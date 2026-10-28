@@ -3,7 +3,7 @@ module Data.CFTA.InclusionSpec (spec) where
 import Control.Monad (filterM)
 import Data.List (find)
 import qualified Data.Map.Strict as Map
-import Data.Maybe (listToMaybe)
+import Data.Maybe (fromMaybe, listToMaybe)
 import Data.Ord (Down (..))
 import qualified Data.Text as Text
 import Test.Hspec (Spec, describe, it, shouldBe)
@@ -86,15 +86,41 @@ spec = describe "Data.CFTA.Inclusion" $ do
     it "finds the smallest counterexample above the bound of the other tests" $ do
         -- The lengths 0, 3, 6, 9, and so on, against the lengths 0, 3, 6, 12,
         -- 18, and so on: the chain of length 9 is missing.
-        let byThree = automaton "d0" [("d0", [leaf "a", node "f" ["d2"]]), ("d1", [node "f" ["d0"]]), ("d2", [node "f" ["d1"]])]
-            bySixOrThree =
+        let bySixOrThree =
                 automaton "s" $
                     ("s", [leaf "a", node "f" ["c5"], node "f" ["t2"]])
                         : ("t0", [leaf "a"])
                         : [("t" <> show length', [node "f" ["t" <> show (length' - 1)]]) | length' <- [1 .. 2 :: Int]]
                             <> sixRows
-        inclusion byThree bySixOrThree `shouldBe` Right (NotIncluded $ chain 9)
-        inclusion byThree bySixOrThree `shouldBe` inclusionUpTo 20 byThree bySixOrThree
+        inclusion chainsByThree bySixOrThree `shouldBe` Right (NotIncluded $ chain 9)
+        inclusion chainsByThree bySixOrThree `shouldBe` inclusionUpTo 20 chainsByThree bySixOrThree
+    describe "partitions" $ do
+        it "agrees with a search of the size classes of the whole" $
+            [(name, partitionUpTo bound whole parts) | (name, whole, parts) <- partitions]
+                `shouldBe` [(name, Right $ partitionSearch whole parts) | (name, whole, parts) <- partitions]
+        it "gives a gap and an overlap of the smallest size, with what they claim" $
+            [(name, partitionCheck whole parts) | (name, whole, parts) <- partitions]
+                `shouldBe` [(name, Just $ smallestFlaws whole parts) | (name, whole, parts) <- partitions]
+        it "gives these gaps and overlaps" $
+            [(name, partitionUpTo bound whole parts) | (name, whole, parts) <- take 4 partitions]
+                `shouldBe` [ ("chains into even and odd lengths", Right $ Partition (CoveredUpTo bound) (DisjointUpTo bound))
+                           , ("chains into even lengths and lengths divisible by three", Right $ Partition (Gap $ chain 1) (Overlap (chain 0) 0 1))
+                           , ("binary trees into the same part twice", Right $ Partition (CoveredUpTo bound) (Overlap (term "a" []) 0 1))
+                           , ("binary trees and no parts", Right $ Partition (Gap $ term "a" []) (DisjointUpTo bound))
+                           ]
+        it "agrees with the bounded check without a bound, for automata without constraints" $
+            [(name, upToBoundPartition <$> partition whole parts) | (name, whole, parts) <- partitions, plainPartition whole parts]
+                `shouldBe` [(name, partitionUpTo bound whole parts) | (name, whole, parts) <- partitions, plainPartition whole parts]
+        it "shows the partition of an infinite language, which no bound shows" $
+            partition chains [evenChains, oddChains] `shouldBe` Right (Partition Covered Disjoint)
+        it "rejects an automaton with a constraint that the check does not decide" $ do
+            let different = semanticConstraint $ Not $ Same (ECTA.path [0]) (ECTA.path [1])
+                differentPairs = automaton "s" $ ("s", [FTA.Transition (sym "g") ["t", "t"] different]) : chainRows "t"
+            partitionUpTo bound pairsOfChains [equalPairs, differentPairs] `shouldBe` Left ConstrainedRight
+            partitionUpTo bound differentPairs [equalPairs] `shouldBe` Left ConstrainedLeft
+            partition pairsOfChains [equalPairs] `shouldBe` Left ConstrainedRight
+        it "checks nothing below a bound of one" $
+            partitionUpTo 0 trees [trees] `shouldBe` Right (Partition (CoveredUpTo 0) (DisjointUpTo 0))
     describe "with a solver" $ do
         it "agrees with the check without a solver where no guard needs one" $ do
             found <-
@@ -133,6 +159,75 @@ spec = describe "Data.CFTA.Inclusion" $ do
 -- | The largest size that the tests check.
 bound :: Size
 bound = 7
+
+-- | Named partition checks: a whole and its parts.
+partitions :: [(String, FTA.PlainFTA String Symbol, [FTA.PlainFTA String Symbol])]
+partitions =
+    [ ("chains into even and odd lengths", chains, [evenChains, oddChains])
+    , ("chains into even lengths and lengths divisible by three", chains, [evenChains, chainsByThree])
+    , ("binary trees into the same part twice", trees, [trees, trees])
+    , ("binary trees and no parts", trees, [])
+    , ("chains into all chains and even lengths", chains, [chains, evenChains])
+    , ("binary trees over a and b by their roots", treesOverAB, [only "a", only "b", rootedAt "g" treesOverAB])
+    , ("binary trees into a leaf and right combs below g", trees, [only "a", rootedAt "g" rightCombs])
+    , ("even lengths, with an overlap of the parts outside the whole", evenChains, [evenChains, oddChains, oddChains])
+    , ("pairs of chains, with a part of equal pairs", pairsOfChains, [equalPairs, pairsOfChains])
+    , ("pairs of chains into equal pairs and g(f(x), x)", pairsOfChains, [equalPairs, chainAndItsF])
+    ]
+
+-- | The result of an exact partition check as the bounded check up to 'bound' gives it.
+upToBoundPartition :: Partition Symbol -> Partition Symbol
+upToBoundPartition (Partition cover disjointness) =
+    Partition
+        (case cover of Covered -> CoveredUpTo bound; other -> other)
+        (case disjointness of Disjoint -> DisjointUpTo bound; other -> other)
+
+-- | Whether the whole and the parts have no constraints.
+plainPartition :: FTA.PlainFTA String Symbol -> [FTA.PlainFTA String Symbol] -> Bool
+plainPartition whole parts = all (all (all ((== noConstraint) . FTA.transitionConstraint)) . FTA.transitionTable) (whole : parts)
+
+{- | The first term of the whole, by size and then by class rank, that no part
+accepts, and the first that two parts accept, with the indexes of the first
+two such parts.
+-}
+partitionSearch :: FTA.PlainFTA String Symbol -> [FTA.PlainFTA String Symbol] -> Partition Symbol
+partitionSearch whole parts =
+    Partition
+        (maybe (CoveredUpTo bound) Gap $ listToMaybe [found | found <- inOrder, null (accepting found)])
+        ( fromMaybe (DisjointUpTo bound) $
+            listToMaybe [Overlap found first second | found <- inOrder, first : second : _ <- [accepting found]]
+        )
+  where
+    classes = either (error . show) id $ sized whole
+    inOrder = [found | size <- [1 .. bound], found <- termsOfSize classes size]
+    accepting found = [index | (index, part) <- zip [0 ..] parts, FTA.accepts part found]
+
+{- | The sizes of the gap and the overlap, when the whole accepts the gap and no
+part does, and the whole and the two named parts accept the overlap, and no
+part with a smaller index does. 'Nothing' when a claim fails.
+-}
+partitionCheck :: FTA.PlainFTA String Symbol -> [FTA.PlainFTA String Symbol] -> Maybe (Maybe Size, Maybe Size)
+partitionCheck whole parts = case partitionUpTo bound whole parts of
+    Right (Partition cover disjointness) -> (,) <$> coverSize cover <*> disjointnessSize disjointness
+    Left _ -> Nothing
+  where
+    coverSize (Gap gap)
+        | FTA.accepts whole gap && null (accepting gap) = Just $ Just $ size gap
+        | otherwise = Nothing
+    coverSize _ = Just Nothing
+    disjointnessSize (Overlap overlap first second)
+        | FTA.accepts whole overlap && take 2 (accepting overlap) == [first, second] = Just $ Just $ size overlap
+        | otherwise = Nothing
+    disjointnessSize _ = Just Nothing
+    accepting found = [index | (index, part) <- zip [0 ..] parts, FTA.accepts part found]
+    size = Size . toInteger . length
+
+-- | The smallest sizes of a term over the alphabet that is a gap, and of one that is an overlap.
+smallestFlaws :: FTA.PlainFTA String Symbol -> [FTA.PlainFTA String Symbol] -> (Maybe Size, Maybe Size)
+smallestFlaws whole parts = (smallest ((== 0) . accepting), smallest ((>= 2) . accepting))
+  where
+    smallest flaw = find (\size -> any (\candidate -> FTA.accepts whole candidate && flaw candidate) (allTerms size)) [1 .. bound]
+    accepting candidate = length [() | part <- parts, FTA.accepts part candidate]
 
 -- | The result of an exact check as the bounded check up to 'bound' gives it.
 upToBound :: Inclusion Symbol -> Inclusion Symbol
@@ -302,7 +397,7 @@ fixtures =
         ( "binary trees with two runs for some trees"
         , automaton "s" [("s", [leaf "a", node "g" ["s", "s"], node "g" ["l", "s"]]), ("l", [leaf "a"])]
         )
-    , ("chains", automaton "s" [("s", [leaf "a", node "f" ["s"]])])
+    , ("chains", chains)
     , ("chains of even length", evenChains)
     , ("chains of even length, by residues modulo four", evenChainsByFour)
     , ("chains with a length divisible by six", chainsBySix)
@@ -350,6 +445,29 @@ evenChainsByFour =
         , ("r2", [node "f" ["r1"]])
         , ("r3", [node "f" ["r2"]])
         ]
+
+-- | Every chain f(...f(a)).
+chains :: FTA.PlainFTA String Symbol
+chains = automaton "s" [("s", [leaf "a", node "f" ["s"]])]
+
+-- | The chains with an odd number of f nodes.
+oddChains :: FTA.PlainFTA String Symbol
+oddChains = automaton "o" [("s", [leaf "a", node "f" ["o"]]), ("o", [node "f" ["s"]])]
+
+-- | The chains whose number of f nodes is divisible by three.
+chainsByThree :: FTA.PlainFTA String Symbol
+chainsByThree = automaton "d0" [("d0", [leaf "a", node "f" ["d2"]]), ("d1", [node "f" ["d0"]]), ("d2", [node "f" ["d1"]])]
+
+-- | The automaton of one leaf.
+only :: String -> FTA.PlainFTA String Symbol
+only symbol = automaton "s" [("s", [leaf symbol])]
+
+-- | The terms of the given symbol whose two children are terms of the automaton.
+rootedAt :: String -> FTA.PlainFTA String Symbol -> FTA.PlainFTA String Symbol
+rootedAt symbol original =
+    automaton "root" $ ("root", [node symbol [initial, initial]]) : Map.toList (FTA.transitionTable original)
+  where
+    initial = FTA.initialState original
 
 -- | The chains whose number of f nodes is divisible by six.
 chainsBySix :: FTA.PlainFTA String Symbol

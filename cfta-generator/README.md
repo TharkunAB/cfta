@@ -316,6 +316,15 @@ is then a counterexample below that size, or `UnknownAt` with that size. A
 constraint that a check does not take gives `ConstrainedLeft` or
 `ConstrainedRight`.
 
+`partitionUpTo n whole parts` checks a list of automata, the parts, against
+one automaton, the whole. The cover is `CoveredUpTo n`, or `Gap` with a
+smallest term of the whole that no part accepts. The disjointness is
+`DisjointUpTo n`, or `Overlap` with a smallest term of the whole that two
+parts accept and the indexes of the first two such parts. A term of two parts
+that the whole rejects is not an overlap. `partition whole parts` checks
+without a bound, for automata without constraints, and gives `Covered` and
+`Disjoint` in place of the bounded results.
+
 ```haskell
 module Main (main) where
 
