@@ -1,3 +1,42 @@
+# Verified prepared model progress update — 2026-10-28 22:46 CET
+
+Source `b1421f82bce347a0d874ed2e2464191955712b02` is pushed and verified on formalize. Full goal ACTIVE.
+Read `lean/notes-current-prepared-model-progress.md` for exact current contracts and next work.
+
+Actual prepared heads, selected receipts, recording and output histories now
+preserve original ProperState. The same full finite outcome keeps its old bound,
+resources, histories, canonicality, arity and projection, plus proper outputs.
+At a literal successful recording call, original proper model/resource inputs
+derive the actual framed Packet/model and exclude a stuck restart. This local
+result requires no output history. Original model/origin evidence also bounds
+stored paths and each actual recursion-key trie by a finite domain of relative
+paths in original subtrees. Global historical keys/native handles remain open.
+
+Strongest semantics: conditional checked rendered soundness under fixed-PCS and
+whole-Discharged, plus ordered output-prefix retention with greater depth.
+Main gap: actual chosen-model recursive emission and source-derived sufficient
+depth across earlier allocating callbacks. A stable finite-depth result does
+not establish output existence. DONE does not imply Discharged.
+
+Seven modules/11 public theorems/one finite proof-domain definition: 577 lines,
+34,603 bytes. Eight exact strict sources pass. Audit: 4,555 jobs/81,774 theorem
+dependencies. Compiler matrix: 22 commands, 19 passes, three preserved failures;
+all final inputs pass at serial 4 GiB/swap zero. Public: 742 theorem readbacks,
+63 definition bodies, 3,301,695 bytes SHA256
+5fd4e6d329de909e1529186e05503246b489d66bafc0370c3d510026cb961485.
+Prior 3,273,340 bytes remain an exact prefix. All 28,355 new bytes were read.
+All 4,547 old non-Audit Lean, 396 stronger-source and 817 Haskell/Cabal hashes
+remain. No Haskell source changed, no Haskell check ran and no new Haskell
+defect/fix was established. FINDINGS keeps all earlier external repair records.
+
+Evidence: `lean/restart-evidence/20261028-prepared-model-progress/`.
+Board 710: `51c32a79-2198-4380-9d84-1fbbcd148326`, exact verified author/content/metadata.
+The full goal remains ACTIVE. Preserve frozen evidence and use a new writable
+area. Refresh upstream first; compile/native jobs stay serial under the 4 GiB
+cap. Standing push permission covers git@github.com:TharkunAB/cfta.git formalize.
+
+---
+
 # Current prepared finite-depth projection proof
 
 Verified: 2026-10-28 22:14 CET. Source: `767155569c152490376fc977f934c137f4da1065` on formalize, pushed and verified.
