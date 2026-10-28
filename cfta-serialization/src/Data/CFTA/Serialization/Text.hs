@@ -45,7 +45,7 @@ import Data.CFTA.Equality.Constraint (
  )
 import qualified Data.CFTA.Formula as F
 import Data.CFTA.Index (ChildIndex (ChildIndex))
-import Data.CFTA.Path (Path (Path), unPath)
+import Data.CFTA.Path (Path (Path), isStrictSubpath, unPath)
 import Data.CFTA.Symbol (Symbol (RefinedSymbol, Symbol), symbolRefinement, symbolText, valueName)
 
 {- | A typed codec for portable state labels. Decoding an encoded state must
@@ -528,7 +528,10 @@ constraintParser :: A.Parser C.Constraint
 constraintParser = do
     form <- nameParser
     case form of
-        "equal" -> (\paths -> C.Constraint (EqConstraints [PathEClass $ Set.fromList paths]) C.Top) <$> arguments pathParser
+        "equal" -> do
+            paths <- arguments pathParser
+            part <- checkedPathClass paths
+            pure $ C.Constraint (EqConstraints [part]) C.Top
         "impossible" -> pure $ C.Constraint EqContradiction C.Top
         "constraint" -> pairArguments C.Constraint classesParser guardParser
         _ -> C.Constraint (EqConstraints []) <$> guardAfterName form
@@ -539,7 +542,16 @@ classesParser = do
     impossible <- startsKeyword "impossible"
     if impossible
         then keyword "impossible" $> EqContradiction
-        else EqConstraints <$> bracketed (PathEClass . Set.fromList <$> bracketed pathParser)
+        else EqConstraints <$> bracketed (bracketed pathParser >>= checkedPathClass)
+
+-- | Reject strict-prefix paths before constructing their stored class trie.
+checkedPathClass :: [Path] -> A.Parser PathEClass
+checkedPathClass paths = do
+    let distinct = Set.fromList paths
+        ordered = Set.toAscList distinct
+    when (or $ zipWith isStrictSubpath ordered (drop 1 ordered)) $
+        fail "an equality class contains a path and its strict extension"
+    pure $ PathEClass distinct
 
 -- | Retain invalid stored paths, but reject indexes outside the machine range.
 pathParser :: A.Parser Path

@@ -168,7 +168,9 @@ outside the machine `Int` range is rejected instead of overflowing.
 
 `CLASSES` is `impossible` or a list of path classes, such as
 `[[[0], [1]], [[1], [2]]]`. Class order and empty/singleton classes are retained.
-Paths within one class are a set.
+Paths within one class are a set. One path cannot be a strict prefix of another
+path in the same class. The reader rejects such input before it constructs the
+stored class trie.
 
 | Guard | Operands |
 | --- | --- |

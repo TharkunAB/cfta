@@ -1,3 +1,56 @@
+# 2026-10-29: graph text parser exception for strict-prefix equality paths
+
+Status: REPAIRED and locally VERIFIED on integrated main `63aae675c`.
+The integration commit is `e216346905cfeb0b243799138b4c254a739de0aa`.
+
+`parseGraphWith` throws an exception for this input instead of returning `Left`:
+
+```text
+graph 1; start S; state S { a where equal([], [0]); }
+```
+
+The same failure occurs for `equal([0], [0, 1])` and both corresponding explicit
+`constraint(CLASSES, true)` forms. Four focused cases throw the `toPathTrie`
+strict-prefix exception. Four controls return graphs: empty classes, singleton
+root classes, nonprefix paths and duplicate paths that collapse to one set entry.
+The existing serialization test suite passed before this added coverage.
+
+Cause: both parser branches call the `PathEClass` constructor before checking
+whether a distinct path prefixes another. Its strict stored trie rejects that
+representation with `error`. This concerns parsed text, not the Lean core model.
+
+Repair: share a checked path-class parser. Deduplicate paths, inspect adjacent
+paths in ascending order for a strict prefix, and report a parser error before
+constructing the trie. Keep empty and singleton classes and exact valid stored
+constraints. Extend the existing malformed-input list and document the format
+restriction. No constructor or equality semantics change.
+
+Focused reproducer: `/tmp/mcfta-prepared-ancestry-progress-20261029/serialization/repro-v1/PrefixClassException.hs`.
+Run inside `nix-shell` with the host linker path:
+
+```sh
+export PATH=/usr/bin:$PATH
+cabal exec -- runghc -package=cfta-serialization /tmp/mcfta-prepared-ancestry-progress-20261029/serialization/repro-v1/PrefixClassException.hs
+```
+
+Root recorded the original exception output under
+`/tmp/mcfta-prepared-ancestry-progress-20261029/serialization-prefix-repro-before/`.
+This probe catches exceptions and exits zero. Assess its eight labeled results,
+not its process exit alone. After the repair, all four bad inputs return `Left`
+and all four controls return graphs. The existing suite passes: 19 examples,
+zero failures, with `-Werror`. Fourmolu and Cabal-gild checks pass. The exact
+2,905-byte validation log has SHA256
+`dee133f6b6001845390b5eb7a21b4fa500c1ef46a17533c8fcd0946101024bfb`.
+All jobs ran serially in Nix under measured 4 GiB max/high and zero swap. The
+first Nix build failed because its linker could not locate host `libgmp`;
+prepending `/usr/bin` to `PATH` restored the host linker and the build passed.
+This environment failure is separate from the reproduced parser exception.
+No further Haskell repair is pending for this witness. The repair belongs to
+`formalize`; upstream `main` does not yet contain it.
+All earlier findings follow unchanged.
+
+---
+
 # Verified actual boundary entry progress — 2026-10-29 00:31 CET
 
 Source `c7da675e2afe3779d62d0b3b00467db2985cbdd6` is pushed and verified on formalize. Full goal ACTIVE.
