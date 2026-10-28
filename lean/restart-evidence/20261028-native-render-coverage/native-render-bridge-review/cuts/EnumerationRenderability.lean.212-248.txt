@@ -1,0 +1,37 @@
+    CarriesGraph after 0 ∧ ReferencesCarry after := by
+  obtain ⟨preserved, references⟩ := enumerateFully_carriers graph complete (fun _ _ => none) noPruning noPruning_readOnly fuel () (initial root) after
+    ⟨initial_storage root, initial_live root⟩ (initial_references root) success
+  exact ⟨preserved 0 (carries_self (initial root) (initial_storage root).total 0 (.unenumerated (some root) []) rfl trivial), references⟩
+
+/-- A graph carrier in safe storage is an allocated variable. -/
+theorem carrier_inside (state : State Symbol Guard) (safe : Safe state) (uv : Nat) (carried : CarriesGraph state uv) : uv < state.counter := by
+  obtain ⟨held, value, related, stored, _⟩ := carried
+  have inside : held < state.counter := by rw [safe.1.aligned]; exact (List.getElem?_eq_some_iff.mp stored).1
+  by_cases allocated : uv < state.counter
+  · exact allocated
+  · have same := outside_class state.representatives state.counter uv held safe.1.forest (by omega) related
+    omega
+
+/-- A completed complete-graph state stores an enumerated fragment at each graph carrier's representative. -/
+theorem completed_carrier (graph : Graph Symbol Guard) (complete : CompleteGraph graph) (state : State Symbol Guard)
+    (safe : Safe state) (finished : Finished graph state) (uv root size : Nat) (carried : CarriesGraph state uv)
+    (path : UnionFind.Reaches state.representatives uv root size) :
+    ∃ fragment, state.values[root]? = some (.enumerated fragment) := by
+  obtain ⟨held, value, related, stored, bearing⟩ := carried
+  have live : value ≠ .eliminated := by cases value <;> simp_all [GraphValue]
+  obtain ⟨heldSize, heldPath⟩ := (safe.2 held value stored).mp live
+  have same : root = held := (UnionFind.sameClass_iff_roots path heldPath).mp related
+  subst root
+  cases value with
+  | eliminated => cases bearing
+  | enumerated fragment => exact ⟨fragment, stored⟩
+  | unenumerated node scs =>
+      cases node with
+      | none => cases bearing
+      | some node =>
+          have done := finished _ (List.mem_of_getElem? stored)
+          cases view : graph.node node with
+          | recursive body => exact (complete.1 node body view).elim
+          | empty | alternatives _ | unresolved _ => simp [candidate, view] at done
+
+end MicroCFTA.EnumerationRenderability

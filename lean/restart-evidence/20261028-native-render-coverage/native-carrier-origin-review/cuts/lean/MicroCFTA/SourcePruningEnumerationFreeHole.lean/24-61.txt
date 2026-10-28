@@ -1,0 +1,38 @@
+    [.enumerated (.node symbol [.hole 1]), .unenumerated none []], [], fun _ => [], []⟩
+private def assignment (leaf : Term Symbol) (uv : Nat) : Term Symbol :=
+  if uv = 0 then .node symbol [leaf] else leaf
+
+private theorem assigned (leaf : Term Symbol) :
+    Satisfies (fun _ _ => True) (fun _ _ => True) (assignment leaf) state := by
+  refine ⟨⟨UnionFind.initial_satisfies [0, 1] (assignment leaf), ?_⟩,
+    by simp [guardsHold, state]⟩
+  intro uv
+  cases uv with
+  | zero => simp [heap, state, slot, slotSatisfies, fill, assignment]
+  | succ uv =>
+      cases uv <;> simp [heap, state, slot, slotSatisfies, permits]
+
+private theorem discharged : SourcePruningEnumerationRendering.Discharged state := by
+  intro uv node scs stored
+  cases uv with
+  | zero => simp [state] at stored
+  | succ uv =>
+      cases uv with
+      | zero =>
+          change some (.unenumerated none [] : UVarValue Symbol) = some (.unenumerated node scs) at stored
+          have payloadSame := Option.some.inj stored
+          cases payloadSame
+          exact ⟨rfl, rfl⟩
+      | succ uv => simp [state] at stored
+
+/-- A discharged safe core can contain an unrenderable free hole without native history provenance. -/
+theorem free_hole_counterexample :
+    ∃ before : Core,
+      Safe before ∧ Canonical before ∧ ProperState before ∧
+      (∃ level frontier, Stratified before level frontier) ∧
+      SourcePruningEnumerationRendering.Discharged before ∧
+      (∃ model : Nat → Term Symbol, Satisfies (fun _ _ => True) (fun _ _ => True) model before) ∧
+      CarriesGraph before 0 ∧ ¬ CarriesGraph before 1 ∧ ¬ ReferencesCarry before ∧
+      ∀ (heap : InternedConstructorTemplates.State Symbol Unit) (marker : Symbol)
+        (fuel : Nat) (term : Term Symbol) (pending : List (Unit × Term Symbol)) (after : Core),
+        ¬ Success (SourcePruningEnumerationRendering.render heap marker fuel 0)

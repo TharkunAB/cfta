@@ -1,0 +1,16 @@
+--- owner-v2
++++ root-checked-final
+@@ -142,12 +142,7 @@
+             exact ⟨middleValid, (success_bind _ _ _ _ _).mpr
+               ⟨terms, after, transferred, (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩⟩⟩
+         | hole uv =>
+-            change Success (getValue (fuel + 1) uv >>= fun value => match value with
+-              | .enumerated fragment => EnumerationState.expandFragment graph marker fuel fragment
+-              | .unenumerated (some handle) _ => match graph.node handle with
+-                | .recursive _ => pure (.node marker [])
+-                | _ => failure .unfinishedFragment
+-              | _ => failure .unfinishedFragment) before term after at observed
++            simp only [EnumerationState.expandFragment] at observed
+             obtain ⟨value, middle, reading, continued⟩ := (success_bind _ _ _ _ _).mp observed
+             obtain ⟨middleValid, free⟩ := read_discharged (fuel + 1) uv before middle value total discharged reading
+             cases value with

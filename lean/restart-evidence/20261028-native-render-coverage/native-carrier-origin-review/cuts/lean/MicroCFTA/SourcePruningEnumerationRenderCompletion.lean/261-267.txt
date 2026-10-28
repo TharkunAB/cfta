@@ -1,0 +1,7 @@
+theorem render_complete (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (marker : Symbol) (level : Nat → Nat) (frontier uv : Nat)
+    (before : State Symbol EnumGuard) (safe : Safe before)
+    (ordered : Stratified before level frontier) (discharged : Discharged before)
+    (references : ReferencesCarry before) (carried : CarriesGraph before uv) :
+    ∃ fuel term pending after, Success (render heap marker fuel uv) before (term, pending) after ∧
+      RenderStable before after := by

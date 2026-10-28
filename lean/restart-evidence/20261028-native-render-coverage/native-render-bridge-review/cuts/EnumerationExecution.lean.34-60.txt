@@ -1,0 +1,27 @@
+/-- One action retains every successful state transition of another action. -/
+def Retains (first second : EnumerateM Symbol Guard α) : Prop :=
+  ∀ before value after, Success first before value after → Success second before value after
+
+/-- Sequential actions compose successful-branch inclusion. -/
+theorem retains_bind (first second : EnumerateM Symbol Guard α)
+    (left right : α → EnumerateM Symbol Guard β) (initial : Retains first second)
+    (continued : ∀ value, Retains (left value) (right value)) :
+    Retains (first >>= left) (second >>= right) := by
+  intro before result after success
+  obtain ⟨value, middle, step, rest⟩ := (success_bind _ _ _ _ _).mp success
+  exact (success_bind _ _ _ _ _).mpr ⟨value, middle, initial _ _ _ step, continued value _ _ _ rest⟩
+
+/-- An unchanged continuation retains successful branches. -/
+theorem retains_refl (action : EnumerateM Symbol Guard α) : Retains action action := fun _ _ _ success => success
+
+/-- List traversal retains each successful ordered result. -/
+theorem retains_mapM (left right : α → EnumerateM Symbol Guard β)
+    (step : ∀ input, Retains (left input) (right input)) (inputs : List α) :
+    Retains (inputs.mapM left) (inputs.mapM right) := by
+  induction inputs with
+  | nil => exact retains_refl _
+  | cons input rest ih =>
+      simp only [List.mapM_cons]
+      apply retains_bind _ _ _ _ (step input)
+      intro output
+      exact retains_bind _ _ _ _ ih (fun _ => retains_refl _)

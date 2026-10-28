@@ -1,0 +1,83 @@
+
+private theorem fragment_transfers (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (graph : Graph Symbol EnumGuard) (marker : Symbol) (fuel : Nat) :
+    ∀ fragment (before after : State Symbol EnumGuard) term,
+      UnionFind.Total before.representatives → Discharged before →
+      (Success (expandFragment heap marker fuel fragment) before term after →
+        (UnionFind.Total after.representatives ∧ Discharged after) ∧
+          Success (EnumerationState.expandFragment graph marker fuel fragment) before term after) ∧
+      (Success (EnumerationState.expandFragment graph marker fuel fragment) before term after →
+        (UnionFind.Total after.representatives ∧ Discharged after) ∧
+          Success (expandFragment heap marker fuel fragment) before term after) := by
+  induction fuel with
+  | zero =>
+      intro fragment before after term total discharged
+      constructor <;> intro observed <;>
+        exact (success_failure .fuelExhausted before after term observed).elim
+  | succ fuel ih =>
+      intro fragment before after term total discharged
+      constructor
+      · intro observed
+        cases fragment with
+        | node symbol children =>
+            change Success (children.mapM (expandFragment heap marker fuel) >>= fun terms =>
+              pure (.node symbol terms)) before term after at observed
+            obtain ⟨terms, middle, traversed, final⟩ := (success_bind _ _ _ _ _).mp observed
+            obtain ⟨middleValid, transferred⟩ := mapM_transfer _ _
+              (fun state => UnionFind.Total state.representatives ∧ Discharged state)
+              (fun child previous output next valid success =>
+                (ih child previous next output valid.1 valid.2).1 success)
+              children before middle terms ⟨total, discharged⟩ traversed
+            obtain ⟨rfl, rfl⟩ := (success_pure (.node symbol terms) term middle after).mp final
+            exact ⟨middleValid, (success_bind _ _ _ _ _).mpr
+              ⟨terms, after, transferred, (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩⟩⟩
+        | hole uv =>
+            change Success (getValue (fuel + 1) uv >>= fun value => match value with
+              | .enumerated fragment => expandFragment heap marker fuel fragment
+              | .unenumerated (some handle) _ => match lookupNode heap handle with
+                | none => failure .unresolvedReference
+                | some value => if MergedOrdinaryHeight.recursiveBoundary value then
+                    pure (.node marker []) else failure .unfinishedFragment
+              | _ => failure .unfinishedFragment) before term after at observed
+            obtain ⟨value, middle, reading, continued⟩ := (success_bind _ _ _ _ _).mp observed
+            obtain ⟨middleValid, free⟩ := read_discharged (fuel + 1) uv before middle value total discharged reading
+            cases value with
+            | eliminated => exact (success_failure .unfinishedFragment middle after term continued).elim
+            | unenumerated node scs =>
+                obtain ⟨rfl, rfl⟩ := free node scs rfl
+                exact (success_failure .unfinishedFragment middle after term continued).elim
+            | enumerated fragment =>
+                obtain ⟨afterValid, transferred⟩ :=
+                  (ih fragment middle after term middleValid.1 middleValid.2).1 continued
+                exact ⟨afterValid, (success_bind _ _ _ _ _).mpr
+                  ⟨.enumerated fragment, middle, reading, transferred⟩⟩
+      · intro observed
+        cases fragment with
+        | node symbol children =>
+            change Success (children.mapM (EnumerationState.expandFragment graph marker fuel) >>= fun terms =>
+              pure (.node symbol terms)) before term after at observed
+            obtain ⟨terms, middle, traversed, final⟩ := (success_bind _ _ _ _ _).mp observed
+            obtain ⟨middleValid, transferred⟩ := mapM_transfer _ _
+              (fun state => UnionFind.Total state.representatives ∧ Discharged state)
+              (fun child previous output next valid success =>
+                (ih child previous next output valid.1 valid.2).2 success)
+              children before middle terms ⟨total, discharged⟩ traversed
+            obtain ⟨rfl, rfl⟩ := (success_pure (.node symbol terms) term middle after).mp final
+            exact ⟨middleValid, (success_bind _ _ _ _ _).mpr
+              ⟨terms, after, transferred, (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩⟩⟩
+        | hole uv =>
+            simp only [EnumerationState.expandFragment] at observed
+            obtain ⟨value, middle, reading, continued⟩ := (success_bind _ _ _ _ _).mp observed
+            obtain ⟨middleValid, free⟩ := read_discharged (fuel + 1) uv before middle value total discharged reading
+            cases value with
+            | eliminated => exact (success_failure .unfinishedFragment middle after term continued).elim
+            | unenumerated node scs =>
+                obtain ⟨rfl, rfl⟩ := free node scs rfl
+                exact (success_failure .unfinishedFragment middle after term continued).elim
+            | enumerated fragment =>
+                obtain ⟨afterValid, transferred⟩ :=
+                  (ih fragment middle after term middleValid.1 middleValid.2).2 continued
+                exact ⟨afterValid, (success_bind _ _ _ _ _).mpr
+                  ⟨.enumerated fragment, middle, reading, transferred⟩⟩
+
+/-- Discharged storage gives the same successful fragment trace in both renderers. -/

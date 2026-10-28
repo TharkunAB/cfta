@@ -1,0 +1,18 @@
+theorem expandUVar_complete (graph : Graph Symbol Guard) (complete : CompleteGraph graph) (marker : Symbol)
+    (level : Nat → Nat) (frontier uv : Nat) (before : State Symbol Guard)
+    (ready : RenderReady graph level frontier before) (carried : CarriesGraph before uv) :
+    ∃ fuel term after, Success (expandUVar graph marker fuel uv) before term after ∧ RenderStable before after := by
+  obtain ⟨readFuel, root, fragment, resolved, reading, readStable, stored, _⟩ := getEnumerated_terminates graph complete before ready.safe ready.finished uv carried
+  obtain ⟨renderFuel, term, after, rendering, renderedStable⟩ := expandFragment_complete graph complete marker level frontier fragment resolved
+    (ready_read graph level frontier before resolved ready readStable)
+    ((ready.references.1 root fragment stored).preserve fragment (carriers_read before resolved readStable))
+  let fuel := readFuel + renderFuel
+  refine ⟨fuel, term, after, ?_, readStable.trans renderedStable⟩
+  unfold expandUVar
+  apply (success_bind _ _ _ _ _).mpr
+  refine ⟨.enumerated fragment, resolved, ?_, ?_⟩
+  · exact atLeast _ (fun fuel extra => getValue_moreFuel fuel extra uv) readFuel (fuel + 1) (by dsimp [fuel]; omega) before resolved _ reading
+  · exact atLeast _ (fun fuel extra => expandFragment_moreFuel graph marker fuel extra fragment) renderFuel fuel (by dsimp [fuel]; omega) resolved after term rendering
+
+/-- Every finite residual list with graph-bearing holes has a successful common rendering bound. -/
+theorem renderObligations_complete (graph : Graph Symbol Guard) (complete : CompleteGraph graph) (marker : Symbol)

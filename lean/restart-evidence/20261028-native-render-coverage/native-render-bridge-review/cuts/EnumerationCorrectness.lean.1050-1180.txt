@@ -1,0 +1,131 @@
+    (fuel uv : Nat) (before after : State Symbol Guard) (value : UVarValue Symbol)
+    (valid : RenderValid graph language meaning assignment before)
+    (success : Success (getValue fuel uv) before value after) :
+    RenderValid graph language meaning assignment after ∧
+      slotSatisfies assignment uv (slot language value) ∧
+      (∀ node scs, value = .unenumerated (some node) scs → ∀ body, graph.node node ≠ .recursive body) := by
+  obtain ⟨found, lookup, stored, same⟩ := (getValue_success fuel uv before after value).mp success
+  subst after
+  have path := (UnionFind.findRoot_correct fuel before.representatives uv found lookup).1
+  have assigned := valid.satisfies.1.1 uv found.representative (UnionFind.sameClass_root path)
+  have storedHolds := valid.satisfies.1.2 found.representative
+  have slotHolds : slotSatisfies assignment found.representative (slot language value) := by
+    simpa [heap, stored] using storedHolds
+  refine ⟨⟨UnionFind.findRoot_total valid.total lookup,
+    (representative_semantics language meaning assignment fuel uv before found valid.total lookup).mpr valid.satisfies,
+    valid.markers⟩, ?_, ?_⟩
+  · cases value <;> simp_all [slot, slotSatisfies]
+  · intro node scs same body
+    exact valid.markers found.representative node scs (by simpa [same] using stored) body
+
+/-- List traversal composes established local invariants without reordering outputs. -/
+theorem mapM_sound (action : α → EnumerateM Symbol Guard β) (invariant : State Symbol Guard → Prop)
+    (relation : α → β → Prop)
+    (step : ∀ input before output after, invariant before → Success (action input) before output after →
+      invariant after ∧ relation input output)
+    (inputs : List α) (before after : State Symbol Guard) (outputs : List β)
+    (valid : invariant before) (success : Success (inputs.mapM action) before outputs after) :
+    invariant after ∧ All₂ relation inputs outputs := by
+  induction inputs generalizing before after outputs with
+  | nil =>
+      have result := (success_pure [] outputs before after).mp success
+      obtain ⟨rfl, rfl⟩ := result
+      exact ⟨valid, .nil⟩
+  | cons input rest ih =>
+      rw [List.mapM_cons] at success
+      obtain ⟨output, middle, first, continued⟩ := (success_bind _ _ _ _ _).mp success
+      obtain ⟨validMiddle, related⟩ := step input before output middle valid first
+      obtain ⟨tail, last, remaining, final⟩ := (success_bind _ _ _ _ _).mp continued
+      obtain ⟨validLast, relatedTail⟩ := ih middle last tail validMiddle remaining
+      obtain ⟨rfl, rfl⟩ := (success_pure (output :: tail) outputs last after).mp final
+      exact ⟨validLast, .cons related relatedTail⟩
+
+/-- Pointwise deterministic outputs form exactly the corresponding mapped list. -/
+theorem all₂_map_eq (function : α → β) (inputs : List α) (outputs : List β)
+    (related : All₂ (fun input output => output = function input) inputs outputs) :
+    outputs = inputs.map function := by
+  induction related with
+  | nil => rfl
+  | cons same _ ih => simp [same, ih]
+
+/-- Actual rendering follows stored fragment equations and preserves the complete assignment.
+Pending recursive markers are excluded explicitly; they are not accepted terms. -/
+theorem expandFragment_sound (graph : Graph Symbol Guard) (language : NodeLanguage Symbol)
+    (meaning : Guard → Term Symbol → Prop) (assignment : Nat → Term Symbol) (marker : Symbol)
+    (fuel : Nat) (fragment : Fragment Symbol) (before after : State Symbol Guard) (result : Term Symbol)
+    (valid : RenderValid graph language meaning assignment before)
+    (success : Success (expandFragment graph marker fuel fragment) before result after) :
+    RenderValid graph language meaning assignment after ∧ result = fill assignment fragment := by
+  induction fuel generalizing fragment before after result with
+  | zero => exact (success_failure .fuelExhausted before after result success).elim
+  | succ fuel ih =>
+      cases fragment with
+      | node symbol children =>
+          change Success (children.mapM (expandFragment graph marker fuel) >>= fun terms => pure (.node symbol terms))
+            before result after at success
+          obtain ⟨terms, middle, traversed, final⟩ := (success_bind _ _ _ _ _).mp success
+          obtain ⟨validMiddle, related⟩ := mapM_sound (expandFragment graph marker fuel)
+            (RenderValid graph language meaning assignment) (fun child term => term = fill assignment child)
+            (fun child before term after valid success => ih child before after term valid success)
+            children before middle terms valid traversed
+          obtain ⟨rfl, rfl⟩ := (success_pure (.node symbol terms) result middle after).mp final
+          exact ⟨validMiddle, by simp [fill, all₂_map_eq (fill assignment) children terms related]⟩
+      | hole uv =>
+          change Success (getValue (fuel + 1) uv >>= fun value => match value with
+            | .enumerated fragment => expandFragment graph marker fuel fragment
+            | .unenumerated (some node) _ => match graph.node node with
+              | .recursive _ => pure (.node marker [])
+              | _ => EnumerationState.failure .unfinishedFragment
+            | _ => EnumerationState.failure .unfinishedFragment) before result after at success
+          obtain ⟨value, middle, read, final⟩ := (success_bind _ _ _ _ _).mp success
+          obtain ⟨validMiddle, stored, markers⟩ := getValue_sound graph language meaning assignment
+            (fuel + 1) uv before middle value valid read
+          cases value with
+          | eliminated => exact (success_failure .unfinishedFragment middle after result final).elim
+          | enumerated fragment =>
+              obtain ⟨validAfter, exactTerm⟩ := ih fragment middle after result validMiddle final
+              exact ⟨validAfter, by simpa [fill, slot, slotSatisfies] using exactTerm.trans stored⟩
+          | unenumerated node scs =>
+              cases node with
+              | none => exact (success_failure .unfinishedFragment middle after result final).elim
+              | some node =>
+                  cases view : graph.node node with
+                  | recursive body => exact (markers node scs rfl body view).elim
+                  | empty | alternatives _ | unresolved _ =>
+                      simp only [view] at final
+                      exact (success_failure .unfinishedFragment middle after result final).elim
+
+/-- Reading and rendering one complete UVar returns its assigned term. -/
+theorem expandUVar_sound (graph : Graph Symbol Guard) (language : NodeLanguage Symbol)
+    (meaning : Guard → Term Symbol → Prop) (assignment : Nat → Term Symbol) (marker : Symbol)
+    (fuel uv : Nat) (before after : State Symbol Guard) (result : Term Symbol)
+    (valid : RenderValid graph language meaning assignment before)
+    (success : Success (expandUVar graph marker fuel uv) before result after) :
+    RenderValid graph language meaning assignment after ∧ result = assignment uv := by
+  unfold expandUVar at success
+  obtain ⟨value, middle, read, final⟩ := (success_bind _ _ _ _ _).mp success
+  obtain ⟨validMiddle, stored, markers⟩ := getValue_sound graph language meaning assignment
+    (fuel + 1) uv before middle value valid read
+  cases value with
+  | enumerated fragment =>
+      obtain ⟨validAfter, exactTerm⟩ := expandFragment_sound graph language meaning assignment marker fuel
+        fragment middle after result validMiddle final
+      exact ⟨validAfter, exactTerm.trans stored⟩
+  | eliminated => simp [Success, reject, ExceptT.run] at final
+  | unenumerated node scs =>
+      cases node with
+      | none => simp [Success, reject, ExceptT.run] at final
+      | some node =>
+          cases view : graph.node node with
+          | recursive body => exact (markers node scs rfl body view).elim
+          | empty | alternatives _ | unresolved _ => simp [view, Success, reject, ExceptT.run] at final
+
+/-- Suspended inputs avoid the class of a root that must retain its current slot. -/
+def Avoids (forest : UnionFind.Forest) (root : Nat) (scs : List Suspended) : Prop :=
+  ∀ sc ∈ scs, ¬UnionFind.SameClass forest root sc.var
+
+/-- Descent cannot introduce a reference to the protected root. -/
+theorem descend_avoids (forest : UnionFind.Forest) (root index : Nat) (scs : List Suspended)
+    (avoids : Avoids forest root scs) : Avoids forest root (descendScs index scs) := by
+  intro sc member
+  simp only [descendScs, EqualityTrie.descendScs, List.mem_filter, List.mem_map] at member

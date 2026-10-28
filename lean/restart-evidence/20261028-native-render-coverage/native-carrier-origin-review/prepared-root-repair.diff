@@ -1,0 +1,17 @@
+--- own-untested-v1
++++ actual-strict3-final
+@@ -64,12 +64,12 @@
+           (.unenumerated (some (entry.identity + 1)) scs)
+           (allocated (some (entry.identity + 1)) before) written
+           (by intro other impossible; cases impossible) writing
+-        have writtenSame := (modify_success _ (allocated (some (entry.identity + 1)) before) written).mp writing
++        have writtenSame := (EnumerationDriver.modify_success _ (allocated (some (entry.identity + 1)) before) written).mp writing
+         have writtenCarriers : PreservesCarriers (allocated (some (entry.identity + 1)) before) written := by
+           rw [writtenSame]
+           exact set_graph_carriers _ before.counter (.unenumerated (some (entry.identity + 1)) scs) trivial
+         have writtenReferences := references_transport _ written allocatedFacts.2.1
+-          writtenCarriers origin (by rw [writtenSame]; rfl)
++          writtenCarriers origin (by rw [writtenSame])
+         obtain ⟨fragmentSame, afterSame⟩ :=
+           (success_pure (.hole before.counter) fragment written after).mp final
+         subst fragment

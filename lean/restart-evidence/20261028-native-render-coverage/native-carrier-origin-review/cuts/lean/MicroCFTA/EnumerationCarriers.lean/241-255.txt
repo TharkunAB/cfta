@@ -1,0 +1,15 @@
+theorem suspension_carriers (count : Nat) (before : State Symbol Guard) : PreservesCarriers before (suspendedState count before) := by
+  induction count generalizing before with
+  | zero => exact .refl before
+  | succ count ih => exact (allocation_carriers none before).trans (ih (allocated none before))
+
+/-- Residual recording preserves every graph carrier. -/
+theorem recordResidual_carriers (residual : Option Guard) (fragment : Fragment Symbol) (before after : State Symbol Guard)
+    (success : Success (recordResidual residual fragment) before () after) : PreservesCarriers before after := by
+  cases residual with
+  | none =>
+      obtain ⟨_, same⟩ := (success_pure () () before after).mp success
+      subst after
+      exact .refl before
+  | some guard =>
+      obtain rfl := (modify_success _ before after).mp success

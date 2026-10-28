@@ -1,0 +1,27 @@
+structure RenderReady (graph : Graph Symbol Guard) (level : Nat → Nat) (frontier : Nat) (state : State Symbol Guard) : Prop where
+  safe : Safe state
+  finished : Finished graph state
+  references : ReferencesCarry state
+  stratified : Stratified state level frontier
+
+/-- Rendering reads retain the completed-state facts and the same dependency levels. -/
+theorem ready_read (graph : Graph Symbol Guard) (level : Nat → Nat) (frontier : Nat) (before after : State Symbol Guard)
+    (ready : RenderReady graph level frontier before) (stable : RenderStable before after) : RenderReady graph level frontier after := by
+  refine ⟨stable.safe, ?_, references_read before after stable ready.references, stratified_read before after level frontier stable ready.stratified⟩
+  intro value member
+  exact ready.finished value (by simpa [stable.values] using member)
+
+/-- A completed graph-bearing variable admits an actual enumerated-value read. -/
+theorem getEnumerated_terminates (graph : Graph Symbol Guard) (complete : CompleteGraph graph) (before : State Symbol Guard)
+    (safe : Safe before) (finished : Finished graph before) (uv : Nat) (carried : CarriesGraph before uv) :
+    ∃ fuel root fragment after, Success (getValue fuel uv) before (.enumerated fragment) after ∧ RenderStable before after ∧
+      before.values[root]? = some (.enumerated fragment) ∧ ∃ size, UnionFind.Reaches before.representatives uv root size := by
+  obtain ⟨root, size, path⟩ := safe.1.total uv
+  obtain ⟨fragment, stored⟩ := completed_carrier graph complete before safe finished uv root size carried path
+  obtain ⟨fuel, found, lookup⟩ := UnionFind.findRoot_terminates path
+  have rootSame := (UnionFind.reaches_unique (UnionFind.findRoot_correct fuel before.representatives uv found lookup).1 path).1
+  let after := {before with representatives := found.forest}
+  have execution : Success (getValue fuel uv) before (.enumerated fragment) after :=
+    (getValue_success fuel uv before after (.enumerated fragment)).mpr ⟨found, lookup, by simpa [rootSame] using stored, rfl⟩
+  exact ⟨fuel, root, fragment, after, execution,
+    (getValue_storage fuel uv before after (.enumerated fragment) safe (carrier_inside before safe uv carried) execution).1, stored, size, path⟩

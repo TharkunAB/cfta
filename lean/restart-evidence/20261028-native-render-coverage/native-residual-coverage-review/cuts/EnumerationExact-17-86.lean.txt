@@ -1,0 +1,70 @@
+/-- Every accepted finite term occurs in an actual initialized public run with satisfied residuals. -/
+theorem runs_complete (graph : Graph Symbol Guard) (meaning : Guard → Term Symbol → Prop)
+    (complete : CompleteGraph graph) (correct : IntersectionCorrect graph (Accepted graph meaning))
+    (marker : Symbol) (root : Nat) (term : Term Symbol) (accepted : Accepted graph meaning root term) :
+    ∃ fuel pending after, .ok ((term, pending), after) ∈ runs graph marker fuel root ∧
+      ∀ obligation ∈ pending, meaning obligation.1 obligation.2 := by
+  obtain ⟨enumFuel, enumerated, assignment, enumeration, satisfies, assigned⟩ := initialized_complete graph meaning complete correct root term accepted
+  obtain ⟨safe, _, finished⟩ := enumerateFully_outcome graph (fun _ _ => none) noPruning noPruning_readOnly enumFuel () (initial root) enumerated
+    ⟨initial_storage root, initial_live root⟩ enumeration
+  obtain ⟨level, frontier, stratified⟩ := initialized_stratified graph complete enumFuel root enumerated enumeration
+  obtain ⟨rootCarrier, references⟩ := initialized_carriers graph complete enumFuel root enumerated enumeration
+  have ready : RenderReady graph level frontier enumerated := ⟨safe, finished, references, stratified⟩
+  obtain ⟨rootFuel, rendered, renderedState, rendering, renderedStable⟩ := expandUVar_complete graph complete marker level frontier 0 enumerated ready rootCarrier
+  have renderValid : RenderValid graph (Accepted graph meaning) meaning assignment enumerated :=
+    ⟨safe.1.total, satisfies, complete_noMarkers graph complete enumerated⟩
+  have renderedTerm := (expandUVar_sound graph (Accepted graph meaning) meaning assignment marker rootFuel 0 enumerated renderedState rendered renderValid rendering).2
+  have termSame : rendered = term := renderedTerm.trans assigned
+  have renderedReady := ready_read graph level frontier enumerated renderedState ready renderedStable
+  obtain ⟨guardFuel, pending, after, guardRendering, guardedStable⟩ := renderObligations_complete graph complete marker level frontier
+    renderedState.obligations renderedState renderedReady renderedReady.references.2
+  let fuel := enumFuel + rootFuel + guardFuel
+  have enumMore : Success (enumerateFully graph (fun _ _ => none) noPruning fuel ()) (initial root) () enumerated :=
+    atLeast _ (fun fuel extra => enumerateFully_moreFuel graph (fun _ _ => none) noPruning fuel extra ()) enumFuel fuel (by dsimp [fuel]; omega) (initial root) enumerated () enumeration
+  have rootMore : Success (expandUVar graph marker fuel 0) enumerated term renderedState := by
+    have more := atLeast _ (fun fuel extra => expandUVar_moreFuel graph marker fuel extra 0) rootFuel fuel (by dsimp [fuel]; omega) enumerated renderedState rendered rendering
+    simpa only [termSame] using more
+  have guardMore : Success (renderedState.obligations.mapM fun obligation => do
+      pure (obligation.1, ← expandFragment graph marker fuel obligation.2)) renderedState pending after := by
+    apply atLeast (fun bound => renderedState.obligations.mapM fun obligation => do
+      pure (obligation.1, ← expandFragment graph marker bound obligation.2)) ?_
+      guardFuel fuel (by dsimp [fuel]; omega) renderedState after pending guardRendering
+    intro base extra
+    exact retains_mapM _ _ (fun (obligation : Guard × Fragment Symbol) =>
+      retains_bind _ _ (fun term => pure (obligation.1, term)) (fun term => pure (obligation.1, term))
+        (expandFragment_moreFuel graph marker base extra obligation.2) (fun _ => retains_refl _)) renderedState.obligations
+  have execution : .ok ((term, pending), after) ∈ runs graph marker fuel root := by
+    unfold runs
+    change Success _ (initial root) (term, pending) after
+    exact (success_bind _ _ _ _ _).mpr ⟨(), enumerated, enumMore,
+      (success_bind _ _ _ _ _).mpr ⟨term, renderedState, rootMore,
+        (success_bind _ _ _ _ _).mpr ⟨renderedState, renderedState, (get_success _ _ _).mpr ⟨rfl, rfl⟩,
+          (success_bind _ _ _ _ _).mpr ⟨pending, after, guardMore, (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩⟩⟩⟩⟩
+  have afterSatisfies := (renderStable_assignment (Accepted graph meaning) meaning assignment enumerated after (renderedStable.trans guardedStable)).mpr satisfies
+  exact ⟨fuel, pending, after, execution,
+    (runs_assignment_sound graph meaning complete correct assignment marker fuel root term pending after execution afterSatisfies).2⟩
+
+/-- One successful complete witness remains available at every sufficiently large execution bound. -/
+theorem runs_complete_eventually (graph : Graph Symbol Guard) (meaning : Guard → Term Symbol → Prop)
+    (complete : CompleteGraph graph) (correct : IntersectionCorrect graph (Accepted graph meaning))
+    (marker : Symbol) (root : Nat) (term : Term Symbol) (accepted : Accepted graph meaning root term) :
+    ∃ bound pending after, (∀ fuel, bound ≤ fuel → .ok ((term, pending), after) ∈ runs graph marker fuel root) ∧
+      ∀ obligation ∈ pending, meaning obligation.1 obligation.2 := by
+  obtain ⟨bound, pending, after, success, checked⟩ := runs_complete graph meaning complete correct marker root term accepted
+  refine ⟨bound, pending, after, ?_, checked⟩
+  intro fuel large
+  obtain ⟨extra, rfl⟩ := Nat.exists_eq_add_of_le large
+  exact runs_moreFuel graph marker bound extra root term pending after success
+
+/-- The successful residual-checked public runs have exactly the accepted finite-term support. -/
+theorem runs_exact (graph : Graph Symbol Guard) (meaning : Guard → Term Symbol → Prop)
+    (complete : CompleteGraph graph) (correct : IntersectionCorrect graph (Accepted graph meaning))
+    (marker : Symbol) (root : Nat) (term : Term Symbol) :
+    Accepted graph meaning root term ↔ ∃ fuel pending after, .ok ((term, pending), after) ∈ runs graph marker fuel root ∧
+      ∀ obligation ∈ pending, meaning obligation.1 obligation.2 := by
+  constructor
+  · exact runs_complete graph meaning complete correct marker root term
+  · rintro ⟨fuel, pending, after, success, checked⟩
+    exact runs_sound graph meaning complete correct marker fuel root term pending after success checked
+
+end MicroCFTA.EnumerationExact

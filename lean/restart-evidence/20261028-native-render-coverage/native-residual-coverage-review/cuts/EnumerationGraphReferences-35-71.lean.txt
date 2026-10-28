@@ -1,0 +1,37 @@
+def FragmentCarries (state : State Symbol Guard) (fragment : Fragment Symbol) : Prop :=
+  ∀ uv, HasHole fragment uv → CarriesGraph state uv
+
+/-- Stored fragments and retained residuals refer only to graph-bearing classes. -/
+def ReferencesCarry (state : State Symbol Guard) : Prop :=
+  (∀ (uv : Nat) (fragment : Fragment Symbol), state.values[uv]? = some (.enumerated fragment) → FragmentCarries state fragment) ∧
+    ∀ obligation ∈ state.obligations, FragmentCarries state obligation.2
+
+/-- Carrier preservation retains every hole of an earlier fragment. -/
+theorem FragmentCarries.preserve (fragment : Fragment Symbol) (carried : FragmentCarries before fragment)
+    (preserved : PreservesCarriers before after) : FragmentCarries after fragment := fun uv hole => preserved uv (carried uv hole)
+
+/-- A symbol fragment carries its holes exactly when each child does. -/
+theorem fragmentCarries_node (state : State Symbol Guard) (symbol : Symbol) (children : List (Fragment Symbol))
+    (carried : ∀ child ∈ children, FragmentCarries state child) : FragmentCarries state (.node symbol children) := by
+  intro uv hole
+  cases hole with
+  | child _ _ child _ member hole => exact carried child member uv hole
+
+/-- A hole carries its class when the variable has a graph carrier. -/
+theorem fragmentCarries_hole (state : State Symbol Guard) (uv : Nat) (carried : CarriesGraph state uv) : FragmentCarries state (.hole uv) := by
+  intro other hole
+  cases hole
+  exact carried
+
+/-- Old fragments and unchanged obligations retain graph-bearing references. -/
+theorem references_transport (before after : State Symbol Guard) (carried : ReferencesCarry before)
+    (preserved : PreservesCarriers before after) (origin : EnumeratedOrigin before after)
+    (obligations : after.obligations = before.obligations) : ReferencesCarry after := by
+  refine ⟨?_, ?_⟩
+  · intro uv fragment stored
+    exact (carried.1 uv fragment (origin uv fragment stored)).preserve fragment preserved
+  · intro obligation member
+    exact (carried.2 obligation (by simpa [obligations] using member)).preserve obligation.2 preserved
+
+/-- Representative lookup changes no retained residual. -/
+theorem representative_obligations (fuel uv root : Nat) (before after : State Symbol Guard)

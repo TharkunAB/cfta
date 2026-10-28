@@ -1,0 +1,11 @@
+      term pending storage.total discharged (assigned _) rendered
+    have second := SourcePruningEnumerationRendering.render_model heap
+      (fun _ _ => True) (fun _ _ => True)
+      (assignment (.node symbol [.node symbol []])) marker fuel 0 state after term pending storage.total discharged (assigned _) rendered
+    have same : Term.node symbol [.node symbol []] = .node symbol [.node symbol [.node symbol []]] := by
+      simpa [assignment] using first.1.symm.trans second.1
+    have leaves := (List.cons.inj (Term.node.inj same).2).1
+    have impossible : (0 : Nat) = 1 := congrArg List.length (Term.node.inj leaves).2
+    omega
+
+end MicroCFTA.SourcePruningEnumerationFreeHole

@@ -1,0 +1,16 @@
+theorem free_hole_counterexample :
+    ∃ before : Core,
+      Safe before ∧ Canonical before ∧ ProperState before ∧
+      (∃ level frontier, Stratified before level frontier) ∧
+      SourcePruningEnumerationRendering.Discharged before ∧
+      (∃ model : Nat → Term Symbol, Satisfies (fun _ _ => True) (fun _ _ => True) model before) ∧
+      CarriesGraph before 0 ∧ ¬ CarriesGraph before 1 ∧ ¬ ReferencesCarry before ∧
+      ∀ (heap : InternedConstructorTemplates.State Symbol Unit) (marker : Symbol)
+        (fuel : Nat) (term : Term Symbol) (pending : List (Unit × Term Symbol)) (after : Core),
+        ¬ Success (SourcePruningEnumerationRendering.render heap marker fuel 0)
+          before (term, pending) after := by
+  have storage : StorageValid state := by
+    refine ⟨rfl, UnionFind.initial_total [0, 1], ?_, ?_, by simp [state]⟩
+    · intro uv entry stored
+      simp only [state, UnionFind.withInitialValues] at stored
+      split at stored

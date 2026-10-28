@@ -1,0 +1,7 @@
+theorem expandFragment_complete (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (marker : Symbol) (level : Nat → Nat) (frontier : Nat) (fragment : Fragment Symbol)
+    (before : State Symbol EnumGuard) (safe : Safe before)
+    (ordered : Stratified before level frontier) (discharged : Discharged before)
+    (references : ReferencesCarry before) (carried : FragmentCarries before fragment) :
+    ∃ fuel term after, Success (expandFragment heap marker fuel fragment) before term after ∧
+      RenderStable before after := by

@@ -1,0 +1,7 @@
+theorem expandUVar_complete (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (marker : Symbol) (level : Nat → Nat) (frontier uv : Nat)
+    (before : State Symbol EnumGuard) (safe : Safe before)
+    (ordered : Stratified before level frontier) (discharged : Discharged before)
+    (references : ReferencesCarry before) (carried : CarriesGraph before uv) :
+    ∃ fuel term after, Success (expandUVar heap marker fuel uv) before term after ∧
+      RenderStable before after := by

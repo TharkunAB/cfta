@@ -1,0 +1,64 @@
+    PreservesCarriers before after ∧ ReferencesCarry after ∧ FragmentCarries after fragment := by
+  cases value with
+  | empty =>
+      simp only [prepareChild, Option.some.injEq] at prepared
+      rw [← prepared] at success
+      exact (reject_unsuccessful before after fragment success).elim
+  | reference name =>
+      simp only [prepareChild, reduceCtorEq] at prepared
+  | node entry edges depth free =>
+      by_cases terminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true
+      · simp only [prepareChild, terminal, ↓reduceIte, reduceCtorEq] at prepared
+      · simp only [prepareChild, terminal, Bool.false_eq_true, ↓reduceIte,
+          SourcePruningEnumerationNodes.encodeNode, Option.some.injEq] at prepared
+        rw [← prepared] at success
+        obtain ⟨uv, allocatedAfter, allocation, continued⟩ := (success_bind _ _ _ _ _).mp success
+        have shape : uv = before.counter ∧ allocatedAfter = allocated (some (entry.identity + 1)) before := by
+          simpa [Success, allocate_exact, ExceptT.run] using allocation
+        obtain ⟨rfl, rfl⟩ := shape
+        obtain ⟨ignored, written, writing, final⟩ := (success_bind _ _ _ _ _).mp continued
+        cases ignored
+        have allocatedFacts := allocated_carriers (entry.identity + 1) before safe references
+        have origin := setValue_origin before.counter
+          (.unenumerated (some (entry.identity + 1)) scs)
+          (allocated (some (entry.identity + 1)) before) written
+          (by intro other impossible; cases impossible) writing
+        have writtenSame := (EnumerationDriver.modify_success _ (allocated (some (entry.identity + 1)) before) written).mp writing
+        have writtenCarriers : PreservesCarriers (allocated (some (entry.identity + 1)) before) written := by
+          rw [writtenSame]
+          exact set_graph_carriers _ before.counter (.unenumerated (some (entry.identity + 1)) scs) trivial
+        have writtenReferences := references_transport _ written allocatedFacts.2.1
+          writtenCarriers origin (by rw [writtenSame])
+        obtain ⟨fragmentSame, afterSame⟩ :=
+          (success_pure (.hole before.counter) fragment written after).mp final
+        subst fragment
+        subst after
+        exact ⟨allocatedFacts.1.trans writtenCarriers, writtenReferences,
+          allocatedFacts.2.2.preserve _ writtenCarriers⟩
+  | union entry _ _ _ | mu entry _ _ _ =>
+      by_cases terminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true
+      · simp only [prepareChild, terminal, ↓reduceIte, reduceCtorEq] at prepared
+      · simp only [prepareChild, terminal, Bool.false_eq_true, ↓reduceIte,
+          SourcePruningEnumerationNodes.encodeNode, Option.some.injEq] at prepared
+        rw [← prepared] at success
+        obtain ⟨uv, allocatedAfter, allocation, final⟩ := (success_bind _ _ _ _ _).mp success
+        have shape : uv = before.counter ∧ allocatedAfter = allocated (some (entry.identity + 1)) before := by
+          simpa [Success, allocate_exact, ExceptT.run] using allocation
+        obtain ⟨rfl, rfl⟩ := shape
+        obtain ⟨fragmentSame, afterSame⟩ :=
+          (success_pure (.hole before.counter) fragment (allocated (some (entry.identity + 1)) before) after).mp final
+        subst fragment
+        subst after
+        exact allocated_carriers (entry.identity + 1) before safe references
+
+end MicroCFTA.SourcePruningEnumerationShallowChild
+
+namespace MicroCFTA.SourcePruningEnumerationCachedPrepare
+open Fragments EnumerationState EnumerationCorrectness EnumerationSchedule
+open EnumerationCarriers EnumerationGraphReferences InternedConstructorTemplates
+local notation "Symbol" => SourcePruningTemplates.Symbol
+variable {EnumGuard NativeGuard : Type}
+
+/-- Each actual cached row inherits carrier provenance from its exact erased native preparation. -/
+theorem rows_carriers
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard) (fuel : Nat)

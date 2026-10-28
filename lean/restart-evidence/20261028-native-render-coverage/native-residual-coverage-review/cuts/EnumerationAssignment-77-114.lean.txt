@@ -1,0 +1,38 @@
+  exact stable (frontier - level uv) uv rfl leftFuel rightFuel leftBound rightBound
+
+/-- A finite dependency ordering constructs a solution of every completed stored equation. -/
+theorem stratified_assignment (state : State Symbol Guard) (safe : Safe state) (level : Nat → Nat) (frontier : Nat)
+    (stratified : Stratified state level frontier) (fallback : Term Symbol) (language : NodeLanguage Symbol)
+    (free : ∀ (uv : Nat) (node : Option Nat) (scs : List Suspended), state.values[uv]? = some (.unenumerated node scs) → node = none ∧ scs = []) :
+    ∃ assignment : Nat → Term Symbol, Fragments.stateSatisfies state.representatives (heap language state.values) assignment := by
+  obtain ⟨roots, paths⟩ := roots_exist state.representatives safe.1.total
+  let assignment := evaluateSlots state.values roots fallback (frontier + 1)
+  refine ⟨assignment, ?_, ?_⟩
+  · intro left right same
+    have sameRoot := (class_iff state.representatives roots paths left right).mp same
+    simp [assignment, evaluateSlots, sameRoot]
+  · intro uv
+    cases stored : state.values[uv]? with
+    | none => simp [heap, stored, slot, slotSatisfies]
+    | some value =>
+        cases value with
+        | eliminated => simp [heap, stored, slot, slotSatisfies]
+        | unenumerated node scs =>
+            obtain ⟨rfl, rfl⟩ := free uv node scs stored
+            simp [heap, stored, slot, slotSatisfies, permits]
+        | enumerated fragment =>
+            simp only [heap, stored, Option.getD_some, slot, slotSatisfies]
+            have fixed := stored_root_fixed state safe roots paths uv _ stored (by simp)
+            change fill assignment fragment = evaluateSlots state.values roots fallback (frontier + 1) uv
+            rw [evaluateSlots, fixed, stored]
+            apply fill_holes_congr
+            intro hole present
+            obtain ⟨bound, dependencies⟩ := stratified.expanded uv fragment stored
+            have higher := dependencies hole present
+            exact evaluateSlots_stable state roots paths level frontier stratified fallback hole (frontier + 1) frontier (by omega) (by omega)
+
+/-- Every successful initialized complete caller has a complete solution of its forest and fragment equations. -/
+theorem completed_assignment (graph : Graph Symbol Guard) (complete : CompleteGraph graph) (fuel root : Nat)
+    (after : State Symbol Guard) (fallback : Term Symbol) (language : NodeLanguage Symbol)
+    (success : Success (enumerateFully graph (fun _ _ => none) noPruning fuel ()) (initial root) () after) :
+    ∃ assignment : Nat → Term Symbol, Fragments.stateSatisfies after.representatives (heap language after.values) assignment := by

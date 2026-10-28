@@ -1,0 +1,28 @@
+
+/-- Every finite residual list with graph-bearing holes has a successful common rendering bound. -/
+theorem renderObligations_complete (graph : Graph Symbol Guard) (complete : CompleteGraph graph) (marker : Symbol)
+    (level : Nat → Nat) (frontier : Nat) (obligations : List (Guard × Fragment Symbol)) (before : State Symbol Guard)
+    (ready : RenderReady graph level frontier before)
+    (carried : ∀ obligation ∈ obligations, FragmentCarries before obligation.2) :
+    ∃ fuel pending after, Success (obligations.mapM fun obligation => do
+      pure (obligation.1, ← expandFragment graph marker fuel obligation.2)) before pending after ∧ RenderStable before after := by
+  induction obligations generalizing before with
+  | nil => exact ⟨0, [], before, (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩, .refl before ready.safe⟩
+  | cons obligation rest ih =>
+      obtain ⟨firstFuel, term, middle, first, firstStable⟩ := expandFragment_complete graph complete marker level frontier obligation.2 before ready (carried obligation (by simp))
+      obtain ⟨restFuel, pending, after, continued, lastStable⟩ := ih middle (ready_read graph level frontier before middle ready firstStable)
+        (fun obligation member => (carried obligation (by simp [member])).preserve obligation.2 (carriers_read before middle firstStable))
+      refine ⟨firstFuel + restFuel, (obligation.1, term) :: pending, after, ?_, firstStable.trans lastStable⟩
+      rw [List.mapM_cons]
+      apply (success_bind _ _ _ _ _).mpr
+      refine ⟨(obligation.1, term), middle, ?_, ?_⟩
+      · exact (success_bind _ _ _ _ _).mpr ⟨term, middle,
+          expandFragment_moreFuel graph marker firstFuel restFuel obligation.2 before term middle first,
+          (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩⟩
+      · apply (success_bind _ _ _ _ _).mpr
+        refine ⟨pending, after, ?_, (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩⟩
+        have more := retains_mapM _ _ (fun (obligation : Guard × Fragment Symbol) => retains_bind _ _ _ _
+          (expandFragment_moreFuel graph marker restFuel firstFuel obligation.2) (fun _ => retains_refl _)) rest middle pending after continued
+        simpa [Nat.add_comm] using more
+
+end MicroCFTA.EnumerationRendering

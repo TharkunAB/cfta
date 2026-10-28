@@ -1,0 +1,26 @@
+      subst after
+      obtain ⟨middleValid, firstCarriers, firstFragment⟩ := step input (by simp) before fragment middle valid first
+      obtain ⟨afterValid, tailCarriers, tailFragments⟩ := ih (fun input member => step input (by simp [member])) middle tail middleValid traversal
+      refine ⟨afterValid, firstCarriers.trans tailCarriers, ?_⟩
+      intro child member
+      rcases List.mem_cons.mp member with rfl | member
+      · exact firstFragment.preserve _ tailCarriers
+      · exact tailFragments child member
+
+/-- Actual mutual traversal preserves graph provenance and creates holes only for graph-bearing classes. -/
+theorem enumeration_carriers (graph : Graph Symbol Guard) (fuel : Nat) :
+    (∀ scs node (before after : State Symbol Guard) fragment, Safe before → (∀ sc ∈ scs, sc.var < before.counter) → ReferencesCarry before →
+      Success (enumerateNode graph fuel scs node) before fragment after →
+      PreservesCarriers before after ∧ ReferencesCarry after ∧ FragmentCarries after fragment) ∧
+    (∀ scs edge (before after : State Symbol Guard) fragment, Safe before → (∀ sc ∈ scs, sc.var < before.counter) → ReferencesCarry before →
+      Success (enumerateEdge graph fuel scs edge) before fragment after →
+      PreservesCarriers before after ∧ ReferencesCarry after ∧ FragmentCarries after fragment) := by
+  induction fuel with
+  | zero =>
+      constructor
+      · intro scs node before after fragment _ _ _ success
+        exact (success_failure .fuelExhausted before after fragment success).elim
+      · intro scs edge before after fragment _ _ _ success
+        exact (success_failure .fuelExhausted before after fragment success).elim
+  | succ fuel ih =>
+      constructor

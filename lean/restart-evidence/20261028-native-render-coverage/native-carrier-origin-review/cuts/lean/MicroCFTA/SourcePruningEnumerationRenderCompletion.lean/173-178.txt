@@ -1,0 +1,6 @@
+theorem expandUVar_bridge (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (graph : Graph Symbol EnumGuard) (marker : Symbol) (fuel uv : Nat)
+    (before after : State Symbol EnumGuard) (term : Term Symbol)
+    (total : UnionFind.Total before.representatives) (discharged : Discharged before) :
+    Success (expandUVar heap marker fuel uv) before term after ↔
+      Success (EnumerationState.expandUVar graph marker fuel uv) before term after := by

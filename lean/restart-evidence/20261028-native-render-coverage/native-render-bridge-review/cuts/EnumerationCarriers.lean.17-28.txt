@@ -1,0 +1,12 @@
+/-- A stored value has a graph restriction or its completed fragment. -/
+def GraphValue : UVarValue Symbol → Prop
+  | .unenumerated (some _) _ | .enumerated _ => True
+  | _ => False
+
+/-- A variable's class contains a stored graph restriction or completed fragment. -/
+def CarriesGraph (state : State Symbol Guard) (uv : Nat) : Prop :=
+  ∃ held value, UnionFind.SameClass state.representatives uv held ∧ state.values[held]? = some value ∧ GraphValue value
+
+/-- An action retains each existing graph-bearing equality class. -/
+def PreservesCarriers (before after : State Symbol Guard) : Prop :=
+  ∀ uv, CarriesGraph before uv → CarriesGraph after uv

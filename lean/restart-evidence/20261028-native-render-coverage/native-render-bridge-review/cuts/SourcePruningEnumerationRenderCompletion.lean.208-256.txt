@@ -1,0 +1,49 @@
+  constructor
+  · intro node body equal
+    change (.empty : Node Symbol EnumGuard) = .recursive body at equal
+    cases equal
+  · intro node edges equal
+    change (.empty : Node Symbol EnumGuard) = .alternatives edges at equal
+    cases equal
+
+private theorem discharged_finished (graph : Graph Symbol EnumGuard) (before : State Symbol EnumGuard)
+    (discharged : Discharged before) : Finished graph before := by
+  intro value member
+  cases value with
+  | eliminated | enumerated _ => rfl
+  | unenumerated node scs =>
+      obtain ⟨uv, stored⟩ := List.mem_iff_getElem?.mp member
+      obtain ⟨rfl, rfl⟩ := discharged uv node scs stored
+      rfl
+
+/-- Original carrier provenance gives a finite native fragment rendering. -/
+theorem expandFragment_complete (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (marker : Symbol) (level : Nat → Nat) (frontier : Nat) (fragment : Fragment Symbol)
+    (before : State Symbol EnumGuard) (safe : Safe before)
+    (ordered : Stratified before level frontier) (discharged : Discharged before)
+    (references : ReferencesCarry before) (carried : FragmentCarries before fragment) :
+    ∃ fuel term after, Success (expandFragment heap marker fuel fragment) before term after ∧
+      RenderStable before after := by
+  let graph : Graph Symbol EnumGuard := proofGraph
+  have ready : EnumerationRendering.RenderReady graph level frontier before :=
+    ⟨safe, discharged_finished graph before discharged, references, ordered⟩
+  obtain ⟨fuel, term, after, observed, stable⟩ := EnumerationRendering.expandFragment_complete
+    graph proofGraph_complete marker level frontier fragment before ready carried
+  exact ⟨fuel, term, after,
+    (expandFragment_bridge heap graph marker fuel fragment before after term safe.1.total discharged).mpr observed,
+    stable⟩
+
+/-- Original root and stored-reference provenance give a finite native root rendering. -/
+theorem expandUVar_complete (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (marker : Symbol) (level : Nat → Nat) (frontier uv : Nat)
+    (before : State Symbol EnumGuard) (safe : Safe before)
+    (ordered : Stratified before level frontier) (discharged : Discharged before)
+    (references : ReferencesCarry before) (carried : CarriesGraph before uv) :
+    ∃ fuel term after, Success (expandUVar heap marker fuel uv) before term after ∧
+      RenderStable before after := by
+  let graph : Graph Symbol EnumGuard := proofGraph
+  have ready : EnumerationRendering.RenderReady graph level frontier before :=
+    ⟨safe, discharged_finished graph before discharged, references, ordered⟩
+  obtain ⟨fuel, term, after, observed, stable⟩ := EnumerationRendering.expandUVar_complete
+    graph proofGraph_complete marker level frontier uv before ready carried
+  exact ⟨fuel, term, after,

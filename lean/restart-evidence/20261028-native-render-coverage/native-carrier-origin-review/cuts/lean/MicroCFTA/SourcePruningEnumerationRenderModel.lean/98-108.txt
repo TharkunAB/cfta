@@ -1,0 +1,11 @@
+theorem render_model (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (language : NodeLanguage Symbol) (meaning : EnumGuard → Term Symbol → Prop)
+    (assignment : Nat → Term Symbol) (marker : Symbol) (fuel uv : Nat)
+    (before after : EnumerationState.State Symbol EnumGuard) (term : Term Symbol)
+    (pending : List (EnumGuard × Term Symbol)) (total : UnionFind.Total before.representatives)
+    (discharged : Discharged before) (satisfied : Satisfies language meaning assignment before)
+    (success : Success (render heap marker fuel uv) before (term, pending) after) :
+    term = assignment uv ∧
+      pending = before.obligations.map (fun obligation => (obligation.1, fill assignment obligation.2)) ∧
+      (∀ obligation ∈ pending, meaning obligation.1 obligation.2) ∧
+      Frame before after ∧ Satisfies language meaning assignment after := by

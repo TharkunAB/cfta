@@ -1,0 +1,24 @@
+  cases residual with
+  | none =>
+      obtain ⟨_, same⟩ := (success_pure () () before after).mp success
+      subst after
+      exact carried
+  | some guard =>
+      obtain rfl := (modify_success _ before after).mp success
+      refine ⟨carried.1, ?_⟩
+      intro obligation member
+      rcases List.mem_cons.mp member with rfl | old
+      · exact holes
+      · exact carried.2 obligation old
+
+/-- Ordered traversal preserves all old graph carriers and all returned fragment holes. -/
+theorem mapM_carriers (action : α → EnumerateM Symbol Guard (Fragment Symbol)) (invariant : State Symbol Guard → Prop)
+    (inputs : List α)
+    (step : ∀ input ∈ inputs, ∀ before fragment after, invariant before → Success (action input) before fragment after →
+      invariant after ∧ PreservesCarriers before after ∧ FragmentCarries after fragment)
+    (before after : State Symbol Guard) (fragments : List (Fragment Symbol)) (valid : invariant before)
+    (success : Success (inputs.mapM action) before fragments after) :
+    invariant after ∧ PreservesCarriers before after ∧ ∀ fragment ∈ fragments, FragmentCarries after fragment := by
+  induction inputs generalizing before fragments with
+  | nil =>
+      obtain ⟨rfl, rfl⟩ := (success_pure [] fragments before after).mp success

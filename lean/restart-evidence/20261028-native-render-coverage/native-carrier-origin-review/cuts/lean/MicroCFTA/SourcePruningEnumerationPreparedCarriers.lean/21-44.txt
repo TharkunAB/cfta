@@ -1,0 +1,24 @@
+
+private theorem allocated_carriers (node : Nat) (before : EnumerationState.State Symbol EnumGuard)
+    (safe : Safe before) (references : ReferencesCarry before) :
+    PreservesCarriers before (allocated (some node) before) ∧
+      ReferencesCarry (allocated (some node) before) ∧
+      FragmentCarries (allocated (some node) before) (.hole before.counter) := by
+  have preserved := allocation_carriers (some node) before
+  refine ⟨preserved,
+    references_transport before _ references preserved (allocation_origin (some node) before) rfl, ?_⟩
+  apply fragmentCarries_hole
+  exact carries_self (allocated (some node) before) safe.1.total before.counter
+    (.unenumerated (some node) []) (allocated_slot (some node) before safe.1.aligned) trivial
+
+/-- Every actual successful shallow row retains old carriers and supplies its returned hole. -/
+theorem prepared_carriers
+    (scs : List Suspended) (value : Value Symbol NativeGuard)
+    (before after : EnumerationState.State Symbol EnumGuard)
+    (action : EnumerateM Symbol EnumGuard (Fragment Symbol)) (fragment : Fragment Symbol)
+    (safe : Safe before) (references : ReferencesCarry before)
+    (prepared : prepareChild scs value = some action)
+    (success : Success action before fragment after) :
+    PreservesCarriers before after ∧ ReferencesCarry after ∧ FragmentCarries after fragment := by
+  cases value with
+  | empty =>

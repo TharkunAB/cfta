@@ -1,0 +1,8 @@
+theorem prepared_carriers
+    (scs : List Suspended) (value : Value Symbol NativeGuard)
+    (before after : EnumerationState.State Symbol EnumGuard)
+    (action : EnumerateM Symbol EnumGuard (Fragment Symbol)) (fragment : Fragment Symbol)
+    (safe : Safe before) (references : ReferencesCarry before)
+    (prepared : prepareChild scs value = some action)
+    (success : Success action before fragment after) :
+    PreservesCarriers before after ∧ ReferencesCarry after ∧ FragmentCarries after fragment := by

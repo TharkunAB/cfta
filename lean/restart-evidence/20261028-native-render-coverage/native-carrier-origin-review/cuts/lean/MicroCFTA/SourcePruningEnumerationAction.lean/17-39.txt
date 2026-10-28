@@ -1,0 +1,23 @@
+def prepare [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol NativeGuard)]
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
+    (admits : Key → InternedConstructorTemplates.Value Symbol NativeGuard → Bool)
+    (metadata : Metadata Typing) (nativeFuel representativeFuel uv oldHandle : Nat)
+    (scs : List EnumerationState.Suspended) (oldValue : InternedConstructorTemplates.Value Symbol NativeGuard)
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard) :
+    MergedSourceComparison.Result Symbol NativeGuard
+      (InternedConstructorTemplates.Value Symbol NativeGuard × Option (EnumerateM Symbol EnumGuard Unit))
+ :=
+  match SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue heap with
+  | .failed fault after => .failed fault after
+  | .done result nextHeap =>
+      .done (result,
+        match result with
+        | .empty => some reject
+        | _ =>
+            match encodeNode result with
+            | none => none
+            | some newHandle =>
+                some (
+                  if newHandle = oldHandle then
+                    pure ()
+                  else

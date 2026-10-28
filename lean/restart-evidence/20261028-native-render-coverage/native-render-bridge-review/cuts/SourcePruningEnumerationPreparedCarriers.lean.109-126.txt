@@ -1,0 +1,18 @@
+    (safe : Safe before.core) (references : ReferencesCarry before.core)
+    (cached : prepareChild heap fuel scs value before = some rows) :
+    ∀ fragment after, (fragment, after) ∈ rows →
+      PreservesCarriers before.core after.core ∧ ReferencesCarry after.core ∧
+        FragmentCarries after.core fragment := by
+  have raw := erase_some heap fuel scs value before rows cached
+  cases prepared : SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := EnumGuard) scs value with
+  | none =>
+      simp only [prepared, Option.map_none, reduceCtorEq] at raw
+  | some action =>
+      simp only [prepared, Option.map_some, Option.some.injEq] at raw
+      intro fragment after member
+      apply SourcePruningEnumerationShallowChild.prepared_carriers scs value before.core after.core
+        action fragment safe references prepared
+      rw [Success, raw]
+      exact List.mem_map.mpr ⟨(fragment, after), member, rfl⟩
+
+end MicroCFTA.SourcePruningEnumerationCachedPrepare

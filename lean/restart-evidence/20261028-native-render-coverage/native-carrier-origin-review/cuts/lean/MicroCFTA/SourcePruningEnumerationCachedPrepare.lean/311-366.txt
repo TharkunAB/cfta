@@ -1,0 +1,56 @@
+          value ≠ .empty ∧ rows = [(.hole before.core.counter, after)] ∧
+          after.core.counter = before.core.counter + 1 ∧
+          after.core.counter = after.core.values.length ∧
+          after.core.representatives = before.core.representatives ∧ Roots after.core.representatives roots ∧
+          StorageValid after.core ∧ PendingRealized heap after.core ∧
+          EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
+          (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap
+            ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧
+          FragmentBound («Symbol» := Symbol) after.core.counter (.hole before.core.counter)) := by
+  cases value with
+  | empty =>
+      refine ⟨reject, 0, [], rfl, ?_, rfl, Or.inl ⟨rfl, rfl⟩⟩
+      intro extra
+      rfl
+  | reference name => cases closed
+  | node entry edges depth free =>
+      obtain ⟨_handle, action, _allocatedCached, after, fuel, _encoded, _decoded,
+        prepared, coreRaw, _nativeAllocated, _allocatedShape, _allocatedStored,
+        _allocatedStorage, _allocatedRealized, _allocatedCounts, _allocatedFlags,
+        _waitingSame, _nativeRun, prepareRun, _afterShape, _afterSlot, grows,
+        alignedAfter, forestSame, pathsAfter, storageAfter, realizedAfter, countsAfter,
+        flagsAfter, _flagShape, _waitingCount, holeBound⟩ :=
+        SourcePruningEnumerationCachedChild.complete heap before entry edges depth free scs roots
+          coherent available closed storage realized paths counts flags bounded
+          (nonterminal (by intro emptyValue; cases emptyValue))
+      refine ⟨action, fuel, [(.hole before.core.counter, after)], prepared, ?_, coreRaw,
+        Or.inr ⟨after, (by intro emptyValue; cases emptyValue), rfl, grows, alignedAfter,
+          forestSame, pathsAfter, storageAfter, realizedAfter, countsAfter, flagsAfter, holeBound⟩⟩
+      intro extra
+      simp only [prepareChild, prepareRun extra, Option.map_some]
+  | union entry members depth free =>
+      obtain ⟨_handle, action, after, _encoded, _decoded, prepared, prepareRun, coreRaw,
+        _shape, _stored, grows, alignedAfter, forestSame, pathsAfter, storageAfter,
+        realizedAfter, countsAfter, _waitingSame, _flagSame, flagsAfter, holeBound⟩ :=
+        boundary_complete heap before (.union entry members depth free) scs roots
+          coherent available closed rfl (nonterminal (by intro emptyValue; cases emptyValue))
+          storage realized paths counts flags
+      refine ⟨action, 0, [(.hole before.core.counter, after)], prepared, ?_, coreRaw,
+        Or.inr ⟨after, (by intro emptyValue; cases emptyValue), rfl, grows, alignedAfter,
+          forestSame, pathsAfter, storageAfter, realizedAfter, countsAfter, flagsAfter, holeBound⟩⟩
+      intro extra
+      exact prepareRun (0 + extra)
+  | mu entry body depthShape ordinaryShape =>
+      obtain ⟨_handle, action, after, _encoded, _decoded, prepared, prepareRun, coreRaw,
+        _shape, _stored, grows, alignedAfter, forestSame, pathsAfter, storageAfter,
+        realizedAfter, countsAfter, _waitingSame, _flagSame, flagsAfter, holeBound⟩ :=
+        boundary_complete heap before (.mu entry body depthShape ordinaryShape) scs roots
+          coherent available closed rfl (nonterminal (by intro emptyValue; cases emptyValue))
+          storage realized paths counts flags
+      refine ⟨action, 0, [(.hole before.core.counter, after)], prepared, ?_, coreRaw,
+        Or.inr ⟨after, (by intro emptyValue; cases emptyValue), rfl, grows, alignedAfter,
+          forestSame, pathsAfter, storageAfter, realizedAfter, countsAfter, flagsAfter, holeBound⟩⟩
+      intro extra
+      exact prepareRun (0 + extra)
+
+end MicroCFTA.SourcePruningEnumerationCachedPrepare

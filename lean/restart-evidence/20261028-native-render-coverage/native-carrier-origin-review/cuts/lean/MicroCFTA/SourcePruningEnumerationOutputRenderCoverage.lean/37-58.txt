@@ -1,0 +1,22 @@
+theorem ResourceHistory.render_complete_models
+    (history : ResourceHistory holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver
+      workFuel recursiveFuel inventory caller memos metadata before seed ceiling next output)
+    (marker : Symbol) (uv : Nat)
+    (discharged : SourcePruningEnumerationRendering.Discharged output.cache.core)
+    (references : EnumerationGraphReferences.ReferencesCarry output.cache.core)
+    (carried : EnumerationCarriers.CarriesGraph output.cache.core uv) :
+    ∃ (finalInventory : Inventory) (finalMemos : Memos) (finalMetadata : Metadata Typing),
+      Packet formulas solver finalInventory output.caller finalMemos finalMetadata output.cache ∧
+      ∃ (level : Nat → Nat) (frontier : Nat),
+        EnumerationOrder.Stratified output.cache.core level frontier ∧
+        ∃ (bound : Nat) (term : Term Symbol) (pending : List (Constraint × Term Symbol))
+      (after : EnumerationState.State Symbol Constraint),
+      (∀ extra, Success (SourcePruningEnumerationRendering.render output.caller.checked.native.machine.heap marker (bound + extra) uv) output.cache.core (term, pending) after) ∧
+      EnumerationDriver.RenderStable output.cache.core after ∧ EnumerationCompressionFrame.Frame output.cache.core after ∧ EnumerationOrder.Stratified after level frontier ∧
+      ∀ (language : NodeLanguage Symbol) (meaning : Constraint → Term Symbol → Prop)
+        (assignment : Nat → Term Symbol),
+        Satisfies language meaning assignment output.cache.core →
+        term = assignment uv ∧
+        pending = output.cache.core.obligations.map (fun obligation => (obligation.1, fill assignment obligation.2)) ∧
+        (∀ obligation ∈ pending, meaning obligation.1 obligation.2) ∧
+        Satisfies language meaning assignment after := by

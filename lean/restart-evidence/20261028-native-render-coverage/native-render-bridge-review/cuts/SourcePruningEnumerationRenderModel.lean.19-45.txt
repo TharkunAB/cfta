@@ -1,0 +1,27 @@
+private def Valid (language : NodeLanguage Symbol) (assignment : Nat → Term Symbol)
+    (state : EnumerationState.State Symbol EnumGuard) : Prop :=
+  UnionFind.Total state.representatives ∧
+    stateSatisfies state.representatives (EnumerationCorrectness.heap language state.values) assignment ∧ Discharged state
+
+private theorem read_sound (language : NodeLanguage Symbol) (assignment : Nat → Term Symbol)
+    (fuel uv : Nat) (before after : EnumerationState.State Symbol EnumGuard) (value : UVarValue Symbol)
+    (valid : Valid language assignment before) (success : Success (getValue fuel uv) before value after) :
+    Valid language assignment after ∧ Frame before after ∧ slotSatisfies assignment uv (slot language value) ∧
+      (∀ node scs, value = .unenumerated node scs → node = none ∧ scs = []) := by
+  obtain ⟨frame, root, size, path, _afterPath, stored⟩ := getValue_frame fuel uv before after value valid.1 success
+  have satisfied : Satisfies language (fun _ _ => True) assignment before :=
+    ⟨valid.2.1, by simp [guardsHold]⟩
+  have final := (EnumerationFrame.getValue_assignment language (fun _ _ => True) assignment
+    fuel uv before after value valid.1 success).mpr satisfied
+  have assigned := valid.2.1.1 uv root (UnionFind.sameClass_root path)
+  have storedHolds : slotSatisfies assignment root (slot language value) := by
+    simpa only [EnumerationCorrectness.heap, stored, Option.getD_some] using valid.2.1.2 root
+  refine ⟨⟨frame.total valid.1, final.1, ?_⟩, frame, ?_, ?_⟩
+  · intro held node scs found
+    exact valid.2.2 held node scs (by simpa only [frame.values] using found)
+  · cases value <;> simp_all [slot, slotSatisfies]
+  · intro node scs same
+    exact valid.2.2 root node scs (by simpa only [same] using stored)
+
+private theorem fragment_sound (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (language : NodeLanguage Symbol) (assignment : Nat → Term Symbol) (marker : Symbol)

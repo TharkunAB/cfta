@@ -1,0 +1,25 @@
+node with a hole at slot one. Slot one is a free equality variable with no
+graph restriction. The core is Safe, Canonical, ProperState, Stratified and
+Discharged. It has satisfying assignments and a root carrier. The referenced
+free hole has no carrier; ReferencesCarry is false. No fuel, heap or marker
+can make the actual native render succeed.
+
+The proof gives the free hole two different terms. Both assignments satisfy
+the original core. The checked render_model theorem would make any successful
+root equal both distinct assigned terms, which is impossible. This avoids an
+unbounded low-level evaluator computation and proves failure for EVERY fuel.
+Earlier untested low-level drafts are retained as such.
+
+This is an internal-state counterexample, not a full Packet, public startup
+history or public Haskell counterexample. Haskell expandTermFragWith raises an
+error on a nonrecursive unfinished nested hole; expandUVarWith rejects an
+unfinished nonrecursive root. Proving those cases unreachable on the covered
+native history needs the carrier invariant. No new Haskell patch is established.
+No Haskell/Cabal file changed. No Haskell test or benchmark ran.
+FINDINGS records this assessment and retains integrated LPO/KBO repair status
+and prior executed witnesses for external review.
+
+## Remaining whole-system gap
+
+The largest gap remains full recursive accepted-output coverage. Preserve
+root and reference carriers through actual terminal merging, assimilation,

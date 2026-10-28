@@ -1,0 +1,29 @@
+/-- Concrete rendering uses the caller's marker for any unexpanded recursive node. -/
+def expandFragment (graph : Graph Symbol Guard) (marker : Symbol) : Nat → Fragment Symbol →
+    EnumerateM Symbol Guard (Term Symbol)
+  | 0, _ => failure .fuelExhausted
+  | fuel + 1, .node symbol children => do
+      pure (.node symbol (← children.mapM (expandFragment graph marker fuel)))
+  | fuel + 1, .hole uv => do
+      match ← getValue (fuel + 1) uv with
+      | .enumerated fragment => expandFragment graph marker fuel fragment
+      | .unenumerated (some node) _ =>
+          match graph.node node with
+          | .recursive _ => pure (.node marker [])
+          | _ => failure .unfinishedFragment
+      | _ => failure .unfinishedFragment
+
+/-- Read a completed variable. A nonrecursive unfinished root rejects the branch. -/
+def expandUVar (graph : Graph Symbol Guard) (marker : Symbol) (fuel uv : Nat) :
+    EnumerateM Symbol Guard (Term Symbol) := do
+  match ← getValue (fuel + 1) uv with
+  | .enumerated fragment => expandFragment graph marker fuel fragment
+  | .unenumerated (some node) _ =>
+      match graph.node node with
+      | .recursive _ => pure (.node marker [])
+      | _ => reject
+  | _ => reject
+
+/-- One run keeps every residual constraint paired with its rendered guarded subtree. -/
+def runs (graph : Graph Symbol Guard) (marker : Symbol) (fuel root : Nat) :
+    List (Except Error ((Term Symbol × List (Guard × Term Symbol)) × State Symbol Guard)) :=

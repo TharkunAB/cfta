@@ -1,0 +1,16 @@
+/-- Native root and residual rendering retain the same result at every larger bound. -/
+theorem render_moreFuel (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (marker : Symbol) (fuel extra uv : Nat) :
+    Retains (render (EnumGuard := EnumGuard) heap marker fuel uv)
+      (render heap marker (fuel + extra) uv) := by
+  unfold render
+  apply retains_bind _ _ _ _ (expandUVar_moreFuel heap marker fuel extra uv)
+  intro term
+  apply retains_bind _ _ _ _ (retains_refl _)
+  intro current
+  apply retains_bind _ _ _ _ ?_ (fun _ => retains_refl _)
+  exact retains_mapM _ _ (fun obligation =>
+    retains_bind _ _ _ _ (expandFragment_moreFuel heap marker fuel extra obligation.2)
+      (fun _ => retains_refl _)) current.obligations
+
+end MicroCFTA.SourcePruningEnumerationRendering

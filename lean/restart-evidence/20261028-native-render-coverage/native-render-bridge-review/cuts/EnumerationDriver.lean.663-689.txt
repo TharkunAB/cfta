@@ -1,0 +1,27 @@
+/-- Rendering changes only union-find compression and retains all stored payloads. -/
+structure RenderStable (before after : State Symbol Guard) : Prop where
+  safe : Safe after
+  counter : after.counter = before.counter
+  values : after.values = before.values
+  obligations : after.obligations = before.obligations
+  classes : ∀ left right, UnionFind.SameClass after.representatives left right ↔ UnionFind.SameClass before.representatives left right
+
+/-- An unchanged rendering state retains all stored data. -/
+theorem RenderStable.refl (state : State Symbol Guard) (safe : Safe state) : RenderStable state state :=
+  ⟨safe, rfl, rfl, rfl, fun _ _ => Iff.rfl⟩
+
+/-- Rendering preservation composes through consecutive actions. -/
+theorem RenderStable.trans (left : RenderStable before middle) (right : RenderStable middle after) :
+    RenderStable before after :=
+  ⟨right.safe, right.counter.trans left.counter, right.values.trans left.values, right.obligations.trans left.obligations,
+    fun first second => (right.classes first second).trans (left.classes first second)⟩
+
+/-- A bounded UVar read preserves storage and returns a bounded stored value. -/
+theorem getValue_storage (fuel uv : Nat) (before after : State Symbol Guard) (value : UVarValue Symbol)
+    (safe : Safe before) (inside : uv < before.counter)
+    (success : Success (getValue fuel uv) before value after) : RenderStable before after ∧ SlotBound after.counter value := by
+  obtain ⟨found, lookup, stored, rfl⟩ := (getValue_success fuel uv before after value).mp success
+  have reached := (UnionFind.findRoot_correct fuel before.representatives uv found lookup).1
+  have root : IsRoot before.representatives found.representative := ⟨found.size, .root (UnionFind.reaches_terminal reached)⟩
+  have safeAfter := (compression_safe before safe fuel uv found.representative inside root found lookup).1
+  exact ⟨⟨safeAfter, rfl, rfl, rfl, UnionFind.findRoot_classes safe.1.total lookup⟩,

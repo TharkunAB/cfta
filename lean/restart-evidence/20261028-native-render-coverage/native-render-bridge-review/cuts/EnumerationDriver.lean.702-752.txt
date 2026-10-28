@@ -1,0 +1,51 @@
+
+/-- Actual fragment rendering preserves every stored value and obligation. -/
+theorem expandFragment_storage (graph : Graph Symbol Guard) (marker : Symbol) (fuel : Nat)
+    (fragment : Fragment Symbol) (before after : State Symbol Guard) (term : Term Symbol)
+    (safe : Safe before) (bounded : FragmentBound before.counter fragment)
+    (success : Success (expandFragment graph marker fuel fragment) before term after) : RenderStable before after := by
+  induction fuel generalizing fragment before after term with
+  | zero => exact (success_failure .fuelExhausted before after term success).elim
+  | succ fuel ih =>
+      cases fragment with
+      | node symbol children =>
+          change Success (children.mapM (expandFragment graph marker fuel) >>= fun terms => pure (.node symbol terms))
+            before term after at success
+          obtain ⟨terms, middle, traversed, final⟩ := (success_bind _ _ _ _ _).mp success
+          have step : ∀ child ∈ children, ∀ previous output next, RenderStable before previous →
+              Success (expandFragment graph marker fuel child) previous output next → RenderStable before next := by
+            intro child member previous output next valid childSuccess
+            have childBound : FragmentBound previous.counter child := by
+              rw [valid.counter]
+              exact fragmentsBound_member before.counter children bounded child member
+            exact valid.trans (ih child previous next output valid.safe childBound childSuccess)
+          have rendered := mapM_invariant (expandFragment graph marker fuel) (RenderStable before) children step
+            before middle terms (.refl before safe) traversed
+          obtain ⟨_, same⟩ := (success_pure (.node symbol terms) term middle after).mp final
+          subst after
+          exact rendered
+      | hole uv =>
+          change Success (getValue (fuel + 1) uv >>= fun value => match value with
+            | .enumerated fragment => expandFragment graph marker fuel fragment
+            | .unenumerated (some node) _ => match graph.node node with
+              | .recursive _ => pure (.node marker [])
+              | _ => EnumerationState.failure .unfinishedFragment
+            | _ => EnumerationState.failure .unfinishedFragment) before term after at success
+          obtain ⟨value, middle, reading, final⟩ := (success_bind _ _ _ _ _).mp success
+          obtain ⟨readStable, valueBound⟩ := getValue_storage (fuel + 1) uv before middle value safe bounded reading
+          cases value with
+          | eliminated => exact (success_failure .unfinishedFragment middle after term final).elim
+          | enumerated stored => exact readStable.trans (ih stored middle after term readStable.safe valueBound final)
+          | unenumerated node scs =>
+              cases node with
+              | none => exact (success_failure .unfinishedFragment middle after term final).elim
+              | some node =>
+                  cases view : graph.node node with
+                  | recursive body =>
+                      simp only [view] at final
+                      obtain ⟨_, same⟩ := (success_pure (.node marker []) term middle after).mp final
+                      subst after
+                      exact readStable
+                  | empty | alternatives _ | unresolved _ =>
+                      simp only [view] at final
+                      exact (success_failure .unfinishedFragment middle after term final).elim

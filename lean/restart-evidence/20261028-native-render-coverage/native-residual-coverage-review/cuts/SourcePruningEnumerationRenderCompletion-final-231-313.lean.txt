@@ -1,0 +1,83 @@
+    (references : ReferencesCarry before) (carried : FragmentCarries before fragment) :
+    ∃ fuel term after, Success (expandFragment heap marker fuel fragment) before term after ∧
+      RenderStable before after := by
+  let graph : Graph Symbol EnumGuard := proofGraph
+  have ready : EnumerationRendering.RenderReady graph level frontier before :=
+    ⟨safe, discharged_finished graph before discharged, references, ordered⟩
+  obtain ⟨fuel, term, after, observed, stable⟩ := EnumerationRendering.expandFragment_complete
+    graph proofGraph_complete marker level frontier fragment before ready carried
+  exact ⟨fuel, term, after,
+    (expandFragment_bridge heap graph marker fuel fragment before after term safe.1.total discharged).mpr observed,
+    stable⟩
+
+/-- Original root and stored-reference provenance give a finite native root rendering. -/
+theorem expandUVar_complete (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (marker : Symbol) (level : Nat → Nat) (frontier uv : Nat)
+    (before : State Symbol EnumGuard) (safe : Safe before)
+    (ordered : Stratified before level frontier) (discharged : Discharged before)
+    (references : ReferencesCarry before) (carried : CarriesGraph before uv) :
+    ∃ fuel term after, Success (expandUVar heap marker fuel uv) before term after ∧
+      RenderStable before after := by
+  let graph : Graph Symbol EnumGuard := proofGraph
+  have ready : EnumerationRendering.RenderReady graph level frontier before :=
+    ⟨safe, discharged_finished graph before discharged, references, ordered⟩
+  obtain ⟨fuel, term, after, observed, stable⟩ := EnumerationRendering.expandUVar_complete
+    graph proofGraph_complete marker level frontier uv before ready carried
+  exact ⟨fuel, term, after,
+    (expandUVar_bridge heap graph marker fuel uv before after term safe.1.total discharged).mpr observed,
+    stable⟩
+
+/-- Original carrier provenance gives one finite bound for the root and all residuals. -/
+theorem render_complete (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (marker : Symbol) (level : Nat → Nat) (frontier uv : Nat)
+    (before : State Symbol EnumGuard) (safe : Safe before)
+    (ordered : Stratified before level frontier) (discharged : Discharged before)
+    (references : ReferencesCarry before) (carried : CarriesGraph before uv) :
+    ∃ fuel term pending after, Success (render heap marker fuel uv) before (term, pending) after ∧
+      RenderStable before after := by
+  let graph : Graph Symbol EnumGuard := proofGraph
+  have ready : EnumerationRendering.RenderReady graph level frontier before :=
+    ⟨safe, discharged_finished graph before discharged, references, ordered⟩
+  obtain ⟨rootFuel, term, middle, rootRun, rootStable⟩ := EnumerationRendering.expandUVar_complete
+    graph proofGraph_complete marker level frontier uv before ready carried
+  have middleReady := EnumerationRendering.ready_read graph level frontier before middle ready rootStable
+  have middleDischarged := discharged_values before middle rootStable.values discharged
+  obtain ⟨pendingFuel, pending, after, pendingRun, pendingStable⟩ :=
+    EnumerationRendering.renderObligations_complete graph proofGraph_complete marker level frontier
+      middle.obligations middle middleReady middleReady.references.2
+  let fuel := rootFuel + pendingFuel
+  have rootRaised : Success (EnumerationState.expandUVar graph marker fuel uv) before term middle :=
+    EnumerationExecution.expandUVar_moreFuel graph marker rootFuel pendingFuel uv before term middle rootRun
+  have pendingRaised : Success (middle.obligations.mapM fun obligation => do
+      pure (obligation.1, ← EnumerationState.expandFragment graph marker fuel obligation.2))
+      middle pending after := by
+    have raised := retains_mapM _ _ (fun (obligation : EnumGuard × Fragment Symbol) => retains_bind _ _ _ _
+      (EnumerationExecution.expandFragment_moreFuel graph marker pendingFuel rootFuel obligation.2)
+      (fun _ => retains_refl _)) middle.obligations middle pending after pendingRun
+    simpa only [fuel, Nat.add_comm] using raised
+  have nativeRoot := (expandUVar_bridge heap graph marker fuel uv before middle term safe.1.total discharged).mpr rootRaised
+  have pendingTransferred := mapM_transfer
+    (fun (obligation : EnumGuard × Fragment Symbol) => do
+      pure (obligation.1, ← EnumerationState.expandFragment graph marker fuel obligation.2))
+    (fun (obligation : EnumGuard × Fragment Symbol) => do
+      pure (obligation.1, ← expandFragment heap marker fuel obligation.2))
+    (fun state => UnionFind.Total state.representatives ∧ Discharged state)
+    (by
+      intro obligation previous output next valid observed
+      obtain ⟨term, expanded, expansion, final⟩ := (success_bind _ _ _ _ _).mp observed
+      obtain ⟨expandedValid, transferred⟩ :=
+        (fragment_transfers heap graph marker fuel obligation.2 previous expanded term valid.1 valid.2).2 expansion
+      obtain ⟨rfl, rfl⟩ := (success_pure (obligation.1, term) output expanded next).mp final
+      exact ⟨expandedValid, (success_bind _ _ _ _ _).mpr
+        ⟨term, next, transferred, (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩⟩⟩)
+    middle.obligations middle after pending ⟨rootStable.safe.1.total, middleDischarged⟩ pendingRaised
+  refine ⟨fuel, term, pending, after, ?_, rootStable.trans pendingStable⟩
+  unfold render
+  apply (success_bind _ _ _ _ _).mpr
+  refine ⟨term, middle, nativeRoot, ?_⟩
+  apply (success_bind _ _ _ _ _).mpr
+  refine ⟨middle, middle, (get_success _ _ _).mpr ⟨rfl, rfl⟩, ?_⟩
+  exact (success_bind _ _ _ _ _).mpr
+    ⟨pending, after, pendingTransferred.2, (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩⟩
+
+end MicroCFTA.SourcePruningEnumerationRendering

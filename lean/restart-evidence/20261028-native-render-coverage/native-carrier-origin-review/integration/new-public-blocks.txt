@@ -1,0 +1,343 @@
+def MicroCFTA.EnumerationCarriers.GraphValue : {Symbol : Type} → MicroCFTA.EnumerationState.UVarValue Symbol → Prop :=
+fun {Symbol} x =>
+  match x with
+  | MicroCFTA.EnumerationState.UVarValue.unenumerated (some val) a => True
+  | MicroCFTA.EnumerationState.UVarValue.enumerated a => True
+  | x => False
+def MicroCFTA.EnumerationCarriers.CarriesGraph : {Symbol Guard : Type} →
+  MicroCFTA.EnumerationState.State Symbol Guard → Nat → Prop :=
+fun {Symbol Guard} state uv =>
+  ∃ held value,
+    MicroCFTA.UnionFind.SameClass state.representatives uv held ∧
+      state.values[held]? = some value ∧ MicroCFTA.EnumerationCarriers.GraphValue value
+def MicroCFTA.EnumerationGraphReferences.FragmentCarries : {Symbol Guard : Type} →
+  MicroCFTA.EnumerationState.State Symbol Guard → MicroCFTA.Fragments.Fragment Symbol → Prop :=
+fun {Symbol Guard} state fragment =>
+  ∀ (uv : Nat),
+    MicroCFTA.EnumerationDependencies.HasHole fragment uv → MicroCFTA.EnumerationCarriers.CarriesGraph state uv
+def MicroCFTA.EnumerationGraphReferences.ReferencesCarry : {Symbol Guard : Type} →
+  MicroCFTA.EnumerationState.State Symbol Guard → Prop :=
+fun {Symbol Guard} state =>
+  (∀ (uv : Nat) (fragment : MicroCFTA.Fragments.Fragment Symbol),
+      state.values[uv]? = some (MicroCFTA.EnumerationState.UVarValue.enumerated fragment) →
+        MicroCFTA.EnumerationGraphReferences.FragmentCarries state fragment) ∧
+    ∀ (obligation : Guard × MicroCFTA.Fragments.Fragment Symbol),
+      obligation ∈ state.obligations → MicroCFTA.EnumerationGraphReferences.FragmentCarries state obligation.snd
+MicroCFTA.SourcePruningEnumerationRendering.expandFragment_moreFuel {NativeGuard EnumGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (marker : MicroCFTA.SourcePruningTemplates.Symbol) (fuel extra : Nat)
+  (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol) :
+  MicroCFTA.EnumerationExecution.Retains
+    (MicroCFTA.SourcePruningEnumerationRendering.expandFragment heap marker fuel fragment)
+    (MicroCFTA.SourcePruningEnumerationRendering.expandFragment heap marker (fuel + extra) fragment)
+'MicroCFTA.SourcePruningEnumerationRendering.expandFragment_moreFuel' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourcePruningEnumerationRendering.expandUVar_moreFuel {NativeGuard EnumGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (marker : MicroCFTA.SourcePruningTemplates.Symbol) (fuel extra uv : Nat) :
+  MicroCFTA.EnumerationExecution.Retains (MicroCFTA.SourcePruningEnumerationRendering.expandUVar heap marker fuel uv)
+    (MicroCFTA.SourcePruningEnumerationRendering.expandUVar heap marker (fuel + extra) uv)
+'MicroCFTA.SourcePruningEnumerationRendering.expandUVar_moreFuel' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourcePruningEnumerationRendering.render_moreFuel {NativeGuard EnumGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (marker : MicroCFTA.SourcePruningTemplates.Symbol) (fuel extra uv : Nat) :
+  MicroCFTA.EnumerationExecution.Retains (MicroCFTA.SourcePruningEnumerationRendering.render heap marker fuel uv)
+    (MicroCFTA.SourcePruningEnumerationRendering.render heap marker (fuel + extra) uv)
+'MicroCFTA.SourcePruningEnumerationRendering.render_moreFuel' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourcePruningEnumerationRecursive.initial_packet_carriers {Typing : Type} {width : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width) (memos : MicroCFTA.EndpointMemoGateTrace.Memos)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (context : MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory caller memos)
+  (available : MicroCFTA.InternedProbeProvenance.Available caller.checked.native.machine.heap value)
+  (closed : value.free = []) (emptyPending : metadata.pending = []) :
+  ∃ handle,
+    MicroCFTA.SourcePruningEnumerationNodes.encodeNode value = some handle ∧
+      MicroCFTA.SourcePruningEnumerationNodes.lookupNode caller.checked.native.machine.heap handle = some value ∧
+        have startup :=
+          { core := MicroCFTA.EnumerationState.initial handle,
+            expandable := fun slot =>
+              if slot = 0 then !MicroCFTA.MergedOrdinaryHeight.recursiveBoundary value else false,
+            waiting := fun x => none };
+        (MicroCFTA.SourcePruningEnumerationRecursive.Packet formulas solver inventory caller memos metadata startup ∧
+            MicroCFTA.EnumerationValidity.Canonical startup.core ∧
+              startup.core.values[0]? = some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle) []) ∧
+                MicroCFTA.SourcePruningEnumerationPrefixAdmission.suspendedBound startup.core = 0 ∧
+                  MicroCFTA.EnumerationCanonicalWaiting.Correct (fun uv => uv) startup.core.values startup.waiting ∧
+                    ∀ (slot : Nat),
+                      MicroCFTA.SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+                          (startup.core.values[slot]?.getD MicroCFTA.EnumerationState.UVarValue.eliminated) =
+                        some (startup.expandable slot)) ∧
+          MicroCFTA.EnumerationCarriers.CarriesGraph startup.core 0 ∧
+            MicroCFTA.EnumerationGraphReferences.ReferencesCarry startup.core
+'MicroCFTA.SourcePruningEnumerationRecursive.initial_packet_carriers' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationShallowChild.prepared_carriers {EnumGuard NativeGuard : Type}
+  (scs : List MicroCFTA.EnumerationState.Suspended)
+  (value : MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (before after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (action :
+    MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol EnumGuard
+      (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol))
+  (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+  (safe : MicroCFTA.EnumerationSchedule.Safe before)
+  (references : MicroCFTA.EnumerationGraphReferences.ReferencesCarry before)
+  (prepared : MicroCFTA.SourcePruningEnumerationShallowChild.prepareChild scs value = some action)
+  (success : MicroCFTA.EnumerationCorrectness.Success action before fragment after) :
+  MicroCFTA.EnumerationCarriers.PreservesCarriers before after ∧
+    MicroCFTA.EnumerationGraphReferences.ReferencesCarry after ∧
+      MicroCFTA.EnumerationGraphReferences.FragmentCarries after fragment
+'MicroCFTA.SourcePruningEnumerationShallowChild.prepared_carriers' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourcePruningEnumerationCachedPrepare.rows_carriers {EnumGuard NativeGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard) (fuel : Nat)
+  (scs : List MicroCFTA.EnumerationState.Suspended)
+  (value : MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (before : MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (rows :
+    List
+      (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol ×
+        MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol EnumGuard))
+  (safe : MicroCFTA.EnumerationSchedule.Safe before.core)
+  (references : MicroCFTA.EnumerationGraphReferences.ReferencesCarry before.core)
+  (cached : MicroCFTA.SourcePruningEnumerationCachedPrepare.prepareChild heap fuel scs value before = some rows)
+  (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+  (after : MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol EnumGuard) :
+  (fragment, after) ∈ rows →
+    MicroCFTA.EnumerationCarriers.PreservesCarriers before.core after.core ∧
+      MicroCFTA.EnumerationGraphReferences.ReferencesCarry after.core ∧
+        MicroCFTA.EnumerationGraphReferences.FragmentCarries after.core fragment
+'MicroCFTA.SourcePruningEnumerationCachedPrepare.rows_carriers' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourcePruningEnumerationRendering.expandFragment_bridge {NativeGuard EnumGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (graph : MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (marker : MicroCFTA.SourcePruningTemplates.Symbol) (fuel : Nat)
+  (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+  (before after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (term : MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol)
+  (total : MicroCFTA.UnionFind.Total before.representatives)
+  (discharged : MicroCFTA.SourcePruningEnumerationRendering.Discharged before) :
+  MicroCFTA.EnumerationCorrectness.Success
+      (MicroCFTA.SourcePruningEnumerationRendering.expandFragment heap marker fuel fragment) before term after ↔
+    MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationState.expandFragment graph marker fuel fragment)
+      before term after
+'MicroCFTA.SourcePruningEnumerationRendering.expandFragment_bridge' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourcePruningEnumerationRendering.expandUVar_bridge {NativeGuard EnumGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (graph : MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (marker : MicroCFTA.SourcePruningTemplates.Symbol) (fuel uv : Nat)
+  (before after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (term : MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol)
+  (total : MicroCFTA.UnionFind.Total before.representatives)
+  (discharged : MicroCFTA.SourcePruningEnumerationRendering.Discharged before) :
+  MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.SourcePruningEnumerationRendering.expandUVar heap marker fuel uv)
+      before term after ↔
+    MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationState.expandUVar graph marker fuel uv) before term
+      after
+'MicroCFTA.SourcePruningEnumerationRendering.expandUVar_bridge' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourcePruningEnumerationRendering.expandFragment_complete {NativeGuard EnumGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (marker : MicroCFTA.SourcePruningTemplates.Symbol) (level : Nat → Nat) (frontier : Nat)
+  (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+  (before : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (safe : MicroCFTA.EnumerationSchedule.Safe before)
+  (ordered : MicroCFTA.EnumerationOrder.Stratified before level frontier)
+  (discharged : MicroCFTA.SourcePruningEnumerationRendering.Discharged before)
+  (references : MicroCFTA.EnumerationGraphReferences.ReferencesCarry before)
+  (carried : MicroCFTA.EnumerationGraphReferences.FragmentCarries before fragment) :
+  ∃ fuel term after,
+    MicroCFTA.EnumerationCorrectness.Success
+        (MicroCFTA.SourcePruningEnumerationRendering.expandFragment heap marker fuel fragment) before term after ∧
+      MicroCFTA.EnumerationDriver.RenderStable before after
+'MicroCFTA.SourcePruningEnumerationRendering.expandFragment_complete' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourcePruningEnumerationRendering.expandUVar_complete {NativeGuard EnumGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (marker : MicroCFTA.SourcePruningTemplates.Symbol) (level : Nat → Nat) (frontier uv : Nat)
+  (before : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (safe : MicroCFTA.EnumerationSchedule.Safe before)
+  (ordered : MicroCFTA.EnumerationOrder.Stratified before level frontier)
+  (discharged : MicroCFTA.SourcePruningEnumerationRendering.Discharged before)
+  (references : MicroCFTA.EnumerationGraphReferences.ReferencesCarry before)
+  (carried : MicroCFTA.EnumerationCarriers.CarriesGraph before uv) :
+  ∃ fuel term after,
+    MicroCFTA.EnumerationCorrectness.Success
+        (MicroCFTA.SourcePruningEnumerationRendering.expandUVar heap marker fuel uv) before term after ∧
+      MicroCFTA.EnumerationDriver.RenderStable before after
+'MicroCFTA.SourcePruningEnumerationRendering.expandUVar_complete' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourcePruningEnumerationRendering.render_complete {NativeGuard EnumGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (marker : MicroCFTA.SourcePruningTemplates.Symbol) (level : Nat → Nat) (frontier uv : Nat)
+  (before : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (safe : MicroCFTA.EnumerationSchedule.Safe before)
+  (ordered : MicroCFTA.EnumerationOrder.Stratified before level frontier)
+  (discharged : MicroCFTA.SourcePruningEnumerationRendering.Discharged before)
+  (references : MicroCFTA.EnumerationGraphReferences.ReferencesCarry before)
+  (carried : MicroCFTA.EnumerationCarriers.CarriesGraph before uv) :
+  ∃ fuel term pending after,
+    MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.SourcePruningEnumerationRendering.render heap marker fuel uv)
+        before (term, pending) after ∧
+      MicroCFTA.EnumerationDriver.RenderStable before after
+'MicroCFTA.SourcePruningEnumerationRendering.render_complete' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourcePruningEnumerationRendering.render_model {NativeGuard EnumGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (language : MicroCFTA.EnumerationCorrectness.NodeLanguage MicroCFTA.SourcePruningTemplates.Symbol)
+  (meaning : EnumGuard → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol → Prop)
+  (assignment : Nat → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol)
+  (marker : MicroCFTA.SourcePruningTemplates.Symbol) (fuel uv : Nat)
+  (before after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (term : MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol)
+  (pending : List (EnumGuard × MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol))
+  (total : MicroCFTA.UnionFind.Total before.representatives)
+  (discharged : MicroCFTA.SourcePruningEnumerationRendering.Discharged before)
+  (satisfied : MicroCFTA.EnumerationCorrectness.Satisfies language meaning assignment before)
+  (success :
+    MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.SourcePruningEnumerationRendering.render heap marker fuel uv)
+      before (term, pending) after) :
+  term = assignment uv ∧
+    pending =
+        List.map (fun obligation => (obligation.fst, MicroCFTA.Fragments.fill assignment obligation.snd))
+          before.obligations ∧
+      (∀ (obligation : EnumGuard × MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol),
+          obligation ∈ pending → meaning obligation.fst obligation.snd) ∧
+        MicroCFTA.EnumerationCompressionFrame.Frame before after ∧
+          MicroCFTA.EnumerationCorrectness.Satisfies language meaning assignment after
+'MicroCFTA.SourcePruningEnumerationRendering.render_model' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourcePruningEnumerationRendering.render_complete_models {NativeGuard EnumGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (marker : MicroCFTA.SourcePruningTemplates.Symbol) (level : Nat → Nat) (frontier uv : Nat)
+  (before : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (safe : MicroCFTA.EnumerationSchedule.Safe before)
+  (ordered : MicroCFTA.EnumerationOrder.Stratified before level frontier)
+  (discharged : MicroCFTA.SourcePruningEnumerationRendering.Discharged before)
+  (references : MicroCFTA.EnumerationGraphReferences.ReferencesCarry before)
+  (carried : MicroCFTA.EnumerationCarriers.CarriesGraph before uv) :
+  ∃ bound term pending after,
+    (∀ (extra : Nat),
+        MicroCFTA.EnumerationCorrectness.Success
+          (MicroCFTA.SourcePruningEnumerationRendering.render heap marker (bound + extra) uv) before (term, pending)
+          after) ∧
+      MicroCFTA.EnumerationDriver.RenderStable before after ∧
+        MicroCFTA.EnumerationCompressionFrame.Frame before after ∧
+          MicroCFTA.EnumerationOrder.Stratified after level frontier ∧
+            ∀ (language : MicroCFTA.EnumerationCorrectness.NodeLanguage MicroCFTA.SourcePruningTemplates.Symbol)
+              (meaning : EnumGuard → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol → Prop)
+              (assignment : Nat → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol),
+              MicroCFTA.EnumerationCorrectness.Satisfies language meaning assignment before →
+                term = assignment uv ∧
+                  pending =
+                      List.map (fun obligation => (obligation.fst, MicroCFTA.Fragments.fill assignment obligation.snd))
+                        before.obligations ∧
+                    (∀ (obligation : EnumGuard × MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol),
+                        obligation ∈ pending → meaning obligation.fst obligation.snd) ∧
+                      MicroCFTA.EnumerationCorrectness.Satisfies language meaning assignment after
+'MicroCFTA.SourcePruningEnumerationRendering.render_complete_models' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationFreeHole.free_hole_counterexample :
+  ∃ before,
+    MicroCFTA.EnumerationSchedule.Safe before ∧
+      MicroCFTA.EnumerationValidity.Canonical before ∧
+        MicroCFTA.EnumerationProgress.ProperState before ∧
+          (∃ level frontier, MicroCFTA.EnumerationOrder.Stratified before level frontier) ∧
+            MicroCFTA.SourcePruningEnumerationRendering.Discharged before ∧
+              (∃ model,
+                  MicroCFTA.EnumerationCorrectness.Satisfies (fun x x_1 => True) (fun x x_1 => True) model before) ∧
+                MicroCFTA.EnumerationCarriers.CarriesGraph before 0 ∧
+                  ¬MicroCFTA.EnumerationCarriers.CarriesGraph before 1 ∧
+                    ¬MicroCFTA.EnumerationGraphReferences.ReferencesCarry before ∧
+                      ∀
+                        (heap :
+                          MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol Unit)
+                        (marker : MicroCFTA.SourcePruningTemplates.Symbol) (fuel : Nat)
+                        (term : MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol)
+                        (pending : List (Unit × MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol))
+                        (after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol Unit),
+                        ¬MicroCFTA.EnumerationCorrectness.Success
+                            (MicroCFTA.SourcePruningEnumerationRendering.render heap marker fuel 0) before
+                            (term, pending) after
+'MicroCFTA.SourcePruningEnumerationFreeHole.free_hole_counterexample' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourcePruningEnumerationRecursive.ResourceHistory.render_complete_models {Typing Key : Type} {bits : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {holeKey : Typing → Nat → Key} {fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool}
+  {admits :
+    Key →
+      MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        Bool}
+  {graph :
+    MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol)} {checkEmpty : Bool}
+  {edgesOf :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      List
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {stop : Option (MicroCFTA.SourcePruningRecordTypes.Metadata Typing → Nat → Bool)}
+  {order : MicroCFTA.SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat}
+  {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula} {workFuel recursiveFuel : Nat}
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {caller : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2)}
+  {memos : MicroCFTA.EndpointMemoGateTrace.Memos} {metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing}
+  {before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed} {ceiling : Nat}
+  {next : Option MicroCFTA.EnumerationState.Next}
+  {output : MicroCFTA.SourcePruningEnumerationRecursive.Output (bits + 2) Typing}
+  (history :
+    MicroCFTA.SourcePruningEnumerationRecursive.ResourceHistory holeKey fits admits graph templates checkEmpty edgesOf
+      stop order formulas solver workFuel recursiveFuel inventory caller memos metadata before seed ceiling next output)
+  (marker : MicroCFTA.SourcePruningTemplates.Symbol) (uv : Nat)
+  (discharged : MicroCFTA.SourcePruningEnumerationRendering.Discharged output.cache.core)
+  (references : MicroCFTA.EnumerationGraphReferences.ReferencesCarry output.cache.core)
+  (carried : MicroCFTA.EnumerationCarriers.CarriesGraph output.cache.core uv) :
+  ∃ finalInventory finalMemos finalMetadata,
+    MicroCFTA.SourcePruningEnumerationRecursive.Packet formulas solver finalInventory output.caller finalMemos
+        finalMetadata output.cache ∧
+      ∃ level frontier,
+        MicroCFTA.EnumerationOrder.Stratified output.cache.core level frontier ∧
+          ∃ bound term pending after,
+            (∀ (extra : Nat),
+                MicroCFTA.EnumerationCorrectness.Success
+                  (MicroCFTA.SourcePruningEnumerationRendering.render output.caller.checked.native.machine.heap marker
+                    (bound + extra) uv)
+                  output.cache.core (term, pending) after) ∧
+              MicroCFTA.EnumerationDriver.RenderStable output.cache.core after ∧
+                MicroCFTA.EnumerationCompressionFrame.Frame output.cache.core after ∧
+                  MicroCFTA.EnumerationOrder.Stratified after level frontier ∧
+                    ∀ (language : MicroCFTA.EnumerationCorrectness.NodeLanguage MicroCFTA.SourcePruningTemplates.Symbol)
+                      (meaning :
+                        MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+                          MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol → Prop)
+                      (assignment : Nat → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol),
+                      MicroCFTA.EnumerationCorrectness.Satisfies language meaning assignment output.cache.core →
+                        term = assignment uv ∧
+                          pending =
+                              List.map
+                                (fun obligation => (obligation.fst, MicroCFTA.Fragments.fill assignment obligation.snd))
+                                output.cache.core.obligations ∧
+                            (∀
+                                (obligation :
+                                  MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula ×
+                                    MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol),
+                                obligation ∈ pending → meaning obligation.fst obligation.snd) ∧
+                              MicroCFTA.EnumerationCorrectness.Satisfies language meaning assignment after
+'MicroCFTA.SourcePruningEnumerationRecursive.ResourceHistory.render_complete_models' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

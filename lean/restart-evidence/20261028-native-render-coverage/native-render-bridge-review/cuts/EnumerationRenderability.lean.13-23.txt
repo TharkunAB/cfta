@@ -1,0 +1,11 @@
+local instance : Monad List where
+  pure value := [value]
+  bind values continuation := values.flatMap continuation
+
+/-- Class-preserving reads retain all graph carriers. -/
+theorem carriers_read (before after : State Symbol Guard) (stable : RenderStable before after) : PreservesCarriers before after :=
+  carriers_classes before after stable.values (fun left right same => (stable.classes left right).mpr same)
+
+/-- Class-preserving reads retain the graph provenance of every stored reference. -/
+theorem references_read (before after : State Symbol Guard) (stable : RenderStable before after) (carried : ReferencesCarry before) : ReferencesCarry after :=
+  references_transport before after carried (carriers_read before after stable)

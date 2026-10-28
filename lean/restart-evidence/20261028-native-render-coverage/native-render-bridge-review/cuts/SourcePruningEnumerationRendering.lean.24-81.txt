@@ -1,0 +1,58 @@
+  ∀ (uv : Nat) (node : Option Nat) (scs : List Suspended),
+    state.values[uv]? = some (.unenumerated node scs) → node = none ∧ scs = []
+
+/-- Render a fragment with the source recursion marker and actual native handle lookup. -/
+def expandFragment (heap : InternedConstructorTemplates.State Symbol NativeGuard) (marker : Symbol) :
+    Nat → Fragment Symbol → EnumerateM Symbol EnumGuard (Term Symbol)
+  | 0, _ => failure .fuelExhausted
+  | fuel + 1, .node symbol children => do
+      pure (.node symbol (← children.mapM (expandFragment heap marker fuel)))
+  | fuel + 1, .hole uv => do
+      match ← getValue (fuel + 1) uv with
+      | .enumerated fragment => expandFragment heap marker fuel fragment
+      | .unenumerated (some handle) _ =>
+          match lookupNode heap handle with
+          | none => failure .unresolvedReference
+          | some value =>
+              if MergedOrdinaryHeight.recursiveBoundary value then pure (.node marker [])
+              else failure .unfinishedFragment
+      | _ => failure .unfinishedFragment
+
+/-- Render a stored root, or reject an unfinished nonrecursive root. -/
+def expandUVar (heap : InternedConstructorTemplates.State Symbol NativeGuard) (marker : Symbol)
+    (fuel uv : Nat) : EnumerateM Symbol EnumGuard (Term Symbol) := do
+  match ← getValue (fuel + 1) uv with
+  | .enumerated fragment => expandFragment heap marker fuel fragment
+  | .unenumerated (some handle) _ =>
+      match lookupNode heap handle with
+      | none => failure .unresolvedReference
+      | some value =>
+          if MergedOrdinaryHeight.recursiveBoundary value then pure (.node marker []) else reject
+  | _ => reject
+
+/-- Render the root and every residual at the same reached native heap. -/
+def render (heap : InternedConstructorTemplates.State Symbol NativeGuard) (marker : Symbol)
+    (fuel uv : Nat) : EnumerateM Symbol EnumGuard (Term Symbol × List (EnumGuard × Term Symbol)) := do
+  let term ← expandUVar heap marker fuel uv
+  let pending ← (← get).obligations.mapM fun obligation => do
+    pure (obligation.1, ← expandFragment heap marker fuel obligation.2)
+  pure (term, pending)
+
+private def Valid (language : NodeLanguage Symbol) (assignment : Nat → Term Symbol)
+    (state : EnumerationState.State Symbol EnumGuard) : Prop :=
+  UnionFind.Total state.representatives ∧
+    stateSatisfies state.representatives (EnumerationCorrectness.heap language state.values) assignment ∧ Discharged state
+
+private theorem read_sound (language : NodeLanguage Symbol) (assignment : Nat → Term Symbol)
+    (fuel uv : Nat) (before after : EnumerationState.State Symbol EnumGuard) (value : UVarValue Symbol)
+    (valid : Valid language assignment before) (success : Success (getValue fuel uv) before value after) :
+    Valid language assignment after ∧ Frame before after ∧ slotSatisfies assignment uv (slot language value) ∧
+      (∀ node scs, value = .unenumerated node scs → node = none ∧ scs = []) := by
+  obtain ⟨frame, root, size, path, _afterPath, stored⟩ := getValue_frame fuel uv before after value valid.1 success
+  have satisfied : Satisfies language (fun _ _ => True) assignment before :=
+    ⟨valid.2.1, by simp [guardsHold]⟩
+  have final := (EnumerationFrame.getValue_assignment language (fun _ _ => True) assignment
+    fuel uv before after value valid.1 success).mpr satisfied
+  have assigned := valid.2.1.1 uv root (UnionFind.sameClass_root path)
+  have storedHolds : slotSatisfies assignment root (slot language value) := by
+    simpa only [EnumerationCorrectness.heap, stored, Option.getD_some] using valid.2.1.2 root
