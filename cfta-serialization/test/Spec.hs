@@ -4,6 +4,7 @@
 module Main (main) where
 
 import Control.Monad (forM_)
+import qualified Data.Map.Strict as Map
 import qualified Data.Set as Set
 import Data.Text (Text)
 import qualified Data.Text as Text
@@ -21,6 +22,7 @@ import Data.CFTA.Constraint (
     noConstraint,
     semanticConstraint,
  )
+import qualified Data.CFTA.Document as D
 import Data.CFTA.Equality.Constraint (
     EqConstraints (EqConstraints, EqContradiction),
     PathEClass (PathEClass),
@@ -28,6 +30,7 @@ import Data.CFTA.Equality.Constraint (
  )
 import qualified Data.CFTA.Formula as F
 import Data.CFTA.Index (ClassRank (..))
+import qualified Data.CFTA.Language as L
 import Data.CFTA.Path (path)
 import Data.CFTA.Refinement.Expression (refinementFormula, (.==), (.>))
 import Data.CFTA.Refinement.LiquidFixpoint (withZ3)
@@ -35,6 +38,7 @@ import Data.CFTA.Serialization.Text (StateCodec (..), TextError (..))
 import qualified Data.CFTA.Serialization.Text as T
 import qualified Data.CFTA.Sized as Sized
 import Data.CFTA.Symbol (Symbol (RefinedSymbol, Symbol), valueName)
+import Data.CFTA.Template (Template (..))
 
 main :: IO ()
 main = do
@@ -55,9 +59,21 @@ spec = do
             forM_ graphs $
                 \(_, graph) -> roundTrip T.printGraph T.parseGraph graph
 
+        it "keep every document" $
+            forM_ graphs $
+                \(_, graph) -> roundTrip T.printDocument T.parseDocument $ document graph
+
+        it "keep every language with every template form" $
+            forM_ graphs $
+                \(_, graph) -> roundTrip T.printLanguage T.parseLanguage $ withForms $ document graph
+
         it "keep unusual names and stored constraints" $
             forM_ [(name, constraint) | name <- names, constraint <- storedConstraints] $ \(name, constraint) ->
                 roundTrip T.printGraph T.parseGraph $ single name constraint
+
+        it "keep unusual names and stored facts in a language" $
+            forM_ [(name, constraint) | name <- names, constraint <- storedConstraints] $ \(name, constraint) ->
+                roundTrip T.printLanguage T.parseLanguage $ withForms $ singleSource name constraint
 
         it "keep structured states through Show and Read"
             $ roundTrip T.printGraph T.parseGraph
@@ -75,6 +91,13 @@ spec = do
         it "ignore comments and whitespace" $
             T.parseGraph ("// λ prefix\r\n\t" <> T.printGraph liquid <> " // suffix") `shouldBe` Right liquid
 
+        it "allow an edit after reopening" $ do
+            let original = withForms $ singleSource "leaf" $ Constraint (EqConstraints []) Bottom
+                ref = L.at "leaf" "leaf"
+                changes = L.define ref "replacement" [] <> L.relax ref "leaf" <> L.restore "0"
+                reopened = must $ T.parseLanguage $ T.printLanguage original
+            L.update reopened changes `shouldBe` L.update original changes
+
     describe "errors" $ do
         it "give the line and column of a syntax error" $
             case T.parseGraphWith strings "// λ\ngraph 1;\nstart S;\nstate S { a @{ nonsense }; }" of
@@ -84,15 +107,28 @@ spec = do
         it "report a duplicate state" $
             T.parseGraphWith strings "graph 1; start S; state S {} state S {}" `shouldBe` Left (DuplicateState "S")
 
+        it "report a duplicate state and a duplicate production in a language" $ do
+            T.parseLanguageWith strings "language 1; start S; state S {} state S {}"
+                `shouldBe` Left (InvalidDefinition $ D.DuplicateState "S")
+            T.parseLanguageWith strings "language 1; start S; state S { x = a; x = b; }"
+                `shouldBe` Left (InvalidDefinition $ D.DuplicateTransition "S" "x")
+
         it "reject malformed input" $
             forM_ malformed $ \text ->
                 T.parseGraphWith strings text `shouldSatisfy` either (const True) (const False)
+
+        it "reject malformed languages" $
+            forM_ malformedLanguages $ \text ->
+                T.parseLanguageWith strings text `shouldSatisfy` either (const True) (const False)
 
         it "explain a bad string escape" $
             forM_ escapes $ \(escape, expected) ->
                 case T.parseGraphWith strings $ "graph 1; start \"" <> escape <> "\"; state S {}" of
                     Left failure -> Text.pack (T.explainTextError failure) `shouldSatisfy` Text.isInfixOf expected
                     Right _ -> expectationFailure $ "accepted " <> show escape
+
+        it "keep the formats apart" $
+            T.parseDocumentWith strings "language 1; start S; state S {}" `shouldSatisfy` either (const True) (const False)
 
     describe "ranks" $
         it "are the same after a round trip" $
@@ -142,6 +178,51 @@ single name constraint =
             ]
   where
     value = F.Var $ F.Name $ Text.pack valueName
+
+-- | A plain graph as a document.
+document :: FTA.PlainFTA String Symbol -> D.Document String
+document = must . D.fromGraph
+
+-- | A one-state language whose name, symbol, and fact use the same text.
+singleSource :: Text -> Constraint -> D.Document String
+singleSource name constraint =
+    must $
+        D.mkDocument
+            (Text.unpack name)
+            [
+                ( Text.unpack name
+                ,
+                    [ FTA.Transition (RefinedSymbol (Symbol name) $ F.Atom F.Eq value (F.Lit $ 2 ^ (100 :: Int))) []
+                        $ D.Annotation name
+                        $ Map.singleton name constraint
+                    ]
+                )
+            , ("dead", [])
+            ]
+  where
+    value = F.Var $ F.Name $ Text.pack valueName
+
+-- | The language with one named exclusion for each template form, at the root and anywhere.
+withForms :: D.Document state -> L.Language state
+withForms source =
+    L.Language source $
+        Map.fromList
+            [ (L.ExclusionName $ Text.pack $ show index, scope form)
+            | (index, (scope, form)) <- zip [0 :: Int ..] [(scope, form) | scope <- [L.AtRoot, L.Anywhere], form <- forms]
+            ]
+  where
+    forms =
+        [ Hole
+        , AnyNode []
+        , AnyNode [Hole]
+        , AnyPrefix []
+        , AnyPrefix [Hole]
+        , TemplateNode "_" []
+        , TemplateNode "json" [Hole]
+        , TemplatePrefix "_" []
+        , TemplatePrefix "f" [Hole]
+        , TemplateNode (RefinedSymbol "x" $ F.And []) [AnyPrefix [], TemplatePrefix "a b" [Hole]]
+        ]
 
 -- | Names that need quotes or escapes, or that look like keywords.
 names :: [Text]
@@ -306,6 +387,29 @@ malformed =
     , "graph 1; start S; state S { a where satisfies([], forall([x: unknown], true)); }"
     , "graph 1; start S; state S { a where same([], [], []); }"
     ]
+
+-- | Language input that the parser must reject.
+malformedLanguages :: [Text]
+malformedLanguages =
+    [ "language 2; start S; state S {}"
+    , "language1; start S; state S {}"
+    , "language 1; start S; state S { a = a { x = true; x = false; }; }"
+    , blank <> " exclude x = root _; exclude x = root _;"
+    , "language 1; start S; state S { x = f(Missing); }"
+    , "language 1; start S; state S { x = a; y = a(S); }"
+    , blank <> " exclude x = elsewhere _;"
+    , blank <> " exclude x = root f(...,a);"
+    , blank <> " exclude x = root f(a,);"
+    , "language 1; start S; state S { a = a @{ v == 1.5 }; }"
+    , "language 1; start S; state S { a = a { x = raw {}; }; }"
+    , "language 1; start S; state S { a = a"
+    , blank <> " garbage"
+    , "language 1; start S; state S { a = a { x = equal([9223372036854775808]); }; }"
+    , "language 1; start S; state S { a = a { x = satisfies([], forall([x: unknown], true)); }; }"
+    , "language 1; start S; state S { a = a { x = same([], [], []); }; }"
+    ]
+  where
+    blank = "language 1; start S; state S {}"
 
 -- | Bad string escapes and a part of the message that explains each one.
 escapes :: [(Text, Text)]

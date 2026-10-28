@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
--- | Complete readable snapshots of graphs.
+-- | Complete readable snapshots of graphs, editable documents, and languages.
 module Data.CFTA.Serialization.Text (
     StateCodec (..),
     TextError (..),
@@ -9,6 +9,14 @@ module Data.CFTA.Serialization.Text (
     parseGraph,
     printGraphWith,
     parseGraphWith,
+    printDocument,
+    parseDocument,
+    printDocumentWith,
+    parseDocumentWith,
+    printLanguage,
+    parseLanguage,
+    printLanguageWith,
+    parseLanguageWith,
 ) where
 
 import Control.Applicative ((<|>))
@@ -30,6 +38,7 @@ import Text.Read (readEither)
 
 import qualified Data.CFTA as FTA
 import qualified Data.CFTA.Constraint as C
+import qualified Data.CFTA.Document as D
 import Data.CFTA.Equality.Constraint (
     EqConstraints (EqConstraints, EqContradiction),
     PathEClass (PathEClass),
@@ -37,8 +46,10 @@ import Data.CFTA.Equality.Constraint (
  )
 import qualified Data.CFTA.Formula as F
 import Data.CFTA.Index (ChildIndex (ChildIndex))
+import qualified Data.CFTA.Language as L
 import Data.CFTA.Path (Path (Path), unPath)
 import Data.CFTA.Symbol (Symbol (RefinedSymbol, Symbol), symbolRefinement, symbolText, valueName)
+import Data.CFTA.Template (Template (..))
 
 {- | A typed codec for portable state labels. Decoding an encoded state must
 return that state and preserve equality and ordering. Labels are escaped by the
@@ -49,14 +60,15 @@ data StateCodec state = StateCodec
     , decodeState :: Text -> Either String state
     }
 
--- | A syntax location or a checked graph error.
+-- | A syntax location, a checked graph error, or a checked source-definition error.
 data TextError state
     = SyntaxError !Int !Int !String
     | DuplicateState !state
     | InvalidGraph !(FTA.FTAError state Symbol)
+    | InvalidDefinition !(D.DocumentError state)
     deriving (Eq, Show)
 
--- | Describe the input location or the rejected graph.
+-- | Describe the input location, the rejected graph, or the rejected source identity.
 explainTextError :: (Show state) => TextError state -> String
 explainTextError failure = case failure of
     SyntaxError line column message -> "line " <> show line <> ", column " <> show column <> ": " <> message
@@ -65,6 +77,7 @@ explainTextError failure = case failure of
     InvalidGraph (FTA.DanglingState state) -> "child state " <> show state <> " has no row"
     InvalidGraph (FTA.InconsistentArity symbol expected actual) ->
         "symbol " <> show symbol <> " has arities " <> show expected <> " and " <> show actual
+    InvalidDefinition failure' -> D.explainDocumentError failure'
 
 -- | Print a graph with state labels from its 'Show' instance.
 printGraph :: (Show state) => FTA.PlainFTA state Symbol -> Text
@@ -82,6 +95,41 @@ parseGraph = readGraph (readEither . Text.unpack)
 parseGraphWith :: (Ord state) => StateCodec state -> Text -> Either (TextError state) (FTA.PlainFTA state Symbol)
 parseGraphWith = readGraph . decodeState
 
+-- | Print a source document with state labels from its 'Show' instance.
+printDocument :: (Show state) => D.Document state -> Text
+printDocument = renderDocument (Text.pack . show)
+
+-- | Print a source document with an explicit typed state codec.
+printDocumentWith :: StateCodec state -> D.Document state -> Text
+printDocumentWith = renderDocument . encodeState
+
+-- | Read and validate a source document with its state's 'Read' instance.
+parseDocument :: (Ord state, Read state) => Text -> Either (TextError state) (D.Document state)
+parseDocument = readDocument (readEither . Text.unpack)
+
+-- | Read a source document with an explicit typed state codec.
+parseDocumentWith :: (Ord state) => StateCodec state -> Text -> Either (TextError state) (D.Document state)
+parseDocumentWith = readDocument . decodeState
+
+{- | Print an exact language value with state labels from its 'Show' instance.
+A matching lawful 'Read' instance gives @parseLanguage (printLanguage x) == Right x@.
+Comments and input whitespace are not part of the stored value.
+-}
+printLanguage :: (Show state) => L.Language state -> Text
+printLanguage = renderLanguage (Text.pack . show)
+
+-- | Print a language with an explicit typed state codec.
+printLanguageWith :: StateCodec state -> L.Language state -> Text
+printLanguageWith = renderLanguage . encodeState
+
+-- | Read an exact language value with its state's 'Read' instance.
+parseLanguage :: (Ord state, Read state) => Text -> Either (TextError state) (L.Language state)
+parseLanguage = readLanguage (readEither . Text.unpack)
+
+-- | Read a language with an explicit typed state codec.
+parseLanguageWith :: (Ord state) => StateCodec state -> Text -> Either (TextError state) (L.Language state)
+parseLanguageWith = readLanguage . decodeState
+
 -- | Render graph rows with their complete transition constraints.
 renderGraph :: (state -> Text) -> FTA.PlainFTA state Symbol -> Text
 renderGraph encode = built . graphText "graph" encode transition
@@ -90,6 +138,22 @@ renderGraph encode = built . graphText "graph" encode transition
     obligation constraint
         | constraint == C.noConstraint = mempty
         | otherwise = " where " <> constraintText constraint
+
+-- | Render source rows without compiling their individual facts.
+renderDocument :: (state -> Text) -> D.Document state -> Text
+renderDocument encode = built . graphText "document" encode (sourceTransitionText encode) . D.sourceGraph
+
+-- | Render source rows and the retained exclusion expressions.
+renderLanguage :: (state -> Text) -> L.Language state -> Text
+renderLanguage encode language =
+    built $
+        graphText "language" encode (sourceTransitionText encode) (D.sourceGraph $ L.source language)
+            <> foldMap exclusionText (Map.toAscList $ L.exclusions language)
+  where
+    exclusionText (name, exclusion) =
+        "exclude " <> nameText (L.exclusionNameText name) <> " = " <> case exclusion of
+            L.AtRoot template -> "root " <> templateText template <> ";\n"
+            L.Anywhere template -> "anywhere " <> templateText template <> ";\n"
 
 -- | Render the shared version, initial state, and finite row table.
 graphText ::
@@ -106,6 +170,19 @@ graphText format encode transition graph =
         <> foldMap row (Map.toAscList $ FTA.transitionTable graph)
   where
     row (state, edges) = "state " <> nameText (encode state) <> " {\n" <> foldMap transition edges <> "}\n\n"
+
+-- | Render one named production and its individual facts.
+sourceTransitionText :: (state -> Text) -> FTA.Transition state Symbol D.Annotation -> Builder
+sourceTransitionText encode edge =
+    "  "
+        <> nameText (D.annotationName annotation)
+        <> " = "
+        <> edgeText encode edge
+        <> if Map.null facts then ";\n" else " {\n" <> foldMap fact (Map.toAscList facts) <> "  };\n"
+  where
+    annotation = FTA.transitionConstraint edge
+    facts = D.annotationFacts annotation
+    fact (name, constraint) = "    " <> nameText name <> " = " <> constraintText constraint <> ";\n"
 
 -- | Render a complete symbol and ordered child state references.
 edgeText :: (state -> Text) -> FTA.Transition state Symbol annotation -> Builder
@@ -233,6 +310,15 @@ classesText (EqConstraints classes) = listText [listText $ map pathText $ Set.to
 pathText :: Path -> Builder
 pathText = listText . map (\(ChildIndex index) -> integerText $ toInteger index) . unPath
 
+-- | Retain each template constructor and complete refined symbol.
+templateText :: Template Symbol -> Builder
+templateText template = case template of
+    Hole -> "_"
+    AnyNode children -> call "_" $ map templateText children
+    TemplateNode symbol children -> symbolText' symbol <> childrenText (map templateText children)
+    AnyPrefix children -> call "_" $ map templateText children <> ["..."]
+    TemplatePrefix symbol children -> symbolText' symbol <> "(" <> separated (map templateText children <> ["..."]) <> ")"
+
 -- | Omit parentheses only for an exact leaf.
 childrenText :: [Builder] -> Builder
 childrenText [] = mempty
@@ -269,6 +355,24 @@ readGraph decode input = do
     distinct seen state
         | Set.member state seen = Left $ DuplicateState state
         | otherwise = Right $ Set.insert state seen
+
+-- | Read source syntax and validate names and graph structure together.
+readDocument :: (Ord state) => (Text -> Either String state) -> Text -> Either (TextError state) (D.Document state)
+readDocument decode input = do
+    (initial, rows) <- runParser (graphParser "document" decode $ sourceTransitionParser decode) input
+    first InvalidDefinition $ D.mkDocument initial rows
+
+-- | Read a complete language without compiling its constraints or exclusions.
+readLanguage :: (Ord state) => (Text -> Either String state) -> Text -> Either (TextError state) (L.Language state)
+readLanguage decode input = do
+    (initial, rows, exclusions) <- runParser parser input
+    document <- first InvalidDefinition $ D.mkDocument initial rows
+    pure $ L.Language document exclusions
+  where
+    parser = do
+        (initial, rows) <- graphParser "language" decode $ sourceTransitionParser decode
+        exclusions <- untilEnd exclusionParser >>= namedMap "exclusion"
+        pure (initial, rows, Map.mapKeys L.ExclusionName exclusions)
 
 -- | Parse one complete input and retain Unicode-aware syntax locations.
 runParser :: A.Parser value -> Text -> Either (TextError state) value
@@ -324,6 +428,24 @@ graphTransitionParser decode = do
     token ";"
     pure $ FTA.Transition symbol children constraint
 
+-- | Read a named production and its separate facts.
+sourceTransitionParser :: (Text -> Either String state) -> A.Parser (FTA.Transition state Symbol D.Annotation)
+sourceTransitionParser decode = do
+    name <- nameParser
+    token "="
+    (symbol, children) <- edgeParser decode
+    facts <- ifNext '{' (token "{" *> untilClose '}' fact <* token "}") []
+    namedFacts <- namedMap "fact" facts
+    token ";"
+    pure $ FTA.Transition symbol children $ D.Annotation name namedFacts
+  where
+    fact = do
+        name <- nameParser
+        token "="
+        constraint <- constraintParser
+        token ";"
+        pure (name, constraint)
+
 -- | Read a symbol and ordered child state references.
 edgeParser :: (Text -> Either String state) -> A.Parser (Symbol, [state])
 edgeParser decode = (,) <$> symbolParser <*> ifNext '(' (arguments $ stateParser decode) []
@@ -334,6 +456,21 @@ symbolParser = do
     name <- nameParser
     refinement <- ifNext '@' (token "@" *> token "{" *> formulaParser <* token "}") F.Top
     pure $ RefinedSymbol (Symbol name) refinement
+
+-- | Read a named whole-term or subtree exclusion.
+exclusionParser :: A.Parser (Text, L.Exclusion)
+exclusionParser = do
+    keyword "exclude"
+    name <- nameParser
+    token "="
+    scope <- nameParser
+    constructor <- case scope of
+        "root" -> pure L.AtRoot
+        "anywhere" -> pure L.Anywhere
+        _ -> fail "expected root or anywhere exclusion scope"
+    template <- templateParser
+    token ";"
+    pure (name, constructor template)
 
 -- | Read every formula constructor without invoking a simplifier.
 formulaParser :: A.Parser F.Formula
@@ -453,6 +590,52 @@ pathParser = Path <$> bracketed index
         when (value < toInteger (minBound :: Int) || value > toInteger (maxBound :: Int)) $
             fail "child index is outside the Int range"
         pure $ ChildIndex $ fromInteger value
+
+-- | Parse all five templates, distinguishing an unquoted hole from a symbol.
+templateParser :: A.Parser (Template Symbol)
+templateParser = do
+    wildcard <- startsKeyword "_"
+    if wildcard
+        then do
+            keyword "_"
+            ifNext
+                '('
+                ( do
+                    (children, prefix) <- templateArguments
+                    pure $ if prefix then AnyPrefix children else AnyNode children
+                )
+                Hole
+        else do
+            symbol <- symbolParser
+            (children, prefix) <- ifNext '(' templateArguments ([], False)
+            pure $ if prefix then TemplatePrefix symbol children else TemplateNode symbol children
+
+-- | Read ordered template children and an optional final prefix marker.
+templateArguments :: A.Parser ([Template Symbol], Bool)
+templateArguments = parenthesized $ go []
+  where
+    go reversed = do
+        next <- A.peekChar
+        case next of
+            Just ')' -> pure (reverse reversed, False)
+            Just '.' -> token "..." $> (reverse reversed, True)
+            _ -> do
+                child <- templateParser
+                ifNext ',' (token "," *> afterComma (child : reversed)) (reverse $ child : reversed, False)
+    afterComma reversed = do
+        next <- A.peekChar
+        when (next == Just ')') $ fail "expected a template or prefix marker after comma"
+        go reversed
+
+-- | Reject duplicate named facts or exclusions before constructing a map.
+namedMap :: String -> [(Text, value)] -> A.Parser (Map.Map Text value)
+namedMap role entries = do
+    foldM_ distinct Set.empty $ map fst entries
+    pure $ Map.fromList entries
+  where
+    distinct seen name
+        | Set.member name seen = fail ("duplicate " <> role <> " name: " <> show name)
+        | otherwise = pure $ Set.insert name seen
 
 -- | Read an unquoted label or a quoted Unicode string.
 nameParser :: A.Parser Text
@@ -584,6 +767,14 @@ untilClose :: Char -> A.Parser value -> A.Parser [value]
 untilClose closing parser = do
     next <- A.peekChar
     if next == Just closing then pure [] else (:) <$> parser <*> untilClose closing parser
+
+-- | Read remaining statements without swallowing syntax errors.
+untilEnd :: A.Parser value -> A.Parser [value]
+untilEnd parser = do
+    next <- A.peekChar
+    case next of
+        Nothing -> pure []
+        Just _ -> (:) <$> parser <*> untilEnd parser
 
 -- | Read consecutive declarations with a known leading keyword.
 whileKeyword :: Text -> A.Parser value -> A.Parser [value]

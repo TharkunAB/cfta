@@ -1,22 +1,25 @@
 # cfta-serialization
 
-Read and write complete FTA, ECTA, and LTA graphs.
+Read and write complete FTA, ECTA, and LTA graphs and editable language values.
 `Data.CFTA.Serialization.Text` provides one readable format. It retains full
-refinements, every constraint constructor, cycles, empty/dead rows, repeated
-alternatives, and child order. Reading validates the graph without running a
-solver or enumerating terms.
+refinements, every constraint constructor, individual source facts, named
+exclusions, cycles, empty/dead rows, repeated alternatives, and child order.
+Reading validates the input without running a solver or enumerating terms.
 
 The format is version 1. Each file starts with its kind and version, such as
-`graph 1;`.
+`graph 1;` or `language 1;`.
 
 ## Typed values and exact round trips
 
 | Value | Printer | Parser | Header |
 | --- | --- | --- | --- |
 | `PlainFTA state Symbol` | `printGraph` | `parseGraph` | `graph 1;` |
+| `Document state` | `printDocument` | `parseDocument` | `document 1;` |
+| `Language state` | `printLanguage` | `parseLanguage` | `language 1;` |
 
 Printers return `Text`. Parsers return `Either (TextError state) value`.
-`explainTextError` reports a syntax line/column or a checked graph error.
+`explainTextError` reports a syntax line/column, a checked graph error, or a
+checked source error.
 The default state labels use `Show` and `Read`. For lawful instances:
 
 ```haskell
@@ -34,8 +37,9 @@ Use an ADT for states. For example:
 data State = Atom | Expr deriving (Eq, Ord, Show, Read)
 ```
 
-For custom or portable state labels, use `StateCodec state` with
-`printGraphWith` and `parseGraphWith`. The codec contains
+For custom or portable state labels, use `StateCodec state` and the corresponding
+`printGraphWith`/`parseGraphWith`, `printDocumentWith`/`parseDocumentWith`, or
+`printLanguageWith`/`parseLanguageWith` functions. The codec contains
 `encodeState :: state -> Text` and `decodeState :: Text -> Either String state`.
 The snapshot printer handles quoting. For a graph with `Text` state names:
 
@@ -46,7 +50,7 @@ textStates = StateCodec id Right
 Decoding an encoded state must return that exact state and preserve equality and
 ordering. A structured state such as `Index 3` can use derived `Show`/`Read`; its
 label is printed as `"Index 3"`. State labels are the only caller-defined codec.
-Constraints, symbols, and paths remain typed values.
+Constraints, symbols, paths, and source operations remain typed values.
 
 ## A complete readable graph
 
@@ -70,11 +74,41 @@ constraint after `where`. Only an exact top symbol refinement is omitted.
 Unknown references and inconsistent symbol arities are errors. Duplicate states
 are errors even when their rows are identical.
 
+## A complete readable language
+
+```text
+language 1;
+start Expr;
+
+state Atom {
+  zero = zero @{ v == 0 };
+  one = one @{ v == 1 };
+  two = two @{ v == 2 };
+}
+
+state Expr {
+  pair = pair(Atom, Atom) {
+    same = equal([0], [1]);
+  };
+  wrap = wrap(Expr);
+}
+
+exclude zero-pair = root pair(zero @{ v == 0 }, zero @{ v == 0 });
+```
+
+A source production has a stable name, complete symbol, ordered child states,
+and optional named facts. Only an exact top symbol refinement is omitted.
+Production names are unique within their state. Fact and exclusion names must
+also be unique in their scope. Unknown references and inconsistent symbol arities
+are errors. Duplicate source states are errors even when their rows are identical.
+
+A document uses the same source rows with a `document 1;` header.
+
 Names can use ASCII letters, digits, `_`, `-`, and `+`. Other names use double
 quotes. Quoted strings retain Unicode and escaped control characters. Supported
 escapes are `\"`, `\\`, `\/`, `\b`, `\f`, `\n`, `\r`, `\t`, and `\uXXXX`;
-a non-BMP escape uses a valid surrogate pair. The printer also quotes the name
-`_`.
+a non-BMP escape uses a valid surrogate pair. The printer quotes the name `_`
+to distinguish it from a template hole.
 
 ## Complete constraint syntax
 
@@ -93,7 +127,8 @@ outside the machine `Int` range is rejected instead of overflowing.
 
 `CLASSES` is `impossible` or a list of path classes, such as
 `[[[0], [1]], [[1], [2]]]`. Class order and empty/singleton classes are retained.
-Paths within one class are a set.
+Paths within one class are a set. Removing a source fact removes that obligation;
+it does not negate the constraint or reconstruct facts lost during compilation.
 
 | Guard | Operands |
 | --- | --- |
@@ -125,6 +160,16 @@ Sorts are `int`, `real`, `bool`, and `function([SORT, ...], RESULT)`.
 These are representations of existing typed constructors. A query backend still
 needs to support the stored constraints. Exact storage does not establish that
 an arbitrary formula can be decided or enumerated.
+
+## Exclusion templates
+
+A language stores its named exclusions as `exclude NAME = root TEMPLATE;` or
+`exclude NAME = anywhere TEMPLATE;`. Templates use `_` for a hole, `f(a, b)` for
+an exact node, `_(a, b)` for any symbol with those children, and a final `...`
+for a prefix. Thus `f(...)` and `_(...)` differ from exact leaves. Templates keep
+complete symbol refinements, so a term printed after `eraseRefinements` does not
+select the same terms. See [editable languages](../docs/editable-languages.md)
+for the updates that change a language before you save it.
 
 ## Ranks after reopening
 
