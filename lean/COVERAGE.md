@@ -1,3 +1,49 @@
+# Current checkpoint: prepared projection, parking and completed depth
+
+Source: `3f1ab74e4690b05e9f451643807ba4d7b6752bae` on `formalize`.
+Read [lean/notes-current-prepared-coverage-depth.md](lean/notes-current-prepared-coverage-depth.md)
+from the repository root. The full formalization goal remains open and active.
+Normal pushes to `origin/formalize` remain authorized.
+
+The earlier conditional rendering soundness and finite resource/history results
+remain unchanged. A fully discharged output with successful checked rendering
+satisfies its original formalized native language and suspended constraints.
+The original Packet, resources, genuine arity and observer gates remain explicit.
+
+New proofs derive guard projection support at the actual prepared node from
+original physical projectability. An actual pending task gives some ready
+selection under the original proper model and no stop rule. Actual invoked
+hook outputs remain in the sibling scan. A completed actual prepared run now
+retains its exact outputs, final caller and queries at every greater recursive
+depth, with work fuel and all inputs fixed. This assumes the original run is
+complete. It does not derive a sufficient depth.
+
+A selected successful repeated-key park keeps the allocation counter fixed,
+disables only the selected candidate flag and strictly reduces the full
+candidate count. This bounds consecutive such parks. Later allocations can
+add work. Global accepted-output coverage still needs a model-preserving
+emitted output and one finite bound for earlier ordered callbacks and the
+chosen continuation. Selection membership and length alone do not give row
+coverage. DONE does not imply Discharged. Partial outputs remain in scope.
+
+All eight new modules and Audit pass nine exact strict checks. The combined
+Audit passes 4,509 jobs and 81,597 theorem dependency checks. Public readback
+has 687 theorems and 60 definitions. The prior 3,016,159-byte readback and the
+intermediate 3,034,447-byte readback remain exact prefixes of 3,052,362 bytes.
+All thirteen new public theorem blocks have complete source/signature review.
+All 4,500 prior non-Audit Lean files, 349 stronger proof sources and 817
+Haskell/Cabal files retain their hashes.
+
+No new Haskell defect or fix was established. No Haskell file changed or check
+ran. The candidate import, name, pattern and simplifier repairs are Lean proof
+repairs. Earlier Haskell findings remain below for external implementation work.
+Durable evidence: `lean/restart-evidence/20261028-prepared-coverage-depth`.
+Use a new writable area after this checkpoint. Keep sealed evidence immutable.
+Run compiler jobs serially under measured 4 GiB limits. No old build handle is
+live. Keep the optimized interned core and older secondary proof targets.
+
+The earlier document body follows unchanged.
+
 # Current checkpoint: prepared finite arity and rendered soundness
 
 Source: `5902ecbf3ba39c0119fbd1bd34747ed15e70dd43` on `formalize`.
