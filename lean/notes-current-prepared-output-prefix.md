@@ -1,3 +1,39 @@
+# Verified native projectability update: 2026-10-28 20:06 CET
+
+Source: `dbc7c240c0ee313467681bab22586c50437459b0` on `formalize`.
+Read `lean/notes-current-prepared-projectability-lineage.md` from the repo root.
+Every earlier document byte follows this update unchanged.
+
+Original physical projectability now survives actual incoming query/write,
+dispatch, ordered fold and terminal outer-success returns. The exact old
+Fits/Known pair remains. Empty and absent results keep actual native effects.
+Only ORIGINAL caller ProjectionHeap is added. No future heap or step supplier
+is assumed. Whole recursive transport remains open. Actual cached assimilation
+retains slot ancestry and transfers source keys on non-Empty merges.
+
+Earlier original rendered soundness, finite canonical/history/arity resources,
+and exact output-prefix preservation at greater recursive depth remain intact.
+Largest gap: actual model-preserving output emission and an original finite
+depth for all earlier ordered allocating callbacks and the continuation.
+Complete policies/origin lineage, public adapters and Haskell correspondence
+remain open. DONE does not imply Discharged. Intended partial outputs remain.
+
+Six modules add six public theorems, no definitions. Seven exact final strict
+sources pass. Audit: 4,519 jobs/81,661 dependencies. Public: 701 theorems,
+60 definitions, 3,100,926 bytes; prior 3,080,208 bytes an exact prefix.
+Fifteen compiler commands: fourteen pass, one preserved failed ancestry proof
+attempt. The repair changes five Lean simplifier lines; all final checks pass.
+All 4,512 prior non-Audit Lean, 361 stronger and 817 Haskell/Cabal hashes remain.
+
+No Haskell source changed, no Haskell check ran, and no new Haskell defect or
+fix was established. FINDINGS.md retains earlier external repair records.
+Complete evidence: lean/restart-evidence/20261028-prepared-projectability-lineage/.
+Board sequence 705 has verified author, content and metadata readback.
+The separate ChildDispatch draft remains UNTESTED and is preserved in that
+archive. Continue in a new writable area. Keep frozen evidence immutable.
+Full goal ACTIVE. Normal pushes to the authorized formalize branch remain
+authorized. Keep every proof, counterexample, repair and marked draft.
+
 # Current prepared output-prefix proof
 
 Verified update: 2026-10-28, Europe/Stockholm.
