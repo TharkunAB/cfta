@@ -38,10 +38,15 @@ Wilf, and Feat (ranking).
 - **Edit** (of a term): a change at one position of a term that keeps the
   state of the position. A **replacement** gives the position another term of
   its state. A **wrap** puts a new node of that state above the old subterm,
-  as one of its children. An **edit site** is a position with a kind of edit:
-  a replacement, or a wrap with a transition index and a child index. The
-  **new material** of an edit is what it adds: the new subterm, or the other
-  children of the new node. Not a row edit of an automaton
+  as one of its children. A **context wrap** puts a new term with one hole
+  above the old subterm: the old subterm fills the hole, and the hole is
+  deeper than the children of the new root. An **unwrap** gives the position
+  a child of its old subterm, when the state accepts that child. An **edit
+  site** is a position with a kind of edit: a replacement, a wrap or a
+  context wrap with a transition index and a child index, or an unwrap with a
+  child index. The **new material** of an edit is what it adds: the new
+  subterm, the other children of the new node, or the nodes of the new term
+  of a context wrap. An unwrap has none. Not a row edit of an automaton
   (`Data.CFTA.replaceRows`).
 - **Edit set** (of a term): the edits at one to k sites of a term at pairwise
   incomparable paths, so that no edit is inside another. `Data.CFTA.Edit.Sets`

@@ -1,6 +1,8 @@
 module Data.CFTA.EditSpec (spec) where
 
 import Data.Containers.ListUtils (nubOrd)
+import Data.List (sort)
+import Data.Maybe (listToMaybe)
 import qualified Data.Map.Strict as Map
 import Test.Hspec (Spec, describe, it, shouldBe)
 
@@ -30,11 +32,11 @@ spec = describe "Data.CFTA.Edit" $ do
               generatorCounts = and [Gen.countAtSize generator (Size size) == Right (countOfSize classes (Size size)) | size <- [1 .. bound + 1]]
         ]
             `shouldBe` [(name, [], True) | (name, _, _) <- fixtures]
-    it "gives each edited term as often as the definition does" $
+    it "gives each edited term, with the size of the edit, as often as the definition does" $
         [ ( name
           , Map.fromListWith
                 (+)
-                [ (edited, 1 :: Int)
+                [ ((edited, fromInteger size), 1 :: Int)
                 | size <- [1 .. bound + 1]
                 , edit <- termsOfSize classes (Size size)
                 , Just edited <- [applyEdit given edit]
@@ -46,18 +48,22 @@ spec = describe "Data.CFTA.Edit" $ do
         ]
             `shouldBe` [ ( name
                          , Map.fromList
-                            [ (edited, count)
+                            [ ((edited, size), count)
                             | edited <- allTerms automaton =<< [1 .. fromInteger bound]
-                            , let count = editCount automaton given edited
-                            , count > 0
+                            , let costs = editCosts automaton given edited
+                            , size <- nubOrd costs
+                            , let count = length (filter (== size) costs)
                             ]
                          )
                        | (name, automaton, given) <- fixtures
                        ]
     it "gives the edits with the least new material first" $
-        -- Each position of state e can be wrapped in neg, with no new material.
-        termsOfSize (either (error . show) id $ sized $ editsOf expressions sum') 1
-            `shouldBe` [term (WrapAt (path at) "neg" 1 0) [] | at <- [[], [0], [1], [1, 0]]]
+        -- Each position of state e can be wrapped in neg, with no new material. An unwrap has none either.
+        sort (termsOfSize (either (error . show) id $ sized $ editsOf expressions sum') 1)
+            `shouldBe` sort
+                ( [term (WrapAt (path at) "neg" 1 0) [] | at <- [[], [0], [1], [1, 0]]]
+                    <> [term (UnwrapAt (path at) (ChildIndex index)) [] | (at, index) <- [([], 0), ([], 1), ([1], 0)]]
+                )
     it "applies an edit" $ do
         applyEdit sum' (term (ReplaceAt $ path [1, 0]) [material "lit" [material "one" []]])
             `shouldBe` Just (Term.Node "add" [lit "one", Term.Node "neg" [lit "one"]])
@@ -65,6 +71,58 @@ spec = describe "Data.CFTA.Edit" $ do
             `shouldBe` Just (Term.Node "add" [Term.Node "add" [lit "two", lit "one"], Term.Node "neg" [lit "two"]])
         applyEdit sum' (term (ReplaceAt $ path [2]) [material "one" []]) `shouldBe` Nothing
         applyEdit sum' (term (ReplaceAt $ path []) [term (ReplaceAt $ path []) []]) `shouldBe` Nothing
+    describe "unwraps and context wraps" $ do
+        it "does not unwrap to a child that the state does not accept" $
+            -- A body has a cons only, so cons(skip, nil) is not a body that nil replaces.
+            [ edit | edit@(Term.Node (UnwrapAt _ _) _) <- termsOfSize (either (error . show) id $ sized $ editsOf statements block) 1
+            ]
+                `shouldBe` []
+        it "unwraps a statement of a list" $
+            applyEdit blocks (term (UnwrapAt (path [0, 1]) (ChildIndex 1)) []) `shouldBe` Just block
+        it "wraps a statement in an if, with the hole two nodes below" $ do
+            applyEdit
+                block
+                ( term
+                    (ContextAt (path [0, 0]) "if" (TransitionIndex 0) (ChildIndex 0))
+                    [term (HoleParent "cons" (ChildIndex 0)) [material "nil" []]]
+                )
+                `shouldBe` Just
+                    ( Term.Node
+                        "block"
+                        [Term.Node "cons" [Term.Node "if" [Term.Node "cons" [Term.Node "skip" [], Term.Node "nil" []]], Term.Node "nil" []]]
+                    )
+            -- The other context wrap of this size wraps the body: cons(if(hole), nil).
+            (length . filter isContext) (termsOfSize (either (error . show) id $ sized $ editsOf statements block) 3) `shouldBe` 2
+        it "gives a statement edit the size of its new nodes" $ do
+            let skip = Term.Node "skip" []
+                nil = Term.Node "nil" []
+                cons = Term.Node "cons"
+                smallest target =
+                    listToMaybe
+                        [ size
+                        | size <- [1 .. 4]
+                        , edit <- termsOfSize (either (error . show) id $ sized $ editsOf statements blocks) (Size size)
+                        , applyEdit blocks edit == Just (Term.Node "block" [target])
+                        ]
+            -- Delete the second statement, insert a statement before it, and wrap the first in an if.
+            smallest (cons [skip, nil]) `shouldBe` Just 1
+            smallest (cons [skip, cons [skip, cons [skip, nil]]]) `shouldBe` Just 2
+            smallest (cons [Term.Node "if" [cons [skip, nil]], cons [skip, nil]]) `shouldBe` Just 3
+        it "refuses an edit with two holes or none" $ do
+            applyEdit
+                block
+                ( term
+                    (ContextAt (path [0, 0]) "if" (TransitionIndex 0) (ChildIndex 0))
+                    [material "cons" [material "skip" [], material "nil" []]]
+                )
+                `shouldBe` Nothing
+            applyEdit
+                block
+                ( term
+                    (ContextAt (path [0, 0]) "if" (TransitionIndex 0) (ChildIndex 0))
+                    [term (HoleParent "cons" (ChildIndex 0)) [term (HoleParent "cons" (ChildIndex 0)) []]]
+                )
+                `shouldBe` Nothing
     describe "rejects" $ do
         it "an automaton with a constraint" $ do
             let equal = equalityConstraint $ ECTA.mkEqConstraints [[ECTA.path [0], ECTA.path [1]]]
@@ -92,6 +150,7 @@ fixtures =
         , fromRows "s" [("s", [leaf "a", leaf "b", node "g" ["s", "s"]])]
         , Term.Node "g" [Term.Node "a" [], Term.Node "g" [Term.Node "b" [], Term.Node "a" []]]
         )
+    , ("statements", statements, blocks)
     ,
         ( "pairs with a flag on either side"
         , fromRows
@@ -107,6 +166,31 @@ fixtures =
 -- | Expressions: a literal of a number, a negation, or a sum.
 expressions :: FTA.PlainFTA String String
 expressions = fromRows "e" [("e", [node "lit" ["n"], node "neg" ["e"], node "add" ["e", "e"]]), ("n", [leaf "one", leaf "two"])]
+
+-- | Blocks of statements: a body is a non-empty list, and an if has a body.
+statements :: FTA.PlainFTA String String
+statements =
+    fromRows
+        "m"
+        [ ("m", [node "block" ["b"]])
+        , ("b", [node "cons" ["s", "l"]])
+        , ("l", [leaf "nil", node "cons" ["s", "l"]])
+        , ("s", [leaf "skip", node "if" ["b"]])
+        ]
+
+-- | A block of one statement.
+block :: Term String
+block = Term.Node "block" [Term.Node "cons" [Term.Node "skip" [], Term.Node "nil" []]]
+
+-- | A block of two statements.
+blocks :: Term String
+blocks =
+    Term.Node "block" [Term.Node "cons" [Term.Node "skip" [], Term.Node "cons" [Term.Node "skip" [], Term.Node "nil" []]]]
+
+-- | Whether an edit is a context wrap.
+isContext :: Edit String -> Bool
+isContext (Term.Node (ContextAt{}) _) = True
+isContext _ = False
 
 -- | The sum add(lit(one), neg(lit(two))).
 sum' :: Term String
@@ -124,13 +208,13 @@ editsOf automaton given = either (error . show) id $ editAutomaton automaton giv
 editError :: FTA.PlainFTA String String -> Term String -> Maybe EditError
 editError automaton given = either Just (const Nothing) $ editAutomaton automaton given
 
-{- | The number of edits that give the candidate from the given term, by the
+{- | The sizes of the edits that give the candidate from the given term, by the
 definition: replacements of a subterm by another term of the state of its
-position, and wraps of a subterm in a transition of the state of its
-position.
+position, wraps and context wraps of a subterm in a term of the state of its
+position, and unwraps of a subterm to a child that the state accepts.
 -}
-editCount :: FTA.PlainFTA String String -> Term String -> Term String -> Int
-editCount automaton given candidate = length replacements + length wraps
+editCosts :: FTA.PlainFTA String String -> Term String -> Term String -> [Int]
+editCosts automaton given candidate = replacements <> wraps <> contexts <> unwraps
   where
     places =
         [ (at, state, old, new)
@@ -140,17 +224,34 @@ editCount automaton given candidate = length replacements + length wraps
         , Just new <- [subtermAt candidate at]
         , state <- runStates at
         ]
-    replacements = [at | (at, state, old, new) <- places, new /= old, acceptsAt state new]
+    replacements = [1 + length new | (_, state, old, new) <- places, new /= old, acceptsAt state new]
     wraps =
-        [ (at, index, hole)
-        | (at, state, old, Term.Node symbol arguments) <- places
-        , (index, FTA.Transition other children _) <- zip [0 :: Int ..] $ FTA.transitionsFrom automaton state
+        [ length candidateNode - length old
+        | (_, state, old, candidateNode@(Term.Node symbol arguments)) <- places
+        , FTA.Transition other children _ <- FTA.transitionsFrom automaton state
         , other == symbol
         , length children == length arguments
         , (hole, child) <- zip [0 :: Int ..] children
         , arguments !! hole == old
         , acceptsAt child old
         , and [acceptsAt sibling argument | (other', (sibling, argument)) <- zip [0 ..] (zip children arguments), other' /= hole]
+        ]
+    -- A context wrap puts the old subterm deeper than the children of the new node.
+    contexts =
+        [ length new - length old
+        | (_, state, old, new) <- places
+        , acceptsAt state new
+        , deeper <- positions new
+        , length deeper >= 2
+        , subtermAt new deeper == Just old
+        ]
+    -- An unwrap replaces the subterm by a child that the state accepts.
+    unwraps =
+        [ 1
+        | (_, state, Term.Node _ children, new) <- places
+        , child <- children
+        , child == new
+        , acceptsAt state new
         ]
     agreesOutside at = (replaceAt candidate at =<< subtermAt given at) == Just given
     -- A state is a run state of a position when it accepts the subterm there,
