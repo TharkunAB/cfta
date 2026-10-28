@@ -7,6 +7,12 @@ Before release, the package was called `microcfta-generator`.
 Initial release. `cfta-generator` is one generator over the constrained
 tree automata of `cfta`, with QuickCheck integration.
 
+- `Data.CFTA.Gen.ManySorted.checkSorts` and `checkSortsWith` check that a
+  map from the states of an automaton to sorts fits a run-time signature:
+  each transition is a function from the sorts of its children to the sort of
+  its state, or a value of that sort. The map is then a homomorphism to the
+  automaton of the signature.
+
 - `Data.CFTA.Gen`: one generator type, `Gen symbol a`, for every kind of
   automaton. An ordinary generator is `FTAGen symbol a`, that is
   `Gen symbol a`; the equality and refinement facades fix the symbol in

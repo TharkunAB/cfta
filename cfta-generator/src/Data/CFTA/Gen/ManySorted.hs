@@ -50,6 +50,9 @@ module Data.CFTA.Gen.ManySorted (
     TypeError (..),
     typeCheck,
     typeCheckWith,
+    SortingError (..),
+    checkSorts,
+    checkSortsWith,
 
     -- * For modules that extend signatures
     checkSignatureWith,
@@ -425,3 +428,73 @@ checkWith valueOf signature term0 = check [] term0 >>= rootSort
 
     mismatch (sort, Just actual) = sort /= actual
     mismatch (_, Nothing) = False
+
+-- | Why a map from the states of an automaton to sorts does not fit a signature.
+data SortingError state sort symbol
+    = -- | A state with transitions has no sort.
+      UnsortedState !state
+    | {- | A transition of a state is neither a function from the sorts of its
+      children to the sort of the state, nor a value of the sort of the state.
+      -}
+      IllSortedTransition
+        !state
+        !symbol
+        -- | The sorts of the children, or 'Nothing' for a child without a sort.
+        ![Maybe sort]
+    deriving (Eq, Show)
+
+{- | Check that a map from the states of an automaton to sorts fits a
+signature. Each transition @f(q1, ..., qn)@ of a state @q@ must be a function
+@f@ with the sorts of @q1, ..., qn@ as its argument sorts and the sort of @q@
+as its result sort. The map is then a homomorphism from the automaton to
+'signatureAutomaton' of the signature, so each term of a state is a term of
+its sort. A state without transitions needs no sort.
+
+The symbols of the automaton must be the symbols of the signature. For an
+automaton with refined symbols, check @'FTA.mapSymbols' unrefined@ of it.
+
+The signature must have no value sort. Use 'checkSortsWith' for a signature
+with value sorts.
+-}
+checkSorts ::
+    (Ord state, Ord sort, Ord symbol) =>
+    SortedSignature sort symbol ->
+    Map.Map state sort ->
+    FTA.FTA state symbol annotation ->
+    Either (SortingError state sort symbol) ()
+checkSorts = checkSortsOf (const Nothing)
+
+-- | 'checkSorts' for a signature with value sorts: a leaf can also be a value of the sort of its state.
+checkSortsWith ::
+    (Ord state, Ord sort, Ord symbol) =>
+    ValueCodec sort symbol ->
+    SortedSignature sort symbol ->
+    Map.Map state sort ->
+    FTA.FTA state symbol annotation ->
+    Either (SortingError state sort symbol) ()
+checkSortsWith codec signature = checkSortsOf (valueSortOf codec signature) signature
+
+-- | Check the sorts with the sort of the value of a leaf symbol, if it has one.
+checkSortsOf ::
+    (Ord state, Ord sort, Ord symbol) =>
+    (symbol -> Maybe sort) ->
+    SortedSignature sort symbol ->
+    Map.Map state sort ->
+    FTA.FTA state symbol annotation ->
+    Either (SortingError state sort symbol) ()
+checkSortsOf valueOf signature sorts automaton = mapM_ row $ Map.toList $ FTA.transitionTable automaton
+  where
+    functions = Map.fromList [(functionSymbol f, (functionArguments f, functionResult f)) | f <- sortedFunctions signature]
+    row (_, []) = Right ()
+    row (state, edges) = case Map.lookup state sorts of
+        Nothing -> Left $ UnsortedState state
+        Just sort -> mapM_ (edge state sort) edges
+    edge state sort transition
+        | fmap expected (Map.lookup symbol functions) == Just (childSorts, sort) = Right ()
+        | null children, valueOf symbol == Just sort = Right ()
+        | otherwise = Left $ IllSortedTransition state symbol childSorts
+      where
+        symbol = FTA.transitionSymbol transition
+        children = FTA.transitionChildren transition
+        childSorts = map (`Map.lookup` sorts) children
+        expected (inputs, result) = (map Just inputs, result)
