@@ -1,0 +1,66 @@
+/-- An actual successful preparation derives its heap and result bounds. -/
+theorem run_resources (fuel : Nat) (value : Value Symbol Guard)
+    (before : State Symbol Guard) (result : Value Symbol Guard) (after : State Symbol Guard)
+    (bound : Nat) (semantic : SemanticReady before)
+    (costs : InternedFreshOrdinaryCostHeap.Heap before)
+    (available : Available before value) (closed : value.free = [])
+    (fits : Fits bound before) (observed : run fuel value before = .done result after) :
+    Fits (resourceBound bound) after ∧ InternedValueMass.value result ≤ resourceBound bound := by
+  cases value with
+  | empty | reference | node =>
+      cases observed
+      exact ⟨fits.mono (resourceBound_ge bound),
+        Nat.le_trans (InternedValueMassHeap.available before fits.stored _ available)
+          (resourceBound_ge bound)⟩
+  | mu entry body depth ordinary =>
+      have numeric := SourceCurrentAllocatedProjectionResources.unfold_bound
+        (.mu entry body depth ordinary) before bound fits.stored available
+      cases unfolded : InternedFreshOrdinaryStoredSubstitution.unfold
+          (.mu entry body depth ordinary) before with
+      | pending key middle =>
+          simp only [run, unfolded] at observed
+          cases observed
+      | done produced middle =>
+          have same : produced = result ∧ middle = after := by
+            simpa only [run, unfolded, MergedSourceComparison.Result.done.injEq] using observed
+          rcases same with ⟨rfl, rfl⟩
+          have stored : InternedValueMassHeap.Stored (ceiling bound) middle := by
+            simpa only [unfolded, InternedNestedConstruction.Outcome.state] using numeric.1
+          have nodes : middle.nodes.next ≤ before.nodes.next + charge bound := by
+            simpa only [unfolded, InternedNestedConstruction.Outcome.state] using numeric.2.1
+          have edges : middle.edges.next ≤ before.edges.next + charge bound := by
+            simpa only [unfolded, InternedNestedConstruction.Outcome.state] using numeric.2.2.1
+          have mass := numeric.2.2.2 produced middle unfolded
+          have originalNodes := fits.nodes
+          have originalEdges := fits.edges
+          change before.nodes.next ≤ bound at originalNodes
+          change before.edges.next ≤ bound at originalEdges
+          refine ⟨⟨stored.mono ?_, ?_, ?_, Nat.zero_le _⟩, ?_⟩
+          · unfold resourceBound; omega
+          · change middle.nodes.next ≤ resourceBound bound
+            unfold resourceBound; omega
+          · change middle.edges.next ≤ resourceBound bound
+            unfold resourceBound; omega
+          · unfold resourceBound; omega
+  | union entry members depth free =>
+      cases exposed : MergedFreshOrdinaryExposure.nodeEdges fuel
+          (.union entry members depth free) before with
+      | unresolved | pending | exhausted =>
+          simp only [run, exposed] at observed
+          cases observed
+      | done rows middle =>
+          have same :
+              (InternedConstructorTemplates.run (makeNode rows) middle).1 = result ∧
+                (InternedConstructorTemplates.run (makeNode rows) middle).2 = after := by
+            simpa only [run, exposed, MergedSourceComparison.Result.done.injEq] using observed
+          rcases same with ⟨rfl, rfl⟩
+          have head : SourceEqualityRequiredHead.Head (.union entry members depth free) before
+              (InternedConstructorTemplates.run (makeNode rows) middle).1
+              (InternedConstructorTemplates.run (makeNode rows) middle).2 :=
+            .read fuel rows middle exposed rfl
+          have numeric := SourceCurrentProjectionUnionResources.head head bound semantic costs
+            available closed fits
+          have mass := InternedValueMassHeap.available _ numeric.2.1.stored _ numeric.2.2.1
+          have increase : SourceCurrentProjectionUnionResources.headGrowth bound ≤ resourceBound bound := by
+            unfold resourceBound
+            omega

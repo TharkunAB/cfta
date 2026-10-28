@@ -1,0 +1,39 @@
+theorem heap_set (language : NodeLanguage Symbol) (values : List (UVarValue Symbol))
+    (uv : Nat) (value : UVarValue Symbol) (bound : uv < values.length) :
+    heap language (values.set uv value) = Fragments.setSlot (heap language values) uv (slot language value) := by
+  funext other
+  by_cases same : other = uv
+  · subst other
+    simp [heap, Fragments.setSlot, bound]
+  · simp [heap, Fragments.setSlot, same, Ne.symm same]
+
+/-- Allocation retains all previous slots and constrains only the fresh appended variable. -/
+theorem heap_append (language : NodeLanguage Symbol) (values : List (UVarValue Symbol))
+    (assignment : Nat → Term Symbol) (value : UVarValue Symbol) :
+    heapSatisfies (heap language (values ++ [value])) assignment ↔
+      heapSatisfies (heap language values) assignment ∧ slotSatisfies assignment values.length (slot language value) := by
+  constructor
+  · intro after
+    refine ⟨?_, ?_⟩
+    · intro uv
+      by_cases bound : uv < values.length
+      · simpa [heap, List.getElem?_append, bound] using after uv
+      · simp [heap, List.getElem?_eq_none (by omega : values.length ≤ uv), slot, slotSatisfies]
+    · simpa [heap] using after values.length
+  · rintro ⟨before, added⟩ uv
+    by_cases bound : uv < values.length
+    · simpa [heap, List.getElem?_append, bound] using before uv
+    · by_cases same : uv = values.length
+      · subst uv; simpa [heap] using added
+      · have outside : (values ++ [value]).length ≤ uv := by simp; omega
+        simp [heap, List.getElem?_eq_none outside, slot, slotSatisfies]
+
+/-- Concrete allocation preserves exactly the old assignment restrictions and the new optional node restriction. -/
+theorem allocation_semantics (language : NodeLanguage Symbol) (meaning : Guard → Term Symbol → Prop)
+    (assignment : Nat → Term Symbol) (node : Option Nat) (state : State Symbol Guard)
+    (aligned : SupplyAligned state) :
+    Satisfies language meaning assignment (allocated node state) ↔
+      Satisfies language meaning assignment state ∧ permits (node.map language) (assignment state.counter) := by
+  simp only [Satisfies, Fragments.stateSatisfies, allocated, heap_append, slot, slotSatisfies]
+  simp only [List.map_nil, List.not_mem_nil, false_implies, implies_true, and_true]
+  rw [← aligned]

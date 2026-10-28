@@ -1,0 +1,33 @@
+theorem complete
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller width) (memos : Memos) (metadata : SourcePruningRecordTypes.Metadata Typing)
+    (before : Cached) (uv handle : Nat) (scs : List Suspended)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (ready : EnumerationDriver.Ready uv before.core)
+    (stored : before.core.values[uv]? = some (.unenumerated (some handle) scs)) :
+    ∃ (bound : Nat) (decoded result : Node) (heap : InternedConstructorTemplates.State Symbol Constraint) (entered : Cached),
+      (∀ extra, run (bound + extra) (bound + extra) uv caller before =
+        ([.ok ((uv, handle, scs, decoded), entered.core)], some (.done result heap))) ∧
+      lookupNode caller.checked.native.machine.heap handle = some decoded ∧
+      Post formulas solver inventory caller
+        (SourcePruningEnumerationSelectedValueCaller.advance caller heap) memos ∧
+      Packet formulas solver inventory
+        (SourcePruningEnumerationSelectedValueCaller.advance caller heap) memos metadata entered ∧
+      EnumerationDriver.RenderStable before.core entered.core ∧
+      EnumerationDriver.Ready uv entered.core ∧
+      entered.core.values[uv]? = some (.unenumerated (some handle) scs) ∧
+      entered.core.counter = before.core.counter ∧ entered.core.values = before.core.values ∧
+      entered.expandable = before.expandable ∧ entered.waiting = before.waiting ∧
+      Available heap result ∧ result.free = [] ∧
+      (∀ holds ambient term,
+        InternedGuardedLanguage.meaning holds ambient result term ↔
+          InternedGuardedLanguage.meaning holds ambient decoded term) ∧
+      ∀ holds ambient residualMeaning assignment,
+        (Satisfies (SourcePruningEnumerationNativeLanguage.handles holds ambient heap)
+          residualMeaning assignment entered.core ↔
+        Satisfies (SourcePruningEnumerationNativeLanguage.handles holds ambient
+          caller.checked.native.machine.heap) residualMeaning assignment before.core) ∧
+        (Satisfies (SourcePruningEnumerationNativeLanguage.handles holds ambient
+          caller.checked.native.machine.heap) residualMeaning assignment before.core →
+          InternedGuardedLanguage.meaning holds ambient result (assignment uv))

@@ -1,0 +1,36 @@
+def grow (width bound : Nat) : Nat := (width + 3) * (bound + 1)
+
+/-- Iterate the same numeric growth rule from the original payload bound. -/
+def evolve (width : Nat) : Nat → Nat → Nat
+  | 0, bound => bound
+  | count + 1, bound => grow width (evolve width count bound)
+
+/-- Each numeric growth step retains the preceding payload bound. -/
+theorem grow_ge (width bound : Nat) : bound ≤ grow width bound := by
+  simp only [grow, Nat.add_mul, Nat.mul_add]
+  omega
+
+/-- Larger initial payload bounds remain ordered after one growth step. -/
+theorem grow_mono (width : Nat) {first last : Nat} (enough : first ≤ last) :
+    grow width first ≤ grow width last :=
+  Nat.mul_le_mul_left _ (Nat.add_le_add_right enough 1)
+
+/-- A literal constructor list fits one growth step. -/
+theorem inflate_bound (width length bound : Nat) (fits : length ≤ width) :
+    inflate length bound ≤ grow width bound := by
+  have multiplied := Nat.mul_le_mul_right (1 + bound) fits
+  have retained := grow_ge width bound
+  simp only [inflate, Nat.max_le]
+  refine ⟨retained, ?_⟩
+  simp only [grow, Nat.add_mul, Nat.mul_add] at multiplied ⊢
+  omega
+
+/-- Larger initial bounds remain ordered through the same finite schedule. -/
+theorem evolve_mono (width count : Nat) {first last : Nat} (enough : first ≤ last) :
+    evolve width count first ≤ evolve width count last := by
+  induction count with
+  | zero => exact enough
+  | succ count ih => exact grow_mono width ih
+
+/-- Additional growth steps retain the earlier finite bound. -/
+theorem evolve_count_mono (width : Nat) {first last : Nat} (enough : first ≤ last) (bound : Nat) :

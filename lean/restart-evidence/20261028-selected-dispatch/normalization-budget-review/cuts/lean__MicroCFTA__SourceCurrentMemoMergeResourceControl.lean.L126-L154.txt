@@ -1,0 +1,29 @@
+  refine ⟨⟨actual.1.mono larger, ?_, ?_, Nat.zero_le _⟩, Nat.le_trans actual.2.1 larger, actual.2.2⟩
+  · change (run (makeNode rows) heap).2.nodes.next ≤ primitiveGrowth width bound
+    have old := fits.nodes
+    change heap.nodes.next ≤ bound at old
+    have paid : bound + 1 ≤ primitiveGrowth width bound := Nat.le_max_left _ _
+    omega
+  · change (run (makeNode rows) heap).2.edges.next ≤ primitiveGrowth width bound
+    have old := fits.edges
+    change heap.edges.next ≤ bound at old
+    have retained := primitiveGrowth_ge width bound
+    omega
+
+/-- Full union work includes normalized members and either literal final constructor path. -/
+theorem union (values : List (Value Symbol Guard)) (heap : State Symbol Guard) (bound width : Nat)
+    (fits : Fits bound heap) (available : Values heap values) (length : values.length ≤ width) :
+    Fits (primitiveGrowth width bound) (run (makeUnion values) heap).2 ∧
+      InternedValueMass.value (run (makeUnion values) heap).1 ≤ primitiveGrowth width bound ∧
+      (run (makeUnion values) heap).2.nodes.next ≤ heap.nodes.next + 1 ∧
+      (run (makeUnion values) heap).2.edges.next = heap.edges.next := by
+  have actual := SourceRecursiveIntersectionWorkMass.union values heap fits.stored
+    (fun value member => InternedValueMassHeap.available heap fits.stored value (available value member))
+  have larger : inflate values.length bound ≤ primitiveGrowth width bound :=
+    Nat.le_trans (SourceRecursiveIntersectionWorkMass.inflate_width length bound) (Nat.le_max_right _ _)
+  refine ⟨⟨actual.1.mono larger, ?_, ?_, Nat.zero_le _⟩, Nat.le_trans actual.2.1 larger, actual.2.2⟩
+  · change (run (makeUnion values) heap).2.nodes.next ≤ primitiveGrowth width bound
+    have old := fits.nodes
+    change heap.nodes.next ≤ bound at old
+    have paid : bound + 1 ≤ primitiveGrowth width bound := Nat.le_max_left _ _
+    omega

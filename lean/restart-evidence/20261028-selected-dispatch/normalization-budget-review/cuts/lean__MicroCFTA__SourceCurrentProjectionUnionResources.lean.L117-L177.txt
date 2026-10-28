@@ -1,0 +1,61 @@
+  have physical := SourceEqualityExposureCosts.nodeEdges_verified (readFuel bound) value before semantic costs available
+  have effect : Effect before after := by
+    refine ⟨?_, replay.2.2.1, ?_⟩
+    · have kept := physical.keeps
+      rw [done] at kept
+      exact kept
+    · have retained := physical.costs
+      rw [done] at retained
+      exact retained
+  have enough : readFuel bound ≤ readGrowth bound := by unfold readGrowth; omega
+  refine ⟨effect, ⟨replay.2.2.2.1.mono enough, Nat.le_trans replay.2.2.2.2.1 enough,
+    Nat.le_trans replay.2.2.2.2.2.1 enough, Nat.zero_le _⟩, width.2.2.2.1,
+    replay.2.2.2.2.2.2.1, replay.2.2.2.2.2.2.2.1, replay.1, replay.2.2.2.2.2.2.2.2⟩
+
+/-- Exact earlier row reads remain ready at every larger initial scalar envelope. -/
+theorem read_ready {value : Value Symbol Guard} {before after : State Symbol Guard}
+    {rows : List (EdgeValue Symbol Guard)} (actual : SourceEqualityProjectionRead.Read value before rows after)
+    (bound larger : Nat) (semantic : SemanticReady before) (available : Available before value)
+    (closed : value.free = []) (fits : Fits bound before) (increase : bound ≤ larger) :
+    SourceCurrentProjectionNumericReplay.ReadReady (readFuel larger) actual := by
+  have wide := SourceCurrentMemoMergeResourceControl.Fits.mono fits increase
+  exact (SourceCurrentAllocatedRowReadUniform.of_read actual larger semantic available closed wide.stored wide.nodes wide.edges).1
+
+/-- An actual head read pays its final node and retains the exact shared read certificate. -/
+theorem head {value result : Value Symbol Guard} {before after : State Symbol Guard}
+    (actual : SourceEqualityRequiredHead.Head value before result after)
+    (bound : Nat) (semantic : SemanticReady before) (costs : CostHeap before)
+    (available : Available before value) (closed : value.free = []) (fits : Fits bound before) :
+    Effect before after ∧ Fits (headGrowth bound) after ∧ Available after result ∧ result.free = [] ∧
+      SourceCurrentProjectionNumericReplay.HeadReady (readFuel (headGrowth bound)) actual := by
+  cases actual with
+  | read fuel rows middle exposed rebuilt =>
+      have first := read (.done fuel exposed) bound semantic costs available closed fits
+      have final := SourceEqualityRequiredCache.node rows middle first.1.semantic.ready first.2.2.2.1 first.2.2.2.2.1
+      have finalEffect : Effect middle (run (makeNode rows) middle).2 :=
+        ⟨final.1, SourceEqualityRequiredSemanticCache.node rows middle first.1.semantic first.2.2.2.1 first.2.2.2.2.1,
+          InternedFreshOrdinaryCostHeap.preserve middle _ first.1.costs (InternedShallowHeap.makeNode_noNewMu rows middle)⟩
+      have resources := SourceCurrentMemoMergeResourceControl.node rows middle (readGrowth bound) (readWidth bound)
+        first.2.1 first.2.2.2.1 first.2.2.1
+      have ready := read_ready (.done fuel exposed) bound (headGrowth bound) semantic available closed fits (headGrowth_ge bound)
+      have ordinary := (SourceEqualityRequiredHead.Head.verified
+        (.read fuel rows middle exposed rebuilt) semantic.ready available closed).2.2.2
+      have resultSame := congrArg Prod.fst rebuilt
+      have stateSame := congrArg Prod.snd rebuilt
+      dsimp only at resultSame stateSame
+      subst result
+      subst after
+      exact ⟨first.1.trans finalEffect, resources.1, final.2.1, final.2.2.1,
+        .read fuel rows middle exposed rfl ready ordinary⟩
+
+private theorem readAll_exact {values : List (Value Symbol Guard)} {before after : State Symbol Guard}
+    {rows : List (EdgeValue Symbol Guard)} (actual : SourceEqualityProjectionUnion.ReadAll values before rows after)
+    (bound : Nat) (semantic : SemanticReady before) (costs : CostHeap before)
+    (available : Values before values) (closed : ClosedValues values) (fits : Fits bound before) :
+    Effect before after ∧ Fits (readAllGrowth values.length bound) after ∧
+      rows.length ≤ values.length * readAllGrowth values.length bound ∧
+      SourceCurrentProjectionNumericReplay.ReadAllReady (readFuel (readAllGrowth values.length bound)) actual := by
+  induction actual generalizing bound with
+  | nil => exact ⟨SourceCurrentMemoMergeEffects.effect_refl _ semantic costs, fits, Nat.zero_le _, .nil _⟩
+  | @cons value before own middle values more after first rest ih =>
+      have head := read first bound semantic costs (available value List.mem_cons_self) (closed value List.mem_cons_self) fits

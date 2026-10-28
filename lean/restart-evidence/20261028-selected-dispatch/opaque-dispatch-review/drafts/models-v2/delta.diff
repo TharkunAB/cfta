@@ -1,0 +1,37 @@
+--- /tmp/mcfta-selected-dispatch-20261028/opaque-dispatch-review/drafts/models-v1/SourcePruningEnumerationSelectedOpaqueModels.lean
++++ /tmp/mcfta-selected-dispatch-20261028/opaque-dispatch-review/drafts/models-v2/SourcePruningEnumerationSelectedOpaqueModels.lean
+@@ -118,23 +118,18 @@
+     ancestry, afterPacket, afterProper, post⟩ :=
+     opaque_complete formulas solver inventory caller memos metadata before checkEmpty target originalHandle
+       scs value packet ready stored proper incoming available closed boundary
+-  have nonempty : value ≠ .empty := by
+-    intro same
+-    subst value
+-    cases boundary
+-  have gate : (match (generalizing := false) value with
+-      | .node .. => !(scs.any (fun sc => EqualityTrie.isTerminal sc.trie))
+-      | _ => false) = false := by
+-    cases value <;> cases boundary <;> rfl
+-  have actual := completed 0 0 0 0 0
+-  simp only [run, ite_eq_right nonempty, gate, Bool.false_eq_true, ↓reduceIte,
+-    childRun 0 0 0 0 0] at actual
+-  obtain ⟨finished, finalized, same⟩ := Option.map_eq_some_iff.mp actual
+-  have cacheSame : finished = after :=
+-    (SourcePruningEnumerationSelectedEdge.Result.complete.inj same).2.2.2
++  have actualFinalized : SourcePruningEnumerationFinalize.run caller.checked.native.machine.heap
++      (bound + 0) target (.hole before.core.counter) middle = some after := by
++    have actual := completed 0 0 0 0 0
++    cases value <;> cases boundary
++    all_goals
++      simp only [run, reduceCtorEq, ↓reduceIte, childRun 0 0 0 0 0] at actual
++      obtain ⟨finished, finalized, same⟩ := Option.map_eq_some_iff.mp actual
++      have cacheSame : finished = after :=
++        (SourcePruningEnumerationSelectedEdge.Result.complete.inj same).2.2.2
++      simpa only [cacheSame] using finalized
+   have finalCore := finalized_core caller.checked.native.machine.heap (bound + 0) target
+-    (.hole before.core.counter) middle finished finalized
+-  rw [cacheSame] at finalCore
++    (.hole before.core.counter) middle after actualFinalized
+   refine ⟨bound, childHandle, middle, after,
+     ⟨encoded, decoded, middleCore, freshStored, flagsSame, waitingSame, childRun, completed,
+       counter, capturedStored, holeStored, ancestry, afterPacket, afterProper, post⟩, ?_⟩

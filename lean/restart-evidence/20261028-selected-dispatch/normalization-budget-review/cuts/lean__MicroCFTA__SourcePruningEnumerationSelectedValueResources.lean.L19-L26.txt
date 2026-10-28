@@ -1,0 +1,8 @@
+/-- One original scalar covers either selected preparation branch. -/
+def resourceBound (bound : Nat) : Nat :=
+  max (bound + charge bound)
+    (max (ceiling bound) (SourceCurrentProjectionUnionResources.headGrowth bound))
+
+private theorem resourceBound_ge (bound : Nat) : bound ≤ resourceBound bound := by
+  unfold resourceBound
+  omega

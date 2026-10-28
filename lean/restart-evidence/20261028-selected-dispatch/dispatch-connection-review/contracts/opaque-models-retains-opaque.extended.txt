@@ -1,0 +1,48 @@
+theorem opaque_complete_models
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller width) (memos : Memos) (metadata : SourcePruningRecordTypes.Metadata Typing)
+    (before : Cached) (checkEmpty : Bool) (target originalHandle : Nat) (scs : List Suspended)
+    (value : Node)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (ready : EnumerationDriver.Ready target before.core)
+    (stored : before.core.values[target]? = some (.unenumerated (some originalHandle) scs))
+    (proper : ProperState before.core)
+    (incoming : EnumerationReferences.IncomingAvoid target before.core)
+    (available : Available caller.checked.native.machine.heap value) (closed : value.free = [])
+    (boundary : MergedOrdinaryHeight.recursiveBoundary value = true) :
+    ∃ (bound childHandle : Nat) (middle after : Cached),
+      (encodeNode value = some childHandle ∧
+      lookupNode caller.checked.native.machine.heap childHandle = some value ∧
+      middle.core = allocated (some childHandle) before.core ∧
+      middle.core.values[before.core.counter]? = some (.unenumerated (some childHandle) []) ∧
+      middle.expandable = before.expandable ∧ middle.waiting = before.waiting ∧
+      (∀ r n p h extra,
+        SourcePruningEnumerationChildDispatch.run checkEmpty r n p h (bound + extra)
+          scs value caller before memos.query =
+          ((.ok (some [.ok (.hole before.core.counter, middle.core)]), caller, memos.query,
+            before.core, before.waiting), some middle)) ∧
+      (∀ r n p h extra, run checkEmpty r n p h (bound + extra) target scs value caller before memos.query =
+        some (.complete (.hole before.core.counter) caller memos.query after)) ∧
+      after.core.counter = before.core.counter + 1 ∧
+      after.core.values[target]? = some (.enumerated (.hole before.core.counter)) ∧
+      after.core.values[before.core.counter]? = some (.unenumerated (some childHandle) []) ∧
+      after.core.expansionAncestry = [] ∧
+      Packet formulas solver inventory caller memos metadata after ∧ ProperState after.core ∧
+      Post formulas solver inventory caller caller memos) ∧
+      ∀ (ambient : InternedGuardedLanguage.Env Symbol)
+        (residualMeaning : Constraint → Term Symbol → Prop) (assignment : Nat → Term Symbol),
+        Satisfies (SourcePruningEnumerationNativeLanguage.handles
+          (SourceEqualityPCSGuard.holds formulas solver) ambient caller.checked.native.machine.heap)
+          residualMeaning assignment before.core →
+        InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)
+          ambient value (assignment target) →
+        ∃ extended : Nat → Term Symbol,
+          (∀ uv < before.core.counter, extended uv = assignment uv) ∧
+          Satisfies (SourcePruningEnumerationNativeLanguage.handles
+            (SourceEqualityPCSGuard.holds formulas solver) ambient caller.checked.native.machine.heap)
+            residualMeaning extended before.core ∧
+          Fragments.fill extended (.hole before.core.counter : Fragments.Fragment Symbol) = assignment target ∧
+          Satisfies (SourcePruningEnumerationNativeLanguage.handles
+            (SourceEqualityPCSGuard.holds formulas solver) ambient caller.checked.native.machine.heap)
+            residualMeaning extended after.core

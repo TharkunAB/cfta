@@ -1,0 +1,46 @@
+structure Good (limit : Nat) (config : Config Symbol Guard) : Prop where
+  /-- Actual stored plans retain their semantic readback. -/
+  semantic : SemanticHeap config.heap
+  /-- Every free reference has its actual source binding. -/
+  covered : Covered [] config.heap
+  /-- Stored open-body degrees retain their physical readback. -/
+  depth : InternedOpenDepthReadback.Heap config.heap
+  /-- Every completed Mu lies within the fixed degree vector. -/
+  bounded : Bounded config.heap limit
+  /-- Each pending value is available in this exact heap. -/
+  available : Values config.heap config.pending
+  /-- Pending values have no unresolved free references. -/
+  closed : ClosedValues config.pending
+
+/-- One current numeric bound covers payloads, both supplies, and pending work. -/
+structure Fits (bound : Nat) (config : Config Symbol Guard) : Prop where
+  /-- Complete stored payloads fit the same causal bound. -/
+  stored : Stored bound config.heap
+  /-- The current issued node counter fits the bound. -/
+  nodes : config.heap.nodes.next ≤ bound
+  /-- The current issued edge counter fits the bound. -/
+  edges : config.heap.edges.next ≤ bound
+  /-- The literal pending work fits the bound. -/
+  work : workWeight config.pending ≤ bound
+
+/-- The existing Mu-degree vector gains a lowest pending-work coordinate. -/
+def measure (limit : Nat) (config : Config Symbol Guard) : Fin (limit + 1) → Nat :=
+  MergedFreshOrdinaryColdTermination.measure limit config.heap config.seen config.pending
+
+/-- One strict growth step covers actual unfolding and replacement of the pending head. -/
+def g (bound : Nat) : Nat := bound + charge bound + ceiling bound + 1
+
+/-- The controlled resource bound strictly increases at every scheduled step. -/
+theorem g_strict (bound : Nat) : bound < g bound := by unfold g; omega
+
+/-- Larger initial resources retain the next controlled bound. -/
+theorem g_mono {first last : Nat} (enough : first ≤ last) : g first ≤ g last :=
+  Nat.add_le_add_right (Nat.add_le_add
+    (Nat.add_le_add enough (SourceCurrentAllocatedRecursiveMassMonotone.charge_mono enough))
+    (SourceCurrentAllocatedRecursiveMassMonotone.ceiling_mono enough)) 1
+
+mutual
+/-- Structural collector weight is bounded by complete payload mass. -/
+theorem weight_le_mass (value : Value Symbol Guard) : weight value ≤ InternedValueMass.value value := by
+  cases value with
+  | union entry members depth free =>

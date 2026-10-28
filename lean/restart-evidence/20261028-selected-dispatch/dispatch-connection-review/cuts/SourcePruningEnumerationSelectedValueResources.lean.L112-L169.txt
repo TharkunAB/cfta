@@ -1,0 +1,58 @@
+/-- The original profile pays native preparation without a domain operation. -/
+def normalizationProfile (profile : Profile) : Profile :=
+  let bound := SourceCurrentMemoMergeResourceControl.initialBound profile.nodes profile.edges profile.mass
+  let prepared := SourcePruningEnumerationSelectedValue.resourceBound bound
+  ⟨prepared, prepared, profile.domains, prepared⟩
+
+variable [DecidableEq (EdgeKey Symbol Guard)]
+
+/-- Original counters and stored mass bound the same actual advanced caller. -/
+theorem fits_after (profile : Profile) (before : Caller width) (fuel : Nat)
+    (value result : Node) (heap : State Symbol Guard)
+    (semantic : SemanticReady before.checked.native.machine.heap)
+    (costs : InternedFreshOrdinaryCostHeap.Heap before.checked.native.machine.heap)
+    (available : Available before.checked.native.machine.heap value) (closed : value.free = [])
+    (fits : Fits profile before.checked)
+    (observed : SourcePruningEnumerationSelectedValue.run fuel value
+      before.checked.native.machine.heap = .done result heap) :
+    Fits (normalizationProfile profile) (advance before heap).checked ∧
+      InternedValueMass.value result ≤ (normalizationProfile profile).mass := by
+  let bound := SourceCurrentMemoMergeResourceControl.initialBound profile.nodes profile.edges profile.mass
+  have massLe : profile.mass ≤ bound := by dsimp [bound, SourceCurrentMemoMergeResourceControl.initialBound]; omega
+  have nodeLe : profile.nodes ≤ bound := by dsimp [bound, SourceCurrentMemoMergeResourceControl.initialBound]; omega
+  have edgeLe : profile.edges ≤ bound := by dsimp [bound, SourceCurrentMemoMergeResourceControl.initialBound]; omega
+  have original : SourceCurrentMemoMergeResourceControl.Fits bound before.checked.native.machine.heap :=
+    ⟨fits.stored.mono massLe, Nat.le_trans fits.nodes nodeLe, Nat.le_trans fits.edges edgeLe, Nat.zero_le _⟩
+  have numeric := SourcePruningEnumerationSelectedValue.run_resources fuel value
+    before.checked.native.machine.heap result heap bound semantic costs available closed original observed
+  exact ⟨⟨numeric.1.nodes, numeric.1.edges, fits.domains, numeric.1.stored⟩, numeric.2⟩
+
+/-- One original caller producer retains its full result and derives its forecast. -/
+theorem complete_resources (profile : Profile)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (before : Caller width) (memos : Memos) (value : Node)
+    (initial : Context formulas solver inventory before memos)
+    (available : Available before.checked.native.machine.heap value)
+    (closed : value.free = []) (fits : Fits profile before.checked) :
+    ∃ bound result heap,
+      (((∀ extra, SourcePruningEnumerationSelectedValue.run (bound + extra) value
+            before.checked.native.machine.heap = .done result heap) ∧
+          Keeps before.checked.native.machine.heap heap ∧ SemanticReady heap ∧
+          Available heap result ∧ result.free = [] ∧
+          ∀ holds ambient term,
+            InternedGuardedLanguage.meaning holds ambient result term ↔
+              InternedGuardedLanguage.meaning holds ambient value term) ∧
+        Post formulas solver inventory before (advance before heap) memos) ∧
+      Fits (normalizationProfile profile) (advance before heap).checked ∧
+      InternedValueMass.value result ≤ (normalizationProfile profile).mass := by
+  obtain ⟨bound, result, heap, packet, post⟩ :=
+    complete formulas solver inventory before memos value initial available closed
+  have observed : SourcePruningEnumerationSelectedValue.run bound value
+      before.checked.native.machine.heap = .done result heap := by
+    simpa only [Nat.add_zero] using packet.1 0
+  have numeric := fits_after profile before bound value result heap initial.ready.semantic
+    initial.ready.costs available closed fits observed
+  exact ⟨bound, result, heap, ⟨packet, post⟩, numeric⟩
+
+end MicroCFTA.SourcePruningEnumerationSelectedValueCaller

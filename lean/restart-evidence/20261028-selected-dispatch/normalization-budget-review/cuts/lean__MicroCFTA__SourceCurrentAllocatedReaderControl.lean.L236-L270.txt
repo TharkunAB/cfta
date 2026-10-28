@@ -1,0 +1,35 @@
+      have small := weight_le_mass result
+      have oldNodes := fits.nodes
+      have oldEdges := fits.edges
+      have oldWork := fits.work
+      simp only [workWeight] at oldWork ⊢
+      refine ⟨stored.mono (by unfold g; omega), ?_, ?_, ?_⟩
+      all_goals dsimp only [Config.heap, Config.pending] at oldNodes oldEdges oldWork ⊢
+      all_goals try simp only [workWeight] at oldWork ⊢
+      all_goals unfold g; omega
+
+private theorem pop_decreases {limit : Nat} {heap : State Symbol Guard} {seen : List Nat}
+    {value : Value Symbol Guard} {rest : List (Value Symbol Guard)}
+    (good : Good limit ⟨heap, seen, value :: rest⟩) :
+    HeightOrder.VectorBelow (limit + 1) (measure limit ⟨heap, seen, rest⟩)
+      (measure limit ⟨heap, seen, value :: rest⟩) := by
+  apply MergedFreshOrdinaryColdTermination.ordinary_step limit heap good.semantic.1.normal.facts.coherent
+    seen seen (value :: rest) rest (fun _ member => member)
+  have positive := weight_positive value
+  simp only [workWeight]
+  omega
+
+/-- Each exact step strictly decreases the existing finite Mu-degree vector. -/
+theorem Step.decreases [DecidableEq (EdgeKey Symbol Guard)] {limit : Nat} {before after : Config Symbol Guard}
+    (step : Step before after) (good : Good limit before) :
+    HeightOrder.VectorBelow (limit + 1) (measure limit after) (measure limit before) := by
+  cases step with
+  | empty | node | union_seen | mu_seen => exact pop_decreases good
+  | union_fresh =>
+      apply MergedFreshOrdinaryColdTermination.ordinary_step limit _ good.semantic.1.normal.facts.coherent
+        _ _ _ _ (fun _ member => List.mem_cons_of_mem _ member)
+      simp only [workWeight, weight, workWeight_append]
+      omega
+  | @mu_fresh heap after seen entry body depth ordinary result rest unvisited actual =>
+      have available := good.available _ List.mem_cons_self
+      have lower : InternedStoredPlanBinderDepthProgress.Lower heap (InternedStoredPlanBinderDepth.valueDepth body) after := by

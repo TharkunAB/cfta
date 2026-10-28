@@ -1,0 +1,15 @@
+
+/-- Exact edge residency supplies the stored edge mass bound. -/
+theorem resident (source : State Symbol Guard) (stored : Stored bound source)
+    (edge : EdgeValue Symbol Guard) (known : EdgeResident source edge) : InternedValueMass.edge edge ≤ bound :=
+  stored.edges edge.entry.key edge known
+
+/-- Cache reservation changes no complete payload map. -/
+theorem Stored.node_cache {state : State Symbol Guard} (stored : Stored bound state)
+    (cache : Cache.State InternedBinderProtocol.NodeKey) : Stored bound {state with nodes := cache} :=
+  ⟨stored.positive, stored.nodes, stored.edges⟩
+
+/-- Changing the edge identity cache changes no complete payload map. -/
+theorem Stored.edge_cache {state : State Symbol Guard} (stored : Stored bound state)
+    (cache : Cache.State (EdgeKey Symbol Guard)) : Stored bound {state with edges := cache} :=
+  ⟨stored.positive, stored.nodes, stored.edges⟩

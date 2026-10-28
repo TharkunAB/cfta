@@ -1,0 +1,78 @@
+theorem complete_resources
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller width) (memos : Memos) (metadata : SourcePruningRecordTypes.Metadata Typing)
+    (before : Cached) (uv handle : Nat) (scs : List Suspended)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (ready : EnumerationDriver.Ready uv before.core)
+    (stored : before.core.values[uv]? = some (.unenumerated (some handle) scs))
+    (profile : SourceCurrentAllocatedNativeResourceForecast.Profile)
+    (fits : SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile caller.checked) :
+    ∃ (bound : Nat) (decoded result : Node) (heap : InternedConstructorTemplates.State Symbol Constraint) (entered : Cached),
+      (((∀ extra, SourcePruningEnumerationSelectedPreparation.run (bound + extra) (bound + extra) uv caller before =
+        ([.ok ((uv, handle, scs, decoded), entered.core)], some (.done result heap))) ∧
+      lookupNode caller.checked.native.machine.heap handle = some decoded ∧
+      Post formulas solver inventory caller
+        (SourcePruningEnumerationSelectedValueCaller.advance caller heap) memos ∧
+      Packet formulas solver inventory
+        (SourcePruningEnumerationSelectedValueCaller.advance caller heap) memos metadata entered ∧
+      EnumerationDriver.RenderStable before.core entered.core ∧
+      EnumerationDriver.Ready uv entered.core ∧
+      entered.core.values[uv]? = some (.unenumerated (some handle) scs) ∧
+      entered.core.counter = before.core.counter ∧ entered.core.values = before.core.values ∧
+      entered.expandable = before.expandable ∧ entered.waiting = before.waiting ∧
+      Available heap result ∧ result.free = [] ∧
+      (∀ holds ambient term,
+        InternedGuardedLanguage.meaning holds ambient result term ↔
+          InternedGuardedLanguage.meaning holds ambient decoded term) ∧
+      ∀ holds ambient residualMeaning assignment,
+        (Satisfies (SourcePruningEnumerationNativeLanguage.handles holds ambient heap)
+          residualMeaning assignment entered.core ↔
+        Satisfies (SourcePruningEnumerationNativeLanguage.handles holds ambient
+          caller.checked.native.machine.heap) residualMeaning assignment before.core) ∧
+        (Satisfies (SourcePruningEnumerationNativeLanguage.handles holds ambient
+          caller.checked.native.machine.heap) residualMeaning assignment before.core →
+          InternedGuardedLanguage.meaning holds ambient result (assignment uv))) ∧
+      SourceCurrentConstrainedCapGeneratedQueryResources.Fits
+        (SourcePruningEnumerationSelectedValueCaller.normalizationProfile profile)
+        (SourcePruningEnumerationSelectedValueCaller.advance caller heap).checked ∧
+      InternedValueMass.value result ≤
+        (SourcePruningEnumerationSelectedValueCaller.normalizationProfile profile).mass) ∧
+      ∀ (checkEmpty : Bool) (r n p h k : Nat)
+        (edgesOf : Node → List (EdgeValue Symbol Constraint)) (queries : Queries) (extra : Nat),
+        run checkEmpty (bound + extra) (bound + extra) r n p h k uv edgesOf caller before queries =
+          (([.ok ((uv, handle, scs, decoded), entered.core)], some (.done result heap)),
+            if scs.any (fun sc => EqualityTrie.isTerminal sc.trie) then
+              .inr (SourcePruningEnumerationSelectedOpaqueDispatch.run checkEmpty r n p h k uv scs result
+                (SourcePruningEnumerationSelectedValueCaller.advance caller heap) entered queries)
+            else match result with
+              | parent@(.node ..) =>
+                  .inl (SourcePruningEnumerationNativeBranches.run checkEmpty r n p h k uv scs entered
+                    (edgesOf parent) (SourcePruningEnumerationSelectedValueCaller.advance caller heap) queries)
+              | _ =>
+                  .inr (SourcePruningEnumerationSelectedOpaqueDispatch.run checkEmpty r n p h k uv scs result
+                    (SourcePruningEnumerationSelectedValueCaller.advance caller heap) entered queries)) := by
+  obtain ⟨bound, decoded, result, heap, entered, packet⟩ :=
+    SourcePruningEnumerationSelectedPreparation.complete_resources formulas solver inventory caller memos metadata
+      before uv handle scs packet ready stored profile fits
+  have retained := packet
+  rcases packet with ⟨prepared, _fits, _mass⟩
+  rcases prepared with ⟨running, _lookup, _post, _enteredPacket, _stable, _ready, _stored,
+    _counter, _values, sameFlags, sameWaiting, _available, _closed, _language, _models⟩
+  have framed : EnumerationExpandableIndex.frame entered.core before = entered := by
+    cases entered with
+    | mk core expandable waiting =>
+        simp only [EnumerationExpandableIndex.frame] at *
+        congr 1
+        · exact sameFlags.symm
+        · exact sameWaiting.symm
+  refine ⟨bound, decoded, result, heap, entered, retained, ?_⟩
+  intro checkEmpty r n p h k edgesOf queries extra
+  by_cases terminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true
+  · simp only [run, SourcePruningEnumerationSelectedOrdinaryDispatch.run, running extra,
+      framed, terminal, ↓reduceIte]
+  · cases result <;>
+      simp only [run, SourcePruningEnumerationSelectedOrdinaryDispatch.run, running extra,
+        framed, terminal, Bool.false_eq_true, ↓reduceIte]
+
+end MicroCFTA.SourcePruningEnumerationSelectedDispatch

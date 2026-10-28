@@ -1,0 +1,35 @@
+--- immutable-v1
++++ immutable-v2
+@@ -66,7 +66,7 @@
+           (SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap k target fragment after).map
+             (fun finished => .complete fragment reached saved finished)
+       | (observation, candidate) => some (.stopped [] observation candidate) := by
+-  have gate : (match value with
++  have gate : (match (generalizing := false) value with
+       | .node .. => !(scs.any (fun sc => EqualityTrie.isTerminal sc.trie))
+       | _ => false) = false := by
+     cases value <;> simp only [terminal, Bool.not_true]
+@@ -108,12 +108,13 @@
+   have payload : ProperValue (.unenumerated (some originalHandle) scs : UVarValue Symbol) :=
+     proper _ (List.mem_of_getElem? stored)
+   have nonterminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = false :=
+-    List.any_eq_false.mpr (fun sc member => (payload sc member).2.2)
++    List.any_eq_false.mpr (fun sc member => by
++      simp only [(payload sc member).2.2, Bool.false_eq_true, not_false_eq_true])
+   have nonempty : value ≠ .empty := by
+     intro same
+     subst value
+     cases boundary
+-  have gate : (match value with
++  have gate : (match (generalizing := false) value with
+       | .node .. => !(scs.any (fun sc => EqualityTrie.isTerminal sc.trie))
+       | _ => false) = false := by
+     cases value <;> cases boundary <;> rfl
+@@ -164,6 +165,7 @@
+     rw [forest] at same
+     have equal := outside_class before.core.representatives before.core.counter before.core.counter target
+       packet.safe.1.forest (Nat.le_refl _) (UnionFind.sameClass_symm same)
++    have inside := ready.inside
+     omega
+   obtain ⟨bound, after, finalRun, _finalRaw, finalCore, finalStored, _finalFlag, _finalWaiting,
+     afterPaths, afterCounts, afterFlags, afterStorage, afterRealized, safeFinish⟩ :=

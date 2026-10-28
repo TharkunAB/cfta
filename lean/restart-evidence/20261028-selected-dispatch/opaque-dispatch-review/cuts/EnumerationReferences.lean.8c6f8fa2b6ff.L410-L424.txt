@@ -1,0 +1,15 @@
+theorem setValue_pending (uv : Nat) (fragment : Fragment Symbol) (before after : State Symbol Guard)
+    (pending : PendingReferences before) (incoming : IncomingAvoid uv before)
+    (success : Success (setValue uv (.enumerated fragment)) before () after) : PendingReferences after := by
+  have stateSame := (modify_success _ before after).mp success
+  intro held storedFragment stored
+  have oldIncoming : IncomingAvoid held before := by
+    by_cases same : held = uv
+    · simpa [same] using incoming
+    · apply pending held storedFragment
+      simpa [stateSame, Ne.symm same] using stored
+  have allowed := setValue_allowed (fun other => ¬UnionFind.SameClass before.representatives held other)
+    uv (.enumerated fragment) before after oldIncoming (by simp [references, InputsAllowed]) success
+  simpa [IncomingAvoid, stateSame] using allowed
+
+/-- The actual selected-slot expansion preserves pending targets for every suspended reference. -/

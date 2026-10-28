@@ -1,0 +1,8 @@
+theorem allocation_proper (node : Option Nat) (state : State Symbol Guard) (proper : ProperState state) :
+    ProperState (allocated node state) := by
+  intro value member
+  rcases List.mem_append.mp member with old | fresh
+  · exact proper value old
+  · have same : value = .unenumerated node [] := by simpa using fresh
+    subst value
+    cases node <;> simp [ProperValue]

@@ -1,0 +1,23 @@
+    ((leaves value).map (input environment)) before bound stored
+    (fun child member => InternedValueMassHeap.available before stored child (inputs child member))
+  have larger := encoded_transform value bound small
+  have counters := InternedStoredEncodingMass.execute_bound value environment before
+  have power := Nat.pow_le_pow_right (by decide : 1 ≤ 3) small
+  refine ⟨built.1.mono larger, ?_, ?_, fun result after done => Nat.le_trans (built.2 result after done) larger⟩
+  all_goals unfold charge SourceCurrentAllocatedRecursiveMassBudget.charge; omega
+
+/-- Full actual unfolding bounds every stopping heap and its exact successful result. -/
+theorem unfold_bound [DecidableEq (EdgeKey Symbol Guard)] (value : Value Symbol Guard) (before : State Symbol Guard) (bound : Nat)
+    (stored : Stored bound before) (available : Available before value) :
+    Stored (ceiling bound) (InternedFreshOrdinaryStoredSubstitution.unfold value before).state ∧
+      (InternedFreshOrdinaryStoredSubstitution.unfold value before).state.nodes.next ≤ before.nodes.next + charge bound ∧
+      (InternedFreshOrdinaryStoredSubstitution.unfold value before).state.edges.next ≤ before.edges.next + charge bound ∧
+      ∀ result after, InternedFreshOrdinaryStoredSubstitution.unfold value before = .done result after →
+        InternedValueMass.value result ≤ ceiling bound := by
+  cases value with
+  | mu entry body depth ordinary =>
+      exact execute_bound body _ before bound stored (available.children body (by simp [children]))
+        (by intro name replacement found; dsimp only at found; split at found <;> cases found; exact available)
+  | empty | reference | node | union =>
+      refine ⟨stored.mono (SourceCurrentAllocatedRecursiveMassTrace.ceiling_ge bound),
+        Nat.le_add_right _ _, Nat.le_add_right _ _, ?_⟩

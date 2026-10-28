@@ -1,0 +1,28 @@
+/-- One scalar bounds both complete payload maps and both issued counters. -/
+abbrev Fits (bound : Nat) (heap : State Symbol Guard) : Prop :=
+  SourceCurrentAllocatedUnfoldHistory.Fits bound heap
+
+/-- Larger scalar resources retain the same complete heap. -/
+theorem Fits.mono {first last : Nat} {heap : State Symbol Guard}
+    (fits : Fits first heap) (increase : first ≤ last) : Fits last heap :=
+  SourceCurrentAllocatedReaderControl.Fits.mono fits increase
+
+/-- Original issued counters and causal payload mass bound the initial heap. -/
+def initialBound (nodes edges mass : Nat) : Nat := max (max nodes edges) mass
+
+/-- Initial causal stored mass needs no future execution to establish scalar control. -/
+theorem initial (heap : State Symbol Guard) (mass : Nat) (stored : InternedValueMassHeap.Stored mass heap) :
+    Fits (initialBound heap.nodes.next heap.edges.next mass) heap := by
+  refine ⟨stored.mono (by unfold initialBound; omega), ?_, ?_, Nat.zero_le _⟩
+  · change heap.nodes.next ≤ initialBound heap.nodes.next heap.edges.next mass
+    unfold initialBound; omega
+  · change heap.edges.next ≤ initialBound heap.nodes.next heap.edges.next mass
+    unfold initialBound; omega
+
+/-- One primitive pays one identity and the complete list of bounded payloads. -/
+def primitiveGrowth (width bound : Nat) : Nat := max (bound + 1) (inflate width bound)
+
+/-- Every primitive envelope retains the original scalar resources. -/
+theorem primitiveGrowth_ge (width bound : Nat) : bound ≤ primitiveGrowth width bound := by
+  unfold primitiveGrowth
+  omega

@@ -1,0 +1,76 @@
+abbrev Obligation (Symbol : Type) := (Nat → Term Symbol) → Term Symbol → Prop
+
+/-- A missing graph restriction permits any complete term. -/
+def permits (domain : Option (Domain Symbol)) (term : Term Symbol) : Prop :=
+  match domain with
+  | none => True
+  | some predicate => predicate term
+
+/-- Intersect graph restrictions, retaining a sole restriction unchanged. -/
+def intersectDomains : Option (Domain Symbol) → Option (Domain Symbol) → Option (Domain Symbol)
+  | none, right => right
+  | left, none => left
+  | some left, some right => some (fun term => left term ∧ right term)
+
+/-- Optional graph intersection means conjunction of accepted-term restrictions. -/
+theorem intersectDomains_correct (left right : Option (Domain Symbol)) (term : Term Symbol) :
+    permits (intersectDomains left right) term ↔ permits left term ∧ permits right term := by
+  cases left <;> cases right <;> simp [intersectDomains, permits]
+
+/-- Concrete synchronous graph intersection supplies the interpreted conjunction. -/
+theorem graph_intersection_domain [DecidableEq Symbol]
+    (left : Automaton Q Symbol) (right : Automaton R Symbol) (q : Q) (r : R) (term : Term Symbol) :
+    Accepts (Language.intersect left right) (q, r) term ↔
+      permits (intersectDomains (some (Accepts left q)) (some (Accepts right r))) term := by
+  rw [accepts_intersect_iff]
+  rfl
+
+/-- The value states used by the enumeration engine. -/
+inductive Slot (Symbol : Type) where
+  | pending (domain : Option (Domain Symbol)) (obligations : List (Obligation Symbol))
+  | expanded (fragment : Fragment Symbol)
+  | eliminated
+
+/-- Stored graph, suspended obligations, or fragment equations constrain one assigned term. -/
+def slotSatisfies (assignment : Nat → Term Symbol) (uv : Nat) : Slot Symbol → Prop
+  | .pending domain obligations =>
+      permits domain (assignment uv) ∧ ∀ obligation ∈ obligations, obligation assignment (assignment uv)
+  | .expanded fragment => fill assignment fragment = assignment uv
+  | .eliminated => True
+
+/-- Intersect only two unexpanded slots, as required by `intersectUVarValue`. -/
+def intersectSlots : Slot Symbol → Slot Symbol → Option (Slot Symbol)
+  | .pending left leftObligations, .pending right rightObligations =>
+      some (.pending (intersectDomains left right) (leftObligations ++ rightObligations))
+  | _, _ => none
+
+/-- Successful slot intersection retains exactly both original restrictions. -/
+theorem intersectSlots_correct (assignment : Nat → Term Symbol) (uv : Nat)
+    (left right merged : Slot Symbol) (success : intersectSlots left right = some merged) :
+    slotSatisfies assignment uv merged ↔
+      slotSatisfies assignment uv left ∧ slotSatisfies assignment uv right := by
+  cases left <;> cases right <;> simp only [intersectSlots] at success
+  all_goals try cases success
+  simp only [slotSatisfies, intersectDomains_correct, List.mem_append]
+  grind only
+
+/-- Equal assigned values satisfy the same unexpanded slot restrictions. -/
+theorem openSlot_congr (assignment : Nat → Term Symbol) (left right : Nat)
+    (same : assignment left = assignment right) (domain : Option (Domain Symbol))
+    (obligations : List (Obligation Symbol)) :
+    slotSatisfies assignment left (.pending domain obligations) ↔
+      slotSatisfies assignment right (.pending domain obligations) := by
+  simp only [slotSatisfies, same]
+
+/-- A value-slot store indexed by union-find variables. -/
+abbrev Heap (Symbol : Type) := Nat → Slot Symbol
+
+/-- Replace one slot in a persistent store. -/
+def setSlot (heap : Heap Symbol) (uv : Nat) (slot : Slot Symbol) : Heap Symbol :=
+  fun other => if other = uv then slot else heap other
+
+/-- All stored payload restrictions hold for the assignment. -/
+def heapSatisfies (heap : Heap Symbol) (assignment : Nat → Term Symbol) : Prop :=
+  ∀ uv, slotSatisfies assignment uv (heap uv)
+
+/-- Move the source restrictions to the target, then eliminate the source slot. -/

@@ -1,0 +1,98 @@
+/-- Recursive children allocate an empty bucket and preserve waiting counts. -/
+theorem boundary_complete
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (before : EnumerationExpandableIndex.Cached Symbol EnumGuard)
+    (value : InternedConstructorTemplates.Value Symbol NativeGuard)
+    (scs : List EnumerationState.Suspended) (roots : Nat → Nat)
+    (coherent : InternedRecordCoherence.Coherent heap)
+    (available : InternedProbeProvenance.Available heap value) (closed : value.free = [])
+    (boundary : MergedOrdinaryHeight.recursiveBoundary value = true)
+    (nonterminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = false)
+    (storage : StorageValid before.core) (realized : PendingRealized heap before.core)
+    (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (flags : ∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap
+      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot)) :
+    ∃ (handle : Nat) (action : EnumerateM Symbol EnumGuard (Fragments.Fragment Symbol))
+      (after : EnumerationExpandableIndex.Cached Symbol EnumGuard),
+      encodeNode value = some handle ∧ lookupNode heap handle = some value ∧
+      SourcePruningEnumerationShallowChild.prepareChild scs value = some action ∧
+      (∀ (fuel : Nat), prepareChild heap fuel scs value before =
+        some [(.hole before.core.counter, after)]) ∧
+      ExceptT.run (action before.core) = [.ok (.hole before.core.counter, after.core)] ∧
+      after.core = EnumerationState.allocated (some handle) before.core ∧
+      after.core.values[before.core.counter]? = some (.unenumerated (some handle) []) ∧
+      after.core.counter = before.core.counter + 1 ∧
+      after.core.counter = after.core.values.length ∧
+      after.core.representatives = before.core.representatives ∧ Roots after.core.representatives roots ∧
+      StorageValid after.core ∧ PendingRealized heap after.core ∧
+      EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
+      after.waiting = before.waiting ∧ after.expandable = before.expandable ∧
+      (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap
+        ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧
+      FragmentBound («Symbol» := Symbol) after.core.counter (.hole before.core.counter) := by
+  have nonempty : value ≠ .empty := by
+    intro emptyValue
+    subst value
+    cases boundary
+  obtain ⟨handle, encoded, decoded, _emptyCase, nonemptyCase⟩ :=
+    SourcePruningEnumerationShallowChild.prepareChild_complete heap before.core scs value
+      coherent available closed realized storage.aligned nonterminal
+  obtain ⟨action, _coreAfter, prepared, _observed, _afterShape, _afterSlot,
+    _grows, _alignedAfter, _realizedAfter⟩ := nonemptyCase nonempty
+  obtain ⟨flag, after, classified, nativeAllocated, _allocationRaw, shape, stored,
+    grows, alignedAfter, forestSame, pathsAfter, storageAfter, realizedAfter,
+    countsAfter, waitingSame, _flagShape, flagsAfter⟩ :=
+    allocate_complete heap (some handle) before roots (fun storedHandle nodeSame => by
+      cases Option.some.inj nodeSame
+      exact ⟨value, decoded, available, closed⟩) storage realized paths counts flags
+  have flagFalse : flag = false := by
+    apply Option.some.inj
+    simpa only [SourcePruningEnumerationNativeIndex.candidate, decoded, Option.map_some,
+      boundary, List.isEmpty_nil, Bool.true_and, Bool.not_true] using classified.symm
+  subst flag
+  have coreRaw : ExceptT.run (action before.core) =
+      [.ok (.hole before.core.counter, after.core)] := by
+    cases value with
+    | empty => cases boundary
+    | reference name => cases boundary
+    | node entry edges depth free => cases boundary
+    | union entry members depth free =>
+        simp only [SourcePruningEnumerationShallowChild.prepareChild, nonterminal,
+          Bool.false_eq_true, ↓reduceIte, encoded, Option.some.injEq] at prepared
+        rw [← prepared]
+        change [(.ok (.hole before.core.counter,
+          EnumerationState.allocated (some handle) before.core) :
+            Except EnumerationState.Error
+              (Fragments.Fragment Symbol × EnumerationState.State Symbol EnumGuard))] = _
+        rw [shape]
+    | mu entry body depthShape ordinaryShape =>
+        simp only [SourcePruningEnumerationShallowChild.prepareChild, nonterminal,
+          Bool.false_eq_true, ↓reduceIte, encoded, Option.some.injEq] at prepared
+        rw [← prepared]
+        change [(.ok (.hole before.core.counter,
+          EnumerationState.allocated (some handle) before.core) :
+            Except EnumerationState.Error
+              (Fragments.Fragment Symbol × EnumerationState.State Symbol EnumGuard))] = _
+        rw [shape]
+  refine ⟨handle, action, after, encoded, decoded, prepared, ?_, coreRaw, shape,
+    stored, grows, alignedAfter, forestSame, pathsAfter, storageAfter, realizedAfter,
+    countsAfter, waitingSame, ?_, flagsAfter, ?_⟩
+  · intro fuel
+    cases value with
+    | empty => cases boundary
+    | reference name => cases boundary
+    | node entry edges depth free => cases boundary
+    | union entry members depth free =>
+        simp only [prepareChild, nonterminal, Bool.false_eq_true, ↓reduceIte,
+          encoded, Option.bind_some, nativeAllocated, Option.map_some]
+    | mu entry body depthShape ordinaryShape =>
+        simp only [prepareChild, nonterminal, Bool.false_eq_true, ↓reduceIte,
+          encoded, Option.bind_some, nativeAllocated, Option.map_some]
+  · simp only [SourcePruningEnumerationCachedChild.allocate, classified,
+      Option.map_some, Bool.false_eq_true, ↓reduceIte] at nativeAllocated
+    exact (congrArg (fun (allocation : Nat × EnumerationExpandableIndex.Cached Symbol EnumGuard) =>
+      allocation.2.expandable) (Option.some.inj nativeAllocated)).symm
+  · change before.core.counter < after.core.counter
+    rw [grows]
+    exact Nat.lt_succ_self _

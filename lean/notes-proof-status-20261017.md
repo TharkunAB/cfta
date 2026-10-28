@@ -1,5 +1,44 @@
 # Proof status at 2026-10-18
 
+## Original preparation resources and actual selected dispatch
+
+Source checkpoint: d2ccf5f1f33cfec161589f81401e9928dac176c7.
+The original Packet, Ready root, stored handle and heap profile now derive
+one actual entry and one native preparation with a computed resource bound.
+The complete previous caller, cache and model result remains. The bound,
+prepared value, heap and entered cache precede all semantic observers.
+Mu unfolds ONCE. Union reconstructs its actual rows. Domains stay unchanged.
+
+The combined selected dispatcher uses that preparation once. Ordinary nodes
+scan their prepared rows with the actual advanced caller. Remaining opaque
+or terminal values use the actual child operation and captured-target write.
+The complete preparation result and native fault heaps remain available.
+The branch equation holds at arbitrary branch fuels. It does not assert that
+all branches complete at those fuels. A failed finalizer can return None.
+
+For an opaque value, original ProperState and IncomingAvoid derive actual
+fresh allocation, captured write, full returned Packet and ProperState.
+A new model theorem extends each original satisfying assignment that accepts
+the prepared value. It keeps every old variable and fills the actual fresh
+hole with the original selected term. The fresh slot has an EMPTY bucket.
+This proves representation of the original term. It does not prove that every
+completion of that opaque hole satisfies the original suspended constraints.
+
+The largest gap remains global ORIGINAL accepted-output coverage. Connect
+this dispatcher to hook-aware recursive scheduling, pay the branch resources
+from the original forecast, and compose models through siblings and restarts.
+The old Recursive.run is unchanged. Public policy origins, APIs, ranking,
+sampling and physical Haskell correspondence remain open. Goal ACTIVE.
+
+Six modules add 17 public theorems and five definitions. All seven final
+strict checks pass. Full Audit passes 4348 jobs and 80624 dependency checks.
+Public readback has 356 theorem blocks and 19 definitions. The complete old
+1366947-byte readback remains its exact prefix. All 4341 old non-Audit Lean
+sources, 190 strong modules and 810 tracked Haskell source/evidence files
+retain bytes. No Haskell file changed. Checkpoint PROGRESS.
+Details: `lean/notes-current-selected-dispatch.md`.
+
+
 ## Selected preparation retains the full caller and model
 
 Source checkpoint: 1bc96b44ee41d9252941f4404cca67f7dbcb0a66.

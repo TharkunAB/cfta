@@ -1,0 +1,39 @@
+theorem written_proper
+    (before after : EnumerationState.State Symbol EnumGuard) (target : Nat) (fragment : Fragments.Fragment Symbol)
+    (proper : ProperState before)
+    (written : after = {before with
+      values := before.values.set target (.enumerated fragment)
+      expansionAncestry := []}) : ProperState after := by
+  subst after
+  intro value member
+  rcases List.mem_or_eq_of_mem_set member with old | same
+  · exact proper value old
+  · subst value
+    trivial
+
+/-- Every actual indexed finalization cache has proper pending paths. -/
+theorem run_proper
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard) (fuel target : Nat)
+    (fragment : Fragments.Fragment Symbol) (before after : EnumerationExpandableIndex.Cached Symbol EnumGuard)
+    (proper : ProperState before.core)
+    (observed : run heap fuel target fragment before = some after) : ProperState after.core := by
+  simp only [run, Option.bind_eq_some_iff] at observed
+  obtain ⟨_old, _stored, written⟩ := observed
+  simp only [SourcePruningEnumerationNativeIndex.write, Option.bind_eq_some_iff, Option.some.injEq] at written
+  obtain ⟨_flag, _classified, _removed, _removedCounts, _saved, _savedCounts, same⟩ := written
+  subst after
+  exact written_proper before.core _ target fragment proper rfl
+
+end MicroCFTA.SourcePruningEnumerationFinalize
+
+namespace MicroCFTA.SourcePruningEnumerationSelectedEdge
+open EnumerationProgress
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+
+/-- Recording an actual completed edge residual keeps all proper pending paths. -/
+theorem finish_proper (residual : Option Constraint) (fragment : Fragments.Fragment Symbol)
+    (before : EnumerationExpandableIndex.Cached Symbol Constraint) (proper : ProperState before.core) :
+    ProperState (finish residual fragment before).core := proper
+
+end MicroCFTA.SourcePruningEnumerationSelectedEdge

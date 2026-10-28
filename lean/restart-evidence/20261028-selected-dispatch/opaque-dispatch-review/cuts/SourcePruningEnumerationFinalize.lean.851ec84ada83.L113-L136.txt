@@ -1,0 +1,24 @@
+  refine ⟨fuel, ⟨{before.core with
+    values := before.core.values.set target (.enumerated fragment)
+    expansionAncestry := []},
+    fun slot => if slot = target then false else before.expandable slot,
+    EnumerationCanonicalWaiting.count roots (-1) (references old) before.waiting⟩,
+    ?_, ?_, rfl, List.getElem?_set_self inside, rfl, rfl, paths, ?_,
+    writtenFlags, writtenStorage, writtenRealized,
+    fun safe root => written_safe before target fragment safe root bounded⟩
+  · intro extra
+    simp only [run, EnumerationExpandableIndex.frame, stored, Option.bind_some,
+      SourcePruningEnumerationNativeIndex.write, SourcePruningEnumerationNativeIndex.candidate,
+      countRun extra (-1) before.waiting]
+    rfl
+  · dsimp [finish, rawValue, setValue, bind, pure, get, getThe, MonadStateOf.get,
+      modify, modifyGet, MonadStateOf.modifyGet, StateT.bind, StateT.pure,
+      StateT.get, StateT.modifyGet, ExceptT.bind, ExceptT.pure, ExceptT.bindCont,
+      ExceptT.mk, ExceptT.run]
+    simp only [List.flatMap_singleton, ExceptT.bindCont]
+    rw [stored]
+    rfl
+  · exact EnumerationCanonicalWaiting.replace_correct roots before.core.values target old
+      (.enumerated fragment) stored before.waiting counts
+
+end MicroCFTA.SourcePruningEnumerationFinalize

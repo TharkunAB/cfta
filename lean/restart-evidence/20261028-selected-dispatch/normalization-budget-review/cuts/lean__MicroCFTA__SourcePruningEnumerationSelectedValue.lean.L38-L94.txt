@@ -1,0 +1,57 @@
+    (semantic : SemanticReady before) (available : Available before value)
+    (closed : value.free = []) :
+    ∃ bound result after,
+      (∀ extra, run (bound + extra) value before = .done result after) ∧
+      Keeps before after ∧ SemanticReady after ∧ Available after result ∧ result.free = [] ∧
+      ∀ holds ambient term,
+        InternedGuardedLanguage.meaning holds ambient result term ↔
+          InternedGuardedLanguage.meaning holds ambient value term := by
+  cases value with
+  | empty | reference | node =>
+      refine ⟨0, _, before, ?_, pure_keeps before semantic.ready, semantic, available, closed, ?_⟩
+      · intro extra
+        rfl
+      · intro holds ambient term
+        rfl
+  | mu entry body depth ordinary =>
+      obtain ⟨result, after, observed, context, cached, covered, resultAvailable, growth, history⟩ :=
+        InternedFreshOrdinaryStoredSubstitution.unfold_complete_decoded
+          (.mu entry body depth ordinary) before semantic.ready.semantic.1 available
+          semantic.ready.semantic.2 semantic.ready.covered
+      have opened : InternedOpenDepthReadback.Heap after := by
+        simpa only [observed, InternedNestedConstruction.Outcome.state] using
+          InternedStoredPlanBinderDepthProgress.unfold_heap (.mu entry body depth ordinary)
+            before semantic.ready.semantic.1 semantic.ready.semantic.2 semantic.ready.depth available
+      have checked := InternedGuardedStoredExecution.unfold_checked (.mu entry body depth ordinary)
+        before semantic.ready.semantic.1 semantic.guarded available
+      have guarded : InternedGuardedProbeHeap.Heap after := by
+        simpa only [observed, InternedNestedConstruction.Outcome.state] using checked.heap
+      have budget : InternedGuardedBudgetProbeHeap.Heap after := by
+        simpa only [observed, InternedNestedConstruction.Outcome.state] using
+          (InternedGuardedBudgetStoredExecution.unfold_heaps (.mu entry body depth ordinary)
+            before semantic.ready.semantic.1 semantic.budget semantic.ready.semantic.2 available).1
+      have ready : Ready after := ⟨⟨context, cached⟩, covered, opened⟩
+      have resultClosed := InternedFreshOrdinaryStoredSubstitution.unfold_closed
+        (.mu entry body depth ordinary) before semantic.ready.semantic.1 available closed
+        result after observed
+      refine ⟨0, result, after, ?_, ⟨ready, growth, history⟩,
+        ⟨ready, guarded, budget⟩, resultAvailable, resultClosed, ?_⟩
+      · intro extra
+        simp only [run, observed]
+      · intro holds ambient term
+        rw [checked.result result after observed holds ambient]
+  | union entry members depth free =>
+      obtain ⟨result, after, head, kept, resultAvailable, resultClosed, _ordinary⟩ :=
+        SourceEqualityRequiredHead.complete (.union entry members depth free) before
+          semantic.ready available closed
+      have finalSemantic := SourceEqualityRequiredSemanticCache.head head semantic available closed
+      have exactLanguage := SourceEqualityRequiredHeadLanguage.head_exact head semantic available closed
+      cases head with
+      | read fuel rows middle exposed rebuilt =>
+          refine ⟨fuel, result, after, ?_, kept, finalSemantic, resultAvailable, resultClosed, exactLanguage⟩
+          intro extra
+          have stable := MergedFreshOrdinaryColdReplay.nodeEdges_stable fuel extra
+            (.union entry members depth free) before
+            (by simp only [exposed, MergedSourceExposure.Finished])
+          rw [exposed] at stable
+          simp only [run, stable, rebuilt]

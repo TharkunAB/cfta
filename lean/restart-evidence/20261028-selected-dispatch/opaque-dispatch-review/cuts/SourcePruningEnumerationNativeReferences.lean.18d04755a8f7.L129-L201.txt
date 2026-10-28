@@ -1,0 +1,73 @@
+theorem prepared_allowed (allowed : Nat → Prop) (scs : List Suspended) (value : Node)
+    (action : EnumerateM Symbol EnumGuard (Fragments.Fragment Symbol))
+    (before after : EnumerationState.State Symbol EnumGuard) (fragment : Fragments.Fragment Symbol)
+    (valid : ReferencesAllowed allowed before) (inputs : InputsAllowed allowed scs)
+    (prepared : SourcePruningEnumerationShallowChild.prepareChild scs value = some action)
+    (observed : Success action before fragment after) : ReferencesAllowed allowed after := by
+  cases value with
+  | empty =>
+    simp only [SourcePruningEnumerationShallowChild.prepareChild, Option.some.injEq] at prepared
+    subst action
+    exact (reject_unsuccessful before after fragment observed).elim
+  | reference _name => simp [SourcePruningEnumerationShallowChild.prepareChild] at prepared
+  | node entry _edges _depth _free =>
+    by_cases terminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true
+    · simp [SourcePruningEnumerationShallowChild.prepareChild, terminal] at prepared
+    simp only [SourcePruningEnumerationShallowChild.prepareChild, terminal, Bool.false_eq_true,
+      ↓reduceIte, SourcePruningEnumerationNodes.encodeNode, Option.some.injEq] at prepared
+    subst action
+    have shape : fragment = .hole before.counter ∧
+        after = {allocated (some (entry.identity + 1)) before with
+          values := (allocated (some (entry.identity + 1)) before).values.set before.counter
+            (.unenumerated (some (entry.identity + 1)) scs)} := by
+      unfold Success at observed
+      rw [bind_single _ _ before (allocated (some (entry.identity + 1)) before)
+        before.counter (allocate_exact _ _)] at observed
+      simpa [setValue, bind, pure, modify, modifyGet, MonadStateOf.modifyGet,
+        StateT.bind, StateT.pure, StateT.modifyGet, ExceptT.bind, ExceptT.pure,
+        ExceptT.bindCont, ExceptT.mk, ExceptT.run, eq_comm] using observed
+    obtain ⟨rfl, rfl⟩ := shape
+    exact setValue_allowed allowed before.counter (.unenumerated (some (entry.identity + 1)) scs)
+      (allocated (some (entry.identity + 1)) before) _ (allocation_allowed allowed _ before valid) inputs
+      ((EnumerationDriver.modify_success _ _ _).mpr rfl)
+  | union entry _ _ _ | mu entry _ _ _ =>
+    by_cases terminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true
+    · simp [SourcePruningEnumerationShallowChild.prepareChild, terminal] at prepared
+    simp only [SourcePruningEnumerationShallowChild.prepareChild, terminal, Bool.false_eq_true,
+      ↓reduceIte, SourcePruningEnumerationNodes.encodeNode, Option.some.injEq] at prepared
+    subst action
+    have shape : fragment = .hole before.counter ∧
+        after = allocated (some (entry.identity + 1)) before := by
+      unfold Success at observed
+      rw [bind_single _ _ before (allocated (some (entry.identity + 1)) before)
+        before.counter (allocate_exact _ _)] at observed
+      simpa [pure, StateT.pure, ExceptT.pure, ExceptT.mk, ExceptT.run, eq_comm] using observed
+    obtain ⟨rfl, rfl⟩ := shape
+    exact allocation_allowed allowed _ before valid
+
+/-- Fixed reference preservation and protected class equivalence retain incoming avoidance. -/
+theorem incoming_preserved (before after : EnumerationState.State Symbol EnumGuard)
+    (held : Nat) (scs : List Suspended) (incoming : IncomingAvoid held before)
+    (inputs : Avoids before.representatives held scs)
+    (classes : ∀ uv, UnionFind.SameClass after.representatives held uv ↔
+      UnionFind.SameClass before.representatives held uv)
+    (effects : ∀ allowed, ReferencesAllowed allowed before → InputsAllowed allowed scs →
+      ReferencesAllowed allowed after) : IncomingAvoid held after := by
+  have valid := effects (fun uv => ¬UnionFind.SameClass before.representatives held uv) incoming inputs
+  intro value member sc listed same
+  exact valid value member sc listed ((classes sc.var).mp same)
+
+/-- Actual reference effects and protected old enumerated roots retain global pending references. -/
+theorem pending_preserved (before after : EnumerationState.State Symbol EnumGuard) (scs : List Suspended)
+    (pending : PendingReferences before) (inputs : InputsPending before scs)
+    (origin : EnumeratedOrigin before after)
+    (protects : ∀ held fragment, before.values[held]? = some (.enumerated fragment) →
+      EnumerationDriver.Protected held before after)
+    (effects : ∀ allowed, ReferencesAllowed allowed before → InputsAllowed allowed scs →
+      ReferencesAllowed allowed after) : PendingReferences after := by
+  intro held fragment stored
+  have old := origin held fragment stored
+  exact incoming_preserved before after held scs (pending held fragment old) (inputs held fragment old)
+    (protects held fragment old).classes effects
+
+end MicroCFTA.SourcePruningEnumerationNativeReferences

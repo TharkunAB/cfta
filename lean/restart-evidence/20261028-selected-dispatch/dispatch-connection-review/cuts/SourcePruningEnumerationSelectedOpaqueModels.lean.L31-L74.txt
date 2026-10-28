@@ -1,0 +1,44 @@
+private theorem finalized_core
+    (heap : InternedConstructorTemplates.State Symbol Constraint) (fuel target : Nat)
+    (fragment : Fragments.Fragment Symbol) (before after : Cached)
+    (observed : SourcePruningEnumerationFinalize.run heap fuel target fragment before = some after) :
+    after.core = {before.core with
+      values := before.core.values.set target (.enumerated fragment)
+      expansionAncestry := []} := by
+  simp only [SourcePruningEnumerationFinalize.run, Option.bind_eq_some_iff] at observed
+  obtain ⟨_old, _stored, written⟩ := observed
+  simp only [SourcePruningEnumerationNativeIndex.write, Option.bind_eq_some_iff, Option.some.injEq] at written
+  obtain ⟨_flag, _classified, _removed, _removedCounts, _saved, _savedCounts, same⟩ := written
+  subst after
+  rfl
+
+private theorem written_satisfies
+    (language : NodeLanguage Symbol) (meaning : Constraint → Term Symbol → Prop)
+    (assignment : Nat → Term Symbol) (before after : EnumerationState.State Symbol Constraint)
+    (target : Nat) (fragment : Fragments.Fragment Symbol)
+    (satisfied : Satisfies language meaning assignment before)
+    (inside : target < before.values.length)
+    (filled : Fragments.fill assignment fragment = assignment target)
+    (written : after = {before with
+      values := before.values.set target (.enumerated fragment)
+      expansionAncestry := []}) : Satisfies language meaning assignment after := by
+  subst after
+  refine ⟨⟨satisfied.1.1, ?_⟩, satisfied.2⟩
+  rw [heap_set language before.values target (.enumerated fragment) inside]
+  intro uv
+  by_cases same : uv = target
+  · subst uv
+    simpa only [Fragments.setSlot, ↓reduceIte, slot, Fragments.slotSatisfies] using filled
+  · simpa only [Fragments.setSlot, ite_eq_right same] using satisfied.1.2 uv
+
+variable {Typing : Type} {width : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+/-- Original acceptance constructs a model of the actual opaque result after the original producer. -/
+theorem opaque_complete_models
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller width) (memos : Memos) (metadata : SourcePruningRecordTypes.Metadata Typing)
+    (before : Cached) (checkEmpty : Bool) (target originalHandle : Nat) (scs : List Suspended)
+    (value : Node)
+    (packet : Packet formulas solver inventory caller memos metadata before)

@@ -1,0 +1,28 @@
+
+/-- The original profile pays native preparation without a domain operation. -/
+def normalizationProfile (profile : Profile) : Profile :=
+  let bound := SourceCurrentMemoMergeResourceControl.initialBound profile.nodes profile.edges profile.mass
+  let prepared := SourcePruningEnumerationSelectedValue.resourceBound bound
+  ⟨prepared, prepared, profile.domains, prepared⟩
+
+variable [DecidableEq (EdgeKey Symbol Guard)]
+
+/-- Original counters and stored mass bound the same actual advanced caller. -/
+theorem fits_after (profile : Profile) (before : Caller width) (fuel : Nat)
+    (value result : Node) (heap : State Symbol Guard)
+    (semantic : SemanticReady before.checked.native.machine.heap)
+    (costs : InternedFreshOrdinaryCostHeap.Heap before.checked.native.machine.heap)
+    (available : Available before.checked.native.machine.heap value) (closed : value.free = [])
+    (fits : Fits profile before.checked)
+    (observed : SourcePruningEnumerationSelectedValue.run fuel value
+      before.checked.native.machine.heap = .done result heap) :
+    Fits (normalizationProfile profile) (advance before heap).checked ∧
+      InternedValueMass.value result ≤ (normalizationProfile profile).mass := by
+  let bound := SourceCurrentMemoMergeResourceControl.initialBound profile.nodes profile.edges profile.mass
+  have massLe : profile.mass ≤ bound := by dsimp [bound, SourceCurrentMemoMergeResourceControl.initialBound]; omega
+  have nodeLe : profile.nodes ≤ bound := by dsimp [bound, SourceCurrentMemoMergeResourceControl.initialBound]; omega
+  have edgeLe : profile.edges ≤ bound := by dsimp [bound, SourceCurrentMemoMergeResourceControl.initialBound]; omega
+  have original : SourceCurrentMemoMergeResourceControl.Fits bound before.checked.native.machine.heap :=
+    ⟨fits.stored.mono massLe, Nat.le_trans fits.nodes nodeLe, Nat.le_trans fits.edges edgeLe, Nat.zero_le _⟩
+  have numeric := SourcePruningEnumerationSelectedValue.run_resources fuel value
+    before.checked.native.machine.heap result heap bound semantic costs available closed original observed

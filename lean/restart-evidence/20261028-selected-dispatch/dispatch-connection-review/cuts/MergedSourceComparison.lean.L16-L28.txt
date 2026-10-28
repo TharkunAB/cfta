@@ -1,0 +1,13 @@
+inductive Fault where
+  | unresolved (name : Reference)
+  | pending (key : NodeKey)
+  | identity (value : NodeRef)
+  | exhausted
+
+/-- Each ordered comparison stage returns its actual physical cache. -/
+inductive Result (Symbol Guard Output : Type) where
+  | done (value : Output) (state : State Symbol Guard)
+  | failed (fault : Fault) (state : State Symbol Guard)
+
+/-- Both success and failure retain the last source cache. -/
+def Result.state : Result Symbol Guard Output → State Symbol Guard

@@ -1,0 +1,18 @@
+theorem complete_resources (profile : Profile)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (before : Caller width) (memos : Memos) (value : Node)
+    (initial : Context formulas solver inventory before memos)
+    (available : Available before.checked.native.machine.heap value)
+    (closed : value.free = []) (fits : Fits profile before.checked) :
+    ∃ bound result heap,
+      (((∀ extra, SourcePruningEnumerationSelectedValue.run (bound + extra) value
+            before.checked.native.machine.heap = .done result heap) ∧
+          Keeps before.checked.native.machine.heap heap ∧ SemanticReady heap ∧
+          Available heap result ∧ result.free = [] ∧
+          ∀ holds ambient term,
+            InternedGuardedLanguage.meaning holds ambient result term ↔
+              InternedGuardedLanguage.meaning holds ambient value term) ∧
+        Post formulas solver inventory before (advance before heap) memos) ∧
+      Fits (normalizationProfile profile) (advance before heap).checked ∧
+      InternedValueMass.value result ≤ (normalizationProfile profile).mass

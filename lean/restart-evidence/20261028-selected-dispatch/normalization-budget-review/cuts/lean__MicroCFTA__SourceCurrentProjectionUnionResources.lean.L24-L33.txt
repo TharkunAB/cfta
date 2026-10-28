@@ -1,0 +1,10 @@
+variable {Symbol Guard : Type}
+
+/-- One initial scalar fixes a complete recursive row-read fuel. -/
+def readFuel (bound : Nat) : Nat := SourceCurrentAllocatedRowReadNumeric.readFuel bound bound bound
+/-- The explicit read schedule bounds the literal output row count. -/
+def readWidth (bound : Nat) : Nat := (readFuel bound + 1) * massAfter (readFuel bound + 1) bound
+/-- One initial scalar covers both the returned heap and its row count. -/
+def readGrowth (bound : Nat) : Nat := bound + readFuel bound + readWidth bound
+/-- Head normalization pays the final actual node constructor. -/
+def headGrowth (bound : Nat) : Nat := primitiveGrowth (readWidth bound) (readGrowth bound)
