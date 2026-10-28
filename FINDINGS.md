@@ -1,5 +1,75 @@
 # Current formalization findings
 
+## Original subtree paths through prepared enumeration
+
+Source checkpoint: 3802a91d2b465ab343e4823504103a379ed4965a.
+The existing finite-pruning language preservation and prepared finite resource
+induction remain. New actual startup, equality allocation, child traversal,
+selected-edge and prepared-head theorems construct a satisfying assignment
+whose every allocated value has a path in the original complete term.
+The same new model witness supplies the actual receipt and callback-entry cache.
+Terminal work retains the counter. Opaque work adds one variable. Empty equality
+classes use the current accepted term as a valid witness.
+
+Original policies for all structural subtrees now supply the local forbidden
+pattern and ProgramEncoding conditions at actual recording callbacks.
+The actual recording frame retains variable origins and the same certified
+restart outcome. Bounded pending refutation transports through old-ID agreement.
+These are original syntax assumptions. Native acceptance does not imply them.
+ProgramAt skips annotations, so root-only program policies are insufficient.
+
+Whole-driver output soundness and original accepted-output coverage remain open.
+The next proof must compose these model and origin witnesses through actual
+recursive histories. It must establish sufficient depth for ALL earlier reachable
+callbacks and accepting-row selector coverage. A chosen term's height does not
+bound earlier alternatives. The existing earlier-stop alternative remains.
+Public APIs, ranking, sampling and physical Haskell correspondence remain open.
+Goal ACTIVE; checkpoint PROGRESS. No new Haskell defect or required fix was found.
+
+Eight new modules add 22 public theorems and three definitions. All nine final
+strict checks pass. Full Audit passes 4395 jobs and checks 80957 dependencies.
+Public readback has 471 theorem blocks and 44 definitions. Its entire prior
+1902411-byte readback remains an exact prefix. All 4386 prior non-Audit Lean,
+235 strong and 810 Haskell source/evidence files retain bytes.
+Details: `lean/notes-current-prepared-origins.md`.
+
+### Haskell comparison and external integration handoff
+
+No Haskell or Cabal file changed. No Haskell test or benchmark ran.
+No new implementation defect or required Haskell repair was established.
+Keep the integrated LPO and KBO Natural-weight fixes and their evidence below.
+The new results request no Haskell patch.
+
+Preserve one actual native preparation and the original stored handle.
+Each branch keeps its captured metadata and cache. Actual Caller effects and
+full Memos pass to the next sibling. The new origin proofs concern the SAME
+actual receipt and callback-entry cache. They do not certify recursive outputs.
+
+OriginPolicies quantifies over structural subtrees of the ORIGINAL complete
+term. Each such subtree must satisfy Avoids and program-position ProgramEncoding.
+ProgramAt does not inspect annotation or application-marker children. A native
+accepted term or a root-only ProgramAt policy does not establish OriginPolicies.
+This is a formal policy boundary. No annotation-related Haskell fault is proved.
+
+The new origin-aware semantic observer uses one extension for all of its model,
+fragment-fill and path conclusions. It does not assert that every arbitrary
+witness of the older unconstrained existential observer has origins. An empty
+equality class can admit unrelated witnesses. The new construction chooses an
+original subtree and still satisfies that class. Operational witnesses are fixed
+before the model observer. The complete older proofs remain unchanged.
+
+Coverage audit: an actual stopped hook omits its remaining sibling suffix.
+At recursive depth zero, an expand request produces exhausted with no outputs
+at every work fuel. More work fuel cannot remove that depth stop. An unbounded
+earlier branch would therefore obstruct a later accepting branch. No admitted
+all-depth counterexample was established. The simple candidate A=f(A)|a is
+insufficient: a fresh Mu child with no bucket is not expandable, and repeated
+native recursion keys clear the bucket or park the work. A valid obstruction
+must retain genuinely expandable unseen inputs. Do not report the candidate as
+a Haskell defect or a proved failure. Prove earlier-callback termination or find
+a complete original Context/Packet counterexample before strengthening coverage.
+
+
 ## Original models through prepared enumeration branches
 
 Source checkpoint: 1036a20310d4c7a970ce3c206f773675c8c1795f.

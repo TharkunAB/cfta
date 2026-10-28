@@ -1,5 +1,39 @@
 Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
+## Original subtree paths through prepared enumeration
+
+Source checkpoint: 3802a91d2b465ab343e4823504103a379ed4965a.
+The existing finite-pruning language preservation and prepared finite resource
+induction remain. New actual startup, equality allocation, child traversal,
+selected-edge and prepared-head theorems construct a satisfying assignment
+whose every allocated value has a path in the original complete term.
+The same new model witness supplies the actual receipt and callback-entry cache.
+Terminal work retains the counter. Opaque work adds one variable. Empty equality
+classes use the current accepted term as a valid witness.
+
+Original policies for all structural subtrees now supply the local forbidden
+pattern and ProgramEncoding conditions at actual recording callbacks.
+The actual recording frame retains variable origins and the same certified
+restart outcome. Bounded pending refutation transports through old-ID agreement.
+These are original syntax assumptions. Native acceptance does not imply them.
+ProgramAt skips annotations, so root-only program policies are insufficient.
+
+Whole-driver output soundness and original accepted-output coverage remain open.
+The next proof must compose these model and origin witnesses through actual
+recursive histories. It must establish sufficient depth for ALL earlier reachable
+callbacks and accepting-row selector coverage. A chosen term's height does not
+bound earlier alternatives. The existing earlier-stop alternative remains.
+Public APIs, ranking, sampling and physical Haskell correspondence remain open.
+Goal ACTIVE; checkpoint PROGRESS. No new Haskell defect or required fix was found.
+
+Eight new modules add 22 public theorems and three definitions. All nine final
+strict checks pass. Full Audit passes 4395 jobs and checks 80957 dependencies.
+Public readback has 471 theorem blocks and 44 definitions. Its entire prior
+1902411-byte readback remains an exact prefix. All 4386 prior non-Audit Lean,
+235 strong and 810 Haskell source/evidence files retain bytes.
+Details: `lean/notes-current-prepared-origins.md`.
+
+
 ## Original models through prepared enumeration branches
 
 Source checkpoint: 1036a20310d4c7a970ce3c206f773675c8c1795f.
