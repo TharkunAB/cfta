@@ -1,5 +1,85 @@
 # Current formalization findings
 
+## Admitted histories at every finite prepared driver depth
+
+Source checkpoint: 1b1b33ced8fc324baea2d246addbef001e2cee89. Whole-CFTA goal ACTIVE. Checkpoint PROGRESS.
+For every fixed finite recursive depth, the admitted prepared driver has
+one stable actual outcome at all sufficiently large work fuels. The complete
+previous endpoint and output resource result remains. Every emitted output
+now also has a ResourceHistory at that SAME chosen work bound. Each recursive
+input retains its original Packet, Fits, known guards, suspended mass and
+reservation. Each selected step retains actual prefix validity, preparation,
+full Memos, ordinary or opaque receipt, false recording and recursive tail.
+The finite entry proves the stronger induction hypothesis. It takes no
+supplied Complete, history, semantic model or future success premise.
+Stopped and exhausted outcomes remain possible. Outputs before a later stop
+retain their histories.
+
+Actual preparation now connects the original stored value to its separate
+prepared ordinary parent in the backward language proof. An actual ordinary
+callback restores the selected input model through preparation and prefix.
+The old Canonical, nonterminal, fresh projected arity, retained-child and
+final satisfying-assignment gates remain. No new Ranges premise is added.
+Whole-parent completed execution also preserves the projectable native heap
+from its original admitted heap. Neither result establishes semantic output
+soundness for every driver branch.
+
+The largest remaining connection is semantic induction through these admitted
+histories. Derive the ordinary branch gates from real receipts where possible.
+Prove the backward opaque and terminal cases and compose parked restarts.
+Global accepted-output coverage also needs an original sufficient recursive
+depth for ALL earlier callbacks. Fixed-depth resource closure does not supply
+that depth. Public API adapters, ranking, sampling and physical Haskell
+correspondence remain open. Conditional finite-pruning language preservation
+and all earlier results retain their recorded scope.
+
+Twenty-four modules add 63 public theorems and nine definitions. All 25 final
+strict checks pass. Full Audit passes 4433 jobs and checks 81262 theorem
+dependencies. Public readback has 574 theorem blocks and 57 definitions.
+Its complete previous 2256710-byte output is an exact prefix. All 4408 prior
+non-Audit Lean, 257 strong and 810 Haskell source/evidence files retain bytes.
+No Haskell file changed. No new Haskell defect or required repair was found.
+Details: lean/notes-current-prepared-semantic-history.md.
+
+### Haskell comparison and external integration handoff
+
+No Haskell or Cabal file changed in this checkpoint. No Haskell test or
+benchmark ran. No new Haskell defect or required repair was established.
+Keep the integrated LPO and KBO Natural-weight repairs and all earlier
+counterexamples below. Refreshed main d1ca06a1dd0c7488205feda613b529df21a08669
+is already an ancestor. This checkpoint requests no Haskell patch.
+
+The new resource-history theorem concerns the actual modeled prepared worker.
+It does not prove refinement of the Haskell implementation. Full memo states
+pass through the real chronological callbacks and sibling scan. The original
+stored handle remains separate from the prepared parent. Do not replace that
+distinction with a lookup equation that identifies the two values.
+
+The ordinary semantic bridge uses the same actual preparation witnesses.
+It derives the source/prepared language equivalence from that preparation.
+Its local backward conclusion still requires a satisfying callback cache,
+Canonical input, nonterminal constraints, fresh projected arity and the
+retained-child condition. Resource admission alone supplies no model.
+
+The whole-parent heap theorem covers completed actual reduction, native
+queries, edits, class scans and checked parent construction. It retains the
+original physical, readiness, semantic and resource premises. It does not
+assume arbitrary raw conjunction supports projection. It does not cover all
+failed or pending native query prefixes. Its initial projectable heap remains
+explicit. Attaching that heap property to every recursive history is open.
+
+The depth obstruction remains unchanged. An earlier stopped callback can omit
+later siblings. More work fuel cannot remove recursive-depth exhaustion.
+Fresh UVar IDs do not change recursion keys. Union narrowing can remove the
+original Union before entry. Equality normalization can increase path length.
+The previous counterexamples and rejected progress measures remain below.
+No complete admitted divergence example was established here.
+
+Next, consume ResourceHistory in a semantic induction. Keep opaque and terminal
+receipts separate from ordinary completed-head receipts. Prove original
+path and recursive-identity carriers before claiming a global depth bound.
+
+
 ## Prepared output histories and native projection support
 
 Source checkpoint: c2447659a54c163c679fc5e17917c414b6aa7906.

@@ -1,0 +1,135 @@
+# Reboot handoff: prepared resource histories
+
+Saved on 2026-10-28 at 14:00 CET. Work stopped at Matti's reboot request.
+Resume from this file and the newest sections of NEXT-PROMPT.md, HANDOFF.md
+and FINDINGS.md. The whole-CFTA formalization remains incomplete.
+
+## Published proof state
+
+Branch: `formalize`.
+Remote: `git@github.com:TharkunAB/cfta.git`.
+Matti explicitly authorizes normal pushes to `formalize`. Do not ask again.
+The verified source checkpoint is `1b1b33ced8fc324baea2d246addbef001e2cee89`.
+Its remote and tracking heads were verified before the documentation commit.
+Five proof and Audit commits are published:
+
+- `4dc21b915a160a88147d8dfda6e87711dbf060f0`: prepared captured resource meaning.
+- `3862a7761c3cc9f8e08b4d963bb5f717a556b809`: actual preparation and ordinary callback meaning.
+- `010880a0a40cf599a4207758b45fd7217a44438b`: whole-parent projection support.
+- `94da5c76d4b2857c964feeef2717314252bdd3d6`: admitted histories at every finite prepared driver depth.
+- `1b1b33ced8fc324baea2d246addbef001e2cee89`: full Audit integration.
+
+The reboot documentation and evidence commit follows that source checkpoint.
+Read the actual branch head after restart. Do not reset to the source checkpoint.
+Refreshed main `d1ca06a1dd0c7488205feda613b529df21a08669` is already included.
+The integrated Haskell LPO and KBO Natural repairs remain intact.
+
+## Strongest new result
+
+For every fixed finite recursive depth, the admitted prepared driver has one
+stable actual outcome at all sufficiently large work fuels. Every emitted
+output has an actual recursive ResourceHistory at that same work bound.
+Each recursive input retains its Packet, Fits, known guards, suspended mass
+and original reservation. Actual prefix, preparation, full Memos, ordinary
+or opaque receipt, false recording and smaller-depth restart are retained.
+Outputs before a later stop retain their histories. The public finite entry
+has no supplied Complete, history, semantic model or future-success premise.
+Stopped and exhausted outcomes remain possible.
+
+Main entry: `SourcePruningEnumerationPreparedRecursive.run_finite_complete_resources_with_history`
+in `lean/MicroCFTA/SourcePruningEnumerationPreparedFiniteHistoryResources.lean`.
+Its depth induction is `finite_complete_with_history` in the same module.
+The old running and OutcomeResources conclusions remain first.
+
+The actual ordinary backward proof now derives source/prepared equivalence
+from the SAME preparation witnesses. It retains the original stored source
+separately from its prepared parent. Original Canonical, nonterminal,
+fresh projected arity, retained-child and final Satisfies gates remain.
+It adds no Ranges premise. The selected prefix adapter restores the outer
+input model. Whole-parent completed execution now preserves the whole
+projectable native heap under its original operational admission.
+
+Whole-driver output soundness, original accepted-output coverage, a global
+sufficient recursive depth, public API refinement, ranking, sampling and
+physical Haskell correspondence remain OPEN. Conditional finite-pruning
+language preservation and earlier component results retain their scope.
+
+## Validation already complete
+
+- 24 new modules; 63 new public theorems and nine new definitions.
+- All 25 final strict checks PASS with `warningAsError=true` and `linter.all=true`.
+- Full Audit PASS: 4433 jobs and 81262 theorem dependency checks.
+- Public readback PASS: 574 complete theorem/axiom blocks and 57 definitions.
+- Only `propext`, `Classical.choice` and `Quot.sound` occur.
+- Readback: 2610680 bytes, SHA256 `18ce89e57323a783297e27000b0d421f8921dc7394cfd8fdb1332fb7a24837f4`.
+- The previous 2256710 bytes are an exact prefix. No elision occurs.
+- All 72 new public blocks received whole assigned reviews. Their copied
+  intervals partition the complete 353970-byte new appendix without gaps.
+- All 4408 prior non-Audit Lean, 257 strong and 810 Haskell source/evidence
+  files retain exact bytes. All nine documentation insertions retain the
+  complete old document bodies by exact inverse.
+- 61 current compiler/build/public commands plus one inherited receipt are saved.
+  Four failed strict attempts and all immutable drafts remain.
+- Every actual compiler command ran serially with measured 4 GiB memory.max
+  and memory.high and zero swap. No proof limit or linter was weakened.
+- No Haskell or Cabal file changed. No Haskell test or benchmark ran.
+  No new Haskell defect or required repair was established. FINDINGS records this.
+
+No compiler, build, native command or network operation was running when
+this handoff was written. Do not repeat the completed proof checks without
+a new source change or unresolved concern.
+
+## Reboot-safe evidence
+
+The working evidence area was `/tmp/mcfta-prepared-semantic-history-20261028`.
+Do not rely on `/tmp` surviving the reboot.
+Its complete stopped snapshot is saved in:
+
+`lean/restart-evidence/20261028-prepared-semantic-history-reboot/`
+
+Read that directory's README and manifest. The archive retains raw command
+logs, tested sources, all drafts and failed attempts, previous source hashes,
+public readback, source cuts, review reports, document inverses and helpers.
+The snapshot manifest records the exact source files and hashes. The archive
+is checked by full decompression before commit. A checkpoint receipt records
+which independent owner areas were sealed when reboot work stopped.
+
+The usual final per-payload archive and root FROZEN seal were not complete
+when Matti requested the reboot. Do not claim those later checks passed.
+The reboot archive is a complete preservation snapshot. Some historical
+intermediate reports correctly retain their earlier OPEN or pending status.
+Use the newest final reports and actual compiler receipts for current claims.
+
+Reconstruct into a NEW directory. Never overwrite an existing evidence area.
+Treat the saved reboot snapshot as immutable. Use a fresh area for new proof work.
+All older archives, especially `20261028-prepared-history`, remain unchanged.
+
+New detailed note: `lean/notes-current-prepared-semantic-history.md`.
+Its saved source-review identity is 10108 bytes, SHA256
+`7749c5187efb24711a0857e334843a6b4696cf032ddaa4d5ae1e9e35dd21d8e1`.
+
+## Resume work
+
+1. Detect the host. Read current repository instructions. Check the actual
+   branch, working tree and remotes. Pull with `git pull --ff-only` before work.
+   Preserve unrelated changes and all proof, repair and counterexample files.
+2. Verify the reboot archive and reconstruct only if needed. Check the current
+   branch head against this source checkpoint and the later reboot commit.
+3. Review the newest owner final reports and their seals. Finish any remaining
+   root archive bookkeeping in a fresh area. The proof checks are already done.
+   No final shared-board status for this new checkpoint was posted before reboot.
+4. Continue semantic induction through the admitted ResourceHistory. Use the
+   checked ordinary callback and selected-prefix bridge. Prove the opaque,
+   terminal and parked backward cases. Derive ordinary branch gates from actual
+   checked annotation and receipts where possible. Do not assume future output
+   models or add endpoint-success premises to the original input contract.
+5. Separately derive original path and recursive-identity carriers and a depth
+   bound for ALL earlier callbacks. Fresh UVar IDs do not alter recursion keys.
+   Union narrowing can remove its original boundary before entry. Equality
+   closure can lengthen paths. A chosen term's height does not bound the ordered
+   earlier search. No admitted all-depth divergence example has been established.
+
+Keep the optimized interned core. Preserve older constructor and equality work
+as secondary targets. Record every actual Haskell fix in root FINDINGS.md.
+Use serial measured 4 GiB jobs through `/home/tritlo/Code/heavy-management`.
+Keep brief timestamped updates and push verified changes regularly.

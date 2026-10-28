@@ -1,5 +1,47 @@
 # cfta formal model
 
+## Admitted histories at every finite prepared driver depth
+
+Source checkpoint: 1b1b33ced8fc324baea2d246addbef001e2cee89. Whole-CFTA goal ACTIVE. Checkpoint PROGRESS.
+For every fixed finite recursive depth, the admitted prepared driver has
+one stable actual outcome at all sufficiently large work fuels. The complete
+previous endpoint and output resource result remains. Every emitted output
+now also has a ResourceHistory at that SAME chosen work bound. Each recursive
+input retains its original Packet, Fits, known guards, suspended mass and
+reservation. Each selected step retains actual prefix validity, preparation,
+full Memos, ordinary or opaque receipt, false recording and recursive tail.
+The finite entry proves the stronger induction hypothesis. It takes no
+supplied Complete, history, semantic model or future success premise.
+Stopped and exhausted outcomes remain possible. Outputs before a later stop
+retain their histories.
+
+Actual preparation now connects the original stored value to its separate
+prepared ordinary parent in the backward language proof. An actual ordinary
+callback restores the selected input model through preparation and prefix.
+The old Canonical, nonterminal, fresh projected arity, retained-child and
+final satisfying-assignment gates remain. No new Ranges premise is added.
+Whole-parent completed execution also preserves the projectable native heap
+from its original admitted heap. Neither result establishes semantic output
+soundness for every driver branch.
+
+The largest remaining connection is semantic induction through these admitted
+histories. Derive the ordinary branch gates from real receipts where possible.
+Prove the backward opaque and terminal cases and compose parked restarts.
+Global accepted-output coverage also needs an original sufficient recursive
+depth for ALL earlier callbacks. Fixed-depth resource closure does not supply
+that depth. Public API adapters, ranking, sampling and physical Haskell
+correspondence remain open. Conditional finite-pruning language preservation
+and all earlier results retain their recorded scope.
+
+Twenty-four modules add 63 public theorems and nine definitions. All 25 final
+strict checks pass. Full Audit passes 4433 jobs and checks 81262 theorem
+dependencies. Public readback has 574 theorem blocks and 57 definitions.
+Its complete previous 2256710-byte output is an exact prefix. All 4408 prior
+non-Audit Lean, 257 strong and 810 Haskell source/evidence files retain bytes.
+No Haskell file changed. No new Haskell defect or required repair was found.
+Details: lean/notes-current-prepared-semantic-history.md.
+
+
 ## Prepared output histories and native projection support
 
 Source checkpoint: c2447659a54c163c679fc5e17917c414b6aa7906.
