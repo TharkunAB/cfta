@@ -1,0 +1,15 @@
+theorem OutcomeResources.post
+    (post : Post formulas solver middleInventory original middle middleMemos)
+    (resources : OutcomeResources formulas solver middle seed outcome) :
+    OutcomeResources formulas solver original seed outcome := by
+  obtain ⟨reached, next, final, reachedPost, fits, known, shape⟩ := resources
+  refine ⟨reached, next, final, post.trans reachedPost, fits, known, ?_⟩
+  cases outcome with
+  | complete outputs caller queries =>
+      obtain ⟨callerSame, querySame, outputsValid⟩ := shape
+      exact ⟨callerSame, querySame, fun output member => (outputsValid output member).post post⟩
+  | stopped outputs reason endpoint =>
+      obtain ⟨endpointSame, outputsValid⟩ := shape
+      exact ⟨endpointSame, fun output member => (outputsValid output member).post post⟩
+
+/-- Resource padding retains the reached endpoint and every output endpoint. -/

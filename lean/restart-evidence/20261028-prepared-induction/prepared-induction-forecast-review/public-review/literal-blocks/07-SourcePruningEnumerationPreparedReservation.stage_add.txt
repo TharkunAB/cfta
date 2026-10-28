@@ -1,0 +1,9 @@
+MicroCFTA.SourcePruningEnumerationPreparedReservation.stage_add (depth : Nat)
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed) (capturedMass inherited first last : Nat) :
+  MicroCFTA.SourcePruningEnumerationPreparedReservation.stage depth seed capturedMass inherited (first + last) =
+    MicroCFTA.SourcePruningEnumerationPreparedReservation.stage depth
+      (MicroCFTA.SourcePruningEnumerationPreparedReservation.stage depth seed capturedMass inherited first) capturedMass
+      inherited last
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.stage_add' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,19 @@
+
+/-- The current constructor heap fits the three physical profile components. -/
+structure HeapFits (profile : Profile) (heap : State Symbol Guard) : Prop where
+  /-- The issued node counter fits the profile. -/
+  nodes : heap.nodes.next ≤ profile.nodes
+  /-- The issued edge counter fits the profile. -/
+  edges : heap.edges.next ≤ profile.edges
+  /-- Each stored payload fits the causal mass bound. -/
+  stored : InternedValueMassHeap.Stored profile.mass heap
+
+/-- Larger component bounds retain the same constructor heap. -/
+theorem HeapFits.mono {first last : Profile} {heap : State Symbol Guard}
+    (fits : HeapFits first heap) (increase : Le first last) : HeapFits last heap :=
+  ⟨Nat.le_trans fits.nodes increase.1, Nat.le_trans fits.edges increase.2.1,
+    fits.stored.mono increase.2.2.2⟩
+
+/-- The profile scalar bounds both issued counters and causal stored mass. -/
+theorem HeapFits.scalar_fits {profile : Profile} {heap : State Symbol Guard}
+    (fits : HeapFits profile heap) : SourceCurrentMemoMergeResourceControl.Fits (scalar profile) heap :=

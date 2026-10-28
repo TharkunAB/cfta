@@ -1,0 +1,11 @@
+
+namespace MicroCFTA.SourcePruningEnumerationIncomingReservation
+
+/-- A later entry of the same schedule retains the guards at every earlier entry. -/
+theorem advance_count_alphabet_mono (seed : Seed) {first last : Nat} (counts : first ≤ last) :
+    (advance seed first).1 ⊆ (advance seed last).1 := by
+  obtain ⟨extra, rfl⟩ := Nat.exists_eq_add_of_le counts
+  rw [advance_add]
+  exact advance_alphabet_ge (advance seed first) extra
+
+end MicroCFTA.SourcePruningEnumerationIncomingReservation

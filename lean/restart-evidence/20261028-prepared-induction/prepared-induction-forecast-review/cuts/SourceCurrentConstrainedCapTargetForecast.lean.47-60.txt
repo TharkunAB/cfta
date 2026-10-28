@@ -1,0 +1,14 @@
+/-- The scalar covers the initial node counter. -/
+theorem scalar_nodes (profile : Profile) : profile.nodes ≤ scalar profile := by unfold scalar; omega
+
+/-- The scalar covers the initial edge counter. -/
+theorem scalar_edges (profile : Profile) : profile.edges ≤ scalar profile := by unfold scalar; omega
+
+/-- The scalar covers every initial payload mass. -/
+theorem scalar_mass (profile : Profile) : profile.mass ≤ scalar profile := by unfold scalar; omega
+
+/-- Larger component bounds retain the scalar heap bound. -/
+theorem scalar_mono {first last : Profile} (increase : Le first last) : scalar first ≤ scalar last := by
+  unfold scalar
+  rcases increase with ⟨nodes, edges, domains, mass⟩
+  omega

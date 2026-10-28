@@ -1,0 +1,11 @@
+theorem advance_count_profile_mono (seed : Seed) {first last : Nat} (counts : first ≤ last) :
+    Le (advance seed first).2 (advance seed last).2 := by
+  obtain ⟨extra, rfl⟩ := Nat.exists_eq_add_of_le counts
+  rw [advance_add]
+  exact advance_profile_ge (advance seed first) extra
+
+/-- Initial numeric reservations give entry Room for every step in the fixed schedule. -/
+def Reserved (bits : Nat) (seed : Seed) (count : Nat) : Prop :=
+  ∀ index, index < count → Room bits (advance seed index).2
+
+/-- An empty schedule needs no entry Room. -/

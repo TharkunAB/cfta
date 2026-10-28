@@ -1,0 +1,19 @@
+    ∃ (bound : Nat) (receipt : Receipt (bits + 2)) (reached : Caller (bits + 2))
+      (saved : Queries) (final : Memos) (next : Inventory),
+      (∀ extra, SourcePruningEnumerationSelectedOpaqueDispatch.run checkEmpty
+        (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra)
+        target scs value caller before memos.query = some receipt) ∧
+      Post formulas solver next caller reached final ∧ final.query = saved ∧
+      receiptAdvance receipt = some (reached, saved) ∧
+      Admitted target receipt ∧ Pending receipt ∧ FragmentHistory before.core receipt ∧
+      Fits (advance seed (scs.length + 1)).2 reached.checked ∧
+      Heap (fun guard => guard ∈ (advance seed (scs.length + 1)).1) reached.checked.native.machine.heap ∧
+      ((∃ fragment after, receipt = .complete fragment reached saved after ∧
+          Packet formulas solver next reached final metadata after ∧
+          after.core.counter ≤ before.core.counter + 1 ∧
+          suspendedBound after.core ≤ suspendedBound before.core + scs.length) ∨
+        (∃ after outer waiting, receipt = .stopped []
+          (.ok (some []), reached, saved, outer, waiting) (some after) ∧
+          after.core.counter ≤ before.core.counter + 1 ∧
+          suspendedBound after.core ≤ suspendedBound before.core + scs.length) ∨
+        receipt = .rejected caller memos.query before)

@@ -1,0 +1,29 @@
+--- drafts/v1/SourcePruningEnumerationPreparedFiniteCallbackResources.lean
++++ drafts/v2/SourcePruningEnumerationPreparedFiniteCallbackResources.lean
+@@ -56,7 +56,7 @@
+     (selectionMembers : ∀ entry rows depth free, ∀ edge ∈ edgesOf (.node entry rows depth free), edge ∈ rows)
+     (selectionLength : ∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length)
+     (mass : suspendedBound before.core ≤ ceiling)
+-    (reserved : SourcePruningEnumerationFiniteReservation.Reserved bits recursiveFuel seed ceiling) :
++    (reserved : SourcePruningEnumerationPreparedReservation.Reserved bits recursiveFuel seed ceiling) :
+     ∃ (fuel : Nat) (result : Bool × Metadata Typing) (after : Core) (outcome : Result),
+       Packet formulas solver inventory caller memos result.2 (EnumerationExpandableIndex.frame after before) ∧
+       RenderStable before.core after ∧ Frame before.core after ∧
+@@ -76,7 +76,7 @@
+         (resume holeKey fits admits graph templates checkEmpty edgesOf stop order (fuel + extra) recursiveFuel)
+         graph templates stop order (fuel + extra) metadata uv fragment caller memos.query before = outcome) ∧
+       OutcomeResources formulas solver caller
+-        (SourcePruningEnumerationFiniteReservation.final recursiveFuel seed ceiling) outcome := by
++        (SourcePruningEnumerationPreparedReservation.final recursiveFuel seed ceiling) outcome := by
+   obtain ⟨callbackFuel, result, after, returned, stable, frame, types, holes, typing, originalCallback⟩ :=
+     SourcePruningEnumerationRecursive.callback_complete formulas solver inventory graph templates metadata uv fragment caller memos before
+       packet allocated
+@@ -102,7 +102,7 @@
+       refine ⟨caller, inventory, memos, Post.refl packet.context, bounded, known, rfl, rfl, ?_⟩
+       intro output member
+       exact False.elim (List.not_mem_nil member)
+-    have growth := SourcePruningEnumerationFiniteReservation.final_ge recursiveFuel seed ceiling
++    have growth := SourcePruningEnumerationPreparedReservation.final_ge recursiveFuel seed ceiling
+     refine ⟨callbackFuel, result, after, .complete [] caller memos.query,
+       returned, stable, frame, types, holes, typing, callback, ?_, resources.mono growth.1 growth.2⟩
+     intro extra

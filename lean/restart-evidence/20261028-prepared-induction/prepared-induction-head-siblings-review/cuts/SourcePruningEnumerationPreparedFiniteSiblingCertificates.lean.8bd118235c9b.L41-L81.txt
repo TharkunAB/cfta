@@ -1,0 +1,41 @@
+def ReceiptAt (recursiveFuel : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (caller : Caller width) (before : Cached) (uv : Nat)
+    (seed : Seed) (scs : List Suspended) (capturedMass inherited : Nat)
+    (index : Nat) (receipt : Receipt width) : Prop :=
+  Admitted uv receipt ∧ Pending receipt ∧ FragmentHistory before.core receipt ∧
+    HeadCacheBounds before scs (scalar (stage recursiveFuel seed capturedMass inherited index).2)
+      (guardWidth (stage recursiveFuel seed capturedMass inherited index).1) receipt ∧
+    ∃ (reached : Caller width) (saved : Queries) (next : Inventory) (final : Memos),
+      advance receipt = some (reached, saved) ∧
+      Post formulas solver next caller reached final ∧ final.query = saved ∧
+      Fits (afterHead (stage recursiveFuel seed capturedMass inherited index) inherited).2 reached.checked ∧
+      Heap (fun guard => guard ∈ (afterHead (stage recursiveFuel seed capturedMass inherited index) inherited).1)
+        reached.checked.native.machine.heap
+
+/-- Each output keeps its actual cache and the resources after its callback stage. -/
+def OutputAt (recursiveFuel : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (caller : Caller width) (seed : Seed) (capturedMass inherited index : Nat)
+    (output : Output width Typing) : Prop :=
+  OutputResources formulas solver caller (stage recursiveFuel seed capturedMass inherited (index + 1)) output
+
+/-- A stopped callback retains its own outputs inside the full ordered output prefix. -/
+def StoppedAt (recursiveFuel : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (caller : Caller width) (before : Cached) (uv : Nat)
+    (seed : Seed) (scs : List Suspended) (capturedMass inherited index : Nat)
+    (outputs : List (Output width Typing)) (current : Stop (Failure width Typing) width) : Prop :=
+  current = .edge (some .unhandled) ∨
+    ∃ (receipt : Receipt width) (reason : Failure width Typing)
+      (endpoint : Option (Caller width × Queries))
+      (hookOutputs prefixOutputs : List (Output width Typing)),
+      current = .continuation receipt reason endpoint ∧ outputs = prefixOutputs ++ hookOutputs ∧
+      ReceiptAt recursiveFuel formulas solver caller before uv seed scs capturedMass inherited index receipt ∧
+      OutcomeResources formulas solver caller (stage recursiveFuel seed capturedMass inherited (index + 1))
+        (.stopped hookOutputs reason endpoint)
+
+variable {recursiveFuel : Nat}

@@ -1,0 +1,32 @@
+MicroCFTA.SourcePruningEnumerationPreparedRecursive.completed_captured_packet {Typing : Type} {width : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width) (memos : MicroCFTA.EndpointMemoGateTrace.Memos)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed)
+  (outputs : List (MicroCFTA.SourcePruningEnumerationRecursive.Output width Typing))
+  (reached : MicroCFTA.SourceCurrentAllocatedPartialState.State width) (queries : MicroCFTA.SourceEndpointMemo.Memos)
+  (packet : MicroCFTA.SourcePruningEnumerationRecursive.Packet formulas solver inventory caller memos metadata before)
+  (resources :
+    MicroCFTA.SourcePruningEnumerationPreparedRecursive.OutcomeResources formulas solver caller seed
+      (MicroCFTA.SourcePruningEnumerationNativeContinuations.HookResult.complete outputs reached queries)) :
+  ∃ next final,
+    MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver next caller reached final ∧
+      final.query = queries ∧
+        MicroCFTA.SourcePruningEnumerationRecursive.Packet formulas solver next reached final metadata before ∧
+          MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits seed.snd reached.checked ∧
+            MicroCFTA.SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.fst)
+                reached.checked.native.machine.heap ∧
+              ∀ (output : MicroCFTA.SourcePruningEnumerationRecursive.Output width Typing),
+                output ∈ outputs →
+                  MicroCFTA.SourcePruningEnumerationRecursive.OutputResources formulas solver caller seed output
+'MicroCFTA.SourcePruningEnumerationPreparedRecursive.completed_captured_packet' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,34 @@
+--- historical-v1-old-forecast
++++ v2-new-prepared-forecast
+@@ -15,11 +15,10 @@
+ open SourceCurrentAllocatedPartialInvariant (Post)
+ open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
+ open SourcePruningEnumerationIncomingReservation (Seed)
+-open SourcePruningEnumerationFiniteReservation (stage ScanReserved)
++open SourcePruningEnumerationPreparedReservation (stage ScanReserved)
+ open SourcePruningEnumerationRecursive (Packet Output)
+ open SourcePruningEnumerationPreparedRecursive (Failure continueWith resume endpoint)
+-open SourcePruningEnumerationNativeFiniteSiblingResources (ReceiptAt OutputAt)
+-attribute [local irreducible] SourcePruningEnumerationFiniteReservation.step
++attribute [local irreducible] SourcePruningEnumerationPreparedReservation.step
+ local notation "Symbol" => SourcePruningTemplates.Symbol
+ local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+ local notation "Node" => Value Symbol Constraint
+@@ -31,7 +30,7 @@
+ local notation "Result" => SourcePruningEnumerationNativeContinuations.Result
+ local notation "HookResult" => SourcePruningEnumerationNativeContinuations.HookResult
+ local notation "afterHead" => SourcePruningEnumerationRecursiveReservation.afterHead
+-local notation "afterHook" => SourcePruningEnumerationFiniteReservation.step
++local notation "afterHook" => SourcePruningEnumerationPreparedReservation.step
+ local notation "advance" => SourcePruningEnumerationNativeBranches.advance
+ local notation "suspendedBound" => SourcePruningEnumerationPrefixAdmission.suspendedBound
+ variable {Typing Key : Type} {bits : Nat}
+@@ -107,7 +106,7 @@
+     obtain ⟨index, inside, certificate⟩ := outputCertificates output member
+     have own : SourcePruningEnumerationRecursive.OutputResources formulas solver caller
+         (stage recursiveFuel seed capturedMass inherited (index + 1)) output := certificate
+-    have growth := SourcePruningEnumerationFiniteReservation.count_mono recursiveFuel seed capturedMass inherited
++    have growth := SourcePruningEnumerationPreparedReservation.count_mono recursiveFuel seed capturedMass inherited
+       (by omega : index + 1 ≤ selectedEdges.length)
+     exact own.mono growth.1 growth.2
+   have actualShape : result = .complete processed outputs afterCaller final.query ∨

@@ -1,0 +1,63 @@
+/-- The next final write advances pending levels and leaves old expanded levels fixed. -/
+theorem write_stratified (before : State Symbol Guard) (safe : Safe before) (level : Nat → Nat) (frontier uv : Nat)
+    (stratified : Stratified before level frontier) (node : Option Nat) (scs : List Suspended)
+    (stored : before.values[uv]? = some (.unenumerated node scs)) (fragment : Fragment Symbol)
+    (pendingHoles : ∀ hole, HasHole fragment hole → ∃ root size node scs,
+      UnionFind.Reaches before.representatives hole root size ∧ before.values[root]? = some (.unenumerated node scs))
+    (separate : FragmentAvoid before.representatives uv fragment) :
+    ∃ nextLevel, Stratified {before with values := before.values.set uv (.enumerated fragment)} nextLevel (frontier + 1) := by
+  obtain ⟨roots, paths⟩ := roots_exist before.representatives safe.1.total
+  have fixed := stored_root_fixed before safe roots paths uv _ stored (by simp)
+  have selectedLevel := stratified.pending uv node scs stored
+  let nextLevel := fun index => if roots index = uv then frontier else if level index = frontier then frontier + 1 else level index
+  have sameRootLevel : ∀ index, roots index = uv → level index = frontier := by
+    intro index selected
+    obtain ⟨size, path⟩ := paths index
+    have same := stratified.classes index (roots index) (UnionFind.sameClass_root path)
+    simpa [selected, selectedLevel] using same
+  have increases : ∀ index, level index ≤ nextLevel index := by
+    intro index
+    by_cases selected : roots index = uv
+    · simp [nextLevel, selected, sameRootLevel index selected]
+    · by_cases atFrontier : level index = frontier <;> simp [nextLevel, selected, atFrontier]
+  have selectedNext : nextLevel uv = frontier := by simp [nextLevel, fixed]
+  have oldExpanded : ∀ index storedFragment, before.values[index]? = some (.enumerated storedFragment) → nextLevel index = level index := by
+    intro index storedFragment old
+    have bound := (stratified.expanded index storedFragment old).1
+    have notSelected : roots index ≠ uv := by intro same; have equal := sameRootLevel index same; omega
+    have notFrontier : level index ≠ frontier := by omega
+    simp [nextLevel, notSelected, notFrontier]
+  refine ⟨nextLevel, ?_, ?_, ?_⟩
+  · intro left right same
+    have sameRoot := (class_iff before.representatives roots paths left right).mp same
+    have sameLevel := stratified.classes left right same
+    simp [nextLevel, sameRoot, sameLevel]
+  · intro index storedFragment read
+    by_cases selected : index = uv
+    · subst index
+      have inside := (List.getElem?_eq_some_iff.mp stored).1
+      have fragmentSame : storedFragment = fragment := by simpa [inside] using read.symm
+      subst storedFragment
+      rw [selectedNext]
+      refine ⟨by omega, ?_⟩
+      intro hole present
+      obtain ⟨root, size, node, scs, path, pendingRead⟩ := pendingHoles hole present
+      have holeLevel := (stratified.classes hole root (UnionFind.sameClass_root path)).trans (stratified.pending root node scs pendingRead)
+      have different : roots hole ≠ uv := by
+        intro same
+        apply separate hole present
+        exact (class_iff before.representatives roots paths uv hole).mpr (fixed.trans same.symm)
+      simp [nextLevel, different, holeLevel]
+    · have old : before.values[index]? = some (.enumerated storedFragment) := by simpa [Ne.symm selected] using read
+      obtain ⟨bound, dependencies⟩ := stratified.expanded index storedFragment old
+      rw [oldExpanded index storedFragment old]
+      exact ⟨by omega, fun hole present => Nat.lt_of_lt_of_le (dependencies hole present) (increases hole)⟩
+  · intro index pendingNode pendingScs read
+    have notSelected : index ≠ uv := by
+      intro same
+      subst index
+      have inside := (List.getElem?_eq_some_iff.mp stored).1
+      simp [inside] at read
+    have old : before.values[index]? = some (.unenumerated pendingNode pendingScs) := by simpa [Ne.symm notSelected] using read
+    have indexFixed := stored_root_fixed before safe roots paths index _ old (by simp)
+    simp [nextLevel, indexFixed, notSelected, stratified.pending index pendingNode pendingScs old]

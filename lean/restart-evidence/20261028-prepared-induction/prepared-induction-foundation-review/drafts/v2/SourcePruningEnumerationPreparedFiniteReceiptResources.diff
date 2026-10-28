@@ -1,0 +1,29 @@
+--- drafts/v1/SourcePruningEnumerationPreparedFiniteReceiptResources.lean
++++ drafts/v2/SourcePruningEnumerationPreparedFiniteReceiptResources.lean
+@@ -54,7 +54,7 @@
+     (mass : match (generalizing := false) receipt with
+       | .complete _ _ _ after => SourcePruningEnumerationPrefixAdmission.suspendedBound after.core ≤ ceiling
+       | _ => True)
+-    (reserved : SourcePruningEnumerationFiniteReservation.Reserved bits recursiveFuel seed ceiling) :
++    (reserved : SourcePruningEnumerationPreparedReservation.Reserved bits recursiveFuel seed ceiling) :
+     ∃ (fuel : Nat) (outcome : HookResult (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2)),
+       (∀ extra, match (generalizing := false) receipt with
+         | .complete fragment actual saved after =>
+@@ -62,7 +62,7 @@
+               graph templates stop order (fuel + extra) metadata uv fragment actual saved after = outcome
+         | _ => outcome = .complete [] reached final.query) ∧
+       OutcomeResources formulas solver reached
+-        (SourcePruningEnumerationFiniteReservation.final recursiveFuel seed ceiling) outcome := by
++        (SourcePruningEnumerationPreparedReservation.final recursiveFuel seed ceiling) outcome := by
+   cases receipt with
+   | unhandled => cases advanced
+   | rejected actual saved after | stopped fragments observation candidate =>
+@@ -71,7 +71,7 @@
+         refine ⟨reached, next, final, Post.refl post.context, bounded, known, rfl, rfl, ?_⟩
+         intro output member
+         exact False.elim (List.not_mem_nil member)
+-      have growth := SourcePruningEnumerationFiniteReservation.final_ge recursiveFuel seed ceiling
++      have growth := SourcePruningEnumerationPreparedReservation.final_ge recursiveFuel seed ceiling
+       exact ⟨0, .complete [] reached final.query, fun _ => rfl, originalResources.mono growth.1 growth.2⟩
+   | complete fragment actual saved after =>
+       have endpoints : (actual, saved) = (reached, final.query) := Option.some.inj advanced

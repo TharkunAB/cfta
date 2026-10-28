@@ -1,0 +1,59 @@
+
+/-- The callback retains the planned mass ceiling rather than changing its recursive reservation. -/
+theorem HeadReserved.callback {bits depth capturedMass inherited : Nat} {seed : Seed}
+    (reservation : HeadReserved bits depth seed capturedMass inherited) :
+    Reserved bits depth (afterHead seed inherited) (massCeil seed capturedMass inherited) :=
+  reservation.2
+
+/-- Room at the complete original forecast supplies every nested reservation. -/
+theorem reserved_of_final_room (bits depth : Nat) (seed : Seed) (ceiling : Nat)
+    (room : Room bits (final depth seed ceiling).2) : Reserved bits depth seed ceiling := by
+  induction depth generalizing seed ceiling with
+  | zero => exact reserved_zero bits seed ceiling
+  | succ depth ih =>
+      apply (reserved_succ_iff bits depth seed ceiling).mpr
+      intro index less
+      let current := stage depth (narrowSeed seed) ceiling ceiling index
+      have later := count_mono depth (narrowSeed seed) ceiling ceiling
+        (by omega : index + 1 ≤ rows seed)
+      have ordered : Le (step depth current ceiling ceiling).2 (final (depth + 1) seed ceiling).2 := by
+        simpa only [current, final_succ, stage_succ_right] using later.1
+      have callbackRoom : Room bits (step depth current ceiling ceiling).2 := room.mono ordered
+      have headRoom : Room bits (afterHead current ceiling).2 :=
+        callbackRoom.mono (afterHead_le_step depth current ceiling ceiling).1
+      exact ⟨SourcePruningEnumerationIncomingReservation.reserved_of_final_room bits current
+          (edgeCount current ceiling)
+          (by simpa only [SourcePruningEnumerationRecursiveReservation.afterHead] using headRoom),
+        ih (afterHead current ceiling) (massCeil current ceiling ceiling) callbackRoom⟩
+
+/-- Room at one paired final forecast supplies its edge and recursive callback reservations. -/
+theorem head_reserved_of_final_room (bits depth : Nat) (seed : Seed) (capturedMass inherited : Nat)
+    (room : Room bits (step depth seed capturedMass inherited).2) :
+    HeadReserved bits depth seed capturedMass inherited :=
+  ⟨SourcePruningEnumerationIncomingReservation.reserved_of_final_room bits seed (edgeCount seed inherited)
+      (by
+        have headRoom := room.mono (afterHead_le_step depth seed capturedMass inherited).1
+        simpa only [SourcePruningEnumerationRecursiveReservation.afterHead] using headRoom),
+    reserved_of_final_room bits depth (afterHead seed inherited) (massCeil seed capturedMass inherited) room⟩
+
+/-- Room at the scan's final entry supplies every paired reservation in its original prefix. -/
+theorem scan_reserved_of_final_room (bits depth : Nat) (seed : Seed) (capturedMass inherited count : Nat)
+    (room : Room bits (stage depth seed capturedMass inherited count).2) :
+    ScanReserved bits depth seed capturedMass inherited count := by
+  intro index less
+  have later := count_mono depth seed capturedMass inherited (by omega : index + 1 ≤ count)
+  apply head_reserved_of_final_room bits depth (stage depth seed capturedMass inherited index) capturedMass inherited
+  exact room.mono (by simpa only [stage_succ_right] using later.1)
+
+/-- The original recursive forecast computes a mathematical width for every nested query entry. -/
+theorem reserved_computed (depth : Nat) (seed : Seed) (ceiling : Nat) :
+    Reserved (SourceCurrentParentInitialRoom.roomBits (final depth seed ceiling).2) depth seed ceiling :=
+  reserved_of_final_room _ depth seed ceiling (SourceCurrentParentInitialRoom.room_computed _)
+
+/-- The original paired forecast computes a width before its actual receipt exists. -/
+theorem head_reserved_computed (depth : Nat) (seed : Seed) (capturedMass inherited : Nat) :
+    HeadReserved (SourceCurrentParentInitialRoom.roomBits (step depth seed capturedMass inherited).2)
+      depth seed capturedMass inherited :=
+  head_reserved_of_final_room _ depth seed capturedMass inherited (SourceCurrentParentInitialRoom.room_computed _)
+
+/-- The original sibling schedule computes one width for all its nested reservations. -/

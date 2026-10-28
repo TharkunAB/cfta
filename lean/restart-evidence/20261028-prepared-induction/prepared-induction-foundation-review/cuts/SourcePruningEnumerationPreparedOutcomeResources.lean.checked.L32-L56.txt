@@ -1,0 +1,25 @@
+def OutcomeResources
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (original : Caller width) (seed : Seed)
+    (outcome : SourcePruningEnumerationNativeContinuations.HookResult
+      (Output width Typing) (Failure width Typing) width) : Prop :=
+  ∃ (reached : Caller width) (next : Inventory) (final : Memos),
+    Post formulas solver next original reached final ∧ Fits seed.2 reached.checked ∧
+    Heap (fun guard => guard ∈ seed.1) reached.checked.native.machine.heap ∧
+    match outcome with
+    | .complete outputs caller queries =>
+        caller = reached ∧ queries = final.query ∧
+        ∀ output ∈ outputs, OutputResources formulas solver original seed output
+    | .stopped outputs _ endpoint =>
+        (endpoint = none ∨ endpoint = some (reached, final.query)) ∧
+        ∀ output ∈ outputs, OutputResources formulas solver original seed output
+
+variable {formulas : SourceGuards.Formulas FullSyntax.Formula}
+variable {solver : SourceGuards.Entailment FullSyntax.Formula}
+variable {original middle : Caller width} {middleInventory : Inventory} {middleMemos : Memos}
+variable {seed larger : Seed}
+variable {outcome : SourcePruningEnumerationNativeContinuations.HookResult
+  (Output width Typing) (Failure width Typing) width}
+
+/-- An earlier Post composes with the reached endpoint and every emitted output. -/

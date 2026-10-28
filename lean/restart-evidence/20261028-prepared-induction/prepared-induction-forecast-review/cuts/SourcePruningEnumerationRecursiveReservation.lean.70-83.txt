@@ -1,0 +1,14 @@
+/-- The edge phase retains every original numeric and guard bound. -/
+theorem afterHead_ge (seed : Seed) (inherited : Nat) :
+    Le seed.2 (afterHead seed inherited).2 ∧ seed.1 ⊆ (afterHead seed inherited).1 :=
+  ⟨SourcePruningEnumerationIncomingReservation.advance_profile_ge seed (edgeCount seed inherited),
+    SourcePruningEnumerationIncomingReservation.advance_alphabet_ge seed (edgeCount seed inherited)⟩
+
+/-- The callback phase retains the full edge-phase bounds. -/
+theorem afterHead_le_afterHook (seed : Seed) (capturedMass inherited : Nat) :
+    Le (afterHead seed inherited).2 (afterHook seed capturedMass inherited).2 ∧
+      (afterHead seed inherited).1 ⊆ (afterHook seed capturedMass inherited).1 :=
+  ⟨(SourceCurrentConstrainedCapEditForecast.headProfile_ge (afterHead seed inherited).2).trans
+      (SourcePruningEnumerationIncomingReservation.advance_profile_ge
+        ((afterHead seed inherited).1, headProfile (afterHead seed inherited).2) (callbackCount seed capturedMass inherited)),
+    SourcePruningEnumerationIncomingReservation.advance_alphabet_ge

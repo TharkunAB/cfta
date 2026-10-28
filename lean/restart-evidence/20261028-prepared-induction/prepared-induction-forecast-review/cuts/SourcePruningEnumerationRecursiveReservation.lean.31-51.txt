@@ -1,0 +1,21 @@
+
+/-- The current seed bounds one original edge's complete mixed-query cost. -/
+noncomputable def edgeCount (seed : Seed) (inherited : Nat) : Nat :=
+  scalar seed.2 * (inherited + guardWidth seed.1 + 1)
+
+/-- The edge phase precedes the callback phase. -/
+noncomputable def afterHead (seed : Seed) (inherited : Nat) : Seed :=
+  advance seed (edgeCount seed inherited)
+
+/-- Each sibling starts from the same captured mass and inherited bucket. -/
+noncomputable def massCeil (seed : Seed) (capturedMass inherited : Nat) : Nat :=
+  capturedMass + scalar seed.2 * (inherited + guardWidth seed.1)
+
+/-- The callback's depth-one scan is bounded before its actual cache exists. -/
+noncomputable def callbackCount (seed : Seed) (capturedMass inherited : Nat) : Nat :=
+  SourcePruningEnumerationOriginalForecast.count ((afterHead seed inherited).1, headProfile (afterHead seed inherited).2)
+    (massCeil seed capturedMass inherited)
+
+/-- Narrowing changes the profile before the callback's mixed-query schedule. -/
+noncomputable def afterHook (seed : Seed) (capturedMass inherited : Nat) : Seed :=
+  advance ((afterHead seed inherited).1, headProfile (afterHead seed inherited).2) (callbackCount seed capturedMass inherited)

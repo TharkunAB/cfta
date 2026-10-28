@@ -1,0 +1,21 @@
+--- old-declaration
++++ new-actual-prepared-worker-declaration
+@@ -8,7 +8,7 @@
+     (recursiveFuel : Nat)
+     (seed : Seed) (formulas : SourceGuards.Formulas FullSyntax.Formula)
+     (solver : SourceGuards.Entailment FullSyntax.Formula)
+-    (recursive : SourcePruningEnumerationRecursive.Complete (bits := bits) holeKey fits admits graph templates
++    (recursive : SourcePruningEnumerationPreparedRecursive.Complete (bits := bits) holeKey fits admits graph templates
+       checkEmpty edgesOf stop order formulas solver recursiveFuel)
+     (inventory : Inventory)
+     (caller : Caller (bits + 2)) (memos : Memos) (before : Cached) (uv handle : Nat) (scs : List Suspended)
+@@ -18,7 +18,8 @@
+     (packet : Packet formulas solver inventory caller memos metadata before)
+     (ready : EnumerationDriver.Ready uv before.core)
+     (stored : before.core.values[uv]? = some (.unenumerated (some handle) scs))
+-    (decoded : lookupNode caller.checked.native.machine.heap handle = some (.node parentEntry storedEdges depth free))
++    (parentAvailable : Available caller.checked.native.machine.heap (.node parentEntry storedEdges depth free))
++    (parentClosed : free = [])
+     (selected : ∀ edge ∈ selectedEdges, edge ∈ storedEdges)
+     (incoming : EnumerationReferences.IncomingAvoid uv before.core)
+     (bounded : Fits seed.2 caller.checked)

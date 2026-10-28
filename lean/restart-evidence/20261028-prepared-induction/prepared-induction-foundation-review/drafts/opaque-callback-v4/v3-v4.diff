@@ -1,0 +1,10 @@
+--- opaque-callback-v3
++++ opaque-callback-v4
+@@ -176,6 +176,7 @@
+     | unhandled => cases advancedQuery
+     | complete fragment reached queries after =>
+         simp only [folded, SourcePruningEnumerationReceiptContinuation.run, actual]
++        cases outcome <;> rfl
+     | rejected reached queries after | stopped fragments observation candidate =>
+         simp only [folded, SourcePruningEnumerationReceiptContinuation.run, advancedQuery]
+   have finished : OutcomeResources formulas solver caller (finiteStep recursiveFuel seed capturedMass inherited)

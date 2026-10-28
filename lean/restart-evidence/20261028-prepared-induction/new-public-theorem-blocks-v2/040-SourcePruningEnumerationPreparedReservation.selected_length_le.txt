@@ -1,0 +1,18 @@
+MicroCFTA.SourcePruningEnumerationPreparedReservation.selected_length_le {width : Nat}
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed)
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (bounded :
+    MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits
+      (MicroCFTA.SourcePruningEnumerationPreparedReservation.preparedSeed seed).snd caller.checked)
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (stored selected :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (depth : Nat) (free : List MicroCFTA.InternedBinderProtocol.Reference)
+  (available :
+    MicroCFTA.InternedProbeProvenance.Available caller.checked.native.machine.heap
+      (MicroCFTA.InternedConstructorTemplates.Value.node entry stored depth free))
+  (lengths : selected.length ≤ stored.length) :
+  selected.length ≤ MicroCFTA.SourcePruningEnumerationPreparedReservation.rows seed
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.selected_length_le' depends on axioms: [propext, Quot.sound]

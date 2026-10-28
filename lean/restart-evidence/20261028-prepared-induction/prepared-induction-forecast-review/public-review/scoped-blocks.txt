@@ -1,0 +1,519 @@
+MicroCFTA.SourcePruningEnumerationPreparedReservation.normalizationProfile_ge
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile) :
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le profile
+    (MicroCFTA.SourcePruningEnumerationSelectedValueCaller.normalizationProfile profile)
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.normalizationProfile_ge' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourcePruningEnumerationPreparedReservation.final_zero
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed) (ceiling : Nat) :
+  MicroCFTA.SourcePruningEnumerationPreparedReservation.final 0 seed ceiling = seed
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.final_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationPreparedReservation.final_succ (depth : Nat)
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed) (ceiling : Nat) :
+  MicroCFTA.SourcePruningEnumerationPreparedReservation.final (depth + 1) seed ceiling =
+    MicroCFTA.SourcePruningEnumerationPreparedReservation.stage depth
+      (MicroCFTA.SourcePruningEnumerationPreparedReservation.preparedSeed seed) ceiling ceiling
+      (MicroCFTA.SourcePruningEnumerationPreparedReservation.rows seed)
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.final_succ' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationPreparedReservation.step_zero
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed) (capturedMass inherited : Nat) :
+  MicroCFTA.SourcePruningEnumerationPreparedReservation.step 0 seed capturedMass inherited =
+    MicroCFTA.SourcePruningEnumerationRecursiveReservation.afterHead seed inherited
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.step_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationPreparedReservation.stage_zero (depth : Nat)
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed) (capturedMass inherited : Nat) :
+  MicroCFTA.SourcePruningEnumerationPreparedReservation.stage depth seed capturedMass inherited 0 = seed
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.stage_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationPreparedReservation.stage_succ (depth : Nat)
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed) (capturedMass inherited count : Nat) :
+  MicroCFTA.SourcePruningEnumerationPreparedReservation.stage depth seed capturedMass inherited (count + 1) =
+    MicroCFTA.SourcePruningEnumerationPreparedReservation.stage depth
+      (MicroCFTA.SourcePruningEnumerationPreparedReservation.step depth seed capturedMass inherited) capturedMass
+      inherited count
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.stage_succ' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationPreparedReservation.stage_add (depth : Nat)
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed) (capturedMass inherited first last : Nat) :
+  MicroCFTA.SourcePruningEnumerationPreparedReservation.stage depth seed capturedMass inherited (first + last) =
+    MicroCFTA.SourcePruningEnumerationPreparedReservation.stage depth
+      (MicroCFTA.SourcePruningEnumerationPreparedReservation.stage depth seed capturedMass inherited first) capturedMass
+      inherited last
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.stage_add' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationPreparedReservation.stage_succ_right (depth : Nat)
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed) (capturedMass inherited count : Nat) :
+  MicroCFTA.SourcePruningEnumerationPreparedReservation.stage depth seed capturedMass inherited (count + 1) =
+    MicroCFTA.SourcePruningEnumerationPreparedReservation.step depth
+      (MicroCFTA.SourcePruningEnumerationPreparedReservation.stage depth seed capturedMass inherited count) capturedMass
+      inherited
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.stage_succ_right' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationPreparedReservation.preparedSeed_ge
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed) :
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le seed.snd
+      (MicroCFTA.SourcePruningEnumerationPreparedReservation.preparedSeed seed).snd ∧
+    seed.fst ⊆ (MicroCFTA.SourcePruningEnumerationPreparedReservation.preparedSeed seed).fst
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.preparedSeed_ge' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourcePruningEnumerationPreparedReservation.final_ge (depth : Nat)
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed) (ceiling : Nat) :
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le seed.snd
+      (MicroCFTA.SourcePruningEnumerationPreparedReservation.final depth seed ceiling).snd ∧
+    seed.fst ⊆ (MicroCFTA.SourcePruningEnumerationPreparedReservation.final depth seed ceiling).fst
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.final_ge' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationPreparedReservation.afterHead_le_step (depth : Nat)
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed) (capturedMass inherited : Nat) :
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (MicroCFTA.SourcePruningEnumerationRecursiveReservation.afterHead seed inherited).snd
+      (MicroCFTA.SourcePruningEnumerationPreparedReservation.step depth seed capturedMass inherited).snd ∧
+    (MicroCFTA.SourcePruningEnumerationRecursiveReservation.afterHead seed inherited).fst ⊆
+      (MicroCFTA.SourcePruningEnumerationPreparedReservation.step depth seed capturedMass inherited).fst
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.afterHead_le_step' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationPreparedReservation.step_ge (depth : Nat)
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed) (capturedMass inherited : Nat) :
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le seed.snd
+      (MicroCFTA.SourcePruningEnumerationPreparedReservation.step depth seed capturedMass inherited).snd ∧
+    seed.fst ⊆ (MicroCFTA.SourcePruningEnumerationPreparedReservation.step depth seed capturedMass inherited).fst
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.step_ge' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationPreparedReservation.stage_ge (depth : Nat)
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed) (capturedMass inherited count : Nat) :
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le seed.snd
+      (MicroCFTA.SourcePruningEnumerationPreparedReservation.stage depth seed capturedMass inherited count).snd ∧
+    seed.fst ⊆ (MicroCFTA.SourcePruningEnumerationPreparedReservation.stage depth seed capturedMass inherited count).fst
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.stage_ge' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationPreparedReservation.count_mono (depth : Nat)
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed) (capturedMass inherited : Nat) {first last : Nat}
+  (counts : first ≤ last) :
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (MicroCFTA.SourcePruningEnumerationPreparedReservation.stage depth seed capturedMass inherited first).snd
+      (MicroCFTA.SourcePruningEnumerationPreparedReservation.stage depth seed capturedMass inherited last).snd ∧
+    (MicroCFTA.SourcePruningEnumerationPreparedReservation.stage depth seed capturedMass inherited first).fst ⊆
+      (MicroCFTA.SourcePruningEnumerationPreparedReservation.stage depth seed capturedMass inherited last).fst
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.count_mono' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationPreparedReservation.rows_positive
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed) :
+  1 ≤ MicroCFTA.SourcePruningEnumerationPreparedReservation.rows seed
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.rows_positive' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourcePruningEnumerationPreparedReservation.stage_le_final (depth : Nat)
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed) (ceiling count : Nat)
+  (bounded : count ≤ MicroCFTA.SourcePruningEnumerationPreparedReservation.rows seed) :
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (MicroCFTA.SourcePruningEnumerationPreparedReservation.stage depth
+          (MicroCFTA.SourcePruningEnumerationPreparedReservation.preparedSeed seed) ceiling ceiling count).snd
+      (MicroCFTA.SourcePruningEnumerationPreparedReservation.final (depth + 1) seed ceiling).snd ∧
+    (MicroCFTA.SourcePruningEnumerationPreparedReservation.stage depth
+          (MicroCFTA.SourcePruningEnumerationPreparedReservation.preparedSeed seed) ceiling ceiling count).fst ⊆
+      (MicroCFTA.SourcePruningEnumerationPreparedReservation.final (depth + 1) seed ceiling).fst
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.stage_le_final' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationPreparedReservation.first_le_final (depth : Nat)
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed) (ceiling : Nat) :
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (MicroCFTA.SourcePruningEnumerationPreparedReservation.step depth
+          (MicroCFTA.SourcePruningEnumerationPreparedReservation.preparedSeed seed) ceiling ceiling).snd
+      (MicroCFTA.SourcePruningEnumerationPreparedReservation.final (depth + 1) seed ceiling).snd ∧
+    (MicroCFTA.SourcePruningEnumerationPreparedReservation.step depth
+          (MicroCFTA.SourcePruningEnumerationPreparedReservation.preparedSeed seed) ceiling ceiling).fst ⊆
+      (MicroCFTA.SourcePruningEnumerationPreparedReservation.final (depth + 1) seed ceiling).fst
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.first_le_final' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationPreparedReservation.reserved_zero (bits : Nat)
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed) (ceiling : Nat) :
+  MicroCFTA.SourcePruningEnumerationPreparedReservation.Reserved bits 0 seed ceiling
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.reserved_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationPreparedReservation.reserved_succ_iff (bits depth : Nat)
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed) (ceiling : Nat) :
+  MicroCFTA.SourcePruningEnumerationPreparedReservation.Reserved bits (depth + 1) seed ceiling ↔
+    MicroCFTA.SourcePruningEnumerationPreparedReservation.ScanReserved bits depth
+      (MicroCFTA.SourcePruningEnumerationPreparedReservation.preparedSeed seed) ceiling ceiling
+      (MicroCFTA.SourcePruningEnumerationPreparedReservation.rows seed)
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.reserved_succ_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationPreparedReservation.Reserved.scan {bits depth ceiling : Nat}
+  {seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed}
+  (reservation : MicroCFTA.SourcePruningEnumerationPreparedReservation.Reserved bits (depth + 1) seed ceiling) :
+  MicroCFTA.SourcePruningEnumerationPreparedReservation.ScanReserved bits depth
+    (MicroCFTA.SourcePruningEnumerationPreparedReservation.preparedSeed seed) ceiling ceiling
+    (MicroCFTA.SourcePruningEnumerationPreparedReservation.rows seed)
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.Reserved.scan' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationPreparedReservation.scan_reserved_zero (bits depth : Nat)
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed) (capturedMass inherited : Nat) :
+  MicroCFTA.SourcePruningEnumerationPreparedReservation.ScanReserved bits depth seed capturedMass inherited 0
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.scan_reserved_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationPreparedReservation.scan_reserved_succ_iff (bits depth : Nat)
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed) (capturedMass inherited count : Nat) :
+  MicroCFTA.SourcePruningEnumerationPreparedReservation.ScanReserved bits depth seed capturedMass inherited
+      (count + 1) ↔
+    MicroCFTA.SourcePruningEnumerationPreparedReservation.HeadReserved bits depth seed capturedMass inherited ∧
+      MicroCFTA.SourcePruningEnumerationPreparedReservation.ScanReserved bits depth
+        (MicroCFTA.SourcePruningEnumerationPreparedReservation.step depth seed capturedMass inherited) capturedMass
+        inherited count
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.scan_reserved_succ_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationPreparedReservation.ScanReserved.head {bits depth capturedMass inherited count : Nat}
+  {seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed}
+  (reservation :
+    MicroCFTA.SourcePruningEnumerationPreparedReservation.ScanReserved bits depth seed capturedMass inherited
+      (count + 1)) :
+  MicroCFTA.SourcePruningEnumerationPreparedReservation.HeadReserved bits depth seed capturedMass inherited
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.ScanReserved.head' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationPreparedReservation.ScanReserved.tail {bits depth capturedMass inherited count : Nat}
+  {seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed}
+  (reservation :
+    MicroCFTA.SourcePruningEnumerationPreparedReservation.ScanReserved bits depth seed capturedMass inherited
+      (count + 1)) :
+  MicroCFTA.SourcePruningEnumerationPreparedReservation.ScanReserved bits depth
+    (MicroCFTA.SourcePruningEnumerationPreparedReservation.step depth seed capturedMass inherited) capturedMass
+    inherited count
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.ScanReserved.tail' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationPreparedReservation.ScanReserved.prefix
+  {bits depth capturedMass inherited first last : Nat}
+  {seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed}
+  (reservation :
+    MicroCFTA.SourcePruningEnumerationPreparedReservation.ScanReserved bits depth seed capturedMass inherited last)
+  (counts : first ≤ last) :
+  MicroCFTA.SourcePruningEnumerationPreparedReservation.ScanReserved bits depth seed capturedMass inherited first
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.ScanReserved.prefix' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationPreparedReservation.ScanReserved.after_prefix
+  {bits depth capturedMass inherited consumed remaining : Nat}
+  {seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed}
+  (reservation :
+    MicroCFTA.SourcePruningEnumerationPreparedReservation.ScanReserved bits depth seed capturedMass inherited
+      (consumed + remaining)) :
+  MicroCFTA.SourcePruningEnumerationPreparedReservation.ScanReserved bits depth
+    (MicroCFTA.SourcePruningEnumerationPreparedReservation.stage depth seed capturedMass inherited consumed)
+    capturedMass inherited remaining
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.ScanReserved.after_prefix' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationPreparedReservation.Reserved.first {bits depth ceiling : Nat}
+  {seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed}
+  (reservation : MicroCFTA.SourcePruningEnumerationPreparedReservation.Reserved bits (depth + 1) seed ceiling) :
+  MicroCFTA.SourcePruningEnumerationPreparedReservation.HeadReserved bits depth
+    (MicroCFTA.SourcePruningEnumerationPreparedReservation.preparedSeed seed) ceiling ceiling
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.Reserved.first' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationPreparedReservation.Reserved.ordinary {bits depth ceiling : Nat}
+  {seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed}
+  (reservation : MicroCFTA.SourcePruningEnumerationPreparedReservation.Reserved bits (depth + 1) seed ceiling)
+  (count : Nat) (bounded : count ≤ MicroCFTA.SourcePruningEnumerationPreparedReservation.rows seed) :
+  MicroCFTA.SourcePruningEnumerationPreparedReservation.ScanReserved bits depth
+    (MicroCFTA.SourcePruningEnumerationPreparedReservation.preparedSeed seed) ceiling ceiling count
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.Reserved.ordinary' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationPreparedReservation.HeadReserved.edge
+  {bits depth capturedMass inherited actualCost : Nat}
+  {seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed}
+  (reservation :
+    MicroCFTA.SourcePruningEnumerationPreparedReservation.HeadReserved bits depth seed capturedMass inherited)
+  (bounded : actualCost ≤ MicroCFTA.SourcePruningEnumerationRecursiveReservation.edgeCount seed inherited) :
+  MicroCFTA.SourcePruningEnumerationIncomingReservation.Reserved bits seed actualCost
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.HeadReserved.edge' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationPreparedReservation.HeadReserved.callback {bits depth capturedMass inherited : Nat}
+  {seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed}
+  (reservation :
+    MicroCFTA.SourcePruningEnumerationPreparedReservation.HeadReserved bits depth seed capturedMass inherited) :
+  MicroCFTA.SourcePruningEnumerationPreparedReservation.Reserved bits depth
+    (MicroCFTA.SourcePruningEnumerationRecursiveReservation.afterHead seed inherited)
+    (MicroCFTA.SourcePruningEnumerationRecursiveReservation.massCeil seed capturedMass inherited)
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.HeadReserved.callback' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationPreparedReservation.reserved_of_final_room (bits depth : Nat)
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed) (ceiling : Nat)
+  (room :
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+      (MicroCFTA.SourcePruningEnumerationPreparedReservation.final depth seed ceiling).snd) :
+  MicroCFTA.SourcePruningEnumerationPreparedReservation.Reserved bits depth seed ceiling
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.reserved_of_final_room' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationPreparedReservation.head_reserved_of_final_room (bits depth : Nat)
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed) (capturedMass inherited : Nat)
+  (room :
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+      (MicroCFTA.SourcePruningEnumerationPreparedReservation.step depth seed capturedMass inherited).snd) :
+  MicroCFTA.SourcePruningEnumerationPreparedReservation.HeadReserved bits depth seed capturedMass inherited
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.head_reserved_of_final_room' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationPreparedReservation.scan_reserved_of_final_room (bits depth : Nat)
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed) (capturedMass inherited count : Nat)
+  (room :
+    MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits
+      (MicroCFTA.SourcePruningEnumerationPreparedReservation.stage depth seed capturedMass inherited count).snd) :
+  MicroCFTA.SourcePruningEnumerationPreparedReservation.ScanReserved bits depth seed capturedMass inherited count
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.scan_reserved_of_final_room' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationPreparedReservation.reserved_computed (depth : Nat)
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed) (ceiling : Nat) :
+  MicroCFTA.SourcePruningEnumerationPreparedReservation.Reserved
+    (MicroCFTA.SourceCurrentParentInitialRoom.roomBits
+      (MicroCFTA.SourcePruningEnumerationPreparedReservation.final depth seed ceiling).snd)
+    depth seed ceiling
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.reserved_computed' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationPreparedReservation.head_reserved_computed (depth : Nat)
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed) (capturedMass inherited : Nat) :
+  MicroCFTA.SourcePruningEnumerationPreparedReservation.HeadReserved
+    (MicroCFTA.SourceCurrentParentInitialRoom.roomBits
+      (MicroCFTA.SourcePruningEnumerationPreparedReservation.step depth seed capturedMass inherited).snd)
+    depth seed capturedMass inherited
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.head_reserved_computed' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationPreparedReservation.scan_reserved_computed (depth : Nat)
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed) (capturedMass inherited count : Nat) :
+  MicroCFTA.SourcePruningEnumerationPreparedReservation.ScanReserved
+    (MicroCFTA.SourceCurrentParentInitialRoom.roomBits
+      (MicroCFTA.SourcePruningEnumerationPreparedReservation.stage depth seed capturedMass inherited count).snd)
+    depth seed capturedMass inherited count
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.scan_reserved_computed' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationSelectedPreparation.complete_resources_known {Typing : Type} {width : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width) (memos : MicroCFTA.EndpointMemoGateTrace.Memos)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (uv handle : Nat) (scs : List MicroCFTA.EnumerationState.Suspended)
+  (packet : MicroCFTA.SourcePruningEnumerationRecursive.Packet formulas solver inventory caller memos metadata before)
+  (ready : MicroCFTA.EnumerationDriver.Ready uv before.core)
+  (stored : before.core.values[uv]? = some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle) scs))
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+  (fits : MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile caller.checked)
+  (property : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Prop)
+  (known : MicroCFTA.SourceEqualityAnnotationHeap.Heap property caller.checked.native.machine.heap) :
+  ∃ bound decoded result heap entered,
+    (((∀ (extra : Nat),
+            MicroCFTA.SourcePruningEnumerationSelectedPreparation.run (bound + extra) (bound + extra) uv caller before =
+              ([Except.ok ((uv, handle, scs, decoded), entered.core)],
+                some (MicroCFTA.MergedSourceComparison.Result.done result heap))) ∧
+          MicroCFTA.SourcePruningEnumerationNodes.lookupNode caller.checked.native.machine.heap handle = some decoded ∧
+            MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver inventory caller
+                (MicroCFTA.SourcePruningEnumerationSelectedValueCaller.advance caller heap) memos ∧
+              MicroCFTA.SourcePruningEnumerationRecursive.Packet formulas solver inventory
+                  (MicroCFTA.SourcePruningEnumerationSelectedValueCaller.advance caller heap) memos metadata entered ∧
+                MicroCFTA.EnumerationDriver.RenderStable before.core entered.core ∧
+                  MicroCFTA.EnumerationDriver.Ready uv entered.core ∧
+                    entered.core.values[uv]? =
+                        some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle) scs) ∧
+                      entered.core.counter = before.core.counter ∧
+                        entered.core.values = before.core.values ∧
+                          entered.expandable = before.expandable ∧
+                            entered.waiting = before.waiting ∧
+                              MicroCFTA.InternedProbeProvenance.Available heap result ∧
+                                result.free = [] ∧
+                                  (∀
+                                      (holds :
+                                        MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+                                          MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+                                      (ambient :
+                                        MicroCFTA.InternedGuardedLanguage.Env MicroCFTA.SourcePruningTemplates.Symbol)
+                                      (term : MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol),
+                                      MicroCFTA.InternedGuardedLanguage.meaning holds ambient result term ↔
+                                        MicroCFTA.InternedGuardedLanguage.meaning holds ambient decoded term) ∧
+                                    ∀
+                                      (holds :
+                                        MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+                                          MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+                                      (ambient :
+                                        MicroCFTA.InternedGuardedLanguage.Env MicroCFTA.SourcePruningTemplates.Symbol)
+                                      (residualMeaning :
+                                        MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+                                          MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol → Prop)
+                                      (assignment :
+                                        Nat → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol),
+                                      (MicroCFTA.EnumerationCorrectness.Satisfies
+                                            (MicroCFTA.SourcePruningEnumerationNativeLanguage.handles holds ambient
+                                              heap)
+                                            residualMeaning assignment entered.core ↔
+                                          MicroCFTA.EnumerationCorrectness.Satisfies
+                                            (MicroCFTA.SourcePruningEnumerationNativeLanguage.handles holds ambient
+                                              caller.checked.native.machine.heap)
+                                            residualMeaning assignment before.core) ∧
+                                        (MicroCFTA.EnumerationCorrectness.Satisfies
+                                            (MicroCFTA.SourcePruningEnumerationNativeLanguage.handles holds ambient
+                                              caller.checked.native.machine.heap)
+                                            residualMeaning assignment before.core →
+                                          MicroCFTA.InternedGuardedLanguage.meaning holds ambient result
+                                            (assignment uv))) ∧
+        MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits
+            (MicroCFTA.SourcePruningEnumerationSelectedValueCaller.normalizationProfile profile)
+            (MicroCFTA.SourcePruningEnumerationSelectedValueCaller.advance caller heap).checked ∧
+          MicroCFTA.InternedValueMass.value result ≤
+            (MicroCFTA.SourcePruningEnumerationSelectedValueCaller.normalizationProfile profile).mass) ∧
+      MicroCFTA.SourceEqualityAnnotationHeap.Heap property heap
+'MicroCFTA.SourcePruningEnumerationSelectedPreparation.complete_resources_known' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationPreparedReservation.selected_length_le {width : Nat}
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed)
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (bounded :
+    MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits
+      (MicroCFTA.SourcePruningEnumerationPreparedReservation.preparedSeed seed).snd caller.checked)
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (stored selected :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (depth : Nat) (free : List MicroCFTA.InternedBinderProtocol.Reference)
+  (available :
+    MicroCFTA.InternedProbeProvenance.Available caller.checked.native.machine.heap
+      (MicroCFTA.InternedConstructorTemplates.Value.node entry stored depth free))
+  (lengths : selected.length ≤ stored.length) :
+  selected.length ≤ MicroCFTA.SourcePruningEnumerationPreparedReservation.rows seed
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.selected_length_le' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourcePruningEnumerationPreparedRecursive.finite_complete {Typing Key : Type} {bits : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (holeKey : Typing → Nat → Key) (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits :
+    Key →
+      MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        Bool)
+  (graph :
+    MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol)) (checkEmpty : Bool)
+  (edgesOf :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      List
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (stop : Option (MicroCFTA.SourcePruningRecordTypes.Metadata Typing → Nat → Bool))
+  (order : MicroCFTA.SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat)
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula) (recursiveFuel : Nat) :
+  MicroCFTA.SourcePruningEnumerationPreparedRecursive.Complete holeKey fits admits graph templates checkEmpty edgesOf
+    stop order formulas solver recursiveFuel
+'MicroCFTA.SourcePruningEnumerationPreparedRecursive.finite_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationPreparedRecursive.run_finite_complete_resources {Typing Key : Type} {bits : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (holeKey : Typing → Nat → Key) (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits :
+    Key →
+      MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        Bool)
+  (graph :
+    MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol)) (checkEmpty : Bool)
+  (edgesOf :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      List
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (stop : Option (MicroCFTA.SourcePruningRecordTypes.Metadata Typing → Nat → Bool))
+  (order : MicroCFTA.SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat)
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula) (recursiveFuel : Nat)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2))
+  (memos : MicroCFTA.EndpointMemoGateTrace.Memos)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed) (ceiling : Nat)
+  (packet : MicroCFTA.SourcePruningEnumerationRecursive.Packet formulas solver inventory caller memos metadata before)
+  (bounded : MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits seed.snd caller.checked)
+  (known :
+    MicroCFTA.SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.fst) caller.checked.native.machine.heap)
+  (selectionMembers :
+    ∀ (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+      (rows :
+        List
+          (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+      (depth : Nat) (free : List MicroCFTA.InternedBinderProtocol.Reference)
+      (edge :
+        MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      edge ∈ edgesOf (MicroCFTA.InternedConstructorTemplates.Value.node entry rows depth free) → edge ∈ rows)
+  (selectionLength :
+    ∀ (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+      (rows :
+        List
+          (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+      (depth : Nat) (free : List MicroCFTA.InternedBinderProtocol.Reference),
+      (edgesOf (MicroCFTA.InternedConstructorTemplates.Value.node entry rows depth free)).length ≤ rows.length)
+  (initialMass : MicroCFTA.SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling)
+  (reserved : MicroCFTA.SourcePruningEnumerationPreparedReservation.Reserved bits recursiveFuel seed ceiling) :
+  ∃ bound outcome,
+    (∀ (extra : Nat),
+        MicroCFTA.SourcePruningEnumerationPreparedRecursive.run holeKey fits admits graph templates checkEmpty edgesOf
+            stop order (bound + extra) recursiveFuel metadata caller memos.query before =
+          outcome) ∧
+      MicroCFTA.SourcePruningEnumerationPreparedRecursive.OutcomeResources formulas solver caller
+        (MicroCFTA.SourcePruningEnumerationPreparedReservation.final recursiveFuel seed ceiling) outcome
+'MicroCFTA.SourcePruningEnumerationPreparedRecursive.run_finite_complete_resources' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

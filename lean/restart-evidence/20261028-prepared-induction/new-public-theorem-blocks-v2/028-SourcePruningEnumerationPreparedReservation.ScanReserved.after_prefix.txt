@@ -1,0 +1,12 @@
+MicroCFTA.SourcePruningEnumerationPreparedReservation.ScanReserved.after_prefix
+  {bits depth capturedMass inherited consumed remaining : Nat}
+  {seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed}
+  (reservation :
+    MicroCFTA.SourcePruningEnumerationPreparedReservation.ScanReserved bits depth seed capturedMass inherited
+      (consumed + remaining)) :
+  MicroCFTA.SourcePruningEnumerationPreparedReservation.ScanReserved bits depth
+    (MicroCFTA.SourcePruningEnumerationPreparedReservation.stage depth seed capturedMass inherited consumed)
+    capturedMass inherited remaining
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.ScanReserved.after_prefix' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

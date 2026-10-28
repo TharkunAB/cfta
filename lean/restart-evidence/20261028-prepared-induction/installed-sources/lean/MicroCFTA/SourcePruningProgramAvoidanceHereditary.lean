@@ -1,0 +1,34 @@
+import MicroCFTA.SourcePruningProgramSemantics
+
+/-!
+# Original template avoidance at inspected program positions
+
+A program position inside another inspected program is an original position.
+The original avoidance condition therefore holds at each such program.
+This law supplies no position or source-encoding origin for a native variable.
+-/
+namespace MicroCFTA.SourcePruningTemplates
+open Language
+local notation "Symbol" => SourcePruningTemplates.Symbol
+
+/-- Nested inspected program positions remain positions of the original term. -/
+theorem ProgramAt.trans {whole program nested : Term Symbol}
+    (position : ProgramAt whole program) (inside : ProgramAt program nested) :
+    ProgramAt whole nested := by
+  induction position generalizing nested with
+  | application => exact inside
+  | function annotation marker function argument _program _ ih =>
+      exact .function annotation marker function argument nested (ih inside)
+  | argument annotation marker function argument _program _ ih =>
+      exact .argument annotation marker function argument nested (ih inside)
+  | filter annotation term _program _ ih =>
+      exact .filter annotation term nested (ih inside)
+
+/-- Original forbidden-template avoidance holds at every inspected program. -/
+theorem Avoids.at_program {templates : List (Template.Pattern Symbol)}
+    {whole program : Term Symbol} (avoids : Avoids templates whole)
+    (position : ProgramAt whole program) : Avoids templates program := by
+  intro nested inside pattern member
+  exact avoids nested (position.trans inside) pattern member
+
+end MicroCFTA.SourcePruningTemplates

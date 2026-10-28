@@ -1,0 +1,9 @@
+/-- An actual shorter edge schedule fits the planned edge endpoint. -/
+theorem head_padding (seed : Seed) (inherited actualCost : Nat)
+    (bounded : actualCost ≤ edgeCount seed inherited) :
+    Le (advance seed actualCost).2 (afterHead seed inherited).2 ∧
+      (advance seed actualCost).1 ⊆ (afterHead seed inherited).1 :=
+  ⟨SourcePruningEnumerationIncomingReservation.advance_count_profile_mono seed bounded,
+    SourcePruningEnumerationIncomingReservation.advance_count_alphabet_mono seed bounded⟩
+
+/-- A mass bound at the actual receipt bounds its depth-one callback count. -/

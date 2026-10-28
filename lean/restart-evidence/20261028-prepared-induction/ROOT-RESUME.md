@@ -1,0 +1,11 @@
+# Prepared finite induction checkpoint: PROGRESS
+
+Whole-CFTA goal ACTIVE. Source0a7cb26721d37832b3654decd70c9fb73ab0d256 already pushed toformalize. Read lean/notes-current-prepared-induction.md, NEXT-PROMPT, HANDOFF and FINDINGS. Preserve optimized interned core, all older constructor/equality proofs, counterexamples, repairs, drafts and frozen evidence. No Haskell change or new fix.
+
+PreparedRecursive.finite_complete now discharges its own smaller-depth Complete by natural-depth induction. Original Packet/Fits/known/selection bounds/mass/newpreparedreservation derive stable actual finite execution and each output's full resources. Actual normalization/ordinary/opaque/terminal/parked/rejected/stop/done/stuck routes included. No Proper/futurePost/outputmodel/history admission or oldfallback. Exhausted/unsupported/empty outcomes permitted. Model soundness and original accepted-output coverage remain open; older arity/ResourceHistory/carrier/rendering results do not transfer automatically.
+
+20modules+Audit21strictPASS; full4379jobs80859deps. Public441blocks41defs1774860B d411fdb6d089bd846032dcfc35163bc2229d7cc7ba74c6500daefc41dd0a33e0, exact1582151prefix. Root read13printed definitions+7root theorem blocks; owner scopes38+12+7public blocks. New192709B appendix retained unelided.4358oldnonAuditLean207strong810Haskell retain bytes.49commands7failures all kept; complete failed logs read before repair; serial measured4GiB max/high, swap0. No live compiler/native handles.
+
+Next compose same original-model path and model soundness through prepared siblings/callbacks/opaque/parked execution. Derive original accepted-term depth and permitted policy origins, then public APIs/rank/sample/physical Haskell correspondence. Keep whole goal active. Do not assume future desired success/Post/history/output models. Do not pause or mark complete.
+
+Root solely compiles/builds/native-checks/edits repository/Git/network/board. Three current owner review subtrees remain OPEN until final exact pins/seals and WRITEHALT. Root reads full final reports/seals BEFORE snapshot. Freeze ends ALL current TEMP writes. Documentation/evidence publication receipts and finalstatus remain OUTSIDE. Standing authorization permits nonforce git@github.com:TharkunAB/cfta.git refs/heads/formalize pushes. Finish archive+docs publication and board readback before final status.

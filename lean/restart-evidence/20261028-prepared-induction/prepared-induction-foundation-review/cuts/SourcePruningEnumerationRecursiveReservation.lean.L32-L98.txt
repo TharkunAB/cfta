@@ -1,0 +1,67 @@
+/-- The current seed bounds one original edge's complete mixed-query cost. -/
+noncomputable def edgeCount (seed : Seed) (inherited : Nat) : Nat :=
+  scalar seed.2 * (inherited + guardWidth seed.1 + 1)
+
+/-- The edge phase precedes the callback phase. -/
+noncomputable def afterHead (seed : Seed) (inherited : Nat) : Seed :=
+  advance seed (edgeCount seed inherited)
+
+/-- Each sibling starts from the same captured mass and inherited bucket. -/
+noncomputable def massCeil (seed : Seed) (capturedMass inherited : Nat) : Nat :=
+  capturedMass + scalar seed.2 * (inherited + guardWidth seed.1)
+
+/-- The callback's depth-one scan is bounded before its actual cache exists. -/
+noncomputable def callbackCount (seed : Seed) (capturedMass inherited : Nat) : Nat :=
+  SourcePruningEnumerationOriginalForecast.count ((afterHead seed inherited).1, headProfile (afterHead seed inherited).2)
+    (massCeil seed capturedMass inherited)
+
+/-- Narrowing changes the profile before the callback's mixed-query schedule. -/
+noncomputable def afterHook (seed : Seed) (capturedMass inherited : Nat) : Seed :=
+  advance ((afterHead seed inherited).1, headProfile (afterHead seed inherited).2) (callbackCount seed capturedMass inherited)
+
+/-- Current reservations cover the edge and the subsequent callback separately. -/
+def Reserved (bits : Nat) (seed : Seed) (capturedMass inherited : Nat) : Prop :=
+  SourcePruningEnumerationIncomingReservation.Reserved bits seed (edgeCount seed inherited) ∧
+    SourcePruningEnumerationIncomingReservation.Reserved bits ((afterHead seed inherited).1, headProfile (afterHead seed inherited).2)
+      (callbackCount seed capturedMass inherited)
+
+/-- A longer inherited bound retains the current edge-count bound. -/
+theorem edgeCount_mono (seed : Seed) {first last : Nat} (lengths : first ≤ last) :
+    edgeCount seed first ≤ edgeCount seed last :=
+  Nat.mul_le_mul_left _ (Nat.add_le_add_right (Nat.add_le_add_right lengths _) 1)
+
+/-- Larger original scalar inputs retain the receipt mass ceiling at the same seed. -/
+theorem massCeil_mono (seed : Seed) {firstMass lastMass firstLength lastLength : Nat}
+    (masses : firstMass ≤ lastMass) (lengths : firstLength ≤ lastLength) :
+    massCeil seed firstMass firstLength ≤ massCeil seed lastMass lastLength :=
+  Nat.add_le_add masses (Nat.mul_le_mul_left _ (Nat.add_le_add_right lengths _))
+
+/-- The edge phase retains every original numeric and guard bound. -/
+theorem afterHead_ge (seed : Seed) (inherited : Nat) :
+    Le seed.2 (afterHead seed inherited).2 ∧ seed.1 ⊆ (afterHead seed inherited).1 :=
+  ⟨SourcePruningEnumerationIncomingReservation.advance_profile_ge seed (edgeCount seed inherited),
+    SourcePruningEnumerationIncomingReservation.advance_alphabet_ge seed (edgeCount seed inherited)⟩
+
+/-- The callback phase retains the full edge-phase bounds. -/
+theorem afterHead_le_afterHook (seed : Seed) (capturedMass inherited : Nat) :
+    Le (afterHead seed inherited).2 (afterHook seed capturedMass inherited).2 ∧
+      (afterHead seed inherited).1 ⊆ (afterHook seed capturedMass inherited).1 :=
+  ⟨(SourceCurrentConstrainedCapEditForecast.headProfile_ge (afterHead seed inherited).2).trans
+      (SourcePruningEnumerationIncomingReservation.advance_profile_ge
+        ((afterHead seed inherited).1, headProfile (afterHead seed inherited).2) (callbackCount seed capturedMass inherited)),
+    SourcePruningEnumerationIncomingReservation.advance_alphabet_ge
+      ((afterHead seed inherited).1, headProfile (afterHead seed inherited).2) (callbackCount seed capturedMass inherited)⟩
+
+/-- A completed stage retains every earlier bound for a stopped path or the next sibling. -/
+theorem afterHook_ge (seed : Seed) (capturedMass inherited : Nat) :
+    Le seed.2 (afterHook seed capturedMass inherited).2 ∧
+      seed.1 ⊆ (afterHook seed capturedMass inherited).1 :=
+  ⟨(afterHead_ge seed inherited).1.trans (afterHead_le_afterHook seed capturedMass inherited).1,
+    fun _ member => (afterHead_le_afterHook seed capturedMass inherited).2
+      ((afterHead_ge seed inherited).2 member)⟩
+
+/-- An actual shorter edge schedule fits the planned edge endpoint. -/
+theorem head_padding (seed : Seed) (inherited actualCost : Nat)
+    (bounded : actualCost ≤ edgeCount seed inherited) :
+    Le (advance seed actualCost).2 (afterHead seed inherited).2 ∧
+      (advance seed actualCost).1 ⊆ (afterHead seed inherited).1 :=

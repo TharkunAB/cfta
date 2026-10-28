@@ -1,0 +1,11 @@
+MicroCFTA.SourcePruningEnumerationPreparedReservation.ScanReserved.tail {bits depth capturedMass inherited count : Nat}
+  {seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed}
+  (reservation :
+    MicroCFTA.SourcePruningEnumerationPreparedReservation.ScanReserved bits depth seed capturedMass inherited
+      (count + 1)) :
+  MicroCFTA.SourcePruningEnumerationPreparedReservation.ScanReserved bits depth
+    (MicroCFTA.SourcePruningEnumerationPreparedReservation.step depth seed capturedMass inherited) capturedMass
+    inherited count
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.ScanReserved.tail' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

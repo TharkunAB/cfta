@@ -1,0 +1,12 @@
+MicroCFTA.SourcePruningEnumerationPreparedReservation.first_le_final (depth : Nat)
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed) (ceiling : Nat) :
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (MicroCFTA.SourcePruningEnumerationPreparedReservation.step depth
+          (MicroCFTA.SourcePruningEnumerationPreparedReservation.preparedSeed seed) ceiling ceiling).snd
+      (MicroCFTA.SourcePruningEnumerationPreparedReservation.final (depth + 1) seed ceiling).snd ∧
+    (MicroCFTA.SourcePruningEnumerationPreparedReservation.step depth
+          (MicroCFTA.SourcePruningEnumerationPreparedReservation.preparedSeed seed) ceiling ceiling).fst ⊆
+      (MicroCFTA.SourcePruningEnumerationPreparedReservation.final (depth + 1) seed ceiling).fst
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.first_le_final' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

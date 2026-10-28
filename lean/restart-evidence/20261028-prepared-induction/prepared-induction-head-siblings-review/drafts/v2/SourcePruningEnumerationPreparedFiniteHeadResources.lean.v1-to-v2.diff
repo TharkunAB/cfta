@@ -1,0 +1,20 @@
+--- historical-v1-old-forecast
++++ v2-new-prepared-forecast
+@@ -35,7 +35,7 @@
+ local notation "guardWidth" => SourcePruningEnumerationGuardWidth.width
+ local notation "suspendedBound" => SourcePruningEnumerationPrefixAdmission.suspendedBound
+ local notation "afterHead" => SourcePruningEnumerationRecursiveReservation.afterHead
+-local notation "finiteStep" => SourcePruningEnumerationFiniteReservation.step
++local notation "finiteStep" => SourcePruningEnumerationPreparedReservation.step
+ local notation "massCeil" => SourcePruningEnumerationRecursiveReservation.massCeil
+ variable {Typing Key : Type} {bits : Nat}
+ variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+@@ -69,7 +69,7 @@
+     (selectionLength : ∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length)
+     (capturedMass inherited : Nat) (initialMass : suspendedBound before.core ≤ capturedMass)
+     (inheritedLength : scs.length ≤ inherited)
+-    (reserved : SourcePruningEnumerationFiniteReservation.HeadReserved bits recursiveFuel seed capturedMass inherited) :
++    (reserved : SourcePruningEnumerationPreparedReservation.HeadReserved bits recursiveFuel seed capturedMass inherited) :
+     ∃ (bound : Nat) (receipt : Receipt (bits + 2)) (middleCaller : Caller (bits + 2))
+       (saved : Queries) (middleMemos : Memos) (middleInventory : Inventory),
+       (∀ extra, SourcePruningEnumerationCapturedEdge.run checkEmpty

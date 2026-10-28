@@ -1,0 +1,9 @@
+MicroCFTA.SourcePruningEnumerationPreparedReservation.stage_succ_right (depth : Nat)
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed) (capturedMass inherited count : Nat) :
+  MicroCFTA.SourcePruningEnumerationPreparedReservation.stage depth seed capturedMass inherited (count + 1) =
+    MicroCFTA.SourcePruningEnumerationPreparedReservation.step depth
+      (MicroCFTA.SourcePruningEnumerationPreparedReservation.stage depth seed capturedMass inherited count) capturedMass
+      inherited
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.stage_succ_right' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

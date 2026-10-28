@@ -1,0 +1,38 @@
+MicroCFTA.SourcePruningEnumerationPreparedRecursive.finish_resources_general {Typing : Type} {width : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (original : MicroCFTA.SourceCurrentAllocatedPartialState.State width) (uv : Nat)
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed)
+  (processed : List (MicroCFTA.SourcePruningEnumerationSelectedEdge.Result width))
+  (outputs : List (MicroCFTA.SourcePruningEnumerationRecursive.Output width Typing))
+  (afterCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (next : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (final : MicroCFTA.EndpointMemoGateTrace.Memos)
+  (result :
+    MicroCFTA.SourcePruningEnumerationNativeContinuations.Result
+      (MicroCFTA.SourcePruningEnumerationRecursive.Output width Typing)
+      (MicroCFTA.SourcePruningEnumerationPreparedRecursive.Failure width Typing) width)
+  (post : MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver next original afterCaller final)
+  (bounded : MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits seed.snd afterCaller.checked)
+  (known :
+    MicroCFTA.SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.fst) afterCaller.checked.native.machine.heap)
+  (outputResources :
+    ∀ (output : MicroCFTA.SourcePruningEnumerationRecursive.Output width Typing),
+      output ∈ outputs →
+        MicroCFTA.SourcePruningEnumerationRecursive.OutputResources formulas solver original seed output)
+  (shape :
+    result =
+        MicroCFTA.SourcePruningEnumerationNativeContinuations.Result.complete processed outputs afterCaller
+          final.query ∨
+      ∃ current,
+        result = MicroCFTA.SourcePruningEnumerationNativeContinuations.Result.stopped processed outputs current ∧
+          (MicroCFTA.SourcePruningEnumerationPreparedRecursive.endpoint current = none ∨
+            MicroCFTA.SourcePruningEnumerationPreparedRecursive.endpoint current = some (afterCaller, final.query))) :
+  MicroCFTA.SourcePruningEnumerationPreparedRecursive.OutcomeResources formulas solver original seed
+    (MicroCFTA.SourcePruningEnumerationPreparedRecursive.finish uv result)
+'MicroCFTA.SourcePruningEnumerationPreparedRecursive.finish_resources_general' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

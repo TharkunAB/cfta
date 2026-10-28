@@ -1,0 +1,43 @@
+    stage depth seed capturedMass inherited (count + 1) =
+      step depth (stage depth seed capturedMass inherited count) capturedMass inherited :=
+  stage_add depth seed capturedMass inherited count 1
+
+/-- The first narrowed seed retains all original numeric and guard bounds. -/
+theorem narrowSeed_ge (seed : Seed) :
+    Le seed.2 (narrowSeed seed).2 ∧ seed.1 ⊆ (narrowSeed seed).1 := by
+  change Le seed.2 (SourceCurrentConstrainedCapEditForecast.headProfile seed.2) ∧ seed.1 ⊆ seed.1
+  constructor
+  · exact SourceCurrentConstrainedCapEditForecast.headProfile_ge seed.2
+  · exact fun _ member => member
+
+/-- Every finite-depth forecast retains its original numeric profile and alphabet. -/
+theorem final_ge (depth : Nat) (seed : Seed) (ceiling : Nat) :
+    Le seed.2 (final depth seed ceiling).2 ∧ seed.1 ⊆ (final depth seed ceiling).1 := by
+  induction depth generalizing seed ceiling with
+  | zero => exact ⟨Le.refl _, fun _ member => member⟩
+  | succ depth ih =>
+      have growth : ∀ current : Seed,
+          Le current.2 (step depth current ceiling ceiling).2 ∧
+            current.1 ⊆ (step depth current ceiling ceiling).1 := by
+        intro current
+        have head := SourcePruningEnumerationRecursiveReservation.afterHead_ge current ceiling
+        have callback := ih (afterHead current ceiling) (massCeil current ceiling ceiling)
+        exact ⟨head.1.trans callback.1, fun _ member => callback.2 (head.2 member)⟩
+      have later := iterate_ge (fun current => step depth current ceiling ceiling) growth
+        (narrowSeed seed) (rows seed)
+      have first := narrowSeed_ge seed
+      rw [final_succ]
+      exact ⟨first.1.trans later.1, fun _ member => later.2 (first.2 member)⟩
+
+/-- The completed head fits the following smaller-depth callback forecast. -/
+theorem afterHead_le_step (depth : Nat) (seed : Seed) (capturedMass inherited : Nat) :
+    Le (afterHead seed inherited).2 (step depth seed capturedMass inherited).2 ∧
+      (afterHead seed inherited).1 ⊆ (step depth seed capturedMass inherited).1 :=
+  final_ge depth (afterHead seed inherited) (massCeil seed capturedMass inherited)
+
+/-- Each paired stage retains its input seed. -/
+theorem step_ge (depth : Nat) (seed : Seed) (capturedMass inherited : Nat) :
+    Le seed.2 (step depth seed capturedMass inherited).2 ∧
+      seed.1 ⊆ (step depth seed capturedMass inherited).1 := by
+  have head := SourcePruningEnumerationRecursiveReservation.afterHead_ge seed inherited
+  have callback := afterHead_le_step depth seed capturedMass inherited

@@ -1,0 +1,9 @@
+theorem StoppedAt.prepend
+    (post : Post formulas solver middleInventory caller middle middleMemos)
+    (headOutputs : List (Output width Typing))
+    {outputs : List (Output width Typing)}
+    {current : Stop (Failure width Typing) width}
+    (certificate : StoppedAt recursiveFuel formulas solver middle before uv
+      (afterHook recursiveFuel seed capturedMass inherited) scs capturedMass inherited index outputs current) :
+    StoppedAt recursiveFuel formulas solver caller before uv seed scs capturedMass inherited (index + 1)
+      (headOutputs ++ outputs) current := by

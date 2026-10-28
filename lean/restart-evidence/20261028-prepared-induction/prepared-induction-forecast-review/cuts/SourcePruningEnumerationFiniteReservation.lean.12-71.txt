@@ -1,0 +1,60 @@
+open SourceCurrentAllocatedNativeResourceForecast (Le Room)
+open SourcePruningEnumerationIncomingReservation (Seed)
+attribute [local irreducible] SourcePruningEnumerationRecursiveReservation.afterHead
+attribute [local irreducible] SourceCurrentConstrainedCapEditForecast.headProfile
+local notation "afterHead" => SourcePruningEnumerationRecursiveReservation.afterHead
+local notation "edgeCount" => SourcePruningEnumerationRecursiveReservation.edgeCount
+local notation "massCeil" => SourcePruningEnumerationRecursiveReservation.massCeil
+local notation "narrowSeed" => SourcePruningEnumerationExpansionAdmission.narrowSeed
+local notation "scalar" => SourceCurrentConstrainedCapTargetForecast.scalar
+
+/-- Iterate one fixed seed transition in its original order. -/
+def iterate (next : Seed → Seed) (seed : Seed) : Nat → Seed
+  | 0 => seed
+  | count + 1 => iterate next (next seed) count
+
+/-- An empty schedule retains its original seed. -/
+theorem iterate_zero (next : Seed → Seed) (seed : Seed) : iterate next seed 0 = seed := rfl
+
+/-- The first transition precedes the remaining schedule. -/
+theorem iterate_succ (next : Seed → Seed) (seed : Seed) (count : Nat) :
+    iterate next seed (count + 1) = iterate next (next seed) count := rfl
+
+/-- Consecutive parts of one schedule share their exact intermediate seed. -/
+theorem iterate_add (next : Seed → Seed) (seed : Seed) (first last : Nat) :
+    iterate next seed (first + last) = iterate next (iterate next seed first) last := by
+  induction first generalizing seed with
+  | zero => simp only [Nat.zero_add, iterate]
+  | succ first ih => simpa only [Nat.succ_add, iterate] using ih (next seed)
+
+/-- A growing transition retains the original profile and alphabet at every entry. -/
+theorem iterate_ge (next : Seed → Seed)
+    (growth : ∀ seed, Le seed.2 (next seed).2 ∧ seed.1 ⊆ (next seed).1)
+    (seed : Seed) (count : Nat) :
+    Le seed.2 (iterate next seed count).2 ∧ seed.1 ⊆ (iterate next seed count).1 := by
+  induction count generalizing seed with
+  | zero => exact ⟨Le.refl _, fun _ member => member⟩
+  | succ count ih =>
+      have first := growth seed
+      have later := ih (next seed)
+      exact ⟨first.1.trans later.1, fun _ member => later.2 (first.2 member)⟩
+
+/-- One extra sibling slot also pays a parked expansion when no ordinary row exists. -/
+def rows (seed : Seed) : Nat := scalar (narrowSeed seed).2 + 1
+
+/-- The original mass ceiling and depth determine the complete finite forecast. -/
+noncomputable def final : Nat → Seed → Nat → Seed
+  | 0, seed, _ceiling => seed
+  | depth + 1, seed, ceiling =>
+      iterate (fun current => final depth (afterHead current ceiling) (massCeil current ceiling ceiling))
+        (narrowSeed seed) (rows seed)
+
+/-- One sibling pays its head and then its smaller-depth callback. -/
+noncomputable def step (depth : Nat) (seed : Seed) (capturedMass inherited : Nat) : Seed :=
+  final depth (afterHead seed inherited) (massCeil seed capturedMass inherited)
+
+/-- A sibling schedule retains the same captured mass and inherited length bounds. -/
+noncomputable def stage (depth : Nat) (seed : Seed) (capturedMass inherited count : Nat) : Seed :=
+  iterate (fun current => step depth current capturedMass inherited) seed count
+
+/-- Depth zero retains the literal original seed. -/

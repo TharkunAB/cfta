@@ -1,0 +1,20 @@
+--- opaque-callback-v2
++++ opaque-callback-v3
+@@ -9,7 +9,7 @@
+ its derived Packet and the new smaller-depth contract at one common bound.
+ -/
+ namespace MicroCFTA.SourcePruningEnumerationPreparedNativeHookResources
+-open EnumerationState EnumerationSchedule InternedConstructorTemplates
++open EnumerationState EnumerationSchedule InternedConstructorTemplates InternedProbeProvenance
+ open SourceCurrentAllocatedNativeInventoryState (Inventory)
+ open SourceCurrentAllocatedPartialInvariant (Post)
+ open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
+@@ -151,7 +151,7 @@
+   let folded : FoldResult (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2) :=
+     match (generalizing := false) receipt with
+     | .complete _ _ _ _ =>
+-        match outcome with
++        match (generalizing := false) outcome with
+         | .complete outputs reached queries => .complete [receipt] outputs reached queries
+         | .stopped outputs reason endpoint => .stopped [] outputs (.continuation receipt reason endpoint)
+     | _ => .complete [receipt] [] middleCaller middleMemos.query

@@ -1,0 +1,26 @@
+MicroCFTA.SourcePruningEnumerationPreparedFiniteSiblingResources.ReceiptAt.prepend {width : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {recursiveFuel : Nat} {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {caller middle : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {uv : Nat} {seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed} {capturedMass inherited index : Nat}
+  {scs : List MicroCFTA.EnumerationState.Suspended}
+  {middleInventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {middleMemos : MicroCFTA.EndpointMemoGateTrace.Memos}
+  (post :
+    MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver middleInventory caller middle middleMemos)
+  {receipt : MicroCFTA.SourcePruningEnumerationSelectedEdge.Result width}
+  (certificate :
+    MicroCFTA.SourcePruningEnumerationPreparedFiniteSiblingResources.ReceiptAt recursiveFuel formulas solver middle
+      before uv (MicroCFTA.SourcePruningEnumerationPreparedReservation.step recursiveFuel seed capturedMass inherited)
+      scs capturedMass inherited index receipt) :
+  MicroCFTA.SourcePruningEnumerationPreparedFiniteSiblingResources.ReceiptAt recursiveFuel formulas solver caller before
+    uv seed scs capturedMass inherited (index + 1) receipt
+'MicroCFTA.SourcePruningEnumerationPreparedFiniteSiblingResources.ReceiptAt.prepend' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

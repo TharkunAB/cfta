@@ -1,0 +1,60 @@
+from pathlib import Path
+import hashlib,json
+root=Path('/home/tritlo/Code/mcfta');area=Path('/tmp/mcfta-prepared-induction-20261028');review=area/'root-source-review';review.mkdir()
+def digest(b):return hashlib.sha256(b).hexdigest()
+def write_json(p,x):p.write_text(json.dumps(x,indent=2)+'\n')
+raw=(area/'new-public-blocks.txt').read_bytes();blocks=json.loads((area/'new-public-block-index.json').read_text())
+root_names={'resume_parked','resume_depth_stable','parked_finite_complete_resources','selected_finite_complete_resources','run_finite_succ_complete_resources','finite_complete','run_finite_complete_resources'}
+selected=[b for b in blocks if b['name'].split('.')[-1] in root_names];assert len(selected)==7
+scope={'source':str(area/'new-public-blocks.txt'),'bytes':len(raw),'sha256':digest(raw),'definitions_prefix':{'byte_start':0,'byte_end_exclusive':blocks[0]['byte_start']},'complete_theorem_blocks':selected,'scope':'Root read all13 printed definitions and all7 root composition/induction theorem blocks in full. Owners read their38/12/7 complete theorem blocks. Root does not claim a whole public-appendix read.'}
+write_json(area/'root-public-readback.json',scope)
+records=[]
+for module in json.loads((area/'modules.json').read_text()):
+ p=root/'lean/MicroCFTA'/(module+'.lean');b=p.read_bytes();q=review/'sources'/p.name;q.parent.mkdir(exist_ok=True);q.write_bytes(b)
+ records.append(dict(source=str(p),whole=dict(path=str(q.relative_to(review)),bytes=len(b),sha256=digest(b)),cuts=[],read_scope='Whole initial proof or whole copied old proof plus every exact generation/revision delta, then complete final public declaration where assigned. Final source also reviewed in full by owners.'))
+for name in ['root-public-readback.json','public-validation.json','source-validation.json','preservation-validation.json','actual-commands.json','document-validation.json']:
+ p=area/name;b=p.read_bytes();q=review/'sources'/name;q.write_bytes(b);records.append(dict(source=str(p),whole=dict(path=str(q.relative_to(review)),bytes=len(b),sha256=digest(b)),cuts=[],read_scope='Current complete validation or read-scope metadata.'))
+p=area/'new-public-blocks.txt';cuts=[]
+intervals=[('all13definitions',0,blocks[0]['byte_start'])]+[(b['name'],b['byte_start'],b['byte_end_exclusive']) for b in selected]
+for label,first,last in intervals:
+ q=review/'public-cuts'/(label+'.txt');q.parent.mkdir(exist_ok=True);b=raw[first:last];q.write_bytes(b);cuts.append(dict(path=str(q.relative_to(review)),bytes=len(b),sha256=digest(b),byte_start=first,byte_end_exclusive=last))
+records.append(dict(source=str(p),source_bytes=len(raw),source_sha256=digest(raw),cuts=cuts,read_scope=scope['scope']))
+p=root/'lean/notes-current-prepared-induction.md';b=p.read_bytes();q=review/'sources'/p.name;q.write_bytes(b);records.append(dict(source=str(p),whole=dict(path=str(q.relative_to(review)),bytes=len(b),sha256=digest(b)),cuts=[],read_scope='Whole final13272-byte note read.'))
+for x in json.loads((area/'document-validation.json').read_text()):
+ if 'inserted_bytes' not in x:continue
+ p=root/x['path'];b=p.read_bytes();old=(area/'prior-documents'/x['path']).read_bytes();start=x['offset'];end=start+x['inserted_bytes'];assert b[:start]+b[end:]==old;ins=b[start:end];q=review/'insertions'/(x['path'].replace('/','__')+'.txt');q.parent.mkdir(exist_ok=True);q.write_bytes(ins)
+ records.append(dict(source=str(p),source_bytes=len(b),source_sha256=digest(b),reconstruction=dict(prior=dict(path=str(area/'prior-documents'/x['path']),bytes=len(old),sha256=digest(old)),insert=dict(path=str(q),bytes=len(ins),sha256=digest(ins)),offset=start),cuts=[dict(path=str(q.relative_to(review)),bytes=len(ins),sha256=digest(ins),byte_start=start,byte_end_exclusive=end)],read_scope='Exact2346-byte common insertion or4717-byte FINDINGS insertion read. Common bytes are identical in8 documents. Prior body inverse-preserved, no whole-old-document review claim.'))
+p=root/'cfta/src/Data/CFTA/Enumeration.hs';b=p.read_bytes();cut=b''.join(b.splitlines(keepends=True)[869:945]);q=review/'sources/Enumeration-870-945.hs';q.write_bytes(cut);records.append(dict(source=str(p),source_bytes=len(b),source_sha256=digest(b),cuts=[dict(path=str(q.relative_to(review)),bytes=len(cut),sha256=digest(cut),first_line=870,last_line=945)],read_scope='Only current selected expansion/callback API lines870-945 read.'))
+write_json(review/'source-index.json',dict(sources=records))
+(review/'report.md').write_text('''# Prepared finite induction review
+
+CLEAR at the recorded scope. Twenty installed new modules and Audit pass21strict checks. Full Audit4379jobs checks80859theorem dependencies. Only standard propext, Classical.choice and Quot.sound occur. All4358prior non-Audit Lean sources,207strong modules and810Haskell source/evidence files retain bytes. Audit adds20imports only. There is no Haskell patch or native test/benchmark. FINDINGS retains earlier LPO/KBO Natural repairs and the current external integration boundaries.
+
+The actual new PreparedRecursive worker now has a genuine finite-depth resource induction. finite_complete has NO Complete input; Nat induction derives the smaller-depth instance. The public run theorem takes original Packet/Fits/known guards/selection bounds/mass ceiling/new PreparedReservation. It supplies one stable actual result for all larger work fuels and resources at the actual reached caller and each emitted output. It permits empty, exhausted and unsupported outcomes. It supplies no original accepted-output existence, original-term depth sufficiency or general output-language model. Old arity/carrier/ResourceHistory/rendering corollaries are not silently reused.
+
+The new forecast pays narrowing and native normalization at every positive depth. Same captured mass and inherited ceiling feed each head/callback stage. Returned preparation Fits/Available bound the ACTUAL prepared row count. Original decoded value is never assumed ordinary. Complete preparation and sibling packets remain under the SAME witnesses before semantic observers. The same preparation witness feeds ordinary or opaque/terminal execution. Callback order uses actual recordTypes singleton, actual returned frame/metadata and new smaller-depth runtime. Siblings retain captured cache/metadata and pass actual native Caller/full Memos effects before the suffix.
+
+The generic opaque/terminal resource producer uses actual general child completion ONCE without ProperState. Empty returns are rejected. Raw=[] retains its actual native endpoint/attached cache/stopped receipt. Singleton derives SAME captured-target finalization, Pending/ordered invariant and full Packet, with actual counter and suspended mass bounds. IncomingAvoid follows from original selection and actual RenderStable. New finite callback consumes this derived Packet, head padding and massCeil. No future desired Post/cache/model/history/branch-success admission occurs. The separate opaque-model theorem keeps its earlier ProperState boundary and represents original terms in EMPTYbucket holes; all completions of those holes are not certified.
+
+Actual prefix, preparation, branch and smaller-depth observations align at genuine summed work bounds. Parked and rejected paths keep their exact results. All branch stops retain literal output prefixes, reasons and optional endpoints. Outside sufficient-work conditions an optional finalizer None can hide earlier successful child work; no arbitrary-fuel endpoint-retention theorem is claimed.
+
+Public441blocks41definitions1774860B d411fdb6d089bd846032dcfc35163bc2229d7cc7ba74c6500daefc41dd0a33e0 retains exact1582151B prior prefix. New192709B appendix is unelided. Root read all13definition prints and all7root composition/induction blocks. Owner scopes cover38forecast/preparation,12foundation/opaque and7head/sibling/ordinary blocks. The whole appendix is retained, but no whole-root-appendix read is claimed. Root read all initial proofs or whole copied old proofs and all generation/final deltas. Three owners reviewed final installed source. The whole13272B note and both exact insertion payloads were read. Nine old document bodies inverse-preserved;8common insertions share identical2346B, FINDINGS4717B.
+
+All49actual compiler/build/public commands and7failed strict checks remain with their exact source/raw log and measured4GiB memory.max/high, swap0. Root read each ENTIRE failed log before repair, including largest52956B in three ranges. Repairs: parked resume argument order; opaque Bool/dependent matcher equations; explicit Available namespace; local callback matcher by cases; prepared caller heap projection; forecast unfolding control; replacement of unavailable swap tactic. No public statement was weakened; expansion's entire declaration stays byte-identical. All draft histories remain, including untested old-forecast variants. No sorry/admit/custom axiom/native_decide/heartbeat override/linter suppression. The old replay warning remains unchanged.
+
+Source commits already pushed through0a7cb26721d37832b3654decd70c9fb73ab0d256. Whole-CFTA goal ACTIVE, checkpointPROGRESS. Next: same original-model composition through actual prepared recursion, original-term sufficient depth and permitted policy origins. Public APIs/rank/sample/physical Haskell correspondence remain open. All older evidence stays frozen. New publication receipts must remain outside the frozen area.
+''')
+write_json(area/'seal-supplements.json',dict(reviews={}))
+(area/'ROOT-RESUME.md').write_text('''# Prepared finite induction checkpoint: PROGRESS
+
+Whole-CFTA goal ACTIVE. Source0a7cb26721d37832b3654decd70c9fb73ab0d256 already pushed toformalize. Read lean/notes-current-prepared-induction.md, NEXT-PROMPT, HANDOFF and FINDINGS. Preserve optimized interned core, all older constructor/equality proofs, counterexamples, repairs, drafts and frozen evidence. No Haskell change or new fix.
+
+PreparedRecursive.finite_complete now discharges its own smaller-depth Complete by natural-depth induction. Original Packet/Fits/known/selection bounds/mass/newpreparedreservation derive stable actual finite execution and each output's full resources. Actual normalization/ordinary/opaque/terminal/parked/rejected/stop/done/stuck routes included. No Proper/futurePost/outputmodel/history admission or oldfallback. Exhausted/unsupported/empty outcomes permitted. Model soundness and original accepted-output coverage remain open; older arity/ResourceHistory/carrier/rendering results do not transfer automatically.
+
+20modules+Audit21strictPASS; full4379jobs80859deps. Public441blocks41defs1774860B d411fdb6d089bd846032dcfc35163bc2229d7cc7ba74c6500daefc41dd0a33e0, exact1582151prefix. Root read13printed definitions+7root theorem blocks; owner scopes38+12+7public blocks. New192709B appendix retained unelided.4358oldnonAuditLean207strong810Haskell retain bytes.49commands7failures all kept; complete failed logs read before repair; serial measured4GiB max/high, swap0. No live compiler/native handles.
+
+Next compose same original-model path and model soundness through prepared siblings/callbacks/opaque/parked execution. Derive original accepted-term depth and permitted policy origins, then public APIs/rank/sample/physical Haskell correspondence. Keep whole goal active. Do not assume future desired success/Post/history/output models. Do not pause or mark complete.
+
+Root solely compiles/builds/native-checks/edits repository/Git/network/board. Three current owner review subtrees remain OPEN until final exact pins/seals and WRITEHALT. Root reads full final reports/seals BEFORE snapshot. Freeze ends ALL current TEMP writes. Documentation/evidence publication receipts and finalstatus remain OUTSIDE. Standing authorization permits nonforce git@github.com:TharkunAB/cfta.git refs/heads/formalize pushes. Finish archive+docs publication and board readback before final status.
+''')
+print(json.dumps({'status':'pass','root_source_records':len(records),'root_public_theorem_blocks':len(selected),'definition_prefix_bytes':blocks[0]['byte_start']}))

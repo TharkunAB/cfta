@@ -1,0 +1,11 @@
+MicroCFTA.SourcePruningEnumerationPreparedReservation.count_mono (depth : Nat)
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed) (capturedMass inherited : Nat) {first last : Nat}
+  (counts : first ≤ last) :
+  MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le
+      (MicroCFTA.SourcePruningEnumerationPreparedReservation.stage depth seed capturedMass inherited first).snd
+      (MicroCFTA.SourcePruningEnumerationPreparedReservation.stage depth seed capturedMass inherited last).snd ∧
+    (MicroCFTA.SourcePruningEnumerationPreparedReservation.stage depth seed capturedMass inherited first).fst ⊆
+      (MicroCFTA.SourcePruningEnumerationPreparedReservation.stage depth seed capturedMass inherited last).fst
+'MicroCFTA.SourcePruningEnumerationPreparedReservation.count_mono' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

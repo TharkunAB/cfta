@@ -1,0 +1,17 @@
+--- old-declaration
++++ new-actual-prepared-worker-declaration
+@@ -1,4 +1,4 @@
+-theorem head_finite_complete_resources_prepared
++theorem head_finite_complete_resources
+     (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+     (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+     (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+@@ -26,7 +26,7 @@
+     (selectionLength : ∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length)
+     (capturedMass inherited : Nat) (initialMass : suspendedBound before.core ≤ capturedMass)
+     (inheritedLength : scs.length ≤ inherited)
+-    (reserved : SourcePruningEnumerationFiniteReservation.HeadReserved bits recursiveFuel seed capturedMass inherited) :
++    (reserved : SourcePruningEnumerationPreparedReservation.HeadReserved bits recursiveFuel seed capturedMass inherited) :
+     ∃ (bound : Nat) (receipt : Receipt (bits + 2)) (middleCaller : Caller (bits + 2))
+       (saved : Queries) (middleMemos : Memos) (middleInventory : Inventory),
+       (∀ extra, SourcePruningEnumerationCapturedEdge.run checkEmpty

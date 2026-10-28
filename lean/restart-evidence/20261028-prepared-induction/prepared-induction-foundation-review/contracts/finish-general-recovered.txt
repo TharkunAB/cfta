@@ -1,0 +1,14 @@
+theorem finish_resources_general
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (original : Caller width) (uv : Nat) (seed : Seed)
+    (processed : List (Receipt width)) (outputs : List (Output width Typing))
+    (afterCaller : Caller width) (next : Inventory) (final : Memos)
+    (result : FoldResult (Output width Typing) (Failure width Typing) width)
+    (post : Post formulas solver next original afterCaller final)
+    (bounded : Fits seed.2 afterCaller.checked)
+    (known : Heap (fun guard => guard ∈ seed.1) afterCaller.checked.native.machine.heap)
+    (outputResources : ∀ output ∈ outputs, OutputResources formulas solver original seed output)
+    (shape : result = .complete processed outputs afterCaller final.query ∨
+      ∃ current, result = .stopped processed outputs current ∧
+        (endpoint current = none ∨ endpoint current = some (afterCaller, final.query))) :
+    OutcomeResources formulas solver original seed (finish uv result)

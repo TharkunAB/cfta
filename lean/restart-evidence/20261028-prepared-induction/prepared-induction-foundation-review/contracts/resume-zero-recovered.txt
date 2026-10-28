@@ -1,0 +1,26 @@
+theorem resume_zero_complete_resources
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller width) (memos : Memos) (before : Cached) (metadata : Metadata Typing)
+    (next : Option Next) (profile : Profile) (property : Constraint → Prop)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (bounded : Fits profile caller.checked) (known : Heap property caller.checked.native.machine.heap) :
+    ∃ outcome : Result,
+      (∀ workFuel, resume holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel 0
+        metadata caller memos.query before next = outcome) ∧
+      match outcome with
+      | .complete outputs reached saved =>
+          reached = caller ∧ saved = memos.query ∧ Fits profile reached.checked ∧
+          Heap property reached.checked.native.machine.heap ∧
+          ∀ output ∈ outputs,
+            Packet formulas solver inventory caller memos metadata output.cache ∧
+            output.caller = caller ∧ output.queries = memos.query ∧
+            (output.metadata = none ∨ output.metadata = some metadata) ∧ output.cache = before
+      | .stopped outputs reason endpoint =>
+          ∃ selected, next = some (.expand selected) ∧ outputs = [] ∧
+            reason = .exhausted selected metadata before ∧ endpoint = some (caller, memos.query) ∧
+            Fits profile caller.checked ∧ Heap property caller.checked.native.machine.heap

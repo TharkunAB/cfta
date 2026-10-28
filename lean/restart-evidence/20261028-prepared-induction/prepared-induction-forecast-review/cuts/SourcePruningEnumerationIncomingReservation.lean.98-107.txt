@@ -1,0 +1,10 @@
+  ((reserved_succ_iff bits seed count).mp reservation).2
+
+/-- A reservation covers every shorter initial part of the same schedule. -/
+theorem Reserved.prefix {bits first last : Nat} {seed : Seed}
+    (reservation : Reserved bits seed last) (counts : first ≤ last) : Reserved bits seed first :=
+  fun index less => reservation index (Nat.lt_of_lt_of_le less counts)
+
+/-- A consumed schedule prefix leaves entry Room for each reserved remaining step. -/
+theorem Reserved.after_prefix {bits consumed remaining : Nat} {seed : Seed}
+    (reservation : Reserved bits seed (consumed + remaining)) :

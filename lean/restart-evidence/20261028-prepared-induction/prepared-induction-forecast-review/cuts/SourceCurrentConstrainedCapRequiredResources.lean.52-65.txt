@@ -1,0 +1,14 @@
+  have mass := InternedValueMassHeap.available heap fits.stored _ available
+  have count := InternedStoredEncodingWidth.edges_length rows
+  have enough : profile.mass ≤ scalar profile := SourceCurrentConstrainedCapTargetForecast.scalar_mass profile
+  simp only [InternedValueMass.value] at mass
+  omega
+
+/-- A resident original edge bounds its literal child count before any child scan. -/
+theorem edge_width {profile : Profile} {heap : State Symbol Guard} (fits : HeapFits profile heap)
+    (edge : EdgeValue Symbol Guard) (resident : InternedEdgeResidency.EdgeResident heap edge) :
+    edge.children.length ≤ scalar profile := by
+  have mass := InternedValueMassHeap.resident heap fits.stored edge resident
+  have count := InternedStoredEncodingWidth.values_length edge.children
+  have enough : profile.mass ≤ scalar profile := SourceCurrentConstrainedCapTargetForecast.scalar_mass profile
+  have same : InternedValueMass.edge edge = 1 + InternedValueMass.values edge.children := by cases edge; simp only [InternedValueMass.edge, EdgeValue.children]

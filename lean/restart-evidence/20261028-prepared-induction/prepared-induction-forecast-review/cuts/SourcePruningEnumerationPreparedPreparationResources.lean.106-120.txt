@@ -1,0 +1,15 @@
+theorem selected_length_le {width : Nat} (seed : Seed) (caller : Caller width)
+    (bounded : Fits (preparedSeed seed).2 caller.checked)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (stored selected : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference)
+    (available : Available caller.checked.native.machine.heap (.node entry stored depth free))
+    (lengths : selected.length ≤ stored.length) : selected.length ≤ rows seed := by
+  have heapFits : SourceCurrentConstrainedCapRequiredResources.HeapFits (preparedSeed seed).2
+      caller.checked.native.machine.heap :=
+    SourceCurrentConstrainedCapRequiredResources.of_checked
+      (profile := (preparedSeed seed).2) (before := caller.checked) bounded
+  have count := SourceCurrentConstrainedCapRequiredResources.node_width heapFits available
+  exact Nat.le_trans lengths (Nat.le_trans count (Nat.le_succ _))
+
+end MicroCFTA.SourcePruningEnumerationPreparedReservation

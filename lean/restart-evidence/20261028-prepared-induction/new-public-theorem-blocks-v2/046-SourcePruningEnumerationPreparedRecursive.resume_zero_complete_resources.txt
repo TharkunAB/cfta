@@ -1,0 +1,68 @@
+MicroCFTA.SourcePruningEnumerationPreparedRecursive.resume_zero_complete_resources {Typing Key : Type} {width : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (holeKey : Typing → Nat → Key) (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits :
+    Key →
+      MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        Bool)
+  (graph :
+    MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol)) (checkEmpty : Bool)
+  (edgesOf :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      List
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (stop : Option (MicroCFTA.SourcePruningRecordTypes.Metadata Typing → Nat → Bool))
+  (order : MicroCFTA.SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat)
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width) (memos : MicroCFTA.EndpointMemoGateTrace.Memos)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing) (next : Option MicroCFTA.EnumerationState.Next)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+  (property : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Prop)
+  (packet : MicroCFTA.SourcePruningEnumerationRecursive.Packet formulas solver inventory caller memos metadata before)
+  (bounded : MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile caller.checked)
+  (known : MicroCFTA.SourceEqualityAnnotationHeap.Heap property caller.checked.native.machine.heap) :
+  ∃ outcome,
+    (∀ (workFuel : Nat),
+        MicroCFTA.SourcePruningEnumerationPreparedRecursive.resume holeKey fits admits graph templates checkEmpty
+            edgesOf stop order workFuel 0 metadata caller memos.query before next =
+          outcome) ∧
+      match outcome with
+      | MicroCFTA.SourcePruningEnumerationNativeContinuations.HookResult.complete outputs reached saved =>
+        reached = caller ∧
+          saved = memos.query ∧
+            MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile reached.checked ∧
+              MicroCFTA.SourceEqualityAnnotationHeap.Heap property reached.checked.native.machine.heap ∧
+                ∀ (output : MicroCFTA.SourcePruningEnumerationRecursive.Output width Typing),
+                  output ∈ outputs →
+                    MicroCFTA.SourcePruningEnumerationRecursive.Packet formulas solver inventory caller memos metadata
+                        output.cache ∧
+                      output.caller = caller ∧
+                        output.queries = memos.query ∧
+                          (output.metadata = none ∨ output.metadata = some metadata) ∧ output.cache = before
+      | MicroCFTA.SourcePruningEnumerationNativeContinuations.HookResult.stopped outputs reason endpoint =>
+        ∃ selected,
+          next = some (MicroCFTA.EnumerationState.Next.expand selected) ∧
+            outputs = [] ∧
+              reason = MicroCFTA.SourcePruningEnumerationPreparedRecursive.Failure.exhausted selected metadata before ∧
+                endpoint = some (caller, memos.query) ∧
+                  MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile caller.checked ∧
+                    MicroCFTA.SourceEqualityAnnotationHeap.Heap property caller.checked.native.machine.heap
+'MicroCFTA.SourcePruningEnumerationPreparedRecursive.resume_zero_complete_resources' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

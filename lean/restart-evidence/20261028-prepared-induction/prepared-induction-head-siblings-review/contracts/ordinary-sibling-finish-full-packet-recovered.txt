@@ -1,0 +1,22 @@
+      (∀ extra, SourcePruningEnumerationNativeContinuations.run
+        (continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order (bound + extra) recursiveFuel)
+          graph templates stop order (bound + extra) metadata uv)
+        checkEmpty (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra)
+        uv scs before selectedEdges caller memos.query = result) ∧
+      Post formulas solver next caller afterCaller final ∧
+      Packet formulas solver next afterCaller final metadata before ∧
+      Fits (stage recursiveFuel seed capturedMass inherited selectedEdges.length).2 afterCaller.checked ∧
+      Heap (fun guard => guard ∈ (stage recursiveFuel seed capturedMass inherited selectedEdges.length).1)
+        afterCaller.checked.native.machine.heap ∧
+      processed.length ≤ selectedEdges.length ∧
+      (∀ index receipt, processed[index]? = some receipt →
+        ReceiptAt recursiveFuel formulas solver caller before uv seed scs capturedMass inherited index receipt) ∧
+      (∀ output ∈ outputs, ∃ index, index < selectedEdges.length ∧
+        OutputAt recursiveFuel formulas solver caller seed capturedMass inherited index output) ∧
+      (result = .complete processed outputs afterCaller final.query ∨
+        ∃ current, result = .stopped processed outputs current ∧
+          (endpoint current = none ∨ endpoint current = some (afterCaller, final.query)) ∧
+          StoppedAt recursiveFuel formulas solver caller before uv seed scs capturedMass inherited processed.length outputs current) ∧
+      SourcePruningEnumerationPreparedRecursive.OutcomeResources formulas solver caller
+        (stage recursiveFuel seed capturedMass inherited selectedEdges.length)
+        (SourcePruningEnumerationPreparedRecursive.finish uv result)

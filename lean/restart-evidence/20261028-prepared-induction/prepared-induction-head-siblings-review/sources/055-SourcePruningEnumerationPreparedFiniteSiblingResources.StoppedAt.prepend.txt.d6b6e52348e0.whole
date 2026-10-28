@@ -1,0 +1,30 @@
+MicroCFTA.SourcePruningEnumerationPreparedFiniteSiblingResources.StoppedAt.prepend {Typing : Type} {width : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {recursiveFuel : Nat} {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {caller middle : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {uv : Nat} {seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed} {capturedMass inherited index : Nat}
+  {scs : List MicroCFTA.EnumerationState.Suspended}
+  {middleInventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {middleMemos : MicroCFTA.EndpointMemoGateTrace.Memos}
+  (post :
+    MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver middleInventory caller middle middleMemos)
+  (headOutputs : List (MicroCFTA.SourcePruningEnumerationRecursive.Output width Typing))
+  {outputs : List (MicroCFTA.SourcePruningEnumerationRecursive.Output width Typing)}
+  {current :
+    MicroCFTA.SourcePruningEnumerationNativeContinuations.Stop
+      (MicroCFTA.SourcePruningEnumerationPreparedRecursive.Failure width Typing) width}
+  (certificate :
+    MicroCFTA.SourcePruningEnumerationPreparedFiniteSiblingResources.StoppedAt recursiveFuel formulas solver middle
+      before uv (MicroCFTA.SourcePruningEnumerationPreparedReservation.step recursiveFuel seed capturedMass inherited)
+      scs capturedMass inherited index outputs current) :
+  MicroCFTA.SourcePruningEnumerationPreparedFiniteSiblingResources.StoppedAt recursiveFuel formulas solver caller before
+    uv seed scs capturedMass inherited (index + 1) (headOutputs ++ outputs) current
+'MicroCFTA.SourcePruningEnumerationPreparedFiniteSiblingResources.StoppedAt.prepend' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,25 @@
+/-- Writing an enumerated fragment cannot add pending mass, including at an absent target. -/
+theorem enumerated_mass_le (before : Core) (target : Nat) (fragment : Fragments.Fragment Symbol) :
+    suspendedBound {before with values := before.values.set target (.enumerated fragment)} ≤
+      suspendedBound before := by
+  exact sum_map_set_zero_le (fun value : UVarValue Symbol => match value with
+    | .unenumerated _ scs => scs.length
+    | _ => 0) (.enumerated fragment) rfl before.values target
+
+/-- Every actual finalization keeps the counter and does not increase suspended mass. -/
+theorem run_scalars
+    (heap : InternedConstructorTemplates.State Symbol Constraint) (fuel target : Nat)
+    (fragment : Fragments.Fragment Symbol) (before after : Cached)
+    (observed : run heap fuel target fragment before = some after) :
+    after.core.counter = before.core.counter ∧ suspendedBound after.core ≤ suspendedBound before.core := by
+  unfold run at observed
+  obtain ⟨old, _stored, written⟩ := Option.bind_eq_some_iff.mp observed
+  unfold SourcePruningEnumerationNativeIndex.write at written
+  obtain ⟨flag, _classified, written⟩ := Option.bind_eq_some_iff.mp written
+  obtain ⟨removed, _removedCounts, written⟩ := Option.bind_eq_some_iff.mp written
+  obtain ⟨saved, _savedCounts, afterSame⟩ := Option.bind_eq_some_iff.mp written
+  have cacheSame := Option.some.inj afterSame
+  subst after
+  exact ⟨rfl, enumerated_mass_le before.core target fragment⟩
+
+end MicroCFTA.SourcePruningEnumerationFinalize

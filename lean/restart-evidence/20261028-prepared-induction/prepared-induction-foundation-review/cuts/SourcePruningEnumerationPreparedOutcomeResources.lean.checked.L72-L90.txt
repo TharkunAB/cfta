@@ -1,0 +1,19 @@
+theorem OutcomeResources.mono (numeric : Le seed.2 larger.2)
+    (alphabet : seed.1 ⊆ larger.1)
+    (resources : OutcomeResources formulas solver original seed outcome) :
+    OutcomeResources formulas solver original larger outcome := by
+  obtain ⟨reached, next, final, reachedPost, fits, known, shape⟩ := resources
+  refine ⟨reached, next, final, reachedPost, fits.mono numeric, ?_, ?_⟩
+  · intro key edge found
+    exact alphabet (known key edge found)
+  · cases outcome with
+    | complete outputs caller queries =>
+        obtain ⟨callerSame, querySame, outputsValid⟩ := shape
+        exact ⟨callerSame, querySame,
+          fun output member => (outputsValid output member).mono numeric alphabet⟩
+    | stopped outputs reason endpoint =>
+        obtain ⟨endpointSame, outputsValid⟩ := shape
+        exact ⟨endpointSame,
+          fun output member => (outputsValid output member).mono numeric alphabet⟩
+
+/-- A completed subtree retains the captured sibling packet at its actual native endpoint. -/

@@ -1,5 +1,43 @@
 # cfta formal model
 
+## Finite resource induction for prepared recursive enumeration
+
+Source checkpoint: 0a7cb26721d37832b3654decd70c9fb73ab0d256.
+PreparedRecursive.finite_complete now proves the original-input resource
+contract for every finite recursive expansion budget. Its natural-number
+induction discharges the smaller-depth Complete premise. The final theorem
+has no recursive completion assumption. It uses the actual new worker and
+new Failure type. The old Recursive worker and its proofs remain unchanged.
+
+Original Packet, Fits, known guards, selection bounds, suspended-mass ceiling
+and prepared reservation derive one stable actual outcome at all sufficiently
+large work fuels. The forecast pays narrowing and native normalization at
+every positive depth. It pays each actual head and smaller-depth callback.
+Ordinary, opaque, terminal, Empty, parked and initial stop/done/stuck paths
+are included. No old ordinary fallback replaces opaque or terminal work.
+Each output retains its own full Post, Memos, metadata/cache Packet and
+resource bounds. Stops retain their actual outputs, reason and optional endpoint.
+The resource-only opaque and terminal proofs need no ProperState premise.
+
+This is finite execution and resource closure. Exhausted and unsupported
+outcomes are permitted. It does not prove that an original accepted term
+reaches an output, or that every output has the intended language meaning.
+The largest gap is recursive model soundness and ORIGINAL accepted-output
+coverage with sufficient depth from the original term and permitted policies.
+Older arity, carrier, ResourceHistory and rendering corollaries do not transfer
+automatically to the new worker. Public origins/APIs, ranking, sampling and
+physical Haskell correspondence remain open. The previous conditional
+finite-pruning language preservation theorem remains. Goal ACTIVE;
+checkpoint PROGRESS.
+
+Twenty modules add 64 public theorems and 13 definitions. All 21 final strict
+checks pass. Full Audit passes 4379 jobs and checks 80859 theorem dependencies.
+Public readback has 441 theorem blocks and 41 definitions. Its entire previous
+1582151-byte readback is an exact prefix. All 4358 prior non-Audit Lean sources,
+207 strong modules and 810 tracked Haskell source/evidence files retain bytes.
+No Haskell file changed. Details: `lean/notes-current-prepared-induction.md`.
+
+
 ## Prepared recursive callbacks and original opaque models
 
 Source checkpoint: 9eddb729b6786649df0fcb90e0e329c77a19d585.

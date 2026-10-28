@@ -1,0 +1,70 @@
+import MicroCFTA.SourcePruningEnumerationPrefixAdmission
+import MicroCFTA.SourcePruningEnumerationOriginalForecast
+
+namespace MicroCFTA.SourcePruningEnumerationExpansionAdmission
+open EnumerationState EnumerationCorrectness EnumerationSchedule InternedConstructorTemplates InternedProbeProvenance
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedPartialInvariant (Post)
+open SourcePruningEnumerationIncomingReservation (Seed)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
+open SourceCurrentConstrainedCapEditForecast (headProfile)
+open SourcePruningEnumerationSelectedStep (Result PrefixValid finish runPrefix)
+open SourcePruningEnumerationRecursive (Packet)
+open SourcePruningEnumerationNodes (lookupNode)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Core" => EnumerationState.State Symbol Constraint
+local notation "Heap" => SourceEqualityAnnotationHeap.Heap
+variable {Typing Key : Type} {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+/-- Reserve the ordinary scan after the original narrowing read and rebuild forecast. -/
+def narrowSeed (seed : Seed) : Seed := (seed.1, headProfile seed.2)
+
+/-- Fix the complete scan count before the narrowed caller and rows exist. -/
+noncomputable def count (seed : Seed) (before : Core) : Nat :=
+  SourcePruningEnumerationOriginalForecast.count (narrowSeed seed)
+    (SourcePruningEnumerationPrefixAdmission.suspendedBound before)
+
+/-- The original reservation supplies ordinary admission at each actual retained prefix cache. -/
+theorem narrowed_ordinary_reservation
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (fuel uv : Nat) (caller : Caller (bits + 2)) (memos : Memos) (before : Cached)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (chosen : SourcePruningEnumerationRestart.decision stop order metadata before = some (.expand uv))
+    (seed : Seed)
+    (bounded : Fits seed.2 caller.checked) (known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap)
+    (selected : ∀ entry rows depth free, ∀ edge ∈ edgesOf (.node entry rows depth free), edge ∈ rows)
+    (selectedLength : ∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length)
+    (reserved : SourcePruningEnumerationIncomingReservation.Reserved bits (narrowSeed seed) (count seed before.core))
+    (observed : Result (bits + 2) Typing)
+    (valid : PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
+      formulas solver inventory fuel uv caller before memos observed) :
+    match observed with
+    | .narrowed _ _ reached queries _ (some after) _ _ =>
+        ∃ (handle : Nat) (scs : List Suspended) (value : Node) (final : Memos),
+          (Post formulas solver inventory caller reached final ∧ final.query = queries ∧
+          Packet formulas solver inventory reached final metadata after ∧
+          EnumerationDriver.Ready uv after.core ∧
+          after.core.values[uv]? = some (.unenumerated (some handle) scs) ∧
+          lookupNode reached.checked.native.machine.heap handle = some value ∧
+          Available reached.checked.native.machine.heap value ∧ value.free = [] ∧
+          EnumerationReferences.IncomingAvoid uv after.core ∧
+          EnumerationDependencies.InputsPending after.core scs ∧
+          (∀ sc ∈ scs, sc.var < before.core.counter) ∧
+          scs.length ≤ SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ∧
+          after.core.counter = before.core.counter ∧ after.waiting = before.waiting ∧
+          Fits (headProfile seed.2) reached.checked ∧ Heap (fun guard => guard ∈ seed.1) reached.checked.native.machine.heap) ∧
+          ∀ entry rows depth free, value = .node entry rows depth free →
+            SourcePruningEnumerationNativeBranchCompletion.cost scs after.core.counter

@@ -1,0 +1,281 @@
+import MicroCFTA.SourcePruningEnumerationFiniteReservation
+import MicroCFTA.SourcePruningEnumerationSelectedValueResources
+
+/-!
+# Original reservations for prepared recursive execution
+
+Each positive depth pays the current narrowing and selected-value
+normalization. The remaining schedule pays each actual edge and its
+smaller-depth callback. The captured cache and mass ceiling stay explicit.
+-/
+namespace MicroCFTA.SourcePruningEnumerationPreparedReservation
+open SourceCurrentAllocatedNativeResourceForecast (Le Room)
+open SourcePruningEnumerationIncomingReservation (Seed)
+attribute [local irreducible] SourcePruningEnumerationRecursiveReservation.afterHead
+attribute [local irreducible] SourceCurrentConstrainedCapEditForecast.headProfile
+local notation "afterHead" => SourcePruningEnumerationRecursiveReservation.afterHead
+local notation "edgeCount" => SourcePruningEnumerationRecursiveReservation.edgeCount
+local notation "massCeil" => SourcePruningEnumerationRecursiveReservation.massCeil
+local notation "scalar" => SourceCurrentConstrainedCapTargetForecast.scalar
+
+export SourcePruningEnumerationFiniteReservation
+  (iterate iterate_zero iterate_succ iterate_add iterate_ge)
+
+/-- Native normalization retains the original numeric profile. -/
+theorem normalizationProfile_ge (profile : SourceCurrentAllocatedNativeResourceForecast.Profile) :
+    Le profile (SourcePruningEnumerationSelectedValueCaller.normalizationProfile profile) := by
+  let bound := SourceCurrentMemoMergeResourceControl.initialBound profile.nodes profile.edges profile.mass
+  have nodes : profile.nodes ≤ bound := by
+    dsimp [bound, SourceCurrentMemoMergeResourceControl.initialBound]
+    omega
+  have edges : profile.edges ≤ bound := by
+    dsimp [bound, SourceCurrentMemoMergeResourceControl.initialBound]
+    omega
+  have mass : profile.mass ≤ bound := by
+    dsimp [bound, SourceCurrentMemoMergeResourceControl.initialBound]
+    omega
+  have grows : bound ≤ SourcePruningEnumerationSelectedValue.resourceBound bound := by
+    unfold SourcePruningEnumerationSelectedValue.resourceBound
+    omega
+  exact ⟨Nat.le_trans nodes grows, Nat.le_trans edges grows,
+    Nat.le_refl _, Nat.le_trans mass grows⟩
+
+/-- The initial transition pays narrowing and actual native normalization. -/
+def preparedSeed (seed : Seed) : Seed :=
+  (seed.1, SourcePruningEnumerationSelectedValueCaller.normalizationProfile
+    (SourcePruningEnumerationExpansionAdmission.narrowSeed seed).2)
+
+/-- One extra sibling slot also pays a parked expansion when no ordinary row exists. -/
+def rows (seed : Seed) : Nat := scalar (preparedSeed seed).2 + 1
+
+/-- The original mass ceiling and depth determine the complete finite forecast. -/
+noncomputable def final : Nat → Seed → Nat → Seed
+  | 0, seed, _ceiling => seed
+  | depth + 1, seed, ceiling =>
+      iterate (fun current => final depth (afterHead current ceiling) (massCeil current ceiling ceiling))
+        (preparedSeed seed) (rows seed)
+
+/-- One sibling pays its head and then its smaller-depth callback. -/
+noncomputable def step (depth : Nat) (seed : Seed) (capturedMass inherited : Nat) : Seed :=
+  final depth (afterHead seed inherited) (massCeil seed capturedMass inherited)
+
+/-- A sibling schedule retains the same captured mass and inherited length bounds. -/
+noncomputable def stage (depth : Nat) (seed : Seed) (capturedMass inherited count : Nat) : Seed :=
+  iterate (fun current => step depth current capturedMass inherited) seed count
+
+/-- Depth zero retains the literal original seed. -/
+theorem final_zero (seed : Seed) (ceiling : Nat) : final 0 seed ceiling = seed := rfl
+
+/-- Positive depth uses its prepared seed and original mass ceiling. -/
+theorem final_succ (depth : Nat) (seed : Seed) (ceiling : Nat) :
+    final (depth + 1) seed ceiling =
+      stage depth (preparedSeed seed) ceiling ceiling (rows seed) := rfl
+
+/-- A depth-zero callback does not enlarge the edge endpoint. -/
+theorem step_zero (seed : Seed) (capturedMass inherited : Nat) :
+    step 0 seed capturedMass inherited = afterHead seed inherited := rfl
+
+/-- An empty sibling schedule retains its seed. -/
+theorem stage_zero (depth : Nat) (seed : Seed) (capturedMass inherited : Nat) :
+    stage depth seed capturedMass inherited 0 = seed := rfl
+
+/-- The first paired stage precedes the remaining siblings. -/
+theorem stage_succ (depth : Nat) (seed : Seed) (capturedMass inherited count : Nat) :
+    stage depth seed capturedMass inherited (count + 1) =
+      stage depth (step depth seed capturedMass inherited) capturedMass inherited count := rfl
+
+/-- Parts of the same sibling schedule compose at their exact planned seed. -/
+theorem stage_add (depth : Nat) (seed : Seed) (capturedMass inherited first last : Nat) :
+    stage depth seed capturedMass inherited (first + last) =
+      stage depth (stage depth seed capturedMass inherited first) capturedMass inherited last :=
+  iterate_add _ seed first last
+
+/-- The next paired forecast follows the entire preceding sibling prefix. -/
+theorem stage_succ_right (depth : Nat) (seed : Seed) (capturedMass inherited count : Nat) :
+    stage depth seed capturedMass inherited (count + 1) =
+      step depth (stage depth seed capturedMass inherited count) capturedMass inherited :=
+  stage_add depth seed capturedMass inherited count 1
+
+/-- The prepared seed retains all original numeric and guard bounds. -/
+theorem preparedSeed_ge (seed : Seed) :
+    Le seed.2 (preparedSeed seed).2 ∧ seed.1 ⊆ (preparedSeed seed).1 := by
+  constructor
+  · exact (SourceCurrentConstrainedCapEditForecast.headProfile_ge seed.2).trans
+      (normalizationProfile_ge (SourcePruningEnumerationExpansionAdmission.narrowSeed seed).2)
+  · exact fun _ member => member
+
+/-- Every finite-depth forecast retains its original numeric profile and alphabet. -/
+theorem final_ge (depth : Nat) (seed : Seed) (ceiling : Nat) :
+    Le seed.2 (final depth seed ceiling).2 ∧ seed.1 ⊆ (final depth seed ceiling).1 := by
+  induction depth generalizing seed ceiling with
+  | zero => exact ⟨Le.refl _, fun _ member => member⟩
+  | succ depth ih =>
+      have growth : ∀ current : Seed,
+          Le current.2 (step depth current ceiling ceiling).2 ∧
+            current.1 ⊆ (step depth current ceiling ceiling).1 := by
+        intro current
+        have head := SourcePruningEnumerationRecursiveReservation.afterHead_ge current ceiling
+        have callback := ih (afterHead current ceiling) (massCeil current ceiling ceiling)
+        exact ⟨head.1.trans callback.1, fun _ member => callback.2 (head.2 member)⟩
+      have later := iterate_ge (fun current => step depth current ceiling ceiling) growth
+        (preparedSeed seed) (rows seed)
+      have first := preparedSeed_ge seed
+      rw [final_succ]
+      exact ⟨first.1.trans later.1, fun _ member => later.2 (first.2 member)⟩
+
+/-- The completed head fits the following smaller-depth callback forecast. -/
+theorem afterHead_le_step (depth : Nat) (seed : Seed) (capturedMass inherited : Nat) :
+    Le (afterHead seed inherited).2 (step depth seed capturedMass inherited).2 ∧
+      (afterHead seed inherited).1 ⊆ (step depth seed capturedMass inherited).1 :=
+  final_ge depth (afterHead seed inherited) (massCeil seed capturedMass inherited)
+
+/-- Each paired stage retains its input seed. -/
+theorem step_ge (depth : Nat) (seed : Seed) (capturedMass inherited : Nat) :
+    Le seed.2 (step depth seed capturedMass inherited).2 ∧
+      seed.1 ⊆ (step depth seed capturedMass inherited).1 := by
+  have head := SourcePruningEnumerationRecursiveReservation.afterHead_ge seed inherited
+  have callback := afterHead_le_step depth seed capturedMass inherited
+  exact ⟨head.1.trans callback.1, fun _ member => callback.2 (head.2 member)⟩
+
+/-- Every sibling schedule retains its original profile and guards. -/
+theorem stage_ge (depth : Nat) (seed : Seed) (capturedMass inherited count : Nat) :
+    Le seed.2 (stage depth seed capturedMass inherited count).2 ∧
+      seed.1 ⊆ (stage depth seed capturedMass inherited count).1 :=
+  iterate_ge _ (fun current => step_ge depth current capturedMass inherited) seed count
+
+/-- Later entries of the same schedule retain earlier numeric and guard bounds. -/
+theorem count_mono (depth : Nat) (seed : Seed) (capturedMass inherited : Nat) {first last : Nat}
+    (counts : first ≤ last) :
+    Le (stage depth seed capturedMass inherited first).2 (stage depth seed capturedMass inherited last).2 ∧
+      (stage depth seed capturedMass inherited first).1 ⊆ (stage depth seed capturedMass inherited last).1 := by
+  obtain ⟨extra, same⟩ := Nat.exists_eq_add_of_le counts
+  rw [same, stage_add]
+  exact stage_ge depth (stage depth seed capturedMass inherited first) capturedMass inherited extra
+
+/-- An original positive-depth envelope contains its first paired stage. -/
+theorem rows_positive (seed : Seed) : 1 ≤ rows seed := by
+  unfold rows
+  omega
+
+/-- A shorter original ordinary scan fits the positive-depth driver envelope. -/
+theorem stage_le_final (depth : Nat) (seed : Seed) (ceiling count : Nat)
+    (bounded : count ≤ rows seed) :
+    Le (stage depth (preparedSeed seed) ceiling ceiling count).2 (final (depth + 1) seed ceiling).2 ∧
+      (stage depth (preparedSeed seed) ceiling ceiling count).1 ⊆ (final (depth + 1) seed ceiling).1 := by
+  rw [final_succ]
+  exact count_mono depth (preparedSeed seed) ceiling ceiling bounded
+
+/-- A parked route can use the first paired stage without an actual edge execution. -/
+theorem first_le_final (depth : Nat) (seed : Seed) (ceiling : Nat) :
+    Le (step depth (preparedSeed seed) ceiling ceiling).2 (final (depth + 1) seed ceiling).2 ∧
+      (step depth (preparedSeed seed) ceiling ceiling).1 ⊆ (final (depth + 1) seed ceiling).1 :=
+  stage_le_final depth seed ceiling 1 (rows_positive seed)
+
+/-- A reservation checks only the recursively planned original query entries. -/
+def Reserved : Nat → Nat → Seed → Nat → Prop
+  | _bits, 0, _seed, _ceiling => True
+  | bits, depth + 1, seed, ceiling =>
+      ∀ index, index < rows seed →
+        SourcePruningEnumerationIncomingReservation.Reserved bits
+          (stage depth (preparedSeed seed) ceiling ceiling index)
+          (edgeCount (stage depth (preparedSeed seed) ceiling ceiling index) ceiling) ∧
+        Reserved bits depth
+          (afterHead (stage depth (preparedSeed seed) ceiling ceiling index) ceiling)
+          (massCeil (stage depth (preparedSeed seed) ceiling ceiling index) ceiling ceiling)
+
+/-- Reserve an edge and its smaller-depth callback at the same planned head endpoint. -/
+def HeadReserved (bits depth : Nat) (seed : Seed) (capturedMass inherited : Nat) : Prop :=
+  SourcePruningEnumerationIncomingReservation.Reserved bits seed (edgeCount seed inherited) ∧
+    Reserved bits depth (afterHead seed inherited) (massCeil seed capturedMass inherited)
+
+/-- Reserve every paired entry of one original sibling schedule. -/
+def ScanReserved (bits depth : Nat) (seed : Seed) (capturedMass inherited count : Nat) : Prop :=
+  ∀ index, index < count →
+    HeadReserved bits depth (stage depth seed capturedMass inherited index) capturedMass inherited
+
+/-- Depth zero needs no native query reservation. -/
+theorem reserved_zero (bits : Nat) (seed : Seed) (ceiling : Nat) : Reserved bits 0 seed ceiling :=
+  True.intro
+
+/-- The positive-depth driver reservation is its exact original sibling reservation. -/
+theorem reserved_succ_iff (bits depth : Nat) (seed : Seed) (ceiling : Nat) :
+    Reserved bits (depth + 1) seed ceiling ↔
+      ScanReserved bits depth (preparedSeed seed) ceiling ceiling (rows seed) := Iff.rfl
+
+/-- A driver reservation supplies its full original sibling schedule. -/
+theorem Reserved.scan {bits depth ceiling : Nat} {seed : Seed}
+    (reservation : Reserved bits (depth + 1) seed ceiling) :
+    ScanReserved bits depth (preparedSeed seed) ceiling ceiling (rows seed) := reservation
+
+/-- An empty sibling schedule requires no paired reservations. -/
+theorem scan_reserved_zero (bits depth : Nat) (seed : Seed) (capturedMass inherited : Nat) :
+    ScanReserved bits depth seed capturedMass inherited 0 := by
+  intro index less
+  omega
+
+/-- A nonempty scan separates its first paired reservation from the exact remaining seed. -/
+theorem scan_reserved_succ_iff (bits depth : Nat) (seed : Seed) (capturedMass inherited count : Nat) :
+    ScanReserved bits depth seed capturedMass inherited (count + 1) ↔
+      HeadReserved bits depth seed capturedMass inherited ∧
+        ScanReserved bits depth (step depth seed capturedMass inherited) capturedMass inherited count := by
+  constructor
+  · intro reservation
+    exact ⟨reservation 0 (by omega), fun index less => reservation (index + 1) (by omega)⟩
+  · rintro ⟨first, rest⟩ index less
+    cases index with
+    | zero => exact first
+    | succ index => exact rest index (by omega)
+
+/-- A nonempty scan supplies the current edge and callback reservation. -/
+theorem ScanReserved.head {bits depth capturedMass inherited count : Nat} {seed : Seed}
+    (reservation : ScanReserved bits depth seed capturedMass inherited (count + 1)) :
+    HeadReserved bits depth seed capturedMass inherited :=
+  ((scan_reserved_succ_iff bits depth seed capturedMass inherited count).mp reservation).1
+
+/-- The remaining scan uses the paired step's exact planned endpoint. -/
+theorem ScanReserved.tail {bits depth capturedMass inherited count : Nat} {seed : Seed}
+    (reservation : ScanReserved bits depth seed capturedMass inherited (count + 1)) :
+    ScanReserved bits depth (step depth seed capturedMass inherited) capturedMass inherited count :=
+  ((scan_reserved_succ_iff bits depth seed capturedMass inherited count).mp reservation).2
+
+/-- A shorter scan keeps the original reservations at every retained position. -/
+theorem ScanReserved.prefix {bits depth capturedMass inherited first last : Nat} {seed : Seed}
+    (reservation : ScanReserved bits depth seed capturedMass inherited last) (counts : first ≤ last) :
+    ScanReserved bits depth seed capturedMass inherited first :=
+  fun index less => reservation index (Nat.lt_of_lt_of_le less counts)
+
+/-- A consumed scan prefix leaves the exact original remaining reservations. -/
+theorem ScanReserved.after_prefix {bits depth capturedMass inherited consumed remaining : Nat} {seed : Seed}
+    (reservation : ScanReserved bits depth seed capturedMass inherited (consumed + remaining)) :
+    ScanReserved bits depth (stage depth seed capturedMass inherited consumed) capturedMass inherited remaining := by
+  intro index less
+  have current := reservation (consumed + index) (by omega)
+  simpa only [stage_add] using current
+
+/-- A driver reservation pays its first paired stage, including the parked route. -/
+theorem Reserved.first {bits depth ceiling : Nat} {seed : Seed}
+    (reservation : Reserved bits (depth + 1) seed ceiling) :
+    HeadReserved bits depth (preparedSeed seed) ceiling ceiling :=
+  reservation.scan.head
+
+/-- A driver reservation pays any shorter original ordinary row list. -/
+theorem Reserved.ordinary {bits depth ceiling : Nat} {seed : Seed}
+    (reservation : Reserved bits (depth + 1) seed ceiling) (count : Nat) (bounded : count ≤ rows seed) :
+    ScanReserved bits depth (preparedSeed seed) ceiling ceiling count :=
+  reservation.scan.prefix bounded
+
+/-- The head reservation covers its actual edge cost without another execution premise. -/
+theorem HeadReserved.edge {bits depth capturedMass inherited actualCost : Nat} {seed : Seed}
+    (reservation : HeadReserved bits depth seed capturedMass inherited)
+    (bounded : actualCost ≤ edgeCount seed inherited) :
+    SourcePruningEnumerationIncomingReservation.Reserved bits seed actualCost :=
+  reservation.1.prefix bounded
+
+/-- The callback retains the planned mass ceiling rather than changing its recursive reservation. -/
+theorem HeadReserved.callback {bits depth capturedMass inherited : Nat} {seed : Seed}
+    (reservation : HeadReserved bits depth seed capturedMass inherited) :
+    Reserved bits depth (afterHead seed inherited) (massCeil seed capturedMass inherited) :=
+  reservation.2
+
+/-- Room at the complete original forecast supplies every nested reservation. -/
+theorem reserved_of_final_room (bits depth : Nat) (seed : Seed) (ceiling : Nat)

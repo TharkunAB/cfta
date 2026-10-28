@@ -1,0 +1,21 @@
+  SourceCurrentConstrainedCapTargetForecast.scalar_mono increase
+
+/-- A complete recursive head changes only the constructor heap bounds. -/
+def headProfile (profile : Profile) : Profile :=
+  let bound := SourceCurrentProjectionUnionResources.headGrowth (scalar profile)
+  ⟨bound, bound, profile.domains, bound⟩
+
+/-- The current head read has one initial shared read ceiling. -/
+def headFuel (profile : Profile) : Nat :=
+  SourceCurrentProjectionUnionResources.readFuel (SourceCurrentProjectionUnionResources.headGrowth (scalar profile))
+
+/-- Head normalization retains all original component bounds. -/
+theorem headProfile_ge (profile : Profile) : Le profile (headProfile profile) := by
+  dsimp only [Le, headProfile]
+  have grows := SourceCurrentProjectionUnionResources.headGrowth_ge (scalar profile)
+  exact ⟨Nat.le_trans (SourceCurrentConstrainedCapTargetForecast.scalar_nodes profile) grows,
+    Nat.le_trans (SourceCurrentConstrainedCapTargetForecast.scalar_edges profile) grows,
+    Nat.le_refl _, Nat.le_trans (SourceCurrentConstrainedCapTargetForecast.scalar_mass profile) grows⟩
+
+/-- Larger original components retain the head profile. -/
+theorem headProfile_mono {first last : Profile} (increase : Le first last) :
