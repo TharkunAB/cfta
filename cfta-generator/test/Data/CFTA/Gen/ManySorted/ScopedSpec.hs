@@ -184,7 +184,7 @@ spec = describe "Data.CFTA.Gen.ManySorted.Scoped" $ do
             let scoped = arithmetic [Int, Bool] 1
                 gen = generator 5 scoped
             sort (members gen) `shouldBe` sort (allTerms scoped 5)
-            members gen `shouldSatisfy` any (== Node "v1" [])
+            members gen `shouldSatisfy` elem (Node "v1" [])
             members gen `shouldSatisfy` all (closed scoped)
 
     describe "scopedTypeCheck" $ do
