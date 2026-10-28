@@ -1,5 +1,78 @@
 # Current formalization findings
 
+## Original models through prepared enumeration branches
+
+Source checkpoint: 1036a20310d4c7a970ce3c206f773675c8c1795f.
+The prepared worker retains its all-depth finite resource induction.
+New semantic theorems preserve the original satisfying assignment through
+actual selected narrowing and one native preparation. Accepted ordinary,
+opaque and terminal work constructs an assignment extension at the SAME
+actual captured receipt and callback-entry cache. Fragment recording retains
+that model and restarts the SAME resource-certified outcome under the stated
+original template, program-encoding and pending-refutation policies.
+The new finite semantic APIs derive Complete internally. No supplied
+recursive completion or future output model is a premise.
+
+The ordered sibling theorem retains the whole resource packet. It reaches
+the chosen accepted head OR records an exact strictly earlier callback stop.
+That stop remains a real alternative. This is constructive model transport
+to actual branch entries and restarts. It does not prove global output
+soundness, original accepted-output coverage or sufficient recursive depth.
+The prefix bound is uniform. Native preparation witnesses in the new
+original-input corollary are chosen per actual retained prefix observation.
+
+The largest gap is recursive semantic composition and coverage. Derive an
+original depth bound and adequate policies for all earlier reachable callbacks.
+Derive selector coverage and template/program origins for fresh variables.
+Public APIs, ranking, sampling and physical Haskell correspondence remain open.
+Conditional finite-pruning language preservation remains. Goal ACTIVE;
+checkpoint PROGRESS. No new Haskell patch or required fix was established.
+
+Eight modules add eight public theorems. All nine final strict checks pass.
+Full Audit passes 4387 jobs and checks 80896 theorem dependencies.
+Public readback has 449 theorem blocks and 41 definitions.
+Its complete previous 1774860-byte readback remains an exact prefix.
+All 4378 prior non-Audit Lean, 227 strong and 810 Haskell source/evidence
+files retain bytes. Details: `lean/notes-current-prepared-models.md`.
+
+### Haskell comparison and external integration handoff
+
+No Haskell or Cabal file changed. No Haskell test or benchmark ran.
+No new implementation defect or required Haskell fix was established.
+Keep the integrated LPO and KBO Natural-weight repairs and their evidence below.
+
+The new semantic results concern the actual PreparedRecursive worker. Keep
+one native preparation after the Right callback. Retain the original target
+and stored handle separately from its prepared value. Each Left callback
+and recursive restart execute before the next sibling. Pass the actual native
+Caller and full Memos to that sibling. Keep its captured cache and metadata.
+The new proofs retain the complete old resource packets and actual receipts.
+They request no Haskell change.
+
+The opaque model observer now covers the general opaque and terminal resource
+branches without ProperState. It constructs one assignment extension for the
+original accepted term at the SAME actual callback-entry cache. The fresh
+opaque slot still has an EMPTY bucket. This does not prove that every hole
+completion satisfies the original suspended constraints.
+
+A selected accepting branch can be preceded by a stopped recursive callback.
+The new sibling theorem records that exact earlier stop, including its receipt,
+outputs, reason, optional endpoint and resource packet. A model for the chosen
+branch alone cannot exclude that stop. Completion and a depth bound must cover
+all earlier reachable callbacks too. This is a proof gap; no Haskell fault is
+established. The resource selector laws permit a subset of the available rows.
+They do not imply that an accepting row is selected. Global semantic coverage
+also needs an original selector coverage law.
+
+The recording theorem uses original pending refutation, forbidden-template
+Avoids and ProgramEncoding at the filled fragment. Native language acceptance
+alone does not supply these policies. Global composition must derive their
+origins for fresh variables. Old-variable agreement alone is insufficient.
+No recursive output model, accepted-output existence or public API correspondence
+is established by these local semantic observers. Keep earlier arbitrary-fuel
+finalizer endpoint and partial-versus-discharged output boundaries below.
+
+
 ## Finite resource induction for prepared recursive enumeration
 
 Source checkpoint: 0a7cb26721d37832b3654decd70c9fb73ab0d256.
