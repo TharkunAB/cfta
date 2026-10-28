@@ -52,6 +52,12 @@ Wilf, and Feat (ranking).
   incomparable paths, so that no edit is inside another. `Data.CFTA.Edit.Sets`
   gives the automaton of the edit sets. Its size is the number of the edits plus
   the total new material.
+- **Edit tree** (of a term): an edit set where an edit may lie inside a wrap.
+  A wrap or a context wrap holds edits only when the state of its hole is the
+  state of its position (it is **treeable**). The edits inside change the old
+  subterm before the wrap goes around it. `Data.CFTA.Edit.Trees` gives the
+  automaton of the edit trees. Its size is the number of the edits plus the
+  total new material, as for an edit set.
 
 ## Constraints
 
