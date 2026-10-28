@@ -8,3 +8,5 @@
 - Add `printDocument`, `parseDocument`, `printLanguage`, and `parseLanguage`:
   the text forms `document 1;` and `language 1;` of source documents and of
   languages with named exclusions.
+- Add `printUpdate` and `parseUpdate`: the text form `update 1;` of a
+  `Language.Update`, one statement for each operation.
