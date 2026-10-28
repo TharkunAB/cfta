@@ -1,0 +1,66 @@
+import MicroCFTA.SourcePruningEnumerationHookCertificates
+import MicroCFTA.SourcePruningEnumerationPreparedRecursive
+
+/-!
+# Actual zero-expansion stops for the prepared recursive worker
+
+The stop certificate uses the new worker's failure type. It keeps the
+actual unsupported edge or exhausted callback with its own Packet.
+-/
+namespace MicroCFTA.SourcePruningEnumerationNativeHookResources
+open EnumerationState EnumerationSchedule InternedConstructorTemplates
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedPartialInvariant (Post)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
+open SourcePruningEnumerationIncomingReservation (Seed)
+open SourcePruningEnumerationNativeBranchCompletion (Admitted Pending FragmentHistory cost)
+open SourcePruningEnumerationRecursive (Packet)
+open SourcePruningEnumerationPreparedRecursive (Failure)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Receipt" => SourcePruningEnumerationSelectedEdge.Result
+local notation "Heap" => SourceEqualityAnnotationHeap.Heap
+local notation "reservationAdvance" => SourcePruningEnumerationIncomingReservation.advance
+local notation "advance" => SourcePruningEnumerationNativeBranches.advance
+variable {Typing : Type} {width : Nat}
+variable [DecidableEq (EdgeKey Symbol Constraint)]
+
+/-- Unsupported edges and exhausted hooks retain different exact stopping observations. -/
+def PreparedStoppedAt
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (caller : Caller width) (before : Cached) (uv : Nat) (seed : Seed) (scs : List Suspended)
+    (edges : List (EdgeValue Symbol Constraint)) (index : Nat)
+    (reached : Caller width) (next : Inventory) (final : Memos)
+    (current : SourcePruningEnumerationNativeContinuations.Stop (Failure width Typing) width) : Prop :=
+  current = .edge (some .unhandled) ∨
+  ∃ (fragment : Fragments.Fragment Symbol) (receiptCache : Cached) (selected : Nat)
+    (updated : SourcePruningRecordTypes.Metadata Typing) (callbackCache : Cached),
+    current = .continuation (.complete fragment reached final.query receiptCache)
+      (.exhausted selected updated callbackCache) (some (reached, final.query)) ∧
+    ReceiptAt formulas solver caller before uv seed scs edges index
+      (.complete fragment reached final.query receiptCache) ∧
+    Packet formulas solver next reached final updated callbackCache
+
+variable {formulas : SourceGuards.Formulas FullSyntax.Formula}
+variable {solver : SourceGuards.Entailment FullSyntax.Formula}
+variable {caller middle : Caller width} {before : Cached} {uv : Nat} {seed : Seed} {scs : List Suspended}
+variable {edge : EdgeValue Symbol Constraint} {rest : List (EdgeValue Symbol Constraint)} {index : Nat}
+variable {middleInventory : Inventory} {middleMemos : Memos}
+
+/-- An exhausted suffix keeps the current unprocessed receipt and exact native endpoint. -/
+theorem PreparedStoppedAt.prepend (post : Post formulas solver middleInventory caller middle middleMemos)
+    {reached : Caller width} {next : Inventory} {final : Memos}
+    {current : SourcePruningEnumerationNativeContinuations.Stop (Failure width Typing) width}
+    (certificate : PreparedStoppedAt formulas solver middle before uv
+      (reservationAdvance seed (SourcePruningEnumerationNativeBranchCompletion.edgeCost scs before.core.counter edge))
+      scs rest index reached next final current) :
+    PreparedStoppedAt formulas solver caller before uv seed scs (edge :: rest) (index + 1) reached next final current := by
+  rcases certificate with stopped | ⟨fragment, receiptCache, selected, updated, callbackCache, same, receipt, packet⟩
+  · exact .inl stopped
+  · exact .inr ⟨fragment, receiptCache, selected, updated, callbackCache, same, receipt.prepend post, packet⟩
+
+end MicroCFTA.SourcePruningEnumerationNativeHookResources
