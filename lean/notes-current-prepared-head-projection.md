@@ -1,3 +1,47 @@
+# Verified finite prepared projection: 2026-10-28 22:14 CET
+
+Source: `767155569c152490376fc977f934c137f4da1065` on formalize; pushed and verified.
+Read lean/notes-current-prepared-finite-projection.md from the repository root.
+Every earlier document byte follows this update unchanged.
+
+The actual prepared finite-depth worker derives projection at its complete
+aggregate caller, stopped some endpoint and each output's own native caller.
+It starts with original resource gates and original caller ProjectionHeap.
+Complete [] retains its aggregate heap. Stopped none creates no caller.
+The final depth induction discharges the local recursive contract. A combined
+result retains the original bound, outcome, resources, histories, canonical
+storage and arity, then adds projection at that same actual outcome.
+
+Strongest semantics remains conditional checked rendered soundness under
+fixed-PCS and whole-Discharged, plus ordered output-prefix retention at greater
+recursive depth. The main gap is chosen-model preservation through actual
+emission and sufficient recursive depth derived from the original source,
+including preceding allocating callbacks. Finite key/inventory budgets,
+complete policies/origin/public APIs and optimized Haskell correspondence
+remain open. DONE does not imply Discharged. Partial outputs remain in scope.
+
+Sixteen modules add sixteen public theorems, two proof-specification predicates,
+zero runtime definitions and one private proof helper: 2,166 lines/148,313 bytes.
+All 17 final strict sources pass. Audit: 4,548 jobs/81,757 dependencies.
+Public: 731 theorems/62 definitions, 3,273,340 bytes; prior 3,156,168 bytes exact
+prefix. All 117,172 new bytes were read. The 37-command matrix has 28 passes
+and nine preserved failures. All final checks pass at measured 4 GiB and zero
+swap. All 4,531 old non-Audit Lean, 380 stronger-source and 817 Haskell/Cabal
+hashes remain unchanged. Audit retains its entire old body after 16 imports.
+
+No Haskell source changed. No Haskell check ran. No new Haskell defect or fix
+was established. The repairs affect Lean proofs only. FINDINGS retains all
+earlier external Haskell repair records. The redundant prefix candidate stays
+UNTESTED and withdrawn: existing generic prefix_resources supplies the needed
+property. All candidate and failure bytes remain in the complete evidence.
+Board sequence 708 has verified author/content/metadata readback.
+Evidence: lean/restart-evidence/20261028-prepared-finite-projectability/.
+
+Preserve all proofs, counterexamples, repairs and marked drafts. Keep sealed
+proof areas and reconstructed evidence immutable. Continue in a new writable
+area. The full goal remains ACTIVE. Normal formalize pushes remain authorized.
+Continue without asking whether to continue.
+
 # Current actual original and prepared head projection
 
 Verified update: 2026-10-28 21:22 CET.
