@@ -1,0 +1,53 @@
+import MicroCFTA.SourcePruningEnumerationRenderModel
+import MicroCFTA.SourcePruningEnumerationRenderCompletion
+import MicroCFTA.SourcePruningEnumerationRenderFuel
+
+/-!
+# Uniform native render coverage of original assignments
+
+Original storage and carrier facts fix one actual render result before models.
+Every original satisfying assignment gives that same root and residual list.
+-/
+namespace MicroCFTA.SourcePruningEnumerationRendering
+open Language Fragments EnumerationState EnumerationCorrectness EnumerationSchedule
+open EnumerationDriver EnumerationCompressionFrame EnumerationOrder
+open EnumerationCarriers EnumerationGraphReferences
+local notation "Symbol" => SourcePruningTemplates.Symbol
+variable {NativeGuard EnumGuard : Type}
+
+/-- A structurally completed native state renders before assignment observers are chosen. -/
+theorem render_complete_models (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (marker : Symbol) (level : Nat → Nat) (frontier uv : Nat)
+    (before : EnumerationState.State Symbol EnumGuard) (safe : Safe before)
+    (ordered : Stratified before level frontier) (discharged : Discharged before)
+    (references : ReferencesCarry before) (carried : CarriesGraph before uv) :
+    ∃ (bound : Nat) (term : Term Symbol) (pending : List (EnumGuard × Term Symbol))
+      (after : EnumerationState.State Symbol EnumGuard),
+      (∀ extra, Success (render heap marker (bound + extra) uv) before (term, pending) after) ∧
+      RenderStable before after ∧ Frame before after ∧ Stratified after level frontier ∧
+      ∀ (language : NodeLanguage Symbol) (meaning : EnumGuard → Term Symbol → Prop)
+        (assignment : Nat → Term Symbol),
+        Satisfies language meaning assignment before →
+        term = assignment uv ∧
+        pending = before.obligations.map (fun obligation => (obligation.1, fill assignment obligation.2)) ∧
+        (∀ obligation ∈ pending, meaning obligation.1 obligation.2) ∧
+        Satisfies language meaning assignment after := by
+  obtain ⟨bound, term, pending, after, running, stable⟩ :=
+    render_complete heap marker level frontier uv before safe ordered discharged references carried
+  let trivialLanguage : NodeLanguage Symbol := fun _ _ => True
+  obtain ⟨canonical, equations⟩ := EnumerationAssignment.stratified_assignment before safe level frontier
+    ordered (.node marker []) trivialLanguage discharged
+  have canonicalModel : Satisfies trivialLanguage (fun _ _ => True) canonical before :=
+    ⟨equations, by simp [guardsHold]⟩
+  have frame := (render_model heap trivialLanguage (fun _ _ => True) canonical marker bound uv
+    before after term pending safe.1.total discharged canonicalModel running).2.2.2.1
+  refine ⟨bound, term, pending, after, ?_, stable, frame,
+    EnumerationOrder.stratified_read before after level frontier stable ordered, ?_⟩
+  · intro extra
+    exact render_moreFuel heap marker bound extra uv before (term, pending) after running
+  · intro language meaning assignment satisfied
+    have actual := render_model heap language meaning assignment marker bound uv before after term pending
+      safe.1.total discharged satisfied running
+    exact ⟨actual.1, actual.2.1, actual.2.2.1, actual.2.2.2.2⟩
+
+end MicroCFTA.SourcePruningEnumerationRendering
