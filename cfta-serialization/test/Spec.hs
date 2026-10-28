@@ -39,7 +39,7 @@ import qualified Data.CFTA.Serialization.Text as T
 import qualified Data.CFTA.Sized as Sized
 import Data.CFTA.Sized.Checkpoint (Checkpoint (..), CheckpointError (..), SamplingCheckpoint (..))
 import qualified Data.CFTA.Sized.Checkpoint as Checkpoint
-import Data.CFTA.Symbol (Symbol (RefinedSymbol, Symbol), valueName)
+import Data.CFTA.Symbol (Symbol (RefinedSymbol, Symbol), symbolText, valueName)
 import Data.CFTA.Template (Template (..))
 
 main :: IO ()
@@ -131,6 +131,21 @@ spec = do
 
         it "keep the formats apart" $
             T.parseDocumentWith strings "language 1; start S; state S {}" `shouldSatisfy` either (const True) (const False)
+
+    describe "updates" $ do
+        it "keep every operation" $
+            roundTrip (T.printUpdateWith strings) (T.parseUpdateWith strings) everyOperation
+
+        it "give the same language when they are applied after reopening" $ do
+            let language = withForms $ document liquid
+                reopened = must $ T.parseUpdateWith strings $ T.printUpdateWith strings everyOperation
+            L.update language reopened `shouldBe` L.update language everyOperation
+            L.update language everyOperation `shouldSatisfy` either (const False) (const True)
+
+        it "give the position of an error" $
+            case T.parseUpdateWith strings "update 1;\ndefine pair t0 = pair(atom, atom);\nrequire pair t0;" of
+                Left (SyntaxError line _ _) -> line `shouldBe` 3
+                other -> expectationFailure $ show other
 
     describe "ranks" $
         it "are the same after a round trip" $
@@ -325,6 +340,25 @@ sameRanks before after = withZ3 [] $ \solver -> do
             Sized.unrankOfSize new size (ClassRank rank) `shouldBe` Just term
             Sized.rankOfSize new term `shouldBe` Just (size, ClassRank rank)
 
+-- | An update with every operation, valid on the language of 'liquid' with every template form.
+everyOperation :: L.Update String
+everyOperation =
+    L.define (L.at "atom" "two") (RefinedSymbol "two" $ refinementFormula (.== 2)) []
+        <> L.require (L.at "pair" "t0") "same" equal
+        <> L.relax (L.at "pair" "t0") "imported"
+        <> L.remove (L.at "atom" "t1")
+        <> L.editSource
+            ( D.PutTransition "atom"
+                $ FTA.Transition "three" []
+                $ D.Annotation "three"
+                $ Map.singleton "never"
+                $ Constraint (EqConstraints []) Bottom
+            )
+        <> L.editSource (D.PutRow "extra" [production "leaf" []])
+        <> L.editSource (D.DeleteRow "extra")
+        <> L.without "pairs" (L.AtRoot $ TemplateNode "pair" [Hole, Hole])
+        <> L.restore "0"
+
 -- | State labels as plain text.
 strings :: StateCodec String
 strings = StateCodec Text.pack (Right . Text.unpack)
@@ -351,6 +385,10 @@ single name constraint =
 -- | A plain graph as a document.
 document :: FTA.PlainFTA String Symbol -> D.Document String
 document = must . D.fromGraph
+
+-- | A production with no facts.
+production :: Symbol -> [state] -> FTA.Transition state Symbol D.Annotation
+production symbol children = FTA.Transition symbol children $ D.Annotation (symbolText symbol) Map.empty
 
 -- | A one-state language whose name, symbol, and fact use the same text.
 singleSource :: Text -> Constraint -> D.Document String
