@@ -1,0 +1,22 @@
+MicroCFTA.SourcePruningEnumerationOrigins.fresh_classes_state_complete_origins {Symbol Guard : Type}
+  (language : MicroCFTA.EnumerationCorrectness.NodeLanguage Symbol)
+  (meaning : Guard → MicroCFTA.Language.Term Symbol → Prop) (state : MicroCFTA.EnumerationState.State Symbol Guard)
+  (valid : MicroCFTA.EnumerationCorrectness.StorageValid state) (assignment : Nat → MicroCFTA.Language.Term Symbol)
+  (satisfied : MicroCFTA.EnumerationCorrectness.Satisfies language meaning assignment state)
+  (whole term : MicroCFTA.Language.Term Symbol) (tries : List MicroCFTA.EqualityTrie.Trie)
+  (equalities :
+    ∀ (trie : MicroCFTA.EqualityTrie.Trie), trie ∈ tries → MicroCFTA.EnumerationCorrectness.EqualityHolds term trie)
+  (old : MicroCFTA.SourcePruningEnumerationOrigins.AssignmentOrigins whole state.counter assignment)
+  (origin : MicroCFTA.SourcePruningEnumerationOrigins.Origin whole term) :
+  ∃ extended,
+    MicroCFTA.EnumerationCorrectness.Satisfies language meaning extended
+        (MicroCFTA.EnumerationCorrectness.suspendedState tries.length state) ∧
+      (∀ (uv : Nat), uv < state.counter → extended uv = assignment uv) ∧
+        (∀ (sc : MicroCFTA.EnumerationState.Suspended),
+            sc ∈ MicroCFTA.EnumerationCorrectness.suspendedVars state.counter tries →
+              MicroCFTA.EnumerationState.Suspended.Holds extended term sc) ∧
+          MicroCFTA.SourcePruningEnumerationOrigins.AssignmentOrigins whole
+            (MicroCFTA.EnumerationCorrectness.suspendedState tries.length state).counter extended
+'MicroCFTA.SourcePruningEnumerationOrigins.fresh_classes_state_complete_origins' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

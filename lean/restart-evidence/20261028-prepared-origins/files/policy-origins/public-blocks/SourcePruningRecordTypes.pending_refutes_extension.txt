@@ -1,0 +1,15 @@
+MicroCFTA.SourcePruningRecordTypes.pending_refutes_extension {Typing : Type} (limit : Nat)
+  (original extended : Nat → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (bounded :
+    ∀ (group : MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol),
+      group ∈ metadata.pending → MicroCFTA.SourcePruningPartialMatch.PendingBound limit group)
+  (agree : ∀ (uv : Nat), uv < limit → extended uv = original uv)
+  (refuted :
+    ∀ (group : MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol),
+      group ∈ metadata.pending → MicroCFTA.SourcePruningResume.Refutes original group)
+  (group : MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol) :
+  group ∈ metadata.pending → MicroCFTA.SourcePruningResume.Refutes extended group
+'MicroCFTA.SourcePruningRecordTypes.pending_refutes_extension' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

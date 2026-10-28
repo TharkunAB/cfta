@@ -1,0 +1,25 @@
+/-- Every actual attached terminal child cache retains the original allocation counter. -/
+theorem terminal_counter
+    (checkEmpty : Bool) (r n p h k : Nat) (bucket : List Suspended) (incoming : Node)
+    (caller : Caller width) (before : Cached) (queries : Queries) (after : Cached)
+    (terminal : bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) = true)
+    (observed : (run checkEmpty r n p h k bucket incoming caller before queries).2 = some after) :
+    after.core.counter = before.core.counter := by
+  by_cases empty : incoming = .empty
+  · simp only [run, ite_eq_left empty, Option.some.injEq] at observed
+    subst after
+    rfl
+  · cases partitioned : bucket.partition (fun sc => EqualityTrie.isTerminal sc.trie) with
+    | mk here descendants =>
+      cases here with
+      | nil =>
+          have emptyFilter := congrArg Prod.fst partitioned
+          simp only [List.partition_eq_filter_filter] at emptyFilter
+          have noTerminal : bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) = false :=
+            List.any_eq_false.mpr (List.filter_eq_nil_iff.mp emptyFilter)
+          rw [terminal] at noTerminal
+          cases noTerminal
+      | cons first rest =>
+          exact (SourcePruningEnumerationCachedTerminalAdapter.observed_cache_bounds
+            checkEmpty r n p h k first rest caller before incoming descendants queries after
+            (by simpa only [run, ite_eq_right empty, partitioned] using observed)).1

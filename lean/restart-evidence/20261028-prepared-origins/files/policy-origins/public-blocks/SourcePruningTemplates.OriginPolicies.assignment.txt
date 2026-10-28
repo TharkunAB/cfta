@@ -1,0 +1,12 @@
+MicroCFTA.SourcePruningTemplates.OriginPolicies.assignment
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol))
+  (whole : MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol) (limit : Nat)
+  (assignment : Nat → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol)
+  (policies : MicroCFTA.SourcePruningTemplates.OriginPolicies templates whole)
+  (origins : MicroCFTA.SourcePruningEnumerationOrigins.AssignmentOrigins whole limit assignment) (uv : Nat)
+  (inside : uv < limit) :
+  MicroCFTA.SourcePruningTemplates.Avoids templates (assignment uv) ∧
+    ∀ (program : MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol),
+      MicroCFTA.SourcePruningTemplates.ProgramAt (assignment uv) program →
+        MicroCFTA.SourcePruningTemplates.ProgramEncoding program
+'MicroCFTA.SourcePruningTemplates.OriginPolicies.assignment' depends on axioms: [propext, Classical.choice, Quot.sound]

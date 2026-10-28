@@ -1,0 +1,10 @@
+MicroCFTA.SourcePruningEnumerationOrigins.install_origins {Symbol : Type}
+  (assignment : Nat → MicroCFTA.Language.Term Symbol) (start : Nat) (terms : List (MicroCFTA.Language.Term Symbol))
+  (whole : MicroCFTA.Language.Term Symbol)
+  (old : MicroCFTA.SourcePruningEnumerationOrigins.AssignmentOrigins whole start assignment)
+  (fresh :
+    ∀ (term : MicroCFTA.Language.Term Symbol),
+      term ∈ terms → MicroCFTA.SourcePruningEnumerationOrigins.Origin whole term) :
+  MicroCFTA.SourcePruningEnumerationOrigins.AssignmentOrigins whole (start + terms.length)
+    (MicroCFTA.EnumerationCorrectness.install assignment start terms)
+'MicroCFTA.SourcePruningEnumerationOrigins.install_origins' depends on axioms: [propext, Quot.sound]

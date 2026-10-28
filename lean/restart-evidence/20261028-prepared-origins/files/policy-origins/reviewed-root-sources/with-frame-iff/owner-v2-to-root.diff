@@ -1,0 +1,23 @@
+--- owner-v2-strict-pass
++++ root-frame-iff-awaiting-receipt
+@@ -172,6 +172,9 @@
+               (EnumerationExpandableIndex.frame after before)
+               (SourcePruningEnumerationRestart.decision stop order result.2
+                 (EnumerationExpandableIndex.frame after before)) = outcome) ∧
++      (∀ (whole : Language.Term Symbol) (assignment : Nat → Language.Term Symbol),
++        SourcePruningEnumerationOrigins.AssignmentOrigins whole after.counter assignment ↔
++          SourcePruningEnumerationOrigins.AssignmentOrigins whole before.core.counter assignment) ∧
+       ∀ (language : NodeLanguage Symbol)
+         (meaning : Constraint → Language.Term Symbol → Prop) (assignment : Nat → Language.Term Symbol)
+         (whole : Language.Term Symbol),
+@@ -194,7 +197,9 @@
+     holeKey fits admits formulas solver inventory graph templates metadata uv fragment caller memos before
+     checkEmpty edgesOf stop order recursiveFuel seed ceiling packet allocated bounded known
+     selectionMembers selectionLength mass reserved
+-  refine ⟨fuel, result, after, outcome, retained, ?_⟩
++  refine ⟨fuel, result, after, outcome, retained, ?_, ?_⟩
++  · intro whole assignment
++    rw [retained.1.2.2.1.counter]
+   intro language meaning assignment whole satisfied filled refuted policies origin
+   have localPolicies := policies (assignment uv) origin
+   have avoids : SourcePruningTemplates.Avoids templates (Fragments.fill assignment fragment) := by

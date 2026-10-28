@@ -1,0 +1,1 @@
+Assembly v1 assumed the new status text began at byte zero. It stopped at the document inverse assertion. Current documents place the exact insertion after the title. Assembly v2 locates the unique literal insertion, removes only that byte range, and compares the entire recovered old document. No source, proof, or documentation was changed.

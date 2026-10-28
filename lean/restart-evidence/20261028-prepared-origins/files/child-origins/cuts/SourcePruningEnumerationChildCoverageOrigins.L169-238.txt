@@ -1,0 +1,70 @@
+              ambient beforeCaller.checked.native.machine.heap) residualMeaning extended before.core ∧
+          raw = [.ok (fragment, after.core)] ∧ Fragments.fill extended fragment = term ∧
+          Satisfies
+            (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+              ambient afterCaller.checked.native.machine.heap) residualMeaning extended after.core ∧
+          AssignmentOrigins whole after.core.counter extended := by
+  obtain ⟨r, n, p, h, k, raw, afterCaller, after, savedQueries, final, next, afterRoots,
+    outer, waiting, retained⟩ :=
+    complete_with_fragments_resources_accepting seed formulas solver inventory beforeCaller before
+      checkEmpty bucket incoming roots memos initial safe paths counts flags realized bounded pending
+      available closed fits reserved known
+  have resources := retained.1
+  rcases resources with ⟨observed, _post, _query, _growth, _paths, _storage, _realized,
+    _counts, _flags, _origin, _protects, _references, _history, _shape, _fits, _known, _terminal⟩
+  refine ⟨r, n, p, h, k, raw, afterCaller, after, savedQueries, final, next, afterRoots,
+    outer, waiting, retained, ?_⟩
+  intro ambient residualMeaning assignment term whole original accepted holds oldOrigins termOrigin
+  obtain ⟨extended, fragment, agree, originalExtended, singleton, filled, afterSatisfied⟩ :=
+    retained.2 ambient residualMeaning assignment term original accepted holds
+  refine ⟨extended, fragment, agree, originalExtended, singleton, filled, afterSatisfied, ?_⟩
+  by_cases terminal : bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) = true
+  · have actual := observed 0 0 p h 0 (Nat.le_refl _) (Nat.le_refl _)
+    simp only [Nat.add_zero] at actual
+    have counter := SourcePruningEnumerationChildDispatch.terminal_counter
+      checkEmpty r n p h k bucket incoming beforeCaller before memos.query after terminal
+      (congrArg Prod.snd actual)
+    intro uv inside
+    rw [counter] at inside
+    rw [agree uv inside]
+    exact oldOrigins uv inside
+  · have nonterminal : bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) = false :=
+      Bool.eq_false_iff.mpr terminal
+    have nonempty : incoming ≠ .empty := by
+      intro empty
+      rw [empty, InternedGuardedLanguage.meaning] at accepted
+      exact accepted
+    obtain ⟨action, freshFuel, freshCache, _prepared, _raw, freshRun, grows, _rest⟩ :=
+      SourcePruningEnumerationChildDispatch.nonterminal_complete checkEmpty r n p h bucket incoming
+        beforeCaller before memos.query roots initial.ready.semantic.ready.semantic.1.normal.facts.coherent
+        available closed nonempty safe.1 realized paths counts flags bounded nonterminal
+    have canonical := freshRun k
+    rw [Nat.add_comm freshFuel k] at canonical
+    have actual : SourcePruningEnumerationChildDispatch.run checkEmpty r n p h (k + freshFuel)
+        bucket incoming beforeCaller before memos.query =
+        ((.ok (some raw), afterCaller, savedQueries, outer, waiting), some after) := by
+      simpa only [Nat.add_zero] using
+        observed 0 0 p h freshFuel (Nat.le_refl _) (Nat.le_refl _)
+    have same : raw = [.ok (.hole before.core.counter, freshCache.core)] ∧
+        afterCaller = beforeCaller ∧ savedQueries = memos.query ∧ outer = before.core ∧
+        waiting = before.waiting ∧ after = freshCache := by
+      simpa only [Prod.mk.injEq, Except.ok.injEq, Option.some.injEq, and_assoc] using
+        actual.symm.trans canonical
+    obtain ⟨rawSame, _callerSame, _querySame, _outerSame, _waitingSame, cacheSame⟩ := same
+    have rowSame : (fragment, after.core) = (.hole before.core.counter, freshCache.core) :=
+      Except.ok.inj ((List.cons.inj (singleton.symm.trans rawSame)).1)
+    have fragmentSame : fragment = .hole before.core.counter := (Prod.mk.inj rowSame).1
+    have freshTerm : extended before.core.counter = term := by
+      simpa only [fragmentSame, Fragments.fill] using filled
+    have counter : after.core.counter = before.core.counter + 1 := by
+      simpa only [cacheSame] using grows
+    intro uv inside
+    by_cases old : uv < before.core.counter
+    · rw [agree uv old]
+      exact oldOrigins uv old
+    · have fresh : uv = before.core.counter := by rw [counter] at inside; omega
+      subst uv
+      rw [freshTerm]
+      exact termOrigin
+
+end MicroCFTA.SourcePruningEnumerationChildCompletion

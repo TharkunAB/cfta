@@ -1,0 +1,56 @@
+    (scs : List Suspended) (incoming : Node)
+    (beforeCaller : Caller width) (before : EnumerationExpandableIndex.Cached Symbol Constraint)
+    (queries : Queries) (roots : Nat → Nat)
+    (coherent : InternedRecordCoherence.Coherent beforeCaller.checked.native.machine.heap)
+    (available : Available beforeCaller.checked.native.machine.heap incoming)
+    (closed : incoming.free = []) (nonempty : incoming ≠ .empty)
+    (storage : StorageValid before.core)
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before.core)
+    (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (flags : ∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate
+      beforeCaller.checked.native.machine.heap
+      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
+    (bounded : ∀ sc ∈ scs, sc.var < before.core.counter)
+    (nonterminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = false) :
+    ∃ (action : EnumerateM Symbol Constraint (Fragments.Fragment Symbol)) (fuel : Nat)
+      (after : EnumerationExpandableIndex.Cached Symbol Constraint),
+      SourcePruningEnumerationShallowChild.prepareChild scs incoming = some action ∧
+      ExceptT.run (action before.core) = [.ok (.hole before.core.counter, after.core)] ∧
+      (∀ (extra : Nat), run checkEmpty representativeFuel nativeFuel p h (fuel + extra)
+        scs incoming beforeCaller before queries =
+        ((.ok (some [.ok (.hole before.core.counter, after.core)]),
+          beforeCaller, queries, before.core, before.waiting), some after)) ∧
+      after.core.counter = before.core.counter + 1 ∧
+      after.core.counter = after.core.values.length ∧
+      after.core.representatives = before.core.representatives ∧ Roots after.core.representatives roots ∧
+      StorageValid after.core ∧ PendingRealized beforeCaller.checked.native.machine.heap after.core ∧
+      EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
+      (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate
+        beforeCaller.checked.native.machine.heap
+        ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧
+      FragmentBound («Symbol» := Symbol) after.core.counter (.hole before.core.counter) := by
+  obtain ⟨action, fuel, rows, prepared, cachedRun, raw, shape⟩ :=
+    SourcePruningEnumerationCachedPrepare.complete beforeCaller.checked.native.machine.heap
+      before incoming scs roots coherent available closed storage realized paths counts flags bounded
+      (fun _ => nonterminal)
+  rcases shape with ⟨emptyValue, _emptyRows⟩ | ⟨after, _nonempty, rowsSame,
+    grows, aligned, forestSame, afterPaths, afterStorage, afterRealized, afterCounts, afterFlags, bound⟩
+  · exact (nonempty emptyValue).elim
+  · rw [rowsSame] at cachedRun raw
+    have noHere : (scs.partition (fun sc => EqualityTrie.isTerminal sc.trie)).1 = [] := by
+      simp only [List.partition_eq_filter_filter]
+      exact List.filter_eq_nil_iff.mpr (fun sc member =>
+        List.any_eq_false.mp nonterminal sc member)
+    refine ⟨action, fuel, after, prepared, ?_, ?_, grows, aligned, forestSame,
+      afterPaths, afterStorage, afterRealized, afterCounts, afterFlags, bound⟩
+    · simpa only [List.map_cons, List.map_nil] using raw
+    · intro extra
+      cases partitioned : scs.partition (fun sc => EqualityTrie.isTerminal sc.trie) with
+      | mk here descendants =>
+        have hereSame : here = [] := by simpa only [partitioned] using noHere
+        subst here
+        simp only [run, observe, ite_eq_right nonempty, partitioned, prepared,
+          cachedRun extra, List.map_cons, List.map_nil, raw]
+
+end MicroCFTA.SourcePruningEnumerationChildDispatch

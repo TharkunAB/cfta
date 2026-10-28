@@ -1,0 +1,8 @@
+def Term.atPath {Symbol : Type} : Term Symbol → List Nat → Option (Term Symbol)
+  | t, [] => some t
+  | .node _ ts, i :: rest => ts[i]?.bind (fun t => t.atPath rest)
+
+/-- A child height does not exceed the greatest height in its child list. -/
+theorem height_le_forestHeight {Symbol : Type} (ts : List (Term Symbol))
+    (t : Term Symbol) (h : t ∈ ts) : t.height ≤ forestHeight ts := by
+  induction ts with

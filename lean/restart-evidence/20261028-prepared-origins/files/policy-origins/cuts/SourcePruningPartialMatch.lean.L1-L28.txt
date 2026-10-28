@@ -1,0 +1,28 @@
+import MicroCFTA.Template
+import MicroCFTA.EnumerationState
+import MicroCFTA.EnumerationPartialBounds
+
+/-!
+# Pure matching of partial pruning terms
+
+The branch order follows Specftacular.Pruning.matchPartial.
+Pending entries retain their pattern and original hole ID in child order.
+-/
+namespace MicroCFTA.SourcePruningPartialMatch
+
+/-- The unresolved pieces of one template match. -/
+abbrev Pending (Symbol : Type) := List (Template.Pattern Symbol × Nat)
+
+/-- Every parked match names an allocated variable. -/
+def PendingBound (limit : Nat) (pending : Pending Symbol) : Prop :=
+  ∀ entry ∈ pending, entry.2 < limit
+
+mutual
+  /-- Match a partial term and collect the unresolved pieces in order. -/
+  def matchPartial [DecidableEq Symbol] (pattern : Template.Pattern Symbol)
+      (term : Language.Term (EnumerationState.PartialSymbol Symbol)) : Option (Pending Symbol) :=
+    match pattern, term with
+    | .hole, _ => some []
+    | .anyPrefix [], _ => some []
+    | pattern, .node (.hole uv) [] => some [(pattern, uv)]
+    | _, .node .truncated _ => none

@@ -1,0 +1,2 @@
+The first source validator stopped after all prior-source and final strict checks passed. Its keyword scan matched the English word "admit" in a documentation comment in Origins. The repaired validator removes nested block and line comments before the same forbidden-command check. No Lean source changed for this repair. The full Lean Audit and printed axiom checks passed independently.
+The first TEMP bootstrap copied a directory named lean as a file. The corrected bootstrap traversed all nine prior document paths recursively. No source or old evidence changed.

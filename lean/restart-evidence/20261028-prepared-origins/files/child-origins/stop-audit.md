@@ -1,0 +1,15 @@
+# Earlier-callback stop audit
+
+Result: a real coverage obligation remains. No admitted all-depth counterexample or Haskell defect was established.
+
+The actual `SourcePruningEnumerationNativeContinuations.run` executes a completed head's hook before its sibling suffix. If that hook returns `stopped`, the function returns that stop immediately. It does not evaluate the suffix. The public `stopped_hook` equation states this exact behavior. Completed earlier hooks retain their outputs through concatenation. A stopped result therefore need not have an empty output prefix.
+
+The actual `PreparedRecursive.resume` at recursive depth zero returns `stopped [] (exhausted ...)` for an expansion at every workFuel. Its `finish` function retains the fold's exact outputs, reason and optional endpoint. More workFuel can pay for finite primitive work. It cannot change recursive depth zero into a recursive expansion. A genuinely unbounded earlier expansion path could therefore prevent a later finite accepting alternative from being visited at every admitted finite depth. This statement is conditional. Numeric reservations must also hold at each admitted depth.
+
+The simple proposal `A = f(A) | a`, with the recursive alternative first, does not establish such a native path. The actual native candidate test disables a Mu/Union boundary with an empty suspended bucket. Actual `checkRepeated` writes an empty bucket when the native recursion key occurs in ancestry. Its producer records that the resulting flag is false. The recursion key omits equality-variable IDs and keeps the native handle and canonical path tries. Fresh equality-variable IDs alone do not avoid repetition. The candidate has not been instantiated with an original native Context, Packet and all required actual operation receipts. No arbitrary Graph or isolated core is substituted for that missing provenance.
+
+The current origins results concern a chosen accepted model. They give actual subtree paths and a height upper bound for that model's allocated values. They do not supply a model or a decreasing rank for every earlier unchosen callback. They therefore do not prove that all earlier alternatives terminate. This audit does not prove that accepted-output coverage is false either.
+
+A useful next proof must derive sufficient recursive depth for every actually reached earlier callback from original source data. It must account for native parking, opaque completion and the actual caller-threaded sibling order. A finite rank for the whole relevant scan tree could then yield one common bound. Until that origin proof exists, the exact earlier-stop disjunct remains necessary. Future success or termination must not be inserted as an unexplained producer premise.
+
+Source provenance is in `source-index.json`. The decisive literal cuts are PreparedRecursive lines 42–68 and 75–116, NativeContinuations lines 43–72, NativeIndex lines 16–27, Recursion lines 16–29 and 31–65, and EnumerationState lines 55–64. Whole runtime copies remain available. No Haskell execution, compiler, Git or network command was run for this audit.

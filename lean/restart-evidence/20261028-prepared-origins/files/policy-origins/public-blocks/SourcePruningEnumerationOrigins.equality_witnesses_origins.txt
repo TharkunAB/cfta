@@ -1,0 +1,14 @@
+MicroCFTA.SourcePruningEnumerationOrigins.equality_witnesses_origins {Symbol : Type}
+  (whole term : MicroCFTA.Language.Term Symbol) (tries : List MicroCFTA.EqualityTrie.Trie)
+  (origin : MicroCFTA.SourcePruningEnumerationOrigins.Origin whole term)
+  (holds :
+    ∀ (trie : MicroCFTA.EqualityTrie.Trie), trie ∈ tries → MicroCFTA.EnumerationCorrectness.EqualityHolds term trie) :
+  ∃ witnesses,
+    MicroCFTA.Language.All₂
+        (fun trie common =>
+          ∀ (path : MicroCFTA.EqualityTrie.Path),
+            path ∈ MicroCFTA.EqualityTrie.fromPathTrie trie → term.atPath path = some common)
+        tries witnesses ∧
+      ∀ (witness : MicroCFTA.Language.Term Symbol),
+        witness ∈ witnesses → MicroCFTA.SourcePruningEnumerationOrigins.Origin whole witness
+'MicroCFTA.SourcePruningEnumerationOrigins.equality_witnesses_origins' depends on axioms: [propext, Quot.sound]

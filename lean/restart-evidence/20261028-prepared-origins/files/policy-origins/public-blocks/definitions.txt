@@ -1,0 +1,17 @@
+def MicroCFTA.SourcePruningEnumerationOrigins.Origin : {Symbol : Type} →
+  MicroCFTA.Language.Term Symbol → MicroCFTA.Language.Term Symbol → Prop :=
+fun {Symbol} whole term => ∃ path, whole.atPath path = some term
+def MicroCFTA.SourcePruningEnumerationOrigins.AssignmentOrigins : {Symbol : Type} →
+  MicroCFTA.Language.Term Symbol → Nat → (Nat → MicroCFTA.Language.Term Symbol) → Prop :=
+fun {Symbol} whole limit assignment =>
+  ∀ (uv : Nat), uv < limit → MicroCFTA.SourcePruningEnumerationOrigins.Origin whole (assignment uv)
+def MicroCFTA.SourcePruningTemplates.OriginPolicies : List
+    (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol) →
+  MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol → Prop :=
+fun templates whole =>
+  ∀ (term : MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol),
+    MicroCFTA.SourcePruningEnumerationOrigins.Origin whole term →
+      MicroCFTA.SourcePruningTemplates.Avoids templates term ∧
+        ∀ (program : MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol),
+          MicroCFTA.SourcePruningTemplates.ProgramAt term program →
+            MicroCFTA.SourcePruningTemplates.ProgramEncoding program

@@ -1,0 +1,33 @@
+MicroCFTA.SourcePruningRecordTypes.recordTypes_inl_refutes_of_origin {Typing Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (language : MicroCFTA.EnumerationCorrectness.NodeLanguage MicroCFTA.SourcePruningTemplates.Symbol)
+  (meaning : Guard → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol → Prop)
+  (original extended : Nat → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol)
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol))
+  (whole : MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol) (fuel uv limit : Nat)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+  (before after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (result : Bool × MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (total : MicroCFTA.UnionFind.Total before.representatives)
+  (satisfied : MicroCFTA.EnumerationCorrectness.Satisfies language meaning extended before)
+  (filled : MicroCFTA.Fragments.fill extended fragment = extended uv)
+  (policies : MicroCFTA.SourcePruningTemplates.OriginPolicies templates whole)
+  (origin : MicroCFTA.SourcePruningEnumerationOrigins.Origin whole (extended uv))
+  (bounded :
+    ∀ (group : MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol),
+      group ∈ metadata.pending → MicroCFTA.SourcePruningPartialMatch.PendingBound limit group)
+  (agree : ∀ (key : Nat), key < limit → extended key = original key)
+  (refuted :
+    ∀ (group : MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol),
+      group ∈ metadata.pending → MicroCFTA.SourcePruningResume.Refutes original group)
+  (success :
+    MicroCFTA.EnumerationCorrectness.Success
+      (MicroCFTA.SourcePruningRecordTypes.recordTypes graph templates fuel metadata uv (Sum.inl fragment)) before result
+      after) :
+  result.fst = false ∧
+    ∀ (group : MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol),
+      group ∈ result.snd.pending → MicroCFTA.SourcePruningResume.Refutes extended group
+'MicroCFTA.SourcePruningRecordTypes.recordTypes_inl_refutes_of_origin' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

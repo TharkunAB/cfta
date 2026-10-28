@@ -1,0 +1,14 @@
+theorem observed_cache_bounds
+    (checkEmpty : Bool) (r n p h k : Nat) (first : Suspended) (rest : List Suspended)
+    (beforeCaller : Caller width) (before : Cached) (incoming : Node)
+    (incomingScs : List Suspended) (queries : Queries) (after : Cached)
+    (observed : (run checkEmpty r n p h k first rest beforeCaller before
+      incoming incomingScs queries).2 = some after) :
+    after.core.counter = before.core.counter ∧
+      suspendedBound after.core ≤ suspendedBound before.core + incomingScs.length := by
+  by_cases empty : incoming = .empty
+  · simp only [run, ite_eq_left empty, Option.some.injEq] at observed
+    subst after
+    exact ⟨rfl, Nat.le_add_right _ _⟩
+  · cases prefixObserved : ExceptT.run (SourcePruningEnumerationTerminalPrefix.run
+        r first rest before.waiting before.core) with

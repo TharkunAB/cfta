@@ -1,0 +1,22 @@
+    (checkEmpty : Bool) (representativeFuel nativeFuel p h indexFuel : Nat)
+    (scs : List Suspended) (incoming : Node)
+    (beforeCaller : Caller width) (before : EnumerationExpandableIndex.Cached Symbol Constraint)
+    (queries : Queries) : Observation width × Option (EnumerationExpandableIndex.Cached Symbol Constraint) :=
+  if incoming = .empty then
+    ((.ok (some []), beforeCaller, queries, before.core, before.waiting), some before)
+  else
+    match scs.partition (fun sc => EqualityTrie.isTerminal sc.trie) with
+    | ([], _) =>
+        (observe checkEmpty representativeFuel nativeFuel p h scs incoming
+          beforeCaller before.core before.waiting queries,
+          match SourcePruningEnumerationCachedPrepare.prepareChild
+              beforeCaller.checked.native.machine.heap indexFuel scs incoming before with
+          | some [] => some before
+          | some [(_, after)] => some after
+          | _ => none)
+    | (first :: rest, descendants) =>
+        SourcePruningEnumerationCachedTerminalAdapter.run
+          checkEmpty representativeFuel nativeFuel p h indexFuel
+          first rest beforeCaller before incoming descendants queries
+
+/-- Cache erasure preserves every raw result and reached caller at fixed bounds. -/

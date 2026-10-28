@@ -1,0 +1,10 @@
+/-- Recursion keys omit equality-variable identities. -/
+structure RecursionKey where
+  node : Nat
+  tries : List (List (List Nat))
+  deriving DecidableEq
+
+/-- Canonical path sets represent the source's set of suspended tries. -/
+def recursionKey (node : Nat) (scs : List Suspended) : RecursionKey :=
+  ⟨node, (scs.map fun sc => EqualityTrie.fromPathTrie sc.trie).eraseDups.mergeSort
+    (fun left right => compare left right != .gt)⟩

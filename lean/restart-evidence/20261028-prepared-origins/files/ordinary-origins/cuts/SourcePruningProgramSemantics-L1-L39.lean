@@ -1,0 +1,39 @@
+import MicroCFTA.SourcePruningPartialMatchSemantics
+import MicroCFTA.SourcePruningTemplateIndexMeaning
+import MicroCFTA.SourcePruningResumeRefutation
+
+/-!
+# Complete programs selected by actual partial matching
+
+Program positions follow application function and argument children.
+Filter wrappers expose only their program child.
+Annotations do not add program positions.
+-/
+namespace MicroCFTA.SourcePruningTemplates
+open Language EnumerationState SourcePruningPartialMatch
+local notation "Symbol" => SourcePruningTemplates.Symbol
+attribute [local instance] FormulaExecutable.formulaDecidableEq
+
+/-- A complete program occurs at a position inspected by the source callback. -/
+inductive ProgramAt : Term Symbol → Term Symbol → Prop where
+  /-- The complete application is a program position. -/
+  | application (annotation marker function argument : Term Symbol) :
+      ProgramAt (.node ("app", FullSyntax.Formula.top) [annotation, marker, function, argument])
+        (.node ("app", FullSyntax.Formula.top) [annotation, marker, function, argument])
+  /-- A function child retains its program positions. -/
+  | function (annotation marker function argument program : Term Symbol) :
+      ProgramAt function program →
+      ProgramAt (.node ("app", FullSyntax.Formula.top) [annotation, marker, function, argument]) program
+  /-- An argument child retains its program positions. -/
+  | argument (annotation marker function argument program : Term Symbol) :
+      ProgramAt argument program →
+      ProgramAt (.node ("app", FullSyntax.Formula.top) [annotation, marker, function, argument]) program
+  /-- A filter retains its program child positions. -/
+  | filter (annotation term program : Term Symbol) :
+      ProgramAt term program → ProgramAt (.node ("filter", FullSyntax.Formula.top) [annotation, term]) program
+
+/-- Every original forbidden template fails at every source program position. -/
+def Avoids (templates : List (Template.Pattern Symbol)) (term : Term Symbol) : Prop :=
+  ∀ program, ProgramAt term program → ∀ pattern ∈ templates, ¬ Template.Matches pattern program
+
+/-- Each actually selected partial program completes at an original program position. -/
