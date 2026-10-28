@@ -1,3 +1,37 @@
+# Current checkpoint: prepared point stability and local semantics
+
+Source: `05570bab725e076f94d8371be1efa485c3877f9d` on `formalize`.
+Read [notes-current-prepared-point-stability.md](notes-current-prepared-point-stability.md) first.
+The full formalization goal remains open and active. Normal pushes to
+`origin/formalize` remain authorized.
+
+The existing history now derives original Fits, guard Heap and reservation at
+the actual prepared opaque point. Completed opaque points are stable at larger
+work bounds. The local opaque semantic theorem restores the original narrowed
+model under its explicit retention and whole reached-state satisfaction gates.
+Local ordinary-head and opaque-completion arity bridges also pass. This removes
+the earlier proposed need for a second history type on the opaque-resource route.
+
+The largest remaining attachment is the actual prepared sibling scan and its
+callbacks. Earlier callbacks can change the aggregate native caller while they
+emit no outputs. Prove arity for that endpoint and for each output in the finite
+producer, with its original selectionMembers/selectionLength premises. A Post
+growth fact or an output-only history induction does not supply this result.
+Keep the prepared parent separate from the original decoded source.
+
+All 16 new modules and Audit pass strict Lean 4.34.1 checks. The combined Audit
+passes 4,479 jobs and 81,486 theorem dependencies. All 25 new public theorem
+blocks have whole-block review. The previous public readback remains an exact
+prefix. All 4,462 prior non-Audit Lean files, 311 prior stronger proof sources
+and 817 current Haskell/Cabal files retain their recorded hashes.
+
+No new Haskell defect or fix was established. No Haskell or Cabal source changed.
+Keep the prior Haskell repair findings for external work. The callback gap is a
+Lean proof task. Durable evidence is under
+`lean/restart-evidence/20261028-prepared-point-stability`.
+
+The earlier document body follows unchanged.
+
 ## Current checkpoint: 2026-10-28 16:10 CET
 
 The checked source checkpoint is `1115481c15dec8193b8d0594366ee5d068c24331` on `formalize`.
