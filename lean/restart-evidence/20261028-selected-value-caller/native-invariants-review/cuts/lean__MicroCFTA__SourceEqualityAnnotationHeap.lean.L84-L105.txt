@@ -1,0 +1,22 @@
+theorem makeEdge (valid : Guard → Prop) (symbol : Symbol) (guard : Guard) (values : List (Value Symbol Guard))
+    (annotation : valid guard) : SafeWork valid (InternedConstructorTemplates.makeEdge symbol guard values) := ⟨annotation, fun _ => trivial⟩
+
+/-- Actual ordinary-node construction emits no new edge annotation. -/
+theorem makeNode (valid : Guard → Prop) (edges : List (EdgeValue Symbol Guard)) :
+    SafeWork valid (InternedConstructorTemplates.makeNode edges) := by
+  unfold InternedConstructorTemplates.makeNode
+  dsimp only
+  split <;> simp only [SafeWork, implies_true]
+
+/-- Actual union construction reuses existing edge records in every normalization branch. -/
+theorem makeUnion (valid : Guard → Prop) (values : List (Value Symbol Guard)) :
+    SafeWork valid (InternedConstructorTemplates.makeUnion values) := by
+  unfold InternedConstructorTemplates.makeUnion
+  split
+  · trivial
+  · trivial
+  · split
+    · exact makeNode valid _
+    · exact fun _ => trivial
+
+/-- Source bare-self removal constructs only nodes and unions of existing edges. -/

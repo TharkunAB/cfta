@@ -1,0 +1,38 @@
+theorem reserved_succ_iff (bits : Nat) (seed : Seed) (count : Nat) :
+    Reserved bits seed (count + 1) ↔ Room bits seed.2 ∧ Reserved bits (step seed) count := by
+  constructor
+  · intro reservation
+    exact ⟨reservation 0 (by omega), fun index less => reservation (index + 1) (by omega)⟩
+  · rintro ⟨room, reservation⟩ index less
+    cases index with
+    | zero => exact room
+    | succ index => exact reservation index (by omega)
+
+/-- A nonempty reservation supplies Room for its first actual query. -/
+theorem Reserved.head {bits count : Nat} {seed : Seed}
+    (reservation : Reserved bits seed (count + 1)) : Room bits seed.2 :=
+  ((reserved_succ_iff bits seed count).mp reservation).1
+
+/-- One scheduled step retains the original reservation for its remaining steps. -/
+theorem Reserved.tail {bits count : Nat} {seed : Seed}
+    (reservation : Reserved bits seed (count + 1)) : Reserved bits (step seed) count :=
+  ((reserved_succ_iff bits seed count).mp reservation).2
+
+/-- A reservation covers every shorter initial part of the same schedule. -/
+theorem Reserved.prefix {bits first last : Nat} {seed : Seed}
+    (reservation : Reserved bits seed last) (counts : first ≤ last) : Reserved bits seed first :=
+  fun index less => reservation index (Nat.lt_of_lt_of_le less counts)
+
+/-- A consumed schedule prefix leaves entry Room for each reserved remaining step. -/
+theorem Reserved.after_prefix {bits consumed remaining : Nat} {seed : Seed}
+    (reservation : Reserved bits seed (consumed + remaining)) :
+    Reserved bits (advance seed consumed) remaining := by
+  intro index less
+  have room := reservation (consumed + index) (by omega)
+  simpa only [advance_add] using room
+
+/-- Room at the last reserved entry is equivalent to the complete finite reservation. -/
+theorem reserved_iff_last (bits : Nat) (seed : Seed) (count : Nat) :
+    Reserved bits seed (count + 1) ↔ Room bits (advance seed count).2 := by
+  constructor
+  · intro reservation

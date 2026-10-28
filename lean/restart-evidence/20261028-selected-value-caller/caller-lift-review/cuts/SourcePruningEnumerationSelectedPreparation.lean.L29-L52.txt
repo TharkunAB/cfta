@@ -1,0 +1,24 @@
+private theorem satisfies_read (language : NodeLanguage Symbol)
+    (meaning : Constraint → Language.Term Symbol → Prop) (assignment : Nat → Language.Term Symbol)
+    (before after : Core) (stable : EnumerationDriver.RenderStable before after) :
+    Satisfies language meaning assignment after ↔ Satisfies language meaning assignment before := by
+  have classes : UnionFind.Satisfies after.representatives assignment ↔
+      UnionFind.Satisfies before.representatives assignment := by
+    constructor
+    · intro satisfied left right related
+      exact satisfied left right ((stable.classes left right).mpr related)
+    · intro satisfied left right related
+      exact satisfied left right ((stable.classes left right).mp related)
+  simp only [Satisfies, Fragments.stateSatisfies, stable.values, stable.obligations, classes]
+
+variable [DecidableEq (EdgeKey Symbol Constraint)]
+
+/-- Retain the complete entry observation and every actual native preparation outcome. -/
+def run (entryFuel nativeFuel uv : Nat) (caller : Caller width) (before : Cached) :
+    Raw × Option (MergedSourceComparison.Result Symbol Constraint Node) :=
+  let raw := ExceptT.run (SourcePruningEnumerationEntry.enter caller.checked.native.machine.heap
+    entryFuel uv before.core)
+  (raw, match raw with
+    | [.ok ((_target, _handle, _scs, value), _entered)] =>
+        some (SourcePruningEnumerationSelectedValue.run nativeFuel value caller.checked.native.machine.heap)
+    | _ => none)

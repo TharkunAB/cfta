@@ -1,0 +1,37 @@
+--- SourcePruningEnumerationCapturedEdgeResources.lean:complete_with_history_resources
++++ SourcePruningEnumerationCapturedPreparedResources.lean:complete_with_history_resources_prepared
+@@ -1,4 +1,4 @@
+-theorem complete_with_history_resources
++theorem complete_with_history_resources_prepared
+     (seed : Seed)
+     (formulas : SourceGuards.Formulas FullSyntax.Formula)
+     (solver : SourceGuards.Entailment FullSyntax.Formula)
+@@ -10,7 +10,8 @@
+     (initial : Context formulas solver inventory caller memos)
+     (ready : EnumerationDriver.Ready uv before.core)
+     (stored : before.core.values[uv]? = some (.unenumerated (some handle) scs))
+-    (decoded : lookupNode caller.checked.native.machine.heap handle = some (.node parentEntry edges depth free))
++    (parentAvailable : Available caller.checked.native.machine.heap (.node parentEntry edges depth free))
++    (parentClosed : free = [])
+     (realized : PendingRealized caller.checked.native.machine.heap before.core)
+     (selected : edge ∈ edges)
+     (paths : Roots before.core.representatives roots)
+@@ -53,9 +54,6 @@
+       Heap (fun guard => guard ∈ (advance seed
+         (SourcePruningEnumerationSelectedEdge.cost edge scs before.core.counter tries)).1)
+         afterCaller.checked.native.machine.heap := by
+-  obtain ⟨value, lookup, available, closed⟩ := realized uv handle scs stored
+-  have same : value = .node parentEntry edges depth free := Option.some.inj (lookup.symm.trans decoded)
+-  subst value
+   have bounded : ∀ sc ∈ scs, sc.var < before.core.counter :=
+     ready.safe.1.values _ (List.mem_of_getElem? stored)
+   have avoids := ready.avoids handle scs stored
+@@ -63,7 +61,7 @@
+     edgeRun, post, querySame, growth, middlePaths, storage, middleRealized, middleCounts,
+     middleFlags, origin, retained, protects, pendingHistory, incomingHistory, shape, returnedFits, returnedKnown⟩ :=
+     SourcePruningEnumerationSelectedEdge.complete_with_fragments_resources seed formulas solver inventory caller before checkEmpty
+-      parentEntry edges depth free edge scs roots memos initial available closed selected ready.safe realized
++      parentEntry edges depth free edge scs roots memos initial parentAvailable parentClosed selected ready.safe realized
+       paths counts flags bounded pending allowed tries residual projected fits reserved known
+   rcases shape with ⟨fragment, completed, middleSafe, fragmentBound, fragmentPending, fragmentSeparate⟩ |
+     ⟨fragments, outer, waiting, stopped⟩

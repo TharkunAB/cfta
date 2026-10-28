@@ -1,0 +1,5 @@
+/-- Every actual physical edge key in the constructor cache satisfies the annotation predicate. -/
+def Heap (valid : Guard → Prop) (state : State Symbol Guard) : Prop :=
+  ∀ key edge, state.edgeRecords key = some edge → valid key.constraint
+
+/-- The empty constructor cache satisfies every source annotation invariant. -/

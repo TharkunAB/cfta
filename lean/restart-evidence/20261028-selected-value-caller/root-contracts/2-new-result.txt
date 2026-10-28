@@ -1,0 +1,15 @@
+    ∃ (r n p h k : Nat) (receipt : Receipt (bits + 2)) (afterCaller : Caller (bits + 2)) (saved : Queries)
+      (final : Memos) (next : Inventory),
+      (∀ er en P H ek, p ≤ P → h ≤ H →
+        SourcePruningEnumerationCapturedEdge.run checkEmpty (r + er) (n + en) P H (k + ek)
+          uv scs edge caller before memos.query = some receipt) ∧
+      Post formulas solver next caller afterCaller final ∧ final.query = saved ∧ Admitted uv receipt ∧
+      (EnumerationReferences.PendingReferences before.core → EnumerationReferences.IncomingAvoid uv before.core →
+        Pending receipt) ∧
+      FragmentHistory before.core receipt ∧
+      (advance receipt = some (afterCaller, saved) ∨
+        receipt = .unhandled ∧ arityAllows edge.children.length scs = true ∧
+          SourcePruningEnumerationConstraint.project edge.entry.key.constraint = none) ∧
+      Fits (reservationAdvance seed (edgeCost scs before.core.counter edge)).2 afterCaller.checked ∧
+      Heap (fun guard => guard ∈ (reservationAdvance seed (edgeCost scs before.core.counter edge)).1)
+        afterCaller.checked.native.machine.heap

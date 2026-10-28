@@ -1,0 +1,30 @@
+
+/-- Constructor reads and equality allocation retain their separate actual states. -/
+structure State (Symbol Formula : Type) where
+  heap : InternedConstructorTemplates.State Symbol (SourceSymbolicIndex.Constraint Formula)
+  equality : SourceEqualityConstraintMemoAllocation.State
+
+/-- Initial physical invariants supply each reached operation. -/
+structure Ready (state : State Symbol Formula) : Prop where
+  semantic : SemanticReady state.heap
+  costs : CostHeap state.heap
+  valid : SourceEqualityConstraintMemoAllocation.Valid state.equality
+  fields : Eq.Fields state.equality state.heap
+
+/-- A completed row graph retains both actual state components. -/
+structure Effects (before after : State Symbol Formula) : Prop where
+  keeps : Keeps before.heap after.heap
+  ready : Ready after
+  grows : SourceEqualityConstraintMemoAllocation.Grows before.equality after.equality
+
+/-- An empty operation sequence retains the initial state. -/
+theorem Effects.refl (state : State Symbol Formula) (ready : Ready state) : Effects state state :=
+  ⟨pure_keeps _ ready.semantic.ready, ready, SourceEqualityConstraintMemoAllocation.grows_refl _⟩
+
+/-- Consecutive actual row operations retain earlier records and equality allocations. -/
+theorem Effects.trans {before middle after : State Symbol Formula}
+    (first : Effects before middle) (second : Effects middle after) : Effects before after :=
+  ⟨first.keeps.trans second.keeps, second.ready, Eq.grows_trans first.grows second.grows⟩
+
+/-- A completed tuple either stops at contradiction or constructs its actual requirements. -/
+inductive Tuple [DecidableEq (EdgeKey Symbol Guard)] (tuple : List (EdgeValue Symbol Guard)) :

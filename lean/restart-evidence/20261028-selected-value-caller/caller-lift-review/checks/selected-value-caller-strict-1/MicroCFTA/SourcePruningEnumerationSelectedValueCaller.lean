@@ -1,0 +1,79 @@
+import MicroCFTA.SourcePruningEnumerationSelectedValueInvariants
+import MicroCFTA.SourceCurrentAllocatedPartialInvariant
+import MicroCFTA.SourceQueryUnfoldMemo
+
+/-!
+# Allocated caller after one selected native value
+
+The native worker changes only the physical heap. The caller retains its
+native tables, equality operations, completed result tables and full Memos.
+The original context derives the full caller postcondition at that heap.
+-/
+namespace MicroCFTA.SourcePruningEnumerationSelectedValueCaller
+open Cache InternedConstructorTemplates InternedProbeProvenance
+open SourceEqualityRequiredCache SourceEqualityRequiredSemanticCache
+open SourceCurrentAllocatedNativeEffects (physical)
+open SourceCurrentAllocatedQueryMemo (advancePhysical)
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedPartialInvariant (Context Post)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+variable {width : Nat}
+
+/-- Set the returned physical heap and retain every other caller component. -/
+def advance (before : Caller width) (heap : State Symbol Constraint) : Caller width :=
+  SourceCurrentAllocatedPartialState.advance before
+    (advancePhysical before.checked ⟨heap, before.checked.operations⟩) before.fourth before.merge
+
+variable [DecidableEq (EdgeKey Symbol Constraint)]
+
+/-- One native preparation derives its stable result and full caller context. -/
+theorem complete
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (before : Caller width) (memos : Memos) (value : Node)
+    (initial : Context formulas solver inventory before memos)
+    (available : Available before.checked.native.machine.heap value)
+    (closed : value.free = []) :
+    ∃ bound result heap,
+      ((∀ extra, SourcePruningEnumerationSelectedValue.run (bound + extra) value
+          before.checked.native.machine.heap = .done result heap) ∧
+        Keeps before.checked.native.machine.heap heap ∧ SemanticReady heap ∧
+        Available heap result ∧ result.free = [] ∧
+        ∀ holds ambient term,
+          InternedGuardedLanguage.meaning holds ambient result term ↔
+            InternedGuardedLanguage.meaning holds ambient value term) ∧
+      Post formulas solver inventory before (advance before heap) memos := by
+  obtain ⟨bound, result, heap, running, kept, semantic, resultAvailable, resultClosed, exactLanguage⟩ :=
+    SourcePruningEnumerationSelectedValue.run_complete value before.checked.native.machine.heap
+      initial.ready.semantic available closed
+  have observed : SourcePruningEnumerationSelectedValue.run bound value
+      before.checked.native.machine.heap = .done result heap := by
+    simpa only [Nat.add_zero] using running 0
+  have physicalReady := SourceCurrentAllocatedConjunctionMemo.ready before.checked initial.ready.good
+    initial.ready.semantic initial.ready.costs
+  have invariants := SourcePruningEnumerationSelectedValue.run_invariants
+    (SourceCurrentConjunctionEquality.FieldAvailable before.checked.operations)
+    bound value before.checked.native.machine.heap result heap initial.ready.semantic available
+    initial.ready.costs initial.probes physicalReady.fields observed
+  have effects : SourceCurrentConjunctionRowsAllocation.Effects
+      (physical before.checked) ⟨heap, before.checked.operations⟩ :=
+    ⟨kept, ⟨semantic, invariants.1, physicalReady.valid, invariants.2.2⟩,
+      SourceEqualityConstraintMemoAllocation.grows_refl _⟩
+  let checked := advancePhysical before.checked ⟨heap, before.checked.operations⟩
+  have afterContext : Context formulas solver inventory (advance before heap) memos := by
+    refine ⟨SourceCurrentConjunctionClassScan.advance_ready before.checked _ initial.ready effects,
+      initial.admitted.advance _ (SourceCurrentAllocatedQueryMemo.advance_extension before.checked _ effects),
+      initial.sound.advance formulas solver checked before.fourth before.merge effects,
+      initial.stored.grows effects.keeps, initial.covered,
+      SourceCurrentEmptinessMemo.grows formulas solver effects.keeps before.fourth initial.correct,
+      SourceQueryUnfoldMemo.valid_grows _ _ initial.ready.semantic effects.keeps memos initial.globals,
+      invariants.2.1⟩
+  exact ⟨bound, result, heap,
+    ⟨running, kept, semantic, resultAvailable, resultClosed, exactLanguage⟩,
+    afterContext, effects, extends_refl _, fun _ _ found => found⟩
+
+end MicroCFTA.SourcePruningEnumerationSelectedValueCaller

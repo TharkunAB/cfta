@@ -1,0 +1,9 @@
+theorem run_complete (value : Value Symbol Guard) (before : State Symbol Guard)
+    (semantic : SemanticReady before) (available : Available before value)
+    (closed : value.free = []) :
+    ∃ bound result after,
+      (∀ extra, run (bound + extra) value before = .done result after) ∧
+      Keeps before after ∧ SemanticReady after ∧ Available after result ∧ result.free = [] ∧
+      ∀ holds ambient term,
+        InternedGuardedLanguage.meaning holds ambient result term ↔
+          InternedGuardedLanguage.meaning holds ambient value term

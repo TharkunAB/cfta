@@ -1,0 +1,31 @@
+theorem handles_lookup
+    (holds : NativeGuard → Term Symbol → Bool) (ambient : InternedGuardedLanguage.Env Symbol)
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (handle : Nat) (value : InternedConstructorTemplates.Value Symbol NativeGuard) (term : Term Symbol)
+    (decoded : lookupNode heap handle = some value) :
+    handles holds ambient heap handle term ↔ InternedGuardedLanguage.meaning holds ambient value term := by
+  constructor
+  · rintro ⟨actual, found, accepted⟩
+    have same : actual = value := Option.some.inj (found.symm.trans decoded)
+    simpa only [same] using accepted
+  · intro accepted
+    exact ⟨value, decoded, accepted⟩
+
+/-- Native growth retains a handle's language when that handle already has an actual readback. -/
+theorem handles_keeps
+    (holds : NativeGuard → Term Symbol → Bool) (ambient : InternedGuardedLanguage.Env Symbol)
+    (beforeHeap afterHeap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (handle : Nat) (value : InternedConstructorTemplates.Value Symbol NativeGuard) (term : Term Symbol)
+    (decoded : lookupNode beforeHeap handle = some value)
+    (kept : SourceEqualityRequiredCache.Keeps beforeHeap afterHeap) :
+    handles holds ambient afterHeap handle term ↔ handles holds ambient beforeHeap handle term :=
+  (handles_lookup holds ambient afterHeap handle value term
+    (lookupNode_keeps beforeHeap afterHeap kept handle value decoded)).trans
+    (handles_lookup holds ambient beforeHeap handle value term decoded).symm
+
+/-- Every actual old stored slot has the same interpreted domain after native growth. -/
+theorem slot_keeps
+    (holds : NativeGuard → Term Symbol → Bool) (ambient : InternedGuardedLanguage.Env Symbol)
+    (beforeHeap afterHeap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (state : EnumerationState.State Symbol EnumGuard) (uv : Nat) (value : UVarValue Symbol)
+    (stored : state.values[uv]? = some value)

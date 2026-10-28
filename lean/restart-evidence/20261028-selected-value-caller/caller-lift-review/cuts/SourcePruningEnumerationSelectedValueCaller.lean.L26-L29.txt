@@ -1,0 +1,4 @@
+/-- Set the returned physical heap and retain every other caller component. -/
+def advance (before : Caller width) (heap : State Symbol Constraint) : Caller width :=
+  SourceCurrentAllocatedPartialState.advance before
+    (advancePhysical before.checked ⟨heap, before.checked.operations⟩) before.fourth before.merge

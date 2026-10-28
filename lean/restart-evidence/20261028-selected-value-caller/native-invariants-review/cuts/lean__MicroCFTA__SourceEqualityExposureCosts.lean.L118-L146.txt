@@ -1,0 +1,29 @@
+    (state : State Symbol Guard) (semantic : SemanticReady state) (costs : CostHeap state)
+    (available : Available state value) : Verified state (nodeEdges fuel value state) := by
+  have fallback (current : State Symbol Guard) (currentSemantic : SemanticReady current) (currentCosts : CostHeap current)
+      (root : Value Symbol Guard) (rootAvailable : Available current root) :
+      Verified current (collect fuel current [] [root]).canonical :=
+    (collect_verified fuel current currentSemantic currentCosts [] [root]
+      (by intro child member; simpa only [List.mem_singleton.mp member] using rootAvailable)).canonical
+  cases value with
+  | empty | reference => exact done_verified state semantic costs [] (by simp [Edges])
+  | node entry edges depth free =>
+      exact done_verified state semantic costs edges
+        (InternedEdgeResidency.resident_edges state semantic.ready.semantic.1.normal.facts.linked _ available.resident)
+  | union => exact fallback state semantic costs _ available
+  | mu entry body depth ordinary =>
+      obtain ⟨result, after, done, kept, finalSemantic, resultAvailable, _⟩ :=
+        SourceEqualityOpenOrdinaryHead.unfold_complete (.mu entry body depth ordinary) state semantic available
+      have retained := InternedFreshOrdinaryStoredSubstitution.unfold_cost_heap (.mu entry body depth ordinary)
+        state semantic.ready.semantic.1 semantic.ready.semantic.2 costs available
+      have finalCosts : CostHeap after := by simpa only [done, Outcome.state] using retained
+      have following := (fallback after finalSemantic finalCosts (.mu entry body depth ordinary)
+        (kept.available _ available)).extend kept
+      cases result with
+      | node own edges level free =>
+          simpa only [nodeEdges, done] using
+            (done_verified after finalSemantic finalCosts edges
+              (InternedEdgeResidency.resident_edges after finalSemantic.ready.semantic.1.normal.facts.linked _ resultAvailable.resident)).extend kept
+      | empty | reference | union | mu => simpa only [nodeEdges, done] using following
+
+end MicroCFTA.SourceEqualityExposureCosts

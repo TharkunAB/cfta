@@ -1,0 +1,11 @@
+    InternedFreshOrdinaryMemoGateTrace.Ready state :=
+  ⟨semantic.ready.semantic.1, semantic.ready.semantic.2, semantic.ready.covered, costs⟩
+
+/-- Every actual reader outcome retains semantic heaps, weighted records, and resident completed rows. -/
+structure Verified (before : State Symbol Guard) (result : Result Symbol Guard) : Prop where
+  semantic : SemanticReady result.state
+  costs : CostHeap result.state
+  keeps : Keeps before result.state
+  rows : ∀ edges after, result = .done edges after → Edges after edges
+
+private theorem done_verified (state : State Symbol Guard) (semantic : SemanticReady state)

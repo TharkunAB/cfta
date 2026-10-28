@@ -1,0 +1,24 @@
+/-- Actual repaired stored execution retains the cost heap and observes its exact prepared cost list. -/
+theorem execute_costs [DecidableEq (EdgeKey Symbol Guard)] (body : Value Symbol Guard)
+    (environment : Environment Symbol Guard) (state : State Symbol Guard) (context : Context state captures)
+    (cached : InternedFreshOrdinaryDepthHeap.Heap state) (heap : InternedFreshOrdinaryCostHeap.Heap state)
+    (available : Available state body) (replacements : Replacements state environment) :
+    Checked (execute body environment state) (fun value => Agrees value (preparedCosts body environment)) := by
+  have inputs := inputs_available body environment state available replacements
+  exact InternedFreshOrdinaryCosts.build_costs _ _ state
+    ⟨context.normal, inputs, context.profiles, context.freeNames⟩ cached heap
+
+/-- Every repaired unfolding retains weighted records in its exact complete or pending cache. -/
+theorem unfold_cost_heap [DecidableEq (EdgeKey Symbol Guard)] (value : Value Symbol Guard)
+    (state : State Symbol Guard) (context : Context state captures)
+    (cached : InternedFreshOrdinaryDepthHeap.Heap state) (heap : InternedFreshOrdinaryCostHeap.Heap state)
+    (available : Available state value) : InternedFreshOrdinaryCostHeap.Heap (unfold value state).state := by
+  cases value with
+  | empty | reference | node | union => exact heap
+  | mu entry body depth ordinary =>
+      have replacements : Replacements state (fun name => if name = .interned entry.identity then some (.mu entry body depth ordinary) else none) := by
+        intro name replacement found
+        dsimp only at found
+        split at found
+        · cases found; exact available
+        · contradiction

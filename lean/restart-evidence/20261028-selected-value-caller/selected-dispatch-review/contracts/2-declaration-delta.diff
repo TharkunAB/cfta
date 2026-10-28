@@ -1,0 +1,29 @@
+--- SourcePruningEnumerationNativeBranchResources.lean:head_complete_resources
++++ SourcePruningEnumerationNativePreparedResources.lean:head_complete_resources_prepared
+@@ -1,4 +1,4 @@
+-theorem head_complete_resources
++theorem head_complete_resources_prepared
+     (seed : Seed)
+     (formulas : SourceGuards.Formulas FullSyntax.Formula)
+     (solver : SourceGuards.Entailment FullSyntax.Formula)
+@@ -10,7 +10,8 @@
+     (initial : Context formulas solver inventory caller memos)
+     (ready : EnumerationDriver.Ready uv before.core)
+     (stored : before.core.values[uv]? = some (.unenumerated (some handle) scs))
+-    (decoded : lookupNode caller.checked.native.machine.heap handle = some (.node parentEntry edges depth free))
++    (parentAvailable : Available caller.checked.native.machine.heap (.node parentEntry edges depth free))
++    (parentClosed : free = [])
+     (realized : PendingRealized caller.checked.native.machine.heap before.core) (selected : edge ∈ edges)
+     (paths : Roots before.core.representatives roots)
+     (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+@@ -60,8 +61,8 @@
+         obtain ⟨r, n, p, h, k, afterCaller, after, saved, final, next, afterRoots, result,
+           stable, post, querySame, growth, afterPaths, storage, afterRealized, afterCounts,
+           afterFlags, _origin, _retained, _protects, pendingHistory, shape, returnedFits, returnedKnown⟩ :=
+-          SourcePruningEnumerationCapturedEdge.complete_with_history_resources seed formulas solver inventory caller before checkEmpty
+-            uv handle scs parentEntry edges depth free edge roots memos initial ready stored decoded realized
++          SourcePruningEnumerationCapturedEdge.complete_with_history_resources_prepared seed formulas solver inventory caller before checkEmpty
++            uv handle scs parentEntry edges depth free edge roots memos initial ready stored parentAvailable parentClosed realized
+             selected paths counts flags pending allowed tries residual projected fits actualReserved known
+         have valid : CacheValid afterCaller after :=
+           ⟨afterRoots, afterPaths, storage, afterRealized, afterCounts, afterFlags⟩

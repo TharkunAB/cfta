@@ -1,0 +1,44 @@
+theorem complete
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (before : Caller width) (memos : Memos) (value : Node)
+    (initial : Context formulas solver inventory before memos)
+    (available : Available before.checked.native.machine.heap value)
+    (closed : value.free = []) :
+    ∃ bound result heap,
+      ((∀ extra, SourcePruningEnumerationSelectedValue.run (bound + extra) value
+          before.checked.native.machine.heap = .done result heap) ∧
+        Keeps before.checked.native.machine.heap heap ∧ SemanticReady heap ∧
+        Available heap result ∧ result.free = [] ∧
+        ∀ holds ambient term,
+          InternedGuardedLanguage.meaning holds ambient result term ↔
+            InternedGuardedLanguage.meaning holds ambient value term) ∧
+      Post formulas solver inventory before (advance before heap) memos := by
+  obtain ⟨bound, result, heap, running, kept, semantic, resultAvailable, resultClosed, exactLanguage⟩ :=
+    SourcePruningEnumerationSelectedValue.run_complete value before.checked.native.machine.heap
+      initial.ready.semantic available closed
+  have observed : SourcePruningEnumerationSelectedValue.run bound value
+      before.checked.native.machine.heap = .done result heap := by
+    simpa only [Nat.add_zero] using running 0
+  have physicalReady := SourceCurrentAllocatedConjunctionMemo.ready before.checked initial.ready.good
+    initial.ready.semantic initial.ready.costs
+  have invariants := SourcePruningEnumerationSelectedValue.run_invariants
+    (SourceCurrentConjunctionEquality.FieldAvailable before.checked.operations)
+    bound value before.checked.native.machine.heap result heap initial.ready.semantic available
+    initial.ready.costs initial.probes physicalReady.fields observed
+  have effects : SourceCurrentConjunctionRowsAllocation.Effects
+      (physical before.checked) ⟨heap, before.checked.operations⟩ :=
+    ⟨kept, ⟨semantic, invariants.1, physicalReady.valid, invariants.2.2⟩,
+      SourceEqualityConstraintMemoAllocation.grows_refl _⟩
+  let checked := advancePhysical before.checked ⟨heap, before.checked.operations⟩
+  have afterContext : Context formulas solver inventory (advance before heap) memos := by
+    refine ⟨SourceCurrentConjunctionClassScan.advance_ready before.checked _ initial.ready effects,
+      initial.admitted.advance _ (SourceCurrentAllocatedQueryMemo.advance_extension before.checked _ effects),
+      initial.sound.advance formulas solver checked before.fourth before.merge effects,
+      initial.stored.grows effects.keeps, initial.covered,
+      SourceCurrentEmptinessMemo.grows formulas solver effects.keeps before.fourth initial.correct,
+      SourceQueryUnfoldMemo.valid_grows _ _ initial.ready.semantic effects.keeps memos initial.globals,
+      invariants.2.1⟩
+  exact ⟨bound, result, heap,
+    ⟨running, kept, semantic, resultAvailable, resultClosed, exactLanguage⟩,
+    afterContext, effects, extends_refl _, fun _ _ found => found⟩

@@ -1,0 +1,43 @@
+    (Hashable symbol, Typeable symbol) => UVar -> EnumerateM symbol (TermFragment symbol)
+orderedRawStep = enumerateOutUVarWith enumerateShallowHere
+
+{- | Pull one raw sibling with the parent's refreshed local state.
+This source takes no global or config argument. Its child has a pending Left
+event, which is delivered only when the child is activated.
+-}
+orderedSiblings ::
+    Frontier.Estimate key ->
+    UVar ->
+    [(TermFragment symbol, EnumerationState symbol)] ->
+    Frontier.Siblings key (OrderedBranch local symbol)
+orderedSiblings _ _ [] = Frontier.End
+orderedSiblings lower uv ((fragment, enumState) : rest) =
+    Frontier.More lower $ \(OrderedBranch _ local _) ->
+        (OrderedBranch enumState local (OrderedLeft uv fragment), orderedSiblings lower uv rest)
+
+-- | Connect shared callbacks to the scheduler outside the raw alternative tail.
+orderedPolicy ::
+    (Hashable symbol, Typeable symbol) =>
+    symbol ->
+    OrderedConfig key global local symbol ->
+    Frontier.Policy key global (OrderedBranch local symbol) (Term symbol, [(Constraint, Term symbol)])
+orderedPolicy marker config =
+    Frontier.Policy
+        { Frontier.refresh = \global (OrderedBranch enumState local phase) ->
+            case orderedObserve (orderedActivate marker config global local phase) enumState of
+                Just ((updated, phase'), enumState') -> Just (OrderedBranch enumState' updated phase')
+                Nothing -> Nothing
+        , Frontier.lowerBound = bound
+        , Frontier.advance = \branch@(OrderedBranch enumState _ phase) -> case phase of
+            OrderedComplete run -> Frontier.Finished run
+            OrderedPrepared uv ->
+                Frontier.Children (orderedSiblings (bound branch) uv (allBranches (orderedRawStep uv) enumState))
+            _ -> error "ordered enumeration: branch was not prepared"
+        , Frontier.exactKey = orderedKey config . fst
+        }
+  where
+    bound (OrderedBranch enumState _ phase) = case phase of
+        OrderedComplete (term, _) -> Frontier.Bound (orderedKey config term)
+        _ -> case orderedObserve (orderedPartialRoot >>= orderedBound config) enumState of
+            Just (Just key, _) -> Frontier.Bound key
+            _ -> Frontier.Unknown

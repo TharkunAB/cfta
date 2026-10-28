@@ -1,0 +1,18 @@
+/-- Physical readiness includes the scope needed by subsequent generated native operands. -/
+structure Ready (state : Checked width) : Prop where
+  good : Good state
+  semantic : SemanticReady state.native.machine.heap
+  costs : CostHeap state.native.machine.heap
+  scopedCache : SourceCurrentAllocatedNativeScopeCache.Scoped state.native
+  idle : SourceRecursiveIntersectionNative.Idle state.native
+
+/-- Constructor-only effects retain every checked invariant at the same native tables. -/
+theorem advance_ready (before : Checked width) (after : Physical) (ready : Ready before)
+    (effects : SourceCurrentConjunctionRowsAllocation.Effects (physical before) after) :
+    Ready (advancePhysical before after) :=
+  ⟨SourceCurrentAllocatedConjunctionMemo.advance_good before after ready.good effects,
+    effects.ready.semantic, effects.ready.costs,
+    SourceCurrentAllocatedConjunctionMemo.advance_scoped before after ready.scopedCache,
+    SourceCurrentAllocatedConjunctionMemo.advance_idle before after ready.idle⟩
+
+/-- Each actual primary gate derives readiness and retains the original forest. -/

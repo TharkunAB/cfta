@@ -1,0 +1,38 @@
+--- SourcePruningEnumerationNativeBranchResources.lean:complete_with_history_resources
++++ SourcePruningEnumerationNativePreparedResources.lean:complete_with_history_resources_prepared
+@@ -1,4 +1,4 @@
+-theorem complete_with_history_resources
++theorem complete_with_history_resources_prepared
+     (seed : Seed)
+     (formulas : SourceGuards.Formulas FullSyntax.Formula)
+     (solver : SourceGuards.Entailment FullSyntax.Formula)
+@@ -10,7 +10,8 @@
+     (initial : Context formulas solver inventory caller memos)
+     (ready : EnumerationDriver.Ready uv before.core)
+     (stored : before.core.values[uv]? = some (.unenumerated (some handle) scs))
+-    (decoded : lookupNode caller.checked.native.machine.heap handle = some (.node parentEntry storedEdges depth free))
++    (parentAvailable : Available caller.checked.native.machine.heap (.node parentEntry storedEdges depth free))
++    (parentClosed : free = [])
+     (realized : PendingRealized caller.checked.native.machine.heap before.core)
+     (selected : ∀ edge ∈ selectedEdges, edge ∈ storedEdges)
+     (paths : Roots before.core.representatives roots)
+@@ -65,8 +66,8 @@
+           omega)
+       obtain ⟨r, n, p, h, k, receipt, middleCaller, middleQueries, middleMemos, middleInventory,
+         headRun, headPost, headQueries, admitted, headPending, headHistory, shape, headFits, headKnown⟩ :=
+-        head_complete_resources seed formulas solver inventory caller before checkEmpty uv handle scs parentEntry storedEdges depth free
+-          edge roots memos initial ready stored decoded realized (selected edge (by simp)) paths counts flags pending fits headReserved known
++        head_complete_resources_prepared seed formulas solver inventory caller before checkEmpty uv handle scs parentEntry storedEdges depth free
++          edge roots memos initial ready stored parentAvailable parentClosed realized (selected edge (by simp)) paths counts flags pending fits headReserved known
+       rcases shape with continued | ⟨unhandled, allowed, projected⟩
+       · have kept := headPost.effects.keeps
+         have middleRealized : PendingRealized middleCaller.checked.native.machine.heap before.core :=
+@@ -80,7 +81,7 @@
+           tailFits, tailKnown, tailResources⟩ :=
+           ih (reservationAdvance seed (edgeCost scs before.core.counter edge))
+             middleInventory middleCaller middleMemos headPost.context
+-            (lookupNode_keeps _ _ kept handle _ decoded) middleRealized
++            (kept.available (.node parentEntry storedEdges depth free) parentAvailable) middleRealized
+             (fun chosen member => selected chosen (List.mem_cons_of_mem _ member)) middleFlags headFits tailReserved headKnown
+         let result : Result (bits + 2) := match (generalizing := false) tailResult with
+           | .complete receipts afterCaller saved => .complete (receipt :: receipts) afterCaller saved

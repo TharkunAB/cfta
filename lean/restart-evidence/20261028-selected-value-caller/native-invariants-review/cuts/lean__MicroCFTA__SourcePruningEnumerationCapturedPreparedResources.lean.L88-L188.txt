@@ -1,0 +1,101 @@
+        afterCaller.checked.native.machine.heap := by
+  have bounded : ∀ sc ∈ scs, sc.var < before.core.counter :=
+    ready.safe.1.values _ (List.mem_of_getElem? stored)
+  have avoids := ready.avoids handle scs stored
+  obtain ⟨r, n, p, h, k, afterCaller, middle, savedQueries, final, next, afterRoots, edgeResult,
+    edgeRun, post, querySame, growth, middlePaths, storage, middleRealized, middleCounts,
+    middleFlags, origin, retained, protects, pendingHistory, incomingHistory, shape, returnedFits, returnedKnown⟩ :=
+    SourcePruningEnumerationSelectedEdge.complete_with_fragments_resources seed formulas solver inventory caller before checkEmpty
+      parentEntry edges depth free edge scs roots memos initial parentAvailable parentClosed selected ready.safe realized
+      paths counts flags bounded pending allowed tries residual projected fits reserved known
+  rcases shape with ⟨fragment, completed, middleSafe, fragmentBound, fragmentPending, fragmentSeparate⟩ |
+    ⟨fragments, outer, waiting, stopped⟩
+  · subst edgeResult
+    have frame := protects uv ready.inside ready.root avoids
+    have currentStored : middle.core.values[uv]? = some (.unenumerated (some handle) scs) :=
+      frame.value.trans stored
+    obtain ⟨fuel, after, finishRun, _raw, core, finalStored, _finalFlag, _finalWaiting,
+      afterPaths, afterCounts, afterFlags, afterStorage, afterRealized, safeFinish⟩ :=
+      SourcePruningEnumerationFinalize.complete afterCaller.checked.native.machine.heap middle uv fragment
+        (.unenumerated (some handle) scs) currentStored afterRoots middlePaths middleCounts middleFlags
+        storage fragmentBound middleRealized
+    have afterSafe := safeFinish middleSafe frame.root
+    have separate := fragmentSeparate uv ready.inside ready.root avoids
+    have afterFragmentPending : PendingFragment after.core fragment := by
+      rw [core]
+      exact pendingFragment_write middle.core uv fragment fragmentPending separate
+    have advance : ∀ level frontier, EnumerationOrder.Stratified before.core level frontier →
+        ∃ nextLevel, EnumerationOrder.Stratified after.core nextLevel (frontier + 1) := by
+      intro level frontier stratified
+      have enumProtects : ∀ held old, before.core.values[held]? = some (.enumerated old) →
+          EnumerationDriver.Protected held before.core middle.core := by
+        intro held old stored
+        obtain ⟨inside, root⟩ := enumerated_root before.core ready.safe held old stored
+        exact protects held inside root (pending held old stored)
+      obtain ⟨middleLevel, middleOrder⟩ := EnumerationOrder.stratified_preserved before.core middle.core
+        middleSafe level frontier stratified origin enumProtects
+      obtain ⟨nextLevel, nextOrder⟩ := EnumerationOrder.write_stratified middle.core middleSafe middleLevel
+        frontier uv middleOrder (some handle) scs currentStored fragment fragmentPending separate
+      refine ⟨nextLevel, ?_⟩
+      rw [core]
+      exact EnumerationOrder.stratified_ancestry _ [] nextLevel (frontier + 1) nextOrder
+    have afterPending : InputsPending after.core scs := by
+      intro held old expanded
+      by_cases same : held = uv
+      · subst held
+        rw [core]
+        exact frame.avoids scs avoids
+      · rw [core]
+        apply retained held old
+        rw [core] at expanded
+        simpa only [List.getElem?_set_ne (Ne.symm same)] using expanded
+    refine ⟨r, n, p, h, k + fuel, afterCaller, after, savedQueries, final, next, afterRoots,
+      .complete fragment afterCaller savedQueries after, ?_, post, querySame, ?_, afterPaths,
+      afterStorage, afterRealized, afterCounts, afterFlags, ?_, afterPending, ?_, ?_,
+      .inl ⟨fragment, rfl, afterSafe, ?_, finalStored, ?_, ?_, afterFragmentPending, advance⟩, returnedFits, returnedKnown⟩
+    · intro er en P H ek largeP largeH
+      have selectedRun := edgeRun er en P H (fuel + ek) largeP largeH
+      rw [← Nat.add_assoc] at selectedRun
+      simp only [run, selectedRun]
+      have finalRun := finishRun (k + ek)
+      rw [show fuel + (k + ek) = k + fuel + ek by omega] at finalRun
+      rw [finalRun]
+      rfl
+    · rw [core]
+      exact growth
+    · intro held old different expanded
+      apply origin held old
+      rw [core] at expanded
+      simpa only [List.getElem?_set_ne (Ne.symm different)] using expanded
+    · intro held different inside root separate
+      have oldFrame := protects held inside root separate
+      apply oldFrame.trans
+      refine ⟨?_, ?_, ?_⟩
+      · rw [core]
+        exact List.getElem?_set_ne (Ne.symm different)
+      · rw [core]
+        exact oldFrame.root
+      · rw [core]
+        exact fun _ => Iff.rfl
+    · intro history incoming
+      have written := EnumerationReferences.setValue_pending uv fragment middle.core
+        {middle.core with values := middle.core.values.set uv (.enumerated fragment)}
+        (pendingHistory history) (incomingHistory uv ready.inside ready.root avoids incoming)
+        ((EnumerationDriver.modify_success _ _ _).mpr rfl)
+      rw [core]
+      exact written
+    · rw [core]
+      exact fragmentBound
+    · rw [core]
+    · rw [core]
+      exact frame.root
+  · subst edgeResult
+    refine ⟨r, n, p, h, k, afterCaller, middle, savedQueries, final, next, afterRoots,
+      .stopped fragments (.ok (some []), afterCaller, savedQueries, outer, waiting) (some middle),
+      ?_, post, querySame, growth, middlePaths, storage, middleRealized, middleCounts, middleFlags,
+      fun held old _ expanded => origin held old expanded, retained,
+      fun held _ inside root separate => protects held inside root separate,
+      (fun history _ => pendingHistory history),
+      .inr ⟨fragments, outer, waiting, rfl⟩, returnedFits, returnedKnown⟩
+    intro er en P H ek largeP largeH
+    rw [run, edgeRun er en P H ek largeP largeH]

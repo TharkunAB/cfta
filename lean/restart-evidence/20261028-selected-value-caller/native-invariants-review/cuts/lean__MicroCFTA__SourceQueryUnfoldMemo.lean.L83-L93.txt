@@ -1,0 +1,11 @@
+/-- Actual constructor effects retain coherence of the same three completed source tables. -/
+theorem valid_grows [DecidableEq (EdgeKey SourceSymbol SourceGuard)]
+    (before after : State SourceSymbol SourceGuard) (semantic : SemanticReady before)
+    (keeps : SourceEqualityRequiredCache.Keeps before after) (memos : EndpointMemoGateTrace.Memos)
+    (valid : EndpointMemoGateTrace.Valid before memos) : EndpointMemoGateTrace.Valid after memos := by
+  exact ⟨InternedFreshOrdinaryUnfoldMemo.grows before after semantic.ready.semantic.1.normal.facts.coherent.valid
+      keeps.growth keeps.history memos.unfolding valid.unfolding,
+    SourceEndpointMemo.grows before after keeps.growth keeps.history memos.query valid.query⟩
+
+/-- An actual source unfolding updates only its unfolding table and derives all returned memo coherence. -/
+theorem run_memos_of_unfold [DecidableEq (EdgeKey SourceSymbol SourceGuard)]

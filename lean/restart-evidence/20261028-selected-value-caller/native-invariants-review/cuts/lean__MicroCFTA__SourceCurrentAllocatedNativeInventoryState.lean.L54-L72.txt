@@ -1,0 +1,19 @@
+/-- An actual machine extension retains the same native tables and inventory. -/
+theorem At.advanceNative
+    {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {inventory : Inventory} {before : Checked width} (current : At formulas solver inventory before)
+    (machine : Machine Symbol Guard) (extension : Extension before.native.machine machine) :
+    At formulas solver inventory {before with native := advance before.native machine} :=
+  ⟨⟨current.contextual.nodes, current.contextual.edges⟩, ⟨current.covered.nodes, current.covered.edges⟩,
+    grows_trans current.growth extension.heap, extends_trans current.history extension.history⟩
+
+/-- Literal physical advancement retains the same native cells and computed input model. -/
+theorem At.advance
+    {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {inventory : Inventory} {before : Checked width} (current : At formulas solver inventory before)
+    (after : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula)
+    (extension : Extension before.native.machine
+      (SourceCurrentAllocatedQueryMemo.advancePhysical before after).native.machine) :
+    At formulas solver inventory (SourceCurrentAllocatedQueryMemo.advancePhysical before after) :=
+  ⟨⟨current.contextual.nodes, current.contextual.edges⟩, ⟨current.covered.nodes, current.covered.edges⟩,
+    grows_trans current.growth extension.heap, extends_trans current.history extension.history⟩

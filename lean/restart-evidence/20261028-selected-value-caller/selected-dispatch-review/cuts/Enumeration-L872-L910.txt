@@ -1,0 +1,39 @@
+{- | Expand one selected slot into a fragment with the supplied node-expansion
+function.
+
+The pattern bind is deliberately failable: a failed match in 'EnumerateM'
+ends the branch, so a UVar that is not an unexpanded node drops this branch
+instead of raising. The branch is unreachable through @enumerateFully'@, which takes its
+UVar from 'nextExpandableUVar' and so only offers expandable UVars.
+-}
+enumerateOutUVarWith ::
+    (Hashable symbol, Typeable symbol) =>
+    (Seq SuspendedConstraint -> Node symbol -> EnumerateM symbol (TermFragment symbol)) ->
+    UVar ->
+    EnumerateM symbol (TermFragment symbol)
+enumerateOutUVarWith expandNode uv =
+    do
+        UVarUnenumerated (Just n) scs <- getUVarValue uv
+        uv' <- getUVarRepresentative uv
+        ancestry <- gets $ IntMap.findWithDefault HashSet.empty (uvarToInt uv') . _recursionAncestry
+        modify' $ \s ->
+            s
+                { _expansionAncestry = if recursiveBoundary n then HashSet.insert (recursionKey n scs) ancestry else ancestry
+                }
+
+        t <- case n of
+            Mu _ -> expandNode scs (unfoldOuterRec n)
+            InternedUnion _ -> expandNode scs (Node $ nodeEdges n)
+            _ -> expandNode scs n
+
+        modify' $ \s -> s{_expansionAncestry = HashSet.empty}
+        setUVarValue uv' (UVarEnumerated t)
+        return t
+
+-- | Expand the root UVar until it represents a complete term.
+enumerateFully :: (Hashable symbol, Typeable symbol) => EnumerateM symbol ()
+enumerateFully =
+    enumerateFully' () noExpansionPreference (\state _ _ -> return (False, state))
+
+{- | 'enumerateUntil'' without a stop rule and without narrowing: enumerate
+until the root term is complete.

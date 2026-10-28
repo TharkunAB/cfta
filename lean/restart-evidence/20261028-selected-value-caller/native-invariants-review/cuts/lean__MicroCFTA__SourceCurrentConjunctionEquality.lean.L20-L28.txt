@@ -1,0 +1,9 @@
+
+/-- An original physical field is normalized and has an existing successful load. -/
+def FieldAvailable (state : State) (original : Raw Formula) : Prop :=
+  SourceEqualityGuardReadback.Cached original.equalities ∧
+    ∃ value : Allocated Formula, SourceEqualityConstraintFieldLookup.load original state.constraints = .ok (some value)
+
+/-- Physical edge keys retain field availability in the current equality cache. -/
+def Fields (state : State) (heap : InternedConstructorTemplates.State Symbol (Raw Formula)) : Prop :=
+  SourceEqualityAnnotationHeap.Heap (FieldAvailable state) heap
