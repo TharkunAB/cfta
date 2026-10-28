@@ -4,12 +4,14 @@ checker, and the rank round trip.
 module Data.CFTA.Gen.ManySortedSpec (spec) where
 
 import Data.List (sort)
+import qualified Data.Map.Strict as Map
 import qualified Data.Set as Set
 import Test.Hspec (Spec, describe, it, shouldBe, shouldSatisfy)
 
 import Data.Either (isRight)
 
 import qualified Data.CFTA as FTA
+import Data.CFTA.Constraint (Constraint, noConstraint)
 import Data.CFTA.Gen (Gen)
 import qualified Data.CFTA.Gen as Gen
 import Data.CFTA.Gen.ManySorted
@@ -36,6 +38,36 @@ arithmetic =
             ]
         , sortedRoots = [Int, Bool]
         , sortedValues = []
+        }
+
+-- | A graph whose states refine the sorts of 'arithmetic', and a dead state without a sort.
+sortedGraph :: FTA.PlainFTA String String
+sortedGraph =
+    graphOf
+        "Test"
+        [ ("Test", [edge "lt" ["Sum", "Small"]])
+        , ("Sum", [edge "add" ["Sum", "Small"], edge "zero" []])
+        , ("Small", [edge "zero" [], edge "one" []])
+        , ("Dead", [])
+        ]
+
+-- | A graph from its initial state and its rows.
+graphOf :: String -> [(String, [FTA.Transition String String Constraint])] -> FTA.PlainFTA String String
+graphOf initial rows = either (error . show) id $ FTA.mkFTA initial rows
+
+-- | A transition without a constraint.
+edge :: String -> [String] -> FTA.Transition String String Constraint
+edge symbol children = FTA.Transition symbol children noConstraint
+
+-- | Integers as @#n@.
+codec :: ValueCodec Sort String
+codec =
+    ValueCodec
+        { injectInteger = \n -> '#' : show n
+        , projectInteger = \symbol -> case symbol of
+            '#' : digits | [(n, "")] <- reads digits -> Just n
+            _ -> Nothing
+        , valueSymbol = \s -> '<' : show s <> ">"
         }
 
 maxSize :: Int
@@ -162,5 +194,31 @@ spec = describe "Data.CFTA.Gen.ManySorted" $ do
     it "rejects a duplicate symbol" $
         failure (signatureGen arithmetic{sortedFunctions = SortedFunction "zero" [] Int : sortedFunctions arithmetic})
             `shouldBe` Just (DuplicateSymbol "zero")
+
+    it "checks a map from the states of an automaton to sorts" $ do
+        let sorts = Map.fromList [("Test", Bool), ("Sum", Int), ("Small", Int)]
+        checkSorts arithmetic sorts sortedGraph `shouldBe` Right ()
+        checkSorts arithmetic (Map.delete "Small" sorts) sortedGraph `shouldBe` Left (UnsortedState "Small")
+        checkSorts arithmetic (Map.insert "Small" Bool sorts) sortedGraph
+            `shouldBe` Left (IllSortedTransition "Small" "zero" [])
+        checkSorts arithmetic (Map.insert "Sum" Bool sorts) sortedGraph
+            `shouldBe` Left (IllSortedTransition "Sum" "add" [Just Bool, Just Int])
+
+    it "accepts the terms of each sorted state as terms of its sort" $
+        mapM_
+            ( \(state, sort') ->
+                mapM_ (\term -> typeCheck arithmetic{sortedRoots = [sort']} term `shouldBe` Right sort') $ take 200 $ stateTerms state
+            )
+            [("Test", Bool), ("Sum", Int), ("Small", Int)]
+
+    it "checks the values of a value sort" $ do
+        let digits = arithmetic{sortedValues = [ValueSort Int (Interval 0 9)]}
+            graph = graphOf "Digit" [("Digit", [edge "#7" [], edge "zero" []])]
+            sorts = Map.singleton "Digit" Int
+        checkSortsWith codec digits sorts graph `shouldBe` Right ()
+        checkSorts digits sorts graph `shouldBe` Left (IllSortedTransition "Digit" "#7" [])
+        checkSortsWith codec digits sorts (graphOf "Digit" [("Digit", [edge "#12" []])])
+            `shouldBe` Left (IllSortedTransition "Digit" "#12" [])
   where
     failure = either Just (const Nothing)
+    stateTerms state = FTA.terms sortedGraph{FTA.initialState = state}

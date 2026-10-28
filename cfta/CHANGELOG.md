@@ -4,6 +4,10 @@
 
 Before release, the package was called `microcfta`.
 
+- Add `Data.CFTA.Signature`: the data of a first-order many-sorted
+  signature, `SortedSignature`, `SortedFunction`, `ValueSort`, and
+  `ValueSource`. `Data.CFTA.Gen.ManySorted` of `cfta-generator` re-exports
+  them, so a package can print and read a signature without `cfta-generator`.
 - `Data.CFTA.replaceRows` applies row replacements and deletions to an
   existing explicit automaton. It shares unchanged rows and validates the
   complete result after the batch. The original automaton stays unchanged.
