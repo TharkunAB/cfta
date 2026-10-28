@@ -25,3 +25,5 @@
   `showCodec` gives the state labels of `Show` and `Read`.
 - Add the text forms of named predicates, `predicate(NAME, [TERM, ...])`, and
   of named sorts, `named(NAME, [SORT, ...])`.
+- Add named holes to templates: `_x` is the hole with the name `x`. A template
+  quotes a symbol whose name starts with `_`.

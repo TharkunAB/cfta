@@ -451,7 +451,11 @@ edgeText encode edge = symbolText' (FTA.transitionSymbol edge) <> childrenText (
 nameText :: Text -> Builder
 nameText name
     | not (Text.null name), Text.all nameCharacter name, name /= "_" = fromText name
-    | otherwise = "\"" <> foldMap escape (Text.unpack name) <> "\""
+    | otherwise = quotedText name
+
+-- | Render a label in double quotes, with Unicode and escaped control characters.
+quotedText :: Text -> Builder
+quotedText name = "\"" <> foldMap escape (Text.unpack name) <> "\""
   where
     escape '\\' = "\\\\"
     escape '"' = "\\\""
@@ -465,10 +469,19 @@ nameText name
 
 -- | Render a complete symbol; omit only an exact top refinement.
 symbolText' :: Symbol -> Builder
-symbolText' symbol =
-    nameText (symbolText symbol) <> case symbolRefinement symbol of
-        F.Top -> mempty
-        formula -> " @{ " <> formulaText formula <> " }"
+symbolText' symbol = nameText (symbolText symbol) <> refinementText symbol
+
+-- | Render a symbol of a template. A name that starts with @_@ is quoted, because @_name@ is a named hole.
+templateSymbolText :: Symbol -> Builder
+templateSymbolText symbol
+    | "_" `Text.isPrefixOf` symbolText symbol = quotedText (symbolText symbol) <> refinementText symbol
+    | otherwise = symbolText' symbol
+
+-- | Render the refinement of a symbol; omit only an exact top refinement.
+refinementText :: Symbol -> Builder
+refinementText symbol = case symbolRefinement symbol of
+    F.Top -> mempty
+    formula -> " @{ " <> formulaText formula <> " }"
 
 -- | Render each formula constructor without normalization.
 formulaText :: F.Formula -> Builder
@@ -575,10 +588,11 @@ pathText = listText . map (\(ChildIndex index) -> integerText $ toInteger index)
 templateText :: Template Symbol -> Builder
 templateText template = case template of
     Hole -> "_"
+    NamedHole name -> "_" <> nameText name
     AnyNode children -> call "_" $ map templateText children
-    TemplateNode symbol children -> symbolText' symbol <> childrenText (map templateText children)
+    TemplateNode symbol children -> templateSymbolText symbol <> childrenText (map templateText children)
     AnyPrefix children -> call "_" $ map templateText children <> ["..."]
-    TemplatePrefix symbol children -> symbolText' symbol <> "(" <> separated (map templateText children <> ["..."]) <> ")"
+    TemplatePrefix symbol children -> templateSymbolText symbol <> "(" <> separated (map templateText children <> ["..."]) <> ")"
 
 -- | Omit parentheses only for an exact leaf.
 childrenText :: [Builder] -> Builder
@@ -1035,20 +1049,27 @@ pathParser = Path <$> bracketed index
             fail "child index is outside the Int range"
         pure $ ChildIndex $ fromInteger value
 
--- | Parse all five templates, distinguishing an unquoted hole from a symbol.
+{- | Parse all six templates. An unquoted @_@ is a hole, and @_@ directly
+followed by a name is a named hole; a quoted name is a symbol.
+-}
 templateParser :: A.Parser (Template Symbol)
 templateParser = do
-    wildcard <- startsKeyword "_"
-    if wildcard
+    next <- A.peekChar
+    if next == Just '_'
         then do
-            keyword "_"
-            ifNext
-                '('
-                ( do
-                    (children, prefix) <- templateArguments
-                    pure $ if prefix then AnyPrefix children else AnyNode children
-                )
-                Hole
+            _ <- A.char '_'
+            after <- A.peekChar
+            if maybe False (\c -> nameCharacter c || c == '"') after
+                then NamedHole <$> nameParser
+                else do
+                    spaces
+                    ifNext
+                        '('
+                        ( do
+                            (children, prefix) <- templateArguments
+                            pure $ if prefix then AnyPrefix children else AnyNode children
+                        )
+                        Hole
         else do
             symbol <- symbolParser
             (children, prefix) <- ifNext '(' templateArguments ([], False)

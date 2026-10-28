@@ -549,6 +549,12 @@ withForms source =
         , TemplatePrefix "_" []
         , TemplatePrefix "f" [Hole]
         , TemplateNode (RefinedSymbol "x" $ F.And []) [AnyPrefix [], TemplatePrefix "a b" [Hole]]
+        , NamedHole "x"
+        , NamedHole ""
+        , NamedHole "_y"
+        , NamedHole "a b"
+        , TemplateNode "_f" [NamedHole "x", Hole]
+        , TemplatePrefix (RefinedSymbol "_g" $ F.And []) [NamedHole "z"]
         ]
 
 -- | Names that need quotes or escapes, or that look like keywords.
@@ -736,6 +742,7 @@ malformedLanguages =
     , blank <> " exclude x = elsewhere _;"
     , blank <> " exclude x = root f(...,a);"
     , blank <> " exclude x = root f(a,);"
+    , blank <> " exclude x = root _x(a);"
     , "language 1; start S; state S { a = a @{ v == 1.5 }; }"
     , "language 1; start S; state S { a = a { x = raw {}; }; }"
     , "language 1; start S; state S { a = a"
