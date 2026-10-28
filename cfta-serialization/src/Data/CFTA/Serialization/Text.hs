@@ -389,7 +389,6 @@ graphParser format decode transition = do
     version <- integerParser
     unless (version == 1) $ fail "unsupported snapshot version; expected 1"
     token ";"
-    noComment
     keyword "start"
     initial <- stateParser decode
     token ";"
@@ -416,7 +415,6 @@ stateParser decode = do
 -- | Read a graph transition with an optional complete constraint.
 graphTransitionParser :: (Text -> Either String state) -> A.Parser (FTA.Transition state Symbol C.Constraint)
 graphTransitionParser decode = do
-    noComment
     (symbol, children) <- edgeParser decode
     present <- startsKeyword "where"
     constraint <- if present then keyword "where" *> constraintParser else pure C.noConstraint
@@ -655,9 +653,9 @@ misplacedComment = "a doc comment must come before the header or a state"
 commentOn :: CommentTarget state -> Maybe Text -> [NoteEntry state]
 commentOn target = maybe [] (\text -> [CommentEntry target text])
 
--- | Attach presentation whitespace to one token.
+-- | Attach presentation whitespace to one token, and reject a doc comment before it.
 lexeme :: A.Parser value -> A.Parser value
-lexeme parser = parser <* spaces
+lexeme parser = noComment *> parser <* spaces
 
 -- | Require one punctuation token.
 token :: Text -> A.Parser ()

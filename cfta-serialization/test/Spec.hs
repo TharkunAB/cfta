@@ -169,6 +169,9 @@ misplacedGraphComments =
     , "graph 1; start S; state S {}\n/// x\n"
     , "graph 1; start S; state S { a; /// x\n}"
     , "graph 1; start S; state S { /// x\na; }"
+    , "graph 1; start S; state /// x\nS {}"
+    , "graph 1; start S; state S : /// x\nInt {}"
+    , "graph 1 /// x\n; start S; state S {}"
     ]
 
 -- | Print and parse again: the value is the same, and so is the text.
