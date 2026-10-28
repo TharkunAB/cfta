@@ -1,5 +1,48 @@
 Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
+## Prepared output histories and native projection support
+
+Source checkpoint: c2447659a54c163c679fc5e17917c414b6aa7906.
+Conditional finite-pruning language preservation and prepared finite-depth
+resource closure remain. Every output of the actual prepared driver now has
+an operational recursive history. This includes outputs before a later stop.
+The history records actual preparation, ordinary or opaque dispatch, false
+fragment recording and the same smaller-depth restart. The history theorem
+needs no semantic model, resource packet or future completion premise.
+
+Original checked source construction now derives a projectable native heap.
+Checked edge construction and completed native node and edge queries preserve
+that whole-heap property. The query induction derives the smaller-query facts.
+It does not assume arbitrary conjunctions support projection. Application to
+the whole parent worker and every recursive history remains open.
+
+A new backward soundness helper keeps the original stored value separate
+from its prepared ordinary parent. It retains the old ordinary-branch gates
+and final satisfying-assignment premise. Actual preparation supplies the
+required language equivalence, but no installed history composition passes
+that receipt to the helper yet. A separate completed-head resource receipt
+retains the actual caller, full Memos, both cache packets and prepared-parent
+indexes. It preserves the old head producer and its smaller-depth Complete
+premise. These results do not prove whole-driver output soundness or coverage.
+
+The largest gaps are semantic composition through all actual histories and
+an original sufficient depth bound for ALL earlier reachable callbacks.
+Fresh variable IDs do not change recursion keys. A narrowed Union need not
+insert its original key. Equality normalization can increase path length.
+Use the existing finite saturation domain as a starting point for a global
+carrier proof. No complete admitted divergence example has been established.
+Public APIs, ranking, sampling and physical Haskell correspondence remain open.
+Whole-CFTA goal ACTIVE; checkpoint PROGRESS. No new required Haskell fix
+was established.
+
+Eight modules add 29 public theorems and four definitions. Nine final strict
+checks pass. Full Audit passes 4409 jobs and checks 81113 theorem dependencies.
+Public readback has 511 theorem blocks and 48 definitions. Its complete prior
+2141917-byte output is an exact prefix. All 4400 prior non-Audit Lean, 249 strong
+and 810 Haskell source/evidence files retain bytes.
+Details: lean/notes-current-prepared-history.md.
+
+
 ## Prepared prefix, parent and restart origin composition
 
 Source checkpoint: 96d98b104c7dc44b168c73dd370c0f46398c9407.
