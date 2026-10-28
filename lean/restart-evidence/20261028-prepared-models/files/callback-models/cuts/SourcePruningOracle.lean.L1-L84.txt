@@ -1,0 +1,84 @@
+import MicroCFTA.SourcePruningTemplates
+import MicroCFTA.SourcePruningResume
+import MicroCFTA.EnumerationPartialCongruence
+import MicroCFTA.EnumerationPartialTransport
+import MicroCFTA.EnumerationPartialCompletion
+
+/-!
+# The concrete template pruning callback
+
+The callback renders once, resumes every pending group, then combines the
+pure match results. A rejected match does not omit later state reads.
+-/
+namespace MicroCFTA.SourcePruningOracle
+open Language Fragments EnumerationState EnumerationCorrectness EnumerationSchedule
+open EnumerationCompressionFrame EnumerationObservations EnumerationExecution
+open SourcePruningPartialMatch SourcePruningTemplates
+attribute [local instance] FormulaExecutable.formulaDecidableEq
+
+local instance pruningOracleMonadList : Monad List where
+  pure value := [value]
+  bind values continuation := values.flatMap continuation
+
+local instance pruningOracleLawfulMonadList : LawfulMonad List where
+  map_const := rfl
+  id_map := by intro α xs; simp [Functor.map]
+  seqLeft_eq := by
+    intros
+    simp [SeqLeft.seqLeft, Seq.seq, Functor.map, List.flatMap_map, ← List.map_eq_flatMap]
+    simp only [List.map_const']
+  seqRight_eq := by
+    intros
+    simp only [SeqRight.seqRight, Seq.seq, Functor.map, List.flatMap_map]
+    simp
+  pure_seq := by intros; simp [Seq.seq, Functor.map, pure]
+  bind_pure_comp := by intros; simp [bind, pure, Functor.map, ← List.map_eq_flatMap]
+  bind_map := by intros; rfl
+  pure_bind := by intros; simp [pure, bind]
+  bind_assoc := by intros; exact List.flatMap_assoc
+
+variable {Guard : Type}
+
+/-- The concrete-root fast path applies only when no check is pending. -/
+private def idle (pending : List (Pending Symbol)) : Fragment Symbol → Bool
+  | .node symbol children => pending.isEmpty &&
+      !(isProgramRoot (.node symbol children))
+  | .hole _ => false
+
+/-- Render the fragment, then read every group before combining match results. -/
+private def observe (graph : Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
+    (fuel : Nat) (pending : List (Pending Symbol)) (uv : Nat) (fragment : Fragment Symbol) :
+    EnumerateM Symbol Guard (Bool × List (Pending Symbol)) := do
+  let term ← expandPartial graph fuel fragment
+  let resumed ← pending.mapM (SourcePruningResume.resume fuel uv term)
+  pure (finishChecks resumed (startMatches templates term))
+
+/-- The source callback preserves its early-rejection and empty-check branches. -/
+def oracle (graph : Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
+    (fuel : Nat) : Oracle Symbol Guard (List (Pending Symbol)) := fun pending uv input =>
+  match input with
+  | .inr _ => pure (false, pending)
+  | .inl fragment =>
+      if rejectEarly templates fragment = true then pure (true, pending)
+      else if idle pending fragment = true then pure (false, [])
+      else observe graph templates fuel pending uv fragment
+
+/-- The pre-expansion callback returns the pending checks without a state read. -/
+theorem oracle_inr (graph : Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
+    (fuel : Nat) (pending : List (Pending Symbol)) (uv node : Nat) :
+    oracle graph templates fuel pending uv (.inr node) = pure (false, pending) := rfl
+
+private theorem groups_agree (leftFuel rightFuel current : Nat) (term : PartialTerm)
+    (pending : List (Pending Symbol)) (left right leftAfter rightAfter : State Symbol Guard)
+    (leftResults rightResults : List (Option (Pending Symbol))) (frame : Frame left right)
+    (total : UnionFind.Total left.representatives)
+    (leftRead : Success (pending.mapM (SourcePruningResume.resume leftFuel current term)) left leftResults leftAfter)
+    (rightRead : Success (pending.mapM (SourcePruningResume.resume rightFuel current term)) right rightResults rightAfter) :
+    leftResults = rightResults ∧ Frame leftAfter rightAfter := by
+  induction pending generalizing left right leftAfter rightAfter leftResults rightResults with
+  | nil =>
+      obtain ⟨leftEq, leftSame⟩ := (success_pure [] leftResults left leftAfter).mp leftRead
+      obtain ⟨rightEq, rightSame⟩ := (success_pure [] rightResults right rightAfter).mp rightRead
+      exact ⟨leftEq.trans rightEq.symm, by simpa only [leftSame, rightSame] using frame⟩
+  | cons first rest ih =>
+      rw [List.mapM_cons] at leftRead rightRead

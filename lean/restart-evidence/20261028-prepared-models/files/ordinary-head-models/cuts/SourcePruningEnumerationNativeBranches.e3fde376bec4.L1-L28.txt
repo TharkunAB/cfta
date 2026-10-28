@@ -1,0 +1,28 @@
+import MicroCFTA.SourcePruningEnumerationCapturedEdge
+
+namespace MicroCFTA.SourcePruningEnumerationNativeBranches
+open EnumerationState InternedConstructorTemplates
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => InternedConstructorTemplates.Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Receipt" => SourcePruningEnumerationSelectedEdge.Result
+variable {width : Nat}
+
+/-- Complete the ordered alternatives or retain the first unsupported receipt. -/
+inductive Result (width : Nat) where
+  /-- Every alternative has a continuable result, including valid rejections. -/
+  | complete (processed : List (Receipt width)) (caller : Caller width) (queries : Queries)
+  /-- Retain processed alternatives and the exact first noncontinuable result. -/
+  | stopped (processed : List (Receipt width)) (current : Option (Receipt width))
+
+/-- Retain native effects after a completed edge, arity rejection or valid child rejection. -/
+def advance : Receipt width → Option (Caller width × Queries)
+  | .complete _ caller queries _ => some (caller, queries)
+  | .rejected caller queries _ => some (caller, queries)
+  | .stopped _ (.ok (some []), caller, queries, _outer, _waiting) (some _) => some (caller, queries)
+  | _ => none
+
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]

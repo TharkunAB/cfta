@@ -1,0 +1,1 @@
+Whole CFTA goal ACTIVE. Prior turn PROGRESS and published at d885d9d6c61c8726da4185d5490ac7bd08196ebc. Preserve all old sources, counterexamples, repairs and marked drafts. All old TEMP and evidence areas are FROZEN. Root owns compiler/build/native/Git/network/board. Fresh semantic work. No recursive output soundness or global accepted-output coverage is yet claimed.

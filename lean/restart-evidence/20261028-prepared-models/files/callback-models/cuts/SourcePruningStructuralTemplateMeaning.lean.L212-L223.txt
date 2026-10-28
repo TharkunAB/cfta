@@ -1,0 +1,12 @@
+                            (.cons (functionIH _ _ functionRun functionMatches)
+                              (.cons (argumentIH _ _ argumentRun argumentMatches) .nil)))
+
+/-- A converted structural match is an original forbidden match on a source-encoded complete program. -/
+theorem structuralTemplate_matches (original early : Template.Pattern Symbol) (full : Language.Term Symbol)
+    (converted : structuralTemplate original = some early)
+    (encoded : ProgramEncoding full) (matched : Template.Matches early full) :
+    Template.Matches original full := by
+  cases original with
+  | hole | anyNode _ | anyPrefix _ | «prefix» _ _ => simp [structuralTemplate] at converted
+  | node symbol parts =>
+      cases parts with

@@ -1,0 +1,65 @@
+theorem edge_cost_le (seed : Seed) (inherited : Nat) (scs : List Suspended) (start : Nat)
+    (edge : EdgeValue Symbol Constraint)
+    (children : edge.children.length ≤ scalar seed.2)
+    (own : ∀ tries residual,
+      SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual) →
+      tries.length ≤ guardWidth seed.1)
+    (length : scs.length ≤ inherited) :
+    SourcePruningEnumerationNativeBranchCompletion.edgeCost scs start edge ≤ edgeCount seed inherited := by
+  have actual := SourcePruningEnumerationCostBounds.edge_cost_le scs start edge
+    (scalar seed.2) (guardWidth seed.1) children own
+  exact Nat.le_trans actual
+    (Nat.mul_le_mul_left _ (Nat.add_le_add_right (Nat.add_le_add_right length _) 1))
+
+/-- An actual completed head fits the mass ceiling fixed from the captured input.
+-/
+theorem head_mass_le {width : Nat} (seed : Seed) (capturedMass inherited : Nat)
+    (before : Cached) (scs : List Suspended)
+    (receipt : SourcePruningEnumerationSelectedEdge.Result width)
+    (initial : suspendedBound before.core ≤ capturedMass)
+    (length : scs.length ≤ inherited)
+    (actual : SourcePruningEnumerationNativeBranchCompletion.HeadCacheBounds before scs
+      (scalar seed.2) (guardWidth seed.1) receipt) :
+    match (generalizing := false) receipt with
+    | .complete _ _ _ after => suspendedBound after.core ≤ massCeil seed capturedMass inherited
+    | _ => True := by
+  cases receipt with
+  | complete fragment caller queries after =>
+      exact Nat.le_trans actual.2 (Nat.add_le_add initial
+        (Nat.mul_le_mul_left _ (Nat.add_le_add_right length _)))
+  | unhandled | rejected _ _ _ | stopped _ _ _ => trivial
+
+variable {Typing : Type} {width : Nat}
+variable [DecidableEq (EdgeKey Symbol Constraint)]
+
+/-- A current packet and its current heap bounds derive each selected edge's shape bounds. -/
+theorem edge_shape_from_packet
+    (seed : Seed)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : SourceCurrentAllocatedNativeInventoryState.Inventory)
+    (caller : Caller width) (memos : Memos) (metadata : Metadata Typing) (before : Cached)
+    (packet : SourcePruningEnumerationRecursive.Packet formulas solver inventory caller memos metadata before)
+    (bounded : Fits seed.2 caller.checked)
+    (known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (rows : List (EdgeValue Symbol Constraint)) (depth : Nat) (free : List InternedBinderProtocol.Reference)
+    (available : Available caller.checked.native.machine.heap (.node entry rows depth free))
+    (edge : EdgeValue Symbol Constraint) (selected : edge ∈ rows) :
+    edge.children.length ≤ scalar seed.2 ∧
+      ∀ tries residual,
+        SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual) →
+        tries.length ≤ guardWidth seed.1 := by
+  have resident : InternedEdgeResidency.EdgeResident caller.checked.native.machine.heap edge :=
+    InternedEdgeResidency.resident_edges caller.checked.native.machine.heap
+      packet.context.ready.semantic.ready.semantic.1.normal.facts.linked _ available.resident edge selected
+  have heapFits : SourceCurrentConstrainedCapRequiredResources.HeapFits seed.2
+      caller.checked.native.machine.heap :=
+    SourceCurrentConstrainedCapRequiredResources.of_checked
+      (profile := seed.2) (before := caller.checked) bounded
+  refine ⟨SourceCurrentConstrainedCapRequiredResources.edge_width heapFits edge resident, ?_⟩
+  intro tries residual projected
+  exact SourcePruningEnumerationGuardWidth.project_le seed.1 edge.entry.key.constraint tries residual
+    (known edge.entry.key edge resident) projected
+
+end MicroCFTA.SourcePruningEnumerationRecursiveReservation

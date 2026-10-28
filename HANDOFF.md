@@ -1,5 +1,41 @@
 # cfta formalization restart handoff
 
+## Original models through prepared enumeration branches
+
+Source checkpoint: 1036a20310d4c7a970ce3c206f773675c8c1795f.
+The prepared worker retains its all-depth finite resource induction.
+New semantic theorems preserve the original satisfying assignment through
+actual selected narrowing and one native preparation. Accepted ordinary,
+opaque and terminal work constructs an assignment extension at the SAME
+actual captured receipt and callback-entry cache. Fragment recording retains
+that model and restarts the SAME resource-certified outcome under the stated
+original template, program-encoding and pending-refutation policies.
+The new finite semantic APIs derive Complete internally. No supplied
+recursive completion or future output model is a premise.
+
+The ordered sibling theorem retains the whole resource packet. It reaches
+the chosen accepted head OR records an exact strictly earlier callback stop.
+That stop remains a real alternative. This is constructive model transport
+to actual branch entries and restarts. It does not prove global output
+soundness, original accepted-output coverage or sufficient recursive depth.
+The prefix bound is uniform. Native preparation witnesses in the new
+original-input corollary are chosen per actual retained prefix observation.
+
+The largest gap is recursive semantic composition and coverage. Derive an
+original depth bound and adequate policies for all earlier reachable callbacks.
+Derive selector coverage and template/program origins for fresh variables.
+Public APIs, ranking, sampling and physical Haskell correspondence remain open.
+Conditional finite-pruning language preservation remains. Goal ACTIVE;
+checkpoint PROGRESS. No new Haskell patch or required fix was established.
+
+Eight modules add eight public theorems. All nine final strict checks pass.
+Full Audit passes 4387 jobs and checks 80896 theorem dependencies.
+Public readback has 449 theorem blocks and 41 definitions.
+Its complete previous 1774860-byte readback remains an exact prefix.
+All 4378 prior non-Audit Lean, 227 strong and 810 Haskell source/evidence
+files retain bytes. Details: `lean/notes-current-prepared-models.md`.
+
+
 ## Finite resource induction for prepared recursive enumeration
 
 Source checkpoint: 0a7cb26721d37832b3654decd70c9fb73ab0d256.

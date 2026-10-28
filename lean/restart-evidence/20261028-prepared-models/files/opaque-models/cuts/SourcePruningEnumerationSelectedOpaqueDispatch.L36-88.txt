@@ -1,0 +1,53 @@
+    (scs : List Suspended) (value : Node) (caller : Caller width) (before : Cached)
+    (queries : SourceEndpointMemo.Memos) : Option (Result width) :=
+  if value = .empty then some (.rejected caller queries before)
+  else if (match value with
+      | .node .. => !(scs.any (fun sc => EqualityTrie.isTerminal sc.trie))
+      | _ => false) then none
+  else
+    match SourcePruningEnumerationChildDispatch.run checkEmpty r n p h k scs value caller before queries with
+    | ((.ok (some [.ok (fragment, _returned)]), reached, saved, _outer, _waiting), some after) =>
+        (SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap k target fragment after).map
+          (fun finished => .complete fragment reached saved finished)
+    | (observation, candidate) => some (.stopped [] observation candidate)
+
+/-- The selected ordinary nonterminal route never uses a fresh child slot here. -/
+theorem ordinary_deferred (checkEmpty : Bool) (r n p h k target : Nat)
+    (scs : List Suspended) (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (edges : List (EdgeValue Symbol Constraint)) (depth : Nat) (free : List InternedBinderProtocol.Reference)
+    (caller : Caller width) (before : Cached) (queries : SourceEndpointMemo.Memos)
+    (nonterminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = false) :
+    run checkEmpty r n p h k target scs (.node entry edges depth free) caller before queries = none := by
+  simp only [run, reduceCtorEq, ↓reduceIte, nonterminal, Bool.not_false]
+
+/-- Terminal dispatch uses the actual child observation and finalizer. -/
+theorem terminal_step (checkEmpty : Bool) (r n p h k target : Nat)
+    (scs : List Suspended) (value : Node) (caller : Caller width) (before : Cached)
+    (queries : SourceEndpointMemo.Memos) (nonempty : value ≠ .empty)
+    (terminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true) :
+    run checkEmpty r n p h k target scs value caller before queries =
+      match SourcePruningEnumerationChildDispatch.run checkEmpty r n p h k scs value caller before queries with
+      | ((.ok (some [.ok (fragment, _returned)]), reached, saved, _outer, _waiting), some after) =>
+          (SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap k target fragment after).map
+            (fun finished => .complete fragment reached saved finished)
+      | (observation, candidate) => some (.stopped [] observation candidate) := by
+  have gate : (match (generalizing := false) value with
+      | .node .. => !(scs.any (fun sc => EqualityTrie.isTerminal sc.trie))
+      | _ => false) = false := by
+    cases value <;> simp only [terminal, Bool.not_true]
+  simp only [run, ite_eq_right nonempty, gate, Bool.false_eq_true, ↓reduceIte]
+
+/-- Original selected storage derives the complete opaque allocation and captured write. -/
+theorem opaque_complete
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller width) (memos : Memos) (metadata : SourcePruningRecordTypes.Metadata Typing)
+    (before : Cached) (checkEmpty : Bool) (target originalHandle : Nat) (scs : List Suspended)
+    (value : Node)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (ready : EnumerationDriver.Ready target before.core)
+    (stored : before.core.values[target]? = some (.unenumerated (some originalHandle) scs))
+    (proper : ProperState before.core)
+    (incoming : EnumerationReferences.IncomingAvoid target before.core)
+    (available : Available caller.checked.native.machine.heap value) (closed : value.free = [])
+    (boundary : MergedOrdinaryHeight.recursiveBoundary value = true) :

@@ -1,0 +1,63 @@
+                residualMeaning extended after.core) := by
+  obtain ⟨bound, decoded, result, heap, entered, preparationPacket⟩ :=
+    SourcePruningEnumerationSelectedPreparation.complete_resources formulas solver inventory caller memos metadata
+      before uv handle scs packet ready stored profile fits
+  refine ⟨bound, decoded, result, heap, entered, preparationPacket, ?_⟩
+  intro boundary
+  rcases preparationPacket with ⟨preparation, _fits, _mass⟩
+  rcases preparation with ⟨preparationRun, _lookup, preparationPost, enteredPacket, stable,
+    enteredReady, enteredStored, counterSame, valuesSame, flagsSame, waitingSame,
+    available, closed, _language, models⟩
+  have enteredProper : ProperState entered.core := by
+    simpa only [ProperState, valuesSame] using proper
+  have enteredIncoming := EnumerationReferences.incoming_read uv before.core entered.core stable incoming
+  have nonterminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = false := by
+    have payload : ProperValue (.unenumerated (some handle) scs : UVarValue Symbol) :=
+      enteredProper _ (List.mem_of_getElem? enteredStored)
+    exact List.any_eq_false.mpr (fun sc member => by
+      simp only [(payload sc member).2.2, Bool.false_eq_true, not_false_eq_true])
+  have framed : EnumerationExpandableIndex.frame entered.core before = entered := by
+    cases entered with
+    | mk core expandable waiting =>
+        simp only [EnumerationExpandableIndex.frame] at *
+        congr 1
+        · exact flagsSame.symm
+        · exact waitingSame.symm
+  obtain ⟨opaqueBound, childHandle, middle, after, opaquePacket, opaqueModels⟩ :=
+    SourcePruningEnumerationSelectedOpaqueDispatch.opaque_complete_models formulas solver inventory
+      (SourcePruningEnumerationSelectedValueCaller.advance caller heap) memos metadata entered checkEmpty
+      uv handle scs result enteredPacket enteredReady enteredStored enteredProper enteredIncoming
+      available closed boundary
+  have retainedOpaque := opaquePacket
+  rcases opaquePacket with ⟨_encoded, _decoded, _middleCore, _freshStored, _flagsSame, _waitingSame,
+    _childRun, opaqueRun, _counter, _capturedStored, _holeStored, _ancestry, _afterPacket,
+    _afterProper, opaquePost⟩
+  refine ⟨opaqueBound, childHandle, middle, after, retainedOpaque,
+    preparationPost.trans opaquePost, ?_, ?_⟩
+  · intro r n p h extra edgesOf
+    have preparationAt : SourcePruningEnumerationSelectedPreparation.run
+        (bound + opaqueBound + extra) (bound + opaqueBound + extra) uv caller before =
+        ([.ok ((uv, handle, scs, decoded), entered.core)], some (.done result heap)) := by
+      simpa only [Nat.add_assoc] using preparationRun (opaqueBound + extra)
+    have opaqueAt : SourcePruningEnumerationSelectedOpaqueDispatch.run checkEmpty r n p h
+        (bound + opaqueBound + extra) uv scs result
+        (SourcePruningEnumerationSelectedValueCaller.advance caller heap) entered memos.query =
+        some (.complete (.hole before.core.counter)
+          (SourcePruningEnumerationSelectedValueCaller.advance caller heap) memos.query after) := by
+      simpa only [Nat.add_assoc, Nat.add_left_comm, Nat.add_comm, counterSame] using
+        opaqueRun r n p h (bound + extra)
+    cases result <;> cases boundary
+    all_goals
+      simp only [run, SourcePruningEnumerationSelectedOrdinaryDispatch.run, preparationAt,
+        framed, nonterminal, Bool.false_eq_true, ↓reduceIte, opaqueAt]
+  · intro ambient residualMeaning assignment original
+    have preparedModel := models (SourceEqualityPCSGuard.holds formulas solver) ambient residualMeaning assignment
+    obtain ⟨extended, agree, enteredExtended, filled, afterSatisfied⟩ :=
+      opaqueModels ambient residualMeaning assignment (preparedModel.1.mpr original) (preparedModel.2 original)
+    have originalExtended :=
+      (models (SourceEqualityPCSGuard.holds formulas solver) ambient residualMeaning extended).1.mp enteredExtended
+    refine ⟨extended, ?_, originalExtended, ?_, afterSatisfied⟩
+    · simpa only [counterSame] using agree
+    · simpa only [counterSame] using filled
+
+end MicroCFTA.SourcePruningEnumerationSelectedDispatch

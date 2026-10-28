@@ -1,0 +1,43 @@
+    (seed : Seed)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller (bits + 2)) (memos : Memos) (metadata : Metadata Typing)
+    (before : Cached) (checkEmpty : Bool) (target handle : Nat) (scs : List Suspended)
+    (value : Node)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (ready : EnumerationDriver.Ready target before.core)
+    (stored : before.core.values[target]? = some (.unenumerated (some handle) scs))
+    (incoming : EnumerationReferences.IncomingAvoid target before.core)
+    (available : Available caller.checked.native.machine.heap value) (closed : value.free = [])
+    (dispatch : (match (generalizing := false) value with
+      | .node .. => !(scs.any (fun sc => EqualityTrie.isTerminal sc.trie))
+      | _ => false) = false)
+    (bounded : Fits seed.2 caller.checked)
+    (reserved : Reserved bits seed (scs.length + 1))
+    (known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap) :
+    ∃ (bound : Nat) (receipt : Receipt (bits + 2)) (reached : Caller (bits + 2))
+      (saved : Queries) (final : Memos) (next : Inventory),
+      (∀ extra, SourcePruningEnumerationSelectedOpaqueDispatch.run checkEmpty
+        (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra)
+        target scs value caller before memos.query = some receipt) ∧
+      Post formulas solver next caller reached final ∧ final.query = saved ∧
+      receiptAdvance receipt = some (reached, saved) ∧
+      Admitted target receipt ∧ Pending receipt ∧ FragmentHistory before.core receipt ∧
+      Fits (advance seed (scs.length + 1)).2 reached.checked ∧
+      Heap (fun guard => guard ∈ (advance seed (scs.length + 1)).1) reached.checked.native.machine.heap ∧
+      ((∃ fragment after, receipt = .complete fragment reached saved after ∧
+          Packet formulas solver next reached final metadata after ∧
+          after.core.counter ≤ before.core.counter + 1 ∧
+          suspendedBound after.core ≤ suspendedBound before.core + scs.length) ∨
+        (∃ after outer waiting, receipt = .stopped []
+          (.ok (some []), reached, saved, outer, waiting) (some after) ∧
+          after.core.counter ≤ before.core.counter + 1 ∧
+          suspendedBound after.core ≤ suspendedBound before.core + scs.length) ∨
+        receipt = .rejected caller memos.query before) := by
+  by_cases empty : value = .empty
+  · subst value
+    refine ⟨0, .rejected caller memos.query before, caller, memos.query, memos, inventory,
+      ?_, Post.refl packet.context, rfl, rfl, packet.valid, packet.pending, trivial,
+      bounded.mono (SourcePruningEnumerationIncomingReservation.advance_profile_ge seed _),
+      ?_, Or.inr (Or.inr rfl)⟩
+    · intro extra

@@ -1,0 +1,90 @@
+import MicroCFTA.SourcePruningPartialMatch
+import MicroCFTA.Fragments
+import MicroCFTA.SourceObservations
+import MicroCFTA.FormulaExecutable
+
+/-!
+# Pure helpers for the partial pruning oracle
+
+Full labels retain source names and refinements. Tagged finite buckets
+represent the observable lookup and ascending traversal of the source maps.
+-/
+namespace MicroCFTA.SourcePruningTemplates
+open Language Fragments EnumerationState SourcePruningPartialMatch
+attribute [local instance] FormulaExecutable.formulaDecidableEq
+
+/-- The existing complete source alphabet, including refinements. -/
+abbrev Symbol := SourceObservations.Label FullSyntax.Formula
+
+/-- A partial term with full labels, raw holes and truncation. -/
+abbrev PartialTerm := Language.Term (EnumerationState.PartialSymbol Symbol)
+
+/-- View a fragment without reading or expanding any hole. -/
+def fragmentTerm : Fragment Symbol → PartialTerm
+  | .node symbol children => .node (.concrete symbol) (children.map fragmentTerm)
+  | .hole uv => .node (.hole uv) []
+
+/-- Select application terms in function-before-argument order. -/
+def programs : PartialTerm → List PartialTerm
+  | .node (.concrete symbol) [_, term] =>
+      if symbol = ("filter", FullSyntax.Formula.top) then programs term else []
+  | term@(.node (.concrete symbol) [_, _, function, argument]) =>
+      if symbol = ("app", FullSyntax.Formula.top) then
+        term :: programs function ++ programs argument
+      else []
+  | _ => []
+
+private def templateSpineFrom (count : Nat) : Template.Pattern Symbol → Option (Symbol × Nat)
+  | .node symbol [_, _, function, _] =>
+      if symbol = ("app", FullSyntax.Formula.top) then templateSpineFrom (count + 1) function else none
+  | .node symbol [_] => some (symbol, count)
+  | _ => none
+
+/-- Read only exact raw application nodes and a one-child template head. -/
+def templateSpine (pattern : Template.Pattern Symbol) : Option (Symbol × Nat) :=
+  templateSpineFrom 0 pattern
+
+private def partialSpineFrom (count : Nat) : PartialTerm → Option (Symbol × Nat)
+  | .node (.concrete symbol) [_, _, function, _] =>
+      if symbol = ("app", FullSyntax.Formula.top) then partialSpineFrom (count + 1) function else none
+  | .node (.concrete symbol) [_] => some (symbol, count)
+  | _ => none
+
+/-- Read only exact raw application nodes and a one-child concrete head. -/
+def partialSpine (term : PartialTerm) : Option (Symbol × Nat) :=
+  partialSpineFrom 0 term
+
+/-- Select the ascending-position union of generic and matching fixed buckets. -/
+def indexTemplates (templates : List (Template.Pattern Symbol)) (term : PartialTerm) :
+    List (Template.Pattern Symbol) :=
+  let tagged := templates.zipIdx
+  let generic := tagged.filter (fun entry => (templateSpine entry.1).isNone)
+  let fixed := fun key => tagged.filter (fun entry => decide (templateSpine entry.1 = some key))
+  match partialSpine term with
+  | none => templates
+  | some key =>
+      (List.range templates.length).filterMap fun position =>
+        ((generic.find? (fun entry => entry.2 == position)).map Prod.fst).orElse
+          (fun _ => ((fixed key).find? (fun entry => entry.2 == position)).map Prod.fst)
+
+private def structuralProgram : Template.Pattern Symbol → Option (Template.Pattern Symbol)
+  | .hole => some .hole
+  | .node symbol [.hole, marker, function, argument] =>
+      if symbol = ("app", FullSyntax.Formula.top) then
+        if (match marker with
+          | .hole => true
+          | .node arrow [] => decide (arrow = ("(->)", FullSyntax.Formula.top))
+          | _ => false) then do
+          let nextFunction ← structuralProgram function
+          let nextArgument ← structuralProgram argument
+          pure (.node ("app", FullSyntax.Formula.top) [.hole, .hole, nextFunction, nextArgument])
+        else none
+      else none
+  | .node symbol [.hole] => some (.node symbol [.hole])
+  | _ => none
+
+/-- Admit only a root application with the source's annotation restrictions. -/
+def structuralTemplate : Template.Pattern Symbol → Option (Template.Pattern Symbol)
+  | pattern@(.node symbol [_, _, _, _]) =>
+      if symbol = ("app", FullSyntax.Formula.top) then structuralProgram pattern else none
+  | _ => none

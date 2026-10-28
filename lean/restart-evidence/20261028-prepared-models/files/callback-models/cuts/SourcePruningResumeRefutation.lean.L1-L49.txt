@@ -1,0 +1,49 @@
+import MicroCFTA.SourcePruningPartialMatchSemantics
+import MicroCFTA.SourcePruningResume
+import MicroCFTA.SourcePruningTemplates
+
+/-!
+# Refutation through actual pending-match resumption
+
+Representative reads retain the original assignment. Each successful match
+reduces the original pending group without losing its refutation.
+-/
+namespace MicroCFTA.SourcePruningResume
+open Language EnumerationState EnumerationCorrectness EnumerationSchedule
+open SourcePruningPartialMatch
+
+local instance : Monad List where
+  pure value := [value]
+  bind values continuation := values.flatMap continuation
+
+local instance : LawfulMonad List where
+  map_const := rfl
+  id_map := by intro α xs; simp [Functor.map]
+  seqLeft_eq := by
+    intros
+    simp [SeqLeft.seqLeft, Seq.seq, Functor.map, List.flatMap_map, ← List.map_eq_flatMap]
+    simp only [List.map_const']
+  seqRight_eq := by
+    intros
+    simp only [SeqRight.seqRight, Seq.seq, Functor.map, List.flatMap_map]
+    simp
+  pure_seq := by intros; simp [Seq.seq, Functor.map, pure]
+  bind_pure_comp := by intros; simp [bind, pure, Functor.map, ← List.map_eq_flatMap]
+  bind_map := by intros; rfl
+  pure_bind := by intros; simp [pure, bind]
+  bind_assoc := by intros; exact List.flatMap_assoc
+
+/-- At least one pending pattern fails at its assigned complete term. -/
+def Refutes [DecidableEq Symbol] (assignment : Nat → Term Symbol)
+    (pending : Pending Symbol) : Prop :=
+  ¬ ∀ entry ∈ pending, Template.Matches entry.1 (assignment entry.2)
+
+variable {Symbol Guard : Type} [DecidableEq Symbol]
+
+/-- This local expression is definitionally equal to the private source part. -/
+private def part (fuel current : Nat) (term : Term (PartialSymbol Symbol))
+    (pending : Template.Pattern Symbol × Nat) : EnumerateM Symbol Guard (Option (Pending Symbol)) := do
+  let root ← representative fuel pending.2
+  pure (if root = current then matchPartial pending.1 term else some [(pending.1, root)])
+
+private theorem part_success (fuel current : Nat) (term : Term (PartialSymbol Symbol))

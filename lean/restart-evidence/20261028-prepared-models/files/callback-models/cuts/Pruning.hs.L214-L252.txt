@@ -1,0 +1,39 @@
+
+{- | The expansion order and the oracle of 'prunedTerms'. The order takes
+the holes that a suspended check waits for first. The oracle rejects a
+branch when a template matches one of its programs.
+-}
+templateOracle ::
+    [Template Symbol] ->
+    ( [Pending] -> [UVar] -> Maybe UVar
+    , [Pending] -> UVar -> Either (TermFragment Symbol) (Node Symbol) -> EnumerateM Symbol (Bool, [Pending])
+    )
+templateOracle templates = (order, oracle)
+  where
+    earlyTemplates = mapMaybe structuralTemplate templates
+    earlyCandidatesFor = indexTemplates earlyTemplates
+    rejectEarly fragment@(TermFragmentNode symbol children)
+        | (symbol, length children) `elem` [("app", 4), ("filter", 2)] =
+            any redundant (programs (fragmentTerm fragment))
+      where
+        redundant term = any (\template -> matchPartial template term == Just []) (earlyCandidatesFor term)
+    rejectEarly _ = False
+    candidatesFor = indexTemplates templates
+    order pending candidates =
+        let waiting = Set.fromList (map snd (concat pending))
+         in find (`Set.member` waiting) candidates
+    oracle :: [Pending] -> UVar -> Either (TermFragment Symbol) (Node Symbol) -> EnumerateM Symbol (Bool, [Pending])
+    oracle pending _ (Right _) = pure (False, pending)
+    oracle pending _ (Left fragment)
+        | rejectEarly fragment = pure (True, pending)
+    -- This concrete root starts no program match, and no check waits.
+    oracle [] _ (Left (TermFragmentNode symbol children))
+        | (symbol, length children) `notElem` [("app", 4), ("filter", 2)] = pure (False, [])
+    oracle pending uv (Left fragment) = do
+        partial <- expandPartialTermFrag fragment
+        resumed <- traverse (resume uv partial) pending
+        let started = [matchPartial template term | term <- programs partial, template <- candidatesFor term]
+            checks = catMaybes (resumed ++ started)
+        pure (any null checks, filter (not . null) checks)
+
+-- | A fixed program head and the number of applications in its function spine.

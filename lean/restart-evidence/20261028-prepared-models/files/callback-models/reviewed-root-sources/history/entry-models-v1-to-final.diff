@@ -1,0 +1,28 @@
+--- entry-models-v1
++++ final-installed
+@@ -52,7 +52,7 @@
+       fuel fuel fuel fuel fuel fuel uv caller before memos.query = observed)
+     (valid : PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
+       formulas solver inventory fuel uv caller before memos observed) :
+-    match observed with
++    match (generalizing := false) observed with
+     | .narrowed _ _ reached queries _ (some after) _ _ =>
+         ∃ (handle : Nat) (scs : List Suspended) (value : Node) (final : Memos),
+           (Post formulas solver inventory caller reached final ∧ final.query = queries ∧
+@@ -145,6 +145,7 @@
+       | none => trivial
+       | some after =>
+           obtain ⟨handle, scs, value, final, retained⟩ := admission
++          have admissionPacket := retained
+           obtain ⟨post, saved, afterPacket, afterReady, stored, _decoded, _available, _closed,
+             _incoming, _pending, _ids, _lengths, _counter, _waiting, afterFits, afterKnown⟩ := retained
+           obtain ⟨preparationBound, decoded, result, heap, entered, preparation, preparedKnown⟩ :=
+@@ -156,7 +157,7 @@
+           obtain ⟨_preparationRun, _lookup, preparationPost, _enteredPacket, _stable,
+             _enteredReady, _enteredStored, _counterSame, _values, _flags, _waiting,
+             _resultAvailable, _resultClosed, _language, preparedModels⟩ := preparedPacket
+-          refine ⟨handle, scs, value, final, retained, preparationBound, decoded, result,
++          refine ⟨handle, scs, value, final, admissionPacket, preparationBound, decoded, result,
+             heap, entered, originalPreparation, post.trans preparationPost, ?_⟩
+           intro ambient residualMeaning assignment satisfied unary application filtered
+           have afterSatisfied := models ambient residualMeaning assignment satisfied unary application filtered

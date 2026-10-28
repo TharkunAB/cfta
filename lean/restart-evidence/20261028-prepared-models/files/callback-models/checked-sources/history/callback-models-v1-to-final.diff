@@ -1,0 +1,25 @@
+--- callback-models-v1
++++ final-installed
+@@ -1,3 +1,4 @@
++import MicroCFTA.SourcePruningEnumerationPreparedFiniteResources
+ import MicroCFTA.SourcePruningEnumerationPreparedFiniteCallbackResources
+ import MicroCFTA.SourcePruningEnumerationNativeLanguage
+ import MicroCFTA.SourcePruningRecordTypesRefutation
+@@ -47,8 +48,6 @@
+     (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+     (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+     (recursiveFuel : Nat)
+-    (recursive : Complete (bits := bits) holeKey fits admits graph templates checkEmpty edgesOf stop order
+-      formulas solver recursiveFuel)
+     (seed : Seed) (ceiling : Nat)
+     (packet : Packet formulas solver inventory caller memos metadata before)
+     (allocated : FragmentBound before.core.counter fragment)
+@@ -100,6 +99,8 @@
+               (EnumerationExpandableIndex.frame after before)
+               (SourcePruningEnumerationRestart.decision stop order result.2
+                 (EnumerationExpandableIndex.frame after before)) = outcome := by
++  have recursive := SourcePruningEnumerationPreparedRecursive.finite_complete
++    (bits := bits) holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver recursiveFuel
+   obtain ⟨fuel, result, after, outcome, returned, stable, framed, types, holes, typing, callback, running, resources⟩ :=
+     callback_finite_complete_resources holeKey fits admits formulas solver inventory graph templates metadata uv fragment
+       caller memos before checkEmpty edgesOf stop order recursiveFuel recursive seed ceiling

@@ -1,0 +1,39 @@
+    ∃ (bound : Nat) (receipt : Receipt (bits + 2)) (middleCaller : Caller (bits + 2))
+      (saved : Queries) (middleMemos : Memos) (middleInventory : Inventory)
+      (outcome : HookResult (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2))
+      (folded : FoldResult (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2)),
+      (∀ extra, SourcePruningEnumerationSelectedOpaqueDispatch.run checkEmpty
+        (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra)
+        target scs value caller before memos.query = some receipt) ∧
+      Post formulas solver middleInventory caller middleCaller middleMemos ∧ middleMemos.query = saved ∧
+      receiptAdvance receipt = some (middleCaller, saved) ∧
+      Admitted target receipt ∧ Pending receipt ∧ FragmentHistory before.core receipt ∧
+      Fits (advance seed (scs.length + 1)).2 middleCaller.checked ∧
+      Heap (fun guard => guard ∈ (advance seed (scs.length + 1)).1) middleCaller.checked.native.machine.heap ∧
+      ((∃ fragment after, receipt = .complete fragment middleCaller saved after ∧
+          Packet formulas solver middleInventory middleCaller middleMemos metadata after ∧
+          after.core.counter ≤ before.core.counter + 1 ∧
+          suspendedBound after.core ≤ suspendedBound before.core + scs.length) ∨
+        (∃ after outer waiting, receipt = .stopped []
+          (.ok (some []), middleCaller, saved, outer, waiting) (some after) ∧
+          after.core.counter ≤ before.core.counter + 1 ∧
+          suspendedBound after.core ≤ suspendedBound before.core + scs.length) ∨
+        receipt = .rejected caller memos.query before) ∧
+      Fits (afterHead seed inherited).2 middleCaller.checked ∧
+      Heap (fun guard => guard ∈ (afterHead seed inherited).1) middleCaller.checked.native.machine.heap ∧
+      (∀ extra, match (generalizing := false) receipt with
+        | .complete fragment actual queries after =>
+            continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order (bound + extra) recursiveFuel)
+              graph templates stop order (bound + extra) metadata target fragment actual queries after = outcome
+        | _ => outcome = .complete [] middleCaller middleMemos.query) ∧
+      (∀ extra, SourcePruningEnumerationReceiptContinuation.run
+        (continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order (bound + extra) recursiveFuel)
+          graph templates stop order (bound + extra) metadata target) (some receipt) = folded) ∧
+      OutcomeResources formulas solver caller (finiteStep recursiveFuel seed capturedMass inherited)
+        (finish target folded) ∧
+      (∀ extra, SourcePruningEnumerationReceiptContinuation.run
+        (continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order (bound + extra) recursiveFuel)
+          graph templates stop order (bound + extra) metadata target)
+        (SourcePruningEnumerationSelectedOpaqueDispatch.run checkEmpty
+          (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra)
+          target scs value caller before memos.query) = folded)

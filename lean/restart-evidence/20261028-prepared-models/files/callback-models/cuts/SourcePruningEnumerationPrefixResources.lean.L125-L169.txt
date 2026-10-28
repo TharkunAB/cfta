@@ -1,0 +1,45 @@
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller width) (memos : Memos) (before : Cached)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (profile : Profile) (property : Constraint → Prop)
+    (bounded : Fits profile caller.checked) (known : Heap property caller.checked.native.machine.heap) :
+    ∃ bound, ∀ extra selected,
+      SourcePruningEnumerationRestart.decision stop order metadata before = some (.expand selected) →
+      let observed := runPrefix holeKey fits admits graph templates stop order metadata
+        (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra)
+        selected caller before memos.query
+      PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
+        formulas solver inventory (bound + extra) selected caller before memos observed ∧
+      Resources profile property caller observed ∧
+      match observed with
+      | .parked _ (some after) _ => Packet formulas solver inventory caller memos metadata after
+      | .narrowed _ _ reached queries _ (some after) _ _ =>
+          ∃ final, Post formulas solver inventory caller reached final ∧ final.query = queries ∧
+            Packet formulas solver inventory reached final metadata after
+      | _ => True := by
+  obtain ⟨bound, complete⟩ := packet_prefix_complete holeKey fits admits graph templates checkEmpty edgesOf
+    stop order metadata formulas solver inventory caller memos before packet
+  obtain ⟨_roots, _paths, _storage, realized, _counts, _flags⟩ := packet.valid
+  refine ⟨bound, ?_⟩
+  intro extra selected chosen
+  have valid := complete extra selected chosen
+  dsimp only
+  generalize actual : runPrefix holeKey fits admits graph templates stop order metadata
+    (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra)
+    selected caller before memos.query = observed at valid ⊢
+  refine ⟨valid,
+    SourcePruningEnumerationSelectedStep.prefix_resources holeKey fits admits graph templates checkEmpty edgesOf
+      stop order metadata formulas solver inventory (bound + extra) selected caller before memos profile property
+      packet.context realized bounded known _ valid, ?_⟩
+  have returned := prefix_packet holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
+    formulas solver inventory (bound + extra) selected caller memos before packet observed valid
+  cases observed with
+  | stopped _ _ => trivial
+  | parked checked candidate raw => cases candidate <;> exact returned
+  | narrowed checked prepared reached queries action candidate right ordinary => cases candidate <;> exact returned
+
+end MicroCFTA.SourcePruningEnumerationRecursive

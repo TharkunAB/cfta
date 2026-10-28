@@ -1,0 +1,33 @@
+-- | Resume the parts whose holes now have the expanded representative.
+resume :: UVar -> PartialTerm -> Pending -> EnumerateM Symbol (Maybe Pending)
+resume current partial pending = fmap (fmap concat . sequence) (traverse part pending)
+  where
+    part (template, uv) = do
+        representative <- getUVarRepresentative uv
+        pure $
+            if representative == current
+                then matchPartial template partial
+                else Just [(template, representative)]
+
+{- | Match a partial term. Nothing rejects the match. An empty list proves
+the match. A nonempty list records the parts that still need expansion.
+-}
+matchPartial :: Template Symbol -> PartialTerm -> Maybe Pending
+matchPartial Hole _ = Just []
+matchPartial (AnyPrefix []) _ = Just []
+matchPartial template (CT.Node (UVarHole uv) []) = Just [(template, uv)]
+matchPartial _ (CT.Node TruncatedRecursion _) = Nothing
+matchPartial template (CT.Node (ConcreteSymbol symbol) children) = case template of
+    AnyNode parts -> exact parts
+    TemplateNode expected parts | expected == symbol -> exact parts
+    AnyPrefix parts -> prefix parts
+    TemplatePrefix expected parts | expected == symbol -> prefix parts
+    _ -> Nothing
+  where
+    exact parts
+        | length parts == length children = concat <$> zipWithM matchPartial parts children
+        | otherwise = Nothing
+    prefix parts
+        | length parts <= length children = concat <$> zipWithM matchPartial parts children
+        | otherwise = Nothing
+matchPartial _ _ = Nothing

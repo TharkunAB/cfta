@@ -1,0 +1,21 @@
+# Opaque and terminal models at the actual prepared callback entry
+
+Status: source-only draft. Root owns all Lean checks. The bundle remains OPEN.
+
+The new theorem `PreparedNativeHookResources.opaque_finite_complete_resources_models` retains every input and the entire result of `opaque_finite_complete_resources`. The original 5,308-byte declaration is preserved under one grouping. All operational witnesses, including the callback outcome and folded result, are fixed before the semantic observer. The old finite producer is called once.
+
+The observer takes the original native `Satisfies` and acceptance of the already prepared value at the original assigned target term. It constructs an assignment extension, a fragment, and the actual finalized cache. The extension agrees at every originally allocated variable. It satisfies the original state. The SAME fixed receipt is complete at its SAME caller and queries. The fragment fills to the original assigned target term. The extension satisfies the actual callback-entry cache under that reached caller's native heap.
+
+The original stored slot derives every incoming suspended `Holds`. General `ChildCoverage.complete_with_fragments_resources_accepting` covers both terminal and fresh opaque branches. Its full producer runs before models. One common diagonal, at the finite bound plus the sum of its five genuine lower bounds, identifies the child singleton in the actual finite receipt. The existing stable opaque execution supplies actual success at that diagonal. The proof does not assume a later successful run. `NativeBranches.advance` identifies the literal caller and query endpoint. Actual child protection retains the captured slot. Actual finalizer readback supplies the exact captured write. The public `Finalize.written_semantics` law then derives the final model from the child model and the filled-target equation.
+
+No source producer generalization is needed. No new `ProperState`, universal `Ranges`, future `Fits`, future `Post`, output model, or recursive success premise is added. `ProperState` was needed by the earlier opaque-only structural theorem to force a nonterminal bucket. It is unnecessary here because the general resource-backed child theorem also handles terminal buckets. The existing recursive `Complete` premise is retained exactly from the finite resource producer.
+
+The original stored handle and prepared value remain distinct. This theorem does not assume that the original handle decodes to the prepared value. `SelectedOpaquePreparationModels` already derives prepared-value acceptance from the original model through the actual one-step normalization. A future composition can supply that implication without changing this local producer.
+
+The theorem constructs one model. It does not claim that all assignments completing an opaque hole satisfy removed restrictions. Fresh opaque storage still has an empty bucket. It does not establish a model after `continueWith`, template-policy acceptance, recursive output coverage, or a final rendered term. The entire existing callback and resource packet remains available for those next steps.
+
+The actual Haskell cuts retain the known distinction: `enumerateOutUVarWith` performs one Mu unfold or Union exposure, and `enumerateNode` allocates an opaque child with `addUVarValue (Just n)`. No new Haskell mismatch or reachable defect is claimed. The new result is a constructive existence law for the modeled actual receipt, with its original resource and semantic scope.
+
+The only copied proof helper is the exact native finalizer core readback from the earlier `SelectedOpaqueModels` proof. No runtime evaluator is copied. The public finalizer meaning law is reused. The source index records whole identities and focused literal cuts. Only the recorded Haskell and generic correctness cuts are inspected for those larger files.
+
+Draft v1: 231 lines, 16,518 bytes, SHA256 `ce023df8ca980c623ab4d929ff4d419b56456b766662bed78f21231d6d2681a6`. Its compiler status is UNTESTED. `contracts/comparison-v1.json` records the exact old parameter and result recovery. No compiler, build, native execution, Git, network, repository, or older bundle mutation was performed by this agent.

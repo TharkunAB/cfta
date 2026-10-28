@@ -1,0 +1,23 @@
+--- v1
++++ v2
+@@ -176,9 +176,8 @@
+       (by simpa only [termShape] using inheritedModel)
+   rcases shape with ⟨built, builtComplete, _middleSafe, fragmentBound, _fragmentPending, _fragmentSeparate⟩ |
+     ⟨_fragments, _outer, _waiting, stopped⟩
+-  · subst edgeResult
+-    have sameFragment : built = fragment :=
+-      (SourcePruningEnumerationSelectedEdge.Result.complete.inj completed).1
++  · have sameFragment : built = fragment :=
++      (SourcePruningEnumerationSelectedEdge.Result.complete.inj (builtComplete.symm.trans completed)).1
+     subst built
+     have frame := protects uv ready.inside ready.root avoids
+     have currentStored : middle.core.values[uv]? = some (.unenumerated (some handle) scs) :=
+@@ -197,7 +196,7 @@
+     have kl : k ≤ work := by dsimp [work, padding]; omega
+     have fl : fuel ≤ work := by dsimp [work, padding]; omega
+     have selectedAt := edgeRun (work - r) (work - n) work work (work - k) pl hl
+-    simp only [Nat.add_sub_of_le rl, Nat.add_sub_of_le nl, Nat.add_sub_of_le kl] at selectedAt
++    simp only [Nat.add_sub_of_le rl, Nat.add_sub_of_le nl, Nat.add_sub_of_le kl, builtComplete] at selectedAt
+     have finalizedAt := finishRun (work - fuel)
+     simp only [Nat.add_sub_of_le fl] at finalizedAt
+     have capturedAt : SourcePruningEnumerationCapturedEdge.run checkEmpty work work work work work
