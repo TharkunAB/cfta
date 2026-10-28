@@ -154,6 +154,19 @@ tree automata of `cfta`, with QuickCheck integration.
   automaton whose terms are the edit trees of a term: edit sets where an edit
   may lie inside a wrap whose hole has the state of its position. `applyEditTree`
   gives the edited term.
+- `Data.CFTA.Edit.Constrained`: `constrainedEditAutomaton` gives the
+  replacements, unwraps, wraps, and context wraps of a term under an automaton
+  with equality constraints, in the symbols of `Data.CFTA.Edit`, so
+  `applyEdit` decodes them. An equality class above an edit, or of the new
+  node of a wrap or a context wrap, pins the new material to a fixed subterm,
+  moves onto the root transition of the edit, or leaves the site without a
+  valid edit. An unwrap is valid or not. The result is unambiguous when the
+  automaton is, and `Data.CFTA.Sized` counts it exactly; the cyclic generator
+  import does not count equality constraints. `leftOut` lists the sites whose
+  edits the result leaves out, with the reason: `Branching` for a site below
+  a state with two transitions for the symbol of the term there, and
+  `ConstrainedHole` for a context wrap whose hole a class or a constrained
+  transition can read.
 - Terms are `Term symbol` from `Data.CFTA.Term` of `cfta`:
   `fromAutomaton`, `fromAutomatonUpToDepth`, `termAt`, `rankOf`, `ranksOf`,
   `rankOfTerm`, `surface`, and the refinement witnesses take and give `Term`

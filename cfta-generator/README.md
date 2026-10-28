@@ -312,6 +312,26 @@ term, for example a replacement at the root and a deeper edit, so the
 automaton counts edits, not edited terms. When the automaton is
 unambiguous, the edit automaton is unambiguous too.
 
+`Data.CFTA.Edit.Constrained` gives the replacements, unwraps, wraps, and
+context wraps of a term under an automaton with equality constraints. An edit
+is valid when the automaton accepts the edited term.
+`constrainedEditAutomaton` moves each equality class of a transition above
+the edit, or of the new node of a wrap, onto the edit: a class with a fixed
+subterm pins the new material to it, a class with only paths into the new
+material becomes a class on the root transition of the edit, and a class with
+a path through the edited node leaves the site without a valid edit. An unwrap
+adds no material, so each of its classes holds or does not. The edits use the
+symbols of `Data.CFTA.Edit`, so `applyEdit` decodes them, and
+`Data.CFTA.Sized` counts them exactly. The cyclic generator import does not
+count equality constraints; use `Data.CFTA.Sized` or the depth-bounded import.
+
+`leftOut` lists two kinds of site whose edits the result leaves out, instead
+of counting them under an assumption. A site is `Branching` when a state above
+it has two transitions for the symbol of the term there: another transition
+could accept an edited term. A context wrap is `ConstrainedHole` when a class
+reads the child with the hole, or when that child can have a node with an
+equality constraint: the place of the hole differs from edit to edit.
+
 ## Equality-constrained generators
 
 An equality generator is a `Gen Symbol`, with the name `ECTAGen`. Each

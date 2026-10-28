@@ -47,7 +47,9 @@ Wilf, and Feat (ranking).
   child index. The **new material** of an edit is what it adds: the new
   subterm, the other children of the new node, or the nodes of the new term
   of a context wrap. An unwrap has none. Not a row edit of an automaton
-  (`Data.CFTA.replaceRows`).
+  (`Data.CFTA.replaceRows`). A **branching site** is an edit site below a
+  state with two transitions for the symbol of the term there: with
+  constraints, another transition can accept an edited term.
 - **Edit set** (of a term): the edits at one to k sites of a term at pairwise
   incomparable paths, so that no edit is inside another. `Data.CFTA.Edit.Sets`
   gives the automaton of the edit sets. Its size is the number of the edits plus
