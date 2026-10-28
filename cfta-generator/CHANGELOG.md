@@ -139,6 +139,11 @@ tree automata of `cfta`, with QuickCheck integration.
   classes up to a size bound with a solver that decides every guard on each
   built term, so a liquid automaton has an exact route that needs no
   pruning; a guard the solver cannot decide is `GuardUnknown`.
+- `Data.CFTA.Template.Learn`: `generalize` gives the least general
+  generalization of terms as a `Template`. `learnExclusions` clusters
+  rejected terms into templates that remove no accepted term, at the root or
+  anywhere, and reports conflicts. `exclusionPrice` counts the terms that
+  templates remove from a language within a size bound.
 - Terms are `Term symbol` from `Data.CFTA.Term` of `cfta`:
   `fromAutomaton`, `fromAutomatonUpToDepth`, `termAt`, `rankOf`, `ranksOf`,
   `rankOfTerm`, `surface`, and the refinement witnesses take and give `Term`
