@@ -8,7 +8,8 @@ exclusions, cycles, empty/dead rows, repeated alternatives, and child order.
 Reading validates the input without running a solver or enumerating terms.
 
 The format is version 1. Each file starts with its kind and version, such as
-`graph 1;` or `language 1;`.
+`graph 1;` or `language 1;`. The [grammar](#grammar) gives the complete syntax,
+and [versions](#versions) says when a version changes.
 [Prior art](../docs/language-authoring-prior-art.md) compares this syntax with
 Redex, Nanopass, EDN, and KDL, and explains why the format has its own syntax.
 
@@ -338,6 +339,115 @@ of draws before the next draw. A draw depends only on the seed and on its
 index, so the file holds no state of the generator. As in a checkpoint, the
 remaining text is the text of `printGraph` for the graph. `resumeSampling`
 rejects another graph and other weights.
+
+## Grammar
+
+The grammar uses EBNF: `?` is optional, `*` is zero or more, and `+` is one or
+more. Spaces, line breaks, and `//` comments can come between any two tokens.
+A `name` is a state label, a symbol, or a name of a production, a fact, an
+exclusion, or a variable. The printer leaves a name unquoted when every
+character is an ASCII letter, a digit, `_`, `-`, or `+`, and the name is not
+`_`. It quotes every other name.
+
+```ebnf
+graph-file      = header("graph") graph-row* ;
+document-file   = header("document") source-row* ;
+language-file   = header("language") source-row* exclusion* ;
+header(kind)    = doc-comment? kind "1" ";" "start" name ";" ;
+
+graph-row       = doc-comment? "state" name "{" graph-edge* "}" ";"? ;
+graph-edge      = symbol children? ( "where" constraint )? ";" ;
+source-row      = doc-comment? "state" name "{" production* "}" ";"? ;
+production      = doc-comment? name "=" symbol children? ( "{" fact* "}" )? ";" ;
+fact            = doc-comment? name "=" constraint ";" ;
+exclusion       = doc-comment? "exclude" exclusion-body ;
+exclusion-body  = name "=" ( "root" | "anywhere" ) template ";" ;
+symbol          = name ( "@" "{" formula "}" )? ;
+children        = "(" ( name ( "," name )* )? ")" ;
+
+update-file     = "update" "1" ";" operation* ;
+operation       = "start" name ";"
+                | "define" name name "=" symbol children? ";"
+                | "remove" name name ";"
+                | "require" name name name "=" constraint ";"
+                | "relax" name name name ";"
+                | "put" "production" name production
+                | "put" "row" name "{" production* "}"
+                | "delete" "row" name ";"
+                | "exclude" exclusion-body
+                | "restore" name ";" ;
+
+checkpoint-file = "checkpoint" "1" ";" query "next" integer integer ";" graph-file ;
+sampling-file   = "sampling" "1" ";" query
+                  "weights" ( "uniform" | "[" ( weight ( "," weight )* )? "]" ) ";"
+                  "prng" name integer ";" "seed" integer ";" "draws" integer ";" graph-file ;
+query           = "query" name integer ";" "bound" integer ";" ;
+weight          = integer ":" integer ;
+
+constraint      = "equal" "(" ( path ( "," path )* )? ")"
+                | "impossible"
+                | "constraint" "(" classes "," guard ")"
+                | guard ;
+classes         = "impossible" | "[" ( paths ( "," paths )* )? "]" ;
+paths           = "[" ( path ( "," path )* )? "]" ;
+path            = "[" ( integer ( "," integer )* )? "]" ;
+guard           = "true" | "false"
+                | ( "same" | "entails" ) "(" path "," path ")"
+                | "satisfies" "(" path "," formula ")"
+                | "holds" "(" paths "," formula ")"
+                | "substitute" "(" "[" ( substitution ( "," substitution )* )? "]" "," guard ")"
+                | "not" "(" guard ")"
+                | ( "and" | "or" ) "(" ( guard ( "," guard )* )? ")" ;
+substitution    = "(" path "," path ")" ;
+
+formula         = "true" | "false"
+                | ( "and" | "or" ) "(" ( formula ( "," formula )* )? ")"
+                | "not" "(" formula ")"
+                | "v" ( "==" | "/=" | ">=" | "<=" | ">" | "<" ) integer
+                | ( "eq" | "ne" | "gt" | "ge" | "lt" | "le" ) "(" term "," term ")"
+                | ( "forall" | "exists" ) "(" "[" ( binding ( "," binding )* )? "]" "," formula ")" ;
+binding         = name ":" sort ;
+term            = integer | "v" | "var" "(" name ")"
+                | "app" "(" name "," "[" ( term ( "," term )* )? "]" ")"
+                | "negate" "(" term ")"
+                | ( "add" | "subtract" | "multiply" | "divide" | "modulo" ) "(" term "," term ")"
+                | "if" "(" formula "," term "," term ")"
+                | "cast" "(" term "," sort ")" ;
+sort            = "int" | "real" | "bool" | "function" "(" "[" ( sort ( "," sort )* )? "]" "," sort ")" ;
+
+template        = ( "_" | symbol ) template-args? ;
+template-args   = "(" ( "..." | template ( "," template )* ( "," "..." )? )? ")" ;
+
+name            = name-char+ | '"' ( string-char | escape )* '"' ;
+name-char       = ASCII letter | digit | "_" | "-" | "+" ;
+escape          = "\" ( '"' | "\" | "/" | "b" | "f" | "n" | "r" | "t" | "u" hex hex hex hex ) ;
+integer         = ( "+" | "-" )? digit+ ;
+doc-comment     = ( "///" any character except a line break, to the end of the line )+ ;
+```
+
+A `string-char` is any character except `"`, `\`, and a control character
+below U+0020. A comment that starts with four or more slashes is an ordinary
+comment. The keywords, such as `state` and `true`, are not reserved: a name can
+have the same text.
+
+## Versions
+
+Each file starts with its kind and a version, such as `graph 1;`. A reader
+rejects a version that it does not know. After the first release of
+`cfta-serialization`, these rules apply to each kind:
+
+- Printing is stable within a version: a value prints as the same text. A
+  checkpoint and a store use the printed text as an identity, so a change to
+  the printed text of an existing value needs a new version.
+- A change that gives existing text a different value needs a new version.
+- An addition that a reader of the version rejects, such as a new constraint
+  constructor, keeps the version. A new file can then fail in an older reader,
+  but it is not read as a different value.
+- An addition that a reader of the version can skip keeps the version. Doc
+  comments are such an addition: a reader that does not keep them reads them as
+  `//` comments.
+
+Until the first release, version 1 can still change.
 
 ## Ranks after reopening
 
