@@ -1,5 +1,44 @@
 # Current system claim
 
+## Native carrier preservation through actual recursive output histories
+
+Source checkpoint: 94d867aeb4309e7a5affbb4f0e31ac3681e57811.
+`SourcePruningEnumerationRecursive.run_initial_finite_render_sound_carriers`
+retains the entire previous startup, resource, history, proper-storage and
+rendered-output soundness contract. It adds no input admission. Literal
+startup and the SAME actual ResourceHistory derive a graph-bearing root and
+graph-bearing stored references for EVERY emitted cache.
+
+For each actual output that is Discharged, the theorem constructs an actual
+native render with sufficient fuel. It fixes bound, term, residual list and
+full final state BEFORE all semantic models. It retains that output's full
+Packet, caller heap, cache, compression frame and dependency levels. For each
+satisfying assignment of that OUTPUT, the term equals its root value. The
+residual list is the exact filled output-obligation list. All residual checks
+hold under that meaning. The same assignment satisfies the rendered state.
+
+Carrier preservation now covers terminal class union, assimilation, incoming
+writes, child traversal, selected and captured finalization, callback recording
+and actual recursive history tails. The previous internal free-hole witness
+remains valid. Its missing carrier is excluded from these covered outputs.
+This does not establish discharge or model existence for every output.
+
+The largest gap is full recursive accepted-output coverage. Retain the chosen
+ORIGINAL accepted model through the run and prove that the permitted policies
+produce a discharged output. Depth, stop, frontier, projection, parked and
+Mu/Union cases still need coverage. Public encoding and pending-policy origins,
+public APIs, ranking, sampling and physical Haskell correspondence remain open.
+Earlier finite pruning and accepted-head callback results retain their scope.
+Whole-CFTA correctness remains the objective. Goal ACTIVE; checkpoint PROGRESS.
+
+Twenty modules add 41 public theorems. Final strict checks and full Audit pass:
+4325 jobs and 80496 dependencies. Public readback has 309 theorem blocks and
+nine printed definitions. All 268 prior blocks and nine definitions remain
+the exact 1081831-byte prefix. All 4304 old non-Audit Lean sources, 153 pinned
+strong modules and 810 tracked Haskell source/evidence files retain bytes.
+Haskell is unchanged. Details: `lean/notes-current-native-carrier-history.md`.
+
+
 ## Constructive native rendering with exact original residual checks
 
 Source checkpoint: 7220dacbb21a21b133a17c7160350dca5f0f2a65.
