@@ -1,3 +1,59 @@
+# Verified original-input native return degree: 2026-10-29 19:29 CET
+
+Proof f735675369ceed4a8244d54c24d1599b1359f69d is integrated with main ef0a2f32
+at source 2cdd5080bfb066e975856ada4f7a3c819a6f8567 on formalize.
+The full goal remains ACTIVE. Read lean/notes-current-native-degree-progress.md.
+Every earlier document body follows unchanged as a dated checkpoint.
+
+Actual original-source kernel node/row returns have degree <= L + semantic R.
+Runtime-fuel induction discharges all internal child-return hypotheses.
+The bound covers open intermediate returns. It retains the exact value and
+both reached heap invariants. Actual native returns and completed memo hits
+inherit the same bound under the existing word-range or checked-key contracts.
+Closed roots derive the original ceiling and semantic completion. No future
+body/result bound is assumed. Closed root outputs already have degree zero.
+This result does not bound every cached body or establish return existence.
+
+Eleven additive modules: 18 public theorems, 1055 lines/71543 bytes.
+All 12 final strict sources pass, including Audit. Audit checks 82076 theorem
+dependencies in 4624 jobs. Public readback: 874 checks/axiom lists and 73 old
+definition bodies, 3654083 bytes. The old 3609022 bytes are an exact prefix.
+All 45061 new bytes were read. No custom axiom, placeholder or suppression.
+There are 38 completed new Lean commands: 28 PASS and ten retained failed
+drafts. One separate diagnostic evaluator timed out; no numeric claim follows.
+All compiler checks use measured serial 4 GiB max/high and zero swap.
+All 4612 old non-Audit Lean and 461 stronger source identities remain.
+
+Whole-system semantics remains conditional checked rendered soundness under
+its contracts, fixed PCS and whole-Discharged. Greater recursive capacity
+retains ordered output prefixes. The earlier all-cache ancestry theorem keeps
+the same resource bound/outcome and same-raw-slot key membership, including
+nested stopped diagnostics. DONE does not imply Discharged. Configured stop
+can emit partial results. Whole-language completeness remains open.
+
+Biggest gap: bounds for ALL generated allocations and pending heaps, then a
+fixed global progress argument and sufficient recursive capacity. Next prove
+Lower for every actual kernel outcome; use the closed successful-return theorem
+and MaybeMu.lower. Preserve earlier effects before later failures. Then prove
+native prefix and generated-query lineage bounds. Per-query bounds alone do
+not close this obligation. Nonterminal chosen-value coverage, policy/origin,
+new public APIs and full Haskell correspondence remain open.
+
+Main now adds source documents/merges, canonical export, listing and sampling
+checkpoints and symbols at several arities. Integrated tests pass 383 core,
+56 serialization and 30 Sized/checkpoint examples. Formatting checks pass.
+FINDINGS records the upstream HugeLists fix and all retained local repairs.
+Main ef0a2f32 lacks serialization repair c15021ce706ef560b6c0ab335ceed1a4b67ba4aa.
+Formalize retains its exact helper body, both parser call sites and four invalid
+fixtures. The optimized interned operations and probe-freshness repair remain.
+
+Evidence: lean/restart-evidence/20261029-native-degree-progress/.
+Preserve frozen evidence and marked drafts. Use a new writable area after seal.
+Refresh upstream. Regular formalize pushes remain explicitly authorized.
+Continue the full goal. Preserve the exact earlier counterexample scopes.
+
+---
+
 # Verified output and diagnostic ancestry: 2026-10-29 02:30 CET
 
 Source `49169700142d3f587e64ffe4398616e4aba33e90` is pushed on formalize.
