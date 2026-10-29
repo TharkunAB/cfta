@@ -8,9 +8,9 @@ import qualified Data.Set as Set
 import Test.Hspec (Spec, describe, it, shouldBe)
 
 import qualified Data.CFTA as FTA
-import qualified Data.CFTA.Document as Document
 import Data.CFTA.Language (Language, UpdateError (..))
 import qualified Data.CFTA.Language as Language
+import qualified Data.CFTA.Language.Source as Source
 import Data.CFTA.Symbol (Symbol, symbolText)
 import Data.CFTA.Template (Exclusion (Anywhere), Template (Hole, TemplateNode))
 import Data.CFTA.Term (Term (Node))
@@ -51,7 +51,7 @@ spec = describe "language updates" $ do
     it "report a missing exclusion and an invalid source edit" $ do
         Language.update original (Language.restore "absent") `shouldBe` Left (MissingExclusion "absent")
         Language.update original (Language.remove $ Language.at Atom "absent")
-            `shouldBe` Left (InvalidSource $ Document.MissingProduction Atom "absent")
+            `shouldBe` Left (InvalidSource $ Source.MissingProduction Atom "absent")
   where
     changed = update original
     update before = either (error . Language.explainUpdateError) id . Language.update before
@@ -64,14 +64,14 @@ spec = describe "language updates" $ do
 original :: Language State
 original =
     Language.fromDocument
-        $ either (error . Document.explainDocumentError) id
-        $ Document.mkDocument
+        $ either (error . Source.explainDocumentError) id
+        $ Source.mkDocument
             Expr
             [ (Expr, [production "pair" [Atom, Atom]])
             , (Atom, [production "zero" [], production "one" []])
             ]
   where
-    production symbol children = FTA.Transition symbol children $ Document.Annotation (symbolText symbol) Map.empty
+    production symbol children = FTA.Transition symbol children $ Source.Annotation (Source.ProductionName $ symbolText symbol) Map.empty
 
 -- | The terms of the compiled language.
 terms :: Language State -> Set.Set (Term Symbol)

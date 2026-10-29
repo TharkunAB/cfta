@@ -161,7 +161,7 @@ claim is made here. See
 ## Edits, exclusions, and names
 
 These sources compare with the edits, the exclusions, and the names of
-`Data.CFTA.Document` and `Data.CFTA.Language`.
+`Data.CFTA.Language` and `Data.CFTA.Language.Source`.
 
 - **Unit of an edit.** Ohm overrides a rule with `:=` and extends it with
   `+=`; `+=` is an error when the rule does not exist
@@ -210,6 +210,53 @@ These sources compare with the edits, the exclusions, and the names of
   document does not reserve a deleted production name: a new production can
   use it. A rank has no name or number, so a rank is valid only for the
   compiled graph that gave it.
+
+## Merges
+
+These sources compare with `diff` and `merge3` of `Data.CFTA.Language.Merge`.
+
+- **A merge by key.** A three-way merge in Git works on each path of the
+  index: a path that one side does not change takes the version of the other
+  side, and a path that the two sides change in the same way takes that
+  version. Git keeps every other path as three stages: the base, ours, and
+  theirs ([git read-tree](https://git-scm.com/docs/git-read-tree)). Unison
+  uses the same rule for each path, and a deleted path is a version too
+  ([Unison manual](https://www.cis.upenn.edu/~bcpierce/unison/download/releases/stable/unison-manual.html)).
+  `merge3` uses this rule for each name, and a `Conflict` holds the three
+  versions, as the stages do.
+- **Alignment by name.** diff3 aligns the three versions with a longest common
+  subsequence. Khanna, Kunal, and Pierce show that diff3 is not idempotent and
+  not stable, and that the choice of the alignment causes these failures. They
+  also write that keys make the alignment clear
+  ([FSTTCS 2007](https://link.springer.com/chapter/10.1007/978-3-540-77050-3_40)).
+  Production names, fact names, and exclusion names are keys, so `merge3`
+  does not choose an alignment.
+- **The order of a row.** Schwägerl and others merge ordered collections of
+  model elements: they merge the elements first, and then their order. An
+  insertion stays after its predecessor, and two different insertions at one
+  place are a conflict
+  ([MODELSWARD 2014](https://www.scitepress.org/Papers/2014/47021/47021.pdf)).
+  3DM, as the Spork paper describes it, and Pijul also report this case as a
+  conflict ([Spork](https://arxiv.org/abs/2202.05329),
+  [Pijul](https://pijul.org/manual/theory.html)). Sequence CRDTs put
+  concurrent insertions in a fixed order by identifier instead, and Fugue
+  keeps each run of insertions together
+  ([Weidner and Kleppmann](https://arxiv.org/abs/2305.00583)). `merge3` keeps
+  each new production after its predecessor. It puts two different runs at
+  one place in the order of their first names, as a CRDT does, because two
+  sides that each add a production to the end of one row are the most frequent
+  concurrent edit.
+- **Patches.** JSON Merge Patch replaces an array as a whole
+  ([RFC 7396](https://www.rfc-editor.org/rfc/rfc7396)), and JSON Patch
+  addresses an array element by its index
+  ([RFC 6902](https://www.rfc-editor.org/rfc/rfc6902)). Neither can insert an
+  item after a named item, and edits by index do not commute. `diff` addresses
+  each production by its name.
+- **Grammars.** An ANTLR import replaces a whole rule by its name
+  ([ANTLR grammars](https://github.com/antlr/antlr4/blob/master/doc/grammars.md)),
+  and grammar convergence records a change as a chain of transformation
+  operators ([Lämmel and Zaytsev](https://arxiv.org/abs/1008.4188)). No source
+  that we found merges grammars three-way by production name.
 
 ## Current scope
 

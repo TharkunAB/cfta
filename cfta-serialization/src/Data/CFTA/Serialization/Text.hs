@@ -74,7 +74,6 @@ import Text.Read (readEither)
 import qualified Data.CFTA as FTA
 import Data.CFTA.Checkpoint (Checkpoint (..), SamplingCheckpoint (..))
 import qualified Data.CFTA.Constraint as C
-import qualified Data.CFTA.Document as D
 import Data.CFTA.Equality.Constraint (
     EqConstraints (EqConstraints, EqContradiction),
     PathEClass (PathEClass),
@@ -83,6 +82,7 @@ import Data.CFTA.Equality.Constraint (
 import qualified Data.CFTA.Formula as F
 import Data.CFTA.Index (ChildIndex (ChildIndex), ClassRank (ClassRank), Size (Size), Weight (Weight))
 import qualified Data.CFTA.Language as L
+import qualified Data.CFTA.Language.Source as D
 import Data.CFTA.Path (Path (Path), unPath)
 import Data.CFTA.Signature (SortedFunction (..), SortedSignature (..), ValueSort (..), ValueSource (..))
 import Data.CFTA.Symbol (Symbol (RefinedSymbol, Symbol), symbolRefinement, symbolText, valueName)
@@ -106,9 +106,9 @@ data CommentTarget state
     = OnFile
     | OnState !state
     | -- | A production, by its state and its name.
-      OnProduction !state !Text
+      OnProduction !state !D.ProductionName
     | -- | A fact, by its state, the name of its production, and its name.
-      OnFact !state !Text !Text
+      OnFact !state !D.ProductionName !D.FactName
     | OnExclusion !L.ExclusionName
     deriving (Eq, Ord, Show)
 
@@ -396,15 +396,24 @@ renderUpdate encode (L.Update operations) = built $ "update 1;\n" <> foldMap ope
                 "define "
                     <> state at
                     <> " "
-                    <> nameText name
+                    <> nameText (D.productionNameText name)
                     <> " = "
                     <> symbolText' symbol
                     <> childrenText (map state children)
                     <> ";\n"
-            D.DeleteProduction at name -> "remove " <> state at <> " " <> nameText name <> ";\n"
+            D.DeleteProduction at name -> "remove " <> state at <> " " <> nameText (D.productionNameText name) <> ";\n"
             D.SetFact at name fact constraint ->
-                "require " <> state at <> " " <> nameText name <> " " <> nameText fact <> " = " <> constraintText constraint <> ";\n"
-            D.RemoveFact at name fact -> "relax " <> state at <> " " <> nameText name <> " " <> nameText fact <> ";\n"
+                "require "
+                    <> state at
+                    <> " "
+                    <> nameText (D.productionNameText name)
+                    <> " "
+                    <> nameText (D.factNameText fact)
+                    <> " = "
+                    <> constraintText constraint
+                    <> ";\n"
+            D.RemoveFact at name fact ->
+                "relax " <> state at <> " " <> nameText (D.productionNameText name) <> " " <> nameText (D.factNameText fact) <> ";\n"
             D.PutProduction at transition -> "put production " <> state at <> " " <> productionText "" encode none at transition
             D.PutRow at transitions -> "put row " <> state at <> " {\n" <> foldMap (sourceTransitionText encode none at) transitions <> "}\n"
             D.DeleteRow at -> "delete row " <> state at <> ";\n"
@@ -503,7 +512,7 @@ productionText ::
     FTA.Transition state Symbol D.Annotation ->
     Builder
 productionText indent encode notes state edge =
-    nameText name
+    nameText (D.productionNameText name)
         <> " = "
         <> edgeText encode edge
         <> if Map.null facts then ";\n" else " {\n" <> foldMap fact (Map.toAscList facts) <> indent <> "};\n"
@@ -515,7 +524,7 @@ productionText indent encode notes state edge =
         commentText (indent <> "  ") (commentOf notes $ OnFact state name factName)
             <> indent
             <> "  "
-            <> nameText factName
+            <> nameText (D.factNameText factName)
             <> " = "
             <> constraintText constraint
             <> ";\n"
@@ -887,8 +896,8 @@ readLanguage decode input = do
   where
     parser = do
         (comments, rows) <- graphParser WithNotes "language" decode $ sourceTransitionParser decode
-        entries <- untilEnd namedExclusionParser
-        exclusions <- namedMap "exclusion" $ map fst entries
+        entries <- distinctItems "exclusion" A.atEnd (fst . fst) namedExclusionParser
+        let exclusions = Map.fromList $ map fst entries
         let exclusionComments = concat [commentOn (OnExclusion $ L.ExclusionName name) comment | ((name, _), comment) <- entries]
         pure (comments <> exclusionComments, rows, Map.mapKeys L.ExclusionName exclusions)
 
@@ -970,21 +979,21 @@ readUpdate decode = runParser $ do
             "start" -> (D.SetStart <$> state <* end) >>= source
             "define" -> do
                 at <- state
-                name <- nameParser
+                name <- productionNameParser
                 token "="
                 (symbol, children) <- edgeParser decode
                 end
                 source $ D.DefineProduction at name symbol children
-            "remove" -> (D.DeleteProduction <$> state <*> nameParser <* end) >>= source
+            "remove" -> (D.DeleteProduction <$> state <*> productionNameParser <* end) >>= source
             "require" -> do
                 at <- state
-                name <- nameParser
-                fact <- nameParser
+                name <- productionNameParser
+                fact <- factNameParser
                 token "="
                 constraint <- constraintParser
                 end
                 source $ D.SetFact at name fact constraint
-            "relax" -> (D.RemoveFact <$> state <*> nameParser <*> nameParser <* end) >>= source
+            "relax" -> (D.RemoveFact <$> state <*> productionNameParser <*> factNameParser <* end) >>= source
             "put" -> do
                 target <- word
                 case target of
@@ -1080,11 +1089,11 @@ sourceTransitionParser ::
     A.Parser (FTA.Transition state Symbol D.Annotation, [NoteEntry state])
 sourceTransitionParser decode state = do
     comment <- itemComment
-    name <- nameParser
+    name <- productionNameParser
     token "="
     (symbol, children) <- edgeParser decode
-    facts <- ifNext '{' (token "{" *> untilClose '}' fact <* token "}") []
-    namedFacts <- namedMap "fact" [(factName, constraint) | (factName, constraint, _) <- facts]
+    facts <- ifNext '{' (token "{" *> factBlock <* token "}") []
+    let namedFacts = Map.fromList [(factName, constraint) | (factName, constraint, _) <- facts]
     token ";"
     pure
         ( FTA.Transition symbol children $ D.Annotation name namedFacts
@@ -1092,9 +1101,10 @@ sourceTransitionParser decode state = do
             <> concat [commentOn (OnFact state name factName) factComment | (factName, _, factComment) <- facts]
         )
   where
-    fact = do
+    factBlock = distinctItems "fact" ((== Just '}') <$> A.peekChar) (\(name', _, _) -> D.factNameText name') fact
+    fact newName = do
         comment <- itemComment
-        name <- nameParser
+        name <- D.FactName <$> newName
         token "="
         constraint <- constraintParser
         token ";"
@@ -1112,11 +1122,11 @@ symbolParser = do
     pure $ RefinedSymbol (Symbol name) refinement
 
 -- | Read a named exclusion of a language and its doc comment: @exclude NAME = root TEMPLATE;@ or @exclude NAME = anywhere TEMPLATE;@.
-namedExclusionParser :: A.Parser ((Text, Exclusion Symbol), Maybe Text)
-namedExclusionParser = do
+namedExclusionParser :: A.Parser Text -> A.Parser ((Text, Exclusion Symbol), Maybe Text)
+namedExclusionParser newName = do
     comment <- itemComment
     keyword "exclude"
-    name <- nameParser
+    name <- newName
     token "="
     exclusion <- exclusionBody
     pure ((name, exclusion), comment)
@@ -1285,15 +1295,31 @@ templateArguments = parenthesized $ go []
         when (next == Just ')') $ fail "expected a template or prefix marker after comma"
         go reversed
 
--- | Reject duplicate named facts or exclusions before constructing a map.
-namedMap :: String -> [(Text, value)] -> A.Parser (Map.Map Text value)
-namedMap role entries = do
-    foldM_ distinct Set.empty $ map fst entries
-    pure $ Map.fromList entries
+{- | Read items until the end. Each item reads its name with the parser that
+it gets. That parser fails at the start of a name that an earlier item has.
+-}
+distinctItems :: String -> A.Parser Bool -> (item -> Text) -> (A.Parser Text -> A.Parser item) -> A.Parser [item]
+distinctItems role atEnd nameOf item = go Set.empty
   where
-    distinct seen name
-        | Set.member name seen = fail ("duplicate " <> role <> " name: " <> show name)
-        | otherwise = pure $ Set.insert name seen
+    go seen = do
+        end <- atEnd
+        if end
+            then pure []
+            else do
+                next <- item $ newName seen
+                (next :) <$> go (Set.insert (nameOf next) seen)
+    newName seen = do
+        name <- lookAhead nameParser
+        when (Set.member name seen) $ fail ("duplicate " <> role <> " name: " <> show name)
+        nameParser
+
+-- | Read the name of a production.
+productionNameParser :: A.Parser D.ProductionName
+productionNameParser = D.ProductionName <$> nameParser
+
+-- | Read the name of a fact.
+factNameParser :: A.Parser D.FactName
+factNameParser = D.FactName <$> nameParser
 
 -- | Read an unquoted label or a quoted Unicode string.
 nameParser :: A.Parser Text

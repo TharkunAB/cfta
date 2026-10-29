@@ -22,7 +22,6 @@ import Data.CFTA.Constraint (
     noConstraint,
     semanticConstraint,
  )
-import qualified Data.CFTA.Document as D
 import Data.CFTA.Equality.Constraint (
     EqConstraints (EqConstraints, EqContradiction),
     PathEClass (PathEClass),
@@ -32,7 +31,8 @@ import qualified Data.CFTA.Formula as F
 import qualified Data.CFTA.Gen.ManySorted as ManySorted
 import Data.CFTA.Index (ClassRank (..), Size, Weight)
 import qualified Data.CFTA.Language as L
-import qualified Data.CFTA.Merge as Merge
+import qualified Data.CFTA.Language.Merge as Merge
+import qualified Data.CFTA.Language.Source as D
 import Data.CFTA.Path (path)
 import Data.CFTA.Refinement.Expression (refinementFormula, (.==), (.>))
 import Data.CFTA.Refinement.LiquidFixpoint (withZ3)
@@ -112,11 +112,16 @@ spec = do
         it "report a duplicate state" $
             T.parseGraphWith strings "graph 1; start S; state S {} state S {}" `shouldBe` Left (DuplicateState "S")
 
-        it "report a duplicate state and a duplicate production in a language" $ do
+        it "report a duplicate state and a duplicate production in a language, and a duplicate fact or exclusion at its name" $ do
             T.parseLanguageWith strings "language 1; start S; state S {} state S {}"
                 `shouldBe` Left (DuplicateState "S")
             T.parseLanguageWith strings "language 1; start S; state S { x = a; x = b; }"
                 `shouldBe` Left (InvalidDefinition $ D.DuplicateProduction "S" "x")
+            let position text = case T.parseLanguageWith strings text of
+                    Left (SyntaxError line column _) -> Just (line, column)
+                    _ -> Nothing
+            position "language 1; start S;\nstate S { a = a { x = true; x = false; }; }" `shouldBe` Just (2, 29)
+            position "language 1; start S; state S {}\nexclude x = root _;\nexclude x = root _;" `shouldBe` Just (3, 9)
 
         it "reject malformed input" $
             forM_ malformed $ \text ->
@@ -787,7 +792,7 @@ document = must . D.fromGraph
 
 -- | A production with no facts.
 production :: Symbol -> [state] -> FTA.Transition state Symbol D.Annotation
-production symbol children = FTA.Transition symbol children $ D.Annotation (symbolText symbol) Map.empty
+production symbol children = FTA.Transition symbol children $ D.Annotation (D.ProductionName $ symbolText symbol) Map.empty
 
 -- | A one-state language whose name, symbol, and fact use the same text.
 singleSource :: Text -> Constraint -> D.Document String
@@ -799,8 +804,8 @@ singleSource name constraint =
                 ( Text.unpack name
                 ,
                     [ FTA.Transition (RefinedSymbol (Symbol name) $ F.Atom F.Eq value (F.Lit $ 2 ^ (100 :: Int))) []
-                        $ D.Annotation name
-                        $ Map.singleton name constraint
+                        $ D.Annotation (D.ProductionName name)
+                        $ Map.singleton (D.FactName name) constraint
                     ]
                 )
             , ("dead", [])

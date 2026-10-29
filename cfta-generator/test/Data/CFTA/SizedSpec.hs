@@ -13,7 +13,6 @@ import qualified Test.QuickCheck as QC
 
 import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint, Guard (..), equalityConstraint, noConstraint, semanticConstraint)
-import qualified Data.CFTA.Document as Document
 import Data.CFTA.Equality (numNestedMu)
 import qualified Data.CFTA.Equality as ECTA
 import qualified Data.CFTA.Gen as Gen
@@ -21,6 +20,7 @@ import Data.CFTA.Gen.Reference (Automaton (..), AutomatonEdge (..), automatonNod
 import Data.CFTA.Index (Cardinality (..), ClassRank (..), Rank (..), Size (..), Weight (..))
 import Data.CFTA.Interned (toFTA)
 import qualified Data.CFTA.Language as Language
+import qualified Data.CFTA.Language.Source as Source
 import Data.CFTA.Lowering (Expansion (..))
 import qualified Data.CFTA.Lowering as Lowering
 import Data.CFTA.Refinement (Entailment (Entailment))
@@ -185,12 +185,12 @@ spec = describe "Data.CFTA.Sized" $ do
                 `shouldBe` Right [allowed]
 
         it "saves a position in a language, and relocates a term into the edited language" $ do
-            let language = Language.fromDocument $ either (error . show) id $ Document.fromGraph $ automaton "s" binary
+            let language = Language.fromDocument $ either (error . show) id $ Source.fromGraph $ automaton "s" binary
                 edit before = either (error . Language.explainUpdateError) id . Language.update before
                 aFirst = Anywhere $ TemplateNode (sym "g") [TemplateNode (sym "a") [], Hole]
                 excluded = edit language $ Language.without (Language.ExclusionName $ Text.pack "a-first") aFirst
                 renamed = edit excluded $ Language.define (Language.at "s" $ Language.ProductionName $ Text.pack "t0") (sym "b") []
-                graphOf current = Document.compileGraph $ Language.source current
+                graphOf current = Source.compileGraph $ Language.source current
                 exclusionsOf current = Map.elems $ Language.exclusions current
                 checkpoint = Checkpoint.start listingBound (exclusionsOf excluded) (graphOf excluded)
                 resumeIn current saved = map fst <$> Checkpoint.resume saved (graphOf current) (exclusionsOf current)

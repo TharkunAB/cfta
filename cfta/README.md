@@ -48,7 +48,7 @@ import qualified Data.CFTA.Enumeration as Enumeration
 import qualified Data.CFTA.Generic as Generic
 import qualified Data.CFTA.Interned as Common
 import qualified Data.CFTA.Language as Language
-import qualified Data.CFTA.Merge as Merge
+import qualified Data.CFTA.Language.Merge as Merge
 import qualified Data.CFTA.Template as Template
 import qualified Data.CFTA.Trace as Trace
 ```
@@ -254,7 +254,8 @@ oneAccepted = fmap (`accepts` Term.Node "successor" [Term.Node "zero" []]) natur
 -- Right True
 ```
 
-An automaton checks symbol arities and child-state references at construction.
+An automaton checks child-state references at construction. A symbol can occur
+at several arities.
 Cycles are valid. `PlainFTA state symbol` is `FTA state symbol Constraint`.
 An ordinary automaton has `noConstraint` on every transition.
 
@@ -330,7 +331,7 @@ contains it. `compileGraph` gives a new graph for queries, and the language
 keeps its source for the next edit. See
 [editable languages](../docs/editable-languages.md).
 
-`Data.CFTA.Merge` compares and merges languages by their stable names.
+`Data.CFTA.Language.Merge` compares and merges languages by their stable names.
 `diff base other` gives the update that changes `base` into `other`.
 `merge3 base left right` merges two versions that come from one base, key by
 key: the initial state, the state rows, the production names, the fact names,
@@ -409,7 +410,7 @@ Paths are built when `toTree` is requested; normal generation does not build
 them.
 
 `Common.toTree` provides the same view for interned graphs. Its state labels
-contain `Common.Node symbol`; its transition labels contain `Common.Edge symbol`. It returns `Either (Common.FTAViewError symbol)`
+contain `Common.Node symbol`; its transition labels contain `Common.Edge symbol`. It returns `Either Common.FTAViewError`
 around the tree because it rejects an open recursive root. It traverses the
 graph directly and does not validate symbol arities. Neither view enumerates
 the accepted values. Add `containers` to your component's `build-depends` when
@@ -537,7 +538,7 @@ compatible patterns can still produce exponentially many choices.
 toTree ::
     (Hashable symbol, Typeable symbol) =>
     Node symbol ->
-    Either (FTAViewError symbol)
+    Either FTAViewError
         (Tree (Either (StateView (Node symbol)) (Edge symbol)))
 ```
 
@@ -982,7 +983,7 @@ optimized pruning and generation can be checked.
 ```haskell
 toTree ::
     Automaton ->
-    Either (FTAViewError Symbol) (Tree (Either (StateView Automaton) Transition))
+    Either FTAViewError (Tree (Either (StateView Automaton) Transition))
 ```
 
 `Left` contains a node definition or reference. `Right` contains the complete

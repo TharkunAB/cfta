@@ -4,19 +4,19 @@ import System.Directory (findExecutable)
 import System.Exit (die)
 import Test.Hspec (hspec)
 
-import qualified Data.CFTA.EGraphSpec
 import qualified Data.CFTA.AbstractionSpec
-import qualified Data.CFTA.DocumentSpec
+import qualified Data.CFTA.EGraphSpec
 import qualified Data.CFTA.Equality.ConstraintSpec
 import qualified Data.CFTA.Equality.FTASpec
 import qualified Data.CFTA.EqualitySpec
 import qualified Data.CFTA.Internal.UnionFindSpec
+import qualified Data.CFTA.Language.MergeSpec
+import qualified Data.CFTA.Language.SourceSpec
+import qualified Data.CFTA.LanguageSpec
+import qualified Data.CFTA.LarkSpec
+import qualified Data.CFTA.LoweringSpec
 import qualified Data.CFTA.Refinement.DefinitionSpec
 import qualified Data.CFTA.Refinement.GroundSpec
-import qualified Data.CFTA.LoweringSpec
-import qualified Data.CFTA.LarkSpec
-import qualified Data.CFTA.LanguageSpec
-import qualified Data.CFTA.MergeSpec
 import qualified Data.CFTA.Refinement.GuardSpec
 import qualified Data.CFTA.Refinement.MinimizeSpec
 import qualified Data.CFTA.Refinement.PruneSpec
@@ -65,6 +65,6 @@ main = do
         Data.CFTA.LoweringSpec.spec
         Data.CFTA.LarkSpec.spec
         Data.CFTA.AbstractionSpec.spec
-        Data.CFTA.DocumentSpec.spec
+        Data.CFTA.Language.SourceSpec.spec
         Data.CFTA.LanguageSpec.spec
-        Data.CFTA.MergeSpec.spec
+        Data.CFTA.Language.MergeSpec.spec
