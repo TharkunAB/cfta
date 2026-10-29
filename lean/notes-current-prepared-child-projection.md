@@ -1,3 +1,56 @@
+# Verified prepared ancestry and serialization repair: 2026-10-29 01:15 CET
+
+Source `5eb88a239b05ee6ede5acb296b64ee0fe8616f02` is pushed and verified on formalize. Full goal ACTIVE.
+Read `lean/notes-current-prepared-ancestry-progress.md` for contracts and next work.
+Every earlier document byte follows unchanged.
+
+Actual storage, terminal assimilation, child traversal and prepared heads retain
+every old recursion key at every SAME RAW SLOT. This includes stale keys at the
+fresh counter. Exact expansion history stays equal where retained; captured
+completion clears it. A fixed-slot, fixed-handle unused-shape budget cannot
+increase. This does not compare different representatives or sibling inputs.
+The whole recursive output and attached-stop composition remains open.
+
+Strongest semantics remains conditional checked rendered soundness under the
+semantic/resource contracts, fixed-PCS and whole-Discharged, with ordered output
+prefix retention at greater depth. Native generated-family/rank, nonterminal
+chosen-model emission and original-input sufficient depth remain the main gaps.
+Complete policies/origin/public API and physical Haskell correspondence remain.
+DONE does not imply Discharged. A configured stop can emit partial outputs.
+
+Eleven modules: 33 public theorems, one retention predicate, six private helpers,
+1,295 lines/70,783 bytes. All 12 final strict sources pass. Audit: 4,595 jobs and
+81,958 theorem dependencies. Compiler: 28 commands, 25 PASS, three preserved
+draft FAIL. Native: five commands, four PASS, one preserved linker environment
+FAIL. One wrapper argument error ran no compiler. All jobs remain serial at
+measured 4 GiB and zero swap. Public: 827 theorem checks/axiom lists, 68 definition
+bodies, 3,454,104 bytes. Prior 3,408,116 bytes are an exact prefix; all 45,988 new
+bytes were read. All 4,583 prior non-Audit Lean and 432 stronger sources retain
+their hashes. All 817 inherited Haskell/Cabal identities retain their hashes.
+
+Main PR188 is integrated at e216346905cfeb0b243799138b4c254a739de0aa.
+Parser repair c15021ce706ef560b6c0ab335ceed1a4b67ba4aa is pushed on formalize.
+Four strict-prefix equality inputs threw toPathTrie exceptions. They now return
+Left. Four valid controls still return graphs. Existing suite: 19 examples,
+zero failures with -Werror. Fourmolu, Cabal-gild, HLint and package metadata pass.
+The repair changes two of 821 integrated Haskell/Cabal identities; 819 retain
+their hashes. FINDINGS has the exact codec, input, cause and external pickup.
+
+Next: all-tag valid-prefix ancestry, actual opaque-cache ancestry, Entry and
+SelectedHistoryReceipt composition. ResourceHistory can then give output-only
+retention. Attached stopped caches need an actual diagnostic-cache relation and
+a stronger closed finite-depth proof. The source-only worker-next report gives
+the exact route. Its proposed interfaces are not installed or checked theorems.
+
+Evidence: `lean/restart-evidence/20261029-prepared-ancestry-progress/`.
+Current note: `lean/notes-current-prepared-ancestry-progress.md`.
+Board 718: `3298f7df-3880-44f5-ae98-fbe1bd4ff7fb`, exact verified readback.
+Preserve frozen evidence and old counterexamples. Use a new writable area.
+Refresh upstream. Normal formalize pushes remain explicitly authorized.
+Continue the full objective without asking whether to continue.
+
+---
+
 # Verified actual boundary entry progress — 2026-10-29 00:31 CET
 
 Source `c7da675e2afe3779d62d0b3b00467db2985cbdd6` is pushed and verified on formalize. Full goal ACTIVE.
