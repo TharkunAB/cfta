@@ -1,3 +1,45 @@
+# Prepared constructor forecasts: 2026-10-29 23:36 CET
+
+Source 31a55cd7c9ea995e74d40751c0415ebc8d91240e on formalize.
+The full goal remains ACTIVE.
+Read lean/notes-current-prepared-constructor-forecast.md.
+Earlier dated findings and Haskell repairs follow unchanged.
+
+The prepared constructor can differ from the value decoded by its stored handle.
+The three progress interfaces now accept separate parent availability/closedness
+and captured Ready/IncomingAvoid. All old APIs and full result expressions remain.
+A new local forecast derives projection and exact reservation from the original
+accepted model, Packet/Fits/knownHeap and inherited seed edgeCount reservation.
+The full same-model, strict-cost, actual callback and Packet results remain.
+
+The prior gap list overstated missing prefix primitives. Existing forward
+PreparedEntryModels, prefix_proper and recordTypes_inr supply their facts.
+PrefixMeaning's narrowed model direction alone is backward. Use the forward API.
+Recursive directly enters a stored ordinary node; PreparedRecursive first uses
+SelectedPreparation. Their full execution/correspondence remains separate.
+
+Largest gap: an actual earlier recursive hook can stop before the chosen edge.
+The whole sibling coverage law preserves that exact earlier-stop case and outputs.
+The chosen term cannot rank all earlier alternatives that reset the captured cache.
+Global controls/resources, unfolding/public coverage, exact public stops/order
+and Haskell correspondence remain open. No fully admitted all-capacity
+counterexample was constructed. DONE does not imply Discharged.
+
+Strict Audit: 4670 jobs and 82360 theorem axiom checks. All 11 Root commands pass.
+All 831 Haskell-related identities remain unchanged. No Haskell source change,
+fix or new executable defect was found. External work must retain all earlier
+Haskell repairs and pickup items below. Existing native/formatter evidence is
+retained for the unchanged inputs. Physical enabled emptiness and PR193 keep
+their separate earlier resource contracts.
+
+Evidence corrections: a prior frozen callback report states 18905 source bytes;
+the exact checked source had 18903 bytes with the same recorded hash. The new
+prefix review records a 6/5 whole-source acquisition overrun and recovered registry.
+Both records remain explicit. The original frozen evidence is unchanged.
+Evidence: lean/restart-evidence/20261029-selected-prefix-model-progress.
+
+---
+
 # Constructor iteration and Left callback: 2026-10-29 23:06 CET
 
 Source 6edaa82b4d1be3f1a1fba14cdc6d57284916d4f2 on formalize.

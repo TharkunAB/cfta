@@ -1,3 +1,41 @@
+# Prepared constructor forecasts: 2026-10-29 23:36 CET
+
+Source 31a55cd7c9ea995e74d40751c0415ebc8d91240e on formalize.
+The full goal remains ACTIVE. Last fetched main remains 7b8db072f.
+Read lean/notes-current-prepared-constructor-forecast.md first.
+Earlier dated document bodies follow unchanged.
+
+Prepared constructor progress now accepts the separate Available closed parent
+and captured-input Ready/IncomingAvoid. All three old public headers and full
+results remain exact. The new forecast theorem derives the actual projection
+and exact local reservation from the accepted model and original seed envelope.
+Its whole callback result retains the same model, Packet, strict pending-term
+decrease and actual non-rejecting continuation at a common local work bound.
+
+Existing forward prefix/preparation, ProperState and Right identity laws
+already supply their facts. Preserve the distinction between Recursive's
+direct ordinary entry and PreparedRecursive's SelectedPreparation dispatch.
+The new local theorem does not compose either whole worker.
+
+Largest gap: attach the quantitative result to the actual chosen sibling event,
+retaining the existing chosen-OR-earlier-stopped-hook contract and ordered outputs.
+Then control unintended earlier stops. A later accepted term does not rank every
+earlier alternative. Global controls/resources, unfolding/public coverage,
+exact public order/stops and Haskell correspondence remain open.
+DONE does not imply Discharged. Worker/depth fuel alone cannot remove the known
+recursive initial-boundary placeholders.
+
+Strict Audit: 4670 jobs, 82360 theorem axiom checks.
+Public: 979 checks, 78 definitions; exact old 4023550-byte prefix; four new laws.
+All 11 proof commands and 49 snapshots pass. All 831 Haskell-related inputs match.
+Of 470 prior protected proofs, 467 source identities remain unchanged; three
+generalizations preserve their exact old APIs/results. Use the archived
+final-strong-sources.json with 471 CURRENT identities for the next baseline.
+No Haskell fix or new executable defect was found. Earlier FINDINGS remain.
+Evidence: lean/restart-evidence/20261029-selected-prefix-model-progress.
+
+---
+
 # Constructor iteration and Left callback: 2026-10-29 23:06 CET
 
 Source 6edaa82b4d1be3f1a1fba14cdc6d57284916d4f2 on formalize.
