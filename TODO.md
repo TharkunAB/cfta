@@ -10,10 +10,10 @@ the top.
 ## In progress: serialization
 
 Each pull request is one complete feature. #188, the graph text format, is on
-`main`. The others are drafts: mark the next one ready when work on it starts.
+`main`. #116 is ready for review. The others are drafts: mark the next one
+ready when work on it starts.
 
-- #116 `feature/listing-checkpoints`: Query checkpoints: resume a size-ordered listing in a new process
-- #123 `feature/sampling-checkpoints`: Sampling checkpoints: resume a sampled run in a new process
+- #116 `feature/listing-checkpoints`: Checkpoints: resume a size-ordered listing or a sampled run in a new process
 - #110 `feature/source-documents`: Editable source documents and language updates
 - #187 `feature/document-text`: Text forms of source documents, languages, and updates
 - #126 `feature/document-merge`: Diff and three-way merge of languages by stable names
