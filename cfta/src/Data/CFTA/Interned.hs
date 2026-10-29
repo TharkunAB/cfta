@@ -65,6 +65,7 @@ module Data.CFTA.Interned (
     InternedState (..),
     FTAViewError (..),
     toFTA,
+    canonicalFTA,
     toRows,
     stateOf,
     fromFTA,
@@ -111,7 +112,9 @@ data FTAViewError
 Each interned node becomes one state. The operation does not enumerate terms
 or interpret transition constraints. Use the explicit-state interface when
 an operation must retain caller-supplied state names. The rows are those of
-'toRows'. A symbol can occur at several arities.
+'toRows'. A symbol can occur at several arities. The names of the states depend
+on the identities of the nodes in this process; 'canonicalFTA' gives names that
+depend on the content of the graph only.
 -}
 toFTA ::
     (Hashable symbol, Typeable symbol) =>
@@ -122,6 +125,36 @@ toFTA root
     | otherwise =
         either (const $ error "cfta bug in Data.CFTA.Interned.toFTA: the rows of a closed node are not closed") Right $
             FTA.mkFTA (stateOf root) (Map.toList $ toRows root)
+
+{- | The explicit graph of a closed node, with names that depend on the content
+of the graph only. Each state is a canonical class ('canonicalClasses') of the
+nodes that the root reaches, and the initial state is the class of the root.
+A row has the transitions of one node of its class, in the order of their
+arity, symbol, child states, and constraint; equal transitions are kept once.
+The nodes of one class have the same language, so the graph has the language of
+the node. The same node, built in any order and in any process, gives the same
+graph, so the text of the graph can identify the language.
+-}
+canonicalFTA ::
+    (Hashable symbol, Ord symbol, Typeable symbol) =>
+    Node symbol ->
+    Either FTAViewError (FTA.FTA Int symbol Constraint)
+canonicalFTA root
+    | not (Set.null $ freeVars root) = Left OpenNode
+    | otherwise =
+        either (const $ error "cfta bug in Data.CFTA.Interned.canonicalFTA: the rows of a closed node are not closed") Right $
+            FTA.mkFTA initial (if IntMap.null graph then [(initial, [])] else rows)
+  where
+    graph = reachable root
+    classes = canonicalClasses $ IntMap.map (map $ \edge -> (shape edge, map nodeIdentity $ edgeChildren edge)) graph
+    classOf node = let NodeId ident = nodeIdentity node in classes IntMap.! ident
+    initial = if IntMap.null graph then 0 else classOf root
+    shape edge = (length $ edgeChildren edge, edgeSymbol edge, constraintEqualities constraint, constraintGuard constraint)
+      where
+        constraint = edgeConstraint edge
+    transition edge = FTA.Transition (edgeSymbol edge) (map classOf $ edgeChildren edge) (edgeConstraint edge)
+    row edges = Map.elems $ Map.fromList [((shape edge, FTA.transitionChildren (transition edge)), transition edge) | edge <- edges]
+    rows = Map.toList $ Map.fromList [(classes IntMap.! ident, row edges) | (ident, edges) <- IntMap.toList graph]
 
 {- | The transitions of each node that a closed interned graph reaches, keyed by
 the state of the node, with their constraints unchanged.

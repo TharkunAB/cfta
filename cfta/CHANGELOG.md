@@ -11,6 +11,9 @@ Before release, the package was called `microcfta`.
   itself; `toFTA` fails only on an open node (`FTAViewError` is `OpenNode`).
   `mixedArity` gives the first symbol with two arities, for a component that
   needs one arity for each symbol, such as the import of `Data.CFTA.Gen`.
+- Add `canonicalFTA` to `Data.CFTA.Interned`: the explicit graph of a closed
+  node, with states named by their canonical classes. The same node gives the
+  same graph in every process.
 - Add `Data.CFTA.Checkpoint`: saved positions in a size-ordered listing of the
   terms of a graph, and in a sampled run of draws from that listing. A
   `Checkpoint` holds the graph, the query route and its version, the size
