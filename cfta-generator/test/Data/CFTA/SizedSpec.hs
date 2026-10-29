@@ -24,6 +24,7 @@ import Data.CFTA.Sized
 import Data.CFTA.Sized.Checkpoint (Checkpoint (..), CheckpointError (..), SamplingCheckpoint (..))
 import qualified Data.CFTA.Sized.Checkpoint as Checkpoint
 import Data.CFTA.Symbol (Symbol (Symbol))
+import Data.CFTA.Template (Exclusion (..), Template (..), matchesNone, matchesNowhere)
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
 
@@ -82,24 +83,24 @@ spec = describe "Data.CFTA.Sized" $ do
                 let entries = listing graph
                     classes = either (error . show) id $ sized graph
                 map fst entries `shouldBe` concatMap (termsOfSize classes) [1 .. listingBound]
-                forM_ (zip [0 ..] $ Checkpoint.start listingBound graph : map snd entries) $ \(cut, checkpoint) ->
-                    map fst <$> Checkpoint.resume checkpoint graph `shouldBe` Right (drop cut $ map fst entries)
+                forM_ (zip [0 ..] $ Checkpoint.start listingBound [] graph : map snd entries) $ \(cut, checkpoint) ->
+                    map fst <$> Checkpoint.resume checkpoint graph [] `shouldBe` Right (drop cut $ map fst entries)
         it "rejects an edited graph as stale" $ do
             let graph = automaton "s" deadRow
                 edited = either (error . show) id $ FTA.replaceRows (Map.singleton "q" $ Just [node "n" ["leaf"]]) graph
-                checkpoint = Checkpoint.start listingBound graph
-            void (Checkpoint.resume checkpoint edited) `shouldBe` Left (StaleRow "q")
-            void (Checkpoint.resume checkpoint $ automaton "q" deadRow) `shouldBe` Left (StaleStart "s" "q")
+                checkpoint = Checkpoint.start listingBound [] graph
+            void (Checkpoint.resume checkpoint edited []) `shouldBe` Left (StaleRow "q")
+            void (Checkpoint.resume checkpoint (automaton "q" deadRow) []) `shouldBe` Left (StaleStart "s" "q")
         it "rejects another route and another version of the route" $ do
             let graph = automaton "s" binary
-                checkpoint = Checkpoint.start 3 graph
-            void (Checkpoint.resume checkpoint{checkpointVersion = 2} graph) `shouldBe` Left (UnknownRoute Checkpoint.route 2)
-            void (Checkpoint.resume checkpoint{checkpointRoute = Text.pack "other"} graph)
+                checkpoint = Checkpoint.start 3 [] graph
+            void (Checkpoint.resume checkpoint{checkpointVersion = 2} graph []) `shouldBe` Left (UnknownRoute Checkpoint.route 2)
+            void (Checkpoint.resume checkpoint{checkpointRoute = Text.pack "other"} graph [])
                 `shouldBe` Left (UnknownRoute (Text.pack "other") 1)
         it "rejects a position outside the listing" $ do
             -- Up to size three, one binary tree has size one and one has size three.
             let graph = automaton "s" binary
-                from next = map fst <$> Checkpoint.resume (Checkpoint.start 3 graph){checkpointNext = next} graph
+                from next = map fst <$> Checkpoint.resume (Checkpoint.start 3 [] graph){checkpointNext = next} graph []
             forM_ [(0, 0), (1, -1), (1, 2), (2, 1), (4, 1)] $ \next@(size, rank) ->
                 from next `shouldBe` Left (OutsideListing size rank)
             from (1, 1) `shouldBe` Right [term "g" [term "a" [], term "a" []]]
@@ -110,21 +111,43 @@ spec = describe "Data.CFTA.Sized" $ do
             let graph = automaton "s" deadRow
                 edit row = either (error . show) id $ FTA.replaceRows (Map.singleton "q" $ Just row) graph
                 added = edit [node "n" ["leaf"], node "m" ["leaf"]]
-                checkpoint = Checkpoint.start listingBound graph
-                firstAfter target found = take 1 . map fst <$> (Checkpoint.relocate checkpoint target found >>= (`Checkpoint.resume` target))
+                checkpoint = Checkpoint.start listingBound [] graph
+                firstAfter target found = take 1 . map fst <$> (Checkpoint.relocate checkpoint target [] found >>= \saved -> Checkpoint.resume saved target [])
             forM_ [graph, added] $ \target ->
                 forM_ (map fst $ listing target) $ \found -> firstAfter target found `shouldBe` Right [found]
             let removed = term "f" [term "m" [term "k" []]]
                 larger = term "g" [term "a" [], term "g" [term "a" [], term "a" []]]
-            void (Checkpoint.relocate checkpoint (edit [node "n" ["leaf"]]) removed) `shouldBe` Left (MissingTerm removed)
-            void (Checkpoint.relocate (Checkpoint.start 3 $ automaton "s" binary) (automaton "s" binary) larger)
+            void (Checkpoint.relocate checkpoint (edit [node "n" ["leaf"]]) [] removed) `shouldBe` Left (MissingTerm removed)
+            void (Checkpoint.relocate (Checkpoint.start 3 [] $ automaton "s" binary) (automaton "s" binary) [] larger)
                 `shouldBe` Left (MissingTerm larger)
+        it "lists the terms of the graph that no exclusion rejects, and resumes at every cut" $
+            forM_ listings $ \graph -> do
+                let first = Checkpoint.start listingBound someExclusions graph
+                    entries = either (error . show) id $ Checkpoint.resume first graph someExclusions
+                sort (map fst entries) `shouldBe` sort (filter kept $ map fst $ listing graph)
+                forM_ (zip [0 ..] $ first : map snd entries) $ \(cut, checkpoint) ->
+                    map fst <$> Checkpoint.resume checkpoint graph someExclusions `shouldBe` Right (drop cut $ map fst entries)
+
+        it "rejects other exclusions as stale, and relocates only to a term that no exclusion rejects" $ do
+            let graph = automaton "s" binary
+                checkpoint = Checkpoint.start listingBound someExclusions graph
+                rejected = term "g" [term "a" [], term "a" []]
+                -- A first child of g must not be a, so the only binary tree left is the leaf.
+                allowed = term "a" []
+            void (Checkpoint.resume checkpoint graph []) `shouldBe` Left StaleExclusions
+            void (Checkpoint.resume checkpoint graph $ reverse someExclusions) `shouldBe` Left StaleExclusions
+            void (Checkpoint.relocate checkpoint graph someExclusions rejected) `shouldBe` Left (MissingTerm rejected)
+            fmap
+                (take 1 . map fst)
+                (Checkpoint.relocate checkpoint graph someExclusions allowed >>= \saved -> Checkpoint.resume saved graph someExclusions)
+                `shouldBe` Right [allowed]
+
         it "rejects a guard beyond equality constraints" $ do
             let different = semanticConstraint $ Not $ Same (ECTA.path [0]) (ECTA.path [1])
                 graph = automaton "s" [("s", [FTA.Transition (sym "g") ["q", "q"] different]), ("q", [leaf "a", leaf "b"])]
-                checkpoint = Checkpoint.start 3 graph
-            void (Checkpoint.resume checkpoint graph) `shouldBe` Left (QueryFailed ResidualGuard)
-            void (Checkpoint.relocate checkpoint graph $ term "g" [term "a" [], term "b" []])
+                checkpoint = Checkpoint.start 3 [] graph
+            void (Checkpoint.resume checkpoint graph []) `shouldBe` Left (QueryFailed ResidualGuard)
+            void (Checkpoint.relocate checkpoint graph [] $ term "g" [term "a" [], term "b" []])
                 `shouldBe` Left (QueryFailed ResidualGuard)
     describe "Data.CFTA.Sized.Checkpoint, sampling" $ do
         it "gives the words of splitmix64.c"
@@ -149,7 +172,8 @@ spec = describe "Data.CFTA.Sized" $ do
                     let graph = automaton "s" binary
                         classes = either (error . show) id $ sized graph
                         run =
-                            either (error . show) id $ Checkpoint.resumeSampling (Checkpoint.startSampling bound weights seed graph) graph weights
+                            either (error . show) id $
+                                Checkpoint.resumeSampling (Checkpoint.startSampling bound weights seed [] graph) graph weights []
                     forM_ (zip [0 .. 19] run) $ \(index, (found, _)) ->
                         rankOfSize classes found `shouldBe` Just (documentedDraw classes bound weights seed index)
         it "resumes at every cut as the run without a cut"
@@ -158,15 +182,16 @@ spec = describe "Data.CFTA.Sized" $ do
             $ \(graph, weights) -> do
                 let entries = take 40 $ sampled weights graph
                     run = map fst entries
-                forM_ (zip [0 ..] $ Checkpoint.startSampling listingBound weights 7 graph : map snd entries) $ \(cut, checkpoint) ->
-                    (take cut run <>) . take (40 - cut) . map fst <$> Checkpoint.resumeSampling checkpoint graph weights
+                forM_ (zip [0 ..] $ Checkpoint.startSampling listingBound weights 7 [] graph : map snd entries) $ \(cut, checkpoint) ->
+                    (take cut run <>) . take (40 - cut) . map fst <$> Checkpoint.resumeSampling checkpoint graph weights []
                         `shouldBe` Right run
         it "draws from a listing with more terms than a word counts" $ do
             -- The binary trees with 40 inner nodes alone are more than 2^64.
             let graph = automaton "s" binary
                 classes = either (error . show) id $ sized graph
-                run = either (error . show) id $ Checkpoint.resumeSampling (Checkpoint.startSampling 81 Nothing 7 graph) graph Nothing
-                resumed = either (error . show) id $ Checkpoint.resumeSampling (snd $ run !! 9) graph Nothing
+                run =
+                    either (error . show) id $ Checkpoint.resumeSampling (Checkpoint.startSampling 81 Nothing 7 [] graph) graph Nothing []
+                resumed = either (error . show) id $ Checkpoint.resumeSampling (snd $ run !! 9) graph Nothing []
             sum [count | size <- [1 .. 81], let Cardinality count = countOfSize classes size]
                 `shouldSatisfy` (> 2 ^ (64 :: Int))
             forM_ (take 20 run) $ \(found, _) -> fmap fst (rankOfSize classes found) `shouldSatisfy` maybe False (<= 81)
@@ -186,18 +211,30 @@ spec = describe "Data.CFTA.Sized" $ do
             map length (Map.keys counts) `shouldBe` [1, 5, 5]
             Map.elems counts `shouldSatisfy` all (\count -> count > 850 && count < 1150) . take 1
             Map.elems counts `shouldSatisfy` all (\count -> count > 1350 && count < 1650) . drop 1
+        it "draws only terms that no exclusion rejects, and resumes at every cut" $ do
+            let graph = automaton "s" binary
+                start = Checkpoint.startSampling listingBound Nothing 7 someExclusions graph
+                entries = take 40 $ either (error . show) id $ Checkpoint.resumeSampling start graph Nothing someExclusions
+                run = map fst entries
+            take 400 (map fst $ either (error . show) id $ Checkpoint.resumeSampling start graph Nothing someExclusions)
+                `shouldSatisfy` all kept
+            forM_ (zip [0 ..] $ start : map snd entries) $ \(cut, checkpoint) ->
+                (take cut run <>) . take (40 - cut) . map fst <$> Checkpoint.resumeSampling checkpoint graph Nothing someExclusions
+                    `shouldBe` Right run
+            void (Checkpoint.resumeSampling start graph Nothing []) `shouldBe` Left StaleExclusions
+
         it "rejects an edited graph, other weights, another generator, and another route" $ do
             let graph = automaton "s" deadRow
                 edited = either (error . show) id $ FTA.replaceRows (Map.singleton "q" $ Just [node "n" ["leaf"]]) graph
-                checkpoint = Checkpoint.startSampling listingBound Nothing 7 graph
-                from saved target weights = void $ Checkpoint.resumeSampling saved target weights
+                checkpoint = Checkpoint.startSampling listingBound Nothing 7 [] graph
+                from saved target weights = void $ Checkpoint.resumeSampling saved target weights []
             from checkpoint edited Nothing `shouldBe` Left (StaleRow "q")
             from checkpoint graph (Just sizeWeights) `shouldBe` Left StaleWeights
             from checkpoint{samplingPrngVersion = 2} graph Nothing `shouldBe` Left (UnknownPrng Checkpoint.prng 2)
             from checkpoint{samplingVersion = 2} graph Nothing `shouldBe` Left (UnknownRoute Checkpoint.sampleRoute 2)
         it "rejects invalid weights, a listing with nothing to draw, and a negative number of draws" $ do
             let graph = automaton "s" binary
-                from weights target = void $ Checkpoint.resumeSampling (Checkpoint.startSampling listingBound weights 7 target) target weights
+                from weights target = void $ Checkpoint.resumeSampling (Checkpoint.startSampling listingBound weights 7 [] target) target weights []
                 weighted = Just . Map.fromList
             from (weighted [(2, 0)]) graph `shouldBe` Left (InvalidWeight 2 0)
             from (weighted [(0, 1)]) graph `shouldBe` Left (InvalidWeight 0 1)
@@ -205,12 +242,17 @@ spec = describe "Data.CFTA.Sized" $ do
             from (weighted [(2, 1)]) graph `shouldBe` Left NothingToDraw
             from Nothing (automaton "e" [("e", [])]) `shouldBe` Left NothingToDraw
             void
-                (Checkpoint.resumeSampling (Checkpoint.startSampling listingBound Nothing 7 graph){samplingDraws = -1} graph Nothing)
+                ( Checkpoint.resumeSampling
+                    (Checkpoint.startSampling listingBound Nothing 7 [] graph){samplingDraws = -1}
+                    graph
+                    Nothing
+                    []
+                )
                 `shouldBe` Left (InvalidDraws (-1))
         it "rejects a guard beyond equality constraints" $ do
             let different = semanticConstraint $ Not $ Same (ECTA.path [0]) (ECTA.path [1])
                 graph = automaton "s" [("s", [FTA.Transition (sym "g") ["q", "q"] different]), ("q", [leaf "a", leaf "b"])]
-            void (Checkpoint.resumeSampling (Checkpoint.startSampling 3 Nothing 7 graph) graph Nothing)
+            void (Checkpoint.resumeSampling (Checkpoint.startSampling 3 Nothing 7 [] graph) graph Nothing [])
                 `shouldBe` Left (QueryFailed ResidualGuard)
 
 -- | The classes of size one to 'sizeBound' are the accepted terms of each size, each once, and the ranks invert.
@@ -376,13 +418,23 @@ allTerms size =
         , rest <- spread (arity - 1) (remaining - firstSize)
         ]
 
+-- | Exclusions at the root and anywhere, with a hole: no root @f@ with one child, and no @g@ whose first child is @a@.
+someExclusions :: [Exclusion Symbol]
+someExclusions = [AtRoot (TemplateNode (sym "f") [Hole]), Anywhere (TemplateNode (sym "g") [TemplateNode (sym "a") [], Hole])]
+
+-- | Whether no exclusion of 'someExclusions' rejects a term.
+kept :: Term Symbol -> Bool
+kept found =
+    matchesNone [template | AtRoot template <- someExclusions] found
+        && matchesNowhere [template | Anywhere template <- someExclusions] found
+
 -- | The largest size of the listings of the checkpoint tests.
 listingBound :: Size
 listingBound = 7
 
 -- | The listing of the terms of a graph up to 'listingBound', each with the checkpoint after it.
 listing :: FTA.FTA String Symbol Constraint -> [(Term Symbol, Checkpoint String)]
-listing graph = either (error . show) id $ Checkpoint.resume (Checkpoint.start listingBound graph) graph
+listing graph = either (error . show) id $ Checkpoint.resume (Checkpoint.start listingBound [] graph) graph []
 
 {- | Graphs with recursion, empty size classes, a dead and a repeated
 transition, and equality constraints, and a graph without terms.
@@ -440,7 +492,7 @@ documentedDraw classes bound weights seed index = case weights of
 sampled :: Maybe (Map.Map Size Weight) -> FTA.FTA String Symbol Constraint -> [(Term Symbol, SamplingCheckpoint String)]
 sampled weights graph =
     either (error . show) id $
-        Checkpoint.resumeSampling (Checkpoint.startSampling listingBound weights 7 graph) graph weights
+        Checkpoint.resumeSampling (Checkpoint.startSampling listingBound weights 7 [] graph) graph weights []
 
 -- | Weights of sizes up to 'listingBound', with a size of no terms in some listings.
 sizeWeights :: Map.Map Size Weight

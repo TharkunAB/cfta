@@ -1,18 +1,21 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-{- | Resume a size-ordered listing of the terms of a graph, or a sampled run of
-draws from that listing, also in a new process.
+{- | Resume a size-ordered listing of the terms of a language, or a sampled run
+of draws from that listing, also in a new process.
 
-The listing holds the terms of each size from one to a bound, in the order of
-"Data.CFTA.Sized". 'start' gives the checkpoint before the first term.
+A language is a graph and its exclusions ("Data.CFTA.Template"): the terms of
+the graph that no exclusion rejects. The listing holds the terms of the
+language of each size from one to a bound, in the order of "Data.CFTA.Sized"
+for 'Data.CFTA.Template.excludeAllFTA' of the exclusions and the graph. Without
+exclusions, this is the order of the graph. 'start' gives the checkpoint before the first term.
 'resume' gives the terms from a checkpoint on, each with the checkpoint after
 it. Save one of these checkpoints. Later, 'resume' it for the terms after it,
 in the same order. The text form @checkpoint 1;@ of @cfta-serialization@ saves
 a checkpoint with its graph.
 
-'resume' builds the size classes of the graph again, so it needs no state of
-an earlier process. It rejects a checkpoint of another route, of another
-version of the route, or of another graph. An edit to a graph can change the
+'resume' builds the size classes of the language again, so it needs no state
+of an earlier process. It rejects a checkpoint of another route, of another
+version of the route, of another graph, or of other exclusions. An edit to a graph can change the
 order of its terms. Thus the position of a checkpoint has no meaning in an
 edited graph. 'resume' compares the two graphs row by row. A new order of the
 transitions of one state also makes a checkpoint stale: the ranks of a size
@@ -30,7 +33,8 @@ the seed and of @i@ only, so a sampling checkpoint holds the seed and the
 number of draws, and no state of the pseudorandom generator. Without weights,
 each term of the listing has the same chance. With weights, a draw selects a
 size by its weight, then a term of that size with the same chance for each.
-'resumeSampling' rejects a checkpoint of another graph or of other weights.
+'resumeSampling' rejects a checkpoint of another graph, of other exclusions,
+or of other weights.
 The bound and the seed come from the checkpoint.
 
 = The draws of route @sized-sample@ 1 with the generator @splitmix64@ 1
@@ -120,6 +124,7 @@ import Data.CFTA.Checkpoint (Checkpoint (..), SamplingCheckpoint (..))
 import Data.CFTA.Index (Cardinality (..), ClassRank (..), Size, Weight (..))
 import Data.CFTA.Sized (Sized, SizedError, countOfSize, rankOfSize, sized, termsOfSizeFrom, unrankOfSize)
 import Data.CFTA.Symbol (Symbol)
+import Data.CFTA.Template (Exclusion, excludeAllFTA)
 import Data.CFTA.Term (Term)
 
 -- | Why a checkpoint does not resume, or does not relocate.
@@ -130,11 +135,13 @@ data CheckpointError state
       StaleStart !state !state
     | -- | The first state whose row is not the same in the graph of the checkpoint and in the graph.
       StaleRow !state
+    | -- | The exclusions are not the exclusions of the checkpoint.
+      StaleExclusions
     | -- | The route cannot build the size classes of the graph.
       QueryFailed !SizedError
     | -- | No term of the listing has this sized rank, and it is not the end of a size class of the listing.
       OutsideListing !Size !ClassRank
-    | -- | The graph does not accept the term, or the term is larger than the bound.
+    | -- | The language does not have the term, or the term is larger than the bound.
       MissingTerm !(Term Symbol)
     | -- | The sampling checkpoint has another pseudorandom generator, or another version of it.
       UnknownPrng !Text !Integer
@@ -156,12 +163,15 @@ route = "sized"
 routeVersion :: Integer
 routeVersion = 1
 
--- | The checkpoint before the first term of the listing of the terms up to a size bound.
-start :: Size -> FTA.PlainFTA state Symbol -> Checkpoint state
-start bound graph = Checkpoint graph route routeVersion bound (1, 0)
+{- | The checkpoint before the first term of the listing of the terms up to a
+size bound of a graph and its exclusions.
+-}
+start :: Size -> [Exclusion Symbol] -> FTA.PlainFTA state Symbol -> Checkpoint state
+start bound exclusions graph = Checkpoint graph exclusions route routeVersion bound (1, 0)
 
 {- | The terms of the listing from the next term of a checkpoint on, each with
-the checkpoint after it. The graph must be the graph of the checkpoint.
+the checkpoint after it. The graph and the exclusions must be those of the
+checkpoint.
 
 The next term of a checkpoint has a size of at least one, and a class rank
 from zero to the number of terms of that size in the listing. A class rank
@@ -170,11 +180,15 @@ with the next size. A size class above the bound is empty in the listing.
 -}
 resume ::
     (Ord state) =>
-    Checkpoint state -> FTA.PlainFTA state Symbol -> Either (CheckpointError state) [(Term Symbol, Checkpoint state)]
-resume checkpoint graph = do
+    Checkpoint state ->
+    FTA.PlainFTA state Symbol ->
+    [Exclusion Symbol] ->
+    Either (CheckpointError state) [(Term Symbol, Checkpoint state)]
+resume checkpoint graph exclusions = do
     known UnknownRoute (route, routeVersion) (checkpointRoute checkpoint, checkpointVersion checkpoint)
     maybe (Right ()) Left $ staleness (checkpointGraph checkpoint) graph
-    classes <- first QueryFailed $ sized graph
+    when (checkpointExclusions checkpoint /= exclusions) $ Left StaleExclusions
+    classes <- first QueryFailed $ sized $ excludeAllFTA exclusions graph
     let bound = checkpointBound checkpoint
         (size, ClassRank rank) = checkpointNext checkpoint
         Cardinality listed = if size <= bound then countOfSize classes size else 0
@@ -186,23 +200,27 @@ resume checkpoint graph = do
         , (after, term) <- zip [from + 1 ..] (termsOfSizeFrom classes at from)
         ]
 
-{- | A checkpoint of the same query on a graph, at a term. Resuming it gives
-the term first.
+{- | A checkpoint of the same query on a graph and its exclusions, at a term.
+Resuming it gives the term first.
 
-This does not continue the listing of the old checkpoint. The listing of the
-graph can repeat or skip terms of the old listing. The result is
-'MissingTerm' when the graph does not accept the term, or when the term is
-larger than the bound.
+This does not continue the listing of the old checkpoint. The new listing can
+repeat or skip terms of the old listing. The result is 'MissingTerm' when the
+language does not have the term, or when the term is larger than the bound.
 -}
 relocate ::
     (Ord state) =>
-    Checkpoint state -> FTA.PlainFTA state Symbol -> Term Symbol -> Either (CheckpointError state) (Checkpoint state)
-relocate checkpoint graph term = do
+    Checkpoint state ->
+    FTA.PlainFTA state Symbol ->
+    [Exclusion Symbol] ->
+    Term Symbol ->
+    Either (CheckpointError state) (Checkpoint state)
+relocate checkpoint graph exclusions term = do
     known UnknownRoute (route, routeVersion) (checkpointRoute checkpoint, checkpointVersion checkpoint)
-    classes <- first QueryFailed $ sized graph
+    classes <- first QueryFailed $ sized $ excludeAllFTA exclusions graph
     case rankOfSize classes term of
         Just next@(size, _)
-            | size <= checkpointBound checkpoint -> Right checkpoint{checkpointGraph = graph, checkpointNext = next}
+            | size <= checkpointBound checkpoint ->
+                Right checkpoint{checkpointGraph = graph, checkpointExclusions = exclusions, checkpointNext = next}
         _ -> Left $ MissingTerm term
 
 -- | The name of the sampling route: draws from the listing of 'route'.
@@ -226,15 +244,16 @@ prngVersion = 1
 
 {- | The sampling checkpoint before the first draw from the listing of the
 terms up to a size bound, with the weights of the sizes, or 'Nothing' for the
-same chance for each term, and a seed.
+same chance for each term, a seed, and the exclusions of the graph.
 -}
-startSampling :: Size -> Maybe (Map Size Weight) -> Word64 -> FTA.PlainFTA state Symbol -> SamplingCheckpoint state
-startSampling bound weights seed graph =
-    SamplingCheckpoint graph sampleRoute sampleRouteVersion bound weights prng prngVersion seed 0
+startSampling ::
+    Size -> Maybe (Map Size Weight) -> Word64 -> [Exclusion Symbol] -> FTA.PlainFTA state Symbol -> SamplingCheckpoint state
+startSampling bound weights seed exclusions graph =
+    SamplingCheckpoint graph exclusions sampleRoute sampleRouteVersion bound weights prng prngVersion seed 0
 
 {- | The draws from the next draw of a sampling checkpoint on, each with the
-sampling checkpoint after it. The list has no end. The graph and the weights
-must be those of the checkpoint.
+sampling checkpoint after it. The list has no end. The graph, the exclusions,
+and the weights must be those of the checkpoint.
 
 Without weights, draw @i@ selects a rank of the listing below the number of
 its terms, and gives the term at that rank. With weights, draw @i@ selects a
@@ -248,13 +267,15 @@ resumeSampling ::
     SamplingCheckpoint state ->
     FTA.PlainFTA state Symbol ->
     Maybe (Map Size Weight) ->
+    [Exclusion Symbol] ->
     Either (CheckpointError state) [(Term Symbol, SamplingCheckpoint state)]
-resumeSampling checkpoint graph weights = do
+resumeSampling checkpoint graph weights exclusions = do
     known UnknownRoute (sampleRoute, sampleRouteVersion) (samplingRoute checkpoint, samplingVersion checkpoint)
     known UnknownPrng (prng, prngVersion) (samplingPrng checkpoint, samplingPrngVersion checkpoint)
     maybe (Right ()) Left $ staleness (samplingGraph checkpoint) graph
+    when (samplingExclusions checkpoint /= exclusions) $ Left StaleExclusions
     when (samplingWeights checkpoint /= weights) $ Left StaleWeights
-    classes <- first QueryFailed $ sized graph
+    classes <- first QueryFailed $ sized $ excludeAllFTA exclusions graph
     select <- selection classes (samplingBound checkpoint) weights
     let draws = samplingDraws checkpoint
     when (draws < 0) $ Left $ InvalidDraws draws

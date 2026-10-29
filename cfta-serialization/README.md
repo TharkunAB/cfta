@@ -80,7 +80,7 @@ Names can use ASCII letters, digits, `_`, `-`, and `+`. Other names use double
 quotes. Quoted strings retain Unicode and escaped control characters. Supported
 escapes are `\"`, `\\`, `\/`, `\b`, `\f`, `\n`, `\r`, `\t`, and `\uXXXX`;
 a non-BMP escape uses a valid surrogate pair. The printer also quotes the name
-`_`.
+`_`, so that a symbol `"_"` and the hole `_` of a template differ.
 
 ## Doc comments
 
@@ -209,14 +209,17 @@ an arbitrary formula can be decided or enumerated.
 
 `printCheckpoint` and `parseCheckpoint` store a `Checkpoint` of
 `Data.CFTA.Checkpoint`: a saved position in a size-ordered listing of the
-terms of a graph. `Data.CFTA.Sized.Checkpoint` of
-[cfta-generator](../cfta-generator/README.md) makes and resumes it.
+terms of a language. `Data.CFTA.Sized.Checkpoint` of
+[cfta-generator](../cfta-generator/README.md) makes and resumes it. The
+language is a graph and its exclusions (`Exclusion` of `Data.CFTA.Template`):
+the terms of the graph that no exclusion rejects.
 
 ```text
 checkpoint 1;
 query sized 1;
 bound 7;
 next size 5 rank 1;
+exclude anywhere node(leaf, _);
 
 graph 1;
 start tree;
@@ -230,10 +233,14 @@ state tree {
 `query` gives the route and its version. The route and its version fix the
 order of the listing. `bound` gives the largest size in the listing.
 `next size 5 rank 1` gives the sized rank of the next term: size 5, and rank 1
-in the class of the terms of that size. The remaining text is the text of
-`printGraph` for the graph. Thus the checkpoint holds its graph, and the
-printed graph is the identity of the checkpoint. No hash is necessary, and one
-file is sufficient to resume.
+in the class of the terms of that size. Each `exclude root TEMPLATE;` rejects
+the terms that match the template, and each `exclude anywhere TEMPLATE;` the
+terms with a subterm that matches it, in the order of the list. A template is
+`_` for any term, `_(...)` for any symbol with these children, a symbol with its
+children, and `...` at the end of the children for a prefix. The remaining text
+is the text of `printGraph` for the graph. Thus the checkpoint holds its
+language, and the printed graph and exclusions are the identity of the
+checkpoint. No hash is necessary, and one file is sufficient to resume.
 
 A program writes a checkpoint, so a checkpoint has no doc comments, and its
 graph has no doc comments and no sorts. A reader rejects them with the error
@@ -245,12 +252,13 @@ the states are text, as with `textStates` above:
 ```haskell
 saved <- either (fail . T.explainTextError) pure $ T.parseCheckpointWith textStates checkpointText
 graph <- either (fail . T.explainTextError) pure $ T.parseGraphWith textStates graphText
-rest <- either (fail . show) pure $ Checkpoint.resume saved graph
+rest <- either (fail . show) pure $ Checkpoint.resume saved graph (checkpointExclusions saved)
 ```
 
-`resume` builds the size classes of the graph again. It rejects a graph that
-is not equal to the graph of the checkpoint, and names the first row that
-differs. A new order of the transitions of one state also makes a checkpoint
+`resume` builds the size classes of the language again. It rejects a graph
+that is not equal to the graph of the checkpoint, and names the first row that
+differs. It rejects other exclusions, also in another order, with
+`StaleExclusions`. A new order of the transitions of one state also makes a checkpoint
 stale, because the ranks follow the order of the rows. To resume the saved
 version, use `checkpointGraph saved` as the graph. To continue in an edited
 graph, use `relocate`: it does not continue the old listing.
@@ -286,7 +294,8 @@ generator and its version. `seed` is a 64-bit word, and `draws` is the number
 of draws before the next draw. A draw depends only on the seed and on its
 index, so the file holds no state of the generator. As in a checkpoint, the
 remaining text is the text of `printGraph` for the graph. `resumeSampling`
-rejects another graph and other weights.
+rejects another graph, other exclusions, and other weights. The exclusions
+follow `draws`, as in a checkpoint.
 
 ## Grammar
 
@@ -305,14 +314,19 @@ graph-edge      = symbol children? ( "where" constraint )? ";" ;
 symbol          = name ( "@" "{" formula "}" )? ;
 children        = "(" ( name ( "," name )* )? ")" ;
 
-checkpoint-file = "checkpoint" "1" ";" query "next" "size" integer "rank" integer ";" plain-graph ;
+checkpoint-file = "checkpoint" "1" ";" query "next" "size" integer "rank" integer ";"
+                  exclusion* plain-graph ;
 sampling-file   = "sampling" "1" ";" query
                   "weights" ( "uniform" | "[" ( weight ( "," weight )* )? "]" ) ";"
-                  "prng" name integer ";" "seed" integer ";" "draws" integer ";" plain-graph ;
+                  "prng" name integer ";" "seed" integer ";" "draws" integer ";"
+                  exclusion* plain-graph ;
 query           = "query" name integer ";" "bound" integer ";" ;
 weight          = integer ":" integer ;
+exclusion       = "exclude" ( "root" | "anywhere" ) template ";" ;
 plain-graph     = "graph" "1" ";" "start" name ";" plain-row* ;
 plain-row       = "state" name "{" graph-edge* "}" ";"? ;
+template        = ( "_" | symbol ) template-args? ;
+template-args   = "(" ( "..." | template ( "," template )* ( "," "..." )? )? ")" ;
 
 constraint      = "equal" "(" ( path ( "," path )* )? ")"
                 | "impossible"

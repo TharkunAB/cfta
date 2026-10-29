@@ -20,8 +20,11 @@ Before release, the package was called `microcfta`.
   bound, and the sized rank of the next term. A `SamplingCheckpoint` holds the
   graph, the route and its version, the bound, the weights of the sizes, the
   pseudorandom generator and its version, the seed, and the number of draws
-  so far. `cfta-generator` resumes both, and `cfta-serialization` prints and
-  reads both.
+  so far. Each also holds its exclusions, so its language is the terms of the
+  graph that no exclusion rejects. `cfta-generator` resumes both, and
+  `cfta-serialization` prints and reads both.
+- Add `Exclusion` (`AtRoot` and `Anywhere` a template) and `excludeAllFTA` to
+  `Data.CFTA.Template`: the terms of an automaton that no exclusion rejects.
 - `Data.CFTA.EGraph.refines` is a rule condition on refinements, as egglog
   conditions a rule on a lattice value: the refinement of the e-class of a
   variable must imply a formula about its value. An analysis can meet the

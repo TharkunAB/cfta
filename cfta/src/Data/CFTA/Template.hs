@@ -24,6 +24,8 @@ module Data.CFTA.Template (
     excludeFTA,
     excludeAnywhere,
     excludeAnywhereFTA,
+    Exclusion (..),
+    excludeAllFTA,
     Obligation (..),
     excludePrefixesFTA,
     Position (..),
@@ -309,9 +311,32 @@ excludeBelow ::
     FTA state symbol annotation ->
     FTA (state, Obligation symbol) symbol annotation
 excludeBelow everywhere templates automaton =
-    -- The input is ranked, so the result is ranked and validation cannot fail.
-    fromRight (error "excludeBelow: the exclusion from a ranked automaton is ranked") $
+    -- The rows give each pair that they reach a row, so validation cannot fail.
+    fromRight (error "excludeBelow: the rows of the exclusion are not closed") $
         uncurry FTA.mkFTA (obligationRows everywhere (FTA.transitionsFrom automaton) templates (FTA.initialState automaton))
+
+-- | A template that rejects a term: when the whole term matches it, or when a subterm matches it.
+data Exclusion symbol
+    = -- | Reject a term that matches the template.
+      AtRoot !(Template symbol)
+    | -- | Reject a term with a subterm that matches the template.
+      Anywhere !(Template symbol)
+    deriving (Eq, Ord, Read, Show)
+
+{- | Keep exactly the terms of an automaton that no exclusion rejects:
+'excludeFTA' with the templates at the root, then 'excludeAnywhereFTA' with
+the templates anywhere. These keep only the transitions whose children can
+have terms. Without exclusions, the result is the input with each state paired
+with empty obligations, so it keeps every row and the order of the states.
+-}
+excludeAllFTA ::
+    (Ord state, Ord symbol) =>
+    [Exclusion symbol] ->
+    FTA state symbol annotation ->
+    FTA ((state, Obligation symbol), Obligation symbol) symbol annotation
+excludeAllFTA [] = FTA.mapStates (\state -> ((state, Obligation [] []), Obligation [] []))
+excludeAllFTA exclusions =
+    excludeAnywhereFTA [template | Anywhere template <- exclusions] . excludeFTA [template | AtRoot template <- exclusions]
 
 {- | The pairs of a state and an 'Obligation' that a state reaches, with
 their transitions, when its terms must match none of the second templates

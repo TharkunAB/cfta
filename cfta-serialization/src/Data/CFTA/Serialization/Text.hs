@@ -59,6 +59,7 @@ import qualified Data.CFTA.Formula as F
 import Data.CFTA.Index (ChildIndex (ChildIndex), ClassRank (ClassRank), Size (Size), Weight (Weight))
 import Data.CFTA.Path (Path (Path), unPath)
 import Data.CFTA.Symbol (Symbol (RefinedSymbol, Symbol), symbolRefinement, symbolText, valueName)
+import Data.CFTA.Template (Exclusion (..), Template (..))
 
 {- | A typed codec for portable state labels. Decoding an encoded state must
 return that state and preserve equality and ordering. Labels are escaped by the
@@ -230,7 +231,9 @@ renderCheckpoint encode checkpoint =
             <> integerText size
             <> " rank "
             <> integerText rank
-            <> ";\n\n"
+            <> ";\n"
+            <> foldMap exclusionText (checkpointExclusions checkpoint)
+            <> "\n"
             <> plainGraphText encode noNotes (checkpointGraph checkpoint)
   where
     Size bound = checkpointBound checkpoint
@@ -256,7 +259,9 @@ renderSamplingCheckpoint encode checkpoint =
             <> integerText (toInteger $ samplingSeed checkpoint)
             <> ";\ndraws "
             <> integerText (samplingDraws checkpoint)
-            <> ";\n\n"
+            <> ";\n"
+            <> foldMap exclusionText (samplingExclusions checkpoint)
+            <> "\n"
             <> plainGraphText encode noNotes (samplingGraph checkpoint)
   where
     Size bound = samplingBound checkpoint
@@ -292,6 +297,21 @@ commentText :: Builder -> Maybe Text -> Builder
 commentText indent = maybe mempty (foldMap line . Text.splitOn "\n")
   where
     line text = indent <> "///" <> (if Text.null text then mempty else " " <> fromText text) <> "\n"
+
+-- | Render an exclusion of a checkpoint as one statement.
+exclusionText :: Exclusion Symbol -> Builder
+exclusionText exclusion = case exclusion of
+    AtRoot template -> "exclude root " <> templateText template <> ";\n"
+    Anywhere template -> "exclude anywhere " <> templateText template <> ";\n"
+
+-- | Render a template with the syntax of symbols, @_@ for a hole or any symbol, and @...@ for a prefix.
+templateText :: Template Symbol -> Builder
+templateText template = case template of
+    Hole -> "_"
+    AnyNode children -> call "_" $ map templateText children
+    TemplateNode symbol children -> symbolText' symbol <> childrenText (map templateText children)
+    AnyPrefix children -> call "_" $ map templateText children <> ["..."]
+    TemplatePrefix symbol children -> symbolText' symbol <> "(" <> separated (map templateText children <> ["..."]) <> ")"
 
 -- | Render a complete symbol and ordered child state references.
 edgeText :: (state -> Text) -> FTA.Transition state Symbol annotation -> Builder
@@ -482,9 +502,21 @@ readSamplingCheckpoint decode input = do
         checkpointKeyword "draws"
         draws <- integerParser
         token ";"
+        exclusions <- whileKeyword "exclude" exclusionParser
         (_, rows) <- plainGraphParser WithoutNotes decode
         pure
-            ( \graph -> SamplingCheckpoint graph route version (Size bound) weights algorithm algorithmVersion (fromInteger seed) draws
+            ( \graph ->
+                SamplingCheckpoint
+                    graph
+                    exclusions
+                    route
+                    version
+                    (Size bound)
+                    weights
+                    algorithm
+                    algorithmVersion
+                    (fromInteger seed)
+                    draws
             , rows
             )
     weight = (,) <$> (Size <$> integerParser <* token ":") <*> (Weight <$> integerParser)
@@ -527,9 +559,9 @@ validGraph (initial, rows) = do
 -- | Read the query, the next sized rank, and the graph of a checkpoint.
 readCheckpoint :: (Ord state) => (Text -> Either String state) -> Text -> Either (TextError state) (Checkpoint state)
 readCheckpoint decode input = do
-    (route, version, bound, next, rows) <- runParser parser input
+    (route, version, bound, next, exclusions, rows) <- runParser parser input
     graph <- validGraph rows
-    pure $ Checkpoint graph route version bound next
+    pure $ Checkpoint graph exclusions route version bound next
   where
     parser = do
         checkpointKeyword "checkpoint"
@@ -549,8 +581,22 @@ readCheckpoint decode input = do
         keyword "rank"
         rank <- integerParser
         token ";"
+        exclusions <- whileKeyword "exclude" exclusionParser
         (_, rows) <- plainGraphParser WithoutNotes decode
-        pure (route, version, Size bound, (Size size, ClassRank rank), rows)
+        pure (route, version, Size bound, (Size size, ClassRank rank), exclusions, rows)
+
+-- | Read an exclusion statement of a checkpoint: @exclude root TEMPLATE;@ or @exclude anywhere TEMPLATE;@.
+exclusionParser :: A.Parser (Exclusion Symbol)
+exclusionParser = do
+    checkpointKeyword "exclude"
+    place <- nameParser
+    exclusion <- case place of
+        "root" -> pure AtRoot
+        "anywhere" -> pure Anywhere
+        _ -> fail "expected root or anywhere"
+    template <- templateParser
+    token ";"
+    pure $ exclusion template
 
 -- | Reject a second row for a state.
 distinctStates :: (Ord state) => [(state, rows)] -> Either (TextError state) ()
@@ -632,6 +678,42 @@ symbolParser = do
     name <- nameParser
     refinement <- ifNext '@' (token "@" *> token "{" *> formulaParser <* token "}") F.Top
     pure $ RefinedSymbol (Symbol name) refinement
+
+-- | Read a template: @_@ for a hole, @_(...)@ for any symbol, a symbol with its children, and @...@ for a prefix.
+templateParser :: A.Parser (Template Symbol)
+templateParser = do
+    wildcard <- startsKeyword "_"
+    if wildcard
+        then do
+            keyword "_"
+            ifNext
+                '('
+                ( do
+                    (children, prefix) <- templateArguments
+                    pure $ if prefix then AnyPrefix children else AnyNode children
+                )
+                Hole
+        else do
+            symbol <- symbolParser
+            (children, prefix) <- ifNext '(' templateArguments ([], False)
+            pure $ if prefix then TemplatePrefix symbol children else TemplateNode symbol children
+
+-- | Read the children of a template, and whether they end in the prefix marker @...@.
+templateArguments :: A.Parser ([Template Symbol], Bool)
+templateArguments = parenthesized $ go []
+  where
+    go reversed = do
+        next <- A.peekChar
+        case next of
+            Just ')' -> pure (reverse reversed, False)
+            Just '.' -> token "..." $> (reverse reversed, True)
+            _ -> do
+                child <- templateParser
+                ifNext ',' (token "," *> afterComma (child : reversed)) (reverse $ child : reversed, False)
+    afterComma reversed = do
+        next <- A.peekChar
+        when (next == Just ')') $ fail "expected a template or prefix marker after comma"
+        go reversed
 
 -- | Read every formula constructor without invoking a simplifier.
 formulaParser :: A.Parser F.Formula
