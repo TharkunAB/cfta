@@ -1,3 +1,33 @@
+# Constructor storage progress and actual native stops: 2026-10-29 21:38 CET
+
+Source 2866f1310 on formalize. The full goal remains ACTIVE.
+Read lean/notes-current-constructor-storage-progress.md first.
+Earlier document bodies follow unchanged as dated checkpoints.
+
+Actual nonterminal child traversal now constructs one fresh-slot assignment.
+The actual residual finish and captured finalizer derive final pendingSize+1
+= original pendingSize. This is a storage law. Compatible semantic models,
+terminal children and sufficient recursive capacity remain open.
+
+Actual cached assimilation of two graph slots removes the source's full
+constructor count. Union success preserves the count. Earlier opaque and
+recording operations remain neutral and need separate progress control.
+
+Actual incoming native-error returns now retain an explicit stored-payload
+bound, transported to the original fixed-capacity final forecast. Local stage
+admissions and index bounds remain explicit. All-event stage attachment and
+optional-check errors still need proof.
+
+Strict Audit passes 4657 jobs and 82277 theorem dependencies. Public readback
+adds ten theorems. No Haskell change or new Haskell defect was found. The prior
+831-path Haskell preservation scope is unchanged; a distinct wide snapshot
+also includes 116 generated/untracked paths. Existing Haskell fixes remain
+recorded below for external pickup.
+
+Coverage, exact order/stops, public APIs and Haskell correspondence remain
+part of the full objective. No final-state or sufficient-capacity claim.
+
+---
 # Explicit checked-query resources and storage progress: 2026-10-29 21:23 CET
 
 Source 011a4f4045a9327b610a2fa3639e4815f8a8c0c2 on formalize.
