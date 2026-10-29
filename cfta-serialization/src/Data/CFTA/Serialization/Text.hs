@@ -68,7 +68,6 @@ import Text.Read (readEither)
 import qualified Data.CFTA as FTA
 import Data.CFTA.Checkpoint (Checkpoint (..), SamplingCheckpoint (..))
 import qualified Data.CFTA.Constraint as C
-import qualified Data.CFTA.Document as D
 import Data.CFTA.Equality.Constraint (
     EqConstraints (EqConstraints, EqContradiction),
     PathEClass (PathEClass),
@@ -77,6 +76,7 @@ import Data.CFTA.Equality.Constraint (
 import qualified Data.CFTA.Formula as F
 import Data.CFTA.Index (ChildIndex (ChildIndex), ClassRank (ClassRank), Size (Size), Weight (Weight))
 import qualified Data.CFTA.Language as L
+import qualified Data.CFTA.Language.Source as D
 import Data.CFTA.Path (Path (Path), unPath)
 import Data.CFTA.Symbol (Symbol (RefinedSymbol, Symbol), symbolRefinement, symbolText, valueName)
 import Data.CFTA.Template (Exclusion (..), Template (..))

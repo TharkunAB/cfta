@@ -161,7 +161,7 @@ claim is made here. See
 ## Edits, exclusions, and names
 
 These sources compare with the edits, the exclusions, and the names of
-`Data.CFTA.Document` and `Data.CFTA.Language`.
+`Data.CFTA.Language` and `Data.CFTA.Language.Source`.
 
 - **Unit of an edit.** Ohm overrides a rule with `:=` and extends it with
   `+=`; `+=` is an error when the rule does not exist

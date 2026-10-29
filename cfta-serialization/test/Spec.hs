@@ -22,7 +22,6 @@ import Data.CFTA.Constraint (
     noConstraint,
     semanticConstraint,
  )
-import qualified Data.CFTA.Document as D
 import Data.CFTA.Equality.Constraint (
     EqConstraints (EqConstraints, EqContradiction),
     PathEClass (PathEClass),
@@ -31,6 +30,7 @@ import Data.CFTA.Equality.Constraint (
 import qualified Data.CFTA.Formula as F
 import Data.CFTA.Index (ClassRank (..), Size, Weight)
 import qualified Data.CFTA.Language as L
+import qualified Data.CFTA.Language.Source as D
 import Data.CFTA.Path (path)
 import Data.CFTA.Refinement.Expression (refinementFormula, (.==), (.>))
 import Data.CFTA.Refinement.LiquidFixpoint (withZ3)

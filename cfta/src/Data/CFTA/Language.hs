@@ -34,7 +34,7 @@ import Data.Text (Text)
 
 import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint)
-import qualified Data.CFTA.Document as Document
+import qualified Data.CFTA.Language.Source as Source
 import Data.CFTA.Symbol (Symbol)
 import Data.CFTA.Template (Exclusion (..), Template)
 import qualified Data.CFTA.Template as Template
@@ -43,7 +43,7 @@ import qualified Data.CFTA.Term as Term
 
 -- | Editable source and named exclusions. Compilation never replaces this source.
 data Language state = Language
-    { source :: !(Document.Document state)
+    { source :: !(Source.Document state)
     , exclusions :: !(Map ExclusionName (Exclusion Symbol))
     }
     deriving (Eq, Show)
@@ -66,7 +66,7 @@ data ProductionRef state = ProductionRef !state !ProductionName
 
 -- | One inspectable operation in a reusable update expression.
 data Operation state
-    = EditSource !(Document.Edit state)
+    = EditSource !(Source.Edit state)
     | Exclude !ExclusionName !(Exclusion Symbol)
     | Restore !ExclusionName
     deriving (Eq, Show)
@@ -77,12 +77,12 @@ newtype Update state = Update {operations :: [Operation state]}
 
 -- | An invalid source edit or removal of an absent exclusion.
 data UpdateError state
-    = InvalidSource !(Document.DocumentError state)
+    = InvalidSource !(Source.DocumentError state)
     | MissingExclusion !ExclusionName
     deriving (Eq, Show)
 
 -- | Start with the complete source language and no exclusions.
-fromDocument :: Document.Document state -> Language state
+fromDocument :: Source.Document state -> Language state
 fromDocument document = Language document Map.empty
 
 -- | Select a production by source state and name.
@@ -97,28 +97,28 @@ equality on such a child holds for no term.
 -}
 define :: ProductionRef state -> Symbol -> [state] -> Update state
 define (ProductionRef state name) symbol children =
-    editSource $ Document.DefineProduction state (productionNameText name) symbol children
+    editSource $ Source.DefineProduction state (productionNameText name) symbol children
 
 -- | Remove an existing production. Keep its state even when the row becomes empty.
 remove :: ProductionRef state -> Update state
-remove (ProductionRef state name) = editSource $ Document.DeleteProduction state (productionNameText name)
+remove (ProductionRef state name) = editSource $ Source.DeleteProduction state (productionNameText name)
 
 -- | Add or replace one named fact on an existing production.
 require :: ProductionRef state -> FactName -> Constraint -> Update state
-require (ProductionRef state name) fact constraint = editSource $ Document.SetFact state (productionNameText name) (factNameText fact) constraint
+require (ProductionRef state name) fact constraint = editSource $ Source.SetFact state (productionNameText name) (factNameText fact) constraint
 
 -- | Remove one existing fact. Keep the production and all its other facts.
 relax :: ProductionRef state -> FactName -> Update state
-relax (ProductionRef state name) fact = editSource $ Document.RemoveFact state (productionNameText name) (factNameText fact)
+relax (ProductionRef state name) fact = editSource $ Source.RemoveFact state (productionNameText name) (factNameText fact)
 
 {- | Make a state the initial state. The state must have a row when the
 update ends, so one update can add the row and make it the initial state.
 -}
 start :: state -> Update state
-start = editSource . Document.SetStart
+start = editSource . Source.SetStart
 
 -- | Include a checked source edit, such as an atomic state-row change.
-editSource :: Document.Edit state -> Update state
+editSource :: Source.Edit state -> Update state
 editSource edit = Update [EditSource edit]
 
 -- | Exclude exactly this complete term. Match full symbols, including refinements.
@@ -153,7 +153,7 @@ update before (Update changes) = do
     changedSource <-
         if null edits
             then Right document
-            else first InvalidSource $ Document.applyEdits edits document
+            else first InvalidSource $ Source.applyEdits edits document
     changedExclusions <- foldM apply (exclusions before) changes
     pure $ Language changedSource changedExclusions
   where
@@ -173,7 +173,7 @@ unambiguous. It does not make an ambiguous source unambiguous.
 -}
 compileGraph :: (Ord state) => Language state -> FTA.PlainFTA Int Symbol
 compileGraph language =
-    numberStates $ Template.excludeAllFTA (Map.elems $ exclusions language) $ Document.compileGraph $ source language
+    numberStates $ Template.excludeAllFTA (Map.elems $ exclusions language) $ Source.compileGraph $ source language
 
 -- | Give states consecutive numbers in their existing ascending order.
 numberStates :: (Ord state) => FTA.PlainFTA state Symbol -> FTA.PlainFTA Int Symbol
@@ -184,5 +184,5 @@ numberStates graph = FTA.mapStates (numbers Map.!) graph
 -- | Explain a failed update with the relevant source or exclusion identity.
 explainUpdateError :: (Show state) => UpdateError state -> String
 explainUpdateError failure = case failure of
-    InvalidSource error' -> Document.explainDocumentError error'
+    InvalidSource error' -> Source.explainDocumentError error'
     MissingExclusion name -> "exclusion " <> show (exclusionNameText name) <> " does not exist"

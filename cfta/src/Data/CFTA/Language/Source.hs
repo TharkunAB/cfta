@@ -1,5 +1,5 @@
 -- | Editable source graphs with named productions and removable facts.
-module Data.CFTA.Document (
+module Data.CFTA.Language.Source (
     Annotation (..),
     Document,
     DocumentError (..),

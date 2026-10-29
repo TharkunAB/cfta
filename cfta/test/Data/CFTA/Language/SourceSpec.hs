@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 -- | Source documents: validation, checked patches, named facts, and compilation.
-module Data.CFTA.DocumentSpec (spec) where
+module Data.CFTA.Language.SourceSpec (spec) where
 
 import Control.Monad (void)
 import qualified Data.Map.Strict as Map
@@ -17,9 +17,9 @@ import Data.CFTA.Constraint (
     noConstraint,
     semanticConstraint,
  )
-import Data.CFTA.Document (Annotation (..), DocumentError (..), Edit (..))
-import qualified Data.CFTA.Document as Document
 import Data.CFTA.Equality.Constraint (mkEqConstraints)
+import Data.CFTA.Language.Source (Annotation (..), DocumentError (..), Edit (..))
+import qualified Data.CFTA.Language.Source as Source
 import Data.CFTA.Path (path)
 import Data.CFTA.Symbol (Symbol)
 
@@ -30,15 +30,15 @@ data State = Atom | Expr | Extra
 spec :: Spec
 spec = describe "source documents" $ do
     it "reject a duplicate state row" $
-        Document.mkDocument Expr (rows <> [(Atom, [])]) `shouldBe` Left (DuplicateState Atom)
+        Source.mkDocument Expr (rows <> [(Atom, [])]) `shouldBe` Left (DuplicateState Atom)
 
     it "reject a duplicate production name in a row" $
-        Document.mkDocument Atom [(Atom, [production "zero" [] "z", production "one" [] "z"])]
+        Source.mkDocument Atom [(Atom, [production "zero" [] "z", production "one" [] "z"])]
             `shouldBe` Left (DuplicateProduction Atom "z")
 
     it "reject a patch prepared on another document" $ do
         let other = edited [DeleteProduction Atom "one"]
-        Document.applyPatch (Document.patch other [DeleteProduction Atom "zero"]) document
+        Source.applyPatch (Source.patch other [DeleteProduction Atom "zero"]) document
             `shouldBe` Left StalePatch
 
     it "keep the facts of a production that define changes" $
@@ -56,43 +56,43 @@ spec = describe "source documents" $ do
             `shouldBe` [[("new", disabled), ("same", noConstraint)]]
 
     it "report a missing fact, production, and state" $ do
-        let attempt edit = Document.applyPatch (Document.patch document [edit]) document
+        let attempt edit = Source.applyPatch (Source.patch document [edit]) document
         attempt (RemoveFact Expr "pair" "absent") `shouldBe` Left (MissingFact Expr "pair" "absent")
         attempt (DeleteProduction Expr "absent") `shouldBe` Left (MissingProduction Expr "absent")
         attempt (DeleteRow Extra) `shouldBe` Left (MissingState Extra)
 
     it "check references after the complete batch" $ do
         let forward = [PutProduction Expr $ production "extra" [Extra] "extra", PutRow Extra [production "leaf" [] "leaf"]]
-        void (Document.applyPatch (Document.patch document forward) document) `shouldBe` Right ()
-        Document.applyPatch (Document.patch document $ take 1 forward) document
+        void (Source.applyPatch (Source.patch document forward) document) `shouldBe` Right ()
+        Source.applyPatch (Source.patch document $ take 1 forward) document
             `shouldBe` Left (InvalidGraph $ FTA.DanglingState Extra)
 
     it "set the initial state, which must have a row after the complete batch" $ do
-        let start = FTA.initialState . Document.sourceGraph
+        let start = FTA.initialState . Source.sourceGraph
         start (edited [SetStart Atom]) `shouldBe` Atom
         start (edited [SetStart Atom, SetStart Extra, PutRow Extra [production "leaf" [] "leaf"], DeleteRow Expr])
             `shouldBe` Extra
-        Document.applyEdits [SetStart Extra] document `shouldBe` Left (InvalidGraph $ FTA.MissingInitialState Extra)
-        Document.applyEdits [DeleteRow Expr] document `shouldBe` Left (InvalidGraph $ FTA.MissingInitialState Expr)
+        Source.applyEdits [SetStart Extra] document `shouldBe` Left (InvalidGraph $ FTA.MissingInitialState Extra)
+        Source.applyEdits [DeleteRow Expr] document `shouldBe` Left (InvalidGraph $ FTA.MissingInitialState Expr)
 
     it "conjoin the facts of each production" $
-        map FTA.transitionConstraint (rowOf Expr $ Document.compileGraph document)
+        map FTA.transitionConstraint (rowOf Expr $ Source.compileGraph document)
             `shouldBe` [foldl1 conjoinConstraints $ Map.elems pairFacts]
 
     it "compile an imported graph to the same graph" $ do
-        let graph = Document.compileGraph document
-        Document.compileGraph <$> Document.fromGraph graph `shouldBe` Right graph
+        let graph = Source.compileGraph document
+        Source.compileGraph <$> Source.fromGraph graph `shouldBe` Right graph
   where
-    edited edits = either (error . Document.explainDocumentError) id $ Document.applyPatch (Document.patch document edits) document
+    edited edits = either (error . Source.explainDocumentError) id $ Source.applyPatch (Source.patch document edits) document
     facts changed state =
         [ (FTA.transitionSymbol transition, Map.keys $ annotationFacts $ FTA.transitionConstraint transition)
-        | transition <- rowOf state $ Document.sourceGraph changed
+        | transition <- rowOf state $ Source.sourceGraph changed
         ]
-    annotations changed state = map FTA.transitionConstraint $ rowOf state $ Document.sourceGraph changed
+    annotations changed state = map FTA.transitionConstraint $ rowOf state $ Source.sourceGraph changed
 
 -- | A pair of atoms whose production has three named facts.
-document :: Document.Document State
-document = either (error . Document.explainDocumentError) id $ Document.mkDocument Expr rows
+document :: Source.Document State
+document = either (error . Source.explainDocumentError) id $ Source.mkDocument Expr rows
 
 -- | The rows of the test document.
 rows :: [(State, [FTA.Transition State Symbol Annotation])]

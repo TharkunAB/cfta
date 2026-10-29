@@ -1,9 +1,9 @@
 # Editable languages
 
-`Data.CFTA.Document` and `Data.CFTA.Language` keep a language in a form that
-you can edit. A query needs a compiled graph. An edit needs the names of the
-source productions and their separate facts. The two modules keep the source,
-and compile a new graph after each change.
+`Data.CFTA.Language` and `Data.CFTA.Language.Source` keep a language in a form
+that you can edit. A query needs a compiled graph. An edit needs the names of
+the source productions and their separate facts. The two modules keep the
+source, and compile a new graph after each change.
 
 ## Source documents
 

@@ -25,7 +25,7 @@ Before release, the package was called `microcfta`.
   `cfta-serialization` prints and reads both.
 - Add `Exclusion` (`AtRoot` and `Anywhere` a template) and `excludeAllFTA` to
   `Data.CFTA.Template`: the terms of an automaton that no exclusion rejects.
-- Add `Data.CFTA.Document`: editable source documents with named
+- Add `Data.CFTA.Language.Source`: editable source documents with named
   productions and named facts, and patches that check the document they
   were prepared on. `applyEdits` applies a batch without that check. Both
   replace only the changed rows and share the others. The edit `SetStart`
