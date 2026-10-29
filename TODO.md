@@ -13,21 +13,14 @@ Each pull request is one complete feature. #188, the graph text format, and
 #116, checkpoints, are on `main`. The others are drafts: mark the next one
 ready when work on it starts.
 
-Each of these pull requests needs the API of #116 when it is rebased on
-`main`. `experimental` has these changes in its merge of `main`:
+#110 is based on `main`. It has the API of #116, the edit `SetStart`, and the
+text forms of documents, languages, and updates; #161 and #187 are closed. The
+edits and errors of a production are `PutProduction`, `DefineProduction`,
+`DeleteProduction`, `MissingProduction`, and `DuplicateProduction`. #126 is
+based on #110, and its `diff` and `diffDocument` are total.
 
-- `FTAError` has one parameter. A symbol can occur at several arities, so a
-  language with a symbol at two arities is valid (#187: test and README).
-- `mapSymbols`, `intersect`, and `intersectWith` are total.
-- `exclusionText` and `exclusionParser` are the checkpoint forms. In #187, the
-  language forms with names become `namedExclusionText` and
-  `namedExclusionParser`, with the grammar rule `named-exclusion`.
-- Remove the constraints that the new signatures make redundant.
-
-- #110 `feature/source-documents`: Editable source documents and language updates
-- #187 `feature/document-text`: Text forms of source documents, languages, and updates
+- #110 `feature/source-documents`: Editable source documents and language updates, and their text forms
 - #126 `feature/document-merge`: Diff and three-way merge of languages by stable names
-- #161 `feature/start-edit`: An edit that sets the initial state
 
 ## Not in progress
 
@@ -131,5 +124,5 @@ checks for #134, #135, #142, and #191. A manual CI run passes on each.
   serialization and #153 on `main`.
 - `fb974cc3a`: signature files (`signature 1;`, `printSignature`), and a test
   that checks the sorts of a graph read from text with `checkSorts`. The
-  sorted states of this commit are now in #188 and #187. This needs #191 on
+  sorted states of this commit are now in #188 and #110. This needs #191 on
   `main`.
