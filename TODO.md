@@ -7,16 +7,16 @@ is on `main`.
 Each list is one stack of pull requests, from the bottom (based on `main`) to
 the top.
 
-## In progress: serialization
+## In progress: completions of a prefix
 
-Each pull request is one complete feature. #188, the graph text format, #116,
-checkpoints, and #110, editable source documents and their text forms, are on
-`main`. #126 is ready for review. It moves `Data.CFTA.Document` to
-`Data.CFTA.Language.Source`, and production and fact names become
-`ProductionName` and `FactName`: open work that imports the old module or
-builds an `Edit` from `Text` needs these changes when it is rebased.
+The serialization stack is on `main`: #188, the graph text format; #116,
+checkpoints; #110, editable source documents and their text forms; and #126,
+diff and three-way merge under `Data.CFTA.Language`. #102 is ready for
+review: it folds the completions stack (#102, #108, #122, #138, #157, #159,
+and #164, which are closed) into one pull request, with the completions in
+the order of `sized` from a size index of the prefix.
 
-- #126 `feature/document-merge`: Diff and three-way merge of languages, under Data.CFTA.Language
+- #102 `feature/grammar-mask`: Completions of a prefix
 
 ## Not in progress
 
@@ -28,18 +28,6 @@ Each pull request in this section is a draft.
 - #103 `feature/exact-inclusion`: Exact language inclusion
 - #105 `feature/constrained-inclusion`: Bounded inclusion for constrained automata
 - #137 `feature/partition-check`: Check a partition of a language into parts
-
-### Completions of a prefix
-
-#102 conflicts with `main`.
-
-- #102 `feature/grammar-mask`: Completions of a preorder prefix
-- #108 `feature/completions-equalities`: Completions of a prefix with equality constraints
-- #122 `feature/completions-guards`: Completions of a prefix with guards and a solver
-- #138 `feature/weighted-completions`: Weighted completions of a prefix
-- #157 `feature/lazy-guarded-completions`: Decide the guards of prefix completions on demand
-- #159 `feature/completion-tokens`: Take the next tokens of a completions walk from its runs
-- #164 `feature/equality-walk`: Decide the next tokens under equality constraints without listing
 
 ### Sized documentation
 
@@ -112,8 +100,12 @@ checks for #134, #135, #142, and #191. A manual CI run passes on each.
 ## Commits without a pull request
 
 - `b2a4b10e1`: `tableIndexes` takes the leaf sources of `tableIndex`. The
-  completions stack adds `tableIndexes`, and the run-time signatures stack
-  adds the leaf sources. Add this change to the stack that is merged second.
+  completions (#102) add `tableIndexes`, `prefixedTable`, and the top-level
+  `seed` and `termPositions` of the table module, and the run-time signatures
+  stack adds the leaf sources. The merge of #102 here gives `seed` and
+  `termPositions` the leaf sources, and `prefixedTable` and `Data.CFTA.Sized`
+  use none. Add this change to the run-time signatures stack when it is rebased
+  after #102.
 - `40f13e60d`: the text forms of named predicates and named sorts. This needs
   serialization and #109 on `main`.
 - `39c500494`: named holes `_name` in the text form of templates. This needs
