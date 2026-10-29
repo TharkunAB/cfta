@@ -455,33 +455,33 @@ readSamplingCheckpoint decode input = do
     pure $ fields graph
   where
     parser = do
-        field "sampling"
+        checkpointKeyword "sampling"
         format <- integerParser
         unless (format == 1) $ fail "unsupported sampling version; expected 1"
         token ";"
-        field "query"
+        checkpointKeyword "query"
         route <- nameParser
         version <- integerParser
         token ";"
-        field "bound"
+        checkpointKeyword "bound"
         bound <- integerParser
         token ";"
-        field "weights"
+        checkpointKeyword "weights"
         uniform <- startsKeyword "uniform"
         weights <-
             if uniform
                 then keyword "uniform" $> Nothing
                 else Just . Map.fromList <$> (bracketed weight >>= distinctSizes)
         token ";"
-        field "prng"
+        checkpointKeyword "prng"
         algorithm <- nameParser
         algorithmVersion <- integerParser
         token ";"
-        field "seed"
+        checkpointKeyword "seed"
         seed <- integerParser
         when (seed < 0 || seed > toInteger (maxBound :: Word64)) $ fail "seed is outside the range of a 64-bit word"
         token ";"
-        field "draws"
+        checkpointKeyword "draws"
         draws <- integerParser
         token ";"
         (_, rows) <- plainGraphParser WithoutNotes decode
@@ -534,18 +534,18 @@ readCheckpoint decode input = do
     pure $ Checkpoint graph route version bound next
   where
     parser = do
-        field "checkpoint"
+        checkpointKeyword "checkpoint"
         format <- integerParser
         unless (format == 1) $ fail "unsupported checkpoint version; expected 1"
         token ";"
-        field "query"
+        checkpointKeyword "query"
         route <- nameParser
         version <- integerParser
         token ";"
-        field "bound"
+        checkpointKeyword "bound"
         bound <- integerParser
         token ";"
-        field "next"
+        checkpointKeyword "next"
         keyword "size"
         size <- integerParser
         keyword "rank"
@@ -877,8 +877,8 @@ noCheckpointComment = do
     when present $ fail "a checkpoint has no doc comments"
 
 -- | Read the keyword of a checkpoint statement, after a check for a doc comment.
-field :: Text -> A.Parser ()
-field word = noCheckpointComment *> keyword word
+checkpointKeyword :: Text -> A.Parser ()
+checkpointKeyword word = noCheckpointComment *> keyword word
 
 -- | A doc comment of a target, as a list of at most one note.
 commentOn :: CommentTarget state -> Maybe Text -> [NoteEntry state]
