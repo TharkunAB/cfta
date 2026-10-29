@@ -29,16 +29,17 @@ the prefix, not the rank of the term in the whole language. The order is the
 order of the language, so it does not depend on the names of the states or on
 the route of the queries.
 
-When the rows that the initial state reaches have no constraint and are
-unambiguous, the queries read a size index of the prefix: the index of the
-initial state with only the transitions whose token is the token of the
-prefix at each node ('Data.CFTA.Gen.Internal.Table.prefixedTable'). The
+When the rows that the initial state reaches have no constraint, the queries
+read a size index of the prefix: the index of the initial state with only the
+transitions whose token is the token of the prefix at each node
+('Data.CFTA.Gen.Internal.Table.prefixedTable'). Ambiguous rows give this index
+from their bottom-up deterministic rows, as "Data.CFTA.Sized" does. The
 combinators of this index are those of the count table of "Data.CFTA.Sized",
 so it counts, unranks, and ranks the completions without a list of them. A
-query counts the products of the transitions along the prefix. Otherwise,
-with equality constraints or with ambiguous rows, the queries list the
-accepted terms up to the bound, from 'Data.CFTA.Sized.sized', and keep the
-terms that start with the prefix. This is exact, but the first query lists
+query counts the products of the transitions along the prefix. Otherwise, with
+equality constraints, or with more than 1024 deterministic states, the queries
+list the accepted terms up to the bound, from 'Data.CFTA.Sized.sized', and
+keep the terms that start with the prefix. This is exact, but the first query lists
 every accepted term up to the bound.
 
 'prefixCompletions' rejects a guard beyond equality constraints.
@@ -135,7 +136,7 @@ module Data.CFTA.Sized.Prefix (
     decided,
 ) where
 
-import Control.Monad (foldM, void)
+import Control.Monad (foldM)
 import Data.Either (fromRight)
 import Data.IORef (modifyIORef', newIORef, readIORef)
 import qualified Data.IntMap.Lazy as IntMap
@@ -210,13 +211,13 @@ prefixCompletions ::
 prefixCompletions (Size bound) automaton
     | any (any (residual . FTA.transitionConstraint)) reached = Left ResidualGuard
     | all (all ((== noConstraint) . FTA.transitionConstraint)) reached
-    , Ordinary.unambiguousRows (Map.map (map void) reached) =
+    , Just rows <- Ordinary.countingRows (FTA.mapConstraints (const ()) automaton) =
         let table =
                 Table
                     { tableBound = bound
                     , tableRows = rows
-                    , tableInitial = initial
-                    , tablePrefixed = Ordinary.prefixedTable rows initial
+                    , tableInitial = Left initial
+                    , tablePrefixed = Ordinary.prefixedTable rows (Left initial)
                     , tableTokens =
                         Set.toAscList $ Set.fromList [tokenOf transition | transitions <- Map.elems reached, transition <- transitions]
                     }
@@ -229,7 +230,6 @@ prefixCompletions (Size bound) automaton
   where
     reached = FTA.transitionTable $ FTA.trim automaton
     initial = FTA.initialState automaton
-    rows = Map.map (map void) $ Ordinary.sortedRows automaton
 
 -- | The token of a transition.
 tokenOf :: FTA.Transition state symbol constraint -> Token symbol

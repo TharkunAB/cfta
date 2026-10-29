@@ -161,7 +161,7 @@ route = "sized"
 
 -- | The version of the route. Increase it when the order of "Data.CFTA.Sized" changes.
 routeVersion :: Integer
-routeVersion = 1
+routeVersion = 2
 
 {- | The checkpoint before the first term of the listing of the terms up to a
 size bound of a graph and its exclusions.
@@ -232,7 +232,7 @@ sampleRoute = "sized-sample"
 another way.
 -}
 sampleRouteVersion :: Integer
-sampleRouteVersion = 1
+sampleRouteVersion = 2
 
 -- | The name of the pseudorandom generator: 'splitMix64'.
 prng :: Text

@@ -338,7 +338,7 @@ spec = do
                 (Checkpoint.start 7 [AtRoot (TemplateNode "node" [TemplateNode "leaf" [], Hole]), Anywhere (AnyPrefix [Hole])] trees)
                 `shouldBe` Text.unlines
                     [ "checkpoint 1;"
-                    , "query sized 1;"
+                    , "query sized 2;"
                     , "bound 7;"
                     , "next size 1 rank 0;"
                     , "exclude root node(leaf, _);"
@@ -359,7 +359,7 @@ spec = do
             printed
                 `shouldBe` Text.unlines
                     [ "checkpoint 1;"
-                    , "query sized 1;"
+                    , "query sized 2;"
                     , "bound 7;"
                     , "next size 5 rank 1;"
                     , ""
@@ -430,7 +430,7 @@ spec = do
             printed
                 `shouldBe` Text.unlines
                     [ "sampling 1;"
-                    , "query sized-sample 1;"
+                    , "query sized-sample 2;"
                     , "bound 7;"
                     , "weights [1: 1, 5: 3];"
                     , "prng splitmix64 1;"
@@ -451,7 +451,7 @@ spec = do
 
         it "give the line of a syntax error" $ do
             let header seed weights =
-                    "sampling 1;\nquery sized-sample 1;\nbound 7;\nweights "
+                    "sampling 1;\nquery sized-sample 2;\nbound 7;\nweights "
                         <> weights
                         <> ";\nprng splitmix64 1;\nseed "
                         <> seed
@@ -544,13 +544,13 @@ notedCheckpoints =
 -- | Sampling checkpoints with a doc comment before a statement and before the graph, and with a sort.
 notedSamplingCheckpoints :: [Text]
 notedSamplingCheckpoints =
-    [ "sampling 1;\nquery sized-sample 1;\nbound 7;\nweights uniform;\nprng splitmix64 1;\n/// x\nseed 0;\ndraws 0;\n"
+    [ "sampling 1;\nquery sized-sample 2;\nbound 7;\nweights uniform;\nprng splitmix64 1;\n/// x\nseed 0;\ndraws 0;\n"
         <> smallGraph
     , statements <> "/// x\n" <> smallGraph
     , statements <> "graph 1;\nstart s;\nstate s : Int { a; }\n"
     ]
   where
-    statements = "sampling 1;\nquery sized-sample 1;\nbound 7;\nweights uniform;\nprng splitmix64 1;\nseed 0;\ndraws 0;\n"
+    statements = "sampling 1;\nquery sized-sample 2;\nbound 7;\nweights uniform;\nprng splitmix64 1;\nseed 0;\ndraws 0;\n"
 
 -- | Weights of sizes up to seven, with a size of no terms in some graphs.
 drawWeights :: Map.Map Size Weight

@@ -247,16 +247,30 @@ Each query ends, also on a cyclic, ambiguous, or equality-constrained
 automaton, and an empty size class says nothing about the classes after it.
 `sizedReference` builds each class from the classes of the child states at
 smaller sizes and checks the equality constraints on each term. `sized`
-gives the same sequence, and it uses the count table of `fromAutomaton`, read
-from the original rows, when the automaton has no constraint and no
-ambiguity. A guard beyond equality
-constraints is `ResidualGuard`. `sizedUpTo` builds the classes up to a size
+gives the same classes. It counts, ranks, and unranks with a count table,
+without a list of the terms, for three kinds of rows:
+
+- Rows without constraints and without ambiguity: the count table of
+  `fromAutomaton`, read from the original rows, in the order of the
+  reference.
+- Rows without constraints, with ambiguity: the count table of the bottom-up
+  deterministic rows (the subset construction), so each term has one run.
+- Rows without ambiguity when the constraints are ignored, where each
+  constraint is equalities between direct children, as in `pair(x, x)`: the
+  count table of the intersections of the states. A class of equal children
+  is one child, the intersection of its child states, and the size of its
+  term counts once for each position.
+
+Other rows, and a construction with more than 1024 deterministic states or
+intersections, use the reference. For the second and the third kind, the
+order can be different from the order of the reference. A guard beyond
+equality constraints is `ResidualGuard`. `sizedUpTo` builds the classes up to a size
 bound with a solver that decides every guard on each term, as
 `denotationAtMost` does by depth, so it also takes a liquid automaton whose
 guards pruning did not discharge. `sizedStates` gives the classes of each
-state, as `sized` gives them with that state as the initial state, with one
-table for all the states. An interned automaton enters through `toFTA` of
-`Data.CFTA.Interned`.
+state, as `sized` gives them with that state as the initial state. The states
+without constraints share one table. An interned automaton enters through
+`toFTA` of `Data.CFTA.Interned`.
 
 ```haskell
 module Main (main) where
@@ -291,7 +305,9 @@ Just (41,4000000000)
 The order is the order of the count table: the transitions of a state by
 arity, symbol, and the classes of their children; the children of a
 transition by the size of the earlier children, in ascending order; and a
-term that several transitions accept at its first place.
+term that several transitions accept at its first place. With ambiguous rows
+or equal children, the count table reads the deterministic rows or the
+intersections, in the same way.
 
 ### Resume a listing from a checkpoint
 
@@ -529,12 +545,11 @@ bound of nodes.
 
 The completions are the terms of `sized` up to the bound that start with the
 prefix, in the same order. So their ranks do not depend on the names of the
-states. Without constraints and with unambiguous rows, the queries read a
-size index of the prefix: the count table of `sized` with only the
-transitions whose token is the token of the prefix at each node. It counts,
-ranks, and unranks the completions without a list of them. With equality
-constraints or ambiguous rows, the queries list the accepted terms up to the
-bound and keep those with the prefix.
+states. Without constraints, the queries read a size index of the prefix: the
+count table of `sized` with only the transitions whose token is the token of
+the prefix at each node. It counts, ranks, and unranks the completions without
+a list of them. With equality constraints, the queries list the accepted terms
+up to the bound and keep those with the prefix.
 
 With guards, `prefixCompletionsWith` takes an `Entailment` and decides the
 guards on each listed term. A token is then offered, rejected, or undecided:

@@ -14,9 +14,12 @@ checkpoints; #110, editable source documents and their text forms; and #126,
 diff and three-way merge under `Data.CFTA.Language`. #102 is ready for
 review: it folds the completions stack (#102, #108, #122, #138, #157, #159,
 and #164, which are closed) into one pull request, with the completions in
-the order of `sized` from a size index of the prefix.
+the order of `sized` from a size index of the prefix. It also gives `sized`
+count tables for ambiguous rows without constraints (the bottom-up
+deterministic rows) and for equal direct children (the intersections of the
+states), with the checkpoint routes `sized` and `sized-sample` at version 2.
 
-- #102 `feature/grammar-mask`: Completions of a prefix
+- #102 `feature/grammar-mask`: Completions of a prefix, and count tables for ambiguous rows and equal children
 
 ## Not in progress
 
@@ -104,8 +107,10 @@ checks for #134, #135, #142, and #191. A manual CI run passes on each.
   `seed` and `termPositions` of the table module, and the run-time signatures
   stack adds the leaf sources. The merge of #102 here gives `seed` and
   `termPositions` the leaf sources, and `prefixedTable` and `Data.CFTA.Sized`
-  use none. Add this change to the run-time signatures stack when it is rebased
-  after #102.
+  use none. The table rows of #102 carry the classes of equal children
+  (`EqualChildren`) in place of `()`, and `seed` reads a leaf source before
+  the classes. Add this change to the run-time signatures stack when it is
+  rebased after #102.
 - `40f13e60d`: the text forms of named predicates and named sorts. This needs
   serialization and #109 on `main`.
 - `39c500494`: named holes `_name` in the text form of templates. This needs
