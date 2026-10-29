@@ -89,11 +89,11 @@ that mixes the scores of a model with a grammar needs this mass of the
 grammatical completions; see Park, Wang, Berg-Kirkpatrick, Polikarpova, and
 D'Antoni, /Grammar-Aligned Decoding/, NeurIPS 2024 (arXiv:2405.21047). Here
 the mass is exact for a weight that is a product over the nodes, not for the
-distribution of a language model. With unambiguous rows and no constraint,
-the weights of a prefix are a convolution over its transitions, as the counts
-are. Otherwise they are sums over the listed completions. Weights on the
-symbols, not on the transitions, give each completion one weight, also when
-two runs accept it.
+distribution of a language model. Without constraints, the weights of a
+prefix are a convolution over its transitions, as the counts are; ambiguous
+rows give them from their bottom-up deterministic rows. Otherwise they are
+sums over the listed completions. Weights on the symbols, not on the
+transitions, give each completion one weight, also when two runs accept it.
 
 A 'Completions' value does not change, so a decoder that keeps the values of
 its prefix can go back one token with the value before it. When 'nextTokens'
@@ -178,11 +178,15 @@ data Completions symbol = Completions
 
 -- | How the queries find the completions of a prefix.
 data Route symbol
-    = -- | The size index of the completions and their positions, for unambiguous rows without constraints.
+    = {- | The size index of the completions and their positions, for rows
+      without constraints: the rows, or their bottom-up deterministic rows when
+      they are ambiguous.
+      -}
       forall state. (Ord state, Eq symbol) => Indexed !(Table state symbol) !(SizeIndex (Term symbol)) (Term symbol -> Maybe SizedRank)
     | {- | The completions in order, each with its tokens after the prefix and
       whether the solver accepted it ('Yes') or did not decide it ('Unknown'),
-      for an automaton with constraints or with ambiguous rows.
+      for an automaton with constraints, or with more than 1024 deterministic
+      states.
       -}
       Listed [(Term symbol, [Token symbol], Verdict)]
 
@@ -867,9 +871,9 @@ withWeights weight completions
         Indexed table _ _ -> map fst $ tableTokens table
         Listed listed -> [symbol | (term, _, _) <- listed, (symbol, _) <- preorder term]
 
-{- | The total weight of the completions. With unambiguous rows and no
-constraint, it is a sum over the transitions, as the counts are. Otherwise it
-is the sum of the weights of the listed completions.
+{- | The total weight of the completions. Without constraints, it is a sum
+over the transitions of the rows of the count table, as the counts are.
+Otherwise it is the sum of the weights of the listed completions.
 -}
 completionWeight :: Completions symbol -> Rational
 completionWeight completions = case completionsRoute completions of
@@ -905,12 +909,12 @@ chooses the index @i@ with the probability of the weight @i@ over the sum of
 the weights, as 'Data.CFTA.Sized.Prefix.QuickCheck.sampleWeighted' does. The
 draw takes an index outside the list modulo the length of the list.
 
-With unambiguous rows and no constraint, the draw chooses the size of the
-completion, then a transition and the sizes of its children at each node,
-each in proportion to the weights of its terms. Otherwise it chooses one
-listed completion. The draw does not choose a rank, so with the weight one
-for each symbol the probabilities are uniform, but one draw can give another
-completion than an unranked uniform rank.
+Without constraints, the draw chooses the size of the completion, then a
+transition of the rows of the count table and the sizes of its children at
+each node, each in proportion to the weights of its terms. Otherwise it
+chooses one listed completion. The draw does not choose a rank, so with the
+weight one for each symbol the probabilities are uniform, but one draw can
+give another completion than an unranked uniform rank.
 -}
 drawCompletion :: (Monad m) => ([Rational] -> m Int) -> Completions symbol -> Maybe (m (Term symbol))
 drawCompletion choose completions
