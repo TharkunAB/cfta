@@ -1,3 +1,34 @@
+# Latest handoff: prepared callback progress,2026-10-30
+
+The full goal is ACTIVE. Source 51c59ddd6826c138d0d746cd45f7647fd7ec2ace.
+Read lean/notes-current-prepared-callback-progress.md for exact contracts,
+proof composition, failures, resource caps and remaining gaps.
+The actual chosen constructor callback now preserves the SAME model, Packet,
+ProperState, strict original pending cost and exact operational continuation.
+All earlier scan/resource/output results remain. No top-level premise was added.
+
+The largest gap remains whole-search control from original inputs. Earlier
+incompatible/unproductive alternatives and neutral work lack the required
+model-independent bound. Do not replace this gap with a later worker/resource
+assumption. Recursive fuel uses a maximum across siblings; resources advance
+in order. Configured partial stopping and actual stopped-hook failure differ.
+Unfolding/public coverage, exact order/stops and Haskell correspondence are open.
+
+All final strict sources pass. Audit4675 jobs/82394 theorem axiom checks.
+Public984 checks/79 definitions; exact old4127541-byte prefix retained.
+Twelve proof commands:9 pass/3 fail,41 pinned input snapshots.
+One failed head import/match draft was repaired without changing its statement.
+Two suffix-carrier probes remain failed and are not public proof claims.
+All473 old protected/831 Haskell identities remain exact; new baseline476.
+No Haskell source changed. Keep all prior repair entries in FINDINGS.
+
+Evidence:lean/restart-evidence/20261030-prepared-callback-progress/.
+All sealed payloads are retained. Continue in a new writable area.
+Current main7b8db072fbde44f20ce9a803736de5624050f038 includes the integrated LPO fix.
+Pull/fetch before continuing. Normal pushes to formalize remain authorized.
+
+---
+
 # Actual prepared sibling progress: 2026-10-29 23:55 CET
 
 Source c7bc62b5f0f0080369f13ce738b469589521658c on formalize.

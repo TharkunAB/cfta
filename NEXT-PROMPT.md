@@ -1,3 +1,35 @@
+# Current checkpoint: actual prepared callback progress,2026-10-30
+
+The full formalization goal remains ACTIVE on formalize.
+Read lean/notes-current-prepared-callback-progress.md first.
+Source 51c59ddd6826c138d0d746cd45f7647fd7ec2ace. Three strict new modules now carry the SAME accepting
+assignment through actual constructor selection and callback recording.
+They preserve every old input/result clause and all ordered resources/outputs.
+The new callback conclusion derives actual success from original reservations;
+it adds no future callback or worker supplier. Policy gates cover only that
+new conclusion. The old chosen model, Packet and strict cost remain unconditional.
+
+Next: derive uniform original control for earlier incompatible/unproductive
+branches and neutral transitions. Chosen-model decrease does not rank them.
+Use1+max continuation bounds for recursive fuel. Compose native resources in
+actual stage order. Configured stopping completes partial output; earlier
+stopped hooks are operational failures. DONE is not Discharged.
+Public coverage, unfolding, exact public order/stops and Haskell correspondence
+remain in scope. No admitted all-capacity counterexample was established.
+
+Audit4675 jobs/82394 axiom checks; public984 checks/79 definitions.
+All473 old protected and831 Haskell identities remain exact. New baseline476.
+Archive lean/restart-evidence/20261030-prepared-callback-progress/.
+Retain both failed suffix-carrier probes as unproved research. Keep all marked
+drafts and source-review limits. Do not alter sealed evidence or its reconstruction.
+Pull formalize/fetch main before more work. Push remains explicitly authorized
+for git@github.com:TharkunAB/cfta.git refs/heads/formalize. No force push.
+The fixed-capacity forecast supplies a finite path-carrier candidate P_D. Its
+all-state transport and a D-independent bound are both open. Do not use the
+D-dependent key count as a proof that a sufficient D exists.
+
+---
+
 # Actual prepared sibling progress: 2026-10-29 23:55 CET
 
 Source c7bc62b5f0f0080369f13ce738b469589521658c on formalize.
