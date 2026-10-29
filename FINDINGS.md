@@ -1,3 +1,47 @@
+# Latest findings: integrated Prefix and sized counts,2026-10-30
+
+Source 9f17b74c13f66e363545ce7e9c60e14bb878f599 integrates main bd5a406a6a3f84b7e3ae0906082783911509df83(PR102).
+Full goal ACTIVE. Read lean/notes-current-main-prefix-integration.md.
+
+## Haskell pickup: already incorporated upstream
+
+- 9b5181980 adds distinct-term counting of ambiguous unconstrained rows through
+  bottom-up determinization. Duplicate accepting runs do not duplicate counts.
+- 289b99818 counts an equal-child group from the intersection of ALL its child
+  states. One term choice has node size multiplied by its number of positions.
+  Counting, selection and ranking use the same grouped product.
+- Both sized and sized-sample checkpoint route versions advance1→2 because the
+  fast ambiguous/equality routes can change within-class order. Serialization
+  and checkpoint fixtures retain and validate that version change.
+
+No additional local Haskell repair or newly reproduced final-merge defect was
+needed. The preceding base used reference fallback on these rows; do not label
+these fast-route corrections as a newly reproduced wrong count in that base.
+All415 generator and56 serialization examples pass. Fourmolu checks12 changed
+Haskell files; cabal-gild checks the changed generator package. New native
+baseline835 includes9 changed old paths,822 unchanged and4 additions.
+The first check failed before tests at missing-lgmp. An explicit existing GMP
+library path repairs the host environment; it is not a source-code fix.
+All older concrete Haskell repair entries remain below as an exact suffix.
+
+## Resource and proof boundary
+
+The1024-state/key cap does not bound intermediate Cartesian-product work.
+Treat it as a construction limit, not a whole-call memory/time guarantee.
+The new Prefix and fast-table APIs have test evidence but no new whole public
+Lean correspondence result. All4675 Lean sources and476 protected identities
+remain exact. Conditional core soundness and local callback progress remain.
+Global original control, finite-value coverage and Haskell correspondence are open.
+
+The immediate proposed control lemma is parked candidate-count decrease from
+actual selection and indexed-write receipts. It is source-only so far.
+The existing checked ordinary-height counterexample gives(2,1,3); it rejects a
+naive parent-height measure, not termination or coverage. Fixed-capacity path
+transport must include stopped candidates and callbacks with no output.
+Archive:lean/restart-evidence/20261030-main-prefix-integration/.
+
+---
+
 # Latest findings: prepared callback progress,2026-10-30
 
 Source 51c59ddd6826c138d0d746cd45f7647fd7ec2ace. Full objective ACTIVE.
