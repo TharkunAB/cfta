@@ -1,3 +1,39 @@
+# Explicit checked-query resources and storage progress: 2026-10-29 21:23 CET
+
+Source 011a4f4045a9327b610a2fa3639e4815f8a8c0c2 on formalize.
+Read lean/notes-current-generator-sequence-progress.md first.
+The full goal remains ACTIVE. Main remains 7b8db072f.
+Earlier document bodies follow unchanged as dated checkpoints.
+
+An admitted checked query now has an explicit (step profile).mass bound on
+every stored node and edge payload at every native runtime fuel. Its Mu-body
+degree corollary uses the same original caller gates. No future endpoint,
+trace or body-bound supplier is a public input.
+
+The existing generator theorem ALREADY derives original resources for each
+supplied finite recursive capacity. Sufficient capacity from finite model/size
+data remains open. A whole-run observation covering every internal query,
+including earlier/no-output work and nonquery effects, is also still needed.
+
+New actual allocation, finalizer and callback laws track chosen-term
+constructor count. An opaque transfer can preserve it exactly. The recording
+callback also preserves it. Finalizer-only strict descent does not prove
+whole generator progress. Neutral preparation and earlier callbacks need
+separate control before sufficient-capacity and output coverage follow.
+
+Strict checks pass for all 3 new modules and Audit: 4653 jobs and 82233 theorem
+dependencies. Public output retains its exact old prefix and adds16 theorems.
+All 4649 old non-Audit Lean, 461 protected and 831 Haskell/Cabal/project
+identities are unchanged. The earlier preservation display denominator is
+corrected in the detailed note; all earlier hash comparisons were valid.
+No Haskell change or new Haskell defect was found. Existing PR193 Haddock
+repairs remain in FINDINGS. PR193 physical tuple resources remain open.
+
+Whole-system rendered soundness remains conditional on semantic/resource
+contracts, fixed PCS and wholeDischarged. Coverage, ordering, sufficient
+capacity and Haskell correspondence remain open. Continue the full goal.
+
+---
 # Verified checked query prefix bounds: 2026-10-29 20:57 CET
 
 Source 20a4595247b497b1242707325ddf03dc101a92d4 on formalize.
