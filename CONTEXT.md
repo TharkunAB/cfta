@@ -159,9 +159,11 @@ Wilf, and Feat (ranking).
   language.
 - **Weight**: a relative frequency weight of an alternative or a value
   (QuickCheck's word). Not the real-valued weight of a Boltzmann sampler.
+  The weight of a term is the product of the weights of the symbols of its
+  nodes (`withWeights`).
 - **Checked rank**: a rank of a term with whether the ranking checked every
   symbol of the term.
-- **Occurrence**: the token of one recursion probe.
+- **Occurrence**: the identifier of one recursion probe.
 - **Exclusion**: a template that rejects a term, when the whole term matches
   it (at the root) or when a subterm matches it (anywhere).
 - **Query route**: a named way to list the terms of a language, with a version.
@@ -186,6 +188,31 @@ Wilf, and Feat (ranking).
   pseudorandom generator (PRNG) and its version, the seed, and the number of
   draws so far. It is stale for each graph other than its own graph, and for
   other exclusions or other weights.
+
+## Prefixes
+
+- **Token**: one node of a term in preorder: its symbol and its number of
+  children.
+- **Prefix**: the first tokens of the preorder of a term
+  (`preorderPrefix`, `excludePrefixesFTA`). A *child prefix* of a count
+  table, the first children of a transition, is a different thing.
+- **Pending state**: the state of a subterm that a prefix does not reach.
+- **Prefix run**: a run of an automaton on the nodes of a prefix: the stack
+  of its pending states, in preorder, and the constraints of the prefix nodes
+  that the prefix does not decide. Not a sampled run.
+- **Completion**: an accepted term within a size bound whose preorder starts
+  with a prefix. The completions of a prefix are in the order of
+  `Data.CFTA.Sized`.
+- **Candidate**: with a solver, a term of the automaton with each constraint
+  reduced to its equality constraints. The solver accepts, rejects, or does
+  not decide each candidate.
+- **Offered token**: a token with an accepted completion (`nextTokens`).
+- **Undecided completion, undecided token**: with a solver, a completion is
+  undecided when the solver neither accepts nor rejects it. A token is
+  undecided when the solver accepts none of its completions and some of them
+  are undecided. An undecided token is neither offered nor rejected.
+- **Walk**: a path of tokens with the verdicts of the solver kept for each
+  step (`Deciding`). It asks the solver only when a query needs a verdict.
 
 ## Generators
 
