@@ -40,6 +40,10 @@ module Data.CFTA.Gen (
     -- * Sources
     Indexed (..),
     fromIndexed,
+    invertible,
+    invertibleMap,
+    invertiblePair,
+    rankOfInvertible,
     elements,
     namedElements,
     leaf,
