@@ -21,7 +21,7 @@ To add or remove a transition, read its current row with `transitionsFrom`,
 change the list, and replace the row. To add a constraint, use
 `conjoinConstraints` on the selected transition. To change a refinement,
 replace its refined symbol or annotation. A new constructor is a transition
-with a new symbol and its child states. The batch must retain a ranked alphabet.
+with a new symbol and its child states. A symbol can occur at several arities.
 
 ## Sharing and cost
 

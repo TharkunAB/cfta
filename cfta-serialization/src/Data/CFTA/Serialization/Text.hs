@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
--- | Complete readable snapshots of graphs.
+-- | Complete readable snapshots of graphs, editable documents, languages, and checkpoints.
 module Data.CFTA.Serialization.Text (
     StateCodec (..),
     TextError (..),
@@ -9,6 +9,14 @@ module Data.CFTA.Serialization.Text (
     parseGraph,
     printGraphWith,
     parseGraphWith,
+    printDocument,
+    parseDocument,
+    printDocumentWith,
+    parseDocumentWith,
+    printLanguage,
+    parseLanguage,
+    printLanguageWith,
+    parseLanguageWith,
     showCodec,
 
     -- * Notes
@@ -16,6 +24,26 @@ module Data.CFTA.Serialization.Text (
     CommentTarget (..),
     printGraphNotesWith,
     parseGraphNotesWith,
+    printDocumentNotesWith,
+    parseDocumentNotesWith,
+    printLanguageNotesWith,
+    parseLanguageNotesWith,
+
+    -- * Updates
+    printUpdate,
+    parseUpdate,
+    printUpdateWith,
+    parseUpdateWith,
+
+    -- * Checkpoints
+    printCheckpoint,
+    parseCheckpoint,
+    printCheckpointWith,
+    parseCheckpointWith,
+    printSamplingCheckpoint,
+    parseSamplingCheckpoint,
+    printSamplingCheckpointWith,
+    parseSamplingCheckpointWith,
 ) where
 
 import Control.Applicative ((<|>))
@@ -27,16 +55,18 @@ import Data.Char (chr, isAsciiLower, isAsciiUpper, isDigit, ord)
 import Data.Functor (($>))
 import Data.List (intersperse)
 import qualified Data.Map.Strict as Map
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromMaybe, isJust)
 import qualified Data.Set as Set
 import Data.Text (Text)
 import qualified Data.Text as Text
 import qualified Data.Text.Lazy as Lazy
 import Data.Text.Lazy.Builder (Builder, fromText, toLazyText)
+import Data.Word (Word64)
 import Numeric (showHex)
 import Text.Read (readEither)
 
 import qualified Data.CFTA as FTA
+import Data.CFTA.Checkpoint (Checkpoint (..), SamplingCheckpoint (..))
 import qualified Data.CFTA.Constraint as C
 import Data.CFTA.Equality.Constraint (
     EqConstraints (EqConstraints, EqContradiction),
@@ -44,9 +74,12 @@ import Data.CFTA.Equality.Constraint (
     unPathEClass,
  )
 import qualified Data.CFTA.Formula as F
-import Data.CFTA.Index (ChildIndex (ChildIndex))
+import Data.CFTA.Index (ChildIndex (ChildIndex), ClassRank (ClassRank), Size (Size), Weight (Weight))
+import qualified Data.CFTA.Language as L
+import qualified Data.CFTA.Language.Source as D
 import Data.CFTA.Path (Path (Path), isStrictSubpath, unPath)
 import Data.CFTA.Symbol (Symbol (RefinedSymbol, Symbol), symbolRefinement, symbolText, valueName)
+import Data.CFTA.Template (Exclusion (..), Template (..))
 
 {- | A typed codec for portable state labels. Decoding an encoded state must
 return that state and preserve equality and ordering. Labels are escaped by the
@@ -61,10 +94,15 @@ data StateCodec state = StateCodec
 showCodec :: (Show state, Read state) => StateCodec state
 showCodec = StateCodec (Text.pack . show) (readEither . Text.unpack)
 
--- | The item that a doc comment documents.
+-- | The item that a doc comment documents. A production, a fact, and an exclusion are found by name.
 data CommentTarget state
     = OnFile
     | OnState !state
+    | -- | A production, by its state and its name.
+      OnProduction !state !D.ProductionName
+    | -- | A fact, by its state, the name of its production, and its name.
+      OnFact !state !D.ProductionName !D.FactName
+    | OnExclusion !L.ExclusionName
     deriving (Eq, Ord, Show)
 
 {- | What a file says beside its value: its doc comments, by the item that each
@@ -112,22 +150,22 @@ notesOf entries =
         (Map.fromList [(target, text) | CommentEntry target text <- entries])
         (Map.fromList [(state, sort) | SortEntry state sort <- entries])
 
--- | A syntax location or a checked graph error.
+-- | A syntax location, a checked graph error, or a checked document error.
 data TextError state
     = SyntaxError !Int !Int !String
     | DuplicateState !state
-    | InvalidGraph !(FTA.FTAError state Symbol)
+    | InvalidGraph !(FTA.FTAError state)
+    | InvalidDefinition !(D.DocumentError state)
     deriving (Eq, Show)
 
--- | Describe the input location or the rejected graph.
+-- | Describe the input location, the rejected graph, or the rejected source identity.
 explainTextError :: (Show state) => TextError state -> String
 explainTextError failure = case failure of
     SyntaxError line column message -> "line " <> show line <> ", column " <> show column <> ": " <> message
     DuplicateState state -> "duplicate state row: " <> show state
     InvalidGraph (FTA.MissingInitialState state) -> "initial state " <> show state <> " has no row"
     InvalidGraph (FTA.DanglingState state) -> "child state " <> show state <> " has no row"
-    InvalidGraph (FTA.InconsistentArity symbol expected actual) ->
-        "symbol " <> show symbol <> " has arities " <> show expected <> " and " <> show actual
+    InvalidDefinition failure' -> D.explainDocumentError failure'
 
 -- | Print a graph with state labels from its 'Show' instance.
 printGraph :: (Show state) => FTA.PlainFTA state Symbol -> Text
@@ -145,6 +183,41 @@ parseGraph = fmap snd . readGraph (readEither . Text.unpack)
 parseGraphWith :: (Ord state) => StateCodec state -> Text -> Either (TextError state) (FTA.PlainFTA state Symbol)
 parseGraphWith codec = fmap snd . readGraph (decodeState codec)
 
+-- | Print a source document with state labels from its 'Show' instance.
+printDocument :: (Show state) => D.Document state -> Text
+printDocument = renderDocument (Text.pack . show) noNotes
+
+-- | Print a source document with an explicit typed state codec.
+printDocumentWith :: StateCodec state -> D.Document state -> Text
+printDocumentWith codec = renderDocument (encodeState codec) noNotes
+
+-- | Read and validate a source document with its state's 'Read' instance.
+parseDocument :: (Ord state, Read state) => Text -> Either (TextError state) (D.Document state)
+parseDocument = fmap snd . readDocument (readEither . Text.unpack)
+
+-- | Read a source document with an explicit typed state codec.
+parseDocumentWith :: (Ord state) => StateCodec state -> Text -> Either (TextError state) (D.Document state)
+parseDocumentWith codec = fmap snd . readDocument (decodeState codec)
+
+{- | Print an exact language value with state labels from its 'Show' instance.
+A matching lawful 'Read' instance gives @parseLanguage (printLanguage x) == Right x@.
+Comments and input whitespace are not part of the stored value.
+-}
+printLanguage :: (Show state) => L.Language state -> Text
+printLanguage = renderLanguage (Text.pack . show) noNotes
+
+-- | Print a language with an explicit typed state codec.
+printLanguageWith :: StateCodec state -> L.Language state -> Text
+printLanguageWith codec = renderLanguage (encodeState codec) noNotes
+
+-- | Read an exact language value with its state's 'Read' instance.
+parseLanguage :: (Ord state, Read state) => Text -> Either (TextError state) (L.Language state)
+parseLanguage = fmap snd . readLanguage (readEither . Text.unpack)
+
+-- | Read a language with an explicit typed state codec.
+parseLanguageWith :: (Ord state) => StateCodec state -> Text -> Either (TextError state) (L.Language state)
+parseLanguageWith codec = fmap snd . readLanguage (decodeState codec)
+
 -- | Print a graph with the doc comments of the file and of its states. A comment on another item is not printed.
 printGraphNotesWith :: (Ord state) => StateCodec state -> Notes state -> FTA.PlainFTA state Symbol -> Text
 printGraphNotesWith codec notes = renderGraph (encodeState codec) (lookupNotes notes)
@@ -154,20 +227,205 @@ parseGraphNotesWith ::
     (Ord state) => StateCodec state -> Text -> Either (TextError state) (Notes state, FTA.PlainFTA state Symbol)
 parseGraphNotesWith = readGraph . decodeState
 
+-- | Print a source document with the doc comments of the file, its states, its productions, and its facts.
+printDocumentNotesWith :: (Ord state) => StateCodec state -> Notes state -> D.Document state -> Text
+printDocumentNotesWith codec notes = renderDocument (encodeState codec) (lookupNotes notes)
+
+-- | Read a source document and the doc comments of the file, its states, its productions, and its facts.
+parseDocumentNotesWith ::
+    (Ord state) => StateCodec state -> Text -> Either (TextError state) (Notes state, D.Document state)
+parseDocumentNotesWith = readDocument . decodeState
+
+-- | Print a language with the doc comments of its document and of its exclusions.
+printLanguageNotesWith :: (Ord state) => StateCodec state -> Notes state -> L.Language state -> Text
+printLanguageNotesWith codec notes = renderLanguage (encodeState codec) (lookupNotes notes)
+
+-- | Read a language and the doc comments of its document and of its exclusions.
+parseLanguageNotesWith ::
+    (Ord state) => StateCodec state -> Text -> Either (TextError state) (Notes state, L.Language state)
+parseLanguageNotesWith = readLanguage . decodeState
+
+-- | Print an update with state labels from its 'Show' instance.
+printUpdate :: (Show state) => L.Update state -> Text
+printUpdate = renderUpdate (Text.pack . show)
+
+-- | Print an update with an explicit typed state codec.
+printUpdateWith :: StateCodec state -> L.Update state -> Text
+printUpdateWith codec = renderUpdate (encodeState codec)
+
+-- | Read an update with state labels from their 'Read' instance.
+parseUpdate :: (Read state) => Text -> Either (TextError state) (L.Update state)
+parseUpdate = readUpdate (readEither . Text.unpack)
+
+-- | Read an update with an explicit typed state codec.
+parseUpdateWith :: StateCodec state -> Text -> Either (TextError state) (L.Update state)
+parseUpdateWith codec = readUpdate (decodeState codec)
+
+{- | Print a checkpoint with state labels from their 'Show' instance. The
+text holds the query and the sized rank of the next term, then the text of
+'printGraph' for the graph.
+-}
+printCheckpoint :: (Show state) => Checkpoint state -> Text
+printCheckpoint = renderCheckpoint (Text.pack . show)
+
+-- | Print a checkpoint with an explicit typed state codec.
+printCheckpointWith :: StateCodec state -> Checkpoint state -> Text
+printCheckpointWith = renderCheckpoint . encodeState
+
+-- | Read a checkpoint with its state's 'Read' instance, and validate its graph.
+parseCheckpoint :: (Ord state, Read state) => Text -> Either (TextError state) (Checkpoint state)
+parseCheckpoint = readCheckpoint (readEither . Text.unpack)
+
+-- | Read a checkpoint with an explicit typed state codec.
+parseCheckpointWith :: (Ord state) => StateCodec state -> Text -> Either (TextError state) (Checkpoint state)
+parseCheckpointWith = readCheckpoint . decodeState
+
+{- | Print a sampling checkpoint with state labels from their 'Show' instance.
+The text holds the query, the weights, the pseudorandom generator, the seed,
+and the number of draws, then the text of 'printGraph' for the graph.
+-}
+printSamplingCheckpoint :: (Show state) => SamplingCheckpoint state -> Text
+printSamplingCheckpoint = renderSamplingCheckpoint (Text.pack . show)
+
+-- | Print a sampling checkpoint with an explicit typed state codec.
+printSamplingCheckpointWith :: StateCodec state -> SamplingCheckpoint state -> Text
+printSamplingCheckpointWith = renderSamplingCheckpoint . encodeState
+
+-- | Read a sampling checkpoint with its state's 'Read' instance, and validate its graph.
+parseSamplingCheckpoint :: (Ord state, Read state) => Text -> Either (TextError state) (SamplingCheckpoint state)
+parseSamplingCheckpoint = readSamplingCheckpoint (readEither . Text.unpack)
+
+-- | Read a sampling checkpoint with an explicit typed state codec.
+parseSamplingCheckpointWith ::
+    (Ord state) => StateCodec state -> Text -> Either (TextError state) (SamplingCheckpoint state)
+parseSamplingCheckpointWith = readSamplingCheckpoint . decodeState
+
 -- | Render graph rows with their complete transition constraints, and the doc comments that the lookup gives.
 renderGraph :: (state -> Text) -> NoteLookup state -> FTA.PlainFTA state Symbol -> Text
-renderGraph encode notes = built . graphText "graph" encode transition notes
+renderGraph encode notes = built . plainGraphText encode notes
+
+-- | Render the graph format.
+plainGraphText :: (state -> Text) -> NoteLookup state -> FTA.PlainFTA state Symbol -> Builder
+plainGraphText encode = graphText "graph" encode transition
   where
-    transition edge = "  " <> edgeText encode edge <> obligation (FTA.transitionConstraint edge) <> ";\n"
+    transition _ edge = "  " <> edgeText encode edge <> obligation (FTA.transitionConstraint edge) <> ";\n"
     obligation constraint
         | constraint == C.noConstraint = mempty
         | otherwise = " where " <> constraintText constraint
+
+-- | Render source rows without compiling their individual facts.
+renderDocument :: (state -> Text) -> NoteLookup state -> D.Document state -> Text
+renderDocument encode notes =
+    built . graphText "document" encode (sourceTransitionText encode notes) notes . D.sourceGraph
+
+-- | Render source rows and the retained exclusion expressions.
+renderLanguage :: (state -> Text) -> NoteLookup state -> L.Language state -> Text
+renderLanguage encode notes language =
+    built $
+        graphText "language" encode (sourceTransitionText encode notes) notes (D.sourceGraph $ L.source language)
+            <> foldMap (uncurry $ namedExclusionText notes) (Map.toAscList $ L.exclusions language)
+
+-- | Render a named exclusion after its doc comment.
+namedExclusionText :: NoteLookup state -> L.ExclusionName -> Exclusion Symbol -> Builder
+namedExclusionText notes name exclusion =
+    commentText "" (commentOf notes $ OnExclusion name)
+        <> "exclude "
+        <> nameText (L.exclusionNameText name)
+        <> " = "
+        <> exclusionBodyText exclusion
+
+-- | Render the operations of an update in order, one statement each.
+renderUpdate :: (state -> Text) -> L.Update state -> Text
+renderUpdate encode (L.Update operations) = built $ "update 1;\n" <> foldMap operation operations
+  where
+    state = nameText . encode
+    none = noNotes
+    operation change = case change of
+        L.EditSource edit -> case edit of
+            D.SetStart at -> "start " <> state at <> ";\n"
+            D.DefineProduction at name symbol children ->
+                "define "
+                    <> state at
+                    <> " "
+                    <> nameText (D.productionNameText name)
+                    <> " = "
+                    <> symbolText' symbol
+                    <> childrenText (map state children)
+                    <> ";\n"
+            D.DeleteProduction at name -> "remove " <> state at <> " " <> nameText (D.productionNameText name) <> ";\n"
+            D.SetFact at name fact constraint ->
+                "require "
+                    <> state at
+                    <> " "
+                    <> nameText (D.productionNameText name)
+                    <> " "
+                    <> nameText (D.factNameText fact)
+                    <> " = "
+                    <> constraintText constraint
+                    <> ";\n"
+            D.RemoveFact at name fact ->
+                "relax " <> state at <> " " <> nameText (D.productionNameText name) <> " " <> nameText (D.factNameText fact) <> ";\n"
+            D.PutProduction at transition -> "put production " <> state at <> " " <> productionText "" encode none at transition
+            D.PutRow at transitions -> "put row " <> state at <> " {\n" <> foldMap (sourceTransitionText encode none at) transitions <> "}\n"
+            D.DeleteRow at -> "delete row " <> state at <> ";\n"
+        L.Exclude name exclusion -> namedExclusionText none name exclusion
+        L.Restore name -> "restore " <> nameText (L.exclusionNameText name) <> ";\n"
+
+-- | Render the query and the next sized rank, then the graph in the graph format.
+renderCheckpoint :: (state -> Text) -> Checkpoint state -> Text
+renderCheckpoint encode checkpoint =
+    built $
+        "checkpoint 1;\nquery "
+            <> nameText (checkpointRoute checkpoint)
+            <> " "
+            <> integerText (checkpointVersion checkpoint)
+            <> ";\nbound "
+            <> integerText bound
+            <> ";\nnext size "
+            <> integerText size
+            <> " rank "
+            <> integerText rank
+            <> ";\n"
+            <> foldMap exclusionText (checkpointExclusions checkpoint)
+            <> "\n"
+            <> plainGraphText encode noNotes (checkpointGraph checkpoint)
+  where
+    Size bound = checkpointBound checkpoint
+    (Size size, ClassRank rank) = checkpointNext checkpoint
+
+-- | Render the query, the weights, and the position of the run, then the graph in the graph format.
+renderSamplingCheckpoint :: (state -> Text) -> SamplingCheckpoint state -> Text
+renderSamplingCheckpoint encode checkpoint =
+    built $
+        "sampling 1;\nquery "
+            <> nameText (samplingRoute checkpoint)
+            <> " "
+            <> integerText (samplingVersion checkpoint)
+            <> ";\nbound "
+            <> integerText bound
+            <> ";\nweights "
+            <> maybe "uniform" weightsText (samplingWeights checkpoint)
+            <> ";\nprng "
+            <> nameText (samplingPrng checkpoint)
+            <> " "
+            <> integerText (samplingPrngVersion checkpoint)
+            <> ";\nseed "
+            <> integerText (toInteger $ samplingSeed checkpoint)
+            <> ";\ndraws "
+            <> integerText (samplingDraws checkpoint)
+            <> ";\n"
+            <> foldMap exclusionText (samplingExclusions checkpoint)
+            <> "\n"
+            <> plainGraphText encode noNotes (samplingGraph checkpoint)
+  where
+    Size bound = samplingBound checkpoint
+    weightsText weights = listText [integerText size <> ": " <> integerText weight | (Size size, Weight weight) <- Map.toAscList weights]
 
 -- | Render the shared version, initial state, and finite row table, each item after its doc comment.
 graphText ::
     Text ->
     (state -> Text) ->
-    (FTA.Transition state Symbol annotation -> Builder) ->
+    (state -> FTA.Transition state Symbol annotation -> Builder) ->
     NoteLookup state ->
     FTA.FTA state Symbol annotation ->
     Builder
@@ -185,14 +443,67 @@ graphText format encode transition notes graph =
             <> nameText (encode state)
             <> maybe mempty ((" : " <>) . nameText) (sortOf notes state)
             <> " {\n"
-            <> foldMap transition edges
+            <> foldMap (transition state) edges
             <> "}\n\n"
+
+-- | Render one named production and its individual facts in a state row, after its doc comment.
+sourceTransitionText ::
+    (state -> Text) -> NoteLookup state -> state -> FTA.Transition state Symbol D.Annotation -> Builder
+sourceTransitionText encode notes state edge =
+    commentText "  " (commentOf notes $ OnProduction state $ D.annotationName $ FTA.transitionConstraint edge)
+        <> "  "
+        <> productionText "  " encode notes state edge
+
+-- | Render one named production and its individual facts, with the given indentation for its closing line.
+productionText ::
+    Builder ->
+    (state -> Text) ->
+    NoteLookup state ->
+    state ->
+    FTA.Transition state Symbol D.Annotation ->
+    Builder
+productionText indent encode notes state edge =
+    nameText (D.productionNameText name)
+        <> " = "
+        <> edgeText encode edge
+        <> if Map.null facts then ";\n" else " {\n" <> foldMap fact (Map.toAscList facts) <> indent <> "};\n"
+  where
+    annotation = FTA.transitionConstraint edge
+    name = D.annotationName annotation
+    facts = D.annotationFacts annotation
+    fact (factName, constraint) =
+        commentText (indent <> "  ") (commentOf notes $ OnFact state name factName)
+            <> indent
+            <> "  "
+            <> nameText (D.factNameText factName)
+            <> " = "
+            <> constraintText constraint
+            <> ";\n"
 
 -- | Render a doc comment as @///@ lines with the indentation of its item, or nothing.
 commentText :: Builder -> Maybe Text -> Builder
 commentText indent = maybe mempty (foldMap line . Text.splitOn "\n")
   where
     line text = indent <> "///" <> (if Text.null text then mempty else " " <> fromText text) <> "\n"
+
+-- | Render an exclusion of a checkpoint as one statement.
+exclusionText :: Exclusion Symbol -> Builder
+exclusionText exclusion = "exclude " <> exclusionBodyText exclusion
+
+-- | Render the place and the template of an exclusion, and the end of its statement.
+exclusionBodyText :: Exclusion Symbol -> Builder
+exclusionBodyText exclusion = case exclusion of
+    AtRoot template -> "root " <> templateText template <> ";\n"
+    Anywhere template -> "anywhere " <> templateText template <> ";\n"
+
+-- | Render a template with the syntax of symbols, @_@ for a hole or any symbol, and @...@ for a prefix.
+templateText :: Template Symbol -> Builder
+templateText template = case template of
+    Hole -> "_"
+    AnyNode children -> call "_" $ map templateText children
+    TemplateNode symbol children -> symbolText' symbol <> childrenText (map templateText children)
+    AnyPrefix children -> call "_" $ map templateText children <> ["..."]
+    TemplatePrefix symbol children -> symbolText' symbol <> "(" <> separated (map templateText children <> ["..."]) <> ")"
 
 -- | Render a complete symbol and ordered child state references.
 edgeText :: (state -> Text) -> FTA.Transition state Symbol annotation -> Builder
@@ -345,6 +656,69 @@ integerText = fromText . Text.pack . show
 built :: Builder -> Text
 built = Lazy.toStrict . toLazyText
 
+-- | Read the query, the weights, the position, and the graph of a sampling checkpoint.
+readSamplingCheckpoint ::
+    (Ord state) => (Text -> Either String state) -> Text -> Either (TextError state) (SamplingCheckpoint state)
+readSamplingCheckpoint decode input = do
+    (fields, rows) <- runParser parser input
+    graph <- validGraph rows
+    pure $ fields graph
+  where
+    parser = do
+        checkpointKeyword "sampling"
+        format <- integerParser
+        unless (format == 1) $ fail "unsupported sampling version; expected 1"
+        token ";"
+        checkpointKeyword "query"
+        route <- nameParser
+        version <- integerParser
+        token ";"
+        checkpointKeyword "bound"
+        bound <- integerParser
+        token ";"
+        checkpointKeyword "weights"
+        uniform <- startsKeyword "uniform"
+        weights <-
+            if uniform
+                then keyword "uniform" $> Nothing
+                else Just . Map.fromList <$> (bracketed weight >>= distinctSizes)
+        token ";"
+        checkpointKeyword "prng"
+        algorithm <- nameParser
+        algorithmVersion <- integerParser
+        token ";"
+        checkpointKeyword "seed"
+        seed <- integerParser
+        when (seed < 0 || seed > toInteger (maxBound :: Word64)) $ fail "seed is outside the range of a 64-bit word"
+        token ";"
+        checkpointKeyword "draws"
+        draws <- integerParser
+        token ";"
+        exclusions <- whileKeyword "exclude" exclusionParser
+        (_, rows) <- plainGraphParser WithoutNotes decode
+        pure
+            ( \graph ->
+                SamplingCheckpoint
+                    graph
+                    exclusions
+                    route
+                    version
+                    (Size bound)
+                    weights
+                    algorithm
+                    algorithmVersion
+                    (fromInteger seed)
+                    draws
+            , rows
+            )
+    weight = (,) <$> (Size <$> integerParser <* token ":") <*> (Weight <$> integerParser)
+    distinctSizes entries = do
+        foldM_ distinct Set.empty $ map fst entries
+        pure entries
+    distinct seen size
+        | Set.member size seen = fail $ "duplicate weight of size " <> show size
+        | otherwise = pure $ Set.insert size seen
+
 -- | Read graph syntax and its doc comments, and validate identities before constructing its row map.
 readGraph ::
     (Ord state) =>
@@ -352,14 +726,172 @@ readGraph ::
     Text ->
     Either (TextError state) (Notes state, FTA.PlainFTA state Symbol)
 readGraph decode input = do
-    (notes, (initial, rows)) <- runParser (graphParser "graph" decode (graphTransitionParser decode) <* noComment) input
-    foldM_ distinct Set.empty $ map fst rows
-    graph <- first InvalidGraph $ FTA.mkFTA initial rows
-    pure (notesOf notes, graph)
+    (comments, rows) <- runParser (plainGraphParser WithNotes decode) input
+    graph <- validGraph rows
+    pure (notesOf comments, graph)
+
+{- | Read the graph format: the header, the initial state, and the rows with
+their constraints, and, where the rule allows them, the doc comments of the
+file and of the states and the sorts of the states.
+-}
+plainGraphParser ::
+    NoteRule ->
+    (Text -> Either String state) ->
+    A.Parser ([NoteEntry state], (state, [(state, [FTA.Transition state Symbol C.Constraint])]))
+plainGraphParser rule decode = graphParser rule "graph" decode transition <* ruleGuard rule <* noComment
+  where
+    transition _ = (,) <$> graphTransitionParser decode <*> pure []
+
+-- | Check that each state has one row, then check the graph as 'FTA.mkFTA' does.
+validGraph ::
+    (Ord state) =>
+    (state, [(state, [FTA.Transition state Symbol C.Constraint])]) -> Either (TextError state) (FTA.PlainFTA state Symbol)
+validGraph (initial, rows) = do
+    distinctStates rows
+    first InvalidGraph $ FTA.mkFTA initial rows
+
+-- | Read the query, the next sized rank, and the graph of a checkpoint.
+readCheckpoint :: (Ord state) => (Text -> Either String state) -> Text -> Either (TextError state) (Checkpoint state)
+readCheckpoint decode input = do
+    (route, version, bound, next, exclusions, rows) <- runParser parser input
+    graph <- validGraph rows
+    pure $ Checkpoint graph exclusions route version bound next
+  where
+    parser = do
+        checkpointKeyword "checkpoint"
+        format <- integerParser
+        unless (format == 1) $ fail "unsupported checkpoint version; expected 1"
+        token ";"
+        checkpointKeyword "query"
+        route <- nameParser
+        version <- integerParser
+        token ";"
+        checkpointKeyword "bound"
+        bound <- integerParser
+        token ";"
+        checkpointKeyword "next"
+        keyword "size"
+        size <- integerParser
+        keyword "rank"
+        rank <- integerParser
+        token ";"
+        exclusions <- whileKeyword "exclude" exclusionParser
+        (_, rows) <- plainGraphParser WithoutNotes decode
+        pure (route, version, Size bound, (Size size, ClassRank rank), exclusions, rows)
+
+-- | Read an exclusion statement of a checkpoint: @exclude root TEMPLATE;@ or @exclude anywhere TEMPLATE;@.
+exclusionParser :: A.Parser (Exclusion Symbol)
+exclusionParser = checkpointKeyword "exclude" *> exclusionBody
+
+-- | Read the place and the template of an exclusion, and the end of its statement.
+exclusionBody :: A.Parser (Exclusion Symbol)
+exclusionBody = do
+    place <- nameParser
+    exclusion <- case place of
+        "root" -> pure AtRoot
+        "anywhere" -> pure Anywhere
+        _ -> fail "expected root or anywhere"
+    template <- templateParser
+    token ";"
+    pure $ exclusion template
+
+-- | Reject a second row for a state.
+distinctStates :: (Ord state) => [(state, rows)] -> Either (TextError state) ()
+distinctStates = foldM_ distinct Set.empty . map fst
   where
     distinct seen state
         | Set.member state seen = Left $ DuplicateState state
         | otherwise = Right $ Set.insert state seen
+
+{- | Report a duplicate state and an invalid graph of a document or a language
+as the graph format reports them, and every other error as 'InvalidDefinition'.
+-}
+definitionError :: D.DocumentError state -> TextError state
+definitionError failure = case failure of
+    D.DuplicateState state -> DuplicateState state
+    D.InvalidGraph graphError -> InvalidGraph graphError
+    _ -> InvalidDefinition failure
+
+-- | Read source syntax and its doc comments, and validate names and graph structure together.
+readDocument ::
+    (Ord state) => (Text -> Either String state) -> Text -> Either (TextError state) (Notes state, D.Document state)
+readDocument decode input = do
+    (comments, (initial, rows)) <-
+        runParser (graphParser WithNotes "document" decode (sourceTransitionParser decode) <* noComment) input
+    document <- first definitionError $ D.mkDocument initial rows
+    pure (notesOf comments, document)
+
+-- | Read a complete language and its doc comments without compiling its constraints or exclusions.
+readLanguage ::
+    (Ord state) => (Text -> Either String state) -> Text -> Either (TextError state) (Notes state, L.Language state)
+readLanguage decode input = do
+    (comments, (initial, rows), exclusions) <- runParser parser input
+    document <- first definitionError $ D.mkDocument initial rows
+    pure (notesOf comments, L.Language document exclusions)
+  where
+    parser = do
+        (comments, rows) <- graphParser WithNotes "language" decode $ sourceTransitionParser decode
+        entries <- distinctItems "exclusion" A.atEnd (fst . fst) namedExclusionParser
+        let exclusions = Map.fromList $ map fst entries
+        let exclusionComments = concat [commentOn (OnExclusion $ L.ExclusionName name) comment | ((name, _), comment) <- entries]
+        pure (comments <> exclusionComments, rows, Map.mapKeys L.ExclusionName exclusions)
+
+-- | Read the header and the operations of an update, in order.
+readUpdate :: (Text -> Either String state) -> Text -> Either (TextError state) (L.Update state)
+readUpdate decode = runParser $ do
+    _ <- itemComment
+    keyword "update"
+    version <- integerParser
+    unless (version == 1) $ fail "unsupported update version; expected 1"
+    token ";"
+    L.Update <$> untilEnd operation
+  where
+    state = stateParser decode
+    end = token ";"
+    source = pure . L.EditSource
+    -- An operation word is a keyword, so it is never quoted.
+    word = lexeme (A.takeWhile1 nameCharacter) <?> "update operation"
+    operation = do
+        _ <- itemComment
+        operationWord <- word
+        case operationWord of
+            "start" -> (D.SetStart <$> state <* end) >>= source
+            "define" -> do
+                at <- state
+                name <- productionNameParser
+                token "="
+                (symbol, children) <- edgeParser decode
+                end
+                source $ D.DefineProduction at name symbol children
+            "remove" -> (D.DeleteProduction <$> state <*> productionNameParser <* end) >>= source
+            "require" -> do
+                at <- state
+                name <- productionNameParser
+                fact <- factNameParser
+                token "="
+                constraint <- constraintParser
+                end
+                source $ D.SetFact at name fact constraint
+            "relax" -> (D.RemoveFact <$> state <*> productionNameParser <*> factNameParser <* end) >>= source
+            "put" -> do
+                target <- word
+                case target of
+                    "production" -> do
+                        at <- state
+                        (transition, _) <- sourceTransitionParser decode at
+                        source $ D.PutProduction at transition
+                    "row" -> do
+                        at <- state
+                        token "{"
+                        transitions <- untilClose '}' (sourceTransitionParser decode at)
+                        token "}"
+                        ifNext ';' (token ";") ()
+                        source $ D.PutRow at $ map fst transitions
+                    _ -> fail "expected put production or put row"
+            "delete" -> keyword "row" *> ((D.DeleteRow <$> state <* end) >>= source)
+            "exclude" -> L.Exclude . L.ExclusionName <$> (nameParser <* token "=") <*> exclusionBody
+            "restore" -> L.Restore . L.ExclusionName <$> nameParser <* end
+            _ -> fail $ "expected an update operation, not " <> show operationWord
 
 -- | Parse one complete input and retain Unicode-aware syntax locations.
 runParser :: A.Parser value -> Text -> Either (TextError state) value
@@ -375,20 +907,21 @@ runParser parser input = finish $ A.parse (spaces *> parser <* A.endOfInput) inp
          in Left $ SyntaxError line column detail
 
 {- | Read the common header and finite rows, preserving duplicates for
-validation, the doc comments of the file and the states, and the sorts of the
-states.
+validation, and the doc comments of the file, the states, and the transitions.
 -}
 graphParser ::
+    NoteRule ->
     Text ->
     (Text -> Either String state) ->
-    A.Parser (FTA.Transition state Symbol annotation) ->
+    (state -> A.Parser (FTA.Transition state Symbol annotation, [NoteEntry state])) ->
     A.Parser ([NoteEntry state], (state, [(state, [FTA.Transition state Symbol annotation])]))
-graphParser format decode transition = do
-    fileComment <- commentParser
+graphParser rule format decode transition = do
+    fileComment <- ruleComment rule
     keyword format
     version <- integerParser
     unless (version == 1) $ fail "unsupported snapshot version; expected 1"
     token ";"
+    ruleGuard rule
     keyword "start"
     initial <- stateParser decode
     token ";"
@@ -396,15 +929,18 @@ graphParser format decode transition = do
     pure (commentOn OnFile fileComment <> concatMap fst rows, (initial, map snd rows))
   where
     row = do
-        comment <- commentParser
+        comment <- ruleComment rule
         keyword "state"
         state <- stateParser decode
-        sort <- ifNext ':' (Just <$> (token ":" *> nameParser)) Nothing
+        sort <- ruleSort rule
         token "{"
-        transitions <- untilClose '}' transition
+        transitions <- untilClose '}' (ruleGuard rule *> transition state)
         token "}"
         ifNext ';' (token ";") ()
-        pure (commentOn (OnState state) comment <> maybe [] (\name -> [SortEntry state name]) sort, (state, transitions))
+        pure
+            ( commentOn (OnState state) comment <> maybe [] (\name -> [SortEntry state name]) sort <> concatMap snd transitions
+            , (state, map fst transitions)
+            )
 
 -- | Decode one escaped state label through its typed codec.
 stateParser :: (Text -> Either String state) -> A.Parser state
@@ -421,6 +957,34 @@ graphTransitionParser decode = do
     token ";"
     pure $ FTA.Transition symbol children constraint
 
+-- | Read a named production of a state and its separate facts, and the doc comments of both.
+sourceTransitionParser ::
+    (Text -> Either String state) ->
+    state ->
+    A.Parser (FTA.Transition state Symbol D.Annotation, [NoteEntry state])
+sourceTransitionParser decode state = do
+    comment <- itemComment
+    name <- productionNameParser
+    token "="
+    (symbol, children) <- edgeParser decode
+    facts <- ifNext '{' (token "{" *> factBlock <* token "}") []
+    let namedFacts = Map.fromList [(factName, constraint) | (factName, constraint, _) <- facts]
+    token ";"
+    pure
+        ( FTA.Transition symbol children $ D.Annotation name namedFacts
+        , commentOn (OnProduction state name) comment
+            <> concat [commentOn (OnFact state name factName) factComment | (factName, _, factComment) <- facts]
+        )
+  where
+    factBlock = distinctItems "fact" ((== Just '}') <$> A.peekChar) (\(name', _, _) -> D.factNameText name') fact
+    fact newName = do
+        comment <- itemComment
+        name <- D.FactName <$> newName
+        token "="
+        constraint <- constraintParser
+        token ";"
+        pure (name, constraint, comment)
+
 -- | Read a symbol and ordered child state references.
 edgeParser :: (Text -> Either String state) -> A.Parser (Symbol, [state])
 edgeParser decode = (,) <$> symbolParser <*> ifNext '(' (arguments $ stateParser decode) []
@@ -431,6 +995,52 @@ symbolParser = do
     name <- nameParser
     refinement <- ifNext '@' (token "@" *> token "{" *> formulaParser <* token "}") F.Top
     pure $ RefinedSymbol (Symbol name) refinement
+
+-- | Read a template: @_@ for a hole, @_(...)@ for any symbol, a symbol with its children, and @...@ for a prefix.
+templateParser :: A.Parser (Template Symbol)
+templateParser = do
+    wildcard <- startsKeyword "_"
+    if wildcard
+        then do
+            keyword "_"
+            ifNext
+                '('
+                ( do
+                    (children, prefix) <- templateArguments
+                    pure $ if prefix then AnyPrefix children else AnyNode children
+                )
+                Hole
+        else do
+            symbol <- symbolParser
+            (children, prefix) <- ifNext '(' templateArguments ([], False)
+            pure $ if prefix then TemplatePrefix symbol children else TemplateNode symbol children
+
+-- | Read the children of a template, and whether they end in the prefix marker @...@.
+templateArguments :: A.Parser ([Template Symbol], Bool)
+templateArguments = parenthesized $ go []
+  where
+    go reversed = do
+        next <- A.peekChar
+        case next of
+            Just ')' -> pure (reverse reversed, False)
+            Just '.' -> token "..." $> (reverse reversed, True)
+            _ -> do
+                child <- templateParser
+                ifNext ',' (token "," *> afterComma (child : reversed)) (reverse $ child : reversed, False)
+    afterComma reversed = do
+        next <- A.peekChar
+        when (next == Just ')') $ fail "expected a template or prefix marker after comma"
+        go reversed
+
+-- | Read a named exclusion of a language and its doc comment: @exclude NAME = root TEMPLATE;@ or @exclude NAME = anywhere TEMPLATE;@.
+namedExclusionParser :: A.Parser Text -> A.Parser ((Text, Exclusion Symbol), Maybe Text)
+namedExclusionParser newName = do
+    comment <- itemComment
+    keyword "exclude"
+    name <- newName
+    token "="
+    exclusion <- exclusionBody
+    pure ((name, exclusion), comment)
 
 -- | Read every formula constructor without invoking a simplifier.
 formulaParser :: A.Parser F.Formula
@@ -563,6 +1173,32 @@ pathParser = Path <$> bracketed index
             fail "child index is outside the Int range"
         pure $ ChildIndex $ fromInteger value
 
+{- | Read items until the end. Each item reads its name with the parser that
+it gets. That parser fails at the start of a name that an earlier item has.
+-}
+distinctItems :: String -> A.Parser Bool -> (item -> Text) -> (A.Parser Text -> A.Parser item) -> A.Parser [item]
+distinctItems role atEnd nameOf item = go Set.empty
+  where
+    go seen = do
+        end <- atEnd
+        if end
+            then pure []
+            else do
+                next <- item $ newName seen
+                (next :) <$> go (Set.insert (nameOf next) seen)
+    newName seen = do
+        name <- lookAhead nameParser
+        when (Set.member name seen) $ fail ("duplicate " <> role <> " name: " <> show name)
+        nameParser
+
+-- | Read the name of a production.
+productionNameParser :: A.Parser D.ProductionName
+productionNameParser = D.ProductionName <$> nameParser
+
+-- | Read the name of a fact.
+factNameParser :: A.Parser D.FactName
+factNameParser = D.FactName <$> nameParser
+
 -- | Read an unquoted label or a quoted Unicode string.
 nameParser :: A.Parser Text
 nameParser = lexeme $ do
@@ -651,6 +1287,14 @@ commentParser = do
     commentLine = A.string "///" *> (dropSpace <$> A.takeTill (== '\n'))
     dropSpace line = fromMaybe line $ Text.stripPrefix " " line
 
+-- | Read the doc comment of an item, and reject a doc comment at the end of a block or of the input.
+itemComment :: A.Parser (Maybe Text)
+itemComment = do
+    comment <- commentParser
+    next <- A.peekChar
+    when (isJust comment && maybe True (== '}') next) $ fail misplacedComment
+    pure comment
+
 -- | Reject a doc comment where no item can take it.
 noComment :: A.Parser ()
 noComment = do
@@ -659,7 +1303,35 @@ noComment = do
 
 -- | The error for a doc comment that does not come before an item.
 misplacedComment :: String
-misplacedComment = "a doc comment must come before the header or a state"
+misplacedComment = "a doc comment must come before the header, a state, a production, a fact, an exclusion, or an operation"
+
+-- | Whether a graph can have doc comments and the sorts of its states. The graph of a checkpoint has neither.
+data NoteRule = WithNotes | WithoutNotes
+
+-- | Read the doc comment of an item, where the rule allows one.
+ruleComment :: NoteRule -> A.Parser (Maybe Text)
+ruleComment WithNotes = commentParser
+ruleComment WithoutNotes = noCheckpointComment $> Nothing
+
+-- | Read the sort of a state, where the rule allows one.
+ruleSort :: NoteRule -> A.Parser (Maybe Text)
+ruleSort WithNotes = ifNext ':' (Just <$> (token ":" *> nameParser)) Nothing
+ruleSort WithoutNotes = ifNext ':' (fail "a checkpoint has no sorts") Nothing
+
+-- | Reject a doc comment where the rule allows none.
+ruleGuard :: NoteRule -> A.Parser ()
+ruleGuard WithNotes = pure ()
+ruleGuard WithoutNotes = noCheckpointComment
+
+-- | Reject a doc comment in a checkpoint.
+noCheckpointComment :: A.Parser ()
+noCheckpointComment = do
+    present <- (lookAhead (A.string "///") $> True) <|> pure False
+    when present $ fail "a checkpoint has no doc comments"
+
+-- | Read the keyword of a checkpoint statement, after a check for a doc comment.
+checkpointKeyword :: Text -> A.Parser ()
+checkpointKeyword word = noCheckpointComment *> keyword word
 
 -- | A doc comment of a target, as a list of at most one note.
 commentOn :: CommentTarget state -> Maybe Text -> [NoteEntry state]
@@ -722,6 +1394,14 @@ untilClose :: Char -> A.Parser value -> A.Parser [value]
 untilClose closing parser = do
     next <- A.peekChar
     if next == Just closing then pure [] else (:) <$> parser <*> untilClose closing parser
+
+-- | Read remaining statements without swallowing syntax errors.
+untilEnd :: A.Parser value -> A.Parser [value]
+untilEnd parser = do
+    next <- A.peekChar
+    case next of
+        Nothing -> pure []
+        Just _ -> (:) <$> parser <*> untilEnd parser
 
 -- | Read consecutive declarations with a known leading keyword, each after its doc comment.
 whileKeyword :: Text -> A.Parser value -> A.Parser [value]

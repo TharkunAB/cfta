@@ -36,7 +36,8 @@ Wilf, and Feat (ranking).
   depth 0. TATA's *height* counts a constant as 1, so height = depth + 1.
   **Mu depth** is the nesting depth of `Mu` binders, a different quantity.
 - **Graph snapshot**: a stored explicit graph with its symbols, refinements,
-  constraints, states, and transitions.
+  constraints, states, and transitions. It need not retain the source facts
+  from which its compiled constraints were made.
 
 ## Constraints
 
@@ -92,6 +93,34 @@ Wilf, and Feat (ranking).
   matching** finds only the matches through e-classes with a stamp after the
   last run of the rule.
 
+## Editable languages
+
+- **Language**: a set of terms. A `Language` value is the source of one: a
+  source document and named exclusions. Its terms are the terms of the
+  compiled document that no exclusion rejects.
+- **Source document**: an editable language definition that retains named
+  productions and their separate facts before compilation.
+- **Production**: a transition of a source document, with a name that is
+  unique in its state, and named facts.
+- **Language update**: a reusable expression that changes a source document or
+  named exclusions. It does not contain an expected source version.
+- **Named exclusion**: an exclusion with a name in a language. An update can
+  remove it again. The source document does not change.
+- **Production reference**: a source state and the stable name of one
+  production in that state.
+- **Source fact**: one named constraint attached to a production.
+  Removing a fact removes that obligation. It does not negate the constraint.
+- **Patch**: an ordered batch of edits together with the source document it
+  expects. A valid patch produces a new source document.
+- **Three-way merge**: the merge of two versions of a language, the left and
+  the right, that come from one base. It merges by key: the initial state, the
+  state rows, the production names, the fact names, and the exclusion names.
+  A key that one side changes takes that change. A key that both sides change
+  in the same way takes that change.
+- **Conflict**: a key that the two sides of a three-way merge change in
+  different ways, or that one side deletes and the other side changes. A
+  conflict holds its key and its three versions.
+
 ## Transformations
 
 - **Exact transformation**: an operation on an automaton that keeps its
@@ -133,6 +162,30 @@ Wilf, and Feat (ranking).
 - **Checked rank**: a rank of a term with whether the ranking checked every
   symbol of the term.
 - **Occurrence**: the token of one recursion probe.
+- **Exclusion**: a template that rejects a term, when the whole term matches
+  it (at the root) or when a subterm matches it (anywhere).
+- **Query route**: a named way to list the terms of a language, with a version.
+  The language is a graph and its exclusions: the terms of the graph that no
+  exclusion rejects. The route and its version fix the order. Route `sized`,
+  version 1, is the order of `Data.CFTA.Sized`. A **listing** holds the terms
+  of each size from one to a size bound, in the order of a route.
+- **Checkpoint**: a saved position in a listing: the graph, the exclusions, the
+  query route and its version, the size bound, and the sized rank of the next
+  term. Resuming a checkpoint gives the next term and the terms after it, in
+  the same order, also in a new process. A checkpoint is **stale** for each
+  graph other than its own graph, and for other exclusions.
+- **Relocation**: finding a term in another graph, and making a checkpoint at
+  that term. It does not continue the old listing: the new listing can repeat
+  or skip terms of the old one.
+- **Sampled run**: the terms that a sequence of draws from a listing gives,
+  one term for each draw. Draw *i* depends only on the seed and on *i*.
+  Without weights, each term of the listing has the same chance. With weights,
+  a draw selects a size by its weight, then a term of that size.
+- **Sampling checkpoint**: a saved position in a sampled run: the graph, the
+  exclusions, the route and its version, the size bound, the weights, the
+  pseudorandom generator (PRNG) and its version, the seed, and the number of
+  draws so far. It is stale for each graph other than its own graph, and for
+  other exclusions or other weights.
 
 ## Generators
 

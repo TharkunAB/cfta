@@ -161,11 +161,11 @@ ambiguousExpressions salt =
 
 -- | The ambiguous grammar over 'Text' symbols, as the constraint packages use.
 textExpressions :: Int -> FTA.PlainFTA Int Text
-textExpressions = either (error . show) id . FTA.mapSymbols Text.pack . ambiguousExpressions
+textExpressions = FTA.mapSymbols Text.pack . ambiguousExpressions
 
 -- | The ambiguous grammar over 'Int' symbols, which compare like interned symbols.
 intExpressions :: Int -> FTA.PlainFTA Int Int
-intExpressions salt = either (error . show) id $ FTA.mapSymbols code (ambiguousExpressions 0)
+intExpressions salt = FTA.mapSymbols code (ambiguousExpressions 0)
   where
     code symbol = salt * 8 + fromMaybe 0 (elemIndex (takeWhile (/= '0') symbol) ["zero", "one", "neg", "add", "mul"])
 

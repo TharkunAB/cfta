@@ -209,7 +209,7 @@ data DeriveError
       -}
       NonRegularRecursion !Int !TypeRep !TypeRep
     | -- | The derived transition table is not a valid ranked grammar.
-      InvalidDerivedFTA !(FTA.FTAError TypeRep Constructor)
+      InvalidDerivedFTA !(FTA.FTAError TypeRep)
     | -- | Annotation names that no constructor of the grammar has.
       UnknownConstructors ![String]
     deriving (Eq, Show)

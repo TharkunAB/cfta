@@ -291,6 +291,81 @@ arity, symbol, and the classes of their children; the children of a
 transition by the size of the earlier children, in ascending order; and a
 term that several transitions accept at its first place.
 
+### Resume a listing from a checkpoint
+
+`Data.CFTA.Sized.Checkpoint` lists the terms of each size from one to a bound,
+in the order above, and keeps the position of the next term in a checkpoint.
+A checkpoint holds the language, the query route `sized` and its version, the
+bound, and the sized rank of the next term. The language is a graph and its
+exclusions (`Exclusion` of `Data.CFTA.Template`): the terms of the graph that no
+exclusion rejects. `start` gives the checkpoint before the first term. `resume` gives the terms from a checkpoint on, each
+with the checkpoint after it.
+
+```haskell
+{-# LANGUAGE OverloadedStrings #-}
+
+module Main (main) where
+
+import qualified Data.CFTA as FTA
+import Data.CFTA.Constraint (noConstraint)
+import qualified Data.CFTA.Sized.Checkpoint as Checkpoint
+
+-- | List three binary trees, then resume after the third.
+main :: IO ()
+main = do
+    automaton <-
+        either (fail . show) pure $
+            FTA.mkFTA ("tree" :: String) [("tree", [FTA.Transition "leaf" [] noConstraint, FTA.Transition "node" ["tree", "tree"] noConstraint])]
+    listing <- either (fail . show) pure $ Checkpoint.resume (Checkpoint.start 7 [] automaton) automaton []
+    let seen = map fst (take 3 listing)
+        saved = snd (listing !! 2)
+    print (Checkpoint.checkpointNext saved)
+    rest <- either (fail . show) pure $ Checkpoint.resume saved automaton []
+    print (seen <> map fst rest == map fst listing)
+```
+
+The output is:
+
+```text
+(5,1)
+True
+```
+
+`resume` builds the size classes of the language again, so a checkpoint also
+resumes in a new process. `printCheckpoint` of
+[cfta-serialization](../cfta-serialization/README.md) saves it with its graph
+and its exclusions. With exclusions, the listing is the order above for the
+graph that `excludeAllFTA` gives; `resume` rejects other exclusions as stale
+(`StaleExclusions`).
+`resume` rejects a checkpoint of another route version: a new version can
+have a different order. It rejects another graph as stale, and names the
+first state whose row differs (`StaleRow`). To continue in an edited graph,
+`relocate` finds a term and gives a checkpoint at that term. The new listing
+can repeat or skip terms of the old one. The route decides equality
+constraints. A guard beyond equality constraints needs a solver, and `resume`
+rejects it with `QueryFailed ResidualGuard`.
+
+`startSampling` and `resumeSampling` draw terms from the same listing in a
+sampled run. Without weights, each term up to the bound has the same chance:
+a draw selects a rank of the listing. With a weight for each size, a draw
+selects a size by its weight, then a term of that size. A size with no terms
+is not selected. Draw `i` uses SplitMix64 (`splitMix64`, as `splitmix64.c` of
+Sebastiano Vigna) from a word that depends only on the seed and on `i`. Thus a
+sampling checkpoint holds the seed and the number of draws, and no state of
+the generator. A new process that resumes it gives the same next draws.
+
+```haskell
+weights = Just (Map.fromList [(1, 1), (5, 3)])
+run <- either (fail . show) pure $ Checkpoint.resumeSampling (Checkpoint.startSampling 7 weights 42 [] automaton) automaton weights []
+let saved = snd (run !! 99) -- the checkpoint after one hundred draws
+```
+
+`resumeSampling` rejects another graph, other exclusions, and other weights as
+stale (`StaleRow`, `StaleExclusions`, `StaleWeights`). It also rejects another version of the route
+(`sized-sample`) or of the generator (`splitmix64`). The bound and the seed
+come from the checkpoint. `printSamplingCheckpoint` of cfta-serialization
+saves it with its graph.
+
 ## Equality-constrained generators
 
 An equality generator is a `Gen Symbol`, with the name `ECTAGen`. Each

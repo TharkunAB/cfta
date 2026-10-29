@@ -252,17 +252,17 @@ importDatatype ::
     ((Symbol -> (Int, Text)) -> Node Symbol -> Gen Symbol (Term Symbol)) ->
     Gen Symbol a
 importDatatype datatype readAutomaton =
-    case FTA.mapSymbols (fromString . constructorLabel) (datatypeFTA datatype) of
-        Left (FTA.InconsistentArity symbol expected actual) ->
+    case FTA.mixedArity graph of
+        Just (symbol, expected, actual) ->
             Transparent $ Left $ InvalidSupport $ InconsistentArity symbol expected actual
-        Left err ->
-            error $ "cfta-generator bug in Data.CFTA.Gen.importDatatype: " <> show err
-        Right graph
+        Nothing
             | Just constructor <-
                 undecodableConstructor (null . datatypeDecode datatype) (datatypeFTA datatype) ->
                 Transparent $ Left $ UndecodableConstructor $ constructorName constructor
             | otherwise -> decode <$> readAutomaton (\(Symbol name) -> order name) (Common.fromFTA graph)
   where
+    -- The import keys a constructor by its label, so each label needs one arity.
+    graph = FTA.mapSymbols (fromString . constructorLabel) (datatypeFTA datatype)
     order = declarationOrder datatype
     decodeValue = datatypeDecoder datatype
     decode term = case decodeValue term of

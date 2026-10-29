@@ -46,6 +46,8 @@ import qualified Data.CFTA as FTA
 import qualified Data.CFTA.Enumeration as Enumeration
 import qualified Data.CFTA.Generic as Generic
 import qualified Data.CFTA.Interned as Common
+import qualified Data.CFTA.Language as Language
+import qualified Data.CFTA.Language.Merge as Merge
 import qualified Data.CFTA.Template as Template
 ```
 
@@ -58,6 +60,8 @@ import qualified Data.CFTA.Template as Template
 | Encode or decode one value | `Generic.encodeTerm`, `Generic.datatypeDecode` | A constructor tree or a typed value. This does not enumerate the grammar. |
 | Check membership | `FTA.accepts`, `Common.acceptsWith` | Whether a supplied tree belongs. The interned API takes a constraint interpreter. |
 | List accepted terms | `FTA.terms`, `Enumeration.terms`, `Enumeration.plainTerms`, `Enumeration.plainTermsAtMost` | Every term. `FTA.terms`, `plainTerms`, and `plainTermsAtMost` list by depth. `FTA.terms` and `plainTerms` ignore constraints and give an infinite list for a recursive grammar, and `plainTermsAtMost` stops at a depth. `terms` solves constraints and stops at recursion. For an automaton with constraints or recursion, it lists in the order of the runs, each term once. |
+| Edit a language | `Language.update`, `Language.define`, `Language.require`, `Language.relax`, `Language.start`, `Language.without`, `Language.restore` | A new language value with its source productions, named facts, and named exclusions. `Language.compileGraph` gives the graph to query. |
+| Compare or merge languages | `Merge.diff`, `Merge.merge3`, `Merge.diffDocument`, `Merge.merge3Document` | The update between two versions, or the three-way merge of two versions by stable names, with each conflict as data. |
 | Restrict to a pattern | `Template.restrictFTA`, `Template.restrict` | A grammar for the terms that match a `Template`. |
 | List terms a check accepts | `FTA.termsUpToM` | The terms up to a depth, each checked once by a monadic predicate that sees its transition. |
 | Bound tree depth | `FTA.boundDepth` | Another grammar, restricted to trees within the bound. |
@@ -244,7 +248,8 @@ oneAccepted = fmap (`accepts` Term.Node "successor" [Term.Node "zero" []]) natur
 -- Right True
 ```
 
-An automaton checks symbol arities and child-state references at construction.
+An automaton checks child-state references at construction. A symbol can occur
+at several arities.
 Cycles are valid. `PlainFTA state symbol` is `FTA state symbol Constraint`.
 An ordinary automaton has `noConstraint` on every transition.
 
@@ -252,6 +257,24 @@ An ordinary automaton has `noConstraint` on every transition.
 input annotations. Apply `dropConstraints` to the result of two plain FTAs before
 calling `accepts`. Use `intersectWith` when you need a different annotation
 combination. `dropConstraints` removes annotations; it does not solve constraints.
+
+## Edit a language
+
+`Data.CFTA.Language` keeps the source of a language: named productions, their
+named facts, and named exclusions. Combine `define`, `require`, `relax`,
+`start`, `without`, and `restore` with `<>`, and apply the result with
+`update`.
+`wholeTerm` excludes one complete term. `subterm` excludes every term that
+contains it. `compileGraph` gives a new graph for queries, and the language
+keeps its source for the next edit. See
+[editable languages](../docs/editable-languages.md).
+
+`Data.CFTA.Language.Merge` compares and merges languages by their stable names.
+`diff base other` gives the update that changes `base` into `other`.
+`merge3 base left right` merges two versions that come from one base, key by
+key: the initial state, the state rows, the production names, the fact names,
+and the exclusion names. A key that the two sides change in different ways is
+a `Conflict` with its key and its three versions.
 
 ## Visualize a grammar
 
@@ -325,7 +348,7 @@ Paths are built when `toTree` is requested; normal generation does not build
 them.
 
 `Common.toTree` provides the same view for interned graphs. Its state labels
-contain `Common.Node symbol`; its transition labels contain `Common.Edge symbol`. It returns `Either (Common.FTAViewError symbol)`
+contain `Common.Node symbol`; its transition labels contain `Common.Edge symbol`. It returns `Either Common.FTAViewError`
 around the tree because it rejects an open recursive root. It traverses the
 graph directly and does not validate symbol arities. Neither view enumerates
 the accepted values. Add `containers` to your component's `build-depends` when
@@ -453,7 +476,7 @@ compatible patterns can still produce exponentially many choices.
 toTree ::
     (Hashable symbol, Typeable symbol) =>
     Node symbol ->
-    Either (FTAViewError symbol)
+    Either FTAViewError
         (Tree (Either (StateView (Node symbol)) (Edge symbol)))
 ```
 
@@ -559,8 +582,8 @@ node identities or the child-only `Path` used by equality constraints.
 does not list every route through a shared or recursive graph. Paths are built
 only when `toTree` is requested; normal generation does not build them.
 
-The view traverses the interned graph directly. Unlike `toFTA`, it does not
-require a ranked alphabet. An open recursive variable returns `Left OpenNode`.
+The view traverses the interned graph directly. An open recursive variable
+returns `Left OpenNode`.
 It does not enumerate terms or solve constraints. Add `containers` to your
 component's `build-depends` when you import `Data.Tree` directly.
 
@@ -866,7 +889,7 @@ optimized pruning and generation can be checked.
 ```haskell
 toTree ::
     Automaton ->
-    Either (FTAViewError Symbol) (Tree (Either (StateView Automaton) Transition))
+    Either FTAViewError (Tree (Either (StateView Automaton) Transition))
 ```
 
 `Left` contains a node definition or reference. `Right` contains the complete
@@ -1097,6 +1120,7 @@ productivity; they do not prove that arbitrary transition guards are satisfiable
 | --- | --- |
 | `Data.CFTA.Generic` | Datatype derivation, finite domains, metadata, and typed codecs. |
 | `Data.CFTA` | Checked explicit-state graphs, recognition, depth bounds, product intersection, and enumeration. |
+| `Data.CFTA.Checkpoint` | A saved position in a size-ordered listing of the terms of a graph: the graph, the query route and its version, the size bound, and the sized rank of the next term. A sampling checkpoint saves a position in a sampled run: the weights, the pseudorandom generator, the seed, and the number of draws. `cfta-generator` resumes both, and `cfta-serialization` stores both. |
 | `Data.CFTA.Interned` | Shared nodes and edges, recursive languages, union, intersection, and views. |
 | `Data.CFTA.Template` | Patterns with holes and prefixes, and restriction of a grammar to a pattern. |
 | `Data.CFTA.Path` | Child-index paths, and reading, editing, and requiring positions in a graph. |
