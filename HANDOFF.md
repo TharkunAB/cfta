@@ -1,3 +1,59 @@
+# Verified all-outcome kernel body bounds: 2026-10-29 19:53 CET
+
+Source c63fd18298a6060b39076eea484dc5db26f8a997 on formalize.
+Read lean/notes-current-kernel-lower-progress.md before older checkpoints.
+The full formalization goal remains ACTIVE. Main ef0a2f32 remains integrated.
+Every earlier document body follows unchanged as a dated checkpoint.
+
+For every finite original kernel request execution under its contracts,
+each complete Mu record is an exact input record or its body has degree
+strictly below original source ceiling + semantic requiredFuel(request).
+The runtime induction is closed. The result covers failure, exhaustion and
+pending construction, including all complete probe records in reached heaps.
+It assumes no current-heap ceiling or future body/result bound.
+Closed roots whose constructor heap starts at the original source derive
+one ceiling for every complete Mu body in every finite kernel outcome.
+Actual checked native node/row returns inherit Lower through exact replay.
+Cold closed-root native returns inherit Bounded under existing WordRanges.
+These native transfers require DONE; arbitrary stopped prefixes remain open.
+Native means the Lean model. Full Haskell correspondence remains open.
+
+Nine additive modules: 16 public theorems, 836 lines/58130 bytes.
+All ten final sources strictly pass, including Audit. Audit checks 82108
+theorem dependencies in 4633 jobs. There are 23 completed compiler commands:
+21 PASS and two retained failed drafts. All 160 command snapshots match.
+Public readback: 890 checks/axiom lists, 73 old definition bodies, 3691779
+bytes. The old 3654083 bytes are an exact prefix. All 37696 new bytes were read.
+No custom axiom, placeholder, native_decide or suppression is added.
+All 4623 old non-Audit Lean, 461 stronger and 829 Haskell/Cabal identities
+remain. Only additive imports change Audit. Earlier evidence stays unchanged.
+
+The strongest system semantic claim remains conditional checked rendered
+soundness under its contracts, fixed PCS and whole-Discharged. Ordered prefix
+retention and same-raw-slot output/diagnostic ancestry remain. DONE does not
+imply Discharged. A configured stop can emit partial results.
+
+Biggest gap: all stopped native prefixes and generated-query lineage, then
+one global progress argument and sufficient recursive capacity. Current Safe
+and Below reject generated finishNode/finishEdge frames. A concrete prefix
+invariant must retain those continuations and all constructor/memo states.
+Per-query body bounds do not bound total allocations, guard growth, handles
+or word ranges. Nonterminal chosen-value coverage, public contracts and
+Haskell correspondence remain open. No completion percentage is supported.
+
+No Haskell source changes or new runtime defect occur in this increment.
+FINDINGS retains parser repair c15021ce706ef560b6c0ab335ceed1a4b67ba4aa for
+external pickup, its exact helper, both calls, four malformed fixtures and
+lawful codec. Main ef0a2f32 still lacks it. The prior integration's 383 core,
+56 serialization and 30 Sized/checkpoint examples passed. Preserve those
+results, the HugeLists import fix, probe repair and counterexample scopes.
+
+Evidence: lean/restart-evidence/20261029-kernel-lower-progress/.
+Use a new writable area after sealing. Refresh upstream. Regular formalize
+pushes remain explicitly authorized. Continue the full goal ACTIVE.
+
+---
+
 # Verified original-input native return degree: 2026-10-29 19:29 CET
 
 Proof f735675369ceed4a8244d54c24d1599b1359f69d is integrated with main ef0a2f32
