@@ -1,8 +1,9 @@
 # Representation levels of an editable language
 
 Status: investigation and implementation plan. The APIs in the current-support
-column below exist. The document, file, checkpoint, and edit interfaces in the
-plan do not yet exist.
+column below exist. The document, file, and edit interfaces in the plan do not
+yet exist. The checkpoints of a size-ordered listing and of a sampled run
+exist (item 4).
 
 The required workflow is: define a language, inspect it, save it, reopen it,
 change it, and continue synthesis, indexing, or sampling. The language can be
@@ -32,7 +33,7 @@ at the boundary described in [ADR 4](adr/0004-explicit-graph-boundary.md).
 | Editable definition | Named constructors, states, transitions, individual facts, source locations, and imports | Explicit rows and the quoter in PR 72 cover graph construction. Named removable facts and a complete document are missing. |
 | Explicit graph | Initial state, complete rows, ordered children and alternatives, symbols, refinements, and constraints | `Data.CFTA.FTA` holds this data. `Interned.toFTA` exports a closed interned graph. |
 | Prepared query | Graph version, query route, order policy, bounds, weights, decoder, and solver assumptions | `Sized` and `Gen` prepare queries. Their closures and memo tables are not portable values. |
-| Run checkpoint | Query identity and next enumeration position, or sampler state | No portable checkpoint API exists. A rank alone is insufficient. |
+| Run checkpoint | Query identity and next enumeration position, or sampler state | `Data.CFTA.Sized.Checkpoint` saves and resumes a size-ordered listing and a sampled run of draws from it. The `checkpoint 1;` and `sampling 1;` text forms store them with their graph. A rank alone is insufficient. |
 | Meta-language | Terms that describe definitions and edit requests | A possible later frontend. It must use the same document validation and edit semantics. |
 
 An import from a compiled graph can create an editable document. It cannot
@@ -103,7 +104,7 @@ graph edit or appear as zero.
 | --- | --- | --- |
 | Add a constructor | Declare a symbol and arity, then add its productions at named states | `mkFTA`; atomic `replaceRows` in PR 70. A declaration without a production need not add terms. |
 | Remove a constructor | Remove every production of that constructor in the selected scope | Filter explicit rows. Distinguish one full refined symbol from all symbols with a shared display text. Report affected references and facts. |
-| Add a whole term | Union the root language with that exact tree | `fromTerms` plus interned `union` exist. An explicit-graph union can retain state names and avoid normalization. Validate the combined ranked alphabet. |
+| Add a whole term | Union the root language with that exact tree | `fromTerms` plus interned `union` exist. An explicit-graph union can retain state names and avoid normalization. |
 | Remove whole terms | Exclude exact trees only at the initial state | Convert each term to a hole-free `TemplateNode`, then use `Template.excludeFTA`. |
 | Remove expressions anywhere | Exclude every term that contains a matching subtree | `Template.excludeAnywhereFTA`; recursive inputs are supported. |
 | Restrict by a pattern | Keep matching trees, with holes for unconstrained subtrees | `Template.restrictFTA`. |
@@ -147,7 +148,7 @@ alternatives, symbols as text plus full refinements, and complete constraints.
 Store equality contradiction explicitly. Keep formula syntax unchanged; do not
 simplify it while decoding. Formula order participates in symbol order.
 Use file-local state references. Reject duplicate state identities, missing
-references, invalid tags, unsupported versions, and inconsistent arities.
+references, invalid tags, and unsupported versions.
 Validation must not call a solver or enumerate terms.
 
 The text encoding should be usable by tools outside Haskell. JSON supplies
@@ -218,6 +219,8 @@ first deliverable remains a usable workflow for an ordinary object language.
    Reuse `Template`; compare result languages with independent bounded filtering.
 4. Checkpoints: versioned query plans and enumeration cursors, then sampling
    state. Reject stale plans. Resume in a fresh process at the exact next term.
+   The size-ordered listing and its sampled runs have their checkpoints:
+   `Data.CFTA.Sized.Checkpoint`.
 5. Complete inspection: finite graph views with stable document references and
    all constraints, plus a save/edit/load example usable from a clean module.
 6. Compact codec: the same schema and validation as text. Measure size and cost

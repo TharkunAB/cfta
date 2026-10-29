@@ -24,6 +24,10 @@ table shared with the cyclic import ('Data.CFTA.Gen.fromAutomaton'):
   left-major.
 * A term that several transitions accept keeps its first place.
 
+The routes @sized@ and @sized-sample@ of "Data.CFTA.Sized.Checkpoint" use
+this order. A change to the order must increase the versions of both routes,
+so that an old checkpoint does not resume in the new order.
+
 The count table reads these original rows. Importing through interned nodes
 can trim dead edges or remove duplicate edges. Those changes can change
 canonical row order even when they preserve the language.
@@ -49,6 +53,7 @@ module Data.CFTA.Sized (
     sizedReference,
     sizedUpTo,
     termsOfSize,
+    termsOfSizeFrom,
     countOfSize,
     unrankOfSize,
     rankOfSize,
@@ -80,7 +85,7 @@ import qualified Data.CFTA.Term as Term
 
 -- | The size classes of an automaton, built on demand and kept.
 data Sized symbol = Sized
-    { sizedTerms :: Size -> [Term symbol]
+    { sizedTermsFrom :: Size -> ClassRank -> [Term symbol]
     , sizedCount :: Size -> Cardinality
     , sizedUnrank :: Size -> ClassRank -> Maybe (Term symbol)
     , sizedRank :: Term symbol -> Maybe (Size, ClassRank)
@@ -114,7 +119,9 @@ sized automaton
             position = Ordinary.tablePosition initial rows
          in Right
                 Sized
-                    { sizedTerms = \size -> [term | rank <- everyClassRank (count size), Just term <- [unrank size rank]]
+                    { sizedTermsFrom = \size (ClassRank from) ->
+                        let Cardinality total = count size
+                         in [term | rank <- [max 0 from .. total - 1], Just term <- [unrank size (ClassRank rank)]]
                     , sizedCount = count
                     , sizedUnrank = unrank
                     , sizedRank = fmap (\(SizedRank size rank) -> (size, rank)) . position
@@ -123,7 +130,6 @@ sized automaton
   where
     initial = FTA.initialState automaton
     rows = Map.map (map void) $ sortedRows automaton
-    everyClassRank (Cardinality total) = map ClassRank [0 .. total - 1]
 
 {- | Whether no two transitions of the rows have the same symbol and the same
 child states, as in an e-graph. Then each term reaches at most one state, by
@@ -286,7 +292,7 @@ candidates classAt transition size =
 fromClasses :: (Eq symbol) => (Size -> [Term symbol]) -> Sized symbol
 fromClasses classOf =
     Sized
-        { sizedTerms = classOf
+        { sizedTermsFrom = \size (ClassRank from) -> genericDrop from $ classOf size
         , sizedCount = Cardinality . genericLength . classOf
         , sizedUnrank = \size (ClassRank rank) ->
             if rank < 0 then Nothing else listToMaybe $ genericDrop rank $ classOf size
@@ -297,7 +303,14 @@ fromClasses classOf =
 
 -- | The distinct accepted terms with the given number of nodes, in order.
 termsOfSize :: Sized symbol -> Size -> [Term symbol]
-termsOfSize = sizedTerms
+termsOfSize classes size = sizedTermsFrom classes size 0
+
+{- | The terms of a size class from a class rank on, in order. The list skips
+the terms before the class rank without building them where the count table
+applies. A negative class rank gives the whole class.
+-}
+termsOfSizeFrom :: Sized symbol -> Size -> ClassRank -> [Term symbol]
+termsOfSizeFrom = sizedTermsFrom
 
 -- | The number of distinct accepted terms with the given number of nodes.
 countOfSize :: Sized symbol -> Size -> Cardinality

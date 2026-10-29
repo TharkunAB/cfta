@@ -491,7 +491,7 @@ spec = describe "Data.CFTA.Gen.Typing" $ do
         it "keeps the terms whose sums add equal terms, in a product with an annotated grammar" $ do
             let equalOperands = equalityConstraint (mkEqConstraints [[path [0], path [1]]])
                 annotated = either (error . show) id $ annotateConstructors noConstraint [("Plus", equalOperands)] derived
-                product' = either (error . show) id $ FTA.intersectWith same conjoinConstraints (arithAutomaton 2) (datatypeFTA annotated)
+                product' = FTA.intersectWith same conjoinConstraints (arithAutomaton 2) (datatypeFTA annotated)
                 equalSums term = and [left == right | Plus left right <- subterms term]
             members (fromConstructorAutomaton @Arith product') `shouldBe` filter equalSums (members (arithLanguage 2))
         it "keeps the terms without a subterm that a template matches" $ do

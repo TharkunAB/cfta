@@ -144,12 +144,11 @@ explicitView :: Automaton -> Either AutomatonError (FTA.FTA InternedState Symbol
 explicitView = first viewError . toFTA
   where
     viewError OpenNode = OpenAutomaton
-    viewError (InvalidFTA err) = fromViewError err
 
--- | Translate a structural error of the explicit view into the LTA vocabulary.
-fromViewError :: FTA.FTAError InternedState Symbol -> AutomatonError
-fromViewError (FTA.InconsistentArity (RefinedSymbol symbol _) expected actual) =
-    InconsistentArity symbol expected actual
+{- | Report a structural error of an explicit view as a bug. The explicit view
+of a closed interned graph has a row for each state that it reaches.
+-}
+fromViewError :: FTA.FTAError InternedState -> AutomatonError
 fromViewError err =
     error $
         "cfta bug in Data.CFTA.Refinement.Automaton: the explicit view of an interned graph is malformed: " <> show err

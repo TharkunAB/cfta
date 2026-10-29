@@ -7,6 +7,24 @@ Before release, the package was called `microcfta-generator`.
 Initial release. `cfta-generator` is one generator over the constrained
 tree automata of `cfta`, with QuickCheck integration.
 
+- Add `Data.CFTA.Sized.Checkpoint`: resume a size-ordered listing of the
+  terms of a graph, or a sampled run of draws from it, also in a new process.
+  `start` gives the checkpoint before the first term. `resume` builds the size
+  classes again and gives the terms after a checkpoint, each with the
+  checkpoint after it. `relocate` finds a term in an edited graph.
+  `startSampling` and `resumeSampling` draw terms from the same listing,
+  uniformly or with a weight for each size, with SplitMix64 (`splitMix64`, as
+  `splitmix64.c`). Draw `i` depends only on the seed and on `i`, so a sampling
+  checkpoint holds the seed and the number of draws, and a new process gives
+  the same next draws. A checkpoint lists a language: a graph and its
+  exclusions, through `excludeAllFTA`. Resuming rejects another route or
+  generator version, another graph (naming the first row that differs), other
+  exclusions (`StaleExclusions`), and other weights. A
+  graph with a guard beyond equality constraints needs a solver, and both
+  routes reject it.
+- `Data.CFTA.Sized.termsOfSizeFrom`: the terms of a size class from a class
+  rank on. Where the count table applies, it does not build the terms before
+  the class rank.
 - `Data.CFTA.Gen`: one generator type, `Gen symbol a`, for every kind of
   automaton. An ordinary generator is `FTAGen symbol a`, that is
   `Gen symbol a`; the equality and refinement facades fix the symbol in
