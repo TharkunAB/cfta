@@ -1,3 +1,41 @@
+# Actual prepared sibling progress: 2026-10-29 23:55 CET
+
+Source c7bc62b5f0f0080369f13ce738b469589521658c on formalize.
+The full goal remains ACTIVE. Last fetched main remains 7b8db072f.
+Read lean/notes-current-sibling-constructor-progress.md first.
+Earlier dated bodies follow unchanged.
+
+PreparedFiniteHeadProgress and PreparedFiniteSiblingProgress add actual-event
+strict pending-term decrease, SAME model, ProperState and a full recursive
+Packet with exact progress Post/query. The operational bound stays unchanged.
+All old resources, ordered outputs and the complete earlier-failure case remain.
+Both old Coverage sources remain byte-exact. The new original admission is
+ProperState of the captured cache. The prefix already supplies that fact.
+
+Use existing PreparedCallbackModels/PreparedCallbackProgress for the actual
+prepared callback. Its failure type differs from the older local continuation.
+Next derive original uniform control for earlier incompatible alternatives.
+Recursive fuel follows 1 plus the maximum continuation bound. Native resources
+compose in order. A finite original boundary-key universe plus ordinary height
+and neutral-step laws is a candidate proof plan, not a checked rank.
+No admitted all-capacity earlier-failure counterexample was established.
+
+Configured stopping completes with partial output and permits later siblings.
+The exact earlier stopped hook is an operational failure. Global controls,
+resources, unfolding/public coverage, public order/stops and Haskell remain open.
+DONE does not imply Discharged. Keep older constructor/equality work.
+
+Strict Audit: 4672 jobs, 82377 theorem axiom checks. Public: 981 checks, 78 definitions.
+Nine commands retain seven passes and two failed import drafts; all 24 snapshots
+verify. All 471 protected and 831 Haskell identities remain unchanged.
+Only Audit changed among 4670 old Lean sources; its old body follows one import.
+Use final-strong-sources.json with 473 CURRENT identities for the next baseline.
+Root verified 93 pinned review payloads, 52 source scopes and 15 Root scopes.
+No Haskell fix/new defect. Earlier FINDINGS and all old evidence remain.
+Evidence: lean/restart-evidence/20261029-sibling-constructor-progress.
+
+---
+
 # Prepared constructor forecasts: 2026-10-29 23:36 CET
 
 Source 31a55cd7c9ea995e74d40751c0415ebc8d91240e on formalize.

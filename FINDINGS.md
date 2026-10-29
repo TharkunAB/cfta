@@ -1,3 +1,41 @@
+# Actual prepared sibling progress: 2026-10-29 23:55 CET
+
+Source c7bc62b5f0f0080369f13ce738b469589521658c on formalize.
+The full goal remains ACTIVE.
+Read lean/notes-current-sibling-constructor-progress.md.
+Earlier dated findings and Haskell fixes follow unchanged.
+
+The actual chosen event of the prepared ordered scan now has SAME-model
+strict pendingSize+1 decrease, ProperState and a full recursive Packet.
+Its actual Post/query and the full old resource/output/failure result remain.
+The only new original gate is ProperState; Packet alone does not supply it.
+Stable receipt comparison at B+r+n+p+h+k leaves operational bound B unchanged.
+Both older Coverage sources remain unchanged.
+
+Terminology correction: a configured stopping predicate returns COMPLETE partial
+output. It permits later siblings. Callback rejection also completes.
+The exact earlier STOPPED hook is operational failure, such as exhausted fuel
+or an unsupported observation. The previous broad word "stop" obscured this.
+Recursive fuel follows a maximum over continuation bounds; native resources
+still compose in order. A chosen accepted term cannot rank all earlier branches.
+
+Existing PreparedCallbackModels/Progress already give the actual prepared-type
+callback APIs. Do not instantiate Recursive.Failure with PreparedRecursive.Failure.
+Uniform earlier-branch/neutral control, global resource derivation, unfolding,
+public coverage/order/stops and Haskell correspondence remain open.
+No admitted all-capacity earlier-failure counterexample was established.
+DONE does not imply Discharged.
+
+Strict Audit: 4672 jobs and 82377 theorem axiom checks. Final strict/public checks pass.
+Two failed import drafts remain explicit. All 24 command snapshots verify.
+All 471 protected proofs and 831 Haskell-related identities remain unchanged.
+No Haskell source change, fix or new executable defect was found.
+External work must retain every earlier Haskell repair and pickup item below.
+Prior native/formatter evidence applies to unchanged inputs; no rerun was needed.
+Evidence: lean/restart-evidence/20261029-sibling-constructor-progress.
+
+---
+
 # Prepared constructor forecasts: 2026-10-29 23:36 CET
 
 Source 31a55cd7c9ea995e74d40751c0415ebc8d91240e on formalize.

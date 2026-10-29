@@ -1,3 +1,38 @@
+# Actual prepared sibling progress: 2026-10-29 23:55 CET
+
+Source c7bc62b5f0f0080369f13ce738b469589521658c on formalize.
+The full goal remains ACTIVE. Last fetched main remains 7b8db072f.
+Read lean/notes-current-sibling-constructor-progress.md first.
+Earlier dated bodies follow unchanged.
+
+The actual chosen sibling event now has SAME-model strict pendingSize+1
+decrease, ProperState and the full recursive Packet with exact Post/query.
+The full ordered scan keeps all resources/outputs and its exact earlier-failure
+case. Original ProperState is the one new admission; Packet does not imply it.
+The head compares stable receipts at B+r+n+p+h+k without changing bound B.
+
+Next compose existing PreparedCallbackModels/PreparedCallbackProgress at this
+actual head. They use PreparedRecursive.Failure; the older local continuation
+uses Recursive.Failure. Then address a uniform bound for earlier alternatives,
+including those incompatible with the chosen model. Recursive fuel follows a
+maximum over continuation bounds; native resources still compose in order.
+Investigate a finite original boundary-handle/trie universe and neutral-step
+rank. No admitted all-capacity failure counterexample was established.
+
+Configured stopping returns COMPLETE partial output and permits later siblings.
+The earlier STOPPED hook is an operational failure. Preserve this distinction.
+Global controls/resources, unfolding/public coverage, exact public order/stops
+and Haskell correspondence remain open. DONE does not imply Discharged.
+
+Strict Audit: 4672 jobs, 82377 theorem axiom checks. Public: 981 checks, 78 definitions.
+Nine commands retain seven passes and two failed import drafts; 24 snapshots
+verify. All 471 protected proofs and 831 Haskell identities remain unchanged.
+Use final-strong-sources.json with 473 CURRENT identities for the next baseline.
+No Haskell fix/new defect was found. Earlier FINDINGS remain.
+Evidence: lean/restart-evidence/20261029-sibling-constructor-progress.
+
+---
+
 # Prepared constructor forecasts: 2026-10-29 23:36 CET
 
 Source 31a55cd7c9ea995e74d40751c0415ebc8d91240e on formalize.
