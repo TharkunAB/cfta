@@ -11,8 +11,9 @@ of the child states at smaller sizes, because each child of a term has fewer
 nodes than the term. So a cycle in the automaton cannot make a query loop,
 and an empty class says nothing about the classes after it.
 
-The order uses the original graph rows and the nested products of the count
-table shared with the cyclic import ('Data.CFTA.Gen.fromAutomaton'):
+The order of 'sizedReference' uses the original graph rows and the nested
+products of the count table shared with the cyclic import
+('Data.CFTA.Gen.fromAutomaton'):
 
 * The transitions of a state are sorted by their arity, their symbol, and the
   canonical classes of their child states, so the order does not depend on
@@ -25,8 +26,8 @@ table shared with the cyclic import ('Data.CFTA.Gen.fromAutomaton'):
 * A term that several transitions accept keeps its first place.
 
 The routes @sized@ and @sized-sample@ of "Data.CFTA.Sized.Checkpoint" use
-this order. A change to the order must increase the versions of both routes,
-so that an old checkpoint does not resume in the new order.
+the order of 'sized'. A change to the order must increase the versions of both
+routes, so that an old checkpoint does not resume in the new order.
 
 The count table reads these original rows. Importing through interned nodes
 can trim dead edges or remove duplicate edges. Those changes can change
@@ -41,16 +42,42 @@ classes of each state for later queries. It is slow for large classes.
 'sizedUpTo' builds the classes up to a size bound with a solver that decides
 every guard, so it needs no pruning: it is the exact route for a liquid
 automaton whose guards pruning did not discharge.
-'sized' gives the same sequence. It counts, ranks, and unranks with the count
-table when the automaton has no constraint and its rows are unambiguous.
-It uses the reference otherwise. Bottom-up deterministic rows, as in an
-e-graph, are unambiguous. A set of transition keys checks this condition first.
+'sized' gives the classes of the reference. It counts, ranks, and unranks
+with a count table, without a list of the terms, when the rows that the
+initial state reaches are of one of these kinds:
+
+* Rows without constraints that are unambiguous. The table reads the rows,
+  and the order is the order of the reference. Bottom-up deterministic rows,
+  as in an e-graph, are unambiguous. A set of transition keys checks this
+  condition first.
+* Rows without constraints that are ambiguous. The table reads the bottom-up
+  deterministic rows of all the rows of the automaton. A deterministic state
+  is the set of the states that accept one term, so each term has one run.
+  The row of a state holds the transitions of each deterministic state that
+  contains the state. The order is the order of the reference for these rows.
+* Rows that are unambiguous without their constraints, where each constraint
+  is equalities between direct children. The table reads the rows of the
+  intersections of the states. A class of equal children is one child: the
+  intersection of its child states. Its term fills each position of the
+  class, and its size counts once for each position. The order is the order
+  of the reference for the rows of the intersections, with the classes of
+  equal children as a part of the symbol. A transition lists the nested
+  product of its groups of children, in the order of their first positions.
+
+The second and the third kind stop at 1024 deterministic states or
+intersections, and 'sized' then uses the reference. 'sized' also uses the
+reference for all other rows, for example an equality below the direct
+children, or ambiguous rows with constraints. For the second and the third
+kind, the order can be different from the order of the reference.
+'sizedStates' gives the classes of each state. The states without constraints
+share one table, and each state with equal children has its own table.
 -}
 module Data.CFTA.Sized (
     Sized,
     SizedError (..),
     sized,
     sizedReference,
+    sizedStates,
     sizedUpTo,
     termsOfSize,
     termsOfSizeFrom,
@@ -63,18 +90,17 @@ import Control.Monad (filterM, foldM, void)
 import Control.Monad.Except (runExceptT, throwError)
 import Control.Monad.IO.Class (liftIO)
 import Data.Containers.ListUtils (nubOrd)
-import qualified Data.IntMap.Strict as IntMap
-import Data.List (elemIndex, genericDrop, genericIndex, genericLength, sortOn, tails)
+import Data.Either (fromRight)
+import Data.List (elemIndex, genericDrop, genericIndex, genericLength)
 import qualified Data.Map.Lazy as LazyMap
 import qualified Data.Map.Strict as Map
-import Data.Maybe (listToMaybe)
+import Data.Maybe (fromMaybe, listToMaybe)
 import qualified Data.Set as Set
 
 import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint, equalitiesHold, noConstraint, residual)
 import qualified Data.CFTA.Gen.Internal.Table as Ordinary
 import Data.CFTA.Index (Cardinality (..), ClassRank (..), Size (..))
-import Data.CFTA.Interned (NodeId (..), canonicalClasses)
 import Data.CFTA.Ranked.Internal.Decoder (RankedValue (..))
 import Data.CFTA.Ranked.Internal.Size (SizedRank (..), countAtSize, sizeClassSelect)
 import Data.CFTA.Refinement.Evaluate (evaluateConstraint)
@@ -107,73 +133,71 @@ reach has a guard beyond equality constraints.
 sized ::
     (Ord state, Ord symbol) =>
     FTA.FTA state symbol Constraint -> Either SizedError (Sized symbol)
-sized automaton
-    | all (all ((== noConstraint) . FTA.transitionConstraint)) (FTA.transitionTable automaton)
-    , bottomUpDeterministic rows || unambiguousRows rows =
-        let index = Ordinary.tableIndex initial rows
-            count = countAtSize index
-            unrank size (ClassRank rank)
-                | rank >= 0 && Cardinality rank < count size =
-                    Just $ rankedValue $ sizeClassSelect index size (ClassRank rank)
-                | otherwise = Nothing
-            position = Ordinary.tablePosition initial rows
-         in Right
-                Sized
-                    { sizedTermsFrom = \size (ClassRank from) ->
-                        let Cardinality total = count size
-                         in [term | rank <- [max 0 from .. total - 1], Just term <- [unrank size (ClassRank rank)]]
-                    , sizedCount = count
-                    , sizedUnrank = unrank
-                    , sizedRank = fmap (\(SizedRank size rank) -> (size, rank)) . position
-                    }
-    | otherwise = sizedReference automaton
-  where
-    initial = FTA.initialState automaton
-    rows = Map.map (map void) $ sortedRows automaton
+sized automaton = ($ FTA.initialState automaton) <$> sizedStates automaton
 
-{- | Whether no two transitions of the rows have the same symbol and the same
-child states, as in an e-graph. Then each term reaches at most one state, by
-induction on the term. So two transitions of a state that accept one term
-have the same child states, and are the same transition: each term has at
-most one run, and the rows are unambiguous. The check builds an ordered set
-of transition keys. 'unambiguousRows' builds the product of each pair of states.
+{- | The size classes of each state of an automaton. The states without
+constraints share one count table, and each state with equal children has its
+own table. For each state that the initial state reaches, the classes are
+those that 'sized' gives with that state as the initial state. A state
+that the initial state does not reach, or that accepts no term, has no terms
+here: its guards are not checked.
+
+The result is 'ResidualGuard' when a transition that the initial state can
+reach has a guard beyond equality constraints. A rank query of a state builds
+a position table for that state.
 -}
-bottomUpDeterministic :: (Ord state, Ord symbol) => Map.Map state [FTA.Transition state symbol ()] -> Bool
-bottomUpDeterministic rows = length keys == Set.size (Set.fromList keys)
+sizedStates ::
+    (Ord state, Ord symbol) =>
+    FTA.FTA state symbol Constraint -> Either SizedError (state -> Sized symbol)
+sizedStates automaton = route <$> referenceStates automaton
   where
-    keys = [(FTA.transitionSymbol t, FTA.transitionChildren t) | ts <- Map.elems rows, t <- ts]
+    reached = FTA.transitionTable $ FTA.trim automaton
+    route reference state = case LazyMap.lookup state tables of
+        Nothing -> fromClasses (const [])
+        Just table -> fromMaybe (reference state) table
+    -- The route of each state follows the rows that it reaches, as 'sized' of
+    -- the automaton with that initial state does, so the two agree.
+    tables = LazyMap.fromList [(state, tableClasses state) | state <- Map.keys reached]
+    tableClasses state
+        | all (all ((== noConstraint) . FTA.transitionConstraint)) rows =
+            if unambiguous then Just (plain state) else ($ state) <$> deterministic
+        | unambiguous = (\table -> fromTable table Set.singleton state) <$> Ordinary.intersectionCountingRows rows state
+        | otherwise = Nothing
+      where
+        rows = FTA.transitionTable $ FTA.trim $ withInitial state
+        unambiguous = Ordinary.unambiguousRows (Map.map (map void) rows)
+    withInitial state =
+        fromRight (error "sizedStates: a state of a valid automaton is a valid initial state") $
+            FTA.mkFTA state (Map.toList $ FTA.transitionTable automaton)
+    unconstrained = FTA.mapConstraints (const ()) automaton
+    plain = fromTable (withoutClasses $ Ordinary.plainCountingRows unconstrained) Left
+    deterministic = (`fromTable` Left) . withoutClasses <$> Ordinary.deterministicCountingRows unconstrained
+    withoutClasses = Map.map (map ([] <$))
 
-{- | Whether each term has at most one run in the rows.
-
-The synchronous product accepts the common terms of each pair of states.
-Two alternatives overlap when every pair of child states is productive.
+{- | The size classes of each state from the count table of unambiguous rows,
+with the key of the row of each state.
 -}
-unambiguousRows :: (Ord state, Eq symbol) => Map.Map state [FTA.Transition state symbol ()] -> Bool
-unambiguousRows rows =
-    not $
-        or
-            [ FTA.transitionSymbol left == FTA.transitionSymbol right
-                && length (FTA.transitionChildren left) == length (FTA.transitionChildren right)
-                && all (`Map.member` productive) (zip (FTA.transitionChildren left) (FTA.transitionChildren right))
-            | alternatives <- Map.elems rows
-            , left : rest <- tails alternatives
-            , right <- rest
-            ]
+fromTable ::
+    (Ord key, Ord symbol) =>
+    Map.Map key [FTA.Transition key symbol Ordinary.EqualChildren] -> (state -> key) -> state -> Sized symbol
+fromTable rows key = \state ->
+    let index = indexOf (key state)
+        count = countAtSize index
+        unrank size (ClassRank rank)
+            | rank >= 0 && Cardinality rank < count size =
+                Just $ rankedValue $ sizeClassSelect index size (ClassRank rank)
+            | otherwise = Nothing
+        position = Ordinary.tablePosition (key state) rows
+     in Sized
+            { sizedTermsFrom = \size (ClassRank from) ->
+                let Cardinality total = count size
+                 in [term | rank <- [max 0 from .. total - 1], Just term <- [unrank size (ClassRank rank)]]
+            , sizedCount = count
+            , sizedUnrank = unrank
+            , sizedRank = fmap (\(SizedRank size rank) -> (size, rank)) . position
+            }
   where
-    productive = Ordinary.minimumSizes products
-    products =
-        Map.fromList
-            [ ( (leftState, rightState)
-              , [ FTA.Transition (FTA.transitionSymbol left) (zip (FTA.transitionChildren left) (FTA.transitionChildren right)) ()
-                | left <- leftRows
-                , right <- rightRows
-                , FTA.transitionSymbol left == FTA.transitionSymbol right
-                , length (FTA.transitionChildren left) == length (FTA.transitionChildren right)
-                ]
-              )
-            | (leftState, leftRows) <- Map.toList rows
-            , (rightState, rightRows) <- Map.toList rows
-            ]
+    indexOf = Ordinary.tableIndexes rows
 
 {- | The size classes of an automaton, each built from its definition.
 
@@ -181,11 +205,18 @@ The result is 'ResidualGuard' when a transition that the initial state can
 reach has a guard beyond equality constraints.
 -}
 sizedReference :: (Ord state, Ord symbol) => FTA.FTA state symbol Constraint -> Either SizedError (Sized symbol)
-sizedReference automaton
+sizedReference automaton = ($ FTA.initialState automaton) <$> referenceStates automaton
+
+{- | The size classes of each state of an automaton, each built from its
+definition, as 'sizedReference' builds them for the initial state.
+-}
+referenceStates ::
+    (Ord state, Ord symbol) => FTA.FTA state symbol Constraint -> Either SizedError (state -> Sized symbol)
+referenceStates automaton
     | any (any (residual . FTA.transitionConstraint)) (FTA.transitionTable $ FTA.trim automaton) = Left ResidualGuard
-    | otherwise = Right $ fromClasses $ classAt $ FTA.initialState automaton
+    | otherwise = Right $ fromClasses . classAt
   where
-    rows = sortedRows automaton
+    rows = Ordinary.sortedRows automaton
 
     -- The classes of each state from size one, built when a query reads them.
     table = LazyMap.map (\transitions -> [classOf transitions size | size <- [1 ..]]) rows
@@ -215,7 +246,7 @@ sizedUpTo entailment bound automaton = runExceptT $ do
     table <- foldM addSize Map.empty [1 .. bound]
     pure $ fromClasses $ \size -> Map.findWithDefault [] (FTA.initialState automaton, size) table
   where
-    rows = sortedRows automaton
+    rows = Ordinary.sortedRows automaton
     reached = Map.keys $ FTA.transitionTable $ FTA.trim automaton
     -- The classes of one size, from the classes of the smaller sizes.
     addSize table size = foldM addClass table reached
@@ -237,37 +268,6 @@ sizedUpTo entailment bound automaton = runExceptT $ do
             Yes -> pure True
             No -> pure False
             Unknown -> throwError $ GuardUnknown constraint term
-
-{- | The transitions of each state in the order of the count table of the
-cyclic import: by arity, symbol, and the canonical classes of their children.
-
-The classes are those of the whole graph, as in the import. A trim would
-remove the transitions with a child that accepts nothing, and that can change
-the order of the classes of the other states.
--}
-sortedRows ::
-    (Ord state, Ord symbol) => FTA.FTA state symbol constraint -> Map.Map state [FTA.Transition state symbol constraint]
-sortedRows automaton = Map.map (sortOn rowKey) (FTA.transitionTable automaton)
-  where
-    -- Each state has a number, so that the canonical classes can refine the rows.
-    numbers = Map.fromList $ zip (Map.keys $ FTA.transitionTable automaton) [0 ..]
-    number state = numbers Map.! state
-    classes =
-        canonicalClasses $
-            IntMap.fromList
-                [ ( number state
-                  , [ ((length children, FTA.transitionSymbol transition), map (NodeId . number) children)
-                    | transition <- transitions
-                    , let children = FTA.transitionChildren transition
-                    ]
-                  )
-                | (state, transitions) <- Map.toList (FTA.transitionTable automaton)
-                ]
-    rowKey transition =
-        ( length $ FTA.transitionChildren transition
-        , FTA.transitionSymbol transition
-        , [classes IntMap.! number child | child <- FTA.transitionChildren transition]
-        )
 
 {- | The terms of the given size that a transition builds from the classes of
 its children, before its constraint is checked, in the order of the nested

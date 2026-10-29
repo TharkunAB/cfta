@@ -52,7 +52,7 @@ import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
 import Data.Hashable (Hashable, hash)
 import qualified Data.IntMap.Strict as IntMap
-import Data.List (compareLength, partition, sortOn, tails)
+import Data.List (compareLength, sortOn, tails)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (catMaybes, isNothing, listToMaybe)
 import qualified Data.Set as Set
@@ -75,7 +75,7 @@ import Data.CFTA.Equality (
     reachable,
  )
 import Data.CFTA.Equality.Constraint (EqConstraints, subsumptionOrderedEclasses, unPathEClass)
-import Data.CFTA.Index (Arity (..), Rank, childIndexes, offsetRank, pairRank)
+import Data.CFTA.Index (Arity (..), Rank, offsetRank, pairRank)
 import Data.CFTA.Interned (InternedState (..), canonicalClasses, stateOf, toRows)
 import Data.CFTA.Path (ChildIndex (..), adjustAt, unPath)
 
@@ -132,7 +132,7 @@ automatonRows ::
     (Hashable symbol, Typeable symbol, Ord key) =>
     (symbol -> key) ->
     Node symbol ->
-    Either GenError (InternedState, Map.Map InternedState [FTA.Transition InternedState symbol ()])
+    Either GenError (InternedState, Map.Map InternedState [FTA.Transition InternedState symbol Ordinary.EqualChildren])
 automatonRows _ EmptyNode = Right (EmptyState, Map.empty)
 automatonRows order root
     | not $ Set.null $ freeVars root = Left $ InvalidSupport OpenAutomaton
@@ -141,8 +141,8 @@ automatonRows order root
     | otherwise = Right (stateOf root, sortOn transitionKey <$> rows)
   where
     alternatives = IntMap.elems (reachable root)
-    -- The checks above leave no constraint to keep.
-    rows = map (\transition -> transition{FTA.transitionConstraint = ()}) <$> toRows root
+    -- The checks above leave no constraint to keep, and no equal children.
+    rows = map (\transition -> transition{FTA.transitionConstraint = []}) <$> toRows root
     -- Each state has a number, so that the canonical classes can refine the rows.
     numbers = Map.fromDistinctAscList $ zip (Map.keys rows) [0 ..]
     number state = numbers Map.! state
@@ -301,7 +301,7 @@ compileFiniteAutomaton order root
             , Just rank <- [rankOf term]
             ]
 
-    buildEdge edge = case childGroups (Arity (length children)) (equalities $ edgeConstraint edge) of
+    buildEdge edge = case Ordinary.childGroups (Arity (length children)) (equalities $ edgeConstraint edge) of
         Nothing -> pure Nothing
         Just groups -> do
             selected <- traverse (buildGroup children) groups
@@ -356,21 +356,6 @@ needsPathExpansion :: EqConstraints -> Bool
 needsPathExpansion constraints = case subsumptionOrderedEclasses constraints of
     Nothing -> False
     Just classes -> any (any ((/= EQ) . (`compareLength` 1) . unPath) . unPathEClass) classes
-
--- | Partition direct child positions into equality classes in child order.
-childGroups :: Arity -> EqConstraints -> Maybe [[ChildIndex]]
-childGroups arity constraints = do
-    classes <- subsumptionOrderedEclasses constraints
-    positions <- traverse (traverse childIndex . Set.toAscList . unPathEClass) classes
-    pure $ foldl' merge (map pure (childIndexes arity)) positions
-  where
-    childIndex target = case unPath target of
-        [index] | index >= 0 && index < ChildIndex (fromEnum arity) -> Just index
-        _ -> Nothing
-    merge groups [] = groups
-    merge groups positions =
-        let (equal, other) = partition (any (`elem` positions)) groups
-         in sortOn (take 1) (concat equal : other)
 
 {- | Order the constructor labels of a datatype by their position in the row
 of their type.

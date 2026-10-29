@@ -314,7 +314,7 @@ the terms of the graph that no exclusion rejects.
 
 ```text
 checkpoint 1;
-query sized 1;
+query sized 2;
 bound 7;
 next size 5 rank 1;
 exclude anywhere node(leaf, _);
@@ -370,7 +370,7 @@ same listing. `startSampling` and `resumeSampling` of
 
 ```text
 sampling 1;
-query sized-sample 1;
+query sized-sample 2;
 bound 7;
 weights [1: 1, 5: 3];
 prng splitmix64 1;

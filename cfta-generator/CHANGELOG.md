@@ -148,15 +148,62 @@ tree automata of `cfta`, with QuickCheck integration.
   finite tree automaton accepts, as one sequence with inverse ranks. Each
   query ends, also on cyclic, ambiguous, and equality-constrained automata,
   and an empty class says nothing about later classes. `sizedReference`
-  builds each class from smaller ones; `sized` gives the same sequence with
-  the count table, read from the original rows, when the automaton has no
-  constraint and no ambiguity. A bottom-up deterministic automaton, such as
+  builds each class from smaller ones; `sized` gives the same classes with a
+  count table: of the original rows, in the same sequence, when the rows have
+  no constraint and no ambiguity; of the bottom-up deterministic rows when
+  they have no constraint and ambiguity; and of the intersections of the
+  states when they have no ambiguity without their constraints and each
+  constraint is equalities between direct children. A class of equal children
+  is one child, the intersection of its child states, and its size counts
+  once for each position. The last two tables stop at 1024 states, and give
+  their own order. A bottom-up deterministic automaton, such as
   an e-graph, has no ambiguity. A set of transition keys checks this before
   the product check. A guard
   beyond equality constraints is `ResidualGuard`. `sizedUpTo` builds the
   classes up to a size bound with a solver that decides every guard on each
   built term, so a liquid automaton has an exact route that needs no
   pruning; a guard the solver cannot decide is `GuardUnknown`.
+  `sizedStates` gives the classes of each state, with one table for all the
+  states without constraints; a state that the initial state does not reach
+  has no terms there.
+  `sized` and `sizedStates` check the constraints and the ambiguity of the
+  rows that the initial state reaches only.
+- `Data.CFTA.Sized.Prefix`: the completions of a prefix in preorder, within a
+  size bound. `nextTokens` gives the tokens that can come next, each with its
+  number of completions, and each has a completion within the bound.
+  `afterToken` rejects a token that no completion continues with, and
+  `isComplete` says whether the prefix is an accepted term. The completions
+  are the terms of `sized` with the prefix, in the order of `sized`:
+  `completionCount`, `completionTerms`, `unrankCompletion`, and
+  `rankCompletion` count and list them, and map them to and from their ranks.
+  Without constraints, they come from a size index of the prefix, built with
+  the combinators of the count table, so no query lists them. With equality
+  constraints, the queries list the terms up to the bound and keep those with
+  the prefix. A guard beyond equality constraints is `ResidualGuard`.
+  `prefixCompletionsWith` takes an `Entailment` and decides the guards on
+  each candidate term: `nextTokens`
+  gives the tokens with an accepted completion, `undecidedTokens` the tokens
+  that the solver neither offers nor rejects, `undecidedTerms` the undecided
+  completions, and `completeVerdict` whether the prefix is an accepted term,
+  with `Unknown` when the solver does not decide it. A walk, `Deciding`,
+  asks the solver only when a query needs a verdict: `deciding` starts it,
+  `decidingStep` adds a token, `decidingTokens` gives the verdict of each next
+  token, and `decided` gives the `Completions` of the current prefix. The
+  verdicts are kept for the whole walk. The next tokens come from the runs of
+  the automaton on the prefix, and a constraint that the prefix fixes is
+  decided once for its whole run. With equality constraints, a step of the
+  walk rejects a run whose equality class conflicts with its prefix, tries
+  256 candidates (`decidingWithCap` sets another number), and then enumerates
+  an automaton of the terms of each exact size, restricted to the prefix,
+  with the equalities solved by unification, so its tokens need no list of
+  the terms up to the bound. `withWeights` gives each symbol a non-negative
+  `Rational` weight, and the weight of a term is the product over its nodes:
+  `completionWeight`, `nextTokenWeights`, and `tokenProbability` give the
+  exact masses and probabilities, and `drawCompletion` draws a completion in
+  proportion to its weight.
+- `Data.CFTA.Sized.Prefix.QuickCheck`: `sampleCompletion` draws a rank of the
+  completions uniformly and unranks it, and `sampleWeighted` draws a
+  completion in proportion to its weight.
 - Terms are `Term symbol` from `Data.CFTA.Term` of `cfta`:
   `fromAutomaton`, `fromAutomatonUpToDepth`, `termAt`, `rankOf`, `ranksOf`,
   `rankOfTerm`, `surface`, and the refinement witnesses take and give `Term`
