@@ -72,6 +72,7 @@ import Data.CFTA.Constraint (Constraint)
 import qualified Data.CFTA.Document as D
 import qualified Data.CFTA.Language as L
 import Data.CFTA.Symbol (Symbol)
+import Data.CFTA.Template (Exclusion)
 
 -- | A production of a source document: its symbol, its child states, and its name and facts.
 type Production state = FTA.Transition state Symbol D.Annotation
@@ -97,7 +98,7 @@ data Conflict state
     | -- | The order of the productions of a row: the production names of each version, in order.
       OrderConflict !state !(Versions [L.ProductionName])
     | -- | A named exclusion.
-      ExclusionConflict !L.ExclusionName !(Versions L.Exclusion)
+      ExclusionConflict !L.ExclusionName !(Versions (Exclusion Symbol))
     deriving (Eq, Show)
 
 -- | Why two versions do not merge.
@@ -115,10 +116,10 @@ The source edits come first. When the initial states differ, the first edit
 is 'D.SetStart'. The other source edits are by state in ascending order. A
 state that only the first language has is 'D.DeleteRow', and a state that only
 the second has is 'D.PutRow'. In a state that both have, a production that only
-the first row has is 'D.DeleteTransition'. A production with another symbol or
-other child states is 'D.PutTransition', which replaces it in place, and a
+the first row has is 'D.DeleteProduction'. A production with another symbol or
+other child states is 'D.PutProduction', which replaces it in place, and a
 production with other facts is 'D.SetFact' and 'D.RemoveFact'. A new
-production is 'D.PutTransition', which appends it. These edits keep the order
+production is 'D.PutProduction', which appends it. These edits keep the order
 of the old productions and append the new ones. When the second row has
 another order, the edit is one 'D.PutRow' of the second row. Then
 'L.Restore' removes each exclusion that only the first language has, and
@@ -156,13 +157,13 @@ edits base other =
         _ -> []
     rowEdits state old new
         | map productionName new == kept <> added =
-            [D.DeleteTransition state name | name <- oldNames, name `notElem` newNames]
+            [D.DeleteProduction state name | name <- oldNames, name `notElem` newNames]
                 <> concat
                     [ productionEdits state production (named old)
                     | production <- new
                     , productionName production `elem` kept
                     ]
-                <> [D.PutTransition state production | production <- new, productionName production `elem` added]
+                <> [D.PutProduction state production | production <- new, productionName production `elem` added]
         | otherwise = [D.PutRow state new]
       where
         oldNames = map productionName old
@@ -172,7 +173,7 @@ edits base other =
         named row = Map.fromList [(productionName production, production) | production <- row]
     productionEdits state production oldNamed = case Map.lookup name oldNamed of
         Just old
-            | constructor old /= constructor production -> [D.PutTransition state production]
+            | constructor old /= constructor production -> [D.PutProduction state production]
             | otherwise ->
                 [ D.SetFact state name fact constraint | (fact, constraint) <- Map.toAscList new, Map.lookup fact facts /= Just constraint
                 ]
@@ -242,9 +243,9 @@ mergeProductionAt ::
     Maybe (Production state) ->
     ([Conflict state], Maybe (Production state))
 mergeProductionAt ref (Just base) (Just left) (Just right) = do
-    (symbol, children) <- case pick (constructor base) (constructor left) (constructor right) of
-        Just merged -> pure merged
-        Nothing -> ([ProductionConflict ref $ Versions (Just base) (Just left) (Just right)], constructor base)
+    (symbol, children) <-
+        maybe ([ProductionConflict ref $ Versions (Just base) (Just left) (Just right)], constructor base) pure $
+            pick (constructor base) (constructor left) (constructor right)
     facts <- byKey mergeFact (productionFacts base) (productionFacts left) (productionFacts right)
     pure $ Just $ FTA.Transition symbol children $ D.Annotation (D.annotationName $ FTA.transitionConstraint base) facts
   where
@@ -270,9 +271,7 @@ mergeOrder state base left right merged
 mergeKey ::
     (Eq value) =>
     (Versions value -> Conflict state) -> Maybe value -> Maybe value -> Maybe value -> ([Conflict state], Maybe value)
-mergeKey conflict base left right = case pick base left right of
-    Just merged -> pure merged
-    Nothing -> ([conflict $ Versions base left right], base)
+mergeKey conflict base left right = maybe ([conflict $ Versions base left right], base) pure $ pick base left right
 
 -- | Merge three maps by key, with a merge of the three versions of each key.
 byKey ::

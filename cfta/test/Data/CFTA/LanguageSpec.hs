@@ -12,6 +12,7 @@ import qualified Data.CFTA.Document as Document
 import Data.CFTA.Language (Language, UpdateError (..))
 import qualified Data.CFTA.Language as Language
 import Data.CFTA.Symbol (Symbol, symbolText)
+import Data.CFTA.Template (Exclusion (Anywhere), Template (Hole, TemplateNode))
 import Data.CFTA.Term (Term (Node))
 
 -- | The states of the test language.
@@ -28,6 +29,14 @@ spec = describe "language updates" $ do
         terms (changed $ Language.without "rule" $ Language.subterm zero)
             `shouldBe` Set.fromList [pair one one]
 
+    it "apply a root exclusion and a subterm exclusion together" $
+        terms
+            ( changed $
+                Language.without "zeros" (Language.wholeTerm $ pair zero zero)
+                    <> Language.without "one-first" (Anywhere $ TemplateNode "pair" [TemplateNode "one" [], Hole])
+            )
+            `shouldBe` Set.fromList [pair zero one]
+
     it "restore the terms of a named exclusion" $ do
         let excluded =
                 changed $
@@ -42,7 +51,7 @@ spec = describe "language updates" $ do
     it "report a missing exclusion and an invalid source edit" $ do
         Language.update original (Language.restore "absent") `shouldBe` Left (MissingExclusion "absent")
         Language.update original (Language.remove $ Language.at Atom "absent")
-            `shouldBe` Left (InvalidSource $ Document.MissingTransition Atom "absent")
+            `shouldBe` Left (InvalidSource $ Document.MissingProduction Atom "absent")
   where
     changed = update original
     update before = either (error . Language.explainUpdateError) id . Language.update before

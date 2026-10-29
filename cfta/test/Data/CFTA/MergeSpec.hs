@@ -30,13 +30,13 @@ import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint (..), Guard (Bottom), equalityConstraint, noConstraint)
 import qualified Data.CFTA.Document as D
 import Data.CFTA.Equality.Constraint (EqConstraints (EqConstraints), mkEqConstraints)
-import Data.CFTA.Language (Exclusion (..), Language (..))
+import Data.CFTA.Language (Language (..))
 import qualified Data.CFTA.Language as L
 import Data.CFTA.Merge (Conflict (..), MergeError (..), Versions (..))
 import qualified Data.CFTA.Merge as Merge
 import Data.CFTA.Path (path)
 import Data.CFTA.Symbol (Symbol)
-import Data.CFTA.Template (Template (..))
+import Data.CFTA.Template (Exclusion (..), Template (..))
 
 spec :: Spec
 spec = describe "differences and merges" $ do
@@ -271,7 +271,7 @@ randomProduction present name = do
     pure $ withFacts name symbol children facts
 
 -- | Random exclusions.
-exclusionMap :: Gen (Map L.ExclusionName Exclusion)
+exclusionMap :: Gen (Map L.ExclusionName (Exclusion Symbol))
 exclusionMap = Map.fromList <$> (sublistOf ["x", "y"] >>= mapM (\name -> (name,) <$> elements exclusionValues))
 
 {- | One to three random changes of a language: a new order of a row, a new
@@ -351,11 +351,11 @@ mutate original = do
                 )
             ,
                 ( 1
-                , (\table' -> (start current, table', exclusions current)) . Map.union table . Map.fromList
+                , (start current,,exclusions current) . Map.union table . Map.fromList
                     <$> forM ["a", "b"] (\state -> (state,) <$> (sublistOf productionNames >>= mapM (randomProduction ("a" : "b" : present))))
                 )
-            , (2, (\excluded -> (start current, table, excluded)) <$> exclusionMap)
-            , (1, (\initial -> (initial, table, exclusions current)) <$> elements present)
+            , (2, (start current,table,) <$> exclusionMap)
+            , (1, (,table,exclusions current) <$> elements present)
             ]
     nameOf = D.annotationName . FTA.transitionConstraint
     factsOf = D.annotationFacts . FTA.transitionConstraint
@@ -377,5 +377,5 @@ constraints :: [Constraint]
 constraints = [noConstraint, impossible, equal]
 
 -- | The exclusions of the random languages.
-exclusionValues :: [Exclusion]
+exclusionValues :: [Exclusion Symbol]
 exclusionValues = [AtRoot Hole, Anywhere $ TemplateNode "leaf" []]

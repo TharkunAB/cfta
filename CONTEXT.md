@@ -145,15 +145,20 @@ Wilf, and Feat (ranking).
 
 ## Editable languages
 
+- **Language**: a set of terms. A `Language` value is the source of one: a
+  source document and named exclusions. Its terms are the terms of the
+  compiled document that no exclusion rejects.
 - **Source document**: an editable language definition that retains named
-  transitions and their separate facts before compilation.
-- **Language update**: a reusable expression that changes source definitions or
+  productions and their separate facts before compilation.
+- **Production**: a transition of a source document, with a name that is
+  unique in its state, and named facts.
+- **Language update**: a reusable expression that changes a source document or
   named exclusions. It does not contain an expected source version.
-- **Named exclusion**: a removable restriction that rejects matching whole terms
-  or terms with matching subtrees. The source definition remains available.
-- **Production reference**: a source state and the stable name of one transition
-  in that state.
-- **Source fact**: one named constraint attached to a source transition.
+- **Named exclusion**: an exclusion with a name in a language. An update can
+  remove it again. The source document does not change.
+- **Production reference**: a source state and the stable name of one
+  production in that state.
+- **Source fact**: one named constraint attached to a production.
   Removing a fact removes that obligation. It does not negate the constraint.
 - **Patch**: an ordered batch of edits together with the source document it
   expects. A valid patch produces a new source document.

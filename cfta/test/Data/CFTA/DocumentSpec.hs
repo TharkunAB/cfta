@@ -34,19 +34,19 @@ spec = describe "source documents" $ do
 
     it "reject a duplicate production name in a row" $
         Document.mkDocument Atom [(Atom, [production "zero" [] "z", production "one" [] "z"])]
-            `shouldBe` Left (DuplicateTransition Atom "z")
+            `shouldBe` Left (DuplicateProduction Atom "z")
 
     it "reject a patch prepared on another document" $ do
-        let other = edited [DeleteTransition Atom "one"]
-        Document.applyPatch (Document.patch other [DeleteTransition Atom "zero"]) document
+        let other = edited [DeleteProduction Atom "one"]
+        Document.applyPatch (Document.patch other [DeleteProduction Atom "zero"]) document
             `shouldBe` Left StalePatch
 
     it "keep the facts of a production that define changes" $
-        facts (edited [DefineTransition Expr "pair" "tuple" [Atom, Atom]]) Expr
+        facts (edited [DefineProduction Expr "pair" "tuple" [Atom, Atom]]) Expr
             `shouldBe` [("tuple", Map.keys pairFacts)]
 
     it "append a production with no facts for a new name" $
-        facts (edited [DefineTransition Expr "wrap" "wrap" [Expr]]) Expr
+        facts (edited [DefineProduction Expr "wrap" "wrap" [Expr]]) Expr
             `shouldBe` [("pair", Map.keys pairFacts), ("wrap", [])]
 
     it "replace, add, and remove single facts" $ do
@@ -58,11 +58,11 @@ spec = describe "source documents" $ do
     it "report a missing fact, production, and state" $ do
         let attempt edit = Document.applyPatch (Document.patch document [edit]) document
         attempt (RemoveFact Expr "pair" "absent") `shouldBe` Left (MissingFact Expr "pair" "absent")
-        attempt (DeleteTransition Expr "absent") `shouldBe` Left (MissingTransition Expr "absent")
+        attempt (DeleteProduction Expr "absent") `shouldBe` Left (MissingProduction Expr "absent")
         attempt (DeleteRow Extra) `shouldBe` Left (MissingState Extra)
 
     it "check references after the complete batch" $ do
-        let forward = [PutTransition Expr $ production "extra" [Extra] "extra", PutRow Extra [production "leaf" [] "leaf"]]
+        let forward = [PutProduction Expr $ production "extra" [Extra] "extra", PutRow Extra [production "leaf" [] "leaf"]]
         void (Document.applyPatch (Document.patch document forward) document) `shouldBe` Right ()
         Document.applyPatch (Document.patch document $ take 1 forward) document
             `shouldBe` Left (InvalidGraph $ FTA.DanglingState Extra)

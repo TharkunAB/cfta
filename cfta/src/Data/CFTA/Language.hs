@@ -1,7 +1,6 @@
 -- | Composable source updates and reversible exclusions over a language value.
 module Data.CFTA.Language (
     Language (..),
-    Exclusion (..),
     ProductionName (..),
     FactName (..),
     ExclusionName (..),
@@ -37,7 +36,7 @@ import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint)
 import qualified Data.CFTA.Document as Document
 import Data.CFTA.Symbol (Symbol)
-import Data.CFTA.Template (Template)
+import Data.CFTA.Template (Exclusion (..), Template)
 import qualified Data.CFTA.Template as Template
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
@@ -45,15 +44,9 @@ import qualified Data.CFTA.Term as Term
 -- | Editable source and named exclusions. Compilation never replaces this source.
 data Language state = Language
     { source :: !(Document.Document state)
-    , exclusions :: !(Map ExclusionName Exclusion)
+    , exclusions :: !(Map ExclusionName (Exclusion Symbol))
     }
     deriving (Eq, Show)
-
--- | Exclude matching complete terms, or terms with a matching subtree.
-data Exclusion
-    = AtRoot !(Template Symbol)
-    | Anywhere !(Template Symbol)
-    deriving (Eq, Ord, Show)
 
 -- | A source production name. Text belongs at the declaration and codec boundary.
 newtype ProductionName = ProductionName {productionNameText :: Text}
@@ -74,7 +67,7 @@ data ProductionRef state = ProductionRef !state !ProductionName
 -- | One inspectable operation in a reusable update expression.
 data Operation state
     = EditSource !(Document.Edit state)
-    | Exclude !ExclusionName !Exclusion
+    | Exclude !ExclusionName !(Exclusion Symbol)
     | Restore !ExclusionName
     deriving (Eq, Show)
 
@@ -99,14 +92,16 @@ at = ProductionRef
 {- | Define a constructor at a named production. Change its symbol and children
 in place while retaining its facts, or append a new production with no facts.
 The state must exist. Use 'require' and 'relax' to change its facts explicitly.
+A kept fact can refer to a child that the new production does not have. An
+equality on such a child holds for no term.
 -}
 define :: ProductionRef state -> Symbol -> [state] -> Update state
 define (ProductionRef state name) symbol children =
-    editSource $ Document.DefineTransition state (productionNameText name) symbol children
+    editSource $ Document.DefineProduction state (productionNameText name) symbol children
 
 -- | Remove an existing production. Keep its state even when the row becomes empty.
 remove :: ProductionRef state -> Update state
-remove (ProductionRef state name) = editSource $ Document.DeleteTransition state (productionNameText name)
+remove (ProductionRef state name) = editSource $ Document.DeleteProduction state (productionNameText name)
 
 -- | Add or replace one named fact on an existing production.
 require :: ProductionRef state -> FactName -> Constraint -> Update state
@@ -127,11 +122,11 @@ editSource :: Document.Edit state -> Update state
 editSource edit = Update [EditSource edit]
 
 -- | Exclude exactly this complete term. Match full symbols, including refinements.
-wholeTerm :: Term Symbol -> Exclusion
+wholeTerm :: Term Symbol -> Exclusion Symbol
 wholeTerm = AtRoot . exact
 
 -- | Exclude every term that contains this exact subtree.
-subterm :: Term Symbol -> Exclusion
+subterm :: Term Symbol -> Exclusion Symbol
 subterm = Anywhere . exact
 
 -- | Convert a complete term to a template without holes.
@@ -139,7 +134,7 @@ exact :: Term Symbol -> Template Symbol
 exact (Term.Node symbol children) = Template.TemplateNode symbol $ map exact children
 
 -- | Add or replace a named exclusion without changing the source document.
-without :: ExclusionName -> Exclusion -> Update state
+without :: ExclusionName -> Exclusion Symbol -> Update state
 without name exclusion = Update [Exclude name exclusion]
 
 -- | Remove an existing exclusion. Other exclusions and source facts still apply.
@@ -169,24 +164,16 @@ update before (Update changes) = do
             | Map.member name current -> Right $ Map.delete name current
             | otherwise -> Left $ MissingExclusion name
 
-{- | Compile facts and apply exclusions without changing the retained source.
+{- | Compile facts and apply exclusions without changing the retained source:
+'Template.excludeAllFTA' of the exclusions and the compiled document.
 Compiled state numbers are query identities, not editable source identities.
 Use a constraint-aware query route; plain 'FTA.terms' ignores constraints.
-Template lowering can increase graph size. It preserves unambiguity when the
-source is unambiguous. It does not make an ambiguous source unambiguous.
+Exclusions can increase the graph size. They keep an unambiguous source
+unambiguous. It does not make an ambiguous source unambiguous.
 -}
 compileGraph :: (Ord state) => Language state -> FTA.PlainFTA Int Symbol
 compileGraph language =
-    if null anywhere
-        then roots
-        else numberStates $ Template.excludeAnywhereFTA anywhere roots
-  where
-    graph = numberStates $ Document.compileGraph $ source language
-    rootPatterns = [template | AtRoot template <- Map.elems $ exclusions language]
-    anywhere = [template | Anywhere template <- Map.elems $ exclusions language]
-    roots
-        | null rootPatterns = graph
-        | otherwise = numberStates $ Template.excludeFTA rootPatterns graph
+    numberStates $ Template.excludeAllFTA (Map.elems $ exclusions language) $ Document.compileGraph $ source language
 
 -- | Give states consecutive numbers in their existing ascending order.
 numberStates :: (Ord state) => FTA.PlainFTA state Symbol -> FTA.PlainFTA Int Symbol

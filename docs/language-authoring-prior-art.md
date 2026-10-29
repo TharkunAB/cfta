@@ -95,7 +95,7 @@ Every candidate still needs the CFTA graph, constraint, and identity checks.
 | EDN | Lists, vectors, maps, keywords, and tagged values can represent typed syntax directly. | Keep alternatives in vectors; map order has no meaning. Validate the domain after reading. Require exact integers and reject duplicate identities. |
 | KDL | Named nodes, arguments, properties, and ordered children give compact block notation. | Specify how facts, formulas, state references, and term trees map to nodes. Preserve order where ranks depend on it. |
 | JSON5 / Hjson | Comments and less punctuation can improve an existing JSON document. | The verbose graph schema remains. Neither supplies language extension or constraint semantics. |
-| Grammar blocks in this PR | Common productions, refinements, facts, and exclusions are concise. | Maintain a small domain parser. Complex constraints use exact structural forms. |
+| Grammar blocks of `language 1;` | Common productions, refinements, facts, and exclusions are concise. | Maintain a small domain parser. Complex constraints use exact structural forms. |
 
 Sources: [EDN specification](https://github.com/edn-format/edn),
 [KDL specification](https://kdl.dev/spec/), [JSON5 specification](https://spec.json5.org/),
@@ -158,6 +158,59 @@ claim is made here. See
 [kdl-hs](https://github.com/brandonchinn178/kdl-hs) and its
 [package description](https://hackage-content.haskell.org/package/kdl-hs-1.2.1/kdl-hs.cabal).
 
+## Edits, exclusions, and names
+
+These sources compare with the edits, the exclusions, and the names of
+`Data.CFTA.Document` and `Data.CFTA.Language`.
+
+- **Unit of an edit.** Ohm overrides a rule with `:=` and extends it with
+  `+=`; `+=` is an error when the rule does not exist
+  ([Ohm syntax](https://ohmjs.org/docs/syntax-reference)). Lark has `%extend`
+  and `%override` for a rule
+  ([Lark grammar](https://lark-parser.readthedocs.io/en/stable/grammar.html)).
+  In ANTLR 4, a rule of the main grammar overrides an imported rule
+  ([ANTLR grammars](https://github.com/antlr/antlr4/blob/master/doc/grammars.md)).
+  In these tools, the unit of an override is a rule, that is, a state here. Ohm
+  case names, Lark aliases, ANTLR labels, and Rascal labels name an
+  alternative, but they name a node of the parse tree. None of these tools
+  deletes one alternative by its name. A production name here is the key of
+  an edit. The closest precedent is the merge key of a Kubernetes strategic
+  merge patch, `patchMergeKey: name`
+  ([kubectl patch](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/update-api-object-kubectl-patch/)).
+- **Exclusions.** SDF3 applies reject productions, priorities, and
+  associativity as filters on the parse forest
+  ([SDF3 disambiguation](https://spoofax.dev/references/sdf3/disambiguation/)).
+  Afroozeh and others rewrite the grammar for precedence rules, and the
+  rewritten grammar accepts the same language as the specification
+  ([SLE 2013](https://link.springer.com/doi/10.1007/978-3-319-02654-1_8)).
+  `Language.compileGraph` also rewrites: the exclusions become part of the
+  automaton, so the compiled graph keeps exact counts, ranks, and sampling. A
+  filter does not. In these sources, an exclusion has no name, and a change
+  is an edit of the grammar text. Here an exclusion has a name, and
+  `restore` removes it. Removal compiles the document and the other
+  exclusions again; it does not undo a product.
+- **Constraints.** ISLa attaches `forall` and `exists` constraints to a
+  grammar and uses the Z3 solver to generate inputs
+  ([ISLa](https://isla.readthedocs.io/en/latest/)). Fandango writes
+  constraints in Python and searches for inputs that satisfy them
+  ([Fandango](https://fandango-fuzzer.github.io/)). Neither compiles a
+  constraint into the grammar, so neither gives an exact count. A fact here is
+  a constraint of one production, with a name.
+- **Stale checks.** A JSON Patch is atomic: when a `test` operation fails, the
+  patch changes nothing ([RFC 6902](https://www.rfc-editor.org/rfc/rfc6902)).
+  HTTP `If-Match` prevents a lost update, and it must use the strong
+  comparison ([RFC 9110, section 13.1.1](https://www.rfc-editor.org/rfc/rfc9110)).
+  A `Patch` compares the complete document, which is the strongest form of
+  this check; its cost is a patch that holds the document. A JSON Merge Patch
+  has no stale check ([RFC 7396](https://www.rfc-editor.org/rfc/rfc7396)), as
+  an `Update` has none.
+- **Names after a deletion.** Protocol Buffers reserves the numbers and names
+  of deleted fields, because a reused number makes old data ambiguous
+  ([proto3 guide](https://protobuf.dev/programming-guides/proto3/)). A
+  document does not reserve a deleted production name: a new production can
+  use it. A rank has no name or number, so a rank is valid only for the
+  compiled graph that gave it.
+
 ## Current scope
 
 Liquid Haskell is the primary inspiration for the constraint notation: refined
@@ -171,9 +224,9 @@ The grammar-block codec builds typed values directly and uses the existing
 graph and document validation. Its only parser library is attoparsec. It keeps
 the common language example short. Its cost is a domain-specific syntax and structural
 forms for complex constraints. Do not describe it as EDN or as a Redex frontend.
-The roundtrip contract is between language values and canonical text; comments
-and arbitrary input spelling are not retained.
+A printed language reads back equal, and printing it again gives the same
+text. Only the `Notes` functions keep doc comments, and no reader keeps the
+spelling of its input.
 
-The follow-ups (named pattern bindings, a data form of `Update`, a quasiquoter
-for definitions, typing judgments, and the typed-language spike) are in the
-project TODO list.
+Later work can add named pattern bindings, a quasiquoter for definitions, and
+typing judgments.

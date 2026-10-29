@@ -20,6 +20,7 @@ Redex, Nanopass, EDN, and KDL, and explains why the format has its own syntax.
 | `PlainFTA state Symbol` | `printGraph` | `parseGraph` | `graph 1;` |
 | `Document state` | `printDocument` | `parseDocument` | `document 1;` |
 | `Language state` | `printLanguage` | `parseLanguage` | `language 1;` |
+| `Update state` | `printUpdate` | `parseUpdate` | `update 1;` |
 | `Checkpoint state` | `printCheckpoint` | `parseCheckpoint` | `checkpoint 1;` |
 | `SamplingCheckpoint state` | `printSamplingCheckpoint` | `parseSamplingCheckpoint` | `sampling 1;` |
 
@@ -47,7 +48,7 @@ data State = Atom | Expr deriving (Eq, Ord, Show, Read)
 
 For custom or portable state labels, use `StateCodec state` and the corresponding
 `printGraphWith`/`parseGraphWith`, `printDocumentWith`/`parseDocumentWith`,
-`printLanguageWith`/`parseLanguageWith`,
+`printLanguageWith`/`parseLanguageWith`, `printUpdateWith`/`parseUpdateWith`,
 `printCheckpointWith`/`parseCheckpointWith`, or
 `printSamplingCheckpointWith`/`parseSamplingCheckpointWith` functions. The codec contains
 `encodeState :: state -> Text` and `decodeState :: Text -> Either String state`.
@@ -118,8 +119,8 @@ A document uses the same source rows with a `document 1;` header.
 Names can use ASCII letters, digits, `_`, `-`, and `+`. Other names use double
 quotes. Quoted strings retain Unicode and escaped control characters. Supported
 escapes are `\"`, `\\`, `\/`, `\b`, `\f`, `\n`, `\r`, `\t`, and `\uXXXX`;
-a non-BMP escape uses a valid surrogate pair. The printer quotes the name `_`
-to distinguish it from a template hole.
+a non-BMP escape uses a valid surrogate pair. The printer also quotes the name
+`_`, so that a symbol `"_"` and the hole `_` of a template differ.
 
 ## Doc comments
 
@@ -291,7 +292,9 @@ an arbitrary formula can be decided or enumerated.
 ## Exclusion templates
 
 A language stores its named exclusions as `exclude NAME = root TEMPLATE;` or
-`exclude NAME = anywhere TEMPLATE;`. Templates use `_` for a hole, `f(a, b)` for
+`exclude NAME = anywhere TEMPLATE;`. A checkpoint stores the same exclusions
+without names, as `exclude root TEMPLATE;` or `exclude anywhere TEMPLATE;`.
+Both use one grammar rule, `exclusion-body`. Templates use `_` for a hole, `f(a, b)` for
 an exact node, `_(a, b)` for any symbol with those children, and a final `...`
 for a prefix. `_x` is a named hole: it matches any subterm, as `_` does, and
 gives it the name `x`. No space comes between `_` and the name. A template
@@ -327,10 +330,12 @@ start Expr;
 
 `define`, `remove`, `require`, `relax`, and `start` are the operations of the
 same names in `Data.CFTA.Language`. `put production`, `put row`, and
-`delete row` are the source edits `PutTransition`, `PutRow`, and `DeleteRow`.
+`delete row` are the source edits `PutProduction`, `PutRow`, and `DeleteRow`.
 `start` is the source edit `SetStart`, written as the `start` line of a
 document. An update does not name the language it changes: apply it with
-`Language.update`, which checks it.
+`Language.update`, which checks it. An update has no notes: the reader reads a
+doc comment before the header, an operation, a production, or a fact, and
+drops it, as the other readers without notes do.
 
 ## Checkpoints
 
@@ -444,8 +449,7 @@ graph-edge      = symbol children? ( "where" constraint )? ";" ;
 source-row      = doc-comment? "state" name ( ":" name )? "{" production* "}" ";"? ;
 production      = doc-comment? name "=" symbol children? ( "{" fact* "}" )? ";" ;
 fact            = doc-comment? name "=" constraint ";" ;
-named-exclusion = doc-comment? "exclude" exclusion-body ;
-exclusion-body  = name "=" ( "root" | "anywhere" ) template ";" ;
+named-exclusion = doc-comment? "exclude" name "=" exclusion-body ;
 symbol          = name ( "@" "{" formula "}" )? ;
 children        = "(" ( name ( "," name )* )? ")" ;
 
@@ -456,16 +460,16 @@ signature-statement
                                     | "pool" "(" ( name ( "," name )* )? ")" ) ";"
                 | "function" name ":" ( "(" ( name ( "," name )* )? ")" "->" )? name ";" ;
 
-update-file     = "update" "1" ";" operation* ;
+update-file     = doc-comment? "update" "1" ";" ( doc-comment? operation )* ;
 operation       = "start" name ";"
                 | "define" name name "=" symbol children? ";"
                 | "remove" name name ";"
                 | "require" name name name "=" constraint ";"
                 | "relax" name name name ";"
                 | "put" "production" name production
-                | "put" "row" name "{" production* "}"
+                | "put" "row" name "{" production* "}" ";"?
                 | "delete" "row" name ";"
-                | "exclude" exclusion-body
+                | "exclude" name "=" exclusion-body
                 | "restore" name ";" ;
 
 checkpoint-file = "checkpoint" "1" ";" query "next" "size" integer "rank" integer ";"
@@ -476,11 +480,10 @@ sampling-file   = "sampling" "1" ";" query
                   exclusion* plain-graph ;
 query           = "query" name integer ";" "bound" integer ";" ;
 weight          = integer ":" integer ;
-exclusion       = "exclude" ( "root" | "anywhere" ) template ";" ;
+exclusion       = "exclude" exclusion-body ;
+exclusion-body  = ( "root" | "anywhere" ) template ";" ;
 plain-graph     = "graph" "1" ";" "start" name ";" plain-row* ;
 plain-row       = "state" name "{" graph-edge* "}" ";"? ;
-template        = ( "_" | symbol ) template-args? ;
-template-args   = "(" ( "..." | template ( "," template )* ( "," "..." )? )? ")" ;
 
 constraint      = "equal" "(" ( path ( "," path )* )? ")"
                 | "impossible"

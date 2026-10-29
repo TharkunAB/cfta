@@ -114,9 +114,9 @@ spec = do
 
         it "report a duplicate state and a duplicate production in a language" $ do
             T.parseLanguageWith strings "language 1; start S; state S {} state S {}"
-                `shouldBe` Left (InvalidDefinition $ D.DuplicateState "S")
+                `shouldBe` Left (DuplicateState "S")
             T.parseLanguageWith strings "language 1; start S; state S { x = a; x = b; }"
-                `shouldBe` Left (InvalidDefinition $ D.DuplicateTransition "S" "x")
+                `shouldBe` Left (InvalidDefinition $ D.DuplicateProduction "S" "x")
 
         it "reject malformed input" $
             forM_ malformed $ \text ->
@@ -153,6 +153,17 @@ spec = do
             case T.parseUpdateWith strings "update 1;\ndefine pair t0 = pair(atom, atom);\nrequire pair t0;" of
                 Left (SyntaxError line _ _) -> line `shouldBe` 3
                 other -> expectationFailure $ show other
+
+        it "read operation words only as keywords, and a row with or without its semicolon" $ do
+            let parsed = T.parseUpdateWith strings
+                plain = must $ parsed "update 1; put row S { a = a; } start S;"
+            parsed "update 1; \"start\" S;" `shouldSatisfy` either (const True) (const False)
+            parsed "update 1; put \"row\" S {}" `shouldSatisfy` either (const True) (const False)
+            parsed "update 1; put row S { a = a; }; start S;" `shouldBe` Right plain
+
+        it "drop a doc comment, as the readers without notes do" $
+            T.parseUpdateWith strings "/// The changes.\nupdate 1;\n/// Why.\nput row S {\n  /// A leaf.\n  a = a;\n}\nstart S;"
+                `shouldBe` T.parseUpdateWith strings "update 1; put row S { a = a; } start S;"
 
     describe "merges" $ do
         it "keep a merged language" $ do
@@ -712,7 +723,7 @@ mergeBase = withForms $ document liquid
 
 -- | A new fact and a new exclusion.
 leftChanges :: L.Update String
-leftChanges = L.require (L.at "pair" "t0") "same" equal <> L.without "extra" (L.AtRoot Hole)
+leftChanges = L.require (L.at "pair" "t0") "same" equal <> L.without "extra" (AtRoot Hole)
 
 -- | A new production, a removed fact, and a restored exclusion.
 rightChanges :: L.Update String
@@ -735,7 +746,7 @@ everyOperation =
         <> L.relax (L.at "pair" "t0") "imported"
         <> L.remove (L.at "atom" "t1")
         <> L.editSource
-            ( D.PutTransition "atom"
+            ( D.PutProduction "atom"
                 $ FTA.Transition "three" []
                 $ D.Annotation "three"
                 $ Map.singleton "never"
@@ -743,7 +754,7 @@ everyOperation =
             )
         <> L.editSource (D.PutRow "extra" [production "leaf" []])
         <> L.editSource (D.DeleteRow "extra")
-        <> L.without "pairs" (L.AtRoot $ TemplateNode "pair" [Hole, Hole])
+        <> L.without "pairs" (AtRoot $ TemplateNode "pair" [Hole, Hole])
         <> L.restore "0"
         <> L.start "atom"
 
@@ -803,7 +814,7 @@ withForms source =
     L.Language source $
         Map.fromList
             [ (L.ExclusionName $ Text.pack $ show index, scope form)
-            | (index, (scope, form)) <- zip [0 :: Int ..] [(scope, form) | scope <- [L.AtRoot, L.Anywhere], form <- forms]
+            | (index, (scope, form)) <- zip [0 :: Int ..] [(scope, form) | scope <- [AtRoot, Anywhere], form <- forms]
             ]
   where
     forms =

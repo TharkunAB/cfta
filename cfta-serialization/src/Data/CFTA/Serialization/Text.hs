@@ -157,7 +157,7 @@ notesOf entries =
         (Map.fromList [(target, text) | CommentEntry target text <- entries])
         (Map.fromList [(state, sort) | SortEntry state sort <- entries])
 
--- | A syntax location, a checked graph error, or a checked source-definition error.
+-- | A syntax location, a checked graph error, or a checked document error.
 data TextError state
     = SyntaxError !Int !Int !String
     | DuplicateState !state
@@ -353,11 +353,13 @@ renderLanguage encode notes language =
             <> foldMap (uncurry $ namedExclusionText notes) (Map.toAscList $ L.exclusions language)
 
 -- | Render a named exclusion after its doc comment.
-namedExclusionText :: NoteLookup state -> L.ExclusionName -> L.Exclusion -> Builder
+namedExclusionText :: NoteLookup state -> L.ExclusionName -> Exclusion Symbol -> Builder
 namedExclusionText notes name exclusion =
-    commentText "" (commentOf notes $ OnExclusion name) <> "exclude " <> nameText (L.exclusionNameText name) <> " = " <> case exclusion of
-        L.AtRoot template -> "root " <> templateText template <> ";\n"
-        L.Anywhere template -> "anywhere " <> templateText template <> ";\n"
+    commentText "" (commentOf notes $ OnExclusion name)
+        <> "exclude "
+        <> nameText (L.exclusionNameText name)
+        <> " = "
+        <> exclusionBodyText exclusion
 
 {- | Render the sorts, the roots, the value sorts, and the functions of a
 signature, each list in its order, one statement for each element.
@@ -390,7 +392,7 @@ renderUpdate encode (L.Update operations) = built $ "update 1;\n" <> foldMap ope
     operation change = case change of
         L.EditSource edit -> case edit of
             D.SetStart at -> "start " <> state at <> ";\n"
-            D.DefineTransition at name symbol children ->
+            D.DefineProduction at name symbol children ->
                 "define "
                     <> state at
                     <> " "
@@ -399,11 +401,11 @@ renderUpdate encode (L.Update operations) = built $ "update 1;\n" <> foldMap ope
                     <> symbolText' symbol
                     <> childrenText (map state children)
                     <> ";\n"
-            D.DeleteTransition at name -> "remove " <> state at <> " " <> nameText name <> ";\n"
+            D.DeleteProduction at name -> "remove " <> state at <> " " <> nameText name <> ";\n"
             D.SetFact at name fact constraint ->
                 "require " <> state at <> " " <> nameText name <> " " <> nameText fact <> " = " <> constraintText constraint <> ";\n"
             D.RemoveFact at name fact -> "relax " <> state at <> " " <> nameText name <> " " <> nameText fact <> ";\n"
-            D.PutTransition at transition -> "put production " <> state at <> " " <> productionText "" encode none at transition
+            D.PutProduction at transition -> "put production " <> state at <> " " <> productionText "" encode none at transition
             D.PutRow at transitions -> "put row " <> state at <> " {\n" <> foldMap (sourceTransitionText encode none at) transitions <> "}\n"
             D.DeleteRow at -> "delete row " <> state at <> ";\n"
         L.Exclude name exclusion -> namedExclusionText none name exclusion
@@ -526,9 +528,13 @@ commentText indent = maybe mempty (foldMap line . Text.splitOn "\n")
 
 -- | Render an exclusion of a checkpoint as one statement.
 exclusionText :: Exclusion Symbol -> Builder
-exclusionText exclusion = case exclusion of
-    AtRoot template -> "exclude root " <> templateText template <> ";\n"
-    Anywhere template -> "exclude anywhere " <> templateText template <> ";\n"
+exclusionText exclusion = "exclude " <> exclusionBodyText exclusion
+
+-- | Render the place and the template of an exclusion, and the end of its statement.
+exclusionBodyText :: Exclusion Symbol -> Builder
+exclusionBodyText exclusion = case exclusion of
+    AtRoot template -> "root " <> templateText template <> ";\n"
+    Anywhere template -> "anywhere " <> templateText template <> ";\n"
 
 -- | Render a complete symbol and ordered child state references.
 edgeText :: (state -> Text) -> FTA.Transition state Symbol annotation -> Builder
@@ -831,8 +837,11 @@ readCheckpoint decode input = do
 
 -- | Read an exclusion statement of a checkpoint: @exclude root TEMPLATE;@ or @exclude anywhere TEMPLATE;@.
 exclusionParser :: A.Parser (Exclusion Symbol)
-exclusionParser = do
-    checkpointKeyword "exclude"
+exclusionParser = checkpointKeyword "exclude" *> exclusionBody
+
+-- | Read the place and the template of an exclusion, and the end of its statement.
+exclusionBody :: A.Parser (Exclusion Symbol)
+exclusionBody = do
     place <- nameParser
     exclusion <- case place of
         "root" -> pure AtRoot
@@ -850,13 +859,22 @@ distinctStates = foldM_ distinct Set.empty . map fst
         | Set.member state seen = Left $ DuplicateState state
         | otherwise = Right $ Set.insert state seen
 
+{- | Report a duplicate state and an invalid graph of a document or a language
+as the graph format reports them, and every other error as 'InvalidDefinition'.
+-}
+definitionError :: D.DocumentError state -> TextError state
+definitionError failure = case failure of
+    D.DuplicateState state -> DuplicateState state
+    D.InvalidGraph graphError -> InvalidGraph graphError
+    _ -> InvalidDefinition failure
+
 -- | Read source syntax and its doc comments, and validate names and graph structure together.
 readDocument ::
     (Ord state) => (Text -> Either String state) -> Text -> Either (TextError state) (Notes state, D.Document state)
 readDocument decode input = do
     (comments, (initial, rows)) <-
         runParser (graphParser WithNotes "document" decode (sourceTransitionParser decode) <* noComment) input
-    document <- first InvalidDefinition $ D.mkDocument initial rows
+    document <- first definitionError $ D.mkDocument initial rows
     pure (notesOf comments, document)
 
 -- | Read a complete language and its doc comments without compiling its constraints or exclusions.
@@ -864,7 +882,7 @@ readLanguage ::
     (Ord state) => (Text -> Either String state) -> Text -> Either (TextError state) (Notes state, L.Language state)
 readLanguage decode input = do
     (comments, (initial, rows), exclusions) <- runParser parser input
-    document <- first InvalidDefinition $ D.mkDocument initial rows
+    document <- first definitionError $ D.mkDocument initial rows
     pure (notesOf comments, L.Language document exclusions)
   where
     parser = do
@@ -933,6 +951,7 @@ readSignature decodeSort decodeSymbol = runParser $ do
 -- | Read the header and the operations of an update, in order.
 readUpdate :: (Text -> Either String state) -> Text -> Either (TextError state) (L.Update state)
 readUpdate decode = runParser $ do
+    _ <- itemComment
     keyword "update"
     version <- integerParser
     unless (version == 1) $ fail "unsupported update version; expected 1"
@@ -942,9 +961,12 @@ readUpdate decode = runParser $ do
     state = stateParser decode
     end = token ";"
     source = pure . L.EditSource
+    -- An operation word is a keyword, so it is never quoted.
+    word = lexeme (A.takeWhile1 nameCharacter) <?> "update operation"
     operation = do
-        word <- nameParser
-        case word of
+        _ <- itemComment
+        operationWord <- word
+        case operationWord of
             "start" -> (D.SetStart <$> state <* end) >>= source
             "define" -> do
                 at <- state
@@ -952,8 +974,8 @@ readUpdate decode = runParser $ do
                 token "="
                 (symbol, children) <- edgeParser decode
                 end
-                source $ D.DefineTransition at name symbol children
-            "remove" -> (D.DeleteTransition <$> state <*> nameParser <* end) >>= source
+                source $ D.DefineProduction at name symbol children
+            "remove" -> (D.DeleteProduction <$> state <*> nameParser <* end) >>= source
             "require" -> do
                 at <- state
                 name <- nameParser
@@ -964,23 +986,24 @@ readUpdate decode = runParser $ do
                 source $ D.SetFact at name fact constraint
             "relax" -> (D.RemoveFact <$> state <*> nameParser <*> nameParser <* end) >>= source
             "put" -> do
-                target <- nameParser
+                target <- word
                 case target of
                     "production" -> do
                         at <- state
                         (transition, _) <- sourceTransitionParser decode at
-                        source $ D.PutTransition at transition
+                        source $ D.PutProduction at transition
                     "row" -> do
                         at <- state
                         token "{"
                         transitions <- untilClose '}' (sourceTransitionParser decode at)
                         token "}"
+                        ifNext ';' (token ";") ()
                         source $ D.PutRow at $ map fst transitions
                     _ -> fail "expected put production or put row"
             "delete" -> keyword "row" *> ((D.DeleteRow <$> state <* end) >>= source)
-            "exclude" -> uncurry L.Exclude . first L.ExclusionName <$> exclusionBody
+            "exclude" -> L.Exclude . L.ExclusionName <$> (nameParser <* token "=") <*> exclusionBody
             "restore" -> L.Restore . L.ExclusionName <$> nameParser <* end
-            _ -> fail $ "expected an update operation, not " <> show word
+            _ -> fail $ "expected an update operation, not " <> show operationWord
 
 -- | Parse one complete input and retain Unicode-aware syntax locations.
 runParser :: A.Parser value -> Text -> Either (TextError state) value
@@ -1088,26 +1111,15 @@ symbolParser = do
     refinement <- ifNext '@' (token "@" *> token "{" *> formulaParser <* token "}") F.Top
     pure $ RefinedSymbol (Symbol name) refinement
 
--- | Read a named whole-term or subtree exclusion and its doc comment.
-namedExclusionParser :: A.Parser ((Text, L.Exclusion), Maybe Text)
+-- | Read a named exclusion of a language and its doc comment: @exclude NAME = root TEMPLATE;@ or @exclude NAME = anywhere TEMPLATE;@.
+namedExclusionParser :: A.Parser ((Text, Exclusion Symbol), Maybe Text)
 namedExclusionParser = do
     comment <- itemComment
-    exclusion <- keyword "exclude" *> exclusionBody
-    pure (exclusion, comment)
-
--- | Read the name, the scope, and the template of an exclusion.
-exclusionBody :: A.Parser (Text, L.Exclusion)
-exclusionBody = do
+    keyword "exclude"
     name <- nameParser
     token "="
-    scope <- nameParser
-    constructor <- case scope of
-        "root" -> pure L.AtRoot
-        "anywhere" -> pure L.Anywhere
-        _ -> fail "expected root or anywhere exclusion scope"
-    template <- templateParser
-    token ";"
-    pure (name, constructor template)
+    exclusion <- exclusionBody
+    pure ((name, exclusion), comment)
 
 -- | Read every formula constructor without invoking a simplifier.
 formulaParser :: A.Parser F.Formula
@@ -1387,7 +1399,7 @@ noComment = do
 
 -- | The error for a doc comment that does not come before an item.
 misplacedComment :: String
-misplacedComment = "a doc comment must come before the header, a state, a production, a fact, or an exclusion"
+misplacedComment = "a doc comment must come before the header, a state, a production, a fact, an exclusion, or an operation"
 
 -- | Whether a graph can have doc comments and the sorts of its states. The graph of a checkpoint has neither.
 data NoteRule = WithNotes | WithoutNotes

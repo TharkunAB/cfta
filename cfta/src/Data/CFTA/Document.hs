@@ -28,7 +28,7 @@ import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint, conjoinConstraints, noConstraint)
 import Data.CFTA.Symbol (Symbol)
 
--- | A transition name, unique within its state, and its individual source facts.
+-- | A production name, unique within its state, and its individual source facts.
 data Annotation = Annotation
     { annotationName :: !Text
     , annotationFacts :: !(Map Text Constraint)
@@ -43,21 +43,21 @@ newtype Document state = Document (FTA.FTA state Symbol Annotation)
 data DocumentError state
     = InvalidGraph !(FTA.FTAError state)
     | DuplicateState !state
-    | DuplicateTransition !state !Text
+    | DuplicateProduction !state !Text
     | MissingState !state
-    | MissingTransition !state !Text
+    | MissingProduction !state !Text
     | MissingFact !state !Text !Text
     | StalePatch
     deriving (Eq, Show)
 
--- | One edit in an ordered atomic batch. Facts select a state and transition name.
+-- | One edit in an ordered atomic batch. Facts select a state and production name.
 data Edit state
     = SetStart !state
     | PutRow !state ![FTA.Transition state Symbol Annotation]
     | DeleteRow !state
-    | PutTransition !state !(FTA.Transition state Symbol Annotation)
-    | DefineTransition !state !Text !Symbol ![state]
-    | DeleteTransition !state !Text
+    | PutProduction !state !(FTA.Transition state Symbol Annotation)
+    | DefineProduction !state !Text !Symbol ![state]
+    | DeleteProduction !state !Text
     | SetFact !state !Text !Text !Constraint
     | RemoveFact !state !Text !Text
     deriving (Eq, Show)
@@ -66,31 +66,31 @@ data Edit state
 data Patch state = Patch !(Document state) ![Edit state]
     deriving (Eq, Show)
 
--- | Validate graph structure, unique state rows, and transition names within rows.
+-- | Validate graph structure, unique state rows, and production names within rows.
 mkDocument ::
     (Ord state) =>
     state -> [(state, [FTA.Transition state Symbol Annotation])] -> Either (DocumentError state) (Document state)
 mkDocument initial rows = do
     foldM_ distinctState Set.empty rows
     graph <- first InvalidGraph $ FTA.mkFTA initial rows
-    mapM_ distinctTransitions rows
+    mapM_ distinctProductions rows
     pure $ Document graph
   where
     distinctState seen (state, _)
         | Set.member state seen = Left $ DuplicateState state
         | otherwise = Right $ Set.insert state seen
 
--- | Check that the transitions of one row have distinct names.
-distinctTransitions :: (state, [FTA.Transition state Symbol Annotation]) -> Either (DocumentError state) ()
-distinctTransitions (state, transitions) = foldM_ distinct Set.empty transitions
+-- | Check that the productions of one row have distinct names.
+distinctProductions :: (state, [FTA.Transition state Symbol Annotation]) -> Either (DocumentError state) ()
+distinctProductions (state, transitions) = foldM_ distinct Set.empty transitions
   where
     distinct seen transition
-        | Set.member name seen = Left $ DuplicateTransition state name
+        | Set.member name seen = Left $ DuplicateProduction state name
         | otherwise = Right $ Set.insert name seen
       where
         name = annotationName $ FTA.transitionConstraint transition
 
-{- | Import each existing annotation as one fact named @imported@. Transition
+{- | Import each existing annotation as one fact named @imported@. Production
 names are @t0@, @t1@, and so on within each row. This retains the graph, but
 cannot recover separate facts or branches discarded before the import.
 -}
@@ -140,21 +140,20 @@ applyPatch (Patch expected edits) current
 {- | Apply an ordered batch of edits. An invalid edit returns an error.
 SetStart makes a state the initial state; the last SetStart of the batch
 applies. SetFact adds or replaces a named fact; RemoveFact and
-DeleteRow require their targets to exist. PutTransition replaces a named
-production in place or appends a new one. DeleteTransition requires an existing
-name and leaves the state row. DefineTransition changes the symbol and children
+DeleteRow require their targets to exist. PutProduction replaces a named
+production in place or appends a new one. DeleteProduction requires an existing
+name and leaves the state row. DefineProduction changes the symbol and children
 of an existing production while retaining its facts, or appends a new production
 with no facts. Named edits require an existing state and a unique
 production name. They resolve their targets at that step
-in the sequence. Validate graph references and arities after the complete batch,
-so the initial state must have a row only at the end of the batch. Without a
+in the sequence. Validate the graph references after the complete batch, so
+the initial state must have a row only at the end of the batch. Without a
 SetStart, the initial state stays the same. The old document is unchanged.
 
-The result replaces the rows that the edits change and shares the other rows
-(see 'FTA.replaceRows'). A batch that changes the initial state validates the
-whole graph again with 'FTA.mkFTA'. Transition names are checked again only in
-the changed rows. It does not reuse count tables or provide a compact
-serialized patch.
+Both 'FTA.replaceRows' and, when the initial state changes, 'FTA.mkFTA' check
+the whole graph. 'FTA.replaceRows' also shares the rows that the edits do not
+change. Production names are checked again only in the changed rows, because
+every document has distinct names in its other rows.
 -}
 applyEdits :: (Ord state) => [Edit state] -> Document state -> Either (DocumentError state) (Document state)
 applyEdits edits current = do
@@ -166,7 +165,7 @@ applyEdits edits current = do
             if start == FTA.initialState graph
                 then FTA.replaceRows changed graph
                 else FTA.mkFTA start $ Map.toList rows
-    mapM_ distinctTransitions [(state, transitions) | (state, Just transitions) <- Map.toList changed]
+    mapM_ distinctProductions [(state, transitions) | (state, Just transitions) <- Map.toList changed]
     pure $ Document graph'
   where
     graph = sourceGraph current
@@ -175,9 +174,9 @@ applyEdits edits current = do
         SetStart _ -> []
         PutRow state _ -> [state]
         DeleteRow state -> [state]
-        PutTransition state _ -> [state]
-        DefineTransition state _ _ _ -> [state]
-        DeleteTransition state _ -> [state]
+        PutProduction state _ -> [state]
+        DefineProduction state _ _ _ -> [state]
+        DeleteProduction state _ -> [state]
         SetFact state _ _ _ -> [state]
         RemoveFact state _ _ -> [state]
     apply rows edit = case edit of
@@ -186,39 +185,39 @@ applyEdits edits current = do
         DeleteRow state
             | Map.member state rows -> Right $ Map.delete state rows
             | otherwise -> Left $ MissingState state
-        PutTransition state transition -> case Map.lookup state rows of
+        PutProduction state transition -> case Map.lookup state rows of
             Nothing -> Left $ MissingState state
             Just transitions
-                | any (named name) transitions -> changeTransition state name (const $ Right $ Just transition) rows
+                | any (named name) transitions -> changeProduction state name (const $ Right $ Just transition) rows
                 | otherwise -> Right $ Map.insert state (transitions <> [transition]) rows
               where
                 name = annotationName $ FTA.transitionConstraint transition
-        DefineTransition state name symbol children -> case Map.lookup state rows of
+        DefineProduction state name symbol children -> case Map.lookup state rows of
             Nothing -> Left $ MissingState state
             Just transitions
-                | any (named name) transitions -> changeTransition state name changeConstructor rows
+                | any (named name) transitions -> changeProduction state name changeConstructor rows
                 | otherwise ->
                     Right $ Map.insert state (transitions <> [FTA.Transition symbol children $ Annotation name Map.empty]) rows
               where
                 changeConstructor selected = Right $ Just selected{FTA.transitionSymbol = symbol, FTA.transitionChildren = children}
-        DeleteTransition state name -> changeTransition state name (const $ Right Nothing) rows
-        SetFact state transition fact constraint ->
-            changeFacts state transition (Right . Map.insert fact constraint) rows
-        RemoveFact state transition fact ->
-            changeFacts state transition (remove state transition fact) rows
-    remove state transition fact facts
+        DeleteProduction state name -> changeProduction state name (const $ Right Nothing) rows
+        SetFact state production fact constraint ->
+            changeFacts state production (Right . Map.insert fact constraint) rows
+        RemoveFact state production fact ->
+            changeFacts state production (remove state production fact) rows
+    remove state production fact facts
         | Map.member fact facts = Right $ Map.delete fact facts
-        | otherwise = Left $ MissingFact state transition fact
-    changeFacts state name update = changeTransition state name $ \selected -> do
+        | otherwise = Left $ MissingFact state production fact
+    changeFacts state name update = changeProduction state name $ \selected -> do
         let annotation = FTA.transitionConstraint selected
         facts <- update $ annotationFacts annotation
         Right $ Just selected{FTA.transitionConstraint = annotation{annotationFacts = facts}}
-    changeTransition state name update rows = case Map.lookup state rows of
+    changeProduction state name update rows = case Map.lookup state rows of
         Nothing -> Left $ MissingState state
         Just transitions -> case break (named name) transitions of
-            (_, []) -> Left $ MissingTransition state name
+            (_, []) -> Left $ MissingProduction state name
             (before, selected : after)
-                | any (named name) after -> Left $ DuplicateTransition state name
+                | any (named name) after -> Left $ DuplicateProduction state name
                 | otherwise -> do
                     changed <- update selected
                     Right $ Map.insert state (before <> maybeToList changed <> after) rows
@@ -230,10 +229,10 @@ explainDocumentError failure = case failure of
     InvalidGraph (FTA.MissingInitialState state) -> "initial state " <> show state <> " has no row"
     InvalidGraph (FTA.DanglingState state) -> "child state " <> show state <> " has no row"
     DuplicateState state -> "duplicate state row: " <> show state
-    DuplicateTransition state name -> target state name <> " has a duplicate name"
+    DuplicateProduction state name -> target state name <> " has a duplicate name"
     MissingState state -> "state " <> show state <> " has no row"
-    MissingTransition state name -> target state name <> " does not exist"
+    MissingProduction state name -> target state name <> " does not exist"
     MissingFact state name fact -> target state name <> " has no fact " <> show fact
     StalePatch -> "the document changed after this patch was prepared"
   where
-    target state name = "transition " <> show name <> " in state " <> show state
+    target state name = "production " <> show name <> " in state " <> show state
