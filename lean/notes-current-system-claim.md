@@ -1,3 +1,45 @@
+# Verified recursive output ancestry: 2026-10-29 01:42 CET
+
+Source `bd75ee348c17f4946fadb5c5a676bf7252180725` is pushed and verified on formalize.
+The full goal remains ACTIVE. Read `lean/notes-current-recursive-ancestry-progress.md`.
+Earlier document bodies follow unchanged as dated checkpoints.
+
+For each finite recursive capacity, the original resource contracts give a
+sufficient work bound and a stable actual result. Every emitted output retains
+all original recursion keys at the SAME RAW SLOT, including outputs before a
+stop. The theorem keeps all prior resources and admitted histories. It adds no
+new input gate or future-retention supplier. Stopped diagnostic caches remain
+outside this output theorem. It proves no sufficient recursive depth.
+
+Four additive modules contain six public theorems and four private helpers:
+587 lines/35,942 bytes. All five final strict sources pass. Audit checks 81,980
+theorem dependencies in 4,599 jobs. All 11 compiler commands pass at serial
+measured 4 GiB and zero swap. Public readback: 833 theorem checks/axiom lists,
+68 definition bodies, 3,473,780 bytes. The prior 3,454,104 bytes are an exact
+prefix. All 19,676 new bytes were read. All 4,594 old non-Audit Lean sources,
+443 stronger sources and 821 integrated Haskell/Cabal identities retain hashes.
+
+Strongest semantics remains conditional checked rendered soundness under the
+semantic/resource contracts, fixed-PCS and whole-Discharged. Greater recursive
+depth retains the ordered output prefix. Native generated-family/rank,
+nonterminal chosen-model emission and original-input sufficient recursive depth
+remain the main gaps. Complete policies/origin/public API and physical Haskell
+correspondence remain open. DONE does not imply Discharged. Configured stop
+can emit partial results.
+
+No Haskell change, new Haskell defect or Haskell check occurred here. The parser
+repair `c15021ce706ef560b6c0ab335ceed1a4b67ba4aa` and its exact reproduction remain
+in FINDINGS for external pickup. Main remains `63aae675c` and lacks that repair.
+Board 720 records this checked proof result with exact readback.
+Evidence: `lean/restart-evidence/20261029-recursive-ancestry-progress/`.
+Next: extend the closed finite-depth producer to actual stopped diagnostic
+caches. Per-output ResourceHistory alone is insufficient when no output exists.
+Preserve frozen evidence and counterexamples. Use a new writable area.
+Refresh upstream. Normal formalize pushes remain explicitly authorized.
+Continue the full objective without asking whether to continue.
+
+---
+
 # Verified prepared ancestry and serialization repair: 2026-10-29 01:15 CET
 
 Source `5eb88a239b05ee6ede5acb296b64ee0fe8616f02` is pushed and verified on formalize. Full goal ACTIVE.
