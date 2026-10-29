@@ -31,6 +31,7 @@ import Data.CFTA.Equality.Constraint (
 import qualified Data.CFTA.Formula as F
 import Data.CFTA.Index (ClassRank (..), Size, Weight)
 import qualified Data.CFTA.Language as L
+import qualified Data.CFTA.Merge as Merge
 import Data.CFTA.Path (path)
 import Data.CFTA.Refinement.Expression (refinementFormula, (.==), (.>))
 import Data.CFTA.Refinement.LiquidFixpoint (withZ3)
@@ -161,6 +162,21 @@ spec = do
         it "drop a doc comment, as the readers without notes do" $
             T.parseUpdateWith strings "/// The changes.\nupdate 1;\n/// Why.\nput row S {\n  /// A leaf.\n  a = a;\n}\nstart S;"
                 `shouldBe` T.parseUpdateWith strings "update 1; put row S { a = a; } start S;"
+
+    describe "merges" $ do
+        it "keep a merged language" $ do
+            roundTrip T.printLanguage T.parseLanguage merged
+            roundTrip (T.printLanguageWith strings) (T.parseLanguageWith strings) merged
+
+        it "give the same merge after the three versions are printed and read" $ do
+            let reopen = must . T.parseLanguageWith strings . T.printLanguageWith strings
+            Merge.merge3 (reopen mergeBase) (reopen mergeLeft) (reopen mergeRight) `shouldBe` Right merged
+            merged `shouldBe` must (L.update mergeBase $ leftChanges <> rightChanges)
+
+        it "give each version from the base with a difference that is printed and read" $
+            forM_ [mergeLeft, mergeRight, merged, must $ L.update mergeBase $ L.start "atom"] $ \other -> do
+                let printed = T.printUpdateWith strings $ Merge.diff mergeBase other
+                L.update mergeBase (must $ T.parseUpdateWith strings printed) `shouldBe` Right other
 
     describe "doc comments" $ do
         it "keep the comments of a graph and of its states" $
@@ -602,6 +618,27 @@ sameRanks before after = withZ3 [] $ \solver -> do
         forM_ (zip [0 ..] $ Sized.termsOfSize old size) $ \(rank, term) -> do
             Sized.unrankOfSize new size (ClassRank rank) `shouldBe` Just term
             Sized.rankOfSize new term `shouldBe` Just (size, ClassRank rank)
+
+-- | The base of the merge tests: the language of 'liquid' with every template form.
+mergeBase :: L.Language String
+mergeBase = withForms $ document liquid
+
+-- | A new fact and a new exclusion.
+leftChanges :: L.Update String
+leftChanges = L.require (L.at "pair" "t0") "same" equal <> L.without "extra" (AtRoot Hole)
+
+-- | A new production, a removed fact, and a restored exclusion.
+rightChanges :: L.Update String
+rightChanges =
+    L.define (L.at "atom" "two") (RefinedSymbol "two" $ refinementFormula (.== 2)) []
+        <> L.relax (L.at "atom" "t1") "imported"
+        <> L.restore "0"
+
+-- | The two sides of the merge tests, and their merge.
+mergeLeft, mergeRight, merged :: L.Language String
+mergeLeft = must $ L.update mergeBase leftChanges
+mergeRight = must $ L.update mergeBase rightChanges
+merged = must $ Merge.merge3 mergeBase mergeLeft mergeRight
 
 -- | An update with every operation, valid on the language of 'liquid' with every template form.
 everyOperation :: L.Update String
