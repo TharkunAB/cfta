@@ -99,9 +99,9 @@ data CommentTarget state
     = OnFile
     | OnState !state
     | -- | A production, by its state and its name.
-      OnProduction !state !Text
+      OnProduction !state !D.ProductionName
     | -- | A fact, by its state, the name of its production, and its name.
-      OnFact !state !Text !Text
+      OnFact !state !D.ProductionName !D.FactName
     | OnExclusion !L.ExclusionName
     deriving (Eq, Ord, Show)
 
@@ -347,15 +347,24 @@ renderUpdate encode (L.Update operations) = built $ "update 1;\n" <> foldMap ope
                 "define "
                     <> state at
                     <> " "
-                    <> nameText name
+                    <> nameText (D.productionNameText name)
                     <> " = "
                     <> symbolText' symbol
                     <> childrenText (map state children)
                     <> ";\n"
-            D.DeleteProduction at name -> "remove " <> state at <> " " <> nameText name <> ";\n"
+            D.DeleteProduction at name -> "remove " <> state at <> " " <> nameText (D.productionNameText name) <> ";\n"
             D.SetFact at name fact constraint ->
-                "require " <> state at <> " " <> nameText name <> " " <> nameText fact <> " = " <> constraintText constraint <> ";\n"
-            D.RemoveFact at name fact -> "relax " <> state at <> " " <> nameText name <> " " <> nameText fact <> ";\n"
+                "require "
+                    <> state at
+                    <> " "
+                    <> nameText (D.productionNameText name)
+                    <> " "
+                    <> nameText (D.factNameText fact)
+                    <> " = "
+                    <> constraintText constraint
+                    <> ";\n"
+            D.RemoveFact at name fact ->
+                "relax " <> state at <> " " <> nameText (D.productionNameText name) <> " " <> nameText (D.factNameText fact) <> ";\n"
             D.PutProduction at transition -> "put production " <> state at <> " " <> productionText "" encode none at transition
             D.PutRow at transitions -> "put row " <> state at <> " {\n" <> foldMap (sourceTransitionText encode none at) transitions <> "}\n"
             D.DeleteRow at -> "delete row " <> state at <> ";\n"
@@ -454,7 +463,7 @@ productionText ::
     FTA.Transition state Symbol D.Annotation ->
     Builder
 productionText indent encode notes state edge =
-    nameText name
+    nameText (D.productionNameText name)
         <> " = "
         <> edgeText encode edge
         <> if Map.null facts then ";\n" else " {\n" <> foldMap fact (Map.toAscList facts) <> indent <> "};\n"
@@ -466,7 +475,7 @@ productionText indent encode notes state edge =
         commentText (indent <> "  ") (commentOf notes $ OnFact state name factName)
             <> indent
             <> "  "
-            <> nameText factName
+            <> nameText (D.factNameText factName)
             <> " = "
             <> constraintText constraint
             <> ";\n"
@@ -849,21 +858,21 @@ readUpdate decode = runParser $ do
             "start" -> (D.SetStart <$> state <* end) >>= source
             "define" -> do
                 at <- state
-                name <- nameParser
+                name <- productionNameParser
                 token "="
                 (symbol, children) <- edgeParser decode
                 end
                 source $ D.DefineProduction at name symbol children
-            "remove" -> (D.DeleteProduction <$> state <*> nameParser <* end) >>= source
+            "remove" -> (D.DeleteProduction <$> state <*> productionNameParser <* end) >>= source
             "require" -> do
                 at <- state
-                name <- nameParser
-                fact <- nameParser
+                name <- productionNameParser
+                fact <- factNameParser
                 token "="
                 constraint <- constraintParser
                 end
                 source $ D.SetFact at name fact constraint
-            "relax" -> (D.RemoveFact <$> state <*> nameParser <*> nameParser <* end) >>= source
+            "relax" -> (D.RemoveFact <$> state <*> productionNameParser <*> factNameParser <* end) >>= source
             "put" -> do
                 target <- word
                 case target of
@@ -955,11 +964,12 @@ sourceTransitionParser ::
     A.Parser (FTA.Transition state Symbol D.Annotation, [NoteEntry state])
 sourceTransitionParser decode state = do
     comment <- itemComment
-    name <- nameParser
+    name <- productionNameParser
     token "="
     (symbol, children) <- edgeParser decode
     facts <- ifNext '{' (token "{" *> untilClose '}' fact <* token "}") []
-    namedFacts <- namedMap "fact" [(factName, constraint) | (factName, constraint, _) <- facts]
+    namedFacts <-
+        Map.mapKeys D.FactName <$> namedMap "fact" [(D.factNameText factName, constraint) | (factName, constraint, _) <- facts]
     token ";"
     pure
         ( FTA.Transition symbol children $ D.Annotation name namedFacts
@@ -969,7 +979,7 @@ sourceTransitionParser decode state = do
   where
     fact = do
         comment <- itemComment
-        name <- nameParser
+        name <- factNameParser
         token "="
         constraint <- constraintParser
         token ";"
@@ -1160,6 +1170,14 @@ namedMap role entries = do
     distinct seen name
         | Set.member name seen = fail ("duplicate " <> role <> " name: " <> show name)
         | otherwise = pure $ Set.insert name seen
+
+-- | Read the name of a production.
+productionNameParser :: A.Parser D.ProductionName
+productionNameParser = D.ProductionName <$> nameParser
+
+-- | Read the name of a fact.
+factNameParser :: A.Parser D.FactName
+factNameParser = D.FactName <$> nameParser
 
 -- | Read an unquoted label or a quoted Unicode string.
 nameParser :: A.Parser Text

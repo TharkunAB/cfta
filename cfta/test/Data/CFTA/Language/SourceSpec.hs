@@ -5,7 +5,6 @@ module Data.CFTA.Language.SourceSpec (spec) where
 
 import Control.Monad (void)
 import qualified Data.Map.Strict as Map
-import Data.Text (Text)
 import Test.Hspec (Spec, describe, it, shouldBe)
 
 import qualified Data.CFTA as FTA
@@ -18,7 +17,7 @@ import Data.CFTA.Constraint (
     semanticConstraint,
  )
 import Data.CFTA.Equality.Constraint (mkEqConstraints)
-import Data.CFTA.Language.Source (Annotation (..), DocumentError (..), Edit (..))
+import Data.CFTA.Language.Source (Annotation (..), DocumentError (..), Edit (..), FactName, Production, ProductionName)
 import qualified Data.CFTA.Language.Source as Source
 import Data.CFTA.Path (path)
 import Data.CFTA.Symbol (Symbol)
@@ -102,7 +101,7 @@ rows =
     ]
 
 -- | The facts of the pair production.
-pairFacts :: Map.Map Text Constraint
+pairFacts :: Map.Map FactName Constraint
 pairFacts =
     Map.fromList
         [ ("same", equalityConstraint $ mkEqConstraints [[path [0], path [1]]])
@@ -114,7 +113,7 @@ disabled :: Constraint
 disabled = semanticConstraint Bottom
 
 -- | A production with no facts.
-production :: Symbol -> [State] -> Text -> FTA.Transition State Symbol Annotation
+production :: Symbol -> [State] -> ProductionName -> Production State
 production symbol children name = FTA.Transition symbol children $ Annotation name Map.empty
 
 -- | The transitions of one state.

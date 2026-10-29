@@ -71,7 +71,7 @@ original =
             , (Atom, [production "zero" [], production "one" []])
             ]
   where
-    production symbol children = FTA.Transition symbol children $ Source.Annotation (symbolText symbol) Map.empty
+    production symbol children = FTA.Transition symbol children $ Source.Annotation (Source.ProductionName $ symbolText symbol) Map.empty
 
 -- | The terms of the compiled language.
 terms :: Language State -> Set.Set (Term Symbol)

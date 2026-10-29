@@ -27,10 +27,11 @@ Before release, the package was called `microcfta`.
   `Data.CFTA.Template`: the terms of an automaton that no exclusion rejects.
 - Add `Data.CFTA.Language.Source`: editable source documents with named
   productions and named facts, and patches that check the document they
-  were prepared on. `applyEdits` applies a batch without that check. Both
-  replace only the changed rows and share the others. The edit `SetStart`
-  changes the initial state; the new initial state must have a row at the end
-  of the batch.
+  were prepared on. The names have the types `ProductionName` and
+  `FactName`, which `Data.CFTA.Language` exports too. `applyEdits` applies a
+  batch without that check. Both replace only the changed rows and share the
+  others. The edit `SetStart` changes the initial state; the new initial
+  state must have a row at the end of the batch.
 - Add `Data.CFTA.Language`: updates that combine with `<>` over a source
   document, and named exclusions that `restore` removes again. `start`
   changes the initial state.

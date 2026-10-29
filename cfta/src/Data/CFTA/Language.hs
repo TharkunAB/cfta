@@ -34,6 +34,7 @@ import Data.Text (Text)
 
 import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint)
+import Data.CFTA.Language.Source (FactName (..), ProductionName (..))
 import qualified Data.CFTA.Language.Source as Source
 import Data.CFTA.Symbol (Symbol)
 import Data.CFTA.Template (Exclusion (..), Template)
@@ -47,14 +48,6 @@ data Language state = Language
     , exclusions :: !(Map ExclusionName (Exclusion Symbol))
     }
     deriving (Eq, Show)
-
--- | A source production name. Text belongs at the declaration and codec boundary.
-newtype ProductionName = ProductionName {productionNameText :: Text}
-    deriving (Eq, Ord, Show, IsString)
-
--- | A named source obligation, distinct from production and exclusion names.
-newtype FactName = FactName {factNameText :: Text}
-    deriving (Eq, Ord, Show, IsString)
 
 -- | The identity of a reversible exclusion.
 newtype ExclusionName = ExclusionName {exclusionNameText :: Text}
@@ -97,19 +90,19 @@ equality on such a child holds for no term.
 -}
 define :: ProductionRef state -> Symbol -> [state] -> Update state
 define (ProductionRef state name) symbol children =
-    editSource $ Source.DefineProduction state (productionNameText name) symbol children
+    editSource $ Source.DefineProduction state name symbol children
 
 -- | Remove an existing production. Keep its state even when the row becomes empty.
 remove :: ProductionRef state -> Update state
-remove (ProductionRef state name) = editSource $ Source.DeleteProduction state (productionNameText name)
+remove (ProductionRef state name) = editSource $ Source.DeleteProduction state name
 
 -- | Add or replace one named fact on an existing production.
 require :: ProductionRef state -> FactName -> Constraint -> Update state
-require (ProductionRef state name) fact constraint = editSource $ Source.SetFact state (productionNameText name) (factNameText fact) constraint
+require (ProductionRef state name) fact constraint = editSource $ Source.SetFact state name fact constraint
 
 -- | Remove one existing fact. Keep the production and all its other facts.
 relax :: ProductionRef state -> FactName -> Update state
-relax (ProductionRef state name) fact = editSource $ Source.RemoveFact state (productionNameText name) (factNameText fact)
+relax (ProductionRef state name) fact = editSource $ Source.RemoveFact state name fact
 
 {- | Make a state the initial state. The state must have a row when the
 update ends, so one update can add the row and make it the initial state.

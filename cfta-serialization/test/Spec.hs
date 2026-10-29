@@ -652,7 +652,7 @@ document = must . D.fromGraph
 
 -- | A production with no facts.
 production :: Symbol -> [state] -> FTA.Transition state Symbol D.Annotation
-production symbol children = FTA.Transition symbol children $ D.Annotation (symbolText symbol) Map.empty
+production symbol children = FTA.Transition symbol children $ D.Annotation (D.ProductionName $ symbolText symbol) Map.empty
 
 -- | A one-state language whose name, symbol, and fact use the same text.
 singleSource :: Text -> Constraint -> D.Document String
@@ -664,8 +664,8 @@ singleSource name constraint =
                 ( Text.unpack name
                 ,
                     [ FTA.Transition (RefinedSymbol (Symbol name) $ F.Atom F.Eq value (F.Lit $ 2 ^ (100 :: Int))) []
-                        $ D.Annotation name
-                        $ Map.singleton name constraint
+                        $ D.Annotation (D.ProductionName name)
+                        $ Map.singleton (D.FactName name) constraint
                     ]
                 )
             , ("dead", [])
