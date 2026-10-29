@@ -105,6 +105,21 @@ theorem initial_pendingSize (root : Nat) (assignment : Nat → Term Symbol) :
     pendingSize (initial root : State Symbol Guard) assignment = NumberedTerms.size (assignment 0) := by
   simp [pendingSize, initial, scanCost, weight]
 
+/-- A literal slot write changes only that slot's pending graph cost. -/
+theorem values_set_pendingSize (before : State Symbol Guard) (target : Nat)
+    (old new : UVarValue Symbol) (assignment : Nat → Term Symbol)
+    (stored : before.values[target]? = some old) :
+    pendingSize {before with values := before.values.set target new} assignment +
+        (match (generalizing := false) old with
+        | .unenumerated (some _) _ => NumberedTerms.size (assignment target)
+        | _ => 0) =
+      pendingSize before assignment +
+        (match (generalizing := false) new with
+        | .unenumerated (some _) _ => NumberedTerms.size (assignment target)
+        | _ => 0) := by
+  simpa only [pendingSize, weight, Nat.zero_add] using
+    from_set assignment before.values 0 target old new stored
+
 /-- Actual allocation adds only the fresh graph slot's assigned cost. -/
 theorem allocate_pendingSize (node : Option Nat) (before after : State Symbol Guard) (uv : Nat)
     (assignment extended : Nat → Term Symbol)
