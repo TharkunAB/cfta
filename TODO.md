@@ -18,6 +18,10 @@ the order of `sized` from a size index of the prefix.
 
 - #102 `feature/grammar-mask`: Completions of a prefix
 
+## Ready: fixes
+
+- #193 `fix/emptiness-budget`: Count edge tuples in the budget of provablyEmpty. It stops the random failure of CI on `main` in the property "restrict to a template as filtering the terms by the template does". The model of the emptiness budget on the `formalize` branch counts conjunctions and needs the new count.
+
 ## Not in progress
 
 Each pull request in this section is a draft.
