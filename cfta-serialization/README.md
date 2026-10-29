@@ -1,25 +1,32 @@
 # cfta-serialization
 
-Read and write complete FTA, ECTA, and LTA graphs and query checkpoints.
+Read and write complete FTA, ECTA, and LTA graphs, editable language values,
+and query checkpoints.
 `Data.CFTA.Serialization.Text` provides one readable format. It retains full
-refinements, every constraint constructor, cycles, empty/dead rows, repeated
-alternatives, and child order. Reading validates the graph without running a
-solver or enumerating terms.
+refinements, every constraint constructor, individual source facts, named
+exclusions, cycles, empty/dead rows, repeated alternatives, and child order.
+Reading validates the input without running a solver or enumerating terms.
 
 The format is version 1. Each file starts with its kind and version, such as
-`graph 1;`. The [grammar](#grammar) gives the complete syntax,
+`graph 1;` or `language 1;`. The [grammar](#grammar) gives the complete syntax,
 and [versions](#versions) says when a version changes.
+[Prior art](../docs/language-authoring-prior-art.md) compares this syntax with
+Redex, Nanopass, EDN, and KDL, and explains why the format has its own syntax.
 
 ## Typed values and exact round trips
 
 | Value | Printer | Parser | Header |
 | --- | --- | --- | --- |
 | `PlainFTA state Symbol` | `printGraph` | `parseGraph` | `graph 1;` |
+| `Document state` | `printDocument` | `parseDocument` | `document 1;` |
+| `Language state` | `printLanguage` | `parseLanguage` | `language 1;` |
+| `Update state` | `printUpdate` | `parseUpdate` | `update 1;` |
 | `Checkpoint state` | `printCheckpoint` | `parseCheckpoint` | `checkpoint 1;` |
 | `SamplingCheckpoint state` | `printSamplingCheckpoint` | `parseSamplingCheckpoint` | `sampling 1;` |
 
 Printers return `Text`. Parsers return `Either (TextError state) value`.
-`explainTextError` reports a syntax line/column or a checked graph error.
+`explainTextError` reports a syntax line/column, a checked graph error, or a
+checked source error.
 The default state labels use `Show` and `Read`. For lawful instances:
 
 ```haskell
@@ -39,9 +46,11 @@ Use an ADT for states. For example:
 data State = Atom | Expr deriving (Eq, Ord, Show, Read)
 ```
 
-For custom or portable state labels, use `StateCodec state` with
-`printGraphWith`/`parseGraphWith`, `printCheckpointWith`/`parseCheckpointWith`, or
-`printSamplingCheckpointWith`/`parseSamplingCheckpointWith`. The codec contains
+For custom or portable state labels, use `StateCodec state` and the corresponding
+`printGraphWith`/`parseGraphWith`, `printDocumentWith`/`parseDocumentWith`,
+`printLanguageWith`/`parseLanguageWith`, `printUpdateWith`/`parseUpdateWith`,
+`printCheckpointWith`/`parseCheckpointWith`, or
+`printSamplingCheckpointWith`/`parseSamplingCheckpointWith` functions. The codec contains
 `encodeState :: state -> Text` and `decodeState :: Text -> Either String state`.
 The snapshot printer handles quoting. For a graph with `Text` state names:
 
@@ -52,7 +61,7 @@ textStates = StateCodec id Right
 Decoding an encoded state must return that exact state and preserve equality and
 ordering. A structured state such as `Index 3` can use derived `Show`/`Read`; its
 label is printed as `"Index 3"`. State labels are the only caller-defined codec.
-Constraints, symbols, and paths remain typed values.
+Constraints, symbols, paths, and source operations remain typed values.
 
 ## A complete readable graph
 
@@ -76,6 +85,37 @@ constraint after `where`. Only an exact top symbol refinement is omitted.
 Unknown references are errors. A symbol can occur at several arities.
 Duplicate states are errors even when their rows are identical.
 
+## A complete readable language
+
+```text
+language 1;
+start Expr;
+
+state Atom {
+  zero = zero @{ v == 0 };
+  one = one @{ v == 1 };
+  two = two @{ v == 2 };
+}
+
+state Expr {
+  pair = pair(Atom, Atom) {
+    same = equal([0], [1]);
+  };
+  wrap = wrap(Expr);
+}
+
+exclude zero-pair = root pair(zero @{ v == 0 }, zero @{ v == 0 });
+```
+
+A source production has a stable name, complete symbol, ordered child states,
+and optional named facts. Only an exact top symbol refinement is omitted.
+Production names are unique within their state. Fact and exclusion names must
+also be unique in their scope. Unknown references are errors. A symbol can occur
+at several arities. Duplicate source states are errors even when their rows are
+identical.
+
+A document uses the same source rows with a `document 1;` header.
+
 Names can use ASCII letters, digits, `_`, `-`, and `+`. Other names use double
 quotes. Quoted strings retain Unicode and escaped control characters. Supported
 escapes are `\"`, `\\`, `\/`, `\b`, `\f`, `\n`, `\r`, `\t`, and `\uXXXX`;
@@ -85,36 +125,44 @@ a non-BMP escape uses a valid surrogate pair. The printer also quotes the name
 ## Doc comments
 
 A line that starts with exactly three slashes, `///`, is a doc comment. It
-documents the item after it: the header of the file or a state. A graph
-transition has no doc comment. A `//` comment, and a comment with four or more
-slashes, is not kept.
+documents the item after it: the header of the file, a state, a production, a
+fact, or an exclusion. A graph transition has no doc comment. A `//` comment,
+and a comment with four or more slashes, is not kept.
 
 ```text
 /// Pairs of small numbers.
-graph 1;
+language 1;
 start Expr;
 
 /// The leaves.
 state Atom {
-  zero @{ v == 0 };
-  one @{ v == 1 };
+  zero = zero @{ v == 0 };
+  one = one @{ v == 1 };
 }
 
-/// A pair of atoms, or a wrapped expression.
 state Expr {
-  pair(Atom, Atom);
-  wrap(Expr);
+  /// A pair of atoms.
+  pair = pair(Atom, Atom) {
+    /// Both atoms are the same.
+    same = equal([0], [1]);
+  };
 }
+
+/// A pair of zeros is not a term.
+exclude zero-pair = root pair(zero @{ v == 0 }, zero @{ v == 0 });
 ```
 
 The doc comments are kept beside the value, in `Notes state`. Its field
-`noteComments` maps a `CommentTarget state` (`OnFile` or `OnState`) to the text
-of the comment. One space after `///` is not part of the text. Consecutive
-comment lines are one text, with a newline between the lines.
+`noteComments` maps a `CommentTarget state` (`OnFile`, `OnState`,
+`OnProduction`, `OnFact`, or `OnExclusion`) to the text of the comment. One
+space after `///` is not part of the text. Consecutive comment lines are one
+text, with a newline between the lines.
 
 | Value | Printer | Parser |
 | --- | --- | --- |
 | `PlainFTA state Symbol` | `printGraphNotesWith` | `parseGraphNotesWith` |
+| `Document state` | `printDocumentNotesWith` | `parseDocumentNotesWith` |
+| `Language state` | `printLanguageNotesWith` | `parseLanguageNotesWith` |
 
 Each takes a `StateCodec`. `showCodec` gives the state labels of `printGraph`
 and `parseGraph`. The other readers read doc comments and drop them. A doc
@@ -128,10 +176,10 @@ a new comment does not make a checkpoint stale.
 
 ## Sorts
 
-A state can have a sort, written after its name: `state Pos : Int {`. The sorts
-are kept beside the value, in the field `noteSorts` of `Notes`, as the doc
-comments are. The printers and parsers with notes keep them; the other readers
-drop them.
+A state of a graph, a document, or a language can have a sort, written after
+its name: `state Pos : Int {`. The sorts are kept beside the value, in the field
+`noteSorts` of `Notes`, as the doc comments are. The printers and parsers with
+notes keep them; the other readers drop them.
 
 ```text
 graph 1;
@@ -172,7 +220,8 @@ outside the machine `Int` range is rejected instead of overflowing.
 
 `CLASSES` is `impossible` or a list of path classes, such as
 `[[[0], [1]], [[1], [2]]]`. Class order and empty/singleton classes are retained.
-Paths within one class are a set.
+Paths within one class are a set. Removing a source fact removes that obligation;
+it does not negate the constraint or reconstruct facts lost during compilation.
 
 | Guard | Operands |
 | --- | --- |
@@ -204,6 +253,52 @@ Sorts are `int`, `real`, `bool`, and `function([SORT, ...], RESULT)`.
 These are representations of existing typed constructors. A query backend still
 needs to support the stored constraints. Exact storage does not establish that
 an arbitrary formula can be decided or enumerated.
+
+## Exclusion templates
+
+A language stores its named exclusions as `exclude NAME = root TEMPLATE;` or
+`exclude NAME = anywhere TEMPLATE;`. A checkpoint stores the same exclusions
+without names, as `exclude root TEMPLATE;` or `exclude anywhere TEMPLATE;`.
+Both use one grammar rule, `exclusion-body`. Templates use `_` for a hole, `f(a, b)` for
+an exact node, `_(a, b)` for any symbol with those children, and a final `...`
+for a prefix. Thus `f(...)` and `_(...)` differ from exact leaves. Templates keep
+complete symbol refinements, so a term printed after `eraseRefinements` does not
+select the same terms. See [editable languages](../docs/editable-languages.md)
+for the updates that change a language before you save it.
+
+## Updates
+
+`printUpdate` and `parseUpdate` store a `Language.Update`, so that a list of
+changes can be saved and applied again later. Each operation is one statement,
+in order, with the same names, symbols, constraints, and templates as a
+language:
+
+```text
+update 1;
+define Atom two = two @{ v == 2 };
+require Expr pair same = equal([0], [1]);
+relax Expr pair positive;
+remove Atom one;
+put production Atom three = three {
+  never = false;
+};
+put row Extra {
+  leaf = leaf;
+}
+delete row Extra;
+exclude zero-pair = root pair(zero @{ v == 0 }, zero @{ v == 0 });
+restore old-rule;
+start Expr;
+```
+
+`define`, `remove`, `require`, `relax`, and `start` are the operations of the
+same names in `Data.CFTA.Language`. `put production`, `put row`, and
+`delete row` are the source edits `PutProduction`, `PutRow`, and `DeleteRow`.
+`start` is the source edit `SetStart`, written as the `start` line of a
+document. An update does not name the language it changes: apply it with
+`Language.update`, which checks it. An update has no notes: the reader reads a
+doc comment before the header, an operation, a production, or a fact, and
+drops it, as the other readers without notes do.
 
 ## Checkpoints
 
@@ -301,18 +396,37 @@ follow `draws`, as in a checkpoint.
 
 The grammar uses EBNF: `?` is optional, `*` is zero or more, and `+` is one or
 more. Spaces, line breaks, and `//` comments can come between any two tokens.
-A `name` is a state label, the sort of a state, a symbol, or a variable. The
-printer leaves a name unquoted when every character is an ASCII letter, a
-digit, `_`, `-`, or `+`, and the name is not `_`. It quotes every other name.
+A `name` is a state label, the sort of a state, a symbol, or a name of a
+production, a fact, an exclusion, or a variable. The printer leaves a name
+unquoted when every character is an ASCII letter, a digit, `_`, `-`, or `+`,
+and the name is not `_`. It quotes every other name.
 
 ```ebnf
 graph-file      = header("graph") graph-row* ;
+document-file   = header("document") source-row* ;
+language-file   = header("language") source-row* named-exclusion* ;
 header(kind)    = doc-comment? kind "1" ";" "start" name ";" ;
 
 graph-row       = doc-comment? "state" name ( ":" name )? "{" graph-edge* "}" ";"? ;
 graph-edge      = symbol children? ( "where" constraint )? ";" ;
+source-row      = doc-comment? "state" name ( ":" name )? "{" production* "}" ";"? ;
+production      = doc-comment? name "=" symbol children? ( "{" fact* "}" )? ";" ;
+fact            = doc-comment? name "=" constraint ";" ;
+named-exclusion = doc-comment? "exclude" name "=" exclusion-body ;
 symbol          = name ( "@" "{" formula "}" )? ;
 children        = "(" ( name ( "," name )* )? ")" ;
+
+update-file     = doc-comment? "update" "1" ";" ( doc-comment? operation )* ;
+operation       = "start" name ";"
+                | "define" name name "=" symbol children? ";"
+                | "remove" name name ";"
+                | "require" name name name "=" constraint ";"
+                | "relax" name name name ";"
+                | "put" "production" name production
+                | "put" "row" name "{" production* "}" ";"?
+                | "delete" "row" name ";"
+                | "exclude" name "=" exclusion-body
+                | "restore" name ";" ;
 
 checkpoint-file = "checkpoint" "1" ";" query "next" "size" integer "rank" integer ";"
                   exclusion* plain-graph ;
@@ -322,7 +436,8 @@ sampling-file   = "sampling" "1" ";" query
                   exclusion* plain-graph ;
 query           = "query" name integer ";" "bound" integer ";" ;
 weight          = integer ":" integer ;
-exclusion       = "exclude" ( "root" | "anywhere" ) template ";" ;
+exclusion       = "exclude" exclusion-body ;
+exclusion-body  = ( "root" | "anywhere" ) template ";" ;
 plain-graph     = "graph" "1" ";" "start" name ";" plain-row* ;
 plain-row       = "state" name "{" graph-edge* "}" ";"? ;
 template        = ( "_" | symbol ) template-args? ;
