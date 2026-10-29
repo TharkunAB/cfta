@@ -11,9 +11,12 @@ the top.
 
 Each pull request is one complete feature. #188, the graph text format, #116,
 checkpoints, and #110, editable source documents and their text forms, are on
-`main`. #126 is ready for review.
+`main`. #126 is ready for review. It moves `Data.CFTA.Document` to
+`Data.CFTA.Language.Source`, and production and fact names become
+`ProductionName` and `FactName`: open work that imports the old module or
+builds an `Edit` from `Text` needs these changes when it is rebased.
 
-- #126 `feature/document-merge`: Diff and three-way merge of languages by stable names
+- #126 `feature/document-merge`: Diff and three-way merge of languages, under Data.CFTA.Language
 
 ## Not in progress
 
