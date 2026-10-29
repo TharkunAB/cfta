@@ -21,29 +21,28 @@
   and a production with another number of children than its expansion. Each
   report has a counterexample term, built with the smallest terms of
   `Data.CFTA.Sized`, and its lowering. Automata with constraints are rejected.
-- `Data.CFTA.Sized.termsOfSizeFrom`: the terms of a size class from a class
-  rank on. Where the count table applies, it does not build the terms before
-  the class rank.
-- Add `Data.CFTA.Sized.Checkpoint`: resume a size-ordered listing of the
-  terms of a graph, also in a new process. `start` gives the checkpoint before
-  the first term. `resume` builds the size classes again and gives the terms
-  after a checkpoint, each with the checkpoint after it. It rejects a
-  checkpoint of another route, route version, or graph, and names the first
-  row that differs. `relocate` finds a term in an edited graph. A graph with a
-  guard beyond equality constraints needs a solver: `resume` rejects it.
-- `Data.CFTA.Sized.Checkpoint`: sampling checkpoints. `startSampling` and
-  `resumeSampling` draw terms from the same listing, uniformly or with a
-  weight for each size, with SplitMix64 (`splitMix64`, as `splitmix64.c`).
-  Draw `i` depends only on the seed and on `i`, so a checkpoint holds the
-  seed and the number of draws, and a new process gives the same next draws.
-  `resumeSampling` rejects another graph, other weights, another route
-  version, and another generator version.
 
 Before release, the package was called `microcfta-generator`.
 
 Initial release. `cfta-generator` is one generator over the constrained
 tree automata of `cfta`, with QuickCheck integration.
 
+- Add `Data.CFTA.Sized.Checkpoint`: resume a size-ordered listing of the
+  terms of a graph, or a sampled run of draws from it, also in a new process.
+  `start` gives the checkpoint before the first term. `resume` builds the size
+  classes again and gives the terms after a checkpoint, each with the
+  checkpoint after it. `relocate` finds a term in an edited graph.
+  `startSampling` and `resumeSampling` draw terms from the same listing,
+  uniformly or with a weight for each size, with SplitMix64 (`splitMix64`, as
+  `splitmix64.c`). Draw `i` depends only on the seed and on `i`, so a sampling
+  checkpoint holds the seed and the number of draws, and a new process gives
+  the same next draws. Resuming rejects another route or generator version,
+  another graph (naming the first row that differs), and other weights. A
+  graph with a guard beyond equality constraints needs a solver, and both
+  routes reject it.
+- `Data.CFTA.Sized.termsOfSizeFrom`: the terms of a size class from a class
+  rank on. Where the count table applies, it does not build the terms before
+  the class rank.
 - `Data.CFTA.Gen.ManySorted.checkSorts` and `checkSortsWith` check that a
   map from the states of an automaton to sorts fits a run-time signature:
   each transition is a function from the sorts of its children to the sort of

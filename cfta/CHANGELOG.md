@@ -63,17 +63,17 @@
   `Merge.diffDocument` are total and give `SetStart` first when the initial
   states differ; `DiffError` and `DifferentStart` are removed. The text
   format writes the edit as `start STATE;` in an update.
-- Add `Data.CFTA.Checkpoint`: a saved position in a size-ordered listing of
-  the terms of a graph. It holds the graph, the query route and its version,
-  the size bound, and the sized rank of the next term. `cfta-generator`
-  resumes it, and `cfta-serialization` prints and reads it.
-- Add `SamplingCheckpoint` to `Data.CFTA.Checkpoint`: a saved position in a
-  sampled run of draws from that listing. It holds the graph, the route and
-  its version, the bound, the weights of the sizes, the pseudorandom
-  generator and its version, the seed, and the number of draws so far.
 
 Before release, the package was called `microcfta`.
 
+- Add `Data.CFTA.Checkpoint`: saved positions in a size-ordered listing of the
+  terms of a graph, and in a sampled run of draws from that listing. A
+  `Checkpoint` holds the graph, the query route and its version, the size
+  bound, and the sized rank of the next term. A `SamplingCheckpoint` holds the
+  graph, the route and its version, the bound, the weights of the sizes, the
+  pseudorandom generator and its version, the seed, and the number of draws
+  so far. `cfta-generator` resumes both, and `cfta-serialization` prints and
+  reads both.
 - `Data.CFTA.EGraph.refines` is a rule condition on refinements, as egglog
   conditions a rule on a lattice value: the refinement of the e-class of a
   variable must imply a formula about its value. An analysis can meet the
