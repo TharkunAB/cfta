@@ -1,3 +1,35 @@
+# Current checkpoint: main Prefix integration,2026-10-30
+
+Full goal ACTIVE. Source 9f17b74c13f66e363545ce7e9c60e14bb878f599 integrates main bd5a406a6a3f84b7e3ae0906082783911509df83.
+Read lean/notes-current-main-prefix-integration.md first.
+Main adds Prefix completion/guard/weight APIs and sized deterministic/equality
+count tables.415 generator examples and56 serialization examples pass.
+Fourmolu/cabal-gild pass. No additional Haskell source repair was needed.
+Both checkpoint route versions are2. Ambiguous/equality fast routes can change
+within-size order; use their actual order in correspondence theorems.
+All4675 Lean files and476 protected identities remain exact. Prior Audit
+4675jobs/82394 axioms and984 public checks/79 definitions remain applicable.
+Nine old native inputs changed through upstream; four added; new baseline835.
+Upstream corrections and resource boundaries are in FINDINGS.
+
+NEXT: prove exact parked candidate-count progress, with every original parked
+and restart clause retained and no new premise. Selection.offered already
+supplies the selected true flag. Reuse the SAME full parked receipt and actual
+indexed write. Target after.candidates.length+1=before.candidates.length.
+This is source-only so far. Full contracts and proof plan are in the archive's
+control-research/neutral-control/STRONGER_STATEMENTS.md.
+Then build HeadAdmission path transport before output filtering. Cover stopped
+candidates and empty-output callbacks. A fixed-D carrier does not establish
+that any finite D suffices. Ordinary/opaque neutral control, global coverage,
+unfolding, exact public order/stops and Haskell correspondence remain open.
+Keep the optimized core and older constructor/equality/size-rank work.
+
+Archive:lean/restart-evidence/20261030-main-prefix-integration/.
+Keep every sealed payload, failed probe and marked draft. Use a fresh writable
+area. Pull/fetch before continuing; normal formalize pushes remain authorized.
+
+---
+
 # Current checkpoint: actual prepared callback progress,2026-10-30
 
 The full formalization goal remains ACTIVE on formalize.

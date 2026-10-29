@@ -1,3 +1,31 @@
+# Latest handoff: main Prefix integration,2026-10-30
+
+The full goal is ACTIVE. Source 9f17b74c13f66e363545ce7e9c60e14bb878f599 merges main bd5a406a6a3f84b7e3ae0906082783911509df83.
+Read lean/notes-current-main-prefix-integration.md for exact changes,
+verification, incorporated Haskell corrections and proof boundaries.
+The new Prefix API and fast sized counting routes are tested, not yet proved
+correspondent to Lean. Both checkpoint versions advance to2.
+All4675 Lean sources and476 protected identities remain exact. Current strict
+Audit evidence remains82394 theorem dependencies; public984 checks/79 definitions.
+Native checks pass415 generator+56 serialization examples and required formatters.
+The first attempt's missing-lgmp environment failure remains in evidence.
+New Haskell baseline835:822 prior identities exact,9 upstream changes,4 additions.
+No extra local Haskell repair was needed. Prior FINDINGS entries remain below.
+
+Next implement exact model-independent parked progress using the SAME existing
+full receipt and Selection.offered. Source-only complete statements and proof
+plan are archived. The candidate-count measure does not cover ordinary/opaque
+work. The checked(2,1,3) height example rejects the original-parent height bound.
+Path transport can start at HeadAdmission before completion/output filtering.
+The capacity-dependent forecast still needs all-state transport and a uniform
+bound. Global completion, public coverage and Haskell correspondence remain open.
+
+Archive:lean/restart-evidence/20261030-main-prefix-integration/.
+All sealed source-only reports and failed attempts are preserved. Continue in a
+fresh writable area. Pull/fetch first. Normal formalize pushes remain authorized.
+
+---
+
 # Latest handoff: prepared callback progress,2026-10-30
 
 The full goal is ACTIVE. Source 51c59ddd6826c138d0d746cd45f7647fd7ec2ace.
