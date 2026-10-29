@@ -46,8 +46,8 @@ private theorem node_bound (limit : Nat) (symbol : Symbol) (fragments : List Fra
 variable {bits : Nat}
 variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
 
-/-- Original accepted constructor inputs derive an actual mixed step with a strict pending-cost decrease. -/
-theorem accepted_constructor_decreases
+/-- A prepared constructor preserves the captured target and the complete progress result. -/
+theorem accepted_prepared_constructor_decreases
     (seed : Seed) (formulas : SourceGuards.Formulas FullSyntax.Formula)
     (solver : SourceGuards.Entailment FullSyntax.Formula)
     (inventory : Inventory) (caller : Caller (bits + 2)) (before : Cached) (checkEmpty : Bool)
@@ -64,7 +64,8 @@ theorem accepted_constructor_decreases
     (bounded : ∀ sc ∈ scs, sc.var < before.core.counter) (pending : InputsPending before.core scs)
     (canonical : EnumerationValidity.Canonical before.core)
     (target handle : Nat) (stored : before.core.values[target]? = some (.unenumerated (some handle) scs))
-    (parentLookup : lookupNode caller.checked.native.machine.heap handle = some (.node parentEntry edges depth free))
+    (parentAvailable : Available caller.checked.native.machine.heap (.node parentEntry edges depth free))
+    (parentClosed : free = [])
     (root : IsRoot before.core.representatives target)
     (ambient : InternedGuardedLanguage.Env Symbol) (assignment : Nat → Term Symbol) (term : Term Symbol)
     (parentValue : assignment target = term)
@@ -118,13 +119,6 @@ theorem accepted_constructor_decreases
         afterCaller.checked.native.machine.heap ∧
       EnumerationStorageProgress.pendingSize finalized.core extended + 1 ≤
         EnumerationStorageProgress.pendingSize before.core assignment := by
-  obtain ⟨actualParent, parentFound, parentKnown, parentIsClosed⟩ := realized target handle scs stored
-  have parentSame : actualParent = .node parentEntry edges depth free :=
-    Option.some.inj (parentFound.symm.trans parentLookup)
-  have parentAvailable : Available caller.checked.native.machine.heap (.node parentEntry edges depth free) := by
-    simpa only [parentSame] using parentKnown
-  have parentClosed : free = [] := by
-    simpa only [parentSame, Value.free] using parentIsClosed
   have insideValues : target < before.core.values.length := (List.getElem?_eq_some_iff.mp stored).1
   have inside : target < before.core.counter := by
     have aligned : before.core.counter = before.core.values.length := safe.1.aligned
@@ -259,5 +253,89 @@ theorem accepted_constructor_decreases
     simpa only [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using finalRun (k + ek)
   · rw [ownCost] at childCost
     omega
+
+/-- Original accepted constructor inputs derive an actual mixed step with a strict pending-cost decrease. -/
+theorem accepted_constructor_decreases
+    (seed : Seed) (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (caller : Caller (bits + 2)) (before : Cached) (checkEmpty : Bool)
+    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (edges : List (EdgeValue Symbol Constraint)) (depth : Nat) (free : List InternedBinderProtocol.Reference)
+    (edge : EdgeValue Symbol Constraint) (scs : List Suspended) (roots : Nat → Nat) (memos : Memos)
+    (initial : Context formulas solver inventory caller memos)
+    (selected : edge ∈ edges)
+    (safe : Safe before.core) (realized : PendingRealized caller.checked.native.machine.heap before.core)
+    (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (flags : ∀ slot, SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
+    (bounded : ∀ sc ∈ scs, sc.var < before.core.counter) (pending : InputsPending before.core scs)
+    (canonical : EnumerationValidity.Canonical before.core)
+    (target handle : Nat) (stored : before.core.values[target]? = some (.unenumerated (some handle) scs))
+    (parentLookup : lookupNode caller.checked.native.machine.heap handle = some (.node parentEntry edges depth free))
+    (root : IsRoot before.core.representatives target)
+    (ambient : InternedGuardedLanguage.Env Symbol) (assignment : Nat → Term Symbol) (term : Term Symbol)
+    (parentValue : assignment target = term)
+    (satisfied : Satisfies
+      (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+        ambient caller.checked.native.machine.heap)
+      (fun guard value => SourceEqualityPCSGuard.holds formulas solver guard value = true)
+      assignment before.core)
+    (accepted : InternedGuardedLanguage.edgeMeaning (SourceEqualityPCSGuard.holds formulas solver) ambient edge term)
+    (tries : List EqualityTrie.Trie) (residual : Option Constraint)
+    (projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual))
+    (fits : Fits seed.2 caller.checked)
+    (reserved : Reserved bits seed (SourcePruningEnumerationSelectedEdge.cost edge scs before.core.counter tries))
+    (known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap) :
+    ∃ (r n p h k : Nat) (fragment : Fragment) (afterCaller : Caller (bits + 2))
+      (recorded finalized : Cached) (savedQueries : Queries) (final : Memos) (next : Inventory)
+      (afterRoots : Nat → Nat) (extended : Nat → Term Symbol),
+      (∀ er en P H ek, p ≤ P → h ≤ H →
+        SourcePruningEnumerationSelectedEdge.run checkEmpty (r + er) (n + en) P H (k + ek)
+          scs edge caller before memos.query = .complete fragment afterCaller savedQueries recorded) ∧
+      (∀ ek, SourcePruningEnumerationFinalize.run afterCaller.checked.native.machine.heap (k + ek)
+        target fragment recorded = some finalized) ∧
+      Post formulas solver next caller afterCaller final ∧ final.query = savedQueries ∧
+      (∀ uv < before.core.counter, extended uv = assignment uv) ∧
+      Satisfies
+        (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+          ambient caller.checked.native.machine.heap)
+        (fun guard value => SourceEqualityPCSGuard.holds formulas solver guard value = true)
+        extended before.core ∧
+      Fragments.fill extended fragment = term ∧
+      Satisfies
+        (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+          ambient afterCaller.checked.native.machine.heap)
+        (fun guard value => SourceEqualityPCSGuard.holds formulas solver guard value = true)
+        extended recorded.core ∧
+      Satisfies
+        (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+          ambient afterCaller.checked.native.machine.heap)
+        (fun guard value => SourceEqualityPCSGuard.holds formulas solver guard value = true)
+        extended finalized.core ∧
+      Safe finalized.core ∧ EnumerationValidity.Canonical finalized.core ∧
+      Roots finalized.core.representatives afterRoots ∧ StorageValid finalized.core ∧
+      PendingRealized afterCaller.checked.native.machine.heap finalized.core ∧
+      EnumerationCanonicalWaiting.Correct afterRoots finalized.core.values finalized.waiting ∧
+      (∀ slot, SourcePruningEnumerationNativeIndex.candidate afterCaller.checked.native.machine.heap
+        ((finalized.core.values[slot]?).getD .eliminated) = some (finalized.expandable slot)) ∧
+      Fits (advance seed (SourcePruningEnumerationSelectedEdge.cost edge scs before.core.counter tries)).2
+        afterCaller.checked ∧
+      Heap (fun guard => guard ∈ (advance seed
+        (SourcePruningEnumerationSelectedEdge.cost edge scs before.core.counter tries)).1)
+        afterCaller.checked.native.machine.heap ∧
+      EnumerationStorageProgress.pendingSize finalized.core extended + 1 ≤
+        EnumerationStorageProgress.pendingSize before.core assignment := by
+  obtain ⟨actualParent, parentFound, parentKnown, parentIsClosed⟩ := realized target handle scs stored
+  have parentSame : actualParent = .node parentEntry edges depth free :=
+    Option.some.inj (parentFound.symm.trans parentLookup)
+  have parentAvailable : Available caller.checked.native.machine.heap (.node parentEntry edges depth free) := by
+    simpa only [parentSame] using parentKnown
+  have parentClosed : free = [] := by
+    simpa only [parentSame, Value.free] using parentIsClosed
+  exact accepted_prepared_constructor_decreases seed formulas solver inventory caller before checkEmpty
+    parentEntry edges depth free edge scs roots memos initial selected safe realized paths counts flags
+    bounded pending canonical target handle stored parentAvailable parentClosed root ambient assignment term
+    parentValue satisfied accepted tries residual projected fits reserved known
 
 end MicroCFTA.SourcePruningEnumerationAcceptedConstructorProgress
