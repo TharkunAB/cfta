@@ -1,3 +1,45 @@
+# Latest findings: prepared callback progress,2026-10-30
+
+Source 51c59ddd6826c138d0d746cd45f7647fd7ec2ace. Full objective ACTIVE.
+Read lean/notes-current-prepared-callback-progress.md for the complete boundary.
+The actual head and sibling chosen-event laws now compose through recordTypes.
+They retain the SAME accepting extension, strict pendingSize decrease,
+ProperState, full recursive Packet, exact native stages and ordered outputs.
+Callback success is derived from original reservations. No top-level input was
+added. Original policy gates affect only the new callback conclusion.
+
+## Haskell pickup
+
+No Haskell source changed. All831 current Haskell identities match the prior
+checkpoint. No new executable Haskell defect or fix was established.
+Every earlier concrete Haskell repair entry remains below as an exact suffix.
+Do not treat this proof checkpoint as end-to-end Haskell correspondence.
+
+## Open control and research boundary
+
+Global completion still needs uniform original bounds for earlier incompatible
+or unproductive alternatives and neutral transitions. The chosen model does not
+rank those alternatives. Keep exact configured stopping/output semantics.
+Configured stopping permits later siblings; an earlier stopped hook ends the
+scan suffix. Stable finite stopped behavior is not complete finite behavior.
+
+The original-path suffix-carrier example remains an UNTESTED source-only draft.
+Two strict Root probes failed; the full counterexample is not a proved claim.
+The finite saturationDomain law applies to one normalization input. A uniform
+carrier across later conjunctions and child buckets remains open.
+Plain unfolding preserves original Mu values under its proved gates.
+The primitive makeUnion can create a new union handle; projectionUnion itself
+uses makeNode and does not call makeUnion. Preserve that correction. Full query
+admission and a uniform handle carrier remain open. No admitted all-capacity
+coverage failure or Haskell defect follows from these research observations.
+
+Audit4675 jobs/82394 theorem axiom checks; public984 checks/79 definitions.
+All473 old protected sources remain exact; new baseline476. Four exact final
+strict mappings and all41 command input snapshots are preserved in
+lean/restart-evidence/20261030-prepared-callback-progress/.
+
+---
+
 # Actual prepared sibling progress: 2026-10-29 23:55 CET
 
 Source c7bc62b5f0f0080369f13ce738b469589521658c on formalize.
