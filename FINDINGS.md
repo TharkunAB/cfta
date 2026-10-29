@@ -1,3 +1,35 @@
+# Constructive mixed constructor progress: 2026-10-29 22:33 CET
+
+Source ef0d084c5969bd0016f3155cf15abf8a79c8ca84 on formalize.
+The full goal remains ACTIVE. Read lean/notes-current-mixed-constructor-progress.md.
+Earlier dated findings and Haskell repairs follow unchanged.
+
+Original accepted stored parents now construct an actual mixed-child selected
+edge and captured finalizer. One model supplies original/recorded/final
+Satisfies, actual fill and pendingSize(final)+1 <= pendingSize(original).
+Both actual operations use the SAME common index bound.
+The final theorem ties the stored handle to the exact selected native parent.
+It derives availability, closedness and inherited obligations from that link.
+
+Canonical child paths supply parent-class separation. Safe and StorageValid
+alone cannot replace this admission: an invalid empty branch can make abstract
+Holds vacuous. No reachable Haskell defect was established by this observation.
+The earlier note overstated local accepted-parent branch existence as open.
+Existing SelectedEdge.accepted_complete already derives it under local gates.
+This change adds the shared quantitative model through actual finalization.
+
+Largest open work: full iteration admissions, neutral-step progress, sufficient
+whole-run resources, graph unfolding/public coverage, exact order/stops and
+Haskell correspondence. DONE still does not imply whole-state discharge.
+
+Strict Audit passes 4667 jobs and 82345 theorem dependencies.
+All 461 protected and 831 Haskell/Cabal/project identities remain unchanged.
+No Haskell source change, fix or new executable defect was found in this phase.
+External agents should retain the earlier Haskell fixes and pickup items below.
+Evidence: lean/restart-evidence/20261029-mixed-child-progress.
+
+---
+
 # Constructor models and terminal storage progress: 2026-10-29 22:00 CET
 
 Source fb6d0fb5a on formalize. The full goal remains ACTIVE.

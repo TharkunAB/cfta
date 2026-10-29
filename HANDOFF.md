@@ -1,3 +1,31 @@
+# Constructive mixed constructor progress: 2026-10-29 22:33 CET
+
+Source ef0d084c5969bd0016f3155cf15abf8a79c8ca84 on formalize.
+The full goal remains ACTIVE. Main remains 7b8db072f.
+Read lean/notes-current-mixed-constructor-progress.md first.
+Earlier dated document bodies follow unchanged.
+
+The local accepted constructor step now constructs actual selected-edge and
+finalizer executions with mixed terminal/nonterminal children. It uses the
+SAME common index bound and one extended assignment for all three states,
+fragment fill and strict pending-cost decrease. Original resource gates remain.
+
+Continue with the actual worker's iteration admissions. The result returns
+Safe, Canonical and native resources. It does not export ProperState,
+PendingReferences, ancestry or a whole recursive Packet. Neutral work needs
+separate progress control. Whole-run resources, recursive unfolding, public
+coverage, exact order/stops and Haskell correspondence remain open.
+
+Strict Audit: 4667 jobs, 82345 theorem dependencies, eight final source mappings.
+Public: 973 checks, 78 definitions, nine new standard-axiom theorem readbacks.
+All 461 protected and 831 Haskell/Cabal/project identities remain unchanged.
+Root verified 31 capped commands and 179 exact input snapshots.
+No Haskell fix was needed. Earlier external pickup items remain in FINDINGS.
+Preserve lean/restart-evidence/20261029-mixed-child-progress and all older
+evidence. Continue in a fresh writable area after sealing this phase.
+
+---
+
 # Constructor models and terminal storage progress: 2026-10-29 22:00 CET
 
 Source fb6d0fb5a on formalize. The full goal remains ACTIVE.

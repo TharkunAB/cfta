@@ -1,3 +1,32 @@
+# Constructive mixed constructor progress: 2026-10-29 22:33 CET
+
+Source ef0d084c5969bd0016f3155cf15abf8a79c8ca84 on formalize.
+The full goal remains ACTIVE. Main remains 7b8db072f.
+Read lean/notes-current-mixed-constructor-progress.md first.
+Earlier dated document bodies follow unchanged.
+
+An original accepted stored constructor now derives actual mixed-child edge
+execution AND the actual captured finalizer at the SAME common index bound.
+One original-compatible assignment supplies original, recorded and final
+Satisfies, the actual fragment fill, and final pendingSize+1 <= original cost.
+Original storage, canonical-state and resource admissions remain explicit.
+No successful-operation observation or future model/cost supplier is an input.
+
+The largest gap is iteration in the actual outer worker. Preserve the next
+step's full Packet/history and pending-reference admissions. Neutral work can
+preserve constructor cost and still needs a global rank or finite bound.
+Sufficient whole-run original resources and public finite-value coverage remain
+open. initial_boundary_done still retains internal recursive placeholders at
+EVERY worker/depth fuel. Connect graph unfolding and the public generator path.
+
+Strict Audit passes 4667 jobs and 82345 theorem dependencies.
+Public readback passes 973 checks and 78 definition prints, with nine new laws.
+All 461 protected and 831 Haskell/Cabal/project identities remain unchanged.
+No Haskell fix or new executable defect was found. Earlier FINDINGS remain.
+Evidence: lean/restart-evidence/20261029-mixed-child-progress.
+
+---
+
 # Constructor models and terminal storage progress: 2026-10-29 22:00 CET
 
 Source fb6d0fb5a on formalize. The full goal remains ACTIVE.
