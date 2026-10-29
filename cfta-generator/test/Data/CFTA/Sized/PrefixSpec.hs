@@ -4,7 +4,7 @@ import Control.Monad (ap, forM_)
 import Data.Containers.ListUtils (nubOrd)
 import Data.Either (fromRight)
 import Data.Functor (void)
-import Data.List (genericLength, inits, isPrefixOf, sort)
+import Data.List (genericLength, inits, isPrefixOf)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe, isJust)
 import qualified Data.Text as Text
@@ -23,14 +23,19 @@ import Data.CFTA.Gen.UntypedExpressionLanguage (expressionAutomaton)
 import Data.CFTA.Generic (Constructor (..))
 import Data.CFTA.Index (Cardinality (..), ClassRank (..), Rank (..), Size (..))
 import Data.CFTA.Refinement.Verdict (Entailment (Entailment), Verdict (..))
-import Data.CFTA.Sized (countOfSize, sized, sizedStates, termsOfSize, unrankOfSize)
+import Data.CFTA.Sized (SizedError (..), countOfSize, sized, sizedStates, termsOfSize, unrankOfSize)
 import Data.CFTA.Sized.Prefix
+import Data.CFTA.Sized.Prefix.QuickCheck (sampleCompletion)
+import Data.CFTA.SizedSpec (automatonGraph)
 import Data.CFTA.Symbol (Symbol (Symbol))
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
 
 spec :: Spec
 spec = describe "Data.CFTA.Sized.Prefix" $ do
+    it "lists, counts, ranks, and unranks the completions of random automata in the order of sized"
+        $ QC.withNumTests 200
+        $ prefixLaws . automatonGraph
     it "has unambiguous and ambiguous fixtures" $
         [unambiguous expressionAutomaton, unambiguous overlapping, unambiguous (arithAutomaton 2)]
             `shouldBe` [True, False, True]
@@ -46,6 +51,7 @@ spec = describe "Data.CFTA.Sized.Prefix" $ do
         fmap completionCount (afterToken (start sizeBound overlapping) (sym "f", 1)) `shouldBe` Just 10
     fixture "untyped expressions" expressionAutomaton
     fixture "overlapping alternatives" overlapping
+    fixture "a symbol at two arities" mixedArities
     fixture "typed arithmetic" (arithAutomaton 2)
     it "counts the terms of the fixtures with equality constraints up to their bounds" $
         [completionCount $ start sizeBound equalPairs, completionCount $ start 7 equalArithmetic] `shouldBe` [4, 38]
@@ -66,7 +72,7 @@ spec = describe "Data.CFTA.Sized.Prefix" $ do
     it "rejects a guard beyond equality constraints" $ do
         let different = semanticConstraint $ Not $ Same (ECTA.path [0]) (ECTA.path [1])
             guarded = automaton "s" [("s", [FTA.Transition (sym "g") ["q", "q"] different]), ("q", [leaf "a", leaf "b"])]
-        either Just (const Nothing) (prefixCompletions 6 guarded) `shouldBe` Just GuardedTransition
+        either Just (const Nothing) (prefixCompletions 6 guarded) `shouldBe` Just ResidualGuard
     it "draws the sizes of two children with their weights" $ do
         -- Up to nine nodes, the two children of a sum can have one and five
         -- nodes or three and three, whose weights differ.
@@ -76,15 +82,17 @@ spec = describe "Data.CFTA.Sized.Prefix" $ do
             sums = [term | term <- listed, take 1 (preorder term) == [("add", 2)]]
         forM_ [const 1, \symbol -> if symbol == "one" then 3 else 1 / 2] $ \each -> do
             let total = sum $ map (termWeight each) sums
-            fmap distribution (drawCompletion proportional $ withWeights each add)
+            fmap distribution (drawCompletion proportional $ weightedBy each add)
                 `shouldBe` Just (Map.fromListWith (+) [(term, termWeight each term / total) | term <- sums])
     it "keeps a token whose completions have the weight zero, with the probability zero" $ do
-        let completions = withWeights (\symbol -> if symbol == "one" then 0 else 1) $ start 3 expressionAutomaton
+        let completions = weightedBy (\symbol -> if symbol == "one" then 0 else 1) $ start 3 expressionAutomaton
             one = fromMaybe (error "no one") $ afterToken completions ("one", 0)
         lookup ("one", 0) (nextTokenWeights completions) `shouldBe` Just 0
         tokenProbability completions ("one", 0) `shouldBe` Just 0
         (completionWeight one, tokenProbability one ("zero", 0), isJust $ drawCompletion proportional one)
             `shouldBe` (0, Nothing, False)
+    it "rejects a negative weight" $
+        isJust (withWeights (\symbol -> if symbol == "one" then -1 else 1) $ start 3 expressionAutomaton) `shouldBe` False
     it "has no completion below size one" $ do
         let completions = start 0 expressionAutomaton
         completionCount completions `shouldBe` 0
@@ -133,15 +141,18 @@ fixtureUpTo bound name graph = describe name $ do
     it "is complete exactly when the prefix is an accepted term" $
         forM_ prefixes $ \prefix ->
             (prefix, isComplete $ after prefix) `shouldBe` (prefix, prefix `elem` preorders)
-    it "lists and unranks each completion once, accepted and with the prefix" $
+    it "lists, ranks, and unranks the completions in the order of sized, each once, accepted and with the prefix" $
         forM_ prefixes $ \prefix -> do
             let completions = after prefix
                 listed = completionTerms completions
                 count = genericLength listed
-            (prefix, sort listed) `shouldBe` (prefix, sort [term | term <- accepted, prefix `isPrefixOf` preorder term])
+            (prefix, listed) `shouldBe` (prefix, [term | term <- accepted, prefix `isPrefixOf` preorder term])
             (prefix, completionCount completions) `shouldBe` (prefix, Cardinality count)
             (prefix, map (unrankCompletion completions . Rank) [-1 .. count])
                 `shouldBe` (prefix, [Nothing] <> map Just listed <> [Nothing])
+            (prefix, map (rankCompletion completions) listed) `shouldBe` (prefix, map (Just . Rank) [0 .. count - 1])
+            (prefix, [term | term <- accepted, isJust (rankCompletion completions term), not (prefix `isPrefixOf` preorder term)])
+                `shouldBe` (prefix, [])
             (prefix, filter (\term -> not (FTA.accepts plain term && prefix `isPrefixOf` preorder term)) listed)
                 `shouldBe` (prefix, [])
     it "samples completions with the prefix, the same for the same seed" $
@@ -180,7 +191,7 @@ fixtureUpTo bound name graph = describe name $ do
                                )
         it "gives each next token the sum of the weights of its completions" $
             forM_ prefixes $ \prefix -> do
-                let completions = withWeights weight $ after prefix
+                let completions = weightedBy weight $ after prefix
                 (prefix, nextTokenWeights completions, completionWeight completions)
                     `shouldBe` ( prefix
                                , [(token, bruteWeight (prefix <> [token])) | (token, _) <- nextTokens completions]
@@ -188,7 +199,7 @@ fixtureUpTo bound name graph = describe name $ do
                                )
         it "draws each completion with its weight over the total weight" $
             forM_ prefixes $ \prefix -> forM_ [const 1, weight] $ \each -> do
-                let completions = withWeights each $ after prefix
+                let completions = weightedBy each $ after prefix
                     total = sum [termWeight each term | term <- accepted, prefix `isPrefixOf` preorder term]
                 (prefix, fmap distribution $ drawCompletion proportional completions)
                     `shouldBe` ( prefix
@@ -203,7 +214,7 @@ fixtureUpTo bound name graph = describe name $ do
                                )
         it "gives the next tokens and the complete prefix probabilities that sum to one" $
             forM_ prefixes $ \prefix -> do
-                let completions = withWeights weight $ after prefix
+                let completions = weightedBy weight $ after prefix
                     complete = sum [termWeight weight term | term <- accepted, preorder term == prefix]
                 ( prefix
                     , fmap (+ complete / bruteWeight prefix) $ sum <$> traverse (tokenProbability completions . fst) (nextTokens completions)
@@ -281,12 +292,54 @@ distribution (Distribution weighted) = Map.fromListWith (+) weighted
 sizeBound :: Integer
 sizeBound = 6
 
+{- | The laws of the completions of an automaton for each prefix of its terms
+up to a bound, against the terms that 'sized' lists: the completions in
+order, their count and their ranks, the counts of the next tokens, and the
+tokens that 'afterToken' rejects.
+-}
+prefixLaws :: (Ord state) => FTA.FTA state Symbol Constraint -> QC.Property
+prefixLaws graph =
+    QC.conjoin
+        [ QC.counterexample (show prefix) $ case afterPrefix empty prefix of
+            Nothing -> QC.counterexample "no completions" False
+            Just completions ->
+                let listed = completionTerms completions
+                    expected = [term | term <- accepted, prefix `isPrefixOf` preorder term]
+                    complete = if isComplete completions then 1 else 0
+                    continues token = any (((prefix <> [token]) `isPrefixOf`) . preorder) expected
+                 in listed
+                        QC.=== expected
+                        QC..&&. completionCount completions
+                            QC.=== genericLength expected
+                        QC..&&. map (rankCompletion completions) listed
+                            QC.=== map (Just . Rank) [0 .. genericLength listed - 1]
+                        QC..&&. sum (map snd $ nextTokens completions) + complete
+                            QC.=== completionCount completions
+                        QC..&&. [token | token <- alphabet, isJust (afterToken completions token) /= continues token]
+                            QC.=== []
+        | prefix <- nubOrd $ concatMap (inits . preorder) accepted
+        ]
+  where
+    bound = 5
+    empty = start bound graph
+    accepted = concat [termsOfSize (either (error . show) id $ sized graph) (Size size) | size <- [1 .. bound]]
+    alphabet =
+        nubOrd
+            [ (FTA.transitionSymbol transition, arity)
+            | transition <- concat $ Map.elems $ FTA.transitionTable graph
+            , arity <- [0 .. 2]
+            ]
+
+-- | The completions with weights that must not be negative.
+weightedBy :: (symbol -> Rational) -> Completions symbol -> Completions symbol
+weightedBy weight = fromMaybe (error "a negative weight") . withWeights weight
+
 -- | The completions of the empty prefix up to a bound.
 start :: (Ord state, Ord symbol) => Integer -> FTA.FTA state symbol Constraint -> Completions symbol
 start bound = either (error . show) id . prefixCompletions (Size bound)
 
 -- | Whether the rows of an automaton are unambiguous.
-unambiguous :: (Ord state, Eq symbol) => FTA.FTA state symbol Constraint -> Bool
+unambiguous :: (Ord state, Ord symbol) => FTA.FTA state symbol Constraint -> Bool
 unambiguous = unambiguousRows . Map.map (map void) . FTA.transitionTable
 
 -- | The tokens of a term in preorder.
@@ -361,7 +414,12 @@ walkTo walk (token : rest) = decidingStep walk token >>= maybe (pure Nothing) (`
 unusedSolver :: Entailment
 unusedSolver = Entailment $ \_ _ -> fail "unexpected solver call"
 
--- | A recursion in which @f(a)@ and @f(f(a))@ have two runs.
+{- | A recursion in which @f(a)@ and @f(f(a))@ have two runs.
+| A symbol with one child and with two children, and a leaf.
+-}
+mixedArities :: FTA.FTA String Symbol Constraint
+mixedArities = automaton "s" [("s", [leaf "a", node "f" ["s"], node "f" ["s", "s"]])]
+
 overlapping :: FTA.FTA String Symbol Constraint
 overlapping =
     automaton

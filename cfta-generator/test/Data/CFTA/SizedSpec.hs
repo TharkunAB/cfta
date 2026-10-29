@@ -1,4 +1,4 @@
-module Data.CFTA.SizedSpec (spec) where
+module Data.CFTA.SizedSpec (spec, SizedAutomaton, automatonGraph) where
 
 import Control.Monad (forM_, void)
 import Data.Containers.ListUtils (nubOrd)
@@ -18,7 +18,7 @@ import qualified Data.CFTA.Equality as ECTA
 import qualified Data.CFTA.Gen as Gen
 import Data.CFTA.Gen.Reference (Automaton (..), AutomatonEdge (..), automatonNode, closedAutomaton)
 import Data.CFTA.Index (Cardinality (..), ClassRank (..), Rank (..), Size (..), Weight (..))
-import Data.CFTA.Interned (toFTA)
+import Data.CFTA.Interned (InternedState, toFTA)
 import qualified Data.CFTA.Language as Language
 import qualified Data.CFTA.Language.Source as Source
 import Data.CFTA.Lowering (Expansion (..))
@@ -469,6 +469,10 @@ sizeBound = 6
 -- | A closed automaton with loops, overlapping alternatives, and equal children.
 newtype SizedAutomaton = SizedAutomaton Automaton
     deriving (Show)
+
+-- | The automaton of a random description.
+automatonGraph :: SizedAutomaton -> FTA.FTA InternedState Symbol Constraint
+automatonGraph (SizedAutomaton description) = either (error . show) id $ toFTA $ automatonNode description
 
 instance QC.Arbitrary SizedAutomaton where
     arbitrary = SizedAutomaton <$> QC.oneof [states 0 2, Loop <$> states 1 2] `QC.suchThat` closedAutomaton

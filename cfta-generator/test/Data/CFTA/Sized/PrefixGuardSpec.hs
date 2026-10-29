@@ -140,7 +140,7 @@ spec = describe "Data.CFTA.Sized.Prefix with a solver" $ do
         length path `shouldSatisfy` (> 1)
         (isJust stepped, maskCalls <= eagerCalls, made < eagerCalls) `shouldBe` (True, True, True)
     it "rejects a constrained automaton without a solver" $
-        either Just (const Nothing) (prefixCompletions 3 guardedPairs) `shouldBe` Just GuardedTransition
+        either Just (const Nothing) (prefixCompletions 3 guardedPairs) `shouldBe` Just ResidualGuard
 
 {- | The completions and the undecided completions of each prefix, against a
 search of every term over the symbols of the automaton: a term is accepted
@@ -318,6 +318,21 @@ guardFixtures =
     , ("equal pairs whose first child is above one", 3, pairsWith $ conjoinConstraints equalChildren firstAboveOne)
     , ("lists whose numbers are above one", 7, guardedLists)
     , ("lists of 1 and 2 whose numbers are above one", 7, decidedLists)
+    , ("pairs without a guard", 3, pairsWith noConstraint)
+    ,
+        ( "pairs with two runs, each with a guard on one child"
+        , 3
+        , automaton
+            "s"
+            [ ("s", [FTA.Transition (sym "g") ["q", "q"] firstAboveOne, FTA.Transition (sym "g") ["q", "q"] secondAboveOne])
+            , ("q", map numberLeaf [1, 2, 3])
+            ]
+        )
+    ,
+        ( "pairs with an equality on a child that they do not have"
+        , 3
+        , pairsWith $ conjoinConstraints equalMissing firstAboveOne
+        )
     ]
 
 -- | The pairs g(x, y) of the numbers 1, 2, and 3, whose first child is above one.
@@ -350,6 +365,14 @@ listsOf numbers =
 -- | The guard that the first child is above one.
 firstAboveOne :: Constraint
 firstAboveOne = semanticConstraint $ Satisfies (ECTA.path [0]) aboveOne
+
+-- | The guard that the second child is above one.
+secondAboveOne :: Constraint
+secondAboveOne = semanticConstraint $ Satisfies (ECTA.path [1]) aboveOne
+
+-- | The equality of the first child and a third child, which a pair does not have.
+equalMissing :: Constraint
+equalMissing = equalityConstraint $ ECTA.mkEqConstraints [[ECTA.path [0], ECTA.path [2]]]
 
 -- | The equality of the two children.
 equalChildren :: Constraint
