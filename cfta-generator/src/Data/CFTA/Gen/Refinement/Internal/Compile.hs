@@ -22,6 +22,9 @@ module Data.CFTA.Gen.Refinement.Internal.Compile (
     spineArity,
     isIntegerName,
     namedTerms,
+    integersText,
+    integerSymbol,
+    exactLabel,
 ) where
 
 import Control.Applicative ((<|>))
@@ -695,7 +698,7 @@ integerGroup constraint = case points [valueName] domain of
             $ Gen Built
             $ TransparentLanguage
             $ Right
-            $ holeStatic (RefinedSymbol (fromString "integers") domain) firstInteger
+            $ holeStatic (RefinedSymbol (fromString $ Text.unpack integersText) domain) firstInteger
       where
         firstInteger point = case point of
             value : _ -> value
@@ -704,7 +707,7 @@ integerGroup constraint = case points [valueName] domain of
                     "cfta-generator bug in Data.CFTA.Gen.Refinement.Internal.Compile.integerGroup: \
                     \an integer leaf read an empty point"
     domain = integerDomain constraint
-    root = RefinedSymbol (fromString "integers") $ refinementFormula (.== variable (integerName 0))
+    root = RefinedSymbol (fromString $ Text.unpack integersText) $ refinementFormula (.== variable (integerName 0))
     bounded = substitute [(valueName, variable $ integerName 0)] domain
 
 -- | Join the keys of each tuple of a bare spine, positioned by first appearance.
@@ -1059,11 +1062,21 @@ fillHoles point = snd . fill point
     fill (value : rest) (Term.Node Placeholder _) = (rest, Term.Node (Label $ integerSymbol value) [])
     fill remaining (Term.Node (Label label) children) = Term.Node (Label $ exactLabel remaining label) <$> mapAccumL fill remaining children
     fill remaining (Term.Node private children) = Term.Node private <$> mapAccumL fill remaining children
-    exactLabel remaining label@(RefinedSymbol symbol refinement)
-        | any isIntegerName $ freeNames refinement =
-            let named = substitute [(integerName index, literal value) | (index, value) <- zip [0 ..] remaining] refinement
-             in RefinedSymbol symbol $ maybe named (\value -> refinementFormula (.== literal value)) $ onlyPoint valueName named
-        | otherwise = label
+
+{- | The label of a constructor when the integers under it are known: the
+integers replace the open variables of its refinement, in order, and a
+refinement that fixes the value becomes that value.
+-}
+exactLabel :: [Integer] -> Symbol -> Symbol
+exactLabel remaining label@(RefinedSymbol symbol refinement)
+    | any isIntegerName $ freeNames refinement =
+        let named = substitute [(integerName index, literal value) | (index, value) <- zip [0 ..] remaining] refinement
+         in RefinedSymbol symbol $ maybe named (\value -> refinementFormula (.== literal value)) $ onlyPoint valueName named
+    | otherwise = label
+
+-- | The text of the symbol of the support of an integer leaf.
+integersText :: Text.Text
+integersText = Text.pack "integers"
 
 {- | The terms of the named measures that a refinement fixes: each conjunct
 @name(v) == t@ whose term does not read the value @v@.
