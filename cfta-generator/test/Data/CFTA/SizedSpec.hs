@@ -16,6 +16,7 @@ import Data.CFTA.Constraint (Constraint, Guard (..), equalityConstraint, noConst
 import Data.CFTA.Equality (numNestedMu)
 import qualified Data.CFTA.Equality as ECTA
 import qualified Data.CFTA.Gen as Gen
+import Data.CFTA.Gen.Internal.Table (unambiguousRows)
 import Data.CFTA.Gen.Reference (Automaton (..), AutomatonEdge (..), automatonNode, closedAutomaton)
 import Data.CFTA.Index (Cardinality (..), ClassRank (..), Rank (..), Size (..), Weight (..))
 import Data.CFTA.Interned (InternedState, toFTA)
@@ -53,8 +54,10 @@ spec = describe "Data.CFTA.Sized" $ do
                 , ("dead", [])
                 ]
         termsOfSize (fromRows "s" rows) 3 `shouldBe` termsOfSize (fromReference "s" rows) 3
-    it "keeps the order of the rows with a repeated transition" $ do
-        -- An interned import merged the two a transitions of p.
+    it "lists each term of rows with a repeated transition once" $ do
+        -- An interned import merged the two a transitions of p. The rows are
+        -- ambiguous, so the classes come from the deterministic rows, in their
+        -- order.
         let rows =
                 [ ("s", [node "f" ["p", "r"], node "f" ["q", "t"]])
                 , ("p", [leaf "a", leaf "a", leaf "z"])
@@ -62,7 +65,8 @@ spec = describe "Data.CFTA.Sized" $ do
                 , ("r", [leaf "r"])
                 , ("t", [leaf "t"])
                 ]
-        termsOfSize (fromRows "s" rows) 3 `shouldBe` termsOfSize (fromReference "s" rows) 3
+        sort (termsOfSize (fromRows "s" rows) 3) `shouldBe` sort (termsOfSize (fromReference "s" rows) 3)
+        countOfSize (fromRows "s" rows) 3 `shouldBe` countOfSize (fromReference "s" rows) 3
     it "lists a term that two transitions accept once" $ do
         let classes = fromRows "s" [("s", [node "f" ["p"], node "f" ["q"]]), ("p", [leaf "a"]), ("q", [leaf "a"])]
         termsOfSize classes 2 `shouldBe` [term "f" [term "a" []]]
@@ -77,7 +81,8 @@ spec = describe "Data.CFTA.Sized" $ do
     modifyMaxSuccess (const 300) $ do
         it "lists each accepted term of each size once, and ranks it" $ QC.property exactClasses
         it "agrees with the cyclic import wherever the import accepts the automaton" $ QC.property importAgreement
-        it "gives the sequence of the reference, also where it uses the count table" $ QC.property referenceAgreement
+        it "gives the classes of the reference, in its sequence where it reads unambiguous rows" $
+            QC.property referenceAgreement
         it "gives the classes of sized for each state, from one table" $ QC.property stateAgreement
         it "decides the classes up to a bound as the reference builds them" $ QC.property boundedAgreement
     describe "Data.CFTA.Sized.Checkpoint" $ do
@@ -97,9 +102,10 @@ spec = describe "Data.CFTA.Sized" $ do
         it "rejects another route and another version of the route" $ do
             let graph = automaton "s" binary
                 checkpoint = Checkpoint.start 3 [] graph
-            void (Checkpoint.resume checkpoint{checkpointVersion = 2} graph []) `shouldBe` Left (UnknownRoute Checkpoint.route 2)
+            -- Version 1 listed the classes of ambiguous rows in the order of the reference.
+            void (Checkpoint.resume checkpoint{checkpointVersion = 1} graph []) `shouldBe` Left (UnknownRoute Checkpoint.route 1)
             void (Checkpoint.resume checkpoint{checkpointRoute = Text.pack "other"} graph [])
-                `shouldBe` Left (UnknownRoute (Text.pack "other") 1)
+                `shouldBe` Left (UnknownRoute (Text.pack "other") Checkpoint.routeVersion)
         it "rejects a position outside the listing" $ do
             -- Up to size three, one binary tree has size one and one has size three.
             let graph = automaton "s" binary
@@ -255,7 +261,7 @@ spec = describe "Data.CFTA.Sized" $ do
             from checkpoint edited Nothing `shouldBe` Left (StaleRow "q")
             from checkpoint graph (Just sizeWeights) `shouldBe` Left StaleWeights
             from checkpoint{samplingPrngVersion = 2} graph Nothing `shouldBe` Left (UnknownPrng Checkpoint.prng 2)
-            from checkpoint{samplingVersion = 2} graph Nothing `shouldBe` Left (UnknownRoute Checkpoint.sampleRoute 2)
+            from checkpoint{samplingVersion = 1} graph Nothing `shouldBe` Left (UnknownRoute Checkpoint.sampleRoute 1)
         it "rejects invalid weights, a listing with nothing to draw, and a negative number of draws" $ do
             let graph = automaton "s" binary
                 from weights target = void $ Checkpoint.resumeSampling (Checkpoint.startSampling listingBound weights 7 [] target) target weights []
@@ -348,13 +354,19 @@ referenceAgreement (SizedAutomaton description) =
         $ QC.within 5000000
         $ QC.conjoin
             [ counterexample (label <> ", size " <> show size) $
-                termsOfSize classes (Size size) === termsOfSize reference (Size size)
+                (if sequenceKept then id else sort) (termsOfSize classes (Size size))
+                    === (if sequenceKept then id else sort) (termsOfSize reference (Size size))
                     .&&. countOfSize classes (Size size) === countOfSize reference (Size size)
             | (label, extra) <-
                 [("as built", const []), ("with a dead transition", const [dead]), ("with a repeated transition", take 1)]
             , let padded = withExtra extra
                   classes = either (error . show) id $ sized padded
                   reference = either (error . show) id $ sizedReference padded
+                  reachedRows = FTA.transitionTable $ FTA.trim padded
+                  -- Unambiguous rows without constraints keep the sequence of the reference.
+                  sequenceKept =
+                    all (all ((== noConstraint) . FTA.transitionConstraint)) reachedRows
+                        && unambiguousRows (Map.map (map void) reachedRows)
             , size <- [1 .. sizeBound]
             ]
   where

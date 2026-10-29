@@ -7,14 +7,19 @@ module Data.CFTA.Gen.Internal.Table (
     childStarts,
     minimumSizes,
     unambiguousRows,
+    deterministicRows,
+    countingRows,
+    plainCountingRows,
+    deterministicCountingRows,
     sortedRows,
 ) where
 
 import Control.Monad (foldM, zipWithM)
 import Data.Array (listArray, (!))
+import Data.Either (fromRight)
 import Data.Foldable (toList)
 import qualified Data.IntMap.Strict as IntMap
-import Data.List (sortOn, tails)
+import Data.List (inits, sortOn, tails)
 import Data.List.NonEmpty (NonEmpty)
 import qualified Data.List.NonEmpty as NonEmpty
 import qualified Data.Map.Lazy as LazyMap
@@ -360,3 +365,115 @@ sortedRows automaton = Map.map (sortOn rowKey) (FTA.transitionTable automaton)
         , FTA.transitionSymbol transition
         , [classes IntMap.! number child | child <- FTA.transitionChildren transition]
         )
+
+{- | The rows of the bottom-up deterministic automaton of the rows, and a root
+for each state. A deterministic state is a set of states: the states that
+accept one term. So each term has one deterministic state, and the
+deterministic rows are unambiguous. The root of a state, 'Left', has the
+transitions of each deterministic state that holds it; these accept distinct
+terms, so the root accepts the terms of the state, each once. A deterministic
+state is 'Right'. 'Nothing' when there are more deterministic states than the
+given number: the subset construction can grow exponentially.
+-}
+deterministicRows ::
+    (Ord state, Ord symbol) =>
+    Int ->
+    Map.Map state [FTA.Transition state symbol ()] ->
+    Maybe (Map.Map (Either state (Set.Set state)) [FTA.Transition (Either state (Set.Set state)) symbol ()])
+deterministicRows limit rows = go Set.empty Map.empty Map.empty (step Set.empty Map.empty Set.empty)
+  where
+    -- The transitions of each token, with the state that each one leaves.
+    byToken =
+        Map.fromListWith
+            (flip (<>))
+            [ ((FTA.transitionSymbol transition, length $ FTA.transitionChildren transition), [(state, transition)])
+            | (state, transitions) <- Map.toList rows
+            , transition <- transitions
+            ]
+    -- Each round reads only the tuples of sets with a set that the round
+    -- before found, as a semi-naive fixed point does, so it reads each tuple
+    -- once. The holders of a state are the known sets that hold it.
+    go known holders table found
+        | Set.size known' > limit = Nothing
+        | Set.null fresh = Just $ Map.fromList $ roots <> sets
+        | otherwise = go known' holders' table' (step fresh holders' known')
+      where
+        table' = Map.unionWith (<>) table found
+        fresh = Map.keysSet found `Set.difference` known
+        known' = known <> fresh
+        holders' =
+            Map.unionWith (<>) holders $ Map.fromListWith (<>) [(state, [set]) | set <- Set.toList fresh, state <- Set.toList set]
+        sets = [(Right set, map (withChildren Right) transitions) | (set, transitions) <- Map.toList table']
+        roots =
+            [ ( Left state
+              , [ withChildren Right transition | (set, transitions) <- Map.toList table', Set.member state set, transition <- transitions
+                ]
+              )
+            | state <- Map.keys rows
+            ]
+    -- The deterministic transitions of the tuples that hold a fresh set.
+    step fresh holders known =
+        Map.fromListWith
+            (flip (<>))
+            [ (target, [FTA.Transition symbol children ()])
+            | ((symbol, _), members) <- Map.toList byToken
+            , children <- Set.toList $ Set.fromList $ concat [tuples (FTA.transitionChildren transition) | (_, transition) <- members]
+            , let target =
+                    Set.fromList
+                        [state | (state, transition) <- members, and (zipWith Set.member (FTA.transitionChildren transition) children)]
+            ]
+      where
+        -- The tuples with the first fresh set at each position: older sets before it, any known set after it.
+        tuples [] = [[] | Set.null known]
+        tuples children =
+            [ before <> [set] <> after
+            | (earlier, child : later) <- zip (inits children) (tails children)
+            , before <- mapM (filter (`Set.notMember` fresh) . holding) earlier
+            , set <- filter (`Set.member` fresh) $ holding child
+            , after <- mapM holding later
+            ]
+        holding state = Map.findWithDefault [] state holders
+    withChildren wrap transition = transition{FTA.transitionChildren = map wrap $ FTA.transitionChildren transition}
+
+{- | The rows of the count table of an automaton without constraints, with
+the row of each state at 'Left', for the queries of the initial state.
+When the rows that the initial state reaches are unambiguous, these are the
+rows of the automaton in the order of 'sortedRows'. Otherwise they are the
+deterministic rows of all the rows ('deterministicRows'), in the order of
+'sortedRows' of the deterministic automaton. All the rows, not only the
+reached ones, give the order, as in 'sortedRows', so the order of the terms
+of a state does not depend on the initial state. 'Nothing' when the
+deterministic automaton has more than 'deterministicLimit' states.
+-}
+countingRows ::
+    (Ord state, Ord symbol) =>
+    FTA.FTA state symbol () ->
+    Maybe (Map.Map (Either state (Set.Set state)) [FTA.Transition (Either state (Set.Set state)) symbol ()])
+countingRows automaton
+    | unambiguousRows $ FTA.transitionTable $ FTA.trim automaton = Just $ plainCountingRows automaton
+    | otherwise = deterministicCountingRows automaton
+
+-- | The rows of the automaton in the order of 'sortedRows', with the row of each state at 'Left'.
+plainCountingRows ::
+    (Ord state, Ord symbol) =>
+    FTA.FTA state symbol () ->
+    Map.Map (Either state (Set.Set state)) [FTA.Transition (Either state (Set.Set state)) symbol ()]
+plainCountingRows automaton = Map.mapKeysMonotonic Left $ Map.map (map withLeftChildren) $ sortedRows automaton
+  where
+    withLeftChildren transition = transition{FTA.transitionChildren = map Left $ FTA.transitionChildren transition}
+
+-- | The deterministic rows of all the rows of the automaton, in the order of 'sortedRows', within 'deterministicLimit'.
+deterministicCountingRows ::
+    (Ord state, Ord symbol) =>
+    FTA.FTA state symbol () ->
+    Maybe (Map.Map (Either state (Set.Set state)) [FTA.Transition (Either state (Set.Set state)) symbol ()])
+deterministicCountingRows automaton = do
+    determinized <- deterministicRows deterministicLimit $ FTA.transitionTable automaton
+    pure
+        $ sortedRows
+        $ fromRight (error "countingRows: the deterministic rows are a valid automaton")
+        $ FTA.mkFTA (Left $ FTA.initialState automaton) (Map.toList determinized)
+
+-- | The number of deterministic states above which 'countingRows' gives up.
+deterministicLimit :: Int
+deterministicLimit = 1024

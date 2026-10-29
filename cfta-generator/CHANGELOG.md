@@ -148,9 +148,11 @@ tree automata of `cfta`, with QuickCheck integration.
   finite tree automaton accepts, as one sequence with inverse ranks. Each
   query ends, also on cyclic, ambiguous, and equality-constrained automata,
   and an empty class says nothing about later classes. `sizedReference`
-  builds each class from smaller ones; `sized` gives the same sequence with
-  the count table, read from the original rows, when the automaton has no
-  constraint and no ambiguity. A bottom-up deterministic automaton, such as
+  builds each class from smaller ones; `sized` gives the same classes with a
+  count table: of the original rows, in the same sequence, when the rows have
+  no constraint and no ambiguity; and of the bottom-up deterministic rows when
+  they have no constraint and ambiguity. The deterministic rows stop at 1024
+  states, and give their own order. A bottom-up deterministic automaton, such as
   an e-graph, has no ambiguity. A set of transition keys checks this before
   the product check. A guard
   beyond equality constraints is `ResidualGuard`. `sizedUpTo` builds the
@@ -169,12 +171,12 @@ tree automata of `cfta`, with QuickCheck integration.
   are the terms of `sized` with the prefix, in the order of `sized`:
   `completionCount`, `completionTerms`, `unrankCompletion`, and
   `rankCompletion` count and list them, and map them to and from their ranks.
-  Without constraints and with unambiguous rows, they come from a size index
-  of the prefix, built with the combinators of the count table, so no query
-  lists them. With equality constraints or ambiguous rows, the queries list
-  the terms up to the bound and keep those with the prefix. A guard beyond
-  equality constraints is `ResidualGuard`. `prefixCompletionsWith` takes an
-  `Entailment` and decides the guards on each candidate term: `nextTokens`
+  Without constraints, they come from a size index of the prefix, built with
+  the combinators of the count table, so no query lists them. With equality
+  constraints, the queries list the terms up to the bound and keep those with
+  the prefix. A guard beyond equality constraints is `ResidualGuard`.
+  `prefixCompletionsWith` takes an `Entailment` and decides the guards on
+  each candidate term: `nextTokens`
   gives the tokens with an accepted completion, `undecidedTokens` the tokens
   that the solver neither offers nor rejects, `undecidedTerms` the undecided
   completions, and `completeVerdict` whether the prefix is an accepted term,
