@@ -34,6 +34,14 @@ Before release, the package was called `microcfta`.
 - Add `Data.CFTA.Language`: updates that combine with `<>` over a source
   document, and named exclusions that `restore` removes again. `start`
   changes the initial state.
+- Add `Data.CFTA.Merge`: `diff` and `diffDocument` give the update or the
+  patch between two versions of a language or a document. They are total:
+  when the initial states differ, the first edit is `SetStart`. `merge3` and
+  `merge3Document` merge two versions from one base by stable names: the
+  initial state, the rows, the production names, the fact names, and the
+  exclusion names. Each conflict holds its key and its three versions. The
+  merged order of a row is defined, and two different new orders of one row
+  are a conflict.
 - `Data.CFTA.EGraph.refines` is a rule condition on refinements, as egglog
   conditions a rule on a lattice value: the refinement of the e-class of a
   variable must imply a formula about its value. An analysis can meet the
