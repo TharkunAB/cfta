@@ -241,15 +241,14 @@ spec = describe "Data.CFTA.EGraph" $ do
                     , (2, anyTerm)
                     ]
         case (classAutomaton g' c, sharedFactor) of
-            (Right language, Right selection) -> case FTA.intersectWith (\f h -> if f == h then Just f else Nothing) (\_ k -> k) language selection of
-                Right both -> do
-                    found <- FTA.termsUpToM (\_ t u -> pure (equalitiesHold (FTA.transitionConstraint t) u)) (Depth 3) both
-                    Set.fromList found
-                        `shouldBe` Set.fromList
-                            [ Node "+" [Node "*" [leaf "a", leaf "b"], Node "*" [leaf "a", leaf "c"]]
-                            , Node "+" [Node "*" [leaf "a", leaf "c"], Node "*" [leaf "a", leaf "b"]]
-                            ]
-                Left err -> expectationFailure (show err)
+            (Right language, Right selection) -> do
+                let both = FTA.intersectWith (\f h -> if f == h then Just f else Nothing) (\_ k -> k) language selection
+                found <- FTA.termsUpToM (\_ t u -> pure (equalitiesHold (FTA.transitionConstraint t) u)) (Depth 3) both
+                Set.fromList found
+                    `shouldBe` Set.fromList
+                        [ Node "+" [Node "*" [leaf "a", leaf "b"], Node "*" [leaf "a", leaf "c"]]
+                        , Node "+" [Node "*" [leaf "a", leaf "c"], Node "*" [leaf "a", leaf "b"]]
+                        ]
             _ -> expectationFailure "no automaton"
     describe "an analysis of refinements" $ do
         let x = PVar "x"

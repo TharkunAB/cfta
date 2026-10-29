@@ -4,6 +4,13 @@
 
 Before release, the package was called `microcfta`.
 
+- An `FTA` allows a symbol at several arities, as an interned `Node` does.
+  `mkFTA` no longer checks the arities, and `FTAError` loses
+  `InconsistentArity` and its symbol parameter. `mapSymbols`, `intersect`,
+  `intersectWith`, and `fromTerms` cannot fail and return the automaton
+  itself; `toFTA` fails only on an open node (`FTAViewError` is `OpenNode`).
+  `mixedArity` gives the first symbol with two arities, for a component that
+  needs one arity for each symbol, such as the import of `Data.CFTA.Gen`.
 - Add `Data.CFTA.Checkpoint`: saved positions in a size-ordered listing of the
   terms of a graph, and in a sampled run of draws from that listing. A
   `Checkpoint` holds the graph, the query route and its version, the size

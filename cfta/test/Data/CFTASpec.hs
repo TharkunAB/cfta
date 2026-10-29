@@ -84,14 +84,11 @@ spec = do
             let left = Automaton.mkFTA Expression [(Expression, [Transition "left" [] noConstraint, Transition "shared" [] noConstraint])]
                 right = Automaton.mkFTA Expression [(Expression, [Transition "shared" [] noConstraint, Transition "right" [] noConstraint])]
             case (left, right) of
-                (Right leftAutomaton, Right rightAutomaton) ->
-                    case Automaton.intersect leftAutomaton rightAutomaton of
-                        Left err -> expectationFailure $ show err
-                        Right intersection -> do
-                            let ordinary = Automaton.dropConstraints intersection
-                            Automaton.accepts ordinary (Term.Node "shared" []) `shouldBe` True
-                            Automaton.accepts ordinary (Term.Node "left" []) `shouldBe` False
-                            Automaton.accepts ordinary (Term.Node "right" []) `shouldBe` False
+                (Right leftAutomaton, Right rightAutomaton) -> do
+                    let ordinary = Automaton.dropConstraints $ Automaton.intersect leftAutomaton rightAutomaton
+                    Automaton.accepts ordinary (Term.Node "shared" []) `shouldBe` True
+                    Automaton.accepts ordinary (Term.Node "left" []) `shouldBe` False
+                    Automaton.accepts ordinary (Term.Node "right" []) `shouldBe` False
                 (Left err, _) -> expectationFailure $ show err
                 (_, Left err) -> expectationFailure $ show err
 
@@ -340,6 +337,13 @@ spec = do
                 unary = Common.Node [Common.Edge "same" [leaf]]
             Common.intersect leaf unary `shouldBe` Common.EmptyNode
             fmap (length . Tree.flatten) (Common.toTree $ Common.union [leaf, unary]) `shouldBe` Right 5
+
+        it "keeps a symbol at two arities in an explicit graph" $ do
+            let leaf = Common.Node [Common.Edge "same" []] :: Common.Node String
+                both = Common.union [leaf, Common.Node [Common.Edge "same" [leaf]]]
+            fmap Automaton.mixedArity (Common.toFTA both)
+                `shouldSatisfy` (`elem` [Right (Just ("same", 0, 1)), Right (Just ("same", 1, 0))])
+            fmap Automaton.mixedArity (Common.toFTA leaf) `shouldBe` Right Nothing
 
         it "rejects an open recursive node in an explicit graph view" $ do
             let open = Common.Rec (Common.RecUnint 0) :: Common.Node String

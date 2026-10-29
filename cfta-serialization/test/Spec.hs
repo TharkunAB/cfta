@@ -294,7 +294,7 @@ spec = do
 -- | The graphs whose listing needs no solver, and a recursive graph with equal children.
 listed :: [FTA.PlainFTA String Symbol]
 listed =
-    [graph | (name, graph) <- graphs, name `elem` ["ordinary", "recursive", "equality", "empty"]]
+    [graph | (name, graph) <- graphs, name `elem` ["ordinary", "recursive", "equality", "empty", "two-arities"]]
         <> [ must $
                 FTA.mkFTA "s" [("s", [leaf "a", leaf "b", FTA.Transition "f" ["s"] noConstraint, FTA.Transition "g" ["s", "s"] equal])]
            ]
@@ -503,6 +503,7 @@ graphs =
     , ("equality", pairs equal)
     , ("liquid", liquid)
     , ("empty", must $ FTA.mkFTA "empty" [("empty", [])])
+    , ("two-arities", must $ FTA.mkFTA "s" [("s", [leaf "a", FTA.Transition "a" ["s"] noConstraint])])
     , ("all-forms", allForms)
     ]
 
@@ -615,7 +616,6 @@ malformed =
     [ "graph 2; start S; state S {}"
     , "graph1; start S; state S {}"
     , "graph 1; start S; state S { f(Missing); }"
-    , "graph 1; start S; state S { a; a(S); }"
     , "graph 1; start S; state S { a @{ v == 1.5 }; }"
     , "graph 1; start S; state S { a where raw {}; }"
     , "graph 1; start S; state S { a"

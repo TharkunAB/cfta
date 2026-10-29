@@ -73,8 +73,8 @@ state Expr {
 
 A transition has a complete symbol, ordered child states, and an optional
 constraint after `where`. Only an exact top symbol refinement is omitted.
-Unknown references and inconsistent symbol arities are errors. Duplicate states
-are errors even when their rows are identical.
+Unknown references are errors. A symbol can occur at several arities.
+Duplicate states are errors even when their rows are identical.
 
 Names can use ASCII letters, digits, `_`, `-`, and `+`. Other names use double
 quotes. Quoted strings retain Unicode and escaped control characters. Supported

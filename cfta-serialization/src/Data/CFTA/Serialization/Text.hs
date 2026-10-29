@@ -128,7 +128,7 @@ notesOf entries =
 data TextError state
     = SyntaxError !Int !Int !String
     | DuplicateState !state
-    | InvalidGraph !(FTA.FTAError state Symbol)
+    | InvalidGraph !(FTA.FTAError state)
     deriving (Eq, Show)
 
 -- | Describe the input location or the rejected graph.
@@ -138,8 +138,6 @@ explainTextError failure = case failure of
     DuplicateState state -> "duplicate state row: " <> show state
     InvalidGraph (FTA.MissingInitialState state) -> "initial state " <> show state <> " has no row"
     InvalidGraph (FTA.DanglingState state) -> "child state " <> show state <> " has no row"
-    InvalidGraph (FTA.InconsistentArity symbol expected actual) ->
-        "symbol " <> show symbol <> " has arities " <> show expected <> " and " <> show actual
 
 -- | Print a graph with state labels from its 'Show' instance.
 printGraph :: (Show state) => FTA.PlainFTA state Symbol -> Text
