@@ -228,9 +228,9 @@ renderCheckpoint encode checkpoint =
             <> integerText (checkpointVersion checkpoint)
             <> ";\nbound "
             <> integerText bound
-            <> ";\nnext "
+            <> ";\nnext size "
             <> integerText size
-            <> " "
+            <> " rank "
             <> integerText rank
             <> ";\n\n"
             <> plainGraphText encode noNotes (checkpointGraph checkpoint)
@@ -455,36 +455,36 @@ readSamplingCheckpoint decode input = do
     pure $ fields graph
   where
     parser = do
-        keyword "sampling"
+        field "sampling"
         format <- integerParser
         unless (format == 1) $ fail "unsupported sampling version; expected 1"
         token ";"
-        keyword "query"
+        field "query"
         route <- nameParser
         version <- integerParser
         token ";"
-        keyword "bound"
+        field "bound"
         bound <- integerParser
         token ";"
-        keyword "weights"
+        field "weights"
         uniform <- startsKeyword "uniform"
         weights <-
             if uniform
                 then keyword "uniform" $> Nothing
                 else Just . Map.fromList <$> (bracketed weight >>= distinctSizes)
         token ";"
-        keyword "prng"
+        field "prng"
         algorithm <- nameParser
         algorithmVersion <- integerParser
         token ";"
-        keyword "seed"
+        field "seed"
         seed <- integerParser
         when (seed < 0 || seed > toInteger (maxBound :: Word64)) $ fail "seed is outside the range of a 64-bit word"
         token ";"
-        keyword "draws"
+        field "draws"
         draws <- integerParser
         token ";"
-        (_, rows) <- plainGraphParser decode
+        (_, rows) <- plainGraphParser WithoutNotes decode
         pure
             ( \graph -> SamplingCheckpoint graph route version (Size bound) weights algorithm algorithmVersion (fromInteger seed) draws
             , rows
@@ -504,17 +504,19 @@ readGraph ::
     Text ->
     Either (TextError state) (Notes state, FTA.PlainFTA state Symbol)
 readGraph decode input = do
-    (comments, rows) <- runParser (plainGraphParser decode) input
+    (comments, rows) <- runParser (plainGraphParser WithNotes decode) input
     graph <- validGraph rows
     pure (notesOf comments, graph)
 
 {- | Read the graph format: the header, the initial state, and the rows with
-their constraints, and the doc comments of the file and of the states.
+their constraints, and, where the rule allows them, the doc comments of the
+file and of the states and the sorts of the states.
 -}
 plainGraphParser ::
+    NoteRule ->
     (Text -> Either String state) ->
     A.Parser ([NoteEntry state], (state, [(state, [FTA.Transition state Symbol C.Constraint])]))
-plainGraphParser decode = graphParser "graph" decode (graphTransitionParser decode) <* noComment
+plainGraphParser rule decode = graphParser rule "graph" decode (graphTransitionParser decode) <* ruleGuard rule <* noComment
 
 -- | Check that each state has one row, then check the graph as 'FTA.mkFTA' does.
 validGraph ::
@@ -532,22 +534,24 @@ readCheckpoint decode input = do
     pure $ Checkpoint graph route version bound next
   where
     parser = do
-        keyword "checkpoint"
+        field "checkpoint"
         format <- integerParser
         unless (format == 1) $ fail "unsupported checkpoint version; expected 1"
         token ";"
-        keyword "query"
+        field "query"
         route <- nameParser
         version <- integerParser
         token ";"
-        keyword "bound"
+        field "bound"
         bound <- integerParser
         token ";"
-        keyword "next"
+        field "next"
+        keyword "size"
         size <- integerParser
+        keyword "rank"
         rank <- integerParser
         token ";"
-        (_, rows) <- plainGraphParser decode
+        (_, rows) <- plainGraphParser WithoutNotes decode
         pure (route, version, Size bound, (Size size, ClassRank rank), rows)
 
 -- | Reject a second row for a state.
@@ -576,16 +580,18 @@ validation, the doc comments of the file and the states, and the sorts of the
 states.
 -}
 graphParser ::
+    NoteRule ->
     Text ->
     (Text -> Either String state) ->
     A.Parser (FTA.Transition state Symbol annotation) ->
     A.Parser ([NoteEntry state], (state, [(state, [FTA.Transition state Symbol annotation])]))
-graphParser format decode transition = do
-    fileComment <- commentParser
+graphParser rule format decode transition = do
+    fileComment <- ruleComment rule
     keyword format
     version <- integerParser
     unless (version == 1) $ fail "unsupported snapshot version; expected 1"
     token ";"
+    ruleGuard rule
     keyword "start"
     initial <- stateParser decode
     token ";"
@@ -593,12 +599,12 @@ graphParser format decode transition = do
     pure (commentOn OnFile fileComment <> concatMap fst rows, (initial, map snd rows))
   where
     row = do
-        comment <- commentParser
+        comment <- ruleComment rule
         keyword "state"
         state <- stateParser decode
-        sort <- ifNext ':' (Just <$> (token ":" *> nameParser)) Nothing
+        sort <- ruleSort rule
         token "{"
-        transitions <- untilClose '}' transition
+        transitions <- untilClose '}' (ruleGuard rule *> transition)
         token "}"
         ifNext ';' (token ";") ()
         pure (commentOn (OnState state) comment <> maybe [] (\name -> [SortEntry state name]) sort, (state, transitions))
@@ -845,6 +851,34 @@ noComment = do
 -- | The error for a doc comment that does not come before an item.
 misplacedComment :: String
 misplacedComment = "a doc comment must come before the header or a state"
+
+-- | Whether a graph can have doc comments and the sorts of its states. The graph of a checkpoint has neither.
+data NoteRule = WithNotes | WithoutNotes
+
+-- | Read the doc comment of an item, where the rule allows one.
+ruleComment :: NoteRule -> A.Parser (Maybe Text)
+ruleComment WithNotes = commentParser
+ruleComment WithoutNotes = noCheckpointComment $> Nothing
+
+-- | Read the sort of a state, where the rule allows one.
+ruleSort :: NoteRule -> A.Parser (Maybe Text)
+ruleSort WithNotes = ifNext ':' (Just <$> (token ":" *> nameParser)) Nothing
+ruleSort WithoutNotes = ifNext ':' (fail "a checkpoint has no sorts") Nothing
+
+-- | Reject a doc comment where the rule allows none.
+ruleGuard :: NoteRule -> A.Parser ()
+ruleGuard WithNotes = pure ()
+ruleGuard WithoutNotes = noCheckpointComment
+
+-- | Reject a doc comment in a checkpoint.
+noCheckpointComment :: A.Parser ()
+noCheckpointComment = do
+    present <- (lookAhead (A.string "///") $> True) <|> pure False
+    when present $ fail "a checkpoint has no doc comments"
+
+-- | Read the keyword of a checkpoint statement, after a check for a doc comment.
+field :: Text -> A.Parser ()
+field word = noCheckpointComment *> keyword word
 
 -- | A doc comment of a target, as a list of at most one note.
 commentOn :: CommentTarget state -> Maybe Text -> [NoteEntry state]

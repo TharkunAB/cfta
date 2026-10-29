@@ -14,7 +14,8 @@
   for `checkpoint 1;`, and `printSamplingCheckpoint` and
   `parseSamplingCheckpoint` for `sampling 1;`, each with a `With` variant for
   a `StateCodec`. A `checkpoint 1;` file holds the query route and its
-  version, the size bound, and the sized rank of the next term. A
-  `sampling 1;` file holds the query, the weights of the sizes, the
-  pseudorandom generator and its version, the seed, and the number of draws.
-  Each then holds the text of `printGraph` for the graph.
+  version, the size bound, and the sized rank of the next term
+  (`next size 5 rank 1;`). A `sampling 1;` file holds the query, the weights
+  of the sizes, the pseudorandom generator and its version, the seed, and the
+  number of draws. Each then holds the text of `printGraph` for the graph.
+  Neither has doc comments or sorts.
