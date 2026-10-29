@@ -9,11 +9,21 @@ the top.
 
 ## In progress: serialization
 
-Each pull request is one complete feature. #188, the graph text format, is on
-`main`. #116 is ready for review. The others are drafts: mark the next one
+Each pull request is one complete feature. #188, the graph text format, and
+#116, checkpoints, are on `main`. The others are drafts: mark the next one
 ready when work on it starts.
 
-- #116 `feature/listing-checkpoints`: Checkpoints: resume a size-ordered listing or a sampled run in a new process
+Each of these pull requests needs the API of #116 when it is rebased on
+`main`. `experimental` has these changes in its merge of `main`:
+
+- `FTAError` has one parameter. A symbol can occur at several arities, so a
+  language with a symbol at two arities is valid (#187: test and README).
+- `mapSymbols`, `intersect`, and `intersectWith` are total.
+- `exclusionText` and `exclusionParser` are the checkpoint forms. In #187, the
+  language forms with names become `namedExclusionText` and
+  `namedExclusionParser`, with the grammar rule `named-exclusion`.
+- Remove the constraints that the new signatures make redundant.
+
 - #110 `feature/source-documents`: Editable source documents and language updates
 - #187 `feature/document-text`: Text forms of source documents, languages, and updates
 - #126 `feature/document-merge`: Diff and three-way merge of languages by stable names
