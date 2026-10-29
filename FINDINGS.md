@@ -1,3 +1,38 @@
+# Constructor models and terminal storage progress: 2026-10-29 22:00 CET
+
+Source fb6d0fb5a on formalize. The full goal remains ACTIVE.
+Read lean/notes-current-constructor-model-progress.md first.
+Earlier document bodies follow unchanged as dated checkpoints.
+
+Actual nonterminal constructor traversal and finalization now use the SAME
+constructed assignment for final Satisfies and exact pendingSize+1 decrease.
+Original native child meanings, all suspended obligations and actual successful
+operations remain explicit. Mixed pure/graph assimilation cannot increase cost
+under compatible assignments. Actual terminal prefix, fold, compression and
+incoming write yield a chosen hole and cost <= old+size(chosen).
+
+The largest gaps are mixed child composition, original accepted-parent branch
+existence, neutral-step control, sufficient resources and public coverage.
+The known initial_boundary_done theorem retains undischarged recursion markers
+at EVERY worker/depth fuel. Graph unfolding or the separate public generator
+path must be connected. Worker capacity alone cannot remove these markers.
+
+Strict Audit passes 4661 jobs and 82317 theorem dependencies. The 11 new public
+laws pass axiom readback. Four focused Nix recursion controls pass. All prior
+831 Haskell/Cabal/project identities are unchanged. No Haskell fix was needed.
+Earlier Haskell fixes and open pickup items remain below for external work.
+
+Haskell finding for external pickup: Equality.terms deliberately truncates
+recursion; Equality.hs105-113 documents unfoldBounded. Gen.fromAutomaton uses
+the separate size-indexed Flat backend. This is a proof contract boundary,
+not a new runtime defect. Controls cover bare recursion, unfolded constructors,
+a recursive-first later atom, and the existing repeated-key case. No new
+Haskell patch, formatter change or source-level test was committed. Preserve
+the previous Haskell fix records. The current handoff gives exact evidence
+and remaining correspondence work.
+
+---
+
 # Constructor storage progress and actual native stops: 2026-10-29 21:38 CET
 
 Source 2866f1310 on formalize. The full goal remains ACTIVE.
