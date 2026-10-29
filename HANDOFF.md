@@ -1,3 +1,37 @@
+# Constructor iteration and Left callback: 2026-10-29 23:06 CET
+
+Source 6edaa82b4d1be3f1a1fba14cdc6d57284916d4f2 on formalize.
+The full goal remains ACTIVE. Last fetched main remains 7b8db072f.
+Read lean/notes-current-constructor-iteration-progress.md first.
+Earlier dated document bodies follow unchanged.
+
+ConstructorIteration retains the complete earlier constructor result.
+It derives actual captured execution, the whole recursive Packet,
+ProperState, Admitted, FragmentHistory and all final pending-input bounds.
+ConstructorCallback retains that complete result and the complete specialized
+callback result. Original policies derive callback=false and updated refutations.
+The SAME extended assignment satisfies the callback cache and gives strict
+pendingSize+1 decrease. A common local work bound controls both actual actions.
+The actual continuation equation allows any operational recur.
+It does not prove that recur's future semantic result.
+
+Largest gap: attach the actual outer selected prefix and earlier alternatives
+to this exact input and continuation. Then handle neutral-step control,
+sufficient global resources, graph unfolding/public coverage, exact order/stops
+and Haskell correspondence. Whole-system soundness still has its checked
+semantic/resource/fixed-PCS gates and separate whole-state Discharged condition.
+
+Strict Audit: 4669 jobs, 82355 theorem axiom checks, three final strict mappings.
+Public: 975 checks, 78 definitions, two new standard-axiom theorem readbacks.
+Nine capped commands retain seven passes and two failed first drafts.
+All 24 input snapshots, 157 review payloads and 50 source scopes verify.
+All 468 protected and 831 Haskell/Cabal/project identities remain unchanged.
+No Haskell fix was needed. Earlier external pickup items remain in FINDINGS.
+Preserve lean/restart-evidence/20261029-constructor-iteration-progress and older
+evidence. Continue in a fresh writable area after sealing this phase.
+
+---
+
 # Constructive mixed constructor progress: 2026-10-29 22:33 CET
 
 Source ef0d084c5969bd0016f3155cf15abf8a79c8ca84 on formalize.
