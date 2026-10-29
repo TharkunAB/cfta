@@ -1,3 +1,34 @@
+# Constructor iteration and Left callback: 2026-10-29 23:06 CET
+
+Source 6edaa82b4d1be3f1a1fba14cdc6d57284916d4f2 on formalize.
+The full goal remains ACTIVE. Last fetched main remains 7b8db072f.
+Read lean/notes-current-constructor-iteration-progress.md first.
+Earlier dated document bodies follow unchanged.
+
+An original accepted constructor now returns the whole recursive Packet,
+ProperState, fragment history and every final pending-input admission.
+Its actual Left recording callback preserves the SAME model and strict
+pendingSize+1 decrease. Original refutation, Avoids and ProgramEncoding gates
+derive callback=false, updated refutations and actual continuation.
+One common local work bound controls the constructor and callback.
+
+Continue with the actual outer selected prefix and earlier ordinary edges.
+Attach entry, recursion checking, narrowing and the Right callback to the
+exact constructor input. Then prove the actual recursive continuation.
+Neutral-step rank, sufficient global resources, unfolding/public coverage,
+exact public order/stops and Haskell correspondence remain open.
+DONE does not imply Discharged. Worker/depth fuel alone cannot remove the
+known initial_boundary_done recursive placeholders.
+
+Strict Audit: 4669 jobs and 82355 theorem axiom checks.
+Public: 975 checks, 78 definitions, two new standard-axiom theorem readbacks.
+All 468 protected and 831 Haskell/Cabal/project identities remain unchanged.
+Root verified nine capped commands and 24 input snapshots.
+No Haskell fix or new executable defect was found. Earlier FINDINGS remain.
+Evidence: lean/restart-evidence/20261029-constructor-iteration-progress.
+
+---
+
 # Constructive mixed constructor progress: 2026-10-29 22:33 CET
 
 Source ef0d084c5969bd0016f3155cf15abf8a79c8ca84 on formalize.

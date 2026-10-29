@@ -1,3 +1,38 @@
+# Constructor iteration and Left callback: 2026-10-29 23:06 CET
+
+Source 6edaa82b4d1be3f1a1fba14cdc6d57284916d4f2 on formalize.
+The full goal remains ACTIVE.
+Read lean/notes-current-constructor-iteration-progress.md.
+Earlier dated findings and Haskell repairs follow unchanged.
+
+An original accepted constructor now derives its whole returned recursive
+Packet, ProperState and fragment history. Its actual Left recording callback
+preserves the SAME model and strict pending-term decrease. Original metadata
+refutation, Avoids and ProgramEncoding derive callback=false and actual
+continuation at one common local work bound. No future model is an input.
+
+The earlier local gap list overstated missing primitive admissions.
+Restart.selected already derives Ready and IncomingAvoid from the original
+Packet and actual decision. EnumerationReferences.pending_inputs already
+derives stored pending-input admissions. Existing pending_refutes_extension
+already transports original metadata refutations. No new primitive was needed.
+
+The largest gap is the actual outer prefix, earlier alternatives and recursive
+continuation. Neutral rank, global resources, unfolding/public coverage, exact
+public order/stops and Haskell correspondence remain open.
+DONE does not imply Discharged. The known recursive initial boundary persists
+at every worker/depth fuel. Preserve the earlier unfolding and generator scope.
+
+Strict Audit passes 4669 jobs and 82355 theorem axiom checks.
+All 468 protected and 831 Haskell/Cabal/project identities remain unchanged.
+Haskell handoff: no Haskell change, fix or new executable defect was found.
+External work must retain all earlier Haskell repairs and pickup items below.
+The physical enabled-emptiness worker limit and PR193 tuple-budget contract
+retain their separate earlier scopes.
+Evidence: lean/restart-evidence/20261029-constructor-iteration-progress.
+
+---
+
 # Constructive mixed constructor progress: 2026-10-29 22:33 CET
 
 Source ef0d084c5969bd0016f3155cf15abf8a79c8ca84 on formalize.
