@@ -20,6 +20,7 @@ module Data.CFTA.Gen.UntypedExpressionLanguage (
     evaluate,
     naiveExpressionGen,
     handwrittenExpressionGen,
+    expressionAutomaton,
 ) where
 
 import qualified Test.QuickCheck as QC

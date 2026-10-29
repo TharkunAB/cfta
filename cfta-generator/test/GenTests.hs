@@ -15,6 +15,8 @@ import qualified Data.CFTA.Gen.SynthesisSpec
 import qualified Data.CFTA.Gen.TypingSpec
 import qualified Data.CFTA.GenSpec
 import qualified Data.CFTA.RankedSpec
+import qualified Data.CFTA.Sized.PrefixGuardSpec
+import qualified Data.CFTA.Sized.PrefixSpec
 import qualified Data.CFTA.SizedSpec
 
 main :: IO ()
@@ -34,3 +36,5 @@ main =
         Data.CFTA.Gen.Synthesis.StatesSpec.spec
         Data.CFTA.Gen.TypingSpec.spec
         Data.CFTA.SizedSpec.spec
+        Data.CFTA.Sized.PrefixSpec.spec
+        Data.CFTA.Sized.PrefixGuardSpec.spec
