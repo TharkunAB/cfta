@@ -1,3 +1,60 @@
+# Verified native intersection prefix body bounds: 2026-10-29 20:30 CET
+
+Source 3f15b7e8127019e02c9b66893225a842e9edb059 on formalize.
+Read lean/notes-current-native-prefix-progress.md before older checkpoints.
+The full formalization goal remains ACTIVE. Main ef0a2f32 remains integrated.
+Every earlier document body follows unchanged as a dated checkpoint.
+
+SourceRecursiveIntersectionNative.node_prefix_lower and edge_prefix_lower
+now derive Lower at EVERY finite native outcome from original source ceiling
++ original semantic requiredFuel. Simultaneous semantic-rank induction closes
+all child and compiled-body suppliers. Actual bind endpoints retain complete
+native states. No DONE premise, current-heap ceiling, future value/body bound,
+idle state or arbitrary future-range family is required. WordRanges remains.
+Complete probe records in failed, yielded and blocked heaps are included.
+Native.closed_roots_cold_prefix_bounded derives one bound for every complete
+Mu body's open stored-plan binder degree before all finite observations.
+Its cold premise fixes only the constructor heap to the original source.
+
+This result is for SourceRecursiveIntersectionNative.execute in Lean.
+The generator calls SourceEqualityNativeDemand.execute. That checked engine
+has a separate edge-body control and equality-field/conjoin allocations.
+It uses physical memo validity and checked provenance. These facts are not
+the eager Produced receipts required by the bare interpreter's strong Valid.
+A direct substitution is not proved. Its query inventory already derives
+physical operand scope per query by rebasing to the actual query-entry heap.
+The checked-engine bound and one uniform bound across generated queries are
+the next concrete gaps. One global allocation/guard/handle/word bound,
+sufficient recursive capacity and nonterminal chosen-value coverage remain.
+
+Twelve additive proof modules: 22 public theorems, 1238 lines/90220 bytes.
+All 13 final sources strictly pass, including Audit. Audit checks 82156
+theorem dependencies in 4645 jobs. Compiler commands: 27 PASS and seven
+retained failures. All 303 command snapshots match. Public readback has
+912 checks/axiom lists and 73 old definition bodies, 3751130 bytes. Its old
+3691779 bytes are an exact prefix. All 59351 new bytes were read.
+All 4632 old non-Audit Lean, 461 stronger and 829 Haskell/Cabal identities
+remain. No runtime definition, custom axiom, placeholder or suppression is
+added. Default Audit retains the known imported unused-variable warning.
+
+Strongest whole-system semantics remains conditional checked rendered
+soundness under its contracts, fixed PCS and whole-Discharged. Ordered output
+prefix retention and same-raw-slot output/diagnostic ancestry remain.
+DONE does not imply Discharged. Configured stops can emit partial results.
+Whole-language completeness and full optimized Haskell correspondence remain
+open. No completion percentage is supported by these local results.
+
+No Haskell source change or new runtime defect occurs in this increment.
+FINDINGS retains parser repair c15021ce706ef560b6c0ab335ceed1a4b67ba4aa for
+external pickup: checkedPathClass, both calls, four malformed fixtures and
+the lawful codec. Main ef0a2f32 lacks this repair. Earlier integration tests,
+the HugeLists fix, probe repair and counterexample scopes remain preserved.
+
+Evidence: lean/restart-evidence/20261029-native-prefix-progress/.
+Use a new writable area after sealing. Refresh upstream. Regular formalize
+pushes remain explicitly authorized. Continue the full goal ACTIVE.
+
+---
 # Current proof state: all-outcome kernel body bounds
 
 Checkpoint: 2026-10-29 19:53 CET. The full goal remains ACTIVE.
