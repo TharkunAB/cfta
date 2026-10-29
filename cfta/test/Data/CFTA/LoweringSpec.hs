@@ -27,7 +27,7 @@ spec = describe "template lowerings" $ do
 
     it "lift a spec to the terms whose lowering it accepts" $ do
         lifted <- either (fail . show) pure $ Lowering.lift lowering evenValue
-        let within = either (error . show) FTA.dropConstraints $ FTA.intersect later lifted
+        let within = FTA.dropConstraints $ FTA.intersect later lifted
             bounded = Set.fromList $ FTA.terms $ FTA.boundDepth 3 later
             expected = Set.filter (maybe False (FTA.accepts evenValue) . Lowering.lower lowering) bounded
         Set.fromList (FTA.terms $ FTA.boundDepth 3 within) `shouldBe` expected
@@ -45,7 +45,7 @@ spec = describe "template lowerings" $ do
         map (Lowering.lower (compose Lowering.identity lowering)) terms `shouldBe` map (Lowering.lower lowering) terms
         map (Lowering.lower (compose lowering Lowering.identity)) terms `shouldBe` map (Lowering.lower lowering) terms
         let top = grammar [("double", 1), ("succ", 1), ("quad", 1)]
-            within lifted = Set.fromList $ FTA.terms $ FTA.boundDepth 3 $ either (error . show) FTA.dropConstraints $ FTA.intersect top lifted
+            within lifted = Set.fromList $ FTA.terms $ FTA.boundDepth 3 $ FTA.dropConstraints $ FTA.intersect top lifted
             once = either (error . show) id $ Lowering.lift composite evenValue
             twice = either (error . show) id $ Lowering.lift lowering evenValue >>= Lowering.lift upper
         within once `shouldBe` within twice

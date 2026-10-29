@@ -116,7 +116,7 @@ data SignatureError sort symbol
     | {- | The automaton check rejected the signature. The checks of this
       module find every such case first, so this error is not expected.
       -}
-      AutomatonRejected !(FTA.FTAError (Maybe sort) symbol)
+      AutomatonRejected !(FTA.FTAError (Maybe sort))
     deriving (Eq, Show)
 
 {- | The automaton of a signature, for the operations of "Data.CFTA".

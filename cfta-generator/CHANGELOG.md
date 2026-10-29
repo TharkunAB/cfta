@@ -36,8 +36,10 @@ tree automata of `cfta`, with QuickCheck integration.
   uniformly or with a weight for each size, with SplitMix64 (`splitMix64`, as
   `splitmix64.c`). Draw `i` depends only on the seed and on `i`, so a sampling
   checkpoint holds the seed and the number of draws, and a new process gives
-  the same next draws. Resuming rejects another route or generator version,
-  another graph (naming the first row that differs), and other weights. A
+  the same next draws. A checkpoint lists a language: a graph and its
+  exclusions, through `excludeAllFTA`. Resuming rejects another route or
+  generator version, another graph (naming the first row that differs), other
+  exclusions (`StaleExclusions`), and other weights. A
   graph with a guard beyond equality constraints needs a solver, and both
   routes reject it.
 - `Data.CFTA.Sized.termsOfSizeFrom`: the terms of a size class from a class

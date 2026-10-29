@@ -47,7 +47,7 @@ import qualified Data.Text as Text
 import System.Mem.StableName (StableName, eqStableName, hashStableName, makeStableName)
 import Unsafe.Coerce (unsafeCoerce)
 
-import qualified Data.CFTA as FTA (fromTerms)
+import qualified Data.CFTA as FTA (fromTerms, mixedArity)
 import Data.CFTA.Equality.Constraint (EqConstraints (EmptyConstraints))
 import qualified Data.CFTA.Formula as Formula
 import Data.CFTA.Gen
@@ -1238,7 +1238,9 @@ compileImport entailment requested bound order automaton
         accepted <- denotationAtMost entailment depth automaton
         pure $ case accepted of
             Left (DenotationUnknown _ _) -> Left SolverUnknown
-            Right denotation -> either (const $ Left $ ResidualGuard guard) (Right . grouped . fromFTA) (FTA.fromTerms denotation)
+            Right denotation -> case FTA.mixedArity (FTA.fromTerms denotation) of
+                Just _ -> Left $ ResidualGuard guard
+                Nothing -> Right $ grouped $ fromFTA $ FTA.fromTerms denotation
 
 {- | Partition the language of an automaton by the labels at the requested paths.
 

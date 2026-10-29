@@ -88,7 +88,7 @@ precondition is true in it. A state from which no final state is reachable
 keeps its row, so 'feasibility' finds the step whose precondition is false.
 'FTA.trim' removes these states.
 -}
-traceAutomaton :: (Ord state, Ord step) => StateMachine state step -> PlainFTA state (TraceSymbol step)
+traceAutomaton :: (Ord state) => StateMachine state step -> PlainFTA state (TraceSymbol step)
 traceAutomaton StateMachine{machineInitial, machineSteps, machineNext, machineFinal} =
     -- Each child is a reached state, and each symbol has one arity, so validation cannot fail.
     fromRight (error "traceAutomaton: the automaton of a state machine is valid")

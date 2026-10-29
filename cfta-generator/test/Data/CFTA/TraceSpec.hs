@@ -148,7 +148,7 @@ intersection ::
     FTA.PlainFTA right (TraceSymbol step) ->
     FTA.PlainFTA (FTA.ProductState left right) (TraceSymbol step)
 intersection left right =
-    either (const $ error "intersection: trace symbols have one arity each") FTA.dropConstraints $ FTA.intersect left right
+    FTA.dropConstraints $ FTA.intersect left right
 
 -- | Check the size class of a length against brute force, and rank each member back.
 checkLength :: (Ord state, Ord step, Show step) => StateMachine state step -> Int -> Expectation
@@ -308,7 +308,7 @@ spec = describe "Data.CFTA.Trace" $ do
             coarse step = if step `elem` [ReadLine, ReadByte] then Read else step
             lifted = either (error . show) id $ Lowering.lift lowering $ traceAutomaton handle
             fineTraces = intersection (traceAutomaton $ free fine) lifted
-            image = either (error . show) id $ FTA.mapSymbols (fmap coarse) fineTraces
+            image = FTA.mapSymbols (fmap coarse) fineTraces
         forM_ [0 .. 6] $ \length_ -> do
             fmap sort (tracesOf fineTraces length_)
                 `shouldBe` Just (sort [steps | steps <- replicateM length_ fine, runs handle (map coarse steps)])
@@ -346,7 +346,7 @@ spec = describe "Data.CFTA.Trace" $ do
         timeout 10000000 (evaluate $ countOfSize words_ $ sizeOf 40) `shouldReturn` Just (2 ^ (40 :: Int))
     it "projects to a coarser step alphabet with one run for each trace" $ do
         let typed = traceAutomaton typedStack
-            image = either (error . show) id $ FTA.mapSymbols (fmap shape) typed
+            image = FTA.mapSymbols (fmap shape) typed
             reference = either (error . show) id $ sizedReference image
             result = project shape typed
         -- Two pushes of one shape go to different stacks, so the image has two runs of a trace.

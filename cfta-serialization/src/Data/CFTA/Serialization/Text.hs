@@ -86,7 +86,7 @@ import qualified Data.CFTA.Language as L
 import Data.CFTA.Path (Path (Path), unPath)
 import Data.CFTA.Signature (SortedFunction (..), SortedSignature (..), ValueSort (..), ValueSource (..))
 import Data.CFTA.Symbol (Symbol (RefinedSymbol, Symbol), symbolRefinement, symbolText, valueName)
-import Data.CFTA.Template (Template (..))
+import Data.CFTA.Template (Exclusion (..), Template (..))
 
 {- | A typed codec for portable state labels. Decoding an encoded state must
 return that state and preserve equality and ordering. Labels are escaped by the
@@ -161,7 +161,7 @@ notesOf entries =
 data TextError state
     = SyntaxError !Int !Int !String
     | DuplicateState !state
-    | InvalidGraph !(FTA.FTAError state Symbol)
+    | InvalidGraph !(FTA.FTAError state)
     | InvalidDefinition !(D.DocumentError state)
     deriving (Eq, Show)
 
@@ -172,8 +172,6 @@ explainTextError failure = case failure of
     DuplicateState state -> "duplicate state row: " <> show state
     InvalidGraph (FTA.MissingInitialState state) -> "initial state " <> show state <> " has no row"
     InvalidGraph (FTA.DanglingState state) -> "child state " <> show state <> " has no row"
-    InvalidGraph (FTA.InconsistentArity symbol expected actual) ->
-        "symbol " <> show symbol <> " has arities " <> show expected <> " and " <> show actual
     InvalidDefinition failure' -> D.explainDocumentError failure'
 
 -- | Print a graph with state labels from its 'Show' instance.
@@ -352,11 +350,11 @@ renderLanguage :: (state -> Text) -> NoteLookup state -> L.Language state -> Tex
 renderLanguage encode notes language =
     built $
         graphText "language" encode (sourceTransitionText encode notes) notes (D.sourceGraph $ L.source language)
-            <> foldMap (uncurry $ exclusionText notes) (Map.toAscList $ L.exclusions language)
+            <> foldMap (uncurry $ namedExclusionText notes) (Map.toAscList $ L.exclusions language)
 
 -- | Render a named exclusion after its doc comment.
-exclusionText :: NoteLookup state -> L.ExclusionName -> L.Exclusion -> Builder
-exclusionText notes name exclusion =
+namedExclusionText :: NoteLookup state -> L.ExclusionName -> L.Exclusion -> Builder
+namedExclusionText notes name exclusion =
     commentText "" (commentOf notes $ OnExclusion name) <> "exclude " <> nameText (L.exclusionNameText name) <> " = " <> case exclusion of
         L.AtRoot template -> "root " <> templateText template <> ";\n"
         L.Anywhere template -> "anywhere " <> templateText template <> ";\n"
@@ -408,7 +406,7 @@ renderUpdate encode (L.Update operations) = built $ "update 1;\n" <> foldMap ope
             D.PutTransition at transition -> "put production " <> state at <> " " <> productionText "" encode none at transition
             D.PutRow at transitions -> "put row " <> state at <> " {\n" <> foldMap (sourceTransitionText encode none at) transitions <> "}\n"
             D.DeleteRow at -> "delete row " <> state at <> ";\n"
-        L.Exclude name exclusion -> exclusionText none name exclusion
+        L.Exclude name exclusion -> namedExclusionText none name exclusion
         L.Restore name -> "restore " <> nameText (L.exclusionNameText name) <> ";\n"
 
 -- | Render the query and the next sized rank, then the graph in the graph format.
@@ -425,7 +423,9 @@ renderCheckpoint encode checkpoint =
             <> integerText size
             <> " rank "
             <> integerText rank
-            <> ";\n\n"
+            <> ";\n"
+            <> foldMap exclusionText (checkpointExclusions checkpoint)
+            <> "\n"
             <> plainGraphText encode noNotes (checkpointGraph checkpoint)
   where
     Size bound = checkpointBound checkpoint
@@ -451,7 +451,9 @@ renderSamplingCheckpoint encode checkpoint =
             <> integerText (toInteger $ samplingSeed checkpoint)
             <> ";\ndraws "
             <> integerText (samplingDraws checkpoint)
-            <> ";\n\n"
+            <> ";\n"
+            <> foldMap exclusionText (samplingExclusions checkpoint)
+            <> "\n"
             <> plainGraphText encode noNotes (samplingGraph checkpoint)
   where
     Size bound = samplingBound checkpoint
@@ -521,6 +523,12 @@ commentText :: Builder -> Maybe Text -> Builder
 commentText indent = maybe mempty (foldMap line . Text.splitOn "\n")
   where
     line text = indent <> "///" <> (if Text.null text then mempty else " " <> fromText text) <> "\n"
+
+-- | Render an exclusion of a checkpoint as one statement.
+exclusionText :: Exclusion Symbol -> Builder
+exclusionText exclusion = case exclusion of
+    AtRoot template -> "exclude root " <> templateText template <> ";\n"
+    Anywhere template -> "exclude anywhere " <> templateText template <> ";\n"
 
 -- | Render a complete symbol and ordered child state references.
 edgeText :: (state -> Text) -> FTA.Transition state Symbol annotation -> Builder
@@ -736,9 +744,21 @@ readSamplingCheckpoint decode input = do
         checkpointKeyword "draws"
         draws <- integerParser
         token ";"
+        exclusions <- whileKeyword "exclude" exclusionParser
         (_, rows) <- plainGraphParser WithoutNotes decode
         pure
-            ( \graph -> SamplingCheckpoint graph route version (Size bound) weights algorithm algorithmVersion (fromInteger seed) draws
+            ( \graph ->
+                SamplingCheckpoint
+                    graph
+                    exclusions
+                    route
+                    version
+                    (Size bound)
+                    weights
+                    algorithm
+                    algorithmVersion
+                    (fromInteger seed)
+                    draws
             , rows
             )
     weight = (,) <$> (Size <$> integerParser <* token ":") <*> (Weight <$> integerParser)
@@ -783,9 +803,9 @@ validGraph (initial, rows) = do
 -- | Read the query, the next sized rank, and the graph of a checkpoint.
 readCheckpoint :: (Ord state) => (Text -> Either String state) -> Text -> Either (TextError state) (Checkpoint state)
 readCheckpoint decode input = do
-    (route, version, bound, next, rows) <- runParser parser input
+    (route, version, bound, next, exclusions, rows) <- runParser parser input
     graph <- validGraph rows
-    pure $ Checkpoint graph route version bound next
+    pure $ Checkpoint graph exclusions route version bound next
   where
     parser = do
         checkpointKeyword "checkpoint"
@@ -805,8 +825,22 @@ readCheckpoint decode input = do
         keyword "rank"
         rank <- integerParser
         token ";"
+        exclusions <- whileKeyword "exclude" exclusionParser
         (_, rows) <- plainGraphParser WithoutNotes decode
-        pure (route, version, Size bound, (Size size, ClassRank rank), rows)
+        pure (route, version, Size bound, (Size size, ClassRank rank), exclusions, rows)
+
+-- | Read an exclusion statement of a checkpoint: @exclude root TEMPLATE;@ or @exclude anywhere TEMPLATE;@.
+exclusionParser :: A.Parser (Exclusion Symbol)
+exclusionParser = do
+    checkpointKeyword "exclude"
+    place <- nameParser
+    exclusion <- case place of
+        "root" -> pure AtRoot
+        "anywhere" -> pure Anywhere
+        _ -> fail "expected root or anywhere"
+    template <- templateParser
+    token ";"
+    pure $ exclusion template
 
 -- | Reject a second row for a state.
 distinctStates :: (Ord state) => [(state, rows)] -> Either (TextError state) ()
@@ -835,7 +869,7 @@ readLanguage decode input = do
   where
     parser = do
         (comments, rows) <- graphParser WithNotes "language" decode $ sourceTransitionParser decode
-        entries <- untilEnd exclusionParser
+        entries <- untilEnd namedExclusionParser
         exclusions <- namedMap "exclusion" $ map fst entries
         let exclusionComments = concat [commentOn (OnExclusion $ L.ExclusionName name) comment | ((name, _), comment) <- entries]
         pure (comments <> exclusionComments, rows, Map.mapKeys L.ExclusionName exclusions)
@@ -1055,8 +1089,8 @@ symbolParser = do
     pure $ RefinedSymbol (Symbol name) refinement
 
 -- | Read a named whole-term or subtree exclusion and its doc comment.
-exclusionParser :: A.Parser ((Text, L.Exclusion), Maybe Text)
-exclusionParser = do
+namedExclusionParser :: A.Parser ((Text, L.Exclusion), Maybe Text)
+namedExclusionParser = do
     comment <- itemComment
     exclusion <- keyword "exclude" *> exclusionBody
     pure (exclusion, comment)

@@ -17,8 +17,9 @@
   version, the size bound, and the sized rank of the next term
   (`next size 5 rank 1;`). A `sampling 1;` file holds the query, the weights
   of the sizes, the pseudorandom generator and its version, the seed, and the
-  number of draws. Each then holds the text of `printGraph` for the graph.
-  Neither has doc comments or sorts.
+  number of draws. Each then holds its exclusions, `exclude root TEMPLATE;`
+  and `exclude anywhere TEMPLATE;`, and the text of `printGraph` for the
+  graph. Neither has doc comments or sorts.
 - Add `printDocument`, `parseDocument`, `printLanguage`, and `parseLanguage`:
   the text forms `document 1;` and `language 1;` of source documents and of
   languages with named exclusions. A doc comment can also document a

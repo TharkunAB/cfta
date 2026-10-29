@@ -41,7 +41,7 @@ newtype Document state = Document (FTA.FTA state Symbol Annotation)
 
 -- | A structural error, an invalid edit target, or a patch for another document.
 data DocumentError state
-    = InvalidGraph !(FTA.FTAError state Symbol)
+    = InvalidGraph !(FTA.FTAError state)
     | DuplicateState !state
     | DuplicateTransition !state !Text
     | MissingState !state
@@ -229,8 +229,6 @@ explainDocumentError :: (Show state) => DocumentError state -> String
 explainDocumentError failure = case failure of
     InvalidGraph (FTA.MissingInitialState state) -> "initial state " <> show state <> " has no row"
     InvalidGraph (FTA.DanglingState state) -> "child state " <> show state <> " has no row"
-    InvalidGraph (FTA.InconsistentArity symbol expected actual) ->
-        "symbol " <> show symbol <> " has arities " <> show expected <> " and " <> show actual
     DuplicateState state -> "duplicate state row: " <> show state
     DuplicateTransition state name -> target state name <> " has a duplicate name"
     MissingState state -> "state " <> show state <> " has no row"

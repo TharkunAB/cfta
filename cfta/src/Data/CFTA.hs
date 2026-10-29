@@ -2,8 +2,8 @@
 
 {- | Ordinary finite-state tree automata.
 
-An FTA has a finite set of states and ranked transitions. Each transition has
-an annotation of the type @constraint@. A 'PlainFTA' is an FTA with
+An FTA has a finite set of states and transitions. A symbol can occur at
+several arities, as in an interned automaton. Each transition has an annotation of the type @constraint@. A 'PlainFTA' is an FTA with
 'Constraint' annotations, and an interned automaton converts to and from one.
 An ordinary FTA has 'noConstraint' on every transition. A layer can use another
 annotation type for its own data, such as the refinement of a constructor.
@@ -30,6 +30,7 @@ module Data.CFTA (
     cycleState,
     mapConstraints,
     mapSymbols,
+    mixedArity,
     mapStates,
     trim,
     annotate,
@@ -49,7 +50,6 @@ module Data.CFTA (
     toTree,
 ) where
 
-import Control.Monad (foldM_)
 import qualified Control.Monad.State.Strict as State
 import qualified Data.Bifunctor as Bifunctor
 import Data.Functor.Identity (Identity (..))
@@ -113,19 +113,11 @@ data ProductState left right = ProductState
     deriving (Eq, Ord, Show)
 
 -- | A structural error found while constructing an FTA.
-data FTAError state symbol
+data FTAError state
     = -- | The initial state has no row in the transition table.
       MissingInitialState !state
     | -- | A transition refers to a state with no row.
       DanglingState !state
-    | -- | The same alphabet symbol occurs at two different arities.
-      InconsistentArity
-        -- | The symbol.
-        !symbol
-        -- | The arity found first.
-        !Arity
-        -- | The other arity.
-        !Arity
     deriving (Eq, Show)
 
 {- | Expose the reachable grammar as a finite tree of typed labels.
@@ -145,10 +137,10 @@ toTree automaton = toTreeBy (transitionsFrom automaton) transitionChildren $ ini
 
 -- | Validate and construct an FTA. Cyclic automata are accepted.
 mkFTA ::
-    (Ord state, Ord symbol) =>
+    (Ord state) =>
     state ->
     [(state, [Transition state symbol constraint])] ->
-    Either (FTAError state symbol) (FTA state symbol constraint)
+    Either (FTAError state) (FTA state symbol constraint)
 mkFTA initial rows = validateFTA $ FTA initial $ Map.fromListWith (flip (<>)) rows
 
 {- | Replace or remove rows in one batch. A 'Just' row adds or replaces its
@@ -161,10 +153,10 @@ together. An invalid result returns the same errors as 'mkFTA'. The input
 automaton stays unchanged. An edit can change the language and its ranks.
 -}
 replaceRows ::
-    (Ord state, Ord symbol) =>
+    (Ord state) =>
     Map state (Maybe [Transition state symbol constraint]) ->
     FTA state symbol constraint ->
-    Either (FTAError state symbol) (FTA state symbol constraint)
+    Either (FTAError state) (FTA state symbol constraint)
 replaceRows edits automaton
     | Map.null edits = Right automaton
     | otherwise = validateFTA automaton{transitionTable = Map.foldlWithKey' replace (transitionTable automaton) edits}
@@ -174,12 +166,11 @@ replaceRows edits automaton
 
 -- | Check an explicit graph without rebuilding its row map.
 validateFTA ::
-    (Ord state, Ord symbol) =>
-    FTA state symbol constraint -> Either (FTAError state symbol) (FTA state symbol constraint)
+    (Ord state) =>
+    FTA state symbol constraint -> Either (FTAError state) (FTA state symbol constraint)
 validateFTA automaton@FTA{initialState = initial, transitionTable = rows} = do
     ensureInitial rows
     ensureClosed rows
-    ensureRanked rows
     pure automaton
   where
     ensureInitial table
@@ -196,29 +187,33 @@ validateFTA automaton@FTA{initialState = initial, transitionTable = rows} = do
             dangling : _ -> Left (DanglingState dangling)
             [] -> Right ()
 
-    ensureRanked table = foldM_ rememberArity Map.empty (concat $ Map.elems table)
-      where
-        rememberArity arities transition =
-            let symbol = transitionSymbol transition
-                arity = Arity (length (transitionChildren transition))
-             in case Map.lookup symbol arities of
-                    Nothing -> Right (Map.insert symbol arity arities)
-                    Just expected
-                        | expected == arity -> Right arities
-                        | otherwise -> Left (InconsistentArity symbol expected arity)
+{- | The first symbol, in the order of the rows, that occurs at two arities,
+with the arity found first and the other arity. An FTA allows a symbol at
+several arities; a component that needs one arity for each symbol checks this.
+-}
+mixedArity :: (Ord symbol) => FTA state symbol constraint -> Maybe (symbol, Arity, Arity)
+mixedArity automaton = go Map.empty (concat $ Map.elems $ transitionTable automaton)
+  where
+    go _ [] = Nothing
+    go arities (transition : rest) =
+        let symbol = transitionSymbol transition
+            arity = Arity (length (transitionChildren transition))
+         in case Map.lookup symbol arities of
+                Nothing -> go (Map.insert symbol arity arities) rest
+                Just expected
+                    | expected == arity -> go arities rest
+                    | otherwise -> Just (symbol, expected, arity)
 
 {- | Build the exact finite language of a list of terms.
 
 Equal subterms share one state. The initial state contains the complete terms.
 Duplicate terms are removed and alternatives use ascending term order.
 -}
-fromTerms ::
-    (Ord symbol) =>
-    [Term symbol] ->
-    Either (FTAError (Maybe (Term symbol)) symbol) (PlainFTA (Maybe (Term symbol)) symbol)
+fromTerms :: (Ord symbol) => [Term symbol] -> PlainFTA (Maybe (Term symbol)) symbol
 fromTerms input =
-    mkFTA Nothing $
-        (Nothing, map transition distinct)
+    FTA Nothing
+        $ Map.fromList
+        $ (Nothing, map transition distinct)
             : [(Just term, [transition term]) | term <- Set.toList $ Set.fromList $ concatMap subterms distinct]
   where
     distinct = Set.toList $ Set.fromList input
@@ -259,12 +254,10 @@ cyclicStates automaton =
               ]
             )
 
--- | Change constructor labels and check that the result stays ranked.
-mapSymbols ::
-    (Ord state, Ord other) =>
-    (symbol -> other) -> FTA state symbol constraint -> Either (FTAError state other) (FTA state other constraint)
-mapSymbols transform FTA{initialState, transitionTable} =
-    mkFTA initialState [(state, map transition outgoing) | (state, outgoing) <- Map.toList transitionTable]
+-- | Change constructor labels. Two symbols can become one, also at two arities.
+mapSymbols :: (symbol -> other) -> FTA state symbol constraint -> FTA state other constraint
+mapSymbols transform automaton@FTA{transitionTable} =
+    automaton{transitionTable = Map.map (map transition) transitionTable}
   where
     transition Transition{transitionSymbol, transitionChildren, transitionConstraint} =
         Transition (transform transitionSymbol) transitionChildren transitionConstraint
@@ -347,7 +340,7 @@ boundDepth maximumDepth automaton
         children <- traverse (\child -> buildState (child, remaining - 1)) transitionChildren
         pure $ Transition transitionSymbol children transitionConstraint
 
-{- | Intersect two automata with the same ranked alphabet.
+{- | Intersect two automata.
 
 Only reachable product states are constructed. Transition annotations from the
 two operands are paired; use 'intersectWith' when the constraint theory has a
@@ -358,9 +351,7 @@ intersect ::
     (Ord leftState, Ord rightState, Ord symbol) =>
     FTA leftState symbol leftConstraint ->
     FTA rightState symbol rightConstraint ->
-    Either
-        (FTAError (ProductState leftState rightState) symbol)
-        (FTA (ProductState leftState rightState) symbol (leftConstraint, rightConstraint))
+    FTA (ProductState leftState rightState) symbol (leftConstraint, rightConstraint)
 intersect = intersectWith sameSymbol (,)
   where
     sameSymbol left right
@@ -370,21 +361,18 @@ intersect = intersectWith sameSymbol (,)
 {- | Product intersection with explicit symbol matching and constraint composition.
 
 The symbol callback returns the result label for compatible transitions and
-'Nothing' for disjoint ones. Children are intersected position by position.
-The result is validated because a callback may map differently ranked input
-symbols to the same output symbol.
+'Nothing' for disjoint ones. Two transitions are compatible only with the same
+number of children, which are intersected position by position.
 -}
 intersectWith ::
-    (Ord leftState, Ord rightState, Ord resultSymbol) =>
+    (Ord leftState, Ord rightState) =>
     (leftSymbol -> rightSymbol -> Maybe resultSymbol) ->
     (leftConstraint -> rightConstraint -> resultConstraint) ->
     FTA leftState leftSymbol leftConstraint ->
     FTA rightState rightSymbol rightConstraint ->
-    Either
-        (FTAError (ProductState leftState rightState) resultSymbol)
-        (FTA (ProductState leftState rightState) resultSymbol resultConstraint)
+    FTA (ProductState leftState rightState) resultSymbol resultConstraint
 intersectWith matchSymbol combineConstraint left right =
-    mkFTA initial $ explore intersectState transitionChildren initial
+    FTA initial $ Map.fromListWith (flip (<>)) $ explore intersectState transitionChildren initial
   where
     initial = ProductState (initialState left) (initialState right)
 

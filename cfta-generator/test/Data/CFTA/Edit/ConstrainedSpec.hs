@@ -321,7 +321,7 @@ the child with the hole. The first argument decides a constraint on a term.
 The sites of the second argument are left out.
 -}
 definitionWith ::
-    (Monad m, Ord symbol, Show symbol) =>
+    (Monad m, Ord symbol) =>
     (Constraint -> Term symbol -> m Bool) ->
     [EditSymbol symbol] ->
     FTA.PlainFTA String symbol ->
@@ -454,7 +454,6 @@ replaceAt (Term.Node symbol children) (index : rest) new = case splitAt index ch
 
 -- | An automaton from rows of named states.
 fromRows ::
-    (Ord symbol, Show symbol) =>
     String -> [(String, [FTA.Transition String symbol Constraint])] -> FTA.PlainFTA String symbol
 fromRows initial rows = either (error . show) id $ FTA.mkFTA initial rows
 

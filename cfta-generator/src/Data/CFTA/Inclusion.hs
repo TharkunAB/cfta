@@ -348,9 +348,7 @@ intersection ::
     (Ord left, Ord right, Ord symbol) =>
     FTA.PlainFTA left symbol -> FTA.PlainFTA right symbol -> FTA.PlainFTA (FTA.ProductState left right) symbol
 intersection left right =
-    FTA.mapConstraints (uncurry conjoinConstraints)
-        $ fromRight (bug "the intersection of two ranked automata is not ranked")
-        $ FTA.intersect left right
+    FTA.mapConstraints (uncurry conjoinConstraints) $ FTA.intersect left right
 
 {- | Whether the parts cover the whole and are disjoint within it, for the terms
 with at most the given number of nodes. The cover is 'CoveredUpTo' or 'Gap',
@@ -429,7 +427,7 @@ partition whole parts
 {- | The union of automata. A new initial state has the transitions of the
 initial states of all of them. The automata must give each symbol one arity.
 -}
-union :: (Ord state, Ord symbol) => [FTA.PlainFTA state symbol] -> FTA.PlainFTA (Maybe (Int, state)) symbol
+union :: (Ord state) => [FTA.PlainFTA state symbol] -> FTA.PlainFTA (Maybe (Int, state)) symbol
 union automata =
     fromRight (bug "the union of the intersections with one whole is not ranked")
         $ FTA.mkFTA Nothing

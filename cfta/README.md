@@ -643,8 +643,8 @@ node identities or the child-only `Path` used by equality constraints.
 does not list every route through a shared or recursive graph. Paths are built
 only when `toTree` is requested; normal generation does not build them.
 
-The view traverses the interned graph directly. Unlike `toFTA`, it does not
-require a ranked alphabet. An open recursive variable returns `Left OpenNode`.
+The view traverses the interned graph directly. An open recursive variable
+returns `Left OpenNode`.
 It does not enumerate terms or solve constraints. Add `containers` to your
 component's `build-depends` when you import `Data.Tree` directly.
 

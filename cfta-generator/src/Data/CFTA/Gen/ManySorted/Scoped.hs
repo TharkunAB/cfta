@@ -105,7 +105,7 @@ data ScopeError sort symbol
     | -- | The bound is negative.
       NegativeBound !Int
     | -- | The automaton check rejected the signature. This error is not expected.
-      ScopedAutomatonRejected !(FTA.FTAError (ScopedState sort) symbol)
+      ScopedAutomatonRejected !(FTA.FTAError (ScopedState sort))
     deriving (Eq, Show)
 
 {- | A state of the automaton of a scoped signature: the root, or a term of a

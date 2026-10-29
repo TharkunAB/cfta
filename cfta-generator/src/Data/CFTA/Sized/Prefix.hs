@@ -609,7 +609,7 @@ A transition with @k@ children has a copy for each of the about
 @size^(k-1)@ splits of each size, so the automaton grows with the arities.
 -}
 bySize ::
-    (Ord state, Ord symbol) =>
+    (Ord state) =>
     Integer -> FTA.FTA state symbol Constraint -> FTA.FTA (Maybe (state, Integer)) symbol Constraint
 bySize bound automaton =
     fromRight (error "bySize: the states of a valid automaton give a valid automaton")

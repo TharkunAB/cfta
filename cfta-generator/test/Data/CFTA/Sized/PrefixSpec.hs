@@ -57,7 +57,6 @@ spec = describe "Data.CFTA.Sized.Prefix" $ do
                 it ("on equal sums" <> route) $ walksAsListing (maybe deciding decidingWithCap cap) 7 equalSums
                 it ("on typed arithmetic with equal operands and branches, with three children" <> route)
                     $ walksAsListing (maybe deciding decidingWithCap cap) 7
-                    $ either (error . show) id
                     $ FTA.mapSymbols (Symbol . Text.pack . show) equalArithmetic
     fixtureUpTo 7 "typed arithmetic with equal operands and branches" equalArithmetic
     it "offers only the equal child after the first child of a pair" $ do

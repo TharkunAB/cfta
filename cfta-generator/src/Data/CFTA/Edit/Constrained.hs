@@ -305,9 +305,7 @@ plainSymbols automaton = (encoded, decode)
     fresh = filter (`Set.notMember` material) [fromString $ "edit-" <> show number | number <- [0 :: Int ..]]
     names = Map.fromList $ zip others fresh
     labelsOf = Map.fromList $ zip fresh others
-    encoded =
-        fromRight (error "Data.CFTA.Edit.Constrained: the plain symbols of an edit automaton are not ranked") $
-            FTA.mapSymbols (\label -> fromMaybe (names Map.! label) (materialOf label)) automaton
+    encoded = FTA.mapSymbols (\label -> fromMaybe (names Map.! label) (materialOf label)) automaton
     decode (Term.Node symbol children) = Term.Node (Map.findWithDefault (Material symbol) symbol labelsOf) (map decode children)
 
 {- | The edits of a term, with the verdict of a constraint on a whole term,

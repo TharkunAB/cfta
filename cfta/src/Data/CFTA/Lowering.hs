@@ -57,7 +57,7 @@ data ExpansionError symbol
 -- | An automaton that 'lift' does not handle, or a production that does not lower.
 data LoweringError state symbol
     = ConstrainedTransition !state !symbol
-    | InvalidLift !(FTA.FTAError state symbol)
+    | InvalidLift !(FTA.FTAError state)
     | ArityMismatch !symbol !Int !Int
     | NotLowered !state !symbol ![state]
     deriving (Eq, Show)

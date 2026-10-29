@@ -117,12 +117,9 @@ termsUpToM satisfies (Depth depth) automaton = filterM (acceptsM satisfies autom
 termsUpTo :: (Ord state, Ord symbol) => Depth -> FTA state symbol Constraint -> Maybe [Term symbol]
 termsUpTo = termsUpToM equalitiesOnly
 
-{- | The terms of either automaton: a new initial state has the transitions of
-both initial states. The two automata must give each symbol one arity, as
-'mkFTA' requires of one automaton; otherwise 'union' raises an error.
--}
+-- | The terms of either automaton: a new initial state has the transitions of both initial states.
 union ::
-    (Ord left, Ord right, Ord symbol) =>
+    (Ord left, Ord right) =>
     FTA left symbol Constraint -> FTA right symbol Constraint -> FTA (Maybe (Either left right)) symbol Constraint
 union left right =
     build Nothing $
@@ -158,7 +155,7 @@ intersect left right = build (initialState left, initialState right) [(pair, tra
         | otherwise = closure (Set.insert pair seen) (concatMap transitionChildren (transitions pair) <> pending)
 
 -- | The terms of depth at most the bound: a state with the depth that its terms may still have.
-boundDepth :: (Ord state, Ord symbol) => Depth -> FTA state symbol Constraint -> FTA (state, Depth) symbol Constraint
+boundDepth :: (Ord state) => Depth -> FTA state symbol Constraint -> FTA (state, Depth) symbol Constraint
 boundDepth bound automaton =
     build
         (initialState automaton, bound)
@@ -174,11 +171,9 @@ boundDepth bound automaton =
 
 -- | Build an automaton from rows that name every state they use.
 build ::
-    (Ord state, Ord symbol) => state -> [(state, [Transition state symbol Constraint])] -> FTA state symbol Constraint
+    (Ord state) => state -> [(state, [Transition state symbol Constraint])] -> FTA state symbol Constraint
 build initial rows =
-    -- Only 'union' can fail here: the product and the depth bound keep the arities of one automaton.
-    fromRight (error "Data.CFTA.Simple.union: the two automata give one symbol two arities") $
-        mkFTA initial rows
+    fromRight (error "Data.CFTA.Simple.build: a row names a state without a row") $ mkFTA initial rows
 
 -- | Whether some element satisfies a monadic predicate, from the left.
 anyM :: (Monad m) => (a -> m Bool) -> [a] -> m Bool

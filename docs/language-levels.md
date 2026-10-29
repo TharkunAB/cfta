@@ -104,7 +104,7 @@ graph edit or appear as zero.
 | --- | --- | --- |
 | Add a constructor | Declare a symbol and arity, then add its productions at named states | `mkFTA`; atomic `replaceRows` in PR 70. A declaration without a production need not add terms. |
 | Remove a constructor | Remove every production of that constructor in the selected scope | Filter explicit rows. Distinguish one full refined symbol from all symbols with a shared display text. Report affected references and facts. |
-| Add a whole term | Union the root language with that exact tree | `fromTerms` plus interned `union` exist. An explicit-graph union can retain state names and avoid normalization. Validate the combined ranked alphabet. |
+| Add a whole term | Union the root language with that exact tree | `fromTerms` plus interned `union` exist. An explicit-graph union can retain state names and avoid normalization. |
 | Remove whole terms | Exclude exact trees only at the initial state | Convert each term to a hole-free `TemplateNode`, then use `Template.excludeFTA`. |
 | Remove expressions anywhere | Exclude every term that contains a matching subtree | `Template.excludeAnywhereFTA`; recursive inputs are supported. |
 | Restrict by a pattern | Keep matching trees, with holes for unconstrained subtrees | `Template.restrictFTA`. |
@@ -148,7 +148,7 @@ alternatives, symbols as text plus full refinements, and complete constraints.
 Store equality contradiction explicitly. Keep formula syntax unchanged; do not
 simplify it while decoding. Formula order participates in symbol order.
 Use file-local state references. Reject duplicate state identities, missing
-references, invalid tags, unsupported versions, and inconsistent arities.
+references, invalid tags, and unsupported versions.
 Validation must not call a solver or enumerate terms.
 
 The text encoding should be usable by tools outside Haskell. JSON supplies

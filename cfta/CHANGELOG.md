@@ -66,14 +66,27 @@
 
 Before release, the package was called `microcfta`.
 
+- An `FTA` allows a symbol at several arities, as an interned `Node` does.
+  `mkFTA` no longer checks the arities, and `FTAError` loses
+  `InconsistentArity` and its symbol parameter. `mapSymbols`, `intersect`,
+  `intersectWith`, and `fromTerms` cannot fail and return the automaton
+  itself; `toFTA` fails only on an open node (`FTAViewError` is `OpenNode`).
+  `mixedArity` gives the first symbol with two arities, for a component that
+  needs one arity for each symbol, such as the import of `Data.CFTA.Gen`.
+- Add `canonicalFTA` to `Data.CFTA.Interned`: the explicit graph of a closed
+  node, with states named by their canonical classes. The same node gives the
+  same graph in every process.
 - Add `Data.CFTA.Checkpoint`: saved positions in a size-ordered listing of the
   terms of a graph, and in a sampled run of draws from that listing. A
   `Checkpoint` holds the graph, the query route and its version, the size
   bound, and the sized rank of the next term. A `SamplingCheckpoint` holds the
   graph, the route and its version, the bound, the weights of the sizes, the
   pseudorandom generator and its version, the seed, and the number of draws
-  so far. `cfta-generator` resumes both, and `cfta-serialization` prints and
-  reads both.
+  so far. Each also holds its exclusions, so its language is the terms of the
+  graph that no exclusion rejects. `cfta-generator` resumes both, and
+  `cfta-serialization` prints and reads both.
+- Add `Exclusion` (`AtRoot` and `Anywhere` a template) and `excludeAllFTA` to
+  `Data.CFTA.Template`: the terms of an automaton that no exclusion rejects.
 - `Data.CFTA.EGraph.refines` is a rule condition on refinements, as egglog
   conditions a rule on a lattice value: the refinement of the e-class of a
   variable must imply a formula about its value. An analysis can meet the
