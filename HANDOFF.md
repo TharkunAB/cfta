@@ -1,3 +1,40 @@
+# Prepared constructor forecasts: 2026-10-29 23:36 CET
+
+Source 31a55cd7c9ea995e74d40751c0415ebc8d91240e on formalize.
+The full goal remains ACTIVE. Last fetched main remains 7b8db072f.
+Read lean/notes-current-prepared-constructor-forecast.md first.
+Earlier dated document bodies follow unchanged.
+
+Three prepared constructor interfaces retain all old model/cost/Packet/callback
+results. The old APIs remain verbatim wrappers. Stored handle and prepared
+parent remain distinct; captured Ready/IncomingAvoid replace a second selection.
+The forecast bridge derives projection and exact edge reservation from original
+local model, Packet, Fits, known Heap and seed edgeCount reservation.
+The SAME accepting extension, actual callback, strict pending-term decrease
+and common local work remain. Its future recursive result remains unproved.
+
+Actual prefix model/Packet/proper laws and the exact Right no-op already exist.
+The direct Recursive and PreparedRecursive workers have different dispatch.
+Keep their theorem namespaces and invocation/continuation types distinct.
+Continue by attaching the new quantitative result to the actual sibling event
+at its adaptive caller and stage reservation. Preserve the complete earlier-stop
+case and output order. Control unintended earlier stops from original inputs.
+Global resources, neutral work, unfolding/public coverage, exact public order
+and Haskell correspondence remain open. DONE does not imply Discharged.
+
+Strict Audit: 4670 jobs, 82360 theorem axiom checks. Public: 979 checks, 78 definitions.
+All 11 capped commands and 49 snapshots pass. Five strict mappings are current.
+All 831 Haskell-related identities remain unchanged. Three of 470 protected sources
+were generalized with exact old APIs/results; the other 467 remain unchanged.
+The archived final-strong-sources.json binds 471 CURRENT protected identities.
+Root verified 218 review payloads, 95 source/code scopes and 18 Root source scopes.
+The prefix review's 6/5 whole-source overrun and registry recovery remain explicit.
+No Haskell fix was needed. Earlier external pickup items remain in FINDINGS.
+Preserve all earlier archives and continue in a fresh writable area.
+Evidence: lean/restart-evidence/20261029-selected-prefix-model-progress.
+
+---
+
 # Constructor iteration and Left callback: 2026-10-29 23:06 CET
 
 Source 6edaa82b4d1be3f1a1fba14cdc6d57284916d4f2 on formalize.
