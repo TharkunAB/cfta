@@ -10,11 +10,11 @@
   value, in `Notes`. The other readers drop them. `showCodec` gives the state
   labels of `Show` and `Read`.
 - Add sorts of states: `state Pos : Int {`. `Notes` keeps them in `noteSorts`.
-- Add `printCheckpoint` and `parseCheckpoint`: the text form `checkpoint 1;`
-  of a `Checkpoint`. It holds the query route and its version, the size
-  bound, and the sized rank of the next term, then the text of `printGraph`
-  for the graph.
-- Add `printSamplingCheckpoint` and `parseSamplingCheckpoint`: the text form
-  `sampling 1;` of a `SamplingCheckpoint`. It holds the query, the weights of
-  the sizes, the pseudorandom generator and its version, the seed, and the
-  number of draws, then the text of `printGraph` for the graph.
+- Add the text forms of checkpoints: `printCheckpoint` and `parseCheckpoint`
+  for `checkpoint 1;`, and `printSamplingCheckpoint` and
+  `parseSamplingCheckpoint` for `sampling 1;`, each with a `With` variant for
+  a `StateCodec`. A `checkpoint 1;` file holds the query route and its
+  version, the size bound, and the sized rank of the next term. A
+  `sampling 1;` file holds the query, the weights of the sizes, the
+  pseudorandom generator and its version, the seed, and the number of draws.
+  Each then holds the text of `printGraph` for the graph.
