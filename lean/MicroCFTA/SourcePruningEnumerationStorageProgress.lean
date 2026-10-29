@@ -146,6 +146,15 @@ theorem setValue_enumerated_pendingSize (before after : State Symbol Guard) (tar
   simpa only [pendingSize, weight, Nat.zero_add, Nat.add_zero] using
     from_set assignment before.values 0 target (.unenumerated (some handle) scs) (.enumerated fragment) stored
 
+/-- Assignments that agree at every stored slot have the same pending graph cost. -/
+theorem pendingSize_assignment_congr (state : State Symbol Guard)
+    (first second : Nat → Term Symbol)
+    (agree : ∀ uv < state.values.length, first uv = second uv) :
+    pendingSize state first = pendingSize state second := by
+  apply from_congr state.values 0 first second
+  intro uv _lower upper
+  exact agree uv (by omega)
+
 end MicroCFTA.EnumerationStorageProgress
 
 namespace MicroCFTA.SourcePruningEnumerationStorageProgress
