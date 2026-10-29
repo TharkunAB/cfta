@@ -582,9 +582,13 @@ of the equalities of all its edges. It can accept a term when, at each child
 position, the conjunction of the children of its edges can, and, for each
 class, the conjunction of the nodes at the paths of the class can: the
 subterm that the class shares is in each of them. The check takes the least
-fixed point of this rule over the conjunctions that the node reaches. A
-conjunction beyond 'emptinessBudget' of them, and a conjunction with free
-references, counts as one that can accept a term. So true is never wrong.
+fixed point of this rule over the conjunctions that the node reaches. The
+check reads at most 'emptinessBudget' edge tuples. It stops at the first
+conjunction with more edge tuples than are left, because the number of tuples
+of one conjunction is a product over its nodes and can grow exponentially as
+the conjunctions grow. A conjunction that the check does not read, and a
+conjunction with free references, counts as one that can accept a term. So
+true is never wrong.
 
 The check builds no intersection. The intersection of an intersection is a
 new node, deeper in recursive nodes than its operands, and the cost of an
@@ -608,11 +612,15 @@ provablyEmpty = memoTypeableWith @symbol provablyEmptyCache $ \start ->
     explore budget seen (ns : rest)
         | EmptyNode `elem` ns = explore budget seen rest
         | budget <= 0 || not (all (null . freeVars) ns) || Map.member (keys ns) seen = explore budget seen rest
-        | otherwise = explore (budget - 1) (Map.insert (keys ns) tupleRows seen) (concat tupleRows <> rest)
+        | count > budget = explore 0 seen rest
+        | otherwise = explore (budget - count) (Map.insert (keys ns) tupleRows seen) (concat tupleRows <> rest)
       where
+        -- The tuples up to one more than the budget, so that a large product is not built.
+        tuples = take (budget + 1) (edgeTuples ns)
+        count = length tuples
         tupleRows =
             [ requirements classes (map edgeChildren tuple)
-            | tuple <- edgeTuples ns
+            | tuple <- tuples
             , let classes = foldr (combineEqConstraints . equalities . edgeConstraint) EmptyConstraints tuple
             , classes /= EqContradiction
             ]
@@ -651,9 +659,9 @@ provablyEmpty = memoTypeableWith @symbol provablyEmptyCache $ \start ->
     keys = map key
     key n = let NodeId ident = nodeIdentity n in ident
 
--- | The number of conjunctions that 'provablyEmpty' reads before it stops.
+-- | The number of edge tuples that 'provablyEmpty' reads before it stops.
 emptinessBudget :: Int
-emptinessBudget = 1000
+emptinessBudget = 10000
 
 {- | The edges of each node that a root reaches, in the order of enumeration:
 by arity, then by symbol, then by the canonical classes of their children

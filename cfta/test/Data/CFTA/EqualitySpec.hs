@@ -23,6 +23,7 @@ import System.Timeout (timeout)
 import Test.Hspec
 import Test.QuickCheck
 
+import qualified Data.CFTA as FTA
 import Data.CFTA.Equality
 import Data.CFTA.Index (Depth)
 import Data.CFTA.Interned.Operations (mergeAlternatives)
@@ -507,6 +508,35 @@ spec = do
                     forM_ [0 .. 3] $ \depth -> do
                         terms (boundDepth depth reduced) `shouldBe` []
                         terms (boundDepth depth root) `shouldBe` []
+
+        it "bounds the edge tuples of the emptiness check of a class at constrained recursive nodes" $ do
+            -- The seed 492294335 of the property "restrict to a template as
+            -- filtering the terms by the template does" gave this input. Both
+            -- states are on cycles with equality constraints. The reduction of
+            -- the restricted root checks the emptiness of one class, and the
+            -- conjunctions of that check grow: one of eleven nodes has more
+            -- than 100,000 edge tuples. With a budget on the conjunctions
+            -- alone, the check took minutes. The root still accepts terms, so
+            -- the check must not find it empty.
+            let crossed = equalityConstraint $ mkEqConstraints [[path [0, 1], path [1, 0]]]
+                same = equalityConstraint $ mkEqConstraints [[path [0], path [1]]]
+                leaf symbol = FTA.Transition symbol [] noConstraint
+                graph =
+                    either (error . show) id $
+                        FTA.mkFTA
+                            (0 :: Int)
+                            [ (0, [leaf "a", FTA.Transition "g" [0, 1] crossed, leaf "b"])
+                            , (1, [FTA.Transition "g" [0, 0] same, FTA.Transition "g" [0, 1] noConstraint, leaf "b"])
+                            ]
+                root = fromFTA graph :: Node Symbol
+                shape = AnyNode [AnyPrefix [Hole, Hole], AnyNode [Hole, Hole]]
+            result <- timeout 10000000 $ evaluate $ termsMatching shape root
+            case result of
+                Nothing -> expectationFailure "the reduction did not finish"
+                Just reduced ->
+                    forM_ [0 .. 4] $ \depth ->
+                        sort (terms (boundDepth depth reduced))
+                            `shouldBe` sort (filter (matchesTemplate shape) (terms (boundDepth depth root)))
 
         it "stops when a narrowed child contains its ancestor" $ do
             -- The formalization found this closed input. The class 0 = 1 of
