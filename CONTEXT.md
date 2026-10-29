@@ -36,7 +36,8 @@ Wilf, and Feat (ranking).
   depth 0. TATA's *height* counts a constant as 1, so height = depth + 1.
   **Mu depth** is the nesting depth of `Mu` binders, a different quantity.
 - **Graph snapshot**: a stored explicit graph with its symbols, refinements,
-  constraints, states, and transitions.
+  constraints, states, and transitions. It need not retain the source facts
+  from which its compiled constraints were made.
 
 ## Constraints
 
@@ -91,6 +92,26 @@ Wilf, and Feat (ranking).
 - **Stamp**: the iteration of the last change of an e-class. **Semi-naive
   matching** finds only the matches through e-classes with a stamp after the
   last run of the rule.
+
+## Editable languages
+
+- **Language**: a set of terms. A `Language` value is the source of one: a
+  source document and named exclusions. Its terms are the terms of the
+  compiled document that no exclusion rejects.
+- **Source document**: an editable language definition that retains named
+  productions and their separate facts before compilation.
+- **Production**: a transition of a source document, with a name that is
+  unique in its state, and named facts.
+- **Language update**: a reusable expression that changes a source document or
+  named exclusions. It does not contain an expected source version.
+- **Named exclusion**: an exclusion with a name in a language. An update can
+  remove it again. The source document does not change.
+- **Production reference**: a source state and the stable name of one
+  production in that state.
+- **Source fact**: one named constraint attached to a production.
+  Removing a fact removes that obligation. It does not negate the constraint.
+- **Patch**: an ordered batch of edits together with the source document it
+  expects. A valid patch produces a new source document.
 
 ## Transformations
 

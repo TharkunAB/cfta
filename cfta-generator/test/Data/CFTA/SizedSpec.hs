@@ -13,12 +13,14 @@ import qualified Test.QuickCheck as QC
 
 import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint, Guard (..), equalityConstraint, noConstraint, semanticConstraint)
+import qualified Data.CFTA.Document as Document
 import Data.CFTA.Equality (numNestedMu)
 import qualified Data.CFTA.Equality as ECTA
 import qualified Data.CFTA.Gen as Gen
 import Data.CFTA.Gen.Reference (Automaton (..), AutomatonEdge (..), automatonNode, closedAutomaton)
 import Data.CFTA.Index (Cardinality (..), ClassRank (..), Rank (..), Size (..), Weight (..))
 import Data.CFTA.Interned (toFTA)
+import qualified Data.CFTA.Language as Language
 import Data.CFTA.Refinement (Entailment (Entailment))
 import Data.CFTA.Sized
 import Data.CFTA.Sized.Checkpoint (Checkpoint (..), CheckpointError (..), SamplingCheckpoint (..))
@@ -141,6 +143,27 @@ spec = describe "Data.CFTA.Sized" $ do
                 (take 1 . map fst)
                 (Checkpoint.relocate checkpoint graph someExclusions allowed >>= \saved -> Checkpoint.resume saved graph someExclusions)
                 `shouldBe` Right [allowed]
+
+        it "saves a position in a language, and relocates a term into the edited language" $ do
+            let language = Language.fromDocument $ either (error . show) id $ Document.fromGraph $ automaton "s" binary
+                edit before = either (error . Language.explainUpdateError) id . Language.update before
+                aFirst = Anywhere $ TemplateNode (sym "g") [TemplateNode (sym "a") [], Hole]
+                excluded = edit language $ Language.without (Language.ExclusionName $ Text.pack "a-first") aFirst
+                renamed = edit excluded $ Language.define (Language.at "s" $ Language.ProductionName $ Text.pack "t0") (sym "b") []
+                graphOf current = Document.compileGraph $ Language.source current
+                exclusionsOf current = Map.elems $ Language.exclusions current
+                checkpoint = Checkpoint.start listingBound (exclusionsOf excluded) (graphOf excluded)
+                resumeIn current saved = map fst <$> Checkpoint.resume saved (graphOf current) (exclusionsOf current)
+                compiled = Language.compileGraph excluded
+            fmap sort (resumeIn excluded checkpoint)
+                `shouldBe` Right
+                    (sort $ map fst $ either (error . show) id $ Checkpoint.resume (Checkpoint.start listingBound [] compiled) compiled [])
+            void (resumeIn language checkpoint) `shouldBe` Left StaleExclusions
+            void (resumeIn renamed checkpoint) `shouldBe` Left (StaleRow "s")
+            fmap
+                (take 1)
+                (Checkpoint.relocate checkpoint (graphOf renamed) (exclusionsOf renamed) (term "b" []) >>= resumeIn renamed)
+                `shouldBe` Right [term "b" []]
 
         it "rejects a guard beyond equality constraints" $ do
             let different = semanticConstraint $ Not $ Same (ECTA.path [0]) (ECTA.path [1])
