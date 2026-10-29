@@ -831,8 +831,8 @@ readLanguage decode input = do
   where
     parser = do
         (comments, rows) <- graphParser WithNotes "language" decode $ sourceTransitionParser decode
-        entries <- untilEnd namedExclusionParser
-        exclusions <- namedMap "exclusion" $ map fst entries
+        entries <- distinctItems "exclusion" A.atEnd (fst . fst) namedExclusionParser
+        let exclusions = Map.fromList $ map fst entries
         let exclusionComments = concat [commentOn (OnExclusion $ L.ExclusionName name) comment | ((name, _), comment) <- entries]
         pure (comments <> exclusionComments, rows, Map.mapKeys L.ExclusionName exclusions)
 
@@ -967,9 +967,8 @@ sourceTransitionParser decode state = do
     name <- productionNameParser
     token "="
     (symbol, children) <- edgeParser decode
-    facts <- ifNext '{' (token "{" *> untilClose '}' fact <* token "}") []
-    namedFacts <-
-        Map.mapKeys D.FactName <$> namedMap "fact" [(D.factNameText factName, constraint) | (factName, constraint, _) <- facts]
+    facts <- ifNext '{' (token "{" *> factBlock <* token "}") []
+    let namedFacts = Map.fromList [(factName, constraint) | (factName, constraint, _) <- facts]
     token ";"
     pure
         ( FTA.Transition symbol children $ D.Annotation name namedFacts
@@ -977,9 +976,10 @@ sourceTransitionParser decode state = do
             <> concat [commentOn (OnFact state name factName) factComment | (factName, _, factComment) <- facts]
         )
   where
-    fact = do
+    factBlock = distinctItems "fact" ((== Just '}') <$> A.peekChar) (\(name', _, _) -> D.factNameText name') fact
+    fact newName = do
         comment <- itemComment
-        name <- factNameParser
+        name <- D.FactName <$> newName
         token "="
         constraint <- constraintParser
         token ";"
@@ -1033,11 +1033,11 @@ templateArguments = parenthesized $ go []
         go reversed
 
 -- | Read a named exclusion of a language and its doc comment: @exclude NAME = root TEMPLATE;@ or @exclude NAME = anywhere TEMPLATE;@.
-namedExclusionParser :: A.Parser ((Text, Exclusion Symbol), Maybe Text)
-namedExclusionParser = do
+namedExclusionParser :: A.Parser Text -> A.Parser ((Text, Exclusion Symbol), Maybe Text)
+namedExclusionParser newName = do
     comment <- itemComment
     keyword "exclude"
-    name <- nameParser
+    name <- newName
     token "="
     exclusion <- exclusionBody
     pure ((name, exclusion), comment)
@@ -1161,15 +1161,23 @@ pathParser = Path <$> bracketed index
             fail "child index is outside the Int range"
         pure $ ChildIndex $ fromInteger value
 
--- | Reject duplicate named facts or exclusions before constructing a map.
-namedMap :: String -> [(Text, value)] -> A.Parser (Map.Map Text value)
-namedMap role entries = do
-    foldM_ distinct Set.empty $ map fst entries
-    pure $ Map.fromList entries
+{- | Read items until the end. Each item reads its name with the parser that
+it gets. That parser fails at the start of a name that an earlier item has.
+-}
+distinctItems :: String -> A.Parser Bool -> (item -> Text) -> (A.Parser Text -> A.Parser item) -> A.Parser [item]
+distinctItems role atEnd nameOf item = go Set.empty
   where
-    distinct seen name
-        | Set.member name seen = fail ("duplicate " <> role <> " name: " <> show name)
-        | otherwise = pure $ Set.insert name seen
+    go seen = do
+        end <- atEnd
+        if end
+            then pure []
+            else do
+                next <- item $ newName seen
+                (next :) <$> go (Set.insert (nameOf next) seen)
+    newName seen = do
+        name <- lookAhead nameParser
+        when (Set.member name seen) $ fail ("duplicate " <> role <> " name: " <> show name)
+        nameParser
 
 -- | Read the name of a production.
 productionNameParser :: A.Parser D.ProductionName

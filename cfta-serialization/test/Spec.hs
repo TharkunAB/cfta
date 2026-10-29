@@ -110,11 +110,16 @@ spec = do
         it "report a duplicate state" $
             T.parseGraphWith strings "graph 1; start S; state S {} state S {}" `shouldBe` Left (DuplicateState "S")
 
-        it "report a duplicate state and a duplicate production in a language" $ do
+        it "report a duplicate state and a duplicate production in a language, and a duplicate fact or exclusion at its name" $ do
             T.parseLanguageWith strings "language 1; start S; state S {} state S {}"
                 `shouldBe` Left (DuplicateState "S")
             T.parseLanguageWith strings "language 1; start S; state S { x = a; x = b; }"
                 `shouldBe` Left (InvalidDefinition $ D.DuplicateProduction "S" "x")
+            let position text = case T.parseLanguageWith strings text of
+                    Left (SyntaxError line column _) -> Just (line, column)
+                    _ -> Nothing
+            position "language 1; start S;\nstate S { a = a { x = true; x = false; }; }" `shouldBe` Just (2, 29)
+            position "language 1; start S; state S {}\nexclude x = root _;\nexclude x = root _;" `shouldBe` Just (3, 9)
 
         it "reject malformed input" $
             forM_ malformed $ \text ->
