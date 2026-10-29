@@ -9,17 +9,10 @@ the top.
 
 ## In progress: serialization
 
-Each pull request is one complete feature. #188, the graph text format, and
-#116, checkpoints, are on `main`. The others are drafts: mark the next one
-ready when work on it starts.
+Each pull request is one complete feature. #188, the graph text format, #116,
+checkpoints, and #110, editable source documents and their text forms, are on
+`main`. #126 is ready for review.
 
-#110 is based on `main`. It has the API of #116, the edit `SetStart`, and the
-text forms of documents, languages, and updates; #161 and #187 are closed. The
-edits and errors of a production are `PutProduction`, `DefineProduction`,
-`DeleteProduction`, `MissingProduction`, and `DuplicateProduction`. #126 is
-based on #110, and its `diff` and `diffDocument` are total.
-
-- #110 `feature/source-documents`: Editable source documents and language updates, and their text forms
 - #126 `feature/document-merge`: Diff and three-way merge of languages by stable names
 
 ## Not in progress
@@ -124,5 +117,5 @@ checks for #134, #135, #142, and #191. A manual CI run passes on each.
   serialization and #153 on `main`.
 - `fb974cc3a`: signature files (`signature 1;`, `printSignature`), and a test
   that checks the sorts of a graph read from text with `checkSorts`. The
-  sorted states of this commit are now in #188 and #110. This needs #191 on
+  sorted states of this commit are now on `main`. This needs #191 on
   `main`.
