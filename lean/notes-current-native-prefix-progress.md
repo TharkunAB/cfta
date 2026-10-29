@@ -1,3 +1,33 @@
+# Verified checked query prefix bounds: 2026-10-29 20:57 CET
+
+Source 20a4595247b497b1242707325ddf03dc101a92d4 on formalize.
+Read lean/notes-current-checked-prefix-progress.md first.
+The full formalization goal remains ACTIVE. Main 7b8db072f is integrated.
+Earlier document bodies follow unchanged as dated checkpoints.
+
+IncomingQuery.native_prefix_bounded now derives one finite Mu-body degree
+ceiling for every actual checked native fuel from original caller admission.
+Its finite completion trace is derived, not supplied as a new premise.
+No sharp formula or global bound across successive rebased queries is proved.
+
+Main PR193 now has an additive tuple-budget model with finite exploration,
+conservative overflow, zero-charge entries, a completed literal fixed-point
+loop and sound public True verdict under explicit source-interface laws.
+The old conjunction-count resource models remain historical targets.
+Physical lazy exposure and allocation bounds for PR193 remain open.
+
+Strict checks pass for all 5 new modules and Audit: 4650 build jobs and 82182
+theorem dependencies. Public output preserves the exact old prefix and adds
+15 theorems. Nix core passes 384 examples; final Fourmolu/cabal-gild pass.
+The two Haskell Haddock fixes include the overflow lookahead tuple. Runtime
+code is unchanged locally. FINDINGS records both for external pickup.
+
+Whole-system rendered soundness remains conditional on semantic/resource
+contracts, fixed PCS and wholeDischarged. Global original-input resources,
+nonterminal chosen-value coverage, ordering and Haskell correspondence remain
+open. The detailed note gives the exact evidence and next proof targets.
+
+---
 # Current proof state: all-outcome native intersection body bounds
 
 Checkpoint: 2026-10-29 20:30 CET. The full goal remains ACTIVE.
