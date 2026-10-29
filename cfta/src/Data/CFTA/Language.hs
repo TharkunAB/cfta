@@ -137,7 +137,8 @@ restore name = Update [Restore name]
 {- | Apply one reusable expression atomically. Resolve source edits in their order
 and validate the final source graph. Then resolve exclusions in their order.
 The old value remains available on success or failure. This expression has no
-expected version; use a document patch when that check is required.
+expected version. To apply it to a version that changed after it was written,
+use 'Data.CFTA.Language.Merge.merge3'.
 -}
 update :: (Ord state) => Language state -> Update state -> Either (UpdateError state) (Language state)
 update before (Update changes) = do
