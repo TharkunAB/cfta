@@ -157,6 +157,10 @@ tree automata of `cfta`, with QuickCheck integration.
   classes up to a size bound with a solver that decides every guard on each
   built term, so a liquid automaton has an exact route that needs no
   pruning; a guard the solver cannot decide is `GuardUnknown`.
+  `sizedStates` gives the classes of each state, with one table for all the
+  states; a state that the initial state does not reach has no terms there.
+  `sized` and `sizedStates` check the constraints and the ambiguity of the
+  rows that the initial state reaches only.
 - Terms are `Term symbol` from `Data.CFTA.Term` of `cfta`:
   `fromAutomaton`, `fromAutomatonUpToDepth`, `termAt`, `rankOf`, `ranksOf`,
   `rankOfTerm`, `surface`, and the refinement witnesses take and give `Term`

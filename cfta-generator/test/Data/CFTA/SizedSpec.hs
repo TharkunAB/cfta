@@ -1,4 +1,4 @@
-module Data.CFTA.SizedSpec (spec) where
+module Data.CFTA.SizedSpec (spec, SizedAutomaton, automatonGraph) where
 
 import Control.Monad (forM_, void)
 import Data.Containers.ListUtils (nubOrd)
@@ -18,7 +18,7 @@ import qualified Data.CFTA.Equality as ECTA
 import qualified Data.CFTA.Gen as Gen
 import Data.CFTA.Gen.Reference (Automaton (..), AutomatonEdge (..), automatonNode, closedAutomaton)
 import Data.CFTA.Index (Cardinality (..), ClassRank (..), Rank (..), Size (..), Weight (..))
-import Data.CFTA.Interned (toFTA)
+import Data.CFTA.Interned (InternedState, toFTA)
 import qualified Data.CFTA.Language as Language
 import qualified Data.CFTA.Language.Source as Source
 import Data.CFTA.Refinement (Entailment (Entailment))
@@ -78,6 +78,7 @@ spec = describe "Data.CFTA.Sized" $ do
         it "lists each accepted term of each size once, and ranks it" $ QC.property exactClasses
         it "agrees with the cyclic import wherever the import accepts the automaton" $ QC.property importAgreement
         it "gives the sequence of the reference, also where it uses the count table" $ QC.property referenceAgreement
+        it "gives the classes of sized for each state, from one table" $ QC.property stateAgreement
         it "decides the classes up to a bound as the reference builds them" $ QC.property boundedAgreement
     describe "Data.CFTA.Sized.Checkpoint" $ do
         it "resumes at every cut as the listing without a cut" $
@@ -371,6 +372,33 @@ referenceAgreement (SizedAutomaton description) =
                   , let transitions = [transition{FTA.transitionChildren = map Just (FTA.transitionChildren transition)} | transition <- original]
                   ]
 
+{- | 'sizedStates' gives, for each state that the initial state reaches, the
+classes that 'sized' gives with that state as the initial state.
+-}
+stateAgreement :: SizedAutomaton -> Property
+stateAgreement (SizedAutomaton description) =
+    counterexample (show description)
+        $ QC.within 5000000
+        $ QC.conjoin
+            [ counterexample ("state " <> show state <> ", size " <> show size) $
+                termsOfSize shared (Size size) === termsOfSize alone (Size size)
+                    .&&. countOfSize shared (Size size) === countOfSize alone (Size size)
+                    .&&. [unrankOfSize shared (Size size) (ClassRank rank) | rank <- ranks]
+                        === [unrankOfSize alone (Size size) (ClassRank rank) | rank <- ranks]
+                    .&&. map (rankOfSize shared) (termsOfSize alone (Size size))
+                        === map (rankOfSize alone) (termsOfSize alone (Size size))
+            | state <- Map.keys $ FTA.transitionTable $ FTA.trim graph
+            , let shared = states state
+                  alone = either (error . show) id $ sized $ either (error . show) id $ FTA.mkFTA state rows
+            , size <- [1 .. sizeBound]
+            , let Cardinality count = countOfSize alone (Size size)
+                  ranks = [-1 .. count]
+            ]
+  where
+    graph = either (error . show) id $ toFTA $ automatonNode description
+    rows = Map.toList $ FTA.transitionTable graph
+    states = either (error . show) id $ sizedStates graph
+
 {- | 'sizedUpTo' decides equality constraints without the solver and gives the
 classes of 'sizedReference' up to its bound, and no term above it.
 -}
@@ -402,6 +430,10 @@ sizeBound = 6
 -- | A closed automaton with loops, overlapping alternatives, and equal children.
 newtype SizedAutomaton = SizedAutomaton Automaton
     deriving (Show)
+
+-- | The automaton of a random description.
+automatonGraph :: SizedAutomaton -> FTA.FTA InternedState Symbol Constraint
+automatonGraph (SizedAutomaton description) = either (error . show) id $ toFTA $ automatonNode description
 
 instance QC.Arbitrary SizedAutomaton where
     arbitrary = SizedAutomaton <$> QC.oneof [states 0 2, Loop <$> states 1 2] `QC.suchThat` closedAutomaton
