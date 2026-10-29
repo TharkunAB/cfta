@@ -1,3 +1,118 @@
+# Verified original-input native return degree: 2026-10-29 19:29 CET
+
+Proof f735675369ceed4a8244d54c24d1599b1359f69d is integrated with main ef0a2f32
+at source 2cdd5080bfb066e975856ada4f7a3c819a6f8567 on formalize.
+The full goal remains ACTIVE. Read lean/notes-current-native-degree-progress.md.
+Every earlier document body follows unchanged as a dated checkpoint.
+
+Actual original-source kernel node/row returns have degree <= L + semantic R.
+Runtime-fuel induction discharges all internal child-return hypotheses.
+The bound covers open intermediate returns. It retains the exact value and
+both reached heap invariants. Actual native returns and completed memo hits
+inherit the same bound under the existing word-range or checked-key contracts.
+Closed roots derive the original ceiling and semantic completion. No future
+body/result bound is assumed. Closed root outputs already have degree zero.
+This result does not bound every cached body or establish return existence.
+
+Eleven additive modules: 18 public theorems, 1055 lines/71543 bytes.
+All 12 final strict sources pass, including Audit. Audit checks 82076 theorem
+dependencies in 4624 jobs. Public readback: 874 checks/axiom lists and 73 old
+definition bodies, 3654083 bytes. The old 3609022 bytes are an exact prefix.
+All 45061 new bytes were read. No custom axiom, placeholder or suppression.
+There are 38 completed new Lean commands: 28 PASS and ten retained failed
+drafts. One separate diagnostic evaluator timed out; no numeric claim follows.
+All compiler checks use measured serial 4 GiB max/high and zero swap.
+All 4612 old non-Audit Lean and 461 stronger source identities remain.
+
+Whole-system semantics remains conditional checked rendered soundness under
+its contracts, fixed PCS and whole-Discharged. Greater recursive capacity
+retains ordered output prefixes. The earlier all-cache ancestry theorem keeps
+the same resource bound/outcome and same-raw-slot key membership, including
+nested stopped diagnostics. DONE does not imply Discharged. Configured stop
+can emit partial results. Whole-language completeness remains open.
+
+Biggest gap: bounds for ALL generated allocations and pending heaps, then a
+fixed global progress argument and sufficient recursive capacity. Next prove
+Lower for every actual kernel outcome; use the closed successful-return theorem
+and MaybeMu.lower. Preserve earlier effects before later failures. Then prove
+native prefix and generated-query lineage bounds. Per-query bounds alone do
+not close this obligation. Nonterminal chosen-value coverage, policy/origin,
+new public APIs and full Haskell correspondence remain open.
+
+Main now adds source documents/merges, canonical export, listing and sampling
+checkpoints and symbols at several arities. Integrated tests pass 383 core,
+56 serialization and 30 Sized/checkpoint examples. Formatting checks pass.
+FINDINGS records the upstream HugeLists fix and all retained local repairs.
+Main ef0a2f32 lacks serialization repair c15021ce706ef560b6c0ab335ceed1a4b67ba4aa.
+Formalize retains its exact helper body, both parser call sites and four invalid
+fixtures. The optimized interned operations and probe-freshness repair remain.
+
+Evidence: lean/restart-evidence/20261029-native-degree-progress/.
+Preserve frozen evidence and marked drafts. Use a new writable area after seal.
+Refresh upstream. Regular formalize pushes remain explicitly authorized.
+Continue the full goal. Preserve the exact earlier counterexample scopes.
+
+---
+
+# Upstream APIs and retained Haskell repairs: 2026-10-29 19:29 CET
+
+Main `ef0a2f32ed2e658603de395253cee89f5747f2e2` is integrated by merge
+`2cdd5080bfb066e975856ada4f7a3c819a6f8567`. It adds source documents,
+language updates and three-way merges, canonical graph export, listing and
+sampling checkpoints, and symbols with several arities. This changes public
+FTA error and return types. The Lean kernel already checks each pair's arity.
+The new API behavior still needs explicit formal correspondence contracts.
+
+Three merge conflicts were resolved. The serialization import keeps
+`isStrictSubpath` beside the new language and checkpoint imports. Its README
+keeps both the strict-prefix rule and the source-fact removal rule. The core
+changelog keeps the local constructor probe-freshness repair and the upstream
+API entries. The optimized interned operations retain their prior bodies.
+
+Serialization repair `c15021ce706ef560b6c0ab335ceed1a4b67ba4aa` still needs
+external pickup. Main ef0a2f32 has no `checkedPathClass` helper. Formalize keeps
+its exact prior body and both call sites. The four malformed strict-prefix
+inputs remain in the serialization suite. The 56-example suite passes after
+the merge, including the new document and checkpoint formats.
+
+Further validation: 383 core examples and 30 Sized/checkpoint examples pass.
+Fourmolu checks the resolved Haskell file. Cabal-gild checks all three changed
+package files. The HugeLists benchmark builds against the merged APIs, and
+the actual repaired example passes a separate `ghc -fno-code` check.
+The linker still emits its prior dynamic-symbol warnings. No runtime benchmark
+was run. All native checks use nix-shell, serial 4 GiB scopes, zero swap and
+single-capability test runs. Raw inputs and logs are retained for the archive.
+
+There is no new Haskell repair beyond the preserved local fixes and the
+upstream HugeLists repair below. The source review and passing tests establish
+the integration checks. They do not prove Haskell implementation correspondence.
+
+---
+
+# Upstream Haskell example fix: 2026-10-29 03:25 CET
+
+Main `e2185ede7517ccc5b0fb221e81d5ea7127983404` is integrated by merge
+`d53d37dfc1a7935d239831de58c3c5726a3c336e` on formalize.
+Upstream commit `37f0ba817` fixes `specftacular/examples/HugeLists.hs`.
+It removes the unavailable `QuickSpec.Internal.Utils.usort` import.
+It adds a local Int sort that removes duplicates. No core or Lean code changes.
+
+The changed example passes `cabal exec --offline -- ghc -fno-code
+specftacular/examples/HugeLists.hs` inside nix-shell with GHC 9.14.1.
+The separate `specftacular:exe:bench-huge-lists` target also builds.
+That target uses `benchmarks/HugeLists.hs`; it does not check the example.
+The first benchmark build failed because the Nix linker could not find GMP.
+The retry passed with `/usr/bin` first in PATH inside nix-shell.
+All checks used serial 4 GiB scopes with zero swap. Raw inputs and logs are in
+`/tmp/mcfta-native-degree-progress-20261029/` until the next evidence archive.
+
+External pickup remains necessary for serialization repair
+`c15021ce706ef560b6c0ab335ceed1a4b67ba4aa`. Main `e2185ede` lacks this repair.
+Both parser branches reject strict-prefix path classes before `toPathTrie`.
+The exact reproduction and the prior validation remain in the older findings.
+
+---
+
 # Verified output and diagnostic ancestry: 2026-10-29 02:30 CET
 
 Source `49169700142d3f587e64ffe4398616e4aba33e90` is pushed on formalize.
