@@ -21,14 +21,12 @@ import Data.CFTA.Ranked.Internal.Sampler (Exact (..))
 
 -- | Copy an automaton under other symbols, through its explicit view.
 renameSymbols ::
-    (Hashable symbol, Ord symbol, Show symbol, Typeable symbol, Hashable other, Ord other, Show other, Typeable other) =>
+    (Hashable symbol, Typeable symbol, Hashable other, Typeable other) =>
     (symbol -> other) -> Node symbol -> Node other
 renameSymbols rename automaton =
     case Interned.toFTA automaton of
         Left err -> error $ show err
-        Right explicit -> case FTA.mapSymbols rename explicit of
-            Left err -> error $ show err
-            Right renamed -> Interned.fromFTA renamed
+        Right explicit -> Interned.fromFTA $ FTA.mapSymbols rename explicit
 
 -- | Aggregate exact ticket multiplicities by their sampled result.
 aggregateRights :: (Ord a) => [(Rational, Either e a)] -> [(Rational, a)]

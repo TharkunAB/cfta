@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
--- | Complete readable snapshots of graphs.
+-- | Complete readable snapshots of graphs and checkpoints.
 module Data.CFTA.Serialization.Text (
     StateCodec (..),
     TextError (..),
@@ -16,6 +16,16 @@ module Data.CFTA.Serialization.Text (
     CommentTarget (..),
     printGraphNotesWith,
     parseGraphNotesWith,
+
+    -- * Checkpoints
+    printCheckpoint,
+    parseCheckpoint,
+    printCheckpointWith,
+    parseCheckpointWith,
+    printSamplingCheckpoint,
+    parseSamplingCheckpoint,
+    printSamplingCheckpointWith,
+    parseSamplingCheckpointWith,
 ) where
 
 import Control.Applicative ((<|>))
@@ -33,10 +43,12 @@ import Data.Text (Text)
 import qualified Data.Text as Text
 import qualified Data.Text.Lazy as Lazy
 import Data.Text.Lazy.Builder (Builder, fromText, toLazyText)
+import Data.Word (Word64)
 import Numeric (showHex)
 import Text.Read (readEither)
 
 import qualified Data.CFTA as FTA
+import Data.CFTA.Checkpoint (Checkpoint (..), SamplingCheckpoint (..))
 import qualified Data.CFTA.Constraint as C
 import Data.CFTA.Equality.Constraint (
     EqConstraints (EqConstraints, EqContradiction),
@@ -44,9 +56,10 @@ import Data.CFTA.Equality.Constraint (
     unPathEClass,
  )
 import qualified Data.CFTA.Formula as F
-import Data.CFTA.Index (ChildIndex (ChildIndex))
+import Data.CFTA.Index (ChildIndex (ChildIndex), ClassRank (ClassRank), Size (Size), Weight (Weight))
 import Data.CFTA.Path (Path (Path), unPath)
 import Data.CFTA.Symbol (Symbol (RefinedSymbol, Symbol), symbolRefinement, symbolText, valueName)
+import Data.CFTA.Template (Exclusion (..), Template (..))
 
 {- | A typed codec for portable state labels. Decoding an encoded state must
 return that state and preserve equality and ordering. Labels are escaped by the
@@ -116,7 +129,7 @@ notesOf entries =
 data TextError state
     = SyntaxError !Int !Int !String
     | DuplicateState !state
-    | InvalidGraph !(FTA.FTAError state Symbol)
+    | InvalidGraph !(FTA.FTAError state)
     deriving (Eq, Show)
 
 -- | Describe the input location or the rejected graph.
@@ -126,8 +139,6 @@ explainTextError failure = case failure of
     DuplicateState state -> "duplicate state row: " <> show state
     InvalidGraph (FTA.MissingInitialState state) -> "initial state " <> show state <> " has no row"
     InvalidGraph (FTA.DanglingState state) -> "child state " <> show state <> " has no row"
-    InvalidGraph (FTA.InconsistentArity symbol expected actual) ->
-        "symbol " <> show symbol <> " has arities " <> show expected <> " and " <> show actual
 
 -- | Print a graph with state labels from its 'Show' instance.
 printGraph :: (Show state) => FTA.PlainFTA state Symbol -> Text
@@ -154,14 +165,107 @@ parseGraphNotesWith ::
     (Ord state) => StateCodec state -> Text -> Either (TextError state) (Notes state, FTA.PlainFTA state Symbol)
 parseGraphNotesWith = readGraph . decodeState
 
+{- | Print a checkpoint with state labels from their 'Show' instance. The
+text holds the query and the sized rank of the next term, then the text of
+'printGraph' for the graph.
+-}
+printCheckpoint :: (Show state) => Checkpoint state -> Text
+printCheckpoint = renderCheckpoint (Text.pack . show)
+
+-- | Print a checkpoint with an explicit typed state codec.
+printCheckpointWith :: StateCodec state -> Checkpoint state -> Text
+printCheckpointWith = renderCheckpoint . encodeState
+
+-- | Read a checkpoint with its state's 'Read' instance, and validate its graph.
+parseCheckpoint :: (Ord state, Read state) => Text -> Either (TextError state) (Checkpoint state)
+parseCheckpoint = readCheckpoint (readEither . Text.unpack)
+
+-- | Read a checkpoint with an explicit typed state codec.
+parseCheckpointWith :: (Ord state) => StateCodec state -> Text -> Either (TextError state) (Checkpoint state)
+parseCheckpointWith = readCheckpoint . decodeState
+
+{- | Print a sampling checkpoint with state labels from their 'Show' instance.
+The text holds the query, the weights, the pseudorandom generator, the seed,
+and the number of draws, then the text of 'printGraph' for the graph.
+-}
+printSamplingCheckpoint :: (Show state) => SamplingCheckpoint state -> Text
+printSamplingCheckpoint = renderSamplingCheckpoint (Text.pack . show)
+
+-- | Print a sampling checkpoint with an explicit typed state codec.
+printSamplingCheckpointWith :: StateCodec state -> SamplingCheckpoint state -> Text
+printSamplingCheckpointWith = renderSamplingCheckpoint . encodeState
+
+-- | Read a sampling checkpoint with its state's 'Read' instance, and validate its graph.
+parseSamplingCheckpoint :: (Ord state, Read state) => Text -> Either (TextError state) (SamplingCheckpoint state)
+parseSamplingCheckpoint = readSamplingCheckpoint (readEither . Text.unpack)
+
+-- | Read a sampling checkpoint with an explicit typed state codec.
+parseSamplingCheckpointWith ::
+    (Ord state) => StateCodec state -> Text -> Either (TextError state) (SamplingCheckpoint state)
+parseSamplingCheckpointWith = readSamplingCheckpoint . decodeState
+
 -- | Render graph rows with their complete transition constraints, and the doc comments that the lookup gives.
 renderGraph :: (state -> Text) -> NoteLookup state -> FTA.PlainFTA state Symbol -> Text
-renderGraph encode notes = built . graphText "graph" encode transition notes
+renderGraph encode notes = built . plainGraphText encode notes
+
+-- | Render the graph format.
+plainGraphText :: (state -> Text) -> NoteLookup state -> FTA.PlainFTA state Symbol -> Builder
+plainGraphText encode = graphText "graph" encode transition
   where
     transition edge = "  " <> edgeText encode edge <> obligation (FTA.transitionConstraint edge) <> ";\n"
     obligation constraint
         | constraint == C.noConstraint = mempty
         | otherwise = " where " <> constraintText constraint
+
+-- | Render the query and the next sized rank, then the graph in the graph format.
+renderCheckpoint :: (state -> Text) -> Checkpoint state -> Text
+renderCheckpoint encode checkpoint =
+    built $
+        "checkpoint 1;\nquery "
+            <> nameText (checkpointRoute checkpoint)
+            <> " "
+            <> integerText (checkpointVersion checkpoint)
+            <> ";\nbound "
+            <> integerText bound
+            <> ";\nnext size "
+            <> integerText size
+            <> " rank "
+            <> integerText rank
+            <> ";\n"
+            <> foldMap exclusionText (checkpointExclusions checkpoint)
+            <> "\n"
+            <> plainGraphText encode noNotes (checkpointGraph checkpoint)
+  where
+    Size bound = checkpointBound checkpoint
+    (Size size, ClassRank rank) = checkpointNext checkpoint
+
+-- | Render the query, the weights, and the position of the run, then the graph in the graph format.
+renderSamplingCheckpoint :: (state -> Text) -> SamplingCheckpoint state -> Text
+renderSamplingCheckpoint encode checkpoint =
+    built $
+        "sampling 1;\nquery "
+            <> nameText (samplingRoute checkpoint)
+            <> " "
+            <> integerText (samplingVersion checkpoint)
+            <> ";\nbound "
+            <> integerText bound
+            <> ";\nweights "
+            <> maybe "uniform" weightsText (samplingWeights checkpoint)
+            <> ";\nprng "
+            <> nameText (samplingPrng checkpoint)
+            <> " "
+            <> integerText (samplingPrngVersion checkpoint)
+            <> ";\nseed "
+            <> integerText (toInteger $ samplingSeed checkpoint)
+            <> ";\ndraws "
+            <> integerText (samplingDraws checkpoint)
+            <> ";\n"
+            <> foldMap exclusionText (samplingExclusions checkpoint)
+            <> "\n"
+            <> plainGraphText encode noNotes (samplingGraph checkpoint)
+  where
+    Size bound = samplingBound checkpoint
+    weightsText weights = listText [integerText size <> ": " <> integerText weight | (Size size, Weight weight) <- Map.toAscList weights]
 
 -- | Render the shared version, initial state, and finite row table, each item after its doc comment.
 graphText ::
@@ -193,6 +297,21 @@ commentText :: Builder -> Maybe Text -> Builder
 commentText indent = maybe mempty (foldMap line . Text.splitOn "\n")
   where
     line text = indent <> "///" <> (if Text.null text then mempty else " " <> fromText text) <> "\n"
+
+-- | Render an exclusion of a checkpoint as one statement.
+exclusionText :: Exclusion Symbol -> Builder
+exclusionText exclusion = case exclusion of
+    AtRoot template -> "exclude root " <> templateText template <> ";\n"
+    Anywhere template -> "exclude anywhere " <> templateText template <> ";\n"
+
+-- | Render a template with the syntax of symbols, @_@ for a hole or any symbol, and @...@ for a prefix.
+templateText :: Template Symbol -> Builder
+templateText template = case template of
+    Hole -> "_"
+    AnyNode children -> call "_" $ map templateText children
+    TemplateNode symbol children -> symbolText' symbol <> childrenText (map templateText children)
+    AnyPrefix children -> call "_" $ map templateText children <> ["..."]
+    TemplatePrefix symbol children -> symbolText' symbol <> "(" <> separated (map templateText children <> ["..."]) <> ")"
 
 -- | Render a complete symbol and ordered child state references.
 edgeText :: (state -> Text) -> FTA.Transition state Symbol annotation -> Builder
@@ -345,6 +464,69 @@ integerText = fromText . Text.pack . show
 built :: Builder -> Text
 built = Lazy.toStrict . toLazyText
 
+-- | Read the query, the weights, the position, and the graph of a sampling checkpoint.
+readSamplingCheckpoint ::
+    (Ord state) => (Text -> Either String state) -> Text -> Either (TextError state) (SamplingCheckpoint state)
+readSamplingCheckpoint decode input = do
+    (fields, rows) <- runParser parser input
+    graph <- validGraph rows
+    pure $ fields graph
+  where
+    parser = do
+        checkpointKeyword "sampling"
+        format <- integerParser
+        unless (format == 1) $ fail "unsupported sampling version; expected 1"
+        token ";"
+        checkpointKeyword "query"
+        route <- nameParser
+        version <- integerParser
+        token ";"
+        checkpointKeyword "bound"
+        bound <- integerParser
+        token ";"
+        checkpointKeyword "weights"
+        uniform <- startsKeyword "uniform"
+        weights <-
+            if uniform
+                then keyword "uniform" $> Nothing
+                else Just . Map.fromList <$> (bracketed weight >>= distinctSizes)
+        token ";"
+        checkpointKeyword "prng"
+        algorithm <- nameParser
+        algorithmVersion <- integerParser
+        token ";"
+        checkpointKeyword "seed"
+        seed <- integerParser
+        when (seed < 0 || seed > toInteger (maxBound :: Word64)) $ fail "seed is outside the range of a 64-bit word"
+        token ";"
+        checkpointKeyword "draws"
+        draws <- integerParser
+        token ";"
+        exclusions <- whileKeyword "exclude" exclusionParser
+        (_, rows) <- plainGraphParser WithoutNotes decode
+        pure
+            ( \graph ->
+                SamplingCheckpoint
+                    graph
+                    exclusions
+                    route
+                    version
+                    (Size bound)
+                    weights
+                    algorithm
+                    algorithmVersion
+                    (fromInteger seed)
+                    draws
+            , rows
+            )
+    weight = (,) <$> (Size <$> integerParser <* token ":") <*> (Weight <$> integerParser)
+    distinctSizes entries = do
+        foldM_ distinct Set.empty $ map fst entries
+        pure entries
+    distinct seen size
+        | Set.member size seen = fail $ "duplicate weight of size " <> show size
+        | otherwise = pure $ Set.insert size seen
+
 -- | Read graph syntax and its doc comments, and validate identities before constructing its row map.
 readGraph ::
     (Ord state) =>
@@ -352,10 +534,73 @@ readGraph ::
     Text ->
     Either (TextError state) (Notes state, FTA.PlainFTA state Symbol)
 readGraph decode input = do
-    (notes, (initial, rows)) <- runParser (graphParser "graph" decode (graphTransitionParser decode) <* noComment) input
-    foldM_ distinct Set.empty $ map fst rows
-    graph <- first InvalidGraph $ FTA.mkFTA initial rows
-    pure (notesOf notes, graph)
+    (comments, rows) <- runParser (plainGraphParser WithNotes decode) input
+    graph <- validGraph rows
+    pure (notesOf comments, graph)
+
+{- | Read the graph format: the header, the initial state, and the rows with
+their constraints, and, where the rule allows them, the doc comments of the
+file and of the states and the sorts of the states.
+-}
+plainGraphParser ::
+    NoteRule ->
+    (Text -> Either String state) ->
+    A.Parser ([NoteEntry state], (state, [(state, [FTA.Transition state Symbol C.Constraint])]))
+plainGraphParser rule decode = graphParser rule "graph" decode (graphTransitionParser decode) <* ruleGuard rule <* noComment
+
+-- | Check that each state has one row, then check the graph as 'FTA.mkFTA' does.
+validGraph ::
+    (Ord state) =>
+    (state, [(state, [FTA.Transition state Symbol C.Constraint])]) -> Either (TextError state) (FTA.PlainFTA state Symbol)
+validGraph (initial, rows) = do
+    distinctStates rows
+    first InvalidGraph $ FTA.mkFTA initial rows
+
+-- | Read the query, the next sized rank, and the graph of a checkpoint.
+readCheckpoint :: (Ord state) => (Text -> Either String state) -> Text -> Either (TextError state) (Checkpoint state)
+readCheckpoint decode input = do
+    (route, version, bound, next, exclusions, rows) <- runParser parser input
+    graph <- validGraph rows
+    pure $ Checkpoint graph exclusions route version bound next
+  where
+    parser = do
+        checkpointKeyword "checkpoint"
+        format <- integerParser
+        unless (format == 1) $ fail "unsupported checkpoint version; expected 1"
+        token ";"
+        checkpointKeyword "query"
+        route <- nameParser
+        version <- integerParser
+        token ";"
+        checkpointKeyword "bound"
+        bound <- integerParser
+        token ";"
+        checkpointKeyword "next"
+        keyword "size"
+        size <- integerParser
+        keyword "rank"
+        rank <- integerParser
+        token ";"
+        exclusions <- whileKeyword "exclude" exclusionParser
+        (_, rows) <- plainGraphParser WithoutNotes decode
+        pure (route, version, Size bound, (Size size, ClassRank rank), exclusions, rows)
+
+-- | Read an exclusion statement of a checkpoint: @exclude root TEMPLATE;@ or @exclude anywhere TEMPLATE;@.
+exclusionParser :: A.Parser (Exclusion Symbol)
+exclusionParser = do
+    checkpointKeyword "exclude"
+    place <- nameParser
+    exclusion <- case place of
+        "root" -> pure AtRoot
+        "anywhere" -> pure Anywhere
+        _ -> fail "expected root or anywhere"
+    template <- templateParser
+    token ";"
+    pure $ exclusion template
+
+-- | Reject a second row for a state.
+distinctStates :: (Ord state) => [(state, rows)] -> Either (TextError state) ()
+distinctStates = foldM_ distinct Set.empty . map fst
   where
     distinct seen state
         | Set.member state seen = Left $ DuplicateState state
@@ -379,16 +624,18 @@ validation, the doc comments of the file and the states, and the sorts of the
 states.
 -}
 graphParser ::
+    NoteRule ->
     Text ->
     (Text -> Either String state) ->
     A.Parser (FTA.Transition state Symbol annotation) ->
     A.Parser ([NoteEntry state], (state, [(state, [FTA.Transition state Symbol annotation])]))
-graphParser format decode transition = do
-    fileComment <- commentParser
+graphParser rule format decode transition = do
+    fileComment <- ruleComment rule
     keyword format
     version <- integerParser
     unless (version == 1) $ fail "unsupported snapshot version; expected 1"
     token ";"
+    ruleGuard rule
     keyword "start"
     initial <- stateParser decode
     token ";"
@@ -396,12 +643,12 @@ graphParser format decode transition = do
     pure (commentOn OnFile fileComment <> concatMap fst rows, (initial, map snd rows))
   where
     row = do
-        comment <- commentParser
+        comment <- ruleComment rule
         keyword "state"
         state <- stateParser decode
-        sort <- ifNext ':' (Just <$> (token ":" *> nameParser)) Nothing
+        sort <- ruleSort rule
         token "{"
-        transitions <- untilClose '}' transition
+        transitions <- untilClose '}' (ruleGuard rule *> transition)
         token "}"
         ifNext ';' (token ";") ()
         pure (commentOn (OnState state) comment <> maybe [] (\name -> [SortEntry state name]) sort, (state, transitions))
@@ -431,6 +678,42 @@ symbolParser = do
     name <- nameParser
     refinement <- ifNext '@' (token "@" *> token "{" *> formulaParser <* token "}") F.Top
     pure $ RefinedSymbol (Symbol name) refinement
+
+-- | Read a template: @_@ for a hole, @_(...)@ for any symbol, a symbol with its children, and @...@ for a prefix.
+templateParser :: A.Parser (Template Symbol)
+templateParser = do
+    wildcard <- startsKeyword "_"
+    if wildcard
+        then do
+            keyword "_"
+            ifNext
+                '('
+                ( do
+                    (children, prefix) <- templateArguments
+                    pure $ if prefix then AnyPrefix children else AnyNode children
+                )
+                Hole
+        else do
+            symbol <- symbolParser
+            (children, prefix) <- ifNext '(' templateArguments ([], False)
+            pure $ if prefix then TemplatePrefix symbol children else TemplateNode symbol children
+
+-- | Read the children of a template, and whether they end in the prefix marker @...@.
+templateArguments :: A.Parser ([Template Symbol], Bool)
+templateArguments = parenthesized $ go []
+  where
+    go reversed = do
+        next <- A.peekChar
+        case next of
+            Just ')' -> pure (reverse reversed, False)
+            Just '.' -> token "..." $> (reverse reversed, True)
+            _ -> do
+                child <- templateParser
+                ifNext ',' (token "," *> afterComma (child : reversed)) (reverse $ child : reversed, False)
+    afterComma reversed = do
+        next <- A.peekChar
+        when (next == Just ')') $ fail "expected a template or prefix marker after comma"
+        go reversed
 
 -- | Read every formula constructor without invoking a simplifier.
 formulaParser :: A.Parser F.Formula
@@ -648,6 +931,34 @@ noComment = do
 -- | The error for a doc comment that does not come before an item.
 misplacedComment :: String
 misplacedComment = "a doc comment must come before the header or a state"
+
+-- | Whether a graph can have doc comments and the sorts of its states. The graph of a checkpoint has neither.
+data NoteRule = WithNotes | WithoutNotes
+
+-- | Read the doc comment of an item, where the rule allows one.
+ruleComment :: NoteRule -> A.Parser (Maybe Text)
+ruleComment WithNotes = commentParser
+ruleComment WithoutNotes = noCheckpointComment $> Nothing
+
+-- | Read the sort of a state, where the rule allows one.
+ruleSort :: NoteRule -> A.Parser (Maybe Text)
+ruleSort WithNotes = ifNext ':' (Just <$> (token ":" *> nameParser)) Nothing
+ruleSort WithoutNotes = ifNext ':' (fail "a checkpoint has no sorts") Nothing
+
+-- | Reject a doc comment where the rule allows none.
+ruleGuard :: NoteRule -> A.Parser ()
+ruleGuard WithNotes = pure ()
+ruleGuard WithoutNotes = noCheckpointComment
+
+-- | Reject a doc comment in a checkpoint.
+noCheckpointComment :: A.Parser ()
+noCheckpointComment = do
+    present <- (lookAhead (A.string "///") $> True) <|> pure False
+    when present $ fail "a checkpoint has no doc comments"
+
+-- | Read the keyword of a checkpoint statement, after a check for a doc comment.
+checkpointKeyword :: Text -> A.Parser ()
+checkpointKeyword word = noCheckpointComment *> keyword word
 
 -- | A doc comment of a target, as a list of at most one note.
 commentOn :: CommentTarget state -> Maybe Text -> [NoteEntry state]

@@ -65,6 +65,7 @@ module Data.CFTA.Interned (
     InternedState (..),
     FTAViewError (..),
     toFTA,
+    canonicalFTA,
     toRows,
     stateOf,
     fromFTA,
@@ -78,7 +79,6 @@ module Data.CFTA.Interned (
 ) where
 
 import Control.Monad.State.Strict (State, evalState, gets, modify')
-import Data.Bifunctor (first)
 import Data.Graph (flattenSCC, stronglyConnComp)
 import Data.Hashable (Hashable)
 import Data.IntMap.Strict (IntMap)
@@ -102,11 +102,9 @@ data InternedState = EmptyState | InternedState !NodeId
     deriving (Eq, Ord, Show)
 
 -- | Failure while exposing an interned graph as an explicit-state automaton.
-data FTAViewError symbol
+data FTAViewError
     = -- | A recursive variable is free in the root node.
       OpenNode
-    | -- | The graph does not have a consistently ranked alphabet.
-      InvalidFTA !(FTA.FTAError InternedState symbol)
     deriving (Eq, Show)
 
 {- | Expose the shared graph with its constraints unchanged.
@@ -114,23 +112,56 @@ data FTAViewError symbol
 Each interned node becomes one state. The operation does not enumerate terms
 or interpret transition constraints. Use the explicit-state interface when
 an operation must retain caller-supplied state names. The rows are those of
-'toRows', and 'FTA.mkFTA' checks them.
+'toRows'. A symbol can occur at several arities. The names of the states depend
+on the identities of the nodes in this process; 'canonicalFTA' gives names that
+depend on the content of the graph only.
 -}
 toFTA ::
-    (Hashable symbol, Ord symbol, Typeable symbol) =>
+    (Hashable symbol, Typeable symbol) =>
     Node symbol ->
-    Either (FTAViewError symbol) (FTA.FTA InternedState symbol Constraint)
+    Either FTAViewError (FTA.FTA InternedState symbol Constraint)
 toFTA root
     | not (Set.null $ freeVars root) = Left OpenNode
-    | otherwise = first InvalidFTA $ FTA.mkFTA (stateOf root) (Map.toList $ toRows root)
+    | otherwise =
+        either (const $ error "cfta bug in Data.CFTA.Interned.toFTA: the rows of a closed node are not closed") Right $
+            FTA.mkFTA (stateOf root) (Map.toList $ toRows root)
+
+{- | The explicit graph of a closed node, with names that depend on the content
+of the graph only. Each state is a canonical class ('canonicalClasses') of the
+nodes that the root reaches, and the initial state is the class of the root.
+A row has the transitions of one node of its class, in the order of their
+arity, symbol, child states, and constraint; equal transitions are kept once.
+The nodes of one class have the same language, so the graph has the language of
+the node. The same node, built in any order and in any process, gives the same
+graph, so the text of the graph can identify the language.
+-}
+canonicalFTA ::
+    (Hashable symbol, Ord symbol, Typeable symbol) =>
+    Node symbol ->
+    Either FTAViewError (FTA.FTA Int symbol Constraint)
+canonicalFTA root
+    | not (Set.null $ freeVars root) = Left OpenNode
+    | otherwise =
+        either (const $ error "cfta bug in Data.CFTA.Interned.canonicalFTA: the rows of a closed node are not closed") Right $
+            FTA.mkFTA initial (if IntMap.null graph then [(initial, [])] else rows)
+  where
+    graph = reachable root
+    classes = canonicalClasses $ IntMap.map (map $ \edge -> (shape edge, map nodeIdentity $ edgeChildren edge)) graph
+    classOf node = let NodeId ident = nodeIdentity node in classes IntMap.! ident
+    initial = if IntMap.null graph then 0 else classOf root
+    shape edge = (length $ edgeChildren edge, edgeSymbol edge, constraintEqualities constraint, constraintGuard constraint)
+      where
+        constraint = edgeConstraint edge
+    transition edge = FTA.Transition (edgeSymbol edge) (map classOf $ edgeChildren edge) (edgeConstraint edge)
+    row edges = Map.elems $ Map.fromList [((shape edge, FTA.transitionChildren (transition edge)), transition edge) | edge <- edges]
+    rows = Map.toList $ Map.fromList [(classes IntMap.! ident, row edges) | (ident, edges) <- IntMap.toList graph]
 
 {- | The transitions of each node that a closed interned graph reaches, keyed by
 the state of the node, with their constraints unchanged.
 
 This is the one adapter from interned nodes to explicit rows: 'toFTA' checks
-these rows, and the count table of the generators reads them directly. Unlike
-'toFTA', it does not require a ranked alphabet. The initial state is
-'stateOf' the root.
+these rows, and the count table of the generators reads them directly. The
+initial state is 'stateOf' the root.
 -}
 toRows ::
     (Hashable symbol, Typeable symbol) =>
@@ -151,14 +182,12 @@ toRows root =
 
 The view retains the original nodes, edges, and constraints. Recursive and
 shared references use the same finite representation as 'FTA.toTree'. Open
-roots return 'OpenNode'. The view does not require a ranked alphabet.
+roots return 'OpenNode'.
 -}
 toTree ::
     (Hashable symbol, Typeable symbol) =>
     Node symbol ->
-    Either
-        (FTAViewError symbol)
-        (Tree.Tree (Either (StateView (Node symbol)) (Edge symbol)))
+    Either FTAViewError (Tree.Tree (Either (StateView (Node symbol)) (Edge symbol)))
 toTree root
     | not (Set.null $ freeVars root) = Left OpenNode
     | otherwise = Right $ toTreeBy nodeEdges edgeChildren root

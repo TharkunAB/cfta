@@ -559,8 +559,8 @@ node identities or the child-only `Path` used by equality constraints.
 does not list every route through a shared or recursive graph. Paths are built
 only when `toTree` is requested; normal generation does not build them.
 
-The view traverses the interned graph directly. Unlike `toFTA`, it does not
-require a ranked alphabet. An open recursive variable returns `Left OpenNode`.
+The view traverses the interned graph directly. An open recursive variable
+returns `Left OpenNode`.
 It does not enumerate terms or solve constraints. Add `containers` to your
 component's `build-depends` when you import `Data.Tree` directly.
 
@@ -1097,6 +1097,7 @@ productivity; they do not prove that arbitrary transition guards are satisfiable
 | --- | --- |
 | `Data.CFTA.Generic` | Datatype derivation, finite domains, metadata, and typed codecs. |
 | `Data.CFTA` | Checked explicit-state graphs, recognition, depth bounds, product intersection, and enumeration. |
+| `Data.CFTA.Checkpoint` | A saved position in a size-ordered listing of the terms of a graph: the graph, the query route and its version, the size bound, and the sized rank of the next term. A sampling checkpoint saves a position in a sampled run: the weights, the pseudorandom generator, the seed, and the number of draws. `cfta-generator` resumes both, and `cfta-serialization` stores both. |
 | `Data.CFTA.Interned` | Shared nodes and edges, recursive languages, union, intersection, and views. |
 | `Data.CFTA.Template` | Patterns with holes and prefixes, and restriction of a grammar to a pattern. |
 | `Data.CFTA.Path` | Child-index paths, and reading, editing, and requiring positions in a graph. |

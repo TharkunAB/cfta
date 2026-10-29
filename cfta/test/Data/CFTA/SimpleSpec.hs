@@ -319,9 +319,7 @@ spec = describe "the interned automata against Data.CFTA.Simple" $ do
                     (depth, expected) `shouldBe` (depth, filter (simpleAccepts right) (simpleTerms depth left))
                     (depth, sort (terms (Interned.boundDepth depth (Interned.intersect (Interned.fromFTA left) (Interned.fromFTA right)))))
                         `shouldBe` (depth, expected)
-                    case FTA.intersectWith sameSymbol conjoinConstraints left right of
-                        Left err -> expectationFailure $ show err
-                        Right explicitProduct -> (depth, simpleTerms depth explicitProduct) `shouldBe` (depth, expected)
+                    (depth, simpleTerms depth (FTA.intersectWith sameSymbol conjoinConstraints left right)) `shouldBe` (depth, expected)
 
     it "unite as the simple union does, which keeps the terms of either" $
         property $

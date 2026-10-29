@@ -807,19 +807,17 @@ eNodeCount :: (Hashable f) => EGraph s f -> Int
 eNodeCount g = sum [HashSet.size (HashSet.fromList (nodesAt g i)) | i <- IntMap.keys (classes g)]
 
 {- | The terms of an e-class, as an automaton whose states are e-classes.
-The sort of a term is the sort of its state. An error is a symbol with two
-arities.
+The sort of a term is the sort of its state.
 -}
-classAutomaton :: (Ord f) => EGraph s f -> ClassId -> Either (FTA.FTAError ClassId f) (FTA.FTA ClassId f Constraint)
+classAutomaton :: EGraph s f -> ClassId -> Either (FTA.FTAError ClassId) (FTA.FTA ClassId f Constraint)
 classAutomaton = classAutomatonWith (\_ f -> f)
 
 -- | 'classAutomaton' with a symbol made from the sort and the symbol of each e-node.
 classAutomatonWith ::
-    (Ord g) =>
     (Maybe (Term s) -> f -> g) ->
     EGraph s f ->
     ClassId ->
-    Either (FTA.FTAError ClassId g) (FTA.FTA ClassId g Constraint)
+    Either (FTA.FTAError ClassId) (FTA.FTA ClassId g Constraint)
 classAutomatonWith label g c0 = FTA.mkFTA root (go IntSet.empty [root])
   where
     root = find g c0
@@ -1493,15 +1491,14 @@ here; 'ematch' requires both.
 ematchByIntersection ::
     (Ord s, Hashable s, Ord f, Hashable f) => EGraph s f -> Pattern s f -> [(ClassId, Map.Map String ClassId)]
 ematchByIntersection g pat = case (FTA.mkFTA GRoot graphRows, FTA.mkFTA (-1 :: Int) patternRows) of
-    (Right graph, Right patterns) -> case FTA.intersectWith same (\_ c -> c) graph patterns of
-        Right product' ->
-            [ (c, bindings)
+    (Right graph, Right patterns) ->
+        let product' = FTA.intersectWith same (\_ c -> c) graph patterns
+         in [ (c, bindings)
             | term@(Node GMatch [instance']) <- FTA.terms product'
             , all (\t -> equalitiesHold (FTA.transitionConstraint t) term) (FTA.transitionsFrom product' (FTA.initialState product'))
             , Just c <- [classOf instance']
             , Just bindings <- [bind pat instance' Map.empty]
             ]
-        Left _ -> []
     _ -> []
   where
     nodesOf = IntMap.mapWithKey (\i _ -> canonicalNodes g i) (classes g)
