@@ -253,8 +253,10 @@ ambiguity. A guard beyond equality
 constraints is `ResidualGuard`. `sizedUpTo` builds the classes up to a size
 bound with a solver that decides every guard on each term, as
 `denotationAtMost` does by depth, so it also takes a liquid automaton whose
-guards pruning did not discharge. An interned automaton enters through
-`toFTA` of `Data.CFTA.Interned`.
+guards pruning did not discharge. `sizedStates` gives the classes of each
+state, as `sized` gives them with that state as the initial state, with one
+table for all the states. An interned automaton enters through `toFTA` of
+`Data.CFTA.Interned`.
 
 ```haskell
 module Main (main) where
@@ -365,6 +367,82 @@ stale (`StaleRow`, `StaleExclusions`, `StaleWeights`). It also rejects another v
 (`sized-sample`) or of the generator (`splitmix64`). The bound and the seed
 come from the checkpoint. `printSamplingCheckpoint` of cfta-serialization
 saves it with its graph.
+
+### The completions of a prefix
+
+`Data.CFTA.Sized.Prefix` reads the terms of an automaton one node at a time,
+in preorder, as a decoder writes them. A token is a symbol with its number of
+children, and a prefix is a list of tokens. `prefixCompletions` takes a size
+bound and an automaton without a guard beyond equality constraints, and
+gives the completions of the empty prefix: the accepted terms with at most the
+bound of nodes.
+
+- `nextTokens` gives the tokens that can come next, each with the number of
+  completions that start with the prefix and the token. Each such token has a
+  completion within the bound, so a decoder that writes only these tokens ends
+  with an accepted term.
+- `afterToken` adds one token, and it gives `Nothing` when no completion
+  starts with the result, so a caller can reject a token at once.
+  `isComplete` says whether the prefix is an accepted term.
+- `completionCount`, `completionTerms`, `unrankCompletion`, and
+  `rankCompletion` count and list the completions, and map them to and from
+  their ranks. `Data.CFTA.Sized.Prefix.QuickCheck` samples them.
+
+The completions are the terms of `sized` up to the bound that start with the
+prefix, in the same order. So their ranks do not depend on the names of the
+states. Without constraints and with unambiguous rows, the queries read a
+size index of the prefix: the count table of `sized` with only the
+transitions whose token is the token of the prefix at each node. It counts,
+ranks, and unranks the completions without a list of them. With equality
+constraints or ambiguous rows, the queries list the accepted terms up to the
+bound and keep those with the prefix.
+
+With guards, `prefixCompletionsWith` takes an `Entailment` and decides the
+guards on each listed term. A token is then offered, rejected, or undecided:
+`nextTokens` gives the offered tokens, `undecidedTokens` the tokens that the
+solver neither offers nor rejects, and `undecidedTerms` the completions that
+it does not decide. A decoder that walks one path of tokens can use
+`deciding`, `decidingStep`, and `decidingTokens` instead: they ask the solver
+only about the candidates that the prefix can still reach, and only until a
+verdict is known, and they keep the verdicts for the whole walk. With equality
+constraints, a step of the walk tries a few candidates, then takes the next
+ones from an automaton of the terms of each size, whose enumerator solves the
+equalities by unification. `decided` gives the `Completions` of the current
+prefix.
+
+`withWeights` gives each symbol a weight, a non-negative `Rational`, and the
+weight of a term is the product of the weights of its nodes.
+`nextTokenWeights` gives the total weight of the completions after each next
+token, `tokenProbability` the probability of a token after the prefix, and
+`drawCompletion` draws a completion in proportion to its weight. This is the
+mass that grammar-aligned decoding needs (Park et al., *Grammar-Aligned
+Decoding*, NeurIPS 2024), exact for a weight that is a product over the
+nodes. With the weight one for each symbol, the weights are the counts.
+
+Grammar-constrained decoders compute a mask over the subword tokens of a
+language model at each step: XGrammar with a pushdown automaton and
+precomputed token sets ([arXiv:2411.15100](https://arxiv.org/abs/2411.15100)),
+llguidance with an Earley parser over a lexer
+([llguidance](https://github.com/guidance-ai/llguidance)), each in tens of
+microseconds per token for a vocabulary of 128k tokens. A token here is a
+whole symbol with its number of children, so there is no subword alignment,
+and the cost of a step does not depend on a vocabulary. Synchromesh keeps the
+output in the prefixes that a valid program completes
+([arXiv:2201.11227](https://arxiv.org/abs/2201.11227)); here each offered
+token has a completion within the size bound, which also bounds the length.
+Park et al. show that a mask alone changes the distribution of the model,
+and that each token needs the expected mass of its grammatical completions
+([arXiv:2405.21047](https://arxiv.org/abs/2405.21047)); sequential Monte
+Carlo needs the same quantity as a twist
+([arXiv:2504.13139](https://arxiv.org/abs/2504.13139)). Here that mass is
+exact for weights that are products over the nodes.
+
+A `Completions` value does not change, so a decoder can keep the values of
+its prefix and go back one token with the value before it. When `nextTokens`
+gives one token and the prefix is not complete, the token is forced. The
+queries are pure, so the values of a batch of prefixes can be computed in
+parallel. A walk of `deciding` keeps its verdicts in memories that grow
+during the walk; use it in one thread.
 
 ## Equality-constrained generators
 
