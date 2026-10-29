@@ -583,7 +583,7 @@ position, the conjunction of the children of its edges can, and, for each
 class, the conjunction of the nodes at the paths of the class can: the
 subterm that the class shares is in each of them. The check takes the least
 fixed point of this rule over the conjunctions that the node reaches. The
-check reads at most 'emptinessBudget' edge tuples. It stops at the first
+check reads at most 'emptinessBudget' + 1 edge tuples. It stops at the first
 conjunction with more edge tuples than are left, because the number of tuples
 of one conjunction is a product over its nodes and can grow exponentially as
 the conjunctions grow. A conjunction that the check does not read, and a
@@ -659,7 +659,7 @@ provablyEmpty = memoTypeableWith @symbol provablyEmptyCache $ \start ->
     keys = map key
     key n = let NodeId ident = nodeIdentity n in ident
 
--- | The number of edge tuples that 'provablyEmpty' reads before it stops.
+-- | The edge tuple budget for 'provablyEmpty'. One extra tuple detects overflow.
 emptinessBudget :: Int
 emptinessBudget = 10000
 

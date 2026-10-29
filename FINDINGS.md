@@ -1,3 +1,66 @@
+# Verified checked query prefix bounds: 2026-10-29 20:57 CET
+
+Source 20a4595247b497b1242707325ddf03dc101a92d4 on formalize.
+Read lean/notes-current-checked-prefix-progress.md first.
+The full formalization goal remains ACTIVE. Main 7b8db072f is integrated.
+Earlier document bodies follow unchanged as dated checkpoints.
+
+Haskell repairs for external pickup are in cfta/src/Data/CFTA/Enumeration.hs.
+The provablyEmpty paragraph now states at most emptinessBudget + 1 raw tuples.
+The emptinessBudget Haddock now states that one extra tuple detects overflow.
+Both changes are comments. The runtime body is the tested upstream PR193 body.
+No functional Haskell defect was found in this refresh.
+
+IncomingQuery.native_prefix_bounded now derives one finite Mu-body degree
+ceiling for every actual checked native fuel from original caller admission.
+Its finite completion trace is derived, not supplied as a new premise.
+No sharp formula or global bound across successive rebased queries is proved.
+
+Main PR193 now has an additive tuple-budget model with finite exploration,
+conservative overflow, zero-charge entries, a completed literal fixed-point
+loop and sound public True verdict under explicit source-interface laws.
+The old conjunction-count resource models remain historical targets.
+Physical lazy exposure and allocation bounds for PR193 remain open.
+
+Strict checks pass for all 5 new modules and Audit: 4650 build jobs and 82182
+theorem dependencies. Public output preserves the exact old prefix and adds
+15 theorems. Nix core passes 384 examples; final Fourmolu/cabal-gild pass.
+The two Haskell Haddock fixes include the overflow lookahead tuple. Runtime
+code is unchanged locally. FINDINGS records both for external pickup.
+
+Whole-system rendered soundness remains conditional on semantic/resource
+contracts, fixed PCS and wholeDischarged. Global original-input resources,
+nonterminal chosen-value coverage, ordering and Haskell correspondence remain
+open. The detailed note gives the exact evidence and next proof targets.
+
+---
+# PR193 emptiness budget: 2026-10-29 20:49 CET
+
+Main 7b8db072fbde44f20ce9a803736de5624050f038 is integrated at ec6d21f68ee7e7ff702a4c8edbff413d802766d7.
+The old budget counted conjunctions. One conjunction can have a very large
+Cartesian product of edges. The new code samples at most remaining budget
++ 1 tuples. Overflow adds no table entry and ends further tuple reads.
+Other cases charge every tuple, including tuples rejected by equality.
+The configured budget is now 10000 tuples. Unknown conjunctions remain
+possibly accepting. No false emptiness result is introduced by this cutoff.
+
+The actual Nix core suite passed 384 examples with seed 492294335. This
+includes the upstream constrained recursive regression. Raw output and
+exact integrated inputs are retained in the checked-prefix evidence area.
+The only additional Haskell change here corrects the Haddock read bound to
+emptinessBudget + 1. The extra tuple detects overflow. Runtime code is
+unchanged by this documentation repair. Record it for external pickup.
+The exact parent implementation and regression remain upstream PR193.
+
+The older Lean worklists count conjunctions and use 1000. They remain
+historical models. A new model must charge tuple samples, omit overflow
+entries and retain zero-tuple entries without a charge. Changing only the
+constant would not establish current Haskell correspondence. Total table
+length need not be bounded by the tuple budget. The source audit and proofs
+are in progress. All earlier evidence and parser/probe repairs remain.
+The full formalization goal remains ACTIVE.
+
+---
 # Verified native intersection prefix body bounds: 2026-10-29 20:30 CET
 
 Source 3f15b7e8127019e02c9b66893225a842e9edb059 on formalize.
