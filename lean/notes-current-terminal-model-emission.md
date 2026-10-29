@@ -1,3 +1,52 @@
+# Verified output and diagnostic ancestry: 2026-10-29 02:30 CET
+
+Source `49169700142d3f587e64ffe4398616e4aba33e90` is pushed on formalize.
+The full goal remains ACTIVE. Read `lean/notes-current-diagnostic-ancestry-progress.md`.
+Every earlier document byte follows unchanged as a dated checkpoint.
+
+For every finite recursive capacity, the original resource contracts give a
+sufficient work bound and a stable actual result. The SAME old bound/outcome
+retains all resource fields and every admitted output history. Emitted outputs
+and concrete Cached payloads in returned stop diagnostics retain all original
+recursion keys at the SAME RAW SLOT. This includes nested failures and runs
+with no output. No original gate or future-retention supplier is added.
+This is membership retention, not a strict rank or sufficient recursive depth.
+
+Fourteen additive modules contain 23 public theorems and five concrete Prop
+definitions: 2,225 lines/153,422 bytes. All 15 final strict sources pass.
+Audit checks 82,040 theorem dependencies in 4,613 jobs. Actual compiler matrix:
+33 PASS/four retained failed drafts, all serial measured 4 GiB and zero swap.
+Public readback: 856 theorem checks/axiom lists, 73 definition bodies,
+3,609,022 bytes. The old 3,473,780 bytes are an exact prefix. All 135,242
+new bytes and the separate 2,392-byte generated recursive body were read.
+All 4,598 old non-Audit Lean, 447 stronger and 821 Haskell/Cabal identities
+retain hashes. No old runtime/proof body changes. No linter suppression.
+
+Strongest semantics remains conditional checked rendered soundness under the
+semantic/resource contracts, fixed PCS and whole-Discharged. Greater recursive
+capacity retains ordered output prefixes. DONE does not imply Discharged.
+Configured stop can emit partial results. Whole-language completeness is open.
+
+Next: prove an original-input bound for actual generated native returns,
+ordered child returns, optionalBinder construction and memo provenance.
+Semantic completion for original closed-root requests is ALREADY derived by
+initial_complete. CodeBounds.Below does not bound generated callback syntax.
+The source-only next-rank proposal is UNPROVED. Per-query bounds on growing
+heaps do not establish a fixed global rank. Nonterminal chosen-model emission,
+sufficient recursive depth, policy/origin/public API and Haskell correspondence
+remain open. Preserve the exact scope of all earlier counterexamples.
+
+No Haskell change/check/new defect here. FINDINGS retains serialization repair
+`c15021ce706ef560b6c0ab335ceed1a4b67ba4aa` for external pickup. Both parser branches
+now reject strict-prefix path classes before toPathTrie. Main `63aae675c` lacks
+that repair. The current note includes the lawful codec and exact reproduction.
+Board 725 has exact readback. Evidence:
+`lean/restart-evidence/20261029-diagnostic-ancestry-progress/`.
+Preserve all frozen areas. Use new writable paths. Refresh upstream.
+Normal formalize pushes remain explicitly authorized. Continue the full goal.
+
+---
+
 # Verified recursive output ancestry: 2026-10-29 01:42 CET
 
 Source `bd75ee348c17f4946fadb5c5a676bf7252180725` is pushed and verified on formalize.
