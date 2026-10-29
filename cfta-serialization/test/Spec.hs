@@ -308,7 +308,7 @@ spec = do
                     [ "checkpoint 1;"
                     , "query sized 1;"
                     , "bound 7;"
-                    , "next 5 1;"
+                    , "next size 5 rank 1;"
                     , ""
                     , "graph 1;"
                     , "start tree;"
@@ -322,11 +322,29 @@ spec = do
             printed `shouldSatisfy` Text.isSuffixOf (T.printGraphWith strings trees)
 
         it "give the line of a syntax error" $ do
-            case T.parseCheckpointWith strings "checkpoint 1;\nquery sized 1;\nbound 7;\nnext 5;\n\ngraph 1;\nstart s;\nstate s {}" of
+            case T.parseCheckpointWith strings "checkpoint 1;\nquery sized 1;\nbound 7;\nnext size 5;\n\ngraph 1;\nstart s;\nstate s {}" of
                 Left (SyntaxError line _ _) -> line `shouldBe` 4
                 other -> expectationFailure $ show other
-            T.parseCheckpointWith strings "checkpoint 2;\nquery sized 1;\nbound 7;\nnext 1 0;\ngraph 1;\nstart s;\nstate s {}"
+            T.parseCheckpointWith
+                strings
+                "checkpoint 2;\nquery sized 1;\nbound 7;\nnext size 1 rank 0;\ngraph 1;\nstart s;\nstate s {}"
                 `shouldSatisfy` either (const True) (const False)
+
+        it "reject statements in another order, a missing or an extra statement, and a position without its labels" $
+            forM_ malformedCheckpoints $ \text ->
+                T.parseCheckpointWith strings text `shouldSatisfy` either (const True) (const False)
+
+        it "reject an invalid graph" $ do
+            T.parseCheckpointWith strings (checkpointHeader <> "graph 1;\nstart s;\nstate s { a; }\nstate s { b; }\n")
+                `shouldBe` Left (DuplicateState "s")
+            T.parseCheckpointWith strings (checkpointHeader <> "graph 1;\nstart s;\nstate s { f(t); }\n")
+                `shouldBe` Left (InvalidGraph $ FTA.DanglingState "t")
+
+        it "reject doc comments and sorts, which a checkpoint does not have" $
+            forM_ notedCheckpoints $ \text ->
+                case T.parseCheckpointWith strings text of
+                    Left failure -> Text.pack (T.explainTextError failure) `shouldSatisfy` Text.isInfixOf "a checkpoint has no"
+                    Right _ -> expectationFailure $ "accepted " <> show text
 
     describe "sampling checkpoints" $ do
         it "resume at every cut as the run without a cut, after the checkpoint and the graph are printed and read" $
@@ -394,6 +412,12 @@ spec = do
             lineOf (header "0" "[1: 1, 1: 2]") `shouldBe` Just 4
             lineOf ("sampling 2;" <> Text.drop (Text.length "sampling 1;") (header "0" "uniform")) `shouldBe` Just 1
 
+        it "reject doc comments and sorts, which a sampling checkpoint does not have" $
+            forM_ notedSamplingCheckpoints $ \text ->
+                case T.parseSamplingCheckpointWith strings text of
+                    Left failure -> Text.pack (T.explainTextError failure) `shouldSatisfy` Text.isInfixOf "a checkpoint has no"
+                    Right _ -> expectationFailure $ "accepted " <> show text
+
 -- | The graphs whose listing needs no solver, and a recursive graph with equal children.
 listed :: [FTA.PlainFTA String Symbol]
 listed =
@@ -414,6 +438,51 @@ checkpoints =
                 }
            | name <- names
            ]
+
+-- | The statements of a checkpoint before its graph.
+checkpointHeader :: Text
+checkpointHeader = "checkpoint 1;\nquery sized 1;\nbound 7;\nnext size 1 rank 0;\n"
+
+-- | A graph with one state, as a checkpoint holds it.
+smallGraph :: Text
+smallGraph = "graph 1;\nstart s;\nstate s { a; }\n"
+
+-- | Checkpoints with statements in another order, a missing or an extra statement, and a position without its labels.
+malformedCheckpoints :: [Text]
+malformedCheckpoints =
+    map
+        (<> smallGraph)
+        [ "checkpoint 1;\nbound 7;\nquery sized 1;\nnext size 1 rank 0;\n"
+        , "checkpoint 1;\nquery sized 1;\nnext size 1 rank 0;\n"
+        , checkpointHeader <> "owner someone;\n"
+        , "checkpoint 1;\nquery sized 1;\nbound 7;\nnext 1 0;\n"
+        , "checkpoint 1;\nquery sized 1;\nbound 7;\nnext rank 0 size 1;\n"
+        ]
+
+-- | Checkpoints with a doc comment before a statement, before the graph, and at each place of the graph, and with a sort.
+notedCheckpoints :: [Text]
+notedCheckpoints =
+    [ "/// x\n" <> checkpointHeader <> smallGraph
+    , "checkpoint 1;\nquery sized 1;\n/// x\nbound 7;\nnext size 1 rank 0;\n" <> smallGraph
+    , checkpointHeader <> "/// x\n" <> smallGraph
+    , checkpointHeader <> "graph 1;\n/// x\nstart s;\nstate s { a; }\n"
+    , checkpointHeader <> "graph 1;\nstart s;\n/// x\nstate s { a; }\n"
+    , checkpointHeader <> "graph 1;\nstart s;\nstate s { /// x\na; }\n"
+    , checkpointHeader <> "graph 1;\nstart s;\nstate s { a; /// x\n}\n"
+    , checkpointHeader <> smallGraph <> "/// x\n"
+    , checkpointHeader <> "graph 1;\nstart s;\nstate s : Int { a; }\n"
+    ]
+
+-- | Sampling checkpoints with a doc comment before a statement and before the graph, and with a sort.
+notedSamplingCheckpoints :: [Text]
+notedSamplingCheckpoints =
+    [ "sampling 1;\nquery sized-sample 1;\nbound 7;\nweights uniform;\nprng splitmix64 1;\n/// x\nseed 0;\ndraws 0;\n"
+        <> smallGraph
+    , statements <> "/// x\n" <> smallGraph
+    , statements <> "graph 1;\nstart s;\nstate s : Int { a; }\n"
+    ]
+  where
+    statements = "sampling 1;\nquery sized-sample 1;\nbound 7;\nweights uniform;\nprng splitmix64 1;\nseed 0;\ndraws 0;\n"
 
 -- | Weights of sizes up to seven, with a size of no terms in some graphs.
 drawWeights :: Map.Map Size Weight

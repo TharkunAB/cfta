@@ -342,7 +342,7 @@ terms of a graph. `Data.CFTA.Sized.Checkpoint` of
 checkpoint 1;
 query sized 1;
 bound 7;
-next 5 1;
+next size 5 rank 1;
 
 graph 1;
 start tree;
@@ -354,11 +354,16 @@ state tree {
 ```
 
 `query` gives the route and its version. The route and its version fix the
-order of the listing. `bound` gives the largest size in the listing. `next`
-gives the sized rank of the next term: its size, then its class rank. The
-remaining text is the text of `printGraph` for the graph. Thus the checkpoint
-holds its graph, and the printed graph is the identity of the checkpoint. No
-hash is necessary, and one file is sufficient to resume.
+order of the listing. `bound` gives the largest size in the listing.
+`next size 5 rank 1` gives the sized rank of the next term: size 5, and rank 1
+in the class of the terms of that size. The remaining text is the text of
+`printGraph` for the graph. Thus the checkpoint holds its graph, and the
+printed graph is the identity of the checkpoint. No hash is necessary, and one
+file is sufficient to resume.
+
+A program writes a checkpoint, so a checkpoint has no doc comments, and its
+graph has no doc comments and no sorts. A reader rejects them with the error
+"a checkpoint has no doc comments" or "a checkpoint has no sorts".
 
 To resume in a new process, read the checkpoint and the current graph. Here
 the states are text, as with `textStates` above:
@@ -453,12 +458,14 @@ operation       = "start" name ";"
                 | "exclude" exclusion-body
                 | "restore" name ";" ;
 
-checkpoint-file = "checkpoint" "1" ";" query "next" integer integer ";" graph-file ;
+checkpoint-file = "checkpoint" "1" ";" query "next" "size" integer "rank" integer ";" plain-graph ;
 sampling-file   = "sampling" "1" ";" query
                   "weights" ( "uniform" | "[" ( weight ( "," weight )* )? "]" ) ";"
-                  "prng" name integer ";" "seed" integer ";" "draws" integer ";" graph-file ;
+                  "prng" name integer ";" "seed" integer ";" "draws" integer ";" plain-graph ;
 query           = "query" name integer ";" "bound" integer ";" ;
 weight          = integer ":" integer ;
+plain-graph     = "graph" "1" ";" "start" name ";" plain-row* ;
+plain-row       = "state" name "{" graph-edge* "}" ";"? ;
 
 constraint      = "equal" "(" ( path ( "," path )* )? ")"
                 | "impossible"
