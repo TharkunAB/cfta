@@ -1,5 +1,8 @@
 -- | Editable source graphs with named productions and removable facts.
-module Data.CFTA.Document (
+module Data.CFTA.Language.Source (
+    ProductionName (..),
+    FactName (..),
+    Production,
     Annotation (..),
     Document,
     DocumentError (..),
@@ -21,6 +24,7 @@ import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (maybeToList)
 import qualified Data.Set as Set
+import Data.String (IsString)
 import Data.Text (Text)
 import qualified Data.Text as Text
 
@@ -28,10 +32,21 @@ import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint, conjoinConstraints, noConstraint)
 import Data.CFTA.Symbol (Symbol)
 
+-- | A production name, unique within its state. Text belongs at the declaration and codec boundary.
+newtype ProductionName = ProductionName {productionNameText :: Text}
+    deriving (Eq, Ord, Show, IsString)
+
+-- | A named source obligation, distinct from production and exclusion names.
+newtype FactName = FactName {factNameText :: Text}
+    deriving (Eq, Ord, Show, IsString)
+
+-- | A production of a source document: its symbol, its child states, and its name and facts.
+type Production state = FTA.Transition state Symbol Annotation
+
 -- | A production name, unique within its state, and its individual source facts.
 data Annotation = Annotation
-    { annotationName :: !Text
-    , annotationFacts :: !(Map Text Constraint)
+    { annotationName :: !ProductionName
+    , annotationFacts :: !(Map FactName Constraint)
     }
     deriving (Eq, Show)
 
@@ -43,23 +58,23 @@ newtype Document state = Document (FTA.FTA state Symbol Annotation)
 data DocumentError state
     = InvalidGraph !(FTA.FTAError state)
     | DuplicateState !state
-    | DuplicateProduction !state !Text
+    | DuplicateProduction !state !ProductionName
     | MissingState !state
-    | MissingProduction !state !Text
-    | MissingFact !state !Text !Text
+    | MissingProduction !state !ProductionName
+    | MissingFact !state !ProductionName !FactName
     | StalePatch
     deriving (Eq, Show)
 
 -- | One edit in an ordered atomic batch. Facts select a state and production name.
 data Edit state
     = SetStart !state
-    | PutRow !state ![FTA.Transition state Symbol Annotation]
+    | PutRow !state ![Production state]
     | DeleteRow !state
-    | PutProduction !state !(FTA.Transition state Symbol Annotation)
-    | DefineProduction !state !Text !Symbol ![state]
-    | DeleteProduction !state !Text
-    | SetFact !state !Text !Text !Constraint
-    | RemoveFact !state !Text !Text
+    | PutProduction !state !(Production state)
+    | DefineProduction !state !ProductionName !Symbol ![state]
+    | DeleteProduction !state !ProductionName
+    | SetFact !state !ProductionName !FactName !Constraint
+    | RemoveFact !state !ProductionName !FactName
     deriving (Eq, Show)
 
 -- | An edit batch and the complete source document on which it was prepared.
@@ -69,7 +84,7 @@ data Patch state = Patch !(Document state) ![Edit state]
 -- | Validate graph structure, unique state rows, and production names within rows.
 mkDocument ::
     (Ord state) =>
-    state -> [(state, [FTA.Transition state Symbol Annotation])] -> Either (DocumentError state) (Document state)
+    state -> [(state, [Production state])] -> Either (DocumentError state) (Document state)
 mkDocument initial rows = do
     foldM_ distinctState Set.empty rows
     graph <- first InvalidGraph $ FTA.mkFTA initial rows
@@ -81,7 +96,7 @@ mkDocument initial rows = do
         | otherwise = Right $ Set.insert state seen
 
 -- | Check that the productions of one row have distinct names.
-distinctProductions :: (state, [FTA.Transition state Symbol Annotation]) -> Either (DocumentError state) ()
+distinctProductions :: (state, [Production state]) -> Either (DocumentError state) ()
 distinctProductions (state, transitions) = foldM_ distinct Set.empty transitions
   where
     distinct seen transition
@@ -101,7 +116,9 @@ fromGraph graph =
         [ ( state
           , [ transition
                 { FTA.transitionConstraint =
-                    Annotation (Text.pack $ "t" <> show index) (Map.singleton (Text.pack "imported") $ FTA.transitionConstraint transition)
+                    Annotation
+                        (ProductionName $ Text.pack $ "t" <> show index)
+                        (Map.singleton (FactName $ Text.pack "imported") $ FTA.transitionConstraint transition)
                 }
             | (index, transition) <- zip [0 :: Int ..] transitions
             ]
@@ -232,7 +249,7 @@ explainDocumentError failure = case failure of
     DuplicateProduction state name -> target state name <> " has a duplicate name"
     MissingState state -> "state " <> show state <> " has no row"
     MissingProduction state name -> target state name <> " does not exist"
-    MissingFact state name fact -> target state name <> " has no fact " <> show fact
+    MissingFact state name fact -> target state name <> " has no fact " <> show (factNameText fact)
     StalePatch -> "the document changed after this patch was prepared"
   where
-    target state name = "production " <> show name <> " in state " <> show state
+    target state name = "production " <> show (productionNameText name) <> " in state " <> show state

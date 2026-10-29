@@ -47,6 +47,7 @@ import qualified Data.CFTA.Enumeration as Enumeration
 import qualified Data.CFTA.Generic as Generic
 import qualified Data.CFTA.Interned as Common
 import qualified Data.CFTA.Language as Language
+import qualified Data.CFTA.Language.Merge as Merge
 import qualified Data.CFTA.Template as Template
 ```
 
@@ -60,6 +61,7 @@ import qualified Data.CFTA.Template as Template
 | Check membership | `FTA.accepts`, `Common.acceptsWith` | Whether a supplied tree belongs. The interned API takes a constraint interpreter. |
 | List accepted terms | `FTA.terms`, `Enumeration.terms`, `Enumeration.plainTerms`, `Enumeration.plainTermsAtMost` | Every term. `FTA.terms`, `plainTerms`, and `plainTermsAtMost` list by depth. `FTA.terms` and `plainTerms` ignore constraints and give an infinite list for a recursive grammar, and `plainTermsAtMost` stops at a depth. `terms` solves constraints and stops at recursion. For an automaton with constraints or recursion, it lists in the order of the runs, each term once. |
 | Edit a language | `Language.update`, `Language.define`, `Language.require`, `Language.relax`, `Language.start`, `Language.without`, `Language.restore` | A new language value with its source productions, named facts, and named exclusions. `Language.compileGraph` gives the graph to query. |
+| Compare or merge languages | `Merge.diff`, `Merge.merge3`, `Merge.diffDocument`, `Merge.merge3Document` | The update between two versions, or the three-way merge of two versions by stable names, with each conflict as data. |
 | Restrict to a pattern | `Template.restrictFTA`, `Template.restrict` | A grammar for the terms that match a `Template`. |
 | List terms a check accepts | `FTA.termsUpToM` | The terms up to a depth, each checked once by a monadic predicate that sees its transition. |
 | Bound tree depth | `FTA.boundDepth` | Another grammar, restricted to trees within the bound. |
@@ -246,7 +248,8 @@ oneAccepted = fmap (`accepts` Term.Node "successor" [Term.Node "zero" []]) natur
 -- Right True
 ```
 
-An automaton checks symbol arities and child-state references at construction.
+An automaton checks child-state references at construction. A symbol can occur
+at several arities.
 Cycles are valid. `PlainFTA state symbol` is `FTA state symbol Constraint`.
 An ordinary automaton has `noConstraint` on every transition.
 
@@ -265,6 +268,13 @@ named facts, and named exclusions. Combine `define`, `require`, `relax`,
 contains it. `compileGraph` gives a new graph for queries, and the language
 keeps its source for the next edit. See
 [editable languages](../docs/editable-languages.md).
+
+`Data.CFTA.Language.Merge` compares and merges languages by their stable names.
+`diff base other` gives the update that changes `base` into `other`.
+`merge3 base left right` merges two versions that come from one base, key by
+key: the initial state, the state rows, the production names, the fact names,
+and the exclusion names. A key that the two sides change in different ways is
+a `Conflict` with its key and its three versions.
 
 ## Visualize a grammar
 
@@ -338,7 +348,7 @@ Paths are built when `toTree` is requested; normal generation does not build
 them.
 
 `Common.toTree` provides the same view for interned graphs. Its state labels
-contain `Common.Node symbol`; its transition labels contain `Common.Edge symbol`. It returns `Either (Common.FTAViewError symbol)`
+contain `Common.Node symbol`; its transition labels contain `Common.Edge symbol`. It returns `Either Common.FTAViewError`
 around the tree because it rejects an open recursive root. It traverses the
 graph directly and does not validate symbol arities. Neither view enumerates
 the accepted values. Add `containers` to your component's `build-depends` when
@@ -466,7 +476,7 @@ compatible patterns can still produce exponentially many choices.
 toTree ::
     (Hashable symbol, Typeable symbol) =>
     Node symbol ->
-    Either (FTAViewError symbol)
+    Either FTAViewError
         (Tree (Either (StateView (Node symbol)) (Edge symbol)))
 ```
 
@@ -879,7 +889,7 @@ optimized pruning and generation can be checked.
 ```haskell
 toTree ::
     Automaton ->
-    Either (FTAViewError Symbol) (Tree (Either (StateView Automaton) Transition))
+    Either FTAViewError (Tree (Either (StateView Automaton) Transition))
 ```
 
 `Left` contains a node definition or reference. `Right` contains the complete

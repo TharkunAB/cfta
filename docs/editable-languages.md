@@ -1,9 +1,9 @@
 # Editable languages
 
-`Data.CFTA.Document` and `Data.CFTA.Language` keep a language in a form that
-you can edit. A query needs a compiled graph. An edit needs the names of the
-source productions and their separate facts. The two modules keep the source,
-and compile a new graph after each change.
+`Data.CFTA.Language` and `Data.CFTA.Language.Source` keep a language in a form
+that you can edit. A query needs a compiled graph. An edit needs the names of
+the source productions and their separate facts. The two modules keep the
+source, and compile a new graph after each change.
 
 ## Source documents
 
@@ -75,14 +75,80 @@ changes =
 | `restore name` | Remove a named exclusion. The exclusion must exist. |
 
 `update` applies all source edits of an update as one batch, as `applyEdits`
-does, and then the exclusion operations in order. An `Update` has no expected document. Use a
-`Patch` when you need the stale check.
+does, and then the exclusion operations in order. An `Update` has no expected
+version. To apply an update to a version that changed after the update was
+written, use a merge: see [Differences and merges](#differences-and-merges).
 
 `Language.compileGraph` compiles the facts, then applies the exclusions with
 `Template.excludeAllFTA`: the root exclusions, then the subterm exclusions. It
 numbers the compiled states from 0. Template
 exclusion keeps an unambiguous graph unambiguous. Overlapping templates can
 make the compiled graph much larger than the source.
+
+## Differences and merges
+
+`Data.CFTA.Language.Merge` compares and merges versions by their stable names.
+
+`diff base other` gives an `Update` such that `update base` of it gives
+`other`. `diffDocument` gives the `Patch` of the source documents. When the
+initial states differ, the first edit is `SetStart`, so `diff` and
+`diffDocument` are total. A state that only `base` has is `DeleteRow`, and a
+state that only `other` has is `PutRow`. In a row, the edits are by name where
+they can be: `DeleteProduction`, `PutProduction`, `SetFact`, and `RemoveFact`.
+They keep the order of the old productions and append the new ones. A row
+with another order is one `PutRow`. The edits of the exclusions are `Restore`
+and `Exclude`.
+
+`merge3 base left right` merges two versions that come from `base`. The keys
+are the initial state, the state rows, the production names in a row, the
+fact names in a production, and the exclusion names. The symbol and child
+states of a production are one value. For each key, the merge takes the
+version of the two sides when they agree, or the version of the side that
+changes it. A key that the two sides change in different ways, or that one
+side deletes and the other side changes, is a `Conflict`. A side that changes
+the facts of a production wrote them for its symbol and children. When the
+merged production has other ones, the production is a conflict. A conflict
+holds its key as data, for example a `ProductionRef` with a state and a
+production name, and the versions of the base, the left side, and the right
+side. `merge3` reports all conflicts in this order: the initial state; then
+each state in ascending order, with its productions by name, each before its
+facts by name, and then the order of its row; then the exclusions by name.
+
+The order of a merged row:
+
+1. The names that the base and the two sides all have are one key, with the
+   rule above. Two different new orders of these names are an
+   `OrderConflict`.
+2. A new name stays after the name before it on its side: the nearest earlier
+   name of step 1, or the start of the row. A deletion on the other side does
+   not move it.
+3. When the two sides put new names in the same place, and the names of one
+   side are in the names of the other side in the same order, the merged row
+   has the longer list. When the two sides put different names there, the
+   names of each side stay together, and the side with the smaller first name
+   comes first. Other new names in the same place are an `OrderConflict`, and
+   so is a name that the two sides put in different places.
+
+| Base | Left | Right | Merged row |
+| --- | --- | --- | --- |
+| `a b c` | `a c` | `a y b c` | `a y c` |
+| `a b c` | `b a c` | `a b y c` | `b a y c` |
+| `a b` | `a x b` | `a y b` | `a x y b` |
+| `a b` | `x a b` | `a b x` | `OrderConflict` |
+
+The order matters, because the ranks follow the order of the rows. The rules
+are symmetric: `merge3 base right left` gives the same language as
+`merge3 base left right`, or the same conflicts with the sides exchanged. A
+merge without conflicts can still give an invalid document, for example a
+production that uses a state that the other side deletes: the result is
+`InvalidMerge`. Two versions are the same when they are equal, and equal
+versions have the same text in the text format.
+
+A merge also applies an update to a version that changed after the update was
+written. Apply the update to the version that it was written for, and merge
+the result with the current version: `merge3 old current new`, where
+`update old changes == Right new`. The conflicts show where the update and
+the current version disagree.
 
 ## Ranks
 
