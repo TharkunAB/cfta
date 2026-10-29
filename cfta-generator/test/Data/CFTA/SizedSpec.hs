@@ -1,12 +1,14 @@
 module Data.CFTA.SizedSpec (spec, SizedAutomaton, automatonGraph) where
 
+import Control.Exception (evaluate)
 import Control.Monad (forM_, void)
 import Data.Containers.ListUtils (nubOrd)
 import Data.List (sort)
 import qualified Data.Map.Strict as Map
 import qualified Data.Text as Text
 import Data.Word (Word64)
-import Test.Hspec (Spec, describe, it, shouldBe, shouldSatisfy)
+import System.Timeout (timeout)
+import Test.Hspec (Spec, describe, it, shouldBe, shouldReturn, shouldSatisfy)
 import Test.Hspec.QuickCheck (modifyMaxSuccess)
 import Test.QuickCheck (Property, counterexample, (.&&.), (===))
 import qualified Test.QuickCheck as QC
@@ -74,6 +76,63 @@ spec = describe "Data.CFTA.Sized" $ do
         let equal = equalityConstraint $ ECTA.mkEqConstraints [[ECTA.path [0], ECTA.path [1]]]
             classes = fromRows "s" [("s", [FTA.Transition (sym "g") ["q", "q"] equal]), ("q", [leaf "a", leaf "b"])]
         termsOfSize classes 3 `shouldBe` [term "g" [term "a" [], term "a" []], term "g" [term "b" [], term "b" []]]
+    it "counts and ranks equal children with the count table" $ do
+        -- The perfect binary trees: one of each size 2^k - 1. The reference
+        -- builds each class below a size, so it does not finish in time.
+        let classes = fromRows "s" [("s", [leaf "a", FTA.Transition (sym "g") ["s", "s"] equalPair])]
+            perfect :: Int -> Term Symbol
+            perfect depth = if depth == 0 then term "a" [] else let child = perfect (depth - 1) in term "g" [child, child]
+        map (countOfSize classes) [1 .. 8] `shouldBe` [1, 0, 1, 0, 0, 0, 1, 0]
+        rankOfSize classes (term "g" [term "a" [], term "g" [term "a" [], term "a" []]]) `shouldBe` Nothing
+        timeout 5000000 (evaluate $ countOfSize classes (2 ^ (20 :: Int) - 1)) `shouldReturn` Just 1
+        timeout 5000000 (evaluate $ rankOfSize classes (perfect 16))
+            `shouldReturn` Just (Just (2 ^ (17 :: Int) - 1, ClassRank 0))
+    it "intersects the child states of equal children" $ do
+        -- The terms of a and of c share the towers f(f(...(a))) of even
+        -- height; those of a and of b share nothing.
+        let rows =
+                [ ("s", [FTA.Transition (sym "g") ["a", "c"] equalPair, FTA.Transition (sym "h") ["a", "b"] equalPair])
+                , ("a", [leaf "a", node "f" ["a"]])
+                , ("b", [leaf "b", node "f" ["b"]])
+                , ("c", [leaf "a", node "f" ["d"]])
+                , ("d", [node "f" ["c"]])
+                ]
+            tower :: Int -> Term Symbol
+            tower height = iterate (\inner -> term "f" [inner]) (term "a" []) !! height
+        forM_ [1 .. 12] $ \size -> do
+            sort (termsOfSize (fromRows "s" rows) size) `shouldBe` sort (termsOfSize (fromReference "s" rows) size)
+            countOfSize (fromRows "s" rows) size `shouldBe` countOfSize (fromReference "s" rows) size
+        termsOfSize (fromRows "s" rows) 7 `shouldBe` [term "g" [tower 2, tower 2]]
+    it "joins the classes of equal children of the states of an intersection" $ do
+        -- p has equal children 0 and 1, and q has 1 and 2, so their common
+        -- terms have three equal children.
+        let firstTwo = equalityConstraint $ ECTA.mkEqConstraints [[ECTA.path [0], ECTA.path [1]]]
+            lastTwo = equalityConstraint $ ECTA.mkEqConstraints [[ECTA.path [1], ECTA.path [2]]]
+            rows =
+                [ ("s", [FTA.Transition (sym "g") ["p", "q"] equalPair])
+                , ("p", [FTA.Transition (sym "f") ["l", "l", "l"] firstTwo])
+                , ("q", [FTA.Transition (sym "f") ["l", "l", "l"] lastTwo])
+                , ("l", [leaf "a", leaf "b"])
+                ]
+            triple symbol = term "f" [term symbol [], term symbol [], term symbol []]
+        termsOfSize (fromRows "s" rows) 9 `shouldBe` [term "g" [triple "a", triple "a"], term "g" [triple "b", triple "b"]]
+        map (countOfSize $ fromRows "s" rows) [1 .. 12] `shouldBe` map (countOfSize $ fromReference "s" rows) [1 .. 12]
+        rankOfSize (fromRows "s" rows) (term "g" [triple "a", triple "b"]) `shouldBe` Nothing
+    it "reads a class of equal children with a child between its positions" $ do
+        -- The class {0, 2} is read before the child at position 1.
+        let outer = equalityConstraint $ ECTA.mkEqConstraints [[ECTA.path [0], ECTA.path [2]]]
+            rows =
+                [ ("s", [FTA.Transition (sym "f") ["l", "m", "l"] outer])
+                , ("l", [leaf "a", leaf "b", node "h" ["l"]])
+                , ("m", [leaf "c", leaf "d", node "g" ["m"]])
+                ]
+            classes = fromRows "s" rows
+        forM_ [1 .. 10] $ \size -> do
+            sort (termsOfSize classes size) `shouldBe` sort (termsOfSize (fromReference "s" rows) size)
+            countOfSize classes size `shouldBe` countOfSize (fromReference "s" rows) size
+            [rankOfSize classes found | found <- termsOfSize classes size]
+                `shouldBe` [Just (size, ClassRank rank) | rank <- [0 .. toInteger (length $ termsOfSize classes size) - 1]]
+        rankOfSize classes (term "f" [term "a" [], term "c" [], term "b" []]) `shouldBe` Nothing
     it "rejects a guard beyond equality constraints" $ do
         let different = semanticConstraint $ Not $ Same (ECTA.path [0]) (ECTA.path [1])
             rows = [("s", [FTA.Transition (sym "g") ["q", "q"] different]), ("q", [leaf "a", leaf "b"])]
@@ -594,6 +653,10 @@ fromRows initial rows = either (error . show) id $ sized $ automaton initial row
 -- | A transition without children.
 leaf :: String -> FTA.Transition String Symbol Constraint
 leaf symbol = FTA.Transition (sym symbol) [] noConstraint
+
+-- | Equal children at positions 0 and 1.
+equalPair :: Constraint
+equalPair = equalityConstraint $ ECTA.mkEqConstraints [[ECTA.path [0], ECTA.path [1]]]
 
 -- | A transition without a constraint.
 node :: String -> [String] -> FTA.Transition String Symbol Constraint

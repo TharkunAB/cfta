@@ -1,16 +1,20 @@
 -- | Shared size indexing for ordinary, possibly recursive automata.
 module Data.CFTA.Gen.Internal.Table (
+    EqualChildren,
     tableIndex,
     tableIndexes,
     tablePosition,
     prefixedTable,
     childStarts,
+    childGroups,
+    equalChildren,
     minimumSizes,
     unambiguousRows,
     deterministicRows,
     countingRows,
     plainCountingRows,
     deterministicCountingRows,
+    intersectionCountingRows,
     sortedRows,
 ) where
 
@@ -19,7 +23,7 @@ import Data.Array (listArray, (!))
 import Data.Either (fromRight)
 import Data.Foldable (toList)
 import qualified Data.IntMap.Strict as IntMap
-import Data.List (inits, sortOn, tails)
+import Data.List (inits, partition, sort, sortOn, tails)
 import Data.List.NonEmpty (NonEmpty)
 import qualified Data.List.NonEmpty as NonEmpty
 import qualified Data.Map.Lazy as LazyMap
@@ -30,8 +34,11 @@ import qualified Data.Sequence as Sequence
 import qualified Data.Set as Set
 
 import qualified Data.CFTA as FTA
-import Data.CFTA.Index (Size, TransitionIndex (..))
+import Data.CFTA.Constraint (Constraint, equalities, residual)
+import Data.CFTA.Equality.Constraint (EqConstraints, subsumptionOrderedEclasses, unPathEClass)
+import Data.CFTA.Index (Arity (..), Size, TransitionIndex (..), childIndexes)
 import Data.CFTA.Interned (NodeId (..), canonicalClasses)
+import Data.CFTA.Path (ChildIndex (..), unPath)
 import Data.CFTA.Ranked.Internal.Size (
     ChoiceIndex (..),
     MinimumSize (..),
@@ -45,25 +52,36 @@ import Data.CFTA.Ranked.Internal.Size (
     payIndex,
     productIndex,
     productPosition,
+    scaleIndex,
     withKnotMetadata,
  )
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
 
+{- | The classes of equal children of a transition: in each class, the child
+positions whose subterms are equal. A class has two positions or more, its
+positions are in ascending order, and the classes are in the order of their
+first positions. The table reads the child at the first position of a class,
+and its term fills each position of the class, so its size counts once for
+each position. A transition without classes has the empty list.
+-}
+type EqualChildren = [[ChildIndex]]
+
 {- | Index ordinary transition rows supplied by a graph adapter.
 
 Missing rows accept nothing. Constraint layers must validate their annotations
-before supplying ordinary rows. This worker does not interpret constraints.
+before supplying ordinary rows. This worker does not interpret constraints;
+it reads only the classes of equal children.
 -}
 tableIndex ::
-    (Ord state) => state -> Map.Map state [FTA.Transition state symbol ()] -> SizeIndex (Term symbol)
+    (Ord state) => state -> Map.Map state [FTA.Transition state symbol EqualChildren] -> SizeIndex (Term symbol)
 tableIndex initial rows = fst (stateTable rows) initial
 
 {- | The size index of each state of the rows, as 'tableIndex' gives it.
 Apply the function to the rows once: the states then share one table.
 -}
 tableIndexes ::
-    (Ord state) => Map.Map state [FTA.Transition state symbol ()] -> state -> SizeIndex (Term symbol)
+    (Ord state) => Map.Map state [FTA.Transition state symbol EqualChildren] -> state -> SizeIndex (Term symbol)
 tableIndexes rows = fst (stateTable rows)
 
 {- | Find the size class and the position in it of a term that the initial
@@ -77,15 +95,15 @@ function to the rows once: each term then uses the same counts.
 -}
 tablePosition ::
     (Ord state, Ord symbol) =>
-    state -> Map.Map state [FTA.Transition state symbol ()] -> Term symbol -> Maybe SizedRank
+    state -> Map.Map state [FTA.Transition state symbol EqualChildren] -> Term symbol -> Maybe SizedRank
 tablePosition initial rows = Map.lookup initial . termPositions rows (stateTable rows)
 
 -- | The size and position of a term in each state that accepts it, from the table of the rows.
 termPositions ::
     (Ord state, Ord symbol) =>
-    Map.Map state [FTA.Transition state symbol ()] ->
+    Map.Map state [FTA.Transition state symbol EqualChildren] ->
     ( state -> SizeIndex (Term symbol)
-    , state -> [(FTA.Transition state symbol (), NonEmpty (SizeIndex ([Term symbol] -> Term symbol)))]
+    , state -> [(FTA.Transition state symbol EqualChildren, NonEmpty (SizeIndex ([Term symbol] -> Term symbol)))]
     ) ->
     Term symbol ->
     Map.Map state SizedRank
@@ -118,14 +136,34 @@ termPositions rows (indexOf, prefixesOf) = positionsOf
             | (state, TransitionIndex branch, transition, prefixes, indexes) <-
                 toList $ Map.findWithDefault Empty (symbol, length children) candidates
             , Just childPositions <- [zipWithM Map.lookup (FTA.transitionChildren transition) childMaps]
-            , let SizedRank size position =
-                    foldl' addChild (SizedRank 1 0) $ zip3 (NonEmpty.toList prefixes) (FTA.transitionChildren transition) childPositions
+            , Just (SizedRank size position) <- [transitionPosition transition prefixes childPositions]
             ]
       where
         childMaps = map positionsOf children
 
-        addChild built (prefix, child, childPosition) =
-            productPosition prefix (indexOf child) built childPosition
+        -- The size and position of the term in a transition. The subterms of
+        -- a class of equal children must be equal, and the table reads the
+        -- first child of each group.
+        transitionPosition transition prefixes childPositions = case FTA.transitionConstraint transition of
+            [] ->
+                Just
+                    $ foldl' addChild (SizedRank 1 0)
+                    $ zip3 (NonEmpty.toList prefixes) (map indexOf $ FTA.transitionChildren transition) childPositions
+            classes
+                | and [children !! other == children !! first | ChildIndex first : rest <- classes, ChildIndex other <- rest] ->
+                    Just
+                        $ foldl' addChild (SizedRank 1 0)
+                        $ zip3
+                            (NonEmpty.toList prefixes)
+                            [scaled factor $ indexOf (FTA.transitionChildren transition !! first) | (factor, first) <- leaders]
+                            [scaledRank factor (childPositions !! first) | (factor, first) <- leaders]
+                | otherwise -> Nothing
+              where
+                leaders = [(length group, first) | group@(ChildIndex first : _) <- childGroupsOf (length children) classes]
+
+        addChild built (prefix, index, childPosition) =
+            productPosition prefix index built childPosition
+        scaledRank factor (SizedRank size rank) = SizedRank (fromIntegral factor * size) rank
 
 {- | The size index of each state, and the transitions of each state with the
 indexes of their child prefixes.
@@ -136,9 +174,9 @@ index, which recursive references to the state share.
 -}
 stateTable ::
     (Ord state) =>
-    Map.Map state [FTA.Transition state symbol ()] ->
+    Map.Map state [FTA.Transition state symbol EqualChildren] ->
     ( state -> SizeIndex (Term symbol)
-    , state -> [(FTA.Transition state symbol (), NonEmpty (SizeIndex ([Term symbol] -> Term symbol)))]
+    , state -> [(FTA.Transition state symbol EqualChildren, NonEmpty (SizeIndex ([Term symbol] -> Term symbol)))]
     )
 stateTable rows = (indexOf, prefixesOf)
   where
@@ -146,7 +184,7 @@ stateTable rows = (indexOf, prefixesOf)
     prefixTable = LazyMap.map (map $ \transition -> (transition, childPrefixes transition)) rows
       where
         childPrefixes transition =
-            NonEmpty.scanl consumeChild (seed transition) (map indexOf $ FTA.transitionChildren transition)
+            NonEmpty.scanl consumeChild (seed transition) (childIndexesOf transition)
     -- Sampling reads this index. It is built directly, not as the last child
     -- prefix, because an index from the prefix list made each sample slower
     -- (about 1% more instructions in the sampling benchmarks).
@@ -161,7 +199,17 @@ stateTable rows = (indexOf, prefixesOf)
 
         transitionIndex transition =
             mapIndex ($ []) $
-                foldl' consumeChild (seed transition) (map indexOf $ FTA.transitionChildren transition)
+                foldl' consumeChild (seed transition) (childIndexesOf transition)
+    -- The indexes of the children that the table reads. The first child of a
+    -- class of equal children fills each position of the class.
+    childIndexesOf transition = case FTA.transitionConstraint transition of
+        [] -> map indexOf children
+        classes ->
+            [ scaled (length group) $ indexOf (children !! first)
+            | group@(ChildIndex first : _) <- childGroupsOf (length children) classes
+            ]
+      where
+        children = FTA.transitionChildren transition
     indexOf state
         | Map.member state minima = Map.findWithDefault emptyIndex state indexTable
         | otherwise = emptyIndex
@@ -170,9 +218,25 @@ stateTable rows = (indexOf, prefixesOf)
         | otherwise = []
     emptyIndex = choiceIndex []
 
--- | The index of a transition before its children: the symbol, with its pay.
-seed :: FTA.Transition state symbol () -> SizeIndex ([Term symbol] -> Term symbol)
-seed transition = payIndex $ constantIndex $ Term.Node $ FTA.transitionSymbol transition
+{- | The index of a transition before its children: the symbol, with its pay.
+The term of a class of equal children fills each position of the class.
+-}
+seed :: FTA.Transition state symbol EqualChildren -> SizeIndex ([Term symbol] -> Term symbol)
+seed transition = payIndex $ constantIndex $ case FTA.transitionConstraint transition of
+    [] -> Term.Node symbol
+    classes ->
+        let groups = childGroupsOf (length $ FTA.transitionChildren transition) classes
+         in \terms ->
+                Term.Node symbol
+                    $ IntMap.elems
+                    $ IntMap.fromList [(position, term) | (group, term) <- zip groups terms, ChildIndex position <- group]
+  where
+    symbol = FTA.transitionSymbol transition
+
+-- | An index whose members fill a number of positions: their sizes are multiplied by it.
+scaled :: Int -> SizeIndex a -> SizeIndex a
+scaled 1 index = index
+scaled factor index = scaleIndex factor index
 
 -- | The index of a transition with one more child.
 consumeChild ::
@@ -193,8 +257,9 @@ a product or a choice keeps the order of the whole. So the order of the terms
 is the order of 'tableIndex', restricted to the terms with the prefix. The
 index is empty when tokens remain after the first term of the prefix.
 
-The rows must be unambiguous, as for 'tablePosition'. Apply the function to
-the rows once: the prefixes then share one table of the states.
+The rows must be unambiguous, as for 'tablePosition', and they have no
+classes of equal children. Apply the function to the rows once: the prefixes
+then share one table of the states.
 -}
 prefixedTable ::
     (Ord state, Ord symbol) =>
@@ -202,8 +267,9 @@ prefixedTable ::
     state ->
     [(symbol, Int)] ->
     (SizeIndex (Term symbol), Term symbol -> Maybe SizedRank)
-prefixedTable rows = table
+prefixedTable plainRows = table
   where
+    rows = Map.map (map ([] <$)) plainRows
     stateIndexes@(indexOf, _) = stateTable rows
     positionsOf = termPositions rows stateIndexes
     table initial prefix
@@ -270,6 +336,51 @@ childStarts prefix = (starts, if size == 0 then Nothing else ends ! 0)
     after start
         | start < size, Just end <- ends ! start = end
         | otherwise = size
+
+-- | Partition direct child positions into equality classes in child order.
+childGroups :: Arity -> EqConstraints -> Maybe [[ChildIndex]]
+childGroups arity constraints = do
+    classes <- subsumptionOrderedEclasses constraints
+    positions <- traverse (traverse childIndex . Set.toAscList . unPathEClass) classes
+    pure $ joinGroups (map pure (childIndexes arity)) positions
+  where
+    childIndex target = case unPath target of
+        [index] | index >= 0 && index < ChildIndex (fromEnum arity) -> Just index
+        _ -> Nothing
+
+{- | Join the groups of child positions that share a position with a class,
+for each class. The groups are in the order of their first positions.
+-}
+joinGroups :: [[ChildIndex]] -> [[ChildIndex]] -> [[ChildIndex]]
+joinGroups = foldl' merge
+  where
+    merge groups [] = groups
+    merge groups positions =
+        let (equal, other) = partition (any (`elem` positions)) groups
+         in sortOn (take 1) (concat equal : other)
+
+-- | The groups of child positions with two positions or more.
+classesOf :: [[ChildIndex]] -> EqualChildren
+classesOf groups = [sort group | group@(_ : _ : _) <- groups]
+
+{- | The child positions of a node with a number of children in groups: each
+class of equal children, and each other position alone, in the order of their
+first positions.
+-}
+childGroupsOf :: Int -> EqualChildren -> [[ChildIndex]]
+childGroupsOf arity = joinGroups (map pure $ childIndexes $ Arity arity)
+
+{- | The classes of equal children of a transition whose constraint is
+equalities between direct children: the constraint has no guard beyond
+positive equalities, and each path of an equality is one child position.
+'Nothing' for another constraint, and for contradictory equalities.
+-}
+equalChildren :: FTA.Transition state symbol Constraint -> Maybe EqualChildren
+equalChildren transition
+    | residual constraint = Nothing
+    | otherwise = classesOf <$> childGroups (Arity $ length $ FTA.transitionChildren transition) (equalities constraint)
+  where
+    constraint = FTA.transitionConstraint transition
 
 {- | Find the least finite term size of each productive state.
 
@@ -443,7 +554,7 @@ deterministic rows of all the rows ('deterministicRows'), in the order of
 'sortedRows' of the deterministic automaton. All the rows, not only the
 reached ones, give the order, as in 'sortedRows', so the order of the terms
 of a state does not depend on the initial state. 'Nothing' when the
-deterministic automaton has more than 'deterministicLimit' states.
+deterministic automaton has more than 'countingLimit' states.
 -}
 countingRows ::
     (Ord state, Ord symbol) =>
@@ -462,18 +573,86 @@ plainCountingRows automaton = Map.mapKeysMonotonic Left $ Map.map (map withLeftC
   where
     withLeftChildren transition = transition{FTA.transitionChildren = map Left $ FTA.transitionChildren transition}
 
--- | The deterministic rows of all the rows of the automaton, in the order of 'sortedRows', within 'deterministicLimit'.
+-- | The deterministic rows of all the rows of the automaton, in the order of 'sortedRows', within 'countingLimit'.
 deterministicCountingRows ::
     (Ord state, Ord symbol) =>
     FTA.FTA state symbol () ->
     Maybe (Map.Map (Either state (Set.Set state)) [FTA.Transition (Either state (Set.Set state)) symbol ()])
 deterministicCountingRows automaton = do
-    determinized <- deterministicRows deterministicLimit $ FTA.transitionTable automaton
+    determinized <- deterministicRows countingLimit $ FTA.transitionTable automaton
     pure
         $ sortedRows
         $ fromRight (error "countingRows: the deterministic rows are a valid automaton")
         $ FTA.mkFTA (Left $ FTA.initialState automaton) (Map.toList determinized)
 
--- | The number of deterministic states above which 'countingRows' gives up.
-deterministicLimit :: Int
-deterministicLimit = 1024
+{- | The rows of the count table of the intersections of states, from the rows
+that an initial state reaches, in the order of 'sortedRows'. Each constraint
+must be equalities between direct children ('equalChildren').
+
+A key is a set of states, and it accepts the terms that each of its states
+accepts. The key of one state accepts the terms of the state. The row of a key
+has a transition for each tuple of transitions with one token, one transition
+of each state of the key. The classes of equal children of the transition join
+the classes of the tuple. The child of the transition at a position is the key
+of the child states of the tuple at each position of its group, so a class of
+equal children has one key. The rows start at the key of the initial state.
+
+The rows must be unambiguous without their constraints, as for
+'tablePosition': then a term has at most one run from a key, made of one run
+from each of its states. The canonical classes of 'sortedRows' read the classes
+of equal children of a transition with its symbol. 'Nothing' when a
+constraint is not equalities between direct children, or when there are more
+than 'countingLimit' keys, or more than 'countingLimit' transitions of one key:
+the tuples of a key can grow exponentially with its states.
+-}
+intersectionCountingRows ::
+    (Ord state, Ord symbol) =>
+    Map.Map state [FTA.Transition state symbol Constraint] ->
+    state ->
+    Maybe (Map.Map (Set.Set state) [FTA.Transition (Set.Set state) symbol EqualChildren])
+intersectionCountingRows rows initial = do
+    classified <- traverse (traverse $ \transition -> (<$ transition) <$> equalChildren transition) rows
+    table <- explore classified Map.empty [Set.singleton initial]
+    pure
+        $ Map.map (map $ \transition -> transition{FTA.transitionSymbol = fst $ FTA.transitionSymbol transition})
+        $ sortedRows
+        $ fromRight (error "intersectionCountingRows: the rows of the keys are a valid automaton")
+        $ FTA.mkFTA (Set.singleton initial) [(key, map labelled transitions) | (key, transitions) <- Map.toList table]
+  where
+    labelled transition = transition{FTA.transitionSymbol = (FTA.transitionSymbol transition, FTA.transitionConstraint transition)}
+    explore _ table [] = Just table
+    explore classified table (key : pending)
+        | Map.member key table = explore classified table pending
+        | Map.size table >= countingLimit || length row > countingLimit = Nothing
+        | otherwise = explore classified (Map.insert key row table) (concatMap FTA.transitionChildren row <> pending)
+      where
+        row = take (countingLimit + 1) $ case [Map.findWithDefault [] state classified | state <- Set.toList key] of
+            first : others ->
+                [ intersection transition tuple
+                | transition <- first
+                , tuple <- mapM (filter $ sameToken transition) others
+                ]
+            [] -> []
+    sameToken left right =
+        FTA.transitionSymbol left == FTA.transitionSymbol right
+            && length (FTA.transitionChildren left) == length (FTA.transitionChildren right)
+    -- The transition of a key from a tuple of transitions with one token.
+    intersection transition others = FTA.Transition (FTA.transitionSymbol transition) children (classesOf groups)
+      where
+        tuple = transition : others
+        groups = childGroupsOf (length $ FTA.transitionChildren transition) (concatMap FTA.transitionConstraint tuple)
+        children =
+            IntMap.elems $
+                IntMap.fromList
+                    [ (position, key)
+                    | group <- groups
+                    , let key = Set.fromList [FTA.transitionChildren member !! index | member <- tuple, ChildIndex index <- group]
+                    , ChildIndex position <- group
+                    ]
+
+{- | The number of keys above which 'countingRows' and 'intersectionCountingRows'
+give up, and the number of transitions of one key above which
+'intersectionCountingRows' gives up.
+-}
+countingLimit :: Int
+countingLimit = 1024

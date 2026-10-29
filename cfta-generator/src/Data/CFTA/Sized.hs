@@ -55,12 +55,22 @@ initial state reaches are of one of these kinds:
   is the set of the states that accept one term, so each term has one run.
   The row of a state holds the transitions of each deterministic state that
   contains the state. The order is the order of the reference for these rows.
+* Rows that are unambiguous without their constraints, where each constraint
+  is equalities between direct children. The table reads the rows of the
+  intersections of the states. A class of equal children is one child: the
+  intersection of its child states. Its term fills each position of the
+  class, and its size counts once for each position. The order is the order
+  of the reference for the rows of the intersections, with the classes of
+  equal children as a part of the symbol. A transition lists the nested
+  product of its groups of children, in the order of their first positions.
 
-The second kind stops at 1024 deterministic states, and 'sized' then uses the
-reference. 'sized' also uses the reference for rows with constraints. For the
-second kind, the order can be different from the order of the reference.
-'sizedStates' gives the classes of each state, with one table for all the
-states.
+The second and the third kind stop at 1024 deterministic states or
+intersections, and 'sized' then uses the reference. 'sized' also uses the
+reference for all other rows, for example an equality below the direct
+children, or ambiguous rows with constraints. For the second and the third
+kind, the order can be different from the order of the reference.
+'sizedStates' gives the classes of each state. The states without constraints
+share one table, and each state with equal children has its own table.
 -}
 module Data.CFTA.Sized (
     Sized,
@@ -84,7 +94,8 @@ import Data.Either (fromRight)
 import Data.List (elemIndex, genericDrop, genericIndex, genericLength)
 import qualified Data.Map.Lazy as LazyMap
 import qualified Data.Map.Strict as Map
-import Data.Maybe (listToMaybe)
+import Data.Maybe (fromMaybe, listToMaybe)
+import qualified Data.Set as Set
 
 import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint, equalitiesHold, noConstraint, residual)
@@ -124,9 +135,10 @@ sized ::
     FTA.FTA state symbol Constraint -> Either SizedError (Sized symbol)
 sized automaton = ($ FTA.initialState automaton) <$> sizedStates automaton
 
-{- | The size classes of each state of an automaton, with one count table for
-all the states. For each state that the initial state reaches, the classes
-are those that 'sized' gives with that state as the initial state. A state
+{- | The size classes of each state of an automaton. The states without
+constraints share one count table, and each state with equal children has its
+own table. For each state that the initial state reaches, the classes are
+those that 'sized' gives with that state as the initial state. A state
 that the initial state does not reach, or that accepts no term, has no terms
 here: its guards are not checked.
 
@@ -140,35 +152,34 @@ sizedStates ::
 sizedStates automaton = route <$> referenceStates automaton
   where
     reached = FTA.transitionTable $ FTA.trim automaton
+    route reference state = case LazyMap.lookup state tables of
+        Nothing -> fromClasses (const [])
+        Just table -> fromMaybe (reference state) table
     -- The route of each state follows the rows that it reaches, as 'sized' of
     -- the automaton with that initial state does, so the two agree.
-    route reference state
-        | not (Map.member state reached) = fromClasses (const [])
-        | not unconstrainedFrom = reference state
-        | unambiguousFrom = plain state
-        | otherwise = maybe (reference state) ($ state) deterministic
+    tables = LazyMap.fromList [(state, tableClasses state) | state <- Map.keys reached]
+    tableClasses state
+        | all (all ((== noConstraint) . FTA.transitionConstraint)) rows =
+            if unambiguous then Just (plain state) else ($ state) <$> deterministic
+        | unambiguous = (\table -> fromTable table Set.singleton state) <$> Ordinary.intersectionCountingRows rows state
+        | otherwise = Nothing
       where
-        (unconstrainedFrom, unambiguousFrom) = routes Map.! state
-    routes =
-        LazyMap.fromList
-            [ ( state
-              , (all (all ((== noConstraint) . FTA.transitionConstraint)) rows, Ordinary.unambiguousRows (Map.map (map void) rows))
-              )
-            | state <- Map.keys reached
-            , let rows = FTA.transitionTable $ FTA.trim $ withInitial state
-            ]
+        rows = FTA.transitionTable $ FTA.trim $ withInitial state
+        unambiguous = Ordinary.unambiguousRows (Map.map (map void) rows)
     withInitial state =
         fromRight (error "sizedStates: a state of a valid automaton is a valid initial state") $
             FTA.mkFTA state (Map.toList $ FTA.transitionTable automaton)
     unconstrained = FTA.mapConstraints (const ()) automaton
-    plain = fromTable (Ordinary.plainCountingRows unconstrained) Left
-    deterministic = (`fromTable` Left) <$> Ordinary.deterministicCountingRows unconstrained
+    plain = fromTable (withoutClasses $ Ordinary.plainCountingRows unconstrained) Left
+    deterministic = (`fromTable` Left) . withoutClasses <$> Ordinary.deterministicCountingRows unconstrained
+    withoutClasses = Map.map (map ([] <$))
 
 {- | The size classes of each state from the count table of unambiguous rows,
 with the key of the row of each state.
 -}
 fromTable ::
-    (Ord key, Ord symbol) => Map.Map key [FTA.Transition key symbol ()] -> (state -> key) -> state -> Sized symbol
+    (Ord key, Ord symbol) =>
+    Map.Map key [FTA.Transition key symbol Ordinary.EqualChildren] -> (state -> key) -> state -> Sized symbol
 fromTable rows key = \state ->
     let index = indexOf (key state)
         count = countAtSize index

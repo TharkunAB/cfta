@@ -150,9 +150,13 @@ tree automata of `cfta`, with QuickCheck integration.
   and an empty class says nothing about later classes. `sizedReference`
   builds each class from smaller ones; `sized` gives the same classes with a
   count table: of the original rows, in the same sequence, when the rows have
-  no constraint and no ambiguity; and of the bottom-up deterministic rows when
-  they have no constraint and ambiguity. The deterministic rows stop at 1024
-  states, and give their own order. A bottom-up deterministic automaton, such as
+  no constraint and no ambiguity; of the bottom-up deterministic rows when
+  they have no constraint and ambiguity; and of the intersections of the
+  states when they have no ambiguity without their constraints and each
+  constraint is equalities between direct children. A class of equal children
+  is one child, the intersection of its child states, and its size counts
+  once for each position. The last two tables stop at 1024 states, and give
+  their own order. A bottom-up deterministic automaton, such as
   an e-graph, has no ambiguity. A set of transition keys checks this before
   the product check. A guard
   beyond equality constraints is `ResidualGuard`. `sizedUpTo` builds the
@@ -160,7 +164,8 @@ tree automata of `cfta`, with QuickCheck integration.
   built term, so a liquid automaton has an exact route that needs no
   pruning; a guard the solver cannot decide is `GuardUnknown`.
   `sizedStates` gives the classes of each state, with one table for all the
-  states; a state that the initial state does not reach has no terms there.
+  states without constraints; a state that the initial state does not reach
+  has no terms there.
   `sized` and `sizedStates` check the constraints and the ambiguity of the
   rows that the initial state reaches only.
 - `Data.CFTA.Sized.Prefix`: the completions of a prefix in preorder, within a
