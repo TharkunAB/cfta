@@ -7,9 +7,16 @@
 
 import Control.Monad
 import Data.List
-import QuickSpec.Internal.Utils (usort)
 
 import Specftacular
+
+-- | Sort a list and remove duplicate elements, as in QuickSpec 2.
+usort :: [Int] -> [Int]
+usort [] = []
+usort (a : as) =
+    usort (filter (< a) as)
+        ++ [a]
+        ++ usort (filter (> a) as)
 
 main =
     ftacularSpec
