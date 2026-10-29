@@ -16,8 +16,12 @@ table shared with the cyclic import ('Data.CFTA.Gen.fromAutomaton'):
 
 * The transitions of a state are sorted by their arity, their symbol, and the
   canonical classes of their child states, so the order does not depend on
-  the order in which the automaton lists them. States that the initial state
-  cannot reach do not change the order.
+  the order in which the automaton lists them. The exception is two
+  transitions of one state with the same key: they differ only in their
+  constraints, or in the constraints of the states below them. The sort is
+  stable, so they keep their order in the row, and the order of the class
+  follows it. States that the initial state cannot reach do not change the
+  order.
 * A transition @f(c1, ..., ck)@ lists the nested product
   @((f × c1) × c2) ... × ck@. Each product goes through the sizes of its
   left side in ascending order, and through the terms of each split
@@ -240,6 +244,8 @@ sizedUpTo entailment bound automaton = runExceptT $ do
 
 {- | The transitions of each state in the order of the count table of the
 cyclic import: by arity, symbol, and the canonical classes of their children.
+The key has no constraints. Transitions with the same key keep their order
+in the row.
 
 The classes are those of the whole graph, as in the import. A trim would
 remove the transitions with a child that accepts nothing, and that can change
