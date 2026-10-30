@@ -9,7 +9,7 @@ for each part, with its parts as children. The symbol of a node is a name
 and its number of children, as @map/2@:
 
 * an application has its head's name and its arguments, also through @$@
-  and an operator; @f $ x@ is @f x@;
+  and an operator; @f $ x@ and @f $! x@ are @f x@;
 * a head is a candidate when its name is the text of a candidate and its
   qualifier, if any, names a module of the candidates; every other variable
   or constructor is @var@;
@@ -197,7 +197,7 @@ parsedTerms modules names parsed = collect (hsmodDecls parsed)
         HsAppType _ inner _ -> convert inner
         HsApp _ function argument -> applied function [argument]
         OpApp _ left (L _ (HsVar _ operator)) right
-            | occNameString (rdrOcc $ unLoc operator) == "$" -> applied left [right]
+            | occNameString (rdrOcc $ unLoc operator) `elem` ["$", "$!"] -> applied left [right]
             | otherwise -> node (nameOf $ unLoc operator) [left, right] []
         SectionL _ left (L _ (HsVar _ operator)) -> node (nameOf $ unLoc operator) [left] []
         SectionR _ (L _ (HsVar _ operator)) right ->
