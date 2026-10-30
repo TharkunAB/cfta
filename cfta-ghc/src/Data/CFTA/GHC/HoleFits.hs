@@ -48,7 +48,6 @@ The options apply to each hole:
 > -fplugin-opt=Data.CFTA.GHC.HoleFits:rank-keep-alive=0   how long the server keeps the model loaded
 
 > -fplugin-opt=Data.CFTA.GHC.HoleFits:model=base.cfta   order the fits with a fit model
-> -fplugin-opt=Data.CFTA.GHC.HoleFits:model-module=K    add the counts of the module K times
 > -fplugin-opt=Data.CFTA.GHC.HoleFits:hole-context=off  score the root of each fit as a right-hand side
 > -fplugin-opt=Data.CFTA.GHC.HoleFits:model-search=best-first  search the typed space in the model's order
 
@@ -64,9 +63,7 @@ hole. The plugin also reads the module of the first hole with GHC's parser
 ("Data.CFTA.GHC.Corpus"): the probability of @var@ (a name outside the
 library) goes to the module's own names in proportion to their uses in the
 module ('tokenScoreShared'), so the model knows which of the names in scope
-the module calls. With @model-module@, it also adds the counts of that
-module, multiplied by K, to the model, for all the holes of the module.
-@model-module@ needs @model@. A model that the plugin cannot read gives a
+the module calls. A model that the plugin cannot read gives a
 warning, and the fits keep their order. The root of each fit has the context
 of its hole: in @foldr f _ xs@, the second argument of @foldr@ ('scorerFor').
 With @hole-context=off@, it has the context of a right-hand side.
@@ -106,9 +103,9 @@ import qualified Data.Text.IO as Text
 import System.IO (hPutStrLn, stderr)
 import Text.Read (readMaybe)
 
-import Data.CFTA.GHC.Corpus (holeContext, holeEquations, moduleNames, moduleTerms, parserOf)
+import Data.CFTA.GHC.Corpus (holeContext, holeEquations, moduleNames, parserOf)
 import Data.CFTA.GHC.Fits
-import Data.CFTA.GHC.Model (FitModel (..), fromTerms, merge, parseFitModel, scale, tokenScoreShared)
+import Data.CFTA.GHC.Model (FitModel (..), parseFitModel, tokenScoreShared)
 import Data.CFTA.GHC.Rank (Ranking (..), defaultRanking, holeState, rankedFits, rankingModel)
 import Data.CFTA.Gen.Synthesis (Program (..))
 import Data.CFTA.Gen.Synthesis.States (EdgeOrder (..), Walking (..))
@@ -187,8 +184,6 @@ data PluginOptions = PluginOptions
     , pluginRanking :: Maybe Ranking
     , pluginModel :: Maybe FilePath
     -- ^ The file of a fit model.
-    , pluginModuleWeight :: Maybe Integer
-    -- ^ The factor of the counts of the module, which the model gets.
     , pluginHoleContext :: Bool
     -- ^ Whether the root of a fit has the context of the hole, or always @top@.
     , pluginRerank :: Bool
@@ -205,26 +200,18 @@ ranking.
 readOptions :: [CommandLineOption] -> Either String PluginOptions
 readOptions arguments = do
     (options, ranking, ranked, settings) <- foldM set (search0, defaultRanking, False, []) arguments
-    let model = lastValue "model"
-    weight <-
-        traverse
-            (\value -> maybe (Left ("not a number in model-module=" <> value)) Right (readMaybe value))
-            (lastValue "model-module")
     case settings of
         setting : _
             | not ranked -> Left (setting <> " needs the option rank: the ranking is on only with rank")
-        _
-            | Just _ <- weight, Nothing <- model -> Left "model-module needs the option model"
-            | otherwise ->
-                Right
-                    ( PluginOptions
-                        options
-                        (if ranked then Just ranking else Nothing)
-                        model
-                        weight
-                        (lastValue "hole-context" /= Just "off")
-                        (lastValue "model-search" /= Just "best-first")
-                    )
+        _ ->
+            Right
+                ( PluginOptions
+                    options
+                    (if ranked then Just ranking else Nothing)
+                    (lastValue "model")
+                    (lastValue "hole-context" /= Just "off")
+                    (lastValue "model-search" /= Just "best-first")
+                )
   where
     search0 = defaultOptions{optionMaximumSize = 4, optionFits = 5, optionSeconds = Just 1, optionAvoid = hectareAvoid}
     set (options, ranking, ranked, settings) argument = case break (== '=') argument of
@@ -239,7 +226,6 @@ readOptions arguments = do
         ("normal-forms", '=' : "off") -> Right (search (\o -> o{optionNormalForms = False}))
         ("rank", "") -> Right (options, ranking, True, settings)
         ("model", '=' : _) -> Right (options, ranking, ranked, settings)
-        ("model-module", '=' : _) -> Right (options, ranking, ranked, settings)
         ("hole-context", '=' : "on") -> Right (options, ranking, ranked, settings)
         ("hole-context", '=' : "off") -> Right (options, ranking, ranked, settings)
         ("model-search", '=' : "best-first") -> Right (options, ranking, ranked, settings)
@@ -252,7 +238,7 @@ readOptions arguments = do
             Left
                 ( "unknown option "
                     <> argument
-                    <> "; the options are size, fits, seconds, programs, first-order, only-defaulted, no-type-domains, normal-forms, model, model-module, hole-context, model-search, rank, rank-pool, rank-seconds, rank-model, and rank-keep-alive"
+                    <> "; the options are size, fits, seconds, programs, first-order, only-defaulted, no-type-domains, normal-forms, model, hole-context, model-search, rank, rank-pool, rank-seconds, rank-model, and rank-keep-alive"
                 )
       where
         search change = (change options, ranking, ranked, settings)
@@ -304,7 +290,7 @@ holeFits options =
                     writeTcRef reference (Nothing, ranked')
                     case open of
                         Just scope -> do
-                            (model, uses) <- modelFor options modelReference hole
+                            (model, uses) <- modelFor modelReference hole
                             scorer <-
                                 traverse
                                     (\found -> if pluginHoleContext options then scorerFor hole uses found else pure (tokenScoreShared found uses ("top", 0)))
@@ -342,13 +328,10 @@ readModel path = liftIO $ do
             pure Nothing
 
 {- | The model of a hole, and how often the module uses each name that is
-@var@ for the model: the model of the file, with the counts of the module of
-the hole added once for the module, with @model-module@. The plugin reads
-the module once, at its first hole.
+@var@ for the model. The plugin reads the module once, at its first hole.
 -}
-modelFor ::
-    PluginOptions -> TcRef (Maybe FitModel, Map.Map Text Int, Bool) -> TypedHole -> TcM (Maybe FitModel, Map.Map Text Int)
-modelFor options reference hole = do
+modelFor :: TcRef (Maybe FitModel, Map.Map Text Int, Bool) -> TypedHole -> TcM (Maybe FitModel, Map.Map Text Int)
+modelFor reference hole = do
     (loaded, uses, read') <- readTcRef reference
     case (loaded, th_hole hole) of
         (Just model, Just Hole{hole_loc = location}) | not read' -> do
@@ -358,15 +341,9 @@ modelFor options reference hole = do
                 parser = parserOf flags logger
             -- How often the module uses each name that is var for the model.
             names <- liftIO (moduleNames parser file)
-            merged <- case pluginModuleWeight options of
-                Just weight -> do
-                    terms <- liftIO (moduleTerms parser (modelModules model) (Map.keysSet (modelCandidates model)) file)
-                    let own = [kept | kept@(_, term) <- fromMaybe [] terms, length (foldr (:) [] term) >= 2]
-                    pure (merge model (scale weight (fromTerms (modelModules model) (modelCandidates model) own)))
-                Nothing -> pure model
             let uses' = Map.filterWithKey (\name _ -> Map.notMember name (modelCandidates model)) names
-            writeTcRef reference (Just merged, uses', True)
-            pure (Just merged, uses')
+            writeTcRef reference (Just model, uses', True)
+            pure (Just model, uses')
         (found, _) -> pure (found, uses)
 
 {- | The score of the tokens of the fits of a hole under a model. The root of
@@ -410,7 +387,7 @@ fitsFor ::
     TypedHole ->
     [HoleFitCandidate] ->
     TcM ([HoleFit], Bool)
-fitsFor (PluginOptions options' ranking _ _ _ rerank) scorer hole scope = case th_hole hole of
+fitsFor (PluginOptions options' ranking _ _ rerank) scorer hole scope = case th_hole hole of
     Nothing -> pure ([], False)
     Just Hole{hole_ty = holeType, hole_loc = location} -> do
         elements <- globalRdrEnvElts <$> getGlobalRdrEnv

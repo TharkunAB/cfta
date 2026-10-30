@@ -55,7 +55,6 @@ module Data.CFTA.GHC.Model (
     FitModel (..),
     fromTerms,
     merge,
-    scale,
     tokenScore,
     tokenScoreAt,
     tokenScoreShared,
@@ -112,14 +111,6 @@ merge left right =
         , modelCandidates = Map.unionWith max (modelCandidates left) (modelCandidates right)
         , modelUnigrams = Map.unionWith (+) (modelUnigrams left) (modelUnigrams right)
         , modelContexts = Map.unionWith (+) (modelContexts left) (modelContexts right)
-        }
-
--- | A model whose counts are each multiplied by a number, for a part that counts more in a 'merge'.
-scale :: Integer -> FitModel -> FitModel
-scale factor model =
-    model
-        { modelUnigrams = Map.map (* factor) (modelUnigrams model)
-        , modelContexts = Map.map (* factor) (modelContexts model)
         }
 
 {- | The symbol of a token, for the names of the arguments and locals of a

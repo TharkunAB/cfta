@@ -39,7 +39,6 @@ import Data.CFTA.GHC.Model (
     merge,
     parseFitModel,
     printFitModel,
-    scale,
     symbolOf,
     tokenScore,
     tokenScoreShared,
@@ -269,7 +268,6 @@ main = withSession ["import Prelude", "import Data.Coerce (coerce)", "import Dat
                         ]
             it "prints a model and reads it back, and merges two models by adding their counts" $ do
                 parseFitModel (printFitModel model) `shouldBe` Right model
-                merge model model `shouldBe` scale 2 model
                 fmap (Map.lookup ("map/2", 0, "var/0") . modelContexts) (parseFitModel (printFitModel (merge model model)))
                     `shouldBe` Right (Just 4)
             it "rejects a text that is not a model, with the number of the line" $ do
@@ -318,10 +316,8 @@ main = withSession ["import Prelude", "import Data.Coerce (coerce)", "import Dat
                                    , Just ("lambda/1", 0)
                                    ]
                 removeFile path
-            it "reads the options model, model-module, model-search, and hole-context of the plugin" $ do
+            it "reads the options model, model-search, and hole-context of the plugin" $ do
                 fmap pluginModel (readOptions ["model=base.cfta"]) `shouldBe` Right (Just "base.cfta")
-                fmap pluginModuleWeight (readOptions ["model=base.cfta", "model-module=3"]) `shouldBe` Right (Just 3)
-                fmap pluginModuleWeight (readOptions ["model-module=3"]) `shouldBe` Left "model-module needs the option model"
                 fmap pluginRerank (readOptions ["model=base.cfta"]) `shouldBe` Right True
                 fmap pluginRerank (readOptions ["model=base.cfta", "model-search=best-first"]) `shouldBe` Right False
                 fmap pluginHoleContext (readOptions ["model=base.cfta", "hole-context=off"]) `shouldBe` Right False
