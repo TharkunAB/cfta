@@ -1,3 +1,50 @@
+# Current raw pruning guard and caller checkpoint (2026-10-30)
+
+Full goal ACTIVE. Read [the current note](lean/notes-current-raw-guard-control.md).
+Source commits 5c4c726b6, 7dabc502d, and 1b2ea182d add 31 public laws in nine
+modules. All three source commits are pushed to formalize.
+
+The existing cold equality nodeCall already completes and preserves its exact
+language from original closed construction/cache history with derived finite
+resources. Do not list that cold entry as missing or re-prove it.
+
+The new laws preserve actual returned guard heaps through raw narrowing,
+projection, rows, the complete bounded emptiness check, and every native
+outcome. Current Context/Fits/Room and available closed operands now derive
+physical InputsThrough for any requested native fuel. Complete IncomingNode.run
+and Dispatch.dispatch retain the same original closed alphabet. They derive
+observed native receipts and next check admission internally. No future success
+or future receipt is a public premise. Incoming requires its original available
+closed input; Dispatch derives both operands from original pending slots.
+
+The biggest gap is public compiled-root/cache admission and the full coupled
+Context/Fits/Room/PendingRealized schedule across every earlier alternative and
+staged child in BOTH recursive workers. InitialPacket already builds the core
+from an admitted root/context. Derive original head reservations, recursive
+completion, and intended coverage. A guard alphabet alone does not bound SCS
+multiplicities, waiting counts, handles, memo keys, or ordinary work. Retain
+public order/stops, all older targets, APIs, and Haskell correspondence.
+
+Audit 4712/82734 and public 1122 checks/92 definitions pass. All 31 new axiom
+reports use only standard axioms. Current strict inputs match all nine modules
+and Audit. Prior protected504 and native835 sources are exact; current baselines
+are protected513/Lean4712/native835. The complete old public output and both
+intermediate readbacks remain exact prefixes. All 51 commands remain:39 pass,
+12 repaired draft failures;303 input snapshots. Five frozen reviews verify562
+payload pins and exact file sets. All five final reports were read in full.
+
+No Haskell source changed. No new Haskell bug or fix was established. FINDINGS
+retains the earlier conditional SCS repair candidate and exact public fixtures.
+Keep compiled pruning's single equality pass, bounded100/30 composite rounds,
+and unbounded TermSearch identity convergence separate. Every future Haskell
+repair must get a concrete FINDINGS entry for external pickup.
+
+Evidence: lean/restart-evidence/20261030-raw-guard-control/.
+Source and reconstructed areas become read-only after sealing. Use a fresh area.
+Normal pushes to formalize remain explicitly authorized. Keep the goal active.
+Earlier sections below remain literal history. This prefix and the linked note
+control current claims, including gates closed after earlier frozen reports.
+
 # Current cold equality and enumeration checkpoint (2026-10-30)
 
 Full goal ACTIVE. Read [the current note](lean/notes-current-worker-control.md).
