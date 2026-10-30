@@ -1,4 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TupleSections #-}
 
 {- | A corpus of programs from Haskell sources, in the alphabet of the
 automata of mode (b), for a fit model ("Data.CFTA.GHC.Model").
@@ -113,7 +114,7 @@ a variable or a constructor. Empty when the module does not parse, or uses
 CPP.
 -}
 moduleNames :: Parser -> FilePath -> IO (Map.Map Text Int)
-moduleNames parser file = maybe Map.empty (Map.fromListWith (+) . map (\name -> (name, 1)) . go . hsmodDecls) <$> parseFile parser file
+moduleNames parser file = maybe Map.empty (Map.fromListWith (+) . map (,1) . go . hsmodDecls) <$> parseFile parser file
   where
     go :: (Data a) => a -> [Text]
     go value = here <> concat (gmapQ go value)
@@ -311,12 +312,12 @@ parsedTerms modules names parsed = collect Set.empty (hsmodDecls parsed)
     statement bound part = case part of
         BodyStmt _ body _ _ -> Just (body, [])
         LastStmt _ body _ _ -> Just (body, [])
-        BindStmt _ pattern body -> Just (body, within bound pattern)
+        BindStmt _ pattern' body -> Just (body, within bound pattern')
         _ -> Nothing
     -- The names that a statement's pattern binds.
     boundBy :: StmtLR GhcPs GhcPs (LHsExpr GhcPs) -> Set.Set Text
     boundBy part = case part of
-        BindStmt _ pattern _ -> patternNames pattern
+        BindStmt _ pattern' _ -> patternNames pattern'
         _ -> Set.empty
     -- A head with more arguments: the arguments of the head first.
     applied bound function arguments = case convert bound function of

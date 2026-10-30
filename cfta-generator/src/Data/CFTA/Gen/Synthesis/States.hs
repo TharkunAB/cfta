@@ -617,7 +617,7 @@ bestScore ::
     IO Double
 bestScore score memory = go
   where
-    go Interned.EmptyNode _ _ = pure (-1 / 0)
+    go Interned.EmptyNode _ _ = pure (-(1 / 0))
     go node parent position = do
         let key = (nodeIdentity node, parent, position)
         known <- Map.lookup key <$> readIORef memory
@@ -628,7 +628,7 @@ bestScore score memory = go
                     let token = (symbolText (edgeSymbol edge), length (edgeChildren edge))
                     children <- forM (zip [0 ..] (edgeChildren edge)) $ \(index, child) -> go child (Just token) index
                     pure (score parent position token + sum children)
-                let value = if null values then -1 / 0 else maximum values
+                let value = if null values then -(1 / 0) else maximum values
                 modifyIORef' memory (Map.insert key value)
                 pure value
 
