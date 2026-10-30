@@ -1,3 +1,57 @@
+# Native prefix and returned-control checkpoint — 2026-10-30 23:14 CET
+
+Prefix source: `f4521b07accf2da1ca440449f2e3310a2438a2e0`.
+Actual-return source: `6dab391a2643f95181540773ba2420dc493024be`.
+Read lean/notes-current-native-prefix-and-returned-control.md first.
+The full original-input objective remains open. Work continues.
+
+Five new laws preserve conditional native Stored at arbitrary observed
+checked prefixes and actual terminal returned states. No future return is
+supplied. Each yielded Trace step still has its existing Inputs witness.
+Terminal Yielded concludes True; it does not cover an unchecked successor.
+Good/SemanticReady/Fields/Stored/Clean gates remain. Literal request and
+initializer companions derive their stated entry conditions internally.
+No unrestricted recursive operand domain or height result is added.
+
+Three new laws transfer control to actual successful narrowing results.
+Ready/Available/closed input plus actual success derives physical Normal,
+Keeps, closed Ordinary result, kept rows and exact same-key replay.
+No input Normal, historical constructor or future result is supplied.
+Changed actual prepare results derive their filter branch internally.
+Empty can select rejection. No unconditional stored-slot execution is proved.
+Cached depth/free are constrained by NodeFields; row canonicality remains
+separate. A weak interface is not a Haskell defect or a countermodel.
+
+Repairs only qualify yielded constructors, remove redundant tactics and
+replace unnecessary simpa. One explicit-rewrite repair failed and remains.
+All eight headers remain exact. No Haskell defect/fix/candidate or native
+run is established. All older conditional findings remain complete below.
+
+Both finite-depth modeled workers retain stable actual outcomes, exact
+forecasts and one depth-independent original path carrier. Their original
+entry/resource gates remain; recursive exhaustion is permitted. Sufficient
+ORIGINAL depth for every earlier alternative and staged child under the
+configured order/stops is still the largest gap. Bound filter sequences and
+source resets, intersections, Prepared Mu/Union work, slots and raw SCS work.
+Actual native caller-to-Trace/Inputs transport also remains open.
+
+Default+strict Audit: 4,750 jobs / 83,011 dependency checks. Public: 1,209
+checks / unchanged 116 definition prints. Twelve serial capped commands,
+nine pass / three repaired failed probes, 27 snapshots. All eight new axiom
+reports use standard axioms. The old 4,860,054-byte public output remains
+an exact prefix. All 549 prior protected and 835 native inputs remain exact.
+Independent review reads all 457 source lines and 190 new public lines.
+The archive is lean/restart-evidence/20261030-native-stored-prefix-control.
+The prior UNCOMPILED prefix/producer drafts now have checked derivatives.
+New source-only chain-bound and native caller reviews remain uncompiled.
+
+Keep the full public adapters, Haskell, constructor/equality/count/order/rank
+objective. The backend marker remains blocked despite resumed progress.
+No pause, completion or completion percentage is claimed.
+The complete prior document follows as an exact suffix.
+
+---
+
 # Pruning row-filter control checkpoint — 2026-10-30 22:54 CET
 
 Checked source: `52ca456d99bcef2dd6015543cce6636e87d4cbd9` on formalize; earlier control c6b104886.
