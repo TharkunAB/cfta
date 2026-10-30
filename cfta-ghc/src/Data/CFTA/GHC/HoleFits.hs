@@ -53,12 +53,12 @@ at least 50 fits, and the model orders them, the fits that use every part
 first. With @model-search=best-first@, the search is mode (b) ('States') and
 lists the programs of all sizes in the order of the model's score, best
 first ('optionScore'); it finds more fits, but needs a few seconds for each
-hole. With @model-module@, the plugin also reads the module of the first
-hole with GHC's parser ("Data.CFTA.GHC.Corpus"), and adds the counts of that
-module, multiplied by K, to the model, for all the holes of the module. The
-probability of @var@ then goes to the module's own names in proportion to
-their uses in the module ('tokenScoreShared'), so the model learns which of
-its functions the module calls.
+hole. The plugin also reads the module of the first hole with GHC's parser
+("Data.CFTA.GHC.Corpus"): the probability of @var@ (a name outside the
+library) goes to the module's own names in proportion to their uses in the
+module ('tokenScoreShared'), so the model knows which of the names in scope
+the module calls. With @model-module@, it also adds the counts of that
+module, multiplied by K, to the model, for all the holes of the module.
 @model-module@ needs @model@. A model that the plugin cannot read gives a
 warning, and the fits keep their order. The root of each fit has the context
 of its hole: in @foldr f _ xs@, the second argument of @foldr@ ('scorerFor').
@@ -334,28 +334,33 @@ readModel path = liftIO $ do
                 ("Data.CFTA.GHC.HoleFits: the model " <> path <> " is not read, so the fits keep their order: " <> problem)
             pure Nothing
 
-{- | The model of a hole: the model of the file, with the counts of the
-module of the hole added once for the module, with @model-module@.
+{- | The model of a hole, and how often the module uses each name that is
+@var@ for the model: the model of the file, with the counts of the module of
+the hole added once for the module, with @model-module@. The plugin reads
+the module once, at its first hole.
 -}
 modelFor ::
     PluginOptions -> TcRef (Maybe FitModel, Map.Map Text Int, Bool) -> TypedHole -> TcM (Maybe FitModel, Map.Map Text Int)
 modelFor options reference hole = do
-    (loaded, uses, added) <- readTcRef reference
-    case (loaded, pluginModuleWeight options, th_hole hole) of
-        (Just model, Just weight, Just Hole{hole_loc = location}) | not added -> do
+    (loaded, uses, read') <- readTcRef reference
+    case (loaded, th_hole hole) of
+        (Just model, Just Hole{hole_loc = location}) | not read' -> do
             flags <- getDynFlags
             logger <- hsc_logger . env_top <$> getEnv
             let file = unpackFS (srcSpanFile (ctLocSpan location))
                 parser = parserOf flags logger
-            terms <- liftIO (moduleTerms parser (modelModules model) (Map.keysSet (modelCandidates model)) file)
             -- How often the module uses each name that is var for the model.
             names <- liftIO (moduleNames parser file)
-            let own = [kept | kept@(_, term) <- fromMaybe [] terms, length (foldr (:) [] term) >= 2]
-                merged = merge model (scale weight (fromTerms (modelModules model) (modelCandidates model) own))
-                uses' = Map.filterWithKey (\name _ -> Map.notMember name (modelCandidates model)) names
+            merged <- case pluginModuleWeight options of
+                Just weight -> do
+                    terms <- liftIO (moduleTerms parser (modelModules model) (Map.keysSet (modelCandidates model)) file)
+                    let own = [kept | kept@(_, term) <- fromMaybe [] terms, length (foldr (:) [] term) >= 2]
+                    pure (merge model (scale weight (fromTerms (modelModules model) (modelCandidates model) own)))
+                Nothing -> pure model
+            let uses' = Map.filterWithKey (\name _ -> Map.notMember name (modelCandidates model)) names
             writeTcRef reference (Just merged, uses', True)
             pure (Just merged, uses')
-        (found, _, _) -> pure (found, uses)
+        (found, _) -> pure (found, uses)
 
 {- | The score of the tokens of the fits of a hole under a model. The root of
 a fit has the context of the hole ("Data.CFTA.GHC.Corpus.holeContext"): the
