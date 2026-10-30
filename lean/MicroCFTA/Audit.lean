@@ -1,3 +1,6 @@
+import MicroCFTA.SourceEqualityNormalizationFuel
+import MicroCFTA.SourceEqualityInheritedIteration
+import MicroCFTA.SourceEqualityInheritedCarrierFailure
 import MicroCFTA.SourceEqualityNormalizationOrigins
 import MicroCFTA.SourceEqualityNormalizationCarrier
 import MicroCFTA.SourceEqualityNormalizationInitial
