@@ -103,7 +103,7 @@ import GHC.Core.ConLike (ConLike (RealDataCon))
 import GHC.Core.DataCon (dataConName, dataConNonlinearType, dataConWrapId)
 import GHC.Core.Multiplicity (scaledMult, scaledThing)
 import GHC.Core.TyCo.FVs (tyCoVarsOfTypesList)
-import GHC.Core.Type (Type, isManyTy)
+import GHC.Core.Type (Type, getTyVar_maybe, isManyTy)
 import GHC.Data.FastString (unpackFS)
 import GHC.Data.IOEnv (getEnv, runIOEnv)
 import GHC.Driver.DynFlags (
@@ -357,7 +357,8 @@ scorerFor hole model = case th_hole hole of
 
 {- | The plugin's fits for a hole, best first: none when the hole has no
 type, when its type has a @forall@ or a class context at the top, when a
-multiplicity is not @Many@, or when the search fails. The flag says whether
+multiplicity is neither @Many@ nor an open multiplicity variable (which GHC
+defaults to @Many@), or when the search fails. The flag says whether
 a model was asked.
 -}
 fitsFor ::
@@ -390,9 +391,14 @@ fitsFor (PluginOptions options' ranking _ _ _) scorer hole scope = case th_hole 
                 [Candidate label typ' (heads name) False (Just name) | (label, (name, typ')) <- named]
                     <> [Candidate argument (scaledThing parameter) True True Nothing | (argument, parameter) <- zip arguments parameters]
             names = Map.fromList [(label, pprPrefixName name) | (label, (name, _)) <- named]
-        if not (null variables && null context)
-            || not (all (isManyTy . scaledMult) parameters)
-            || not (all (\(_, identifier, _) -> isManyTy (idMult identifier)) found)
+        -- A binder of a case alternative has a multiplicity variable that GHC
+        -- defaults to Many later, so an open variable counts as Many.
+        multiplicities <-
+            liftZonkM (zonkTcTypes (map scaledMult parameters <> [idMult identifier | (_, identifier, _) <- found]))
+        let unrestricted multiplicity =
+                isManyTy multiplicity
+                    || maybe False (\variable -> isTcTyVar variable && isMetaTyVar variable) (getTyVar_maybe multiplicity)
+        if not (null variables && null context) || not (all unrestricted multiplicities)
             then pure ([], False)
             else do
                 flexible <-
