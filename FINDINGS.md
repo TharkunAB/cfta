@@ -1,3 +1,66 @@
+# Current equality caller and enumeration findings (2026-10-30)
+
+Full goal ACTIVE. Current source 6a859fc9ad61ba76e804323d3c9d78814bb4260d.
+Read [the current note](lean/notes-current-worker-control.md).
+No Haskell source changed. No new Haskell defect or source repair was established.
+Preserve all earlier actual repair records and conditional candidates below.
+
+External pickup: keep these actual Haskell caller contracts distinct.
+Specftacular.CompiledPruning.preparePruning compiles templates, makes ONE
+reducePartially call, performs bounded inspection and returns. Operations defines
+reducePartially as one memoized recursive pass with empty inherited constraints.
+Its Mu/union branches stop direct outer recursion. Parent require/edit exposure
+is separate. The source locations are CompiledPruning lines 48-67 and Operations lines 70-96.
+
+Specftacular.searchSpace/searchSpaceParts use fixWithin 100 on the COMPOSITE
+withoutRedundantEdges . reducePartially. Gen.Synthesis.reduceFully uses at most 30
+composite rounds. Data.CFTA.TermSearch.reduceFully uses fixUnbounded until node
+identity stops changing. Operations lines 775-788 defines the bounded and unbounded
+loops separately. A finite-round equality-only theorem does not establish
+unbounded convergence or the interposed edge-pruning step. No divergence or
+source defect was established. These are proof/caller distinctions for review.
+
+The current formalized equality cold entry ALREADY has completion and exact
+language preservation from original closed construction, valid allocation
+history and covered guards, with chosen finite capacity/fuel. Its full 139-line
+capacity proof derives all initial support/history/merge/writer gates. The two
+existing contracts were independently printed with only standard axioms.
+The missing link for compiled preprocessing is actual source/heap/cache admission
+and correspondence. recordTypes calls the pruning oracle; it does not call this
+equality worker. Its enumeration/oracle completion is a separate obligation.
+
+Enumeration SCS writes append, descend, install or drop supplied tries. They do
+not normalize the union of inherited and own SCS. Native intersection conjoins
+own guards. Use the CLOSED original guard alphabet plus original stored SCS paths.
+Raw literal suffixes alone omit paths introduced by native guard normalization.
+The new native interpreter theorem covers every bounded outcome under physical
+input/field gates. It does not cover raw SelectedStep.runPrefix exposure or the
+EnabledEmpty.check conjunction/projection route. Both can advance Caller on
+failure. They need separate heap/field provenance for every outcome.
+
+The prior conditional Haskell repair remains: if recursive-boundary semantics
+requires retention of incoming descendant SCS when terminal hereConstraints is
+empty, Mu/open-union allocation must store it through the existing write path
+and update waiting counts. A shallow entry alone is insufficient because Node
+and Mu are distinct interned constructors and Mu falls back to enumerateNode.
+The two prior exact public fixtures pass. No new test or fact establishes that
+contract as a defect; do not apply a repair without checking marker semantics.
+All 835 native source/build inputs match those verified fixtures.
+
+The 16 new Lean laws close staged guard-inclusion/projection/suffix gates at both
+actual head producers and retain the same closed alphabet through bounded native
+execution. They leave original StatePaths, recursive Complete, HeadReserved and
+physical input/field premises explicit. Audit 4703/82643 and public 1091/89 pass.
+One failed heartbeat draft is retained; local opacity repairs it without raising
+limits. No axiom, native_decide or linter suppression was added. All 14 commands
+and 42 input snapshots remain, as do all prior sources and counterexamples.
+
+Three frozen reviews retain 223 normalized payload pins. Root separately records
+one copied seal omitted by the flat list but already hashed in its pinned reuse
+ledger. No frozen bundle was edited. Evidence is in
+lean/restart-evidence/20261030-worker-control/.
+Older entries below remain literal history. This note controls current claims.
+
 # Current inherited payload and Haskell findings (2026-10-30)
 
 Full goal ACTIVE. Current source b5d87b72c16916bf854c75be9e1c44255cad13f5.

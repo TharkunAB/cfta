@@ -1,3 +1,52 @@
+# Current cold equality and enumeration checkpoint (2026-10-30)
+
+Full goal ACTIVE. Read [the current note](lean/notes-current-worker-control.md).
+Source 6a859fc9ad61ba76e804323d3c9d78814bb4260d adds 16 public laws in three modules.
+
+Correction to the previous assessment: cold equality completion is ALREADY
+proved by SourceCurrentColdRankCapacity.constructed_initial_node_call. Its
+semantic companion proves exact language preservation and result availability.
+From original closed construction, valid equality-cache allocation history and
+covered guards, it supplies finite capacity/fuel and all initial store gates.
+No future completion supplier is assumed. Fixed finite warm equality repetitions
+are also proved. Do not list this cold entry as missing or re-prove it.
+
+The 16 new laws retain one original guard alphabet through both actual finite
+reservation families, derive the staged inclusion/projection/suffix gates at
+both head-resource producers, and preserve the alphabet through EVERY bounded
+native interpreter outcome, including failed and blocked calls. Original input
+paths, recursive Complete, HeadReserved and physical input/field gates remain.
+
+The largest gaps are public compiled-root/source/cache admission, raw exposure/projection links for every outcome, actual oracle/enumeration control across all
+earlier alternatives, sufficient resources, intended coverage, public order/stops
+and Haskell correspondence. Compiled pruning makes one equality pass. Specftacular
+uses 100 bounded composite rounds and Synthesis uses 30; their edge-pruning step
+needs its own adapter. TermSearch.reduceFully uses an unbounded identity fixpoint;
+fixed-round completion does not prove convergence. Retain both workers, the
+optimized interned core and all constructor/equality/size/rank targets.
+
+Audit 4703/82643 and public 1091 checks/89 definitions pass. All 16 new axiom reports
+and two separately printed existing cold contracts use only standard axioms.
+All 501 prior protected sources and 835 native inputs match. Current baselines:
+504 protected/4703 Lean/835 native. The old public output remains an exact prefix.
+All 14 commands remain: 13 pass, one repaired heartbeat draft fails; 42 input snapshots.
+Four final strict sources match. Three frozen reviews have 223 normalized payload
+pins, including one Root supplement for a reused seal recorded by a pinned ledger.
+All three final reports were read. Keep the named third-whole-source exception
+for the cold proof and all acquisition/preflight incidents explicit.
+
+No Haskell source changed or runtime command was needed for these Lean changes.
+FINDINGS records the exact public caller distinctions and retains the prior
+conditional descendant-SCS repair candidate. No new Haskell defect is asserted.
+The payload anchor/word-bound counterexamples still hold; they do not refute the
+existing cold control proof. Metadata stuttering still rejects that proposed rank.
+
+Evidence: lean/restart-evidence/20261030-worker-control/.
+Source and reconstructed areas become read-only after sealing. Use a new writable
+area. Normal pushes to formalize remain explicitly authorized. Keep the full
+goal active. Older sections below remain literal history. This note controls
+current claims.
+
 # Current inherited payload and control checkpoint (2026-10-30)
 
 Full goal ACTIVE. Read [the current note](lean/notes-current-inherited-control.md).
