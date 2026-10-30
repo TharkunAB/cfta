@@ -83,8 +83,9 @@ still list the candidates.
 'withWeights' gives each symbol a weight, a non-negative 'Rational'. The weight
 of a term is the product of the weights of the symbols of its nodes.
 'nextTokenWeights' gives the total weight of the completions after each token,
-'tokenProbability' the probability of a token after the prefix, and
-'drawCompletion' draws a completion in proportion to its weight. A decoder
+'tokenProbability' the probability of a token after the prefix,
+'drawCompletion' draws a completion in proportion to its weight, and
+'bestCompletions' gives the completions with the largest weights. A decoder
 that mixes the scores of a model with a grammar needs this mass of the
 grammatical completions; see Park, Wang, Berg-Kirkpatrick, Polikarpova, and
 D'Antoni, /Grammar-Aligned Decoding/, NeurIPS 2024 (arXiv:2405.21047). Here
@@ -130,9 +131,11 @@ module Data.CFTA.Sized.Prefix (
     withWeights,
     completionSymbols,
     completionWeight,
+    completionWeightBy,
     nextTokenWeights,
     tokenProbability,
     drawCompletion,
+    bestCompletions,
     weightedTotal,
     unrankWeighted,
     rankWeighted,
@@ -151,10 +154,11 @@ import Control.Monad (foldM)
 import Data.Either (fromRight)
 import Data.IORef (modifyIORef', newIORef, readIORef)
 import qualified Data.IntMap.Lazy as IntMap
-import Data.List (elemIndex, genericDrop, genericIndex, genericLength, genericTake, mapAccumL)
+import Data.List (elemIndex, genericDrop, genericIndex, genericLength, genericTake, mapAccumL, sortOn)
 import qualified Data.Map.Lazy as LazyMap
 import qualified Data.Map.Strict as Map
 import Data.Maybe (catMaybes, listToMaybe)
+import Data.Ord (Down (..))
 import Data.Ratio (denominator, numerator)
 import qualified Data.Set as Set
 
@@ -894,9 +898,21 @@ over the transitions of the rows of the count table, as the counts are.
 Otherwise it is the sum of the weights of the listed completions.
 -}
 completionWeight :: Completions symbol -> Rational
-completionWeight completions = case completionsRoute completions of
-    Indexed table _ _ -> sum $ genericTake (tableBound table) $ drop 1 $ indexedWeights completions table
-    Listed _ listed -> sum [termWeight (completionsWeight completions) term | (term, _, Yes) <- listed]
+completionWeight completions = completionWeightBy (completionsWeight completions) completions
+
+{- | The total weight of the completions for a weight of each symbol in any
+number type, as 'completionWeight' gives it for the weights of 'withWeights'.
+A number type that carries derivatives gives the derivatives of the total
+weight ("Data.CFTA.Sized.Prefix.Train").
+-}
+completionWeightBy :: (Num weight) => (symbol -> weight) -> Completions symbol -> weight
+completionWeightBy weight completions = case completionsRoute completions of
+    Indexed table _ _ ->
+        sum
+            $ genericTake (tableBound table)
+            $ drop 1
+            $ prefixedWeights weight (tableRows table) (completionPrefix completions) (tableInitial table) 0
+    Listed _ listed -> sum [termWeight weight term | (term, _, Yes) <- listed]
 
 {- | The tokens of 'nextTokens', each with the total weight of the completions
 that start with the prefix and the token. A token with completions whose
@@ -946,6 +962,99 @@ drawCompletion choose completions
         Listed _ listed -> drawOne choose (termWeight weight) [term | (term, _, Yes) <- listed]
   where
     weight = completionsWeight completions
+
+{- | The completions with the largest weights, at most the given number, the
+largest weight first, each with its weight. The probability of a completion
+is its weight over 'completionWeight'. Completions with equal weights come in
+a fixed order.
+
+Without constraints, the count table gives them without a list of the
+completions. For each state, each part of the prefix and each size, a list
+keeps the terms with the largest weights, at most the given number. The list
+of a transition comes from the lists of its children, as the counts come
+from a convolution (the k-best lists of Huang and Chiang, /Better k-best
+Parsing/, IWPT 2005). The weights are not negative, so the largest products
+come from the largest factors. Otherwise the listed completions are sorted
+by weight.
+-}
+bestCompletions :: Int -> Completions symbol -> [(Term symbol, Rational)]
+bestCompletions count completions
+    | count <= 0 = []
+    | otherwise = case completionsRoute completions of
+        Indexed table _ _ ->
+            [ (term, value)
+            | (value, term) <-
+                foldr (largest count) []
+                    $ genericTake (tableBound table)
+                    $ drop 1
+                    $ prefixedBest count weight (tableRows table) (completionPrefix completions) (tableInitial table) 0
+            ]
+        Listed _ listed -> take count $ sortOn (Down . snd) [(term, termWeight weight term) | (term, _, Yes) <- listed]
+  where
+    weight = completionsWeight completions
+
+{- | The terms with the largest weights of a state whose preorder starts with
+the part of a prefix at a position, at most the given number, for each size
+from zero, the largest weight first, as 'prefixedWeights' gives their total
+weights. A transition with the token at the position has the products of
+the lists of its children, for each split of the size.
+-}
+prefixedBest ::
+    (Ord state, Eq symbol) =>
+    Int ->
+    (symbol -> Rational) ->
+    Map.Map state [FTA.Transition state symbol ()] ->
+    [Token symbol] ->
+    state ->
+    Int ->
+    [[(Rational, Term symbol)]]
+prefixedBest count weight rows prefix = bestAt
+  where
+    size = length prefix
+    (starts, end) = Ordinary.childStarts prefix
+    -- The prefix ends after its first term.
+    valid = maybe True (== size) end
+    bestAt state position
+        | not valid = repeat []
+        | otherwise = LazyMap.findWithDefault (repeat []) (state, min position size) table
+    table =
+        LazyMap.fromList
+            [ ((state, position), transitionsBest state position)
+            | state <- Map.keys rows
+            , position <- [0 .. size]
+            ]
+    transitionsBest state position =
+        []
+            : foldr
+                (zipWith (largest count))
+                (repeat [])
+                [ map (map (\(value, children) -> (weight symbol * value, Term.Node symbol children)))
+                    $ foldr (products . uncurry bestAt) ([(1, [])] : repeat [])
+                    $ zip (FTA.transitionChildren transition) (childPositions position transition)
+                | transition <- branches rows prefix state position
+                , let symbol = FTA.transitionSymbol transition
+                ]
+    -- The convolution of 'convolve', with the best products for a sum.
+    products [] _ = repeat []
+    products (first : rest) others = zipWith (largest count) (map (pairs first) others) ([] : products rest others)
+    pairs first other =
+        take count $ sortOn (Down . fst) [(value * value', term : terms) | (value, term) <- first, (value', terms) <- other]
+    childPositions position transition
+        | position >= size = map (const size) $ FTA.transitionChildren transition
+        | otherwise = starts position
+
+{- | The values with the largest weights of two lists, at most the given
+number, the largest weight first. Each list has the largest weight first,
+and the first list comes first at equal weights.
+-}
+largest :: Int -> [(Rational, value)] -> [(Rational, value)] -> [(Rational, value)]
+largest count left right = take count $ merge left right
+  where
+    merge [] others = others
+    merge firsts [] = firsts
+    merge firsts@(first : rest) others@(other : more)
+        | fst other > fst first = other : merge firsts more
+        | otherwise = first : merge rest others
 
 {- | The sum of the lengths of the weighted intervals of the completions. Each
 completion has an interval of integers, and the intervals follow the order of
