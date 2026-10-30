@@ -1,3 +1,40 @@
+# Current handoff: original paths through completed heads,2026-10-30
+
+The full formalization goal remains ACTIVE. Source88d473726c97bda9df2550e6635700597d0cfe41.
+Read lean/notes-current-child-path-control.md first.
+Main remains bd5a406a6a3f84b7e3ae0906082783911509df83.
+
+The SAME fixed path predicate now survives actual writes, merges, child folds,
+completed/stopped prefixes and completed heads through finalization. Native and
+Prepared receipts have separate original-forecast corollaries before filtering.
+Head path hypotheses remain explicit. A completed receipt is still a premise.
+This does not establish whole-search completion or Haskell correspondence.
+
+Audit4686/82512; nine current strict sources pass; public1038/85 passes.
+All479 old protected and835 Haskell/build identities match. New protected487.
+All4678 old Lean files remain; only Audit adds imports before its literal old body.
+The complete4213123B old public output is an exact prefix. Failed attempts remain.
+No Haskell source changed and no new Haskell defect/fix was established.
+Keep every older FINDINGS repair entry for external pickup.
+
+Next: actual recordTypes/frame transport, then retain the path fact at the head
+producer. ReceiptAt currently erases the full completed receipt and actual run.
+Quantify every actual callback invocation, including the stopping head outside
+processed prefix receipts. Carry the SAME original carrier through both inductions before
+output membership. A D-dependent forecast still supplies no sufficient D.
+Uniform handles/key/neutral-work bounds, full coverage/order/stops, Prefix/table
+correspondence and Haskell correspondence remain open.
+
+Evidence:lean/restart-evidence/20261030-child-path-control/.
+Use final-strong-sources.json487, final-lean-sources.json4686 and final-haskell.json835.
+Preserve failed drafts and the fold task's explicit3/2 source-acquisition incident.
+The source-only next-callback-design bundle remains uncompiled.
+Normal pushes to formalize remain explicitly authorized. Do not force-push.
+
+Older sections below are retained history. The current note controls this checkpoint.
+
+---
+
 # Latest handoff: exact parking and forecast path preparation,2026-10-30
 
 The full formalization goal remains ACTIVE. Source 58841e2669d385837bd86bb44bde1177074ee395.
