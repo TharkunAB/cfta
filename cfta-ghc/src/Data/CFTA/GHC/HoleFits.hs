@@ -40,7 +40,7 @@ The options apply to each hole:
 > -fplugin-opt=Data.CFTA.GHC.HoleFits:rank-model=NAME the model on the server
 > -fplugin-opt=Data.CFTA.GHC.HoleFits:rank-keep-alive=0   how long the server keeps the model loaded
 
-> -fplugin-opt=Data.CFTA.GHC.HoleFits:model=PATH        order the fits with a fit model
+> -fplugin-opt=Data.CFTA.GHC.HoleFits:model=base.cfta   order the fits with a fit model
 > -fplugin-opt=Data.CFTA.GHC.HoleFits:model-module=K    add the counts of the module K times
 
 With @model@, the plugin reads a fit model ("Data.CFTA.GHC.Model", the text
@@ -87,9 +87,9 @@ import qualified Data.Text.IO as Text
 import System.IO (hPutStrLn, stderr)
 import Text.Read (readMaybe)
 
-import Data.CFTA.GHC.Corpus (moduleTerms, parserOf)
+import Data.CFTA.GHC.Corpus (holeContext, moduleTerms, parserOf)
 import Data.CFTA.GHC.Fits
-import Data.CFTA.GHC.Model (FitModel (..), fromTerms, merge, parseFitModel, scale, tokenScore)
+import Data.CFTA.GHC.Model (FitModel (..), fromTerms, merge, parseFitModel, scale, tokenScore, tokenScoreAt)
 import Data.CFTA.GHC.Rank (Ranking (..), defaultRanking, holeState, rankedFits, rankingModel)
 import Data.CFTA.Gen.Synthesis (Program (..))
 import Data.CFTA.Gen.Synthesis.States (EdgeOrder (..), Walking (..))
@@ -147,7 +147,7 @@ import GHC.Types.Name (
  )
 import GHC.Types.Name.Reader (GlobalRdrElt, globalRdrEnvElts, greName, gre_lcl)
 import GHC.Types.Name.Set (elemNameSet, emptyNameSet, extendNameSet)
-import GHC.Types.SrcLoc (srcSpanFile)
+import GHC.Types.SrcLoc (srcSpanFile, srcSpanStartCol, srcSpanStartLine)
 import GHC.Types.TyThing (TyThing (AConLike, AnId))
 import GHC.Types.Var (isTcTyVar)
 import GHC.Utils.Outputable (SDoc, char, hcat, hsep, parens, ppr, text, (<+>))
@@ -267,7 +267,8 @@ holeFits options =
                     case open of
                         Just scope -> do
                             model <- modelFor options modelReference hole
-                            (ours, asked) <- fitsFor options model hole scope
+                            scorer <- traverse (scorerFor hole) model
+                            (ours, asked) <- fitsFor options scorer hole scope
                             updTcRef reference (\(open', _) -> (open', ranked' || asked))
                             -- The limit without the plugin: see 'raiseLimit'.
                             limit <- maxValidHoleFits <$> getDynFlags
@@ -317,13 +318,45 @@ modelFor options reference hole = do
             pure (Just merged)
         (found, _, _) -> pure found
 
+{- | The score of the tokens of the fits of a hole under a model. The root of
+a fit has the context of the hole: for a hole that is an argument of an
+application and whose type is not a function, the application's symbol and
+the hole's position ("Data.CFTA.GHC.Corpus.holeContext"), as @foldr/3@ and 1
+for @foldr f _ xs@; otherwise @top@, the context of a right-hand side. A hole
+of a function type gets its fits as lambdas, whose bodies are not the
+arguments that the corpus counts, so it keeps @top@.
+-}
+scorerFor :: TypedHole -> FitModel -> TcM (Maybe (Text, Int) -> Int -> (Text, Int) -> Double)
+scorerFor hole model = case th_hole hole of
+    Just Hole{hole_ty = holeType, hole_loc = location} -> do
+        typ <- liftZonkM (zonkTcType holeType)
+        let (parameters, _) = tcSplitFunTys typ
+            span' = ctLocSpan location
+            start = (srcSpanStartLine span', srcSpanStartCol span')
+        context <-
+            if null parameters
+                then do
+                    flags <- getDynFlags
+                    logger <- hsc_logger . env_top <$> getEnv
+                    let parser = parserOf flags logger
+                    liftIO
+                        (holeContext parser (modelModules model) (Map.keysSet (modelCandidates model)) (unpackFS (srcSpanFile span')) start)
+                else pure Nothing
+        pure (tokenScoreAt model (fromMaybe ("top", 0) context))
+    Nothing -> pure (tokenScore model)
+
 {- | The plugin's fits for a hole, best first: none when the hole has no
 type, when its type has a @forall@ or a class context at the top, when a
 multiplicity is not @Many@, or when the search fails. The flag says whether
 a model was asked.
 -}
-fitsFor :: PluginOptions -> Maybe FitModel -> TypedHole -> [HoleFitCandidate] -> TcM ([HoleFit], Bool)
-fitsFor (PluginOptions options' ranking _ _) fitModel hole scope = case th_hole hole of
+fitsFor ::
+    PluginOptions ->
+    Maybe (Maybe (Text, Int) -> Int -> (Text, Int) -> Double) ->
+    TypedHole ->
+    [HoleFitCandidate] ->
+    TcM ([HoleFit], Bool)
+fitsFor (PluginOptions options' ranking _ _) scorer hole scope = case th_hole hole of
     Nothing -> pure ([], False)
     Just Hole{hole_ty = holeType} -> do
         elements <- globalRdrEnvElts <$> getGlobalRdrEnv
@@ -381,8 +414,8 @@ fitsFor (PluginOptions options' ranking _ _) fitModel hole scope = case th_hole 
                 pure ([RawHoleFit (shown fit) | fit <- take (optionFits options) ordered], asked)
   where
     -- With a fit model, mode (b) checks the programs in the order of the model's score.
-    options = case fitModel of
-        Just found -> options'{optionMode = States (Enumerated HostOrder), optionScore = Just (tokenScore found)}
+    options = case scorer of
+        Just score -> options'{optionMode = States (Enumerated HostOrder), optionScore = Just score}
         Nothing -> options'
     -- With a ranking, the model orders more fits than the plugin shows.
     wanted = maybe (optionFits options) (max (optionFits options) . rankingPool) ranking

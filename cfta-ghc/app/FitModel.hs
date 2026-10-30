@@ -3,8 +3,8 @@
 {- | Build and merge fit models ("Data.CFTA.GHC.Model"), the models that order
 the fits of the hole-fit plugin (option @model@ of "Data.CFTA.GHC.HoleFits").
 
-> cfta-fit-model build FILES OUT [MODULE...]
-> cfta-fit-model merge MODEL MODEL OUT
+> cfta-fit-model build FILES OUT.cfta [MODULE...]
+> cfta-fit-model merge MODEL.cfta MODEL.cfta OUT.cfta
 
 @build@ reads the paths of Haskell modules from FILES, one on each line. The
 candidates are those that cfta-ghc reads from the Prelude, "Data.List",
@@ -43,7 +43,9 @@ main = do
             model <- merge <$> load left <*> load right
             Text.writeFile out (printFitModel model)
         _ -> do
-            hPutStrLn stderr "usage: cfta-fit-model build FILES OUT [MODULE...] | cfta-fit-model merge MODEL MODEL OUT"
+            hPutStrLn
+                stderr
+                "usage: cfta-fit-model build FILES OUT.cfta [MODULE...] | cfta-fit-model merge MODEL.cfta MODEL.cfta OUT.cfta"
             exitFailure
 
 -- | Build the model of the modules that a file lists.

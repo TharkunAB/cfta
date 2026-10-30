@@ -20,6 +20,7 @@ module Data.CFTA.GHC.Corpus (
     newParser,
     parserOf,
     moduleTerms,
+    holeContext,
 ) where
 
 import Control.Exception (SomeException, evaluate, try)
@@ -29,6 +30,7 @@ import Data.Maybe (fromMaybe)
 import qualified Data.Set as Set
 import Data.Text (Text)
 import qualified Data.Text as Text
+import Text.Read (readMaybe)
 
 import GHC (getSessionDynFlags)
 import GHC.Data.FastString (mkFastString)
@@ -45,7 +47,7 @@ import GHC.Platform (platformArchOS)
 import GHC.Types.Name (nameOccName)
 import GHC.Types.Name.Occurrence (OccName, isSymOcc, occNameString)
 import GHC.Types.Name.Reader (RdrName (..))
-import GHC.Types.SrcLoc (GenLocated (L), mkRealSrcLoc, unLoc)
+import GHC.Types.SrcLoc (GenLocated (L), SrcSpan (RealSrcSpan), mkRealSrcLoc, srcSpanStartCol, srcSpanStartLine, unLoc)
 import GHC.Utils.Logger (Logger, getLogger)
 
 import Data.CFTA.GHC.Session (Session, inSession)
@@ -67,28 +69,101 @@ candidates of the given names from the given modules. 'Nothing' when the
 module does not parse, or uses CPP.
 -}
 moduleTerms :: Parser -> [Text] -> Set.Set Text -> FilePath -> IO (Maybe [(Text, Term Text)])
-moduleTerms (Parser flags logger supported) modules names file = do
+moduleTerms parser modules names file = do
+    found <- parseFile parser file
+    case found of
+        Nothing -> pure Nothing
+        Just parsed -> do
+            let terms = parsedTerms (map Text.unpack modules) names parsed
+            outcome <- try (evaluate (length (show terms)))
+            pure $ case outcome :: Either SomeException Int of
+                Right _ -> Just terms
+                Left _ -> Nothing
+
+{- | The context of the hole that starts at a line and a column of a module
+file: the symbol of the application whose argument the hole is, with the
+number of the application's arguments, and the hole's position among them.
+In @foldr f _ xs@ the hole has the context @(foldr/3, 1)@. 'Nothing' when the
+module does not parse, or the hole is not an argument of an application.
+-}
+holeContext :: Parser -> [Text] -> Set.Set Text -> FilePath -> (Int, Int) -> IO (Maybe (Text, Int))
+holeContext parser modules names file start = do
+    found <- parseFile parser file
+    pure $ case found of
+        Nothing -> Nothing
+        Just parsed ->
+            let nameOf = namer (map Text.unpack modules) names parsed
+                contexts = [context | (context, at) <- holeArguments nameOf (hsmodDecls parsed), at == start]
+             in case contexts of
+                    [] -> Nothing
+                    _ -> Just (snd (maximum [(arity symbol, (symbol, position)) | (symbol, position) <- contexts]))
+  where
+    -- The number after the slash of a symbol.
+    arity :: Text -> Int
+    arity = fromMaybe 0 . readMaybe . Text.unpack . Text.takeWhileEnd (/= '/')
+
+-- | The parsed module of a file. 'Nothing' when it does not parse, or uses CPP.
+parseFile :: Parser -> FilePath -> IO (Maybe (HsModule GhcPs))
+parseFile (Parser flags logger supported) file = do
     outcome <- try $ do
         buffer <- hGetStringBuffer file
         let (_, pragmas) = getOptions (initParserOpts flags) supported buffer file
         (moduleFlags, _, _) <- parseDynamicFilePragma logger flags pragmas
-        if xopt Cpp moduleFlags
-            then pure Nothing
-            else case unP parseModule (initParserState (initParserOpts moduleFlags) buffer (mkRealSrcLoc (mkFastString file) 1 1)) of
-                POk _ parsed -> do
-                    let found = parsedTerms (map Text.unpack modules) names (unLoc parsed)
-                    _ <- evaluate (length (show found))
-                    pure (Just found)
-                PFailed _ -> pure Nothing
-    pure $ case outcome :: Either SomeException (Maybe [(Text, Term Text)]) of
+        pure $
+            if xopt Cpp moduleFlags
+                then Nothing
+                else case unP parseModule (initParserState (initParserOpts moduleFlags) buffer (mkRealSrcLoc (mkFastString file) 1 1)) of
+                    POk _ parsed -> Just (unLoc parsed)
+                    PFailed _ -> Nothing
+    pure $ case outcome :: Either SomeException (Maybe (HsModule GhcPs)) of
         Right found -> found
         Left _ -> Nothing
 
--- | The terms of the maximal applications of a parsed module.
-parsedTerms :: [String] -> Set.Set Text -> HsModule GhcPs -> [(Text, Term Text)]
-parsedTerms modules names parsed = collect (hsmodDecls parsed)
+{- | The holes that are arguments of applications: for each application and
+each hole among its arguments, the application's symbol, the hole's
+position, and the line and column where the hole starts.
+-}
+holeArguments :: (Data a) => (RdrName -> Text) -> a -> [((Text, Int), (Int, Int))]
+holeArguments nameOf = go
   where
-    -- The modules of each qualifier.
+    go :: (Data b) => b -> [((Text, Int), (Int, Int))]
+    go value = here <> concat (gmapQ go value)
+      where
+        here = case cast value :: Maybe (LHsExpr GhcPs) of
+            Just expression
+                | (Just headName, arguments@(_ : _)) <- spine expression ->
+                    [ ((headName <> "/" <> Text.pack (show (length arguments)), position), at)
+                    | (position, argument) <- zip [0 ..] arguments
+                    , Just at <- [holeStart argument]
+                    ]
+            _ -> []
+    -- The head of an application, if it is a name, and its arguments.
+    spine (L _ expression) = case expression of
+        HsApp _ function argument -> let (headName, arguments) = spine function in (headName, arguments <> [argument])
+        HsPar _ inner -> spine inner
+        HsAppType _ inner _ -> spine inner
+        OpApp _ left (L _ (HsVar _ operator)) right
+            | occNameString (rdrOcc (unLoc operator)) == "$" ->
+                let (headName, arguments) = spine left in (headName, arguments <> [right])
+            | otherwise -> (Just (nameOf (unLoc operator)), [left, right])
+        HsVar _ name -> (Just (nameOf (unLoc name)), [])
+        _ -> (Nothing, [])
+    holeStart (L location expression) = case expression of
+        HsHole _ | RealSrcSpan span' _ <- locA location -> Just (srcSpanStartLine span', srcSpanStartCol span')
+        HsPar _ inner -> holeStart inner
+        _ -> Nothing
+
+{- | The text of a name in a parsed module: a candidate's text, when the
+qualifier (if any) names one of the modules, and @var@ otherwise.
+-}
+namer :: [String] -> Set.Set Text -> HsModule GhcPs -> RdrName -> Text
+namer modules names parsed name = case name of
+    Qual qualifier occurrence
+        | any (`elem` modules) (Map.findWithDefault [moduleNameString qualifier] (moduleNameString qualifier) qualifiers) ->
+            candidate occurrence
+        | otherwise -> "var"
+    _ -> candidate (rdrOcc name)
+  where
     qualifiers =
         Map.fromListWith
             (<>)
@@ -97,6 +172,23 @@ parsedTerms modules names parsed = collect (hsmodDecls parsed)
               )
             | declaration <- map unLoc (hsmodImports parsed)
             ]
+    candidate occurrence =
+        let text = Text.pack (if isSymOcc occurrence then "(" <> occNameString occurrence <> ")" else occNameString occurrence)
+         in if Set.member text names then text else "var"
+
+-- | The occurrence of a name.
+rdrOcc :: RdrName -> OccName
+rdrOcc name = case name of
+    Unqual occurrence -> occurrence
+    Qual _ occurrence -> occurrence
+    Orig _ occurrence -> occurrence
+    Exact exact -> nameOccName exact
+
+-- | The terms of the maximal applications of a parsed module.
+parsedTerms :: [String] -> Set.Set Text -> HsModule GhcPs -> [(Text, Term Text)]
+parsedTerms modules names parsed = collect (hsmodDecls parsed)
+  where
+    nameOf = namer modules names parsed
     collect :: (Data a) => a -> [(Text, Term Text)]
     collect value = case cast value :: Maybe (GRHS GhcPs (LHsExpr GhcPs)) of
         Just (GRHS _ guards body) -> concatMap collect guards <> rooted "top" (unLoc body)
@@ -129,20 +221,3 @@ parsedTerms modules names parsed = collect (hsmodDecls parsed)
     node name arguments =
         let (terms, inner) = unzip (map convert arguments)
          in (Node (name <> "/" <> Text.pack (show (length terms))) terms, concat inner)
-    nameOf :: RdrName -> Text
-    nameOf name = case name of
-        Qual qualifier occurrence
-            | any (`elem` modules) (Map.findWithDefault [moduleNameString qualifier] (moduleNameString qualifier) qualifiers) ->
-                candidate occurrence
-            | otherwise -> "var"
-        _ -> candidate (rdrOcc name)
-    candidate :: OccName -> Text
-    candidate occurrence =
-        let text = Text.pack (if isSymOcc occurrence then "(" <> occNameString occurrence <> ")" else occNameString occurrence)
-         in if Set.member text names then text else "var"
-    rdrOcc :: RdrName -> OccName
-    rdrOcc name = case name of
-        Unqual occurrence -> occurrence
-        Qual _ occurrence -> occurrence
-        Orig _ occurrence -> occurrence
-        Exact exact -> nameOccName exact

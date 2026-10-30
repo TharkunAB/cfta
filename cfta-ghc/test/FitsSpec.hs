@@ -21,11 +21,15 @@ import Control.Monad.IO.Class (liftIO)
 import Data.IORef (modifyIORef', newIORef, readIORef)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (isJust, isNothing)
+import qualified Data.Set as Set
 import Data.Text (Text)
 import qualified Data.Text as Text
+import System.Directory (getTemporaryDirectory, removeFile)
+import System.IO (hClose, hPutStr, openTempFile)
 import System.Timeout (timeout)
 import Test.Hspec (describe, hspec, it, shouldBe, shouldReturn, shouldSatisfy)
 
+import Data.CFTA.GHC.Corpus (holeContext, newParser)
 import Data.CFTA.GHC.Fits
 import Data.CFTA.GHC.HoleFits (PluginOptions (..), readOptions)
 import Data.CFTA.GHC.Internal.Check (Leaf (..), complete, newEnvironment, startWalker, step)
@@ -268,9 +272,27 @@ main = withSession ["import Prelude", "import Data.Coerce (coerce)", "import Dat
                 score Nothing 0 ("length", 1) `shouldSatisfy` (\value -> abs (value - log (1 / 2 + 1 / 2 * 2 / 22)) < 1e-12)
                 score (Just ("length", 1)) 0 ("map 2", 2) `shouldBe` score (Just ("length", 1)) 0 ("map", 2)
                 symbolOf model ("xs", 0) `shouldBe` "var/0"
+            it "finds the application around a hole, in the parsed module" $ do
+                parser <- newParser session
+                temporary <- getTemporaryDirectory
+                (path, handle) <- openTempFile temporary "Holes.hs"
+                let source =
+                        [ "module Holes where"
+                        , "import Data.Maybe (fromMaybe)"
+                        , "firstOr d xs = fromMaybe d _"
+                        , "pairs xs ys = zip xs (_)"
+                        , "total xs = foldr (+) _ xs"
+                        , "whole = _"
+                        ]
+                hPutStr handle (unlines source) >> hClose handle
+                let names = Set.fromList ["fromMaybe", "zip", "foldr", "(+)"]
+                    at line = (line, 1 + length (takeWhile (/= '_') (source !! (line - 1))))
+                    context line = holeContext parser ["Prelude", "Data.Maybe"] names path (at line)
+                mapM context [3, 4, 5, 6] `shouldReturn` [Just ("fromMaybe/2", 1), Just ("zip/2", 1), Just ("foldr/3", 1), Nothing]
+                removeFile path
             it "reads the options model and model-module of the plugin" $ do
-                fmap pluginModel (readOptions ["model=base.fit-model"]) `shouldBe` Right (Just "base.fit-model")
-                fmap pluginModuleWeight (readOptions ["model=base.fit-model", "model-module=3"]) `shouldBe` Right (Just 3)
+                fmap pluginModel (readOptions ["model=base.cfta"]) `shouldBe` Right (Just "base.cfta")
+                fmap pluginModuleWeight (readOptions ["model=base.cfta", "model-module=3"]) `shouldBe` Right (Just 3)
                 fmap pluginModuleWeight (readOptions ["model-module=3"]) `shouldBe` Left "model-module needs the option model"
         describe "the fast rejects" $
             forM_ soundness $ \(name, signature, arguments, program) ->

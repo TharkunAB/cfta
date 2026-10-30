@@ -35,6 +35,8 @@ a model of Hackage.
 
 = The text form @fit-model 1;@
 
+A file of a fit model has the extension @.cfta@, as @base.cfta@.
+
 Each record is one line, which ends with a semicolon; the words are separated
 by spaces. The first line is @fit-model 1;@. Then, in any order:
 
@@ -54,6 +56,7 @@ module Data.CFTA.GHC.Model (
     merge,
     scale,
     tokenScore,
+    tokenScoreAt,
     symbolOf,
     printFitModel,
     parseFitModel,
@@ -133,7 +136,16 @@ once, and the result to each token: the totals of the contexts are computed
 once.
 -}
 tokenScore :: FitModel -> Maybe (Text, Int) -> Int -> (Text, Int) -> Double
-tokenScore model = \parent position token -> log (probability (maybe "top" (symbolOf model) parent) position (symbolOf model token))
+tokenScore model = tokenScoreAt model ("top", 0)
+
+{- | 'tokenScore' with the context of the root of the fit: a parent symbol (as
+@foldr/3@, or @top@) and a position, as for a hole that is an argument of an
+application ("Data.CFTA.GHC.Corpus.holeContext").
+-}
+tokenScoreAt :: FitModel -> (Text, Int) -> Maybe (Text, Int) -> Int -> (Text, Int) -> Double
+tokenScoreAt model (rootParent, rootPosition) = \parent position token -> case parent of
+    Nothing -> log (probability rootParent rootPosition (symbolOf model token))
+    Just above -> log (probability (symbolOf model above) position (symbolOf model token))
   where
     alphabet =
         fromIntegral . Set.size . Set.fromList $
