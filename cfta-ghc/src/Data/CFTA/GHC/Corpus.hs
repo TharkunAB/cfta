@@ -38,6 +38,7 @@ module Data.CFTA.GHC.Corpus (
     moduleTerms,
     moduleNames,
     holeContext,
+    holeEquations,
 ) where
 
 import Control.Exception (SomeException, evaluate, try)
@@ -64,7 +65,16 @@ import GHC.Platform (platformArchOS)
 import GHC.Types.Name (nameOccName)
 import GHC.Types.Name.Occurrence (OccName, isSymOcc, occNameString)
 import GHC.Types.Name.Reader (RdrName (..))
-import GHC.Types.SrcLoc (GenLocated (L), SrcSpan (RealSrcSpan), mkRealSrcLoc, srcSpanStartCol, srcSpanStartLine, unLoc)
+import GHC.Types.SrcLoc (
+    GenLocated (L),
+    SrcSpan (RealSrcSpan),
+    mkRealSrcLoc,
+    srcSpanEndCol,
+    srcSpanEndLine,
+    srcSpanStartCol,
+    srcSpanStartLine,
+    unLoc,
+ )
 import GHC.Utils.Logger (Logger, getLogger)
 
 import Data.CFTA.GHC.Session (Session, inSession)
@@ -136,6 +146,38 @@ holeContext parser modules names file start = do
         | otherwise = inner term
     inner (Node symbol children) =
         [(symbol, position) | (position, Node child _) <- zip [0 ..] children, child == marker] <> concatMap inner children
+
+{- | The equations that hold the hole that starts at a line and a column of
+a module file. For each equation: the name of its definition; its
+parameters, a name for a variable (also with a bang) and 'Nothing' for
+another pattern; and whether the hole is the whole right-hand side of the
+only equation of the definition, without a guard. In
+@firstOr fallback xs = _@ the hole has the equation
+@("firstOr", [Just "fallback", Just "xs"], True)@. 'Nothing' when the module
+does not parse, or uses CPP.
+-}
+holeEquations :: Parser -> FilePath -> (Int, Int) -> IO (Maybe [(Text, [Maybe Text], Bool)])
+holeEquations parser file start = fmap (equations . hsmodDecls) <$> parseFile parser file
+  where
+    equations :: (Data a) => a -> [(Text, [Maybe Text], Bool)]
+    equations value = here <> concat (gmapQ equations value)
+      where
+        here = case cast value :: Maybe (MatchGroup GhcPs (LHsExpr GhcPs)) of
+            Just (MG _ (L _ matches)) ->
+                [ (Text.pack (occNameString (rdrOcc name)), map parameter patterns, length matches == 1 && isHole body)
+                | L location (Match _ FunRhs{mc_fun = L _ name} (L _ patterns) (GRHSs _ body _)) <- matches
+                , RealSrcSpan span' _ <- [locA location]
+                , (srcSpanStartLine span', srcSpanStartCol span') <= start
+                , start < (srcSpanEndLine span', srcSpanEndCol span')
+                ]
+            _ -> []
+    parameter (L _ pattern') = case pattern' of
+        VarPat _ name -> Just (Text.pack (occNameString (rdrOcc (unLoc name))))
+        BangPat _ inner -> parameter inner
+        _ -> Nothing
+    isHole body = case body of
+        L _ (GRHS _ [] (L _ (HsHole _))) :| [] -> True
+        _ -> False
 
 -- | The symbol of a hole at a line and a column, without its number of children.
 holeSymbol :: (Int, Int) -> Text

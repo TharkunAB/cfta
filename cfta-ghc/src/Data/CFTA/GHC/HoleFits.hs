@@ -12,8 +12,14 @@ type is a type variable), and the hole's type, implications, and relevant
 constraints (the 'TypedHole'). A hole of a function type gets its fits as lambdas: each
 argument of the type is a variable that the fit uses once, as in a Hoogle+
 query. The plugin drops the fits that GHC finds itself (one identifier
-applied to the arguments in order, or @id@ as @\\x1 -> x1@), and the fits
-that call a definition that holds the hole, because such a fit can loop.
+applied to the arguments in order, or @id@ as @\\x1 -> x1@). A fit can call
+a definition that holds the hole, as a recursive call, with two exceptions,
+because such a call loops: no call when the hole is the whole right-hand
+side of the definition's only equation (@count = _@), and no call with the
+parameters of the equation that holds the hole (@sizeOf m@ in
+@sizeOf m = case m of Just ys -> _@). When the module does not parse with
+GHC's parser (it uses CPP), a fit does not call a definition that holds the
+hole.
 Hectare's rule 'hectareAvoid' applies: a list function is not applied to
 @[]@. A fit with the normal form of an earlier fit is skipped
 ('optionNormalForms'), and a fit that ignores part of itself or drops an
@@ -99,7 +105,7 @@ import qualified Data.Text.IO as Text
 import System.IO (hPutStrLn, stderr)
 import Text.Read (readMaybe)
 
-import Data.CFTA.GHC.Corpus (holeContext, moduleNames, moduleTerms, parserOf)
+import Data.CFTA.GHC.Corpus (holeContext, holeEquations, moduleNames, moduleTerms, parserOf)
 import Data.CFTA.GHC.Fits
 import Data.CFTA.GHC.Model (FitModel (..), fromTerms, merge, parseFitModel, scale, tokenScoreShared)
 import Data.CFTA.GHC.Rank (Ranking (..), defaultRanking, holeState, rankedFits, rankingModel)
@@ -405,9 +411,24 @@ fitsFor ::
     TcM ([HoleFit], Bool)
 fitsFor (PluginOptions options' ranking _ _ _ rerank) scorer hole scope = case th_hole hole of
     Nothing -> pure ([], False)
-    Just Hole{hole_ty = holeType} -> do
+    Just Hole{hole_ty = holeType, hole_loc = location} -> do
         elements <- globalRdrEnvElts <$> getGlobalRdrEnv
-        let everything = withoutRepeats (scope <> map GreHFCand elements <> map (NameHFCand . dataConName) syntax)
+        parser <- parserOf <$> getDynFlags <*> (hsc_logger . env_top <$> getEnv)
+        let span' = ctLocSpan location
+        equations <-
+            liftIO (holeEquations parser (unpackFS (srcSpanFile span')) (srcSpanStartLine span', srcSpanStartCol span'))
+        let enclosing = definitionsHolding scope elements
+            localNames = Set.fromList [idName identifier | IdHFCand identifier <- scope]
+            -- A definition that holds the hole is not a fit when the hole is the
+            -- whole right-hand side of its only equation, because a call of it
+            -- loops. When the module does not parse, no definition that holds
+            -- the hole is a fit.
+            looping = maybe enclosing (\found' -> Set.fromList [Text.unpack name | (name, _, True) <- found']) equations
+            -- A definition that holds the hole is a local and a name of the
+            -- module: the plugin keeps the local.
+            elsewhere element = not (gre_lcl element && getOccString (greName element) `Set.member` enclosing)
+            everything =
+                withoutRepeats (scope <> map GreHFCand (filter elsewhere elements) <> map (NameHFCand . dataConName) syntax)
             syntax = [nilDataCon, consDataCon, tupleDataCon Boxed 2]
             -- The scope in an order that does not depend on uniques.
             byName (name, _, _) (name', _, _) = stableNameCmp name name'
@@ -416,8 +437,12 @@ fitsFor (PluginOptions options' ranking _ _ _ rerank) scorer hole scope = case t
         types <- liftZonkM (zonkTcTypes [typ' | (_, _, typ') <- found])
         let (variables, context, _) = tcSplitSigmaTy typ
             (parameters, result) = tcSplitFunTys typ
-            enclosing = definitionsHolding scope elements
-            named = uniqueNames [(name, typ') | ((name, _, _), typ') <- zip found types, getOccString name `Set.notMember` enclosing]
+            named =
+                uniqueNames
+                    [ (name, typ')
+                    | ((name, _, _), typ') <- zip found types
+                    , not (name `Set.member` localNames && getOccString name `Set.member` looping)
+                    ]
             used = Set.fromList (map fst named)
             arguments =
                 take
@@ -440,9 +465,28 @@ fitsFor (PluginOptions options' ranking _ _ _ rerank) scorer hole scope = case t
                 flexible <-
                     filterM (fmap isFlexi . readMetaTyVar) (filter (\v -> isTcTyVar v && isMetaTyVar v) (tyCoVarsOfTypesList (typ : types)))
                 -- The locals of the hole and the arguments of its lambdas are @arg@ for the model.
-                let localNames = Set.fromList [idName identifier | IdHFCand identifier <- scope]
-                    argumentNames = Set.fromList ([label | (label, (name, _)) <- named, name `Set.member` localNames] <> arguments)
-                outcome <- attempt (search (withScorer argumentNames) candidates arguments result)
+                -- A definition that holds the hole is @var@, as in the corpus.
+                let argumentNames =
+                        Set.fromList
+                            ( [ label
+                              | (label, (name, _)) <- named
+                              , name `Set.member` localNames
+                              , getOccString name `Set.notMember` enclosing
+                              ]
+                                <> arguments
+                            )
+                -- A call of the definition of an equation that holds the hole,
+                -- with the parameters of the equation, loops at once.
+                let labelOf = Map.fromList [(Text.pack (getOccString name), label) | (label, (name, _)) <- named, name `Set.member` localNames]
+                    loops =
+                        Set.fromList
+                            [ foldl App (Var function') (map Var labels)
+                            | (function, equationParameters, _) <- fromMaybe [] equations
+                            , Just function' <- [Map.lookup function labelOf]
+                            , Just labels <- [traverse (>>= (`Map.lookup` labelOf)) equationParameters]
+                            ]
+                    dropped program = foundByGhc arguments program || program `Set.member` loops
+                outcome <- attempt (search (withScorer argumentNames) candidates dropped result)
                 -- As 'GHC.Tc.Errors.Hole.withoutUnification', also when the
                 -- search stops part way.
                 mapM_ (\variable -> writeTcRef (metaTyVarRef variable) Flexi) flexible
@@ -484,10 +528,10 @@ fitsFor (PluginOptions options' ranking _ _ _ rerank) scorer hole scope = case t
     wanted =
         maybe (optionFits options') (max (optionFits options') . rankingPool) ranking
             `max` (if rerank && isJust scorer then 50 else 0)
-    search options candidates arguments result = do
+    search options candidates dropped result = do
         kept <- newTcRef []
         let accept fit
-                | foundByGhc arguments (fitProgram fit) = pure True
+                | dropped (fitProgram fit) = pure True
                 | otherwise = do
                     updTcRef kept (fit :)
                     fits <- readTcRef kept
