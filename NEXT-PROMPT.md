@@ -1,3 +1,52 @@
+# Pruning row-filter control checkpoint — 2026-10-30 22:54 CET
+
+Checked source: `52ca456d99bcef2dd6015543cce6636e87d4cbd9` on formalize; earlier control c6b104886.
+Read lean/notes-current-narrowing-control.md first. The full objective is open.
+
+Six laws control actual row filtering, same-key physical replay, complete-row
+preservation and strict complete-row-set loss for a changed normal handle.
+A constructor/Keeps companion derives current Normal/Available/Ordinary.
+Ordinary restricts the root form. It permits recursive children. The subset
+and first strict-loss laws do not require recursive NodeDomain or closedness.
+Normal/Ready/Available, actual success and encode/lineage gates remain exact.
+No numeric sequence, global handle carrier or original-depth bound is proved.
+
+The original uncompiled fourth control conclusion incorrectly returned pure()
+for Empty. Actual Action.prepare rejects Empty before encodeNode. Root fixed
+the conclusion to the exact Empty/nonempty match and qualified
+EnumerationState.reject. The first three headers remain exact. The strict-
+loss repair only replaces unavailable by_contra with Classical.byContradiction.
+These are Lean repairs. No Haskell defect/fix/candidate or native run is
+established. Keep actual runtime Empty rejection. All older findings remain.
+
+Whole-worker original-carrier, recording and completed mixed-native cache
+laws remain exact. Both finite-depth workers retain stable outcomes, exact
+resources and one original path carrier. Depth-dependent work/resource gates
+and recursive exhaustion remain permitted. Sufficient ORIGINAL depth for the
+intended ordered prefix, earlier alternatives and staged children is still
+the largest gap. Compose filter lineages and bound their source resets,
+incoming/dispatch intersection, Prepared Mu/Union work, slot and raw SCS work.
+
+Default+strict Audit: 4,748 jobs / 82,993 dependency checks. Public: 1,201
+checks / unchanged 116 definition prints. Fifteen serial capped commands,
+twelve pass / three repaired failed probes, 32 snapshots. All six new axiom
+reports use standard axioms. Complete old and intermediate public outputs
+remain exact prefixes. Full new tail 11,301 bytes / 151 lines was read.
+All 547 prior protected and 835 native inputs remain exact.
+
+Independent review reads all 246 new source lines and six expanded contracts;
+zero old whole sources. All frozen source owners, incidents, originals and
+repairs remain. Archive: lean/restart-evidence/20261030-narrowing-control.
+The five-law native arbitrary-prefix draft is included as UNCOMPILED future
+work. Root has not probed it. Whole-caller/EnabledEmpty transport remains.
+The separate normal producer review is source-only and still in progress.
+Keep full public adapters, Haskell, constructor/equality/count/order/rank scope.
+The backend marker remains blocked despite resumed work. No pause,
+completion or completion percentage is claimed.
+The complete prior document follows as an exact suffix.
+
+---
+
 # Native cache preservation checkpoint — 2026-10-30 22:23 CET
 
 Checked source: `4adf96c3fdd959a255c4b888bd40bd65b0822588` on `formalize`.
