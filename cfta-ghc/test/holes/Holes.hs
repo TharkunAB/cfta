@@ -28,3 +28,10 @@ sizeOf m = case m of
 -- A hole of a function type: the fits print eta reduced, as (,) x.
 pairWith :: a -> b -> (a, b)
 pairWith x = _
+
+-- A function that GHC checks after the hole is a fit: twice x.
+twiceOr :: Int -> Int
+twiceOr x = _
+
+twice :: Int -> Int
+twice n = n + n

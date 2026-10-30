@@ -19,8 +19,8 @@ because such a call loops: no call when the hole is the whole right-hand
 side of the definition's only equation (@count = _@), and no call with the
 parameters of the equation that holds the hole (@sizeOf m@ in
 @sizeOf m = case m of Just ys -> _@). When the module does not parse with
-GHC's parser (it uses CPP), a fit does not call a definition that holds the
-hole.
+GHC's parser (it uses CPP), a fit does not call a top-level definition that
+holds the hole.
 Hectare's rule 'hectareAvoid' applies: a list function is not applied to
 @[]@. A fit with the normal form of an earlier fit is skipped
 ('optionNormalForms'), and a fit that ignores part of itself or drops an
@@ -134,9 +134,9 @@ import GHC.Driver.Ppr (showSDoc)
 import GHC.Tc.Errors.Hole.FitTypes (HoleFit (RawHoleFit), HoleFitCandidate (..))
 import GHC.Tc.Errors.Hole.Plugin (HoleFitPlugin (..), HoleFitPluginR (..))
 import GHC.Tc.Types (env_top)
-import GHC.Tc.Types.BasicTypes (TcTyThing (AGlobal, ATcId, tct_id))
+import GHC.Tc.Types.BasicTypes (TcBinder (..), TcTyThing (AGlobal, ATcId, tct_id))
 import GHC.Tc.Types.Constraint (Hole (..))
-import GHC.Tc.Types.CtLoc (ctLocSpan)
+import GHC.Tc.Types.CtLoc (CtLoc, ctLocEnv, ctLocSpan, ctl_bndrs)
 import GHC.Tc.Utils.Env (tcLookup)
 import GHC.Tc.Utils.Monad (
     TcM,
@@ -152,7 +152,7 @@ import GHC.Tc.Utils.Monad (
 import GHC.Tc.Utils.TcMType (readMetaTyVar)
 import GHC.Tc.Utils.TcType (MetaDetails (Flexi), isFlexi, isMetaTyVar, metaTyVarRef, tcSplitFunTys, tcSplitSigmaTy)
 import GHC.Tc.Zonk.TcType (zonkTcType, zonkTcTypes)
-import GHC.Types.Basic (Boxity (Boxed))
+import GHC.Types.Basic (Boxity (Boxed), isTopLevel)
 import GHC.Types.Id (Id, idMult, idName, idType)
 import GHC.Types.Name (
     Name,
@@ -418,16 +418,18 @@ fitsFor (PluginOptions options' ranking _ _ _ rerank) scorer hole scope = case t
         let span' = ctLocSpan location
         equations <-
             liftIO (holeEquations parser (unpackFS (srcSpanFile span')) (srcSpanStartLine span', srcSpanStartCol span'))
-        let enclosing = definitionsHolding scope elements
+        let definitions = moduleLocals scope elements
+            -- The definitions of the module that hold the hole.
+            holding = Set.intersection (binderNames location) definitions
             localNames = Set.fromList [idName identifier | IdHFCand identifier <- scope]
             -- A definition that holds the hole is not a fit when the hole is the
             -- whole right-hand side of its only equation, because a call of it
-            -- loops. When the module does not parse, no definition that holds
-            -- the hole is a fit.
-            looping = maybe enclosing (\found' -> Set.fromList [Text.unpack name | (name, _, True) <- found']) equations
+            -- loops. When the module does not parse, no top-level definition
+            -- that holds the hole is a fit.
+            looping = maybe holding (\found' -> Set.fromList [Text.unpack name | (name, _, True) <- found']) equations
             -- A definition that holds the hole is a local and a name of the
             -- module: the plugin keeps the local.
-            elsewhere element = not (gre_lcl element && getOccString (greName element) `Set.member` enclosing)
+            elsewhere element = not (gre_lcl element && getOccString (greName element) `Set.member` definitions)
             everything =
                 withoutRepeats (scope <> map GreHFCand (filter elsewhere elements) <> map (NameHFCand . dataConName) syntax)
             syntax = [nilDataCon, consDataCon, tupleDataCon Boxed 2]
@@ -466,13 +468,13 @@ fitsFor (PluginOptions options' ranking _ _ _ rerank) scorer hole scope = case t
                 flexible <-
                     filterM (fmap isFlexi . readMetaTyVar) (filter (\v -> isTcTyVar v && isMetaTyVar v) (tyCoVarsOfTypesList (typ : types)))
                 -- The locals of the hole and the arguments of its lambdas are @arg@ for the model.
-                -- A definition that holds the hole is @var@, as in the corpus.
+                -- A definition of the module is @var@, as in the corpus.
                 let argumentNames =
                         Set.fromList
                             ( [ label
                               | (label, (name, _)) <- named
                               , name `Set.member` localNames
-                              , getOccString name `Set.notMember` enclosing
+                              , getOccString name `Set.notMember` definitions
                               ]
                                 <> arguments
                             )
@@ -494,8 +496,8 @@ fitsFor (PluginOptions options' ranking _ _ _ rerank) scorer hole scope = case t
                 flags <- getDynFlags
                 let shown fit = render names arguments (fitProgram fit)
                     plain = Text.pack . showSDoc flags
-                    definition = [identifier | IdHFCand identifier <- scope, getOccString identifier `Set.member` enclosing]
-                    locals = [identifier | IdHFCand identifier <- scope, getOccString identifier `Set.notMember` enclosing]
+                    definition = [identifier | IdHFCand identifier <- scope, getOccString identifier `Set.member` holding]
+                    locals = [identifier | IdHFCand identifier <- scope, getOccString identifier `Set.notMember` definitions]
                     state =
                         holeState
                             ( (\identifier -> (plain (ppr identifier), plain (ppr (idType identifier)), ["..."]))
@@ -579,14 +581,28 @@ lookupCandidate candidate = case candidate of
         | nameModule_maybe name `elem` [Just gHC_INTERNAL_ERR, Just gHC_INTERNAL_UNSAFE_COERCE] = Nothing
         | otherwise = Just found
 
-{- | The names of the definitions that hold the hole. GHC gives such a
-definition as a local, with the name of a definition of the module.
+{- | The names of the definitions of the module that GHC gives as locals in
+the scope of a hole: the definitions that hold the hole, and the definitions
+with a type signature that GHC checks after the hole.
 -}
-definitionsHolding :: [HoleFitCandidate] -> [GlobalRdrElt] -> Set.Set String
-definitionsHolding scope elements =
+moduleLocals :: [HoleFitCandidate] -> [GlobalRdrElt] -> Set.Set String
+moduleLocals scope elements =
     Set.intersection
         (Set.fromList [getOccString identifier | IdHFCand identifier <- scope])
         (Set.fromList [getOccString (greName element) | element <- elements, gre_lcl element])
+
+{- | The names of the binders that hold a hole, from GHC's binder stack. The
+stack also has the definitions with a type signature that GHC checks after
+the hole, as top-level binders; they do not hold the hole, so they are not
+in the result.
+-}
+binderNames :: CtLoc -> Set.Set String
+binderNames location = Set.fromList (concatMap name (ctl_bndrs (ctLocEnv location)))
+  where
+    name binder = case binder of
+        TcIdBndr identifier flag | not (isTopLevel flag) -> [getOccString identifier]
+        TcIdBndr_ExpType name' _ flag | not (isTopLevel flag) -> [getOccString name']
+        _ -> []
 
 -- | The candidates without a second candidate of the same name.
 withoutRepeats :: [HoleFitCandidate] -> [HoleFitCandidate]

@@ -13,11 +13,11 @@ test/holes/Holes.hs:5:9: error: [GHC-88464]
           with length @[] @a
           (imported from `Prelude' at test/holes/Holes.hs:1:8-12
            (and originally defined in `GHC.Internal.Data.Foldable'))
+        \x1 -> twice (length x1)
+        \x1 -> twiceOr (length x1)
         \x1 -> length (cycle x1)
         \x1 -> length (init x1)
         \x1 -> length (reverse x1)
-        \x1 -> length (tail x1)
-        \x1 -> pred (length x1)
   |
 5 | count = _
   |         ^
@@ -203,4 +203,29 @@ test/holes/Holes.hs:30:14: error: [GHC-88464]
    |
 30 | pairWith x = _
    |              ^
+
+test/holes/Holes.hs:34:13: error: [GHC-88464]
+    * Found hole: _ :: Int
+    * In an equation for `twiceOr': twiceOr x = _
+    * Relevant bindings include
+        x :: Int (bound at test/holes/Holes.hs:34:9)
+        twiceOr :: Int -> Int (bound at test/holes/Holes.hs:34:1)
+      Valid hole fits include
+        x :: Int (bound at test/holes/Holes.hs:34:9)
+        maxBound :: forall a. Bounded a => a
+          with maxBound @Int
+          (imported from `Prelude' at test/holes/Holes.hs:1:8-12
+           (and originally defined in `GHC.Internal.Enum'))
+        minBound :: forall a. Bounded a => a
+          with minBound @Int
+          (imported from `Prelude' at test/holes/Holes.hs:1:8-12
+           (and originally defined in `GHC.Internal.Enum'))
+        count []
+        sizeOf Nothing
+        twice x
+        fromEnum EQ
+        fromEnum GT
+   |
+34 | twiceOr x = _
+   |             ^
 
