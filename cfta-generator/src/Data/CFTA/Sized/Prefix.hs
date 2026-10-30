@@ -95,6 +95,13 @@ rows give them from their bottom-up deterministic rows. Otherwise they are
 sums over the listed completions. Weights on the symbols, not on the
 transitions, give each completion one weight, also when two runs accept it.
 
+'weightedTotal', 'unrankWeighted', and 'rankWeighted' give each completion an
+interval of integers whose length is in proportion to its weight. The
+intervals follow the order of 'completionTerms'. So a uniform integer below the
+total draws a completion in proportion to its weight, and the draw is one
+integer. With the weight one for each symbol, the interval of a completion
+holds only its rank.
+
 A 'Completions' value does not change, so a decoder that keeps the values of
 its prefix can go back one token with the value before it. When 'nextTokens'
 gives one token and the prefix is not complete, that token is forced. The
@@ -121,10 +128,14 @@ module Data.CFTA.Sized.Prefix (
 
     -- * Weights
     withWeights,
+    completionSymbols,
     completionWeight,
     nextTokenWeights,
     tokenProbability,
     drawCompletion,
+    weightedTotal,
+    unrankWeighted,
+    rankWeighted,
 
     -- * Verdicts on demand
     Deciding,
@@ -144,6 +155,7 @@ import Data.List (elemIndex, genericDrop, genericIndex, genericLength, genericTa
 import qualified Data.Map.Lazy as LazyMap
 import qualified Data.Map.Strict as Map
 import Data.Maybe (catMaybes, listToMaybe)
+import Data.Ratio (denominator, numerator)
 import qualified Data.Set as Set
 
 import qualified Data.CFTA as FTA
@@ -183,12 +195,12 @@ data Route symbol
       they are ambiguous.
       -}
       forall state. (Ord state, Eq symbol) => Indexed !(Table state symbol) !(SizeIndex (Term symbol)) (Term symbol -> Maybe SizedRank)
-    | {- | The completions in order, each with its tokens after the prefix and
-      whether the solver accepted it ('Yes') or did not decide it ('Unknown'),
-      for an automaton with constraints, or with more than 1024 deterministic
-      states.
+    | {- | The size bound, and the completions in order, each with its tokens
+      after the prefix and whether the solver accepted it ('Yes') or did not
+      decide it ('Unknown'), for an automaton with constraints, or with more
+      than 1024 deterministic states.
       -}
-      Listed [(Term symbol, [Token symbol], Verdict)]
+      Listed !Integer [(Term symbol, [Token symbol], Verdict)]
 
 -- | The automaton of the 'Indexed' route.
 data Table state symbol = Table
@@ -230,7 +242,7 @@ prefixCompletions (Size bound) automaton
         classes <- sized automaton
         Right
             $ emptyPrefix
-            $ Listed [(term, preorder term, Yes) | size <- [1 .. bound], term <- termsOfSize classes (Size size)]
+            $ Listed bound [(term, preorder term, Yes) | size <- [1 .. bound], term <- termsOfSize classes (Size size)]
   where
     reached = FTA.transitionTable $ FTA.trim automaton
     initial = FTA.initialState automaton
@@ -707,7 +719,9 @@ decided walk = do
             { completionsPrefix = decidingTokensBefore walk
             , completionsWeight = const 1
             , completionsRoute =
-                Listed [(term, rest, verdict) | ((term, rest), verdict) <- zip (decidingCandidates walk) found, verdict /= No]
+                Listed
+                    (decidingBudget walk + genericLength (decidingTokensBefore walk))
+                    [(term, rest, verdict) | ((term, rest), verdict) <- zip (decidingCandidates walk) found, verdict /= No]
             }
   where
     machine = decidingMachine walk
@@ -726,9 +740,9 @@ afterToken completions token = case completionsRoute completions of
     Indexed table _ _ ->
         let (index, position) = tablePrefixed table $ reverse prefix
          in if countUpTo (tableBound table) index == 0 then Nothing else Just $ after $ Indexed table index position
-    Listed listed ->
+    Listed bound listed ->
         let kept = [(term, rest, verdict) | (term, next : rest, verdict) <- listed, next == token]
-         in if null kept then Nothing else Just $ after $ Listed kept
+         in if null kept then Nothing else Just $ after $ Listed bound kept
   where
     prefix = token : completionsPrefix completions
     after route = completions{completionsPrefix = prefix, completionsRoute = route}
@@ -757,7 +771,7 @@ nextTokens completions = case completionsRoute completions of
         , let count = countUpTo (tableBound table) $ fst $ tablePrefixed table $ completionPrefix completions <> [token]
         , count > 0
         ]
-    Listed listed -> Map.toList $ Map.fromListWith (+) [(next, 1) | (_, next : _, Yes) <- listed]
+    Listed _ listed -> Map.toList $ Map.fromListWith (+) [(next, 1) | (_, next : _, Yes) <- listed]
 
 {- | The tokens that the solver neither offers nor rejects, in ascending order:
 the solver accepts no completion that starts with the prefix and the token,
@@ -768,7 +782,7 @@ rejected: the solver rejects each of its completions.
 undecidedTokens :: (Ord symbol) => Completions symbol -> [(Token symbol, Cardinality)]
 undecidedTokens completions = case completionsRoute completions of
     Indexed{} -> []
-    Listed listed ->
+    Listed _ listed ->
         [ (token, undecided)
         | (token, (Cardinality 0, undecided)) <-
             Map.toList $
@@ -792,7 +806,7 @@ completeVerdict completions = case completionsRoute completions of
     Indexed table index _
         | size <= tableBound table && countAtSize index (Size size) > 0 -> Yes
         | otherwise -> No
-    Listed listed -> case [verdict | (_, [], verdict) <- listed] of
+    Listed _ listed -> case [verdict | (_, [], verdict) <- listed] of
         verdict : _ -> verdict
         [] -> No
   where
@@ -802,7 +816,7 @@ completeVerdict completions = case completionsRoute completions of
 completionCount :: Completions symbol -> Cardinality
 completionCount completions = case completionsRoute completions of
     Indexed table index _ -> countUpTo (tableBound table) index
-    Listed listed -> genericLength [() | (_, _, Yes) <- listed]
+    Listed _ listed -> genericLength [() | (_, _, Yes) <- listed]
 
 -- | The completions, each once, in the order of "Data.CFTA.Sized".
 completionTerms :: Completions symbol -> [Term symbol]
@@ -813,7 +827,7 @@ completionTerms completions = case completionsRoute completions of
         , let Cardinality count = countAtSize index (Size size)
         , rank <- [0 .. count - 1]
         ]
-    Listed listed -> [term | (term, _, Yes) <- listed]
+    Listed _ listed -> [term | (term, _, Yes) <- listed]
 
 {- | The completions that the solver does not decide, each once, in order.
 Without a solver, the list is empty.
@@ -821,7 +835,7 @@ Without a solver, the list is empty.
 undecidedTerms :: Completions symbol -> [Term symbol]
 undecidedTerms completions = case completionsRoute completions of
     Indexed{} -> []
-    Listed listed -> [term | (term, _, Unknown) <- listed]
+    Listed _ listed -> [term | (term, _, Unknown) <- listed]
 
 {- | The completion at a rank in the order of 'completionTerms'. 'Nothing'
 when the rank is outside the completions. The rank is a place among the
@@ -839,7 +853,7 @@ unrankCompletion completions (Rank rank)
                 | otherwise = select (remaining - count) sizes
               where
                 Cardinality count = countAtSize index (Size size)
-        Listed _ -> listToMaybe $ genericDrop rank $ completionTerms completions
+        Listed{} -> listToMaybe $ genericDrop rank $ completionTerms completions
 
 {- | The rank of a completion in the order of 'completionTerms', the inverse of
 'unrankCompletion'. 'Nothing' when the term is not a completion.
@@ -851,7 +865,7 @@ rankCompletion completions term = case completionsRoute completions of
             | size <= tableBound table ->
                 Just $ Rank $ rank + sum [count | smaller <- [1 .. size - 1], let Cardinality count = countAtSize index (Size smaller)]
         _ -> Nothing
-    Listed _ -> Rank . toInteger <$> elemIndex term (completionTerms completions)
+    Listed{} -> Rank . toInteger <$> elemIndex term (completionTerms completions)
 
 -- Weights
 
@@ -864,12 +878,16 @@ symbol of the automaton has a negative weight.
 -}
 withWeights :: (symbol -> Rational) -> Completions symbol -> Maybe (Completions symbol)
 withWeights weight completions
-    | any ((< 0) . weight) symbols = Nothing
+    | any ((< 0) . weight) $ completionSymbols completions = Nothing
     | otherwise = Just completions{completionsWeight = weight}
-  where
-    symbols = case completionsRoute completions of
-        Indexed table _ _ -> map fst $ tableTokens table
-        Listed listed -> [symbol | (term, _, _) <- listed, (symbol, _) <- preorder term]
+
+{- | The symbols that the completions can have, each at least once: the
+symbols that a weight of 'withWeights' must cover.
+-}
+completionSymbols :: Completions symbol -> [symbol]
+completionSymbols completions = case completionsRoute completions of
+    Indexed table _ _ -> map fst $ tableTokens table
+    Listed _ listed -> [symbol | (term, _, _) <- listed, (symbol, _) <- preorder term]
 
 {- | The total weight of the completions. Without constraints, it is a sum
 over the transitions of the rows of the count table, as the counts are.
@@ -878,7 +896,7 @@ Otherwise it is the sum of the weights of the listed completions.
 completionWeight :: Completions symbol -> Rational
 completionWeight completions = case completionsRoute completions of
     Indexed table _ _ -> sum $ genericTake (tableBound table) $ drop 1 $ indexedWeights completions table
-    Listed listed -> sum [termWeight (completionsWeight completions) term | (term, _, Yes) <- listed]
+    Listed _ listed -> sum [termWeight (completionsWeight completions) term | (term, _, Yes) <- listed]
 
 {- | The tokens of 'nextTokens', each with the total weight of the completions
 that start with the prefix and the token. A token with completions whose
@@ -925,16 +943,73 @@ drawCompletion choose completions
             drawPrefixed choose weight (tableRows table) (completionPrefix completions) (tableInitial table) size
           where
             weights = indexedWeights completions table
-        Listed listed -> drawOne choose (termWeight weight) [term | (term, _, Yes) <- listed]
+        Listed _ listed -> drawOne choose (termWeight weight) [term | (term, _, Yes) <- listed]
   where
     weight = completionsWeight completions
+
+{- | The sum of the lengths of the weighted intervals of the completions. Each
+completion has an interval of integers, and the intervals follow the order of
+'completionTerms', one after another from zero. So a uniform integer below the
+total, decoded with 'unrankWeighted', gives each completion a probability in
+proportion to its weight, and one draw is one integer.
+
+Let @d@ be the least common denominator of the weights of 'completionSymbols',
+and let @b@ be the size bound. The integer weight of a symbol is its weight
+times @d@. A completion with @n@ nodes has an interval whose length is the
+product of the integer weights of its nodes times @d ^ (b - n)@: its weight
+times @d ^ b@. So the total is 'completionWeight' times @d ^ b@. A completion
+with the weight zero has an empty interval. With the weight one for each
+symbol, each interval has the length one, and the total is the number of
+completions.
+-}
+weightedTotal :: Completions symbol -> Integer
+weightedTotal completions = case completionsRoute completions of
+    Indexed table _ _ -> case indexedIntervals completions table of
+        (total, _, _) -> total
+    Listed bound _ -> sum [width | (_, _, width) <- listedIntervals completions bound]
+
+{- | The completion whose weighted interval holds an integer, as
+'weightedTotal' describes the intervals. 'Nothing' when the integer is
+negative or not below the total. With the weight one for each symbol, the
+result is the result of 'unrankCompletion'.
+
+Without constraints, the decoder reads the order of the size index: it
+chooses the size, then at each node the transition and the sizes and the
+terms of its children, each by the totals of the intervals of their terms.
+Otherwise it reads the intervals of the listed completions. The decoder of
+@unrankWeighted completions@ keeps the totals of the intervals, so for many
+integers, apply 'unrankWeighted' to the completions once.
+-}
+unrankWeighted :: Completions symbol -> Integer -> Maybe (Term symbol)
+unrankWeighted completions = case completionsRoute completions of
+    Indexed table _ _ -> case indexedIntervals completions table of
+        (_, unrank, _) -> \value -> if value < 0 then Nothing else unrank value
+    Listed bound _ ->
+        let intervals = listedIntervals completions bound
+         in \value -> listToMaybe [term | (term, start, width) <- intervals, start <= value, value < start + width]
+
+{- | The start and the length of the weighted interval of a completion, the
+inverse of 'unrankWeighted' at each integer of a non-empty interval.
+'Nothing' when the term is not a completion. A completion with the weight
+zero has the length zero. With the weight one for each symbol, the start is
+the rank of 'rankCompletion' and the length is one. As for
+'unrankWeighted', the function of @rankWeighted completions@ keeps the
+totals of the intervals.
+-}
+rankWeighted :: (Eq symbol) => Completions symbol -> Term symbol -> Maybe (Integer, Integer)
+rankWeighted completions = case completionsRoute completions of
+    Indexed table _ _ -> case indexedIntervals completions table of
+        (_, _, interval) -> interval
+    Listed bound _ ->
+        let intervals = listedIntervals completions bound
+         in \term -> listToMaybe [(start, width) | (listed, start, width) <- intervals, listed == term]
 
 -- | The number of terms of an index with at most the given number of nodes.
 countUpTo :: Integer -> SizeIndex (Term symbol) -> Cardinality
 countUpTo bound index = sum [countAtSize index (Size size) | size <- [1 .. bound]]
 
 -- | The weight of a term: the product of the weights of its symbols.
-termWeight :: (symbol -> Rational) -> Term symbol -> Rational
+termWeight :: (Num weight) => (symbol -> weight) -> Term symbol -> weight
 termWeight weight = foldr ((*) . weight) 1
 
 -- | The total weight of the completions of the 'Indexed' route, for each size from zero.
@@ -950,11 +1025,12 @@ that each term has one run. A part has the weights of its transitions with
 the token at the position, each the weight of the symbol times the
 convolution of the weights of its children, as the counts of
 'Ordinary.prefixedTable' are. Each list is built once and lazily, so a size
-costs a convolution of the smaller sizes.
+costs a convolution of the smaller sizes. The weights are 'Rational' for
+'completionWeight' and 'Integer' for the weighted intervals.
 -}
 prefixedWeights ::
-    (Ord state, Eq symbol) =>
-    (symbol -> Rational) -> Map.Map state [FTA.Transition state symbol ()] -> [Token symbol] -> state -> Int -> [Rational]
+    (Ord state, Eq symbol, Num weight) =>
+    (symbol -> weight) -> Map.Map state [FTA.Transition state symbol ()] -> [Token symbol] -> state -> Int -> [weight]
 prefixedWeights weight rows prefix = weightsAt
   where
     size = length prefix
@@ -1028,6 +1104,161 @@ drawPrefixed choose weight rows prefix initial = drawAt initial 0
         (:) <$> drawAt child position first <*> drawChildren rest (total - first)
     childrenWeights = foldr (convolve . uncurry weightsAt) (1 : repeat 0)
 
+{- | The least common denominator @d@ of the weights of 'completionSymbols', and
+the integer weight of each of these symbols: its weight times @d@.
+-}
+integerWeights :: Completions symbol -> (Integer, symbol -> Integer)
+integerWeights completions = (common, \symbol -> numerator $ weight symbol * fromInteger common)
+  where
+    weight = completionsWeight completions
+    common = foldr (lcm . denominator . weight) 1 $ completionSymbols completions
+
+{- | The completions of the 'Listed' route with its size bound, in order, each
+with the start and the length of its weighted interval, as 'weightedTotal'
+describes them.
+-}
+listedIntervals :: Completions symbol -> Integer -> [(Term symbol, Integer, Integer)]
+listedIntervals completions bound = zip3 terms (scanl (+) 0 widths) widths
+  where
+    (common, weight) = integerWeights completions
+    terms = completionTerms completions
+    widths = [termWeight weight term * common ^ (bound - toInteger (length term)) | term <- terms]
+
+{- | The weighted intervals of the completions of the 'Indexed' route, as
+'weightedTotal' describes them: the sum of their lengths, the completion whose
+interval holds an integer, and the start and the length of the interval of a
+completion.
+
+The intervals follow the order of the size index of the prefix
+('Ordinary.prefixedTable'). A size class comes after the smaller sizes. In a
+size class of a state, the transitions come in the order of the rows. The
+index of a transition is a product of the index of its earlier children and
+the index of its last child, and the index of the earlier children is such a
+product too. The parts of a product come in ascending size of the earlier
+children, and in a part the earlier children vary slowest
+('Data.CFTA.Ranked.Internal.Size.productPosition'). In a size class, the
+length of the interval of a term is the product of the integer weights of its
+nodes. So in a part, each term of the earlier children has an interval whose
+length is its length times the total of the last child. This interval holds
+one interval for each term of the last child, whose length is the length of
+the earlier children times the length of the term of the last child. In the
+completions, the interval of a term is its interval in its size class times
+@d ^ (b - n)@, after the intervals of the smaller sizes.
+-}
+indexedIntervals ::
+    (Ord state, Eq symbol) =>
+    Completions symbol ->
+    Table state symbol ->
+    (Integer, Integer -> Maybe (Term symbol), Term symbol -> Maybe (Integer, Integer))
+indexedIntervals completions table = (sum classTotals, unrank, interval)
+  where
+    bound = tableBound table
+    rows = tableRows table
+    prefix = completionPrefix completions
+    size = length prefix
+    (starts, _) = Ordinary.childStarts prefix
+    (common, weight) = integerWeights completions
+    weightsAt = prefixedWeights weight rows prefix
+    -- The factor of the lengths of the intervals of a size class in the completions.
+    factor termSize = common ^ (bound - termSize)
+    -- The sum of the lengths of the intervals of each size class, from size one.
+    classTotals = [genericIndex (weightsAt (tableInitial table) 0) termSize * factor termSize | termSize <- [1 .. bound]]
+    unrank = select $ zip [1 ..] classTotals
+      where
+        select [] _ = Nothing
+        select ((termSize, total) : rest) value
+            | value < total = case termAt (tableInitial table) 0 termSize (value `div` factor termSize) of
+                (term, _, _) -> Just term
+            | otherwise = select rest (value - total)
+    interval term
+        | termSize > bound = Nothing
+        | otherwise = do
+            (start, width) <- intervalAt (tableInitial table) 0 term
+            Just (sum (genericTake (termSize - 1) classTotals) + start * factor termSize, width * factor termSize)
+      where
+        termSize = toInteger $ length term
+    childPositions position transition
+        | position >= size = map (const size) $ FTA.transitionChildren transition
+        | otherwise = starts position
+    -- The children of a transition, the last child first, each with the
+    -- position of its part of the prefix.
+    lastFirst position transition = reverse $ zip (FTA.transitionChildren transition) (childPositions position transition)
+    -- The sum of the lengths of the intervals of the terms of children, for each total size from zero.
+    totalsOf = foldr (convolve . uncurry weightsAt) (1 : repeat 0)
+    -- The transitions of a state with the part of the prefix at a position,
+    -- each with the sum of the lengths of the intervals of its terms for each
+    -- size from one. The map keeps them for all the integers that the
+    -- decoder reads.
+    blocks =
+        LazyMap.fromList
+            [ ( (state, position)
+              , [ (transition, map (weight (FTA.transitionSymbol transition) *) (totalsOf $ lastFirst position transition))
+                | transition <- branches rows prefix state position
+                ]
+              )
+            | state <- Map.keys rows
+            , position <- [0 .. size]
+            ]
+    blocksAt state position = LazyMap.findWithDefault [] (state, min position size) blocks
+    -- The term of a state, with the part of the prefix at a position, whose
+    -- interval in the class of a size holds a value, with the start and the
+    -- length of its interval in the class.
+    termAt state position termSize = choose 0 $ blocksAt state position
+      where
+        choose _ [] _ = error "indexedIntervals: a value outside the size class"
+        choose offset ((transition, totals) : rest) value
+            | value < block =
+                let (children, start, width) = childrenAt (lastFirst position transition) (termSize - 1) (value `div` symbolWeight)
+                 in (Term.Node symbol (reverse children), offset + symbolWeight * start, symbolWeight * width)
+            | otherwise = choose (offset + block) rest (value - block)
+          where
+            symbol = FTA.transitionSymbol transition
+            symbolWeight = weight symbol
+            block = genericIndex totals (termSize - 1)
+    -- The terms of children, the last child first, whose interval in the
+    -- class of a total size holds a value, with the start and the length of
+    -- their interval in the class.
+    childrenAt [] _ _ = ([], 0, 1)
+    childrenAt ((child, position) : earlier) total value = split 0 0 value
+      where
+        earlierTotals = totalsOf earlier
+        childTotals = weightsAt child position
+        split earlierSize offset remaining
+            | earlierSize > total = error "indexedIntervals: a value outside the children"
+            | remaining < part =
+                let (terms, earlierStart, earlierWidth) = childrenAt earlier earlierSize (remaining `div` childTotal)
+                    (term, start, width) =
+                        termAt child position (total - earlierSize) ((remaining - earlierStart * childTotal) `div` earlierWidth)
+                 in (term : terms, offset + earlierStart * childTotal + earlierWidth * start, earlierWidth * width)
+            | otherwise = split (earlierSize + 1) (offset + part) (remaining - part)
+          where
+            childTotal = genericIndex childTotals (total - earlierSize)
+            part = genericIndex earlierTotals earlierSize * childTotal
+    -- The start and the length of the interval of a term of a state, with
+    -- the part of the prefix at a position, in the class of its size.
+    intervalAt state position term@(Term.Node symbol children) =
+        listToMaybe
+            [ (offset + weight symbol * start, weight symbol * width)
+            | (offset, transition) <- zip offsets transitions
+            , tokenOf transition == (symbol, length children)
+            , Just (start, width) <- [childrenInterval (lastFirst position transition) (reverse children)]
+            ]
+      where
+        transitions = map fst $ blocksAt state position
+        offsets = scanl (+) 0 [genericIndex totals (toInteger (length term) - 1) | (_, totals) <- blocksAt state position]
+    -- The start and the length of the interval of the terms of children, the
+    -- last child first, in the class of their total size.
+    childrenInterval [] [] = Just (0, 1)
+    childrenInterval ((child, position) : earlier) (term : terms) = do
+        (earlierStart, earlierWidth) <- childrenInterval earlier terms
+        (start, width) <- intervalAt child position term
+        let earlierSize = sum $ map (toInteger . length) terms
+            total = earlierSize + toInteger (length term)
+            childTotal smaller = genericIndex (weightsAt child position) (total - smaller)
+            parts = sum [genericIndex (totalsOf earlier) smaller * childTotal smaller | smaller <- [0 .. earlierSize - 1]]
+        Just (parts + earlierStart * childTotal earlierSize + earlierWidth * start, earlierWidth * width)
+    childrenInterval _ _ = Nothing
+
 {- | The transitions of a state whose token is the token of the prefix at a
 position, or all of them at the end of the prefix.
 -}
@@ -1041,7 +1272,7 @@ branches rows prefix state position =
     ]
 
 -- | The convolution of two lists of weights by size, from size zero. The lists can be infinite.
-convolve :: [Rational] -> [Rational] -> [Rational]
+convolve :: (Num weight) => [weight] -> [weight] -> [weight]
 convolve [] _ = repeat 0
 convolve (first : rest) others = zipWith (+) (map (first *) others) (0 : convolve rest others)
 

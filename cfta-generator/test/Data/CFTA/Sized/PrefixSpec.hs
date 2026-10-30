@@ -7,6 +7,7 @@ import Data.Functor (void)
 import Data.List (genericLength, inits, isPrefixOf)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe, isJust)
+import Data.Ratio (denominator)
 import qualified Data.Text as Text
 import Test.Hspec (Spec, describe, it, shouldBe)
 import qualified Test.QuickCheck as QC
@@ -25,6 +26,7 @@ import Data.CFTA.Index (Cardinality (..), ClassRank (..), Rank (..), Size (..))
 import Data.CFTA.Refinement.Verdict (Entailment (Entailment), Verdict (..))
 import Data.CFTA.Sized (SizedError (..), countOfSize, sized, sizedStates, termsOfSize, unrankOfSize)
 import Data.CFTA.Sized.Prefix
+import Data.CFTA.Sized.Prefix.Parents (labelParents, labelPrefix, unlabelParents, withParents)
 import Data.CFTA.Sized.Prefix.QuickCheck (sampleCompletion)
 import Data.CFTA.SizedSpec (automatonGraph)
 import Data.CFTA.Symbol (Symbol (Symbol))
@@ -52,6 +54,7 @@ spec = describe "Data.CFTA.Sized.Prefix" $ do
     fixture "untyped expressions" expressionAutomaton
     fixture "overlapping alternatives" overlapping
     fixture "a symbol at two arities" mixedArities
+    fixture "a symbol with three children" threeChildren
     fixture "typed arithmetic" (arithAutomaton 2)
     it "counts the terms of the fixtures with equality constraints up to their bounds" $
         [completionCount $ start sizeBound equalPairs, completionCount $ start 7 equalArithmetic] `shouldBe` [4, 38]
@@ -91,6 +94,7 @@ spec = describe "Data.CFTA.Sized.Prefix" $ do
         tokenProbability completions ("one", 0) `shouldBe` Just 0
         (completionWeight one, tokenProbability one ("zero", 0), isJust $ drawCompletion proportional one)
             `shouldBe` (0, Nothing, False)
+        (weightedTotal one, rankWeighted one (Term.Node "one" []), unrankWeighted one 0) `shouldBe` (0, Just (0, 0), Nothing)
     it "rejects a negative weight" $
         isJust (withWeights (\symbol -> if symbol == "one" then -1 else 1) $ start 3 expressionAutomaton) `shouldBe` False
     it "has no completion below size one" $ do
@@ -228,6 +232,60 @@ fixtureUpTo bound name graph = describe name $ do
                       ]
                     )
                     `shouldBe` (prefix, [])
+        it "gives each completion the interval of its rank, with the weight one" $
+            forM_ prefixes $ \prefix -> do
+                let completions = after prefix
+                    count = brute prefix
+                (prefix, weightedTotal completions) `shouldBe` (prefix, count)
+                (prefix, map (unrankWeighted completions) [-1 .. count])
+                    `shouldBe` (prefix, [Nothing] <> map (unrankCompletion completions . Rank) [0 .. count - 1] <> [Nothing])
+                (prefix, map (rankWeighted completions) $ completionTerms completions)
+                    `shouldBe` (prefix, [Just (rank, 1) | rank <- [0 .. count - 1]])
+                (prefix, [term | term <- accepted, isJust (rankWeighted completions term), not (prefix `isPrefixOf` preorder term)])
+                    `shouldBe` (prefix, [])
+        it "tiles the integers below the weighted total with the intervals of the completions in order" $
+            forM_ prefixes $ \prefix -> do
+                let completions = weightedBy weight $ after prefix
+                    listed = completionTerms completions
+                    common = foldr (lcm . denominator . weight) 1 $ completionSymbols completions
+                    scale = fromInteger $ common ^ bound
+                    widths = [termWeight weight term * scale | term <- listed]
+                    intervals = map (rankWeighted completions) listed
+                    total = weightedTotal completions
+                (prefix, [(toRational offset, toRational width) | Just (offset, width) <- intervals])
+                    `shouldBe` (prefix, zip (scanl (+) 0 widths) widths)
+                (prefix, toRational total, completionWeight completions * scale) `shouldBe` (prefix, sum widths, sum widths)
+                ( prefix
+                    , [unrankWeighted completions value | Just (offset, width) <- intervals, width > 0, value <- [offset, offset + width - 1]]
+                    )
+                    `shouldBe` (prefix, [Just term | (term, width) <- zip listed widths, width > 0, _ <- [(), ()]])
+                (prefix, map (unrankWeighted completions) [-1, total]) `shouldBe` (prefix, [Nothing, Nothing])
+    -- An automaton with constraints has no labelled automaton.
+    it "labels each node with the token of its parent and its position, one labelling for each term" $
+        forM_ (withParents Nothing graph) $ \labelled -> do
+            let labelledClasses = either (error . show) id $ sized labelled
+                labelledTerms = concat [termsOfSize labelledClasses (Size size) | size <- [1 .. bound]]
+                completions = start bound labelled
+            [countOfSize labelledClasses (Size size) | size <- [1 .. bound]]
+                `shouldBe` [countOfSize classes (Size size) | size <- [1 .. bound]]
+            [term | term <- accepted, labelParents Nothing term `notElem` labelledTerms] `shouldBe` []
+            [term | term <- map unlabelParents labelledTerms, term `notElem` accepted] `shouldBe` []
+            forM_ prefixes $ \prefix ->
+                (prefix, fmap completionCount . afterPrefix completions =<< labelPrefix Nothing prefix)
+                    `shouldBe` (prefix, Just (Cardinality (brute prefix)))
+    it "weighs each node by its symbol and its context in the labelled automaton" $
+        forM_ (withParents Nothing graph) $ \labelled ->
+            forM_ prefixes $ \prefix -> do
+                let byContext ((symbol, count), context) =
+                        weight symbol * fromIntegral (count + 1) * maybe 2 (\(_, position) -> fromIntegral position + 1) context
+                    labelledPrefix = fromMaybe (error "a prefix of a term") $ labelPrefix Nothing prefix
+                    completions = weightedBy byContext $ fromMaybe (error "a prefix of a term") $ afterPrefix (start bound labelled) labelledPrefix
+                    common = foldr (lcm . denominator . byContext) 1 $ completionSymbols completions
+                (prefix, completionWeight completions, toRational (weightedTotal completions))
+                    `shouldBe` ( prefix
+                               , sum [termWeight byContext (labelParents Nothing term) | term <- accepted, prefix `isPrefixOf` preorder term]
+                               , completionWeight completions * fromInteger (common ^ bound)
+                               )
   where
     plain = FTA.dropConstraints graph
     empty = start bound graph
@@ -419,6 +477,14 @@ unusedSolver = Entailment $ \_ _ -> fail "unexpected solver call"
 -}
 mixedArities :: FTA.FTA String Symbol Constraint
 mixedArities = automaton "s" [("s", [leaf "a", node "f" ["s"], node "f" ["s", "s"]])]
+
+{- | A symbol with three children, a symbol with one child, and two leaves.
+The size index orders the sizes of the three children of a term with six
+nodes as (1,1,3), (1,2,2), (2,1,2), (1,3,1), (2,2,1), (3,1,1), not in
+lexicographic order.
+-}
+threeChildren :: FTA.FTA String Symbol Constraint
+threeChildren = automaton "s" [("s", [leaf "a", leaf "b", node "f" ["s"], node "h" ["s", "s", "s"]])]
 
 overlapping :: FTA.FTA String Symbol Constraint
 overlapping =
