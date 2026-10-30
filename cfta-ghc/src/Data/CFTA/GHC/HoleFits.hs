@@ -14,11 +14,10 @@ argument of the type is a variable that the fit uses once, as in a Hoogle+
 query. The plugin drops the fits that GHC finds itself (one identifier
 applied to the arguments in order, or @id@ as @\\x1 -> x1@), and the fits
 that call a definition that holds the hole, because such a fit can loop.
-Hectare's rule
-'hectareAvoid' applies: a list function is not applied to @[]@. A fit with
-the normal form of an earlier fit is skipped ('optionNormalForms'), and a fit
-that ignores part of itself or drops an argument ('comesLast') comes after
-the others.
+Hectare's rule 'hectareAvoid' applies: a list function is not applied to
+@[]@. A fit with the normal form of an earlier fit is skipped
+('optionNormalForms'), and a fit that ignores part of itself or drops an
+argument ('comesLast') comes after the others.
 
 The plugin's fits come after GHC's. GHC keeps the first
 @-fmax-valid-hole-fits@ fits after the plugin, so the plugin's driver hook
