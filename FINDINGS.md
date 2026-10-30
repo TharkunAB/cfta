@@ -1,3 +1,26 @@
+# Current proof and Haskell findings — 2026-10-30 07:30 CET
+
+Read `lean/notes-current-finite-prefix-control.md` before older checkpoints.
+Source `dce9c1fc82ce2b14221783657537d0977639c29d` is pushed to `formalize`.
+Seventeen new laws in nine modules prove finite stored-path recursion shapes and actual raw-row path transport.
+Default/strict Audit passes: 4,726 jobs and 82,860 checked theorem dependency reports.
+Public verification passes: 1,147 checks, 100 definitions, and 17 standard-axiom reports.
+All prior 518 protected sources and 835 native inputs remain exact; current protected count is 527.
+The full formalization goal remains ACTIVE.
+Both original-input fixed-D resource results still permit exhausted outcomes.
+The main gap is sufficient original recursive capacity across all earlier alternatives.
+Native handle renewal, ordinary rewrites, multiplicity, and neutral control still need progress bounds.
+Next: all-row ChildTraversal/Captured composition, then whole fixed-D execution/hook paths with every old resource clause.
+Successful finish discards processed receipts; output-only paths are insufficient.
+The actual original guard-derived path carrier is finite; do not confuse it with arbitrary words over finite indices.
+Haskell: no source change, native run, new defect, or repair in this phase. Keep earlier conditional candidates below.
+Keep all older constructor/equality/count/size/rank/unrank and public API/Haskell targets.
+Archive: `lean/restart-evidence/20261030-finite-prefix-control`; local evidence `/tmp/mcfta-finite-prefix-control-20261030`.
+All failed versions, diagnostics, source-scope incidents, and four frozen reviews remain unfiltered.
+Use the detailed note and archive verification scripts for the current scope and resume steps.
+
+---
+
 # Current checkpoint: original-input bounded enumeration
 
 Full goal ACTIVE. Read [the controlling note](lean/notes-current-coupled-entry-control.md).
