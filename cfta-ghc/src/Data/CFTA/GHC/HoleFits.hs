@@ -42,6 +42,7 @@ The options apply to each hole:
 
 > -fplugin-opt=Data.CFTA.GHC.HoleFits:model=base.cfta   order the fits with a fit model
 > -fplugin-opt=Data.CFTA.GHC.HoleFits:model-module=K    add the counts of the module K times
+> -fplugin-opt=Data.CFTA.GHC.HoleFits:hole-context=off  score the root of each fit as a right-hand side
 
 With @model@, the plugin reads a fit model ("Data.CFTA.GHC.Model", the text
 form @fit-model 1;@, which @cfta-fit-model@ builds from Haskell sources) once
@@ -51,7 +52,9 @@ programs of all sizes in the order of the model's score, best first
 first hole with GHC's parser ("Data.CFTA.GHC.Corpus"), and adds the counts of
 that module, multiplied by K, to the model, for all the holes of the module.
 @model-module@ needs @model@. A model that the plugin cannot read gives a
-warning, and the search keeps its order.
+warning, and the search keeps its order. The root of each fit has the context
+of its hole: in @foldr f _ xs@, the second argument of @foldr@ ('scorerFor').
+With @hole-context=off@, it has the context of a right-hand side.
 
 With @rank@, a decision model orders the plugin's fits
 ("Data.CFTA.GHC.Rank"). It needs a running Ollama
@@ -170,6 +173,8 @@ data PluginOptions = PluginOptions
     -- ^ The file of a fit model.
     , pluginModuleWeight :: Maybe Integer
     -- ^ The factor of the counts of the module, which the model gets.
+    , pluginHoleContext :: Bool
+    -- ^ Whether the root of a fit has the context of the hole, or always @top@.
     }
 
 {- | The options of the plugin, from its @-fplugin-opt@ arguments
@@ -190,7 +195,9 @@ readOptions arguments = do
             | not ranked -> Left (setting <> " needs the option rank: the ranking is on only with rank")
         _
             | Just _ <- weight, Nothing <- model -> Left "model-module needs the option model"
-            | otherwise -> Right (PluginOptions options (if ranked then Just ranking else Nothing) model weight)
+            | otherwise ->
+                Right
+                    (PluginOptions options (if ranked then Just ranking else Nothing) model weight (lastValue "hole-context" /= Just "off"))
   where
     search0 = defaultOptions{optionMaximumSize = 4, optionFits = 5, optionSeconds = Just 1, optionAvoid = hectareAvoid}
     set (options, ranking, ranked, settings) argument = case break (== '=') argument of
@@ -206,6 +213,8 @@ readOptions arguments = do
         ("rank", "") -> Right (options, ranking, True, settings)
         ("model", '=' : _) -> Right (options, ranking, ranked, settings)
         ("model-module", '=' : _) -> Right (options, ranking, ranked, settings)
+        ("hole-context", '=' : "on") -> Right (options, ranking, ranked, settings)
+        ("hole-context", '=' : "off") -> Right (options, ranking, ranked, settings)
         ("rank-pool", '=' : value) -> (\pool -> setting (\r -> r{rankingPool = pool})) <$> number value
         ("rank-seconds", '=' : value) -> (\seconds -> setting (\r -> r{rankingSeconds = seconds})) <$> number value
         ("rank-model", '=' : value) -> Right (setting (server (\o -> o{ollamaModel = Text.pack value})))
@@ -214,7 +223,7 @@ readOptions arguments = do
             Left
                 ( "unknown option "
                     <> argument
-                    <> "; the options are size, fits, seconds, programs, first-order, only-defaulted, no-type-domains, normal-forms, model, model-module, rank, rank-pool, rank-seconds, rank-model, and rank-keep-alive"
+                    <> "; the options are size, fits, seconds, programs, first-order, only-defaulted, no-type-domains, normal-forms, model, model-module, hole-context, rank, rank-pool, rank-seconds, rank-model, and rank-keep-alive"
                 )
       where
         search change = (change options, ranking, ranked, settings)
@@ -267,7 +276,7 @@ holeFits options =
                     case open of
                         Just scope -> do
                             model <- modelFor options modelReference hole
-                            scorer <- traverse (scorerFor hole) model
+                            scorer <- traverse (if pluginHoleContext options then scorerFor hole else pure . tokenScore) model
                             (ours, asked) <- fitsFor options scorer hole scope
                             updTcRef reference (\(open', _) -> (open', ranked' || asked))
                             -- The limit without the plugin: see 'raiseLimit'.
@@ -357,7 +366,7 @@ fitsFor ::
     TypedHole ->
     [HoleFitCandidate] ->
     TcM ([HoleFit], Bool)
-fitsFor (PluginOptions options' ranking _ _) scorer hole scope = case th_hole hole of
+fitsFor (PluginOptions options' ranking _ _ _) scorer hole scope = case th_hole hole of
     Nothing -> pure ([], False)
     Just Hole{hole_ty = holeType} -> do
         elements <- globalRdrEnvElts <$> getGlobalRdrEnv
