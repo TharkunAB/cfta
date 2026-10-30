@@ -1,3 +1,65 @@
+# Numeric filters and actual native execution — 2026-10-30 23:48 CET
+
+Chain source: `fd8243c9cd1530c79ebe1364c89f3026ce4f827b`.
+Execute source: `0452a1a9b6f538dc71a9bc7ddcaeadea32b26cd3`.
+Enabled-empty source: `f81964542e7508f418acaf37d1511ed253cb51b6`.
+Read lean/notes-current-chain-and-native-execute.md first.
+The full original-input objective remains open. Work continues.
+
+Four laws give a numeric bound for consecutive actual changed filters.
+Keys and native reader fuel can vary. The history contains literal returns
+and unequal actual encodings. It derives strict loss and next Normal internally.
+One actual first closed filter supplies Normal without a historical constructor.
+For an ordinary source, subsequent changed steps are at most its ORIGINAL
+root-row length. Ordinary permits recursive children. This local source bound
+is not a public-original bound across replacements. Unchanged calls and
+intervening writers are not counted. Both mathematical definitions are printed.
+
+Two laws preserve conditional native Stored in actual arbitrary-fuel root node
+execution, including its yielded budget state. They derive Original/WordRanges
+and a physical Receipt internally. No Trace, InputsThrough, WordRanges or
+future completion is supplied. Ready, available/closed operands, entry Stored
+and three current numeric bounds remain. These width-dependent admission
+bounds are conservative; they are not discharged for every Word64 configuration.
+The initializer derives entry Stored internally.
+
+Two frame laws preserve the caller's native Stored through both actual
+conjunction outcomes and full EnabledEmpty.check. They need only entry Stored
+plus equality instances. Actual advancePhysical retains outer native tables;
+the endpoint bypass retains before. No inner worker result semantics is claimed.
+Native Stored remains conditional and differs from Context's merge Stored.
+
+Syntax/linter repairs retain all original headers. The ordinary-source law is
+an added companion. All failed probes and superseded checked inputs remain.
+No Haskell source, native command, new defect/fix/candidate is established.
+All older conditional findings remain complete below.
+
+Default+strict Audit: 4,753 jobs / 83,043 dependency checks. Public: 1,217
+checks / 118 definition prints. Eighteen serial capped commands, fifteen pass /
+three repaired failed probes, 49 snapshots. All eight new axiom reports use
+standard axioms. Old public 4,873,867 bytes remain an exact prefix. All 551
+prior protected and 835 native inputs remain exact. Independent review reads
+all 325 source lines and 224 public lines, including both full definitions.
+Archive: lean/restart-evidence/20261030-chain-and-native-execute.
+
+Both finite-depth modeled workers retain stable outcomes, exact forecasts and
+one original finite path carrier under their original gates. Exhaustion remains
+permitted. Sufficient ORIGINAL depth for all earlier alternatives and staged
+children under configured order/stops remains the largest gap. Bound source
+replacements, intersections, Prepared Mu/Union work, slots, unchanged calls and
+raw SCS work; compose actual filter histories with the worker.
+IncomingNode.run composition is the next unproved native caller target.
+Its fresh source task owns /tmp/mcfta-native-incoming-stored-review-20261030.
+Its complete 95-line V2 is retained as UNCOMPILED next-incoming-review work.
+Root has not probed that draft in this checkpoint.
+
+Keep full public adapters, Haskell and constructor/equality/count/order/rank
+scope. The backend marker remains blocked despite user-resumed verified work.
+No pause, completion or completion percentage is claimed.
+The complete prior document follows as an exact suffix.
+
+---
+
 # Native prefix and returned-control checkpoint — 2026-10-30 23:14 CET
 
 Prefix source: `f4521b07accf2da1ca440449f2e3310a2438a2e0`.
