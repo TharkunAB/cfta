@@ -1,3 +1,54 @@
+# Actual incoming native certificates — 2026-10-31 00:17 CET
+
+Incoming source: `b7116e537a06197a4bb058d2d24b007d5cd9abc3`.
+Cache-adapter source: `f4fbea6d453704d9a9d183356068f64929975911`.
+Read lean/notes-current-native-incoming-stored.md first.
+The full original-input objective remains open. Work continues.
+
+Two new laws preserve the existing conditional native Stored certificate
+through actual IncomingNode.run and the actual IncomingCacheAdapter.run.
+Every supplied representative/native/index fuel and p/h remains arbitrary.
+Both checkEmpty settings and all actual outcomes remain in scope.
+The yielded native execution retains its observed state certificate too.
+The cache adapter needs no cached-index validity premise.
+
+The public gates are current ClassScan.Ready, PendingRealized, available/closed
+incoming, Fits/Room and separate native Stored. Fits.room derives the raw
+counter bounds. PendingRealized supplies the old decoded slot value at the
+actual found.representative in ORIGINAL before.values. Raw execution and
+EnabledEmpty laws compose internally. No Trace, InputsThrough, WordRanges,
+output Stored, future completion or iteration producer is supplied.
+Both original draft headers remain exact. All failed probes remain.
+
+Stored gives finite ordinary result structure and height only when its
+request's conditional antecedent holds. It is not Context's merge Stored.
+These laws give no arbitrary result semantics or complete worker invariants.
+No Haskell source changed, no native command ran, and no new Haskell defect,
+fix or candidate is established. All older conditional findings remain below.
+
+Default+strict Audit passes: 4,755 jobs / 83,045 dependency checks.
+Public readback: 1,219 checks / 118 definition prints; both new axiom reports
+use standard axioms. Fifteen serial capped commands retain twelve passes and
+three repaired failed probes, with all 31 snapshots. All 554 prior protected
+and 835 native inputs remain exact. Review reads all 146 source and 63 public
+lines. Archive: lean/restart-evidence/20261031-native-incoming-stored-control.
+
+Both finite-depth modeled workers retain stable outcomes, exact forecasts
+and one original finite path carrier under their original gates. Exhaustion
+remains possible. Sufficient ORIGINAL depth for all earlier alternatives and
+staged children under configured order/stops remains the largest gap.
+Connect actual changed-filter actions and histories with the worker. Bound
+source replacements, dispatch/intersections, Prepared Mu/Union work, slots,
+unchanged calls and raw SCS work. Actual dispatch Stored and Fold induction
+are the next local native targets. Physical Fold Ranges already have a
+current-entry producer. Do not replace missing transport with future inputs.
+Keep public adapters, Haskell and constructor/equality/count/order/rank scope.
+The backend marker remains blocked despite user-resumed verified progress.
+No pause, completion or completion percentage is claimed.
+The complete prior document follows as an exact suffix.
+
+---
+
 # Numeric filters and actual native execution — 2026-10-30 23:48 CET
 
 Chain source: `fd8243c9cd1530c79ebe1364c89f3026ce4f827b`.
