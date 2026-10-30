@@ -1,3 +1,26 @@
+# Current continuation — 2026-10-30 08:50 CET
+
+Read `lean/notes-current-execution-path-control.md` before older checkpoints.
+Source `41263dc20408165536aea3aeb80770be419869a8` is pushed to `formalize`.
+Fourteen new laws in five modules cover closed original forecasts, actual finish/base cases, callback resources with internal path IHs, and computed callback projections.
+Sixteen new definitions specify retained data and both actual executions. Their positive-depth invariant remains UNPROVED.
+For normalized original guard inputs and an included seed, both forecasts use one finite path carrier at every depth.
+The paired callback bridges keep every old clause at the SAME framed state and common larger work bound.
+Default/strict Audit passes: 4,734 jobs and 82,891 dependency checks.
+Public verification passes: 1,164 checks, 116 definitions, and 14 new standard-axiom reports.
+All 530 prior protected sources and 835 native inputs remain exact; current protected count is 535.
+All 23 compiler commands, 72 snapshots, six repaired failures, full readbacks, and two frozen reviews remain.
+The full formalization goal remains ACTIVE.
+Next: the separate positive-depth eventual execution-path induction through both sibling workers, with every old resource clause.
+Then combine the path bound C with unchanged finite_complete bound B at B+C.
+The largest gap is sufficient ORIGINAL recursive capacity through all earlier alternatives. Fixed-D Complete still permits exhaustion.
+Keep older constructor/equality/count/size/rank/unrank, optimized core, public APIs, and Haskell targets.
+Haskell: no source change, native command, new defect, fix, or repair candidate. Earlier conditional SCS findings remain below.
+Nearby follow-up: obsolete uncompiled-status comment in protected SourcePruningEnumerationPathSelectedRaw; source unchanged.
+Evidence: `/tmp/mcfta-execution-path-control-20261030`; archive target `lean/restart-evidence/20261030-execution-path-control`.
+
+---
+
 # Current continuation — 2026-10-30 07:58 CET
 
 Read `lean/notes-current-traversal-path-control.md` before older checkpoints.
