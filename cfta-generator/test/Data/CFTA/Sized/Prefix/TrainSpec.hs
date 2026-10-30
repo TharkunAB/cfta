@@ -1,17 +1,22 @@
 module Data.CFTA.Sized.Prefix.TrainSpec (spec) where
 
 import Control.Monad (forM_)
+import Data.Containers.ListUtils (nubOrd)
+import Data.List (inits, isPrefixOf, sort)
 import qualified Data.Map.Strict as Map
-import Data.Maybe (fromJust)
+import Data.Maybe (fromJust, isNothing)
 import Test.Hspec (Spec, describe, it, shouldBe, shouldSatisfy)
 
 import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint, equalityConstraint, noConstraint)
 import qualified Data.CFTA.Equality as ECTA
-import Data.CFTA.Sized.Prefix (Completions, afterToken, completionTerms, prefixCompletions)
+import Data.CFTA.Sized.Prefix (Completions, Token, afterToken, completionTerms, prefixCompletions)
+import qualified Data.CFTA.Sized.Prefix.Model as Model
+import Data.CFTA.Sized.Prefix.Parents (Reach (..))
 import Data.CFTA.Sized.Prefix.QuickCheck (sampleWeighted)
 import Data.CFTA.Sized.Prefix.Train
 import Data.CFTA.Term (Term)
+import qualified Data.CFTA.Term as Term
 import qualified Test.QuickCheck as QC
 import qualified Test.QuickCheck.Gen as QCGen
 import qualified Test.QuickCheck.Random as QCRandom
@@ -95,6 +100,50 @@ spec = describe "Data.CFTA.Sized.Prefix.Train" $ do
         forM_ ["x", "y", "neg", "add"] $ \symbol ->
             abs (difference symbol - scale * arityLess symbol) `shouldSatisfy` (< 1e-5)
 
+    describe "Model" $ do
+        let models =
+                [ (reach, fromJust $ Model.train reach expressions 5 corpus)
+                | reach <- [Reach 0 False, Reach 1 False, Reach 2 True]
+                ]
+            everything model = fromJust $ Model.bestTerms 100000 model []
+            close left right = abs (left - right) < 1e-7
+        it "gives each term within the bound a probability, the probabilities sum to one, and the most probable come first" $
+            forM_ models $ \(reach, model) -> do
+                let best = everything model
+                (reach, sort $ map fst best) `shouldBe` (reach, sort $ completionTerms $ completionsOf 5 expressions)
+                (reach, close (sum $ map snd best) 1) `shouldBe` (reach, True)
+                (reach, and $ zipWith (>=) (map snd best) (drop 1 $ map snd best)) `shouldBe` (reach, True)
+                forM_ best $ \(term, probability) ->
+                    (reach, term, close (log probability) <$> Model.termLogProbability model term) `shouldBe` (reach, term, Just True)
+        it "gives each next token the probability of its completions" $
+            forM_ models $ \(reach, model) -> do
+                let best = everything model
+                forM_ (nubOrd $ concatMap (inits . preorder . fst) best) $ \prefix -> do
+                    let within = [(preorder term, probability) | (term, probability) <- best, prefix `isPrefixOf` preorder term]
+                        total = sum $ map snd within
+                        expected =
+                            Map.toList $
+                                Map.fromListWith
+                                    (+)
+                                    [(tokens !! length prefix, probability / total) | (tokens, probability) <- within, length tokens > length prefix]
+                        found = fromJust $ Model.nextTokenProbabilities model prefix
+                    (reach, prefix, map fst found) `shouldBe` (reach, prefix, map fst expected)
+                    (reach, prefix, and $ zipWith close (map snd found) (map snd expected)) `shouldBe` (reach, prefix, True)
+        it "raises the probabilities of the terms to one over the temperature" $
+            forM_ models $ \(reach, model) -> do
+                let best = everything model
+                    cooled = Map.fromList $ everything $ fromJust $ Model.withTemperature 0.5 model
+                    total = sum [probability ^ (2 :: Int) | (_, probability) <- best]
+                forM_ best $ \(term, probability) ->
+                    (reach, term, close (cooled Map.! term) (probability ^ (2 :: Int) / total)) `shouldBe` (reach, term, True)
+                (reach, isNothing $ Model.withTemperature 0 model) `shouldBe` (reach, True)
+        it "samples completions of the prefix, and no completion of a prefix outside the language" $
+            forM_ models $ \(reach, model) -> do
+                forM_ [[], [("add", 2)], [("add", 2), ("neg", 1)]] $ \prefix -> do
+                    let drawn = QCGen.unGen (QC.vectorOf 50 $ fromJust $ Model.sampleTerm model prefix) (QCRandom.mkQCGen 3) 30
+                    (reach, prefix, filter (not . isPrefixOf prefix . preorder) drawn) `shouldBe` (reach, prefix, [])
+                (reach, isNothing $ Model.sampleTerm model [("x", 0), ("y", 0)]) `shouldBe` (reach, True)
+
 -- | Expressions: x, y, neg(e), add(e, e).
 expressions :: FTA.FTA String String Constraint
 expressions =
@@ -156,6 +205,10 @@ arityLess symbol = case symbol of
     "neg" -> 0
     "add" -> 1
     _ -> -1
+
+-- | The tokens of a term in preorder.
+preorder :: Term String -> [Token String]
+preorder (Term.Node symbol children) = (symbol, length children) : concatMap preorder children
 
 -- | A small corpus of completions within the bound 9.
 corpus :: [Term String]
