@@ -40,6 +40,19 @@ The options apply to each hole:
 > -fplugin-opt=Data.CFTA.GHC.HoleFits:rank-model=NAME the model on the server
 > -fplugin-opt=Data.CFTA.GHC.HoleFits:rank-keep-alive=0   how long the server keeps the model loaded
 
+> -fplugin-opt=Data.CFTA.GHC.HoleFits:model=PATH        order the fits with a fit model
+> -fplugin-opt=Data.CFTA.GHC.HoleFits:model-module=K    add the counts of the module K times
+
+With @model@, the plugin reads a fit model ("Data.CFTA.GHC.Model", the text
+form @fit-model 1;@, which @cfta-fit-model@ builds from Haskell sources) once
+for each module. Then the search is mode (b) ('States'), and it checks the
+programs of all sizes in the order of the model's score, best first
+('optionScore'). With @model-module@, the plugin also reads the module of the
+first hole with GHC's parser ("Data.CFTA.GHC.Corpus"), and adds the counts of
+that module, multiplied by K, to the model, for all the holes of the module.
+@model-module@ needs @model@. A model that the plugin cannot read gives a
+warning, and the search keeps its order.
+
 With @rank@, a decision model orders the plugin's fits
 ("Data.CFTA.GHC.Rank"). It needs a running Ollama
 (@http://localhost:11434@) with a model that has the capability
@@ -61,20 +74,25 @@ module Data.CFTA.GHC.HoleFits (
     readOptions,
 ) where
 
-import Control.Exception (SomeAsyncException, fromException, throwIO, try)
-import Control.Monad (filterM, foldM, void)
+import Control.Exception (IOException, SomeAsyncException, fromException, throwIO, try)
+import Control.Monad (filterM, foldM, join, void)
 import Control.Monad.IO.Class (liftIO)
 import Data.List (sortBy)
 import qualified Data.Map.Strict as Map
-import Data.Maybe (catMaybes, listToMaybe)
+import Data.Maybe (catMaybes, fromMaybe, listToMaybe)
 import qualified Data.Set as Set
 import Data.Text (Text)
 import qualified Data.Text as Text
+import qualified Data.Text.IO as Text
+import System.IO (hPutStrLn, stderr)
 import Text.Read (readMaybe)
 
+import Data.CFTA.GHC.Corpus (moduleTerms, parserOf)
 import Data.CFTA.GHC.Fits
+import Data.CFTA.GHC.Model (FitModel (..), fromTerms, merge, parseFitModel, scale, tokenScore)
 import Data.CFTA.GHC.Rank (Ranking (..), defaultRanking, holeState, rankedFits, rankingModel)
 import Data.CFTA.Gen.Synthesis (Program (..))
+import Data.CFTA.Gen.Synthesis.States (EdgeOrder (..), Walking (..))
 import Decision.Ollama (Ollama (..), unload)
 import GHC.Builtin.Names (gHC_INTERNAL_BASE, gHC_INTERNAL_ERR, gHC_INTERNAL_UNSAFE_COERCE)
 import GHC.Builtin.Types (consDataCon, nilDataCon, tupleDataCon)
@@ -83,6 +101,7 @@ import GHC.Core.DataCon (dataConName, dataConNonlinearType, dataConWrapId)
 import GHC.Core.Multiplicity (scaledMult, scaledThing)
 import GHC.Core.TyCo.FVs (tyCoVarsOfTypesList)
 import GHC.Core.Type (Type, isManyTy)
+import GHC.Data.FastString (unpackFS)
 import GHC.Data.IOEnv (getEnv, runIOEnv)
 import GHC.Driver.DynFlags (
     DynFlags (maxValidHoleFits),
@@ -90,16 +109,19 @@ import GHC.Driver.DynFlags (
     HasDynFlags (getDynFlags),
     gopt_unset,
  )
-import GHC.Driver.Env (HscEnv, hscUpdateFlags)
+import GHC.Driver.Env (HscEnv, hscUpdateFlags, hsc_logger)
 import GHC.Driver.Plugins (CommandLineOption, Plugin (..), defaultPlugin, purePlugin)
 import GHC.Driver.Ppr (showSDoc)
 import GHC.Tc.Errors.Hole.FitTypes (HoleFit (RawHoleFit), HoleFitCandidate (..))
 import GHC.Tc.Errors.Hole.Plugin (HoleFitPlugin (..), HoleFitPluginR (..))
+import GHC.Tc.Types (env_top)
 import GHC.Tc.Types.BasicTypes (TcTyThing (AGlobal, ATcId, tct_id))
 import GHC.Tc.Types.Constraint (Hole (..))
+import GHC.Tc.Types.CtLoc (ctLocSpan)
 import GHC.Tc.Utils.Env (tcLookup)
 import GHC.Tc.Utils.Monad (
     TcM,
+    TcRef,
     getGlobalRdrEnv,
     liftZonkM,
     newTcRef,
@@ -125,6 +147,7 @@ import GHC.Types.Name (
  )
 import GHC.Types.Name.Reader (GlobalRdrElt, globalRdrEnvElts, greName, gre_lcl)
 import GHC.Types.Name.Set (elemNameSet, emptyNameSet, extendNameSet)
+import GHC.Types.SrcLoc (srcSpanFile)
 import GHC.Types.TyThing (TyThing (AConLike, AnId))
 import GHC.Types.Var (isTcTyVar)
 import GHC.Utils.Outputable (SDoc, char, hcat, hsep, parens, ppr, text, (<+>))
@@ -143,6 +166,10 @@ plugin =
 data PluginOptions = PluginOptions
     { pluginSearch :: Options
     , pluginRanking :: Maybe Ranking
+    , pluginModel :: Maybe FilePath
+    -- ^ The file of a fit model.
+    , pluginModuleWeight :: Maybe Integer
+    -- ^ The factor of the counts of the module, which the model gets.
     }
 
 {- | The options of the plugin, from its @-fplugin-opt@ arguments
@@ -153,10 +180,17 @@ ranking.
 readOptions :: [CommandLineOption] -> Either String PluginOptions
 readOptions arguments = do
     (options, ranking, ranked, settings) <- foldM set (search0, defaultRanking, False, []) arguments
+    let model = lastValue "model"
+    weight <-
+        traverse
+            (\value -> maybe (Left ("not a number in model-module=" <> value)) Right (readMaybe value))
+            (lastValue "model-module")
     case settings of
         setting : _
             | not ranked -> Left (setting <> " needs the option rank: the ranking is on only with rank")
-        _ -> Right (PluginOptions options (if ranked then Just ranking else Nothing))
+        _
+            | Just _ <- weight, Nothing <- model -> Left "model-module needs the option model"
+            | otherwise -> Right (PluginOptions options (if ranked then Just ranking else Nothing) model weight)
   where
     search0 = defaultOptions{optionMaximumSize = 4, optionFits = 5, optionSeconds = Just 1, optionAvoid = hectareAvoid}
     set (options, ranking, ranked, settings) argument = case break (== '=') argument of
@@ -170,6 +204,8 @@ readOptions arguments = do
         ("normal-forms", '=' : "on") -> Right (search (\o -> o{optionNormalForms = True}))
         ("normal-forms", '=' : "off") -> Right (search (\o -> o{optionNormalForms = False}))
         ("rank", "") -> Right (options, ranking, True, settings)
+        ("model", '=' : _) -> Right (options, ranking, ranked, settings)
+        ("model-module", '=' : _) -> Right (options, ranking, ranked, settings)
         ("rank-pool", '=' : value) -> (\pool -> setting (\r -> r{rankingPool = pool})) <$> number value
         ("rank-seconds", '=' : value) -> (\seconds -> setting (\r -> r{rankingSeconds = seconds})) <$> number value
         ("rank-model", '=' : value) -> Right (setting (server (\o -> o{ollamaModel = Text.pack value})))
@@ -178,7 +214,7 @@ readOptions arguments = do
             Left
                 ( "unknown option "
                     <> argument
-                    <> "; the options are size, fits, seconds, programs, first-order, only-defaulted, no-type-domains, normal-forms, rank, rank-pool, rank-seconds, rank-model, and rank-keep-alive"
+                    <> "; the options are size, fits, seconds, programs, first-order, only-defaulted, no-type-domains, normal-forms, model, model-module, rank, rank-pool, rank-seconds, rank-model, and rank-keep-alive"
                 )
       where
         search change = (change options, ranking, ranked, settings)
@@ -187,6 +223,10 @@ readOptions arguments = do
         server change current = current{rankingServer = change (rankingServer current)}
         number :: (Read a) => String -> Either String a
         number value = maybe (Left ("not a number in " <> argument)) Right (readMaybe value)
+    -- The value of the last argument NAME=VALUE with a name.
+    lastValue name = case [value | argument <- arguments, (found, '=' : value) <- [break (== '=') argument], found == name] of
+        [] -> Nothing
+        values -> Just (last values)
 
 {- | Raise @-fmax-valid-hole-fits@ by the plugin's number of fits, because
 GHC cuts the list of fits after the plugin, and read the unfoldings of the
@@ -210,16 +250,24 @@ a model that the server keeps loaded.
 holeFits :: PluginOptions -> HoleFitPluginR
 holeFits options =
     HoleFitPluginR
-        { hfPluginInit = newTcRef (Nothing, False)
-        , hfPluginRun = \reference ->
+        { hfPluginInit = do
+            model <- join <$> traverse readModel (pluginModel options)
+            modelReference <- newTcRef (model, False)
+            reference <- newTcRef (Nothing, False)
+            newTcRef (reference, modelReference)
+        , hfPluginRun = \references ->
             HoleFitPlugin
-                { candPlugin = \_ scope -> scope <$ updTcRef reference (\(_, ranked') -> (Just scope, ranked'))
+                { candPlugin = \_ scope -> do
+                    (reference, _) <- readTcRef references
+                    scope <$ updTcRef reference (\(_, ranked') -> (Just scope, ranked'))
                 , fitPlugin = \hole fits -> do
+                    (reference, modelReference) <- readTcRef references
                     (open, ranked') <- readTcRef reference
                     writeTcRef reference (Nothing, ranked')
                     case open of
                         Just scope -> do
-                            (ours, asked) <- fitsFor options hole scope
+                            model <- modelFor options modelReference hole
+                            (ours, asked) <- fitsFor options model hole scope
                             updTcRef reference (\(open', _) -> (open', ranked' || asked))
                             -- The limit without the plugin: see 'raiseLimit'.
                             limit <- maxValidHoleFits <$> getDynFlags
@@ -227,7 +275,8 @@ holeFits options =
                             pure (take kept fits <> ours <> drop kept fits)
                         Nothing -> pure fits
                 }
-        , hfPluginStop = \reference -> do
+        , hfPluginStop = \references -> do
+            (reference, _) <- readTcRef references
             (_, ranked') <- readTcRef reference
             case pluginRanking options of
                 Just ranking
@@ -236,13 +285,45 @@ holeFits options =
                 _ -> pure ()
         }
 
+{- | Read a fit model. A model that the plugin cannot read gives a warning
+and no model.
+-}
+readModel :: FilePath -> TcM (Maybe FitModel)
+readModel path = liftIO $ do
+    found <- try (Text.readFile path)
+    case either (Left . show) parseFitModel (found :: Either IOException Text) of
+        Right model -> pure (Just model)
+        Left problem -> do
+            hPutStrLn
+                stderr
+                ("Data.CFTA.GHC.HoleFits: the model " <> path <> " is not read, so the fits keep their order: " <> problem)
+            pure Nothing
+
+{- | The model of a hole: the model of the file, with the counts of the
+module of the hole added once for the module, with @model-module@.
+-}
+modelFor :: PluginOptions -> TcRef (Maybe FitModel, Bool) -> TypedHole -> TcM (Maybe FitModel)
+modelFor options reference hole = do
+    (loaded, added) <- readTcRef reference
+    case (loaded, pluginModuleWeight options, th_hole hole) of
+        (Just model, Just weight, Just Hole{hole_loc = location}) | not added -> do
+            flags <- getDynFlags
+            logger <- hsc_logger . env_top <$> getEnv
+            let file = unpackFS (srcSpanFile (ctLocSpan location))
+            terms <- liftIO (moduleTerms (parserOf flags logger) (modelModules model) (Map.keysSet (modelCandidates model)) file)
+            let own = [kept | kept@(_, term) <- fromMaybe [] terms, length (foldr (:) [] term) >= 2]
+                merged = merge model (scale weight (fromTerms (modelModules model) (modelCandidates model) own))
+            writeTcRef reference (Just merged, True)
+            pure (Just merged)
+        (found, _, _) -> pure found
+
 {- | The plugin's fits for a hole, best first: none when the hole has no
 type, when its type has a @forall@ or a class context at the top, when a
 multiplicity is not @Many@, or when the search fails. The flag says whether
 a model was asked.
 -}
-fitsFor :: PluginOptions -> TypedHole -> [HoleFitCandidate] -> TcM ([HoleFit], Bool)
-fitsFor (PluginOptions options ranking) hole scope = case th_hole hole of
+fitsFor :: PluginOptions -> Maybe FitModel -> TypedHole -> [HoleFitCandidate] -> TcM ([HoleFit], Bool)
+fitsFor (PluginOptions options' ranking _ _) fitModel hole scope = case th_hole hole of
     Nothing -> pure ([], False)
     Just Hole{hole_ty = holeType} -> do
         elements <- globalRdrEnvElts <$> getGlobalRdrEnv
@@ -299,6 +380,10 @@ fitsFor (PluginOptions options ranking) hole scope = case th_hole hole of
                     Nothing -> pure (fits, False)
                 pure ([RawHoleFit (shown fit) | fit <- take (optionFits options) ordered], asked)
   where
+    -- With a fit model, mode (b) checks the programs in the order of the model's score.
+    options = case fitModel of
+        Just found -> options'{optionMode = States (Enumerated HostOrder), optionScore = Just (tokenScore found)}
+        Nothing -> options'
     -- With a ranking, the model orders more fits than the plugin shows.
     wanted = maybe (optionFits options) (max (optionFits options) . rankingPool) ranking
     search candidates arguments result = do

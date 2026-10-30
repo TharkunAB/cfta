@@ -49,8 +49,8 @@ queries are the queries of Hectare's evaluation, with GHC's library of the
 rung. Next to the Hoogle+ queries, the parent takes the names of the
 differential queries ('differential'), where the erasure loses information.
 
-The variable @HECTARE_GHC_SCORES@ names a file of the counts of a corpus
-('loadScore'). With it, the enumerated walks of mode (b) check the programs
+The variable @HECTARE_GHC_SCORES@ names a fit model, the file that
+@cfta-fit-model@ builds ('loadScore'). With it, the enumerated walks of mode (b) check the programs
 of all sizes together in the order of descending score ('optionScore').
 @HECTARE_GHC_PREFIX@ gives a number @n@: those walks keep only the programs
 that start with the first @n@ tokens of the expected solution, as if the
@@ -78,9 +78,9 @@ import Data.IORef (modifyIORef', newIORef, readIORef, writeIORef)
 import Data.List (elemIndex, intercalate, isPrefixOf, nub, partition, sortOn)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe, isJust, isNothing)
-import qualified Data.Set as Set
 import Data.Text (Text)
 import qualified Data.Text as Text
+import qualified Data.Text.IO as Text
 import GHC.Clock (getMonotonicTime)
 import GHC.Stats (allocated_bytes, getRTSStats, getRTSStatsEnabled, max_mem_in_use_bytes)
 import System.Directory (createDirectoryIfMissing)
@@ -94,6 +94,7 @@ import Text.Read (readMaybe)
 
 import Data.CFTA.GHC.Fits
 import Data.CFTA.GHC.Internal.Check (Counters (..))
+import Data.CFTA.GHC.Model (parseFitModel, tokenScore)
 import Data.CFTA.GHC.Rank (holeState, rankFits)
 import Data.CFTA.GHC.Session
 import Data.CFTA.Gen.Synthesis (Program (..), Query (..), Type (..), parseProgram, renderProgram, renderType)
@@ -490,44 +491,9 @@ runQuery name rungName' seconds = case [query | query <- allQueries, ghcName que
 
 -- | Read a mode: @hectare@, @states@, @automaton@, or @automaton-canonical@.
 
-{- | The score of a token from the counts of a corpus (the file of
-@ContextCounts.hs@ of the training examples of cfta-generator): the
-logarithm of the probability of the token's symbol given its parent's
-symbol (@top@ for the root) and its position. The score of a program is the
-sum over its tokens. The probability mixes the relative
-frequency of the symbol in that context with the frequency of the symbol
-alone (one added to each count of the alphabet), in the proportion of the
-count of the context over the count plus the number of distinct symbols in
-it (Witten and Bell). A symbol is a name with its number of arguments, as
-@map/2@. A name that is not a candidate of the file, such as an argument of
-the query, is @var@. A name of a specialization drops its number after the
-space.
--}
+-- | The score of a fit model's file ("Data.CFTA.GHC.Model"); stop with the error of a file that is not a model.
 loadScore :: FilePath -> IO (Maybe (Text, Int) -> Int -> (Text, Int) -> Double)
-loadScore path = do
-    rows <- map words . lines <$> readFile path
-    let candidates = Set.fromList [name | ["candidate", name] <- rows]
-        alphabet = sum [read count | ["alphabet", count] <- rows] :: Double
-        unigrams = Map.fromList [(symbol, read count) | ["unigram", symbol, count] <- rows] :: Map.Map String Double
-        total = sum (Map.elems unigrams)
-        pairs =
-            Map.fromList [((parent, read position, symbol), read count) | ["context", parent, position, symbol, count] <- rows] ::
-                Map.Map (String, Int, String) Double
-        contexts =
-            Map.fromListWith
-                (\(count, kinds) (count', kinds') -> (count + count', kinds + kinds'))
-                [((parent, read position), (read count, 1)) | ["context", parent, position, _, count] <- rows] ::
-                Map.Map (String, Int) (Double, Double)
-        unigram symbol = (Map.findWithDefault 0 symbol unigrams + 1) / (total + alphabet)
-        probability parent position symbol = case Map.lookup (parent, position) contexts of
-            Nothing -> unigram symbol
-            Just (count, kinds) ->
-                let mix = count / (count + kinds)
-                 in mix * Map.findWithDefault 0 (parent, position, symbol) pairs / count + (1 - mix) * unigram symbol
-        symbolOf (name, arguments) =
-            let base = takeWhile (/= ' ') (Text.unpack name)
-             in (if Set.member base candidates then base else "var") <> "/" <> show arguments
-    pure (\parent position token -> log (probability (maybe "top" symbolOf parent) position (symbolOf token)))
+loadScore path = either (\problem -> fail (path <> ": " <> problem)) (pure . tokenScore) . parseFitModel =<< Text.readFile path
 
 readMode :: String -> Either String Mode
 readMode text = case text of
