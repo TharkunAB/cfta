@@ -976,28 +976,33 @@ result is the result of 'unrankCompletion'.
 Without constraints, the decoder reads the order of the size index: it
 chooses the size, then at each node the transition and the sizes and the
 terms of its children, each by the totals of the intervals of their terms.
-Otherwise it reads the intervals of the listed completions.
+Otherwise it reads the intervals of the listed completions. The decoder of
+@unrankWeighted completions@ keeps the totals of the intervals, so for many
+integers, apply 'unrankWeighted' to the completions once.
 -}
 unrankWeighted :: Completions symbol -> Integer -> Maybe (Term symbol)
-unrankWeighted completions value
-    | value < 0 = Nothing
-    | otherwise = case completionsRoute completions of
-        Indexed table _ _ -> case indexedIntervals completions table of
-            (_, unrank, _) -> unrank value
-        Listed bound _ ->
-            listToMaybe [term | (term, start, width) <- listedIntervals completions bound, start <= value, value < start + width]
+unrankWeighted completions = case completionsRoute completions of
+    Indexed table _ _ -> case indexedIntervals completions table of
+        (_, unrank, _) -> \value -> if value < 0 then Nothing else unrank value
+    Listed bound _ ->
+        let intervals = listedIntervals completions bound
+         in \value -> listToMaybe [term | (term, start, width) <- intervals, start <= value, value < start + width]
 
 {- | The start and the length of the weighted interval of a completion, the
 inverse of 'unrankWeighted' at each integer of a non-empty interval.
 'Nothing' when the term is not a completion. A completion with the weight
 zero has the length zero. With the weight one for each symbol, the start is
-the rank of 'rankCompletion' and the length is one.
+the rank of 'rankCompletion' and the length is one. As for
+'unrankWeighted', the function of @rankWeighted completions@ keeps the
+totals of the intervals.
 -}
 rankWeighted :: (Eq symbol) => Completions symbol -> Term symbol -> Maybe (Integer, Integer)
-rankWeighted completions term = case completionsRoute completions of
+rankWeighted completions = case completionsRoute completions of
     Indexed table _ _ -> case indexedIntervals completions table of
-        (_, _, interval) -> interval term
-    Listed bound _ -> listToMaybe [(start, width) | (listed, start, width) <- listedIntervals completions bound, listed == term]
+        (_, _, interval) -> interval
+    Listed bound _ ->
+        let intervals = listedIntervals completions bound
+         in \term -> listToMaybe [(start, width) | (listed, start, width) <- intervals, listed == term]
 
 -- | The number of terms of an index with at most the given number of nodes.
 countUpTo :: Integer -> SizeIndex (Term symbol) -> Cardinality
