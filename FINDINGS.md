@@ -1,3 +1,35 @@
+# Current callback path checkpoint (2026-10-30 02:13 CET)
+
+Full goal ACTIVE. Read [the current note](lean/notes-current-callback-path-control.md).
+Source9821dec17e13c7b7a422c6d38a749f5785427286 adds13 checked public laws in six modules.
+Original stored paths reach every actual callback input, successful recorded
+frame and the exact Native/Prepared false-branch recur input. The configured
+stop/order and all literal call arguments are retained. No recursive-output
+property is assumed. Invocation.selected supplies the actual head equation;
+the earlier producer-alignment requirement for this path fact is superseded.
+
+Audit4692/82532 and public1051/85 pass. Seven current strict sources match.
+All487 prior protected and835 Haskell/build inputs match; baseline493/4692.
+All20 proof commands (17 pass,3 fail) and104 input snapshots remain.
+The complete prior public readback remains an exact prefix.
+All eight final owner/review/design reports are read;327 pins verify.
+The archive is lean/restart-evidence/20261030-callback-path-control/.
+
+Largest gap: SAME original-input path/key/handle/neutral-work bounds and
+sufficientD, followed by whole recursion, coverage, exact order/stops and Haskell
+correspondence. Normalization appends paths. The bounded-word/anchor investigation
+and concrete normalization candidate remain UNTESTED, not a checked native
+counterexample. Preserve both workers and all earlier proof targets.
+
+No Haskell source changed. No new Haskell defect or fix was established.
+Every previous FINDINGS repair remains below. The source-only draft stays marked.
+Root's experimental equality-instance removal failed; restoring the exact old
+three-instance context fixed it. The original producer draft was correct.
+Continue in a new writable area after evidence sealing. Push to formalize remains
+authorized. Do not mark the full goal complete or pause it at this checkpoint.
+
+---
+
 # Latest findings: original paths through completed heads,2026-10-30
 
 The full formalization goal remains ACTIVE. Source88d473726c97bda9df2550e6635700597d0cfe41.
