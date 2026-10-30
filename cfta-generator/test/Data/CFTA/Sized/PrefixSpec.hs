@@ -27,7 +27,15 @@ import Data.CFTA.Index (Cardinality (..), ClassRank (..), Rank (..), Size (..))
 import Data.CFTA.Refinement.Verdict (Entailment (Entailment), Verdict (..))
 import Data.CFTA.Sized (SizedError (..), countOfSize, sized, sizedStates, termsOfSize, unrankOfSize)
 import Data.CFTA.Sized.Prefix
-import Data.CFTA.Sized.Prefix.Parents (labelParents, labelPrefix, unlabelParents, withParents)
+import Data.CFTA.Sized.Prefix.Parents (
+    Context (..),
+    Reach (..),
+    labelParents,
+    labelPrefix,
+    rootContext,
+    unlabelParents,
+    withParents,
+ )
 import Data.CFTA.Sized.Prefix.QuickCheck (sampleCompletion)
 import Data.CFTA.SizedSpec (automatonGraph)
 import Data.CFTA.Symbol (Symbol (Symbol))
@@ -270,34 +278,40 @@ fixtureUpTo bound name graph = describe name $ do
                     `shouldBe` (prefix, [Just term | (term, width) <- zip listed widths, width > 0, _ <- [(), ()]])
                 (prefix, map (unrankWeighted completions) [-1, total]) `shouldBe` (prefix, [Nothing, Nothing])
     -- An automaton with constraints has no labelled automaton.
-    it "labels each node with the token of its parent and its position, one labelling for each term" $
-        forM_ (withParents Nothing graph) $ \labelled -> do
+    it "labels each node with its ancestors and its left sibling, one labelling for each term" $
+        forM_ reaches $ \reach -> forM_ (withParents reach rootContext graph) $ \labelled -> do
             let labelledClasses = either (error . show) id $ sized labelled
                 labelledTerms = concat [termsOfSize labelledClasses (Size size) | size <- [1 .. bound]]
                 completions = start bound labelled
-            [countOfSize labelledClasses (Size size) | size <- [1 .. bound]]
-                `shouldBe` [countOfSize classes (Size size) | size <- [1 .. bound]]
-            [term | term <- accepted, labelParents Nothing term `notElem` labelledTerms] `shouldBe` []
-            [term | term <- map unlabelParents labelledTerms, term `notElem` accepted] `shouldBe` []
+            (reach, [countOfSize labelledClasses (Size size) | size <- [1 .. bound]])
+                `shouldBe` (reach, [countOfSize classes (Size size) | size <- [1 .. bound]])
+            (reach, [term | term <- accepted, labelParents reach rootContext term `notElem` labelledTerms]) `shouldBe` (reach, [])
+            (reach, [term | term <- map unlabelParents labelledTerms, term `notElem` accepted]) `shouldBe` (reach, [])
             forM_ prefixes $ \prefix ->
-                (prefix, fmap completionCount . afterPrefix completions =<< labelPrefix Nothing prefix)
-                    `shouldBe` (prefix, Just (Cardinality (brute prefix)))
+                (reach, prefix, fmap completionCount . afterPrefix completions =<< labelPrefix reach rootContext prefix)
+                    `shouldBe` (reach, prefix, Just (Cardinality (brute prefix)))
     it "weighs each node by its symbol and its context in the labelled automaton" $
-        forM_ (withParents Nothing graph) $ \labelled ->
+        forM_ [Reach 1 False, Reach 0 True] $ \reach -> forM_ (withParents reach rootContext graph) $ \labelled -> do
+            let labelledEmpty = start bound labelled
             forM_ prefixes $ \prefix -> do
-                let byContext ((symbol, count), context) =
-                        weight symbol * fromIntegral (count + 1) * maybe 2 (\(_, position) -> fromIntegral position + 1) context
-                    labelledPrefix = fromMaybe (error "a prefix of a term") $ labelPrefix Nothing prefix
-                    completions = weightedBy byContext $ fromMaybe (error "a prefix of a term") $ afterPrefix (start bound labelled) labelledPrefix
+                let byContext ((symbol, count), Context ancestors left) =
+                        weight symbol
+                            * fromIntegral (count + 1)
+                            * fromIntegral (1 + sum [position + 1 | (_, position) <- ancestors])
+                            * maybe 1 (const 2) left
+                    labelledPrefix = fromMaybe (error "a prefix of a term") $ labelPrefix reach rootContext prefix
+                    completions = weightedBy byContext $ fromMaybe (error "a prefix of a term") $ afterPrefix labelledEmpty labelledPrefix
                     common = foldr (lcm . denominator . byContext) 1 $ completionSymbols completions
-                (prefix, completionWeight completions, toRational (weightedTotal completions))
-                    `shouldBe` ( prefix
-                               , sum [termWeight byContext (labelParents Nothing term) | term <- accepted, prefix `isPrefixOf` preorder term]
+                (reach, prefix, completionWeight completions, toRational (weightedTotal completions))
+                    `shouldBe` ( reach
+                               , prefix
+                               , sum [termWeight byContext (labelParents reach rootContext term) | term <- accepted, prefix `isPrefixOf` preorder term]
                                , completionWeight completions * fromInteger (common ^ bound)
                                )
   where
     plain = FTA.dropConstraints graph
     empty = start bound graph
+    reaches = [Reach 1 False, Reach 0 True, Reach 2 True]
     after prefix = fromMaybe (error $ "no completions after " <> show prefix) $ afterPrefix empty prefix
     classes = either (error . show) id $ sized graph
     accepted = concat [termsOfSize classes (Size size) | size <- [1 .. bound]]
