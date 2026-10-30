@@ -4,16 +4,30 @@
 automata of mode (b), for a fit model ("Data.CFTA.GHC.Model").
 
 'moduleTerms' parses a module with GHC's parser, with the language pragmas
-of the module. Each maximal application becomes a term: a node for each
-head, with its arguments as children. The symbol of a node is the name of
-its head and its number of arguments, as @map/2@. A head is a candidate
-when its name is the text of a candidate and its qualifier, if any, names a
-module of the candidates. Every other variable or constructor is @var@. A
-literal, a lambda, and every other expression is the leaf @other/0@, and the
-corpus looks for applications inside it. @f $ x@ is @f x@, @(a, b)@ is @(,)@
-with two arguments, and @[]@ is the empty list. The root of the body of a
-right-hand side (of a function, a case alternative, or a lambda) has the
-parent @top@; the root of another application has the parent @expr@.
+of the module. Each expression of a right-hand side becomes a term: a node
+for each part, with its parts as children. The symbol of a node is a name
+and its number of children, as @map/2@:
+
+* an application has its head's name and its arguments, also through @$@
+  and an operator; @f $ x@ is @f x@;
+* a head is a candidate when its name is the text of a candidate and its
+  qualifier, if any, names a module of the candidates; every other variable
+  or constructor is @var@;
+* a section @(x +)@ is @(+)@ with one argument, @(+ x)@ is @flip (+) x@, and
+  @-x@ is @negate x@;
+* a tuple is @(,)@, @(,,)@, ...; @[]@ is the empty list, and @[a, b]@ is
+  @list/2@; a literal is @lit/0@;
+* @if@ is @if/3@; a lambda is @lambda/1@ with its body; @case@ has the
+  scrutinee and the body of each alternative; @let@ is @let/1@ with its
+  body; @do@ has the expression of each statement; a lambda or an
+  alternative with guards, and a statement other than an expression, a
+  bind, or the last one, make the whole expression @other/0@;
+* every other expression is @other/0@.
+
+The corpus also takes the terms of the parts that a term leaves out:
+guards, local bindings, patterns, and the insides of @other/0@. The root of
+the body of a right-hand side has the parent @top@; the root of another
+expression has the parent @expr@.
 -}
 module Data.CFTA.GHC.Corpus (
     Parser,
@@ -25,12 +39,12 @@ module Data.CFTA.GHC.Corpus (
 
 import Control.Exception (SomeException, evaluate, try)
 import Data.Data (Data, cast, gmapQ)
+import Data.List.NonEmpty (NonEmpty ((:|)))
 import qualified Data.Map.Strict as Map
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromMaybe, listToMaybe)
 import qualified Data.Set as Set
 import Data.Text (Text)
 import qualified Data.Text as Text
-import Text.Read (readMaybe)
 
 import GHC (getSessionDynFlags)
 import GHC.Data.FastString (mkFastString)
@@ -74,17 +88,20 @@ moduleTerms parser modules names file = do
     case found of
         Nothing -> pure Nothing
         Just parsed -> do
-            let terms = parsedTerms (map Text.unpack modules) names parsed
+            let terms = [(root, fmap withoutHoles term) | (root, term) <- parsedTerms (map Text.unpack modules) names parsed]
+                withoutHoles symbol = if "_@" `Text.isPrefixOf` symbol then "var/0" else symbol
             outcome <- try (evaluate (length (show terms)))
             pure $ case outcome :: Either SomeException Int of
                 Right _ -> Just terms
                 Left _ -> Nothing
 
 {- | The context of the hole that starts at a line and a column of a module
-file: the symbol of the application whose argument the hole is, with the
-number of the application's arguments, and the hole's position among them.
-In @foldr f _ xs@ the hole has the context @(foldr/3, 1)@. 'Nothing' when the
-module does not parse, or the hole is not an argument of an application.
+file: the symbol of the node whose child the hole is, with the node's number
+of children, and the hole's position among them. In @foldr f _ xs@ the hole
+has the context @(foldr/3, 1)@, and in @if _ then a else b@ the context
+@(if/3, 0)@. A hole that is the root of a right-hand side has @top@, and the
+root of another expression @expr@, both with the position 0. 'Nothing' when
+the module does not parse, or has no such hole.
 -}
 holeContext :: Parser -> [Text] -> Set.Set Text -> FilePath -> (Int, Int) -> IO (Maybe (Text, Int))
 holeContext parser modules names file start = do
@@ -92,15 +109,19 @@ holeContext parser modules names file start = do
     pure $ case found of
         Nothing -> Nothing
         Just parsed ->
-            let nameOf = namer (map Text.unpack modules) names parsed
-                contexts = [context | (context, at) <- holeArguments nameOf (hsmodDecls parsed), at == start]
-             in case contexts of
-                    [] -> Nothing
-                    _ -> Just (snd (maximum [(arity symbol, (symbol, position)) | (symbol, position) <- contexts]))
+            listToMaybe
+                [context | (root, term) <- parsedTerms (map Text.unpack modules) names parsed, context <- contexts root term]
   where
-    -- The number after the slash of a symbol.
-    arity :: Text -> Int
-    arity = fromMaybe 0 . readMaybe . Text.unpack . Text.takeWhileEnd (/= '/')
+    marker = holeSymbol start <> "/0"
+    contexts root term@(Node symbol _)
+        | symbol == marker = [(root, 0)]
+        | otherwise = inner term
+    inner (Node symbol children) =
+        [(symbol, position) | (position, Node child _) <- zip [0 ..] children, child == marker] <> concatMap inner children
+
+-- | The symbol of a hole at a line and a column, without its number of children.
+holeSymbol :: (Int, Int) -> Text
+holeSymbol (line, column) = "_@" <> Text.pack (show line) <> ":" <> Text.pack (show column)
 
 -- | The parsed module of a file. 'Nothing' when it does not parse, or uses CPP.
 parseFile :: Parser -> FilePath -> IO (Maybe (HsModule GhcPs))
@@ -118,40 +139,6 @@ parseFile (Parser flags logger supported) file = do
     pure $ case outcome :: Either SomeException (Maybe (HsModule GhcPs)) of
         Right found -> found
         Left _ -> Nothing
-
-{- | The holes that are arguments of applications: for each application and
-each hole among its arguments, the application's symbol, the hole's
-position, and the line and column where the hole starts.
--}
-holeArguments :: (Data a) => (RdrName -> Text) -> a -> [((Text, Int), (Int, Int))]
-holeArguments nameOf = go
-  where
-    go :: (Data b) => b -> [((Text, Int), (Int, Int))]
-    go value = here <> concat (gmapQ go value)
-      where
-        here = case cast value :: Maybe (LHsExpr GhcPs) of
-            Just expression
-                | (Just headName, arguments@(_ : _)) <- spine expression ->
-                    [ ((headName <> "/" <> Text.pack (show (length arguments)), position), at)
-                    | (position, argument) <- zip [0 ..] arguments
-                    , Just at <- [holeStart argument]
-                    ]
-            _ -> []
-    -- The head of an application, if it is a name, and its arguments.
-    spine (L _ expression) = case expression of
-        HsApp _ function argument -> let (headName, arguments) = spine function in (headName, arguments <> [argument])
-        HsPar _ inner -> spine inner
-        HsAppType _ inner _ -> spine inner
-        OpApp _ left (L _ (HsVar _ operator)) right
-            | occNameString (rdrOcc (unLoc operator)) == "$" ->
-                let (headName, arguments) = spine left in (headName, arguments <> [right])
-            | otherwise -> (Just (nameOf (unLoc operator)), [left, right])
-        HsVar _ name -> (Just (nameOf (unLoc name)), [])
-        _ -> (Nothing, [])
-    holeStart (L location expression) = case expression of
-        HsHole _ | RealSrcSpan span' _ <- locA location -> Just (srcSpanStartLine span', srcSpanStartCol span')
-        HsPar _ inner -> holeStart inner
-        _ -> Nothing
 
 {- | The text of a name in a parsed module: a candidate's text, when the
 qualifier (if any) names one of the modules, and @var@ otherwise.
@@ -184,40 +171,82 @@ rdrOcc name = case name of
     Orig _ occurrence -> occurrence
     Exact exact -> nameOccName exact
 
--- | The terms of the maximal applications of a parsed module.
+{- | The terms of a parsed module, each with the parent of its root. A hole
+@_@ of the module is a leaf whose symbol holds its line and column, as
+@_\@12:7/0@ ('holeSymbol').
+-}
 parsedTerms :: [String] -> Set.Set Text -> HsModule GhcPs -> [(Text, Term Text)]
 parsedTerms modules names parsed = collect (hsmodDecls parsed)
   where
     nameOf = namer modules names parsed
     collect :: (Data a) => a -> [(Text, Term Text)]
     collect value = case cast value :: Maybe (GRHS GhcPs (LHsExpr GhcPs)) of
-        Just (GRHS _ guards body) -> concatMap collect guards <> rooted "top" (unLoc body)
-        Nothing -> case cast value :: Maybe (HsExpr GhcPs) of
+        Just (GRHS _ guards body) -> concatMap collect guards <> rooted "top" body
+        Nothing -> case cast value :: Maybe (LHsExpr GhcPs) of
             Just expression -> rooted "expr" expression
             Nothing -> concat (gmapQ collect value)
-    rooted parent expression =
-        let (term, opaque) = convert expression
-         in (parent, term) : concatMap (concat . gmapQ collect) opaque
-    -- A term and the expressions that it leaves opaque.
-    convert :: HsExpr GhcPs -> (Term Text, [HsExpr GhcPs])
-    convert expression = case expression of
+    rooted parent expression = let (term, inner) = convert expression in (parent, term) : inner
+    -- The children of a value that is not part of a term.
+    within :: (Data a) => a -> [(Text, Term Text)]
+    within = concat . gmapQ collect
+    -- A term, and the terms of the parts that it leaves out.
+    convert :: LHsExpr GhcPs -> (Term Text, [(Text, Term Text)])
+    convert located@(L location expression) = case expression of
         HsVar _ name -> (Node (nameOf (unLoc name) <> "/0") [], [])
-        HsPar _ inner -> convert (unLoc inner)
-        HsAppType _ inner _ -> convert (unLoc inner)
-        HsApp _ function argument -> applied (unLoc function) [unLoc argument]
+        HsPar _ inner -> convert inner
+        HsAppType _ inner _ -> convert inner
+        HsApp _ function argument -> applied function [argument]
         OpApp _ left (L _ (HsVar _ operator)) right
-            | occNameString (rdrOcc $ unLoc operator) == "$" -> applied (unLoc left) [unLoc right]
-            | otherwise -> node (nameOf $ unLoc operator) [unLoc left, unLoc right]
-        ExplicitTuple _ [Present _ left, Present _ right] _ -> node "(,)" [unLoc left, unLoc right]
+            | occNameString (rdrOcc $ unLoc operator) == "$" -> applied left [right]
+            | otherwise -> node (nameOf $ unLoc operator) [left, right] []
+        SectionL _ left (L _ (HsVar _ operator)) -> node (nameOf $ unLoc operator) [left] []
+        SectionR _ (L _ (HsVar _ operator)) right ->
+            let (term, inner) = convert right
+             in (Node "flip/2" [Node (nameOf (unLoc operator) <> "/0") [], term], inner)
+        NegApp _ inner _ -> node "negate" [inner] []
+        ExplicitTuple _ arguments _
+            | Just present <- traverse presentOf arguments
+            , length present >= 2 ->
+                node ("(" <> Text.replicate (length present - 1) "," <> ")") present []
         ExplicitList _ [] -> (Node "[]/0" [], [])
-        _ -> (Node "other/0" [], [expression])
+        ExplicitList _ elements -> node "list" elements []
+        HsLit _ _ -> (Node "lit/0" [], [])
+        HsOverLit _ _ -> (Node "lit/0" [], [])
+        HsIf _ condition yes no -> node "if" [condition, yes, no] []
+        HsLam _ LamSingle (MG _ (L _ [L _ (Match _ _ patterns (GRHSs _ (L _ (GRHS _ [] body) :| []) binds))])) ->
+            node "lambda" [body] (within patterns <> within binds)
+        HsCase _ scrutinee (MG _ (L _ alternatives))
+            | Just bodies <- traverse (unguarded . unLoc) alternatives ->
+                node "case" (scrutinee : map fst bodies) (concatMap snd bodies)
+        HsLet _ binds body -> node "let" [body] (within binds)
+        HsDo _ _ (L _ statements)
+            | Just parts <- traverse (statement . unLoc) statements ->
+                node "do" (map fst parts) (concatMap snd parts)
+        HsHole _
+            | RealSrcSpan span' _ <- locA location ->
+                (Node (holeSymbol (srcSpanStartLine span', srcSpanStartCol span') <> "/0") [], [])
+        _ -> (Node "other/0" [], within located)
+    presentOf argument = case argument of
+        Present _ inner -> Just inner
+        _ -> Nothing
+    -- The body of an alternative without guards, and the terms of its patterns and local bindings.
+    unguarded :: Match GhcPs (LHsExpr GhcPs) -> Maybe (LHsExpr GhcPs, [(Text, Term Text)])
+    unguarded (Match _ _ patterns (GRHSs _ (L _ (GRHS _ [] body) :| []) binds)) = Just (body, within patterns <> within binds)
+    unguarded _ = Nothing
+    -- The expression of a statement, and the terms of its other parts.
+    statement :: StmtLR GhcPs GhcPs (LHsExpr GhcPs) -> Maybe (LHsExpr GhcPs, [(Text, Term Text)])
+    statement part = case part of
+        BodyStmt _ body _ _ -> Just (body, [])
+        LastStmt _ body _ _ -> Just (body, [])
+        BindStmt _ pattern body -> Just (body, within pattern)
+        _ -> Nothing
     -- A head with more arguments: the arguments of the head first.
     applied function arguments = case convert function of
-        (Node symbol children, opaque) ->
-            let (terms, inner) = unzip (map convert arguments)
+        (Node symbol children, inner) ->
+            let (terms, inners) = unzip (map convert arguments)
                 name = Text.dropWhileEnd (/= '/') symbol
                 every = children <> terms
-             in (Node (name <> Text.pack (show (length every))) every, opaque <> concat inner)
-    node name arguments =
-        let (terms, inner) = unzip (map convert arguments)
-         in (Node (name <> "/" <> Text.pack (show (length terms))) terms, concat inner)
+             in (Node (name <> Text.pack (show (length every))) every, inner <> concat inners)
+    node name arguments others =
+        let (terms, inners) = unzip (map convert arguments)
+         in (Node (name <> "/" <> Text.pack (show (length terms))) terms, concat inners <> others)

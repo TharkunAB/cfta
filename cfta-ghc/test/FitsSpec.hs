@@ -283,12 +283,21 @@ main = withSession ["import Prelude", "import Data.Coerce (coerce)", "import Dat
                         , "pairs xs ys = zip xs (_)"
                         , "total xs = foldr (+) _ xs"
                         , "whole = _"
+                        , "choose b x y = if _ then x else y"
+                        , "twice f = map (\\x -> _) f"
                         ]
                 hPutStr handle (unlines source) >> hClose handle
                 let names = Set.fromList ["fromMaybe", "zip", "foldr", "(+)"]
                     at line = (line, 1 + length (takeWhile (/= '_') (source !! (line - 1))))
                     context line = holeContext parser ["Prelude", "Data.Maybe"] names path (at line)
-                mapM context [3, 4, 5, 6] `shouldReturn` [Just ("fromMaybe/2", 1), Just ("zip/2", 1), Just ("foldr/3", 1), Nothing]
+                mapM context [3, 4, 5, 6, 7, 8]
+                    `shouldReturn` [ Just ("fromMaybe/2", 1)
+                                   , Just ("zip/2", 1)
+                                   , Just ("foldr/3", 1)
+                                   , Just ("top", 0)
+                                   , Just ("if/3", 0)
+                                   , Just ("lambda/1", 0)
+                                   ]
                 removeFile path
             it "reads the options model and model-module of the plugin" $ do
                 fmap pluginModel (readOptions ["model=base.cfta"]) `shouldBe` Right (Just "base.cfta")

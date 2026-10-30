@@ -319,30 +319,31 @@ modelFor options reference hole = do
         (found, _, _) -> pure found
 
 {- | The score of the tokens of the fits of a hole under a model. The root of
-a fit has the context of the hole: for a hole that is an argument of an
-application and whose type is not a function, the application's symbol and
-the hole's position ("Data.CFTA.GHC.Corpus.holeContext"), as @foldr/3@ and 1
-for @foldr f _ xs@; otherwise @top@, the context of a right-hand side. A hole
-of a function type gets its fits as lambdas, whose bodies are not the
-arguments that the corpus counts, so it keeps @top@.
+a fit has the context of the hole ("Data.CFTA.GHC.Corpus.holeContext"): the
+symbol of the node whose child the hole is and the hole's position, as
+@foldr/3@ and 1 for @foldr f _ xs@, or @top@ for the body of a right-hand
+side. A hole of a function type gets its fits as lambdas: when such a hole
+is the child of another node, the root of a fit's body has the context of a
+lambda's body, @lambda/1@ and 0.
 -}
 scorerFor :: TypedHole -> FitModel -> TcM (Maybe (Text, Int) -> Int -> (Text, Int) -> Double)
 scorerFor hole model = case th_hole hole of
     Just Hole{hole_ty = holeType, hole_loc = location} -> do
         typ <- liftZonkM (zonkTcType holeType)
+        flags <- getDynFlags
+        logger <- hsc_logger . env_top <$> getEnv
         let (parameters, _) = tcSplitFunTys typ
             span' = ctLocSpan location
             start = (srcSpanStartLine span', srcSpanStartCol span')
+            parser = parserOf flags logger
         context <-
-            if null parameters
-                then do
-                    flags <- getDynFlags
-                    logger <- hsc_logger . env_top <$> getEnv
-                    let parser = parserOf flags logger
-                    liftIO
-                        (holeContext parser (modelModules model) (Map.keysSet (modelCandidates model)) (unpackFS (srcSpanFile span')) start)
-                else pure Nothing
-        pure (tokenScoreAt model (fromMaybe ("top", 0) context))
+            liftIO
+                (holeContext parser (modelModules model) (Map.keysSet (modelCandidates model)) (unpackFS (srcSpanFile span')) start)
+        pure . tokenScoreAt model $ case context of
+            Just found
+                | null parameters -> found
+                | fst found `notElem` ["top", "expr"] -> ("lambda/1", 0)
+            _ -> ("top", 0)
     Nothing -> pure (tokenScore model)
 
 {- | The plugin's fits for a hole, best first: none when the hole has no
