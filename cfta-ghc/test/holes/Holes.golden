@@ -150,3 +150,37 @@ test/holes/Holes.hs:20:23: error: [GHC-88464]
 20 | firstOr fallback xs = _
    |                       ^
 
+test/holes/Holes.hs:25:16: error: [GHC-88464]
+    * Found hole: _ :: Int
+    * In a case alternative: Just ys -> _
+      In the expression:
+        case m of
+          Just ys -> _
+          Nothing -> 0
+      In an equation for `sizeOf':
+          sizeOf m
+            = case m of
+                Just ys -> _
+                Nothing -> 0
+    * Relevant bindings include
+        ys :: [Int] (bound at test/holes/Holes.hs:25:10)
+        m :: Maybe [Int] (bound at test/holes/Holes.hs:24:8)
+        sizeOf :: Maybe [Int] -> Int (bound at test/holes/Holes.hs:24:1)
+      Valid hole fits include
+        maxBound :: forall a. Bounded a => a
+          with maxBound @Int
+          (imported from `Prelude' at test/holes/Holes.hs:1:8-12
+           (and originally defined in `GHC.Internal.Enum'))
+        minBound :: forall a. Bounded a => a
+          with minBound @Int
+          (imported from `Prelude' at test/holes/Holes.hs:1:8-12
+           (and originally defined in `GHC.Internal.Enum'))
+        count []
+        count ys
+        fromEnum EQ
+        fromEnum GT
+        fromEnum LT
+   |
+25 |     Just ys -> _
+   |                ^
+

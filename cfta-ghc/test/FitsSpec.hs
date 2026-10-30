@@ -33,7 +33,17 @@ import Data.CFTA.GHC.Corpus (holeContext, newParser)
 import Data.CFTA.GHC.Fits
 import Data.CFTA.GHC.HoleFits (PluginOptions (..), readOptions)
 import Data.CFTA.GHC.Internal.Check (Leaf (..), complete, newEnvironment, startWalker, step)
-import Data.CFTA.GHC.Model (FitModel (..), fromTerms, merge, parseFitModel, printFitModel, scale, symbolOf, tokenScore)
+import Data.CFTA.GHC.Model (
+    FitModel (..),
+    fromTerms,
+    merge,
+    parseFitModel,
+    printFitModel,
+    scale,
+    symbolOf,
+    tokenScore,
+    tokenScoreShared,
+ )
 import Data.CFTA.GHC.NormalForm (Term (TApp, TLam, TVar), normalForm)
 import Data.CFTA.GHC.Rank (Ranking (..), defaultRanking, rankFits, rankedFits)
 import Data.CFTA.GHC.Session
@@ -273,6 +283,14 @@ main = withSession ["import Prelude", "import Data.Coerce (coerce)", "import Dat
                 score (Just ("length", 1)) 0 ("map 2", 2) `shouldBe` score (Just ("length", 1)) 0 ("map", 2)
                 symbolOf model Set.empty ("xs", 0) `shouldBe` "var/0"
                 symbolOf model (Set.fromList ["xs"]) ("xs", 0) `shouldBe` "arg/0"
+            it "shares the probability of var among the module's names in proportion to their uses" $ do
+                let uses = Map.fromList [("helper", 3), ("other", 0)]
+                    shared = tokenScoreShared model uses ("top", 0) Set.empty Nothing 0
+                    plain = tokenScore model Set.empty Nothing 0
+                -- (3 + 1) / (3 + 2 + 1) for helper, (0 + 1) / 6 for other and for an unknown name.
+                shared ("helper", 1) - plain ("helper", 1) `shouldSatisfy` (\value -> abs (value - log (4 / 6)) < 1e-12)
+                shared ("unknown", 1) - plain ("unknown", 1) `shouldSatisfy` (\value -> abs (value - log (1 / 6)) < 1e-12)
+                shared ("length", 1) `shouldBe` plain ("length", 1)
             it "finds the application around a hole, in the parsed module" $ do
                 parser <- newParser session
                 temporary <- getTemporaryDirectory
