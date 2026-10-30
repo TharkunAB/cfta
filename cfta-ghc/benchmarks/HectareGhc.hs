@@ -78,6 +78,7 @@ import Data.IORef (modifyIORef', newIORef, readIORef, writeIORef)
 import Data.List (elemIndex, intercalate, isPrefixOf, nub, partition, sortOn)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe, isJust, isNothing)
+import qualified Data.Set as Set
 import Data.Text (Text)
 import qualified Data.Text as Text
 import qualified Data.Text.IO as Text
@@ -360,7 +361,7 @@ runQuery name rungName' seconds = case [query | query <- allQueries, ghcName que
                             , optionTypeDomains = not noTypeDomains
                             , optionNormalForms = normalForms
                             , optionPrefix = maybe [] (take prefixLength . Walk.preorder) (ghcSolution query)
-                            , optionScore = score
+                            , optionScore = ($ Set.fromList (map fst (ghcArguments query))) <$> score
                             }
                     -- With normal forms, a fit with the normal form of the solution is the solution.
                     isSolution normal program
@@ -492,7 +493,7 @@ runQuery name rungName' seconds = case [query | query <- allQueries, ghcName que
 -- | Read a mode: @hectare@, @states@, @automaton@, or @automaton-canonical@.
 
 -- | The score of a fit model's file ("Data.CFTA.GHC.Model"); stop with the error of a file that is not a model.
-loadScore :: FilePath -> IO (Maybe (Text, Int) -> Int -> (Text, Int) -> Double)
+loadScore :: FilePath -> IO (Set.Set Text -> Maybe (Text, Int) -> Int -> (Text, Int) -> Double)
 loadScore path = either (\problem -> fail (path <> ": " <> problem)) (pure . tokenScore) . parseFitModel =<< Text.readFile path
 
 readMode :: String -> Either String Mode

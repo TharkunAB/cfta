@@ -11,8 +11,10 @@ and its number of children, as @map/2@:
 * an application has its head's name and its arguments, also through @$@
   and an operator; @f $ x@ and @f $! x@ are @f x@;
 * a head is a candidate when its name is the text of a candidate and its
-  qualifier, if any, names a module of the candidates; every other variable
-  or constructor is @var@;
+  qualifier, if any, names a module of the candidates; a name that a
+  pattern around it binds (a parameter of the function or of a lambda, or a
+  variable of an alternative or a bind) is @arg@; every other variable or
+  constructor is @var@;
 * a section @(x +)@ is @(+)@ with one argument, @(+ x)@ is @flip (+) x@, and
   @-x@ is @negate x@;
 * a tuple is @(,)@, @(,,)@, ...; @[]@ is the empty list, and @[a, b]@ is
@@ -171,82 +173,109 @@ rdrOcc name = case name of
     Orig _ occurrence -> occurrence
     Exact exact -> nameOccName exact
 
-{- | The terms of a parsed module, each with the parent of its root. A hole
+{- | The terms of a parsed module, each with the parent of its root. A name
+that a pattern binds (a parameter of the enclosing function or lambda, or a
+variable of a pattern of an enclosing alternative or bind) is @arg@. A hole
 @_@ of the module is a leaf whose symbol holds its line and column, as
 @_\@12:7/0@ ('holeSymbol').
 -}
 parsedTerms :: [String] -> Set.Set Text -> HsModule GhcPs -> [(Text, Term Text)]
-parsedTerms modules names parsed = collect (hsmodDecls parsed)
+parsedTerms modules names parsed = collect Set.empty (hsmodDecls parsed)
   where
     nameOf = namer modules names parsed
-    collect :: (Data a) => a -> [(Text, Term Text)]
-    collect value = case cast value :: Maybe (GRHS GhcPs (LHsExpr GhcPs)) of
-        Just (GRHS _ guards body) -> concatMap collect guards <> rooted "top" body
-        Nothing -> case cast value :: Maybe (LHsExpr GhcPs) of
-            Just expression -> rooted "expr" expression
-            Nothing -> concat (gmapQ collect value)
-    rooted parent expression = let (term, inner) = convert expression in (parent, term) : inner
+    -- The name of a variable, with the names that the patterns around it bind.
+    nameIn bound name = case name of
+        Unqual occurrence | Text.pack (occNameString occurrence) `Set.member` bound -> "arg"
+        _ -> nameOf name
+    collect :: (Data a) => Set.Set Text -> a -> [(Text, Term Text)]
+    collect bound value = case cast value :: Maybe (Match GhcPs (LHsExpr GhcPs)) of
+        Just match -> concat (gmapQ (collect (bound <> patternNames (m_pats match))) match)
+        Nothing -> case cast value :: Maybe (GRHS GhcPs (LHsExpr GhcPs)) of
+            Just (GRHS _ guards body) -> concatMap (collect bound) guards <> rooted bound "top" body
+            Nothing -> case cast value :: Maybe (LHsExpr GhcPs) of
+                Just expression -> rooted bound "expr" expression
+                Nothing -> concat (gmapQ (collect bound) value)
+    rooted bound parent expression = let (term, inner) = convert bound expression in (parent, term) : inner
     -- The children of a value that is not part of a term.
-    within :: (Data a) => a -> [(Text, Term Text)]
-    within = concat . gmapQ collect
+    within :: (Data a) => Set.Set Text -> a -> [(Text, Term Text)]
+    within bound = concat . gmapQ (collect bound)
     -- A term, and the terms of the parts that it leaves out.
-    convert :: LHsExpr GhcPs -> (Term Text, [(Text, Term Text)])
-    convert located@(L location expression) = case expression of
-        HsVar _ name -> (Node (nameOf (unLoc name) <> "/0") [], [])
-        HsPar _ inner -> convert inner
-        HsAppType _ inner _ -> convert inner
-        HsApp _ function argument -> applied function [argument]
+    convert :: Set.Set Text -> LHsExpr GhcPs -> (Term Text, [(Text, Term Text)])
+    convert bound located@(L location expression) = case expression of
+        HsVar _ name -> (Node (nameIn bound (unLoc name) <> "/0") [], [])
+        HsPar _ inner -> convert bound inner
+        HsAppType _ inner _ -> convert bound inner
+        HsApp _ function argument -> applied bound function [argument]
         OpApp _ left (L _ (HsVar _ operator)) right
-            | occNameString (rdrOcc $ unLoc operator) `elem` ["$", "$!"] -> applied left [right]
-            | otherwise -> node (nameOf $ unLoc operator) [left, right] []
-        SectionL _ left (L _ (HsVar _ operator)) -> node (nameOf $ unLoc operator) [left] []
+            | occNameString (rdrOcc $ unLoc operator) `elem` ["$", "$!"] -> applied bound left [right]
+            | otherwise -> node bound (nameIn bound $ unLoc operator) [left, right] []
+        SectionL _ left (L _ (HsVar _ operator)) -> node bound (nameIn bound $ unLoc operator) [left] []
         SectionR _ (L _ (HsVar _ operator)) right ->
-            let (term, inner) = convert right
-             in (Node "flip/2" [Node (nameOf (unLoc operator) <> "/0") [], term], inner)
-        NegApp _ inner _ -> node "negate" [inner] []
+            let (term, inner) = convert bound right
+             in (Node "flip/2" [Node (nameIn bound (unLoc operator) <> "/0") [], term], inner)
+        NegApp _ inner _ -> node bound "negate" [inner] []
         ExplicitTuple _ arguments _
             | Just present <- traverse presentOf arguments
             , length present >= 2 ->
-                node ("(" <> Text.replicate (length present - 1) "," <> ")") present []
+                node bound ("(" <> Text.replicate (length present - 1) "," <> ")") present []
         ExplicitList _ [] -> (Node "[]/0" [], [])
-        ExplicitList _ elements -> node "list" elements []
+        ExplicitList _ elements -> node bound "list" elements []
         HsLit _ _ -> (Node "lit/0" [], [])
         HsOverLit _ _ -> (Node "lit/0" [], [])
-        HsIf _ condition yes no -> node "if" [condition, yes, no] []
+        HsIf _ condition yes no -> node bound "if" [condition, yes, no] []
         HsLam _ LamSingle (MG _ (L _ [L _ (Match _ _ patterns (GRHSs _ (L _ (GRHS _ [] body) :| []) binds))])) ->
-            node "lambda" [body] (within patterns <> within binds)
+            let bound' = bound <> patternNames patterns
+             in node bound' "lambda" [body] (within bound' patterns <> within bound' binds)
         HsCase _ scrutinee (MG _ (L _ alternatives))
-            | Just bodies <- traverse (unguarded . unLoc) alternatives ->
-                node "case" (scrutinee : map fst bodies) (concatMap snd bodies)
-        HsLet _ binds body -> node "let" [body] (within binds)
+            | Just bodies <- traverse (unguarded bound . unLoc) alternatives ->
+                let bound' = bound <> foldMap (\(L _ alternative) -> patternNames (m_pats alternative)) alternatives
+                 in node bound' "case" (scrutinee : map fst bodies) (concatMap snd bodies)
+        HsLet _ binds body -> node bound "let" [body] (within bound binds)
         HsDo _ _ (L _ statements)
-            | Just parts <- traverse (statement . unLoc) statements ->
-                node "do" (map fst parts) (concatMap snd parts)
+            | Just parts <- traverse (statement bound . unLoc) statements ->
+                let bound' = bound <> foldMap (\(L _ part) -> boundBy part) statements
+                 in node bound' "do" (map fst parts) (concatMap snd parts)
         HsHole _
             | RealSrcSpan span' _ <- locA location ->
                 (Node (holeSymbol (srcSpanStartLine span', srcSpanStartCol span') <> "/0") [], [])
-        _ -> (Node "other/0" [], within located)
+        _ -> (Node "other/0" [], within bound located)
     presentOf argument = case argument of
         Present _ inner -> Just inner
         _ -> Nothing
     -- The body of an alternative without guards, and the terms of its patterns and local bindings.
-    unguarded :: Match GhcPs (LHsExpr GhcPs) -> Maybe (LHsExpr GhcPs, [(Text, Term Text)])
-    unguarded (Match _ _ patterns (GRHSs _ (L _ (GRHS _ [] body) :| []) binds)) = Just (body, within patterns <> within binds)
-    unguarded _ = Nothing
+    unguarded :: Set.Set Text -> Match GhcPs (LHsExpr GhcPs) -> Maybe (LHsExpr GhcPs, [(Text, Term Text)])
+    unguarded bound (Match _ _ patterns (GRHSs _ (L _ (GRHS _ [] body) :| []) binds)) =
+        let bound' = bound <> patternNames patterns
+         in Just (body, within bound' patterns <> within bound' binds)
+    unguarded _ _ = Nothing
     -- The expression of a statement, and the terms of its other parts.
-    statement :: StmtLR GhcPs GhcPs (LHsExpr GhcPs) -> Maybe (LHsExpr GhcPs, [(Text, Term Text)])
-    statement part = case part of
+    statement :: Set.Set Text -> StmtLR GhcPs GhcPs (LHsExpr GhcPs) -> Maybe (LHsExpr GhcPs, [(Text, Term Text)])
+    statement bound part = case part of
         BodyStmt _ body _ _ -> Just (body, [])
         LastStmt _ body _ _ -> Just (body, [])
-        BindStmt _ pattern body -> Just (body, within pattern)
+        BindStmt _ pattern body -> Just (body, within bound pattern)
         _ -> Nothing
+    -- The names that a statement's pattern binds.
+    boundBy :: StmtLR GhcPs GhcPs (LHsExpr GhcPs) -> Set.Set Text
+    boundBy part = case part of
+        BindStmt _ pattern _ -> patternNames pattern
+        _ -> Set.empty
     -- A head with more arguments: the arguments of the head first.
-    applied function arguments = case convert function of
+    applied bound function arguments = case convert bound function of
         (Node symbol children, inner) ->
-            let (terms, inners) = unzip (map convert arguments)
+            let (terms, inners) = unzip (map (convert bound) arguments)
                 name = Text.dropWhileEnd (/= '/') symbol
                 every = children <> terms
              in (Node (name <> Text.pack (show (length every))) every, inner <> concat inners)
-    node name arguments others =
-        let (terms, inners) = unzip (map convert arguments)
+    node bound name arguments others =
+        let (terms, inners) = unzip (map (convert bound) arguments)
          in (Node (name <> "/" <> Text.pack (show (length terms))) terms, concat inners <> others)
+
+-- | The names that the variable patterns and the as-patterns of a value bind.
+patternNames :: (Data a) => a -> Set.Set Text
+patternNames value = here <> mconcat (gmapQ patternNames value)
+  where
+    here = case cast value :: Maybe (Pat GhcPs) of
+        Just (VarPat _ name) -> Set.singleton (Text.pack (occNameString (rdrOcc (unLoc name))))
+        Just (AsPat _ name _) -> Set.singleton (Text.pack (occNameString (rdrOcc (unLoc name))))
+        _ -> Set.empty

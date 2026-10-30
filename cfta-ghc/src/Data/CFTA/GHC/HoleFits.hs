@@ -335,7 +335,7 @@ side. A hole of a function type gets its fits as lambdas: when such a hole
 is the child of another node, the root of a fit's body has the context of a
 lambda's body, @lambda/1@ and 0.
 -}
-scorerFor :: TypedHole -> FitModel -> TcM (Maybe (Text, Int) -> Int -> (Text, Int) -> Double)
+scorerFor :: TypedHole -> FitModel -> TcM (Set.Set Text -> Maybe (Text, Int) -> Int -> (Text, Int) -> Double)
 scorerFor hole model = case th_hole hole of
     Just Hole{hole_ty = holeType, hole_loc = location} -> do
         typ <- liftZonkM (zonkTcType holeType)
@@ -362,7 +362,7 @@ a model was asked.
 -}
 fitsFor ::
     PluginOptions ->
-    Maybe (Maybe (Text, Int) -> Int -> (Text, Int) -> Double) ->
+    Maybe (Set.Set Text -> Maybe (Text, Int) -> Int -> (Text, Int) -> Double) ->
     TypedHole ->
     [HoleFitCandidate] ->
     TcM ([HoleFit], Bool)
@@ -397,7 +397,10 @@ fitsFor (PluginOptions options' ranking _ _ _) scorer hole scope = case th_hole 
             else do
                 flexible <-
                     filterM (fmap isFlexi . readMetaTyVar) (filter (\v -> isTcTyVar v && isMetaTyVar v) (tyCoVarsOfTypesList (typ : types)))
-                outcome <- attempt (search candidates arguments result)
+                -- The locals of the hole and the arguments of its lambdas are @arg@ for the model.
+                let localNames = Set.fromList [idName identifier | IdHFCand identifier <- scope]
+                    argumentNames = Set.fromList ([label | (label, (name, _)) <- named, name `Set.member` localNames] <> arguments)
+                outcome <- attempt (search (withScorer argumentNames) candidates arguments result)
                 -- As 'GHC.Tc.Errors.Hole.withoutUnification', also when the
                 -- search stops part way.
                 mapM_ (\variable -> writeTcRef (metaTyVarRef variable) Flexi) flexible
@@ -421,15 +424,15 @@ fitsFor (PluginOptions options' ranking _ _ _) scorer hole scope = case th_hole 
                         model <- rankingModel ranking'
                         (\(order, _) -> (order, asks (rankingPool ranking'))) <$> rankedFits model ranking' state (plain . shown) fits
                     Nothing -> pure (fits, False)
-                pure ([RawHoleFit (shown fit) | fit <- take (optionFits options) ordered], asked)
+                pure ([RawHoleFit (shown fit) | fit <- take (optionFits options') ordered], asked)
   where
     -- With a fit model, mode (b) checks the programs in the order of the model's score.
-    options = case scorer of
-        Just score -> options'{optionMode = States (Enumerated HostOrder), optionScore = Just score}
+    withScorer argumentNames = case scorer of
+        Just score -> options'{optionMode = States (Enumerated HostOrder), optionScore = Just (score argumentNames)}
         Nothing -> options'
     -- With a ranking, the model orders more fits than the plugin shows.
-    wanted = maybe (optionFits options) (max (optionFits options) . rankingPool) ranking
-    search candidates arguments result = do
+    wanted = maybe (optionFits options') (max (optionFits options') . rankingPool) ranking
+    search options candidates arguments result = do
         kept <- newTcRef []
         let accept fit
                 | foundByGhc arguments (fitProgram fit) = pure True

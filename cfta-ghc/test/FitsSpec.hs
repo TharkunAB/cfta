@@ -267,11 +267,12 @@ main = withSession ["import Prelude", "import Data.Coerce (coerce)", "import Dat
                 parseFitModel "fit-model 1;\ncandidate map;" `shouldBe` Left "fit-model: line 2 is not a record: candidate map;"
             it "scores a token in its context, mixed with the symbol alone, and names a non-candidate var" $ do
                 -- The context top 0 has one symbol seen once (mix 1/2); length/1 has
-                -- the count 1 among 7 nodes and an alphabet of 15 symbols.
-                let score = tokenScore model
-                score Nothing 0 ("length", 1) `shouldSatisfy` (\value -> abs (value - log (1 / 2 + 1 / 2 * 2 / 22)) < 1e-12)
+                -- the count 1 among 7 nodes and an alphabet of 20 symbols.
+                let score = tokenScore model Set.empty
+                score Nothing 0 ("length", 1) `shouldSatisfy` (\value -> abs (value - log (1 / 2 + 1 / 2 * 2 / 27)) < 1e-12)
                 score (Just ("length", 1)) 0 ("map 2", 2) `shouldBe` score (Just ("length", 1)) 0 ("map", 2)
-                symbolOf model ("xs", 0) `shouldBe` "var/0"
+                symbolOf model Set.empty ("xs", 0) `shouldBe` "var/0"
+                symbolOf model (Set.fromList ["xs"]) ("xs", 0) `shouldBe` "arg/0"
             it "finds the application around a hole, in the parsed module" $ do
                 parser <- newParser session
                 temporary <- getTemporaryDirectory

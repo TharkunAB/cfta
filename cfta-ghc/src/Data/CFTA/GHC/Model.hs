@@ -5,8 +5,9 @@
 A fit model holds the counts of a corpus of programs: how often each symbol
 occurs, and how often it occurs as the argument at each position of each
 parent symbol. A symbol is the name of a leaf with its number of arguments,
-as @map/2@. A name that is not a candidate of the model is @var@: an
-argument of the query or another local name. 'tokenScore' gives the
+as @map/2@. A name that a pattern binds (a parameter of the function, a
+local of the hole, an argument of the query) is @arg@, and another name that
+is not a candidate of the model is @var@. 'tokenScore' gives the
 logarithm of the probability of a token given its parent's token and its
 position; the score of a fit is the sum over its tokens. Mode (b) with
 'Data.CFTA.GHC.Fits.optionScore' checks the fits in the order of descending
@@ -28,7 +29,7 @@ application. The logarithm of each such probability is a log-weight of a
 symbol in a context, as in "Data.CFTA.Sized.Prefix.Model".
 
 The alphabet is every candidate with each number of arguments up to its
-arity, @var@ and @other@ with 0 to 4 arguments, and every symbol of the
+arity, @arg@, @var@, and @other@ with 0 to 4 arguments, and every symbol of the
 counts. Counts are integers, so two models of the same candidates merge by
 adding their counts ('merge'): a project can add a model of its own code to
 a model of Hackage.
@@ -120,37 +121,43 @@ scale factor model =
         , modelContexts = Map.map (* factor) (modelContexts model)
         }
 
-{- | The symbol of a token: its name, without the number after a space that
-names a specialization, and its number of arguments. A name that is not a
-candidate is @var@.
+{- | The symbol of a token, for the names of the arguments and locals of a
+hole: its name, without the number after a space that names a
+specialization, and its number of arguments. An argument or a local is
+@arg@, and another name that is not a candidate is @var@.
 -}
-symbolOf :: FitModel -> (Text, Int) -> Text
-symbolOf model (name, arguments) =
+symbolOf :: FitModel -> Set.Set Text -> (Text, Int) -> Text
+symbolOf model locals (name, arguments) =
     let base = Text.takeWhile (/= ' ') name
-     in (if Map.member base (modelCandidates model) then base else "var") <> "/" <> Text.pack (show arguments)
+        kind
+            | Set.member base locals = "arg"
+            | Map.member base (modelCandidates model) = base
+            | otherwise = "var"
+     in kind <> "/" <> Text.pack (show arguments)
 
-{- | The score of a token given its parent's token (none for the root of a
-fit, whose parent is @top@) and its position: the logarithm of its
+{- | The score of a token given the names of the arguments and locals of the
+hole ('symbolOf'), its parent's token (none for the root of a fit, whose
+parent is @top@), and its position: the logarithm of its
 probability, as the module header gives it. Apply the function to the model
 once, and the result to each token: the totals of the contexts are computed
 once.
 -}
-tokenScore :: FitModel -> Maybe (Text, Int) -> Int -> (Text, Int) -> Double
+tokenScore :: FitModel -> Set.Set Text -> Maybe (Text, Int) -> Int -> (Text, Int) -> Double
 tokenScore model = tokenScoreAt model ("top", 0)
 
 {- | 'tokenScore' with the context of the root of the fit: a parent symbol (as
 @foldr/3@, or @top@) and a position, as for a hole that is an argument of an
 application ("Data.CFTA.GHC.Corpus.holeContext").
 -}
-tokenScoreAt :: FitModel -> (Text, Int) -> Maybe (Text, Int) -> Int -> (Text, Int) -> Double
-tokenScoreAt model (rootParent, rootPosition) = \parent position token -> case parent of
-    Nothing -> log (probability rootParent rootPosition (symbolOf model token))
-    Just above -> log (probability (symbolOf model above) position (symbolOf model token))
+tokenScoreAt :: FitModel -> (Text, Int) -> Set.Set Text -> Maybe (Text, Int) -> Int -> (Text, Int) -> Double
+tokenScoreAt model (rootParent, rootPosition) = \locals parent position token -> case parent of
+    Nothing -> log (probability rootParent rootPosition (symbolOf model locals token))
+    Just above -> log (probability (symbolOf model locals above) position (symbolOf model locals token))
   where
     alphabet =
         fromIntegral . Set.size . Set.fromList $
             [name <> "/" <> Text.pack (show count) | (name, arity) <- Map.toList (modelCandidates model), count <- [0 .. arity]]
-                <> [name <> "/" <> Text.pack (show count) | name <- ["var", "other"], count <- [0 .. 4 :: Int]]
+                <> [name <> "/" <> Text.pack (show count) | name <- ["arg", "var", "other"], count <- [0 .. 4 :: Int]]
                 <> Map.keys (modelUnigrams model) ::
             Double
     total = fromIntegral (sum (Map.elems (modelUnigrams model))) :: Double
