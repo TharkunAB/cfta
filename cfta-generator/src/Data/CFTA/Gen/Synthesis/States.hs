@@ -69,7 +69,7 @@ import Control.Monad (filterM, forM)
 import Control.Monad.IO.Class (MonadIO, liftIO)
 import Data.Containers.ListUtils (nubOrd)
 import Data.Either (fromRight)
-import Data.IORef (IORef, modifyIORef', newIORef, readIORef)
+import Data.IORef (IORef, modifyIORef', newIORef, readIORef, writeIORef)
 import Data.IntMap.Strict (IntMap)
 import qualified Data.IntMap.Strict as IntMap
 import Data.List (delete, isPrefixOf, sort, sortOn)
@@ -248,6 +248,10 @@ searchStatesWith ::
 searchStatesWith walking limits checker hooks goals avoid accept = do
     begin <- liftIO getMonotonicTimeNSec
     reference <- liftIO (newIORef (Search Map.empty Map.empty [] emptyDead emptyProgress emptyFigures))
+    -- The deadline of the builds, which the scored search sets earlier than
+    -- the deadline of the search, and whether a build stopped at it.
+    buildLimit <- liftIO (newIORef (limitDeadline limits))
+    buildCut <- liftIO (newIORef False)
     let current = liftIO (readIORef reference)
         change f = liftIO (modifyIORef' reference f)
         progress f = change (\s -> s{searchProgress = f (searchProgress s)})
@@ -268,14 +272,22 @@ searchStatesWith walking limits checker hooks goals avoid accept = do
                 if null missing
                     then pure (Just known)
                     else do
-                        stop <- (||) <$> timedOut <*> late
+                        limit <- liftIO (readIORef buildLimit)
+                        let lateForBuild = maybe (pure False) (\end -> (>= end) <$> liftIO getMonotonicTimeNSec) limit
+                            -- Past the deadline of the search the whole search is out of
+                            -- time; past only the deadline of the builds, the build is cut.
+                            stopped = do
+                                over <- late
+                                if over then outOfTime else liftIO (writeIORef buildCut True)
+                                pure Nothing
+                        stop <- (||) <$> timedOut <*> lateForBuild
                         if stop
-                            then Nothing <$ outOfTime
+                            then stopped
                             else do
                                 figures (\f -> f{figuresRefinements = figuresRefinements f + 1})
-                                answer <- goalsTransitions goals deadline key missing
+                                answer <- goalsTransitions goals limit key missing
                                 case answer of
-                                    Nothing -> Nothing <$ outOfTime
+                                    Nothing -> stopped
                                     Just found -> do
                                         let known' =
                                                 IntMap.union known . IntMap.fromListWith (flip (<>)) $
@@ -293,7 +305,7 @@ searchStatesWith walking limits checker hooks goals avoid accept = do
                     | otherwise -> do
                         refined <- refinements key (childCounts size)
                         transitions <- concat <$> mapM (transition size arguments) refined
-                        stop <- timedOut
+                        stop <- (||) <$> timedOut <*> liftIO (readIORef buildCut)
                         if stop then pure transitions else remember key budget transitions
         -- The transition of a refinement, with the splits whose children's
         -- states are not empty.
@@ -458,9 +470,11 @@ searchStatesWith walking limits checker hooks goals avoid accept = do
                 Just _ -> do
                     figures (\f -> f{figuresCount = figuresCount f + count})
                     pure (Just (count, listed))
-        -- With a score: build the automata of every size first, then list
-        -- the programs of all sizes in the order of descending score by a
-        -- best-first search, and check each one that no dead prefix covers.
+        -- With a score: build the automata of every size first (with a
+        -- deadline, the sizes in ascending order for at most half of the
+        -- time), then list the programs of the sizes built in the order of
+        -- descending score by a best-first search, and check each one that no
+        -- dead prefix covers.
         -- The score of a program is the sum of the scores of its tokens, each
         -- given its parent's token and its position. A partial program has
         -- the score of its tokens plus the best score of each pending node in
@@ -472,17 +486,29 @@ searchStatesWith walking limits checker hooks goals avoid accept = do
             checkerTruncate checker 0
             change (\s -> s{searchHeld = []})
             before <- liftIO getMonotonicTimeNSec
-            mapM_ (stateOf root) budgets
+            -- With a deadline, the sizes in ascending order for at most half of
+            -- the time, so that the search has the other half.
+            let buildEnd = (\end -> before + (end - min end before) `div` 2) <$> deadline
+                -- A size whose build stops at the deadline of the builds is left
+                -- out; the smaller sizes are complete.
+                build [] built = pure (reverse built)
+                build (budget : rest) built = do
+                    _ <- stateOf root budget
+                    stop <- (||) <$> timedOut <*> liftIO (readIORef buildCut)
+                    if stop then pure (reverse built) else build rest (budget : built)
+            liftIO (writeIORef buildLimit buildEnd)
+            built <- build budgets []
+            liftIO (writeIORef buildLimit deadline >> writeIORef buildCut False)
             table <- searchTable <$> current
             after <- liftIO getMonotonicTimeNSec
-            progress (\p -> p{progressSize = limitSize limits, progressBuildNanos = progressBuildNanos p + (after - before)})
+            progress (\p -> p{progressSize = length built, progressBuildNanos = progressBuildNanos p + (after - before)})
             stop <- timedOut
-            if stop
+            if stop || null built
                 then halt OutOfTime
                 else do
                     memory <- liftIO (newIORef Map.empty)
                     let best = bestScore score memory
-                    starts <- forM budgets $ \budget -> do
+                    starts <- forM built $ \budget -> do
                         let node = fst (automatonOf name avoid table (root, budget))
                         h <- liftIO (best node Nothing 0)
                         pure (h, Item [] 0 [(node, Nothing, 0, h)])
