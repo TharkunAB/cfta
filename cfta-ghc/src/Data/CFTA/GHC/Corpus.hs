@@ -36,6 +36,7 @@ module Data.CFTA.GHC.Corpus (
     newParser,
     parserOf,
     moduleTerms,
+    moduleNames,
     holeContext,
 ) where
 
@@ -96,6 +97,21 @@ moduleTerms parser modules names file = do
             pure $ case outcome :: Either SomeException Int of
                 Right _ -> Just terms
                 Left _ -> Nothing
+
+{- | How often the expressions of a module file use each unqualified name of
+a variable or a constructor. Empty when the module does not parse, or uses
+CPP.
+-}
+moduleNames :: Parser -> FilePath -> IO (Map.Map Text Int)
+moduleNames parser file = maybe Map.empty (Map.fromListWith (+) . map (\name -> (name, 1)) . go . hsmodDecls) <$> parseFile parser file
+  where
+    go :: (Data a) => a -> [Text]
+    go value = here <> concat (gmapQ go value)
+      where
+        here = case cast value :: Maybe (HsExpr GhcPs) of
+            Just (HsVar _ name) | Unqual occurrence <- unLoc name -> [occurrenceText occurrence]
+            _ -> []
+    occurrenceText occurrence = Text.pack (if isSymOcc occurrence then "(" <> occNameString occurrence <> ")" else occNameString occurrence)
 
 {- | The context of the hole that starts at a line and a column of a module
 file: the symbol of the node whose child the hole is, with the node's number

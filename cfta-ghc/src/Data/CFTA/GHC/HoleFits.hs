@@ -55,7 +55,10 @@ lists the programs of all sizes in the order of the model's score, best
 first ('optionScore'); it finds more fits, but needs a few seconds for each
 hole. With @model-module@, the plugin also reads the module of the first
 hole with GHC's parser ("Data.CFTA.GHC.Corpus"), and adds the counts of that
-module, multiplied by K, to the model, for all the holes of the module.
+module, multiplied by K, to the model, for all the holes of the module. The
+probability of @var@ then goes to the module's own names in proportion to
+their uses in the module ('tokenScoreShared'), so the model learns which of
+its functions the module calls.
 @model-module@ needs @model@. A model that the plugin cannot read gives a
 warning, and the fits keep their order. The root of each fit has the context
 of its hole: in @foldr f _ xs@, the second argument of @foldr@ ('scorerFor').
@@ -96,9 +99,9 @@ import qualified Data.Text.IO as Text
 import System.IO (hPutStrLn, stderr)
 import Text.Read (readMaybe)
 
-import Data.CFTA.GHC.Corpus (holeContext, moduleTerms, parserOf)
+import Data.CFTA.GHC.Corpus (holeContext, moduleNames, moduleTerms, parserOf)
 import Data.CFTA.GHC.Fits
-import Data.CFTA.GHC.Model (FitModel (..), fromTerms, merge, parseFitModel, scale, tokenScore, tokenScoreAt)
+import Data.CFTA.GHC.Model (FitModel (..), fromTerms, merge, parseFitModel, scale, tokenScoreShared)
 import Data.CFTA.GHC.Rank (Ranking (..), defaultRanking, holeState, rankedFits, rankingModel)
 import Data.CFTA.Gen.Synthesis (Program (..))
 import Data.CFTA.Gen.Synthesis.States (EdgeOrder (..), Walking (..))
@@ -280,7 +283,7 @@ holeFits options =
     HoleFitPluginR
         { hfPluginInit = do
             model <- join <$> traverse readModel (pluginModel options)
-            modelReference <- newTcRef (model, False)
+            modelReference <- newTcRef (model, Map.empty, False)
             reference <- newTcRef (Nothing, False)
             newTcRef (reference, modelReference)
         , hfPluginRun = \references ->
@@ -294,8 +297,11 @@ holeFits options =
                     writeTcRef reference (Nothing, ranked')
                     case open of
                         Just scope -> do
-                            model <- modelFor options modelReference hole
-                            scorer <- traverse (if pluginHoleContext options then scorerFor hole else pure . tokenScore) model
+                            (model, uses) <- modelFor options modelReference hole
+                            scorer <-
+                                traverse
+                                    (\found -> if pluginHoleContext options then scorerFor hole uses found else pure (tokenScoreShared found uses ("top", 0)))
+                                    model
                             (ours, asked) <- fitsFor options scorer hole scope
                             updTcRef reference (\(open', _) -> (open', ranked' || asked))
                             -- The limit without the plugin: see 'raiseLimit'.
@@ -331,20 +337,25 @@ readModel path = liftIO $ do
 {- | The model of a hole: the model of the file, with the counts of the
 module of the hole added once for the module, with @model-module@.
 -}
-modelFor :: PluginOptions -> TcRef (Maybe FitModel, Bool) -> TypedHole -> TcM (Maybe FitModel)
+modelFor ::
+    PluginOptions -> TcRef (Maybe FitModel, Map.Map Text Int, Bool) -> TypedHole -> TcM (Maybe FitModel, Map.Map Text Int)
 modelFor options reference hole = do
-    (loaded, added) <- readTcRef reference
+    (loaded, uses, added) <- readTcRef reference
     case (loaded, pluginModuleWeight options, th_hole hole) of
         (Just model, Just weight, Just Hole{hole_loc = location}) | not added -> do
             flags <- getDynFlags
             logger <- hsc_logger . env_top <$> getEnv
             let file = unpackFS (srcSpanFile (ctLocSpan location))
-            terms <- liftIO (moduleTerms (parserOf flags logger) (modelModules model) (Map.keysSet (modelCandidates model)) file)
+                parser = parserOf flags logger
+            terms <- liftIO (moduleTerms parser (modelModules model) (Map.keysSet (modelCandidates model)) file)
+            -- How often the module uses each name that is var for the model.
+            names <- liftIO (moduleNames parser file)
             let own = [kept | kept@(_, term) <- fromMaybe [] terms, length (foldr (:) [] term) >= 2]
                 merged = merge model (scale weight (fromTerms (modelModules model) (modelCandidates model) own))
-            writeTcRef reference (Just merged, True)
-            pure (Just merged)
-        (found, _, _) -> pure found
+                uses' = Map.filterWithKey (\name _ -> Map.notMember name (modelCandidates model)) names
+            writeTcRef reference (Just merged, uses', True)
+            pure (Just merged, uses')
+        (found, _, _) -> pure (found, uses)
 
 {- | The score of the tokens of the fits of a hole under a model. The root of
 a fit has the context of the hole ("Data.CFTA.GHC.Corpus.holeContext"): the
@@ -354,8 +365,9 @@ side. A hole of a function type gets its fits as lambdas: when such a hole
 is the child of another node, the root of a fit's body has the context of a
 lambda's body, @lambda/1@ and 0.
 -}
-scorerFor :: TypedHole -> FitModel -> TcM (Set.Set Text -> Maybe (Text, Int) -> Int -> (Text, Int) -> Double)
-scorerFor hole model = case th_hole hole of
+scorerFor ::
+    TypedHole -> Map.Map Text Int -> FitModel -> TcM (Set.Set Text -> Maybe (Text, Int) -> Int -> (Text, Int) -> Double)
+scorerFor hole uses model = case th_hole hole of
     Just Hole{hole_ty = holeType, hole_loc = location} -> do
         typ <- liftZonkM (zonkTcType holeType)
         flags <- getDynFlags
@@ -367,12 +379,12 @@ scorerFor hole model = case th_hole hole of
         context <-
             liftIO
                 (holeContext parser (modelModules model) (Map.keysSet (modelCandidates model)) (unpackFS (srcSpanFile span')) start)
-        pure . tokenScoreAt model $ case context of
+        pure . tokenScoreShared model uses $ case context of
             Just found
                 | null parameters -> found
                 | fst found `notElem` ["top", "expr"] -> ("lambda/1", 0)
             _ -> ("top", 0)
-    Nothing -> pure (tokenScore model)
+    Nothing -> pure (tokenScoreShared model uses ("top", 0))
 
 {- | The plugin's fits for a hole, best first: none when the hole has no
 type, when its type has a @forall@ or a class context at the top, when a

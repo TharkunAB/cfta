@@ -58,6 +58,7 @@ module Data.CFTA.GHC.Model (
     scale,
     tokenScore,
     tokenScoreAt,
+    tokenScoreShared,
     symbolOf,
     printFitModel,
     parseFitModel,
@@ -150,10 +151,29 @@ tokenScore model = tokenScoreAt model ("top", 0)
 application ("Data.CFTA.GHC.Corpus.holeContext").
 -}
 tokenScoreAt :: FitModel -> (Text, Int) -> Set.Set Text -> Maybe (Text, Int) -> Int -> (Text, Int) -> Double
-tokenScoreAt model (rootParent, rootPosition) = \locals parent position token -> case parent of
-    Nothing -> log (probability rootParent rootPosition (symbolOf model locals token))
-    Just above -> log (probability (symbolOf model locals above) position (symbolOf model locals token))
+tokenScoreAt model = tokenScoreShared model Map.empty
+
+{- | 'tokenScoreAt' with the shares of the names that are @var@, as the module
+of the hole uses them: the score of such a name adds the logarithm of its
+share, @(c(n) + 1) / (C + V + 1)@, with @c(n)@ the uses of the name, @C@ the
+uses of all the names, and @V@ their number. So the probability of @var@ in a
+context goes to the module's names in proportion to their uses (a class-based
+back-off). Without shares, a name that is @var@ adds nothing.
+-}
+tokenScoreShared ::
+    FitModel -> Map Text Int -> (Text, Int) -> Set.Set Text -> Maybe (Text, Int) -> Int -> (Text, Int) -> Double
+tokenScoreShared model uses (rootParent, rootPosition) = \locals parent position token ->
+    let symbol = symbolOf model locals token
+        above = maybe rootParent (symbolOf model locals) parent
+        at = maybe rootPosition (const position) parent
+     in log (probability above at symbol) + shareOf symbol (fst token)
   where
+    usesTotal = fromIntegral (sum (Map.elems uses)) :: Double
+    namesTotal = fromIntegral (Map.size uses) :: Double
+    shareOf symbol name
+        | Map.null uses || not ("var/" `Text.isPrefixOf` symbol) = 0
+        | otherwise =
+            log ((fromIntegral (Map.findWithDefault 0 (Text.takeWhile (/= ' ') name) uses) + 1) / (usesTotal + namesTotal + 1))
     alphabet =
         fromIntegral . Set.size . Set.fromList $
             [name <> "/" <> Text.pack (show count) | (name, arity) <- Map.toList (modelCandidates model), count <- [0 .. arity]]
