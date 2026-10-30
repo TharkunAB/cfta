@@ -1,3 +1,4 @@
+import MicroCFTA.SourceCurrentAllocatedNativeStoredDispatch
 import MicroCFTA.SourceCurrentAllocatedNativeStoredIncoming
 import MicroCFTA.SourceCurrentAllocatedNativeStoredIncomingCacheAdapter
 import MicroCFTA.SourcePruningNarrowChainBound
