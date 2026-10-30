@@ -1,3 +1,26 @@
+# Current continuation — 2026-10-30 07:58 CET
+
+Read `lean/notes-current-traversal-path-control.md` before older checkpoints.
+Source `12447ebf0f388a2047a9e6cdafcbf42080f8ebdb` is pushed to `formalize`.
+Three new laws cover every retained successful raw row at traversal stops, captured edges, and prepared opaque/terminal dispatch.
+They retain the existing receipt clauses and require no returned singleton or attached candidate.
+Default/strict Audit passes: 4,729 jobs and 82,866 dependency checks.
+Public verification passes: 1,150 checks, the same 100 definitions, and three standard-axiom reports.
+All 527 prior protected sources and 835 native inputs remain exact; current protected count is 530.
+All 14 compiler commands, 42 snapshots, two failed matcher drafts, and one precompiler bus-launch failure remain.
+The full formalization goal remains ACTIVE.
+The biggest gap is sufficient original recursive capacity through every earlier alternative.
+Both original-input fixed-D resource results still permit exhaustion.
+Next: a separate eventual whole-execution path induction, then combine its bound with the unchanged resource theorem.
+Cover processed/current receipts, empty-output hooks, exact parked/Left-false calls, and Prepared opaque hooks.
+Existing local hook/false-callback path laws are already proved; transport their inputs at reached recursive states.
+The proposed whole-worker induction is UNCOMPILED.
+Keep all older constructor/equality/count/size/rank/unrank, optimized core, public API, and Haskell targets.
+Haskell: no source change, native command, new defect, or fix. Earlier conditional SCS repair candidates remain below.
+Evidence: `/tmp/mcfta-traversal-path-control-20261030`; archive `lean/restart-evidence/20261030-traversal-path-control`.
+
+---
+
 # Current checked handoff — 2026-10-30 07:30 CET
 
 Read `lean/notes-current-finite-prefix-control.md` before older checkpoints.
