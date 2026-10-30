@@ -4,9 +4,10 @@ import Control.Monad (ap, forM_)
 import Data.Containers.ListUtils (nubOrd)
 import Data.Either (fromRight)
 import Data.Functor (void)
-import Data.List (genericLength, inits, isPrefixOf)
+import Data.List (genericLength, inits, isPrefixOf, sortOn)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe, isJust)
+import Data.Ord (Down (..))
 import Data.Ratio (denominator)
 import qualified Data.Text as Text
 import Test.Hspec (Spec, describe, it, shouldBe)
@@ -216,6 +217,14 @@ fixtureUpTo bound name graph = describe name $ do
                                         , termWeight each term > 0
                                         ]
                                )
+        it "gives the completions with the largest weights, the largest first, each once with its weight" $
+            forM_ prefixes $ \prefix -> forM_ [1, 3, 1000] $ \count -> do
+                let best = bestCompletions count $ weightedBy weight $ after prefix
+                    completions = [term | term <- accepted, prefix `isPrefixOf` preorder term]
+                (prefix, count, map snd best) `shouldBe` (prefix, count, take count $ sortOn Down $ map (termWeight weight) completions)
+                (prefix, count, [term | (term, value) <- best, term `notElem` completions || termWeight weight term /= value])
+                    `shouldBe` (prefix, count, [])
+                (prefix, count, length (nubOrd $ map fst best)) `shouldBe` (prefix, count, length best)
         it "gives the next tokens and the complete prefix probabilities that sum to one" $
             forM_ prefixes $ \prefix -> do
                 let completions = weightedBy weight $ after prefix
