@@ -65,17 +65,18 @@ module Data.CFTA.Gen.Synthesis.States (
     budgetSplits,
 ) where
 
-import Control.Monad (filterM)
+import Control.Monad (filterM, forM)
 import Control.Monad.IO.Class (MonadIO, liftIO)
 import Data.Containers.ListUtils (nubOrd)
 import Data.Either (fromRight)
-import Data.IORef (modifyIORef', newIORef, readIORef)
+import Data.IORef (IORef, modifyIORef', newIORef, readIORef)
 import Data.IntMap.Strict (IntMap)
 import qualified Data.IntMap.Strict as IntMap
-import Data.List (delete, sort, sortOn)
+import Data.List (delete, isPrefixOf, sort, sortOn)
 import qualified Data.Map.Lazy as LazyMap
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
+import Data.Ord (Down (..))
 import qualified Data.Set as Set
 import Data.Text (Text)
 import Data.Word (Word64)
@@ -433,6 +434,15 @@ searchStatesWith walking limits checker hooks goals avoid accept = do
         -- List the programs of the automaton of a state with cfta's
         -- enumerator, and check each one that no dead prefix covers.
         enumerated order root = do
+            found <- programsOf order root
+            case found of
+                Nothing -> pure (Halt OutOfTime)
+                Just (_, listed) -> each (filter prefixed listed)
+        -- Whether a program starts with the prefix of the limits.
+        prefixed tokens = limitPrefix limits `isPrefixOf` tokens
+        -- The programs of the automaton of a state, in the order of the walk,
+        -- and their number. 'Nothing' when the deadline stops the build.
+        programsOf order root = do
             table <- searchTable <$> current
             let (node, places) = automatonOf name avoid table root
                 count = either (const 0) (\(Cardinality n) -> n) (cardinality (fromAutomaton node))
@@ -444,10 +454,78 @@ searchStatesWith walking limits checker hooks goals avoid accept = do
             (built, buildTime) <- liftIO (timed deadline (count `seq` node))
             progress (\p -> p{progressBuildNanos = progressBuildNanos p + buildTime})
             case built of
-                Nothing -> Halt OutOfTime <$ outOfTime
+                Nothing -> Nothing <$ outOfTime
                 Just _ -> do
                     figures (\f -> f{figuresCount = figuresCount f + count})
-                    each listed
+                    pure (Just (count, listed))
+        -- With a score: build the automata of every size first, then list
+        -- the programs of all sizes in the order of descending score by a
+        -- best-first search, and check each one that no dead prefix covers.
+        -- The score of a program is the sum of the scores of its tokens, each
+        -- given its parent's token and its position. A partial program has
+        -- the score of its tokens plus the best score of each pending node in
+        -- its context, which is exact, so the search lists the programs in the
+        -- order of their scores; at equal scores, in the order of insertion.
+        scored score = do
+            let root = goalsRoot goals
+                budgets = [(size, sort (goalsRequired goals)) | size <- [1 .. limitSize limits]]
+            checkerTruncate checker 0
+            change (\s -> s{searchHeld = []})
+            before <- liftIO getMonotonicTimeNSec
+            mapM_ (stateOf root) budgets
+            table <- searchTable <$> current
+            after <- liftIO getMonotonicTimeNSec
+            progress (\p -> p{progressSize = limitSize limits, progressBuildNanos = progressBuildNanos p + (after - before)})
+            stop <- timedOut
+            if stop
+                then halt OutOfTime
+                else do
+                    memory <- liftIO (newIORef Map.empty)
+                    let best = bestScore score memory
+                    starts <- forM budgets $ \budget -> do
+                        let node = fst (automatonOf name avoid table (root, budget))
+                        h <- liftIO (best node Nothing 0)
+                        pure (h, Item [] 0 [(node, Nothing, 0, h)])
+                    let queue = Map.fromList [((Down h, index), item) | (index, (h, item)) <- zip [0 :: Int ..] starts, not (isInfinite h)]
+                    result <- bestFirst score best queue (length starts)
+                    case result of
+                        Halt outcome -> halt outcome
+                        _ -> halt Exhausted
+        -- Take the partial program with the largest score: check it when it
+        -- is complete, else replace it by its programs after one more token.
+        bestFirst score best queue counter = case Map.minViewWithKey queue of
+            Nothing -> pure Continue
+            Just ((_, item), rest) -> do
+                stop <- late
+                dead <- isDead (reverse (itemTokens item)) . searchDead <$> current
+                if stop
+                    then Halt OutOfTime <$ outOfTime
+                    else
+                        if dead && not (null (itemTokens item))
+                            then progress (\p -> p{progressSkipped = progressSkipped p + 1}) >> bestFirst score best rest counter
+                            else case itemPending item of
+                                [] -> do
+                                    result <- check (reverse (itemTokens item))
+                                    case result of
+                                        Halt _ -> pure result
+                                        _ -> bestFirst score best rest counter
+                                (node, parent, position, _) : others -> do
+                                    let position' = length (itemTokens item)
+                                        allowed token = case drop position' (limitPrefix limits) of
+                                            wanted : _ -> token == wanted
+                                            [] -> True
+                                    expanded <- forM (Interned.nodeEdges node) $ \edge -> do
+                                        let token = (symbolText (edgeSymbol edge), length (edgeChildren edge))
+                                        children <- forM (zip [0 ..] (edgeChildren edge)) $ \(index, child) -> do
+                                            h <- liftIO (best child (Just token) index)
+                                            pure (child, Just token, index, h)
+                                        let g = itemScore item + score parent position token
+                                            pending = children <> others
+                                            f = g + sum [h | (_, _, _, h) <- pending]
+                                        pure [(f, Item (token : itemTokens item) g pending) | allowed token, not (isInfinite f)]
+                                    let new = concat expanded
+                                        queue' = foldr (\(index, (f, next)) -> Map.insert (Down f, index) next) rest (zip [counter ..] new)
+                                    bestFirst score best queue' (counter + length new)
         each listed = case listed of
             [] -> pure Continue
             tokens : rest -> do
@@ -476,13 +554,57 @@ searchStatesWith walking limits checker hooks goals avoid accept = do
                 parts = progressBuildNanos p + progressCheckNanos p
                 total = end - begin
             pure (p{progressOutcome = outcome, progressListNanos = if total > parts then total - parts else 0}, searchFigures s)
-    sizes 1
+    case (walking, hookScore hooks) of
+        (Enumerated _, Just score) -> scored score
+        _ -> sizes 1
   where
     childCounts size = if size == 1 then [0] else [1 .. size - 1]
     commonPrefix (x : xs) (y : ys) | x == y = 1 + commonPrefix xs ys
     commonPrefix _ _ = 0 :: Int
     preorderOf :: Term Symbol -> [Token]
     preorderOf term = (symbolText (Term.rootLabel term), length (Term.subForest term)) : concatMap preorderOf (Term.subForest term)
+
+-- | A partial program of the best-first search of 'searchStatesWith'.
+data Item = Item
+    { itemTokens :: [Token]
+    -- ^ Its tokens so far, the last first.
+    , itemScore :: Double
+    -- ^ The sum of the scores of its tokens.
+    , itemPending :: [(Node Symbol, Maybe Token, Int, Double)]
+    {- ^ Its pending nodes in preorder, each with the token of its parent (none
+    for the root), its position among the parent's children, and the best
+    score of its programs there.
+    -}
+    }
+
+{- | The best score of the programs of a node with a parent's token and a
+position: the largest over its edges of the edge's token score plus the best
+scores of its children. Minus infinity for a node without programs. The
+memory keeps each answer for the whole search.
+-}
+bestScore ::
+    (Maybe Token -> Int -> Token -> Double) ->
+    IORef (Map (NodeId, Maybe Token, Int) Double) ->
+    Node Symbol ->
+    Maybe Token ->
+    Int ->
+    IO Double
+bestScore score memory = go
+  where
+    go Interned.EmptyNode _ _ = pure (-1 / 0)
+    go node parent position = do
+        let key = (nodeIdentity node, parent, position)
+        known <- Map.lookup key <$> readIORef memory
+        case known of
+            Just value -> pure value
+            Nothing -> do
+                values <- forM (Interned.nodeEdges node) $ \edge -> do
+                    let token = (symbolText (edgeSymbol edge), length (edgeChildren edge))
+                    children <- forM (zip [0 ..] (edgeChildren edge)) $ \(index, child) -> go child (Just token) index
+                    pure (score parent position token + sum children)
+                let value = if null values then -1 / 0 else maximum values
+                modifyIORef' memory (Map.insert key value)
+                pure value
 
 {- | The automaton of a size: a node for each state that the root reaches,
 and an edge for each transition and split, labeled by the leaf's name, with
