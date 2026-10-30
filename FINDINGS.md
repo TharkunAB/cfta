@@ -1,3 +1,76 @@
+# Current normalization and forecast checkpoint (2026-10-30)
+
+Full goal ACTIVE. Read [the current note](lean/notes-current-normalization-control.md).
+Source f4d46dd54cacbd6fe6b786c47b7905624ec08d57 adds 17 checked public laws in five modules.
+Completed equality normalization retains induced path extensions. A finite word
+carrier follows from the original raw paths through actual preparation and
+successful normalization. No raw Active or marker-retention premise is needed
+for the prepared-input entry. The SAME original native guard inventory bounds
+projected own guard paths after every admitted physical trace prefix. It also
+bounds complete parent/resident forecasts for every local budget and profile,
+under their explicit original-base and original-guard inclusion gates.
+
+These results remove local dependence on D from these path carriers. They do
+not bound every inherited equality value, handle, key, list multiplicity, or
+ordinary action. Compose the original input gates at higher reservation stages.
+Then prove a uniform structural bound for all earlier alternatives and sufficient
+D, whole recursion, intended coverage, configured order/stops, and Haskell
+correspondence. Preserve both workers and every older proof target.
+
+Audit 4697 jobs/82567 dependencies and public 1068 checks/86 definitions pass.
+Six current strict sources match. All 493 prior protected sources and 835 native
+source/build inputs match. Current baselines are 498 protected/4697 Lean sources.
+All 20 commands remain: 17 pass, three fail, with 91 input snapshots.
+The three failures are two repaired Lean proof drafts and one repaired local
+GMP linker-path failure. No current check remains failed. All six final owned
+reports are read. The 412 verified bundle pins include one explicit Root
+supplement for an omitted copied seal. Preserve this acquisition correction.
+The complete prior public readback remains an exact prefix.
+
+The public DFS candidate reaches G(Zero) second and terminates. Unconstrained
+recursive boundaries are ineligible even with no explicit stop rule. This is
+not a starvation counterexample. The fresh offline library build and exact
+runtime replay pass with all 835 native inputs pinned before and after.
+No Haskell source changed. No new Haskell defect or source fix was established.
+The FINDINGS addition records the local GMP environment repair and the corrected
+internal/public API description. All earlier Haskell repair entries remain below.
+
+Evidence: lean/restart-evidence/20261030-normalization-control/.
+The original and reconstructed areas become read-only after evidence sealing.
+Use a new writable area for further work. Normal pushes to formalize remain
+explicitly authorized. Do not pause or complete the full goal at this checkpoint.
+Older sections below are retained history. This note controls current claims.
+
+---
+
+## Native findings for external pickup
+
+No new Haskell source repair is required by this result. Preserve all older
+repair entries in this file. The public F(Nat) | G(Zero) fixture uses mkFTA and
+fromFTA. It confirms native acceptance and the observed F-before-G order.
+runsNarrowedBy and termsWith return F(__DFS_TRUNCATED__) then G(Zero), and end.
+plainTerms uses a separate depth order and also reaches G(Zero). Marker results
+represent opaque subtrees; they are not full accepted concrete terms.
+
+Correction: enumerateFully and enumerateUntil' are internal helpers. The public
+run wrappers reach enumerateFully through runsFrom. No-stop configuration does
+not override expandable: an unconstrained recursive boundary remains ineligible.
+The frozen neutral-control report used an imprecise public-default phrase.
+The retained public-dfs-candidate/DEFAULT-ENTRY-ADDENDUM.md corrects it.
+
+The project nix-shell fresh build initially failed to link -lgmp on this WSL
+host. The verified local repair adds /usr/lib/x86_64-linux-gnu to LIBRARY_PATH
+inside that shell. It changes no repository file. The replay helper records the
+resolved GMP path and SHA256. cabal build --offline cfta:lib:cfta then succeeds
+with Cabal 3.18.1.0 and GHC 9.14.1. The fixture output is byte-identical to the
+first run. All 835 native source/build inputs match before and after the build.
+Keep the failed native-source-replay and successful native-source-replay-v3
+records. The first run alone did not pin its package binary or native inputs at
+start. The fresh rebuild supplies the current-source evidence. This remains a
+focused runtime check, not a Haskell-to-Lean simulation or a fairness theorem.
+
+---
+
 # Current callback path checkpoint (2026-10-30 02:13 CET)
 
 Full goal ACTIVE. Read [the current note](lean/notes-current-callback-path-control.md).
