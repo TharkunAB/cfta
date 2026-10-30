@@ -12,8 +12,9 @@ type is a type variable), and the hole's type, implications, and relevant
 constraints (the 'TypedHole'). A hole of a function type gets its fits as lambdas: each
 argument of the type is a variable that the fit uses once, as in a Hoogle+
 query. The plugin drops the fits that GHC finds itself (one identifier
-applied to the arguments in order), and the fits that call a definition
-that holds the hole, because such a fit can loop. Hectare's rule
+applied to the arguments in order, or @id@ as @\\x1 -> x1@), and the fits
+that call a definition that holds the hole, because such a fit can loop.
+Hectare's rule
 'hectareAvoid' applies: a list function is not applied to @[]@. A fit with
 the normal form of an earlier fit is skipped ('optionNormalForms'), and a fit
 that ignores part of itself or drops an argument ('comesLast') comes after
@@ -566,9 +567,12 @@ uniqueNames = go Map.empty
             text' = if count == 0 then base else base <> "'" <> Text.pack (show count)
          in (text', (name, typ)) : go (Map.insert base (count + 1) seen) rest
 
--- | Whether GHC finds a program itself: one identifier applied to the arguments in order.
+{- | Whether GHC finds a program itself: one identifier applied to the
+arguments in order, or the only argument, which is @id@.
+-}
 foundByGhc :: [Text] -> Program -> Bool
 foundByGhc arguments program = case spine program [] of
+    (Var name, []) | [name] == arguments -> True
     (Var _, applied) -> applied == map Var arguments
     _ -> False
   where
