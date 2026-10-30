@@ -24,3 +24,7 @@ sizeOf :: Maybe [Int] -> Int
 sizeOf m = case m of
     Just ys -> _
     Nothing -> 0
+
+-- A hole of a function type: the fits print eta reduced, as (,) x.
+pairWith :: a -> b -> (a, b)
+pairWith x = _

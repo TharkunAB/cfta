@@ -184,3 +184,23 @@ test/holes/Holes.hs:25:16: error: [GHC-88464]
 25 |     Just ys -> _
    |                ^
 
+test/holes/Holes.hs:30:14: error: [GHC-88464]
+    * Found hole: _ :: b -> (a, b)
+      Where: `a', `b' are rigid type variables bound by
+               the type signature for:
+                 pairWith :: forall a b. a -> b -> (a, b)
+               at test/holes/Holes.hs:29:1-28
+    * In an equation for `pairWith': pairWith x = _
+    * Relevant bindings include
+        x :: a (bound at test/holes/Holes.hs:30:10)
+        pairWith :: a -> b -> (a, b) (bound at test/holes/Holes.hs:30:1)
+      Valid hole fits include
+        (,) x
+        \x1 -> head (const [] x1)
+        \x1 -> last (const [] x1)
+        \x1 -> head (mconcat [] x1)
+        \x1 -> last (mconcat [] x1)
+   |
+30 | pairWith x = _
+   |              ^
+

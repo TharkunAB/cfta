@@ -11,7 +11,8 @@ fits, all the names in scope (GHC checks only the locals when the hole's
 type is a type variable), and the hole's type, implications, and relevant
 constraints (the 'TypedHole'). A hole of a function type gets its fits as lambdas: each
 argument of the type is a variable that the fit uses once, as in a Hoogle+
-query. The plugin drops the fits that GHC finds itself (one identifier
+query. The plugin prints such a fit eta reduced, as @h b@ for
+@\\x1 -> h b x1@. The plugin drops the fits that GHC finds itself (one identifier
 applied to the arguments in order, or @id@ as @\\x1 -> x1@). A fit can call
 a definition that holds the hole, as a recursive call, with two exceptions,
 because such a call loops: no call when the hole is the whole right-hand
@@ -623,16 +624,31 @@ foundByGhc arguments program = case spine program [] of
     spine other rest = (other, rest)
 
 {- | A program as an expression: each candidate's name in prefix form, as
-GHC qualifies it, and the arguments as a lambda.
+GHC qualifies it, and the arguments as a lambda, eta reduced ('etaReduced').
 -}
 render :: Map.Map Text SDoc -> [Text] -> Program -> SDoc
 render names arguments program
-    | null arguments = expression False program
-    | otherwise = hcat [char '\\', hsep (map (text . Text.unpack) arguments)] <+> text "->" <+> expression False program
+    | null arguments' = expression False program'
+    | otherwise = hcat [char '\\', hsep (map (text . Text.unpack) arguments')] <+> text "->" <+> expression False program'
   where
+    (arguments', program') = etaReduced arguments program
     expression nested term = case term of
         Var name -> Map.findWithDefault (text (Text.unpack name)) name names
         App function argument -> (if nested then parens else id) (expression False function <+> expression True argument)
+
+{- | A lambda without the last arguments that its body applies last and
+does not use elsewhere: @\\x1 x2 -> f x1 a x2@ is @\\x1 -> f x1 a@, and
+@\\x1 -> h b x1@ is @h b@.
+-}
+etaReduced :: [Text] -> Program -> ([Text], Program)
+etaReduced arguments program = case (reverse arguments, program) of
+    (lastArgument : earlier, App function (Var name))
+        | name == lastArgument && not (uses lastArgument function) -> etaReduced (reverse earlier) function
+    _ -> (arguments, program)
+  where
+    uses name term = case term of
+        Var name' -> name == name'
+        App function argument -> uses name function || uses name argument
 
 {- | Run an action, and give 'Nothing' when it throws an exception that is
 not asynchronous, so that a failed search leaves GHC's fits as they are.
