@@ -43,16 +43,21 @@ The options apply to each hole:
 > -fplugin-opt=Data.CFTA.GHC.HoleFits:model=base.cfta   order the fits with a fit model
 > -fplugin-opt=Data.CFTA.GHC.HoleFits:model-module=K    add the counts of the module K times
 > -fplugin-opt=Data.CFTA.GHC.HoleFits:hole-context=off  score the root of each fit as a right-hand side
+> -fplugin-opt=Data.CFTA.GHC.HoleFits:model-search=best-first  search the typed space in the model's order
 
 With @model@, the plugin reads a fit model ("Data.CFTA.GHC.Model", the text
-form @fit-model 1;@, which @cfta-fit-model@ builds from Haskell sources) once
-for each module. Then the search is mode (b) ('States'), and it checks the
-programs of all sizes in the order of the model's score, best first
-('optionScore'). With @model-module@, the plugin also reads the module of the
-first hole with GHC's parser ("Data.CFTA.GHC.Corpus"), and adds the counts of
-that module, multiplied by K, to the model, for all the holes of the module.
+form @fit-model 1;@ in a @.cfta@ file, which @cfta-fit-model@ builds from
+Haskell sources) once for each module, and orders the fits by the model's
+score. By default the search keeps its own mode: the plugin takes a pool of
+at least 50 fits, and the model orders them, the fits that use every part
+first. With @model-search=best-first@, the search is mode (b) ('States') and
+lists the programs of all sizes in the order of the model's score, best
+first ('optionScore'); it finds more fits, but needs a few seconds for each
+hole. With @model-module@, the plugin also reads the module of the first
+hole with GHC's parser ("Data.CFTA.GHC.Corpus"), and adds the counts of that
+module, multiplied by K, to the model, for all the holes of the module.
 @model-module@ needs @model@. A model that the plugin cannot read gives a
-warning, and the search keeps its order. The root of each fit has the context
+warning, and the fits keep their order. The root of each fit has the context
 of its hole: in @foldr f _ xs@, the second argument of @foldr@ ('scorerFor').
 With @hole-context=off@, it has the context of a right-hand side.
 
@@ -80,9 +85,10 @@ module Data.CFTA.GHC.HoleFits (
 import Control.Exception (IOException, SomeAsyncException, fromException, throwIO, try)
 import Control.Monad (filterM, foldM, join, void)
 import Control.Monad.IO.Class (liftIO)
-import Data.List (sortBy)
+import Data.List (sortBy, sortOn)
 import qualified Data.Map.Strict as Map
-import Data.Maybe (catMaybes, fromMaybe, listToMaybe)
+import Data.Maybe (catMaybes, fromMaybe, isJust, listToMaybe)
+import Data.Ord (Down (..))
 import qualified Data.Set as Set
 import Data.Text (Text)
 import qualified Data.Text as Text
@@ -175,6 +181,10 @@ data PluginOptions = PluginOptions
     -- ^ The factor of the counts of the module, which the model gets.
     , pluginHoleContext :: Bool
     -- ^ Whether the root of a fit has the context of the hole, or always @top@.
+    , pluginRerank :: Bool
+    {- ^ Whether the model orders the fits of the search (a pool of at least
+    50, the default), or the search itself (@model-search=best-first@).
+    -}
     }
 
 {- | The options of the plugin, from its @-fplugin-opt@ arguments
@@ -197,7 +207,14 @@ readOptions arguments = do
             | Just _ <- weight, Nothing <- model -> Left "model-module needs the option model"
             | otherwise ->
                 Right
-                    (PluginOptions options (if ranked then Just ranking else Nothing) model weight (lastValue "hole-context" /= Just "off"))
+                    ( PluginOptions
+                        options
+                        (if ranked then Just ranking else Nothing)
+                        model
+                        weight
+                        (lastValue "hole-context" /= Just "off")
+                        (lastValue "model-search" /= Just "best-first")
+                    )
   where
     search0 = defaultOptions{optionMaximumSize = 4, optionFits = 5, optionSeconds = Just 1, optionAvoid = hectareAvoid}
     set (options, ranking, ranked, settings) argument = case break (== '=') argument of
@@ -215,6 +232,8 @@ readOptions arguments = do
         ("model-module", '=' : _) -> Right (options, ranking, ranked, settings)
         ("hole-context", '=' : "on") -> Right (options, ranking, ranked, settings)
         ("hole-context", '=' : "off") -> Right (options, ranking, ranked, settings)
+        ("model-search", '=' : "best-first") -> Right (options, ranking, ranked, settings)
+        ("model-search", '=' : "rerank") -> Right (options, ranking, ranked, settings)
         ("rank-pool", '=' : value) -> (\pool -> setting (\r -> r{rankingPool = pool})) <$> number value
         ("rank-seconds", '=' : value) -> (\seconds -> setting (\r -> r{rankingSeconds = seconds})) <$> number value
         ("rank-model", '=' : value) -> Right (setting (server (\o -> o{ollamaModel = Text.pack value})))
@@ -223,7 +242,7 @@ readOptions arguments = do
             Left
                 ( "unknown option "
                     <> argument
-                    <> "; the options are size, fits, seconds, programs, first-order, only-defaulted, no-type-domains, normal-forms, model, model-module, hole-context, rank, rank-pool, rank-seconds, rank-model, and rank-keep-alive"
+                    <> "; the options are size, fits, seconds, programs, first-order, only-defaulted, no-type-domains, normal-forms, model, model-module, hole-context, model-search, rank, rank-pool, rank-seconds, rank-model, and rank-keep-alive"
                 )
       where
         search change = (change options, ranking, ranked, settings)
@@ -367,7 +386,7 @@ fitsFor ::
     TypedHole ->
     [HoleFitCandidate] ->
     TcM ([HoleFit], Bool)
-fitsFor (PluginOptions options' ranking _ _ _) scorer hole scope = case th_hole hole of
+fitsFor (PluginOptions options' ranking _ _ _ rerank) scorer hole scope = case th_hole hole of
     Nothing -> pure ([], False)
     Just Hole{hole_ty = holeType} -> do
         elements <- globalRdrEnvElts <$> getGlobalRdrEnv
@@ -422,7 +441,15 @@ fitsFor (PluginOptions options' ranking _ _ _) scorer hole scope = case th_hole 
                             )
                             (plain (ppr typ))
                             [(plain (ppr local), plain (ppr (idType local))) | local <- locals]
-                let fits = concat outcome
+                let found' = concat outcome
+                    -- With model-search=rerank, the model orders the fits of the search,
+                    -- those that use every part first.
+                    fits = case scorer of
+                        Just score
+                            | rerank ->
+                                let byScore = sortOn (Down . programScore (score argumentNames) . fitProgram)
+                                 in byScore (filter (not . comesLast) found') <> byScore (filter comesLast found')
+                        _ -> found'
                     -- 'rankedFits' asks a question for two fits or more that use every part.
                     asks pool = length (take pool (filter (not . comesLast) fits)) >= 2
                 (ordered, asked) <- case ranking of
@@ -434,10 +461,12 @@ fitsFor (PluginOptions options' ranking _ _ _) scorer hole scope = case th_hole 
   where
     -- With a fit model, mode (b) checks the programs in the order of the model's score.
     withScorer argumentNames = case scorer of
-        Just score -> options'{optionMode = States (Enumerated HostOrder), optionScore = Just (score argumentNames)}
-        Nothing -> options'
+        Just score | not rerank -> options'{optionMode = States (Enumerated HostOrder), optionScore = Just (score argumentNames)}
+        _ -> options'
     -- With a ranking, the model orders more fits than the plugin shows.
-    wanted = maybe (optionFits options') (max (optionFits options') . rankingPool) ranking
+    wanted =
+        maybe (optionFits options') (max (optionFits options') . rankingPool) ranking
+            `max` (if rerank && isJust scorer then 50 else 0)
     search options candidates arguments result = do
         kept <- newTcRef []
         let accept fit
@@ -452,6 +481,17 @@ fitsFor (PluginOptions options' ranking _ _ _) scorer hole scope = case th_hole 
     -- As in Hectare's library, @($)@ and @id@ only appear as arguments; so
     -- does @($!)@, which applies a function as @($)@ does.
     heads name = getOccString name `notElem` ["$", "$!", "id"] || nameModule_maybe name /= Just gHC_INTERNAL_BASE
+
+-- | The score of a program: the sum of the scores of its tokens, each given its parent's token and its position.
+programScore :: (Maybe (Text, Int) -> Int -> (Text, Int) -> Double) -> Program -> Double
+programScore score = go Nothing 0
+  where
+    go parent position program =
+        let (name, arguments) = spine program
+            token = (name, length arguments)
+         in score parent position token + sum [go (Just token) index argument | (index, argument) <- zip [0 ..] arguments]
+    spine (Var name) = (name, [])
+    spine (App function argument) = let (name, arguments) = spine function in (name, arguments <> [argument])
 
 {- | The identifier of a candidate, with its name and type, as
 'GHC.Tc.Errors.Hole.tcFilterHoleFits' looks it up: a data constructor has
