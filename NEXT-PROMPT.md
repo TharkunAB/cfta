@@ -1,3 +1,44 @@
+# Current inherited payload and control checkpoint (2026-10-30)
+
+Full goal ACTIVE. Read [the current note](lean/notes-current-inherited-control.md).
+Source b5d87b72c16916bf854c75be9e1c44255cad13f5 adds seven public laws in three modules.
+Completed bounded normalization agrees with the actual normalizer. Completed
+finite reference sequences equal actual inherited payload combine and physical
+trie descent. Two kernel proofs show that these actual payload operations can
+lose the original anchors and, after nineteen cycles, exceed the earlier
+input-derived length-20 word carrier. These are finite payload counterexamples.
+They do not establish an unbounded admitted worker or a public Haskell defect.
+
+The main gap is a structural bound for the actual recursive callers and every
+earlier alternative. Separate equality-reduction combination from enumeration's
+independent inherited/own descents. Include stored constraints, history, caller
+frames and exact stop decisions. Then discharge the higher original-input gates,
+sufficient resources, whole-worker completion, intended finite-value coverage,
+public order/stops and Haskell correspondence. Retain both workers, the optimized
+interned core, and all earlier constructor, equality, size and rank targets.
+
+Audit 4700 jobs/82627 dependency reports and public 1075 checks/89 definitions pass.
+All seven new public axiom reports use only standard axioms. All 498 prior
+protected sources and 835 native inputs match. Current baselines are
+501 protected/4700 Lean/835 native sources. The whole prior public readback is
+an exact prefix. All 33 commands remain: 21 pass, twelve failed repaired drafts
+or diagnostics; 94 input snapshots remain. Four final strict checks match.
+Four frozen research bundles have 257 verified pins and fully read reports.
+
+Both exact public Haskell fixtures pass. The first reaches G second and ends.
+The shared-constraint fixture runs Rec before Stop twice and reaches G fourth;
+all returned term and obligation trees are forced inside the request timeout.
+Neither is a starvation counterexample. No Haskell source changed. FINDINGS
+records the conditional descendant-SCS retention repair candidate, the distinct
+Mu/Node constructors, and why a shallow public entry alone does not fix it.
+No new source defect or repair is asserted.
+
+Evidence: lean/restart-evidence/20261030-inherited-control/.
+The source and reconstructed areas become read-only after sealing. Use a new
+writable area for further work. Normal pushes to formalize remain explicitly
+authorized. Do not pause or complete the full goal at this checkpoint.
+Older sections below remain literal history. This note controls current claims.
+
 # Current normalization and forecast checkpoint (2026-10-30)
 
 Full goal ACTIVE. Read [the current note](lean/notes-current-normalization-control.md).

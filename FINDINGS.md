@@ -1,3 +1,63 @@
+# Current inherited payload and Haskell findings (2026-10-30)
+
+Full goal ACTIVE. Current source b5d87b72c16916bf854c75be9e1c44255cad13f5.
+Read [the current note](lean/notes-current-inherited-control.md).
+No Haskell source changed. No new public Haskell defect or source repair was
+established. Preserve all earlier actual Haskell repair records below.
+
+For external pickup: enumerateNode can allocate a Mu or open-union value with
+addUVarValue (Just n) when terminal hereConstraints is empty. That allocation
+stores empty SCS, even when incoming descendant SCS is nonempty. Recursive-slot
+eligibility requires nonempty stored SCS; it is separate from the graph-wide
+Enumeration.unconstrained predicate. With nonempty terminal constraints,
+mergeNodeIntoUVarVal can retain the descendant SCS and update waiting counts.
+
+Conditional repair candidate: IF the recursive boundary contract requires
+retention of that incoming descendant SCS in the empty-terminal branch, use
+the existing SCS write path and maintain the waiting counts for Mu/open-union
+allocation. Check recursion-marker semantics before applying this change.
+The two public fixtures pass and do not establish this as a defect.
+Changing only the public entry to termsPruneUntil or a shallow/prepared entry
+is insufficient: InternedNode and InternedMu are distinct constructors. The
+Node view matches only ordinary nodes; prepareShallowChild falls back to
+enumerateNode for Mu. This corrects the earlier intermediate interpretation.
+
+The simple F(Loop), G(Leaf) fixture emits F with a recursion marker, then G,
+and ends. It does not call the expected Loop row callback. The shared-child
+F(Loop,Loop), Rec(Any,Loop,Loop) fixture forces the nonempty-terminal retention
+branch. It runs Rec before Stop twice. G appears fourth. Prefix requests 1, 2
+and 4 force all returned term and obligation trees within the same timeout;
+node counts are 41, 62 and 71. Both G-only controls and all fifteen finite F
+membership checks for each fixture pass. Earlier WHNF-only variants were not
+executed. Preserve the exact v1 and v4 programs and their before/after pins.
+
+Each fresh offline Cabal build check reports Up to date. All 835 Haskell/build
+inputs and the exact probe match before and after. The local GMP library-path
+repair is the previously recorded environment repair; it is not a source edit.
+
+Do not identify payload feedback with an enumeration transition. enumerateEdgeWith
+descends inherited and own-class constraints separately. Equality reduction
+combines inherited first and own second; its contradiction precheck reverses
+that order, and memo keys retain operand order. Its outer partial driver stops
+at direct Mu/union, but requireAll/editAll can expose recursive nodes. Repeated
+public passes reset inherited state. The required proof must use actual callers.
+
+Seven new public Lean laws refine completed bounded observations to actual
+normalization/payload operations and check two finite carrier failures. Actual
+well-formed payload combination plus descent loses the original anchors; nineteen
+cycles exceed the earlier length-20 word carrier. This rejects that specific
+unrestricted carrier extension, not all uniform worker bounds. No native_decide,
+new axiom or linter suppression was added. Builtin proof-producing cbv handles
+the closed well-founded sorting computations. Twelve failed proof drafts and
+diagnostics remain in the archive; none is treated as a final theorem.
+
+Audit 4700 jobs/82627 dependency reports; public 1075 checks/89 definitions pass.
+All 498 prior protected sources and 835 native inputs match. Four frozen research
+bundles retain 257 verified pins. See lean/restart-evidence/20261030-inherited-control/.
+The biggest gap remains an actual-worker structural bound for all earlier
+alternatives, followed by the remaining original resource and coverage gates.
+Older entries below remain literal history. This note controls current claims.
+
 # Current normalization and forecast checkpoint (2026-10-30)
 
 Full goal ACTIVE. Read [the current note](lean/notes-current-normalization-control.md).
