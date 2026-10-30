@@ -1,3 +1,46 @@
+# Current checkpoint: sibling execution paths — 2026-10-30 20:18 CET
+
+Read `lean/notes-current-sibling-execution-path-control.md` first.
+Source is `7138aea48f246fb9c4a87e3a23af79ddf47b3f3f` on formalize.
+Main is `bd5a406a6a3f84b7e3ae0906082783911509df83`.
+The full objective remains open. Continue without reducing its scope.
+Normal pushes to origin formalize have explicit standing authorization.
+
+Thirteen checked laws retain every old resource contract and add actual
+callback, receipt, head, sibling, Prepared opaque, and parked restart paths.
+Both sibling scans cover every actual Invocation, including empty-output
+callbacks and current stopped hooks. FoldPaths retains discarded receipts.
+Parked paths use the returned decision and same actual cache frame.
+The smaller-depth path premise remains INTERNAL. The positive-depth whole
+worker induction and sufficient ORIGINAL recursion depth are NOT proved.
+
+Default/strict Audit: 4740 jobs, 82937 dependency checks.
+Public: 1177 checks, the same 116 definition prints, 13 standard-axiom reports.
+Prior 4,623,391-byte public output is an exact prefix; new tail 140,163 bytes.
+All 535 prior protected/835 native inputs are exact. Current protected 541.
+Old 4,734 Lean sources change only by six prepended Audit imports; current 4,740.
+All 25 compiler commands remain: 21 pass / 4 repaired failures, 115 snapshots.
+Four frozen proof reviews retain 117 payloads; full public readback is reviewed
+independently. Keep all owner versions and exact failed diagnostic logs.
+
+Next: close actual selected expansion/entry/preparation, then the paired
+whole-worker depth induction. Conjoin eventual path and unchanged resource
+bounds at B+C. Derive original-carrier projections internally.
+Source-only next work is in `/tmp/mcfta-worker-execution-path-control-20261030`.
+The expansion owner has three named old whole-source approvals in SCOPE.md.
+Its new drafts remain uncompiled. Do not change that owner directory.
+Do not install more production source until this archive is independently
+reconstructed and its current-source checks pass.
+
+Evidence: `/tmp/mcfta-sibling-execution-path-control-20261030`.
+Archive target: `lean/restart-evidence/20261030-sibling-execution-path-control`.
+Keep serial 4 GiB / zero swap / five minute Lean 4.34.1 strict checks and all prior proof
+and coverage boundaries. Keep all constructor/equality/size/rank work.
+For the external Haskell agent: no Haskell source change, native command,
+new defect, fix, or candidate is established here. All older findings follow.
+
+---
+
 # Current continuation — 2026-10-30 08:50 CET
 
 Read `lean/notes-current-execution-path-control.md` before older checkpoints.
