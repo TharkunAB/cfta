@@ -1,4 +1,5 @@
 import MicroCFTA.SourcePruningNarrowControl
+import MicroCFTA.SourcePruningNarrowLineage
 import MicroCFTA.SourceCurrentAllocatedNativeStoredTrace
 import MicroCFTA.SourcePruningEnumerationNeutralControl
 import MicroCFTA.SourcePruningEnumerationExecutionOrdinaryBridge
