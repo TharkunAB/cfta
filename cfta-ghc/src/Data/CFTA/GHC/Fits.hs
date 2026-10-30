@@ -546,6 +546,7 @@ streamFits options hole candidates goal accept = do
             goals <-
                 holeGoals
                     environment
+                    (isJust (optionScore options))
                     [(leafOf candidate, candidateRequired candidate) | candidate <- candidates]
                     (optionMaximumSize options - 1)
                     goal
