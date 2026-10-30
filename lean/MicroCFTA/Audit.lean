@@ -1,3 +1,4 @@
+import MicroCFTA.SourcePruningNarrowChainBound
 import MicroCFTA.SourceCurrentAllocatedNativeStoredPrefix
 import MicroCFTA.SourcePruningNarrowReturnedControl
 import MicroCFTA.SourcePruningNarrowControl
