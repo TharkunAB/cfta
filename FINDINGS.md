@@ -1,3 +1,46 @@
+# Neutral recording control checkpoint — 2026-10-30 21:35 CET
+
+Checked source: `ea59a299ee215da7498f60eab8874df10223d495` on `formalize`.
+Read `lean/notes-current-neutral-recording-control.md` first.
+The full objective remains incomplete. Work continues.
+
+Three new laws preserve the actual recording operation's slot counter,
+complete values, recursion ancestry, and expansion ancestry. They consume
+actual success or the existing callback singleton. They preserve pendingSize
+without the old UnionFind.Total premise. This is a local gate removal.
+It does not bound neutral transitions, native interner allocation, or depth.
+
+The whole-worker original-carrier checkpoint remains published at09f8a31a.
+Both finite-depth workers retain stable outcomes, exact resources and actual
+paths at a common bound. One original finite path carrier works independently
+of recursive depth. Their work bounds and resource gates can depend on depth.
+
+Default+strict Audit pass: 4,745 jobs and 82,975 dependency checks.
+Public verification passes 1,189 checks and unchanged 116 definition prints.
+The complete previous public output is an exact prefix. All three new standard
+axiom reports and the complete 3,371-byte tail were read. All six compiler
+commands pass; all 11 input snapshots remain. All 545 prior protected and
+835 native inputs remain exact. One Audit import precedes the complete old body.
+
+Largest gap: sufficient ORIGINAL recursive capacity for the intended finite
+ordered prefix. Boundary preparation already preserves its physical handle.
+The renewal gap is an intervening ordinary/native rewrite. Actual canonicality,
+history, earlier alternatives, staged children, raw multiplicity and slot work
+still need control. Duplicate-erased key shapes do not bound raw bucket work.
+The source-only next review owns /tmp/mcfta-native-renewal-control-review-20261030.
+Its drafts remain uncompiled until checked. Keep the full prior scope below.
+
+Resume from lean/restart-evidence/20261030-neutral-recording-control.
+Safe extraction needs a fresh destination. Remove restored write bits before
+ownership verification. Give metadata verifiers a writable output directory.
+Haskell: no source changed, no native command ran, and no new Haskell defect,
+fix or candidate is established. All prior conditional findings remain below.
+The backend marker still says blocked. Proof work continues under resumed
+instructions. No pause, completion, or completion percentage is claimed.
+The complete prior document follows as an exact suffix.
+
+---
+
 # Whole-worker original-carrier checkpoint — 2026-10-30 21:14 CET
 
 Checked source: `954b21de14883a6ab8604fc3a9dc24bd0e427904` on `formalize`.
