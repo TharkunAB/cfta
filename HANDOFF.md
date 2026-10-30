@@ -1,3 +1,53 @@
+# Whole-worker original-carrier checkpoint — 2026-10-30 21:14 CET
+
+Checked source: `954b21de14883a6ab8604fc3a9dc24bd0e427904` on `formalize`.
+Main remains `bd5a406a6a3f84b7e3ae0906082783911509df83`.
+Read `lean/notes-current-worker-execution-path-control.md` first.
+The full objective remains incomplete. Work continues.
+
+Both Native and Prepared workers now have checked execution-path inductions
+at every finite recursive depth that meets the existing resource gates.
+The final laws discharge Complete and the smaller-depth path IH internally.
+Original-carrier companions derive paths from normalized original literals,
+seed inclusion in originalAlphabet literals, and the initial state.
+One finite carrier works independently of recursive depth. The work bound,
+forecast, and Reserved gate can still depend on that depth. Each worker keeps
+its original stable actual outcome and exact resources at a common B+C.
+The theorem does not prove an outcome stable across recursive depths.
+
+Default+strict Audit pass: 4,744 jobs and 82,965 dependency checks.
+Public verification passes: 1,186 checks and unchanged 116 definition prints.
+All nine new axiom reports use only standard axioms. Independent review reads
+all 70,791 bytes of new public output and all six required source snapshots.
+All 541 prior protected and 835 native inputs remain exact. Four Audit imports
+precede the complete old body. All 19 commands remain, including four repaired
+failures and 61 input snapshots. Current strict sources match their snapshots.
+
+Largest gap: sufficient ORIGINAL recursive capacity for the intended finite
+ordered prefix through every earlier alternative and staged child. Fixed-depth
+recursive exhaustion remains permitted. Native handle renewal, composed
+ordinary rewrites, raw multiplicity, branch/slot work, and neutral progress
+still need bounds. Public adapters, coverage, and Haskell correspondence remain
+open. Keep the optimized interned core and all older semantic/count/order work.
+
+Resume from `lean/restart-evidence/20261030-worker-execution-path-control`.
+Safe extraction needs a fresh destination. Remove reconstructed write bits
+before ownership checks. Give metadata verifiers a writable output directory.
+The full unfiltered source evidence and prior publication receipts remain.
+A new source-only capacity review owns only
+`/tmp/mcfta-original-capacity-gap-review-20261030`. Its drafts are uncompiled.
+It checks concrete neutral recording and recursion-key control. Duplicate
+shape erasure does not bound fresh node handles. Root checks before integration.
+
+Haskell: no source changed and no native command ran. No new Haskell defect,
+fix, or repair candidate is established. Preserve the prior conditional SCS
+and capacity findings below. No completion percentage is established.
+The backend goal marker still says blocked despite resumed instructions and
+checked progress. This is not a technical blocker. No pause or completion is
+claimed. The entire prior document follows as an exact suffix.
+
+---
+
 # Current checkpoint: sibling execution paths — 2026-10-30 20:18 CET
 
 Read `lean/notes-current-sibling-execution-path-control.md` first.
