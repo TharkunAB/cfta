@@ -300,6 +300,17 @@ data Options = Options
     form of an earlier fit is skipped, and a fit whose normal form drops an
     argument comes last ('fitDropsArgument').
     -}
+    , optionPrefix :: [(Text, Int)]
+    {- ^ The tokens in preorder that each fit starts with: the name of each
+    leaf and its number of arguments, as the user wrote the start of the
+    program. Empty for no prefix. Only mode (b) with 'Enumerated' reads it.
+    -}
+    , optionScore :: Maybe (Maybe (Text, Int) -> Int -> (Text, Int) -> Double)
+    {- ^ The score of a token (the name of a leaf and its number of arguments)
+    given its parent's token and its position. Mode (b) with 'Enumerated'
+    checks the programs of all sizes together in the order of descending
+    score, the sum over their tokens ('hookScore').
+    -}
     }
 
 -- | A way to propose the programs of a hole.
@@ -328,6 +339,8 @@ defaultOptions =
         , optionOnlyDefaulted = False
         , optionTypeDomains = True
         , optionNormalForms = True
+        , optionPrefix = []
+        , optionScore = Nothing
         }
 
 {- | Hectare's pruning rule of the Hoogle+ library, with GHC's names, for
@@ -478,7 +491,7 @@ streamFits options hole candidates goal accept = do
         leaves' = Map.insert ignored ignoredLeaf leaves
     startKey <- stateKey environment (walkerVariables start) start
     checker <- newChecker environment leaves' start startKey
-    let limits = Limits (optionMaximumSize options) (optionMaximumPrograms options) deadline
+    let limits = Limits (optionMaximumSize options) (optionMaximumPrograms options) deadline (optionPrefix options)
         hooks =
             Hooks
                 { hookSize = \size progress -> case optionReport options of
@@ -487,6 +500,7 @@ streamFits options hole candidates goal accept = do
                 , hookProgram = \size program -> mapM_ (\trace -> liftIO (trace size program)) (optionTrace options)
                 , hookNew = \tokens -> liftIO $ atomicModifyIORef' reported $ \fits ->
                     if tokens `Set.member` fits then (fits, False) else (Set.insert tokens fits, True)
+                , hookScore = optionScore options
                 }
         -- A fit with the normal form of an earlier fit is skipped,
         -- before the checks of its parts.
@@ -532,6 +546,7 @@ streamFits options hole candidates goal accept = do
             goals <-
                 holeGoals
                     environment
+                    (isJust (optionScore options))
                     [(leafOf candidate, candidateRequired candidate) | candidate <- candidates]
                     (optionMaximumSize options - 1)
                     goal

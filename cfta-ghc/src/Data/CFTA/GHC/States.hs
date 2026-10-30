@@ -58,10 +58,14 @@ data Head = Exact !Word64 | Any
 the hole, the leaves (each with whether each program must use it), the
 largest number of children of a leaf, and the goal type. A key counts the
 unification variables of the goal and of the leaves' types as given, as the
-walk's keys do.
+walk's keys do. A leaf whose result is a type variable that no parameter has
+('anyResult') fits every goal, so it is left out, unless a program must use
+it, or the flag is on and a class constraint reads that variable
+('classResult'), as in @fromIntegral@ and @mempty@: a search in the order of
+a score can rank such leaves.
 -}
-holeGoals :: Environment -> [(Leaf, Bool)] -> Int -> Type -> TcM (Goals TcM StateKey)
-holeGoals environment leaves most goal = do
+holeGoals :: Environment -> Bool -> [(Leaf, Bool)] -> Int -> Type -> TcM (Goals TcM StateKey)
+holeGoals environment constrained leaves most goal = do
     root <- liftZonkM (zonkTcType goal)
     rootKey <- keyOf root
     representatives <- liftIO (newIORef (Map.singleton rootKey root))
@@ -104,7 +108,11 @@ holeGoals environment leaves most goal = do
             , goalsTransitions = transitions
             }
   where
-    kept = [(leaf, required) | (leaf, required) <- leaves, required || not (anyResult (leafType leaf))]
+    kept =
+        [ (leaf, required)
+        | (leaf, required) <- leaves
+        , required || not (anyResult (leafType leaf)) || (constrained && classResult (leafType leaf))
+        ]
     byIndex = IntMap.fromList (zip [0 ..] (map fst kept))
     types = map (leafType . fst) leaves
     given = walkerVariables (startWalker environment types goal)
@@ -149,6 +157,17 @@ headOf bound typ = case tcSplitTyConApp_maybe typ of
   where
     leftmost (AppTy function _) = leftmost function
     leftmost other = other
+
+{- | Whether the result of a type is a type variable that a class constraint
+of the type reads, as in @(Integral a, Num b) => a -> b@.
+-}
+classResult :: Type -> Bool
+classResult typ = case result of
+    TyVarTy variable -> variable `elemVarSet` tyCoVarsOfTypes theta
+    _ -> False
+  where
+    (_, theta, rho) = tcSplitNestedSigmaTys (expandTypeSynonyms typ)
+    (_, result) = tcSplitFunTys rho
 
 {- | Whether the result of a type is a type variable that no parameter has, as
 in @a@ and @[Char] -> a@.
