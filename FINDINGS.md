@@ -1,3 +1,43 @@
+# Latest findings: exact parking and forecast path preparation,2026-10-30
+
+The full formalization goal remains ACTIVE. Source 58841e2669d385837bd86bb44bde1177074ee395.
+Read lean/notes-current-parked-control-progress.md first.
+Main remains bd5a406a6a3f84b7e3ae0906082783911509df83.
+
+Exact parking consumption now retains every original order/restart clause and
+the SAME actual witnesses, without new input. Correction: the older preserved
+ParkedProgress already proved strict model-independent decrease and exact flags.
+The new value is exact+1 with the complete combined operational contracts.
+
+A finite carrier now contains original stored paths, literal forecast-projected
+paths and their suffixes. Actual CachedOwn.prepare and HeadAdmission preserve
+the predicate for EVERY row cache and staged child bucket before child actions
+or output filtering. No model/Valid/future packet is assumed. This is local;
+carry the SAME original carrier through child actions, merges, callbacks,
+stopped candidates and empty-output branches next. A capacity-dependent carrier
+does not establish any sufficient capacity. Global control, public coverage,
+exact public order/stops and Haskell correspondence remain open.
+
+Audit4678 jobs/82423 dependencies; public997 checks/85 definitions.
+Four exact strict sources pass.24 proof commands:21 pass/3 fail;74 snapshots.
+All476 old protected/835 Haskell identities unchanged; new protected baseline479.
+Only Audit changes among4675 old Lean sources. Its old body remains exact.
+The temporary filename collision was restored before any commit; complete final
+checks include the original old proof. All failed and intermediate evidence is
+retained with its actual inputs. No Haskell repair/new defect was established.
+Earlier native415+56 tests and required formatters apply to unchanged835 inputs.
+
+Archive:lean/restart-evidence/20261030-parked-control-progress/.
+Keep all older proof, repair, counterexample, draft and restart evidence.
+Use a fresh writable area. Pull/fetch first. Normal formalize pushes authorized.
+
+Haskell pickup: this proof checkpoint changes no native source. Preserve the
+upstream corrections and all older concrete repairs below as an exact suffix.
+The proof-scope correction above is not a Haskell defect or fix. The new Prefix
+and sized fast-table APIs still need their full public correspondence proof.
+
+---
+
 # Latest findings: integrated Prefix and sized counts,2026-10-30
 
 Source 9f17b74c13f66e363545ce7e9c60e14bb878f599 integrates main bd5a406a6a3f84b7e3ae0906082783911509df83(PR102).
