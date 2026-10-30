@@ -1,3 +1,59 @@
+# Actual dispatch, changed slots and fold certificates — 2026-10-31 00:53 CET
+
+Dispatch source: `14e7fa6d7494e65a301d9f0b5fc6bc64d6292160`.
+Slot source: `bcd4a68303df554b8efe05839ac218c597a42e47`.
+Fold source: `a5a174707fe610082b61e1fb501f74f99b7d351d`.
+Read lean/notes-current-slot-and-native-dispatch.md first.
+The full original-input objective remains open. Work continues.
+
+Actual Dispatch.dispatch preserves conditional native Stored in every outcome
+under current Ready/Realized/Fits/Room/entry Stored. Both operands' availability
+and closedness derive from their actual original slot lookups.
+Actual Fold.run preserves that certificate in EVERY returned outcome under
+its existing current Context/slot/Fits/Reserved/known-heap gates. The actual
+singleton-success head derives all successor entry facts. No future Ranges,
+Trace, output Stored or postcondition supplier is added.
+
+An actual false recursion check derives Frame. The changed-slot law uses
+actual read/check/lookup/prepare/newEncoded/change/action-success equations.
+It derives OLD availability/closedness/encoding, all Frames, the same allocated
+representative, exact final write/readback, RESULT Normal and final Realized.
+OLD input Normal is neither assumed nor proved. These separate observations
+remain inputs; extraction from a final runPrefix result is not yet proved.
+It ends at the successful action state, before adaptation/index/Right stages.
+Ordinary-source complete-row inclusion remains conditional on an ordinary root.
+No global filter-history or original-depth bound follows yet.
+
+Dispatcher syntax reductions keep headers exact. The slot header TEXT is
+unchanged, but its original nodeEdges name failed to elaborate. Opening the
+canonical namespace repairs intended resolution; no spurious implicit parameter remains.
+Explicit get-success equalities, an alias, a binder and a Root indentation
+failure were repaired. Fold passes its first probe. Every failed log remains.
+No Haskell source changed or native command ran. No new Haskell defect, fix
+or candidate is established. All older conditional findings remain complete.
+
+Default+strict Audit: 4,758 jobs / 83,054 dependency checks. Public: 1,223
+checks / 118 prints; all four new reports use standard axioms. Nineteen serial
+capped commands retain fifteen passes, four repaired failed probes and 52
+snapshots. All 556 prior protected and 835 native inputs remain exact.
+Review reads all 413 source and 137 public lines. Archive:
+lean/restart-evidence/20261031-slot-dispatch-fold-control.
+
+Both finite-depth workers retain stable actual outcomes, exact forecasts and
+one original finite path carrier under their original gates. Exhaustion remains
+allowed. Sufficient ORIGINAL depth for the ordered finite prefix remains the
+largest gap. Cover earlier alternatives, staged children, configured stops,
+source replacements, prepared work, slots, unchanged calls and raw SCS work.
+Keep public/Haskell and constructor/equality/count/order/rank scope.
+Complete Terminal (152 lines) and adapter (63 lines) drafts remain UNCOMPILED.
+The latter ends at Right input; Right recording is an existing pure identity.
+Actual prefix-observation extraction is the next control target.
+The backend marker remains blocked despite user-resumed verified progress.
+No pause, completion or completion percentage is claimed.
+The complete prior document follows as an exact suffix.
+
+---
+
 # Actual incoming native certificates — 2026-10-31 00:17 CET
 
 Incoming source: `b7116e537a06197a4bb058d2d24b007d5cd9abc3`.
