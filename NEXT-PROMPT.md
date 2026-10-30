@@ -1,3 +1,24 @@
+# Current checkpoint: original-input bounded enumeration
+
+Full goal ACTIVE. Read [the controlling note](lean/notes-current-coupled-entry-control.md).
+Eight checked laws derive original Lean startup and both fixed-D recursive runs,
+with internally derived width, literal history, Packet/Fits and reservation.
+Every sufficiently large local work fuel yields the same actual outcome and
+OutcomeResources. Exhausted stopped outcomes remain permitted. The main gap is
+sufficient original recursive capacity for the intended finite ordered prefix,
+including all earlier alternatives and staged children, then coverage, policy,
+public APIs and Haskell correspondence. Existing fixed-D resource induction,
+local prefix resources and cold equality completion are already proved.
+Raw prepared rows, captured prefixes and opaque receipts now preserve stored paths.
+Audit4717/82766, public1130/95 and six matching strict sources pass. All eight
+new axiom reports are standard. Prior513 protected/835 native inputs remain exact.
+No Haskell source changed or new defect/fix was established. Keep all prior
+FINDINGS repairs, conditional SCS scope, counterexamples and caller boundaries.
+Current source: 7d9757d96a8588d6e17820065f8ec1eaf80f8868. Push is authorized.
+The complete previous document follows. The controlling note supersedes its gap assessment.
+
+---
+
 # Current raw pruning guard and caller checkpoint (2026-10-30)
 
 Full goal ACTIVE. Read [the current note](lean/notes-current-raw-guard-control.md).
