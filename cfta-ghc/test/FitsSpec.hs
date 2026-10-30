@@ -29,11 +29,13 @@ import Test.Hspec (describe, hspec, it, shouldBe, shouldReturn, shouldSatisfy)
 import Data.CFTA.GHC.Fits
 import Data.CFTA.GHC.HoleFits (PluginOptions (..), readOptions)
 import Data.CFTA.GHC.Internal.Check (Leaf (..), complete, newEnvironment, startWalker, step)
+import Data.CFTA.GHC.Model (FitModel (..), fromTerms, merge, parseFitModel, printFitModel, scale, symbolOf, tokenScore)
 import Data.CFTA.GHC.NormalForm (Term (TApp, TLam, TVar), normalForm)
 import Data.CFTA.GHC.Rank (Ranking (..), defaultRanking, rankFits, rankedFits)
 import Data.CFTA.GHC.Session
 import Data.CFTA.Gen.Synthesis (Program (..), parseProgram, renderProgram)
 import Data.CFTA.Gen.Synthesis.Walk (preorder)
+import qualified Data.CFTA.Term as CFTA
 import Decision (DecisionModel (..), Option (..), fixedModel)
 import GHC.Builtin.Types (mkListTy)
 import GHC.Core.Type (liftedTypeKind, mkTyVarTy)
@@ -242,6 +244,34 @@ main = withSession ["import Prelude", "import Data.Coerce (coerce)", "import Dat
                 fmap (fmap rankingPool . pluginRanking) (readOptions []) `shouldBe` Right Nothing
                 fmap (fmap rankingPool . pluginRanking) (readOptions ["rank-pool=10"])
                     `shouldBe` Left "rank-pool needs the option rank: the ranking is on only with rank"
+        describe "fit models" $ do
+            let leaf symbol = CFTA.Node symbol []
+                model =
+                    fromTerms
+                        ["Prelude"]
+                        (Map.fromList [("map", 2), ("length", 1)])
+                        [ ("top", CFTA.Node "length/1" [CFTA.Node "map/2" [leaf "var/0", leaf "var/0"]])
+                        , ("expr", CFTA.Node "map/2" [leaf "var/0", leaf "var/0"])
+                        ]
+            it "prints a model and reads it back, and merges two models by adding their counts" $ do
+                parseFitModel (printFitModel model) `shouldBe` Right model
+                merge model model `shouldBe` scale 2 model
+                fmap (Map.lookup ("map/2", 0, "var/0") . modelContexts) (parseFitModel (printFitModel (merge model model)))
+                    `shouldBe` Right (Just 4)
+            it "rejects a text that is not a model, with the number of the line" $ do
+                parseFitModel "fit-model 2;" `shouldSatisfy` either (const True) (const False)
+                parseFitModel "fit-model 1;\ncandidate map;" `shouldBe` Left "fit-model: line 2 is not a record: candidate map;"
+            it "scores a token in its context, mixed with the symbol alone, and names a non-candidate var" $ do
+                -- The context top 0 has one symbol seen once (mix 1/2); length/1 has
+                -- the count 1 among 7 nodes and an alphabet of 15 symbols.
+                let score = tokenScore model
+                score Nothing 0 ("length", 1) `shouldSatisfy` (\value -> abs (value - log (1 / 2 + 1 / 2 * 2 / 22)) < 1e-12)
+                score (Just ("length", 1)) 0 ("map 2", 2) `shouldBe` score (Just ("length", 1)) 0 ("map", 2)
+                symbolOf model ("xs", 0) `shouldBe` "var/0"
+            it "reads the options model and model-module of the plugin" $ do
+                fmap pluginModel (readOptions ["model=base.fit-model"]) `shouldBe` Right (Just "base.fit-model")
+                fmap pluginModuleWeight (readOptions ["model=base.fit-model", "model-module=3"]) `shouldBe` Right (Just 3)
+                fmap pluginModuleWeight (readOptions ["model-module=3"]) `shouldBe` Left "model-module needs the option model"
         describe "the fast rejects" $
             forM_ soundness $ \(name, signature, arguments, program) ->
                 it ("keep the fit of " <> name) $
