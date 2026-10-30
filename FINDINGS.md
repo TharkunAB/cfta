@@ -1,3 +1,52 @@
+# Native cache preservation checkpoint — 2026-10-30 22:23 CET
+
+Checked source: `4adf96c3fdd959a255c4b888bd40bd65b0822588` on `formalize`.
+Read lean/notes-current-native-memo-stored-control.md first.
+The full original-input objective remains incomplete. Work continues.
+
+Six laws preserve conditional native memo certificates through completed
+mixed checked calls. They use the existing Clean/BodyCode and actual physical
+Trace/Receipt. Each Trace retains its existing per-step Inputs witnesses.
+Literal request laws derive Fields/Clean internally. The existing literal
+initializer supplies entry Stored internally. Good/SemanticReady and other
+starting gates remain. No future completion or mixed verifier is supplied.
+The result is conditional finite ordinary structure and height control.
+It does not give recursive operand domains or unrestricted height bounds.
+
+Whole-worker original-carrier and successful recording laws remain exact.
+Both finite-depth workers retain stable outcomes, exact resources and one
+original path carrier. Depth-dependent work/resources and recursive exhaustion
+remain permitted. Sufficient ORIGINAL depth for the intended ordered prefix
+is still the largest gap. Earlier alternatives and staged children remain.
+Whole-caller Stored transport, EnabledEmpty and arbitrary unfinished/failed
+prefixes are not closed by the new completed-call proof.
+
+Default+strict Audit: 4,746 jobs / 82,987 dependency checks.
+Public: 1,195 checks / unchanged 116 definition prints. All seven serial
+capped compiler commands pass with 12 snapshots. Six new axiom reports use
+only standard axioms. The complete old public output is an exact prefix.
+Root and independent review read every new contract and all 11,037 tail bytes.
+All 546 prior protected and 835 native inputs remain exact.
+
+Source review: 169 payloads / 171 files, 137 records / 73 sources, three
+named old wholes with explicit Root approval for the third. Independent
+public review: 32 payloads / 34 files, zero old wholes. All versions and
+metadata repairs remain. Resume archive:
+lean/restart-evidence/20261030-native-memo-stored-control.
+
+Action.prepare can change a handle before a head in its nonboundary branch.
+Its OuterNarrow primitive filters existing complete rows; it does not run
+recursive intersection. A separate source-only row-filter replay/carrier
+review owns /tmp/mcfta-preparation-renewal-measure-review-20261030. Treat that
+work as uncompiled. Incoming/dispatch intersection and Prepared Mu/Union
+reconstruction remain separate. No new Haskell change, native run, defect,
+fix or candidate is established. All prior findings remain below.
+The backend marker remains blocked despite resumed instructions. Work
+continues. No pause, completion or completion percentage is claimed.
+The complete prior document follows as an exact suffix.
+
+---
+
 # Neutral recording control checkpoint — 2026-10-30 21:35 CET
 
 Checked source: `ea59a299ee215da7498f60eab8874df10223d495` on `formalize`.
