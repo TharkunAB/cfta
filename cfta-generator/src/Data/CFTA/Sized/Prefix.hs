@@ -130,6 +130,7 @@ module Data.CFTA.Sized.Prefix (
     withWeights,
     completionSymbols,
     completionWeight,
+    completionWeightBy,
     nextTokenWeights,
     tokenProbability,
     drawCompletion,
@@ -894,9 +895,21 @@ over the transitions of the rows of the count table, as the counts are.
 Otherwise it is the sum of the weights of the listed completions.
 -}
 completionWeight :: Completions symbol -> Rational
-completionWeight completions = case completionsRoute completions of
-    Indexed table _ _ -> sum $ genericTake (tableBound table) $ drop 1 $ indexedWeights completions table
-    Listed _ listed -> sum [termWeight (completionsWeight completions) term | (term, _, Yes) <- listed]
+completionWeight completions = completionWeightBy (completionsWeight completions) completions
+
+{- | The total weight of the completions for a weight of each symbol in any
+number type, as 'completionWeight' gives it for the weights of 'withWeights'.
+A number type that carries derivatives gives the derivatives of the total
+weight ("Data.CFTA.Sized.Prefix.Train").
+-}
+completionWeightBy :: (Num weight) => (symbol -> weight) -> Completions symbol -> weight
+completionWeightBy weight completions = case completionsRoute completions of
+    Indexed table _ _ ->
+        sum
+            $ genericTake (tableBound table)
+            $ drop 1
+            $ prefixedWeights weight (tableRows table) (completionPrefix completions) (tableInitial table) 0
+    Listed _ listed -> sum [termWeight weight term | (term, _, Yes) <- listed]
 
 {- | The tokens of 'nextTokens', each with the total weight of the completions
 that start with the prefix and the token. A token with completions whose
