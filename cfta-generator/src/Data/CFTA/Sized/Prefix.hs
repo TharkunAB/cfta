@@ -1185,13 +1185,28 @@ indexedIntervals completions table = (sum classTotals, unrank, interval)
     lastFirst position transition = reverse $ zip (FTA.transitionChildren transition) (childPositions position transition)
     -- The sum of the lengths of the intervals of the terms of children, for each total size from zero.
     totalsOf = foldr (convolve . uncurry weightsAt) (1 : repeat 0)
+    -- The transitions of a state with the part of the prefix at a position,
+    -- each with the sum of the lengths of the intervals of its terms for each
+    -- size from one. The map keeps them for all the integers that the
+    -- decoder reads.
+    blocks =
+        LazyMap.fromList
+            [ ( (state, position)
+              , [ (transition, map (weight (FTA.transitionSymbol transition) *) (totalsOf $ lastFirst position transition))
+                | transition <- branches rows prefix state position
+                ]
+              )
+            | state <- Map.keys rows
+            , position <- [0 .. size]
+            ]
+    blocksAt state position = LazyMap.findWithDefault [] (state, min position size) blocks
     -- The term of a state, with the part of the prefix at a position, whose
     -- interval in the class of a size holds a value, with the start and the
     -- length of its interval in the class.
-    termAt state position termSize = choose 0 $ branches rows prefix state position
+    termAt state position termSize = choose 0 $ blocksAt state position
       where
         choose _ [] _ = error "indexedIntervals: a value outside the size class"
-        choose offset (transition : rest) value
+        choose offset ((transition, totals) : rest) value
             | value < block =
                 let (children, start, width) = childrenAt (lastFirst position transition) (termSize - 1) (value `div` symbolWeight)
                  in (Term.Node symbol (reverse children), offset + symbolWeight * start, symbolWeight * width)
@@ -1199,7 +1214,7 @@ indexedIntervals completions table = (sum classTotals, unrank, interval)
           where
             symbol = FTA.transitionSymbol transition
             symbolWeight = weight symbol
-            block = symbolWeight * genericIndex (totalsOf $ lastFirst position transition) (termSize - 1)
+            block = genericIndex totals (termSize - 1)
     -- The terms of children, the last child first, whose interval in the
     -- class of a total size holds a value, with the start and the length of
     -- their interval in the class.
@@ -1229,15 +1244,8 @@ indexedIntervals completions table = (sum classTotals, unrank, interval)
             , Just (start, width) <- [childrenInterval (lastFirst position transition) (reverse children)]
             ]
       where
-        transitions = branches rows prefix state position
-        offsets =
-            scanl
-                (+)
-                0
-                [ weight (FTA.transitionSymbol transition)
-                    * genericIndex (totalsOf $ lastFirst position transition) (toInteger (length term) - 1)
-                | transition <- transitions
-                ]
+        transitions = map fst $ blocksAt state position
+        offsets = scanl (+) 0 [genericIndex totals (toInteger (length term) - 1) | (_, totals) <- blocksAt state position]
     -- The start and the length of the interval of the terms of children, the
     -- last child first, in the class of their total size.
     childrenInterval [] [] = Just (0, 1)
