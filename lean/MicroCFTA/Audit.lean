@@ -1,5 +1,6 @@
 import MicroCFTA.SourceCurrentIncomingAdaptObserved
 import MicroCFTA.SourceCurrentIncomingReadRoots
+import MicroCFTA.SourceCurrentIncomingOriginalRoot
 import MicroCFTA.SourceCurrentNativeWriteFlags
 import MicroCFTA.SourceCurrentNativeCountObserved
 import MicroCFTA.SourceCurrentNativeSlotIndex
