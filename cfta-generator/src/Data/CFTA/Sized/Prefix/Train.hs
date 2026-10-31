@@ -518,7 +518,7 @@ fitWithReport limit precision oracle counts start
     | limit <= 0 = Left InvalidStepLimit
     | not (finite precision) || precision < 0 = Left InvalidPrecision
     | any (\value -> not (finite value) || value < 0) counts = Left InvalidCounts
-    | any (not . finite) start = Left InvalidInitialWeights
+    | not (all finite start) = Left InvalidInitialWeights
     | otherwise = collect 1 $ fitTrace precision oracle counts start
   where
     collect count trace = case trace of
