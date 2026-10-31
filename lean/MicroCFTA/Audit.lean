@@ -1,4 +1,5 @@
 import MicroCFTA.SourceSizedMinimumStructuralBound
+import MicroCFTA.SourceSizedMinimumAttainment
 import MicroCFTA.SourceSizedMinimumPass
 import MicroCFTA.SourceSizedMinimumConvergence
 import MicroCFTA.SourceSizedPrefixEqualSizes
