@@ -1,3 +1,4 @@
+import MicroCFTA.SourceCurrentAllocatedNativeTerminalKnown
 import MicroCFTA.SourceEqualityRequiredAllEffects
 import MicroCFTA.SourceSizedPrefixOrdinaryIncomingInputs
 import MicroCFTA.SourceCurrentAllocatedNativeIncomingCacheKnown
