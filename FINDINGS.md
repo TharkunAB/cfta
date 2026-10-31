@@ -1,3 +1,72 @@
+# Current proof state — 2026-10-31 17:05 CET
+
+Read `lean/notes-current-first-child-native-frames.md` for the current claims and boundaries.
+Current source head: `b8a996e3ae7ad79d32bfd227bb7f803c10c253ab` on `formalize`.
+Integrated `main`: `bd5a406a6a3f84b7e3ae0906082783911509df83`.
+The two proof commits are pushed to `git@github.com:TharkunAB/cfta.git`, `refs/heads/formalize`.
+The goal remains active.
+Current control: `/tmp/mcfta-first-child-native-frame-control-20261031`.
+Prior complete archive: `lean/restart-evidence/20261031-current-call-probes-control` at `3e294d8c95c71dd78b9a37a92cd1b1bf675c0323`.
+
+The strongest general conjunction-call result remains `SourceCurrentConjunctionCallPost.call_post`.
+It derives the full actual-call `Post` from the original `Context` and resident closed query.
+It covers every budget and outcome, including failure and exhaustion.
+It retains all eight context fields, physical effects, the same inventory and external memos, and the merge and fourth-cache extensions.
+An emptiness answer of `true` excludes every satisfying term.
+An answer of `false` does not establish a witness.
+
+Two more modules now pass the production checks.
+`SourceCurrentSelectedFirstChildKnown.selected_first_child` derives the actual first staged child and a strict ordinary-node height decrease from the original parent and preparation conditions.
+It proves known successful raw cores and any optional returned cache at the actual returned caller heap.
+It retains the explicit original scheduling, `Fits`, finite ordinary stored-request, annotation and first-bucket reservation conditions.
+It does not assume an ordinary incoming child.
+It does not establish the old captured-cache property on error or absent-result branches.
+It does not cover all siblings or bound scheduling and renewal history.
+`SourceCurrentNativeDemandFrames` proves exact lookup and demand properties for arbitrary requests.
+Demand retains the table and next counter and uses the exact stored request.
+Cold node lookup publishes the original request at the original next handle when the original table misses the computed key.
+These laws do not establish the complete native step, body, finish or recursive prefix interface.
+
+Verification: seven production commands, seven passes, zero failures and 21 source snapshots.
+Both new modules pass default and strict checks.
+`Audit` passes default and strict checks at 4,822 jobs and 83,902 theorem dependencies.
+Public readback passes at 1,372 checks and 159 definitions, with three new standard-axiom reports.
+All prior 5,157,554 public bytes remain an exact prefix.
+The new suffix has 8,794 bytes and 129 lines; Root read it in full.
+All 621 prior protected sources and 835 native-input records remain byte exact.
+Each compiler command has verified 4 GiB limits before and after execution, zero swap and a five-minute limit.
+
+Keep the original native-prefix owner's permanent source-scope failure explicit.
+It read 101 of 160 lines from a third OLD original outside its two named whole originals.
+Its original 89-line candidate remains sealed as `UNCOMPILED` in that history.
+Its enforced budget check fails; its integrity-only pass does not repair the failure.
+Root's separate 94-line mathematical repair now passes isolated and production strict checks.
+The installed source only normalizes one stale status comment.
+Retain both the failure history and the later successful mathematical result.
+Never report every retained owner as a scope pass.
+
+The largest gap is sufficient original depth and common resources for the full ordered recursive prefix.
+Finite-depth execution and resource-path laws already exist and can return exhaustion.
+Local selected-step and recursive-packet `Post` restoration already exist.
+The remaining work derives their actual cache and resource premises from the original inputs.
+Preserve the same arbitrary captured sibling cache at the actual after-hook caller and query for every outcome.
+Reuse the existing all-outcome stored-child dispatch result.
+The next draft targets arbitrary captured-cache preservation through dispatch and the incoming fold.
+That draft remains outside this two-module production result.
+Keep its exact compiler status in the separate retained proof receipts.
+
+Retain the full public objective and optimized interned core.
+Retain `Mu`/`Union`/opaque values, constructor-sensitive `NodeEq`, `originalMap`, domain labels, maps, SCC/history, generic/default, `Map`/`Set`, signed/weighted inputs, aliases, renewal and writer behavior.
+Retain original admission, identity, `Fits`, annotation and reservation conditions for both workers.
+Retain size/node-count/count/table/order/rank/unrank/prefix/checkpoint APIs and Haskell correspondence.
+Conditional future certificates and a bounded ordinary-node component do not replace that objective.
+
+No new Haskell defect or fix was found in this increment.
+No Haskell source changed and no native Haskell program ran for this increment.
+Keep all earlier Haskell findings below so an external agent can use them.
+
+---
+
 # Current checkpoint: complete actual conjunction-call Post
 
 Source head: `1e574b48a1561357890d3b6c3cc6ba0518b0f088` on `formalize`.
