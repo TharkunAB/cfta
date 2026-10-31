@@ -27,6 +27,9 @@ defaults remain the same: two uniform pseudo-terms, L2 precision `1e-3`, and
 at most 2000 steps. The report does not include pseudo-terms in its corpus
 counts.
 
+The wrapper calculates the corpus counts before optimization. It does not
+retain the original corpus to calculate the dropped count after fitting.
+
 ```haskell
 case distillWithReport automaton bound corpus of
     Left problem -> print problem

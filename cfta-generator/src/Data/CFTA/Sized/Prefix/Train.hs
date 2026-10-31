@@ -144,8 +144,9 @@ distillWithReport ::
     FTA.FTA state symbol Constraint -> Int -> [Term symbol] -> Either TrainingError (DistillReport symbol)
 distillWithReport automaton bound terms = do
     (oracle, counts, retained) <- distillationInput automaton bound terms
+    let !dropped = length terms - retained
     report <- fitWithReport 2000 1e-3 oracle counts Map.empty
-    pure $ DistillReport report retained (length terms - retained)
+    pure $ DistillReport report retained dropped
 
 -- | Select the existing oracle route and prepare the regularized corpus counts.
 distillationInput ::
@@ -181,12 +182,22 @@ distillationInput automaton bound terms = do
 "Data.CFTA.Sized.Prefix": 'nextTokenWeights', 'tokenProbability' and
 'drawCompletion'. Each weight is the exponential of the log-weight as a
 'Rational' within a relative error of @10^-9@. A symbol without a log-weight
-has the weight one.
+has the weight one. 'Nothing' when an exponential is nonfinite or zero.
+Only the symbols of 'completionSymbols' are checked; other map entries are
+ignored. Use 'withWeights' for explicit zero weights. If the approximation's
+upper endpoint would overflow, the finite exponential is converted exactly.
 -}
 withLogWeights :: (Ord symbol) => LogWeights symbol -> Completions symbol -> Maybe (Completions symbol)
-withLogWeights logWeights = withWeights weight
+withLogWeights logWeights completions
+    | any invalid $ completionSymbols completions = Nothing
+    | otherwise = withWeights weight completions
   where
-    weight symbol = let value = exp (Map.findWithDefault 0 symbol logWeights) in approxRational value (value * 1e-9)
+    exponential symbol = exp $ Map.findWithDefault 0 symbol logWeights
+    invalid symbol = let value = exponential symbol in isNaN value || isInfinite value || value <= 0
+    weight symbol =
+        let value = exponential symbol
+            tolerance = value * 1e-9
+         in if isInfinite (value + tolerance) then toRational value else approxRational value tolerance
 
 {- | The log-weights of a temperature: each log-weight divided by the
 temperature. The probability of a completion is the exponential of its
