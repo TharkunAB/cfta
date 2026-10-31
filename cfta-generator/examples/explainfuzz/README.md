@@ -128,4 +128,8 @@ intervals, ordinary and weighted rank round trips, and 64 reproducible valid
 draws per event. It also checks invalid input rejection, zero-mass rejection,
 nonuniform learned grouping probability, and summed ambiguous-output mass.
 
-Build and runtime results are pending the serialized capped validation.
+The capped `check` run passed on 2026-10-31. An independent check parsed and
+executed all 45 distinct SQL statements with the schema above in an in-memory
+SQLite 3.45.1 database. These results cover the documented finite grammar
+and synthetic corpus. They do not validate arbitrary SQL or reproduce the
+paper's evaluation.
