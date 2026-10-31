@@ -2,6 +2,7 @@ import MicroCFTA.SourceSizedMinimumStructuralBound
 import MicroCFTA.SourceSizedMinimumAttainment
 import MicroCFTA.SourceSizedPrefixKnownOrdinary
 import MicroCFTA.SourceSizedPrefixComputedMinimum
+import MicroCFTA.SourceSizedPrefixKnownOrdinaryHeap
 import MicroCFTA.SourceSizedMinimumPass
 import MicroCFTA.SourceSizedMinimumConvergence
 import MicroCFTA.SourceSizedPrefixEqualSizes
