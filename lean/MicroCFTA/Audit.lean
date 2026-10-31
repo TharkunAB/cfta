@@ -1,3 +1,4 @@
+import MicroCFTA.SourceSizedPrefixEqualSizes
 import MicroCFTA.SourceSizedPrefixProductRank
 import MicroCFTA.SourceSizedPrefixProductInteger
 import MicroCFTA.SourceRankedRowsOrdinaryConstruction
