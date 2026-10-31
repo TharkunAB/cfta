@@ -35,6 +35,8 @@ another model ('mixCounts') to keep each log-weight finite.
 module Data.CFTA.Sized.Prefix.Train (
     -- * Distill a corpus
     distill,
+    distillWithReport,
+    DistillReport (..),
     withLogWeights,
     atTemperature,
 
@@ -46,12 +48,16 @@ module Data.CFTA.Sized.Prefix.Train (
     automatonOracle,
     constrainedOracle,
     Step (..),
+    FitReport (..),
+    FitStopReason (..),
+    TrainingError (..),
     expectedCounts,
     logPartition,
     meanCounts,
     mixCounts,
     logLikelihood,
     fit,
+    fitWithReport,
     logProbability,
     nextTokenDistribution,
 ) where
@@ -100,8 +106,9 @@ instance (Ord symbol, Num number) => Num (Dual symbol number) where
 {- | Fit the symbol weights of an automaton to a corpus of its terms, for the
 terms within a size bound: the maximum-likelihood weights of the module, with
 an L2 prior of precision @10^-3@ and two pseudo terms of the uniform model
-mixed into the counts. The fit is exact and convex, and it takes about a
-second for a few hundred symbols.
+mixed into the counts. The objective is concave. The optimizer uses
+'Double' and can stop before its gradient is small. 'distillWithReport'
+returns the stop reason and the number of terms retained.
 
 The oracle follows the automaton. Without constraints, unambiguous rows use
 'automatonOracle', and ambiguous rows their bottom-up deterministic rows.
@@ -116,13 +123,46 @@ distill ::
     (Ord state, Ord symbol) =>
     FTA.FTA state symbol Constraint -> Int -> [Term symbol] -> Maybe (LogWeights symbol)
 distill automaton bound terms = do
-    oracle <- chooseOracle
+    (oracle, counts, _) <- either (const Nothing) Just $ distillationInput automaton bound terms
+    pure $ stepWeights $ last $ take 2000 $ fit 1e-3 oracle counts Map.empty
+
+-- | A corpus fit, with the number of terms retained and dropped before fitting.
+data DistillReport symbol = DistillReport
+    { distillFit :: FitReport symbol
+    , distillRetained :: !Int
+    , distillDropped :: !Int
+    }
+    deriving (Show)
+
+{- | Fit with the same objective, filtering, and 2000-step limit as 'distill'.
+Return the final step, the stop reason, and the corpus counts. A finite fit
+can stop before convergence. An error reports no retained terms, an
+unsupported training route, or a numerical failure.
+-}
+distillWithReport ::
+    (Ord state, Ord symbol) =>
+    FTA.FTA state symbol Constraint -> Int -> [Term symbol] -> Either TrainingError (DistillReport symbol)
+distillWithReport automaton bound terms = do
+    (oracle, counts, retained) <- distillationInput automaton bound terms
+    report <- fitWithReport 2000 1e-3 oracle counts Map.empty
+    pure $ DistillReport report retained (length terms - retained)
+
+-- | Select the existing oracle route and prepare the regularized corpus counts.
+distillationInput ::
+    (Ord state, Ord symbol) =>
+    FTA.FTA state symbol Constraint ->
+    Int ->
+    [Term symbol] ->
+    Either TrainingError (Oracle symbol, Map.Map symbol Double, Int)
+distillationInput automaton bound terms = do
+    oracle <- maybe (Left UnsupportedTrainingLanguage) Right chooseOracle
     if null kept
-        then Nothing
+        then Left NoRetainedTerms
         else do
-            let uniform = snd $ oracleExpectations oracle Map.empty
-                counts = mixCounts (fromIntegral $ length kept) (meanCounts kept) 2 uniform
-            pure $ stepWeights $ last $ take 2000 $ fit 1e-3 oracle counts Map.empty
+            let retained = length kept
+                uniform = snd $ oracleExpectations oracle Map.empty
+                counts = mixCounts (fromIntegral retained) (meanCounts kept) 2 uniform
+            pure (oracle, counts, retained)
   where
     kept = [term | term <- terms, length (foldr (:) [] term) <= bound, FTA.accepts automaton term]
     reached = FTA.transitionTable $ FTA.trim automaton
@@ -420,6 +460,80 @@ data Step symbol = Step
     }
     deriving (Show)
 
+-- | Why the optimizer stopped. 'GradientTolerance' records a stop caused by the gradient tolerance.
+data FitStopReason
+    = GradientTolerance
+    | ObjectiveTolerance
+    | LineSearchFailed
+    | StepLimit
+    deriving (Eq, Show)
+
+-- | A finite final step, the number of steps evaluated, and the stop reason.
+data FitReport symbol = FitReport
+    { fitFinalStep :: Step symbol
+    , fitStepCount :: !Int
+    , fitStopReason :: FitStopReason
+    }
+    deriving (Show)
+
+-- | An invalid input or numerical failure of a reporting fit.
+data TrainingError
+    = InvalidStepLimit
+    | InvalidPrecision
+    | InvalidCounts
+    | InvalidInitialWeights
+    | NonFiniteStep
+    | NoRetainedTerms
+    | UnsupportedTrainingLanguage
+    deriving (Eq, Show)
+
+{- | Run at most the given number of steps with the objective of 'fit'. The
+initial point counts as one step. The limit must be positive. The precision
+and counts must be finite and nonnegative. Initial log-weights must be
+finite. The caller must supply feasible counts for the oracle's language.
+
+The report preserves the optimizer's stop reason. At the limit it does not
+start another line search or evaluate another point to discover whether the
+stream ends. A stop already known at the final step takes precedence over
+'StepLimit'. The limit bounds steps, not the oracle calls of a line search.
+Every returned step is checked for finite weights, objective, and gradient
+norm. This validation does not change the legacy 'fit' stream.
+-}
+fitWithReport ::
+    (Ord symbol) =>
+    Int -> Double -> Oracle symbol -> Map.Map symbol Double -> LogWeights symbol -> Either TrainingError (FitReport symbol)
+fitWithReport limit precision oracle counts start
+    | limit <= 0 = Left InvalidStepLimit
+    | not (finite precision) || precision < 0 = Left InvalidPrecision
+    | any (\value -> not (finite value) || value < 0) counts = Left InvalidCounts
+    | any (not . finite) start = Left InvalidInitialWeights
+    | otherwise = collect 1 $ fitTrace precision oracle counts start
+  where
+    collect count trace = case trace of
+        FitDone step reason -> report count step reason
+        FitMore step next
+            | not (finiteStep step) -> Left NonFiniteStep
+            | count >= limit -> report count step StepLimit
+            | otherwise -> case next of
+                Left reason -> report count step reason
+                Right rest -> collect (count + 1) rest
+    report count step reason
+        | finiteStep step = Right $ FitReport step count reason
+        | otherwise = Left NonFiniteStep
+
+-- | Whether a floating-point value is finite.
+finite :: Double -> Bool
+finite value = not (isNaN value || isInfinite value)
+
+-- | Whether all numerical fields of a step are finite.
+finiteStep :: Step symbol -> Bool
+finiteStep step = all finite $ stepObjective step : stepGradientNorm step : Map.elems (stepWeights step)
+
+-- | A fit step with either a known stop or an unevaluated continuation.
+data FitTrace symbol
+    = FitDone (Step symbol) FitStopReason
+    | FitMore (Step symbol) (Either FitStopReason (FitTrace symbol))
+
 {- | Maximize the mean log-likelihood of a corpus with the given mean counts,
 minus @precision / 2@ times the squared norm of the log-weights (a Gaussian
 prior with that precision), from the given log-weights. The method is L-BFGS
@@ -434,7 +548,14 @@ improves the objective by less than @1e-13@ times its size (the sums in
 search finds no step up. Take a prefix of it to bound the work.
 -}
 fit :: (Ord symbol) => Double -> Oracle symbol -> Map.Map symbol Double -> LogWeights symbol -> [Step symbol]
-fit precision oracle counts start = go [] startPoint startValue startGradient
+fit precision oracle counts start = steps $ fitTrace precision oracle counts start
+  where
+    steps (FitDone step _) = [step]
+    steps (FitMore step next) = step : either (const []) steps next
+
+-- | Share the optimizer and its lazy continuations between both public fit APIs.
+fitTrace :: (Ord symbol) => Double -> Oracle symbol -> Map.Map symbol Double -> LogWeights symbol -> FitTrace symbol
+fitTrace precision oracle counts start = go [] startPoint startValue startGradient
   where
     -- The parameters: each symbol of the language and of the corpus.
     symbols = Set.toAscList $ Set.fromList $ Map.keys counts <> oracleSymbols oracle
@@ -455,8 +576,8 @@ fit precision oracle counts start = go [] startPoint startValue startGradient
     startPoint = toVector start
     (startValue, startGradient) = lossAndGradient startPoint
     go history point value gradient
-        | norm < 1e-9 = [here]
-        | otherwise = here : maybe [] next (search 1)
+        | norm < 1e-9 = FitDone here GradientTolerance
+        | otherwise = FitMore here $ maybe (Left LineSearchFailed) (Right . next) (search 1)
       where
         here = Step (fromVector point) (negate value) norm
         norm = sqrt $ dot gradient gradient
@@ -471,7 +592,7 @@ fit precision oracle counts start = go [] startPoint startValue startGradient
             candidate = zipWith (+) point (map (* rate) direction)
         next candidate
             | value - value' < 1e-13 * max 1 (abs value) =
-                [Step (fromVector candidate) (negate value') (sqrt $ dot gradient' gradient')]
+                FitDone (Step (fromVector candidate) (negate value') (sqrt $ dot gradient' gradient')) ObjectiveTolerance
             | otherwise = go history' candidate value' gradient'
           where
             (value', gradient') = lossAndGradient candidate
