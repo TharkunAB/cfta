@@ -105,7 +105,8 @@ import Text.Read (readMaybe)
 
 import Data.CFTA.GHC.Corpus (holeContext, holeEquations, moduleNames, parserOf)
 import Data.CFTA.GHC.Fits
-import Data.CFTA.GHC.Model (FitModel (..), parseFitModel, tokenScoreShared)
+import Data.CFTA.GHC.Model (FitModel (..))
+import Data.CFTA.GHC.Preference (PreferenceModel, parsePreferenceModel, preferenceBase, tokenScoreShared)
 import Data.CFTA.GHC.Rank (Ranking (..), defaultRanking, holeState, rankedFits, rankingModel)
 import Data.CFTA.Gen.Synthesis (Program (..))
 import Data.CFTA.Gen.Synthesis.States (EdgeOrder (..), Walking (..))
@@ -316,10 +317,10 @@ holeFits options =
 {- | Read a fit model. A model that the plugin cannot read gives a warning
 and no model.
 -}
-readModel :: FilePath -> TcM (Maybe FitModel)
+readModel :: FilePath -> TcM (Maybe PreferenceModel)
 readModel path = liftIO $ do
     found <- try (Text.readFile path)
-    case either (Left . show) parseFitModel (found :: Either IOException Text) of
+    case either (Left . show) parsePreferenceModel (found :: Either IOException Text) of
         Right model -> pure (Just model)
         Left problem -> do
             hPutStrLn
@@ -330,7 +331,8 @@ readModel path = liftIO $ do
 {- | The model of a hole, and how often the module uses each name that is
 @var@ for the model. The plugin reads the module once, at its first hole.
 -}
-modelFor :: TcRef (Maybe FitModel, Map.Map Text Int, Bool) -> TypedHole -> TcM (Maybe FitModel, Map.Map Text Int)
+modelFor ::
+    TcRef (Maybe PreferenceModel, Map.Map Text Int, Bool) -> TypedHole -> TcM (Maybe PreferenceModel, Map.Map Text Int)
 modelFor reference hole = do
     (loaded, uses, read') <- readTcRef reference
     case (loaded, th_hole hole) of
@@ -341,7 +343,7 @@ modelFor reference hole = do
                 parser = parserOf flags logger
             -- How often the module uses each name that is var for the model.
             names <- liftIO (moduleNames parser file)
-            let uses' = Map.filterWithKey (\name _ -> Map.notMember name (modelCandidates model)) names
+            let uses' = Map.filterWithKey (\name _ -> Map.notMember name (modelCandidates $ preferenceBase model)) names
             writeTcRef reference (Just model, uses', True)
             pure (Just model, uses')
         (found, _) -> pure (found, uses)
@@ -355,7 +357,10 @@ is the child of another node, the root of a fit's body has the context of a
 lambda's body, @lambda/1@ and 0.
 -}
 scorerFor ::
-    TypedHole -> Map.Map Text Int -> FitModel -> TcM (Set.Set Text -> Maybe (Text, Int) -> Int -> (Text, Int) -> Double)
+    TypedHole ->
+    Map.Map Text Int ->
+    PreferenceModel ->
+    TcM (Set.Set Text -> Maybe (Text, Int) -> Int -> (Text, Int) -> Double)
 scorerFor hole uses model = case th_hole hole of
     Just Hole{hole_ty = holeType, hole_loc = location} -> do
         typ <- liftZonkM (zonkTcType holeType)
@@ -367,7 +372,13 @@ scorerFor hole uses model = case th_hole hole of
             parser = parserOf flags logger
         context <-
             liftIO
-                (holeContext parser (modelModules model) (Map.keysSet (modelCandidates model)) (unpackFS (srcSpanFile span')) start)
+                ( holeContext
+                    parser
+                    (modelModules $ preferenceBase model)
+                    (Map.keysSet (modelCandidates $ preferenceBase model))
+                    (unpackFS (srcSpanFile span'))
+                    start
+                )
         pure . tokenScoreShared model uses $ case context of
             Just found
                 | null parameters -> found

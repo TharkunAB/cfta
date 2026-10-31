@@ -13,6 +13,7 @@ library), which changes between major versions; the bound is
 | Module | Purpose |
 | --- | --- |
 | `Data.CFTA.GHC.Fits` | The entry point: `streamFits` and `synthesizeFits` for GHC's `TypedHole`, `Candidate`s, and a goal type, and `holeFor` for a driver without a typechecked hole. |
+| `Data.CFTA.GHC.Preference` | Learn corrections to corpus scores from preferred programs and fixed pools of GHC-checked alternatives. See [Train preferences between valid hole fits](docs/hole-fit-preferences.md). |
 | `Data.CFTA.GHC.HoleFits` | A typed-hole plugin: fits of several components after GHC's own valid hole fits. |
 | `Data.CFTA.GHC.Erase` | GHC types as Hectare's types, curried or first-order, with the class contexts erased. |
 | `Data.CFTA.GHC.Internal.Check` | One step of a program walk in `TcM` on the machinery of GHC's hole fits, and freeze and restore of unification variables; exposed for integration, not covered by the PVP contract. |
@@ -125,6 +126,8 @@ The options apply to each hole:
 | `-fplugin-opt=Data.CFTA.GHC.HoleFits:fits=N` | 5 | The number of fits. |
 | `-fplugin-opt=Data.CFTA.GHC.HoleFits:seconds=S` | 1 | The time of the search. |
 | `-fplugin-opt=Data.CFTA.GHC.HoleFits:programs=N` | none | The number of Hectare's programs. |
+| `-fplugin-opt=Data.CFTA.GHC.HoleFits:model=FILE` | none | Score fits with a corpus or trained preference file. See [the preference guide](docs/hole-fit-preferences.md). |
+| `-fplugin-opt=Data.CFTA.GHC.HoleFits:model-search=best-first` | rerank a pool | Search in score order with mode (b). |
 | `-fplugin-opt=Data.CFTA.GHC.HoleFits:first-order` | off | Hectare's first-order types (see Limits), in place of its curried types. |
 | `-fplugin-opt=Data.CFTA.GHC.HoleFits:only-defaulted` | off | A variable of kind `* -> *` that a fit does not determine takes only its default, the list, and the check has `ExtendedDefaultRules`. |
 | `-fplugin-opt=Data.CFTA.GHC.HoleFits:no-type-domains` | off | A variable of kind `Type` with classes takes any type. By default it takes only the types in scope at which the instances of those classes can hold, following the instance contexts, so `maximum` does not have a goal `a` or `(a, Int)` without `Ord a`. |

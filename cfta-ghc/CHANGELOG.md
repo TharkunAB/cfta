@@ -2,6 +2,13 @@
 
 ## 0.1.0.0 - Unreleased
 
+- `Data.CFTA.GHC.Preference` fits conditional scores over supplied program pools.
+  `cfta-fit-preferences` writes these scores with the baseline corpus model and
+  training groups. The plugin reads the file through its existing `model` option.
+  The evaluation command rejects groups that occur in the training record.
+- `Model.tokenScoreSharedWith` shares token classification with an additive
+  log-score adjustment. Preference scoring uses this function.
+
 Before release, the package was called `microcfta-ghc`.
 
 Initial version, for GHC 9.14 only (`ghc >=9.14 && <9.15`).

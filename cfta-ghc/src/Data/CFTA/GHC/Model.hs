@@ -58,6 +58,7 @@ module Data.CFTA.GHC.Model (
     tokenScore,
     tokenScoreAt,
     tokenScoreShared,
+    tokenScoreSharedWith,
     symbolOf,
     printFitModel,
     parseFitModel,
@@ -153,11 +154,28 @@ back-off). Without shares, a name that is @var@ adds nothing.
 -}
 tokenScoreShared ::
     FitModel -> Map Text Int -> (Text, Int) -> Set.Set Text -> Maybe (Text, Int) -> Int -> (Text, Int) -> Double
-tokenScoreShared model uses (rootParent, rootPosition) = \locals parent position token ->
+tokenScoreShared = tokenScoreSharedWith (\_ _ _ -> 0)
+
+{- | 'tokenScoreShared' with an additive log-score adjustment. The callback
+receives the classified parent symbol, resolved child position, and classified
+token symbol. Classification and corpus totals are shared with the base score.
+Apply the function through the model, module counts, and root context once.
+-}
+tokenScoreSharedWith ::
+    (Text -> Int -> Text -> Double) ->
+    FitModel ->
+    Map Text Int ->
+    (Text, Int) ->
+    Set.Set Text ->
+    Maybe (Text, Int) ->
+    Int ->
+    (Text, Int) ->
+    Double
+tokenScoreSharedWith adjustment model uses (rootParent, rootPosition) = \locals parent position token ->
     let symbol = symbolOf model locals token
         above = maybe rootParent (symbolOf model locals) parent
         at = maybe rootPosition (const position) parent
-     in log (probability above at symbol) + shareOf symbol (fst token)
+     in log (probability above at symbol) + shareOf symbol (fst token) + adjustment above at symbol
   where
     usesTotal = fromIntegral (sum (Map.elems uses)) :: Double
     namesTotal = fromIntegral (Map.size uses) :: Double
