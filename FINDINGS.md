@@ -1,3 +1,64 @@
+[2026-10-31] Current checkpoint: actual successful-child Post and remaining staged values.
+
+Source `432451cd281765c112dd8a172088474cb635e812` is pushed to `formalize`.
+Prior complete evidence is `c445faefa9f4e18543cdedf135c025b296a72f53`.
+Read `lean/notes-current-first-child-post.md` first. The full original-input goal remains ACTIVE.
+
+Five new modules contain 556 lines and six laws. The enabled-check law covers
+all outcomes with entry inventory. Incoming .ok, terminal singleton continuation
+and direct/selected child singleton continuation produce full Post and an exact
+saved query memo at the literal returned Caller. The latter laws produce an
+inventory and final memos; they do not fix the entry inventory.
+Every ORIGINAL remaining staged child stays Available and closed with the same
+encoded handle and exact lookup value. The tail is from the actual preparation.
+The selected laws require a staged split and actual continuing success.
+They do not prove nonempty staging, success or sufficient fuel.
+All original Context/resource/annotation/reservation/source gates stay explicit.
+No future Context/Post/Packet/trace/callback/resource supplier is added.
+No ordinary incoming gate or public proof-only Node equality gate is added.
+
+Production: 13 commands, 13 passes, zero failures, 78 snapshots.
+Default/strict each pass for all five modules and Audit.
+Audit: 4832 jobs and 83976 theorem dependencies.
+Public: 1385 checks, 159 definition readbacks, six new standard axiom reports.
+All prior 5187699 bytes are an exact prefix of 5210300 bytes.
+New 22601 bytes/333 lines equal the reviewed isolated output exactly.
+Each command retains serial five-minute/4 GiB max+high/zero-swap checks before/after.
+All 628 old protected and 835 native records stay exact; protected total 633.
+Audit has five new imports and the exact full old body.
+Independent source, isolated-public, normal-production and document assessment is CLEAR.
+Isolated history retains all 27 actual commands, 15 passes, 12 failures and 162 snapshots.
+The failed initial seal/helper and complete corrected v2 provider stay distinct.
+
+Separate NEXT native flags/count primitives have 108 lines and three strict/public
+passes. Their original entry gates and exact waiting deltas do not yet give full
+fresh CacheValid. All four checks, one import-layout failure and 24 snapshots stay.
+
+Reuse existing chosen-resource ChildBoundedResources full fresh-cache validity,
+initial_ranges, observed_resources, Reserved.after_prefix, selected-step complete
+and recursive captured_post. Do not duplicate them or call them absent.
+Full Packet needs ORIGINAL pending-reference/order/metadata facts. Keep the fresh
+next-field cache distinct from the SAME old captured cache restored across alternatives.
+Derive actual next-field/outer-alternative invariants and the original remaining schedule.
+A first-bucket reservation does not pay a nonempty remainder.
+
+Largest gap: sufficient ORIGINAL D/progress and COMMON original resources for
+BOTH workers through the intended ordered requested prefix and configured stops.
+Finite-D laws can exhaust. Keep Mu/Union/opaque/originalMap/domain/maps/SCC/history,
+constructor-sensitive NodeEq, generic/default/Map/Set, signed/weighted and aliases/
+renewal/writer in scope. Complete size/node-count/count/table/order/rank/unrank/
+prefix/checkpoint APIs and Map/Set prefixes, full order/coverage and Haskell correspondence.
+The full conjunction-call Post still holds for every budget and outcome.
+True empty excludes satisfying terms; false does not produce a positive witness.
+
+The old native 101/160 OLD scope failure is permanent. Its original 89-line
+candidate stays sealed UNCOMPILED; Root 94-line mathematical PASS is separate.
+Retain every whole provider, unknown field, failure, version and seal.
+No Haskell defect/edit/fix/product run occurred. Record future Haskell defects
+or fixes in root FINDINGS so the external agent can act on them.
+
+The full previous document follows unchanged.
+
 [2026-10-31] Current checkpoint: same captured cache at actual first-child returns.
 
 Source `f3deac04c762979ef47c19b68bb5b02d062fa2cc` is pushed to `formalize`.
