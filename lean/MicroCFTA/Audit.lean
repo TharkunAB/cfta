@@ -1,3 +1,4 @@
+import MicroCFTA.SourceSizedPrefixOrdinarySlotCreation
 import MicroCFTA.SourceSizedMinimumStructuralBound
 import MicroCFTA.SourceSizedMinimumAttainment
 import MicroCFTA.SourceSizedPrefixKnownOrdinary
