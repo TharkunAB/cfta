@@ -1,3 +1,4 @@
+import MicroCFTA.SourceEqualityProjectionWorkerEffects
 import MicroCFTA.SourceCurrentAllocatedNativeCachedFoldKnown
 import MicroCFTA.SourceEqualityProjectionWorkerPhysical
 import MicroCFTA.SourceCurrentAllocatedNativeIncomingOldKnown
