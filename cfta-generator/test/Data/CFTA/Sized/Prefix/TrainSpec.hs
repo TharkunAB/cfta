@@ -10,7 +10,15 @@ import Test.Hspec (Spec, describe, it, shouldBe, shouldSatisfy)
 import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint, equalityConstraint, noConstraint)
 import qualified Data.CFTA.Equality as ECTA
-import Data.CFTA.Sized.Prefix (Completions, Token, afterToken, completionTerms, prefixCompletions)
+import Data.CFTA.Sized.Prefix (
+    Completions,
+    Token,
+    afterToken,
+    completionTerms,
+    completionWeight,
+    prefixCompletions,
+    withWeights,
+ )
 import qualified Data.CFTA.Sized.Prefix.Model as Model
 import Data.CFTA.Sized.Prefix.Parents (Reach (..))
 import Data.CFTA.Sized.Prefix.QuickCheck (sampleWeighted)
@@ -23,6 +31,24 @@ import qualified Test.QuickCheck.Random as QCRandom
 
 spec :: Spec
 spec = describe "Data.CFTA.Sized.Prefix.Train" $ do
+    it "rejects invalid exponential weights before they can become zero rational weights" $ do
+        let completions = completionsOf 1 expressions
+        forM_ [0 / 0, 1 / 0, -1 / 0, 1000, -1000] $ \weight ->
+            isNothing (withLogWeights (Map.singleton "x" weight) completions) `shouldBe` True
+        completionWeight <$> withLogWeights (Map.singleton "x" (log 2)) completions `shouldBe` Just 3
+        completionWeight <$> withWeights (\symbol -> if symbol == "x" then 0 else 1) completions `shouldBe` Just 1
+    it "keeps default weights and ignores unused log-weight entries" $ do
+        let completions = completionsOf 1 expressions
+        completionWeight <$> withLogWeights Map.empty completions `shouldBe` Just 2
+        completionWeight <$> withLogWeights (Map.singleton "unused" (0 / 0)) completions `shouldBe` Just 2
+    it "keeps a finite positive exponential when its approximation endpoint would overflow" $ do
+        let singleton = FTA.fromTerms [Term.Node "x" []]
+            completions = either (error . show) id $ prefixCompletions 1 singleton
+            weight = log (encodeFloat (2 ^ (53 :: Int) - 1) (1024 - 53) :: Double)
+            value = exp weight
+        value `shouldSatisfy` (\x -> x > 0 && not (isInfinite x))
+        value + value * 1e-9 `shouldSatisfy` isInfinite
+        completionWeight <$> withLogWeights (Map.singleton "x" weight) completions `shouldBe` Just (toRational value)
     it "gives the expected counts of brute force, exactly, from the count table and from a listing" $
         forM_ [expressions, doubles] $ \automaton -> do
             let completions = completionsOf 6 automaton
@@ -136,7 +162,10 @@ spec = describe "Data.CFTA.Sized.Prefix.Train" $ do
                     total = sum [probability ^ (2 :: Int) | (_, probability) <- best]
                 forM_ best $ \(term, probability) ->
                     (reach, term, close (cooled Map.! term) (probability ^ (2 :: Int) / total)) `shouldBe` (reach, term, True)
-                (reach, isNothing $ Model.withTemperature 0 model) `shouldBe` (reach, True)
+                forM_ [0, -1, 0 / 0, 1 / 0, -1 / 0] $ \temperature ->
+                    (reach, isNothing $ Model.withTemperature temperature model) `shouldBe` (reach, True)
+                let restored = fromJust $ Model.withTemperature 1 $ fromJust $ Model.withTemperature 0.5 model
+                everything restored `shouldBe` best
         it "samples completions of the prefix, and no completion of a prefix outside the language" $
             forM_ models $ \(reach, model) -> do
                 forM_ [[], [("add", 2)], [("add", 2), ("neg", 1)]] $ \prefix -> do
