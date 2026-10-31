@@ -1,3 +1,4 @@
+import MicroCFTA.SourceCurrentConjunctionProjectionWarmEffects
 import MicroCFTA.SourceCurrentConjunctionRowsExposureFields
 import MicroCFTA.SourceCurrentConjunctionCallGlobals
 import MicroCFTA.SourceCurrentConjunctionRowsEqualityEffects
