@@ -141,7 +141,7 @@ train :: [Term String] -> Either String Learned
 train examples
     | null examples = Left "The training corpus is empty."
     | any ((> bound) . length . foldr (:) []) examples = Left "A training term exceeds the node bound."
-    | any (not . FTA.accepts (grammar AnyQuery)) examples = Left "A training term is outside the query grammar."
+    | not (all (FTA.accepts (grammar AnyQuery)) examples) = Left "A training term is outside the query grammar."
     | otherwise = do
         labelled <- note "The query grammar cannot be context-labelled." $ withParents reach rootContext $ grammar AnyQuery
         weights <- note "The bounded fit failed." $ Train.distill labelled bound $ map (labelParents reach rootContext) examples
