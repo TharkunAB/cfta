@@ -1,3 +1,61 @@
+# Current state: fold cache and physical effects (2026-10-31)
+
+The full original-input system proof remains open. Work continues.
+Current checked source: `30d76d6909780d9bb7a89a6153e4591138efb768`.
+Six source commits start at `77b9ff158ae8bc3889b34fc983f5d6bb346733f0`.
+Check the live branch and archive record before a publication claim.
+
+Read `lean/notes-current-fold-cache-and-physical-effects.md` first.
+It states the full objective, exact current gates, validation and missing work.
+
+Actual raw Fold preserves Known for every successful Core row at the reached heap.
+Actual CachedFold preserves Known for every Some cache and its raw fallback rows.
+Both source-list inductions and all dispatch admissions are internal.
+Actual singleton endpoints derive Post, query identity, target, Fits, annotated heap,
+Stored, same-cap Known and remaining incoming Room from the current reservation.
+They preserve the original incoming value's availability, including cache none.
+The actual source builder must still certify incoming domain, closedness and height.
+Every native query endpoint preserves OLD cache Known, including failed/blocked.
+Whole incoming OLD cache Known excludes exactly the failed physical-check error.
+Actual readAll/union/head preserve physical lookups. Actual project/forest preserve
+semantic heap, coverage, growth and history at all outcomes, including Mu/Union.
+Completed projected values remain available and closed. Full require/call lifting
+remains open. Known concerns pending Some handles, not every slot or all metadata.
+
+Full Audit default/strict PASS4796 jobs/83564 theorem dependency checks.
+Public PASS1315 checks/159 prints;13 new standard-only axiom reports.
+Root read all991 final source and440 new public lines (30883B).
+The old5054923B public output remains an exact prefix of the new5085806B output.
+All591 old protected sources and835 native inputs remain exact.
+Audit only adds six imports. All24 compiler commands/130 snapshots remain:
+16pass8retained repaired failures. Every command verified effective4GiB/high and
+zero swap before/after execution, with a five-minute heavy-management time cap.
+No Haskell source edit or Haskell/native product execution occurred.
+No new Haskell defect/fix was established. Record every later Haskell fix in FINDINGS.
+
+Next: lift actual require/class/rows/call effects to the failed-check endpoint.
+Compose terminal/cache adapters, including the Empty target write on raw empty.
+Derive the actual builder's incoming ordinary-domain/common-cap facts.
+Then close alias/renewal/terminal and positive-depth original-input support for BOTH
+workers, followed by sufficient ORIGINAL depth/resources for every branch.
+Preserve generic Mu/Union/opaque, original Map/domain/order, signed/Set adapters,
+exact node-count/size order, rank/unrank, configured order/stops, intended accepted
+public prefix/resources, Prefix/table/count/checkpoint and Haskell/host correspondence.
+A local height cap, finite path carrier or supplied future witness does not close this.
+Future require/terminal-cache drafts are outside the six checked modules.
+
+Control: /tmp/mcfta-fold-cache-control-20261031
+Publication: /tmp/mcfta-fold-cache-packaging-20261031
+Restart target: lean/restart-evidence/20261031-fold-cache-control
+Prior complete archive: lean/restart-evidence/20261031-whole-incoming-control
+Prior published head:533d1c0ec90420e89241e2cbfe82846dda293bc3.
+Standing authorization: ordinary pushes to origin formalize; no main/force push.
+Root owns compilers/native execution/Git/network/board/production/packaging.
+Use serial4GiB/zero-swap/five-minute heavy-management jobs. Retain every failure.
+All previous bodies follow unchanged. Their statuses apply to their recorded versions.
+
+---
+
 # Current state: whole-cache incoming and dispatch (2026-10-31)
 
 The full original-input system proof remains open. Work continues.
