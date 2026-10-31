@@ -1,3 +1,54 @@
+# Current state: native bindings and constraint startup (2026-10-31)
+
+The full original-input proof remains open. Work continues.
+Current checked source: `2b3ca454b35cd4ea343dd498fc167e1f43b81a6c`.
+Source commits start at `783e616aca96e135f1b0d8d150fe2dd28b05f077`.
+All seven source changes have local commits. Check live publication before a push.
+
+Read `lean/notes-current-native-bindings-and-constraint-startup.md` first.
+It records the exact current contracts, gates, validation and missing work.
+
+Strongest new result: actual bounded startup derives both the minimum table and
+full CURRENT Nat-constraint numeric filter. Accepted nodes pass that filter.
+Actual ordinary queries return ordinary nodes bounded by both operand heights.
+Actual None/child slot creation preserves known handles and the shared cap.
+Literal canonical parent rows give strict child-height decrease.
+Actual native Some/Some incoming writes are classified for checkEmpty=false.
+The signed codec preserves all index/path identities and bounded lookup.
+Full signed normalization/Set/Haskell correspondence remains open.
+
+Full Audit default/strict PASS4785 jobs/83418 theorem dependency checks.
+Public PASS1295 checks/155 prints;19 new standard-only axiom reports.
+Root reviewed all699 final source and433 new public lines (31009B).
+The old4997063 public bytes remain an exact prefix. All579 old protected sources
+and835 native inputs remain exact; Audit only adds imports.
+All26 compiler attempts/168 snapshots remain:18pass8repairedfailures.
+Every dispatched job had effective4GiB/high,zero swap,five-minute caps.
+No Haskell source edit or Haskell/native product execution occurred.
+No new Haskell defect/fix was established. Record every later Haskell fix in FINDINGS.
+
+Next: whole returned-cache Known through actual native writes; source-only
+checkEmpty/None/canonical-origin drafts need separate kernel checks.
+Then close sufficient ORIGINAL nested-worker depth/global progress for BOTH workers.
+Keep terminal/alias/renewal work and captured sibling restoration explicit.
+Do not replace original Map/domain/order, generic Mu/Union/opaque, exact node-count,
+configured order/stops, intended public prefix/resources, rank/unrank, Prefix,
+table/count/checkpoint or Haskell/host correspondence with a local admission gate.
+A node-height cap or finite path carrier is not a whole-worker resource bound.
+
+Control: /tmp/mcfta-native-binding-and-constraint-control-20261031
+Publication: /tmp/mcfta-native-binding-and-constraint-packaging-20261031
+Restart target: lean/restart-evidence/20261031-native-binding-and-constraint-control
+Read its manifest and live branch before a publication claim.
+Prior complete archive: lean/restart-evidence/20261031-minimum-meaning-control
+Prior published head:e553a4f91614f0d5b2ff8808748a9d2306c3d967.
+Standing authorization: ordinary pushes to origin formalize; no main/force push.
+Root owns compilers/native execution/Git/network/board/production/packaging.
+Use serial4GiB/zero-swap/five-minute heavy-management jobs. Retain every failure.
+All previous handoff/findings/prompt bodies follow unchanged.
+
+---
+
 ## Current structural minima and known ordinary handles (2026-10-31 05:20 CET)
 
 The full public Haskell system theorem remains open.
