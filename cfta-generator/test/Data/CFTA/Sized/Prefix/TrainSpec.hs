@@ -101,6 +101,9 @@ spec = describe "Data.CFTA.Sized.Prefix.Train" $ do
                 generator = fromJust $ sampleWeighted (fromJust $ withLogWeights teacher completions)
                 samples = QCGen.unGen (QC.vectorOf 2000 generator) (QCRandom.mkQCGen 7) 30
                 fitted = fromJust $ distill automaton 7 samples
+                report = either (error . show) id $ distillWithReport automaton 7 samples
+            stepWeights (fitFinalStep $ distillFit report) `shouldBe` fitted
+            (distillRetained report, distillDropped report) `shouldBe` (2000, 0)
             forM_ [[], [("add", 2)], [("neg", 1)]] $ \prefix -> do
                 let after = foldl (\current token -> fromJust $ afterToken current token) completions prefix
                 forM_ (zip (nextTokenDistribution teacher after) (nextTokenDistribution fitted after)) $
@@ -126,6 +129,63 @@ spec = describe "Data.CFTA.Sized.Prefix.Train" $ do
         forM_ ["x", "y", "neg", "add"] $ \symbol ->
             abs (difference symbol - scale * arityLess symbol) `shouldSatisfy` (< 1e-5)
 
+    describe "training reports" $ do
+        it "reports the retained corpus and preserves the default fit" $ do
+            let retained = [Term.Node "x" [], Term.Node "y" []]
+                terms = retained <> [Term.Node "neg" [Term.Node "x" []], Term.Node "outside" []]
+                report = either (error . show) id $ distillWithReport expressions 1 terms
+            (distillRetained report, distillDropped report) `shouldBe` (2, 2)
+            Just (stepWeights $ fitFinalStep $ distillFit report) `shouldBe` distill expressions 1 retained
+        it "distinguishes an empty retained corpus from an unsupported training language" $ do
+            fmap distillRetained (distillWithReport expressions 1 []) `shouldBe` Left NoRetainedTerms
+            fmap distillRetained (distillWithReport expressions 1 [Term.Node "outside" []]) `shouldBe` Left NoRetainedTerms
+            let deep = equalityConstraint $ ECTA.mkEqConstraints [[ECTA.path [0, 0], ECTA.path [1, 0]]]
+                unsupported = FTA.mapConstraints (const deep) expressions
+            fmap distillRetained (distillWithReport unsupported 5 corpus) `shouldBe` Left UnsupportedTrainingLanguage
+        it "does not start a line search after the step budget is spent" $ do
+            let oracle = Oracle ["x"] (error "the step limit must not evaluate trial points") (const (0, Map.empty))
+                report = either (error . show) id $ fitWithReport 1 0 oracle (Map.singleton "x" 1) Map.empty
+            (fitStepCount report, fitStopReason report) `shouldBe` (1, StepLimit)
+            stepGradientNorm (fitFinalStep report) `shouldBe` 1
+            length (take 1 $ fit 0 oracle (Map.singleton "x" 1) Map.empty) `shouldBe` 1
+        it "reports a known gradient stop at the step limit" $ do
+            let oracle = Oracle ["x"] (error "a stationary point needs no line search") (const (0, Map.singleton "x" 1))
+                report = either (error . show) id $ fitWithReport 1 0 oracle (Map.singleton "x" 1) Map.empty
+            (fitStepCount report, fitStopReason report) `shouldBe` (1, GradientTolerance)
+        it "reports a small objective change without calling it a gradient stop" $ do
+            let report = either (error . show) id $ fitWithReport 2 0 (bernoulliOracle 1e12) (Map.singleton "x" 0.8) Map.empty
+            (fitStepCount report, fitStopReason report) `shouldBe` (2, ObjectiveTolerance)
+            stepGradientNorm (fitFinalStep report) `shouldSatisfy` (> 1e-3)
+        it "reports a failed line search without adding a step" $ do
+            let oracle = Oracle ["x"] (const 2) (const (0, Map.empty))
+                report = either (error . show) id $ fitWithReport 2 0 oracle (Map.singleton "x" 1) Map.empty
+            (fitStepCount report, fitStopReason report) `shouldBe` (1, LineSearchFailed)
+            stepWeights (fitFinalStep report) `shouldBe` Map.singleton "x" 0
+        it "preserves every bounded prefix of the legacy fit" $ do
+            let oracle = bernoulliOracle 0
+                counts = Map.singleton "x" 0.75
+                legacy = fit 0 oracle counts Map.empty
+            forM_ [1, 2, 3, 100] $ \limit -> do
+                let expected = take limit legacy
+                    report = either (error . show) id $ fitWithReport limit 0 oracle counts Map.empty
+                    actual = fitFinalStep report
+                fitStepCount report `shouldBe` length expected
+                stepWeights actual `shouldBe` stepWeights (last expected)
+                stepObjective actual `shouldBe` stepObjective (last expected)
+                stepGradientNorm actual `shouldBe` stepGradientNorm (last expected)
+            abs (Map.findWithDefault 0 "x" (stepWeights $ last legacy) - log 3) `shouldSatisfy` (< 1e-6)
+        it "rejects invalid reporting inputs before evaluating the oracle" $ do
+            let oracle = error "invalid inputs must not evaluate the oracle" :: Oracle String
+                report limit precision counts start = fmap fitStepCount $ fitWithReport limit precision oracle counts start
+            forM_ [0, -1] $ \limit -> report limit 0 Map.empty Map.empty `shouldBe` Left InvalidStepLimit
+            forM_ [-1, 0 / 0, 1 / 0] $ \precision -> report 1 precision Map.empty Map.empty `shouldBe` Left InvalidPrecision
+            forM_ [-1, 0 / 0, 1 / 0] $ \count -> report 1 0 (Map.singleton "x" count) Map.empty `shouldBe` Left InvalidCounts
+            forM_ [0 / 0, 1 / 0] $ \weight -> report 1 0 Map.empty (Map.singleton "x" weight) `shouldBe` Left InvalidInitialWeights
+        it "rejects non-finite steps instead of returning a successful report" $
+            forM_ [(0 / 0, Map.empty), (1 / 0, Map.empty), (0, Map.singleton "x" (1 / 0))] $ \result -> do
+                let oracle = Oracle ["x"] (error "a non-finite step must stop before the line search") (const result)
+                fmap fitStepCount (fitWithReport 2 0 oracle Map.empty Map.empty) `shouldBe` Left NonFiniteStep
+
     describe "Model" $ do
         let models =
                 [ (reach, fromJust $ Model.train reach expressions 5 corpus)
@@ -133,6 +193,23 @@ spec = describe "Data.CFTA.Sized.Prefix.Train" $ do
                 ]
             everything model = fromJust $ Model.bestTerms 100000 model []
             close left right = abs (left - right) < 1e-7
+        it "returns the same model queries with an inspectable training report" $
+            forM_ models $ \(reach, model) -> do
+                let (reported, report) = either (error . show) id $ Model.trainWithReport reach expressions 5 corpus
+                everything reported `shouldBe` everything model
+                Model.nextTokenProbabilities reported [] `shouldBe` Model.nextTokenProbabilities model []
+                (distillRetained report, distillDropped report) `shouldBe` (length corpus, 0)
+                fitStepCount (distillFit report) `shouldSatisfy` (\count -> count > 0 && count <= 2000)
+        it "reports dropped terms without requiring callers to label the corpus" $ do
+            let terms = [Term.Node "x" [], Term.Node "y" [], Term.Node "neg" [Term.Node "x" []], Term.Node "outside" []]
+                (model, report) = either (error . show) id $ Model.trainWithReport (Reach 1 True) expressions 1 terms
+            (distillRetained report, distillDropped report) `shouldBe` (2, 2)
+            Map.fromList (everything model) `shouldBe` Map.fromList [(Term.Node "x" [], 0.5), (Term.Node "y" [], 0.5)]
+        it "reports an empty retained corpus or unsupported context labelling" $ do
+            let outcome automaton terms = fmap (distillRetained . snd) $ Model.trainWithReport (Reach 1 True) automaton 5 terms
+            outcome expressions [] `shouldBe` Left NoRetainedTerms
+            outcome expressions [Term.Node "outside" []] `shouldBe` Left NoRetainedTerms
+            outcome doubles corpus `shouldBe` Left UnsupportedTrainingLanguage
         it "gives each term within the bound a probability, the probabilities sum to one, and the most probable come first" $
             forM_ models $ \(reach, model) -> do
                 let best = everything model
@@ -172,6 +249,14 @@ spec = describe "Data.CFTA.Sized.Prefix.Train" $ do
                     let drawn = QCGen.unGen (QC.vectorOf 50 $ fromJust $ Model.sampleTerm model prefix) (QCRandom.mkQCGen 3) 30
                     (reach, prefix, filter (not . isPrefixOf prefix . preorder) drawn) `shouldBe` (reach, prefix, [])
                 (reach, isNothing $ Model.sampleTerm model [("x", 0), ("y", 0)]) `shouldBe` (reach, True)
+
+-- | The log partition and expected count of one Bernoulli feature, with a constant offset.
+bernoulliOracle :: Double -> Oracle String
+bernoulliOracle offset = Oracle ["x"] partition expectations
+  where
+    weight point = exp $ Map.findWithDefault 0 "x" point
+    partition point = offset + log (1 + weight point)
+    expectations point = (partition point, Map.singleton "x" (weight point / (1 + weight point)))
 
 -- | Expressions: x, y, neg(e), add(e, e).
 expressions :: FTA.FTA String String Constraint

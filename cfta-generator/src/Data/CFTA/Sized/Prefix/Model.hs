@@ -25,6 +25,7 @@ The queries take a prefix of plain tokens and are exact for the model:
 module Data.CFTA.Sized.Prefix.Model (
     Model,
     train,
+    trainWithReport,
     withTemperature,
     nextTokenProbabilities,
     sampleTerm,
@@ -56,9 +57,14 @@ import Data.CFTA.Sized.Prefix.Parents (
  )
 import Data.CFTA.Sized.Prefix.QuickCheck (sampleWeighted)
 import Data.CFTA.Sized.Prefix.Train (
+    DistillReport (..),
+    FitReport (..),
     LogWeights,
+    Step (..),
+    TrainingError (..),
     atTemperature,
     distill,
+    distillWithReport,
     logProbability,
     nextTokenDistribution,
     withLogWeights,
@@ -88,6 +94,34 @@ train reach automaton bound terms = do
     completions <- either (const Nothing) Just $ prefixCompletions (Size $ toInteger bound) labelled
     weighted <- withLogWeights logWeights completions
     Just $ Model reach logWeights 1 weighted
+
+{- | Fit the same model as 'train', with the optimizer's stop reason and
+retained and dropped corpus counts. The report's weights use context-labelled
+symbols; model queries still use plain symbols. A finite fit can stop before
+convergence. 'UnrepresentableWeights' means that its log-weights cannot be
+converted to finite positive sampling potentials. Other errors come from
+context labelling or 'distillWithReport'.
+-}
+trainWithReport ::
+    (Ord state, Ord symbol) =>
+    Reach ->
+    FTA.FTA state symbol Constraint ->
+    Int ->
+    [Term symbol] ->
+    Either TrainingError (Model symbol, DistillReport (Parented symbol))
+trainWithReport reach automaton bound terms = do
+    labelled <- maybe (Left UnsupportedTrainingLanguage) Right $ withParents reach rootContext automaton
+    report <- distillWithReport labelled bound (map (labelParents reach rootContext) terms)
+    let logWeights = stepWeights $ fitFinalStep $ distillFit report
+    if any unrepresentable logWeights
+        then Left UnrepresentableWeights
+        else do
+            completions <-
+                either (const $ Left UnsupportedTrainingLanguage) Right $ prefixCompletions (Size $ toInteger bound) labelled
+            weighted <- maybe (Left UnrepresentableWeights) Right $ withLogWeights logWeights completions
+            pure (Model reach logWeights 1 weighted, report)
+  where
+    unrepresentable logWeight = let value = exp logWeight in isNaN value || isInfinite value || value <= 0
 
 {- | The model at a temperature of whole terms: the probability of each term to
 the power one over the temperature, renormalized ('atTemperature'). The
