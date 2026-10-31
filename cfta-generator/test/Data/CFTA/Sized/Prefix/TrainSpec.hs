@@ -43,7 +43,7 @@ spec = describe "Data.CFTA.Sized.Prefix.Train" $ do
         completionWeight <$> withLogWeights (Map.singleton "unused" (0 / 0)) completions `shouldBe` Just 2
     it "keeps a finite positive exponential when its approximation endpoint would overflow" $ do
         let singleton = FTA.fromTerms [Term.Node "x" []]
-            completions = completionsOf 1 singleton
+            completions = either (error . show) id $ prefixCompletions 1 singleton
             weight = log (encodeFloat (2 ^ (53 :: Int) - 1) (1024 - 53) :: Double)
             value = exp weight
         value `shouldSatisfy` (\x -> x > 0 && not (isInfinite x))
