@@ -1,3 +1,61 @@
+# Current: size-product rows produce ordinary native values
+
+Updated: 2026-10-31 03:32 CET. Branch `formalize`. Status: progress.
+The complete original-input proof remains open. Continue the full objective.
+Read `lean/notes-current-sized-product-ordinary.md` for the current statement.
+This prefix supersedes older status summaries below. Preserve their full bodies.
+
+Four checked modules derive original size-product child-rank decrease, exact
+ordered Integer/Nat split correspondence under an embedded minimum table,
+ranked ordinary constructor completion and the bounded product instance.
+`SourceSizedPrefixProductOrdinary.closed` derives actual fresh `build.done`,
+heap Facts, Available, no free names, recursive finite ordinary Node structure
+and height at most `bound.toNat + 1`. Unfolding fuel is `bound.toNat + 2`.
+The caller supplies original rows, minimum table, numeric filter, root and bound.
+The theorem derives its rank, completion and native domain witnesses.
+
+The minimum table and numeric equality filter remain formal input parameters.
+Child budgets are nonnegative and strictly smaller than their parent budget.
+Each active row class has positive rank. Child budgets need not all be positive.
+The syntax preserves row/child order and full constraints. Native makeNode
+filters and canonicalizes, so final native row-list order is a separate issue.
+The construction unfolds a ranked DAG. Literal SCC/memo import is still open.
+Syntax stability above a rank does not establish worker-depth adequacy.
+
+The existing paired execution/resource/path laws remain checked at each supplied
+finite depth. Their finite carrier contains constraint/SCS and projected equality
+paths with suffixes. Numeric forecasts can depend on depth. The carrier does not
+bound term depth or work traces. Current Packet/Fits/heap and other gates remain.
+Safe slot hints fall back to the offered candidate. Explicit stop rules determine
+all-stopped rejection. Stopped metadata is not automatically an accepted term.
+
+Biggest gaps: actual minimum/filter/reachable/SCC/memo/native correspondence;
+sufficient original depth and global progress for BOTH workers; intended accepted
+public-list membership, coverage and configured order. Retain Prefix/table/count/
+checkpoint/adapters/Haskell and the older constructor/equality/size/rank/unrank
+obligations. Keep generic Mu/Union/opaque-field inputs in the full scope.
+
+Audit passes default and strict: 4769 jobs / 83193 theorem dependency checks.
+Public readback passes: 1245 checks / 129 definition prints; 14 new axiom reports
+use only standard axioms. All old 4938741 public bytes are an exact prefix.
+The new tail is 196 lines / 14041 bytes. Full output is 4952782 bytes.
+All 566 old protected sources and 835 native inputs remain exact; protected570.
+All old Audit bytes remain after four new imports; Lean4765 -> 4769.
+All 26 compiler attempts and 82 snapshots remain: 15 passes, 11 repaired failures.
+All jobs used effective 4GiB memory/high, zero swap and a five-minute time cap.
+
+Haskell/FINDINGS: no Haskell source changed and no Haskell/native program ran.
+No new executable Haskell defect or fix was established. Source correspondence
+obligations remain explicit. The main LPO fix remains integrated.
+Complete evidence: `/tmp/mcfta-sized-product-ordinary-control-20261031` and
+`lean/restart-evidence/20261031-sized-product-ordinary-control`.
+Root and peer read all 678 final source lines and the complete 196-line new public
+output. Large repeated failed diagnostics retain all bytes and replay indices.
+Resume with exact source import and original-depth producers. Do not substitute
+the bounded model result for the complete goal. Pushes to formalize are authorized.
+
+---
+
 # Current checkpoint: original size rank and captured edges
 
 Updated 2026-10-31 02:37 CET. Source a562f7b12d4c230dd38a24e55b86b454a475bb42.
