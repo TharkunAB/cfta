@@ -1,3 +1,4 @@
+import MicroCFTA.SourceCurrentAllocatedNativeStoredChildTraversal
 import MicroCFTA.SourceCurrentAllocatedNativeStoredTerminal
 import MicroCFTA.SourcePruningNarrowPrefixObservation
 import MicroCFTA.SourceCurrentAllocatedNativeStoredChildDispatch
