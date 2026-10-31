@@ -15,7 +15,6 @@ import qualified Data.CFTA.Gen as G
 import qualified Data.CFTA.Gen.QuickCheck as GQ
 import Data.CFTA.Index (Rank (..))
 import qualified Data.CFTA.Sized.Prefix as P
-import Data.CFTA.Sized.Prefix.QuickCheck (sampleWeighted)
 import Data.CFTA.Term (Term)
 
 import ListGenerator
@@ -62,10 +61,15 @@ weighted parameters = do
 draw :: Int -> QC.Gen value -> [value]
 draw count generator = unGen (QC.vectorOf count generator) (mkQCGen 1729) 30
 
--- | Sample terms through the library's rational weighted sampler.
+-- | Draw weighted integer ranks with one retained total and decoder.
 drawTerms :: Int -> P.Completions Choice -> Either String [Term Choice]
-drawTerms count completions =
-    maybe (Left "The generator has zero total sampling mass.") (Right . draw count) $ sampleWeighted completions
+drawTerms count completions = do
+    let total = P.weightedTotal completions
+        decodeRank = P.unrankWeighted completions
+    unless (total > 0) $ Left "The generator has zero total sampling mass."
+    traverse
+        (\ticket -> maybe (Left "A weighted rank has no completion.") Right $ decodeRank ticket)
+        (draw count $ QC.chooseInteger (0, total - 1))
 
 -- | Count observed lengths, including repeated samples.
 counts :: [[value]] -> Map.Map Int Int
@@ -135,10 +139,21 @@ checks = do
         ensure "Rational list mass must be exactly one." $ P.completionWeight full == 1
         masses <- rationalWeights parameters >>= lengthMasses
         ensure "Rational length mass must be exactly one." $ sum masses == 1
+        weights <- rationalWeights parameters
+        let total = P.weightedTotal full
+            interval = P.rankWeighted full
+            decodeRank = P.unrankWeighted full
+        ensure "Weighted ranks outside the ticket space must be rejected." $
+            decodeRank (-1) == Nothing && decodeRank total == Nothing
         terms <- drawTerms 100 full
         forM_ terms $ \term -> do
             value <- decode term
             ensure "A sample violates the length or element bound." $ valid value
+            (start, width) <- maybe (Left "A sample has no weighted interval.") Right $ interval term
+            ensure "A weighted interval has an invalid boundary." $
+                width > 0 && decodeRank start == Just term && decodeRank (start + width - 1) == Just term
+            ensure "A weighted interval has the wrong probability." $
+                fromInteger width / fromInteger total == product (map weights $ foldr (:) [] term)
             rank <- maybe (Left "A sample has no term rank.") Right $ P.rankCompletion full term
             restored <- replay "cfta" rank
             ensure "CFTA replay changed the list." $ restored == value
@@ -155,6 +170,11 @@ checks = do
     case rationalWeights (Map.singleton 1 (0 / 0)) of
         Left _ -> pure ()
         Right _ -> Left "A non-finite logit reached rational conversion."
+    full <- listEvent Nothing
+    zero <- maybe (Left "Zero symbol weights must be accepted.") Right $ P.withWeights (const 0) full
+    case drawTerms 1 zero of
+        Left _ -> pure ()
+        Right _ -> Left "A zero-mass language was sampled."
   where
     valid values = length values <= maximumLength && all (\value -> value >= 0 && value < alphabetSize) values
 

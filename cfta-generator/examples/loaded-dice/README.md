@@ -40,6 +40,9 @@ Each method draws 10,000 lists with seed 1729. The CSV compares exact class
 probabilities, displayed as rounded decimals, with observed counts. The
 same dependency versions reproduce the seeded draw sequences. Rank replay
 uses `unrankCompletion` or `Gen.unrank` and does not depend on the random seed.
+The weighted-rank sampler uses a different seeded sequence from the earlier
+transition-by-transition sampler. Its probabilities and ordinary replay
+ranks are unchanged. Weighted sampling tickets are not ordinary replay ranks.
 
 ## What the paper example does
 
@@ -66,7 +69,11 @@ different objective and parameterization.
 For sampling, `rationalWeights` converts each finite sigmoid result to
 `Rational` once and computes `1 - stop` in `Rational`. The two choices then
 sum to exactly one. The sigmoid itself was evaluated in `Double`.
-`withWeights` and `sampleWeighted` sample this rational distribution.
+After `withWeights`, `weightedTotal` gives an integer ticket count.
+`unrankWeighted completions` supplies a decoder that retains its tables.
+The example keeps both values outside the draw loop, draws a uniform ticket,
+and decodes it. Each term has an interval proportional to its rational
+weight. A language with total mass zero returns an error.
 
 ## When direct class control is enough
 
@@ -108,7 +115,8 @@ finite generator by enumerating its outcomes.
 
 `check` verifies exact rational total mass, the reference KL result, exact
 direct class probabilities, missing-class rejection, sampled list bounds,
-and both rank replay paths. The direct `Gen.pmf` check enumerates its finite
+and both rank replay paths. It also checks weighted interval endpoints and
+their exact probabilities. The direct `Gen.pmf` check enumerates its finite
 support, which has 100,101 lists at the reference settings. That check can
 become expensive when the alphabet or length bound grows. The example does
 not compile arbitrary Haskell generators or choose a target from test failures.
