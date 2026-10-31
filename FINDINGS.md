@@ -1,3 +1,60 @@
+[2026-10-31] Current checkpoint: same captured cache at actual first-child returns.
+
+Source `f3deac04c762979ef47c19b68bb5b02d062fa2cc` is pushed to `formalize`.
+Prior complete evidence is `a618f71554d936924d13f9f6df472cd31b35b52a`.
+Read `lean/notes-current-first-child-captured-cache.md` first.
+The full original-input goal remains ACTIVE.
+
+Five new modules contain 569 lines and seven preservation laws.
+Dispatch, fold, and incoming preserve the same independently captured cache.
+Terminal preserves input `before`; selected first child preserves prepared `after`.
+Every law names the actual returned Caller, including error and None outcomes.
+The two first-child laws also retain finite native Stored.
+All original semantic, resource, annotation, and reservation hypotheses remain.
+No future Context/Post/trace/resource supplier or ordinary incoming gate is added.
+Known cache preservation does not prove exact old-cell lookup preservation.
+
+Production: 13 commands, 13 passes, zero failures, 78 exact input snapshots.
+Default and strict each pass for all five modules and Audit.
+Audit passes 4827 jobs and 83934 theorem dependencies.
+Public checks total 1379 with 159 definition readbacks and seven new axiom reports.
+All prior 5166348 public bytes are an exact prefix of 5187699 bytes.
+The new 21351 bytes and 302 lines equal the reviewed isolated output exactly.
+All new reports use only propext, Classical.choice, and Quot.sound.
+Serial checks retain verified 4 GiB max/high, zero swap, and five-minute limits.
+All 623 prior protected and 835 native records remain exact; protected total 628.
+Audit retains its previous whole body after exactly five new imports.
+
+Independent source, isolated-public, normal-production, and document assessment is CLEAR.
+A separate actual enabled-check Post producer passes strict/public after a
+49-line scoping repair; its original 50-line strict failure stays retained.
+Incoming, terminal, and child Post compositions remain outside current production.
+Reuse existing child resources, fold entry, selected-step, and packet producers.
+
+The main gap is sufficient ORIGINAL D/progress and common original resources
+for BOTH workers through the exact requested ordered prefix and configured stops.
+Derive actual all-sibling Context/Fits/annotations/reservations/staged residency,
+source identity, Caller/query, and SAME captured-cache premises at each real hook.
+Finite-D execution/resource laws already exist and can exhaust. Do not replace
+the objective with assumed future certificates or ordinary-only test carriers.
+
+Keep Mu/Union/opaque, originalMap/domain, maps/SCC/history, constructor-sensitive
+NodeEq, generic/default/Map/Set, signed/weighted, alias/renewal/writer behavior.
+Complete all size/node-count/count/table/order/rank/unrank/prefix/checkpoint APIs.
+Map/Set prefixes, full public order/coverage, and Haskell correspondence remain open.
+The full conjunction-call Post remains proved for all budgets and outcomes.
+True empty excludes satisfying terms. False does not supply a positive witness.
+
+The old native source owner's 101/160 OLD scope failure remains permanent.
+Its original 89-line candidate stays UNCOMPILED in that sealed owner history.
+Root's separate 94-line mathematical repair does not change that process result.
+Retain all complete providers, metadata fields, failures, seals, and old drafts.
+The prior five-part archive and exact failed unsplit archive remain recoverable.
+No Haskell defect/edit/fix/product run occurred. Put every future Haskell fix
+in root FINDINGS so the external agent can act on it.
+
+The full previous document follows unchanged.
+
 # Current proof state — 2026-10-31 17:05 CET
 
 Read `lean/notes-current-first-child-native-frames.md` for the current claims and boundaries.
