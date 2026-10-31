@@ -494,6 +494,7 @@ data TrainingError
     | InvalidCounts
     | InvalidInitialWeights
     | NonFiniteStep
+    | UnrepresentableWeights
     | NoRetainedTerms
     | UnsupportedTrainingLanguage
     deriving (Eq, Show)
