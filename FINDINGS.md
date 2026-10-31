@@ -1,3 +1,61 @@
+# Current checkpoint: recursive native traversal and continuation count
+
+The complete original-input formalization remains OPEN. Work continues.
+Traversal source: 9b67abbd261ec0abafb81aa13084a9160bf978f4.
+Selected-edge source: a10bf2d2aad35061a93d5a06938e5bd36571be55.
+Count source: dd33ab557bd76f9f340f348743c3253777703d03.
+Branch: formalize. Main: bd5a406a6a3f84b7e3ae0906082783911509df83.
+Details: lean/notes-current-native-child-traversal.md.
+
+Strongest global claim remains closed for BOTH actual workers at each supplied
+finite recursive depth under existing original entry/resource gates. Outcomes
+stabilize; actual paths and forecasts stay in one finite ORIGINAL carrier
+independent of depth. Work and reservations may depend on depth. Exhaustion
+remains possible. Sufficient original depth/common successful outcome/global
+ordered prefix/public API coverage/Haskell correspondence remain open.
+
+NEW: actual ChildTraversal complete and stopped returns retain native Stored.
+Only an actual singleton child/cache success recurses. Current completion and
+uniqueness exports derive actual successor Context/Safe/flags/Realized/Fits,
+pending tail, known heap and reservation internally. No future supplier.
+NEW: SelectedEdge derives actual own-cache traversal admission; exposed rejected,
+stopped and complete callers retain Stored. Unhandled=>True proves no hidden
+state fact. CapturedEdge/finalization-none discard can hide a reached caller.
+Native Stored remains conditional for seen-empty recursively finite ordinary
+node/edge inputs, with returned height bounds. It is separate from Normal,
+result semantics, merge Context.Stored and public result tables.
+
+NEW: actual NativeContinuations fold completes with processed.length=edge-list
+length or stops with strictly fewer processed receipts. Duplicates count.
+The stopping receipt is separate. No semantic/history/Normal premise is added.
+This is a per-supplied-fold list fact. Global depth and native work remain open.
+Sibling captured caches can reset the row source while native endpoints advance.
+Finalize consumes the pending source; callbacks are not established resets.
+
+Validation: Audit 4764/83089; public 1230 checks/118 prints; 3 standard axiom reports.
+Compiler: 15 commands, all pass; 42 snapshots; serial 4 GiB, zero swap, five minutes.
+Public: 4,934,281 bytes, SHA256 1a3c2ec3f52cfcfb41378701ffb47ae973ddd0a468078d2e3e529f054f3486b3.
+Prior 4,923,220 bytes and intermediate 4,927,290 bytes remain exact prefixes.
+Root and independent review read all 328 source lines and 163 public lines.
+All old 562 protected and 835 native files remain exact. Old 4,761 Lean files
+are exact except Audit imports before its full old body. Current: 565 protected
+files and 4,764 Lean files.
+No Haskell edit/native execution/new executable defect, fix or candidate.
+All older Haskell findings remain below intact.
+
+Root: /tmp/mcfta-native-child-traversal-control-20261031.
+Archive: lean/restart-evidence/20261031-native-child-traversal-control.
+All drafts/providers/source ledgers/snapshots/helper failures and old full
+root documents remain. Copied owners are read-only with exact byte pins.
+CapturedEdge draft of 108 lines remains UNCOMPILED; no hidden-state claim.
+
+NEXT: original-depth inventory must identify a genuine common successful-depth
+producer from ORIGINAL inputs for the intended order/stops and both workers.
+Keep all full original-resource, optimized-core, Prefix/table/count/checkpoint,
+public/Haskell and older constructor/equality/size/order/rank/unrank contracts.
+
+--- Previous checkpoint retained in full ---
+
 # Current checkpoint: actual terminal, child-dispatch and prefix observation
 
 The full original-input formalization remains OPEN. Work continues.
