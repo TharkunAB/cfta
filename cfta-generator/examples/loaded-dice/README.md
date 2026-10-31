@@ -15,19 +15,18 @@ From the repository root, build `cfta-generator:cfta-loaded-dice`. The
 commands are `demo`, `check`, `replay cfta RANK`, and `replay direct RANK`.
 With no arguments, the executable runs `demo`.
 
-Use the project's `nix-shell` and capped job workflow. On the current WSL2
-development host:
+From a repository checkout, use the project's `nix-shell`:
 
 ```sh
-export XDG_RUNTIME_DIR=/run/user/1000
-export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
-/home/tritlo/Code/heavy-management/bin/capped --mem 8G --time 10m \
-  nix-shell --run 'export PATH=/usr/bin:$PATH; cabal build cfta-generator:cfta-loaded-dice -j1'
-/home/tritlo/Code/heavy-management/bin/capped --mem 4G --time 5m \
-  nix-shell --run 'export PATH=/usr/bin:$PATH; cabal run cfta-generator:cfta-loaded-dice -- demo +RTS -M2G -RTS'
-/home/tritlo/Code/heavy-management/bin/capped --mem 4G --time 5m \
-  nix-shell --run 'export PATH=/usr/bin:$PATH; cabal run cfta-generator:cfta-loaded-dice -- check +RTS -M2G -RTS'
+nix-shell --run 'cabal build cfta-generator:cfta-loaded-dice -j1'
+nix-shell --run 'cabal run cfta-generator:cfta-loaded-dice -- demo +RTS -M2G -RTS'
+nix-shell --run 'cabal run cfta-generator:cfta-loaded-dice -- check +RTS -M2G -RTS'
 ```
+
+For an unpacked source package, run the corresponding `cabal` commands
+directly in an environment with the package's declared dependencies.
+Repository maintainers must also use their usual process memory cap and
+serial job workflow. The commands above set a 2 GiB Haskell heap limit.
 
 The demo prints replay lines such as `replay cfta RANK => [...]`. Pass the
 printed rank to the same executable, for example by replacing `demo` in
