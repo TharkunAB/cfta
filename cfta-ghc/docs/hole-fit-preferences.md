@@ -200,5 +200,11 @@ learn the context selector.
 
 The manual CLI example moves the preferred program from rank two to rank one.
 The actual plugin loads the resulting file in reranking and best-first modes.
-Legacy golden output is unchanged. These checks establish the file workflow;
-no gain on real held-out hole fits has been established.
+Legacy golden output is unchanged. These checks establish the file workflow.
+
+The [fixed package-held-out evaluation](hole-fit-preferences/evaluation.md)
+contains 65 training cases and 37 eligible test cases from separate packages.
+Top-one source recovery falls from 16 to 14 of 37 test cases. Top-five recovery
+stays at 25 of 37. Keep this feature experimental: these results do not justify
+its extra scoring cost. The report includes all ranks, coverage, input hashes,
+and the limits of the labels and corpus provenance.
