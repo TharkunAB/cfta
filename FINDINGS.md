@@ -1,3 +1,82 @@
+## 2026-10-31: actual native indexes and prepared cache validity
+
+Current source: `9ce4093d3ff174e553ece47a442b49edd71e95f1` on `formalize`, pushed.
+Prior complete restart evidence: `ecbf32fbf7bc615ae391e002d316fea035803c06`.
+Read [the current checkpoint](lean/notes-current-native-cache-observed.md) first.
+This section supersedes older current-state descriptions. All older text remains below.
+The full original-input objective remains ACTIVE. Keep the optimized interned core.
+
+Seven modules add 536 lines and 13 public laws.
+Actual successful native writes derive exact flags and canonical waiting deltas.
+Actual slot writes retain roots and derive both native indexes.
+Actual successful preparation and every actual prepared row derive all five cache
+fields at the SAME entry heap. The row law covers every Value constructor.
+Original coherence, admission, closure, cache invariants and suspension bounds remain.
+Successful-fuel uniqueness keeps the same original input cache and read state.
+
+No-terminal ChildDispatch.run retains the exact entry Caller and query memo.
+Its optional returned cache is CacheValid at that literal Caller.
+The original Edge/Node equality dictionaries retain the complete literal result.
+The nonempty terminal partition still states True. Progress is not proved here.
+The earlier all-budget call Post and successful-child staged readback remain valid.
+Keep the captured cache, fresh next-field cache and both preparation APIs distinct.
+
+All 18 production commands pass with 144 source snapshots.
+Audit checks 4839 jobs and 84001 theorem dependencies.
+Public validation has 1398 checks and 159 definition readbacks.
+All 633 prior protected records and 835 native inputs remain exact.
+Audit has seven new imports and its complete previous body as an exact suffix.
+All 13 new axiom reports use only propext, Classical.choice and Quot.sound.
+The complete old public output is an exact prefix. All 259 new lines are read.
+The explicit 265-line dictionary output equals the reviewed isolated bytes exactly.
+
+FINDING: the original 53-line dictionary draft stated a reflexive equality.
+Lean inferred the supplied decisions on both sides. The checked 59-line repair
+defines closed private canonical decisions before its input arguments.
+The explicit output confirms supplied decisions on the left and closed constants
+on the right. Preserve the rejected draft, all six failures and the true repair.
+No Haskell defect, edit, fix or product run occurred in this increment.
+Record EVERY later Haskell defect or fix in root FINDINGS for the external agent.
+
+Separate next work has an unchanged 82-line adapter proof, outside production.
+Strict and public checks pass, with 16 snapshots and one standard axiom report.
+It derives exact adapt waiting counts and successful index-fuel uniqueness.
+It assumes Roots of its supplied read Core. Derive that fact for the literal
+reached incoming read and the exact original reference append next.
+Do not assume future CacheValid, a future Packet or a replacement actual call.
+
+Whole private checkpoint007 is retained and replayed before source review.
+Keep its raw conversation records private. The separate bounded PUBLIC source
+submission retains all declared proof inputs and exact scoped setup failures.
+It is NOT whole007. The complete private provider remains available locally.
+
+The R28 baseline passes byte verification of all 1548719 prior files, 160931
+directories and 42679761303 bytes, plus the whole 312-file prior publication.
+The old fresh R27 pathname was consumed by lossless relocation. Its original
+frozen control remains unchanged. The first readonly rename caused a fallback
+copy and disk exhaustion. Its complete partial copy is retained losslessly as
+verified immutable-source prefix references. Only the new duplicate was removed.
+The 21 GiB older reconstruction cleanup question has no approval. Do not delete it.
+Current public R28 archive publication is not complete in this source checkpoint.
+The original native-prefix owner has a PERMANENT scope failure. Keep that result.
+Its integrity-only pass and the separate strict94 repair do not repair its scope.
+
+The current review owner also has a PERMANENT process scope failure.
+It inspected an OLD warning locator at line 24 of InternedFreshOrdinaryClosedCompletion.
+Its cumulative union is now 464 lines across 12 originals, with the same two wholes.
+No source body was opened for this incident. Keep its old 463/11 vector and exact delta.
+The controller saw the same locator through a default-log tail. Its union is now
+63 direct plus 34 inherited CFTA lines, or 97 across four originals, plus 12 stdlib lines.
+Both unapproved locator exposures remain process scope FAIL. Numeric partial and
+two-whole bounds still hold. Mathematical CLEAR does not repair either failure.
+
+Full completion still needs actual terminal and recursive continuation cache facts,
+sufficient ORIGINAL-D common resources for BOTH workers, exact remaining schedule
+and reservations, sound acceptance, exact ordered finite coverage/configured stops,
+the full input domain, all public APIs and Haskell correspondence.
+Existing finite-D executions can exhaust. Do not claim end-to-end completion.
+Reuse ChildBoundedResources, SelectedStepCompletion.complete and captured_post.
+
 [2026-10-31] Current checkpoint: actual successful-child Post and remaining staged values.
 
 Source `432451cd281765c112dd8a172088474cb635e812` is pushed to `formalize`.
