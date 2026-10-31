@@ -5,6 +5,18 @@ optimizer reaches its gradient tolerance. It can also drop corpus terms
 that the automaton rejects or that exceed the size bound. A caller needs
 both facts before it accepts a fitted generator or compares training runs.
 
+The motivating experiments adapt ideas from
+[PHOG: Probabilistic Model for Code](https://proceedings.mlr.press/v48/bielik16.html)
+(Bielik, Raychev, and Vechev, ICML 2016) for finite context selection, and
+[Approximating Probabilistic Models as Weighted Finite Automata](https://aclanthology.org/2021.cl-2.9/)
+(Suresh, Roark, Riley, and Schogol, Computational Linguistics 2021) for
+bounded forward-KL projection. PHOG estimates local rule probabilities by
+counting. Suresh et al. use count normalization for ordinary deterministic
+targets and difference-of-convex optimization for backoff targets. Our
+experiments instead fit bounded, globally normalized CFTA weights with the
+existing L-BFGS optimizer. The early stops below occurred in these CFTA
+adaptations; they are not findings from the papers.
+
 The weighted-automaton study exposed two such early stops among 15 raw
 corpus fits. A separate context-selection experiment compared 33 candidate
 fits through `distill`, which returned weights without a stop reason. These
