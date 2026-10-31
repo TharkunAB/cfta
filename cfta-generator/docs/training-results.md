@@ -103,3 +103,34 @@ log-domain arithmetic or support for further constraint classes.
 Structural enumeration and ranks do not change. The weights passed to the
 sampling API determine its distribution. Inspecting a training report does
 not change that distribution.
+
+## Compatibility and cost
+
+The standalone [comparison fixture](training-results/LegacyFitBench.hs)
+uses only the original public API. It runs varied finite teacher fits,
+default corpus fits, stationary points, and early-stop cases. Its `trace`
+mode prints every numerical field. Its `bench 32` mode forces 32 different
+fit-and-distill jobs without retaining or printing the traces.
+
+The comparison used GHC 9.14.1, the project's unoptimized libraries, and an
+optimized fixture executable. The baseline is `feature/train-weights` at
+`c43cb612e8`. The reporting optimizer is the implementation at `e56a6c1a38`.
+The trace files were byte-for-byte equal. Both workloads returned
+`(32,448,-4953.087029470077)`.
+
+| Metric | Original API | Reporting implementation | Change |
+| --- | ---: | ---: | ---: |
+| Cachegrind instructions | 677,933,405 | 678,414,993 | +0.071% |
+| RTS allocation, bytes | 289,973,832 | 290,211,864 | +0.082% |
+
+These figures measure the legacy `fit` and `distill` paths. They do not
+measure report validation, sampling, or a paper artifact. The standard
+generator benchmark cells do not call the changed optimizer. The measured
+cost is below the repository's 5% budget. No wall-clock claim is made.
+
+Build the same fixture against each checkout with the same dependency plan.
+Run `trace` and compare its output before measuring `bench 32`. Use a process
+memory cap and `+RTS -M2G -s -RTS`; use Cachegrind for instruction counts.
+The main library's local package ID is
+`cfta-generator-0.1.0.0-inplace`. Select that ID when using `cabal exec ghc`
+in a workspace that also builds the `hoogleplus` sublibrary.
