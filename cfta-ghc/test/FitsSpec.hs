@@ -18,6 +18,7 @@ import Control.Concurrent (threadDelay)
 import Control.Exception (evaluate)
 import Control.Monad (forM, forM_)
 import Control.Monad.IO.Class (liftIO)
+import Data.Either (isLeft)
 import Data.IORef (modifyIORef', newIORef, readIORef)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (isJust, isNothing)
@@ -44,10 +45,12 @@ import Data.CFTA.GHC.Model (
     tokenScoreShared,
  )
 import Data.CFTA.GHC.NormalForm (Term (TApp, TLam, TVar), normalForm)
+import qualified Data.CFTA.GHC.Preference as Preference
 import Data.CFTA.GHC.Rank (Ranking (..), defaultRanking, rankFits, rankedFits)
 import Data.CFTA.GHC.Session
 import Data.CFTA.Gen.Synthesis (Program (..), parseProgram, renderProgram)
 import Data.CFTA.Gen.Synthesis.Walk (preorder)
+import qualified Data.CFTA.Sized.Prefix.Train as Train
 import qualified Data.CFTA.Term as CFTA
 import Decision (DecisionModel (..), Option (..), fixedModel)
 import GHC.Builtin.Types (mkListTy)
@@ -321,6 +324,115 @@ main = withSession ["import Prelude", "import Data.Coerce (coerce)", "import Dat
                 fmap pluginRerank (readOptions ["model=base.cfta"]) `shouldBe` Right True
                 fmap pluginRerank (readOptions ["model=base.cfta", "model-search=best-first"]) `shouldBe` Right False
                 fmap pluginHoleContext (readOptions ["model=base.cfta", "hole-context=off"]) `shouldBe` Right False
+        describe "fit preferences" $ do
+            let base =
+                    fromTerms
+                        ["Prelude"]
+                        (Map.fromList [("id", 1), ("reverse", 1)])
+                        (replicate 20 ("top", CFTA.Node "id/1" [CFTA.Node "arg/0" []]))
+                item =
+                    Preference.PreferenceCase
+                        "Example.hs"
+                        ("top", 0)
+                        (Set.singleton "xs")
+                        (Map.fromList [("helper", 3), ("other", 1)])
+                        (parse "reverse xs")
+                        (map parse ["id xs", "reverse xs", "xs"])
+                precision = 0.01
+                fit = either fail pure . Preference.trainPreferences 200 precision base
+                other = item{Preference.caseRoot = ("lambda/1", 0), Preference.casePreferred = parse "id xs"}
+            it "keeps the corpus token scorer unchanged without corrections" $ do
+                let unchanged = Preference.fromFitModel base
+                    uses = Preference.caseUses item
+                    locals = Preference.caseLocals item
+                forM_ [("top", 0), ("map/2", 1), ("lambda/1", 0)] $ \root ->
+                    forM_ [Nothing, Just ("reverse", 1), Just ("helper", 2)] $ \parent ->
+                        forM_ [0, 1] $ \position ->
+                            forM_ [("id", 1), ("xs", 0), ("helper", 2), ("unknown", 0)] $ \token ->
+                                Preference.tokenScoreShared unchanged uses root locals parent position token
+                                    `shouldBe` tokenScoreShared base uses root locals parent position token
+                let score = tokenScoreShared base uses (Preference.caseRoot item) locals
+                    expected = score Nothing 0 ("reverse", 1) + score (Just ("reverse", 1)) 0 ("id", 1) + score (Just ("id", 1)) 0 ("xs", 0)
+                Preference.scoreProgram unchanged item (parse "reverse (id xs)") - expected
+                    `shouldSatisfy` ((< 1e-12) . abs)
+            it "improves preferred probabilities and reports the externally scored conditional objective" $ do
+                let items = [item, other]
+                    initial = Preference.fromFitModel base
+                (trained, report) <- fit items
+                exp (preferenceLogProbability trained item)
+                    `shouldSatisfy` (> exp (preferenceLogProbability initial item) + 0.1)
+                Train.stepObjective (Train.fitFinalStep report) - preferenceObjective precision trained items
+                    `shouldSatisfy` ((< 1e-10) . abs)
+                (_, first) <- either fail pure $ Preference.trainPreferences 1 precision base items
+                Train.stepObjective (Train.fitFinalStep first) - preferenceObjective precision initial items
+                    `shouldSatisfy` ((< 1e-10) . abs)
+            it "retains each distinct program's mass when their correction features are identical" $ do
+                let emptyBase = FitModel [] Map.empty Map.empty Map.empty
+                    aliases =
+                        item
+                            { Preference.caseLocals = Set.empty
+                            , Preference.casePreferred = Var "a"
+                            , Preference.caseCandidates = map Var ["a", "b", "c"]
+                            }
+                forM_ [(Map.empty, 1 / 3), (Map.fromList [("a", 9), ("b", 1)], 10 / 13)] $ \(uses, expected) -> do
+                    let chosen = aliases{Preference.caseUses = uses}
+                    (trained, report) <- either fail pure $ Preference.trainPreferences 200 precision emptyBase [chosen]
+                    exp (preferenceLogProbability trained chosen) - expected `shouldSatisfy` ((< 1e-12) . abs)
+                    Train.stepObjective (Train.fitFinalStep report) - log expected `shouldSatisfy` ((< 1e-12) . abs)
+            it "does not give duplicate candidate programs additional training mass" $ do
+                (trained, _) <- fit [item, other]
+                let repeated = item{Preference.caseCandidates = Preference.caseCandidates item <> replicate 12 (parse "id xs")}
+                (withDuplicates, _) <- fit [repeated, other]
+                withDuplicates `shouldBe` trained
+            it "rejects missing preferences, invalid contexts, invalid counts, and invalid fitting controls" $ do
+                forM_
+                    [ []
+                    , [item{Preference.casePreferred = Var "absent"}]
+                    , [item{Preference.caseCandidates = []}]
+                    , [item{Preference.caseCandidates = replicate 2 (Preference.casePreferred item)}]
+                    , [item{Preference.caseRoot = ("", 0)}]
+                    , [item{Preference.caseRoot = ("top", -1)}]
+                    , [item{Preference.caseUses = Map.singleton "helper" (-1)}]
+                    ]
+                    $ \items -> Preference.trainPreferences 200 precision base items `shouldSatisfy` isLeft
+                forM_ [0, -1, 0 / 0, 1 / 0] $ \invalid ->
+                    Preference.trainPreferences 200 invalid base [item] `shouldSatisfy` isLeft
+                forM_ [0, -1] $ \limit ->
+                    Preference.trainPreferences limit precision base [item] `shouldSatisfy` isLeft
+            it "round-trips cases, corrections, and legacy corpus files" $ do
+                (trained, _) <- fit [item, other]
+                Preference.parsePreferenceModel (Preference.printPreferenceModel trained) `shouldBe` Right trained
+                Preference.parsePreferenceModel (printFitModel base) `shouldBe` Right (Preference.fromFitModel base)
+                Preference.parsePreferenceCases (Preference.printPreferenceCases [item, other]) `shouldBe` Right [item, other]
+            it "rejects duplicate correction keys and invalid correction fields" $ do
+                let text records = Text.unlines ("fit-preferences 1;" : records) <> printFitModel base
+                    valid = "(\"top\",0,\"reverse/1\",0.5)"
+                forM_
+                    [ [valid, valid]
+                    , ["(\"top\",-1,\"reverse/1\",0.5)"]
+                    , ["(\"\",0,\"reverse/1\",0.5)"]
+                    , ["(\"top\",0,\"\",0.5)"]
+                    , ["(\"top\",0,\"reverse/1\",NaN)"]
+                    , ["(\"top\",0,\"reverse/1\",Infinity)"]
+                    , ["(\"top\",0,\"reverse/1\",1e999)"]
+                    ]
+                    $ \records -> Preference.parsePreferenceModel (text records) `shouldSatisfy` isLeft
+            it "rejects invalid case fields and infix syntax, and accepts a parenthesized backslash operator" $ do
+                forM_
+                    [ item{Preference.caseRoot = ("", 0)}
+                    , item{Preference.caseRoot = ("top", -1)}
+                    , item{Preference.caseUses = Map.singleton "helper" (-1)}
+                    ]
+                    $ \invalid ->
+                        Preference.parsePreferenceCases (Preference.printPreferenceCases [invalid]) `shouldSatisfy` isLeft
+                let invalidUses = "fit-preference-cases 1;\n(\"group\",(\"top\",0),[],[(\"helper\",1),(\"helper\",2)],\"a\",[\"a\",\"b\"])\n"
+                Preference.parsePreferenceCases invalidUses `shouldSatisfy` isLeft
+                forM_ ["x + y", "x `f` y", "\\x -> x", "if x then y else z"] $ \source -> do
+                    let invalid = item{Preference.casePreferred = parse source}
+                    Preference.parsePreferenceCases (Preference.printPreferenceCases [invalid]) `shouldSatisfy` isLeft
+                let operator = parse "(\\\\) xs ys"
+                    valid = item{Preference.casePreferred = operator, Preference.caseCandidates = [operator, Var "xs"]}
+                Preference.parsePreferenceCases (Preference.printPreferenceCases [valid]) `shouldBe` Right [valid]
         describe "the fast rejects" $
             forM_ soundness $ \(name, signature, arguments, program) ->
                 it ("keep the fit of " <> name) $
@@ -413,3 +525,18 @@ main = withSession ["import Prelude", "import Data.Coerce (coerce)", "import Dat
     size program = case program of
         Var _ -> 1
         App function argument -> size function + size argument
+
+-- | Normalize public program scores over a nonempty supplied candidate pool.
+preferenceLogProbability :: Preference.PreferenceModel -> Preference.PreferenceCase -> Double
+preferenceLogProbability model item =
+    Preference.scoreProgram model item (Preference.casePreferred item) - largest - log (sum masses)
+  where
+    scores = map (Preference.scoreProgram model item) $ Set.toList $ Set.fromList $ Preference.caseCandidates item
+    largest = maximum scores
+    masses = map (exp . subtract largest) scores
+
+-- | Check the reported objective through complete program probabilities and the exposed corrections.
+preferenceObjective :: Double -> Preference.PreferenceModel -> [Preference.PreferenceCase] -> Double
+preferenceObjective precision model items =
+    sum (map (preferenceLogProbability model) items) / fromIntegral (length items)
+        - precision / 2 * sum (map (^ (2 :: Int)) $ Map.elems $ Preference.preferenceWeights model)
