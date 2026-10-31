@@ -1,3 +1,4 @@
+import MicroCFTA.SourceCurrentConjunctionWorkerWarmEffects
 import MicroCFTA.SourceCurrentConjunctionRowsWarmEffects
 import MicroCFTA.SourceCurrentConjunctionProbeBirth
 import MicroCFTA.SourceCurrentConjunctionProjectionWarmEffects
