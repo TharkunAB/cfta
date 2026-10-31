@@ -138,7 +138,8 @@ trainPreferences limit precision base items = do
     unless (finite precision && precision > 0) $ Left "Preference precision must be finite and positive."
     when (null items) $ Left "Supply at least one training case."
     prepared <- traverse prepare items
-    let size = fromIntegral (length prepared)
+    let groups = Set.fromList $ map caseGroup items
+        size = fromIntegral (length prepared)
         average = Map.map (/ size) . Map.unionsWith (+)
         observed = average [chosen | (_, chosen, _) <- prepared]
         evaluate weights =
@@ -151,8 +152,8 @@ trainPreferences limit precision base items = do
                 , Train.oracleLogPartition = fst . evaluate
                 , Train.oracleExpectations = evaluate
                 }
-    report <- either (Left . show) Right $ Train.fitWithReport limit precision oracle observed Map.empty
-    pure (PreferenceModel base (Train.stepWeights $ Train.fitFinalStep report) (Set.fromList $ map caseGroup items), report)
+    report <- groups `seq` (either (Left . show) Right $ Train.fitWithReport limit precision oracle observed Map.empty)
+    pure (PreferenceModel base (Train.stepWeights $ Train.fitFinalStep report) groups, report)
   where
     prepare item = do
         unless (not (Text.null $ fst $ caseRoot item) && snd (caseRoot item) >= 0 && all (>= 0) (caseUses item)) $
