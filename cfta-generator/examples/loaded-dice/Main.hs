@@ -3,6 +3,7 @@ module Main (main) where
 
 import Control.Monad (forM, forM_, replicateM, unless)
 import qualified Data.Map.Strict as Map
+import Data.Maybe (isNothing)
 import System.Environment (getArgs)
 import System.Exit (die)
 import qualified Test.QuickCheck as QC
@@ -144,7 +145,7 @@ checks = do
             interval = P.rankWeighted full
             decodeRank = P.unrankWeighted full
         ensure "Weighted ranks outside the ticket space must be rejected." $
-            decodeRank (-1) == Nothing && decodeRank total == Nothing
+            isNothing (decodeRank (-1)) && isNothing (decodeRank total)
         terms <- drawTerms 100 full
         forM_ terms $ \term -> do
             value <- decode term
