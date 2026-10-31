@@ -1,3 +1,67 @@
+# Current checkpoint: actual call effects and sound returned memos
+
+Date: 2026-10-31. Branch: `formalize`. Goal: ACTIVE.
+Source head: `8efe735ba7fad5a030ba63c9daf5eff8d8733713`.
+This entry supersedes the proof status in older entries below.
+Canonical note: [Actual call effects and sound returned memos](lean/notes-current-call-effects-and-retained-memos.md).
+
+## Strongest current claim
+
+Given the current Context and a resident, closed query, the literal allocated conjunction call returns a correct fourth memo at its actual returned heap.
+The theorem covers success and failure.
+Every completed answer satisfies AnswerSound for the original query.
+True proves that no term satisfies the query. False leaves nonemptiness undecided.
+The same inventory remains admitted, and the old merge and fourth memos retain their original properties at the actual heap.
+Every earlier fourth-table entry remains in the returned memo.
+No future row, table, completion, or output-Context certificate is supplied.
+
+The actual rows/explore/decision/call path preserves SemanticHeap, Covered, heap growth, and issued-node history on all outcomes.
+Completed row requirements are resident and closed.
+The incoming-node result now preserves the BEFORE cache's KnownOrdinary bound on every outcome, including a failed physical check.
+It also retains native Stored at the literal returned Caller.
+It adds no ordinary-domain gate on the incoming value and makes no new-Core claim.
+
+## What remains
+
+Full reached Context/Post remains open on the general route.
+Next derive full actual physical Effects, including reached depth/cost readiness and equality-cache Valid/Fields/growth.
+Also transport result-table Sound, global memo validity, and Mu probe cleanliness at the actual endpoint.
+Returned fourth-memo correctness has a producer now; do not reopen it as an unsupplied premise.
+The largest gap is the fixed-ORIGINAL-depth actual recursive induction for BOTH Native and Prepared workers.
+It must retain actual admissions, memo identity, Fits, annotations, reservations, and ORIGINAL resource lineage.
+Use the SAME captured sibling cache at the actual hook Caller/query.
+Prepared endpoint None has no hidden outer Caller certificate.
+Keep generic Mu/Union/opaque and every alias/renewal/writer/default-source branch in scope.
+
+The full objective includes original admissible public inputs, sound accepted outputs, exact finite ordered prefixes/configured stops, and sufficient ORIGINAL depth/resources.
+It includes optimized interned execution, originalMap/domain/order/SCC, signed/Set/default/weighted getters, row history, constructor-sensitive NodeEq, size/node-count/order/rank/unrank, Prefix/tables/counts/checkpoints, and public/host/Haskell correspondence.
+Conditional local laws, ordinary domains, finite carriers, and future certificates do not replace that objective.
+
+## Verification and restart
+
+Five new modules contain 684 lines and eleven public theorems.
+Focused default/strict and full Audit default/strict pass.
+Audit: 4,806 jobs and 83,739 theorem dependencies.
+Public: 1,332 checks, 159 definition prints, eleven standard-only new axiom reports.
+The final 5,120,002-byte readback has SHA256 b28b24b11c7e290c56761aa070f186dc9e32f58234bed0c21d2f39d96b4f00b0.
+The prior and intermediate readbacks remain exact prefixes.
+All 602 prior protected sources and 835 native inputs remain exact.
+Only Audit's five added imports change an old Lean file; its old body remains exact.
+Production evidence retains eighteen commands, sixteen passes, two failed drafts, and ninety input snapshots.
+The separate frozen probe owner retains all thirteen earlier commands and 103 snapshots.
+All actual Lean commands use verified serial 4 GiB memory.max/high, zero swap, and a five-minute timeout.
+Root read all 684 new source lines and the complete 243-line public suffix.
+Root read two old repository cuts with 34 lines in total, no old whole, and twelve separate installed stdlib lines.
+
+No Haskell defect, edit, or fix is established. No Haskell/native product run is claimed.
+Keep any later Haskell fixes in FINDINGS with exact source locations and evidence for an external agent.
+Control: `/tmp/mcfta-current-call-control-20261031`.
+Publication records: `/tmp/mcfta-current-call-packaging-20261031`.
+Portable evidence: `lean/restart-evidence/20261031-current-call-control`.
+The preceding complete evidence remains in Git at `572dd4f7198c7bcf3502b73ad99552819698d220`.
+
+---
+
 # Current checkpoint: actual terminal cache bounds and required-reader effects
 
 Date: 2026-10-31. Branch: `formalize`. Full goal: ACTIVE.
