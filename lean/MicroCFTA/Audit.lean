@@ -1,4 +1,5 @@
 import MicroCFTA.SourceSizedMinimumPass
+import MicroCFTA.SourceSizedMinimumConvergence
 import MicroCFTA.SourceSizedPrefixEqualSizes
 import MicroCFTA.SourceSizedPrefixProductInitial
 import MicroCFTA.SourceSizedPrefixProductRank
