@@ -1,3 +1,66 @@
+# Current checkpoint: row equality and same global memos
+
+Date: 2026-10-31. Branch: `formalize`. Goal: ACTIVE.
+Source head: `bfdf130de961ac4121e26bbb5a4699c3f6103bfc`.
+This entry supersedes the proof status in older entries below.
+Canonical note: [Actual row equality and global memo preservation](lean/notes-current-row-equality-and-global-memos.md).
+
+## Strongest current statement
+
+Given the current Context and a resident, closed query, the literal allocated conjunction call returns a conservatively correct fourth memo at its actual returned heap on every outcome.
+Completed True excludes all satisfying terms. False gives no nonempty witness.
+The SAME unfolding and paired endpoint-query memo families now remain valid at that actual heap on every outcome too.
+No future Valid, Ready, Context, Effects, completion, or row certificate is an input.
+Earlier inventory, old merge/fourth memo, and old pending-handle preservation results remain checked.
+The pending-cache claim concerns the BEFORE cache, including failed physical checks. It makes no new-Core claim.
+
+The actual operand exposure list now produces full physical Effects/Ready, resident returned rows, and actual FieldAvailable facts.
+It covers every outcome and every reader fuel from current Ready and resident operands.
+The literal rows function now preserves equality-cache Valid/Grows and Fields on the INITIAL heap.
+The actual tuple/list and row cache laws remain generic in Symbol and Formula.
+They need no closedness gate for these field/cache claims.
+
+## Biggest remaining gaps
+
+Full physical Effects/Ready for actual projections, requirements, tuples, rows, and call remains open.
+Fields on the INITIAL heap do not cover all final allocated edges.
+Retain actual reached depth/cost/field facts on every failed route.
+Use an actual all-outcome producer; a completed trace or a sufficient-ceiling endpoint is insufficient.
+Full reached Context/Post still needs complete readiness, result-table Sound transport, and Mu probe cleanliness.
+Returned fourth correctness and same global-memo validity have actual-call producers now.
+
+The largest gap remains the fixed-ORIGINAL-depth actual recursive induction for BOTH Native and Prepared workers.
+It must retain admissions, memo identity, Fits, annotations, reservations, and ORIGINAL resource lineage.
+Restore the SAME captured sibling cache at the actual hook Caller/query.
+Prepared endpoint None supplies no hidden outer Caller certificate.
+Keep generic Mu/Union/opaque and every alias/renewal/writer/default-source branch.
+The complete objective includes original admissible public inputs, sound outputs, exact finite ordered prefixes/configured stops, sufficient ORIGINAL depth/resources, optimized interned execution, originalMap/domain/order/SCC, signed/Set/default/weighted getters, row history, constructor-sensitive NodeEq, size/node-count/rank/unrank, Prefix/tables/counts/checkpoints, and public/host/Haskell correspondence.
+Conditional local laws, ordinary domains, finite carriers, and future certificates do not replace that objective.
+
+## Checks and restart
+
+Three new modules contain 304 lines and five public laws.
+Focused default/strict and full Audit default/strict pass: 4809 jobs and 83773 theorem dependencies.
+Public checks: 1337 declarations, 159 definition prints, five standard-only new axiom reports.
+The complete 5125851-byte readback has SHA256859ad7034ace2d59b0c8c90b8d18899640ff88c41570a06cdf01231e6be9e930.
+The prior 5120002 bytes remain an exact prefix. Root read the complete 87-line new suffix.
+All 607 prior protected sources and 835 native inputs remain exact.
+Only Audit's three added imports change an old Lean file; its old body remains exact.
+Production evidence retains nine commands, nine passes, no failures, and 32 input snapshots.
+Separate frozen probes retain the tuple draft failure and repair, and the first unchanged globals strict pass.
+All actual Lean commands use verified serial 4 GiB memory.max/high, zero swap, and a timeout of five minutes.
+Root read all 304 new source lines and acquired no OLD repository body in this stage.
+The preceding Root scope retains 34 direct OLD repository lines and twelve separate installed stdlib lines.
+
+This checkpoint establishes no Haskell defect, edit, or fix. No Haskell/native product execution is reported.
+Keep later Haskell fixes in FINDINGS with source locations and evidence for external implementation work.
+Control: `/tmp/mcfta-current-equality-globals-control-20261031`.
+Publication records: `/tmp/mcfta-current-equality-globals-packaging-20261031`.
+The complete preceding archive remains in Git at `e0f547cced365f350c79f2144a4ab6d179dd012b`.
+The full objective remains unproved. Work continues.
+
+---
+
 # Current checkpoint: actual call effects and sound returned memos
 
 Date: 2026-10-31. Branch: `formalize`. Goal: ACTIVE.
