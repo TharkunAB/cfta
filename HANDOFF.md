@@ -1,3 +1,51 @@
+## Current minimum pass and finite convergence (2026-10-31 04:43 CET)
+
+The full public system theorem remains open.
+Current detail: `lean/notes-current-literal-minimum-pass.md`.
+
+The checked finite model now computes a positive pass fixed point from empty.
+It takes no finished table, iteration count, or future invariant as an input.
+The pass uses signed Integer values and the original supplied key sequence.
+It processes each suffix before its head.
+All rows for one key read that same suffix-updated table before one min insertion.
+Known entries remain known and cannot increase.
+These signed laws do not assume positivity.
+The actual empty-initialized iteration derives and preserves positivity internally.
+Its computable finite-key comparison and natural lexicographic decrease make it total.
+
+The key-domain, container and relative order adapter to the Haskell Map remains open.
+Guard-erased structural minimum semantics and the computed Int/Nat embedding remain open.
+The routine ignores guards.
+A structural minimum would bound constrained accepted terms from below.
+It would not certify an attained constrained-language minimum.
+
+The main execution gap remains sufficient original depth for actual nested worker calls.
+Maintain ordinary domain and height through actual slots, queries and children.
+Cover terminal, alias and wakeup work and captured sibling restoration.
+Existing production callback completeness and Frame laws are available.
+A pending profile is a proposal, not an established rank or a new admission gate.
+The Native ordinary wrapper and Prepared full fallback have distinct scopes.
+Keep source contradictions and both workers in the full objective.
+
+Public accepted membership, coverage, configured order, requested prefix, resource
+sufficiency and Haskell correspondence remain open.
+The earlier same-root ordinary height/startup Packet/Fits proof remains checked.
+Initial Fits at a supplied width is not a global capacity or worker-depth result.
+
+The complete Audit passes: 4,773 jobs and 83,303 theorem-dependency checks.
+Public readback passes: 1,258 checks and 148 definition prints.
+All seven new theorem reports use only standard axioms.
+All prior 572 protected sources and 835 native inputs retain exact bytes.
+The two new strict module checks have zero output.
+Ten compiler commands, one repaired failure, and 23 snapshots remain in the evidence.
+
+No Haskell source changed or ran.
+No new Haskell defect or fix was established.
+Record later Haskell fixes in FINDINGS for external work.
+The full goal remains active and incomplete.
+
+---
+
 # Current: concrete numeric filter and bounded product startup
 
 Updated: 2026-10-31 04:05 CET. Branch `formalize`. Status: progress.
