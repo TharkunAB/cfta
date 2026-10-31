@@ -7,6 +7,12 @@ Before release, the package was called `microcfta-generator`.
 Initial release. `cfta-generator` is one generator over the constrained
 tree automata of `cfta`, with QuickCheck integration.
 
+- Add `fitWithReport`, `distillWithReport`, and `Model.trainWithReport`.
+  Reports expose the final step, the optimizer's stopping reason, and the
+  step count. Corpus fits also report retained and dropped terms. Reporting
+  validates finite numerical results and does not evaluate another point
+  after the step budget is spent. Existing training functions keep their
+  behavior. See [Inspect training results](docs/training-results.md).
 - Reject nonfinite or zero exponential potentials in `withLogWeights`, and
   nonfinite temperatures in `Model.withTemperature`. A public-API check found
   that NaN, infinity, overflow, and underflow could become zero rational
