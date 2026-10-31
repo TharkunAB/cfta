@@ -104,18 +104,13 @@ that derivation-to-output mapping; this example supplies no general parser.
 
 ## Run and check
 
-Build and run inside `nix-shell` with the project's process memory cap.
-For the current WSL2 host:
+Run these commands from the repository root. Use the process memory cap
+for your development environment. The checks also set a 2 GiB RTS heap limit.
 
 ```sh
-export XDG_RUNTIME_DIR=/run/user/1000
-export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
-/home/tritlo/Code/heavy-management/bin/capped --mem 8G --time 15m \
-  nix-shell --run 'export PATH=/usr/bin:$PATH; cabal build cfta-generator:cfta-explainfuzz'
-/home/tritlo/Code/heavy-management/bin/capped --mem 4G --time 5m \
-  nix-shell --run 'export PATH=/usr/bin:$PATH; cabal run cfta-generator:cfta-explainfuzz -- check +RTS -M2G -RTS'
-/home/tritlo/Code/heavy-management/bin/capped --mem 4G --time 5m \
-  nix-shell --run 'export PATH=/usr/bin:$PATH; cabal run cfta-generator:cfta-explainfuzz -- sample grouped-filtered 7 12 +RTS -M2G -RTS'
+nix-shell --run 'cabal build cfta-generator:cfta-explainfuzz'
+nix-shell --run 'cabal run cfta-generator:cfta-explainfuzz -- check +RTS -M2G -RTS'
+nix-shell --run 'cabal run cfta-generator:cfta-explainfuzz -- sample grouped-filtered 7 12 +RTS -M2G -RTS'
 ```
 
 The default invocation and `demo` request twelve grouped queries with seed 7.
