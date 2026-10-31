@@ -1,3 +1,4 @@
+import MicroCFTA.SourceCurrentConjunctionWorkerEffects
 import MicroCFTA.SourceCurrentConjunctionRowsWorkerEffects
 import MicroCFTA.SourceCurrentAllocatedNativeTerminalKnown
 import MicroCFTA.SourceEqualityRequiredAllEffects
