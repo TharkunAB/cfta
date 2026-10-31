@@ -120,7 +120,10 @@ export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
 
 The default invocation and `demo` request twelve grouped queries with seed 7.
 `sample REQUIREMENT SEED COUNT` accepts seeds 0 through 1,000,000 and counts
-1 through 10,000. Unknown requirements, malformed arguments, and impossible
+1 through 10,000. `sample` writes SQL statements only to standard output, so
+a test harness can consume them. `demo` also prints the event probability,
+conditional probabilities, and the ambiguous-output fixture.
+Unknown requirements, malformed arguments, and impossible
 events exit with an error. `--help` prints the usage.
 
 `check` exhausts the 45 ASTs. It checks unique rendered outputs, all four

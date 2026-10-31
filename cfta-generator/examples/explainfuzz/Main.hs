@@ -83,7 +83,7 @@ main = do
             case (readMaybe seedText, readMaybe countText) of
                 (Just seed, Just count)
                     | seed >= 0 && seed <= 1000000 && count >= 1 && count <= 10000 ->
-                        demo requirement seed count
+                        emitSamples requirement seed count
                 _ -> die $ "Seed must be 0..1000000 and count must be 1..10000.\n" <> usage
         _ -> die usage
 
@@ -239,6 +239,14 @@ ambiguousOutputProbabilities = do
             (+)
             [(output, probability) | (Node _ [Node output []], probability) <- Map.toList $ probabilities weighted]
 
+-- | Write SQL statements only, so another program can consume the sample stream.
+emitSamples :: Requirement -> Int -> Int -> IO ()
+emitSamples requirement seed count = do
+    learned <- either die pure $ train corpus
+    selected <- either die pure $ condition requirement learned
+    forM_ (sample seed count selected) $ \term ->
+        maybe (die "A sampled query could not be rendered.") putStrLn $ render $ unlabelParents term
+
 -- | Report the event probability and sample the conditioned query distribution.
 demo :: Requirement -> Int -> Int -> IO ()
 demo requirement seed count = do
@@ -283,8 +291,8 @@ check = do
             && isLeft (train [Node "unknown" []])
             && isLeft (train [oversized])
             && isLeft (condition Impossible learned)
-        ) $
-        die "An empty corpus, invalid or oversized term, or impossible requirement was accepted."
+        )
+        $ die "An empty corpus, invalid or oversized term, or impossible requirement was accepted."
     forM_ [AnyQuery, Grouped, Filtered, GroupedFiltered] $ \requirement -> do
         selected <- either die pure $ condition requirement learned
         let terms = completionTerms selected
