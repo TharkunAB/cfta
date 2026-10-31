@@ -1,3 +1,59 @@
+# Current checkpoint: original size rank and captured edges
+
+Updated 2026-10-31 02:37 CET. Source a562f7b12d4c230dd38a24e55b86b454a475bb42.
+Canonical current note: [lean/notes-current-original-depth-and-captured.md](lean/notes-current-original-depth-and-captured.md).
+The complete earlier document remains below as an exact suffix.
+
+The strongest closed BOTH-worker result stabilizes actual outcomes at each
+supplied finite depth and keeps relevant constraint/projection paths in one finite
+original carrier. Numeric forecast magnitudes can still depend on that depth.
+Current original input and resource gates remain explicit. Exhaustion is possible.
+ConstructedResources already computes mathematical width at each supplied depth.
+The missing producer must derive sufficient original depth and intended prefix output.
+Cross-depth List.IsPrefix alone is not that production theorem.
+
+The bounded public reference target already has exactness, completeness, and finite
+size evaluation. Public preorder-token Prefix also retains the token restriction.
+The next construction route is concrete: bySize gives positive decreasing child
+budgets; fromRows introduces Rec/Mu only for cyclic components.
+Prove the actual original size rank, then transport it through native construction.
+No literal bySize/fromRows-to-native proof is claimed yet.
+A 157-line numeric product-rank draft is retained UNCOMPILED for the next phase.
+The generic Mu/Union/opaque-field interface remains part of the full goal.
+
+The new captured-edge law derives current parent admission from the actual stored
+slot and preserves conditional native Stored at exposed rejected/stopped/complete callers.
+None and unhandled establish no hidden-state fact.
+This is one checked local law; it does not close whole-worker progress.
+
+Audit passed at 4765 jobs and 83090 dependencies.
+Public readback passed at 1231 checks and 118 definition prints.
+Eight compiler commands: six passes, two retained repaired failures, 13 snapshots.
+Root and peer fully read 108 installed source lines and 63 new public lines.
+All 565 prior protected files and 835 native inputs are exact.
+The old 4764 Lean files are exact except the new Audit import.
+The full prior public output remains an exact prefix.
+The complete current note records hashes, resource limits, gates, and repairs.
+
+Haskell: no file changed and no Haskell/native program ran.
+No new executable defect or fix was established.
+The custom-cost candidate is an existing source-grounded progress limit.
+It concerns cost extraction, not safe worker hints or bounded Prefix.
+All older conditional FINDINGS and fixes remain below without omission.
+The acquired current Tree/EGraph/Prefix bytes match exact main bd5a406a and this checkout.
+
+Worker hints fall back to an offered variable when absent or invalid.
+Only the explicit stop rule gives Restart.decision None.
+A contrary Root note was corrected and retained with its source evidence.
+Keep configured stops, ordering, pruning, and Yes/No/Unknown meanings in the target.
+Do not replace original admission with a future successful history or output witness.
+
+Control root: /tmp/mcfta-original-depth-and-captured-control-20261031.
+Restart package: lean/restart-evidence/20261031-original-depth-captured-control.
+The full original-input/BOTH-worker/public-adapter/Haskell goal remains open.
+
+---
+
 # Current checkpoint: recursive native traversal and continuation count
 
 The complete original-input formalization remains OPEN. Work continues.
