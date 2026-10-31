@@ -1,3 +1,62 @@
+# Current: concrete numeric filter and bounded product startup
+
+Updated: 2026-10-31 04:05 CET. Branch `formalize`. Status: progress.
+The complete original-input proof remains open. Continue the full objective.
+Read `lean/notes-current-sized-source-filter-and-initial.md` for current details.
+This prefix supersedes older status summaries. Preserve their complete bodies.
+
+The concrete numeric equality filter now has checked ordered Nat/Integer laws.
+Its current view retains signed child indexes. Selected invalid indexes reject.
+Root/deeper paths select no size. Empty selected classes pass. EqContradiction
+passes this numeric prefilter; that is not a satisfiability statement.
+Filtered splits preserve exact list order/multiplicity. Negative totals give [].
+Actual full Constraint.equalities extraction and minimumSizes remain open.
+
+`SourceSizedPrefixProductInitial.initial_packet` derives the SAME actual fresh
+bounded product root/heap, Facts, Available, free = [], recursive ordinary Node and
+height <= bound.toNat+1. It derives the physical original-guard Heap, encode/lookup,
+literal prepared-cache startup Packet, initial profile Fits, canonical core,
+root handle in slot 0 and suspended mass 0. Cache preparation occurs internally.
+Inputs remain original rows/minimum/filter/root/bound/query parameters, original
+Cache.Valid, Cached equality payloads on original rows and empty pending metadata.
+No future build/Packet/Fits/heap/run certificate is supplied. Width is a supplied
+Nat; initial Fits does not choose global capacity or sufficient recursive depth.
+The startup expandable flag remains !recursiveBoundary value at slot 0.
+
+The startup theorem still accepts the numeric filter as a parameter. The new
+concrete filter can instantiate it, but its actual full-constraint view adapter
+is not yet derived. Ranked-DAG unfolding still differs from literal SCC/memo
+import. Syntax order does not prove native makeNode's final row-list order.
+Facts/Available/finite ordinary Node are not a Normal producer.
+
+Biggest execution gap: sufficient ORIGINAL recursive depth and global progress
+for BOTH workers, including same-slot restarts, incoming replacement, raw alias/
+SCS charges, unknown slots and the remaining sibling/child stack. Public accepted
+membership/coverage/configured order/prefix equality and Haskell/adapter APIs
+remain. Retain table/count/checkpoint and older constructor/equality/exact size/
+rank/unrank obligations. Keep recursive/union/opaque-field sources in full scope.
+Finite path carriers bound constraint/SCS/equality paths, not numeric work/depth.
+Safe hints fall back to the offered candidate; explicit all-stopped rules stop.
+
+Audit default/strict PASS 4771 jobs / 83226 theorem dependency checks.
+Public PASS 1251 checks / 135 definition prints; all 6 new axiom reports standard-only.
+The complete 4952782 prior public bytes are an exact prefix. New 128L / 8497B tail.
+Full 4961279B SHA 679849bdc2d025070a8e3a5df20936a0203ada62277f5a30d59d9661eab286f9.
+All 570 old protected/835 native inputs remain exact; protected572, Lean4771.
+Audit adds two imports before its complete old body. Final source 250L / public 128L
+are fully read. All 11 compiler attempts/24 snapshots remain: 9 passes, 2 repaired failures.
+Filter fixes only normalize composition/cast proofs. Initial 134 passed unchanged.
+All dispatched checks used effective 4 GiB memory/high, zero swap, five-minute caps.
+
+Haskell/FINDINGS: no Haskell source changed or Haskell/native program ran.
+No new executable Haskell defect or fix was established. Keep source gates clear.
+Evidence: `/tmp/mcfta-sized-source-filter-admission-control-20261031` and
+`lean/restart-evidence/20261031-sized-source-filter-admission-control`.
+Continue literal minimum/equality producers and original worker progress.
+Pushes to formalize are explicitly authorized. The complete goal is unfinished.
+
+---
+
 # Current: size-product rows produce ordinary native values
 
 Updated: 2026-10-31 03:32 CET. Branch `formalize`. Status: progress.
