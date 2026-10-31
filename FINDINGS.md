@@ -1,3 +1,62 @@
+# Current checkpoint: actual terminal cache bounds and required-reader effects
+
+Date: 2026-10-31. Branch: `formalize`. Full goal: ACTIVE.
+Canonical note: `lean/notes-current-terminal-cache-and-required-effects.md`.
+Source head: `08316d37fbec60e1174d40ef07908aa5361338c2`.
+Prior published archive head: `028144e1ace158391f7465981b22f41451383c35`.
+Main `bd5a406a6a3f84b7e3ae0906082783911509df83` is already integrated.
+
+The actual cached terminal adapter now preserves whole KnownOrdinary for every successful raw Core
+and every Some cache at the literal returned Caller heap, from explicit CURRENT admissions.
+It derives prefix, fold, and incoming conditions internally.
+It includes the cache-None raw fallback and the literal Empty handle-0 adaptation.
+The actual selected ordinary-edge producer supplies its exact staged children's availability,
+closedness, ordinary domain, strict parent-height descent, common cap, and bucket admission.
+The literal parent lookup, selected stored row, Ready, and current cache/arity/projection gates remain.
+Default/free `edgesOf` correspondence is separate.
+
+Five modules / 794 lines: TerminalKnown206, RequiredAllEffects122, OrdinaryIncomingInputs101,
+IncomingCacheKnown155, RequiredWorkerEffects210. All pass default and strict checks.
+The required-reader and list laws preserve all-outcome SemanticHeap, Covered, growth, and issued history.
+Done values are available and closed. These are secondary helper laws.
+
+Route correction: the CURRENT failed check uses EnabledEmpty -> CurrentAllocatedConjunctionWorker
+-> CurrentConjunctionWorker -> CurrentConjunctionRowsWorker -> CurrentConjunctionEquality
+-> ProjectionWorker.forest. It does not use legacy SharedTarget.step/ClassFold.pass.
+The legacy raw native executor and NativeDemand executor are distinct programs.
+No failed-current-call theorem follows by replacing one with the other.
+The full wrong-route review and all scope concerns remain retained; it adds zero theorems.
+The actual current rows/call effects proof is the next source-only task.
+
+Biggest gap: derive all-outcome actual worker Post/current admissions/resource lineage for BOTH
+literal resume D k workers, with primitive D fixed. After the hook, restore the SAME captured cache
+and hook metadata at the ACTUAL returned Caller/query pair. Packet.captured_post consumes Post;
+the worker must derive it. Local sufficient callback/prefix bounds do not bound fixed original D.
+Prepared raw failure heaps are separate from an absent outer endpoint. Keep aliases, renewal,
+writers, terminal, Mu, Union, opaque, and default source branches in scope.
+Then prove sufficient ORIGINAL depth/resources and the complete intended ordered public prefix,
+including configured stops, source Map/domain/order/SCC, signed/Set/default-weighted getters,
+NodeEq, size/node-count/rank/unrank, Prefix/table/count/checkpoint, and Haskell/host correspondence.
+No whole-system completion, termination, or unconditional public coverage theorem is claimed.
+
+Audit: 4,801 jobs / 83,659 dependencies. Public: 1,321 checks / 159 definitions / six standard axiom reports.
+All 597 old protected sources and all 835 native inputs remain exact. Only old Audit gets five imports.
+22 commands: 14 passes / eight retained failures / 108 snapshots. Every actual command has verified
+4 GiB max/high, zero swap, and a five-minute cap before and after execution.
+Root read all 794 final source lines and all 246 new public lines.
+Seven small failures were read fully; the 114,992-byte terminal failure uses explicit diagnostic cuts.
+Root OLD scope: two predeclared whole paths (100+296), one named 52-line adapter cut; 448 lines / three originals.
+Thirty-four complete owner closures pass Root replay before the final public review.
+Retain all original-path vectors, superseded drafts, compiler failures, and metadata incidents.
+Restart control: `/tmp/mcfta-required-cache-control-20261031`.
+Packaging: `/tmp/mcfta-required-cache-packaging-20261031`.
+Planned archive: `lean/restart-evidence/20261031-required-cache-control`.
+Planned restored replay: `/tmp/mcfta-required-cache-restored-20261031`.
+No Haskell/native product execution or executable Haskell defect, edit, or fix occurred here.
+`FINDINGS.md` retains that status and all earlier findings. The full goal remains ACTIVE.
+
+The complete prior document follows unchanged.
+
 # Current state: fold cache and physical effects (2026-10-31)
 
 The full original-input system proof remains open. Work continues.
