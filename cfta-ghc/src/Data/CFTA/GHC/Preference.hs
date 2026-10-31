@@ -99,19 +99,22 @@ tokenScoreShared (PreferenceModel base weights _) uses root locals
     adjustment parent position symbol = Map.findWithDefault 0 (parent, position, symbol) weights
 
 -- | Sum a token scorer over a program without changing its application tree.
-foldProgram :: (Maybe (Text, Int) -> Int -> (Text, Int) -> value) -> (value -> value -> value) -> Program -> value
-foldProgram at combine = go Nothing 0
+foldProgram ::
+    (Maybe (Text, Int) -> Int -> (Text, Int) -> value) -> (value -> value -> value) -> value -> Program -> value
+foldProgram at combine identity = go Nothing 0
   where
     go parent position program =
         let (name, arguments) = spine program []
             token = (name, length arguments)
-         in foldl' combine (at parent position token) [go (Just token) index child | (index, child) <- zip [0 ..] arguments]
+         in combine
+                (at parent position token)
+                (foldl' combine identity [go (Just token) index child | (index, child) <- zip [0 ..] arguments])
     spine (Var name) arguments = (name, arguments)
     spine (App function argument) arguments = spine function (argument : arguments)
 
 -- | Score a program in the same context as its training case or plugin hole.
 scoreProgram :: PreferenceModel -> PreferenceCase -> Program -> Double
-scoreProgram model item = foldProgram (tokenScoreShared model (caseUses item) (caseRoot item) (caseLocals item)) (+)
+scoreProgram model item = foldProgram (tokenScoreShared model (caseUses item) (caseRoot item) (caseLocals item)) (+) 0
 
 -- | Cache a program's sparse counts and corpus score before optimization.
 prepareProgram :: Corpus.FitModel -> PreferenceCase -> Program -> (Map.Map Feature Double, Double)
@@ -119,6 +122,7 @@ prepareProgram base item program =
     ( foldProgram
         (\parent position token -> Map.singleton (feature base (caseRoot item) (caseLocals item) parent position token) 1)
         (Map.unionWith (+))
+        Map.empty
         program
     , scoreProgram (fromFitModel base) item program
     )

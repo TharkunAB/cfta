@@ -85,6 +85,8 @@ the plugin also keeps GHC's own fits first and puts fits that ignore arguments
 last. Evaluation uses the corpus model embedded in the preference file. The file
 also stores training groups. Evaluation rejects any overlap with the test groups.
 Group labels are supplied metadata; this check cannot prove source independence.
+Complete-program scores use the plugin reranker's addition order. Optimization
+uses aggregated feature counts.
 
 Load the result with the existing plugin option
 `-fplugin-opt=Data.CFTA.GHC.HoleFits:model=demo-preferences.cfta`.
