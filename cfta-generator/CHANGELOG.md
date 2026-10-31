@@ -7,6 +7,12 @@ Before release, the package was called `microcfta-generator`.
 Initial release. `cfta-generator` is one generator over the constrained
 tree automata of `cfta`, with QuickCheck integration.
 
+- Add `fitWithReport`, `distillWithReport`, and `Model.trainWithReport`.
+  Reports expose the final step, the optimizer's stopping reason, and the
+  step count. Corpus fits also report retained and dropped terms. Reporting
+  validates finite numerical results and does not evaluate another point
+  after the step budget is spent. Existing training functions keep their
+  behavior. See [Inspect training results](docs/training-results.md).
 - Add `Data.CFTA.Sized.Checkpoint`: resume a size-ordered listing of the
   terms of a graph, or a sampled run of draws from it, also in a new process.
   `start` gives the checkpoint before the first term. `resume` builds the size

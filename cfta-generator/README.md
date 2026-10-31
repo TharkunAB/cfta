@@ -439,6 +439,9 @@ nodes. With the weight one for each symbol, the weights are the counts.
 and retained and dropped corpus counts. A finite result can stop before
 convergence. See [Inspect training results](docs/training-results.md) for the
 reporting APIs, defaults, and numerical limits.
+`Model.trainWithReport` returns the same report together with the contextual
+model, so callers can inspect the fit and use its normal query and sampling
+functions without constructing context labels themselves.
 
 Grammar-constrained decoders compute a mask over the subword tokens of a
 language model at each step: XGrammar with a pushdown automaton and

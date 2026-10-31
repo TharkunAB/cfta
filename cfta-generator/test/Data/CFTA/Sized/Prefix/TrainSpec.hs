@@ -167,6 +167,23 @@ spec = describe "Data.CFTA.Sized.Prefix.Train" $ do
                 ]
             everything model = fromJust $ Model.bestTerms 100000 model []
             close left right = abs (left - right) < 1e-7
+        it "returns the same model queries with an inspectable training report" $
+            forM_ models $ \(reach, model) -> do
+                let (reported, report) = either (error . show) id $ Model.trainWithReport reach expressions 5 corpus
+                everything reported `shouldBe` everything model
+                Model.nextTokenProbabilities reported [] `shouldBe` Model.nextTokenProbabilities model []
+                (distillRetained report, distillDropped report) `shouldBe` (length corpus, 0)
+                fitStepCount (distillFit report) `shouldSatisfy` (\count -> count > 0 && count <= 2000)
+        it "reports dropped terms without requiring callers to label the corpus" $ do
+            let terms = [Term.Node "x" [], Term.Node "y" [], Term.Node "neg" [Term.Node "x" []], Term.Node "outside" []]
+                (model, report) = either (error . show) id $ Model.trainWithReport (Reach 1 True) expressions 1 terms
+            (distillRetained report, distillDropped report) `shouldBe` (2, 2)
+            Map.fromList (everything model) `shouldBe` Map.fromList [(Term.Node "x" [], 0.5), (Term.Node "y" [], 0.5)]
+        it "reports an empty retained corpus or unsupported context labelling" $ do
+            let outcome automaton terms = fmap (distillRetained . snd) $ Model.trainWithReport (Reach 1 True) automaton 5 terms
+            outcome expressions [] `shouldBe` Left NoRetainedTerms
+            outcome expressions [Term.Node "outside" []] `shouldBe` Left NoRetainedTerms
+            outcome doubles corpus `shouldBe` Left UnsupportedTrainingLanguage
         it "gives each term within the bound a probability, the probabilities sum to one, and the most probable come first" $
             forM_ models $ \(reach, model) -> do
                 let best = everything model

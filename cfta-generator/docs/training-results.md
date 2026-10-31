@@ -13,6 +13,27 @@ establish better hole suggestions or a new fitting algorithm.
 
 ## APIs
 
+For the contextual model API, use
+`Data.CFTA.Sized.Prefix.Model.trainWithReport`. It takes the same arguments
+as `Model.train` and returns the model with its `DistillReport`. Queries and
+sampling still use plain terms and tokens. The report's weight keys carry
+the context labels used during fitting.
+
+```haskell
+import qualified Data.CFTA.Sized.Prefix.Model as Model
+import Data.CFTA.Sized.Prefix.Parents (Reach (..))
+import Data.CFTA.Sized.Prefix.Train
+
+case Model.trainWithReport (Reach 1 True) automaton bound corpus of
+    Left problem -> print problem
+    Right (model, report) -> do
+        let fitted = distillFit report
+        print (distillRetained report, distillDropped report)
+        print (fitStepCount fitted, fitStopReason fitted)
+        print (stepGradientNorm $ fitFinalStep fitted)
+        print (Model.bestTerms 5 model [])
+```
+
 `Data.CFTA.Sized.Prefix.Train.fitWithReport` takes a step limit followed by
 the same arguments as `fit`. It returns `Either TrainingError (FitReport
 symbol)`. The report contains `fitFinalStep`, `fitStepCount`, and
@@ -30,21 +51,10 @@ counts.
 The wrapper calculates the corpus counts before optimization. It does not
 retain the original corpus to calculate the dropped count after fitting.
 
-```haskell
-case distillWithReport automaton bound corpus of
-    Left problem -> print problem
-    Right report -> do
-        let fitted = distillFit report
-        print (distillRetained report, distillDropped report)
-        print (fitStepCount fitted, fitStopReason fitted)
-        print (stepGradientNorm $ fitFinalStep fitted)
-        -- Inspect the report before using stepWeights (fitFinalStep fitted).
-```
-
 The existing `fit` remains a lazy stream. The existing `distill` keeps its
-return type, defaults, filtering, and weights. Both forms use the same
-optimizer. The new reporting functions add validation; they do not change
-the legacy stream's behavior.
+return type, defaults, filtering, and weights. `Model.train` also keeps its
+behavior. Both forms use the same optimizer. The new reporting functions add
+validation; they do not change the legacy stream's behavior.
 
 ## Stop reasons and numerical limits
 
@@ -67,6 +77,10 @@ They also reject a step with a nonfinite weight, objective, or gradient norm.
 An unsupported training route and an empty retained corpus have separate
 errors. `UnsupportedTrainingLanguage` includes the existing limits on
 determinization and intersections; it does not distinguish their causes.
+`Model.trainWithReport` also rejects context labelling of constrained
+automata. It reports `UnrepresentableWeights` when the fitted log-weights
+cannot produce finite positive sampling potentials. This is a conversion
+failure, separate from a nonfinite optimizer step.
 
 The low-level caller must supply feasible counts for its oracle. The report
 does not prove that arbitrary count maps describe accepted terms. A finite
