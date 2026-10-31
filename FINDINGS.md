@@ -1,3 +1,57 @@
+## Current structural minima and known ordinary handles (2026-10-31 05:20 CET)
+
+The full public Haskell system theorem remains open.
+Current detail: `lean/notes-current-minimum-meaning-and-known-nodes.md`.
+
+The finite Lean row model now computes exact minimum node counts for finite
+guard-erased terms. A known entry is attained and no larger than any such term.
+An unknown entry is equivalent to absence of a finite guard-erased run.
+These proofs use the existing language and size relations.
+The actual computed table is reached by finitely many passes from empty.
+No final table, iteration count, trace or future invariant is supplied.
+
+The computed Nat table embeds exactly into the actual signed table.
+It now supplies the actual bounded product startup instead of a free minimum.
+The same root/heap, closed ordinary height, annotation Heap, encode/lookup,
+startup Packet, initial Fits, canonical core, slot0 and zero mass remain.
+The original cache, cached row equalities, empty pending, filter, bound and width gates remain.
+Source Map/domain/order and full signed equality-filter adapters remain open.
+
+The known-slot property includes ordinary Node and a shared height bound.
+It is derived at initialization and preserved by actual callback frames.
+Actual caller Post and completed queries preserve exact old-handle lookup.
+A finite-query producer derives warm ranges and its receipt from current gates.
+It preserves the SAME old cache and height bound at the reached native heap.
+It does not classify newly returned query handles or later new cache bindings.
+Arbitrary configured-fuel incomplete query endpoints remain separate.
+
+The biggest execution gap is actual new child/assigned-handle domain and height,
+then sufficient original nested-call depth for both workers.
+Cover terminal/alias work, memo hits, source contradictions and captured siblings.
+A pending profile remains a proposal, not an established rank or admission gate.
+The Native ordinary wrapper and Prepared full fallback retain distinct scopes.
+
+Public accepted membership, coverage, configured order, intended finite prefix,
+original resource sufficiency and Haskell/native correspondence remain open.
+Initial Fits at a supplied width is not a global capacity theorem.
+The finite constraint/SCS carrier is not a work, forecast or term-depth bound.
+
+Audit passes: 4,778 jobs and 83,357 theorem-dependency checks.
+Public readback passes: 1,276 checks and 151 definition prints.
+All 18 new reports use only standard axioms.
+All 835 native inputs retain exact bytes.
+Of 574 prior protected sources, 573 retain exact bytes.
+The convergence module retains its complete original 196-line body as an exact prefix.
+The extension adds actual finite-pass reachability. It changes no old declaration.
+The 26 compiler attempts, three repaired failures and 120 snapshots remain retained.
+
+No Haskell source changed and no Haskell/native product execution ran.
+No new Haskell defect or fix was established.
+Record later Haskell fixes in FINDINGS for external work.
+The full goal remains active and incomplete.
+
+---
+
 ## Current minimum pass and finite convergence (2026-10-31 04:43 CET)
 
 The full public system theorem remains open.
