@@ -1,3 +1,4 @@
+import MicroCFTA.SourceCurrentIncomingAdaptObserved
 import MicroCFTA.SourceCurrentNativeWriteFlags
 import MicroCFTA.SourceCurrentNativeCountObserved
 import MicroCFTA.SourceCurrentNativeSlotIndex
