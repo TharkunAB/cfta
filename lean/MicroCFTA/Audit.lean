@@ -1,3 +1,8 @@
+import MicroCFTA.SourceCurrentDispatchCapturedKnown
+import MicroCFTA.SourceCurrentFoldCapturedKnown
+import MicroCFTA.SourceCurrentIncomingCapturedKnown
+import MicroCFTA.SourceCurrentTerminalCapturedKnown
+import MicroCFTA.SourceCurrentFirstChildCapturedKnown
 import MicroCFTA.SourceCurrentSelectedFirstChildKnown
 import MicroCFTA.SourceCurrentNativeDemandFrames
 import MicroCFTA.SourceCurrentConjunctionCallPost
