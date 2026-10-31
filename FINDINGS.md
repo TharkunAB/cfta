@@ -1,3 +1,59 @@
+# Current state: whole-cache incoming and dispatch (2026-10-31)
+
+The full original-input system proof remains open. Work continues.
+Current checked source: `b94d677bffd6976542ea8ac59faa0067c50ae015`.
+Five source commits start at `703f9e2c2a3586acfa276794920fdbcba8a0db90`.
+Check the live branch and archive record before a publication claim.
+
+Read `lean/notes-current-whole-cache-incoming-and-dispatch.md` first.
+It states the full objective, exact current gates, validation and missing work.
+
+Strongest new result: whole actual incoming successful Core rows preserve Known
+for every pending Some handle under the common ordinary-node height cap.
+Incoming admission includes an ordinary available closed node within that cap.
+Native Stored holds at every exposed caller. Actual outer .ok dispatch preserves
+Known for the SAME old cache and every successful action cache at its reached heap.
+The dispatch current-slot admission is exactly the existing completion admission.
+Exact Some/Some writes now cover both emptiness modes; None writes are classified.
+The ordinary entry and worker use the fixed interned getter with literal row origin.
+This does not prove the default/weighted Haskell getter or global worker progress.
+
+Full Audit default/strict PASS4790 jobs/83461 theorem dependency checks.
+Public PASS1302 checks/157 prints;7 new standard-only axiom reports.
+Root read all687 final source and381 new public lines (26851B).
+Both the old5028072B and earlier four-module5051665B public prefixes remain exact.
+All586 old protected sources and835 native inputs remain exact.
+Audit only adds five imports. All25 compiler attempts/124 snapshots remain:
+18pass7retained repaired failures. Every dispatched job used effective4GiB/high,
+zero swap,five-minute caps. One before-dispatch permission-review timeout is separate.
+No Haskell source edit or Haskell/native product execution occurred.
+No new Haskell defect/fix was established. Record every later Haskell fix in FINDINGS.
+
+Next: compose actual CachedFold/terminal paths from CURRENT Seed/Fits/Reserved.
+Derive each dispatch admission internally. Keep raw fallback rows explicit.
+Prove old physical lookup retention on FAILED emptiness checks.
+The retained150-line old-cache/native-prefix draft is UNCOMPILED and excludes that case.
+The retained139-line fold draft is UNCOMPILED. It proposes returned Some cache Known.
+Raw Core fallback rows with cache none remain outside that draft.
+Then close alias/renewal/terminal and positive-depth original-input support for BOTH
+workers, followed by sufficient ORIGINAL depth/resources for all branches.
+Preserve generic Mu/Union/opaque, original Map/domain/order, signed/Set adapters,
+exact node-count/size order, rank/unrank, configured order/stops, intended accepted
+public prefix/resources, Prefix/table/count/checkpoint and Haskell/host correspondence.
+A local height cap, finite path carrier or supplied future witness does not close this.
+
+Control: /tmp/mcfta-whole-incoming-control-20261031
+Publication: /tmp/mcfta-whole-incoming-packaging-20261031
+Restart target: lean/restart-evidence/20261031-whole-incoming-control
+Prior complete archive: lean/restart-evidence/20261031-native-binding-and-constraint-control
+Prior published head:d32ee1e710f73f5bf2490ca60dd4b3a889325450.
+Standing authorization: ordinary pushes to origin formalize; no main/force push.
+Root owns compilers/native execution/Git/network/board/production/packaging.
+Use serial4GiB/zero-swap/five-minute heavy-management jobs. Retain every failure.
+All previous handoff/findings/prompt bodies follow unchanged.
+
+---
+
 # Current state: native bindings and constraint startup (2026-10-31)
 
 The full original-input proof remains open. Work continues.
