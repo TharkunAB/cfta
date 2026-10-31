@@ -443,6 +443,12 @@ reporting APIs, defaults, and numerical limits.
 model, so callers can inspect the fit and use its normal query and sampling
 functions without constructing context labels themselves.
 
+The runnable [Loaded Dice recipe](examples/loaded-dice/README.md) tunes a
+recursive list generator toward a target length distribution. It uses these
+weighted count tables, compares direct class selection with `Gen.frequency`,
+and prints ranks that replay the generated lists. Run
+`cabal run cfta-generator:cfta-loaded-dice -- demo`.
+
 Grammar-constrained decoders compute a mask over the subword tokens of a
 language model at each step: XGrammar with a pushdown automaton and
 precomputed token sets ([arXiv:2411.15100](https://arxiv.org/abs/2411.15100)),
