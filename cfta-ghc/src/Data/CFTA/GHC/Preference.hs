@@ -112,20 +112,24 @@ foldProgram at combine identity = go Nothing 0
     spine (Var name) arguments = (name, arguments)
     spine (App function argument) arguments = spine function (argument : arguments)
 
--- | Score a program in the same context as its training case or plugin hole.
+{- | Score a program in the same context as its training case or plugin hole.
+Apply to the model and case once to share the scorer across programs.
+-}
 scoreProgram :: PreferenceModel -> PreferenceCase -> Program -> Double
 scoreProgram model item = foldProgram (tokenScoreShared model (caseUses item) (caseRoot item) (caseLocals item)) (+) 0
 
--- | Cache a program's sparse counts and corpus score before optimization.
+-- | Cache sparse counts and share one corpus scorer across a case's programs.
 prepareProgram :: Corpus.FitModel -> PreferenceCase -> Program -> (Map.Map Feature Double, Double)
-prepareProgram base item program =
-    ( foldProgram
-        (\parent position token -> Map.singleton (feature base (caseRoot item) (caseLocals item) parent position token) 1)
-        (Map.unionWith (+))
-        Map.empty
-        program
-    , scoreProgram (fromFitModel base) item program
-    )
+prepareProgram base item =
+    let score = scoreProgram (fromFitModel base) item
+     in \program ->
+            ( foldProgram
+                (\parent position token -> Map.singleton (feature base (caseRoot item) (caseLocals item) parent position token) 1)
+                (Map.unionWith (+))
+                Map.empty
+                program
+            , score program
+            )
 
 {- | Fit shared corrections with the existing L-BFGS optimizer. The positive
 step limit includes the initial point. Precision must be finite and
@@ -165,9 +169,10 @@ trainPreferences limit precision base items = do
         let programs = Set.toAscList $ Set.fromList (caseCandidates item)
         unless (casePreferred item `elem` programs) $ bad item "The preferred program is absent from its candidate pool."
         unless (length programs >= 2) $ bad item "Supply at least two distinct candidate programs."
-        let candidates = map (prepareProgram base item) programs
-            (chosen, offset) = prepareProgram base item (casePreferred item)
-        unless (all (finite . snd) candidates) $ bad item "The corpus score is non-finite."
+        let prepareOne = prepareProgram base item
+            candidates = map prepareOne programs
+            (chosen, offset) = prepareOne (casePreferred item)
+        unless (finite offset && all (finite . snd) candidates) $ bad item "The corpus score is non-finite."
         pure (candidates, chosen, offset)
     bad item message = Left $ Text.unpack (caseGroup item) <> ": " <> message
 

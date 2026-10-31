@@ -17,6 +17,7 @@ import Text.Read (readMaybe)
 import qualified Data.CFTA.GHC.Model as Corpus
 import qualified Data.CFTA.GHC.Preference as Preference
 import Data.CFTA.Gen.Synthesis (Program (..))
+import qualified Data.CFTA.Sized.Prefix.Train as Train
 import Data.CFTA.Term (Term (..))
 
 -- | One token scorer retained across all program scores.
@@ -28,12 +29,13 @@ main = do
     arguments <- getArgs
     case arguments of
         ["train"] -> require trained >>= Text.putStr . Preference.printPreferenceModel
+        ["train-wide"] -> trainWide
         [mode] | validMode mode -> run mode 100000 Nothing
         [mode, countText]
             | validMode mode, Just count <- readMaybe countText, count > 0 -> run mode count Nothing
         [mode, countText, path]
             | validMode mode, Just count <- readMaybe countText, count > 0 -> run mode count (Just path)
-        _ -> die "Usage: cfta-preference-score-cost train | (plain|empty|trained) [COUNT [PREFERENCE_FILE]]"
+        _ -> die "Usage: cfta-preference-score-cost train | train-wide | (plain|empty|trained) [COUNT [PREFERENCE_FILE]]"
 
 -- | Accept only the three scoring phases.
 validMode :: String -> Bool
@@ -84,6 +86,23 @@ cases =
 -- | Fit once when requested. The train command isolates this setup cost.
 trained :: Either String Preference.PreferenceModel
 trained = fst <$> Preference.trainPreferences 1000 0.01 base cases
+
+{- | Measure scorer preparation with 4,000 additional parent contexts and the
+existing candidate pools. This is synthetic setup cost, not predictive accuracy.
+Print every final fit field for exact comparison without printing the corpus.
+-}
+trainWide :: IO ()
+trainWide = do
+    let wide =
+            Corpus.merge base $
+                Corpus.fromTerms
+                    []
+                    Map.empty
+                    [("synthetic-parent-" <> Text.pack (show index), Node "arg/0" []) | index <- [1 .. 4000 :: Int]]
+    (_, report) <- require $ Preference.trainPreferences 1000 0.01 wide cases
+    putStrLn "train-wide: synthetic scorer preparation; no accuracy measurement"
+    print
+        (Map.size $ Corpus.modelContexts wide, Train.fitStepCount report, Train.fitStopReason report, Train.fitFinalStep report)
 
 -- | Score all modes through the same program traversal and strict checksum.
 run :: String -> Int -> Maybe FilePath -> IO ()

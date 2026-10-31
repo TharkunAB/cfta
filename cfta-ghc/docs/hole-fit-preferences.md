@@ -116,6 +116,12 @@ instructions and 3.42% more allocation than the original corpus scorer. Keep
 this feature experimental until evaluation on unseen source justifies that cost.
 This fixture does not measure complete plugin search or predictive accuracy.
 
+Scores use `Double`. Finite corrections can still overflow when added. The
+evaluation CLI rejects non-finite complete-program scores. Accumulated-score
+overflow remains a limit of the existing best-first search: it discards infinite
+completion bounds. Ordinary positive scores are supported. The search computes
+the best remaining score within its finite size bound.
+
 The source package includes
 [`ScoreCost.hs`](hole-fit-preferences/ScoreCost.hs). Build the library first,
 then compile the driver from the repository root with the same dependency plan
@@ -137,6 +143,50 @@ Use the same serialized file for each mode. Use a separate output directory
 when compiling against a second checkout. Copy the driver there when comparing
 against `f5b91bf4e3`, which does not contain it.
 
+## Training setup cost
+
+Prepare one corpus scorer for each case. Reuse it for every candidate and the
+preferred program. Force the preferred offset before returning the prepared
+case so that its scorer tables can be collected. Library callers can retain
+`scoreProgram model item` once when comparing programs from the same case.
+
+The local real-code pilot has six training cases and 173 corrections. Both
+versions use the same base counts and cases, GHC 9.14.1, and optimized code.
+The baseline is `c993da9daa`, before scorer sharing. Cachegrind counts instructions.
+The RTS reports allocation and maximum residency. The serialized model, fit
+report, and five held-out rank rows are identical before and after the change.
+
+| Pilot training | Before sharing | Shared scorer |
+| --- | ---: | ---: |
+| Instructions | 19,772,196,374 | 2,468,361,626 |
+| Allocation, bytes | 4,214,086,528 | 728,084,672 |
+| Maximum residency, bytes | 14,169,872 | 13,981,968 |
+
+The source package's `ScoreCost.hs` also has a self-contained `train-wide` mode.
+It adds 4,000 distinct parent contexts to the small corpus and fits the existing
+three pools of eight programs. This gives 4,013 context records. It prints the
+step count, stop reason, and every final step field for exact comparison.
+
+| Synthetic training | Before sharing | Shared scorer |
+| --- | ---: | ---: |
+| Instructions | 74,273,488 | 36,832,763 |
+| Allocation, bytes | 39,192,152 | 12,432,704 |
+
+For this comparison, both versions of `Data.CFTA.GHC.Preference` and the driver
+use `-O2` with the same optimized dependency plan. The final fit output is
+identical. Copy the same driver into both checkouts and use separate output
+directories. Run it inside a capped `nix-shell` after compilation:
+
+```sh
+/tmp/preference-score-cost train-wide +RTS -M2G -s -RTS
+valgrind --tool=cachegrind --cache-sim=no --branch-sim=no \
+  /tmp/preference-score-cost train-wide +RTS -M2G -RTS
+```
+
+These measurements cover setup and fitting. They do not measure search speed
+or ranking quality. The complete 65-case fit reports 16,235,752 bytes of maximum
+residency with this preparation order.
+
 ## Origin and validation
 
 This extension uses the corpus scorer and parent-position features from
@@ -150,5 +200,11 @@ learn the context selector.
 
 The manual CLI example moves the preferred program from rank two to rank one.
 The actual plugin loads the resulting file in reranking and best-first modes.
-Legacy golden output is unchanged. These checks establish the file workflow;
-no gain on real held-out hole fits has been established.
+Legacy golden output is unchanged. These checks establish the file workflow.
+
+The [fixed package-held-out evaluation](hole-fit-preferences/evaluation.md)
+contains 65 training cases and 37 eligible test cases from separate packages.
+Top-one source recovery falls from 16 to 14 of 37 test cases. Top-five recovery
+stays at 25 of 37. Keep this feature experimental: these results do not justify
+its extra scoring cost. The report includes all ranks, coverage, input hashes,
+and the limits of the labels and corpus provenance.
