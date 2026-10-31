@@ -126,11 +126,12 @@ trainWithReport reach automaton bound terms = do
 {- | The model at a temperature of whole terms: the probability of each term to
 the power one over the temperature, renormalized ('atTemperature'). The
 temperature replaces the temperature of the model. 'Nothing' when the
-temperature is not positive.
+temperature is nonfinite or not positive, or when a scaled log-weight has
+no finite positive exponential ('withLogWeights').
 -}
 withTemperature :: (Ord symbol) => Double -> Model symbol -> Maybe (Model symbol)
 withTemperature temperature model
-    | temperature <= 0 = Nothing
+    | isNaN temperature || isInfinite temperature || temperature <= 0 = Nothing
     | otherwise = do
         weighted <- withLogWeights (atTemperature temperature $ modelLogWeights model) (modelCompletions model)
         Just model{modelTemperature = temperature, modelCompletions = weighted}

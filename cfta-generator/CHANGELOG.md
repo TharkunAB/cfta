@@ -13,6 +13,12 @@ tree automata of `cfta`, with QuickCheck integration.
   validates finite numerical results and does not evaluate another point
   after the step budget is spent. Existing training functions keep their
   behavior. See [Inspect training results](docs/training-results.md).
+- Reject nonfinite or zero exponential potentials in `withLogWeights`, and
+  nonfinite temperatures in `Model.withTemperature`. A public-API check found
+  that NaN, infinity, overflow, and underflow could become zero rational
+  weights and silently change the sampled support. Missing weights still
+  default to one. Unused entries remain ignored, and `withWeights` still
+  accepts explicit zeros. Ordinary finite conversions keep their results.
 - Add `Data.CFTA.Sized.Checkpoint`: resume a size-ordered listing of the
   terms of a graph, or a sampled run of draws from it, also in a new process.
   `start` gives the checkpoint before the first term. `resume` builds the size
