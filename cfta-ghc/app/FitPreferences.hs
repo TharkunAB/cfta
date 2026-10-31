@@ -69,14 +69,15 @@ groups = Set.fromList . map caseGroup
 csv :: Text -> Text
 csv value = "\"" <> Text.replace "\"" "\"\"" value <> "\""
 
--- | Rank the preferred program with a stable program-order tie break.
+-- | Rank the preferred program. Equal scores keep the supplied candidate order.
 rankPreferred :: PreferenceModel -> PreferenceCase -> Either String Int
 rankPreferred model item = do
     let candidates = unique Set.empty (caseCandidates item)
-        score program = scoreProgram model item program
-    unless (all (\program -> let value = score program in not (isNaN value || isInfinite value)) candidates) $
+        score = scoreProgram model item
+        scored = [(program, score program) | program <- candidates]
+    unless (all (\(_, value) -> not (isNaN value || isInfinite value)) scored) $
         Left "A candidate has a non-finite score."
-    findRank 1 (casePreferred item) $ sortOn (Down . score) candidates
+    findRank 1 (casePreferred item) $ map fst $ sortOn (Down . snd) scored
   where
     findRank :: Int -> Program -> [Program] -> Either String Int
     findRank _ _ [] = Left $ Text.unpack (caseGroup item) <> ": preferred program absent from the supplied pool."
