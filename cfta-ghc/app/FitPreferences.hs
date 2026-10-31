@@ -45,7 +45,7 @@ main = do
             let overlap = Set.intersection (preferenceGroups model) (groups evaluation)
             unless (Set.null overlap) $ die $ "Training and evaluation groups overlap: " <> show (Set.toAscList overlap)
             when (null evaluation) $ die "Supply at least one evaluation case."
-            putStrLn "case,baseline_rank,preference_rank"
+            putStrLn "group,baseline_rank,preference_rank"
             forM_ evaluation $ \item -> do
                 before <- either die pure $ rankPreferred (fromFitModel $ preferenceBase model) item
                 after <- either die pure $ rankPreferred model item

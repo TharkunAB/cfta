@@ -54,15 +54,24 @@ data PreferenceCase = PreferenceCase
     deriving (Eq, Show)
 
 -- | Corpus counts and finite corrections. The constructor stays private.
-data PreferenceModel = PreferenceModel
-    { preferenceBase :: Corpus.FitModel
-    -- ^ The corpus counts used as the score offset during fitting.
-    , preferenceWeights :: Map.Map Feature Double
-    -- ^ Shared log-score corrections for parent-position-token features.
-    , preferenceGroups :: Set.Set Text
-    -- ^ Supplied training-group labels. These labels are not verified provenance.
-    }
+data PreferenceModel
+    = PreferenceModel
+        Corpus.FitModel
+        (Map.Map Feature Double)
+        (Set.Set Text)
     deriving (Eq, Show)
+
+-- | The corpus counts used as the score offset during fitting.
+preferenceBase :: PreferenceModel -> Corpus.FitModel
+preferenceBase (PreferenceModel base _ _) = base
+
+-- | The finite log-score corrections for parent-position-token features.
+preferenceWeights :: PreferenceModel -> Map.Map Feature Double
+preferenceWeights (PreferenceModel _ weights _) = weights
+
+-- | Supplied training-group labels. These labels are not verified provenance.
+preferenceGroups :: PreferenceModel -> Set.Set Text
+preferenceGroups (PreferenceModel _ _ groups) = groups
 
 -- | Use an existing corpus scorer without corrections.
 fromFitModel :: Corpus.FitModel -> PreferenceModel
@@ -84,10 +93,10 @@ tokenScoreShared ::
     PreferenceModel -> Map.Map Text Int -> (Text, Int) -> Set.Set Text -> Maybe (Text, Int) -> Int -> (Text, Int) -> Double
 tokenScoreShared (PreferenceModel base weights _) uses root locals
     | Map.null weights = original
-    | otherwise = \parent position token ->
-        original parent position token + Map.findWithDefault 0 (feature base root locals parent position token) weights
+    | otherwise = Corpus.tokenScoreSharedWith adjustment base uses root locals
   where
     original = Corpus.tokenScoreShared base uses root locals
+    adjustment parent position symbol = Map.findWithDefault 0 (parent, position, symbol) weights
 
 -- | Sum a token scorer over a program without changing its application tree.
 foldProgram :: (Maybe (Text, Int) -> Int -> (Text, Int) -> value) -> (value -> value -> value) -> Program -> value

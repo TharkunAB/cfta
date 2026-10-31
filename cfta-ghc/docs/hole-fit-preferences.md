@@ -92,12 +92,61 @@ The plugin still checks proposed programs with GHC. Preference scores change
 the order of fits, not structural term ranks. Legacy `fit-model 1;` files retain
 the original scorer. They have no training-group record for this evaluation CLI.
 
+## Scoring cost and current limits
+
+The isolated scoring fixture uses 10,000 varied program trees with 32,500 tokens.
+It loads one fitted file for every mode. This excludes training from scoring.
+The original implementation is commit `f5b91bf4e3`. The updated scorer shares
+token classification with the corpus score through `Model.tokenScoreSharedWith`.
+All three mode checksums are unchanged.
+
+| Mode | Original instructions | Updated instructions | Original allocation | Updated allocation |
+| --- | ---: | ---: | ---: | ---: |
+| Corpus | 384,044,100 | 389,292,801 | 164,047,832 | 168,467,840 |
+| Empty corrections | 384,029,867 | 389,282,084 | 164,047,936 | 168,467,896 |
+| Learned corrections | 619,896,954 | 431,786,851 | 249,420,456 | 169,650,392 |
+
+The measurement uses GHC 9.14.1, unoptimized project libraries, an optimized
+driver, Cachegrind instructions, and `+RTS -s` allocation. Corpus scoring costs
+1.37% more instructions and 2.69% more allocation than the original scorer.
+This is within the repository's 5% budget. Learned corrections cost 12.43% more
+instructions and 3.42% more allocation than the original corpus scorer. Keep
+this feature experimental until evaluation on unseen source justifies that cost.
+This fixture does not measure complete plugin search or predictive accuracy.
+
+The source package includes
+[`ScoreCost.hs`](hole-fit-preferences/ScoreCost.hs). Build the library first,
+then compile the driver from the repository root with the same dependency plan
+in each checkout:
+
+```sh
+cabal exec -- ghc -O2 -rtsopts -package cfta \
+  -package-id cfta-generator-0.1.0.0-inplace \
+  -package-id cfta-ghc-0.1.0.0-inplace \
+  cfta-ghc/docs/hole-fit-preferences/ScoreCost.hs -o /tmp/preference-score-cost
+/tmp/preference-score-cost train +RTS -M1G -RTS > /tmp/preferences.cfta
+/tmp/preference-score-cost plain 10000 /tmp/preferences.cfta +RTS -M1G -s -RTS
+/tmp/preference-score-cost empty 10000 /tmp/preferences.cfta +RTS -M1G -s -RTS
+/tmp/preference-score-cost trained 10000 /tmp/preferences.cfta +RTS -M1G -s -RTS
+```
+
+Run these commands inside the repository's `nix-shell` with a process cap.
+Use the same serialized file for each mode. Use a separate output directory
+when compiling against a second checkout. Copy the driver there when comparing
+against `f5b91bf4e3`, which does not contain it.
+
 ## Origin and validation
 
 This extension uses the corpus scorer and parent-position features from
 [PR 194](https://github.com/TharkunAB/cfta/pull/194), and the log-linear fitting
 machinery from [PR 196](https://github.com/TharkunAB/cfta/pull/196).
-It adds conditional training over fixed pools. It does not reproduce PHOG's
-context-navigation learner or ExplainFuzz's probabilistic-circuit construction.
-Final validation and performance measurements are pending. No gain on real
-held-out hole fits has been established.
+It adds conditional training over fixed pools. It does not reproduce
+[PHOG](https://proceedings.mlr.press/v48/bielik16.html)'s context-navigation learner
+or [ExplainFuzz](https://arxiv.org/abs/2604.06559v1)'s probabilistic-circuit
+construction. The preference API uses parent-position corrections. It does not
+learn the context selector.
+
+The manual CLI example moves the preferred program from rank two to rank one.
+The actual plugin loads the resulting file in reranking and best-first modes.
+Legacy golden output is unchanged. These checks establish the file workflow;
+no gain on real held-out hole fits has been established.

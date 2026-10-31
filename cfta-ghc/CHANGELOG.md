@@ -6,6 +6,8 @@
   `cfta-fit-preferences` writes these scores with the baseline corpus model and
   training groups. The plugin reads the file through its existing `model` option.
   The evaluation command rejects groups that occur in the training record.
+- `Model.tokenScoreSharedWith` shares token classification with an additive
+  log-score adjustment. Preference scoring uses this function.
 
 Before release, the package was called `microcfta-ghc`.
 
