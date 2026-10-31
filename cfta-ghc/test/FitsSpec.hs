@@ -28,7 +28,7 @@ import qualified Data.Text as Text
 import System.Directory (getTemporaryDirectory, removeFile)
 import System.IO (hClose, hPutStr, openTempFile)
 import System.Timeout (timeout)
-import Test.Hspec (describe, hspec, it, shouldBe, shouldReturn, shouldSatisfy)
+import Test.Hspec (describe, hspec, it, shouldBe, shouldNotBe, shouldReturn, shouldSatisfy)
 
 import Data.CFTA.GHC.Corpus (holeContext, newParser)
 import Data.CFTA.GHC.Fits
@@ -341,7 +341,7 @@ main = withSession ["import Prelude", "import Data.Coerce (coerce)", "import Dat
                 precision = 0.01
                 fit = either fail pure . Preference.trainPreferences 200 precision base
                 other = item{Preference.caseRoot = ("lambda/1", 0), Preference.casePreferred = parse "id xs"}
-            it "keeps the corpus token scorer unchanged without corrections" $ do
+            it "matches corpus and plugin score accumulation" $ do
                 let unchanged = Preference.fromFitModel base
                     uses = Preference.caseUses item
                     locals = Preference.caseLocals item
@@ -355,6 +355,23 @@ main = withSession ["import Prelude", "import Data.Coerce (coerce)", "import Dat
                     expected = score Nothing 0 ("reverse", 1) + score (Just ("reverse", 1)) 0 ("id", 1) + score (Just ("id", 1)) 0 ("xs", 0)
                 Preference.scoreProgram unchanged item (parse "reverse (id xs)") - expected
                     `shouldSatisfy` ((< 1e-12) . abs)
+                let context = item{Preference.caseLocals = Set.fromList ["xs", "ys"], Preference.caseUses = Map.empty}
+                    original = tokenScoreShared base Map.empty (Preference.caseRoot context) (Preference.caseLocals context)
+                    nodes = [(Nothing, 0, ("const", 2)), (Just ("const", 2), 0, ("xs", 0)), (Just ("const", 2), 1, ("ys", 0))]
+                    keys = [("top", 0, "var/2"), ("var/2", 0, "arg/0"), ("var/2", 1, "arg/0")] :: [Preference.Feature]
+                    adjustments =
+                        [ Text.pack $ show (parent, position, symbol, target - original above index token)
+                        | ((above, index, token), (parent, position, symbol), target) <- zip3 nodes keys [1e16, -1e16, 1 :: Double]
+                        ]
+                    serialized = Text.unlines ("fit-preferences 1;" : "groups []" : adjustments) <> printFitModel base
+                corrected <- either fail pure $ Preference.parsePreferenceModel serialized
+                let correctedScore = Preference.tokenScoreShared corrected Map.empty (Preference.caseRoot context) (Preference.caseLocals context)
+                    own = correctedScore Nothing 0 ("const", 2)
+                    left = correctedScore (Just ("const", 2)) 0 ("xs", 0)
+                    right = correctedScore (Just ("const", 2)) 1 ("ys", 0)
+                    pluginScore = own + sum [left, right]
+                (own + left) + right `shouldNotBe` pluginScore
+                Preference.scoreProgram corrected context (parse "const xs ys") `shouldBe` pluginScore
             it "improves preferred probabilities and reports the externally scored conditional objective" $ do
                 let items = [item, other]
                     initial = Preference.fromFitModel base
