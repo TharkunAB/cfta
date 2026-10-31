@@ -20,6 +20,7 @@ tested-with: ghc ==9.14.1
 extra-doc-files:
   CHANGELOG.md
   docs/training-results.md
+  examples/explainfuzz/README.md
   examples/loaded-dice/README.md
   README.md
 
@@ -158,6 +159,19 @@ executable cfta-pairs
   main-is: FinitePairs.hs
   hs-source-dirs: examples
   default-language: Haskell2010
+  build-depends:
+    base >=4.22 && <4.23,
+    cfta >=0.1.0.0 && <0.2,
+    cfta-generator,
+    containers >=0.8 && <0.9,
+    QuickCheck >=2.14 && <2.19,
+
+executable cfta-explainfuzz
+  import: warnings
+  main-is: Main.hs
+  hs-source-dirs: examples/explainfuzz
+  default-language: Haskell2010
+  ghc-options: -rtsopts
   build-depends:
     base >=4.22 && <4.23,
     cfta >=0.1.0.0 && <0.2,
