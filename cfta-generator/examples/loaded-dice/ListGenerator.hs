@@ -121,11 +121,12 @@ dualWeight parameters choice = case choice of
 loss :: Map.Map Int Rational -> Parameters -> Either String (Dual Int Double)
 loss target parameters = do
     finiteParameters parameters
-    actual <- lengthMasses $ dualWeight parameters
-    sum <$> traverse (contribution actual) (Map.toList target)
+    available <- events
+    sum <$> traverse (contribution available) (Map.toList target)
   where
-    contribution actual (size, desired) = do
-        Dual value gradient <- maybe (Left "A requested length class is absent.") Right $ Map.lookup size actual
+    contribution available (size, desired) = do
+        event <- maybe (Left "A requested length class is absent.") Right $ Map.lookup size available
+        let Dual value gradient = completionWeightBy (dualWeight parameters) event
         unless (value > 0 && not (isNaN value || isInfinite value)) $
             Left "A requested length has zero or non-finite probability."
         let mass = fromRational desired
