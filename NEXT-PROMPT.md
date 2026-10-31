@@ -1,3 +1,60 @@
+# Current checkpoint: actual terminal, child-dispatch and prefix observation
+
+The full original-input formalization remains OPEN. Work continues.
+Terminal source: 0bc6427b0fe44296804c70a3a15a06d05c645b9a.
+Prefix source: 26bc1faf496e9ceb45555bf3af7be99da79bb97c.
+Child source: 1e7a2b6f459ea72279ec576c23fe6b1027abe84f.
+Branch: formalize. Main: bd5a406a6a3f84b7e3ae0906082783911509df83.
+Details: lean/notes-current-terminal-and-prefix-observation.md.
+
+Strongest global statement: at every supplied finite recursive depth, BOTH
+actual modeled workers have stable outcomes under the existing original
+entry/resource gates. Actual paths and forecasts stay in one finite ORIGINAL
+carrier independent of that depth. Work and numeric reservations can depend
+on depth. Exhaustion remains possible. No sufficient original depth, common
+successful outcome, whole ordered prefix or Haskell correspondence follows.
+
+NEW: actual Terminal.run and cached ChildDispatch.run retain native Stored at
+EVERY actual outcome under their existing CURRENT entry gates plus entry
+Stored. Actual prefix/fold/incoming/partition producers derive successor gates.
+No future certificate, Trace, Ranges, Ready or resource supplier is added.
+Native Stored applies conditionally to seen-empty queries on BOTH recursively
+finite ordinary operands. It is separate from merge Context.Stored.
+
+NEW: one exact runPrefix narrowed result plus after.core != checked derives
+all read/check/prepare/action/adapt stages. Ready/Realized/UFTotal are CURRENT
+extra gates for its slot law. It proves a closed ordinary Normal result,
+readback, same allocated slot, exact write and resulting Realized. It also
+proves reached.checked.native.machine.heap = nextHeap. These properties refer
+to the returned caller heap. No separate stage or old Normal premise remains.
+The change gate uses retained fields1 and6. Unchanged successes and resets
+are outside this claim. The global history/resource bound remains open.
+
+Validation: Audit4761/83079; public1227 checks/118 definition prints; four
+new standard-axiom reports. Compiler20 commands16pass4repairedfail;53 input
+snapshots. All commands use serial4GiB/zero-swap/five-minute caps. Final public
+4,923,220B SHA8209f9dc182f021905f6bfffb184fbbf043ed1a28b460a6303a0468b28e6ac3e.
+Prior4,905,232B and intermediate4,920,113B remain exact output prefixes.
+All prior559 protected sources and835 native/Haskell inputs remain exact.
+Old4758 Lean files are exact except three imports before the full old Audit.
+No Haskell edit, native execution, or new executable defect/fix is established.
+All older Haskell findings and conditional fix candidates remain below intact.
+
+Root: /tmp/mcfta-terminal-and-prefix-observation-control-20261031.
+Archive: lean/restart-evidence/20261031-terminal-prefix-control.
+Restore: /tmp/mcfta-terminal-prefix-restored-20261031.
+All drafts, failed probes, repairs, full owner provenance, source snapshots
+and approval/edit/readback incidents remain in evidence. Root and independent
+review cover512 source lines and250 public lines. No compiler repeat is needed.
+
+NEXT: actual recursive child-traversal native certificate transport; derive
+its successor admission from actual singleton child/cache observations.
+Keep original resource sufficiency, both workers, public ordered coverage,
+optimized core, Prefix/table/count/checkpoint, Haskell correspondence, older
+constructor/equality/exact-size/order/rank/unrank in the complete objective.
+
+--- Previous checkpoint retained in full ---
+
 # Actual dispatch, changed slots and fold certificates — 2026-10-31 00:53 CET
 
 Dispatch source: `14e7fa6d7494e65a301d9f0b5fc6bc64d6292160`.
