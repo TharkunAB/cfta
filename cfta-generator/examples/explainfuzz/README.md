@@ -110,7 +110,7 @@ for your development environment. The checks also set a 2 GiB RTS heap limit.
 ```sh
 nix-shell --run 'cabal build cfta-generator:cfta-explainfuzz'
 nix-shell --run 'cabal run cfta-generator:cfta-explainfuzz -- check +RTS -M2G -RTS'
-nix-shell --run 'cabal run cfta-generator:cfta-explainfuzz -- sample grouped-filtered 7 12 +RTS -M2G -RTS'
+nix-shell --run 'cabal run -v0 cfta-generator:cfta-explainfuzz -- sample grouped-filtered 7 12 +RTS -M2G -RTS'
 ```
 
 The default invocation and `demo` request twelve grouped queries with seed 7.
@@ -118,6 +118,7 @@ The default invocation and `demo` request twelve grouped queries with seed 7.
 1 through 10,000. `sample` writes SQL statements only to standard output, so
 a test harness can consume them. `demo` also prints the event probability,
 conditional probabilities, and the ambiguous-output fixture.
+The command uses `-v0` to suppress Cabal's own status output.
 Unknown requirements, malformed arguments, and impossible
 events exit with an error. `--help` prints the usage.
 
