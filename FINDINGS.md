@@ -1,3 +1,77 @@
+# Current checkpoint: complete actual conjunction-call Post
+
+Source head: `1e574b48a1561357890d3b6c3cc6ba0518b0f088` on `formalize`.
+Canonical note: [notes-current-conjunction-call-post.md](lean/notes-current-conjunction-call-post.md).
+Goal ACTIVE. The full original-input system theorem remains open.
+This prefix supersedes older descriptions of the local conjunction context gap.
+Every complete older document body remains below as an exact byte suffix.
+
+The strongest new local result is `SourceCurrentConjunctionCallPost.call_post`.
+From the ORIGINAL caller Context and a resident CLOSED query, the literal
+allocated conjunction call produces the complete Post on EVERY outcome.
+The same original inventory and external memos occur in its result.
+The supplied p, h and worklist budgets remain arbitrary.
+
+The endpoint is exactly the actual returned checked state and fourth memo,
+placed in `PartialState.advance before actual.state actual.memo before.merge`.
+The returned Context has ready, admitted, sound, stored, covered, correct,
+globals and probes. Ready includes native good, scoped cache and idle fields.
+Post also has actual physical Effects and both cache-extension guarantees.
+No future Context/Post/probe/Ready/trace/callback/Fits supplier is an input.
+No ordinary-only or NoNewMu gate was added. Mu and Union remain in scope.
+
+Actual collection, exposure, projection, forest, classes, requirements, tuple,
+tuple-list, rows, worklist, decision and memo-call operations retain clean
+Mu probes. The warm Effects laws derive reached readiness between operations.
+The new full-readiness and result-table laws supply their exact actual fields.
+The final 54-line proof constructs the complete Context and Post directly.
+It retains the general legal equality-decision instance by subsingleton equality.
+
+The compatible answer theorem remains conservative: True excludes every
+satisfying term. False supplies no nonempty witness. Current-context safety
+does not establish resource sufficiency or completion for the whole system.
+
+Seven new modules have 794 lines and 18 public theorems.
+All final default and strict target checks PASS.
+Audit PASS: 4820 jobs and 83881 theorem dependencies.
+Public PASS: 1369 checks, 159 definitions, 18 new standard axiom reports.
+Full public output: 5157554 bytes, SHA256
+`189651a332311693b2e8d28ed0e1520c2c9483dc6169a424f4a8e7cbbfaf5ba8`.
+The prior 5138887 bytes are exact. New suffix: 18667 bytes / 267 fully read lines.
+All reports use only propext, Classical.choice and Quot.sound.
+Nineteen actual commands retain 17 passes, 2 initial failures and 139 snapshots.
+Retain the worker nil/dictionary failure and the Post dictionary failure.
+All actual Lean commands use serial heavy-management, 4 GiB max/high, zero swap,
+and a five-minute timeout. Limits were checked before and after each command.
+All 614 prior protected sources and 835 native inputs remain exact.
+Only Audit's seven-import prefix changes an old Lean file; its old body is exact.
+Protected sources: 621. Lean sources: 4820.
+
+Existing laws give stable actual outcomes and resource paths for each finite D.
+They can still exhaust. The largest gap is sufficient ORIGINAL depth and
+progress to the requested prefix for BOTH native and prepared workers.
+Restore the SAME captured sibling cache at the ACTUAL post-hook Caller/query.
+Derive admissions, identities, Fits, annotations, reservations and common
+resources from ORIGINAL inputs. PreparedNone gives no hidden outer Caller.
+Selected-step completion and captured-cache restoration have local Post laws.
+Derive their actual cache/resource premises through the recursive induction.
+Generic native operand/evaluating-frame producers remain a separate gap.
+InputsThrough, traces and local-law packages do not construct future facts
+when those facts are already their input gates.
+
+Keep sound accepted outputs, exact finite ordered prefixes/configured stops,
+public adapters, global coverage, originalMap/domain/order/SCC, row history,
+constructor-sensitive NodeEq, generic Mu/Union/opaque/default/Map/Set/signed,
+weighted/alias/renewal/writer, size/node-count/order/rank/unrank/prefix/table/
+count/checkpoint and host/Haskell correspondence in the complete objective.
+Do not replace it with current-depth resets, per-state fuel or finite carriers.
+
+No Haskell source changed. No native product program ran.
+No new Haskell defect or fix was established. Record every later Haskell fix
+in root FINDINGS with locations, reason and verification evidence.
+
+---
+
 # Current checkpoint: actual call readiness and probe births
 
 The goal is ACTIVE. The full original-input objective remains open.
