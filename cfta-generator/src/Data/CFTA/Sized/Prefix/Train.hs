@@ -144,8 +144,9 @@ distillWithReport ::
     FTA.FTA state symbol Constraint -> Int -> [Term symbol] -> Either TrainingError (DistillReport symbol)
 distillWithReport automaton bound terms = do
     (oracle, counts, retained) <- distillationInput automaton bound terms
+    let !dropped = length terms - retained
     report <- fitWithReport 2000 1e-3 oracle counts Map.empty
-    pure $ DistillReport report retained (length terms - retained)
+    pure $ DistillReport report retained dropped
 
 -- | Select the existing oracle route and prepare the regularized corpus counts.
 distillationInput ::
