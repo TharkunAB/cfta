@@ -1,4 +1,5 @@
 import MicroCFTA.SourceSizedPrefixProductRank
+import MicroCFTA.SourceSizedPrefixProductInteger
 import MicroCFTA.SourceCurrentAllocatedNativeStoredCapturedEdge
 import MicroCFTA.SourceCurrentAllocatedNativeStoredChildTraversal
 import MicroCFTA.SourceCurrentAllocatedNativeStoredSelectedEdge
