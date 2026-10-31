@@ -1,4 +1,5 @@
 import MicroCFTA.SourceCurrentAllocatedNativeStoredTerminal
+import MicroCFTA.SourcePruningNarrowPrefixObservation
 import MicroCFTA.SourceCurrentAllocatedNativeStoredDispatch
 import MicroCFTA.SourcePruningNarrowSlotTransport
 import MicroCFTA.SourceCurrentAllocatedNativeStoredFold
