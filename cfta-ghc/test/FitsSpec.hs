@@ -400,12 +400,19 @@ main = withSession ["import Prelude", "import Data.Coerce (coerce)", "import Dat
                 forM_ [0, -1] $ \limit ->
                     Preference.trainPreferences limit precision base [item] `shouldSatisfy` isLeft
             it "round-trips cases, corrections, and legacy corpus files" $ do
-                (trained, _) <- fit [item, other]
+                let second = other{Preference.caseGroup = "Other.hs"}
+                (trained, _) <- fit [item, second, item]
+                Preference.preferenceGroups trained `shouldBe` Set.fromList ["Example.hs", "Other.hs"]
                 Preference.parsePreferenceModel (Preference.printPreferenceModel trained) `shouldBe` Right trained
                 Preference.parsePreferenceModel (printFitModel base) `shouldBe` Right (Preference.fromFitModel base)
+                Preference.preferenceGroups (Preference.fromFitModel base) `shouldBe` Set.empty
                 Preference.parsePreferenceCases (Preference.printPreferenceCases [item, other]) `shouldBe` Right [item, other]
+            it "requires a well-formed groups record in a preference file" $ do
+                forM_ [[], ["groups"], ["groups ["], ["groups [1]"], ["groups \"Example.hs\""]] $ \records ->
+                    Preference.parsePreferenceModel (Text.unlines ("fit-preferences 1;" : records) <> printFitModel base)
+                        `shouldSatisfy` isLeft
             it "rejects duplicate correction keys and invalid correction fields" $ do
-                let text records = Text.unlines ("fit-preferences 1;" : records) <> printFitModel base
+                let text records = Text.unlines ("fit-preferences 1;" : "groups []" : records) <> printFitModel base
                     valid = "(\"top\",0,\"reverse/1\",0.5)"
                 forM_
                     [ [valid, valid]
@@ -417,7 +424,7 @@ main = withSession ["import Prelude", "import Data.Coerce (coerce)", "import Dat
                     , ["(\"top\",0,\"reverse/1\",1e999)"]
                     ]
                     $ \records -> Preference.parsePreferenceModel (text records) `shouldSatisfy` isLeft
-            it "rejects invalid case fields and infix syntax, and accepts a parenthesized backslash operator" $ do
+            it "rejects invalid case fields and duplicate module-use names" $ do
                 forM_
                     [ item{Preference.caseRoot = ("", 0)}
                     , item{Preference.caseRoot = ("top", -1)}
@@ -425,14 +432,22 @@ main = withSession ["import Prelude", "import Data.Coerce (coerce)", "import Dat
                     ]
                     $ \invalid ->
                         Preference.parsePreferenceCases (Preference.printPreferenceCases [invalid]) `shouldSatisfy` isLeft
-                let invalidUses = "fit-preference-cases 1;\n(\"group\",(\"top\",0),[],[(\"helper\",1),(\"helper\",2)],\"a\",[\"a\",\"b\"])\n"
+                let invalidUses =
+                        "fit-preference-cases 1;\n(\"group\",(\"top\",0),[],[(\"helper\",1),(\"helper\",2)],Var \"a\",[Var \"a\",Var \"b\"])\n"
                 Preference.parsePreferenceCases invalidUses `shouldSatisfy` isLeft
-                forM_ ["x + y", "x `f` y", "\\x -> x", "if x then y else z"] $ \source -> do
-                    let invalid = item{Preference.casePreferred = parse source}
-                    Preference.parsePreferenceCases (Preference.printPreferenceCases [invalid]) `shouldSatisfy` isLeft
-                let operator = parse "(\\\\) xs ys"
-                    valid = item{Preference.casePreferred = operator, Preference.caseCandidates = [operator, Var "xs"]}
+            it "preserves specialized labels, operators, and nested applications as AST data" $ do
+                let specialized = App (App (Var "fmap 2") (Var "f")) (Var "xs")
+                    operator = App (App (Var "(\\\\)") specialized) (App (Var "reverse") (Var "ys"))
+                    valid = item{Preference.casePreferred = operator, Preference.caseCandidates = [operator, specialized, Var "xs"]}
                 Preference.parsePreferenceCases (Preference.printPreferenceCases [valid]) `shouldBe` Right [valid]
+            it "rejects raw Haskell expressions where a serialized Program is required" $ do
+                forM_
+                    [ "(\"group\",(\"top\",0),[],[],\"reverse xs\",[\"reverse xs\",\"xs\"])"
+                    , "(\"group\",(\"top\",0),[],[],reverse xs,[reverse xs,xs])"
+                    , "(\"group\",(\"top\",0),[],[],x + y,[x + y,x])"
+                    ]
+                    $ \record ->
+                        Preference.parsePreferenceCases (Text.unlines ["fit-preference-cases 1;", record]) `shouldSatisfy` isLeft
         describe "the fast rejects" $
             forM_ soundness $ \(name, signature, arguments, program) ->
                 it ("keep the fit of " <> name) $
