@@ -1,3 +1,4 @@
+import MicroCFTA.SourceSizedPrefixOrdinaryIncomingInputs
 import MicroCFTA.SourceCurrentAllocatedNativeIncomingCacheKnown
 import MicroCFTA.SourceEqualityRequiredWorkerEffects
 import MicroCFTA.SourceCurrentAllocatedNativeFoldIncomingEntry
