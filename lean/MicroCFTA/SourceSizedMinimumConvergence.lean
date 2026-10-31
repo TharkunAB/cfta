@@ -194,3 +194,34 @@ theorem minimum_spec [DecidableEq Q] (input : SourceSizedPreprocessing.Input Q S
   exact ⟨input.complete current, result.val.positive current value found⟩
 
 end MicroCFTA.SourceSizedMinimumConvergence
+
+namespace MicroCFTA.SourceSizedMinimumConvergence
+open SourceSizedMinimumPass
+variable {Q Symbol Guard : Type}
+
+/-- Apply a finite number of actual passes in order. -/
+def passes [DecidableEq Q] (input : SourceSizedPreprocessing.Input Q Symbol Guard) :
+    Nat → Table Q → Table Q
+  | 0, known => known
+  | remaining + 1, known => passes input remaining (pass input known)
+
+private theorem settle_reachable [DecidableEq Q]
+    (input : SourceSizedPreprocessing.Input Q Symbol Guard) (current : Working Q) :
+    ∃ count, passes input count current.known = (settle input current).val.known := by
+  unfold settle
+  split
+  next _compared => exact ⟨0, rfl⟩
+  next compared =>
+    obtain ⟨count, reached⟩ := settle_reachable input
+      ⟨pass input current.known, pass_positive input current.known current.positive⟩
+    exact ⟨count + 1, reached⟩
+termination_by naturalMeasure input current.known
+decreasing_by
+  exact natural_decrease input current.known current.positive (false_of_not_true _ (by assumption))
+
+/-- The computed minimum table is reached by finitely many actual passes from empty. -/
+theorem minimum_reachable [DecidableEq Q] (input : SourceSizedPreprocessing.Input Q Symbol Guard) :
+    ∃ count, passes input count (fun _ => none) = minimumSizes input := by
+  exact settle_reachable input ⟨fun _ => none, by intro current value impossible; cases impossible⟩
+
+end MicroCFTA.SourceSizedMinimumConvergence
