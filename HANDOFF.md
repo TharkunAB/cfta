@@ -1,3 +1,73 @@
+# Current checkpoint: actual call readiness and probe births
+
+The goal is ACTIVE. The full original-input objective remains open.
+Source head: `3c356b0738bf1bd4674693b3b8ba43d48c7dc755` on `formalize`.
+Base archive: `00c5297ced7f6c9941530b43ecd29e69d1ea4cc7`.
+Current note: `lean/notes-current-call-readiness-and-probe-births.md`.
+Read this prefix and that note before the retained older document bodies.
+
+The modeled actual allocated conjunction call now retains full physical
+Effects/Ready at its ACTUAL returned heap AND equality cache on EVERY outcome.
+Inputs are original current readiness and a resident closed query.
+Projection/exposure/worklist budgets remain arbitrary.
+Actual forest and full rows readiness also have original-current-input producers.
+The same external global memos remain Valid. The returned fourth remains Correct.
+Completed True excludes every satisfying term. False supplies no nonempty witness.
+These are compatible local laws; full caller Context/Post is still OPEN.
+
+Four sources add 587 lines and fourteen public laws:
+- ProjectionWarmEffects206: full actual forest readiness, arbitrary signed path.
+- RowsWarmEffects177: full projections/classes/requirements/tuple/list/rows effects.
+- WorkerWarmEffects140: full explore/decision/call/allocated-call effects.
+- ProbeBirth64: actual stored-unfold clean probes, including new nested Mu births.
+All names start with SourceCurrentConjunction.
+No future Ready/Effects/trace/callback/NoNewMu/Fits/ceiling or ordinary-only gate.
+The call retains its original closed-query premise; rows adds no closedness gate.
+
+Production verification: 11 actual commands, 11 PASS, 0 FAIL, 45 input snapshots.
+Audit default/strict PASS: 4813 jobs, 83820 theorem dependencies.
+Public PASS: 1351 declaration checks, 159 definition prints, 14 standard reports.
+The exact 5125851-byte prior output prefixes 5138887 bytes.
+The complete new suffix is 13036 bytes/203 lines and was read in full.
+All 610 prior protected sources and 835 native inputs remain byte-exact.
+Only four Audit imports change an old Lean file; current protected/Lean: 614/4813.
+Every actual Lean command used verified serial 4 GiB memory.max/high, zero swap,
+five-minute timeout, and the required strict flags.
+Old replayed unused-input warnings remain recorded; new strict modules are clean.
+
+Separate isolated rows/worker probes retain 5 commands: 2 PASS, 3 FAIL, 23 snapshots.
+Their complete failure logs, source versions, repairs, and provider closures remain.
+The unsupported isolated production dispatch ran zero Lean commands.
+All earlier archives remain pinned. Do not remove inherited proof or counterexample data.
+
+Next-stage results are OUTSIDE the checked four-source/587-line checkpoint:
+- ExposureProbes133 strictPASS: actual collect/nodeEdges/exposure-list ProbeHeap.
+- CallTableSound42 strictPASS: actual returned caller node/edge result-table laws.
+See current control next-phase-status.json for exact source hashes and receipts.
+The next forest-probe candidate is marked UNCOMPILED until Root checks it.
+The local conjunction route uses stored unfolding and ordinary reconstruction.
+Generic native request prefix frame production is a separate whole-system gap.
+
+Full Context/Post assembly must respect ClassScan.Ready.good, actual Inventory.At,
+sound/stored/covered/correct/globals/probes, actual Effects, and extension fields.
+Full physical RowsAllocation.Ready alone does not supply the native good component.
+Use prior actual retained/inventory, same-global and fourth-correct producers.
+Do not reopen those fields as arbitrary future supplier assumptions.
+
+Largest gap: fixed ORIGINAL D actual recursion for BOTH native/prepared workers.
+Restore the SAME captured sibling cache at the ACTUAL after-hook Caller/query.
+Derive admissions, memo identity, annotations, reservations and ORIGINAL resources.
+PreparedNone gives no hidden outer Caller. Preserve Mu/Union/opaque/default,
+aliases/renewal/writers, signed/Set/weighted getters, originalMap/domain/order/SCC,
+public adapters, size/node-count/order/rank/unrank/prefix/table/count/checkpoint,
+exact finite ordered prefixes/stops, global coverage and Haskell correspondence.
+
+No Haskell source changed. No Haskell or native product program ran.
+No new Haskell defect or fix was established.
+Record all later Haskell fixes in root FINDINGS.md with locations and evidence.
+
+---
+
 # Current checkpoint: row equality and same global memos
 
 Date: 2026-10-31. Branch: `formalize`. Goal: ACTIVE.
