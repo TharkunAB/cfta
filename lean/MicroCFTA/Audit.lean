@@ -1,3 +1,4 @@
+import MicroCFTA.SourceCurrentConjunctionRowsExposureFields
 import MicroCFTA.SourceCurrentConjunctionCallGlobals
 import MicroCFTA.SourceCurrentConjunctionRowsEqualityEffects
 import MicroCFTA.SourceCurrentConjunctionCallSound
