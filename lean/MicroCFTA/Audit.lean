@@ -1,3 +1,4 @@
+import MicroCFTA.SourceCurrentConjunctionRowsEqualityEffects
 import MicroCFTA.SourceCurrentConjunctionCallSound
 import MicroCFTA.SourceCurrentConjunctionCallRetained
 import MicroCFTA.SourceCurrentAllocatedNativeIncomingOldKnownAll
