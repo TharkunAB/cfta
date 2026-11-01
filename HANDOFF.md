@@ -1,3 +1,59 @@
+# 2026-11-01: actual first-write cache validity
+
+Read [the current incoming-state note](lean/notes-current-incoming-state.md) first.
+It states the current result, the full objective, the evidence, and the open work.
+All older content below remains exact. Keep its constraints and retained failures.
+
+Proof source: `a08306bcf6a9ae7218222dea1b4ecac8b9f53bf5`, pushed to `formalize`.
+Main remains `bd5a406a6a3f84b7e3ae0906082783911509df83` after a fresh fetch.
+Eight new modules add 716 lines and eleven named public theorems.
+All 30 normal Lean checks pass with 174 input snapshots. Strict Audit checks
+84,050 dependencies. Public checks contain 1,409 checks and 159 definitions.
+All original protected source bytes and 835 native-source records remain exact.
+All new axiom lists are standard. All eight source/public reviews are clear.
+
+The strongest new result derives all five `CacheValid` fields at the actual
+returned caller and cache for a present `.unenumerated none oldScs` slot.
+It requires observed raw singleton success and a present returned cache, original
+cache validity, and the stated original admission and reference bounds.
+The `none` is the absent node handle. The table entry exists.
+No future cache-validity field is assumed. Success is not guaranteed.
+
+For every outer `.ok` incoming result, a separate theorem derives Post, the actual
+saved-query identity, and pending realization of the outer read at the actual
+reached heap. It uses original Context, realization, available closed input,
+Fits, Room, and Roots. It does not equate produced state with entry state.
+The earlier all-budget conjunction `call_post` theorem remains valid.
+
+Next, prove returned raw-state, reference, and cache effects for an existing node
+handle. Then cover raw-empty and general optional-cache results and recursive
+captured-cache and fresh-reference transport. Reuse the genuine selected-step,
+captured-post, and bounded-child five-field/common-resource producers.
+
+The full objective stays active for both workers: sufficient ORIGINAL `D` and
+common resources, actual after-hook caller/query and the same captured cache,
+all original admissions and identities, annotations and reservations, exact finite
+ordered prefix and configured stops, all domain cases and public APIs, and
+Haskell correspondence. Include node-count and table APIs. Finite `D` can exhaust.
+
+No Haskell defect, edit, fix, or execution occurred in this increment. Preserve
+all earlier Haskell findings. Record every later Haskell fix in root `FINDINGS.md`.
+Lean repairs and all rejected drafts remain recorded in the current note.
+
+The older native-prefix owner exceeded its OLD-source budget (101/160 on a
+third original). Keep its uncompiled 89-line candidate and all corrections.
+All three permanent process-scope failures remain. Root has a known bounded
+153/5 ledger; its complete indirect locator audit is NOT claimed. The review
+ledger remains 464/12 with the same named whole originals. Never claim all-owner
+scope PASS. The early read-completion flag and the failed Edge specialization
+with its wrong unchanged-statement flag remain sealed beside their corrections.
+
+Normal control: `/tmp/mcfta-incoming-state-control-20261101`.
+R28 checks use its immutable source/document snapshot. R28 archive publication
+and fresh reconstruction remain pending storage. Two exact cleanup targets have
+a pending approval question. No deletion is authorized without an actual answer.
+The persistent goal stays active. Do not mark the full objective complete here.
+
 ## 2026-10-31: actual native indexes and prepared cache validity
 
 Current source: `9ce4093d3ff174e553ece47a442b49edd71e95f1` on `formalize`, pushed.
