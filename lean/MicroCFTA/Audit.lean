@@ -17,6 +17,7 @@ import MicroCFTA.SourceCurrentIncomingSomeCacheValid
 import MicroCFTA.SourceCurrentIncomingCapturedPost
 import MicroCFTA.SourceCurrentIncomingPendingWrite
 import MicroCFTA.SourceCurrentIncomingReadPending
+import MicroCFTA.SourceCurrentIncomingSomePending
 import MicroCFTA.SourceCurrentNativeWriteFlags
 import MicroCFTA.SourceCurrentNativeCountObserved
 import MicroCFTA.SourceCurrentNativeSlotIndex
