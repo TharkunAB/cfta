@@ -1,3 +1,30 @@
+## Current pending-preservation checkpoint — 2026-11-01 04:08 CET
+
+Proof source: `6189b75d2c5f865d4261dd55539eef4a7d2e51c6` on `formalize`.
+The complete earlier document body remains below this checkpoint.
+
+`SourceCurrentIncomingSomePending.some_cache_pending` proves that EVERY actual returned Some cache preserves ORIGINAL `InputsPending` for the SAME remaining list at its ACTUAL returned Core. It keeps the original SomeCacheValid gates and adds original pending at entry. It derives the original stored slot, allocation, combined reference bounds and empty-or-singleton return shape. The literal empty-write/frame and singleton-Core identities connect both finish branches to the same observed adapter run. All three supplied equality dictionaries remain DATA. Both original old-handle options remain allowed.
+
+The two PendingWrite laws preserve unenumerated status and pending under a fixed-forest unenumerated replacement. ReadPending transports original pending through the actual outer read for all outcomes. These three laws and SomePending are checked. Their older UNCOMPILED-at-creation labels remain dated history. The full Some-cache validity and same-captured-cache Packet/Post/query laws from the 03:32 checkpoint remain available.
+
+The next local obligation is a FULL fresh Packet at the actual endpoint. Pending buckets alone do not supply its pending-reference and dependency-order fields. Reuse the existing genuine admission, staging, compression, selected-step and chosen-resource/history producers. Derive the missing reference/order transports from the ORIGINAL current Packet and actual stored admissions. Then transport them through every actual sibling endpoint.
+
+The full goal stays ACTIVE: sufficient ORIGINAL D/progress/common resources for BOTH native and prepared workers; the actual after-hook Caller/query and SAME captured cache; original identities/admissions/residency/Fits/annotations/reservations; exact finite ordered requested prefixes and configured stops; ALL original cases and APIs, including node-count/table, plus Haskell correspondence. Finite D can exhaust. The canonical note below retains the full case list. These conditional endpoint laws do not establish sufficient D or whole-execution coverage.
+
+Validation: 20 new modules, 1812 lines, 26 named laws; 80/80 normal checks PASS, 960 exact input snapshots, Audit 84083. Public readback has 1424 checks/159 definitions and the exact original byte prefix. All new public declarations match the fully read isolated outputs and use standard axioms. Source122 has a whole closed independent review: 595 files and all three post-seal siblings. The distinct Source88 review retains all 616 files. The original 835 native files remain exact; no native/Haskell product ran.
+
+All process failures remain permanent: Root known bounded 162/5 with no complete indirect-agent locator audit; reviewer 464/12; earlier native-prefix 101/160. Source122 retains the distinct dated author ledger262/4206 CFTA lines/94 originals plus18 standard-library lines/3 originals. A later separately sealed interface packet reports266/4217 CFTA lines/96 originals plus18/3 at04:00; Root has not yet acquired that packet. Precise further interface windows are authorized separately. No scope budget is reset. All earlier failed sources, seals and separate corrections remain unchanged.
+
+Next draft: counter preservation and original CURRENT-Packet bounds transport, 151 lines, remains UNCOMPILED at this checkpoint. A fixed-forest order draft is also uncompiled. Neither is counted among the 26 checked laws. Fresh Packet construction, dependency order and original-depth progress remain open.
+
+Git first failed to commit stage20 because the path-limited command needed two full index copies and disk space was too low. The unchanged verified files remained staged. Commit6189 used an exact staged-path guard and one index copy. The failed raw log and prior commit script remain retained. The exact two-directory cleanup question remains pending; no deletion occurred. R28 archival reconstruction also remains pending.
+
+No Haskell defect, edit or fix occurred in this increment. Record every future Haskell fix in root `FINDINGS.md` so external work can pick it up. This document update checks the new prefix and exact prior-body suffix. It is not a new whole-document or whole-controller review.
+
+The remaining full objective includes Mu/Union/opaque values; original map/domain maps; SCC/history; constructor-sensitive NodeEq; generic/default constructors; Map/Set; signed/weighted and alias cases; renewal/writer behavior; and size, node-count, count, table, order, rank/unrank, prefix and checkpoint APIs. Existing local producers remain valid under their stated entry gates. The global induction must establish these gates for all scheduled siblings and both workers.
+
+Normal verification: `/tmp/mcfta-incoming-state-control-20261101/verify-twenty.py`; summary80/80,960 snapshots,Audit84083. Independent Source122 report: `/tmp/mcfta-incoming-some-pending-review-retained-20261101/REPORT.md`, fully read after the whole595-file provider, three required siblings and eleven whole external references closed. Its mathematical CLEAR verdict leaves all permanent process failures open. Source88 retains its separate whole616-file review. No fresh archive, large snapshot or reconstruction was started under the current storage limit.
+
 ## Current proof and restart state — 2026-11-01 03:32 CET
 
 Source: `c25c584650b046e59e1d6fb278df0d28816e19f7`. Branch: `formalize`.
