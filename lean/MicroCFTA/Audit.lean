@@ -4,6 +4,7 @@ import MicroCFTA.SourceCurrentIncomingOriginalRoot
 import MicroCFTA.SourceCurrentIncomingReadStorage
 import MicroCFTA.SourceCurrentIncomingNoHandleFlags
 import MicroCFTA.SourceCurrentIncomingWaitingAppend
+import MicroCFTA.SourceCurrentIncomingNoHandleCacheValid
 import MicroCFTA.SourceCurrentNativeWriteFlags
 import MicroCFTA.SourceCurrentNativeCountObserved
 import MicroCFTA.SourceCurrentNativeSlotIndex
