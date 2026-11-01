@@ -1,3 +1,110 @@
+# Current incoming-state proof: both handle options
+
+Checkpoint: 2026-11-01 02:38 CET.
+Branch: `formalize`. Proof source: `6bc70fe05268894cd8676f9c1e2cdea3b2d2e811`, pushed.
+Main: `bd5a406a6a3f84b7e3ae0906082783911509df83`, freshly fetched.
+
+## Current checked statement
+
+The actual conjunction call preserves its full caller/query postcondition for
+every budget and outcome. Errors and exhausted calls are included.
+This is `SourceCurrentConjunctionCallPost.call_post`.
+A true empty result excludes models. A false flag gives no positive witness.
+The theorem does not provide a sufficient budget or completion.
+
+For every outer `.ok` incoming call, the full frame law derives Post, the actual
+saved-query identity, and full CacheValid for the literal outer-read frame at
+the actual reached Caller. The frame uses the ORIGINAL cached value.
+It includes an existing node handle. Inventory and memos are produced values.
+They are not assumed equal to the entry values.
+
+The new finish law derives an available, closed, encoded replacement at the
+ACTUAL returned heap from observed raw singleton success. It derives the exact
+finish execution over the ACTUAL outer read and original target and constraints.
+It covers both stored handle options. An empty replacement is incompatible with
+that singleton observation because the literal finish rejects it.
+No empty-availability premise or future finish witness is supplied.
+
+The new Core law derives the exact returned record. It sets target to
+`.unenumerated (some handle) (scs ++ oldScs)` in the actual outer read.
+It updates target ancestry to `(expansionAncestry ++ oldTargetAncestry).eraseDups`.
+It preserves the other record fields and other ancestry entries as stated.
+It derives the representative equation, original counter, exact target lookup,
+exact reference append, StorageValid, and PendingRealized at the actual heap.
+
+The new cache law binds raw singleton, reached Caller, saved query, read Core,
+and `some after` in ONE literal adapter-result equality. It derives FULL
+CacheValid at that reached Caller and that returned cache. Counts use the actual
+same-call waiting update with gains `scs` and losses `[]`. Flags use the actual
+native write at the same reached heap. All five fields are produced.
+
+These laws retain all three supplied Symbol, Edge, and Node decision DATA.
+The original gates remain explicit: Context, CacheValid, Available and closed
+incoming value, Fits, Room, ORIGINAL root admission, exact present unenumerated
+stored slot, target allocation, and bounds for `scs ++ oldScs`.
+The old node handle is an arbitrary option. Neither theorem uses an ordinary-node
+restriction or a future semantic, cache-validity, or resource supplier.
+Success and optional-cache presence are observations, not guaranteed results.
+Raw-empty and general optional-cache outcomes remain open here.
+
+## Evidence and retained boundaries
+
+Twelve modules add 1,187 lines and fifteen named public laws.
+Normal verification is 46 PASS, zero FAIL, with 358 input snapshots.
+Strict Audit checks 84,056 dependencies. Public output has 1,413 checks and
+159 definitions. The original 5,229,103-byte public prefix remains exact.
+The new public suffix has 37,554 bytes. The full explicit output has
+235,247 bytes and 3,260 lines. It equals the fully read isolated outputs.
+All new public axiom lists are standard. All source/public reviews are clear.
+The whole reviews and their complete external inputs remain retained.
+
+The finish source changed from 144 to 147 proof lines. Its public header stays
+exact. The Core source has one proof-only projection-normalization line.
+Its final length is 111. The cache source has 130 lines. Its isolated import
+alias was restored for production. Both original declaration headers stay exact.
+The original 144 was UNCOMPILED when submitted. Root later compiled that exact
+source twice and both checks FAILED. Final147 passed. A separate sealed
+corrigendum corrects the old review wording. Earlier records stay unchanged.
+The initial summary verifier used an unjustified 84,054 count forecast and failed.
+Its code and failure remain retained. The verified Audit actually reports 84,056.
+This metadata repair changed no Lean source or kernel result.
+
+All three permanent scope failures remain. Root's known bounded ledger is now
+162 lines over five originals after a declared nine-line cut within an already
+charged original. That original's union is 65/296, below half.
+The complete indirect locator audit is NOT claimed. Earlier 153/5 records stay
+dated history. The reviewer remains 464/12 with the same two whole originals.
+The distinct author remains 262 acquisitions, 4,206 CFTA lines over 94 originals,
+and 18 standard-library lines over three originals. No budget is reset.
+No all-owner scope PASS is claimed. Mathematical clearance does not change this.
+
+## Next work and full objective
+
+Check the submitted SomeAdmission110 and EmptyAvailable17 drafts.
+Then check the dependent EmptyCacheValid130 and SomeCacheValid76 drafts.
+They propose actual stored-slot/resource admission and general Some-cache validity.
+They remain UNCOMPILED at this dated checkpoint. Do not claim their conclusions.
+
+Continue original-D and positive-depth whole-execution induction for BOTH native
+and prepared workers. Use the actual after-hook Caller/query and SAME captured
+cache. Preserve original admissions, identities, residency, Fits, annotations,
+and reservations. Preserve Mu, Union, opaque references, original Map/domain maps,
+SCC/history, constructor-sensitive node equality, generic/default behavior,
+Map/Set, signed/weighted/alias/renewal/writer cases, and configured stops.
+Complete the exact finite requested ordered prefix and all size, node-count,
+count, table, order, rank/unrank, prefix, and checkpoint contracts.
+Complete Haskell correspondence. Finite D can exhaust.
+Reuse SelectedStepCompletion.complete, RecursivePacket.captured_post, and genuine
+ChildBoundedResources five-field/common-resource producers. Do not call them missing.
+The full goal remains ACTIVE and incomplete.
+
+No Haskell defect, edit, fix, or execution occurred in this increment.
+Keep all earlier Haskell findings. Put every later Haskell fix in root FINDINGS.md.
+R28 verifiers use their pinned snapshot. Archive publication and fresh replay
+remain pending storage. The exact cleanup question is unanswered. Do not delete.
+
+The earlier dated checkpoint follows. Its complete bytes remain exact.
+
 # Current incoming-state proof
 
 Checkpoint: 2026-11-01 01:25 CET.
