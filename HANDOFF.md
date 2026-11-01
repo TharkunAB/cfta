@@ -1,3 +1,48 @@
+# 2026-11-01: actual incoming caches for both handle options
+
+Read [the current incoming-state note](lean/notes-current-incoming-state.md) first.
+Proof source: `6bc70fe05268894cd8676f9c1e2cdea3b2d2e811`, pushed to `formalize`.
+Main is `bd5a406a6a3f84b7e3ae0906082783911509df83` after a fresh fetch.
+Twelve new modules contain 1,187 lines and fifteen named public theorems.
+All 46 normal checks pass with 358 input snapshots. Strict Audit checks 84,056
+axiom dependencies. Public readback has 1,413 checks and 159 definitions.
+All 640 protected records, 835 native-source records, and the original 4,839
+Lean sources remain exact, except the stated Audit import prefix.
+
+For a literal incoming cached singleton success, the new laws derive the exact
+returned Core and reference append. They derive all five CacheValid fields at
+the actual reached Caller and actual returned cache. Both old node-handle
+options are covered. The original table entry is present and unenumerated.
+The laws retain original Context, CacheValid, available closed input, Fits,
+Room, root admission, target allocation, and combined reference bounds.
+All three supplied equality dictionaries remain literal on the actual call.
+The laws do not promise success or cache presence.
+
+Next, cover raw-empty results and general optional-cache returns. Derive their
+stored-entry and resource admissions from the actual call. The new 127-line
+submission and the dependent 206-line drafts remain uncompiled at this checkpoint.
+Then continue the full original objective for BOTH workers: sufficient original
+D and common resources, actual after-hook Caller/query and the SAME captured
+cache, all original admissions and identities, annotations and reservations,
+exact finite ordered prefix and configured stops, all domain cases and public
+APIs, and Haskell correspondence. Include node-count and table APIs.
+Finite D can exhaust. Reuse the genuine existing completion and child producers.
+
+No Haskell defect, edit, fix, or execution occurred in this increment.
+Preserve every earlier finding. Record each later Haskell fix in root FINDINGS.md.
+All permanent process failures remain. Root has a known bounded 162/5 ledger;
+a complete indirect locator audit is NOT claimed. The review ledger remains
+464/12 with the same whole originals. Never claim all-owner scope PASS.
+The original 144-line finish draft had a historical UNCOMPILED submission label.
+Later exact original checks FAILED twice. The repaired final 147 passed.
+The separate status correction preserves every earlier seal and failed record.
+
+Normal control: `/tmp/mcfta-incoming-state-control-20261101`.
+R28 checks use their pinned source/document snapshot. Archive publication and
+fresh reconstruction remain pending storage. Cleanup approval is still pending.
+No deletion is authorized without an actual answer. Keep the full goal active.
+All earlier dated content below remains exact.
+
 # 2026-11-01: actual first-write cache validity
 
 Read [the current incoming-state note](lean/notes-current-incoming-state.md) first.
