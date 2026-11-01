@@ -1,3 +1,24 @@
+## Current incoming endpoint checkpoint — 2026-11-01 03:32 CET
+
+Proof source: `c25c584650b046e59e1d6fb278df0d28816e19f7` on `formalize`.
+The complete earlier document body remains below this checkpoint.
+
+`SourceCurrentIncomingSomeCacheValid.some_cache_valid` proves FULL cache validity for every actual returned Some cache at the literal returned Caller. Its original gates are Context, CacheValid, target rootedness, incoming reference bounds, closed available input, Fits and Room. It derives the original slot, allocation, retained reference bounds and empty-or-singleton shape.
+
+`SourceCurrentIncomingCapturedPost.incoming_ok_captured_post` combines this with an ORIGINAL Packet for a separate arbitrary captured cache. Every actual `.ok` endpoint produces ONE inventory/memo/Post, binds the actual returned query, and preserves the SAME captured cache and metadata as a full Packet. Any fresh Some cache is valid at that SAME Caller. The current and captured caches can differ. This combined law also assumes original target allocation. Its `.error` branch is True. These laws do not promise a successful return or sufficient D.
+
+The next local obligation is fresh Packet construction through ACTUAL sibling endpoints. CacheValid alone does not establish pending-reference and dependency-order invariants. Existing selected-node admission/staging producers already derive initial liveness. Existing chosen-resource/history producers remain valid local results. Reuse them and derive the remaining per-endpoint transports.
+
+The full goal stays ACTIVE: sufficient ORIGINAL D/progress/common resources for BOTH workers; the actual after-hook Caller/query and SAME captured cache; original identities/admissions/residency/Fits/annotations/reservations; exact finite ordered requested prefix and configured stops; ALL original domain cases and APIs, including node-count/table, plus Haskell correspondence. Finite D can exhaust. The canonical note below retains the detailed case list and restart evidence.
+
+Validation: 17 new modules, 1602 lines, 22 named laws; 67/67 normal checks PASS, 698 input snapshots, Audit 84076. Public readback has 1420 checks/159 definitions and the exact original byte prefix. All new laws use standard axioms. Independent source/public reviews are retained whole and closed. The 835 native files remain exact; no native/Haskell product ran.
+
+All process failures remain permanent: Root known bounded 162/5 with no complete indirect-agent locator audit; reviewer 464/12; earlier native-prefix 101/160. The distinct author ledger remains 262 acquisitions, 4206 CFTA lines/94 originals plus 18 standard-library lines/3 originals. Earlier ledgers, failed sources and sealed status corrections remain unchanged.
+
+No Haskell defect, edit or fix occurred in this increment. Record every future Haskell fix in root `FINDINGS.md` so external work can pick it up. R28 archive/reconstruction and the exact two-directory cleanup approval remain pending. No deletion occurred.
+
+The earlier 02:38 twelve-module checkpoint and its UNCOMPILED-at-creation labels remain dated history. Later original 17/110 and 76/79 failed checks are retained. Empty130 passed unchanged; final Some75 removes one redundant proof command; final Captured79 repairs two namespaces. None changes the intended entry gates.
+
 # 2026-11-01: actual incoming caches for both handle options
 
 Read [the current incoming-state note](lean/notes-current-incoming-state.md) first.
