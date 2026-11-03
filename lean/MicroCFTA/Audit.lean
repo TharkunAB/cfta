@@ -1,3 +1,6 @@
+import MicroCFTA.FiniteSlotProgress
+import MicroCFTA.SourceCurrentSelectedEligibility
+import MicroCFTA.SourceCurrentSelectedRepeatedProgress
 import MicroCFTA.SourceCurrentIncomingReadOrder
 import MicroCFTA.SourceCurrentIncomingReadReferences
 import MicroCFTA.SourceCurrentIncomingSomePredicates
