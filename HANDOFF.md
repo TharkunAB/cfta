@@ -1,3 +1,13 @@
+## Published checkpoint and completed cleanup audit (2026-11-03 19:47 CET)
+
+Proof eb5d23f1f6b83bd31c9615c01f64dbd15c8b3e2c and handoff ab1aefb29c268f89f0579bcd972ff2ffce9d31e9 are published on formalize. The five final proof checks pass. Independent final source/public review is CLEAR for the interim 171-line component, with zero issues. The full Native/Entry target remains open. Main bd5a406a6a3f84b7e3ae0906082783911509df83 is contained. The latest upstream refresh found no changes.
+
+The whole final review is retained at /tmp/mcfta-own-first-dispatch-final-review-retained-20261103:265 files,47 directories including root,1,924,388 bytes. REVIEW-MANIFEST.json has SHA 3cee6e376c4d701c2e54d8c3408a2bc09e3d2e2f63ab736ada8c8faff4269897. REVIEW-PINS.json has SHA c6e4a3e0f92705fb6f263ddf83546bb0ead13f6100ce8438367bbf7129d918f2. All three outside seal artifacts are retained in the current controller's peer-final-siblings directory. Root's portable metadata replay passed. Preserve all historical file modes, including 0664 and 0775. The semantic report remains opaque to Root. Source-process FAIL and all UNKNOWN records remain unchanged.
+
+Cleanup session 37166 is now terminal with exit 0. All 32 directory audits pass with zero mismatches. There were 39 actual bounded worker commands and no deletion. Do not restart that controller or follow the older live-session instructions below. Keep the cache and all attempt logs until approved pruning. The exact 32-directory 106.393 GiB deletion still needs fresh exact-list approval. General cleanup authorization and goal continuation do not supply that approval.
+
+Follow /tmp/mcfta-own-first-dispatch-normal-20261103/CURRENT-HANDOFF.json for the live continuation records. Older counters below are dated snapshots. Continue the genuine Native/Entry-to-own-to-dispatch producer, then the complete original resource/progress and case/API/Haskell targets. No Haskell change occurred.
+
 ## Checked first child dispatch component (2026-11-03 19:32 CET)
 
 Local proof checkpoint eb5d23f1f6b83bd31c9615c01f64dbd15c8b3e2c adds SourceCurrentOwnFirstChildDispatchHistory. It has 171 lines and two public laws: nonterminal_dispatch_history and own_first_dispatch_history. All five final checks pass. Independent final source/public review is CLEAR for this component. The reviewer read all171 source lines and both complete public outputs. Issue count is zero. The preceding published checkpoint was c4add55a83659cc8192e6ec95506c41733ac2679.
