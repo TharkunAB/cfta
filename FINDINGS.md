@@ -1,3 +1,13 @@
+## Actual repeated branch reduces candidate count (2026-11-03 13:52 CET)
+
+Proof `b36b7c3c2d229787816753e688e53203e4aa3599` adds `FiniteSlotProgress`, `SourceCurrentSelectedEligibility` and `SourceCurrentSelectedRepeatedProgress`. The final endpoint derives strict candidate-count descent at the literal repeated parked prefix from the original entry conditions. It derives original target eligibility internally. It also derives target disablement, the exact other-slot frame and unchanged Core counter. The count uses each state's actual counter range. This is a genuine local progress component before the embedded restart result is used. Global progress, sufficient original depth/resources, both workers, all requested prefix/stops and Haskell correspondence remain open.
+
+The strict linter found two unused public decision parameters in the original 126-line draft. The final 133-line theorem retains only the supplied operational Edge dictionary. Separate local proof terms provide Symbol and Node decisions for the auxiliary existence proof. The explicit public type confirms that Context and `runPrefix` use the same Edge data. No runtime definition changed and no new input gate was added. The original source and full 546-byte failure remain in the local canonical records. Seven final required checks pass; eight commands ran, seven PASS and one FAIL. Independent review of eligibility/final endpoint is CLEAR. The generic count lemma has separate Root review/checks because its author performed that review.
+
+No Haskell defect, edit, fix or run occurred in this increment. This linter repair changes Lean proof parameters only. External agents must record every future Haskell fix here with its reproducer and verification. The earlier Haskell findings and repairs below remain intact.
+
+Current proofs reproduce from checked-in source with the pinned toolchain and `lake build MicroCFTA.Audit` in `lean/`. Run logs and hash vectors document the checks. They add no mathematical assumption. Existing source-acquisition audit failures remain permanent; Root's 404/at-most-10 figure is only a bounded upper estimate. All earlier findings below remain exact suffixes. The full original objective remains active.
+
 ## Storage update (2026-11-03 12:19 CET)
 
 The current proof checkpoint is pushed as `704dc27a3c6ce6a7f909d1f635c4f62bc8d940a8`.

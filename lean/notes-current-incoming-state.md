@@ -1,3 +1,13 @@
+## Repeated branch progress added (2026-11-03 13:52 CET)
+
+Proof checkpoint `b36b7c3c2d229787816753e688e53203e4aa3599` adds three selected-progress modules, 257 lines and three public laws. The existing incoming-cache family remains 29 modules, 2637 lines and 40 public laws. Its literal actual-Some theorem still produces full Packet at the same returned Caller/query and original metadata under the original admissions. The complete six-module source/public review is mathematically CLEAR. Historical source-acquisition failures remain separate and permanent.
+
+The new local endpoint is `SourceCurrentSelectedRepeatedProgress.selected_repeated_progress`. Original selection derives a true candidate flag and target bound. Genuine completion/history facts derive stable read/check/count resources, the literal parked prefix, exact values update, target disablement, every other candidate flag unchanged and Core counter equality. The finite-count lemma then proves strict decrease over the actual before/after counter ranges. This is before using the embedded restart result. Global rank and sufficient original resources still need proof across non-repeated/renewal/Left-callback branches and both workers.
+
+Only supplied Edge data occurs operationally in this prefix and its Context. Symbol/Node decisions occur in separate auxiliary proof terms. The original 126-line canonical draft failed the unused-decision linter; the final source is 133 lines. Seven final checks pass from eight actual commands, seven PASS and one FAIL. Ordinary/explicit outputs are 7047/44477 bytes and were read completely. Only standard axioms occur. Independent final endpoint/eligibility review is CLEAR; the generic count source has separate Root review/checks. Strict and Lake audits reported 84148/84127 theorems. These are run totals, not coverage measures.
+
+Reproduce from source with `lake build MicroCFTA.Audit` in `lean/` using the pinned Lean 4.34.1. Local command records are at `/tmp/mcfta-selected-repeated-progress-normal-20261103`. The complete bounded feedback shares whole inputs. It does not clone large controllers. All prior note bodies remain exact suffixes in Git. No Haskell defect/edit/fix/run occurred; record any future Haskell fix in root FINDINGS.md. The full original objective, including all cases/APIs and Haskell correspondence, remains active.
+
 ## Storage update (2026-11-03 12:19 CET)
 
 The current proof checkpoint is pushed as `704dc27a3c6ce6a7f909d1f635c4f62bc8d940a8`.
