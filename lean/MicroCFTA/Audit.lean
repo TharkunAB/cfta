@@ -1,3 +1,4 @@
+import MicroCFTA.SourceCurrentNativeEntryFirstDispatchHistory
 import MicroCFTA.SourceCurrentOwnFirstChildDispatchHistory
 import MicroCFTA.SourceCurrentPreparedChildHistoryUnion
 import MicroCFTA.SourceCurrentAllocatedHistoryExactCountermodel
