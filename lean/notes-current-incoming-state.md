@@ -1,3 +1,11 @@
+## Exact incoming history transport (2026-11-03 14:43 CET)
+
+Proof `c9ce4948d9ce61d27baf7735af114851617825ae` adds one module,158 lines and one public law. `SourceCurrentIncomingHistory.some_cache_histories` connects the literal actualSome cache to ORIGINAL histories: target=dedup(active++oldTarget), every other history unchanged, and all active/old target keys retained. It covers empty and singleton rows. It keeps all3 supplied operational equality dictionaries as DATA and assumes only original conditions plus the actualSome observation.
+
+The corrected158-line source passes all5 required checks. There were6 commands,5PASS/1FAIL. The original159 failed only on a redundant rfl. Full ordinary3070B and explicit14793B outputs were read, with standard axioms only. StrictAudit84144 and Lake84142/4872jobs are run metadata. The local bounded60-file feedback shares whole inputs and is318827B. Reproduce mathematical claims from Git with the pinned toolchain and `lake build MicroCFTA.Audit` in `lean/`.
+
+Previous Packet and repeated-prefix progress laws stay valid. Fresh parent-key staging, finite original-key bounds, all-branch/restart composition, sufficient originalD/common resources for both workers, exact ordered prefix/stops and full Haskell/API correspondence remain open. Parent first-visit absence does not establish child freshness. No Haskell defect/edit/fix/run occurred. Current source-scope limits and permanent failures are in the top HANDOFF/NEXT/FINDINGS entries. Older note bodies remain exact suffixes and complete in Git.
+
 ## Repeated branch progress added (2026-11-03 13:52 CET)
 
 Proof checkpoint `b36b7c3c2d229787816753e688e53203e4aa3599` adds three selected-progress modules, 257 lines and three public laws. The existing incoming-cache family remains 29 modules, 2637 lines and 40 public laws. Its literal actual-Some theorem still produces full Packet at the same returned Caller/query and original metadata under the original admissions. The complete six-module source/public review is mathematically CLEAR. Historical source-acquisition failures remain separate and permanent.
