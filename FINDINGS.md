@@ -1,3 +1,51 @@
+## Storage update (2026-11-03 12:19 CET)
+
+The current proof checkpoint is pushed as `704dc27a3c6ce6a7f909d1f635c4f62bc8d940a8`.
+The six-field actual-Some Packet theorem and all ten canonical checks below are unchanged.
+The checked-in Lean proofs are reproducible from source and the pinned toolchain.
+Compiler logs and expanded replay trees are run records, not additional mathematical proofs.
+
+The requested `/tmp` cleanup removed four generated replay copies, totaling 30.91 GiB:
+
+- `/tmp/mcfta-first-child-captured-cache-restored-20261031` (20.66 GiB). Every byte, path, mode, owner and empty directory matched the retained `/tmp/mcfta-first-child-captured-cache-control-20261031`. The comparison covered 746,882 files and 827,015 entries. No unique file was removed.
+- `/tmp/mcfta-first-child-native-frame-restored-20261031` (6.86 GiB).
+- `/tmp/mcfta-current-call-probes-restored-20261031` (2.46 GiB).
+- `/tmp/mcfta-warm-forest-probes-restored-20261031-v2` (0.94 GiB).
+
+The latter three have complete pinned archives in `lean/restart-evidence/20261031-first-child-native-frame-control`, `20261031-current-call-probes-control` and `20261031-warm-forest-probes-control`.
+Their archive parts and combined hashes passed fresh checks.
+Their current path, directory, mode and size sets matched their archive inventories.
+They had no added files and no payload change after the recorded successful restoration.
+Their prior complete payload-validation receipts remain available.
+The three compressed archives total 339,777,075 bytes.
+The originals and all repository archives remain intact.
+Unique drafts, counterexamples, failures and unknown historical fields remain in those retained sources.
+Warm-forest v1 was not removed.
+No new archive was created.
+Measured free space increased by 33,192,456,192 bytes, to about 79.65 GiB.
+
+The current twenty mandatory whole proof inputs closed after cleanup.
+No source-reading ledger, permanent failure, whole-worker slot or acquisition budget was reset.
+The fixed-forest five-law review is now independently CLEAR.
+The independent six-module source/public assessment reports CLEAR.
+Its final sealed review and Root retention are still pending.
+Its complete bounded primary provider is under 1 MB and reuses twenty whole immutable external inputs.
+It does not copy a whole old controller or private owner.
+
+For future proof work, retain changed sources and a small current handoff.
+Reuse existing complete immutable inputs through hash-bound external references.
+Preserve unique failed drafts, counterexamples and exact failure records.
+Avoid repeated copies of completed controllers, compiler outputs and file inventories.
+Do not recreate old replay expansions for routine work on the current source.
+If a historical audit needs one, use its retained reconstruction recipe and matching source/docs checkout.
+The first removed replay can be regenerated with `cp -a` from its retained control.
+The other three use `python3 ARCHIVE/verify.py ARCHIVE --extract TARGET` and their recorded helper arguments.
+
+Cleanup records are in `/tmp/mcfta-tmp-reduction-20261103`.
+The detailed archive audit and complete duplicate-file comparison vector are retained there.
+The full original proof objective remains active and incomplete.
+Haskell source, tests and benchmarks were unchanged.
+
 ## Current checkpoint: complete actual incoming-cache Packets (2026-11-03 11:31 CET)
 
 The source commit is `276e81c915a479fc7dfcfdd15e1bee6d7a3bc281` on `formalize`.
