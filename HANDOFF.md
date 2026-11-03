@@ -1,3 +1,63 @@
+# 2026-11-04: selected check from the cached initializer
+
+Code commit: `64e07038de9c4d28fecb254c407bf80dee582eac`.
+The full formalization goal remains active.
+
+`MicroCFTA.SourceCurrentSelectedInitialCheck.selected_initial` applies the selected-check producer to the cached initializer.
+It derives the original cache-history condition from that initializer.
+The condition is not an input premise in this theorem.
+The other original input gates remain explicit.
+The theorem derives the required slot, root, and SC identities.
+Its Caller, query, and heap bindings match the stated initialized call.
+The supplied edge remains data.
+No future Context, post-state, endpoint, resource, or observed branch is supplied.
+
+This is a local theorem about the cached initializer and selected prefix.
+Actual public-API use of this initializer remains unproved.
+Initial selection existence remains unproved.
+The complete enclosing worker and its global budget remain outside this theorem.
+
+Source: `lean/MicroCFTA/SourceCurrentSelectedInitialCheck.lean`, 97 lines, 6790 bytes.
+SHA256: `71cb6bcfc994cbdd01e6193794d68a5f545c6adcad54d52958f90f00d94557ce`.
+Audit has one new import. Its previous body is a byte-exact suffix.
+Audit is now 4283 lines, 224853 bytes, SHA256 `6df29caac13786f90c8d88d474692109b0aaf85725643e4efc1cb255679c7475`.
+
+All five required checks pass.
+Six kernel commands were retained: five pass and the first proof version fails.
+Only propext, Classical.choice, and Quot.sound occur in the reported axiom sets.
+Independent CLEAR0 covers this full 97-line source and complete 115-line ordinary and 713-line explicit type/axiom outputs.
+The direct source scope is the 17 constructor/initializer lines and the previously reviewed 137-line theorem's public interface.
+The previous theorem's proof and result-state getter stay outside this review.
+Existing singleton-list and constructor reductions retain an explicit library-audit caveat.
+No full indirect-library, source-process, public-API, or global clearance is claimed.
+All permanent FAIL and UNKNOWN records remain in force.
+
+Controller: `/tmp/mcfta-selected-initial-check-normal-20261104/CURRENT-HANDOFF.json`.
+It retains whole provider57, feedback75, the final independent review owner, ALL3 sidecars, and declared shared roots.
+Its 36 whole external roots reuse the protected earlier providers and Root copies.
+No 177 MB provider copy or compiled-library overlay was added.
+Historical source97 creation metadata remains historical. The active repaired source is the exact 6790-byte version above.
+
+Continue the original initial-selection and public-call connection.
+Reuse existing initial_realized in SourcePruningEnumerationObservation, complete typed contract 28–33.
+Reuse the existing NativeSelectionProgress positive producer.
+Their precise instantiation and decision-adapter relation remain open.
+Do not duplicate either producer or introduce a conditional wrapper.
+EnumerationDriver822 is only a pinned identity candidate. Its prior exposure is UNKNOWN.
+No semantic Driver locator or body read is authorized from filename discovery.
+
+The main gap remains original finite-key coverage, global progress, and original-state resource bounds for BOTH workers.
+Keep all case/API and Haskell correspondence targets active.
+Keep exact accepted terms by node-count size, finite execution, size order, and both rank/unrank inverses.
+Preserve the optimized interned core and older constructor/equality targets.
+
+No Haskell file changed and no new Haskell defect or fix was established.
+The 32-directory deletion still lacks fresh exact-list approval after automatic review rejected it.
+Do not delete those targets or restart the completed cleanup audit.
+Do not pause the formalization goal.
+
+Earlier handoff content follows unchanged.
+
 # 2026-11-04: selected-entry prefix checkpoint
 
 Code commit: `9221173f22011d4a9f34ce01304807b09482b5b6`.

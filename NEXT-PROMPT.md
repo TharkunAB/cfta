@@ -1,3 +1,33 @@
+# Restart after the cached-initializer consumer
+
+The full goal is active. Code commit: `64e07038de9c4d28fecb254c407bf80dee582eac`.
+Pull formalize with fast-forward only. Fetch main and check ancestry. Preserve all local work.
+Normal pushes to `git@github.com:TharkunAB/cfta.git`, `refs/heads/formalize`, remain authorized.
+Read the latest HANDOFF and FINDINGS prefixes and `/tmp/mcfta-selected-initial-check-normal-20261104/CURRENT-HANDOFF.json`.
+
+The selected_initial theorem derives the original history condition for the cached initializer.
+It retains the other original input gates.
+All five required checks pass.
+Independent CLEAR0 covers fullTHIS97 direct source and complete ordinary/explicit type and axiom outputs.
+It does not cover the older 137-line proof, its primitive getter, the complete library audit, or the global/public-API claims.
+
+Next connect the original initial selection and actual public call.
+Reuse initial_realized's complete typed interface 28–33 and the existing NativeSelectionProgress producer.
+Check their precise instantiation and adapter relation. Do not build another conditional wrapper.
+EnumerationDriver822 remains an identity-only candidate with UNKNOWN prior exposure.
+Do not inspect its source without a valid prior bound and explicit exact admission.
+
+Then continue original finite-key coverage, global progress, and original-state budgets for BOTH workers.
+Retain every case/API, Haskell, exact-size, finite-execution, size-order and inverse target.
+Preserve the optimized interned core and older constructor/equality targets.
+Record every Haskell fix in FINDINGS. This increment changes no Haskell file.
+Keep all permanent FAIL, UNKNOWN, actor budgets, and existing whole-file limits.
+Do not repeat passing kernel checks without a new reason.
+The completed cleanup audit is terminal. The exact 32-directory deletion has no fresh approval.
+Do not delete those targets or pause the goal.
+
+Earlier restart content follows unchanged.
+
 # Restart after the 2026-11-04 selected-entry checkpoint
 
 The full goal is active. Code commit: `9221173f22011d4a9f34ce01304807b09482b5b6`.

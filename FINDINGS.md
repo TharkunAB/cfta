@@ -1,3 +1,33 @@
+# 2026-11-04: cached initializer supplies the history condition
+
+Code commit: `64e07038de9c4d28fecb254c407bf80dee582eac`.
+`MicroCFTA.SourceCurrentSelectedInitialCheck.selected_initial` derives the original cache-history condition for the cached initializer.
+It applies the checked selected-prefix producer under the remaining original input gates.
+It derives the required slot/root/SC identities and retains the actual Caller/query/heap bindings.
+No endpoint or future Context, state, resource, or branch supplier was added.
+The edge remains data.
+
+Actual public-API initialization use and initial selection existence remain unproved.
+The full enclosing worker and global original-state budgets for BOTH workers remain open.
+All end-to-end case/API, Haskell, exact-size, finite-execution, order, and inverse targets remain active.
+
+All five required checks pass. Only the standard three reported axioms occur.
+Independent CLEAR0 covers fullTHIS97 direct source and the complete 115-line ordinary and 713-line explicit type/axiom outputs.
+Its source scope is 17 complete initializer/constructor lines plus the prior producer's public interface.
+The prior 137-line proof/getter remains outside this review.
+The library-audit caveat, permanent process FAIL, and all UNKNOWNs remain recorded.
+The retained earlier failed proof uses tagged Lean errors. Its diagnostic metadata and correction remain historical.
+
+Existing initial_realized and the NativeSelectionProgress positive producer must be reused.
+The remaining task is their original-input instantiation and decision-adapter connection.
+EnumerationDriver822 is only an opaque identity candidate. Its prior exposure is UNKNOWN.
+
+Haskell: no Haskell file changed. No new Haskell defect or fix was established.
+Existing Haskell findings below remain unchanged.
+Checkpoint and portable metadata replay paths are recorded in `/tmp/mcfta-selected-initial-check-normal-20261104/CURRENT-HANDOFF.json`.
+
+Earlier findings follow unchanged.
+
 # 2026-11-04: selected-entry construction from original inputs
 
 Code commit: `9221173f22011d4a9f34ce01304807b09482b5b6`.
