@@ -1,3 +1,15 @@
+## Prepared-child history and rejected equality (2026-11-03 17:33 CET)
+
+Proof 849c7d58945162acfd2e14535199e404bb05402e adds 167/18 lines and two public laws. Every actual prepareChild row has the ORIGINAL counter hole, unchanged original active history, exact dedup(original active ++ original slot history) and membership of all original active keys. Node/Mu/Union are covered; empty/reference rows are absent. No future history/Nodup/dictionary gate.
+
+The checked primitive countermodel refutes equality with the active list for an arbitrary duplicate-active Core. Reachable valid states and a Haskell failure are not claimed. Both rejected 153-line drafts/sealed 16, submitted 166/19 and all actual failed sources remain. Prepared repair: open the existing references/encodeNode namespaces. Countermodel repair: use the available List.eraseDups_cons equation; preserve failed nodup/decide attempts.
+
+All 6 final checks PASS;10 actual commands: 6 PASS/4 FAIL. Unchanged compiles reused; all 30 input hashes resolve to retained whole versions. Complete 2263/8757 B public output read; only propext/Quot.sound. Independent source/public CLEAR. Small 78-file feedback and shared 22/all 27 inputs are under /tmp/mcfta-prepared-child-history-normal-20261103. Mathematics rebuilds from source/pinnedLean.
+
+Actual Entry/staging/child key-SC-target-cache matching, changed handles, terminal callbacks, finite original handles+tries, global rank, originalD/common BOTH-worker resources and every original prefix/case/API/node-count/table/Haskell obligation remain open. No runtime definition changed. Haskell: no defect/edit/fix/run. Record every future Haskell fix here with reproducer and verification.
+
+No new large deletion: 10.116 GiB plus earlier 30.914 GiB remain removed. Exact 32 paths/106.393 GiB await exact-list approval after auto-review rejection. Read-only 15-minute session 37166 preserves old logs and all checks. Root source-process FAIL remains permanent: known 732/at-most-21 is incomplete; reviewer 523/15 plus 4 STD/1, same 2 wholes, no full indirect audit. SelectedOrdinary157+unknown34=>191/363 remains a hard stop.
+
 ## Recursive first-visit absence and corrected allocation target (2026-11-03 16:48 CET)
 
 Proof d66f4c59255f8d0e835df517f41568d0d01d5af7 adds SourceCurrentRecursiveFalseKey.recursive_false_key_absent. Original Ready, a decoded recursive boundary and the actual singleton false result imply absence of the same checked key at the same uv in the returned Core. The theorem derives the representative identity. It does not infer key agreement through narrowing or execution existence. No runtime definition or operational equality dictionary changed. All five final checks pass;13 actual commands include5 PASS/8 FAIL. Complete failed sources/diagnostics remain in /tmp/mcfta-recursive-false-key-normal-20261103. Independent final source/public review is CLEAR. Both full public outputs show only standard axioms.
