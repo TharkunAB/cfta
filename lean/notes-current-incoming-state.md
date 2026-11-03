@@ -1,3 +1,31 @@
+# 2026-11-04: cached initializer and selected prefix
+
+Code commit: `64e07038de9c4d28fecb254c407bf80dee582eac` adds SourceCurrentSelectedInitialCheck and one Audit import.
+The selected_initial theorem derives the original history condition for the cached initializer.
+It retains the other original gates and the actual Caller/query/heap bindings.
+The slot/root/SC identities are derived.
+No future or endpoint supplier is present.
+
+All five required checks pass.
+FullTHIS97 direct-source and complete ordinary/explicit public review has CLEAR0.
+The direct original scope is State67–73/76–77 and Cached15–18/27–30.
+The previous 137-line theorem is consumed only through its public interface.
+Its proof/getter stays outside this review.
+Existing singleton-list and constructor reductions keep the explicit library-audit caveat.
+No source-process, library-wide, API-wide, or global clearance is claimed.
+
+Actual public-API use, initial selection existence, and the enclosing-worker resource proof remain open.
+Reuse existing initial_realized and the NativeSelectionProgress positive producer.
+Resolve their actual adapter and instantiation relation before seeking another producer.
+EnumerationDriver822 has only identity metadata and UNKNOWN prior exposure.
+Do not infer ownership or semantic admission from its filename.
+
+Keep original finite-key coverage, BOTH-worker global progress/budgets, all API/Haskell targets and exact-size/order/inverse targets active.
+The full goal is active. No Haskell file changed in this increment.
+Current controller: `/tmp/mcfta-selected-initial-check-normal-20261104/CURRENT-HANDOFF.json`.
+
+Earlier notes follow unchanged.
+
 # 2026-11-04: genuine selected-check prefix
 
 Code commit: `9221173f22011d4a9f34ce01304807b09482b5b6` adds SourceCurrentSelectedNoHistoryCheck and one Audit import.
