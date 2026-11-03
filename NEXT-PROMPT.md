@@ -1,3 +1,62 @@
+# Resume from 2026-11-03 22:58 CET
+
+Continue the full CFTA formalization in `/home/tritlo/Code/mcfta` on `formalize`.
+The verified proof commit is `9b167f9889b2f6bc3a57dd4532161a2e2d9b271e`.
+Previous published head: `e0903aa4f19a6eae30e419727a774aeb9a920f4e`.
+A document commit follows. Keep the optimized interned core and every proof,
+counterexample, repair, and marked draft. Keep constructor/equality work.
+
+`FiniteSlotProgress.lean` now has 113 lines and SHA-256
+`f9c36c2b4dc1d89e465a487ed2add03d64f9d5b2e4f37150a053caff0aa5273e`.
+The new theorem is `countP_lt_of_pointwise_target_cleared`.
+The original Nat public declaration and private helper body remain byte exact.
+All five required checks pass. Independent source/public review is CLEAR0.
+The first uncompiled draft failed. Three proof argument orders were repaired.
+Keep the failed version, its full diagnostic, whole18/42, and all six sidecars.
+
+Use `/tmp/mcfta-original-key-carrier-normal-20261103/CURRENT-HANDOFF.json`.
+The summary is `verification-summary-v2.json`: six actual kernel commands,
+five PASS and one initial FAIL; ten source observations, two query observations,
+four whole versions, and two current repository inputs.
+Driver 69751 is terminal zero. There is no live Root compiler.
+Full ordinary and explicit outputs have 13 and 20 lines.
+Only `propext` and `Quot.sound` occur; preserve explicit `Quot.sound.{u}`.
+Root stays metadata-only for source, full types, diagnostics, and reports.
+
+The final small independent review owner and
+`counting-integration-addendum-v2` are retained and Root-replayed.
+The review has ten files and 69,724 bytes. The addendum has 28 files and
+53,755 bytes. All six outside sidecars are retained.
+The frozen whole59 feedback, whole18 draft, whole42 repair, and all sidecars
+must remain exact. Do not clone old large controllers.
+Commit these four document prefixes separately. Refresh upstream.
+Push the proof and documents to `formalize` normally after the document commit.
+The user already authorized that branch. Record the actual published head.
+
+Then prove the actual native Mu admission/outcome bridge from original input
+and concrete source operations. A fresh local conditional account passed
+independent review; original admission and outcome handling remain unproved.
+No admitted-input counterexample or Haskell defect was established.
+Its whole23 review and all three sidecars are retained and Root-replayed.
+The historical175 document remains unread/UNKNOWN for the reviewer.
+Use fresh source-derived arguments with exact receiver-origin plans.
+
+Keep finite ORIGINAL handle/key coverage, actual strict global progress,
+original D and common upfront BOTH-worker resources as full targets.
+Keep all case/API, exact size-indexed terms, finite execution, size order,
+both rank/unrank inverse laws, and Haskell correspondence obligations.
+The generic counting lemma does not complete these targets.
+Latest source scopes: author343/4780 CFTA113 + STD22/3; fork reviewer961/35
++ STD4/1. Keep actor-specific two whole slots, permanent FAIL, Root UNKNOWN3,
+historical unknowns, Schedule-zero identity, and all partial metadata incidents.
+
+Record every Haskell correction in root `FINDINGS.md`. No Haskell changed here.
+The exact 106.393 GiB cleanup batch remains rejected pending fresh approval.
+Its audit is complete: 32/32 matches, 39 bounded commands, zero deletions.
+Do not restart audit37166. The full proof goal remains active.
+
+The previous restart instructions follow unchanged.
+
 # Resume from 2026-11-03 22:05 CET
 
 Continue the full CFTA proof goal. Keep the optimized interned core, every local

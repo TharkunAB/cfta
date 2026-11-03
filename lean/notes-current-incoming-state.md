@@ -1,3 +1,38 @@
+# Current progress checkpoint — 2026-11-03 22:58 CET
+
+`FiniteSlotProgress.lean` now has 113 lines and SHA-256
+`f9c36c2b4dc1d89e465a487ed2add03d64f9d5b2e4f37150a053caff0aa5273e`.
+Proof commit: `9b167f9889b2f6bc3a57dd4532161a2e2d9b271e`.
+The new pointwise target-clearing count theorem passes all five checks.
+Independent source/public review is CLEAR0 after complete reads of the
+113-line source and ordinary (13-line) and explicit (20-line) public outputs. The original Nat theorem and private helper body remain byte exact.
+Only standard axioms occur. Preserve explicit `Quot.sound.{u}`.
+
+The current controller is
+`/tmp/mcfta-original-key-carrier-normal-20261103`.
+It records six kernel commands: five PASS and one initial draft FAIL.
+Ten source observations and two query observations resolve four whole versions.
+Both Audit checks pass. Driver69751 is terminal zero.
+Keep whole18/42/59, all sidecars, both source versions and the full diagnostic.
+The final integration addendum and independent review owner are retained.
+Their portable metadata replays passed.
+
+The native Mu account has only a conditional source-level conclusion.
+Original-input admission and outcome handling remain unproved.
+No admitted-input counterexample or Haskell defect was established.
+Its whole23 independent review and all sidecars are retained.
+Keep the finite ORIGINAL key carrier, strict global progress, original D,
+common BOTH-worker resources, all case/API contracts, exact enumeration,
+rank/unrank laws, and Haskell correspondence as full targets.
+
+No Haskell changed. Keep Haskell fixes in root `FINDINGS.md`.
+The permanent process FAIL and UNKNOWN records remain.
+The historical175 document remains unread/UNKNOWN.
+Cleanup audit37166 is complete and deleted zero files.
+Its exact 106.393 GiB batch still needs fresh approval.
+
+The previous notes follow unchanged.
+
 # Current entry-history checkpoint — 2026-11-03 22:05 CET
 
 `SourceCurrentNativeEntryFirstDispatchHistory` has 208 lines and SHA-256

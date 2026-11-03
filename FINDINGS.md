@@ -1,3 +1,50 @@
+# Current findings — 2026-11-03 22:58 CET
+
+Commit `9b167f9889b2f6bc3a57dd4532161a2e2d9b271e` adds
+`MicroCFTA.FiniteSlotProgress.countP_lt_of_pointwise_target_cleared`.
+It provides the counting step when the matching predicate decreases pointwise
+and a target clears. It permits more than one key to clear.
+The original public Nat theorem and private helper body remain byte exact.
+The source has 113 lines, 5,202 bytes, and SHA-256
+`f9c36c2b4dc1d89e465a487ed2add03d64f9d5b2e4f37150a053caff0aa5273e`.
+
+The first draft failed its first kernel check. Its complete diagnostic has
+901 bytes. Three proof argument orders were corrected on lines 83, 85, and 95.
+The original draft, whole18, repaired whole42, and all sidecars remain.
+All five required checks now pass. Independent review read the complete
+source and complete ordinary (13-line) and explicit (20-line) public outputs
+without truncation.
+The mathematical/source/public verdict is CLEAR, with zero issues.
+Only `propext` and `Quot.sound` occur in reported axioms.
+The explicit universe suffix `Quot.sound.{u}` remains recorded exactly.
+The final independent review owner and integration addendum are retained.
+Their portable metadata replays passed. No extra public admission gate was added.
+This result does not establish original-key coverage or global resources.
+
+Independent review also checked a fresh conditional native Mu account.
+The source origins were closed before the full account read.
+The conditional account is valid, with zero issues.
+Original-input admission and outcome handling remain unproved.
+No admitted-input counterexample or Haskell defect was established.
+The historical175 document remains unread/UNKNOWN for the reviewer.
+The whole23 review and all sidecars are retained and Root-replayed.
+The next actual source target is the admission/outcome bridge.
+Finite ORIGINAL handle/key coverage, strict global progress, original D,
+and common upfront resources for both workers remain open.
+
+No Haskell file changed. Record Haskell corrections here for an external agent.
+All case/API, enumeration, rank/unrank, and Haskell correspondence goals remain.
+The permanent process FAIL, actor-specific whole slots, Root UNKNOWN3,
+historical unknowns, and partial metadata incident records remain.
+Green kernel checks do not establish a complete indirect source audit.
+
+Cleanup remains pending exact-list approval. Audit37166 is complete:
+32/32 matches, 39 bounded commands, exit zero, and zero deletions.
+Automatic approval review rejected the exact 106.393 GiB batch.
+Preserve unique work and current canonical owners. Do not restart the audit.
+
+The previous findings follow unchanged.
+
 # Current findings — 2026-11-03 22:05 CET
 
 The native-entry history module has a concrete callback-universe repair.
