@@ -1,3 +1,13 @@
+## Current published restart state (2026-11-03 19:47 CET)
+
+Start from published ab1aefb29c268f89f0579bcd972ff2ffce9d31e9, including proof eb5d23f1f6b83bd31c9615c01f64dbd15c8b3e2c. Refresh upstream first. Main bd5a406a6a3f84b7e3ae0906082783911509df83 was contained. The full Native/Entry and original global targets remain open. Normal formalize pushes are authorized.
+
+Read the current controller CURRENT-HANDOFF.json. The final sealed review is retained whole at /tmp/mcfta-own-first-dispatch-final-review-retained-20261103, with265 files/47 directories/1,924,388 bytes. Its portable metadata replay passes. All three outside artifacts are retained in controller peer-final-siblings. Preserve exact historical modes. Keep the semantic report opaque to Root and retain permanent FAIL/UNKNOWN records.
+
+Cleanup 37166 is terminal 0:32/32 PASS,39 actual commands,zero mismatches / deleted 0. Older instructions to resume or pause that audit are superseded. Do not restart it. Exact 32 / 106.393 GiB deletion still requires fresh exact-list approval. Preserve the cache and all logs. Keep every unique proof, counterexample, repair and marked draft, all canonical providers and archives, optimized interned core and older constructor/equality targets.
+
+Continue the actual Native/Entry connection from original admissions. Do not substitute a future frame, cache, key-equivalence or freshness supplier. Continue sufficient ORIGINAL D/common upfront resources for BOTH workers and every original prefix/stop/case/API/node-count/table/Haskell contract. Record all future Haskell fixes in root FINDINGS.md. Keep the full goal active.
+
 ## Resume from first dispatch component (2026-11-03 19:32 CET)
 
 Start from local proof eb5d23f1f6b83bd31c9615c01f64dbd15c8b3e2c and its documentation commit. Previous published head was c4add55a83659cc8192e6ec95506c41733ac2679. Refresh upstream first. Mainbd5a was contained. Preserve every proof/counterexample/repair/marked draft, optimized interned core and older constructor/equality targets. Normal formalize pushes are authorized; never main or force.
