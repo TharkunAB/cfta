@@ -1,3 +1,123 @@
+# Current checkpoint — 2026-11-03 22:58 CET
+
+The verified proof commit is `9b167f9889b2f6bc3a57dd4532161a2e2d9b271e`.
+The previous published head is `e0903aa4f19a6eae30e419727a774aeb9a920f4e`.
+A separate document commit follows. All five required checks pass.
+Independent review of the complete source and both public outputs is CLEAR,
+with zero issues. The final small review owner, integration addendum, and all their sidecars
+are Root-retained. Portable metadata replay passed for both.
+
+`lean/MicroCFTA/FiniteSlotProgress.lean` now has 113 lines and 5,202 bytes.
+Its SHA-256 is
+`f9c36c2b4dc1d89e465a487ed2add03d64f9d5b2e4f37150a053caff0aa5273e`.
+The original source had 74 lines and SHA-256
+`58e07cb00a64b167e4a67522c31bf06619be7c5bd46b097249846a080bcf6398`.
+The new public theorem is
+`MicroCFTA.FiniteSlotProgress.countP_lt_of_pointwise_target_cleared`.
+It supplies the counting step when the matching predicate decreases
+pointwise and clears a target. It permits several keys to clear in one step.
+The existing public theorem is `countP_lt_of_target_cleared`.
+Its entire declaration on lines 37–72 and the private helper body on
+lines 10–34 remain byte exact. The private helper header was generalized.
+The new public header on lines 75–80 is unchanged from the first draft.
+
+The first 113-line draft failed its first kernel check with a 901-byte
+diagnostic. The repair corrected proof argument order on lines 83, 85, and 95.
+Both versions have 113 lines and 5,202 bytes. The failed source SHA-256 is
+`c3ac6a8670e6a5d300b8ada87653fdf2898b55a736393ef8fa12d588970c230f`.
+Keep the whole 18-file draft owner, its three sidecars, the whole 42-file
+repair owner, its three sidecars, and all four failed-command files.
+Do not overwrite readonly snapshots. Each version has a separate path.
+
+The five passing checks are strict module compilation, ordinary public
+output, explicit public output, the Lake Audit build, and strict Audit.
+Ordinary output has 954 bytes and 13 lines. Its SHA-256 is
+`cd0f9845777fae6e706d4b5f34202f0d59b7470fe9fb430cb1e9ee6b5fc2a5c4`.
+Explicit output has 1,551 bytes and 20 lines. Its SHA-256 is
+`cc54aa87c621c0e5a04f8c4189bea3c236f5649b0da2e8acef32f6de449acebb`.
+The only reported axioms are `propext` and `Quot.sound`.
+The explicit output retains `Quot.sound.{u}` exactly.
+The independent reviewer read the whole 113-line source and both complete
+outputs without truncation. The read receipt has 1,456 bytes and SHA-256
+`79f130c99c19696575380808d1c50d3d9b9c004ac0b006477d1430d12cbd9c9a`.
+
+The current controller is
+`/tmp/mcfta-original-key-carrier-normal-20261103`.
+Use `CURRENT-HANDOFF.json` and `verification-summary-v2.json`.
+There are six actual kernel commands: five PASS and one initial draft FAIL.
+Ten source hash observations and two query hash observations resolve to four
+whole source versions. The current repository inputs are the new module and
+unchanged Audit. Audit SHA-256 is
+`4a80b6d887844462788babb7604cf878ac5d5f070a44a55a216fb395375781ec`.
+Integration driver 69751 is authoritatively terminal zero.
+All jobs verified 4 GiB memory.max/high and zero swap before and after.
+There is no live Root compiler. Do not rerun passing checks without a reason.
+
+The frozen `counting-public-feedback-v2` owner has 59 files, 12 directories,
+and 98,513 bytes. Root retained its three sidecars and metadata-replayed it.
+Its manifest SHA-256 is
+`cad3f3fb3520ead474e362ed3558563445756c1d4c57af1ed2d346efb9021ec9`.
+Its pins SHA-256 is
+`243530f737cbfed38b90abc4e7d96f90c45f6a79c2cc05213a1ce310fee012ef`.
+The separate `counting-integration-addendum-v2` preserves the two later checks.
+It has 28 files, three directories, and 53,755 bytes. Its manifest SHA-256 is
+`5bee5d7e533405305318820fa8f224a7c80adc4c92ef18a01c53ff9be5df6c10`.
+Its pins SHA-256 is
+`db12702b5a80d1a6055ebec82427d406794125f6a18979c71480581d4f17a69d`.
+The final counting review is retained as `counting-independent-review`.
+It has ten files, one directory, and 69,724 bytes. Its manifest SHA-256 is
+`9d34663d657bf83c1738c94fdb41966302bb20afcbe15307d3d47e75e981b9af`.
+Its pins SHA-256 is
+`29857343b6afad78ecb549f9cba37000add73df2cf969a46cdd934f2128ee789`.
+Root replay passed against the exact 128 declared shared files. This does
+not claim a whole-controller audit. Its report and API contents stay opaque.
+Shared whole owners replace large controller copies. Preserve the actual
+launcher, staging, metadata assertion, universe-parser, and partial API
+incident records. They are separate from the six kernel commands.
+Root has read metadata and axiom names. Source, full types, diagnostics,
+and private semantic accounts remain opaque to Root.
+
+The native Mu case received a separate independent review.
+Its fresh 2,681-byte account was read after all 47 source-origin lines
+were owned. The local conditional account is valid, with zero issues.
+Original-input admission and outcome handling remain unproved.
+No admitted-input counterexample or Haskell defect was established.
+The whole review has 23 files, two directories, and 99,555 bytes.
+Root retained it, all three sidecars, and metadata-replayed it as
+`actual-case-independent-review`. Its report remains opaque to Root.
+The historical 175-line document remains unread by the reviewer because
+its prior semantic union is UNKNOWN. Do not recover its facts indirectly.
+
+At the latest source report, the author has 343 records, 4,780 unique CFTA
+lines in 113 original paths, and 22 STD lines in three files.
+The fork reviewer has 961 CFTA lines in 35 nonzero originals and four STD
+lines in one file. Keep the separate zero-hit Schedule identity.
+Each actor keeps its same two whole-original slots.
+The permanent process FAIL and historical unknowns remain.
+Root UNKNOWN3 remains SelectedEdge319, CapturedEdge258, and
+EnumerationCompressionFrame145. UNKNOWN does not mean zero.
+No complete indirect library audit has been established.
+
+The next actual source target is to derive the native Mu admission and
+outcome conditions from the original input and concrete source operations.
+Keep the finite ORIGINAL native handle/key carrier, strict global progress,
+original D, and a common upfront resource bound for both workers.
+The counting lemma does not establish those system properties.
+Keep exact accepted terms by node-count size, finite execution, size-order
+enumeration, both rank/unrank inverse laws, all case/API obligations,
+Haskell correspondence, the optimized interned core, and older constructor
+and equality work. The full goal stays active.
+
+No Haskell file changed. Record every Haskell fix in root `FINDINGS.md`.
+Cleanup audit 37166 is complete: 32/32 matches, 39 bounded commands, exit zero,
+and zero deletions. Automatic approval review rejected the exact 106.393 GiB
+batch. Fresh approval of that exact list remains necessary.
+Do not restart the audit or bypass its rejection.
+Normal pushes to `formalize` are already authorized. Refresh upstream
+before publication. Preserve every proof, counterexample, repair, and draft.
+
+The previous handoff follows unchanged.
+
 # Current checkpoint — 2026-11-03 22:05 CET
 
 The verified proof head on `formalize` is `d318f48c38147314d927b7c73a95ae79869076a3`.
