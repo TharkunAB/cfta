@@ -1,3 +1,9 @@
+## First dispatch component (2026-11-03 19:32 CET)
+
+Local proof eb5d23f1f6b83bd31c9615c01f64dbd15c8b3e2c adds171lines and two first child dispatch history laws. Five final checks pass; final public review is CLEAR narrowly. This is an interim component. The full actual Native/Entry bridge and all original global progress/depth/resources/prefix/case/API/node-count/table/Haskell obligations remain open.
+
+Withdrawn193/whole49 and failed169/whole43 with complete1644/21259B diagnostics remain. Corrected171 has unchanged public headers. Only standard axioms occur in complete6011/64584B readbacks. Source/types stay opaque to Root; independent review uses its own before-plan. UNKNOWN3 and permanent process failures remain. Follow the current root HANDOFF/NEXT-PROMPT/FINDINGS and the small controller CURRENT-HANDOFF. No Haskell change or new archive.
+
 ## Prepared rows carry original active keys (2026-11-03 17:33 CET)
 
 Proof 849c7d58945162acfd2e14535199e404bb05402e adds 167-line prepare_child_history and 18-line primitive countermodel. Literal prepared rows have the original counter hole, unchanged active history, exact dedup(original active ++ original slot history) and all input active keys. Arbitrary duplicate-active Core refutes the rejected equality; no reachable-state/Haskell defect claim.

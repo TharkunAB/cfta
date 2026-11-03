@@ -1,3 +1,15 @@
+## First dispatch component and withdrawn native draft (2026-11-03 19:32 CET)
+
+Proof eb5d23f1f6b83bd31c9615c01f64dbd15c8b3e2c adds two first child dispatch history laws in 171 lines. All five final checks pass. Independent final source/public review is CLEAR for this component. The reviewer read all171 source lines and both complete public outputs. Issue count is zero. This interim component does not close the Native/Entry bridge or the global original-depth/resource proof.
+
+The 193-line native-entry main claim is withdrawn after two source-review concerns. Its failed strict compile and full 1644-byte raw remain. The separate 169-line interim component had a failed strict compile with a 21259-byte raw. Correction to171 keeps both public headers byte exact. It repairs four normalization goals and three unused simp arguments. Both failed sources and whole49/43 submissions remain. These are proof repairs. Haskell: no defect, edit, fix or runtime test. Record every future Haskell fix here.
+
+Current component: six actual commands, five pass and one fails; all five final checks pass. Two current shared source inputs give12 hash observations, all resolved with the historical169 source. Full public outputs6011/64584B show only propext/Classical.choice/Quot.sound. Explicit universe instances stay intact. Root did not read source/types/diagnostics semantically. Three prior Root view unions remain unknown. Independent source review passed under its own before-plan; final full public/dictionary review is CLEAR narrowly with zero issues. Metadata parser and receiver-filename failures are recorded separately. They caused no kernel rerun or sealed-provider mutation.
+
+Canonical /tmp/mcfta-own-first-dispatch-normal-20261103/public-feedback is67files/11dirs with449584 payload bytes. PUBLIC-MANIFEST/PUBLIC-PINS and all3 outside seal artifacts close whole24/all30 inputs and initial43/withdrawn49 history. No bulk old-owner/controller/archive copy. Every process failure and historical uncertainty remains explicit.
+
+Full Native/Entry-to-child matching, changed handles, finite original handles+tries, global rank, originalD/common BOTH-worker resources, exact prefix/stops and all original case/API/node-count/table/Haskell scope remain open. Source-process FAIL is permanent; Root UNKNOWN3 and reviewer historical unknown total are not zero. The same readonly cleanup37166 resumed after checks. Exact32/106.393GiB deletion is still pending exact-list approval. No further deletion ran.
+
 ## Prepared-child history and rejected equality (2026-11-03 17:33 CET)
 
 Proof 849c7d58945162acfd2e14535199e404bb05402e adds 167/18 lines and two public laws. Every actual prepareChild row has the ORIGINAL counter hole, unchanged original active history, exact dedup(original active ++ original slot history) and membership of all original active keys. Node/Mu/Union are covered; empty/reference rows are absent. No future history/Nodup/dictionary gate.
