@@ -1,3 +1,119 @@
+## Current checkpoint: complete actual incoming-cache Packets (2026-11-03 11:31 CET)
+
+The source commit is `276e81c915a479fc7dfcfdd15e1bee6d7a3bc281` on `formalize`.
+The incoming-call family now has **29 modules, 2,637 lines and 40 named public laws**.
+The prior 23 modules remain byte exact.
+All prior document bodies remain below this dated prefix as exact suffixes.
+
+The strongest new result is conditional on the actual return.
+If an incoming call has an original `Packet` and the stated input and resource admissions,
+and its actual cache adapter returns `Some after`, then `after` has a complete `Packet`.
+The theorem uses the actual returned Caller and saved query.
+It retains the original metadata.
+It derives all six fields: Context, Safe, PendingReferences, CacheValid, Stratified order and metadata bounds.
+It also supplies the actual reached-state `Post` and its query equality.
+The theorem is `SourceCurrentIncomingSomePacket.incoming_some_packet`.
+
+The original admissions include a root target, bounded incoming suspended variables,
+input availability, a closed input, `Fits`, `Room` and `InputsPending`.
+The proof derives the original stored slot and its combined variable bounds from the actual `Some` observation.
+It uses the original before-cache `Packet` directly.
+It does not assume a future Packet, Safe, order or pending-reference certificate.
+It remains conditional on `Some`; it does not prove that this return occurs for a chosen sufficient depth.
+The Core counter result concerns the enumeration Core, not the native heap counter.
+
+Six modules add 549 lines and seven public laws:
+
+- `SourceCurrentIncomingReadOrder` (51 lines): actual outer reads preserve the original order witness on all outcomes. Original root paths supply the required Total witness.
+- `SourceCurrentIncomingReadReferences` (54 lines): actual outer reads preserve pending references on all outcomes.
+- `SourceCurrentIncomingSomePredicates` (142 lines): actual optional cache returns derive pending references and order from the original Packet and incoming pending inputs.
+- `SourceCurrentIncomingLiveRoots` (91 lines): a live stored slot permits either unenumerated replacement handle; actual outer reads preserve live roots.
+- `SourceCurrentIncomingSomeSafe` (127 lines): original safety and admissions derive Safe for the actual returned cache.
+- `SourceCurrentIncomingSomePacket` (84 lines): the existing Context, validity and bound producers combine with these laws to supply all six fields at the same actual Caller and query.
+
+Ten focused canonical checks passed: six strict compilations, strict Audit, ordinary and explicit new-declaration queries, and the Lake Audit build.
+Strict Audit checked axiom dependencies of 84,121 MicroCFTA theorems.
+The Lake build checked 84,119 and completed 4,868 jobs.
+These are the two actual invocation counts; they are not a completeness measure.
+The seven new public declarations use only the standard axioms `propext`, `Classical.choice` and `Quot.sound`, or a subset.
+Ordinary output is 14,178 bytes; explicit output is 56,823 bytes.
+Both are exact concatenations of the fully read isolated outputs.
+The ten commands share seven complete input files and record 70 hash observations.
+These observations are not 70 physical snapshots.
+The older complete 20-module public readback remains separate: 80/80 checks and 960 input snapshots.
+It was not rerun for the 29-module family.
+The earlier 23-module checkpoint and its checks remain unchanged.
+
+Two Lean repairs preserve every original public theorem header and its premises.
+The original 138-line predicates draft failed once with a complete 2,406-byte diagnostic.
+The repair reconstructs the three Stratified fields at the actual State index in both branches.
+Ancestry does not occur in those three fields.
+The result has 142 lines.
+The original 90-line live-roots draft failed once with an 823-byte diagnostic because `State` was ambiguous.
+The repair opens only `Value` and `EdgeKey` from `InternedConstructorTemplates`.
+Every declaration header and proof body stays byte exact; the result has 91 lines.
+The 51, 54, 127 and 84-line proofs passed without a body repair.
+All failed originals, raw outputs, source snapshots and the two corrected versions remain available.
+The isolated predicates checks were 5 PASS / 1 FAIL with 198 reported snapshots.
+A separate wrong-mode invocation stopped before Lean after it copied 33 inputs.
+The isolated safety/Packet checks were 5 PASS / 1 FAIL with 216 snapshots.
+Metadata setup and verifier failures remain separate from the Lean results.
+Their selected complete API envelopes and all unknown fields are retained.
+
+Evidence is in `/tmp/mcfta-incoming-fresh-packet-normal-20261103`.
+The complete 326-file and 384-file source providers are retained and their required external inputs are closed.
+The sealed fixed-forest reference/order feedback is `/tmp/mcfta-incoming-reference-order-write-feedback-20261103-v2`.
+Its metadata replay passed with all fifteen whole external inputs.
+It retains the failed first 56-file seal unchanged.
+That first helper failed because its header extractor assumed tactic-style proofs and missed term-style proofs.
+The correction verifies all five complete original headers.
+The actual reference/order proof results remain 4 PASS / 1 FAIL across five Lean commands and fifteen snapshots.
+The same independent reviewer is checking this bounded feedback.
+The new six-module evidence package and its independent review remain pending.
+These pending reviews are not claimed complete.
+
+The original full objective stays open.
+The next progress proof must justify a sufficient ORIGINAL D and positive-depth progress,
+with common resources chosen before execution, for both native and prepared workers.
+A restart at the same slot can preserve its Core counter and order frontier.
+A strict decreasing measure for such restarts, renewal and Left callbacks remains unproved.
+The actual inner target is the selected prefix winner in the folded Core.
+Its rooted pending slot and Packet require transport through the actual prefix and fold effects.
+Existing `OutcomeResources`, `captured_post`, `SelectedStepCompletion.complete`,
+`CapturedEdge.complete_with_history` and `ChildBoundedResources.complete_with_fragments_cache_bounds`
+already supply genuine fixed-depth closure, restoration or chosen-resource completion results.
+Reuse them; do not report those producers as wholly absent.
+The newly sealed `original-d-next-plan-20261103` is a draft plan, not a proof.
+Root must retain and close that complete provider and make its own snippet-origin acquisition plan before reading its semantics.
+
+The target still includes the exact finite ordered requested prefix and configured stops.
+It includes the same original Caller/cache/query and the actual returned state.
+It covers Mu, Union, opaque values, maps, domain maps, SCCs, history,
+constructor-sensitive NodeEq, generic and default policies, Map and Set,
+signed and weighted operations, aliases, renewal and writer behavior.
+The API targets remain size, node-count, count, table, order, rank, unrank, prefix and checkpoint.
+Haskell correspondence and runtime validation remain separate obligations.
+Retain the optimized interned core and the older constructor and equality targets.
+
+The source-reading protocol failures remain permanent.
+Root's known bounded ledger is 162 CFTA lines over five originals; its complete indirect audit is not established.
+The reviewer remains at 464 lines over twelve originals with the same two whole workers.
+The author remains at 277 acquisitions, 4,241 CFTA lines over 96 originals and 18 standard-library lines over three originals.
+The author retains the same two whole workers and the CachedChild 125-line limit.
+This increment adds zero direct original-source views for Root and zero authorized OLD views for the reviewer.
+All owner scopes are not claimed PASS.
+Keep all previous manifests, failures, counterexamples, unknown fields and immutable seals.
+
+Disk space became available through an external change after the November 1 block.
+Root deleted no cleanup target.
+The previous cleanup proposals remain history, not approval.
+The goal is active and its full objective is incomplete.
+Normal pushes to `git@github.com:TharkunAB/cfta.git`, `refs/heads/formalize`, remain explicitly authorized.
+
+**Haskell findings:** This increment found no Haskell defect and made no Haskell edit or fix.
+It ran no Haskell tests or benchmarks.
+Record every future Haskell fix in root `FINDINGS.md` so another agent can apply it.
+
 ## Current incoming-metadata checkpoint — 2026-11-03 10:52 CET
 
 Proof source: `16017c37b3f2b9b55eb42751991a4a058e36fbe8` on `formalize`.
