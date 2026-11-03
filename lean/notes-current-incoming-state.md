@@ -1,3 +1,9 @@
+## Prepared rows carry original active keys (2026-11-03 17:33 CET)
+
+Proof 849c7d58945162acfd2e14535199e404bb05402e adds 167-line prepare_child_history and 18-line primitive countermodel. Literal prepared rows have the original counter hole, unchanged active history, exact dedup(original active ++ original slot history) and all input active keys. Arbitrary duplicate-active Core refutes the rejected equality; no reachable-state/Haskell defect claim.
+
+All 6 final checks PASS,10 actual commands: 6 PASS/4 FAIL. Full public outputs read; only propext/Quot.sound; independent source/public CLEAR. Prior incoming actualSome Packet/history, recursive false-key and repeated parked-prefix results remain valid. Actual entry/staging/key/cache path, finite original handles+tries, global rank/originalD/common BOTH-worker resources and full original prefix/case/API/node-count/table/Haskell scope remain open. No runtime or Haskell edit. See current HANDOFF/NEXT-PROMPT/FINDINGS for retained small shared records, permanent process accounting and pending-approved cleanup.
+
 ## Actual recursive false-key absence (2026-11-03 16:48 CET)
 
 Proof d66f4c59255f8d0e835df517f41568d0d01d5af7 adds SourceCurrentRecursiveFalseKey (59 lines) and one Audit import. Original Ready, decoded recursive boundary and literal false singleton imply same-key absence at the same returned uv. Five final checks PASS;13 actual commands5 PASS/8 FAIL, all retained. Both full public outputs and independent review are complete. Only standard axioms occur.
