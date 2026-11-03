@@ -1,3 +1,58 @@
+# Current findings — 2026-11-03 22:05 CET
+
+The native-entry history module has a concrete callback-universe repair.
+The 207-line revision compiled and passed source review for its signature.
+It could not accept the intended Recursive and Prepared worker callbacks.
+The exact same 50-line integration file produces one universe mismatch for
+each worker against that revision. The author read the full 934-byte diagnostic
+under a saved plan and confirmed the two causes.
+
+Commit `d318f48c38147314d927b7c73a95ae79869076a3` adds a universe declaration
+and generalizes the callback binder. It changes no proof body or runtime
+expression. The resulting source has 208 lines and SHA-256
+`e35ed895621e0a7ed30ed7d81157da91ab8a5ebba55eebc0dd7defba42ac569b`.
+The identical integration file now accepts both actual worker callbacks.
+Its SHA-256 is
+`00520c7351145e2766356e2703ce9578f666af889463785b24fbdb38feea4238`.
+
+All six required checks passed. These include the concrete two-worker check
+and five standard module, Audit, public-output, and build checks.
+Ordinary and explicit public output have 109 and 186 lines.
+The reported axioms contain only `propext`, `Classical.choice`, and `Quot.sound`.
+The complete controller has 14 kernel commands, 11 PASS and three FAIL.
+The failures are two earlier elaboration failures and the expected negative
+control. Final independent mathematical/source/public/witness review read the complete
+208-line source and predicate, literal 50-line worker witness, ordinary109,
+explicit186, positive70, and negative934B. All reads were untruncated.
+The verdict is CLEAR0 narrowly for the stated entry-history result and literal
+compatibility with both actual callbacks. The review makes no broader worker
+control-flow, original-resource, or Haskell/runtime claim.
+
+Retain the whole 42-file v5 submission and all three sidecars, the whole 35-file
+and 94-file predecessors, and all failed or rejected intermediate sources.
+Root replay of the v5 33-root metadata closure passed. Preserve the old
+69-file feedback owner. The separate v5 feedback owner has 115 files, 22 directories, and 546,381 bytes.
+Root metadata replay passed. The complete final review owner and all three sidecars are Root-retained.
+It has 676 files, 108 directories, and 4,824,885 bytes. Portable metadata replay
+passed. The semantic report remains opaque to Root. Final metadata confirms
+original entry gates, operational dictionaries as DATA, and no future safety
+or state supplier.
+The permanent process FAIL, Root UNKNOWN3, historical reviewer unknown total,
+and all partial metadata-API captures remain. None is a completed source audit.
+
+No Haskell file changed in this increment. This repair concerns the Lean
+signature. Keep recording Haskell fixes in this file so an external agent can
+apply and verify them. Haskell/runtime correspondence remains open.
+The finite ORIGINAL native-handle/key carrier, strict global progress, and
+common upfront resource bound for both workers remain the largest proof gap.
+
+The tmp cleanup audit is complete: 32/32 matches, 39 bounded commands, exit zero,
+and zero deletions. Automatic approval review rejected the exact 106.393 GiB
+deletion batch. Fresh approval of its exact list remains necessary.
+Do not restart that audit or delete current canonical owners.
+
+The previous findings follow unchanged.
+
 ## Final review retained and read-only audit complete (2026-11-03 19:47 CET)
 
 Published ab1aefb29 includes proof eb5d23f1. All five final proof checks pass. Independent source/public review is CLEAR narrowly for the 171-line interim component, with zero issues. The whole sealed final review has265 files/47 directories/1,924,388 bytes. Root retained it and all three outside seal artifacts, then passed the portable metadata replay. Its semantic report stays opaque to Root. Permanent source-process FAIL and UNKNOWN records remain unchanged.
