@@ -1,3 +1,32 @@
+## Current incoming-metadata checkpoint — 2026-11-03 10:52 CET
+
+Proof source: `16017c37b3f2b9b55eb42751991a4a058e36fbe8` on `formalize`.
+The complete earlier document body remains below this checkpoint.
+
+`SourceCurrentIncomingSomeCounter.some_cache_counter` derives equality of the before and actual returned enumeration Core counters. It uses the original Context, cache validity, rooted target, incoming bounds, availability, closure, Fits and Room gates. The result is conditional on the actual optional return being Some. It does not state that the native heap counter stays equal.
+
+`some_packet_bounds` uses the ORIGINAL full Packet for the CURRENT input cache. It transports bounds for the SAME metadata.pending groups to the actual returned Core counter. A separate captured-cache Packet does not supply this admission. The current and captured caches remain separate where the caller supplies different caches.
+
+The new OrderWrite law preserves stratification under an unenumerated replacement at a fixed forest. Four ReferencesWrite laws derive reference permission, stored-input pending, replacement pending and actual scs++oldScs pending. They support arbitrary Symbol/Guard types and both handle options. They are low-level transports. The actual-call laws retain all three supplied equality dictionaries as DATA.
+
+The current incoming family has23 modules,2088 lines and33 named laws. This increment adds276 lines and7 laws. Six canonical strict kernel/Audit/new-declaration checks PASS. The additional full Lake Audit integration check also PASSES. Audit checks84094 theorem dependencies. The bounded ordinary/explicit outputs match the fully read isolated outputs exactly and use standard axioms. Four whole inputs are shared across these checks;28 is the number of input-hash observations, not28 physical snapshots. The earlier20-module80-check/960-snapshot result remains separate. Its complete old public readback was not rerun for23. All prior20 proof sources,640 protected files,835 native files and4839 Lean files remain exact except the Audit import prefix.
+
+The next local target is a FULL fresh Packet at the ACTUAL returned Caller/cache/query and SAME metadata. Drafts cover six fields: context from the actual Post, cache validity, pending references, dependency order, pending bounds and Safe. The read54/read51/Some138 submission is now retained WHOLE and closed, but remains UNCOMPILED. Check the Total witness in ReadOrder first. LiveRoots90/SomeSafe127/SomePacket84 remain UNCOMPILED drafts pending a complete bounded submission. No future Safe, Context, Packet, resource or output certificate is accepted as a replacement for deriving the result from original admissions.
+
+The full objective stays ACTIVE. Derive sufficient ORIGINAL D/progress/common resources for BOTH native and prepared workers. Preserve the exact after-hook Caller/query and SAME captured cache with all original identities, residency, admissions, Fits, annotations and reservations. Prove exact finite ordered requested prefixes and configured stops. Cover every original case and API, including node-count/table, and prove Haskell correspondence. Finite D can exhaust. Existing staging, selected-step, captured-post and chosen-resource/history producers remain valid local results. Reuse them.
+
+All process failures remain permanent. Root has a known bounded162/5 ledger and no complete indirect-agent locator audit. The reviewer remains464/12 FAIL. The earlier native-prefix101/160 failure remains. The distinct author reports277 acquisitions,4241 CFTA lines/96 originals plus18 standard-library lines/3 originals, with the same two whole-worker originals. References15/557, Compression48/155 and Schedule15/1348 remain partial reads. No budget resets or new Root direct original-source views occurred. Mathematical proof validity does not imply that every process scope passes.
+
+Original Counter151 failed twice at a redundant dsimp, including one duplicate after a failed local patch. Final150 deletes only that command and keeps both public headers/imports exact. Original References78 failed at an unknown references identifier. Final78 infers that property and keeps all four public headers/imports exact. All failed sources, raw outputs and exact failed metadata API pairs remain retained. Counter review642 is WHOLE retained and closed; its report was fully read. The fixed-forest126 independent review remains pending.
+
+The disk blocker is resolved by external free space. This work did not delete either pending cleanup target. Both copies still exist. Old cleanup questions are not approval. No cleanup is needed to continue now. The three checked modules are committed. The upstream refresh confirms main bd5a406 and formalize7df0 before this publication.
+
+No Haskell defect, edit, fix or run occurred. Record every future Haskell fix in root `FINDINGS.md` so external work can pick it up. This update verifies its new prefix and exact earlier-body suffix. It does not claim a new whole-document, whole-controller or archive reconstruction review.
+
+The original case scope includes Mu/Union/opaque values; original maps/domain maps; SCC/history; constructor-sensitive NodeEq; generic/default constructors; Map/Set; signed/weighted and alias cases; renewal/writer behavior; and size, node-count, count, table, order, rank/unrank, prefix and checkpoint APIs. The global induction must establish the original admissions for every scheduled sibling and both workers.
+
+Current evidence: `/tmp/mcfta-incoming-metadata-normal-20261101/verification-summary.json` and `/tmp/mcfta-incoming-metadata-lake-20261103/lake-integration/report.json`. The whole326-file read/Some provider is retained at `/tmp/mcfta-incoming-read-and-some-predicates-source-20261103`. Its semantic read and compiler checks are next. Current safety drafts remain outside that declared producer. Acquire their complete bounded submission before reading them. The earlier RESUME-CURRENT-20261101.md remains dated evidence of the disk blocker.
+
 ## Current pending-preservation checkpoint — 2026-11-01 04:08 CET
 
 Proof source: `6189b75d2c5f865d4261dd55539eef4a7d2e51c6` on `formalize`.
