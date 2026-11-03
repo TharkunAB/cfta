@@ -8,6 +8,7 @@ import MicroCFTA.MergedOrdinaryHeight
 /-! Original entry admissions connect the native continuation to its actual first child call. -/
 set_option autoImplicit false
 namespace MicroCFTA.SourceCurrentNativeEntryFirstDispatchHistory
+universe u v
 open EnumerationState EnumerationSchedule EnumerationCorrectness EnumerationCompressionFrame
 open InternedConstructorTemplates SourcePruningEnumerationNodes SourcePruningEnumerationObservation
 local notation "Symbol" => SourcePruningTemplates.Symbol
@@ -18,7 +19,7 @@ local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
 local notation "Caller" => SourceCurrentAllocatedPartialState.State
 local notation "Queries" => SourceEndpointMemo.Memos
 local notation "Input" => Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)
-variable {width : Nat} {Output Reason : Type}
+variable {width : Nat} {Output : Type u} {Reason : Type v}
 variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
 
 private def HeadHistory (checkEmpty : Bool) (r n p h k : Nat) (history : List RecursionKey)
