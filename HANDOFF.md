@@ -1,3 +1,63 @@
+# 2026-11-04: selected-entry prefix checkpoint
+
+Code commit: `9221173f22011d4a9f34ce01304807b09482b5b6`.
+The full formalization goal remains active.
+
+The new theorem is `MicroCFTA.SourceCurrentSelectedNoHistoryCheck.selected_without_target_history`.
+It derives the literal selected-check prefix from the stated original inputs and local cache condition.
+It proves that suitable resource values exist.
+The observed branch, future resources, and future Context are not supplied as premises.
+The supplied edge remains data.
+The local cache condition is an explicit original condition.
+Its derivation from the public initializer is still open.
+This theorem does not give a global budget for either enclosing worker.
+
+The source is `lean/MicroCFTA/SourceCurrentSelectedNoHistoryCheck.lean`: 137 lines, 8820 bytes.
+Its SHA256 is `9d446148c80b50f23ff29e377874f3f07f1b0314a7543301e8465a70a9581f3d`.
+Audit has one new import. Its previous full body is a byte-exact suffix.
+Audit is now 4282 lines, 224802 bytes, SHA256 `a4b961a74bf72249159e37168dbf078352a9bfa286cf49b17ceab14d740bc198`.
+
+All five required checks pass: strict module, ordinary public type/axioms, explicit public type/axioms, Lake Audit, and strict Audit.
+The only reported axioms are propext, Classical.choice, and Quot.sound.
+The explicit output retains universe suffixes.
+Each kernel command ran with a verified 4 GiB memory cap, zero swap, and a five-minute limit.
+Ten kernel commands were retained: five pass and five fail.
+The failures are four earlier proof versions and one missing compiled dependency in the public-check overlay.
+The passing source keeps the first 76 public-header lines byte-exact to the first draft.
+
+Independent CLEAR0 applies only to header 1–76 and the complete ordinary 105-line and explicit 679-line type/axiom outputs.
+The reviewer did not read proof 77–137.
+Its prior exposure to the result-state primitive remains UNKNOWN.
+There is no full source, proof-body, or process clearance.
+The permanent source-process FAIL and all earlier UNKNOWN records remain in force.
+
+Controller: `/tmp/mcfta-selected-no-history-normal-20261103/CURRENT-HANDOFF.json`.
+It retains whole correction46, original424, feedback82, initial19, limited review186, primitive review25, and their declared receipts.
+The earlier 34 whole providers are explicit shared references. They were rechecked, not copied again.
+The corrected verifier passes. The original provider's failed verifier remains a historical failure.
+The controller records the final integration addendum and publication state.
+No complete indirect or transitive source audit is claimed.
+
+Continue the actual initializer and cached-consumer connection.
+EnumerationState's initial definition is complete at 76–77.
+EnumerationExpandableIndex is the next consumer under a separately bounded source plan.
+Do not replace this connection with an unused projection wrapper.
+Do not infer public API use from a declaration name.
+No top-level required-outcome/permitted-stop contract was identified in the inspected owned interfaces.
+The conditional Mu account is not a refutation of an identified formal contract.
+
+The main open proof remains original finite-key coverage, global progress, and resource bounds from the original state for BOTH workers.
+Keep all case/API and Haskell correspondence work open.
+Keep exact accepted terms by node-count size, finite execution, size order, and both rank/unrank inverses in scope.
+Keep the optimized interned core and the older constructor/equality targets.
+
+No Haskell file changed and no new Haskell defect was established in this increment.
+The proposed 32-directory cleanup still needs fresh exact-list approval after automatic review rejected that deletion.
+Do not delete those targets, restart the completed audit, or pause the formalization goal.
+The exact list is `/tmp/mcfta-tmp-reduction-20261103/CLEANUP-APPROVAL.md`.
+
+Earlier handoff content follows unchanged.
+
 # Current checkpoint — 2026-11-03 22:58 CET
 
 The verified proof commit is `9b167f9889b2f6bc3a57dd4532161a2e2d9b271e`.

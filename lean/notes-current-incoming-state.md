@@ -1,3 +1,33 @@
+# 2026-11-04: genuine selected-check prefix
+
+Code commit: `9221173f22011d4a9f34ce01304807b09482b5b6` adds SourceCurrentSelectedNoHistoryCheck and one Audit import.
+The selected_without_target_history theorem derives a literal selected-check prefix and suitable resource values under its stated original inputs and local-cache condition.
+Its supplied edge is data.
+Its public statement supplies no future observed branch, future resource, or future Context.
+The first 76 source lines stayed byte-exact through five proof versions.
+
+All five required checks pass.
+Independent CLEAR0 is limited to header 1–76 and complete ordinary/explicit type and axiom outputs.
+The proof body 77–137 remains outside that review.
+Only the standard three reported axioms occur.
+The reviewer's prior primitive exposure remains UNKNOWN.
+The separate primitive reader acquired its second actual whole original after an explicit amendment of an unexecuted reservation.
+No third whole was granted. The older conjunction target remains open.
+All permanent FAIL and UNKNOWN statuses remain recorded.
+
+The next task connects the actual initializer and cached consumer to the original local-cache condition.
+EnumerationState's initial definition is complete at 76–77.
+Public initializer use and the cache-condition bridge are not yet proved.
+Do not infer either from names or add a global supplier premise.
+Original finite-key coverage, global progress, and original-state resources for BOTH workers remain open.
+
+The required-outcome/permitted-stop contract is unidentified in the owned inspected interfaces.
+Do not treat that uncertainty as a proved obstruction.
+Keep every system-level case/API, Haskell, exact-size, termination, order, and inverse obligation active.
+
+Current controller: `/tmp/mcfta-selected-no-history-normal-20261103/CURRENT-HANDOFF.json`.
+Earlier notes follow unchanged.
+
 # Current progress checkpoint — 2026-11-03 22:58 CET
 
 `FiniteSlotProgress.lean` now has 113 lines and SHA-256

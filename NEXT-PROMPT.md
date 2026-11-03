@@ -1,3 +1,34 @@
+# Restart after the 2026-11-04 selected-entry checkpoint
+
+The full goal is active. Code commit: `9221173f22011d4a9f34ce01304807b09482b5b6`.
+Pull formalize with fast-forward only. Fetch main and check ancestry. Preserve all local work.
+Normal pushes to `git@github.com:TharkunAB/cfta.git`, `refs/heads/formalize`, remain authorized.
+Read the latest HANDOFF and FINDINGS prefixes and `/tmp/mcfta-selected-no-history-normal-20261103/CURRENT-HANDOFF.json`.
+
+The selected_without_target_history theorem is kernel checked.
+All five required checks pass. The public signature/scope has limited independent CLEAR0.
+This review covers header 1–76 and complete ordinary/explicit type and axiom outputs.
+Proof 77–137 stays unread by that reviewer. Its primitive prior remains UNKNOWN.
+Do not turn this into full source/body/process clearance.
+
+Continue the genuine initializer/cache-condition connection under the author's exact current source plan.
+Use the actual cached consumer. Public initializer reachability is not established.
+Then continue original finite-key coverage, global progress, and original-state budgets for BOTH enclosing workers.
+Do not add an observed future branch, future resource, or future Context supplier.
+A required-outcome/permitted-stop contract has not been identified in the owned inspected interfaces.
+Do not invent one or require every local branch to succeed.
+
+Retain all case/API and Haskell correspondence obligations.
+Retain exact node-count enumeration, finite execution, size order, both inverses, and older constructor/equality targets.
+Keep the optimized interned core.
+Record every Haskell fix in root FINDINGS. This increment changed no Haskell file.
+Preserve all permanent source-process FAIL and UNKNOWN records. Do not reset actor budgets.
+Use verified current heavy-management limits. Do not repeat passing checks without a new reason.
+The completed cleanup audit is terminal. The 32-directory deletion has no fresh exact-list approval.
+Do not delete its targets or pause the goal.
+
+Earlier restart content follows unchanged.
+
 # Resume from 2026-11-03 22:58 CET
 
 Continue the full CFTA formalization in `/home/tritlo/Code/mcfta` on `formalize`.

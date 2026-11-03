@@ -1,3 +1,38 @@
+# 2026-11-04: selected-entry construction from original inputs
+
+Code commit: `9221173f22011d4a9f34ce01304807b09482b5b6`.
+The theorem `MicroCFTA.SourceCurrentSelectedNoHistoryCheck.selected_without_target_history` derives the literal selected-check prefix from its stated original inputs and one explicit original local-cache condition.
+Suitable resources are outputs of the theorem.
+The supplied edge is data.
+The statement does not require a supplied future observed branch, resource witness, or Context supplier.
+
+The initializer has not yet been shown to establish the local-cache condition.
+The theorem does not establish original-state resource bounds or global progress for either enclosing worker.
+Original finite-key coverage and the actual BOTH-worker resource proof remain the main mathematical gap.
+All case/API, Haskell correspondence, exact node-count enumeration, finite execution, size order, and both inverse obligations remain open at system level.
+
+Validation: strict module, ordinary public type/axioms, explicit public type/axioms, Lake Audit, and strict Audit all pass.
+Only propext, Classical.choice, and Quot.sound occur in the reported axiom sets.
+Independent CLEAR0 covers only header 1–76 and complete 105-line ordinary and 679-line explicit type/axiom outputs.
+Proof 77–137 is outside that review. Primitive prior exposure stays UNKNOWN.
+The permanent process FAIL and incomplete indirect/transitive audit remain recorded.
+Full source/body/process clearance is not claimed.
+
+The required-outcome/permitted-stop investigation found no identified top-level contract within the owned inspected interfaces.
+This is not a proof that no such contract exists.
+The conditional Mu account refutes no identified contract.
+Do not introduce an arbitrary stop rule or require every branch to succeed.
+
+Haskell: no Haskell file changed. No new Haskell defect or fix was established in this increment.
+Existing Haskell findings below remain unchanged.
+
+Retained checkpoint and portable metadata replays: `/tmp/mcfta-selected-no-history-normal-20261103`.
+Validation can be rebuilt from the committed Lean source and pinned toolchain.
+Historical source receipts and failed checks record earlier events; rerunning a build does not recreate those events.
+The earlier 34 whole providers remain explicit shared references. This checkpoint does not duplicate them.
+
+Earlier findings follow unchanged.
+
 # Current findings — 2026-11-03 22:58 CET
 
 Commit `9b167f9889b2f6bc3a57dd4532161a2e2d9b271e` adds
