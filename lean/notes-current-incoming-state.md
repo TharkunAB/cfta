@@ -1,3 +1,11 @@
+## Actual recursive false-key absence (2026-11-03 16:48 CET)
+
+Proof d66f4c59255f8d0e835df517f41568d0d01d5af7 adds SourceCurrentRecursiveFalseKey (59 lines) and one Audit import. Original Ready, decoded recursive boundary and literal false singleton imply same-key absence at the same returned uv. Five final checks PASS;13 actual commands5 PASS/8 FAIL, all retained. Both full public outputs and independent review are complete. Only standard axioms occur.
+
+History-rank target correction: compare parent-before to child-after. Entry.complete already produces successful entry and active ancestry; finalization does not insert the key into parent stored history. Match the actual key/SC/target/callback path. Changed handles, finite original handles+tries, global progress, originalD and common resources for BOTH workers remain open. The uncompiled exact-active child-allocation target is rejected; actual allocation deduplicates active history plus prior history at the allocated slot. Corrected prepared-child union draft is kernel-pending.
+
+The incoming actualSome Packet and exact original-history results remain valid, with all their original admissions and operational data dictionaries. No new runtime definition or Haskell fix. Preserve the full original ordered-prefix/cases/APIs/node-count/table/Haskell goal. See the current HANDOFF/NEXT-PROMPT/FINDINGS prefixes for the small run records, cleanup state and permanent source-process failures.
+
 ## Exact incoming history transport (2026-11-03 14:43 CET)
 
 Proof `c9ce4948d9ce61d27baf7735af114851617825ae` adds one module,158 lines and one public law. `SourceCurrentIncomingHistory.some_cache_histories` connects the literal actualSome cache to ORIGINAL histories: target=dedup(active++oldTarget), every other history unchanged, and all active/old target keys retained. It covers empty and singleton rows. It keeps all3 supplied operational equality dictionaries as DATA and assumes only original conditions plus the actualSome observation.
