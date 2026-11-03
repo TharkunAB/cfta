@@ -1,3 +1,5 @@
+import MicroCFTA.SourceCurrentPreparedChildHistoryUnion
+import MicroCFTA.SourceCurrentAllocatedHistoryExactCountermodel
 import MicroCFTA.SourceCurrentRecursiveFalseKey
 import MicroCFTA.SourceCurrentIncomingHistory
 import MicroCFTA.FiniteSlotProgress
