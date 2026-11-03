@@ -1,3 +1,125 @@
+# Current checkpoint — 2026-11-03 22:05 CET
+
+The verified proof head on `formalize` is `d318f48c38147314d927b7c73a95ae79869076a3`.
+A document commit follows this proof head.
+The remote head before publication was `d8335472036d581a5e0d6ef290c5b9ce183d67f6`.
+The two proof commits are `fdf8c88d3` and `d318f48c3`.
+Final independent mathematical/source/public/witness review is CLEAR0 for the
+stated entry-history theorem and literal compatibility with both actual
+callbacks. The review makes no broader worker-control-flow or global-resource
+claim. The complete final review owner and all three sidecars are retained.
+Root portable replay passed.
+
+`SourceCurrentNativeEntryFirstDispatchHistory.lean` has 208 lines and
+13,572 bytes. Its SHA-256 is
+`e35ed895621e0a7ed30ed7d81157da91ab8a5ebba55eebc0dd7defba42ac569b`.
+The Audit import is in `fdf8c88d3`. Audit has 4,281 lines and 224,749 bytes.
+Its SHA-256 is `4a80b6d887844462788babb7604cf878ac5d5f070a44a55a216fb395375781ec`.
+The public names are `EdgeHistory`, `captured_edge_first_dispatch_history`,
+and `native_entry_first_dispatch_history` in the module namespace.
+
+The 207-line revision passed the five standard checks. Independent source and
+public review cleared its present signature. A concrete integration check then
+found that its callback universe excluded both intended recursive workers.
+The 208-line revision adds a universe declaration and changes the callback
+binder. It changes no proof body or runtime expression. The exact same 50-line
+scratch file now type-checks with both actual worker callbacks. The prior
+207-line revision rejects that file with two universe mismatches. The author
+read the complete negative diagnostic under a saved source plan and confirmed
+one mismatch for each worker. Independent review read the complete stronger source and predicate, the
+50-line literal witness, ordinary 109-line and explicit 186-line public output,
+70-line positive output, and 934-byte negative diagnostic. All reads were
+untruncated. The final verdict is CLEAR0 narrowly for the stated target.
+
+All six required checks passed: strict module compilation, the concrete
+two-worker check, strict Audit compilation, ordinary public output, explicit
+public output, and the Lake Audit build. There is no live Root compiler.
+The complete controller records 14 kernel commands: 11 passed and three failed.
+Two failures belong to earlier elaboration repairs. The third is the intended
+negative universe control. The 28 shared input hash observations resolve to
+two current input files and five complete source versions.
+
+The scratch file has 50 lines and 3,092 bytes. Its SHA-256 is
+`00520c7351145e2766356e2703ce9578f666af889463785b24fbdb38feea4238`.
+The positive output has 4,048 bytes and 70 lines. Its SHA-256 is
+`d17331042fa1e1f1aeefab19fd644b72270ebb468f8dda2ba15e97ff6620d9f2`.
+Ordinary public output has 6,640 bytes and 109 lines. Its SHA-256 is
+`d2e481d7c121cdd461a87627059ce329b6b76dcc71b33a4da6be99bb59fe6baf`.
+Explicit public output has 12,896 bytes and 186 lines. Its SHA-256 is
+`d7dda37560e96f2e6ccf530f4c8979e5371bdc2fe7c1bd8b992a56aa97480761`.
+Only `propext`, `Classical.choice`, and `Quot.sound` occur in the reported
+axioms for the three declarations. Root has read metadata and axiom names.
+Root has not read the new source, witness, full public types, or diagnostics.
+
+The current controller is
+`/tmp/mcfta-native-entry-first-dispatch-normal-20261103`.
+Use `CURRENT-HANDOFF.json`, `verification-summary-v5.json`, and
+`all-input-hash-observations-v5.json`. The complete v5 submission has 42 files,
+eight directories, and 552,862 bytes. Root retained all files, modes, paths,
+empty directories, and all three seal sidecars. Its 33-root metadata replay
+passed. The older whole 35-file and 94-file submissions and their sidecars
+remain required. The old 69-file `public-feedback` is immutable. The separate
+`public-feedback-v5` has 115 files, 22 directories, and 546,381 bytes.
+Root retained all three sidecars and replayed the complete metadata closure.
+Its manifest SHA-256 is
+`21efdc29eda948fa3be9134068f7a35d8a9a286fffd9110b7c5fd1a6eb497cd7`.
+Its pins SHA-256 is
+`96b6308409da0f9d6c0d5bb281f471077b912c851cbfefa3b5ad38b56e4e7366`. Do not use the old seven-command summary
+as the final summary for this revision.
+
+At 21:59 CET, the author has 332 acquisition records and 4,736 unique CFTA lines in 111
+original paths, including empty locators. The author has 22 STD lines in three
+files. The reviewer has acquired the exact 76 callback-origin lines and added
+73 unique CFTA lines. The actual reviewer total is 932 CFTA lines in 34 nonzero
+original files and four STD lines in one file. A separate zero-hit Schedule
+identity remains. The same two whole originals remain the limit.
+The permanent process FAIL remains. Root still has three UNKNOWN prior unions:
+SelectedEdge319, CapturedEdge258, and EnumerationCompressionFrame145. UNKNOWN
+does not mean zero. Preserve all partial metadata-API incident records.
+No complete transitive source audit has been established.
+
+Keep the full proof objective. The largest open part is a finite carrier for
+ORIGINAL native handles and keys, strict global progress, and one original
+upfront resource bound for both workers. Keep all case, API, enumeration,
+rank/unrank, and Haskell correspondence contracts. A local entry-history lemma
+does not close these goals. The author has read the exact 11,314-byte private global-carrier plan
+after all seven origin lineages were reconciled. The four admitted STD lines 3715–3718 in
+`Init/Data/List/Lemmas.lean` are acquired. The declaration is complete on lines
+3715–3717. Line 3718 is blank. The four exact canonical NEW versions were retained opaquely. Their proof
+bodies remain unread. The plan added no unowned defining contract. Its future
+carrier and progress contracts remain unproved. Two individually planned
+owned-source rereads added zero unique lines. No extra acquisition is admitted.
+
+Cleanup audit session 37166 ended with exit zero. All 32 targets matched their
+retained copies. The audit used 39 bounded commands and deleted zero files.
+Deletion of the exact 106.393 GiB batch still needs fresh approval. Automatic
+approval review rejected that deletion. Use the exact list in
+`/tmp/mcfta-tmp-reduction-20261103/CLEANUP-APPROVAL.md`.
+Preserve current canonical owners, unique proofs, failed drafts, archives,
+and the audit cache. Do not restart the completed audit.
+
+No Haskell file changed in this increment. Record every future Haskell fix in
+root `FINDINGS.md`. The 21:52 CET fetch confirmed that main
+`bd5a406a6a3f84b7e3ae0906082783911509df83` is contained. Remote formalize
+remained an ancestor. Refresh upstream if it changes before publication. Push only the normal
+`formalize` ref. The user has already authorized that push.
+
+The final review copy is `independent-review-v5` in the controller.
+It has 676 files, 108 directories, and 4,824,885 bytes. The manifest SHA-256 is
+`54d748286792c78af66236f00b0331dbde58533431a3c833f34a7fb7496b351f`.
+The pins SHA-256 is
+`bc30fdc370167e15062e9bf3a4b070ad938f07b9af01aab8cdf4bd4d7255f786`.
+Root replay returned zero. Its 12,396-byte output has SHA-256
+`e8da3936bbd5f103603de65916da1983b3e3b8003fb0d10e971a8dfdd286fb8f`.
+Five inherited Python SyntaxWarnings remain in that output. The semantic
+report remains opaque to Root. All three seal sidecars are retained in
+`independent-review-v5-siblings`. The full-read receipt has 2,438 bytes
+and SHA-256 `c3b8fcc9e2b91aa6489c71e3abc9c8a0b3bd254d6c8d272ecc7d59529c4bd0e2`.
+Final metadata confirms the original entry gates, operational dictionaries
+as DATA, and no future safety or state supplier.
+
+The previous handoff follows unchanged.
+
 ## Published checkpoint and completed cleanup audit (2026-11-03 19:47 CET)
 
 Proof eb5d23f1f6b83bd31c9615c01f64dbd15c8b3e2c and handoff ab1aefb29c268f89f0579bcd972ff2ffce9d31e9 are published on formalize. The five final proof checks pass. Independent final source/public review is CLEAR for the interim 171-line component, with zero issues. The full Native/Entry target remains open. Main bd5a406a6a3f84b7e3ae0906082783911509df83 is contained. The latest upstream refresh found no changes.

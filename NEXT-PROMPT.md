@@ -1,3 +1,80 @@
+# Resume from 2026-11-03 22:05 CET
+
+Continue the full CFTA proof goal. Keep the optimized interned core, every local
+proof, counterexample, repair, and marked draft. Keep constructor and equality
+work as secondary targets. The original global-resource proof and Haskell
+correspondence remain open.
+
+Work in `/home/tritlo/Code/mcfta` on `formalize`.
+The verified proof head is `d318f48c38147314d927b7c73a95ae79869076a3`. Its document commit follows.
+The remote head at the last pre-publication fetch was
+`d8335472036d581a5e0d6ef290c5b9ce183d67f6`.
+The source and universe fix are saved in two proof commits. Final independent
+mathematical/source/public/witness review is CLEAR0 narrowly for the stated
+entry-history result and actual two-worker callback compatibility. The review
+makes no broader worker-control-flow or global-resource claim.
+
+The current module has 208 lines and SHA-256
+`e35ed895621e0a7ed30ed7d81157da91ab8a5ebba55eebc0dd7defba42ac569b`.
+All six required checks passed. The exact 50-line scratch file instantiates
+both actual callbacks. It failed against the retained 207-line revision with
+one universe mismatch for each worker. The same file passes against 208.
+No proof body or runtime expression changed in the universe fix.
+
+Use `/tmp/mcfta-native-entry-first-dispatch-normal-20261103/CURRENT-HANDOFF.json`.
+The current summary is `verification-summary-v5.json`.
+There are 14 kernel commands: 11 PASS, two earlier elaboration failures, and
+one expected negative universe control. All 28 shared input hash observations
+resolve to two current input files and five whole versions. Root compiler
+session 34274 is terminal zero. Do not rerun passing checks without a change
+or unresolved failure.
+
+The independent review is complete. Its whole final owner and all three sidecars are Root-retained.
+Portable metadata replay passed. The separate `public-feedback-v5` package is complete and
+Root-replayed: 115 files, 22 directories, 546,381 bytes.
+The whole 42-file v5 submission, all three sidecars, and 33-root metadata
+closure are retained and Root-replayed. Preserve the older whole 35-file and
+94-file submissions. Keep the old 69-file feedback owner unchanged.
+The ordinary and explicit public outputs have 109 and 186 lines. The positive
+worker output has 70 lines. The final reviewer read these full outputs, the 208-line source and
+predicate, the 50-line literal witness, the 70-line positive output, and the
+cause of the negative control under saved origin plans. All reads were
+untruncated. Do not substitute a generic
+family-only type check for the two actual callbacks.
+
+Keep Root metadata-only for these new source and public artifacts.
+Keep the permanent process FAIL, two whole-file slots, reviewer historical
+unknown total, and Root UNKNOWN3 unchanged. The reviewer has acquired the 76 literal callback-origin lines.
+The actual total is 932 CFTA lines in 34 nonzero originals plus four STD lines
+in one file. Preserve the separate zero-hit Schedule identity
+and all partial metadata-API incidents.
+
+Keep all four current document prefixes aligned with the final verdict.
+The 21:52 CET upstream fetch found no incoming change. Commit the documents
+separately. The final review owner is retained as `independent-review-v5`
+with 676 files, 108 directories, and 4,824,885 bytes. All three sidecars are
+retained alongside it. Root replay passed; five inherited Python warnings
+are preserved. Keep the semantic report opaque to Root. Push both proof commits
+and the document commit to `formalize` without a force push. The user has
+authorized that branch. Record the published head in CURRENT-HANDOFF.json.
+
+Then continue the finite ORIGINAL handle/key carrier, strict global progress,
+and common upfront resources for both workers. The exact private global plan was read after all seven origin lineages
+were reconciled. No unowned defining contract was recovered. Future carrier
+and progress contracts remain unproved. The exact STD lines 3715–3718 from
+`Init/Data/List/Lemmas.lean` are acquired. At 21:59 CET, the author has 332 records,
+4,736 CFTA lines in 111 original paths, and 22 STD lines in three files.
+The four canonical NEW bodies remain opaque. Two individually planned
+owned-source rereads added zero unique lines. Keep all case, API, enumeration,
+rank/unrank, and Haskell correspondence goals.
+
+Cleanup is audited but not approved. All 32 targets matched; zero were deleted.
+Do not restart audit 37166. Automatic approval review rejected the exact
+106.393 GiB deletion batch. Wait for fresh approval of the exact list.
+Record every Haskell fix in root `FINDINGS.md`. No Haskell file changed here.
+
+The previous restart instructions follow unchanged.
+
 ## Current published restart state (2026-11-03 19:47 CET)
 
 Start from published ab1aefb29c268f89f0579bcd972ff2ffce9d31e9, including proof eb5d23f1f6b83bd31c9615c01f64dbd15c8b3e2c. Refresh upstream first. Main bd5a406a6a3f84b7e3ae0906082783911509df83 was contained. The full Native/Entry and original global targets remain open. Normal formalize pushes are authorized.

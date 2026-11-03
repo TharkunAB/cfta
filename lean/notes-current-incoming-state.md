@@ -1,3 +1,44 @@
+# Current entry-history checkpoint — 2026-11-03 22:05 CET
+
+`SourceCurrentNativeEntryFirstDispatchHistory` has 208 lines and SHA-256
+`e35ed895621e0a7ed30ed7d81157da91ab8a5ebba55eebc0dd7defba42ac569b`.
+The local proof commits are `fdf8c88d3` and `d318f48c3`.
+All six required checks passed. These include one exact scratch file with
+both actual Recursive and Prepared worker callbacks. That same file fails
+against the retained 207-line source with one universe mismatch per worker.
+The repair adds a universe declaration and changes the callback binder.
+It changes no proof body or runtime expression.
+
+The old source and public verdict cleared the 207-line signature.
+Final independent mathematical/source/public/witness review read the complete
+208-line source and predicate, literal50, ordinary109, explicit186, positive70,
+and negative934B. All reads were untruncated. The verdict is CLEAR0 narrowly
+for the stated entry-history result and actual callback compatibility.
+The review makes no broader worker-control-flow or global-resource claim.
+The whole final review owner and all three sidecars are Root-retained.
+It has 676 files, 108 directories, and 4,824,885 bytes. Portable replay passed.
+The semantic report remains opaque to Root.
+Only standard axioms occur in the reported dependencies.
+
+Use `/tmp/mcfta-native-entry-first-dispatch-normal-20261103`.
+The v5 summary records 14 kernel commands: 11 PASS and three FAIL.
+One failure is the expected negative universe control. The other two are
+earlier elaboration failures. All 28 shared input hash observations resolve.
+The whole 42-file submission and three sidecars are retained and replayed.
+The older whole 35-file and 94-file submissions remain required.
+Keep the old 69-file feedback owner unchanged. The separate final v5 feedback
+owner has 115 files, 22 directories, and 546,381 bytes. Root replay passed.
+
+This local history result does not prove original global resources.
+Keep the finite ORIGINAL handle/key carrier, strict global progress, common
+upfront bound for both workers, and all case/API/Haskell correspondence goals.
+No Haskell file changed here. Keep Haskell fixes in root `FINDINGS.md`.
+Keep the permanent process FAIL, Root UNKNOWN3, and partial API captures.
+The completed cleanup audit deleted zero files. Its rejected exact batch
+still needs fresh approval.
+
+The previous notes follow unchanged.
+
 ## First dispatch component (2026-11-03 19:32 CET)
 
 Local proof eb5d23f1f6b83bd31c9615c01f64dbd15c8b3e2c adds171lines and two first child dispatch history laws. Five final checks pass; final public review is CLEAR narrowly. This is an interim component. The full actual Native/Entry bridge and all original global progress/depth/resources/prefix/case/API/node-count/table/Haskell obligations remain open.
