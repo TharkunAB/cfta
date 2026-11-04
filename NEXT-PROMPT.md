@@ -1,3 +1,13 @@
+## Current next work (2026-11-04 11:54 CET)
+
+The selected mu preparation proof and its verified handoff are published through `db8f9ab3a3355e156f06fad21a5521b4e59229a8`.
+All three actual Haskell recursion-key sites passed the restricted boundary/getter branch audit. Finite key closure and the common input-derived bound remain open.
+Continue the distinct intersection operator audit and the same native actor's genuine original-result-to-Packet bridge assessment.
+Preserve every actor's prior source unions and final whole reservations. The old-worker119/228 route remains unexecuted and over that role's cap.
+The Haskell branch actor is2923/5 with Type444/922, two final wholes. No Haskell fix was established; record any later repair in root FINDINGS.
+During the current GitHub incident, uploaded objects required a non-force REST reference update through the existing authenticated `gh` CLI. Verify the server head before any retry.
+Use the current Root control at `/tmp/mcfta-selected-preparation-mu-run-normal-20261104`. Keep the full goal and all older work active.
+
 ## Resume after actual selected mu preparation (2026-11-04 11:20 CET)
 
 Keep the full goal from HANDOFF active. Keep older constructor/equality work and all proofs, repairs, counterexamples, and marked drafts.

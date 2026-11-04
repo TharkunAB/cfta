@@ -1,3 +1,15 @@
+## Recursion-key branch audit (2026-11-04 11:54 CET)
+
+The source audit checked all three explicit recursion-key applications in `cfta/src/Data/CFTA/Enumeration.hs`: lines 900, 1006, and 1542.
+Each site uses the boundary check on the same node that supplies its identity.
+The checked `recursiveBoundary` equations select one of the three supported `nodeIdentity` getter branches.
+The namespace, argument, and restricted branch-selection checks pass at all three sites.
+This result has source-audit scope. Complete evaluation, other identity calls, finite key closure, and runtime bounds remain open.
+No Haskell defect or fix was established.
+The same audit now has 2923 examined rows / 5 originals / two final whole reservations. Its Type union is 444/922.
+Evidence: `/tmp/mcfta-haskell-branch-eligibility-supplement-20261104/KEY-SITE-COUPLING-RESULT-METADATA.json`, SHA256 `746afc59e5cb4d456e566730b8280395b98a534309d60e2002888a7d164c8210`.
+The prior UNKNOWN entries remain historical records.
+
 ## Actual selected mu preparation (2026-11-04 11:20 CET)
 
 `MicroCFTA.SourceCurrentSelectedPreparationMuRun.complete` connects the actual entry producer to the selected preparation call.

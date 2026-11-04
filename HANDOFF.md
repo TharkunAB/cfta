@@ -1,3 +1,19 @@
+## Published proof and current follow-up (2026-11-04 11:54 CET)
+
+The verified code and proof handoff are published through `db8f9ab3a3355e156f06fad21a5521b4e59229a8` on `formalize`.
+The three Haskell key-call sites now pass the restricted boundary/getter branch and same-argument audit. No Haskell repair occurred.
+Keep that actor at 2923/5 with two final whole reservations, Type444/922; do not apply the unused five-row companion proposal.
+The current supplement is `/tmp/mcfta-haskell-branch-eligibility-supplement-20261104`.
+A distinct intersection-closure audit has two exact whole reservations for Operations887 and Type922. It must derive closure from original input and size, with imported laws folded until owned.
+The native proof actor continues from its existing SelectedStep whole reservation to assess a genuine original-result-to-Packet producer bridge.
+The old-worker actor stopped at 396 records / 4944 original rows / 113 paths plus STD22/3. Its prefix/Packet binding remains unproved; the provisional119/228 implementation route was not executed.
+
+GitHub reported a Git operations incident during publication. SSH and HTTPS Git pushes failed after commit objects reached the server.
+The existing authenticated `gh` CLI completed a REST update of `git/refs/heads/formalize` with `force=false`.
+An independent reference read and HTTPS fetch verified the server and tracking head. The GitHub integration lacked write access.
+Keep the transport failures and successful update in `/tmp/mcfta-selected-preparation-mu-run-normal-20261104`.
+The standing push authorization remains active. The separate 32-directory cleanup still needs fresh approval.
+
 ## Current checkpoint: actual selected mu preparation (2026-11-04 11:20 CET)
 
 The full goal remains active. Preserve the whole Haskell library target, optimized interned core, both actual recursive workers, original-input finite activation carrier, and one common upfront bound.
