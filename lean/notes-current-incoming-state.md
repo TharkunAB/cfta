@@ -1,3 +1,27 @@
+## 2026-11-04 03:49 CET: Native mu resources
+
+The new47-line module is `MicroCFTA.SourceCurrentMuPrepareResources`.
+Its public theorem is `mu_prepare`.
+Code commit: `5f42e6d0da31a0b98aa6e4dcce4edeeb9f446ecc`.
+All five required checks pass.
+The full ordinary report has 31 lines.
+The full explicit report has 93 lines.
+Only the three standard axiom names occur.
+The independent local verdict is `PASS_BOUNDED_LOCAL_PRINTED_INTERFACE`.
+Fidelity is `YES_WITH_FOLDED_CONTRACT_LIMIT`.
+The original strong statement/proof source is unchanged.
+Local typing context adds no public premise.
+The review confirms actual operator, input and elaborated instance binding.
+
+This is a local resource-preparation producer.
+Activation instantiation and action execution remain unproved.
+The original activation-key carrier and common BOTH-worker bound remain unproved.
+The initial-selector/selected-prefix composition remains unverified.
+Continue from the two live controller CURRENT-HANDOFF.json files named in HANDOFF.md.
+No Haskell source changed and no new Haskell fix was established.
+The full goal stays active.
+All source-process failures, folded-contract limits and UNKNOWNs remain.
+
 # 2026-11-04: literal initial selector result
 
 Code commit: `732ec94207354bda387a7f692a8e9d99ad1b55db` adds SourceCurrentInitialNextCheck and one Audit import.

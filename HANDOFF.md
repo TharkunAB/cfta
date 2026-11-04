@@ -1,3 +1,75 @@
+## 2026-11-04 03:49 CET: Native mu preparation resources
+
+The code commit is `5f42e6d0da31a0b98aa6e4dcce4edeeb9f446ecc`.
+The published predecessor is `9fff13567d5b58d67f1e42079efc5a41e75ab357`.
+`SourceCurrentMuPrepareResources.lean` adds `MicroCFTA.SourceCurrentMuPrepareResources.mu_prepare`.
+The module has 47 lines and 2465 bytes.
+Its SHA256 is `bb755ea38432e4c61baf16fb75a94367e32863b13e364714ac4560a905021519`.
+The theorem derives resource preparation for the literal native mu operation under its stated input gates.
+It reuses the existing Nodes producer.
+It adds no public premise.
+It does not prove action execution, activation-site instantiation, or the common resource bound for BOTH workers.
+
+All five required checks pass.
+These checks are strict module compilation, Lake Audit, strict Audit, and both full public reports.
+The ordinary report has 31 lines and 2257 bytes.
+The explicit report has 93 lines and 6858 bytes.
+Both reports name only `propext`, `Classical.choice`, and `Quot.sound`.
+The independent verdict is `PASS_BOUNDED_LOCAL_PRINTED_INTERFACE`.
+Fidelity is `YES_WITH_FOLDED_CONTRACT_LIMIT`.
+The review confirms the elaborated instance, operator and input bindings within that scope.
+The review covers OLD 352 lines across 8 owners, NEW 47 source lines and 124 report lines.
+It uses no whole-original exception and no fresh STD source or API view.
+It does not clear nested contracts, full source/API/Haskell correspondence, or the permanent source-process failure.
+
+The stronger v4 statement and proof source are byte-exact in v6.
+V4 lines 10–43 equal v6 lines 12–45, with SHA256 `bad21b6f1ce23b39def2a73b4f7364795fe7388eb344e08e1fb2c7d95a5890a7`.
+Two local typing-context lines make the original statement elaborate.
+The independent review checks the resulting instance binding.
+The weaker uncompiled v5 remains a separate draft.
+Do not use it as the repair.
+R43 retains 6 kernel commands: 5 PASS and 1 FAIL.
+The failed v4 command remains retained.
+The earlier R42 command set remains 11 commands: 6 PASS and 5 FAIL.
+
+The live resource controller is `/tmp/mcfta-mu-prepare-resource-normal-20261104`.
+Read its mutable `CURRENT-HANDOFF.json` for publication and packet status.
+The complete bounded author owner has 54 files and 805164 bytes.
+Its whole control sibling owner has 6 files and 15232 bytes.
+The original helper retains an absolute provider path.
+The separate Root relocation helper verifies the copied owner and returns exit0.
+The frozen author status remains `ROOT_COMPILE_PENDING` as an historical fact.
+Later outcomes are separate records.
+Missing historical raw tool wrappers and event identifiers remain UNKNOWN.
+
+The initial-selector theorem from the predecessor remains verified.
+Its composition with `selected_initial` remains UNVERIFIED.
+The live composition controller is `/tmp/mcfta-initial-prefix-composition-normal-20261104`.
+The composition task has inspected 666 original lines across 32 files at the latest received source receipt.
+It has one whole-original allocation and an unused second allocation.
+A further 28-line context/Result validation is admitted separately.
+It has not viewed either new public header yet.
+Six generic binder-context flags need a bounded compiler metadata query.
+Do not supply a selection endpoint, future state, resource supplier, or different initializer to close this gap.
+
+The earlier SelectedOrdinary fragment22–91 is incomplete.
+A separately owned whole-file inspection resolves complete headers22–142 and 220–336.
+This correction does not clear the old indirect library audit.
+The full Formula data clause and its mutual enclosure29–56 are now inspected in the composition task.
+Nested meanings and Haskell correspondence remain separate obligations.
+
+No Haskell defect or fix was established for this checkpoint.
+No Haskell source file changed.
+Keep every later Haskell fix in root FINDINGS.md.
+The full goal remains active.
+Prove original activation-key coverage and a finite original-input carrier.
+Derive a common original-state resource bound for BOTH recursive workers.
+Complete all library cases and public APIs, finite execution, exact accepted terms by node-count size, size ordering, and both rank/unrank inverse laws.
+Keep the optimized interned core and the older constructor/equality work.
+Normal pushes to `formalize` remain authorized.
+The 32-directory cleanup still needs the exact fresh approval described in `/tmp/mcfta-tmp-reduction-20261103/CLEANUP-APPROVAL.md`.
+Do not delete those pending targets or weaken any recorded UNKNOWN.
+
 # 2026-11-04: actual initial pure selection
 
 Code commit: `732ec94207354bda387a7f692a8e9d99ad1b55db`.
