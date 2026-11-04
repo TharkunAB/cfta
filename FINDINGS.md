@@ -1,3 +1,42 @@
+## Actual selected mu preparation (2026-11-04 11:20 CET)
+
+`MicroCFTA.SourceCurrentSelectedPreparationMuRun.complete` connects the actual entry producer to the selected preparation call.
+It keeps the original packet, readiness, and stored-unfold assumptions.
+It derives the available-source and closed-source facts from the existing entry theorem.
+It produces the actual successful entry result and matches its decoded value in the conclusion.
+The mu arm preserves the full previous mu result package.
+It also proves the exact successful `SelectedPreparation.run` result for every native fuel value.
+Each supplied degree ceiling is preserved.
+The other four decoded arms have no completion claim.
+Union completion, original caller production, and the common input-derived bound remain open.
+
+The new module has 88 lines and 5832 bytes.
+Its SHA256 is `48cf8654c0493c6d8fe917d11769a064a004c036cb73fc5ea85f072b0beb28b9`.
+The audit adds one import and retains its complete previous suffix.
+The strict candidate check, Lake audit build, strict audit check, and both full public-type checks pass.
+The ordinary type has 121 lines. The explicit type has 615 lines.
+Both reports contain only `propext`, `Classical.choice`, and `Quot.sound`.
+All five jobs used 4 GiB memory limits, zero swap, and a five-minute limit.
+Independent review: PASS_LOCAL_REAL_ENTRY_MU_DISPATCH_FOLDED_CONTRACTS.
+These checks establish a local theorem. Full transitive source correspondence remains open.
+The permanent source-process FAIL and historical UNKNOWN entries remain in force.
+
+Haskell follow-up: no defect or fix was established.
+The bounded audit located `NodeId`, `nodeIdentity`, `unfoldOuterRec`, `nodeEdges`, and the `intersect` wrapper.
+It checked three permitted getter branches of `nodeIdentity`.
+The constructor-range contract for `recursiveBoundary` remains unowned.
+Key-call eligibility is UNKNOWN at `Enumeration.hs` lines 900, 1006, and 1542.
+The audit established no finite carrier, intersection closure, allocation law, or cache law.
+Record any later Haskell repair in this file for the external agent.
+
+Evidence control: `/tmp/mcfta-selected-preparation-mu-run-normal-20261104`.
+The complete available frozen author supplement is retained there: 88 files, 3 directories, 249583 bytes.
+All copied bytes, modes, distinct inodes, and source stability were checked.
+Public outputs and all five job manifests remain whole.
+The proposed generic decoded-case scope and its Union correction remain retained.
+The header differs from the admitted statement by one trailing whitespace byte only.
+The candidate and its logical statement did not change during checking.
+
 ## 2026-11-04: checked packet to native μ composition
 
 `MicroCFTA.SourceCurrentPacketMuRun.complete` is committed as `b61f48ce2fc2e2478857e2df43f5d83b2b9a6513`.
