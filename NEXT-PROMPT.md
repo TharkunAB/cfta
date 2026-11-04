@@ -1,3 +1,16 @@
+## Continue after original Mu-name inventory closure (2026-11-04 19:12 CET)
+
+Keep the full original goal, both actual workers, the optimized interned core, all older work, exact node-count terms, size order and both rank/unrank inverses.
+Refresh upstream before work. Normal pushes to `formalize` remain authorized.
+The new `SourceRecursiveIntersectionInputView.OriginalInput.mu_inventory_name` theorem proves original Mu-name membership in the actual original issued-name range. Five final checks passed; no extra bound or injectivity premise was added.
+Root control remains `/tmp/mcfta-runtime-packet-producer-normal-20261104-1205`, with current `R58-` records. Keep all old Audit/proof bytes and failed guards.
+Continue the same operator author at project 2093/9+Std 7/1=combined 2100/10, two final wholes/API 5. Freeze the checked 31-line candidate. Prove remaining finite-domain Targets A/B/D; C is now proved. Use actual contracts and a separately admitted minimal implementation/interface plan.
+Continue the same native author at 2103/45/two final wholes, Frame 71/145. Derive full Packet/caller/counter facts from original gates, without a supplier. Complete metadata 111 owner-range reconciliation before claiming a new dependency prior. StorageValid, LiveRoots and SameClass meanings remain folded; EnumerationDependencies prior is UNKNOWN.
+Continue the same trie author at 3010/8/two final wholes, Std 9/project 3. Complete actual combiner/writer contexts after the admitted locator stage. Do not infer HashSet union/dedup, key projection, new-value provenance or input/size insertion counts from names or list descent.
+Keep global FAIL, Root original upper UNKNOWN, all actor histories, old metadata/routing/provenance failures and unavailable Action context. No reset, third whole or imported-helper law is authorized.
+Generated/returned/subsequent graphs, actual identity/equality/hash, both workers, common upfront work bound and full Haskell/runtime/API correspondence remain open.
+Record each later verified Haskell fix in root FINDINGS. None was made here. Approval for the exact list of 32 cleanup directories remains pending.
+
 ## Continue after whole-collection descent closure (2026-11-04 18:19 CET)
 
 Keep the full original goal, both actual workers, exact accepted terms per node count, size order, both rank/unrank inverses, and all older work.

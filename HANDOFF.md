@@ -1,3 +1,19 @@
+## Checked original Mu-name checkpoint (2026-11-04 19:12 CET)
+
+Keep the full formalization goal active. Preserve both actual workers, the optimized interned core, older constructor/equality work, all proofs, repairs, counterexamples, marked drafts and failed guards.
+The parent checkpoint is `b3de55f9661cf593845dc3dc7df615d4dc0af2d4`. The new module is `lean/MicroCFTA/SourceRecursiveIntersectionMuInventoryName.lean`: 31 lines, 1335 bytes, SHA256 `8d2f8e32219ad37d7c06131c71911593c6f53ae74257d698bf18b3d3c14e7aeb`.
+Its `OriginalInput.mu_inventory_name` theorem proves same-range original-name membership under actual Facts and OriginalInput conditions. It derives constructor payload equality and adds no resource, ordinal or injectivity premise.
+Five final checks passed under serial 4 GiB max/high and zero swap. The new theorem uses only `propext` and `Quot.sound`. Both public types are complete; the explicit type has no ellipses.
+All older proof and Audit bytes remain intact. Root control remains `/tmp/mcfta-runtime-packet-producer-normal-20261104-1205`, now with `R58-` records.
+The operator actor is at project 2093/9 plus Std 7/1, combined 2100/10, two final wholes, API 5. Freeze the checked 31-line candidate and context. Target C is proved. Targets A, B and D remain open.
+The finite-domain draft must still compute its canonical/typed family, prove exact membership and the input-derived cardinal bound, and preserve it under actual primitive extension. The physical/schedule bridge remains open.
+The native actor is at 2103/45/two final wholes, Frame 71/145. Exact Safe/Satisfies definitions were received. StorageValid, LiveRoots and SameClass meanings remain folded. Metadata111 is admitted to reconcile historical owner ranges. EnumerationDependencies prior remains UNKNOWN.
+The trie actor remains 3010/8/two final wholes, Std 9/project 3. Its collection descent theorem is published. The actual pending-writer and combiner context is incomplete; a bounded locator-only plan is admitted. HashSet/key correspondence, new-value provenance and input/size insertion counts remain unproved.
+Preserve every old FAIL/STOP/UNKNOWN, all source histories, the unavailable partial Action header, and the wrong snapshot/routing failures. Global source-process FAIL and Root original upper UNKNOWN remain.
+No Haskell repair was made. Record every later verified Haskell fix in root FINDINGS for the external agent.
+Generated/returned graphs, subsequent-worker inputs, actual NodeId/interner/Eq/hash/Memo correspondence, both worker caller links, the common original-input internal-work bound, exact terms per node-count size, size order, both rank/unrank inverses, and full Haskell/runtime/API correspondence remain required.
+The cleanup request for the exact list of 32 directories is pending. Delete none of that set without the requested direct approval.
+
 ## Checked whole-collection descent checkpoint (2026-11-04 18:19 CET)
 
 Keep the full formalization goal active. Preserve both actual workers, the optimized interned core, all older constructor/equality work, and every proof, repair, counterexample, marked draft and failed guard.
