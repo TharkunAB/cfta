@@ -1,3 +1,14 @@
+## Current path-family and caller work (2026-11-04 15:16 CET)
+
+Keep the full both-worker goal and every earlier proof, repair, counterexample, draft, and failed guard.
+All three path-key sites have local routes through pending updates and current-edge extraction. Original-only path families and actual subtrie preservation remain unproved.
+Root copied the sealed path-flow supplement whole: 9 files / 38825 bytes under `haskell-path-factor-flow-provider-v1` in the existing Root control directory.
+The same Haskell audit still owns 2923 rows / 5 originals / two final wholes. Its new EqualityTrie model view adds 44 charged Lean rows, for 2967/6/two final wholes. Source guards precede semantic use.
+The new model locator projections lacked a prior persisted/admitted exact plan. That metadata-process failure, failed coordinate hypotheses, and filename-search output uncertainty remain retained. No corrected guard gives a clean global audit.
+The operator author now owns 1899/4/two final wholes after complete sparse Code/RequestScope contexts. Exact owned-occurrence reference binding passed all 14 matches. Actual inventory/domain contracts remain unowned.
+The native actor now owns 1983/41/two final wholes. Complete frame and recursion contracts have been retained. Actual caller input/fuel/result composition and original Safe-to-UnionFind.Total remain unproved.
+No new kernel theorem or Haskell repair exists. Full activation-key closure, generated/returned identities and constraints, and the common upfront internal-work bound remain open.
+
 ## Two-factor key carrier and current source work (2026-11-04 14:30 CET)
 
 The full goal remains active. Preserve both actual workers, the original-input carrier and common bound, exact size enumeration, both rank/unrank laws, and all older work.

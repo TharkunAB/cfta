@@ -1,3 +1,12 @@
+## Next actual-model steps (2026-11-04 15:16 CET)
+
+Continue the full original goal, both actual workers, exact size contracts, and both rank/unrank laws. Keep all older work.
+Use existing Root control `/tmp/mcfta-runtime-packet-producer-normal-20261104-1205`. Refresh upstream and continue authorized normal pushes to `formalize`.
+Prove an original-input path family closed under actual modeled descent; then cover pending updates and operation-produced edge constraints. Keep actual identity/equality/hash correspondence explicit.
+Continue the same operator at 1899/4/two final wholes and native actor at 1983/41/two final wholes. Resolve actual input/fuel/result and Safe-to-Total obligations without new suppliers.
+The Haskell actor is now at 2967/6/two final wholes after its 44-row EqualityTrie view. Preserve unplanned metadata chronology and failed coordinate guards. No new whole or history reset is authorized.
+Keep the strongest checked result separate from these source audits and unfinished model statements. Record every future verified Haskell repair in root FINDINGS.
+
 ## Key-carrier continuation (2026-11-04 14:30 CET)
 
 Keep the complete both-worker goal and all older work. Refresh upstream and continue authorized normal pushes to `formalize`.
