@@ -1,3 +1,16 @@
+## Activation-key factors (2026-11-04 14:30 CET)
+
+The static audit found two factors at each key site 900, 1006, and 1542.
+The first factor comes from `nodeIdentity` and `NodeId`. The second comes from a collection of suspended `PathTrie` values and `HashSet.fromList`.
+The local key has no explicit counter, binding environment, ancestor context, target UVar, size, depth, fuel, or length field.
+These omissions do not establish independence from those values. Both factors contain imported representations.
+The original-input carrier proof must bound both factors and preserve their domains through actual execution.
+Actual equality, hashing, container laws, canonicality, and finite-domain or length preservation remain UNKNOWN.
+No Haskell defect, Haskell repair, runtime counterexample, finite carrier, execution bound, or kernel theorem was established.
+The same source history stays at 2923 rows / 5 originals / two final wholes. No new source rows or source copies were added.
+Metadata: `/tmp/mcfta-haskell-key-shape-supplement-20261104-1417/KEY-FACTOR-SHAPE-RESULT-METADATA.json`, 6617 bytes, SHA256 `b5b125c51359f01b8cc6217b8485b2efd5590954ff12b278f1c5633334b48cb3`.
+Root verified a whole opaque copy of the sealed supplement: 9 files / 2 directories / 35142 bytes. Its private report remains unread by Root.
+
 ## Key input flow and internal work bound (2026-11-04 13:42 CET)
 
 The static source trace checked all three recursion-key sites in `Enumeration.hs`: 900, 1006, and 1542.
