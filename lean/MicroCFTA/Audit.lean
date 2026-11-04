@@ -1,4 +1,5 @@
 import MicroCFTA.SourceRecursiveIntersectionMuInventoryName
+import MicroCFTA.SourceRecursiveIntersectionDescriptorCarrierLaws
 import MicroCFTA.SourceRecursiveIntersectionDescriptorCarrier
 import MicroCFTA.EqualityTrieCollectionFamily
 
@@ -4310,3 +4311,5 @@ run_cmd do
 #print axioms MicroCFTA.SourceRecursiveIntersectionInputView.OriginalInput.mu_inventory_name
 
 #print axioms MicroCFTA.SourceRecursiveIntersectionDomain.originalDescriptorCarrier
+#print axioms MicroCFTA.SourceRecursiveIntersectionDomain.mem_originalDescriptorCarrier_iff
+#print axioms MicroCFTA.SourceRecursiveIntersectionDomain.extend_mem_originalDescriptorCarrier

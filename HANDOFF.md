@@ -1,3 +1,21 @@
+## Exact descriptor carrier laws checkpoint (2026-11-04 21:06 CET)
+
+This increment adds `lean/MicroCFTA/SourceRecursiveIntersectionDescriptorCarrierLaws.lean`: 323 lines, 16862 bytes, SHA256 `30c4c89ce47e7f04c760c97d1aa56304ab32c8c2fc87b683ac956fd47180454c`. Its parent checkpoint is `94d70fa20aeac3c140f22e614e85dbe115f3af89`. The computation and all older proofs are unchanged.
+
+The public laws are `MicroCFTA.SourceRecursiveIntersectionDomain.mem_originalDescriptorCarrier_iff` and `MicroCFTA.SourceRecursiveIntersectionDomain.extend_mem_originalDescriptorCarrier`. The first gives exact canonical, typed membership over the original name range and input-pair image. The second preserves membership under extension with original inputs, using the existing Facts and originality premises. No supplied carrier, coverage, closure, fuel, counter bound, or runtime equality law is added.
+
+A passed its first strict check at 20:48. D passed its first strict check at 20:54. Final Lake audit, strict audit, and both public-type checks pass at 21:00–21:02. Both types were read in full. The fully explicit output has no ellipsis. Only the three standard axioms occur. Do not repeat these checks without a new change or failure. Preserve the frozen private helper and A bytes.
+
+Continue with the exact computed-list bound B. Its complete header and dependency plan are frozen at 7598 bytes including context. The target is `U.length ≤ 2^(N + I.length^2)` and `2^(N + I.length^2) ≤ 2^(N + (1 + 4N)^2)`. Here N is the original issued-node counter and I is the actual inventory. The planned exact inventory, pair-list and fold-length equalities are unproved. The seven List contracts and later needed arithmetic contracts remain unowned. Their metadata plan needs admission before lookup. Do not replace this target with set finiteness or A/D.
+
+The same three owners continue. Operator: 2169 original-equivalent rows across 12 owners, two FINAL wholes, API8. Native: 2108/46, two FINAL wholes, Frame71; actual HasHole and operation/input flow are owned, but candidate-counter transport, ordered, bounded and full Packet remain unproved. Its exact metadata lookup binds Metadata and recordTypes to SourcePruningRecordTypes; owner metadata plan125 remains pending. Haskell: 3010/8, two FINAL wholes, Std9 plus project3; nominal Seq fields and complete module header are owned, but operator/instance selection and insertion bounds remain open.
+
+The repository Nix Cabal dry run passes. Its exact plan is 153869 bytes, SHA256 `3369c0fbd9d6eb259370c1afefadcd320c503663caf913ad624e4a6dce1301d7`. It records GHC 9.14.1, base 4.22.0.0 and containers 0.8. Hypha is opaque-hashed at 174488640 bytes, SHA256 `27f1fd5278b5a9cdb554b45d3ef043652de053bc3bbc7a0d4d8e8fe1ed270dd3`. No Hypha help or package API has run. Root must plan and run the tool interface check before a dependency lookup. The earlier 64 MiB hash STOP, Nix SIGXFSZ guard failure, and two-directory metadata layout deviation remain recorded. No Haskell repair is claimed.
+
+The Root controller remains `/tmp/mcfta-runtime-packet-producer-normal-20261104-1205`. Keep all failed versions and source histories. The global source-process FAIL and Root original-source upper UNKNOWN remain. Preserve the optimized interned core, older constructor/equality work, counterexamples and repairs. Full worker termination, generated and returned graphs, common upfront work bound, exact size-indexed language, order, rank/unrank and Haskell correspondence remain the full objective.
+
+The exact 32 cleanup targets still need direct approval in `/tmp/mcfta-tmp-reduction-20261103/CLEANUP-APPROVAL.md`; none were deleted. Do not create another Root controller or copy full old documents to tmp. Normal proof work and pushes to formalize are authorized.
+
 ## Checked descriptor computation checkpoint (2026-11-04 20:32 CET)
 
 Keep the full formalization goal active. Preserve both actual workers, the optimized interned core, older constructor/equality work, all proofs, repairs, counterexamples, marked drafts and failed guards.
