@@ -1,3 +1,26 @@
+## Checked frame and trie-family checkpoint (2026-11-04 16:48 CET)
+
+Keep the full formalization goal active. Preserve both actual workers, the optimized interned core, and all older constructor and equality work.
+Preserve every proof, repair, counterexample, marked draft, failed guard, and failed candidate.
+The new selected-step theorem is `MicroCFTA.SourceCurrentSelectedStepCheckedFrame.complete` in `lean/MicroCFTA/SourceCurrentSelectedStepCheckedFrame.lean`.
+Its checked source has 136 lines / 8478 bytes / SHA256 `289780b3af371d5f14ad9df8d9c340106c613f94f24d3cfc790f3869cca7a1a2`.
+It retains the original eight gates, five fuel witnesses, nine universal binders, full `Valid` result, and degree clauses. It adds the existing Frame predicate for the actual returned narrowed state.
+The new trie theorem is `MicroCFTA.EqualityTrie.PathFamily.family_joint` in `lean/MicroCFTA/EqualityTriePathFamily.lean`.
+Its canonical source has 144 lines / 6323 bytes / SHA256 `c84fa8094fa56368b5df2a26de828a1134c22c6012e7855d71020b409b04c52f`.
+It computes the original-trie family, proves actual descent closure, and gives bounded enumeration with the same list-length budget.
+Both modules have audit entries. All old Audit bytes remain exact between the new imports and entries.
+Seven final compiler/build invocations returned zero under serial 4 GiB max/high, zero swap, and five-minute limits.
+The explicit-type output has no ellipses. Its initial metadata-format STOP and the successful universe-suffix correction on the same output remain retained.
+
+Root control remains `/tmp/mcfta-runtime-packet-producer-normal-20261104-1205`; current code and validation records use the `R54-` prefix.
+Native history stays 1983 rows / 41 originals / two final wholes. Metadata97 is admitted; actual Packet ordering/boundedness, Safe-to-Total, and both logical worker links remain open.
+The trie author stays 2991/7/two final wholes, with four STD and one project contract. The next suspended-descent locator plan is proposed only.
+The operator author stays 1974/7/two final wholes. The actual pair-ID projection remains unbound. Its compiled-action API proposal needs separate Root provenance and receiving admission.
+The earlier global source-process FAIL and Root original upper UNKNOWN remain. Checked mathematics does not clear those records or transfer original-source ownership.
+No Haskell repair was made. Any later verified repair must appear in root FINDINGS for the external agent.
+The full key carrier, generated/returned graph preservation, common original-input work bound, exact size contracts, rank/unrank laws, and Haskell/runtime/API correspondence remain required.
+The exact 32-directory cleanup request is still pending. This continuation grants no deletion approval.
+
 ## Current path-family and caller work (2026-11-04 15:16 CET)
 
 Keep the full both-worker goal and every earlier proof, repair, counterexample, draft, and failed guard.

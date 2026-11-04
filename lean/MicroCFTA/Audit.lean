@@ -1,3 +1,5 @@
+import MicroCFTA.EqualityTriePathFamily
+import MicroCFTA.SourceCurrentSelectedStepCheckedFrame
 import MicroCFTA.SourceCurrentSelectedPreparationMuRun
 import MicroCFTA.SourceCurrentPacketMuRun
 import MicroCFTA.SourceCurrentInitialPrefixCheck
@@ -4286,3 +4288,7 @@ run_cmd do
   if checked == 0 then
     throwError "No MicroCFTA theorems were checked"
   logInfo m!"Checked axiom dependencies of {checked} MicroCFTA theorems."
+
+#print axioms MicroCFTA.SourceCurrentSelectedStepCheckedFrame.complete
+
+#print axioms MicroCFTA.EqualityTrie.PathFamily.family_joint
