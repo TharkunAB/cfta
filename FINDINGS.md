@@ -1,3 +1,16 @@
+## Checked finite families for whole suspended collections (2026-11-04 18:19 CET)
+
+`MicroCFTA.EqualityTrie.CollectionFamily.family_joint` computes a finite family from the original suspended list.
+The family contains the original collection. Actual `descendScs` preserves membership for every listed collection and every index.
+Membership is equivalent to selection by an index below the length of that same computed family.
+The construction drops each original position or chooses a trie from its checked trie family. It keeps that entry's original variable.
+It retains duplicates. It needs no finite-domain or equality assumption on the variable type and no supplied carrier, closure proof, fuel, or bound.
+The strict candidate, full Lake audit, strict audit, and both complete public-type checks passed under 4 GiB max/high and zero swap.
+The theorem uses only `propext` and `Quot.sound`. The explicit type has no ellipses. All old proofs and Audit bytes remain intact.
+No Haskell source or API changed. No Haskell fix was established.
+Generated-edge insertion, intersection and unfolding updates, actual identity/equality/hash correspondence, both workers, and the common work bound remain open.
+The descriptor audit acquired the actual original-input inventory contract under `InternedNestedFacts.Facts`. Its finite-domain statement is drafted but unproved.
+
 ## Checked representative paths after selected steps (2026-11-04 17:42 CET)
 
 `MicroCFTA.SourceCurrentSelectedStepCheckedTotal.complete` retains the full selected-step `Valid` result, all degree clauses, and the checked-state Frame.

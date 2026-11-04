@@ -1,3 +1,5 @@
+import MicroCFTA.EqualityTrieCollectionFamily
+
 import MicroCFTA.SourceCurrentSelectedStepCheckedTotal
 
 import MicroCFTA.EqualityTriePathFamily
@@ -4297,3 +4299,6 @@ run_cmd do
 
 #check MicroCFTA.SourceCurrentSelectedStepCheckedTotal.complete
 #print axioms MicroCFTA.SourceCurrentSelectedStepCheckedTotal.complete
+
+#check MicroCFTA.EqualityTrie.CollectionFamily.family_joint
+#print axioms MicroCFTA.EqualityTrie.CollectionFamily.family_joint

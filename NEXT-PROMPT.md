@@ -1,3 +1,16 @@
+## Continue after whole-collection descent closure (2026-11-04 18:19 CET)
+
+Keep the full original goal, both actual workers, exact accepted terms per node count, size order, both rank/unrank inverses, and all older work.
+Refresh upstream before work. Normal pushes to `formalize` remain authorized.
+The new `EqualityTrie.CollectionFamily.family_joint` theorem computes the whole suspended-collection family from the original input, proves actual descent closure, and gives the same-family-length bounded-index iff.
+Its five final checks passed. Root control remains `/tmp/mcfta-runtime-packet-producer-normal-20261104-1205`, now with `R57-` records. Preserve all old Audit and proof bytes.
+Continue the same trie author at 3010/8/two final wholes, Std9/project3. Freeze its checked 91-line candidate. Identify the next actual generated-edge or pending-update operation before more source/API/proof access.
+Continue the same native actor at 2098/45/two final wholes, Frame71/145. Complete exact metadata and the separately admitted minimal predicate query. Derive Packet witnesses and actual caller/counter links from the original gates, with no resource supplier.
+Continue the same operator author at 2085/9/two final wholes/API3. Review the drafted actual original-inventory pair-domain statement under its full context ledger. Facts, empty membership, Mu ordinal bounds, finite exactness/cardinality and primitive extension closure remain explicit proof targets.
+Keep all FAIL/STOP/UNKNOWNs, unused/failed plans, source histories, and the partial unavailable Action header. No source-history reset, third whole, or inferred imported-helper law.
+Keep actual identity/equality/hash, generated/returned graphs and subsequent-worker inputs, both workers, the common upfront work bound, and full Haskell/runtime/API correspondence explicit.
+Record every later verified Haskell fix in root FINDINGS. None was made here. Cleanup approval remains pending.
+
 ## Continue after checked representative paths (2026-11-04 17:42 CET)
 
 Keep the full original goal, both workers, exact node-count terms, size order, both rank/unrank inverses, and all earlier work.
