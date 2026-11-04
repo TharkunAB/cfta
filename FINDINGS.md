@@ -1,3 +1,20 @@
+## Checked step frames and finite trie descent (2026-11-04 16:48 CET)
+
+`MicroCFTA.SourceCurrentSelectedStepCheckedFrame.complete` retains the original selected-step `Valid` result and all degree clauses.
+It also proves `Frame before.core checked` for the actual returned `narrowed` result.
+It retains the eight original gates, five fuel witnesses, and nine universal binders. It adds no premise or resource predicate.
+`MicroCFTA.EqualityTrie.PathFamily.family_joint` computes a finite list from the original trie.
+The list contains the original trie and `empty`. It is closed under actual `pathTrieDescend` for every member and every index.
+Membership is equivalent to selection by an index below the computed list length. The construction keeps duplicates.
+The proof uses the existing `Trie`, descent operation, lookup contract, and four list contracts. It adds no package or replacement datatype.
+
+Seven final Lean compiler/build invocations returned zero. They cover strict candidates, the canonical namespace, the full Lake audit, the strict audit, and both public-type queries.
+The step theorem uses only `propext`, `Classical.choice`, and `Quot.sound`. The trie theorem uses only `propext` and `Quot.sound`.
+The explicit output has no ellipses. Its first metadata validator did not recognize universe-qualified axiom names; validation of the same complete output passed after the format correction.
+All earlier failed candidates, diagnostics, guards, and source-process FAIL/UNKNOWN records remain retained.
+No Haskell defect or Haskell fix was established. Record every later verified Haskell fix here for the external agent.
+Generated-edge constraints, pending-path updates, actual identity/equality/hash correspondence, full returned packets, both worker links, and the common upfront work bound remain open.
+
 ## Suspended-path provenance (2026-11-04 15:16 CET)
 
 The static trace found updated pending collections and current-edge extraction on local routes to all three key sites.

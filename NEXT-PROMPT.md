@@ -1,3 +1,18 @@
+## Continue after checked frames and trie descent (2026-11-04 16:48 CET)
+
+Keep the full original goal, both actual workers, exact accepted terms per node-count size, size order, both rank/unrank inverse laws, and all older work.
+Refresh upstream before work. Normal pushes to `formalize` remain authorized.
+The checked selected-step Frame theorem and original-trie finite descent family are now implemented. Keep their conclusions separate from whole-worker termination and runtime correspondence.
+Continue from Root control `/tmp/mcfta-runtime-packet-producer-normal-20261104-1205` and its `R54-` validation records.
+Continue the same native actor at 1983/41/two final wholes. Derive actual Packet ordering/boundedness and final-state facts from original gates; do not add Frame, Total, Ready, stored, success, or resource suppliers.
+Continue the same trie author at 2991/7/two final wholes, STD APIs4/project1. Its next metadata-only Suspended/descendScs locator proposal needs admission before use.
+Prove pending-path update and generated-edge constraint preservation. The checked single-trie descent theorem does not discharge these obligations.
+Continue the same operator author at 1974/7/two final wholes. Bind the actual pair-ID projection before an original-domain universe statement; do not guess a counter range or add an arbitrary projection parameter.
+Its proposed compiled action-definition query needs explicit Root build/source provenance and receiving-origin accounting. It has not run.
+Keep actual NodeId and suspended-path domains, equality/hash laws, returned graphs, subsequent-worker inputs, and the common upfront internal-work bound explicit.
+Preserve all earlier FAIL/STOP/UNKNOWN records, failed candidates and guards, metadata chronology, partial unavailable Action header, and existing source histories. No reset or third whole is authorized.
+Record every later verified Haskell fix in root FINDINGS. None was made in this checkpoint.
+
 ## Next actual-model steps (2026-11-04 15:16 CET)
 
 Continue the full original goal, both actual workers, exact size contracts, and both rank/unrank laws. Keep all older work.
