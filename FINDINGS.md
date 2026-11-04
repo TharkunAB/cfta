@@ -1,3 +1,31 @@
+## 2026-11-04: checked packet to native μ composition
+
+`MicroCFTA.SourceCurrentPacketMuRun.complete` is committed as `b61f48ce2fc2e2478857e2df43f5d83b2b9a6513`.
+The 73-line module adds one Audit import. The previous Audit body is an exact suffix.
+The theorem retains canonical `Packet`, old-heap availability, and source closedness assumptions.
+It derives the existing μ initialization/realization and μ-depth semantic/observation requirements.
+It preserves the full old μ conclusion and adds the actual selected-value run for every fuel value.
+For each limit, it preserves the native `Bounded` predicate from the old heap to the new heap.
+`Bounded` stayed folded. The theorem supplies no computed limit, original-input carrier, or common worker budget.
+
+Five checks pass with verified 4 GiB max/high, zero swap, and five-minute timeouts.
+The whole ordinary/explicit public reports have 70/230 lines, no elisions, and only the standard three axioms.
+The bounded independent verdict is `PASS_BOUNDED_LOCAL_FOLDED_CONTRACTS`.
+The review matches operator, caller, heap, memo, μ record, body, depth, and the single instance.
+It checks the canonical packet type. Actual preparation `packet33` production, runtime selection/decoded branch, and `stored35` remain open.
+The initializer-to-prefix proof has not been composed with this theorem into a whole-worker result.
+
+The author previously lacked an independent Scan33–108 gap/end-tail guard receipt.
+Its source-complete provenance claim is UNKNOWN. The correction preserves the old flags and ledger beforeimage.
+The independent review completed its own local guards after a retained STOP on an unrecognized inductive declaration.
+Its local PASS does not clear global source-process FAIL, Root historical UNKNOWN bounds, or the retained 12-row unused-private-proof incident.
+The review counts are 389 examined/313 semantic original rows across 10 owners, plus 353 new header/report rows; one whole Scan174 reservation, actual Scan115.
+
+The first public printer probe rejected `pp.width` and `pp.depth`. The repaired probes omit those options. The theorem source did not change.
+All available failures, versions, raw results, and context corrections are retained in `/tmp/mcfta-packet-mu-run-normal-20261104` and its declared snapshots.
+The author snapshot is 390 files and 3,127,440 bytes. No build-directory clone was made.
+No Haskell defect or fix was established in this increment. Keep reporting future Haskell fixes here for an external implementation agent.
+
 # 2026-11-04 06:38 CET — actual mu caller and producer conditions
 
 Source review now binds the selected call path through `SelectedPreparation.run` to

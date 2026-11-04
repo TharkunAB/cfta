@@ -1,3 +1,42 @@
+## 2026-11-04: packet to native μ run
+
+Code commit: `b61f48ce2fc2e2478857e2df43f5d83b2b9a6513` on `formalize`.
+`MicroCFTA.SourceCurrentPacketMuRun.complete` is a new checked component.
+The module has 73 lines. `MicroCFTA.Audit` has one new import.
+
+The theorem takes a canonical recursive `Packet`, source availability in the old heap, and source closedness.
+It derives four requirements of the existing μ and μ-depth theorems.
+These requirements are initialization, realized state, semantic depth, and the observed run.
+It preserves every conclusion of `SourcePruningEnumerationMu.complete`.
+It also proves the actual `SelectedValue.run` result for every `nativeFuel`.
+It preserves each supplied native `Bounded` limit. It does not construct a limit.
+The operation, caller, heap, memo, μ record, body, depth, and instance agree throughout the composition.
+
+Five checks pass: strict candidate, Lake audit, strict audit, ordinary public type, and explicit public type.
+Each check used a verified 4 GiB memory limit, a 4 GiB high limit, zero swap, and a five-minute timeout.
+The public reports have 70 and 230 lines. They contain no elisions.
+Only `propext`, `Classical.choice`, and `Quot.sound` occur in the axiom reports.
+The bounded independent verdict is `PASS_BOUNDED_LOCAL_FOLDED_CONTRACTS`.
+The review checked the canonical `Packet` type. It did not check the actual preparation producer's `packet33` header or the runtime decoded branch.
+
+The proof and run records are in `/tmp/mcfta-packet-mu-run-normal-20261104`.
+The complete available author snapshot has 390 files, 3 directories including root, and 3,127,440 bytes.
+The old unsupported-printer probe is retained with all 45 files and 1,347,311 bytes of its available owner.
+Lean can replay the theorem from committed source. Temporary records preserve the exact past commands, resource limits, and failures.
+
+Runtime packet production, current selection, decoded-branch binding, and `stored35` remain unproved.
+The initializer-to-selected-prefix theorem and this μ theorem remain separate components.
+The main global gap is an original-input finite activation-key carrier and one upfront resource bound for both actual recursive workers.
+Finite execution, exact terms by node count, size order, both rank/unrank inverses, and full Haskell/API correspondence remain in scope.
+No Haskell defect or fix was established in this increment.
+
+The global source-process status remains FAIL. Historical Root exposure bounds remain UNKNOWN.
+The author retains 1,507 examined original rows across 34 owners and both whole-file reservations.
+Its missing Scan gap/end-tail context receipt remains a recorded provenance UNKNOWN.
+The independent review examined 389 original rows across 10 owners. It viewed 313 proof-free source rows and 353 new header/report rows.
+It used one whole Scan reservation of 174 rows and examined 115 of those rows. Its local guard does not repair earlier provenance.
+All earlier incidents, drafts, failures, counterexamples, and full-goal limits remain retained below.
+
 # 2026-11-04 06:38 CET — actual selected-mu caller resource target
 
 The next local target is the actual caller of `SelectedPreparation.run`.
