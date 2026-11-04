@@ -1,3 +1,4 @@
+import MicroCFTA.SourceRecursiveIntersectionMuInventoryName
 import MicroCFTA.EqualityTrieCollectionFamily
 
 import MicroCFTA.SourceCurrentSelectedStepCheckedTotal
@@ -4302,3 +4303,7 @@ run_cmd do
 
 #check MicroCFTA.EqualityTrie.CollectionFamily.family_joint
 #print axioms MicroCFTA.EqualityTrie.CollectionFamily.family_joint
+
+-- Original Mu names use the original inventory.
+#check MicroCFTA.SourceRecursiveIntersectionInputView.OriginalInput.mu_inventory_name
+#print axioms MicroCFTA.SourceRecursiveIntersectionInputView.OriginalInput.mu_inventory_name

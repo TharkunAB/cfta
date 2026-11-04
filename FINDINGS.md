@@ -1,3 +1,13 @@
+## Checked original Mu inventory names (2026-11-04 19:12 CET)
+
+`MicroCFTA.SourceRecursiveIntersectionInputView.OriginalInput.mu_inventory_name` proves that an original Mu input name belongs to `List.range state.nodes.next` under the actual `InternedNestedFacts.Facts state` precondition.
+It uses the actual inventory theorem and actual input constructors. It derives payload equality by datatype elimination.
+It adds no ordinal, injectivity, carrier, fuel or completed-run premise. It adds no named helper or replacement datatype.
+This proves Target C of the drafted original-input domain family. Exact family characterization, its cardinal bound, and primitive extension closure remain open.
+The strict candidate, full Lake audit, strict audit and both complete public-type checks passed. The new theorem uses only `propext` and `Quot.sound`.
+All prior proof and Audit bytes remain intact. No Haskell source or API changed. No Haskell fix was established.
+The original-name result does not establish generated-name preservation, actual identity/equality/hash correspondence, either whole worker, the common work bound, or full Haskell/runtime/API correspondence.
+
 ## Checked finite families for whole suspended collections (2026-11-04 18:19 CET)
 
 `MicroCFTA.EqualityTrie.CollectionFamily.family_joint` computes a finite family from the original suspended list.
