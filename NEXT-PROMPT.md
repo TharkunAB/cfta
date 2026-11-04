@@ -1,3 +1,17 @@
+## [2026-11-05 00:35 CET] Continue from the inventory membership lemma (R63)
+
+The full goal stays active. Preserve both actual recursive workers, all generated/returned/subsequent states, the common original-input/requested-size internal-work bound, exact node counts and size order, both rank/unrank directions, and full Haskell/runtime/source/API/ID/cache/interner/Eq/hash correspondence. Keep older constructor/equality work as secondary. Add no supplied carrier, closure, resource, completed-worker, final-state, success or fuel premise. Keep the native8 gates/5 fuel witnesses/9 universal binders. Normal pushes to `formalize` remain authorized.
+
+`inputOf_mem_inventory` is checked and integrated in `lean/MicroCFTA/SourceRecursiveIntersectionInputOfInventory.lean` (24L/996B/05671eaf...). Strict theorem/public types/axioms, Lake Audit v2 and strict Audit v2 all passed. Only propext/Quot.sound. Preserve first-build SIGXFSZ and Option header-format STOP/correction. No Haskell fix/source change. The new theorem proves membership including fallback; it does not prove codec completion or OriginalInput/call coverage.
+
+Read the R63 FINDINGS/HANDOFF prefixes and Root controller metadata. Refresh upstream while preserving `.hypha/` and all old proofs/drafts/failures. Read PUBLISHED-CHECKPOINT.json for the exact new pushed head. Keep prior carrier/closure/length proofs frozen.
+
+Next: whole-read intersection's5226B pure NEW nodeScope authoring proposal (8ed0a465...), still Root-UNREAD/unadmitted, and review its unproved internal codec-completion goal without adding a premise. Keep initial-entry scope derivation separate. Native metadata156 passed; future75-row helper/class query is still unacquired. Haskell's reviewed7456B compiler module/unit utility remains unexecuted; its earlier exact class-symbol probe failed NOT_FOUND, with no absence claim. The mixed4661B ledger remains unread/not ready. Exact artifacts and scopes are in HANDOFF.
+
+Use only the same three actors and preserve every original union/two FINAL wholes/strict-half cap. Current intersection2253/17/API14; native CFTA2221/49+Std25/3; Haskell5210/9/cache2200/cap2503. Global source FAIL, Root upper UNKNOWN and all source/object/trace UNKNOWNs remain. No reset/transfer/third whole/hidden ordinary-helper unfolding.
+
+All Root jobs are terminal. Keep heavy jobs serial at4GiB max/high/zero swap and logs bounded separately from compiler artifacts. About87.78GiB free in tmp. Exact32 cleanup remains unapproved/deleted0. Continue proof work and authorized normal formalize pushes without another permission request.
+
 ## [2026-11-05 00:01 CET] Continue from the source dependency checkpoint (R62)
 
 The full goal stays active. Preserve both actual recursive workers, all generated/returned/subsequent states, a common original-input/requested-size internal-work bound, exact node counts and size order, both rank/unrank directions, and full Haskell/runtime/source/API/ID/cache/interner/Eq/hash correspondence. Keep the older constructor/equality line as secondary. Add no supplied carrier/closure/resource/completed-work/final-state/success/fuel premise. Preserve the original native8 gates,5 fuel witnesses,9 universal binders. Normal pushes to `formalize` are authorized.

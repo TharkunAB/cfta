@@ -1,3 +1,17 @@
+## [2026-11-05 00:35 CET] Available values map into the inventory (R63)
+
+`MicroCFTA.SourceRecursiveIntersectionInputView.inputOf_mem_inventory` is proved in `lean/MicroCFTA/SourceRecursiveIntersectionInputOfInventory.lean`. For any state with the existing Facts and any available value, `inputOf value` belongs to `inventory state`. The statement has no supplied carrier, closure or work-budget premise. The proof includes the `inputOf` fallback case. It does not prove optional codec completion, `OriginalInput`, or coverage of all actual recursive calls.
+
+The exact new file has24 lines/996 bytes, SHA256 `05671eaf41d5271506771fb599114b043f169c8ba49418996a75e7b40fa1efa9`. The strict theorem check and ordinary/explicit public type checks passed at00:25:22–26. Its axioms are only `propext` and `Quot.sound`. The audit build passed at00:30:22–34. Strict Audit passed at00:31:38–40. Each job used4GiB max/high and zero swap. All inputs stayed stable. The previous carrier length bound remains at `301fe2455231491b602129415a3afa95732e77ea`.
+
+The first audit build stopped with SIGXFSZ. Root had applied a64KiB log limit to compiler artifacts. The corrected driver separates bounded stream capture from the4MiB compiler artifact cap. Preserve the failed result and the successful retry. The Option receipt also retains its original header-regex STOP and its same-output universe-suffix correction. No query was repeated for that correction.
+
+Current histories: intersection2253/17/API14, native CFTA2221/49 plus Std25/3, Haskell5210/9. Native metadata156 located four prospective helper/class envelopes totaling75 new rows. They are not acquired. The offline Haskell class-symbol query returned NOT_FOUND/exit3. This proves no class absence. A distinct compiler module/unit metadata utility is reviewed but unexecuted.
+
+Haskell fixes: none in R63. No Haskell source changed. Record every later verified repair here with its reproducer and validation for external work.
+
+Actual generated-call/returned-state closure, the common work bound and full Haskell correspondence remain open. Global source process FAIL and Root upper UNKNOWN remain. All old failures, overscopes, private unread ledgers and provenance UNKNOWNs remain. About87.78GiB is free in `/tmp`. Exact32 cleanup is still unapproved; deleted0.
+
 ## [2026-11-05 00:01 CET] Source dependency checkpoint (R62)
 
 The latest proved result remains `originalDescriptorCarrier_length_bound` at `301fe2455231491b602129415a3afa95732e77ea`. R62 adds dependency evidence. It adds no theorem. The actual worker closure, common bound from the original input and requested size, and full Haskell correspondence remain open.
