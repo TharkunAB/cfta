@@ -1,3 +1,77 @@
+# Checkpoint 2026-11-04: derive the initial selected prefix
+
+Code commit: `baa8bc9076d4d47e69aa0b796683ce18bad43cb7`.
+Public theorem: `MicroCFTA.SourceCurrentInitialPrefixCheck.initial_prefix_of_pending`.
+Source: `lean/MicroCFTA/SourceCurrentInitialPrefixCheck.lean`.
+
+The literal initializer now connects to the actual selected-prefix result.
+The theorem uses the same original input, graph, heap, class, query, Caller,
+preference and instances. It derives the selection endpoint inside the proof.
+It removes the supplied selection premise. It reuses the existing producers.
+The two producer interfaces have 6 and 8 gates. Their combined theorem has
+12 joint original gates. It adds no gate beyond their union.
+This is a conditional local result. It does not prove unconditional execution.
+
+All five required checks pass: strict source, Lake Audit, strict Audit,
+ordinary public signature and axioms, and explicit public signature and axioms.
+Both public reports contain the complete printed result. They have no ellipsis.
+The only axioms are `propext`, `Classical.choice` and `Quot.sound`.
+Independent review: `PASS_BOUNDED_LOCAL_FOLDED_CONTRACTS`.
+The review confirms the literal initializer, original bindings, derived
+endpoint, producer reuse, actual prefix and joint-gate comparison.
+
+The source has 102 lines, 7241 bytes, SHA256
+`a40d48af53bca1830cad31f7fd0b92f10b6f39fa8816c5a5f3d1a9f090183d32`.
+Audit adds one 49-byte import. The previous 4285-line Audit is an exact suffix.
+The new Audit has 4286 lines, 224998 bytes, SHA256
+`c92047bf2401f3d12f20ad2c65c54d69f07154c25b622beabf42b2d2273e126f`.
+No Haskell code changed. No new Haskell defect or fix was established.
+
+The full goal remains active. Preserve the optimized interned core and older
+constructor and equality work. Still prove the original finite activation-key
+carrier and one original-input resource bound for BOTH recursive workers.
+Still complete the library, public APIs and Haskell correspondence, finite
+execution, exact accepted terms by node-count size, size order, and both
+rank/unrank inverses. This increment does not close those requirements.
+The native mu resource producer was already published through `e152e8ec2`.
+Its actual activation-site instantiation remains a separate open task.
+
+Live controllers:
+- Initial prefix: `/tmp/mcfta-initial-prefix-composition-normal-20261104`.
+- Mu preparation: `/tmp/mcfta-mu-prepare-resource-normal-20261104`.
+- Mu activation: `/tmp/mcfta-mu-activation-normal-20261104`.
+Read each `CURRENT-HANDOFF.json` for later publication and provider records.
+The mu activation task last reported 581 original lines in 14 files, no whole
+slots used, and no established consumer binding or resource closure.
+Its proposed new prefix-header read is deferred pending an exact origin plan.
+
+Source review limits remain explicit. The initial-prefix author read 702
+original lines in 32 files, used one of two whole-file slots, and read 114
+lines in the two producer headers. Its authored candidate is separate.
+The reviewer used the same original union and 1202 new lines across the three
+source objects and two complete reports. Fresh STD/API text views were zero.
+The global source-process verdict remains FAIL. Nested and complete indirect
+semantics, whole API coverage and Haskell correspondence remain open or UNKNOWN.
+Preserve the earlier Root receiving incident and incomplete historical bounds.
+
+The complete available author owner is preserved as a 248-file archive.
+Root copied all 13 archive/control files and passed archive-only replay.
+This preserves the available filesystem snapshot. It does not prove that all
+historical versions, backend events or tool wrappers were retained.
+The earlier 77322-byte ledger raw snapshot is unavailable in the owner tree.
+Its pin and extracted records remain distinct from later raw snapshots.
+Preserve both author helper failures and the header-boundary correction.
+The failed sandbox bus launch did not start Lean. All six actual Lean commands
+passed: one binder metadata query and five proof checks.
+
+Do not delete the 32 pending cleanup targets without fresh direct approval.
+Automatic approval review rejected that deletion. The exact list is in
+`/tmp/mcfta-tmp-reduction-20261103/CLEANUP-APPROVAL.md`.
+Keep unique source providers, failures, counterexamples and current controllers.
+Normal pushes to `formalize` remain explicitly authorized. Do not force push.
+
+Earlier checkpoint records follow unchanged.
+
 ## 2026-11-04 03:49 CET: Native mu preparation resources
 
 The code commit is `5f42e6d0da31a0b98aa6e4dcce4edeeb9f446ecc`.

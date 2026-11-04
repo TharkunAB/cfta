@@ -1,3 +1,48 @@
+# 2026-11-04: derive the initial selected prefix
+
+Verified code: `baa8bc9076d4d47e69aa0b796683ce18bad43cb7`.
+`MicroCFTA.SourceCurrentInitialPrefixCheck.initial_prefix_of_pending`
+connects the literal initializer to the actual selected-prefix result.
+The proof uses the same original input, graph, heap, class, query, Caller,
+preference and instances. It derives the endpoint and removes the supplied
+selection premise. It reuses the two existing producers.
+The producer gates count 6 and 8. The joined theorem has 12 joint original
+gates. It adds no gate beyond their union. This remains conditional.
+
+All five required checks pass. Both complete public reports have no ellipsis.
+Only `propext`, `Classical.choice` and `Quot.sound` occur as axioms.
+Independent review: `PASS_BOUNDED_LOCAL_FOLDED_CONTRACTS`.
+Source: 102 lines, 7241 bytes, SHA256
+`a40d48af53bca1830cad31f7fd0b92f10b6f39fa8816c5a5f3d1a9f090183d32`.
+Audit adds one import and preserves the previous whole body byte for byte.
+
+Haskell: no source changes, new defects or fixes were established in this
+increment. There is no Haskell patch for an external agent to apply.
+Do not treat this local Lean result as complete Haskell correspondence.
+
+The main proof gap remains the original finite activation-key carrier and
+one original-input resource bound for BOTH recursive workers. Actual native
+mu activation-site resource closure is still open. Whole library/API coverage,
+finite execution, exact size-indexed terms, size order and rank/unrank remain
+full-goal requirements. Keep the optimized interned core and older work.
+
+The author used 702 original lines in 32 files and one whole-file slot.
+It read 114 lines in two producer headers. The independent review retained
+those original limits and read the candidate and both complete public reports.
+The global source-process verdict stays FAIL. Nested, indirect, historical,
+whole API and Haskell coverage remain open or UNKNOWN. Preserve the Root
+receiving incident and all prior failures. Both author helper failures and
+the proof-introducer boundary correction remain recorded.
+The available author owner is archived whole. The earlier 77322-byte raw
+ledger snapshot is unavailable; its pin and extracted metadata are retained.
+No replacement snapshot or reconstructed wrapper is the original raw record.
+
+Controller: `/tmp/mcfta-initial-prefix-composition-normal-20261104`.
+Follow `/tmp/mcfta-mu-activation-normal-20261104` for the next bounded task.
+The 32-directory cleanup remains unapproved. Keep its targets intact.
+
+Earlier findings follow unchanged.
+
 ## 2026-11-04 03:49 CET: Strong native mu resource producer verified
 
 The code commit is `5f42e6d0da31a0b98aa6e4dcce4edeeb9f446ecc`.

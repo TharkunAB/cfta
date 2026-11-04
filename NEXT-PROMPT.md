@@ -1,3 +1,36 @@
+# Resume after the initial selected-prefix proof
+
+Latest verified code: `baa8bc9076d4d47e69aa0b796683ce18bad43cb7`.
+The literal initializer now gives the actual selected-prefix result under
+12 joint original gates. The proof derives the selection endpoint and adds
+no gate beyond the two producer interfaces. All five checks and bounded
+independent review pass. This is a local conditional result.
+No Haskell code changed. No new Haskell defect or fix was established.
+
+Read the latest `CURRENT-HANDOFF.json` in these controllers:
+1. `/tmp/mcfta-initial-prefix-composition-normal-20261104`.
+2. `/tmp/mcfta-mu-activation-normal-20261104`.
+3. `/tmp/mcfta-mu-prepare-resource-normal-20261104`.
+Finish and verify whole-provider retention and normal branch publication.
+Then continue actual native mu activation-site resource closure. Reuse the
+existing producers and the initial-prefix proof. Do not add supplied future
+states, selection endpoints, branch results or resource suppliers.
+
+Keep the full goal active: the original finite activation-key carrier,
+one original-input bound for BOTH recursive workers, whole library and API
+coverage, Haskell correspondence, finite execution, exact terms by node-count
+size, size order, and both rank/unrank inverses. Keep the optimized interned
+core and older constructor/equality work. Do not close the goal for this lemma.
+
+Preserve permanent source-process FAIL, all indirect and historical UNKNOWNs,
+the Root receiving incident, both helper failures, the header correction,
+and the missing earlier raw ledger snapshot. A whole available-owner archive
+does not establish complete historical tool-wrapper or event coverage.
+The exact 32-directory cleanup still needs fresh direct approval. No deletion
+is authorized by a normal continuation. Normal `formalize` pushes are authorized.
+
+Earlier restart instructions follow unchanged.
+
 ## 2026-11-04 03:49 CET: Resume after the native mu resource proof
 
 Read the latest HANDOFF prefix and root FINDINGS prefix.
