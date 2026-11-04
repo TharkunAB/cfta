@@ -1,3 +1,4 @@
+import MicroCFTA.SourceCurrentInitialNextCheck
 import MicroCFTA.SourceCurrentSelectedInitialCheck
 import MicroCFTA.SourceCurrentSelectedNoHistoryCheck
 import MicroCFTA.SourceCurrentNativeEntryFirstDispatchHistory
