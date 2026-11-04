@@ -1,3 +1,17 @@
+## Continue after exact descriptor carrier laws (2026-11-04 21:06 CET)
+
+Read this prefix, HANDOFF, and root FINDINGS before restarting. Preserve the full objective and all older proofs, counterexamples, repairs, source histories and marked drafts. Refresh main and formalize before repository changes. Normal formalize pushes are authorized.
+
+The exact computed carrier membership law A and original-input extension closure law D now pass their first strict checks and all four final repository checks. The combined module is `SourceRecursiveIntersectionDescriptorCarrierLaws.lean`, 323 lines/16862 bytes/SHA256 `30c4c89ce47e7f04c760c97d1aa56304ab32c8c2fc87b683ac956fd47180454c`. The computation and C stay fixed. Do not rerun these passing checks without a new reason. Do not add an assumption to replace an actual runtime obligation.
+
+Next: B must bound the length of the actual list by `2^(N + I.length^2)` and then `2^(N + (1 + 4N)^2)`. Its exact header/plan/context is frozen. The seven List-length/flatMap metadata plan is proposed, not executed. Acquire actual owner/type contracts under the existing budgets before a bounded B proof plan. N is the original issued-node counter, not a reachable graph or term-size bound.
+
+Continue the same three owners: operator2169/12/twoFINAL/API8; native2108/46/twoFINAL/Frame71, owner metadata125 pending after exact Metadata/recordTypes binding; Haskell3010/8/twoFINAL/Std9+project3. Nix Cabal dry run now passes and the current plan and full Hypha binary are pinned. No Hypha help/API was run. Root must separately plan its one tool-help invocation before a package lookup. Actual operator/instance laws, operation-result provenance and input-plus-size insertion counts remain open. Record any later Haskell fix in FINDINGS.
+
+Keep Root controller `/tmp/mcfta-runtime-packet-producer-normal-20261104-1205`. Retain all old FAIL/STOP/UNKNOWN results, including guard failures and metadata layout deviation. Root source upper stays UNKNOWN and global source-process FAIL stays recorded. No current proof check is live. Pending exact32 cleanup still needs direct approval; deleted0. Keep tmp use small.
+
+The full goal remains actual generated/returned/subsequent states, both recursive workers, the common original-input/requested-size work bound, exact size-indexed acceptance, size order, both rank/unrank directions, and source/runtime correspondence. Keep the optimized core and older constructor/equality targets. Do not mark the goal complete or paused.
+
 ## Continue after the checked descriptor computation (2026-11-04 20:32 CET)
 
 Keep the full original goal, both actual workers, optimized interned core, all older work, exact node-count terms, size order and both rank/unrank inverses.

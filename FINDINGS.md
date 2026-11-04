@@ -1,3 +1,17 @@
+## Exact original descriptor coverage and extension closure (2026-11-04 21:06 CET)
+
+`SourceRecursiveIntersectionDescriptorCarrierLaws.lean` proves two laws for the computed descriptor list. `mem_originalDescriptorCarrier_iff` gives exact membership. A key is a member if and only if it is canonical and typed, its names are in the original issued-name range, and its seen pairs are in the actual original input-pair image. This theorem needs no Facts premise.
+
+`extend_mem_originalDescriptorCarrier` proves closure under extension. It uses the existing Facts premise, original left and right inputs, and originality of the bound mu inputs. It adds no carrier, coverage, counter, fuel, runtime identity, or closure assumption. The module has one private witness proof and these two public laws.
+
+Both laws passed their first strict kernel and axiom checks. The full Lake audit, strict audit, and ordinary and fully explicit public-type checks pass. Both explicit public types are complete. The axiom reports contain only `propext`, `Classical.choice`, and `Quot.sound`. All previous audit and proof bytes remain.
+
+The explicit computed-list bound `2^(N + (1 + 4N)^2)` remains unproved. Here `N = state.nodes.next` in the original state. This is an issued-node counter, not a reachable graph size or a term-size budget. The actual schedule extension, generated operands and returned states, IDs, caches, interners, pending multiplicities, both workers, and a common input-derived work bound remain open.
+
+Haskell: no source defect or fix is established in this increment. The Cabal dry run now passes inside the repository Nix shell. The exact current plan records GHC 9.14.1, base 4.22.0.0, and containers 0.8 as direct library dependencies. Package metadata does not establish the selected operator, instance law, operation-result provenance, or insertion count. Any later Haskell fix must be recorded here for an external agent.
+
+The previous global source-process FAIL and Root source upper UNKNOWN remain. No entry in the pending exact 32-directory cleanup set was deleted.
+
 ## Checked original descriptor computation (2026-11-04 20:32 CET)
 
 `MicroCFTA.SourceRecursiveIntersectionDomain.originalDescriptorCarrier` computes a list of descriptor choices from the original state.
