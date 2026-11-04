@@ -1,3 +1,32 @@
+## Key-flow result and current proof boundaries (2026-11-04 13:42 CET)
+
+The full goal remains active. Preserve both actual workers, the original-input carrier/common bound, the optimized interned core, and all older work.
+The last checked theorem is unchanged. This increment adds a static source trace and explicit remaining obligations.
+At all three key sites 900/1006/1542, local conditional paths include intersection and outer-unfolding results.
+Fresh identity and original-only identity claims remain unproved. Do not use original node IDs alone as a proved carrier.
+The key workers have no direct numeric size/depth/fuel/limit argument in this trace. Counter state is present.
+Outer ordered fuel/limit values are supplied by the caller. Their bound on nested raw work remains UNKNOWN.
+The helper fixed budget and separate depth API do not establish the common original-input work bound.
+The same Haskell actor stays at 2923/5/two final wholes; source unique delta is zero.
+Its sealed continuation is `/tmp/mcfta-haskell-input-dataflow-supplement-20261104-1316`.
+Root copied all 12 files / 7 directories / 137384 bytes with verified bytes, modes, distinct inodes, and stable sources.
+The metadata SHA256 is `fbf165151f380e24dce98027c1fe4ab9f783b4c151999717f56123ff9beaf5b4`.
+No Haskell defect or repair was established. Record any later verified repair in root FINDINGS for the external agent.
+
+Descriptor reviewer: the justified full-command-boundary policy stopped at 463>443. Operations and the 117-line specification remain unread.
+That immutable provider has 54 files / 1071761 bytes; Root copied it whole and retained the separate 694-byte final return.
+Keep this policy result separate from a universal impossibility claim or specification verdict.
+The same operator author now has a separate admitted parser before-plan with pinned existing tools and NEW calibration gates.
+Its original history remains 1809/2/two final wholes. Parser metadata does not transfer source ownership or prove cache/compiled-binding laws.
+After a valid parser result, the same reviewer must propose its exact complete receiving plan before any Operations/specification view.
+
+Native producer actor: actual 1782/38/two final wholes after guarded order-transport headers.
+The actual Post-to-context and run/action state bindings have source support. Their kernel composition remains unproved.
+The full Packet still needs actual ordering/boundedness and receiver-input composition. Do not add Frame, successful-write, or resource suppliers.
+Action source 1-74 reached its strict cap before its existing completion header ended. The partial header is opaque and unusable.
+Keep old `Action.prepare` distinct from native `SelectedPreparation.run`.
+Root control remains `/tmp/mcfta-runtime-packet-producer-normal-20261104-1205`. Keep all failed guards and historical UNKNOWNs.
+
 ## Current descriptor and Packet work (2026-11-04 12:45 CET)
 
 Keep the full goal active. Preserve the optimized interned core, both actual recursive workers, original-input finite keys, and one common upfront bound.
