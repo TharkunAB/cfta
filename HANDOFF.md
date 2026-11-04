@@ -1,3 +1,41 @@
+## Current descriptor and Packet work (2026-11-04 12:45 CET)
+
+Keep the full goal active. Preserve the optimized interned core, both actual recursive workers, original-input finite keys, and one common upfront bound.
+Keep exact accepted terms by node-count size, finite execution, size order, both rank/unrank inverses, and Haskell/runtime/API correspondence as separate requirements.
+Preserve older constructor/equality work and all proofs, repairs, counterexamples, and marked drafts.
+The published branch starts this increment at `4b4f4bcd8166e74871d5216e937f9b73857842a9`.
+The checked code is unchanged. Its five checks and independent review remain the last theorem evidence.
+
+Current Root control: `/tmp/mcfta-runtime-packet-producer-normal-20261104-1205`.
+Earlier complete proof control: `/tmp/mcfta-selected-preparation-mu-run-normal-20261104`.
+The native actor continues its same source history from `/tmp/mcfta-native-runtime-packet-supplement-20261104-1156`.
+Its latest completed report is 1689 examined original rows / 36 originals / two final whole reservations.
+It received the complete step-completion definition/header with necessary variable context at rows 86-88.
+It also received the canonical Packet and original Context under separate guards.
+No direct future Packet/Entry-result/stored premise was found. Folded predicate contents remain UNKNOWN.
+The actual canonical Packet derivation remains unproved. Plan68 has a cumulative upper of 1693. Do not report it as actual until its receipt exists.
+Preserve every guard stop60-67, the unexecuted65v1 context omission, truncated outputs, and timestamp correction.
+
+The distinct intersection actor has 1809 examined rows / 2 originals / two final whole reservations, Operations887 and Type922.
+Its private descriptor specification has 117 lines and 12430 bytes. Its SHA256 is `30995a6031b2eada59eb1f82a2c932fb57c511504201842f789a7be5098c12de`.
+The specification does not claim that finite descriptors imply finite actual identities.
+The same reviewer keeps its prior history:1423 examined/423 semantic/14originals before the new Type semantic stage. StageA then completed Type semantics and raised the semantic count to 1345.
+Its two final whole reservations remain Scan174 and Type922. Operations must stay at most 443 cumulative examined rows.
+The reviewer must receive an exact complete original-context map before the private specification.
+Do not omit context, use an arbitrary slice, reset a history, or add a third whole reservation.
+StageA allows semantic review of the already-reserved whole Type module. It does not admit Operations or the specification body.
+
+The distinct cache actor completed 496 rows / 2 originals / two final whole reservations, Cache232 and FlatMemo264. Memo and STD/API source remain unread.
+Its 14 external obligations and 3 conditional scenarios remain open. Actual default reachability is UNKNOWN for all 3.
+No Haskell defect, repair, or repository edit was verified by this audit.
+The complete sealed cache provider is copied under the current Root control. Its 12 files / 2 directories / 73443 bytes match all bytes and modes, with distinct inodes and stable sources.
+The private report has 17864 bytes. Its SHA256 is `6ca23e39f376c4393685e8e7a48ed0395006c5679cee5a0a7a8322ca820c493f`.
+Keep private mathematical bodies opaque until their receiving origins are admitted.
+
+Upstream was refreshed. `origin/main` remains `bd5a406a6a3f84b7e3ae0906082783911509df83` and is contained in this branch.
+Normal pushes to `formalize` remain authorized. The separate 32-directory cleanup still needs fresh direct approval.
+No cleanup ran in this increment. Keep the permanent source-process FAIL and Root original-upper UNKNOWN.
+
 ## Published proof and current follow-up (2026-11-04 11:54 CET)
 
 The verified code and proof handoff are published through `db8f9ab3a3355e156f06fad21a5521b4e59229a8` on `formalize`.

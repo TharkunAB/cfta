@@ -1,3 +1,25 @@
+## Current next work (2026-11-04 12:45 CET)
+
+Read the current prefix of HANDOFF and root FINDINGS. Keep the full formalization goal and all older work active.
+Refresh upstream before new work. Normal pushes to `formalize` remain authorized.
+Use Root control `/tmp/mcfta-runtime-packet-producer-normal-20261104-1205`.
+The checked code and five checks are unchanged from the published selected-mu component.
+
+Continue the SAME native actor from its live1156 owner. Its last actual total is 1689/36 with two final wholes.
+Check the actual receipt for plan68 before using its upper1693 as an acquired count.
+Derive the literal runtime Packet from the original step completion and actual runPrefix/finish/run.
+Do not introduce a future Packet, supplied Entry result, decoded branch, stored receiver fact, successful worker, or common bound as a new gate.
+Direct premise checks passed. Nested imported gate contents and the canonical Packet link remain open.
+
+Continue the distinct original-input descriptor target and SAME independent reviewer histories.
+The operator actor owns 1809/2 with Operations887 and Type922 as final wholes.
+The reviewer has Scan174 and Type922 as its two final wholes; Operations has a cumulative 443-row limit.
+Receive complete source-context metadata before the private 117-line specification. Keep actual identities, memo keys, generated/returned graphs, later worker calls, and global bounds separate.
+The cache audit496/2 found 14 external obligations and 3 conditional scenarios. Default actual reachability remains UNKNOWN; no Haskell repair was verified.
+Any later Haskell fix must be recorded in root FINDINGS for the external agent.
+Preserve all failed guards, filename/ledger incidents, truncated raw-output UNKNOWNs, and the permanent global source-process FAIL.
+Keep the exact pending cleanup approval separate. Do not delete unapproved artifacts.
+
 ## Current next work (2026-11-04 11:54 CET)
 
 The selected mu preparation proof and its verified handoff are published through `db8f9ab3a3355e156f06fad21a5521b4e59229a8`.
