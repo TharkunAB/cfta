@@ -1,3 +1,30 @@
+## 2026-11-04 03:49 CET: Resume after the native mu resource proof
+
+Read the latest HANDOFF prefix and root FINDINGS prefix.
+Code commit: `5f42e6d0da31a0b98aa6e4dcce4edeeb9f446ecc`.
+Published predecessor: `9fff13567d5b58d67f1e42079efc5a41e75ab357`.
+The 47-line `mu_prepare` theorem passes all five required checks.
+The bounded independent printed-interface review passes.
+The original strong statement and proof are byte-exact.
+Local typing context adds no public premise.
+No Haskell source changed.
+
+Read `/tmp/mcfta-mu-prepare-resource-normal-20261104/CURRENT-HANDOFF.json` for later publication and packet records.
+Read `/tmp/mcfta-initial-prefix-composition-normal-20261104/CURRENT-HANDOFF.json` for the parallel initial-prefix work.
+Its final binding remains UNVERIFIED.
+Finish its six exact binder metadata flags and the admitted Result/context validation.
+Then join the actual selector result to the checked prefix with the same original objects.
+Do not replace the goal with an endpoint assumption, future-state supplier or generic wrapper.
+
+The largest gap remains original activation-key coverage and common original-state resources for BOTH workers.
+The mu lemma does not prove activation instantiation, action execution, or that common bound.
+Complete the actual library/API/Haskell contracts, finite execution, exact size-indexed accepted language, size order, and both rank/unrank laws.
+Preserve the optimized interned core, old constructor/equality work, all failures and all UNKNOWNs.
+The full goal remains active.
+Root alone runs capped Lean checks and publication.
+Normal pushes to `formalize` remain authorized.
+The pending32-directory cleanup is not approved.
+
 # Restart after actual initial pure selection
 
 The full goal is active. Code commit: `732ec94207354bda387a7f692a8e9d99ad1b55db`.

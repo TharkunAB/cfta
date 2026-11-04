@@ -1,3 +1,46 @@
+## 2026-11-04 03:49 CET: Strong native mu resource producer verified
+
+The code commit is `5f42e6d0da31a0b98aa6e4dcce4edeeb9f446ecc`.
+The published predecessor is `9fff13567d5b58d67f1e42079efc5a41e75ab357`.
+`SourceCurrentMuPrepareResources.lean` adds `MicroCFTA.SourceCurrentMuPrepareResources.mu_prepare`.
+The module has 47 lines and 2465 bytes.
+Its SHA256 is `bb755ea38432e4c61baf16fb75a94367e32863b13e364714ac4560a905021519`.
+The theorem derives resource preparation for the literal native mu operation under its stated input gates.
+It reuses the existing Nodes producer.
+It adds no public premise.
+It does not prove action execution, activation-site instantiation, or the common resource bound for BOTH workers.
+
+All five required checks pass.
+These checks are strict module compilation, Lake Audit, strict Audit, and both full public reports.
+The ordinary report has 31 lines and 2257 bytes.
+The explicit report has 93 lines and 6858 bytes.
+Both reports name only `propext`, `Classical.choice`, and `Quot.sound`.
+The independent verdict is `PASS_BOUNDED_LOCAL_PRINTED_INTERFACE`.
+Fidelity is `YES_WITH_FOLDED_CONTRACT_LIMIT`.
+The review confirms the elaborated instance, operator and input bindings within that scope.
+The review covers OLD 352 lines across 8 owners, NEW 47 source lines and 124 report lines.
+It uses no whole-original exception and no fresh STD source or API view.
+It does not clear nested contracts, full source/API/Haskell correspondence, or the permanent source-process failure.
+
+The repair preserves the strong v4 statement and proof source.
+It adds only local typing context.
+The independent review confirms that this context binds the actual operation.
+The weaker v5 is uncompiled and remains distinct.
+The new proof closes a local resource-preparation obligation.
+It does not establish the global original-input bound or either recursive worker's full execution.
+
+No Haskell defect or fix was established.
+No Haskell source changed.
+Keep all earlier Haskell findings and fixes below this prefix.
+
+The initial pure-selector result remains verified under its original gates.
+The selected-initial execution composition remains UNVERIFIED.
+Its current source inspection resolves the old SelectedOrdinary complete headers to 22–142 and 220–336.
+The old22–91 slice stops inside a conditional.
+The full Formula mutual enclosure29–56 is now inspected by that separate task.
+These source corrections do not clear the permanent source-process failure, Root receiving incident, nested library contracts, or historical UNKNOWNs.
+The full system and Haskell correspondence remain incomplete.
+
 # 2026-11-04: initial selector result is derived
 
 Code commit: `732ec94207354bda387a7f692a8e9d99ad1b55db`.
