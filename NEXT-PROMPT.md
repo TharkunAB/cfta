@@ -1,3 +1,20 @@
+# 2026-11-04 05:54 CET — continue the original-input resource connection
+
+Read the new prefix in root `HANDOFF.md` and the three live `CURRENT-HANDOFF.json` controllers.
+No new theorem was added in this source-review increment.
+The checked initializer-to-selected-prefix result remains conditional on its existing premises.
+
+Continue the actual mu caller investigation and the separate reservation-interface review.
+Derive the existing entry conditions from the original caller.
+Derive both workers' key coverage and upfront bound from the original input.
+Do not supply future resources or new caller conditions to replace these derivations.
+Keep the full objective, source histories, whole-file limits, FAIL/UNKNOWN flags, and old hard stop.
+The old global-carrier role may supply already-held identity metadata only.
+Its available owner and controls are retained under the global-carrier controller's `retention-v1/`.
+
+There is no established Haskell fix in this increment. Record any later fix in root `FINDINGS.md`.
+Normal pushes to `formalize` remain authorized. The 32-directory cleanup needs separate exact approval.
+
 # Resume after the initial selected-prefix proof
 
 Latest verified code: `baa8bc9076d4d47e69aa0b796683ce18bad43cb7`.
