@@ -1,3 +1,32 @@
+# 2026-11-04: actual initialized selected prefix
+
+Code: `baa8bc9076d4d47e69aa0b796683ce18bad43cb7`.
+Public: `MicroCFTA.SourceCurrentInitialPrefixCheck.initial_prefix_of_pending`.
+The actual literal initializer connects to the selected-prefix result at the
+same original input, graph, heap, class, query, Caller, preference and instances.
+The proof derives the endpoint. It removes the supplied selection premise.
+It uses 12 joint original gates from producer interfaces with 6 and 8 gates.
+There is no added gate beyond their union and no replacement producer.
+
+Strict source, Lake Audit, strict Audit, ordinary public/axioms and explicit
+public/axioms all pass. Only the three standard axioms occur. Both public
+reports are complete and have no ellipsis. Bounded independent review passes
+with folded-contract limits. Audit preserves its previous whole body.
+No Haskell source changed. No new Haskell defect or fix was established.
+
+This does not establish actual mu activation resource closure, the original
+finite activation-key carrier, a common bound for BOTH recursive workers,
+complete indirect/library/API/Haskell correspondence, or the full goal.
+Keep exact term-size enumeration, size order and both rank/unrank inverses
+in that goal. Preserve the global source-process FAIL and all UNKNOWNs.
+
+Live initial-prefix controller:
+`/tmp/mcfta-initial-prefix-composition-normal-20261104`.
+Live next resource task:
+`/tmp/mcfta-mu-activation-normal-20261104`.
+
+Earlier notes follow unchanged.
+
 ## 2026-11-04 03:49 CET: Native mu resources
 
 The new47-line module is `MicroCFTA.SourceCurrentMuPrepareResources`.
