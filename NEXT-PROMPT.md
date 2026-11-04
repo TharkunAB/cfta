@@ -1,3 +1,33 @@
+## Resume after actual selected mu preparation (2026-11-04 11:20 CET)
+
+Keep the full goal from HANDOFF active. Keep older constructor/equality work and all proofs, repairs, counterexamples, and marked drafts.
+Refresh upstream before new work. Preserve all source histories and coverage limits.
+The latest component is `SourceCurrentSelectedPreparationMuRun.complete`.
+Its five checks pass; independent review: PASS_LOCAL_REAL_ENTRY_MU_DISPATCH_FOLDED_CONTRACTS.
+It handles the actual mu dispatch under the original packet/ready/stored assumptions.
+It derives source availability and closedness internally and proves exact successful selected preparation for every native fuel value.
+Other decoded arms have no completion claim. Degree ceilings remain conditional.
+
+The main missing result remains a finite activation-key carrier and common upfront bound from the original input for both actual workers.
+Also derive the runtime packet/stored facts from the original caller and complete the Union operation with its real fuel requirement.
+Do not replace a successful outcome with rejection-or-success or add a supplied future packet, entry result, or decoded branch.
+
+Continue the same old-worker actor from `/tmp/mcfta-mu-runtime-caller-eligibility-20261104`.
+Its current original total is 4918/113 plus STD22/3, with two whole reservations.
+The complete Valid definition and local context are acquired. Continue the existing producer application after exact run/runPrefix operator metadata; worker-prefix and Packet receiver linkage remain unproved.
+Do not execute the declined 306-row regex locator.
+
+Continue the same Haskell audit history from `/tmp/mcfta-haskell-activation-carrier-20261104`.
+It has 2919 examined rows / 5 originals / two final whole reservations.
+The unresolved `recursiveBoundary` contract blocks key-call eligibility at three actual sites.
+No finite-closure, allocation/cache law, Haskell defect, or Haskell fix was established.
+Any Haskell repair must be recorded in root FINDINGS for the external agent.
+
+Use `/home/tritlo/Code/heavy-management` for serial heavy jobs. Recheck current scripts and effective cgroup limits.
+The completed checks used 4 GiB max/high, zero swap, and five minutes per job.
+Use the existing SSH agent socket if needed. Push normal commits to `formalize` under the standing authorization.
+Keep the exact pending cleanup approval separate. Do not delete protected or unapproved evidence.
+
 ## 2026-11-04: resume after the packet μ component
 
 Start from code commit `b61f48ce2fc2e2478857e2df43f5d83b2b9a6513` and this documentation checkpoint.

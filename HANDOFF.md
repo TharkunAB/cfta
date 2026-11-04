@@ -1,3 +1,47 @@
+## Current checkpoint: actual selected mu preparation (2026-11-04 11:20 CET)
+
+The full goal remains active. Preserve the whole Haskell library target, optimized interned core, both actual recursive workers, original-input finite activation carrier, and one common upfront bound.
+Preserve exact accepted terms by node-count size, size order, both rank/unrank inverses, and the runtime/API correspondence target.
+Preserve older constructor and equality work as secondary targets.
+
+New code: `lean/MicroCFTA/SourceCurrentSelectedPreparationMuRun.lean`, 88 lines, SHA256 `48cf8654c0493c6d8fe917d11769a064a004c036cb73fc5ea85f072b0beb28b9`.
+Public theorem: `MicroCFTA.SourceCurrentSelectedPreparationMuRun.complete`.
+It keeps the original packet/ready/stored assumptions and derives two mu receiving facts from the actual entry producer.
+The actual decoded match occurs only in the conclusion.
+The real mu arm proves the full previous mu package and exact successful selected preparation for every native fuel value.
+The other four arms have no completion claim. Supplied degree ceilings remain conditional.
+All five compiler/public checks pass. Only the standard three axioms appear.
+Independent review: PASS_LOCAL_REAL_ENTRY_MU_DISPATCH_FOLDED_CONTRACTS.
+
+Verified code commit: `3c730dc08bfe53fc2a6f6c899efcdbcb7f39f265`.
+Review: 501 examined / 423 semantic original rows / 13 owners, one Scan whole reservation, NEW1155, STD/API0.
+Conservative examined upper511 remains recorded.
+
+Root control: `/tmp/mcfta-selected-preparation-mu-run-normal-20261104`.
+The complete available frozen author supplement is copied to `author-supplement-v1` there.
+The current runtime-caller work is also recorded at `/tmp/mcfta-runtime-caller-normal-20261104-0858`.
+The original author history remains 1545 examined rows / 35 owners / two whole reservations.
+The previous 390-file owner remains frozen and retained under the earlier packet-mu control.
+Keep the source-process FAIL, private-proof incident, Scan provenance UNKNOWN, Root receiving incident, and all failed guards.
+Do not reset actor histories or infer complete context from absent references.
+
+Haskell audit: 2919 examined rows / 5 owners / two final whole reservations.
+The three actual key-call sites still require the unowned `recursiveBoundary` constructor-range contract.
+The audit found no Haskell defect or fix. Finite closure and allocator/cache properties remain open.
+The final metadata handoff is `/tmp/mcfta-haskell-activation-carrier-20261104/HASKELL-AUDIT-FINAL-HANDOFF-METADATA.json`.
+Its SHA256 is `2dcd3afba73bf01ea05a2f6d09c3d6ebd2a671c677c2174e55ca50f22752b76a`.
+
+The old-worker audit resolved `SelectedStep.Valid` to defining module `SourcePruningEnumerationSelectedStepCompletion`.
+Its same actor has 4918 original rows / 113 owners plus STD22/3, with two whole reservations.
+The complete Valid definition passed the retained guard retry. The actual worker-prefix and Packet receiver linkage remain unproved.
+Keep the declined full-prefix regex plan unexecuted. Its output cap did not bound examined source rows.
+
+For Git commands, use the existing agent socket with `env SSH_AUTH_SOCK=/run/user/1000/ssh-agent-tritlo.sock` if the shell has no agent variable.
+A fetch with that socket succeeded. The default-shell fetch failure is retained.
+Normal pushes to `formalize` remain authorized.
+The exact 32-directory cleanup still needs fresh direct approval after automatic approval review rejected it.
+The current proof work does not depend on that cleanup.
+
 ## 2026-11-04: packet to native μ run
 
 Code commit: `b61f48ce2fc2e2478857e2df43f5d83b2b9a6513` on `formalize`.
