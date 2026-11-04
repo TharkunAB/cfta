@@ -1,3 +1,20 @@
+## Checked descriptor computation checkpoint (2026-11-04 20:32 CET)
+
+Keep the full formalization goal active. Preserve both actual workers, the optimized interned core, older constructor/equality work, all proofs, repairs, counterexamples, marked drafts and failed guards.
+The parent checkpoint is `173782b49bab8864173f72e071126f0bed38a844`.
+The new module is `lean/MicroCFTA/SourceRecursiveIntersectionDescriptorCarrier.lean`: 26 lines, 1242 bytes, SHA256 `93967cc41822b742b5120efc8045b4a4224d697adcbe5abcfd54c0962cf3e9c7`.
+Its `originalDescriptorCarrier` definition uses the actual inventory, actual pair function and actual extension in two folds. It takes only the original state. It adds no supplied carrier, fuel, closure or completion premise.
+This checkpoint proves no new coverage or closure theorem. Targets A, B and D remain open. The earlier Mu-name Target C remains proved.
+Five checks passed under serial 4 GiB max/high and zero swap. The new definition uses only `propext` and `Quot.sound`. Both complete public types were read; the explicit type has no ellipses.
+All older proof and Audit bytes remain intact. Root control remains `/tmp/mcfta-runtime-packet-producer-normal-20261104-1205`, with `R60-` records. Old document bodies remain intact.
+The operator actor is now project 2093/9 plus Std 76/3, combined 2169/12, two final wholes, API 8. The actual list recursor and empty Pairwise constructor interfaces are received. Their primitive kernel-rule scope correction remains recorded. The private 138-line witness helper passed its first strict check at 20:37 CET. Its candidate is `/tmp/mcfta-intersection-key-closure-audit-20261104/NEW-ChoiceFieldsWitness-PrivateHelper.lean`, SHA256 `d017f15e6873ed205539aa38eb90d884dc68e53cafe4b9cf5f899f3a56239897`. The axiom closure contains only `propext`, `Classical.choice` and `Quot.sound`. A is being authored under its unchanged header; do not repeat the helper check.
+The native actor is now 2108/46, two final wholes, Frame 71/145. Its recorded owner registry is reconciled. The actual HasHole declaration is received. The first query failed on unsupported `pp.maxDepth`; the repaired query passed. Keep the failed output opaque and retained. Full Packet production from the original eight gates and caller/counter links remain unproved.
+The trie actor remains 3010/8, two final wholes, Std 9/project 3. Actual pending-field nominal binding and the header extent are verified. Effective build defaults, imported exports, selected `<>` instance/laws, new-value provenance and original-input/requested-size insertion counts remain open. The Nix Cabal dry run failed. Its old plan is unchanged and freshness is unproved. No Hypha API lookup is authorized until a successful dry run and a separate receiving plan.
+Keep GlobalSourceProcessFAIL, Root original-source upper UNKNOWN, every actor history, unavailable Action context and all old/new failed guards. No reset, third whole or imported helper-body law is authorized.
+No Haskell repair was made. Record each later verified Haskell fix in root FINDINGS.
+Generated/returned/subsequent graphs, actual NodeId/interner/Eq/hash/Memo correspondence, both actual workers, the common original-input internal-work bound, exact terms per node-count size, size order, both rank/unrank inverses and full Haskell/runtime/API correspondence remain required.
+The exact 32-directory cleanup list still needs direct approval. Automatic goal continuation does not approve deletion.
+
 ## Checked original Mu-name checkpoint (2026-11-04 19:12 CET)
 
 Keep the full formalization goal active. Preserve both actual workers, the optimized interned core, older constructor/equality work, all proofs, repairs, counterexamples, marked drafts and failed guards.

@@ -1,4 +1,5 @@
 import MicroCFTA.SourceRecursiveIntersectionMuInventoryName
+import MicroCFTA.SourceRecursiveIntersectionDescriptorCarrier
 import MicroCFTA.EqualityTrieCollectionFamily
 
 import MicroCFTA.SourceCurrentSelectedStepCheckedTotal
@@ -4307,3 +4308,5 @@ run_cmd do
 -- Original Mu names use the original inventory.
 #check MicroCFTA.SourceRecursiveIntersectionInputView.OriginalInput.mu_inventory_name
 #print axioms MicroCFTA.SourceRecursiveIntersectionInputView.OriginalInput.mu_inventory_name
+
+#print axioms MicroCFTA.SourceRecursiveIntersectionDomain.originalDescriptorCarrier

@@ -1,3 +1,16 @@
+## Continue after the checked descriptor computation (2026-11-04 20:32 CET)
+
+Keep the full original goal, both actual workers, optimized interned core, all older work, exact node-count terms, size order and both rank/unrank inverses.
+Refresh upstream before work. Normal pushes to `formalize` remain authorized.
+The new `SourceRecursiveIntersectionDomain.originalDescriptorCarrier` computation passed five final checks. It does not prove exact coverage, closure or a cardinal bound. Mu-name Target C remains proved; A, B and D remain open.
+Root control remains `/tmp/mcfta-runtime-packet-producer-normal-20261104-1205`, with current `R60-` records. Keep all old proof/Audit bytes, failed candidates and diagnostics.
+Continue the same operator actor at 2169/12, Std 76/3, two final wholes/API 8. The private witness helper passed its first strict kernel/axiom check. Preserve its exact 138-line candidate and do not repeat that check. A is now authorized under the admitted staged plan. Read its whole new combined candidate and complete context before compiling. Keep the exact A/D statements and required B bound. Do not add a supplied carrier, closure or resource premise.
+Continue the same native actor at 2108/46, two final wholes, Frame 71/145. Reuse actual HasHole/Safe/Satisfies only within the recorded closed context. Derive the full actual Packet and caller/counter facts from the original gates. Do not supply missing order, boundedness or a Packet as a new hypothesis.
+Continue the same trie actor at 3010/8, two final wholes, Std 9/project 3. The actual pending field is nominally Seq. The selected operation, exports/defaults, provenance and insertion count still need proof. Root's Nix Cabal dry run must pass before a separately scoped Hypha dependency API lookup.
+Keep all historical FAIL/STOP/UNKNOWNs, Root original upper UNKNOWN, primitive scope overdelivery and all source/API histories. No third whole, history reset or unavailable helper-law transfer is authorized.
+Generated/returned/subsequent graphs, actual identity/equality/hash, both workers, common upfront work bound and full Haskell/runtime/API correspondence remain open.
+Record every verified Haskell repair in FINDINGS. None was made here. Exact 32-directory cleanup approval remains pending.
+
 ## Continue after original Mu-name inventory closure (2026-11-04 19:12 CET)
 
 Keep the full original goal, both actual workers, the optimized interned core, all older work, exact node-count terms, size order and both rank/unrank inverses.

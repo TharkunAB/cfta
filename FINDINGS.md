@@ -1,3 +1,14 @@
+## Checked original descriptor computation (2026-11-04 20:32 CET)
+
+`MicroCFTA.SourceRecursiveIntersectionDomain.originalDescriptorCarrier` computes a list of descriptor choices from the original state.
+It uses the actual input inventory and binary pair function. It selects pair occurrences, then original names, in two finite folds.
+The definition takes no supplied carrier, closure proof, fuel or completed run. This is a definition checkpoint. Exact canonical and typed coverage, primitive extension closure and the input-derived cardinal bound remain unproved.
+The earlier `OriginalInput.mu_inventory_name` theorem remains proved. The new computation adds no theorem about generated identities or either whole worker.
+The strict candidate, full Lake audit, strict audit and both complete public-type checks passed. The new definition uses only `propext` and `Quot.sound`. The explicit type has no ellipses.
+The Haskell audit verifies the nominal pending field from `UVarUnenumerated` itself: field 2 uses `Seq SuspendedConstraint`. The import binds `Seq` to `Data.Sequence`. The selected `<>` law, new-value provenance and insertion-count bound remain open.
+No Haskell source or API changed. No Haskell repair was made. Record every later verified Haskell repair here for the external agent.
+All older proofs, counterexamples, repairs, marked drafts and Audit bytes remain intact. Full worker, graph, identity, size-order and rank/unrank correspondence remain open.
+
 ## Checked original Mu inventory names (2026-11-04 19:12 CET)
 
 `MicroCFTA.SourceRecursiveIntersectionInputView.OriginalInput.mu_inventory_name` proves that an original Mu input name belongs to `List.range state.nodes.next` under the actual `InternedNestedFacts.Facts state` precondition.
