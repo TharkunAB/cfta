@@ -1,3 +1,14 @@
+## Suspended-path provenance (2026-11-04 15:16 CET)
+
+The static trace found updated pending collections and current-edge extraction on local routes to all three key sites.
+Local syntax does not exclude constraints from operation-produced edges. It does not establish an original-input-only path family.
+Actual projection or subtrie preservation, finite path domains, length bounds, and canonicality remain UNKNOWN.
+The carrier proof must preserve a computed original-input path family through descent, pending updates, and generated-edge constraint extraction.
+The trace establishes no concrete nonoriginal-trie runtime witness, Haskell defect, Haskell repair, finite carrier, or work bound.
+Metadata: `/tmp/mcfta-haskell-path-factor-flow-supplement-20261104-1435/PATH-FACTOR-FLOW-RESULT-METADATA.json`, 6691 bytes, SHA256 `b4537c809cc240638ebcb3918c0cf6a69f2e3b872a315b45396ef23293be7bfd`.
+The sealed provider has 9 files / 2 directories / 38825 bytes. Root verified its complete opaque copy. Its private report remains unread by Root.
+The caller proof also has an unresolved binding from its original `Safe` premise to the required `MicroCFTA.UnionFind.Total` predicate. Do not add that predicate as a new premise.
+
 ## Activation-key factors (2026-11-04 14:30 CET)
 
 The static audit found two factors at each key site 900, 1006, and 1542.
