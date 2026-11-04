@@ -1,3 +1,24 @@
+# 2026-11-04 06:38 CET — actual mu caller and producer conditions
+
+Source review now binds the selected call path through `SelectedPreparation.run` to
+`SelectedValue.run` and the stored-substitution mu operation.
+The complete existing `SelectedPreparation.complete_resources` header has `packet`, `ready`,
+`stored`, `profile`, and `fits` binders. It has no explicit mu-preparation supplier binder.
+Deriving these conditions from the actual original caller remains open.
+No actual caller premise has been eliminated. No new kernel theorem was added.
+
+The earlier `SourceCurrentMuPrepareResources.mu_prepare` theorem concerns `Action.prepare`.
+Its use here requires actual output-to-input and resource-contract binding.
+The operation names alone do not establish or refute that composition.
+
+The global reservation review has no complete receiving headers within its current source limits.
+No partial receiving contract was applied. The original-input common bound remains open.
+The proposed shared-planner result depends on final planner outputs and supplied profiles.
+It remains pending and does not establish the bound for both original workers.
+
+Haskell handoff: no new Haskell defect or fix was established in this increment.
+The latest checked proof checkpoint is unchanged. Its existing premises still apply.
+
 # 2026-11-04 05:54 CET — resource connections still missing
 
 This increment adds source analysis. It adds no kernel-checked theorem or Haskell fix.

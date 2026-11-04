@@ -1,3 +1,34 @@
+# 2026-11-04 06:38 CET — actual selected-mu caller resource target
+
+The next local target is the actual caller of `SelectedPreparation.run`.
+The source call path is now owned through `SelectedContinuations.run`, `SelectedPreparation.run`,
+`SelectedValue.run`, and the stored-substitution mu operation.
+The existing producer is `SourcePruningEnumerationSelectedPreparation.complete_resources`.
+Its complete guarded header has `packet`, `ready`, `stored`, `profile`, and `fits` binders.
+It has no explicit mu-preparation supplier binder.
+Derive these conditions from the actual caller's existing inputs and gates.
+Their folded meanings and the required original-input binding remain open.
+
+`SourceCurrentMuPrepareResources.mu_prepare` concerns `Action.prepare`.
+The native selected-mu operation uses stored substitution.
+Prove the actual output-to-input and resource-contract binding before reusing that theorem here.
+The different operation names do not establish or refute that composition.
+Keep the earlier theorem and all older proof targets.
+No actual caller premise has been eliminated in this increment. No new kernel theorem exists.
+
+The separate reservation audit stopped before obtaining complete receiving headers.
+It examined 909 original rows and viewed 111 semantic rows.
+Its receiver unions reached 39/80 and 40/81. Neither proof boundary was found within the admitted rows.
+No incomplete receiving contract was applied. The original-input common bound remains unproved.
+The proposed local shared-planner result depends on final planner outputs and supplied profiles.
+It remains pending. It does not establish the requested bound for both original workers.
+
+Read the live native and reservation controllers listed in the preceding checkpoint.
+The native role has 1315 original rows in 29 owners. Both whole-file slots are reserved.
+Its source view included 12 unused private-proof rows in `SelectedPreparation`, rows 29–40.
+Those rows remain charged. The scope-audit UNKNOWN and global source-process FAIL remain recorded.
+The full objective and all historical limits remain unchanged. No Haskell fix was established.
+
 # 2026-11-04 05:54 CET — resource-gap review in progress
 
 This update records source review. It adds no checked theorem.
