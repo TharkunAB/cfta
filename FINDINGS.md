@@ -1,3 +1,36 @@
+## Intersection and cache audit boundary (2026-11-04 12:45 CET)
+
+The checked proof state remains `SourceCurrentSelectedPreparationMuRun.complete` at code commit `3c730dc08bfe53fc2a6f6c899efcdbcb7f39f265`.
+This increment adds source-audit evidence and proof targets. It adds no checked theorem or Haskell repair.
+The independent operator audit read all 887 Operations rows and all 922 Type rows in its two final whole-file reservations.
+It proposed an original-input descriptor construction and actual-transition preservation targets.
+A finite descriptor set does not establish a finite set of actual NodeIds or memo keys.
+The actual identity bridge, generated nodes, returned graphs, later worker calls, and common upfront bound remain open.
+The private specification has 117 lines and 12430 bytes. Its SHA256 is `30995a6031b2eada59eb1f82a2c932fb57c511504201842f789a7be5098c12de`.
+Its independent review has not received the specification body. It first requires the complete original context map.
+
+The distinct cache audit read all 232 Cache rows and all 264 FlatMemo rows in its two final whole-file reservations.
+It retained 14 external obligations and three conditional contract scenarios.
+Actual default-library reachability is UNKNOWN for all three scenarios.
+The scenarios concern API/configuration scope, local preconditions, and actual caller/runtime scope.
+They establish no verified Haskell defect. No Haskell file changed.
+The audit kept Memo source unread. It acquired no dependency API source.
+Further checks must use the actual cache scope and callers. Do not apply a repair from a conditional scenario alone.
+The public dependency names include `GHC.Exts.fetchAddIntArray#` and `GHC.IO.unsafeDupablePerformIO`.
+Record any later verified Haskell repair here for the external agent.
+
+The native actor acquired the complete guarded step-completion context and conditional receiving facts.
+Its direction audit found no direct future Packet, receiving Entry-result, or receiver-stored premise in the checked header and original Context.
+Nested imported predicates remain folded and UNKNOWN. The canonical runtime Packet link remains unproved.
+The actor has 1689 examined rows / 36 originals / two final whole reservations at the last completed report.
+Plan68 permits at most four additional guard rows, for a cumulative upper of 1693. Do not treat this upper as acquired source.
+
+Keep all source-process FAIL and UNKNOWN records.
+The filename search incidents exposed metadata only. Their truncated outputs and incomplete raw-output records remain recorded.
+The private operator and cache reports remain outside the repository.
+Root control: `/tmp/mcfta-runtime-packet-producer-normal-20261104-1205`.
+The sealed cache provider is retained there as an opaque verified copy: 12 files, 2 directories, 73443 bytes.
+
 ## Recursion-key branch audit (2026-11-04 11:54 CET)
 
 The source audit checked all three explicit recursion-key applications in `cfta/src/Data/CFTA/Enumeration.hs`: lines 900, 1006, and 1542.
