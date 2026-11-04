@@ -1,3 +1,32 @@
+# 2026-11-04: literal initial selector result
+
+Code commit: `732ec94207354bda387a7f692a8e9d99ad1b55db` adds SourceCurrentInitialNextCheck and one Audit import.
+The initial_next_of_pending theorem derives the actual pure selector result for the literal initializer.
+It uses the existing original input/progress gates and positive producer.
+No selected endpoint/equality or future-state premise is supplied.
+
+All five checks pass.
+Independent full47 plus complete ordinary37/explicit90 review has `PASS_WITH_FOLDED_PRIMITIVE_LIMITS`.
+The original direct scope is368 lines/six files/two whole originals.
+The standard three reported axioms occur.
+No complete query/library/API/global or source-process clearance is claimed.
+Permanent FAIL, the Root receiving incident and all UNKNOWNs remain.
+
+The join to the earlier checked97 consumer is not yet verified.
+Check the same input/graph/heap/class/query/Caller identities before composing the results.
+Do not replace that join with an assumed selection equality.
+The new proof did not consume NEW97/NEW137 or the conservative OLD149 map.
+SelectedOrdinary68–91 does not contain its complete enclosing conditional.
+The full typed-header end remains UNKNOWN.
+
+Original activation-key coverage and original BOTH-worker resource bounds remain the main gap.
+The separate private mu-resource candidate still fails.
+Keep all full API/Haskell, finite/exact-size/order/inverse and older constructor/equality targets active.
+No Haskell file changed in this increment.
+Current selector controller: `/tmp/mcfta-initial-decision-adapter-normal-20261104/CURRENT-HANDOFF.json`.
+
+Earlier notes follow unchanged.
+
 # 2026-11-04: cached initializer and selected prefix
 
 Code commit: `64e07038de9c4d28fecb254c407bf80dee582eac` adds SourceCurrentSelectedInitialCheck and one Audit import.

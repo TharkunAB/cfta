@@ -1,3 +1,34 @@
+# Restart after actual initial pure selection
+
+The full goal is active. Code commit: `732ec94207354bda387a7f692a8e9d99ad1b55db`.
+Refresh formalize and main. Use fast-forward only for formalize and preserve all work.
+Normal pushes to `git@github.com:TharkunAB/cfta.git`, `refs/heads/formalize`, remain authorized.
+Read the latest HANDOFF/FINDINGS prefixes and `/tmp/mcfta-initial-decision-adapter-normal-20261104/CURRENT-HANDOFF.json`.
+
+The actual initial pure selector result is now derived under the existing original input/progress gates.
+All five required checks pass.
+Independent full47 and ordinary37/explicit90 review has `PASS_WITH_FOLDED_PRIMITIVE_LIMITS`.
+Original direct scope: 368 lines/six files/two whole originals.
+Full query/library/API/global clearance remains absent.
+
+Next join this theorem to the earlier checked97 consumer with the same actual input/graph/heap/class/query/Caller bindings.
+That binding is not yet verified. Do not supply the selection equality as a premise.
+NEW97/NEW137 and the conservative OLD149 lineage were not read by this proof task.
+SelectedOrdinary68–91 is not a complete enclosing conditional. Its full header end remains UNKNOWN.
+Do not reuse the older complete-clause label without its recorded qualification.
+
+Continue original activation-key coverage, finite-key carrier and original-state bounds for BOTH workers.
+The private mu candidate is still failing. Its current controller is `/tmp/mcfta-mu-prepare-resource-normal-20261104/CURRENT-HANDOFF.json`.
+Keep every case/API/Haskell, finite/exact-size/order/inverse target active.
+Preserve optimized interned and older constructor/equality work.
+Record all Haskell fixes in FINDINGS. No Haskell fix was established in this increment.
+Preserve all actual failures, Source368 actor histories, Root receiving incident, UNKNOWNs and whole limits.
+Do not repeat passing checks without a new reason.
+The exact32 cleanup deletion remains unapproved. Do not delete it or restart its completed audit.
+Do not pause the goal.
+
+Earlier restart content follows unchanged.
+
 # Restart after the cached-initializer consumer
 
 The full goal is active. Code commit: `64e07038de9c4d28fecb254c407bf80dee582eac`.

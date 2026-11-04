@@ -1,3 +1,38 @@
+# 2026-11-04: initial selector result is derived
+
+Code commit: `732ec94207354bda387a7f692a8e9d99ad1b55db`.
+`MicroCFTA.SourcePruningEnumerationRestart.initial_next_of_pending` specializes the existing positive producer to the literal initializer.
+It derives the actual pure selector result under the original input/progress gates.
+No selected endpoint, selection equality, future-state or generic before-state premise was added.
+The binding to the earlier97 consumer and actual public-API use remain unverified.
+
+All five required checks pass.
+Independent full47 and complete ordinary37/explicit90 review has `PASS_WITH_FOLDED_PRIMITIVE_LIMITS`.
+Only the three standard reported axioms occur.
+Direct original source: 368 lines/six files/exactly two whole originals.
+Full query, library, API, global resource and source-process clearance are not claimed.
+
+The compiled producer namespace differs from its filename.
+The complete original context line13 resolves the required names.
+The failed52v1 and47v2 remain retained. Their repairs did not add a selected result premise.
+The R42 controller retains eleven commands: six PASS and five FAIL.
+
+Source completeness correction: SelectedOrdinary's enclosing conditional starts68 and is not complete by91.
+Its opaque92–219 suffix does not certify the full header end.
+The older149 lineage map must keep this qualification.
+The new theorem did not consume that map or NEW97/NEW137.
+
+A source-derived message reached Root before a receiving-origin admission at01:21.
+The actual message, known positive ranges and unresolved origins are retained.
+Root semantic exposure is not zero. Permanent FAIL and all UNKNOWNs remain.
+The private mu-resource candidate still fails. No global activation-key or BOTH-resource theorem was established.
+
+Haskell: no Haskell file changed. No new Haskell defect or fix was established.
+All earlier Haskell findings remain unchanged.
+Full checkpoint: `/tmp/mcfta-initial-decision-adapter-normal-20261104/CURRENT-HANDOFF.json`.
+
+Earlier findings follow unchanged.
+
 # 2026-11-04: cached initializer supplies the history condition
 
 Code commit: `64e07038de9c4d28fecb254c407bf80dee582eac`.

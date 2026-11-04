@@ -1,3 +1,73 @@
+# 2026-11-04: actual initial pure selection
+
+Code commit: `732ec94207354bda387a7f692a8e9d99ad1b55db`.
+The full formalization goal remains active.
+
+`MicroCFTA.SourcePruningEnumerationRestart.initial_next_of_pending` derives the actual pure selector result for the literal initializer.
+It uses the existing original input and progress gates.
+It reuses the existing positive producer.
+It does not take a selected endpoint or a selection equality as a premise.
+It adds no future-state premise, generic before-state parameter, or alternate initializer.
+
+This is a local initial-call theorem.
+Its binding to the earlier 97-line selected-check consumer is not yet verified.
+Actual public-API initialization and use remain open.
+Global activation-key coverage and original-input resource bounds for BOTH workers remain open.
+Keep all case/API, Haskell, finite-execution, exact-size, size-order and both rank/unrank inverse targets.
+Preserve the optimized interned core and older constructor/equality work.
+
+Source: `lean/MicroCFTA/SourceCurrentInitialNextCheck.lean`, 47 lines, 2674 bytes.
+SHA256: `fa24b87f26c45fd6ecac73b748e25e3f58cca50c98e4f7de0540a3608dbe39e6`.
+Audit adds one import. The prior 4283-line body is a byte-exact suffix.
+Current Audit: 4284 lines, 224900 bytes, SHA256 `8ca927cae85e12f1d75086237dbf1779b741afc1bdb3af570bb9dbd6e461fd4c`.
+
+All five required checks pass.
+Independent review verdict: `PASS_WITH_FOLDED_PRIMITIVE_LIMITS`.
+It covers full NEW47 and complete ordinary37/explicit90 type and axiom reports.
+The original direct scope is 368 lines across six files, with exactly two whole originals.
+Only propext, Classical.choice and Quot.sound occur in the reported axiom sets.
+Literal initializer, operator, result, input and hypothesis bindings passed this local review.
+The review does not clear complete query bodies, library dependencies, public-API use, or global worker bounds.
+No source-process clearance is claimed.
+
+Controller: `/tmp/mcfta-initial-decision-adapter-normal-20261104/CURRENT-HANDOFF.json`.
+Its eleven kernel commands are six PASS and five FAIL.
+Both failed selection versions, the first name query, and two private resource failures remain retained.
+The five required final selection checks all pass.
+Whole author113 and whole reviewer-parent28 are retained with ALL3 and portable metadata checks.
+The reviewer-parent copy includes its nested five-file packet and all external cut/read history.
+No large controller, provider or compiled-library copy was added.
+
+Root received one unplanned source-derived message at 01:21.
+The incident and exact known origin ranges are retained.
+Negative-absence support and an additional imported origin remain UNKNOWN.
+Do not claim Root semantic exposure is zero.
+All permanent FAIL, historical UNKNOWNs, actor unions and whole-file limits remain in force.
+
+The older conservative149 map has a completeness qualification.
+SelectedOrdinary's conditional that starts68 is not complete by91.
+The opaque92–219 suffix is not a certified typed-header boundary.
+The complete header end remains UNKNOWN.
+Do not read that incomplete range as a complete contract.
+The new initial-selection proof uses neither NEW97/NEW137 nor that OLD149 range.
+
+Next verify the same input, graph, heap, class, query and Caller bindings when joining this result to the checked97 consumer.
+Derive the selected endpoint from the new theorem.
+Do not add it as a premise or replace the target with a generic conversion wrapper.
+Continue the original finite-key carrier and activation-site coverage proof in parallel.
+
+The separate mu-resource candidate is private and still fails checking.
+Controller: `/tmp/mcfta-mu-prepare-resource-normal-20261104/CURRENT-HANDOFF.json`.
+Its local resource result and global BOTH-worker resources are not proved.
+NativeView177 has only identity metadata and an UNKNOWN prior bound for the current resource author.
+No semantic source lookup or third whole-file exception is authorized there.
+
+No Haskell file changed and no new Haskell defect or fix was established.
+The exact 32-directory deletion still lacks fresh approval. Do not delete those targets or repeat the completed audit.
+Do not pause or complete the full goal.
+
+Earlier handoff content follows unchanged.
+
 # 2026-11-04: selected check from the cached initializer
 
 Code commit: `64e07038de9c4d28fecb254c407bf80dee582eac`.
