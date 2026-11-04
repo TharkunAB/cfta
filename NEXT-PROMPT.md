@@ -1,3 +1,17 @@
+# 2026-11-04 06:38 CET — derive the actual selected caller conditions
+
+Read the new root `HANDOFF.md` and `FINDINGS.md` prefixes and both live controllers.
+Bind the actual caller packet and the `ready`, `stored`, `profile`, and `fits` conditions of
+`SourcePruningEnumerationSelectedPreparation.complete_resources` to the original caller's inputs.
+Do not add those conditions as new caller premises.
+Do not replace the native stored-substitution operation with `Action.prepare`.
+Reuse the earlier theorem only after proving actual output-to-input and resource-contract binding.
+
+The reservation audit hit its receiving-header source limit. It owns no complete receiver contract.
+Keep its STOP and history. Do not apply partial headers or substitute a final-planner bound.
+The full goal remains active. Preserve all proofs, failures, drafts, and source-history limits.
+No new Haskell fix was established. Record any later fix in root `FINDINGS.md`.
+
 # 2026-11-04 05:54 CET — continue the original-input resource connection
 
 Read the new prefix in root `HANDOFF.md` and the three live `CURRENT-HANDOFF.json` controllers.
