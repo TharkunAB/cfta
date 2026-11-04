@@ -1,3 +1,27 @@
+## 2026-11-04: resume after the packet μ component
+
+Start from code commit `b61f48ce2fc2e2478857e2df43f5d83b2b9a6513` and this documentation checkpoint.
+Read the newest `HANDOFF.md` and `FINDINGS.md` prefixes first.
+`SourceCurrentPacketMuRun.complete` has five passing checks and bounded independent verdict `PASS_BOUNDED_LOCAL_FOLDED_CONTRACTS`.
+It retains canonical `Packet`, availability, and closedness assumptions. It derives four receiving facts and preserves every old μ conclusion.
+Its native run result holds for every fuel value. Its `Bounded` conclusion preserves a supplied limit; it does not produce one.
+
+Next, connect the actual recursive caller to the canonical packet, selection, decoded branch, and `stored35` requirements.
+The actual preparation producer's `packet33` header was outside this independent review. Do not claim that producer or runtime link is complete.
+Keep the original-input finite activation-key carrier and common upfront bound for BOTH recursive workers as the main global target.
+Keep finite execution, exact accepted terms by NODE COUNT, size ordering, BOTH rank/unrank inverses, and full Haskell/library/API correspondence.
+Keep the optimized interned core and all earlier proofs, counterexamples, repairs, and marked drafts.
+
+The live author owner is WRITEHALT. Its complete available snapshot is under `/tmp/mcfta-packet-mu-run-normal-20261104`.
+Author original exposure remains 1,507 rows/34 owners with both whole reservations used. The Scan provenance correction remains UNKNOWN.
+The Prepared runtime source plan is not certified: its conservative estimate is 36 operation rows + 18 alias rows + 15 context/gap rows before any needed Failure rows.
+That 69-row estimate is not an impossibility lower bound. Missing references do not prove that an alias is unused.
+Do not reset any author, reviewer, Root, or global history to acquire the missing context.
+
+Use the existing serial heavy-management guard: 4 GiB max/high, zero swap, five minutes. Verify effective limits before and after each check.
+No Haskell change was made. Record any later Haskell defect or fix in root `FINDINGS.md`.
+Normal pushes to `formalize` remain authorized. The exact 32-directory cleanup in `/tmp/mcfta-tmp-reduction-20261103/CLEANUP-APPROVAL.md` still needs fresh direct approval after automatic review rejected it.
+
 # 2026-11-04 06:38 CET — derive the actual selected caller conditions
 
 Read the new root `HANDOFF.md` and `FINDINGS.md` prefixes and both live controllers.
