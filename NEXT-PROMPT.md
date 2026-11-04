@@ -1,3 +1,13 @@
+## Key-carrier continuation (2026-11-04 14:30 CET)
+
+Keep the complete both-worker goal and all older work. Refresh upstream and continue authorized normal pushes to `formalize`.
+Bound the actual node-identity factor and suspended-path-collection factor from the original inputs. Prove their preservation and actual key equality/hash correspondence.
+Do not replace this target with finite intersection descriptors, a semantic quotient, caller fuel, or a supplied future packet.
+Continue the same native actor at 1870/41/two final wholes. Its actual Frame/write/order/bounded caller facts remain unproved.
+Continue the same operator author at 1809/2/two final wholes. Use exact existing models and complete sparse contexts that exclude unrelated proofs.
+Both NEW parser calibration stops remain retained. Operations parser runs remain zero; no full-context certificate exists.
+Keep Root control `/tmp/mcfta-runtime-packet-producer-normal-20261104-1205`. Record every verified later Haskell repair in root FINDINGS.
+
 ## Current proof priorities (2026-11-04 13:42 CET)
 
 Keep the full goal and all older work active. Refresh upstream before work. Continue normal pushes to `formalize`.

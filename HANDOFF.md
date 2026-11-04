@@ -1,3 +1,16 @@
+## Two-factor key carrier and current source work (2026-11-04 14:30 CET)
+
+The full goal remains active. Preserve both actual workers, the original-input carrier and common bound, exact size enumeration, both rank/unrank laws, and all older work.
+The new static key audit identifies node identity and a suspended-path collection at all three sites. Finite intersection descriptors alone do not establish a finite activation-key carrier.
+No explicit counter or binding-context field occurs in the local key. Indirect dependence, runtime equality/hash behavior, canonicality, and finite-domain preservation remain UNKNOWN.
+The sealed key-shape supplement has 9 files / 35142 bytes. Root verified the complete opaque copy under `haskell-key-shape-provider-v1` in the existing Root control directory.
+Its source history remains 2923/5/two final wholes. No Haskell defect or repair was established.
+Native source work is now at 1870/41/two final wholes. Numeric guards retained complete Frame/Success/checkRepeated cuts; semantic receiving is separately admitted. Actual caller ordering/boundedness and both worker receiver edges remain unproved.
+The operator author remains at 1809/2/two final wholes. All 15 selected existing-model declaration coordinates passed numeric lookup. Their complete semantic contexts remain unowned.
+The NEW missing-token refinement stopped after eight bounded runs with no MISSING observed. Operations parser runs remain zero. No parser certificate or impossibility claim follows.
+The unexecuted 103-row full-prefix proposal was not admitted because it included unrelated proof bodies. Continue with sparse proof-free context plans and the same histories.
+No new Lean candidate or kernel theorem exists. Keep every earlier FAIL, STOP, unknown bound, failed draft, and partial unavailable header.
+
 ## Key-flow result and current proof boundaries (2026-11-04 13:42 CET)
 
 The full goal remains active. Preserve both actual workers, the original-input carrier/common bound, the optimized interned core, and all older work.
