@@ -1,3 +1,32 @@
+# 2026-11-04 05:54 CET — resource connections still missing
+
+This increment adds source analysis. It adds no kernel-checked theorem or Haskell fix.
+The checked initializer-to-selected-prefix result remains the latest proof checkpoint.
+Its existing premises still apply.
+
+The ordinary `Ranges` condition guards ordinary entry.
+The source mu branch in `SelectedValue.run` uses the stored-substitution operator in `Mu.complete`.
+The existing `Entry.complete` conditions are source-compatible with the mu resource conditions.
+This compatibility has no kernel check yet.
+Deriving the existing entry conditions from the actual original caller remains open.
+Adding `storage` or `inside` as new caller premises does not close that gap.
+
+Both reservation modules already provide `reserved_computed` and `reserved_of_final_room`.
+Their displayed local argument definitions have received a bounded source review.
+Imported-contract closure, original-input binding, and a common bound for both workers remain open.
+The review has reached the input-room interfaces in `IncomingReservation`,
+`AllocatedNativeResourceForecast`, and `ParentInitialRoom`.
+Local `final`, `step`, and `stage` declarations carry noncomputable markers.
+Their classification as forecast helpers or original executable operators remains unknown.
+This review does not establish executability.
+
+Live source plans, ledgers, and opaque reports are referenced by the three controllers in the new
+root `HANDOFF.md` prefix. The old global-carrier role retains its semantic source hard stop.
+The independent review does not clear the global source-process FAIL or historical UNKNOWN limits.
+
+Haskell handoff: no new Haskell defect or fix was established in this increment.
+Full API and Haskell correspondence remains part of the unfinished goal.
+
 # 2026-11-04: derive the initial selected prefix
 
 Verified code: `baa8bc9076d4d47e69aa0b796683ce18bad43cb7`.

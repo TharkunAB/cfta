@@ -1,3 +1,43 @@
+# 2026-11-04 05:54 CET — resource-gap review in progress
+
+This update records source review. It adds no checked theorem.
+The last checked proof checkpoint is `eb61b9e040016eaae76b7602d47293a20f5cb0dd`.
+Under the existing premises, the literal initializer yields the actual selected prefix.
+The proof derives the selection endpoint.
+
+The objective still covers both recursive workers and the actual Haskell library.
+It includes a finite activation-key carrier and upfront bounds from the original input.
+It also includes finite execution, exact accepted terms at each node count, size ordering,
+and both rank/unrank inverses. Retain the optimized interned core and constructor/equality work.
+
+The ordinary `Ranges` condition guards ordinary entry.
+The mu branch of `SelectedValue.run` uses the same stored-substitution operator as `Mu.complete`.
+This source binding has not received a kernel check.
+Deriving the existing entry `storage` and `inside` conditions from the actual original caller is open.
+Do not add those conditions as new caller premises to close the gap.
+
+Both reservation modules contain `reserved_computed` and `reserved_of_final_room`.
+The bounded review has closed their displayed local argument definitions.
+Imported-contract closure and original-input binding remain open.
+The common upfront bound for both workers remains unproved.
+The review has reached `IncomingReservation`, `AllocatedNativeResourceForecast`, and `ParentInitialRoom`.
+Read the live controllers before the next source acquisition:
+
+- `/tmp/mcfta-mu-activation-normal-20261104/CURRENT-HANDOFF.json`
+- `/tmp/mcfta-original-carrier-normal-20261104/CURRENT-HANDOFF.json`
+- `/tmp/mcfta-reservation-interface-audit-normal-20261104/CURRENT-HANDOFF.json`
+
+The old global-carrier role retains its semantic source hard stop.
+The independent review does not clear its history or the global FAIL/UNKNOWN limits.
+All 78 files in its available continuation owner are retained with their controls.
+The retained owner has 89 files. The 244714-byte archive and Root replay pass metadata verification.
+Receipts are in `/tmp/mcfta-original-carrier-normal-20261104/retention-v1/`.
+
+No Haskell defect or fix was established in this increment. Root `FINDINGS.md` records this boundary.
+The separate 32-directory cleanup still requires the exact approval in
+`/tmp/mcfta-tmp-reduction-20261103/CLEANUP-APPROVAL.md`.
+The full goal remains active.
+
 # Checkpoint 2026-11-04: derive the initial selected prefix
 
 Code commit: `baa8bc9076d4d47e69aa0b796683ce18bad43cb7`.
