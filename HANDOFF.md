@@ -1,3 +1,20 @@
+## Checked returned representative paths (2026-11-04 17:42 CET)
+
+Keep the full formalization goal active. Preserve both actual workers, the optimized interned core, all older work, and every failed draft and guard.
+The parent checkpoint is `52ae031a82c6bc3e6758e0a279f6ee3697d467ba`.
+The new module is `lean/MicroCFTA/SourceCurrentSelectedStepCheckedTotal.lean`: 74 lines, 4734 bytes, SHA256 `a671cb88f57b2c2bc738fef721ae9ce4e094d425b41b1631c7527be280fd703f`.
+Its `complete` theorem retains the original eight gates, five fuel witnesses, nine universal binders, three instances, full `Valid` result, degree clauses, and Frame.
+It derives `UnionFind.Total` for the actual returned narrowed state's representatives from the original paths gate and the existing Frame transport lemma.
+Five final compiler/build invocations passed under serial 4 GiB max/high and zero swap. The public types are complete. The only axioms are `propext`, `Classical.choice`, and `Quot.sound`.
+Root control remains `/tmp/mcfta-runtime-packet-producer-normal-20261104-1205`. This increment uses the `R56-` records.
+Native history is 2058 original-equivalent rows / 43 owners / two final wholes. Frame ownership is 71/145. Packet ordering/boundedness needs separate source admission.
+The trie author is at 3000/7/two final wholes, Std contracts4/project targets3. The whole-collection finite-family statement is approved. Five further list contracts need exact metadata and a separate closed-type receipt.
+The operator author is at 2024/8/two final wholes/API1. The action definition and actual pair owner are acquired. A larger minimal contract query is proposed only.
+Keep global source-process FAIL, Root original upper UNKNOWN, old metadata failures, unsupported `pp.width` output, and unexecuted literal-source plans. Use `format.width` with Lean 4.34.1.
+No Haskell fix was made. Record every later verified Haskell fix in root FINDINGS for the external agent.
+The full key carrier, generated/returned graph preservation, both worker links, common original-input work bound, exact size contracts, rank/unrank laws, and Haskell/runtime/API correspondence remain required.
+The exact 32-directory cleanup request remains pending. The read-only duplicate audit passed all 32 targets. This continuation grants no deletion approval.
+
 ## Checked frame and trie-family checkpoint (2026-11-04 16:48 CET)
 
 Keep the full formalization goal active. Preserve both actual workers, the optimized interned core, and all older constructor and equality work.

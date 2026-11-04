@@ -1,3 +1,16 @@
+## Checked representative paths after selected steps (2026-11-04 17:42 CET)
+
+`MicroCFTA.SourceCurrentSelectedStepCheckedTotal.complete` retains the full selected-step `Valid` result, all degree clauses, and the checked-state Frame.
+It also proves `UnionFind.Total checked.representatives` for the actual returned narrowed state.
+The theorem keeps the original eight gates, five fuel witnesses, nine universal binders, and three instances. It adds no premise.
+The original `paths` gate supplies the input representative paths. The existing `Frame.total` lemma transports them to the checked representatives.
+Five compiler/build checks passed: strict candidate, full Lake audit, strict audit, ordinary public type, and explicit public type.
+The theorem uses only `propext`, `Classical.choice`, and `Quot.sound`. The explicit type has no ellipses.
+All earlier Audit bytes and proof files remain intact. No Haskell source or API changed, and no Haskell fix was established.
+Whole-worker execution, full returned packets, generated-edge preservation, the common work bound, and runtime correspondence remain open.
+The next collection target computes a finite family of whole suspended collections from the original list. Its statement is approved but unproved.
+The actual action uses `MicroCFTA.IntersectSchedule.pair`. Its defining owner is confirmed. Primitive domain preservation and the physical/schedule bridge remain open.
+
 ## Checked step frames and finite trie descent (2026-11-04 16:48 CET)
 
 `MicroCFTA.SourceCurrentSelectedStepCheckedFrame.complete` retains the original selected-step `Valid` result and all degree clauses.
