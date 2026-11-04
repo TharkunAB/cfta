@@ -1,3 +1,20 @@
+## Checked whole-collection descent checkpoint (2026-11-04 18:19 CET)
+
+Keep the full formalization goal active. Preserve both actual workers, the optimized interned core, all older constructor/equality work, and every proof, repair, counterexample, marked draft and failed guard.
+The parent checkpoint is `b2fa244fd24c0489415aafdf0207390ca800c66b`.
+The new module is `lean/MicroCFTA/EqualityTrieCollectionFamily.lean`: 91 lines, 4135 bytes, SHA256 `85515b488b8d39637ecb4468823b92fc4b78c429245ae57e19ff98c03886319a`.
+Its `family_joint` theorem computes a family of actual suspended collections, includes the original, proves all-index actual descent closure, and gives the bounded-index iff using that family length.
+The constructor retains the original variable at each selected position. It needs no finite-variable assumption. The filter predicate stays opaque.
+Five final compiler/build invocations passed under serial 4 GiB max/high and zero swap. Only `propext` and `Quot.sound` occur. Both public types are complete and the explicit type has no ellipses.
+All old Audit and documentation bytes remain intact. Root control is `/tmp/mcfta-runtime-packet-producer-normal-20261104-1205`; this increment uses `R57-` records.
+The trie author is at 3010 original-equivalent rows / 8 owners / two final wholes, Std contracts9/project targets3. Freeze its checked candidate and all old source histories.
+The native actor is at 2098/45/two final wholes, Frame71/145. It acquired Stratified and PendingBound. Satisfies and HasHole bindings are confirmed; minimal owner metadata is admitted. Ordering, pending bounds, caller/counter links, and full returned Packet remain unproved.
+The operator actor is at 2085/9/two final wholes/API3. The actual pair, descriptor contracts and OriginalInput.inventory are acquired. The latter requires actual Facts. Its canonical-domain finite-family statement is drafted, not proved.
+Do not use OriginalInput.member as the inventory-membership contract. Keep that earlier dependency STOP and every other FAIL/STOP/UNKNOWN, source-history incident, and unavailable partial Action header.
+No Haskell repair was made. Record every later verified Haskell fix in root FINDINGS for the external agent.
+Generated edges and pending insertion/update closure, actual NodeId/interner/equality/hash/Memo correspondence, both worker receiver links, returned/subsequent graphs, the common original-input internal-work bound, exact size/order/rank-unrank contracts, and Haskell/runtime/API correspondence remain required.
+The exact 32-directory cleanup approval is still pending. Delete none of that set without the requested direct approval.
+
 ## Checked returned representative paths (2026-11-04 17:42 CET)
 
 Keep the full formalization goal active. Preserve both actual workers, the optimized interned core, all older work, and every failed draft and guard.
