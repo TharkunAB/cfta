@@ -1,3 +1,29 @@
+## Key input flow and internal work bound (2026-11-04 13:42 CET)
+
+The static source trace checked all three recursion-key sites in `Enumeration.hs`: 900, 1006, and 1542.
+Each site has conditional local paths from results of `Data.CFTA.Interned.intersect` and `Data.CFTA.Interned.unfoldOuterRec`.
+This trace does not establish fresh identities. It does not establish an original-only identity invariant.
+The finite-carrier proof must cover the identities of these operation results before it can restrict all keys to original identities.
+Direct worker size, depth, numeric fuel, and limit arguments are absent in this trace. Counter state is present.
+The outer ordered wrapper accepts caller fuel and limit values. The audit did not derive those values from the original input.
+The audit did not prove that these values bound nested raw work.
+The separate depth API does not pass depth to these worker arguments. The helper uses a fixed budget.
+These facts leave generated-node preservation and the common original-input work bound open.
+They establish no runtime counterexample, Haskell defect, or Haskell repair.
+
+The same audit remains at 2923 examined rows / 5 originals / two final whole reservations. It acquired no new source rows.
+Metadata: `/tmp/mcfta-haskell-input-dataflow-supplement-20261104-1316/INPUT-DATAFLOW-RESULT-METADATA.json`, 8398 bytes, SHA256 `fbf165151f380e24dce98027c1fe4ab9f783b4c151999717f56123ff9beaf5b4`.
+The sealed provider has 12 files, 7 directories, and 137384 bytes. Root retained a verified opaque copy.
+The earlier boundary/getter branch audit stays valid. It establishes no finite key carrier.
+
+The descriptor review stopped under one guard policy: 463 Operations rows exceed its 443-row limit.
+The private specification remains unread by the reviewer. This stop does not establish a defect or universal review impossibility.
+A separately admitted parser strategy is in progress. It must preserve the full required context and the same source limits.
+The actual runtime Packet still needs ordering and boundedness proofs at its actual caller.
+Generic order-transport contracts are available. Their actual Frame/write conditions remain unproved and are not new premises.
+The existing Action completion header exceeded that actor's source cap. Its partial header remains unavailable and unused.
+No new kernel theorem or Haskell file change occurred in this increment.
+
 ## Intersection and cache audit boundary (2026-11-04 12:45 CET)
 
 The checked proof state remains `SourceCurrentSelectedPreparationMuRun.complete` at code commit `3c730dc08bfe53fc2a6f6c899efcdbcb7f39f265`.

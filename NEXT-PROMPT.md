@@ -1,3 +1,21 @@
+## Current proof priorities (2026-11-04 13:42 CET)
+
+Keep the full goal and all older work active. Refresh upstream before work. Continue normal pushes to `formalize`.
+Use Root control `/tmp/mcfta-runtime-packet-producer-normal-20261104-1205`.
+The new static trace routes intersection/unfolding results to all three recursion-key sites. It proves neither freshness nor original-only identities.
+Prove preservation for actual operation-result identities and actual memo keys. A finite descriptor set alone does not complete this target.
+Derive the common original-input bound on work inside both actual workers. Outer caller fuel and the helper fixed budget do not yet supply that theorem.
+
+Continue the same descriptor author 1809/2/two final wholes and reviewer 1423 examined / 1345 semantic / 14 originals/two final wholes.
+Preserve reviewer STOP 463>443 for its exact full-command policy. Its Operations/specification source remains unread.
+The separately admitted full-parser metadata strategy must pass its NEW calibration and complete-context gates before a new receiving plan.
+No history reset, third whole, omitted context, or grouped-envelope shortcut is authorized.
+Continue the same native actor 1782/38/two final wholes. Derive actual Frame/write/ordering/bounded facts; do not supply them as new gates.
+The unread Action completion header remains unusable at owner 74<75. Do not reprove or rename it as an API workaround.
+Keep the two actual worker edges and old/native operations distinct until exact bindings are proved.
+Any later Haskell fix belongs in root FINDINGS. No Haskell repair was established by this trace.
+Preserve all proofs, failed guards, counterexamples, drafts, source-process FAIL/UNKNOWNs, and unapproved artifacts.
+
 ## Current next work (2026-11-04 12:45 CET)
 
 Read the current prefix of HANDOFF and root FINDINGS. Keep the full formalization goal and all older work active.
