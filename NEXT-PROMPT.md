@@ -1,3 +1,16 @@
+## Continue after checked representative paths (2026-11-04 17:42 CET)
+
+Keep the full original goal, both workers, exact node-count terms, size order, both rank/unrank inverses, and all earlier work.
+Refresh upstream before work. Normal pushes to `formalize` remain authorized.
+The new `SourceCurrentSelectedStepCheckedTotal.complete` theorem preserves full `Valid`, degree clauses, and Frame, and derives `UnionFind.Total` for actual returned checked representatives from the original gates.
+Continue from Root control `/tmp/mcfta-runtime-packet-producer-normal-20261104-1205` and its `R56-` records. Five final checks passed; all old Audit bytes remain exact.
+Continue the same native actor at 2058/43/two final wholes. Derive remaining Packet facts from the original gates. Admit exact predicate/context access before use. Add no resource supplier.
+Continue the same trie author at 3000/7/two final wholes, Std4/project3. The whole-collection family statement is approved. Acquire only the five planned list contracts before the bounded proof.
+Continue the same operator author at 2024/8/two final wholes/API1. Use the actual binary pair image of original input inventory. The exact pair owner is confirmed. Admit its minimal closed-contract query only after source accounting and Root snapshot verification.
+Preserve all prior FAIL/STOP/UNKNOWN records and unavailable partial Action header. No source-history reset, third whole, or imported-helper expansion is authorized.
+Keep full returned packets, generated edges and pending updates, actual identity/equality/hash, subsequent-worker inputs, and the common upfront internal-work bound explicit.
+Record every later verified Haskell fix in root FINDINGS. None was made here. Cleanup approval remains pending.
+
 ## Continue after checked frames and trie descent (2026-11-04 16:48 CET)
 
 Keep the full original goal, both actual workers, exact accepted terms per node-count size, size order, both rank/unrank inverse laws, and all older work.

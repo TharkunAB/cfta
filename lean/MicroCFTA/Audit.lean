@@ -1,3 +1,5 @@
+import MicroCFTA.SourceCurrentSelectedStepCheckedTotal
+
 import MicroCFTA.EqualityTriePathFamily
 import MicroCFTA.SourceCurrentSelectedStepCheckedFrame
 import MicroCFTA.SourceCurrentSelectedPreparationMuRun
@@ -4292,3 +4294,6 @@ run_cmd do
 #print axioms MicroCFTA.SourceCurrentSelectedStepCheckedFrame.complete
 
 #print axioms MicroCFTA.EqualityTrie.PathFamily.family_joint
+
+#check MicroCFTA.SourceCurrentSelectedStepCheckedTotal.complete
+#print axioms MicroCFTA.SourceCurrentSelectedStepCheckedTotal.complete
