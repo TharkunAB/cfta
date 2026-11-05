@@ -1,3 +1,44 @@
+## Continuation — 2026-11-05 16:38 CET
+
+This checkpoint adds no mathematical theorem. The full proof goal remains open.
+The common bound must cover both actual recursive workers and every generated,
+returned, and subsequent state. Keep the original operands and the requested size.
+Do not add a carrier, closure, resource, completed-worker, success, fuel,
+`OriginalInput`, `NodeScope`, or validity premise to the frozen top-level goal.
+
+Native receiving257 passed the complete ordinary reject definition and the
+complete TYPE of the selected existing failure theorem. It passed all 45 final
+physical fences. The bounded compatibility check reports NO for that theorem
+against the actual bound reject operation. Do not transport the theorem across
+that mismatch. This result is not an impossibility theorem. Preserve the earlier
+receiving255 STOP and the partial247 scope incident. No mathematical theorem
+was completed in this continuation.
+
+The intersection actor charged the exact Prelude 1–64 window before all guards.
+Its raw-byte locator found no `optParam` candidate in that window. Current
+consumption is 2524/27 and API 32. The Root numeric-origin attempt stopped at
+OUTPUT_CAP; its output remains opaque. The selector binding alone does not
+establish all relevant effects of the selective-open command. A new complete
+effect-certificate target preserves the same guard; no certificate passed.
+The parent header guard remains closed.
+
+Haskell fixes: none in this continuation. The guarded selected-GHC capture
+reports the module label `GHC.Utils.Outputable`. It does not establish installed
+source correspondence or a provider law. The public constructor name
+`QuietBinIFace` has zero fields in the already-admitted Trace interface.
+Zero fields alone do not establish its typing or use contract. Verify that
+contract before using it to avoid the `SDoc` callback dependency in the inspection
+helper. Keep the whole Trace interface OPEN until all required contracts close.
+Keep the six original open dependencies and the added `SDoc` gap visible.
+
+All prior counterexamples, repairs, failures, and marked drafts remain. The
+strongest unconditional original-input result remains the empty-input theorem.
+Earlier conditional component theorems also remain. Neither interface progress
+nor metadata receipts establish the common actual-worker bound or Haskell
+correspondence. Do not claim end-to-end completion.
+
+---
+
 ## Current findings: 2026-11-05 15:20 CET (R71)
 
 No Haskell source fix occurred. The changes are inspection evidence and private captured-interface receipts. An external implementation pass must keep this distinction. Record each future Haskell source fix here.
