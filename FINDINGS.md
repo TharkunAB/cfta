@@ -1,3 +1,19 @@
+## Current findings: 2026-11-05 15:20 CET (R71)
+
+No Haskell source fix occurred. The changes are inspection evidence and private captured-interface receipts. An external implementation pass must keep this distinction. Record each future Haskell source fix here.
+
+CheckHiWay now has a closed captured interface. TraceBinIFace remains open on GHC.Utils.Outputable.SDoc and IO. Six original gaps remain, plus the new SDoc dependency. Exact compiled rows1-3 and5-9 passed complete-kind/declaration/context checks and12 input/final pin fences. Source equivalents are the already charged complete commands72-73 and75-77. Source history remains5410/10/twoFINAL. This does not prove actual Name/unit/provider identity or source-to-installed semantic equality.
+
+The restricted source checker passed24 new synthetic checks. It accepted both complete ordinary data commands and their observed next layout boundaries. The exact -O2 pragma is approved only for this syntax inspection. No general parser, optimizer, accepted-program or compiler-correspondence law follows. This supersedes earlier claims that the source-span/configuration inspection remained pending. All old assertion causes, guard stops and storage breaches remain recorded.
+
+Native partial247 has a replay-scope incident. Its293 literal rows and API footprints24+25 had prior charge coverage. Fresh full reservation/order/final-pin fences and separate prior Root replay admission were missing. Audit249 confirms historical coverage and preserves those missing conditions. It gives no retroactive clearance. The full partial is incomplete and uncompiled. Root can review only its new proof-free header; the local expanded equation in the body can disclose private interface capability. The fixed full8/5/9 target remains open. The exact Action reject reference check250 passed with13 stable input/final pins. It positively binds MicroCFTA.EnumerationState.reject in MicroCFTA.EnumerationState at[30,25,30,31]. This is metadata only. Its kind and complete contract remain unreceived.
+
+Intersection metadata now identifies the literal pre-parent import/open commands. The complete resolveNamespace interface was received. An exact Nix query binds Lean.resolveNamespaceCore as a definition in Lean.ResolveName. Neither observation proves namespace correctness, read-only behavior, actual pre-parent environment or helper implementation laws. Its actual Core declaration envelope is330-338. A future TYPE-only receipt would add nine rows within the same701-line original; it has not been charged or queried. Current history is2451/27/API31/twoFINAL. The full Facts+Available original-input theorem and general Some case remain unproved.
+
+R71 adds no completed mathematical theorem. The latest mathematical increment remains unconditional empty_originalInput. Both actual recursive workers, their common original-input/requested-size bound and complete runtime correspondence remain open. SourceProcessFAIL and Root upperUNKNOWN remain permanent. Declared build pins are not complete transitive provenance. No cleanup target was deleted; the exact32-path approval is still pending.
+
+---
+
 ## Current findings: 2026-11-05 14:30 CET (R70)
 
 R70 has no new completed mathematical theorem. The full general original-input witness, both actual recursive workers and their common original-input/requested-size bound remain open. The latest mathematical increment remains empty_originalInput. The previously published bounded checker is diagnostic evidence; its soundness and the full runtime/source correspondence remain open.
