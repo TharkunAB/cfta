@@ -1,3 +1,19 @@
+## Current findings: 2026-11-05 13:30 CET (R69)
+
+R69 adds a reproducible bounded diagnostic. It adds no mathematical theorem. The general original-input witness, both actual recursive workers and their common bound remain open.
+
+`lean/CheckNativeClosure.lean` contains the actual fixed-five TYPE/value traversal. The implemented checks passed for five declarations with no rejected or unknown result. The corrected repository copy passed under Nix and reproduced the exact accepted opaque output. The limits are 4096 nodes shared by TYPE/value, depth 128 and 16 universe parameters per declaration. It follows no referenced implementation. The result is bounded checker evidence. Checker soundness, native effect transport, ordinary projection laws and source-object correspondence remain open. The two modifyGet definitions are now accepted as complete ordinary interfaces; the next proof attempt stops at Pure.pure.
+
+The nodeEdges matcher exists in the compiled environment, but its generating origin is absent from the checked index. The full Facts + Available target remains unchanged. v8 is unproved and uncompiled. The literal parent context stopped before body interpretation at an open command. A restricted keyword diagnostic does not resolve the complete header or the matcher origin.
+
+Build-input coverage correction: the 75 records checked by the earlier direct-build wrapper were declared pins, not a complete transitive inventory. Three Lake configuration files were omitted: lean/lakefile.toml, lean/lake-manifest.json and lean/lean-toolchain. shell.nix was included. The successful compiler/Audit runs and their declared pin observations remain recorded. Full source correspondence remains UNKNOWN. The new Nix validation includes the missing configuration pins. Preserve the older overclaims as retracted.
+
+R69 made no Haskell source fix. Guarded GHCi output reports `CheckHiWay` and `TraceBinIFace` in `GHC.Iface.Binary`, `FilePath` in `GHC.Internal.IO`, and `IO` in `GHC.Internal.Types`. These are printed owner labels. Closed dependency interfaces remain zero. All seven dependency gaps remain open. Actual Name and unit identity, provider correspondence, and source-to-installed correspondence remain unknown. The inspection tools repaired their whitespace and exact declaration-header guards. These repairs changed inspection code. The earlier `AssertionError` does not establish a hash mismatch or source drift. Root's current size and hash match the stored expectations. The earlier `STOP_PIN_UNKNOWN` and `PHASE_A_STOP_PRECISE_UNKNOWN_NO_SOURCE_REPLAY` records remain preserved. The old metadata owner still exceeds its 48,000-byte cap at 52,214 bytes. All files and prior source histories remain preserved.
+
+Source process FAIL and Root original-source upper UNKNOWN remain permanent. Preserve the R68 board exposure incident, every old proof failure, partial and counterexample. No /tmp deletion occurred in R69.
+
+---
+
 # Current findings — 2026-11-05 11:27 CET
 
 ## New verified Lean component

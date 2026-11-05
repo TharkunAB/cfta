@@ -1,3 +1,25 @@
+## Current checkpoint: 2026-11-05 13:30 CET (R69)
+
+The goal is active. This checkpoint adds a reproducible diagnostic and records open dependencies. R69 has no new mathematical theorem.
+
+Keep the full goal. Cover both actual recursive workers and all generated, returned and subsequent states. Derive one bound from the original inputs and requested size. Prove exact counts and order, both rank/unrank directions, and Haskell/runtime/source/API/ID/cache/interner/Eq/hash correspondence. Keep the actual operands. Do not add a supplied carrier, closure, resource, completed worker, success, fuel, Original, NodeScope or validity premise. Keep the native 8 gates, 5 fuel witnesses and 9 universal binders. A/C/D/carrier/Frame/CheckedTotal/CollectionFamily remain frozen.
+
+The latest mathematical increment remains `empty_originalInput` in `lean/MicroCFTA/SourceRecursiveIntersectionEmptyOriginalInput.lean`. It proves that the empty recursive input has an original witness in every source state. It needs no hypothesis and reports only `propext`. It does not prove the general Some case or the common recursive-worker bound.
+
+`lean/CheckNativeClosure.lean` now contains the bounded five-declaration diagnostic. Its corrected repository copy passed under Nix. Its complete opaque output matches the earlier accepted capture. The implemented checks passed for all five fixed TYPE/value pairs. This is diagnostic evidence. Checker soundness and native effect transport remain open.
+
+Next work:
+
+- Intersection: the exact Facts + Available to OriginalInput(inputOf value) theorem remains open. v8 is unproved and uncompiled. It stops at `nodeEdges.match_1`. The matcher exists, but its generating source origin is unresolved. The literal parent context stopped at row 13. A restricted diagnostic identified an open command. Do not infer its namespace target or complete header form.
+- Native: the two complete modifyGet definitions are accepted. The next unchanged observed-state target stops at Pure.pure. A plan for the remaining required projection chain is pending.
+- Haskell: no source fix in R69. All seven dependency interfaces remain open. Printed owner labels are metadata. Complete source spans and provider/source correspondence remain open.
+
+Source process FAIL and Root original-source upper UNKNOWN remain permanent. R69 also retracts the claim that 75 declared build pins cover all transitive inputs. Three Lake configuration files were omitted. Full source correspondence remains UNKNOWN. Preserve every earlier failure, partial proof and counterexample.
+
+Live restart state: `/tmp/mcfta-runtime-packet-producer-normal-20261104-1205/CURRENT-HANDOFF.json`. Read its canonical progress path and hash. No /tmp deletion occurred in R69. The exact 32-target cleanup list still requires the previously requested approval. Pushes to formalize remain authorized.
+
+---
+
 # Active proof checkpoint — 2026-11-05 11:27 CET
 
 The goal is active. Mathematical commit `9baa51a6ee72126d36a705748ed6c215d65331f3` proves `OriginalInput source Input.empty` for every source state. It has no hypotheses. The proof uses only `propext`. The integrated build, strict public audit, and fresh imported theorem identity checks passed.
