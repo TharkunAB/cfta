@@ -1,3 +1,51 @@
+## [2026-11-05 05:03 CET] R66 current handoff
+
+Goal status: ACTIVE. Continue the full formalization. This checkpoint adds verified dependency interfaces and metadata. It adds no mathematical theorem. The latest mathematical commit is `3ac8dc395c3b024f5bac4747c85e2e12ece6bdce`. The preceding published head is `39bc10c1f9afbd59a6dd9a2b2ad94ffdd450c4d7`. A fresh fetch found no new upstream changes. Main `bd5a406a6a3f84b7e3ae0906082783911509df83` is contained. Preserve unrelated `.hypha/`.
+
+### Target and strongest current statement
+
+Prove the full contract for both actual recursive workers. Cover every generated, returned, and subsequent state with one common original-input/requested-size bound. Prove exact counts, order, both rank/unrank directions, and correspondence to actual Haskell/runtime/source/API/ID/cache/interner/Eq/hash behavior. Keep native8/5/9 fixed. Do not add a carrier, closure, resource, completed-worker, final-state, success, or fuel supplier premise.
+
+The latest local theorem is `MicroCFTA.SourceRecursiveIntersectionInputView.nodeScope_originalInputs`. It is in `lean/MicroCFTA/SourceRecursiveIntersectionNodeScopeOriginalInputs.lean` (2828bytes,48lines, SHA256 `b222752eaf8ccd144e19198ff3026a6dad88da9ff6751a276412188880c52ece`). Existing `Facts source` and `NodeScope source request` imply `OriginalInput source` for both `inputOf request.left` and `inputOf request.right`. The `Facts` binder is unused and retained. The owned `inputOf` definition is unfolded. Other helper definitions remain folded. Strict and public checks passed. Both Audit runs passed. The axiom check reported `propext` and `Quot.sound` only. The existing carrier bound uses issued counter N. It does not supply the required bound from the original input.
+
+The largest global gap remains the common bound and invariant preservation across both actual recursive workers. The immediate intersection gap is validity of the actual entry operands and state. The actual-entry association is unproved. Keep the operands fixed. Do not substitute witnesses or add caller `Original`, `NodeScope`, validity, closure, or completion assumptions. Global coverage, native execution composition, rank/unrank integration, and complete Haskell correspondence remain open.
+
+### Intersection dependency state
+
+Same actor: `/root/intersection_key_closure`. Actual usage:2327lines/20originals, API19, two whole originals. Project2192/12 plus Std135/8. RequestScope usage is40/157, with rows1–33 and35–41. Row34 is unread. Full retained Step semantic scope is over cap. Full eight-law RequestScope scope is over cap. Keep these STOPs.
+
+The exact `initial_scope` closed type receipt passed privately. The seven lines35–41 were charged before processing. Its public axiom query passed and reported only `propext`. No actual-entry validity proof was produced. The two next dependency names are bound INDUCTIVE declarations: `MicroCFTA.InternedNestedFacts.Facts` and `MicroCFTA.InternedProbeProvenance.Available`.
+
+StageA+B metadata passed for all eight exact source/index/object/trace roles. Total new opaque index copies:78769bytes. No semantic rows or API receipts were added. Facts parent envelope:17–21 of148lines, strict cap73. Available parent envelope:20–24 of268lines, strict cap133. These numeric envelopes do not certify constructor origins or closed context. Constructor names, constructor types, and validity bodies remain unreceived. The next registered-constructor metadata plan is `BEFORE-PLAN-TWO-ACTUAL-VALIDITY-PARENTS-REGISTERED-CONSTRUCTOR-METADATA.json` in the actor directory,12564bytes, SHA256 `4c708f17736b46f99ee428545eff20d3274cdd1246bf2b38aa1abbca63f7fcfc`. It is unexecuted. Root has not admitted it. The requested simple theorem composition was classified WRAPPER_ONLY. It does not close the actual validity gap.
+
+Actor directory: `/tmp/mcfta-intersection-key-closure-audit-20261104`. Actual role and numeric receipts are in `ACTUAL-TWO-VALIDITY-OWNERS-OPAQUE-PINS-AND-PARENT-ORIGINS-METADATA/`. Its role manifest is7253bytes/SHA256 `10066f50827f594cf87ee3ae5f2f118b6a9ab7645b6eae68c09ff34042f0458c`. Its numeric manifest is2187bytes/SHA256 `d0e66514da4e347a4ef2746af111711c348d0e46defecc633fdb418b97672cbf`.
+
+### Native dependency state
+
+Same actor: `/root/native_mu_prepare`. Actual usage: CFTA2221/49 plus Std164/3, two whole originals. Std unions are Prelude123/6091, State15/210, Except26/337. Frame71/145 remains fixed. API181 and receiving182 accepted complete closed `ExceptT.mk` and `ExceptT.run` definitions. All15 new Except origins were charged first.
+
+Metadata183 verified five actual ordinary definitions in `Init.Prelude`: `MonadState.modifyGet`, `MonadStateOf.modifyGet`, `Pure.pure`, `Applicative.toPure`, and `Monad.toApplicative`. The new two registered constructor/projection associations passed. The other three associations reuse accepted171 metadata. These facts do not establish reduction laws.
+
+API184 passed at04:45:21–22CET. Its1182byte/14line raw output remains opaque to Root. Receiving185 stopped at `EXACT_FIVE_DEFINITION_HEADERS` before all body guards, cuts, or private view. No cause was inferred. The accepted164 registry is preserved. New semantic rows:0. A NEW safely bounded first-header metadata plan186 is5499bytes/SHA256 `e2d7e9db8f3ae38844082fec428a59b47d68800833bb9db661cc7a1eefbd42df`, named `BEFORE-PLAN-METADATA186-SAFELY-BOUNDED-DECLARATION-HEADER-CATEGORIES.json` in `/tmp/mcfta-native-checked-total-next-supplement-20261104`. It is unexecuted and unadmitted. It does not identify all five headers. Do not widen receiving185 retrospectively. Keep all three missing Std trace/source-object UNKNOWNs.
+
+### Haskell dependency state and fixes
+
+Same actor: `/root/haskell_activation_carrier`. Original usage:5210/9, two whole originals; cached Seq1–2200/5008; API Std9/project3; compiled-interface rows160. No Haskell source fix was made. Record any future Haskell fix in root FINDINGS for the external agent.
+
+Compiler9.14.1, base4.22.0.0, containers0.8. Exact compiler API unit: `ghc-9.14.1-c6c3`. Its one matching plan record is index88 of206. The plan is153869bytes/SHA256 `3369c0fbd9d6eb259370c1afefadcd320c503663caf913ad624e4a6dce1301d7`. No compiler API contract or encoded Name provider was acquired.
+
+The NAME lookup failed with actual `HOOGLE_OFFLINE`. The exact offline symbol query `ghc-9.14.1/GHC.Iface.Binary/readBinIface` failed with actual `NOT_FOUND`. Preserve the first error-decoder `EXACT_TOP_KEYS` STOP. A separate bounded schema receipt found the symbol response has only `error`; the older NAME response had `actions` and `error`. No message or global-absence inference was accepted.
+
+The exact-unit `ghc-pkg` documentation-field query passed. A separate complete two-field label receipt passed. It found one interface label and one HTML-directory label, with no duplicates. No returned location was accessed or normalized. The receipt is `/tmp/mcfta-r66-documentation-labels-20261105-0457/REGISTRATION-LOCATION-LABELS-ONLY-RESULT.json`,934bytes/SHA256 `fbc5957b6bd81347f536ac2c9e68a6e4ad114ad5885f0c29496fc32ce8f80877`. Any next exact-location identity probe needs a separate bounded metadata plan. The actual Name-unit/provider/API and append/insertion bound remain open.
+
+### Controllers, resources, and restart rules
+
+Root directory: `/tmp/mcfta-runtime-packet-producer-normal-20261104-1205`. Read `R66-CURRENT-PROGRESS.json`, `CURRENT-HANDOFF.json`, and `PUBLISHED-CHECKPOINT.json`. The last file records the actual published head after the checkpoint. Previous R65 evidence remains unchanged. Every R66 heavy handle is terminal. No heavy job is live. Heavy jobs ran serially with memory.max=memory.high4GiB and swap0. Free /tmp space was87.91GiB at04:58CET. No cleanup occurred. No large duplicate source or interface capture was created.
+
+SourceProcessFAIL is permanent. Root historical original-source upper bound remains UNKNOWN. Keep all prior failures, over-cap STOPs, missing declarations, opaque private reports, and first failed versions. Do not reset actors or ledgers. Metadata success does not establish body meaning, reduction, source-object correspondence, or actual entry validity. Charge each original row before processing, including failed guards. Keep at most two whole originals per actor and strict half caps for all others. Do not use another actor, encoding, summary, or wrapper as a bypass.
+
+Cleanup remains separate. The exact32-target list is `/tmp/mcfta-tmp-reduction-20261103/CLEANUP-APPROVAL.md`,6491bytes/SHA256 `6a94acd1a205ff76484d6f9fa28476613f17627078466e9264eae6d26b001731`. Exact direct approval is pending after automatic review rejected the broader deletion. Do not delete it. The106.393GiB figure describes enclosing branches, not the exact removable target size. Normal proof work and pushes to formalize remain authorized.
+
 ## [2026-11-05 03:30 CET] R65: checked scope-to-original-input theorem
 
 Goal status: ACTIVE. This checkpoint is PROGRESS. It proves one new mathematical theorem and does not complete the full objective. Base commit: `8328b608fedcb27fe51284f711b57e35eae47c69`. Fresh fetch at 03:29 CET found no new refs. Main `bd5a406a6a3f84b7e3ae0906082783911509df83` remains contained. Push to `formalize` is explicitly authorized. Use a normal push. Preserve `.hypha/`.
