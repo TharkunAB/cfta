@@ -1,3 +1,19 @@
+## [2026-11-05 02:35 CET] R64 progress: codec interfaces and compiler provenance
+
+No new theorem or Haskell source fix is claimed in this checkpoint. The latest checked theorem remains `inputOf_mem_inventory` at `a9c77e19636b5ebcc1afcfba6d3c7a78bbc1aa01`. Given the existing state facts and an available value, its `inputOf` descriptor belongs to the inventory. This includes the fallback case. It does not prove codec completion or coverage of actual recursive calls.
+
+The two codec definitions now have complete inspected literal contexts. The contexts cover rows 1–21 of `IntersectionFlatMemoKey.lean` and rows 1–40 of `InternedConstructorTemplates.lean`. A bounded compiler command returned 11 complete equation types. Their actual equality heads match the two selected definitions. No proof bodies were received. The equation axioms and the proposed original-input completion lemma still require checks. The `Original.rec` binding is a kernel recursor. Its raw metadata is available. Its complete type has not been received.
+
+The native dependency work has accepted two state-class interfaces and the complete `StateT.modifyGet` and `ExceptT.pure` definitions. The later three-class print stopped at a scope guard. The narrower six-signature receipt also stopped at a header guard. Neither stopped receipt grants a class or computation law. All 49 reserved rows remain charged. `ExceptT.mk` and `ExceptT.run` remain unprobed.
+
+Haskell findings for an external reader: no Haskell source changed. The metadata probe now uses `ghc-pkg --show-unit-ids` for output IDs. `--ipid` controls package-argument interpretation. The selected base unit is `base-4.22.0.0-fde1`, and its ID/name/version match the Cabal plan. The selected `Data/Semigroup.hi` exports the written name `GHC.Internal.Base.Semigroup`. This establishes a written name only. The actual defining owner, class interface, selected dictionary, build flags, and `Seq` laws remain open. The old failed probes and both offline Hypha `NOT_FOUND` results remain recorded.
+
+The full goal remains active. Prove both actual recursive workers for every generated, returned, and subsequent state. Use one bound from the original input and requested size. Retain exact node counts, order, both rank/unrank directions, and the Haskell/runtime correspondence. Add no supplied carrier, closure, resource, completed-worker, final-state, success, or fuel premise. The native eight gates, five fuel witnesses, and nine universal binders remain unchanged.
+
+The main missing proof still connects actual recursive execution to the finite descriptor inventory and one common original-input bound. Actual Haskell correspondence remains a separate gap. The older counter-based carrier bound is not a requested-size bound. The inspection status remains `SourceProcess FAIL`; the Root original-source upper bound remains `UNKNOWN`.
+
+The R64 controller is `/tmp/mcfta-runtime-packet-producer-normal-20261104-1205/R64-CURRENT-PROGRESS.json`. It records exact receipts, failures, counts, and pending plans. No files from the pending 32-path cleanup list were deleted.
+
 ## [2026-11-05 00:35 CET] Available values map into the inventory (R63)
 
 `MicroCFTA.SourceRecursiveIntersectionInputView.inputOf_mem_inventory` is proved in `lean/MicroCFTA/SourceRecursiveIntersectionInputOfInventory.lean`. For any state with the existing Facts and any available value, `inputOf value` belongs to `inventory state`. The statement has no supplied carrier, closure or work-budget premise. The proof includes the `inputOf` fallback case. It does not prove optional codec completion, `OriginalInput`, or coverage of all actual recursive calls.
