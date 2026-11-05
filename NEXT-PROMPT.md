@@ -1,3 +1,23 @@
+## [2026-11-05 05:03 CET] Resume R66: goal ACTIVE
+
+Read only this new prefix first. Read the R66 prefix of root HANDOFF and FINDINGS next. Preserve older tails as opaque history unless a precise new scope permits access. Root controller directory is `/tmp/mcfta-runtime-packet-producer-normal-20261104-1205`. Current files are `R66-CURRENT-PROGRESS.json`, `CURRENT-HANDOFF.json`, and `PUBLISHED-CHECKPOINT.json`.
+
+The full target remains both actual recursive workers, every generated/returned/subsequent state, one common original-input/requested-size bound, exact counts/order/both rank-unrank directions, and complete actual Haskell/runtime/source/API/ID/cache/interner/Eq/hash correspondence. Keep native8 gates/5 fuel witnesses/9 universal binders. Do not add carrier/closure/resource/completed-worker/final-state/success/fuel supplier assumptions. Prefer the optimized interned core. Preserve older constructor/equality work as secondary work.
+
+Latest mathematical commit: `3ac8dc395c3b024f5bac4747c85e2e12ece6bdce`. `nodeScope_originalInputs` proves both computed operand descriptors satisfy `OriginalInput source` from existing Facts and NodeScope. The retained Facts premise is unused. Owned `inputOf` is unfolded. Strict, explicit-proposition, public ordinary type, and both Audit checks passed. Only propext/Quot.sound were reported. R66 added no mathematical theorem. Its contribution is verified dependency interfaces and metadata.
+
+Next steps:
+
+1. Refresh upstream. Preserve unrelated `.hypha/`. Main `bd5a406a6a3f84b7e3ae0906082783911509df83` was contained at the last fetch. Normal pushes to formalize are authorized. Verify the independent remote head and exact-head CI state after publishing.
+2. Intersection: review the NEW12564byte registered-constructor metadata plan in the existing intersection actor directory. No execution is admitted. Both actual parents are bound INDUCTIVE. Parent source envelopes: Facts17–21/148 cap73; Available20–24/268 cap133. All eight actual roles are pinned. No constructor/type/body/source contract was acquired. Keep actual operands fixed. The actual-entry validity implication is unproved. A simple composition of existing scope theorems is WRAPPER_ONLY.
+3. Native: preserve receiving185 `EXACT_FIVE_DEFINITION_HEADERS` STOP. No five-projection body was accepted. Review NEW metadata186 plan5499bytes in the existing native directory. It only bounds the first safe prefix. Other headers remain UNKNOWN. Do not widen old guards or infer the cause. Complete ExceptT.mk/run definitions were accepted. Std164/3 and CFTA2221/49 remain current. Frame71/145 and the three missing Std trace/source-object UNKNOWNs remain fixed.
+4. Haskell: no source fix was made. Exact API unit ghc-9.14.1-c6c3 is registered and present in the plan. NAME lookup returned HOOGLE_OFFLINE. Exact symbol query returned NOT_FOUND. The error schemas differ; preserve the first decoder STOP. Two guarded documentation-location labels are available, but no location was accessed or normalized. A separate metadata plan is required before any location follow. Actual readBinIface/Name-unit/provider and append/insertion bound remain open. Log any Haskell fix in FINDINGS.
+5. All heavy handles are terminal. Run new heavy work serially through heavy-management with4GiB max/high and zero swap. Do not change queue concurrency. Avoid large evidence copies. /tmp had87.91GiB free. Deleted0. Exact32 cleanup approval remains pending.
+
+Current intersection semantic usage2327/20/API19/twoFINAL; RequestScope40/157. Haskell5210/9, Seq2200, Std/project APIs9/3, compiled160. No new/reset actor. Keep all previous charges and failed versions. SourceProcessFAIL and Root historical source upper UNKNOWN remain permanent. Private Source/TYPE/body/capability reports remain opaque to Root. Metadata and associations do not establish reduction or validity. Charge rows before processing, even when guards fail. No transfer, parser, locator, encoding, summary, or wrapper bypass.
+
+Continue toward a genuine validity/coverage proof for the actual program. Keep the full goal open after a local result. Timestamp messages. Share useful verified knowledge through the msg-board skill. Do not ask whether to continue.
+
 ## [2026-11-05 03:30 CET] Resume after R65 checked scope theorem
 
 Keep the full goal ACTIVE. R65 is PROGRESS: one new checked mathematical theorem. Read the latest HANDOFF and FINDINGS prefixes. Preserve their old tails and every proof, counterexample, repair and marked draft. Refresh upstream before further source work. Push to `formalize` is authorized. Preserve `.hypha/` and use a normal push.
