@@ -1,3 +1,39 @@
+## Setter draft and remaining proof gaps — 2026-11-05 21:30 CET
+
+The top-level correctness theorem remains open. The full goal covers both actual
+recursive workers and every generated, returned and later state. It requires one
+bound from the original inputs and requested size, exact size/count/order, both
+rank/unrank laws, and Haskell/runtime/API/ID/cache/interner/equality/hash correspondence.
+
+The [latest native draft](lean/restart-evidence/20261105-selected-step-singleton-elimination/README.md)
+is partial300. It adds admitted StateT.modifyGet and ExceptT.pure reductions.
+Its first 3628 header bytes are unchanged. It retains eight caller gates, five
+fuel witnesses and nine universal binders. It adds no external premise.
+The setter, prepare action and returned representative-totality proofs remain
+incomplete and uncompiled. ExceptT.mk and ExceptT.run remain folded. Their direct
+origins are already covered. Receiving305 stopped on an unsupported offset-unit
+comparison. Diagnostic306 establishes numeric widths, not the historical unit.
+Parametric receiver307 is authored and awaits complete code review.
+
+Eight BinderProtocol Source copies have identical bytes. They do not match the
+held 27 original records. This does not establish a new original or Source/object
+correspondence. The general OriginalInput proof remains open. An isolated module
+reproduction plan needs verified invocation metadata. Printable trace keys remain
+opaque because they can contain Source/configuration fragments.
+
+Two bounded GHC header-candidate filters passed their physical checks and returned
+zero candidates. This establishes no absence, owner, binding or attachment fact.
+The dependency interfaces and runtime correspondence remain open.
+Haskell source fixes: none. No new checked theorem is claimed. The latest checked
+addition remains the empty-OriginalInput case at 9baa51a6ee72126d36a705748ed6c215d65331f3.
+
+Free space remains about 84 GiB. No new tree copies or deletions were made.
+The readable /tmp scan counted 228.56 GiB at 19:45 CET; protected OS directories
+were excluded. The exact 32-directory deletion remains unapproved. Keep every
+prior STOP, historical tuple limit, SourceProcessFAIL and Root upperUNKNOWN.
+
+---
+
 ## Singleton elimination and current boundaries — 2026-11-05 20:05 CET
 
 The [new native drafts](lean/restart-evidence/20261105-selected-step-singleton-elimination/README.md)
