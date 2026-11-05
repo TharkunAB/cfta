@@ -1,3 +1,28 @@
+## Singleton elimination and current boundaries — 2026-11-05 20:05 CET
+
+The [new native drafts](lean/restart-evidence/20261105-selected-step-singleton-elimination/README.md)
+are incomplete and uncompiled. Partial288 adds primitive singleton elimination.
+The full 8/5/9 header is unchanged. Actual setter/prepare preservation and returned
+representative totality remain open. The next retained StateT.modifyGet replay
+needs its exact prior cut and guard context. No new caller premise is added.
+
+The provenance metadata check passed under verified 4 GiB and zero-swap limits.
+The actual index module header matches. Trace schema metadata is available.
+Source/archive identity reconciliation is not complete. Source/object attribution,
+the general OriginalInput result and a complete counterexample remain unproved.
+
+The selected GHC ModIface metadata gate stopped at an alias header. Its other
+frames and attachment remain unresolved. No selector, alias body or provider law
+was acquired. Haskell source fixes: none. No new checked theorem is claimed.
+
+The full original-input bound for both workers and all later states remains open.
+Keep exact counts, order, both inverses and runtime/source correspondence in scope.
+The readable /tmp scan counted 228.56 GiB. Free space is about 84 GiB.
+The exact 32-directory deletion remains unapproved. No new tree copies were made.
+All prior STOPs, SourceProcessFAIL and Root upperUNKNOWN remain unchanged.
+
+---
+
 ## Native draft and current gaps — 2026-11-05 19:36 CET
 
 The [97-line native draft](lean/restart-evidence/20261105-selected-step-singleton-membership/README.md)
