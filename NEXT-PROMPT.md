@@ -1,3 +1,19 @@
+## Current checkpoint: 2026-11-05 14:30 CET (R70)
+
+The goal is active. R70 has no new completed mathematical theorem. The latest mathematical increment remains `empty_originalInput` from commit 9baa51a6ee72126d36a705748ed6c215d65331f3. The general Some case, both actual recursive workers and their common original-input/requested-size bound remain open.
+
+Keep the full objective and all frozen boundaries in the R69 checkpoint below. Do not add a supplied carrier, closure, resource, completed worker, success, fuel, Original, NodeScope or validity premise. Keep the actual operands and native 8 gates, 5 fuel witnesses and 9 universal binders. Preserve every old proof, draft, failure and counterexample. Reuse the same three actors with their full histories.
+
+Native: the five selected complete ordinary interfaces are now received: both modifyGet definitions, Pure.pure, Applicative.toPure and Monad.toApplicative. Receipts 243 and 246 used exact retained captures bound through the executed NEW query literals, manifests, invocation records and independent outputs. All declared context pins matched. No new source rows or compiler queries were needed for these receipts. The exact observed-state completion attempt is active. Its next branch requires the actual reject operation. Its proposed canonical reference still needs a positive binding. No weaker theorem or extra premise was accepted.
+
+Intersection: the actual row 13 syntax is a complete plain parenthesized identifier list. Its NodeKey occurrence has an exact index binding to MicroCFTA.InternedBinderProtocol.NodeKey. The namespace occurrence has no exact index match. Its actual namespace context remains unresolved. A Nix metadata probe found Lean.resolveNamespace, a definition owned by Lean.ResolveName; it received no TYPE, value or behavior and invoked no resolver. Establish its actual origin, contract and eligible context before any call. The parent body and the full Facts + Available theorem remain unproved. Keep v1-v8 and every context stop.
+
+Haskell: no source fix. All seven dependency interfaces remain open. Current checks of the old metadata pin pass; the historical failed conjunct remains UNKNOWN. A new stable-field guard and a restricted complete-declaration checker are inspection work. No source-span result or source/installed correspondence follows. The row 7 OPTIONS_GHC configuration is still a separate gate.
+
+Read `/tmp/mcfta-runtime-packet-producer-normal-20261104-1205/CURRENT-HANDOFF.json` and verify its canonical R70 progress hash. Source process FAIL and Root source upper UNKNOWN remain permanent. The earlier 75 declared build pins are not a complete transitive inventory. No cleanup occurred. The exact 32-target deletion remains unapproved. Pushes to formalize remain authorized.
+
+---
+
 ## Current checkpoint: 2026-11-05 13:30 CET (R69)
 
 The goal is active. This checkpoint adds a reproducible diagnostic and records open dependencies. R69 has no new mathematical theorem.
