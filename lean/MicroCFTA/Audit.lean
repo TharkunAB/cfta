@@ -1,3 +1,4 @@
+import MicroCFTA.SourceRecursiveIntersectionNodeScopeOriginalInputs
 import MicroCFTA.SourceRecursiveIntersectionInputOfInventory
 import MicroCFTA.SourceRecursiveIntersectionMuInventoryName
 import MicroCFTA.SourceRecursiveIntersectionDescriptorCarrierLaws
@@ -4319,3 +4320,6 @@ run_cmd do
 
 #print axioms MicroCFTA.SourceRecursiveIntersectionInputView.inputOf_mem_inventory
 #check @MicroCFTA.SourceRecursiveIntersectionInputView.inputOf_mem_inventory
+
+#check MicroCFTA.SourceRecursiveIntersectionInputView.nodeScope_originalInputs
+#print axioms MicroCFTA.SourceRecursiveIntersectionInputView.nodeScope_originalInputs

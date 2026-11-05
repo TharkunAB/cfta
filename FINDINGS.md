@@ -1,3 +1,17 @@
+## [2026-11-05 03:30 CET] Scoped intersection operands have original input descriptors
+
+The new theorem is `MicroCFTA.SourceRecursiveIntersectionInputView.nodeScope_originalInputs`. Under the existing `Facts source` and `NodeScope source request`, both computed operand descriptors are `OriginalInput source`. The proof covers the five `Original` forms. It uses the actual `Original.rec` TYPE and the eleven registered codec equation interfaces. It does not add a completion or caller scope premise.
+
+The module is `lean/MicroCFTA/SourceRecursiveIntersectionNodeScopeOriginalInputs.lean` (48 lines, 2828 bytes, SHA256 `b222752eaf8ccd144e19198ff3026a6dad88da9ff6751a276412188880c52ece`). The strict public check also proves an anonymous example with the exact original proposition. Its axioms are only `propext` and `Quot.sound`. The first strict candidate failed the unused `facts` binder check. The checked version changes only that bound name to `_facts`. Keep the first failure and its diagnostics.
+
+Both the normal Lake Audit and the strict Audit passed. All input pins stayed stable. Each job used a serial 4 GiB memory limit with zero swap. The Audit change adds one import and two public checks. It preserves all 226766 old Audit bytes. Reproduce the proof from source with `lake build MicroCFTA.Audit` in `lean/`. The files in `/tmp` are review records. They are not required proof inputs.
+
+This result does not derive `NodeScope` at actual entry or at every recursive call. The common bound from the original input and requested size remains open. Exact counts, order, both rank/unrank directions, and full Haskell/runtime/ID/cache/interner/Eq/hash correspondence remain part of the objective. The earlier bound in the issued counter `N` is not that common input bound. The native eight gates, five fuel witnesses and nine universal binders stay unchanged.
+
+Haskell fixes in this checkpoint: none. The selected interface dependency fields passed their amended lexical guards, but they did not establish an explicit unit/module reference for the exported `Semigroup` name. This is not a global absence result. A compiler `Name` and full unit identity method is proposed. Its API contracts and execution are not yet admitted.
+
+The exact 32 cleanup targets still need approval. This checkpoint deletes zero files. Keep all historical SourceProcess FAIL and UNKNOWN states. Keep the failed strict candidate, parser stops, missing traces, and metadata output truncations. No new Source ownership follows from these checks.
+
 ## [2026-11-05 02:35 CET] R64 progress: codec interfaces and compiler provenance
 
 No new theorem or Haskell source fix is claimed in this checkpoint. The latest checked theorem remains `inputOf_mem_inventory` at `a9c77e19636b5ebcc1afcfba6d3c7a78bbc1aa01`. Given the existing state facts and an available value, its `inputOf` descriptor belongs to the inventory. This includes the fallback case. It does not prove codec completion or coverage of actual recursive calls.
