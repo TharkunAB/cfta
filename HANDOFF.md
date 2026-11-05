@@ -1,3 +1,50 @@
+## R67 handoff [2026-11-05 07:20 CET]
+
+The goal is ACTIVE. This is an evidence checkpoint. It adds no mathematical theorem. The base is `f39ea1ece8757443f9033d663d000221ffcde080`. Upstream main `bd5a406a6a3f84b7e3ae0906082783911509df83` is contained. Fetch at 06:42 and branch checks at 06:46 found no update. Normal pushes to formalize are authorized. Preserve unrelated `.hypha/`.
+
+Prove both actual recursive workers for all generated, returned and subsequent states. Derive one common bound from the original input and requested size. Prove exact counts, order and both rank/unrank directions. Prove the actual Haskell/runtime/source/API/ID/cache/interner/Eq/hash correspondence. Keep the actual fixed operands. Add no carrier, closure, resource, completed-worker, final-state, success or fuel supplier premise. Keep the native 8 gates, 5 fuel witnesses and 9 universal binders.
+
+The latest verified mathematical addition remains commit `3ac8dc395c3b024f5bac4747c85e2e12ece6bdce`. `SourceRecursiveIntersectionInputView.nodeScope_originalInputs` proves OriginalInput for both decoded operands under the stated Facts and NodeScope. Facts remains in the header and is unused in that proof. The theorem uses propext and Quot.sound. The 48-line source remains 2828 bytes, SHA b222752eaf8ccd144e19198ff3026a6dad88da9ff6751a276412188880c52ece. Audit remains 227000 bytes, SHA 8fe11cd3bcce5864d0aee8c089882e7ab1ff79daff66dfe874fb8ff47258c541. Ordinary and strict Audit passed for that source. Both hashes were rechecked at 06:42. R67 changes no Lean proof source.
+
+The strongest claim remains conditional local correctness. The checked descriptor count is at most 2^(N+(1+4N)^2), for issued counter N. Actual worker entry, recursive successor coverage, returned graph validity, subsequent worker coverage and a common original-input work bound remain open. Exact runtime IDs, paths, cache/interner behavior and Haskell correspondence also remain open. A/C/D/carrier/Frame/CheckedTotal/CollectionFamily remain frozen.
+
+The live controller is `/tmp/mcfta-runtime-packet-producer-normal-20261104-1205/CURRENT-HANDOFF.json`. It pins `R67-CURRENT-PROGRESS.json`. Consult it before using counts below. All current work uses the same three actors. No actor was reset.
+
+Intersection validity:
+
+- Facts and Available source contracts were accepted privately. Their complete 45-line reservation preceded processing. The original def-head and multiline-signature failures remain retained.
+- Five exact owned-reference bindings were resolved through measured USAGES metadata. Only Resident and IssuedReferences were selected next. Both actually bind to DEFINITIONs in MicroCFTA.InternedFreshProbeKeys.
+- That original has 256 lines and cap 127. The selected origins are 13-15 and 63-65. The new complete query captured 2275 bytes and 28 LF, SHA 17b219e1dec811e2a6fd4492dc84d1adc6a194a0145637f324d03b6daeb55d7a. Root keeps this output opaque.
+- Actual six-line/API 20 charging occurred at 07:13. Current totals are 2378/23/API 20/two FINAL, with project 2243/15 and Std 135/8. The exact charge file is `TWO-ACTUAL-FRESHPROBEKEYS-CLOSED-DEFINITIONS-RECEIPT/ALL6-API20-COMPLETE-HISTORY-CHARGE-FIRST.json` under `/tmp/mcfta-intersection-key-closure-audit-20261104`, 8340 bytes, SHA c91daf1ce9c259b5fe281baa626f819726a755b1c5c31ddf9234f36262453e1a.
+- The new target is `Facts source -> Available source value -> Original value`. It is unproved and can be false. Prove it or produce a source-supported static counterexample. Actual-entry or generated-result falsity also needs the actual producing execution. Keep the exact operands and all original premises.
+- The old 51 build snapshot did not pin FreshProbeKeys. The preparation guard stopped. A separate explicit FreshProbeKeys plus published-context build passed at 06:38 with 55 stable pins. The later two-kind query had 65 stable pins; the definition query had 72. All used 4 GiB and zero swap.
+- A local QName guard incorrectly required a universe suffix. It stopped before acceptance. The actual two headers have colon boundaries. The failure is retained. The same six-line scope remains.
+- The receiving task remained idle after an authorization was queued with send_message. Root found this dispatch mistake and started it with followup_task at 07:13. No earlier acceptance is claimed.
+
+Native dependency work:
+
+- Source totals remain CFTA 2221/49 plus Std 164/3, with two FINAL wholes. Frame remains 71/145. Keep native 8/5/9.
+- Five ordinary projection queries are captured. The closure receiver stopped before private acceptance. A genuinely computed closure walker is proposed but unexecuted. Its compiler primitive interfaces remain unowned.
+- Current recorded 52 identity coverage is now complete. The exact registry is `/tmp/mcfta-native-checked-total-next-supplement-20261104/ACTUAL-METADATA204-COMPLETE-CURRENT52-ORIGINAL-IDENTITY-REGISTRY.json`, 16539 bytes, SHA 28563db066d5321f23e15ff012ea84aeae242be09038ad15f61f4722ff9ca0d3. It validates 45 earlier CFTA identities, four later additions, current 49 continuity and three actual Std identities. Aliases are zero.
+- Next, match the actual three compiler-owner origins against this registry. New-owner prior 0 is still unknown. Missing optional metadata roles cannot certify source-object correspondence. Keep the three existing missing Std traces.
+- Owned Step-to-Action binding was verified. Its optimized-worker association remains unproved. Keep this secondary. Do not substitute the distinct SelectedContinuations-to-native-SelectedPreparation edge.
+
+Haskell follow-up:
+
+- No Haskell source fix was made. Record every future fix in root FINDINGS.md for external work.
+- The fetched GHC Binary.hs source matches repository Git blob 920933bedbd405a343aabe7807a61247f93376a0 at ghc-9.14.1-release. It has 30685 bytes and 749 lines. Installed source HTML has 1649 physical rows; use the original 749 denominator and one alias pool. The strict cap is 374.
+- The header confirms GHC.Iface.Binary and written readBinIface export at 15:9. The last confirmed shared source union is 1-160. Last confirmed source totals are 5370/10, with two FINAL wholes, Std 9/project 3 API receipts and 160 compiled-interface metadata rows. Cached Sequence remains 1-2200/5008.
+- Exact code-token hits in 121-160 are zero. The earlier 72-120 locator tracked only top-level candidates; all-token counts there remain unknown. Neither result establishes global absence. The 161-200 locator was admitted at 07:20; its result is pending in the live controller. The complete typed API, required datatype interfaces, actual installed provider/unit and installed-source correspondence remain open.
+- Keep the mode-format failure and metadata serialization cap failure. The failed exact prefix was initially unknown within 1-80. The later continuous replay now covers 1-160. Keep the historical failure. HEAD returned 200 with all six selected GitLab headers absent. Hypha HOOGLE_OFFLINE and exact symbol NOT_FOUND remain local observations.
+
+Permanent boundaries and restart discipline:
+
+SourceProcessFAIL and Root original-source upper UNKNOWN remain unchanged. Keep all private existing Source/TYPE/body/capability records opaque to Root. No reset, summary, wrapper, parser, locator or alias can clear history. Charge source-equivalent lines before every guard. Keep all old failures and unverified paths. Root's 06:14 whole-read 191 claim overstated a truncated display; only the independently bounded phaseA ran. Phases B/C did not run. Use a new plan for the next compiler-owner stage.
+
+R67 has no live Root heavy job. It deleted zero cleanup targets. About 87.9 GiB was free in /tmp. The exact 32 cleanup list remains pending at `/tmp/mcfta-tmp-reduction-20261103/CLEANUP-APPROVAL.md`. Keep archives, original inputs and all marked drafts. Current additions are small metadata and bounded query outputs. The prior source and Audit checks remain applicable until proof source changes.
+
+--- End R67 current prefix; older checkpoints follow. ---
+
 ## [2026-11-05 05:03 CET] R66 current handoff
 
 Goal status: ACTIVE. Continue the full formalization. This checkpoint adds verified dependency interfaces and metadata. It adds no mathematical theorem. The latest mathematical commit is `3ac8dc395c3b024f5bac4747c85e2e12ece6bdce`. The preceding published head is `39bc10c1f9afbd59a6dd9a2b2ad94ffdd450c4d7`. A fresh fetch found no new upstream changes. Main `bd5a406a6a3f84b7e3ae0906082783911509df83` is contained. Preserve unrelated `.hypha/`.
