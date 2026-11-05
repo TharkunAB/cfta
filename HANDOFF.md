@@ -1,3 +1,66 @@
+## Marked proof draft — 2026-11-05 17:21 CET
+
+No mathematical theorem was completed in this checkpoint. The full system goal
+remains open. No Haskell source fix was made.
+
+The new repository directory
+`lean/restart-evidence/20261105-selected-step-observed-total/` preserves the exact
+5465-byte partial260 draft, its status, and a short README. The draft SHA256 is
+`a878b7a69fe8aab96d5fce5d9eb183596f1de752f6f638067ed1b9208a6a7d4a`.
+It has not been elaborated. It is not a compiler candidate. Do not count it as a
+theorem. Its original statement, receiver, gates, fuel witnesses, and binders
+remain fixed. No private expanded equation from partial247 is included.
+
+Actual Nix metadata identifies `Membership.mem` and `List.instMembership` as
+definitions. The former is in Prelude. Its actual projection parent is not yet
+bound. The latter is in List.Basic. Root found actual source/index/object pins
+in a retained capture manifest and supplied them as metadata. This supplies no
+semantic coverage or prior-zero claim. Native consumption remains CFTA 2227/49
+and Std 490/6, with 55 positive originals and two FINAL slots. The next work is
+metadata preparation only. Keep all previous scope incidents and missing origins.
+
+Intersection consumption remains 2524/27, with 32 historical API capture attempts.
+One explicit replay event covers eleven already-owned codec equation TYPEs.
+The interned-reference witness has the wrong constructor for compound successful
+inputs. For the proposed same-entry member erasure, availability of both variants
+requires an empty original member list. These are bounded, uncompiled route
+obstructions. They are not a complete theorem or a counterexample to the full
+target. A second replay event is reserved for the already-owned `Cache.Valid`
+TYPE+value. It must resolve the actual uniqueness condition without a new premise.
+The parent header guard and Source rows 15–18 remain closed.
+
+The Haskell actor checked a restricted local `QuietBinIFace` constructor contract.
+That package exceeded its metadata storage cap by ten bytes. Preserve it unchanged:
+four files, 12298 bytes, cap 12288. Future writes now reserve exact final payloads.
+The actual selected-GHC annotated TYPE query completed at 17:10:14 CET. Its capture
+has 86 bytes, two rows, SHA256
+`d3cb7412a05c4dfbccb98d6457f11b57a0ad9b9137a82202af7fd95503e45fbc`.
+Root keeps it opaque. The receiver must distinguish the actual fixed-query
+observation from a general CLI/startup-control law. No provider, installed-source,
+actual Name/unit, IO, runtime, or whole Trace closure follows. Consumption stays
+5410/10, with two FINAL slots. No Haskell source fix was made.
+
+All Root compiler jobs are terminal. Read the canonical scratch controller for
+current agent scopes and exact pins. No new deletion was made. The exact32 cleanup
+remains pending. Root R71 control files used 383937 bytes at 17:19; the filesystem
+had about 84.3 GiB free. Leave unrelated model work untouched.
+
+The final quiet-constructor receiver stopped at a physical metadata fence.
+Local TYPE and frame checks passed. Qualified use remains OPEN. A separate
+metadata comparison found rounded nanosecond integers after a JavaScript JSON
+roundtrip. This defect does not establish source drift or identify the exact
+unrecorded failed conjunct. Keep the failed package frozen. A new diagnostic
+may use exact Python integers; no TYPE replay is admitted by that diagnostic.
+
+The Cache.Valid replay supports same-key and same-entry uniqueness for proven
+table lookups. This is a new, uncompiled derivation. Its application to Available
+compound values still needs the exact NodeFields bridge. Replay3 stopped before
+that TYPE view because the old capture pinned an earlier Audit.lean. The other
+80 capture records matched. Keep the old STOP. A fresh current-context TYPE-only
+capture is being prepared; do not drop the old pin or assume it irrelevant.
+
+---
+
 ## Continuation — 2026-11-05 16:38 CET
 
 This checkpoint adds no mathematical theorem. The full proof goal remains open.

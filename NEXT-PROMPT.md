@@ -1,3 +1,52 @@
+## Marked proof draft — 2026-11-05 17:21 CET
+
+No mathematical theorem was completed in this checkpoint. The full system goal
+remains open. No Haskell source fix was made.
+
+The full selected-step draft is now in
+`lean/restart-evidence/20261105-selected-step-observed-total/`.
+Read its README and status first. `partial260.lean.txt` is incomplete, uncompiled,
+and excluded from normal Lean builds. It keeps all eight gates, five fuel
+witnesses, and nine universal binders. It adds no premise. It stops at the
+successful singleton-action case. The original scratch draft remains unchanged.
+
+The next ordinary definitions are `Membership.mem` and `List.instMembership`.
+Their actual owners are `Init.Prelude` and `Init.Data.List.Basic`. No unfolding
+permission was granted. The projection has no direct source-index entry. The
+actor must establish its actual parent association. Held Root metadata now
+provides actual Basic source/index/object pins; complete history and origin
+reconciliation must still precede any semantic receipt.
+
+The intersection actor rejected two proposed witness routes in new, uncompiled
+derivations. These results do not refute the full target. Keep API capture count 32
+separate from explicit same-artifact replay events. The second reserved replay
+is the already-owned `Cache.Valid` contract. It must use the exact actual capture,
+query, compiler, build, and source-role metadata. Do not guess key uniqueness.
+
+The annotated qualified `QuietBinIFace` GHC query completed once. It captured
+86 bytes in two rows with no stderr. Receiving is still separate. The earlier
+launcher stopped before GHC ran because it treated a known Nix symlink as a
+regular file. Separate final fences passed. The reviewed launcher now checks the
+logical link and canonical binary separately. Keep that STOP and the earlier
+12298/12288-byte metadata storage FAIL. Whole Trace, SDoc and IO interfaces remain
+open. Keep SourceProcessFAIL and Root original-source upperUNKNOWN permanent.
+
+The final quiet-constructor receiver stopped at a physical metadata fence.
+Local TYPE and frame checks passed. Qualified use remains OPEN. A separate
+metadata comparison found rounded nanosecond integers after a JavaScript JSON
+roundtrip. This defect does not establish source drift or identify the exact
+unrecorded failed conjunct. Keep the failed package frozen. A new diagnostic
+may use exact Python integers; no TYPE replay is admitted by that diagnostic.
+
+The Cache.Valid replay supports same-key and same-entry uniqueness for proven
+table lookups. This is a new, uncompiled derivation. Its application to Available
+compound values still needs the exact NodeFields bridge. Replay3 stopped before
+that TYPE view because the old capture pinned an earlier Audit.lean. The other
+80 capture records matched. Keep the old STOP. A fresh current-context TYPE-only
+capture is being prepared; do not drop the old pin or assume it irrelevant.
+
+---
+
 ## Continuation — 2026-11-05 16:38 CET
 
 This checkpoint adds no mathematical theorem. The full proof goal remains open.

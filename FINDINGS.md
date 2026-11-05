@@ -1,3 +1,55 @@
+## Marked proof draft — 2026-11-05 17:21 CET
+
+No mathematical theorem was completed in this checkpoint. The full system goal
+remains open. No Haskell source fix was made.
+
+The repository now preserves the exact incomplete partial260 proof under
+`lean/restart-evidence/20261105-selected-step-observed-total/`. It is not compiled
+and proves no theorem. It keeps the full 8/5/9 statement and stops at the actual
+successful singleton-action case. The existing failure theorem still cannot be
+transported to the bound reject operation.
+
+A direct environment query identifies both next membership dependencies as
+ordinary definitions. Names alone do not justify their reduction. Source-origin
+and positive-history guards still apply to their complete interfaces.
+
+Two alternate original-witness choices have bounded obstructions. An interned
+reference has the wrong compound-input constructor. The proposed same-entry
+member erasure needs an empty original member list for both values to be
+available. These new derivations are uncompiled. They do not refute the full
+Facts+Available target. Do not assume that a shared identity label implies a
+shared key. Check the actual owned `Cache.Valid` contract first.
+
+Haskell fixes: none. The local quiet-constructor check passed its input fences,
+but its output package failed the storage cap by ten bytes. Future metadata
+writers must reserve the complete serialized final payload before dependent
+writes. A Root launcher also stopped before GHC because the regular-file guard
+included the logical Nix symlink. The new launcher checks the link and its actual
+canonical binary separately. The one GHC annotated TYPE query then completed.
+Its receipt is still separate. These are inspection-tool changes, not Haskell
+implementation fixes. Whole Trace, SDoc, IO and correspondence gaps remain open.
+
+The common original-input bound for both actual recursive workers and every
+returned state remains the main system gap. Exact counts, order, both inverse
+laws, and complete Haskell correspondence still need the full integration proof.
+Preserve all prior proofs, counterexamples, repairs, marked drafts, and failures.
+
+The final quiet-constructor receiver stopped at a physical metadata fence.
+Local TYPE and frame checks passed. Qualified use remains OPEN. A separate
+metadata comparison found rounded nanosecond integers after a JavaScript JSON
+roundtrip. This defect does not establish source drift or identify the exact
+unrecorded failed conjunct. Keep the failed package frozen. A new diagnostic
+may use exact Python integers; no TYPE replay is admitted by that diagnostic.
+
+The Cache.Valid replay supports same-key and same-entry uniqueness for proven
+table lookups. This is a new, uncompiled derivation. Its application to Available
+compound values still needs the exact NodeFields bridge. Replay3 stopped before
+that TYPE view because the old capture pinned an earlier Audit.lean. The other
+80 capture records matched. Keep the old STOP. A fresh current-context TYPE-only
+capture is being prepared; do not drop the old pin or assume it irrelevant.
+
+---
+
 ## Continuation — 2026-11-05 16:38 CET
 
 This checkpoint adds no mathematical theorem. The full proof goal remains open.
