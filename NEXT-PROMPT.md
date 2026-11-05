@@ -1,3 +1,19 @@
+## [2026-11-05 02:35 CET] Resume R64 from the current controller
+
+Read this prefix, then `/tmp/mcfta-runtime-packet-producer-normal-20261104-1205/R64-CURRENT-PROGRESS.json`. Keep older document tails opaque unless their exact scope is admitted. Do not restart the proof, inspection owners, or budgets. The goal is active. The current published mathematical checkpoint is `a9c77e19636b5ebcc1afcfba6d3c7a78bbc1aa01`. R64 has no new theorem or Haskell source fix.
+
+The full goal remains active. Prove both actual recursive workers for every generated, returned, and subsequent state. Use one bound from the original input and requested size. Retain exact node counts, order, both rank/unrank directions, and the Haskell/runtime correspondence. Add no supplied carrier, closure, resource, completed-worker, final-state, success, or fuel premise. The native eight gates, five fuel witnesses, and nine universal binders remain unchanged.
+
+Intersection has complete owned codec contexts and 11 associated equation types, with actual2320/20/API17. Review the exact 7314-byte Original.rec type-only plan. Acquire its actual complete primitive type through a separate reserved receipt. Verify the actual equation axioms before using the equation interfaces. Then prove the unchanged `nodeScope_originalInputs` statement with no added caller premise. The proposed local completion assertion is a target to prove. Raw primitive metadata grants no rule semantics. No proof candidate exists yet.
+
+Native remains CFTA2221/49 plus Std149/3. Receipts174 and176 stopped before new class/type acceptance. Preserve all49 charged rows and all failures. The next plan is only metadata177 for the existing933-byte six-signature output. No rerun, helper unfolding, law or new caller gate is authorized by those stopped receipts. ExceptT.mk/run remain unprobed.
+
+Haskell remains5210/9, Seq2200, two whole-file slots, Std9/project3 APIs, and separate compiled metadata160. Selected base-unit metadata matches the plan. The selected Data.Semigroup interface writes GHC.Internal.Base.Semigroup. This is not defining-owner/class/dictionary or source/compiler correspondence. The compact provider/class dependency plan is unexecuted. Record any future verified Haskell source fix in FINDINGS. No such fix was made in R64.
+
+Keep `SourceProcess FAIL`, Root upper `UNKNOWN`, every STOP/MISSING/overscope/truncation, missing traces, and source/object unknowns. Use only the same three active inspection owners. Root sees metadata and genuinely new proposals. Run heavy jobs serially under the verified4GiB/zero-swap guard. Do not repeat passed proof audits without a new source change or unresolved reason.
+
+Normal pushes to formalize are authorized. Preserve .hypha/. The exact32-path cleanup is still unapproved; delete none. The saved checkpoint records all current pending plans and failures.
+
 ## [2026-11-05 00:35 CET] Continue from the inventory membership lemma (R63)
 
 The full goal stays active. Preserve both actual recursive workers, all generated/returned/subsequent states, the common original-input/requested-size internal-work bound, exact node counts and size order, both rank/unrank directions, and full Haskell/runtime/source/API/ID/cache/interner/Eq/hash correspondence. Keep older constructor/equality work as secondary. Add no supplied carrier, closure, resource, completed-worker, final-state, success or fuel premise. Keep the native8 gates/5 fuel witnesses/9 universal binders. Normal pushes to `formalize` remain authorized.
