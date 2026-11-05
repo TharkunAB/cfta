@@ -1,3 +1,23 @@
+# Active proof checkpoint — 2026-11-05 11:27 CET
+
+The goal is active. Mathematical commit `9baa51a6ee72126d36a705748ed6c215d65331f3` proves `OriginalInput source Input.empty` for every source state. It has no hypotheses. The proof uses only `propext`. The integrated build, strict public audit, and fresh imported theorem identity checks passed.
+
+Read this prefix first. Read `HANDOFF.md` and `FINDINGS.md` at the same checkpoint. The live controller is `/tmp/mcfta-runtime-packet-producer-normal-20261104-1205/CURRENT-HANDOFF.json`. It points to `R68-CURRENT-PROGRESS.json`. Older text below is history.
+
+Keep the full goal. Cover both actual recursive workers and every generated, returned, and later state. Use one bound from the original input and requested size. Prove actual counts, order, both rank/unrank directions, and runtime/source/API/ID/cache/interner/Eq/hash correspondence for the actual fixed operands. Add no carrier, closure, resource, completed-worker, final-state, success, fuel, Original, NodeScope, or validity supplier. Keep the native 8 gates, 5 fuel witnesses, and 9 universal binders fixed. Keep A/C/D, carrier, Frame, CheckedTotal, and CollectionFamily frozen.
+
+Next work:
+
+- Intersection: the empty component is proved. The full `Facts` + `Available` to `OriginalInput` theorem is still open for `Some`. Actual history is 2414 rows / 25 originals / API27 / two FINAL wholes. `Cache.Valid` was accepted. Prepare metadata and the exact origin for the unopened `MicroCFTA.InternedProbeProvenance.Cached` definition.
+- Native: review the new 6762-byte walker and 5848-byte plan at proposal228-v2 before any run. Constructor TYPEs already received permit positional patterns. Receipt227 stopped at the default/value guard. It accepted no new field context.
+- Haskell: review the 2998-byte header diagnostic diff and 3348-byte plan before any run. The exact-tab owner guard stopped at `UNIQUE_EXACT_TARGET_HEADER`. No owner labels or closed dependency interfaces were accepted.
+
+Preserve every history, partial, and failure. SourceProcessFAIL and Root upper UNKNOWN remain permanent. The board list response exposed content as well as metadata. Do not claim that exposure was metadata-only. Do not reset actors, histories, or whole-source slots. Use the same three proof lanes.
+
+Pushes to `formalize` are authorized. No Haskell source fix was made at this checkpoint. No temporary files were deleted. Deleting the old exact 32-path list still needs fresh direct approval after automatic review rejected it. Proof work and pushes can continue.
+
+---
+
 ## R67 restart checkpoint [2026-11-05 07:20 CET]
 
 The goal is ACTIVE. This checkpoint adds evidence and restart instructions. It adds no mathematical theorem. The base commit is `f39ea1ece8757443f9033d663d000221ffcde080`. The latest mathematical commit is `3ac8dc395c3b024f5bac4747c85e2e12ece6bdce`.

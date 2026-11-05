@@ -1,3 +1,55 @@
+# Current formalization handoff — 2026-11-05 11:27 CET
+
+The goal remains active. The new mathematical result is the unconditional empty-input component. The full system theorem remains open.
+
+## Verified mathematical change
+
+Commit `9baa51a6ee72126d36a705748ed6c215d65331f3` adds `lean/MicroCFTA/SourceRecursiveIntersectionEmptyOriginalInput.lean`. The file has 31 lines and 1457 bytes. Its SHA256 is `bb7879eeb54a7fc10e627c243469f2c2db76239fabbd0da81ca9e0b87dbe1c70`.
+
+`MicroCFTA.SourceRecursiveIntersectionInputView.empty_originalInput` proves `OriginalInput source Input.empty` for an arbitrary `InternedConstructorTemplates.State Symbol Guard`. It takes no Facts, Available, Original, NodeScope, closure, or budget hypothesis. Its only axiom is `propext`.
+
+The proof constructs the empty value and its availability. A local equality computes `children Value.empty = []` by `rfl`. It does not use the absent printed `children.eq_*` names. The public audit imports the module and checks the actual name before it prints the axioms.
+
+The older `nodeScope_originalInputs` theorem still takes Facts and NodeScope. Conditional inventory and carrier bounds remain conditional. They do not supply one bound from the original input for both actual workers.
+
+## Validation and source state
+
+The private strict check passed at 11:01:54. The actual direct build of Cache, the new leaf module, and Audit passed at 11:10:06. The strict public Audit passed at 11:12:51. The fresh imported object check passed at 11:14:56. It found a bound THEOREM owned by `MicroCFTA.SourceRecursiveIntersectionEmptyOriginalInput`. The complete public type and the `propext` report matched the private check.
+
+The integrated and strict checks ran inside `nix-shell`. Each used 4 GiB maximum/high memory and zero swap. The exact commands and 72 current source/config pins are in `R68-EMPTY-ORIGINAL-INTEGRATED-v2-BUILD-BEFORE.json` under the live controller directory. The complete input count is 75 when compiler, Lake, and driver are included. The first broad 38630-file plan was not run. It remains retained. The focused plan passed.
+
+The source build is reproducible from the branch. From `lean/`, use the pinned Lean 4.34.1 toolchain inside the project Nix shell. Build `MicroCFTA.Cache`, `MicroCFTA.SourceRecursiveIntersectionEmptyOriginalInput`, and `MicroCFTA.Audit`. Then run `lean -DwarningAsError=true -j1 MicroCFTA/Audit.lean`. The temporary receipts record the exact run and failure history. They are not additional proof assumptions.
+
+Main `bd5a406a6a3f84b7e3ae0906082783911509df83` is contained. The fresh upstream fetch completed before the source edit. Unrelated `.hypha/` files remain untracked and preserved. Publication status is in the live controller. Do not infer CI success from local checks.
+
+## Next proof obligations
+
+Preserve the full `available_originalInputOf` target with exactly its original Facts and Available hypotheses. The empty component is now proved. The full target has not been compiled with that component. Its Some branch still needs the original-member argument. The stronger Facts + Available to Original-value theorem is also open. No counterexample to it was established here.
+
+Actual intersection history is 2414 rows / 25 originals / API27. Project rows are 2279 across 17 originals. Std rows are 135 across 8 originals. Two FINAL wholes are already used. The exact current history is `R68-CACHE-VALID-ACTUAL-CLOSED-DEFINITION-RECEIPT/ALL5-NEWOWNER25-API27-COMPLETEHISTORY-CHARGE-FIRST.json` under `/tmp/mcfta-intersection-key-closure-audit-20261104`.
+
+NodeFields was accepted at API24. Its five actual persistent equation theorems each use `propext` and `Quot.sound`. Templates.Valid was accepted at API25. Its origin is 71–72; Templates now has 48/805 rows. The children family was printed and received at API26, but all five names are absent after a fresh import. Those names remain unavailable to proofs.
+
+Cache.Valid was accepted at API27 after all five rows and the new original were charged. Its exact origin is Cache135–139, within 5/334 rows and cap166. The actual direct Cache build and all four current roles were verified. The next unopened public dependency is `MicroCFTA.InternedProbeProvenance.Cached`. Only its metadata and exact-origin plan may be prepared now. No additional body or TYPE receipt is authorized by that preparation.
+
+The native lane has CFTA2221/49 + Std490/6 and two FINAL wholes. The native 8/5/9 counts remain fixed. InductiveVal context222 was accepted. Two-context receipt227 stopped at `UNEXPECTED_DEFAULT_OR_ORDINARY_VALUE`. It accepted no new context and exposed no default value privately. The next route uses only the actual owned primitive constructor TYPEs and verified parent/constructor association. It permits positional constructor patterns without field projector or default laws.
+
+The native next draft is `QUERY228-BOUNDED-FIVE-DEFINITION-CONSTRUCTOR-CLOSURE-METADATA-v2.lean`, 6762 bytes, SHA256 `9a7f2f524b87b630a862a5916a352e00941626d043b1a44af833f201184c0b7e`. The 5848-byte before-plan is beside it under `/tmp/mcfta-native-checked-total-next-supplement-20261104`. Review both before execution. The walker has not run. It proposes shared fuel 4096, depth 128, and at most 16 parameters, and per-binder dependency checks. It rejects unopened Literal/MData. Six missing traces and source/object correspondence remain UNKNOWN.
+
+The Haskell lane has all-source5410/10, two FINAL wholes, StdAPI9/projectLeanAPI3, and one printed GHC signature. Closed interfaces and dependency API receipts remain zero. This total includes Lean/Std sources; it is not a Haskell-only row count. GHC 9.14.1 returned the readBinIface signature. Seven type interfaces remain unopened. The repository-to-installed-source relation and provider relation remain unproved.
+
+The four-owner metadata capture has 27 rows. StageA accepted coordinates only. StageB first rejected the marker prefix. The exact diagnostic measured SPACE, SPACE, TAB. The new exact-tab guard still stopped at `UNIQUE_EXACT_TARGET_HEADER`. It produced no labels. The next header diagnostic is authored under `/tmp/mcfta-r68-stageb-tab-prefix-derivative-20261105-1037`. Review its exact diff and plan before execution. Guide768 and HELP40/81 remain fixed. No Haskell source fix was made.
+
+## Full scope and preserved process failures
+
+Cover both actual recursive workers and all generated, returned, and subsequent states. Derive one common bound from the original input and requested size. Complete actual counts/order/both rank directions and full runtime/source/API/ID/cache/interner/Eq/hash correspondence. Keep the actual fixed operands. Add no supplied carrier, closure, resource, completed-worker, final-state, success, fuel, Original, NodeScope, or validity premise. Keep A/C/D, carrier, Frame, CheckedTotal, and CollectionFamily frozen.
+
+SourceProcessFAIL and Root upper UNKNOWN remain permanent. Charge all source-equivalent rows before semantic guards, including failed guards. Preserve all partials and failure outputs. Do not reset actors or transfer private Source/TYPE/body/capability information through summaries, parsers, locators, aliases, or wrapper code. The unfiltered board list exposed content and was truncated. Its incident is recorded. Do not claim the old board bodies remained opaque.
+
+Keep using the same intersection, native, and Haskell lanes. The live controller and its beforeimages preserve their exact checkpoints. The cleanup review blocks deletion of the old exact 32-path list only. No deletion occurred here. Proof work and normal pushes to formalize are already authorized.
+
+---
+
 ## R67 handoff [2026-11-05 07:20 CET]
 
 The goal is ACTIVE. This is an evidence checkpoint. It adds no mathematical theorem. The base is `f39ea1ece8757443f9033d663d000221ffcde080`. Upstream main `bd5a406a6a3f84b7e3ae0906082783911509df83` is contained. Fetch at 06:42 and branch checks at 06:46 found no update. Normal pushes to formalize are authorized. Preserve unrelated `.hypha/`.

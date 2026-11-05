@@ -1,3 +1,33 @@
+# Current findings — 2026-11-05 11:27 CET
+
+## New verified Lean component
+
+Commit `9baa51a6ee72126d36a705748ed6c215d65331f3` proves `OriginalInput source Input.empty` for every source state. It has no hypotheses and uses only `propext`. The integrated build, strict Audit, and fresh persistent-object check passed. The Some case and full worker theorem remain open.
+
+## Do not use an axiom report as an existence check
+
+On the selected Lean 4.34.1, all five printed `MicroCFTA.InternedProbeProvenance.children.eq_1` through `.eq_5` names are ABSENT after a fresh import. Their kind and owner are null. The same run prints that each name depends on no axioms. Therefore that text alone does not establish a theorem binding.
+
+Check actual `env.find?`, kind, and module owner before an axiom report. The 11 named targets in the old published Audit were checked separately. All 11 are bound with owners:10 theorems and 1 other declaration. This checks those 11 targets, not every constant in the system. The new empty theorem also has an actual fresh THEOREM binding and owner. Audit now has a real `#check` for it.
+
+The printed children equation family remains retained. It was not reclassified as persistent. The new proof uses one directly checked local `rfl` equality. The first proof failed at two nil-membership lemma applications. The repair only adds the explicit argument in `(List.mem_nil_iff _).mp`. The failed output, including its provisional sorryAx report, remains retained and is not success evidence.
+
+## Haskell status for an external implementation pass
+
+No Haskell source fix was made at this checkpoint. The new committed source is Lean proof and Audit code. Temporary Python/Lean metadata guards are separate from Haskell behavior.
+
+Selected GHC 9.14.1 returned one readBinIface signature. No closed dependency interface, installed-source relation, or provider law was established. The four-owner lookup accepted coordinates only. All four standalone marker prefixes measured two SPACE bytes and one TAB byte. The exact-tab guard still stops at `UNIQUE_EXACT_TARGET_HEADER`. It accepted no owner labels. A diagnostic that reports only the failed target and header counts is authored but not run. Do not infer a Haskell defect from this guard stop.
+
+Native primitive-context receipt227 also stopped at a default/value guard. No default value was interpreted and no new context was accepted. The next draft uses only already received constructor TYPEs and positional patterns. It has not run. No field-projector, helper-body, or default law follows from it.
+
+## Storage and process record
+
+The live checkpoint is `/tmp/mcfta-runtime-packet-producer-normal-20261104-1205/CURRENT-HANDOFF.json`. There were about 87.8 GiB free at the checkpoint. No temporary files were deleted. The old exact 32-path cleanup list still needs fresh direct approval after automatic review rejected deletion. All proof work and normal formalize pushes remain authorized.
+
+The board list API returned content as well as metadata. Its unfiltered output was exposed and truncated. SourceProcessFAIL and Root upper UNKNOWN remain permanent. The local Lean theorem does not complete the full process or system goal.
+
+---
+
 ## R67 findings [2026-11-05 07:20 CET]
 
 This checkpoint adds verified interface and source-identity evidence. It adds no mathematical theorem. The latest mathematical commit remains `3ac8dc395c3b024f5bac4747c85e2e12ece6bdce`. Its nodeScope_originalInputs theorem derives OriginalInput for both decoded operands from the stated Facts and NodeScope. Actual entry, recursive successors, returned states and a common original-input bound remain open. Source and Audit hashes still match the verified R65 artifacts.
