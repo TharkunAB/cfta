@@ -8,7 +8,7 @@ Keep the full goal. Cover both actual recursive workers and every generated, ret
 
 Next work:
 
-- Intersection: the empty component is proved. The full `Facts` + `Available` to `OriginalInput` theorem is still open for `Some`. Actual history is 2414 rows / 25 originals / API27 / two FINAL wholes. `Cache.Valid` was accepted. Prepare metadata and the exact origin for the unopened `MicroCFTA.InternedProbeProvenance.Cached` definition.
+- Intersection: the empty component is proved. The full `Facts` + `Available` to `OriginalInput` theorem is still open for `Some`. Actual history is 2414 rows / 25 originals / API27 / two FINAL wholes. `Cache.Valid` was accepted. The unopened `MicroCFTA.InternedProbeProvenance.Cached` declaration spans Provenance30–33. Its kind still needs a fresh check before any definition query. The old build snapshot cannot be reused whole because Audit changed.
 - Native: review the new 6762-byte walker and 5848-byte plan at proposal228-v2 before any run. Constructor TYPEs already received permit positional patterns. Receipt227 stopped at the default/value guard. It accepted no new field context.
 - Haskell: review the 2998-byte header diagnostic diff and 3348-byte plan before any run. The exact-tab owner guard stopped at `UNIQUE_EXACT_TARGET_HEADER`. No owner labels or closed dependency interfaces were accepted.
 
