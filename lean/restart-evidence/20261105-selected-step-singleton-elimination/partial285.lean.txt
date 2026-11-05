@@ -1,0 +1,108 @@
+import MicroCFTA.SourceCurrentSelectedStepCheckedTotal
+
+namespace MicroCFTA.SourceCurrentSelectedStepObservedTotal
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationCompressionFrame
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedPartialInvariant (Context)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+
+variable {Typing Key : Type} {width : Nat}
+variable [DecidableEq (EdgeKey Symbol Constraint)]
+variable (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+variable (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+variable (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+variable (stop : Option (Metadata Typing → Nat → Bool))
+variable (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+variable [DecidableEq Symbol] [DecidableEq Node]
+
+attribute [local instance] SourcePruningEnumerationAction.actionMonadList
+
+/-- Preserve the selected-step result and prove totality for its action observation. -/
+theorem complete
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller width) (memos : Memos) (before : Cached)
+    (preference : List Nat → Option Nat) (uv : Nat) (roots : Nat → Nat)
+    (initial : Context formulas solver inventory caller memos) (safe : Safe before.core)
+    (pending : EnumerationReferences.PendingReferences before.core)
+    (selection : EnumerationPureSelection.next preference before = .expand uv)
+    (realized : PendingRealized caller.checked.native.machine.heap before.core)
+    (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (flags : ∀ slot, SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot)) :
+    ∃ readFuel checkFuel nativeFuel representativeFuel indexFuel,
+      ∀ er ec ei callbackFuel r n p h k,
+        let observed := SourcePruningEnumerationSelectedStep.run holeKey fits admits graph templates
+          checkEmpty edgesOf stop order metadata (readFuel + er) (checkFuel + ec) nativeFuel
+          representativeFuel (indexFuel + ei) callbackFuel r n p h k uv caller before memos.query
+        SourcePruningEnumerationSelectedStep.Valid holeKey fits admits graph templates checkEmpty edgesOf
+          stop order metadata formulas solver inventory (readFuel + er) (checkFuel + ec) nativeFuel
+          representativeFuel (indexFuel + ei) callbackFuel r n p h k uv caller before memos observed ∧
+        match observed with
+        | .narrowed checked _ _ _ action _ _ _ =>
+            Frame before.core checked ∧ UnionFind.Total checked.representatives ∧
+              match action with
+              | some [.ok ((), after)] => UnionFind.Total after.representatives
+              | _ => True
+        | _ => True := by
+  obtain ⟨readFuel, checkFuel, nativeFuel, representativeFuel, indexFuel, results⟩ :=
+    SourceCurrentSelectedStepCheckedTotal.complete holeKey fits admits graph templates
+      checkEmpty edgesOf stop order metadata formulas solver inventory caller memos before
+      preference uv roots initial safe pending selection realized paths counts flags
+  refine ⟨readFuel, checkFuel, nativeFuel, representativeFuel, indexFuel, ?_⟩
+  intro er ec ei callbackFuel r n p h k
+  have previous := results er ec ei callbackFuel r n p h k
+  refine ⟨previous.1, ?_⟩
+  have checked := previous.2
+  generalize actual : SourcePruningEnumerationSelectedStep.run holeKey fits admits graph templates
+    checkEmpty edgesOf stop order metadata (readFuel + er) (checkFuel + ec) nativeFuel
+    representativeFuel (indexFuel + ei) callbackFuel r n p h k uv caller before memos.query =
+      produced at checked ⊢
+  cases produced with
+  | stopped read recursion => exact True.intro
+  | parked core candidate raw => exact True.intro
+  | narrowed core prepared reached queries action candidate right ordinary =>
+      refine ⟨checked.1, checked.2, ?_⟩
+      cases action with
+      | none => exact True.intro
+      | some raw =>
+          cases raw with
+          | nil => exact True.intro
+          | cons first tail =>
+              cases first with
+              | error fault => exact True.intro
+              | ok observed =>
+                  rcases observed with ⟨unit, after⟩
+                  cases unit
+                  cases tail with
+                  | cons second rest => exact True.intro
+                  | nil =>
+                      have singletonMember :
+                          (Except.ok ((), after) :
+                            Except EnumerationState.Error
+                              (Unit × EnumerationState.State Symbol Constraint)) ∈
+                            [Except.ok ((), after)] := by
+                        dsimp only [Membership.mem, List.instMembership]
+                        exact List.Mem.head []
+                      have successfulSingleton :
+                          ∀ (operation : EnumerateM Symbol Constraint Unit)
+                            (input : EnumerationState.State Symbol Constraint),
+                            ExceptT.run (operation input) = [Except.ok ((), after)] →
+                              Success operation input () after := by
+                        intro operation input raw
+                        dsimp only [Success]
+                        rw [raw]
+                        exact singletonMember
+                      -- Bind this success to the actual retained prepare action.
+                      -- Preserve Total through its actual representative and setter operations.
+
+end MicroCFTA.SourceCurrentSelectedStepObservedTotal
