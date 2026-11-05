@@ -1,3 +1,28 @@
+## R67 findings [2026-11-05 07:20 CET]
+
+This checkpoint adds verified interface and source-identity evidence. It adds no mathematical theorem. The latest mathematical commit remains `3ac8dc395c3b024f5bac4747c85e2e12ece6bdce`. Its nodeScope_originalInputs theorem derives OriginalInput for both decoded operands from the stated Facts and NodeScope. Actual entry, recursive successors, returned states and a common original-input bound remain open. Source and Audit hashes still match the verified R65 artifacts.
+
+Facts and Available contracts are now accepted privately. Five exact reference bindings were resolved. Resident and IssuedReferences actually bind to definitions in InternedFreshProbeKeys. Their complete query is captured. The six original lines and API 20 were charged before receipt guards at 07:13. Current intersection totals are 2378/23/API 20/two FINAL. Private acceptance of those two definitions is pending at this checkpoint. The new unproved target is `Facts s -> Available s v -> Original v`. It can be false. A static counterexample to it needs a separate actual execution witness before it can establish a worker defect.
+
+The previous 51 build snapshot did not pin FreshProbeKeys. A guard stopped before the query. A new explicit dependency and published-context build passed with 55 stable pins. The two-kind query and definition capture then passed with 65 and 72 stable pins. All jobs used 4 GiB and zero swap. A queued authorization did not start the idle receiving task. Root corrected that dispatch at 07:13. All failures and actual charging times are retained. A local QName guard also stopped because it required a universe suffix. The actual headers have colon boundaries. That failure is retained within the same scope.
+
+Native recorded identity coverage is now complete for 49 CFTA and 3 Std originals. The registry is `/tmp/mcfta-native-checked-total-next-supplement-20261104/ACTUAL-METADATA204-COMPLETE-CURRENT52-ORIGINAL-IDENTITY-REGISTRY.json` (16539 bytes, SHA 28563db066d5321f23e15ff012ea84aeae242be09038ad15f61f4722ff9ca0d3). New compiler-owner priors require actual origin matching. The real closure walker and primitive interface acquisition remain unexecuted. CFTA 2221/49 and Std 164/3 remain unchanged. The old Step-to-Action edge is verified, but its optimized-worker link remains unproved. Keep all three missing Std traces and source-object UNKNOWN states.
+
+Haskell work for an external agent:
+
+- No Haskell source fix was made in R67. Every future Haskell fix must be recorded here.
+- The fetched GHC source is exactly repository blob 920933bedbd405a343aabe7807a61247f93376a0 at ghc-9.14.1-release, compiler/GHC/Iface/Binary.hs. It has 30685 bytes and 749 original lines. The rendered source HTML has 1649 rows. Use the 749-line original and one alias pool, cap 374.
+- The repository header confirms GHC.Iface.Binary and the written readBinIface export at 15:9. Its complete signature and required datatype interfaces remain unreceived. Last confirmed source coverage is 1-160. Last confirmed source history is 5370/10, with two FINAL wholes, Std 9/project 3 API receipts and 160 compiled-interface metadata rows.
+- Exact code-token hits in 121-160 are zero. The earlier 72-120 top-level-candidate result does not count every token. The 161-200 locator was admitted at 07:20. Consult the live controller for its result. Keep scope-local observations separate from global absence.
+- The actual installed Name/unit/provider, selected compiled API and installed-source correspondence remain open. The cached Sequence append/insertion bound also remains open. Source scope is 1-2200/5008.
+- The temporary header tools required a mode-format correction and compact metadata output. These are Python tooling repairs. They change no Haskell source. Both failures and their conservative source charges remain retained.
+
+The full goal remains both actual recursive workers, all generated/returned/subsequent states, one common original-input/requested-size bound, exact counts/order/both rank-unrank directions and full Haskell/runtime/API/ID/cache/interner/Eq/hash correspondence. Add no supplier or closure premise. Keep native 8/5/9 and the same operands. Metadata success does not clear SourceProcessFAIL or Root original-source upper UNKNOWN.
+
+R67 deleted zero cleanup targets. The exact 32 destructive cleanup list still awaits approval. Normal formalize pushes are authorized. Use the live R67 controller referenced by HANDOFF.md for later progress.
+
+--- End R67 current prefix; older findings follow. ---
+
 ## [2026-11-05 05:03 CET] R66: verified dependencies; mathematical claim unchanged
 
 The full proof remains open. This checkpoint adds no mathematical theorem. The latest mathematical commit is `3ac8dc395c3b024f5bac4747c85e2e12ece6bdce`. Its theorem `MicroCFTA.SourceRecursiveIntersectionInputView.nodeScope_originalInputs` proves that an existing `NodeScope source request` gives `OriginalInput source` for both computed operand descriptors. The `Facts source` premise remains in the statement. The proof does not use it. The strict check, explicit original proposition, ordinary public type, normal Audit, and strict Audit passed. The axiom check reported only `propext` and `Quot.sound`.

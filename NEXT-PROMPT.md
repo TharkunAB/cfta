@@ -1,3 +1,25 @@
+## R67 restart checkpoint [2026-11-05 07:20 CET]
+
+The goal is ACTIVE. This checkpoint adds evidence and restart instructions. It adds no mathematical theorem. The base commit is `f39ea1ece8757443f9033d663d000221ffcde080`. The latest mathematical commit is `3ac8dc395c3b024f5bac4747c85e2e12ece6bdce`.
+
+Prove both actual recursive workers for all generated, returned and subsequent states. Derive one common bound from the original input and requested size. Prove exact counts, order and both rank/unrank directions. Prove the actual Haskell/runtime/source/API/ID/cache/interner/Eq/hash correspondence. Keep the actual fixed operands. Add no carrier, closure, resource, completed-worker, final-state, success or fuel supplier premise. Keep the native 8 gates, 5 fuel witnesses and 9 universal binders.
+
+Use `/tmp/mcfta-runtime-packet-producer-normal-20261104-1205/CURRENT-HANDOFF.json` and its pinned `R67-CURRENT-PROGRESS.json` for live work. The live controller can advance after this prefix. Preserve `.hypha/` and all proofs, counterexamples, repairs and marked drafts. Refresh upstream before work. Normal pushes to `formalize` are authorized.
+
+The latest checked addition is `SourceRecursiveIntersectionInputView.nodeScope_originalInputs`. Given the stated Facts and NodeScope, both request operands decode to OriginalInput values. The missing work is to establish the required conditions for actual entry, recursive successors, returned graphs and subsequent workers. The descriptor bound still uses issued counter N. Its relation to one original-input bound remains open.
+
+Next actions:
+
+1. Finish the exact two-predicate receipt for the new unproved target `Facts s -> Available s v -> Original v`. This target can be false. Use the same operands. A static counterexample alone does not establish a worker failure. The actual six-line/API 20 charge is persisted. Current intersection history is 2378 lines, 23 originals, API 20 and two FINAL wholes. Private contract acceptance remains pending at this checkpoint.
+2. Use the recovered native current 52 original-identity registry. It covers 49 CFTA and 3 Std originals. Actual new Lean.Expr/Lean.Level/Lean.Declaration origins must still be matched before prior 0 is established. The real closure walker remains unexecuted. Keep all three missing Std traces and source-object UNKNOWN states.
+3. Continue the bounded Haskell dependency route. The accepted GHC repository source has 749 lines and cap 374. Its shared consumed union is 1-160. The last confirmed actor total is 5370 lines across 10 originals. The 161-200 locator was admitted at 07:20; its result is pending in the live controller. The readBinIface type and installed-API/source link remain unknown. No Haskell source fix was made.
+
+SourceProcessFAIL and Root original-source upper UNKNOWN remain permanent. Keep existing private Source/TYPE/body/capability records private. Do not reset actors or obtain a new view through a summary, wrapper, parser or locator. Charge all source-equivalent lines before guards. Preserve every STOP and partial result.
+
+All Root heavy jobs are terminal. Verified jobs used 4 GiB memory and zero swap. R67 deleted zero cleanup targets. The exact 32 destructive cleanup approval remains pending. Read HANDOFF.md and root FINDINGS.md from their R67 prefixes next. Preserve every older tail.
+
+--- End R67 current prefix; older checkpoints follow. ---
+
 ## [2026-11-05 05:03 CET] Resume R66: goal ACTIVE
 
 Read only this new prefix first. Read the R66 prefix of root HANDOFF and FINDINGS next. Preserve older tails as opaque history unless a precise new scope permits access. Root controller directory is `/tmp/mcfta-runtime-packet-producer-normal-20261104-1205`. Current files are `R66-CURRENT-PROGRESS.json`, `CURRENT-HANDOFF.json`, and `PUBLISHED-CHECKPOINT.json`.
