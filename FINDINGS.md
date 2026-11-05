@@ -1,3 +1,17 @@
+## Current findings: 2026-11-05 14:30 CET (R70)
+
+R70 has no new completed mathematical theorem. The full general original-input witness, both actual recursive workers and their common original-input/requested-size bound remain open. The latest mathematical increment remains empty_originalInput. The previously published bounded checker is diagnostic evidence; its soundness and the full runtime/source correspondence remain open.
+
+The native proof now has all five selected complete ordinary TYPE/value interfaces: both modifyGet definitions, Pure.pure, Applicative.toPure and Monad.toApplicative. Actual receipts 243 and 246 passed after exact retained-capture/query/context bindings and complete-cut guards. No source rows were added. The last two definitions belong to the same actual dictionary chain, as checked in the separately owned operation. These interfaces do not prove effect transport. The full observed-state attempt is examining the actual reject branch. Its proposed canonical reject reference is not yet certified. Keep the original 8 gates, 5 fuel witnesses, 9 universal binders and actual operands.
+
+The intersection header syntax and the exact NodeKey selector binding are accepted as metadata. The namespace index occurrence has no exact match, so its actual context remains unresolved. A Nix metadata probe found Lean.resolveNamespace as a definition owned by Lean.ResolveName. Its TYPE, implementation, behavior and eligible invocation context remain unreceived. No parent-body interpretation, generated matcher law or general Some proof follows from these observations.
+
+No Haskell source fix occurred. The current metadata pin passes all named checks; the old failed assertion/conjunct remains UNKNOWN. The proposed inspection guard records individual failures and checks stable dev/inode/size/mode/mtime/ctime fields. It excludes atime because reads can change it; this does not identify the historical failure's cause. No eligible complete declaration checker was established in the held history. A restricted checker and the unresolved OPTIONS_GHC row 7 configuration are separate gates before any source-span acceptance. All seven dependency interfaces and actual Name/unit/provider/source-to-installed correspondence remain open. Inspection code is not a library repair.
+
+Preserve every old failure, marked draft, counterexample and source history. Source process FAIL and Root source upper UNKNOWN remain permanent. The earlier 75 declared build pins do not constitute a complete transitive inventory. No cleanup occurred; the exact 32-target deletion is still unapproved.
+
+---
+
 ## Current findings: 2026-11-05 13:30 CET (R69)
 
 R69 adds a reproducible bounded diagnostic. It adds no mathematical theorem. The general original-input witness, both actual recursive workers and their common bound remain open.
