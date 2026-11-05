@@ -1,6 +1,6 @@
-## 2026-11-05 22:38 CET: Complete selected-step proof candidate
+## 2026-11-05 23:00 CET: First complete candidate compiler result
 
-Candidate316 supplies a complete 192-line proof script for selected-step observed totality. Its first 3628 bytes match the frozen statement. The statement keeps eight caller gates, five fuel witnesses and nine universal binders. The proof adds no premise or placeholder. Root reviewed the whole candidate. Compiler checking and strict kernel acceptance are pending. The build excludes `lean/restart-evidence/20261105-selected-step-singleton-elimination/candidate316.lean.txt`. No new checked theorem is claimed.
+Candidate316 supplies a complete 192-line proof script for selected-step observed totality. Its first 3628 bytes match the frozen statement. The statement keeps eight caller gates, five fuel witnesses and nine universal binders. The proof adds no premise or placeholder. Root reviewed the whole candidate. The first diagnostic compiler run318 exited with seven errors. It hit no resource or output limit. All 333 declared input checks passed. Filter319 reported locations at lines 101, 154 and 175. Error messages and contexts remain opaque. Proof correction and strict kernel acceptance are pending. The build excludes `lean/restart-evidence/20261105-selected-step-singleton-elimination/candidate316.lean.txt`. No new checked theorem is claimed.
 
 The new script covers setter representative preservation, successful prepared actions, finish retention and the actual runPrefix singleton observation. Paired ExceptT.mk/run receiving309 and exact context comparison313 passed. The needed owned-interface replay314 passed. Earlier partial285/288/300 remain incomplete records. Every earlier STOP, SourceProcessFAIL and Root upperUNKNOWN remains in the record.
 
@@ -10,7 +10,7 @@ Haskell source fix: none. Two extracted ModIface spellings are untrusted printed
 
 A 27-byte fixture compiled with separate .olean/.ilean outputs after omission of the extra RLIMIT_AS limit. Actual cgroup memory.max/high stayed at 4 GiB with zero swap. This result covers that fixture and context only. It establishes no old Source/object or full transitive correspondence. Earlier wrapper failures and their opaque logs remain.
 
-/tmp has 83.98 GiB free. The last readable scan was 228.56 GiB at 19:45 CET. It was a lower bound with five unreadable directories. New work uses small files and no tree copies. The exact 32 cleanup targets still lack approval. Next: check candidate316, recover the validated strict-kernel controls, and continue the full goal.
+/tmp has 83.98 GiB free. The last readable scan was 228.56 GiB at 19:45 CET. It was a lower bound with five unreadable directories. New work uses small files and no tree copies. The exact 32 cleanup targets still lack approval. Next: correct the reported candidate316 proof errors, recover the validated strict-kernel controls, and continue the full goal.
 
 ## Singleton elimination and current boundaries — 2026-11-05 20:05 CET
 

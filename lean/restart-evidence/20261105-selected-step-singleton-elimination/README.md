@@ -2,8 +2,8 @@
 
 All four files keep the full observed-totality statement. The header has eight
 caller gates, five fuel witnesses and nine universal binders. It is unchanged.
-The files add no external premise. They are uncompiled and excluded from the
-normal Lean build. The three partial drafts remain incomplete.
+The files add no external premise. None has passed compiler checking. The normal
+Lean build excludes them. The three partial drafts remain incomplete.
 
 Partial285 gives terms for singleton membership and the local Success predicate.
 Partial288 adds primitive singleton elimination. Partial300 adds the admitted
@@ -15,8 +15,9 @@ The historical offset unit remains unknown. Earlier failed attempts remain.
 Candidate316 supplies a complete 192-line proof script. It covers setter
 representative preservation, successful prepared actions, finish retention and
 the actual runPrefix singleton observation. Its first 3628 bytes match the
-frozen header. Whole review passed. Compiler checking and strict kernel
-acceptance are pending. It is a compiler candidate, not a checked theorem.
+frozen header. Whole review passed. Its first diagnostic compiler run failed
+with seven errors. It hit no resource or output limit. All declared input checks
+passed. Proof correction and strict kernel acceptance are pending.
 
 The full two-worker bound and all-state, count, order, inverse, runtime and
 Haskell correspondence requirements remain open. No checked theorem is added.
