@@ -1,3 +1,29 @@
+## Native draft and current gaps — 2026-11-05 19:36 CET
+
+The [97-line native draft](lean/restart-evidence/20261105-selected-step-singleton-membership/README.md)
+is incomplete and uncompiled. Its full 8/5/9 header is unchanged. The exact
+singleton-membership goal and returned-state totality proof remain open.
+Receipt 281 accepted three primitive List.Mem TYPEs. Current native history is
+CFTA 2227/49 + Std 516/7 across 56 originals; the full 16-row charge is permanent.
+
+Capture 34 accepted the exact IssuedReferences ordinary TYPE/value interface.
+The full available_originalInputOf target and full counterexample remain unproved.
+Reference metadata identifies five constructors. Their complete type interfaces
+and all counterexample premises remain unchecked. BinderProtocol file-role
+attribution is open. The filename locator produced candidates, not ownership.
+
+The exact selected-GHC ModIface query captured 3795 opaque bytes with exit 0.
+Frame/name metadata review is pending. It supplies no export-access contract
+or actual Name/unit/provider law. The earlier Hypha NOT_FOUND/exit 3 STOP stays.
+Haskell source fixes: none. No new checked mathematical theorem is claimed.
+
+The largest gap is the original-input common bound for both actual recursive
+workers and every generated, returned and subsequent state. Keep the exact
+counts, order, both inverses and runtime/source correspondence requirements.
+All historical failures, SourceProcessFAIL and Root upperUNKNOWN remain.
+
+---
+
 ## Union witness analysis — 2026-11-05 18:31 CET
 
 The new [union witness argument](lean/restart-evidence/20261105-union-witness-originality/README.md)
