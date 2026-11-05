@@ -1,3 +1,36 @@
+## Current receipts — 2026-11-05 18:07 CET
+
+No new mathematical theorem or Haskell source fix is claimed.
+The marked partial260 draft remains incomplete and uncompiled.
+
+The exact qualified `GHC.Iface.Binary.QuietBinIFace` use with a
+`GHC.Iface.Binary.TraceBinIFace` annotation passed a fresh receipt. All 43 external
+and four context input fences passed before, after, and at final acceptance.
+This closes one chosen-argument use in the selected GHC context. It does not
+close the whole Trace, SDoc or IO interfaces, a general CLI law, or Name/unit,
+provider, installed-source, runtime, or system correspondence. Keep all older
+STOPs, storage breaches, and the lost pre-view timestamp unchanged.
+
+The native actor permanently charged ten rows before all input guards.
+Current history is CFTA 2227/49 plus Std 500/7, with 56 positive originals.
+Prelude is 131/6091 rows. Basic is 2/2630 rows. All 107 earlier generating rows,
+both FINAL slots and Frame 71/145 remain unchanged. The four-interface capture
+passed with 739 bytes and no stderr. Semantic receiving and the later full 8/5/9
+proof step are separate gates. No reduction permission follows from the capture.
+
+The fresh current-context NodeFields.eq_2 TYPE capture 33 passed with 1315 bytes
+and no stderr. It keeps current Audit pinned and preserves Replay3's historical
+Audit mismatch. The actual Available-to-cache-entry bridge remains unproved.
+The common bound for both actual workers and all returned states remains open.
+Keep the full counts, order, inverse, and Haskell integration requirements.
+
+The Haskell inspector will first check the retained `--show-iface` control
+metadata. The written export label alone does not identify the exported Name's
+unit/provider. No further dump rows, flag, query, source or helper was acquired.
+The canonical scratch handoff records the exact current scopes and pins.
+
+---
+
 ## Marked proof draft — 2026-11-05 17:21 CET
 
 No mathematical theorem was completed in this checkpoint. The full system goal
