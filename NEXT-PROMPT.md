@@ -1,3 +1,42 @@
+## Continuation — 2026-11-05 16:38 CET
+
+This checkpoint adds no mathematical theorem. The full proof goal remains open.
+The common bound must cover both actual recursive workers and every generated,
+returned, and subsequent state. Keep the original operands and the requested size.
+Do not add a carrier, closure, resource, completed-worker, success, fuel,
+`OriginalInput`, `NodeScope`, or validity premise to the frozen top-level goal.
+
+Native receiving257 passed. It received the complete ordinary definition
+`MicroCFTA.EnumerationState.reject` and only the complete TYPE of
+`MicroCFTA.EnumerationCorrectness.success_failure`. All 45 final physical fences
+passed. The existing theorem does not match the actual reject operation. The
+actor must continue the fixed 8-gate, 5-witness, 9-binder mathematical target.
+Use fresh full reservations before each replay. Keep the receiving255 STOP and
+the partial247 incident. Root must not read the partial247 body or private cuts.
+
+Intersection consumption is 2524 rows from 27 originals, with 32 API receipts.
+The exact Prelude 1–64 raw-byte locator found no `optParam` candidate. Those 64
+rows remain charged. This result says nothing about other rows. The parent
+header guard remains closed. A complete certificate of the actual command's
+relevant effects may meet the same context requirement. The selector binding
+alone does not provide that certificate. Do not weaken the guard or extend the
+locator without a separate review.
+
+The selected GHC capture reports the module label `GHC.Utils.Outputable`.
+This label does not establish a source identity, provider, or typing law.
+`QuietBinIFace` may avoid the `SDoc` callback dependency in the inspection helper.
+Its constructor TYPE and use contract still need verification. Keep the whole
+`TraceBinIFace` interface OPEN. No Haskell source fix was made.
+
+The canonical scratch controller is
+`/tmp/mcfta-runtime-packet-producer-normal-20261104-1205/CURRENT-HANDOFF.json`.
+It points to `R71-CURRENT-PROGRESS.json`. Keep the older R70 controller frozen.
+The pending exact32 cleanup still needs the requested direct approval. Do not
+delete those targets or unrelated local-model files. Free space was about
+86.3 GiB. The new Root R71 metadata was about 225 KiB at 16:18.
+
+---
+
 ## Current checkpoint: 2026-11-05 15:20 CET (R71)
 
 The goal is active. Keep both actual recursive workers, every generated, returned and subsequent state, one bound from the original inputs and requested size, exact counts and order, both rank/unrank directions, and Haskell/runtime/source/API/ID/cache/interner/Eq/hash correspondence. Keep the optimized interned core and older constructor/equality targets. Keep actual operands, native 8 gates, 5 fuel witnesses and 9 universal binders. Add no supplied carrier, closure, resource, completed-worker, success, fuel, Original, NodeScope or validity premise. Keep A/C/D/carrier/Frame/CheckedTotal/CollectionFamily frozen.

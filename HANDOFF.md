@@ -1,3 +1,61 @@
+## Continuation — 2026-11-05 16:38 CET
+
+This checkpoint adds no mathematical theorem. The full proof goal remains open.
+The common bound must cover both actual recursive workers and every generated,
+returned, and subsequent state. Keep the original operands and the requested size.
+Do not add a carrier, closure, resource, completed-worker, success, fuel,
+`OriginalInput`, `NodeScope`, or validity premise to the frozen top-level goal.
+
+The latest pushed checkpoint before this continuation is
+`0acfdbf7eb287a548c31a720c359c5829074eb51`. Upstream was refreshed at 15:50 CET.
+`origin/main` remains `bd5a406a6a3f84b7e3ae0906082783911509df83` and is contained
+in `formalize`. Preserve the unrelated untracked `.hypha/` directory.
+
+Native receiving255 stopped at the two-interface framing guard. It accepted
+zero interfaces. A bounded metadata diagnostic found the exact `@` prefix on
+the already-bound theorem header. The reviewed receiving257 repair accepts
+only that exact header form. Receiving257 passed both complete selected
+interfaces and all 45 final physical fences. It received one ordinary
+TYPE+VALUE and one theorem TYPE. It received no theorem proof, helper body,
+or default implementation. Current consumption is CFTA 2227/49 and Std 490/6,
+with 55 positive originals and two FINAL slots. The actor reports that the
+selected existing theorem does not match the actual bound reject operation.
+This result does not prove impossibility. Fresh258 replay preparation precedes
+further work on the unchanged native mathematical target. Root must keep the
+actual private cuts and the partial247 body opaque.
+
+Intersection consumption is now 2524/27, with project 2305/18, Std 219/9, API 32,
+and two FINAL slots. The Prelude owner is at 98/6091 rows, below its cap 3045.
+The newly charged rows 1–64 contain no exact raw-byte `optParam` candidate.
+The separate Root numeric-range tool stopped at OUTPUT_CAP. Its retained
+output remains opaque. No compiler-error cause, source origin, default law,
+or global absence was established. The selective-open selector binding is
+insufficient for the current complete-context guard. A certificate of the
+actual command's complete relevant effects is an alternative certificate
+TARGET. It is not an accepted certificate or a guard change. Parent rows 15–18
+remain uninterpreted. No locator extension is admitted.
+
+Haskell consumption remains 5410/10, with two FINAL slots. The selected Hypha
+symbol lookup returned `NOT_FOUND`. This result does not prove symbol absence.
+The exact selected GHCi query succeeded with a 233-byte, five-row capture.
+The guarded owner-label receipt reports `GHC.Utils.Outputable` and passes its
+six capture/context/locator/plan fences. This is a reported module label only.
+`CheckHiWay` remains the one closed captured dependency interface. Six original
+dependency gaps and the additional `SDoc` gap remain open. A proposed use of
+`QuietBinIFace` may avoid following that callback dependency for the inspection
+helper. Require the exact constructor TYPE and its use contract first. Do not
+claim closure of the whole `TraceBinIFace` interface. No Haskell source fix was
+made. Keep all source/provider/actual-Name/unit/runtime correspondence gaps.
+
+Read the canonical scratch controller for exact current receipt paths and
+hashes. Preserve all earlier STOPs, source charges, before-images, and draft
+proofs. SourceProcessFAIL and Root original-source upperUNKNOWN remain.
+No old-source budget or FINAL slot was reset. Keep the exact32 cleanup pending.
+Root R71 metadata used 229807 bytes in 68 files at 16:18. No build tree was copied
+or deleted. Free space was about 86.3 GiB. Leave unrelated model downloads alone.
+
+---
+
 ## Current handoff: 2026-11-05 15:20 CET (R71)
 
 The goal is active. Keep both actual recursive workers, every generated, returned and subsequent state, one bound from the original inputs and requested size, exact counts and order, both rank/unrank directions, and Haskell/runtime/source/API/ID/cache/interner/Eq/hash correspondence. Keep the optimized interned core and older constructor/equality targets. Keep actual operands, native 8 gates, 5 fuel witnesses and 9 universal binders. Add no supplied carrier, closure, resource, completed-worker, success, fuel, Original, NodeScope or validity premise. Keep A/C/D/carrier/Frame/CheckedTotal/CollectionFamily frozen.
