@@ -1,3 +1,19 @@
+## Union witness analysis — 2026-11-05 18:31 CET
+
+The new [union witness argument](lean/restart-evidence/20261105-union-witness-originality/README.md)
+is uncompiled. In the same valid source, two available union values with the
+same codec identity must be equal. The union case still requires a proof that the
+available value satisfies Original. The full target and a complete counterexample remain unproved.
+The next exact condition is IssuedReferences. Capture 34 remains prospective.
+
+Native receipt 272 accepted all four membership interfaces. The full 8/5/9
+successful-state totality proof has resumed. List.Mem remains folded.
+The current NodeFields.eq_2 receipt 33 passed. Its old Audit STOP is preserved.
+The Haskell help 1–40/81 locator stopped at its fixed boundary. Unit/provider
+facts remain unknown. Haskell source fixes: none. No new checked theorem.
+
+---
+
 ## Current receipts — 2026-11-05 18:07 CET
 
 No new mathematical theorem or Haskell source fix is claimed.
