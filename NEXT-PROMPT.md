@@ -1,38 +1,16 @@
-## Setter draft and remaining proof gaps — 2026-11-05 21:30 CET
+## 2026-11-05 22:38 CET: Complete selected-step proof candidate
 
-The top-level correctness theorem remains open. The full goal covers both actual
-recursive workers and every generated, returned and later state. It requires one
-bound from the original inputs and requested size, exact size/count/order, both
-rank/unrank laws, and Haskell/runtime/API/ID/cache/interner/equality/hash correspondence.
+Candidate316 supplies a complete 192-line proof script for selected-step observed totality. Its first 3628 bytes match the frozen statement. The statement keeps eight caller gates, five fuel witnesses and nine universal binders. The proof adds no premise or placeholder. Root reviewed the whole candidate. Compiler checking and strict kernel acceptance are pending. The build excludes `lean/restart-evidence/20261105-selected-step-singleton-elimination/candidate316.lean.txt`. No new checked theorem is claimed.
 
-The [latest native draft](lean/restart-evidence/20261105-selected-step-singleton-elimination/README.md)
-is partial300. It adds admitted StateT.modifyGet and ExceptT.pure reductions.
-Its first 3628 header bytes are unchanged. It retains eight caller gates, five
-fuel witnesses and nine universal binders. It adds no external premise.
-The setter, prepare action and returned representative-totality proofs remain
-incomplete and uncompiled. ExceptT.mk and ExceptT.run remain folded. Their direct
-origins are already covered. Receiving305 stopped on an unsupported offset-unit
-comparison. Diagnostic306 establishes numeric widths, not the historical unit.
-Parametric receiver307 is authored and awaits complete code review.
+The new script covers setter representative preservation, successful prepared actions, finish retention and the actual runPrefix singleton observation. Paired ExceptT.mk/run receiving309 and exact context comparison313 passed. The needed owned-interface replay314 passed. Earlier partial285/288/300 remain incomplete records. Every earlier STOP, SourceProcessFAIL and Root upperUNKNOWN remains in the record.
 
-Eight BinderProtocol Source copies have identical bytes. They do not match the
-held 27 original records. This does not establish a new original or Source/object
-correspondence. The general OriginalInput proof remains open. An isolated module
-reproduction plan needs verified invocation metadata. Printable trace keys remain
-opaque because they can contain Source/configuration fragments.
+The full target stays unchanged. Both actual recursive workers must use one bound from the original inputs and requested size. It must cover all generated, returned and subsequent states. Exact accepted terms per node count, counts, order and both rank/unrank inverse laws remain required. The main gaps are the common bound, general Some provenance, caller facts and invariant preservation, contract composition, and actual Haskell/runtime correspondence. The last checked mathematical addition remains at 9baa51a6ee72126d36a705748ed6c215d65331f3.
 
-Two bounded GHC header-candidate filters passed their physical checks and returned
-zero candidates. This establishes no absence, owner, binding or attachment fact.
-The dependency interfaces and runtime correspondence remain open.
-Haskell source fixes: none. No new checked theorem is claimed. The latest checked
-addition remains the empty-OriginalInput case at 9baa51a6ee72126d36a705748ed6c215d65331f3.
+Haskell source fix: none. Two extracted ModIface spellings are untrusted printed tokens. They establish no declaration kind, owner, namespace, attachment or TYPE. Dependency interfaces, handle producers, IDs, caches, interning and equality/hash correspondence remain open. The term-use proposal is unexecuted. The next proposal seeks original declaration metadata first.
 
-Free space remains about 84 GiB. No new tree copies or deletions were made.
-The readable /tmp scan counted 228.56 GiB at 19:45 CET; protected OS directories
-were excluded. The exact 32-directory deletion remains unapproved. Keep every
-prior STOP, historical tuple limit, SourceProcessFAIL and Root upperUNKNOWN.
+A 27-byte fixture compiled with separate .olean/.ilean outputs after omission of the extra RLIMIT_AS limit. Actual cgroup memory.max/high stayed at 4 GiB with zero swap. This result covers that fixture and context only. It establishes no old Source/object or full transitive correspondence. Earlier wrapper failures and their opaque logs remain.
 
----
+/tmp has 83.98 GiB free. The last readable scan was 228.56 GiB at 19:45 CET. It was a lower bound with five unreadable directories. New work uses small files and no tree copies. The exact 32 cleanup targets still lack approval. Next: check candidate316, recover the validated strict-kernel controls, and continue the full goal.
 
 ## Singleton elimination and current boundaries — 2026-11-05 20:05 CET
 
