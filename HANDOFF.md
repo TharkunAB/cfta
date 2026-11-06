@@ -1,7 +1,7 @@
-# Current checkpoint: 2026-11-06 17:02 CET
+# Current checkpoint: 2026-11-06 17:58 CET
 
-The goal is active. The published base is
-`0acd961e7e971cc0da828595983b08348947c9e2` on `formalize`.
+The goal is active. The published base on `formalize` is
+`9928ff933a109e9fd72e5ec65adc381dd5b9d5f8`.
 The branch was pulled with `--ff-only`. It was current.
 Upstream `main` remains `bd5a406a6a3f84b7e3ae0906082783911509df83`.
 Preserve the untracked `.hypha/` directory.
@@ -13,137 +13,148 @@ The theorem remains
 For arbitrary local fuels, if preparation returns an operation and that
 operation succeeds from a `UF.Total` heap, its output heap is `UF.Total`.
 No stronger mathematical theorem was added in this checkpoint.
-Operation existence, success, worker termination, a common original-input bound,
+Existence, success, worker termination, the original-input common bound,
 and actual Haskell/runtime correspondence remain open.
-No Haskell source compilation or annotation check ran in this checkpoint.
-GHC version metadata was queried.
+No Haskell source compilation or type assertion ran. The unchanged Lean theorem
+was not recompiled. Its source hash remains unchanged.
 
-## Primary gap and full target
+## Primary result: the node provider must preserve recursion
 
-The model workers are `MicroCFTA.EnumerationState.enumerateOut` and
+The complete Source definitions and explicit exports are in
+`Data.CFTA.Interned.Operations`.
+The module/export command spans rows 4 through 28. Imports span 30 through 57.
+`unfoldOuterRec` spans 145 through 151. Its local step spans 150 through 151.
+The associated cache declaration spans 140 through 142.
+`nodeEdges` spans 161 through 182. Its worklist spans 170 through 178.
+Its member selection spans 180 through 182.
+These are source declarations. Actual GHC Names and loaded-object identity remain open.
+
+The current model distinguishes recursive nodes before expansion.
+Candidate selection, repeated-recursion handling, and ancestry use that distinction.
+Mapping every flattened edge result to model alternatives loses it.
+No refinement for that mapping is proved.
+The provider must establish outer classification and one native unfolding
+for the model recursive case. Ordinary alternatives need the exact native sequence.
+`nodeEdges` remains a payload candidate after classification.
+It is not an established complete `Graph.node` provider.
+
+The primary next reader contract is the unqualified identifier `matchMu`.
+Its defining owner, complete command span, and meaning remain unknown.
+Do not infer its owner or publicness from its use in the Mu pattern.
+Then derive the Mu classifier/unfolding relation, ordinary-edge relation,
+error correspondence, identity laws, and ordering laws for the actual provider.
+
+## Haskell findings for implementation work
+
+No Haskell fix or worker-reachable counterexample is established.
+The received source exposes distinct behavior that needs a proof or repair.
+An ordinary node selects its stored edge list. Empty and a direct Rec select no edges.
+A Mu with an ordinary one-step result selects that result's stored edge list.
+The fallback traverses recursive and union members through an identity worklist.
+A Rec in that worklist selects an explicit error.
+No complete owned construction or caller law excludes that case.
+Derive exclusion for both actual workers, or account for the implementation behavior.
+Do not silently map the error to model emptiness or add a caller validity premise.
+
+Direct paths preserve the stored list order.
+The fallback uses `Set.fromList` followed by `Set.toList`.
+Type's received Edge equality and ordering definitions use stored edge identities.
+Actual duplicate, ordering, identity-allocation, container, and memo laws remain open.
+Language-set equality alone cannot establish exact counts, order, or rank.
+The exported representation declarations do not supply a closed-input invariant.
+The complete `createUnion` body is not received.
+
+The complete term pattern `Data.CFTA.Interned.Type.Mu` spans 671 through 676.
+Its matcher delegates to `matchMu`. Its builder delegates to `createMu`.
+The local unfolding step applies the matcher's returned function to the same node.
+This does not establish substitution, closure, termination, or allocation behavior.
+`memoTypeableWith` and its cache laws also remain unreceived.
+Builder semantics is not needed merely to classify an existing node.
+
+## Exact next source step
+
+Check only the pinned existing syntax report for one complete `matchMu` declaration
+entry under a fresh bounded metadata plan. Do not print the report body.
+The candidate report is
+`/tmp/mcfta-haskell-type-locator-review-supplement-20261104/TYPE-LEXICAL-LOCATOR-RESULT-v1.json`.
+It has 33526 bytes and SHA-256
+`e51693eaf3dcc0117aef8bd27ba67290ae7a0f81b3c4dcf2eff4baceff229556`.
+It remains unopened in the receiving context. No claim says it contains `matchMu`.
+Output at most one verified module/kind/full-command span entry.
+Omit types, bodies, and other names. Missing schema or a token-only hit stays unknown.
+There is no Source or index fallback permission.
+After a positive span, check the remaining source budget before any new reservation.
+
+## Full proof target and remaining work
+
+The model workers remain `MicroCFTA.EnumerationState.enumerateOut` and
 `MicroCFTA.EnumerationState.enumerateFully`.
-They use Graph and Oracle parameters. Their runtime realizations remain open.
-The primary dependency is the actual `nodeEdges` handle/view contract,
-its relation to `unfoldOuterRec`, and the map from native handles to model IDs.
-The native intersection contract is also missing.
-`getUVarValue` is a role candidate for `rawValue` or `getValue`.
-These model reads have different contracts.
-`getUVarRepresentative` is a role candidate for `representative`.
-None of these candidates is a refinement proof.
+Their Graph and Oracle callback types do not impose the required runtime laws.
+The native intersection contract and both Oracle preservation laws remain open.
+`getUVarValue` is a role candidate for different model reads.
+`getUVarRepresentative` is a role candidate for model representative lookup.
+No candidate is a refinement proof.
 
-Implement the realizer and prove its laws from the actual operations.
-Then derive coverage and progress from the original inputs.
-Graph reads must be faithful and have bounded descent.
-Intersection results and all later views must stay in the derived family.
-Both Oracle uses must preserve coverage and lineage.
-The callback types do not impose these laws.
+Implement the actual realizer and prove its refinement laws.
+Derive coverage, lineage, and progress from the original inputs.
 A finite key set alone does not bound work between recursion checkpoints.
-State/BinderInfo probe 507 remains held. No primary dependency was established.
-
-The full target remains both actual optimized workers and one computable bound
-from the original inputs and requested size, for all generated and later states.
+The final target remains both actual optimized workers and one computable bound
+from original inputs and requested size for every generated, returned, and later state.
 It includes exact accepted terms by node count, counts, enumeration order,
-both rank/unrank inverse laws, and actual Haskell/runtime correspondence
-for source, APIs, IDs, caches, interning, equality, and hashing.
-Do not add a supplied carrier, closure, resource, completed-worker, success,
-fuel, OriginalInput, or validity premise.
-Keep the optimized interned core primary. Keep older work as secondary targets.
+both rank/unrank inverse laws, and actual Haskell source/API/ID/cache/interner/Eq/hash laws.
+Add no supplied carrier, closure, resource, completed-worker, success, fuel,
+OriginalInput, or validity premise.
+Keep the optimized interned core primary and older work as secondary targets.
+State/BinderInfo probe 507 stays held. No primary dependency was established.
 
-## Haskell findings and source ownership
-
-No Haskell fix was identified or applied in this checkpoint.
-The private owned 344-row `Data.CFTA.Interned` capture was checked in full.
-It exports `nodeEdges` and `unfoldOuterRec`. It defines neither name locally.
-The complete header/export command occupies rows 8 through 79.
-The complete import section occupies rows 81 through 98.
-Relevant imports include `Data.CFTA` at row 93,
-`Data.CFTA.Constraint` at row 95, `Data.CFTA.Interned.Operations` at row 97,
-and `Data.CFTA.Interned.Type` at row 98.
-Open imports and expanded record members prevent a unique defining-owner claim.
-The `nodeEdges` call sites are in `toTree` at row 193
-and `reachable` at row 216.
-Defining compiler Names and runtime contracts remain open.
-
-The capture has 14572 bytes and SHA-256
-`ae8cc54ade211be804aec27793ee84e8d7e8325350721f950a7e3473398454a4`.
-No current repository-to-capture equality claim was made.
-The next task is to establish a permitted route to the owned Type and Operations
-source, then derive their actual node contracts.
-Type has 444 owned rows of 922. Operations has 420 owned rows of 887.
-Check 562 found no matching cache files in the two declared Stage 1/2 directories.
-It checked ten directories and ten entries. Other locations were not searched.
-Stage 563 permits planning only. It grants no Original ingestion or source view.
-
-The earlier `recursionKey` finding remains valid for its captured source.
-Both workers call that private helper. Its direct getter is at row 290.
-Candidate `Int` and negative `()` annotations were staged at that getter.
-No compiler checked them. Getter type, primitive width, and ABI remain open.
-The exact declared component `build-info.json` was absent in three checks.
-
-## Actual tool and help results
-
-Normal `nix-shell` selected ghcup cabal-install 3.18.1.0 and GHC 9.14.1.
-The GHC package database listed Cabal 3.16.0.0 and Cabal-syntax 3.16.0.0.
-The actual cabal version document says it was compiled using Cabal 3.18.1.0.
-The earlier empty linked-version field was a regex extraction result.
-It did not establish version absence.
-The executable and plan have matching GHC version labels.
-This does not establish effective component compiler flags or ABI equality.
-Hypha was located and pinned. It was not invoked.
-
-`cabal act-as-setup --build-type=Simple -- --help` returned Setup-style help.
-Its banner and command inventory support this classification.
-The generic Usage line alone did not establish it.
-The help does not list `show-build-info`. Hidden support remains unknown.
-No actual CFTA build type or configuration API version was established.
-Use Hypha before dependency API lookup. Resolve the 3.18/3.16 version mismatch.
+The earlier candidate Int/unit annotations remain staged and uncompiled.
+The component's declared build-info file was absent.
+Normal Nix selected ghcup GHC 9.14.1 and cabal-install 3.18.1.0.
+The CLI links Cabal 3.18.1.0. The GHC database lists Cabal 3.16.0.0.
+Resolve this version mismatch through Hypha before any dependency API lookup.
+The compiler-context investigation remains secondary to the actual node provider.
 Do not mutate the protected plan or copy a build tree.
-Keep this compiler-context investigation secondary to the node-view contract.
 
-Check 537 passed all 10611 physical/four logical roles.
-Check 539 passed 10628/eight roles for the private facade projection.
-Check 548 passed 10672 outer and 10670 inner roles, with eight logical roles.
-Check 552 passed 10687/eight roles for static help and version metadata.
-Check 559 passed 10717 outer, 10715 inner, and 10722 private-view roles.
-Check 562 passed 10732 outer and inner roles, with eight logical roles.
-Each successful stage used distinct before, after, and separate final checks.
-The Root did not view the private source body.
-These are source and metadata results. They do not strengthen the theorem.
+## Checks, source history, and storage
 
-## Harness fixes, retained limits, and storage
+Opaque capture 566 passed 10751 outer roles, 10751 inner before roles,
+and 10753 inner after/final roles, with eight logical roles.
+Projection 569 passed 10767 outer, 10769 inner before, and 10777 inner after/final roles.
+Eight private views 571 each passed 10786 physical and nine logical roles.
+Mu projection 574 passed 10812 outer, 10813 inner before, and 10814 inner after/final roles.
+Mu view 575 passed 10821 physical and nine logical roles.
+All stages used distinct before, after, and separate final checks.
+Source-emitting controllers checked buffered bytes before private model receipt.
+Root viewed no private source body. These checks add no mathematical theorem.
 
-The Python controller now hashes the sampled file length.
-It checks descriptor and path identity before and after the read.
-It sets CPU, file-size, and core limits before input guards.
-The private source channel has a 16 KiB cap. The public metadata cap is 196608.
-Memory max/high remain 4 GiB, with no swap. CPU remains 30 seconds.
-File size remains 4 MiB. Core dumps remain disabled. Address-space limits are unchanged.
-The known baseline controller has 6399 bytes. The old summary said 6401.
-Old EOF hashing and late limit placement remain recorded historical defects.
-No retrospective clearance was claimed.
-Stage 557 stopped at denied user-bus access before controller launch.
-Fresh stage 559 used the allowed bus context and passed.
-The 531 size STOP and 543/544 assembly STOPs remain retained.
-
-Source counters are unchanged: native CFTA 2465/49; semantic Std 516/7;
-shared charged Std 809/7; native semantic Source 2981;
-shared charged Source 3274/56; captures 157; accepted interfaces 155.
-B remains 3048/29, workflow 40 reserved, and 37 actual Lean queries.
-Reuses 2, replay 4, both FINAL limits, and all prior STOPs remain in force.
-Haskell Source remains 5410/10 with both FINAL limits retained.
-Root SourceProcessFAIL and Original-Source upper UNKNOWN remain permanent.
-The CLI web search incidentally returned Hooks API source snippets.
-Those snippets provide no clearance or API result.
-State two-TYPE777 remains private and unviewed, with zero private State frames.
+Haskell Source is now 5416 across the same ten Originals.
+The six Mu rows were permanently charged before all guards, including failure.
+Type has 450 of 922 rows, below the strict maximum 460. Ten rows remain.
+Operations has 420 of 887 rows. Its strict maximum remains 443.
+The earlier 571 receipt correctly records 5410 before that later reservation.
+Both FINAL slots remain Enumeration and Facade. No third FINAL occurred.
+Native CFTA2465/49, semantic Std516/7, shared charged Std809/7,
+semantic Source2981, shared Source3274/56, captures157, and interfaces155 are unchanged.
+B remains3048/29, workflow40 reserved, queries37, reuses2, replay4.
+All earlier aliases, limits, STOPs, and SourceProcessFAIL remain.
+Root Original-Source upper UNKNOWN is permanent.
+State two-TYPE777 is private and unviewed. Private State frames remain zero.
 Keep primitiveTYPE1401, failed diagnostics, actual32TYPE396, and old cuts opaque.
 
-Small records are in `lean/restart-evidence/20261106-native-node-source-route/`.
-Earlier shared-getter and runtime-callback records remain retained.
-No private source body or copied build tree is published.
-The runtime selector is
+The full earlier history is embedded with lossless gzip/base64 encoding.
+Its exact JSON roundtrip was checked. The immutable 194164-byte raw prior remains.
+No history value, Source charge, or alias was removed. The 196608 metadata cap is unchanged.
+An unnecessary own-author newline-edit assertion failed before any write or helper run.
+AST inspection confirmed the original newline literal was correct. The executed tool is unchanged.
+
+Ten small records total 33891 bytes in
+`lean/restart-evidence/20261106-native-node-contracts/`.
+They contain exact executed helpers, public receipts, and provider obligations.
+They contain no private source body, raw TYPE, local rolebook, or copied build tree.
+The runtime selector remains
 `/tmp/mcfta-runtime-packet-producer-normal-20261104-1205/CURRENT-HANDOFF.json`.
-It selects the current R85 progress record and full Source history.
-At 16:51 CET, `/tmp` had 87.25 GiB free. No cleanup or build-tree copy ran.
+It selects R86 progress and the complete current source history.
+At 2026-11-06 17:58 CET, `/tmp` had 87.20 GiB free. No cleanup or build-tree copy ran.
 
 The earlier checkpoint below is historical.
 
