@@ -67,14 +67,21 @@ It imported `Lean` and `MicroCFTA.EnumerationDriver`.
 It did not read their types, values, bodies, or `info.name` equality.
 Their optimized-worker behavior and Haskell bridge remain unestablished.
 
-Native packet 462 is authored and fully reviewed. It selects only the two
-exact declaration-origin records. It has not run. The held EnumerationState
-Source identity is 33489 bytes, SHA-256
+Native packet 462 ran once as lookup 467. All 8243 physical and two logical
+roles passed before, distinct after, and separate final checks.
+It returned only the two exact declaration-origin records.
+The candidate envelope for `enumerateOut` is `278..294`.
+The candidate envelope for `enumerateFully` is `300..329`.
+The 47 candidate rows give prospective union138 with prior91, below cap349.
+No Source row was charged or viewed. Local endpoint and incoming-context
+checks remain required before Source or TYPE access.
+The held EnumerationState Source identity is 33489 bytes, SHA-256
 `83a898b883ec7b52469bccd87e8afa4f7abb320e3c935bf48f3d80ad77003cc4`.
 It has 699 lines. Its prior charged union is `1..86, 88..89, 102..104`.
-Its count is 91 and its strict half cap is 349. Reconcile the held physical
-Source/index/object descriptors with fresh full controls before execution.
-Do not promote these functions to the optimized-worker contract from names.
+Its count is 91 and its strict half cap is 349. Lookup 467 reconciled the held physical
+Source/index/object descriptors in its full checks. This does not prove
+Source generation or a loaded-file bridge. Do not promote these functions
+to the optimized-worker contract from names or numeric origins.
 
 The two `Lean.ConstantInfo` getter keys are definitions owned by
 `Lean.Declaration`. Positive full56 accounting found an existing Source
@@ -96,7 +103,14 @@ Source-generation proof, accessor contract, or new Source receipt.
 No Source row was charged or viewed for these envelopes.
 The minimum closed accessor and Expr/Level/binder context remains open.
 The raw 777-byte State-family type capture remains unviewed.
-Metadata packet 466 assesses that next context without new payload access.
+Assessment 466 left the structural State-signature observer open.
+Packet 468 is now authored: a 175-byte producer and a 5774-byte manifest.
+It proposes only the two complete ordinary accessor TYPEs. It has not run.
+It has reserved no Source rows or query attempt. Its future accounting
+separates B's local four-row charge from the shared union82 plus four rows.
+The prospective shared union is 86, below cap277. Complete endpoint,
+accounting, and execution gates remain required before a payload operation.
+These two interfaces alone would not close State's structural signature.
 
 Current counters: B Source 2530/27; Templates union54; workflow reservations36;
 actual Lean queries34; first-artifact reuses2; private State-type frames0.
@@ -136,8 +150,8 @@ The runtime selector is
 It selects `R81-CURRENT-PROGRESS-V2.json`. The previous full progress file
 remains intact. Read the selector and current Source histories before any
 guard or new observation. The latest full Root role table is
-`R81-B465-CAPPED-JOB-BEFORE.json`: 8230 physical roles plus two logical roles.
-All before, distinct after, and separate final checks passed for lookup 465.
+`R81-NATIVE467-CAPPED-JOB-BEFORE.json`: 8243 physical roles plus two logical roles.
+All before, distinct after, and separate final checks passed for lookup 467.
 Run heavy checks serially with the existing 4 GiB capped runner. Preserve
 its output and timeout caps. Do not repeat a successful proof check unless
 a source change or a new failure gives a reason.
