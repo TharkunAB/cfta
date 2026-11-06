@@ -47,3 +47,8 @@ The two getter records are candidate source envelopes. No getter Source
 view or private State-type receipt was performed in this pass.
 No Haskell fix was identified. The fresh-identity recurrence in the handoff
 is an abstract proof obstruction. It is not a Haskell divergence witness.
+
+`worker-origins467.json` records only two exact declaration-origin candidates.
+Their prospective row union is 138 of cap349. No Source rows were charged or
+viewed. This metadata establishes no optimized-worker behavior or Source
+generation relation.
