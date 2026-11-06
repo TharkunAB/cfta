@@ -1,0 +1,37 @@
+import MicroCFTA.SourceCurrentSelectedStepCheckedTotal
+
+namespace MicroCFTA.SourceCurrentSelectedStepObservedTotal
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationCompressionFrame
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedPartialInvariant (Context)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+
+variable {Typing Key : Type} {width : Nat}
+variable [DecidableEq (EdgeKey Symbol Constraint)]
+variable (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+variable (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+variable (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+variable (stop : Option (Metadata Typing → Nat → Bool))
+variable (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+variable [DecidableEq Symbol] [DecidableEq Node]
+
+attribute [local instance] SourcePruningEnumerationAction.actionMonadList
+
+set_option pp.all true
+set_option pp.universes true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.notation false
+set_option pp.maxSteps 1000000
+
+#check @success_bind
+
+end MicroCFTA.SourceCurrentSelectedStepObservedTotal
