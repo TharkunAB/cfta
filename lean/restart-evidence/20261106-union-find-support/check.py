@@ -15,6 +15,9 @@ source = root / "lean/MicroCFTA/UnionFindSupport.lean"
 names = [
     "MicroCFTA.UnionFindSupport.supportedBelow_empty",
     "MicroCFTA.UnionFindSupport.supportedBelow_write",
+    "MicroCFTA.UnionFindSupport.supportedBelow_put",
+    "MicroCFTA.UnionFindSupport.lt_initialBound_of_mem",
+    "MicroCFTA.UnionFindSupport.supportedBelow_withInitialValues",
 ]
 body = source.read_bytes()
 report = body + "".join(f"\n#print axioms {name}\n" for name in names).encode()

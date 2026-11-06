@@ -13,12 +13,16 @@ env XDG_RUNTIME_DIR=/run/user/1000 \
 
 The script builds the new module in `shell.nix`.
 It then checks the source and axioms with warnings as errors.
-It checks the two new lemmas and allows only `propext`, `Classical.choice`,
+It checks all five support lemmas and allows only `propext`, `Classical.choice`,
 and `Quot.sound` as axioms. It reads the current source.
 It deletes its temporary report when the check ends.
 The check does not need an archived build tree or a source copy.
 
-These lemmas concern an empty forest and one functional write.
-They do not establish the invariant for the actual worker transitions.
+The lemmas cover an empty forest, a functional write, the actual `put`,
+and initialization from any input list.
+`initialBound` computes the maximum listed identity plus one, or zero for an
+empty list. Initialization requires no supplied support bound.
+The `put` lemma derives its result from the previous support bound and the key.
+These results do not establish the invariant for every worker transition.
 They do not prove a common fuel bound or Haskell correspondence.
 The kernel check does not recover the earlier source-process audit.
