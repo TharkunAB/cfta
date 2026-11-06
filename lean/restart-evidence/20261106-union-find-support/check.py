@@ -29,6 +29,17 @@ names = [
     "MicroCFTA.UnionFindSupport.union_preserves_bounds",
     "MicroCFTA.UnionFindSupport.findRoot_grows_bound",
     "MicroCFTA.UnionFindSupport.union_grows_bound",
+    "MicroCFTA.UnionFindSupport.length_le_bound_of_nodup",
+    "MicroCFTA.UnionFindSupport.reaches_has_parentDepth",
+    "MicroCFTA.UnionFindSupport.raw_parent_of_read",
+    "MicroCFTA.UnionFindSupport.parentDepth_executes",
+    "MicroCFTA.UnionFindSupport.parentDepth_unique",
+    "MicroCFTA.UnionFindSupport.parentDepth_keys",
+    "MicroCFTA.UnionFindSupport.parentDepth_le_bound",
+    "MicroCFTA.UnionFindSupport.findRoot_uniformFuel",
+    "MicroCFTA.UnionFindSupport.findRoot_initial_uniformFuel",
+    "MicroCFTA.UnionFindSupport.union_uniformFuel",
+    "MicroCFTA.UnionFindSupport.union_initial_uniformFuel",
 ]
 body = source.read_bytes()
 report = body + "".join(f"\n#print axioms {name}\n" for name in names).encode()

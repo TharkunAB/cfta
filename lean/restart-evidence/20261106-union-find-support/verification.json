@@ -1,9 +1,9 @@
 {
   "status": "PASS_TARGETED_NORMAL_NIX_BUILD_AND_AXIOM_CHECK",
   "source": "lean/MicroCFTA/UnionFindSupport.lean",
-  "source_bytes": 12825,
-  "source_sha256": "b9f16c4dea22ed85967bd9e599348219a311294f06587dc3689469d6720c31cb",
-  "recipe_sha256": "5e73864a92ef3a061824db6d6f7c61697b35912a40ef92d2f07876f5e9eed4fd",
+  "source_bytes": 22872,
+  "source_sha256": "53bb7d437829f2047ccc88d90c169037f07eb0b3140d0972ba2b1614eb2b4fff",
+  "recipe_sha256": "a2a1a61bf569dd5a468353c6f776de79450676e1c8c85bc246aa6468879c0d85",
   "toolchain": "leanprover/lean4:v4.34.1",
   "profile": "shell.nix; resolved current nixpkgs channel; -j1 -DwarningAsError=true for source/axiom report",
   "nixpkgs": "/nix/store/cf1g0afyf2xcxfzg35hh4cd4x6wl242q-nixpkgs/nixpkgs",
@@ -61,10 +61,53 @@
     "MicroCFTA.UnionFindSupport.union_grows_bound": [
       "propext",
       "Quot.sound"
+    ],
+    "MicroCFTA.UnionFindSupport.length_le_bound_of_nodup": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "MicroCFTA.UnionFindSupport.reaches_has_parentDepth": [],
+    "MicroCFTA.UnionFindSupport.raw_parent_of_read": [
+      "propext"
+    ],
+    "MicroCFTA.UnionFindSupport.parentDepth_executes": [
+      "propext",
+      "Quot.sound"
+    ],
+    "MicroCFTA.UnionFindSupport.parentDepth_unique": [],
+    "MicroCFTA.UnionFindSupport.parentDepth_keys": [
+      "propext",
+      "Quot.sound"
+    ],
+    "MicroCFTA.UnionFindSupport.parentDepth_le_bound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "MicroCFTA.UnionFindSupport.findRoot_uniformFuel": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "MicroCFTA.UnionFindSupport.findRoot_initial_uniformFuel": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "MicroCFTA.UnionFindSupport.union_uniformFuel": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "MicroCFTA.UnionFindSupport.union_initial_uniformFuel": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
     ]
   },
-  "normal_report_exec": 9391,
-  "normal_module_build_and_report_exec": 99417,
+  "normal_report_exec": 8446,
+  "normal_module_build_and_report_exec": 55841,
   "memory_max": 4294967296,
   "memory_high": 4294967296,
   "swap_max": 0,
@@ -83,19 +126,23 @@
   "source_process_audit": "FAIL remains; Root Original-Source upper UNKNOWN remains. Old runtime directory absent. This check does not recover that audit.",
   "original_source_new_views": 0,
   "scope_exclusions": [
-    "uniform successful representative fuel",
-    "bounds on later worker allocation keys",
-    "worker termination/common original-input bound and total work",
+    "bounds on later worker allocation/query identities",
+    "worker termination/common original-input bound and total work between checkpoints",
     "whole-library build",
     "Haskell compilation or runtime correspondence"
   ],
   "Haskell_fixes": [],
-  "prior_checkpoint": "a75221a08156e4adb8c7c1d7ef02868d35d95b2a",
-  "prior_source_sha256": "d7f1b856826fdc63a70500e9314d84a4019d83c62334ce9ae79a55c574723f97",
-  "original_source_new_views_scope": "Root current-window body views only; Native newly reserved28 unique UF rows; global Root upperUNKNOWN remains",
+  "prior_checkpoint": "bfeb49c74e37a143391b111de6ce85574f9175c3",
+  "prior_source_sha256": "b9f16c4dea22ed85967bd9e599348219a311294f06587dc3689469d6720c31cb",
+  "original_source_new_views_scope": "Root current-window body views only; same Native newly reserved49 unique UF rows; global Root upperUNKNOWN remains",
   "prior_startup_history_scope": "Carried prior checkpoint history; not new timeouts in this checkpoint.",
   "new_math_failures_and_fixes": [
-    "First own find candidate had two unused simp arguments under warningAsError. Removed these arguments.",
-    "Union needed default monadic simplification before using second-run equality; exact forest equality then transports both bounds. No operation changed."
-  ]
+    "List.Subperm helper was unavailable. Used explicit List.Nodup.length_le_of_subset.",
+    "Qualified MicroCFTA.UnionFind.read in proof simplification to avoid an imported read collision.",
+    "Generalized recursive depth+1 fuel before simplification to preserve the successful recursive call.",
+    "Used an explicit decidable Nat case split for the final parent-depth bound."
+  ],
+  "computed_uniform_find_fuel": "bound+1 for every query; support+Total are internal invariants",
+  "initialization_corollaries": "find and union fuel functions use only input/query identities; no support/Total/fuel premise",
+  "computability_note": "Classical.choice occurs in proof-only cardinality. The reported fuel is an explicit computable Nat expression."
 }
