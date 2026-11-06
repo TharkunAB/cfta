@@ -1,3 +1,110 @@
+# Current checkpoint: 2026-11-06 13:55 CET
+
+The goal is active. The published base of this checkpoint is
+`5ae903231752b533577120c743873e56e00b2e3d` on `formalize`.
+Upstream `main` was checked again. It remains
+`bd5a406a6a3f84b7e3ae0906082783911509df83`.
+Preserve the untracked `.hypha/` directory.
+
+## Strongest checked statement
+
+The theorem remains
+`MicroCFTA.SourcePruningEnumerationActionTotal.prepare_total`.
+If a prepared operation succeeds from a total union-find representative map,
+its output representative map is total. This holds for all local fuel values.
+No stronger mathematical theorem was added in this checkpoint.
+Operation existence, successful execution, the common worker bound, and
+actual Haskell/runtime correspondence remain open.
+
+## Main missing work
+
+The model workers are `MicroCFTA.EnumerationState.enumerateOut` and
+`MicroCFTA.EnumerationState.enumerateFully`.
+The first dependency is the exact native heap lookup/view operation and its
+contract connecting actual node IDs to `MicroCFTA.EnumerationState.Node`.
+Its canonical implementation ID is not established in the retained context.
+The exact native intersection contract is also missing.
+`MicroCFTA.EnumerationState.intersectValues` consumes an abstract slot.
+
+Implement the required realizer and prove its refinement laws.
+Then derive original-input key coverage and progress for the fixed callbacks.
+`Graph.node` needs faithful lookup and bounded nonrecursive descent.
+`Graph.intersect` needs coverage for results and subsequent node views.
+Both `Oracle` uses must preserve coverage and the lineage history.
+The current callback types do not impose these guarantees.
+A finite recursion-key set alone does not bound work between checkpoints.
+Do not add a supplied realization, carrier, closure, resource, fuel, success,
+or validity premise.
+
+The full target remains both actual optimized workers, one computable bound
+from the original inputs and requested size, and all generated states.
+It also includes exact accepted terms by node count, counts, enumeration
+order, both rank/unrank inverse laws, and actual Haskell/runtime behavior
+for IDs, caches, interning, equality, and hashing.
+
+## Actual checks and next actions
+
+Check 495 found the exact `Lean.Expr` parent span 290 through 514.
+It matches the prior 225-row exposure and adds no Source charge.
+Check 498 captured the complete prefix 1 through 514.
+Its helper exited zero. All 9084 physical/two logical checks passed before,
+after, and at the separate final check. All seven local coordinate flags passed.
+The private cut has 19991 bytes. Root did not view its Source text.
+Check 499 received the complete literal constructor family and incoming context.
+All 9094 role/two logical final checks passed. The twelve constructor Names
+come from Source. Their compiled registry identities were not queried.
+The limited shape observer 501 compiled in normal check 504.
+The compiler exited zero with empty stderr. All 10473 role/four logical
+checks passed. The 2800-byte emitted shape record is private under 505.
+Universe payloads remain opaque. The full State association stays open.
+State TYPE777 remains private and unviewed.
+SourceObject, loaded-file correspondence, and strict kernel replay remain
+unestablished by these metadata checks.
+
+The prefix reservation was permanent before all capture guards.
+B now has Source 3048/29, workflow 40 reserved, and 37 actual Lean queries.
+The shared charged Std total is 809/7. CFTA remains 2465/49.
+The shared charged total is 3274 across 56 Originals.
+Native semantic Std remains 516 and Native semantic Source remains 2981.
+Native captures 157 and accepted interfaces 155 are unchanged.
+Haskell Source 5410/10 is unchanged.
+All old aliases, STOPs, both FINAL limits, and replay 4 remain in force.
+Root SourceProcessFAIL and Root Original-Source upper UNKNOWN remain permanent.
+
+## Haskell findings
+
+No Haskell fix was identified in this checkpoint.
+Check 494 failed at its own 196608-byte serialized-output assertion.
+It duplicated observed pin records across phases.
+The exact oversized length and phase outcomes were lost.
+No plan, compiler, component, ABI, or cardinality result is accepted.
+A compact output format was authored and reviewed.
+The corrected runner 494D passed in metadata check 502.
+It hashes only the sampled size and prevents skipped roles from passing.
+All 1353 inner role/two logical checks passed in three phases.
+All 10453 outer role/four logical checks passed.
+The pinned plan selects the local cfta library, unit cfta-0.1.0.0-inplace,
+and source path /home/tritlo/Code/mcfta/cfta.
+Its configured labels are GHC 9.14.1, Linux, and x86_64.
+These labels do not prove actual ABI, primitive width, or getter types.
+The actual getter applications at Enumeration.hs lines1006 and1542 still need
+component/context certification before a forced representation assertion.
+
+The small records are in
+`lean/restart-evidence/20261106-runtime-callback-gap/`.
+They include the exact capture producer, compiled shape observer, small
+metadata records, callback obligation, and Haskell metadata failure.
+They include no copied build tree.
+The current runtime selector is
+`/tmp/mcfta-runtime-packet-producer-normal-20261104-1205/CURRENT-HANDOFF.json`.
+Its current path, byte count, and hash fields were made consistent.
+About 83.4 GiB remains free on `/tmp`. No cleanup was executed in this pass.
+
+The earlier checkpoint below is historical. Its smaller Source totals
+precede the permanent prefix514 reservation.
+
+---
+
 # Current checkpoint: 2026-11-06 12:30 CET
 
 The goal is active. The latest proof commit is
