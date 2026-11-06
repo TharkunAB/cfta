@@ -1,3 +1,8 @@
+The latest selected-step theorem is `MicroCFTA.SourceCurrentSelectedStepAllObservedTotal.complete`.
+It preserves total union-find representatives for every successful action result under the existing caller gates.
+The common bound for both complete workers and Haskell/runtime correspondence remain open.
+See `restart-evidence/20261106-all-observed-action-totality/REPRODUCE.md` for the checked scope and commands.
+
 # Explicit checked-query resources and storage progress: 2026-10-29 21:23 CET
 
 Source 011a4f4045a9327b610a2fa3639e4815f8a8c0c2 on formalize.

@@ -1,0 +1,116 @@
+--- SourceCurrentSelectedStepObservedTotal.lean
++++ SourceCurrentSelectedStepAllObservedTotal.lean
+@@ -3 +3 @@
+-namespace MicroCFTA.SourceCurrentSelectedStepObservedTotal
++namespace MicroCFTA.SourceCurrentSelectedStepAllObservedTotal
+@@ -28 +28 @@
+-/-- Preserve the selected-step result and prove totality for its action observation. -/
++/-- Preserve total representatives in every successful action result. -/
+@@ -54,2 +54,3 @@
+-              | some [.ok ((), after)] => UnionFind.Total after.representatives
+-              | _ => True
++              | some outcomes => ∀ after, .ok ((), after) ∈ outcomes →
++                  UnionFind.Total after.representatives
++              | none => True
+@@ -76,8 +76,0 @@
+-  have successfulSingleton (operation : EnumerateM Symbol Constraint Unit)
+-      (input output : EnumerationState.State Symbol Constraint)
+-      (raw : ExceptT.run (operation input) = [Except.ok ((), output)]) :
+-      Success operation input () output := by
+-    dsimp only [Success]
+-    rw [raw]
+-    dsimp only [Membership.mem, List.instMembership]
+-    exact List.Mem.head []
+@@ -153,49 +146,40 @@
+-          cases raw with
+-          | nil => exact True.intro
+-          | cons first tail =>
+-              cases first with
+-              | error _ => exact True.intro
+-              | ok observed =>
+-                  cases observed with
+-                  | mk outcomeUnit afterState =>
+-                      cases outcomeUnit
+-                      cases tail with
+-                      | cons _ _ => exact True.intro
+-                      | nil =>
+-                          have currentTotal : UnionFind.Total core.representatives := checked.2
+-                          have observedAction := (finishRetains
+-                            (SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates
+-                              stop order metadata (readFuel + er) (checkFuel + ec) nativeFuel
+-                              representativeFuel (indexFuel + ei) callbackFuel uv caller before memos.query)).symm.trans
+-                            (congrArg retain actual)
+-                          dsimp only [SourcePruningEnumerationSelectedStep.runPrefix] at observedAction
+-                          all_goals try (split at observedAction)
+-                          all_goals try (split at observedAction)
+-                          all_goals try (split at observedAction)
+-                          all_goals try (split at observedAction)
+-                          all_goals try (split at observedAction)
+-                          all_goals try (split at observedAction)
+-                          all_goals try (split at observedAction)
+-                          all_goals try (split at observedAction)
+-                          all_goals dsimp only [retain] at observedAction
+-                          all_goals
+-                            have retainedShape := congrArg
+-                              (fun kept => match kept with
+-                                | some (_, some _) => some ()
+-                                | _ => none) observedAction
+-                            dsimp only at retainedShape
+-                            cases retainedShape
+-                          all_goals
+-                            have retainedCore := congrArg
+-                              (fun kept => match kept with
+-                                | some (selectedCore, _) => selectedCore
+-                                | none => core) observedAction
+-                            have retainedValues := congrArg
+-                              (fun kept => match kept with
+-                                | some (_, some values) => values
+-                                | _ => []) observedAction
+-                            dsimp only at retainedCore retainedValues
+-                            have inputTotal := currentTotal
+-                            rw [← retainedCore] at inputTotal
+-                            refine preparedTotal _ _ _ _ _ _ _ _ _ (by assumption) inputTotal ?_
+-                            · exact successfulSingleton _ _ _ retainedValues
++          intro afterState successful
++          have currentTotal : UnionFind.Total core.representatives := checked.2
++          have observedAction := (finishRetains
++            (SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates
++              stop order metadata (readFuel + er) (checkFuel + ec) nativeFuel
++              representativeFuel (indexFuel + ei) callbackFuel uv caller before memos.query)).symm.trans
++            (congrArg retain actual)
++          dsimp only [SourcePruningEnumerationSelectedStep.runPrefix] at observedAction
++          all_goals try (split at observedAction)
++          all_goals try (split at observedAction)
++          all_goals try (split at observedAction)
++          all_goals try (split at observedAction)
++          all_goals try (split at observedAction)
++          all_goals try (split at observedAction)
++          all_goals try (split at observedAction)
++          all_goals try (split at observedAction)
++          all_goals dsimp only [retain] at observedAction
++          all_goals
++            have retainedShape := congrArg
++              (fun kept => match kept with
++                | some (_, some _) => some ()
++                | _ => none) observedAction
++            dsimp only at retainedShape
++            cases retainedShape
++          all_goals
++            have retainedCore := congrArg
++              (fun kept => match kept with
++                | some (selectedCore, _) => selectedCore
++                | none => core) observedAction
++            have retainedValues := congrArg
++              (fun kept => match kept with
++                | some (_, some values) => values
++                | _ => []) observedAction
++            dsimp only at retainedCore retainedValues
++            have inputTotal := currentTotal
++            rw [← retainedCore] at inputTotal
++            refine preparedTotal _ _ _ _ _ _ _ _ _ (by assumption) inputTotal ?_
++            · dsimp only [Success]
++              rw [retainedValues]
++              exact successful
+@@ -203 +187 @@
+-end MicroCFTA.SourceCurrentSelectedStepObservedTotal
++end MicroCFTA.SourceCurrentSelectedStepAllObservedTotal
