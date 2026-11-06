@@ -1,198 +1,126 @@
-# Current checkpoint: 2026-11-06 18:50 CET
+# Current checkpoint: 2026-11-06 23:00 CET
 
-The goal is active. The published base on `formalize` is
-`99abc71cc5bf4a274337766ca642f15122476ec6`.
-The branch was pulled with `--ff-only`. It was current.
-Upstream `main` remains `bd5a406a6a3f84b7e3ae0906082783911509df83`.
-Preserve the untracked `.hypha/` directory.
+The goal remains active. The parent on `formalize` is
+`cd530b70ddfccc8f496eb63a16311ebe3494450b`.
+A fresh `pull --ff-only` and fetch found no upstream changes.
+`main` remains `bd5a406a6a3f84b7e3ae0906082783911509df83`.
+Preserve the unrelated untracked `.hypha/` directory.
 
-## Strongest checked statement
+## New local kernel result
 
-The theorem remains
+`lean/MicroCFTA/UnionFindSupport.lean` defines `SupportedBelow`.
+It states that the forest stores no entry at or above a bound.
+The pinned Lean 4.34.1 compiler accepted two new lemmas with warnings as errors.
+An empty function-valued forest has support below zero.
+One write at `key` preserves support below `max bound (key + 1)`.
+The empty lemma uses no axioms. The write lemma uses only `propext` and `Quot.sound`.
+The source has SHA-256
+`a1e23bab9a8723105fddb2b96fb55923cce17883d804fb60e39743a817084a3c`.
+
+The direct compiler diagnostic and the required normal Nix check both passed.
+The final reproduction script also built `MicroCFTA.UnionFindSupport` and
+repeated the source and axiom check in Nix. Both commands exited zero.
+The new module and its proof were the targeted verification scope.
+The checks used 4 GiB memory max/high, no swap, and a 360-second wall limit.
+No whole-library or Haskell compilation ran.
+
+Three earlier Nix attempts timed out after 25, 75, and 300 seconds without
+compiler output. Nix was observed waiting on filesystem I/O.
+System I/O pressure reached 85 percent. The last timed-out attempt retained
+a child. Its scope was killed and its process list became empty.
+Later normal checks succeeded. No proof retry remains live.
+
+The new lemmas concern an empty function and one functional write.
+They do not yet establish support for actual heap operations or worker transitions.
+Their bound is an internal proof input. Derive it from construction and updates.
+Do not add a supplied support bound to the final worker contract.
+
+## Current worker preservation theorem
+
+The worker preservation theorem remains
 `MicroCFTA.SourcePruningEnumerationActionTotal.prepare_total` at line 33.
-For arbitrary local fuels, if preparation returns an operation and that
-operation succeeds from a `UF.Total` heap, its output heap is `UF.Total`.
-No stronger mathematical theorem was added in this checkpoint.
-Existence, success, worker termination, the original-input common bound,
-and actual Haskell/runtime correspondence remain open.
-No Haskell source compilation or type assertion ran. The unchanged Lean theorem
-was not recompiled. Its source hash remains unchanged.
+For arbitrary local fuels, if preparation returns an operation and that operation
+succeeds from a `UF.Total` heap, its output heap is `UF.Total`.
+This does not establish existence, success, termination, a common bound,
+or actual Haskell/runtime correspondence. The unchanged theorem was not rerun.
 
-## Primary result: the node provider must preserve recursion
+## Biggest gaps and next proof steps
 
-The complete Source definitions and explicit exports are in
-`Data.CFTA.Interned.Operations`.
-The module/export command spans rows 4 through 28. Imports span 30 through 57.
-`unfoldOuterRec` spans 145 through 151. Its local step spans 150 through 151.
-The associated cache declaration spans 140 through 142.
-`nodeEdges` spans 161 through 182. Its worklist spans 170 through 178.
-Its member selection spans 180 through 182.
-These are source declarations. Actual GHC Names and loaded-object identity remain open.
-
-The current model distinguishes recursive nodes before expansion.
-Candidate selection, repeated-recursion handling, and ancestry use that distinction.
-Mapping every flattened edge result to model alternatives loses it.
-No refinement for that mapping is proved.
-The provider must establish outer classification and one native unfolding
-for the model recursive case. Ordinary alternatives need the exact native sequence.
-`nodeEdges` remains a payload candidate after classification.
-It is not an established complete `Graph.node` provider.
-
-Three private source cuts now expose partial candidate matcher clauses.
-They cover rows 771 through 773, 775 through 776, and 781 through 784 in Type.
-The observed recursive case returns a replacement callback.
-Its reference guards use the stored ordinary and depth shapes.
-The remaining observed branch calls `substFree` with the stored recursive
-identifier, the replacement, and the stored body. The fallback rejects other cases.
-The first reference guard uses `muPlaceholder` in a strict reference payload.
-Constructor disjointness alone does not establish termination of that comparison.
-The complete contracts of `muPlaceholder` and `substFree` remain unreceived.
-Do not infer their defining owners or publicness from these calls.
-
-The incoming lexical enclosure, signature at 768 through 770, and pragma at 767
-remain unreceived. Under normal fragment entry, the received clauses leave no
-string or block comment open at the omitted gaps. Recorded comment prefixes
-then select line comments. This local check does not certify the full command,
-typed interface, preprocessing behavior, or actual loaded matcher binding.
-No unconditional unfolding, substitution, totality, or finite-closure law follows.
-
-## Haskell findings for implementation work
-
-No Haskell fix or worker-reachable counterexample is established.
-The received source exposes distinct behavior that needs a proof or repair.
-An ordinary node selects its stored edge list. Empty and a direct Rec select no edges.
-A Mu with an ordinary one-step result selects that result's stored edge list.
-The fallback traverses recursive and union members through an identity worklist.
-A Rec in that worklist selects an explicit error.
-No complete owned construction or caller law excludes that case.
-Derive exclusion for both actual workers, or account for the implementation behavior.
-Do not silently map the error to model emptiness or add a caller validity premise.
-
-Direct paths preserve the stored list order.
-The fallback uses `Set.fromList` followed by `Set.toList`.
-Type's received Edge equality and ordering definitions use stored edge identities.
-Actual duplicate, ordering, identity-allocation, container, and memo laws remain open.
-Language-set equality alone cannot establish exact counts, order, or rank.
-The exported representation declarations do not supply a closed-input invariant.
-The complete `createUnion` body is not received.
-
-The complete term pattern `Data.CFTA.Interned.Type.Mu` spans 671 through 676.
-Its matcher delegates to `matchMu`. Its builder delegates to `createMu`.
-The local unfolding step applies the matcher's returned function to the same node.
-This does not establish substitution, closure, termination, or allocation behavior.
-`memoTypeableWith` and its cache laws also remain unreceived.
-Builder semantics is not needed merely to classify an existing node.
-
-## Exact next dependencies
-
-Locate positive complete contracts for `muPlaceholder` and `substFree`.
-Use only a fresh bounded plan. Keep existing report bodies and private source opaque.
-The old 33526-byte lexical report did not supply an accepted matcher entry.
-Its schema and literal-coordinate checks added no declaration ownership claim.
-A candidate token position is not a complete command or a resolved GHC Name.
-Type has only one unreserved row. Do not exceed that limit or reset an actor.
-The signature and omitted comment texts were not received or reconstructed.
-
-The representative-fuel feasibility check found another precise missing interface.
-`lean/MicroCFTA/UnionFind.lean` is a positive Original: 41077 bytes, 808 rows,
-SHA-256 `3668867a41890e4721c301092a06c48d3bd757a8eede4b92340fe5db80119a14`.
-Its owned union is 52 rows, with a strict maximum of 403.
-The complete `MicroCFTA.UnionFind.Forest` declaration span and accepted capture
-are not positively located in the checked metadata. This is not global absence.
-Do not assume a finite map, `Forest.size`, or a finite-domain lookup law.
-A totality predicate alone is not a received computable cardinality bound.
-Locate the actual interface before implementing that bound.
-A heap-dependent bound would still need the original-input heap-growth proof.
-
-## Full proof target and remaining work
-
-The model workers remain `MicroCFTA.EnumerationState.enumerateOut` and
-`MicroCFTA.EnumerationState.enumerateFully`.
-Their Graph and Oracle callback types do not impose the required runtime laws.
-The native intersection contract and both Oracle preservation laws remain open.
-`getUVarValue` is a role candidate for different model reads.
-`getUVarRepresentative` is a role candidate for model representative lookup.
-No candidate is a refinement proof.
-
-Implement the actual realizer and prove its refinement laws.
-Derive coverage, lineage, and progress from the original inputs.
+First, derive one computable bound from the original inputs and requested size.
+It must cover both actual optimized workers and all generated, returned, and later states.
+`Forest` has a functional interface over natural-number identities.
+Its type does not provide a finite key domain. Pointwise totality supplies no
+received computable uniform representative-fuel bound.
+Establish support for actual initial states and all actual heap writes.
+Then bound representative paths and allocation growth from the original inputs.
 A finite key set alone does not bound work between recursion checkpoints.
-The final target remains both actual optimized workers and one computable bound
-from original inputs and requested size for every generated, returned, and later state.
-It includes exact accepted terms by node count, counts, enumeration order,
-both rank/unrank inverse laws, and actual Haskell source/API/ID/cache/interner/Eq/hash laws.
+
+Second, establish the actual native Graph and Oracle realizers and their laws.
+Keep outer recursion classification before native expansion.
+Flattened `nodeEdges` output alone does not realize `Graph.node`.
+The native intersection contract and both Oracle preservation laws remain open.
+Derive coverage, lineage, and progress for the actual transitions.
+
+Third, complete exact enumeration and runtime correspondence for the whole system.
+The target includes exact accepted terms by node count, counts, enumeration order,
+and both rank/unrank inverse laws. It includes actual Haskell source/API,
+identity allocation, caches, interning, equality, and hashing.
 Add no supplied carrier, closure, resource, completed-worker, success, fuel,
-OriginalInput, or validity premise.
-Keep the optimized interned core primary and older work as secondary targets.
-State/BinderInfo probe 507 stays held. No primary dependency was established.
+OriginalInput, or validity premise. Keep the optimized interned core primary.
+Preserve older constructor and equality work as secondary targets.
 
-The earlier candidate Int/unit annotations remain staged and uncompiled.
-The component's declared build-info file was absent.
-Normal Nix selected ghcup GHC 9.14.1 and cabal-install 3.18.1.0.
-The CLI links Cabal 3.18.1.0. The GHC database lists Cabal 3.16.0.0.
-Resolve this version mismatch through Hypha before any dependency API lookup.
-The compiler-context investigation remains secondary to the actual node provider.
-Do not mutate the protected plan or copy a build tree.
+## Haskell findings for external implementation work
 
-## Checks, source history, and storage
+No Haskell fix or worker-reachable counterexample was established in this work.
+The native fallback worklist has an explicit error for a Rec member.
+Prove that both workers exclude that case, or account for the implementation behavior.
+Do not map the error to model emptiness or add a caller validity premise.
+Direct paths preserve stored edge order. The fallback uses
+`Set.fromList` and `Set.toList` with stored edge identities.
+Language-set equality alone does not prove counts, order, or rank.
 
-Opaque capture 566 passed 10751 outer roles, 10751 inner before roles,
-and 10753 inner after/final roles, with eight logical roles.
-Projection 569 passed 10767 outer, 10769 inner before, and 10777 inner after/final roles.
-Eight private views 571 each passed 10786 physical and nine logical roles.
-Mu projection 574 passed 10812 outer, 10813 inner before, and 10814 inner after/final roles.
-Mu view 575 passed 10821 physical and nine logical roles.
-All stages used distinct before, after, and separate final checks.
-Source-emitting controllers checked buffered bytes before private model receipt.
-Root viewed no private source body. These checks add no mathematical theorem.
+The received Mu matcher clauses use `muPlaceholder` and `substFree`.
+Their complete contracts and actual loaded bindings remain open.
+Constructor disjointness alone does not prove the recursive comparison terminates.
+Memo laws, substitution, finite closure, and actual object correspondence remain open.
+The Haskell compiler-context work remains secondary. Resolve the known Cabal
+3.18.1.0/3.16.0.0 mismatch through Hypha before dependency API lookup.
+Do not copy a build tree or mutate the protected build plan.
 
-Haskell Source is now 5425 across the same ten Originals.
-The earlier six Mu rows and the nine new clause rows were permanently charged
-before all guards, including failure. Type has 459 of 922 rows.
-Its strict maximum remains 460. One row remains.
-Operations has 420 of 887 rows. Its strict maximum remains 443.
-The earlier 571 receipt correctly records 5410 before that later reservation.
-Both FINAL slots remain Enumeration and Facade. No third FINAL occurred.
-Native CFTA2465/49, semantic Std516/7, shared charged Std809/7,
-semantic Source2981, shared Source3274/56, captures157, and interfaces155 are unchanged.
-B remains3048/29, workflow40 reserved, queries37, reuses2, replay4.
-All earlier aliases, limits, STOPs, and SourceProcessFAIL remain.
-Root Original-Source upper UNKNOWN is permanent.
-State two-TYPE777 is private and unviewed. Private State frames remain zero.
-Keep primitiveTYPE1401, failed diagnostics, actual32TYPE396, and old cuts opaque.
+## Source history and storage
 
-The full earlier history is embedded with lossless gzip/base64 encoding.
-Its exact JSON roundtrip was checked. The immutable 194164-byte raw prior remains.
-No history value, Source charge, or alias was removed. The 196608 metadata cap is unchanged.
-An unnecessary own-author newline-edit assertion failed before any write or helper run.
-AST inspection confirmed the original newline literal was correct. The executed tool is unchanged.
+The previous temporary runtime directory is absent:
+`/tmp/mcfta-runtime-packet-producer-normal-20261104-1205`.
+Its old selectors and rolebooks are unavailable locally.
+Do not describe them as freshly checked or reconstruct them as passing records.
+The earlier source-process audit remains failed. Root Original-Source upper UNKNOWN
+remains permanent. The new kernel check does not recover that audit.
+Keep private TYPEs, old failed diagnostics, and private State frames opaque.
+State/BinderInfo probe 507 remains held. No primary dependency was established.
 
-Eleven small records total 29973 bytes in
-`lean/restart-evidence/20261106-native-matcher-helper-gates/`.
-They contain exact executed productive helpers, public receipts and obligations.
-They contain no private source body, raw TYPE, local rolebook, or build tree.
-The three private views passed once and in sequence, with 10939, 10940 and 10941
-physical roles and nine logical roles each. Buffer size and hash checks passed
-before each private source receipt. Root did not view those source bodies.
-The earlier schema checks and numeric locators add no mathematical theorem.
+Carry the last known reservations without resetting quotas or aliases.
+Native CFTA is 2470 across 49 Originals. Semantic Std is 516 across seven Originals.
+Shared charged Std is 809. Semantic Source is 2986; shared Source is 3279 across 56.
+UnionFind has 57 reserved rows out of 808, with strict cap 403.
+The five context rows reserved after the earlier 52-row checkpoint were not viewed.
+Haskell Source is 5425 across ten Originals. Type has 459 of 922 rows, cap 460.
+Operations has 420 of 887 rows, cap 443. FINAL slots remain Enumeration and Facade.
+B remains 3048/29, workflow 40 reserved, queries 37, reuses two, replay four.
+Captures remain 157 and interfaces 155. No new Original source body was viewed here.
+The old complete local alias/history packet cannot be verified after its removal.
 
-The first row-shape wrapper stopped before input access because generated own
-code contained an invalid escaped literal. An offline syntax check confirmed it.
-The corrected wrapper uses numeric whitespace bytes. Both its parameter and
-its generated program passed syntax checks before the fresh execution.
-The failed wrapper and its STOP remain in the complete local history.
-
-The runtime selector remains
-`/tmp/mcfta-runtime-packet-producer-normal-20261104-1205/CURRENT-HANDOFF.json`.
-It selects R87 progress and the complete current source history.
-At 2026-11-06 18:50 CET, `/tmp` had 87.16 GiB free.
-This round added about 34 MB of local metadata and small files.
-No cleanup or build-tree copy ran. The shared board records the public findings.
+The new reproduction packet is
+`lean/restart-evidence/20261106-union-find-support/`.
+It reads the proof from repository source and removes its temporary report.
+It contains a small script, instructions, and verification metadata.
+It does not need a copied build tree or a cumulative rolebook.
+The old opaque document tails remain unchanged below this prefix.
+The new scratch data was under 45 KB. About 321 GiB was free at the last sample.
+No cleanup ran in this continuation. Keep future receipts small.
 
 The earlier checkpoint below is historical.
 
 ---
-
 
 # Current checkpoint: 2026-11-06 12:30 CET
 
