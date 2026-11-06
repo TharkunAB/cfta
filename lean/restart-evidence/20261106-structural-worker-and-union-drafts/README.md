@@ -1,3 +1,12 @@
+## Proof revision387 and declaration origin
+
+Candidate387 is the saved draft whose exact proof bytes failed normal
+Lean check389D. Its full frozen statement is unchanged. The new numeric
+receipts and [findings](branch-repair-and-state-origin-findings.txt) record the
+failure, private branch-binding scope, State parent origin and unresolved
+constructor-origin guard. No new theorem or Haskell fix is claimed. Preserve
+candidate376 and every earlier marked draft.
+
 Current continuation: scoped bind interface and failed full-target repair
 
 Read bind-interface-and-proof-findings.txt first. The qualified primitive interface

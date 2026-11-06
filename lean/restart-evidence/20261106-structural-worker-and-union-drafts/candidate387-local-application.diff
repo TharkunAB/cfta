@@ -1,0 +1,18 @@
+--- CANDIDATE376-NEW-FULL-TARGET-OWNED-TYPE-ACTUAL-ARGUMENT-BIND-APPLICATION-UNCOMPILED.lean
++++ CANDIDATE387-FULL-TARGET-SETTER-ALTERNATIVE-AND-RIGID-BIND-PRODUCER-UNCOMPILED.lean
+@@ -100,9 +100,13 @@
+         Membership.mem, List.instMembership] at successful
+       cases successful with
+       | tail _ impossible => cases impossible
+-    | exact (pure_frame () () input output successful).total total
++    | exact (pure_frame _ _ _ _ successful).total total
++    | have preserved := setterRepresentatives _ _ input output successful
++      rw [preserved]
++      exact total
+     | obtain ⟨selected, intermediate, represented, stored⟩ :=
+-        (MicroCFTA.EnumerationCorrectness.success_bind _ _ input () output).mp successful
++        (MicroCFTA.EnumerationCorrectness.success_bind
++          (MicroCFTA.EnumerationState.representative representativeFuel uv) _ input () output).mp successful
+       have frame := representative_frame representativeFuel uv selected input intermediate total represented
+       have preserved := setterRepresentatives _ _ intermediate output stored
+       rw [preserved]
