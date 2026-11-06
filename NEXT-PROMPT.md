@@ -1,3 +1,149 @@
+# Current checkpoint: prepared-action invariant (2026-11-06 10:30 CET)
+
+This checkpoint supersedes the older status sections below. Preserve the older
+proofs, counterexamples, repairs, and marked drafts. The goal remains active.
+The optimized interned core is the primary target. Older constructor and
+equality results remain secondary targets.
+
+## New checked result
+
+Commit `16be95606b3aec7bb0ee2478168503c95ab318ea` adds
+`lean/MicroCFTA/SourcePruningEnumerationActionTotal.lean`.
+The theorem is `MicroCFTA.SourcePruningEnumerationActionTotal.prepare_total`.
+Start with total representatives. If `SourcePruningEnumerationAction.prepare`
+returns an operation and that operation succeeds, its output has total
+representatives. This holds for every local fuel value and every input and
+output state of this operation. It does not use the selected step's eight
+caller conditions. It does not require equality instances for `Symbol` or
+`Node`. The `EdgeKey` equality instance remains.
+
+The source has 3348 bytes and SHA-256
+`e4bc14ff590068ca156e9f02e07b1a72f0257da7573291be67122da1a73597cd`.
+Normal check 459 accepted its full type and axiom report. Normal repository
+check 463 passed with warnings as errors and empty output. The axiom list is
+`propext`, `Classical.choice`, and `Quot.sound`. There is no `sorryAx`.
+The earlier checks 453 and 456 failed the unused-section-variable linter.
+Their failures remain recorded. The final source removes the unused variables.
+
+The proof is on `formalize`. An independent GitHub ref query confirmed commit
+`16be95606b3aec7bb0ee2478168503c95ab318ea`. There is no CI run for that exact
+commit. This is local Lean validation. Upstream was refreshed before publication.
+`main` remains `bd5a406a6a3f84b7e3ae0906082783911509df83`.
+
+## Full target and largest gaps
+
+Prove both actual optimized recursive workers with one computable bound from
+the original input and requested size. The bound must cover all generated,
+returned, and later states. Compose the exact node-count term language,
+counts, order, and both rank/unrank inverse laws at the worker API.
+Prove the Haskell/runtime and modeled-operation correspondence. This includes
+identities, caches, interning, equality, and hashing. Do not add a supplied
+carrier, closure, resource, success, completed-worker, fuel, `OriginalInput`,
+or validity premise to replace a missing proof.
+
+The immediate mathematical gap is the original-input bound on generated
+activation-key identities across nonconstructor re-entry. A repeat-key test
+does not by itself bound the number of distinct keys. A constructor budget
+does not decrease on every such step. An abstract fresh-identity recurrence
+can keep its path factor and constructor-cost projection constant.
+This is an obstruction to those facts alone. It is not a verified Haskell
+execution, an infinite machine-ID claim, or a divergence witness.
+Derive the actual identity-origin bound and prove its preservation.
+The generated-path, cache, caller, and runtime obligations remain separate.
+The new action invariant proves no operation existence, termination, common
+original-input bound, complete worker correctness, or Haskell correspondence.
+
+## Executed metadata checks and current boundaries
+
+The corrected three-index lookup 435 found no exact reference to
+`MicroCFTA.SourcePruningEnumerationSelectedStep.run` in those three indexes.
+This is a scoped negative result. It is not a global caller-absence result.
+Driver lookup 448 found the exact reference candidates
+`MicroCFTA.EnumerationState.enumerateFully` and
+`MicroCFTA.EnumerationState.enumerateOut`.
+Controlled registry query 460 found both requested keys as definitions with
+queried declaring module `MicroCFTA.EnumerationState`.
+It imported `Lean` and `MicroCFTA.EnumerationDriver`.
+It did not read their types, values, bodies, or `info.name` equality.
+Their optimized-worker behavior and Haskell bridge remain unestablished.
+
+Native packet 462 is authored and fully reviewed. It selects only the two
+exact declaration-origin records. It has not run. The held EnumerationState
+Source identity is 33489 bytes, SHA-256
+`83a898b883ec7b52469bccd87e8afa4f7abb320e3c935bf48f3d80ad77003cc4`.
+It has 699 lines. Its prior charged union is `1..86, 88..89, 102..104`.
+Its count is 91 and its strict half cap is 349. Reconcile the held physical
+Source/index/object descriptors with fresh full controls before execution.
+Do not promote these functions to the optimized-worker contract from names.
+
+The two `Lean.ConstantInfo` getter keys are definitions owned by
+`Lean.Declaration`. Positive full56 accounting found an existing Source
+identity: 21161 bytes, SHA-256
+`fcb928c1686f0655279a790f92bd61f8c0d6df3be51a5eccaa2880de058e5e24`,
+556 lines, cap 277. Its prior charged union is
+`94..99, 120..132, 251..302, 429..439`, or 82 rows.
+The own27 negative comparison does not establish global prior zero.
+Coalesce this positive history and every positive alias before a new charge.
+This accounting does not transfer semantic ownership or prove a physical
+six-field identity from a four-field Original identity.
+
+A 51302-byte opaque index copy passed distinct-inode and content checks.
+Lookup 465 returned both exact numeric origin records:
+`Lean.ConstantInfo.levelParams` has candidate envelope `470..471`;
+`Lean.ConstantInfo.type` has candidate envelope `476..477`.
+These are four candidate rows. They are not a certified Source extent,
+Source-generation proof, accessor contract, or new Source receipt.
+No Source row was charged or viewed for these envelopes.
+The minimum closed accessor and Expr/Level/binder context remains open.
+The raw 777-byte State-family type capture remains unviewed.
+Metadata packet 466 assesses that next context without new payload access.
+
+Current counters: B Source 2530/27; Templates union54; workflow reservations36;
+actual Lean queries34; first-artifact reuses2; private State-type frames0.
+Native Source 2227/49 plus Std516/7, full56 Originals; actual capture attempt157;
+semantic ownership155. Attempt157 is metadata-only. Haskell Source5410/10;
+both final whole reservations remain used. Preserve all old closed windows,
+STOPs, canonical/content aliases, and histories.
+`SourceProcessFAIL` and Root Original-Source upper `UNKNOWN` remain permanent.
+Do not view the old failed primitive diagnostics or unavailable Source ranges.
+Do not treat local input-pin checks as loaded-file, Source/object,
+complete-transitive, or strict-kernel-control correspondence.
+
+## Haskell findings
+
+No new Haskell fix or verified Haskell defect was identified in this pass.
+The missing generated-identity bound is a proof obligation.
+Do not report the abstract recurrence as a runtime counterexample.
+The earlier Source-only worker IDs remain
+`Data.CFTA.Enumeration.enumerateUntil'` and
+`Data.CFTA.Enumeration.orderedPrepare`.
+The actual GHC Name, provider/ABI, and runtime correspondence remain open.
+Record any later concrete Haskell fix in this root `FINDINGS.md` as well.
+
+## Reproduction, storage, and restart
+
+Small saved inputs are in
+`lean/restart-evidence/20261106-prepared-action-totality/`.
+`REPRODUCE.md` gives normal Nix/Lake/Lean commands. The proof can be rebuilt
+from repository source. No copied build tree is needed for that check.
+This pass created no build-tree copy and performed no cleanup.
+The last space check found about 83.5 GiB free. The last readable `/tmp` scan
+was about 228.8 GiB and excluded unreadable protected service directories.
+The old exact32 cleanup proposal remains unapproved.
+
+The runtime selector is
+`/tmp/mcfta-runtime-packet-producer-normal-20261104-1205/CURRENT-HANDOFF.json`.
+It selects `R81-CURRENT-PROGRESS-V2.json`. The previous full progress file
+remains intact. Read the selector and current Source histories before any
+guard or new observation. The latest full Root role table is
+`R81-B465-CAPPED-JOB-BEFORE.json`: 8230 physical roles plus two logical roles.
+All before, distinct after, and separate final checks passed for lookup 465.
+Run heavy checks serially with the existing 4 GiB capped runner. Preserve
+its output and timeout caps. Do not repeat a successful proof check unless
+a source change or a new failure gives a reason.
+
+---
+
 ## 2026-11-06 08:17 CET: Total representatives for every successful action state
 
 Normal Lean accepted MicroCFTA.SourceCurrentSelectedStepAllObservedTotal.complete. The new module is lean/MicroCFTA/SourceCurrentSelectedStepAllObservedTotal.lean. Under the same eight caller gates, it supplies the same five local fuel witnesses and nine universal binders. It preserves the selected-step validity result, compression frame and checked representative totality. It now proves total representatives for EVERY successful action-list member. The earlier theorem covers a singleton successful result. The earlier module stays unchanged. No caller premise was added.

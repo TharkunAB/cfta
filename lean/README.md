@@ -1,3 +1,10 @@
+Latest checked action invariant: `MicroCFTA.SourcePruningEnumerationActionTotal.prepare_total`.
+Every successful operation returned by the modeled action preparer preserves
+total representatives from a total input. This holds for all local fuels.
+It does not need the selected step's eight caller conditions. It does not
+prove complete worker termination or a common original-input bound.
+See `restart-evidence/20261106-prepared-action-totality/REPRODUCE.md`.
+
 The latest selected-step theorem is `MicroCFTA.SourceCurrentSelectedStepAllObservedTotal.complete`.
 It preserves total union-find representatives for every successful action result under the existing caller gates.
 The common bound for both complete workers and Haskell/runtime correspondence remain open.
