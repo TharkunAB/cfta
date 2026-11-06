@@ -1,3 +1,11 @@
+Current continuation: declaration calibration and registered module unit
+
+The full worker proof remains open. No theorem or Haskell source fix was added.
+Read coordinate-and-provider-findings.txt for the reproducible small inputs and
+exact limits. The retained declaration certificate is positive. Two newer fixture
+indexes have empty decls tables. Current module-to-unit metadata does not prove
+actual exported Name identity or runtime correspondence.
+
 # Unchecked worker and union proof drafts
 
 These files use the `.lean.txt` extension. The normal Lean build excludes them.
