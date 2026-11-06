@@ -1,122 +1,136 @@
-# Current checkpoint: 2026-11-06 23:00 CET
+# Current checkpoint: 2026-11-06 23:43 CET
 
-The goal remains active. The parent on `formalize` is
-`cd530b70ddfccc8f496eb63a16311ebe3494450b`.
-A fresh `pull --ff-only` and fetch found no upstream changes.
-`main` remains `bd5a406a6a3f84b7e3ae0906082783911509df83`.
-Preserve the unrelated untracked `.hypha/` directory.
+The full goal remains active. This round made mathematical progress.
+The parent on `formalize` is `1b15684faaff862e09e0c520646993c4c4e6b6a9`.
+A fresh `pull --ff-only` found no upstream changes.
+The last fetched `main` remains `bd5a406a6a3f84b7e3ae0906082783911509df83`.
+Preserve unrelated untracked `.hypha/`.
 
-## New local kernel result
+## New checked initialization and write bounds
 
-`lean/MicroCFTA/UnionFindSupport.lean` defines `SupportedBelow`.
-It states that the forest stores no entry at or above a bound.
-The pinned Lean 4.34.1 compiler accepted two new lemmas with warnings as errors.
-An empty function-valued forest has support below zero.
-One write at `key` preserves support below `max bound (key + 1)`.
-The empty lemma uses no axioms. The write lemma uses only `propext` and `Quot.sound`.
-The source has SHA-256
-`a1e23bab9a8723105fddb2b96fb55923cce17883d804fb60e39743a817084a3c`.
+`lean/MicroCFTA/UnionFindSupport.lean` now connects support to actual Lean UF operations.
+For every input list, `withInitialValues` stores no entry at or above
+`initialBound` of that list. This computable function returns the maximum
+listed identity plus one, or zero for an empty list. The theorem adds no premise.
+The membership lemma proves that every listed identity is below that bound.
+For an already supported forest, actual `put` preserves support below
+`max bound (key + 1)`. The earlier empty and functional-write lemmas remain.
 
-The direct compiler diagnostic and the required normal Nix check both passed.
-The final reproduction script also built `MicroCFTA.UnionFindSupport` and
-repeated the source and axiom check in Nix. Both commands exited zero.
-The new module and its proof were the targeted verification scope.
-The checks used 4 GiB memory max/high, no swap, and a 360-second wall limit.
+The actual module build and all five source/axiom checks passed in `shell.nix`.
+The report uses Lean 4.34.1, `-j1`, and `-DwarningAsError=true`.
+The new theorems use only `propext` and `Quot.sound`; the empty theorem uses no axioms.
+No `sorryAx` is allowed. Checks used 4 GiB memory max/high and no swap.
+The final source has 2453 bytes and SHA-256
+`d7f1b856826fdc63a70500e9314d84a4019d83c62334ce9ae79a55c574723f97`.
+The final module-build and report run exited zero. No proof check remains live.
 No whole-library or Haskell compilation ran.
 
-Three earlier Nix attempts timed out after 25, 75, and 300 seconds without
-compiler output. Nix was observed waiting on filesystem I/O.
-System I/O pressure reached 85 percent. The last timed-out attempt retained
-a child. Its scope was killed and its process list became empty.
-Later normal checks succeeded. No proof retry remains live.
+The source-based recipe and result are in
+`lean/restart-evidence/20261106-union-find-support/`.
+The recipe reads current source and removes its temporary report.
+It does not require an archived build tree or a cumulative rolebook.
 
-The new lemmas concern an empty function and one functional write.
-They do not yet establish support for actual heap operations or worker transitions.
-Their bound is an internal proof input. Derive it from construction and updates.
-Do not add a supplied support bound to the final worker contract.
+## Biggest mathematical gap
+
+Initialization now supplies a support bound from its input list.
+The prior support hypothesis in the write lemma is an internal induction hypothesis.
+Do not add a support bound or finite carrier to the final worker contract.
+Next, prove support preservation for actual `findRoot` compression and `union`.
+Then bound the keys allocated by every actual worker transition.
+Derive their growth from original inputs and requested size.
+
+`UF.Total` and finite support remain separate properties.
+We have not proved that they give one computable successful representative fuel.
+A current-heap bound would still need the original-input heap-growth proof.
+A finite key set alone does not bound work between recursion checkpoints.
 
 ## Current worker preservation theorem
 
-The worker preservation theorem remains
-`MicroCFTA.SourcePruningEnumerationActionTotal.prepare_total` at line 33.
+`MicroCFTA.SourcePruningEnumerationActionTotal.prepare_total` remains at line 33.
 For arbitrary local fuels, if preparation returns an operation and that operation
 succeeds from a `UF.Total` heap, its output heap is `UF.Total`.
-This does not establish existence, success, termination, a common bound,
-or actual Haskell/runtime correspondence. The unchanged theorem was not rerun.
+The new bounds do not establish worker existence, success, termination,
+or a common original-input bound. The unchanged theorem was not rerun.
 
-## Biggest gaps and next proof steps
+## Full remaining target
 
-First, derive one computable bound from the original inputs and requested size.
-It must cover both actual optimized workers and all generated, returned, and later states.
-`Forest` has a functional interface over natural-number identities.
-Its type does not provide a finite key domain. Pointwise totality supplies no
-received computable uniform representative-fuel bound.
-Establish support for actual initial states and all actual heap writes.
-Then bound representative paths and allocation growth from the original inputs.
-A finite key set alone does not bound work between recursion checkpoints.
+Cover BOTH actual optimized workers, `enumerateOut` and `enumerateFully`.
+Derive one computable bound from original inputs and requested size.
+It must cover every generated, returned, and subsequent state.
+Preserve exact accepted terms by node count, counts, enumeration order,
+and both rank/unrank inverse laws.
+Complete actual Haskell source/API, identities, caches, interning, equality,
+and hashing correspondence. Keep the optimized interned core primary.
+Preserve older constructor and equality work as secondary targets.
+Add no supplied carrier, closure, resource, completed-worker, success, fuel,
+OriginalInput, or validity premise.
 
-Second, establish the actual native Graph and Oracle realizers and their laws.
-Keep outer recursion classification before native expansion.
+Actual native Graph and Oracle realizers and their laws remain open.
+Preserve outer recursion classification before node expansion.
 Flattened `nodeEdges` output alone does not realize `Graph.node`.
 The native intersection contract and both Oracle preservation laws remain open.
-Derive coverage, lineage, and progress for the actual transitions.
-
-Third, complete exact enumeration and runtime correspondence for the whole system.
-The target includes exact accepted terms by node count, counts, enumeration order,
-and both rank/unrank inverse laws. It includes actual Haskell source/API,
-identity allocation, caches, interning, equality, and hashing.
-Add no supplied carrier, closure, resource, completed-worker, success, fuel,
-OriginalInput, or validity premise. Keep the optimized interned core primary.
-Preserve older constructor and equality work as secondary targets.
+Derive coverage, lineage, and progress for their actual transitions.
 
 ## Haskell findings for external implementation work
 
-No Haskell fix or worker-reachable counterexample was established in this work.
+No Haskell fix or worker-reachable counterexample was established here.
 The native fallback worklist has an explicit error for a Rec member.
-Prove that both workers exclude that case, or account for the implementation behavior.
-Do not map the error to model emptiness or add a caller validity premise.
+Prove that both workers exclude it, or account for the implementation behavior.
+Do not map it to model emptiness or add a caller validity premise.
 Direct paths preserve stored edge order. The fallback uses
 `Set.fromList` and `Set.toList` with stored edge identities.
 Language-set equality alone does not prove counts, order, or rank.
 
-The received Mu matcher clauses use `muPlaceholder` and `substFree`.
+The received Mu matcher uses `muPlaceholder` and `substFree`.
 Their complete contracts and actual loaded bindings remain open.
-Constructor disjointness alone does not prove the recursive comparison terminates.
-Memo laws, substitution, finite closure, and actual object correspondence remain open.
+Constructor disjointness alone does not prove recursive comparison terminates.
+Memo laws, substitution, finite closure, and object correspondence remain open.
 The Haskell compiler-context work remains secondary. Resolve the known Cabal
 3.18.1.0/3.16.0.0 mismatch through Hypha before dependency API lookup.
 Do not copy a build tree or mutate the protected build plan.
 
-## Source history and storage
+## Source boundary and carried history
 
-The previous temporary runtime directory is absent:
+Private Source windows14–37 and428–438 were received by the same Native actor.
+The first establishes the functional Forest interface, defaulted `read`, and `put`.
+`put` preserves raw optional entries at other keys. Its test uses propositional equality.
+The initializer at428–429 directly tests membership in its input list.
+It stores singleton roots for listed variables and no entries elsewhere.
+It does not depend on an empty initializer or a fold of writes.
+The actual empty definition remains unreceived and is not needed by this proof.
+Rows38–427 remain unreceived. No complete source-attachment audit is claimed.
+The checked theorems reference the actual qualified Lean constants.
+
+Both private receipts passed eleven current-local role checks before, after,
+and at a separate final phase. Captures and the numeric locator also passed
+all their declared local guards. These are local input checks.
+They do not recover the removed historical global rolebook or alias history.
+The old runtime directory remains absent:
 `/tmp/mcfta-runtime-packet-producer-normal-20261104-1205`.
-Its old selectors and rolebooks are unavailable locally.
-Do not describe them as freshly checked or reconstruct them as passing records.
-The earlier source-process audit remains failed. Root Original-Source upper UNKNOWN
-remains permanent. The new kernel check does not recover that audit.
-Keep private TYPEs, old failed diagnostics, and private State frames opaque.
-State/BinderInfo probe 507 remains held. No primary dependency was established.
+SourceProcessFAIL and Root Original-Source upper UNKNOWN remain permanent.
+Root viewed no Original Source body. Keep private TYPEs and old diagnostics opaque.
+State/BinderInfo probe507 remains held. No primary dependency was established.
 
-Carry the last known reservations without resetting quotas or aliases.
-Native CFTA is 2470 across 49 Originals. Semantic Std is 516 across seven Originals.
-Shared charged Std is 809. Semantic Source is 2986; shared Source is 3279 across 56.
-UnionFind has 57 reserved rows out of 808, with strict cap 403.
-The five context rows reserved after the earlier 52-row checkpoint were not viewed.
-Haskell Source is 5425 across ten Originals. Type has 459 of 922 rows, cap 460.
-Operations has 420 of 887 rows, cap 443. FINAL slots remain Enumeration and Facade.
-B remains 3048/29, workflow 40 reserved, queries 37, reuses two, replay four.
-Captures remain 157 and interfaces 155. No new Original source body was viewed here.
-The old complete local alias/history packet cannot be verified after its removal.
+All reservations preceded the corresponding guards and remain charged after failure.
+Native CFTA is2488 across49 Originals. Semantic Std remains516/7; shared Std809/7.
+Semantic Source is3004. Shared Native Source is3297 across56 Originals.
+UF has75 reserved rows out of808, with strict cap403.
+The earlier reserved context14–20 was now received without another charge.
+Haskell Source remains5425/10. Type is459/922, cap460; one row remains.
+Operations is420/887, cap443. FINAL slots remain Enumeration and Facade.
+B remains3048/29, workflow40 reserved, queries37, reuses2, replay4.
+Captures remain157; interfaces155. Do not reset actors, aliases, or quotas.
+The full old alias/history packet cannot be checked after its removal.
 
-The new reproduction packet is
-`lean/restart-evidence/20261106-union-find-support/`.
-It reads the proof from repository source and removes its temporary report.
-It contains a small script, instructions, and verification metadata.
-It does not need a copied build tree or a cumulative rolebook.
-The old opaque document tails remain unchanged below this prefix.
-The new scratch data was under 45 KB. About 321 GiB was free at the last sample.
-No cleanup ran in this continuation. Keep future receipts small.
+The old888-byte support-source pins are historical after the new proof was installed.
+Do not reuse those stale working-file expectations in a new Source job.
+The own-source version transition is recorded in the small current handoff.
+No initializer guard ran in the explicitly aborted pre-dispatch tool call.
+A later admitted capture ran once after absence of outputs was checked.
+
+The new scratch directory used under120 KB at the last sample.
+About307 GiB was free in `/tmp`. No cleanup or build-tree copy ran this round.
+Keep future receipts small. Preserve the opaque historical document tails below.
 
 The earlier checkpoint below is historical.
 
