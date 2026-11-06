@@ -1,66 +1,83 @@
-# Current checkpoint: 2026-11-07 00:19 CET
+# Current checkpoint: 2026-11-07 00:53 CET
 
 The full goal remains active. This round made mathematical progress.
-The parent on `formalize` is `a75221a08156e4adb8c7c1d7ef02868d35d95b2a`.
+The parent on `formalize` is `bfeb49c74e37a143391b111de6ce85574f9175c3`.
 A fresh `pull --ff-only` found no upstream changes.
 Fetched `main` remains `bd5a406a6a3f84b7e3ae0906082783911509df83`.
 Preserve unrelated untracked `.hypha/`. Push authorization for `formalize` remains in effect.
 
-## New checked find and union bounds
+## New checked uniform representative and union fuel
 
-`lean/MicroCFTA/UnionFindSupport.lean` now covers actual Lean UF initialization,
-writes, `findRoot`, `link`, and `union`.
-Initialization supplies storage support below `initialBound` of any input list.
-This bound is the maximum listed identity plus one, or zero for an empty list.
-The new `ParentsBelow` property also bounds every stored parent identity.
-Initialization establishes this property without a premise.
-Root writes preserve it. Parent writes preserve it when the target is bounded.
+`lean/MicroCFTA/UnionFindSupport.lean` now proves `findRoot_uniformFuel`.
+If a `UF.Total` forest stores no key at or above `bound`, EVERY query succeeds
+with the same explicit fuel `bound + 1`.
+The query identity can lie outside that bound.
+This theorem needs no parent-target bound or query-range premise.
+Support and `Total` remain internal invariants, not final caller conditions.
 
-A stored-key bound alone is insufficient for search preservation.
-Actual `findRoot` stores a singleton root when it visits a missing identity.
-A stored parent that points outside the bound can therefore enlarge storage.
-The new search theorem maintains both internal invariants and bounds the returned
-representative. The link theorem covers both writes without a size or distinctness premise.
-The union theorem composes two searches. Its second search uses the first returned forest.
+The proof counts parent frames in the actual finite reachability path.
+`ParentDepth` is a proof-only count, not a supplied resource.
+Depth uniqueness gives a distinct list of stored parent keys.
+Every key in that list lies below the storage support bound.
+The list therefore has length at most `bound`.
+A path with `depth` parent frames executes with exactly `depth + 1` fuel.
+The actual fuel-extension theorem then gives the literal allowance `bound + 1`.
+The proof does not choose a maximum of per-query successful-fuel witnesses.
+`Classical.choice` occurs in the proof-only list cardinality lemma.
+The resulting fuel expression is computable and does not depend on that choice.
 
-The query-growth corollaries allow arbitrary queried identities.
-`findRoot_grows_bound` computes `max bound (key + 1)`.
-`union_grows_bound` computes `max bound (max (left + 1) (right + 1))`.
-They require no separate premise that these queries lie below the previous bound.
-The storage and parent properties remain internal induction invariants derived from initialization.
-These theorems apply when the corresponding operation returns successfully.
-They do not establish success or sufficient fuel.
-Do not add their internal support properties to the final worker contract.
+`findRoot_initial_uniformFuel` discharges both invariants for any input variable list.
+Its common fuel is `initialBound variables + 1`, for every queried identity.
+`union_uniformFuel` computes `grown = max bound (max (left + 1) (right + 1))`.
+Both actual searches succeed with `grown + 1` fuel.
+The returned forest has storage and parent bounds below `grown`.
+The internal parent bound supports this union composition.
+`union_initial_uniformFuel` discharges support, parent bounds, and totality.
+It uses only the initial variable list and the two queried identities.
+The initialization corollaries add no support, validity, success, or fuel premise.
+These proofs identify successful fuel values. They do not yet wire them into both workers.
 
-The actual module build and all sixteen source/axiom checks passed in `shell.nix`.
+The earlier checked support laws remain unchanged.
+Initialization supplies `initialBound` from any input list.
+This function is the maximum listed identity plus one, or zero for an empty list.
+`ParentsBelow` bounds stored parent targets.
+Actual `findRoot`, `link`, and `union` preserve both bounds on successful returns.
+Their query-growth corollaries permit arbitrary queried identities.
+The stronger parent invariant remains necessary for fixed-bound storage preservation:
+actual find stores a singleton root at a missing terminal identity.
+It is not necessary for the uniform search-fuel theorem.
+
+The actual module build and all TWENTY-SEVEN source/axiom checks passed in `shell.nix`.
 The report uses Lean4.34.1, `-j1`, and `-DwarningAsError=true`.
-The empty and bound-weakening lemmas use no axioms.
-Other checked lemmas use only `propext` and `Quot.sound`.
-No `sorryAx` is allowed. Checks used4GiB memory max/high and no swap.
-The final source has12825bytes and SHA-256
-`b9f16c4dea22ed85967bd9e599348219a311294f06587dc3689469d6720c31cb`.
-The final module-build and report run99417 exited zero. No proof check remains live.
+Only `propext`, `Classical.choice`, and `Quot.sound` are allowed. No `sorryAx` is allowed.
+Checks used4GiB memory max/high and no swap.
+The final source has22872bytes and SHA-256
+`53bb7d437829f2047ccc88d90c169037f07eb0b3140d0972ba2b1614eb2b4fff`.
+The final module-build and report run55841 exited zero. No proof check remains live.
+All sixteen earlier theorem declarations remain byte-identical.
 No whole-library or Haskell compilation ran.
 
 The source-based recipe and result remain in
 `lean/restart-evidence/20261106-union-find-support/`.
-The recipe checks all sixteen lemmas from current source and deletes its temporary report.
-It needs no archived build tree or cumulative rolebook.
+The recipe checks all twenty-seven lemmas from current source and deletes its temporary report.
+It needs no archived build tree, source copy, or cumulative rolebook.
+The small packet has about17KB of tracked metadata and reproduction code.
 
-## Biggest mathematical gaps and next work
+## Biggest remaining mathematical gaps
 
-The actual UF operations now preserve storage and parent bounds on successful returns.
-Next, derive one computable successful representative fuel from `UF.Total` and finite support.
-A current-heap bound is not yet an original-input worker bound.
-Bound every allocation key and every query identity in actual worker transitions.
-Derive their growth from original inputs and requested size.
-Then bound total work between recursion checkpoints as well as recursion depth.
+Uniform representative fuel from a current supported total forest is now proved.
+The next execution gap is a bound on every actual worker allocation and query identity.
+Derive that bound from original inputs and requested size.
+Apply it to ALL generated, returned, and subsequent heaps.
+Instantiate both optimized workers with the derived common resource values.
+Bound total work between recursion checkpoints as well as recursion depth.
+A current-heap support bound is not yet an original-input worker bound.
 
 `MicroCFTA.SourcePruningEnumerationActionTotal.prepare_total` remains at line33.
 For arbitrary local fuels, if preparation returns an operation and that operation
 succeeds from a `UF.Total` heap, its output heap is `UF.Total`.
 The unchanged theorem was not rerun.
-The new support results do not establish worker existence, success, or termination.
+The new uniform UF fuel does not establish whole-worker existence or termination.
 
 ## Full remaining target
 
@@ -84,8 +101,7 @@ Derive coverage, lineage, and progress for their actual transitions.
 ## Haskell findings for external implementation work
 
 No Haskell fix or worker-reachable counterexample was established here.
-The missing-identity observation above concerns the actual Lean UF model.
-It is not a newly established Haskell bug.
+The new numeric fuel proofs concern actual Lean UF operations.
 The native fallback worklist has an explicit error for a Rec member.
 Prove that both workers exclude it, or account for the implementation behavior.
 Do not map it to model emptiness or add a caller validity premise.
@@ -103,19 +119,20 @@ Do not copy a build tree or mutate the protected build plan.
 
 ## Source boundary and carried history
 
-The same Native actor received private Source windows113–123 and324–334,
-then107–112 and234–237. Twenty plus eight new unique rows were reserved before
-those respective guards. Result107–110 supplies representative, size, and forest fields.
-Complete findRoot113–121, link234–235, and union324–332 support the new proofs.
-Link writes the loser parent, then the winner root with combined stored sizes.
-Union compares representatives by propositional equality and sizes by strict less-than.
-The earlier interface14–37 and initializer428–438 remain received.
+The same Native actor received private Source39–44,201–210,160–180,181–200.
+Forty-nine new unique rows were reserved before their respective guards.
+Complete `Reaches`39–42 records a finite path and terminal size.
+`Total`201 supplies such a path for every identity.
+`findRoot_terminates`160–178 states per-path existence without a numeric bound.
+`findRoot_moreFuel`181–198 preserves the SAME full successful Result.
+`findRoot_total`204–208 preserves totality after a successful search.
+The earlier interface, initializer, Result, find, link, and union receipts remain carried.
 These bounded receipts do not establish a complete lexical attachment audit.
 The checked theorems reference the actual qualified Lean constants.
 
 All four new private receipts passed ten current-local role checks before, after,
-and at a separate final phase. Each capture passed its six declared local roles.
-The numeric locators passed their five or six declared local roles.
+and at a separate final phase. Each capture passed six declared local roles.
+The public-name/numeric locator passed its five declared local roles.
 These checks do not recover the removed global rolebook or full alias history.
 The old runtime directory remains absent:
 `/tmp/mcfta-runtime-packet-producer-normal-20261104-1205`.
@@ -125,25 +142,29 @@ Keep private TYPEs and old diagnostics opaque.
 State/BinderInfo probe507 remains held. No primary dependency was established.
 
 All reservations precede their corresponding guards and remain charged after failure.
-Native CFTA is2516 across49 Originals. Semantic Std remains516/7; shared Std809/7.
-Semantic Source is3032. Shared Native Source is3325 across56 Originals.
-UF has103 reserved rows out of808, with strict cap403 and300 rows remaining.
+Native CFTA is2565 across49 Originals. Semantic Std remains516/7; shared Std809/7.
+Semantic Source is3081. Shared Native Source is3374 across56 Originals.
+UF has152 reserved rows out of808, with strict cap403 and251 rows remaining.
 Haskell Source remains5425/10. Type is459/922, cap460; one row remains.
 Operations is420/887, cap443. FINAL slots remain Enumeration and Facade.
 B remains3048/29, workflow40 reserved, queries37, reuses2, replay4.
 Captures remain157; interfaces155. Do not reset actors, aliases, or quotas.
 The full old alias/history packet cannot be checked after its removal.
 
-Old2453-byte support-source pins are historical after the checked12825-byte installation.
+Old12825-byte support-source pins are historical after the checked22872-byte installation.
 Do not reuse stale expectations in a new Source job. Refresh the current local roles.
-The version transition preserves all five earlier theorem declarations byte for byte.
-The first own search candidate had two unused simp arguments under warningAsError.
-Removing them fixed search. Union required default bind simplification and transport
-along the resulting forest equality. No operation definition changed.
+All sixteen prior declarations before the namespace end remain byte-identical.
+The first cardinality draft used unavailable Subperm helpers; the final proof uses
+`List.Nodup.length_le_of_subset` explicitly.
+Qualify `MicroCFTA.UnionFind.read` in proof simplification to avoid an imported read collision.
+Keep recursive `depth + 1` fuel symbolic before simplification so the success equality still rewrites.
+The final bound proof uses an explicit decidable Nat case split.
 All failed own drafts remain small and marked by their runtime names.
 
-New scratch was about176KB at the last sample, with about307GiB free on the filesystem.
-Readable `/tmp` content was about5.5MiB before the final handoff update.
+New scratch remains below0.25MB. Latest filesystem free space is about193GiB.
+Readable /tmp content is about6.4MiB; five system-private directories are excluded.
+The filesystem lost about114GiB while this round created only151KB of scratch.
+A noninteractive privileged /tmp measurement was unavailable. No deletion ran.
 No cleanup or build-tree copy ran this round. Keep future receipts small.
 Preserve the opaque historical document tails below.
 
