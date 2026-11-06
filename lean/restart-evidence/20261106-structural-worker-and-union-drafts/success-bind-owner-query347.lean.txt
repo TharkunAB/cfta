@@ -1,0 +1,67 @@
+import Lean
+import MicroCFTA.SourceCurrentSelectedStepCheckedTotal
+
+namespace MicroCFTA.SourceCurrentSelectedStepObservedTotal
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationCompressionFrame
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedPartialInvariant (Context)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+
+variable {Typing Key : Type} {width : Nat}
+variable [DecidableEq (EdgeKey Symbol Constraint)]
+variable (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+variable (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+variable (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+variable (stop : Option (Metadata Typing → Nat → Bool))
+variable (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+variable [DecidableEq Symbol] [DecidableEq Node]
+
+attribute [local instance] SourcePruningEnumerationAction.actionMonadList
+
+set_option pp.all true
+set_option pp.universes true
+set_option pp.explicit true
+set_option pp.fullNames true
+set_option pp.notation false
+set_option pp.maxSteps 1000000
+
+open Lean Elab Command in
+run_cmd do
+  let env ← getEnv
+  let ownerOf (name : Name) : Option Name := do
+    let idx ← env.getModuleIdxFor? name
+    env.header.moduleNames[idx]?
+  let requested : Name :=
+    .str (.str (.str .anonymous "MicroCFTA") "EnumerationCorrectness") "success_bind"
+  let some info := env.find? requested
+    | throwError "Exact requested metadata key missing"
+  let kind := match info with
+    | .axiomInfo _ => "AXIOM"
+    | .defnInfo _ => "DEFINITION"
+    | .thmInfo _ => "THEOREM"
+    | .opaqueInfo _ => "OPAQUE"
+    | .quotInfo _ => "QUOTIENT"
+    | .inductInfo _ => "INDUCTIVE"
+    | .ctorInfo _ => "CONSTRUCTOR"
+    | .recInfo _ => "RECURSOR"
+  let some owner := ownerOf requested
+    | throwError "Exact requested metadata owner missing"
+  let record := Json.mkObj [
+    ("requested_exact_key", .str requested.toString),
+    ("found", .bool true),
+    ("kind", .str kind),
+    ("queried_declaring_module", .str owner.toString),
+    ("actual_info_name_equality", .str "UNESTABLISHED_NOT_READ"),
+    ("original345_context_compiled_artifact_bridge", .str "UNESTABLISHED"),
+    ("TYPE_value_or_proof_read", .bool false)]
+  liftIO <| IO.println (Json.compress record)
+
+end MicroCFTA.SourceCurrentSelectedStepObservedTotal

@@ -1,0 +1,20 @@
+Diagnostic format calibration, 2026-11-06 02:36 CET
+
+The fixture has116 bytes. Copy diagnostic-format-calibration.lean.txt to a .lean file. Run it from lean with the installed project dependencies:
+
+env -u LEAN_SYSROOT nix-shell ../shell.nix --run 'lake env lean -j1 -DwarningAsError=true /absolute/path/to/fixture.lean'
+
+Expect a compiler failure for the new missing identifier. Lean4.34.1 emitted a header with this form:
+
+PATH:3:7: error(lean.unknownIdentifier): MESSAGE
+
+The earlier classifier required error: without a parenthesized code. The new classifier permits the bounded suffix (lean.CODE), where CODE starts with an ASCII letter and has at most64 ASCII letters, digits or underscores. It does not export CODE or MESSAGE. It retains the exact known-file prefix, coordinate limits, fixed message-prefix catalogue and output limits. No general error-completeness claim follows.
+
+Candidate350 preserves the frozen worker statement. Its normal check failed. It is not an accepted theorem. Diagnostic351 appended only:
+
+#check MicroCFTA.SourceCurrentSelectedStepObservedTotal.complete
+#print axioms MicroCFTA.SourceCurrentSelectedStepObservedTotal.complete
+
+The numeric projection found a fixed Application type mismatch prefix at105:36. The context remains opaque. Do not treat a generated check or axiom report after a compiler error as theorem acceptance.
+
+The metadata adapter347 imports Lean for tooling. It returned the exact requested key, THEOREM and MicroCFTA.EnumerationCorrectness in its changed environment. This does not validate capture155 or its source origin.
