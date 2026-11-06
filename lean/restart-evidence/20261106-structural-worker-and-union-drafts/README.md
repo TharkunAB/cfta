@@ -1,3 +1,11 @@
+Current continuation: scoped bind interface and failed full-target repair
+
+Read bind-interface-and-proof-findings.txt first. The qualified primitive interface
+has a complete private receipt. The new proof still fails normal Lean at one
+application. No theorem or Haskell fix was added. Candidate376, its one-line diff,
+the reproducible query and numeric receipts are saved here. Raw TYPE and raw
+diagnostic payloads are not copied. The full common-bound/runtime goal stays open.
+
 Current continuation: declaration calibration and registered module unit
 
 The full worker proof remains open. No theorem or Haskell source fix was added.

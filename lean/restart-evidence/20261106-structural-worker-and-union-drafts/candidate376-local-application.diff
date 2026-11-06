@@ -1,0 +1,11 @@
+--- CANDIDATE350-NEW-FULL-TARGET-DIRECT-OBTAIN-BIND-DECOMPOSITION-UNCOMPILED.lean
++++ CANDIDATE376-NEW-FULL-TARGET-OWNED-TYPE-ACTUAL-ARGUMENT-BIND-APPLICATION-UNCOMPILED.lean
+@@ -102,7 +102,7 @@
+       | tail _ impossible => cases impossible
+     | exact (pure_frame () () input output successful).total total
+     | obtain ⟨selected, intermediate, represented, stored⟩ :=
+-        (success_bind _ _ _ _ _).mp successful
++        (MicroCFTA.EnumerationCorrectness.success_bind _ _ input () output).mp successful
+       have frame := representative_frame representativeFuel uv selected input intermediate total represented
+       have preserved := setterRepresentatives _ _ intermediate output stored
+       rw [preserved]
