@@ -1,7 +1,7 @@
-# Current checkpoint: 2026-11-06 15:24 CET
+# Current checkpoint: 2026-11-06 17:02 CET
 
 The goal is active. The published base is
-`1442cde9bba399d3d608c5cae00db70c2fc925de` on `formalize`.
+`0acd961e7e971cc0da828595983b08348947c9e2` on `formalize`.
 The branch was pulled with `--ff-only`. It was current.
 Upstream `main` remains `bd5a406a6a3f84b7e3ae0906082783911509df83`.
 Preserve the untracked `.hypha/` directory.
@@ -13,32 +13,32 @@ The theorem remains
 For arbitrary local fuels, if preparation returns an operation and that
 operation succeeds from a `UF.Total` heap, its output heap is `UF.Total`.
 No stronger mathematical theorem was added in this checkpoint.
-The theorem does not prove operation existence, success, worker termination,
-the common original-input bound, or actual Haskell/runtime correspondence.
+Operation existence, success, worker termination, a common original-input bound,
+and actual Haskell/runtime correspondence remain open.
+No Haskell source compilation or annotation check ran in this checkpoint.
+GHC version metadata was queried.
 
 ## Primary gap and full target
 
 The model workers are `MicroCFTA.EnumerationState.enumerateOut` and
 `MicroCFTA.EnumerationState.enumerateFully`.
-They use Graph and Oracle parameters.
-Neither their optimized runtime realization nor an older realization is proved.
-The next primary dependency is the actual `nodeEdges` node-handle/view contract,
-its relation to `unfoldOuterRec`, and the map from handles to model IDs.
-The actual native intersection contract is also missing.
-`getUVarValue` is a role candidate for model `rawValue` or `getValue`.
-Those two model reads have different contracts.
-`getUVarRepresentative` is a role candidate for model `representative`.
-These candidates are not refinement proofs.
+They use Graph and Oracle parameters. Their runtime realizations remain open.
+The primary dependency is the actual `nodeEdges` handle/view contract,
+its relation to `unfoldOuterRec`, and the map from native handles to model IDs.
+The native intersection contract is also missing.
+`getUVarValue` is a role candidate for `rawValue` or `getValue`.
+These model reads have different contracts.
+`getUVarRepresentative` is a role candidate for `representative`.
+None of these candidates is a refinement proof.
 
-Implement the required realizer and prove its refinement laws.
-Then derive key coverage and progress from the original inputs.
-`Graph.node` needs faithful reads and bounded descent.
-`Graph.intersect` needs coverage for results and all later views.
+Implement the realizer and prove its laws from the actual operations.
+Then derive coverage and progress from the original inputs.
+Graph reads must be faithful and have bounded descent.
+Intersection results and all later views must stay in the derived family.
 Both Oracle uses must preserve coverage and lineage.
-The current callback types do not impose these laws.
-A finite recursion-key set does not bound work between checkpoints.
-No retained link makes the State/BinderInfo investigation a primary dependency.
-Keep probe 507 held until such a link is established.
+The callback types do not impose these laws.
+A finite key set alone does not bound work between recursion checkpoints.
+State/BinderInfo probe 507 remains held. No primary dependency was established.
 
 The full target remains both actual optimized workers and one computable bound
 from the original inputs and requested size, for all generated and later states.
@@ -49,90 +49,106 @@ Do not add a supplied carrier, closure, resource, completed-worker, success,
 fuel, OriginalInput, or validity premise.
 Keep the optimized interned core primary. Keep older work as secondary targets.
 
-## Haskell findings and actual checks
+## Haskell findings and source ownership
 
 No Haskell fix was identified or applied in this checkpoint.
-The Source receipt corrects the planned annotation sites.
-Rows 1006 and 1542 call the private `Data.CFTA.Enumeration.recursionKey` helper.
-They do not apply `nodeIdentity` directly.
-The complete helper signature and equation occupy rows 287 through 292.
-The direct getter application is 14 bytes at row 290.
-Its half-open UTF-8 byte range is `[11587,11601)`.
-Its byte columns are `[27,41)`.
-The worker calls occupy `[43282,43300)` and `[69043,69064)`.
-The correct byte columns at row 1006 are `[44,62)`.
-The old manual columns for that row were wrong and remain historical.
-The row 1542 columns `[40,61)` were correct.
-The Source token `intersect` occurs at row 208 in `intersectUVarValue`.
-These tokens do not establish defining compiler Names or native Graph contracts.
+The private owned 344-row `Data.CFTA.Interned` capture was checked in full.
+It exports `nodeEdges` and `unfoldOuterRec`. It defines neither name locally.
+The complete header/export command occupies rows 8 through 79.
+The complete import section occupies rows 81 through 98.
+Relevant imports include `Data.CFTA` at row 93,
+`Data.CFTA.Constraint` at row 95, `Data.CFTA.Interned.Operations` at row 97,
+and `Data.CFTA.Interned.Type` at row 98.
+Open imports and expanded record members prevent a unique defining-owner claim.
+The `nodeEdges` call sites are in `toTree` at row 193
+and `reachable` at row 216.
+Defining compiler Names and runtime contracts remain open.
 
-The source fingerprint is SHA-256
-`83e394d6b9283a607ef1e31346d58e32bf1bc147e67291da0b51ec9de521da91`.
-It identifies the owned 71748-byte capture with 1595 rows.
+The capture has 14572 bytes and SHA-256
+`ae8cc54ade211be804aec27793ee84e8d7e8325350721f950a7e3473398454a4`.
 No current repository-to-capture equality claim was made.
+The next task is to establish a permitted route to the owned Type and Operations
+source, then derive their actual node contracts.
+Type has 444 owned rows of 922. Operations has 420 owned rows of 887.
+Check 562 found no matching cache files in the two declared Stage 1/2 directories.
+It checked ten directories and ten entries. Other locations were not searched.
+Stage 563 permits planning only. It grants no Original ingestion or source view.
 
-Check 512 produced exact offsets. All 10517 physical/four logical roles passed.
-Check 513 received private helper context. All 10522/four roles passed.
-Check 518 exported build-directory metadata. All 10538/four roles passed.
-Check 522 staged candidate `Int` and negative `()` annotations at the getter.
-All 10552/four roles passed.
-The edits preserve every original byte and both shifted worker call slices.
-The producer adds an explicit qualified `GHC.Types` import.
-The original header has no such import. Provider and availability remain unknown.
-No compiler or annotation check ran. Getter type, width, and ABI remain open.
+The earlier `recursionKey` finding remains valid for its captured source.
+Both workers call that private helper. Its direct getter is at row 290.
+Candidate `Int` and negative `()` annotations were staged at that getter.
+No compiler checked them. Getter type, primitive width, and ABI remain open.
+The exact declared component `build-info.json` was absent in three checks.
 
-Check 524 exported the exact plan `build-info` string path.
-All 10572/four roles passed.
-The selected row is `install-plan[29].component-name=lib`.
-The unit is `cfta-0.1.0.0-inplace` with configured GHC 9.14.1 labels.
-Check 525 found the declared `build-info.json` file absent in three checks.
-All 10582/four roles passed.
-All listed stages used distinct before, after, and separate final checks.
-These are Source and metadata results. They do not strengthen the theorem.
+## Actual tool and help results
 
-Obtain the effective component compiler context before checking the variants.
-Official CLI documentation did not establish a guaranteed export without a build.
-A possible next route is the Cabal library API for existing configuration.
-Use Hypha to discover that API and verify its installed version first.
-No API call or build was made in this checkpoint.
+Normal `nix-shell` selected ghcup cabal-install 3.18.1.0 and GHC 9.14.1.
+The GHC package database listed Cabal 3.16.0.0 and Cabal-syntax 3.16.0.0.
+The actual cabal version document says it was compiled using Cabal 3.18.1.0.
+The earlier empty linked-version field was a regex extraction result.
+It did not establish version absence.
+The executable and plan have matching GHC version labels.
+This does not establish effective component compiler flags or ABI equality.
+Hypha was located and pinned. It was not invoked.
+
+`cabal act-as-setup --build-type=Simple -- --help` returned Setup-style help.
+Its banner and command inventory support this classification.
+The generic Usage line alone did not establish it.
+The help does not list `show-build-info`. Hidden support remains unknown.
+No actual CFTA build type or configuration API version was established.
+Use Hypha before dependency API lookup. Resolve the 3.18/3.16 version mismatch.
 Do not mutate the protected plan or copy a build tree.
-Require a passing candidate and a failing unit control under fatal type checking.
-Keep raw offsets before CPP. A `-F` hook runs after CPP.
-Then return to the primary node-view realizer and original-input worker progress.
+Keep this compiler-context investigation secondary to the node-view contract.
 
-The small reproducible records are in
-`lean/restart-evidence/20261106-shared-recursion-key/`.
-They contain the exact executed producers, edit maps, and metadata results.
-They contain no private source file or copied build tree.
-The earlier callback records remain in
-`lean/restart-evidence/20261106-runtime-callback-gap/`.
+Check 537 passed all 10611 physical/four logical roles.
+Check 539 passed 10628/eight roles for the private facade projection.
+Check 548 passed 10672 outer and 10670 inner roles, with eight logical roles.
+Check 552 passed 10687/eight roles for static help and version metadata.
+Check 559 passed 10717 outer, 10715 inner, and 10722 private-view roles.
+Check 562 passed 10732 outer and inner roles, with eight logical roles.
+Each successful stage used distinct before, after, and separate final checks.
+The Root did not view the private source body.
+These are source and metadata results. They do not strengthen the theorem.
 
-## Source protocol and resource state
+## Harness fixes, retained limits, and storage
 
-Source charges are unchanged. CFTA remains 2465/49.
-Native semantic Std remains 516/7. Shared charged Std remains 809/7.
-Native semantic Source remains 2981. Shared charged Source remains 3274/56.
-Native captures 157 and accepted interfaces 155 are unchanged.
-B remains Source 3048/29, workflow 40 reserved, and 37 actual Lean queries.
+The Python controller now hashes the sampled file length.
+It checks descriptor and path identity before and after the read.
+It sets CPU, file-size, and core limits before input guards.
+The private source channel has a 16 KiB cap. The public metadata cap is 196608.
+Memory max/high remain 4 GiB, with no swap. CPU remains 30 seconds.
+File size remains 4 MiB. Core dumps remain disabled. Address-space limits are unchanged.
+The known baseline controller has 6399 bytes. The old summary said 6401.
+Old EOF hashing and late limit placement remain recorded historical defects.
+No retrospective clearance was claimed.
+Stage 557 stopped at denied user-bus access before controller launch.
+Fresh stage 559 used the allowed bus context and passed.
+The 531 size STOP and 543/544 assembly STOPs remain retained.
+
+Source counters are unchanged: native CFTA 2465/49; semantic Std 516/7;
+shared charged Std 809/7; native semantic Source 2981;
+shared charged Source 3274/56; captures 157; accepted interfaces 155.
+B remains 3048/29, workflow 40 reserved, and 37 actual Lean queries.
 Reuses 2, replay 4, both FINAL limits, and all prior STOPs remain in force.
 Haskell Source remains 5410/10 with both FINAL limits retained.
-Root SourceProcessFAIL and Root Original-Source upper UNKNOWN remain permanent.
+Root SourceProcessFAIL and Original-Source upper UNKNOWN remain permanent.
+The CLI web search incidentally returned Hooks API source snippets.
+Those snippets provide no clearance or API result.
 State two-TYPE777 remains private and unviewed, with zero private State frames.
-Keep primitiveTYPE1401, failed diagnostics, actual32TYPE396, and old Source cuts opaque.
-The 511 author selfretry incident and 516 preexecution assembly STOP are retained.
-Fresh 517/518 corrected the basename-to-absolute-path comparison after that STOP.
-No payload ran under 516. No retrospective clearance was claimed.
-The full Source history was compacted without losing any JSON value.
-The exact earlier raw JSON is retained separately.
+Keep primitiveTYPE1401, failed diagnostics, actual32TYPE396, and old cuts opaque.
 
+Small records are in `lean/restart-evidence/20261106-native-node-source-route/`.
+Earlier shared-getter and runtime-callback records remain retained.
+No private source body or copied build tree is published.
 The runtime selector is
 `/tmp/mcfta-runtime-packet-producer-normal-20261104-1205/CURRENT-HANDOFF.json`.
-It selects the current R84 progress record.
-At 15:28 CET, 87.30 GiB remains free on `/tmp`. No cleanup or build-tree copy ran.
+It selects the current R85 progress record and full Source history.
+At 16:51 CET, `/tmp` had 87.25 GiB free. No cleanup or build-tree copy ran.
 
 The earlier checkpoint below is historical.
 
 ---
+
 
 # Current checkpoint: 2026-11-06 12:30 CET
 
