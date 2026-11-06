@@ -1,0 +1,13 @@
+MicroCFTA.SourceRecursiveIntersectionInputView.union_originalInput_iff_original {Symbol Guard : Type}
+  {source : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (facts : MicroCFTA.InternedNestedFacts.Facts source)
+  (available : MicroCFTA.InternedProbeProvenance.Available source value) :
+  match value, available with
+  | MicroCFTA.InternedConstructorTemplates.Value.union entry members depth free, available =>
+    MicroCFTA.SourceRecursiveIntersectionInputView.OriginalInput source
+        (MicroCFTA.SourceRecursiveIntersectionInputView.inputOf value) ↔
+      MicroCFTA.SourceRecursiveIntersectionInputView.Original value
+  | x, available => True
+'MicroCFTA.SourceRecursiveIntersectionInputView.union_originalInput_iff_original' depends on axioms: [propext,
+ Quot.sound]

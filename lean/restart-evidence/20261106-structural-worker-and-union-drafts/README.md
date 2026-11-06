@@ -9,3 +9,13 @@ No file in this directory adds a checked theorem.
 
 The general provenance theorem and the common input-derived bound remain open.
 All older drafts, failures and unknown correspondence conditions remain recorded.
+
+The corrected v5 proof is in `../../MicroCFTA/SourceRecursiveIntersectionUnionOriginality.lean`. Normal Lean accepted its temporary check and the exact repository module in the pinned compiled environment. All 473 and 481 context checks passed. The new theorem report lists only `propext` and `Quot.sound`. The report is in `union-v5-new-theorem-type-and-axioms.txt`. The v3 and v4 files above remain failed or uncompiled drafts.
+
+To check the new module with installed project dependencies, run from `lean`:
+
+```sh
+env -u LEAN_SYSROOT nix-shell ../shell.nix --run 'lake env lean -j1 -DwarningAsError=true MicroCFTA/SourceRecursiveIntersectionUnionOriginality.lean'
+```
+
+This check uses the existing compiled dependencies. It does not establish complete source/object equivalence, a recovered strict kernel-control protocol, or Haskell correspondence.
