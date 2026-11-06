@@ -1,9 +1,9 @@
 {
   "status": "PASS_TARGETED_NORMAL_NIX_BUILD_AND_AXIOM_CHECK",
   "source": "lean/MicroCFTA/UnionFindSupport.lean",
-  "source_bytes": 2453,
-  "source_sha256": "d7f1b856826fdc63a70500e9314d84a4019d83c62334ce9ae79a55c574723f97",
-  "recipe_sha256": "57c588ccda4de2d66649e094d19001c1bc997d1fdb8981ab073844b0fa58e2fb",
+  "source_bytes": 12825,
+  "source_sha256": "b9f16c4dea22ed85967bd9e599348219a311294f06587dc3689469d6720c31cb",
+  "recipe_sha256": "5e73864a92ef3a061824db6d6f7c61697b35912a40ef92d2f07876f5e9eed4fd",
   "toolchain": "leanprover/lean4:v4.34.1",
   "profile": "shell.nix; resolved current nixpkgs channel; -j1 -DwarningAsError=true for source/axiom report",
   "nixpkgs": "/nix/store/cf1g0afyf2xcxfzg35hh4cd4x6wl242q-nixpkgs/nixpkgs",
@@ -25,10 +25,46 @@
     "MicroCFTA.UnionFindSupport.supportedBelow_withInitialValues": [
       "propext",
       "Quot.sound"
+    ],
+    "MicroCFTA.UnionFindSupport.supportedBelow_put_of_lt": [
+      "propext",
+      "Quot.sound"
+    ],
+    "MicroCFTA.UnionFindSupport.parentsBelow_withInitialValues": [
+      "propext",
+      "Quot.sound"
+    ],
+    "MicroCFTA.UnionFindSupport.parentsBelow_put_root": [
+      "propext"
+    ],
+    "MicroCFTA.UnionFindSupport.parentsBelow_put_parent": [
+      "propext"
+    ],
+    "MicroCFTA.UnionFindSupport.supportedBelow_mono": [],
+    "MicroCFTA.UnionFindSupport.parentsBelow_mono": [],
+    "MicroCFTA.UnionFindSupport.findRoot_preserves_bounds": [
+      "propext",
+      "Quot.sound"
+    ],
+    "MicroCFTA.UnionFindSupport.link_preserves_bounds": [
+      "propext",
+      "Quot.sound"
+    ],
+    "MicroCFTA.UnionFindSupport.union_preserves_bounds": [
+      "propext",
+      "Quot.sound"
+    ],
+    "MicroCFTA.UnionFindSupport.findRoot_grows_bound": [
+      "propext",
+      "Quot.sound"
+    ],
+    "MicroCFTA.UnionFindSupport.union_grows_bound": [
+      "propext",
+      "Quot.sound"
     ]
   },
-  "normal_report_exec": "new own three-theorem report normal-exit0; actual2-check-result",
-  "normal_module_build_and_report_exec": 56808,
+  "normal_report_exec": 9391,
+  "normal_module_build_and_report_exec": 99417,
   "memory_max": 4294967296,
   "memory_high": 4294967296,
   "swap_max": 0,
@@ -47,13 +83,19 @@
   "source_process_audit": "FAIL remains; Root Original-Source upper UNKNOWN remains. Old runtime directory absent. This check does not recover that audit.",
   "original_source_new_views": 0,
   "scope_exclusions": [
-    "findRoot compression and union support preservation",
-    "bounds on later allocation keys",
-    "worker termination/common original-input bound",
+    "uniform successful representative fuel",
+    "bounds on later worker allocation keys",
+    "worker termination/common original-input bound and total work",
     "whole-library build",
     "Haskell compilation or runtime correspondence"
   ],
   "Haskell_fixes": [],
-  "prior_checkpoint": "1b15684faaff862e09e0c520646993c4c4e6b6a9",
-  "prior_source_sha256": "a1e23bab9a8723105fddb2b96fb55923cce17883d804fb60e39743a817084a3c"
+  "prior_checkpoint": "a75221a08156e4adb8c7c1d7ef02868d35d95b2a",
+  "prior_source_sha256": "d7f1b856826fdc63a70500e9314d84a4019d83c62334ce9ae79a55c574723f97",
+  "original_source_new_views_scope": "Root current-window body views only; Native newly reserved28 unique UF rows; global Root upperUNKNOWN remains",
+  "prior_startup_history_scope": "Carried prior checkpoint history; not new timeouts in this checkpoint.",
+  "new_math_failures_and_fixes": [
+    "First own find candidate had two unused simp arguments under warningAsError. Removed these arguments.",
+    "Union needed default monadic simplification before using second-run equality; exact forest equality then transports both bounds. No operation changed."
+  ]
 }

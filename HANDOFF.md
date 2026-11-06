@@ -1,56 +1,66 @@
-# Current checkpoint: 2026-11-06 23:43 CET
+# Current checkpoint: 2026-11-07 00:19 CET
 
 The full goal remains active. This round made mathematical progress.
-The parent on `formalize` is `1b15684faaff862e09e0c520646993c4c4e6b6a9`.
+The parent on `formalize` is `a75221a08156e4adb8c7c1d7ef02868d35d95b2a`.
 A fresh `pull --ff-only` found no upstream changes.
-The last fetched `main` remains `bd5a406a6a3f84b7e3ae0906082783911509df83`.
-Preserve unrelated untracked `.hypha/`.
+Fetched `main` remains `bd5a406a6a3f84b7e3ae0906082783911509df83`.
+Preserve unrelated untracked `.hypha/`. Push authorization for `formalize` remains in effect.
 
-## New checked initialization and write bounds
+## New checked find and union bounds
 
-`lean/MicroCFTA/UnionFindSupport.lean` now connects support to actual Lean UF operations.
-For every input list, `withInitialValues` stores no entry at or above
-`initialBound` of that list. This computable function returns the maximum
-listed identity plus one, or zero for an empty list. The theorem adds no premise.
-The membership lemma proves that every listed identity is below that bound.
-For an already supported forest, actual `put` preserves support below
-`max bound (key + 1)`. The earlier empty and functional-write lemmas remain.
+`lean/MicroCFTA/UnionFindSupport.lean` now covers actual Lean UF initialization,
+writes, `findRoot`, `link`, and `union`.
+Initialization supplies storage support below `initialBound` of any input list.
+This bound is the maximum listed identity plus one, or zero for an empty list.
+The new `ParentsBelow` property also bounds every stored parent identity.
+Initialization establishes this property without a premise.
+Root writes preserve it. Parent writes preserve it when the target is bounded.
 
-The actual module build and all five source/axiom checks passed in `shell.nix`.
-The report uses Lean 4.34.1, `-j1`, and `-DwarningAsError=true`.
-The new theorems use only `propext` and `Quot.sound`; the empty theorem uses no axioms.
-No `sorryAx` is allowed. Checks used 4 GiB memory max/high and no swap.
-The final source has 2453 bytes and SHA-256
-`d7f1b856826fdc63a70500e9314d84a4019d83c62334ce9ae79a55c574723f97`.
-The final module-build and report run exited zero. No proof check remains live.
+A stored-key bound alone is insufficient for search preservation.
+Actual `findRoot` stores a singleton root when it visits a missing identity.
+A stored parent that points outside the bound can therefore enlarge storage.
+The new search theorem maintains both internal invariants and bounds the returned
+representative. The link theorem covers both writes without a size or distinctness premise.
+The union theorem composes two searches. Its second search uses the first returned forest.
+
+The query-growth corollaries allow arbitrary queried identities.
+`findRoot_grows_bound` computes `max bound (key + 1)`.
+`union_grows_bound` computes `max bound (max (left + 1) (right + 1))`.
+They require no separate premise that these queries lie below the previous bound.
+The storage and parent properties remain internal induction invariants derived from initialization.
+These theorems apply when the corresponding operation returns successfully.
+They do not establish success or sufficient fuel.
+Do not add their internal support properties to the final worker contract.
+
+The actual module build and all sixteen source/axiom checks passed in `shell.nix`.
+The report uses Lean4.34.1, `-j1`, and `-DwarningAsError=true`.
+The empty and bound-weakening lemmas use no axioms.
+Other checked lemmas use only `propext` and `Quot.sound`.
+No `sorryAx` is allowed. Checks used4GiB memory max/high and no swap.
+The final source has12825bytes and SHA-256
+`b9f16c4dea22ed85967bd9e599348219a311294f06587dc3689469d6720c31cb`.
+The final module-build and report run99417 exited zero. No proof check remains live.
 No whole-library or Haskell compilation ran.
 
-The source-based recipe and result are in
+The source-based recipe and result remain in
 `lean/restart-evidence/20261106-union-find-support/`.
-The recipe reads current source and removes its temporary report.
-It does not require an archived build tree or a cumulative rolebook.
+The recipe checks all sixteen lemmas from current source and deletes its temporary report.
+It needs no archived build tree or cumulative rolebook.
 
-## Biggest mathematical gap
+## Biggest mathematical gaps and next work
 
-Initialization now supplies a support bound from its input list.
-The prior support hypothesis in the write lemma is an internal induction hypothesis.
-Do not add a support bound or finite carrier to the final worker contract.
-Next, prove support preservation for actual `findRoot` compression and `union`.
-Then bound the keys allocated by every actual worker transition.
+The actual UF operations now preserve storage and parent bounds on successful returns.
+Next, derive one computable successful representative fuel from `UF.Total` and finite support.
+A current-heap bound is not yet an original-input worker bound.
+Bound every allocation key and every query identity in actual worker transitions.
 Derive their growth from original inputs and requested size.
+Then bound total work between recursion checkpoints as well as recursion depth.
 
-`UF.Total` and finite support remain separate properties.
-We have not proved that they give one computable successful representative fuel.
-A current-heap bound would still need the original-input heap-growth proof.
-A finite key set alone does not bound work between recursion checkpoints.
-
-## Current worker preservation theorem
-
-`MicroCFTA.SourcePruningEnumerationActionTotal.prepare_total` remains at line 33.
+`MicroCFTA.SourcePruningEnumerationActionTotal.prepare_total` remains at line33.
 For arbitrary local fuels, if preparation returns an operation and that operation
 succeeds from a `UF.Total` heap, its output heap is `UF.Total`.
-The new bounds do not establish worker existence, success, termination,
-or a common original-input bound. The unchanged theorem was not rerun.
+The unchanged theorem was not rerun.
+The new support results do not establish worker existence, success, or termination.
 
 ## Full remaining target
 
@@ -74,6 +84,8 @@ Derive coverage, lineage, and progress for their actual transitions.
 ## Haskell findings for external implementation work
 
 No Haskell fix or worker-reachable counterexample was established here.
+The missing-identity observation above concerns the actual Lean UF model.
+It is not a newly established Haskell bug.
 The native fallback worklist has an explicit error for a Rec member.
 Prove that both workers exclude it, or account for the implementation behavior.
 Do not map it to model emptiness or add a caller validity premise.
@@ -91,50 +103,54 @@ Do not copy a build tree or mutate the protected build plan.
 
 ## Source boundary and carried history
 
-Private Source windows14–37 and428–438 were received by the same Native actor.
-The first establishes the functional Forest interface, defaulted `read`, and `put`.
-`put` preserves raw optional entries at other keys. Its test uses propositional equality.
-The initializer at428–429 directly tests membership in its input list.
-It stores singleton roots for listed variables and no entries elsewhere.
-It does not depend on an empty initializer or a fold of writes.
-The actual empty definition remains unreceived and is not needed by this proof.
-Rows38–427 remain unreceived. No complete source-attachment audit is claimed.
+The same Native actor received private Source windows113–123 and324–334,
+then107–112 and234–237. Twenty plus eight new unique rows were reserved before
+those respective guards. Result107–110 supplies representative, size, and forest fields.
+Complete findRoot113–121, link234–235, and union324–332 support the new proofs.
+Link writes the loser parent, then the winner root with combined stored sizes.
+Union compares representatives by propositional equality and sizes by strict less-than.
+The earlier interface14–37 and initializer428–438 remain received.
+These bounded receipts do not establish a complete lexical attachment audit.
 The checked theorems reference the actual qualified Lean constants.
 
-Both private receipts passed eleven current-local role checks before, after,
-and at a separate final phase. Captures and the numeric locator also passed
-all their declared local guards. These are local input checks.
-They do not recover the removed historical global rolebook or alias history.
+All four new private receipts passed ten current-local role checks before, after,
+and at a separate final phase. Each capture passed its six declared local roles.
+The numeric locators passed their five or six declared local roles.
+These checks do not recover the removed global rolebook or full alias history.
 The old runtime directory remains absent:
 `/tmp/mcfta-runtime-packet-producer-normal-20261104-1205`.
 SourceProcessFAIL and Root Original-Source upper UNKNOWN remain permanent.
-Root viewed no Original Source body. Keep private TYPEs and old diagnostics opaque.
+Root viewed no body from these Original Source windows.
+Keep private TYPEs and old diagnostics opaque.
 State/BinderInfo probe507 remains held. No primary dependency was established.
 
-All reservations preceded the corresponding guards and remain charged after failure.
-Native CFTA is2488 across49 Originals. Semantic Std remains516/7; shared Std809/7.
-Semantic Source is3004. Shared Native Source is3297 across56 Originals.
-UF has75 reserved rows out of808, with strict cap403.
-The earlier reserved context14–20 was now received without another charge.
+All reservations precede their corresponding guards and remain charged after failure.
+Native CFTA is2516 across49 Originals. Semantic Std remains516/7; shared Std809/7.
+Semantic Source is3032. Shared Native Source is3325 across56 Originals.
+UF has103 reserved rows out of808, with strict cap403 and300 rows remaining.
 Haskell Source remains5425/10. Type is459/922, cap460; one row remains.
 Operations is420/887, cap443. FINAL slots remain Enumeration and Facade.
 B remains3048/29, workflow40 reserved, queries37, reuses2, replay4.
 Captures remain157; interfaces155. Do not reset actors, aliases, or quotas.
 The full old alias/history packet cannot be checked after its removal.
 
-The old888-byte support-source pins are historical after the new proof was installed.
-Do not reuse those stale working-file expectations in a new Source job.
-The own-source version transition is recorded in the small current handoff.
-No initializer guard ran in the explicitly aborted pre-dispatch tool call.
-A later admitted capture ran once after absence of outputs was checked.
+Old2453-byte support-source pins are historical after the checked12825-byte installation.
+Do not reuse stale expectations in a new Source job. Refresh the current local roles.
+The version transition preserves all five earlier theorem declarations byte for byte.
+The first own search candidate had two unused simp arguments under warningAsError.
+Removing them fixed search. Union required default bind simplification and transport
+along the resulting forest equality. No operation definition changed.
+All failed own drafts remain small and marked by their runtime names.
 
-The new scratch directory used under120 KB at the last sample.
-About307 GiB was free in `/tmp`. No cleanup or build-tree copy ran this round.
-Keep future receipts small. Preserve the opaque historical document tails below.
+New scratch was about176KB at the last sample, with about307GiB free on the filesystem.
+Readable `/tmp` content was about5.5MiB before the final handoff update.
+No cleanup or build-tree copy ran this round. Keep future receipts small.
+Preserve the opaque historical document tails below.
 
 The earlier checkpoint below is historical.
 
 ---
+
 
 # Current checkpoint: 2026-11-06 12:30 CET
 
