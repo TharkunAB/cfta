@@ -1,3 +1,7 @@
+## 2026-11-06: Selected-step observed-action totality proved
+
+Normal Lean accepted the new repository module and its own TYPE/axiom report. The two small diffs reconstruct the intermediate proof from saved candidate387. The new report has no sorryAx. Read selected-step-observed-totality-findings.txt for the exact claim, source check, remaining worker-bound/runtime gaps and reproduction limits. No private TYPE, raw failed diagnostic or build tree is added. Haskell source fix: none.
+
 ## Proof revision387 and declaration origin
 
 Candidate387 is the saved draft whose exact proof bytes failed normal

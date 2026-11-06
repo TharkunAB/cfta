@@ -1,0 +1,17 @@
+--- CANDIDATE387-FULL-TARGET-SETTER-ALTERNATIVE-AND-RIGID-BIND-PRODUCER-UNCOMPILED.lean
++++ CANDIDATE397-FULL-TARGET-REJECTION-CLOSED-PRIMITIVE-CASES-UNCOMPILED.lean
+@@ -96,10 +96,10 @@
+     all_goals try (split at prepared)
+     all_goals cases prepared
+     all_goals first
+-    | dsimp only [Success, reject, ExceptT.run, ExceptT.mk,
+-        Membership.mem, List.instMembership] at successful
+-      cases successful with
+-      | tail _ impossible => cases impossible
++    | solve
++      | dsimp only [Success, reject, ExceptT.run, ExceptT.mk,
++          Membership.mem, List.instMembership] at successful
++        cases successful
+     | exact (pure_frame _ _ _ _ successful).total total
+     | have preserved := setterRepresentatives _ _ input output successful
+       rw [preserved]
