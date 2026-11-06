@@ -1,7 +1,7 @@
-# Current checkpoint: 2026-11-06 17:58 CET
+# Current checkpoint: 2026-11-06 18:50 CET
 
 The goal is active. The published base on `formalize` is
-`9928ff933a109e9fd72e5ec65adc381dd5b9d5f8`.
+`99abc71cc5bf4a274337766ca642f15122476ec6`.
 The branch was pulled with `--ff-only`. It was current.
 Upstream `main` remains `bd5a406a6a3f84b7e3ae0906082783911509df83`.
 Preserve the untracked `.hypha/` directory.
@@ -38,11 +38,23 @@ for the model recursive case. Ordinary alternatives need the exact native sequen
 `nodeEdges` remains a payload candidate after classification.
 It is not an established complete `Graph.node` provider.
 
-The primary next reader contract is the unqualified identifier `matchMu`.
-Its defining owner, complete command span, and meaning remain unknown.
-Do not infer its owner or publicness from its use in the Mu pattern.
-Then derive the Mu classifier/unfolding relation, ordinary-edge relation,
-error correspondence, identity laws, and ordering laws for the actual provider.
+Three private source cuts now expose partial candidate matcher clauses.
+They cover rows 771 through 773, 775 through 776, and 781 through 784 in Type.
+The observed recursive case returns a replacement callback.
+Its reference guards use the stored ordinary and depth shapes.
+The remaining observed branch calls `substFree` with the stored recursive
+identifier, the replacement, and the stored body. The fallback rejects other cases.
+The first reference guard uses `muPlaceholder` in a strict reference payload.
+Constructor disjointness alone does not establish termination of that comparison.
+The complete contracts of `muPlaceholder` and `substFree` remain unreceived.
+Do not infer their defining owners or publicness from these calls.
+
+The incoming lexical enclosure, signature at 768 through 770, and pragma at 767
+remain unreceived. Under normal fragment entry, the received clauses leave no
+string or block comment open at the omitted gaps. Recorded comment prefixes
+then select line comments. This local check does not certify the full command,
+typed interface, preprocessing behavior, or actual loaded matcher binding.
+No unconditional unfolding, substitution, totality, or finite-closure law follows.
 
 ## Haskell findings for implementation work
 
@@ -71,19 +83,26 @@ This does not establish substitution, closure, termination, or allocation behavi
 `memoTypeableWith` and its cache laws also remain unreceived.
 Builder semantics is not needed merely to classify an existing node.
 
-## Exact next source step
+## Exact next dependencies
 
-Check only the pinned existing syntax report for one complete `matchMu` declaration
-entry under a fresh bounded metadata plan. Do not print the report body.
-The candidate report is
-`/tmp/mcfta-haskell-type-locator-review-supplement-20261104/TYPE-LEXICAL-LOCATOR-RESULT-v1.json`.
-It has 33526 bytes and SHA-256
-`e51693eaf3dcc0117aef8bd27ba67290ae7a0f81b3c4dcf2eff4baceff229556`.
-It remains unopened in the receiving context. No claim says it contains `matchMu`.
-Output at most one verified module/kind/full-command span entry.
-Omit types, bodies, and other names. Missing schema or a token-only hit stays unknown.
-There is no Source or index fallback permission.
-After a positive span, check the remaining source budget before any new reservation.
+Locate positive complete contracts for `muPlaceholder` and `substFree`.
+Use only a fresh bounded plan. Keep existing report bodies and private source opaque.
+The old 33526-byte lexical report did not supply an accepted matcher entry.
+Its schema and literal-coordinate checks added no declaration ownership claim.
+A candidate token position is not a complete command or a resolved GHC Name.
+Type has only one unreserved row. Do not exceed that limit or reset an actor.
+The signature and omitted comment texts were not received or reconstructed.
+
+The representative-fuel feasibility check found another precise missing interface.
+`lean/MicroCFTA/UnionFind.lean` is a positive Original: 41077 bytes, 808 rows,
+SHA-256 `3668867a41890e4721c301092a06c48d3bd757a8eede4b92340fe5db80119a14`.
+Its owned union is 52 rows, with a strict maximum of 403.
+The complete `MicroCFTA.UnionFind.Forest` declaration span and accepted capture
+are not positively located in the checked metadata. This is not global absence.
+Do not assume a finite map, `Forest.size`, or a finite-domain lookup law.
+A totality predicate alone is not a received computable cardinality bound.
+Locate the actual interface before implementing that bound.
+A heap-dependent bound would still need the original-input heap-growth proof.
 
 ## Full proof target and remaining work
 
@@ -127,9 +146,10 @@ All stages used distinct before, after, and separate final checks.
 Source-emitting controllers checked buffered bytes before private model receipt.
 Root viewed no private source body. These checks add no mathematical theorem.
 
-Haskell Source is now 5416 across the same ten Originals.
-The six Mu rows were permanently charged before all guards, including failure.
-Type has 450 of 922 rows, below the strict maximum 460. Ten rows remain.
+Haskell Source is now 5425 across the same ten Originals.
+The earlier six Mu rows and the nine new clause rows were permanently charged
+before all guards, including failure. Type has 459 of 922 rows.
+Its strict maximum remains 460. One row remains.
 Operations has 420 of 887 rows. Its strict maximum remains 443.
 The earlier 571 receipt correctly records 5410 before that later reservation.
 Both FINAL slots remain Enumeration and Facade. No third FINAL occurred.
@@ -147,14 +167,27 @@ No history value, Source charge, or alias was removed. The 196608 metadata cap i
 An unnecessary own-author newline-edit assertion failed before any write or helper run.
 AST inspection confirmed the original newline literal was correct. The executed tool is unchanged.
 
-Ten small records total 33891 bytes in
-`lean/restart-evidence/20261106-native-node-contracts/`.
-They contain exact executed helpers, public receipts, and provider obligations.
-They contain no private source body, raw TYPE, local rolebook, or copied build tree.
+Eleven small records total 29973 bytes in
+`lean/restart-evidence/20261106-native-matcher-helper-gates/`.
+They contain exact executed productive helpers, public receipts and obligations.
+They contain no private source body, raw TYPE, local rolebook, or build tree.
+The three private views passed once and in sequence, with 10939, 10940 and 10941
+physical roles and nine logical roles each. Buffer size and hash checks passed
+before each private source receipt. Root did not view those source bodies.
+The earlier schema checks and numeric locators add no mathematical theorem.
+
+The first row-shape wrapper stopped before input access because generated own
+code contained an invalid escaped literal. An offline syntax check confirmed it.
+The corrected wrapper uses numeric whitespace bytes. Both its parameter and
+its generated program passed syntax checks before the fresh execution.
+The failed wrapper and its STOP remain in the complete local history.
+
 The runtime selector remains
 `/tmp/mcfta-runtime-packet-producer-normal-20261104-1205/CURRENT-HANDOFF.json`.
-It selects R86 progress and the complete current source history.
-At 2026-11-06 17:58 CET, `/tmp` had 87.20 GiB free. No cleanup or build-tree copy ran.
+It selects R87 progress and the complete current source history.
+At 2026-11-06 18:50 CET, `/tmp` had 87.16 GiB free.
+This round added about 34 MB of local metadata and small files.
+No cleanup or build-tree copy ran. The shared board records the public findings.
 
 The earlier checkpoint below is historical.
 
