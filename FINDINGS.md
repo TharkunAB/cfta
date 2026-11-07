@@ -1,3 +1,137 @@
+# Current checkpoint: actual node and edge allocation bounds
+
+Updated 2026-11-07 02:25 CET. Status: PROGRESS. Full goal ACTIVE. The current formalize HEAD
+identifies the published checkpoint. Parent: 3eecf304ebdf5814ac5a934159f3ec116446b402.
+Fresh pull was up to date. Main remains bd5a406a6a3f84b7e3ae0906082783911509df83.
+Preserve unrelated .hypha/. No proof job is live.
+
+## Strongest new checked result
+
+Actual model Node and Edge expansions now have computable allocation budgets.
+For EVERY successful return, the counter does not decrease and grows by at most
+the computed budget. The value-count/counter offset is preserved. Counter/value
+agreement therefore persists when it holds initially. No supplied allocation
+budget, finite carrier, graph-size bound, or max-arity premise is used.
+
+The budget uses the existing Graph and fuel arguments. At positive fuel, a
+recursive view costs one allocation. Alternative edges use the maximum edge
+budget. An edge budget adds its equality-trie count to the sum of the child-node
+budgets at the actual smaller fuel. Suspension allocates once per trie. Union,
+assimilation, and node merging allocate nothing. Both complete workers reach these
+actual imported transitions. The proof does not replace them with another worker.
+
+New source: lean/MicroCFTA/EnumerationStateExpansionBounds.lean, 21214 bytes,
+SHA-256 e151255ccda5b9f32e9a232037e564c29901a4788a281dc0ffafb0e77781e477.
+Public computable definitions: nodeAllocationBudget and edgeAllocationBudget.
+Four public theorems: enumerateNode_counter_bounds, enumerateEdge_counter_bounds,
+enumerateNode_preserves_shape, enumerateEdge_preserves_shape in namespace
+MicroCFTA.EnumerationStateExpansionBounds.
+
+Normal source check 54026 passed with exit 0. Actual module build plus all four
+portable source/axiom reports 53350 passed with exit 0. Lean 4.34.1, shell.nix,
+one thread, warnings as errors, 4 GiB memory cap, swap 0, final wall cap 360s.
+Final reported peak: 199M. Every public theorem uses only propext and Quot.sound.
+No sorryAx occurs. Prior 27 UF and 4 allocation checks stay unchanged and were
+not repeated. Do not repeat unchanged checks without a new reason.
+
+Portable packet: lean/restart-evidence/20261107-enumeration-expansion/ (about 14 KB).
+check.py builds the actual module, checks its source and all four axiom reports,
+and removes its temporary report. Reproduction needs no archived build tree or
+private Source copy. The earlier UF and allocation packets remain valid.
+
+## Full goal and missing areas
+
+The largest missing result is still ONE bound computed from ORIGINAL inputs and
+requested size for BOTH actual optimized EnumerationState.enumerateOut and
+enumerateFully. Cover ALL generated, returned, and subsequent states, all work
+BETWEEN checkpoints, and total search work. The new budgets depend on existing
+fuel. Do not assume budget(fuel) <= fuel or present that as the final bound.
+Derive ordinary expansion depth and allocation growth from actual original inputs
+and requested size, then remove the fuel dependency.
+
+Successful-return counter bounds do not cover all intermediate states on failing
+branches. They do not yet bound UF query IDs or native interned node/edge IDs.
+Model UVar IDs remain separate from native IDs. The imported EqualityTrie.descendScs
+variable-origin property is still needed for the reference-range proof. Its public
+descendScs_exact theorem is located, but no new Source/TYPE contract was received.
+Its per-Original receipt history remains UNKNOWN. Do not reset or infer it.
+Next: use the checked expansion laws to derive actual worker query/reference ranges
+and input/size-derived allocation limits. Keep failed prefixes and total work open.
+
+Retain exact accepted terms per node-count size, exact counts, size order, and BOTH
+rank/unrank inverse laws. Retain actual Haskell/source/API/runtime/Graph/intersection/
+bothOracle/identity/cache/interner/Eq/hash correspondence. No final caller-supplied
+carrier, closure, resource, completed-worker, success, fuel, OriginalInput, or
+validity premise is allowed. Optimized interned core is PRIMARY. Preserve older
+constructor and equality work as secondary targets. Do not treat component proof
+counts as system completion. Continue autonomously and push verified increments.
+No goal completion, block, or pause is justified.
+
+## Haskell findings
+
+No Haskell fix or reachable counterexample was established in this checkpoint.
+No Haskell code changed. No whole-library or Haskell build ran for this proof.
+Record any future Haskell fix in FINDINGS for external follow-up. Preserve every
+prior counterexample, repair, and marked draft. Preserve the Rec-worklist member
+error exclusion/accounting obligation for BOTH workers, outer recursive Graph
+classification before expansion, stored edge IDs/order for counts/ranking, Mu
+placeholder/substFree contracts, runtime memo bindings, and all older gaps below.
+
+## Source boundary and persistent history
+
+SAME Native reader retained EnumerationState prefix 1..329: U329 of 699 lines,
+strict cap 349, remaining 20. Original file stays 33489 bytes, SHA-256
+83a898b883ec7b52469bccd87e8afa4f7abb320e3c935bf48f3d80ad77003cc4.
+Already-owned replays this turn total 243 LF, ZERO new unique Source. Ten capture
+and view records passed all three phases. Nine captures used 7 roles, nine views
+10 roles; the header replay used 8/11 roles after pinning the then-current own
+7942-byte draft. Root independently verified all metadata. Root received public
+names/numeric metadata and genuinely new own math only. No OriginalTYPE or
+compiler-interface probe occurred. Never Root-view private Source or raw diagnostics.
+
+Permanent totals UNCHANGED: Native CFTA2565/49; semanticStd516/7,sharedStd809/7;
+semanticSource3081,sharedNative3374/56; UF152/808 cap403; Haskell5425/10;
+Type459/922 cap460; Ops420/887 cap443; FINAL exactly Enumeration+Facade;
+B3048/29,workflow40reserved,queries37,reuses2,compiled replay4,captures157/interfaces155.
+Unknown other per-Original histories stay UNKNOWN. Never reset or repartition
+readers, aliases, or quotas. Global alias history and old rolebooks are unavailable.
+Historical SourceProcessFAIL and Root Original-Source upperUNKNOWN are PERMANENT.
+Current guards and kernel checks do not recover that historical/global audit.
+PrimitiveTYPE1401,actual32TYPE396,failed old TYPE diagnostics,State twoTYPE777 remain
+opaque. State/BinderInfo507 is HELD; no primary dependency is established.
+
+Current own sources for future fresh guards: Expansion21214/e151..., Allocation3593/
+f7f105..., UFSupport22872/53bb7d.... Header guard's 7942/3c64... own draft is historical.
+No later Source job followed its mutation. EqualityTrie public metadata only:
+44327B/925LF/SHA0cf7d0b98a7bbc24382fde259b3f9b71462c752c347ad6e7788b9e95b41e10d5;
+Suspended618,descendScs623,descendScs_exact628,nextsupported_nodup652. Do not admit
+its body or TYPE without positive retained per-Original quota history.
+
+Own proof repairs: explicitly prove the local List LawfulMonad via LawfulMonad.mk'
+with id_map, bind_pure_comp, pure_bind, and bind_assoc. Generic mapM cons is by simp.
+Wrapped successful-result membership needs ExceptT.run. Bind decomposition needs
+dsimp with StateT.bind/ExceptT.bind/ExceptT.bindCont, then List.mem_flatMap. The error
+branch reduces bindCont and Pure.pure. Projection equalities must reduce before
+subst. All are proof repairs, not Haskell fixes. Failed small math drafts remain.
+
+## Restart and storage
+
+Runtime: /tmp/mcfta-worker-growth-20261107-0127. Exact publication.json will record
+commit, push, board readback, and current disk numbers. Earlier runtimes retain
+small history: mcfta-worker-ids-20261107-0100 and mcfta-uf-fuel-20261107-0025.
+The earlier OWN current prefix is in the first runtime's CURRENT-CHECKPOINT-PREFIX.md.
+The historical content below stays byte-identical. Source-based reproduction is
+in the committed packets. Do not rebuild removed huge alias books or build copies.
+
+Current scratch is about 0.27 MB, including small failed proof drafts and metadata.
+Removed only redundant own wrapper/report copies; all original proof drafts and
+results remain. Readable /tmp was about 6.6 MiB, excluding five private directories.
+Filesystem free space is about 192.3 GiB. The earlier 114 GiB drop has no established
+location. Do not attribute it to /tmp or another directory without measurement.
+Keep new scratch small. No build copy or concurrency change occurred.
+
+--- Historical checkpoints (byte-identical below) ---
+
 # Current formalization checkpoint: allocation invariants
 
 Updated 2026-11-07 01:20 CET. Status: PROGRESS. Full goal remains ACTIVE. The current
