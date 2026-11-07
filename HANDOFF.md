@@ -1,14 +1,16 @@
-# Current checkpoint: valid finite canonical output from bounded determinization
+# Current checkpoint: valid canonical output and exact discovered subset keys
 
-Updated 2026-11-07 07:50 CET. Goal ACTIVE. The previous goal turn made verified
+Updated 2026-11-07 07:59 CET. Goal ACTIVE. The previous goal turn made verified
 progress through complete discovery, root/subset language, and exact query laws.
 This turn adds current structural validation and derives the finite canonical
-output from discovery. Three proof commits:
+output from discovery. It also derives exact key origins and subset order.
+Four proof commits:
+1d763f7a04cdbff4116b59bd9a8edd9c04b6972c Prove exact origins and relative order of discovered subset keys
 97268f588100015cebf617fb15d901093652a04e Derive validated canonical output from bounded determinization
 ed9c112c61eeffb1cb86bafb09899a93426bcdf2 Derive finite canonical Sized input from structural validation
 fb40ea0f0d703a28b75810728c7eedfa5701fcc8 Prove current structural FTA validation without fixed symbol arity
 
-Previous published checkpoint: 748569877452d09666383c55618425778ad649cd.
+Previous published checkpoint: 00b718bbfe965dec5ae4b88a2a23081448716eaa (R106, verified pushed).
 Current formalize HEAD identifies the documentation/publication checkpoint.
 Formalize was pulled before work. Main was refreshed and remains
 bd5a406a6a3f84b7e3ae0906082783911509df83, already incorporated. Preserve unrelated
@@ -24,6 +26,8 @@ concrete bounded subset discovery derives all of the following:
 
 - The Left original roots and Right subset rows accept the original languages.
 - The original keys and discovered subsets supply the finite output carrier.
+- Final known keys are exactly the emitted targets. Every subset is a sublist
+  of original states, so distinct original keys give distinct subset members.
 - Every emitted child is a declared key. Current structural validation and
   normalized mkFTA construction succeed. No uniform symbol arity is required.
 - The finite canonical input is constructed. Its canonical loop terminates.
@@ -116,6 +120,18 @@ cfta-generator/src/Data/CFTA/Gen/Internal/Table.hs:577-589 performs
 deterministicRows, mkFTA, and sortedRows in that order. The new composition
 covers these finite-list stages. Ordered native container readback remains open.
 
+SourceSizedDeterminizationOrigins.lean,5793B:
+6ea8e78e7c680e462171a44e779afc50214a068de28f794c32766edca124c681
+
+Four public laws: compile_key_origin, compile_targets_exact, compile_key_sublist,
+and compile_key_nodup. The actual Evaluation carries target witnesses for known
+and current found keys. Each step retains old choices and appends a new batch.
+The final iff uses this derived origin and compile_closed.targets. No caller
+supplies an origin invariant, closure, or completed table. Every returned key
+is a target filter of original states. Thus it preserves original relative
+order, and original Map.keys distinctness gives distinct subset members.
+These laws identify membership and relative subset order, not map iteration.
+
 ## Existing discovery and query mathematics; reuse it
 
 SourceSizedDeterminizationKernel proves exact target membership and unique
@@ -139,9 +155,9 @@ and sort rather than requiring that permutation. Do not redo this mathematics.
 
 1. Attach ordered native containers to the completed finite-list stages. Source
    known keys are actual sets; connect canonical subset lists to source set
-   readback and the original ordered owner list. In particular, derive that
-   every final known key is an emitted target, not only that every target is
-   known. This connects known to Map.keys of the cumulative table. Relate final
+   readback and the original ordered owner list. Origins now derives final
+   known iff emitted target and per-key sublist/distinctness. Use these checked
+   laws to connect known to Map.keys of the cumulative table. Relate final
    Left-root rows' target-map concatenation order and Right-row order to the
    finite table, then to the computed canonical sort. Inspect existing ordered
    map/set, dense-numbering, and canonical adapters before adding new ones.
@@ -198,19 +214,21 @@ obligation may replace the full original-input result.
 
 ## Checks, compact records, and runtime ownership
 
-All THREE actual Lake targets and all38 own source/axiom reports passed in
+All FOUR actual Lake targets and all42 own source/axiom reports passed in
 shell.nix, Lean4.34.1, j1, own warnings as errors. Only propext, Classical.choice,
 and Quot.sound occur. Final handles: validation15979 terminal0 peak820M;
-structural-keys22476 terminal0 peak167M; finite71176 terminal0 peak171M.
+structural-keys22476 terminal0 peak167M; finite71176 terminal0 peak171M;
+origins49969 terminal0 peak843M. Origins passed its first source check unchanged.
 Failed drafts were repaired and preserved in the small runtime directory.
 Repairs: use a distinct rawIn membership name; omit unused theorem order
 instances; use existing generic sortedSet for Sum-key normalization and lawful
 membership/distinctness; finish the packed edge's definitional readback.
 
-Three four-file source-based packets,19356B total:
+Four four-file source-based packets,24329B total:
 lean/restart-evidence/20261107-current-fta-validation/
 lean/restart-evidence/20261107-sized-structural-keys/
 lean/restart-evidence/20261107-sized-determinization-finite/
+lean/restart-evidence/20261107-sized-determinization-origins/
 
 Each check.py builds its actual target and compiles this source with all public
 axiom reports. README gives the capped reproduction command. checked.json records
@@ -224,7 +242,8 @@ no background heavy slot is owned. Keep heavy compilation serial at cap4G.
 Do not create copied source/build trees, huge logs, or archives in /tmp.
 
 The shared msg-board thread is 1c1333d7-46ea-4f46-a9a1-b5d13e577337. Previous
-checkpoint R105 has sequence949. Publish R106 only after push and independent
+checkpoint R106 has sequence950 with exact canonical readback. Publish R107
+only after push and independent
 remote verification. Retain exact request ID/payload for safe retry and compare
 canonical readback. Root runtime RESUME.json records the actual publication.
 
