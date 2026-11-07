@@ -1,4 +1,270 @@
-# Current checkpoint: original-input kernel entry and marker cross-child completion
+# Current checkpoint: original-input recursive universe completion
+
+Updated 2026-11-07 21:16 CET. Goal ACTIVE. R123 made PROGRESS. Branch formalize.
+This checkpoint follows 87aefef35f7587595022dc01ef0aada1f4360e8a
+(R122, canonical board seq971). Preserve the complete original objective.
+The optimized interned core remains PRIMARY. The old constructor and Eq
+work remain SECONDARY. Preserve all proofs, counterexamples, repairs,
+marked drafts, and unrelated .hypha/. Regular formalize pushes are explicitly
+authorized. Do not pause the goal or ask whether to continue.
+
+Formalize was pulled before work at 20:25. Both remote heads were refreshed
+at 21:11. Main remains bd5a406a6a3f84b7e3ae0906082783911509df83, an ancestor.
+Twelve verified proof commits extend the R122 base through
+879667e1f87bcc7c98fd54f94612aed1e9b6e79c. Their publication and the later
+handoff commit are recorded in the small runtime publication file.
+No production Haskell behavior changed. No native probe, Haskell suite,
+Haskell format run, or CI run was added for these Lean-only changes.
+
+## Strongest new claim
+
+SourceSynthesisUniverseReferenceInput.typesOf_reference_complete takes
+original Library and Query data, with the existing concrete EdgeKey
+DecidableEq instance. It derives the actual cold typesOf constructor result
+U, its complete cache facts, availability, body Shape, and closedness.
+From the actual machine with that heap and the empty domain cache, the
+literal source Kernel.execute at recursive fuel 13 completes Rec(U) intersect
+U in the reserved empty domain. The result is available and closed.
+The final machine satisfies Kernel.Valid, extends the original machine,
+and has payload coverage for every installed node identity.
+
+The original-input endpoint has NO supplied constructor or callback success,
+completed body or worker, successful fuel, future validity or availability,
+coverage, SemanticHeap, cache hit, lookup, pair freshness, numeric ID order,
+finite carrier, or resource premise. It derives those component facts from
+the actual cold construction and actual executions. Internal generic lemmas
+have explicit state and coverage conditions. Those conditions do not survive
+as caller premises at the original-Library/Query endpoint.
+
+This proves completion of this MODELLED source-kernel request. It does NOT
+prove that its returned value has the original U identity. It does not yet
+prove the complete body's normalized edge set equals the corresponding
+substitution in the original body. It does not prove a new language-equivalence
+or native Haskell execution theorem. Both MODELLED cache families retain
+their actual effects: the constructor heap and the domain cache. The full
+native equality/guard caches, wrappers, containers, lazy allocation order,
+word arithmetic, and runtime behavior remain separate obligations.
+
+The constant 13 is RECURSIVE FUEL. It is not total work. The actual ordered
+walk visits every matched row and every child request. Catalog length,
+arity, sibling work, constructor probes, temporary records, domain entries,
+memo entries, and native allocations still need original-input bounds.
+Do not turn this component result into a full enumeration-termination claim.
+
+R111 remains the strongest complete plain-query routing endpoint. R116
+remains the prepared-source rank/count endpoint, including both inverse
+laws at its stated preparation boundary. R123 does not remove their query
+coverage, preparation, or native correspondence conditions.
+
+## How the new execution proof is composed
+
+- BodyRowKinds classifies every retained actual body row as the distinguished
+  arrow or an actual rigid/catalog row. It derives all top guards and every
+  marker-or-Rec(U) child. Catalog duplicates and arrow-name overlaps remain
+  allowed. No residency is assumed for discarded source rows.
+- LeafIdentity derives exact resident nullary edge and singleton-node replay.
+  The actual leaf walk retains mismatch-edge allocations. Its result is
+  Empty or the original resident marker, in both operand orders.
+- MarkerIdentity and MarkerReferenceIdentity derive that physical result for
+  marker/U at fuel 5 and actual D2 marker/Rec(U) at 7 and its reverse at 8.
+  MarkerIdentityInput and MarkerCrossIdentityInput remove all component
+  premises at original-Library/Query endpoints.
+- CrossRowCompletion runs both actual arrow/catalog cross directions at
+  uniform child fuel 8. CrossRowIdentity proves each returned row is dead or
+  has the literal arrow self-product key and children. The first child is
+  computed by the real request. No result-classification oracle is supplied.
+- SecondDomain derives the full actual D2 invariant and the complete extension
+  through both real entries. DomainReplay proves D1 and D2 replay after any
+  extension of that actual D2 machine. Replaying both entries leaves the
+  later domain cache unchanged. The raw-domain successor wrapper is retained.
+- ChildCompletion derives all four marker/Rec(U) child combinations at 8
+  after preceding sibling effects. RowCompletion runs each actual ordered
+  zipped child list and final makeEdge. BodyProductCompletion then runs the
+  ENTIRE actual hash-join row list and final makeNode in source order.
+  BodyProductInput derives this node execution and actual execute at fuel 9 D2 B/B
+  from original Library/Query data. The result is PreparedWithoutMu. Its free
+  list is empty or exactly the outer pending (U,U) name.
+- InnerMu derives that the different inner (B,U) name is absent. Its optional
+  Mu returns the same body and heap without further effects. Actual execute at fuel 11
+  in D1 B/Rec(U) therefore finishes with the checked body result. ReferenceOuter
+  derives execute at fuel 13 Rec(U)/U as the literal remaining outer construction.
+- KernelCoverage proves success-only payload coverage for EVERY bounded actual
+  Kernel.execute, with any incoming pending-key allowance. It uses the real
+  ordinary constructor and completed optional-binder coverage laws. It makes
+  NO coverage claim for a failed pending result, which can retain a reservation.
+- ReferenceCompletion applies that coverage law to the DERIVED execute at fuel 9 body
+  result. It then applies the actual prepared MaybeMu completion law to the
+  outer constructor. Its cold-built corollary derives Facts, availability,
+  coverage and SemanticHeap from the actual build. ReferenceInput discharges
+  even the cold-built equation from original Library/Query data and derives
+  closed output. Returned-U identity is still open.
+
+These equations retain failures where a continuation is not yet discharged.
+The final ReferenceInput endpoint actually derives a successful result.
+The existing KernelStability.execute_stable preserves the entire reached
+result at larger fuel, including both caches. It was reused. A duplicate
+FuelMono wrapper was removed before verification and was not committed.
+
+## Biggest gaps and full target
+
+The next local target is physical reconstruction of the ORIGINAL U. Prove
+the full surviving body row set from the actual hash join and row-origin
+facts. Then prove that outer substitution and both actual probes reproduce
+the original depth/ordinary Mu key, and that the cache read returns the
+original complete U record. Pairwise cross-row absorption and body completion
+are proved. Whole-body canonical equivalence and outer original-key replay
+are not proved. Do not assume either as an oracle.
+
+Then prove preservation of the generated value class and a structural/guard
+measure derived from the original input. Initial syntax over one computed U
+is not generated-state closure. A returned closed value does not prove that
+all retained Mu identities are the original U. Even original-U reuse would
+not bound all transient records, probes, cache entries, or sibling work.
+The prefix-over-U grammar permits arbitrarily deep ordinary chains. Cached
+Mu depth is not ordinary structural depth. Do not use Mu depth as that bound.
+
+The largest gap remains ONE original-input/request/caller-derived bound for
+BOTH the selected-slot worker and the complete enumeration driver. It must
+include ALL sibling work and ALL generated, reached, intermediate, failing,
+rejected, returned, subsequent, and native states. The final theorem must not
+require a caller-supplied successful run, worker oracle, fuel/resource bound,
+closure certificate, finite carrier, validity, or OriginalInput assumption.
+Internal component conditions must be derived from the original caller data.
+
+Keep the complete target: exact accepted terms at each node-count size,
+ordering, count, both signed rank/unrank inverse laws, ALL Sized dispatch,
+fallback and failure branches, productive infinite queries, and actual lazy
+sparse tables, native maps/sets/cache/hash/word behavior. Lookup, Curried,
+Specftacular and other public routes remain in scope. The default-universe
+request is one component, not a replacement objective.
+
+R118 actual repeated-intersection growth and the separate eight-second native
+enumeration timeout remain valid evidence at their exact boundaries. The
+latter is not a divergence proof. R120's 58 stored-graph observations concern
+retained graphs, not all transient states or total work. Do not discard them
+because an initial synthesis class excludes other binders. Generated-state
+preservation has not established that exclusion for the complete workload.
+
+## Haskell findings and external ownership
+
+No new Haskell bug or production repair was identified in R123. All code
+changes here are Lean proofs and their small reproducible check packets.
+Keep Haskell findings in FINDINGS so the external owner can act on them.
+
+GitHub was refreshed at 21:03. Both documentation PRs remain OPEN and unmerged:
+- PR202 https://github.com/TharkunAB/cfta/pull/202, head
+  ce4ee6d82340235a39b9278457fe0f9ff45a2eba, corrects getUVarValue and
+  getUVarRepresentative comments. UnionFind.find returns the representative
+  and the same forest. The implementation does not path-compress there.
+- PR203 https://github.com/TharkunAB/cfta/pull/203, head
+  e019ce41db8029a5d1349a8ea123253f3d7af715, documents intentional required-
+  argument behavior in libraryAvoid/HooglePlus. It preserves Hectare parity.
+  The earlier recommendation to change buildRelevant remains WITHDRAWN.
+  The standalone required-argument probe remains a documentation-discrepancy
+  probe with its controls, not evidence of a pending behavior repair.
+Both use base bd5a406a6a3f84b7e3ae0906082783911509df83. Do not describe their
+comments as landed on main and do not duplicate the external fixes.
+
+Preserve R122's Top allocation distinction: live Top/Top combination retains
+the equality-operation state, but positive Top demand on a cold equality cache
+can intern an empty equality payload. Exact top guard readback does not prove
+zero native equality-cache allocation for every operation.
+
+## Verification and reproducibility
+
+All 20 new modules and all 34 public laws passed actual Lake build and an
+own-source -j1 -DwarningAsError=true report in the project Nix shell.
+Every theorem report uses only propext, Classical.choice and Quot.sound.
+The committed source hashes match checked.json and the complete theorem lists.
+The older dependency warning at InternedFreshOrdinaryClosedCompletion.lean24
+is outside the new own-source reports. It was not changed as unrelated work.
+
+Each module has a committed lean/restart-evidence/20261107-<slug>/ packet
+with check.py, theorems.json, checked.json and README.md. Reproduce it from
+source with python3 on that check.py. The source and the pinned project
+Nix/Lean environment produce the report. No archived build, source copy,
+large trace, or temporary axiom report is required. The packet script removes
+its temporary own-source report after the check. The reports are compact
+receipts and exact source/axiom manifests, not unique experiment data.
+
+The root runtime is /tmp/mcfta-universe-normalization-20261107-2030/.
+It contains only small scripts, manifests and compact failed-check logs.
+Root alone ran compilers. Every heavy job used heavy-management capped with
+4 GiB and one running job. Queue concurrency was not changed. All compiler
+handles are terminal. No Haskell/native build, full suite or CI was rerun.
+
+At 21:13 readable /tmp used 17,166,336 allocated bytes, excluding six protected
+unreadable directories. This runtime used 147,456 allocated bytes then. About
+246 GiB was available. No cleanup was needed or performed in R123. Continue
+to watch /tmp. Do not create copied builds or large evidence archives.
+Unrelated .hypha/ is preserved. No agent has a source edit in progress.
+
+## Next continuation
+
+1. Pull formalize before edits. Verify current runtime publication.json and
+   RESUME.json, exact HEAD/origin, main ancestry, source hashes, root shared
+   prefix and unchanged historical tails. Read the latest canonical board
+   post; publication records its exact sequence and post ID. All R123 handles
+   and agent tasks are terminal. The goal remains ACTIVE.
+2. Prove whole-body canonical output from retained row origins, actual
+   self-products and the checked dead-or-arrow cross-row classification.
+   Derive outer callback/probe equality and original-U physical cache reuse.
+   Keep all real intermediate allocations and earlier counterexamples.
+3. Derive generated-state preservation and the original-input structural/
+   constraint measure. Finish the shared BOTH-worker work bound and the full
+   public API/native correspondence. Do not stop at the default-source case.
+4. Keep small reviewable commits and push formalize regularly. Maintain the
+   current shared prefix in NEXT-PROMPT, HANDOFF and FINDINGS. Preserve the
+   historical tails byte-for-byte. Record any actual Haskell repair/finding.
+
+## Checked R123 modules and source hashes
+
+- SourceRecursiveIntersectionKernelCoverage.lean: 1 public laws, 314 lines.
+  SHA256 347c812b3735ec2e85c23b32316bd0193ff16eb0bc1069ca474649b796c4a626
+- SourceRecursiveIntersectionLeafIdentity.lean: 3 public laws, 228 lines.
+  SHA256 032b229e6d132c778edbc679e7ebaaac4fafc83020399387a9f084398aae0f0f
+- SourceRecursiveIntersectionPreparedNode.lean: 2 public laws, 70 lines.
+  SHA256 d12d2ff31cafbb2f3a25a76632103ba1ae972437b543bb977d388f12ac901303
+- SourceSynthesisUniverseBodyProductCompletion.lean: 1 public laws, 115 lines.
+  SHA256 38665efd36ccf21f9c9b1a481a23558f163dc33fc9a5569b4ea372c9d19b52b5
+- SourceSynthesisUniverseBodyProductInput.lean: 1 public laws, 117 lines.
+  SHA256 7aea466d00e2041912beed3d48331bf72c09ca9f035e89efc54901ad7929c236
+- SourceSynthesisUniverseBodyRowKinds.lean: 3 public laws, 82 lines.
+  SHA256 072a8615155239f5e85615c668b77d0fe5610686274791c79a1c1a5017899928
+- SourceSynthesisUniverseChildCompletion.lean: 1 public laws, 130 lines.
+  SHA256 593dce959543e1ab598b0d76ef1385277c3d7a575b79a99f7317cfd096db0971
+- SourceSynthesisUniverseCrossRowCompletion.lean: 2 public laws, 178 lines.
+  SHA256 87f379efbf84c62fec9aa5b2066fcaa5e9d2a557acabba1db23542038d1fa056
+- SourceSynthesisUniverseCrossRowIdentity.lean: 2 public laws, 167 lines.
+  SHA256 3986e14dfabca413f0c36702f087415b5f346cc21134907a9769bcce94ea999d
+- SourceSynthesisUniverseDomainReplay.lean: 4 public laws, 56 lines.
+  SHA256 e2043cd406b23ffabee2c7189f406292fba9c774e929a94ee60df853b3bed7e6
+- SourceSynthesisUniverseInnerMu.lean: 2 public laws, 110 lines.
+  SHA256 3a77cb89eef9e2729d4509696a22ff06d365a4305ef18410eb2ef4e37a7f229a
+- SourceSynthesisUniverseMarkerCrossIdentityInput.lean: 1 public laws, 125 lines.
+  SHA256 c38660f19ea344b65ae8a5f1cc683b4a23c84443bd7f3a4efbfe6e0f6801abe9
+- SourceSynthesisUniverseMarkerIdentity.lean: 1 public laws, 165 lines.
+  SHA256 ca1f97c96a62427650fa885f0c1fe32e03f9da13d5c6e47fa0fe4b0246675b65
+- SourceSynthesisUniverseMarkerIdentityInput.lean: 2 public laws, 98 lines.
+  SHA256 e155fb7e066758f5b36a223f3dbeac1e78910349a1d7ef90be955fd11c937a31
+- SourceSynthesisUniverseMarkerReferenceIdentity.lean: 2 public laws, 86 lines.
+  SHA256 86af1e7548ddfc166268d57ec84faadab50cb46fda37f2d82ec0c0b202b11d19
+- SourceSynthesisUniverseReferenceCompletion.lean: 2 public laws, 140 lines.
+  SHA256 ce6fed32c43de7aa9eb3c192800f2b22e5bf0ec1933fa523dc72153bcad1b0a7
+- SourceSynthesisUniverseReferenceInput.lean: 1 public laws, 91 lines.
+  SHA256 b05b46fee880a0c6cdbb6778f0cb63aca065084678591ba8913d987b7ddd0a69
+- SourceSynthesisUniverseReferenceOuter.lean: 1 public laws, 62 lines.
+  SHA256 b3645296fbcd5be0e3475ca383940b43293bddac8b53adb76a0659235efd2f47
+- SourceSynthesisUniverseRowCompletion.lean: 1 public laws, 141 lines.
+  SHA256 c3ac744d1364ac6f852b4ebe7f9b8f81046be5f55ec5e8fd9f12f5d40dd44d6b
+- SourceSynthesisUniverseSecondDomain.lean: 1 public laws, 53 lines.
+  SHA256 3b1bc28687692064d4d02933a1167d582dec51576f91622f223d35ada10e8c42
+
+The complete public theorem names are in each packet and in the small runtime
+verified-modules.json. The earlier checkpoints follow without removing any
+proof boundary or counterexample.
+
+# Prior R122 checkpoint: original-input kernel entry and marker cross-child completion
 
 Updated 2026-11-07 20:18 CET. Goal ACTIVE. R122 made PROGRESS. Branch formalize.
 This checkpoint follows a27f4fcb5aafdca2492ec13cd0621fb93adb312e
