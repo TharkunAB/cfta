@@ -79,13 +79,21 @@ The generator library build passed with GHC 9.14.1 -O0 in a project-derived
 Nix shell with GMP. fourmolu formatted the final reproducer. cabal-gild
 checked the unchanged generator Cabal file. This is not a full suite run.
 
-PENDING HASKELL FIX FOR EXTERNAL WORK: buildTerms applies libraryAvoid in
-its size-two branch (Synthesis.hs756-763). Nonempty buildRelevant uses the
-generic split loop (781-789). A split with no required function argument
-reads termsFalse1 and admits f again. Enforce the documented size-two rule
-on this relevant route. Retain required-argument usage and the intended
-Just-rule behavior. NO PRODUCTION HASKELL FIX HAS BEEN MADE. Update the
-faithful source construction port after the Haskell repair lands.
+DOCUMENTATION FOLLOW-UP VERIFIED 2026-11-07 18:09 CET: the behavior follows
+Hectare and preserves the Hoogle+ program spaces. The prior recommendation
+to change buildRelevant was too strong. PR #203 proposes documentation-only
+corrections for the required-argument exception. It is OPEN, not merged:
+https://github.com/TharkunAB/cfta/pull/203
+Head e019ce41db8029a5d1349a8ea123253f3d7af715; base bd5a406a6.
+The observed behavior and faithful source port remain unchanged. Do not
+implement the earlier code-change recommendation without a new decision.
+The public integration fixture remains a reproducible behavior observation.
+
+PR #202 proposes the earlier union-find comment corrections. It is also
+OPEN, not merged: https://github.com/TharkunAB/cfta/pull/202
+Head ce4ee6d82340235a39b9278457fe0f9ff45a2eba; base bd5a406a6.
+The live main comments remain unchanged. A board note used "on main" for
+its target branch; this does not establish that the repair landed.
 
 ## Biggest remaining gaps and next concrete target
 
