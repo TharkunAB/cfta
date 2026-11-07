@@ -1,15 +1,140 @@
-# Current checkpoint: retained execution states and total branch work
+# Current checkpoint: recorded-state allocation and native recursive growth
 
-Updated 2026-11-07 15:57 CET. Goal ACTIVE. Branch formalize. This checkpoint
-follows 2047a47da6571f8a894e7fd96e63a6488536d357 (R116, canonical board seq962).
+Updated 2026-11-07 16:36 CET. Goal ACTIVE. Branch formalize. This checkpoint
+follows 311d05602193eee53c75a9f7bb39662d90a34aef (R117, canonical board seq963).
 The previous turn made progress. This turn also makes progress. The full
 objective remains open. Preserve .hypha/ and every proof, counterexample,
 repair, and marked draft. Regular formalize pushes remain authorized.
 
 Formalize was pulled before work. Both remote branches were refreshed before
 publication. Main remains bd5a406a6a3f84b7e3ae0906082783911509df83, an ancestor.
-No Haskell source changed. These are focused actual Lake and own-source
-proof checks. They are not a cold full build, Haskell execution, or full CI.
+No library Haskell source changed. A standalone Haskell reproducer and a
+marked diagnostic draft were added. Focused Lean proof checks and bounded
+current-source Haskell observations passed as described below. This is not
+a cold full build or full CI.
+
+## R118 checked progress and largest gap
+
+EnumerationStateTraceAllocationBound proves an allocation cap for EVERY
+recorded core state of enumerateNode, enumerateEdge, enumerateOut, the modeled
+scheduler and the COMPLETE default driver. For an input state before and any
+recorded state reached:
+
+    reached.counter <= before.counter + (action before).work
+
+The sum includes all processed alternatives, failures, rejected branches and
+intermediate successful states. The final concrete worker laws require no
+caller resource, state-validity, successful-return or sufficient-fuel premise.
+They hold for every supplied fuel. The proof follows the literal compiled do
+branches. It does not assume a LawfulMonad instance for operational traces.
+
+This attaches concrete allocation to R117's summed work. It does NOT bound
+that work from input, prove completion at a derived fuel, charge native
+primitives, or cover native heap/cache intermediates. The scheduler remains
+the core slot scan. Native cached-scheduler correspondence is separate.
+
+The actual Lake target and own-source report passed for all 32 public laws.
+Source SHA256 d345deb6844a12151442d20ad6d61672576676a574c5bfa3275e119396f325f8.
+Only propext and Quot.sound occur. Proof commit:
+0f9d39905928363ecbbb1c4e7bb4227145a8ec77.
+
+The strongest complete Sized query-contract theorem remains R111 plain
+routing. The strongest prepared source count/rank/query result remains R116.
+R118 adds the all-recorded-state counter cap. It does not complete the native
+system theorem. The largest gap remains ONE original-input/request/caller
+bound for BOTH selected-slot expansion and the entire enumeration run,
+including total sibling work and all native reached/failing/rejected states.
+
+## Native recursive growth: external Haskell finding
+
+Current-source RepeatedIntersectionGrowth.hs PASSES. Two intersections with
+one fixed factor change ordinary/all-physical/edge counts:
+
+    (2,3,3) -> (4,6,7) -> (12,19,26)
+
+The fixture checks closedness, different IDs and both actual
+reduceEdgeIntersection results. This is physical growth, not a language
+counterexample or a proof of infinite growth. It rejects an unproved physical
+absorption assumption for repeated factors. Node handles cannot simply be
+omitted from a global progress argument.
+
+NEW reproducible input: lean/repro/GeneratedBoundaryEnumerationTimeout.hs.
+Every p edge below carries the SAME two equality classes:
+[0]=[1] and [0,0]=[1,0]. Let p(x)=p[x,x]. Then:
+
+    A = Mu(x -> a | p[x,x] | p[p(x),p(x)])
+    B = Mu(b -> a | p[b,A])
+    root = p[B,A]
+
+The finite structural input constructs a CLOSED graph with four ordinary
+nodes and seven edges. Construction completes before the enumeration timer
+starts. The actual default runsInterned query has no first result within
+EIGHT SECONDS in this environment. This is a bounded observation, not proof
+of divergence, infinite fresh IDs, or an established Haskell defect.
+
+The marked NativeBoundaryCandidateTrace.hs uses termsPruneWith and the SAME
+enumerateFully' engine. Its oracle returns False and the same caller state.
+It records at most twelve events in an external diagnostic IORef, then throws.
+It does not modify the core before that limit. The final checked trace is:
+
+    before UVar0 ID11; after UVar0;
+    before UVar1 ID71; after UVar1;
+    before UVar2 ID234881; timeout before its after event.
+
+This shows actual selection of generated handles after completed expansions.
+It does not prove the complete fixed-factor recurrence at every iteration.
+The diagnostic frontend uses CANONICAL edge order. runsInterned uses STORED
+edge order. Do not equate their first branches. The numeric IDs are process
+observations, not input-derived identity bounds. No transfer of this input
+to actual Specftacular tk or Synthesis rawSearchSpace is established.
+
+Source mechanism to investigate: recursionKey uses nodeIdentity plus live
+path shapes (Enumeration.hs287-292). Inherited history retains earlier keys
+(407-412,895-909). A fresh generated ID can evade a previously seen shape.
+The p[C,A] row can request intersect C A again while the descendant class
+renews a nonempty path bucket (726-753,772-779). Freshness for ALL iterations
+and actual branch reachability remain unproved. Current RootedScope/optional
+origin results require the ORIGINAL build heap. OriginGeneration records a
+writer from the entire generated siteBody; it does not bound the number of
+successive generated operands from the original input.
+
+PENDING HASKELL REPAIR INVESTIGATION, not an implemented fix: do not merely
+ignore node IDs. Different nodes can have different languages. A normalized
+idempotent intersection-origin key needs guard/domain/closure and row
+correspondence proofs. Live-obligation emptiness pruning also changes the
+current diagnostic API: EqualitySpec.hs757-763 expects Mu-marker results for
+an analogous constraint cycle, and Enumeration.hs1210-1213 permits partial
+results without a finite completion. Preserve this documented truncation
+behavior and assess output order before any stopping repair.
+
+READ-ONLY RAW CALLER AUDIT: Specftacular.Utils.mtau176-187 and
+Synthesis.allTypes432-438/allCurriedTypes445-460 construct recursive type
+bodies with unconstrained Edge/arrowType/typeApplication rows. Curried
+domainNodes512-537 uses finite iteration with domainDepth=1. Generalization
+adds equality constraints at finite TYPE-pattern roots (Utils194-211,
+Synthesis476-500). These equalities can occur at unequal path lengths at
+program leaf budget1. Do not assume every equality introduction decreases
+the program budget. mapNodes transforms the original finite pattern before
+leaf replacement, so those raw constraints sit outside the inserted type Mu.
+This excludes the exact constrained-Mu reproducer at raw construction.
+Preservation through projection, reduction and generated intersections is
+UNPROVED. This source audit is not a new Lean caller-origin theorem.
+
+An alternative proof route is to derive restrictions from the ACTUAL caller
+constructors that exclude this recursive pattern. A supplied role invariant
+or simplified ProgramEncoding is not enough. Faithfully port tk/rawSearchSpace
+and the relevant type/filter/generalization constructors first. Do not confuse
+Gen/Synthesis/States.hs with Gen/Synthesis.hs rawSearchSpace.
+
+Native observation commit e0bc80f2782771ab9c3a3e80469d6583de83bcb1.
+The compact packet is lean/restart-evidence/20261107-native-boundary-progress/.
+It records exact source hashes and outputs. The existing library built with
+GHC 9.14.1 -O0 against cfta tree d5a5e2a9d7c2ec59ded139b13f3864fe3a42e6a0.
+The first build attempt failed to link -lgmp BEFORE running the fixture.
+Adding pkgs.gmp to a TEMPORARY project-derived Nix shell fixed that environment.
+No project configuration or library code changed. Both new Haskell files
+passed fourmolu. cabal-gild checked cfta/cfta.cabal without changes.
+An observation command exiting zero does NOT mean enumeration completed.
 
 ## R117 execution progress
 
@@ -328,9 +453,10 @@ PENDING HASKELL COMMENT REPAIR: cfta/src/Data/CFTA/Enumeration.hs422 says
 getUVarValue path-compresses its representative. Internal/UnionFind.hs129-130
 returns (root uv uf,uf), with the same forest. Suggested comment: Look up the
 value stored at a UVar's representative. The comment has not changed.
-Record every verified Haskell fix here for external work. This turn changed
-only Lean and proof documentation. No Haskell build, fourmolu, cabal-gild,
-Haskell runtime check or full CI is claimed.
+Record every verified Haskell fix here for external work. No library Haskell
+fix was made in R118. The new native finding, reproducer, temporary GMP
+build-environment repair and exact validation are recorded above. No full
+Haskell test suite or full CI is claimed.
 
 The actual sparse source is cfta-generator/src/Data/CFTA/Ranked/Internal/Size.hs.
 Its productSplit765-784 uses finite-prefix block subtraction and quotRem.
@@ -383,44 +509,50 @@ theorem. Retain the earlier full-scope proof targets and counterexamples.
 
 ## Verification, disk use and publication
 
-All THREE new actual Lake targets and 45 public own-source/axiom laws passed.
-Sources total 41591 B. Compact reproducible packets total 19034 B. Each packet
-contains check.py, theorems.json, checked.json and README.md. Every final source
-hash matches its checked report. Checks use shell.nix and Lean4.34.1.
-Own-source reports use -j1 and warnings-as-errors. Only propext and Quot.sound
-occur. Jobs were strictly SERIAL in 4G heavy-management scopes. All compiler
-jobs are terminal. Initial failed drafts and compact repair diagnostics remain.
-Every repaired final source passed. Unchanged successful sources were not
-checked again without a new reason. Do not label an outer failed batch
-successful because an earlier stage passed. No full cold build or Haskell
-runtime test is claimed. Prior R116 source/query results remain checked.
+R118 checked one new actual Lake target and all 32 public own-source/axiom
+laws. The packet contains check.py, theorems.json, checked.json and README.md.
+Source hashes match. Lean 4.34.1; -j1; warnings-as-errors; standard axioms only.
+The final Lean job reported a peak of 190M within a 4G heavy-management scope. Prior
+failed drafts and small compiler diagnostics remain in this runtime. All
+repaired final sources passed. The prior R117 three modules/45 laws remain
+checked; unchanged successful Lean modules were not checked again.
 
-Verified modules and packet paths:
-- SourcePruningEnumerationIdentityBudget: 8 laws; lean/restart-evidence/20261107-enumeration-identity-budget/.
-- EnumerationStateWorkTrace: 30 laws; lean/restart-evidence/20261107-enumeration-state-work-trace/.
-- EnumerationStateDriverWorkTrace: 7 laws; lean/restart-evidence/20261107-enumeration-driver-work-trace/.
+R118 also ran the actual local Haskell library build and all THREE bounded
+native observations in the final packet. The final Haskell observation batch
+completed. Its enumeration queries timed out as stated above. This is NOT a
+successful enumeration-completion check. All heavy jobs were STRICTLY SERIAL
+with 4G caps. Every compiler and native probe is terminal. No full CI is claimed.
 
-The three proof commits are:
-- 5f967f73b518862e8b5eba5f78d47af8e1e285b2
-- aafb0e7a8100277fa8a47ad446e96e6e3b61ec1d
-- 07003328ac28ec3b076ed8bf84f544d4897248c1
+New proof packet:
+lean/restart-evidence/20261107-enumeration-trace-allocation-bound/.
+Native observation packet:
+lean/restart-evidence/20261107-native-boundary-progress/.
+Prior R117 packets remain in place:
+20261107-enumeration-identity-budget,
+20261107-enumeration-state-work-trace,
+20261107-enumeration-driver-work-trace.
 
-Runtime: /tmp/mcfta-global-execution-20261107-1526/. Read RESUME.json,
-verified-manifest.json, proof-commits.json, heavy-peaks.tsv, publication.json,
+The two new code/evidence commits are:
+0f9d39905928363ecbbb1c4e7bb4227145a8ec77
+e0bc80f2782771ab9c3a3e80469d6583de83bcb1
+The docs commit follows these. Final HEAD identifies the published checkpoint.
+
+Runtime: /tmp/mcfta-global-resources-20261107-1604/.
+Read RESUME.json, verified-manifest.json, heavy-peaks.tsv, publication.json,
 canonical-board-readback.json, doc-tail-manifest.json and tmp-audit-current.json.
-Final publication records are written after push and canonical readback.
-The previous R116 runtime is /tmp/mcfta-native-rank-20261107-1421/.
+Final publication records follow push and canonical readback.
+Previous runtime: /tmp/mcfta-global-execution-20261107-1526/.
 
-Readable /tmp measured 15028224 allocated B and 191732797440
-free B. 5 private entries were inaccessible. This runtime used
-176128 allocated B before final compact records. No copied
-source/build trees or bulk archives were produced. Proof reports reproduce
-from tracked source and shell.nix. No additional deletion was needed.
-Continue checking /tmp. Preserve unrelated .hypha/ and all proof work.
+Readable /tmp measured 15310848 allocated B.
+Free space was 192574205952 B. 6 private entries were inaccessible.
+This runtime used 196608 allocated B before final handoff records.
+No copied source/build trees or bulk archives were produced. Tracked packets
+reproduce from source. No cleanup was needed. Continue checking /tmp.
+Preserve unrelated .hypha/ and all proof work.
 
 Push formalize normally under standing authorization. Verify independent
-ls-remote, refresh origin/formalize and check main ancestry. Publish R117 on
-thread1c1333d7-46ea-4f46-a9a1-b5d13e577337. Save exact request arguments before
+ls-remote, refresh origin/formalize and check main ancestry. Publish R118 on
+thread 1c1333d7-46ea-4f46-a9a1-b5d13e577337. Save exact request arguments before
 writing. Compare canonical author, title, text and metadata.commit separately.
 A write response is not canonical readback. Goal remains ACTIVE.
 
