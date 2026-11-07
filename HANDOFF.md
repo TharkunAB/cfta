@@ -1,3 +1,247 @@
+# Current checkpoint: complete merge after original signed synthesis construction
+
+Updated 2026-11-08 00:19 CET. Goal ACTIVE. R128 made PROGRESS. Branch formalize.
+This checkpoint follows 6487c9aa24857a530f1c1e065d4de720dc28b9a4
+(R127, canonical board seq976). Preserve the complete original objective.
+The optimized interned core remains PRIMARY. Older constructor and equality
+work remains SECONDARY. Preserve all proofs, counterexamples, repairs,
+marked drafts and unrelated .hypha/. Regular formalize pushes are explicitly
+authorized. Do not pause the goal or ask whether to continue.
+
+Formalize was pulled before work at 2026-11-07 23:55 CET. Both upstream heads
+were refreshed at 2026-11-08 00:14 CET. Main remains
+bd5a406a6a3f84b7e3ae0906082783911509df83, an ancestor. Six verified proof
+commits extend R127 through 40b9d081b7d8aa541f5c3326d8dad985aabe34f8.
+The later handoff commit, push and canonical board readback are recorded in
+publication.json and RESUME.json in /tmp/mcfta-generated-merge-20261107-2358/.
+Committed check packets reproduce directly from source without /tmp.
+No existing proof source was modified or deleted in this increment.
+
+## Strongest new claim
+
+SourceSynthesisUniverseMergeInput.firstOrderRaw_merge_prefix_bound accepts
+original Library, Query and SIGNED size, plus the existing concrete EdgeKey
+DecidableEq infrastructure. It preserves original FirstOrder source errors.
+For a successful emitted instruction, the theorem derives the actual repaired
+empty-cache construction, its complete heap Facts, output Available, stored
+body preparation, and the constructor prefix-height bound.
+
+The theorem then derives a COMPLETE modeled source merge from that actual
+constructed input and heap. It uses literal MergedSourceGrouping.groups,
+SourceMemoGate.plain and the source top constraint. Ordinary recursion fuel
+is the executor's actual input-derived MergedOrdinaryHeight. A comparison
+bound is derived internally. Every comparison budget at or above that bound
+returns the SAME complete output value and final constructor heap.
+
+The merge output has ordinary/union prefix height at most the sizeOf the
+original emitted instruction plus ONE. It has either no recursive boundary
+atom, or only ONE actual original U identity. In the latter case, the final
+heap retains that U's complete Available Mu payload, body Shape, and body,
+depth-probe and selected-ordinary-probe raw resident Rows. The actual U is the
+first frame built inside the full constructor. It is not replaced by an
+independently cold-allocated U.
+
+For EVERY comparison budget, including failed or exhausted outcomes, the
+returned merge heap contains no NEW COMPLETE stored Mu record. Each stored
+Mu record was already present in the incoming heap. All stored Mu bodies
+therefore retain the original shallow property. This is a heap property,
+not only a property of records mentioned in the output. It does not bound
+pending key reservations or ordinary record allocations.
+
+No caller supplies constructor success, merge success, Prepared, a selected
+seed, row packets, future states, lookup tables, closure, worker fuel or a
+resource bound to this original-input endpoint. Internal worker lemmas use
+Facts/Prepared/Available and completed-prefix facts. The endpoint derives
+these conditions from original construction and complete source execution.
+
+This is ONE modeled merge operation after original construction. It does
+not prove closure of all generated intersection/projection/required-path/
+optional-binder operations. Its comparison bound controls proof recursion.
+It does not count all sibling work, allocations, lazy demands or native work.
+It does not bound the complete enumeration driver. Native Haskell grouping
+and container correspondence remain separate obligations.
+
+## Checked increment and reproduction
+
+Six NEW modules contain 34 NEW checked public laws:
+
+- MergedPrefixHeight: 11 laws. Successful actual merging adds at most one
+  ordinary/union layer for ARBITRARY available input. No Tree or OnlyU premise
+  is needed. Both retained-column branches and all ordered source groups are
+  covered. A boundary column can add one union layer and does not recurse.
+  Ordinary-row union retains the input maximum before recursion.
+- MergedPrefixAtoms: 14 laws. The complete successful actual worker and its
+  input-derived executor introduce no boundary atom. The proof includes
+  literal references, Mu and explicit unions. It follows actual selection,
+  discarded comparison effects, map order, raw edge readback and groups.
+- SourceSynthesisUniversePrepared: four laws. The existing binder_shallow law
+  handles the actual universe binder, including probes and publication.
+  Ordered child/edge construction lifts Shallow through all source prefix
+  outcomes. Original requests derive Prepared for EVERY stored Mu body,
+  including stored records omitted from the output. Ready/Grows of the
+  selected seed alone was not sufficient to establish this heap property.
+- MergedNoNewMu: three laws. Actual worker, executor and source executor
+  preserve complete stored Mu origins in EVERY returned outcome. Failed
+  comparisons and failed recursive prefixes retain this property. Existing
+  unfold/reader/comparison/selection effect laws provide NoNewMu. Actual
+  makeEdge, makeNode, makeUnion and ordinaryUnion preserve it. Extension's
+  existing public structure was not changed.
+- MergedPrefixCompletion: one law. Existing complete source execution derives
+  a stable comparison bound and full returned-state extension. Checked height,
+  atom-subset and NoNewMu laws then give the result properties without a
+  caller success or worker-fuel premise.
+- SourceSynthesisUniverseMergeInput: one law. Original signed source requests
+  derive all initial conditions and remove internal proof-interface premises.
+  Determinism aligns the actual construction from the preparation and physical
+  prefix theorems. Actual extension transports the complete U and all Rows.
+  All-budget NoNewMu also transports Shallow through failed outcomes.
+
+Each module has a four-file packet under lean/restart-evidence/20261108-:
+merged-prefix-height, merged-prefix-atoms, universe-prepared,
+merged-no-new-mu, merged-prefix-completion and universe-merge-input.
+Each check.py runs the actual project Nix/Lake target and an own-source
+warnings-as-errors report. The report emits an explicit #check and #print
+axioms for EVERY public theorem. It checks the exact declared public set and
+real qualified namespaces against theorems.json. checked.json records the
+exact source hash. Reproduce from the repository root with, for example:
+
+    python3 lean/restart-evidence/20261108-universe-merge-input/check.py
+
+On this host, run compiler work serially under the existing heavy-management
+4 GiB cap. Do not change queue concurrency. All actual R128 compiler jobs
+were Root-only and serial with MemoryMax/MemoryHigh 4G and MemorySwapMax 0.
+All current source checks pass. Their axioms are subsets of propext,
+Classical.choice and Quot.sound. No admitted theorem is used. The old
+InternedFreshOrdinaryClosedCompletion unused-input dependency warning is
+retained; own-source checks are strict. All jobs and bounded tasks are
+terminal. No new native probe, Haskell suite, format run or CI result is claimed.
+
+The runtime verified-modules.json contains the six exact hashes, all fully
+qualified public laws, line counts and packet paths. proof-commits.json records
+all six source commits. The three current root documents have one identical
+current prefix. Their complete historical tails retain exact bytes and hashes.
+
+## Biggest remaining gap: recursion after narrowing
+
+The principal missing bridge is an ORIGINAL-request bound on recursive row
+visits AFTER equality narrowing. SourceEqualityPartialMemoWorker.descendants
+recurses into the narrowed children. They are not literal once-only occurrences
+of the original syntax. Existing busy/exhausted observations remain explicit.
+A supplied recursiveDepth, future-state list or finite-carrier hypothesis does
+not close this gap.
+
+The literal Haskell generic merge call is Equality/Operations.hs reduceEClass
+at line239. It is requested for ordered distinct paths in a selected class.
+For an m-path class, the next local count target is m*(m-1) demanded outer
+merges, including interrupted prefixes. Shared path results must be counted
+with the actual captured forest and memo. This count is NOT proved in R128.
+The original FirstOrder filter has one two-path class; application has three.
+Thus the candidate original-row charges are two and six outer requests.
+These are local source counts, not a complete pass or total-work theorem.
+
+cfta-generator/src/Data/CFTA/Gen/Synthesis.hs reductions/reductionRounds
+limits reduction to 30 outer rounds. Specftacular.searchSpace and
+searchSpaceParts use fixWithin 100. Compiled pruning can add one reduction
+pass after admission and can discard that pass's output after validation.
+Those rejected-route effects must still be counted. The outer limits do not
+prove that a recursive inner pass finishes.
+
+The enumeration loop does not directly request generic mergeAlternatives.
+It performs intersections, unfolding and row filtering. Lazy evaluation can
+force preprocessing thunks after enumeration begins. Do not count zero
+runtime merges from the absence of a direct merge call in the driver.
+Specftacular.Utils.mergeTypeAlternatives is a DIFFERENT specialized algorithm.
+Do not transfer the generic worker theorem to it by function-name similarity.
+
+A proposed transparent-union height counts node layers and uses MAX, without
+an added layer, at unions. This may remove the generic merge's union slack.
+It does not itself establish strict descent for the next narrowed child.
+The retained SourceEqualityPartialHeightBoundary fixture has no unions and
+checks heights (parent, old child, new child)=(2,1,3). It uses two raw unused
+binders outside the actual one-U original-input family. Do not transfer that
+fixture to the current Haskell gate or actual FirstOrder input without proof.
+
+A NEW SOURCE CALCULATION, NOT A CHECKED COUNTEREXAMPLE: a size-two application
+with generalized-variable components can begin as
+app(U, marker, f[U], g[U]). Its actual application classes require the three
+children of the function annotation. RequiredWorker.require can unfold U and
+retain its arrow, producing f[arrow(marker,U,U)]. On transparent-union height,
+the original application has height two and this function child has height
+three. U is unconstrained. This calculation suggests a role-aware measure
+with original program/leaf budgets and a finite type-exposure allowance.
+It has NOT been attached to complete firstOrderRaw/filter execution, compiled,
+run in native Haskell, or established as a new theorem or termination defect.
+Verify that attachment before using it as an original-input counterexample.
+A fixed finite weight for U alone cannot make arbitrary repeated unfolding
+nonincreasing, because U's body contains U below ordinary constructors.
+
+## Full objective and next proof work
+
+Retain the FULL objective. Exact accepted terms must be related to NODE-COUNT
+size, their order and count, and BOTH signed rank/unrank inverses through the
+actual sparse execution. Cover ALL Sized routes, failures and fallbacks,
+productive infinite queries, actual lazy tables/maps/sets/cache, hash/word/Int
+behavior, allocation and wrappers, lookup/Curried/Specftacular. Derive ONE
+original-input/request/caller bound for BOTH the optimized selected-slot
+worker and the COMPLETE driver. Count ALL siblings and ALL generated, reached,
+intermediate, failed, rejected, returned, subsequent and native states.
+No final caller success/body/worker/fuel/resource/validity/OriginalInput,
+closure, finite-carrier or lookup oracle is allowed. Derive internal premises
+from the original Library/Query and actual caller. Do not narrow completion
+to default U, initial constructors, successful traces or a size-free API with
+an assumed size argument. enumerateOutUVarWith/enumerateUntil' have no size
+parameter; their caller paths need their actual bounds.
+
+Next, inspect the complete demanded path and inherited-constraint budget for
+original program roles. Prove how RequiredWorker/projection/kernel operations
+expose U, and bound the resulting type structure using original program and
+request data. Establish generated intersection/required/projection/binder
+closure and recursive visits after narrowing. Count the actual shared-class
+merge requests and inherited row passes, including stopped and rejected routes.
+Then compose the original-derived traversal and all-work bounds through the
+actual complete sparse driver and native state adapters.
+
+R126's stable RecU/U identity at the standalone cold typesOf endpoint and
+R127's actual full-construction resident U Rows remain available. Use the
+actual frame when generalizing the row-based kernel reasoning. Do not identify
+its UID or final heap with an independently cold U. All earlier positive
+results, broad counterexamples and unresolved timeouts remain retained.
+One-step height plus one is not a fixed bound under arbitrary repeated merges.
+A productive run and an ordinary recursive-depth fuel are not total-work proofs.
+
+## Haskell findings and external ownership
+
+No production Haskell fix or new native failure was established in R128.
+Record every future Haskell fix here in FINDINGS so external work can pick it
+up. The current new finding is the unresolved after-narrowing traversal bound
+and the marked type-exposure calculation above. It does not justify a
+production behavior change by itself. Prior PR202/PR203 status reports remain
+dated observations; no new PR-state result is claimed. The earlier PR203
+behavior-change recommendation remains WITHDRAWN. Its required-library check
+is intentional. Positive-top demand can allocate a cold PCS record; physical
+top readback does not establish zero native allocation.
+
+## Storage, publication and restart
+
+At 00:06 CET, readable /tmp allocation was 18,817,024 bytes, excluding five
+unreadable protected directories. The current runtime used 49,152 bytes.
+The filesystem had 264,111,022,080 bytes available. No cleanup was needed or
+performed. Only small scripts, compact failure logs and manifests were added.
+No build trees, cache copies, archives or worktree snapshots were created.
+A later small tmp-audit.json records the publication-time values. Keep watching
+/tmp. Do not regenerate the former large evidence archives. The committed
+source/check packets reproduce the current results without any /tmp files.
+
+Runtime authority is /tmp/mcfta-generated-merge-20261107-2358/RESUME.json and
+publication.json AFTER push and canonical readback. Do not rerun
+write-checkpoint.py: it is a one-time prefix update. The append-only board note
+records the exact final published commit and all scope boundaries. The full
+goal remains ACTIVE. This is a progress checkpoint, not completion or pause.
+
+---
+
+Previous checkpoint and complete historical material follow unchanged.
+
 # Current checkpoint: actual original-input ordinary and union prefixes
 
 Updated 2026-11-07 23:51 CET. Goal ACTIVE. R127 made PROGRESS. Branch formalize.
