@@ -38,8 +38,8 @@ private theorem aligned_members {A B : Type} {relation : A → B → Prop}
         · obtain ⟨source, present, related⟩ := ih.2 selected later
           exact ⟨source, List.mem_cons_of_mem _ present, related⟩
 
-/-- The actual body product retains its marker and has exactly the pending diagonal name. -/
-theorem node_exact_free (top : Guard) (catalog : List (String × Nat))
+/-- Actual ordered source targets give the exact canonical node and pending diagonal name. -/
+theorem node_target_readback (top : Guard) (catalog : List (String × Nat))
     (u b : Interned NodeKey) (bodyRows : List (EdgeValue String Guard))
     (depth ordinary : Value String Guard) (emptyGuard : Guard)
     (conjoin : Guard → Guard → Guard) (conjoinTop : conjoin top top = top)
@@ -48,20 +48,24 @@ theorem node_exact_free (top : Guard) (catalog : List (String × Nat))
     (universeAvailable : Available original.heap
       (.mu u (.node b bodyRows 0 [.interned u.identity]) depth ordinary))
     (shape : Shape top catalog (.interned u.identity) (.node b bodyRows 0 [.interned u.identity])) :
-    ∃ value final entry rows m markerRow,
+    ∃ value final entry targets m markerRow,
       node emptyGuard conjoin
         (execute emptyGuard conjoin 8 (second u b bodyRows depth ordinary original).1)
         bodyRows bodyRows (secondState u b bodyRows depth ordinary original) = .done value final ∧
       SourceRecursiveIntersectionKernel.Valid final ∧
       Extension (secondState u b bodyRows depth ordinary original) final ∧
       Available final.heap value ∧ PreparedWithoutMu value ∧
-      value = .node entry rows 0 [.intersection (pair u.identity u.identity).1
+      value = .node entry (canonicalEdges targets) 0 [.intersection (pair u.identity u.identity).1
         (pair u.identity u.identity).2] ∧
+      All₂ (Readback top u.identity) bodyRows targets ∧
+      (∀ target ∈ targets, EdgeResident final.heap target) ∧
+      (∀ target ∈ targets, EqualityLeafProjectionPhysical.dead target = false) ∧
+      (∀ target ∈ targets, target.entry.key.constraint = top) ∧
+      (∀ target ∈ targets, ∀ child ∈ target.children,
+        child = .node m [markerRow] 0 [] ∨ child = repeatedValue (pair u.identity u.identity)) ∧
       RowReadback "(->)" top [] (.node m [markerRow] 0 []) ∧
       Available final.heap (.node m [markerRow] 0 []) ∧
-      (∀ row ∈ rows, row.entry.key.constraint = top) ∧
-      (∀ row ∈ rows, ∀ child ∈ row.children,
-        child = .node m [markerRow] 0 [] ∨ child = repeatedValue (pair u.identity u.identity)) := by
+      run (makeNode targets) final.heap = (value, final.heap) := by
   obtain ⟨value, final, _products, targets, done, finalValid, growth, available, prepared, _free,
       aligned, _hits, _productResident, _retained, targetResident, targetLive, _exactRows, _same, pureNode⟩ :=
     SourceSynthesisUniverseBodyCanonical.node_canonical top catalog u b bodyRows depth ordinary emptyGuard
@@ -124,15 +128,51 @@ theorem node_exact_free (top : Guard) (catalog : List (String × Nat))
   have valueRead : value = .node entry (canonicalEdges (surviving targets)) 0
       [.intersection (pair u.identity u.identity).1 (pair u.identity u.identity).2] := by
     simpa only [pureNode] using nodeRead
-  have originalRow : ∀ row ∈ canonicalEdges (surviving targets), row ∈ targets := by
+  have survivingTargets : surviving targets = targets := by
+    unfold surviving
+    apply List.filter_eq_self.mpr
     intro row member
-    exact (List.mem_filter.mp (canonicalEdges_member _ row member)).1
-  refine ⟨value, final, entry, canonicalEdges (surviving targets), m, markerRow,
-    done, finalValid, growth, available, prepared, valueRead, markerRead,
-    growth.available _ markerAvailable, ?_, ?_⟩
+    change (!EqualityLeafProjectionPhysical.dead row) = true
+    simp only [targetLive row member, Bool.not_false]
+  rw [survivingTargets] at valueRead
+  exact ⟨value, final, entry, targets, m, markerRow, done, finalValid, growth, available, prepared,
+    valueRead, aligned, targetResident, targetLive, targetTop, targetChildren, markerRead,
+    growth.available _ markerAvailable, pureNode⟩
+
+/-- The actual body product retains its marker and has exactly the pending diagonal name. -/
+theorem node_exact_free (top : Guard) (catalog : List (String × Nat))
+    (u b : Interned NodeKey) (bodyRows : List (EdgeValue String Guard))
+    (depth ordinary : Value String Guard) (emptyGuard : Guard)
+    (conjoin : Guard → Guard → Guard) (conjoinTop : conjoin top top = top)
+    (original : Machine String Guard) (facts : Facts original.heap)
+    (cacheValid : Cache.Valid original.domains)
+    (universeAvailable : Available original.heap
+      (.mu u (.node b bodyRows 0 [.interned u.identity]) depth ordinary))
+    (shape : Shape top catalog (.interned u.identity) (.node b bodyRows 0 [.interned u.identity])) :
+    ∃ value final entry rows m markerRow,
+      node emptyGuard conjoin
+        (execute emptyGuard conjoin 8 (second u b bodyRows depth ordinary original).1)
+        bodyRows bodyRows (secondState u b bodyRows depth ordinary original) = .done value final ∧
+      SourceRecursiveIntersectionKernel.Valid final ∧
+      Extension (secondState u b bodyRows depth ordinary original) final ∧
+      Available final.heap value ∧ PreparedWithoutMu value ∧
+      value = .node entry rows 0 [.intersection (pair u.identity u.identity).1
+        (pair u.identity u.identity).2] ∧
+      RowReadback "(->)" top [] (.node m [markerRow] 0 []) ∧
+      Available final.heap (.node m [markerRow] 0 []) ∧
+      (∀ row ∈ rows, row.entry.key.constraint = top) ∧
+      (∀ row ∈ rows, ∀ child ∈ row.children,
+        child = .node m [markerRow] 0 [] ∨ child = repeatedValue (pair u.identity u.identity)) := by
+  obtain ⟨value, final, entry, targets, m, markerRow, done, finalValid, growth, available, prepared,
+      valueRead, _aligned, _resident, _live, targetTop, targetChildren, markerRead,
+      markerAvailable, _pureNode⟩ :=
+    node_target_readback top catalog u b bodyRows depth ordinary emptyGuard conjoin conjoinTop
+      original facts cacheValid universeAvailable shape
+  refine ⟨value, final, entry, canonicalEdges targets, m, markerRow, done, finalValid, growth,
+    available, prepared, valueRead, markerRead, markerAvailable, ?_, ?_⟩
   · intro row member
-    exact targetTop row (originalRow row member)
+    exact targetTop row (canonicalEdges_member targets row member)
   · intro row member child present
-    exact targetChildren row (originalRow row member) child present
+    exact targetChildren row (canonicalEdges_member targets row member) child present
 
 end MicroCFTA.SourceSynthesisUniverseBodyExactFree
