@@ -1,4 +1,236 @@
-# Current checkpoint: complete initial constructor model and native universe observations
+# Current checkpoint: actual cold universe Mu and exact recursive entry
+
+Updated 2026-11-07 19:18 CET. Goal ACTIVE. R121 made PROGRESS. Branch formalize.
+This checkpoint follows 6da22f3f734c9fa10bbce1d887300f4765d8afa7
+(R120, canonical board seq968). Keep the complete original objective below.
+Preserve the optimized interned core, older constructor/Eq targets, all proofs,
+counterexamples, repairs, marked drafts, and unrelated .hypha/.
+Regular formalize pushes remain explicitly authorized. Do not pause the goal
+or ask whether to continue. No full-system completion claim is made.
+
+Formalize was pulled before work. Both remote heads were refreshed at 19:17.
+Main remains bd5a406a6a3f84b7e3ae0906082783911509df83, an ancestor.
+The five checked proof commits run from a23b087f3 through
+6240951f5b4e21a6c80e9797ed10c9c1d9db430a. The first two are already pushed.
+The remaining checked commits and this handoff will be pushed normally.
+No production Haskell behavior changed. No new Haskell probe was run.
+
+## Current strongest claims and largest gap
+
+The complete R111 plain routing contract and the R116 prepared-source
+rank/count endpoint remain the strongest query contracts. R120 also proves
+completion and cache facts for the modeled initial FirstOrder constructor
+result, without a supplied successful constructor or fuel premise.
+
+R121 adds an original-library/query theorem for its default universe:
+SourceSynthesisUniverseColdReadback.typesOf_cold_mu. Starting from empty
+caches, the actual repaired constructor completes with a closed Mu value.
+Its actual body has ordinary-node shape, depth zero, and exactly its own
+local free reference. The body records the normalized arrow, four rigid
+leaves, and catalog rows. The generic allTypes_cold_mu endpoint also derives
+the resident Mu key, table entry, and complete stored record. These are
+modeled constructor executions. Native Haskell lazyMap, sharing and allocation
+order correspondence remain open. The theorem is not a complete synthesis
+query or enumeration contract.
+
+No callback success, constructor success, cache miss, fuel, finite carrier,
+resource bound, or incoming-state validity premise is supplied to these cold
+endpoints. The proof derives both actual probe runs and their full cache
+facts. Both callbacks are binder-free and add no complete Mu record.
+Coherent full coverage therefore derives absence of the actual Mu key.
+The actual body callback then establishes a recursive ordinary node. Source
+cleanup retains the Mu. The standalone cold endpoint does not establish the
+same history for every incoming cache or every call in the full worker.
+
+The largest gap is the preservation and total-work argument for the actual
+optimized workers. The proposed class of finite ordinary prefixes over the
+one original universe is proved for the initial FirstOrder SYNTAX only.
+It is not proved closed under generated native intersection, projection,
+reduction, field-pool, or enumeration operations. In particular, the exact
+open-body product and canonical Mu reconstruction are still missing.
+Retained reuse of U would not bound temporary Mu records, probes, ordinary
+nodes, domain/memo entries, sibling processing, failures, or rejected states.
+
+The final resource theorem must derive ONE bound from original input,
+request/caller construction and concrete callbacks. Cover BOTH selected-slot
+expansion and the complete enumeration driver. Cover every generated,
+reached, intermediate, failing, rejected, returned and subsequent state.
+Count all siblings and all intermediate/native cache allocations. Derive
+sufficient recursive depth and total processed work. Do not replace this
+with a caller-supplied successful run, fuel, finite carrier, closure,
+validity, OriginalInput, completed worker, or resource premise.
+
+The complete public API still needs all Sized routes, fallback and failure
+behavior, original accessor-language preservation, exact terms by node count
+and ordered enumeration, both rank/unrank inverse directions through actual
+lazy sparse storage, productive infinite queries, and machine/container/
+hash/cache correspondence. Preserve the older constructor/Eq targets too.
+Keep all conditional helper success INTERNAL. Preserve every prior gap and
+counterexample below.
+
+## R121 checked modules and exact proof boundary
+
+All five Lake targets and own-source warnings-as-errors reports pass.
+All 30 public laws use only propext, Classical.choice, and Quot.sound.
+Each packet includes check.py, the complete theorem list, checked.json and
+README.md. Source hashes were compared with checked.json after all checks.
+The compact packets and source reproduce the results. No build archive is
+needed. Runtime verified-modules.json records the complete manifest.
+
+1. InternedOrdinaryUnionReadback: 10 laws, 200 lines.
+   SHA256 abba3fed8452763855b52e616f0689359c7feee26dad9940e9448191e944328b.
+   Packet lean/restart-evidence/20261107-ordinary-union-readback/.
+   Resident ordinary values yield actual edge payloads. The makeUnion
+   computation equals normalized makeNode when two original operands have
+   different references. Duplicate operands and overlapping symbols are
+   allowed. A singleton union can return an operand without normalizing its
+   payload, so the generic law does not assert singleton normalization.
+   Live-row witnesses derive depth zero and exactly one free reference.
+
+2. SourceSynthesisUniverseBody: 3 laws, 346 lines.
+   SHA256 391d4103aa1eca94cbc7c71903a35dd886e0c73428431572b13fa2b2e7f61cd0.
+   Packet lean/restart-evidence/20261107-universe-body/.
+   body_syntax identifies the literal arrow/rigid/catalog alternatives.
+   callback_readback and callback_node use the actual repaired build and
+   buildMany executions. They derive callback completion, Facts, availability
+   and normalized ordinary-node shape for any incoming Facts and available
+   local reference. No callback completion premise is supplied. Shape keeps
+   actual row keys and children. Catalog duplicates and arrow/marker overlaps
+   remain allowed. The four rigid producers derive the distinct references
+   required by the ordinary-union helper.
+
+3. SourceSynthesisUniverseColdProbe: 5 laws, 135 lines.
+   SHA256 745fd6169f09ba3512de0414f253206f8183455795fd91cff2a0a3b510a11ad5.
+   Packet lean/restart-evidence/20261107-universe-cold-probe/.
+   Repaired binder-free build and callback normalization add no complete Mu.
+   empty_mu_key_absent uses full coherent coverage and the actual history.
+   allTypes_cold_probes derives both callback completions, cache facts,
+   available probes, the missing actual Mu key, and the exact constructor
+   continuation after the two probes. It starts with empty caches.
+
+4. SourceSynthesisUniverseColdReadback: 3 laws, 93 lines.
+   SHA256 ce145167beda5691e1e43c43ae57f8f7554f3843a457fdbbc9a095310d7e2c21.
+   Packet lean/restart-evidence/20261107-universe-cold-readback/.
+   finish_shaped_mu rules out both source cleanup branches.
+   allTypes_cold_mu derives actual closed Mu completion, body Shape, Facts,
+   availability and the stored key/table/record. typesOf_cold_mu uses the
+   original library and query. Both endpoints derive their executions.
+   Neither endpoint proves the corresponding native allocation history.
+
+5. SourceSynthesisUniverseReferenceControl: 9 laws, 141 lines.
+   SHA256 f0a35f1e6b8b0fee39e3e477e4116d08e39137536724b99345e5ebe206284e17.
+   Packet lean/restart-evidence/20261107-universe-reference-control/.
+   referenceMu and muReference preserve the literal initial swap and Mu
+   entry. execute_referenceMu retains the actual entered-domain continuation.
+   execute_referenceMu_two exposes exhausted fuel after real allocation.
+   diagonal_key/seen/lookup, reference_entered and execute_repeatedReference
+   derive exact diagonal-domain lookup and the repeated-reference result.
+   These laws do not assume completed body work. They do not prove that work
+   completes, that output rows normalize back to the original universe, or
+   that supplied fuel suffices. The start domain is the actual empty domain.
+
+## Exact next work
+
+Use the actual normalized body from SourceSynthesisUniverseBody and the
+actual original-input Mu from SourceSynthesisUniverseColdReadback. Continue
+SourceSynthesisUniverseReferenceControl beyond its entered-domain body call.
+Derive the next body/reference lookup and actual body/body product. Handle
+all arrow/catalog cross rows and marker intersect U cases. Do not assume
+unique catalog symbols, a normalized source union list, or a supplied body
+completion. Derive that the inner optional binder is unused. Derive that the
+outer reconstructed probes hit the original universe record.
+
+Arbitrary valid seen domains are insufficient: an existing seen(u,u) can
+return a placeholder before Mu entry. Derive the real caller freshness or
+reachability condition. The cold universe readback does not by itself prove
+that condition in the complete caller. Prove generated value-class closure
+next, then derive a finite original-input work bound for BOTH workers.
+Count all temporary records even if the returned universe is reused.
+
+Do not discard the R118 generic growth or timeout findings. The initial
+source syntax restriction does not prove generated preservation. The generic
+RepeatedIntersectionGrowth.hs result and GeneratedBoundaryEnumerationTimeout.hs
+remain valid at their recorded boundaries. R120 native observations remain
+seven fixed cases plus one occurs-check case and 58 retained graphs. They
+are not all-input closure, transient-heap coverage, or a total-work theorem.
+No such native probe was rerun in R121.
+
+## Source audit of the remaining recursive product
+
+The following is a source audit, not an additional Lean theorem. Native
+Type.hs305 assigns ordinary Node tag1 and Mu tag2. The actual body/reference
+call therefore resolves B intersect Rec(u) to B intersect U, then enters the
+right-Mu branch and calls B intersect B. The inner seen pair is pair(b,u).
+Control.pair and native IntersectId sort NUMERIC IDs independently of tags.
+Its exact representation is (min b u, max b u), equal to pair(u,b). Do not
+assume a numeric ID order from operand tags. Coherent Node/Mu residency must
+derive b != u. The initial diagonal pair remains pair(u,u).
+
+Relevant source: cfta/src/Data/CFTA/Interned/Type.hs150 and305;
+cfta/src/Data/CFTA/Interned/Operations.hs492;
+lean/MicroCFTA/SourceRecursiveIntersectionControl.lean43;
+lean/MicroCFTA/SourceRecursiveIntersectionKernel.lean79 and91.
+
+The body is open, so closed-self does not bypass the body/body product.
+The ordinary hash join matches symbols. Unequal arities produce empty edges.
+The special arrow [marker,R,R] can overlap a catalog ("->",3) row. The cross
+rows require marker intersect R and R intersect marker, hence marker
+intersect U. Its result should be marker when the catalog contains
+("(->)",0), and Empty otherwise. Prove that these cross rows duplicate an
+existing arrow or disappear. Derive physical conjoin(top,top)=top and the
+actual surviving/canonical rows. Language equivalence alone is insufficient
+for the original-probe identity claim.
+
+The free placeholders of the result must exclude inner pair(b,u), so its
+optional binder is unused. Retain outer pair(u,u). Then prove outer renaming
+and probe replay hit the original resident U record. Marker-domain, body,
+probe and temporary Mu allocations still count even if output reuses U.
+These are the next proof obligations. No such product is assumed by R121.
+
+## Haskell findings for the external implementation work
+
+No production Haskell code changed in R121. The two existing documentation
+corrections were refreshed through GitHub at 19:12 CET. Both remain OPEN
+and unmerged, based on main bd5a406a6a3f84b7e3ae0906082783911509df83.
+Do not report either as landed on main and do not edit their externally
+owned fixes in parallel.
+
+- PR202: https://github.com/TharkunAB/cfta/pull/202 .
+  Head ce4ee6d82340235a39b9278457fe0f9ff45a2eba.
+  Correct getUVarValue and getUVarRepresentative comments. UnionFind.find
+  returns the representative and the same forest. This is documentation.
+- PR203: https://github.com/TharkunAB/cfta/pull/203 .
+  Head e019ce41db8029a5d1349a8ea123253f3d7af715.
+  Correct libraryAvoid and HooglePlus documentation for intentional Hectare
+  parity. A size-two application to a required argument is retained.
+  The previous recommendation to change buildRelevant was too strong and
+  is withdrawn. Preserve the required-argument counterexample and controls.
+  This is a documentation correction, not a pending behavior repair.
+
+The latest relevant Haskell format/build/probe results remain in R120.
+R121 changes Lean and proof documentation only. No new full Haskell build,
+full test suite, CI result, or behavior fix is claimed.
+
+## R121 restart and storage
+
+Runtime: /tmp/mcfta-universe-readback-20261107-1848/.
+Keep RESUME.json, verified-modules.json, heavy-peaks.tsv, compact repair logs,
+publication/readback records and the document-tail manifest. Do not copy
+source/build trees or keep build archives in /tmp. All compiler and probe
+work remains SERIAL under heavy-management with a 4 GiB cap. Concurrency
+was not changed. Final strict reference job29145 exited zero; earlier
+successful own packets for body/readback were retained even when a later
+module in the serial wrapper failed on a warning. All heavy handles are
+terminal. No compiler job is left running.
+
+The 19:13 audit measured 14,045,184 readable allocated bytes in /tmp.
+Six protected directories could not be read and are excluded. The filesystem
+had 180 GiB available. This turn kept only small scripts, manifests and
+compact failure logs. No cleanup was needed or performed. Keep checking size.
+Historical document tails remain byte-for-byte unchanged. Preserve .hypha/.
+Goal ACTIVE. The preceding goal turn and R121 both made PROGRESS.
+
+# Prior R120 checkpoint: complete initial constructor model and native universe observations
 
 Updated 2026-11-07 18:40 CET. Goal ACTIVE. R120 made PROGRESS. Branch formalize.
 This checkpoint follows 7b5c76ca018b3f395fe2af51c4378cbdff94062f
