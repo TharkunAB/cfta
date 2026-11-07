@@ -1,7 +1,7 @@
-# Current checkpoint: current-constraint language and finite source index observations
+# Current checkpoint: source rank inverses and global execution-bound audit
 
-Updated 2026-11-07 14:14 CET. Goal ACTIVE. Branch formalize. This checkpoint
-follows ace31266aebaa8f68785d292502fa6b75247608d (R114, canonical board seq960).
+Updated 2026-11-07 15:18 CET. Goal ACTIVE. Branch formalize. This checkpoint
+follows 4fc286e211b2c7e67716d6347b6aaefa013870f5 (R115, canonical board seq961).
 The previous turn made progress. This turn also makes progress. The full
 objective remains open. Preserve .hypha/ and every proof, counterexample,
 repair, and marked draft. Regular formalize pushes remain authorized.
@@ -21,86 +21,155 @@ unambiguity test, the shared original table, computed limit1024
 determinization, and reference fallback on cap failure. The caller supplies
 no helper success or root uniqueness. residual_free applies at that same root.
 
-R115 extends the successful grouped branch to the CURRENT ORIGINAL constraint
-language, including arbitrary raw equality fields. Structural validation,
-the actual scoped Boolean unambiguity gate, and successful complete
-conjunction preparation of the actual trimmed table imply exact and distinct
-classes at every output key and node count. No caller supplies output layout,
-output uniqueness, annotation normalization, or evaluator fuel.
-SourceSizedGroupedCurrent.prepared_root_exact gives this result at the
-original query root. The earlier normalized compatibility laws remain true.
+R116 extends the successful prepared SOURCE branch through complete
+bottom-up ranking and BOTH signed rank/unrank inverse directions. Actual
+structural validation, the actual scoped Boolean unambiguity gate, and
+successful complete conjunction preparation of the actual trimmed table
+imply exact and distinct classes. Those classes contain the terms in the
+CURRENT ORIGINAL accessor-based constraint language at each node count.
 
-R115 also attaches counts and guarded selection to direct SOURCE FIELD
-equations. SourceSizedGroupedIndex independently builds count/select fields
-with the actual constant, map, pay, scale, direct productSplit, choice and
-row/group combinators. The fields are not defined as list length or list
-lookup. SourceSizedGroupedTableIndex evaluates finite observations of the
-recursive field equations with the computed bound size+1. The actual
-computed minimum discharges the missing/unproductive-key gate internally.
+The count, selector and rank fields are independently constructed from source
+operations. They are not defined as class-list length, class-list lookup, or
+a search for a term in that class list. The bottom-up rank implementation
+computes child tables structurally, looks up symbol/arity candidates and
+child positions, follows the empty-annotation or representative-group branch,
+checks actual child equality, uses cached prefix products, adds source row
+choice offsets, and preserves the last successful table write.
 
-SourceSizedGroupedPreparedIndex.countAt_eq and selectAt_eq prove exact class
-length and list-position agreement at every natural request size and rank.
-selectAt_none_iff gives the exact out-of-range boundary. root_selection
-proves selection existence iff CURRENT ORIGINAL language acceptance and the
-requested node count. With the actual scoped unambiguity gate,
-selectAt_rank_unique proves that one term cannot occupy different ranks.
-Thus this successful source-model branch has exact counts and one selection
-position per accepted term, in its checked class order.
+SourceSizedGroupedPreparedRank.rankAt_select_iff proves both natural inverse
+directions. SourceSizedGroupedSignedRank.rankSigned_unrank_iff proves both
+directions for ALL Integer size/rank requests, with the literal public rank
+and class-count guard. root_rank_iff and root_rankSigned_iff connect
+rank existence to the current original root language. Acceptance also gives
+the actual node count and a bounded nonnegative rank. No caller supplies
+output layout, output uniqueness, normalized annotations, a minimum
+certificate, a class carrier, or evaluator fuel at these prepared endpoints.
 
-These are finite observations of modeled source fields. They do not prove
-that native lazy Haskell storage realizes those observations. They do not
-attach the cached bottom-up sizedRank operation or prove both complete
-rank/unrank inverse laws. They do not close the full nonplain public
-dispatcher, its failure/fallback branches, or signed Integer query adapters.
-The full final theorem must derive actual preparation and cover its failure.
-An internal successful-branch theorem is not the final public theorem.
+SourceSizedGroupedPublicQueries proves exact signed count/unrank behavior and
+ascending terms/termsFrom class suffixes. It inserts no extra size guard.
+SourceSizedSparseSignedCounts reads a finite stored series at the ORIGINAL
+signed request and proves agreement with those query counts. Negative sizes
+return zero because of the source lookup and the internally proved absence
+of size-zero STATE terms. General constant indices can have a size-zero
+coefficient. The retained constant counterexample prevents a false universal
+signed-to-natural projection.
+
+Finite sparse field operations now realize the independent field counts.
+SourceSizedGroupedSparseMinimum uses the SAME actual global computed minimum
+map at EVERY finite recursive level, including child pay/product seeds.
+SourceSizedSparseProductSplit proves that the literal finite sparse prefix
+and block-subtraction decoder agrees with the dense product decoder. It
+covers omitted sizes and stored zero blocks. Both product inverse directions
+hold. A rank bounded by the actual sparse product count yields bounded child
+ranks and a positive divisor. This closes the finite sparse decoding gap.
+
+These are checked source algorithms and finite field observations. They do
+not establish native Haskell execution of the lazy recursive knot, native
+Map/Set/cache representation, machine Int fast paths, or productive infinite
+queries. Successful helper preparation remains an INTERNAL branch condition.
+The whole public theorem must compose that branch with every other route and
+its failure. It must not impose preparation success on the final caller.
 
 ## New checked components
 
-SourceSizedConjunctionCurrent closes the R114 raw-input semantic gap. It
-uses SourceConstraintEntryRaw.acceptsConstraint, the actual accessor-based
-entry, followed by the complete guard. It derives active extracted classes
-and positive-guard redundancy internally. Classification and complete
-conjunction preparation preserve the current language without ActiveOption.
+SourceSizedReferenceCurrent transports actual residualCheck and structural
+trimming to the current raw root language. It attaches canonical sortedRows
+and the actual accessor-based constraints. Successful reference values have
+exact finite classes, complete distinct size order, and signed inverses.
+It needs no ActiveOption, normalized annotation, or grouped-classification
+success. SourceSizedReferenceCurrentConstructed.selected_reference starts
+from arbitrary original Syntax, uses actual construction, selected preparation
+and cold collection, and derives the original validated table internally.
+An actual returned reference value is still a branch condition. This does
+not prove the mixed dispatcher or native storage theorem.
 
-SourceSizedConjunctionCurrentConstructed starts from arbitrary original
-Syntax and follows actual construction, selected preparation, cold trace,
-computed collection bounds and resulting original-table closure/validation.
-selected_table supplies the original current constraint language and the
-successful complete conjunction language without a SyntaxValid annotation
-premise or a supplied final table, trace, inventory, fuel, or completed worker.
-It also exposes actual classification/cap failure. Native storage and the
-combined total-work theorem remain separate.
+SourceSizedGroupedSparseFields proves constant/map/pay/positive-scale/product/
+choice count fields against the independent field equations, including real
+fromMinimum seeds. SourceSizedGroupedSparseMinimum derives finite-class
+sublists and full-class upper bounds. It then fixes the actual global minimum
+metadata at every recursive level and proves requested-class count equality.
+withKnotMetadata changes metadata only; it preserves count and selector
+fields. Do not invent an outer fromMinimum around the whole recursive index.
 
-SourceSizedGroupedCurrent transports actual trimming and prepared language
-to the original root. SourceSizedGroupedMinimum proves that the actual
-minimumNat computed on the generated finite-key input is attained and bounds
-all grouped members. Missing minima mean all classes are empty. No finite
-State type, supplied productivity certificate or supplied minimum is needed.
-SourceSizedGroupedMinimumIndex covers all conjunction keys, including absent
-ones, and derives the exact minimum-presence gate.
+SourceSizedGroupedRankPrefixes follows actual scanl prefix caching and the
+shortest three-way zip fold. SourceSizedGroupedRankLeaders derives safe group
+representatives and exact child reconstruction from the source equality test.
+SourceSizedGroupedRankCandidates replays both plain and grouped candidates
+through the actual arity and child-lookup order. SourceSizedGroupedRankComplete
+proves the internal accepted candidate exists. These local induction inputs
+are discharged by the later bottom-up/prepared endpoints.
 
-SourceSizedGroupedIndex proves exact native-combinator FIELD arithmetic and
-selection for counted positions. A raw scale selector divides its size even
-when it is not divisible. Correct therefore quantifies over counted
-positions. The outer source count guard rejects all other positions.
-SourceSizedGroupedPlain proves that the literal empty-annotation row shortcut
-agrees with the grouped recurrence for arbitrary child callbacks.
-SourceSizedGroupedTableIndex proves the finite recursive field observations.
-SourceSizedGroupedPreparedIndex composes those results with actual preparation,
-the actual minimum gate, distinctness and the original current language.
+SourceSizedGroupedRankDispatch proves actual ordered row-count offsets and
+last successful write. It establishes replay and existence without assuming
+unique row derivations. SourceSizedGroupedBottomUp derives soundness and
+completeness by structural Term induction over the actual function-table
+algorithm. Its minimum/known-state gate follows prefixesOf. The prepared
+adapter derives its internal closure, valid rows and distinctness from actual
+validation, scoped unambiguity and complete helper preparation.
 
-SourceSizedFromMinimum follows Ranked/Internal/Size.hs839-841: NoFiniteMember
-returns an empty series; a known minimum inserts that size and its current
-coefficient, then drops entries at or below it. It proves ordered lookup and
-coefficient preservation for FINITE sparse series, suffix/read-prefix laws,
-and the internal class-lower-bound adapter. It does not prove productivity
-of a lazy infinite series. Do not substitute the old fixed size-one seed.
+The two new finite sparse adapters close literal product decoding and signed
+count lookup. No term-class materialization appears in the sparse decoder.
+For an out-of-range natural product rank, none represents the source error
+branch. The positive count guard discharges that branch for valid requests.
+Fast Int narrowing/overflow and lazy prefix productivity remain separate.
 
-SourceSizedGroupedPositions proves actual scale-position, paid prefix-count
-and truncating group-product replay, then row-position replay. Child replay
-is still an INTERNAL induction input. Actual candidate dispatch, cache
-attachment and the whole bottom-up rank inverse remain open.
+## Largest gap: one bound for the whole optimized execution
+
+The actual enumerateOutUVarWith, enumerateFully' and enumerateUntil' have
+NEITHER a requested-size parameter NOR a fuel parameter. See Enumeration.hs
+888-1013. A request-based theorem must follow the actual caller construction
+into the graph consumed by these workers. Examples are Specftacular.hs1421
+searchSpace and Gen/Synthesis.hs731 rawSearchSpace. Specftacular termSize197
+omits type subtrees, so program size alone does not immediately bound all
+structural enumeration work. Do not reuse the Sized Integer query bound as
+an unexplained bound for these workers. Do not infer divergence from this
+API distinction.
+
+PathBoundaryBudget.checked_enter_shape_budget ALREADY derives actual
+original-path key-shape consumption without a satisfying-term premise.
+ExecutionOriginalPaths supplies the actual recursive path invariant. Do not
+report the older model-assignment obstacle as still open. The finite shape
+budget applies at one native handle. PathKeyShapes explicitly excludes native
+handles. The remaining progress problem is GLOBAL: derive a joint
+well-founded rank for fresh native handles, repeated-boundary entries, and
+ordinary expansions, or derive an adequate handle bound from original input.
+
+ConstructedResources.native_run/prepared_run derive original construction,
+admission, reservation and stable local work budgets, but still take supplied
+recursiveFuel. The recursive model explicitly permits exhausted. We need to
+derive a sufficient outer recursion budget internally, then reuse those laws.
+For each supplied recursive budget, the original construction currently
+admits a stable bounded run with proved endpoint/output resources. Successful
+modeled workers preserve index validity. This is not whole-driver completion.
+The constructed optimized endpoint also retains cached-annotation and
+selection premises. The current raw reference result does not discharge them.
+
+OutcomeResources retains reached endpoints and emitted output packets.
+Successful Indexed laws keep references below the returned counter. Neither
+alone retains every transient state before rejection or failure. Generic
+EnumerationState failure discards state. A trace or equivalent execution
+invariant must retain those observations and compose later continuations.
+
+EnumerationStateExpansionBounds.nodeAllocationBudget uses maxCost over
+alternatives. That is a branch allocation bound. TOTAL search work must sum
+all processed siblings, including rejected alternatives and callback/native
+operations. Stability above a local workFuel threshold is not a primitive
+operation count.
+
+Generic workers allow arbitrary monadic expansion/oracle callbacks. No
+input-only resource theorem can cover all such callbacks: a callback can
+allocate arbitrarily or fail to terminate. Specialize the final theorem to
+actual enumerateNode/enumerateShallowHere and the concrete default or
+Specftacular callback. Derive callback costs. OraclePreservesIndices alone
+is not a cost or termination theorem. This is a required source attachment,
+not a reason to ask the final user for a resource certificate.
+
+The next primary theorem must compute ONE uniform bound from original input,
+its actual caller/request construction and concrete callbacks. Cover BOTH
+selected-slot expansion and the complete enumeration driver. Cover every
+generated, reached, rejected, failing, returned, subsequent and intermediate
+state. Derive sufficient recursive depth and finite TOTAL processed work,
+including siblings. Do not assume successful supplied fuel or a finite carrier.
 
 ## Formal ordering contract audit and numeric domains
 
@@ -108,19 +177,18 @@ R113 bounds increasing last-child-size sublists in the ACTUAL reference
 recurrence by root row-list length. R114 attaches a fixed three-state chain
 family to the generic finite grouped worker. chain_not_reference proves that
 no ONE fixed reference graph matches that worker at ALL sizes in order.
-The public native worker attachment is still incomplete. This is not yet a
-checked disproof of SourceSizedApiLaws.Exact.finite for the native public API.
-Exact.finite chooses one graph before all sizes. Language equality alone
-does not establish this ordered field. No contract changed.
+Native public worker attachment remains incomplete. This is not yet a checked
+disproof of SourceSizedApiLaws.Exact.finite for the native public API.
+Exact.finite chooses one graph before all sizes. Exact ordered class/rank
+laws for a branch do not imply that field. No contract changed.
 
-CORRECTION: cfta/src/Data/CFTA/Index.hs158 defines Size = Integer. Rank94,
-Cardinality101 and ClassRank166 also use Integer. They are not machine Int
-request domains. Therefore a machine-size cap does not remove the all-size
-ordering question. ChildIndex41 and TransitionIndex49 use Int; internal IDs
-and word bounds remain separate obligations. Signed negative-size/rank
-behavior still needs its public adapter proof. Sized.hs180-200 checks rank
-nonnegativity and the class count before raw selection. The size check is
-indirect through the count. Do not invent an extra literal size guard.
+cfta/src/Data/CFTA/Index.hs158 defines Size = Integer. Rank94, Cardinality101
+and ClassRank166 also use Integer. They are not machine Int request domains.
+A machine-size cap does not remove the all-size ordering question.
+ChildIndex41 and TransitionIndex49 use Int. Internal IDs, word bounds and
+fast-path arithmetic remain separate. R116 closes the prepared source signed
+query adapters. Sized.hs180-200 checks rank nonnegativity and class count;
+size rejection comes indirectly from that count. Do not invent a size guard.
 
 ## Haskell/source findings for external work
 
@@ -128,125 +196,135 @@ The R114 raw example stores singleton {[2]}, guard Same [0] [1], and term
 f(a,a). The positive-guard accessor removes that trivial class and retains
 {[0],[1]}; the current accessor-based entry accepts. The older stored-field
 entry rejects because [2] is absent. With Top, the accessor retains the
-singleton and both reject. This is a checked FORMAL MODEL gap, not a native
-runtime defect. R115 repairs the general successful conjunction endpoint.
-Other source/reference routes must use the current entry or explicit checked
-compatibility. Do not assume all public constructors normalize raw payloads.
+singleton and both reject. This was a FORMAL MODEL gap. R115 repaired the
+successful conjunction endpoint. R116 repairs the general successful
+reference endpoint. Other routes still need the current entry or explicit
+checked compatibility. Do not assume raw constructors normalize payloads.
 
-Source references remain Constraint.hs105-106,129-136,146-154;
+Source references are Constraint.hs105-106,129-136,146-154;
 Refinement/Evaluate.hs309-313; Sized.hs231; Gen/Internal/Table.hs378-383;
-and Equality/Constraint.hs273-276,367-374,381 onward. The public raw
-EqConstraints and PathEClass constructors do not enforce the documented
-normal-form invariant. Actual reference enumeration and equalChildren use
-the accessor, so the example establishes no native/reference disagreement.
-No Haskell runtime repair is justified by this example or the order audit.
+and Equality/Constraint.hs273-276,367-374,381 onward. Public EqConstraints
+and PathEClass constructors do not enforce the documented normal form.
+Actual reference enumeration and equalChildren use the accessor. The raw
+example proves no native/reference disagreement. No Haskell runtime repair
+is justified by it, the order audit, or the new finite sparse laws.
 
 PENDING HASKELL COMMENT REPAIR: cfta/src/Data/CFTA/Enumeration.hs422 says
 getUVarValue path-compresses its representative. Internal/UnionFind.hs129-130
 returns (root uv uf,uf), with the same forest. Suggested comment: Look up the
 value stored at a UVar's representative. The comment has not changed.
-Record every later verified Haskell fix here for external work. This turn
-changed only Lean and proof documentation. No Haskell build, fourmolu,
-cabal-gild or Haskell runtime test is claimed.
+Record every verified Haskell fix here for external work. This turn changed
+only Lean and proof documentation. No Haskell build, fourmolu, cabal-gild,
+Haskell runtime check or full CI is claimed.
 
-## Full remaining objective and original-input bounds
+The actual sparse source is cfta-generator/src/Data/CFTA/Ranked/Internal/Size.hs.
+Its productSplit765-784 uses finite-prefix block subtraction and quotRem.
+Its valueAtSize849-852 compares the ORIGINAL Integer request to stored keys.
+withKnotMetadata666-677 preserves fields. Actual fromMinimum839-841 seeds the
+pay/product operations. Preserve these distinctions in future source adapters.
 
-1. Realize the checked finite source field observations with the actual lazy
-   sparse index and native Map/Set representation, ordering, sharing, reads
-   and writes. Prove productive count/selection queries from actual input.
-   Then attach cached bottom-up ranking and BOTH inverse laws in actual order.
-   Resolve Exact.finite only after auditing the actual public ordered worker.
+## Full remaining objective and original-input component bounds
+
+1. Realize finite source observations and bottom-up rank inverses with the
+   actual lazy sparse knot, native maps/sets, sharing and cache reads/writes.
+   Prove productive demanded queries. Prove machine fast-path correctness.
+   Resolve Exact.finite against the actual public ordered worker.
 2. Finish the COMPLETE current Sized dispatcher: errors/residuals, retained
-   and missing roots, all plain/nonplain gates, shared/decorated sorts,
-   classification and source caps, reference fallback, signed Integer
-   requests, and missing empty callbacks. A missing map key may have
-   unrestricted original language. Preserve that boundary.
-3. Carry current accessor-based constraint semantics through every relevant
-   source/reference route. Reuse normalized compatibility where it applies.
+   and missing roots, plain/nonplain gates, shared/decorated sorts,
+   classification and source caps, reference fallback, signed requests, and
+   missing empty callbacks. A missing key can have unrestricted original
+   language. Preserve that boundary. Do not impose helper success on callers.
+3. Carry current accessor-based constraints through every relevant route.
    Retain original construction, readiness and normalized-allocation evidence.
-4. Prove ONE computable original-input/request-size bound for BOTH optimized
-   enumerateOut and enumerateFully. Cover every generated, reached, returned,
-   subsequent, intermediate and failing state and TOTAL branch work. Derive
-   reached-word, capacity and machine-index conditions from that actual input.
+4. Prove ONE computable original-input/request-derived bound for BOTH
+   optimized enumerateOut and enumerateFully, with actual caller construction
+   and callbacks. Cover all states and TOTAL branch work as stated above.
+   Derive reached-word, capacity and machine-index conditions from that input.
 5. Finish native/Haskell identity, cache, interner, Eq/hash and machine-index
-   correspondence. Keep the optimized interned core primary and the older
-   constructor/Eq targets secondary. Do not replace the final objective with
-   caller resource, closure, finite-carrier, completed-worker, success/fuel,
-   validity or OriginalInput surrogates. The combined native execution
-   theorem and total original-input work bound remain the largest gap.
+   correspondence. Keep the optimized interned core primary. Preserve the
+   older constructor/Eq work. Do not replace the final goal with caller
+   resource, closure, carrier, completed-worker, success/fuel, validity or
+   OriginalInput surrogates. Native execution plus the global total-work
+   theorem remain the largest gap.
 
 R113 is still only a COMPONENT work bound. Let N be original declared keys,
 R=max(1,total original rows), and M maximum original row arity. Actual
 validation/classification derive closure and distinct source-key members.
 Every stored/pending conjunction key has length<=N. Full uncapped tuples,
-intersection rows and intermediate product suffixes have length<=R^N. The
-actual limit1024 explorer has <=1024^2*M+2 checking rounds. Aggregate full
-raw-tuple charge is <=(1024^2*M+2)*R^N, including visited/failing heads.
+intersection rows and intermediate product suffixes have length<=R^N.
+Actual limit1024 exploration has <=1024^2*M+2 checking rounds. Aggregate
+full raw-tuple charge is <=(1024^2*M+2)*R^N, including visited/failing heads.
 Comparisons, filters, normalization, sorting, allocation, native containers
-and other branch work are excluded. This is not the combined total bound.
-The finite size+1 observation bound also does not establish total native work.
+and other branch work are excluded. The finite size+1 observation bound
+also does not establish total native work or productive infinite storage.
 
 Reuse SourcePruningEnumerationSelectedSource.prepare/complete,
 ColdGuardedExact.trace_table_exact, ColdSized.source_sized,
 ColdNativeSized.complete, NormalizedNativeSized.complete and
 SizedEntryCorrect.complete_both_exact/constructed_complete. Their native,
 reached-word and SourceCyclicRows boundaries remain. SourceCyclicRows is not
-every current Sized route. Internal branch conditions must be composed into
-the outer theorem rather than supplied as final user obligations.
+every current Sized route. Compose internal branch conditions into the outer
+theorem. Retain the earlier full-scope proof targets and counterexamples.
 
 ## Verification, disk use and publication
 
-All eleven actual Lake targets and 87 public own-source/axiom laws passed.
-Sources total 116656 B. Compact reproducible packets total 55641 B. Each
-packet contains check.py, theorems.json, checked.json and README.md. Every
-final source hash matches its checked report. Checks use shell.nix and Lean
-4.34.1. Own-source reports use -j1 and warnings-as-errors. Only propext,
+All FIFTEEN new actual Lake targets and 128 public own-source/axiom laws passed.
+Sources total 173548 B. Compact reproducible packets total 79649 B. Every
+packet has check.py, theorems.json, checked.json and README.md. Every final
+source hash matches its checked report. Checks use shell.nix and Lean4.34.1.
+Own-source reports use -j1 and warnings-as-errors. Only propext,
 Classical.choice and Quot.sound occur. Jobs were strictly SERIAL in 4G
 heavy-management scopes. All compiler jobs are terminal. The largest recorded
-scope peak was 911M, including terminal failed checks. Every repaired final
-source passed. No unchanged successful source received another own-source
-check without a new reason. Do not report an outer failed batch as successful
-because one stage passed.
+scope peak was 602M, including failed checks. Every repaired final source
+passed. No unchanged successful source received another own-source check
+without a new reason. Do not label a failed batch successful because an
+earlier stage passed. Initial failed drafts and repair context are retained.
 
 Verified modules and packet paths:
-- SourceSizedConjunctionCurrent: 10 laws; lean/restart-evidence/20261107-sized-conjunction-current/.
-- SourceSizedConjunctionCurrentConstructed: 4 laws; lean/restart-evidence/20261107-sized-conjunction-current-constructed/.
-- SourceSizedFromMinimum: 13 laws; lean/restart-evidence/20261107-sized-from-minimum/.
-- SourceSizedGroupedCurrent: 3 laws; lean/restart-evidence/20261107-sized-grouped-current/.
-- SourceSizedGroupedIndex: 19 laws; lean/restart-evidence/20261107-sized-grouped-index/.
-- SourceSizedGroupedMinimum: 4 laws; lean/restart-evidence/20261107-sized-grouped-minimum/.
-- SourceSizedGroupedMinimumIndex: 5 laws; lean/restart-evidence/20261107-sized-grouped-minimum-index/.
-- SourceSizedGroupedPlain: 5 laws; lean/restart-evidence/20261107-sized-grouped-plain/.
-- SourceSizedGroupedPositions: 7 laws; lean/restart-evidence/20261107-sized-grouped-positions/.
-- SourceSizedGroupedPreparedIndex: 7 laws; lean/restart-evidence/20261107-sized-grouped-prepared-index/.
-- SourceSizedGroupedTableIndex: 10 laws; lean/restart-evidence/20261107-sized-grouped-table-index/.
+- SourceSizedReferenceCurrent: 11 laws; lean/restart-evidence/20261107-sized-reference-current/.
+- SourceSizedReferenceCurrentConstructed: 1 laws; lean/restart-evidence/20261107-sized-reference-current-constructed/.
+- SourceSizedGroupedSparseFields: 20 laws; lean/restart-evidence/20261107-sized-grouped-sparse-fields/.
+- SourceSizedGroupedSparseMinimum: 10 laws; lean/restart-evidence/20261107-sized-grouped-sparse-minimum/.
+- SourceSizedGroupedRankPrefixes: 6 laws; lean/restart-evidence/20261107-sized-grouped-rank-prefixes/.
+- SourceSizedGroupedRankLeaders: 5 laws; lean/restart-evidence/20261107-sized-grouped-rank-leaders/.
+- SourceSizedGroupedRankCandidates: 4 laws; lean/restart-evidence/20261107-sized-grouped-rank-candidates/.
+- SourceSizedGroupedRankComplete: 3 laws; lean/restart-evidence/20261107-sized-grouped-rank-complete/.
+- SourceSizedGroupedRankDispatch: 14 laws; lean/restart-evidence/20261107-sized-grouped-rank-dispatch/.
+- SourceSizedGroupedBottomUp: 6 laws; lean/restart-evidence/20261107-sized-grouped-bottom-up/.
+- SourceSizedGroupedPreparedRank: 5 laws; lean/restart-evidence/20261107-sized-grouped-prepared-rank/.
+- SourceSizedGroupedPublicQueries: 17 laws; lean/restart-evidence/20261107-sized-grouped-public-queries/.
+- SourceSizedGroupedSignedRank: 6 laws; lean/restart-evidence/20261107-sized-grouped-signed-rank/.
+- SourceSizedSparseProductSplit: 10 laws; lean/restart-evidence/20261107-sized-sparse-product-split/.
+- SourceSizedSparseSignedCounts: 10 laws; lean/restart-evidence/20261107-sized-sparse-signed-counts/.
 
-Runtime: /tmp/mcfta-grouped-native-20261107-1333/. Read RESUME.json,
+Runtime: /tmp/mcfta-native-rank-20261107-1421/. Read RESUME.json,
 verified-manifest.json, proof-commits.json, heavy-peaks.tsv, publication.json,
 canonical-board-readback.json, doc-tail-manifest.json and tmp-audit-current.json.
 Final publication records are written after push and canonical readback.
-The previous R114 runtime is /tmp/mcfta-conjunction-language-20261107-1244/.
+The previous R115 runtime is /tmp/mcfta-grouped-native-20261107-1333/.
 
-The four proof commits are:
-- 6dfe2b347735ec3113c0fb7a6682ae0742d30c4b Prove current raw-constraint language preservation through preparation
-- d6cccaf7641ee11c45dcb73556281246ad811f29 Verify grouped count and selector combinators in source order
-- 0dafa73fa134ba113a3448baf2a51bddb5505ef7 Derive prepared minimum gates and verify sparse minimum seeds
-- e6d31d14d8588ff32dc104700f8981d6419c21e7 Attach finite source count and selection to the original language
+The six proof commits are:
+- 8d92bf7d37e8f0e8d45422142f2ce6a954d77710
+- 62c43b9fa3ba0da6bc70a7e699216871a783ac95
+- 08577668088704efeb46b8fbd5a33cba01502ac7
+- 7a6cfdacd1ba6d53c174e0e83fc51f1a35e36921
+- a76bf75e624ad45575ce00350f93dfcb2b45bbf0
+- 89ef312823731271a9faa87502ec55900d057904
 
-The latest readable /tmp audit measured 14061568 allocated B
-and 191731101696 free B. Six private entries were inaccessible.
-This runtime used 221184 allocated B before the
-final compact handoff records. No copied source/build trees or large archives
-were produced. The evidence reproduces from tracked source and shell.nix.
-No additional deletion was needed. Continue checking /tmp during later work.
+The latest readable /tmp audit measured 14716928 allocated B
+and 191681871872 free B. 5 private entries were inaccessible.
+This runtime used 323584 allocated B before final compact
+handoff records. No copied source/build trees or bulk archives were produced.
+The proof reports reproduce from tracked source and shell.nix. No additional
+deletion was needed. Continue checking /tmp during later work.
 
 Push formalize normally under standing authorization. Verify independent
-ls-remote, refresh origin/formalize and check main ancestry. Publish R115 on
+ls-remote, refresh origin/formalize and check main ancestry. Publish R116 on
 thread1c1333d7-46ea-4f46-a9a1-b5d13e577337. Save exact request arguments before
 writing. Compare canonical author, title, text and metadata.commit separately.
 A write response is not canonical readback. Goal remains ACTIVE.
 
-Only this common restart prefix changes. All historical tails below remain
+Only this common restart prefix changes. Historical tails below remain
 byte-for-byte unchanged, with checked hashes. Preserve old counterexamples,
 repairs and marked drafts. Historical quotas and source/TYPE receipt gates
 are superseded. Do not recreate large receipt trees or evidence archives.
