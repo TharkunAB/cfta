@@ -12,10 +12,10 @@ then satisfies the full signed Sized specification at each original root.
 The result also holds after a permutation of each row, including row sorts.
 The query order is the transformed row graph's order.
 
-The ordered source map/set representation, finite canonical-sort input,
-and current public Sized routing still need their source attachments.
-The permutation theorem does not supply these attachments as assumptions
-of a completed public theorem. This module does not bound total work.
+Other modules construct finite canonical inputs and ordered map/set views.
+Their native Haskell correspondence and current public Sized routing remain
+separate. The general closed-row composition supports those derived views.
+This module does not bound total work.
 -/
 namespace MicroCFTA.SourceSizedDeterminizationQueries
 open Language RecursiveSize
@@ -103,6 +103,27 @@ private theorem permuted_unique (states : List State) (source : Automaton State 
   exact RecursiveUnambiguous.enumerate_nodup ordered plainOutput (fun _ => True) (by simp)
     (fun state _ => disjoint state) size state trivial
 
+/-- Derived closed rows give exact optimized queries after a concrete row permutation. -/
+theorem closed_ordered_queries_exact (states : List State) (source : Automaton State Symbol)
+    (plain : Decoder.Plain source)
+    (supported : ∀ state edge, edge ∈ source state → state ∈ states)
+    (known : List (List State)) (choices : List (Choice State Symbol))
+    (closed : Closed states source known choices)
+    (ordered : Automaton (Sum State (List State)) Symbol)
+    (permutation : ∀ state,
+      (ordered state).Perm (SourceSizedDeterminizationRows.rows states source choices state))
+    (root : State) :
+    SourceSizedApiLaws.Exact (optimizedApi ordered (.inl root)) (Accepts source root) := by
+  have plainOutput : Decoder.Plain ordered := by
+    intro state edge member term
+    exact plain_rows states source choices state edge ((permutation state).mem_iff.mp member) term
+  rw [optimizedApi_of_unique ordered plainOutput
+    (permuted_unique states source plain supported choices closed.distinct ordered permutation)]
+  apply SourceSizedApiLaws.reference
+  intro term
+  exact (SourceCyclicAutomaton.permutation_language _ ordered permutation (.inl root) term).trans
+    (SourceSizedDeterminizationRows.left_accepts_iff states source plain supported known choices closed root term)
+
 /-- Row sorting preserves exact counts and inverse ranks in the resulting transformed order. -/
 theorem ordered_queries_exact (limit : Nat) (states : List State) (source : Automaton State Symbol)
     (plain : Decoder.Plain source)
@@ -113,16 +134,9 @@ theorem ordered_queries_exact (limit : Nat) (states : List State) (source : Auto
     (permutation : ∀ state,
       (ordered state).Perm (SourceSizedDeterminizationRows.rows states source choices state))
     (root : State) :
-    SourceSizedApiLaws.Exact (optimizedApi ordered (.inl root)) (Accepts source root) := by
-  have closed := SourceSizedDeterminizationRun.compile_closed limit states source known choices returned
-  have plainOutput : Decoder.Plain ordered := by
-    intro state edge member term
-    exact plain_rows states source choices state edge ((permutation state).mem_iff.mp member) term
-  rw [optimizedApi_of_unique ordered plainOutput
-    (permuted_unique states source plain supported choices closed.distinct ordered permutation)]
-  apply SourceSizedApiLaws.reference
-  intro term
-  exact (SourceCyclicAutomaton.permutation_language _ ordered permutation (.inl root) term).trans
-    (rows_language limit states source plain supported known choices returned root term)
+    SourceSizedApiLaws.Exact (optimizedApi ordered (.inl root)) (Accepts source root) :=
+  closed_ordered_queries_exact states source plain supported known choices
+    (SourceSizedDeterminizationRun.compile_closed limit states source known choices returned)
+    ordered permutation root
 
 end MicroCFTA.SourceSizedDeterminizationQueries
