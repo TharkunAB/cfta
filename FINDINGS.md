@@ -1,177 +1,160 @@
-# Current checkpoint: 2026-11-07 00:53 CET
+# Current formalization checkpoint: allocation invariants
 
-The full goal remains active. This round made mathematical progress.
-The parent on `formalize` is `bfeb49c74e37a143391b111de6ce85574f9175c3`.
-A fresh `pull --ff-only` found no upstream changes.
-Fetched `main` remains `bd5a406a6a3f84b7e3ae0906082783911509df83`.
-Preserve unrelated untracked `.hypha/`. Push authorization for `formalize` remains in effect.
+Updated 2026-11-07 01:20 CET. Status: PROGRESS. Full goal remains ACTIVE. The current
+`formalize` HEAD identifies this checkpoint after publication. Its parent is
+`fe20299346c51d251c449f78c6097e7cec6ac912`. Main remains
+`bd5a406a6a3f84b7e3ae0906082783911509df83` after a fresh fetch. The branch was
+up to date before this work. Preserve the unrelated untracked `.hypha/` directory.
 
-## New checked uniform representative and union fuel
+## Strongest new result and biggest gap
 
-`lean/MicroCFTA/UnionFindSupport.lean` now proves `findRoot_uniformFuel`.
-If a `UF.Total` forest stores no key at or above `bound`, EVERY query succeeds
-with the same explicit fuel `bound + 1`.
-The query identity can lie outside that bound.
-This theorem needs no parent-target bound or query-range premise.
-Support and `Total` remain internal invariants, not final caller conditions.
+The actual Lean model initialization establishes a counter of1, one value slot,
+finite UF support below the counter, parents below the counter, and `UF.Total`.
+Every actual model allocation succeeds with one result. It returns the old counter,
+increments the counter once, and adds one value slot. It preserves the UF forest,
+obligations, and expansion ancestry. Its ancestry update preserves the other fields.
+The counter/value-count agreement and UF support, parent, and Total invariants hold
+after allocation at the new counter. These are model UVar IDs. They are distinct
+from native interned node and edge IDs.
 
-The proof counts parent frames in the actual finite reachability path.
-`ParentDepth` is a proof-only count, not a supplied resource.
-Depth uniqueness gives a distinct list of stored parent keys.
-Every key in that list lies below the storage support bound.
-The list therefore has length at most `bound`.
-A path with `depth` parent frames executes with exactly `depth + 1` fuel.
-The actual fuel-extension theorem then gives the literal allowance `bound + 1`.
-The proof does not choose a maximum of per-query successful-fuel witnesses.
-`Classical.choice` occurs in the proof-only list cardinality lemma.
-The resulting fuel expression is computable and does not depend on that choice.
+The earlier checked UF result supplies explicit fuel. A `Total` forest supported
+below b admits a successful `findRoot (b+1)` for EVERY queried Nat. It needs no
+parent-bound or query-range premise for success. Initialized lookup needs no caller
+invariants. Union succeeds at grown+1 for both searches, where
+grown=max b(max(left+1)(right+1)); it preserves storage and parent bounds. Its
+initialized corollary discharges all internal invariants. The fuel expressions are
+computable. Classical choice occurs only in the earlier cardinality proof.
 
-`findRoot_initial_uniformFuel` discharges both invariants for any input variable list.
-Its common fuel is `initialBound variables + 1`, for every queried identity.
-`union_uniformFuel` computes `grown = max bound (max (left + 1) (right + 1))`.
-Both actual searches succeed with `grown + 1` fuel.
-The returned forest has storage and parent bounds below `grown`.
-The internal parent bound supports this union composition.
-`union_initial_uniformFuel` discharges support, parent bounds, and totality.
-It uses only the initial variable list and the two queried identities.
-The initialization corollaries add no support, validity, success, or fuel premise.
-These proofs identify successful fuel values. They do not yet wire them into both workers.
+The largest gap remains one bound computed from ORIGINAL inputs and requested size
+for BOTH actual optimized `EnumerationState.enumerateOut` and `enumerateFully`.
+It must cover allocation/query identity growth, all work BETWEEN checkpoints, and
+ALL generated, returned, and subsequent states. The four new local laws do not
+bound the number of allocations. They do not close the complete worker theorem.
+Do not replace that missing result with a caller assumption.
 
-The earlier checked support laws remain unchanged.
-Initialization supplies `initialBound` from any input list.
-This function is the maximum listed identity plus one, or zero for an empty list.
-`ParentsBelow` bounds stored parent targets.
-Actual `findRoot`, `link`, and `union` preserve both bounds on successful returns.
-Their query-growth corollaries permit arbitrary queried identities.
-The stronger parent invariant remains necessary for fixed-bound storage preservation:
-actual find stores a singleton root at a missing terminal identity.
-It is not necessary for the uniform search-fuel theorem.
+Retain exact accepted node-count terms, counts, order, and BOTH rank/unrank inverse
+laws. Retain actual Haskell/source/API/runtime/IDs/cache/interner/Eq/hash and native
+Graph/intersection/bothOracle correspondence. No new supplied carrier, closure,
+resource, completed-worker, success, fuel, OriginalInput, or validity premise is
+allowed at the final scope. Keep the optimized interned core PRIMARY. Preserve
+older constructor and equality work as secondary targets. Large theorem totals
+and passing component checks do not establish the complete system claim.
 
-The actual module build and all TWENTY-SEVEN source/axiom checks passed in `shell.nix`.
-The report uses Lean4.34.1, `-j1`, and `-DwarningAsError=true`.
-Only `propext`, `Classical.choice`, and `Quot.sound` are allowed. No `sorryAx` is allowed.
-Checks used4GiB memory max/high and no swap.
-The final source has22872bytes and SHA-256
+## Checked source and reproduction
+
+New module: `lean/MicroCFTA/EnumerationStateAllocation.lean`,3593B, SHA-256
+`f7f105b76bf6bf606066bfe7e2fbf14c29973361d02fc461da04995cc0d62ff3`.
+Its four checked theorems are `inheritAncestry_frame`, `allocate_frame`,
+`allocate_preserves_invariants`, and `initial_invariants` in namespace
+`MicroCFTA.EnumerationStateAllocation`. The local invariant premises are internal
+induction conditions. Initialization establishes them without caller premises.
+
+The first normal source/axiom check passed with exit0(exec52157). The actual module
+build and portable source/axiom check passed with exit0(exec34232). Both used the
+project Nix shell, Lean4.34.1, one thread, warnings as errors, and a4GiB cap with
+swap0. The final wall cap was360s. Reported peaks were564M and164M. The frame law
+for ancestry has no axioms. The allocation frame and preservation laws use only
+`propext`. Initialization uses only `propext` and `Quot.sound`. No `sorryAx` occurs.
+No proof job remains live. Do not repeat unchanged checks without a new reason.
+
+The portable packet is `lean/restart-evidence/20261107-enumeration-allocation/`.
+Its `check.py` builds the actual module, checks the source and all four axiom
+reports, and removes its temporary source report. `theorems.json`, `verification.json`,
+`source-boundary.json`, and `REPRODUCE.md` record the checked scope and recipe.
+The whole packet is about12KB. No build tree or private Source copy is needed.
+
+The earlier UF module stays unchanged at22872B/SHA-256
 `53bb7d437829f2047ccc88d90c169037f07eb0b3140d0972ba2b1614eb2b4fff`.
-The final module-build and report run55841 exited zero. No proof check remains live.
-All sixteen earlier theorem declarations remain byte-identical.
-No whole-library or Haskell compilation ran.
+Its27 checks passed in the prior checkpoint and were not repeated unchanged.
+Its portable packet remains `lean/restart-evidence/20261106-union-find-support/`.
+The earlier `SourcePruningEnumerationActionTotal.prepare_total` remains unchanged
+at source SHA`e4bc14ff590068ca156e9f02e07b1a72f0257da7573291be67122da1a73597cd`.
+It is conditional on a prepared successful operation. It does not prove complete
+worker success, a common numeric fuel, or whole-system termination.
 
-The source-based recipe and result remain in
-`lean/restart-evidence/20261106-union-find-support/`.
-The recipe checks all twenty-seven lemmas from current source and deletes its temporary report.
-It needs no archived build tree, source copy, or cumulative rolebook.
-The small packet has about17KB of tracked metadata and reproduction code.
+## Haskell findings and remaining implementation boundaries
 
-## Biggest remaining mathematical gaps
+No Haskell fix or reachable counterexample was established in this checkpoint.
+No Haskell code changed. No whole-library or Haskell build ran for these four
+proof lemmas. Preserve every earlier counterexample, repair, and marked draft.
 
-Uniform representative fuel from a current supported total forest is now proved.
-The next execution gap is a bound on every actual worker allocation and query identity.
-Derive that bound from original inputs and requested size.
-Apply it to ALL generated, returned, and subsequent heaps.
-Instantiate both optimized workers with the derived common resource values.
-Bound total work between recursion checkpoints as well as recursion depth.
-A current-heap support bound is not yet an original-input worker bound.
+Fresh public metadata locates Haskell `nextUVar`384/385, `addUVarValue`391,
+`getUVarRepresentative`415, and `initEnumerationState`297 in Enumeration.hs.
+These are names and numeric locations only. They do not establish the allocation
+body contract or source correspondence. The current Haskell Enumeration per-Original
+receipt intervals and cap are not positively retained here. Do not infer them.
+The earlier FINAL designation remains exactly Enumeration+Facade, with no third.
 
-`MicroCFTA.SourcePruningEnumerationActionTotal.prepare_total` remains at line33.
-For arbitrary local fuels, if preparation returns an operation and that operation
-succeeds from a `UF.Total` heap, its output heap is `UF.Total`.
-The unchanged theorem was not rerun.
-The new uniform UF fuel does not establish whole-worker existence or termination.
-
-## Full remaining target
-
-Cover BOTH actual optimized workers, `enumerateOut` and `enumerateFully`.
-Derive one computable bound from original inputs and requested size.
-It must cover every generated, returned, and subsequent state.
-Preserve exact accepted terms by node count, counts, enumeration order,
-and both rank/unrank inverse laws.
-Complete actual Haskell source/API, identities, caches, interning, equality,
-and hashing correspondence. Keep the optimized interned core primary.
-Preserve older constructor and equality work as secondary targets.
-Add no supplied carrier, closure, resource, completed-worker, success, fuel,
-OriginalInput, or validity premise.
-
-Actual native Graph and Oracle realizers and their laws remain open.
-Preserve outer recursion classification before node expansion.
-Flattened `nodeEdges` output alone does not realize `Graph.node`.
-The native intersection contract and both Oracle preservation laws remain open.
-Derive coverage, lineage, and progress for their actual transitions.
-
-## Haskell findings for external implementation work
-
-No Haskell fix or worker-reachable counterexample was established here.
-The new numeric fuel proofs concern actual Lean UF operations.
-The native fallback worklist has an explicit error for a Rec member.
-Prove that both workers exclude it, or account for the implementation behavior.
-Do not map it to model emptiness or add a caller validity premise.
-Direct paths preserve stored edge order. The fallback uses
-`Set.fromList` and `Set.toList` with stored edge identities.
-Language-set equality alone does not prove counts, order, or rank.
-
-The received Mu matcher uses `muPlaceholder` and `substFree`.
-Their complete contracts and actual loaded bindings remain open.
-Constructor disjointness alone does not prove recursive comparison terminates.
-Memo laws, substitution, finite closure, and object correspondence remain open.
-The Haskell compiler-context work remains secondary. Resolve the known Cabal
-3.18.1.0/3.16.0.0 mismatch through Hypha before dependency API lookup.
-Do not copy a build tree or mutate the protected build plan.
+Native Graph and intersection realization and both Oracle laws remain open.
+Graph.node must preserve outer recursive classification before expansion. Direct
+nodeEdges paths preserve order and handle Empty/directRec[]. Mu uses ordinary
+unfolding. Fallback worklists use recursive identities and union. Prove that BOTH
+workers exclude the Rec-worklist member error or account for its actual behavior.
+A caller validity premise does not solve that obligation. Stored edge IDs and
+order affect counts and ranking; language set equality alone is insufficient.
+Mu placeholder/substFree contracts and bindings, recursive comparison termination,
+and actual GHC names/objects/memoTypeableWith/interner/Eq/hash laws remain open.
+The Cabal CLI3.18.1.0/GHCDB3.16.0.0 mismatch is secondary. Use Hypha before dependency
+API lookup. Preserve the protected plan and build tree. Do not copy them.
 
 ## Source boundary and carried history
 
-The same Native actor received private Source39–44,201–210,160–180,181–200.
-Forty-nine new unique rows were reserved before their respective guards.
-Complete `Reaches`39–42 records a finite path and terminal size.
-`Total`201 supplies such a path for every identity.
-`findRoot_terminates`160–178 states per-path existence without a numeric bound.
-`findRoot_moreFuel`181–198 preserves the SAME full successful Result.
-`findRoot_total`204–208 preserves totality after a successful search.
-The earlier interface, initializer, Result, find, link, and union receipts remain carried.
-These bounded receipts do not establish a complete lexical attachment audit.
-The checked theorems reference the actual qualified Lean constants.
+Root received public names and numeric metadata only for Original files. The SAME
+Native reader positively retained EnumerationState.lean prefix1..329: U329/699LF,
+strictcap349,remaining20. This known per-Original history was restored from that
+reader. The global alias history and old rolebooks remain unavailable.
 
-All four new private receipts passed ten current-local role checks before, after,
-and at a separate final phase. Each capture passed six declared local roles.
-The public-name/numeric locator passed its five declared local roles.
-These checks do not recover the removed global rolebook or full alias history.
-The old runtime directory remains absent:
-`/tmp/mcfta-runtime-packet-producer-normal-20261104-1205`.
-SourceProcessFAIL and Root Original-Source upper UNKNOWN remain permanent.
-Root viewed no body from these Original Source windows.
-Keep private TYPEs and old diagnostics opaque.
-State/BinderInfo probe507 remains held. No primary dependency was established.
+The following already-owned Source spans were replayed privately to that SAME reader:
+67..79,113..121,132..139,126..131,80..88. This repeats45LF and adds ZERO unique Source.
+Every capture passed6roles x3phases. Every private view passed9roles x3phases. Root
+independently verified the result metadata. Public model and Haskell locators passed
+6roles and7roles respectively, each x3phases. No OriginalTYPE view or compiler-interface
+probe occurred. The original model remains33489B/699LF/SHA-256
+`83a898b883ec7b52469bccd87e8afa4f7abb320e3c935bf48f3d80ad77003cc4`.
+Root MUST NOT read private Source payloads or raw compiler diagnostics.
 
-All reservations precede their corresponding guards and remain charged after failure.
-Native CFTA is2565 across49 Originals. Semantic Std remains516/7; shared Std809/7.
-Semantic Source is3081. Shared Native Source is3374 across56 Originals.
-UF has152 reserved rows out of808, with strict cap403 and251 rows remaining.
-Haskell Source remains5425/10. Type is459/922, cap460; one row remains.
-Operations is420/887, cap443. FINAL slots remain Enumeration and Facade.
-B remains3048/29, workflow40 reserved, queries37, reuses2, replay4.
-Captures remain157; interfaces155. Do not reset actors, aliases, or quotas.
-The full old alias/history packet cannot be checked after its removal.
+Permanent carried totals remain Native CFTA2565/49Originals; semanticStd516/7,
+sharedStd809/7; semanticSource3081,sharedNative3374/56; UF152/808 strictcap403
+(rem251); Haskell5425/10; Type459/922 cap460(rem1); Ops420/887 cap443(rem23).
+B3048/29,workflow40reserved,queries37,reuses2,compiled-channel replay4,
+compiledcaptures157/interfaces155 remain unchanged. Never reset or repartition
+actors, aliases, or quotas. Unknown other per-Original histories remain unknown.
+The UF reservation intervals remain in the prior runtime's
+`RESERVED-UF152-ADMISSION.json`. All earlier reservations remain charged.
+PrimitiveTYPE1401,actual32TYPE396,failed old TYPE diagnostics, and State two-TYPE777
+remain opaque. State/BinderInfo507 remains HELD; no primary dependency is established.
 
-Old12825-byte support-source pins are historical after the checked22872-byte installation.
-Do not reuse stale expectations in a new Source job. Refresh the current local roles.
-All sixteen prior declarations before the namespace end remain byte-identical.
-The first cardinality draft used unavailable Subperm helpers; the final proof uses
-`List.Nodup.length_le_of_subset` explicitly.
-Qualify `MicroCFTA.UnionFind.read` in proof simplification to avoid an imported read collision.
-Keep recursive `depth + 1` fuel symbolic before simplification so the success equality still rewrites.
-The final bound proof uses an explicit decidable Nat case split.
-All failed own drafts remain small and marked by their runtime names.
+Historical SourceProcessFAIL and Root Original-Source upperUNKNOWN are PERMANENT.
+Current local guards and kernel checks do not recover the historical/global audit.
+Do not reconstruct a false ledger or a large alias book. Future Source jobs need
+fresh current pins, including the new3593B own module and the unchanged22872B own
+UF module. Current private views preceded new own module installation. Older
+12825B/2453B/888B own-module pins are historical, not current admissions.
 
-New scratch remains below0.25MB. Latest filesystem free space is about193GiB.
-Readable /tmp content is about6.4MiB; five system-private directories are excluded.
-The filesystem lost about114GiB while this round created only151KB of scratch.
-A noninteractive privileged /tmp measurement was unavailable. No deletion ran.
-No cleanup or build-tree copy ran this round. Keep future receipts small.
-Preserve the opaque historical document tails below.
+## Restart and storage
 
-The earlier checkpoint below is historical.
+Current runtime is `/tmp/mcfta-worker-ids-20261107-0100`. It contains tiny guarded
+metadata, private receipts, and the own checker. The prior checkpoint runtime is
+`/tmp/mcfta-uf-fuel-20261107-0025`. Keep small failed own drafts and quota evidence.
+The message-board thread is `1c1333d7-46ea-4f46-a9a1-b5d13e577337`.
+The prior published checkpoint is sequence934. Read new entries by metadata first.
+Exact current publication metadata belongs in this runtime's `publication.json`.
+
+Readable `/tmp` was6,819,840B, about6.5MiB, excluding five inaccessible private
+directories. This increment used about101KiB before handoff/publication metadata.
+Filesystem free space is about192.7GiB. The earlier114GiB free-space drop has no
+established location. Do not attribute it to `/tmp` or another directory without
+measurement. No deletion, build copy, or concurrency change occurred here. Keep
+new scratch below0.25MB. Source-based checks replace large captured build trees.
+
+Next: derive allocation and queried-UVar bounds through the actual transitions of
+BOTH workers from original inputs and requested size. Use the new initial/allocation
+laws and prior UF uniform fuel as components. Cover all future states and total
+work, and retain every semantic and Haskell correspondence target above. Continue
+autonomously and push small verified increments to formalize. No goal completion,
+block, or pause is justified. The historical content below remains byte-identical.
 
 ---
-
 
 # Current checkpoint: 2026-11-06 12:30 CET
 
