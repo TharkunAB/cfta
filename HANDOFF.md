@@ -1,47 +1,109 @@
-# Current checkpoint: uniform local budgets after an internal depth proof
+# Current checkpoint: allocated reference slots and computed value access
 
-Updated 2026-11-07 03:51 CET. Status: PROGRESS. Full goal ACTIVE. The current formalize HEAD
-identifies the published checkpoint. Parent: f99010580c2120fd17cd9b87ac47696ee7ebca18.
+Updated 2026-11-07 04:19 CET. Status: PROGRESS. Full goal ACTIVE. The current formalize HEAD
+identifies the published checkpoint. Parent: 5105afc382f0407ee649ba3fc0aba1508b37cf37.
+The index theorem is that parent commit; the value-access theorem and current notes
+form this checkpoint. Prior depth checkpoint: a05c6ab0df8f8398b06fdda9332a659ef5d76623.
 Fresh pull was up to date. Main remains bd5a406a6a3f84b7e3ae0906082783911509df83.
-Preserve unrelated .hypha/. No compiler job is live.
+Preserve unrelated .hypha/. Root has no compiler live. A separate Native worker
+extension is active. Verify its actual handle before starting another compiler.
 
 ## Strongest new checked result
 
-The node and edge allocation budgets are monotone in action fuel. An INTERNAL
-ordinary-depth certificate makes each budget stable above that depth. The budget
-at the certified depth bounds the same expansion at EVERY fuel value. Initial
-successful node and edge results therefore retain one reference cap independent
-of action fuel, PROVIDED that internal depth has been established. This is a local
-conditional theorem. The native input-to-depth derivation is NOT established.
-The final theorem must derive that certificate or use another justified bound.
-Do not add depth or validity as a final caller premise.
+BOTH actual imported Node and Edge expansions now preserve references below the
+CURRENT returned counter on every successful return. Value-count equals counter.
+Every stored suspension variable, stored fragment hole, obligation hole and
+returned fragment hole therefore refers to an already allocated value slot.
+UF storage keys and parent targets use the same actual counter. UF Total persists.
+The counter does not decrease. Initial-state/[] corollaries derive this property
+without supplied invariant, capacity, allocation budget, depth, or graph-size
+premises. This closes actual current-value index validity for these expansions.
+It does not yet establish that property for all complete-worker execution states.
 
-The actual abstract Graph interface admits an ordinary self-cycle. Its current
-allocation budget at fuel 2*count+1 equals count. Lean also proves there is no
-uniform bound on that formula and no NodeDepth certificate for this example.
-Only the repeated ordinary node is reachable from the chosen root. Finite IDs
-alone therefore do not establish ordinary descent. This is an INTERFACE and
-UPPER-BUDGET counterexample. It does not establish a native reachable cycle,
-unbounded successful execution, an actual worker cost lower bound, or a Haskell bug.
-The internal depth certificate is sufficient, not asserted necessary for every
-possible proof route. Actual worker guards could justify a different bound.
+Actual rawValue succeeds for every allocated variable in an Indexed state and
+preserves that state. Actual getValue succeeds with fuel state.counter+1, preserves
+Indexed and the counter, and returns a value with the current reference bound.
+The proof combines actual representative success and actual stored-value lookup.
+Initial Node/Edge corollaries derive Indexed before those later reads. The queried
+key must be allocated. The final worker proof must derive that fact for its actual
+queries. Do not introduce a new final caller validity or fuel premise.
 
-New source: lean/MicroCFTA/EnumerationStateExpansionDepth.lean, 12533 bytes,
-SHA-256 5f77f1e37a369454d8d4684430247149d7923dff86027b5b430aa98f52f94dfc.
-All11 public theorems passed normal source check30562 with exit0 and empty logs.
-Actual module build and all11 source/axiom reports38449 passed with exit0,
-Lean4.34.1/shell.nix/j1/warnings-as-errors/4G/swap0/380s, peak176M.
-The wrapper separately verified before/distinct-after/separate-final pins for
-this source, all six earlier own imports, and both portable checker files.
-Every axiom set is within propext, Classical.choice, Quot.sound. No sorryAx or
-added axiom occurs. Normal checks do not recover the historical Source audit.
+IndexValidity: lean/MicroCFTA/EnumerationStateIndexValidity.lean, 27021 bytes,
+SHA-256 67d812e67873154f8b1411b1cdfb452e8224a68b375aea5c8e7be13541795b91.
+SAME Native normal check2/72696 passed with exit0 and empty logs. Root checked the
+result digest and the checker's explicit source/import three-phase assertions.
+Actual module plus all4 own source/axiom reports72985 passed0, peak209M. Every set
+is within propext, Classical.choice, Quot.sound. Small first failures and both
+own proof repairs remain. No published dependency changed.
 
-Portable packet: lean/restart-evidence/20261107-enumeration-expansion-depth/.
-check.py builds the actual module and checks all11 source/axiom reports. Packet
-size is 9891 bytes before Git metadata. Reproduce from source; no archived build
-copy, private Source, or large rolebook is required. All small failed drafts remain.
-No Haskell code/build/fix, Original Source/replay/TYPE, or compiled-interface view
-occurred. The prior unchanged modules were not rechecked without a new reason.
+ValueAccess: lean/MicroCFTA/EnumerationStateValueAccess.lean, 5699 bytes,
+SHA-256 e2f1899af6e8ba2500182b754237968e1add11e3d7370e7bb2261876eed95f00.
+Normal1/29680 passed0/emptylogs. Actual module plus all4 source/axiom reports76329
+passed0, peak172M. Every set is within propext, Classical.choice, Quot.sound.
+All current own dependency/checker sources were pinned before, distinct-after,
+and separate-final. Lean4.34.1/shell.nix/j1/warnings-as-errors/4G/swap0/380s.
+No sorryAx or new axiom. No whole-library or Haskell build.
+
+Portable packets: lean/restart-evidence/20261107-enumeration-index-validity/
+(8545 bytes) and 20261107-enumeration-value-access/ (8644 bytes). Each check.py
+builds its actual module and checks all4 source/axiom reports. Reproduce from
+source. No archived build copy, private Source, or large rolebook is required.
+The earlier unchanged theorems were not rechecked without a new reason.
+
+These are results for the Graph-parameterized Lean model. Actual Haskell/native
+realization, one original-input/request-size bound for BOTH workers, failing
+prefixes, total branch work, and exact end-to-end enumeration remain open.
+The current-state fuel bound is not the requested original-input global bound.
+No Haskell code or fix was established. Index/Value proofs used no new Original
+Source body/replay/TYPE or compiler-interface view.
+
+## Next actual worker task
+
+SAME /root/native_mu_prepare is extending Indexed through actual enumerateOut,
+then enumerateFully where justified. New file: EnumerationStateWorkerIndexValidity.lean.
+Do not replace the workers. Derive internal root/query conditions and add initial
+or composed corollaries. The actual Oracle alias permits actions in the enumeration
+state monad. Arbitrary callbacks can therefore update the state without preserving
+Indexed. The required callback law must be derived from its actual native
+realizer; do not turn it into a final caller requirement or claim arbitrary
+Oracle safety. Failing prefixes and total work remain separate obligations.
+
+A precise replay of already-owned EnumerationState244..329 (86LF) is authorized
+ONLY to the SAME Native reader with fresh capture and receiver/view guards. No
+new unique Source is authorized. Root must not view its private body. All NINE
+current own math sources plus any worker draft and exact scripts/controls/admission
+must be freshly pinned in all phases. No new TYPE or interface view. The replay
+now PASSED: capture14/15/15 roles, separate receiver17/17/17 roles, all three phase
+flags true. Root inspected the new guard, exact controls and all9 current source
+hashes. Cut4187B/SHA cffadb8ec3d4af567790671b456d5eb24e7c21236abde4ae2fda82ae23683e31,
+86 repeated LF/new0. Root did not view the private body. Recorded recent replay243LF
+plus this86LF gives329 repeated LF for this series, with unique U329/699 unchanged.
+Do not infer a global replay total from that partial series. Guard
+runtime: /tmp/mcfta-worker-index-validity-20261107-0413. Worker proof is not yet
+verified; inspect the actual task/check handle before claiming completion.
+All global histories and per-Original caps remain unchanged and must not reset.
+
+## Earlier checked depth-dependent budget result
+
+Node/edge allocation budgets are monotone in fuel. An INTERNAL ordinary-depth
+certificate makes the budget stable above that depth. The depth budget bounds
+EVERY action fuel. Initial successful Node/Edge states then obey one cap independent
+of action fuel. Native input-to-depth derivation is OPEN. The final proof must
+derive that certificate or use another justified bound, with no new caller premise.
+
+The abstract Graph admits an ordinary self-cycle with budget at fuel2*count+1
+exactly count. It has no uniform bound on that formula or ordinary depth certificate.
+Only the repeated ordinary node is reachable. Finite IDs alone do not prove
+ordinary descent. This INTERFACE/UPPER-BUDGET example is not a native reachable
+cycle, unbounded successful execution, a cost lower bound, or a Haskell defect.
+The certificate is sufficient, not asserted necessary for every proof route.
+
+ExpansionDepth is12533B, SHA-256
+5f77f1e37a369454d8d4684430247149d7923dff86027b5b430aa98f52f94dfc.
+All11 public theorems passed30562; actual module/source/axioms38449 passed0,
+peak176M, only standard axioms. Packet9891B:
+lean/restart-evidence/20261107-enumeration-expansion-depth/.
+Its historical source/checker pins remain valid for that earlier scope.
 
 ## Native connection still missing
 
@@ -83,7 +145,8 @@ peak204M. Packet: lean/restart-evidence/20261107-enumeration-reference-bounds/.
 Actual suspension returns the old counter and creates one value slot. Its new
 variable indexes that slot under incoming value-count/counter agreement. Actual
 representative and bounded union actions have results at computed B+1 fuel.
-These do not prove all existing references index the current value list.
+Those fixed-cap theorems alone do not prove current-value index validity.
+The new IndexValidity result above now proves it for successful Node/Edge returns.
 
 ExpansionBounds exposes its existing totalCost/maxCost. Definitions and worker
 behavior did not change. Current21307B/SHAc8656775af75255386731e45885afd1f581a67b9b11e601cba138c9d4c9cc734.
@@ -189,6 +252,7 @@ or use another justified bound. Do not assume budget(fuel) <= fuel.
 
 Successful-return counter bounds do not cover all intermediate states on failing
 branches. They do not yet bound all complete-worker query IDs or native interned node/edge IDs.
+Node/Edge current-value index validity is now proved, as recorded above.
 Model UVar IDs remain separate from native IDs. The imported descent variable-origin
 property is now proved and used in the checked actual node/edge reference
 invariant. EqualityTrie per-Original receipt history remains UNKNOWN. Do not reset
@@ -223,7 +287,9 @@ SAME Native reader retained EnumerationState prefix 1..329: U329 of 699 lines,
 strict cap 349, remaining 20. Original file stays 33489 bytes, SHA-256
 83a898b883ec7b52469bccd87e8afa4f7abb320e3c935bf48f3d80ad77003cc4.
 Already-owned replays in the earlier expansion checkpoint total 243 LF, ZERO new
-unique Source. The reference-proof and depth-proof checkpoints have no Source replay. Ten capture
+unique Source. The reference/depth/index/value proofs have no new Source replay. The active
+worker task has a separately guarded86LF owned replay. Root verified its numerical
+receipts and guard assertions as recorded above. Unique Source remains unchanged. Ten capture
 and view records passed all three phases. Nine captures used 7 roles, nine views
 10 roles; the header replay used 8/11 roles after pinning the then-current own
 7942-byte draft. Root independently verified all metadata. Root received public
@@ -241,7 +307,8 @@ Current guards and kernel checks do not recover that historical/global audit.
 PrimitiveTYPE1401,actual32TYPE396,failed old TYPE diagnostics,State twoTYPE777 remain
 opaque. State/BinderInfo507 is HELD; no primary dependency is established.
 
-Current own sources for future fresh guards: ExpansionDepth12533/5f77f1...,
+Current own sources for future fresh guards: IndexValidity27021/67d812...,
+ValueAccess5699/e2f189..., ExpansionDepth12533/5f77f1...,
 ReferenceBounds39317/7e17...,
 TotalPreservation4765/44fd1...,
 VariableOrigin958/e79b8..., plus any
@@ -262,20 +329,20 @@ subst. All are proof repairs, not Haskell fixes. Failed small math drafts remain
 
 ## Restart and storage
 
-Current runtime: /tmp/mcfta-expansion-depth-20261107-0335. Earlier reference
-runtime: /tmp/mcfta-worker-references-20261107-0232; expansion runtime:
-/tmp/mcfta-worker-growth-20261107-0127. Exact publication.json records commit,
-push, board readback, and current disk numbers. The current OWN prefix is
-CURRENT-CHECKPOINT-PREFIX.md in the depth runtime. Earlier own prefixes remain.
-The historical content below stays byte-identical. Do not rebuild removed large
-alias books or build copies. Small proof drafts, counterexamples, repairs, logs,
-and metadata remain. No concurrency or cleanup-policy change occurred.
+Current Root runtime: /tmp/mcfta-index-access-20261107-0408. Native index runtime:
+/tmp/mcfta-worker-index-validity-20261107-0355 (about21KB, protected small failures).
+Earlier depth runtime: /tmp/mcfta-expansion-depth-20261107-0335; reference runtime:
+/tmp/mcfta-worker-references-20261107-0232. Current OWN prefix is in the Root
+runtime's CURRENT-CHECKPOINT-PREFIX.md. publication.json records exact push,
+independent remote/tracking verification, board readback, and disk metrics.
+All three opaque historical document tails remain byte-identical. Earlier own
+prefixes remain. No large alias book or build copy was recreated.
 
-Readable /tmp allocation was 8962048 bytes (about8.5MiB), with five permission-denied
-entries excluded. Filesystem available space was203854278656 bytes (about190GiB).
-These are different metrics from the earlier apparent-byte count. No inaccessible
-directory size is claimed. Keep new scratch small. Do not attribute the earlier
-114GiB drop to any location without measurement. This checkpoint deleted no data.
+Readable /tmp allocation was9326592 bytes (about8.9MiB), excluding five denied
+entries. Filesystem available space was203320795136 bytes (about189GiB). Root
+runtime before this prefix was20858B. No inaccessible directory size is claimed.
+Keep new scratch small. No data deleted, concurrency changed, or cleanup policy
+changed. Do not attribute the earlier114GiB drop to any location without measurement.
 
 --- Historical checkpoints (byte-identical below) ---
 
