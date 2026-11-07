@@ -116,9 +116,19 @@ Synthesis476-500). These equalities can occur at unequal path lengths at
 program leaf budget1. Do not assume every equality introduction decreases
 the program budget. mapNodes transforms the original finite pattern before
 leaf replacement, so those raw constraints sit outside the inserted type Mu.
-This excludes the exact constrained-Mu reproducer at raw construction.
+Those explicit Mu constructors do not build the reproducer's constrained
+recursive bodies. Exported Utils.tk accepts an ARBITRARY anyArg node. Attach
+mkStecta's actual any_arg producer before extending this conclusion to tk.
 Preservation through projection, reduction and generated intersections is
-UNPROVED. This source audit is not a new Lean caller-origin theorem.
+UNPROVED, including preprocessing inside the complete raw construction.
+This source audit is not a new Lean caller-origin theorem.
+
+The smallest faithful port is Synthesis FirstOrder raw construction. Port
+actual Type/Library/Query data, typeNode/allTypes/generalize, application and
+filter constructors, and literal rawSearchSpace tables. Retain size2
+restrictions, required-argument permutations and the default type Mu. Derive
+raw construction and program-child/type-endpoint laws from that computation.
+Specftacular then requires the actual any_arg producer and projection path.
 
 An alternative proof route is to derive restrictions from the ACTUAL caller
 constructors that exclude this recursive pattern. A supplied role invariant
@@ -535,7 +545,7 @@ Prior R117 packets remain in place:
 The two new code/evidence commits are:
 0f9d39905928363ecbbb1c4e7bb4227145a8ec77
 e0bc80f2782771ab9c3a3e80469d6583de83bcb1
-The docs commit follows these. Final HEAD identifies the published checkpoint.
+The docs commits follow these. Final HEAD identifies the published checkpoint.
 
 Runtime: /tmp/mcfta-global-resources-20261107-1604/.
 Read RESUME.json, verified-manifest.json, heavy-peaks.tsv, publication.json,
