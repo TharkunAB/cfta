@@ -17,7 +17,7 @@ main = do
         unrestricted = library [f] [] []
         query = Query [("x", int)] int
         noRequired = Query [] int
-        found lib q = evaluate (App (Var "f") (Var "x") `elem` concatMap (expand lib) (take 1 (solutionsOfSize lib q 2)))
+        found lib q = evaluate (App (Var "f") (Var "x") `elem` concatMap (expand lib) (solutionsOfSize lib q 2))
     a <- timeout 10000000 (found required query)
     b <- timeout 10000000 (found componentArgument noRequired)
     c <- timeout 10000000 (found unrestricted query)
