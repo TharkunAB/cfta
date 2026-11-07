@@ -1,0 +1,63 @@
+{
+  "kind": "bounded native observations, not a nontermination proof",
+  "time": "2026-11-07T16:33:09.831244+01:00",
+  "source_tree": "d5a5e2a9d7c2ec59ded139b13f3864fe3a42e6a0",
+  "source_sha256": {
+    "lean/repro/RepeatedIntersectionGrowth.hs": "35aa0e2db77a7972800037fc9791eb1b8e8554ff043ae691892ce0304cb37292",
+    "lean/repro/GeneratedBoundaryEnumerationTimeout.hs": "f39540b7668d054c261869412158fe807ebb67d61391f15b843628844f74aa93",
+    "lean/restart-evidence/20261107-native-boundary-progress/drafts/NativeBoundaryCandidateTrace.hs": "bff38244e83dc3724ee460d3745a2f24810d47c383d6e4d498b1fd77e8ae1530"
+  },
+  "results": [
+    {
+      "command": [
+        "cabal",
+        "build",
+        "lib:cfta",
+        "--offline",
+        "-j1"
+      ],
+      "exit": 0,
+      "stdout": "Up to date\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "cabal",
+        "exec",
+        "--",
+        "runghc",
+        "-package=cfta",
+        "/home/tritlo/Code/mcfta/lean/repro/RepeatedIntersectionGrowth.hs"
+      ],
+      "exit": 0,
+      "stdout": "Just True\n[(2,3,3),(4,6,7),(12,19,26)]\n[4,35,436]\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "cabal",
+        "exec",
+        "--",
+        "runghc",
+        "-package=cfta",
+        "/home/tritlo/Code/mcfta/lean/repro/GeneratedBoundaryEnumerationTimeout.hs"
+      ],
+      "exit": 0,
+      "stdout": "(\"construction\",Just (4,7,True))\n(\"enumeration\",Nothing)\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "cabal",
+        "exec",
+        "--",
+        "runghc",
+        "-package=cfta",
+        "/home/tritlo/Code/mcfta/lean/restart-evidence/20261107-native-boundary-progress/drafts/NativeBoundaryCandidateTrace.hs"
+      ],
+      "exit": 0,
+      "stdout": "(\"construction\",Just (4,7,True))\n(\"canonical_engine_trace\",Right Nothing)\n[(\"UVar 0\",\"11\"),(\"UVar 0\",\"after\"),(\"UVar 1\",\"71\"),(\"UVar 1\",\"after\"),(\"UVar 2\",\"234881\")]\n",
+      "stderr": ""
+    }
+  ]
+}
