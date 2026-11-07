@@ -1,131 +1,158 @@
-# Current checkpoint: fixed read bounds and complete incoming observations
+# Current checkpoint: original-source preparation and cyclic query laws
 
-Updated 2026-11-07 06:06 CET. Goal ACTIVE. New proof commits:
-47ff424201a73bf66bfaaf0b96900d81c5e5b56e (flat representative/count bounds), and
-5be26b00f82c99066e0bc7962ead842b1de1d30b (complete incoming observation).
-Current formalize HEAD identifies the documentation checkpoint after publication.
-Previous published checkpoint: 2123587384289ea5fa4178b523effd21ac8e0dd4.
-Upstream was refreshed before work. Last fetched main remains
+Updated 2026-11-07 06:36 CET. Goal ACTIVE. New proof commits:
+9167db6afcceb946e7d5a0b5f7410969b42c48d6 (all-outcome annotation invariant),
+c95918d1c3d81e93e9df45be1ad9d63c32e48992 (warm selected/cyclic compilation),
+25748cc8674c326be99db803ef0bfa34dc29268b (original-source pipeline).
+Current formalize HEAD identifies the following documentation checkpoint.
+Previous published checkpoint: 6f5414efbcbe77f938b782296c5fb2a78c95a1ef.
+Upstream was refreshed before work. Main remains
 bd5a406a6a3f84b7e3ae0906082783911509df83 and is an ancestor of formalize.
 Preserve unrelated .hypha/ and all proofs, counterexamples, and marked drafts.
-No compiler is live. No concurrency setting changed.
+All compiler jobs are terminal. No concurrency setting changed.
 
-## Strongest new checked statement
+## New checked statement and precise scope
 
-For any valid modeled flat forest, erasing its member lists computes the complete
-related comparison input. Earlier representative and count reads succeed at the
-fixed bound 2, including reads after the older lookup materializes an absent
-singleton. One step fails on a stored parent. The count equations cover arbitrary
-reference lists, multiplicities, gained/lost changes, and starting waiting tables.
+SourcePruningEnumerationSelectedConstraintHeap preserves an arbitrary constraint
+predicate through EVERY bounded preparation outcome. This includes failed Union
+exposure and pending Mu unfolding. Its successful corollary supplies the returned
+heap invariant. The proof uses the actual selected worker and existing stored
+substitution, cold exposure, and node-constructor preservation laws.
 
-EnumerationFlatReadBounds composes these laws with the actual imported flat slot
-read, native write, incoming branch, and incoming cache recovery. Fixed
-representative and index fuel 2, or any larger fuel, retain the complete related
-observation. This includes ordered raw results, explicit errors, rejection,
-missing results, native failures, caller/query effects, the outer read core, and
-optional recovered caches. Native intersection and emptiness-check bounds remain
-explicit. This is not a bound on their work or on the number of references.
+SourcePruningEnumerationSelectedNativeSized composes actual selected Mu/Union
+preparation with warm native readiness, cold traversal, and the SourceCyclicRows
+compiler model. It keeps the node and edge memo tables and the domain cache. It
+transports all compiled class/count/decode/order/rank laws to the ORIGINAL selected
+value's independent guarded language. It does not reset the warm memo state.
 
-The incoming comparison requires only flat-forest validity. It is an observation
-relation. Cache correctness still needs the existing internal caller, cache,
-storage, realization, and request-range invariants. Do not infer correct caches
-from forest validity alone. This is a mathematical source-algorithm result, not
-verified Haskell translation or native machine-Int correspondence.
+SourcePruningEnumerationSelectedSource starts from original syntax with checked
+source annotations. It derives actual completed construction, actual selected
+preparation, ready native state, closure, and all final-row annotations. It supplies
+no completed-build, prepared-heap, or final-row witness as an input. Under reached
+native word checks, it derives actual modeled cyclic compiler execution. If that
+compilation succeeds, its size classes contain exactly the original syntax's
+accepted terms at each NODE-COUNT size. Classes are distinct; counts equal lengths;
+decoding equals indexing; size prefixes have the accepted terms in size order;
+rank and unrank are inverses. Class execution has the existing size+1 bound.
 
-The preceding canonical transaction result remains checked: fixed-head flat
-union, derived final class map, ascending old-class count transfer, and ordered
-assimilation preserve both caches at completed endpoints. Duplicate sources,
-eliminated sources, and source=target are covered. Successful core correspondence
-works in both directions. Initialization and the default no-pruning callback also
-have checked component laws. These results do not establish the whole system.
+Source annotation normalization remains an input condition. Reached compiler
+word-range checks remain explicit. Selected/read bounds are existential. This
+is not one computed original-input/request-size work bound for both enumerateOut
+and enumerateFully. It is not verified Haskell translation. The compiler here is
+the SourceCyclicRows cyclic-import model. It is not all current Data.CFTA.Sized
+optimization routes. Do not generalize this result to that full dispatcher.
 
-## Corrections to the previous assessment
+## Corrected baseline: reuse existing exact table and Sized laws
 
-The previous next-step claim was too weak. Full incoming-prefix derivation already
-exists in SourcePruningEnumerationIncomingNode.run_complete. The native gain-only
-cache attachment already exists in SourcePruningEnumerationIncomingCacheAdapter.
-complete. Actual flat cached-fold and terminal completion already exist in
-EnumerationFlatNativeCachedCompletion.complete and
-EnumerationFlatNativeTerminalCompletion.complete. They retain their internal
-admission conditions. Reuse these laws. Do not reconstruct the write prefix or
-count cancellation in another model.
+The previous next-step assessment understated existing results. A lexical
+RowsCorrespond adapter is not necessary for the existing finite-table route.
+SourceFreshOrdinaryColdGuardedExact.trace_table_exact already identifies the actual
+finite shared table with its original independent guarded meaning.
+SourceFreshOrdinaryColdSized.source_sized already composes completed closed source
+construction with exact node-count classes, finite evaluation, order, and inverses.
+SourceFreshOrdinaryColdNativeSized.complete adds the modeled native cyclic compiler
+under internal readiness, normalized-row, and reached word-range conditions.
+SourceFreshOrdinaryNormalizedNativeSized.complete already derives row annotations
+from checked original construction. The new result additionally includes actual
+selected-value preparation and removes the supplied completed-build witness.
 
-CompleteGraph excludes the explicit Graph.node .recursive constructor. It does
-not exclude all recursive grammars. Alternatives can contain cyclic references.
-EnumerationBuilderRuntime.graph emits empty/alternatives rows and its complete
-law derives CompleteGraph. Its requested_accepted_exact proves bounded row-language
-equivalence. LexicalBoundedBuilder.requested_exact and elided_requested_exact
-connect closed lexical meaning under RowsCorrespond and valid-source-row premises.
-These bounds use term HEIGHT. They are not the final exact NODE-COUNT-size law.
-Thus the remaining gap is actual native realization and whole-worker composition,
-including native Mu/retained Union, not absence of all recursive language results.
+SourceFreshOrdinarySizedEntryCorrect.complete_both_exact and constructed_complete
+already connect the modeled public reference/optimized query entries to the full
+SourceSizedApiLaws.Exact record, including signed queries. Their dispatcher model
+has the coverage limit below. These are substantial existing compositions, not
+missing component count/order/inverse proofs. Whole native execution and current
+branch coverage still need the remaining links.
+
+Existing full incoming/cache/fold/terminal completion also remains available.
+Keep the fixed2 read laws and canonical transaction results from the previous
+checkpoint. Do not reimplement those stages or count cancellation.
+
+## Current Haskell coverage gap: intentional new Sized routes
+
+Current cfta-generator/src/Data/CFTA/Sized.hs:150-175 has per-state routing.
+Unconstrained unambiguous rows use the plain count table. Unconstrained ambiguous
+rows can use deterministicCountingRows. Unambiguous rows with constraints can use
+intersectionCountingRows for equal direct children. Other cases or a failed
+bounded transform use the reference. Internal/Table.hs:658 sets countingLimit=1024.
+
+The current header at Sized.hs:53-72 explicitly permits a different within-size
+order for the deterministic and equal-child routes. SizedSpec.hs:59-72 compares
+sorted term sets and counts for its ambiguous repeated-transition case. It does
+not assert equality of that route's original reference sequence.
+
+SourceSizedFiniteKeysDispatchApi.nativeSized models the earlier plain/deterministic
+key or unambiguity gate plus reference fallback. Its nativeSized_eq proof identifies
+the complete query record with that modeled reference. It does NOT model the
+current determinization/equal-child table transforms or their changed within-size
+orders. This is a concrete formalization coverage gap. It is not evidence of a
+Haskell bug. The old blanket reference-order equality must not be presented as a
+proof of the complete current Haskell dispatcher.
+
+Next concrete work: inspect and model the actual sizedStates route, per-state
+trimming, deterministicCountingRows and intersectionCountingRows. Reuse existing
+finite automaton/count/decoder results where they match. Prove the actual branch's
+class language, counts, and rank inverses with its actual sequence order. Include
+the 1024 limit and reference fallback. Retain these optimized routes and their
+intentional order. Record each Haskell repair or proposed repair here for external
+work. No Haskell code changed, no runtime repair was established, and no Haskell
+build ran in this increment.
+
+The earlier Haskell documentation follow-up remains: Enumeration.hs:422 claims
+getUVarValue path-compresses, while Internal/UnionFind.hs:129-130 returns
+(root uv uf, uf) unchanged. Suggested comment:
+"Look up the value stored at a UVar's representative."
 
 ## Validation and reproduction
 
-Both actual Lake targets and all 17 public source/axiom reports passed.
-FlatUnionFindReadBounds: 7731B, SHA-256
-b205190f74e103349d7ef6711fae9699f54d02457dbcdf78848c481c851e8310.
-All nine public laws depend only on propext. Final check handle41166, terminal0.
-EnumerationFlatReadBounds: 11860B, SHA-256
-e422a24ea4cce0c9449b641d4c2289a27b82194541a18480905effe41a0e4ea1.
-All eight public reports contain only propext, Classical.choice, and Quot.sound.
-Final check handle16023, terminal0. Final peak244M; lookup-report peak165M.
-Lean4.34.1; project shell.nix; serial; own reports use warnings as errors; cap4G.
-An unrelated existing dependency warning was replayed by Lake. No global clean
-build or CI claim is made. No sorry or new axiom was added.
+All three actual Lake targets and all SIX public source/axiom reports passed.
+SourcePruningEnumerationSelectedConstraintHeap:3338B, SHA-256
+1b859de61f2f0886cf2dd3e04b49ad4d8793621a9a6439e16659253d4df59c09.
+Root final check returned terminal0 in the initial exec result; peak164M.
+SourcePruningEnumerationSelectedNativeSized:9026B, SHA-256
+d99aec95705bbd5a65c64520cc3ce7bbbf57afeff9c9988412b5bf2d8c6b0b8c.
+Final handle50850 terminal0; peak1214M.
+SourcePruningEnumerationSelectedSource:10682B, SHA-256
+7dc583dec7e3ec0ad494aebb289a6c615e68dea06150966e78601f05ba032180.
+Final handle25793 terminal0; peak215M.
+Every report uses only propext, Classical.choice, and Quot.sound. No sorry or
+new axiom was added. Checks used shell.nix, Lean4.34.1, j1, own warnings as errors,
+and cap4G. Lake can replay an unrelated existing dependency warning. No global
+clean-build, CI, or complete source/runtime-correspondence claim is made.
 
 Source-based packets:
-- lean/restart-evidence/20261107-flat-union-find-read-bounds/ (5520B)
-- lean/restart-evidence/20261107-flat-enumeration-read-bounds/ (5907B)
-Each script builds the actual module and checks every public source/axiom report.
-Temporary reports are removed. No archived build tree or source snapshot is
-required. A separate cold rebuild was not tested. Small failed drafts remain in
-/tmp/mcfta-flat-enumeration-read-bounds-20261107-0559/ and the child lookup scratch.
-New failures print actual diagnostics. Current jobs are all terminal.
+- lean/restart-evidence/20261107-selected-constraint-heap/ (4763B)
+- lean/restart-evidence/20261107-selected-native-sized/ (4944B)
+- lean/restart-evidence/20261107-selected-source-sized/ (5033B)
+Each checker builds the actual module and checks every public source/axiom report.
+Temporary reports are removed. No archived build tree or source snapshot is needed.
+A separate cold rebuild was not tested. Small failed drafts and repairs remain in
+/tmp/mcfta-selected-native-sized-20261107-0622/ and the child constraint scratch.
 
-## Biggest gaps and next concrete target
+## Full remaining objective
 
 Keep BOTH actual optimized enumerateOut and enumerateFully. Derive ONE computable
-bound from the original input and requested size. Cover generated, returned,
-subsequent, intermediate, and failing states and total branch work. Fixed local
-lookup fuel 2 does not close that bound. Do not add final caller resource, closure,
-completed-worker, success, fuel, validity, or OriginalInput obligations.
+bound from original input and requested size. Cover generated, returned, subsequent,
+intermediate, and failing states and total branch work. Derive reached word/capacity
+checks from that original data. SourceFreshOrdinaryNativeCompilerCapacity.
+ranges_of_capacity already converts reached capacity to word checks; it does not
+eliminate the reached-capacity premise. Do not rename that premise as completion.
+Do not add final caller resource, closure, completed-worker, success, fuel,
+validity, or OriginalInput obligations.
 
-Connect actual native row exposure/readback and intersection to the existing graph
-and lexical theorems. Before authoring another adapter, inspect the actual native
-row producers and existing RowsCorrespond/ValidEdge laws. Determine which premises
-of LexicalBoundedBuilder.requested_exact are already derived from native heap and
-request invariants. Reuse SourcePruningEnumeration* completion and flat-native
-comparison modules. Derive missing premises from original admitted inputs. Keep
-the actual native intersection and recursive behavior.
-
-Then compose exact accepted terms per NODE-COUNT size, counts, order, and BOTH
-rank/unrank inverse laws with actual worker execution. Component count/order/CPS
-and inverse results already exist. The actual Haskell/runtime, machine-Int IDs and
-counts, identity, cache, interner, equality, and hash connections remain obligations.
-The optimized interned core stays primary. Older constructor/equality work stays
-secondary. Goal ACTIVE; no completion, pause, or blocking claim.
-
-## Haskell finding for an external follow-up
-
-No Haskell source changed and no Haskell build ran in this increment. No new runtime
-Haskell defect or fix was established. The earlier documentation finding remains:
-Enumeration.hs:422 says getUVarValue path-compresses. Internal/UnionFind.hs:129-130
-returns (root uv uf, uf) without a forest change. Suggested replacement:
-"Look up the value stored at a UVar's representative."
-This is a stale comment, not evidence of a runtime failure. Keep every actual
-Haskell repair or proposed repair recorded in FINDINGS for external work.
+Complete current Sized branch coverage and actual native/Haskell worker, identity,
+cache, interner, equality, hash, and machine-Int correspondence. Reuse existing
+exact node-count/count/order/rank proofs at their actual boundaries. Preserve
+older constructor/equality work as secondary targets. Keep the optimized interned
+core primary. Goal ACTIVE. No completion, pause, or blocking claim is made.
 
 ## Storage and historical records
 
-Readable /tmp is about9.7MiB. Six inaccessible private/system directories were
-excluded. Filesystem available space is about190GiB. No large archive, source tree,
-or build-tree copy was created. No proof or draft was deleted.
-The workflow correction remains in force: historical Source/TYPE reading quotas
-and receipt gates do not limit needed repository inspection. Preserve their
-historical SourceProcess FAIL and unknown-upper records without restoring those
-access restrictions. Do not create opaque receipts to reconstruct those tables.
-The earlier checkpoint tails follow unchanged.
+Readable /tmp remains about10MiB, excluding six inaccessible private/system
+entries. No large archive or source/build-tree copy was made. No proof or draft
+was deleted. The source workflow correction remains in force: historical Source/
+TYPE reading quotas and opaque receipt gates do not limit needed inspection.
+Preserve their historical failure/unknown-upper records without restoring access
+restrictions. The earlier checkpoint tails follow unchanged.
 
 
 # Current checkpoint: default enumeration discharges its callback invariant
