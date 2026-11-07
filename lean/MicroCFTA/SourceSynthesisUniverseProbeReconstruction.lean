@@ -14,28 +14,46 @@ The proof preserves the current constructor cache exactly.
 -/
 namespace MicroCFTA.SourceSynthesisUniverseProbeReconstruction
 open Cache Language InternedConstructorTemplates InternedNestedFacts InternedProbeProvenance
+open InternedEdgeResidency
+open InternedStoredSubstitution (input)
 open InternedStoredSubstitutionRebind
 open InternedBinderProtocol (Reference)
-open SourceSynthesisUniverseBody (descriptors)
+open SourceSynthesisUniverseBody (descriptors RowReadback)
 open SourceSynthesisUniverseResidentRows (Rows)
 
 variable {Guard : Type} [DecidableEq (EdgeKey String Guard)]
 
-/-- Available resident source rows reconstruct the exact resident probe with no cache effect. -/
-theorem execute_probe (top : Guard) (catalog : List (String × Nat)) (name probe : Reference)
+/-- Actual source rows retain their ordered target replay and the complete target node request. -/
+theorem probe_targets (top : Guard) (catalog : List (String × Nat)) (name probe : Reference)
     (source target : Value String Guard) (heap : InternedConstructorTemplates.State String Guard)
     (facts : Facts heap) (sourceAvailable : Available heap source) (targetAvailable : Available heap target)
     (sourceRows : Rows top catalog name source heap) (targetRows : Rows top catalog probe target heap) :
-    InternedFreshOrdinaryStoredSubstitution.execute source (replacement name (.reference probe)) heap =
-      .done target heap := by
+    ∃ sourceEntry marker targets,
+      source = .node sourceEntry (nodeEdges source) 0 [name] ∧
+      RowReadback "(->)" top [] marker ∧ Available heap marker ∧ marker.free = [] ∧
+      (∀ row ∈ nodeEdges source, row.entry.key.constraint = top) ∧
+      (∀ row ∈ nodeEdges source, ∀ child ∈ row.children, child = marker ∨ child = .reference name) ∧
+      All₂ (fun row targetRow =>
+        run (makeEdge row.entry.key.symbol top
+          (row.children.map (input (replacement name (.reference probe))))) heap =
+            (targetRow, heap)) (nodeEdges source) targets ∧
+      (∀ row ∈ targets, EdgeResident heap row) ∧ run (makeNode targets) heap = (target, heap) := by
   obtain ⟨sourceEntry, sourceMarker, sourceArrow, sourceRest, sourceEq, sourceMarkerRead,
-      sourceChildren, sourceKey, sourceAligned, sourceResident, sourceClosed, sourceMarkerAvailable,
-      sourceTop, sourceKinds, _sourceLive, _sourceRetained, _sourceNonempty⟩ :=
+      sourceChildren, sourceKey, sourceAligned, sourceResident, sourceClosed, _rawSourceMarkerAvailable,
+      sourceTop, sourceKinds, _sourceLive, sourceRetained, _sourceNonempty⟩ :=
     sourceRows.readback facts
   obtain ⟨targetEntry, targetMarker, targetArrow, targetRest, targetEq, targetMarkerRead,
       _targetChildren, targetKey, targetAligned, targetResident, _targetClosed, targetMarkerAvailable,
       _targetTop, _targetKinds, targetLive, _targetRetained, targetNonempty⟩ :=
     targetRows.readback facts
+  have sourceMarkerAvailable : Available heap sourceMarker := by
+    apply sourceAvailable.children sourceMarker
+    rw [sourceEq]
+    change sourceMarker ∈ (canonicalEdges (sourceArrow :: sourceRest)).flatMap EdgeValue.children
+    apply List.mem_flatMap.mpr
+    refine ⟨sourceArrow, sourceRetained, ?_⟩
+    rw [sourceChildren]
+    exact List.mem_cons_self
   have markerSame : targetMarker = sourceMarker :=
     SourceSynthesisUniverseMarkerUnique.marker_eq "(->)" top targetMarker sourceMarker heap facts
       targetMarkerAvailable sourceMarkerAvailable targetMarkerRead sourceMarkerRead
@@ -43,14 +61,9 @@ theorem execute_probe (top : Guard) (catalog : List (String × Nat)) (name probe
   have replayed := SourceSynthesisUniverseProbeRowAlignment.raw_rows_replay top name probe sourceMarker
     sourceArrow targetArrow (descriptors catalog) sourceRest targetRest heap facts sourceClosed
     sourceChildren sourceKey targetKey sourceAligned targetAligned targetResident
-  have sourceNodeAvailable : Available heap
-      (.node sourceEntry (canonicalEdges (sourceArrow :: sourceRest)) 0 [name]) := by
-    rw [← sourceEq]
-    exact sourceAvailable
-  have bodyDone := SourceSynthesisUniverseCanonicalRowReplay.execute_eq_work_of_raw top name sourceEntry
-    (sourceArrow :: sourceRest) (targetArrow :: targetRest) sourceMarker
-    (replacement name (.reference probe)) heap facts sourceNodeAvailable sourceClosed
-    sourceResident targetResident sourceTop sourceKinds replayed
+  obtain ⟨canonicalTargets, canonicalReplay, _members, canonicalResident, sameNode⟩ :=
+    SourceSynthesisUniverseCanonicalRowReplay.canonical_replay top (replacement name (.reference probe))
+      (sourceArrow :: sourceRest) (targetArrow :: targetRest) heap facts sourceResident targetResident replayed
   have targetSurvive : surviving (targetArrow :: targetRest) = targetArrow :: targetRest := by
     unfold surviving
     apply List.filter_eq_self.mpr
@@ -66,7 +79,38 @@ theorem execute_probe (top : Guard) (catalog : List (String × Nat)) (name probe
     (by simpa only [targetSurvive] using targetNonempty)
   have targetDone : run (makeNode (targetArrow :: targetRest)) heap = (target, heap) := by
     simpa only [targetSurvive, ← targetEq] using nodeReplay
-  rw [sourceEq, bodyDone]
-  simp only [InternedNestedConstruction.work, targetDone]
+  have sourceEdges : nodeEdges source = canonicalEdges (sourceArrow :: sourceRest) := by
+    simp only [sourceEq, nodeEdges]
+  refine ⟨sourceEntry, sourceMarker, canonicalTargets, ?_, sourceMarkerRead, sourceMarkerAvailable,
+    sourceClosed, ?_, ?_, ?_, canonicalResident, ?_⟩
+  · rw [sourceEdges]
+    exact sourceEq
+  · intro row member
+    exact sourceTop row (canonicalEdges_member _ row (sourceEdges ▸ member))
+  · intro row member
+    exact sourceKinds row (canonicalEdges_member _ row (sourceEdges ▸ member))
+  · rw [sourceEdges]
+    exact canonicalReplay
+  · rw [sameNode]
+    exact targetDone
+
+/-- Available resident source rows reconstruct the exact resident probe with no cache effect. -/
+theorem execute_probe (top : Guard) (catalog : List (String × Nat)) (name probe : Reference)
+    (source target : Value String Guard) (heap : InternedConstructorTemplates.State String Guard)
+    (facts : Facts heap) (sourceAvailable : Available heap source) (targetAvailable : Available heap target)
+    (sourceRows : Rows top catalog name source heap) (targetRows : Rows top catalog probe target heap) :
+    InternedFreshOrdinaryStoredSubstitution.execute source (replacement name (.reference probe)) heap =
+      .done target heap := by
+  obtain ⟨entry, marker, targets, sourceEq, _markerRead, _markerAvailable, closed, tops, kinds,
+      replayed, _targetResident, nodeReplay⟩ :=
+    probe_targets top catalog name probe source target heap facts sourceAvailable targetAvailable sourceRows targetRows
+  have sourceNodeAvailable : Available heap (.node entry (nodeEdges source) 0 [name]) := by
+    rw [← sourceEq]
+    exact sourceAvailable
+  have done := SourceSynthesisUniverseStoredRows.execute_reference_eq_work top name entry (nodeEdges source)
+    targets marker (replacement name (.reference probe)) heap facts sourceNodeAvailable closed tops kinds replayed
+  rw [← sourceEq] at done
+  rw [done]
+  simp only [InternedNestedConstruction.work, nodeReplay]
 
 end MicroCFTA.SourceSynthesisUniverseProbeReconstruction
