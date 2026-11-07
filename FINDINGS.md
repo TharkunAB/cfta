@@ -1,11 +1,35 @@
-# Current checkpoint: actual node and edge allocation bounds
+# Current checkpoint: expansion bounds and constraint variable origin
 
-Updated 2026-11-07 02:25 CET. Status: PROGRESS. Full goal ACTIVE. The current formalize HEAD
-identifies the published checkpoint. Parent: 3eecf304ebdf5814ac5a934159f3ec116446b402.
+Updated 2026-11-07 02:34 CET. Status: PROGRESS. Full goal ACTIVE. The current formalize HEAD
+identifies the published checkpoint. Parent: fca359f15a7393add2d936195886c9b1a0d70d73.
 Fresh pull was up to date. Main remains bd5a406a6a3f84b7e3ae0906082783911509df83.
-Preserve unrelated .hypha/. No proof job is live.
+Preserve unrelated .hypha/. Reference-range work continues independently.
 
-## Strongest new checked result
+## New checked descent contract
+
+Actual EnumerationState.descendScs retains each output variable from an input
+constraint. It therefore preserves every upper bound on input variables. This
+removes the previously missing imported variable-origin dependency. The proof
+uses the actual imported alias. It adds no caller-supplied origin contract.
+
+New source: lean/MicroCFTA/EqualityTrieVariableOrigin.lean, 958 bytes, SHA-256
+e79b8e6e339c7fb97b0854df9378e14336393e96f2d5200aa179e601bc9224d7.
+Two public theorems: descendScs_origin and descendScs_preserves_below. Normal
+leaf check22933a passed. Actual module build and both source/axiom checks34756
+passed with exit0, Lean4.34.1/shell.nix/j1/warnings-as-errors/4G/swap0/360s,
+reported peak165M. Both use only propext, Classical.choice, and Quot.sound.
+Packet: lean/restart-evidence/20261107-equality-variable-origin/. Reproduce from
+source; no private Source or archived build tree is needed.
+
+NO Original Source, replay, TYPE, or compiler-interface view occurred in this
+checkpoint. EqualityTrie per-Original receipt history remains UNKNOWN. This new
+mathematical proof does not recover that history or the old global source audit.
+The actual Node/Edge reference-range preservation proof remains in progress.
+Native may write lean/MicroCFTA/EnumerationStateReferenceBounds.lean separately.
+Do not include unfinished work in this contract's commit. Root must coordinate
+serial capped compiler jobs with Native. Preserve every small failed draft.
+
+## Earlier checked expansion result
 
 Actual model Node and Edge expansions now have computable allocation budgets.
 For EVERY successful return, the counter does not decrease and grows by at most
@@ -51,10 +75,10 @@ and requested size, then remove the fuel dependency.
 
 Successful-return counter bounds do not cover all intermediate states on failing
 branches. They do not yet bound UF query IDs or native interned node/edge IDs.
-Model UVar IDs remain separate from native IDs. The imported EqualityTrie.descendScs
-variable-origin property is still needed for the reference-range proof. Its public
-descendScs_exact theorem is located, but no new Source/TYPE contract was received.
-Its per-Original receipt history remains UNKNOWN. Do not reset or infer it.
+Model UVar IDs remain separate from native IDs. The imported descent variable-origin
+property is now proved by new own math. Apply it to the actual node/edge reference
+invariant. EqualityTrie per-Original receipt history remains UNKNOWN. Do not reset
+or infer that history. No Original Source/TYPE contract was viewed.
 Next: use the checked expansion laws to derive actual worker query/reference ranges
 and input/size-derived allocation limits. Keep failed prefixes and total work open.
 
@@ -82,7 +106,8 @@ placeholder/substFree contracts, runtime memo bindings, and all older gaps below
 SAME Native reader retained EnumerationState prefix 1..329: U329 of 699 lines,
 strict cap 349, remaining 20. Original file stays 33489 bytes, SHA-256
 83a898b883ec7b52469bccd87e8afa4f7abb320e3c935bf48f3d80ad77003cc4.
-Already-owned replays this turn total 243 LF, ZERO new unique Source. Ten capture
+Already-owned replays in the earlier expansion checkpoint total 243 LF, ZERO new
+unique Source. The current descent-contract checkpoint has no Source replay. Ten capture
 and view records passed all three phases. Nine captures used 7 roles, nine views
 10 roles; the header replay used 8/11 roles after pinning the then-current own
 7942-byte draft. Root independently verified all metadata. Root received public
@@ -100,12 +125,14 @@ Current guards and kernel checks do not recover that historical/global audit.
 PrimitiveTYPE1401,actual32TYPE396,failed old TYPE diagnostics,State twoTYPE777 remain
 opaque. State/BinderInfo507 is HELD; no primary dependency is established.
 
-Current own sources for future fresh guards: Expansion21214/e151..., Allocation3593/
+Current own sources for future fresh guards: VariableOrigin958/e79b8..., plus any
+new reference draft; Expansion21214/e151..., Allocation3593/
 f7f105..., UFSupport22872/53bb7d.... Header guard's 7942/3c64... own draft is historical.
 No later Source job followed its mutation. EqualityTrie public metadata only:
 44327B/925LF/SHA0cf7d0b98a7bbc24382fde259b3f9b71462c752c347ad6e7788b9e95b41e10d5;
 Suspended618,descendScs623,descendScs_exact628,nextsupported_nodup652. Do not admit
-its body or TYPE without positive retained per-Original quota history.
+its body or TYPE without positive retained per-Original quota history. Its required
+origin law is now kernel-checked without a new body or TYPE view.
 
 Own proof repairs: explicitly prove the local List LawfulMonad via LawfulMonad.mk'
 with id_map, bind_pure_comp, pure_bind, and bind_assoc. Generic mapM cons is by simp.
@@ -116,14 +143,16 @@ subst. All are proof repairs, not Haskell fixes. Failed small math drafts remain
 
 ## Restart and storage
 
-Runtime: /tmp/mcfta-worker-growth-20261107-0127. Exact publication.json will record
+Current runtime: /tmp/mcfta-worker-references-20261107-0232. Earlier expansion
+runtime: /tmp/mcfta-worker-growth-20261107-0127. Exact publication.json records
 commit, push, board readback, and current disk numbers. Earlier runtimes retain
 small history: mcfta-worker-ids-20261107-0100 and mcfta-uf-fuel-20261107-0025.
 The earlier OWN current prefix is in the first runtime's CURRENT-CHECKPOINT-PREFIX.md.
 The historical content below stays byte-identical. Source-based reproduction is
 in the committed packets. Do not rebuild removed huge alias books or build copies.
 
-Current scratch is about 0.27 MB, including small failed proof drafts and metadata.
+Earlier expansion scratch is about 0.28 MB, including small failed proof drafts
+and metadata. Keep the new reference-proof scratch below 100 KB when practical.
 Removed only redundant own wrapper/report copies; all original proof drafts and
 results remain. Readable /tmp was about 6.6 MiB, excluding five private directories.
 Filesystem free space is about 192.3 GiB. The earlier 114 GiB drop has no established
