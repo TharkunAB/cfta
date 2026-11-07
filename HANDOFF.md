@@ -1,294 +1,252 @@
-# Current checkpoint: ordered target-map output and exact canonical queries
+# Current checkpoint: incremental source discovery and exact canonical queries
 
-Updated 2026-11-07 08:50 CET. Goal ACTIVE. The previous goal turn made verified
-progress through structural validation, finite canonical output, and exact key
-origins. This turn attaches ordered token/tuple batches, target-map output, and
-holder-order independence. Seven proof commits:
-369d894c47e0b8ff6740bbfe5e569e47d6a3492a Connect ordered target-map output to exact canonical Sized queries
-5cc69219722270c2c7f3f1ddcb2db20a9b698155 Prove sorted tuple generation depends only on holder membership
-203c68f196257f4ee7788a5ee99ba49e9359cfb3 Prove exact ordered discovery keys and canonical subset order
-016a3bdfe9ab84c7c98697cf2f557620fe9817a8 Derive closed deterministic rows from ordered bounded discovery
-7453ee4a8a41c5e63e2be4f9802ec9b28af1b72f Prove source token and tuple iteration order
-b9d0929cc141f1579e7750a930f83cf2b81257ee Compose exact optimized queries from derived closed rows
-8fb63f9d3cc7071eb47bdb993918b80e60f88475 Preserve sorted target buckets and exact per-key transition order
+Updated 2026-11-07 09:38 CET. Goal ACTIVE. Branch formalize. This checkpoint follows
+published a00fb82d50b1f7f7796362c42c5ac4c0e4a4a38f (R108, board sequence952).
+The proof checkpoint is1129b58134b5bf4a28cdb704c04f991918b526f1. A separate
+commit records this prefix. The runtime RESUME.json records the final published
+HEAD and canonical board readback. Preserve unrelated .hypha/ and all proof work.
 
-Previous published checkpoint: beead8965c15614fdc204f29b26e878ea26a5bb8 (R107).
-Current formalize HEAD identifies the documentation/publication checkpoint.
-Formalize was pulled before edits. Main was refreshed before work and again
-before publication. It remains bd5a406a6a3f84b7e3ae0906082783911509df83,
-already incorporated. Preserve unrelated .hypha/ and every proof,
-counterexample, repair, and marked draft. All compiler jobs are terminal.
-Heavy compilation stayed serial with cap4G; no queue concurrency changed.
-Readable /tmp remains about11MiB, excluding six inaccessible private/system
-entries. No copied source/build tree or large archive was made.
+Main was refreshed before work and publication. It remains
+bd5a406a6a3f84b7e3ae0906082783911509df83 and is an ancestor of this branch.
+Seven proof commits are listed below. No Haskell source changed.
 
 ## Strongest checked increment and exact boundary
 
-For a plain finite original row graph with original owner support and a
-declared root, successful concrete ordered bounded discovery now derives:
+The complete erased original explicit table now supplies the determinization
+input. Its actual key inventory supplies distinct ascending owners. The erased
+lookup supplies plain guards and owner support. Current structural validation
+supplies original root membership. No uniform symbol arity is required.
 
-- Token iteration in ascending (symbol,arity) order and sorted tuple-set
-  readback within each token. These choices permute the complete prior round.
-- Complete coverage, child/target closure, distinct choices and known keys.
-  The final found batch remains present even when it adds no new target.
-- Exact final known-target membership and per-key original relative order.
-- Target grouping in ascending map-key order. Left-root rows concatenate the
-  buckets that contain that root. Right rows keep their exact bucket order.
-  Appended batches append each old per-target bucket before its new bucket.
-- Current structural validation, derived finite canonical input, terminating
-  canonical refinement, and exact dense/finite sorted-row readback.
-- The optimized count-table worker's full signed SourceSizedApiLaws.Exact
-  contract in that computed transformed order: exact NODE-COUNT classes,
-  distinct terms, exact counts, signed invalid-rank rejection, rank existence,
-  both rank/unrank inverses, and distinct size-major accepted-term prefixes.
+The literal source step now connects to the ordered discovery controller:
+- Original token buckets retain their exact child-seed sequence.
+- Literal inits/tails positions generate earlier, pivot, and later products.
+- Earlier positions use older holders. The pivot uses a fresh holder.
+- Later positions use all holders. The final empty suffix emits nothing.
+- Source tuples and recursive frontier tuples have identical membership.
+- Their sorted tuple sets and concatenated seed sets are exactly equal.
+- Generated arity makes the zipWith membership test check every child.
+- Original ordered owners make source Set.fromList target readback equal the
+  literal kernel target, including its order.
+- Literal source entries give the same ordered choices and found keys.
+- Source found keys and ordered set difference give the controller's exact
+  pending and fresh key lists. Duplicate removal is redundant for found sets.
 
-SourceSizedDeterminizationOrderedOutput.queries_exact derives output closure,
-finite input, canonical computation, and the sort permutation internally.
-No caller supplies those completed artifacts. Its plain/support/root/success
-conditions remain a COMPONENT branch boundary. They must be derived at the
-eventual public/original-input entry; do not add them as new final obligations.
+The source loop keeps table and found separate. It merges old choices before
+new choices. It normalizes known-set readback and checks its true cardinality.
+It inserts each fresh singleton holder entry in the source schedule. New
+singletons precede earlier singletons inside each fresh bucket. The outer
+union appends that bucket after the old holder bucket. Membership equivalence
+then gives the EXACT next sorted batch, despite different holder-list orders.
 
-These are finite-list source-algorithm laws with explicit ordered map/set
-views. They are not the whole current Haskell execution theorem. Native set
-representation and incremental holder/control simulation, generated-arity zip
-target readback, internal signed-cap handling, and current public Sized routing
-still need their full source attachment. Machine Int, identity, cache, interner,
-and Eq/hash correspondence remain separate. The nonnegative cap gives at most
-limit+1 checking rounds, not a total tuple-search or branch-work bound.
-Current determinized/equal-child order may differ from original reference order.
+SourceLoop.go_refines proves the complete bounded control simulation. It
+preserves both failure outcomes and the exact accumulated choice sequence.
+The returned known list is the ascending normalization of discovery order.
+Starting from empty maps derives closure, exact target origins, original
+language preservation, and full Left/Right output uniqueness.
 
-## Current source audit and Haskell findings for external work
+SourceEvaluation records the actual known, holder, table, and found states.
+Its compile theorem derives terminal evaluation in at most limit+1 checking
+rounds. The public 1024 path therefore uses at most 1025 checking rounds.
+This is NOT a total tuple-work, allocation, time, or machine-capacity bound.
 
-Source: cfta-generator/src/Data/CFTA/Gen/Internal/Table.hs:489-550.
+SignedLimit checks negative internal Int limits before toNat conversion.
+Negative limits reject even empty inputs. Natural limits and public 1024
+retain exactly the proved source controller. This specifies returned values;
+it does not count the source's initial step work or prove machine Int storage.
+Signed QUERY sizes and ranks already have their separate exact API contract.
 
-1. Native holders at515-516 use fromListWith (<>) without flip. Each fresh
-   per-state bucket reverses fresh-key insertion order. Existing holders come
-   before that new bucket. Example fresh subsets [0] and[0,1] give holder0
-   [[0,1],[0]], while a filter of ascending fresh keys gives [[0],[0,1]].
-   Literal equality to recomputed holder lists is false. This is not a runtime
-   defect: the source sorts/deduplicates generated tuples. HolderOrder now
-   proves pointwise holder-membership equivalence gives the SAME ordered tuple
-   set and round. It also proves old holders plus reversed fresh filter retain
-   recomputed membership. Still attach actual native map/set readback and its
-   unique state entries. Do not change Haskell holder order to fit a false proof.
-2. Native target grouping uses fromListWith (flip (<>)). Its buckets retain
-   token/tuple emission order. table'=Map.unionWith(<>) table found at512 gives
-   old bucket before new bucket. SortedBuckets/Projection reuse existing exact
-   append-fold/iterator proofs and establish this value order, including repeated
-   values. Left roots519-523 use sorted target buckets; Right rows use their own
-   exact bucket. OrderedOutput now constructs this readback.
-3. Native byToken500 uses symbol AND arity. The zipWith target test at534 is
-   safe on generated tuples because their arity matches the token. Still add the
-   small public generated-arity/equal-length zip adapter to Kernel.childrenMatch.
-   Reuse private Step.tuple_arity and Frontier.mem_tuples. Do not impose uniform
-   arity for each symbol. No runtime bug was found here.
-4. Negative INTERNAL Int discovery caps return Nothing, including empty tables.
-   Clamping a negative cap with toNat would change that outcome. Either reject
-   negatives before the Nat wrapper or specialize the actual positive public cap.
-   countingLimit=1024 at658 is passed at582. This is a cap-parameter boundary;
-   signed QUERY sizes/ranks are already covered by the exact query contract.
-5. Native known is a Set. The model's distinct discovery list need only match
-   its membership/cardinality, not ascending iteration. foundKeys already uses
-   ascending set readback. Original states must be actual ascending Map.keys.
-   OrderedOrigins supplies subset sublist/distinctness. Derive native Set
-   comparison/readback and Set.size from these facts and lawful order.
+SourceOutput derives target-map key order, grouped-row closure, current
+structural validation, constructed finite canonical input, terminating
+refinement, exact dense sorted-row readback, and the row permutation.
+Its queries_exact proves the full SourceSizedApiLaws.Exact contract.
+TableInput.queries_exact derives input plainness, owner support, and root
+membership from the original erased table and current validation. Given
+actual signed compile success, count, rank, unrank, and prefix are exact
+for that table's erased language in the computed transformed order.
+No caller supplies an output carrier, closure, canonical success, or sort
+permutation. The compile success is this COMPONENT'S source branch condition.
+It does not close the complete public Sized fallback or original-input goal.
 
-No Haskell source changed this turn. No Haskell runtime defect was established.
-Record every future Haskell fix or proposed repair in root FINDINGS.md.
-The earlier comment follow-up remains: cfta/src/Data/CFTA/Enumeration.hs:422
-claims getUVarValue path-compresses its representative, while
-cfta/src/Data/CFTA/Internal/UnionFind.hs:129-130 returns (root uv uf, uf).
-Suggested comment: "Look up the value stored at a UVar's representative."
+These are source algorithm and container VALUE laws. They do not prove native
+Map/Set representation, interner identity, hash/Eq behavior, machine Int, or
+whole Haskell execution. The result for an erased table does not yet prove
+language equality with the original guarded root under Sized's scoped checks.
 
-Current cfta/src/Data/CFTA.hs:168-187 validates only initial membership and
-dangling children. mixedArity191-205 is separate and optional. One symbol may
-use several arities. SourceFTAValidation is the current structural model.
-The preserved FTAValidation validator is the older ranked-alphabet boundary;
-its narrower proofs remain valid. The checked Nat symbol7/arity0+1 example
-distinguishes them. Do not restrict current FTAs or add a uniform-arity caller
-premise to force the older validator. R106/R107 structural and finite-key
-results remain available. Arity provenance is not required by current mkFTA.
+## Source findings and Haskell follow-ups
 
-## Current source modules and exact checked hashes
+The current source remains Gen/Internal/Table.hs489-550 and Sized.hs150-175.
+The holder fromListWith(<>) reverses singleton insertion order. Literal
+holder equality to recomputed holders is false. This is not a runtime bug.
+HolderInsertion now models that insertion schedule directly. SetView proves
+that known and holder membership determine the ordered batch. No Haskell
+holder reorder is required.
 
-SourceSortedBuckets.lean5802B,9 laws:
-a2619514fd0725e4181d55a1efe1607be1498e8613f738b46f5ed68d8b92f66f
-keys/buckets/gather instantiate CanonicalClasses.sortedSet and the existing
-SourceCurrentMergeGrouping exact finite iterator. Gather permutes all values
-without Value equality or input Nodup. Stored bucket and optional lookup retain
-the original complete ordered filter. gather_filter selects complete buckets.
+The literal position loop and recursive delta loop can also differ in their
+intermediate tuple order. PositionTuples proves the exact source split and
+first-fresh membership characterization. SourceStep attaches its sorted
+readback to the original token buckets and exact target/choice entries.
+Do not claim intermediate list-order equality.
 
-SourceSortedBucketsProjection.lean3205B,4 laws:
-ba5ce9157fe8cb26a856d0fed4ec9b2876903b2bea4d4e8d44fcf24a8000aee5
-gather_at_key retains exact per-key input order. gather_lookup/Some retain
-defaulted lookup and key presence. append_lookup gives old-before-new buckets.
+byToken includes BOTH symbol and child arity. ZipTarget and TargetReadback
+now prove the missing equal-length target attachment. Current structural
+validation permits mixed symbol arities. Preserve the narrower legacy ranked
+validator as a separate boundary. Do not restore a global-arity premise.
 
-SourceSizedDeterminizationOrderedStep.lean5964B,7 laws:
-859e75f0c172ae5f4a92d07a64557b2497885b22b7d89423dae290f04984ba97
-Literal sorted token and tuple readback. Orderedness uses transitive comparison.
-round_perm/mem_round/round_distinct transfer complete existing round mathematics.
+The internal cap is signed. Do not silently clamp negative caps to zero.
+Exactly 1024 subset keys are allowed. The equal-child route additionally
+allows 1024 raw transitions PER KEY. take1025 detects excess. It skips visited
+keys before the new-key cap. These output limits do not bound total tuple work.
 
-SourceSizedDeterminizationOrderedRun.lean9387B,8 laws:
-328db2f40995039765dc3bd1a701c37ae4cd81c5236cb41633f5edbf044ec78d
-foundKeys is sortedSet(targets batch). step appends the ordered batch to context.
-compile uses the existing complete capped controller and a distinct known-list
-view. Reindex transfers existing invariants across computed choice permutations
-and pending membership. Actual evaluation derives Closed, original Left-root
-language, and full-graph unique classes. compile_complete bounds checking rounds
-and excludes exhausted. No caller loop invariant is needed.
+No Haskell runtime defect or required Haskell code repair was found here.
+Retain the comment follow-up for external work: Enumeration.hs422 says
+getUVarValue path-compresses its representative. Its call reaches
+Internal/UnionFind.hs129-130, where find returns(root uv uf,uf). The forest
+stays unchanged. Suggested comment: Look up the value stored at a UVar's
+representative. This comment has not been changed.
 
-SourceSizedDeterminizationOrderedOrigins.lean6018B,4 laws:
-e11803f9852b1319da1d35ebffb0312c3331fecc3fa7a8e6f7e5fa477337dfec
-Actual ordered evaluation derives known iff emitted target, target-set exactness,
-original-state sublist order, and per-key distinctness from original key Nodup.
+Lean proof repairs are local. They include unused instance removal, current
+conditional lemma names, local let reduction, direct cardinality inequalities,
+product eta/substitution, and Boolean equality across lawful decider instances.
+Marked failed drafts remain in the runtime directory. No old proof or repair
+was removed.
 
-SourceSizedDeterminizationHolderOrder.lean5062B,4 laws:
-3040e837d7c8d014c5c2d03946964d71e2813a84d6909f27037f403736bc331b
-mem_tuples_congr, tupleSet_eq, round_eq, sourceUpdate_membership. Exact sorted
-tuple/round equality uses transitive/lawful state comparison. sourceUpdate
-appends reversed fresh buckets and its membership law needs no order instances.
+## Checked source modules and reproducible packets
 
-SourceSizedDeterminizationOrderedOutput.lean11623B,11 laws:
-d1e32e78e7971e493587b2c8bd7be6734556ccb8370b0121a6e4d264ff94a98b
-grouped_perm, exact Left/Right readback, derived grouped closure, canonical output
-keys, successful validation, canonical termination, dense sorted readback, computed
-sort permutation, and queries_exact. Canonical output-key equality uses lawful
-state order. Final input/sortedRows derive their fields from actual ordered
-compile success. The finite table retains original keys and all subset rows.
+All 12 actual Lake targets and all 76 public source/axiom reports passed.
+The checks used shell.nix, Lean4.34.1, j1, and own warnings as errors.
+Only propext, Classical.choice, and Quot.sound occur. No cold full build,
+whole-library CI result, Haskell build, or Haskell execution is claimed.
+Do not rerun unchanged checks without a new reason.
 
-SourceSizedDeterminizationQueries.lean8659B,5 laws:
-454dea2c9374e219bb3ed4e9fb3619a9bb87235afa9c89b347c593bb82e21cf3
-One new closed_ordered_queries_exact composition reuses private disjointness and
-permutation proofs. The old four public interfaces remain. ordered_queries_exact
-now calls the general closed-row composition. OrderedOutput derives its closure
-and concrete sort permutation, rather than assuming them at the final branch.
-The existing source-based query packet now reports all5 laws at this new hash.
+Each module has a four-file packet in lean/restart-evidence/20261107-
+sized-determinization-<suffix>/. It contains check.py, theorems.json,
+checked.json, and README.md. All 12 packets total 56664 B at this checkpoint.
+Each checker builds its actual Lake target, then checks THIS source and all
+public axioms. It removes temporary reports. No copied source or build tree
+is required. Each README gives the serial capped reproduction command.
 
-## Reuse completed mathematics; do not replace the optimized worker
+SourceSizedDeterminizationHolderInsertion: 5251B, 5 laws.
+SHA256 54d2c318b29f1860421e13576bc4e7abd68cda0e1ea7229ee41359f1c71c713c. Packet suffix holder-insertion.
 
-Kernel proves exact target membership and the unique accepting subset for each
-finite emitted run. Frontier proves the first-fresh tuple condition. Step groups
-by symbol/arity and removes repeated tuples. Discovery bounds actual capped
-checking rounds. Closure proves simultaneous complete runs from coverage.
-Run derives Closed from actual evaluation. Rows installs Left roots/Right keys
-and proves whole-graph language/uniqueness. Queries supplies exact optimized
-counts/ranks in each transformed order. Finite constructs validated canonical
-input. Origins supplies exact target origins and original relative key order.
-Ordered variants now refine these stages with concrete token/tuple/bucket order.
-The context includes cumulative table PLUS current found batch at every frame.
-Keep the last batch; Haskell already merges table+found before fresh-empty return.
+SourceSizedDeterminizationSetView: 5928B, 7 laws.
+SHA256 a77bdbb2a0690a2619076b2de148ba575aed1de171443b7305e8bf5a378b6186. Packet suffix set-view.
 
-SourceSizedStructuralKeys uses current structural validation and existing finite
-restriction/dense canonical adapters. It retains guarded, repeated, unreachable
-and dead rows. SourceSizedFiniteKeys and its older public dispatcher retain
-their stricter validation boundary. Do not silently claim its nativeSized_eq
-reference-record equality for current determinized/equal-child routes.
-Sized.hs53-72 explicitly permits their different within-size orders.
-The proof rewrites optimizedApi using established mathematics. It does not
-replace the optimized implementation with a reference implementation.
+SourceSizedDeterminizationSignedLimit: 5441B, 9 laws.
+SHA256 0911ff97c5f1fde23b572586ed06a187a49f31124742586501771d585d64a3e0. Packet suffix signed-limit.
+
+SourceSizedDeterminizationSourceEvaluation: 6047B, 3 laws.
+SHA256 5b5348113d5a00c13c206932d3e1307c8aa58cf772975e3c6de53b79c653841f. Packet suffix source-evaluation.
+
+SourceSizedDeterminizationSourceLoop: 13188B, 8 laws.
+SHA256 657ef4e8929bcb7758d0b61db74bcf00d2fa120d02f394371783e3c781804005. Packet suffix source-loop.
+
+SourceSizedDeterminizationSourceOutput: 8057B, 7 laws.
+SHA256 8c09c18597743d83690daf5166f55085004f51edd5f1051b4cf3eca8e07cc6b8. Packet suffix source-output.
+
+SourceSizedDeterminizationTargetReadback: 6292B, 8 laws.
+SHA256 d9e6d6ca414a53aab91b9ffe3c0d9ec095355cc2b3a4f1a5e56e337421ff0f2c. Packet suffix target-readback.
+
+SourceSizedDeterminizationZipTarget: 8112B, 7 laws.
+SHA256 b675d2133a0c7c621e189d543b219535b5163f610150403e03d3dd80f75ef75c. Packet suffix zip-target.
+
+SourceSizedDeterminizationTableInput: 6500B, 7 laws.
+SHA256 637352c49d938b4b041d197aeecceaedb89cbd0cab1ad21f2eccf11fa72013ad. Packet suffix table-input.
+
+SourceSizedDeterminizationSetDifference: 3632B, 4 laws.
+SHA256 f82e8d904d460655cbc9b7d2a63a9049c2d11611ed02849101891ded852fa928. Packet suffix set-difference.
+
+SourceSizedDeterminizationPositionTuples: 11499B, 7 laws.
+SHA256 4d15cafe7abae1e4a47b4382ce941db53607257613275b29c7f4d412f82ada20. Packet suffix position-tuples.
+
+SourceSizedDeterminizationSourceStep: 5460B, 4 laws.
+SHA256 24e4186145d87c6960c897b86775e5abe312898ff2259eac6f2c851a5c32832b. Packet suffix source-step.
+
+Successful final checker stages:
+- helpers58216 terminal0: HolderInsertion5 and SetView7.
+- zip50905 stage0: ZipTarget7. The OUTER batch later ended1 on SourceLoop.
+- loop30654 terminal0: SourceLoop8.
+- output41087 terminal0: TargetReadback8 and SourceOutput7.
+- signed16957 stage0: SignedLimit9. The OUTER batch later ended1 on Evaluation.
+- evaluation83178 terminal0: SourceEvaluation3.
+- table67073 terminal0: TableInput7.
+- literal96712 stage0: SetDifference4. The OUTER batch later ended1 on PositionTuples.
+- step36773 terminal0: PositionTuples7 and SourceStep4.
+
+Do not call those failed OUTER batches terminal0. Their successful individual
+checked.json files record compiler_exit0. Later failures were repaired.
+Largest recorded scope peak1261M under4G. All compiler jobs are terminal.
+No heavy slot is owned. Keep all future heavy checks strictly serial.
+
+Runtime: /tmp/mcfta-source-determinization-20261107-0904/.
+It contains compact checker scripts, marked failed drafts, heavy-peaks.tsv,
+verified-manifest.json, doc-tail-manifest.json, and the current prefix.
+RESUME.json and the exact R109 board request record final publication state.
+Prior runtime: /tmp/mcfta-ordered-determinization-20261107-0805/.
+Monitor /tmp. Keep temporary output small. Do not copy build/source trees.
 
 ## Immediate next work and full remaining objective
 
-1. Attach actual native finite-set and incremental-holder/control execution to
-   the ordered list view. Use membership, known Nodup/cardinality, sorted found
-   readback and HolderOrder.round_eq. Avoid literal holder or known iteration
-   equality. Reuse existing finite-key, ordered-map, and dense-numbering adapters.
-2. Add generated tuple arity and equal-length zip target readback. Add negative
-   internal cap behavior if covering all Int helper calls. Preserve mixed symbol
-   arities and the actual public positive1024 path.
-3. Derive original support/root/plain facts from actual source tables and current
-   validation. Attach sizedStates' global reference residual precheck, per-state
-   trim/plain/unambiguity checks, shared deterministic table, missing-state empty
-   result,1024 failure and reference fallback. Determinization uses ALL ERASED
-   original rows. Bridge the original guarded root under the actual SCOPED plain
-   check; do not require globally plain raw original guards.
-4. Prove equal-child exploration's complete conjunction-key language and output
-   uniqueness from execution and the actual unconstrained unambiguity gate. It
-   joins same-token transition tuples and direct-child equality groups. Each
-   grouped key includes every child state at each grouped position and fills all
-   positions in that group. Reuse CompactGroups.groupSelections_exact,
+1. Attach the complete current Sized route. Use its global reference residual
+   precheck, per-state trim/plain/unambiguity checks, shared deterministic table,
+   missing-state empty result,1024 cap failures, and reference fallback.
+   Determinization uses ALL ERASED original rows. TableInput now derives its
+   finite input facts. Bridge the guarded original root to that erased table
+   under the actual SCOPED plain check. Do not require globally plain raw guards.
+2. Prove equal-child exploration's complete conjunction-key language and output
+   uniqueness from actual execution and the actual unambiguity gate. It joins
+   same-token transition tuples and direct-child equality groups. Each grouped
+   key contains every tuple child at every grouped position. Every position in
+   the group is filled. Reuse CompactGroups.groupSelections_exact,
    CompactEdgeRanks.source_outputs_exact/compiledEdge_correct,
    CompactIndexChoice.choice_correct, and SourcePlanScale.group_position_nodes.
-5. Complete ONE computable original-input/request-size bound for BOTH optimized
-   enumerateOut and enumerateFully. Cover all generated, reached, returned,
-   subsequent, intermediate and failing states, plus TOTAL branch work. Derive
-   reached word/capacity conditions from those original data. Output1024 and
-   checking-round bounds and existential stage bounds do not prove this result.
-6. Complete actual native/Haskell identity, cache, interner, Eq/hash and machine
-   Int correspondence. Keep the optimized interned core primary and older
-   constructor/equality work secondary. Do not add new final caller resource,
-   closure, finite-carrier, completed-worker, success/fuel, validity or
-   OriginalInput obligations as a substitute for the full objective.
+3. Finish native container representation and ordering attachments. Reuse the
+   new source step, insertion, set-difference, and control VALUE laws. Bind their
+   reads/writes/cardinality to actual Map/Set operations and actual native key
+   representations. Do not replace the optimized interned core.
+4. Complete ONE computable original-input/request-size bound for BOTH optimized
+   enumerateOut and enumerateFully. Cover every generated, reached, returned,
+   subsequent, intermediate, and failing state, plus TOTAL branch work. Derive
+   reached word/capacity conditions from those original data. Output1024,
+   checking-round bounds, and existential stage bounds do not prove this result.
+5. Complete actual native/Haskell identity, cache, interner, Eq/hash, and machine
+   Int correspondence. Keep older constructor/equality work as secondary targets.
+   Do not add final caller resource, closure, finite-carrier, completed-worker,
+   success/fuel, validity, or OriginalInput obligations in place of the full goal.
 
-Exactly1024 deterministic subset keys are allowed. Equal-child additionally
-permits1024 raw transitions PER KEY; take1025 detects excess. It skips visited
-keys before its new-key cap. These are output caps, not all tuple-work bounds.
+Reuse completed original-syntax and pruning work. SourcePruningEnumeration-
+SelectedSource.prepare/complete derives construction, selected preparation,
+readiness/cache preservation, closure, and normalized rows. Its remaining
+annotation/reached-word/successful SourceCyclicRows compilation conditions
+still matter. SourceCyclicRows is not every current Sized route. Reuse
+ColdGuardedExact.trace_table_exact, ColdSized.source_sized,
+ColdNativeSized.complete, NormalizedNativeSized.complete, and
+SizedEntryCorrect.complete_both_exact/constructed_complete. Do not start over.
 
-Earlier SourcePruningEnumerationSelectedSource.prepare/complete already composes
-original checked syntax, construction, selected Mu/Union preparation, ready warm
-native state/cache preservation, closure, normalized rows and modeled cyclic
-compilation with exact node-count classes/count/decode/order/rank laws under its
-explicit normalization/reached-word/compiler-success boundaries. That compiler
-is SourceCyclicRows, not every current Sized route. Reuse ColdGuardedExact.
-trace_table_exact, ColdSized.source_sized, ColdNativeSized.complete,
-NormalizedNativeSized.complete, and SizedEntryCorrect.complete_both_exact/
-constructed_complete. NativeCompilerCapacity.ranges_of_capacity still assumes
-reached capacity; it does not derive closure from original input.
+## Commits, publication, and retained history
 
-## Checks, compact reproduction, and runtime ownership
+2a2f7fedb2e2bf7d874a1b7cd7324ff9f76073dd Prove holder insertion and set view congruence
+61ef640d78c718f2fe9f8fdd35ba58d49d604f83 Connect generated tuple arity to literal target readback
+fd9c762a849276f9739123f9302ccdfb58367274 Prove bounded source discovery with incremental holders
+1280131c00dd512b527231950feb5316b112a4c9 Derive exact queries from signed source determinization
+a6827f3d811dfae6b0759cc18a165567729e97c4 Derive determinization inputs from original erased tables
+af78e2b8eaab5eaa05a00b91cd42e52a3294c114 Connect source zip targets to ordered set difference
+1129b58134b5bf4a28cdb704c04f991918b526f1 Connect literal positional tuples to exact source step entries
 
-All EIGHT actual Lake targets and all52 own source/axiom reports passed in
-shell.nix, Lean4.34.1, j1, own warnings as errors. This includes48 new public
-laws and the4 preserved query interfaces. Only propext, Classical.choice and
-Quot.sound occur. No clean/CI/Haskell build or execution is claimed.
+Push formalize under the user's standing authorization. Use a normal push.
+Verify an independent ls-remote and refresh origin/formalize afterward.
+Shared board thread:1c1333d7-46ea-4f46-a9a1-b5d13e577337. Publish R109 after
+push verification. Save the exact request ID and payload. Compare canonical
+content title/text, author, and commit after the write. Do not count an
+unverified write response as canonical readback.
 
-Standalone final handles: ordered-step20384 terminal0, buckets34718 terminal0,
-ordered-run55089 terminal0, holder23857 terminal0. Queries, ordered-origins,
-projection and ordered-output passed their individual checkers and saved reports
-inside serial batches27495,66885,52645,36224 respectively. Those OUTER batches
-ended1 on the next draft's failure; do not call them terminal0. Each successful
-stage's compiler_exit is0. Later failures were repaired. All jobs are terminal.
-Largest recorded scope peak1437M under4G; no heavy slot is owned.
+Earlier source half-quotas and source/TYPE receipt gates are superseded.
+No user, developer, goal, or AGENTS rule imposed those access limits.
+Read actual source as needed. Do not rebuild receipts or duplicate trees.
+Preserve historical SourceProcess FAIL and Root unknown-upper facts.
+Preserve every historical document tail below byte for byte.
 
-Seven new four-file packets plus the updated query packet total43998B:
-lean/restart-evidence/20261107-sorted-buckets/
-lean/restart-evidence/20261107-sorted-buckets-projection/
-lean/restart-evidence/20261107-sized-determinization-ordered-step/
-lean/restart-evidence/20261107-sized-determinization-ordered-run/
-lean/restart-evidence/20261107-sized-determinization-ordered-origins/
-lean/restart-evidence/20261107-sized-determinization-ordered-output/
-lean/restart-evidence/20261107-sized-determinization-holder-order/
-lean/restart-evidence/20261107-sized-determinization-queries/
-
-Each check.py builds its actual Lake target and checks THIS source with all
-public axiom reports. checked.json records its checked source hash. README gives
-the capped reproduction command. Temporary reports are removed. No archives or
-copied trees are needed. Do not rerun unchanged checks without a new reason.
-
-Small marked drafts remain in /tmp/mcfta-ordered-determinization-20261107-0805/.
-Repairs include generic/concrete BEq normalization via membership/Nodup,
-unused instance/simp cleanup, Bool branch equations, mem_fresh namespace,
-table-alias unfolding, and omit placement before declaration documentation.
-No old proof/counterexample/repair was removed. verified-manifest.json gives
-all eight source hashes, sizes, laws and packet byte totals. RESUME.json records
-the actual final push and canonical board readback. Prior runtime:
-/tmp/mcfta-current-fta-20261107-0736/. Keep heavy checks serial at cap4G and
-monitor /tmp. Do not create large logs or source/build copies.
-
-Shared msg-board thread: 1c1333d7-46ea-4f46-a9a1-b5d13e577337. R107 has sequence951.
-Publish R108 only after push and independent remote verification. Retain the
-exact request ID/payload for safe retry and compare canonical title/text/author.
-
-## Source workflow and retained history
-
-Earlier source half-quotas and source/TYPE receipt gates were audited and are
-superseded. No user/developer/goal/AGENTS rule imposed those access limits.
-Read actual source as needed. Do not rebuild receipts, duplicate trees or role
-infrastructure. Preserve historical SourceProcess FAIL and Root unknown-upper
-facts. Preserve each historical tail below byte for byte.
-
-The full goal remains ACTIVE. Continue autonomously and push formalize under
-the user's standing authorization. Do not ask whether to continue.
+The full goal remains ACTIVE. Continue autonomously. Do not ask whether to
+continue. Regular formalize pushes are explicitly authorized.
 
 ---
 
