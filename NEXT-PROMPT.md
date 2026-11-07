@@ -1,4 +1,182 @@
-# Current checkpoint: actual FirstOrder construction and recursive-body origins
+# Current checkpoint: complete initial constructor model and native universe observations
+
+Updated 2026-11-07 18:40 CET. Goal ACTIVE. R120 made PROGRESS. Branch formalize.
+This checkpoint follows 7b5c76ca018b3f395fe2af51c4378cbdff94062f
+(R119, canonical board seq966). Keep the complete original objective below.
+Preserve the optimized interned core, older constructor/Eq targets, all
+proofs, counterexamples, repairs, marked drafts, and unrelated .hypha/.
+Regular formalize pushes remain explicitly authorized. Do not pause the goal
+or ask whether to continue. No full-system completion claim is made.
+
+Formalize was pulled before work. Main was refreshed again at 18:35 CET.
+Main remains bd5a406a6a3f84b7e3ae0906082783911509df83, an ancestor.
+The checked R120 code and diagnostic commits end at 3cb49f469b59635e372522e541b616000405fc1b.
+No production Haskell behavior changed. The final native fixture passed
+fourmolu in the project Nix shell. cabal-gild checked the unchanged generator
+Cabal file; its --input option printed a deprecation warning. No full suite,
+cold full build, or full CI is claimed.
+
+## R120 strongest new constructor result
+
+SourceSynthesisUniverseOrigins proves that original successful FirstOrder
+instructions contain finite ordinary-node/union prefixes over ONE exact
+allTypes expression computed from the actual Library and Query. The prefix
+contains no other binder and no bare lexical variable. Ordinary constraints
+remain unrestricted. Duplicate-name table resolution keeps the actual last
+winner. The source table worker retains its actual missing-key errors.
+
+SourceSynthesisUniverseNativeInput derives completion of the actual default
+universe in the repaired fresh-ordinary constructor model. It connects the
+source noBinders Boolean test to the checked binder-free fragment. Its cold
+endpoint supplies actual complete records, Facts, Available, Grows, and issued
+ID history. A conditional Mu readback law derives the physical key and
+payload from Facts and availability. No separate key equation is supplied.
+It does not yet prove that the universe result has a particular Mu tag.
+
+SourceSynthesisUniverseConstruction.firstOrderRaw_constructor_result now
+composes the actual computed input property with the complete constructor
+schedule. If firstOrderRaw returns an instruction, the repaired constructor
+EXECUTES FROM EMPTY CACHES and returns coherent records, an available value,
+cache growth, and issued-ID history. The caller supplies no successful
+constructor run, constructor fuel, caller resource, or cache-validity premise.
+Actual source lookup errors remain errors in the match-result statement.
+The ordinary DecidableEq parameter describes constructor key equality.
+
+This completes the modeled INITIAL constructor stage for the FirstOrder
+branch. It does not prove lookup-domain completeness, actual lazy Haskell
+table demand or allocation order, Curried/Specftacular coverage, value-level
+native prefix preservation, generated intersection/projection closure, or
+the original-input bound for the optimized enumeration workers.
+
+All three actual Lake targets and own-source warning-as-error reports pass.
+All 23 new public laws use only propext, Classical.choice, and Quot.sound:
+
+- SourceSynthesisUniverseOrigins: 11 laws; SHA256 829b199895fa7ec171ff2d8295b7c81fce36baa164eeeca11f1c6113f3eb51db.
+- SourceSynthesisUniverseNativeInput: 8 laws; SHA256 896bbabd2e364343f19738f9d782a1ba37fdfa2d3ec8a6dce09147896a2dbc36.
+- SourceSynthesisUniverseConstruction: 4 laws; SHA256 6b6e27b2d9a637ecbe22185ced443fb8cadfc7c09e34e305f943337449c613a1.
+
+Each compact packet contains check.py, the full theorem list, checked.json,
+and the exact scope README. All compiler/probe/format jobs are terminal.
+Checks used serial 4 GiB capped jobs. The last proof handle was 67025, exit0.
+No successful unchanged proof was rerun without a new source change.
+
+## R120 native observations and their limits
+
+Fixture: lean/repro/AllTypesPrefixClosure.hs, SHA256
+29177c88a9f0eadb0fa49ad445b29d4c29e3a2b4c87ce7bdfe1ddd13ed6ca429.
+Packet: lean/restart-evidence/20261107-native-universe-prefix/.
+The fixture obtains U and generalized prefixes from literal stored children
+of the CURRENT PUBLIC rawSearchSpace Library/Query size-one result. It does
+not supply a private kernel domain or replacement grammar. It reads the
+stored ordinary/Mu/union graph and skips Rec leaves.
+
+Seven fixed cases cover Int, List, Pair/function, unequal-depth variable
+repetition, arrow/catalog overlap, rigid var_e, and unary Fun. They check
+both U/P intersection orders, one repeated intersection, and P/Q product.
+A separate occurs-check case reduces equated Pair a a and Pair b (List b).
+Each case has a three-second limit. ALL EIGHT cases completed, with 58
+returned stored-graph observations. All graphs were closed. Every reachable
+stored Mu had that case's original U identity. Both intersection orders and
+the repeated product had equal identities in all seven cases. The occurs-
+check case reduced to Empty. Missing rigid var_e and unary Fun can also
+produce Empty. These are bounded observations, not general closure laws.
+
+An initial projection-based extraction failed every Mu-tag input check and
+provided NO closure evidence. The corrected fixture reads literal stored
+edgeChildren after shape checks. The packet checker requires all eight
+named cases and all 58 positive sharing/closedness fields. Its assertion is
+diagnostic: a violation alone does not establish a language bug.
+
+Counts exclude transient Mu/probe allocations, unused stored records,
+intersection domains, and memo/cache cells. Returned-U reuse is not a work
+bound. Preserve the generic R118 growth/timeout finding. It is not a proved
+divergence result, and no transfer to actual synthesis callers is established.
+The native library build passed with GHC 9.14.1 -O0 in a project-derived
+Nix shell with GMP. Source trees and complete outputs are in observed.json.
+No archive is needed to reproduce the observation.
+
+## Haskell follow-up correction for external work
+
+PR #203 is a DOCUMENTATION correction for the required-argument exception:
+https://github.com/TharkunAB/cfta/pull/203
+The behavior follows Hectare and preserves Hoogle+ program spaces. The prior
+recommendation to change buildRelevant was too strong and is withdrawn.
+Keep the observed behavior and faithful source port. The reproducer still
+establishes the old documentation discrepancy; it is not a pending behavior
+repair. PR #202 corrects the union-find comments:
+https://github.com/TharkunAB/cfta/pull/202
+
+Both PRs were refreshed at 18:37 CET and are OPEN, NOT MERGED. Their base is
+bd5a406a6. Heads: #202 ce4ee6d82340235a39b9278457fe0f9ff45a2eba;
+#203 e019ce41db8029a5d1349a8ea123253f3d7af715. Main still has the old
+comments. Do not claim either correction has landed. Do not edit or merge
+these externally owned fixes in parallel. The older historical PENDING
+behavior-change recommendation below is superseded by this correction.
+No production Haskell fix was made in R120.
+
+## Largest gap and exact next kernel obligation
+
+The largest gap remains ONE computable original-input/request/caller bound
+for BOTH selected-slot expansion and complete optimized enumeration. Sum
+all processed siblings, not just the longest branch. Cover all generated,
+intermediate, rejected, failing, returned, subsequent, and native cache/probe
+states. R118 bounds recorded core allocation by modeled summed work; it does
+not bound that work from input or charge the native operations. R120 closes
+an initial constructor success premise, not this total-work obligation.
+
+NEXT: prove exact universe reference reconstruction by the actual
+SourceRecursiveIntersectionKernel.execute, starting from the reserved EMPTY
+domain. U must come from the actual allTypes constructor, not an assumed
+semantic carrier. Derive its Mu tag, normalized stored body B, and probes.
+Then execute Rec(U) intersect U. The literal control path swaps to U/Rec(U),
+enters pair(u,u), resolves B/Rec(U) to B/U, enters pair(b,u), and computes
+the OPEN ordinary product B/B. Closed-self does not apply to B.
+
+Child Rec(U)/Rec(U) requests use the seen pair(u,u). Inner maybeMu(b,u)
+must be unused. Outer maybeMu(u,u) must reproduce U's stored depth and
+ordinary probes and hit its existing canonical record. Available+Facts and
+the new available_mu_key_readback derive the original key. Reuse
+InternedProfileHeap.stored_probes, InternedFreshOrdinaryReadback.hit_probes,
+and SourceRecursiveIntersectionMaybeMu.unused. Compute sufficient kernel
+fuel from the literal finite control; do not assume successful fuel.
+
+Catalog overlap needs explicit work. A catalog can contain both the special
+arrow row and an ordinary ("->",3) row, plus ("(->)",0). Prove the small
+marker/U intersection and cross products, including arity mismatch and
+physical top-conjoin-top equality. Literal physical U intersect P = P is
+too strong. A candidate native class allows Empty and finite multirow/union
+prefixes over U. It is NOT YET a proved preserved class.
+
+Do not quantify reconstruction over arbitrary domains: if pair(u,u) is
+already seen, control returns its placeholder before Mu handling. Domain
+validity alone does not prove freshness. Derive the required absence from
+actual caller domains when composing the kernel endpoint. Native closed
+operand reset helps, but needs its real reachability invariant. Count all
+transient allocations even if the final returned U is reused.
+
+Other full goals remain: complete Sized routing and failures/fallbacks,
+original accessor-language preservation, exact per-node-count terms and
+ordering, both count/rank inverse directions through actual lazy sparse
+storage, productive infinite queries, and machine/container/hash/cache
+correspondence. R111 plain routing remains the strongest COMPLETE query
+contract. R116 remains the strongest prepared source rank/count endpoint.
+Keep helper success INTERNAL and preserve the original full scope below.
+
+## R120 restart, storage and publication
+
+Runtime: /tmp/mcfta-universe-closure-20261107-1810/. RESUME.json,
+verified-modules.json, heavy-peaks.tsv, compact compiler repair logs, native
+reports, and external-followups.json retain the current state. Before this
+final documentation pass it occupied 73,728 allocated bytes. No build/source
+trees or bulk archives were copied. Keep runtime records small. All proof
+and native observations are reproducible from tracked source and packets.
+
+Final publication.json and canonical-board-readback.json must identify the
+final pushed documentation commit and compare the canonical board author,
+title, text, and commit separately. Preserve unrelated .hypha/. The current
+document tails remain byte-exact by hash. The active goal stays ACTIVE.
+
+# Prior R119 checkpoint: actual FirstOrder construction and recursive-body origins
 
 Updated 2026-11-07 18:01 CET. Goal ACTIVE. Branch formalize. R119 made PROGRESS.
 This checkpoint follows 23654b5b2e9983cf04322f11befd0558b4cb149f
