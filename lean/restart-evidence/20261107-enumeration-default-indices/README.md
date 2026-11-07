@@ -13,5 +13,6 @@ It does not prove termination, all error prefixes, exact output terms, or Haskel
 
 Source inspection found the same default callback and ordering behavior in `cfta/src/Data/CFTA/Enumeration.hs:859` and `:912`.
 This inspection is not a verified translation of the Haskell implementation.
-The native continuation representation and cached selection still require a correspondence proof.
+Finite CPS and conditional cached-selection agreement already have proofs.
+Their conditions still need to be derived for the complete native run.
 No Haskell source changed in this increment.

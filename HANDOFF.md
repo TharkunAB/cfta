@@ -30,14 +30,43 @@ Lean EnumerationState.noPruning at :331-332 has the matching callback behavior.
 This source inspection closes the callback-law derivation for this Lean default path.
 It does not establish a verified Haskell translation.
 
-The next correspondence obligation is concrete. Haskell EnumerateM uses a
-continuation representation at Enumeration.hs:328-335. Native enumeration also
-maintains _expandableUVars and _waitingUVars at :236-246.
-Lean findExpandable scans the state values at EnumerationState.lean:249-262.
-Prove that native writes and merges maintain caches whose selection agrees with
-that scan. Then connect native interned nodes, recursive/union edge closure,
-intersection, identity, and branch order. The custom callback API remains open.
-Do not claim that an arbitrary state-changing callback satisfies the default law.
+Existing proofs already establish finite CPS algebra and ordered state/list
+agreement in EnumerationCPS and EnumerationCPSRuns.runs_eq. Reuse those proofs.
+EnumerationPureSelection.find_exact, scan_agrees, and scan_complete already
+connect canonical cached selection to the slot scan under Correct and a common
+representative interpretation. Do not describe these component laws as absent.
+
+The remaining native composition must derive those conditions from initialization
+and every native write, merge, and expansion. Haskell stores _expandableUVars and
+_waitingUVars at Enumeration.hs:236-246. Lean findExpandable scans state values at
+EnumerationState.lean:249-262. Connect the native cache maintenance, interned
+nodes, recursive/union edge closure, intersection, identity, and branch order.
+The custom callback API remains open. Do not claim that an arbitrary
+state-changing callback satisfies the default law.
+
+The smallest native attachment is Enumeration.hs:741-754. Prove that the native
+union fold redirects roots and transfers each old representative count to the
+final representative. Apply EnumerationCanonicalWaiting.moveMany_correct and
+assimilation_correct after the complete assimilation transaction. The cache
+invariant need not hold between its temporary empty-delta writes.
+Model initialization, allocation, replacement, and selection already have laws.
+Reuse EnumerationPureSelection.initial_correct, allocate_correct, find_exact,
+scan_agrees, and scan_complete, plus the canonical replacement and count laws.
+Native selection leaves its forest unchanged. The Lean scan may compress it.
+Use the compression frame and root relation, not raw forest equality.
+Native IDs and waiting counts use machine Int. Their bounds and order still need
+to correspond to the unbounded mathematical representation.
+
+The exact accepted-support theorem EnumerationCPSSource.runs_exact has an
+important boundary. Its CompleteGraph premise at EnumerationSemantics.lean:382
+excludes every recursive-tagged graph node. It also requires canonical edge tries
+with valid child indices. IntersectionCorrect separately requires semantic
+intersection. Thus this exactness theorem does not close the native Mu or retained
+union case. It gives existential/eventual fuel witnesses, not the required one
+computable original-input execution bound. Partial rendering has separate proofs;
+those do not establish exact full-term enumeration for recursive inputs.
+These existing theorem boundaries were inspected. Their unchanged modules were
+not rebuilt in this increment.
 
 The other main gaps remain original-input execution bounds for both workers,
 intermediate and failing-path work, and end-to-end exact accepted terms per
