@@ -30,10 +30,10 @@ output = results[-1]["stdout"]
 names = ["int", "list", "pair-function", "unequal-depth", "arrow-catalog",
          "missing-rigid-var-e", "fun-unary", "occurs-check"]
 reports = [line for line in output.splitlines() if any(line.startswith(name + ": ") for name in names)]
-complete = len(reports) == len(names) and all(": Right " in line for line in reports)
+complete = [line.split(": ", 1)[0] for line in reports] == names and all(": Right " in line for line in reports)
 observations = sum(line.count("Observation {") for line in reports)
-closed = not any("closed = False" in line for line in reports)
-same_universe = not any("muSubsetOfActualU = False" in line for line in reports)
+closed = sum(line.count("closed = True") for line in reports) == 58
+same_universe = sum(line.count("muSubsetOfActualU = True") for line in reports) == 58
 checked = complete and observations == 58 and closed and same_universe
 print(json.dumps({
     "time": datetime.datetime.now().astimezone().isoformat(),
