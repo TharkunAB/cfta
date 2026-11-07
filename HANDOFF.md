@@ -1,3 +1,65 @@
+# Current checkpoint: default enumeration discharges its callback invariant
+
+Updated 2026-11-07 05:10 CET. Goal ACTIVE. Parent checkpoint:
+9a8351b9daf20900a7f9da86d90fe07ae7353004. Current formalize HEAD identifies
+this checkpoint after publication. Preserve unrelated .hypha/ and all proof work.
+
+## Checked result
+
+New source: lean/MicroCFTA/EnumerationStateNoPruningIndexValidity.lean.
+The default noPruning callback satisfies OraclePreservesIndices by its definition.
+The ordinary worker uses no ordering preference and that callback.
+Its successful returns preserve Indexed and counter monotonicity.
+Initialization discharges the incoming state invariant.
+These results require no callback law from the caller.
+The graph is still an abstract interface. A successful fuel-bounded return is still
+an assumption. This is not a termination or Haskell-correspondence theorem.
+
+All three public theorems passed the actual Lake target build and source/axiom
+report in shell.nix. Lean 4.34.1; serial; warnings as errors; 4G cap; peak 1095M.
+The only reported axioms are propext, Classical.choice, and Quot.sound.
+No sorry or new axiom was added. No Haskell source changed or Haskell build ran.
+Reproduce from lean/restart-evidence/20261107-enumeration-default-indices/check.py.
+The packet contains small scripts and results. It contains no archived build tree.
+
+## Source inspection and next proof target
+
+The Haskell ordinary wrapper is Enumeration.hs:912-927.
+Its callback returns (False, state). Its default ordering returns Nothing at :859-860.
+Lean EnumerationState.noPruning at :331-332 has the matching callback behavior.
+This source inspection closes the callback-law derivation for this Lean default path.
+It does not establish a verified Haskell translation.
+
+The next correspondence obligation is concrete. Haskell EnumerateM uses a
+continuation representation at Enumeration.hs:328-335. Native enumeration also
+maintains _expandableUVars and _waitingUVars at :236-246.
+Lean findExpandable scans the state values at EnumerationState.lean:249-262.
+Prove that native writes and merges maintain caches whose selection agrees with
+that scan. Then connect native interned nodes, recursive/union edge closure,
+intersection, identity, and branch order. The custom callback API remains open.
+Do not claim that an arbitrary state-changing callback satisfies the default law.
+
+The other main gaps remain original-input execution bounds for both workers,
+intermediate and failing-path work, and end-to-end exact accepted terms per
+node-count size, counts, order, and both rank/unrank inverse laws.
+Retain the optimized interned core as the primary target and older constructor
+and equality work as secondary targets. Do not substitute a theorem count for
+whole-system coverage.
+
+## Workflow correction
+
+Repository inspection is authorized by the active whole-library task.
+No source-reading quota was found in the available direct user messages,
+automatic goal contexts, developer messages, base instructions, or applicable
+AGENTS.md. Historical Source/TYPE quota tables in these working notes do not gate
+further required source inspection. Do not create new opaque source receipts or
+copy source/build trees to satisfy those tables.
+Preserve the historical SourceProcess FAIL and unknown-upper records as historical
+facts. This correction does not reconstruct or clear that historical audit.
+The source-inspection counts in older checkpoints are historical snapshots.
+
+The earlier checkpoint and its records follow unchanged.
+
 # Current checkpoint: actual Fully index theorem with an open native callback obligation
 
 Updated 2026-11-07 04:50 CET. Status: PROGRESS. Full goal ACTIVE. Current formalize HEAD
