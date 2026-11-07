@@ -1,15 +1,54 @@
-# Current checkpoint: actual enumerateOut preserves allocated reference slots
+# Current checkpoint: actual Fully index theorem with an open native callback obligation
 
-Updated 2026-11-07 04:33 CET. Status: PROGRESS. Full goal ACTIVE. Current formalize HEAD
-identifies the published checkpoint. Parent: f90946108b44f6bc3c4a2b4f69e163912acb136c.
-Earlier index5105afc382f0407ee649ba3fc0aba1508b37cf37 and valuef90946108 were
-pushed and independently remote/tracking verified. Main was fetched again and is
-still bd5a406a6a3f84b7e3ae0906082783911509df83. Preserve unrelated .hypha/.
-Root has no compiler live. SAME Native is extending actual enumerateFully under
-an INTERNAL callback preservation contract. Verify its actual handle before
-starting another compiler. Do not treat that callback law as a final caller premise.
+Updated 2026-11-07 04:46 CET. Status: PROGRESS. Full goal ACTIVE. Current formalize HEAD
+identifies the published checkpoint. Parent: 807fb8f205fa40c52ba54f87b117776c7056373e.
+Index5105afc38, Valuef90946108 and Out807fb8f20 were pushed and independently
+remote/tracking verified. Main was fetched again and remains
+bd5a406a6a3f84b7e3ae0906082783911509df83. Preserve unrelated .hypha/.
+No compiler is live. All ELEVEN checked own math sources are FROZEN. SAME Native
+is auditing retained positive native-provider contracts only; no new Source,
+TYPE, private replay, interface probe or compiler is authorized for that audit.
 
-## Strongest new checked worker result
+## Strongest new checked Fully result and its condition
+
+Actual imported enumerateFully now preserves Indexed and counter monotonicity
+on successful return UNDER an explicit INTERNAL OraclePreservesIndices law.
+That property covers both actual callback slots and every successful reply,
+including both Bool values. The before slot requires an allocated UVar. The
+after slot also receives a fragment whose holes are below the current counter.
+The law preserves Indexed and prevents the counter from decreasing. It supplies
+NO callback numeric allocation, cost, success or termination bound.
+
+Initial-state and Node/Edge/Out-then-Fully corollaries derive incoming index
+conditions and preserve held fragment references at the final counter. Selection,
+scan, repeated-recursion reset, both callback slots, actual Out and recursive
+continuation are checked. No worker or Oracle was replaced.
+
+The native callback realization has NOT proved OraclePreservesIndices. This is
+an internal composition theorem, not the final system theorem. The final proof
+must derive that law from the actual native callback. Do not add it as a FINAL
+caller callback/validity/closure/resource/success/fuel premise. Covering both Bool
+results does not cover callback-error/internal prefixes or all failing work.
+
+Source: lean/MicroCFTA/EnumerationStateFullyIndexValidity.lean, 28762 bytes,
+SHA-256 0476cd97fca183b91323c3f427ee3e1b7ea438496a1d3869692d8a0d2fef5d56.
+SAME Native normal3/62904 passed terminal0 with empty logs and guarded10-own-import
+stability. Root verified the result digest and explicit three-phase assertions.
+Actual module plus all5 source/axiom reports25116 passed0, peak348M. The new source,
+all10 checked own dependencies and checker files were stable before, distinct-after,
+and separate-final. Lean4.34.1/shell.nix/j1/warnings-as-errors/4G/swap0/380s.
+Axiom sets only propext, Classical.choice, Quot.sound. No sorryAx or added axiom.
+All small failed drafts and own proof repairs remain.
+
+Packet: lean/restart-evidence/20261107-enumeration-fully-index-validity/10369B.
+Source-based check.py builds the actual module and checks all5 source/axiom reports.
+No archived build copy or private Source cut is required for proof reproduction.
+No new Source replay, TYPE, interface view, Haskell code/fix or whole-library build
+occurred in this Fully increment. Root's Std zipIdx leaf is integrated as private
+own math. Original-input bounds, total/failing work, exact end-to-end enumeration
+and native/Haskell correspondence remain open. No completion/pause/block claim.
+
+## Earlier checked actual Out worker result
 
 Every successful actual imported EnumerationState.enumerateOut result preserves
 Indexed at the returned counter and counter monotonicity. Returned fragment holes
@@ -93,21 +132,22 @@ The current-state fuel bound is not the requested original-input global bound.
 No Haskell code or fix was established. Index/Value proofs used no new Original
 Source body/replay/TYPE or compiler-interface view.
 
-## Next actual worker task
+## Next target: the actual native Graph and Oracle realization
 
-SAME /root/native_mu_prepare is extending actual enumerateFully. New file:
-EnumerationStateFullyIndexValidity.lean. Keep all10 current checked own sources
-FROZEN. Prove an internal theorem from the actual Oracle slots' preservation law,
-covering all successful Bool results where possible (including False). Then prove
-initial/composed corollaries. An accepted-only law would not cover states produced
-on false-result failing paths; retain that separate obligation.
+SAME /root/native_mu_prepare is doing a bounded retained-contract audit, with
+no new Source/TYPE/interface/locator/compiler. Identify the FIRST concrete native
+heap lookup/view and callback operation that realizes the actual model slots.
+Separate that operation from constructor/probe/binder-depth/flat-row models.
+Return only positively retained public names/positions and English contracts.
+Do not add another generic helper or safe replacement Oracle in place of this
+missing native bridge. If no provider is positively bound, retain that UNKNOWN.
 
-The Oracle alias permits enumeration-state actions. Its native realization and
-preservation law remain UNPROVED. Do not replace the worker or Oracle with a safe
-alternative. Do not claim arbitrary Oracle safety. Do not add callback validity,
-resource, closure, fuel or success as a FINAL caller premise. The realizer must
-derive this internal contract. Failing prefixes, total work, exact semantics and
-actual native/Haskell correspondence remain part of the full goal.
+Discharge the actual callback's Indexed/counter preservation law, then derive the
+original-input/request-size allocation/query bound and all generated/returned/
+subsequent-state and total/failing-prefix work bounds for BOTH workers. The
+actual Graph.node provider must preserve the structural recursive boundary;
+Graph.intersect and both Oracle uses need actual source/API/runtime connection.
+Keep all older exact language/count/order/both-inverse and Eq/hash/interner gaps.
 
 A precise replay of already-owned EnumerationState244..329 (86LF) is authorized
 ONLY to the SAME Native reader with fresh capture and receiver/view guards. No
@@ -350,7 +390,8 @@ Current guards and kernel checks do not recover that historical/global audit.
 PrimitiveTYPE1401,actual32TYPE396,failed old TYPE diagnostics,State twoTYPE777 remain
 opaque. State/BinderInfo507 is HELD; no primary dependency is established.
 
-Current own sources for future fresh guards: WorkerIndexValidity15351/a10163...,
+Current own sources for future fresh guards: FullyIndexValidity28762/0476cd...,
+WorkerIndexValidity15351/a10163...,
 IndexValidity27021/67d812...,
 ValueAccess5699/e2f189..., ExpansionDepth12533/5f77f1...,
 ReferenceBounds39317/7e17...,
@@ -373,8 +414,9 @@ subst. All are proof repairs, not Haskell fixes. Failed small math drafts remain
 
 ## Restart and storage
 
-Current Root runtime: /tmp/mcfta-index-access-20261107-0408. Native worker runtime:
-/tmp/mcfta-worker-index-validity-20261107-0413 (about33KB before the Fully extension).
+Current Root runtime: /tmp/mcfta-index-access-20261107-0408. Native Fully runtime:
+/tmp/mcfta-fully-index-validity-20261107-0429 (about25KB before publication).
+Native worker runtime: /tmp/mcfta-worker-index-validity-20261107-0413 (about33KB).
 Native index runtime: /tmp/mcfta-worker-index-validity-20261107-0355 (about21KB).
 Earlier depth runtime: /tmp/mcfta-expansion-depth-20261107-0335; reference runtime:
 /tmp/mcfta-worker-references-20261107-0232. Current OWN prefix is in the Root
