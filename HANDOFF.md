@@ -1,13 +1,16 @@
 # Current checkpoint: actual Fully index theorem with an open native callback obligation
 
-Updated 2026-11-07 04:46 CET. Status: PROGRESS. Full goal ACTIVE. Current formalize HEAD
-identifies the published checkpoint. Parent: 807fb8f205fa40c52ba54f87b117776c7056373e.
+Updated 2026-11-07 04:50 CET. Status: PROGRESS. Full goal ACTIVE. Current formalize HEAD
+identifies the published checkpoint. Parent: e3378d364f8fa415c5e7a748ce0c1844db587340.
+The checked Fully code is in that parent; this checkpoint records the completed
+retained-provider audit and its exact next dependency.
 Index5105afc38, Valuef90946108 and Out807fb8f20 were pushed and independently
 remote/tracking verified. Main was fetched again and remains
 bd5a406a6a3f84b7e3ae0906082783911509df83. Preserve unrelated .hypha/.
 No compiler is live. All ELEVEN checked own math sources are FROZEN. SAME Native
-is auditing retained positive native-provider contracts only; no new Source,
-TYPE, private replay, interface probe or compiler is authorized for that audit.
+completed its retained-contract audit with Source/TYPE/replay/interface0. No actual
+native Oracle provider is positively bound. No new Source admission follows from
+that missing connection.
 
 ## Strongest new checked Fully result and its condition
 
@@ -134,13 +137,32 @@ Source body/replay/TYPE or compiler-interface view.
 
 ## Next target: the actual native Graph and Oracle realization
 
-SAME /root/native_mu_prepare is doing a bounded retained-contract audit, with
-no new Source/TYPE/interface/locator/compiler. Identify the FIRST concrete native
-heap lookup/view and callback operation that realizes the actual model slots.
-Separate that operation from constructor/probe/binder-depth/flat-row models.
-Return only positively retained public names/positions and English contracts.
-Do not add another generic helper or safe replacement Oracle in place of this
-missing native bridge. If no provider is positively bound, retain that UNKNOWN.
+The retained-contract audit is COMPLETE and establishes no concrete native Oracle
+provider. The FIRST missing operation is the native pre-expansion callback
+invocation and its adaptation to EnumerationState.Oracle. Its actual callee and
+callsite remain UNKNOWN. A callback frame must preserve value-length/counter
+agreement, stored-reference bounds at the resulting counter, UF support/parents/
+Total, and counter monotonicity for both Bool replies. A frame proving only separate
+Oracle state changes would suffice, but that separation is unproved. The post
+hook needs the corresponding contract for its constructed fragment.
+
+Positive retained Haskell locators in cfta/src/Data/CFTA/Enumeration.hs:
+getUVarRepresentative header415; getUVarValue callsites1001/1533;
+getUVarRepresentative callsites1004/1540; nextUVar384/385 and addUVarValue391
+are allocation candidates. These are lexical names/positions, NOT callback
+identities, mutation frames, actual getter types or native-to-model correspondence.
+nodeEdges/unfoldOuterRec callsites904/905 do not establish the required structural
+.recursive/.alternatives Graph.node view. Operations definition spans remain
+unbound. EnumerationBuilderRuntime.graph265/graph_rows269 remain metadata
+candidates with no positive actual-native callback connection. Do not substitute
+constructor/probe/binder-depth/flat-row results for that missing connection.
+
+Next: recover the Hsk-held Enumeration receipt METADATA to identify the hook and
+its exact effects, with retained positive per-Original ownership and fresh guards
+before any Source view. Do not infer an owned interval from a header/callsite or
+an aggregate U count. Root must not view private Source. Unknown aliases/row
+unions/global history remain UNKNOWN; no quota or reader reset. Do not add another
+generic helper or safe replacement Oracle in place of the native bridge.
 
 Discharge the actual callback's Indexed/counter preservation law, then derive the
 original-input/request-size allocation/query bound and all generated/returned/
