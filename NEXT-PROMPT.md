@@ -1,3 +1,107 @@
+# Current checkpoint: union and canonical-cache transaction composition
+
+Updated 2026-11-07 05:45 CET. Goal ACTIVE. Proof commits:
+6ec1a26ff12236af82ddc01a2ec8d2c83c4831cd (source union-fold root map), and
+0eca51440cd835b304831010a60f258febc093af (canonical cache transaction).
+Current formalize HEAD identifies the documentation checkpoint after publication.
+Main was fetched and remains bd5a406a6a3f84b7e3ae0906082783911509df83.
+Main is an ancestor of the proof branch. Preserve unrelated .hypha/ and all proof work.
+
+## Checked result and scope
+
+EnumerationUnionRoots executes the fixed-head source union fold. It derives the
+final representative and the complete root map from that fold. It does not accept
+a supplied final-root relation. It supports every equal-membership transfer list,
+including ascending order and duplicates. It preserves flat-forest validity.
+
+EnumerationCanonicalTransaction composes that fold with ascending old-class count
+transfer and ordered assimilation of the original representative list. It includes
+duplicate representatives, already eliminated sources, and source-equals-target.
+Every returned transaction retains correct candidate flags and canonical waiting
+counts for the derived final class map. It retains the transferred waiting table
+through the complete assimilation traversal. Its successful core correspondence
+works in both directions. It does not omit successful core traversals.
+
+The comparison core uses the erased final flat forest. The proof derives its
+representative paths and a finite agreeing slot scan. Every successful comparison
+scan offers the same list and retains the compression frame. Native selection is
+read-only; raw forest equality with a compressing scan is not the relation.
+
+These are finite mathematical source-view theorems. They require a valid incoming
+flat forest and correct incoming caches as internal invariants. Initialization,
+allocation, replacement, and framing already have component laws. Whole-worker
+composition must derive these invariants for every actual invocation.
+The new theorem does not establish machine-Int bounds, native graph/intersection
+realization, verified Haskell extraction, or all intermediate and failing work.
+It does not finish recursive exactness or the original-input execution bound.
+
+## Validation and reproduction
+
+Both actual Lake targets and all 25 public source/axiom reports passed.
+EnumerationUnionRoots: 11782B, SHA-256
+b6c51f5a8a6e7f60e7e9eae634a47054bc052270aac7b506b961197f35af774a.
+EnumerationCanonicalTransaction: 23445B, SHA-256
+e1574f34c6d076235b2aff7c6c1c4478ee86b69962ee65ff804cdb4d98e33689.
+Lean4.34.1; shell.nix; serial; warnings as errors; 4G cap.
+The final transaction job peaked at 221M. The root source/axiom job peaked at 189M.
+Only propext, Classical.choice, and Quot.sound appear in the reports.
+No sorry or new axiom was added. No Haskell source changed or Haskell build ran.
+The small failed drafts and their repairs remain. No compiler is live.
+
+Reproduce from these source-based packets:
+- lean/restart-evidence/20261107-enumeration-union-roots/ (5050B)
+- lean/restart-evidence/20261107-canonical-transaction/ (5642B)
+The scripts build the actual modules and check every public axiom set.
+They remove their temporary reports. No build tree or source snapshot is archived.
+A cold rebuild was not tested separately. New compiler failures print diagnostics.
+
+## Next concrete attachment
+
+The union/count-transfer/assimilation endpoint at Enumeration.hs:741-754 is now
+composed in the finite mathematical source view. Next connect the complete
+mergeNodeIntoUVarVal branch at :514-528: representative read, pending-slot lookup,
+intersection, gain-only write, ancestry, and the empty-node guard.
+Do not reprove the gain arithmetic. SourceCurrentIncomingWaitingAppend.append_correct
+at :40 already proves the gain-only canonical count update. Its private
+append_cancel equates it with full replacement. SourcePruningEnumerationNativeIndex.
+gained_complete at :79 covers native flags, gain-only write, and ancestry, but it
+still assumes the actual write/ancestry prefix. Derive that prefix from the full
+actual branch. Retain the incoming cache and representative invariants through it.
+The native checkEmpty intersection and pending-slot/error cases still need their
+source connection. Do not replace them with a different safe intersection.
+
+## Haskell finding for external follow-up
+
+No runtime Haskell fix was needed or made in this increment.
+Enumeration.hs:422 says getUVarValue path-compresses its representative.
+Internal/UnionFind.hs:129-130 instead returns (root uv uf, uf) without a forest
+change. The comment is stale. A suitable replacement is:
+"Look up the value stored at a UVar's representative."
+This is a documentation correction, not evidence of a runtime failure.
+The proof uses a root/compression relation to compare the two forest views.
+
+## Full remaining target
+
+Keep both actual optimized enumerateOut and enumerateFully. Derive one computable
+bound from the original input and requested size. Cover generated, returned,
+subsequent, intermediate, and failing states and work, including total branch work.
+Connect exact accepted terms per node-count size, counts, order, and both
+rank/unrank inverse laws to actual native graph, intersection, callback, identity,
+cache, interner, equality, hash, and Haskell/runtime behavior.
+The central exact-support theorem still assumes CompleteGraph, which excludes
+recursive-tagged graph nodes. Separate recursive partial-rendering proofs do not
+close exact full-term generation for native Mu/retained-union inputs.
+Keep the optimized interned core primary. Preserve older constructor and equality
+work as secondary targets. No completion, pause, or blocker claim is made.
+
+The earlier workflow correction still applies. Historical Source/TYPE tables do
+not gate required repository inspection. Preserve their historical failure records.
+Do not create opaque source receipts or copy source/build trees for those tables.
+Readable /tmp was about 9.4MiB at the last check, excluding five denied directories.
+No large temporary archive was created. No concurrency setting was changed.
+
+The earlier checkpoints and their records follow unchanged.
+
 # Current checkpoint: default enumeration discharges its callback invariant
 
 Updated 2026-11-07 05:10 CET. Goal ACTIVE. Parent checkpoint:
