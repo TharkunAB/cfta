@@ -1,11 +1,39 @@
-# Current checkpoint: expansion bounds and constraint variable origin
+# Current checkpoint: expansion bounds, variable origins, and forest termination
 
-Updated 2026-11-07 02:34 CET. Status: PROGRESS. Full goal ACTIVE. The current formalize HEAD
-identifies the published checkpoint. Parent: fca359f15a7393add2d936195886c9b1a0d70d73.
+Updated 2026-11-07 02:47 CET. Status: PROGRESS. Full goal ACTIVE. The current formalize HEAD
+identifies the published checkpoint. Parent: 177f153de5b4aea13dfb57432fa8a90cf5de7654.
 Fresh pull was up to date. Main remains bd5a406a6a3f84b7e3ae0906082783911509df83.
 Preserve unrelated .hypha/. Reference-range work continues independently.
 
-## New checked descent contract
+## New checked forest termination and common-fuel laws
+
+Actual link preserves UnionFind.Total without root or distinctness premises.
+The winner becomes a root. Any old finite path either reaches a modified key or
+uses unchanged parent frames. Actual successful union preserves Total through
+both searches and the selected link. For queries below B, union at B+1 succeeds
+and preserves SupportedBelow B, ParentsBelow B, and Total. These invariants can
+be reused for successive searches. This closes the forest-termination preservation
+dependency for the pending expansion reference invariant. It does not yet derive
+B or full-worker fuel from original inputs and requested size.
+
+New source: lean/MicroCFTA/UnionFindTotalPreservation.lean, 4765 bytes, SHA-256
+44fd1c28b9c879bd975355ca18486d0c72aff659e7b306f6ffcb8add0727ce02.
+Three public theorems: link_preserves_total, union_preserves_total, and
+union_bounded_uniformFuel. Actual module plus three source/axiom reports33144
+passed with exit0, Lean4.34.1/shell.nix/j1/warnings-as-errors/4G/swap0/360s,
+reported peak164M. Axioms: link[propext], union[propext,Quot.sound], commonfuel
+[propext,Classical.choice,Quot.sound]. Earlier constructive leaf0d9870 passed;
+initial failed name guess and induction draft remain as small marked own drafts.
+Packet: lean/restart-evidence/20261107-union-total-preservation/. No Haskell fix,
+Original Source/replay/TYPE/interface view, or global historical audit recovery.
+
+Native continues the actual Node/Edge reference-cap proof and now retains Total
+in its invariant. Do not conflate a global cap with actual-counter address validity.
+Root also supplied two checked standard list invariant leaves, normal16579 exit0.
+These helpers are own math, not extra Original Source views. No proof is claimed
+for unfinished Native work. Coordinate serial capped compiler checks with Native.
+
+## Earlier checked descent contract
 
 Actual EnumerationState.descendScs retains each output variable from an input
 constraint. It therefore preserves every upper bound on input variables. This
@@ -125,7 +153,8 @@ Current guards and kernel checks do not recover that historical/global audit.
 PrimitiveTYPE1401,actual32TYPE396,failed old TYPE diagnostics,State twoTYPE777 remain
 opaque. State/BinderInfo507 is HELD; no primary dependency is established.
 
-Current own sources for future fresh guards: VariableOrigin958/e79b8..., plus any
+Current own sources for future fresh guards: TotalPreservation4765/44fd1...,
+VariableOrigin958/e79b8..., plus any
 new reference draft; Expansion21214/e151..., Allocation3593/
 f7f105..., UFSupport22872/53bb7d.... Header guard's 7942/3c64... own draft is historical.
 No later Source job followed its mutation. EqualityTrie public metadata only:
