@@ -1,106 +1,132 @@
-# Current checkpoint: union and canonical-cache transaction composition
+# Current checkpoint: fixed read bounds and complete incoming observations
 
-Updated 2026-11-07 05:45 CET. Goal ACTIVE. Proof commits:
-6ec1a26ff12236af82ddc01a2ec8d2c83c4831cd (source union-fold root map), and
-0eca51440cd835b304831010a60f258febc093af (canonical cache transaction).
+Updated 2026-11-07 06:06 CET. Goal ACTIVE. New proof commits:
+47ff424201a73bf66bfaaf0b96900d81c5e5b56e (flat representative/count bounds), and
+5be26b00f82c99066e0bc7962ead842b1de1d30b (complete incoming observation).
 Current formalize HEAD identifies the documentation checkpoint after publication.
-Main was fetched and remains bd5a406a6a3f84b7e3ae0906082783911509df83.
-Main is an ancestor of the proof branch. Preserve unrelated .hypha/ and all proof work.
+Previous published checkpoint: 2123587384289ea5fa4178b523effd21ac8e0dd4.
+Upstream was refreshed before work. Last fetched main remains
+bd5a406a6a3f84b7e3ae0906082783911509df83 and is an ancestor of formalize.
+Preserve unrelated .hypha/ and all proofs, counterexamples, and marked drafts.
+No compiler is live. No concurrency setting changed.
 
-## Checked result and scope
+## Strongest new checked statement
 
-EnumerationUnionRoots executes the fixed-head source union fold. It derives the
-final representative and the complete root map from that fold. It does not accept
-a supplied final-root relation. It supports every equal-membership transfer list,
-including ascending order and duplicates. It preserves flat-forest validity.
+For any valid modeled flat forest, erasing its member lists computes the complete
+related comparison input. Earlier representative and count reads succeed at the
+fixed bound 2, including reads after the older lookup materializes an absent
+singleton. One step fails on a stored parent. The count equations cover arbitrary
+reference lists, multiplicities, gained/lost changes, and starting waiting tables.
 
-EnumerationCanonicalTransaction composes that fold with ascending old-class count
-transfer and ordered assimilation of the original representative list. It includes
-duplicate representatives, already eliminated sources, and source-equals-target.
-Every returned transaction retains correct candidate flags and canonical waiting
-counts for the derived final class map. It retains the transferred waiting table
-through the complete assimilation traversal. Its successful core correspondence
-works in both directions. It does not omit successful core traversals.
+EnumerationFlatReadBounds composes these laws with the actual imported flat slot
+read, native write, incoming branch, and incoming cache recovery. Fixed
+representative and index fuel 2, or any larger fuel, retain the complete related
+observation. This includes ordered raw results, explicit errors, rejection,
+missing results, native failures, caller/query effects, the outer read core, and
+optional recovered caches. Native intersection and emptiness-check bounds remain
+explicit. This is not a bound on their work or on the number of references.
 
-The comparison core uses the erased final flat forest. The proof derives its
-representative paths and a finite agreeing slot scan. Every successful comparison
-scan offers the same list and retains the compression frame. Native selection is
-read-only; raw forest equality with a compressing scan is not the relation.
+The incoming comparison requires only flat-forest validity. It is an observation
+relation. Cache correctness still needs the existing internal caller, cache,
+storage, realization, and request-range invariants. Do not infer correct caches
+from forest validity alone. This is a mathematical source-algorithm result, not
+verified Haskell translation or native machine-Int correspondence.
 
-These are finite mathematical source-view theorems. They require a valid incoming
-flat forest and correct incoming caches as internal invariants. Initialization,
-allocation, replacement, and framing already have component laws. Whole-worker
-composition must derive these invariants for every actual invocation.
-The new theorem does not establish machine-Int bounds, native graph/intersection
-realization, verified Haskell extraction, or all intermediate and failing work.
-It does not finish recursive exactness or the original-input execution bound.
+The preceding canonical transaction result remains checked: fixed-head flat
+union, derived final class map, ascending old-class count transfer, and ordered
+assimilation preserve both caches at completed endpoints. Duplicate sources,
+eliminated sources, and source=target are covered. Successful core correspondence
+works in both directions. Initialization and the default no-pruning callback also
+have checked component laws. These results do not establish the whole system.
+
+## Corrections to the previous assessment
+
+The previous next-step claim was too weak. Full incoming-prefix derivation already
+exists in SourcePruningEnumerationIncomingNode.run_complete. The native gain-only
+cache attachment already exists in SourcePruningEnumerationIncomingCacheAdapter.
+complete. Actual flat cached-fold and terminal completion already exist in
+EnumerationFlatNativeCachedCompletion.complete and
+EnumerationFlatNativeTerminalCompletion.complete. They retain their internal
+admission conditions. Reuse these laws. Do not reconstruct the write prefix or
+count cancellation in another model.
+
+CompleteGraph excludes the explicit Graph.node .recursive constructor. It does
+not exclude all recursive grammars. Alternatives can contain cyclic references.
+EnumerationBuilderRuntime.graph emits empty/alternatives rows and its complete
+law derives CompleteGraph. Its requested_accepted_exact proves bounded row-language
+equivalence. LexicalBoundedBuilder.requested_exact and elided_requested_exact
+connect closed lexical meaning under RowsCorrespond and valid-source-row premises.
+These bounds use term HEIGHT. They are not the final exact NODE-COUNT-size law.
+Thus the remaining gap is actual native realization and whole-worker composition,
+including native Mu/retained Union, not absence of all recursive language results.
 
 ## Validation and reproduction
 
-Both actual Lake targets and all 25 public source/axiom reports passed.
-EnumerationUnionRoots: 11782B, SHA-256
-b6c51f5a8a6e7f60e7e9eae634a47054bc052270aac7b506b961197f35af774a.
-EnumerationCanonicalTransaction: 23445B, SHA-256
-e1574f34c6d076235b2aff7c6c1c4478ee86b69962ee65ff804cdb4d98e33689.
-Lean4.34.1; shell.nix; serial; warnings as errors; 4G cap.
-The final transaction job peaked at 221M. The root source/axiom job peaked at 189M.
-Only propext, Classical.choice, and Quot.sound appear in the reports.
-No sorry or new axiom was added. No Haskell source changed or Haskell build ran.
-The small failed drafts and their repairs remain. No compiler is live.
+Both actual Lake targets and all 17 public source/axiom reports passed.
+FlatUnionFindReadBounds: 7731B, SHA-256
+b205190f74e103349d7ef6711fae9699f54d02457dbcdf78848c481c851e8310.
+All nine public laws depend only on propext. Final check handle41166, terminal0.
+EnumerationFlatReadBounds: 11860B, SHA-256
+e422a24ea4cce0c9449b641d4c2289a27b82194541a18480905effe41a0e4ea1.
+All eight public reports contain only propext, Classical.choice, and Quot.sound.
+Final check handle16023, terminal0. Final peak244M; lookup-report peak165M.
+Lean4.34.1; project shell.nix; serial; own reports use warnings as errors; cap4G.
+An unrelated existing dependency warning was replayed by Lake. No global clean
+build or CI claim is made. No sorry or new axiom was added.
 
-Reproduce from these source-based packets:
-- lean/restart-evidence/20261107-enumeration-union-roots/ (5050B)
-- lean/restart-evidence/20261107-canonical-transaction/ (5642B)
-The scripts build the actual modules and check every public axiom set.
-They remove their temporary reports. No build tree or source snapshot is archived.
-A cold rebuild was not tested separately. New compiler failures print diagnostics.
+Source-based packets:
+- lean/restart-evidence/20261107-flat-union-find-read-bounds/ (5520B)
+- lean/restart-evidence/20261107-flat-enumeration-read-bounds/ (5907B)
+Each script builds the actual module and checks every public source/axiom report.
+Temporary reports are removed. No archived build tree or source snapshot is
+required. A separate cold rebuild was not tested. Small failed drafts remain in
+/tmp/mcfta-flat-enumeration-read-bounds-20261107-0559/ and the child lookup scratch.
+New failures print actual diagnostics. Current jobs are all terminal.
 
-## Next concrete attachment
+## Biggest gaps and next concrete target
 
-The union/count-transfer/assimilation endpoint at Enumeration.hs:741-754 is now
-composed in the finite mathematical source view. Next connect the complete
-mergeNodeIntoUVarVal branch at :514-528: representative read, pending-slot lookup,
-intersection, gain-only write, ancestry, and the empty-node guard.
-Do not reprove the gain arithmetic. SourceCurrentIncomingWaitingAppend.append_correct
-at :40 already proves the gain-only canonical count update. Its private
-append_cancel equates it with full replacement. SourcePruningEnumerationNativeIndex.
-gained_complete at :79 covers native flags, gain-only write, and ancestry, but it
-still assumes the actual write/ancestry prefix. Derive that prefix from the full
-actual branch. Retain the incoming cache and representative invariants through it.
-The native checkEmpty intersection and pending-slot/error cases still need their
-source connection. Do not replace them with a different safe intersection.
-
-## Haskell finding for external follow-up
-
-No runtime Haskell fix was needed or made in this increment.
-Enumeration.hs:422 says getUVarValue path-compresses its representative.
-Internal/UnionFind.hs:129-130 instead returns (root uv uf, uf) without a forest
-change. The comment is stale. A suitable replacement is:
-"Look up the value stored at a UVar's representative."
-This is a documentation correction, not evidence of a runtime failure.
-The proof uses a root/compression relation to compare the two forest views.
-
-## Full remaining target
-
-Keep both actual optimized enumerateOut and enumerateFully. Derive one computable
+Keep BOTH actual optimized enumerateOut and enumerateFully. Derive ONE computable
 bound from the original input and requested size. Cover generated, returned,
-subsequent, intermediate, and failing states and work, including total branch work.
-Connect exact accepted terms per node-count size, counts, order, and both
-rank/unrank inverse laws to actual native graph, intersection, callback, identity,
-cache, interner, equality, hash, and Haskell/runtime behavior.
-The central exact-support theorem still assumes CompleteGraph, which excludes
-recursive-tagged graph nodes. Separate recursive partial-rendering proofs do not
-close exact full-term generation for native Mu/retained-union inputs.
-Keep the optimized interned core primary. Preserve older constructor and equality
-work as secondary targets. No completion, pause, or blocker claim is made.
+subsequent, intermediate, and failing states and total branch work. Fixed local
+lookup fuel 2 does not close that bound. Do not add final caller resource, closure,
+completed-worker, success, fuel, validity, or OriginalInput obligations.
 
-The earlier workflow correction still applies. Historical Source/TYPE tables do
-not gate required repository inspection. Preserve their historical failure records.
-Do not create opaque source receipts or copy source/build trees for those tables.
-Readable /tmp was about 9.4MiB at the last check, excluding five denied directories.
-No large temporary archive was created. No concurrency setting was changed.
+Connect actual native row exposure/readback and intersection to the existing graph
+and lexical theorems. Before authoring another adapter, inspect the actual native
+row producers and existing RowsCorrespond/ValidEdge laws. Determine which premises
+of LexicalBoundedBuilder.requested_exact are already derived from native heap and
+request invariants. Reuse SourcePruningEnumeration* completion and flat-native
+comparison modules. Derive missing premises from original admitted inputs. Keep
+the actual native intersection and recursive behavior.
 
-The earlier checkpoints and their records follow unchanged.
+Then compose exact accepted terms per NODE-COUNT size, counts, order, and BOTH
+rank/unrank inverse laws with actual worker execution. Component count/order/CPS
+and inverse results already exist. The actual Haskell/runtime, machine-Int IDs and
+counts, identity, cache, interner, equality, and hash connections remain obligations.
+The optimized interned core stays primary. Older constructor/equality work stays
+secondary. Goal ACTIVE; no completion, pause, or blocking claim.
+
+## Haskell finding for an external follow-up
+
+No Haskell source changed and no Haskell build ran in this increment. No new runtime
+Haskell defect or fix was established. The earlier documentation finding remains:
+Enumeration.hs:422 says getUVarValue path-compresses. Internal/UnionFind.hs:129-130
+returns (root uv uf, uf) without a forest change. Suggested replacement:
+"Look up the value stored at a UVar's representative."
+This is a stale comment, not evidence of a runtime failure. Keep every actual
+Haskell repair or proposed repair recorded in FINDINGS for external work.
+
+## Storage and historical records
+
+Readable /tmp is about9.7MiB. Six inaccessible private/system directories were
+excluded. Filesystem available space is about190GiB. No large archive, source tree,
+or build-tree copy was created. No proof or draft was deleted.
+The workflow correction remains in force: historical Source/TYPE reading quotas
+and receipt gates do not limit needed repository inspection. Preserve their
+historical SourceProcess FAIL and unknown-upper records without restoring those
+access restrictions. Do not create opaque receipts to reconstruct those tables.
+The earlier checkpoint tails follow unchanged.
+
 
 # Current checkpoint: default enumeration discharges its callback invariant
 
