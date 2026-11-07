@@ -1,3 +1,256 @@
+# Current checkpoint: actual original-input ordinary and union prefixes
+
+Updated 2026-11-07 23:51 CET. Goal ACTIVE. R127 made PROGRESS. Branch formalize.
+This checkpoint follows 24ff7af09696964c365555bbcf1915cf034743fe
+(R126, canonical board seq975). Preserve the complete original objective.
+The optimized interned core remains PRIMARY. Older constructor and equality
+work remains SECONDARY. Preserve all proofs, counterexamples, repairs,
+marked drafts and unrelated .hypha/. Regular formalize pushes are explicitly
+authorized. Do not pause the goal or ask whether to continue.
+
+Formalize was pulled before work at 23:13. Both upstream heads were refreshed
+at 23:48. Main remains bd5a406a6a3f84b7e3ae0906082783911509df83, an ancestor.
+Seven verified proof commits extend R126 through aaf2e650c4cb59793dfd4c207a146ce94b49d1b0.
+The later handoff commit, push and board readback are in publication.json and
+RESUME.json in /tmp/mcfta-generated-prefix-20261107-2321/.
+Committed source checks reproduce without /tmp. No existing proof source was
+modified or deleted in this increment.
+
+## Strongest new claim
+
+SourceSynthesisUniversePrefixConstruction.firstOrderRaw_physical_prefix_bound
+accepts original Library, Query and SIGNED size, plus the existing concrete
+EdgeKey DecidableEq infrastructure. The original FirstOrder source errors
+remain explicit. On a successful instruction, it derives actual repaired
+constructor execution FROM EMPTY CACHES, complete Facts and Available output,
+and an ordinary/union-prefix height bounded by sizeOf that actual original
+instruction. The concrete syntax SizeOf instance is used consistently.
+
+The measure counts ordinary node AND explicit union layers above recursive
+records. Mu/ref/empty have height zero. This measure is separate from the
+accepted terms' NODE-COUNT size. It is an INITIAL constructor bound.
+
+The actual output has either NO recursive boundary atom or only the identity
+of ONE selected actual U. In the latter case, the result includes that U's
+COMPLETE available Mu payload, its body Shape and all three resident raw row
+packets in the ACTUAL FINAL CONSTRUCTOR HEAP. The packets describe its body,
+depth probe and selected ordinary probe. Complete Mu values with that identity
+are equal by current coherent record readback. No independently cold-allocated
+U identity is substituted for the actual first frame.
+
+No constructor success, finite carrier, future state, selected seed, row
+packet, lookup, closure, successful worker/fuel or resource bound is supplied
+by the caller of this original-input endpoint. These are derived internally.
+The internal Option Seed is not exposed by the final physical corollary.
+A prefix with no U atom needs no artificial resident-U witness.
+
+R126's actual RecU/U identity and stability remain proved at their original
+cold typesOf endpoint. Do not silently equate that standalone cold U with U
+inside a full FirstOrder constructor: ordinary nodes can be allocated first.
+R127 provides the actual warm first-frame packets needed to instantiate the
+same row-based execution reasoning at the correct identities.
+
+This does NOT yet prove preservation of this bound by all generated
+intersection/projection/merge/optional-binder operations. It does not prove
+the complete driver work bound or native Haskell correspondence.
+
+## Checked construction and readback
+
+Seven NEW modules contain 36 NEW checked public laws. All pre-existing proof
+sources remain unchanged. Each packet records the exact source hash, complete
+public theorem set, actual namespaces, explicit #check and standard axioms.
+
+- ProbeUniqueness derives complete physical probe equality from SAME-name
+  resident Rows. Two executions with the same source/request but different
+  resident targets have identical outcomes. Mu-key readback then derives
+  complete Mu equality from equal depth and ordinary probes. No lookup or
+  numeric-identity oracle is needed.
+- PrefixHeight counts ordinary and union layers. Both direct node children
+  and union members strictly decrease. Actual makeNode retains the supplied
+  edge bound. General makeUnion can add ONE layer; ordinary-only union
+  construction retains the input maximum. These use exact cached payload
+  readback, not only key equality.
+- FirstFrame.allTypes_first_frame derives the first actual U in any covered,
+  coherent Mu-free incoming heap. Actual binder-free probe history preserves
+  NoNewMu. Coverage excludes a pending Mu key, so the real reservation misses.
+  Actual callbacks derive Shape, all three Rows, growth and issued history.
+- PrefixSeed tracks None before the first U and Some actual complete frame
+  afterward. The first atom uses FirstFrame. Later atoms use the EXISTING
+  FreshOrdinaryReplay.build_replay to return exactly the same U with no new
+  effects. Ordinary/union effects preserve readiness. Seed advancement
+  transports earlier siblings' allowed atoms when a later sibling first
+  selects U. Only actual execution frames are retained.
+- PrefixLists composes source-ordered buildMany/buildEdges with actual
+  Facts/coverage/growth at each sibling. Actual makeEdge readback retains its
+  ordered children. The result derives allowed atoms and syntax-size bounds.
+  SizeOf Guard is an explicit generic instance so concrete callers do not
+  accidentally use a different default syntax-size instance.
+- PrefixReadback transports the exact resident U payload through Grows.
+  Current Facts.cached.nodes derives full availability in the final cache.
+  This does NOT infer issued-history growth from record growth. All three
+  raw Rows transport through growth. Resident identity uniqueness derives
+  complete actual Mu equality. Raw live rows also recover body Shape.
+- PrefixConstruction lifts the source OverUniverse proof through all actual
+  node/union construction. Original Library/Query/signed size supplies that
+  syntax proof. The physical corollary removes internal seed/readiness
+  notation and returns the concrete final U evidence or no-atom case.
+
+Actual Nix/Lake and own-source warnings-as-errors pass for every current
+public law. Axioms are subsets of propext, Classical.choice and Quot.sound.
+No admitted theorem is used. The old dependency warning about unused inputs
+in InternedFreshOrdinaryClosedCompletion remains; own-source checks are
+strict. All compiler jobs were Root-only and serial under the unchanged
+4 GiB heavy-management cap. All bounded source tasks and jobs are terminal.
+No native probe, Haskell test/format run or CI result is claimed.
+
+## Check-metadata correction
+
+The R127 packet checkers now emit an explicit #check before EVERY #print
+axioms. Older checkpoint prose said explicit #check, but the reused older
+checker template emitted only #print axioms. Keep that distinction: an axiom
+print alone is not a general declaration-existence check. The old source
+compilations and exact then-current public-name matches remain recorded;
+this finding does not establish an invalid historical theorem.
+
+Namespace and source module are separate. PrefixReadback extends three
+methods in the REAL PrefixSeed.Seed namespace and declares its fourth law
+in PrefixReadback. Its four fully qualified names are checked exactly.
+Every new checker compares the real public declaration set with its target
+list. The manifest identifies the source MODULE from check.py's explicit
+source path, never from the first theorem's namespace. Dotted names remain
+complete. All seven final packets were checked with these stronger rules.
+These are Lean/check-metadata repairs, not production Haskell fixes.
+
+## Immediate next proof: generated-operation preservation
+
+The proposed firstOrder_generated_prefix_bound remains OPEN. R127 establishes
+its INITIAL actual-record invariant and initial structural bound. Continue
+through actual generated intersection, projection, merge and optional-binder
+writes, then every selected-worker and COMPLETE-driver prefix.
+
+1. Use the actual final FirstOrder U/Rows, not an independently cold U.
+   Refactor the existing R126 row-based identity derivation into an internal
+   rows/Facts/Available application if needed. Derive incoming coverage from
+   the successful original constructor. Original caller endpoints must still
+   derive those internal conditions and keep source errors explicit.
+2. Prove the next quantitative generated MERGE law. Read-only source review
+   proposes, but has NOT proved:
+   actual successful MergedColdMerge.worker output height <= input height+1
+   AND BoundaryAtoms.atoms output is a subset of atoms input.
+   The retained-column bound is childrenHeight inputs+1. Small groups recurse
+   on original children. Large nonboundary columns use ordinaryUnion then
+   recurse. Boundary columns use makeUnion and DO NOT recurse. Thus the one
+   extra layer should not accumulate at each ordinary recursive level.
+   Follow EqualityMergedTargetHeight's retained/column/edge/group/root/worker
+   proof structure, replacing its old boundary-stopping measure. Reuse
+   MergedColdMergeMapFacts.map_valid/worker_valid, selection subset/verified,
+   Grouping.partition, columns_member, makeEdge_fields and the checked
+   PrefixHeight constructor bounds plus BoundaryAtoms origin laws.
+   Compose existing execute_complete so the original endpoint has no supplied
+   successful worker or arbitrary successful-fuel premise.
+3. Derive preservation by the remaining generated operations. The final
+   claim needs an ORIGINAL-input/caller-derived global bound, not a bound
+   parameterized by an assumed successful trace length or resource oracle.
+   Account for guard/path measures, generated names, every sibling and
+   intermediate/rejected/failing/returned/subsequent/native state. One-step
+   union slack alone is not a global fixed-height or work bound.
+4. Connect that invariant to PathBoundaryBudget and finite_complete. Derive
+   their reservations/capacities at the original endpoint. Include the full
+   driver and native primitive costs, then exact sparse enumeration contracts.
+
+enumerateOutUVarWith and enumerateUntil' have NO size parameter. Derive any
+request restriction from their real caller. RootedScope currently refers to
+the original build heap; generated_row_capture_backedge traces a writer from
+an entire generated siteBody and does not bound repeated generation.
+
+### Unverified merge-growth design calculation
+
+This is a source-level design calculation, NOT a compiled reproduction,
+proved counterexample, native run, Haskell defect or divergence claim.
+Take a one-U ordinary root with FIVE top unary f rows, whose children are
+U and four distinct nullary labels g1..g4 absent from U's catalog/rigid/arrow
+labels. Root-symbol mismatch would retain all five alternatives. The large
+group branch would construct union[U,g1,g2,g3,g4] and rebuild the f root.
+The new union-aware height would grow from 2 to 3. All Mu boundaries remain U.
+This shows why a claimed general nonincrease needs scrutiny even for one-U
+prefixes. This witness is not established as an original FirstOrder-generated
+input. Keep its unverified and restricted boundary. No Haskell fix follows.
+
+## Full objective and biggest remaining gaps
+
+Preserve ONE original-input/request/caller-derived bound for BOTH optimized
+selected-slot worker and COMPLETE enumeration driver. Include ALL sibling
+work and ALL generated, reached, intermediate, failing, rejected, returned,
+subsequent and native states. Derive successful body/worker/fuel/resource,
+closure, finite carrier, validity and OriginalInput at the original endpoint;
+do not finish with those as caller oracles. Do not restrict the whole goal
+to the default type universe.
+
+Keep exact accepted terms per NODE-COUNT size, ordering and counts, BOTH
+signed rank/unrank inverse laws through actual sparse execution, ALL Sized
+routes/fallbacks/failures, productive infinite queries, actual lazy tables,
+maps/sets/caches/hash/word/Int behavior, lookup/Curried/Specftacular and native
+Haskell correspondence. Generated preservation and a complete original-input
+work bound remain the largest mathematical gap. Cached Mu depth and
+MergedOrdinaryHeight (which also stops at unions) cannot replace the new
+ordinary/union-prefix measure or the required guard/path measures.
+
+R117/R118 work/allocation bounds remain component laws. Actual Tree.work is
+not an original-input total-work bound. Preserve R118 repeated-intersection
+physical growth/timeouts and R120's 58 retained-graph observations at their
+exact boundaries. R111/R116 query endpoints retain their boundaries.
+All original source-process failures, original-source upper UNKNOWN and
+full source/runtime correspondence UNKNOWN remain in the historical record.
+
+## Haskell findings and external ownership
+
+R127 has NO production Haskell fix or new native failure. FINDINGS records
+this for the external implementation agent. Do not duplicate an external
+fix from these Lean proof and check-metadata repairs. The unverified merge
+calculation above is expected overapproximation, not a reported Haskell bug.
+The prior PR203 required-argument behavior-change recommendation remains
+withdrawn. Main was refreshed at 23:48 and remains incorporated bd5a406a.
+Earlier PR202/203 reads are dated in the preserved history; no newer PR state
+is inferred. Positive Top demand can allocate on a cold equality cache.
+Physical top readback alone does not prove zero native allocation.
+
+## Reproduction, storage and restart
+
+Runtime: /tmp/mcfta-generated-prefix-20261107-2321/.
+verified-modules.json records exact source hashes, public names and all
+current/new law counts. Each committed lean/restart-evidence/20261107-<slug>/
+packet has check.py, theorems.json, checked.json and README.md. Reproduce its
+check.py under the existing serial 4 GiB heavy-management cap. It uses the
+real project Nix/Lake environment and strict own-source checking. No /tmp
+file is needed to reproduce these committed checks.
+
+At 23:48, readable /tmp used 18,624,512 allocated bytes, excluding six
+protected directories. This runtime used 81,920 bytes at that measurement.
+Only small scripts, manifests and compact repair logs are kept. No copied
+build/source trees or archives were created. No cleanup was needed or done.
+
+NEXT-PROMPT.md, HANDOFF.md and FINDINGS.md share this complete current
+prefix plus the previous current prefix. All original historical tails are
+byte-identical. doc-tail-manifest.json records prefix/tail hashes.
+write-checkpoint.py is ALREADY APPLIED; do not rerun it. publication.json
+and RESUME.json record final HEAD/origin, canonical board readback and goal.
+Older sections below are history. The previously missing actual INITIAL
+prefix evidence is now derived; all GENERATED preservation remains open.
+
+## Current reproducible modules
+
+- SourceSynthesisUniverseFirstFrame: 141 lines, 1 new laws; lean/restart-evidence/20261107-universe-first-frame. SHA256 da56e24813f4954e3bd372bd311eac8e714c2e3fa6c3d21acfc298204f758b2c.
+- SourceSynthesisUniversePrefixConstruction: 181 lines, 4 new laws; lean/restart-evidence/20261107-universe-prefix-construction. SHA256 c082e945e72d6c183ea0fb2c166e7080a339ae4bf41acb550d1d04be8c9f0c31.
+- SourceSynthesisUniversePrefixHeight: 221 lines, 9 new laws; lean/restart-evidence/20261107-universe-prefix-height. SHA256 fb2955f27b90efa40bc04a7a64bdf7158271e5f44bbeb942c0c0f8283f3a3b21.
+- SourceSynthesisUniversePrefixLists: 151 lines, 2 new laws; lean/restart-evidence/20261107-universe-prefix-lists. SHA256 f67831417d4c5268ba0960c3f0250299c05e3192016d83b6e341158a975c1ab2.
+- SourceSynthesisUniversePrefixReadback: 72 lines, 4 new laws; lean/restart-evidence/20261107-universe-prefix-readback. SHA256 48b26244d46eb2918049ef7a4b96230aab5af49751fb619d35bca72a3a9885f0.
+- SourceSynthesisUniversePrefixSeed: 177 lines, 13 new laws; lean/restart-evidence/20261107-universe-prefix-seed. SHA256 76564db9be6ee954f61f887e72a2270746200d5a5f0662b08834f17c7d222fad.
+- SourceSynthesisUniverseProbeUniqueness: 76 lines, 3 new laws; lean/restart-evidence/20261107-universe-probe-uniqueness. SHA256 04449518d75292cb1947383cfb1fd7fadc2e8b0a3feedee89ccf3482ff154d50.
+
+---
+
+# Preserved checkpoint history
+
 # Current checkpoint: exact open-universe identity from original inputs
 
 Updated 2026-11-07 23:09 CET. Goal ACTIVE. R126 made PROGRESS. Branch formalize.
