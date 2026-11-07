@@ -1,3 +1,279 @@
+# Current checkpoint: original stored probes and cached universe reconstruction
+
+Updated 2026-11-07 22:43 CET. Goal ACTIVE. R125 made PROGRESS. Branch formalize.
+This checkpoint follows 55acaeff9006db2bb6e6c10b45add4167f1d7758
+(R124, canonical board seq973). Preserve the complete original objective.
+The optimized interned core remains PRIMARY. Older constructor and equality
+work remains SECONDARY. Preserve all proofs, counterexamples, repairs,
+marked drafts and unrelated .hypha/. Regular formalize pushes are explicitly
+authorized. Do not pause the goal or ask whether to continue.
+
+Formalize was pulled before work at 22:01. Both remote heads were refreshed
+at 22:38. Main remains bd5a406a6a3f84b7e3ae0906082783911509df83, an ancestor.
+Six verified proof commits extend R124 through 738c2b4454e3d9a7e2f9b3108f4dd69d4cbe6182.
+Publication and the later handoff commit are recorded in publication.json.
+No production Haskell behavior changed. No native probe, Haskell suite,
+Haskell format run, or CI result was collected for these Lean-only changes.
+
+## Strongest new claim
+
+SourceSynthesisUniverseStoredProbeInput.typesOf_stored_probes takes only
+original Library and Query data and the existing concrete EdgeKey
+DecidableEq infrastructure. It derives the actual cold typesOf universe
+U, body B, stored depth probe, stored selected ordinary probe, complete
+cache facts, availability, body Shape and closedness of U.
+
+In that ACTUAL returned constructor heap, the ACTUAL repaired stored
+substitution on B, replacing Rec(U) by the depth reference, returns the
+ORIGINAL depth probe with the SAME heap. Replacing Rec(U) by the actual
+selected ordinary reference returns the ORIGINAL ordinary probe with
+the SAME heap. The ACTUAL normalized SourceRecursiveIntersectionMaybeMu
+callbacks also return those two original probes with unchanged heap.
+The complete MaybeMu.construct on ORIGINAL B using its original U name
+therefore returns ORIGINAL U and the SAME heap through the existing Mu
+cache entry. No probe, callback, or reconstruction allocation is added.
+
+All these facts derive from original Library/Query data. No constructor or
+callback success, completed body/worker, raw residency, normalized target,
+future validity/availability, SemanticHeap, cache hit, lookup, pair freshness,
+ID order, finite carrier, successful fuel, or resource oracle survives as
+a caller premise. Explicit internal conditions are discharged by the actual
+cold constructor frames and the actual complete row records.
+
+This closes the original STORED B -> old-probe attachment. It does NOT yet
+identify the OUTER intersection result with original U. The callbacks of the
+INTERSECTION PRODUCT still require the U->cutoff(U,U)->probe composition
+through its actual canonical rows. The original body reconstruction above
+is a checked prerequisite. It is not the product reconstruction endpoint.
+
+R123 still proves execute13 Rec(U)/U completes with available closed output
+and complete payload coverage. R124 proves complete execute9 D2 B/B equals
+actual stored B substitution U->cutoff(U,U) in its actual final heap.
+R125 also strengthens that body's shape: an ordinary node with exactly the
+single diagonal cutoff free name. Its cached node-depth field is zero;
+do NOT interpret that field as ordinary structural depth.
+Recursive fuel8/9/13 is not total sibling, driver, or native work.
+Both MODELLED cache families retain their effects. Native Haskell wrappers,
+containers, equality caches, allocation order and word behavior remain
+separate obligations. R111/R116 query/rank endpoints retain their stated
+routing and preparation boundaries.
+
+## What changed and why it is needed
+
+- SourceSynthesisUniverseBody.callback_readback_with_rows strengthens actual
+  callback readback. It keeps EVERY raw row, descriptor alignment and raw
+  EdgeResident fact through final callback growth, including rows removed
+  as duplicates. Shape alone omits discarded-row residency; it cannot
+  justify matching all required catalog rows in another probe. Existing
+  callback_readback and callback_node APIs remain unchanged.
+- StoredRows generalizes its existing finite proof to arbitrary Reference
+  names and arbitrary Environment. Generic execute_reference_eq_work uses
+  the actual leaves/encode/input/Scope and repaired executor. All three
+  previous public signatures remain exact. No alternate evaluator was added.
+- BodyExactFree derives the actual product's exact ordinary node payload,
+  diagonal singleton free name, available marker, top guards and
+  marker-or-cutoff children. It uses an actual retained arrow target to
+  rule out the earlier empty-free alternative.
+- MarkerUnique derives identical complete nullary marker values from actual
+  edge and node cache records. NodeReplay derives exact no-allocation
+  makeNode replay from a resident nonempty canonical node.
+- ProbeRowReplay derives actual resident makeEdge hits for catalog and arrow
+  rows from their literal keys. ProbeRowAlignment aligns the SAME descriptor
+  list on both sides, with duplicates allowed. It produces ordered literal
+  raw-row replay, rather than requiring a supplied replay equation.
+- CanonicalRowReplay transports that actual replay to canonical source rows.
+  Its local target function is the FIRST PROJECTION OF THE ACTUAL makeEdge
+  run. Resident raw-source membership survives canonicalization, so mapped
+  targets have exactly the old raw target membership. Existing node-set
+  congruence gives identical final makeNode work. No sorted-order equality
+  or ordered Alpha assumption is used.
+- ResidentRows.Rows packages the actual raw witnesses for repeated use by
+  all three callbacks. Rows.grows transports raw residency. Rows.readback
+  derives the same marker's availability/closedness, all raw guards/children,
+  liveness and retained-arrow nonemptiness from actual cache facts.
+- ColdFrames recovers literal depth, selected ordinary, reserved fresh-body,
+  and final publication states from actual cold construction. It derives
+  their callback successes and growth into the final heap. ColdResidentRows
+  instantiates raw callback readback at those exact frames, aligns actual
+  results by Outcome.done injectivity, and transports all three row packets.
+- ProbeReconstruction composes the two actual Rows packets, marker identity,
+  raw row replay, canonical transport and actual resident final-node replay.
+  It yields exact stored substitution to the old probe and unchanged heap.
+  StoredProbeInput removes all packet/state conditions at the original
+  Library/Query endpoint, adds the real normalized callbacks, and uses the
+  original Mu table/record plus finish_shaped_mu to recover original U.
+
+This proof connects three evaluations: source syntax callbacks, stored
+B substitution, and product callbacks. The first two evaluations are now attached
+by checked exact equations. Keep the third phase explicit until it is proved.
+
+## Immediate next proof: product callbacks and actual original-U result
+
+Derive both ACTUAL product callbacks in the ACTUAL final body-product heap.
+Then replay the original Mu cache entry and compose the existing outer
+execute13 equation. The full goal remains larger than this source lane.
+
+1. Use ColdResidentRows.allTypes_cold_rows to obtain original raw body and
+   both probe packets. Actual Kernel body completion supplies final Facts,
+   Extension from original machine, and original U availability after all
+   sibling effects. Transport Rows through Extension.heap growth. Derive
+   original body/depth/ordinary availability from the extended U's children.
+   Generic ProbeReconstruction.execute_probe then gives old-probe replay
+   directly IN THAT FINAL HEAP; no future-state oracle or separate generic
+   replay framework is needed.
+2. Preserve the coupled body-product readback. BodyCanonical.node_canonical
+   returns ordered All2(RowTransform.Readback top Uid) ORIGINAL canonical
+   body rows -> self targets, target residency/liveness, complete product
+   execution, request equality and final pure node replay. BodyExactFree
+   derives exact node metadata using makeNode_zero_singleton on these
+   targets, but its PUBLIC result currently hides the target list and its
+   relation to the payload's canonical rows. Strengthen a coupled readback
+   lemma to retain the targets and value=.node entry(canonicalEdges targets)
+   0[cutoffUU]. Do not supply that shape as a caller oracle or run two bodies
+   without identifying their actual deterministic result and final machine.
+3. Derive original canonical-body-row -> old-probe-target replay from the
+   raw packets with ProbeRowAlignment + CanonicalRowReplay. The source
+   descriptor order can differ from actual edge-ID sort order.
+   Combine this All2 with BodyCanonical's self-target All2 over the SAME
+   original canonical source rows. Each self target's key/children are exact
+   U->cutoff inputs. ProbeChildren.children_compose and makeEdge_compose
+   identify its cutoff->probe request with the original source's U->probe
+   request. A small parallel All2 induction can derive actual probe replay
+   for every raw self target. No injection or distinct-name premise is needed.
+4. CanonicalRowReplay.execute_eq_work_of_raw now accepts arbitrary Reference
+   names, including the diagonal intersection reference. Apply it to self
+   targets -> old probe targets and the coupled product node payload.
+   Original probe-target sets have the same actual final makeNode request
+   as the old raw probe rows. NodeReplay then returns the exact old depth
+   and ordinary records without allocation. Filtering a node root leaves
+   that record unchanged, as in StoredProbeInput's normalized callbacks.
+5. The selected ordinary argument uses ordinaryLevel of the old depth probe,
+   so the second callback name is exact once the first callback is attached.
+   NativeInput.available_mu_key_readback + growth retain the original Mu
+   key/table/record; request true hits it. finish_shaped_mu preserves original
+   U. StoredProbeInput already demonstrates that exact final cache-hit step
+   on the ORIGINAL B. Attach it to the DERIVED product callbacks, then to
+   ReferenceOuter/ReferenceCompletion actual execute13. Do not confuse
+   logical language equality, closedness, and physical original-U identity.
+
+Useful APIs already present:
+- InternedEdgeResidency.canonicalEdges_retains (260) preserves EVERY complete
+  raw payload under coherence and ALL raw residency. The unconditional
+  reverse is InternedProbeProvenance.canonicalEdges_member (164).
+- edge_identity_unique (158) explains why the residency condition is needed.
+- InternedNodeSetCongruence.makeNode_same_members (41) equates full requests
+  from surviving membership; set_replay (80) reuses an old complete node
+  after actual growth. Do not add a redundant sorting framework.
+- Successful whole bounded execute retains SemanticHeap through existing
+  SourceRecursiveIntersectionScopeCalls.execute_scoped. This says nothing
+  about semantic heaps at failed pending results.
+- Available.grows needs BOTH constructor Grows and issued-history extension.
+  Rows.grows needs only raw record growth. For original probe availability,
+  use extended original U children, or Kernel.Extension.available.
+
+## Full objective and biggest remaining gaps
+
+Preserve ONE original-input/request/caller-derived bound for BOTH optimized
+selected-slot worker and COMPLETE enumeration driver. Include ALL sibling
+work and ALL generated, reached, intermediate, failing, rejected, returned,
+subsequent and native states. Derive successful body/worker/fuel/resource,
+closure, finite carrier, validity and OriginalInput at the original endpoint;
+do not finish with those as caller oracles. Do not restrict the whole goal
+to the default type universe.
+
+Keep exact accepted terms per NODE-COUNT size, ordering and counts, BOTH
+signed rank/unrank inverse laws through actual sparse execution, ALL Sized
+routes/fallbacks/failures, productive infinite queries, actual lazy tables,
+maps/sets/caches/hash/word/Int behavior, lookup/Curried/Specftacular and native
+Haskell correspondence. Generated preservation and a complete original-input
+work bound remain the largest mathematical gap. Cached Mu depth cannot
+replace ordinary structural depth or guard/path measures.
+
+R117/R118 work/allocation bounds remain component laws. Actual Tree.work is
+not an original-input total-work bound. Keep R118 repeated-intersection
+physical growth and timeouts; generic physical absorption is false. Keep
+R120's 58 retained-graph observations at their exact boundary. Original-U
+reuse alone would not prove all generated closure or enumeration termination.
+
+## Haskell findings and external ownership
+
+R125 has NO production Haskell repair, new native failure or behavior change.
+No Haskell fix should be duplicated from these Lean and check-metadata
+repairs. At ROOT 22:38, PR202 and PR203 remained OPEN and unmerged on base
+bd5a406a6a3f84b7e3ae0906082783911509df83, with unchanged exact heads:
+- PR202 ce4ee6d82340235a39b9278457fe0f9ff45a2eba corrects union-find comments.
+  UnionFind.find returns the representative and the same forest.
+- PR203 e019ce41db8029a5d1349a8ea123253f3d7af715 documents intentional
+  required-argument libraryAvoid behavior for Hoogle+/Hectare parity.
+  The prior buildRelevant behavior-change recommendation stays withdrawn.
+Keep intended behavior. Positive Top demand can allocate an empty PCS in a
+cold equality cache; exact top readback does not imply zero native allocation.
+
+## Verification, preservation, and storage
+
+This batch changes 13 modules: 11 new modules and two expanded modules.
+All 26 CURRENT public laws passed actual project Nix/Lake plus own-source
+-j1 -DwarningAsError=true. TWENTY laws are NEW; six old public signatures
+are preserved exactly. preserved-public-signatures.json checks the old
+Body and StoredRows declarations. All public axiom sets are subsets of
+propext, Classical.choice, Quot.sound. No admitted theorem was introduced.
+
+Packet generation now retains DOTTED theorem names. ResidentRows reports
+Rows.grows, callback_rows and Rows.readback in full. The earlier generator's
+word-only regex truncated dotted names to Rows; that draft packet was
+corrected BEFORE successful verification and commit. Current manifests match
+EVERY actual public theorem name. Treat historical packets for the two
+expanded modules as reports for their historical commits; the new raw-rows
+and stored-reference-rows packets cover their complete CURRENT source.
+Do not overwrite old reports or mistake their old hashes for current hashes.
+
+Each committed lean/restart-evidence/20261107-<slug>/ packet contains small
+check.py/theorems.json/checked.json/README files. Reproduce with python3
+<packet>/check.py under the usual strict serial 4 GiB heavy-management cap.
+Root is the sole compiler. Do not run parallel/uncapped compilers or change
+queue concurrency. check-all.py serially checks independent slugs and records
+every outcome. Do not repeat passed checks without a new reason. No Haskell
+files changed, so no Haskell suite or format run was needed.
+
+The ROOT runtime is /tmp/mcfta-universe-probe-replay-20261107-2201/.
+verified-modules.json records exact hashes, full theorem names, current/new
+law counts, and packet paths. publication.json and RESUME.json record final
+branch/board state. Source and docs are committed before publication.
+All historical doc tails remain byte-identical. write-checkpoint.py is
+APPLIED ONCE; do not rerun it against the new prefix.
+
+ROOT 22:36 readable /tmp allocated 14,000,128 bytes, excluding six protected
+directories. This runtime allocated 77,824 then. Available space was
+264,546,983,936 bytes. Only small scripts/manifests/compact repair logs are
+stored there. There are no archives or copied builds. No cleanup was needed
+or performed. Continue watching /tmp; publication has the final small audit.
+
+All heavy/compiler handles and bounded source tasks are terminal. No external
+approval is pending. Goal remains ACTIVE. Continue actual PRODUCT callbacks,
+then original-U intersection identity, generated closure and the complete
+shared original-input work/native contract.
+
+## Verified R125 source manifest
+
+- SourceSynthesisUniverseBodyExactFree: 138 lines; 1 current public laws, 1 new; SHA256 68b98754249c6103664b025d336f06f17fc7fd8090d559faf08e2253adfa6987. Packet lean/restart-evidence/20261107-universe-body-exact-free.
+- SourceSynthesisUniverseBody: 384 lines; 4 current public laws, 1 new; SHA256 84533c4653f13d81d89d01ed9f3d7f0b18f924bee86c3e60c8d6f62b5c509152. Packet lean/restart-evidence/20261107-universe-body-raw-rows.
+- SourceSynthesisUniverseCanonicalRowReplay: 121 lines; 2 current public laws, 2 new; SHA256 33002d52c7f10ce395b3a019e9b32153c0967a31b65809c513861e1939e65c8a. Packet lean/restart-evidence/20261107-universe-canonical-row-replay.
+- SourceSynthesisUniverseColdFrames: 115 lines; 1 current public laws, 1 new; SHA256 0a7c2e380953a94d27276f8bb1d2ce01b47a32275990ae9c4a08d0e7938b9c11. Packet lean/restart-evidence/20261107-universe-cold-frames.
+- SourceSynthesisUniverseColdResidentRows: 60 lines; 1 current public laws, 1 new; SHA256 4f8532beb2402a5cc564bde0fe07d50b99064f9dbf36c07a72dda235e0504788. Packet lean/restart-evidence/20261107-universe-cold-resident-rows.
+- SourceSynthesisUniverseMarkerUnique: 52 lines; 1 current public laws, 1 new; SHA256 68eec9fde157f1131a2ce5bca16ce50707b19dd32d056410b2cc226984b21fda. Packet lean/restart-evidence/20261107-universe-marker-unique.
+- SourceSynthesisUniverseNodeReplay: 35 lines; 1 current public laws, 1 new; SHA256 1af12b13ae682a1cc6f5aad216611a438009fe9e13f43db240fce13c0c9548a0. Packet lean/restart-evidence/20261107-universe-probe-node-replay.
+- SourceSynthesisUniverseProbeReconstruction: 72 lines; 1 current public laws, 1 new; SHA256 1eb1841036770a241b4e003ccfa735a67da68b7404cf6d39c07b58a746f1a8d3. Packet lean/restart-evidence/20261107-universe-probe-reconstruction.
+- SourceSynthesisUniverseProbeRowAlignment: 64 lines; 2 current public laws, 2 new; SHA256 d97bbd19bde061f4e26340efe70b5d79a05459d12e6e436c46aeeae4259c0c1e. Packet lean/restart-evidence/20261107-universe-probe-row-alignment.
+- SourceSynthesisUniverseProbeRowReplay: 68 lines; 3 current public laws, 3 new; SHA256 883e40070698d82c3d65327e5e494b6105d2d45128eaca351aa37d460aa8ee85. Packet lean/restart-evidence/20261107-universe-probe-row-replay.
+- SourceSynthesisUniverseResidentRows: 127 lines; 3 current public laws, 3 new; SHA256 dfefb0e768f9d97f68d8e92c10ad3bd1d484d4e8498fe4e5865a18af227d88e5. Packet lean/restart-evidence/20261107-universe-resident-rows.
+- SourceSynthesisUniverseStoredProbeInput: 76 lines; 1 current public laws, 1 new; SHA256 f755f64e790fd03206d90da464fb72390c5fc5ca7729b59bc60d2a17f3610df7. Packet lean/restart-evidence/20261107-universe-stored-probe-input.
+- SourceSynthesisUniverseStoredRows: 223 lines; 5 current public laws, 2 new; SHA256 2617d8c26ca2a62f95a44b36954ac54f0d7039e4f365dc2ddfc621b835d045d9. Packet lean/restart-evidence/20261107-universe-stored-reference-rows.
+
+The prior checkpoint follows as history. Its original stored-probe attachment
+is resolved above. Product callbacks and full-system gaps remain open.
+
+---
+
 # Current checkpoint: exact universe-body substitution from original inputs
 
 Updated 2026-11-07 21:57 CET. Goal ACTIVE. R124 made PROGRESS. Branch formalize.
