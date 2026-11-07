@@ -1,195 +1,210 @@
-# Current checkpoint: deterministic subset meaning, frontier, and bounded rounds
+# Current checkpoint: bounded determinization preserves language and exact queries
 
-Updated 2026-11-07 07:05 CET. Goal ACTIVE. The previous goal turn made verified
-progress: six original-source/cyclic-pipeline laws were published. This turn adds
-23 checked public laws for the current Sized determinization route's operations.
-The four proof commits are:
-a886785eeb821f514b095f5e622ded187e6d87f5 Derive distinct emissions from each determinization round
-f86f344561fce968d92753cb2e7dfc83709b0ca6 Compute the bounded subset-discovery round limit
-9cc86df51b893506e1f61722e802bf756b59797f Characterize fresh-subset frontier tuples
-66a8a4797b925a3336f29becb91080613882bb6c Prove deterministic subset meaning and emitted-row uniqueness
+Updated 2026-11-07 07:29 CET. Goal ACTIVE. The previous goal turn made verified
+progress with subset, frontier, round, and control laws. This turn connects the
+complete bounded list-view discovery worker to the original plain graph language
+and the full signed four-query specification. Four proof commits:
+4f8007360a82887a33b534a1a8c134ea1518d94b Connect bounded determinization to exact signed Sized queries
+d13b0917bea74adbb60a87f3c27d8bcf2140deff Preserve deterministic root and subset row languages
+76e3fe0b068995fa164ef82e3870ddfde00091b5 Derive closed tables from bounded determinization execution
+b2bc1c9b4688b6411181eb12c09cfb8415aaac7a Prove closed subset discovery preserves original languages
 
-Previous published checkpoint: 6a630e2bd13f029dc7a232ee9c03790a00a8e0e4.
+Previous published checkpoint: e61ce246dc5d67a7ccc33c3329c78dac8c434a4b.
 Current formalize HEAD identifies the documentation/publication checkpoint.
-Formalize was pulled before source work. Main was refreshed and remains
-bd5a406a6a3f84b7e3ae0906082783911509df83, already an ancestor of this branch.
-Preserve unrelated .hypha/, every proof, counterexample, repair, and marked draft.
-All compiler jobs are terminal. Heavy work stayed serial with cap4G. No queue
-concurrency changed. Readable /tmp is about10MiB, excluding six inaccessible
+Formalize was pulled before edits. Main was refreshed and remains
+bd5a406a6a3f84b7e3ae0906082783911509df83, already incorporated. Preserve unrelated
+.hypha/ and all proofs, counterexamples, repairs, and marked drafts.
+All compiler jobs are terminal. Heavy jobs remained serial, cap4G; no queue
+concurrency changed. Readable /tmp remains about11MiB, excluding six inaccessible
 private/system entries. No copied source/build tree or large archive was made.
 
-## New exact component laws
+## Strongest new statement and exact boundary
 
-SourceSizedDeterminizationKernel computes each target from all original owners
-whose transition has the symbol, arity, and child memberships of a tuple. With
-plain original rows and a complete owner list, exact child subsets make this
-target exactly the original states that accept the parent term. A finite run in
-any emitted subset-row table recovers its canonical original accepting-state
-subset. Two subset runs of one term therefore have the same key. Distinct emitted
-token/tuple pairs give disjoint alternatives and unique node-count run classes.
-These results derive the subset meaning. They do not assume that desired meaning
-for every output state. Discovery still has to derive complete emitted rows and
-global tuple uniqueness for the actual final table.
+For a plain finite original row graph, the nonnegative discovery limit computes
+a finite bound for the complete determinization list model. Successful discovery
+derives complete emitted rows, known child/target keys, and global uniqueness.
+The actual Left original roots and Right subset states preserve the original
+root languages. The existing optimized count-table worker then satisfies
+SourceSizedApiLaws.Exact: finite exact NODE-COUNT classes, distinct terms, exact
+counts, signed invalid-rank rejection, rank existence, both rank/unrank inverses,
+and distinct size-major prefixes with exact accepted-term coverage.
 
-SourceSizedDeterminizationFrontier proves the first-fresh-position generator's
-exact membership. Nonempty tuples contain at least one fresh subset. Empty tuples
-occur only in the initial round. Once discovery has started, a tuple whose keys
-are all old cannot be emitted again. The recursive list view has the source set
-membership before tuple sorting. It does not claim the source row sequence.
+The query contract also holds after ANY permutation of each final row. Counts and
+ranks use that resulting transformed order. This does not equate the order with
+the original reference graph. It proves that final row sorts preserve these laws.
+The actual finite canonical-sort input and source container adapters still need
+to be instantiated. ordered_queries_exact is an INTERNAL attachment theorem with
+a row-permutation premise, not a completed public dispatcher proof.
 
-SourceSizedDeterminizationDiscovery models the control projection of go: add fresh
-target keys, reject an exceeded limit, stop on an empty frontier, otherwise call
-step and continue. Its computed recursion bound is the original nonnegative limit.
-Sized's limit1024 permits at most1025 checking rounds, including the final round.
-No caller fuel is required by complete/sized_complete. The threaded context and
-step function remain generic. This is a ROUND bound, not a total tuple/work bound
-or a completed concrete table builder. It does not prove ordered Set/Map readback.
+No completed worker, coverage, closure, uniqueness, or caller fuel is supplied to
+the successful concrete compile theorem. Original owner support and plain-row
+meaning are internal graph inputs. The model's outcome still includes the source
+limit failure; generic control proves bound exhaustion impossible. Source-sized
+limit1024 permits at most1025 checking rounds. This remains a ROUND bound, not a
+bound on total tuple generation or total original enumeration work.
 
-SourceSizedDeterminizationStep instantiates actual per-round token/seed/tuple
-operations in a finite list view. It includes ALL original rows, including
-unreachable rows, groups by symbol AND arity, and removes repeated tuples per
-token. It derives exact round membership, distinct emissions, nonempty targets
-from faithful holders, exclusion of old tuples, and unique per-round count classes.
-This removes the supplied tuple-distinctness premise for one generated batch.
-It does not yet derive distinctness/completeness of the full accumulated output.
+Current Haskell uses ordered Sets and Maps. The model uses their finite list/set
+view. Their exact source correspondence, output FTA validation, canonical sort
+construction, and sizedStates routing are still open. In particular, the source
+plain check is PER-STATE after trim, while determinization uses ALL erased original
+rows. The guarded original root must be connected to that erased graph under the
+actual reached plain check. Do not assume every original guard is globally plain.
+This is not a proof of current Haskell execution or all current Sized branches.
 
-These are exact component results for the current determinization path. They are
-not a proof of the complete current sized dispatcher, the equal-child path, or
-actual Haskell execution. Do not restore the older blanket original-reference
-query/order equality for these new paths.
+## Checked modules and their roles
 
-## Strongest earlier composed pipeline result remains checked
+SourceSizedDeterminizationClosure defines five internal loop invariant fields:
+coverage of all original seed tuples over known holders; known children; targets
+in known or pending; distinct accumulated choices; distinct known keys. Once
+pending targets are known, finite-term induction derives original-language
+completeness. Kernel.accepted_exact gives the other direction.
 
-SourcePruningEnumerationSelectedSource.prepare/complete starts from original syntax
-with checked source annotations. It derives construction, actual selected-value
-Mu/Union preparation, ready warm native state, closure, and final normalized rows.
-It supplies no completed-build, prepared-value, or final-row witness as an input.
-Under reached native word checks it derives execution of the SourceCyclicRows
-compiler model. A successful compiler output has exact original-language classes
-at each NODE-COUNT size, finite class evaluation, distinct terms, exact counts and
-decoding, size-prefix coverage/order, and both rank inverses.
+SourceSizedDeterminizationRun instantiates the actual per-round token/seed/tuple
+generator inside the computed-bound controller. It derives the initial invariant
+from empty known keys and leaf choices, preserves it on each continuing round,
+and derives Closed at every successful final return. compile_complete supplies
+finite evaluation; compile_closed, compile_language, and compile_unique require
+no supplied invariant, desired whole-table language, or completed call.
 
-Annotation normalization and reached word checks remain explicit. Stage bounds are
-existential. This result covers the modeled cyclic-import compiler, not every
-current Data.CFTA.Sized route. It is not one computed input/size bound for both
-optimized enumerateOut/Fully or an actual Haskell translation theorem.
+IMPORTANT final-batch detail: its context ALREADY includes accumulated choices
+AND the current found batch. Initial context is the leaf batch. Each step appends
+the newly generated batch before scheduling its target keys. finish retains that
+full context even if all new targets were already known. This matches Haskell
+Table.hs:512, where table' merges table and found before an empty-frontier return.
+The Haskell implementation already handles this correctly. No repair is needed.
 
-Reuse existing ColdGuardedExact.trace_table_exact, ColdSized.source_sized,
+SourceSizedDeterminizationRows installs actual Left roots and Right child keys.
+Concrete Right renaming gives kernel-language equality. Closed gives original
+Left-root language. Distinct choices derive disjoint alternatives and class
+uniqueness on the FULL Left/Right graph, not only on Right states.
+
+SourceSizedDeterminizationQueries composes successful concrete discovery, full
+row language/uniqueness, the existing optimized query worker, and
+SourceSizedApiLaws.Exact. queries_exact uses the emitted graph's order.
+ordered_queries_exact transports language and disjointness through per-row
+permutations and uses the resulting graph's own order. Neither theorem silently
+substitutes an enumerated reference implementation for the optimized worker.
+
+## Next source attachments; do not redo completed loop mathematics
+
+1. Derive provenance of every emitted choice through actual evaluation: its symbol
+   and arity come from an original transition. mem_round and tuple length supply
+   the per-batch fact. Carry it to final output, including the last batch.
+2. Use closed child keys and original validation to build the concrete finite
+   Left/Right output table. Derive root presence, child presence, original symbol
+   arities, and success of the source mkFTA call. Source known keys are actual sets;
+   connect their canonical list view to the original ordered key list.
+3. Instantiate the ordered Map/Set and existing finite canonical-row preparation
+   adapters. SourceSizedRows.prepare_complete/prepare_language/sortedRows_perm and
+   ordered_queries_exact provide reusable boundaries. Derive the actual output;
+   do not require a caller to supply a sorted graph or its completion.
+4. Attach actual sizedStates routes, global reference residual precheck, per-state
+   trim/plain/unambiguity checks, shared deterministic table, missing-state empty
+   result, 1024 failure, and reference fallback. Connect the guarded root to the
+   erased global rows under the actual scoped check.
+5. Prove the equal-child worklist attachment below. Keep both optimized paths and
+   their actual within-size orders. Then continue the full global objective.
+
+The old SourceSizedFiniteKeysDispatchApi.nativeSized/nativeSized_eq covers the
+older plain/unambiguity gate with reference fallback. Its full query-record
+reference equality is not a theorem for the current determinized/equal-child
+routes. Sized.hs:53-72 explicitly permits their different within-size orders;
+SizedSpec.hs:59-72 compares sorted term sets/counts in its ambiguous case.
+This is a formalization boundary, not evidence of a Haskell bug.
+
+## Equal-child path and Haskell findings for external work
+
+intersectionCountingRows is a reachable INTERSECTION-key worklist. Each produced
+key means conjunction of its original state languages. Same-token transition
+tuples join direct-child equality groups. A child-group key includes every tuple
+child state at every grouped position, and fills each position of that group.
+Sorting temporarily labels symbols with the equality classes.
+
+Exactly1024 keys and1024 raw transitions per intersection key are allowed.
+take1025 detects excess. A new1025th key rejects, but already-visited keys are
+skipped first. The helper returns `Nothing` on failure. Sized then uses the
+reference. These are output-size caps, not bounds on all tuple-search work.
+
+Reuse CompactGroups.groupSelections_exact, CompactEdgeRanks.source_outputs_exact/
+compiledEdge_correct, CompactIndexChoice.choice_correct, and SourcePlanScale.
+group_position_nodes. Derive whole-key language from complete worklist rows and
+child-key closure; derive output uniqueness from the existing unconstrained gate.
+Do not supply desired whole-key meaning or uniqueness as final caller conditions.
+
+No Haskell code changed and no Haskell runtime defect was established. Record each
+future Haskell fix or proposed repair here so external work can pick it up.
+The earlier documentation follow-up remains: Enumeration.hs:422 claims
+getUVarValue path-compresses, while Internal/UnionFind.hs:129-130 returns
+(root uv uf, uf) unchanged. Suggested comment:
+"Look up the value stored at a UVar's representative."
+
+## Earlier composed pipelines remain available
+
+SourcePruningEnumerationSelectedSource.prepare/complete starts from original
+syntax with checked annotations and derives construction, actual selected Mu/Union
+preparation, ready warm native state, closure, and normalized final rows. Under
+reached native word checks, successful modeled cyclic compilation gives exact
+original-language node-count classes, counts/decode/order/rank laws. The compiler
+there is SourceCyclicRows, not every current Sized route. Annotation normalization,
+reached word checks, compiler success, and existential stage bounds remain at that
+boundary. Do not claim that result is already the complete current Haskell entry.
+
+Reuse ColdGuardedExact.trace_table_exact, ColdSized.source_sized,
 ColdNativeSized.complete, NormalizedNativeSized.complete, and SizedEntryCorrect.
-complete_both_exact/constructed_complete. Substantial exact table/Sized/count/order/
-inverse composition already exists. The old dispatcher has the coverage limit
-below. A new lexical RowsCorrespond adapter is unnecessary for this finite-table
-route. Full incoming/cache/fold/terminal completion, fixed2 reads, and canonical
-transaction laws from previous checkpoints also remain available. Inspect existing
-modules before declaring a component missing or reimplementing it.
+complete_both_exact/constructed_complete. Substantial count/order/inverse
+composition already exists. A new lexical RowsCorrespond adapter is unnecessary
+for this finite-table route. The concrete Right-state renaming in the NEW Rows
+module is a separate source attachment. Existing incoming/cache/fold/terminal,
+fixed2-read, and canonical transaction laws remain checked; do not reimplement them.
 
-## Precise next attachment for deterministicRows
+## Verification and reproducible source checks
 
-Instantiate the discovery context with accumulated emitted choices. Initial choices
-come from the empty known set and leaf seeds. Derive holders from discovered keys.
-Each following step generates round(newFresh, updatedKnown) and appends its choices.
-Carry these invariants through the actual computed-bound evaluation:
-1. Coverage: every original transition's child tuple drawn from known holders is
-   already an accumulated choice. This includes the empty leaf tuple.
-2. Every accumulated choice's child key belongs to the current known set.
-3. Every accumulated choice's target belongs to known or to the current found batch.
-4. Accumulated choices and known keys are distinct.
-
-To extend coverage, split a tuple into all-old children or one fresh child. Use
-mem_tuples/mem_round for the latter. To retain choice distinctness, use
-round_old_excluded: old choices have only old children, and newFresh excludes known.
-At a successful empty-frontier stop, found is included in known. Every accumulated
-target is then known. Derive finite-term completeness by term induction and reuse
-Kernel.accepted_exact for the other direction. Recursive graphs need no acyclicity.
-
-Then attach the actual Left original-state roots and Right subset states, preserve
-original FTA validity, and connect ordered Set/Map and sortedRows readback. Derive
-the actual transformed count-table queries with that transformed sequence order.
-Include the limit-rejection/reference-fallback route. Retain the optimized path.
-The generic controller alone does not complete these attachments.
-
-## Equal-child audit and Haskell follow-ups for external work
-
-Current Sized.hs:150-175 selects per-state plain, deterministic, equal-child, or
-reference routes after per-state reachability/trim checks. Deterministic counting
-uses all unconstrained original rows. The older SourceSizedFiniteKeysDispatchApi
-nativeSized/nativeSized_eq model covers the older gate/fallback route only.
-Sized.hs:53-72 deliberately permits different within-size orders for determinized
-and equal-child rows. SizedSpec.hs:59-72 compares sorted term sets and counts for
-its ambiguous case. This is a formalization coverage gap, not a demonstrated bug.
-
-The read-only equal-child audit confirms intersectionCountingRows is an
-INTERSECTION-key worklist. Each key denotes the conjunction of its original state
-languages. Same-token transition tuples join all direct-child equality groups.
-Each group receives the set of every tuple child state at every grouped position.
-The same key fills every position in that group. Canonical sorting uses the
-(symbol, equality classes) temporary symbol before that temporary label is removed.
-
-Exactly1024 keys AND1024 raw transitions per intersection key are permitted.
-take1025 detects excess; a new1025th key also rejects. Already-visited keys are
-skipped before that test. Failure returns Nothing and Sized uses the reference.
-These are output-size caps, not bounds on all tuple-search work.
-
-Reuse CompactGroups.groupSelections_exact, CompactEdgeRanks.source_outputs_exact
-and compiledEdge_correct, CompactIndexChoice.choice_correct, and SourcePlanScale.
-group_position_nodes. The missing worklist invariant is:
-Accepts transformed K term iff every original state in K accepts term.
-Derive it from complete key rows and child-key closure, then derive transformed run
-uniqueness from the existing unconstrained-unambiguity gate. Do not add the desired
-whole-key meaning or uniqueness as final caller obligations.
-
-No Haskell code changed. No new runtime defect or repair was established. Any
-future Haskell fix belongs in this FINDINGS prefix for external work. The earlier
-documentation follow-up remains: Enumeration.hs:422 says getUVarValue compresses,
-while Internal/UnionFind.hs:129-130 returns (root uv uf, uf) unchanged. Suggested
-comment: "Look up the value stored at a UVar's representative."
-
-## Verification and compact reproduction
-
-All FOUR actual Lake targets and all23 public source/axiom reports passed in
-shell.nix with Lean4.34.1, j1, own warnings as errors, cap4G. Only propext,
+All FOUR actual Lake modules and all24 public source/axiom reports passed.
+Final handles: Closure38666 terminal0 peak1101M; Run6300 terminal0 peak187M;
+Rows7789 terminal0 peak1164M; Queries29177 terminal0 peak1212M.
+Checks used shell.nix, Lean4.34.1, j1, own warnings as errors, cap4G. Only propext,
 Classical.choice, and Quot.sound occur. No new axiom or sorry was added.
-Final handles: Kernel47406 terminal0 peak173M; Frontier28099 terminal0 peak180M;
-Discovery2950 terminal0 peak165M; Step57003 terminal0 peak167M.
-Failed small drafts and their repairs remain in the runtime directory below.
-Source hashes, sizes, and packet sizes follow:
-- SourceSizedDeterminizationKernel.lean: 12991B, 10 public laws; packet6027B.
-  SHA-256 a73079d21c2c381fcc13bcca0b04678f5d1c80243e75985d05365fb7695da3fb.
-- SourceSizedDeterminizationFrontier.lean: 5927B, 4 public laws; packet4770B.
-  SHA-256 e36a2cf0b90c360736d640d3a04424182f1ff87100ccc986c14ad76f6a69205e.
-- SourceSizedDeterminizationDiscovery.lean: 6634B, 4 public laws; packet4920B.
-  SHA-256 78f86e3cb1e96bc0b7f9f4cb8e9e5d5819609d3a71dfcfde49603b8cba39dc24.
-- SourceSizedDeterminizationStep.lean: 8327B, 5 public laws; packet5065B.
-  SHA-256 136ecea043336e9745c4a76913419a1d323da6b3db4709d4f1a5352bf50d92e7.
+No clean-build, CI, Haskell build/test, or actual-runtime correspondence claim.
+Unchanged earlier proofs were not retested.
 
-Packets: lean/restart-evidence/20261107-sized-determinization-{kernel,frontier,
-discovery,step}/. Each has the actual-source checker, theorem list, checked source
-hash/axiom report, and scope README. No source snapshot or build tree is needed.
-No clean rebuild, CI, Haskell test/build, or complete runtime correspondence claim
-is made. Unchanged earlier modules were not retested. Runtime:
-/tmp/mcfta-sized-determinization-20261107-0645/.
+The loop proof needed a generic fresh-key distinctness lemma: generic DecidableEq
+and concrete List BEq instances need not reduce to the same implementation.
+The Rows proof also needed distinct names for mapped and filtered membership
+witnesses. These were Lean proof repairs, not Haskell fixes. Small failed drafts
+remain in the runtime directory below. Source details:
+- SourceSizedDeterminizationClosure.lean: 6271B; 4 laws; packet4748B.
+  SHA-256 5cce1e8bc65911c40aceb77d9e76b4aafacde53e71034a1be2c275fd342c8eee.
+- SourceSizedDeterminizationRun.lean: 13750B; 10 laws; packet5973B.
+  SHA-256 22e4a55d0ce9d0858ee997d9fcf2aac0e954a02401c35d2a0a90b8d696263f11.
+- SourceSizedDeterminizationRows.lean: 9003B; 6 laws; packet5175B.
+  SHA-256 d4932cdb887cabeecb99bffba579c6b033c17a9862bdbf9999fdbe26039459e3.
+- SourceSizedDeterminizationQueries.lean: 7851B; 4 laws; packet5092B.
+  SHA-256 3a8a756bdd4444f58e9c721e08bf1dfb33152d7b6a7f16518ea14931b50e9961.
+
+Packets: lean/restart-evidence/20261107-sized-determinization-{closure,run,rows,
+queries}/. Total20988B. Each checker builds the actual module, checks every public
+source/axiom report, and removes temporary reports. No source snapshot or build
+tree is needed. Runtime: /tmp/mcfta-sized-determinization-run-20261107-0713/.
 
 ## Full remaining objective and workflow
 
 Keep BOTH actual optimized enumerateOut and enumerateFully. Derive ONE computable
-bound from original input and requested size. Cover generated, returned, subsequent,
-intermediate, and failing states and total branch work. Derive reached word/capacity
-checks from that original data. NativeCompilerCapacity.ranges_of_capacity already
-converts reached capacity to word checks but still assumes reached capacity.
-Do not substitute round count, a renamed capacity premise, or new final caller
-resource/closure/completed-worker/success/fuel/validity/OriginalInput obligations
-for this objective.
+bound from original input and requested size. Cover generated, returned,
+subsequent, intermediate, failing states and total branch work. Derive reached
+word/capacity checks from the original data. NativeCompilerCapacity.
+ranges_of_capacity still assumes reached capacity; renaming it does not close the
+objective. Neither does a subset-discovery round bound. Add no final caller
+resource, closure, completed-worker, success, fuel, validity, or OriginalInput
+obligations in place of the requested theorem.
 
 Complete current Sized branch coverage and native/Haskell worker, identity, cache,
 interner, equality, hash, and machine-Int correspondence. Keep optimized interned
-core primary. Preserve older constructor/equality work as secondary targets. Push
-formalize regularly under standing explicit authorization. Goal ACTIVE.
-
+core primary; preserve older constructor/equality work as secondary targets.
+Push formalize regularly under standing explicit authorization. Goal ACTIVE.
 Historical source-reading quotas and opaque Source/TYPE receipt gates remain
-superseded. Inspect actual source as needed. Preserve historical SourceProcess FAIL
-and Root unknown-upper facts without restoring those access restrictions. Keep
-/tmp small. Do not make source/build-tree copies. Earlier document tails follow
-unchanged, with hashes retained in this runtime's doc-tail-manifest.json.
+superseded. Inspect needed actual source. Preserve historical SourceProcess FAIL
+and Root unknown-upper facts without restoring access restrictions. Keep /tmp
+small and avoid source/build-tree copies. Older document tails follow unchanged.
 
 
 # Current checkpoint: default enumeration discharges its callback invariant
