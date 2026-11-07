@@ -1,14 +1,49 @@
-# Current checkpoint: allocated reference slots and computed value access
+# Current checkpoint: actual enumerateOut preserves allocated reference slots
 
-Updated 2026-11-07 04:19 CET. Status: PROGRESS. Full goal ACTIVE. The current formalize HEAD
-identifies the published checkpoint. Parent: 5105afc382f0407ee649ba3fc0aba1508b37cf37.
-The index theorem is that parent commit; the value-access theorem and current notes
-form this checkpoint. Prior depth checkpoint: a05c6ab0df8f8398b06fdda9332a659ef5d76623.
-Fresh pull was up to date. Main remains bd5a406a6a3f84b7e3ae0906082783911509df83.
-Preserve unrelated .hypha/. Root has no compiler live. A separate Native worker
-extension is active. Verify its actual handle before starting another compiler.
+Updated 2026-11-07 04:33 CET. Status: PROGRESS. Full goal ACTIVE. Current formalize HEAD
+identifies the published checkpoint. Parent: f90946108b44f6bc3c4a2b4f69e163912acb136c.
+Earlier index5105afc382f0407ee649ba3fc0aba1508b37cf37 and valuef90946108 were
+pushed and independently remote/tracking verified. Main was fetched again and is
+still bd5a406a6a3f84b7e3ae0906082783911509df83. Preserve unrelated .hypha/.
+Root has no compiler live. SAME Native is extending actual enumerateFully under
+an INTERNAL callback preservation contract. Verify its actual handle before
+starting another compiler. Do not treat that callback law as a final caller premise.
 
-## Strongest new checked result
+## Strongest new checked worker result
+
+Every successful actual imported EnumerationState.enumerateOut result preserves
+Indexed at the returned counter and counter monotonicity. Returned fragment holes
+are below that counter. The initial-state/root-index-zero corollary derives the
+incoming invariant and key range without supplied validity/capacity/cost. The
+composed Node/Edge-then-Out corollaries preserve both earlier and returned fragment
+references at the final counter. This uses the actual worker, not a replacement.
+It does not yet prove every intermediate state on failing paths or total work.
+
+New source: lean/MicroCFTA/EnumerationStateWorkerIndexValidity.lean, 15351 bytes,
+SHA-256 a10163c6ccf6611b2712a8feaa82c6b61dadb9ffa421c430f43c5249a20a3185.
+SAME Native normal2 completed terminal0 in its initial capped call (no live handle),
+empty logs. Root verified its result digest and the checker's explicit three-phase
+source/9-own-import assertions. Actual module plus all4 source/axiom reports18559
+passed0, peak210M. The worker source, all9 checked own dependencies, and checker
+files were pinned before, distinct-after, and separate-final. Lean4.34.1/shell.nix/j1/warnings-as-errors/
+4G/swap0/380s; axioms only propext, Classical.choice, Quot.sound. No sorryAx or
+new axiom. The one small failed arithmetic draft remains.
+
+Packet: lean/restart-evidence/20261107-enumeration-worker-index-validity/10312B.
+Source-based check.py builds the actual module and all4 source/axiom reports.
+No archived build copy or private Source cut is required to reproduce the proof.
+No Haskell code/fix/build, new unique Source, TYPE, or compiler-interface view.
+The scoped86LF owned replay and permanent historical failures are recorded below.
+
+Root also checked an 888-byte new Std leaf for the next Fully proof: membership
+in values.zipIdx gives value membership and an index below values.length. It
+passed normal4G checking immediately with axioms[propext,Quot.sound]. Private
+zip_start handles any initial offset by induction. The helper is at
+/tmp/mcfta-index-access-20261107-0408/ZipLeaf1.lean, SHA-256
+81a4388adf6c3ade93ef52e77d13fe13770f69254d50bb0a022ddbdac30f83c1.
+This is own math, with no Std Source/TYPE/interface view. Native may copy the proof.
+
+## Earlier checked current-index and value-read results
 
 BOTH actual imported Node and Edge expansions now preserve references below the
 CURRENT returned counter on every successful return. Value-count equals counter.
@@ -18,7 +53,8 @@ UF storage keys and parent targets use the same actual counter. UF Total persist
 The counter does not decrease. Initial-state/[] corollaries derive this property
 without supplied invariant, capacity, allocation budget, depth, or graph-size
 premises. This closes actual current-value index validity for these expansions.
-It does not yet establish that property for all complete-worker execution states.
+It now also holds for successful Out returns as recorded above. All failing
+prefixes and full Fully/native callback realization remain open.
 
 Actual rawValue succeeds for every allocated variable in an Indexed state and
 preserves that state. Actual getValue succeeds with fuel state.counter+1, preserves
@@ -59,19 +95,24 @@ Source body/replay/TYPE or compiler-interface view.
 
 ## Next actual worker task
 
-SAME /root/native_mu_prepare is extending Indexed through actual enumerateOut,
-then enumerateFully where justified. New file: EnumerationStateWorkerIndexValidity.lean.
-Do not replace the workers. Derive internal root/query conditions and add initial
-or composed corollaries. The actual Oracle alias permits actions in the enumeration
-state monad. Arbitrary callbacks can therefore update the state without preserving
-Indexed. The required callback law must be derived from its actual native
-realizer; do not turn it into a final caller requirement or claim arbitrary
-Oracle safety. Failing prefixes and total work remain separate obligations.
+SAME /root/native_mu_prepare is extending actual enumerateFully. New file:
+EnumerationStateFullyIndexValidity.lean. Keep all10 current checked own sources
+FROZEN. Prove an internal theorem from the actual Oracle slots' preservation law,
+covering all successful Bool results where possible (including False). Then prove
+initial/composed corollaries. An accepted-only law would not cover states produced
+on false-result failing paths; retain that separate obligation.
+
+The Oracle alias permits enumeration-state actions. Its native realization and
+preservation law remain UNPROVED. Do not replace the worker or Oracle with a safe
+alternative. Do not claim arbitrary Oracle safety. Do not add callback validity,
+resource, closure, fuel or success as a FINAL caller premise. The realizer must
+derive this internal contract. Failing prefixes, total work, exact semantics and
+actual native/Haskell correspondence remain part of the full goal.
 
 A precise replay of already-owned EnumerationState244..329 (86LF) is authorized
 ONLY to the SAME Native reader with fresh capture and receiver/view guards. No
 new unique Source is authorized. Root must not view its private body. All NINE
-current own math sources plus any worker draft and exact scripts/controls/admission
+then-current own math sources plus the pre-proof worker draft and exact scripts/controls/admission
 must be freshly pinned in all phases. No new TYPE or interface view. The replay
 now PASSED: capture14/15/15 roles, separate receiver17/17/17 roles, all three phase
 flags true. Root inspected the new guard, exact controls and all9 current source
@@ -79,8 +120,10 @@ hashes. Cut4187B/SHA cffadb8ec3d4af567790671b456d5eb24e7c21236abde4ae2fda82ae236
 86 repeated LF/new0. Root did not view the private body. Recorded recent replay243LF
 plus this86LF gives329 repeated LF for this series, with unique U329/699 unchanged.
 Do not infer a global replay total from that partial series. Guard
-runtime: /tmp/mcfta-worker-index-validity-20261107-0413. Worker proof is not yet
-verified; inspect the actual task/check handle before claiming completion.
+runtime: /tmp/mcfta-worker-index-validity-20261107-0413. Out proof is now checked
+as recorded above. Its pre-proof header role changed after the successful replay.
+Those Source guards are HISTORICAL. Future jobs need fresh pins for all current
+own sources/drafts. They must not reuse those old epoch claims.
 All global histories and per-Original caps remain unchanged and must not reset.
 
 ## Earlier checked depth-dependent budget result
@@ -307,7 +350,8 @@ Current guards and kernel checks do not recover that historical/global audit.
 PrimitiveTYPE1401,actual32TYPE396,failed old TYPE diagnostics,State twoTYPE777 remain
 opaque. State/BinderInfo507 is HELD; no primary dependency is established.
 
-Current own sources for future fresh guards: IndexValidity27021/67d812...,
+Current own sources for future fresh guards: WorkerIndexValidity15351/a10163...,
+IndexValidity27021/67d812...,
 ValueAccess5699/e2f189..., ExpansionDepth12533/5f77f1...,
 ReferenceBounds39317/7e17...,
 TotalPreservation4765/44fd1...,
@@ -329,8 +373,9 @@ subst. All are proof repairs, not Haskell fixes. Failed small math drafts remain
 
 ## Restart and storage
 
-Current Root runtime: /tmp/mcfta-index-access-20261107-0408. Native index runtime:
-/tmp/mcfta-worker-index-validity-20261107-0355 (about21KB, protected small failures).
+Current Root runtime: /tmp/mcfta-index-access-20261107-0408. Native worker runtime:
+/tmp/mcfta-worker-index-validity-20261107-0413 (about33KB before the Fully extension).
+Native index runtime: /tmp/mcfta-worker-index-validity-20261107-0355 (about21KB).
 Earlier depth runtime: /tmp/mcfta-expansion-depth-20261107-0335; reference runtime:
 /tmp/mcfta-worker-references-20261107-0232. Current OWN prefix is in the Root
 runtime's CURRENT-CHECKPOINT-PREFIX.md. publication.json records exact push,
@@ -338,9 +383,8 @@ independent remote/tracking verification, board readback, and disk metrics.
 All three opaque historical document tails remain byte-identical. Earlier own
 prefixes remain. No large alias book or build copy was recreated.
 
-Readable /tmp allocation was9326592 bytes (about8.9MiB), excluding five denied
-entries. Filesystem available space was203320795136 bytes (about189GiB). Root
-runtime before this prefix was20858B. No inaccessible directory size is claimed.
+Readable /tmp allocation was9502720 bytes (about9.1MiB), excluding five denied
+entries. Filesystem available space was203289014272 bytes (about189GiB). No inaccessible directory size is claimed.
 Keep new scratch small. No data deleted, concurrency changed, or cleanup policy
 changed. Do not attribute the earlier114GiB drop to any location without measurement.
 
