@@ -1,236 +1,249 @@
-# Current checkpoint: scoped guarded queries and current Sized route control
+# Current checkpoint: complete plain Sized routing and conjunction group keys
 
-Updated 2026-11-07 10:12 CET. Goal ACTIVE. Branch formalize. This checkpoint
-follows published efb9b166e5c2938df48dde0931889e1c7b6e63be (R109, board seq953).
-The proof checkpoint is 8587e553fb91143367936ae161f6fb7845422114. A separate commit
-records this prefix. Runtime RESUME.json records the final pushed HEAD and
-canonical R110 board readback. Preserve unrelated .hypha/ and all proof work.
-
-Main was refreshed before publication. It remains
-bd5a406a6a3f84b7e3ae0906082783911509df83 and is an ancestor of this branch.
-Five proof commits are listed below. No Haskell source changed.
+Updated 2026-11-07 10:58 CET. Goal ACTIVE. Branch formalize. This checkpoint
+follows published 52c712067ba1970cfc63ea1959c091cdd2f8dd67 (R110, board seq954).
+The proof checkpoint is 279992298. A separate commit records this prefix.
+Runtime RESUME.json records the final pushed HEAD and canonical R111 board
+readback. Preserve unrelated .hypha/ and every proof, counterexample, repair,
+and marked draft. Main was refreshed and remains
+bd5a406a6a3f84b7e3ae0906082783911509df83, an ancestor of this branch.
+Four small proof commits are listed below. No Haskell source changed.
 
 ## Strongest checked statement and its boundary
 
-Successful computed Sized determinization now gives the complete exact signed
-query contract for the ORIGINAL GUARDED language at a declared query state
-whose actual scoped noConstraint scan passes. Preparation runs the proved
-source discovery at its actual limit1024. It constructs one canonical output
-table at the ORIGINAL initial state. Every query uses that same sorted table.
-It does not ask a caller for output closure, a finite output carrier, a
-canonical success witness, a sort permutation, or a completed table.
+For a structurally valid original automaton and a declared query state whose
+actual scoped noConstraint scan passes, the computed plain-constraint state
+worker satisfies the complete exact signed query contract for the ORIGINAL
+GUARDED language. This result covers the actual scoped unambiguity gate,
+the shared original table, computed determinization at limit1024, and the
+reference fallback after a cap failure. It has NO helper-success or root
+uniqueness premise. It does not require global original plainness, a finite
+raw State type, uniform symbol arity, or a caller-supplied completed table.
 
-SourceSizedGuardedDeterminization.prepare computes the optional shared API.
-prepare_none_iff proves that failure is exactly discovery limitExceeded.
-The artificial exhausted outcome cannot occur. prepared_exact proves every
-SourceSizedApiLaws.Exact field for each passing, declared query root after
-actual preparation success. Its language uses SourceSymbolicIndex.acceptsConstraint
-with the original rows and arbitrary supplied formulas/entailment evaluator.
-The noConstraint truth fact is derived from the existing source Top theorem.
+The main theorem is SourceSizedPlainRouting.route_exact. The computed route
+first uses both branches of the actual scoped unambiguousRows check. If that
+check fails, it evaluates GuardedDeterminization.prepare. If preparation
+returns none, it uses the original guarded reference worker at that state.
+The reference worker uses the original shared canonical table and the source
+equality predicate. Scoped plainness proves its language agrees with the
+original acceptsConstraint semantics. residual_free also derives the global
+residual precheck result AT THE SAME ROOT from that scoped plain check.
+A query-root plain check alone does not clear a different original-root scan.
 
-This is a successful SOURCE BRANCH theorem. Initial structural validation,
-query-key membership, the actual scoped scan result, and successful computed
-preparation remain its branch conditions. The full dispatcher must derive
-query membership from its actual reached-table lookup and select the reference
-fallback on a cap failure. No final whole-system theorem may replace its work
-with caller worker, validity, closure, finite-carrier, or resource assumptions.
-
-The full Exact record covers finite class evaluation, distinct accepted terms,
-signed size and rank handling, counts, rank rejection, both inverse laws,
-and distinct size-major prefixes. Its mathematical class evaluation does NOT
-supply a whole native execution time, allocation, capacity, or total-work bound.
+Every SourceSizedApiLaws.Exact field is covered: finite class evaluation,
+distinct accepted terms, signed size and rank handling, counts, rank rejection,
+both inverse laws, and distinct size-major prefixes. This is a SOURCE VALUE
+and mathematical class-evaluation theorem. It is not a native Haskell runtime,
+Map/Set storage, machine Int, allocation, capacity, or total-work theorem.
+The complete outer dispatcher still needs actual retained-state lookup and
+its global original-root error routing composed with all workers. The actual
+nonplain equal-child explorer is not yet formalized. A substituted reference
+worker or an opaque correct-worker premise cannot close that source gap.
 
 ## New checked proof connections
 
-ScopedErasure uses current structural validation to construct the finite
-original-key carrier and child closure. It applies structural trim agreement
-on that carrier, then returns to the raw original state type. A passing scoped
-scan identifies noConstraint only on retained rows. No global raw plainness,
-finite raw state type, or uniform symbol arity is required.
+ScopedTrimClosure derives every retained child key and current structural
+validation of the explicit trimmed table from original structural validation.
+It uses the checked finite original-key carrier and actual retained inventory.
+It imposes no legacy uniform-symbol-arity or raw-state finiteness condition.
 
-ScopedTrimInventory gives the actual root-preserving retained key sequence.
-Every retained row derives its owner's membership in that sequence. Outside
-states have empty trimmed rows. The explicit trimmed table has exact lookup
-at EVERY state and retains each constraint and row order. Scanning original
-keys and scanning only the actual trimmed table give the same plainness result.
+CurrentUnambiguity represents BOTH source alternatives: bottom-up transition
+key cardinality, OR the synchronous product/minimum-size overlap check. The
+older DispatchGraph.unambiguousRows was the product part only. The new gate
+combines the checked deterministic shortcut and product laws. ScopedUnambiguity
+runs it on the ACTUAL trimmed table key carrier. It derives root uniqueness
+of the ORIGINAL raw run sequence through exact lookup, finite readback, and
+TrimRunClasses.trim_enumerate. Ambiguity outside the query's retained table
+is allowed. No global original uniqueness premise is introduced.
 
-SharedSorting derives validation at every other declared root. Canonical graph
-construction ignores the initial state. The original dense sort and the
-constructed determinized dense sort are therefore identical at all valid
-roots. This connects the source's shared sort to each local query proof.
+RunPermutation proves that canonical sorting preserves every raw run and its
+multiplicity for arbitrary guards. Its nativeSorted specialization gives
+root uniqueness after the actual shared sort. AnnotationErasure proves that
+plainCountingRows may erase constraints BEFORE sorting. The canonical graph,
+row keys, stable positions including ties, and resulting erased automaton
+agree with sorting annotated rows and then erasing their guards.
 
-RootQueryLaws removes an unnecessary global uniqueness premise. Guarded
-reference classes form a subsequence of raw run enumeration. Plain guards and
-Nodup only at the queried root/size force equality. Ranking uses only that
-root class's uniqueness. Full optimized/reference API equality and Exact need
-neither global nor child-state uniqueness.
+PlainQueries connects these laws to the real plain counting branch. Its
+root-only uniqueness comes from the computed scoped Boolean gate. Its
+language comes from the scoped noConstraint check and the source Top law.
+All queries use the canonical table built once at the ORIGINAL initial state.
+PlainRouting composes the plain shortcut, actual computed determinization,
+and actual reference fallback. It also derives the same-root residual check.
+No successful helper or supplied finite output carrier remains a premise.
 
-TrimRunClasses proves that structural trimming preserves the literal root run
-sequence, including ORDER AND MULTIPLICITY, for arbitrary guards. Raw run
-enumeration ignores guards. Unproductive children emit no candidate forests.
-The live filter therefore removes only empty branches. Reachability retains
-every branch from a reached live state. Root uniqueness of the trimmed graph
-then gives root uniqueness of the original graph. This generic lemma uses a
-complete finite carrier. The actual table adapter must derive that carrier
-from map keys; the final theorem must not ask for raw State completeness.
-
-CurrentRouting now specifies the source's three lookup cases:
-- Missing key: use the constant empty class callback.
-- Present key with a failed helper: use the reference API at that state.
-- Present key with a successful helper: use that returned API.
-
-The empty callback satisfies the full exact empty-language contract and all
-signed empty observations. Mapping route over the global reference Except
-result preserves any residual error before EVERY state lookup. Missing-state
-routing is therefore not an exception to that global error. A missing state
-can still have an unrestricted original language; do not claim otherwise.
-CurrentRouting is a control/value law. It does not compute actual tableClasses.
+ConjunctionGroupKeys proves the literal next kernel for equal-child rows.
+For a chosen same-token tuple and a joined child group, its key contains
+EVERY tuple member's child at EVERY position in that group. The laws derive
+all indexed reads, canonical key uniqueness, nonempty keys, original-key
+support, and conjunction-language equivalence. groupSelections_exact enforces
+every tuple row's actual bounded child domain AND every row's equality class.
+It does not implement transition-tuple enumeration, per-position IntMap
+reconstruction, classification, or the capped worklist. Those are next.
 
 ## Source findings and Haskell follow-ups
 
-Current source: cfta-generator/src/Data/CFTA/Sized.hs149-175. referenceStates
-runs first. tables range over keys of transitionTable(trim original). Each
-query state's plainness/unambiguity checks use trim(withInitial state).
-The plain and determinized counting tables instead read ALL original erased
-rows. Ordinary sortedRows sorts every original row and ignores the initial
-state. See Gen/Internal/Table.hs456+ and cfta/src/Data/CFTA.hs284+; the actual
-FTA module is Data/CFTA.hs, not Data/CFTA/FTA.hs.
+Gen/Internal/Table.hs410-452 defines unambiguousRows with a global transition
+key shortcut before the product check. Both are now represented. Product
+minimum-size relaxation uses states.foldr and updated values. This matches
+the source Map.foldrWithKey sweep; do not invent a simultaneous-update gap.
+Native Map/Set representation, native numeric safety, and total work remain
+separate. Source current structural validation permits mixed symbol arities.
 
-The scoped uniqueness requirement matters. A state outside the query's trim
-can be ambiguous. Do not require whole-original-graph uniqueness merely to
-reuse an older optimizedApi theorem. RootQueryLaws and TrimRunClasses now
-supply the root-only proof. The actual Boolean gate attachment remains open.
+Table.hs613-651 defines intersectionCountingRows. Classification applies
+equalChildren to every input row. Exploration starts at the singleton initial
+key. It skips visited keys BEFORE checking the limit. It rejects a new key at
+1024 stored keys or more than1024 raw transitions for that key. A row inspects
+at most1025 tuples. Tuple alternatives require the SAME symbol AND arity.
+Each joined group takes the set of all tuple children at all group positions.
+Each position gets that group's key. Children follow ascending IntMap keys.
+The joined equality classes remain attached. The final canonical sort uses
+(symbol, equality-classes) labels, THEN restores the original symbol. Do not
+erase those classes before this sort or replace it with the plain sort.
 
-The previous R109 source step, holder insertion, sorted tuple-set, zip target,
-ordered difference, exact discovery loop, grouped output, and dense readback
-laws remain checked and available. Its source evaluation uses at most1025
-checking rounds at public limit1024. This does not bound tuple work. The
-signed internal cap rejects negatives before natural conversion. Exactly1024
-subset keys are allowed. The equal-child route also caps raw transitions at
-1024 PER KEY with take1025 and skips visited keys before the new-key cap.
+No Lean implementation of this literal classified tuple/worklist computation
+was found in the source audit. Existing SizedDeterminization is the different
+unconstrained subset/union construction. CurrentConjunctionWorker.explore is
+the different interned emptiness algorithm. Do not call either implementation
+the completed equal-child worker. Start from ConjunctionGroupKeys and derive
+the actual transition and row, then worklist invariants and output uniqueness.
 
-No Haskell runtime defect or required Haskell code repair was found in this
-increment. All Haskell fixes must continue to be recorded in FINDINGS for
-external work. Retain this unresolved COMMENT repair: Enumeration.hs422 says
-getUVarValue path-compresses its representative. The called find at
-Internal/UnionFind.hs129-130 returns(root uv uf,uf), with an unchanged forest.
-Suggested comment: Look up the value stored at a UVar's representative.
-That comment has not been changed. No Haskell build or execution is claimed.
+Preserve this necessary invariant: an empty conjunction key has no source
+rows. Mathematical conjunction over an empty set is true. Derive NONEMPTY
+keys from the actual singleton seed, nonempty tuples, and valid nonempty
+joined groups. Do not leave that condition to the final caller. Derive all
+key support and returned-table closure from actual execution as well.
 
-Local Lean repairs removed unused order instances, used current ite lemmas,
-used Boolean equivalence names, unfolded map fusion before map identity,
-and used the proved zero-size reference equation. Marked failed drafts remain
-in the runtime directory. No old proof, counterexample, or repair was removed.
+Read-only source inspection and a small arithmetic port confirm an intended
+order distinction. For f(A,B,A), equality positions[0,2], and A/B each admitting
+one unary chain at every positive size, root size6 has reference child-size
+order [(2,1,2),(1,3,1)] and grouped-table order [(1,3,1),(2,1,2)]. Sized.hs58-77
+explicitly permits different ordering for optimized routes. Counts and each
+route's own rank/unrank remain consistent. This is NOT a Haskell defect.
+The arithmetic audit is not Haskell or Lean execution. Its input and result
+are in runtime group-order-audit.json. Do not claim equality to the original
+reference API merely from language equality. Exact.finite quantifies SOME
+reference graph with arbitrary State:Type. This example does not refute that
+existential. The future grouped proof must preserve actual source ordering
+and establish its finite evaluation witness without changing the contract.
+
+No Haskell runtime defect or required Haskell code repair was found. Record
+all Haskell fixes in FINDINGS for external work. Retain this unresolved
+COMMENT repair: Enumeration.hs422 claims getUVarValue path-compresses its
+representative. Internal/UnionFind.hs129-130 find returns(root uv uf,uf), with
+an unchanged forest. Suggested comment: Look up the value stored at a UVar's
+representative. That comment has not been changed. No Haskell execution,
+build, formatter run, or runtime change is claimed by this increment.
+
+Local Lean repairs removed a redundant solved-goal tactic, used equality
+transport for derived subtype roots, unfolded Row.edge eta, and supplied
+required State order instances for the actual helper. Marked failed drafts
+remain. No old proof, counterexample, or repair was removed.
 
 ## Checked modules and small reproducible reports
 
-All eight actual Lake targets and all40 public source/axiom reports passed.
-The checks used shell.nix and Lean4.34.1. Own source/axiom reports used -j1
-and warnings as errors. Only propext, Classical.choice, and Quot.sound occur.
-Do not infer a cold full build, whole-library CI, Haskell execution, native
-storage correspondence, or whole-system completion. Do not rerun unchanged
-checks without a new reason.
+All eight actual Lake targets and all41 public source/axiom reports passed.
+Checks used shell.nix, Lean4.34.1, and serial heavy-management scopes capped
+at4G. Own source/axiom reports used -j1 and warnings as errors. Only propext,
+Classical.choice, and Quot.sound occur. A Lake replay showed an UNCHANGED
+unused-variable warning in InternedFreshOrdinaryClosedCompletion.lean24.
+Do not infer a whole-library warning-clean result, cold full build, CI,
+Haskell execution, native storage correspondence, or whole-system completion.
+Do not rerun unchanged checks without a new reason.
 
-Each packet contains check.py, theorems.json, checked.json, and README.md.
-The checker builds its actual Lake target, then checks this source and its
-public axioms. It removes its temporary reports. No copied source tree,
-build tree, or large archive is needed. Read each README for the serial
-4G-capped reproduction command. All eight packets total39920 B. The eight
-source files total47005 B. Reports reproduce from committed source.
+Each packet has check.py, theorems.json, checked.json, and README.md. It checks
+its actual target and own source/axioms. It deletes temporary reports. No
+copied source/build tree or archive is needed. Reproduce serially with each
+README's4G-capped command. The eight sources total48656 B. All packets total
+39705 B. Source hashes and reports were compared before committing.
 
-SourceSizedScopedErasure: 4121 B, 2 laws.
-SHA256 cc8030039814a3c4ce880f176561bd9d99a631d8241a496ae18ee3105e01b438.
-Packet lean/restart-evidence/20261107-sized-scoped-erasure/.
+SourceSizedRunPermutation: 6985 B, 5 laws.
+SHA256 3c0757bdb5f8e2081da698d53fee96a958657141922becc90338fd2fbdc5e1a0.
+Packet lean/restart-evidence/20261107-sized-run-permutation/.
 
-SourceSizedScopedTrimInventory: 6604 B, 9 laws.
-SHA256 79fd959fb39ed21126838c5703483e508b523c91190fb1b5b4f2f543dda9d7c4.
-Packet lean/restart-evidence/20261107-sized-scoped-trim-inventory/.
+SourceSizedScopedTrimClosure: 5933 B, 5 laws.
+SHA256 1f9becffed5f4bbb7aed2ab586f2b89e1ee7653f449d85f5ef92930c6d3f1ff9.
+Packet lean/restart-evidence/20261107-sized-scoped-trim-closure/.
 
-SourceSizedRootQueryLaws: 9620 B, 6 laws.
-SHA256 205254b8087706b5cd7194e9cac2bbe17dbbdfa40bcb8773c2ddbe2c72edfe70.
-Packet lean/restart-evidence/20261107-sized-root-query-laws/.
+SourceSizedCurrentUnambiguity: 2973 B, 4 laws.
+SHA256 b34ffefe6cb523d142a00b663821995b001d50f134f5da1c442d49c36ca6e172.
+Packet lean/restart-evidence/20261107-sized-current-unambiguity/.
 
-SourceSizedTrimRunClasses: 10132 B, 7 laws.
-SHA256 b8bdf41a4275f272b8faf64268f8b14d626c2b60bbc1722ee7ec956a2b2382f2.
-Packet lean/restart-evidence/20261107-sized-trim-run-classes/.
+SourceSizedScopedUnambiguity: 6519 B, 6 laws.
+SHA256 efdee2016f33500d46d08038f96e96b9260c2ab833bdb5b948e396c550aad24e.
+Packet lean/restart-evidence/20261107-sized-scoped-unambiguity/.
 
-SourceSizedSharedSorting: 3550 B, 4 laws.
-SHA256 479c42cf94dd6c398845cb461a8767ffc0a51898dc74c4b7114f4f22f47a1cde.
-Packet lean/restart-evidence/20261107-sized-shared-sorting/.
+SourceSizedAnnotationErasure: 3447 B, 6 laws.
+SHA256 6657801ccb4aa4edd44484e537b3444dac6eefd2944284757318180aaa16a48b.
+Packet lean/restart-evidence/20261107-sized-annotation-erasure/.
 
-SourceSizedScopedQueries: 2917 B, 2 laws.
-SHA256 c424ade8af54e0320809e351f96f1d3c855b39d9da7aad21d570e01757619046.
-Packet lean/restart-evidence/20261107-sized-scoped-queries/.
+SourceSizedPlainQueries: 5065 B, 2 laws.
+SHA256 0cb422b7608eeec5184b2105476cabc547b0e2af7c8f9aac877c2e405521f4f6.
+Packet lean/restart-evidence/20261107-sized-plain-queries/.
 
-SourceSizedGuardedDeterminization: 5072 B, 3 laws.
-SHA256 5fb62e2ba76a8af6e799e79fc7513fe6116122bedbb07ad8288e4bc1fdd281dd.
-Packet lean/restart-evidence/20261107-sized-guarded-determinization/.
+SourceSizedPlainRouting: 8461 B, 5 laws.
+SHA256 a1f3e8d7959751c0b809d1dd9777199527a47526e8e23b5b9a42191ce0eeabd0.
+Packet lean/restart-evidence/20261107-sized-plain-routing/.
 
-SourceSizedCurrentRouting: 4989 B, 7 laws.
-SHA256 38b1ef9e1b91eab4ec36f9e9c7a6bf18da694669507331b0417b33b2232e5ca1.
-Packet lean/restart-evidence/20261107-sized-current-routing/.
+SourceSizedConjunctionGroupKeys: 9273 B, 8 laws.
+SHA256 c5fc26bf17dd4e9e62bbdc9da6a8436003fa534cdb3afc4b0e0f0684a0a82962.
+Packet lean/restart-evidence/20261107-sized-conjunction-group-keys/.
 
 Final successful checker stages:
-- erasure40721 terminal0: ScopedErasure2.
-- root45868 terminal0: RootQueryLaws6.
-- composition96209 stage0: SharedSorting4 and ScopedQueries2. Its OUTER batch
-  ended1 on the then-unrepaired inventory proof. Do not call that OUTER batch0.
-- source67431 terminal0: ScopedTrimInventory9, GuardedDeterminization3,
-  and TrimRunClasses7.
-- routing70395 terminal0: CurrentRouting7.
+- helpers54074 OUTER1: RunPermutation5, ScopedTrimClosure5, and
+  CurrentUnambiguity4 each compiler_exit0; later scoped projection proof failed.
+- gate9530 terminal0: repaired ScopedUnambiguity6.
+- plain46820 terminal0: AnnotationErasure6 and PlainQueries2.
+- routing99737 OUTER1: ConjunctionGroupKeys8 compiler_exit0; later route
+  order-instance elaboration failed.
+- route93565 terminal0: repaired PlainRouting4.
+- route20439 terminal0: extended final PlainRouting5, including residual_free.
+Do not report a failed OUTER batch as exit0. Initial helpers57603 and
+annotation67093 failed and are terminal. Their final repairs passed above.
+Largest recorded scope peak1536M under4G. All compiler/check jobs are terminal.
+No heavy slot is owned. Queue concurrency has not changed. Keep checks serial.
 
-Earlier failed checks are terminal and their final source repairs passed.
-Largest recorded scope peak1437M under4G. No compiler/check is active and no
-heavy slot is owned. Keep future heavy checks strictly serial. The queue
-concurrency has not changed.
-
-Runtime: /tmp/mcfta-sized-routing-20261107-0944/.
+Runtime: /tmp/mcfta-scoped-plain-20261107-1018/.
 It contains verified-manifest.json, proof-commits.json, doc-tail-manifest.json,
-heavy-peaks.tsv, tmp-size.json, checker drivers, and marked drafts. RESUME.json
-and the exact R110 board request record final publication. Prior R109 runtime:
-/tmp/mcfta-source-determinization-20261107-0904/. Its checked12-module/76-law
-source manifest and reproducible packets remain available. Do not start over.
+heavy-peaks.tsv, tmp-size.json, group-order-audit.json, checker drivers, and
+marked drafts. RESUME.json and publication.json record final pushed HEAD and
+canonical R111 board readback. The prior R110 runtime is
+/tmp/mcfta-sized-routing-20261107-0944/. R109's12-module/76-law source discovery
+checkpoint and reports remain. Do not restart completed source work.
 
-The fresh /tmp audit measured9678848 readable allocated bytes, about9.2 MiB.
-Six private entries were inaccessible. The filesystem had203118231552 B free,
-about189 GiB. This audit includes directory blocks. Keep checking disk use.
-The runtime uses compact text and metadata. Preserve marked drafts. Do not
-copy source/build trees into /tmp or recreate deleted evidence archives.
+The fresh /tmp audit measured10031104 readable allocated bytes, about9.6 MiB.
+Six private entries were inaccessible. Filesystem free space was203089969152 B,
+about189 GiB. This includes directory blocks. Runtime files are compact text
+and metadata. Keep checking sizes. Preserve marked drafts. Do not copy trees
+or recreate deleted evidence archives.
 
 ## Immediate next work and full remaining objective
 
-1. Connect the actual scoped unambiguousRows gate to root uniqueness. Use the
-   exact trimmedTable inventory/lookup and derive its child closure. Restrict
-   to its actual map-key subtype, then apply SourceSizedDispatchGraph.gate_unique.
-   Transport the raw run sequence back with
-   SourceSizedDispatch.enumerate_ordered_rows and FiniteKeys.ordered_readback.
-   Apply TrimRunClasses.trim_enumerate. The raw State type need not be finite.
-   Sorting must retain root Nodup; prove the run-permutation attachment or
-   transport the disjoint-row property. Global original uniqueness is invalid.
-2. Compose actual tableClasses with CurrentRouting.dispatch. Attach the global
-   original-root residual check, per-query trim/plain/unambiguity checks,
-   shared original and determinized sorts, missing-state empty callback,
-   cap failures, and reference fallback. Derive query-key membership from
-   ScopedTrimInventory.inventory_subset. The successful guarded determinized
-   branch is now available via GuardedDeterminization.prepared_exact. Neither
-   the generic route function nor a substituted worker closes the dispatcher.
-3. Prove equal-child exploration's complete conjunction-key language and output
-   uniqueness from actual execution and its actual unambiguity gate. It joins
-   same-token transition tuples and direct-child equality groups. Each grouped
-   key contains every tuple child at every grouped position. Every position in
-   a group is filled. Reuse CompactGroups.groupSelections_exact,
-   CompactEdgeRanks.source_outputs_exact/compiledEdge_correct,
-   CompactIndexChoice.choice_correct, and SourcePlanScale.group_position_nodes.
-4. Finish native Map/Set representation and ordering attachments. Reuse the
+1. Implement the ACTUAL equal-child transition and row from a same-token
+   tuple. Reuse ConjunctionGroupKeys, CompactGroups.groupSelections_exact,
+   SourceCompactGuards.parse_exact/sourceEqualities_exact, and exact grouped
+   edge/rank laws. Compute childGroupsOf, all per-position assignments, and
+   the real tuple product. Preserve (symbol, classes) canonical sorting.
+   Then implement the actual capped explore loop and derive nonempty/support,
+   returned closure, conjunction language, and output uniqueness from execution
+   and the actual erased-row unambiguity gate. Do not substitute another worker.
+2. Complete the full current dispatcher. Compose actual global residual/error
+   routing and retained-key lookup with current tableClasses. The plain region
+   now has its computed complete worker with cap fallback. The nonplain region
+   still needs the literal equal-child worker and grouped count-table order.
+   CurrentRouting already proves global errors precede ALL lookups and missing
+   keys use the empty callback. Derive query membership from actual inventory.
+   Missing states can have unrestricted original language; do not erase that
+   caveat. No caller worker/closure/finite-carrier premise closes this work.
+3. Finish native Map/Set representation and ordering attachments. Reuse the
    checked literal source step, insertion, set-difference, cardinality, and
    control VALUE laws. Attach actual native key representations and reads/writes.
    Keep the optimized interned core primary. Older constructor/Eq work is secondary.
-5. Complete ONE computable original-input/request-size bound for BOTH optimized
+4. Complete ONE computable original-input/request-size bound for BOTH optimized
    enumerateOut and enumerateFully. Cover every generated, reached, returned,
    subsequent, intermediate, and failing state, plus TOTAL branch work. Derive
    reached word/capacity conditions from those original data. Output1024 caps,
    checking-round bounds, and existential stage bounds do not prove this result.
-6. Complete actual native/Haskell identity, cache, interner, Eq/hash, and machine
+5. Complete actual native/Haskell identity, cache, interner, Eq/hash, and machine
    Int correspondence. Do not replace the final goal with caller resource,
    closure, finite-carrier, completed-worker, success/fuel, validity, or
    OriginalInput obligations. The single largest gap remains the combined
@@ -247,27 +260,24 @@ SizedEntryCorrect.complete_both_exact/constructed_complete.
 
 ## Commits, publication, and preserved history
 
-e58f165c418e372c5bf758fb3a33f3d8a3e839b3 Prove scoped guard erasure and exact trimmed table readback
-ca31b41bcfa7340b9684dfffc2824f1eb15b6794 Derive exact optimized queries from trimmed root uniqueness
-a7431f8bbade5f3461832815bd5b250157725d86 Share canonical query sorting across original roots
-337f67f691b785f01110962469d40057f35aa039 Prove exact guarded queries from computed Sized determinization
-8587e553fb91143367936ae161f6fb7845422114 Specify current Sized route control and empty-state queries
+032359748114e6db5cbaa3f5db2219e2ef12a5ca Prove uniqueness from the current scoped unambiguity check
+34eafb244301095576a176a61bc12670118a248f Preserve run multiplicity through sorting and annotation erasure
+685cfe0ed2819581b7c4f693e1a1000ec05561be Complete plain Sized routing with actual reference fallback
+27999229889098d6a783b94c158f59686d95ad97 Prove child conjunction keys enforce all joined equality classes
 
-Push formalize under the user's standing authorization. Use a normal push.
-Verify independent ls-remote and refresh origin/formalize afterward.
-Shared board thread:1c1333d7-46ea-4f46-a9a1-b5d13e577337. Publish R110 after
-push verification. Save the exact request ID and payload. Compare canonical
-title/text, author, and commit after writing. An unverified write response
-is not canonical readback. R109 is already published; do not republish it.
+Push formalize under standing authorization with a normal push. Verify an
+independent ls-remote and refresh origin/formalize. Shared board thread:
+1c1333d7-46ea-4f46-a9a1-b5d13e577337. Publish R111 after push verification.
+Save its exact request and compare canonical title/text, author, and commit.
+An unverified write response is not canonical readback. R110 is already
+published; do not republish it. The prior prefix remains in this runtime.
 
-Earlier source half-quotas and source/TYPE receipt gates are superseded.
-No user, developer, goal, or AGENTS rule imposed those access limits.
-Read actual source as needed. Do not rebuild receipts or duplicate trees.
-Preserve historical SourceProcess FAIL and Root unknown-upper facts.
-The historical tails below remain byte-for-byte unchanged.
-
-The full goal remains ACTIVE. Continue autonomously. Do not ask whether to
-continue. Regular formalize pushes are explicitly authorized.
+Earlier half-quotas and source/TYPE receipt gates are superseded. No user,
+developer, goal, or AGENTS rule imposed them. Read actual source as needed.
+Do not rebuild receipts or duplicate trees. Preserve historical SourceProcess
+FAIL and Root unknown-upper facts. Historical tails below remain byte-for-byte
+unchanged. The full goal stays ACTIVE. Continue autonomously. Regular pushes
+to formalize are explicitly authorized.
 
 ---
 
