@@ -251,11 +251,18 @@ private theorem body_inputs (top : Guard) (catalog : List (String × Nat)) (name
   exact ⟨marker, arrow, values, middle, by simp only [buildMany, arrowDone, Outcome.bind, rowsDone],
     markerShape, arrowShape, shapes⟩
 
-/-- The actual normalized callback derives its complete ordinary rows without a completion premise. -/
-theorem callback_readback (top : Guard) (catalog : List (String × Nat)) (name : Reference)
+/-- The actual callback retains residency of every raw row before canonical ordering. -/
+theorem callback_readback_with_rows (top : Guard) (catalog : List (String × Nat)) (name : Reference)
     (state : State String Guard) (facts : Facts state) (available : Available state (.reference name)) :
     ∃ value final, callback (allTypesBody top catalog) [] name state = .done value final ∧
-      Shape top catalog name value ∧ Facts final ∧ Available final value := by
+      Shape top catalog name value ∧ Facts final ∧ Available final value ∧
+      ∃ entry marker arrowRow catalogRows,
+        value = .node entry (canonicalEdges (arrowRow :: catalogRows)) 0 [name] ∧
+        RowReadback "(->)" top [] marker ∧
+        arrowRow.children = [marker, .reference name, .reference name] ∧
+        arrowRow.entry.key = ⟨"->", [marker.referenceOf, .ref name, .ref name], top⟩ ∧
+        All₂ (RowKeys top name) (descriptors catalog) catalogRows ∧
+        (∀ row ∈ arrowRow :: catalogRows, EdgeResident final row) := by
   obtain ⟨marker, arrow, values, middle, partsDone, markerShape, arrowShape, aligned⟩ :=
     body_inputs top catalog name state facts available
   have checked := buildMany_verified
@@ -327,12 +334,43 @@ theorem callback_readback (top : Guard) (catalog : List (String × Nat)) (name :
     simp only [callback, bodyDone, Outcome.bind, work, resultEq, withoutSelfReference, run]
   have finalChecked := callback_verified (allTypesBody top catalog) [] name state facts
     (input_reference state name available)
-  refine ⟨result.1, result.2, done, ?_, ?_, finalChecked.result _ _ done⟩
+  have rawAligned := row_keys top name (descriptors catalog) values aligned
+  have rawEq : (arrow :: values).flatMap nodeEdges = arrowEdge :: values.flatMap nodeEdges := by
+    simp only [List.flatMap_cons, arrowEq, nodeEdges, List.singleton_append]
+  have rawSurvive : surviving (arrowEdge :: values.flatMap nodeEdges) =
+      arrowEdge :: values.flatMap nodeEdges := by
+    unfold surviving
+    apply List.filter_eq_self.mpr
+    intro edge member
+    rcases List.mem_cons.mp member with rfl | later
+    · simp [arrowChildren, markerEq, Value.referenceOf]
+    · obtain ⟨descriptor, _, related⟩ := output_origin rawAligned edge later
+      simp [related.1, Value.referenceOf]
+  have growth : Grows middle result.2 :=
+    (InternedConstructorTemplates.run_correct (makeUnion (arrow :: values)) middle middleFacts.coherent.valid).2
+  have rawResident : ∀ row ∈ arrowEdge :: values.flatMap nodeEdges, EdgeResident result.2 row := by
+    intro row member
+    apply edge_grows middle result.2 growth row
+    exact rows_resident (arrow :: values) middle middleFacts.linked resident row (rawEq.symm ▸ member)
+  refine ⟨result.1, result.2, done, ?_, ?_, finalChecked.result _ _ done, ?_⟩
   · refine ⟨entry, marker, arrowEdge, values.flatMap nodeEdges, ?_, markerReadback, arrowChildren, ?_, ?_⟩
     · simpa only [List.flatMap_cons, arrowEq, nodeEdges, List.singleton_append] using resultEq
     · simpa only [List.map_cons, List.map_nil, Value.referenceOf] using arrowKey
-    · exact row_keys top name (descriptors catalog) values aligned
+    · exact rawAligned
   · simpa only [done, Outcome.state] using finalChecked.facts
+  · refine ⟨entry, marker, arrowEdge, values.flatMap nodeEdges, ?_, markerReadback,
+      arrowChildren, ?_, rawAligned, rawResident⟩
+    · simpa only [rawEq, rawSurvive] using resultEq
+    · simpa only [List.map_cons, List.map_nil, Value.referenceOf] using arrowKey
+
+/-- The actual normalized callback derives its complete ordinary rows without a completion premise. -/
+theorem callback_readback (top : Guard) (catalog : List (String × Nat)) (name : Reference)
+    (state : State String Guard) (facts : Facts state) (available : Available state (.reference name)) :
+    ∃ value final, callback (allTypesBody top catalog) [] name state = .done value final ∧
+      Shape top catalog name value ∧ Facts final ∧ Available final value := by
+  obtain ⟨value, final, done, shape, finalFacts, finalAvailable, _⟩ :=
+    callback_readback_with_rows top catalog name state facts available
+  exact ⟨value, final, done, shape, finalFacts, finalAvailable⟩
 
 /-- The same callback has an ordinary constructor tag, zero depth, and exactly its local free name. -/
 theorem callback_node (top : Guard) (catalog : List (String × Nat)) (name : Reference)
