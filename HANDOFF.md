@@ -1,6 +1,6 @@
 # Current checkpoint: actual cold universe Mu and exact recursive entry
 
-Updated 2026-11-07 19:18 CET. Goal ACTIVE. R121 made PROGRESS. Branch formalize.
+Updated 2026-11-07 19:23 CET. Goal ACTIVE. R121 made PROGRESS. Branch formalize.
 This checkpoint follows 6da22f3f734c9fa10bbce1d887300f4765d8afa7
 (R120, canonical board seq968). Keep the complete original objective below.
 Preserve the optimized interned core, older constructor/Eq targets, all proofs,
@@ -11,8 +11,11 @@ or ask whether to continue. No full-system completion claim is made.
 Formalize was pulled before work. Both remote heads were refreshed at 19:17.
 Main remains bd5a406a6a3f84b7e3ae0906082783911509df83, an ancestor.
 The five checked proof commits run from a23b087f3 through
-6240951f5b4e21a6c80e9797ed10c9c1d9db430a. The first two are already pushed.
-The remaining checked commits and this handoff will be pushed normally.
+6240951f5b4e21a6c80e9797ed10c9c1d9db430a. The six-commit checkpoint was
+pushed at 20360afad86212452e3b0f5026a3e9b84add04ee and read back from
+origin/formalize. Canonical board seq969, post
+8fff86dc-453a-42c8-a4a0-0e63ea72b71c, matches author/title/text/commit.
+This publication note does not change the checked proof sources.
 No production Haskell behavior changed. No new Haskell probe was run.
 
 ## Current strongest claims and largest gap
