@@ -1,61 +1,150 @@
-# Current checkpoint: recorded-state allocation and native recursive growth
+# Current checkpoint: actual FirstOrder construction and recursive-body origins
 
-Updated 2026-11-07 16:36 CET. Goal ACTIVE. Branch formalize. This checkpoint
-follows 311d05602193eee53c75a9f7bb39662d90a34aef (R117, canonical board seq963).
-The previous turn made progress. This turn also makes progress. The full
-objective remains open. Preserve .hypha/ and every proof, counterexample,
-repair, and marked draft. Regular formalize pushes remain authorized.
+Updated 2026-11-07 18:01 CET. Goal ACTIVE. Branch formalize. R119 made PROGRESS.
+This checkpoint follows 23654b5b2e9983cf04322f11befd0558b4cb149f
+(R118, canonical board seq964). The full system objective remains open.
+Preserve .hypha/ and every proof, counterexample, repair, and marked draft.
+Regular formalize pushes remain explicitly authorized.
 
-Formalize was pulled before work. Both remote branches were refreshed before
-publication. Main remains bd5a406a6a3f84b7e3ae0906082783911509df83, an ancestor.
-No library Haskell source changed. A standalone Haskell reproducer and a
-marked diagnostic draft were added. Focused Lean proof checks and bounded
-current-source Haskell observations passed as described below. This is not
-a cold full build or full CI.
+Formalize was pulled before work. Both branches were refreshed again at
+17:58 CET. Main remains bd5a406a6a3f84b7e3ae0906082783911509df83,
+an ancestor of HEAD. R119 checked code ends at ee292fc1eabae050cb5331baedb45a75f7393fdc.
+No production Haskell fix was made. Focused proof checks and the native
+integration reproducer passed. No cold full build or full CI is claimed.
 
-## R119 active finding: required arguments bypass a size-two head ban
+## R119 checked result and its exact boundary
 
-Verified 2026-11-07 17:25 CET through the CURRENT PUBLIC Haskell API.
-Synthesis.Library.libraryAvoid documents: "With Nothing, the functions head
-no term of size two." Build a library with f :: Int -> Int and rule
-(["f"],Nothing). Query goal Int with REQUIRED x :: Int at size2.
+The source FirstOrder constructor now consumes actual Library, Query, and
+signed size data. It computes the actual constructor catalog, rigid type
+nodes, recursive allTypes universe, type generalization, variable paths,
+normalized equality guards, components, application, and filter rows.
+Its terms/relevant dependencies recurse on strictly smaller sizes. It takes
+no execution fuel. Ordered GHC subsequences/permutations and names-only
+last-winner lookup are retained. Duplicate query argument names require no
+distinctness premise. The current size-two pruning behavior is retained.
+
+SourceSynthesisRecursiveOrigins.firstOrderRaw_result proves that every
+successful constructor instruction has only the top guard inside every
+recursive binder body. Ordinary finite type and program rows may contain
+equality guards. The property is derived from the actual input data. The
+caller supplies no role certificate, closure carrier, validity surrogate,
+or successful worker. Actual missing-key errors remain errors in the result.
+
+This is a constructor-INSTRUCTION result. It does not prove that every
+nonnegative request avoids a missing key. It does not yet realize native
+smart normalization, sharing, caches, lazy Map demand, or machine Int.
+It covers FirstOrder, not Curried. The R118 constrained-Mu input cannot occur
+at this modeled construction stage. Preservation under generated native
+intersections/projections is NOT proved. No global termination or total-work
+bound follows from the initial-body property alone.
+
+All six actual Lake targets and own-source warning-as-error reports pass.
+All 80 public laws use only propext, Classical.choice, and Quot.sound:
+
+- SourceSynthesisTypeSyntax: 11 laws; SHA256 f2d7bfff8bf3df217f8c26f9d38c12326fe91a6bab240dcb4ddf58b854653b7c.
+- SourceSynthesisSelections: 21 laws; SHA256 3fc099d640b025f349e1669245ddd3705063bbb6aaa926a1aa0101417f60abff.
+- SourceSynthesisGeneralizeSyntax: 20 laws; SHA256 c134369bc08accb8eb65b016b796e6578767b7532fdc080459bc3e7c2ef92986.
+- SourceSynthesisSelectionOrigins: 9 laws; SHA256 41719836b2d08fb2fe78bbd762455ca353cc16dbcabe91e81407b52e0cd0a127.
+- SourceSynthesisFirstOrderConstruction: 3 laws; SHA256 0ea950025cdad3421465c42a4d76baa5a9f3553ea4b37c7b0539cdbd8d7547d8.
+- SourceSynthesisRecursiveOrigins: 16 laws; SHA256 34df5a138158062cf92233a0a3cd13aadee88c26200155c109870f35fbfa7c34.
+
+Each module has a compact check.py, theorem list, checked.json, and scope
+README under lean/restart-evidence/20261107-synthesis-*/. Source hashes and
+all axiom reports are stored there. Proof work ran serially with a 4 GiB cap.
+No new compiler or native probe is running at this checkpoint.
+
+## R119 Haskell finding: required arguments bypass a size-two head ban
+
+The CURRENT PUBLIC Synthesis API reproduces a Library.libraryAvoid
+discrepancy. The documentation says: "With Nothing, the functions head no
+term of size two." Build a library with f :: Int -> Int and rule
+(["f"], Nothing). Query goal Int with required x :: Int at size two.
 solutionsOfSize returns a representative that expand maps to f x.
-The reproducer uses the public library constructor, not a custom raw state.
+The reproducer uses the public library constructor, not a private raw state.
 
-Controls in the same native process:
+The final complete-list membership observations passed at 17:47 CET:
+
 - Required x, with the ban: membership of f x is Just True.
 - Component x, with the same ban and no required argument: Just False.
 - Required x, without the ban: Just True.
-All observations completed inside their10-second limits. This is a verified
-pruning-policy/documentation discrepancy. It is independent of R118's
-recursive timeout; it is NOT a termination counterexample.
 
-Reproducer: lean/repro/SynthesisRequiredArgumentAvoid.hs.
+All three queries completed within their ten-second limits. This is a
+verified pruning-policy/documentation discrepancy, not a termination claim.
+Reproducer: lean/repro/SynthesisRequiredArgumentAvoid.hs, SHA256
+c5e9ea72786b67d4f06caf7c65802eed83d7167b046a66c6d5b3b71044f6a75c.
 Packet: lean/restart-evidence/20261107-synthesis-required-argument-avoid/.
 Source cfta tree d5a5e2a9d7c2ec59ded139b13f3864fe3a42e6a0;
 cfta-generator tree db952caa7a823614d661b7ee5e1a1c090d26495b.
-Local generator library build passed with GHC9.14.1 -O0 in the project-derived
-Nix+GMP shell. fourmolu formatted the reproducer. cabal-gild checked the
-unchanged generator Cabal file. No full suite or CI run is claimed.
+The generator library build passed with GHC 9.14.1 -O0 in a project-derived
+Nix shell with GMP. fourmolu formatted the final reproducer. cabal-gild
+checked the unchanged generator Cabal file. This is not a full suite run.
 
-PENDING HASKELL FIX FOR EXTERNAL WORK: buildTerms applies libraryAvoid only
-in its size2 branch (Synthesis.hs756-763). Nonempty buildRelevant uses the
+PENDING HASKELL FIX FOR EXTERNAL WORK: buildTerms applies libraryAvoid in
+its size-two branch (Synthesis.hs756-763). Nonempty buildRelevant uses the
 generic split loop (781-789). A split with no required function argument
-reads termsFalse1, which admits f again. Enforce the documented size-two
-rule on this relevant route. Retain required-argument usage and the intended
+reads termsFalse1 and admits f again. Enforce the documented size-two rule
+on this relevant route. Retain required-argument usage and the intended
 Just-rule behavior. NO PRODUCTION HASKELL FIX HAS BEEN MADE. Update the
-faithful source port when the Haskell repair lands. The current
-SourceSynthesisFirstOrderConstruction intentionally retains current behavior.
+faithful source construction port after the Haskell repair lands.
 
-R119 proof work is ACTIVE. The rigid type port (11 laws, commit4f8c152e2)
-and exact source selection/last-winner port (21 laws, commitf1779804b) are
-verified and pushed. Computable generalization (20 laws, sourcec134369b...)
-passed its actual Lake target and own-source report. Its commit follows.
-Selection containment, the raw FirstOrder worker and complete binder-body
-origin adapters remain under focused checks. These are constructor-instruction
-results. Native smart normalization, sharing and generated-intersection
-preservation remain open. The full R118 system objective below is unchanged.
-Runtime: /tmp/mcfta-synthesis-construction-20261107-1652/.
+## Biggest remaining gaps and next concrete target
+
+1. Derive ONE computable original-input/request/caller bound for BOTH
+   selected-slot expansion and the complete optimized enumeration run.
+   Count all processed siblings and all generated, intermediate, failing,
+   rejected, returned, and subsequent states. R118 bounds recorded core
+   allocation by summed model work. It does not bound that work from input
+   or charge native graph, interner, cache, container, and arithmetic costs.
+2. Connect actual caller construction to the native graph and prove a
+   preserved generated-operand invariant. The new initial-body property
+   is only a first step. Finish exact lookup-domain closure, native lazy
+   table realization, and the Curried/Specftacular caller adapters. Keep
+   the generic constrained-Mu R118 growth/timeout finding visible.
+3. Finish the complete Sized dispatcher and its failure/fallback routes.
+   Realize the prepared count/rank/order results with the actual lazy sparse
+   knot, native containers/caches, and machine arithmetic. Resolve the
+   all-size Exact.finite ordering boundary and productive infinite queries.
+
+The strongest COMPLETE Sized query theorem remains R111 plain routing.
+The strongest prepared source count/rank/query result remains R116, including
+both rank/unrank directions. Its preparation success is an INTERNAL branch,
+not an allowed final caller premise. R119 adds actual FirstOrder construction
+origins. It does not complete either native execution theorem.
+
+NEXT NATIVE TARGET, source audit only: every initial type binder is a copy
+of the same allTypes universe U. A candidate preserved class is finite
+ordinary/union type prefixes over that same U, with Empty permitted.
+Literal physical absorption U intersect P = P is too strong: the catalog can
+contain both the special arrow row and an ordinary arrow row of arity three.
+The class must allow multirow results. A critical auxiliary is the actual
+open Rec(U) versus closed U intersection. Operations.hs506-513 handles Mu
+before free-reference resolution. The closed-self shortcut alone does not
+prove return to the same U. Prove U-specific open-reference reconstruction
+and cache effects first. After the returned body excludes the current pair
+from its free references, reuse SourceRecursiveIntersectionMaybeMu.unused.
+Count transient generated Mu/probe/cache allocations
+even if the returned handle is the original U. This is an OPEN proof target,
+not a checked closure or absorption theorem.
+
+Keep the optimized interned core primary and the old constructor/Eq target
+secondary. Do not replace the objective with caller resource, finite carrier,
+completed-worker, sufficient-fuel, helper-success, validity, or OriginalInput
+surrogates. The older full scope and all counterexamples remain below.
+
+## R119 storage, restart and publication
+
+Runtime: /tmp/mcfta-synthesis-construction-20261107-1652/. RESUME.json,
+verified-modules.json, heavy-peaks.tsv, compact repair logs, and native
+reports record the exact current state. This run uses about 0.33 MB in /tmp.
+The independent 17:58 audit measured 15,900,672 readable bytes in /tmp;
+six protected directories were not readable. The filesystem has about
+180 GiB available. No cleanup was needed or performed in R119. No copied
+build trees or bulk archives were created. All checks can be rerun from
+tracked source and the compact packets. Keep future runtime files small.
+
+Final publication records belong in this runtime's publication.json and
+canonical-board-readback.json. Verify remote formalize equals the final
+documentation commit and remains ahead of main. Preserve unrelated .hypha/.
 
 ## R118 checked progress and largest gap
 
