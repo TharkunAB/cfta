@@ -1,60 +1,96 @@
-# Current checkpoint: actual node and edge reference preservation
+# Current checkpoint: uniform local budgets after an internal depth proof
 
-Updated 2026-11-07 03:26 CET. Status: PROGRESS. Full goal ACTIVE. The current formalize HEAD
-identifies the published checkpoint. Parent: bbae22c6c9561ae46269c3153782b5e6c2cd5219.
+Updated 2026-11-07 03:51 CET. Status: PROGRESS. Full goal ACTIVE. The current formalize HEAD
+identifies the published checkpoint. Parent: f99010580c2120fd17cd9b87ac47696ee7ebca18.
 Fresh pull was up to date. Main remains bd5a406a6a3f84b7e3ae0906082783911509df83.
 Preserve unrelated .hypha/. No compiler job is live.
 
 ## Strongest new checked result
 
+The node and edge allocation budgets are monotone in action fuel. An INTERNAL
+ordinary-depth certificate makes each budget stable above that depth. The budget
+at the certified depth bounds the same expansion at EVERY fuel value. Initial
+successful node and edge results therefore retain one reference cap independent
+of action fuel, PROVIDED that internal depth has been established. This is a local
+conditional theorem. The native input-to-depth derivation is NOT established.
+The final theorem must derive that certificate or use another justified bound.
+Do not add depth or validity as a final caller premise.
+
+The actual abstract Graph interface admits an ordinary self-cycle. Its current
+allocation budget at fuel 2*count+1 equals count. Lean also proves there is no
+uniform bound on that formula and no NodeDepth certificate for this example.
+Only the repeated ordinary node is reachable from the chosen root. Finite IDs
+alone therefore do not establish ordinary descent. This is an INTERFACE and
+UPPER-BUDGET counterexample. It does not establish a native reachable cycle,
+unbounded successful execution, an actual worker cost lower bound, or a Haskell bug.
+The internal depth certificate is sufficient, not asserted necessary for every
+possible proof route. Actual worker guards could justify a different bound.
+
+New source: lean/MicroCFTA/EnumerationStateExpansionDepth.lean, 12533 bytes,
+SHA-256 5f77f1e37a369454d8d4684430247149d7923dff86027b5b430aa98f52f94dfc.
+All11 public theorems passed normal source check30562 with exit0 and empty logs.
+Actual module build and all11 source/axiom reports38449 passed with exit0,
+Lean4.34.1/shell.nix/j1/warnings-as-errors/4G/swap0/380s, peak176M.
+The wrapper separately verified before/distinct-after/separate-final pins for
+this source, all six earlier own imports, and both portable checker files.
+Every axiom set is within propext, Classical.choice, Quot.sound. No sorryAx or
+added axiom occurs. Normal checks do not recover the historical Source audit.
+
+Portable packet: lean/restart-evidence/20261107-enumeration-expansion-depth/.
+check.py builds the actual module and checks all11 source/axiom reports. Packet
+size is 9891 bytes before Git metadata. Reproduce from source; no archived build
+copy, private Source, or large rolebook is required. All small failed drafts remain.
+No Haskell code/build/fix, Original Source/replay/TYPE, or compiled-interface view
+occurred. The prior unchanged modules were not rechecked without a new reason.
+
+## Native connection still missing
+
+The SAME Native reader reports no retained native contract that proves ordinary
+acyclicity or ordinary height. enumerateNode stops at the recursive view; ordinary
+children use enumerateEdge. The retained source establishes decreasing fuel.
+It does not establish an original-input-derived ordinary depth. The actual native
+Graph.node provider must preserve the structural recursive boundary. A flattened
+nodeEdges view cannot silently replace that boundary. Derive height and allocation
+limits from actual original inputs, including newly intersected nodes, or supply
+another justified bound. A finite ID set alone is insufficient.
+
+Positive HISTORICAL public metadata identifies actual Haskell Originals:
+cfta/src/Data/CFTA/Enumeration.hs LF1595; cfta/src/Data/CFTA/Interned/Type.hs
+36883B/LF922; cfta/src/Data/CFTA/Interned/Operations.hs 38260B/LF887.
+These are Hsk-reader files, not Native Lean Source quotas. Type U459/cap460 has
+one row remaining; Ops U420/cap443 has23. Do not transfer those credits. Exact
+owned unions were not recovered. Type internNode markers465/468, internEdge522/525,
+nodeIds459/460; Ops intersect406/intersectOpen475. Enumeration unfoldOuterRec904
+and nodeEdges905 are CALLSITES, not Operations definition spans. No actual native
+Graph.node provider is positively bound. Metadata pointer:
+/tmp/mcfta-worker-ids-20261107-0100/haskell-public-result.json. This historical
+pointer is not a fresh guard. No new Source window was admitted or read.
+
+## Existing checked node and edge reference laws
+
 BOTH actual imported enumerateNode and enumerateEdge preserve the reference
-invariant on every successful return. One internal cap bounds the counter, UF
-storage and parent targets, suspended variables in stored values, holes in stored
-fragments and obligations, and holes in the returned fragment. The invariant also
-retains value-count/counter agreement and UnionFind.Total. Initial-state/[] cases
-calculate cap=1+the actual allocation budget without supplied capacity or validity
-premises. General budget endpoints use before.counter+budget. Fixed-cap contracts
-allow later composition under ONE global cap that the final worker proof must derive.
+invariant on successful return. It bounds counter, UF storage/parents, suspension
+variables, stored/obligation/output fragment holes, and retains value-count/counter
+agreement and UnionFind.Total. Initial [] cases compute cap=1+budget; general
+endpoints compute before.counter+budget. Fixed-cap contracts support composition.
+Those prior budgets use action fuel. The new depth corollaries remove that fuel
+dependency conditionally, but do not derive the final input/request-size cap.
 
-Actual suspension returns the old counter and creates one value slot. Its fresh
-variable indexes that slot when incoming value-count/counter agreement holds.
-Actual representative and bounded union actions have successful results with
-computed B+1 fuel. This connects the checked forest fuel laws to the real actions.
-The existing normalization attempt failed; own mem_bind decomposition plus the
-concrete get-state singleton proved the bridge. All small failed drafts remain.
+ReferenceBounds is 39317B, SHA-256
+7e17f4e1d874a22f6ed1a707327c4205de36c33958e7c24e7f004fac8087096f.
+All15 public theorems passed58569; actual module/source/axioms68889 passed,
+peak204M. Packet: lean/restart-evidence/20261107-enumeration-reference-bounds/.
+Actual suspension returns the old counter and creates one value slot. Its new
+variable indexes that slot under incoming value-count/counter agreement. Actual
+representative and bounded union actions have results at computed B+1 fuel.
+These do not prove all existing references index the current value list.
 
-New source: lean/MicroCFTA/EnumerationStateReferenceBounds.lean, 39317 bytes,
-SHA-256 7e17f4e1d874a22f6ed1a707327c4205de36c33958e7c24e7f004fac8087096f.
-All15 public theorems passed normal source check58569 with exit0 and empty logs.
-Root independently checked the wrapper's before/distinct-after/separate-final
-source and five-own-import assertions. Actual built module and all15 source/axiom
-reports68889 passed with exit0. Lean4.34.1/shell.nix/j1/warnings-as-errors/4G/swap0/
-360s, peak204M. invariant_mono needs no axiom; suspend_fresh uses propext; other
-sets stay within propext, Classical.choice, Quot.sound. No sorryAx or added axiom.
-
-Own ExpansionBounds now exposes its EXISTING totalCost/maxCost to remove duplicate
-cost functions from the new proof. Their definitions and worker behavior did not
-change. Current Expansion21307B/SHAc8656775af75255386731e45885afd1f581a67b9b11e601cba138c9d4c9cc734.
-All4 existing expansion laws were rebuilt and rechecked61705 PASS, peak240M,
-axioms[propext,Quot.sound]. Rechecking was required because this own source changed.
-Old verification is retained under historical_verification_before_shared_cost_visibility.
-Historical replay pins at21214/e151 stay historical, not current.
-
-Portable packet: lean/restart-evidence/20261107-enumeration-reference-bounds/.
-check.py builds the actual module and all15 public source/axiom reports. Source
-reproduction needs no archived build tree, private Source, or huge rolebook.
-Prior Origin2/Total3/Allocation4/UF27 checks stay unchanged and were not repeated.
-No Haskell code or fix, whole-library/Haskell build, Original Source/replay/TYPE,
-or compiled-interface view occurred. Global historical audit remains FAIL/UNKNOWN.
-
-The cap still depends on EXISTING fuel and covers successful returns. It is not
-an original-input/request-size bound for the complete workers, not a proof that
-ALL stored references index the current value list, and not a native interned-ID
-bound. Failing prefixes, total branch work, and all complete-worker query/state
-ranges remain open. Do not claim complete library correctness from these laws.
-Next: derive ordinary expansion depth and global allocation/reference caps from
-actual original inputs and size for BOTH enumerateOut/enumerateFully, then cover
-all intermediate states and work. Do not solve shared fuel by assumingbudget(fuel)<=fuel.
+ExpansionBounds exposes its existing totalCost/maxCost. Definitions and worker
+behavior did not change. Current21307B/SHAc8656775af75255386731e45885afd1f581a67b9b11e601cba138c9d4c9cc734.
+All4 existing laws were rebuilt/rechecked61705, peak240M, axioms[propext,Quot.sound].
+Old verification remains under historical_verification_before_shared_cost_visibility.
+Historical21214/e151 pins remain historical. Origin2/Total3/Allocation4/UF27
+checks remain unchanged. Do not repeat them without a new reason.
 
 ## Earlier checked forest termination and common-fuel laws
 
@@ -146,10 +182,10 @@ private Source copy. The earlier UF and allocation packets remain valid.
 The largest missing result is still ONE bound computed from ORIGINAL inputs and
 requested size for BOTH actual optimized EnumerationState.enumerateOut and
 enumerateFully. Cover ALL generated, returned, and subsequent states, all work
-BETWEEN checkpoints, and total search work. The new budgets depend on existing
-fuel. Do not assume budget(fuel) <= fuel or present that as the final bound.
-Derive ordinary expansion depth and allocation growth from actual original inputs
-and requested size, then remove the fuel dependency.
+BETWEEN checkpoints, failing prefixes, and total search work. The older budgets
+depend on action fuel. The new depth-based cap is fuel-independent only AFTER
+an internal depth proof. Derive that proof from actual original inputs and size,
+or use another justified bound. Do not assume budget(fuel) <= fuel.
 
 Successful-return counter bounds do not cover all intermediate states on failing
 branches. They do not yet bound all complete-worker query IDs or native interned node/edge IDs.
@@ -173,6 +209,8 @@ No goal completion, block, or pause is justified.
 
 No Haskell fix or reachable counterexample was established in this checkpoint.
 No Haskell code changed. No whole-library or Haskell build ran for this proof.
+The new ordinary-cycle example concerns an abstract upper-budget formula.
+It does not establish a reachable native cycle or a Haskell defect.
 Record any future Haskell fix in FINDINGS for external follow-up. Preserve every
 prior counterexample, repair, and marked draft. Preserve the Rec-worklist member
 error exclusion/accounting obligation for BOTH workers, outer recursive Graph
@@ -185,7 +223,7 @@ SAME Native reader retained EnumerationState prefix 1..329: U329 of 699 lines,
 strict cap 349, remaining 20. Original file stays 33489 bytes, SHA-256
 83a898b883ec7b52469bccd87e8afa4f7abb320e3c935bf48f3d80ad77003cc4.
 Already-owned replays in the earlier expansion checkpoint total 243 LF, ZERO new
-unique Source. The current reference-proof checkpoint has no Source replay. Ten capture
+unique Source. The reference-proof and depth-proof checkpoints have no Source replay. Ten capture
 and view records passed all three phases. Nine captures used 7 roles, nine views
 10 roles; the header replay used 8/11 roles after pinning the then-current own
 7942-byte draft. Root independently verified all metadata. Root received public
@@ -203,7 +241,8 @@ Current guards and kernel checks do not recover that historical/global audit.
 PrimitiveTYPE1401,actual32TYPE396,failed old TYPE diagnostics,State twoTYPE777 remain
 opaque. State/BinderInfo507 is HELD; no primary dependency is established.
 
-Current own sources for future fresh guards: ReferenceBounds39317/7e17...,
+Current own sources for future fresh guards: ExpansionDepth12533/5f77f1...,
+ReferenceBounds39317/7e17...,
 TotalPreservation4765/44fd1...,
 VariableOrigin958/e79b8..., plus any
 new own draft; Expansion21307/c865..., Allocation3593/
@@ -223,22 +262,20 @@ subst. All are proof repairs, not Haskell fixes. Failed small math drafts remain
 
 ## Restart and storage
 
-Current runtime: /tmp/mcfta-worker-references-20261107-0232. Earlier expansion
-runtime: /tmp/mcfta-worker-growth-20261107-0127. Exact publication.json records
-commit, push, board readback, and current disk numbers. Earlier runtimes retain
-small history: mcfta-worker-ids-20261107-0100 and mcfta-uf-fuel-20261107-0025.
-The earlier OWN current prefix is in the first runtime's CURRENT-CHECKPOINT-PREFIX.md.
-The historical content below stays byte-identical. Source-based reproduction is
-in the committed packets. Do not rebuild removed huge alias books or build copies.
+Current runtime: /tmp/mcfta-expansion-depth-20261107-0335. Earlier reference
+runtime: /tmp/mcfta-worker-references-20261107-0232; expansion runtime:
+/tmp/mcfta-worker-growth-20261107-0127. Exact publication.json records commit,
+push, board readback, and current disk numbers. The current OWN prefix is
+CURRENT-CHECKPOINT-PREFIX.md in the depth runtime. Earlier own prefixes remain.
+The historical content below stays byte-identical. Do not rebuild removed large
+alias books or build copies. Small proof drafts, counterexamples, repairs, logs,
+and metadata remain. No concurrency or cleanup-policy change occurred.
 
-Earlier expansion scratch is about 0.28 MB, including small failed proof drafts
-and metadata. Keep reference scratch small; it is about0.21MB with all protected failed drafts.
-Removed only redundant own wrapper/report copies; all original proof drafts and
-results remain. Current readable /tmp is 3062728 bytes, excluding 6 private directories.
-Current reference scratch is 213566 bytes. Filesystem available space is
-204302856192 bytes. The earlier 114 GiB drop has no established
-location. Do not attribute it to /tmp or another directory without measurement.
-Keep new scratch small. No build copy or concurrency change occurred.
+Readable /tmp allocation was 8962048 bytes (about8.5MiB), with five permission-denied
+entries excluded. Filesystem available space was203854278656 bytes (about190GiB).
+These are different metrics from the earlier apparent-byte count. No inaccessible
+directory size is claimed. Keep new scratch small. Do not attribute the earlier
+114GiB drop to any location without measurement. This checkpoint deleted no data.
 
 --- Historical checkpoints (byte-identical below) ---
 
