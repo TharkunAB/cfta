@@ -1,3 +1,238 @@
+# Current checkpoint: exact universe-body substitution from original inputs
+
+Updated 2026-11-07 21:57 CET. Goal ACTIVE. R124 made PROGRESS. Branch formalize.
+This checkpoint follows 0dc923a23b980fd308c14f3ba2a5763a62e13ea2
+(R123, canonical board seq972). Preserve the full original objective.
+The optimized interned core remains PRIMARY. The old constructor and Eq
+work remain SECONDARY. Preserve all proofs, counterexamples, repairs,
+marked drafts, and unrelated .hypha/. Regular formalize pushes are explicitly
+authorized. Do not pause the goal or ask whether to continue.
+
+Formalize was pulled before work at 21:23. Both remote heads were refreshed
+at 21:52. Main remains bd5a406a6a3f84b7e3ae0906082783911509df83, an ancestor.
+Eight verified proof commits extend the R123 base through f3386113a7666219b8c879c306d226387cdf4205.
+Publication and the later handoff commit are recorded in the small runtime
+publication.json. No production Haskell behavior changed. No native probe,
+full Haskell suite, Haskell format run, or CI run was added for these Lean-only
+changes. All source tasks and compiler handles are terminal.
+
+## Strongest new claim
+
+SourceSynthesisUniverseBodySubstitutionInput.typesOf_body_substitution takes
+only original Library and Query data and the existing concrete EdgeKey
+DecidableEq infrastructure. It derives the actual cold typesOf universe U,
+its complete cache facts, availability, closedness, and actual body B.
+It derives BOTH the complete source node product at child fuel8 and actual
+Kernel.execute9 D2 B/B. They have the same body-product value and final
+machine. The final machine is valid and extends the original machine.
+The returned value is available, PreparedWithoutMu, and has no free name
+except possibly the diagonal pending (U,U) name. The final constructor heap
+also retains SemanticHeap: normalization and the decoded recursive heaps.
+
+In that ACTUAL final heap, the ACTUAL repaired
+InternedFreshOrdinaryStoredSubstitution.execute on original B, replacing
+Rec(U) with the diagonal cutoff reference, returns EXACTLY the body-product
+value with the SAME heap. This proves the complete normalized body-product
+set and literal source-substitution execution. It includes every actual
+hash-join row, child, duplicate, mismatch edge, and final node request.
+The substitution replay in the final heap adds no constructor allocation.
+The original product itself can allocate; its intermediate effects remain.
+
+The original-input endpoint has NO supplied constructor or callback success,
+completed body or worker, normalized product, successful fuel, future validity,
+availability, coverage, SemanticHeap, cache hit, lookup, pair freshness,
+numeric ID order, finite carrier, or resource premise. Generic internal laws
+have explicit replay conditions. The original-input endpoint DERIVES them
+from actual cold construction and the complete actual product walk.
+
+R123 still proves actual execute13 Rec(U)/U completes with an available,
+closed result and complete payload coverage. R124 additionally proves the
+exact INNER body substitution; this resolves that specific R123 limitation.
+It does NOT yet prove the outer returned Mu is the original cached U.
+The two whole probe callbacks and old Mu cache hit remain to be attached.
+The constants 8/9/13 are recursive fuel, not total sibling or native work.
+Both MODELLED caches retain their actual effects: the constructor heap and
+the domain cache. No new native Haskell correspondence theorem is claimed.
+
+R111 remains the strongest complete plain-query routing endpoint. R116
+remains the prepared-source rank/count endpoint, including both signed
+inverse laws at its stated preparation boundary. R124 does not remove their
+query coverage, preparation, or native correspondence conditions.
+
+## How the exact result is derived
+
+- BodyEvidence extracts one consistent actual marker, retained arrow, all
+  retained row kinds, all top guards, and marker-or-Rec(U) children from actual
+  Mu availability and Shape. It does not assume residency of discarded rows.
+- BodyWalkReplay derives the COMPLETE actual product, every resident raw
+  output row, and ordered All2 replay of every matched pair in the ACTUAL
+  final machine. It also derives pure final makeNode replay for those rows.
+- RowTransform derives literal stored-substitution children and keys for
+  every self row. Each actual self row completes, remains live, and gives
+  the exact makeEdge request. It does not assume its recursive result.
+- SelfRowSet selects required targets from actual self pairs. It retains
+  original source order and multiplicity. Every target belongs to actual
+  products, is resident and live, and has literal constructor replay.
+- RowNormalization classifies every actual matched output, including both
+  arrow/catalog cross directions: dead, or the substitution of a retained
+  source row. Catalog duplicates and arrow-name overlaps remain allowed.
+  Later sibling states replay the actual original D2 through DomainReplay.
+- CanonicalRows uses resident edge-key uniqueness and surviving membership
+  to prove literal makeNode request equality. It permits duplicate and dead
+  product rows. BodyCanonical derives all its conditions from the actual
+  complete product. No normalized-output oracle survives this composition.
+- StoredRows uses the actual leaves, encode, input, Scope closed/external
+  laws and small list inductions. The checked scheduler correspondence
+  transfers to actual FreshOrdinaryStoredSubstitution.execute. It retains
+  the final makeNode work instead of assuming that work succeeds.
+- BodySubstitution composes the canonical product with that actual stored
+  executor. BodySubstitutionInput discharges all conditions from original
+  Library/Query data, and derives final SemanticHeap from existing
+  execute_scoped applied to the DERIVED execute9 result.
+- ProbeChildren proves physical child and makeEdge request composition:
+  U->cutoff(U,U), then cutoff(U,U)->probe, equals direct U->probe. It handles
+  arbitrary probe references and complete closed marker records. This is
+  NOT yet a whole probe callback success or original-U identity theorem.
+
+## Next proof and exact remaining attachment
+
+Prove that outer MaybeMu callbacks on the derived body product return the
+ORIGINAL cached depth and selected ordinary probes with unchanged cache.
+Then the existing Mu key/table/record must yield original U.
+
+1. Existing SourceSynthesisUniverseColdProbe.allTypes_cold_probes supplies
+   actual cold SYNTAX depth/ordinary calls and their request continuation.
+   InternedFreshOrdinaryReadback.request_miss exposes the final heap as the
+   fresh-body heap plus keepFirst. Actual callback/request growth can derive
+   each probe heap -> original heap -> body-product final heap.
+   InternedFreshOrdinaryReplay.callback_replays replays those old syntax
+   callbacks in the later heap.
+2. Attach original STORED B substitution U->each probe to those old probe
+   values. This exact attachment is still OPEN. FreshOrdinaryOrigins.Origin
+   records syntax callbacks; Readback.closed_stored_probes adds matcher fast
+   paths. DepthHeap/ProfileHeap decode observations. None alone proves the
+   required FreshOrdinaryStoredSubstitution.execute equations.
+   UniverseBody.callback_readback and Shape give actual cold probe row
+   packets. Derive that each required stored-body replacement edge hits
+   the corresponding resident old-probe edge; then use canonical makeNode.
+   StoredRows private build_rows is already environment-generic. Its public
+   execute_eq_work currently specializes replacement to cutoff(U,U).
+   Reuse the small proof for actual probe references; avoid a new evaluator
+   or a redundant generic origin framework.
+3. Use ProbeChildren.children_compose for product->probe. Handle canonical
+   ROW SETS explicitly: new edge identities can reorder rows. Ordered Alpha
+   by itself is insufficient. SourceCurrentStoredAlphaNodeReconstruction
+   encode_rows and SourceCurrentNodePlanCongruence.node are existing options.
+   A source-specific resident row/key replay may be smaller. Keep residency
+   for ACTUAL raw callback rows; Shape alone omits discarded-row residency.
+4. NativeInput.available_mu_key_readback derives the original Mu key and
+   records. Growth retains them; NestedConstruction.request then hits the
+   original entry. ColdReadback.finish_shaped_mu preserves original U.
+
+Useful existing fact: successful WHOLE bounded Kernel.execute ALREADY
+preserves SemanticHeap. SourceRecursiveIntersectionScopeCalls.execute_scoped
+(KernelScope.lean91) yields Observed, whose successful result includes that
+heap. This is success-only; do not claim failure-state semantic preservation.
+The input wrapper above already uses it. The retained arrow target can also
+strengthen the product free list to exactly the diagonal cutoff using
+makeNode_zero_singleton, if the outer callback proof needs that equality.
+
+## Full objective and largest gaps
+
+The full goal remains ONE original-input/request/caller-derived bound for
+BOTH the optimized selected-slot worker and the COMPLETE enumeration driver.
+It must cover ALL siblings and ALL generated, reached, intermediate, failing,
+rejected, returned, subsequent, and native states. Do not end with successful
+body/worker/fuel/resource, closure, finite carrier, validity, OriginalInput,
+or lookup conditions as caller oracles. Derive them at the original endpoint.
+Do not restrict the full goal to the default source universe.
+
+- Exact accepted terms per NODE-COUNT size, ordering, and count, plus BOTH
+  signed rank/unrank inverse laws through actual sparse execution.
+- ALL Sized dispatch routes, fallbacks, and failures; productive infinite
+  queries; lookup, Curried, and Specftacular integration.
+- Generated closure and an original-input bound for complete work, including
+  all sibling calls, constructor probes, cache/graph/map/set operations,
+  equality constraints, failures and native allocation. Cached Mu depth
+  cannot replace ordinary structural depth or guard/path measures.
+- Actual Haskell lazy sparse tables, native maps/sets/caches, hash/word/Int
+  behavior, wrappers, allocation order, and source/runtime correspondence.
+
+Preserve R117/R118 work and allocation laws at their component boundaries.
+Actual Tree.work is not an original-input work bound. Keep R118 native
+repeated-intersection growth and timeout counterexamples. Generic physical
+absorption is false. Preserve R120's 58 retained-graph observations; these
+are not an all-intermediate/native/work bound. Closing original-U identity
+would still not establish generated closure or whole-system termination.
+
+## Haskell findings and external ownership
+
+R124 has NO production Haskell repair, new native failure, or behavior change.
+No duplicate fix should be sent to the external owner from this Lean result.
+At the ROOT 21:53 GitHub refresh, PR202 and PR203 were OPEN and unmerged on
+base bd5a406a6a3f84b7e3ae0906082783911509df83, with unchanged heads:
+- PR202 ce4ee6d82340235a39b9278457fe0f9ff45a2eba corrects union-find comments.
+  UnionFind.find returns the representative and the same forest.
+- PR203 e019ce41db8029a5d1349a8ea123253f3d7af715 documents intentional
+  required-argument libraryAvoid behavior for Hoogle+/Hectare parity.
+  The earlier buildRelevant behavior-change recommendation stays withdrawn.
+Do not duplicate these fixes or change the intended required-argument result.
+Positive Top demand can allocate an empty PCS on a cold equality cache;
+exact top readback does not imply zero equality-cache allocation.
+
+## Checks, commits, reproduction, and storage
+
+All 11 new modules and all 21 public laws passed actual project Nix/Lake and
+own-source -j1 -DwarningAsError=true reports. Every public axiom set is a
+subset of propext, Classical.choice, Quot.sound. Small parser, projection,
+opaque-mutual-definition, and unused-argument repairs are already included.
+No admitted theorem, assumed normalized output, or substituted evaluator was
+introduced. Existing dependency warnings were not mistaken for own-source
+warnings. R124 reused existing semantic preservation instead of duplicating it.
+
+Each committed lean/restart-evidence/20261107-<slug>/ packet contains the
+small check.py, theorems.json, checked.json, and README. Reproduce its exact
+source check from the repository root with python3 <packet>/check.py inside
+the usual strict serial 4 GiB heavy-management cap. Do not run uncapped or
+parallel compilers. Do not change queue concurrency. The runtime runner
+can check multiple slugs serially. Do not repeat passed checks without a
+new change or unresolved concern. No Haskell files changed, so no Haskell
+suite or format run was added.
+
+The ROOT runtime is /tmp/mcfta-universe-row-normalization-20261107-2123/.
+verified-modules.json has exact source hashes, public laws, and packet paths.
+RESUME.json and publication.json record final branch/board state. Historical
+doc tails remain byte-identical. Runtime contains only small scripts,
+manifests, and compact repair logs. There are no archives or copied builds.
+ROOT 21:43 audit: readable /tmp used 13,602,816 allocated bytes, excluding six
+protected directories; this runtime used 53,248 then. Available space was
+264,582,582,272 bytes. No cleanup was needed or performed. Continue watching
+/tmp. Final publication records a later runtime audit.
+
+Goal remains ACTIVE. All heavy handles and bounded source tasks are terminal.
+No required external action or approval is pending. The next task is the
+physical probe-row attachment above, then original-U reuse, generated closure,
+and the complete shared work/native contract.
+
+## Verified R124 source manifest
+
+- SourceSynthesisUniverseBodyCanonical: 104 lines, 1 public laws; SHA256 c3e2405c4efe619f3c769933289edb1d514d28f991996904e6103ca0dfa9a4b6. Packet lean/restart-evidence/20261107-universe-body-canonical.
+- SourceSynthesisUniverseBodyEvidence: 90 lines, 1 public laws; SHA256 a648e7b93d205334c8edcaa67978a255bc1e480d12fce7472b1be515cacc5cc5. Packet lean/restart-evidence/20261107-universe-body-evidence.
+- SourceSynthesisUniverseBodySubstitution: 60 lines, 1 public laws; SHA256 e67b86731466e49ec5b8fb5a090b2cf2ec8c429ad8df204b5fe77ba4b7e4aff9. Packet lean/restart-evidence/20261107-universe-body-substitution.
+- SourceSynthesisUniverseBodySubstitutionInput: 103 lines, 1 public laws; SHA256 3ad34dc7a97fcf4411cf6cd253b302f4766d8d38d73a197e76e80bf08dfcb773. Packet lean/restart-evidence/20261107-universe-body-substitution-input.
+- SourceSynthesisUniverseBodyWalkReplay: 101 lines, 1 public laws; SHA256 6b26c8a6aaad13ec5f7f7ba476776b67edb168b07498592825d5208567c80afa. Packet lean/restart-evidence/20261107-universe-body-walk-replay.
+- SourceSynthesisUniverseCanonicalRows: 73 lines, 2 public laws; SHA256 dd54dab3ab97b6929f065b87db090ba3939f479abfd164acb80ba03ce6aedb93. Packet lean/restart-evidence/20261107-universe-canonical-rows.
+- SourceSynthesisUniverseProbeChildren: 61 lines, 3 public laws; SHA256 bd156d62743863e942ebcda07cddb992893517457b838de7e498decca938bf0d. Packet lean/restart-evidence/20261107-universe-probe-children.
+- SourceSynthesisUniverseRowNormalization: 185 lines, 1 public laws; SHA256 2ca6f0ce264cebc50cfccb9346a5249300a8bf462839910e232d255776441c87. Packet lean/restart-evidence/20261107-universe-row-normalization.
+- SourceSynthesisUniverseRowTransform: 136 lines, 6 public laws; SHA256 f2ad2442e2b6ebe53203a685b26d8b6a6cd2e3010678d8fff430167647bfcb1c. Packet lean/restart-evidence/20261107-universe-row-transform.
+- SourceSynthesisUniverseSelfRowSet: 114 lines, 1 public laws; SHA256 054682ea6227f2e9b983b8afa9a5f0532dbe1d67e2de618a4d1eca3990d45cda. Packet lean/restart-evidence/20261107-universe-self-row-set.
+- SourceSynthesisUniverseStoredRows: 201 lines, 3 public laws; SHA256 738b65544fadc18894082ee2c840f8f9d96bb92c54fcb19d5bb7c97b1708cdf0. Packet lean/restart-evidence/20261107-universe-stored-rows.
+
+The previous checkpoint follows as history. Its open body-substitution gap
+is resolved above; its original-U and whole-system gaps remain open.
+
+---
+
 # Current checkpoint: original-input recursive universe completion
 
 Updated 2026-11-07 21:16 CET. Goal ACTIVE. R123 made PROGRESS. Branch formalize.
