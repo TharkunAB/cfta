@@ -103,11 +103,13 @@ private theorem bind_zero_right (first : Budgeted cost action)
     (rest : ∀ value, Budgeted 0 (next value)) : Budgeted cost (action >>= next) := by
   exact bind_budget first rest
 
-private def totalCost (cost : α → Nat) : List α → Nat
+/-- Add the costs of all operations in a list. -/
+def totalCost (cost : α → Nat) : List α → Nat
   | [] => 0
   | first :: rest => cost first + totalCost cost rest
 
-private def maxCost (cost : α → Nat) : List α → Nat
+/-- Bound the cost of any selected operation in a list. -/
+def maxCost (cost : α → Nat) : List α → Nat
   | [] => 0
   | first :: rest => max (cost first) (maxCost cost rest)
 

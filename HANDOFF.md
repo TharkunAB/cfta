@@ -1,11 +1,62 @@
-# Current checkpoint: expansion bounds, variable origins, and forest termination
+# Current checkpoint: actual node and edge reference preservation
 
-Updated 2026-11-07 02:47 CET. Status: PROGRESS. Full goal ACTIVE. The current formalize HEAD
-identifies the published checkpoint. Parent: 177f153de5b4aea13dfb57432fa8a90cf5de7654.
+Updated 2026-11-07 03:26 CET. Status: PROGRESS. Full goal ACTIVE. The current formalize HEAD
+identifies the published checkpoint. Parent: bbae22c6c9561ae46269c3153782b5e6c2cd5219.
 Fresh pull was up to date. Main remains bd5a406a6a3f84b7e3ae0906082783911509df83.
-Preserve unrelated .hypha/. Reference-range work continues independently.
+Preserve unrelated .hypha/. No compiler job is live.
 
-## New checked forest termination and common-fuel laws
+## Strongest new checked result
+
+BOTH actual imported enumerateNode and enumerateEdge preserve the reference
+invariant on every successful return. One internal cap bounds the counter, UF
+storage and parent targets, suspended variables in stored values, holes in stored
+fragments and obligations, and holes in the returned fragment. The invariant also
+retains value-count/counter agreement and UnionFind.Total. Initial-state/[] cases
+calculate cap=1+the actual allocation budget without supplied capacity or validity
+premises. General budget endpoints use before.counter+budget. Fixed-cap contracts
+allow later composition under ONE global cap that the final worker proof must derive.
+
+Actual suspension returns the old counter and creates one value slot. Its fresh
+variable indexes that slot when incoming value-count/counter agreement holds.
+Actual representative and bounded union actions have successful results with
+computed B+1 fuel. This connects the checked forest fuel laws to the real actions.
+The existing normalization attempt failed; own mem_bind decomposition plus the
+concrete get-state singleton proved the bridge. All small failed drafts remain.
+
+New source: lean/MicroCFTA/EnumerationStateReferenceBounds.lean, 39317 bytes,
+SHA-256 7e17f4e1d874a22f6ed1a707327c4205de36c33958e7c24e7f004fac8087096f.
+All15 public theorems passed normal source check58569 with exit0 and empty logs.
+Root independently checked the wrapper's before/distinct-after/separate-final
+source and five-own-import assertions. Actual built module and all15 source/axiom
+reports68889 passed with exit0. Lean4.34.1/shell.nix/j1/warnings-as-errors/4G/swap0/
+360s, peak204M. invariant_mono needs no axiom; suspend_fresh uses propext; other
+sets stay within propext, Classical.choice, Quot.sound. No sorryAx or added axiom.
+
+Own ExpansionBounds now exposes its EXISTING totalCost/maxCost to remove duplicate
+cost functions from the new proof. Their definitions and worker behavior did not
+change. Current Expansion21307B/SHAc8656775af75255386731e45885afd1f581a67b9b11e601cba138c9d4c9cc734.
+All4 existing expansion laws were rebuilt and rechecked61705 PASS, peak240M,
+axioms[propext,Quot.sound]. Rechecking was required because this own source changed.
+Old verification is retained under historical_verification_before_shared_cost_visibility.
+Historical replay pins at21214/e151 stay historical, not current.
+
+Portable packet: lean/restart-evidence/20261107-enumeration-reference-bounds/.
+check.py builds the actual module and all15 public source/axiom reports. Source
+reproduction needs no archived build tree, private Source, or huge rolebook.
+Prior Origin2/Total3/Allocation4/UF27 checks stay unchanged and were not repeated.
+No Haskell code or fix, whole-library/Haskell build, Original Source/replay/TYPE,
+or compiled-interface view occurred. Global historical audit remains FAIL/UNKNOWN.
+
+The cap still depends on EXISTING fuel and covers successful returns. It is not
+an original-input/request-size bound for the complete workers, not a proof that
+ALL stored references index the current value list, and not a native interned-ID
+bound. Failing prefixes, total branch work, and all complete-worker query/state
+ranges remain open. Do not claim complete library correctness from these laws.
+Next: derive ordinary expansion depth and global allocation/reference caps from
+actual original inputs and size for BOTH enumerateOut/enumerateFully, then cover
+all intermediate states and work. Do not solve shared fuel by assumingbudget(fuel)<=fuel.
+
+## Earlier checked forest termination and common-fuel laws
 
 Actual link preserves UnionFind.Total without root or distinctness premises.
 The winner becomes a root. Any old finite path either reaches a modified key or
@@ -13,7 +64,7 @@ uses unchanged parent frames. Actual successful union preserves Total through
 both searches and the selected link. For queries below B, union at B+1 succeeds
 and preserves SupportedBelow B, ParentsBelow B, and Total. These invariants can
 be reused for successive searches. This closes the forest-termination preservation
-dependency for the pending expansion reference invariant. It does not yet derive
+dependency used by the checked expansion reference invariant. It does not yet derive
 B or full-worker fuel from original inputs and requested size.
 
 New source: lean/MicroCFTA/UnionFindTotalPreservation.lean, 4765 bytes, SHA-256
@@ -27,11 +78,11 @@ initial failed name guess and induction draft remain as small marked own drafts.
 Packet: lean/restart-evidence/20261107-union-total-preservation/. No Haskell fix,
 Original Source/replay/TYPE/interface view, or global historical audit recovery.
 
-Native continues the actual Node/Edge reference-cap proof and now retains Total
-in its invariant. Do not conflate a global cap with actual-counter address validity.
+The actual Node/Edge reference-cap proof now retains Total and passed all checks
+as recorded above. Do not conflate a global cap with actual-counter address validity.
 Root also supplied two checked standard list invariant leaves, normal16579 exit0.
-These helpers are own math, not extra Original Source views. No proof is claimed
-for unfinished Native work. Coordinate serial capped compiler checks with Native.
+These helpers are own math, not extra Original Source views. All Native work in
+this increment is checked above. No compiler job is live.
 
 ## Earlier checked descent contract
 
@@ -52,10 +103,9 @@ source; no private Source or archived build tree is needed.
 NO Original Source, replay, TYPE, or compiler-interface view occurred in this
 checkpoint. EqualityTrie per-Original receipt history remains UNKNOWN. This new
 mathematical proof does not recover that history or the old global source audit.
-The actual Node/Edge reference-range preservation proof remains in progress.
-Native may write lean/MicroCFTA/EnumerationStateReferenceBounds.lean separately.
-Do not include unfinished work in this contract's commit. Root must coordinate
-serial capped compiler jobs with Native. Preserve every small failed draft.
+The successful Node/Edge reference-cap proof is now checked as recorded above.
+Native source is frozen and no compiler job is live. Preserve every small failed
+draft and coordinate any new serial capped compiler job.
 
 ## Earlier checked expansion result
 
@@ -102,9 +152,9 @@ Derive ordinary expansion depth and allocation growth from actual original input
 and requested size, then remove the fuel dependency.
 
 Successful-return counter bounds do not cover all intermediate states on failing
-branches. They do not yet bound UF query IDs or native interned node/edge IDs.
+branches. They do not yet bound all complete-worker query IDs or native interned node/edge IDs.
 Model UVar IDs remain separate from native IDs. The imported descent variable-origin
-property is now proved by new own math. Apply it to the actual node/edge reference
+property is now proved and used in the checked actual node/edge reference
 invariant. EqualityTrie per-Original receipt history remains UNKNOWN. Do not reset
 or infer that history. No Original Source/TYPE contract was viewed.
 Next: use the checked expansion laws to derive actual worker query/reference ranges
@@ -135,7 +185,7 @@ SAME Native reader retained EnumerationState prefix 1..329: U329 of 699 lines,
 strict cap 349, remaining 20. Original file stays 33489 bytes, SHA-256
 83a898b883ec7b52469bccd87e8afa4f7abb320e3c935bf48f3d80ad77003cc4.
 Already-owned replays in the earlier expansion checkpoint total 243 LF, ZERO new
-unique Source. The current descent-contract checkpoint has no Source replay. Ten capture
+unique Source. The current reference-proof checkpoint has no Source replay. Ten capture
 and view records passed all three phases. Nine captures used 7 roles, nine views
 10 roles; the header replay used 8/11 roles after pinning the then-current own
 7942-byte draft. Root independently verified all metadata. Root received public
@@ -153,9 +203,10 @@ Current guards and kernel checks do not recover that historical/global audit.
 PrimitiveTYPE1401,actual32TYPE396,failed old TYPE diagnostics,State twoTYPE777 remain
 opaque. State/BinderInfo507 is HELD; no primary dependency is established.
 
-Current own sources for future fresh guards: TotalPreservation4765/44fd1...,
+Current own sources for future fresh guards: ReferenceBounds39317/7e17...,
+TotalPreservation4765/44fd1...,
 VariableOrigin958/e79b8..., plus any
-new reference draft; Expansion21214/e151..., Allocation3593/
+new own draft; Expansion21307/c865..., Allocation3593/
 f7f105..., UFSupport22872/53bb7d.... Header guard's 7942/3c64... own draft is historical.
 No later Source job followed its mutation. EqualityTrie public metadata only:
 44327B/925LF/SHA0cf7d0b98a7bbc24382fde259b3f9b71462c752c347ad6e7788b9e95b41e10d5;
@@ -181,10 +232,11 @@ The historical content below stays byte-identical. Source-based reproduction is
 in the committed packets. Do not rebuild removed huge alias books or build copies.
 
 Earlier expansion scratch is about 0.28 MB, including small failed proof drafts
-and metadata. Keep the new reference-proof scratch below 100 KB when practical.
+and metadata. Keep reference scratch small; it is about0.21MB with all protected failed drafts.
 Removed only redundant own wrapper/report copies; all original proof drafts and
-results remain. Readable /tmp was about 6.6 MiB, excluding five private directories.
-Filesystem free space is about 192.3 GiB. The earlier 114 GiB drop has no established
+results remain. Current readable /tmp is 3062728 bytes, excluding 6 private directories.
+Current reference scratch is 213566 bytes. Filesystem available space is
+204302856192 bytes. The earlier 114 GiB drop has no established
 location. Do not attribute it to /tmp or another directory without measurement.
 Keep new scratch small. No build copy or concurrency change occurred.
 
