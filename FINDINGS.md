@@ -1,158 +1,195 @@
-# Current checkpoint: original-source preparation and cyclic query laws
+# Current checkpoint: deterministic subset meaning, frontier, and bounded rounds
 
-Updated 2026-11-07 06:36 CET. Goal ACTIVE. New proof commits:
-9167db6afcceb946e7d5a0b5f7410969b42c48d6 (all-outcome annotation invariant),
-c95918d1c3d81e93e9df45be1ad9d63c32e48992 (warm selected/cyclic compilation),
-25748cc8674c326be99db803ef0bfa34dc29268b (original-source pipeline).
-Current formalize HEAD identifies the following documentation checkpoint.
-Previous published checkpoint: 6f5414efbcbe77f938b782296c5fb2a78c95a1ef.
-Upstream was refreshed before work. Main remains
-bd5a406a6a3f84b7e3ae0906082783911509df83 and is an ancestor of formalize.
-Preserve unrelated .hypha/ and all proofs, counterexamples, and marked drafts.
-All compiler jobs are terminal. No concurrency setting changed.
+Updated 2026-11-07 07:05 CET. Goal ACTIVE. The previous goal turn made verified
+progress: six original-source/cyclic-pipeline laws were published. This turn adds
+23 checked public laws for the current Sized determinization route's operations.
+The four proof commits are:
+a886785eeb821f514b095f5e622ded187e6d87f5 Derive distinct emissions from each determinization round
+f86f344561fce968d92753cb2e7dfc83709b0ca6 Compute the bounded subset-discovery round limit
+9cc86df51b893506e1f61722e802bf756b59797f Characterize fresh-subset frontier tuples
+66a8a4797b925a3336f29becb91080613882bb6c Prove deterministic subset meaning and emitted-row uniqueness
 
-## New checked statement and precise scope
+Previous published checkpoint: 6a630e2bd13f029dc7a232ee9c03790a00a8e0e4.
+Current formalize HEAD identifies the documentation/publication checkpoint.
+Formalize was pulled before source work. Main was refreshed and remains
+bd5a406a6a3f84b7e3ae0906082783911509df83, already an ancestor of this branch.
+Preserve unrelated .hypha/, every proof, counterexample, repair, and marked draft.
+All compiler jobs are terminal. Heavy work stayed serial with cap4G. No queue
+concurrency changed. Readable /tmp is about10MiB, excluding six inaccessible
+private/system entries. No copied source/build tree or large archive was made.
 
-SourcePruningEnumerationSelectedConstraintHeap preserves an arbitrary constraint
-predicate through EVERY bounded preparation outcome. This includes failed Union
-exposure and pending Mu unfolding. Its successful corollary supplies the returned
-heap invariant. The proof uses the actual selected worker and existing stored
-substitution, cold exposure, and node-constructor preservation laws.
+## New exact component laws
 
-SourcePruningEnumerationSelectedNativeSized composes actual selected Mu/Union
-preparation with warm native readiness, cold traversal, and the SourceCyclicRows
-compiler model. It keeps the node and edge memo tables and the domain cache. It
-transports all compiled class/count/decode/order/rank laws to the ORIGINAL selected
-value's independent guarded language. It does not reset the warm memo state.
+SourceSizedDeterminizationKernel computes each target from all original owners
+whose transition has the symbol, arity, and child memberships of a tuple. With
+plain original rows and a complete owner list, exact child subsets make this
+target exactly the original states that accept the parent term. A finite run in
+any emitted subset-row table recovers its canonical original accepting-state
+subset. Two subset runs of one term therefore have the same key. Distinct emitted
+token/tuple pairs give disjoint alternatives and unique node-count run classes.
+These results derive the subset meaning. They do not assume that desired meaning
+for every output state. Discovery still has to derive complete emitted rows and
+global tuple uniqueness for the actual final table.
 
-SourcePruningEnumerationSelectedSource starts from original syntax with checked
-source annotations. It derives actual completed construction, actual selected
-preparation, ready native state, closure, and all final-row annotations. It supplies
-no completed-build, prepared-heap, or final-row witness as an input. Under reached
-native word checks, it derives actual modeled cyclic compiler execution. If that
-compilation succeeds, its size classes contain exactly the original syntax's
-accepted terms at each NODE-COUNT size. Classes are distinct; counts equal lengths;
-decoding equals indexing; size prefixes have the accepted terms in size order;
-rank and unrank are inverses. Class execution has the existing size+1 bound.
+SourceSizedDeterminizationFrontier proves the first-fresh-position generator's
+exact membership. Nonempty tuples contain at least one fresh subset. Empty tuples
+occur only in the initial round. Once discovery has started, a tuple whose keys
+are all old cannot be emitted again. The recursive list view has the source set
+membership before tuple sorting. It does not claim the source row sequence.
 
-Source annotation normalization remains an input condition. Reached compiler
-word-range checks remain explicit. Selected/read bounds are existential. This
-is not one computed original-input/request-size work bound for both enumerateOut
-and enumerateFully. It is not verified Haskell translation. The compiler here is
-the SourceCyclicRows cyclic-import model. It is not all current Data.CFTA.Sized
-optimization routes. Do not generalize this result to that full dispatcher.
+SourceSizedDeterminizationDiscovery models the control projection of go: add fresh
+target keys, reject an exceeded limit, stop on an empty frontier, otherwise call
+step and continue. Its computed recursion bound is the original nonnegative limit.
+Sized's limit1024 permits at most1025 checking rounds, including the final round.
+No caller fuel is required by complete/sized_complete. The threaded context and
+step function remain generic. This is a ROUND bound, not a total tuple/work bound
+or a completed concrete table builder. It does not prove ordered Set/Map readback.
 
-## Corrected baseline: reuse existing exact table and Sized laws
+SourceSizedDeterminizationStep instantiates actual per-round token/seed/tuple
+operations in a finite list view. It includes ALL original rows, including
+unreachable rows, groups by symbol AND arity, and removes repeated tuples per
+token. It derives exact round membership, distinct emissions, nonempty targets
+from faithful holders, exclusion of old tuples, and unique per-round count classes.
+This removes the supplied tuple-distinctness premise for one generated batch.
+It does not yet derive distinctness/completeness of the full accumulated output.
 
-The previous next-step assessment understated existing results. A lexical
-RowsCorrespond adapter is not necessary for the existing finite-table route.
-SourceFreshOrdinaryColdGuardedExact.trace_table_exact already identifies the actual
-finite shared table with its original independent guarded meaning.
-SourceFreshOrdinaryColdSized.source_sized already composes completed closed source
-construction with exact node-count classes, finite evaluation, order, and inverses.
-SourceFreshOrdinaryColdNativeSized.complete adds the modeled native cyclic compiler
-under internal readiness, normalized-row, and reached word-range conditions.
-SourceFreshOrdinaryNormalizedNativeSized.complete already derives row annotations
-from checked original construction. The new result additionally includes actual
-selected-value preparation and removes the supplied completed-build witness.
+These are exact component results for the current determinization path. They are
+not a proof of the complete current sized dispatcher, the equal-child path, or
+actual Haskell execution. Do not restore the older blanket original-reference
+query/order equality for these new paths.
 
-SourceFreshOrdinarySizedEntryCorrect.complete_both_exact and constructed_complete
-already connect the modeled public reference/optimized query entries to the full
-SourceSizedApiLaws.Exact record, including signed queries. Their dispatcher model
-has the coverage limit below. These are substantial existing compositions, not
-missing component count/order/inverse proofs. Whole native execution and current
-branch coverage still need the remaining links.
+## Strongest earlier composed pipeline result remains checked
 
-Existing full incoming/cache/fold/terminal completion also remains available.
-Keep the fixed2 read laws and canonical transaction results from the previous
-checkpoint. Do not reimplement those stages or count cancellation.
+SourcePruningEnumerationSelectedSource.prepare/complete starts from original syntax
+with checked source annotations. It derives construction, actual selected-value
+Mu/Union preparation, ready warm native state, closure, and final normalized rows.
+It supplies no completed-build, prepared-value, or final-row witness as an input.
+Under reached native word checks it derives execution of the SourceCyclicRows
+compiler model. A successful compiler output has exact original-language classes
+at each NODE-COUNT size, finite class evaluation, distinct terms, exact counts and
+decoding, size-prefix coverage/order, and both rank inverses.
 
-## Current Haskell coverage gap: intentional new Sized routes
+Annotation normalization and reached word checks remain explicit. Stage bounds are
+existential. This result covers the modeled cyclic-import compiler, not every
+current Data.CFTA.Sized route. It is not one computed input/size bound for both
+optimized enumerateOut/Fully or an actual Haskell translation theorem.
 
-Current cfta-generator/src/Data/CFTA/Sized.hs:150-175 has per-state routing.
-Unconstrained unambiguous rows use the plain count table. Unconstrained ambiguous
-rows can use deterministicCountingRows. Unambiguous rows with constraints can use
-intersectionCountingRows for equal direct children. Other cases or a failed
-bounded transform use the reference. Internal/Table.hs:658 sets countingLimit=1024.
+Reuse existing ColdGuardedExact.trace_table_exact, ColdSized.source_sized,
+ColdNativeSized.complete, NormalizedNativeSized.complete, and SizedEntryCorrect.
+complete_both_exact/constructed_complete. Substantial exact table/Sized/count/order/
+inverse composition already exists. The old dispatcher has the coverage limit
+below. A new lexical RowsCorrespond adapter is unnecessary for this finite-table
+route. Full incoming/cache/fold/terminal completion, fixed2 reads, and canonical
+transaction laws from previous checkpoints also remain available. Inspect existing
+modules before declaring a component missing or reimplementing it.
 
-The current header at Sized.hs:53-72 explicitly permits a different within-size
-order for the deterministic and equal-child routes. SizedSpec.hs:59-72 compares
-sorted term sets and counts for its ambiguous repeated-transition case. It does
-not assert equality of that route's original reference sequence.
+## Precise next attachment for deterministicRows
 
-SourceSizedFiniteKeysDispatchApi.nativeSized models the earlier plain/deterministic
-key or unambiguity gate plus reference fallback. Its nativeSized_eq proof identifies
-the complete query record with that modeled reference. It does NOT model the
-current determinization/equal-child table transforms or their changed within-size
-orders. This is a concrete formalization coverage gap. It is not evidence of a
-Haskell bug. The old blanket reference-order equality must not be presented as a
-proof of the complete current Haskell dispatcher.
+Instantiate the discovery context with accumulated emitted choices. Initial choices
+come from the empty known set and leaf seeds. Derive holders from discovered keys.
+Each following step generates round(newFresh, updatedKnown) and appends its choices.
+Carry these invariants through the actual computed-bound evaluation:
+1. Coverage: every original transition's child tuple drawn from known holders is
+   already an accumulated choice. This includes the empty leaf tuple.
+2. Every accumulated choice's child key belongs to the current known set.
+3. Every accumulated choice's target belongs to known or to the current found batch.
+4. Accumulated choices and known keys are distinct.
 
-Next concrete work: inspect and model the actual sizedStates route, per-state
-trimming, deterministicCountingRows and intersectionCountingRows. Reuse existing
-finite automaton/count/decoder results where they match. Prove the actual branch's
-class language, counts, and rank inverses with its actual sequence order. Include
-the 1024 limit and reference fallback. Retain these optimized routes and their
-intentional order. Record each Haskell repair or proposed repair here for external
-work. No Haskell code changed, no runtime repair was established, and no Haskell
-build ran in this increment.
+To extend coverage, split a tuple into all-old children or one fresh child. Use
+mem_tuples/mem_round for the latter. To retain choice distinctness, use
+round_old_excluded: old choices have only old children, and newFresh excludes known.
+At a successful empty-frontier stop, found is included in known. Every accumulated
+target is then known. Derive finite-term completeness by term induction and reuse
+Kernel.accepted_exact for the other direction. Recursive graphs need no acyclicity.
 
-The earlier Haskell documentation follow-up remains: Enumeration.hs:422 claims
-getUVarValue path-compresses, while Internal/UnionFind.hs:129-130 returns
-(root uv uf, uf) unchanged. Suggested comment:
-"Look up the value stored at a UVar's representative."
+Then attach the actual Left original-state roots and Right subset states, preserve
+original FTA validity, and connect ordered Set/Map and sortedRows readback. Derive
+the actual transformed count-table queries with that transformed sequence order.
+Include the limit-rejection/reference-fallback route. Retain the optimized path.
+The generic controller alone does not complete these attachments.
 
-## Validation and reproduction
+## Equal-child audit and Haskell follow-ups for external work
 
-All three actual Lake targets and all SIX public source/axiom reports passed.
-SourcePruningEnumerationSelectedConstraintHeap:3338B, SHA-256
-1b859de61f2f0886cf2dd3e04b49ad4d8793621a9a6439e16659253d4df59c09.
-Root final check returned terminal0 in the initial exec result; peak164M.
-SourcePruningEnumerationSelectedNativeSized:9026B, SHA-256
-d99aec95705bbd5a65c64520cc3ce7bbbf57afeff9c9988412b5bf2d8c6b0b8c.
-Final handle50850 terminal0; peak1214M.
-SourcePruningEnumerationSelectedSource:10682B, SHA-256
-7dc583dec7e3ec0ad494aebb289a6c615e68dea06150966e78601f05ba032180.
-Final handle25793 terminal0; peak215M.
-Every report uses only propext, Classical.choice, and Quot.sound. No sorry or
-new axiom was added. Checks used shell.nix, Lean4.34.1, j1, own warnings as errors,
-and cap4G. Lake can replay an unrelated existing dependency warning. No global
-clean-build, CI, or complete source/runtime-correspondence claim is made.
+Current Sized.hs:150-175 selects per-state plain, deterministic, equal-child, or
+reference routes after per-state reachability/trim checks. Deterministic counting
+uses all unconstrained original rows. The older SourceSizedFiniteKeysDispatchApi
+nativeSized/nativeSized_eq model covers the older gate/fallback route only.
+Sized.hs:53-72 deliberately permits different within-size orders for determinized
+and equal-child rows. SizedSpec.hs:59-72 compares sorted term sets and counts for
+its ambiguous case. This is a formalization coverage gap, not a demonstrated bug.
 
-Source-based packets:
-- lean/restart-evidence/20261107-selected-constraint-heap/ (4763B)
-- lean/restart-evidence/20261107-selected-native-sized/ (4944B)
-- lean/restart-evidence/20261107-selected-source-sized/ (5033B)
-Each checker builds the actual module and checks every public source/axiom report.
-Temporary reports are removed. No archived build tree or source snapshot is needed.
-A separate cold rebuild was not tested. Small failed drafts and repairs remain in
-/tmp/mcfta-selected-native-sized-20261107-0622/ and the child constraint scratch.
+The read-only equal-child audit confirms intersectionCountingRows is an
+INTERSECTION-key worklist. Each key denotes the conjunction of its original state
+languages. Same-token transition tuples join all direct-child equality groups.
+Each group receives the set of every tuple child state at every grouped position.
+The same key fills every position in that group. Canonical sorting uses the
+(symbol, equality classes) temporary symbol before that temporary label is removed.
 
-## Full remaining objective
+Exactly1024 keys AND1024 raw transitions per intersection key are permitted.
+take1025 detects excess; a new1025th key also rejects. Already-visited keys are
+skipped before that test. Failure returns Nothing and Sized uses the reference.
+These are output-size caps, not bounds on all tuple-search work.
+
+Reuse CompactGroups.groupSelections_exact, CompactEdgeRanks.source_outputs_exact
+and compiledEdge_correct, CompactIndexChoice.choice_correct, and SourcePlanScale.
+group_position_nodes. The missing worklist invariant is:
+Accepts transformed K term iff every original state in K accepts term.
+Derive it from complete key rows and child-key closure, then derive transformed run
+uniqueness from the existing unconstrained-unambiguity gate. Do not add the desired
+whole-key meaning or uniqueness as final caller obligations.
+
+No Haskell code changed. No new runtime defect or repair was established. Any
+future Haskell fix belongs in this FINDINGS prefix for external work. The earlier
+documentation follow-up remains: Enumeration.hs:422 says getUVarValue compresses,
+while Internal/UnionFind.hs:129-130 returns (root uv uf, uf) unchanged. Suggested
+comment: "Look up the value stored at a UVar's representative."
+
+## Verification and compact reproduction
+
+All FOUR actual Lake targets and all23 public source/axiom reports passed in
+shell.nix with Lean4.34.1, j1, own warnings as errors, cap4G. Only propext,
+Classical.choice, and Quot.sound occur. No new axiom or sorry was added.
+Final handles: Kernel47406 terminal0 peak173M; Frontier28099 terminal0 peak180M;
+Discovery2950 terminal0 peak165M; Step57003 terminal0 peak167M.
+Failed small drafts and their repairs remain in the runtime directory below.
+Source hashes, sizes, and packet sizes follow:
+- SourceSizedDeterminizationKernel.lean: 12991B, 10 public laws; packet6027B.
+  SHA-256 a73079d21c2c381fcc13bcca0b04678f5d1c80243e75985d05365fb7695da3fb.
+- SourceSizedDeterminizationFrontier.lean: 5927B, 4 public laws; packet4770B.
+  SHA-256 e36a2cf0b90c360736d640d3a04424182f1ff87100ccc986c14ad76f6a69205e.
+- SourceSizedDeterminizationDiscovery.lean: 6634B, 4 public laws; packet4920B.
+  SHA-256 78f86e3cb1e96bc0b7f9f4cb8e9e5d5819609d3a71dfcfde49603b8cba39dc24.
+- SourceSizedDeterminizationStep.lean: 8327B, 5 public laws; packet5065B.
+  SHA-256 136ecea043336e9745c4a76913419a1d323da6b3db4709d4f1a5352bf50d92e7.
+
+Packets: lean/restart-evidence/20261107-sized-determinization-{kernel,frontier,
+discovery,step}/. Each has the actual-source checker, theorem list, checked source
+hash/axiom report, and scope README. No source snapshot or build tree is needed.
+No clean rebuild, CI, Haskell test/build, or complete runtime correspondence claim
+is made. Unchanged earlier modules were not retested. Runtime:
+/tmp/mcfta-sized-determinization-20261107-0645/.
+
+## Full remaining objective and workflow
 
 Keep BOTH actual optimized enumerateOut and enumerateFully. Derive ONE computable
 bound from original input and requested size. Cover generated, returned, subsequent,
 intermediate, and failing states and total branch work. Derive reached word/capacity
-checks from that original data. SourceFreshOrdinaryNativeCompilerCapacity.
-ranges_of_capacity already converts reached capacity to word checks; it does not
-eliminate the reached-capacity premise. Do not rename that premise as completion.
-Do not add final caller resource, closure, completed-worker, success, fuel,
-validity, or OriginalInput obligations.
+checks from that original data. NativeCompilerCapacity.ranges_of_capacity already
+converts reached capacity to word checks but still assumes reached capacity.
+Do not substitute round count, a renamed capacity premise, or new final caller
+resource/closure/completed-worker/success/fuel/validity/OriginalInput obligations
+for this objective.
 
-Complete current Sized branch coverage and actual native/Haskell worker, identity,
-cache, interner, equality, hash, and machine-Int correspondence. Reuse existing
-exact node-count/count/order/rank proofs at their actual boundaries. Preserve
-older constructor/equality work as secondary targets. Keep the optimized interned
-core primary. Goal ACTIVE. No completion, pause, or blocking claim is made.
+Complete current Sized branch coverage and native/Haskell worker, identity, cache,
+interner, equality, hash, and machine-Int correspondence. Keep optimized interned
+core primary. Preserve older constructor/equality work as secondary targets. Push
+formalize regularly under standing explicit authorization. Goal ACTIVE.
 
-## Storage and historical records
-
-Readable /tmp remains about10MiB, excluding six inaccessible private/system
-entries. No large archive or source/build-tree copy was made. No proof or draft
-was deleted. The source workflow correction remains in force: historical Source/
-TYPE reading quotas and opaque receipt gates do not limit needed inspection.
-Preserve their historical failure/unknown-upper records without restoring access
-restrictions. The earlier checkpoint tails follow unchanged.
+Historical source-reading quotas and opaque Source/TYPE receipt gates remain
+superseded. Inspect actual source as needed. Preserve historical SourceProcess FAIL
+and Root unknown-upper facts without restoring those access restrictions. Keep
+/tmp small. Do not make source/build-tree copies. Earlier document tails follow
+unchanged, with hashes retained in this runtime's doc-tail-manifest.json.
 
 
 # Current checkpoint: default enumeration discharges its callback invariant
