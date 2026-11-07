@@ -1,7 +1,7 @@
-# Current checkpoint: source rank inverses and global execution-bound audit
+# Current checkpoint: retained execution states and total branch work
 
-Updated 2026-11-07 15:18 CET. Goal ACTIVE. Branch formalize. This checkpoint
-follows 4fc286e211b2c7e67716d6347b6aaefa013870f5 (R115, canonical board seq961).
+Updated 2026-11-07 15:57 CET. Goal ACTIVE. Branch formalize. This checkpoint
+follows 2047a47da6571f8a894e7fd96e63a6488536d357 (R116, canonical board seq962).
 The previous turn made progress. This turn also makes progress. The full
 objective remains open. Preserve .hypha/ and every proof, counterexample,
 repair, and marked draft. Regular formalize pushes remain authorized.
@@ -10,6 +10,53 @@ Formalize was pulled before work. Both remote branches were refreshed before
 publication. Main remains bd5a406a6a3f84b7e3ae0906082783911509df83, an ancestor.
 No Haskell source changed. These are focused actual Lake and own-source
 proof checks. They are not a cold full build, Haskell execution, or full CI.
+
+## R117 execution progress
+
+The strongest complete Sized query-contract theorem remains R111 plain
+routing. The strongest prepared source rank/query results remain R116 below.
+R117 adds an executable retained-state trace for the CURRENT state model.
+It does not claim a new complete native execution or input-derived work bound.
+
+EnumerationStateWorkTrace instruments actual enumerateNode, enumerateEdge
+and enumerateOut control flow, including representative reads, allocation,
+union, assimilation, merge, suspended classes, branch choice and residual
+writes. Tree.erase reproduces the exact current ordered result list for
+EVERY supplied stage fuel. No successful-run or validity premise is needed.
+Tree.states retains successful, failed and rejected states. Tree binding
+retains an intermediate success even if its continuation immediately rejects.
+Tree.error_iff and failure_state_mem attach each reached error to its state.
+enumerateOut_error_state supplies this witness for the actual selected stage.
+
+Tree.work counts modeled state, branch and sequencing transitions. Its
+work_bind equation sums continuation work over EVERY successful leaf.
+Failed and rejected work remains counted. Fork work is one plus LEFT plus
+RIGHT, not a maximum. The trace computation is operational and has no
+LawfulMonad claim. Erasure gives the ordinary source monad behavior.
+Graph and union-find functions remain atomic at this level. This work is not
+a native primitive-operation count or an instruction/time bound.
+
+EnumerationStateDriverWorkTrace executes the actual zipIdx/foldlM scheduler
+scan with traced representative reads. It then executes the COMPLETE modeled
+enumerateFully loop, including repeated-boundary clearing and both oracle
+calls. erase_findExpandable and erase_enumerateFully retain exact source
+outcomes at every supplied fuel and traced oracle. noPruning_driver attaches
+the ACTUAL default callback. noPruning_error_state gives a retained reached
+state for every actual modeled default-driver error. This includes exhaustion.
+No artificial successful-fuel premise hides the global termination problem.
+
+These traces cover EnumerationState fields. They do not yet trace every
+native heap/cache/receipt intermediate in SourcePruningEnumerationRecursive,
+the cached native scheduler, or every arbitrary Haskell callback. Connect
+those actual native stages next. Do not replace the final total-work theorem
+with the existence of a finite trace at a supplied budget.
+
+SourcePruningEnumerationIdentityBudget proves that injective renaming of
+node handles preserves recursion-key equality and history membership. The
+complete unused shape list and its strict decrease are unchanged. The proof
+supplies NO finite handle carrier. It does not rename cache child graphs,
+container order, native effects or costs. Exact output-order correspondence
+needs a stronger relation that preserves the relevant order.
 
 ## Strongest current claims and their boundaries
 
@@ -145,16 +192,18 @@ The constructed optimized endpoint also retains cached-annotation and
 selection premises. The current raw reference result does not discharge them.
 
 OutcomeResources retains reached endpoints and emitted output packets.
-Successful Indexed laws keep references below the returned counter. Neither
-alone retains every transient state before rejection or failure. Generic
-EnumerationState failure discards state. A trace or equivalent execution
-invariant must retain those observations and compose later continuations.
+Successful Indexed laws keep references below the returned counter. R117 now
+adds actual state-model traces that retain discarded failures, rejected
+branches and successful intermediates. The corresponding native heap/cache
+trace and uniform input bound remain open. The original failure operation
+still discards state after erasure. Do not infer transient native invariants
+from successful endpoint laws alone.
 
 EnumerationStateExpansionBounds.nodeAllocationBudget uses maxCost over
-alternatives. That is a branch allocation bound. TOTAL search work must sum
-all processed siblings, including rejected alternatives and callback/native
-operations. Stability above a local workFuel threshold is not a primitive
-operation count.
+alternatives. That is a branch allocation bound. The new Tree.work_bind law
+SUMS actual continuation work across siblings. Next attach actual native
+primitive/callback costs and bound that sum from original input. Stability
+above a local workFuel threshold is not a primitive-operation count.
 
 Generic workers allow arbitrary monadic expansion/oracle callbacks. No
 input-only resource theorem can cover all such callbacks: a callback can
@@ -170,6 +219,62 @@ selected-slot expansion and the complete enumeration driver. Cover every
 generated, reached, rejected, failing, returned, subsequent and intermediate
 state. Derive sufficient recursive depth and finite TOTAL processed work,
 including siblings. Do not assume successful supplied fuel or a finite carrier.
+
+## Actual caller and native identity audit
+
+This section records source inspection, not a new Lean termination theorem.
+Specftacular/Utils.hs61 tk and Gen/Synthesis.hs730 rawSearchSpace count program
+LEAVES. An application splits a positive budget between its two program
+children. A filter retains that budget. Type annotations and markers add
+structural work. Specftacular.hs197-202 termSize omits the type child of a
+program leaf. A one-leaf given of type List^d Int therefore needs increasing
+type observations as d increases. Do not bound execution by program size alone.
+
+Default Specftacular typeDepth=Nothing uses recursive mtau (Utils.hs176).
+Synthesis allTypes/allCurriedTypes432 are recursive too. An infinite type
+language does not itself prove infinite execution: unconstrained Mu boundaries
+stop as markers. The next caller theorem should attach RAW role/origin facts:
+program children decrease the program budget; equality endpoints remain at
+type positions; raw recursive type bodies introduce no equality classes.
+Derive the remaining type-constraint debt from original finite type-pattern
+origins. Accepted-term mass alone does not bound intermediate or failed work.
+Explicit Just D is an acyclic branch, not a replacement for the default route.
+
+Concrete templateOracle reads partial fragments and representatives.
+Specftacular narrowing and Synthesis narrowHeads filter existing edges.
+They do not allocate UVars. Arbitrary monadic oracles can restore earlier
+state, so universal termination for all callbacks would be false. The
+restoration example is a source-level sketch, not an executed regression.
+Attach concrete callback effects/costs or prove the documented restrictions.
+Do not introduce a final caller resource certificate.
+
+Native addUVarValue copies an existing node. Fresh graph identities instead
+come from Mu match/substitution, Union reconstruction, and intersectOpen /
+maybeMu. constructed_cold_finite proves exposure of one constructed root;
+SourceRecursiveIntersectionComputedFuel.initial_numeric bounds one
+intersection from its starting heap. OriginGeneration.execute recovers writers
+but remains prefix-indexed. extend_mem_originalDescriptorCarrier requires
+operands and binders from the ORIGINAL heap. It does not close generated
+operands after repeated intersections/substitution. Derive bounded original
+descriptors for those actual prefixes, then exact identity reuse or a rank
+that charges distinct representations. Do not assume that carrier.
+
+The process-global supply distinction also matters. NodeId and EdgeId are
+machine Int (Interned/Type.hs70,180). Separate node/edge supplies are shared
+across symbol-typed caches (455-468,511-525). Interned/Cache.hs80-92 uses atomic
+fetchAddIntArray#. Duplicate/losing insertion attempts can consume unused IDs
+(169-178); canonical caches retain entries. Syntax alone does not determine
+absolute IDs. In the no-overflow natural-number abstraction, earlier unrelated
+work can shift them arbitrarily. Actual Int has its machine range bound.
+Bound relevant retained identities separately from their numeric magnitude.
+A bound on issued IDs also needs actual initial supply and duplicate/concurrent
+activity. Relate the real initial environment to the mathematical starting
+state. Do not claim this source audit proves a practical runtime defect.
+
+Native ID ordering also affects Node/Edge Ord and intersection operand order.
+The new equality-budget renaming law does not prove exact ordered execution
+invariance. Existing CacheRenaming relates shared IDENTICAL physical keys;
+it does not by itself rename graphs whose child keys contain renamed IDs.
 
 ## Formal ordering contract audit and numeric domains
 
@@ -208,6 +313,16 @@ and PathEClass constructors do not enforce the documented normal form.
 Actual reference enumeration and equalChildren use the accessor. The raw
 example proves no native/reference disagreement. No Haskell runtime repair
 is justified by it, the order audit, or the new finite sparse laws.
+
+R117 HASKELL CORRESPONDENCE FINDING: native identity supplies are process-global
+and can contain gaps. Do not derive their absolute numeric range from source
+Syntax size alone. Relate initial cache/supply state, relevant-identity
+renaming and actual allocation activity explicitly. nodeMemoKey381-386 packs
+4*identity+tag into Int. Existing IntersectionFlatMemoKey.safe_range,
+uniform_range and collisions64 ALREADY describe the range obligation and
+quarter-word/sentinel collisions. This turn establishes no new executed
+runtime defect and requests no new Haskell code repair. Preserve those checked
+counterexamples. The global input-derived word/capacity attachment remains open.
 
 PENDING HASKELL COMMENT REPAIR: cfta/src/Data/CFTA/Enumeration.hs422 says
 getUVarValue path-compresses its representative. Internal/UnionFind.hs129-130
@@ -268,58 +383,43 @@ theorem. Retain the earlier full-scope proof targets and counterexamples.
 
 ## Verification, disk use and publication
 
-All FIFTEEN new actual Lake targets and 128 public own-source/axiom laws passed.
-Sources total 173548 B. Compact reproducible packets total 79649 B. Every
-packet has check.py, theorems.json, checked.json and README.md. Every final
-source hash matches its checked report. Checks use shell.nix and Lean4.34.1.
-Own-source reports use -j1 and warnings-as-errors. Only propext,
-Classical.choice and Quot.sound occur. Jobs were strictly SERIAL in 4G
-heavy-management scopes. All compiler jobs are terminal. The largest recorded
-scope peak was 602M, including failed checks. Every repaired final source
-passed. No unchanged successful source received another own-source check
-without a new reason. Do not label a failed batch successful because an
-earlier stage passed. Initial failed drafts and repair context are retained.
+All THREE new actual Lake targets and 45 public own-source/axiom laws passed.
+Sources total 41591 B. Compact reproducible packets total 19034 B. Each packet
+contains check.py, theorems.json, checked.json and README.md. Every final source
+hash matches its checked report. Checks use shell.nix and Lean4.34.1.
+Own-source reports use -j1 and warnings-as-errors. Only propext and Quot.sound
+occur. Jobs were strictly SERIAL in 4G heavy-management scopes. All compiler
+jobs are terminal. Initial failed drafts and compact repair diagnostics remain.
+Every repaired final source passed. Unchanged successful sources were not
+checked again without a new reason. Do not label an outer failed batch
+successful because an earlier stage passed. No full cold build or Haskell
+runtime test is claimed. Prior R116 source/query results remain checked.
 
 Verified modules and packet paths:
-- SourceSizedReferenceCurrent: 11 laws; lean/restart-evidence/20261107-sized-reference-current/.
-- SourceSizedReferenceCurrentConstructed: 1 laws; lean/restart-evidence/20261107-sized-reference-current-constructed/.
-- SourceSizedGroupedSparseFields: 20 laws; lean/restart-evidence/20261107-sized-grouped-sparse-fields/.
-- SourceSizedGroupedSparseMinimum: 10 laws; lean/restart-evidence/20261107-sized-grouped-sparse-minimum/.
-- SourceSizedGroupedRankPrefixes: 6 laws; lean/restart-evidence/20261107-sized-grouped-rank-prefixes/.
-- SourceSizedGroupedRankLeaders: 5 laws; lean/restart-evidence/20261107-sized-grouped-rank-leaders/.
-- SourceSizedGroupedRankCandidates: 4 laws; lean/restart-evidence/20261107-sized-grouped-rank-candidates/.
-- SourceSizedGroupedRankComplete: 3 laws; lean/restart-evidence/20261107-sized-grouped-rank-complete/.
-- SourceSizedGroupedRankDispatch: 14 laws; lean/restart-evidence/20261107-sized-grouped-rank-dispatch/.
-- SourceSizedGroupedBottomUp: 6 laws; lean/restart-evidence/20261107-sized-grouped-bottom-up/.
-- SourceSizedGroupedPreparedRank: 5 laws; lean/restart-evidence/20261107-sized-grouped-prepared-rank/.
-- SourceSizedGroupedPublicQueries: 17 laws; lean/restart-evidence/20261107-sized-grouped-public-queries/.
-- SourceSizedGroupedSignedRank: 6 laws; lean/restart-evidence/20261107-sized-grouped-signed-rank/.
-- SourceSizedSparseProductSplit: 10 laws; lean/restart-evidence/20261107-sized-sparse-product-split/.
-- SourceSizedSparseSignedCounts: 10 laws; lean/restart-evidence/20261107-sized-sparse-signed-counts/.
+- SourcePruningEnumerationIdentityBudget: 8 laws; lean/restart-evidence/20261107-enumeration-identity-budget/.
+- EnumerationStateWorkTrace: 30 laws; lean/restart-evidence/20261107-enumeration-state-work-trace/.
+- EnumerationStateDriverWorkTrace: 7 laws; lean/restart-evidence/20261107-enumeration-driver-work-trace/.
 
-Runtime: /tmp/mcfta-native-rank-20261107-1421/. Read RESUME.json,
+The three proof commits are:
+- 5f967f73b518862e8b5eba5f78d47af8e1e285b2
+- aafb0e7a8100277fa8a47ad446e96e6e3b61ec1d
+- 07003328ac28ec3b076ed8bf84f544d4897248c1
+
+Runtime: /tmp/mcfta-global-execution-20261107-1526/. Read RESUME.json,
 verified-manifest.json, proof-commits.json, heavy-peaks.tsv, publication.json,
 canonical-board-readback.json, doc-tail-manifest.json and tmp-audit-current.json.
 Final publication records are written after push and canonical readback.
-The previous R115 runtime is /tmp/mcfta-grouped-native-20261107-1333/.
+The previous R116 runtime is /tmp/mcfta-native-rank-20261107-1421/.
 
-The six proof commits are:
-- 8d92bf7d37e8f0e8d45422142f2ce6a954d77710
-- 62c43b9fa3ba0da6bc70a7e699216871a783ac95
-- 08577668088704efeb46b8fbd5a33cba01502ac7
-- 7a6cfdacd1ba6d53c174e0e83fc51f1a35e36921
-- a76bf75e624ad45575ce00350f93dfcb2b45bbf0
-- 89ef312823731271a9faa87502ec55900d057904
-
-The latest readable /tmp audit measured 14716928 allocated B
-and 191681871872 free B. 5 private entries were inaccessible.
-This runtime used 323584 allocated B before final compact
-handoff records. No copied source/build trees or bulk archives were produced.
-The proof reports reproduce from tracked source and shell.nix. No additional
-deletion was needed. Continue checking /tmp during later work.
+Readable /tmp measured 15028224 allocated B and 191732797440
+free B. 5 private entries were inaccessible. This runtime used
+176128 allocated B before final compact records. No copied
+source/build trees or bulk archives were produced. Proof reports reproduce
+from tracked source and shell.nix. No additional deletion was needed.
+Continue checking /tmp. Preserve unrelated .hypha/ and all proof work.
 
 Push formalize normally under standing authorization. Verify independent
-ls-remote, refresh origin/formalize and check main ancestry. Publish R116 on
+ls-remote, refresh origin/formalize and check main ancestry. Publish R117 on
 thread1c1333d7-46ea-4f46-a9a1-b5d13e577337. Save exact request arguments before
 writing. Compare canonical author, title, text and metadata.commit separately.
 A write response is not canonical readback. Goal remains ACTIVE.
