@@ -1,0 +1,140 @@
+{
+  "exit": 0,
+  "time": "2026-11-07T18:22:19.388964+01:00",
+  "command": [
+    "nix-shell",
+    "--expr",
+    "let pkgs = import <nixpkgs> {}; in pkgs.mkShell { inputsFrom = [ (import ./shell.nix { inherit pkgs; }) ]; packages = [ pkgs.gmp ]; }",
+    "--run",
+    "cabal build lib:cfta-generator --offline -j1 && cabal exec -- runghc -package=cfta -package=cfta-generator lean/repro/AllTypesPrefixClosure.hs"
+  ],
+  "source_sha256": "29177c88a9f0eadb0fa49ad445b29d4c29e3a2b4c87ce7bdfe1ddd13ed6ca429",
+  "stdout": "Up to date\nReturned stored graphs only; no transient-allocation, semantic-equivalence, or termination claim.\nint: Right ([Observation {operation = \"rawSearchSpace\", ordinaryNodes = 5, muNodes = 1, unionNodes = 0, storedEdges = 11, retainedMuIds = [10], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"U\", ordinaryNodes = 2, muNodes = 1, unionNodes = 0, storedEdges = 7, retainedMuIds = [10], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"P\", ordinaryNodes = 1, muNodes = 0, unionNodes = 0, storedEdges = 1, retainedMuIds = [], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"Q\", ordinaryNodes = 1, muNodes = 0, unionNodes = 0, storedEdges = 1, retainedMuIds = [], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"U-intersect-P\", ordinaryNodes = 1, muNodes = 0, unionNodes = 0, storedEdges = 1, retainedMuIds = [], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"P-intersect-U\", ordinaryNodes = 1, muNodes = 0, unionNodes = 0, storedEdges = 1, retainedMuIds = [], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"(U-intersect-P)-intersect-U\", ordinaryNodes = 1, muNodes = 0, unionNodes = 0, storedEdges = 1, retainedMuIds = [], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"P-intersect-Q\", ordinaryNodes = 1, muNodes = 0, unionNodes = 0, storedEdges = 1, retainedMuIds = [], closed = True, empty = False, muSubsetOfActualU = True}],[(\"intersection-order-physical-equality\",True),(\"repeated-physical-equality\",True)],[])\nlist: Right ([Observation {operation = \"rawSearchSpace\", ordinaryNodes = 7, muNodes = 1, unionNodes = 0, storedEdges = 14, retainedMuIds = [19], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"U\", ordinaryNodes = 2, muNodes = 1, unionNodes = 0, storedEdges = 8, retainedMuIds = [19], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"P\", ordinaryNodes = 3, muNodes = 1, unionNodes = 0, storedEdges = 9, retainedMuIds = [19], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"Q\", ordinaryNodes = 2, muNodes = 0, unionNodes = 0, storedEdges = 2, retainedMuIds = [], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"U-intersect-P\", ordinaryNodes = 3, muNodes = 1, unionNodes = 0, storedEdges = 9, retainedMuIds = [19], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"P-intersect-U\", ordinaryNodes = 3, muNodes = 1, unionNodes = 0, storedEdges = 9, retainedMuIds = [19], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"(U-intersect-P)-intersect-U\", ordinaryNodes = 3, muNodes = 1, unionNodes = 0, storedEdges = 9, retainedMuIds = [19], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"P-intersect-Q\", ordinaryNodes = 2, muNodes = 0, unionNodes = 0, storedEdges = 2, retainedMuIds = [], closed = True, empty = False, muSubsetOfActualU = True}],[(\"intersection-order-physical-equality\",True),(\"repeated-physical-equality\",True)],[])\npair-function: Right ([Observation {operation = \"rawSearchSpace\", ordinaryNodes = 11, muNodes = 1, unionNodes = 0, storedEdges = 19, retainedMuIds = [33], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"U\", ordinaryNodes = 2, muNodes = 1, unionNodes = 0, storedEdges = 9, retainedMuIds = [33], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"P\", ordinaryNodes = 5, muNodes = 1, unionNodes = 0, storedEdges = 12, retainedMuIds = [33], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"Q\", ordinaryNodes = 5, muNodes = 0, unionNodes = 0, storedEdges = 5, retainedMuIds = [], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"U-intersect-P\", ordinaryNodes = 5, muNodes = 1, unionNodes = 0, storedEdges = 12, retainedMuIds = [33], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"P-intersect-U\", ordinaryNodes = 5, muNodes = 1, unionNodes = 0, storedEdges = 12, retainedMuIds = [33], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"(U-intersect-P)-intersect-U\", ordinaryNodes = 5, muNodes = 1, unionNodes = 0, storedEdges = 12, retainedMuIds = [33], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"P-intersect-Q\", ordinaryNodes = 5, muNodes = 0, unionNodes = 0, storedEdges = 5, retainedMuIds = [], closed = True, empty = False, muSubsetOfActualU = True}],[(\"intersection-order-physical-equality\",True),(\"repeated-physical-equality\",True)],[])\nunequal-depth: Right ([Observation {operation = \"rawSearchSpace\", ordinaryNodes = 7, muNodes = 1, unionNodes = 0, storedEdges = 15, retainedMuIds = [33], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"U\", ordinaryNodes = 2, muNodes = 1, unionNodes = 0, storedEdges = 9, retainedMuIds = [33], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"P\", ordinaryNodes = 4, muNodes = 1, unionNodes = 0, storedEdges = 11, retainedMuIds = [33], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"Q\", ordinaryNodes = 4, muNodes = 1, unionNodes = 0, storedEdges = 11, retainedMuIds = [33], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"U-intersect-P\", ordinaryNodes = 4, muNodes = 1, unionNodes = 0, storedEdges = 11, retainedMuIds = [33], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"P-intersect-U\", ordinaryNodes = 4, muNodes = 1, unionNodes = 0, storedEdges = 11, retainedMuIds = [33], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"(U-intersect-P)-intersect-U\", ordinaryNodes = 4, muNodes = 1, unionNodes = 0, storedEdges = 11, retainedMuIds = [33], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"P-intersect-Q\", ordinaryNodes = 4, muNodes = 1, unionNodes = 0, storedEdges = 11, retainedMuIds = [33], closed = True, empty = False, muSubsetOfActualU = True}],[(\"intersection-order-physical-equality\",True),(\"repeated-physical-equality\",True)],[])\narrow-catalog: Right ([Observation {operation = \"rawSearchSpace\", ordinaryNodes = 6, muNodes = 1, unionNodes = 0, storedEdges = 13, retainedMuIds = [61], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"U\", ordinaryNodes = 2, muNodes = 1, unionNodes = 0, storedEdges = 8, retainedMuIds = [61], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"P\", ordinaryNodes = 3, muNodes = 1, unionNodes = 0, storedEdges = 9, retainedMuIds = [61], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"Q\", ordinaryNodes = 1, muNodes = 0, unionNodes = 0, storedEdges = 1, retainedMuIds = [], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"U-intersect-P\", ordinaryNodes = 3, muNodes = 1, unionNodes = 0, storedEdges = 10, retainedMuIds = [61], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"P-intersect-U\", ordinaryNodes = 3, muNodes = 1, unionNodes = 0, storedEdges = 10, retainedMuIds = [61], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"(U-intersect-P)-intersect-U\", ordinaryNodes = 3, muNodes = 1, unionNodes = 0, storedEdges = 10, retainedMuIds = [61], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"P-intersect-Q\", ordinaryNodes = 0, muNodes = 0, unionNodes = 0, storedEdges = 0, retainedMuIds = [], closed = True, empty = True, muSubsetOfActualU = True}],[(\"intersection-order-physical-equality\",True),(\"repeated-physical-equality\",True)],[])\nmissing-rigid-var-e: Right ([Observation {operation = \"rawSearchSpace\", ordinaryNodes = 6, muNodes = 1, unionNodes = 0, storedEdges = 12, retainedMuIds = [10], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"U\", ordinaryNodes = 2, muNodes = 1, unionNodes = 0, storedEdges = 7, retainedMuIds = [10], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"P\", ordinaryNodes = 1, muNodes = 0, unionNodes = 0, storedEdges = 1, retainedMuIds = [], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"Q\", ordinaryNodes = 1, muNodes = 0, unionNodes = 0, storedEdges = 1, retainedMuIds = [], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"U-intersect-P\", ordinaryNodes = 0, muNodes = 0, unionNodes = 0, storedEdges = 0, retainedMuIds = [], closed = True, empty = True, muSubsetOfActualU = True},Observation {operation = \"P-intersect-U\", ordinaryNodes = 0, muNodes = 0, unionNodes = 0, storedEdges = 0, retainedMuIds = [], closed = True, empty = True, muSubsetOfActualU = True},Observation {operation = \"(U-intersect-P)-intersect-U\", ordinaryNodes = 0, muNodes = 0, unionNodes = 0, storedEdges = 0, retainedMuIds = [], closed = True, empty = True, muSubsetOfActualU = True},Observation {operation = \"P-intersect-Q\", ordinaryNodes = 0, muNodes = 0, unionNodes = 0, storedEdges = 0, retainedMuIds = [], closed = True, empty = True, muSubsetOfActualU = True}],[(\"intersection-order-physical-equality\",True),(\"repeated-physical-equality\",True)],[])\nfun-unary: Right ([Observation {operation = \"rawSearchSpace\", ordinaryNodes = 6, muNodes = 1, unionNodes = 0, storedEdges = 12, retainedMuIds = [10], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"U\", ordinaryNodes = 2, muNodes = 1, unionNodes = 0, storedEdges = 7, retainedMuIds = [10], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"P\", ordinaryNodes = 3, muNodes = 1, unionNodes = 0, storedEdges = 8, retainedMuIds = [10], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"Q\", ordinaryNodes = 1, muNodes = 0, unionNodes = 0, storedEdges = 1, retainedMuIds = [], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"U-intersect-P\", ordinaryNodes = 0, muNodes = 0, unionNodes = 0, storedEdges = 0, retainedMuIds = [], closed = True, empty = True, muSubsetOfActualU = True},Observation {operation = \"P-intersect-U\", ordinaryNodes = 0, muNodes = 0, unionNodes = 0, storedEdges = 0, retainedMuIds = [], closed = True, empty = True, muSubsetOfActualU = True},Observation {operation = \"(U-intersect-P)-intersect-U\", ordinaryNodes = 0, muNodes = 0, unionNodes = 0, storedEdges = 0, retainedMuIds = [], closed = True, empty = True, muSubsetOfActualU = True},Observation {operation = \"P-intersect-Q\", ordinaryNodes = 0, muNodes = 0, unionNodes = 0, storedEdges = 0, retainedMuIds = [], closed = True, empty = True, muSubsetOfActualU = True}],[(\"intersection-order-physical-equality\",True),(\"repeated-physical-equality\",True)],[])\noccurs-check: Right ([Observation {operation = \"equated-Pair-prefixes\", ordinaryNodes = 6, muNodes = 1, unionNodes = 0, storedEdges = 13, retainedMuIds = [33], closed = True, empty = False, muSubsetOfActualU = True},Observation {operation = \"reducePartially\", ordinaryNodes = 0, muNodes = 0, unionNodes = 0, storedEdges = 0, retainedMuIds = [], closed = True, empty = True, muSubsetOfActualU = True}],[])\n",
+  "stderr": "",
+  "summary": [
+    {
+      "case": "int",
+      "observations": 8,
+      "closed_violations": 0,
+      "new_mu_violations": 0,
+      "comparisons": [
+        [
+          "intersection-order-physical-equality",
+          "True"
+        ],
+        [
+          "repeated-physical-equality",
+          "True"
+        ]
+      ]
+    },
+    {
+      "case": "list",
+      "observations": 8,
+      "closed_violations": 0,
+      "new_mu_violations": 0,
+      "comparisons": [
+        [
+          "intersection-order-physical-equality",
+          "True"
+        ],
+        [
+          "repeated-physical-equality",
+          "True"
+        ]
+      ]
+    },
+    {
+      "case": "pair-function",
+      "observations": 8,
+      "closed_violations": 0,
+      "new_mu_violations": 0,
+      "comparisons": [
+        [
+          "intersection-order-physical-equality",
+          "True"
+        ],
+        [
+          "repeated-physical-equality",
+          "True"
+        ]
+      ]
+    },
+    {
+      "case": "unequal-depth",
+      "observations": 8,
+      "closed_violations": 0,
+      "new_mu_violations": 0,
+      "comparisons": [
+        [
+          "intersection-order-physical-equality",
+          "True"
+        ],
+        [
+          "repeated-physical-equality",
+          "True"
+        ]
+      ]
+    },
+    {
+      "case": "arrow-catalog",
+      "observations": 8,
+      "closed_violations": 0,
+      "new_mu_violations": 0,
+      "comparisons": [
+        [
+          "intersection-order-physical-equality",
+          "True"
+        ],
+        [
+          "repeated-physical-equality",
+          "True"
+        ]
+      ]
+    },
+    {
+      "case": "missing-rigid-var-e",
+      "observations": 8,
+      "closed_violations": 0,
+      "new_mu_violations": 0,
+      "comparisons": [
+        [
+          "intersection-order-physical-equality",
+          "True"
+        ],
+        [
+          "repeated-physical-equality",
+          "True"
+        ]
+      ]
+    },
+    {
+      "case": "fun-unary",
+      "observations": 8,
+      "closed_violations": 0,
+      "new_mu_violations": 0,
+      "comparisons": [
+        [
+          "intersection-order-physical-equality",
+          "True"
+        ],
+        [
+          "repeated-physical-equality",
+          "True"
+        ]
+      ]
+    },
+    {
+      "case": "occurs-check",
+      "observations": 2,
+      "closed_violations": 0,
+      "new_mu_violations": 0,
+      "comparisons": []
+    }
+  ],
+  "source_trees": {
+    "cfta": "d5a5e2a9d7c2ec59ded139b13f3864fe3a42e6a0",
+    "cfta-generator": "db952caa7a823614d661b7ee5e1a1c090d26495b"
+  },
+  "boundary": "58 returned graph observations in8 fixed cases; not semantic closure, transient-allocation, or total-work proof"
+}
