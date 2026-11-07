@@ -13,6 +13,50 @@ marked diagnostic draft were added. Focused Lean proof checks and bounded
 current-source Haskell observations passed as described below. This is not
 a cold full build or full CI.
 
+## R119 active finding: required arguments bypass a size-two head ban
+
+Verified 2026-11-07 17:25 CET through the CURRENT PUBLIC Haskell API.
+Synthesis.Library.libraryAvoid documents: "With Nothing, the functions head
+no term of size two." Build a library with f :: Int -> Int and rule
+(["f"],Nothing). Query goal Int with REQUIRED x :: Int at size2.
+solutionsOfSize returns a representative that expand maps to f x.
+The reproducer uses the public library constructor, not a custom raw state.
+
+Controls in the same native process:
+- Required x, with the ban: membership of f x is Just True.
+- Component x, with the same ban and no required argument: Just False.
+- Required x, without the ban: Just True.
+All observations completed inside their10-second limits. This is a verified
+pruning-policy/documentation discrepancy. It is independent of R118's
+recursive timeout; it is NOT a termination counterexample.
+
+Reproducer: lean/repro/SynthesisRequiredArgumentAvoid.hs.
+Packet: lean/restart-evidence/20261107-synthesis-required-argument-avoid/.
+Source cfta tree d5a5e2a9d7c2ec59ded139b13f3864fe3a42e6a0;
+cfta-generator tree db952caa7a823614d661b7ee5e1a1c090d26495b.
+Local generator library build passed with GHC9.14.1 -O0 in the project-derived
+Nix+GMP shell. fourmolu formatted the reproducer. cabal-gild checked the
+unchanged generator Cabal file. No full suite or CI run is claimed.
+
+PENDING HASKELL FIX FOR EXTERNAL WORK: buildTerms applies libraryAvoid only
+in its size2 branch (Synthesis.hs756-763). Nonempty buildRelevant uses the
+generic split loop (781-789). A split with no required function argument
+reads termsFalse1, which admits f again. Enforce the documented size-two
+rule on this relevant route. Retain required-argument usage and the intended
+Just-rule behavior. NO PRODUCTION HASKELL FIX HAS BEEN MADE. Update the
+faithful source port when the Haskell repair lands. The current
+SourceSynthesisFirstOrderConstruction intentionally retains current behavior.
+
+R119 proof work is ACTIVE. The rigid type port (11 laws, commit4f8c152e2)
+and exact source selection/last-winner port (21 laws, commitf1779804b) are
+verified and pushed. Computable generalization (20 laws, sourcec134369b...)
+passed its actual Lake target and own-source report. Its commit follows.
+Selection containment, the raw FirstOrder worker and complete binder-body
+origin adapters remain under focused checks. These are constructor-instruction
+results. Native smart normalization, sharing and generated-intersection
+preservation remain open. The full R118 system objective below is unchanged.
+Runtime: /tmp/mcfta-synthesis-construction-20261107-1652/.
+
 ## R118 checked progress and largest gap
 
 EnumerationStateTraceAllocationBound proves an allocation cap for EVERY
