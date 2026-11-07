@@ -1,0 +1,154 @@
+import MicroCFTA.SourceRecursiveIntersectionLeafNode
+
+/-!
+# Actual closed-marker intersection with the default universe
+
+The source enters the Mu body before it resolves references. A closed leaf
+marker meets that open ordinary body without evaluating a child request.
+The result is closed. The actual optional Mu therefore returns it unchanged.
+The proof starts at the reserved empty domain and retains both real caches.
+It does not identify the result with the marker or classify catalog members.
+-/
+namespace MicroCFTA.SourceSynthesisUniverseMarkerCompletion
+open Cache InternedConstructorTemplates InternedNestedFacts InternedProbeProvenance
+open InternedFreshProbeKeys InternedBinderProtocol IntersectionFlatMemoKeyDomain
+open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionControl
+
+variable {Symbol Guard : Type}
+
+private theorem pair_right_cancel (first second third : Nat)
+    (same : pair first second = pair first third) : second = third := by
+  have lower := congrArg Prod.fst same
+  have upper := congrArg Prod.snd same
+  simp only [pair] at lower upper
+  omega
+
+private theorem leaf_pair_complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (emptyGuard : Guard) (conjoin : Guard → Guard → Guard) (fuel : Nat)
+    (domain : Interned DomainKey) (first second : Interned NodeKey)
+    (firstRows secondRows : List (EdgeValue Symbol Guard)) (firstDepth secondDepth : Nat)
+    (name : Reference) (state : Machine Symbol Guard) (facts : Facts state.heap)
+    (leaves : ∀ row ∈ firstRows, row.children = [])
+    (different : first.identity ≠ second.identity)
+    (fresh : pair first.identity second.identity ∉ domain.key.seen) :
+    ∃ value final,
+      execute emptyGuard conjoin (fuel + 2) domain
+        (.node first firstRows firstDepth []) (.node second secondRows secondDepth [name]) state =
+        .done value final ∧ Facts final.heap ∧ Available final.heap value ∧ value.free = [] := by
+  let left : Value Symbol Guard := .node first firstRows firstDepth []
+  let right : Value Symbol Guard := .node second secondRows secondDepth [name]
+  have noEmpty : hasEmpty left right = false := rfl
+  have noEmptyReverse : hasEmpty right left = false := rfl
+  have noReset : reset domain.key left right = false := by
+    change (([] : List Reference).isEmpty && [name].isEmpty && !domain.key.free.isEmpty) = false
+    rfl
+  have noResetReverse : reset domain.key right left = false := by
+    change ([name].isEmpty && ([] : List Reference).isEmpty && !domain.key.free.isEmpty) = false
+    rfl
+  have noSelf : closedSelf left right = false := by
+    change ((NodeRef.node first.identity == NodeRef.node second.identity) && true) = false
+    simp [different]
+  have noSelfReverse : closedSelf right left = false := by
+    change (_ && false) = false
+    exact Bool.and_false _
+  have freshReverse : pair second.identity first.identity ∉ domain.key.seen := by
+    simpa only [pair, Nat.min_comm, Nat.max_comm] using fresh
+  by_cases swapped : greater left right = true
+  · have reverseOrder : greater right left = false :=
+      SourceRecursiveIntersectionSchedule.swap_once left right
+        (.node first.identity) (.node second.identity) rfl rfl swapped
+    have selected : decision domain.key left right = .swap :=
+      swap_first domain.key left right noEmpty noReset noSelf swapped
+    have selectedReverse : decision domain.key right left = .ordinary := by
+      simp only [decision, noEmptyReverse, noResetReverse, noSelfReverse, reverseOrder,
+        Bool.false_eq_true, ite_false, left, right, identity, freshReverse, payload]
+    obtain ⟨value, final, done, finalFacts, available, closed⟩ :=
+      SourceRecursiveIntersectionLeafNode.node_leaf_complete emptyGuard conjoin
+        (execute emptyGuard conjoin fuel domain) secondRows firstRows state facts (Or.inr leaves)
+    have reverseDone : execute emptyGuard conjoin (fuel + 1) domain right left state = .done value final := by
+      change onNode emptyGuard conjoin (execute emptyGuard conjoin fuel) domain right left state = _
+      simpa only [onNode, selectedReverse] using done
+    refine ⟨value, final, ?_, finalFacts, available, closed⟩
+    change onNode emptyGuard conjoin (execute emptyGuard conjoin (fuel + 1)) domain left right state = _
+    simpa only [onNode, selected] using reverseDone
+  · have ordered : greater left right = false := Bool.eq_false_iff.mpr swapped
+    have selected : decision domain.key left right = .ordinary := by
+      simp only [decision, noEmpty, noReset, noSelf, ordered,
+        Bool.false_eq_true, ite_false, left, right, identity, fresh, payload]
+    obtain ⟨value, final, done, finalFacts, available, closed⟩ :=
+      SourceRecursiveIntersectionLeafNode.node_leaf_complete emptyGuard conjoin
+        (execute emptyGuard conjoin (fuel + 1) domain) firstRows secondRows state facts (Or.inl leaves)
+    refine ⟨value, final, ?_, finalFacts, available, closed⟩
+    change onNode emptyGuard conjoin (execute emptyGuard conjoin (fuel + 1)) domain left right state = _
+    simpa only [onNode, selected] using done
+
+/-- Five source kernel levels suffice for a closed nullary marker against the actual open-body Mu. -/
+theorem marker_universe_complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (emptyGuard : Guard) (conjoin : Guard → Guard → Guard)
+    (markerEntry bodyEntry universeEntry : Interned NodeKey)
+    (markerRows bodyRows : List (EdgeValue Symbol Guard)) (markerDepth : Nat)
+    (depth ordinary : Value Symbol Guard) (state : Machine Symbol Guard)
+    (valid : SourceRecursiveIntersectionKernel.Valid state)
+    (markerAvailable : Available state.heap (.node markerEntry markerRows markerDepth []))
+    (universeAvailable : Available state.heap
+      (.mu universeEntry (.node bodyEntry bodyRows 0 [.interned universeEntry.identity]) depth ordinary))
+    (leaves : ∀ row ∈ markerRows, row.children = []) :
+    ∃ value final,
+      execute emptyGuard conjoin 5 IntersectionEmptyDomain.emptyDomain
+        (.node markerEntry markerRows markerDepth [])
+        (.mu universeEntry (.node bodyEntry bodyRows 0 [.interned universeEntry.identity]) depth ordinary) state =
+        .done value final ∧ Facts final.heap ∧ Available final.heap value ∧ value.free = [] := by
+  let marker : Value Symbol Guard := .node markerEntry markerRows markerDepth []
+  let storedBody : Value Symbol Guard := .node bodyEntry bodyRows 0 [.interned universeEntry.identity]
+  let universeValue : Value Symbol Guard := .mu universeEntry storedBody depth ordinary
+  have bodyAvailable : Available state.heap storedBody :=
+    universeAvailable.children storedBody (by simp [InternedProbeProvenance.children, storedBody])
+  have different : markerEntry.identity ≠ bodyEntry.identity := by
+    intro same
+    have equal := resident_identity_unique state.heap valid.1.coherent marker storedBody
+      markerAvailable.resident bodyAvailable.resident markerEntry bodyEntry rfl rfl same
+    have impossible : ([] : List Reference) = [.interned universeEntry.identity] := congrArg Value.free equal
+    cases impossible
+  have bodyDifferent : bodyEntry.identity ≠ universeEntry.identity := by
+    intro same
+    have impossible := resident_identity_unique state.heap valid.1.coherent storedBody universeValue
+      bodyAvailable.resident universeAvailable.resident bodyEntry universeEntry rfl rfl same
+    change Value.node bodyEntry bodyRows 0 [.interned universeEntry.identity] =
+      Value.mu universeEntry (.node bodyEntry bodyRows 0 [.interned universeEntry.identity]) depth ordinary at impossible
+    cases impossible
+  let entered := SourceRecursiveIntersectionEnvironment.enter state.domains
+    IntersectionEmptyDomain.emptyDomain.key marker universeValue markerEntry.identity universeEntry.identity
+  let afterEnter : Machine Symbol Guard := {state with domains := entered.2}
+  have enteredKey : entered.1.key = SourceRecursiveIntersectionDomain.extend
+      IntersectionEmptyDomain.emptyDomain.key
+      ((SourceRecursiveIntersectionEnvironment.bindings marker universeValue).map Prod.fst)
+      (pair markerEntry.identity universeEntry.identity) :=
+    (IntersectionEmptyDomain.make_correct state.domains valid.2 _).2.1
+  have fresh : pair markerEntry.identity bodyEntry.identity ∉ entered.1.key.seen := by
+    rw [enteredKey]
+    intro present
+    rcases (SourceRecursiveIntersectionDomain.extend_seen _ _ _ _).mp present with same | old
+    · exact bodyDifferent (pair_right_cancel markerEntry.identity bodyEntry.identity universeEntry.identity same)
+    · cases old
+  obtain ⟨value, final, bodyDone, finalFacts, available, closed⟩ :=
+    leaf_pair_complete emptyGuard conjoin 2 entered.1 markerEntry bodyEntry markerRows bodyRows
+      markerDepth 0 (.interned universeEntry.identity) afterEnter valid.1 leaves different fresh
+  have selected : decision IntersectionEmptyDomain.emptyDomain.key marker universeValue = .rightMu := by
+    simp [decision, hasEmpty, reset, closedSelf, greater, compareValue, tag, identity, payload,
+      IntersectionEmptyDomain.emptyDomain, IntersectionEmptyDomain.emptyKey,
+      marker, universeValue, storedBody, Value.referenceOf, Value.free]
+    decide
+  refine ⟨value, final, ?_, finalFacts, available, closed⟩
+  change onNode emptyGuard conjoin (execute emptyGuard conjoin 4)
+    IntersectionEmptyDomain.emptyDomain marker universeValue state = _
+  unfold onNode
+  rw [selected]
+  change (execute emptyGuard conjoin 4 entered.1 marker storedBody afterEnter).bind
+    (fun value after => construction
+      (SourceRecursiveIntersectionMaybeMu.maybeMu
+        (pair markerEntry.identity universeEntry.identity) value after.heap) after) = .done value final
+  rw [bodyDone]
+  simp only [Result.bind, SourceRecursiveIntersectionMaybeMu.unused _ value final.heap (by simp [closed]),
+    construction]
+
+end MicroCFTA.SourceSynthesisUniverseMarkerCompletion
