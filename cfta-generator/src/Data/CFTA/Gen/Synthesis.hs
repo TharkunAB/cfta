@@ -232,7 +232,10 @@ data Library = Library
     , libraryAvoid :: [([Text], Maybe [Text])]
     {- ^ Pruning rules for terms of size two: a function of the first list is
     not applied to a component of the second list, such as @head@ to @Nil@.
-    With 'Nothing', the functions head no term of size two.
+    With 'Nothing', the functions head no term of size two. As in Hectare,
+    the rules do not prune a term of size two that applies a function to an
+    argument that the term must use: with the argument @x@ in the query,
+    @f x@ stays.
     -}
     , libraryEncoding :: Encoding
     -- ^ How the automaton encodes the types.
