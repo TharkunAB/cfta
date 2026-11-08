@@ -1,3 +1,285 @@
+# Current checkpoint: sound actual tuple decisions and resource phases
+
+Updated 2026-11-08 04:16 CET. Goal ACTIVE. R134 made PROGRESS.
+Branch formalize. Previous checkpoint ed23604893730da7d3b85dda7e8c96e73a53c53d
+is R133, canonical board seq983. Keep the FULL original objective. Keep the
+optimized interned core PRIMARY and older constructor/equality proofs
+SECONDARY. Preserve all proofs, counterexamples, repairs, marked drafts and
+unrelated .hypha/. Regular formalize pushes are explicitly authorized.
+Do not pause the goal or ask whether to continue.
+
+Formalize was pulled before work at03:52 CET. Main and formalize were
+refreshed again at04:14 CET. Main remains
+bd5a406a6a3f84b7e3ae0906082783911509df83, an ancestor.
+Seven verified source/check commits extend R133 through
+f4e1d3f2eac82befaf73f78d7d6707b5049c15f2. They add SEVEN modules and
+44 NEW public laws. All seven actual Nix/Lake targets and strict own-source
+reports pass. Every public theorem has an explicit #check and axiom report.
+All real qualified names match the complete public declaration sets,
+including the nested Numeric namespace. Only propext, Classical.choice and
+Quot.sound occur. No existing proof source or Haskell source changed.
+The final documentation commit, push, canonical board readback and exact
+hashes are in publication.json and RESUME.json under:
+/tmp/mcfta-tuple-semantics-20261108-0356/
+The committed source/check packets reproduce without /tmp. This section
+supersedes historical descriptions of missing tuple graphs, semantic/table
+coverage, fourth-memo correctness, probe/annotation/global-read preservation
+and the zero-charge heap forecast. It does not supersede their native,
+whole-driver or original-input coverage limits.
+
+## Strongest new claim: conservative actual tuple-worker calls
+
+SourceCurrentConjunctionTupleMemo.finite takes an initial physical heap and
+equality cache, Ready, an available query and a valid initial fourth memo.
+It DERIVES a completed call graph, its actual returned state and saved memo,
+physical Effects, saved-memo Correct, AnswerSound and Extends of all old
+memo entries. No completed body or future-state supplier is passed.
+The call graph corresponds to the ACTUAL executable TupleWorker. R133
+stable completion and R134 graph replay retain the same output and complete
+state at sufficient lower projection/read bounds.
+
+In simple technical terms: under those internal initial invariants, a true
+answer from the actual raw-tuple worker proves the queried formal language
+empty. False makes no acceptance or nonemptiness claim. Warm hits retain
+the state and memo exactly. Misses insert only completed sound answers.
+TupleMemo.actual_verified attaches the law to a literal successful physical
+call. TupleMemo.call_outcome covers ALL literal outcomes. A failed outcome
+retains Correct for the ORIGINAL memo at its actual returned heap. A
+successful outcome returns Correct, AnswerSound and old-entry Extends.
+All outcomes retain Ready, original constructor records and equality growth.
+
+These are internal heap premises. Ready.fields includes actual successful
+original guard loads. R133's general Label constructor role theorem alone
+does not discharge that field-load cache invariant. Derive it through the
+actual initialization/preparation path. Do not replace it with a final
+validity, closure, guard-availability or OriginalInput oracle.
+The selected allocated callback STILL uses the older key-charged worker.
+This new semantic claim is about the checked replacement. It is not yet a
+claim about the selected full reducer, complete driver or native Haskell.
+
+## Actual graphs, full coverage and exact memo effects
+
+SourceCurrentConjunctionTupleExecution adds TEN laws plus four graphs:
+Admission, Run, Decision and concrete Call. Admission retains actual
+Exposures. Overflow stores only the actual raw sample overflow and exposure
+state. Zero proves the FULL raw tuple list is empty. Positive records the
+FULL raw count=predecessor+1, charge<=budget and actual Tuples processing of
+the full list. Admission.positive_rows and zero_rows expose full legacy
+Rows graphs, without running exposures again.
+
+Run has six branches: done, empty, skip, overflow, zero and positive.
+Overflow recurses on the old suffix at budget0 without table insertion.
+Zero inserts its empty rows and keeps the same budget. Positive inserts its
+actual rows, prepends requirements and subtracts the actual raw charge.
+Decision retains the open shortcut or the actual finaltable.length+1 grow.
+Call retains the fourth-memo hit/miss and exact returned memo.
+admission_graph/explore_graph/decision_graph/call_graph derive these graphs
+from literal successful executable observations. Matching complete laws
+replay each graph as a stable exact observation. Legacy graphs are retained;
+no old/new physical execution equality is asserted.
+
+SourceCurrentConjunctionTupleSoundness adds FIVE laws in the REAL namespace
+SourceCurrentConjunctionTupleExecution: Admission.effects, Run.verified,
+entered_sound, run_answer_sound and Decision.verified. They derive actual
+physical effects, final TableReady and full semantic Covered from honest
+initial readiness/table/pending/coverage. entered_sound derives empty-table
+completion and coverage internally. Zero and positive reuse the full Rows
+coverage proof. Overflow preserves the existing table after actual exposure.
+The fixed point uses actual final table length. No table.length<=tuplebudget
+claim is retained. Decision.verified uses the same conservative AnswerSound
+predicate as the fourth memo. TupleMemo adds FIVE laws that attach that
+predicate to actual calls and all returned outcomes.
+
+## All outcomes: probes and annotations; actual global logical reads
+
+SourceCurrentConjunctionTupleWorkerProbes adds THREE laws: explore_probes,
+decision_probes and call_probes. Every completed OR failed outcome retains
+the clean stored recursive-probe heap. Each reached admission derives the
+next Ready, probe heap and operand availability internally. Warm hits and
+open decisions retain their exact heap. This is not native demand evidence.
+
+SourceCurrentConjunctionTupleAnnotationOutcome adds FOUR laws:
+admission_heap, explore_heap, decision_heap and call_heap. They preserve an
+arbitrary initial annotation-heap predicate at the EXACT returned heap of
+EVERY outcome. Admission retains the exact lower ready/available/closed
+premises. Exploration derives closedness after the actual skip test and
+future operands from full Rows graphs. No future annotation, top-closure or
+probe premise is inserted. The old lower projection/tuple laws require no
+probe premise for this property; the independent probe law remains proved.
+
+SourceCurrentConjunctionTupleGlobalMemos adds FOUR laws and AdmissionReads,
+RunReads, DecisionReads and CallReads. The actual graph derives saved global
+tables, EndpointMemoGateTrace.Valid at the returned heap, Extends for the
+unfolding table, and exact equality of the two query tables. Zero and
+overflow record ONLY actual exposure reads. Positive admission records its
+full Rows reads. A fourth-memo hit performs no body reads. A miss records
+only the actual decision. The module reuses existing lower read receipts
+and their proofs. No future memo table or returned Valid oracle is supplied.
+These are logical read receipts. They do not establish host thunk forcing,
+pending publication, lazy demand or native table execution.
+
+## New heap forecast covers zero charge and overflow
+
+SourceCurrentConjunctionTupleWorklistResources adds THIRTEEN laws. Its
+Numeric.envelope is executable Nat recursion over raw budget, initial
+pending length and an initial scalar. The concrete forecast uses the old
+fixed guard-alphabet step S and rowWidth H. If B>0 and the current pending
+length is n+1, it computes R=iterate S(n+1,r), then recurses at B-1 with
+pending bound n+B*H(R) and resource R. At budget0 or pending length0, it
+returns the initial scalar. Every positive admission spends at least1.
+Every zero prefix shortens the pending suffix before a positive admission.
+Overflow pays for exposure and then the source budget0 skips the suffix.
+
+The proof derives monotonicity in budget, queue length and scalar, and the
+zero/positive schedule inequalities. positive_generated derives the actual
+requirements.flatten.length bound from the actual full raw count and lower
+tuples_bound. bound proves Fits of the forecast at the actual returned heap
+of all six Run branches. initial_bound DERIVES the finite guard alphabet
+from the original physical heap and Facts inside Ready. It takes only
+initial Ready, pending availability, initial Fits and initial operand-width
+bounds. There is no future resource or finite-carrier supplier.
+
+LIMIT: this is a HEAP RESOURCE envelope. It does not yet derive uniform
+original caller projection/read bounds, equality-cache allocation counts or
+TOTAL WEIGHTED WORK. The concrete S/shapeThrough helpers already use
+noncomputable finite guard combinations. The generic Nat recurrence is
+executable, but its concrete forecast retains that existing noncomputable
+boundary. Do not advertise this as an executable cost estimator or native
+runtime bound. This does not finish the original-input whole-system bound.
+
+## Remaining selected-worker migration and biggest gap
+
+The selected SourceCurrentAllocatedConjunctionWorker.call STILL invokes
+SourceCurrentConjunctionWorker, whose budget charges keys/admissions.
+Haskell Enumeration.hs612-619 charges raw matching tuples before equality
+rejection and projection; emptinessBudget is10000 at664. The new physical
+TupleWorker now has stable completion/success uniqueness, actual graphs,
+semantic coverage/soundness, fourth-memo verification, all-outcome Ready,
+probe and annotation effects, global logical reads and a zero-charge heap
+forecast. All those attachments are checked. Do not list them as missing.
+
+Next work before a source-faithful selected callback:
+
+1. Attach uniform projection/read ceilings and equality-operation/profile
+   bounds to the new forecast. Port the old WorklistResources numeric replay,
+   ConjunctionNumeric, AlphabetBounds and CallerNumeric structure. Start at
+   pending length1 for the decision. Use actual finaltable.length+1 for grow.
+   Keep heap size, lower fuel and weighted total work separate.
+2. Lift new global-read receipts to AllocatedReadValidity and Probe layers,
+   and prove the complete checked Caller/Post/Frame contracts using the new
+   Call. Derive required initial invariants from actual caller state.
+3. Switch the allocated wrapper and migrate all immediate consumers. Keep
+   arguments, Outcome types, fourth-memo hits, failure retention,
+   advancePhysical, native tables and domain-cache retention. call_done and
+   call_failed must expose the NEW physical call. Old graph statements with
+   budget-1/grow(budget+1) are not true of zero/overflow steps. Keep legacy
+   proofs separate and avoid importing the new memo back through old Worker.
+4. Preserve the old WEAKER low-level allocated_call_effects contract with a
+   weaker physical-effects proof. The new Ready-based theorem cannot silently
+   replace it. Selected Context supplies Ready, but the old public low-level
+   API has weaker assumptions. Complete affected direct consumers and checks.
+
+R133 records the exact direct-consumer inventory. Retain its import-cycle
+and weak-premise warnings. No old/new physical execution equality should be
+claimed: raw-tuple charge changes exhaustion, table contents and states.
+
+The BIGGEST gap remains joint Program/constrained-Type progress at ALL
+reached states and ONE original-input/request/ACTUAL-caller bound for BOTH
+the selected optimized worker AND COMPLETE enumeration driver. Include all
+siblings and generated, reached, intermediate, failing, rejected, returned,
+subsequent and native states. Propagate R133's original Label role certificate
+through actual merge, child, Parent and driver calls. The local Required and
+actual selected-footprint laws remain checked components, not global closure.
+The R131 current-model2-to4 height receipt still refutes transparent-height
+descent on its checked prefix. It does not prove nontermination or native
+busy recurrence. Preserve it when the selected callback changes, and verify
+its model/version boundary explicitly.
+
+Native demand remains open. The physical worker still exposes ALL operands
+eagerly from left to right. Native foldr extension demands the seed, then
+inner operands as needed. Empty seeds and early exhaustion can avoid later
+reads. A pull cursor must sample the first budget+1 raw matching tuples with
+actual demanded nodeEdges reads, exact states and faults. Taking a prefix
+after eager exposure does not prove native product work or state/failure
+correspondence. Logical global-read receipts do not close that boundary.
+
+## Full goal and strongest general original-input composition
+
+Retain exact accepted terms for every NODE-COUNT size, exact size order and
+counting, and BOTH SIGNED rank/unrank inverses through ACTUAL sparse
+execution. Cover ALL Sized routes, fallback/failure, productive infinite
+queries, lazy tables/maps/sets, cache/hash, Word/Int/allocation, wrappers,
+lookup/Curried/Specftacular. Do not invent a size parameter for size-free
+enumerateOutUVarWith or enumerateUntil'. Do not finish with a caller-success,
+body/worker/fuel/resource, validity, OriginalInput, closure, finite-carrier,
+lookup or Unselected oracle. Track the original-input discharge of every
+internal premise. Initial-only, U-only and success-only work is insufficient.
+
+R130 remains the strongest general ORIGINAL-INPUT composed completion:
+original Library/Query/SIGNED request -> actual constructor -> COMPLETE stable
+merge at an internal comparison bound, same result/cache, closed/NoNewMu,
+prefix-height<=sizeOf emitted syntax+1; then EVERY actual merged-row forest
+and finite signed path request derives stable Required in the ACTUAL returned
+merge heap at depth2*sizeOf Needed+1 plus an internal reader bound, SAME
+forest/cache, Keeps/Values/closed. Those row calls start independently from
+the same heap. They are not a sequential all-sibling reducer or driver.
+R133 adds all accepted original Label construction roles. R134 adds sound
+actual tuple calls from internal initial invariants. Keep those scopes clear.
+
+## FINDINGS for external Haskell work
+
+No production Haskell source changed in R134. No new Haskell defect or repair
+was established. No new native probe, broad Haskell suite, benchmark or CI
+run occurred. Main's LPO fix remains incorporated. Existing external
+ownership and the WITHDRAWN PR203 behavior-change recommendation remain
+below; remote PR202/203 state was not refreshed.
+
+Repair the Lean selected-worker attachment and its remaining proofs. Do not
+change Haskell raw-tuple accounting to match the old key-charged model.
+Preserve zero-charge behavior, overflow, rejected-tuple charge, memo hits,
+exact failures and native lazy demand. This checkpoint requests no new
+external Haskell behavior change. All prior Haskell findings remain below.
+
+## Verification, /tmp and restart
+
+R134 has SEVEN source/check commits, SEVEN NEW modules and44 NEW public
+laws. All actual project Nix/Lake targets pass. Strict own-source reports
+check warnings as errors, every manual public theorem, exact real qualified
+names and standard axioms. The resource packet now checks nested Numeric
+names correctly. No existing proof, evaluation cap, algorithm budget,
+compiler memory/swap limit or queue concurrency changed. ROOT alone ran
+serial compiler jobs under the established4GiB/swap0 cap. Peak1945MiB was
+the first cold graph attempt. Later checks stayed below300MiB. All child
+tasks and heavy jobs finish before publication. Only unrelated .hypha/ stays
+untracked after the checkpoint.
+
+At04:14 readable allocated /tmp was20652032B (about19.7MiB), excluding five
+protected unreadable paths. This runtime used61440B. Available filesystem
+space was263872573440B (about245.8GiB). No deletion was needed or performed.
+No source copies, build trees, archives or large evaluation dumps were
+created in /tmp. Keep only small scripts, manifests and diagnostic text.
+The final live audit is in tmp-audit.json. Check packets reproduce from
+committed source without /tmp. Preserve protected paths.
+
+Runtime /tmp/mcfta-tuple-semantics-20261108-0356 contains verified-modules.json,
+proof-commits.json, heavy-peaks.tsv, doc-tail-manifest.json and final
+publication.json/RESUME.json. write-checkpoint.py is ALREADY APPLIED ONCE
+after this section is written. DO NOT rerun it. The new shared prefix
+preserves the entire R133 shared prefix and every older file-specific tail
+exactly. The manifest checks lengths and hashes.
+
+On restart: read this current section and CONTEXT.md. Refresh upstream before
+edits; inspect live branch/worktree/main and goal. Preserve unrelated dirt.
+Read the msg-board skill and shared thread
+1c1333d7-46ea-4f46-a9a1-b5d13e577337. Match final branch metadata and canonical
+readback in RESUME.json. If /tmp is gone, use committed source/check packets
+and live git state. Next: uniform numeric replay and allocated checked caller
+attachment, then selected switch with all affected contracts. Propagate
+joint Program/Type roles from original source in parallel. Keep the FULL
+goal active. Do not infer completion from theorem totals or passing targets.
+
+---
+
 # Current checkpoint: general Label roles, joint Required origins, and tuple completion
 
 Updated 2026-11-08 03:45 CET. Goal ACTIVE. R133 made PROGRESS.
