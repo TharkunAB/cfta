@@ -1,5 +1,4 @@
-import MicroCFTA.InternedFreshOrdinaryProbeHeap
-import MicroCFTA.InternedFreshOrdinaryUnfoldCompletion
+import MicroCFTA.SourceCurrentConjunctionProbeBirthCore
 import MicroCFTA.SourcePruningTemplates
 import MicroCFTA.SourceCurrentAllocatedPartialInvariant
 
@@ -7,41 +6,13 @@ set_option autoImplicit false
 open scoped Classical
 
 /-!
-# Filtered probe births in actual stored unfolding
+# Current caller inputs for stored-unfold probe births
 
-The actual stored executor uses the source builder. Its initial context and
-resident replacements supply that builder's inputs. New nested binders retain
-the actual filtered probes. Native query prefixes remain a separate obligation.
+The caller Context supplies the generic unfolding law's initial facts.
+The imported generic law retains its existing public qualified name.
 -/
 namespace MicroCFTA.SourceCurrentConjunctionProbeBirth
-open Cache InternedConstructorTemplates InternedRecordCoherence InternedProbeProvenance
-open InternedStoredSubstitution (Environment Replacements leaves input encode inputs_available)
-
-/-- Actual stored unfolding retains old probes and derives clean probes for new binders. -/
-theorem unfold_heap {Symbol Guard : Type} [DecidableEq (EdgeKey Symbol Guard)]
-    {captures : List (Value Symbol Guard)} (value : Value Symbol Guard) (state : State Symbol Guard)
-    (context : InternedFreshOrdinaryContext.Context state captures)
-    (probes : InternedFreshOrdinaryProbeHeap.Heap state) (available : Available state value) :
-    InternedFreshOrdinaryProbeHeap.Heap
-      (InternedFreshOrdinaryStoredSubstitution.unfold value state).state := by
-  cases value with
-  | empty | reference | node | union => exact probes
-  | mu entry body depth ordinary =>
-    let environment : Environment Symbol Guard := fun name =>
-      if name = .interned entry.identity then some (.mu entry body depth ordinary) else none
-    have replacements : Replacements state environment := by
-      intro name replacement found
-      dsimp only [environment] at found
-      split at found
-      · cases found
-        exact available
-      · cases found
-    have inputs := inputs_available body environment state
-      (available.children body (by simp [children])) replacements
-    have sourceContext : InternedFreshOrdinaryContext.Context state ((leaves body).map (input environment)) :=
-      ⟨context.normal, inputs, context.profiles, context.freeNames⟩
-    exact InternedFreshOrdinaryProbeHeap.build_heap (encode (leaves body) [] body)
-      ((leaves body).map (input environment)) state sourceContext probes
+open InternedConstructorTemplates InternedProbeProvenance
 
 local notation "Symbol" => SourcePruningTemplates.Symbol
 local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula

@@ -1,5 +1,5 @@
 import MicroCFTA.SourceCurrentOpenExposureFields
-import MicroCFTA.SourceCurrentConjunctionProbeBirth
+import MicroCFTA.SourceCurrentConjunctionProbeBirthCore
 import MicroCFTA.SourceCurrentConjunctionRowsWorker
 
 set_option autoImplicit false
