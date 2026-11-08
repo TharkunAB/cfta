@@ -1,3 +1,152 @@
+## R154: Type routes through the actual shared edit traversal
+
+Updated 2026-11-08 13:33 CET. The full goal remains ACTIVE. The previous goal turn
+made verified progress. Five new modules add twenty-two checked public laws.
+No existing proof source or Audit import changes in this checkpoint.
+
+The current actual EditNode, EditChildren, EditRows and EditList graphs now
+retain Type-origin provenance through the same shared execution. Each node
+leaf derives its input annotation from the empty relative TypePath. The
+caller no longer supplies inputTyped for each leaf of the traversal.
+Selected subtries derive their retained leaf witnesses from Populated and
+the actual lookup. Generic node exposure also requires HasLeaf. An empty
+root trie has a vacuous path condition and cannot justify recursive input
+annotation. The list entry permits that empty trie and preserves its input.
+
+The proof preserves EVERY existing TypePath and ForestPath. It does not
+only preserve the selected class paths. This result supplies structural
+routes needed by later classes. Child traversal preserves exact positions.
+Every rebuilt row retains an original row's raw guard and all child routes.
+Actual canonical node construction preserves those routes through its
+surviving rows and exact cache readback. Program parent guards need no
+Type-origin annotation. No global Type annotation on the mixed heap is used.
+
+Actual construction and recursive exposure retain the joint shared state:
+native readiness, costs, the physical Merge memo, conditional typed Merge
+laws, and every exact historical target with availability, closedness and
+its Type-origin annotation. Heap extensions transport earlier values. Head
+exposure uses the input annotation and causal Mu store. It does not assume
+that an exposed future result has the required annotation. The same facts
+hold at the literal returned shared state.
+
+Original application and filter class adapters use actual original row
+construction and Program syntax. Every captured endpoint route comes from
+the original source guard. Actual class membership and a coherent record
+derive the compiled trie routes. Population comes from the actual compiler.
+These adapters edit the same original child forest from the initial cold
+native state, empty Merge memo and empty target slots. They return available
+closed values and all original forest routes. No leaf callback, intermediate
+typed-value supplier or future cache law is an input.
+
+The boundaries remain explicit. Generic traversal consumes its initial
+shared readiness, captured available closed forest and structural routes,
+current available closed input and retained-path certificates. Original
+adapters retain initial cold physical Good, record coherence, actual source
+class membership and a completed actual EditList graph. They establish no
+worker completion, failed-prefix invariant or original-to-arbitrary-warm
+state correspondence. Type-origin guard provenance is not the complete
+generated Type grammar or all reached joint Type/Program role closure.
+
+Verified source targets:
+- `SourceCurrentHereditaryTypeEditPlan`: 9 laws. SHA256 `cf038f650d20b471cd4f236f47bcf5a32f87f47b459a187dcdadf23a5794cc84`.
+- `SourceCurrentHereditaryTypeRouteConstructors`: 4 laws. SHA256 `82bc224c7ee93ed3ebf095bce393152adf41ee95239b5f94e4ee36079961e58e`.
+- `SourceSynthesisNativeTypeSharedEdit`: 4 laws. SHA256 `9503fa7629b5943155ac2eb812b465cfe022c533f61d15f540290cf4b110d806`.
+- `SourceSynthesisNativeTypeSharedHeap`: 3 laws. SHA256 `fd3d262c4181c4670fb2fd00d3a1e1467e5f07b4b90ffc0b6fa8889bdf3edf06`.
+- `SourceSynthesisOriginalTypeClassEdit`: 2 laws. SHA256 `8388256e731a6fd33ecbee5aea9598794aba73c29a3533c96ab88a10bcc85679`.
+
+Reviewable proof commits based on `b8c8681b5c614a672ebf79f8ac747921f205633e`:
+- `03060609bc9a39214bcaa09fd63149f0d2cd412b`: SourceCurrentHereditaryTypeRouteConstructors.
+- `6a2bfd6f35310e03520b9ced88c13c3578b440c2`: SourceCurrentHereditaryTypeEditPlan.
+- `2f2098c3c90900b6351db78cd62a405d7492979d`: SourceSynthesisNativeTypeSharedHeap.
+- `b446fe2ecb143dc2f23f25251ce711618ac510db`: SourceSynthesisNativeTypeSharedEdit.
+- `ab9845d45a6f15091c5ee1ad50e5fba7e96374cc`: SourceSynthesisOriginalTypeClassEdit.
+
+Each target has a small reproducible packet in
+`lean/restart-evidence/20261108-<slug>/`. Actual project Nix/Lake compilation,
+strict own-source warnings, every public name and namespace, standard axioms,
+and final source hashes pass. Use the existing serial 4 GiB and zero-swap
+heavy-management wrapper. All owned compiler handles are terminal at
+publication. The R139 full Audit baseline remains recorded, not rerun.
+
+The general original-input endpoint remains R137
+`SourceSynthesisOriginalTupleCall.request`. Accepted signed FirstOrder
+construction derives initial Context, strict Program roles and the actual
+stable tuple-call/read receipt with its full modeled postcondition.
+It does not establish complete worker/driver execution or native demand.
+R152's mixed Required proof retains the final Mu store and selected strict
+Program role with annotated fields. Its entry field classification still
+needs a reached-state discharge. R153 retains historical target slots and
+derives successful executable target/force/leaf graphs from Type state
+facts and reached physical range checks. R154 removes the per-leaf input
+annotation supplier at the actual enclosing graph consumer.
+
+Next proof work:
+
+1. Prove Type preservation for the CURRENT
+   `SourceCurrentAllocatedClassPass.Fold`. Its tail executes first. The head
+   class captures the tail's returned forest, rather than the first forest.
+   Transport the head's original routes through the tail's ForestRoutes.
+   Reset only local target slots with NativeTypeSharedState.initial. Retain
+   the returned native state, costs and both warm Merge stores. Expose the
+   literal Class.edit EditList, derive compiled_forest_paths and population,
+   apply SharedEdit.list, and compose Extensions and ForestRoutes. Derive
+   coherence and source membership from actual Scan receipts. No supplied
+   Retained or future route supplier is needed. Handle literal Pass empty
+   propagation after the fold; unchanged and erased Empty values preserve
+   routes. Do not reuse the original cold certificate at later class entries.
+2. Attach actual executable class/fold returns without a supplied completed
+   graph or language inventory for these Type facts. ClassWorkerActual's
+   existing attachment still takes semantic inventory, ranges, domains,
+   memo-language and probe facts. Type readiness does not establish them.
+   Derive the actual post-Scan/Required mixed Type/Program input facts.
+   R152/R153/R154 supply components, not that reached-state discharge.
+3. Combine the existing class Program-role laws with annotated field
+   preservation. TypePath [0] plus an actual empty-or-ordinary rebuild can
+   derive AnnotationFields by route inversion. Preserve strict full-guard
+   Program roles without annotating the Program guard. Extend joint facts
+   through Parent, forcing, failed/rejected prefixes, returned values and
+   subsequent callers. Derive full generated Type grammar and scopes.
+4. Derive ONE original-input/request/actual-caller resource bound for BOTH
+   the selected optimized worker and COMPLETE enumeration driver. Include
+   all siblings and all generated, reached, intermediate, failed, rejected,
+   returned, subsequent and native states. Include Word/Int/key/allocation
+   safety. The R146 normalized path3-to4 source boundary still blocks a
+   maximum-initial-path rank. Top descent remains a segment result. Do not
+   substitute supplied fuel, ranges, completed graphs, closure, carrier,
+   final validity, future success or OriginalInput certificates for this goal.
+5. Complete faithful native lazy pull-cursor demand, arity/raw-match
+   suspension, size order, stop and fault behavior. Derive exact accepted
+   terms by NODE COUNT, exact count/order, BOTH SIGNED rank/unrank inverses
+   through actual sparse execution, and every Sized/fallback/failed/productive
+   infinite path. Include tables/maps/sets/cache/hash/native Word/Int,
+   allocation, wrappers, lookup, Curried and Specftacular. Do not invent sizes
+   for size-free enumerateOutUVarWith or enumerateUntil'. The recorded tuple
+   demand difference concerns order only. It establishes no cache inequality,
+   nontermination or Haskell defect. No Haskell edit or established Haskell
+   fix occurred here. Record any future Haskell fix in root FINDINGS as well.
+
+Restart and publication:
+- Branch `formalize`; pushes remain explicitly authorized. Preserve `.hypha/`.
+- Main remains `bd5a406a6a3f84b7e3ae0906082783911509df83`, already an ancestor.
+  Fetch exact main/formalize refs before further proof work.
+- Runtime: `/tmp/mcfta-type-edit-routes-20261108-1317/`. Read RESUME.json,
+  publication.json, canonical-board-readback.json and terminal-audit.json.
+  They record the exact final pushed/fetched head, board sequence, coverage,
+  terminal process state, source hashes, historical bytes and current /tmp.
+- The final publication covers all 28 changed tracked files: five new proof
+  sources, their four-file packets and these three root documents. Historical
+  document bytes remain exact. The full goal stays active.
+- Keep one ROOT compiler at a time under the existing 4 GiB, zero-swap cap.
+  Reuse the actual returned handle after a yield. Do not change concurrency.
+  No broad Audit rerun is needed after these focused targets pass.
+- Continue to measure /tmp. Keep only small replay scripts, hashes and compact
+  reports. No large proof reports or build archives are required. Current
+  usage remains in the tens of MiB. No cleanup is needed for this checkpoint.
+
+The older checkpoint text below remains history. This R154 entry supersedes
+its immediate next-step instructions. Retain every earlier source repair,
+accepted counterexample, rejected shortcut and marked draft.
+
 ## R153: historical Type slots and actual shared-worker returns
 
 Updated 2026-11-08 13:07 CET. The full goal remains ACTIVE. The previous goal turn
