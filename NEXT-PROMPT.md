@@ -1,3 +1,152 @@
+# Current checkpoint: R150 Type paths through the actual seeded class fold
+
+Updated 2026-11-08 12:17 CET. Goal ACTIVE. R150 made PROGRESS. Branch formalize.
+Runtime: /tmp/mcfta-type-seeded-flow-20261108-1158/RESUME.json.
+Parent: c8c56c6e82a7011601621ee089c82c25a0392b27 (R149).
+Main bd5a406a6a3f84b7e3ae0906082783911509df83 remains incorporated.
+
+FOUR new modules and TEN public laws pass actual Nix/Lake, strict
+own-source reports, exact public names, standard axiom reports and final
+source hashes. Existing Lean sources, production Haskell and Audit imports
+are unchanged. R139 full Audit remains a prior baseline, NOT rerun for
+these modules. The previous goal turn was PROGRESS: R149 was verified and
+pushed. The existing Plain endpoints remain available.
+
+## Structural input Type routes
+
+SourceCurrentHereditaryTypePaths has THREE laws. TypePath permits any
+actual residual path once the input value has the annotation predicate.
+An ordinary prefix supplies routes only for children selected by the
+literal signed child index. Program guards and siblings stay unrestricted.
+ForestPath requires all roots only for the empty path; a nonempty path
+requires a route only at the selected root. These are structural INPUT
+facts. They do not assert a future projection result or callback validity.
+
+node, rows and forest follow the SAME actual Project, ProjectRows and
+Forest graphs. They derive the returned guard annotation and conditional
+Mu store from incoming semantic readiness, available closed inputs, the
+incoming conditional store and structural routes. The row proof recurses
+on the actual tail edge list. Calls used inside it are induction
+hypotheses derived from the input routes, not external body-result laws.
+No CostHeap is needed for this annotation layer. Unannotated Program Mu
+or stored-union prefixes have no new route constructor. An already
+annotated Type Mu or union uses the existing hereditary projection law.
+Generic strict Program roles alone do not discharge these routes.
+
+## The actual operand carries warm state
+
+SourceSynthesisNativeTypeOperand.operand consumes the literal
+SourceCurrentAllocatedSeededQuery.Operand. The actual projection retains
+its exact returned heap, unchanged equality operations and native tables.
+The structural route derives its annotation and updated MuStored.
+ProjectionCosts and OpenProjectionFields supply its actual physical
+Effects. UniversalStore.advance retains the native memo laws for every
+source and uses the actual new constructor store. Scope and Idle remain
+at the same unchanged memo tables. Closedness aligns the existing source
+projection completion to the SAME actual graph by uniqueness.
+
+The result contains joint Ready, CostHeap, machine Extension, availability,
+result.free=[] and TypeOrigin annotation at the actual returned state.
+Incoming Ready, CostHeap, available closed forest and ForestPath remain
+local caller facts. CostHeap is required by the existing loaded-field
+preservation proof; it is not a supplied future capacity or result bound.
+No path-support anchor, future store, final readiness or word-range plan
+is supplied. Original construction already derives CostHeap separately.
+
+## Same first-seed rotation, head projection, tail and native query
+
+SourceSynthesisNativeTypeSeeded has TWO laws, fold and seeded. They consume
+the actual current SourceCurrentAllocatedSeededQuery Fold and Seeded,
+including the existing first-seed rotation. Each head projection executes
+at its actual entry. Its returned Ready and cost heap feed the actual tail.
+The tail's Extension retains the earlier projected head value. The actual
+checked native request then consumes that head and generated tail result.
+R149 derives its full annotation Return, joint Ready and closed result.
+The same actual trace derives the next cost heap through TraceEffects.
+
+All generated intermediate operand availability, closedness, annotations,
+and the actual warm cache facts are derived inside this fold induction.
+No independent per-intermediate Type law, reset memo table, returned store
+or future validity premise is supplied. The actual completed graph still
+records its completed tail and native trace. The original forest
+and path certificates remain fixed while actual heaps change. The final
+result retains Ready, CostHeap, complete Extension, availability,
+closedness and TypeOrigin. Literal empty Seeded returns Empty without a
+query. The completed Fold and its initial local facts remain explicit.
+This is not fold completion or a proof of GHC lazy evaluation order.
+
+## Source application, filter and Required path adapters
+
+SourceSynthesisTypePathRoles has FOUR laws. AnnotationFields permits Empty
+or a literal ordinary Program node whose actual row child zero is
+annotated. It does not constrain parent Program guards or siblings.
+annotation_path derives a structural route through that annotation slot
+and any residual Type path.
+
+application_paths uses the accepted original Label build and actual row
+receipt to derive direct universe and marker annotations from R148. Local
+AnnotationFields for function and argument values at the EXACT actual
+child positions two and three cover the nested Program prefixes. It then
+derives ForestPath for EVERY path in the existing applicationRegion,
+including arbitrary residual Type paths, mapped literally to signed Int.
+filter_paths derives its direct goal from the same source laws and uses
+local candidate fields at exact slot one for EVERY filterRegion path.
+required_application_head consumes R149's actual bounded requireAll.done
+and derives ForestPath [0] for its literal returned forest without a
+nested Program input hypothesis.
+
+Those nested function/argument/candidate AnnotationFields are genuine
+LOCAL input induction hypotheses. Strict ProgramValue intentionally leaves
+annotation children unrestricted and cannot supply them alone. Their
+original mutual Program-build derivation and preservation after every
+subsequent edit remain open. AnnotationFields requires Empty or ordinary
+heads; no unproved flattening of generic stored Program unions is used.
+The adapters derive path facts. They do not silently derive initial Ready,
+availability, closedness or source membership for an arbitrary fold.
+
+Throughout these modules, TypeOrigin and Type path annotations record
+GUARD provenance. They are not a structural Type grammar, scoped fresh
+instances, a finite generated carrier or a decreasing progress measure.
+
+## Remaining full objective
+
+Derive nested Program annotation fields from the accepted original source
+build with exact source row and child provenance. Preserve the joint
+Program/Type slot and route facts after actual Required/class/force edits,
+including stored Program union or Mu exposure before a Type slot. Retain
+causal Mu/native stores through every mixed Program prefix; R149's slot
+zero result deliberately does not assert a final store after arbitrary
+later Program edits. Integrate the new fold facts with actual class scans,
+class narrowing/edit passes, Parent, forcing and subsequent callers.
+
+Public intersections still start with the empty domain while retaining
+warm domain caches. Internal Mu bindings already follow the established
+native scope rules. Do not replace those rules with annotations on bare
+references or relabel internal open-domain handling as a missing wrapper.
+
+The full goal remains Program/constrained-Type closure and joint progress
+at EVERY reached state, siblings, generated operands, failures, rejections,
+continuations, returned and subsequent states. Derive ONE original-input
+resource bound for BOTH the selected optimized worker and COMPLETE driver,
+with finite Word/Int/key safety and completion. Completed traces, local
+structural facts and cost heaps here do not prove that global bound.
+No future body/result/worker completion, trace existence, fuel, closure,
+finite carrier, final validity, lookup or OriginalInput oracle may replace
+the original-input theorem. R146's original Type conjunction still raises
+maximum path length from three to four; Top descent is only a segment law.
+
+Connect exact accepted terms, NODE-COUNT size, counts and ordering and
+BOTH SIGNED rank/unrank inverses through actual sparse execution. Preserve
+all Sized/fallback/failure/productive infinite behavior and all wrappers.
+Prove native lazy cursor/demand/order/stop/fault correspondence; the known
+tuple-demand mismatch remains open. Give size-free APIs no invented size.
+
+No Haskell edit or new established Haskell fix in R150. Future Haskell
+repairs must also be recorded here in root FINDINGS.md. Retain only small
+reproducible reports and restart data in /tmp. Measure /tmp at publication.
+
+---
+
 # Current checkpoint: R149 selected Type fields through actual mixed operations
 
 Updated 2026-11-08 11:50 CET. Goal ACTIVE. R149 made PROGRESS. Branch formalize.
