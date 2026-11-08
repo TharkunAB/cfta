@@ -1,3 +1,236 @@
+# Current checkpoint: actual merge-to-Required bounds and original normalized type paths
+
+Updated 2026-11-08 01:31 CET. Goal ACTIVE. R130 made PROGRESS. Branch formalize.
+The preceding checkpoint is 2a5c5576b5a31dea54f3c910159026f74e2e2db1
+(R129, canonical board seq979). Preserve the full original objective.
+The optimized interned core remains PRIMARY. Older constructor and equality
+proofs remain SECONDARY. Preserve all proofs, counterexamples, repairs,
+marked drafts and unrelated .hypha/. Regular formalize pushes are explicitly
+authorized. Do not pause the goal or ask whether to continue.
+
+Formalize was pulled before this work at 01:02 CET. Main was refreshed again
+at 01:30 CET. It remains bd5a406a6a3f84b7e3ae0906082783911509df83,
+an ancestor. Six verified proof commits extend R129 through
+7b3d6776c7e0166a5247b5380079a70eac1008c4. They add six source modules and
+24 public laws. All own-source reports pass warnings-as-errors and explicit
+#check plus axiom reports for the exact complete public declaration sets.
+Only propext, Classical.choice and Quot.sound occur. No existing proof source
+was changed or deleted. The final handoff commit, push and canonical board
+readback are recorded in publication.json and RESUME.json under
+/tmp/mcfta-merge-required-20261108-0104/. The committed packets reproduce
+without /tmp. All earlier checkpoint sections below are historical.
+
+## Strongest new positive original-input claim
+
+SourceSynthesisMergedRequiredRowNumeric.firstOrderRaw_merged_required_rows_numeric
+accepts original Library, Query and SIGNED source size, plus the existing
+concrete EdgeKey DecidableEq infrastructure. Original source errors remain
+explicit. An accepted instruction derives actual empty-cache construction
+and COMPLETE modeled source merging. Its comparison bound is internal.
+Every larger comparison budget returns the SAME merged value and heap.
+The output has prefix height at most sizeOf the original emitted instruction
+plus ONE. The result retains every complete stored Mu record and has no
+free names. The returned heap has SemanticReady, CostHeap and Available.
+
+For EVERY actual root row of that merged output, and EVERY finite SIGNED
+path list, Required runs on that row's ACTUAL child forest in the ACTUAL
+RETURNED MERGE HEAP. The fixed worker-depth bound is
+2 * sizeOf (SourceEqualityNeeded.build paths) + 1.
+The reader bound is derived internally. Every larger worker and reader
+budget returns the SAME complete forest and returned heap. Required retains
+Keeps, Values and closed result children. An output or row may be empty.
+The theorem derives completion, not the existence of an accepted term.
+
+No caller worker success, initial heap certificate, graph, SemanticReady,
+CostHeap, Prepared, fuel, future closure or resource oracle is supplied to
+this original-input endpoint. Such premises remain valid internal module
+interfaces and are discharged from actual original construction.
+Each row call starts independently from the same returned merge heap.
+This is not yet a sequential composition of all row calls, full equality
+narrowing, complete partial reduction or a sum of all sibling work.
+Worker depth is not total time, allocation or heap size. Prefix height counts
+ordinary AND union layers above recursive atoms. The signed source size is
+not a proof of the required term NODE-COUNT size or order.
+
+MergedSemanticReady.worker_source_eq proves exact result AND full returned
+cache equality between the prepared cold worker and the already verified
+repaired SourceMergedWorker. It includes complete and failing outcomes.
+The comparison's closed-input premises are derived inside actual selection.
+Open roots use their actual unchanged branch. worker_ready and the execute
+wrappers then reuse SourceCurrentMergedHeapEffects to preserve Normal,
+Covered, SemanticReady, stored CostHeap and result availability on completed
+runs. Closed inputs return closed results. Normal and pending-key coverage
+are NOT inferred from NoNewMu alone. The original endpoint derives all
+incoming preparation and semantic invariants from the actual constructor.
+Readiness on arbitrary failure states is not claimed by the wrappers.
+
+## Original paths in the actual generalized guard field
+
+SourceSynthesisVariablePaths proves that original variable occurrences are
+JOINTLY prefix-free, across different names and different raw equality
+classes. They include variable-shaped tCons leaves and the exact source
+Fun/tFun child positions. Each original occurrence path has length strictly
+less than sizeOf the original Ty. These are source occurrences, not paths
+in a replacement tree model.
+
+EqualityNormalizePrefixFree proves that successful actual normalization of
+GLOBALLY prefix-free raw endpoints retains only original endpoints. Source
+preparation can remove classes. The theorem therefore gives subset, not
+exact endpoint-set equality. Its proof uses actual prepare, addCongruences,
+complete, fixMaybe and mkEqConstraints. Global prefix freedom prevents every
+strict-suffix generation. complete retains exact endpoint membership.
+The public source wrapper uses SourceCompactGuards.arrayNormalize_eq.
+Per-class prefix freedom alone is insufficient: another class can contain a
+strict extension. No Active or successful-worker oracle is added.
+
+SourceSynthesisNormalizedVariablePaths adapts this to the ACTUAL computed
+(eqGuard (equalityClasses typ)).equalities.getD [] field. Every stored path
+is an exact original recognized occurrence. All stored paths remain jointly
+prefix-free and satisfy path.length < sizeOf typ. Actual normalization
+failure gives no stored endpoints. The theorem handles both branches
+internally and takes no normalization success or fuel premise.
+These results DO NOT cover later conjunction with inherited constraints.
+A conjunction can introduce cross-class strict prefixes. Its actual origin
+and progress proof remains a principal missing step.
+
+## Checked complete-pass boundary for a candidate descent measure
+
+SourceSynthesisUniverseNarrowedBoundary strengthens the R129 one-component
+source witness: library f : TVar a, query goal TVar a, SIGNED raw source
+size TWO, source query arguments []. R129 proved exact source acceptance,
+actual construction, complete filter processing, actual application class
+selection and the Required prefix. R129's measured summary was
+(application, old function, required function, arrow) = (2, 1, 3, true).
+
+The new computation restarts the COMPLETE actual application OnePassWorker
+from that SAME original application, child forest and pre-selection native
+state. It uses own = some original.records and inherited = some [].
+This is an actual modeled call. This witness does not discharge the outer
+caller inheritance. It performs class selection, Required, class folding, substitution
+and final propagation at bounds 8/8/8/8/8/128. Its exact measured summary is
+(application, narrowed function, arrow) = (2, 4, true).
+The full application equality pass therefore retains a function child with
+height FOUR, greater than the original application's height TWO. The earlier
+Required-prefix height THREE is not the complete-pass result. Transparent
+union height does not decrease over all narrowed children in this witness.
+
+The receipt retains the original accepted source computation, the complete
+application pass and its actual returned native state. Its normalization
+receipts are proved equal to the actual source computation, including the
+real timeout fallback. Evaluation limits and resource caps are unchanged.
+This is checked MODEL evidence. It does not prove the next outer recursive
+call, native Haskell behavior, nontermination or a failed whole application.
+It rules out that proposed universal local height inequality at this stage.
+R129's same-U actual returned-heap unfolding bound TWO remains valid.
+R128's all-outcomes NoNewMu and complete merge prefix bound remain valid.
+
+## Biggest gaps and next work
+
+1. Derive actual Program and Type origins for every narrowed descendant,
+including inherited payload combination and every source typing equality.
+Program children need occurrence-indexed original program budgets. Type
+annotations and markers need a separate progress measure. The height-FOUR
+witness prevents an unqualified ordinary-child descent argument. Initial
+normalized type endpoints are now bounded; later inherited conjunctions
+and all actual subsequent recursive Type states remain unbounded by the
+current theorems. Extend the actual complete-pass receipt through the next
+PartialMemoWorker child call before claiming a recursive-call witness.
+2. Derive ONE original-input/request/ACTUAL-caller bound for both the selected
+optimized worker and the COMPLETE enumeration driver. Cover ALL siblings,
+generated, reached, intermediate, failing, rejected, returned, subsequent
+and native states. The new merge-to-Required composition removes that
+specific incoming-heap gap. It does not derive future-state closure for the
+whole reducer. Bounds for individual workers do not sum all driver work.
+3. Close actual native Haskell correspondence, including lazy tables, maps,
+sets, cache/hash identities, machine Word/Int arithmetic, allocation and
+wrapper forcing. Then connect complete ACTUAL sparse execution to term
+NODE-COUNT size, order, counts and BOTH signed rank/unrank inverses. Retain
+ALL Sized routes, fallbacks and failures, productive infinite queries,
+lookup, Curried and Specftacular. Size-free enumerateOutUVarWith and
+enumerateUntil' must not receive an invented size parameter. Older abstract
+or conditional component results do not close these operational obligations.
+
+Keep all three obligations in the full objective. Do not replace them with
+U-only, initially available, successful-only or model-only completion.
+No final caller success/body/validity/resource/OriginalInput/lookup/closure/
+finite-carrier oracle is acceptable. Derive such internal facts from the
+actual original request and actual caller. Do not mark the goal complete,
+paused or blocked because this proof is difficult or this checkpoint stops.
+
+## Haskell findings and external ownership
+
+No production Haskell code changed in R130. No new native Haskell defect,
+fix, benchmark, full test suite or CI claim is made. The checked complete
+pass belongs to the Lean source model. It is not a native Haskell run.
+Keep all earlier Haskell fixes, their FINDINGS entries and external ownership
+notes. PR203 required-library behavior remains intentional; the earlier
+recommendation to change it remains WITHDRAWN. Current PR202/203 state was
+not refreshed and must not be described as current. The source comments
+about the unresolved general recursive-equality termination case remain
+relevant; the new normalization result does not remove that case.
+
+## Verification technique and resource discipline
+
+ROOT alone ran compiler jobs, in serial, through heavy-management/bin/capped
+with MemoryMax=MemoryHigh=4294967296 and MemorySwapMax=0. The live scope was
+checked. Queue concurrency and evaluation limits were not increased.
+Early merge-transport proofs exceeded the 4 GiB scope in kernel conversion.
+A direct single-threaded, 3072 MiB-soft-limit diagnostic located the first
+two selection lemmas. The final proof case-splits the OLD actual comparison
+result before unfolding selection, derives a typed fresh-result equation
+from check_eq.trans, then simplifies only literal outcomes. It uses explicit
+congrArg for recursive Result continuations. This prevents conversion from
+expanding an entire unknown comparison action. Bool.false_eq_true is also
+required when simp only must eliminate an if false = true branch.
+The corrected merge-plus-two checks used a recorded 230 MiB scope peak;
+the final two strict checks used 207 MiB. No source algorithm was changed.
+
+The small committed packets contain source hashes, exact public names,
+checkers and standard-axiom reports. They are reproducible from source.
+The runtime directory contains only small scripts, manifests and compact
+failure logs. No large archives, copied build trees or binary evidence were
+created. /tmp was about 19 MB before this checkpoint. The final allocated
+readable size, protected inaccessible directory count and free space are
+recorded in tmp-audit.json. No cleanup was needed or performed in R130.
+Preserve active proof work and protected storage. Continue to monitor /tmp.
+
+## Exact new source commits and reproducible packets
+
+- MergedSemanticReady: 6 new public laws; commit 5c5365e846d62fc2858f5d758b31ec138ddc840c.
+  Source SHA256 cc61884c957e239c6c0864ffb481c82adfd8fff85be32ff749be296f6827c904.
+  Packet lean/restart-evidence/20261108-merged-semantic-ready/.
+- EqualityNormalizePrefixFree: 3 new public laws; commit b3504bd7bcfb22886f0295e558bca9ca31136365.
+  Source SHA256 efc6bf988fcf1788a4d8c06e536fba500d5e366393da08940db19eb25d9ac5e6.
+  Packet lean/restart-evidence/20261108-normalize-prefix-free/.
+- SourceSynthesisMergedRequiredRowNumeric: 1 new public laws; commit d241252fc4acf70d935a5552271d616cdd4b5231.
+  Source SHA256 4a80d203ea135bc11ae77bb5bfbf35fb419be7a0d3c6e991bcf4802b322b2ecc.
+  Packet lean/restart-evidence/20261108-synthesis-merged-required-row-numeric/.
+- SourceSynthesisNormalizedVariablePaths: 5 new public laws; commit e02ab5e4e16f1535675c4129cf1ad217448000ac.
+  Source SHA256 4f180a60ac967b81009c90b8578215b81fd8aceaed44fbc22ac2b0e80d2731f4.
+  Packet lean/restart-evidence/20261108-synthesis-normalized-variable-paths/.
+- SourceSynthesisVariablePaths: 5 new public laws; commit 1722a32089f974fbcfc21069f96b94f105291972.
+  Source SHA256 d85cae0d1063121af7eed9d411772394351b5452b88b56e02a2d3af065e0b9db.
+  Packet lean/restart-evidence/20261108-synthesis-variable-paths/.
+- SourceSynthesisUniverseNarrowedBoundary: 4 new public laws; commit 7b3d6776c7e0166a5247b5380079a70eac1008c4.
+  Source SHA256 1fabb41cbb7f31d3814f53cf3a134501849c09dfa8c4a393068c103b96eebf63.
+  Packet lean/restart-evidence/20261108-universe-narrowed-boundary/.
+
+Each packet's check.py builds its actual Lake module in the project Nix shell
+and checks the full own source with warnings as errors, explicit #check,
+and axioms for every actual public declaration. Run it under the existing
+serial 4 GiB heavy-management cap. README.md gives the repository-root
+command. No /tmp file is a proof dependency. The exact source and packet
+bytes are committed. No unchanged verified target needs another check.
+
+The final publication audits all 33 changed tracked files, the seven commits
+including this handoff, exact source/check bytes, root common-prefix hash,
+all preserved historical tails, HEAD == origin/formalize, main ancestry,
+canonical board post/readback and the active goal. The unrelated .hypha/
+directory is preserved. No compiler or bounded source task remains active.
+Do not rerun write-checkpoint.py: it prepends this checkpoint once.
+
+---
+
 # Current checkpoint: original-input Required bounds and actual universe exposure
 
 Updated 2026-11-08 00:56 CET. Goal ACTIVE. R129 made PROGRESS. Branch formalize.
