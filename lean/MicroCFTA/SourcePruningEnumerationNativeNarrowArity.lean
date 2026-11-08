@@ -1,6 +1,7 @@
 import MicroCFTA.SourcePruningEnumerationProbeExposureArity
 import MicroCFTA.SourcePruningEnumerationAction
 import MicroCFTA.SourceCurrentAllocatedPartialState
+import MicroCFTA.SourceCurrentAllocatedQueryMemo
 
 /-!
 # Arity through the actual selected native narrowing
