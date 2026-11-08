@@ -1,3 +1,218 @@
+## R160: recursive original fields and actual edge-cache publication
+
+Updated 2026-11-08 16:24 CET. The full goal remains ACTIVE. R159 was verified progress.
+Five new modules add twenty-two checked public laws. Earlier proof sources,
+Audit imports, counterexamples, repairs and marked drafts remain unchanged.
+No production Haskell source changes in this checkpoint.
+
+Accepted original construction now derives a recursive physical certificate
+for every Program position. It retains strict row guards and layouts,
+annotations for every Type operand, and the same certificate for nested
+Program operands. The root endpoint needs only original acceptance and the
+actual completed build. No independent field classification is an input.
+Actual annotation-only Required work preserves this stronger certificate.
+Actual outer edge calls also retain their conditional mixed-field history:
+cold publication derives its certificate from the observed Parent return,
+and ready hits use the exact stored owner. The same successful edge call
+derives its existing source graph, reads, checks and full caller Post.
+
+HereditaryProgramFields.ValueFields/EdgeFields form one mutual certificate.
+Program values are Empty or ordinary nodes with certified complete rows.
+Annotated rows have the exact Top/singleton layout and an annotated child.
+Application rows have the existing app symbol, complete equality guard and
+four-child layout. Their types and marker are annotated; their function
+and argument have ValueFields recursively. Filter rows have the existing
+filter symbol, complete guard and two-child layout. Their goal is annotated
+and their candidate has ValueFields recursively. The certificate implies
+the existing ProgramValue/ProgramEdge and root AnnotationFields properties.
+It does not weaken the old role APIs or annotate Program guards.
+
+The generic constructor laws follow the SAME actual makeEdge, makeNode and
+makeUnion calls. Complete row readback transfers the certificate. Actual
+union normalization returns Empty or an ordinary node from certified
+operands, including empty and singleton branches. A bare physical-union
+case is not added to ValueFields. Such a case would not imply the existing
+root field certificate. This restriction does not skip source unions:
+the actual source-union constructor is proved below.
+
+OriginalHereditaryProgramFields.at_prefix strengthens the existing actual
+source-prefix proof. Its mutual Program/ProgramRow induction retains the
+actual child calls and each recursive Program induction result. Original
+Type allowance and build_typed classify every Type operand, including the
+application marker. Actual context, growth to the whole completed reader,
+cache readback and constructor normalization identify the same values.
+firstOrderRaw_fields derives ValueFields for the actual original value from
+accepted signed firstOrderRaw and its completed Label build in empty stores.
+It requires no additional classification, completed future worker or fuel
+supplier. This is a construction result. It does not imply whole-worker
+completion or fields for arbitrary later generated or warm values.
+
+HereditaryProgramRequired.node follows the actual RequireNode(.node entries)
+graph. AnnotationOnly means every later child lookup is absent. Existing
+child work derives the annotated first child, exact output length and
+LITERAL equality of the remaining children. The recursive Program children
+and application marker therefore remain unchanged. Actual ordered row
+work handles rejected and retained rows at each real prefix. Same-guard
+makeEdge and canonical makeNode retain the complete certificate and MuStored.
+The law requires semantic readiness, costs, available closed input, MuStored,
+input ValueFields, AnnotationOnly and the actual completed Required graph.
+It proves preservation. It does not derive Required completion or the
+annotation-only condition for an arbitrary source caller.
+
+NativeTypeEdgeFieldHistory.EdgeFields is conditional on the complete captured
+edge request. Application/filter source occurrence, physical/source arity,
+closed children and every initial mixed slot imply the coupled source
+guard/arity or Top/[Empty] sentinel, closed result children and every output
+mixed slot. The Top singleton condition returns the original annotation or
+Empty, with the same symbol, Top guard and all returned children annotated.
+Type-origin annotations on the entire mixed row heap are not required.
+
+History certifies the actual edgeResults family through FlatMemoThunk.CellSpec.
+Empty initialization, physical advance, node events, edge lookup/demand,
+publication and ready hits preserve its real owner links and earlier cells.
+The generic finishEdge lemma requires the conditional certificate for its
+actual evaluating owner. It does not itself establish that publication fact.
+Ready hits use edge_same_key to identify the COMPLETE stored request,
+including inherited constraints, from current physical readiness and keys.
+They do not replace the owner with a semantically equivalent request.
+
+NativeTypeOuterEdgeFields discharges cold publication from the literal
+edgeBody execution. It splits the actual Parent outcome and invokes R159
+application/filter/annotated preservation. The Parent load, precheck, local
+and constructor receipts remain internally derived. Context supplies the
+physical caller facts; no duplicate Good premise is added. edge_start
+derives the running Context and stored-owner input facts. The actual range
+plan exposes only that owner's reached Parent checks. Begin components
+transport the SAME checked state and warm Merge owner.
+
+edgeCall_fields covers busy, absent, ready, failed-body and returned-body
+outcomes. All retain earlier edge history. Each successful return gives
+EdgeFields for the candidate through exact owner equality. Cold publication
+uses the proved body certificate at its protected evaluating cell; it has
+no final-field or future-body-success callback. edgeCall_verified_fields
+also derives the same actual EdgeCall graph, SourceReads, reached Checks,
+full caller Post, result residency and existing semantic EdgeLaw. Incoming
+Context, initialShared Type readiness, profile, field history, EdgeReady and
+the genuine actual reached range plan remain premises. EdgeFields is a
+conditional field property; it does not give unconditional Type readiness
+after an arbitrary unclassified edge outcome or a node-field history.
+
+Verified source targets:
+- `SourceSynthesisHereditaryProgramFields`: 8 public laws. SHA256 `a102dc0537386b02adffe5ba317cf13064b0e911fdee7035ba0bc9dd45686c10`.
+- `SourceSynthesisNativeTypeEdgeFieldHistory`: 7 public laws. SHA256 `852efe816096b56561b55122cf9bfbca1d3db9a85761362f3a3c438d2f37162d`.
+- `SourceSynthesisNativeTypeOuterEdgeFields`: 4 public laws. SHA256 `1eb1d3fb9f39293c50cb40956914e40b229314d065a79c36719583ad11c6dedc`.
+- `SourceSynthesisOriginalHereditaryProgramFields`: 2 public laws. SHA256 `7007c110920de9c22f8d0c67fd9278fedb9a2bab8dae0a5045dd26ef11f0b680`.
+- `SourceSynthesisHereditaryProgramRequired`: 1 public laws. SHA256 `597ad74904fc3a9008d0c4dd7c543b7bdd708cc9f1d599c8d1d31529aa1e3d77`.
+
+Reviewable proof commits based on `d52b57d514ac8c832491cab048272d471fe441e5`:
+- `30df97e08b52979c5a22371c6f08ba2e0e2958ca`: SourceSynthesisHereditaryProgramFields.
+- `0ca05a552aebeea99ba59220e06730cbb4710cd0`: SourceSynthesisOriginalHereditaryProgramFields.
+- `a1162b4841378ec57d82e27b5a8cb5ada299f3e9`: SourceSynthesisNativeTypeEdgeFieldHistory.
+- `741c5cc773bba909c8f6d106f3e229876b0fef7c`: SourceSynthesisNativeTypeOuterEdgeFields.
+- `c6c10c9147e23ab5e5572e017deaaa2640618b8e`: SourceSynthesisHereditaryProgramRequired.
+
+Each source has a compact reproducible packet in
+lean/restart-evidence/20261108-<slug>/. Actual project Nix/Lake compilation,
+strict own-source warnings, every public name and namespace, standard axioms
+and exact source hashes pass. ROOT ran one compiler at a time under the
+existing 4 GiB and zero-swap cap. All owned compiler handles are terminal.
+Earlier proof sources and Audit imports remain unchanged. The R139 full
+Audit baseline is retained. It is not rerun here.
+
+The general original-input request endpoint remains R137
+SourceSynthesisOriginalTupleCall.request. Accepted signed FirstOrder
+construction derives initial Context, strict Program roles and the actual
+stable tuple-call/read receipt with its full modeled postcondition. R160
+adds the stronger original construction certificate and actual edge-cache
+field preservation under their stated entry conditions. These are checked
+components. They do not derive the full worker or enumeration driver from
+the original input. Type-origin provenance does not establish the complete
+generated Type grammar, lexical scopes or semantic program typing.
+
+Next proof work, without reducing the full objective:
+
+1. Add SourceSynthesisNativeTypeHereditaryClassFields. Prove below_fields and
+   class/fold/pass laws for mixed slots classified as recursive ValueFields
+   or fully Annotated Types. R158's child-one exclusion proves ordinary
+   output shape; it is INSUFFICIENT for recursive fields. Use the existing
+   ActualSelectedProgramFootprints.application_footprint/filter_footprint:
+   they protect EVERY child index other than zero below a Program operand.
+   ClassPositionalFootprints.compiled_unselected then excludes Program-root
+   leaves and every later child edit. Derive the actual annotated child-zero
+   return and literal later-child/state equality. ActualEditRowOrigins.
+   rows_indexed identifies one consistent source row and all absent child
+   positions. Do not combine independent existential origins per child.
+   Reuse R154/R155 shared readiness, ALL routes, actual prefix effects and
+   new hereditary makeNode_fields. Retain genuine actual graph, readiness,
+   availability, closedness, coherent records and Type-route conditions.
+   Source footprints must discharge the stronger generic pass premise.
+   A Type leaf at an unrestricted Program root does not satisfy this
+   certificate: Annotated permits Mu, unions and references, while Program
+   ValueFields permits only Empty/ordinary. This is a certificate mismatch,
+   not a demonstrated source caller counterexample or Haskell bug.
+2. Compose stronger Required/class facts into literal local, Parent row/node,
+   descendant walk and both warm result families. R160 edge history retains
+   mixed root fields, not hereditary node results. The source original
+   certificate now classifies nested Program children at construction.
+   Later generated descendants, node winners and all reached entry states
+   still need their own actual preservation induction. Keep exact native
+   and equality operations, fourth memo, both warm Merge stores and
+   historical targets. Retain conditional fully annotated Type inputs and
+   strict Program guards/layout together. Establish complete generated Type
+   grammar, lexical scopes and ALL reached joint progress, including
+   failures, rejected/returned states and subsequent callers.
+3. Derive ONE original-input/request/actual-caller resource bound for BOTH
+   the selected optimized worker AND the COMPLETE enumeration driver.
+   Include all siblings and every generated, reached, intermediate, failing,
+   rejected, returned, subsequent and native state. Derive finite Word,
+   Int, key and allocation safety. The explicit Seeded/Scan/class range plans
+   remain obligations at their actual prefix states. Type paths do not
+   discharge them. The R146 normalized path3-to4 source boundary prevents
+   a maximum-initial-path rank. Top descent remains segment-only. Do not
+   substitute supplied success, graph, trace, fuel, ranges, finite carrier,
+   closure, final validity, OriginalInput or future completion for this goal.
+4. Complete faithful native lazy pull-cursor execution, arity/raw-match
+   suspension, demand order, B+1 stopping and faults. Establish exact accepted
+   terms by NODE COUNT, exact counts and size order, BOTH SIGNED rank/unrank
+   inverses through actual sparse execution, and all Sized, fallback,
+   failure and productive infinite paths. Include tables/maps/sets/cache,
+   hashing, native Word/Int, allocation, wrappers, lookup, Curried and
+   Specftacular. Do not invent sizes for size-free enumerateOutUVarWith or
+   enumerateUntil'. The recorded native tuple difference concerns demand
+   order only. It proves no cache inequality, nontermination or Haskell bug.
+
+R156's profile correction remains in force. Actual checked native-query and
+successful Seeded/classes/reduce causal-profile preservation already exists.
+Reuse those laws. GuardHeap does not annotate the entire mixed heap.
+No production Haskell file was changed. No Haskell fix was established here.
+Record every future Haskell fix in root FINDINGS as well, with its source
+location and reproducible evidence, so external work can use it.
+
+Restart and publication:
+- Branch formalize. Pushes remain explicitly authorized. Preserve .hypha/.
+- Main is bd5a406a6a3f84b7e3ae0906082783911509df83 and is an ancestor.
+  Fetch exact main/formalize refs before further proof work.
+- Runtime: /tmp/mcfta-type-edge-cache-20261108-1603/. Read RESUME.json,
+  publication.json, canonical-board-readback.json and terminal-audit.json.
+  They record exact final pushed/fetched refs, board sequence, checked
+  hashes, complete tracked-file coverage and terminal process state.
+- Publication covers 28 changed tracked files: five new proof sources,
+  their four-file replay packets, and these three root documents. Historical
+  document bytes remain exact. The full goal remains active.
+- Retain one ROOT compiler at a time, 4 GiB and zero swap. Reuse the actual
+  returned handle after a yield. Do not change queue concurrency. Focused
+  checks pass. No broader Audit rerun is needed for this checkpoint.
+- Continue to measure /tmp. The directory-inclusive 16:20 audit found
+  28,909,568 bytes of readable allocation, about 28 MiB, with about 246 GiB
+  free. Five protected unreadable entries were excluded. The current runtime
+  held 60 KiB before final reports. No cleanup was needed or performed.
+  Keep compact replay scripts, hashes and reports. Do not retain build
+  archives or large proof-output copies.
+
+The older checkpoint text below remains history. This R160 entry supersedes
+its immediate next-step instructions. Retain every earlier source repair,
+accepted counterexample, rejected shortcut and marked draft.
+
 ## R159: mixed fields at the actual Parent return
 
 Updated 2026-11-08 15:52 CET. The full goal remains ACTIVE. R158 was verified progress.
