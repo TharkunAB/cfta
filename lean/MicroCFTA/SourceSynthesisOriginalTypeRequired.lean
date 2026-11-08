@@ -74,7 +74,8 @@ variable {fuel readFuel : Nat} {paths : List (List Int)} {results : List (Value 
 variable {finish : State Symbol Guard}
 include accepted built
 
-private theorem source_context {guard : Guard} {children : List (Syntax Symbol Guard)}
+/-- Actual original row construction derives the physical and Type input facts. -/
+theorem source_context {guard : Guard} {children : List (Syntax Symbol Guard)}
     (call : RowCall expressions [] before outputs after heap rowIndex symbol guard children) :
     SemanticReady heap ∧ CostHeap heap ∧ Values heap call.output.children ∧
       ClosedValues call.output.children ∧ MuStored (Origin lib) heap := by
