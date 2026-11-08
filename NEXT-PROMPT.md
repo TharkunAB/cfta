@@ -1,3 +1,184 @@
+## R164: original worker completion under computed initial capacity
+
+Updated 2026-11-08 18:22 CET. The full goal remains ACTIVE. R163 was verified progress.
+Nine new modules add 14 checked public laws. Earlier proof sources,
+Audit imports, counterexamples, repairs and marked drafts remain unchanged.
+No production Haskell source changes in this checkpoint.
+
+The new original-source endpoint constructs an actual recursive worker
+return under one computed initial capacity condition. It does not assume
+worker success, a completed worker graph, or a reached WorkerRanges plan.
+The same return retains its exact language, recursive Program fields,
+closedness, physical Type readiness, causal guard profile and both complete
+captured-owner field/closedness memo histories.
+
+The capacity condition remains explicit. It is the Room test for the
+computed rank envelope and the initial finite-fuel forecast. It can be
+extremely conservative. This checkpoint does not prove that actual native
+fixed-width execution satisfies that test. Increasing modeled word width
+does not prove a theorem about the native fixed-width implementation.
+The complete enumeration driver and its total work remain outside this
+completion result.
+
+### Correction to the previous gap description
+
+SourceCurrentOuterRankAdequacy.initial_node_call already proves general
+abstract outer completion from a computed lexicographic rank and initial
+invariants. SourceCurrentOlderOwnerLineage.body_rank_lt supplies the actual
+child decrease. The rank theorem has no source Type-grammar or supplied
+joint-rank premise. A new generic joint rank is not the missing theorem.
+
+The previous R163 text asked for a new joint Program/constrained-Type
+measure too broadly. Its initial source discharge and capacity connection
+were missing. OriginalRankCompletion.accepted now derives the cold source
+invariants for that existing theorem. Actual fixed-width capacity or a
+proved admission/error route, complete-driver coverage, total work and
+native correspondence remain substantive gaps.
+
+Full generated Type structure and actual binder scopes remain relevant
+correspondence obligations. Guard Origin states conjunction provenance.
+It does not state a full Type grammar. The R146 path-growth boundaries
+still reject max-initial-path and unconditional prefix-freedom arguments.
+They do not refute the existing checked abstract quotient-count rank.
+
+### Checked source endpoints
+
+* SourceSynthesisOriginalRankCompletion.accepted derives allocation
+  preparation and the actual empty-store Label build. Actual initial
+  record reads compute a guard list and stored payload mass bound. The
+  original build and empty tables derive Context, Frame, Fits, root
+  readiness and closure, union normalization, causal Mu publication,
+  native positive support, merge stores/support, captured Parent writers,
+  conditional closedness and both idle-table predicates. Under computed
+  Room it constructs a completed nodeCall. Its outer and nine lower
+  bounds are computed. The same result and full caller return at every
+  larger outer fuel. Availability and NodeLaw refer to that same return.
+* SourceSynthesisOriginalWorkerRanges.accepted derives preparation,
+  construction, Context, Frame, Fits, actual raw-guard carrier and root
+  readiness internally. Room for the finite-fuel forecast derives the
+  literal worker range predicate. No success premise occurs. Failed
+  runs need no continuation-state supplier.
+* SourceSynthesisOriginalVerifiedCompletion.accepted connects the two
+  results to the R163 hereditary traversal on the same initial caller
+  and same actual return. It derives the source graph, reads, Checks,
+  full Post, availability, NodeLaw, native shared Type readiness, causal
+  guard profile, both complete captured-owner histories, closedness and
+  recursive Program fields. Success and ranges are derived internally.
+  The explicit computed capacity condition remains.
+
+R163 OriginalHereditaryCall.accepted remains useful when actual success
+and genuine ranges are known without the new capacity condition. R137
+conservative original tuple completion also remains checked. These
+endpoints have different premises. Do not replace them with one claim
+of unconditional native completion.
+
+### Actual range derivation
+
+The existing numeric completion receipts omit some actual range plans.
+This checkpoint derives those plans from initial reservations and exact
+completed prefixes. It does not infer word checks from success alone.
+
+* SourceCurrentEditListNumericRanges.list_ranges derives actual shared
+  edit ListRanges from the existing numeric entry premises. Private
+  target-fold, force and leaf producers derive their actual word plans.
+  A finite-trie induction handles ordinary and recursive node heads,
+  ordered children and rows. Worker uniqueness identifies each actual
+  completed prefix with its computed receipt. Its returned Frame and
+  Fits supply the suffix. No finite-ordinary-tree restriction is added.
+* SourceCurrentParentUniformRanges.resident_ranges retains the actual
+  Scan plan and supplies class-pass plans for every actual prepared
+  Scan/Required return. Same-execution uniqueness retains record order,
+  duplicate occurrences and the stopping contradiction branch. Initial
+  Context, Frame, Fits, resident readiness, raw guards and the uniform
+  reservation suffice. No Parent success or graph is supplied.
+* SourceCurrentOuterInitialWorkerRanges.nodeCall_ranges follows all six
+  actual outer phases. Existing unfinished-prefix receipts derive the
+  current Context, Frame, Fits, guard carrier and scheduled Room. A cold
+  edge demand uses its exact captured owner and unchanged physical
+  components. Actual earlier returns determine continuation states.
+  Failure branches require no future continuation. The proof induction
+  follows the finite worker fuel and phase; it is not a new native rank.
+
+### Program structure measure
+
+SourceSynthesisProgramHeight measures only source Program positions.
+Application rows select children two and three. Filter rows select child
+one. Singleton annotation rows have no recursive Program child. The
+measure ignores Type child zero, the application marker, identities and
+cached metadata. Physical source-layout certificates justify this
+interpretation. The definition does not classify roles from a symbol.
+
+Its six laws prove row bounds, unchanged height when child zero changes,
+actual node-normalization nonincrease and strict application/filter child
+height. ProgramHeightRequired.node and ProgramHeightEdit.below prove
+nonincrease through actual annotation-only Required and shared below
+edits. They keep real initial physical premises and the actual graph.
+They do not prove Type progress or unrestricted warm outer-cache height.
+The existing general abstract completion rank does not depend on these
+new local height laws.
+
+### Largest remaining gaps and full objective
+
+1. Derive useful original-input capacity/admission and total-work bounds
+   for the actual fixed-width implementation. Cover both the selected
+   optimized worker and the complete enumeration driver. Include every
+   sibling, generated request, intermediate state, failed or rejected
+   prefix, returned state and subsequent call. Do not replace this with
+   supplied success, fuel adequacy, future resource/validity, finite
+   carrier, closure, lookup or completion predicates. A computed numeric
+   condition is an explicit remaining condition, not its discharge.
+2. Prove faithful native execution. The eager model and native foldr
+   demand differ. Use an actual pull cursor with demanded nodeEdges,
+   exact arity and raw-match suspension, the first budget+1 matching raw
+   tuples, exact faults/state/cache effects, and stopping without
+   forcing the continuation. Prove native CAF and wrapper initialization
+   correspondence. Arbitrary warm initial callers need their real
+   captured support and history invariants.
+3. Prove exact accepted terms at NODECOUNT size, exact count and order,
+   and both signed rank/unrank inverses through actual sparse execution.
+   Cover all Sized paths, fallback, failure and productive infinite
+   cases. Do not assign a size to the size-free enumerateOutUVarWith or
+   enumerateUntil' APIs.
+4. Retain complete table/map/set/cache/hash/Word/Int/allocation and
+   wrapper/lookup correspondence, including Curried and Specftacular.
+   Preserve the full original objective. Local and original cold-worker
+   results do not prove this whole system theorem.
+
+### Haskell findings, validation and storage
+
+No Haskell source fix was made. No new production counterexample was
+established. The main finding corrects the formal proof-gap inventory:
+the general abstract rank already exists. R163 conditional-closedness
+remains a formal invariant repair, not a reported Haskell fix.
+
+All nine new targets pass in the project Nix/Lake environment. Their
+own-source reports treat warnings as errors, check all 14 public theorem
+names and namespaces, record source hashes and permit only the standard
+axioms propext, Classical.choice and Quot.sound. The retained R139 full
+Audit passed 4920 jobs with 4919 ordered imports and 1286 frontier builds.
+It was not rerun for these additive standalone modules. Earlier Audit
+imports remain unchanged.
+
+Compilation used one serial heavy-management scope at a time. Effective
+memory.max and memory.high were 4294967296 bytes. Swap.max was zero.
+Retain compact reports and reproducible source checkers. Do not retain
+build archives. The latest /tmp audit is in this checkpoint runtime.
+Unreadable protected service directories are excluded from that size.
+No cleanup is needed at the current small footprint.
+
+Runtime: /tmp/mcfta-source-worker-ranges-20261108-1758.
+Resume from RESUME.json, publication.json and verified-modules.json there.
+Proof packets: lean/restart-evidence/20261108-{program-height,
+program-height-required,program-height-edit,edit-list-numeric-ranges,
+parent-uniform-ranges,outer-initial-worker-ranges,original-rank-completion,
+original-worker-ranges,original-verified-completion}.
+
+Fetch exact main/formalize refs before new work. Keep one ROOT compiler
+at the established 4 GiB/swap-zero cap. Preserve unrelated .hypha/.
+Push small verified commits to formalize under the standing authorization.
+The older checkpoint text below remains history. This R164 entry
+supersedes its description of a missing new abstract joint rank.
+
 ## R163: original successful recursive calls retain complete fields
 
 Updated 2026-11-08 17:43 CET. The full goal remains ACTIVE. R162 was verified progress.
