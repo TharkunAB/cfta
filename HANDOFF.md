@@ -1,3 +1,148 @@
+# Current checkpoint: R147 Type guard origins through actual native traces
+
+Updated 2026-11-08 10:55 CET. Goal ACTIVE. R147 made PROGRESS. Branch formalize.
+Runtime: /tmp/mcfta-native-type-trace-20261108-1048/RESUME.json.
+Parent: e42b37705e3e4ba40eb004a38a4540f722896554 (R146).
+Main bd5a406a6a3f84b7e3ae0906082783911509df83 remains incorporated.
+
+FOUR new modules and ELEVEN public laws pass actual Nix/Lake, strict
+own-source checks, exact public names, standard axiom reports and final
+source hashes. Existing sources and Audit imports are unchanged. R139
+full Audit remains a prior baseline, NOT rerun for these new modules.
+The existing Plain endpoints remain available. No source worker changes.
+
+## Actual loaded native row bodies
+
+SourceCurrentHereditaryNativeGeneralBody has TWO laws. loaded_ready_valid
+uses the actual field loads and checked allocated ready branch. It derives
+annotation of the exact source conjunction of the original two guards.
+body_certified follows the actual yielded native body. Ready rows use that
+conjunction. Arity mismatch and rejected rows use Top and [Empty]. Actual
+loads, operation state, physical Good, ready operands, bindings and the
+incoming conditional Mu store are retained. The annotation predicate must
+contain Top and be closed under the actual source conjoin. This is pure
+annotation algebra, not a finite generated carrier or completion oracle.
+
+## Generic induction over the same checked execution
+
+SourceCurrentHereditaryNativeGeneralInduction has FOUR laws. Return and
+Preserves now accept an arbitrary annotation predicate. Return.prepend,
+bind, node_bind and edge_bind retain the existing physical checks,
+continuations, actual body traces and exact captured-owner finish steps.
+Returned facts include Current, heap extension, operation growth, both
+causal stores, physical postconditions and the local annotation result.
+No Top or conjunction premise is added to this induction layer.
+
+SourceCurrentHereditaryNativeGeneralPhysicalTrace.completed follows the
+actual checked trace by strong induction. It applies the new body proof
+and the existing generic node compilation, constructor effects, optional
+binders and exact-owner warm-cache laws. Every branch retains its actual
+physical checks. Source Facts, domain-inventory Closed, initial Current,
+physical/local certificates, initial stores and the completed Trace remain
+explicit at this generic interface. The theorem derives the final stores
+and output annotation. It does not accept a future body result or final
+annotation invariant. It does not construct a trace or bound its length.
+
+## Original-source Type-only guard consumer
+
+SourceSynthesisNativeTypeTrace has FOUR laws. pool contains only Top and
+original generalized equality guards from libraryGroups and
+libraryArgumentOnly Types. It EXCLUDES the fixed application and filter
+Program schemas from R145's broader literal alphabet. Origin is the
+existing Derived(pool, Top, actual native conjoin). origin_top and
+origin_conjoin derive the algebra required by the generic trace proof.
+Origin may have infinite closure. It is a GUARD provenance predicate,
+not a structural Type grammar or a scope/fresh-instance certificate.
+
+initial_stored uses accepted firstOrderRaw and its ACTUAL original Label
+build. R146 supplies the conditional MuStored for this predicate. Empty
+native tables then derive universal source-indexed conditional cache laws.
+The original heap may contain Program rows outside the Type guard pool.
+No whole-heap Type annotation or symbol injectivity is required.
+
+request_completed consumes an ACTUAL completed checked cold requestNode
+trace between two available, closed operands with Origin annotations.
+It derives original source Facts and semantic readiness, the computed
+source domain inventory and its Closed certificate, initial Current,
+closed-original operand scopes, physical/local request certificates,
+empty bindings and initial universal stores INTERNALLY. Its full Return
+contains final availability, the output Origin annotation and updated
+conditional constructor/native stores. It accepts no final heap/store,
+output annotation, per-body result, initial Current or supplied inventory
+closure. Initial physical Good, operand availability/closedness/Origin
+annotations and the completed checked trace REMAIN genuine local inputs.
+The per-instruction trace checks are not an original-input word bound.
+
+## Largest remaining Type and execution gaps
+
+Derive the input operand annotations at EVERY reached Type caller. Feed
+exact InitialTypeFields and captured RowCalls into this interface. A useful
+next source step is to use the final original Mu-body certificate at each
+earlier captured field build: node-record growth retains the same stored
+body, so its conditional Mu certificate can be recovered at that earlier
+heap. HereditaryConstruction.build can then derive the actual compiled
+original generalized/rigid/universe field annotation from source guards.
+Do not require a whole mixed heap to be Type-annotated.
+
+Next carry annotations and conditional stores across subsequent actual
+queries with changed heaps, Required/class edits, exposure and Parent.
+The generic theorem supports warm states when their initial certificates
+are established. It does not prove the Type store after an arbitrary
+Program prefix without those certificates. Original Type scope and fresh
+instance ancestry still need a joint reached-state proof.
+
+R146 showed satisfiable original guard conjunction can grow normalized
+paths from maximum 3 to 4 and lose joint prefix freedom. Top-only inherited
+descent decreases a budget under its starting invariant; it stops at the
+next non-Top conjunction. Neither that segment law nor Type-only guard
+origins gives progress for changed annotations and inherited demands.
+Derive a bound using original Types, equation sites and actual Program
+instances. Do not supply a finite generated carrier, future closure,
+final validity or instruction ceiling instead.
+
+## Full objective and original-input endpoint
+
+Keep ONE original-input/request/ACTUAL-caller bound for BOTH the selected
+optimized worker and COMPLETE enumeration driver. Jointly preserve
+Context, numeric checks, conditional memo histories, strict Program and
+constrained-Type roles, origins, inherited regions, scoped walks and
+progress at EVERY reached state. Include all siblings, generated,
+intermediate, failing, rejected, returned, subsequent and native states.
+Derive native word checks OR initial numeric certificates from original
+input at every caller. Finite outer NodeCall graphs and sufficient
+complete-driver recursiveFuel remain supplied in their existing theorems.
+
+Prove exact accepted terms by NODE COUNT, exact count and order, and BOTH
+SIGNED rank/unrank inverses through actual sparse execution. Retain Sized,
+fallback, failure, productive infinite lazy, tables/maps/sets/cache/hash,
+Word/Int/allocation, wrappers, lookup, Curried and Specftacular. Do not add
+sizes to enumerateOutUVarWith or enumerateUntil'. No U-only, initial-only,
+success-only, supplied-fuel, finite-carrier, future-completion or closure
+replacement. Track original-input discharge for every internal premise.
+
+The faithful native Seed/Extend pull cursor, demand/order, symbol/arity,
+suspension, bounded stopping, faults and later pulls remain open.
+OriginalTupleCall.request remains the strongest GENERAL original-input
+entry endpoint: actual original construction, initial Context/Program
+roles and stable tuple execution/read receipts. True certifies formal
+emptiness. False does not certify acceptance. Full outer/driver completion
+and native CAF reset remain unclaimed. R147 removes the Plain restriction
+from conditional native annotation preservation; it is not the total
+worker/driver theorem or all-reached Type progress.
+
+## Haskell findings and storage
+
+No Haskell edit or fix was made or established in R147. Record any later
+actual Haskell fix in root FINDINGS.md for external implementation work.
+No strict Program predicate was weakened. Preserve every old proof,
+counterexample, repair, draft and historical document byte. Preserve .hypha.
+
+Compilation remains serial at 4 GiB and zero swap. Keep only small source,
+hash, axiom and failure reports in /tmp. Do not copy build trees or archives.
+The exact size is in runtime publication.json. No cleanup was needed.
+
+---
+
 # Current checkpoint: R146 Type conjunction boundary, Top progress and original Mu certificates
 
 Updated 2026-11-08 10:41 CET. Goal ACTIVE. R146 made PROGRESS. Branch formalize.
