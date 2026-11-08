@@ -1,3 +1,208 @@
+# Current checkpoint: R137 original request initializes the tuple caller
+
+Updated 2026-11-08 05:53 CET. Goal ACTIVE. R137 made PROGRESS. Branch formalize.
+Keep the FULL original objective. Regular formalize pushes are authorized.
+Do not pause the goal or ask whether to continue. This introduction
+supersedes the current-status claims below. Preserve all historical text.
+
+Base43b17147dfd138b36dcfa61902bc89545e2e7dbf is the published R136 head.
+Main bd5a406a6a3f84b7e3ae0906082783911509df83 remains incorporated.
+R137 adds SIX proof modules with SEVENTEEN public laws. All six actual
+Nix/Lake targets pass. Strict own-source reports check the complete public
+declaration set, real qualified names, source hashes, and axiom reports.
+The reports use only propext, Classical.choice, and Quot.sound. No existing
+proof source or production Haskell source changes in this checkpoint.
+
+## New original-input result
+
+SourceSynthesisOriginalTupleCall.request starts with the original library,
+query, signed request, caller width, tuple budget, formulas, and solver.
+It follows the actual firstOrderRaw result. A source error remains an error
+branch. Every successful source result constructs all of the following:
+
+- The exact original equality-guard preparation, from the empty interner.
+- The actual mapped Label build, from the empty ordinary heap.
+- Original Program roles and the FULL initial modeled caller Context.
+- An actual tuple Call graph and its actual global-memo CallReads receipt.
+- Derived worker and reader fuel. Every larger pair returns the SAME
+  answer, checked caller state, and fourth memo through the new checked
+  tuple call. The returned state satisfies the shared Post, AnswerSound,
+  query availability, unfold-memo extension, and query-table equality.
+
+The theorem does not assume a supplied successful build, final Context,
+valid input interner, root availability, completed body, future carrier,
+future fuel, or future resource bound. It derives these initial facts.
+The constructor uses the existing modeled native initialization. It does
+not assert that a process-wide Haskell CAF was reset for each request.
+
+This is a new original-input composition for the root conjunction check.
+It supplements R130's original-source construction, merge traversal, and
+Required facts for emitted rows. These statements prove different parts
+of the intended system. Neither is a proof of the complete enumeration
+driver, every reached state, exact size order, or signed rank/unrank.
+
+## Source modules and checked contracts
+
+1. SourceSynthesisOriginalGuardsCached: TWO laws. The actual accepted
+   firstOrderRaw output has cached guards at every ordinary syntax node.
+   Actual source construction plus guard preparation derives Fields.
+   The proof covers the source context, termsRows, relevantRows, mapping,
+   Type guards, Program guards, normalization, and generalization.
+2. SourceSynthesisOriginalCallerInitialization: TWO laws. An accepted
+   request constructs the original field preparation, actual build,
+   Program roles, available closed original value, and initial Context.
+   The request theorem starts with Cache.emptyState and empty_valid.
+3. SourceCurrentAllocatedTupleConjunctionWorker: SIX laws. A checked
+   adapter calls the actual raw TupleWorker. It preserves the historical
+   Outcome type. It advances the actual returned physical state and keeps
+   the original fourth memo on failure. It preserves native tables.
+4. SourceCurrentAllocatedTupleConjunctionWorkerActual: FOUR laws.
+   Stability, uniqueness, observed success, and finite completion use the
+   actual tuple graph and the existing shared Context and Post.
+5. SourceCurrentAllocatedTupleConjunctionWorkerResources: TWO laws, in
+   namespace SourceCurrentAllocatedTupleConjunctionWorkerActual. Existing
+   Context, Fits, and availability suffice. No Frame premise is added.
+   Initial guard membership is derived internally. The forecast uses
+   TupleWorklistResources with ONE pending root and retains the original
+   domain bound. Concrete derived fuel uses TupleWorklistNumeric.
+6. SourceSynthesisOriginalTupleCall: ONE law. Compose original-source
+   initialization, actual tuple caller completion, global read receipts,
+   numeric-independent stable replay, and the actual checked tuple call.
+
+The original-request composition derives instrumented fuel. It does not
+yet state the complete original-request weighted work bound. The separate
+resource adapter accepts a current valid Context and Fits profile. Do not
+describe that internal profile as an already derived whole-request bound.
+
+## Next implementation: switch the actual enabled consumer
+
+The global selected SourceCurrentAllocatedConjunctionWorker.call is STILL
+the legacy key-charged call. EnabledEmpty.check STILL calls it with1000.
+The new checked adapter is verified, but existing driver selection has
+not changed. Haskell Enumeration.hs:664 and currentTupleBudget use10000.
+This mismatch requires a LEAN model correction. It is not a new Haskell
+bug report. Do not claim that an adapter alone completes the cutover.
+
+The R137 read-only consumer audit found a coherent first selected cutover:
+
+1. Add an all-outcome checked tuple CallPost law with the SAME supplied
+   global memo bundle. Use TupleMemo.call_outcome, full tuple effects,
+   tuple probes, checked advancement, and memo growth. Context supplies
+   the readiness already needed. The successful caller theorem alone
+   returns a derived read bundle and does not replace this contract.
+2. Route EnabledEmpty.check to the new checked tuple call and
+   currentTupleBudget. Port pending_enabled_complete and IncomingQuery
+   completion to TupleExecution.Call and TupleGlobalMemos.CallReads.
+   Use AllocatedTupleConjunctionCaller.finite, call_complete, and call_lift.
+3. Port EnabledEmptyStability, CurrentEnabledCheckPost, and
+   DispatchCapturedKnown. Keep legacy call_stored and allocated_call_heap
+   for old consumers. Add tuple variants for StoredEnabledEmpty and
+   AnnotationOutcome.enabled_check_heap. Storage needs only Stored.
+   Annotation preservation needs Ready, availability, and its annotation
+   heap; it does not need probes.
+4. Preserve IncomingOldKnownAll.check_old_known's WEAK SemanticHeap,
+   Covered[], availability, and closedness premises. Lift TupleWeakEffects.
+   Do not strengthen this API to Ready or a cost/field/frame premise.
+   Also port FiniteOrdinaryIncomingCheckedResult, NativeIncomingKnown,
+   and NativeIncomingOldKnown to tuple inversion and caller receipts.
+5. Add tuple-prefixed forecast APIs in ConjunctionAlphabetBounds. Keep
+   the old APIs for ScanNumericForecast and other legacy consumers.
+   For a supplied alphabet A and profile P, let
+   R=TupleWorklistResources.forecast A budget 1 (scalar P). This has ONE
+   pending root. Use profile<R,R,P.domains,R>.
+   Existing forecast_ge and fixed-A forecast_mono prove growth and fixed
+   alphabet monotonicity. Do not assume subset alone compares summed
+   list forecasts: duplicate counts can differ.
+6. Port IncomingQueryResources. Its alphabet stays the ORIGINAL incoming
+   queryAlphabet A P. Existing receipt.actual.guard_forecast proves the
+   queried heap uses this predicted alphabet. Do not replace it with a
+   future heap's computed carrier. Use tuple call_bound with this actual
+   derived annotation heap and workerFuel/readerFuel A 10000 1 (scalar(step P)).
+   Preserve the original domain bound in checked Fits.
+7. Port IncomingObservedResources.optional_done_unique and
+   PreparedQueryPrefixStored's forecast growth use. IncomingReservation,
+   MassForecast, RecursiveReservation, and PreparedReservation pad the
+   SAME seed schedule. Existing forecast_ge/advance_add/alphabet growth
+   suffice. No new cross-alphabet/profile oracle is required.
+8. Port IncomingQueryArity's repeated budget/fuel/graph fields. Its arity
+   proof must follow tuple Run branches, including exposed overflow and
+   zero/positive Admission row receipts. Port IncomingQueryProjectionHeap
+   using the tuple arbitrary-annotation theorem. Then check the affected
+   consumer frontier serially and rebuild Audit if source selection changes.
+
+Do not import the new checked adapter from the old checked worker: the
+new adapter reuses its Outcome type. For the later global worker switch,
+move the shared type to a lower module or use the raw tuple call directly.
+Do not claim old and tuple executions are equal. Preserve old historical
+proofs and the optimized interned core.
+
+## Biggest remaining gaps and unchanged full scope
+
+- Switch every actual selected worker/scan/caller/driver consumer to tuple
+  charging. Derive the shared source and role invariants at ALL reached,
+  generated, intermediate, failing, rejected, returned, and subsequent
+  states. Initial source closure is now proved; reached closure is open.
+- Prove one original-input/request and actual-caller work bound for BOTH
+  the selected optimized worker and the COMPLETE enumeration driver.
+  Discharge every internal context, readiness, progress, body, numeric,
+  finite-carrier, and resource premise from original input. No future
+  completion or supplied-validity oracle is an end-to-end substitute.
+- Prove joint Program/constrained-Type progress through every reached
+  role. Prove exact accepted terms per NODE-COUNT size, finite execution,
+  size-order enumeration, exact count, and BOTH SIGNED rank/unrank inverse
+  laws through the actual sparse implementation and native transitions.
+- Cover Sized/fallback/failure behavior, productive infinite/lazy paths,
+  maps/sets/caches/hash behavior, allocation, Word/Int boundaries, lookup,
+  wrappers, Curried, and Specftacular. Size-free enumerateOutUVarWith and
+  enumerateUntil' do not receive an invented node-size parameter.
+- Prove native lazy demand and edge-spine correspondence. A tuple graph
+  with eager operand exposure is not yet a native demand trace.
+
+The R136 ordinary-node witness still applies: edgeTuples[A,B,C] demands
+A,C,B. With distinct closed nullary shapes at A and C, native evaluation
+returns no tuples without demanding B. The current RowsWorker exposure
+model reads A,B,C. Both return no tuples. This is an exposure-schedule
+model gap. It is not evidence that the final leaf heap/cache differs or
+that Haskell fails to terminate. Matching first tuple order[B,C,A] is
+already modeled correctly. The next native puller must preserve the
+seed/extend dependency, cursor, reads, faults, and budget-stop continuation.
+Do not assume once-per-operand sharing inside the list comprehension.
+
+## Verification, storage, and restart state
+
+All SIX new targets and SEVENTEEN public laws pass their committed compact
+reproduction checkers. Existing proof sources do not change, so R136's
+complete Audit remains the latest broad build. No new broad Audit run is
+claimed for R137. The packets check each new target and all its imports.
+Two initialization drafts failed during implementation because of local
+namespace notation and a DecidableEq instance mismatch. Both are fixed.
+The final reports pass. No final failing target is hidden.
+
+Use the actual canonical EdgeKey instance in the Program build receipt.
+If the caller has a local decidable-equality instance, transport the
+observed build equality with congruence and Subsingleton.elim. Do not add
+an instance-equality hypothesis or change the builder's public result.
+
+ROOT remains the sole compiler. Run one capped job at a time under the
+existing heavy-management4GiB/swap0 cap. Do not alter compiler flags or
+global queue settings. Read-only bounded agent audits are complete.
+
+Runtime /tmp/mcfta-source-guard-entry-20261108-0532 holds only compact
+checkers, draft failure reports, hashes, publication records, and the
+restart registry. There are no build-tree copies or result archives.
+The recent readable /tmp total was about21MiB, with five protected
+unreadable paths. Recheck it at publication. No cleanup is needed for this
+checkpoint. Do not accumulate repeated full board/thread/build output.
+
+The final registry records exact proof commits, final HEAD, fetched
+formalize/main, canonical board readback, source/packet/doc equality,
+terminal jobs, goal status, and /tmp usage. Unrelated .hypha/ stays intact.
+No production Haskell edit or newly required Haskell fix arose in R137.
+Any later Haskell correction MUST be recorded in root FINDINGS.md so an
+external agent can implement or audit it.
+
+---
+
 # Current checkpoint: R136 dependency repair and full Audit verified
 
 Updated 2026-11-08 05:25 CET. Goal ACTIVE. R136 made PROGRESS. Branch formalize.
