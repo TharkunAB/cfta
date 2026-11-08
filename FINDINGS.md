@@ -1,3 +1,199 @@
+# R168: computed initial read allowance for demanded tuple sampling
+
+Updated: 2026-11-08 21:25 CET. This section is the current restart entry. All older
+sections follow it without changes. The full formalization goal remains
+active. Pushes to `formalize` remain authorized. Preserve unrelated `.hypha/`.
+
+The top-level objective remains one source-grounded account of the optimized
+interned worker and complete enumeration. It must cover actual callers,
+generated siblings, reached states, failed paths, and subsequent calls. It
+must include exact NODECOUNT counting, size and order, signed rank and unrank,
+and correspondence with the Haskell implementation. Component results and
+large mathematical resource bounds do not complete that objective.
+
+## Current result
+
+This checkpoint adds 13 modules and 36 public theorems. The main new endpoint
+is `SourceCurrentConjunctionTuplePullNumeric.sample_complete`. Let `N` be the
+original operand-list length and let `r` bound the initial heap. Define:
+
+```
+F = SourceCurrentConjunctionExposureResources.forecast N r
+H = SourceCurrentProjectionUnionResources.readFuel F
+```
+
+Initial `Ready`, operand `Values`, `ClosedValues`, and `Fits r` derive a
+completed physical sample at `H`. Every read allowance at least `H` returns
+the same fit or overflow result and the same full physical state. The result
+has the existing admission bound and input support. Returned rows and the
+remaining cursor operands are closed. The final constructor heap satisfies
+`Fits F`. The theorem takes no successful execution, future read trace,
+future heap, or sufficient read allowance as a premise.
+
+The proof first derives one successful execution from current facts. It
+extracts its actual read sequence. It compresses actual successful prefixes
+to their first demands. This gives the initial-support resource bound at
+each read entry. The proof then replays the original sequence, including
+repeated reads, at `H`. Exact cursor replay and the existing total-machine
+observation inverse identify the same completed result and full state.
+The computed allowance need not exceed the original witness allowance.
+
+This endpoint concerns the physical demand sampler from R167. The selected
+`SourceCurrentConjunctionTupleAdmission.run` still uses the eager exposure
+path. The new endpoint does not change that definition. The later requirement
+rows also retain their earlier eager model. These are open adoption tasks.
+
+## New modules and contracts
+
+* `SourceCurrentConjunctionTuplePullClosed`: 5 laws. Current closed operands
+  and rows remain closed through actual expose and step outcomes. A yielded
+  row has closed edges. The proof uses verified actual singleton reads.
+* `SourceCurrentConjunctionTuplePullClosedSample`: 3 laws. Actual finite and
+  total sampling preserve physical effects on every outcome. Successful fit
+  and overflow results retain closed rows and closed cursor contents.
+* `SourceCurrentConjunctionTuplePullCompletion`: 2 laws. Current readiness,
+  input support, and closed cursor operands derive a successful expose or
+  step. The result is stable at every larger read allowance.
+* `SourceCurrentConjunctionTuplePullTotalCompletion`: 2 laws. The existing
+  well-founded progress relation derives complete run and sample results.
+  This intermediate theorem derives an existential allowance. The numeric
+  endpoint above replaces that allowance with the computed initial bound.
+* `SourceCurrentConjunctionTuplePullReads`: 5 laws. A cursor step requests at
+  most one actual native operand read. The requested operand belongs to the
+  original support. A successful step supplies its exact exposure receipt.
+* `SourceCurrentConjunctionTuplePullReadTrace`: 3 laws. Finite drive execution
+  determines its actual demand sequence. Support holds on every observed
+  path. Successful execution gives an ordered exposure chain with the same
+  final heap. No pre-exposed operand list supplies that chain.
+* `SourceCurrentConjunctionFirstDemands`: 6 laws. First-demand compression
+  keeps the actual order of first reads. It preserves the exact final heap.
+  Every original row list occurs among the compressed row lists. The
+  compressed list is distinct and its length is at most the support length.
+* `SourceCurrentConjunctionFirstDemandResources`: 1 law. Actual first-demand
+  receipts derive final `Fits F`, row-width bounds, and exact compressed
+  replay from the original support and initial resources.
+* `SourceCurrentConjunctionFirstDemandReplay`: 1 law. Initial resources replay
+  the original ordered exposure chain at `readFuel F` or any larger allowance.
+  This includes repeated demands and preserves the original rows and heap.
+* `SourceCurrentConjunctionTuplePullResources`: 2 laws. An actual successful
+  total sample supplies its compressed receipts and final `Fits F`. This
+  component theorem requires that actual success. The numeric endpoint
+  derives the success from initial facts.
+* `SourceCurrentConjunctionTuplePullReplay`: 2 laws. Agreement on the one
+  currently requested native read preserves the whole step outcome. Exact
+  replay of the observed tape preserves the successful finite drive result
+  and full physical state. No monotone allowance premise is needed here.
+* `SourceCurrentConjunctionTuplePullNumeric`: 1 law. It composes current-fact
+  completion, actual demand extraction, prefix resource bounds, original
+  tape replay, and the total-machine observation inverse as described above.
+* `SourceCurrentAllocatedReaderExhausted`: 3 laws. An actual exhausted
+  collector result supplies its consumed path, exact stopped heap, and
+  nonempty remaining work. Current initial control facts then bound the
+  consumed allowance and stopped heap. No successful collector result or
+  supplied future path is needed. Pending and unresolved results, and the
+  initial outer Mu unfolding step, remain separate obligations.
+
+## Strongest broader claims and remaining gaps
+
+R164 `SourceSynthesisOriginalVerifiedCompletion.accepted` remains the broad
+source-worker endpoint. Accepted first-order raw input derives source
+construction, preparation, cold startup, current semantic and field facts,
+both closed histories, and the existing quotient-count and value-mass rank.
+One explicit initial room premise over its computed envelope derives actual
+outer completion. Larger outer allowances return the same result and
+caller. The returned state has the proved semantic, language, field,
+history, and closure properties. The room bound can be very large. This is
+not a practical 64-bit capacity guarantee or complete Haskell correspondence.
+
+R166 `SourceSynthesisOriginalFiniteDriver.accepted_capacity` remains the
+source-to-finite-driver endpoint. Accepted source input and one initial
+capacity premise derive admission and stable literal driver outcomes at
+any chosen recursive depth. The bound covers the modeled nested queries and
+all modeled stop outcomes. This driver starts from the originally built
+root. It does not yet start from R164's returned worker graph and caller.
+It does not derive sufficient depth, productivity, or the native default
+policy from source input.
+
+The next critical task is adoption of the demand sampler in the selected
+checker. Port the actual dependency graph. Derive the weak effects, captured
+field, and both global memo-history contracts on actual demand paths. Retain
+the numeric contracts and the relevant stopped-state bounds. Keep earlier
+eager APIs explicit where their exact execution contracts differ. Do not
+claim exact eager execution equality for the demand machine: a mismatching
+outer row can skip a middle operand, as the retained R167 example proves.
+
+After raw sampling adoption, model shared lazy requirement rows. Connect
+worker completion and the complete enumeration driver on the same actual
+returned graph and caller. Complete exact NODECOUNT, size, order, and both
+signed rank/unrank inverses through actual sparse execution. Retain the
+remaining AllSized, fallback, failed, productive-infinite, lazy table, map,
+set, cache, hash, Word/Int, allocation, wrapper, lookup, Curried, and
+Specftacular obligations. Do not introduce a size parameter for the existing
+size-free enumeration APIs. Do not replace the full scope with initial-only,
+successful-only, U-only, or conditional future-execution claims.
+
+The general outer rank is already proved. Do not ask for a new rank supplier.
+The new numeric theorem supplies an initial read allowance for this sampler.
+It does not bound total scan work. A budget bounds matching tuple outputs;
+it does not by itself bound mismatches, reads, or every failure path.
+
+## Haskell findings for external work
+
+No production Haskell file changes in R168. There is no new Haskell repair
+to transfer in this checkpoint. Keep all earlier Haskell findings below.
+Actual Haskell fixes must also be recorded in this root `FINDINGS.md`.
+Current Haskell enumeration uses `take (B+1)`, inner-first `foldr`, and shared
+lazy tuple and requirement rows. Those execution details remain part of the
+correspondence target.
+
+## Verification and reproduction
+
+Every new module has a compact source packet in `lean/restart-evidence/`
+with its matching `20261108-<slug>` directory. Each packet contains
+`check.py`, `theorems.json`, `checked.json`, and `README.md`. The own-source
+check treats warnings as errors. It emits an explicit `#check` and axiom
+report for every public theorem. The checker compares the real declaration
+namespaces and source hashes. It permits only `propext`, `Classical.choice`,
+and `Quot.sound`.
+
+The compatibility packet is
+`lean/restart-evidence/20261108-demanded-read-receipts-compatibility/`.
+The live graph has 5,305 modules. The changed reverse-import closure has 14
+modules. `Audit` covers all of them and has 4,302 direct imports. Its existing
+commands and body remain byte-exact. The new imports precede those commands.
+The complete audit checks 87,041 theorems, including private helpers.
+
+All compiler runs use the project Nix environment and the existing serial
+heavy-management wrapper. Effective `memory.max` and `memory.high` are both
+4 GiB. Effective `memory.swap.max` is zero. ROOT is the only compiler owner.
+Do not change the queue or compiler concurrency. A running command must be
+polled through its original handle. Observation failure does not authorize
+a duplicate compiler.
+
+Reproduce a source packet under the existing cap with:
+
+```sh
+python3 lean/restart-evidence/20261108-tuple-pull-numeric/check.py
+```
+
+The packet derives its repository root from its own location. It does not
+require a retained `/tmp` directory. The compatibility checker is portable
+in the same way. The committed packets contain small source checks and
+results. They contain no build archives or large compiler logs. All evidence
+is reproducible from the source and the pinned project toolchain.
+
+The working receipts for this checkpoint are in
+`/tmp/mcfta-demanded-read-receipts-20261108-2048/`. They are optional after
+publication. `/tmp` is about 31 MiB at this checkpoint. Check its size before
+large jobs. Retain only small diagnostics needed for active work. No archive
+or large cleanup is needed for this checkpoint.
+
+Before resuming, read this entry and the preserved earlier findings. Refresh
+upstream while preserving all proof sources and unrelated dirt. Check the
+canonical board status and live compiler handles. Keep the goal active.
+
+---
+
 ## R167: total physical tuple sampling and fitting semantic coverage
 
 Updated 2026-11-08 20:35 CET. The full goal remains ACTIVE. R166 was verified progress.
