@@ -1,3 +1,182 @@
+## R159: mixed fields at the actual Parent return
+
+Updated 2026-11-08 15:52 CET. The full goal remains ACTIVE. R158 was verified progress.
+Four new modules add seven checked public laws. Earlier proof sources,
+Audit imports, counterexamples, repairs and marked drafts remain unchanged.
+No production Haskell source changes in this checkpoint.
+
+Actual successful Parent application and filter calls now retain every
+mixed slot at the returned state. They also derive the existing full caller
+receipt and post-Context. The proof derives the actual field load,
+precheck, local receipt and constructor receipt. It does not request those
+future receipts as premises. The same actual return retains shared Type
+readiness, physical extension, closed available children and causal profile.
+The constructor result preserves the source guard and arity together, or
+returns the exact Top/[Empty] rejection sentinel. Program guards do not
+require Type-origin annotations.
+
+NativeTypeParentHeap.build/reject consume actual allocated constructor
+receipts. They derive equality with the actual physical advance. Native
+node, edge and domain stores remain unchanged at this constructor boundary;
+the equality operations may change. UniversalStore.advance retains all
+typed constructor and native Type stores. Existing ParentGuardHeapReturns
+supplies the actual post-heap profile. The exact warm Merge owner remains
+available. Parent laws use initialShared at their entry and return; they do
+not add a general Parent wrapper for arbitrary historical target lists.
+They do not prove the premises of an earlier query or constructor call.
+
+NativeTypeParentWorker.application/filter combine this constructor result
+with R158 local mixed-slot preservation. They follow the actual contradiction
+test and field load. Precheck.loaded_complete derives the matching precheck
+receipt. The proof dispatches unchanged, emptyChildren and classes at their
+actual prefix states. LocalWorkerActual.sound supplies the literal local
+receipt. MkEdge.finite and the observed constructor return identify the
+same constructor result and state. No independent local output, completed
+graph, output-ready fact or returned-slot supplier is an input.
+
+The existing resident_verified law supplies an EdgeBody with actual
+SourceReads, the existing EdgeCall receipt and its full Post. These facts
+and the new Type/field facts refer to the SAME returned checked state and
+memo. MixedSlots classifies every indexed output child: assigned Program
+slots have AnnotationFields; the other slots have Type-origin annotations.
+Coupled retains symbol equality and the paired guard/layout outcome. This
+result does not infer strict Program roles from symbol equality. Existing
+ParentProgramRoles supplies those roles under its stated input conditions.
+
+The application/filter laws still require initial Context, shared Type
+readiness, causal profile, inherited readiness, source-edge residency,
+closed initial children, the exact source guard occurrence, initial mixed
+slots, ResidentRanges and an observed successful Parent edge return.
+ResidentRanges is a genuine reached-state obligation. Context retains its
+existing semantic cache and inventory conditions. These laws do not derive
+completion, failures or the reached conditions from the original input.
+
+NativeTypeParentAnnotatedWorker.annotated covers Top singleton rows with
+a closed annotated child. It derives the actual load and precheck receipt
+internally. Every successful precheck branch gives the same literal local
+return for every fuel: the classes path has empty scan, required and pass
+work. The returned row keeps the symbol, Top guard and singleton layout.
+Its child is the original annotation or Empty. Every returned child has
+the annotation predicate. The main law needs no ResidentRanges premise.
+The resident companion adds ResidentRanges to derive the existing actual
+EdgeBody, reads, receipt and full post-Context at that same return.
+Both public laws still assume an observed successful Parent return.
+
+NativeTypeProgramNode.node uses the SAME actual makeNode call to combine
+shared heap readiness, physical extension, closed available result, strict
+ProgramValue and root AnnotationFields. It consumes resident closed rows,
+strict ProgramEdge roles and an annotated child zero for each row. It does
+not derive these row premises from an arbitrary node traversal. Root fields
+do not establish fields for every nested Program descendant.
+
+Verified source targets:
+- `SourceSynthesisNativeTypeParentAnnotatedWorker`: 2 public laws. SHA256 `7c7c8630f4011c3a27c9a4e1f4284f557b2812b8491fc71540602c3d62c66bc1`.
+- `SourceSynthesisNativeTypeParentHeap`: 2 public laws. SHA256 `20d08a7804aa7ccf3e7ce90da6c01ebe49f83c53f2842cbd82fca39d31b8b577`.
+- `SourceSynthesisNativeTypeParentWorker`: 2 public laws. SHA256 `0dc67e91ca0fa916e45b0d66ba5d233ee12c214371a77e1c2af81f4acb36bdd8`.
+- `SourceSynthesisNativeTypeProgramNode`: 1 public laws. SHA256 `283cc9e00d33627e953c0297d696a7149174a87284af7fdf012fa0a2017229b2`.
+
+Reviewable proof commits based on `57031b3dc31ecf050989bbf0e7104d9362c43b48`:
+- `1387dde827f27a1278391e85c7360c13f6ff9661`: SourceSynthesisNativeTypeParentHeap.
+- `d329ae3eecd1d7ac1b83d279d96ad778d0518f1e`: SourceSynthesisNativeTypeProgramNode.
+- `52f6b139fce336be3c56c995fe54bc9ad64304cf`: SourceSynthesisNativeTypeParentAnnotatedWorker.
+- `44f8106e72594ba821d71f7ec192635f6de7c18d`: SourceSynthesisNativeTypeParentWorker.
+
+Each source has a compact reproducible packet in
+lean/restart-evidence/20261108-<slug>/. Actual project Nix/Lake compilation,
+strict own-source warnings, every public name and namespace, standard axioms
+and exact source hashes pass. ROOT ran one compiler at a time under the
+existing 4 GiB and zero-swap cap. All owned compiler handles are terminal.
+Earlier proof sources and Audit imports remain unchanged. The R139 full
+Audit baseline is retained. It is not rerun here.
+
+The general original-input endpoint remains R137
+SourceSynthesisOriginalTupleCall.request. Accepted signed FirstOrder
+construction derives initial Context, strict Program roles and the actual
+stable tuple-call/read receipt with its full modeled postcondition. Source
+errors remain explicit. A true answer establishes formal emptiness; a false
+answer is not an acceptance result. R159 attaches Type and mixed-field facts
+to successful Parent returns. It does not derive the whole worker or
+enumeration driver from that original input. Type-origin provenance does
+not establish the complete generated Type grammar or lexical scopes.
+
+Next proof work, without reducing the full objective:
+
+1. Prove actual outer edge-cache field preservation. The first missing fact
+   is PartialWorker.rows -> edgeCall.ready, which skips Parent. Existing
+   ProgramMemoRoles.edge_ready gives only ProgramEdge. Add a captured-owner
+   conditional field certificate through FlatMemoThunk.CellSpec. For exact
+   application/filter guard and arity, closed mixed input implies Coupled,
+   closed mixed output. For a Top singleton annotated input, retain the
+   exact annotated-or-Empty result. Use edge_same_key to identify the entire
+   captured owner, including inherited constraints. Prove empty, begin,
+   advance, finish and ready-hit laws. R159 Parent results can justify cold
+   publication under the real cold-body conditions. Then prove
+   SourceSynthesisNativeTypeOuterEdgeFields.edgeCall_fields. Do not supply a
+   field fact for the final result or exchange the physical cache owner.
+2. The analogous node-cache gap occurs at walk -> nodeCall.ready. Root
+   AnnotationFields plus ProgramValue/ProgramMemoRoles.History is insufficient
+   for the ordinary node body. Application traversal also needs fields for
+   its function and argument; filter traversal needs candidate fields.
+   ProgramValue leaves Type operands opaque and permits unions. Establish
+   hereditary fields for every reached Program descendant and the separate
+   conditional preservation of fully annotated Type inputs. Prove actual
+   Parent row/node reconstruction and publication. Transport the joint
+   facts through warm returns, forcing, rejected/failed prefixes and later
+   callers. Keep exact native/equality operations, fourth memo, both warm
+   Merge stores and historical targets. Establish the full generated Type
+   grammar, scopes and ALL reached joint progress. Initial original mixed
+   slot laws do not classify arbitrary later warm winners or descendants.
+3. Derive ONE original-input/request/actual-caller resource bound for BOTH
+   the selected optimized worker AND the COMPLETE enumeration driver.
+   Include all siblings and every generated, reached, intermediate, failing,
+   rejected, returned, subsequent and native state. Derive finite Word,
+   Int, key and allocation safety. The explicit Seeded/Scan/class range plans
+   remain obligations at their actual prefix states. Type paths do not
+   discharge them. The R146 normalized path3-to4 source boundary prevents
+   a maximum-initial-path rank. Top descent remains segment-only. Do not
+   substitute supplied success, graph, trace, fuel, ranges, finite carrier,
+   closure, final validity, OriginalInput or future completion for this goal.
+4. Complete faithful native lazy pull-cursor execution, arity/raw-match
+   suspension, demand order, B+1 stopping and faults. Establish exact accepted
+   terms by NODE COUNT, exact counts and size order, BOTH SIGNED rank/unrank
+   inverses through actual sparse execution, and all Sized, fallback,
+   failure and productive infinite paths. Include tables/maps/sets/cache,
+   hashing, native Word/Int, allocation, wrappers, lookup, Curried and
+   Specftacular. Do not invent sizes for size-free enumerateOutUVarWith or
+   enumerateUntil'. The recorded native tuple difference concerns demand
+   order only. It proves no cache inequality, nontermination or Haskell bug.
+
+R156's profile correction remains in force. Actual checked native-query and
+successful Seeded/classes/reduce causal-profile preservation already exists.
+Reuse those laws. GuardHeap does not annotate the entire mixed heap.
+No production Haskell file was changed. No Haskell fix was established here.
+Record every future Haskell fix in root FINDINGS as well, with its source
+location and reproducible evidence, so external work can use it.
+
+Restart and publication:
+- Branch formalize. Pushes remain explicitly authorized. Preserve .hypha/.
+- Main is bd5a406a6a3f84b7e3ae0906082783911509df83 and is an ancestor.
+  Fetch exact main/formalize refs before further proof work.
+- Runtime: /tmp/mcfta-type-parent-20261108-1530/. Read RESUME.json,
+  publication.json, canonical-board-readback.json and terminal-audit.json.
+  They record the exact final pushed/fetched head, canonical board sequence,
+  checked hashes, complete tracked-file coverage and terminal process state.
+- Publication covers 23 changed tracked files: four new proof sources,
+  their four-file replay packets, and these three root documents. Historical
+  document bytes remain exact. The full goal remains active.
+- Retain one ROOT compiler at a time, 4 GiB and zero swap. Reuse the actual
+  returned handle after a yield. Do not change queue concurrency. Focused
+  checks pass. No broader Audit rerun is needed for this checkpoint.
+- Continue to measure /tmp. The directory-inclusive 15:48 audit found
+  28,680,192 bytes of readable allocation, about 27 MiB, with about 246 GiB
+  free. Five protected unreadable entries were excluded. No cleanup was
+  needed or performed. Keep compact replay scripts, hashes and reports.
+  Do not retain build archives or large proof-output copies.
+
+The older checkpoint text below remains history. This R159 entry supersedes
+its immediate next-step instructions. Retain every earlier source repair,
+accepted counterexample, rejected shortcut and marked draft.
+
 ## R158: mixed slots after literal local reduction
 
 Updated 2026-11-08 15:19 CET. The full goal remains ACTIVE. R157 was verified progress.
