@@ -113,6 +113,31 @@ private theorem mixed_children (valid : Guard → Prop) (assigned : Nat → Prop
           | succ index =>
               simpa only [Nat.add_assoc, Nat.add_comm 1 index] using returned index child selected
 
+/-- The literal mixed forest retains the Mu store and every returned slot classification. -/
+theorem requireAll_slots (valid : Guard → Prop) (assigned : Nat → Prop)
+    {fuel readFuel : Nat} {paths : List (List Int)} {entries : List (Int × Needed)}
+    {values results : List (Value Symbol Guard)} {before after : State Symbol Guard}
+    (actual : SourceEqualityRequiredExecution.requireAll fuel readFuel paths values before = .done results after)
+    (compiled : SourceEqualityNeeded.build paths = .node entries)
+    (semantic : SemanticReady before) (costs : CostHeap before)
+    (available : Values before values) (closed : ClosedValues values) (stored : MuStored valid before)
+    (typed : ∀ index value, values[index]? = some value → ¬ assigned index → Annotated valid value)
+    (fields : ∀ index value, values[index]? = some value → assigned index → AnnotationFields valid value)
+    (only : ∀ (index : Nat) children, SourceEqualityNeededMap.lookup (index : Int) entries = some (.node children) →
+      assigned index → AnnotationOnly children) :
+    MuStored valid after ∧ results.length = values.length ∧
+      ∀ index value, results[index]? = some value →
+        (assigned index → AnnotationFields valid value) ∧ (¬ assigned index → Annotated valid value) := by
+  have graph := (SourceEqualityRequiredExecution.requireAll_execution_iff paths values before results after).mpr
+    ⟨fuel, readFuel, actual⟩
+  simp only [compiled] at graph
+  obtain ⟨kept, returned⟩ := mixed_children valid assigned graph semantic costs available closed stored
+    (fun position value found => by
+      simpa only [Slot, Nat.zero_add] using And.intro (fields position value found) (typed position value found)) only
+  refine ⟨kept, graph.length, ?_⟩
+  intro index value found
+  simpa only [Slot, Nat.zero_add] using returned index value found
+
 /-- The literal mixed forest retains its selected Program operand and derives the final store. -/
 theorem requireAll (valid : Guard → Prop) (assigned : Nat → Prop)
     {fuel readFuel : Nat} {paths : List (List Int)} {entries : List (Int × Needed)}
