@@ -1,3 +1,117 @@
+# Current checkpoint: R145 original guard origins through actual native traces
+
+Updated 2026-11-08 10:17 CET. Goal ACTIVE. R145 made PROGRESS. Branch formalize.
+Runtime: /tmp/mcfta-original-guard-origins-20261108-1008/RESUME.json.
+Parent: 25ef7dcbda8592596b4984b1acd986b163534f58 (R144).
+Main bd5a406a6a3f84b7e3ae0906082783911509df83 remains incorporated.
+
+## New checked component
+
+THREE new proof modules expose 13 public laws. Their own actual
+Nix/Lake targets, strict source reports, complete public names, standard
+axiom reports and final hashes pass. Existing sources and Audit imports
+are unchanged. R139 full Audit is a prior baseline, NOT rerun for these
+new modules. The new modules have their own reproducible small packets.
+
+SourceSynthesisOriginalGuardAlphabet derives the literal guard inventory
+from accepted signed firstOrderRaw input. Its alphabet contains Top, the
+fixed application and filter guards, and equality guards from the actual
+original libraryGroups and libraryArgumentOnly Types. Rigid query Types
+and universe bodies contribute Top. Generic symbol mapping retains guards.
+The actual original build from empty stores derives a whole-record guard
+invariant. complete also derives the build itself. Warm stored winners
+within that build are covered by the construction invariant. They are
+not assigned to the current callback.
+
+SourceSynthesisNativeGuardOrigins connects the original Label build to
+CURRENT checked physical native traces. initial_heap derives the literal
+alphabet heap internally. trace_heap uses the actual yielded prefix and
+its genuine initial Good, allocation and static-code checks. It derives
+the final heap of guards built from original literals, Top and actual
+conjunction. request_heap derives the initial request-node code checks.
+No final GuardHeap is supplied. The actual trace and original build
+receipt/heap identity remain explicit. This does not construct the trace
+or derive an instruction bound from the original input.
+
+SourceSynthesisQueryGuardReadback connects this provenance to selected
+physical query rows and their actual terminal writers. Existing
+OpenQueryRowOrigins already covers self, ordinary joins, Mu, union and
+reference branches. This checkpoint consumes that full result instead
+of treating the older RowOrigin.Residual summary as the final interface.
+It does not establish new branch origins by introducing a disjunction.
+Cold and warm consumers derive final causal histories along the actual
+construction and native traces. They retain genuine initial physical
+checks. Final row guards have original provenance and actual residency.
+The warm consumer retains the preceding actual execution and its checks.
+It does not identify a warm result with the current source callback.
+
+## Biggest gaps and next work
+
+This alphabet is a finite ORIGINAL LITERAL pool. Derived guards need not
+form a finite closed alphabet. The finite advance alphabet still depends
+on the supplied actual trace length. No original-input instruction ceiling,
+UniformReserved, numerical Frame, WordRanges, or progress follows from
+this provenance result. The pool includes Program guards. It is not a
+Type-only scope/instance certificate or a bound on inherited residuals.
+
+Carry the exact R144 Type sites through joins, class edits, Required,
+exposure and Parent with their correct scope and instances. Then derive
+progress and a bound for CHANGED Type annotations and inherited demands.
+Initial prefix-free endpoint bounds alone do not establish that result.
+The inherited-growth example is not asserted reachable from firstOrderRaw;
+actual Required/narrowed height examples still refute ordinary-height
+substitution. Do not supply a finite generated carrier or closure oracle.
+
+Thread one JOINT invariant through EVERY actual reached request: current
+Context, numeric checks, conditional memo histories, strict Program and
+constrained-Type roles, source origins, inherited regions, scoped walks
+and progress. Include all siblings, intermediate, failing, rejected,
+returned, subsequent and native states. Derive native word checks OR the
+initial numerical certificates from the original input at every caller.
+Finite outer NodeCall graphs and sufficient complete-driver recursiveFuel
+remain supplied in their existing theorems.
+
+The native enumeration demand/order gap remains. The actual nested
+Seed/Extend puller must retain cursor order, symbol/arity matching,
+suspension, bounded stopping, faults and later pulls. A demand difference
+alone establishes no heap/cache inequality, nontermination or Haskell bug.
+
+## Full objective and strongest general original-input endpoint
+
+Keep ONE original-input/request/ACTUAL-caller bound for BOTH the selected
+optimized worker and COMPLETE enumeration driver. Prove joint progress
+at all reached states, exact accepted terms by NODE COUNT, exact count
+and order, and BOTH SIGNED rank/unrank inverses through actual sparse
+execution. Retain Sized, fallback, failure, productive infinite lazy,
+tables/maps/sets/cache/hash, Word/Int/allocation, wrappers, lookup, Curried
+and Specftacular. Do not add a size to enumerateOutUVarWith or
+enumerateUntil'. No U-only, initial-only, success-only, supplied-fuel,
+final-validity, finite-carrier, closure or future-completion replacement.
+Track original-input discharge for each internal premise.
+
+OriginalTupleCall.request remains the strongest GENERAL original-input
+entry endpoint. Accepted signed source input and empty stores derive
+actual guard/Label construction, initial modeled Context and Program
+roles, and actual tuple execution/reads at stable instrumented fuel.
+Errors are explicit. True certifies formal emptiness. False does not
+certify acceptance. Full outer/driver completion and native CAF reset
+correspondence remain unclaimed. R145 adds conditional actual-native
+provenance and readback components, not that missing total theorem.
+
+## Haskell findings and storage
+
+No Haskell fix was made or established in R145. Record any later actual
+Haskell fix in root FINDINGS.md for external implementation work. No
+strict Program predicate was weakened. Preserve all prior proofs,
+counterexamples, repairs, drafts and the unrelated .hypha directory.
+
+Compilation remains serial under the 4 GiB, zero-swap cap. Keep only small
+source/hash/axiom reports and failure diagnostics in /tmp. Do not copy
+build trees or source archives there. The latest exact size is in
+runtime publication.json. No cleanup was needed at this checkpoint.
+
+---
+
 # Current checkpoint: R144 original Type fields and physical guard sites
 
 Updated 2026-11-08 09:56 CET. Goal ACTIVE. R144 made PROGRESS. Branch formalize.
