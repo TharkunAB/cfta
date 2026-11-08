@@ -1,4 +1,5 @@
 import MicroCFTA.SourceCurrentAllocatedProbeExposure
+import MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion
 import MicroCFTA.SourcePruningEnumerationArityOrigins
 import MicroCFTA.InternedFreshOrdinaryFacts
 

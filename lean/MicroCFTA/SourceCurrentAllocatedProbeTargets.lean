@@ -1,4 +1,5 @@
 import MicroCFTA.SourceCurrentAllocatedProbeMerge
+import MicroCFTA.SourceCurrentAllocatedMuRebuild
 import MicroCFTA.SourceCurrentAllocatedTargetComplete
 import MicroCFTA.SourceCurrentAllocatedSharedTargetLeaf
 
