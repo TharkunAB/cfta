@@ -1,3 +1,156 @@
+# Current checkpoint: R136 dependency repair and full Audit verified
+
+Updated 2026-11-08 05:25 CET. Goal ACTIVE. R136 made PROGRESS. Branch formalize.
+This extension supersedes the earlier R136 source counts and verification
+status below. It preserves that entire published introduction and history.
+Keep the FULL original objective. Regular formalize pushes are authorized.
+Do not pause the goal or ask whether to continue.
+
+The final R136 source/check sequence is58e611a219569d83bcbdc75d4d500f80938fbaae,
+3c6afe6ebf3e477dcce8febad00d0d9894dac5be and
+f9f7e9fb7c6c162119d77c14001ed9dc36981d9d. There are EIGHT changed source
+targets: ONE new lower module and SEVEN existing modules. Their33 existing
+public laws pass strict own-source checks, explicit complete-name checks,
+source hashes and standard-axiom reports. ZERO new public laws are claimed.
+The original generic and current unfolding declarations retain byte-exact
+signatures and bodies. Every other consumer proof body is unchanged.
+
+The complete existing MicroCFTA.Audit target now PASSES:
+"Build completed successfully (4896 jobs)." It covers4895 ordered modules.
+The unchanged R135 numeric caller's two laws also pass again. This is a
+local Lean build result. It does not close every theorem's premises or prove
+native Haskell correspondence. No broad Haskell test or exact-head CI claim
+is made. Main bd5a406a6a3f84b7e3ae0906082783911509df83 remains incorporated.
+
+## What the broader build found and fixed
+
+Removing the old transitive import exposed four genuine dependency omissions.
+Add direct imports at their actual higher-level consumers:
+- ProbeExposureArity imports AllocatedNativePhysicalCompletion.
+- AllocatedProbeQuery and AllocatedProbeTargets import AllocatedMuRebuild.
+- NativeNarrowArity imports AllocatedQueryMemo.
+
+These are import-only fixes. They preserve all proof statements and bodies.
+The lower probe and tuple modules retain the repaired dependency direction.
+The architecture check still finds all nine unwanted tuple-to-caller paths
+absent. The original ProbeBirth import still exposes BOTH old theorem names.
+No selected execution or Haskell behavior changes in R136.
+
+One broad retry hit the existing4GiB cgroup memory limit. Its scope reported
+Result=oom-kill with MemoryMax4294967296 and MemorySwapMax0. Keep that failure
+in the record. The successful path built pending imports one target at a
+time, then built Audit. It used the same compiler flags, global queue and
+4GiB/swap0 cap. A350-second segment stopped at its time limit and resumed
+from saved successful results. The final segment exited0 and peaked3479MiB.
+It recorded1303 successful individual target checks, including an earlier
+cache scan; that count is not a count of new theorems. All R136 compiler jobs
+are now terminal. Temporary logs and receipts remain small.
+
+Committed per-source packets and the architecture checker reproduce without
+/tmp. The existing whole Audit target is also a source reproduction target.
+On a cold4GiB build, build stale imports in dependency order before Audit.
+The small serial helper and successful result are retained in
+/tmp/mcfta-probe-deps-20261108-0446/ as optional operational records.
+No source tree, archive or build tree was copied into /tmp.
+
+## Strongest statement and next selected port
+
+The strongest semantic statement is still R135's INTERNAL tuple caller law:
+from a valid initial Context, Frame, available query and fitting Profile,
+construct the actual tuple-budget call and logical reads. Preserve the full
+caller invariants at the SAME return. Derive heap and projection/read fuel
+bounds from the initial state. Every larger pair replays that same answer,
+heap/equality state and saved memo. True proves formal-language emptiness.
+False proves no acceptance. This is not a general original-input bound or
+native total-work bound.
+
+The selected allocated wrapper still executes the OLD key-charged worker.
+The next port can use three checked tuple adapters: Worker, Actual and
+Resources. Reuse existing Outcome, physical, advancePhysical, ready,
+lift_effects, Receipt and advance_ready. Do not duplicate those invariants.
+This adapter batch is preparation. It must lead to actual selected migration.
+
+Preserve the old resource interface's weaker premises: Context, Fits and
+Available. Do NOT add a Frame premise merely to reuse TupleCallerNumeric.
+Instead compose TupleWorklistNumeric.call_complete/call_bound with
+AllocatedTupleConjunctionCaller.actual. The returned scalar is
+TupleWorklistResources.forecast alphabet budget1(scalar profile), with the
+initial domain bound unchanged. Both ceilings use pending length1.
+Legacy step, row, exposure and projection bounds remain valid.
+
+A subsequent coherent selected batch can change class scanning first. Port
+ClassScan's actual Call relation, its completion/read/caller proofs, then
+AllocatedScanWorker.decision and literal scan/record interfaces. Update
+ScanNumericForecast.classStep, classFuel/classFuel_limits and inherited
+schedule/Reserved/fuel, plus ScanNumeric.complete. Preserve legacy generic
+resource functions for their legacy callers. Do not claim old/new execution
+equality. Enumeration's enabled check follows as its own selected batch.
+Its1000 budget still differs from actual Haskell's10000. Update that Lean
+wrapper, IncomingQueryResources and dependent receipts/forecasts together.
+
+## More precise original-input and native gaps
+
+The initial field-availability gap has a concrete next target. Prove that
+successful firstOrderRaw lib query signed emits only guards whose equalities
+satisfy Cached. Use actual source guard provenance: top_cached, normalized
+eqGuard, and Type/allTypes/generalize guard-origin laws. Program roles alone
+cannot prove this because assigned Type fields permit arbitrary syntax.
+Existing OriginalAllocationPreparation.prepare_complete and
+NativeOriginalHistory.History.fields can then derive stored-field
+availability. PartialInitialization.constructed supplies the initial caller
+Context. A new authored proof draft is being prepared separately at
+/tmp/mcfta-probe-deps-20261108-0446/draft-original-guards-cached.lean.
+It is UNVERIFIED and not a R136 theorem or publication input. Its completion
+and compilation belong to the next proof step. Preserve it if present.
+No actual Library/Query counterexample was found in this bounded audit.
+
+A read-only native-demand audit gives a precise source-level witness. Take
+ordinary closed nodes A:a, B:b and C:c, with one nullary edge each and a≠c.
+For a fresh positive-budget conjunction[A,B,C], Haskell edgeTuples reduces
+to extendB(extendC seedsA). Lazy source evaluation demands A then C. Their
+mismatch ends the inner stream before B is demanded. The model's eager
+exposures read A,B,C. Both produce zero tuples. This establishes a source
+DEMAND difference only. Ordinary leaf reads do not establish an actual
+heap/cache difference. No native probe or nontermination result is claimed.
+Literal EmptyNode is not a substitute: exploration skips it before admission.
+With matching shapes, source demand is A,C,B and the tuple is[B,C,A]. The
+existing rotated tuple component order is correct; the exposure schedule
+still needs a native bridge.
+
+The next source-faithful pull transition must pull upstream before exposing
+the current Extend operand, suspend edge cursors in source order, emit only
+matching RAW tuples, and stop after budget+1 outputs without forcing the
+continuation. Retain actual demanded states/faults. Do not assume one shared
+nodeEdges read per operand without proof: it occurs in the per-prior-tuple
+comprehension. Edge-list spines, element demand and lazy tuple requirements
+remain further boundaries. Successful eager semantics and logical read
+receipts do not prove these native schedules.
+
+The largest goal remains ONE original-input/request/ACTUAL-caller bound for
+BOTH selected optimized worker AND COMPLETE enumeration, with ALL reached
+Program/Type progress and every sibling/failure/rejected/returned/native
+state. Retain exact NODECOUNT accepted terms/order/count and BOTH SIGNED
+rank inverses through actual sparse execution; all Sized/fallback/infinite,
+cache/hash/Word/Int/allocation/wrappers/lookup/Curried/Specftacular obligations.
+No final validity, closure, body, worker, fuel, carrier or Unselected oracle.
+Do not invent sizes for size-free APIs. R130 remains the strongest general
+original construction+merge+independent-every-merged-row Required composition.
+
+R136 proposes NO Haskell fix. Its budget mismatch and demand mismatch require
+Lean attachment/model work. Record any future Haskell fix in FINDINGS with
+source, status and external owner. Previous Haskell ownership and the
+withdrawn PR203 recommendation remain in the preserved history.
+
+Readable /tmp was21725184B at05:22 CET, with five protected unreadable system
+paths. This runtime used450560B; available space was about263GB. No cleanup
+was needed. The final exact hashes, canonical board readback, disk audit and
+source/packet verification will be in publication.json and RESUME.json.
+This extension's one-time writer preserves the whole307513B published R136
+prefix, the297376B R135 prefix and every historical tail. Do NOT rerun either
+writer after its manifest exists. Retain the full goal ACTIVE.
+
+---
+
 # Current checkpoint: tuple proofs are below the caller layer
 
 Updated 2026-11-08 04:51 CET. Goal ACTIVE. R136 made PROGRESS.
