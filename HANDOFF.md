@@ -1,3 +1,211 @@
+## R163: original successful recursive calls retain complete fields
+
+Updated 2026-11-08 17:43 CET. The full goal remains ACTIVE. R162 was verified progress.
+Six new modules add 24 checked public laws. Earlier proof sources,
+Audit imports, counterexamples, repairs and marked drafts remain unchanged.
+No production Haskell source changes in this checkpoint.
+
+The original signed-source endpoint now derives all initial invariants for
+the SAME successful bounded recursive node caller. It derives allocation
+preparation, the actual empty-store Label build, cold caller Context, root
+availability and closedness, recursive Program fields, shared Type
+readiness, causal profile and both empty captured-owner memo histories.
+A successful actual call with genuine reached ranges then derives its own
+source graph, reads, reached checks, full Post, available closed result,
+NodeLaw, shared Type readiness, profile, both complete field/closedness
+histories and recursive result fields. No initial build, Context, field,
+Type, profile, history or recursive-result supplier is an input.
+Successful execution and reached WorkerRanges remain explicit premises.
+This proves preservation through actual recursive execution. It does not
+derive that execution's completion or its original-input resource bounds.
+
+HereditaryOuterTraversal.nodeCall_fields follows one strong induction on
+the literal outer fuel. The order is walk, children, descendants, rows,
+nodeBody and nodeCall. Each child uses the actual indexed descent at the
+current equality-operation state. The actual smaller node call supplies
+both conditional Type and recursive Program fields. Its existing source
+receipt supplies the exact next Context and physical growth for the suffix.
+The suffix receives that SAME returned state. Contradictory inherited
+payloads erase every slot and supply both Empty certificates without calls.
+
+Descendants uses the actual inherited prefix and its derived combined
+payload. The current returned Parent row classifies the actual child vector:
+annotation rows have one Type child; applications have Type, Type, Program,
+Program; filters have Type, Program. The proof does not infer those roles
+from runtime symbols or the old pre-Parent row. Literal raw edge work uses
+the returned child vector and exact original guard. Rows performs actual
+Parent edge call, descendants and suffix in that order. Each earlier return
+supplies the actual state and inherited readiness used by the next call.
+
+Ordinary node bodies use the same actual row return and exact ordered-ID
+modify branch. Changed reconstruction uses actual makeNode on certified
+resident closed rows. Unchanged reconstruction retains the original value.
+Empty and union branches retain their literal values. Reference cannot
+return success. Resident Mu reconstruction derives its cleanup and unchanged
+heap from the actual cached probe law. Cleanup retains annotations and
+cached free references. Full recursive Program certificates exclude Mu.
+
+Warm node returns use exact complete captured-owner equality. Cold node
+publication uses the actual body result and the protected evaluating cell
+from that body's existing frame. There is no recursive node, body, result,
+future Context or completion callback in the public theorem. The returned
+native checked state, equality operations, fourth memo, warm Merge stores,
+conditional Mu/native Type stores and both outer result families stay tied
+to the exact observed call. Failed general prefixes remain outside this
+successful-run induction.
+
+OriginalHereditaryCall.accepted composes that theorem with actual original
+source initialization. Its only initial inputs are lib, query, signed value,
+the returned firstOrderRaw expression, width, formulas and solver. It uses
+Cache.emptyState and empty_valid internally. Source construction supplies
+the recursive Program fields. The same cold physical Context supplies the
+physical good state for initial shared Type readiness. Actual closed source
+construction supplies GuardHeap for Origin; this causal profile holds for
+any guard predicate and does not annotate the entire mixed heap. Both
+extended result histories start empty. The theorem quantifies over actual
+lower bounds, outer fuel, budget, result and returned caller. The request is
+exactly the constructed root paired with the prepared empty inherited value.
+Source errors stay outside this accepted branch. This is the modeled cold
+caller; native CAF initialization still needs correspondence.
+
+A necessary formal invariant repair preceded that composition.
+R162 HereditaryMemoFields retains conditional annotation and recursive
+Program fields. These predicates do not imply that a result has no free
+references. Context.Sound supplies resident results and language laws; it
+does not supply closedness. Thus warm-result closedness cannot follow from
+those facts alone. HereditaryClosedMemo adds an owner-conditional closure
+law to each actual returned node and edge cell. Closed node input implies
+closed result. Closed input edge children imply closed returned children.
+All inherited values and complete captured owners remain exact.
+
+The new history has actual CellSpec laws for both physical memo families.
+Initial, advance, begin, finish and ready laws retain all three implications.
+Its fields projection supplies R162 history. Generic finish still requires
+the actual complete publication certificate. The actual edge body derives
+that certificate from R162 Parent work. The node mutual induction derives
+it from the actual body. Neither generic finish law is used as a source
+completion argument. R162 sources remain unchanged.
+
+HereditaryOuterEdgeWorker retains extended history on EVERY edge outcome.
+Its successful Type/Program edge calls derive complete field, closedness,
+readiness, extension and profile facts, plus the SAME graph, source reads,
+checks, receipt, full Post, result residency and EdgeLaw. Initial classified
+closed inputs and genuine ranges remain explicit. Cold publication follows
+actual Parent work. Ready hits use conditional cached closedness and exact
+owner equality, including the inherited constraint.
+
+NativeTypeCallerSteps derives Type readiness through actual inherited
+prefix, indexed descent, raw edge and raw node modification. The prefix
+also derives its successful combined payload internally. Existing physical
+receipts derive the SAME caller Post. Operations-only steps retain the full
+native machine and warm stores. Raw constructor steps use existing shared
+heap laws and no-new-Mu profile preservation. No future ready state is
+supplied. HereditaryChildTransport retains strict row schemas through exact
+ordered child pairs, proves Empty erasure, and derives annotated Type rows
+and nodes through actual raw reconstruction. These are genuine constructor
+input facts; no future recursive-call result is assumed by the public
+recursive endpoint.
+
+Verified source targets:
+- `SourceSynthesisHereditaryChildTransport`: 4 public laws. SHA256 `01621f2cfd5fc187148e65a12843240f270052d6d3845d06dfa870c894cea18f`.
+- `SourceSynthesisHereditaryClosedMemo`: 9 public laws. SHA256 `bb9b83c6f7309f48b4ecf4bc43d45e724fa3b24c3beb2483b108cca68068d756`.
+- `SourceSynthesisHereditaryOuterEdgeWorker`: 5 public laws. SHA256 `874e0941658a244e7d637c14e8698efed12a22051c9272872703e735baa6edc8`.
+- `SourceSynthesisHereditaryOuterTraversal`: 1 public laws. SHA256 `98c7ba139becc84a247984433b72f021f69350b0a9538b50023404f309405415`.
+- `SourceSynthesisNativeTypeCallerSteps`: 4 public laws. SHA256 `5139366bb35b3cf23fce55c33750caf28ac06033ea9b3c00463f83f03b7106a7`.
+- `SourceSynthesisOriginalHereditaryCall`: 1 public laws. SHA256 `4af1be348bd6ef9f12d52eb454e8fb251942c268859fe299f303da743e2c1ea6`.
+
+Reviewable proof commits based on `2ceeef19662a746d0d508f39b32d59fcc1060244`:
+- `18bb8c0f4883b0b797481eabd3ce9a2949e5082c`: SourceSynthesisHereditaryChildTransport.
+- `46fdc65a4640c864b479d79f892d01d5dfcdbf96`: SourceSynthesisHereditaryClosedMemo.
+- `18935e0f61be32fb2afcf36cad376fdc485cb424`: SourceSynthesisNativeTypeCallerSteps.
+- `dbcb7453ed08111fa9b924442e2a0530b5021d0b`: SourceSynthesisHereditaryOuterEdgeWorker.
+- `bd5020fc093fcb760533c8f74edba08a105dbaea`: SourceSynthesisHereditaryOuterTraversal.
+- `b252a4e8c08547d0d726632251353c0fd148523d`: SourceSynthesisOriginalHereditaryCall.
+
+Each source has a compact reproducible packet in
+lean/restart-evidence/20261108-<slug>/. Actual project Nix/Lake compilation,
+strict own-source warnings, every public name and namespace, standard axioms
+and exact source hashes pass. ROOT ran one compiler at a time. The actual
+scope records memory.max and memory.high of 4,294,967,296 bytes and
+memory.swap.max of zero. All owned compiler handles are terminal.
+Earlier proof sources and Audit imports remain unchanged. The R139 full
+Audit baseline is retained. It is not rerun here.
+
+The original-source frontier now has two distinct checked endpoints.
+R137 OriginalTupleCall.request derives conservative tuple completion with
+no recursive worker-success supplier. R163 OriginalHereditaryCall.accepted
+covers the SAME successful full bounded recursive worker, derives all
+initial invariants, and retains recursive result and both memo certificates.
+Its actual success and genuine reached ranges are premises. These results
+are distinct. The complete selected enumeration driver, general worker
+completion and native behavior remain open. Origin annotations certify
+provenance. They do not establish the complete generated Type grammar,
+lexical scopes or semantic Program typing.
+
+Next proof work, without reducing the full objective:
+
+1. Derive actual successful finite execution and every reached WorkerRanges
+   plan from the original signed request and ACTUAL evolving caller.
+   Derive ONE resource bound for BOTH the selected optimized worker AND the
+   COMPLETE enumeration driver. Include all siblings and all generated,
+   reached, intermediate, failing, rejected, returned, subsequent and native
+   states. Derive finite Word, Int, key and allocation safety. The full
+   successful-run field/closedness induction is now checked and initialized
+   from source. Local Parent, raw reconstruction, descendants and actual
+   cold field publication are no longer the immediate missing bridge.
+2. Extend the required invariants to failed and incomplete prefixes.
+   Establish full generated Type grammar, scopes and joint Program and
+   constrained-Type progress. Derive a well-founded joint source measure.
+   The R146 normalized path3-to4 source boundary prevents a maximum-initial-
+   path rank. Top descent remains segment-only. Audit original discharge
+   of forecast, room, range, trace and fuel hypotheses. Do not replace the
+   full goal with supplied final success, body, graph, trace, fuel, ranges,
+   finite carrier, closure, final validity, OriginalInput or future
+   completion. Initial source closure does not prove every outcome safe.
+3. Complete faithful native lazy pull-cursor execution, arity/raw-match
+   suspension, demand order, B+1 stopping, faults and CAF correspondence.
+   Establish exact accepted terms by NODE COUNT, exact counts and size
+   order, BOTH SIGNED rank/unrank inverses through actual sparse execution,
+   and ALL Sized, fallback, failure and productive infinite paths. Include
+   tables, maps, sets, cache, hashing, native Word/Int, allocation, wrappers,
+   lookup, Curried and Specftacular. Do not invent sizes for size-free
+   enumerateOutUVarWith or enumerateUntil'. The recorded native tuple
+   difference concerns demand order only. It proves no cache inequality,
+   nontermination or Haskell bug.
+
+R156's profile correction remains in force. Actual checked native-query and
+successful Seeded/classes/reduce causal-profile preservation already exists.
+Reuse those laws. GuardHeap does not annotate the entire mixed heap.
+No production Haskell file was changed. No Haskell fix was established here.
+The new conditional-closedness history repairs a formal invariant. No new
+production counterexample was established. Record every future Haskell fix
+in root FINDINGS as well, with its source location and reproducible evidence,
+so external work can use it.
+
+Restart and publication:
+- Branch formalize. Pushes remain explicitly authorized. Preserve .hypha/.
+- Main is bd5a406a6a3f84b7e3ae0906082783911509df83 and is an ancestor.
+  Fetch exact main/formalize refs before further proof work.
+- Runtime: /tmp/mcfta-hereditary-traversal-20261108-1725/. Read RESUME.json,
+  publication.json, canonical-board-readback.json and terminal-audit.json.
+  They record exact pushed/fetched refs, board sequence, checked hashes,
+  complete tracked-file coverage and terminal process state. The compact
+  effective-caps.jsonl report records actual compiler cgroup limits.
+- Publication covers 33 changed tracked files: six new proof sources,
+  their four-file replay packets and these three root documents. Every
+  historical document byte remains exact. The full goal remains active.
+- Retain one ROOT compiler at a time, 4 GiB and zero swap. Reuse the actual
+  returned handle after a yield. Do not change queue concurrency. Focused
+  checks pass. No broader Audit rerun is needed for this checkpoint.
+- Continue to measure /tmp. Readable allocation stays below 30 MiB, with
+  about246 GiB free. Five protected unreadable entries are excluded.
+  No cleanup was needed or performed. Keep compact scripts, source hashes
+  and reports. Do not retain build archives or large proof-output copies.
+
+The older checkpoint text below remains history. This R163 entry supersedes
+its immediate next-step instructions. Retain every earlier source repair,
+accepted counterexample, rejected shortcut and marked draft.
+
 ## R162: complete Parent fields for Type and Program rows
 
 Updated 2026-11-08 17:12 CET. The full goal remains ACTIVE. R161 was verified progress.
