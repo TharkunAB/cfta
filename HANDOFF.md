@@ -1,3 +1,141 @@
+## R153: historical Type slots and actual shared-worker returns
+
+Updated 2026-11-08 13:07 CET. The full goal remains ACTIVE. The previous goal turn
+made verified progress. Six new modules add twelve checked public laws.
+No existing proof source or Audit import changes in this checkpoint.
+
+The joint shared Type state retains native readiness, costs, physical Merge
+memo facts, conditional typed Merge memo laws, and each historical target's
+exact value. Every stored value has physical availability, closedness and
+the Type-origin annotation. Empty shared slots derive their own initial
+facts. Actual heap extension transports each earlier value to the returned
+heap. Actual storage adds the newly derived result and retains other slots.
+These Type facts supplement the existing semantic SlotReceipt. They do not
+replace its class, captured-owner, inventory or language facts.
+
+The actual force proof follows the literal hit or miss branch. A ready hit
+uses its historical stored value and leaves the whole state unchanged. A
+miss executes the real projection-and-Merge Target graph. It derives the
+result facts BEFORE actual slot publication. No future stored-result law is
+supplied. The actual shared leaf forces that target, executes its native
+intersection with the current Type input, and retains all historical slots,
+Merge memo laws and native stores through the same returned state.
+
+The executable target proof derives its checked graph from the actual
+successful bounded return. Type-state facts derive physical readiness at
+each actual head, tail and native prefix. The executable shared force and
+leaf proofs derive their actual graphs in the same way. No language inventory
+or supplied completed target/force/leaf graph is an input. Initial Type facts
+and reached physical range checks replace the larger language-context API
+for these annotation results. They do not establish completion or derive
+the physical range checks from the original request.
+
+Accepted original Label construction derives the initial shared Type state
+with empty Merge memo and empty target slots. Original application and
+filter row calls derive EVERY normalized original guard endpoint's forest
+route from actual ordered child construction and original Program syntax.
+No per-endpoint typed-value or region oracle remains in those source laws.
+The initial cold physical Good certificate remains explicit. Generic shared
+state initialization also retains a supplied valid warm Merge memo. No native
+CAF reset or general original-to-warm-state correspondence is claimed.
+
+Remaining local premises are explicit: the captured forest's available and
+closed values, structural Type routes, the current leaf input's availability,
+closedness and annotation, reached native range checks, and successful actual
+worker returns. The graph consumers use actual completed execution. These
+are guard-provenance results, not full generated Type grammar, all reached
+role closure, termination, failure-prefix invariants or GHC lazy order.
+
+Verified source targets:
+- `SourceSynthesisNativeTypeSharedForce`: 1 laws. SHA256 `8efcd8ef9023f19096aa9a79ff6d372e27f5b2f39b44d27b5cf7bb055c770efb`.
+- `SourceSynthesisNativeTypeSharedLeaf`: 1 laws. SHA256 `89a5e992ea452913e35a2460eb6c086e89aa16ef942c03b1d6f385bc272d411f`.
+- `SourceSynthesisNativeTypeSharedState`: 3 laws. SHA256 `d74525e3d4ff84a2ff7da787e31177ee5c9e05384aa7b0cc4f11ec7be706ed88`.
+- `SourceSynthesisNativeTypeSharedWorker`: 2 laws. SHA256 `81827e66808e4875c67320b356de5f3918348d74a3c6e24a52349ad4b78313fb`.
+- `SourceSynthesisNativeTypeTargetWorker`: 2 laws. SHA256 `729cff19daee93c449b4f3a471d070897dd17697d7e68760ebdb384ee30f9527`.
+- `SourceSynthesisOriginalTypeSharedState`: 3 laws. SHA256 `67293b44d31deea33f9ce272e4fdfb7ce3223843872609b71ae8b4b4470a21fa`.
+
+Reviewable proof commits based on `3e1ba28922d701c0520dc195bca496d643201b44`:
+- `8ec1e0c1034c13fd74ff8354ae183d55ce09487a`: SourceSynthesisNativeTypeSharedState.
+- `75168115db2efd1b211a196951e23f889e08c72c`: SourceSynthesisNativeTypeSharedForce.
+- `205731b4da8074c29986907aeb3b17d34b5a25a4`: SourceSynthesisNativeTypeSharedLeaf.
+- `a17669f969bb664a447757370585facae0c23a75`: SourceSynthesisOriginalTypeSharedState.
+- `99a6b3cad36f3936c8c6009db0bd57bf7d228f7f`: SourceSynthesisNativeTypeTargetWorker.
+- `5cf6d2946743af42dbcf09be79360d3023b2d954`: SourceSynthesisNativeTypeSharedWorker.
+
+Each target has a small reproducible packet in
+`lean/restart-evidence/20261108-<slug>/`. Actual project Nix/Lake compilation,
+strict own-source warnings, every public name and namespace, standard axioms,
+and final source hashes pass. Use the existing serial 4 GiB and zero-swap
+heavy-management wrapper. All owned compiler handles are terminal at
+publication. The R139 full Audit baseline remains recorded, not rerun.
+
+The general original-input endpoint remains R137
+`SourceSynthesisOriginalTupleCall.request`. Accepted signed FirstOrder
+construction derives initial Context, strict Program roles and the actual
+stable tuple-call/read receipt with its full modeled postcondition.
+It does not establish complete worker/driver execution or native demand.
+R152's mixed Required proof retains the final Mu store and selected strict
+Program role with annotated fields. Its entry field classification still
+needs a reached-state discharge. The existing warm MergeStore theorem
+already supplied causal Mu-store preservation; R152 attached it to allocation.
+
+Next proof work:
+
+1. Use the CURRENT `SourceCurrentAllocatedSharedEditGraph` mutual edit
+   graph. Derive leaf input annotations from initial TypePath facts for the
+   leaves of the input edit trie. At relative path [], TypePath supplies the
+   annotation. Return transport of EVERY existing Type route, not only the
+   selected route. Derive populated selected subtries from
+   `SourceCurrentAllocatedClassEditPlan.compiled_populated`; an empty trie
+   alone has a vacuous route condition and cannot justify recursive exposure.
+   Use actual lookup membership and EditLeafPaths.below_member to descend.
+   Derive each current narrowing leaf input annotation from the actual
+   enclosing class-edit traversal and retained structural Type routes.
+   The current SharedLeaf laws take inputTyped as an entry fact. Remove this
+   per-leaf supplier at the real walk consumer. Derive each selected prefix,
+   its literal child/row read and conditional Mu store. Preserve the needed
+   Type fields and strict Program roles through every actual rebuild.
+2. Combine historical target slots with actual mixed Required, class scans,
+   narrowing, Parent, forcing, failure prefixes, returned and subsequent
+   callers. Derive reached mixed Type/Program entry facts from preceding
+   edits. Keep exact captured cache owners, native tables and operations.
+   An arbitrary stored Program union or Mu head does not follow from
+   AnnotationFields. Derive its actual shape or a sufficient stronger law.
+3. Derive generated structural Type grammar, captured scopes and joint
+   progress at all reached states. R146 still shows a normalized Type
+   conjunction can raise maximum path length from three to four. Top descent
+   is only a segment law. No maximum-initial-path global rank is established.
+
+The full objective remains ONE original-input/request/actual-caller resource
+bound for BOTH the selected optimized worker AND complete enumeration driver,
+including all siblings, generated/reached/intermediate/failing/rejected/
+returned/subsequent/native states. Derive finite Word/Int/key safety and
+completion. No future worker/body/result, success, trace, range plan, fuel,
+closure, finite carrier, final validity, lookup or OriginalInput oracle can
+replace that objective. Keep all Sized/fallback/failure/productive infinite
+paths, tables, maps, sets, caches, hash and allocation behavior, wrappers,
+lookup, Curried and Specftacular. Do not invent a size for size-free APIs.
+
+Connect exact accepted terms, NODE-COUNT size, counts and ordering and BOTH
+SIGNED rank/unrank inverses through actual sparse execution. Native GHC lazy
+cursor/demand/order/stop/fault correspondence remains open. The known tuple
+demand mismatch does not establish a Haskell bug, cache/state inequality,
+or nontermination. Public intersection starts with the empty domain and
+retains warm native caches. Internal Mu bindings already follow native scope
+rules. Do not relabel that wrapper as a missing ingress or infer Type roles
+from symbols or bare references.
+
+No Haskell edit or new established Haskell fix in R153. Any future Haskell
+repair MUST also be recorded in root FINDINGS.md for external work.
+Preserve unrelated `.hypha/`. Refreshed main remains
+`bd5a406a6a3f84b7e3ae0906082783911509df83`, already an ancestor.
+Push regularly to authorized `formalize`. The runtime is
+`/tmp/mcfta-shared-type-history-20261108-1257/`. Publication writes exact
+HEAD/refs, canonical board readback, terminal scopes, source/historical tail
+hashes, active-goal state and measured `/tmp` usage to RESUME.json and
+publication.json. Keep only small reproducible reports and restart data.
+Do not delete protected unreadable `/tmp` paths. No cleanup is required now.
+
 ## R152: joint Program Required and actual allocated Type targets
 
 Updated 2026-11-08 12:52 CET. The full goal remains ACTIVE. The previous goal turn
