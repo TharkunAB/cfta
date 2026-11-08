@@ -1,3 +1,179 @@
+# Current checkpoint: R144 original Type fields and physical guard sites
+
+Updated 2026-11-08 09:56 CET. Goal ACTIVE. R144 made PROGRESS. Branch formalize.
+Keep the FULL original objective. Regular formalize pushes are authorized.
+Do not pause the goal or ask whether to continue. This introduction
+supersedes the status below. Preserve all historical text and proofs.
+
+Base c6e40111680bc5d74777a4455fc303a38ed7c770 is the published R143 head.
+Main bd5a406a6a3f84b7e3ae0906082783911509df83 remains incorporated.
+R144 adds THREE proof modules and FIFTEEN public laws. Actual Nix/Lake,
+strict own-source, real-name, final-hash and standard axiom checks pass.
+No existing Lean module or production Haskell source changes.
+
+## Exact Type fields from accepted source input
+
+SourceSynthesisInitialTypeFields has FIVE laws. Its mutual Program and
+ProgramRow certificates retain the original Library and Query. Component
+and argument-only rows retain their exact original input entry and list
+membership. Their annotation is generalize of the actual typesOf universe
+and that original Ty. Rigid query arguments retain their exact typeNode.
+Applications retain actual typesOf and the arrow marker, with recursive
+Program children. Filters retain typeNode of the actual query goal and
+the recursively certified candidate. Roles follow source constructors,
+positions and input membership. No name injectivity is assumed.
+
+context_fields derives the certificate from actual immutable context
+construction. termsRows_fields and relevantRows_fields follow literal
+selection, lookup, fallback and recursion. firstOrderRaw_fields derives
+the certificate from an accepted source observation. firstOrderRaw_result
+covers the literal error/success split without a supplied syntax result.
+This strengthens the older ProgramRowSyntax.annotated certificate, which
+permits arbitrary annotations. These are INITIAL SOURCE facts. They do
+not establish physical Type roles for every generated or reached value.
+
+## Positional source guard sites
+
+SourceSynthesisTypeGuardSites has SIX laws. Position.child retains both
+row and child indices; Position.member retains the union index; body
+retains the literal binder step. RowAt constructors contain exact source
+lookups and sub-occurrences. They contain no role or guard conclusion.
+
+RowAt.guard_mem derives literal guard inventory membership.
+generalize_nonTop proves that every non-Top literal row in
+  generalize (allTypes top constructors) typ
+has EMPTY ancestor address, row index ZERO, and the exact complete guard
+  eqGuard (equalityClasses typ).
+generalize_interior_top proves Top for every proper source interior row.
+generalize_site gives Top OR that exact original outer site. typeNode_top
+and allTypes_top prove Top for every literal rigid/universe row occurrence.
+These laws concern original instructions, including literal binder bodies.
+They do not classify physical captures, stored winners, or later joins.
+
+## Actual physical rows and initial endpoint bounds
+
+SourceSynthesisBuiltTypeGuardSites has FOUR laws. It uses generic
+mapSyntax/mapEdges literal, so the current Label symbol mapping is covered
+without changing guards or requiring an injective symbol map.
+
+rowCall_guard_site combines an indexed original source occurrence with
+its actual captured mapped RowCall. The full output guard is Top OR the
+exact original outer eqGuard, with empty address and source index zero.
+interior_call_top derives Top for the actual call of a proper original
+literal occurrence. rowCall_endpoint_origin derives, for every endpoint
+in that physical output guard, an exact recognized variable occurrence
+in the ORIGINAL Ty and path.length < sizeOf typ. Top has no endpoints.
+This is a PHYSICAL INITIAL FIELD bound, not an inherited or generated bound.
+
+The source occurrence and captured RowCall are explicit local inputs.
+generalized_root_row is the direct source-build consumer. A completed
+mapped generalized build, an exact ordinary source-root equation, its
+initial construction Context, and a selected physical structural root row
+derive the actual buildEdges/makeNode calls, canonical survivor indices,
+captured original RowCall, full guard classification and ordered child
+instructions. No GuardHeap or body-result supplier is accepted.
+
+The root equation is a genuine scope requirement. The structural root-row
+relation is not arbitrary physical descendant traversal. Binder, capture
+and warm stored-winner cases are not identified with the current Ty.
+A warm binder's selected body can come from another callback. R144 does
+not prove all physical interior Type guards Top, a full heap Type-site
+invariant, or every physical Type occurrence's original binding.
+
+## Main gap and next proof work
+
+The missing Type certificate now has explicit initial source facts and
+an ordinary physical-row interface. It must be carried through ACTUAL
+native joins, class edits, Required, exposure, Parent and subsequent
+requests. NativeQueryRowOrigins.Joined records actual full-guard
+conjunction. RowOrigin.Residual still leaves Mu/union/reference exposure
+explicit. Resolve those cases with actual captured source and stored-winner
+provenance. Do not infer a role from a symbol or assign a warm winner to
+the current callback. ConstraintOrigins.Derived tracks literal guards,
+Top and conjunctions, but retains its scope/read/range premises and also
+includes Program literals. It is not the joint Type-site invariant.
+
+Source normalized Type endpoints are prefix-free and bounded by original
+Ty size. That initial fact does not prove preservation under later
+conjunction or inherited combination. The existing inherited-growth
+recurrence has [0] and [0,1] in different raw classes and is not asserted
+reachable from firstOrderRaw. It must not be presented as an original
+Type counterexample. Conversely, the checked actual Required/narrowed
+height examples still refute ordinary application-height substitution.
+Finite source-site provenance alone would not prove a residual-demand
+rank. Derive the bound/decrease for CHANGED annotations and inherited
+residual demands from original types, source equation sites and actual
+Program occurrences. Do not supply a finite carrier or closure premise.
+
+Keep one JOINT induction over EVERY actual reached request: current
+Context and numerical facts, conditional Program memo histories, strict
+Program/constrained-Type roles, exact scoped walk positions, origins,
+inherited regions and progress. Include failing, rejected, intermediate,
+returned, subsequent and copied warm-hit states. R141 Parent roles,
+R142 actual edge-call history, R143 scoped walk and observed-context laws,
+and R144 initial Type-site laws are components. They do not prove this
+induction. All-reached global phase classification remains open.
+
+R143 observed Parent postconditions retain INITIAL Context, Frame, Fits,
+guard-alphabet heap, UniformReserved, readiness and row residency. Native
+WordRanges/KeySafe checks are not implied by physical Good. Derive the
+reached word checks OR those initial numerical certificates from the
+original request at every actual caller. The globally selected tuple
+conjunction itself adds no Frame or range premise. No new numerical
+requirements are discharged by R144.
+
+## Full objective and original-input boundary
+
+Keep ONE original-input/request/ACTUAL-caller bound for BOTH the selected
+optimized worker and the COMPLETE enumeration driver. Cover all siblings
+and generated/reached/intermediate/failing/rejected/returned/subsequent/
+native states. Derive joint Program/constrained-Type progress at every
+reached request. Prove exact accepted terms by NODE COUNT, exact count and
+order, and BOTH SIGNED rank/unrank inverses through actual sparse execution.
+Retain Sized, fallback, failure, productive infinite lazy, tables/maps/
+sets/cache/hash, Word/Int/allocation, wrappers, lookup, Curried and
+Specftacular scopes. Do not add sizes to size-free enumerateOutUVarWith
+or enumerateUntil'. Do not substitute U-only, initial-only, success-only,
+supplied-fuel, finite-carrier, final-validity, future-completion or closure
+claims. Track original-input discharge for all internal premises.
+
+OriginalTupleCall.request remains the strongest general original-input
+entry endpoint: accepted signed firstOrderRaw input and empty stores
+derive actual guard/Label construction, initial modeled Context, Program
+roles and actual tuple execution/reads at stable instrumented fuel.
+Errors remain explicit. True certifies formal emptiness; false does not
+certify acceptance. Full outer/driver completion and native CAF reset
+remain unclaimed. The full outer finite NodeCall graph, reached machine
+ranges and sufficient complete-driver recursiveFuel remain supplied in
+their existing theorems. R144 does not discharge those obligations.
+
+## Haskell findings and verification
+
+No Haskell fix was made or established in R144. No strict Program
+predicate was weakened. Actual rejection retains Top paired with [Empty].
+No strict-role counterexample was established from the weaker guard summary.
+
+Native demand/cursor correspondence remains open. edgeTuples [A,B,C]
+can demand A,C and skip B; the row exposure model demands A,B,C. Both can
+return []. This is a demand difference, not an established heap/cache/
+nontermination or Haskell defect. Retain actual Seed/Extend order,
+symbol/arity matching, suspended emissions, B+1 stop without forcing the
+continuation, reads, faults and later pulls. No once-per-operand sharing
+assumption is justified. Exact node-count/count/order/signed inverse and
+all wrapper correspondence remain in scope.
+
+All THREE new proof-only targets and FIFTEEN public laws pass actual
+Nix/Lake, strict own-source, explicit #check/#print axioms for all real
+public names, final source hashes and standard axiom checks. Only propext,
+Classical.choice and Quot.sound occur. Packets reproduce from committed
+source. The existing Audit import tree did not change. R139's 4920-job
+Audit is a baseline NOT rerun for these new unimported modules; their own
+strict target checks cover them. Compilation stays serial at 4 GiB with
+zero swap. No queue or global compiler option changed. Final publication
+checks all changed tracked bytes, exact pushed/fetched refs, historical
+document bytes, canonical board readback, active goal, terminal compilers
+and readable /tmp usage. Preserve .hypha/. Fetch before continuing.
+
 # Current checkpoint: R143 actual walk frames and observed Parent contexts
 
 Updated 2026-11-08 09:33 CET. Goal ACTIVE. R143 made PROGRESS. Branch formalize.
