@@ -1,3 +1,192 @@
+## R156: literal Scan and Required states with retained Type routes
+
+Updated 2026-11-08 14:28 CET. The full goal remains ACTIVE. Eight checked source targets
+contain nineteen public laws. Fifteen laws are new. Seven modules are new.
+The existing JointProgramRequired module gains one 25-line theorem. Every
+old statement and proof in that module remains byte-for-byte unchanged.
+No Audit import or production Haskell source changes in this checkpoint.
+
+The new laws use the actual returned states of the local phases. They do
+not substitute an original cold state for Scan or Required output. They
+retain warm native and Merge stores. The separate phase laws still need
+attachment to the whole literal LocalWorker.classes execution.
+
+JointProgramRequired.requireAll_slots exposes the full mixed child result
+from its existing induction. Actual Required success retains the final Mu
+store and the input length. Every output slot retains Type-origin provenance
+or annotated Program fields according to its assigned role. This law does
+not assert strict Program shape for every Program slot. The existing
+selected-slot strict Program law remains available. No induction is copied.
+
+NativeTypeRequired.requireAll combines that mixed result with actual
+Required allocation effects. It derives shared native readiness, physical
+extension, available closed results and the full slot classification at the
+same returned heap. Conditional native/Mu stores and both warm Merge stores
+remain valid. Historical target slots remain valid at the extended heap.
+No returned readiness or returned Mu-store supplier is an input.
+
+TypeRequiredRoutes has two layout laws and two source adapters. The source
+adapters use the original application/filter occurrence, actual precheck
+receipt, literal record Scan return and literal Required return. They derive
+every kept record's coherence and every endpoint route on Required's actual
+output forest. The Required run starts at scanned.heap. Its compiled need,
+annotation-only footprint and paths come from the real selected records.
+The input semantic/cost/store/field facts remain entry premises at that
+same scanned heap. The output routes are conclusions.
+
+NativeTypeGate retains native readiness, costs, physical extension, available
+original values and the causal profile GuardHeap through actual primary or
+secondary gate traces. NativeTypeSeededProfile combines the existing Type
+result with the existing actual seeded profile law. It derives a successful
+run of the same seeded worker internally from its actual graph. It does not
+assume a future profile heap or a supplied successful run.
+
+Correction to R155's immediate next-step text: actual checked native-query
+profile preservation already existed. ConstrainedCapNativeGuardHeap.trace_heap
+retains the causal profile through an actual checked physical Trace.
+NativeGuardHeapReturns.node/code and ParentGuardHeapReturns.seeded already
+provide actual successful worker profile laws. ParentGuardHeapReturns.classes
+and reduce also retain the profile through their actual successful workers.
+The new seeded wrapper composes existing results. It does not establish a
+previously missing core Mu/profile preservation theorem. GuardHeap constrains
+actual stored recursive bodies. It does NOT annotate the entire mixed heap.
+ConstrainedCapGuardNative.stored already converts this profile to MuStored.
+This correction is not a Haskell defect or a Haskell fix.
+
+NativeTypeScan covers all five actual current Scan branches. It retains
+native readiness, costs, physical extension, the causal profile and original
+forest availability. Primary/secondary effects, seeded queries, warm memo
+hits and actual decision misses use their own returned states. A decision
+may change equality operations. The proof rebuilds the native-store facts
+for that literal advancePhysical state. It does not equate these operations
+with an earlier copy. This graph law has no language inventory, MemoCorrect
+or future-state supplier. It consumes an actual Scan graph.
+
+NativeTypeRequiredPass composes the source application/filter adapters with
+Required and the class pass. It starts at Shared.initial scanned memo and
+uses the literal Required return. The class pass starts at advanceHeap
+scanned requiredHeap with the actual returned forest. The proof derives
+intermediate shared readiness and every selected route internally. Its
+result retains shared readiness, physical extension, closed available values
+and all selected routes. Only class-local target slots reset. Native state,
+costs and both warm Merge facts retain their exact owners. The actual class
+pass graph and the initial scanned-state slot facts remain inputs.
+
+NativeTypeLocalPrefix.precheck retains shared readiness and physical
+extension through the actual precheck state. NativeTypeLocalPrefix.scan
+attaches the new Scan result to the same shared state. SharedState.advance
+retains both warm Merge stores and historical target slots. These laws do
+not reconstruct a Scan graph from literal worker success or establish
+completion of the full local worker.
+
+Verified source targets:
+- `SourceSynthesisJointProgramRequired`: 5 public laws, 1 new. SHA256 `a4d6b1d482d96186be16fa63c8a4c295ae70255730bf22e647ac5a6f6daa10e1`.
+- `SourceSynthesisNativeTypeGate`: 2 public laws, 2 new. SHA256 `4c9936c60f79260cd4262e7f3aeb2cc57fa20a71eeb3df796b4769360d02044d`.
+- `SourceSynthesisNativeTypeLocalPrefix`: 2 public laws, 2 new. SHA256 `adcc4a4ac50e3e2116466030127b91da16834814ede343699ffe1001830efd10`.
+- `SourceSynthesisNativeTypeRequired`: 1 public laws, 1 new. SHA256 `f912f1410ec5436241e82712229f5617c769838cc0663f536b0cf60c4593543c`.
+- `SourceSynthesisNativeTypeRequiredPass`: 2 public laws, 2 new. SHA256 `87bbd96818bff71dd3453a191b44c4afb3dbe0ae2e8468dea57e5e105fe524c4`.
+- `SourceSynthesisNativeTypeScan`: 2 public laws, 2 new. SHA256 `50ef2b15b5e43cb95afa0364d54baecb3b2cc0cf98c3acddd3797f59abb9e144`.
+- `SourceSynthesisNativeTypeSeededProfile`: 1 public laws, 1 new. SHA256 `65177c74f74e888f29f7e11f0886466b1d336e538db088ad64ef87a44bcfcb52`.
+- `SourceSynthesisTypeRequiredRoutes`: 4 public laws, 4 new. SHA256 `ca550081fa84198f190840adc69927d5899e4a71856e61bb93b22b823bbf2500`.
+
+Reviewable proof commits based on `b39f4d677a412227541684f3d17805b56c2dc6ec`:
+- `aea5a2458b70cc9fd63410b1629a021c1b51bcec`: SourceSynthesisJointProgramRequired.
+- `81589c7c5aa8345801e0de4fc5380b67bfb396ea`: SourceSynthesisNativeTypeRequired.
+- `d9bd02cc02d1bfddb3c0bf575ff82c8d37549ee9`: SourceSynthesisTypeRequiredRoutes.
+- `68f685655d4627c924cd2e10ccdbe9fa61da3933`: SourceSynthesisNativeTypeGate.
+- `b2e39db35d0e1cb52ddd5db67a7e68280d8e8963`: SourceSynthesisNativeTypeSeededProfile.
+- `49cedd6f902862eabb223b46935be07153791773`: SourceSynthesisNativeTypeScan.
+- `ed0a110bce78687f1f3f1ae8937f390b2ecc14dc`: SourceSynthesisNativeTypeRequiredPass.
+- `fb799712ca4e7aac94b07fa6d2e6c3a81d0f0d2f`: SourceSynthesisNativeTypeLocalPrefix.
+
+Each source target has a compact reproducible packet in
+lean/restart-evidence/20261108-<slug>/. Actual project Nix/Lake compilation,
+strict own-source warnings, all public names and namespaces, standard axioms
+and exact source hashes pass. The existing four JointProgramRequired laws
+are rechecked with the new law. Its old source text is preserved exactly.
+Use one ROOT compiler under the existing 4 GiB and zero-swap cap. All owned
+compiler handles are terminal at publication. The R139 full Audit baseline
+is retained. It is not rerun for this checkpoint.
+
+The general original-input endpoint remains R137
+SourceSynthesisOriginalTupleCall.request. Accepted signed FirstOrder
+construction derives initial Context, strict Program roles and the actual
+stable tuple-call/read receipt with its full modeled postcondition.
+It does not establish whole worker/driver completion or native demand.
+R156 joins more of the actual local phase states. It does not prove full
+generated Type grammar, lexical scopes or joint roles for every reached
+value. Type-origin provenance is a narrower statement.
+
+Next proof work, without reducing the full objective:
+
+1. Attach the phase laws to literal successful Scan and LocalWorker.classes
+   execution from Type-state facts. First derive each actual seeded graph
+   and its returned Type facts, then derive the same actual Scan graph and
+   retained record occurrences, then bind the literal precheck, Scan,
+   Required and class-pass returns. The old AllocatedRecordScanWorkerActual.sound
+   already has NO inventory input. It requires broad Scan.Ready, MemoCorrect,
+   proper paths and reached ranges. Its verified/finite caller endpoints add
+   Context/inventory. Do not describe the generic sound law as inventory
+   dependent. The Type-only bridge must derive actual prefix facts and avoid
+   those broad semantic inputs where Type provenance suffices. It must
+   retain the exact equality operations, native state, fourth memo and warm
+   Merge owners. Derive the source field-slot assignment at actual Scan
+   return. Do not supply future readiness, routes or completed graphs.
+2. Extend joint strict Program roles and annotated Type fields through every
+   class operand, Parent, forcing, failed/rejected prefix, return and later
+   caller. Derive every annotation-only compiled footprint and each current
+   region. Include ordinary and recursive prefixes. Establish the complete
+   generated Type grammar, lexical scopes and joint progress on ALL reached
+   values. Existing profile preservation is available for reuse. It does
+   not supply all reached source role or structural classification facts.
+3. Derive ONE original-input/request/actual-caller resource bound for BOTH
+   the selected optimized worker AND the COMPLETE enumeration driver.
+   Include all siblings and all generated, reached, intermediate, failing,
+   rejected, returned, subsequent and native states. Include finite Word,
+   Int, key and allocation safety. The R146 normalized path3-to4 source
+   boundary still prevents a maximum-initial-path rank. Top descent remains
+   a segment result. A supplied success, trace, body, fuel, range, carrier,
+   closure, final validity, OriginalInput or future completion certificate
+   cannot replace this original-input proof obligation.
+4. Complete faithful native lazy pull-cursor execution, arity/raw-match
+   suspension, demand order, B+1 stopping and faults. Establish exact accepted
+   terms by NODE COUNT, exact counts and size order, BOTH SIGNED rank/unrank
+   inverses through actual sparse execution, and all Sized, fallback,
+   failure and productive infinite paths. Include tables/maps/sets/cache,
+   hashing, native Word/Int, allocation, wrappers, lookup, Curried and
+   Specftacular. Do not invent sizes for size-free enumerateOutUVarWith or
+   enumerateUntil'. The recorded native tuple difference concerns demand
+   order only. It proves no cache inequality, nontermination or Haskell bug.
+
+No production Haskell file was changed. No Haskell fix was established here.
+Record every future Haskell fix in root FINDINGS as well, with its source
+location and reproducible evidence, so external work can use it.
+
+Restart and publication:
+- Branch formalize. Pushes remain explicitly authorized. Preserve .hypha/.
+- Main is bd5a406a6a3f84b7e3ae0906082783911509df83 and is an ancestor.
+  Fetch exact main/formalize refs before further proof work.
+- Runtime: /tmp/mcfta-type-scan-required-20261108-1405/. Read RESUME.json,
+  publication.json, canonical-board-readback.json and terminal-audit.json.
+  They record the final pushed/fetched head, canonical board sequence,
+  checked source hashes, complete tracked-file coverage and process state.
+- Publication covers 43 changed tracked files: eight proof targets, their
+  four-file replay packets, and these three root documents. Seven proof
+  modules are new. One existing source has one additive public theorem.
+  Historical document bytes remain exact. The full goal remains active.
+- Retain one ROOT compiler at a time, 4 GiB and zero swap. Reuse the actual
+  returned handle after a yield. Do not change queue concurrency. The
+  focused targets pass. No broader Audit rerun is needed for this checkpoint.
+- Continue to measure /tmp. The 14:25 audit found about 22 MiB of readable
+  files and about 246 GiB free. The current runtime held about 68 KiB.
+  Protected unreadable entries were excluded from the readable total.
+  No cleanup was needed or performed. Keep compact replay scripts, hashes
+  and reports. Do not retain large build archives or proof-output copies.
+
+The older checkpoint text below remains history. This R156 entry supersedes
+its immediate next-step instructions. Retain every earlier source repair,
+accepted counterexample, rejected shortcut and marked draft.
+
 ## R155: warm class folds, joint fields and executable Type edit returns
 
 Updated 2026-11-08 13:56 CET. The full goal remains ACTIVE. The previous goal turn
