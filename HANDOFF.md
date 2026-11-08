@@ -1,3 +1,207 @@
+# R170: selected demand worklists and complete checked callers
+
+Updated: 2026-11-08 23:41 CET. This is the current restart entry. All older sections
+follow without changes. The full goal remains active. Pushes to `formalize`
+remain authorized. Preserve unrelated `.hypha/`.
+
+## Current result and strongest claim
+
+BOTH selected modeled checked call routes now use actual demand admission.
+`SourcePruningEnumerationEnabledEmpty.check` calls
+`SourceCurrentAllocatedTupleConjunctionWorker.call` at the existing
+`currentTupleBudget = 10000`. The separate global
+`SourceCurrentAllocatedConjunctionWorker.call` uses the same DemandWorker.
+Their executable chain is DemandWorker.call, decision, explore,
+DemandAdmission.run, and TuplePullTotal.sample. Overflow stops the sampled
+continuation. A fitting positive sample uses the existing ordered tuple
+worker. Historical TupleWorker and eager TupleAdmission remain available.
+The shared TupleAdmission.Result type is not eager execution.
+
+From legitimate initial caller Context, available query, and an initial
+Fits profile, each selected call derives its own complete Call graph,
+actual ordered CallReads, full returned Post, sound answer, and final Fits.
+The computed work and read allowances suffice. Every larger pair returns
+the SAME answer, complete checked state, and fourth memo. The exact returned
+bundle is valid. Both native tables, domain state, original inventory,
+merge memo, captured fields, and the required histories remain covered.
+A true answer proves emptiness. False remains conservative.
+
+`SourceCurrentConjunctionDemandWorklistNumeric.call_initial` derives a
+complete physical call from only Ready and query availability. It requires
+no numeric Fits premise. Its call_complete adds the computed allowances and
+final Fits from initial Fits. Neither endpoint takes a successful future
+run, future read list, future heap, future closure, or future tuple count.
+The selected allocated resource adapters retain their original premises.
+
+The forecast seeds `max(initialScalar, originalBudget)` ONCE. Later budgets
+remain at most the growing scalar. Existing pure step and phase envelopes
+remain. No new budget-versus-scalar premise was added. The new seed reaches
+both allocated callers, alphabet forecasts, class scan ceilings, incoming
+query ceilings, arity, projection, parent, and original source paths.
+Initial native capacity remains a real condition. These bounds do not
+establish practical fixed width feasibility.
+
+## Checked implementation and evidence
+
+There are 73 changed proof modules: 10 new and 63 existing ports. Their 267
+public laws include 71 new laws. Every previous public theorem name remains.
+Each module passes its pinned Nix/Lake check, explicit public #check, axiom
+report, exact declaration/namespace comparison, and own
+source reports with warnings treated as errors. Only propext, Classical.choice and Quot.sound are permitted.
+
+The new modules are DemandWorker; DemandWorklistExecution, Soundness,
+Effects, Memos and Numeric; DemandMemo; DemandWorkerStability; DemandGuard;
+and DemandArity, all under the SourceCurrentConjunction prefix.
+Their actual Run/Decision/Call graphs preserve the old skip order, budget
+charge, table growth, and Boolean fixed-point bound. Soundness uses actual
+sample coverage rather than fabricated full eager Rows. Repeated logical
+reads remain in their actual order. Positive receipts add only the actual
+sampled-tuple reads. First-demand compression remains numeric only.
+
+All-outcome weak effects retain the original weak heap premises. Operation
+growth remains unconditional. UnionNormal preservation still assumes only
+UnionNormal. Actual supplied publication graphs use the demanded sampler
+reads and actual sampled tuples. Arbitrary physical annotations survive
+all outcomes. Completed guard and arity graphs retain their old premises.
+Physical annotations and causal guard/publication predicates remain distinct.
+Requirement-fault causal claims still need their lower outcome laws where
+requested; do not substitute an annotation theorem for those claims.
+
+Two dependency repairs keep the layers acyclic. Executable allocated
+adapters import lower AllocatedQueryMemo and prove their warm hit state
+identity inline. ReadDeterminism imports lower ConjunctionGlobalMemos.
+AllocatedQueryReadValidity explicitly imports its query/class graphs.
+No checked state or Context/Post schema was redesigned.
+
+The complete compatibility frontier passes: 5,327 live
+modules, 1,781 affected modules, and
+27 outermost targets. Their import closure covers
+every affected module. Audit has 4,324 direct imports
+and checks 87,216 imported theorems. Independent
+signed-ranking roots and SourceSynthesisOriginalVerifiedCompletion also
+pass as frontier roots. Every affected source hash is checked before and
+after compilation. Earlier Audit command bytes remain exact.
+
+The compatibility packet is
+`lean/restart-evidence/20261108-selected-demand-compatibility/`.
+Each changed source has a four file packet named in verified-modules.json
+in the working receipt directory. The packets contain source hashes,
+public names, checkers, results and reproduction commands. They contain no
+build archives. Their roots derive from their own repository paths.
+
+Run compiler work serially through the existing heavy-management cap:
+4 GiB memory.max/high, memory.swap.max=0, LEAN_NUM_THREADS=1. Do not change
+the global queue. A portable reproduction is:
+
+```sh
+LEAN_NUM_THREADS=1 python3 lean/restart-evidence/20261108-selected-demand-compatibility/check.py
+```
+
+Use that command inside the existing capped job. The checker verifies its
+actual cgroup limits. The working receipts are small files in
+`/tmp/mcfta-demand-integration-20261108-2238/`; no retained /tmp state is
+needed to reproduce a published packet.
+Portable numeric and full compatibility reproduction also pass when started
+from /tmp. Their compiler work uses the same serial 4 GiB cap.
+
+## Commits and restart
+
+The previous published base is f162e0e611047a31b38a010b0256badf3c91958c. The checked proof changes are:
+
+* `35a9b4d563e97425ba93a14d08c7f508813bee7a`: Model conjunction worklists through actual demand.
+* `a2f2ab89384b4c4832c7b6eafa2f1b305f46a616`: Prove demand worklist effects histories and numeric completion.
+* `1ad1518b293371693fda5ac25fd471ec41c8bca3`: Prove stable sound memo calls and preserve guard and arity.
+* `4c8f55c6968e6cde5bcdbc7dcd22e0169a61f286`: Select demand admission throughout checked conjunction callers.
+
+A separate commit preserves two UNVERIFIED source drafts:
+
+* `lean/drafts/20261108-shared-requirements/`: actual class projection cursor.
+  SHA256: 3d77e02a3af2e583dff535112aeffc634e17f922e673b6545bf6050224fb1bfe.
+* `lean/drafts/20261108-same-return-driver/`: source worker-return to finite
+  driver composition. SHA256: 89dd205d5fe8f8f6557acc1dcb18dd84d68e8ca844c18909beb9dcdfdef230fd.
+
+The draft README files state their limits. They are not imported by Audit
+and are not part of the 71 new proved laws. Verify them before moving them
+into MicroCFTA. Check live Git/process state before resuming. Do not restart
+an observed compiler after a transient observation failure; poll its handle.
+The proof owners have finished their source ports. Root is the only compiler.
+
+## Next critical work
+
+The selected raw tuple sampler is demanded. REQUIREMENT allocation remains
+eager. Haskell `cfta/src/Data/CFTA/Enumeration.hs:616` shares the same
+`tupleRows` between Map.insert and concat tupleRows<>rest. Requirements at lines 639–643
+emit columns before classes. Class jobs use forest-major then Set.toList path
+order. Each conjunction at lines 647–649 stops at the first EmptyNode. RowsWorker
+requirements at line 84 currently completes classes before returning columns, and
+tuples at line 108 completes later tuples before returning its head. This is the
+remaining forcing and sharing gap. It is not a Haskell defect.
+
+Model stable shared row and requirement cells inside the emptiness body.
+The table and queue must reference the SAME cells. Force each cell at the
+source Empty test, save its result, and resume the worklist before forcing
+the next cell. An Empty column does not skip sibling requirements or tuples.
+The Empty test precedes budget/open/repeated-key skips at lines 613–614. A class stops
+only its own remaining projection jobs after its first Empty result.
+
+A successful explore from an empty table drains every stored requirement
+through that Empty test before grow. This forces canonical conjunction
+values, not deep graph bodies. A terminal materialization theorem can retain
+the current successful full-table and caller schemas. Failed prefixes do
+not materialize unfinished cells. Preserve their exact reached physical
+state and pending-cursor diagnostic. Do not assert the old contiguous eager
+Tuples graph occurred before the recursive worklist.
+
+The small RequirementPull draft implements only one class cursor and its
+planned branch laws. It does not implement shared cells or selected adoption.
+Compile it, prove exact prefix receipts and preservation, then connect the
+actual shared worklist. No supplied completed row, trace, or callback is a
+main endpoint premise.
+
+The separate same-return driver draft composes the SAME R164 result, caller
+and final global memos with SourcePruningEnumerationRecursive.initial_packet and the literal
+nodeEdges driver. It derives returned Fits and guard carrier through
+OuterInitialActual.node_call at the original InitialSchedule.node. Do not
+reseed the returned warm heap with OriginalFiniteDriver.seed, which sets
+domains to zero. The draft retains the scheduled domain counter.
+
+Its single original admission predicate explicitly joins worker Room and
+driver-final Capacity at a chosen recursive depth. Worker Room alone does
+not imply driver-final capacity. Existing policy/graph/metadata arguments
+remain explicit, and all stopped outcomes remain. This draft does not prove
+sufficient depth, productivity or total work. Check it before claiming the
+worker-return/driver gap is closed.
+
+The full objective remains the optimized interned worker and COMPLETE
+enumeration on actual callers and all generated, reached, failed, returned,
+and subsequent states. Retain exact NODECOUNT, size/count/order, BOTH signed
+rank/unrank inverses through sparse execution, AllSized/fallback/failure,
+productive infinity, lazy tables/maps/sets/cache/hash, Word/Int, allocation,
+wrappers, lookup, Curried, Specftacular and complete native correspondence.
+Do not add size parameters to size-free enumeration APIs. Retain the older
+constructor and equality targets as secondary targets.
+
+The general outer rank is already proved. R164 original-input worker
+completion remains conditional on its computed initial room. R166 finite
+driver execution remains at a chosen depth under its initial capacity,
+starting from the original constructed root until the new draft is checked.
+Do not replace these boundaries with theorem totals or a green component
+build. The full goal remains active.
+
+## Haskell findings and storage
+
+No production Haskell file changed in R170. There is no new Haskell repair
+for an external implementation task. The lazy-row finding is a formal model
+correspondence gap. All older Haskell findings and repairs remain below.
+Record every future Haskell fix in this root FINDINGS too.
+
+Readable /tmp allocation was about 28 MiB at 23:19 CET. It contains small source
+or diagnostic files, not build archives. The next drafts are preserved in
+Git. Continue to check /tmp before large work and keep only active small
+receipts. Preserve all marked proofs, counterexamples and unrelated .hypha/.
+
+---
+
 # R169: verified demand admission and migration contracts
 
 Updated: 2026-11-08 22:34 CET. This is the current restart entry. All earlier sections
