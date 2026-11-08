@@ -68,9 +68,9 @@ theorem complete
         (reached = true →
           ∃ reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula,
             checkedAfter = advancePhysical queried reachedPhysical ∧
-            ∃ actual : SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query
+            ∃ actual : SourceCurrentConjunctionTupleExecution.Call SourceCurrentConjunctionTupleBudget.currentTupleBudget beforeCaller.fourth query
                 (physical queried) answer reachedPhysical saved,
-              SourceCurrentConjunctionGlobalMemos.CallReads actual {memos with query := queries} final)) := by
+              SourceCurrentConjunctionTupleGlobalMemos.CallReads actual {memos with query := queries} final)) := by
   obtain ⟨next, query, queried, nextSource, nextRoots, receipt⟩ :=
     SourceCurrentAllocatedTargetQuery.finite formulas solver inventory left right beforeCaller.checked
       initial.ready initial.admitted leftAvailable rightAvailable leftClosed rightClosed ranges memos initial.globals
@@ -138,9 +138,9 @@ theorem complete
           (reached = true →
             ∃ reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula,
               checkedAfter = advancePhysical queried reachedPhysical ∧
-              ∃ actual : SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query
+              ∃ actual : SourceCurrentConjunctionTupleExecution.Call SourceCurrentConjunctionTupleBudget.currentTupleBudget beforeCaller.fourth query
                   (physical queried) answer reachedPhysical saved,
-                SourceCurrentConjunctionGlobalMemos.CallReads actual {memos with query := guardSaved} final) ∧
+                SourceCurrentConjunctionTupleGlobalMemos.CallReads actual {memos with query := guardSaved} final) ∧
           SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer ∧
           Available checkedAfter.native.machine.heap query ∧
           Cache.Extends memos.unfolding final.unfolding ∧ final.query = guardSaved := by
@@ -160,13 +160,13 @@ theorem complete
         | true =>
             obtain ⟨workerAnswer, workerPhysical, workerSaved, workerFinal, actualCall, actualReads,
               workerPost, workerSound, workerAvailable, workerUnfolding, workerQuerySame⟩ :=
-              SourceCurrentAllocatedConjunctionCaller.finite formulas solver 1000 guardContext receipt.available
-            obtain ⟨p, h, physicalStable⟩ := SourceCurrentConjunctionWorkerCompletion.call_complete actualCall
+              SourceCurrentAllocatedTupleConjunctionCaller.finite formulas solver SourceCurrentConjunctionTupleBudget.currentTupleBudget guardContext receipt.available
+            obtain ⟨p, h, physicalStable⟩ := SourceCurrentConjunctionTupleExecution.call_complete actualCall
             refine ⟨workerAnswer, advancePhysical queried workerPhysical, workerSaved, workerFinal, p, h,
               ?_, workerPost, ?_, ?_, workerSound, workerAvailable, workerUnfolding, workerQuerySame⟩
             · intro P H enoughP enoughH
               simp only [SourcePruningEnumerationEnabledEmpty.check, guardRun, ↓reduceIte]
-              exact Prod.ext (SourceCurrentAllocatedConjunctionWorker.call_lift
+              exact Prod.ext (SourceCurrentAllocatedTupleConjunctionWorker.call_lift
                 (physicalStable P H enoughP enoughH)) rfl
             · intro notReached
               cases notReached

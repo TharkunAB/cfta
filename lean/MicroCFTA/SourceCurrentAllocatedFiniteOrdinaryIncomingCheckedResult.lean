@@ -1,3 +1,5 @@
+import MicroCFTA.SourceCurrentAllocatedTupleConjunctionCaller
+import MicroCFTA.SourceCurrentAllocatedTupleConjunctionWorker
 import MicroCFTA.SourceCurrentAllocatedFiniteOrdinaryIncomingResult
 
 /-! The actual incoming result includes the enabled empty check. -/
@@ -119,12 +121,11 @@ theorem some_some_result (bits : Nat) (profile : Profile)
               .done answer checkedAfter saved at observedPhase
             dsimp only [SourcePruningEnumerationEnabledEmpty.check] at observedPhase
             split at observedPhase
-            · obtain ⟨reached, physicalDone, same⟩ := SourceCurrentAllocatedConjunctionWorker.call_done observedPhase
+            · obtain ⟨reached, physicalDone, same⟩ := SourceCurrentAllocatedTupleConjunctionWorker.call_done observedPhase
               subst checkedAfter
-              have call := SourceCurrentConjunctionWorkerCompletion.call_sound p h 1000 beforeCaller.fourth query
-                (SourceCurrentAllocatedNativeEffects.physical queried) answer reached saved physicalDone
+              have call := SourceCurrentConjunctionTupleExecution.call_graph physicalDone
               obtain ⟨_final, _reads, post, _sound, _available, _unfolding, _queries⟩ :=
-                SourceCurrentAllocatedConjunctionCaller.actual formulas solver
+                SourceCurrentAllocatedTupleConjunctionCaller.actual formulas solver
                   (before := SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge)
                   call queryPost.context receipt.available
               exact SourcePruningEnumerationNodes.lookupNode_keeps _ _ post.effects.keeps handle query looked

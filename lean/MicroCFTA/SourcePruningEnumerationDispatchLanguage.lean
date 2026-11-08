@@ -106,9 +106,9 @@ theorem dispatch_complete_semantics
                 (reached = true →
                   ∃ (reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula),
                     afterCaller.checked = SourceCurrentAllocatedQueryMemo.advancePhysical queried reachedPhysical ∧
-                    ∃ actual : SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query
+                    ∃ actual : SourceCurrentConjunctionTupleExecution.Call SourceCurrentConjunctionTupleBudget.currentTupleBudget beforeCaller.fourth query
                         (physical queried) answer reachedPhysical afterCaller.fourth,
-                      SourceCurrentConjunctionGlobalMemos.CallReads actual {memos with query := guardSaved} final)))) ∧
+                      SourceCurrentConjunctionTupleGlobalMemos.CallReads actual {memos with query := guardSaved} final)))) ∧
       ∀ (ambient : InternedGuardedLanguage.Env Symbol)
         (residualMeaning : EnumGuard → Language.Term Symbol → Prop)
         (assignment : Nat → Language.Term Symbol),

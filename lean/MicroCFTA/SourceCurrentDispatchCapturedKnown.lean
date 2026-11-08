@@ -1,5 +1,5 @@
 import MicroCFTA.SourceCurrentAllocatedNativeIncomingOldKnown
-import MicroCFTA.SourceCurrentConjunctionCallPost
+import MicroCFTA.SourceCurrentConjunctionTupleCallPost
 import MicroCFTA.SourcePruningEnumerationDispatch
 
 /-! Every actual dispatcher outcome retains the same entry captured cache. -/
@@ -37,7 +37,8 @@ theorem check_captured (bound p h : Nat) (query : Node)
     (fun a b => Classical.propDecidable (a = b))
   letI : DecidableEq Node := fun a b => Classical.propDecidable (a = b)
   have callKnown := SourceSizedPrefixKnownOrdinaryHeap.post_known
-    (SourceCurrentConjunctionCallPost.call_post p h 1000 query caller memos context available closed) known
+    (SourceCurrentConjunctionTupleCallPost.call_post p h
+      SourceCurrentConjunctionTupleBudget.currentTupleBudget query caller memos context available closed) known
   cases gate : (SourceEndpointMemo.run query queries).1
   · simpa [SourcePruningEnumerationEnabledEmpty.check, gate,
       SourceCurrentAllocatedPartialState.advance, SourceCurrentAllocatedConjunctionWorker.Outcome.state] using known

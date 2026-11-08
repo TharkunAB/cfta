@@ -1,5 +1,5 @@
 import MicroCFTA.SourcePruningEnumerationIncomingQueryResources
-import MicroCFTA.SourceCurrentAllocatedConjunctionWorkerActual
+import MicroCFTA.SourceCurrentAllocatedTupleConjunctionWorkerActual
 
 /-!
 # Resources at observed incoming-query returns
@@ -51,7 +51,7 @@ theorem optional_done_unique (flag : Bool)
               have first := (Prod.mk.inj one).1
               have second := (Prod.mk.inj two).1
               obtain ⟨sameAnswer, sameState, sameMemo⟩ :=
-                SourceCurrentAllocatedConjunctionWorkerActual.call_done_unique first second
+                SourceCurrentAllocatedTupleConjunctionWorkerActual.call_done_unique first second
               exact ⟨sameAnswer, sameState, sameMemo,
                 (Prod.mk.inj one).2.symm.trans (Prod.mk.inj two).2⟩
 

@@ -1,5 +1,7 @@
 import MicroCFTA.SourcePruningEnumerationIncomingObservedResources
-import MicroCFTA.SourcePruningEnumerationParentProjectionScan
+import MicroCFTA.SourcePruningEnumerationParentProjectionTargets
+import MicroCFTA.SourceCurrentConjunctionTupleAnnotationOutcome
+import MicroCFTA.SourceCurrentConjunctionTupleExecution
 
 /-!
 # Projection support at actual incoming query returns
@@ -84,8 +86,13 @@ theorem raw_done_resources_projection_heap
             obtain ⟨reachedPhysical, same, actual, _reads⟩ := performed rfl
             have ready := SourceCurrentAllocatedConjunctionMemo.ready reached receipt.ready.good
               receipt.ready.semantic receipt.ready.costs
-            have current := SourcePruningEnumerationConjunctionProjectionHeap.call_heap actual ready
-              receipt.available queryProjection
+            obtain ⟨work, read, replay⟩ := SourceCurrentConjunctionTupleExecution.call_complete actual
+            have retained := SourceCurrentConjunctionTupleAnnotationOutcome.call_heap projectable
+              work read SourceCurrentConjunctionTupleBudget.currentTupleBudget beforeCaller.fourth result
+              (physical reached) ready receipt.available queryProjection
+            have current : ProjectionHeap reachedPhysical.heap := by
+              simpa only [replay work read (Nat.le_refl _) (Nat.le_refl _),
+                SourceCurrentConjunctionWorker.Outcome.state] using retained
             simpa only [same, advancePhysical, SourceRecursiveIntersectionThunks.advance] using current
   have replacementAnnotated : SourceEqualityAnnotationLanguage.Annotated projectable
       (if producedAnswer then .empty else result) := by

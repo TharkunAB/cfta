@@ -31,28 +31,29 @@ local notation "reaches" => SourceEndpointReachability.reaches SourceMemoGate.un
 local notation "queryAlphabet" => SourceCurrentGeneratedQueryGuardResources.forecast
 local notation "scalar" => SourceCurrentConstrainedCapTargetForecast.scalar
 local notation "instructionBound" => SourceCurrentAllocatedNativeComputedBudget.instructionBound
-local notation "workerFuel" => SourceCurrentConjunctionWorklistResources.workerFuel
-local notation "readerFuel" => SourceCurrentConjunctionWorklistResources.readerFuel
+local notation "workerFuel" => SourceCurrentConjunctionTupleWorklistNumeric.workerFuel
+local notation "readerFuel" => SourceCurrentConjunctionTupleWorklistNumeric.readerFuel
+local notation "currentTupleBudget" => SourceCurrentConjunctionTupleBudget.currentTupleBudget
 variable {bits : Nat}
 
 /-- Initial guard and numeric bounds reserve the query and its optional constructor allocations. -/
 noncomputable def forecast (alphabet : List Constraint) (profile : Profile) : Profile :=
-  SourceCurrentConjunctionAlphabetBounds.callerForecast (queryAlphabet alphabet profile) 1000 (step profile)
+  SourceCurrentConjunctionAlphabetBounds.tupleCallerForecast (queryAlphabet alphabet profile) currentTupleBudget (step profile)
 
 /-- The combined forecast retains every original numeric component. -/
 theorem forecast_ge (alphabet : List Constraint) (profile : Profile) :
     SourceCurrentAllocatedNativeResourceForecast.Le profile (forecast alphabet profile) :=
   (SourceCurrentAllocatedNativeResourceForecast.step_ge profile).trans
-    (SourceCurrentConjunctionAlphabetBounds.callerForecast_ge _ _ _)
+    (SourceCurrentConjunctionAlphabetBounds.tupleCallerForecast_ge _ _ _)
 
 private theorem checked_fits (alphabet : List Constraint) (budget : Nat) (profile : Profile)
     {before : Checked (bits + 2)}
     {after : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula}
     (initial : Fits profile before)
     (bounded : SourceCurrentMemoMergeResourceControl.Fits
-      (SourceCurrentConjunctionWorklistResources.forecast alphabet budget (scalar profile)) after.heap) :
-    Fits (SourceCurrentConjunctionAlphabetBounds.callerForecast alphabet budget profile) (advancePhysical before after) :=
-  ⟨bounded.nodes, bounded.edges, initial.domains, bounded.stored⟩
+      (SourceCurrentConjunctionTupleWorklistResources.forecast alphabet budget 1 (scalar profile)) after.heap) :
+    Fits (SourceCurrentConjunctionAlphabetBounds.tupleCallerForecast alphabet budget profile) (advancePhysical before after) :=
+  SourceCurrentConjunctionAlphabetBounds.tuple_checked_fits alphabet budget profile initial bounded
 
 /-- Original current facts construct the complete incoming packet and its final resources. -/
 theorem complete_resources
@@ -104,14 +105,14 @@ theorem complete_resources
         (reached = true →
           ∃ reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula,
             checkedAfter = advancePhysical queried reachedPhysical ∧
-            ∃ actual : SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query
+            ∃ actual : SourceCurrentConjunctionTupleExecution.Call currentTupleBudget beforeCaller.fourth query
                 (physical queried) answer reachedPhysical saved,
-              SourceCurrentConjunctionGlobalMemos.CallReads actual {memos with query := queries} final)) ∧
+              SourceCurrentConjunctionTupleGlobalMemos.CallReads actual {memos with query := queries} final)) ∧
       Fits (step profile) queried ∧ Fits (forecast alphabet profile) checkedAfter ∧
       Heap (fun guard => guard ∈ queryAlphabet alphabet profile) checkedAfter.native.machine.heap ∧
       fuel = instructionBound profile.nodes profile.edges profile.mass + 1 ∧
-      p = workerFuel (queryAlphabet alphabet profile) 1000 (scalar (step profile)) ∧
-      h = readerFuel (queryAlphabet alphabet profile) 1000 (scalar (step profile)) := by
+      p = workerFuel (queryAlphabet alphabet profile) currentTupleBudget 1 (scalar (step profile)) ∧
+      h = readerFuel (queryAlphabet alphabet profile) currentTupleBudget 1 (scalar (step profile)) := by
   have actualRoom := fits.room room
   have leftOriginal := SourceRecursiveIntersectionOriginalOutput.closed_original left
     beforeCaller.checked.native.machine.heap initial.ready.good.native.machine.1.coherent leftAvailable leftClosed
@@ -137,8 +138,8 @@ theorem complete_resources
   have computed := receipt.actual.done_profile profile initial.ready fits
     leftAvailable rightAvailable leftClosed rightClosed
   let alphabetAfter := queryAlphabet alphabet profile
-  let p := workerFuel alphabetAfter 1000 (scalar (step profile))
-  let h := readerFuel alphabetAfter 1000 (scalar (step profile))
+  let p := workerFuel alphabetAfter currentTupleBudget 1 (scalar (step profile))
+  let h := readerFuel alphabetAfter currentTupleBudget 1 (scalar (step profile))
   have finalData : Fits (forecast alphabet profile) checkedAfter ∧
       Heap (fun guard => guard ∈ alphabetAfter) checkedAfter.native.machine.heap ∧
       (∀ P H, p ≤ P → h ≤ H →
@@ -147,7 +148,7 @@ theorem complete_resources
     cases checkEmpty with
     | false =>
         obtain ⟨rfl, _same, rfl, rfl, rfl, _final⟩ := disabled rfl
-        refine ⟨queryFits.mono (SourceCurrentConjunctionAlphabetBounds.callerForecast_ge _ _ _), queryCarrier, ?_⟩
+        refine ⟨queryFits.mono (SourceCurrentConjunctionAlphabetBounds.tupleCallerForecast_ge _ _ _), queryCarrier, ?_⟩
         intro P H _enoughP _enoughH
         simp only [Bool.false_eq_true, ↓reduceIte]
     | true =>
@@ -155,7 +156,7 @@ theorem complete_resources
         cases reached with
         | false =>
             obtain ⟨rfl, rfl, rfl, _final⟩ := skipped rfl
-            refine ⟨queryFits.mono (SourceCurrentConjunctionAlphabetBounds.callerForecast_ge _ _ _), queryCarrier, ?_⟩
+            refine ⟨queryFits.mono (SourceCurrentConjunctionAlphabetBounds.tupleCallerForecast_ge _ _ _), queryCarrier, ?_⟩
             intro P H _enoughP _enoughH
             simp only [↓reduceIte, SourcePruningEnumerationEnabledEmpty.check,
               guardRun, Bool.false_eq_true]
@@ -164,12 +165,12 @@ theorem complete_resources
             have ready := SourceCurrentAllocatedConjunctionMemo.ready queried receipt.ready.good
               receipt.ready.semantic receipt.ready.costs
             have scalarFits := (SourceCurrentConstrainedCapRequiredResources.of_checked queryFits).scalar_fits
-            have numeric := SourceCurrentConjunctionAlphabetBounds.call_bound alphabetAfter actual
+            have numeric := SourceCurrentConjunctionTupleWorklistNumeric.call_bound actual alphabetAfter
               (scalar (step profile)) ready receipt.available scalarFits queryCarrier
-            have carrier := SourceCurrentConjunctionAlphabetBounds.call_carrier alphabetAfter actual
+            have carrier := SourceCurrentConjunctionAlphabetBounds.tuple_call_carrier alphabetAfter actual
               ready receipt.available queryCarrier
             have bounded : Fits (forecast alphabet profile) (advancePhysical queried reachedPhysical) :=
-              checked_fits alphabetAfter 1000 (step profile) queryFits numeric.1
+              checked_fits alphabetAfter currentTupleBudget (step profile) queryFits numeric.1
             refine ⟨?_, ?_, ?_⟩
             · simpa only [same] using bounded
             · simpa only [same, SourceCurrentAllocatedQueryMemo.advancePhysical,
@@ -178,7 +179,7 @@ theorem complete_resources
               simp only [↓reduceIte, SourcePruningEnumerationEnabledEmpty.check, guardRun]
               apply Prod.ext
               · simpa only [same] using
-                  (SourceCurrentAllocatedConjunctionWorker.call_lift (numeric.2 P H enoughP enoughH))
+                  (SourceCurrentAllocatedTupleConjunctionWorker.call_lift (numeric.2 P H enoughP enoughH))
               · rfl
   refine ⟨next, query, queried, answer, checkedAfter, saved, final, queries, replacement, handle,
     instructionBound profile.nodes profile.edges profile.mass + 1, p, h, source, roots, receipt,

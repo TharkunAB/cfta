@@ -1,5 +1,5 @@
 import MicroCFTA.SourcePruningEnumerationEnabledEmpty
-import MicroCFTA.SourceCurrentAllocatedConjunctionWorkerActual
+import MicroCFTA.SourceCurrentAllocatedTupleConjunctionWorkerActual
 
 /-!
 # Successful enabled emptiness checks at larger bounds
@@ -34,6 +34,6 @@ theorem check_done_stable
           simp only [endpoint, ↓reduceIte, Prod.mk.injEq] at observed
           obtain ⟨done, same⟩ := observed
           simp only [↓reduceIte,
-            SourceCurrentAllocatedConjunctionWorkerActual.call_done_stable done enoughP enoughH, same]
+            SourceCurrentAllocatedTupleConjunctionWorkerActual.call_done_stable done enoughP enoughH, same]
 
 end MicroCFTA.SourcePruningEnumerationEnabledEmpty

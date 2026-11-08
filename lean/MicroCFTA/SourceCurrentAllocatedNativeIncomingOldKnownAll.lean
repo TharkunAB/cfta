@@ -1,5 +1,6 @@
 import MicroCFTA.SourceCurrentAllocatedNativeIncomingOldKnown
 import MicroCFTA.SourceCurrentConjunctionWorkerEffects
+import MicroCFTA.SourceCurrentConjunctionTupleCallPost
 
 set_option autoImplicit false
 open scoped Classical
@@ -51,15 +52,18 @@ theorem call_lookup (p h budget : Nat) (query : Node) (before : Checked width) (
   have retained := physical_lookup_growth before.native.machine.heap _ effects.2.2.1 effects.2.2.2 handle value present
   apply Eq.mp ?_ retained
   congr; apply Subsingleton.elim
-private theorem call_old_known (bound p h budget : Nat) (query : Node) (before : Checked width)
+private theorem tuple_call_old_known (bound p h budget : Nat) (query : Node) (before : Checked width)
     (memo : SourceCurrentEmptinessMemo.Memo) (cached : Cached)
     (semantic : SourceRecursiveIntersectionSemanticHeap.SemanticHeap before.native.machine.heap)
     (covered : Covered [] before.native.machine.heap) (available : Available before.native.machine.heap query) (closed : query.free = [])
     (known : KnownOrdinary bound before.native.machine.heap cached) :
-    KnownOrdinary bound (SourceCurrentAllocatedConjunctionWorker.call p h budget query before memo).state.native.machine.heap cached := by
+    KnownOrdinary bound (SourceCurrentAllocatedTupleConjunctionWorker.call p h budget query before memo).state.native.machine.heap cached := by
+  have effects := SourceCurrentConjunctionTupleCallPost.allocated_weak_effects p h budget memo query
+    before semantic covered available closed
   intro handle scs member
   obtain ⟨value, present, ordinary, height⟩ := known handle scs member
-  exact ⟨value, call_lookup p h budget query before memo semantic covered available closed handle value present, ordinary, height⟩
+  exact ⟨value, physical_lookup_growth before.native.machine.heap _ effects.2.2.1 effects.2.2.2
+    handle value present, ordinary, height⟩
 private theorem check_old_known (bound p h : Nat) (query : Node) (before : Checked width)
     (memo : SourceCurrentEmptinessMemo.Memo) (queries : SourceEndpointMemo.Memos) (cached : Cached)
     (semantic : SourceRecursiveIntersectionSemanticHeap.SemanticHeap before.native.machine.heap)
@@ -69,7 +73,8 @@ private theorem check_old_known (bound p h : Nat) (query : Node) (before : Check
   unfold SourcePruningEnumerationEnabledEmpty.check
   dsimp only
   split
-  · exact call_old_known bound p h 1000 query before memo cached semantic covered available closed known
+  · exact tuple_call_old_known bound p h SourceCurrentConjunctionTupleBudget.currentTupleBudget
+      query before memo cached semantic covered available closed known
   · exact known
 /-- Every actual incoming caller retains the old cache, including a failed physical check. -/
 theorem run_old_known (bits bound : Nat) (profile : Profile)
