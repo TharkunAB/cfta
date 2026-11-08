@@ -1,3 +1,171 @@
+## R167: total physical tuple sampling and fitting semantic coverage
+
+Updated 2026-11-08 20:35 CET. The full goal remains ACTIVE. R166 was verified progress.
+Nine new proof modules have strict reports for 40 public laws. The fresh
+project Audit passes for 86,900 imported MicroCFTA theorems. No production
+Haskell source changed. The selected emptiness checker remains eager.
+
+### Strongest statement and largest gaps
+
+The strongest original-source endpoints remain R164 and R166. Under their
+explicit computed capacity conditions, accepted source input derives a
+complete modeled core worker with language preservation, and a stable
+modeled driver outcome with resource bounds for each chosen finite depth.
+These are separate endpoints. The worker return is not yet composed with
+the complete driver on the same returned graph and warm caller. Sufficient
+depth, infinite-output productivity and full Haskell correspondence remain
+open. The conservative capacity tests are not practical native 64-bit
+guarantees. Exact NODECOUNT coverage and BOTH signed inverse laws still
+need their complete attachment through actual sparse execution.
+
+R167 closes local obligations for the physical raw-tuple sampler. Its total
+executor no longer takes an administrative transition allowance. Cursor
+accessibility proves termination even when a demanded read can return any
+finite row list. The initial operands and the existing lower read allowance
+determine fit, overflow with its unforced continuation, or the existing
+physical exposure fault. The proof does not assume future rows, a successful
+read sequence or a supplied adequate cursor allowance.
+
+Every total execution has an exact finite observation that stays equal for
+all larger administrative allowances. Conversely, any terminal finite
+observation identifies the same total result and full physical state.
+The lower operand-read allowance h remains explicit. R167 does not derive
+an adequate h from original source input, a practical native cost bound or
+host evaluation correspondence.
+
+### Checked sampler contracts
+
+1. SourceCurrentConjunctionTuplePullProgress: two public laws. Next includes
+   every actual more/yield continuation. Its accessibility proof permits
+   arbitrary finite exposure rows. wellFounded uses no axioms.
+2. SourceCurrentConjunctionTuplePullTotal: nine laws. run/sample have only
+   fit and overflow success constructors. run_eq executes the literal next
+   transition and source cap test. run_observation/sample_observation and
+   run_of_observation connect both directions to the finite machine.
+   Equality state, exact overflow charge and existing faults are retained.
+3. SourceCurrentConjunctionTuplePullEffects: six laws. Actual singleton
+   exposures and cursor steps preserve full constructor/equality Effects,
+   resident rows, available suspended operands and clean probe heaps.
+   These laws include every physical fault and require no closed-input or
+   successful-run premise. The generic singleton proof uses the supplied
+   EdgeKey equality instance directly.
+4. SourceCurrentConjunctionTuplePullDriveEffects: six laws. Finite advance,
+   drive and sample preserve these same effects and probes. StatusInputs
+   retains resident collected tuples and the actual unforced continuation.
+5. SourceCurrentConjunctionTuplePullTotalEffects: two laws. Initial Ready
+   and Values derive all-outcome effects and probes for TOTAL sampling.
+   The finite observation is derived internally, not supplied by a caller.
+6. SourceCurrentConjunctionTuplePullStability: six laws. Every successful
+   expose/step/advance/drive/run/sample has the identical result and complete
+   physical state at all larger operand-read allowances. Finite running
+   statuses are included. No stability of failed reads is asserted.
+7. SourceCurrentConjunctionTuplePullShapes: four laws. Actual yields retain
+   original operand-POSITION width, matching symbol/arity and nonemptiness.
+   Equal operands still occupy separate positions. Fitting and overflow
+   total samples derive these facts without a view/read-agreement premise.
+8. SourceCurrentConjunctionTuplePullCoverage: one law. For actual fitting
+   total sampling, Ready, available closed operands and their common
+   accepted term derive a NONEMPTY RESIDENT tuple whose every edge accepts
+   that term. A semantic residual follows the actual suspended cursor and
+   invokes read_accepted only for demanded singleton reads. No future view,
+   readback supplier or administrative bound is a public premise.
+9. SourceCurrentConjunctionTuplePullDemand: four laws. Literal ordinary
+   outer operands with different symbols complete in six transitions
+   without reading the middle operand. The total sampler derives the same
+   result without a transition input. Eager exposures still propagate a
+   middle fault. A union at lower read allowance zero gives a concrete
+   modeled observation fault. This is not a native Haskell fault claim.
+
+### Selected cutover: exact next obligations
+
+The executable cutover is small: replace TupleAdmission.run's eager exposure
+phase with total physical sampling. Overflow maps directly to the returned
+state. fit [] maps to zero. A positive fit runs the existing tuple worker
+at the actual sample-returned state. TupleWorker.explore/decision/call and
+the allocated wrappers can retain their public arguments and outcomes.
+The proof migration is necessary before selecting that change.
+
+The old eager claims fits_rows, positive_rows and TupleExecution.Admission
+produce a complete left-to-right Exposures/Rows graph at the SAME physical
+state. These claims are false for skipped or reordered demand. Preserve
+them under an explicit historical eager definition. Do not assert physical
+execution equality or hide eager reads inside a future-row provider.
+
+Next implement the actual demanded-read graph, source-derived successful
+read completion, ClosedEdges of yielded tuples and complete global memo
+histories. The new successful stability and fitting accepting-tuple laws
+provide their local prerequisites. Existing RowsSoundness.tuples_witness
+can then handle equality rejection and requirement witnesses. Preserve
+the weak SemanticHeap/Covered APIs where they already apply.
+
+For successful source completion, a possible route is cursor accessibility
+induction plus actual singleton read completion. Each reached Ready/Inputs
+state supplies its own next successful read. The actual successful read
+stability law then combines the finitely many lower allowances with max.
+This is a proposed proof route, not a checked R167 endpoint. A numeric bound
+computed from original input is a further obligation.
+
+For numeric heap/read bounds, MergedFreshOrdinaryColdReplay.nodeEdges_replay
+already proves exact rows and NO allocation after successful reads and heap
+growth; replay_stable also raises h. Compress ACTUAL demand to first reads
+of original operands, in DEMAND order. Its length must be bounded by the
+original operand count. Keep that count distinct from original tuple width,
+which includes duplicates. Derive all prefix and fault bounds. Raw budget+1
+limits matching outputs, not mismatching scans or total exposure work.
+Do not replace this missing producer with a future trace or bound premise.
+
+After raw sampling fits, the native tupleRows and requirements remain lazy
+and shared between table and pending worklist. RowsWorker.tuples remains
+eager. Full sharing, native allocation/global caches, warm startup, default
+policy and complete driver progress still need their own correspondence.
+Keep all Sized/fallback/failure/wrapper/lookup/Curried/Specftacular paths in
+scope. Do not assign an invented size to size-free enumerators.
+
+### Haskell FINDINGS
+
+No Haskell code or fix is part of R167. The actual source pointers remain
+Enumeration.hs:611-646: tuple sampling uses take(budget+1), edgeTuples uses
+foldr with inner-first demand, and tupleRows/requirements are shared lazy
+bindings. The checked skipped-read example explains a source-model demand
+gap. Its exhausted lower observation is not a production runtime defect.
+The earlier unchecked identity increments and FlatMemo range boundaries
+remain documented findings, not new reachable-failure claims.
+
+### Verification, publication and restart
+
+Base: 75422be8c87780238079ca696655cc87f0299dc7. Refreshed main remains
+bd5a406a6a3f84b7e3ae0906082783911509df83 and is an ancestor of formalize.
+Every new module has a compact packet under
+lean/restart-evidence/20261108-tuple-pull-*. Its own-source checker uses
+warnings as errors, exact real public namespaces, explicit #check, source
+hashes and only standard Lean axioms. There are no removed public laws.
+
+Audit imports all nine new modules BEFORE its unchanged audit commands.
+The Audit build covers all ten affected modules in the 5,292-module graph.
+It checks all 86,900 imported MicroCFTA theorem dependencies. This is fresh
+verification. Older full-build and signed-root reports remain historical
+coverage; they were not rerun without a changed dependency.
+
+Portable integration reproduction:
+lean/restart-evidence/20261108-total-tuple-demand-compatibility/check.py.
+frontier.json records exact affected source hashes. checked.json records
+the capped Audit result. No compiler tree, copied source or build archive
+is retained. Use the established serial effective 4 GiB memory.max/high,
+swap=0 heavy-management cap. ROOT remains the sole compiler. Do not change
+queue concurrency. Run from the repository root in the existing Nix setup.
+
+Compact runtime: /tmp/mcfta-total-tuple-demand-20261108-2011/. It holds
+scripts, capped reports, small failure diagnostics and publication checks.
+/tmp was about 31 MiB total before this checkpoint. Keep checking its size.
+Preserve the six protected directories, active process files and unrelated
+.hypha/. No additional destructive cleanup was necessary in R167.
+
+All prior document bytes follow this new prefix unchanged. The full goal
+remains ACTIVE. Push to formalize is explicitly authorized. Next work is
+the selected raw-sampler graph/resource/history migration above, followed
+by native demand/sharing, practical capacity and the complete worker-driver
+and exact NODECOUNT/BOTH-signed-inverse objective. No complete-system claim.
+
 ## R166: actual driver credit admission and suspended tuple sampling
 
 Updated 2026-11-08 19:52 CET. The full goal remains ACTIVE. R165 was verified progress.
