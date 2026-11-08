@@ -1,4 +1,5 @@
 import MicroCFTA.SourceCurrentAllocatedProbeGates
+import MicroCFTA.SourceCurrentAllocatedMuRebuild
 import MicroCFTA.SourceCurrentAllocatedProbeConjunction
 import MicroCFTA.SourceCurrentAllocatedSeededLanguage
 import MicroCFTA.SourceCurrentConjunctionClassScanCompletion
