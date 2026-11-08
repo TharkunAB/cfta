@@ -1,3 +1,312 @@
+# Current checkpoint: general Label roles, joint Required origins, and tuple completion
+
+Updated 2026-11-08 03:45 CET. Goal ACTIVE. R133 made PROGRESS.
+Branch formalize. Previous checkpoint2afd2758e5bb576a99dbc754b813f18f55c7ebce
+is R132, canonical board seq982. Keep the FULL original objective.
+The optimized interned core remains PRIMARY. Keep older constructor and
+equality results as SECONDARY targets. Preserve every proof, counterexample,
+repair, marked draft and unrelated .hypha/. Regular pushes to formalize are
+explicitly authorized. Do not pause the goal or ask whether to continue.
+
+Formalize was pulled before work at03:19 CET. Main and formalize were
+refreshed again at03:43 CET. Main remains
+bd5a406a6a3f84b7e3ae0906082783911509df83, an ancestor.
+Seven verified proof commits extend R132 through
+c59eb5b28a01a7410b767dda223ddf3678a05872. They add SEVEN modules and
+45 NEW public laws. One existing module now specializes a generic family.
+Its eight public theorem signatures, six qualified constructors and two
+qualified recursors remain available. EIGHT changed targets and53 current
+public laws pass actual project Nix/Lake and strict own-source reports.
+Every public theorem has an explicit #check and an axiom report. The names
+match each complete public declaration set in its real namespace. Only
+propext, Classical.choice and Quot.sound occur. No production Haskell source
+changed. The final documentation commit, push, canonical board readback and
+exact hashes are recorded in publication.json and RESUME.json under:
+/tmp/mcfta-required-roles-20261108-0325/
+The committed source and check packets reproduce without /tmp. Earlier
+checkpoint sections below are historical. This current section supersedes
+their descriptions of missing joint origins, generic roles and completion.
+
+## Strongest new original-input claim: general actual Label construction
+
+SourceSynthesisLabelProgramBuildRoles.firstOrderRaw_build_result takes the
+ORIGINAL Library, Query and SIGNED source size. Source errors stay explicit.
+For every accepted source instruction it derives an ACTUAL completed fresh
+constructor call FROM EMPTY, using the actual ordinarySymbols map. It returns
+the actual value and complete heap, Facts, availability, physical ProgramValue,
+cache growth and issued-key history. It does not require caller success,
+constructor success, a ready final heap, a supplied Context, final role
+closure, or a relation between a String heap and a Label heap.
+
+The proof first uses the generic symbol map in
+SourceSynthesisProgramBuildRolesGeneric. Generic firstOrderRaw_build_roles
+and firstOrderRaw_build_result work for any literal:String->Symbol mapping.
+The mapping need not be injective. Guards, binders, layouts, child order and
+effect order stay in the mapped instruction. Existing
+InternedFreshOrdinaryClosedCompletion.closed_complete is already generic
+and derives actual completion from empty captures and caches. No new mapped
+completion induction was needed. The earlier READ-ONLY suggestion that a
+mapped-OverUniverse completion proof was missing was too strong. The missing
+attachment is now proved by composition with this existing theorem.
+
+The Label adapter proves structural equality of mapSyntax/mapChildren/
+mapEdges with actual ordinarySymbols/ordinaryChildren/ordinaryEdges. It also
+retains caller_receipt_roles, current_receipt_roles and actual_current_roles
+for the concrete actual current caller. The general endpoint is no longer
+limited to that receipt. It uses no foreign heap, interned ID or cache entry.
+
+The physical certificate assigns roles by complete rows and positions.
+Program values contain only empty, node and union records at Program
+positions. A Program position cannot contain a reference or Mu. Type fields
+remain arbitrary. An annotated component has its FULL Top guard and one
+Type child. Application has Type children0/1, function Program child2 and
+argument Program child3. Filter has Type child0 and Program child1. Names
+can overlap between constructors and library components. No symbol-name
+classifier or symbol-disjointness premise is used.
+
+This is initial construction and local preservation. It is NOT the invariant
+that every reached state of the complete reducer or driver has those roles.
+It does not establish final total work, complete enumeration or native cost.
+
+## New local preservation: one source row covers all untouched children
+
+SourceCurrentRequiredJointRowOrigins adds FOUR public laws:
+
+- required_rows and required_node place ONE indexed original-row witness
+  outside the universal quantifier over absent child positions. That same
+  row supplies the full returned guard, symbol, arity and all unchanged
+  child lookups. Top rows are included.
+- head_literal_rows derives an ordinary returned head and exact literal
+  root-row origins through HeadSafe unions.
+- required_literal_rows extends the joint origin to completed actual
+  Required calls on HeadSafe roots. The witness is a literal original row.
+
+This closes R132's quantifier-order gap. It does not use the plain-guard
+escape in ActualRequiredRowOrigins.Link. That older Link remains conditional
+and must not be treated as unconditional provenance. Joint proofs use actual
+ExposureOrigins, GraphOrigins, completed head normalization and Required
+reconstruction. They do not replace physical exposure by a new collector.
+
+SourceSynthesisRequiredProgramRoles adds FIVE public laws. program_headSafe
+derives HeadSafe at root unions. ProgramValue also excludes references.
+literal_roles transfers
+the full ProgramEdge certificate to each literal original row. rebuild_roles
+permits a changed child0 and retains all other child roles, full guard and
+layout. head_roles preserves Program roles through an actual completed head
+call. required_roles preserves Program roles through an ACTUAL completed
+RequireNode(.node entries) when every Nat index other than0 is absent from
+entries. All work for the generic literal mapping, including Label symbols.
+
+The internal preservation laws retain honest SemanticReady, CostHeap,
+availability and incoming-role premises. They do not derive whole-driver
+completion or all reached role closure. Arbitrary Type children stay opaque
+to the Program certificate. This does not assert that a Type subtree is a
+Program subtree or prohibit recursive Type annotations.
+
+SourceSynthesisSelectedProgramFootprints adds TWO public laws.
+application_annotation_only covers program slots2/3. filter_annotation_only
+covers program slot1. They derive the EXACT absent-index premise used by
+required_roles from actual source occurrence equations, actual current
+Precheck.Receipt.classes and Retained scan receipts, the actual Needed
+compilation equation and selected-child lookup. There is no supplied region,
+Unselected or footprint premise. Receipt.classes reads ordered OWN records;
+ordered_perm and Retained.fields.1 transport source endpoint regions to the
+retained records. This uses the current class-scan API, not an older Trace.
+The laws compose directly with required_roles for the actual child graph.
+
+Inherited-region propagation is a separate obligation. The local Required
+footprint uses own records. An arbitrary inherited payload does not acquire
+a Type-region invariant from the local footprint. Keep R131's actual
+normalize/read/combine/descend laws and discharge their incoming invariant
+from original input and preceding actual calls.
+
+## Actual raw-tuple worker: stable successful completion and uniqueness
+
+SourceCurrentConjunctionTupleWorkerCompletion adds FIVE public laws:
+admission_complete, explore_complete, entered, decision_complete and
+call_complete. StableRun means there are lower projection/read bounds such
+that EVERY larger pair returns the SAME output and COMPLETE physical state.
+
+Admission derives actual exposures and their stable bounds from initial
+Ready, available operands and closed operands. It branches on the actual raw
+sample. Overflow and zero return the exact exposed state. A positive fitting
+sample derives actual full tuple processing, bounds and RowsReady. The
+worklist proof directly uses strong induction on budget and pending length.
+It derives every reached exposure and tuple call; it takes no future-state,
+row, completion, closure or resource supplier. Initial TableReady and
+PendingReady are honest internal premises. entered discharges the empty
+table case. Decision uses ACTUAL finaltable.length+1 for the fixed point.
+Memo calls preserve the literal hit/miss behavior and exact return state.
+
+SourceCurrentConjunctionTupleWorkerStability adds EIGHT public laws:
+admission_done_stable, explore_done_stable, decision_done_stable,
+call_done_stable and four matching done_unique corollaries. Each stability
+law takes a literal successful observation and componentwise larger lower
+bounds. It needs NO Ready, availability, closedness or future completion
+premise. The returned value AND entire state stay identical. Uniqueness uses
+a common pair of maximum bounds. Actual exposure/tuple success stability
+supplies the admission proof; worklist induction retains the raw branches.
+
+These theorems strengthen the executable physical tuple worker. They do NOT
+attach it to the currently selected allocated callback. They do NOT prove
+its semantic verdict promise, all-outcome global-read preservation, numeric
+total-work bound, full driver completion or native lazy demand.
+
+## Biggest gap and the concrete selected-worker migration
+
+The largest gap remains ONE bound derived from original input/request and
+the ACTUAL caller, covering BOTH the selected optimized worker AND the
+COMPLETE enumeration driver. It must cover all siblings and all generated,
+reached, intermediate, failing, rejected, returned, subsequent and native
+states. Joint Program and constrained-Type progress must be preserved at
+each reached state. Root-only, initial-only and successful-call bounds do
+not close this gap. The current actual2-to4 height-growth receipt still
+refutes transparent-height descent on its checked prefix. It does not show
+nontermination or native busy recurrence. Preserve that counterexample.
+
+The selected SourceCurrentAllocatedConjunctionWorker.call STILL calls the
+OLDER SourceCurrentConjunctionWorker. Its budget counts keys/admissions.
+Live Haskell Enumeration.hs612-619 charges RAW matching tuples, before
+equality rejection/projection, with emptinessBudget10000 at664. The new
+TupleWorker models that admission count and now has checked completion,
+success stability, uniqueness and all-outcome Ready/Keeps/equality effects.
+The selected callback has NOT been switched.
+
+A read-only migration audit established this order:
+
+1. Add companion actual tuple admission/worklist/decision/memo graphs.
+   Record actual exposures and overflow/zero/positive raw admission. Reuse
+   RowsWorkerActual exposure and tuple graphs. Success stability is now
+   proved. Keep old graph modules as legacy. TupleWorker imports the old
+   Worker for shared types; rewriting old Memo to import TupleWorker can
+   create an import cycle.
+2. Port semantic row/table coverage and fourth-memo verification. Positive
+   fitting admission reuses complete Rows coverage. Zero admission must
+   derive that the FULL raw tuple list is empty. Overflow preserves the
+   existing table. Reuse generic table soundness, identity faithfulness and
+   answer_sound. Keep AnswerSound/Correct/Extends and memo representation.
+   The target promise is true proves emptiness; false makes no acceptance
+   claim. Do not assign that proved promise to the new worker before this
+   attachment is checked.
+3. Lift probe, annotation and global logical-read preservation through the
+   new graphs. Overflow/zero need exposure-only read receipts. Positive
+   admission needs full tuple receipts. Existing exposures_memos and
+   tuples_memos supply the lower proofs. Port ReadValidity and Probe layers.
+4. Switch the allocated wrapper and immediate consumers. Preserve argument
+   and Outcome types, fourth-memo hits, failure retention, advancePhysical,
+   native tables and domain-cache retention. call_done/call_failed must then
+   expose the NEW call. OLD graphs with budget-1 and grow(budget+1) are not
+   literally true of the new zero/overflow branches. Do not claim old/new
+   physical execution equality or keep a false old graph endpoint.
+5. Migrate all-outcome wrappers, including class-scan Ready, CallRetained,
+   CallSound/Globals/TableSound, annotation effects and operation growth.
+   Selected Context supplies full Ready. The OLD low-level
+   WorkerEffects.allocated_call_effects has WEAKER premises than Ready.
+   Preserve that contract with a weaker physical-effects induction. Do not
+   silently strengthen its public premises during the switch.
+6. Replace the numeric worklist forecast. Old forecast iterates one heap
+   envelope per admission budget unit. Zero-charge and overflow exposures
+   can grow the heap without spending raw tuples. Derive a forecast on
+   (remaining tuple budget,pending length), starting with pending length1
+   for decision. Reuse ExposureResources.bounded and RowsResources.tuples_bound,
+   row-count and requirement-count bounds. Final fixed-point work uses
+   finaltable.length+1 separately. Then migrate ConjunctionNumeric,
+   AlphabetBounds, CallerNumeric and AllocatedWorkerResources.
+
+Zero-charge rows can make table length exceed budget. Both the old table
+length argument and the old budget-only heap-growth envelope need repair.
+The new successful-completion theorem does not itself give an explicit
+original-input bound on all work.
+
+Host demand remains a second source-correspondence boundary. The current
+physical worker uses existing EAGER left-to-right operand exposures. Native
+foldr extend demands the seed, then inner operands as needed. Empty seeds
+and early exhaustion can avoid later reads. A pull cursor must sample the
+first budget+1 raw matching tuples with actual demanded nodeEdges reads,
+states and faults. Taking a prefix after eager exposure does not establish
+native demand, product work, failure or physical-state correspondence.
+
+## Full top-level objective and current strongest composition
+
+Keep exact accepted terms for every NODE-COUNT size, exact size order and
+counting, and BOTH SIGNED rank/unrank inverse laws through ACTUAL sparse
+execution as separate contracts. Include ALL Sized routes, fallback and
+failure cases, productive infinite queries, lazy tables/maps/sets, cache/hash,
+Word/Int/allocation, wrappers and lookup/Curried/Specftacular behavior.
+Do not add a size parameter to size-free enumerateOutUVarWith or enumerateUntil'.
+Do not use a final caller-success, body/worker/fuel/resource, validity,
+OriginalInput, closure, finite-carrier, lookup or Unselected oracle. Internal
+premises can remain only when their original-input discharge is tracked.
+
+The strongest general COMPOSED completion endpoint remains R130's original
+Library/Query/SIGNED request -> actual construction -> COMPLETE stable merge
+at an internal comparison bound, same output/cache, closed/NoNewMu and
+prefix-height<=sizeOf emitted syntax+1. EVERY actual merged root-row forest
+and finite signed path request then derives stable Required in the ACTUAL
+returned merge heap, with worker depth2*sizeOf Needed+1 and an internal
+reader bound, same forest/cache, Keeps/Values/closed. These are independent
+row calls from that heap. They are not a sequential all-sibling reducer or
+the complete driver. R133 extends actual initial Label roles and local
+Required preservation; it does not claim all reached role preservation.
+
+## FINDINGS for the external Haskell work
+
+No production Haskell source changed in R133. No Haskell defect or new
+behavior repair was established here. No new native probe, benchmark, broad
+Haskell suite or CI run occurred. Existing Haskell findings and ownership
+remain below. Main's incorporated LPO fix remains incorporated. Remote
+PR202/203 status was not refreshed; preserve historical ownership and the
+WITHDRAWN PR203 behavior-change recommendation.
+
+The immediate repair is to the Lean selected-worker attachment and its
+proofs. Do not change Haskell tuple accounting to make it match the older
+key-charged model. Preserve actual raw-tuple charge, zero-charge behavior,
+early overflow, memo hits and native lazy demand. The migration plan above
+identifies the exact proof gaps and incompatible old graph endpoints.
+No external Haskell action is requested solely by this checkpoint.
+
+## Verification, disk use and restart
+
+R133 has SEVEN source/check commits, SEVEN new modules, ONE factored existing
+source and45 NEW public laws (53 current laws across eight changed targets).
+All project Nix/Lake targets and strict own-source checks pass. All manual
+public theorems have explicit #check, exact complete names and standard
+axiom reports. There are no sorry axioms in these reports. The String source
+keeps its eight public statements and qualified constructors/recursors.
+No cap, evaluator limit, algorithm budget or queue concurrency changed.
+The ROOT was the only compiler. Checks ran serially under the existing
+heavy-management4GiB memory cap and swap0. Peak1476MiB was the first cold
+joint-origin check; final general role checks peaked243MiB. All jobs finish
+before publication. Child tasks are complete and own no pending edits.
+
+At03:30 the readable allocated /tmp total was20246528B (about19.3MiB).
+Six protected paths were unreadable by the account. Available filesystem
+space was263917973504B (about245.8GiB). No cleanup was needed or performed.
+The final live audit is in tmp-audit.json. Only small check scripts,
+manifests and diagnostic text were retained. No source copies, build trees,
+archives or large evaluation dumps were created in /tmp. Check packets
+reproduce from committed source without /tmp. Preserve protected paths.
+
+Runtime /tmp/mcfta-required-roles-20261108-0325 contains verified-modules.json,
+proof-commits.json, heavy-peaks.tsv, doc-tail-manifest.json and final
+publication.json/RESUME.json. It also contains the one-time doc writer.
+write-checkpoint.py is ALREADY APPLIED ONCE after this section is written.
+Do not rerun it. R133 prepends this shared section to all three root docs;
+the entire R132 shared prefix and older file-specific historical tails are
+preserved exactly. The manifest verifies their lengths and hashes.
+
+On restart: read this current shared section and CONTEXT.md, inspect live
+branch/worktree/remote/main and goal status, and preserve unrelated .hypha/.
+Use the msg-board skill for the shared thread
+1c1333d7-46ea-4f46-a9a1-b5d13e577337. Match final branch metadata and canonical
+readback in RESUME.json. Read source and check packets directly if /tmp is
+gone. Refresh upstream before edits. Next: actual tuple graph/semantic/memo
+attachment, then effects/global reads and numeric forecast. In parallel,
+propagate Program/Type roles from original Label construction through ALL
+actual merge, child, Parent and driver calls. Keep the full objective active.
+
+---
+
 # Current checkpoint: original physical Program roles and tuple-charged execution
 
 Updated 2026-11-08 03:12 CET. Goal ACTIVE. R132 made PROGRESS.
