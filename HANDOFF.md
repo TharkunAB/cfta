@@ -1,3 +1,200 @@
+## R158: mixed slots after literal local reduction
+
+Updated 2026-11-08 15:19 CET. The full goal remains ACTIVE. R157 was verified progress.
+Four new modules add eleven checked public laws. Earlier proof sources,
+Audit imports, counterexamples, repairs and marked drafts remain unchanged.
+No production Haskell source changes in this checkpoint.
+
+The application/filter classes branch now returns every mixed slot
+classification. Program slots retain AnnotationFields; other slots retain
+Type-origin annotations. This result includes the annotation root. It is
+stronger than R157's public source guard endpoint result. Separate unchanged
+and empty-children laws derive their actual literal returns and retain
+shared histories. Original source construction supplies the initial mixed
+slot certificates without an independent per-slot classification supplier.
+
+OriginalMixedTypeSlots.application/filter combine the existing original
+Type and Program field laws at the SAME actual RowCall. The real ordered
+buildMany return derives the child count, four for application and two for
+filter. Exact source and physical lookups identify each Type or Program
+child. The result classifies every returned child slot with the source's
+literal assignment. Program guards need no Type-origin annotation.
+These are original construction facts. They do not identify later Parent
+rows or memo winners with those original calls. The original accepted
+FirstOrder construction and successful original build remain explicit.
+The R137 original-input endpoint already supplies original construction.
+
+NativeTypeClassSlotFields.class_slots/fold_slots/pass_slots retain all mixed
+slots through actual current class graphs. A Type slot uses the preserved
+route [index]. A Program slot uses [index,0] and actual ordinary-output
+preservation. This combination derives AnnotationFields, including the
+annotation root guard. Source guard endpoints alone cannot supply it.
+
+The ordinary-output proof derives a literal run of the SAME class from its
+actual graph. ClassPositionalFootprints.class_dispatch uses the protected
+non-annotation child at index one. Actual earlier-child work derives its
+own SharedGood and available original value. ActualEditRowOrigins.
+edit_node_ordinary proves the returned shape of a selected below edit.
+An absent edit retains the actual original value. Empty inputs and final
+literal empty propagation are covered. No returned ordinary-shape or field
+supplier is an input. Tail-first Fold derives each head's readiness, routes
+and slot facts from its actual tail return.
+
+The generic pass law requires initial readiness, closed available values,
+coherent records, Type routes, mixed slots and a genuine footprint:
+for every assigned Program slot, every edited record leaves child one
+unselected. It consumes an actual Pass graph. It does not establish Pass
+completion, source footprints or all reached classifications by itself.
+Existing source footprint laws discharge that footprint below.
+
+NativeTypeLocalSlotWorker.application_classes/filter_classes retain the
+R157 local result AND all mixed output slots. application_reduce/filter_reduce
+bind the literal precheck's classes branch. The proof follows the actual
+Scan return, Required heap/forest and class Pass. It derives the same
+Scan and Pass graphs and Required's mixed slot result internally. Source
+precheck and retained records derive the pass footprint; no independent
+footprint, output field, output shape or completed graph is supplied.
+The stopped Scan branch erases the original forest and supplies Empty slot
+certificates. The continued branch applies the new pass_slots law at the
+literal post-Required state.
+
+The result retains actual checked state, fourth memo and warm Merge owner,
+shared readiness, costs, physical extension, closed available values,
+causal profile, every original source guard endpoint route and all mixed
+slot classifications. The source wrappers still require initial mixed
+slots, successful local return, actual precheck Receipt and reached ranges.
+Receipt retains its existing source Ready/At/inventory facts. Original slot
+laws discharge the first-call classification at their stated original
+construction event. Later Parent and warm-cache entry discharges remain.
+
+NativeTypeLocalTrivialWorker.unchanged/emptyChildren cover the two other
+successful precheck branches. Each actual precheck Receipt derives the
+literal LocalWorker.reduce return. No successful whole local return is a
+premise. The unchanged branch returns the same forest. The empty-children
+branch erases every slot; it needs no available/closed input forest.
+Both retain arbitrary historical shared targets through SharedState.advance,
+the same warm Merge memo and exact fourth memo. They return readiness,
+physical extension, available closed results, causal profile and all
+ForestRoutes. Unchanged slots inherit every initial mixed classification;
+erased slots satisfy every assignment unconditionally. A successful Receipt
+does not justify a precheck error. Error and failed-prefix cases remain open.
+
+Verified source targets:
+- `SourceSynthesisNativeTypeClassSlotFields`: 3 public laws. SHA256 `367c49d28cdae0fb9501837053f3970d4244d3ee3ba13c747c7af03867a62022`.
+- `SourceSynthesisNativeTypeLocalSlotWorker`: 4 public laws. SHA256 `202cbb3e27dd876aaaae86d18d2c3f4e41a345e6b34cf6b5b864e094dc9204a6`.
+- `SourceSynthesisNativeTypeLocalTrivialWorker`: 2 public laws. SHA256 `e2396288b783da4409b5014155e2f67aa56df0aab4dcf7468a3c4ae3de6f5c1e`.
+- `SourceSynthesisOriginalMixedTypeSlots`: 2 public laws. SHA256 `17e834d62ed2a3e0a321b1d1b4ef3f8ed0edb7f339b6ea4ac0a1c0ce8d831dbe`.
+
+Reviewable proof commits based on `643a282e59c598d56c1a9786d16546fdff9bd524`:
+- `bf3106b651b797fbadaceffdf3d42a94ed539c47`: SourceSynthesisOriginalMixedTypeSlots.
+- `e9f715862498590c4ca465eb29b375cc731f4643`: SourceSynthesisNativeTypeClassSlotFields.
+- `e637259093f349d80b054960096a183cf24900f8`: SourceSynthesisNativeTypeLocalTrivialWorker.
+- `e5a006f37143e619e8f22303c1b2292d6177a392`: SourceSynthesisNativeTypeLocalSlotWorker.
+
+Each source has a compact reproducible packet in
+lean/restart-evidence/20261108-<slug>/. Actual project Nix/Lake compilation,
+strict own-source warnings, every public name and namespace, standard axioms
+and exact source hashes pass. ROOT ran one compiler at a time under the
+existing 4 GiB and zero-swap cap. All owned compiler handles are terminal at
+publication. Earlier proof sources and Audit imports remain unchanged.
+The R139 full Audit baseline is retained. It is not rerun here.
+
+The general original-input endpoint remains R137
+SourceSynthesisOriginalTupleCall.request. Accepted signed FirstOrder
+construction derives initial Context, strict Program roles and the actual
+stable tuple-call/read receipt with its full modeled postcondition. R158
+adds initial and post-local mixed fields. It does not derive the whole
+worker or enumeration driver from that original input. Type-origin
+provenance does not establish complete generated Type grammar or scopes.
+
+Next proof work, without reducing the full objective:
+
+1. Add SourceSynthesisNativeTypeParentWorker with literal successful
+   ParentWorker.edge laws for application, filter and annotated rows.
+   Follow ParentProgramRoles.edge_roles through contradiction, actual field
+   load and AllocatedPrecheck.loaded_complete. Derive the precheck Receipt;
+   do not supply it as a future entry certificate. Dispatch unchanged and
+   emptyChildren through R158 LocalTrivialWorker, and classes through the
+   new LocalSlotWorker. Reuse LocalReduceProgramRoles.reduce_length for the
+   actual child layout. AllocatedMkEdge.Receipt.guard/children retains the
+   SAME acceptance test and its coupled source-fields/Top-[Empty] outcome.
+   AllocatedParentWorkerActual.resident_verified already derives the same
+   EdgeBody graph, reads, receipt and post-Context from initial Context,
+   inherited readiness, source-edge residency, ResidentRanges and observed
+   success. ResidentRanges selects the actual initial field load. Reuse
+   ConstructorProgramRoles.build_application/build_filter/build_annotated
+   for strict roles. AnnotationFieldConstructors.makeNode_fields and
+   makeUnion_fields then derive root fields from reconstructed row facts.
+   Attach the mixed post-local slots to actual Parent reconstruction and
+   warm returns. Use the exact local output, original
+   constructor guard and actual rebuilt rows. Derive root first-field
+   annotations from each reconstructed row's returned slot zero. Reuse
+   ParentProgramRoles.edge_roles and OuterEdgeProgramRoles.edgeCall_program
+   for strict Program guards/layout, including the coupled Top/[Empty]
+   sentinel. Do not infer roles from symbols or replace a Program guard by
+   an annotated Type guard. The actual source footprint, role and owner
+   must identify the correct application/filter or other Program row.
+2. Establish recursive joint classification for every reached Program
+   descendant, native/constructor store and warm memo winner. Root
+   AnnotationFields is not recursive. ProgramValue/ProgramMemoRoles.History
+   retains strict Program guards and layout but leaves Type operands opaque
+   and permits unions. Those facts plus root fields do not classify every
+   nested Program child. Transport the stronger property through Parent,
+   forcing, reconstruction, rejected/failed prefixes, returns and subsequent
+   callers. Retain exact native/equality operations, fourth memo, both
+   physical/typed warm Merge stores and historical targets. Establish full
+   generated Type grammar, lexical scopes and ALL reached joint progress.
+3. Derive ONE original-input/request/actual-caller resource bound for BOTH
+   the selected optimized worker AND the COMPLETE enumeration driver.
+   Include all siblings and every generated, reached, intermediate, failing,
+   rejected, returned, subsequent and native state. Derive finite Word,
+   Int, key and allocation safety. The explicit Seeded/Scan/class range plans
+   remain genuine obligations at actual prefix states. Type paths do not
+   discharge them. The R146 normalized path3-to4 source boundary still
+   prevents a maximum-initial-path rank. Top descent remains segment-only.
+   Do not substitute supplied success, graph, trace, fuel, ranges, finite
+   carrier, closure, final validity, OriginalInput or future completion.
+4. Complete faithful native lazy pull-cursor execution, arity/raw-match
+   suspension, demand order, B+1 stopping and faults. Establish exact accepted
+   terms by NODE COUNT, exact counts and size order, BOTH SIGNED rank/unrank
+   inverses through actual sparse execution, and all Sized, fallback,
+   failure and productive infinite paths. Include tables/maps/sets/cache,
+   hashing, native Word/Int, allocation, wrappers, lookup, Curried and
+   Specftacular. Do not invent sizes for size-free enumerateOutUVarWith or
+   enumerateUntil'. The recorded native tuple difference concerns demand
+   order only. It proves no cache inequality, nontermination or Haskell bug.
+
+R156's profile correction remains in force. Actual checked native-query and
+successful Seeded/classes/reduce causal-profile preservation already exists.
+Reuse those laws. GuardHeap does not annotate the entire mixed heap.
+No production Haskell file was changed. No Haskell fix was established here.
+Record every future Haskell fix in root FINDINGS as well, with its source
+location and reproducible evidence, so external work can use it.
+
+Restart and publication:
+- Branch formalize. Pushes remain explicitly authorized. Preserve .hypha/.
+- Main is bd5a406a6a3f84b7e3ae0906082783911509df83 and is an ancestor.
+  Fetch exact main/formalize refs before further proof work.
+- Runtime: /tmp/mcfta-type-slot-closure-20261108-1509/. Read RESUME.json,
+  publication.json, canonical-board-readback.json and terminal-audit.json.
+  They record the exact final pushed/fetched head, canonical board sequence,
+  checked hashes, complete tracked-file coverage and terminal process state.
+- Publication covers 23 changed tracked files: four new proof sources,
+  their four-file replay packets, and these three root documents. Historical
+  document bytes remain exact. The full goal remains active.
+- Retain one ROOT compiler at a time, 4 GiB and zero swap. Reuse the actual
+  returned handle after a yield. Do not change queue concurrency. Focused
+  checks pass. No broader Audit rerun is needed for this checkpoint.
+- Continue to measure /tmp. The directory-inclusive 15:15 audit found about
+  27 MiB readable allocation and about 246 GiB free. Protected unreadable
+  entries were excluded. The new runtime held 56 KiB before final reports.
+  No cleanup was needed or performed. Keep compact replay scripts, hashes
+  and reports. Do not retain build archives or large proof-output copies.
+
+The older checkpoint text below remains history. This R158 entry supersedes
+its immediate next-step instructions. Retain every earlier source repair,
+accepted counterexample, rejected shortcut and marked draft.
+
 ## R157: literal Type workers and source local reduction
 
 Updated 2026-11-08 14:58 CET. The full goal remains ACTIVE. R156 was verified progress.
