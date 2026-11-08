@@ -1,3 +1,174 @@
+# Current checkpoint: R142 conditional memo roles and actual outer edge calls
+
+Updated 2026-11-08 09:17 CET. Goal ACTIVE. R142 made PROGRESS. Branch formalize.
+Keep the FULL original objective. Regular formalize pushes are authorized.
+Do not pause the goal or ask whether to continue. This introduction
+supersedes the status below. Preserve all historical text and proofs.
+
+Base e2af71035b3bd065af798e0932492635263da557 is the published R141 head.
+Main bd5a406a6a3f84b7e3ae0906082783911509df83 remains incorporated.
+R142 adds TWO proof modules and TWELVE public laws. All pass actual
+Nix/Lake targets, strict own-source, complete real-name checks, final
+source hashes, and standard axiom reports. No existing Lean module or
+production Haskell source changes. All earlier proofs remain available.
+
+## Conditional roles in both outer memo families
+
+SourceSynthesisProgramMemoRoles.History uses the existing
+FlatMemoThunk.CellSpec and Valid predicates. Each returned node cell has
+this obligation: ProgramValue for its captured input implies ProgramValue
+for its result. Each returned edge cell has the corresponding ProgramEdge
+implication. The condition permits Type-only requests in the SAME tables.
+Neither an unconditional Program result nor a language-only law suffices.
+
+initial derives the history from actual empty outer tables. advance
+retains it through actual physical advancement. beginNode and beginEdge
+retain it through actual lookup, insertion, and demand. finishNode and
+finishEdge install the certificate for the actual evaluating owner. Those
+publication laws state a LOCAL boundary: the completed body must supply
+its conditional role certificate. They do not assume a future final
+history or establish the body certificate by themselves.
+
+node_ready and edge_ready recover roles from actual warm observations.
+Their inputs are initial History, physical OuterPrefixInvariants.Good,
+current request readiness, actual begin = ready, and the query's Program
+role. They derive the same complete caller state and the result's strict
+role. Captured and queried requests are exactly equal in the SAME coherent
+heap/cache. Raw key equality alone is insufficient. The node proof reuses
+public same_key. New edge_same_key proves the edge analogue from current
+Good, both EdgeReady facts, and equality of complete physical keys.
+These facts concern serial logical demand. They do not model host scheduling.
+
+## Actual outer edge execution consumes the new history
+
+SourceSynthesisOuterEdgeProgramRoles.edgeBody_history retains History at
+the actual edgeBody Outcome.state, including Parent failure. The body
+runs actual Parent and advances physical state. It does not change either
+outer table. No Context, successful return, or role premise is required
+for this table-history law.
+
+edgeBody_roles proves strict ProgramEdge for an actual successful body
+from its original caller Context, current EdgeReady, and strict input
+role. It derives raw live requirements from checked state facts and edge
+residency, then uses R141 Parent.edge_roles. It accepts no supplied
+precheck receipt, footprint, guard-heap certificate, or body result role.
+
+edgeCall_program describes the ACTUAL computed edgeCall outcome. It
+retains History on ALL outcome states and proves the conditional result
+role whenever that same call succeeds. Inputs are the original Context,
+physical Good, EdgeReady, and initial History. Cold starts derive their
+actual owner Context, readiness, key, and evaluating cell from existing
+PartialCallSteps.edge_start. Exact physical owner equality transports the
+query. Parent supplies the completed body's role. The unchanged outer
+tables retain the evaluating cell, and finishEdge publishes its certificate.
+Warm hits use their captured conditional certificate. Busy, absent, and
+Parent failure branches retain history without asserting a result role.
+There is no supplied body-role, future Context, receipt, closure, or final
+history oracle in this source-facing call result.
+
+## Scope and next missing induction
+
+History before edgeCall is an explicit LOCAL induction hypothesis. Actual
+empty initialization discharges it at the initial caller. R142 does not
+prove it for every outer node call, body, rows, descendants, children, or
+walk. It does not prove preservation of the full semantic Context at every
+reached phase. It does not supply constrained-Type closure or a decreasing
+Type measure. Existing ProgramValue permits arbitrary annotation values;
+its certificate alone does not supply a Type execution theorem.
+
+The next task remains one JOINT invariant over EVERY actual reached
+request, including failing, rejected, returned, intermediate, subsequent,
+and copied warm-hit states. It must connect conditional memo histories,
+current caller Context, strict Program and constrained-Type roles,
+origins, inherited regions, exact walk positions, and progress. R141's
+Parent and next-child entry laws and R142's actual edge-call law are
+components of that induction. They do not replace it. Type endpoint
+regions state where constraints occur; they do not prove termination.
+
+The current Type audit confirms these specific limits.
+NormalizedVariablePaths.eqGuard_length_lt_sizeOf bounds only the initial
+normalized generalize field. InheritedGrowthBoundary.actual_prefix shows
+combine/descent maximum lengths 0, 3, 4, 5, 6 with a fixed own maximum 4.
+That recurrence is not asserted reachable from firstOrderRaw. Separately,
+UniverseRequiredBoundary.not_required_child_descent and
+UniverseNarrowedBoundary.not_narrowed_child_descent refute original
+application-height descent on actual synthesis observations: selected
+function height grows from 1 to 3 to 4 while the parent height is 2.
+RequiredWorkerNumeric bounds one completed Needed stage, not recursive
+Type progress. The needed quantitative certificate concerns changed
+child-zero annotations and residual inherited demands through actual
+Required, class edits, Parent and subsequent requests. Derive it from the
+original types and equation sites. Do not supply a finite carrier, height,
+closure, or future-completion premise instead. Preserve these boundaries.
+
+AllocatedPartialWorkerCompletion.nodeCall_complete still needs a finite
+PartialGraph.NodeCall derivation. WorkerActual.nodeCall_verified still
+needs an actual successful return and reachedWorkerRanges.
+ConstructedResources.prepared_run still accepts supplied recursiveFuel
+and can return exhausted. Derive these obligations from the original
+input and actual caller. Do not present them as discharged by R142.
+
+## Full objective and strongest original-input boundary
+
+The full goal remains ONE original-input/request/ACTUAL-caller bound for
+BOTH the selected optimized worker and the COMPLETE enumeration driver.
+Cover all siblings and generated/reached/intermediate/failing/rejected/
+returned/subsequent/native states. Derive joint Program/constrained-Type
+progress at every reached request. Prove exact accepted terms by NODE
+COUNT, exact count and order, and BOTH SIGNED rank/unrank inverses through
+actual sparse execution. Retain Sized, fallback, failure, productive
+infinite lazy, tables/maps/sets/cache/hash, Word/Int/allocation, wrappers,
+lookup, Curried, and Specftacular scopes. Do not add size arguments to
+size-free enumerateOutUVarWith or enumerateUntil'. No U-only, initial-only,
+success-only, supplied-fuel, finite-carrier, final-validity, future-return,
+or closure substitution is permitted. Track original-input discharge for
+all internal premises.
+
+SourceSynthesisOriginalTupleCall.request remains the strongest general
+original-input entry result. Accepted signed firstOrderRaw input and empty
+stores produce the actual original guard and Label graph, full initial
+modeled Context and Program roles, and actual tuple execution/reads at
+stable instrumented fuel. No supplied Context/build/validity/body/future
+carrier/fuel/resource oracle is accepted. Errors remain explicit. True
+certifies formal emptiness. False does not certify acceptance. Native CAF
+reset and full outer/driver completion remain unclaimed.
+
+## Haskell findings and native correspondence
+
+No Haskell fix was made or established in R142. No existing strict role
+predicate was weakened. Actual constructor rejection still couples Top
+with [Empty]. The existing annotated ProgramEdge permits that sentinel.
+The earlier hypothetical Top four-child row is not an actual rejected
+Parent result or an established invariant counterexample.
+
+Native lazy tuple demand and cursor state remain a separate gap.
+Enumeration.hs edgeTuples [A,B,C] can demand A,C and skip B, while the
+row exposure model demands A,B,C. Both can return []. This is a demand
+difference, not an established heap/cache/nontermination or Haskell defect.
+The remaining faithful puller must use actual nested Seed/Extend order,
+match symbol/arity, suspend raw emissions, stop at B+1 without forcing the
+continuation, and retain actual reads, faults, and later pulls. Do not
+assume once-per-operand sharing. Exact node-count/count/order/signed inverse
+and wrapper correspondence work remains required.
+
+## Verification and temporary storage
+
+The TWO new proof-only targets and all TWELVE public laws pass their
+actual Nix/Lake targets and strict own-source reports. Each packet emits
+explicit #check and #print axioms for every public declaration in its real
+namespace. Source hashes match the final checked files. Only propext,
+Classical.choice, and Quot.sound occur. The packets are reproducible from
+committed source. Runtime files contain small scripts and summaries.
+
+The existing Audit tree did not change. Its R139 baseline passed 4920
+jobs. Audit was NOT rerun for these new unimported modules. Their own
+strict checks cover them. Compilation stays serial at 4 GiB with zero
+swap. No queue or global compiler setting changed. Final publication
+checks exact pushed/fetched refs, all changed tracked source/packet/doc
+bytes, all historical document bytes, canonical board readback, active
+goal, terminal compiler state, and readable /tmp usage. Preserve .hypha/.
+Fetch exact refs before the next continuation and keep the full goal active.
+
 # Current checkpoint: R141 strict Parent roles and actual Program child entry
 
 Updated 2026-11-08 08:58 CET. Goal ACTIVE. R141 made PROGRESS. Branch formalize.
