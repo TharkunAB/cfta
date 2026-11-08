@@ -1,3 +1,204 @@
+# Current checkpoint: R143 actual walk frames and observed Parent contexts
+
+Updated 2026-11-08 09:33 CET. Goal ACTIVE. R143 made PROGRESS. Branch formalize.
+Keep the FULL original objective. Regular formalize pushes are authorized.
+Do not pause the goal or ask whether to continue. This introduction
+supersedes the status below. Preserve all historical text and proofs.
+
+Base aedfc2fbca45a83cac9fd18f1a163e840226b258 is the published R142 head.
+Main bd5a406a6a3f84b7e3ae0906082783911509df83 remains incorporated.
+R143 adds TWO proof modules and EIGHT public laws. Both actual Nix/Lake
+targets and strict own-source reports pass. All real public names, final
+source hashes, and standard axiom reports match. No existing Lean module
+or production Haskell source changes. All earlier results remain available.
+
+## Exact positions from the same actual child walk
+
+SourceSynthesisProgramWalkPrefix.WalkPrefix starts at index zero with the
+current row's complete child list. Each next constructor records ONLY a
+completed earlier literal nodeCall, at the actual descended inherited
+payload and caller. It decrements fuel, increments the index, and uses
+that call's actual returned caller. It stores no role, position, Context,
+closure, final return, or future child-success certificate.
+
+WalkPrefix.position derives originals.drop index = remaining.
+WalkPrefix.bounds derives fuel + index = initialFuel and
+index + remaining.length = originals.length. WalkPrefix.reached embeds
+this scoped prefix into the existing literal outer Reached relation.
+descendants_reached derives the complete descendants-to-current-walk
+prefix from the same actual inherited-prefix equation, live combined
+payload, and scoped prefix. No separate Reached premise is accepted.
+
+application_entry and filter_entry consume those derived facts through
+R141 ProgramChildEntry. They derive strict ProgramValue for the next
+child, Within the annotation region for its actual descended inherited
+payload, and Reached to its exact node request BEFORE the child returns.
+No separate walk-position or Reached premise remains. Strict current
+ProgramEdge, exact four-child/app-slot or two-child/filter layout,
+initial physical Good/Inputs, inherited annotation-region containment,
+the actual prefix equation, and the scoped actual prefix remain inputs.
+
+These laws cover prefixes of one identified actual walk. R143 does not
+classify every arbitrary reached phase into its correct scoped walk or
+prove the current returned row's Program role at every global phase.
+That joint global induction remains open. The scoped relation retains
+actual earlier-call witnesses and must not be replaced with an arbitrary
+frame or reachability assertion.
+
+## Full postconditions for exact observed Parent returns
+
+SourceSynthesisObservedParentContext.parent_post calls the existing
+ParentUniformEnvelope.complete with its genuine initial certificates.
+It chooses the canonical common fuel ceiling. ParentWorkerStability.
+edge_done_unique identifies ALL FOUR fields of that return with the
+supplied successful actual Parent observation. The observed call can use
+ANY nine stage bounds. No lower-bound relation to the ceiling is required.
+
+The result contains the numeric receipt for the SAME observed result,
+checked state, fourth memo and merge memo. It also contains the common
+output Fits bound and the full Post for the actual advanced caller.
+edgeBody_post applies this result to the literal outer edgeBody success.
+It returns the SAME observed caller Post, its new-inventory Frame, and the
+common output Fits bound. Post.context supplies the exact current Context.
+No future Context, body supplier, final-validity certificate, or supplied
+ResidentRanges is accepted.
+
+Both laws RETAIN the genuine initial Context, Frame, Fits profile,
+guard-alphabet heap, UniformReserved, inherited readiness and resident
+input row. Width is bits + 2, as in the existing numerical envelope.
+R143 does not derive these initial numerical certificates from arbitrary
+Context or from the original request at every reached state. It does not
+prove range-free Parent semantics, Parent-failure contexts, all-reached
+progress, or original-input worker/driver completion.
+
+## Concrete remaining caller-context obligation
+
+The existing PartialCallSteps.edge_start derives the running owner's
+Context from initial Context and ready inputs. edge_hit already derives
+Post at a warm hit. edge_finish derives the published Context from the
+actual body receipt and protects its evaluating owner. The missing
+initial numerical discharge is therefore specific, not a missing generic
+Context-update interface.
+
+ParentOperationInvariants.parent proves range-free physical Effect,
+retained merge storage, and result residency. Those facts do not imply
+semantic native inventory At.contextual/At.covered, fourth correctness,
+or source-aligned reads. ParentWorkerActual.resident_verified and
+PartialWorkerLeafActual.edgeBody_verified still require ResidentRanges.
+The smaller ParentEdgeActual.verified route needs LocalReductionActual.
+Ranges for reached Scan calls. The full finite-construction route also
+requires class plans after actual Scan and Required returns.
+
+These checks reach NativeRequestBounds.WordRanges: native instructions
+must have KeySafe operands and domain. Physical Good permits resident
+captured operands without asserting these word checks. The globally
+selected tuple conjunction itself adds NO Frame or range requirement.
+The numerical alternative now transfers its Post to arbitrary successful
+observations, but its initial Frame has joint cache/origin facts beyond
+ordinary Context.admitted. Fits, alphabet membership and UniformReserved
+also remain genuine requirements. Derive the reached word checks OR these
+initial numerical certificates from the original request and current
+actual caller. Do not assume future Contexts or completed bodies instead.
+
+## Type guard-site findings and the larger progress gap
+
+The initial Type syntax has useful structure. TypeSyntax.typeNode_guards,
+allTypesBody_guards and allTypes_guards make every rigid/universe row Top.
+GeneralizeSyntax.replace builds Top rows and inserts the universe without
+traversing it. finish changes only an outer singleton row. A finite
+generalized Type can therefore introduce its own outer eqGuard for that
+original Ty. Generalized variable Mu values receive no extra outer guard.
+generalize_guards proves the guard inventory. eqGuard_residual proves
+that each new guard has residual formula Top. These are initial syntax
+facts. They do NOT supply a positional Type certificate for all later rows.
+
+Actual native joins conjoin the two matched full guards. NativeQueryRowOrigins.
+Joined records this exact conjunction. ClassFoldGuardOrigins permits both
+original guards and leaf-intersection/exposure events. Such events can
+import a generalized-root guard into a nested Type position. Do not assume
+that every proper interior row remains Top after Type processing.
+ConstraintOrigins.Derived already tracks literal guards, Top and their
+conjunctions. Its constructed/complete results retain their stated
+scope/read/range conditions and include Program guard literals too.
+
+A useful next attachment is a SOURCE-OCCURRENCE-indexed Type guard-origin
+certificate. Initial construction must distinguish Top Type rows from the
+outer guard of a specific original generalized Ty. BuildStructuralRowOrigins.
+build_row_origin can identify source rows. Actual queries must preserve
+site witnesses through joins and resolve NativeQueryRowOrigins.RowOrigin.
+Residual cases for Mu, union and reference exposure. Connect inherited
+combine/descent to these occurrences with existing allocated region laws.
+Finite site provenance would still NOT prove a decreasing residual-demand
+rank by itself. Repeated conjunction, exposure and descent remain open.
+
+The main gap remains ONE joint invariant over EVERY actual reached request:
+current Context and numerical facts, conditional Program memo histories,
+strict Program/constrained-Type roles, exact scoped walk positions,
+origins, inherited regions and progress. Include failing/rejected/
+intermediate/returned/subsequent and copied warm-hit states. R141 Parent
+and child roles, R142 actual edge-call histories and R143 scoped walk and
+observed-context laws are components. They do not establish that induction.
+ProgramValue still permits arbitrary annotation values. Type endpoint
+regions and initial normalized guard-path bounds do not give a decreasing
+Type measure. Preserve the existing inherited-path growth and actual
+Required/narrowed-height counterexamples. Derive the changed-annotation
+and residual-demand bound from original types and equation sites.
+
+## Full objective and current original-input boundary
+
+Keep ONE original-input/request/ACTUAL-caller bound for BOTH the selected
+optimized worker and the COMPLETE enumeration driver. Cover all siblings
+and generated/reached/intermediate/failing/rejected/returned/subsequent/
+native states. Derive joint Program/constrained-Type progress at every
+reached request. Prove exact accepted terms by NODE COUNT, exact count and
+order, and BOTH SIGNED rank/unrank inverses through actual sparse execution.
+Retain Sized, fallback, failure, productive infinite lazy, tables/maps/
+sets/cache/hash, Word/Int/allocation, wrappers, lookup, Curried, and
+Specftacular scopes. Do not add sizes to size-free enumerateOutUVarWith
+or enumerateUntil'. No U-only, initial-only, success-only, supplied-fuel,
+finite-carrier, final-validity, future-completion or closure substitution
+is permitted. Track original-input discharge for all internal premises.
+
+OriginalTupleCall.request remains the strongest general original-input
+entry result. Accepted signed firstOrderRaw input and empty stores derive
+actual guard/Label construction, full initial modeled Context, Program
+roles, and actual tuple execution/reads at stable instrumented fuel. It
+accepts no supplied Context/build/validity/body/future-carrier/fuel/resource
+oracle. Errors stay explicit. True certifies formal emptiness; false does
+not certify acceptance. Native CAF reset and full outer/driver completion
+remain unclaimed. PartialWorkerCompletion.nodeCall_complete still needs a
+finite NodeCall graph. WorkerActual still needs actual success and reached
+ranges. ConstructedResources.prepared_run still accepts recursiveFuel and
+can return exhausted. R143 does not discharge those global requirements.
+
+## Haskell findings, native demand and verification
+
+No Haskell fix was made or established in R143. No strict Program predicate
+was weakened. Actual rejection still couples Top with [Empty], which the
+existing annotated ProgramEdge permits. No actual counterexample to that
+strict role invariant was established by the earlier weak guard summary.
+
+Native lazy demand/cursor correspondence remains open. For edgeTuples
+[A,B,C], source demand can be A,C and skip B; the row exposure model
+demands A,B,C. Both can return []. This is a demand difference, not an
+established heap/cache/nontermination or Haskell defect. The remaining
+puller must retain actual Seed/Extend order, symbol/arity matching,
+suspended emissions, B+1 stop without forcing continuation, reads, faults
+and later pulls. Do not assume once-per-operand sharing. Exact node-count,
+count/order/signed inverse and wrapper correspondence remains in scope.
+
+Both new targets and all EIGHT public laws pass actual Nix/Lake and strict
+own-source checks, explicit #check/#print axioms for all real public names,
+final source hashes, and standard axiom checks. Only propext,
+Classical.choice and Quot.sound occur. The packets are reproducible from
+committed source. Existing Audit imports did not change. R139's 4920-job
+Audit is a baseline NOT rerun for these new unimported modules; their own
+strict target checks cover them. Compilation is serial at 4 GiB with zero
+swap. No queue or global compiler option changed. Final publication checks
+all changed tracked bytes, exact pushed/fetched refs, every historical
+document byte, canonical board readback, active goal, terminal compilers
+and readable /tmp usage. Keep .hypha/. Fetch before the next continuation.
+
 # Current checkpoint: R142 conditional memo roles and actual outer edge calls
 
 Updated 2026-11-08 09:17 CET. Goal ACTIVE. R142 made PROGRESS. Branch formalize.
