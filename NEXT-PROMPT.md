@@ -1,3 +1,136 @@
+## R152: joint Program Required and actual allocated Type targets
+
+Updated 2026-11-08 12:52 CET. The full goal remains ACTIVE. The previous goal turn
+made verified progress. Five new modules add thirteen checked public laws.
+No existing proof source or Audit import changes in this checkpoint.
+
+The actual annotation-only Program Required graph now preserves its final
+conditional Mu store and annotated first fields. The children proof executes
+the selected Type at child zero. It proves that each later unselected child
+retains its literal value and causes no heap change. Ordered row work derives
+its intermediate physical facts and retains every surviving first field.
+Actual node normalization returns the same field certificate. Program guards
+keep their raw source guards and need no Type annotation.
+
+The joint Required proof combines those field facts with strict Program
+roles. An actual mixed forest assigns each present entry either a Type
+annotation or Program annotation fields. Each selected Program requirement
+visits only its annotation field. The same ordered call derives the final
+Mu store through ALL Type and Program siblings. Its selected returned Program
+operand has both the strict Program role and the annotated first fields.
+The returned index exists by the real graph's arity law, not a supplied arity.
+Actual application/filter occurrence, precheck and record-scan receipts derive
+the annotation-only footprints. Initial role and field facts at the literal
+Required entry remain explicit. This is not all reached role closure.
+
+The actual Type target now includes projection PLUS allocated memo-aware
+Merge. Its operand, right fold and target laws retain the exact returned
+merge table, constructor heap, equality operations and native tables.
+They derive all intermediate operand annotations and closedness, then the
+joint native Ready state, costs, machine extension, physical Merge memo
+facts, conditional typed Merge memo facts, and the final annotated result.
+The source first-seed position and head/tail/native order remain literal.
+No later operand or future returned-state certificate is supplied.
+
+Original application/filter target adapters derive their routes from an
+ACTUAL equality class of the original row guard. Accepted original build
+and original Program syntax supply the nested fields. Both initial Merge
+memo certificates follow from the literal empty table. They use the real
+Target graph, not the projection-only refused-class Seeded graph. Initial
+physical Good and completed actual target execution remain explicit.
+Type annotations record guard provenance. Full structural Type grammar,
+scoped generated instances, trace existence, failure-prefix closure and
+native lazy evaluation order remain separate obligations.
+
+Correction to the R151 handoff: the existing
+`SourceCurrentHereditaryMergeStore.call` ALREADY proves causal Mu-store
+preservation for the warm memo-aware Merge graph. R151 listed that result
+as missing. R152 adds its attachment to the actual allocated Merge call
+and the target composition. It does not duplicate the existing theorem.
+The same allocated call supplies both its equality-allocation effects and
+its erased graph. The new proof aligns their exact heap and returned value.
+
+Verified source targets:
+- `SourceCurrentHereditaryProgramRequired`: 3 laws. SHA256 `8684c385e4ac685ba51ee63f44b78974fd4c3b7391728d21f22a5d1022a12f55`.
+- `SourceSynthesisJointProgramRequired`: 4 laws. SHA256 `349164f1ed6cbbea2da27dc9025587bce322c76b10d0661828c475f8e8109a82`.
+- `SourceSynthesisNativeTypeMerge`: 1 laws. SHA256 `cbd6425407244a2f51f90505d585d9b30b300fd99eed764dcdbf9f4a06033139`.
+- `SourceSynthesisNativeTypeTarget`: 3 laws. SHA256 `f294251e6b5370fe61ef839b0f491059b46852d90e619df17feec88b7665ca91`.
+- `SourceSynthesisOriginalTypeTarget`: 2 laws. SHA256 `4c4773d03b443f0f78ac4881a671bf551782868262710d8e0d478acec103ceed`.
+
+Reviewable proof commits based on `a696793295ed744b83b3e59bd5f95e215a7eb99c`:
+- `48c61bb42297bc8da60cba600c9663e4763e82e1`: SourceSynthesisNativeTypeMerge.
+- `66832fdb392100edf3e6c2a4bcac3b33fd111408`: SourceSynthesisNativeTypeTarget.
+- `e959202719a2ce4535cf19caa2e6eb41195c2ada`: SourceCurrentHereditaryProgramRequired.
+- `12cfb9367a9eff78b53b68c932aff73af46e07df`: SourceSynthesisJointProgramRequired.
+- `4a1de92e951e8186125ad28f50c7b971e12505fd`: SourceSynthesisOriginalTypeTarget.
+
+Each new target has a small reproducible packet in
+`lean/restart-evidence/20261108-<slug>/`. Actual project Nix/Lake compilation,
+strict own-source warnings, every public name and namespace, standard axioms,
+and final source hashes pass. Use the existing serial 4 GiB and zero-swap
+heavy-management wrapper. All owned compiler handles are terminal at
+publication. The R139 full Audit baseline remains recorded, not rerun.
+The generic Program Required laws are children/rows/node. The joint source
+laws are node/requireAll/application_requireAll/filter_requireAll. The
+allocated Merge law is merge. The target laws are operand/fold/target.
+The original target laws are application/filter.
+
+The general original-input endpoint remains R137
+`SourceSynthesisOriginalTupleCall.request`. Accepted signed FirstOrder
+construction derives initial Context, strict Program roles, and the actual
+stable tuple-call/read receipt with the full modeled postcondition.
+It does not establish complete worker/driver execution or native demand.
+
+Next proof work:
+
+1. Attach actual Type target and mixed Required preservation to
+   `SharedTargetWorker.force` and `leaf`. Class-local slots retain historical
+   targets. Start with empty slots. Prove each miss's Type facts before actual
+   publication. Preserve the historical annotation, closedness and physical
+   availability of ready hits through all earlier real effects. Keep the
+   same captured owners, warm Merge memo, operations and native stores.
+2. Derive the reached mixed Type/Program entry facts and structural projection
+   routes from preceding actual edits. Integrate class scans, narrowing,
+   Parent, forcing, failure prefixes, returned and subsequent states. Do not
+   supply a future local invariant as a replacement for its original-input
+   discharge. Preserve strict Program guard/child coupling. An arbitrary
+   stored Program union or Mu head does not follow from AnnotationFields;
+   derive its actual shape or prove the needed stronger invariant.
+3. Derive structural Type grammar, captured scopes and joint progress for all
+   reached states. R146 shows normalized Type conjunction can increase the
+   maximum path from three to four. Top descent proves only a segment law.
+   No maximum-initial-path global ranking argument is established.
+
+The full objective remains ONE original-input/request/actual-caller resource
+bound for BOTH the selected optimized worker AND complete enumeration driver,
+including all siblings, generated/reached/intermediate/failing/rejected/
+returned/subsequent/native states. Derive finite Word/Int/key safety and
+completion. No future worker/body/result, trace, fuel, closure, finite carrier,
+final validity, lookup or OriginalInput oracle can replace that objective.
+Keep all Sized/fallback/failure/productive infinite paths, tables, maps, sets,
+caches, hash and allocation behavior, wrappers, lookup, Curried and
+Specftacular. Do not invent a size for size-free APIs.
+
+Connect exact accepted terms, NODE-COUNT size, counts and ordering and BOTH
+SIGNED rank/unrank inverses through actual sparse execution. Native GHC lazy
+cursor/demand/order/stop/fault correspondence remains open. The known tuple
+demand mismatch does not establish a Haskell bug, cache/state inequality,
+or nontermination. Public intersection starts with the empty domain and
+retains warm native caches. Internal Mu bindings already follow native scope
+rules. Do not relabel that wrapper as a missing ingress or infer Type roles
+from symbols or bare references.
+
+No Haskell edit or new established Haskell fix in R152. Any future Haskell
+repair MUST also be recorded in root FINDINGS.md for external work.
+Preserve unrelated `.hypha/`. Refreshed main remains
+`bd5a406a6a3f84b7e3ae0906082783911509df83`, already an ancestor.
+Push regularly to authorized `formalize`. The runtime is
+`/tmp/mcfta-program-required-target-20261108-1239/`. Publication writes exact
+HEAD/refs, canonical board readback, terminal scopes, source/historical tail
+hashes, active-goal state and measured `/tmp` usage to RESUME.json and
+publication.json. Keep only small reproducible reports and restart data.
+Do not delete protected unreadable `/tmp` paths. No cleanup is required now.
+
 ## R151: original Program fields and actual seeded Type classes
 
 Updated 2026-11-08 12:33 CET. The full goal remains ACTIVE. The previous goal turn
