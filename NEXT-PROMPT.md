@@ -1,3 +1,261 @@
+# R169: verified demand admission and migration contracts
+
+Updated: 2026-11-08 22:34 CET. This is the current restart entry. All earlier sections
+follow without changes. The full goal remains active. Pushes to `formalize`
+remain authorized. Preserve unrelated `.hypha/`.
+
+The objective remains the whole optimized interned worker and complete
+enumeration, on actual callers and all generated, reached, failed, returned,
+and subsequent states. It includes exact NODECOUNT, size, count, order, both
+signed rank/unrank inverses, and native Haskell correspondence. Retain the
+older constructor and equality targets. The results below do not complete
+this full objective.
+
+## Current result
+
+`SourceCurrentConjunctionDemandVerified.complete` derives complete physical
+admission from initial `Ready`, available closed original operands, `Fits r`,
+original operand length at most `r`, and an initial finite guard alphabet.
+The budget is an actual program input. Set `s = max r budget`.
+
+```
+P = ProjectionResources.workerFuel (TupleBounds.shapeThrough alphabet s)
+H = ProjectionUnionResources.readFuel (WorklistResources.step alphabet s)
+```
+
+Every projection allowance at least `P` and read allowance at least `H`
+returns the same overflow, zero, or positive result and the same full
+physical state. The final heap satisfies the existing step envelope at `s`.
+The result preserves physical effects and positive requirement readiness.
+The endpoint takes no successful execution, future read list, future heap,
+future closure, sufficient allowance, or future tuple-count bound as input.
+
+The new executable is `SourceCurrentConjunctionDemandAdmission.run`. It
+uses R167's total physical cursor. Overflow returns the sampled state without
+forcing its continuation. A fitting empty sample returns zero. A positive
+sample executes the existing ordered tuple worker on exactly those sampled
+tuples. The result type is the existing `TupleAdmission.Result`. The later
+requirement-row fold remains eager.
+
+R168 supplied a computed read allowance for raw sampling. R169 composes raw
+sampling with actual requirement allocation and computed projection/read
+ceilings. The old step and phase-envelope functions remain unchanged.
+Seeding at `max r budget` derives sample count at most the seed. The old
+Cartesian ceiling then bounds the count. This avoids a supplied count law
+or a new demanded-view/product-order proof. The seed must be propagated to
+the selected caller and later worklist resources during adoption.
+
+The selected checker STILL uses eager `TupleAdmission.run`. This checkpoint
+provides the admission-level execution, soundness, history, weak-effect, and
+numeric contracts for its migration. It does not yet change selected worklist,
+decision, fourth-memo, or caller wiring. Do not claim selected adoption.
+
+## Checked contracts
+
+There are 15 changed proof modules, 53 public laws, and 43 new public laws.
+Twelve modules are new. Three existing modules expose or wrap their existing
+lower preservation proofs. Every earlier public theorem name remains.
+
+* `DemandAdmission`: 6 laws. Exact sampler faults, overflow, zero, positive
+  allocation, actual positive sample extraction, and positive charge bounds.
+* `DemandExecution`: 3 laws. Actual successful admission supplies its graph.
+  The graph records the actual total sampler at its exact physical state.
+  Positive graphs additionally record actual `RowsAllocation.Tuples` over
+  the sampled list. The graph supplies stable replay and charge bounds.
+* `DemandSoundness`: 3 laws. Graphs retain physical effects and positive
+  `RowsReady`. Fitting zero and positive outcomes cover commonly accepted
+  original terms. The proof composes raw-sample accepted-term coverage with
+  `RowsSoundness.tuples_witness`. It does not assert eager full `Rows`.
+* `DemandCompletion`: 2 laws. Current facts derive one complete stable
+  admission internally. Each successful graph supplies the exact sampled
+  state, ordered supported exposure receipts, unchanged sampler equality,
+  and branch alignment. Positive alignment retains its actual tuple graph.
+* `DemandNumeric`: 2 laws. The old-style numeric admission bound uses the
+  internally computed seed `max resource budget`. It proves final `Fits`
+  and exact replay at the computed pair. Positive generated work has the
+  proved charge-times-row-width bound. Neither law takes a count supplier.
+* `DemandVerified`: 1 law. It composes current-fact completion, actual graph
+  extraction, and numeric replay as stated above.
+* `DemandMemos`: 4 laws. `SampleReads` fixes a real finite observation and
+  the complete literal `ReadTrace.demands`. `AdmissionReads` sequences that
+  sampling receipt with actual tuple reads for positive results. Producers
+  derive both memo histories and exact returned-bundle validity. Supplied
+  receipt validity checks that receipt's own bundle. Every repeated logical
+  read remains in order. First-demand compression is only for resources.
+* `TuplePullWeakEffects`: 2 laws. All actual raw-sampler outcomes preserve
+  `SemanticHeap`, `Covered []`, constructor growth, and issued identities.
+  Successful statuses retain available closed rows and cursor contents.
+  Equality validity, costs, and `Ready` are not premises.
+* `DemandWeakEffects`: 1 law. Sampling followed by actual tuple processing
+  retains the selected weak heap contract on all outcomes. Successful
+  positive requirements have available closed operands.
+* `DemandEffects`: 2 laws. All admission outcomes retain full readiness,
+  physical effects, old records, and clean probes. The proof transports
+  equal decision instances rather than requiring a particular instance.
+* `TuplePullHeapEffects`: 6 laws. Actual expose/step heaps are either the
+  unchanged heap or the exact requested native read's returned heap.
+  Finite and total composition retain original operand support on all
+  outcomes. Its generic native-preservation rule is a component helper.
+  Concrete endpoints instantiate it with existing native read theorems.
+  Do not introduce that rule as a new callback premise of top endpoints.
+* `DemandAnnotations`: 8 laws. All-outcome sampling/admission preserves
+  `UnionNormal` from only that premise. Arbitrary physical annotations also
+  survive all outcomes. Sampling preserves causal guards and arity on all
+  outcomes. Guard and arity admission laws retain their earlier successful
+  graph premises. They do not cover failed requirement allocation without
+  a further lower outcome theorem.
+
+Three surgical existing-source changes support these laws:
+
+* `SourceCurrentUnionNormalConjunction.tuples` is public. Its proof body is
+  unchanged. Its only heap premise is `UnionNormal`.
+* `SourceCurrentConstrainedCapMergeGuardEffects.nodeEdges_heap` is public.
+  Its proof body is unchanged. It includes actual failed native reads.
+* `SourceCurrentConjunctionRowsWorkerEffects.tuples_effects` wraps the existing
+  private tuple verification. It exports weak all-outcome heap effects and
+  successful available closed requirements. Existing `rows_effects` stays.
+
+`DemandEffects` needed an explicit decision-instance transport. The old
+warm/probe tuple theorems fix the derived classical key decision. The new
+executable is generic in its key decision. `Subsingleton.elim` identifies
+the decisions. A private reducible abbreviation exposes the exact derived
+decision to rewriting. A regular opaque definition blocked `rw` despite
+identical default pretty printing. No extra premise or axiom was added.
+
+## Next critical work
+
+Port the ACTUAL selected worklist, decision, fourth-memo, and caller graph
+to demand admission. Preserve lexicographic budget/queue termination, the
+three admission branches, exact returned states, and the fixed-point bound
+from the final table length. Use the new admission graphs and term coverage.
+
+Preserve historical eager APIs where exact execution contracts differ.
+The old `fits_rows`, `positive_rows`, `Admission.positive_rows`, and
+`Admission.zero_rows` require eager exposures of every operand. They cannot
+describe skipped or reordered reads. Do not claim eager execution equality
+or reuse those contracts as if the new path produced eager full `Rows`.
+
+Lift both actual memo histories, captured fields, arity, guard facts, numeric
+bounds, and failing states through the new worklist. Preserve weak contracts:
+`WorkerOperationGrowth.tuple_admission` has no readiness premise;
+`UnionNormalConjunction.call` assumes only `UnionNormal`. Total sampler
+equality preservation is unconditional. Use it with the lower tuple-growth
+proof for unconditional operation growth. Do not replace either weak API
+with a theorem that requires `Ready`.
+
+Propagate `max(initial scalar, budget)` at caller initialization. Subsequent
+remaining budgets are at most the growing scalar. Keep the existing step
+and phase-envelope functions. The numeric component gives exact sampled
+count and generated-work bounds without a future tuple-count premise.
+
+Avoid an import cycle: `DemandAnnotations` imports the old
+`UnionNormalConjunction` only for its exported `tuples`. During cutover that
+old file must use `TuplePullHeapEffects.sample_preserves` directly with its
+own tuple law. It must not import `DemandAnnotations` back.
+
+The exact selected route is `EnabledEmpty.check` to
+`AllocatedTupleConjunctionWorker.call` with `currentTupleBudget = 10000`,
+then `TupleWorker.call/explore`, then eager `TupleAdmission.run`. The separate
+global `AllocatedConjunctionWorker.call` also selects `TupleWorker`. An
+enabled-only switch must not be reported as global selected adoption.
+
+The bounded next implementation is one `DemandWorker` control module plus
+Run/Decision/Call extensions of the current demand graph modules. Reuse
+Outcome/Fault/Table, skips, budget branches, table grow, and memo insertion.
+Lift exact ordered reads through the three graphs. Shared caller Context/Post
+and `AllocatedConjunctionMemo.lift_effects` need no metadata-schema redesign.
+Port both allocated call routes after their actual proof contracts exist.
+
+Numeric initializer sites are TupleWorklistResources.bound/initial_bound,
+TupleWorklistNumeric.bound/initial_bound/entered/decision/call,
+ConjunctionCallerNumeric.forecast/complete, AlphabetBounds.tupleCallerForecast,
+AllocatedConjunctionWorkerResources, and the separate TupleCallerNumeric /
+AllocatedTupleConjunctionWorkerResources adapters. ScanNumericForecast and
+IncomingQueryResources/IncomingQueryArity have direct ceilings to update.
+A demand forecast can wrap the old forecast at `max r originalBudget`.
+Maintain remainingBudget at most currentScalar internally; do not reseed
+each recursive step or add a budget premise. Reservation ge/mono facts
+transport to the enlarged forecast. Initial capacity remains a real premise.
+
+Publication history can reuse the old private exposures/tuples rules within
+its module, or export them for a separate adapter. All-outcome sampling can
+use RequiredPublicationHistory.nodeEdges. Actual requirement-fault causal
+guard, arity, and publication preservation still needs lower all-outcome
+forest/projection-prefix proofs where requested. Arbitrary physical
+annotations are a different predicate and do not discharge those obligations.
+
+Active R170 drafts are outside the frozen proof source tree in
+`/tmp/mcfta-demand-control-r170/`. Preserve them until they are moved and
+checked. They are unverified source drafts, not part of this checkpoint.
+The worker/execution/soundness owner is `/root/determinization_zip_target`.
+The worklist numeric owner is `/root/reference_order_bound`. The effects
+and memo owner is `/root/native_mu_prepare`. Inspect their frozen-file
+reports and live status before editing. No child may run a compiler. Move
+and check the drafts after R169 publication, then port both selected callers.
+
+Then model shared lazy requirement rows. Connect R164's completed worker
+return and R166's enumeration driver on the SAME actual graph and caller.
+Derive sufficient driver depth and productivity. Complete exact NODECOUNT,
+size/count/order, and BOTH signed rank/unrank inverses through actual sparse
+execution. Retain AllSized, fallback, failure, productive infinity, lazy
+tables/maps/sets/cache/hash, Word/Int, allocation, wrappers, lookup, Curried,
+and Specftacular. Do not add size parameters to size-free enumeration APIs.
+
+The general outer rank is already checked. R164 still supplies source-worker
+completion conditional on its computed initial room. R166 still supplies
+source-to-finite-driver outcomes under its computed initial capacity, at a
+chosen finite recursive depth. They remain separate endpoints. Their large
+mathematical bounds do not imply useful 64-bit capacity or complete native
+Haskell correspondence. Do not replace the full objective with initial-only,
+successful-only, U-only, or supplied future execution/closure/carrier claims.
+
+## Haskell findings and validation
+
+No production Haskell file changes in R169. There is no new Haskell repair
+for an external implementation task. All previous findings remain below.
+Record every future Haskell fix in this root `FINDINGS.md` too.
+
+Each changed module has a compact `lean/restart-evidence/20261108-<slug>/`
+packet. It records source hashes, exact public theorem names and namespaces,
+explicit `#check`, axiom reports, and warning-as-error own-source checks.
+Only `propext`, `Classical.choice`, and `Quot.sound` are permitted. The packet
+root is derived from its own path. No `/tmp` state is needed to reproduce it.
+
+The compatibility packet is
+`lean/restart-evidence/20261108-demand-admission-compatibility/`.
+The live graph has 5,317 modules. The changed reverse-import closure has
+1,831 modules. Its 27 outermost targets cover that complete closure,
+including independent worker, type, and signed-ranking roots outside Audit.
+Audit has 4,314 direct imports and checks 87,121 imported theorems. Its old
+commands and body remain exact. All earlier root-document bytes remain exact.
+
+An initial broad Lake rebuild exceeded the effective 4 GiB memory limit.
+The systemd scope was verified failed with `Result=oom-kill` before retry.
+No duplicate compiler was started. Per-build `LEAN_NUM_THREADS=1` then
+limited the actual build to one Lean process; a live cgroup observation
+showed about 345 MiB current / 457 MiB peak with no OOM events. Keep this
+per-build limit for broad rebuilds. The first serial run reached its900-second limit after600 rebuilt oleans.
+Its scope was verified inactive before cached progress resumed with a longer
+per-command limit. Peak memory at that timeout was2069MiB. The global heavy
+queue is unchanged.
+All successful checks use effective memory.max/high of 4 GiB and swap zero.
+ROOT remains the sole compiler owner. Do not raise the cap or queue concurrency.
+
+Run source packets in the pinned project Nix environment under the existing
+serial heavy-management cap. For example:
+
+```sh
+LEAN_NUM_THREADS=1 python3 lean/restart-evidence/20261108-demand-verified/check.py
+```
+
+The working receipts are in `/tmp/mcfta-selected-demand-20261108-2134/`.
+They are small scripts, hashes, reports, and bounded diagnostics. There are
+no build archives or copied compiler trees. `/tmp` remains about 31 MiB.
+Check it before large work. Retain only small diagnostics needed for active
+work. Preserve unrelated `.hypha/` and all marked drafts/counterexamples.
+
+---
+
 # R168: computed initial read allowance for demanded tuple sampling
 
 Updated: 2026-11-08 21:25 CET. This section is the current restart entry. All older
