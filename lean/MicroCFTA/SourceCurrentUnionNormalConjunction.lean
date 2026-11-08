@@ -85,7 +85,8 @@ private theorem tuple [DecidableEq (EdgeKey Symbol (SourceSymbolicIndex.Constrai
     · exact normal
     · exact bind _ _ (requirements worker reader edges _ _ normal) (fun _ _ currentNormal => currentNormal)
 
-private theorem tuples [DecidableEq (EdgeKey Symbol (SourceSymbolicIndex.Constraint Formula))] (worker reader : Nat)
+/-- Actual tuple processing retains union-normal records on every outcome. -/
+theorem tuples [DecidableEq (EdgeKey Symbol (SourceSymbolicIndex.Constraint Formula))] (worker reader : Nat)
     (edges : List (List (EdgeValue Symbol (SourceSymbolicIndex.Constraint Formula))))
     (state : SourceCurrentConjunctionRowsWorker.Physical Symbol Formula) (normal : UnionNormal state.heap) :
     UnionNormal (SourceCurrentConjunctionRowsWorker.tuples worker reader edges state).state.heap := by

@@ -79,7 +79,7 @@ private theorem collect_heap (property : Guard → Prop) [DecidableEq (EdgeKey S
                   ih after afterSemantic afterHeap (entry.identity :: seen) (result :: rest) nextInputs
 
 /-- Actual direct and closure reads retain causal guard observations without whole-value closedness. -/
-private theorem nodeEdges_heap (property : Guard → Prop) [DecidableEq (EdgeKey Symbol Guard)]
+theorem nodeEdges_heap (property : Guard → Prop) [DecidableEq (EdgeKey Symbol Guard)]
     (fuel : Nat) (value : Value Symbol Guard) (state : State Symbol Guard)
     (semantic : SemanticReady state) (heap : Heap property state) (available : Available state value) :
     Heap property (nodeEdges fuel value state).state := by

@@ -183,4 +183,23 @@ theorem rows_effects (p h : Nat) (nodes : List (Value Symbol (Guard Formula))) (
   cases actual : rows p h nodes before with
   | done requirements after => exact checked.result _ _ actual
   | failed fault after => trivial
+/-- Actual sampled tuples retain weak heap effects and closed available requirements. -/
+theorem tuples_effects (p h : Nat) (sampled : List (List (EdgeValue Symbol (Guard Formula))))
+    (before : Physical Symbol Formula) (semantic : SemanticHeap before.heap)
+    (covered : Covered [] before.heap)
+    (resident : ∀ edges ∈ sampled, Edges before.heap edges)
+    (closed : ∀ edges ∈ sampled, ClosedEdges edges) :
+    let actual := tuples p h sampled before
+    SemanticHeap actual.state.heap ∧ Covered [] actual.state.heap ∧ Grows before.heap actual.state.heap ∧
+      Extends before.heap.nodes.issued actual.state.heap.nodes.issued ∧
+      match actual with
+      | .done requirements after =>
+          ∀ row ∈ requirements, ∀ nodes ∈ row, Values after.heap nodes ∧ ClosedValues nodes
+      | .failed _ _ => True := by
+  have checked := tuples_verified p h sampled before semantic covered
+    (fun edges member => ⟨resident edges member, closed edges member⟩)
+  refine ⟨checked.semantic, checked.covered, checked.growth, checked.history, ?_⟩
+  cases actual : tuples p h sampled before with
+  | done requirements after => exact checked.result _ _ actual
+  | failed fault after => trivial
 end MicroCFTA.SourceCurrentConjunctionRowsWorkerEffects
