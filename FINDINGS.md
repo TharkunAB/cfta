@@ -1,3 +1,184 @@
+## R166: actual driver credit admission and suspended tuple sampling
+
+Updated 2026-11-08 19:52 CET. The full goal remains ACTIVE. R165 was verified progress.
+39 proof modules have exact strict reports for 111 public laws, including
+42 new laws. Public theorem names from earlier sources remain present.
+No production Haskell source changes in this checkpoint.
+
+### Strongest new source statement
+
+SourceSynthesisOriginalFiniteDriver.accepted_capacity starts from accepted
+firstOrderRaw input. It derives the actual Label construction, equality
+preparation, cold caller, encoded handle/readback, startup Packet, canonical
+startup, waiting/index flags, Fits, guard alphabet and zero suspended mass.
+For each chosen recursive depth, ONE Capacity test on the computed final
+forecast supplies all nested native-query reservations. The literal modeled
+driver has a stable finite outcome with OutcomeResources. This includes
+exhaustion, ordinary fallback, selected, callback and alternative outcomes.
+Policy, graph and initial typing/types/openHoles remain explicit arguments.
+The literal nodeEdges selection laws are derived internally.
+
+This is an actual adoption in the driver resource chain. It is not an unused
+parallel numeric certificate. IncomingQuery, incoming observation, dispatch,
+stored native prefixes, captured/old guard carriers, native error prefixes,
+arity and projection-heap resource laws use the new entry admission. The
+same returned callers, tables, query receipts and heap bounds are retained.
+The earlier Room route remains available. The higher incoming coverage API
+still has its original Room premise; its proof supplies the old alternative.
+
+This theorem does NOT choose enough recursive depth or identify the public
+native policy and runtime with the modeled driver. It starts the driver on
+the original constructed root. It does not yet compose the R164 worker
+return into the driver at that returned warm caller.
+
+### Capacity definitions and proof direction
+
+SourceCurrentAllocatedNativeCreditProfile.Entry reserves one native query:
+nodes < 2^bits, edges <= 2^(bits+2), and domains + I(profile) < 2^(bits+1).
+I is the existing computed instructionBound of initial node/edge counters
+and stored payload mass. Capacity bounds only the final three counters.
+Admits is the disjunction of the earlier Room test and Entry.
+
+The same numeric ResourceForecast.step remains unchanged. Its domain
+component is domains + I(profile). Therefore a final Capacity bound that
+dominates a COMPLETE step supplies Entry at that step's entry. Incoming
+reserved_of_final_capacity uses the NEXT scheduled entry, then the common
+final profile. FiniteCapacity repeats this argument across the exact sibling,
+captured-head and recursive schedules. It does not reserve an extra query
+that the driver never executes.
+
+TargetCallerCreditResources.ready_admitted_ranges needs only actual Ready,
+Fits, admission and closed available operands. It does not strengthen this
+weak API to Context. The admitted caller producer returns the old complete
+physical receipt and resource forecast. The checked prefix and stored-prefix
+producers retain every actual bounded endpoint, including unfinished and
+failing prefixes. No future range, completion or intermediate Room supplier
+is a public premise of the source finite-driver endpoint.
+
+This is NOT a practical native 64-bit capacity result. The generic computed
+instruction bound can be larger than the powerset bound it replaces. It uses
+worst-case branching at every level of a large computed semantic ceiling.
+For example, the numeric formula at nodes=2 and mass=1 already permits
+branching at least 4 and ceiling 1968. A final fixed-width Capacity test can
+therefore be impossible for small realistic inputs. Source/request-specific
+cost and allocation estimates remain necessary. All process-global native
+counters, allocation reuse, duplicate work and runtime correspondence remain
+separate obligations. The R164 original worker theorem still uses its earlier
+explicit Room condition.
+
+### Suspended physical tuple sampling
+
+SourceCurrentConjunctionTuplePull implements seed, inner-first extend,
+operand exposure and suspended row scans. Each demanded operand uses the
+existing actual singleton RowsWorker exposure. Matching preserves symbol,
+arity, order and duplicate occurrences. A yield retains its continuation.
+The proof retains the actual reached physical state and exposure fault.
+A per-transition ReadAgreement supports list-order readback; it is not an
+execution input that supplies all future operand rows.
+
+SourceCurrentConjunctionTuplePullAdmission pulls the cursor until end or
+exactly budget+1 matching raw tuples. Overflow leaves the returned continuation
+unforced. Its finite administrative observation allowance returns running
+when the observation ends. That limit is not a new Haskell runtime error.
+The public reports contain 10 cursor laws and 9 admission laws.
+
+This cursor is NOT yet the selected emptiness checker. The current selected
+RowsWorker still uses eager exposures. After sampling fits, native tupleRows
+and requirements also remain lazy, with sharing between table and pending
+worklist. Both the selected cutover and that sharing need proofs. A cursor
+alone is not full native demand correspondence. Do not bound total scan or
+exposure work by budget+1: mismatches can consume reads, and union exposure
+can construct a complete Set closure before yielding its first row.
+
+### Correction to the warm-rank gap and table attachment
+
+The modeled recursive driver's incoming and dispatch definitions execute
+native requestNode followed by the optional tuple emptiness check. They do
+not invoke the full outer AllocatedPartialWorker.nodeCall. Their narrowing
+uses row exposure and filtered makeNode. Actual Haskell
+Enumeration.intersectUVarValue also directly calls intersect and the optional
+provablyEmpty check. These source pointers support this route distinction;
+they do not prove complete default-policy or demand correspondence.
+
+Do not reintroduce a missing full-outer-rank provider as the current native
+admission obstacle on these driver branches. The general abstract outer rank
+already exists, and R164 derives its cold source entry. Later independent
+full-worker entries and worker-return/driver composition still need their
+own exact invariants and bounds.
+
+SourcePruningEnumerationOuterTables proves exact nodeResults/edgeResults
+preservation through actual incoming merges, dispatch, ordered folds and
+every selected narrowed caller. These laws cover all outcomes without
+Ready, Context, successful execution or numeric premises. EdgeIdle then
+transports from its actual initial table. Full recursive continuation lifting
+is still open. No arbitrary future hook-preservation oracle was added.
+
+### Remaining full objective and next work
+
+1. Replace the SELECTED eager raw-tuple sampler with the physical cursor.
+   Derive adequate observation/read bounds from original input and actual
+   current invariants. Prove repeated operand-read cache stability, exact
+   demand/fault effects and the later shared lazy row/requirements heap.
+   Keep both the source branch order and every rejected/failing state.
+2. Obtain useful request-specific native cost/allocation bounds. Connect them
+   through exact warm startup and global caches to fixed-width Haskell IDs.
+   Do not infer native admission from successful raw execute or from modeled
+   mathematical widths. No controlled native overflow-error route exists.
+3. Compose the actual original worker return and complete driver on the SAME
+   returned graph/caller. Derive input-dependent sufficient depth or finite
+   prefix productivity for genuinely infinite output. Higher coverage under
+   new admission remains to be attached. Keep all siblings, callbacks,
+   subsequent queries, fallback paths, intermediate and native states.
+4. Finish exact NODECOUNT accepted terms, counts/order and BOTH signed
+   rank/unrank inverse laws through actual sparse execution. Keep Sized,
+   size-free, tables/maps/sets/cache/hash/allocation, wrappers, lookup,
+   Curried and Specftacular. Do not invent a size for enumerateUntil' or
+   enumerateOutUVarWith. No U-only, initial-only or success-only substitute,
+   or future completion/validity/closure/carrier/lookup supplier, meets the
+   full objective.
+
+### Haskell findings and validation
+
+No Haskell fix was made in R166. Existing unchecked Cache.nextId,
+mkIntersectionDom identity+1 and FlatMemo word handling remain as recorded
+in R165. No practical reachable native overflow bug or divergence is claimed.
+The new pull code is a Lean model change. Record every later actual Haskell
+fix here so an external agent can pick it up.
+
+A fresh project Audit and both affected signed-count roots pass. The import
+graph contains 5,283 live modules. Exact snapshots cover all 625 affected
+reverse dependencies. The three roots are Audit, SourceSizedGroupedSignedRank
+and SourceSizedSparseSignedCounts. The Audit checks 86,708 imported MicroCFTA
+theorems against the three standard axioms. This is a dependency/axiom audit;
+it is not a proof of full native or enumeration completion.
+
+Integration repair: R165 appended four imports after Audit commands. Lean
+rejects imports at that location. R166 moves those four imports and places
+its seven new imports in the initial import block. All prior imports remain
+present. The original audit command body remains byte-exact. The fresh Audit
+now includes the relocated components before it checks axiom dependencies.
+No older proof theorem was removed to make the build pass.
+
+Compact reproducible compatibility: lean/restart-evidence/20261108-driver-credit-compatibility.
+It retains only the checker, source/import snapshot, compact result and README.
+It contains no copied source tree, compiler artifact or build archive.
+
+Own-source checks use the project Nix/Lake target, warnings as errors, exact
+public declarations/namespaces, explicit #check, source hashes and standard
+axioms only (propext, Classical.choice, Quot.sound). All compiler runs use
+one ROOT-controlled serial job with effective memory.max=memory.high=4 GiB
+and memory.swap.max=0. Earlier dependency warning replays are unchanged.
+All historical document tails and every unedited proof source remain exact.
+The Audit imports add only the seven new source modules.
+
+Runtime bookkeeping: /tmp/mcfta-driver-credit-admission-20261108-1904.
+Proof reports live under lean/restart-evidence/20261108-*. Each checker
+rebuilds its source and reproduces the public name/axiom report. No build
+archive or copied compiler tree was created. Keep /tmp compact and preserve
+unrelated .hypha/. Push authorization for formalize remains explicit.
+
+---
+
 ## R165: native query capacity from instruction credit; source finite-driver admission
 
 Updated 2026-11-08 18:52 CET. The full goal remains ACTIVE. R164 was verified progress.
