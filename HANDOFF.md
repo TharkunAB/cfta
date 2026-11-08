@@ -1,3 +1,256 @@
+# Current checkpoint: inherited type regions and actual caller height growth
+
+Updated 2026-11-08 02:32 CET. Goal ACTIVE. R131 made PROGRESS.
+Branch formalize. The preceding checkpoint is
+4b94e02317a3998b6371c6c84ad7d7a58cb65d58 (R130, board seq980).
+The optimized interned core remains PRIMARY. Older constructor and equality
+proofs remain SECONDARY. Preserve all proofs, counterexamples, repairs,
+marked drafts and unrelated .hypha/. Regular formalize pushes are explicitly
+authorized. Do not pause the goal or ask whether to continue.
+
+Formalize was pulled before work at 01:37 CET. Main and formalize were
+refreshed before publication at 02:31 CET. Main remains
+bd5a406a6a3f84b7e3ae0906082783911509df83, an ancestor.
+Eight verified source/check commits extend R130 through
+b87388313e0720cf7af2a189976e9e515d41739c. They add eight modules and
+39 NEW public laws. All actual project Nix/Lake builds and strict own-source
+reports pass. Every public theorem has an explicit #check and axiom report.
+The checked names equal the complete public declaration set in its real
+namespaces. Only propext, Classical.choice and Quot.sound occur.
+No existing proof source was changed or deleted. No Haskell source changed.
+The final documentation commit, push, canonical board readback and exact
+hashes are recorded in publication.json and RESUME.json under
+/tmp/mcfta-inherited-regions-20261108-0145/. The committed check packets
+reproduce without /tmp. All earlier checkpoint sections below are historical.
+
+## Strongest current general positive claim
+
+The R130 original-input endpoint remains the strongest general composed
+completion theorem. SourceSynthesisMergedRequiredRowNumeric.
+firstOrderRaw_merged_required_rows_numeric takes original Library, Query and
+SIGNED source size, with concrete EdgeKey DecidableEq infrastructure.
+Source errors remain explicit. An accepted instruction derives actual
+empty-cache construction, internally complete stable source merging,
+closed output, NoNewMu, and prefix height at most sizeOf its emitted
+instruction plus ONE. The actual returned merge heap has SemanticReady,
+CostHeap and Available. Every actual merged root-row child forest and finite
+SIGNED path list then derives complete stable Required, in THAT returned
+heap, at worker depth 2 * sizeOf (SourceEqualityNeeded.build paths) + 1 and
+an internal reader bound. Larger budgets return the SAME forest and heap.
+Keeps, Values and closed children are retained. No final worker success,
+initial heap certificate, graph, semantic readiness, preparation, fuel,
+future closure, finite carrier or resource oracle is supplied.
+
+Each row call starts independently in the same merge heap. This does not
+sum all sibling work, execute the full reducer or bound the complete driver.
+Worker depth is not total time, allocation or heap size. The SIGNED source
+size is not a theorem about accepted term NODE-COUNT size or order.
+R131 adds the following actual path and caller results. It does not extend
+this original-input endpoint to a completed whole-worker execution.
+
+## New positive result: inherited constraints stay in their supplied type regions
+
+EqualityNormalizeRightIdeal proves two preservation laws for the ACTUAL
+normalizer. A right-closed path region contains every extension p ++ suffix
+of each member p. Actual mkEqConstraints and normalize preserve that region.
+The proof follows preparation, congruence generation and the complete/fix
+loop. It does not assume global prefix freedom or a finite carrier.
+
+SourceEqualityConstraintRegions adds four laws for literal physical
+constraints. Within P accepts a contradiction without endpoints. For a live
+constraint, every endpoint in every stored record satisfies P. Physical read,
+actual inherited/own combination and trie descent preserve the appropriate
+region. combine_descend_preserves derives combination completion and
+WellFormed internally. Descent changes P to fun suffix => P (index :: suffix).
+No successful normalizer or successful combine premise is supplied.
+
+SourceSynthesisGuardRegions adds twelve laws for ACTUAL synthesis fields.
+Relative to a program row, its annotation region is the prefix [0]. The
+application region consists of prefixes [0], [1], [2,0] and [3,0]. Child 1
+is the arrow marker. Child 2 is the function program. Child 3 is the argument
+program. The filter region consists of [0] and [1,0]. These regions are
+right-closed. Component, application and filter guards have actual stored
+AND actual accessor endpoints in these regions. The eqGuard accessor law
+uses the source Top/residual fast path. It does not normalize a second time.
+
+SourceSynthesisInheritedRegions adds two actual source-row adapters.
+Application and filter own reads, physical payload combination, WellFormed
+and every relevant child annotation region follow from the source row and
+the current inherited region. The own constraints and their successful
+reads are derived. They are not caller-supplied values.
+
+SourceCurrentInheritedConstraintRegions adds three laws for the SELECTED
+CURRENT allocated prefix. fields_preserve uses the actual returned-field
+alternatives: original symbol and either original guard or Top sentinel.
+It does not assert original guard equality on rejected rows. run_preserves
+uses the actual accessor and memoized combiner. It derives completion,
+Valid, Ready, Grows and the literal combined payload region. descend_preserves
+joins actual caller descent to physical trie descent by exact payload
+equality. These are internal interfaces: Valid, FieldAvailable, inherited
+Ready and the current region still need a whole-execution original-input
+derivation. Semantic equivalence alone is not used as literal payload equality.
+
+The Type region itself is True. This permits paths inside a type subtree;
+it does NOT assign constrained Type work rank zero. These preservation laws
+do NOT bound inherited endpoint lengths. R130's strict original-Ty length
+and joint prefix-freedom theorem concerns initial guards. A later inherited
+conjunction can generate cross-class extensions.
+
+## New positive result: actual Required footprints exclude program fields
+
+SourceSynthesisRequiredFootprints adds five laws. Actual natural endpoint
+regions pass through signed path conversion and the actual Needed builder.
+In an application, Required leaves every non-annotation child inside both
+the function program and the argument program unselected. In a filter it
+leaves every non-annotation child inside the filtered program unselected.
+Actual ordered selection queries inherit the region from Trace.sublist.
+The proof reuses SourceCurrentRequiredPathFootprints.build_unselected.
+It does not replace the evaluator or assume a future Unselected fact.
+
+This does not skip the program roots. Their annotation child 0 can change.
+The current region is still a premise at this internal interface. The
+missing composition must derive occurrence-indexed Program/Type roles for
+EVERY reached row from the original instruction and preserve them through
+all actual construction, merge, Required and parent/outer operations.
+Symbols cannot establish roles: user component and type names can collide
+with internal names. A path is a list of child indices, per CONTEXT.md.
+Use occurrences and actual origin/readback laws, not name tests.
+
+## Checked boundary: height grows in the actual current caller
+
+The fixed original library has ONE f : TVar a. The query is TVar a and the
+SIGNED raw source request is 2. Original source acceptance is checked.
+The ordinary-symbol adapter retains names and Top refinements. The labeled
+heap is built afresh; String-heap IDs and caches are not transported.
+Both new caller fixtures use 64-bit reference width. Width is the BitVec
+width, not a table capacity. This matches the local native Word width, but
+does not prove native hash, identity, allocation or execution correspondence.
+
+SourceSynthesisUniverseCallerBoundary adds five laws for the RAW SOURCE
+PartialMemo caller. Actual run 8 8 8 8 8 128 3 from the original constructed
+state retains evaluating memo owners at 0, 2 and 4. The application has
+transparent height 2. The requested function has height 4. Both actual
+inherited constraints are empty. Their values come from that execution;
+they are not manually supplied for an isolated application pass.
+
+SourceSynthesisUniverseCurrentCallerBoundary adds six laws for the CURRENT
+ALLOCATED caller. It collects the literal original guards, runs actual
+OriginalAllocationPreparation.prepare from Cache.emptyState, builds the
+actual labeled expression, and initializes the caller from the returned
+cache and its allocated empty inherited value. Actual nodeCall parameters
+are f10, g/s/r/e/p/h8, m24, c8, n128 and algorithm budget10000.
+observation_receipts retains those exact preparation, construction and
+failed bounded execution equations. actual_requests reads the actual
+separate node-result table cells 0, 2 and 4. They retain evaluating owners,
+application height2 and function height4, with actual empty inherited
+payloads. The returned fourth memo is exactly empty. The concrete kernel
+certificate and all extracted public laws pass.
+
+Thus strict transparent-height descent fails EVEN for this actual selected
+current caller prefix. The earlier isolated own/inherited-value gap is now
+closed for this fixture. This does NOT prove nontermination, a busy-key
+recurrence, native Haskell behavior, or a general completion bound.
+The bounded failed return is part of the receipt. No claim is made that the
+failed return represents the unbounded Haskell outcome. An empty returned
+fourth memo does not prove that no fourth decision was entered.
+
+## FINDINGS for the external Haskell/formalization owner
+
+No production Haskell defect or fix was established in R131. Keep all earlier
+FINDINGS and ownership notes, including the WITHDRAWN PR203 behavior-change
+recommendation. PR202/203 state was not refreshed. Do not change Haskell on
+the basis of these modeled bounded prefixes.
+
+A model-integration gap WAS confirmed directly against the current source.
+Haskell cfta/src/Data/CFTA/Enumeration.hs lines612-619 charges EDGE TUPLES:
+it takes budget+1 tuples, detects overflow, and otherwise subtracts count.
+The native emptinessBudget at line664 is 10000. The selected older
+SourceCurrentConjunctionWorker.explore at lines54-66 instead subtracts ONE
+per admitted requirement key. Dedicated SourceCurrentConjunctionTupleBudget,
+TupleBudgetDecision, TupleBudgetCompletion and TupleBudgetSoundness modules
+already model tuple charging separately. They are not composed into the
+selected current caller. This is a FORMAL MODEL ATTACHMENT GAP, not a
+recommendation to alter the Haskell budget. Next work must attach the actual
+tuple-budget worker and transport its exact returned states, failures and
+memo effects through the selected caller and driver. The empty-fourth-memo
+fixture does not close that general correspondence gap.
+
+One simulation-fuel mismatch was also corrected. Raw merge fuel8 measures
+structural recursion. Current merge fuel measures code, bind and request
+layers. Copying8 stopped in the root filter with a precise localReduction /
+classes / leaf / target / merge.exhausted fault. No application request was
+then present. Inspection of the first exposed five-row universe gives an
+instruction-depth bound22; using24 reaches the checked current request.
+This is a first-target calculation, NOT a bound for all later targets.
+Other simulation parameters, algorithm budget, compiler limits, CBV limits,
+cgroup limits and queue concurrency were not increased.
+
+The current caller extraction required simplifying the outer Option match
+before splitting the inner three-cell match. Use simp only[certificate,found]
+at the certificate, then split. After cases found : observation, the goal
+already contains some observed, so the existential receipt equality is rfl.
+These are Lean proof-extraction repairs, not changes to either algorithm.
+
+## Biggest gaps and bounded next work
+
+1. Derive occurrence-indexed Program/Type roles for all actual reached rows.
+   Combine source guard regions, current allocated inherited preservation,
+   actual selection traces and Required footprints. Existing useful APIs
+   include SourceCurrentOuterRowFieldOrigins.descendants_source/gain_source,
+   actual Required/parent row origins, positional child links, and
+   BuildStructuralRowOrigins.build_row_origin. Do not assume every returned
+   row retains its original guard: the Top sentinel branch is real.
+2. Derive separate constrained-Type progress together with the Program
+   budget. Parent transparent height is refuted by the actual 2-to-4 call.
+   Initial prefix freedom and stored-Mu preservation alone do not solve
+   inherited conjunctions, repeated exposure or all sibling work.
+3. Attach the dedicated tuple-budget implementation to the selected current
+   worker. Then derive ONE original-input/request/ACTUAL-caller bound for
+   BOTH the optimized worker and COMPLETE enumeration driver. Cover ALL
+   siblings and generated/reached/intermediate/failing/rejected/returned/
+   subsequent/native states. A sum of all work remains separate from depth.
+4. Connect actual sparse execution to exact accepted NODE-COUNT size, order,
+   count and BOTH signed rank/unrank inverse laws. Retain ALL Sized routes,
+   fallbacks and failures, productive infinite queries, lazy tables/maps/sets,
+   caches/hash/Word/Int/allocation/wrappers, lookup, Curried and Specftacular.
+   Size-free enumerateOutUVarWith/enumerateUntil' must use their actual caller;
+   do not invent a size parameter. No final closure, OriginalInput, lookup,
+   finite-carrier, worker-success or resource oracle closes the goal.
+
+These results are progress. The full system is not proved. A theorem count
+or a bounded example does not give a defensible completion percentage.
+Preserve earlier source-process failures, provenance UNKNOWN states,
+counterexamples, rejected measures and historical boundaries below.
+
+## Validation, publication and storage
+
+The eight focused source/check commits are recorded in proof-commits.json.
+verified-modules.json contains their exact source hashes and 39 real public
+names. Every committed packet has check.py, checked.json, theorems.json and
+README.md. Reproduce a packet from the repository root with python3 on its
+check.py inside the existing heavy-management serial4GiB policy. It runs
+actual Nix/Lake and the strict own-source check. Do not claim a new native
+Haskell probe, full Haskell suite, benchmark or CI result.
+
+Root alone compiled all new modules. Each heavy scope used MemoryMax and
+MemoryHigh4GiB, swap0 and unchanged queue settings. The first incorrect
+current certificate peaked at2237MiB. The final successful current pipeline
+peaked at769MiB. All heavy handles and bounded source tasks are terminal.
+No build trees, source copies or archives were placed in /tmp. At02:29 CET,
+readable /tmp used19787776 allocated bytes, excluding5 protected directories;
+the filesystem had263982481408 available bytes. No deletion was needed or
+performed. Final measurements are in tmp-audit.json. Keep monitoring size.
+Small manifests, scripts and compact diagnostic logs are sufficient. The
+committed sources/check packets reproduce without retained /tmp artifacts.
+
+The three root documents share this new prefix plus the full R130 prefix.
+Historical tails remain byte-for-byte exact. write-checkpoint.py applies the
+new prefix ONCE; after application, do not rerun it. Exact final source,
+commit, origin, board readback, prefix and historical-tail checks belong in
+publication.json and RESUME.json. Goal stays ACTIVE after publication.
+
+---
+
 # Current checkpoint: actual merge-to-Required bounds and original normalized type paths
 
 Updated 2026-11-08 01:31 CET. Goal ACTIVE. R130 made PROGRESS. Branch formalize.
