@@ -1,3 +1,114 @@
+# Current checkpoint: R148 original Type operands and changed-heap query composition
+
+Updated 2026-11-08 11:25 CET. Goal ACTIVE. R148 made PROGRESS. Branch formalize.
+Runtime: /tmp/mcfta-original-type-fields-20261108-1109/RESUME.json.
+Parent: 2bc30ad570ef205758f8623b7b3dc72d26c6456c (R147).
+Main bd5a406a6a3f84b7e3ae0906082783911509df83 remains incorporated.
+
+FOUR new modules and FIFTEEN public laws pass actual Nix/Lake, strict
+own-source reports, exact public names, standard axiom reports and final
+source hashes. Existing Lean sources, production Haskell and Audit imports
+are unchanged. R139 full Audit remains a prior baseline, NOT rerun for
+these modules. The existing Plain endpoints remain available.
+
+## Earlier actual construction heaps
+
+SourceSynthesisOriginalPrefixMuStore has FOUR laws. Exact node-record
+retention transports a conditional Mu body certificate backward from a
+later heap. An accepted original firstOrderRaw Label build supplies the
+later certificate through R146. Actual RowCall receipts derive the store
+at their entry, child-return and edge-return heaps. A source Site with
+ZERO binder crossings also derives a completed earlier call, its Context,
+its growth into the original reader and both conditional stores. No
+future store or independently asserted final invariant is supplied.
+
+## Actual built Type fields and captured references
+
+SourceSynthesisOriginalTypeAnnotations has SIX laws. OriginalType selects
+libraryGroups and libraryArgumentOnly Types. Generalized fields have only
+the original Type guard pool. Rigid fields, the actual original typesOf
+universe and the arrow marker have Top guards. Literal symbol mapping
+preserves these Allowed predicates. build_typed applies the existing
+hereditary construction proof at an ACTUAL earlier source heap. It derives
+MuStored from the accepted original build and record growth. It supplies
+neither a pre-annotated heap nor a future typed result. captured_build_typed
+uses an actual source Path to derive that its lexical inputs are reference
+values. Their annotations follow internally, including crossed binders.
+The source Context, growth, actual child build and allowed field remain
+local premises. A Path is not an all-reached native caller theorem.
+
+## Exact physical child slots
+
+SourceSynthesisOriginalTypeFieldCalls has FOUR laws. It consumes actual
+ordered RowCall receipts with empty lexical inputs and the original final
+heap as reader. It extracts the indexed child build at its exact earlier
+heap. Generalized component and rigid argument operands occupy slot zero.
+Application operands occupy slots zero and one: the universe and marker.
+The filter goal occupies slot zero. Every selected value is available in
+the original reader, has no free references and is Annotated by TypeOrigin.
+The other application/filter Program children need no Type annotation.
+Availability follows from the actual allocated edge record, exact record
+growth and the original final Cached invariant. Record growth alone does
+not imply reservation-history growth. Closedness follows from actual
+source free-name origins in the empty environment. Source shape and local
+call receipts remain explicit; this does not classify every physical row,
+changed-heap caller or open-domain operand.
+
+## Two actual requests with warm state
+
+SourceSynthesisNativeTypeWarmRequests.two_requests starts with the accepted
+original Label construction and an ACTUAL first completed checked query.
+It then proves the full Return for an ACTUAL second checked query in the
+first query's changed heap. The second source is that heap. Its inventory
+is computed there. Its initial domain cache is the actual retained cache;
+node and edge caches also retain their actual contents. The first Return
+derives Good, semantic readiness, Current, source Facts, domain inventory
+closure, request certificates and universal stores for the second request.
+Both requests retain initial physical Good and their available, closed,
+TypeOrigin-annotated operands, together with their actual completed traces.
+The second operand facts remain a local caller obligation. There is no
+supplied future Return, store or code certificate and no cache reset.
+Both root domains are empty. Nonempty domains also require typed ancestry
+for bound names; allocation history alone does not establish it.
+
+TypeOrigin remains GUARD provenance closed under actual source conjoin.
+It is not a structural Type grammar, a scoped fresh-instance certificate,
+a finite generated carrier, trace existence or a decreasing global rank.
+R146's original-Type conjunction boundary still increases maximum path
+length from three to four. Top-only descent is a segment result.
+
+## Biggest gaps and unchanged full objective
+
+Derive Program and constrained-Type roles, scoped instances, bound-name
+ancestry and compatible stores at EVERY actual reached caller. Include
+open-domain and subsequent queries, Required/class edits, exposure, Parent,
+failed/rejected branches, siblings and lazy continuations. The new source
+slot and two-query laws are components of that induction. They do not
+replace it with supplied closure or a completed native trace.
+
+Prove joint constrained-Type and Program progress and ONE original-input
+resource bound for BOTH the selected optimized worker and COMPLETE driver.
+Derive finite word/Int/key safety and completion from that input. Retain
+ALL reached/intermediate/failing/rejected/returned/subsequent states and
+all native stores. A verified completed trace is not a proof that the
+worker or complete driver constructs one within the bound.
+
+Connect the exact accepted terms, NODE-COUNT size, count and order, and
+BOTH SIGNED rank/unrank inverses through actual sparse execution. Preserve
+all Sized/fallback/failure/productive infinite behavior and wrappers.
+Establish faithful native lazy cursor/demand/order/stop/fault behavior;
+the R139 tuple demand mismatch remains open. Size-free APIs receive no
+invented size parameter. Do not assume a finite carrier, final validity,
+future worker result, fuel bound, body result, source closure, lookup or
+OriginalInput certificate in place of deriving it from original inputs.
+
+No Haskell source change or new established Haskell fix in R148. Future
+Haskell repairs must also be recorded here in root FINDINGS.md. Runtime
+evidence contains small reproducible reports and handoff data. No large
+build archive is required. /tmp is measured again at publication.
+
+---
+
 # Current checkpoint: R147 Type guard origins through actual native traces
 
 Updated 2026-11-08 10:55 CET. Goal ACTIVE. R147 made PROGRESS. Branch formalize.
