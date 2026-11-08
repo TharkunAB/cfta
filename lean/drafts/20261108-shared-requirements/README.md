@@ -1,3 +1,6 @@
+Verified counterpart: [MicroCFTA source](../../MicroCFTA/SourceCurrentConjunctionRequirementPull.lean).
+The file in this directory remains the historical draft.
+
 # Shared requirement cursor draft
 
 This source is an unverified draft. The proof build does not import it.
