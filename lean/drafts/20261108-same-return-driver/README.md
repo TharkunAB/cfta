@@ -1,3 +1,6 @@
+Verified counterpart: [MicroCFTA source](../../MicroCFTA/SourceSynthesisOriginalVerifiedFiniteDriver.lean).
+The file in this directory remains the historical draft.
+
 # Driver on the completed worker return
 
 This source is an unverified draft. The proof build does not import it.
