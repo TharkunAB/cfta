@@ -1,3 +1,188 @@
+# Current checkpoint: R140 actual local class calls preserve Program children
+
+Updated 2026-11-08 08:37 CET. Goal ACTIVE. R140 made PROGRESS. Branch formalize.
+Keep the FULL original objective. Regular formalize pushes are authorized.
+Do not pause the goal or ask whether to continue. This introduction
+supersedes the status below. Preserve all historical text and proofs.
+
+Base 63fe10d4708bc6c18f8f659cff6d3aaa8e1fa290 is the published R139 head.
+Main bd5a406a6a3f84b7e3ae0906082783911509df83 remains incorporated.
+R140 adds FIVE proof modules and TWENTY public laws. All pass actual
+Nix/Lake targets, strict own-source, complete real-name checks, exact
+source hashes, and standard axiom reports. No existing Lean module or
+production Haskell source changes. All earlier results remain available.
+
+## New actual local result
+
+SourceSynthesisLocalClassProgramRoles.application_classes_roles and
+filter_classes_roles describe the ACTUAL AllocatedLocalWorker.classes
+call at the computed Precheck.state. For applications, they cover Program
+slots 2 and 3. For filters, they cover Program slot 1.
+
+Their inputs include the literal source occurrence, actual precheck
+receipt, successful local call, physical Good/Stored/Values at the
+ORIGINAL initial state, an indexed input/output, and the input Program
+role. Their conclusion is the returned child's FULL ProgramValue role.
+No final Retained/formal Scan, annotation-only map, Unselected footprint,
+intermediate role, closure, origin, or callback supplier is accepted.
+
+The proof derives the precheck entry with receipt.effects. It inverts the
+literal record scan. A stopped scan erases every result to Empty. A live
+scan runs Required at the actual returned heap, then the actual right
+class pass. The Required graph's length supplies the intermediate slot.
+Physical effects supply every subsequent semantic, cost, availability,
+Good, and stored-memo fact. Concrete source/scan laws discharge the two
+private footprint functions. The public source endpoints have no such
+function premise.
+
+These are SUCCESSFUL LOCAL RETURN laws. They do not prove that a Parent,
+outer traversal, or driver completes. They do not prove failure-prefix
+roles, all-reached joint roles, generated Type closure, or a total bound.
+The input Program certificate is still an explicit local requirement.
+Its preservation across every reached outer request remains to be proved.
+
+## Supporting laws and source selection
+
+SourceSynthesisClassProgramRoles has FOUR laws. below_roles and
+run_class_roles preserve Program children through actual annotation-only
+class edits. ActualEditRowOrigins.rows_indexed supplies one original row
+and all unchanged non-annotation children, including Top rows. Required
+rebuild_roles and head_roles retain full guards and layouts. The two
+source footprint adapters derive the internal exclusions.
+
+SourceSynthesisClassPassProgramRoles has FOUR laws. fold_roles follows
+the literal right fold: tail first, then head at that tail's return.
+class_dispatch supplies the actual intermediate indexed value. Existing
+class_fold effects derive its entry facts. pass_roles includes actual
+empty propagation, which makes every slot Empty when any value is Empty.
+The two selected source adapters derive coherence and footprints.
+
+SourceSynthesisSelectedRequiredProgramRoles has FOUR laws. Indexed
+children_roles follows actual RequireChildren. Earlier selected siblings
+supply their own physical effects through RequiredHeapEffects.node.
+Absent siblings keep the literal value. requireAll_roles follows the
+actual bounded call and compiled map. Application/filter adapters derive
+the annotation-only property from source occurrence and retained records.
+
+SourceSynthesisActualSelectedProgramFootprints has SIX laws.
+precheck_regions derives coherence and endpoint regions for ORIGINAL
+records. selected_regions uses actual record-scan success and
+SelectedRootOrigins.selected_primary to derive membership. The four
+application/filter adapters derive class-edit exclusions and Required
+annotation-only maps from the ACTUAL scan. These adapters require no
+supplied Retained certificate or formal Scan. The final local result uses
+these actual-scan adapters, rather than the older Retained interfaces.
+
+## Parent boundary: keep guard and shape coupled
+
+The next Parent proof must use the actual constructor's guard AND child
+shape together. SourceEqualityMkEdgeAllocation.work constructs either
+original guard plus original children, or Top plus [Empty], using the
+SAME keep decision. AllocatedMkEdge.Receipt.guard and .children retain
+that same decision. RejectReceipt also returns Top plus [Empty].
+
+ProgramEdge.annotated already allows any symbol with Top and ONE child.
+Thus this sentinel has a strict Program role. Top alone does not refute
+ProgramValue preservation. A fake Top application with four children
+fits the weak separate field alternatives, but it is not an output of
+the actual rejecting constructor. No actual false-invariant counterexample
+was established. Do not weaken the role to arbitrary guards or introduce
+a new runtime-role relation on the basis of that weaker field summary.
+
+Next prove the coupled constructor and actual Parent Program-role laws.
+Use the new local child certificates in the classes branch. Cover raw
+rejection, empty/unchanged precheck branches, and live Required/class
+branches. Then compose program origins and inherited annotation regions
+through EVERY rows/descendants/walk request, including prefixes that later
+reject or fail. Keep Type positions separate; physical Type height need
+not decrease. A successful Parent lemma alone is not all-reached closure.
+
+## Strongest original-input result and full remaining scope
+
+R137's original accepted signed firstOrderRaw request composition remains.
+It derives actual guard preparation and Label build from empty initial
+stores, original Program roles, and FULL initial modeled caller Context.
+It derives an actual tuple call/read receipt, stable instrumented fuel,
+and full returned Post without supplied Context, successful build, valid
+interner, body, future carrier, fuel, or resource oracle. Source errors
+remain explicit. R139 rechecked this unchanged endpoint against the
+converted global dependencies. R130's construction, complete merge, and
+independent Required facts for every emitted merged row remain separate.
+True certifies formal-language emptiness under the checked invariants.
+False gives no acceptance result.
+
+Global and enabled conjunction calls now use tuple charging. Enabled
+checks use source budget 10000. R139 ports actual memo, class-scan, caller,
+read, probe, and resource receipts without stronger weak interfaces.
+R140 adds local Program-child preservation. These component results do
+not close the full selected outer worker or complete enumeration driver.
+
+The FULL original objective remains unchanged:
+- Derive ONE original-input/request and actual-caller bound for BOTH the
+  selected optimized worker and COMPLETE enumeration driver. Include all
+  siblings, generated, intermediate, failing, rejected, returned, later,
+  and native states. Derive internal requirements from original inputs.
+- Prove joint Program/constrained-Type progress at ALL reached roles.
+  Initial original Context is derived. Reached roles and closure remain.
+- Prove exact accepted terms per NODE-COUNT size, finite requested
+  execution, size order, exact count, and BOTH SIGNED rank/unrank inverse
+  laws through actual sparse execution. Cover Sized, fallback, failure,
+  productive infinite/lazy behavior, maps, sets, tables, caches, hash,
+  allocation, Word/Int, wrappers, lookup, Curried, and Specftacular.
+- Do not invent a size for size-free enumerateOutUVarWith or enumerateUntil'.
+  Initial-only and success-only facts do not satisfy the full objective.
+  No final body, closure, validity, lookup, OriginalInput, finite-carrier,
+  resource, future completion, or footprint oracle is accepted.
+
+Outer AllocatedPartialWorkerCompletion.nodeCall_complete still takes a
+finite PartialGraph.NodeCall. Actual nodeCall_verified takes successful
+execution and reached ranges. ConstructedResources.prepared_run takes
+recursiveFuel and may return stopped/exhausted. Derive outer completion
+and sufficient driver fuel from original requests and all-reached facts.
+
+Native lazy demand correspondence remains OPEN. Source edgeTuples[A,B,C]
+demands A,C,B. Different ordinary nullary A/C shapes skip B and yield no
+tuples. The eager model exposes A,B,C and also yields no tuples. This is
+a demand difference only. It proves no final leaf heap/cache inequality,
+nontermination, or Haskell defect. Matching tuple order[B,C,A] is correct.
+A faithful resumable puller must retain exact source cursor, reads, faults,
+and first budget+1 RAW matching emissions. Stop without forcing the
+continuation. Do not assume each source operand is evaluated only once.
+
+## Validation, Haskell findings, and restart
+
+The FIVE individual Nix/Lake targets and strict own-source reports pass
+for all TWENTY public laws. Each report checks every actual qualified
+name and source hash. All axioms are within propext, Classical.choice,
+and Quot.sound. ROOT ran one capped compiler command at a time, with
+4 GiB memory and zero swap. Compiler flags and global queue settings
+were unchanged. Initial namespace/instance/width/IH argument errors were
+repaired. No linter is disabled. Existing dependency warnings remain.
+
+R140 adds proof modules only. The existing Audit import tree is unchanged.
+R139's full Audit passed 4920 jobs/4919 ordered modules; it was not rerun
+for this proof-only addition. The five new modules have their OWN actual
+Lake and strict checks. Do not describe the old Audit as checking these
+new modules. No Haskell full-suite, benchmark, or CI claim is made.
+
+No Haskell fixes or production source changes arose in R140. Any later
+Haskell fix MUST also be recorded in root FINDINGS.md for an external
+agent. This checkpoint establishes source-model proof facts only.
+
+Runtime /tmp/mcfta-class-program-roles-20261108-0813 contains compact
+scripts, hashes, registries, and small failed-check reports. No build-tree
+copies, archives, or full board dumps are retained. Readable /tmp remains
+about 24 MiB; recheck before publication. Committed reproduction packets
+do not depend on /tmp. Preserve unrelated .hypha/. Keep ROOT as sole
+compiler, serial 4 GiB/swap0, without global queue or compiler changes.
+
+The final registry must record exact pushed/fetched head/main, canonical
+board readback, source/packet/doc equality, terminal jobs, active goal,
+and /tmp use. Keep the goal ACTIVE and continue with coupled actual
+Parent roles, then all-reached joint progress and both total-work bounds.
+
+---
+
 # Current checkpoint: R139 global calls and class scans use tuple charging
 
 Updated 2026-11-08 08:09 CET. Goal ACTIVE. R139 made PROGRESS. Branch formalize.
