@@ -1,0 +1,176 @@
+import MicroCFTA.SourceSynthesisHereditaryMemoFields
+
+/-!
+# Conditional closedness in both actual outer memo families
+
+Each returned cell retains its captured owner's field implications and
+conditional closedness. Publication requires these facts for the actual
+running body. This module does not prove the body facts or worker completion.
+-/
+namespace MicroCFTA.SourceSynthesisHereditaryClosedMemo
+open InternedConstructorTemplates
+open SourceCurrentAllocatedPartialState (NodeRequest EdgeRequest)
+open SourceCurrentOuterPrefixInvariants (Good NodeReady EdgeReady)
+open SourceSynthesisTypeSyntax (Library)
+open SourceSynthesisGeneralizeSyntax (Guard)
+open MergedColdReaderClosedInputs (ClosedValues)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Node" => Value Symbol Guard
+local notation "Edge" => EdgeValue Symbol Guard
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "Fourth" => SourceCurrentEmptinessMemo.Memo
+local notation "Memo" => SourceCurrentMemoMergeGraph.Memo Symbol Guard
+variable {width : Nat} {lib : Library} {literal : String → Symbol}
+
+/-- A node result retains both field implications and conditional closedness. -/
+structure NodeFields (lib : Library) (literal : String → Symbol) (request : NodeRequest) (result : Node) : Prop
+    extends SourceSynthesisHereditaryMemoFields.NodeFields lib literal request result where
+  closed : request.value.free = [] → result.free = []
+
+/-- A row result retains both field implications and conditional child closedness. -/
+structure EdgeFields (lib : Library) (literal : String → Symbol) (request : EdgeRequest) (result : Edge) : Prop
+    extends SourceSynthesisHereditaryMemoFields.EdgeFields lib literal request result where
+  closed : ClosedValues request.value.children → ClosedValues result.children
+
+/-- Both actual result families retain complete owner links and all three implications. -/
+structure History (lib : Library) (literal : String → Symbol) (before : Caller width) : Prop where
+  nodes : FlatMemoThunk.Valid (fun request key => request.key = key)
+    (FlatMemoThunk.CellSpec (NodeFields lib literal)) before.nodeResults
+  edges : FlatMemoThunk.Valid (fun request key => request.key = key)
+    (FlatMemoThunk.CellSpec (EdgeFields lib literal)) before.edgeResults
+
+/-- The stronger history supplies the original two field implications. -/
+theorem History.fields {before : Caller width} (history : History lib literal before) :
+    SourceSynthesisHereditaryMemoFields.History lib literal before := by
+  refine ⟨FlatMemoThunk.Valid.map _ _ _ _ history.nodes ?_,
+    FlatMemoThunk.Valid.map _ _ _ _ history.edges ?_⟩
+  · intro cell certificate
+    cases cell with
+    | mk request status =>
+        cases status with
+        | suspended | evaluating => trivial
+        | returned value => exact certificate.toNodeFields
+  · intro cell certificate
+    cases cell with
+    | mk request status =>
+        cases status with
+        | suspended | evaluating => trivial
+        | returned value => exact certificate.toEdgeFields
+
+/-- Empty outer families require no supplied input or result facts. -/
+theorem initial (lib : Library) (literal : String → Symbol) (checked : Checked width) (memo : Memo) (fourth : Fourth) :
+    History lib literal (SourceCurrentAllocatedPartialState.initial checked memo fourth) :=
+  ⟨FlatMemoThunk.empty_valid _ _, FlatMemoThunk.empty_valid _ _⟩
+
+/-- Physical caller updates retain both immutable outer result families. -/
+theorem advance {before : Caller width} (history : History lib literal before)
+    (checked : Checked width) (fourth : Fourth) (memo : Memo) :
+    History lib literal (SourceCurrentAllocatedPartialState.advance before checked fourth memo) :=
+  ⟨history.nodes, history.edges⟩
+
+/-- Actual node lookup and demand retain earlier returned certificates. -/
+theorem beginNode {before : Caller width} (history : History lib literal before) (request : NodeRequest) :
+    History lib literal (SourceCurrentAllocatedPartialState.beginNode request before).2.2 := by
+  have inserted := FlatMemoThunk.lookup_valid request.key request before.nodeResults
+    (fun request key => request.key = key) (FlatMemoThunk.CellSpec (NodeFields lib literal)) history.nodes rfl trivial
+  exact ⟨FlatMemoThunk.demand_spec _ _ _ _ inserted, history.edges⟩
+
+/-- Actual edge lookup and demand retain earlier returned certificates. -/
+theorem beginEdge {before : Caller width} (history : History lib literal before) (request : EdgeRequest) :
+    History lib literal (SourceCurrentAllocatedPartialState.beginEdge request before).2.2 := by
+  have inserted := FlatMemoThunk.lookup_valid request.key request before.edgeResults
+    (fun request key => request.key = key) (FlatMemoThunk.CellSpec (EdgeFields lib literal)) history.edges rfl trivial
+  exact ⟨history.nodes, FlatMemoThunk.demand_spec _ _ _ _ inserted⟩
+
+/-- Node publication requires all implications for the actual evaluating owner. -/
+theorem finishNode {before : Caller width} {handle : Nat} {owner : NodeRequest} {value : Node}
+    (history : History lib literal before)
+    (running : before.nodeResults.cells handle = some ⟨owner, .evaluating⟩)
+    (published : NodeFields lib literal owner value) :
+    History lib literal (SourceCurrentAllocatedPartialState.finishNode handle value before) := by
+  refine ⟨FlatMemoThunk.finish_spec handle value before.nodeResults _ _ history.nodes ?_, history.edges⟩
+  intro request found
+  have same := congrArg (fun cell : FlatMemoThunk.Cell NodeRequest Node => cell.request)
+    (Option.some.inj (running.symm.trans found))
+  change owner = request at same
+  subst request
+  exact published
+
+/-- Edge publication requires all implications for the actual evaluating owner. -/
+theorem finishEdge {before : Caller width} {handle : Nat} {owner : EdgeRequest} {value : Edge}
+    (history : History lib literal before)
+    (running : before.edgeResults.cells handle = some ⟨owner, .evaluating⟩)
+    (published : EdgeFields lib literal owner value) :
+    History lib literal (SourceCurrentAllocatedPartialState.finishEdge handle value before) := by
+  refine ⟨history.nodes, FlatMemoThunk.finish_spec handle value before.edgeResults _ _ history.edges ?_⟩
+  intro request found
+  have same := congrArg (fun cell : FlatMemoThunk.Cell EdgeRequest Edge => cell.request)
+    (Option.some.inj (running.symm.trans found))
+  change owner = request at same
+  subst request
+  exact published
+
+private theorem lookup_demand_ready {Key Request Result : Type} [DecidableEq Key]
+    (key : Key) (request : Request) (memo : FlatMemoThunk.State Key Request Result) (result : Result)
+    (ready : (FlatMemoThunk.demand (FlatMemoThunk.lookupOrInsert key request memo).1
+      (FlatMemoThunk.lookupOrInsert key request memo).2).1 = .ready result) :
+    ∃ original, memo.table key = some (FlatMemoThunk.lookupOrInsert key request memo).1 ∧
+      memo.cells (FlatMemoThunk.lookupOrInsert key request memo).1 = some ⟨original, .returned result⟩ := by
+  cases found : memo.table key with
+  | none => simp [FlatMemoThunk.lookupOrInsert, found, FlatMemoThunk.demand, Cache.put] at ready
+  | some handle =>
+      have observed : (FlatMemoThunk.demand handle memo).1 = .ready result := by
+        simpa only [FlatMemoThunk.lookupOrInsert, found] using ready
+      obtain ⟨original, returned, _same⟩ := FlatMemoThunk.demand_ready_original handle memo result
+        (FlatMemoThunk.demand handle memo).2 (Prod.ext observed rfl)
+      exact ⟨original, by simp only [FlatMemoThunk.lookupOrInsert, found],
+        by simpa only [FlatMemoThunk.lookupOrInsert, found] using returned⟩
+
+/-- A ready node hit transfers all implications through exact complete owner equality. -/
+theorem node_ready {before after : Caller width} {request : NodeRequest} {handle : Nat} {result : Node}
+    (history : History lib literal before) (good : Good before) (ready : NodeReady before request)
+    (started : SourceCurrentAllocatedPartialState.beginNode request before = (handle, .ready result, after)) :
+    after = before ∧ NodeFields lib literal request result := by
+  obtain ⟨owner, published, returned⟩ := lookup_demand_ready request.key request before.nodeResults result
+    (congrArg (fun output => output.2.1) started)
+  have handles : (FlatMemoThunk.lookupOrInsert request.key request before.nodeResults).1 = handle :=
+    congrArg Prod.fst started
+  rw [handles] at published returned
+  have unchanged := congrArg (fun output => output.2.2)
+    (started.symm.trans (SourceCurrentAllocatedPartialState.beginNode_ready
+      request owner before handle result published returned))
+  obtain ⟨cell, stored, linked⟩ := good.nodes.linked request.key handle published
+  have same : cell = ⟨owner, .returned result⟩ := Option.some.inj (stored.symm.trans returned)
+  subst cell
+  have ownerReady := (good.nodes.checked handle _ returned).1
+  have ownerEq := SourceCurrentOuterPrefixInvariants.same_key good ownerReady ready linked
+  change owner = request at ownerEq
+  have certificate : NodeFields lib literal owner result := history.nodes.checked handle _ returned
+  rw [ownerEq] at certificate
+  exact ⟨unchanged, certificate⟩
+
+/-- A ready edge hit retains the inherited owner and all conditional row implications. -/
+theorem edge_ready {before after : Caller width} {request : EdgeRequest} {handle : Nat} {result : Edge}
+    (history : History lib literal before) (good : Good before) (ready : EdgeReady before request)
+    (started : SourceCurrentAllocatedPartialState.beginEdge request before = (handle, .ready result, after)) :
+    after = before ∧ EdgeFields lib literal request result := by
+  obtain ⟨owner, published, returned⟩ := lookup_demand_ready request.key request before.edgeResults result
+    (congrArg (fun output => output.2.1) started)
+  have handles : (FlatMemoThunk.lookupOrInsert request.key request before.edgeResults).1 = handle :=
+    congrArg Prod.fst started
+  rw [handles] at published returned
+  have unchanged := congrArg (fun output => output.2.2)
+    (started.symm.trans (SourceCurrentAllocatedPartialState.beginEdge_ready
+      request owner before handle result published returned))
+  obtain ⟨cell, stored, linked⟩ := good.edges.linked request.key handle published
+  have same : cell = ⟨owner, .returned result⟩ := Option.some.inj (stored.symm.trans returned)
+  subst cell
+  have ownerReady := (good.edges.checked handle _ returned).1
+  have ownerEq := SourceSynthesisProgramMemoRoles.edge_same_key good ownerReady ready linked
+  change owner = request at ownerEq
+  have certificate : EdgeFields lib literal owner result := history.edges.checked handle _ returned
+  rw [ownerEq] at certificate
+  exact ⟨unchanged, certificate⟩
+
+end MicroCFTA.SourceSynthesisHereditaryClosedMemo
