@@ -1,4 +1,5 @@
 import MicroCFTA.SourceCurrentOperationGrowth
+import MicroCFTA.SourceCurrentConjunctionTupleWorker
 
 /-!
 # Equality-operation growth through literal lower workers
@@ -302,18 +303,80 @@ private theorem conjunction_decision [DecidableEq Node] (p h budget : Nat) (valu
     split <;> exact SourceEqualityConstraintMemoAllocation.grows_refl _
   · exact SourceEqualityConstraintMemoAllocation.grows_refl _
 
-private theorem conjunction [DecidableEq Node] (p h budget : Nat) (value : Node) (before : Checked width) (memo : Fourth) :
-    Grows before.operations (SourceCurrentAllocatedConjunctionWorker.call p h budget value before memo).state.operations := by
-  have first : Grows before.operations (SourceCurrentConjunctionWorker.call p h budget memo value
-      (SourceCurrentAllocatedNativeEffects.physical before)).state.equality := by
-    unfold SourceCurrentConjunctionWorker.call
+private theorem tuple_admission (p h budget : Nat) (values : List Node) (before : Physical) :
+    Grows before.equality (SourceCurrentConjunctionTupleAdmission.run p h budget values before).state.equality := by
+  unfold SourceCurrentConjunctionTupleAdmission.run
+  apply rows_bind
+  · rw [exposures]
+    exact SourceEqualityConstraintMemoAllocation.grows_refl _
+  · intro edges exposed
+    dsimp only
     split
     · exact SourceEqualityConstraintMemoAllocation.grows_refl _
-    · apply physical_bind _ _ (conjunction_decision p h budget value (SourceCurrentAllocatedNativeEffects.physical before))
+    · split
+      · exact SourceEqualityConstraintMemoAllocation.grows_refl _
+      · apply rows_bind _ _ (tuples p h _ exposed)
+        intros
+        exact SourceEqualityConstraintMemoAllocation.grows_refl _
+
+private theorem tuple_explore (p h budget : Nat)
+    (table : SourceCurrentConjunctionWorker.Table Symbol FullSyntax.Formula)
+    (pending : List (List Node)) (before : Physical) :
+    Grows before.equality (SourceCurrentConjunctionTupleWorker.explore p h budget table pending before).state.equality := by
+  induction budget using Nat.strongRecOn generalizing table pending before with
+  | ind budget smaller =>
+      induction pending generalizing table before with
+      | nil =>
+          simpa only [SourceCurrentConjunctionTupleWorker.explore, SourceCurrentConjunctionWorker.Outcome.state]
+            using SourceEqualityConstraintMemoAllocation.grows_refl before.equality
+      | cons nodes rest tail =>
+          rw [SourceCurrentConjunctionTupleWorker.explore.eq_def]
+          dsimp only
+          split
+          · exact tail table before
+          · split
+            · exact tail table before
+            · rename_i admitted
+              have positive := (SourceCurrentConjunctionEmptinessTable.admitted
+                SourceCurrentConjunctionRequirements.key SourceCurrentConjunctionWorklist.closed budget table nodes
+                (Bool.eq_false_iff.mpr admitted)).1
+              have first := tuple_admission p h budget nodes before
+              cases actual : SourceCurrentConjunctionTupleAdmission.run p h budget nodes before with
+              | failed fault after =>
+                  simpa only [actual, SourceCurrentConjunctionRowsWorker.Outcome.state,
+                    SourceCurrentConjunctionWorker.Outcome.state] using first
+              | done result middle =>
+                  have grown : Grows before.equality middle.equality := by
+                    simpa only [actual, SourceCurrentConjunctionRowsWorker.Outcome.state] using first
+                  cases result with
+                  | overflow => exact trans grown (smaller 0 positive table rest middle)
+                  | zero => exact trans grown (tail _ middle)
+                  | positive predecessor requirements =>
+                      have charge := SourceCurrentConjunctionTupleAdmission.positive_charge p h budget nodes before
+                        middle predecessor requirements actual
+                      exact trans grown (smaller (budget - (predecessor + 1)) (by omega) _ _ middle)
+
+private theorem tuple_decision [DecidableEq Node] (p h budget : Nat) (value : Node) (before : Physical) :
+    Grows before.equality (SourceCurrentConjunctionTupleWorker.decision p h budget value before).state.equality := by
+  unfold SourceCurrentConjunctionTupleWorker.decision
+  split
+  · apply physical_bind _ _ (tuple_explore p h budget _ _ before)
+    intro table after
+    split <;> exact SourceEqualityConstraintMemoAllocation.grows_refl _
+  · exact SourceEqualityConstraintMemoAllocation.grows_refl _
+
+private theorem conjunction [DecidableEq Node] (p h budget : Nat) (value : Node) (before : Checked width) (memo : Fourth) :
+    Grows before.operations (SourceCurrentAllocatedConjunctionWorker.call p h budget value before memo).state.operations := by
+  have first : Grows before.operations (SourceCurrentConjunctionTupleWorker.call p h budget memo value
+      (SourceCurrentAllocatedNativeEffects.physical before)).state.equality := by
+    unfold SourceCurrentConjunctionTupleWorker.call
+    split
+    · exact SourceEqualityConstraintMemoAllocation.grows_refl _
+    · apply physical_bind _ _ (tuple_decision p h budget value (SourceCurrentAllocatedNativeEffects.physical before))
       intros
       exact SourceEqualityConstraintMemoAllocation.grows_refl _
   unfold SourceCurrentAllocatedConjunctionWorker.call
-  cases actual : SourceCurrentConjunctionWorker.call p h budget memo value
+  cases actual : SourceCurrentConjunctionTupleWorker.call p h budget memo value
       (SourceCurrentAllocatedNativeEffects.physical before) with
   | failed => rw [actual] at first; exact first
   | done output after => cases output; rw [actual] at first; exact first

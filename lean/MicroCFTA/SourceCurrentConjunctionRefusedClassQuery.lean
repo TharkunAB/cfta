@@ -68,7 +68,7 @@ theorem refutes_current_memo [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol G
     (gate : SourceCurrentSecondaryTrace.ClassTrace unconstrained values paths before.native.machine.heap false anchor)
     (actual : Seeded values (paths.map (List.map Int.ofNat)) (advanceHeap before anchor) query middle)
     (ranges : SeededRanges values (paths.map (List.map Int.ofNat)) (advanceHeap before anchor))
-    (call : SourceCurrentConjunctionMemo.Call budget memo query (physical middle) true after saved)
+    (call : SourceCurrentConjunctionTupleExecution.Call budget memo query (physical middle) true after saved)
     (ready : Ready before) (admitted : At formulas solver inventory before)
     (available : Values before.native.machine.heap values)
     (correct : SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap memo)
@@ -79,7 +79,7 @@ theorem refutes_current_memo [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol G
   obtain ⟨_, receipt, part, acceptedPart, _⟩ := class_witness formulas solver inventory unconstrained paths active values
     gate actual ranges ready admitted available ambient symbol terms accepted satisfied
   have queryCorrect := SourceCurrentEmptinessMemo.grows formulas solver receipt.effects.keeps memo correct
-  have checked := SourceCurrentConjunctionMemo.verified formulas solver call receipt.effects.ready receipt.available queryCorrect
+  have checked := SourceCurrentConjunctionTupleMemo.verified formulas solver call receipt.effects.ready receipt.available queryCorrect
   exact checked.2.2.1.2 rfl ambient part acceptedPart
 
 end MicroCFTA.SourceCurrentConjunctionRefusedClassQuery

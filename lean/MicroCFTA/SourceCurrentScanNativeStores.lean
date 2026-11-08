@@ -5,9 +5,9 @@ import MicroCFTA.SourceCurrentAllocatedNativeActualScope
 import MicroCFTA.SourceCurrentNativePositiveSupportAdvance
 import MicroCFTA.SourceCurrentNativeOpenRequestResults
 import MicroCFTA.SourceCurrentGateGuard
-import MicroCFTA.SourceCurrentConjunctionGuard
+import MicroCFTA.SourceCurrentConjunctionTupleGuard
 import MicroCFTA.SourceCurrentConstrainedCapProjectionGuard
-import MicroCFTA.SourceCurrentConjunctionDecisionSoundness
+import MicroCFTA.SourceCurrentConjunctionTupleSoundness
 
 /-!
 # Current native stores through the same completed Scan
@@ -153,7 +153,7 @@ private theorem decision
     (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
     {budget : Nat} {memo saved : SourceCurrentEmptinessMemo.Memo} {query : Node} {before : Checked width}
     {answer : Bool} {after : Physical}
-    (actual : SourceCurrentConjunctionMemo.Call budget memo query (physical before) answer after saved)
+    (actual : SourceCurrentConjunctionTupleExecution.Call budget memo query (physical before) answer after saved)
     (ready : Ready before) (available : Available before.native.machine.heap query)
     (current : Current before) (supported : Support before.native.machine.heap before.native)
     (causal : History empty before.native.machine.heap) :
@@ -166,8 +166,8 @@ private theorem decision
   have effects : Effects (physical before) after := by
     cases actual with
     | hit => exact .refl _ initial
-    | miss _ actual => exact (SourceCurrentConjunctionDecision.Decision.verified actual initial available formulas solver).1
-  have guards := SourceCurrentConjunctionGuard.call Plain actual initial available current.1.guards
+    | miss _ actual => exact (SourceCurrentConjunctionTupleExecution.Decision.verified actual initial available formulas solver).1
+  have guards := SourceCurrentConjunctionTupleGuard.call Plain actual initial available current.1.guards
   obtain ⟨interval⟩ := SourceCurrentConjunctionPublicationHistory.call actual initial available
   obtain ⟨nextCurrent,nextSupport,nextHistory⟩ := unchanged before after ready current supported causal effects guards interval
   exact ⟨SourceCurrentConjunctionClassScan.advance_ready before after ready effects,effects,

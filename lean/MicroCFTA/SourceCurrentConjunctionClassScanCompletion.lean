@@ -43,7 +43,7 @@ def Ranges [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
           (advanceHeap (advanceHeap before heap) anchor) ∧
         ∀ query middle, SourceCurrentAllocatedSeededQuery.Seeded values (paths.map (List.map Int.ofNat))
           (advanceHeap (advanceHeap before heap) anchor) query middle →
-          ∀ later saved, SourceCurrentConjunctionMemo.Call budget memo query (physical middle) false later saved →
+          ∀ later saved, SourceCurrentConjunctionTupleExecution.Call budget memo query (physical middle) false later saved →
             Ranges budget unconstrained reaches values classes (advancePhysical middle later) saved)
 
 /-- Initial invariants and reached word bounds derive a finite current scan and its returned states. -/
@@ -104,7 +104,7 @@ theorem finite [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
               have queryReady : Ready middle :=
                 ⟨queryGood, queryEffects.ready.semantic, queryEffects.ready.costs, queryScopes, queryIdle⟩
               have queryCorrect := SourceCurrentEmptinessMemo.grows formulas solver queryEffects.keeps memo firstCorrect
-              obtain ⟨answer, later, savedMemo, decision, _⟩ := SourceCurrentConjunctionMemo.complete
+              obtain ⟨answer, later, savedMemo, decision, _⟩ := SourceCurrentConjunctionTupleMemo.complete
                 budget memo query (physical middle) queryEffects.ready queryAvailable
               obtain ⟨memoReady, memoEffects, memoCorrect, _, memoRetained⟩ :=
                 memo_effects formulas solver decision queryReady queryAvailable queryCorrect

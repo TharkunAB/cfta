@@ -1,3 +1,4 @@
+import MicroCFTA.SourceCurrentConjunctionTupleWorkerProbes
 import MicroCFTA.SourceCurrentAllocatedPartialInvariant
 import MicroCFTA.SourceCurrentConjunctionWorkerWarmEffects
 import MicroCFTA.SourceCurrentConjunctionRowsProbes
@@ -131,20 +132,20 @@ theorem allocated_call_heap {width : Nat}
     {inventory : SourceCurrentAllocatedNativeInventoryState.Inventory}
     (p h budget : Nat) (query : Node) (before : Caller width) (memos : EndpointMemoGateTrace.Memos)
     (context : SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory before memos)
-    (available : Available before.checked.native.machine.heap query) (closed : query.free = []) :
+    (available : Available before.checked.native.machine.heap query) (_closed : query.free = []) :
     let actual := SourceCurrentAllocatedConjunctionWorker.call p h budget query before.checked before.fourth
     Heap actual.state.native.machine.heap := by
   change Heap (SourceCurrentAllocatedNativeEffects.physical
     (SourceCurrentAllocatedConjunctionWorker.call p h budget query before.checked before.fourth).state).heap
   have ready := SourceCurrentAllocatedConjunctionMemo.ready before.checked context.ready.good
     context.ready.semantic context.ready.costs
-  have produced := call_heap p h budget before.fourth query
-    (SourceCurrentAllocatedNativeEffects.physical before.checked) ready context.probes available closed
-  have clean : Heap (SourceCurrentConjunctionWorker.call p h budget before.fourth query
+  have produced := SourceCurrentConjunctionTupleWorkerProbes.call_probes p h budget before.fourth query
+    (SourceCurrentAllocatedNativeEffects.physical before.checked) ready context.probes available
+  have clean : Heap (SourceCurrentConjunctionTupleWorker.call p h budget before.fourth query
       (SourceCurrentAllocatedNativeEffects.physical before.checked)).state.heap := by
     refine Eq.mp ?_ produced
     congr; exact Subsingleton.elim _ _
-  cases actual : SourceCurrentConjunctionWorker.call p h budget before.fourth query
+  cases actual : SourceCurrentConjunctionTupleWorker.call p h budget before.fourth query
       (SourceCurrentAllocatedNativeEffects.physical before.checked) with
   | done output after =>
     rcases output with ⟨answer, saved⟩

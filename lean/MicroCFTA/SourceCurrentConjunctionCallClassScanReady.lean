@@ -21,18 +21,18 @@ theorem call_ready {width : Nat}
     {inventory : SourceCurrentAllocatedNativeInventoryState.Inventory}
     (p h budget : Nat) (query : Node) (before : Caller width) (memos : EndpointMemoGateTrace.Memos)
     (context : SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory before memos)
-    (available : Available before.checked.native.machine.heap query) (closed : query.free = []) :
+    (available : Available before.checked.native.machine.heap query) (_closed : query.free = []) :
     let actual := SourceCurrentAllocatedConjunctionWorker.call p h budget query before.checked before.fourth
     SourceCurrentConjunctionClassScan.Ready actual.state := by
   have ready := SourceCurrentAllocatedConjunctionMemo.ready before.checked context.ready.good
     context.ready.semantic context.ready.costs
-  have produced := SourceCurrentConjunctionWorkerWarmEffects.call_effects p h budget before.fourth query
-    (physical before.checked) ready available closed
+  have produced := SourceCurrentConjunctionTupleWorkerEffects.call_effects p h budget before.fourth query
+    (physical before.checked) ready available
   have effects : SourceCurrentConjunctionRowsAllocation.Effects (physical before.checked)
-      (SourceCurrentConjunctionWorker.call p h budget before.fourth query (physical before.checked)).state := by
+      (SourceCurrentConjunctionTupleWorker.call p h budget before.fourth query (physical before.checked)).state := by
     refine Eq.mp ?_ produced
     congr; exact Subsingleton.elim _ _
-  cases actual : SourceCurrentConjunctionWorker.call p h budget before.fourth query
+  cases actual : SourceCurrentConjunctionTupleWorker.call p h budget before.fourth query
       (physical before.checked) with
   | done output after =>
     rcases output with ⟨answer, saved⟩

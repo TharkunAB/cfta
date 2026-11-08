@@ -24,7 +24,7 @@ theorem scan_reserved_of_room (bits budget count : Nat) (classes : EqualityNorma
           (SourceCurrentScanNumericForecast.classStep budget count paths alphabet profile).1
           (SourceCurrentScanNumericForecast.classStep budget count paths alphabet profile).2)
       have queryRoom := firstRoom.mono
-        (SourceCurrentConjunctionAlphabetBounds.callerForecast_ge
+        (SourceCurrentConjunctionAlphabetBounds.tupleCallerForecast_ge
           (SourceCurrentSeededGuardForecast.finalAlphabet alphabet count (paths.map (List.map Int.ofNat))
             (SourceCurrentGateFrameResources.forecast paths (SourceCurrentGateFrameResources.forecast paths profile)))
           budget (SourceCurrentConstrainedCapSeededForecast.finalProfile count (paths.map (List.map Int.ofNat))

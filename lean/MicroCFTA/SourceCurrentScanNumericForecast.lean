@@ -16,7 +16,7 @@ local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
 local notation "gateProfile" => SourceCurrentGateFrameResources.forecast
 local notation "seedProfile" => SourceCurrentConstrainedCapSeededForecast.finalProfile
 local notation "seedAlphabet" => SourceCurrentSeededGuardForecast.finalAlphabet
-local notation "memoProfile" => SourceCurrentConjunctionAlphabetBounds.callerForecast
+local notation "memoProfile" => SourceCurrentConjunctionAlphabetBounds.tupleCallerForecast
 
 /-- One class predicts every allocating branch before the original suffix. -/
 noncomputable def classStep (budget count : Nat) (paths : Class) (alphabet : List Guard) (profile : Profile) :
@@ -40,7 +40,7 @@ theorem classStep_profile_ge (budget count : Nat) (paths : Class) (alphabet : Li
           (rest.map (List.map Int.ofNat)) _
   exact (SourceCurrentGateFrameResources.forecast_ge paths profile).trans
     ((SourceCurrentGateFrameResources.forecast_ge paths _).trans
-      (seeded.trans (SourceCurrentConjunctionAlphabetBounds.callerForecast_ge _ _ _)))
+      (seeded.trans (SourceCurrentConjunctionAlphabetBounds.tupleCallerForecast_ge _ _ _)))
 
 /-- Every entry guard remains in the complete class forecast. -/
 theorem classStep_alphabet_ge (budget count : Nat) (paths : Class) (alphabet : List Guard) (profile : Profile) :
@@ -58,12 +58,12 @@ private theorem seeded_ge (count : Nat) (paths : Class) (profile : Profile) :
 theorem classStep_primary_ge (budget count : Nat) (paths : Class) (alphabet : List Guard) (profile : Profile) :
     Le (gateProfile paths profile) (classStep budget count paths alphabet profile).2 :=
   (SourceCurrentGateFrameResources.forecast_ge paths _).trans
-    ((seeded_ge count paths _).trans (SourceCurrentConjunctionAlphabetBounds.callerForecast_ge _ _ _))
+    ((seeded_ge count paths _).trans (SourceCurrentConjunctionAlphabetBounds.tupleCallerForecast_ge _ _ _))
 
 /-- A secondary-only return fits the remaining reserved class stages. -/
 theorem classStep_secondary_ge (budget count : Nat) (paths : Class) (alphabet : List Guard) (profile : Profile) :
     Le (gateProfile paths (gateProfile paths profile)) (classStep budget count paths alphabet profile).2 :=
-  (seeded_ge count paths _).trans (SourceCurrentConjunctionAlphabetBounds.callerForecast_ge _ _ _)
+  (seeded_ge count paths _).trans (SourceCurrentConjunctionAlphabetBounds.tupleCallerForecast_ge _ _ _)
 
 /-- The original ordered class list determines both final forecasts. -/
 noncomputable def schedule (budget count : Nat) : Constraints → List Guard → Profile → List Guard × Profile
@@ -107,9 +107,9 @@ noncomputable def classFuel (budget count : Nat) (paths : Class) (alphabet : Lis
   max (SourceCurrentGateFrameResources.workerFuel paths profile)
     (max (SourceCurrentGateFrameResources.workerFuel paths secondary)
       (max (SourceCurrentConstrainedCapSeededForecast.fuel count signed seeded)
-        (max (SourceCurrentConjunctionWorklistResources.workerFuel guards budget
+        (max (SourceCurrentConjunctionTupleWorklistNumeric.workerFuel guards budget 1
           (SourceCurrentConstrainedCapTargetForecast.scalar native))
-          (SourceCurrentConjunctionWorklistResources.readerFuel guards budget
+          (SourceCurrentConjunctionTupleWorklistNumeric.readerFuel guards budget 1
             (SourceCurrentConstrainedCapTargetForecast.scalar native)))))
 
 /-- The class ceiling covers both gates, all seeded phases, and both conjunction workers. -/
@@ -118,11 +118,11 @@ theorem classFuel_limits (budget count : Nat) (paths : Class) (alphabet : List G
     SourceCurrentGateFrameResources.workerFuel paths (gateProfile paths profile) ≤ classFuel budget count paths alphabet profile ∧
     SourceCurrentConstrainedCapSeededForecast.fuel count (paths.map (List.map Int.ofNat))
       (gateProfile paths (gateProfile paths profile)) ≤ classFuel budget count paths alphabet profile ∧
-    SourceCurrentConjunctionWorklistResources.workerFuel (classStep budget count paths alphabet profile).1 budget
+    SourceCurrentConjunctionTupleWorklistNumeric.workerFuel (classStep budget count paths alphabet profile).1 budget 1
       (SourceCurrentConstrainedCapTargetForecast.scalar
         (seedProfile count (paths.map (List.map Int.ofNat)) (gateProfile paths (gateProfile paths profile)))) ≤
           classFuel budget count paths alphabet profile ∧
-    SourceCurrentConjunctionWorklistResources.readerFuel (classStep budget count paths alphabet profile).1 budget
+    SourceCurrentConjunctionTupleWorklistNumeric.readerFuel (classStep budget count paths alphabet profile).1 budget 1
       (SourceCurrentConstrainedCapTargetForecast.scalar
         (seedProfile count (paths.map (List.map Int.ofNat)) (gateProfile paths (gateProfile paths profile)))) ≤
           classFuel budget count paths alphabet profile := by

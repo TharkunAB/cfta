@@ -60,7 +60,7 @@ inductive Scan [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
       (secondary : SourceCurrentSecondaryTrace.ClassTrace unconstrained values paths heap false anchor)
       (seeded : SourceCurrentAllocatedSeededQuery.Seeded values
         (paths.map (List.map Int.ofNat)) (advanceHeap (advanceHeap before heap) anchor) query middle)
-      (decision : SourceCurrentConjunctionMemo.Call budget memo query (physical middle) false later savedMemo)
+      (decision : SourceCurrentConjunctionTupleExecution.Call budget memo query (physical middle) false later savedMemo)
       (rest : Scan budget unconstrained reaches values classes (advancePhysical middle later)
         savedMemo outcome selected after saved) :
       Scan budget unconstrained reaches values (paths :: classes) before memo outcome selected after saved
@@ -70,7 +70,7 @@ inductive Scan [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
       (secondary : SourceCurrentSecondaryTrace.ClassTrace unconstrained values paths heap false anchor)
       (seeded : SourceCurrentAllocatedSeededQuery.Seeded values
         (paths.map (List.map Int.ofNat)) (advanceHeap (advanceHeap before heap) anchor) query middle)
-      (decision : SourceCurrentConjunctionMemo.Call budget memo query (physical middle) true later saved) :
+      (decision : SourceCurrentConjunctionTupleExecution.Call budget memo query (physical middle) true later saved) :
       Scan budget unconstrained reaches values (paths :: classes) before memo (some paths) []
         (advancePhysical middle later) saved
 
@@ -159,7 +159,7 @@ theorem memo_effects [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
     (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
     {budget : Nat} {memo saved : Memo} {query : Value Symbol Guard}
     {before : Checked width} {answer : Bool} {after : Physical}
-    (actual : SourceCurrentConjunctionMemo.Call budget memo query (physical before) answer after saved)
+    (actual : SourceCurrentConjunctionTupleExecution.Call budget memo query (physical before) answer after saved)
     (ready : Ready before) (available : Available before.native.machine.heap query)
     (correct : SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap memo) :
     Ready (advancePhysical before after) ∧

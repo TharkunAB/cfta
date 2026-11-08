@@ -1,3 +1,4 @@
+import MicroCFTA.SourceCurrentConjunctionTupleWeakEffects
 import MicroCFTA.SourceCurrentConjunctionWorker
 import MicroCFTA.SourceCurrentAllocatedConjunctionWorker
 import MicroCFTA.SourceCurrentConjunctionRowsWorkerEffects
@@ -134,9 +135,9 @@ theorem allocated_call_effects {width : Nat} (p h budget : Nat) (memo : Memo)
     SemanticHeap actual.state.native.machine.heap ∧ Covered [] actual.state.native.machine.heap ∧
       Grows before.native.machine.heap actual.state.native.machine.heap ∧
       Extends before.native.machine.heap.nodes.issued actual.state.native.machine.heap.nodes.issued := by
-  have first := call_effects p h budget memo query
+  have first := SourceCurrentConjunctionTupleWeakEffects.call_effects p h budget memo query
     (SourceCurrentAllocatedNativeEffects.physical before) semantic covered available closed
-  cases actual : SourceCurrentConjunctionWorker.call p h budget memo query
+  cases actual : SourceCurrentConjunctionTupleWorker.call p h budget memo query
       (SourceCurrentAllocatedNativeEffects.physical before) with
   | done output after =>
     rcases output with ⟨answer, saved⟩

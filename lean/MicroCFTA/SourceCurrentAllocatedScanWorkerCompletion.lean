@@ -1,6 +1,6 @@
 import MicroCFTA.SourceCurrentAllocatedScanWorker
 import MicroCFTA.SourceCurrentAllocatedSeededWorkerCompletion
-import MicroCFTA.SourceCurrentConjunctionWorkerCompletion
+import MicroCFTA.SourceCurrentConjunctionTupleExecution
 
 /-!
 # Stable literal execution of completed current Scan graphs
@@ -114,10 +114,10 @@ theorem decision_complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guar
     [DecidableEq (Value Symbol Guard)] {budget : Nat} {paths : Class} {queryValue : Value Symbol Guard}
     {before : Checked width} {memo saved : Memo} {answer : Bool}
     {after : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula}
-    (actual : SourceCurrentConjunctionMemo.Call budget memo queryValue (physical before) answer after saved) :
+    (actual : SourceCurrentConjunctionTupleExecution.Call budget memo queryValue (physical before) answer after saved) :
     StableRun (fun _ _ p h _ => decision p h budget paths queryValue before memo)
       answer (advancePhysical before after) saved := by
-  obtain ⟨p, h, returned⟩ := SourceCurrentConjunctionWorkerCompletion.call_complete actual
+  obtain ⟨p, h, returned⟩ := SourceCurrentConjunctionTupleExecution.call_complete actual
   refine ⟨0, 0, p, h, 0, ?_⟩
   intro G S P H N _ _ enoughP enoughH _
   have done := SourceCurrentAllocatedConjunctionWorker.call_lift (before := before)
@@ -158,7 +158,7 @@ theorem scan_complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
       obtain ⟨s, secondaryDone⟩ := SourceCurrentAllocatedGateWorker.secondary_complete
         (before := advanceHeap before heap) secondary
       obtain ⟨p, h, n, queryDone⟩ := SourceCurrentAllocatedSeededWorkerCompletion.seeded_complete seeded
-      obtain ⟨decisionP, decisionH, checkedDone⟩ := SourceCurrentConjunctionWorkerCompletion.call_complete decision
+      obtain ⟨decisionP, decisionH, checkedDone⟩ := SourceCurrentConjunctionTupleExecution.call_complete decision
       obtain ⟨laterG, laterS, laterP, laterH, laterN, tailDone⟩ := ih
       refine ⟨max g laterG, max s laterS, max p (max decisionP laterP),
         max h (max decisionH laterH), max n laterN, ?_⟩
@@ -176,7 +176,7 @@ theorem scan_complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
       obtain ⟨s, secondaryDone⟩ := SourceCurrentAllocatedGateWorker.secondary_complete
         (before := advanceHeap before heap) secondary
       obtain ⟨p, h, n, queryDone⟩ := SourceCurrentAllocatedSeededWorkerCompletion.seeded_complete seeded
-      obtain ⟨decisionP, decisionH, checkedDone⟩ := SourceCurrentConjunctionWorkerCompletion.call_complete decision
+      obtain ⟨decisionP, decisionH, checkedDone⟩ := SourceCurrentConjunctionTupleExecution.call_complete decision
       refine ⟨g, s, max p decisionP, max h decisionH, n, ?_⟩
       intro G S P H N enoughG enoughS enoughP enoughH enoughN
       have first := primaryDone G enoughG
