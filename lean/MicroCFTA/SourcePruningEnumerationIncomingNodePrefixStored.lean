@@ -29,7 +29,7 @@ theorem observed_native_error_stored
     (memos : Memos) (initial : Context formulas solver inventory beforeCaller memos)
     (realized : PendingRealized beforeCaller.checked.native.machine.heap before)
     (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])
-    (fits : Fits profile beforeCaller.checked) (room : Room bits profile)
+    (fits : Fits profile beforeCaller.checked) (room : SourceCurrentAllocatedNativeCreditProfile.Admits bits profile)
     {fault : SourceEqualityNativeDemand.Outcome (bits + 2) Node}
     {afterCaller : Caller (bits + 2)} {savedQueries : Queries} {read : Core EnumGuard}
     (observed : run checkEmpty r n p h beforeCaller before uv incoming incomingScs memos.query =

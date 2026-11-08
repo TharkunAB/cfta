@@ -10,7 +10,8 @@ namespace MicroCFTA.SourceCurrentAllocatedNativeIncomingOldKnown
 open Cache InternedConstructorTemplates InternedRecordCoherence InternedProbeProvenance
 open SourceCurrentAllocatedNativeInventoryState (Inventory)
 open SourceCurrentAllocatedPartialInvariant (Context)
-open SourceCurrentAllocatedNativeResourceForecast (Profile Room)
+open SourceCurrentAllocatedNativeResourceForecast (Profile)
+open SourceCurrentAllocatedNativeCreditProfile (Admits)
 open SourceCurrentAllocatedFiniteOrdinaryStored (Stored)
 open SourceSizedPrefixKnownOrdinary (KnownOrdinary)
 open SourcePruningEnumerationObservation (PendingRealized)
@@ -86,7 +87,7 @@ theorem run_old_known (bits bound : Nat) (profile : Profile)
     (realized : PendingRealized beforeCaller.checked.native.machine.heap before.core)
     (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])
     (known : KnownOrdinary bound beforeCaller.checked.native.machine.heap before)
-    (fits : SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile beforeCaller.checked) (room : Room bits profile)
+    (fits : SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile beforeCaller.checked) (room : Admits bits profile)
     (stored : Stored beforeCaller.checked.native) :
     let result := SourcePruningEnumerationIncomingNode.run checkEmpty r n p h beforeCaller before.core uv incoming incomingScs queries
     Stored result.2.1.checked.native ∧ KnownOrdinary bound result.2.1.checked.native.machine.heap before := by
@@ -108,7 +109,6 @@ theorem run_old_known (bits bound : Nat) (profile : Profile)
           | none => cases SourcePruningEnumerationNodes.encodeNode incoming <;> exact known
           | some oldHandle =>
             obtain ⟨old, decoded, oldAvailable, oldClosed⟩ := realized found.representative oldHandle oldScs slot
-            have bounds := fits.room room
             have nativeKnown := native_query_old_known bits bound profile beforeCaller.checked before incoming old n
               initial.ready available oldAvailable closed oldClosed fits room known
             simp only [decoded]
@@ -128,9 +128,9 @@ theorem run_old_known (bits bound : Nat) (profile : Profile)
               simpa only [actual, SourceEqualityNativeDemand.Outcome.state] using nativeKnown
             | done query queried =>
               dsimp only []
-              obtain ⟨next, _source, _roots, receipt, queryPost⟩ := SourceCurrentAllocatedTargetQuery.raw_done_caller_initial
-                bits n formulas solver inventory beforeCaller queried incoming old query memos initial
-                available oldAvailable closed oldClosed bounds.1 bounds.2.1 bounds.2.2 actual
+              obtain ⟨next, _source, _roots, receipt, queryPost, _queryFits, _queryMass⟩ := SourceCurrentAllocatedTargetQuery.raw_done_caller_admitted_resources
+                profile n formulas solver inventory beforeCaller queried incoming old query memos initial fits room
+                available oldAvailable closed oldClosed actual
               have queryKnown := SourceSizedPrefixKnownOrdinaryHeap.query_known receipt known
               have checkedKnown := check_old_known bound p h query queried beforeCaller.fourth queries before
                 queryPost.context.ready.semantic.ready.semantic queryPost.context.ready.semantic.ready.covered receipt.available receipt.closed queryKnown

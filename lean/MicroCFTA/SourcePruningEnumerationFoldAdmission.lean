@@ -39,7 +39,7 @@ theorem observed_singleton (seed : Seed)
     (targetPending : PendingAt before target)
     (selected : ∀ slot ∈ source :: rest, PendingOrEliminated before slot)
     (fits : Fits seed.2 beforeCaller.checked)
-    (room : SourceCurrentAllocatedNativeResourceForecast.Room bits seed.2)
+    (room : SourceCurrentAllocatedNativeCreditProfile.Admits bits seed.2)
     (known : Heap (fun guard => guard ∈ seed.1) beforeCaller.checked.native.machine.heap)
     {n p h : Nat} {action : EnumerateM Symbol EnumGuard Unit} {afterCaller : Caller (bits + 2)}
     {saved : Queries} {after : EnumerationState.State Symbol EnumGuard}

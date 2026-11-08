@@ -112,14 +112,14 @@ theorem native_prefix_stored_profile
     (leftAvailable : Available beforeCaller.checked.native.machine.heap left)
     (rightAvailable : Available beforeCaller.checked.native.machine.heap right)
     (leftClosed : left.free = []) (rightClosed : right.free = [])
-    (fits : Fits profile beforeCaller.checked) (room : Room bits profile) :
+    (fits : Fits profile beforeCaller.checked) (room : SourceCurrentAllocatedNativeCreditProfile.Admits bits profile) :
     ∀ nativeFuel, InternedValueMassHeap.Stored (step profile).mass
       (SourceEqualityNativeDemand.execute nativeFuel
         (.code (SourceRecursiveIntersectionCode.requestNode
           IntersectionEmptyDomain.emptyDomain left right))
         beforeCaller.checked).state.native.machine.heap := by
   obtain ⟨_next, _query, _queried, _source, _roots, receipt, _post, _done, returnedFits, _mass⟩ :=
-    SourceCurrentAllocatedTargetQuery.finite_caller_resources profile formulas solver inventory
+    SourceCurrentAllocatedTargetQuery.finite_caller_admitted_resources profile formulas solver inventory
       beforeCaller left right memos initial fits room leftAvailable rightAvailable leftClosed rightClosed
   cases receipt.actual with
   | run trace =>
@@ -146,6 +146,6 @@ theorem native_prefix_bounded_profile
   intro nativeFuel
   exact InternedValueMassBinderDepth.stored_bounded _ _
     (native_prefix_stored_profile profile formulas solver inventory beforeCaller left right memos
-      initial leftAvailable rightAvailable leftClosed rightClosed fits room nativeFuel)
+      initial leftAvailable rightAvailable leftClosed rightClosed fits (Or.inl room) nativeFuel)
 
 end MicroCFTA.SourcePruningEnumerationIncomingQuery

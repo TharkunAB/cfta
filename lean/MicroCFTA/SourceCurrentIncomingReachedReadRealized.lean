@@ -53,7 +53,7 @@ theorem incoming_ok_read_realized (symbolEquality : DecidableEq Symbol)
   dsimp only
   intro initial realized available closed fits room
   have callerPost := SourceCurrentIncomingPost.incoming_ok_post profile formulas solver inventory caller before
-    checkEmpty r n p h target incoming scs memos initial realized available closed fits room
+    checkEmpty r n p h target incoming scs memos initial realized available closed fits (Or.inl room)
   have readFacts := SourceCurrentIncomingReadRoots.incoming_read_roots canonicalSymbol edgeEquality canonicalNode
     checkEmpty r n p h caller before target incoming scs memos roots paths
   change (let actual := SourcePruningEnumerationIncomingNode.run checkEmpty r n p h caller before target incoming scs memos.query;

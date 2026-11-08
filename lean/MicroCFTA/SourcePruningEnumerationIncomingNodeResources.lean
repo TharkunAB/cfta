@@ -14,7 +14,8 @@ open InternedConstructorTemplates InternedProbeProvenance
 open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
 open SourceCurrentAllocatedNativeInventoryState (Inventory)
 open SourceCurrentAllocatedPartialInvariant (Context Post)
-open SourceCurrentAllocatedNativeResourceForecast (Profile Room)
+open SourceCurrentAllocatedNativeResourceForecast (Profile)
+open SourceCurrentAllocatedNativeCreditProfile (Admits)
 open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
 local notation "Symbol" => SourcePruningTemplates.Symbol
 local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
@@ -35,7 +36,7 @@ theorem initial_ranges (profile : Profile) (beforeCaller : Caller (bits + 2)) (b
     (uv : Nat) (incoming : Node) (ready : SourceCurrentConjunctionClassScan.Ready beforeCaller.checked)
     (realized : PendingRealized beforeCaller.checked.native.machine.heap before)
     (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])
-    (fits : Fits profile beforeCaller.checked) (room : Room bits profile) :
+    (fits : Fits profile beforeCaller.checked) (room : Admits bits profile) :
     match before.values[uv]? with
     | some (.unenumerated (some oldHandle) _) =>
         match lookupNode beforeCaller.checked.native.machine.heap oldHandle with
@@ -59,14 +60,10 @@ theorem initial_ranges (profile : Profile) (beforeCaller : Caller (bits + 2)) (b
                   obtain ⟨value, found, resident, oldClosed⟩ := realized uv oldHandle oldScs stored
                   have same := Option.some.inj (found.symm.trans decoded)
                   subst value
-                  have actualRoom := fits.room room
-                  have leftOriginal := SourceRecursiveIntersectionOriginalOutput.closed_original incoming
-                    beforeCaller.checked.native.machine.heap ready.good.native.machine.1.coherent available closed
-                  have rightOriginal := SourceRecursiveIntersectionOriginalOutput.closed_original old
-                    beforeCaller.checked.native.machine.heap ready.good.native.machine.1.coherent resident oldClosed
-                  simpa only [decoded] using (SourceCurrentAllocatedRecursiveWarmInitialRanges.warm_initial_ranges bits beforeCaller.checked
-                    ready.good ready.semantic incoming old leftOriginal rightOriginal available resident
-                    actualRoom.1 actualRoom.2.1 actualRoom.2.2).1
+                  simpa only [decoded] using
+                    SourceCurrentAllocatedTargetQuery.ready_admitted_ranges profile beforeCaller.checked
+                      ready fits room incoming old available resident closed oldClosed
+
 
 variable [DecidableEq Node]
 
@@ -78,7 +75,7 @@ theorem observed_resources (alphabet : List Constraint) (profile : Profile)
     (memos : Memos) (initial : Context formulas solver inventory beforeCaller memos)
     (realized : PendingRealized beforeCaller.checked.native.machine.heap before)
     (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])
-    (fits : Fits profile beforeCaller.checked) (room : Room bits profile)
+    (fits : Fits profile beforeCaller.checked) (room : Admits bits profile)
     (known : Heap (fun guard => guard ∈ alphabet) beforeCaller.checked.native.machine.heap)
     {result : Option (List (Except EnumerationState.Error (Unit × Core)))}
     {afterCaller : Caller (bits + 2)} {savedQueries : Queries} {read : Core}
@@ -178,7 +175,7 @@ theorem run_complete_resources
     (pending : EnumerationCompleteness.PendingAt before uv)
     (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])
     (bounded : ∀ sc ∈ incomingScs, sc.var < before.counter)
-    (fits : Fits profile beforeCaller.checked) (room : Room bits profile)
+    (fits : Fits profile beforeCaller.checked) (room : Admits bits profile)
     (known : Heap (fun guard => guard ∈ alphabet) beforeCaller.checked.native.machine.heap) :
     ∃ (r n p h : Nat) (oldNode : Option Nat) (oldScs : List EnumerationState.Suspended)
       (read after : EnumerationState.State Symbol EnumGuard) (afterCaller : Caller (bits + 2))

@@ -14,7 +14,8 @@ open InternedConstructorTemplates InternedProbeProvenance
 open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
 open SourceCurrentAllocatedNativeInventoryState (Inventory)
 open SourceCurrentAllocatedPartialInvariant (Context)
-open SourceCurrentAllocatedNativeResourceForecast (Profile Room)
+open SourceCurrentAllocatedNativeResourceForecast (Profile)
+open SourceCurrentAllocatedNativeCreditProfile (Admits)
 open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
 local notation "Symbol" => SourcePruningTemplates.Symbol
 local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
@@ -33,7 +34,7 @@ variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)]
 theorem initial_ranges (profile : Profile) (beforeCaller : Caller (bits + 2)) (before : Core)
     (source target : Nat) (ready : SourceCurrentConjunctionClassScan.Ready beforeCaller.checked)
     (realized : PendingRealized beforeCaller.checked.native.machine.heap before)
-    (fits : Fits profile beforeCaller.checked) (room : Room bits profile) :
+    (fits : Fits profile beforeCaller.checked) (room : Admits bits profile) :
     if source = target then True else
       match before.values[source]?, before.values[target]? with
       | some (.unenumerated (some left) _), some (.unenumerated (some right) _) =>
@@ -79,17 +80,10 @@ theorem initial_ranges (profile : Profile) (beforeCaller : Caller (bits + 2)) (b
                                     have secondSame := Option.some.inj (secondLookup.symm.trans rightLookup)
                                     subst first
                                     subst second
-                                    have actualRoom := fits.room room
-                                    have leftOriginal := SourceRecursiveIntersectionOriginalOutput.closed_original left
-                                      beforeCaller.checked.native.machine.heap ready.good.native.machine.1.coherent
-                                      leftAvailable leftClosed
-                                    have rightOriginal := SourceRecursiveIntersectionOriginalOutput.closed_original right
-                                      beforeCaller.checked.native.machine.heap ready.good.native.machine.1.coherent
-                                      rightAvailable rightClosed
                                     simpa only [leftLookup, rightLookup] using
-                                      (SourceCurrentAllocatedRecursiveWarmInitialRanges.warm_initial_ranges bits
-                                      beforeCaller.checked ready.good ready.semantic left right leftOriginal rightOriginal
-                                      leftAvailable rightAvailable actualRoom.1 actualRoom.2.1 actualRoom.2.2).1
+                                      SourceCurrentAllocatedTargetQuery.ready_admitted_ranges profile beforeCaller.checked
+                                        ready fits room left right leftAvailable rightAvailable leftClosed rightClosed
+
 
 variable [DecidableEq Node]
 
@@ -100,7 +94,7 @@ theorem observed_resources (alphabet : List Constraint) (profile : Profile)
     (checkEmpty : Bool) (nativeFuel p h source target : Nat) (memos : Memos)
     (initial : Context formulas solver inventory beforeCaller memos)
     (realized : PendingRealized beforeCaller.checked.native.machine.heap before)
-    (fits : Fits profile beforeCaller.checked) (room : Room bits profile)
+    (fits : Fits profile beforeCaller.checked) (room : Admits bits profile)
     (known : Heap (fun guard => guard ∈ alphabet) beforeCaller.checked.native.machine.heap)
     {result : Option (EnumerateM Symbol EnumGuard Unit)}
     {afterCaller : Caller (bits + 2)} {savedQueries : Queries}
@@ -238,7 +232,8 @@ open InternedConstructorTemplates InternedProbeProvenance
 open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
 open SourceCurrentAllocatedNativeInventoryState (Inventory)
 open SourceCurrentAllocatedPartialInvariant (Context Post)
-open SourceCurrentAllocatedNativeResourceForecast (Profile Room)
+open SourceCurrentAllocatedNativeResourceForecast (Profile)
+open SourceCurrentAllocatedNativeCreditProfile (Admits)
 open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
 open SourceCurrentAllocatedNativeEffects (physical)
 local notation "Symbol" => SourcePruningTemplates.Symbol
@@ -274,7 +269,7 @@ theorem complete_resources
       ∃ (sourceNode targetNode : Option Nat) (sourceScs targetScs : List EnumerationState.Suspended),
         before.core.values[source]? = some (.unenumerated sourceNode sourceScs) ∧
         before.core.values[target]? = some (.unenumerated targetNode targetScs))
-    (fits : Fits profile beforeCaller.checked) (room : Room bits profile)
+    (fits : Fits profile beforeCaller.checked) (room : Admits bits profile)
     (known : Heap (fun guard => guard ∈ alphabet) beforeCaller.checked.native.machine.heap) :
     ∃ (fuel p h : Nat) (action : EnumerateM Symbol Constraint Unit)
       (afterCaller : Caller (bits + 2)) (savedQueries : Queries) (final : Memos) (next : Inventory)

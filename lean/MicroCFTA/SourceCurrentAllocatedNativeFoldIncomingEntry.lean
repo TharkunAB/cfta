@@ -19,7 +19,7 @@ open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
 open SourceCurrentAllocatedNativeInventoryState (Inventory)
 open SourceCurrentAllocatedPartialInvariant (Context Post)
 open SourcePruningEnumerationIncomingReservation (Seed advance Reserved)
-open SourceCurrentAllocatedNativeResourceForecast (Room)
+open SourceCurrentAllocatedNativeCreditProfile (Admits)
 open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
 open SourceCurrentAllocatedFiniteOrdinaryStored (Stored)
 open SourceSizedPrefixKnownOrdinary (KnownOrdinary)
@@ -56,7 +56,7 @@ theorem fold_incoming_entry (bits bound : Nat) (seed : Seed)
         Post formulas solver next beforeCaller actual.2.1 final ∧ final.query = actual.2.2.1 ∧
         PendingRealized actual.2.1.checked.native.machine.heap after ∧ PendingAt after target ∧
         Fits (advance seed sources.length).2 actual.2.1.checked ∧
-        Room bits (advance seed sources.length).2 ∧
+        Admits bits (advance seed sources.length).2 ∧
         Heap (fun guard => guard ∈ (advance seed sources.length).1) actual.2.1.checked.native.machine.heap ∧
         Stored actual.2.1.checked.native ∧
         KnownOrdinary bound actual.2.1.checked.native.machine.heap {before with core := after} ∧
@@ -149,7 +149,7 @@ theorem cached_fold_incoming_entry (bits bound : Nat) (seed : Seed)
         Post formulas solver next beforeCaller actual.1.2.1 final ∧ final.query = actual.1.2.2.1 ∧
         PendingRealized actual.1.2.1.checked.native.machine.heap after ∧ PendingAt after target ∧
         Fits (advance seed sources.length).2 actual.1.2.1.checked ∧
-        Room bits (advance seed sources.length).2 ∧
+        Admits bits (advance seed sources.length).2 ∧
         Heap (fun guard => guard ∈ (advance seed sources.length).1) actual.1.2.1.checked.native.machine.heap ∧
         Stored actual.1.2.1.checked.native ∧
         KnownOrdinary bound actual.1.2.1.checked.native.machine.heap {before with core := after} ∧

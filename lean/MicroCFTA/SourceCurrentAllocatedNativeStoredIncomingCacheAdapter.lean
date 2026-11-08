@@ -9,7 +9,8 @@ The adapter retains the complete observed caller before it attaches an index can
 namespace MicroCFTA.SourceCurrentAllocatedNativeStoredIncomingCacheAdapter
 open InternedConstructorTemplates InternedProbeProvenance
 open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
-open SourceCurrentAllocatedNativeResourceForecast (Profile Room)
+open SourceCurrentAllocatedNativeResourceForecast (Profile)
+open SourceCurrentAllocatedNativeCreditProfile (Admits)
 open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
 open SourceCurrentAllocatedFiniteOrdinaryStored (Stored)
 local notation "Symbol" => SourcePruningTemplates.Symbol
@@ -28,7 +29,7 @@ theorem incoming_cache_adapter_stored (profile : Profile) (checkEmpty : Bool)
     (ready : SourceCurrentConjunctionClassScan.Ready beforeCaller.checked)
     (realized : PendingRealized beforeCaller.checked.native.machine.heap before.core)
     (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])
-    (fits : Fits profile beforeCaller.checked) (room : Room bits profile)
+    (fits : Fits profile beforeCaller.checked) (room : Admits bits profile)
     (stored : Stored beforeCaller.checked.native) :
     Stored (SourcePruningEnumerationIncomingCacheAdapter.run checkEmpty representativeFuel nativeFuel p h indexFuel
       beforeCaller before target incoming incomingScs queries).1.2.1.checked.native := by

@@ -131,7 +131,7 @@ theorem run_complete_accepting
         run checkEmpty (r + extra) (n + extraNative) P H beforeCaller before uv incoming incomingScs memos.query =
           (.ok (some [.ok ((), after)]), afterCaller, savedQueries, read)) := by
   have ranges := initial_ranges profile beforeCaller before uv incoming initial.ready
-    realized available closed fits room
+    realized available closed fits (Or.inl room)
   obtain ⟨r, n, p, h, oldNode, oldScs, read, after, afterCaller, savedQueries, final, next,
     replacement, handle, reading, frame, running, writing, afterSame, stored, afterStorage,
     afterRealized, post, query, unfolding, replacementAvailable, replacementClosed, encoded,

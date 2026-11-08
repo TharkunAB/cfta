@@ -14,7 +14,8 @@ open InternedConstructorTemplates InternedProbeProvenance
 open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
 open SourceCurrentAllocatedNativeInventoryState (Inventory)
 open SourceCurrentAllocatedPartialInvariant (Context)
-open SourceCurrentAllocatedNativeResourceForecast (Profile Room)
+open SourceCurrentAllocatedNativeResourceForecast (Profile)
+open SourceCurrentAllocatedNativeCreditProfile (Admits)
 open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
 local notation "Symbol" => SourcePruningTemplates.Symbol
 local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
@@ -41,7 +42,7 @@ theorem observed_resources_projection_heap (alphabet : List Constraint) (profile
     (checkEmpty : Bool) (nativeFuel p h source target : Nat) (memos : Memos)
     (initial : Context formulas solver inventory beforeCaller memos)
     (realized : PendingRealized beforeCaller.checked.native.machine.heap before)
-    (fits : Fits profile beforeCaller.checked) (room : Room bits profile)
+    (fits : Fits profile beforeCaller.checked) (room : Admits bits profile)
     (known : Heap (fun guard => guard ∈ alphabet) beforeCaller.checked.native.machine.heap)
     (originalProjection : ProjectionHeap beforeCaller.checked.native.machine.heap)
     {result : Option (EnumerateM Symbol EnumGuard Unit)}

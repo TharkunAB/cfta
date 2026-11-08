@@ -11,7 +11,8 @@ namespace MicroCFTA.SourceCurrentAllocatedNativeIncomingOldKnown
 open InternedConstructorTemplates InternedProbeProvenance
 open SourceCurrentAllocatedNativeInventoryState (Inventory)
 open SourceCurrentAllocatedPartialInvariant (Context)
-open SourceCurrentAllocatedNativeResourceForecast (Profile Room)
+open SourceCurrentAllocatedNativeResourceForecast (Profile)
+open SourceCurrentAllocatedNativeCreditProfile (Admits)
 open SourceCurrentAllocatedFiniteOrdinaryStored (Stored)
 open SourceSizedPrefixKnownOrdinary (KnownOrdinary)
 open SourcePruningEnumerationObservation (PendingRealized)
@@ -47,17 +48,16 @@ theorem native_query_old_known (bits bound : Nat) (profile : Profile) (before : 
     (ready : SourceCurrentConjunctionClassScan.Ready before)
     (leftAvailable : Available before.native.machine.heap left) (rightAvailable : Available before.native.machine.heap right)
     (leftClosed : left.free = []) (rightClosed : right.free = [])
-    (fits : SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile before) (room : Room bits profile)
+    (fits : SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile before) (room : Admits bits profile)
     (known : KnownOrdinary bound before.native.machine.heap cached) :
     KnownOrdinary bound (SourceEqualityNativeDemand.execute fuel
       (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right)) before).state.native.machine.heap cached := by
-  have bounds := fits.room room
   have leftOriginal := SourceRecursiveIntersectionOriginalOutput.closed_original left before.native.machine.heap
     ready.good.native.machine.1.coherent leftAvailable leftClosed
   have rightOriginal := SourceRecursiveIntersectionOriginalOutput.closed_original right before.native.machine.heap
     ready.good.native.machine.1.coherent rightAvailable rightClosed
-  have ranges := (SourceCurrentAllocatedRecursiveWarmInitialRanges.warm_initial_ranges bits before
-    ready.good ready.semantic left right leftOriginal rightOriginal leftAvailable rightAvailable bounds.1 bounds.2.1 bounds.2.2).1
+  have ranges := SourceCurrentAllocatedTargetQuery.ready_admitted_ranges profile before ready fits room
+    left right leftAvailable rightAvailable leftClosed rightClosed
   obtain ⟨length, value, after, receipt, _⟩ := SourceCurrentAllocatedNativePhysicalTraceCompletion.initial_complete
     (fun _ _ => true) before ready.good ready.idle left right leftOriginal rightOriginal
     leftAvailable rightAvailable leftClosed rightClosed ranges
@@ -77,7 +77,7 @@ theorem run_old_known_except_failed_check (bits bound : Nat) (profile : Profile)
     (realized : PendingRealized beforeCaller.checked.native.machine.heap before.core)
     (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])
     (known : KnownOrdinary bound beforeCaller.checked.native.machine.heap before)
-    (fits : SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile beforeCaller.checked) (room : Room bits profile)
+    (fits : SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile beforeCaller.checked) (room : Admits bits profile)
     (stored : Stored beforeCaller.checked.native) :
     let result := SourcePruningEnumerationIncomingNode.run checkEmpty r n p h beforeCaller before.core uv incoming incomingScs queries
     Stored result.2.1.checked.native ∧
@@ -104,7 +104,6 @@ theorem run_old_known_except_failed_check (bits bound : Nat) (profile : Profile)
           | none => cases SourcePruningEnumerationNodes.encodeNode incoming <;> exact known
           | some oldHandle =>
             obtain ⟨old, decoded, oldAvailable, oldClosed⟩ := realized found.representative oldHandle oldScs slot
-            have bounds := fits.room room
             have nativeKnown := native_query_old_known bits bound profile beforeCaller.checked before incoming old n
               initial.ready available oldAvailable closed oldClosed fits room known
             simp only [decoded]
@@ -125,9 +124,9 @@ theorem run_old_known_except_failed_check (bits bound : Nat) (profile : Profile)
               simpa only [actual, SourceEqualityNativeDemand.Outcome.state] using nativeKnown
             | done query queried =>
               dsimp only []
-              obtain ⟨next, _source, _roots, receipt, queryPost⟩ := SourceCurrentAllocatedTargetQuery.raw_done_caller_initial
-                bits n formulas solver inventory beforeCaller queried incoming old query memos initial
-                available oldAvailable closed oldClosed bounds.1 bounds.2.1 bounds.2.2 actual
+              obtain ⟨next, _source, _roots, receipt, queryPost, _queryFits, _queryMass⟩ := SourceCurrentAllocatedTargetQuery.raw_done_caller_admitted_resources
+                profile n formulas solver inventory beforeCaller queried incoming old query memos initial fits room
+                available oldAvailable closed oldClosed actual
               have queryKnown := SourceSizedPrefixKnownOrdinaryHeap.query_known receipt known
               generalize phaseEq : (if checkEmpty then
                 SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries

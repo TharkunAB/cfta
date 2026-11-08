@@ -8,7 +8,8 @@ open InternedConstructorTemplates InternedProbeProvenance
 open SourcePruningEnumerationObservation (PendingRealized)
 open SourceCurrentAllocatedNativeInventoryState (Inventory)
 open SourceCurrentAllocatedPartialInvariant (Context)
-open SourceCurrentAllocatedNativeResourceForecast (Profile Room)
+open SourceCurrentAllocatedNativeResourceForecast (Profile)
+open SourceCurrentAllocatedNativeCreditProfile (Admits)
 open SourceCurrentAllocatedFiniteOrdinaryStored (Stored)
 attribute [local instance] FormulaExecutable.formulaDecidableEq
 local notation "Symbol" => SourcePruningTemplates.Symbol
@@ -63,7 +64,7 @@ theorem some_some_result (bits : Nat) (profile : Profile)
     (realized : PendingRealized beforeCaller.checked.native.machine.heap before)
     (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])
     (incomingDomain : NodeDomain incoming) (oldDomain : NodeDomain old)
-    (fits : SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile beforeCaller.checked) (room : Room bits profile)
+    (fits : SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile beforeCaller.checked) (room : Admits bits profile)
     (stored : Stored beforeCaller.checked.native)
     (reading : UnionFind.findRoot r before.representatives uv = some found)
     (slot : before.values[found.representative]? = some (.unenumerated (some oldHandle) oldScs))
@@ -87,7 +88,6 @@ theorem some_some_result (bits : Nat) (profile : Profile)
   · obtain ⟨actualOld, oldLookup, oldAvailable, oldClosed⟩ := realized found.representative oldHandle oldScs slot
     have same : actualOld = old := Option.some.inj (oldLookup.symm.trans decoded)
     subst actualOld
-    have actualRoom := fits.room room
     have inside : found.representative < before.values.length :=
       (List.getElem?_eq_some_iff.mp slot).elim (fun bound _value => bound)
     simp only [SourcePruningEnumerationIncomingNode.run, reading, slot, decoded]
@@ -96,9 +96,9 @@ theorem some_some_result (bits : Nat) (profile : Profile)
         beforeCaller.checked <;> try trivial
     case done query queried =>
       dsimp only []
-      obtain ⟨next, _source, _roots, receipt, queryPost⟩ := SourceCurrentAllocatedTargetQuery.raw_done_caller_initial
-        bits n formulas solver inventory beforeCaller queried incoming old query memos initial
-        available oldAvailable closed oldClosed actualRoom.1 actualRoom.2.1 actualRoom.2.2 actual
+      obtain ⟨next, _source, _roots, receipt, queryPost, _queryFits, _queryMass⟩ := SourceCurrentAllocatedTargetQuery.raw_done_caller_admitted_resources
+        profile n formulas solver inventory beforeCaller queried incoming old query memos initial fits room
+        available oldAvailable closed oldClosed actual
       obtain ⟨_queriedStored, domain, leftHeight, rightHeight, handle, encoded, looked⟩ :=
         SourceCurrentAllocatedFiniteOrdinaryTargetResult.receipt_result initial.ready stored incomingDomain oldDomain receipt
       generalize phaseEq : (if checkEmpty then

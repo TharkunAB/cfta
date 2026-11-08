@@ -11,7 +11,8 @@ open InternedConstructorTemplates InternedProbeProvenance
 open SourcePruningEnumerationObservation (PendingRealized)
 open SourceCurrentAllocatedNativeInventoryState (Inventory)
 open SourceCurrentAllocatedPartialInvariant (Context)
-open SourceCurrentAllocatedNativeResourceForecast (Profile Room)
+open SourceCurrentAllocatedNativeResourceForecast (Profile)
+open SourceCurrentAllocatedNativeCreditProfile (Admits)
 open SourceCurrentAllocatedFiniteOrdinaryStored (Stored)
 open SourceSizedPrefixKnownOrdinary (KnownOrdinary)
 attribute [local instance] FormulaExecutable.formulaDecidableEq
@@ -78,7 +79,7 @@ theorem run_known (bits bound : Nat) (profile : Profile)
     (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])
     (incomingDomain : NodeDomain incoming) (incomingHeight : MergedOrdinaryHeight.height incoming ≤ bound)
     (known : KnownOrdinary bound beforeCaller.checked.native.machine.heap before)
-    (fits : SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile beforeCaller.checked) (room : Room bits profile)
+    (fits : SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile beforeCaller.checked) (room : Admits bits profile)
     (stored : Stored beforeCaller.checked.native) :
     let result := SourcePruningEnumerationIncomingNode.run checkEmpty r n p h beforeCaller before.core uv incoming incomingScs queries
     Stored result.2.1.checked.native ∧
@@ -121,16 +122,15 @@ theorem run_known (bits bound : Nat) (profile : Profile)
               known oldHandle oldScs (List.mem_of_getElem? slot)
             have same : knownOld = old := Option.some.inj (knownLookup.symm.trans decoded)
             subst knownOld
-            have actualRoom := fits.room room
             simp only [decoded]
             cases actual : SourceEqualityNativeDemand.execute n
                 (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain incoming old))
                 beforeCaller.checked <;> try trivial
             case done query queried =>
               dsimp only []
-              obtain ⟨next, _source, _roots, receipt, queryPost⟩ := SourceCurrentAllocatedTargetQuery.raw_done_caller_initial
-                bits n formulas solver inventory beforeCaller queried incoming old query memos initial
-                available oldAvailable closed oldClosed actualRoom.1 actualRoom.2.1 actualRoom.2.2 actual
+              obtain ⟨next, _source, _roots, receipt, queryPost, _queryFits, _queryMass⟩ := SourceCurrentAllocatedTargetQuery.raw_done_caller_admitted_resources
+                profile n formulas solver inventory beforeCaller queried incoming old query memos initial fits room
+                available oldAvailable closed oldClosed actual
               obtain ⟨_stored, domain, leftHeight, _rightHeight, handle, encoded, looked⟩ :=
                 SourceCurrentAllocatedFiniteOrdinaryTargetResult.receipt_result initial.ready stored incomingDomain oldDomain receipt
               have queryKnown := SourceSizedPrefixKnownOrdinaryHeap.query_known receipt readKnown

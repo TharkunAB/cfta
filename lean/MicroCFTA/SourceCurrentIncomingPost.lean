@@ -9,7 +9,8 @@ open EnumerationState InternedConstructorTemplates InternedProbeProvenance
 open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
 open SourceCurrentAllocatedNativeInventoryState (Inventory)
 open SourceCurrentAllocatedPartialInvariant (Context Post)
-open SourceCurrentAllocatedNativeResourceForecast (Profile Room)
+open SourceCurrentAllocatedNativeResourceForecast (Profile)
+open SourceCurrentAllocatedNativeCreditProfile (Admits)
 open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
 attribute [local instance] FormulaExecutable.formulaDecidableEq
 local notation "Symbol" => SourcePruningTemplates.Symbol
@@ -29,7 +30,7 @@ theorem incoming_ok_post (profile : Profile)
     (initial : Context formulas solver inventory caller memos)
     (realized : PendingRealized caller.checked.native.machine.heap before)
     (available : Available caller.checked.native.machine.heap incoming) (closed : incoming.free = [])
-    (fits : Fits profile caller.checked) (room : Room bits profile) :
+    (fits : Fits profile caller.checked) (room : Admits bits profile) :
     let actual := SourcePruningEnumerationIncomingNode.run checkEmpty r n p h
       caller before target incoming scs memos.query
     match actual.1 with
@@ -53,14 +54,13 @@ theorem incoming_ok_post (profile : Profile)
                 simpa [SourcePruningEnumerationIncomingNode.run, rootRead, oldRead, encoded] using unchanged
           | some oldHandle =>
               obtain ⟨old, oldLookup, oldAvailable, oldClosed⟩ := realized found.representative oldHandle oldScs oldRead
-              have bounds := fits.room room
               simp only [SourcePruningEnumerationIncomingNode.run, rootRead, oldRead, oldLookup]
               cases actual : SourceEqualityNativeDemand.execute n
                   (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain incoming old)) caller.checked with
               | done query queried =>
-                obtain ⟨next, _source, _roots, receipt, queryPost⟩ := SourceCurrentAllocatedTargetQuery.raw_done_caller_initial
-                  bits n formulas solver inventory caller queried incoming old query memos initial
-                  available oldAvailable closed oldClosed bounds.1 bounds.2.1 bounds.2.2 actual
+                obtain ⟨next, _source, _roots, receipt, queryPost, _queryFits, _queryMass⟩ := SourceCurrentAllocatedTargetQuery.raw_done_caller_admitted_resources
+                  profile n formulas solver inventory caller queried incoming old query memos initial fits room
+                  available oldAvailable closed oldClosed actual
                 cases checkEmpty with
                 | false =>
                     have returned : ∃ destination final, Post formulas solver destination caller
