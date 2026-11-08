@@ -1,3 +1,194 @@
+# Current checkpoint: R139 global calls and class scans use tuple charging
+
+Updated 2026-11-08 08:09 CET. Goal ACTIVE. R139 made PROGRESS. Branch formalize.
+Keep the FULL original objective. Regular formalize pushes are authorized.
+Do not pause the goal or ask whether to continue. This introduction
+supersedes the status below. Preserve all historical text and proofs.
+
+Base aa5e788c181724e3f8e11210625faf79b8092a8d is the published R138 head.
+Main bd5a406a6a3f84b7e3ae0906082783911509df83 remains incorporated.
+R139 changes FORTY-ONE source targets: ONE new proof module and
+FORTY existing modules. Their 151 public laws pass actual Nix/Lake,
+strict own-source, complete real-name checks, source hashes, and standard
+axiom reports. FOUR public laws are new. All old public theorem names
+remain. Several receipt types now describe actual tuple execution.
+No theorem equates legacy key charging with tuple charging.
+
+## Actual global selection and its consumers
+
+SourceCurrentAllocatedConjunctionWorker.call now directly calls
+SourceCurrentConjunctionTupleWorker.call at the supplied budget. The
+original checked Outcome, its constructors, state, and memo projections
+remain in place. No type extraction or new wrapper cycle is required.
+Both success and failure lift the exact returned physical state. Failure
+retains the original fourth memo. A warm memo hit retains the identical
+complete checked state without an execution-bound premise.
+
+AllocatedMemo, ClassScan, ClassScanCompletion, ClassScanGlobalMemos,
+AllocatedCaller, WorkerActual, source reads, query read validity, query
+global reads, refused queries, selected records, and native causal entry
+now use TupleExecution.Call and TupleGlobalMemos.CallReads where they
+describe the actual selected call. False continuations and stopped scans
+follow the same actual graph. Caller soundness, full/warm effects,
+retention, class-scan readiness, probes, arity, projection, storage, and
+publication history follow the new physical callee.
+
+The enabled path converted in R138 remains at canonical source budget
+10000. R139 also converts the global checked call and actual class-scan
+callers. Legacy RawWorker, legacy Memo.Call, and their generic proofs
+remain available for historical clients. Their presence does not select
+them from the converted global call.
+
+## Weak interfaces, numeric replay, and dependency structure
+
+WorkerOperationGrowth.conjunction still has NO semantic, readiness,
+availability, or completion premise. Its new private tuple proofs cover
+admission, skip, overflow, zero charge, positive charge, success, and
+failure. UnionNormalConjunction.call still needs ONLY UnionNormal.
+Both weak contracts pass at their original interfaces.
+
+CallerNumeric, WorkerResources, ScanNumericForecast, ScanNumeric,
+AllocatedScanWorkerCompletion, and AllocatedRecordScanWorkerActual now
+follow actual tuple replay. Context, Fits, and Available remain the
+supplied caller requirements. No Frame, future carrier, successful body,
+or new completion oracle is added. Supplied original query alphabets,
+one initial pending root, and concrete tuple work/read ceilings remain.
+AlphabetBounds adds tuple_memo_complete and retains its legacy raw laws.
+CallUnique adds tuple_call. ParentProjectionScan adds tuple_call_heap and
+retains its legacy call_heap.
+
+The only new module is SourceCurrentAllocatedTupleProbeConjunction. It
+adds SourceCurrentAllocatedProbeConjunction.tuple_call_heap in the old
+public namespace. The old AllocatedProbeConjunction module remains byte
+identical. This companion avoids a real import cycle: TupleExecution and
+TupleWorkerProbes depend on RowsWorkerActual, which already depends on
+the old probe module. Never add the new tuple imports to that old module.
+
+Use LOWER TupleMemo, TupleWeakEffects, TupleWorkerEffects,
+TupleWorkerProbes, and TupleWorklistNumeric inside Memo/ClassScan.
+TupleCallPost and TupleCallerNumeric already depend on ClassScan.
+Do not import those higher bridges back into its dependency layer.
+The global Outcome identity stays compatible with the separate checked
+tuple adapter from R137.
+
+## Strongest original-input statements and remaining gaps
+
+R137's original request composition remains: every accepted signed
+firstOrderRaw request constructs actual guard preparation and Label
+build from empty initial stores, original Program roles, and the FULL
+initial modeled caller Context. It derives an actual tuple call/read
+receipt, stable instrumented fuel, and full returned Post. It supplies
+no Context, successful build, valid interner, body, future carrier, fuel,
+or resource oracle. Source errors remain explicit. This supplements
+R130's original construction, complete merge, and independent Required
+facts for every emitted merged row. True certifies formal-language
+emptiness under the checked invariants. False gives no acceptance result.
+
+The global and enabled selected call families now use tuple charging.
+This closes a selection and proof-integration gap. It does not close the
+complete driver bound or native execution correspondence.
+
+The full outer worker still needs a supplied finite
+PartialGraph.NodeCall in AllocatedPartialWorkerCompletion.nodeCall_complete.
+WorkerActual.nodeCall_verified also takes actual success and reached
+ranges. ConstructedResources.prepared_run takes recursiveFuel and may
+return stopped/exhausted. Derive that outer graph and sufficient driver
+fuel from the original request. The bounded global conjunction call does
+not discharge those outer premises.
+
+The FULL objective remains unchanged:
+- Derive one original-input/request and actual-caller bound for BOTH the
+  selected optimized worker and COMPLETE enumeration driver. Cover every
+  sibling, generated, intermediate, failing, rejected, returned, later,
+  and native state. Derive internal premises from original inputs.
+- Prove joint Program/constrained-Type progress at ALL reached roles.
+  Original initial Context is derived. Reached roles and closure remain.
+- Prove exact accepted terms per NODE-COUNT size, finite requested
+  execution, size order, exact count, and BOTH SIGNED rank/unrank inverse
+  laws through actual sparse execution. Cover Sized, fallback, failure,
+  productive infinite/lazy behavior, maps, sets, tables, caches, hash,
+  allocation, Word/Int, wrappers, lookup, Curried, and Specftacular.
+- Do not invent a size parameter for size-free enumerateOutUVarWith or
+  enumerateUntil'. Initial-only and success-only results do not satisfy
+  the full objective. No final body, closure, validity, lookup,
+  OriginalInput, finite-carrier, resource, or future completion oracle.
+
+Native lazy demand correspondence remains open. Source edgeTuples[A,B,C]
+demands A,C,B. Different ordinary nullary shapes at A/C skip B and produce
+no tuples. The eager model exposes A,B,C and also produces no tuples.
+This establishes demand difference only. It does not establish final
+leaf heap/cache inequality, nontermination, or a Haskell defect.
+Matching tuple order[B,C,A] is correct. A faithful resumable puller must
+retain the source cursor, reads, faults, and first budget+1 RAW matching
+emissions. Stop without forcing the continuation. Do not assume each
+operand is evaluated once in the source list comprehension.
+
+## Validation, Haskell findings, and restart
+
+The complete local MicroCFTA.Audit build PASSES: 4920 jobs, covering
+4919 ordered modules. The serial record has 1286 rebuild attempts:
+1284 successful attempts and two stale Parent adapter failures. Both
+adapters now pass strict checks and the complete Audit. Two earlier
+900-second segments stopped at 509 and 1036 successes and exited 124.
+Each later segment reused saved successes. The final Audit segment
+peaked at 3041 MiB. The complete checkpoint's maximum recorded peak was
+3419 MiB. Memory stayed at 4 GiB with zero swap. Nix, compiler flags, and
+global queue settings were unchanged. No Haskell full-suite, benchmark,
+or CI claim is made.
+
+The unchanged SourceSynthesisOriginalTupleCall.request endpoint also
+passes a separate Nix/Lake, strict own-source, complete-name and axiom
+check against the final global dependencies. Audit does not import this
+endpoint directly. Its isolated report does not modify old tracked
+reproduction packets.
+
+All 151 public laws have exact final source hashes and standard axiom
+reports within propext, Classical.choice, and Quot.sound. The first
+integration build exposed stale probe, query-read, WorkerActual, and
+numeric graph dependencies. Those ports are repaired. The full import rebuild also found two stale
+Parent call-graph adapters in OperationInvariants and GuardHeapReturns.
+Their graph, completion, uniqueness, and guard steps now use the actual
+tuple family without new premises. The weak growth
+and UnionNormal checks pass without stronger premises. Existing warnings
+outside the edited own-source targets remain unchanged.
+
+The probe-helper commit is 5ea248725fbd65fcf03dced2e4b3713285fa4fbb.
+The atomic global/consumer commit is 71f5e15fc85143153f4f250bb11e41130d7843a1.
+The Parent invariant repair commit is
+20752298f2f32a68b324fa116c59e3f414fa0f02. The guard-heap repair is
+65a8e0dd36d8f2e458285cee2bafef268b79960f.
+All 205 source and reproduction-packet files belong to these four commits.
+The separate documentation commit records the final verification state.
+
+No production Haskell source changes arose in R139. The charging repair
+changes the Lean source model to follow the existing Haskell behavior.
+No Haskell repair is required for this finding. Any later Haskell fix
+MUST also be recorded in root FINDINGS.md for an external agent.
+
+Runtime /tmp/mcfta-global-tuple-20261108-0708 holds compact scripts,
+hashes, final registries, and necessary failure reports. No build-tree
+copies, result archives, or full board dumps are retained. Readable /tmp
+is about 23 MiB with five protected unreadable paths. Recheck before
+publication. Keep ROOT as sole compiler, one capped job at a time, with
+4 GiB memory and zero swap. Do not change global queue or compiler flags.
+Committed reproduction packets do not depend on /tmp. Preserve .hypha/.
+
+Next: derive all-reached joint Program/Type progress and original-input
+bounds for both the worker and the complete enumeration driver. The next
+small role target is Program-slot preservation through actual
+AllocatedClassWorker.runClass and its ordered pass. Derive it from the
+selected Type-region footprint, class_dispatch, and joint row origins
+that retain Top rows. Then compose inherited annotation regions and
+program-child origins at every rows/descendants/walk request, including
+failure prefixes. Keep Type-position requests as a separate case. Use the
+actual tuple call graph now selected by the global and enabled callers.
+Keep the native pull/cursor/stop/fault obligation explicit. Retain exact
+node-count, count, order, signed rank inverses, and all wrapper scopes.
+The final registry must record exact fetched head/main, canonical board
+readback, source/packet/doc equality, terminal jobs, active goal, and /tmp.
+
+---
+
 # Current checkpoint: R138 selected enabled checks use tuple charging
 
 Updated 2026-11-08 07:00 CET. Goal ACTIVE. R138 made PROGRESS. Branch formalize.
