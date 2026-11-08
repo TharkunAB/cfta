@@ -1,3 +1,153 @@
+# R171: checked driver on the returned worker state and shared requirement primitives
+
+Updated: 2026-11-09 00:20 CET. The full goal remains ACTIVE. Pushes to formalize remain
+explicitly authorized. Preserve unrelated .hypha/. No Haskell production
+file changes in this checkpoint. Record future Haskell fixes in FINDINGS.
+
+## Strongest new statement
+
+Given a successful original firstOrderRaw result and the explicit initial
+Room and chosen-depth driver Capacity conditions,
+SourceSynthesisOriginalVerifiedFiniteDriver.accepted constructs the verified
+worker return and runs the literal finite driver on that SAME returned node,
+caller, and final global memos. The worker has its actual ordered reads,
+full Post, language law, readiness, guard carrier, closedness, and recursive
+fields. Returned Fits, startup packet, canonical state, and waiting facts
+are derived. The computed finite driver bound gives a stable chosen-depth
+outcome and resource bounds. Returned warm domains are retained.
+
+The driver outcome may stop at its chosen depth. Graph, policies, metadata,
+and other source callback arguments remain explicit. This theorem does not
+derive sufficient depth, complete enumeration, one total-work bound for the
+full API, or practical fixed64 capacity. The original admission condition
+combines worker Room AND driver-final Capacity. It is not a future-state
+supplier. The general outer worker rank was already proved and remains.
+The selected R170 demand callers and their full contracts remain unchanged.
+
+## Checked new sources
+
+Seven new modules have 52 strict own-source public theorem checks:
+- SourceSynthesisOriginalVerifiedFiniteDriver: 1.
+- SourceCurrentConjunctionRequirementPull: 11.
+- SourceCurrentConjunctionRequirementPullExecution: 7.
+- SourceCurrentConjunctionRequirementPullEffects: 3.
+- SourceCurrentConjunctionRequirementCells: 10.
+- SourceCurrentConjunctionRequirementCellsEffects: 4.
+- SourceCurrentConjunctionRequirementRows: 16.
+
+The class cursor runs literal singleton projection jobs in source order.
+First Empty stops only that conjunction. Execution graphs derive every
+outcome and expose exact failed prefixes. Physical effects need only Ready
+and current pending-forest residency. Shared cell allocation retains stable
+handles. Forcing caches at the same handle, preserves every other cell,
+and uses strict pending-job decrease without a new allowance.
+
+Row preparation runs the SAME actual right-fold equality operation first.
+Contradiction allocates or forces no requirement cells. A live tuple allocates
+columns before class cursors. nextRow skips contradictory raw tuples in
+source order and caches its row and fresh tail at the same head handle.
+Cached hits retain identical complete state. The live-tail receipt identifies
+the exact shorter, unforced raw suffix. These are internal primitives.
+The selected DemandAdmission positive branch STILL calls RowsWorker.tuples.
+No shared-row selected-adoption claim is made.
+
+## Validation and exact commits
+
+Base: 0eb8d2014ad662d14c2d49afbcad1aa92460e079. Refreshed main remains
+bd5a406a6a3f84b7e3ae0906082783911509df83, an ancestor. Proof commits:
+3131e1fc20722a0be4ee49a8a9e25ea939cc164e driver on the worker return;
+5ec5bd6ff90e1c3a318a47b1d4b5b1c8708ed2d4 ordered projection prefixes;
+52236536ac276eea8e75f40bb6feccd0a52481bd shared cells and effects;
+c659cc7fb60087ef4a2aed0937170ca0f0c9e5cc shared row spines.
+The following documentation commit contains this checkpoint and Audit imports.
+
+All seven source hashes and exact public theorem names are recorded in their
+four-file packets under lean/restart-evidence/20261108-*. The complete
+changed reverse-import closure is eight modules in a 5,334-module graph.
+Audit covers all eight. Its 4,331 direct imports expose 88,112 axiom-checked
+theorems, including existing roots newly imported by the driver bridge.
+This count is not 52 new laws plus the previous Audit total.
+Only propext, Classical.choice, and Quot.sound are permitted.
+
+Portable compatibility packet:
+lean/restart-evidence/20261109-shared-requirement-compatibility/.
+Both this packet and the original-verified-finite-driver packet pass when
+launched from /tmp. Checkers derive the repository root from their location.
+No retained temporary directory or build archive is required. Compilation
+used one serial capped command, memory.max/high of 4 GiB, swap of zero, and
+LEAN_NUM_THREADS=1. The compatibility batch reported peak of 4 GiB and exit code 0.
+No global queue or concurrency setting changed. Previous public laws,
+all R170 root-document bytes, and the complete earlier Audit file remain.
+
+## Next selected integration
+
+Replace the positive eager tuple batch with one pending sampled-row spine.
+The table entry and pending queue must hold the SAME spine handle. Force
+one requirement cell before its Empty/budget/open/seen tests. Explore that
+requirement's descendants BEFORE later requirements. Empty discards only
+the current conjunction task. It does not discard remaining cells or rows.
+Overflow inserts no table row; its budget-zero suffix still forces each queued
+requirement for the Empty test.
+
+Derive row-origin credits from actual initial allocation and nextRow.
+Arbitrary private heaps permit cyclic cached tails. The immediate live-tail
+receipt is checked; a full derived origin invariant is not yet implemented.
+At fixed budget use finite queue, requirement-list, and raw-row suffix
+induction. A positive nonempty sample strictly lowers tuple budget.
+A zero-count sample introduces no rows. Cached tails use their retained
+origin credit. Do not add a caller-supplied administrative allowance.
+
+Prove that queue drain leaves every stored spine and requirement cached.
+Then materialize the terminal table by reads alone and reuse grow/answer.
+Failure snapshots must retain the private heaps and unforced queue. Do not
+force unfinished cells to construct an old strict diagnostic. Effects,
+ordered memo receipts, language coverage, and numeric/guard/arity/annotation
+laws must follow the NEW interleaving. Later parent projections occur after
+child exploration; the old eager batch execution equation is false there.
+Preserve all existing weak all-outcome premises when selecting the new path.
+
+## Biggest remaining completion gap
+
+PreparedRecursiveDepth.run_complete_moreDepth preserves an ALREADY complete
+run. It does not derive sufficient depth. Ordinary storage progress is
+bounded by the assigned child forest, but opaque_transfer_pendingSize
+preserves pending cost EXACTLY. The missing source invariant bounds neutral
+Type/recursion preparations across ALL actual siblings before ordinary cost
+falls or literal repeat parking disables the selected site. ValueFields has
+no quantitative ancestry credit. TypeDescentProgress requires joint
+prefix-free endpoints not yet derived across arbitrary source conjoins.
+Do not supply a future iteration bound or transfer one accepted branch's
+completeness to all siblings. Native enumerateFully/Until has no depth
+argument. Source signed size counts Program leaves; it does not count
+annotation-expanded term nodes or selected recursive restarts.
+
+Full scope remains: complete enumeration on the returned graph, exact
+accepted terms per source size, counts/order/BOTH signed inverse laws through
+actual sparse execution, AllSized/fallback/failure/productive infinity,
+lazy table/map/set/cache/hash, Word/Int/allocation, wrappers/lookup/Curried/
+Specftacular, and full Haskell correspondence. No new Haskell repair is
+established here. All earlier Haskell findings remain below.
+
+## Live restart state
+
+Root is the sole compiler. All handles through 2114 are terminal. The latest
+source/frontier checks passed. Reuse existing agents only for bounded owned
+work; no child may compile or use Git. Alpha owned Rows; Gamma owned Cells
+and CellsEffects; Beta audited queue termination and the depth gap. All
+seven checked sources are frozen. Check live ownership before new edits.
+
+Runtime: /tmp/mcfta-same-return-20261108-2345/. It contains small manifests,
+source-check failures, and publication scripts. Our temporary file payload
+is about 28 MiB; readable /tmp including directory blocks is about 35 MiB.
+The Lean build cache is 6.3 GiB inside the repository, not /tmp. Retain marked
+source drafts. No large archive is needed for reproduction. Keep monitoring
+/tmp. Continue small commits and authorized pushes to formalize.
+Historical draft sources remain under lean/drafts with checked pointers.
+
+All R170 document bytes follow unchanged.
+
+---
+
 # R170: selected demand worklists and complete checked callers
 
 Updated: 2026-11-08 23:41 CET. This is the current restart entry. All older sections
