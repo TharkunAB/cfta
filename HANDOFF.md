@@ -1,3 +1,143 @@
+## R165: native query capacity from instruction credit; source finite-driver admission
+
+Updated 2026-11-08 18:52 CET. The full goal remains ACTIVE. R164 was verified progress.
+Four new modules add seven checked public laws. No production Haskell source
+changes in this checkpoint. Earlier source proofs, counterexamples, repairs
+and marked drafts remain intact.
+
+The native binary-query component now has an alternative initial domain
+capacity condition. It uses source-derived instruction credit. It does not
+use the cardinality of the inventory of all possible domains. This result
+covers the same actual checked controls, physical states and returned memo
+tables. It is not a fixed-width native execution guarantee for the system.
+The original worker endpoint and whole-driver reservation still use their
+existing ResourceForecast.Room conditions.
+
+### Checked statements
+
+* SourceCurrentAllocatedNativeFuelWordRanges.raw_domain_prefix bounds the
+  actual domain counter by its initial value plus the raw yielded-step count.
+  This law requires no successful execution, checked Trace or word plan.
+  node_prefix derives the existing physical prefix Receipt from closed
+  available operands, initial Good/SemanticReady, source node/edge bounds,
+  count <= fuel, and initialDomains + fuel < 2^(bits+1). Its inventory is
+  only a source-scope carrier. The inventory length is not a premise.
+  node_step retains the exact physical effects of every next outcome,
+  including failure and blocked outcomes, at count < fuel.
+* SourceCurrentAllocatedNativeCreditWordRanges.word_ranges derives Words
+  for EVERY raw prefix of the actual native request. It uses the independent
+  semantic nodeBudget. The proof checks the shorter prefix, charges its
+  actual last step with InstructionStep.yielded, and derives count <= budget.
+  There is no completed trace, future word plan, or supplied worker return.
+* SourceCurrentAllocatedNativeCreditCompletion.initial constructs an actual
+  complete native request and its physical Receipt under initialDomains +
+  nodeBudget < 2^(bits+1), with the source node/edge bounds and actual initial
+  Good, SemanticReady and idle native owners. Closed available operands
+  derive their own Original scope. The exact returned state retains idle
+  owners and the instruction, mass, node, edge and domain bounds. computed
+  replaces nodeBudget by the existing instructionBound of initial counters
+  and stored payload mass. Neither variant uses powerset inventory room.
+  The two conditions are alternatives; instructionBound need not be smaller
+  than the old inventory bound for every request.
+* SourceSynthesisOriginalFiniteDriver.accepted derives the actual Label
+  construction, equality preparation, cold caller, encoded handle/readback,
+  startup Packet, canonical startup, waiting/index flags, Fits, guard alphabet
+  and zero suspended mass from accepted firstOrderRaw input. One computed
+  Room(final recursiveFuel seed 0) gives a stable literal finite driver run
+  and OutcomeResources. It retains ALL stopped outcomes. The source startup
+  supports both a selector satisfying stored-row membership/length and the
+  literal nodeEdges getter with those laws discharged internally. Policy,
+  graph and initial typing/types/openHoles remain explicit arguments. Pending
+  checks are empty at startup. This is a finite resource theorem. It does not
+  choose sufficient depth or prove correspondence with canonical runsBy.
+
+The strongest original root-worker statement remains
+SourceSynthesisOriginalVerifiedCompletion.accepted: accepted original source
+plus one computed initial Room constructs the same complete cold worker
+return, language preservation, recursive Program fields, closedness,
+physical Type readiness, guard profile and BOTH captured-owner memo
+histories. R165 does not silently replace that theorem's capacity condition.
+The existing general abstract joint rank is already checked in
+SourceCurrentOuterRankAdequacy.initial_node_call. Do not request another
+generic rank as if that theorem were missing.
+
+### Biggest gaps and concrete next work
+
+1. Propagate instruction-credit admission through the actual native-query
+   reservation chain. Whole-driver final Room still contains the old domain
+   inventory test. At modeled width 64 (bits=62), that test is impossible
+   once its profile has eight nodes: 2^(8+8*8)=2^72 exceeds 2^63. This is a
+   limitation of the certificate, not native exhaustion at eight nodes.
+   Replacing the root theorem's condition requires a proved new forecast for
+   every actual later query. A universal future-room premise is not a fix.
+2. Derive the full warm rank/admission package at every actual driver call.
+   The cold initializer cannot replace a call at a returned warm endpoint.
+   Recursive.Packet does not itself provide all causal Mu history, positive
+   support, writer origins, closed stored inputs, or idle outer owners needed
+   by RankAdequacy. Derive these facts from the SAME actual prefix and an
+   original-input forecast. Keep failures, siblings and later requests.
+3. Implement actual suspended native tuple demand. For closed [L,U,R], with
+   an a-row in L and a b-row in R, foldr extend can reject before reading U.
+   The current eager exposures reads all three. A cursor must pull its inner
+   tuple first, scan matching rows, preserve symbol/arity order and duplicates,
+   and stop after budget+1 matching raw tuples without forcing continuation.
+   Each demanded exposure must retain the actual physical heap/cache effects.
+   After count fits, tupleRows/requirements and their shared table/worklist
+   uses are also lazy. A sampling cursor alone does not close that second gap.
+   Union exposure can inspect a whole Set closure before yielding one row.
+4. Finish input-derived driver progress or finite-prefix productivity, exact
+   NODECOUNT accepted terms and counts/order, and BOTH signed rank/unrank
+   inverses through actual sparse execution. Preserve all Sized, fallback,
+   failure, potentially infinite, table/map/set/cache/hash/allocation,
+   wrapper/lookup/Curried/Specftacular paths. Do not invent a size for size-free
+   enumerateUntil' or enumerateOutUVarWith. No U-only or success-only substitute
+   meets this objective. No future trace/fuel/resource/completion/closure/
+   carrier/lookup supplier may become a final original-input premise.
+
+### Haskell findings for the external agent
+
+No Haskell fix was made in R165. Cache.nextId uses unchecked machine-Int
+fetchAddIntArray#. mkIntersectionDom adds one to the interned identity with
+no admission branch. FlatMemo.lookupOrInsert has no word-range rejection
+route. FlatMemo documents a nonnegative first key, while findSlot treats
+exactly -1 as empty; other negative bit patterns can compare normally. The
+model's nonnegative key bound is a documented sufficient contract, not the
+weakest possible bit-pattern condition. None of these facts establishes a
+native controlled overflow error. Allocation wraparound, per-family identity
+reuse, generated result IDs and global cache lifetime still need native
+correspondence or a source-level admission change. No practical reachable
+production counterexample or native divergence is claimed here.
+
+The tuple mismatch above is a demand/cache scheduling difference. It does
+not establish a Haskell bug, cache inequality or nontermination. Public
+constructor forging and hypothetical counter exhaustion must remain separate
+from reachable accepted source input.
+
+### Verification and restart
+
+All four own-source reports pass the project Nix/Lake target, warnings as
+errors, exact public declaration/namespace inventory, explicit #check and
+standard-axiom audit (propext, Classical.choice, Quot.sound only). Focused
+checks ran serially under an effective memory.max=memory.high=4294967296,
+memory.swap.max=0 cap. Earlier dependency warning replays are unchanged.
+There is no new full Audit rebuild; retained R139 full Audit is historical
+coverage, not a fresh run. The Audit import list adds only these four modules.
+
+Compact reproducible packets:
+lean/restart-evidence/20261108-native-fuel-word-ranges
+lean/restart-evidence/20261108-native-credit-word-ranges
+lean/restart-evidence/20261108-native-credit-completion
+lean/restart-evidence/20261108-original-finite-driver
+
+Runtime bookkeeping: /tmp/mcfta-native-credit-capacity-20261108-1842.
+Do not copy build trees or create evidence archives. The last readable /tmp
+measurement before publication was about 15 MB of apparent file data, with
+six protected directories excluded. Recheck block use and free space at
+restart. Preserve unrelated .hypha/. ROOT remains the sole serial compiler.
+The full objective and explicit formalize push authorization remain active.
+
+---
+
 ## R164: original worker completion under computed initial capacity
 
 Updated 2026-11-08 18:22 CET. The full goal remains ACTIVE. R163 was verified progress.

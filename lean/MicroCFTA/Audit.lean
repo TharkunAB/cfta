@@ -4327,3 +4327,7 @@ run_cmd do
 
 #check MicroCFTA.SourceRecursiveIntersectionInputView.empty_originalInput
 #print axioms MicroCFTA.SourceRecursiveIntersectionInputView.empty_originalInput
+import MicroCFTA.SourceCurrentAllocatedNativeFuelWordRanges
+import MicroCFTA.SourceCurrentAllocatedNativeCreditWordRanges
+import MicroCFTA.SourceCurrentAllocatedNativeCreditCompletion
+import MicroCFTA.SourceSynthesisOriginalFiniteDriver
