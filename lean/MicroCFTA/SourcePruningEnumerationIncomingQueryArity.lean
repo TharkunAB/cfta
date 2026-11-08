@@ -1,7 +1,7 @@
 import MicroCFTA.SourcePruningEnumerationIncomingQueryResources
 import MicroCFTA.SourcePruningEnumerationIncomingObservedResources
 import MicroCFTA.SourcePruningEnumerationSharedTargetArity
-import MicroCFTA.SourceCurrentConjunctionTupleArity
+import MicroCFTA.SourceCurrentConjunctionDemandArity
 
 /-!
 # Whole edge-record arity at the actual incoming query endpoint
@@ -32,8 +32,8 @@ local notation "Heap" => SourceEqualityAnnotationHeap.Heap
 local notation "queryAlphabet" => SourceCurrentGeneratedQueryGuardResources.forecast
 local notation "scalar" => SourceCurrentConstrainedCapTargetForecast.scalar
 local notation "instructionBound" => SourceCurrentAllocatedNativeComputedBudget.instructionBound
-local notation "workerFuel" => SourceCurrentConjunctionTupleWorklistNumeric.workerFuel
-local notation "readerFuel" => SourceCurrentConjunctionTupleWorklistNumeric.readerFuel
+local notation "workerFuel" => SourceCurrentConjunctionDemandWorklistNumeric.workerFuel
+local notation "readerFuel" => SourceCurrentConjunctionDemandWorklistNumeric.readerFuel
 local notation "currentTupleBudget" => SourceCurrentConjunctionTupleBudget.currentTupleBudget
 variable {bits : Nat}
 
@@ -88,9 +88,9 @@ theorem complete_resources_arity
         (reached = true →
           ∃ reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula,
             checkedAfter = advancePhysical queried reachedPhysical ∧
-            ∃ actual : SourceCurrentConjunctionTupleExecution.Call currentTupleBudget beforeCaller.fourth query
+            ∃ actual : SourceCurrentConjunctionDemandWorklistExecution.Call currentTupleBudget beforeCaller.fourth query
                 (physical queried) answer reachedPhysical saved,
-              SourceCurrentConjunctionTupleGlobalMemos.CallReads actual {memos with query := queries} final)) ∧
+              SourceCurrentConjunctionDemandWorklistMemos.CallReads actual {memos with query := queries} final)) ∧
       Fits (step profile) queried ∧ Fits (forecast alphabet profile) checkedAfter ∧
       Heap (fun guard => guard ∈ queryAlphabet alphabet profile) checkedAfter.native.machine.heap ∧
       fuel = instructionBound profile.nodes profile.edges profile.mass + 1 ∧
@@ -121,7 +121,7 @@ theorem complete_resources_arity
             obtain ⟨reachedPhysical, same, actual, _reads⟩ := performed rfl
             have ready := SourceCurrentAllocatedConjunctionMemo.ready queried receipt.ready.good
               receipt.ready.semantic receipt.ready.costs
-            have current := SourceCurrentConjunctionTupleArity.call_heap actual ready receipt.available queryArity
+            have current := SourceCurrentConjunctionDemandArity.call_heap actual ready receipt.available queryArity
             simpa only [same, advancePhysical, SourceRecursiveIntersectionThunks.advance] using current
   exact ⟨next, query, queried, answer, checkedAfter, saved, final, queries, replacement, handle,
     fuel, p, h, source, roots, receipt, native, phase, post, querySame, unfolding, sound,
@@ -182,9 +182,9 @@ theorem complete_arity
         (reached = true →
           ∃ reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula,
             checkedAfter = advancePhysical queried reachedPhysical ∧
-            ∃ actual : SourceCurrentConjunctionTupleExecution.Call currentTupleBudget beforeCaller.fourth query
+            ∃ actual : SourceCurrentConjunctionDemandWorklistExecution.Call currentTupleBudget beforeCaller.fourth query
                 (physical queried) answer reachedPhysical saved,
-              SourceCurrentConjunctionTupleGlobalMemos.CallReads actual {memos with query := queries} final)) ∧
+              SourceCurrentConjunctionDemandWorklistMemos.CallReads actual {memos with query := queries} final)) ∧
       SourcePruningEnumerationArityOrigins.Heap checkedAfter.native.machine.heap := by
   obtain ⟨next, query, queried, answer, checkedAfter, saved, final, queries, replacement, handle,
     fuel, p, h, source, roots, receipt, native, phase, post, querySame, unfolding, sound,
@@ -209,7 +209,7 @@ theorem complete_arity
             obtain ⟨reachedPhysical, same, actual, _reads⟩ := performed rfl
             have ready := SourceCurrentAllocatedConjunctionMemo.ready queried receipt.ready.good
               receipt.ready.semantic receipt.ready.costs
-            have current := SourceCurrentConjunctionTupleArity.call_heap actual ready receipt.available queryArity
+            have current := SourceCurrentConjunctionDemandArity.call_heap actual ready receipt.available queryArity
             simpa only [same, advancePhysical, SourceRecursiveIntersectionThunks.advance] using current
   exact ⟨next, query, queried, answer, checkedAfter, saved, final, queries, replacement, handle,
     fuel, p, h, source, roots, receipt, native, phase, post, querySame, unfolding, sound,

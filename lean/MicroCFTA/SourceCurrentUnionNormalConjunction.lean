@@ -1,6 +1,7 @@
 import MicroCFTA.SourceCurrentUnionNormalProjectionGate
 import MicroCFTA.SourceCurrentAllocatedConjunctionWorker
 import MicroCFTA.SourceCurrentConjunctionTupleWorker
+import MicroCFTA.SourceCurrentConjunctionTuplePullHeapEffects
 
 /-!
 # Union normality through actual conjunction exploration
@@ -143,36 +144,41 @@ private theorem decision [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol (Sour
         split <;> exact afterNormal
   · exact normal
 
-private theorem tuple_admission [DecidableEq Symbol]
+private theorem demand_admission [DecidableEq Symbol]
     [DecidableEq (EdgeKey Symbol (SourceSymbolicIndex.Constraint Formula))]
     (worker reader budget : Nat) (values : List (Value Symbol (SourceSymbolicIndex.Constraint Formula)))
     (state : SourceCurrentConjunctionRowsWorker.Physical Symbol Formula) (normal : UnionNormal state.heap) :
-    UnionNormal (SourceCurrentConjunctionTupleAdmission.run worker reader budget values state).state.heap := by
-  unfold SourceCurrentConjunctionTupleAdmission.run
-  apply bind _ _ (exposures reader values state normal)
-  intro edges exposed exposedNormal
-  dsimp only
-  split
-  · exact exposedNormal
-  · split
-    · exact exposedNormal
-    · exact bind _ _ (tuples worker reader _ exposed exposedNormal)
-        (fun _ _ afterNormal => afterNormal)
+    UnionNormal (SourceCurrentConjunctionDemandAdmission.run worker reader budget values state).state.heap := by
+  have sampled := SourceCurrentConjunctionTuplePullHeapEffects.sample_preserves UnionNormal
+    reader budget values state normal
+    (fun heap value _member heapNormal =>
+      SourceCurrentRequiredUnionNormalRead.nodeEdges reader value heap heapNormal)
+  unfold SourceCurrentConjunctionDemandAdmission.run
+  apply bind _ _ sampled
+  intro result exposed exposedNormal
+  cases result with
+  | overflow => exact exposedNormal
+  | fit edges =>
+      cases edges with
+      | nil => exact exposedNormal
+      | cons first rest =>
+          exact bind _ _ (tuples worker reader (first :: rest) exposed exposedNormal)
+            (fun _ _ afterNormal => afterNormal)
 
-private theorem tuple_explore [DecidableEq Symbol]
+private theorem demand_explore [DecidableEq Symbol]
     [DecidableEq (EdgeKey Symbol (SourceSymbolicIndex.Constraint Formula))]
     (worker reader budget : Nat) (table : SourceCurrentConjunctionWorker.Table Symbol Formula)
     (pending : List (List (Value Symbol (SourceSymbolicIndex.Constraint Formula))))
     (state : SourceCurrentConjunctionWorker.Physical Symbol Formula) (normal : UnionNormal state.heap) :
-    UnionNormal (SourceCurrentConjunctionTupleWorker.explore worker reader budget table pending state).state.heap := by
+    UnionNormal (SourceCurrentConjunctionDemandWorker.explore worker reader budget table pending state).state.heap := by
   induction budget using Nat.strongRecOn generalizing table pending state with
   | ind budget lower =>
       induction pending generalizing table state with
       | nil =>
-          simpa only [SourceCurrentConjunctionTupleWorker.explore, SourceCurrentConjunctionWorker.Outcome.state]
+          simpa only [SourceCurrentConjunctionDemandWorker.explore, SourceCurrentConjunctionWorker.Outcome.state]
             using normal
       | cons values rest tail =>
-          rw [SourceCurrentConjunctionTupleWorker.explore.eq_def]
+          rw [SourceCurrentConjunctionDemandWorker.explore.eq_def]
           dsimp only
           split
           · exact tail table state normal
@@ -182,8 +188,8 @@ private theorem tuple_explore [DecidableEq Symbol]
               have positive := (SourceCurrentConjunctionEmptinessTable.admitted
                 SourceCurrentConjunctionRequirements.key SourceCurrentConjunctionWorklist.closed budget table values
                 (Bool.eq_false_iff.mpr admitted)).1
-              have retained := tuple_admission worker reader budget values state normal
-              cases actual : SourceCurrentConjunctionTupleAdmission.run worker reader budget values state with
+              have retained := demand_admission worker reader budget values state normal
+              cases actual : SourceCurrentConjunctionDemandAdmission.run worker reader budget values state with
               | failed fault after =>
                   simpa only [actual, SourceCurrentConjunctionRowsWorker.Outcome.state,
                     SourceCurrentConjunctionWorker.Outcome.state] using retained
@@ -194,20 +200,20 @@ private theorem tuple_explore [DecidableEq Symbol]
                   | overflow => exact lower 0 positive table rest after afterNormal
                   | zero => exact tail _ after afterNormal
                   | positive predecessor requirements =>
-                      have charge := SourceCurrentConjunctionTupleAdmission.positive_charge worker reader budget values
+                      have charge := SourceCurrentConjunctionDemandAdmission.positive_charge worker reader budget values
                         state after predecessor requirements actual
                       exact lower (budget - (predecessor + 1)) (by omega) _ _ after afterNormal
 
-private theorem tuple_decision [DecidableEq Symbol]
+private theorem demand_decision [DecidableEq Symbol]
     [DecidableEq (EdgeKey Symbol (SourceSymbolicIndex.Constraint Formula))]
     [DecidableEq (Value Symbol (SourceSymbolicIndex.Constraint Formula))] (worker reader budget : Nat)
     (value : Value Symbol (SourceSymbolicIndex.Constraint Formula))
     (state : SourceCurrentConjunctionWorker.Physical Symbol Formula) (normal : UnionNormal state.heap) :
-    UnionNormal (SourceCurrentConjunctionTupleWorker.decision worker reader budget value state).state.heap := by
-  unfold SourceCurrentConjunctionTupleWorker.decision
+    UnionNormal (SourceCurrentConjunctionDemandWorker.decision worker reader budget value state).state.heap := by
+  unfold SourceCurrentConjunctionDemandWorker.decision
   split
-  · have retained := tuple_explore worker reader budget [] [[value]] state normal
-    cases actual : SourceCurrentConjunctionTupleWorker.explore worker reader budget [] [[value]] state with
+  · have retained := demand_explore worker reader budget [] [[value]] state normal
+    cases actual : SourceCurrentConjunctionDemandWorker.explore worker reader budget [] [[value]] state with
     | failed =>
         simpa only [actual, SourceCurrentConjunctionWorker.Outcome.bind,
           SourceCurrentConjunctionWorker.Outcome.state] using retained
@@ -226,15 +232,15 @@ theorem call [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [Decidabl
     (worker reader budget : Nat) (memo : SourceCurrentEmptinessMemo.Memo) (query : Value Symbol Guard)
     (before : SourceEqualityNativeDemand.State width) (normal : UnionNormal before.native.machine.heap) :
     UnionNormal (SourceCurrentAllocatedConjunctionWorker.call worker reader budget query before memo).state.native.machine.heap := by
-  have retained : UnionNormal (SourceCurrentConjunctionTupleWorker.call worker reader budget memo query
+  have retained : UnionNormal (SourceCurrentConjunctionDemandWorker.call worker reader budget memo query
       (SourceCurrentAllocatedNativeEffects.physical before)).state.heap := by
-    unfold SourceCurrentConjunctionTupleWorker.call
+    unfold SourceCurrentConjunctionDemandWorker.call
     split
     · exact normal
-    · have checked := tuple_decision worker reader budget query (SourceCurrentAllocatedNativeEffects.physical before) normal
-      cases actual : SourceCurrentConjunctionTupleWorker.decision worker reader budget query (SourceCurrentAllocatedNativeEffects.physical before) <;>
+    · have checked := demand_decision worker reader budget query (SourceCurrentAllocatedNativeEffects.physical before) normal
+      cases actual : SourceCurrentConjunctionDemandWorker.decision worker reader budget query (SourceCurrentAllocatedNativeEffects.physical before) <;>
         simpa only [actual,SourceCurrentConjunctionWorker.Outcome.bind,SourceCurrentConjunctionWorker.Outcome.state] using checked
-  cases actual : SourceCurrentConjunctionTupleWorker.call worker reader budget memo query
+  cases actual : SourceCurrentConjunctionDemandWorker.call worker reader budget memo query
       (SourceCurrentAllocatedNativeEffects.physical before) <;>
     simpa only [SourceCurrentAllocatedConjunctionWorker.call,actual,SourceCurrentAllocatedConjunctionWorker.Outcome.state,
       SourceCurrentConjunctionWorker.Outcome.state,SourceCurrentAllocatedQueryMemo.advancePhysical,SourceRecursiveIntersectionThunks.advance] using retained

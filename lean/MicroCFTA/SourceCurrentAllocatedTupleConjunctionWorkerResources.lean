@@ -1,5 +1,5 @@
 import MicroCFTA.SourceCurrentAllocatedTupleConjunctionWorkerActual
-import MicroCFTA.SourceCurrentConjunctionTupleWorklistNumeric
+import MicroCFTA.SourceCurrentConjunctionDemandWorklistNumeric
 import MicroCFTA.SourceCurrentConstrainedCapRequiredResources
 
 /-!
@@ -29,15 +29,15 @@ local notation "Caller" => SourceCurrentAllocatedPartialState.State
 local notation "Physical" => SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula
 local notation "Memo" => SourceCurrentEmptinessMemo.Memo
 local notation "Memos" => EndpointMemoGateTrace.Memos
-local notation "Call" => SourceCurrentConjunctionTupleExecution.Call
-local notation "CallReads" => SourceCurrentConjunctionTupleGlobalMemos.CallReads
+local notation "Call" => SourceCurrentConjunctionDemandWorklistExecution.Call
+local notation "CallReads" => SourceCurrentConjunctionDemandWorklistMemos.CallReads
 local notation "guards" => SourceCurrentConjunctionGuardUniverse.guards
-local notation "workerFuel" => SourceCurrentConjunctionTupleWorklistNumeric.workerFuel
-local notation "readerFuel" => SourceCurrentConjunctionTupleWorklistNumeric.readerFuel
+local notation "workerFuel" => SourceCurrentConjunctionDemandWorklistNumeric.workerFuel
+local notation "readerFuel" => SourceCurrentConjunctionDemandWorklistNumeric.readerFuel
 
 /-- The entry heap and profile supply constructor bounds while retaining the original domain bound. -/
 noncomputable def forecast (heap : Heap) (budget : Nat) (profile : Profile) : Profile :=
-  let resource := SourceCurrentConjunctionTupleWorklistResources.forecast (guards heap) budget 1 (scalar profile)
+  let resource := SourceCurrentConjunctionDemandWorklistNumeric.forecast (guards heap) budget 1 (scalar profile)
   ⟨resource, resource, profile.domains, resource⟩
 
 variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq (Value Symbol Guard)] {width : Nat}
@@ -65,7 +65,7 @@ theorem finite_resources {inventory : Inventory} {before : Caller width}
     initial.ready.semantic initial.ready.costs
   have scalarFits := (SourceCurrentConstrainedCapRequiredResources.of_checked fits).scalar_fits
   obtain ⟨answer, reached, saved, actual, _effects, numeric, replay⟩ :=
-    SourceCurrentConjunctionTupleWorklistNumeric.call_complete budget before.fourth query (physical before.checked)
+    SourceCurrentConjunctionDemandWorklistNumeric.call_complete budget before.fourth query (physical before.checked)
       (scalar profile) ready available scalarFits
   obtain ⟨final, reads, post, sound, returnedAvailable, unfolding, querySame⟩ :=
     SourceCurrentAllocatedTupleConjunctionCaller.actual formulas solver actual initial available
@@ -98,7 +98,7 @@ theorem raw_done_resources {inventory : Inventory} {p h budget : Nat}
   have ready := SourceCurrentAllocatedConjunctionMemo.ready before.checked initial.ready.good
     initial.ready.semantic initial.ready.costs
   have scalarFits := (SourceCurrentConstrainedCapRequiredResources.of_checked fits).scalar_fits
-  have numeric := SourceCurrentConjunctionTupleWorklistNumeric.call_bound actual
+  have numeric := SourceCurrentConjunctionDemandWorklistNumeric.call_bound actual
     (guards before.checked.native.machine.heap) (scalar profile) ready available scalarFits
     (SourceCurrentConjunctionGuardUniverse.initial before.checked.native.machine.heap
       ready.semantic.ready.semantic.1.normal.facts)

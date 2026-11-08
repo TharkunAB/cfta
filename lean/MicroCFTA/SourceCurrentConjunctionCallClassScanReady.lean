@@ -26,13 +26,12 @@ theorem call_ready {width : Nat}
     SourceCurrentConjunctionClassScan.Ready actual.state := by
   have ready := SourceCurrentAllocatedConjunctionMemo.ready before.checked context.ready.good
     context.ready.semantic context.ready.costs
-  have produced := SourceCurrentConjunctionTupleWorkerEffects.call_effects p h budget before.fourth query
+  have produced := SourceCurrentConjunctionDemandWorklistEffects.call_effects p h budget before.fourth query
     (physical before.checked) ready available
   have effects : SourceCurrentConjunctionRowsAllocation.Effects (physical before.checked)
-      (SourceCurrentConjunctionTupleWorker.call p h budget before.fourth query (physical before.checked)).state := by
-    refine Eq.mp ?_ produced
-    congr; exact Subsingleton.elim _ _
-  cases actual : SourceCurrentConjunctionTupleWorker.call p h budget before.fourth query
+      (SourceCurrentConjunctionDemandWorker.call p h budget before.fourth query (physical before.checked)).state := by
+    exact produced
+  cases actual : SourceCurrentConjunctionDemandWorker.call p h budget before.fourth query
       (physical before.checked) with
   | done output after =>
     rcases output with ⟨answer, saved⟩

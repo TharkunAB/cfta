@@ -1,7 +1,7 @@
 import MicroCFTA.SourceCurrentAllocatedPartialInvariant
 import MicroCFTA.SourceCurrentAllocatedTupleConjunctionReadValidity
-import MicroCFTA.SourceCurrentConjunctionTupleMemo
-import MicroCFTA.SourceCurrentConjunctionTupleWorkerProbes
+import MicroCFTA.SourceCurrentConjunctionDemandMemo
+import MicroCFTA.SourceCurrentConjunctionDemandWorklistEffects
 
 /-!
 # Tuple-budget calls retain the full outer caller
@@ -23,19 +23,19 @@ local notation "Caller" => SourceCurrentAllocatedPartialState.State
 local notation "Physical" => SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula
 local notation "Memo" => SourceCurrentEmptinessMemo.Memo
 local notation "Memos" => EndpointMemoGateTrace.Memos
-local notation "Call" => SourceCurrentConjunctionTupleExecution.Call
-local notation "CallReads" => SourceCurrentConjunctionTupleGlobalMemos.CallReads
+local notation "Call" => SourceCurrentConjunctionDemandWorklistExecution.Call
+local notation "CallReads" => SourceCurrentConjunctionDemandWorklistMemos.CallReads
 variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq (Value Symbol Guard)] {width : Nat}
 
 private theorem call_probes {budget : Nat} {memo saved : Memo} {query : Value Symbol Guard}
     {before after : Physical} {answer : Bool} (actual : Call budget memo query before answer after saved)
     (ready : SourceCurrentConjunctionRowsAllocation.Ready before) (available : Available before.heap query)
     (probes : InternedFreshOrdinaryProbeHeap.Heap before.heap) : InternedFreshOrdinaryProbeHeap.Heap after.heap := by
-  obtain ⟨p, h, done⟩ := SourceCurrentConjunctionTupleExecution.call_complete actual
+  obtain ⟨p, h, done⟩ := SourceCurrentConjunctionDemandWorklistExecution.call_complete actual
   have kept : InternedFreshOrdinaryProbeHeap.Heap
-      (SourceCurrentConjunctionTupleWorker.call p h budget memo query before).state.heap :=
+      (SourceCurrentConjunctionDemandWorker.call p h budget memo query before).state.heap :=
     Eq.mp (by congr <;> exact Subsingleton.elim _ _)
-      (SourceCurrentConjunctionTupleWorkerProbes.call_probes p h budget memo query before ready probes available)
+      (SourceCurrentConjunctionDemandWorklistEffects.call_probes p h budget memo query before ready probes available)
   have completed := done p h (Nat.le_refl _) (Nat.le_refl _)
   simpa only [completed, SourceCurrentConjunctionWorker.Outcome.state] using kept
 
@@ -53,7 +53,7 @@ theorem verified {inventory : Inventory} {budget : Nat} {before : Caller width} 
       Extends memos.unfolding final.unfolding ∧ final.query = memos.query := by
   have ready := SourceCurrentAllocatedConjunctionMemo.ready before.checked initial.ready.good
     initial.ready.semantic initial.ready.costs
-  obtain ⟨stepEffects, correct, sound, retained⟩ := SourceCurrentConjunctionTupleMemo.verified formulas solver
+  obtain ⟨stepEffects, correct, sound, retained⟩ := SourceCurrentConjunctionDemandMemo.verified formulas solver
     actual ready available initial.correct
   have receipt := SourceCurrentAllocatedConjunctionMemo.lift_effects before.checked after
     initial.ready.good initial.ready.idle stepEffects
@@ -82,7 +82,7 @@ theorem actual {inventory : Inventory} {budget : Nat} {before : Caller width} {a
       Extends memos.unfolding final.unfolding ∧ final.query = memos.query := by
   have ready := SourceCurrentAllocatedConjunctionMemo.ready before.checked initial.ready.good
     initial.ready.semantic initial.ready.costs
-  obtain ⟨final, reads, _⟩ := SourceCurrentConjunctionTupleGlobalMemos.call_memos call ready available memos initial.globals
+  obtain ⟨final, reads, _⟩ := SourceCurrentConjunctionDemandWorklistMemos.call_memos call ready available memos initial.globals
   exact ⟨final, reads, verified formulas solver reads initial available⟩
 
 /-- Legitimate caller entry derives a finite tuple call and its full returned invariant. -/
@@ -97,7 +97,7 @@ theorem finite {inventory : Inventory} {before : Caller width} {query : Value Sy
       Extends memos.unfolding final.unfolding ∧ final.query = memos.query := by
   have ready := SourceCurrentAllocatedConjunctionMemo.ready before.checked initial.ready.good
     initial.ready.semantic initial.ready.costs
-  obtain ⟨answer, after, saved, call, _⟩ := SourceCurrentConjunctionTupleMemo.complete budget before.fourth query
+  obtain ⟨answer, after, saved, call, _⟩ := SourceCurrentConjunctionDemandMemo.complete budget before.fourth query
     (physical before.checked) ready available
   obtain ⟨final, reads, post⟩ := actual formulas solver call initial available
   exact ⟨answer, after, saved, final, call, reads, post⟩

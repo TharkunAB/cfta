@@ -1,5 +1,5 @@
 import MicroCFTA.SourceCurrentConjunctionWorkerCompletion
-import MicroCFTA.SourceCurrentConjunctionTupleExecution
+import MicroCFTA.SourceCurrentConjunctionDemandWorklistExecution
 
 /-!
 # Exact return uniqueness for the actual conjunction memo call
@@ -37,11 +37,11 @@ theorem call [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [Decidabl
 theorem tuple_call [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq (Value Symbol Guard)]
     {budget : Nat} {memo firstSaved secondSaved : Memo} {query : Value Symbol Guard}
     {before firstAfter secondAfter : Physical} {firstAnswer secondAnswer : Bool}
-    (first : SourceCurrentConjunctionTupleExecution.Call budget memo query before firstAnswer firstAfter firstSaved)
-    (second : SourceCurrentConjunctionTupleExecution.Call budget memo query before secondAnswer secondAfter secondSaved) :
+    (first : SourceCurrentConjunctionDemandWorklistExecution.Call budget memo query before firstAnswer firstAfter firstSaved)
+    (second : SourceCurrentConjunctionDemandWorklistExecution.Call budget memo query before secondAnswer secondAfter secondSaved) :
     firstAnswer = secondAnswer ∧ firstAfter = secondAfter ∧ firstSaved = secondSaved := by
-  obtain ⟨firstP, firstH, firstStable⟩ := SourceCurrentConjunctionTupleExecution.call_complete first
-  obtain ⟨secondP, secondH, secondStable⟩ := SourceCurrentConjunctionTupleExecution.call_complete second
+  obtain ⟨firstP, firstH, firstStable⟩ := SourceCurrentConjunctionDemandWorklistExecution.call_complete first
+  obtain ⟨secondP, secondH, secondStable⟩ := SourceCurrentConjunctionDemandWorklistExecution.call_complete second
   have firstAt := firstStable (max firstP secondP) (max firstH secondH)
     (Nat.le_max_left _ _) (Nat.le_max_left _ _)
   have secondAt := secondStable (max firstP secondP) (max firstH secondH)

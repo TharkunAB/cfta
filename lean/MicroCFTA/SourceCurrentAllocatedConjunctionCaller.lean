@@ -21,8 +21,8 @@ local notation "Caller" => SourceCurrentAllocatedPartialState.State
 local notation "Physical" => SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula
 local notation "Memo" => SourceCurrentEmptinessMemo.Memo
 local notation "Memos" => EndpointMemoGateTrace.Memos
-local notation "Call" => SourceCurrentConjunctionTupleExecution.Call
-local notation "CallReads" => SourceCurrentConjunctionTupleGlobalMemos.CallReads
+local notation "Call" => SourceCurrentConjunctionDemandWorklistExecution.Call
+local notation "CallReads" => SourceCurrentConjunctionDemandWorklistMemos.CallReads
 variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq (Value Symbol Guard)] {width : Nat}
 variable (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
 

@@ -1,4 +1,4 @@
-import MicroCFTA.SourceCurrentConjunctionTupleWorkerEffects
+import MicroCFTA.SourceCurrentConjunctionDemandWorklistEffects
 import MicroCFTA.SourceCurrentConjunctionWorkerEffects
 import MicroCFTA.SourceCurrentConjunctionRowsWarmEffects
 
@@ -122,9 +122,9 @@ theorem allocated_call_effects {width : Nat} (p h budget : Nat) (memo : Memo)
     let actual := SourceCurrentAllocatedConjunctionWorker.call p h budget query before memo
     Effects (SourceCurrentAllocatedNativeEffects.physical before)
       (SourceCurrentAllocatedNativeEffects.physical actual.state) := by
-  have first := SourceCurrentConjunctionTupleWorkerEffects.call_effects p h budget memo query
+  have first := SourceCurrentConjunctionDemandWorklistEffects.call_effects p h budget memo query
     (SourceCurrentAllocatedNativeEffects.physical before) ready available
-  cases actual : SourceCurrentConjunctionTupleWorker.call p h budget memo query
+  cases actual : SourceCurrentConjunctionDemandWorker.call p h budget memo query
       (SourceCurrentAllocatedNativeEffects.physical before) with
   | done output after =>
     rcases output with ⟨answer, saved⟩

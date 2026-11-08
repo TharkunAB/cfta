@@ -74,7 +74,7 @@ theorem scan_complete {budget : Nat} {values : List (Value Symbol Guard)}
       obtain ⟨s, secondaryDone⟩ := SourceCurrentAllocatedGateWorker.secondary_complete
         (before := advanceHeap before heap) secondary
       obtain ⟨p, h, n, queryDone⟩ := SourceCurrentAllocatedSeededWorkerCompletion.seeded_complete seeded
-      obtain ⟨decisionP, decisionH, checkedDone⟩ := SourceCurrentConjunctionTupleExecution.call_complete decision
+      obtain ⟨decisionP, decisionH, checkedDone⟩ := SourceCurrentConjunctionDemandWorklistExecution.call_complete decision
       obtain ⟨laterG, laterS, laterP, laterH, laterN, tailDone⟩ := ih
       refine ⟨max g laterG, max s laterS, max p (max decisionP laterP),
         max h (max decisionH laterH), max n laterN, ?_⟩
@@ -93,7 +93,7 @@ theorem scan_complete {budget : Nat} {values : List (Value Symbol Guard)}
       obtain ⟨s, secondaryDone⟩ := SourceCurrentAllocatedGateWorker.secondary_complete
         (before := advanceHeap before heap) secondary
       obtain ⟨p, h, n, queryDone⟩ := SourceCurrentAllocatedSeededWorkerCompletion.seeded_complete seeded
-      obtain ⟨decisionP, decisionH, checkedDone⟩ := SourceCurrentConjunctionTupleExecution.call_complete decision
+      obtain ⟨decisionP, decisionH, checkedDone⟩ := SourceCurrentConjunctionDemandWorklistExecution.call_complete decision
       refine ⟨g, s, max p decisionP, max h decisionH, n, ?_⟩
       intro G S P H N enoughG enoughS enoughP enoughH enoughN
       have first := primaryDone G enoughG

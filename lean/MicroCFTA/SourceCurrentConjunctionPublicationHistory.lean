@@ -1,4 +1,5 @@
-import MicroCFTA.SourceCurrentConjunctionTupleSoundness
+import MicroCFTA.SourceCurrentConjunctionDemandWorklistSoundness
+import MicroCFTA.SourceCurrentConjunctionDemandCompletion
 import MicroCFTA.SourceCurrentConjunctionRowsSoundness
 import MicroCFTA.SourceCurrentRequiredPublicationHistory
 
@@ -16,7 +17,8 @@ open MergedColdReaderClosedInputs (ClosedValues ClosedEdges)
 open SourceEqualityRequiredSemanticCache (SemanticReady)
 open SourceCurrentConjunctionRowsAllocation (Ready Tuple Tuples Rows)
 open SourceCurrentConjunctionWorklist (PendingReady)
-open SourceCurrentConjunctionTupleExecution (Admission Run)
+open SourceCurrentConjunctionDemandExecution (Admission)
+open SourceCurrentConjunctionDemandWorklistExecution (Run)
 open SourceCurrentNativeMuPublication (History)
 local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
 local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
@@ -140,12 +142,34 @@ private theorem admission [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guar
     (actual : Admission budget nodes before result after) (ready : Ready before)
     (available : Values before.heap nodes) (closed : ClosedValues nodes) :
     Nonempty (History before.heap after.heap) := by
+  obtain ⟨h, sampled, middle, reads, _readRows, sampledEq, actualReads, included, _equality, processed⟩ :=
+    actual.demand_reads
+  obtain ⟨initial⟩ := exposures actualReads ready.semantic ready.costs
+    (fun value member => available value (included value member))
+  have physical := SourceCurrentConjunctionTuplePullTotalEffects.sample_effects h budget nodes before ready available
+  have kept : SourceCurrentConjunctionRowsAllocation.Effects before middle := by
+    simpa only [sampledEq, SourceCurrentConjunctionRowsWorker.Outcome.state] using physical.1
   cases result with
   | overflow =>
-      cases actual with
-      | overflow reads _ => exact exposures reads ready.semantic ready.costs available
-  | zero => exact rows actual.zero_rows ready available closed
-  | positive predecessor values => exact rows actual.positive_rows.2 ready available closed
+      cases sampled with
+      | overflow => exact ⟨by simpa only [processed] using initial⟩
+      | fit => cases processed
+  | zero =>
+      cases sampled with
+      | overflow => cases processed
+      | fit edges =>
+          cases edges with
+          | nil => exact ⟨by simpa only [processed] using initial⟩
+          | cons => cases processed
+  | positive predecessor values =>
+      cases sampled with
+      | overflow => cases processed
+      | fit edges =>
+          have resident := physical.2 (.fit edges) middle sampledEq
+          have closedRows := SourceCurrentConjunctionTuplePullClosedSample.sample_fit
+            h budget nodes before middle edges sampledEq ready available closed
+          obtain ⟨later⟩ := tuples processed.2 kept.ready resident closedRows
+          exact ⟨.trans initial later⟩
 
 private theorem run [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {budget : Nat} {table final : List (SourceCurrentConjunctionEmptinessTable.Entry Node)}
     {pending : List (List Node)} {before after : Physical}
@@ -182,7 +206,7 @@ private theorem run [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {b
       have closed := SourceCurrentConjunctionWorklist.closed_values _
         (SourceCurrentConjunctionEmptinessTable.admitted SourceCurrentConjunctionRequirements.key
           SourceCurrentConjunctionWorklist.closed _ _ _ fresh).2.1
-      have own := SourceCurrentConjunctionRowsSoundness.rows_verified actual.positive_rows.2 ready inputs closed
+      have own := actual.verified ready inputs closed
       obtain ⟨initial⟩ := admission actual ready inputs closed
       obtain ⟨later⟩ := ih own.1.ready (by
         intro requirement member
@@ -194,7 +218,7 @@ private theorem run [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {b
       exact ⟨.trans initial later⟩
 
 private theorem decision [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Node] {budget : Nat} {value : Node} {before after : Physical} {answer : Bool}
-    (actual : SourceCurrentConjunctionTupleExecution.Decision budget value before answer after)
+    (actual : SourceCurrentConjunctionDemandWorklistExecution.Decision budget value before answer after)
     (ready : Ready before) (available : Available before.heap value) : Nonempty (History before.heap after.heap) := by
   cases actual with
   | open_input => exact ⟨.refl _⟩
@@ -204,7 +228,7 @@ private theorem decision [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard
 
 /-- An actual memo call derives its own causal publication interval from physical readiness. -/
 theorem call [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Node] {budget : Nat} {memo saved : Memo} {query : Node} {before after : Physical} {answer : Bool}
-    (actual : SourceCurrentConjunctionTupleExecution.Call budget memo query before answer after saved)
+    (actual : SourceCurrentConjunctionDemandWorklistExecution.Call budget memo query before answer after saved)
     (ready : Ready before) (available : Available before.heap query) :
     Nonempty (History before.heap after.heap) := by
   cases actual with

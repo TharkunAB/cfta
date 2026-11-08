@@ -209,7 +209,7 @@ theorem complete (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver :
                     (advanceHeap (advanceHeap before other) nextAnchor) ∧
                   ∀ otherQuery otherMiddle, SourceCurrentAllocatedSeededQuery.Seeded values (paths.map (List.map Int.ofNat))
                     (advanceHeap (advanceHeap before other) nextAnchor) otherQuery otherMiddle →
-                    ∀ otherLater otherSaved, SourceCurrentConjunctionTupleExecution.Call budget memo otherQuery (physical otherMiddle) false otherLater otherSaved →
+                    ∀ otherLater otherSaved, SourceCurrentConjunctionDemandWorklistExecution.Call budget memo otherQuery (physical otherMiddle) false otherLater otherSaved →
                       answer = false ∧ otherLater = later ∧ otherSaved = savedMemo := by
                 intro other actual nextAnchor otherSecondary
                 obtain ⟨_same, rfl⟩ := EndpointStatefulGateTrace.class_trace_unique source reaches values paths

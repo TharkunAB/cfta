@@ -1,7 +1,7 @@
 import MicroCFTA.SourceCurrentAllocatedTupleConjunctionWorker
-import MicroCFTA.SourceCurrentConjunctionTupleMemo
-import MicroCFTA.SourceCurrentConjunctionTupleWorkerProbes
-import MicroCFTA.SourceCurrentConjunctionTupleWeakEffects
+import MicroCFTA.SourceCurrentConjunctionDemandMemo
+import MicroCFTA.SourceCurrentConjunctionDemandWorklistEffects
+import MicroCFTA.SourceCurrentConjunctionDemandWorklistEffects
 import MicroCFTA.SourceCurrentAllocatedPartialInvariant
 import MicroCFTA.SourceQueryUnfoldMemo
 
@@ -48,9 +48,9 @@ theorem allocated_weak_effects {width : Nat} (p h budget : Nat) (memo : Memo)
   cases Subsingleton.elim (inferInstance : DecidableEq (EdgeKey Symbol Guard))
     (fun a b => instDecidableEqEdgeKey a b)
   have beforeHeapEq : (physical before).heap = before.native.machine.heap := rfl
-  have first := SourceCurrentConjunctionTupleWeakEffects.call_effects p h budget memo query
+  have first := SourceCurrentConjunctionDemandWorklistEffects.weak_call_effects p h budget memo query
     (physical before) semantic covered available closed
-  cases actual : SourceCurrentConjunctionTupleWorker.call p h budget memo query (physical before) with
+  cases actual : SourceCurrentConjunctionDemandWorker.call p h budget memo query (physical before) with
   | done output after =>
       rcases output with ⟨answer, saved⟩
       have heapEq : (advancePhysical before after).native.machine.heap = after.heap :=
@@ -104,16 +104,16 @@ theorem call_post {width : Nat}
     (fun a b => instDecidableEqEdgeKey a b)
   have ready := SourceCurrentAllocatedConjunctionMemo.ready before.checked context.ready.good
     context.ready.semantic context.ready.costs
-  have checked := SourceCurrentConjunctionTupleMemo.call_outcome formulas solver p h budget
+  have checked := SourceCurrentConjunctionDemandMemo.call_outcome formulas solver p h budget
     before.fourth query (physical before.checked) ready available context.correct
-  have probes := SourceCurrentConjunctionTupleWorkerProbes.call_probes p h budget before.fourth
+  have probes := SourceCurrentConjunctionDemandWorklistEffects.call_probes p h budget before.fourth
     query (physical before.checked) ready context.probes available
-  cases actual : SourceCurrentConjunctionTupleWorker.call p h budget before.fourth query
+  cases actual : SourceCurrentConjunctionDemandWorker.call p h budget before.fourth query
       (physical before.checked) with
   | done output after =>
       rcases output with ⟨answer, saved⟩
       simp only [actual, SourceCurrentConjunctionWorker.Outcome.state,
-        SourceCurrentConjunctionTupleMemo.OutcomeCorrect] at checked
+        SourceCurrentConjunctionDemandMemo.OutcomeCorrect] at checked
       have clean : ProbeHeap after.heap := by
         simpa only [actual, SourceCurrentConjunctionWorker.Outcome.state] using probes
       have post := physical_post before after saved memos context checked.1 checked.2.1 clean checked.2.2.2
@@ -122,7 +122,7 @@ theorem call_post {width : Nat}
         SourceCurrentAllocatedConjunctionWorker.Outcome.memo] using post
   | failed fault after =>
       simp only [actual, SourceCurrentConjunctionWorker.Outcome.state,
-        SourceCurrentConjunctionTupleMemo.OutcomeCorrect] at checked
+        SourceCurrentConjunctionDemandMemo.OutcomeCorrect] at checked
       have clean : ProbeHeap after.heap := by
         simpa only [actual, SourceCurrentConjunctionWorker.Outcome.state] using probes
       have post := physical_post before after before.fourth memos context checked.1 checked.2 clean

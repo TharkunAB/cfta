@@ -107,9 +107,9 @@ noncomputable def classFuel (budget count : Nat) (paths : Class) (alphabet : Lis
   max (SourceCurrentGateFrameResources.workerFuel paths profile)
     (max (SourceCurrentGateFrameResources.workerFuel paths secondary)
       (max (SourceCurrentConstrainedCapSeededForecast.fuel count signed seeded)
-        (max (SourceCurrentConjunctionTupleWorklistNumeric.workerFuel guards budget 1
+        (max (SourceCurrentConjunctionDemandWorklistNumeric.workerFuel guards budget 1
           (SourceCurrentConstrainedCapTargetForecast.scalar native))
-          (SourceCurrentConjunctionTupleWorklistNumeric.readerFuel guards budget 1
+          (SourceCurrentConjunctionDemandWorklistNumeric.readerFuel guards budget 1
             (SourceCurrentConstrainedCapTargetForecast.scalar native)))))
 
 /-- The class ceiling covers both gates, all seeded phases, and both conjunction workers. -/
@@ -118,11 +118,11 @@ theorem classFuel_limits (budget count : Nat) (paths : Class) (alphabet : List G
     SourceCurrentGateFrameResources.workerFuel paths (gateProfile paths profile) ≤ classFuel budget count paths alphabet profile ∧
     SourceCurrentConstrainedCapSeededForecast.fuel count (paths.map (List.map Int.ofNat))
       (gateProfile paths (gateProfile paths profile)) ≤ classFuel budget count paths alphabet profile ∧
-    SourceCurrentConjunctionTupleWorklistNumeric.workerFuel (classStep budget count paths alphabet profile).1 budget 1
+    SourceCurrentConjunctionDemandWorklistNumeric.workerFuel (classStep budget count paths alphabet profile).1 budget 1
       (SourceCurrentConstrainedCapTargetForecast.scalar
         (seedProfile count (paths.map (List.map Int.ofNat)) (gateProfile paths (gateProfile paths profile)))) ≤
           classFuel budget count paths alphabet profile ∧
-    SourceCurrentConjunctionTupleWorklistNumeric.readerFuel (classStep budget count paths alphabet profile).1 budget 1
+    SourceCurrentConjunctionDemandWorklistNumeric.readerFuel (classStep budget count paths alphabet profile).1 budget 1
       (SourceCurrentConstrainedCapTargetForecast.scalar
         (seedProfile count (paths.map (List.map Int.ofNat)) (gateProfile paths (gateProfile paths profile)))) ≤
           classFuel budget count paths alphabet profile := by

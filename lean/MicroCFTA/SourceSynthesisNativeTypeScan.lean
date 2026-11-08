@@ -1,12 +1,12 @@
 import MicroCFTA.SourceSynthesisNativeTypeGate
 import MicroCFTA.SourceSynthesisNativeTypeSeededProfile
-import MicroCFTA.SourceCurrentConjunctionTupleGuard
+import MicroCFTA.SourceCurrentConjunctionDemandGuard
 
 /-!
 # Type readiness through the actual current class scan
 
 The scan retains its literal warm native and equality-operation states.
-Gates and seeded queries derive their causal guard profiles. Actual tuple
+Gates and seeded queries derive their causal guard profiles. Actual demand
 decisions retain the same profile. The returned profile supplies the
 conditional Mu store for subsequent Type requests. The original forest
 stays fixed, so its structural routes and closedness stay fixed.
@@ -55,12 +55,12 @@ private theorem advance (lib : Library) (before : Checked width) (after : Physic
 
 variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq (Value Symbol Guard)]
 
-/-- An actual tuple memo call retains the full warm state and causal Type profile. -/
+/-- An actual demand memo call retains the full warm state and causal Type profile. -/
 theorem decision (lib : Library) (formulas : SourceGuards.Formulas FullSyntax.Formula)
     (solver : SourceGuards.Entailment FullSyntax.Formula)
     {budget : Nat} {memo saved : Memo} {query : Value Symbol Guard} {answer : Bool}
     {before : Checked width} {after : Physical}
-    (actual : SourceCurrentConjunctionTupleExecution.Call budget memo query (physical before) answer after saved)
+    (actual : SourceCurrentConjunctionDemandWorklistExecution.Call budget memo query (physical before) answer after saved)
     (ready : Ready lib before) (costs : CostHeap before.native.machine.heap)
     (available : Available before.native.machine.heap query)
     (guards : GuardHeap (Origin lib) before.native.machine.heap) :
@@ -71,7 +71,7 @@ theorem decision (lib : Library) (formulas : SourceGuards.Formulas FullSyntax.Fo
     cases actual with
     | hit => exact .refl _ physicalReady
     | miss _ part => exact (part.verified physicalReady available formulas solver).1
-  have retained := SourceCurrentConjunctionTupleGuard.call (Origin lib) actual physicalReady available guards
+  have retained := SourceCurrentConjunctionDemandGuard.call (Origin lib) actual physicalReady available guards
   obtain ⟨next, nextCosts, extension⟩ := advance lib before after ready effects retained
   exact ⟨next, nextCosts, extension, retained⟩
 
@@ -85,7 +85,7 @@ private theorem query_decision (lib : Library) (formulas : SourceGuards.Formulas
     (secondary : SourceCurrentSecondaryTrace.ClassTrace unconstrained values paths heap false anchor)
     (seeded : SourceCurrentAllocatedSeededQuery.Seeded values (paths.map (List.map Int.ofNat))
       (advanceHeap (advanceHeap before heap) anchor) query middle)
-    (called : SourceCurrentConjunctionTupleExecution.Call budget memo query (physical middle) answer later saved)
+    (called : SourceCurrentConjunctionDemandWorklistExecution.Call budget memo query (physical middle) answer later saved)
     (ready : Ready lib before) (costs : CostHeap before.native.machine.heap)
     (available : Values before.native.machine.heap values) (closed : ClosedValues values)
     (routes : ∀ path ∈ paths, ForestPath (Origin lib) (path.map Int.ofNat) values)

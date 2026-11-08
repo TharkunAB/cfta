@@ -1,5 +1,7 @@
 import MicroCFTA.SourceCurrentConjunctionCallerNumeric
-import MicroCFTA.SourceCurrentConjunctionTupleWorklistNumeric
+import MicroCFTA.SourceCurrentConjunctionDemandWorklistNumeric
+import MicroCFTA.SourceCurrentConjunctionDemandGuard
+import MicroCFTA.SourceCurrentConjunctionDemandMemo
 import MicroCFTA.SourceCurrentConjunctionTupleAnnotationOutcome
 import MicroCFTA.SourceCurrentAllocatedTupleProbeConjunction
 
@@ -201,13 +203,13 @@ theorem callerForecast_mono (alphabet : List ConcreteGuard) (budget : Nat) {firs
 
 /-- One supplied alphabet bounds the tuple worker from its original singleton queue. -/
 noncomputable def tupleCallerForecast (alphabet : List ConcreteGuard) (budget : Nat) (profile : Profile) : Profile :=
-  let resource := SourceCurrentConjunctionTupleWorklistResources.forecast alphabet budget 1 (scalar profile)
+  let resource := SourceCurrentConjunctionDemandWorklistNumeric.forecast alphabet budget 1 (scalar profile)
   ⟨resource, resource, profile.domains, resource⟩
 
 /-- The tuple forecast retains every initial numeric component. -/
 theorem tupleCallerForecast_ge (alphabet : List ConcreteGuard) (budget : Nat) (profile : Profile) :
     Le profile (tupleCallerForecast alphabet budget profile) := by
-  have retained := SourceCurrentConjunctionTupleWorklistResources.forecast_ge alphabet budget 1 (scalar profile)
+  have retained := SourceCurrentConjunctionDemandWorklistNumeric.forecast_ge alphabet budget 1 (scalar profile)
   exact ⟨Nat.le_trans (SourceCurrentConstrainedCapTargetForecast.scalar_nodes profile) retained,
     Nat.le_trans (SourceCurrentConstrainedCapTargetForecast.scalar_edges profile) retained,
     Nat.le_refl _, Nat.le_trans (SourceCurrentConstrainedCapTargetForecast.scalar_mass profile) retained⟩
@@ -216,7 +218,7 @@ theorem tupleCallerForecast_ge (alphabet : List ConcreteGuard) (budget : Nat) (p
 theorem tupleCallerForecast_mono (alphabet : List ConcreteGuard) (budget : Nat) {first last : Profile}
     (increase : Le first last) :
     Le (tupleCallerForecast alphabet budget first) (tupleCallerForecast alphabet budget last) := by
-  have retained := SourceCurrentConjunctionTupleWorklistResources.forecast_mono alphabet budget
+  have retained := SourceCurrentConjunctionDemandWorklistNumeric.forecast_mono alphabet budget
     (Nat.le_refl 1) (SourceCurrentConstrainedCapTargetForecast.scalar_mono increase)
   exact ⟨retained, retained, increase.2.2.1, retained⟩
 
@@ -224,7 +226,7 @@ theorem tupleCallerForecast_mono (alphabet : List ConcreteGuard) (budget : Nat) 
 theorem tuple_checked_fits (alphabet : List ConcreteGuard) (budget : Nat) (profile : Profile)
     {before : Checked width} {after : ConcretePhysical}
     (initial : SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile before)
-    (bounded : Fits (SourceCurrentConjunctionTupleWorklistResources.forecast
+    (bounded : Fits (SourceCurrentConjunctionDemandWorklistNumeric.forecast
       alphabet budget 1 (scalar profile)) after.heap) :
     SourceCurrentConstrainedCapGeneratedQueryResources.Fits
       (tupleCallerForecast alphabet budget profile) (advancePhysical before after) :=
@@ -235,15 +237,12 @@ theorem tuple_call_carrier [DecidableEq ConcreteSymbol] [DecidableEq (EdgeKey Co
     [DecidableEq ConcreteValue] (alphabet : List ConcreteGuard)
     {budget : Nat} {memo saved : Memo} {query : ConcreteValue}
     {before after : ConcretePhysical} {answer : Bool}
-    (actual : SourceCurrentConjunctionTupleExecution.Call budget memo query before answer after saved)
+    (actual : SourceCurrentConjunctionDemandWorklistExecution.Call budget memo query before answer after saved)
     (ready : Ready before) (available : Available before.heap query)
     (known : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ alphabet) before.heap) :
-    SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ alphabet) after.heap := by
-  obtain ⟨p, h, stable⟩ := SourceCurrentConjunctionTupleExecution.call_complete actual
-  have annotated := SourceCurrentConjunctionTupleAnnotationOutcome.call_heap (fun guard => guard ∈ alphabet)
-    p h budget memo query before ready available known
-  have done := stable p h (Nat.le_refl _) (Nat.le_refl _)
-  simpa only [done, SourceCurrentConjunctionWorker.Outcome.state] using annotated
+    SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ alphabet) after.heap :=
+  SourceCurrentConjunctionDemandGuard.call_annotations (fun guard => guard ∈ alphabet)
+    actual ready available known
 
 /-- Initial physical and memo facts derive the tuple call in the same supplied alphabet. -/
 theorem tuple_memo_complete [DecidableEq ConcreteSymbol] [DecidableEq (EdgeKey ConcreteSymbol ConcreteGuard)]
@@ -256,21 +255,21 @@ theorem tuple_memo_complete [DecidableEq ConcreteSymbol] [DecidableEq (EdgeKey C
     (correct : SourceCurrentEmptinessMemo.Correct formulas solver before.heap memo)
     (annotation : ConcreteGuard → Prop) (guards : SourceCurrentConstrainedCapGuardHeap.Heap annotation before.heap)
     (known : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ alphabet) before.heap) :
-    ∃ answer after saved, SourceCurrentConjunctionTupleExecution.Call budget memo query before answer after saved ∧
+    ∃ answer after saved, SourceCurrentConjunctionDemandWorklistExecution.Call budget memo query before answer after saved ∧
       Effects before after ∧ SourceCurrentEmptinessMemo.Correct formulas solver after.heap saved ∧
       SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer ∧ SourceCurrentEmptinessMemo.Extends memo saved ∧
       SourceCurrentConstrainedCapGuardHeap.Heap annotation after.heap ∧
       SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ alphabet) after.heap ∧
-      Fits (SourceCurrentConjunctionTupleWorklistResources.forecast alphabet budget 1 resource) after.heap ∧
-      (∀ work reader, SourceCurrentConjunctionTupleWorklistNumeric.workerFuel alphabet budget 1 resource ≤ work →
-        SourceCurrentConjunctionTupleWorklistNumeric.readerFuel alphabet budget 1 resource ≤ reader →
-        SourceCurrentConjunctionTupleWorker.call work reader budget memo query before = .done (answer, saved) after) := by
+      Fits (SourceCurrentConjunctionDemandWorklistNumeric.forecast alphabet budget 1 resource) after.heap ∧
+      (∀ work reader, SourceCurrentConjunctionDemandWorklistNumeric.workerFuel alphabet budget 1 resource ≤ work →
+        SourceCurrentConjunctionDemandWorklistNumeric.readerFuel alphabet budget 1 resource ≤ reader →
+        SourceCurrentConjunctionDemandWorker.call work reader budget memo query before = .done (answer, saved) after) := by
   obtain ⟨answer, after, saved, actual, effects, finalCorrect, sound, retained⟩ :=
-    SourceCurrentConjunctionTupleMemo.finite formulas solver budget memo query before ready available correct
+    SourceCurrentConjunctionDemandMemo.finite formulas solver budget memo query before ready available correct
   exact ⟨answer, after, saved, actual, effects, finalCorrect, sound, retained,
-    SourceCurrentConjunctionTupleGuard.call annotation actual ready available guards,
+    SourceCurrentConjunctionDemandGuard.call annotation actual ready available guards,
     tuple_call_carrier alphabet actual ready available known,
-    SourceCurrentConjunctionTupleWorklistNumeric.call_bound actual alphabet resource ready available fits known⟩
+    SourceCurrentConjunctionDemandWorklistNumeric.call_bound actual alphabet resource ready available fits known⟩
 
 /-- Initial caller facts construct their actual tuple call and full Post in the supplied alphabet. -/
 theorem caller_complete [DecidableEq ConcreteSymbol] [DecidableEq (EdgeKey ConcreteSymbol ConcreteGuard)]
@@ -283,7 +282,7 @@ theorem caller_complete [DecidableEq ConcreteSymbol] [DecidableEq (EdgeKey Concr
     (available : Available before.checked.native.machine.heap query)
     (known : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ alphabet) before.checked.native.machine.heap) :
     ∃ answer after saved,
-      SourceCurrentConjunctionTupleExecution.Call budget before.fourth query (physical before.checked) answer after saved ∧
+      SourceCurrentConjunctionDemandWorklistExecution.Call budget before.fourth query (physical before.checked) answer after saved ∧
       Frame formulas solver inventory (advancePhysical before.checked after) ∧
       Post formulas solver inventory before (advance before (advancePhysical before.checked after) saved before.merge) memos ∧
       SourceCurrentConstrainedCapGeneratedQueryResources.Fits (tupleCallerForecast alphabet budget profile)
@@ -294,9 +293,9 @@ theorem caller_complete [DecidableEq ConcreteSymbol] [DecidableEq (EdgeKey Concr
       (advance before (advancePhysical before.checked after) saved before.merge).edgeResults = before.edgeResults ∧
       (advance before (advancePhysical before.checked after) saved before.merge).merge = before.merge ∧
       (advance before (advancePhysical before.checked after) saved before.merge).fourth = saved ∧
-      (∀ work reader, SourceCurrentConjunctionTupleWorklistNumeric.workerFuel alphabet budget 1 (scalar profile) ≤ work →
-        SourceCurrentConjunctionTupleWorklistNumeric.readerFuel alphabet budget 1 (scalar profile) ≤ reader →
-        SourceCurrentConjunctionTupleWorker.call work reader budget before.fourth query (physical before.checked) = .done (answer, saved) after) := by
+      (∀ work reader, SourceCurrentConjunctionDemandWorklistNumeric.workerFuel alphabet budget 1 (scalar profile) ≤ work →
+        SourceCurrentConjunctionDemandWorklistNumeric.readerFuel alphabet budget 1 (scalar profile) ≤ reader →
+        SourceCurrentConjunctionDemandWorker.call work reader budget before.fourth query (physical before.checked) = .done (answer, saved) after) := by
   have ready := SourceCurrentAllocatedConjunctionMemo.ready before.checked initial.ready.good initial.ready.semantic initial.ready.costs
   have scalarFits := (SourceCurrentConstrainedCapRequiredResources.of_checked fits).scalar_fits
   obtain ⟨answer, after, saved, actual, effects, correct, sound, retained, _guards, carrier, bounded, done⟩ :=

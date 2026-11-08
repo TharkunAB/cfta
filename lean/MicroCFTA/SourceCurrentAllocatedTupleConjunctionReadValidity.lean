@@ -1,12 +1,12 @@
 import MicroCFTA.SourceCurrentAllocatedConjunctionReadValidity
-import MicroCFTA.SourceCurrentConjunctionTupleGlobalMemos
+import MicroCFTA.SourceCurrentConjunctionDemandWorklistMemos
 
 /-!
 # Validity of supplied tuple-budget read receipts
 
 The proof uses each supplied receipt and its exact returned bundle.
-Overflow and zero use only the lower exposure receipts. Positive admission
-uses its full allocated rows. Actual effects supply the next read premises.
+Overflow and zero use the actual repeated demand reads. Positive admission
+adds its actual allocated-tuple reads. Actual effects supply the next read premises.
 The proof does not compare different read schedules.
 -/
 namespace MicroCFTA.SourceCurrentAllocatedTupleConjunctionReadValidity
@@ -15,8 +15,10 @@ open InternedNestedProvenance (Values)
 open MergedColdReaderClosedInputs (ClosedValues)
 open SourceCurrentConjunctionRowsAllocation (Ready Effects RowsReady)
 open SourceCurrentConjunctionWorklist (PendingReady closed closed_values pending_keeps)
-open SourceCurrentConjunctionTupleExecution (Admission Run Decision Call)
-open SourceCurrentConjunctionTupleGlobalMemos (AdmissionReads RunReads DecisionReads CallReads)
+open SourceCurrentConjunctionDemandExecution (Admission)
+open SourceCurrentConjunctionDemandWorklistExecution (Run Decision Call)
+open SourceCurrentConjunctionDemandMemos (AdmissionReads)
+open SourceCurrentConjunctionDemandWorklistMemos (RunReads DecisionReads CallReads)
 local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
 local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
 local notation "Physical" => SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula
@@ -34,12 +36,7 @@ private theorem admission_physical [DecidableEq Symbol]
     (available : Values before.heap nodes) (noFree : ClosedValues nodes) :
     Effects before after ∧
       (match result with | .positive _ rows => RowsReady after rows | _ => True) := by
-  refine ⟨actual.effects ready available noFree, ?_⟩
-  cases result with
-  | overflow => trivial
-  | zero => trivial
-  | positive predecessor requirements =>
-      exact (SourceCurrentConjunctionRowsSoundness.rows_verified actual.positive_rows.2 ready available noFree).2
+  cases result <;> exact actual.verified ready available noFree
 
 /-- Supplied admission reads retain their own coherent global bundle. -/
 theorem admission [DecidableEq Symbol]
@@ -49,13 +46,7 @@ theorem admission [DecidableEq Symbol]
     (reads : AdmissionReads actual memos final) (ready : Ready before)
     (available : Values before.heap nodes) (closed : ClosedValues nodes) (valid : Valid before.heap memos) :
     Valid after.heap final ∧ Extends memos.unfolding final.unfolding ∧ final.query = memos.query := by
-  cases reads with
-  | overflow calls =>
-      exact SourceCurrentAllocatedConjunctionReadValidity.exposures calls ready.semantic ready.costs available valid
-  | zero calls =>
-      exact SourceCurrentAllocatedConjunctionReadValidity.exposures calls ready.semantic ready.costs available valid
-  | positive calls =>
-      exact SourceCurrentAllocatedConjunctionReadValidity.rows calls ready available closed valid
+  exact SourceCurrentConjunctionDemandMemos.admission_valid reads ready available closed valid
 
 /-- Actual admissions supply all premises for the supplied pending suffix receipts. -/
 theorem run [DecidableEq Symbol]

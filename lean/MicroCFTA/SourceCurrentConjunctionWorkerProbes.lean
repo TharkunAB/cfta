@@ -1,4 +1,4 @@
-import MicroCFTA.SourceCurrentConjunctionTupleWorkerProbes
+import MicroCFTA.SourceCurrentConjunctionDemandWorklistEffects
 import MicroCFTA.SourceCurrentAllocatedPartialInvariant
 import MicroCFTA.SourceCurrentConjunctionWorkerWarmEffects
 import MicroCFTA.SourceCurrentConjunctionRowsProbes
@@ -139,13 +139,12 @@ theorem allocated_call_heap {width : Nat}
     (SourceCurrentAllocatedConjunctionWorker.call p h budget query before.checked before.fourth).state).heap
   have ready := SourceCurrentAllocatedConjunctionMemo.ready before.checked context.ready.good
     context.ready.semantic context.ready.costs
-  have produced := SourceCurrentConjunctionTupleWorkerProbes.call_probes p h budget before.fourth query
+  have produced := SourceCurrentConjunctionDemandWorklistEffects.call_probes p h budget before.fourth query
     (SourceCurrentAllocatedNativeEffects.physical before.checked) ready context.probes available
-  have clean : Heap (SourceCurrentConjunctionTupleWorker.call p h budget before.fourth query
+  have clean : Heap (SourceCurrentConjunctionDemandWorker.call p h budget before.fourth query
       (SourceCurrentAllocatedNativeEffects.physical before.checked)).state.heap := by
-    refine Eq.mp ?_ produced
-    congr; exact Subsingleton.elim _ _
-  cases actual : SourceCurrentConjunctionTupleWorker.call p h budget before.fourth query
+    exact produced
+  cases actual : SourceCurrentConjunctionDemandWorker.call p h budget before.fourth query
       (SourceCurrentAllocatedNativeEffects.physical before.checked) with
   | done output after =>
     rcases output with ⟨answer, saved⟩

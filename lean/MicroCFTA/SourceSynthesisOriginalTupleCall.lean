@@ -21,8 +21,8 @@ open SourceCurrentAllocatedQueryMemo (advancePhysical)
 open SourceCurrentAllocatedPartialInvariant (Context Post)
 local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
 local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
-local notation "Call" => SourceCurrentConjunctionTupleExecution.Call
-local notation "CallReads" => SourceCurrentConjunctionTupleGlobalMemos.CallReads
+local notation "Call" => SourceCurrentConjunctionDemandWorklistExecution.Call
+local notation "CallReads" => SourceCurrentConjunctionDemandWorklistMemos.CallReads
 variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq (Value Symbol Guard)]
 
 /-- Original source success derives a complete conservative tuple call and its exact returned caller. -/
@@ -60,7 +60,7 @@ theorem request (lib : Library) (query : Query) (signed : Int) (width budget : N
           Cache.emptyState Cache.empty_valid formulas solver
       obtain ⟨answer, after, saved, final, actual, reads, post⟩ :=
         SourceCurrentAllocatedTupleConjunctionCaller.finite formulas solver budget initial available
-      obtain ⟨p, h, stable⟩ := SourceCurrentConjunctionTupleExecution.call_complete actual
+      obtain ⟨p, h, stable⟩ := SourceCurrentConjunctionDemandWorklistExecution.call_complete actual
       exact ⟨fields, cache, value, heap, built, answer, after, saved, final, p, h,
         prepared, initial, roles, actual, reads,
         (fun P H enoughP enoughH => SourceCurrentAllocatedTupleConjunctionWorker.call_lift

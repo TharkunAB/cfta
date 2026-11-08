@@ -3,8 +3,8 @@ import MicroCFTA.SourceCurrentConjunctionClassScanCompletion
 import MicroCFTA.SourcePrimaryGateEffects
 import MicroCFTA.SourceCurrentSecondaryEffects
 import MicroCFTA.SourceCurrentConjunctionMemo
-import MicroCFTA.SourceCurrentConjunctionTupleAnnotationOutcome
-import MicroCFTA.SourceCurrentConjunctionTupleExecution
+import MicroCFTA.SourceCurrentConjunctionDemandGuard
+import MicroCFTA.SourceCurrentConjunctionDemandWorklistExecution
 
 /-!
 # Projectability through the actual allocated class scan
@@ -166,19 +166,16 @@ theorem call_heap
   | hit _ => exact heap
   | miss _ decision => exact decision_heap decision ready available heap
 
-/-- An actual tuple call preserves the same projection predicate at its returned heap. -/
+/-- An actual demand call preserves the same projection predicate at its returned heap. -/
 theorem tuple_call_heap
     {budget : Nat} {query : Value Symbol Guard} {before after : Physical} {answer : Bool}
     {memo saved : SourceCurrentEmptinessMemo.Memo}
-    (actual : SourceCurrentConjunctionTupleExecution.Call budget memo query before answer after saved)
+    (actual : SourceCurrentConjunctionDemandWorklistExecution.Call budget memo query before answer after saved)
     (ready : SourceCurrentConjunctionRowsAllocation.Ready before)
-    (available : Available before.heap query) (heap : Heap before.heap) : Heap after.heap := by
-  obtain ⟨worker, reader, replay⟩ := SourceCurrentConjunctionTupleExecution.call_complete actual
-  have retained := SourceCurrentConjunctionTupleAnnotationOutcome.call_heap
+    (available : Available before.heap query) (heap : Heap before.heap) : Heap after.heap :=
+  SourceCurrentConjunctionDemandGuard.call_annotations
     (fun constraint : Guard => SourcePruningEnumerationConstraint.project constraint ≠ none)
-    worker reader budget memo query before ready available heap
-  simpa only [replay worker reader (Nat.le_refl _) (Nat.le_refl _),
-    SourceCurrentConjunctionWorker.Outcome.state] using retained
+    actual ready available heap
 
 end MicroCFTA.SourcePruningEnumerationConjunctionProjectionHeap
 
@@ -208,7 +205,7 @@ private theorem query_heap_effects
     (gate : SourceCurrentSecondaryTrace.ClassTrace unconstrained values paths before.native.machine.heap false anchor)
     (seeded : SourceCurrentAllocatedSeededQuery.Seeded values (paths.map (List.map Int.ofNat))
       (advanceHeap before anchor) query middle)
-    (call : SourceCurrentConjunctionTupleExecution.Call budget memo query (physical middle) answer after saved)
+    (call : SourceCurrentConjunctionDemandWorklistExecution.Call budget memo query (physical middle) answer after saved)
     (ranges : SourceCurrentAllocatedSeededQuery.SeededRanges values (paths.map (List.map Int.ofNat))
       (advanceHeap before anchor))
     (proper : ∀ path ∈ paths, path ≠ []) (ready : Ready before)

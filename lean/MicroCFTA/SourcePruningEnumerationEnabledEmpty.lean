@@ -1,7 +1,7 @@
 import MicroCFTA.SourcePruningEnumerationObservation
 import MicroCFTA.SourceCurrentAllocatedTargetQuery
 import MicroCFTA.SourceCurrentAllocatedTupleConjunctionCaller
-import MicroCFTA.SourceCurrentConjunctionTupleExecution
+import MicroCFTA.SourceCurrentConjunctionDemandWorklistExecution
 import MicroCFTA.SourceCurrentAllocatedTupleConjunctionWorker
 import MicroCFTA.SourceEndpointMemoCorrect
 
@@ -70,9 +70,9 @@ theorem pending_enabled_complete
       (reached = true →
         ∃ reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula,
           checkedAfter = advancePhysical queried reachedPhysical ∧
-          ∃ actual : SourceCurrentConjunctionTupleExecution.Call SourceCurrentConjunctionTupleBudget.currentTupleBudget beforeCaller.fourth query
+          ∃ actual : SourceCurrentConjunctionDemandWorklistExecution.Call SourceCurrentConjunctionTupleBudget.currentTupleBudget beforeCaller.fourth query
               (physical queried) answer reachedPhysical saved,
-            SourceCurrentConjunctionTupleGlobalMemos.CallReads actual {memos with query := guardSaved} final) ∧
+            SourceCurrentConjunctionDemandWorklistMemos.CallReads actual {memos with query := guardSaved} final) ∧
       SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer ∧
       Cache.Extends memos.unfolding final.unfolding ∧ final.query = guardSaved ∧
       replacement = (if answer then .empty else query) ∧
@@ -128,9 +128,9 @@ theorem pending_enabled_complete
         (reached = true →
           ∃ reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula,
             checkedAfter = advancePhysical queried reachedPhysical ∧
-            ∃ actual : SourceCurrentConjunctionTupleExecution.Call SourceCurrentConjunctionTupleBudget.currentTupleBudget beforeCaller.fourth query
+            ∃ actual : SourceCurrentConjunctionDemandWorklistExecution.Call SourceCurrentConjunctionTupleBudget.currentTupleBudget beforeCaller.fourth query
                 (physical queried) answer reachedPhysical saved,
-              SourceCurrentConjunctionTupleGlobalMemos.CallReads actual {memos with query := guardSaved} final) ∧
+              SourceCurrentConjunctionDemandWorklistMemos.CallReads actual {memos with query := guardSaved} final) ∧
         SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer ∧
         Available checkedAfter.native.machine.heap query ∧
         Cache.Extends memos.unfolding final.unfolding ∧ final.query = guardSaved := by
@@ -151,7 +151,7 @@ theorem pending_enabled_complete
           obtain ⟨workerAnswer, workerPhysical, workerSaved, workerFinal, actualCall, actualReads,
             workerPost, workerSound, workerAvailable, workerUnfolding, workerQuerySame⟩ :=
             SourceCurrentAllocatedTupleConjunctionCaller.finite formulas solver SourceCurrentConjunctionTupleBudget.currentTupleBudget queryContext receipt.available
-          obtain ⟨p, h, physicalStable⟩ := SourceCurrentConjunctionTupleExecution.call_complete actualCall
+          obtain ⟨p, h, physicalStable⟩ := SourceCurrentConjunctionDemandWorklistExecution.call_complete actualCall
           refine ⟨workerAnswer, advancePhysical queried workerPhysical, workerSaved, workerFinal, p, h,
             ?_, workerPost, ?_, ?_, workerSound, workerAvailable, workerUnfolding, workerQuerySame⟩
           · intro P H enoughP enoughH

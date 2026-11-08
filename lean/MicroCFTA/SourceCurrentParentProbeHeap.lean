@@ -1,7 +1,7 @@
 import MicroCFTA.SourceCurrentLowerProbeHeap
 import MicroCFTA.SourceCurrentAllocatedProbeGates
 import MicroCFTA.SourceCurrentAllocatedTupleProbeConjunction
-import MicroCFTA.SourceCurrentConjunctionTupleMemo
+import MicroCFTA.SourceCurrentConjunctionDemandMemo
 
 /-!
 # Physical filtered probes through literal completed Parent execution
@@ -173,8 +173,8 @@ private theorem scan_decision [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol 
     simp only [SourceCurrentAllocatedScanWorker.decision,observed] at actual
     cases actual
     obtain ⟨heap,done,rfl⟩ := SourceCurrentAllocatedConjunctionWorker.call_done observed
-    have graph := SourceCurrentConjunctionTupleExecution.call_graph done
-    obtain ⟨answer,heap,saved,produced,effects⟩ := SourceCurrentConjunctionTupleMemo.complete budget fourth value (physical before) good.physical available
+    have graph := SourceCurrentConjunctionDemandWorklistExecution.call_graph done
+    obtain ⟨answer,heap,saved,produced,effects⟩ := SourceCurrentConjunctionDemandMemo.complete budget fourth value (physical before) good.physical available
     obtain ⟨_,rfl,_⟩ := SourceCurrentConjunctionCallUnique.tuple_call graph produced
     exact advanced good effects
       (SourceCurrentAllocatedProbeConjunction.tuple_call_heap produced good.physical available good.probes)

@@ -1,6 +1,6 @@
 import MicroCFTA.SourceCurrentAllocatedProbeConjunction
-import MicroCFTA.SourceCurrentConjunctionTupleExecution
-import MicroCFTA.SourceCurrentConjunctionTupleWorkerProbes
+import MicroCFTA.SourceCurrentConjunctionDemandWorklistExecution
+import MicroCFTA.SourceCurrentConjunctionDemandWorklistEffects
 
 /-!
 # Filtered probes through actual tuple-budget calls
@@ -22,13 +22,13 @@ theorem tuple_call_heap [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)
     [DecidableEq (Value Symbol Guard)]
     {budget : Nat} {memo saved : SourceCurrentEmptinessMemo.Memo}
     {query : Value Symbol Guard} {before after : Physical} {answer : Bool}
-    (actual : SourceCurrentConjunctionTupleExecution.Call budget memo query before answer after saved)
+    (actual : SourceCurrentConjunctionDemandWorklistExecution.Call budget memo query before answer after saved)
     (ready : Ready before) (available : Available before.heap query) (probes : Heap before.heap) :
     Heap after.heap := by
-  obtain ⟨p, h, done⟩ := SourceCurrentConjunctionTupleExecution.call_complete actual
-  have kept : Heap (SourceCurrentConjunctionTupleWorker.call p h budget memo query before).state.heap :=
+  obtain ⟨p, h, done⟩ := SourceCurrentConjunctionDemandWorklistExecution.call_complete actual
+  have kept : Heap (SourceCurrentConjunctionDemandWorker.call p h budget memo query before).state.heap :=
     Eq.mp (by congr <;> exact Subsingleton.elim _ _)
-      (SourceCurrentConjunctionTupleWorkerProbes.call_probes p h budget memo query before ready probes available)
+      (SourceCurrentConjunctionDemandWorklistEffects.call_probes p h budget memo query before ready probes available)
   have completed := done p h (Nat.le_refl _) (Nat.le_refl _)
   simpa only [completed, SourceCurrentConjunctionWorker.Outcome.state] using kept
 
