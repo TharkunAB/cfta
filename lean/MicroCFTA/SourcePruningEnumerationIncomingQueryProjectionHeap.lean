@@ -16,7 +16,8 @@ open SourceCurrentAllocatedNativeEffects (physical)
 open SourceCurrentAllocatedQueryMemo (advancePhysical)
 open SourceCurrentAllocatedNativeInventoryState (Inventory)
 open SourceCurrentAllocatedPartialInvariant (Context)
-open SourceCurrentAllocatedNativeResourceForecast (Profile Room)
+open SourceCurrentAllocatedNativeResourceForecast (Profile)
+open SourceCurrentAllocatedNativeCreditProfile (Admits)
 open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
 local notation "Symbol" => SourcePruningTemplates.Symbol
 local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
@@ -44,7 +45,7 @@ theorem raw_done_resources_projection_heap
     (leftAvailable : Available beforeCaller.checked.native.machine.heap left)
     (rightAvailable : Available beforeCaller.checked.native.machine.heap right)
     (leftClosed : left.free = []) (rightClosed : right.free = [])
-    (fits : Fits profile beforeCaller.checked) (room : Room bits profile)
+    (fits : Fits profile beforeCaller.checked) (room : Admits bits profile)
     (known : Heap (fun guard => guard ∈ alphabet) beforeCaller.checked.native.machine.heap)
     (originalProjection : ProjectionHeap beforeCaller.checked.native.machine.heap)
     {fuel p h : Nat} {query : Node} {queried checkedAfter : Checked (bits + 2)}

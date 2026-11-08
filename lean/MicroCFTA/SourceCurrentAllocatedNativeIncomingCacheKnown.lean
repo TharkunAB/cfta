@@ -15,7 +15,8 @@ open InternedConstructorTemplates InternedProbeProvenance
 open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
 open SourceCurrentAllocatedNativeInventoryState (Inventory)
 open SourceCurrentAllocatedPartialInvariant (Context)
-open SourceCurrentAllocatedNativeResourceForecast (Profile Room)
+open SourceCurrentAllocatedNativeResourceForecast (Profile)
+open SourceCurrentAllocatedNativeCreditProfile (Admits)
 open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
 open SourceCurrentAllocatedFiniteOrdinaryStored (Stored)
 open SourceSizedPrefixKnownOrdinary (KnownOrdinary)
@@ -104,7 +105,7 @@ theorem run_known (bits bound : Nat) (profile : Profile)
     (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])
     (incomingDomain : NodeDomain incoming) (incomingHeight : MergedOrdinaryHeight.height incoming ≤ bound)
     (known : KnownOrdinary bound beforeCaller.checked.native.machine.heap before)
-    (fits : Fits profile beforeCaller.checked) (room : Room bits profile)
+    (fits : Fits profile beforeCaller.checked) (room : Admits bits profile)
     (stored : Stored beforeCaller.checked.native) :
     let actual := SourcePruningEnumerationIncomingCacheAdapter.run checkEmpty r n p h indexFuel
       beforeCaller before uv incoming incomingScs queries

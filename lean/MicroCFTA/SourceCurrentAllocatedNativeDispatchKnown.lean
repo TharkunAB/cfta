@@ -17,7 +17,8 @@ open InternedConstructorTemplates InternedProbeProvenance
 open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
 open SourceCurrentAllocatedNativeInventoryState (Inventory)
 open SourceCurrentAllocatedPartialInvariant (Context)
-open SourceCurrentAllocatedNativeResourceForecast (Profile Room)
+open SourceCurrentAllocatedNativeResourceForecast (Profile)
+open SourceCurrentAllocatedNativeCreditProfile (Admits)
 open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
 open SourceSizedPrefixKnownOrdinary (KnownOrdinary)
 local notation "Symbol" => SourcePruningTemplates.Symbol
@@ -64,7 +65,7 @@ theorem dispatch_known (bits bound : Nat) (profile : Profile)
         before.core.values[source]? = some (.unenumerated sourceNode sourceScs) ∧
         before.core.values[target]? = some (.unenumerated targetNode targetScs))
     (known : KnownOrdinary bound beforeCaller.checked.native.machine.heap before)
-    (fits : Fits profile beforeCaller.checked) (room : Room bits profile)
+    (fits : Fits profile beforeCaller.checked) (room : Admits bits profile)
     (stored : SourceCurrentAllocatedFiniteOrdinaryStored.Stored beforeCaller.checked.native) :
     let actual := SourcePruningEnumerationDispatch.dispatch checkEmpty nativeFuel p h beforeCaller
       before.core source target memos.query

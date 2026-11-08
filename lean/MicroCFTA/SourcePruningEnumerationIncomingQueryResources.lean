@@ -1,5 +1,6 @@
 import MicroCFTA.SourcePruningEnumerationIncomingQuery
 import MicroCFTA.SourceCurrentAllocatedTargetCallerGuardResources
+import MicroCFTA.SourceCurrentAllocatedTargetCallerCreditResources
 import MicroCFTA.SourceCurrentConjunctionAlphabetBounds
 
 /-!
@@ -16,7 +17,8 @@ open SourceCurrentAllocatedNativeEffects (physical)
 open SourceCurrentAllocatedQueryMemo (advancePhysical)
 open SourceCurrentAllocatedNativeInventoryState (Inventory)
 open SourceCurrentAllocatedPartialInvariant (Context Post)
-open SourceCurrentAllocatedNativeResourceForecast (Profile Room step)
+open SourceCurrentAllocatedNativeResourceForecast (Profile step)
+open SourceCurrentAllocatedNativeCreditProfile (Admits)
 open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
 local notation "Symbol" => SourcePruningTemplates.Symbol
 local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
@@ -67,7 +69,7 @@ theorem complete_resources
     (leftAvailable : Available beforeCaller.checked.native.machine.heap left)
     (rightAvailable : Available beforeCaller.checked.native.machine.heap right)
     (leftClosed : left.free = []) (rightClosed : right.free = [])
-    (fits : Fits profile beforeCaller.checked) (room : Room bits profile)
+    (fits : Fits profile beforeCaller.checked) (room : Admits bits profile)
     (known : Heap (fun guard => guard ∈ alphabet) beforeCaller.checked.native.machine.heap) :
     ∃ (next : Inventory) (query : Node) (queried : Checked (bits + 2))
       (answer : Bool) (checkedAfter : Checked (bits + 2)) (saved : Fourth)
@@ -113,25 +115,19 @@ theorem complete_resources
       fuel = instructionBound profile.nodes profile.edges profile.mass + 1 ∧
       p = workerFuel (queryAlphabet alphabet profile) currentTupleBudget 1 (scalar (step profile)) ∧
       h = readerFuel (queryAlphabet alphabet profile) currentTupleBudget 1 (scalar (step profile)) := by
-  have actualRoom := fits.room room
-  have leftOriginal := SourceRecursiveIntersectionOriginalOutput.closed_original left
-    beforeCaller.checked.native.machine.heap initial.ready.good.native.machine.1.coherent leftAvailable leftClosed
-  have rightOriginal := SourceRecursiveIntersectionOriginalOutput.closed_original right
-    beforeCaller.checked.native.machine.heap initial.ready.good.native.machine.1.coherent rightAvailable rightClosed
-  have ranges := SourceCurrentAllocatedRecursiveWarmInitialRanges.warm_initial_ranges bits beforeCaller.checked
-    initial.ready.good initial.ready.semantic left right leftOriginal rightOriginal leftAvailable rightAvailable
-    actualRoom.1 actualRoom.2.1 actualRoom.2.2
+  have ranges := SourceCurrentAllocatedTargetQuery.ready_admitted_ranges profile beforeCaller.checked
+    initial.ready fits room left right leftAvailable rightAvailable leftClosed rightClosed
   obtain ⟨next, query, queried, answer, checkedAfter, saved, final, queries, replacement, handle,
     oldFuel, _oldP, _oldH, source, roots, receipt, native, _phase, post, querySame, unfolding,
     sound, replacementEq, available, closed, encoded, decoded, meaning, disabled, enabled⟩ :=
     complete formulas solver inventory beforeCaller left right checkEmpty memos initial
-      leftAvailable rightAvailable leftClosed rightClosed ranges.1
+      leftAvailable rightAvailable leftClosed rightClosed ranges
   have done : SourceEqualityNativeDemand.execute oldFuel
       (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
       beforeCaller.checked = .done query queried := by
     simpa only [Nat.add_zero] using native 0
   obtain ⟨_next, _source, _roots, _receipt, _post, queryFits, _mass⟩ :=
-    SourceCurrentAllocatedTargetQuery.raw_done_caller_resources profile oldFuel formulas solver inventory
+    SourceCurrentAllocatedTargetQuery.raw_done_caller_admitted_resources profile oldFuel formulas solver inventory
       beforeCaller queried left right query memos initial fits room leftAvailable rightAvailable leftClosed rightClosed done
   have queryCarrier := receipt.actual.guard_forecast alphabet profile initial.ready fits
     leftAvailable rightAvailable leftClosed rightClosed known

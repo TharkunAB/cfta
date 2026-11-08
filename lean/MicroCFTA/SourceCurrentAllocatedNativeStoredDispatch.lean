@@ -12,7 +12,8 @@ namespace MicroCFTA.SourceCurrentAllocatedNativeStoredDispatch
 open EnumerationState EnumerationCorrectness
 open InternedConstructorTemplates InternedProbeProvenance
 open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
-open SourceCurrentAllocatedNativeResourceForecast (Profile Room)
+open SourceCurrentAllocatedNativeResourceForecast (Profile)
+open SourceCurrentAllocatedNativeCreditProfile (Admits)
 open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
 open SourceCurrentAllocatedFiniteOrdinaryStored (Stored)
 local notation "Symbol" => SourcePruningTemplates.Symbol
@@ -59,7 +60,7 @@ theorem dispatch_native_stored (profile : Profile) (checkEmpty : Bool) (nativeFu
     (source target : Nat) (queries : Queries)
     (ready : SourceCurrentConjunctionClassScan.Ready beforeCaller.checked)
     (realized : PendingRealized beforeCaller.checked.native.machine.heap before)
-    (fits : Fits profile beforeCaller.checked) (room : Room bits profile)
+    (fits : Fits profile beforeCaller.checked) (room : Admits bits profile)
     (stored : Stored beforeCaller.checked.native) :
     Stored (SourcePruningEnumerationDispatch.dispatch checkEmpty nativeFuel p h
       beforeCaller before source target queries).2.1.checked.native := by
@@ -120,10 +121,9 @@ theorem dispatch_native_stored (profile : Profile) (checkEmpty : Bool) (nativeFu
                                       realized target targetHandle targetScs targetSlot
                                     have rightSame := Option.some.inj (rightFound.symm.trans rightDecoded)
                                     subst rightValue
-                                    have actualRoom := fits.room room
-                                    have rawStored := SourceCurrentAllocatedNativeStoredExecute.execute_stored bits
+                                    have rawStored := SourceCurrentAllocatedNativeStoredExecute.execute_admitted_stored profile bits
                                       beforeCaller.checked left right nativeFuel ready leftAvailable rightAvailable
-                                      leftClosed rightClosed stored actualRoom.1 actualRoom.2.1 actualRoom.2.2
+                                      leftClosed rightClosed stored fits room
                                     cases actual : SourceEqualityNativeDemand.execute nativeFuel
                                         (.code (SourceRecursiveIntersectionCode.requestNode
                                           IntersectionEmptyDomain.emptyDomain left right)) beforeCaller.checked with

@@ -11,7 +11,8 @@ namespace MicroCFTA.SourceCurrentAllocatedNativeStoredIncoming
 open EnumerationState EnumerationCorrectness EnumerationSchedule
 open InternedConstructorTemplates InternedProbeProvenance
 open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
-open SourceCurrentAllocatedNativeResourceForecast (Profile Room)
+open SourceCurrentAllocatedNativeResourceForecast (Profile)
+open SourceCurrentAllocatedNativeCreditProfile (Admits)
 open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
 open SourceCurrentAllocatedFiniteOrdinaryStored (Stored)
 local notation "Symbol" => SourcePruningTemplates.Symbol
@@ -30,7 +31,7 @@ theorem incoming_run_stored (profile : Profile) (checkEmpty : Bool)
     (ready : SourceCurrentConjunctionClassScan.Ready beforeCaller.checked)
     (realized : PendingRealized beforeCaller.checked.native.machine.heap before)
     (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])
-    (fits : Fits profile beforeCaller.checked) (room : Room bits profile)
+    (fits : Fits profile beforeCaller.checked) (room : Admits bits profile)
     (stored : Stored beforeCaller.checked.native) :
     Stored (SourcePruningEnumerationIncomingNode.run checkEmpty representativeFuel nativeFuel p h
       beforeCaller before uv incoming incomingScs queries).2.1.checked.native := by
@@ -59,10 +60,8 @@ theorem incoming_run_stored (profile : Profile) (checkEmpty : Bool)
                         realized found.representative oldHandle oldScs slot
                       have same := Option.some.inj (foundValue.symm.trans decoded)
                       subst value
-                      have actualRoom := fits.room room
-                      have rawStored := SourceCurrentAllocatedNativeStoredExecute.execute_stored bits
-                        beforeCaller.checked incoming old nativeFuel ready available resident closed oldClosed stored
-                        actualRoom.1 actualRoom.2.1 actualRoom.2.2
+                      have rawStored := SourceCurrentAllocatedNativeStoredExecute.execute_admitted_stored profile bits
+                        beforeCaller.checked incoming old nativeFuel ready available resident closed oldClosed stored fits room
                       cases actual : SourceEqualityNativeDemand.execute nativeFuel
                           (.code (SourceRecursiveIntersectionCode.requestNode
                             IntersectionEmptyDomain.emptyDomain incoming old)) beforeCaller.checked with

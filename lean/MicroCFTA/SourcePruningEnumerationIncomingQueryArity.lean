@@ -17,7 +17,8 @@ open SourceCurrentAllocatedNativeEffects (physical)
 open SourceCurrentAllocatedQueryMemo (advancePhysical)
 open SourceCurrentAllocatedNativeInventoryState (Inventory)
 open SourceCurrentAllocatedPartialInvariant (Context Post)
-open SourceCurrentAllocatedNativeResourceForecast (Profile Room step)
+open SourceCurrentAllocatedNativeResourceForecast (Profile step)
+open SourceCurrentAllocatedNativeCreditProfile (Admits)
 open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
 local notation "Symbol" => SourcePruningTemplates.Symbol
 local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
@@ -48,7 +49,7 @@ theorem complete_resources_arity
     (leftAvailable : Available beforeCaller.checked.native.machine.heap left)
     (rightAvailable : Available beforeCaller.checked.native.machine.heap right)
     (leftClosed : left.free = []) (rightClosed : right.free = [])
-    (fits : Fits profile beforeCaller.checked) (room : Room bits profile)
+    (fits : Fits profile beforeCaller.checked) (room : Admits bits profile)
     (known : Heap (fun guard => guard ∈ alphabet) beforeCaller.checked.native.machine.heap)
     (arity : SourcePruningEnumerationArityOrigins.Heap beforeCaller.checked.native.machine.heap) :
     ∃ (next : Inventory) (query : Node) (queried : Checked (bits + 2))
@@ -227,7 +228,7 @@ theorem raw_done_resources_arity
     (leftAvailable : Available beforeCaller.checked.native.machine.heap left)
     (rightAvailable : Available beforeCaller.checked.native.machine.heap right)
     (leftClosed : left.free = []) (rightClosed : right.free = [])
-    (fits : Fits profile beforeCaller.checked) (room : Room bits profile)
+    (fits : Fits profile beforeCaller.checked) (room : Admits bits profile)
     (known : Heap (fun guard => guard ∈ alphabet) beforeCaller.checked.native.machine.heap)
     (arity : SourcePruningEnumerationArityOrigins.Heap beforeCaller.checked.native.machine.heap)
     {fuel p h : Nat} {query : Node} {queried checkedAfter : Checked (bits + 2)}

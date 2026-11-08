@@ -9,7 +9,8 @@ open SourcePruningEnumerationNodes
 open SourcePruningEnumerationObservation (PendingRealized)
 open SourceCurrentAllocatedNativeInventoryState (Inventory)
 open SourceCurrentAllocatedPartialInvariant (Context)
-open SourceCurrentAllocatedNativeResourceForecast (Profile Room)
+open SourceCurrentAllocatedNativeResourceForecast (Profile)
+open SourceCurrentAllocatedNativeCreditProfile (Admits)
 open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
 open SourceSizedPrefixKnownOrdinary (KnownOrdinary)
 attribute [local instance] FormulaExecutable.formulaDecidableEq
@@ -32,7 +33,7 @@ theorem incoming_captured (bound : Nat) (profile : Profile)
     (initial : Context formulas solver inventory caller memos)
     (realized : PendingRealized caller.checked.native.machine.heap before)
     (available : Available caller.checked.native.machine.heap incoming) (closed : incoming.free = [])
-    (fits : Fits profile caller.checked) (room : Room bits profile)
+    (fits : Fits profile caller.checked) (room : Admits bits profile)
     (known : KnownOrdinary bound caller.checked.native.machine.heap captured) :
     KnownOrdinary bound (SourcePruningEnumerationIncomingNode.run checkEmpty r n p h
       caller before target incoming scs queries).2.1.checked.native.machine.heap captured := by
@@ -54,14 +55,13 @@ theorem incoming_captured (bound : Nat) (profile : Profile)
               have nativeKnown := SourceCurrentAllocatedNativeIncomingOldKnown.native_query_old_known
                 bits bound profile caller.checked captured incoming old n initial.ready
                 available oldAvailable closed oldClosed fits room known
-              have bounds := fits.room room
               simp only [SourcePruningEnumerationIncomingNode.run, rootRead, oldRead, oldLookup]
               cases actual : SourceEqualityNativeDemand.execute n
                   (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain incoming old)) caller.checked with
               | done query queried =>
-                obtain ⟨next, _source, _roots, receipt, queryPost⟩ := SourceCurrentAllocatedTargetQuery.raw_done_caller_initial
-                  bits n formulas solver inventory caller queried incoming old query memos initial
-                  available oldAvailable closed oldClosed bounds.1 bounds.2.1 bounds.2.2 actual
+                obtain ⟨next, _source, _roots, receipt, queryPost, _queryFits, _queryMass⟩ := SourceCurrentAllocatedTargetQuery.raw_done_caller_admitted_resources
+                  profile n formulas solver inventory caller queried incoming old query memos initial fits room
+                  available oldAvailable closed oldClosed actual
                 have queryKnown := SourceSizedPrefixKnownOrdinaryHeap.query_known receipt known
                 cases checkEmpty with
                 | false =>

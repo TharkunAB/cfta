@@ -2,6 +2,7 @@ import MicroCFTA.SourceCurrentAllocatedNativeStoredPrefix
 import MicroCFTA.SourceCurrentAllocatedRecursiveWarmInitialRanges
 import MicroCFTA.SourceCurrentConjunctionClassScan
 import MicroCFTA.SourceRecursiveIntersectionOriginalOutput
+import MicroCFTA.SourceCurrentAllocatedTargetCallerCreditResources
 
 /-!
 # Native certificates in actual bounded node execution
@@ -60,6 +61,32 @@ theorem execute_stored (bits : Nat) (before : Checked (bits + 2))
     ready.good.native.machine.1.coherent rightAvailable rightClosed
   have ranges := (SourceCurrentAllocatedRecursiveWarmInitialRanges.warm_initial_ranges bits before
     ready.good ready.semantic left right leftOriginal rightOriginal leftAvailable rightAvailable nodes edges room).1
+  obtain ⟨length, value, after, receipt, _⟩ :=
+    SourceCurrentAllocatedNativePhysicalTraceCompletion.initial_complete (fun _ _ => true) before ready.good ready.idle
+      left right leftOriginal rightOriginal leftAvailable rightAvailable leftClosed rightClosed ranges
+  obtain ⟨prefixFuel, remaining, current, checked, observed⟩ := execute_state_prefix receipt.trace fuel
+  rw [observed]
+  exact SourceCurrentAllocatedNativeStoredPrefix.node_prefix_stored
+    ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩ before current prefixFuel remaining checked
+    ready.good ready.semantic stored
+
+/-- Either admitted profile retains native certificates at every actual bounded endpoint. -/
+theorem execute_admitted_stored (profile : SourceCurrentAllocatedNativeResourceForecast.Profile)
+    (bits : Nat) (before : Checked (bits + 2)) (left right : Node) (fuel : Nat)
+    (ready : SourceCurrentConjunctionClassScan.Ready before)
+    (leftAvailable : Available before.native.machine.heap left)
+    (rightAvailable : Available before.native.machine.heap right)
+    (leftClosed : left.free = []) (rightClosed : right.free = [])
+    (stored : Stored before.native)
+    (fits : SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile before)
+    (room : SourceCurrentAllocatedNativeCreditProfile.Admits bits profile) :
+    Stored (execute fuel (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before).state.native := by
+  have leftOriginal := SourceRecursiveIntersectionOriginalOutput.closed_original left before.native.machine.heap
+    ready.good.native.machine.1.coherent leftAvailable leftClosed
+  have rightOriginal := SourceRecursiveIntersectionOriginalOutput.closed_original right before.native.machine.heap
+    ready.good.native.machine.1.coherent rightAvailable rightClosed
+  have ranges := SourceCurrentAllocatedTargetQuery.ready_admitted_ranges profile before ready fits room
+    left right leftAvailable rightAvailable leftClosed rightClosed
   obtain ⟨length, value, after, receipt, _⟩ :=
     SourceCurrentAllocatedNativePhysicalTraceCompletion.initial_complete (fun _ _ => true) before ready.good ready.idle
       left right leftOriginal rightOriginal leftAvailable rightAvailable leftClosed rightClosed ranges
