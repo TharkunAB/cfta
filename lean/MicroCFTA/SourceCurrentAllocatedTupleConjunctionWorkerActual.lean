@@ -1,6 +1,6 @@
 import MicroCFTA.SourceCurrentAllocatedTupleConjunctionWorker
-import MicroCFTA.SourceCurrentConjunctionTupleExecution
-import MicroCFTA.SourceCurrentConjunctionTupleWorkerStability
+import MicroCFTA.SourceCurrentConjunctionDemandWorklistExecution
+import MicroCFTA.SourceCurrentConjunctionDemandWorkerStability
 import MicroCFTA.SourceCurrentAllocatedTupleConjunctionCaller
 
 /-!
@@ -24,8 +24,8 @@ local notation "Checked" => SourceEqualityNativeDemand.State
 local notation "Caller" => SourceCurrentAllocatedPartialState.State
 local notation "Memo" => SourceCurrentEmptinessMemo.Memo
 local notation "Memos" => EndpointMemoGateTrace.Memos
-local notation "Call" => SourceCurrentConjunctionTupleExecution.Call
-local notation "CallReads" => SourceCurrentConjunctionTupleGlobalMemos.CallReads
+local notation "Call" => SourceCurrentConjunctionDemandWorklistExecution.Call
+local notation "CallReads" => SourceCurrentConjunctionDemandWorklistMemos.CallReads
 variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq (Value Symbol Guard)] {width : Nat}
 variable (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
 
@@ -35,7 +35,7 @@ theorem call_done_stable {p h P H budget : Nat} {query : Value Symbol Guard} {be
     (done : call p h budget query before memo = .done answer after saved) (enoughP : p ≤ P) (enoughH : h ≤ H) :
     call P H budget query before memo = .done answer after saved := by
   obtain ⟨reached, observed, rfl⟩ := call_done done
-  exact call_lift (SourceCurrentConjunctionTupleWorkerStability.call_done_stable observed enoughP enoughH)
+  exact call_lift (SourceCurrentConjunctionDemandWorkerStability.call_done_stable observed enoughP enoughH)
 
 /-- Different successful bounds identify the Boolean, every checked field, and the entire fourth memo. -/
 theorem call_done_unique {p h P H budget : Nat} {query : Value Symbol Guard} {before after later : Checked width}
@@ -61,7 +61,7 @@ theorem verified {inventory : Inventory} {p h budget : Nat} {before : Caller wid
         SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer ∧
         Available after.native.machine.heap query ∧ Extends memos.unfolding final.unfolding ∧ final.query = memos.query := by
   obtain ⟨reached, observed, rfl⟩ := call_done done
-  have actual := SourceCurrentConjunctionTupleExecution.call_graph observed
+  have actual := SourceCurrentConjunctionDemandWorklistExecution.call_graph observed
   obtain ⟨final, reads, post⟩ := SourceCurrentAllocatedTupleConjunctionCaller.actual formulas solver actual initial available
   exact ⟨reached, final, rfl, actual, reads, post⟩
 
@@ -77,7 +77,7 @@ theorem finite {inventory : Inventory} {before : Caller width} {query : Value Sy
       Extends memos.unfolding final.unfolding ∧ final.query = memos.query := by
   obtain ⟨answer, after, saved, final, actual, _, post⟩ :=
     SourceCurrentAllocatedTupleConjunctionCaller.finite formulas solver budget initial available
-  obtain ⟨p, h, stable⟩ := SourceCurrentConjunctionTupleExecution.call_complete actual
+  obtain ⟨p, h, stable⟩ := SourceCurrentConjunctionDemandWorklistExecution.call_complete actual
   exact ⟨answer, advancePhysical before.checked after, saved, final, p, h,
     fun P H enoughP enoughH => call_lift (stable P H enoughP enoughH), post⟩
 

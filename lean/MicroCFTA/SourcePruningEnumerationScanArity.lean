@@ -1,7 +1,7 @@
 import MicroCFTA.SourceCurrentConjunctionClassScanCompletion
 import MicroCFTA.SourcePruningEnumerationGateArity
 import MicroCFTA.SourcePruningEnumerationSeededArity
-import MicroCFTA.SourceCurrentConjunctionTupleArity
+import MicroCFTA.SourceCurrentConjunctionDemandArity
 
 /-!
 # Arity through the actual current class scan
@@ -34,7 +34,7 @@ private theorem query_heap_effects
     (gate : SourceCurrentSecondaryTrace.ClassTrace unconstrained values paths before.native.machine.heap false anchor)
     (seeded : SourceCurrentAllocatedSeededQuery.Seeded values (paths.map (List.map Int.ofNat))
       (advanceHeap before anchor) query middle)
-    (call : SourceCurrentConjunctionTupleExecution.Call budget memo query (physical middle) answer after saved)
+    (call : SourceCurrentConjunctionDemandWorklistExecution.Call budget memo query (physical middle) answer after saved)
     (ranges : SourceCurrentAllocatedSeededQuery.SeededRanges values (paths.map (List.map Int.ofNat))
       (advanceHeap before anchor))
     (proper : ∀ path ∈ paths, path ≠ []) (ready : Ready before)
@@ -67,7 +67,7 @@ private theorem query_heap_effects
   have queryCorrect := SourceCurrentEmptinessMemo.grows formulas solver queryEffects.keeps memo correct
   obtain ⟨finalReady, callEffects, finalCorrect, _, _⟩ :=
     memo_effects formulas solver call queryReady queryAvailable queryCorrect
-  have afterHeap := SourceCurrentConjunctionTupleArity.call_heap call queryEffects.ready queryAvailable queryHeap
+  have afterHeap := SourceCurrentConjunctionDemandArity.call_heap call queryEffects.ready queryAvailable queryHeap
   exact ⟨finalReady, queryEffects.trans callEffects,
     fun value member => callEffects.keeps.available value (queryEffects.keeps.available value (available value member)),
     finalCorrect, afterHeap⟩

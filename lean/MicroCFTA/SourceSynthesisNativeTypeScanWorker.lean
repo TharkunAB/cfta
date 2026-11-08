@@ -85,7 +85,7 @@ private theorem decision_return [DecidableEq Symbol] [DecidableEq (EdgeKey Symbo
     {p h budget : Nat} {paths : Class} {value : Value Symbol Guard}
     {before after : Checked width} {memo saved : Memo} {answer : Bool}
     (actual : SourceCurrentAllocatedScanWorker.decision p h budget paths value before memo = .done answer after saved) :
-    ∃ later : Physical, SourceCurrentConjunctionTupleExecution.Call budget memo value (physical before) answer later saved ∧
+    ∃ later : Physical, SourceCurrentConjunctionDemandWorklistExecution.Call budget memo value (physical before) answer later saved ∧
       after = advancePhysical before later := by
   cases observed : SourceCurrentAllocatedConjunctionWorker.call p h budget value before memo with
   | failed => simp only [SourceCurrentAllocatedScanWorker.decision, observed] at actual; cases actual
@@ -93,7 +93,7 @@ private theorem decision_return [DecidableEq Symbol] [DecidableEq (EdgeKey Symbo
       simp only [SourceCurrentAllocatedScanWorker.decision, observed] at actual
       cases actual
       obtain ⟨later, returned, same⟩ := SourceCurrentAllocatedConjunctionWorker.call_done observed
-      exact ⟨later, SourceCurrentConjunctionTupleExecution.call_graph returned, same⟩
+      exact ⟨later, SourceCurrentConjunctionDemandWorklistExecution.call_graph returned, same⟩
 
 variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq (Value Symbol Guard)]
 

@@ -26,12 +26,12 @@ local notation "Caller" => SourceCurrentAllocatedPartialState.State
 local notation "Physical" => SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula
 local notation "Memo" => SourceCurrentEmptinessMemo.Memo
 local notation "Memos" => EndpointMemoGateTrace.Memos
-local notation "Call" => SourceCurrentConjunctionTupleExecution.Call
-local notation "CallReads" => SourceCurrentConjunctionTupleGlobalMemos.CallReads
+local notation "Call" => SourceCurrentConjunctionDemandWorklistExecution.Call
+local notation "CallReads" => SourceCurrentConjunctionDemandWorklistMemos.CallReads
 local notation "forecast" => SourceCurrentConjunctionCallerNumeric.forecast
 local notation "guards" => SourceCurrentConjunctionGuardUniverse.guards
-local notation "workerFuel" => SourceCurrentConjunctionTupleWorklistNumeric.workerFuel
-local notation "readerFuel" => SourceCurrentConjunctionTupleWorklistNumeric.readerFuel
+local notation "workerFuel" => SourceCurrentConjunctionDemandWorklistNumeric.workerFuel
+local notation "readerFuel" => SourceCurrentConjunctionDemandWorklistNumeric.readerFuel
 variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq (Value Symbol Guard)] {width : Nat}
 variable (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
 
@@ -58,7 +58,7 @@ theorem finite_resources {inventory : Inventory} {before : Caller width}
   have ready := SourceCurrentAllocatedConjunctionMemo.ready before.checked initial.ready.good
     initial.ready.semantic initial.ready.costs
   have scalarFits := (SourceCurrentConstrainedCapRequiredResources.of_checked fits).scalar_fits
-  have numeric := SourceCurrentConjunctionTupleWorklistNumeric.call_bound actual
+  have numeric := SourceCurrentConjunctionDemandWorklistNumeric.call_bound actual
     (guards before.checked.native.machine.heap) (scalar profile) ready available scalarFits
     (SourceCurrentConjunctionGuardUniverse.initial before.checked.native.machine.heap
       ready.semantic.ready.semantic.1.normal.facts)
@@ -91,7 +91,7 @@ theorem raw_done_resources {inventory : Inventory} {p h budget : Nat}
   have ready := SourceCurrentAllocatedConjunctionMemo.ready before.checked initial.ready.good
     initial.ready.semantic initial.ready.costs
   have scalarFits := (SourceCurrentConstrainedCapRequiredResources.of_checked fits).scalar_fits
-  have numeric := SourceCurrentConjunctionTupleWorklistNumeric.call_bound actual
+  have numeric := SourceCurrentConjunctionDemandWorklistNumeric.call_bound actual
     (guards before.checked.native.machine.heap) (scalar profile) ready available scalarFits
     (SourceCurrentConjunctionGuardUniverse.initial before.checked.native.machine.heap
       ready.semantic.ready.semantic.1.normal.facts)

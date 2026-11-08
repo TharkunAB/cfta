@@ -170,9 +170,9 @@ theorem dispatch_complete
                 (reached = true →
                   ∃ (reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula),
                     afterCaller.checked = SourceCurrentAllocatedQueryMemo.advancePhysical queried reachedPhysical ∧
-                    ∃ actual : SourceCurrentConjunctionTupleExecution.Call SourceCurrentConjunctionTupleBudget.currentTupleBudget beforeCaller.fourth query
+                    ∃ actual : SourceCurrentConjunctionDemandWorklistExecution.Call SourceCurrentConjunctionTupleBudget.currentTupleBudget beforeCaller.fourth query
                         (physical queried) answer reachedPhysical afterCaller.fourth,
-                      SourceCurrentConjunctionTupleGlobalMemos.CallReads actual {memos with query := guardSaved} final)))) := by
+                      SourceCurrentConjunctionDemandWorklistMemos.CallReads actual {memos with query := guardSaved} final)))) := by
   have optionalPacket :
     ∀ (sourceNode targetNode merged : Option Nat) (sourceScs targetScs : List EnumerationState.Suspended),
       before.values[source]? = some (.unenumerated sourceNode sourceScs) →
@@ -265,9 +265,9 @@ theorem dispatch_complete
           (reached = true →
             ∃ (reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula),
               afterCaller.checked = SourceCurrentAllocatedQueryMemo.advancePhysical queried reachedPhysical ∧
-              ∃ actual : SourceCurrentConjunctionTupleExecution.Call SourceCurrentConjunctionTupleBudget.currentTupleBudget beforeCaller.fourth query
+              ∃ actual : SourceCurrentConjunctionDemandWorklistExecution.Call SourceCurrentConjunctionTupleBudget.currentTupleBudget beforeCaller.fourth query
                   (physical queried) answer reachedPhysical afterCaller.fourth,
-                SourceCurrentConjunctionTupleGlobalMemos.CallReads actual {memos with query := guardSaved} final)) := by
+                SourceCurrentConjunctionDemandWorklistMemos.CallReads actual {memos with query := guardSaved} final)) := by
     intro sourceHandle targetHandle sourceScs targetScs sourceStored targetStored _different
     have pairRanges :
         match lookupNode beforeCaller.checked.native.machine.heap sourceHandle,

@@ -1,4 +1,4 @@
-import MicroCFTA.SourceCurrentConjunctionClassScanGlobalMemos
+import MicroCFTA.SourceCurrentConjunctionGlobalMemos
 import MicroCFTA.SourceCurrentRequiredQueryMemos
 
 /-!

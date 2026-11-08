@@ -114,10 +114,10 @@ theorem complete
                 (reached = true →
                   ∃ (reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula),
                     afterCaller.checked = SourceCurrentAllocatedQueryMemo.advancePhysical queried reachedPhysical ∧
-                    ∃ actual : SourceCurrentConjunctionTupleExecution.Call
+                    ∃ actual : SourceCurrentConjunctionDemandWorklistExecution.Call
                         SourceCurrentConjunctionTupleBudget.currentTupleBudget beforeCaller.fourth query
                         (physical queried) answer reachedPhysical afterCaller.fourth,
-                      SourceCurrentConjunctionTupleGlobalMemos.CallReads actual {memos with query := guardSaved} final)))) := by
+                      SourceCurrentConjunctionDemandWorklistMemos.CallReads actual {memos with query := guardSaved} final)))) := by
   obtain ⟨fuel, p, h, action, afterCaller, savedQueries, final, next,
     actual, post, savedSame, heapRealized, noOpResult, liveResult⟩ :=
       SourcePruningEnumerationDispatch.dispatch_complete formulas solver inventory beforeCaller

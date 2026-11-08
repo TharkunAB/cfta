@@ -1,4 +1,7 @@
 import MicroCFTA.SourceCurrentConjunctionTupleAnnotationOutcome
+import MicroCFTA.SourceCurrentConjunctionDemandAnnotations
+import MicroCFTA.SourceCurrentConjunctionDemandEffects
+import MicroCFTA.SourceCurrentConjunctionDemandSoundness
 import MicroCFTA.SourceCurrentConjunctionRowsAnnotationOutcome
 import MicroCFTA.SourcePruningEnumerationEnabledEmpty
 
@@ -13,8 +16,10 @@ open InternedConstructorTemplates InternedProbeProvenance
 open InternedNestedProvenance (Values)
 open SourceEqualityAnnotationHeap (Heap)
 open SourceCurrentConjunctionWorker
+open SourceCurrentConjunctionRowsAllocation (Ready Effects)
 variable {Symbol Formula Output : Type}
 local notation "Guard" => SourceSymbolicIndex.Constraint Formula
+local notation "Node" => Value Symbol Guard
 local notation "ProbeHeap" => InternedFreshOrdinaryProbeHeap.Heap
 
 /-- Completed and failed worklists retain annotations at their actual heap. -/
@@ -116,6 +121,82 @@ theorem decision_heap [DecidableEq (Value Symbol Guard)]
     split <;> exact afterHeap
   · exact heap
 
+/-- Each reached worklist branch derives preservation from the original annotation heap. -/
+private theorem demand_explore_heap (annotation : Guard → Prop) (p h budget : Nat) (table : Table Symbol Formula)
+    (pending : List (List Node)) (before : Physical Symbol Formula) (ready : Ready before)
+    (available : ∀ nodes ∈ pending, Values before.heap nodes) (heap : Heap annotation before.heap) :
+    Heap annotation (SourceCurrentConjunctionDemandWorker.explore p h budget table pending before).state.heap := by
+  induction budget using Nat.strongRecOn generalizing table pending before with
+  | ind budget smaller =>
+      induction pending generalizing table before with
+      | nil => simpa only [SourceCurrentConjunctionDemandWorker.explore, Outcome.state] using heap
+      | cons nodes rest tail =>
+          rw [SourceCurrentConjunctionDemandWorker.explore.eq_def]
+          dsimp only
+          split
+          · exact tail table before ready (fun group member => available group (List.mem_cons_of_mem _ member)) heap
+          · split
+            · exact tail table before ready (fun group member => available group (List.mem_cons_of_mem _ member)) heap
+            · have admitted := SourceCurrentConjunctionEmptinessTable.admitted
+                SourceCurrentConjunctionRequirements.key SourceCurrentConjunctionWorklist.closed budget table nodes
+                (Bool.eq_false_iff.mpr (by assumption))
+              have inputs := available nodes List.mem_cons_self
+              have noFree := SourceCurrentConjunctionWorklist.closed_values nodes admitted.2.1
+              have first : Effects before
+                  (SourceCurrentConjunctionDemandAdmission.run p h budget nodes before).state :=
+                Eq.mp (by congr <;> exact Subsingleton.elim _ _)
+                  (SourceCurrentConjunctionDemandEffects.run_effects p h budget nodes before ready inputs)
+              have annotated := SourceCurrentConjunctionDemandAnnotations.run_annotation_heap annotation p h budget nodes before ready inputs noFree heap
+              cases actual : SourceCurrentConjunctionDemandAdmission.run p h budget nodes before with
+              | failed fault after =>
+                  simpa only [actual, SourceCurrentConjunctionRowsWorker.Outcome.state, Outcome.state] using annotated
+              | done result middle =>
+                  have kept : Effects before middle := by
+                    simpa only [actual, SourceCurrentConjunctionRowsWorker.Outcome.state] using first
+                  have middleHeap : Heap annotation middle.heap := by
+                    simpa only [actual, SourceCurrentConjunctionRowsWorker.Outcome.state] using annotated
+                  have oldInputs : ∀ group ∈ rest, Values middle.heap group := by
+                    intro group member value included
+                    exact kept.keeps.available value (available group (List.mem_cons_of_mem _ member) value included)
+                  cases result with
+                  | overflow => exact smaller 0 admitted.1 table rest middle kept.ready oldInputs middleHeap
+                  | zero => exact tail (⟨nodes, []⟩ :: table) middle kept.ready oldInputs middleHeap
+                  | positive predecessor requirements =>
+                      have charge := SourceCurrentConjunctionDemandAdmission.positive_charge p h budget nodes before middle
+                        predecessor requirements actual
+                      have returned := (SourceCurrentConjunctionDemandExecution.admission_graph actual).verified
+                        ready inputs noFree
+                      have remaining : ∀ group ∈ requirements.flatten ++ rest, Values middle.heap group := by
+                        intro group member
+                        rcases List.mem_append.mp member with fresh | old
+                        · obtain ⟨row, rowIn, groupIn⟩ := List.mem_flatten.mp fresh
+                          exact (returned.2 row rowIn group groupIn).1
+                        · exact oldInputs group old
+                      exact smaller (budget - (predecessor + 1)) (by omega)
+                        (⟨nodes, requirements⟩ :: table) (requirements.flatten ++ rest) middle kept.ready remaining middleHeap
+
+/-- The open shortcut and every fixed-point outcome retain the original annotation predicate. -/
+private theorem demand_decision_heap [DecidableEq (Value Symbol (SourceSymbolicIndex.Constraint Formula))]
+    (annotation : Guard → Prop) (p h budget : Nat) (query : Node) (before : Physical Symbol Formula)
+    (ready : Ready before) (available : Available before.heap query) (heap : Heap annotation before.heap) :
+    Heap annotation (SourceCurrentConjunctionDemandWorker.decision p h budget query before).state.heap := by
+  unfold SourceCurrentConjunctionDemandWorker.decision
+  split
+  · have inputs : ∀ nodes ∈ [[query]], Values before.heap nodes := by
+      intro nodes member
+      cases List.mem_singleton.mp member
+      intro value included
+      cases List.mem_singleton.mp included
+      exact available
+    have first := demand_explore_heap annotation p h budget [] [[query]] before ready inputs heap
+    cases actual : SourceCurrentConjunctionDemandWorker.explore p h budget [] [[query]] before with
+    | failed fault after => simpa only [actual, Outcome.bind, Outcome.state] using first
+    | done table after =>
+        simp only [actual, Outcome.state] at first
+        simp only [Outcome.bind]
+        split <;> exact first
+  · exact heap
+
 end Generic
 
 local notation "ConcreteSymbol" => SourceObservations.Label FullSyntax.Formula
@@ -126,6 +207,19 @@ local notation "Memo" => SourceCurrentEmptinessMemo.Memo
 section Concrete
 variable [DecidableEq ConcreteSymbol] [DecidableEq (EdgeKey ConcreteSymbol ConcreteGuard)]
   [DecidableEq (Value ConcreteSymbol ConcreteGuard)]
+
+private theorem demand_call_heap (annotation : ConcreteGuard → Prop)
+    (projectionFuel readFuel budget : Nat) (memo : Memo) (query : Value ConcreteSymbol ConcreteGuard)
+    (before : Physical ConcreteSymbol FullSyntax.Formula) (ready : Ready before)
+    (available : Available before.heap query) (heap : Heap annotation before.heap) :
+    Heap annotation (SourceCurrentConjunctionDemandWorker.call projectionFuel readFuel budget memo query before).state.heap := by
+  unfold SourceCurrentConjunctionDemandWorker.call
+  split
+  · exact heap
+  · have first := demand_decision_heap annotation projectionFuel readFuel budget query before ready available heap
+    cases actual : SourceCurrentConjunctionDemandWorker.decision projectionFuel readFuel budget query before with
+    | done answer after => simpa only [actual, Outcome.bind, Outcome.state] using first
+    | failed fault after => simpa only [actual, Outcome.bind, Outcome.state] using first
 
 /-- Memo hits and every actual memo-miss outcome retain the same annotation predicate. -/
 theorem call_heap (annotation : ConcreteGuard → Prop) (projectionFuel readFuel budget : Nat)
@@ -152,14 +246,14 @@ theorem allocated_call_heap {width : Nat} (annotation : ConcreteGuard → Prop)
     (heap : Heap annotation before.native.machine.heap) :
     Heap annotation (SourceCurrentAllocatedConjunctionWorker.call projectionFuel readFuel budget
       query before memo).state.native.machine.heap := by
-  have own := SourceCurrentConjunctionTupleAnnotationOutcome.call_heap annotation projectionFuel readFuel budget memo query
+  have own := demand_call_heap annotation projectionFuel readFuel budget memo query
     (SourceCurrentAllocatedNativeEffects.physical before) ready available heap
-  cases observed : SourceCurrentConjunctionTupleWorker.call projectionFuel readFuel budget memo query
+  cases observed : SourceCurrentConjunctionDemandWorker.call projectionFuel readFuel budget memo query
       (SourceCurrentAllocatedNativeEffects.physical before) with
   | done output after =>
       obtain ⟨answer, saved⟩ := output
       have afterHeap : Heap annotation after.heap := by
-        simpa only [observed, HeapOutcome, Outcome.state] using own
+        simpa only [observed, Outcome.state] using own
       have heapEq : (SourceCurrentAllocatedQueryMemo.advancePhysical before after).native.machine.heap = after.heap :=
         congrArg (fun state : Physical ConcreteSymbol FullSyntax.Formula => state.heap)
           (SourceCurrentAllocatedQueryMemo.physical_advance before after)
@@ -167,7 +261,7 @@ theorem allocated_call_heap {width : Nat} (annotation : ConcreteGuard → Prop)
         SourceCurrentAllocatedConjunctionWorker.Outcome.state, heapEq] using afterHeap
   | failed fault after =>
       have afterHeap : Heap annotation after.heap := by
-        simpa only [observed, HeapOutcome, Outcome.state] using own
+        simpa only [observed, Outcome.state] using own
       have heapEq : (SourceCurrentAllocatedQueryMemo.advancePhysical before after).native.machine.heap = after.heap :=
         congrArg (fun state : Physical ConcreteSymbol FullSyntax.Formula => state.heap)
           (SourceCurrentAllocatedQueryMemo.physical_advance before after)
@@ -183,14 +277,14 @@ theorem allocated_tuple_call_heap {width : Nat} (annotation : ConcreteGuard → 
     (heap : Heap annotation before.native.machine.heap) :
     Heap annotation (SourceCurrentAllocatedTupleConjunctionWorker.call projectionFuel readFuel budget
       query before memo).state.native.machine.heap := by
-  have own := SourceCurrentConjunctionTupleAnnotationOutcome.call_heap annotation projectionFuel readFuel budget memo query
+  have own := demand_call_heap annotation projectionFuel readFuel budget memo query
     (SourceCurrentAllocatedNativeEffects.physical before) ready available heap
-  cases observed : SourceCurrentConjunctionTupleWorker.call projectionFuel readFuel budget memo query
+  cases observed : SourceCurrentConjunctionDemandWorker.call projectionFuel readFuel budget memo query
       (SourceCurrentAllocatedNativeEffects.physical before) with
   | done output after =>
       obtain ⟨answer, saved⟩ := output
       have afterHeap : Heap annotation after.heap := by
-        simpa only [observed, HeapOutcome, Outcome.state] using own
+        simpa only [observed, Outcome.state] using own
       have heapEq : (SourceCurrentAllocatedQueryMemo.advancePhysical before after).native.machine.heap = after.heap :=
         congrArg (fun state : Physical ConcreteSymbol FullSyntax.Formula => state.heap)
           (SourceCurrentAllocatedQueryMemo.physical_advance before after)
@@ -198,7 +292,7 @@ theorem allocated_tuple_call_heap {width : Nat} (annotation : ConcreteGuard → 
         SourceCurrentAllocatedConjunctionWorker.Outcome.state, heapEq] using afterHeap
   | failed fault after =>
       have afterHeap : Heap annotation after.heap := by
-        simpa only [observed, HeapOutcome, Outcome.state] using own
+        simpa only [observed, Outcome.state] using own
       have heapEq : (SourceCurrentAllocatedQueryMemo.advancePhysical before after).native.machine.heap = after.heap :=
         congrArg (fun state : Physical ConcreteSymbol FullSyntax.Formula => state.heap)
           (SourceCurrentAllocatedQueryMemo.physical_advance before after)

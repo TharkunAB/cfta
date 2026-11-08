@@ -43,7 +43,7 @@ inductive ScanReads [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
       {secondary : SourceCurrentSecondaryTrace.ClassTrace unconstrained values paths heap false anchor}
       {seeded : SourceCurrentAllocatedSeededQuery.Seeded values (paths.map (List.map Int.ofNat))
         (advanceHeap (advanceHeap before heap) anchor) query middle}
-      {call : SourceCurrentConjunctionTupleExecution.Call budget memo query (physical middle) false later savedMemo}
+      {call : SourceCurrentConjunctionDemandWorklistExecution.Call budget memo query (physical middle) false later savedMemo}
       {rest : Scan budget unconstrained reaches values classes (advancePhysical middle later)
         savedMemo outcome selected after saved}
       {memos first second final : Memos}
@@ -58,7 +58,7 @@ inductive ScanReads [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
       {secondary : SourceCurrentSecondaryTrace.ClassTrace unconstrained values paths heap false anchor}
       {seeded : SourceCurrentAllocatedSeededQuery.Seeded values (paths.map (List.map Int.ofNat))
         (advanceHeap (advanceHeap before heap) anchor) query middle}
-      {call : SourceCurrentConjunctionTupleExecution.Call budget memo query (physical middle) true later saved}
+      {call : SourceCurrentConjunctionDemandWorklistExecution.Call budget memo query (physical middle) true later saved}
       {memos first final : Memos}
       (primaryRead : SourceCurrentAllocatedPrimaryReads.ClassReads primary memos first)
       (queryRead : QueryReads (before := advanceHeap before heap) secondary seeded call first final) :

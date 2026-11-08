@@ -1,5 +1,5 @@
 import MicroCFTA.SourceCurrentAllocatedQueryMemo
-import MicroCFTA.SourceCurrentConjunctionTupleMemo
+import MicroCFTA.SourceCurrentConjunctionDemandMemo
 import MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion
 import MicroCFTA.SourceCurrentAllocatedNativeContextCache
 import MicroCFTA.SourceCurrentAllocatedNativeScopeCache
@@ -92,7 +92,7 @@ theorem call_effects [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
     (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
     {budget : Nat} {memo saved : SourceCurrentEmptinessMemo.Memo} {query : Value Symbol Guard}
     {before : Checked width} {answer : Bool} {after : Physical}
-    (actual : SourceCurrentConjunctionTupleExecution.Call budget memo query (physical before) answer after saved)
+    (actual : SourceCurrentConjunctionDemandWorklistExecution.Call budget memo query (physical before) answer after saved)
     (good : Good before) (semantic : SemanticReady before.native.machine.heap)
     (costs : CostHeap before.native.machine.heap) (idle : SourceRecursiveIntersectionNative.Idle before.native)
     (available : Available before.native.machine.heap query)
@@ -100,7 +100,7 @@ theorem call_effects [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
     Receipt before after ∧ SourceCurrentEmptinessMemo.Correct formulas solver after.heap saved ∧
       SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer ∧
       SourceCurrentEmptinessMemo.Extends memo saved := by
-  obtain ⟨effects, finalCorrect, sound, retained⟩ := SourceCurrentConjunctionTupleMemo.verified formulas solver
+  obtain ⟨effects, finalCorrect, sound, retained⟩ := SourceCurrentConjunctionDemandMemo.verified formulas solver
     actual (ready before good semantic costs) available correct
   exact ⟨lift_effects before after good idle effects, finalCorrect, sound, retained⟩
 
@@ -113,11 +113,11 @@ theorem finite [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
     (costs : CostHeap before.native.machine.heap) (idle : SourceRecursiveIntersectionNative.Idle before.native)
     (available : Available before.native.machine.heap query)
     (correct : SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap memo) :
-    ∃ answer after saved, SourceCurrentConjunctionTupleExecution.Call budget memo query (physical before) answer after saved ∧
+    ∃ answer after saved, SourceCurrentConjunctionDemandWorklistExecution.Call budget memo query (physical before) answer after saved ∧
       Receipt before after ∧ SourceCurrentEmptinessMemo.Correct formulas solver after.heap saved ∧
       SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer ∧
       SourceCurrentEmptinessMemo.Extends memo saved := by
-  obtain ⟨answer, after, saved, actual, _⟩ := SourceCurrentConjunctionTupleMemo.complete budget memo query (physical before)
+  obtain ⟨answer, after, saved, actual, _⟩ := SourceCurrentConjunctionDemandMemo.complete budget memo query (physical before)
     (ready before good semantic costs) available
   exact ⟨answer, after, saved, actual,
     call_effects formulas solver actual good semantic costs idle available correct⟩

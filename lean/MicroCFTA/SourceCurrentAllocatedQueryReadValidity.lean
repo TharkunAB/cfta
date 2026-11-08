@@ -1,3 +1,4 @@
+import MicroCFTA.SourceCurrentConjunctionQueryGlobalMemos
 import MicroCFTA.SourceCurrentAllocatedGateReadValidity
 import MicroCFTA.SourceCurrentAllocatedSeededReadValidity
 import MicroCFTA.SourceCurrentAllocatedTupleConjunctionReadValidity
@@ -36,7 +37,7 @@ theorem query
     {gate : SourceCurrentSecondaryTrace.ClassTrace unconstrained values paths before.native.machine.heap false anchor}
     {seeded : SourceCurrentAllocatedSeededQuery.Seeded values (paths.map (List.map Int.ofNat))
       (advanceHeap before anchor) value middle}
-    {call : SourceCurrentConjunctionTupleExecution.Call budget memo value (physical middle) answer after saved}
+    {call : SourceCurrentConjunctionDemandWorklistExecution.Call budget memo value (physical middle) answer after saved}
     {memos final : Memos} (reads : QueryReads gate seeded call memos final)
     (proper : ∀ path ∈ paths, path ≠ [])
     (ranges : SourceCurrentAllocatedSeededQuery.SeededRanges values (paths.map (List.map Int.ofNat))

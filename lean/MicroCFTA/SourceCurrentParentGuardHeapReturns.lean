@@ -1,7 +1,7 @@
 import MicroCFTA.SourceCurrentLowerGuardHeapReturns
 import MicroCFTA.SourceCurrentParentOperationInvariants
 import MicroCFTA.SourceCurrentGateGuard
-import MicroCFTA.SourceCurrentConjunctionTupleGuard
+import MicroCFTA.SourceCurrentConjunctionDemandGuard
 import MicroCFTA.SourceCurrentRequiredGuard
 
 /-!
@@ -165,11 +165,11 @@ private theorem scan_decision (annotation : Guard → Prop) [DecidableEq Symbol]
     simp only [SourceCurrentAllocatedScanWorker.decision,observed] at actual
     cases actual
     obtain ⟨heap,done,rfl⟩ := SourceCurrentAllocatedConjunctionWorker.call_done observed
-    have graph := SourceCurrentConjunctionTupleExecution.call_graph done
-    obtain ⟨answer,heap,saved,produced,effects⟩ := SourceCurrentConjunctionTupleMemo.complete budget fourth value (physical before) good.physical available
+    have graph := SourceCurrentConjunctionDemandWorklistExecution.call_graph done
+    obtain ⟨answer,heap,saved,produced,effects⟩ := SourceCurrentConjunctionDemandMemo.complete budget fourth value (physical before) good.physical available
     obtain ⟨_,rfl,_⟩ := SourceCurrentConjunctionCallUnique.tuple_call graph produced
     exact ⟨⟨good.advance _ effects,effects.keeps,effects.grows⟩,
-      SourceCurrentConjunctionTupleGuard.call annotation graph good.physical available guards⟩
+      SourceCurrentConjunctionDemandGuard.call annotation graph good.physical available guards⟩
 
 /-- Every reached successful Scan branch retains the initial causal guard heap. -/
 theorem scan (annotation : Guard → Prop) [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Node]

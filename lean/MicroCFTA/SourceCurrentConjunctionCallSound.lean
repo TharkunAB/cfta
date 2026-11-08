@@ -1,6 +1,6 @@
 import MicroCFTA.SourceCurrentConjunctionCallRetained
-import MicroCFTA.SourceCurrentConjunctionTupleExecution
-import MicroCFTA.SourceCurrentConjunctionTupleMemo
+import MicroCFTA.SourceCurrentConjunctionDemandWorklistExecution
+import MicroCFTA.SourceCurrentConjunctionDemandMemo
 
 set_option autoImplicit false
 open scoped Classical
@@ -43,12 +43,12 @@ theorem call_correct {width : Nat} {formulas : SourceGuards.Formulas FullSyntax.
   have ready := SourceCurrentAllocatedConjunctionMemo.ready before.checked
     context.ready.good context.ready.semantic context.ready.costs
   refine ⟨retained, ?_⟩
-  cases running : SourceCurrentConjunctionTupleWorker.call p h budget before.fourth query
+  cases running : SourceCurrentConjunctionDemandWorker.call p h budget before.fourth query
       (physical before.checked) with
   | done output after =>
     obtain ⟨answer, saved⟩ := output
-    have actual := SourceCurrentConjunctionTupleExecution.call_graph running
-    have semantic := SourceCurrentConjunctionTupleMemo.verified formulas solver actual ready available context.correct
+    have actual := SourceCurrentConjunctionDemandWorklistExecution.call_graph running
+    have semantic := SourceCurrentConjunctionDemandMemo.verified formulas solver actual ready available context.correct
     simpa only [SourceCurrentAllocatedConjunctionWorker.call, running,
       SourceCurrentAllocatedConjunctionWorker.Outcome.state,
       SourceCurrentAllocatedConjunctionWorker.Outcome.memo, advancePhysical,

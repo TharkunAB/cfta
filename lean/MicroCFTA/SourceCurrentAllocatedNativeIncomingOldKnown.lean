@@ -150,7 +150,7 @@ theorem run_old_known_except_failed_check (bits bound : Nat) (profile : Profile)
                     split at observedPhase
                     · obtain ⟨physicalAfter, physicalDone, same⟩ := SourceCurrentAllocatedTupleConjunctionWorker.call_done observedPhase
                       subst checkedAfter
-                      have call := SourceCurrentConjunctionTupleExecution.call_graph physicalDone
+                      have call := SourceCurrentConjunctionDemandWorklistExecution.call_graph physicalDone
                       obtain ⟨_final, _reads, post, _sound, _available, _unfolding, _queries⟩ :=
                         SourceCurrentAllocatedTupleConjunctionCaller.actual formulas solver
                           (before := SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge)

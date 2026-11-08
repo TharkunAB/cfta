@@ -33,8 +33,8 @@ local notation "reaches" => SourceEndpointReachability.reaches SourceMemoGate.un
 local notation "queryAlphabet" => SourceCurrentGeneratedQueryGuardResources.forecast
 local notation "scalar" => SourceCurrentConstrainedCapTargetForecast.scalar
 local notation "instructionBound" => SourceCurrentAllocatedNativeComputedBudget.instructionBound
-local notation "workerFuel" => SourceCurrentConjunctionTupleWorklistNumeric.workerFuel
-local notation "readerFuel" => SourceCurrentConjunctionTupleWorklistNumeric.readerFuel
+local notation "workerFuel" => SourceCurrentConjunctionDemandWorklistNumeric.workerFuel
+local notation "readerFuel" => SourceCurrentConjunctionDemandWorklistNumeric.readerFuel
 local notation "currentTupleBudget" => SourceCurrentConjunctionTupleBudget.currentTupleBudget
 variable {bits : Nat}
 
@@ -53,7 +53,7 @@ private theorem checked_fits (alphabet : List Constraint) (budget : Nat) (profil
     {after : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula}
     (initial : Fits profile before)
     (bounded : SourceCurrentMemoMergeResourceControl.Fits
-      (SourceCurrentConjunctionTupleWorklistResources.forecast alphabet budget 1 (scalar profile)) after.heap) :
+      (SourceCurrentConjunctionDemandWorklistNumeric.forecast alphabet budget 1 (scalar profile)) after.heap) :
     Fits (SourceCurrentConjunctionAlphabetBounds.tupleCallerForecast alphabet budget profile) (advancePhysical before after) :=
   SourceCurrentConjunctionAlphabetBounds.tuple_checked_fits alphabet budget profile initial bounded
 
@@ -107,9 +107,9 @@ theorem complete_resources
         (reached = true →
           ∃ reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula,
             checkedAfter = advancePhysical queried reachedPhysical ∧
-            ∃ actual : SourceCurrentConjunctionTupleExecution.Call currentTupleBudget beforeCaller.fourth query
+            ∃ actual : SourceCurrentConjunctionDemandWorklistExecution.Call currentTupleBudget beforeCaller.fourth query
                 (physical queried) answer reachedPhysical saved,
-              SourceCurrentConjunctionTupleGlobalMemos.CallReads actual {memos with query := queries} final)) ∧
+              SourceCurrentConjunctionDemandWorklistMemos.CallReads actual {memos with query := queries} final)) ∧
       Fits (step profile) queried ∧ Fits (forecast alphabet profile) checkedAfter ∧
       Heap (fun guard => guard ∈ queryAlphabet alphabet profile) checkedAfter.native.machine.heap ∧
       fuel = instructionBound profile.nodes profile.edges profile.mass + 1 ∧
@@ -161,7 +161,7 @@ theorem complete_resources
             have ready := SourceCurrentAllocatedConjunctionMemo.ready queried receipt.ready.good
               receipt.ready.semantic receipt.ready.costs
             have scalarFits := (SourceCurrentConstrainedCapRequiredResources.of_checked queryFits).scalar_fits
-            have numeric := SourceCurrentConjunctionTupleWorklistNumeric.call_bound actual alphabetAfter
+            have numeric := SourceCurrentConjunctionDemandWorklistNumeric.call_bound actual alphabetAfter
               (scalar (step profile)) ready receipt.available scalarFits queryCarrier
             have carrier := SourceCurrentConjunctionAlphabetBounds.tuple_call_carrier alphabetAfter actual
               ready receipt.available queryCarrier

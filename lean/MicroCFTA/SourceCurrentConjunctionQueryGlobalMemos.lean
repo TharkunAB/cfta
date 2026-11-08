@@ -1,5 +1,5 @@
 import MicroCFTA.SourceCurrentAllocatedSeededMemos
-import MicroCFTA.SourceCurrentConjunctionTupleGlobalMemos
+import MicroCFTA.SourceCurrentConjunctionDemandWorklistMemos
 import MicroCFTA.SourceCurrentConjunctionClassScan
 import MicroCFTA.SourceCurrentSecondaryMemos
 
@@ -39,12 +39,12 @@ inductive QueryReads [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
     (gate : SourceCurrentSecondaryTrace.ClassTrace unconstrained values paths before.native.machine.heap false anchor)
     (seeded : SourceCurrentAllocatedSeededQuery.Seeded values (paths.map (List.map Int.ofNat))
       (advanceHeap before anchor) query middle)
-    (call : SourceCurrentConjunctionTupleExecution.Call budget memo query (physical middle) answer after saved) :
+    (call : SourceCurrentConjunctionDemandWorklistExecution.Call budget memo query (physical middle) answer after saved) :
     Memos → Memos → Prop where
   | run {memos first second final : Memos}
       (gateRead : SourceCurrentSecondaryMemos.ClassReads gate memos first)
       (seededRead : SourceCurrentAllocatedSeededMemos.SeededReads seeded first second)
-      (callRead : SourceCurrentConjunctionTupleGlobalMemos.CallReads call second final) :
+      (callRead : SourceCurrentConjunctionDemandWorklistMemos.CallReads call second final) :
       QueryReads gate seeded call memos final
 
 /-- Actual current query execution derives coherent tables and physical and fourth-memo invariants. -/
@@ -56,7 +56,7 @@ theorem query_memos [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
     (gate : SourceCurrentSecondaryTrace.ClassTrace unconstrained values paths before.native.machine.heap false anchor)
     (seeded : SourceCurrentAllocatedSeededQuery.Seeded values (paths.map (List.map Int.ofNat))
       (advanceHeap before anchor) query middle)
-    (call : SourceCurrentConjunctionTupleExecution.Call budget memo query (physical middle) answer after saved)
+    (call : SourceCurrentConjunctionDemandWorklistExecution.Call budget memo query (physical middle) answer after saved)
     (ranges : SourceCurrentAllocatedSeededQuery.SeededRanges values (paths.map (List.map Int.ofNat))
       (advanceHeap before anchor))
     (ready : Ready before) (available : Values before.native.machine.heap values)
@@ -89,7 +89,7 @@ theorem query_memos [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
   have queryReady : Ready middle :=
     ⟨queryGood, queryEffects.ready.semantic, queryEffects.ready.costs, queryScopes, queryIdle⟩
   have queryCorrect := SourceCurrentEmptinessMemo.grows formulas solver queryEffects.keeps memo correct
-  obtain ⟨final, callRead, finalValid, _, _⟩ := SourceCurrentConjunctionTupleGlobalMemos.call_memos
+  obtain ⟨final, callRead, finalValid, _, _⟩ := SourceCurrentConjunctionDemandWorklistMemos.call_memos
     call queryEffects.ready queryAvailable seedMemos seedValid
   obtain ⟨finalReady, callEffects, finalCorrect, _, retained⟩ :=
     SourceCurrentConjunctionClassScan.memo_effects formulas solver call queryReady queryAvailable queryCorrect
