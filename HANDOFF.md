@@ -1,3 +1,150 @@
+# Current checkpoint: R146 Type conjunction boundary, Top progress and original Mu certificates
+
+Updated 2026-11-08 10:41 CET. Goal ACTIVE. R146 made PROGRESS. Branch formalize.
+Runtime: /tmp/mcfta-type-progress-20261108-1029/RESUME.json.
+Parent: 9b5d212b641b6dfa9fc9f43109f502ead679fe23 (R145).
+Main bd5a406a6a3f84b7e3ae0906082783911509df83 remains incorporated.
+
+THREE new modules and TWENTY-ONE public laws pass actual Nix/Lake,
+strict own-source checking, exact public names, standard axiom reports
+and final source hashes. Existing sources and Audit imports are unchanged.
+R139 full Audit remains a prior baseline, NOT rerun for these new modules.
+Each new module has its own small reproducible packet.
+
+## Verified boundary between actual original Type guards
+
+SourceSynthesisTypeConjunctionBoundary uses two concrete original Types.
+Their recognized variable classes produce separate generalized guards.
+Each normalized field is jointly prefix-free, with maximum endpoint
+length THREE. Actual native conjoin produces the exact normalized field
+from InheritedGrowthBoundary.localConstraint. The result has maximum
+endpoint length FOUR and is NOT jointly prefix-free. One source
+conjunction can therefore add endpoints beyond both original inventories.
+
+The second Type has a fresh variable c at path [1,0,0]. Its singleton
+class is removed by normalization. A concrete finite commonTerm satisfies
+both normalized equality fields and their conjunction. The CURRENT full
+constraint evaluator accepts the joined guard on this term. The example
+is not merely a contradictory pair of equality fields. Both original
+component instructions have the exact original-library certificate, a
+size-one request is accepted, and the joined guard belongs to Derived of
+that actual original literal alphabet.
+
+This is a SOURCE-CONSTRUCTOR boundary. It does not prove that a native
+query between these fields occurs in the selected source execution, that
+an outer caller repeats the inherited-growth walk, or that any execution
+does not terminate. Acceptance here concerns the complete constraint
+evaluator on the supplied term. No full generalized-pattern language,
+whole-query acceptance or Haskell defect is claimed.
+
+## Actual progress along Top-only Type segments
+
+SourceSynthesisTypeDescentProgress has FOUR laws. source_read uses the
+ACTUAL eqGuard accessor outcome to derive jointly prefix-free endpoints,
+physical WellFormed and budget <= sizeOf original Ty. The budget is the
+existing trie pathBudget, one plus maximum endpoint length.
+
+top_descend uses the ACTUAL inherited combination with Top. It derives
+WellFormed and prefix freedom of the combined payload, nonincreasing
+budget, prefix freedom for every descended child, and child endpoint
+length + 1 < the parent budget. Every child budget strictly decreases
+when the parent budget is greater than one. top_complete derives the
+actual Top accessor and combined outcome. source_step derives the
+original own payload and actual first step without a supplied normalizer
+success. Top re-normalizes nonempty inherited classes; it is not a
+literal bypass. The proof controls that normalization from joint prefix
+freedom. The result stops at the next non-Top conjunction. The new
+conjunction boundary shows why that missing case cannot be assumed.
+
+## Source-derived stored Mu body certificate in a mixed heap
+
+SourceSynthesisNativeTypeSites has FOUR laws. build_mu_bodies derives
+Top-annotated bodies for EVERY completed Mu record in the actual original
+closed build, under the source PlainMu binder condition. The outer
+Program rows may have arbitrary guards. Strong induction follows the
+indexed actual publication list and its strictly earlier body writers.
+Actual source paths provide reference-only captures. Existing hereditary
+construction and actual callback/filter readback produce each body.
+A stored winner is attached to its actual writer, not the current callback.
+
+mapped_plainMu retains the literal binder condition under generic symbol
+mapping without injectivity. firstOrderRaw_mu_bodies derives Top body
+annotations from accepted source and its actual Label build.
+firstOrderRaw_muStored derives conditional MuStored(valid) for ANY guard
+predicate containing Top. No supplied body, source inventory, annotation
+heap, future closure or stored-winner certificate is accepted. The actual
+accepted build receipt and validTop remain explicit. This discharges the
+ORIGINAL mixed-heap binder obligation. Later native preservation and
+all-reached Type scope/instance ancestry remain open.
+
+## Concrete next execution target
+
+HereditaryNativeScope.Bindings.enter/read and NativeCache.Stored retain
+operand-local annotations with exact captured warm owners. They permit
+mixed heaps and do not need symbol injectivity. NativeEffectsEdge.
+children_certified and sentinel_certified are already generic.
+body_certified is still specialized to Plain. Generalize its ACTUAL
+loaded/allocated ready and rejected branches to a guard predicate with
+Top and source-conjunction closure. Derive this algebra for the chosen
+original Type guard relation. Keep actual physical checks explicit.
+Then generalize the Plain-specialized PhysicalInduction/PhysicalTrace
+without changing the source worker. Do not replace the trace with an
+unmatched legacy evaluation or a final annotation supplier.
+
+Original conditional MuStored is now derived. It does not supply each
+reached operand's Type role. Feed exact InitialTypeFields and captured
+RowCalls into the operand-local laws. Track scopes and fresh instances
+through joins, Required, class edits, exposure and Parent. Establish
+progress for changed Type annotations and inherited demands. Guard-origin
+Derived can be infinite; neither the original literal alphabet nor the
+new Top segment proves a closed finite carrier or an original-input
+instruction ceiling.
+
+## Full objective and remaining global gaps
+
+Keep ONE original-input/request/ACTUAL-caller bound for BOTH the selected
+optimized worker and COMPLETE enumeration driver. Jointly preserve
+Context, numeric checks, conditional memo histories, strict Program and
+constrained-Type roles, source origins, inherited regions, scoped walks
+and progress at EVERY reached state. Include all siblings, generated,
+intermediate, failing, rejected, returned, subsequent and native states.
+Derive native word checks OR initial numeric certificates from original
+input at every caller. Finite outer NodeCall graphs and sufficient
+complete-driver recursiveFuel remain supplied in their current theorems.
+
+Prove exact accepted terms by NODE COUNT, exact count and order, and BOTH
+SIGNED rank/unrank inverses through actual sparse execution. Retain Sized,
+fallback, failure, productive infinite lazy, tables/maps/sets/cache/hash,
+Word/Int/allocation, wrappers, lookup, Curried and Specftacular. Do not add
+a size to enumerateOutUVarWith or enumerateUntil'. No U-only, initial-only,
+success-only, supplied-fuel, final-validity, finite-carrier, closure or
+future-completion replacement. Track each internal premise's original
+input discharge.
+
+The native Seed/Extend pull cursor, demand/order, symbol/arity matching,
+suspension, bounded stopping, fault state and later pulls remain open.
+The observed demand difference does not establish a heap/cache inequality,
+nontermination or Haskell bug. OriginalTupleCall.request remains the
+strongest GENERAL original-input entry endpoint: actual construction,
+initial Context/Program roles, and stable tuple execution/read receipts.
+True certifies formal emptiness. False does not certify acceptance.
+Full outer/driver completion and native CAF reset remain unclaimed.
+R146 is component progress, not the missing total theorem.
+
+## Haskell findings, preservation and storage
+
+No Haskell edit or fix was made or established in R146. The Type-boundary
+result concerns the formal source constructors. Record any later actual
+Haskell fix in root FINDINGS.md for external implementation work. No
+strict Program predicate was weakened. Preserve every prior proof,
+counterexample, repair, draft and historical document byte. Preserve .hypha.
+
+Compilation remains serial at 4 GiB and zero swap. Keep only small source,
+hash, axiom and failure reports in /tmp. Do not copy build trees or archives.
+The exact size is in runtime publication.json. No cleanup was needed.
+
+---
+
 # Current checkpoint: R145 original guard origins through actual native traces
 
 Updated 2026-11-08 10:17 CET. Goal ACTIVE. R145 made PROGRESS. Branch formalize.
