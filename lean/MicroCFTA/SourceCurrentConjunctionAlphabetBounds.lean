@@ -1,4 +1,6 @@
 import MicroCFTA.SourceCurrentConjunctionCallerNumeric
+import MicroCFTA.SourceCurrentConjunctionTupleWorklistNumeric
+import MicroCFTA.SourceCurrentConjunctionTupleAnnotationOutcome
 
 /-!
 # Conjunction resources from one initial guard alphabet
@@ -236,5 +238,51 @@ theorem caller_complete [DecidableEq ConcreteSymbol] [DecidableEq (EdgeKey Concr
       effects, Cache.extends_refl _, retained⟩
   exact ⟨answer, after, saved, actual, returned, post,
     ⟨bounded.nodes, bounded.edges, fits.domains, bounded.stored⟩, carrier, sound, rfl, rfl, rfl, rfl, done⟩
+
+/-- One supplied alphabet bounds the tuple worker from its original singleton queue. -/
+noncomputable def tupleCallerForecast (alphabet : List ConcreteGuard) (budget : Nat) (profile : Profile) : Profile :=
+  let resource := SourceCurrentConjunctionTupleWorklistResources.forecast alphabet budget 1 (scalar profile)
+  ⟨resource, resource, profile.domains, resource⟩
+
+/-- The tuple forecast retains every initial numeric component. -/
+theorem tupleCallerForecast_ge (alphabet : List ConcreteGuard) (budget : Nat) (profile : Profile) :
+    Le profile (tupleCallerForecast alphabet budget profile) := by
+  have retained := SourceCurrentConjunctionTupleWorklistResources.forecast_ge alphabet budget 1 (scalar profile)
+  exact ⟨Nat.le_trans (SourceCurrentConstrainedCapTargetForecast.scalar_nodes profile) retained,
+    Nat.le_trans (SourceCurrentConstrainedCapTargetForecast.scalar_edges profile) retained,
+    Nat.le_refl _, Nat.le_trans (SourceCurrentConstrainedCapTargetForecast.scalar_mass profile) retained⟩
+
+/-- Larger original profiles retain the tuple schedule for the same supplied alphabet. -/
+theorem tupleCallerForecast_mono (alphabet : List ConcreteGuard) (budget : Nat) {first last : Profile}
+    (increase : Le first last) :
+    Le (tupleCallerForecast alphabet budget first) (tupleCallerForecast alphabet budget last) := by
+  have retained := SourceCurrentConjunctionTupleWorklistResources.forecast_mono alphabet budget
+    (Nat.le_refl 1) (SourceCurrentConstrainedCapTargetForecast.scalar_mono increase)
+  exact ⟨retained, retained, increase.2.2.1, retained⟩
+
+/-- Tuple heap bounds lift to the exact checked return with its original domain bound. -/
+theorem tuple_checked_fits (alphabet : List ConcreteGuard) (budget : Nat) (profile : Profile)
+    {before : Checked width} {after : ConcretePhysical}
+    (initial : SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile before)
+    (bounded : Fits (SourceCurrentConjunctionTupleWorklistResources.forecast
+      alphabet budget 1 (scalar profile)) after.heap) :
+    SourceCurrentConstrainedCapGeneratedQueryResources.Fits
+      (tupleCallerForecast alphabet budget profile) (advancePhysical before after) :=
+  ⟨bounded.nodes, bounded.edges, initial.domains, bounded.stored⟩
+
+/-- The same completed tuple call retains the original supplied guard alphabet. -/
+theorem tuple_call_carrier [DecidableEq ConcreteSymbol] [DecidableEq (EdgeKey ConcreteSymbol ConcreteGuard)]
+    [DecidableEq ConcreteValue] (alphabet : List ConcreteGuard)
+    {budget : Nat} {memo saved : Memo} {query : ConcreteValue}
+    {before after : ConcretePhysical} {answer : Bool}
+    (actual : SourceCurrentConjunctionTupleExecution.Call budget memo query before answer after saved)
+    (ready : Ready before) (available : Available before.heap query)
+    (known : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ alphabet) before.heap) :
+    SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ alphabet) after.heap := by
+  obtain ⟨p, h, stable⟩ := SourceCurrentConjunctionTupleExecution.call_complete actual
+  have annotated := SourceCurrentConjunctionTupleAnnotationOutcome.call_heap (fun guard => guard ∈ alphabet)
+    p h budget memo query before ready available known
+  have done := stable p h (Nat.le_refl _) (Nat.le_refl _)
+  simpa only [done, SourceCurrentConjunctionWorker.Outcome.state] using annotated
 
 end MicroCFTA.SourceCurrentConjunctionAlphabetBounds
