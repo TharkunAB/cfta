@@ -1,3 +1,177 @@
+# Current checkpoint: tuple proofs are below the caller layer
+
+Updated 2026-11-08 04:51 CET. Goal ACTIVE. R136 made PROGRESS.
+Branch formalize. Previous checkpoint d8a085df3d3c1615dbf599b36c995e5097d19167
+is R135, canonical board seq985. Retain the FULL original objective below.
+Keep the optimized interned core PRIMARY and older constructor/equality
+proofs SECONDARY. Preserve all proofs, counterexamples, repairs, marked
+drafts and unrelated .hypha/. Regular formalize pushes are authorized.
+Do not pause the goal or ask whether to continue.
+
+Formalize was pulled before this work at04:44 CET. It was current. Main
+bd5a406a6a3f84b7e3ae0906082783911509df83 remains incorporated. Source/check
+commit58e611a219569d83bcbdc75d4d500f80938fbaae implements the dependency
+repair. It changes THREE existing proof modules and adds ONE lower module.
+All FOUR changed Nix/Lake targets and strict own-source reports pass.
+They cover14 existing public laws and ZERO new public laws. Complete public
+names and standard-axiom reports match. The generic and current unfolding
+proofs retain their exact original signatures and bodies. No proof is lost.
+The unchanged R135 TupleCallerNumeric target was rebuilt and both of its
+public laws pass again at source hash
+147d7b0c584feeaf9ff453c7e668ac0a53cca63d3f5e64a6246a83f10c266725.
+No Haskell source changed. No selected implementation changed yet.
+
+The documentation commit, push, independent fetch, canonical board readback
+and exact final hashes are in publication.json and RESUME.json under:
+/tmp/mcfta-probe-deps-20261108-0446/
+Committed check packets reproduce without /tmp. This introduction supersedes
+the R135 statement that the two dependency repairs are only hypothetical.
+All selected integration, original-input and native gaps below remain.
+
+## Dependency repair and proof preservation
+
+SourceCurrentConjunctionProbeBirthCore contains the EXISTING generic
+SourceCurrentConjunctionProbeBirth.unfold_heap. Its full declaration and
+proof match the previous source byte-for-byte. Its direct dependencies are
+InternedFreshOrdinaryProbeHeap and InternedFreshOrdinaryUnfoldCompletion.
+It does not import the current caller Context.
+
+The original SourceCurrentConjunctionProbeBirth module imports this lower
+module and retains current_unfold_heap byte-for-byte. Its original import
+therefore continues to expose BOTH existing qualified names and signatures.
+No Audit import change is necessary. No second unfolding law was added.
+
+SourceCurrentConjunctionExposureProbes now imports ProbeBirthCore directly.
+SourceCurrentAllocatedProbeExposure now imports SourceEqualityProbeUnfold
+instead of the unused SourceCurrentAllocatedMuRebuild import. Every other
+line in these two modules is unchanged. All of their public laws compile.
+
+The committed architecture check traverses actual current imports. It finds
+all NINE prohibited paths absent: each of TupleMemo, TupleGlobalMemos and
+TupleWorkerProbes has no dependency path to AllocatedConjunctionMemo,
+ConjunctionClassScan or AllocatedPartialInvariant. Closure sizes including
+the starting module and external import names are1154,1166 and1151.
+Reproduce from the repository root:
+
+```sh
+python3 lean/restart-evidence/20261108-probe-birth-core/import-audit.py
+```
+
+The four committed packets contain strict source hashes, full public names,
+explicit #check and standard-axiom reports. The Core packet also contains
+import-audit.py and its small JSON result. The dependency repair is compiler
+verified. It changes proof placement and imports. It adds no new semantic
+claim and does not switch the selected worker.
+
+## Strongest statement and largest remaining gap
+
+R135 remains the strongest new INTERNAL caller statement. Given the current
+caller Context, its full query Frame, an available query and a fitting
+Profile, construct the ACTUAL tuple-budget call and its logical read receipt.
+At the SAME return preserve Frame/Post, native cells/domains, input
+inventory, both result families, warm merge, correct and extended fourth
+memo, probes and global read validity. Extend the unfolding memo and retain
+the query table. Derive returned heap bounds and original projection/read
+ceilings. Every larger pair replays the same answer, complete physical state
+and saved memo. True proves formal-language emptiness. False proves no
+acceptance. No future heap/read/fuel supplier or completed body is an input.
+
+The largest gap is still the SAME execution across the actual selected
+worker, all reached callers and the complete enumeration driver. R136
+removes a dependency obstacle to that port. It does not discharge the
+initial Context/Frame/Ready premises from an original Library/Query/SIGNED
+size. In particular, general Label Program roles alone do not establish
+Ready.fields. Derive actual equality-field availability from guard and heap
+preparation at initial and reached states. Do not add a final future oracle.
+
+The strongest general ORIGINAL-INPUT composition remains R130: original
+construction, complete stable merge, and an independent Required traversal
+for EVERY actual merged row in the same returned merge heap, with depth
+2*sizeOfNeeded+1 and the internal reader ceiling. This does not establish
+all siblings, a complete reducer or the full driver. R131's current-modeled
+2-to4 height prefix still refutes transparent height descent only. Audit
+its selected callback version when changing the selected call.
+
+## Next selected implementation
+
+The existing Memo/ClassScan interfaces can now import the lower tuple
+contracts without the audited cycles. Port these existing interfaces.
+Do not leave a parallel compatible worker as the final result.
+- Keep AllocatedConjunctionMemo.ready, lift_effects and Receipt. Port its
+  call_effects/finite to the actual TupleExecution.Call and TupleMemo laws.
+- Port ClassScan.Scan.continued/stopped and their completion, soundness,
+  global-read, allocated source-read, literal scan/record and ScanNumeric
+  consumers to the SAME tuple Call relation.
+- Port existing Caller verified/actual/finite, WorkerActual graph extraction,
+  stability and completion, and WorkerResources to the checked tuple laws.
+- Switch AllocatedConjunctionWorker.call from the old key-charged core to
+  TupleWorker.call. Retain the checked Outcome and advancePhysical. Port
+  literal lift/extract success and failure equations. Failures retain their
+  actual reached checked state and the original fourth memo.
+- Port all-outcome effects, CallPost, stored certificates, union normality,
+  operation growth, correctness, probe and annotation consumers. Preserve
+  the original weak semantic/coverage/available/closed premises.
+
+Keep legacy SourceCurrentConjunctionWorker intact for shared types and
+historical proofs. TupleWorker already imports it. Do not introduce a
+reverse dependency or claim the two workers execute equally.
+
+SourcePruningEnumerationEnabledEmpty.check still passes1000 at line33.
+SourceCurrentAllocatedNativeStoredEnabledEmpty repeats1000 at line40.
+Actual cfta/src/Data/CFTA/Enumeration.hs:664 and
+SourceCurrentConjunctionTupleBudget.currentTupleBudget use10000. Change the
+selected LEAN wrapper and its dependent receipts and forecasts, including
+IncomingQueryResources, during the cutover. This mismatch is in FINDINGS.
+Haskell already has the current budget. Do not change it to fit the model.
+
+## Full objective and native obligations
+
+Retain ONE original-input/request/ACTUAL-caller bound for BOTH the selected
+optimized worker AND the COMPLETE enumeration driver. Cover all siblings,
+generated/reached/intermediate/failing/rejected/returned/subsequent/native
+states. Prove joint Program/constrained-Type progress at ALL reached states.
+Preserve exact accepted terms at NODECOUNT size, size order and counts, plus
+BOTH SIGNED rank/unrank inverses through ACTUAL sparse execution. Cover ALL
+Sized, fallback, failure, productive-infinite/lazy behavior, maps/sets/tables,
+cache/hash/Word/Int/allocation, wrappers, lookup, Curried and Specftacular.
+Do not finish with U-only, initial-only or success-only results. Do not add a
+final body, worker, fuel, resource, validity, OriginalInput, closure,
+finite-carrier, lookup or Unselected oracle. Do not invent a size for the
+size-free enumerateOutUVarWith or enumerateUntil' APIs. Track original-input
+discharge for every internal premise.
+
+Native correspondence still needs the ACTUAL pull cursor for the first
+budget+1 matching raw tuples, demanded nodeEdges reads, exact reached cache
+and state, faults and publication. Current model exposures are eager and
+left-to-right. Haskell foldr seed and inner demand can differ. Logical read
+receipts and eager replay do not establish native lazy behavior. Projection
+and reader fuel remain distinct from weighted work, equality-cache growth,
+allocation and Word/Int behavior. The full objective remains ACTIVE.
+
+## Haskell, runtime and restart
+
+R136 changes NO Haskell source and proposes no Haskell fix. Main's LPO repair
+remains incorporated. The1000/10000 mismatch requires a Lean wrapper fix.
+Preserve all previous Haskell findings, external ownership and the withdrawn
+PR203 recommendation in the historical tails. Remote PR status, broad Haskell
+tests, benchmarks, native demand probes and exact-head CI were not refreshed.
+Record any later Haskell fix in FINDINGS with source, status and owner.
+
+Both compiler jobs finished successfully under serial4GiB/swap0 caps.
+The four changed targets peaked417MiB. The unchanged caller consumer check
+peaked559MiB. The bounded read-only audit finished. No concurrency, memory
+cap or evaluator setting changed. Readable /tmp remains about20MiB, with
+five protected unreadable system paths and about263GB available. No deletion,
+source copy, archive or build tree was needed. Runtime files are small and
+optional after publication. No proof depends on /tmp.
+
+The one-time writer prepends this same introduction to NEXT-PROMPT.md,
+HANDOFF.md and FINDINGS.md. It preserves the complete shared R135 prefix of
+297376B and every historical tail byte. Once doc-tail-manifest.json exists,
+DO NOT RERUN the writer. Read RESUME.json for exact publication receipts.
+
+---
+
 # Current checkpoint: numeric tuple calls retain the full caller
 
 Updated 2026-11-08 04:41 CET. Goal ACTIVE. R135 made PROGRESS.
