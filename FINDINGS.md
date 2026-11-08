@@ -1,3 +1,172 @@
+# Current checkpoint: R141 strict Parent roles and actual Program child entry
+
+Updated 2026-11-08 08:58 CET. Goal ACTIVE. R141 made PROGRESS. Branch formalize.
+Keep the FULL original objective. Regular formalize pushes are authorized.
+Do not pause the goal or ask whether to continue. This introduction
+supersedes the status below. Preserve all historical text and proofs.
+
+Base 08f0d730ffe78b1339bcc1d6c3a4369a28f9e4cd is the published R140 head.
+Main bd5a406a6a3f84b7e3ae0906082783911509df83 remains incorporated.
+R141 adds FOUR proof modules and THIRTEEN public laws. All pass actual
+Nix/Lake targets, strict own-source, complete real-name checks, exact
+source hashes, and standard axiom reports. No existing Lean module or
+production Haskell source changes. All earlier results remain available.
+
+## New actual Parent result
+
+SourceSynthesisParentProgramRoles.edge_roles proves that an ACTUAL
+successful AllocatedParentWorker.edge call preserves the FULL strict
+ProgramEdge certificate. It requires the original caller Context and the
+input ProgramEdge. If the raw guard is not contradictory, it also requires
+FieldAvailable for that guard, EqReady for the inherited value, and
+resident input children at that SAME original caller state. The raw
+contradiction branch does not require those live input facts.
+
+The proof derives the physical Good state and stored merge memo from the
+caller Context. It derives the actual precheck receipt from the exact
+field load and Context.admitted. The receipt supplies cached readback.
+The actual local reduction supplies effects, output availability, length,
+and indexed Program roles. The actual constructor supplies its coupled
+guard and layout. No supplied receipt, Frame, future Context, footprint,
+result role, or guard-heap certificate is accepted. Three public adapters
+cover application, filter, and annotated input rows.
+
+This is a SUCCESSFUL PARENT RETURN law. It does not establish Parent
+completion, arbitrary outer cache return roles, all reached role closure,
+constrained-Type progress, or a total worker/driver bound. The initial
+Context and live input facts still need to hold at every reached caller.
+R137 already derives the initial request Context from accepted input.
+R141 does not extend that initial construction to every outer state.
+
+## Supporting constructor and reduction laws
+
+SourceSynthesisConstructorProgramRoles has FOUR laws. reject_program
+proves the strict role for actual reject. build_application, build_filter,
+and build_annotated follow actual successful constructors under physical
+Good, loaded EqReady, and resident children. Their private execution
+inversion retains BOTH guard and children from the SAME keep decision:
+the original guard and children, OR Top and [Empty].
+
+SourceSynthesisLocalReduceProgramRoles has THREE laws.
+application_reduce_roles and filter_reduce_roles preserve indexed Program
+children through the SAME actual precheck receipt and literal successful
+reduce call. They cover unchanged, empty-children, and live-class branches.
+Their initial Good, Stored, Values, indexed input/output, source occurrence,
+and Program role requirements refer to the actual initial state.
+reduce_length needs only the actual successful reduce return. It requires
+no range, readiness, physical invariant, receipt, or role premise. It
+supplies the exact four-, two-, or one-child layout used by Parent.
+
+## Program child requests before a child return
+
+SourceSynthesisProgramChildEntry has TWO laws. application_entry covers
+slots 2 and 3 of a current four-child strict Program row. filter_entry
+covers slot 1 of a current two-child strict Program row. Each uses physical
+Good and Inputs at the initial descendants phase, inherited Within the
+annotation region, the SAME actual inherited-prefix equation, actual
+Reached to the current walk, and the exact walk-position frame:
+edge.children.drop index = child :: rest.
+
+Each law derives ProgramValue for the next child, Within the annotation
+region for the actual descended inherited payload, and actual Reached to
+the next node request. It needs no child return or child completion. The
+region proof derives current validity and readiness from the actual
+prefix. Role constructors and arity determine the layout. Symbol names
+alone do not classify rows. The exact walk-position frame remains an
+explicit induction requirement. These two laws do not prove that every
+reached walk has that frame, or that every current returned row has its
+Program certificate.
+
+## Largest remaining proof gap
+
+The next task is one joint invariant over ALL actual reached outer
+requests, including failing, rejected, and subsequent requests. It must
+retain strict Program roles, constrained-Type roles and progress, exact
+walk positions, inherited regions, origins, and current caller facts.
+Successful Parent preservation and the local next-entry laws now supply
+parts of this induction. They do not supply the induction itself.
+
+Warm cache hits need actual role history. Existing physical request-key
+coherence can identify a captured request with a ready query. The existing
+NodeLaw and EdgeLaw memo soundness predicates state language meaning;
+they do not state Program roles. The next candidate is a conditional
+returned-role history: a Program input captured by a returned cell implies
+a Program result. The condition permits Type-only requests in the same
+memo. Derive this history from actual empty initialization, publication,
+and advancement. Do not accept it as a final closure oracle. Inspect the
+existing same_key and private edge_same_key facts before adding helpers.
+
+AllocatedPartialWorkerCompletion.nodeCall_complete still requires a finite
+PartialGraph.NodeCall derivation. WorkerActual.nodeCall_verified still
+requires an actual successful return and reachedWorkerRanges.
+ConstructedResources.prepared_run still accepts supplied recursiveFuel
+and can return exhausted. R141 does not discharge these requirements.
+
+## Full objective and strongest original-input boundary
+
+The goal remains ONE original-input/request/ACTUAL-caller bound for BOTH
+the selected optimized worker and the COMPLETE enumeration driver. It
+must cover all siblings, generated, reached, intermediate, failing,
+rejected, returned, subsequent, and native states. It must derive joint
+Program/constrained-Type progress at every reached request. It must prove
+exact accepted terms by NODE COUNT, count, order, and BOTH SIGNED rank and
+unrank inverses through actual sparse execution. Retain all Sized,
+fallback, failure, productive infinite lazy, table/map/set/cache/hash,
+Word/Int/allocation, wrapper, lookup, Curried, and Specftacular scopes.
+Do not add a size to size-free enumerateOutUVarWith or enumerateUntil'.
+Do not replace the full goal with U-only, initial-only, success-only,
+finite-carrier, supplied-fuel, final-validity, future-completion, or closure
+claims. Internal premises require tracked original-input discharge.
+
+SourceSynthesisOriginalTupleCall.request remains the strongest general
+original-input entry endpoint. It builds the actual original guard and
+Label graph from accepted signed firstOrderRaw input and empty stores.
+It derives the full initial modeled Context and Program roles, then
+actual tuple execution and reads at stable instrumented fuel. It accepts
+no supplied Context, build, validity, body, future carrier, fuel, or
+resource oracle. Source errors remain explicit. True certifies formal
+emptiness; false does not certify acceptance. Native CAF reset and full
+outer/driver completion are not claimed.
+
+## Native correspondence gap and Haskell findings
+
+No Haskell fix was made or established in R141. No strict Program
+predicate was weakened. Actual constructor rejection retains Top paired
+with [Empty], which the existing annotated ProgramEdge constructor already
+permits. A hypothetical Top row with four application children from a
+weaker guard-only summary is not an actual rejected Parent result and is
+not a counterexample to the strict role invariant.
+
+The separate native gap remains exact lazy tuple demand and cursor state.
+For Enumeration.hs edgeTuples [A,B,C], the source demand is A,C and can
+skip B; the row exposure model demands A,B,C. Both can return []. This is
+a demand difference, not an established heap, cache, nontermination, or
+Haskell defect. Implement the actual nested Seed/Extend cursor order,
+symbol/arity matching, suspended emissions, B+1 stop without forcing its
+continuation, actual read/fault states, and later pulls. Do not assume
+once-per-operand sharing. Keep exact node-count/count/order/signed inverse
+and wrapper correspondence work in scope.
+
+## Verification, publication, and temporary storage
+
+The four new targets have THIRTEEN new public laws. Each packet includes
+an actual Nix/Lake target, a strict own-source report, explicit #check and
+#print axioms for every public theorem in its real namespace, and the
+final source hash. Only propext, Classical.choice, and Quot.sound occur.
+Packet sources and reports are reproducible from the committed source.
+The runtime stores small scripts and summaries, not build trees.
+
+The existing Audit import tree did not change. Its R139 baseline passed
+4920 jobs. That Audit was NOT rerun for R140 or R141 and does not cover the
+new unimported modules; their own strict target checks cover them.
+Compilation remains serial under a 4 GiB memory cap and zero swap.
+No queue or global compiler setting changed. The final publication record
+checks exact pushed/fetched refs, every changed tracked source/packet/doc
+file, every historical document byte, the canonical board readback, goal
+state, terminal compiler state, and readable /tmp usage. Keep .hypha/.
+The next continuation must fetch exact refs, retain the full objective,
+and continue the joint reached invariant and original-input bounds.
+
 # Current checkpoint: R140 actual local class calls preserve Program children
 
 Updated 2026-11-08 08:37 CET. Goal ACTIVE. R140 made PROGRESS. Branch formalize.
