@@ -1,3 +1,123 @@
+## R151: original Program fields and actual seeded Type classes
+
+Updated 2026-11-08 12:33 CET. The full goal remains ACTIVE. The previous goal turn
+made verified progress. This checkpoint adds eleven public laws in four
+new modules and exposes one existing shared source proof. Five targets
+and fifteen public laws pass. Four previous public laws remain unchanged.
+
+The new source endpoint derives `AnnotationFields (Origin lib)` for the
+actual accepted original Program build. It uses original library and query
+membership, actual ordered child calls, their returned heaps, and growth
+into the original completed heap. Each earlier Type call obtains its Mu
+store from that original heap. No returned annotation invariant is assumed.
+
+Actual node normalization retains annotated first children through pruning
+and first-writer readback. Actual union construction derives its empty,
+singleton, or ordinary-node branch from the input fields. It does not
+assume that arbitrary stored Program unions are flat. Program guards keep
+their own full source guards. They do not acquire a Type-origin annotation.
+
+Original application and filter row calls now derive their nested function,
+argument, and candidate field facts from exact original `Program` syntax.
+Their final seeded query selects an ACTUAL equality class from the actual
+row guard accessor. Source endpoint laws derive the path regions. The same
+completed `Seeded` graph then derives joint `Ready`, costs, machine extension,
+and an available, closed, Type-origin result through all intermediate
+operands and retained warm caches. No separate nested value annotation,
+forest route, initial semantic readiness, cost heap, availability, closedness,
+or conditional Mu-store premise remains in these original-row adapters.
+
+Two premises remain explicit: physical `Good` at the original cold checked
+state, and completed actual `Seeded` execution. Original Program syntax
+and the actual row/selected-class receipts remain source input facts.
+This is guard provenance. It does not prove the complete generated Type
+grammar, scoped instantiation, global progress, finite Word safety, trace
+existence, or preservation after later Program edits. The cold adapter starts
+empty native tables. R150 still carries warm tables within the actual fold.
+
+Verified source targets:
+- `SourceSynthesisAnnotationFieldConstructors`: 2 checked laws; 2 new. Source SHA256 `713b1c0a9d4f5958155500533a32913975845212986dbf6695430383acba0c9c`.
+- `SourceSynthesisOriginalProgramFieldCalls`: 3 checked laws; 3 new. Source SHA256 `81ef768fa82164efd89158ec861d9d8ca9e870b4d016296359d6f84a21719bde`.
+- `SourceSynthesisOriginalProgramTypeFields`: 3 checked laws; 3 new. Source SHA256 `e8f1bddb953463572687f257aa865b7f748fedbd382d84801c16402a09d7e90e`.
+- `SourceSynthesisOriginalTypeRequired`: 5 checked laws; 1 new. Source SHA256 `ffcecc6dbde0da5adaa6af9de74d9dc7614bdeb9b54ed874c62176c9ae571969`.
+- `SourceSynthesisOriginalTypeSeeded`: 2 checked laws; 2 new. Source SHA256 `fc1d3567905df8f46ef65127d71fc21d021d1875f3c330de2d53e8fe5d32fc7e`.
+
+Reviewable proof commits, based on `04da309b2b3e008e0a8265a75ff6d4c79a809992`:
+- `4ccfe85c0eb2e675a199d7e0eda45c8df63464d6`: SourceSynthesisOriginalTypeRequired.
+- `df68e0636e21412598c8552c92ed397d3e24a3bc`: SourceSynthesisAnnotationFieldConstructors.
+- `5d041231fdf989031549d157f9268354bb8f1d17`: SourceSynthesisOriginalProgramTypeFields.
+- `e191dd0fcbce9ab069d6c189cc9b0498b4e646e7`: SourceSynthesisOriginalProgramFieldCalls.
+- `bef1aaa1aced1fb11b145b35053c213829562575`: SourceSynthesisOriginalTypeSeeded.
+
+The existing Required source file changes only `source_context` from private
+to public and adds its documentation. Its proof body and previous public
+contracts remain unchanged. Its checker and README remain unchanged.
+Each changed target has a small reproducible packet in
+`lean/restart-evidence/20261108-<slug>/`. The packets check actual project
+Nix/Lake compilation, strict own-source warnings, every public name and
+namespace, standard axioms, and final source hashes. Use the existing serial
+4 GiB and zero-swap heavy-management wrapper. Do not start parallel compilers.
+The R139 full Audit baseline remains recorded. It was not rerun here.
+
+The current general original-input endpoint remains R137
+`SourceSynthesisOriginalTupleCall.request`. Accepted signed FirstOrder
+construction derives initial Context and Program roles and the actual
+stable tuple-call/read receipt with its full modeled postcondition.
+It does not prove complete worker or driver termination or native demand.
+
+Next proof work:
+
+1. Preserve strict `ProgramValue`, `AnnotationFields`, and `MuStored` jointly
+   through actual annotation-only `RequireNode`/`RequireRows`/`RequireChildren`.
+   `ActualSelectedProgramFootprints.application_annotation_only` and
+   `filter_annotation_only` derive the source-selected footprints. Only the
+   annotated first child is selected. Other Program children are unselected.
+   Use actual Type Required merge for the selected child and actual edge/node
+   constructors for the Program result. Do not supply a future final store.
+2. Attach the live narrowing target separately. `SharedTargetWorker.leaf`
+   forces a target before native intersection. Its target operands perform
+   projection PLUS memo-aware Merge. The refused-class `Seeded.Operand` is
+   projection-only. It does not cover this target executor. Carry actual
+   `HereditaryMerge.Stored` and class-local typed target-slot history. Derive
+   each miss before publication. Add Mu-store preservation to the real warm
+   memo-Merge graph; the cold `MergedNoNewMu` theorem is insufficient.
+3. Integrate source roles and Type fields with class scans, actual narrowing,
+   Parent, force, subsequent callers, failing prefixes and returned states.
+   Derive structural Type grammar, captured scopes and joint Program/Type
+   progress for every reached state. R146 still shows maximum normalized
+   Type path length can increase from three to four. Top descent is only a
+   segment theorem. No maximum-initial-path ranking argument is established.
+
+The full objective remains ONE original-input/request/actual-caller resource
+bound for BOTH the selected optimized worker AND the complete enumeration
+driver, including all siblings, generated/reached/intermediate/failing/
+rejected/returned/subsequent/native states. Derive finite Word/Int/key safety
+and completion. No supplied future worker/body/result, trace, fuel, closure,
+finite carrier, final validity, lookup, or OriginalInput oracle can replace
+that objective. Keep every Sized/fallback/failure/productive infinite path,
+tables, maps, sets, caches, hash and allocation behavior, wrappers, lookup,
+Curried and Specftacular. Do not invent a size for size-free APIs.
+
+Connect exact accepted terms, NODE-COUNT size, counts and order and BOTH
+SIGNED rank/unrank inverses through actual sparse execution. Native GHC lazy
+cursor/demand/order/stop/fault correspondence remains open. The known tuple
+demand mismatch remains a correspondence boundary, not an established
+Haskell bug or a demonstrated cache/state inequality. Public intersection
+still starts with the empty domain and retains warm native caches. Internal
+Mu bindings already follow the native scope rules. Do not reopen that wrapper
+as a missing ingress or infer Type roles from symbols or bare references.
+
+No Haskell edit or new established Haskell fix in R151. Any future Haskell
+repair MUST also be recorded in this root FINDINGS.md for external work.
+Preserve unrelated `.hypha/`. Refreshed main remains
+`bd5a406a6a3f84b7e3ae0906082783911509df83`, already an ancestor.
+Push regularly to authorized `formalize`. The runtime directory is
+`/tmp/mcfta-original-program-fields-20261108-1223/`. Publication writes exact
+HEAD/ref, canonical board readback, terminal scopes, source and historical
+tail hashes, active-goal state and `/tmp` usage to `RESUME.json` and
+`publication.json`. Keep only small reproducible reports and restart data.
+Do not delete protected unreadable `/tmp` paths. No cleanup is required now.
+
 # Current checkpoint: R150 Type paths through the actual seeded class fold
 
 Updated 2026-11-08 12:17 CET. Goal ACTIVE. R150 made PROGRESS. Branch formalize.
