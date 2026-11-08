@@ -165,9 +165,9 @@ private theorem scan_decision [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol 
     simp only [SourceCurrentAllocatedScanWorker.decision,observed] at actual
     cases actual
     obtain ⟨heap,done,rfl⟩ := SourceCurrentAllocatedConjunctionWorker.call_done observed
-    have graph := SourceCurrentConjunctionWorkerCompletion.call_sound p h budget fourth value (physical before) _ heap _ done
-    obtain ⟨answer,heap,saved,produced,effects⟩ := SourceCurrentConjunctionMemo.complete budget fourth value (physical before) good.physical available
-    obtain ⟨_,rfl,_⟩ := SourceCurrentConjunctionCallUnique.call graph produced
+    have graph := SourceCurrentConjunctionTupleExecution.call_graph done
+    obtain ⟨answer,heap,saved,produced,effects⟩ := SourceCurrentConjunctionTupleMemo.complete budget fourth value (physical before) good.physical available
+    obtain ⟨_,rfl,_⟩ := SourceCurrentConjunctionCallUnique.tuple_call graph produced
     exact advanced good effects
 
 private theorem scan_bind_done {A B : Type}
