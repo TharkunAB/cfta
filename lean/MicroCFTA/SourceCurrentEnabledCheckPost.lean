@@ -1,4 +1,4 @@
-import MicroCFTA.SourceCurrentConjunctionCallPost
+import MicroCFTA.SourceCurrentConjunctionTupleCallPost
 import MicroCFTA.SourcePruningEnumerationEnabledEmpty
 
 /-! The literal enabled check retains full Post at its actual saved query memo. -/
@@ -42,7 +42,8 @@ theorem check_post
             SourceCurrentAllocatedPartialState.advance, SourceCurrentAllocatedConjunctionWorker.Outcome.state,
             SourceCurrentAllocatedConjunctionWorker.Outcome.memo] using Post.refl updated
       | true =>
-          have called := SourceCurrentConjunctionCallPost.call_post p h 1000 query before
+          have called := SourceCurrentConjunctionTupleCallPost.call_post p h
+            SourceCurrentConjunctionTupleBudget.currentTupleBudget query before
             {memos with query := savedQueries} updated available closed
           simpa [SourcePruningEnumerationEnabledEmpty.check, observed] using called
 

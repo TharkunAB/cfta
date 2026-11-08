@@ -1,8 +1,8 @@
 import MicroCFTA.SourcePruningEnumerationObservation
 import MicroCFTA.SourceCurrentAllocatedTargetQuery
-import MicroCFTA.SourceCurrentAllocatedConjunctionCaller
-import MicroCFTA.SourceCurrentConjunctionWorkerCompletion
-import MicroCFTA.SourceCurrentAllocatedConjunctionWorker
+import MicroCFTA.SourceCurrentAllocatedTupleConjunctionCaller
+import MicroCFTA.SourceCurrentConjunctionTupleExecution
+import MicroCFTA.SourceCurrentAllocatedTupleConjunctionWorker
 import MicroCFTA.SourceEndpointMemoCorrect
 
 namespace MicroCFTA.SourcePruningEnumerationEnabledEmpty
@@ -30,7 +30,7 @@ noncomputable def check
     (queries : Queries) : SourceCurrentAllocatedConjunctionWorker.Outcome width × Queries :=
   let guardResult : Bool × Queries := SourceEndpointMemo.run query queries
   if guardResult.1 then
-    (SourceCurrentAllocatedConjunctionWorker.call p h 1000 query before memo, guardResult.2)
+    (SourceCurrentAllocatedTupleConjunctionWorker.call p h SourceCurrentConjunctionTupleBudget.currentTupleBudget query before memo, guardResult.2)
   else (.done false before memo, guardResult.2)
 
 /-- Derive the enabled replacement from two actual pending slots and the full input caller. -/
@@ -70,9 +70,9 @@ theorem pending_enabled_complete
       (reached = true →
         ∃ reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula,
           checkedAfter = advancePhysical queried reachedPhysical ∧
-          ∃ actual : SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query
+          ∃ actual : SourceCurrentConjunctionTupleExecution.Call SourceCurrentConjunctionTupleBudget.currentTupleBudget beforeCaller.fourth query
               (physical queried) answer reachedPhysical saved,
-            SourceCurrentConjunctionGlobalMemos.CallReads actual {memos with query := guardSaved} final) ∧
+            SourceCurrentConjunctionTupleGlobalMemos.CallReads actual {memos with query := guardSaved} final) ∧
       SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer ∧
       Cache.Extends memos.unfolding final.unfolding ∧ final.query = guardSaved ∧
       replacement = (if answer then .empty else query) ∧
@@ -128,9 +128,9 @@ theorem pending_enabled_complete
         (reached = true →
           ∃ reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula,
             checkedAfter = advancePhysical queried reachedPhysical ∧
-            ∃ actual : SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query
+            ∃ actual : SourceCurrentConjunctionTupleExecution.Call SourceCurrentConjunctionTupleBudget.currentTupleBudget beforeCaller.fourth query
                 (physical queried) answer reachedPhysical saved,
-              SourceCurrentConjunctionGlobalMemos.CallReads actual {memos with query := guardSaved} final) ∧
+              SourceCurrentConjunctionTupleGlobalMemos.CallReads actual {memos with query := guardSaved} final) ∧
         SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer ∧
         Available checkedAfter.native.machine.heap query ∧
         Cache.Extends memos.unfolding final.unfolding ∧ final.query = guardSaved := by
@@ -150,13 +150,13 @@ theorem pending_enabled_complete
       | true =>
           obtain ⟨workerAnswer, workerPhysical, workerSaved, workerFinal, actualCall, actualReads,
             workerPost, workerSound, workerAvailable, workerUnfolding, workerQuerySame⟩ :=
-            SourceCurrentAllocatedConjunctionCaller.finite formulas solver 1000 queryContext receipt.available
-          obtain ⟨p, h, physicalStable⟩ := SourceCurrentConjunctionWorkerCompletion.call_complete actualCall
+            SourceCurrentAllocatedTupleConjunctionCaller.finite formulas solver SourceCurrentConjunctionTupleBudget.currentTupleBudget queryContext receipt.available
+          obtain ⟨p, h, physicalStable⟩ := SourceCurrentConjunctionTupleExecution.call_complete actualCall
           refine ⟨workerAnswer, advancePhysical queried workerPhysical, workerSaved, workerFinal, p, h,
             ?_, workerPost, ?_, ?_, workerSound, workerAvailable, workerUnfolding, workerQuerySame⟩
           · intro P H enoughP enoughH
             simp only [check, guardRun, ↓reduceIte]
-            exact Prod.ext (SourceCurrentAllocatedConjunctionWorker.call_lift
+            exact Prod.ext (SourceCurrentAllocatedTupleConjunctionWorker.call_lift
               (physicalStable P H enoughP enoughH)) rfl
           · intro notReached
             cases notReached

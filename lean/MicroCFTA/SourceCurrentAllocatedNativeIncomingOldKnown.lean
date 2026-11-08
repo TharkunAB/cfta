@@ -1,3 +1,5 @@
+import MicroCFTA.SourceCurrentAllocatedTupleConjunctionCaller
+import MicroCFTA.SourceCurrentAllocatedTupleConjunctionWorker
 import MicroCFTA.SourceCurrentAllocatedNativeIncomingKnown
 import MicroCFTA.SourceCurrentAllocatedNativeSemanticTraceReadback
 
@@ -147,12 +149,11 @@ theorem run_old_known_except_failed_check (bits bound : Nat) (profile : Profile)
                       .done answer checkedAfter saved at observedPhase
                     dsimp only [SourcePruningEnumerationEnabledEmpty.check] at observedPhase
                     split at observedPhase
-                    · obtain ⟨physicalAfter, physicalDone, same⟩ := SourceCurrentAllocatedConjunctionWorker.call_done observedPhase
+                    · obtain ⟨physicalAfter, physicalDone, same⟩ := SourceCurrentAllocatedTupleConjunctionWorker.call_done observedPhase
                       subst checkedAfter
-                      have call := SourceCurrentConjunctionWorkerCompletion.call_sound p h 1000 beforeCaller.fourth query
-                        (SourceCurrentAllocatedNativeEffects.physical queried) answer physicalAfter saved physicalDone
+                      have call := SourceCurrentConjunctionTupleExecution.call_graph physicalDone
                       obtain ⟨_final, _reads, post, _sound, _available, _unfolding, _queries⟩ :=
-                        SourceCurrentAllocatedConjunctionCaller.actual formulas solver
+                        SourceCurrentAllocatedTupleConjunctionCaller.actual formulas solver
                           (before := SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge)
                           call queryPost.context receipt.available
                       exact SourceSizedPrefixKnownOrdinaryHeap.post_known post queryKnown

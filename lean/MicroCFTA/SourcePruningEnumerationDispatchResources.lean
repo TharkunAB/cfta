@@ -344,9 +344,10 @@ theorem complete_resources
                 (reached = true →
                   ∃ (reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula),
                     afterCaller.checked = SourceCurrentAllocatedQueryMemo.advancePhysical queried reachedPhysical ∧
-                    ∃ actual : SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query
+                    ∃ actual : SourceCurrentConjunctionTupleExecution.Call
+                        SourceCurrentConjunctionTupleBudget.currentTupleBudget beforeCaller.fourth query
                         (physical queried) answer reachedPhysical afterCaller.fourth,
-                      SourceCurrentConjunctionGlobalMemos.CallReads actual {memos with query := guardSaved} final)))) ∧
+                      SourceCurrentConjunctionTupleGlobalMemos.CallReads actual {memos with query := guardSaved} final)))) ∧
       Fits (forecast alphabet profile) afterCaller.checked ∧
       Heap (fun guard => guard ∈ queryAlphabet alphabet profile) afterCaller.checked.native.machine.heap := by
   have ranges := SourcePruningEnumerationDispatch.initial_ranges profile beforeCaller before.core

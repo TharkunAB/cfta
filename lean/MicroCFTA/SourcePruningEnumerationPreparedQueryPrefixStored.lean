@@ -21,7 +21,7 @@ theorem incoming_native_profile_le_final
         (SourcePruningEnumerationIncomingReservation.advance current queryIndex).2)
         (SourcePruningEnumerationIncomingReservation.step
           (SourcePruningEnumerationIncomingReservation.advance current queryIndex)).2 :=
-    SourceCurrentConjunctionAlphabetBounds.callerForecast_ge _ _ _
+    SourceCurrentConjunctionAlphabetBounds.tupleCallerForecast_ge _ _ _
   have nextSeed : SourcePruningEnumerationIncomingReservation.advance current (queryIndex + 1) =
       SourcePruningEnumerationIncomingReservation.step
         (SourcePruningEnumerationIncomingReservation.advance current queryIndex) := by

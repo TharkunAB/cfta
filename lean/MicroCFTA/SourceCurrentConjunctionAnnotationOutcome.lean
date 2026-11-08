@@ -1,3 +1,4 @@
+import MicroCFTA.SourceCurrentConjunctionTupleAnnotationOutcome
 import MicroCFTA.SourceCurrentConjunctionRowsAnnotationOutcome
 import MicroCFTA.SourcePruningEnumerationEnabledEmpty
 
@@ -173,19 +174,51 @@ theorem allocated_call_heap {width : Nat} (annotation : ConcreteGuard → Prop)
       simpa only [SourceCurrentAllocatedConjunctionWorker.call, observed,
         SourceCurrentAllocatedConjunctionWorker.Outcome.state, heapEq] using afterHeap
 
+/-- Physical advancement retains the heap of every successful or failed raw call. -/
+theorem allocated_tuple_call_heap {width : Nat} (annotation : ConcreteGuard → Prop)
+    (projectionFuel readFuel budget : Nat) (query : Value ConcreteSymbol ConcreteGuard)
+    (before : Checked width) (memo : Memo)
+    (ready : SourceCurrentConjunctionRowsAllocation.Ready (SourceCurrentAllocatedNativeEffects.physical before))
+    (available : Available before.native.machine.heap query)
+    (heap : Heap annotation before.native.machine.heap) :
+    Heap annotation (SourceCurrentAllocatedTupleConjunctionWorker.call projectionFuel readFuel budget
+      query before memo).state.native.machine.heap := by
+  have own := SourceCurrentConjunctionTupleAnnotationOutcome.call_heap annotation projectionFuel readFuel budget memo query
+    (SourceCurrentAllocatedNativeEffects.physical before) ready available heap
+  cases observed : SourceCurrentConjunctionTupleWorker.call projectionFuel readFuel budget memo query
+      (SourceCurrentAllocatedNativeEffects.physical before) with
+  | done output after =>
+      obtain ⟨answer, saved⟩ := output
+      have afterHeap : Heap annotation after.heap := by
+        simpa only [observed, HeapOutcome, Outcome.state] using own
+      have heapEq : (SourceCurrentAllocatedQueryMemo.advancePhysical before after).native.machine.heap = after.heap :=
+        congrArg (fun state : Physical ConcreteSymbol FullSyntax.Formula => state.heap)
+          (SourceCurrentAllocatedQueryMemo.physical_advance before after)
+      simpa only [SourceCurrentAllocatedTupleConjunctionWorker.call, observed,
+        SourceCurrentAllocatedConjunctionWorker.Outcome.state, heapEq] using afterHeap
+  | failed fault after =>
+      have afterHeap : Heap annotation after.heap := by
+        simpa only [observed, HeapOutcome, Outcome.state] using own
+      have heapEq : (SourceCurrentAllocatedQueryMemo.advancePhysical before after).native.machine.heap = after.heap :=
+        congrArg (fun state : Physical ConcreteSymbol FullSyntax.Formula => state.heap)
+          (SourceCurrentAllocatedQueryMemo.physical_advance before after)
+      simpa only [SourceCurrentAllocatedTupleConjunctionWorker.call, observed,
+        SourceCurrentAllocatedConjunctionWorker.Outcome.state, heapEq] using afterHeap
+
 /-- Both endpoint-guard branches preserve annotations, including retained failed check states. -/
 theorem enabled_check_heap {width : Nat} (annotation : ConcreteGuard → Prop)
     (projectionFuel readFuel : Nat) (query : Value ConcreteSymbol ConcreteGuard)
     (before : Checked width) (memo : Memo) (queries : SourceEndpointMemo.Memos)
     (ready : SourceCurrentConjunctionRowsAllocation.Ready (SourceCurrentAllocatedNativeEffects.physical before))
-    (probes : ProbeHeap before.native.machine.heap) (available : Available before.native.machine.heap query)
+    (_probes : ProbeHeap before.native.machine.heap) (available : Available before.native.machine.heap query)
     (heap : Heap annotation before.native.machine.heap) :
     Heap annotation (SourcePruningEnumerationEnabledEmpty.check projectionFuel readFuel query
       before memo queries).1.state.native.machine.heap := by
   unfold SourcePruningEnumerationEnabledEmpty.check
   dsimp only
   split
-  · exact allocated_call_heap annotation projectionFuel readFuel 1000 query before memo ready probes available heap
+  · exact allocated_tuple_call_heap annotation projectionFuel readFuel
+      SourceCurrentConjunctionTupleBudget.currentTupleBudget query before memo ready available heap
   · exact heap
 
 end Concrete

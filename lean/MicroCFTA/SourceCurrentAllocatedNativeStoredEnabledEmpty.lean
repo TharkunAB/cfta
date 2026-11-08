@@ -31,13 +31,26 @@ theorem call_stored (p h budget : Nat) (query : Node) (before : Checked width) (
   | failed fault after =>
       exact advance_stored before.native {before.native.machine with heap := after.heap} stored
 
+/-- Both actual conjunction outcomes retain the native structural certificates. -/
+theorem tuple_call_stored (p h budget : Nat) (query : Node) (before : Checked width) (memo : Fourth)
+    (stored : Stored before.native) :
+    Stored (SourceCurrentAllocatedTupleConjunctionWorker.call p h budget query before memo).state.native := by
+  unfold SourceCurrentAllocatedTupleConjunctionWorker.call
+  cases actual : SourceCurrentConjunctionTupleWorker.call p h budget memo query
+      (SourceCurrentAllocatedNativeEffects.physical before) with
+  | done result after =>
+      rcases result with ⟨answer, saved⟩
+      exact advance_stored before.native {before.native.machine with heap := after.heap} stored
+  | failed fault after =>
+      exact advance_stored before.native {before.native.machine with heap := after.heap} stored
+
 /-- The actual endpoint query and enabled fourth-memo check retain native certificates. -/
 theorem check_stored (p h : Nat) (query : Node) (before : Checked width) (memo : Fourth)
     (queries : Queries) (stored : Stored before.native) :
     Stored (SourcePruningEnumerationEnabledEmpty.check p h query before memo queries).1.state.native := by
   dsimp only [SourcePruningEnumerationEnabledEmpty.check]
   split
-  · exact call_stored p h 1000 query before memo stored
+  · exact tuple_call_stored p h SourceCurrentConjunctionTupleBudget.currentTupleBudget query before memo stored
   · exact stored
 
 end MicroCFTA.SourceCurrentAllocatedNativeStoredEnabledEmpty
