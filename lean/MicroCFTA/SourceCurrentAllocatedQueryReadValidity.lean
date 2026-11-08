@@ -1,6 +1,6 @@
 import MicroCFTA.SourceCurrentAllocatedGateReadValidity
 import MicroCFTA.SourceCurrentAllocatedSeededReadValidity
-import MicroCFTA.SourceCurrentAllocatedConjunctionReadValidity
+import MicroCFTA.SourceCurrentAllocatedTupleConjunctionReadValidity
 
 /-!
 # Validity of supplied current class-query reads
@@ -36,7 +36,7 @@ theorem query
     {gate : SourceCurrentSecondaryTrace.ClassTrace unconstrained values paths before.native.machine.heap false anchor}
     {seeded : SourceCurrentAllocatedSeededQuery.Seeded values (paths.map (List.map Int.ofNat))
       (advanceHeap before anchor) value middle}
-    {call : SourceCurrentConjunctionMemo.Call budget memo value (physical middle) answer after saved}
+    {call : SourceCurrentConjunctionTupleExecution.Call budget memo value (physical middle) answer after saved}
     {memos final : Memos} (reads : QueryReads gate seeded call memos final)
     (proper : ∀ path ∈ paths, path ≠ [])
     (ranges : SourceCurrentAllocatedSeededQuery.SeededRanges values (paths.map (List.map Int.ofNat))
@@ -71,7 +71,7 @@ theorem query
       have queryReady : Ready middle :=
         ⟨queryGood, queryEffects.ready.semantic, queryEffects.ready.costs, queryScopes, queryIdle⟩
       have queryCorrect := SourceCurrentEmptinessMemo.grows formulas solver queryEffects.keeps memo correct
-      have finalValid := SourceCurrentAllocatedConjunctionReadValidity.call callRead queryEffects.ready queryAvailable seedValid.1
+      have finalValid := SourceCurrentAllocatedTupleConjunctionReadValidity.call callRead queryEffects.ready queryAvailable seedValid.1
       obtain ⟨finalReady, callEffects, finalCorrect, _, retained⟩ :=
         SourceCurrentConjunctionClassScan.memo_effects formulas solver call queryReady queryAvailable queryCorrect
       exact ⟨finalValid.1, finalReady, queryEffects.trans callEffects,

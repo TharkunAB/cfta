@@ -23,7 +23,7 @@ theorem call_stored (p h budget : Nat) (query : Node) (before : Checked width) (
     (stored : Stored before.native) :
     Stored (SourceCurrentAllocatedConjunctionWorker.call p h budget query before memo).state.native := by
   unfold SourceCurrentAllocatedConjunctionWorker.call
-  cases actual : SourceCurrentConjunctionWorker.call p h budget memo query
+  cases actual : SourceCurrentConjunctionTupleWorker.call p h budget memo query
       (SourceCurrentAllocatedNativeEffects.physical before) with
   | done result after =>
       rcases result with ⟨answer, saved⟩

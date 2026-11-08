@@ -1,3 +1,4 @@
+import MicroCFTA.SourceCurrentConjunctionTupleWorkerEffects
 import MicroCFTA.SourceCurrentConjunctionWorkerEffects
 import MicroCFTA.SourceCurrentConjunctionRowsWarmEffects
 
@@ -117,13 +118,13 @@ theorem call_effects (p h budget : Nat) (memo : Memo) (query : Node) (before : P
 theorem allocated_call_effects {width : Nat} (p h budget : Nat) (memo : Memo)
     (query : Node) (before : SourceEqualityNativeDemand.State width)
     (ready : Ready (SourceCurrentAllocatedNativeEffects.physical before))
-    (available : Available before.native.machine.heap query) (closed : query.free = []) :
+    (available : Available before.native.machine.heap query) (_closed : query.free = []) :
     let actual := SourceCurrentAllocatedConjunctionWorker.call p h budget query before memo
     Effects (SourceCurrentAllocatedNativeEffects.physical before)
       (SourceCurrentAllocatedNativeEffects.physical actual.state) := by
-  have first := call_effects p h budget memo query
-    (SourceCurrentAllocatedNativeEffects.physical before) ready available closed
-  cases actual : SourceCurrentConjunctionWorker.call p h budget memo query
+  have first := SourceCurrentConjunctionTupleWorkerEffects.call_effects p h budget memo query
+    (SourceCurrentAllocatedNativeEffects.physical before) ready available
+  cases actual : SourceCurrentConjunctionTupleWorker.call p h budget memo query
       (SourceCurrentAllocatedNativeEffects.physical before) with
   | done output after =>
     rcases output with ⟨answer, saved⟩

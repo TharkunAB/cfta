@@ -72,7 +72,7 @@ theorem conjunction [DecidableEq (Value Symbol Guard)]
     (available : Available before.native.machine.heap value)
     (correct : SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap memo) :
     ∃ answer after saved,
-      SourceCurrentConjunctionMemo.Call budget memo value (physical before) answer after saved ∧
+      SourceCurrentConjunctionTupleExecution.Call budget memo value (physical before) answer after saved ∧
       SourceCurrentAllocatedConjunctionMemo.Receipt before after ∧
       History (advancePhysical before after) ∧
       SourceCurrentEmptinessMemo.Correct formulas solver after.heap saved ∧

@@ -148,13 +148,13 @@ theorem allocated_call_heap {width : Nat} (annotation : ConcreteGuard → Prop)
     (projectionFuel readFuel budget : Nat) (query : Value ConcreteSymbol ConcreteGuard)
     (before : Checked width) (memo : Memo)
     (ready : SourceCurrentConjunctionRowsAllocation.Ready (SourceCurrentAllocatedNativeEffects.physical before))
-    (probes : ProbeHeap before.native.machine.heap) (available : Available before.native.machine.heap query)
+    (_probes : ProbeHeap before.native.machine.heap) (available : Available before.native.machine.heap query)
     (heap : Heap annotation before.native.machine.heap) :
     Heap annotation (SourceCurrentAllocatedConjunctionWorker.call projectionFuel readFuel budget
       query before memo).state.native.machine.heap := by
-  have own := call_heap annotation projectionFuel readFuel budget memo query
-    (SourceCurrentAllocatedNativeEffects.physical before) ready probes available heap
-  cases observed : call projectionFuel readFuel budget memo query
+  have own := SourceCurrentConjunctionTupleAnnotationOutcome.call_heap annotation projectionFuel readFuel budget memo query
+    (SourceCurrentAllocatedNativeEffects.physical before) ready available heap
+  cases observed : SourceCurrentConjunctionTupleWorker.call projectionFuel readFuel budget memo query
       (SourceCurrentAllocatedNativeEffects.physical before) with
   | done output after =>
       obtain ⟨answer, saved⟩ := output

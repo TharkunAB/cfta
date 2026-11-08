@@ -1,6 +1,7 @@
 import MicroCFTA.SourceCurrentConjunctionCallerNumeric
 import MicroCFTA.SourceCurrentConjunctionTupleWorklistNumeric
 import MicroCFTA.SourceCurrentConjunctionTupleAnnotationOutcome
+import MicroCFTA.SourceCurrentAllocatedTupleProbeConjunction
 
 /-!
 # Conjunction resources from one initial guard alphabet
@@ -198,47 +199,6 @@ theorem callerForecast_mono (alphabet : List ConcreteGuard) (budget : Nat) {firs
     (SourceCurrentConstrainedCapTargetForecast.scalar_mono increase)
   exact ⟨retained, retained, increase.2.2.1, retained⟩
 
-/-- Initial caller facts construct their own call and full Post with the same supplied alphabet. -/
-theorem caller_complete [DecidableEq ConcreteSymbol] [DecidableEq (EdgeKey ConcreteSymbol ConcreteGuard)]
-    [DecidableEq ConcreteValue]
-    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
-    (alphabet : List ConcreteGuard) (inventory : Inventory) (budget : Nat) (query : ConcreteValue)
-    (before : Caller width) (memos : Memos) (initial : Context formulas solver inventory before memos)
-    (frame : Frame formulas solver inventory before.checked) (profile : Profile)
-    (fits : SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile before.checked)
-    (available : Available before.checked.native.machine.heap query)
-    (known : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ alphabet) before.checked.native.machine.heap) :
-    ∃ answer after saved,
-      SourceCurrentConjunctionMemo.Call budget before.fourth query (physical before.checked) answer after saved ∧
-      Frame formulas solver inventory (advancePhysical before.checked after) ∧
-      Post formulas solver inventory before (advance before (advancePhysical before.checked after) saved before.merge) memos ∧
-      SourceCurrentConstrainedCapGeneratedQueryResources.Fits (callerForecast alphabet budget profile)
-        (advancePhysical before.checked after) ∧
-      SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ alphabet) after.heap ∧
-      SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer ∧
-      (advance before (advancePhysical before.checked after) saved before.merge).nodeResults = before.nodeResults ∧
-      (advance before (advancePhysical before.checked after) saved before.merge).edgeResults = before.edgeResults ∧
-      (advance before (advancePhysical before.checked after) saved before.merge).merge = before.merge ∧
-      (advance before (advancePhysical before.checked after) saved before.merge).fourth = saved ∧
-      (∀ work reader, workerFuel alphabet budget (scalar profile) ≤ work →
-        readerFuel alphabet budget (scalar profile) ≤ reader →
-        SourceCurrentConjunctionWorker.call work reader budget before.fourth query (physical before.checked) = .done (answer, saved) after) := by
-  have ready := SourceCurrentAllocatedConjunctionMemo.ready before.checked initial.ready.good initial.ready.semantic initial.ready.costs
-  have scalarFits := (SourceCurrentConstrainedCapRequiredResources.of_checked fits).scalar_fits
-  obtain ⟨answer, after, saved, actual, effects, correct, sound, retained, _guards, carrier, bounded, done⟩ :=
-    memo_complete formulas solver alphabet budget before.fourth query (physical before.checked)
-      (scalar profile) ready available scalarFits initial.correct Plain frame.context.guards known
-  have returned := SourceCurrentConjunctionCallerNumeric.of_call formulas solver actual frame available initial.correct
-  have probes := SourceCurrentAllocatedProbeConjunction.call_heap actual ready available initial.probes
-  have post : Post formulas solver inventory before (advance before (advancePhysical before.checked after) saved before.merge) memos := by
-    exact ⟨⟨returned.ready, returned.admitted,
-      initial.sound.advance formulas solver _ saved before.merge effects,
-      initial.stored.grows effects.keeps, initial.covered, correct,
-      SourceQueryUnfoldMemo.valid_grows _ _ initial.ready.semantic effects.keeps memos initial.globals, probes⟩,
-      effects, Cache.extends_refl _, retained⟩
-  exact ⟨answer, after, saved, actual, returned, post,
-    ⟨bounded.nodes, bounded.edges, fits.domains, bounded.stored⟩, carrier, sound, rfl, rfl, rfl, rfl, done⟩
-
 /-- One supplied alphabet bounds the tuple worker from its original singleton queue. -/
 noncomputable def tupleCallerForecast (alphabet : List ConcreteGuard) (budget : Nat) (profile : Profile) : Profile :=
   let resource := SourceCurrentConjunctionTupleWorklistResources.forecast alphabet budget 1 (scalar profile)
@@ -284,5 +244,73 @@ theorem tuple_call_carrier [DecidableEq ConcreteSymbol] [DecidableEq (EdgeKey Co
     p h budget memo query before ready available known
   have done := stable p h (Nat.le_refl _) (Nat.le_refl _)
   simpa only [done, SourceCurrentConjunctionWorker.Outcome.state] using annotated
+
+/-- Initial physical and memo facts derive the tuple call in the same supplied alphabet. -/
+theorem tuple_memo_complete [DecidableEq ConcreteSymbol] [DecidableEq (EdgeKey ConcreteSymbol ConcreteGuard)]
+    [DecidableEq ConcreteValue]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (alphabet : List ConcreteGuard)
+    (budget : Nat) (memo : Memo) (query : ConcreteValue) (before : ConcretePhysical)
+    (resource : Nat) (ready : Ready before) (available : Available before.heap query)
+    (fits : Fits resource before.heap)
+    (correct : SourceCurrentEmptinessMemo.Correct formulas solver before.heap memo)
+    (annotation : ConcreteGuard → Prop) (guards : SourceCurrentConstrainedCapGuardHeap.Heap annotation before.heap)
+    (known : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ alphabet) before.heap) :
+    ∃ answer after saved, SourceCurrentConjunctionTupleExecution.Call budget memo query before answer after saved ∧
+      Effects before after ∧ SourceCurrentEmptinessMemo.Correct formulas solver after.heap saved ∧
+      SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer ∧ SourceCurrentEmptinessMemo.Extends memo saved ∧
+      SourceCurrentConstrainedCapGuardHeap.Heap annotation after.heap ∧
+      SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ alphabet) after.heap ∧
+      Fits (SourceCurrentConjunctionTupleWorklistResources.forecast alphabet budget 1 resource) after.heap ∧
+      (∀ work reader, SourceCurrentConjunctionTupleWorklistNumeric.workerFuel alphabet budget 1 resource ≤ work →
+        SourceCurrentConjunctionTupleWorklistNumeric.readerFuel alphabet budget 1 resource ≤ reader →
+        SourceCurrentConjunctionTupleWorker.call work reader budget memo query before = .done (answer, saved) after) := by
+  obtain ⟨answer, after, saved, actual, effects, finalCorrect, sound, retained⟩ :=
+    SourceCurrentConjunctionTupleMemo.finite formulas solver budget memo query before ready available correct
+  exact ⟨answer, after, saved, actual, effects, finalCorrect, sound, retained,
+    SourceCurrentConjunctionTupleGuard.call annotation actual ready available guards,
+    tuple_call_carrier alphabet actual ready available known,
+    SourceCurrentConjunctionTupleWorklistNumeric.call_bound actual alphabet resource ready available fits known⟩
+
+/-- Initial caller facts construct their actual tuple call and full Post in the supplied alphabet. -/
+theorem caller_complete [DecidableEq ConcreteSymbol] [DecidableEq (EdgeKey ConcreteSymbol ConcreteGuard)]
+    [DecidableEq ConcreteValue]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (alphabet : List ConcreteGuard) (inventory : Inventory) (budget : Nat) (query : ConcreteValue)
+    (before : Caller width) (memos : Memos) (initial : Context formulas solver inventory before memos)
+    (frame : Frame formulas solver inventory before.checked) (profile : Profile)
+    (fits : SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile before.checked)
+    (available : Available before.checked.native.machine.heap query)
+    (known : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ alphabet) before.checked.native.machine.heap) :
+    ∃ answer after saved,
+      SourceCurrentConjunctionTupleExecution.Call budget before.fourth query (physical before.checked) answer after saved ∧
+      Frame formulas solver inventory (advancePhysical before.checked after) ∧
+      Post formulas solver inventory before (advance before (advancePhysical before.checked after) saved before.merge) memos ∧
+      SourceCurrentConstrainedCapGeneratedQueryResources.Fits (tupleCallerForecast alphabet budget profile)
+        (advancePhysical before.checked after) ∧
+      SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ alphabet) after.heap ∧
+      SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer ∧
+      (advance before (advancePhysical before.checked after) saved before.merge).nodeResults = before.nodeResults ∧
+      (advance before (advancePhysical before.checked after) saved before.merge).edgeResults = before.edgeResults ∧
+      (advance before (advancePhysical before.checked after) saved before.merge).merge = before.merge ∧
+      (advance before (advancePhysical before.checked after) saved before.merge).fourth = saved ∧
+      (∀ work reader, SourceCurrentConjunctionTupleWorklistNumeric.workerFuel alphabet budget 1 (scalar profile) ≤ work →
+        SourceCurrentConjunctionTupleWorklistNumeric.readerFuel alphabet budget 1 (scalar profile) ≤ reader →
+        SourceCurrentConjunctionTupleWorker.call work reader budget before.fourth query (physical before.checked) = .done (answer, saved) after) := by
+  have ready := SourceCurrentAllocatedConjunctionMemo.ready before.checked initial.ready.good initial.ready.semantic initial.ready.costs
+  have scalarFits := (SourceCurrentConstrainedCapRequiredResources.of_checked fits).scalar_fits
+  obtain ⟨answer, after, saved, actual, effects, correct, sound, retained, _guards, carrier, bounded, done⟩ :=
+    tuple_memo_complete formulas solver alphabet budget before.fourth query (physical before.checked)
+      (scalar profile) ready available scalarFits initial.correct Plain frame.context.guards known
+  have returned := SourceCurrentConjunctionCallerNumeric.of_call formulas solver actual frame available initial.correct
+  have probes := SourceCurrentAllocatedProbeConjunction.tuple_call_heap actual ready available initial.probes
+  have post : Post formulas solver inventory before (advance before (advancePhysical before.checked after) saved before.merge) memos := by
+    exact ⟨⟨returned.ready, returned.admitted,
+      initial.sound.advance formulas solver _ saved before.merge effects,
+      initial.stored.grows effects.keeps, initial.covered, correct,
+      SourceQueryUnfoldMemo.valid_grows _ _ initial.ready.semantic effects.keeps memos initial.globals, probes⟩,
+      effects, Cache.extends_refl _, retained⟩
+  exact ⟨answer, after, saved, actual, returned, post,
+    ⟨bounded.nodes, bounded.edges, fits.domains, bounded.stored⟩, carrier, sound, rfl, rfl, rfl, rfl, done⟩
 
 end MicroCFTA.SourceCurrentConjunctionAlphabetBounds

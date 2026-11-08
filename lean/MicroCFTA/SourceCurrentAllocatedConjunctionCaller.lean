@@ -1,6 +1,5 @@
 import MicroCFTA.SourceCurrentAllocatedPartialInvariant
-import MicroCFTA.SourceCurrentAllocatedConjunctionReadValidity
-import MicroCFTA.SourceCurrentAllocatedProbeConjunction
+import MicroCFTA.SourceCurrentAllocatedTupleConjunctionCaller
 
 /-!
 # Current conjunction calls retain the full outer caller
@@ -22,8 +21,8 @@ local notation "Caller" => SourceCurrentAllocatedPartialState.State
 local notation "Physical" => SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula
 local notation "Memo" => SourceCurrentEmptinessMemo.Memo
 local notation "Memos" => EndpointMemoGateTrace.Memos
-local notation "Call" => SourceCurrentConjunctionMemo.Call
-local notation "CallReads" => SourceCurrentConjunctionGlobalMemos.CallReads
+local notation "Call" => SourceCurrentConjunctionTupleExecution.Call
+local notation "CallReads" => SourceCurrentConjunctionTupleGlobalMemos.CallReads
 variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq (Value Symbol Guard)] {width : Nat}
 variable (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
 
@@ -36,22 +35,8 @@ theorem verified {inventory : Inventory} {budget : Nat} {before : Caller width} 
     Post formulas solver inventory before
         (SourceCurrentAllocatedPartialState.advance before (advancePhysical before.checked after) saved before.merge) final ∧
       SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer ∧ Available after.heap query ∧
-      Extends memos.unfolding final.unfolding ∧ final.query = memos.query := by
-  have ready := SourceCurrentAllocatedConjunctionMemo.ready before.checked initial.ready.good
-    initial.ready.semantic initial.ready.costs
-  obtain ⟨receipt, correct, sound, retained⟩ := SourceCurrentAllocatedConjunctionMemo.call_effects formulas solver
-    actual initial.ready.good initial.ready.semantic initial.ready.costs initial.ready.idle available initial.correct
-  have globals := SourceCurrentAllocatedConjunctionReadValidity.call reads ready available initial.globals
-  have probes := SourceCurrentAllocatedProbeConjunction.call_heap actual ready available initial.probes
-  have effects : SourceCurrentConjunctionRowsAllocation.Effects (physical before.checked)
-      (physical (advancePhysical before.checked after)) := by
-    simpa only [SourceCurrentAllocatedQueryMemo.physical_advance] using receipt.effects
-  refine ⟨⟨⟨SourceCurrentConjunctionClassScan.advance_ready before.checked after initial.ready receipt.effects,
-    initial.admitted.advance after receipt.extension,
-    initial.sound.advance formulas solver _ saved before.merge effects,
-    initial.stored.grows receipt.effects.keeps, initial.covered, correct, globals.1, probes⟩,
-    effects, Cache.extends_refl _, retained⟩, sound, receipt.effects.keeps.available _ available,
-    globals.2.1, globals.2.2⟩
+      Extends memos.unfolding final.unfolding ∧ final.query = memos.query :=
+  SourceCurrentAllocatedTupleConjunctionCaller.verified formulas solver reads initial available
 
 /-- Initial caller facts construct reads for the same completed physical call. -/
 theorem actual {inventory : Inventory} {budget : Nat} {before : Caller width} {after : Physical}
@@ -63,11 +48,8 @@ theorem actual {inventory : Inventory} {budget : Nat} {before : Caller width} {a
       Post formulas solver inventory before
         (SourceCurrentAllocatedPartialState.advance before (advancePhysical before.checked after) saved before.merge) final ∧
       SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer ∧ Available after.heap query ∧
-      Extends memos.unfolding final.unfolding ∧ final.query = memos.query := by
-  have ready := SourceCurrentAllocatedConjunctionMemo.ready before.checked initial.ready.good
-    initial.ready.semantic initial.ready.costs
-  obtain ⟨final, reads, _⟩ := SourceCurrentConjunctionGlobalMemos.call_memos call ready available memos initial.globals
-  exact ⟨final, reads, verified formulas solver reads initial available⟩
+      Extends memos.unfolding final.unfolding ∧ final.query = memos.query :=
+  SourceCurrentAllocatedTupleConjunctionCaller.actual formulas solver call initial available
 
 /-- Legitimate caller entry constructs a finite current call and its full returned invariant. -/
 theorem finite {inventory : Inventory} {before : Caller width} {query : Value Symbol Guard} {memos : Memos}
@@ -78,12 +60,7 @@ theorem finite {inventory : Inventory} {before : Caller width} {query : Value Sy
       Post formulas solver inventory before
         (SourceCurrentAllocatedPartialState.advance before (advancePhysical before.checked after) saved before.merge) final ∧
       SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer ∧ Available after.heap query ∧
-      Extends memos.unfolding final.unfolding ∧ final.query = memos.query := by
-  have ready := SourceCurrentAllocatedConjunctionMemo.ready before.checked initial.ready.good
-    initial.ready.semantic initial.ready.costs
-  obtain ⟨answer, after, saved, call, _⟩ := SourceCurrentConjunctionMemo.complete budget before.fourth query
-    (physical before.checked) ready available
-  obtain ⟨final, reads, post⟩ := actual formulas solver call initial available
-  exact ⟨answer, after, saved, final, call, reads, post⟩
+      Extends memos.unfolding final.unfolding ∧ final.query = memos.query :=
+  SourceCurrentAllocatedTupleConjunctionCaller.finite formulas solver budget initial available
 
 end MicroCFTA.SourceCurrentAllocatedConjunctionCaller

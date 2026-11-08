@@ -1,4 +1,5 @@
 import MicroCFTA.SourceCurrentAllocatedProbeQuery
+import MicroCFTA.SourceCurrentAllocatedTupleProbeConjunction
 
 /-!
 # Filtered probes through the current ordered class scan
@@ -81,7 +82,7 @@ theorem scan_heap
         ready.semantic ready.costs available probes).2.2.2
       have queryProbes := SourceCurrentAllocatedProbeQuery.false_class_heap formulas solver inventory unconstrained
         secondary seeded first.1 firstAdmission first.2.2 (proper paths List.mem_cons_self) reached.1 firstProbes
-      have memoProbes := SourceCurrentAllocatedProbeConjunction.call_heap decision queryReceipt.effects.ready queryReceipt.available queryProbes
+      have memoProbes := SourceCurrentAllocatedProbeConjunction.tuple_call_heap decision queryReceipt.effects.ready queryReceipt.available queryProbes
       exact ih next memoReady
         (queryReceipt.admitted.advance later (SourceCurrentAllocatedQueryMemo.advance_extension middle later memoEffects))
         (fun value member => memoEffects.keeps.available value (queryReceipt.effects.keeps.available value (first.2.2 value member)))
@@ -99,6 +100,6 @@ theorem scan_heap
         ready.semantic ready.costs available probes).2.2.2
       have queryProbes := SourceCurrentAllocatedProbeQuery.false_class_heap formulas solver inventory unconstrained
         secondary seeded first.1 firstAdmission first.2.2 (proper paths List.mem_cons_self) reached.1 firstProbes
-      exact SourceCurrentAllocatedProbeConjunction.call_heap decision queryReceipt.effects.ready queryReceipt.available queryProbes
+      exact SourceCurrentAllocatedProbeConjunction.tuple_call_heap decision queryReceipt.effects.ready queryReceipt.available queryProbes
 
 end MicroCFTA.SourceCurrentAllocatedProbeScan

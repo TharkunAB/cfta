@@ -26,12 +26,12 @@ local notation "Caller" => SourceCurrentAllocatedPartialState.State
 local notation "Physical" => SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula
 local notation "Memo" => SourceCurrentEmptinessMemo.Memo
 local notation "Memos" => EndpointMemoGateTrace.Memos
-local notation "Call" => SourceCurrentConjunctionMemo.Call
-local notation "CallReads" => SourceCurrentConjunctionGlobalMemos.CallReads
+local notation "Call" => SourceCurrentConjunctionTupleExecution.Call
+local notation "CallReads" => SourceCurrentConjunctionTupleGlobalMemos.CallReads
 local notation "forecast" => SourceCurrentConjunctionCallerNumeric.forecast
 local notation "guards" => SourceCurrentConjunctionGuardUniverse.guards
-local notation "workerFuel" => SourceCurrentConjunctionWorklistResources.workerFuel
-local notation "readerFuel" => SourceCurrentConjunctionWorklistResources.readerFuel
+local notation "workerFuel" => SourceCurrentConjunctionTupleWorklistNumeric.workerFuel
+local notation "readerFuel" => SourceCurrentConjunctionTupleWorklistNumeric.readerFuel
 variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq (Value Symbol Guard)] {width : Nat}
 variable (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
 
@@ -49,8 +49,8 @@ theorem finite_resources {inventory : Inventory} {before : Caller width}
         Available reached.heap query ∧ Extends memos.unfolding final.unfolding ∧ final.query = memos.query ∧
         Fits (forecast before.checked.native.machine.heap budget profile) (advancePhysical before.checked reached) ∧
         (∀ work reader,
-          workerFuel (guards before.checked.native.machine.heap) budget (scalar profile) ≤ work →
-          readerFuel (guards before.checked.native.machine.heap) budget (scalar profile) ≤ reader →
+          workerFuel (guards before.checked.native.machine.heap) budget 1 (scalar profile) ≤ work →
+          readerFuel (guards before.checked.native.machine.heap) budget 1 (scalar profile) ≤ reader →
           call work reader budget query before.checked before.fourth =
             .done answer (advancePhysical before.checked reached) saved) := by
   obtain ⟨answer, reached, saved, final, actual, reads, post, sound, returnedAvailable, unfolding, querySame⟩ :=
@@ -58,7 +58,10 @@ theorem finite_resources {inventory : Inventory} {before : Caller width}
   have ready := SourceCurrentAllocatedConjunctionMemo.ready before.checked initial.ready.good
     initial.ready.semantic initial.ready.costs
   have scalarFits := (SourceCurrentConstrainedCapRequiredResources.of_checked fits).scalar_fits
-  have numeric := SourceCurrentConjunctionNumeric.call_bound actual (scalar profile) ready available scalarFits
+  have numeric := SourceCurrentConjunctionTupleWorklistNumeric.call_bound actual
+    (guards before.checked.native.machine.heap) (scalar profile) ready available scalarFits
+    (SourceCurrentConjunctionGuardUniverse.initial before.checked.native.machine.heap
+      ready.semantic.ready.semantic.1.normal.facts)
   refine ⟨answer, reached, saved, final, actual, reads, post, sound, returnedAvailable, unfolding, querySame, ?_, ?_⟩
   · exact ⟨numeric.1.nodes, numeric.1.edges, fits.domains, numeric.1.stored⟩
   · intro work reader enoughWork enoughRead
@@ -80,15 +83,18 @@ theorem raw_done_resources {inventory : Inventory} {p h budget : Nat}
         Available after.native.machine.heap query ∧ Extends memos.unfolding final.unfolding ∧ final.query = memos.query ∧
         Fits (forecast before.checked.native.machine.heap budget profile) after ∧
         (∀ work reader,
-          workerFuel (guards before.checked.native.machine.heap) budget (scalar profile) ≤ work →
-          readerFuel (guards before.checked.native.machine.heap) budget (scalar profile) ≤ reader →
+          workerFuel (guards before.checked.native.machine.heap) budget 1 (scalar profile) ≤ work →
+          readerFuel (guards before.checked.native.machine.heap) budget 1 (scalar profile) ≤ reader →
           call work reader budget query before.checked before.fourth = .done answer after saved) := by
   obtain ⟨reached, final, same, actual, reads, post, sound, returnedAvailable, unfolding, querySame⟩ :=
     verified formulas solver initial available done
   have ready := SourceCurrentAllocatedConjunctionMemo.ready before.checked initial.ready.good
     initial.ready.semantic initial.ready.costs
   have scalarFits := (SourceCurrentConstrainedCapRequiredResources.of_checked fits).scalar_fits
-  have numeric := SourceCurrentConjunctionNumeric.call_bound actual (scalar profile) ready available scalarFits
+  have numeric := SourceCurrentConjunctionTupleWorklistNumeric.call_bound actual
+    (guards before.checked.native.machine.heap) (scalar profile) ready available scalarFits
+    (SourceCurrentConjunctionGuardUniverse.initial before.checked.native.machine.heap
+      ready.semantic.ready.semantic.1.normal.facts)
   have returned : Fits (forecast before.checked.native.machine.heap budget profile)
       (advancePhysical before.checked reached) :=
     ⟨numeric.1.nodes, numeric.1.edges, fits.domains, numeric.1.stored⟩

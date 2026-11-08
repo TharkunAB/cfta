@@ -1,4 +1,5 @@
 import MicroCFTA.SourceCurrentConjunctionWorker
+import MicroCFTA.SourceCurrentConjunctionTupleWorker
 import MicroCFTA.SourceCurrentAllocatedConjunctionMemo
 
 /-!
@@ -36,7 +37,7 @@ def Outcome.memo : Outcome width → Memo
 noncomputable def call [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
     [DecidableEq (Value Symbol Guard)] (p h budget : Nat) (query : Value Symbol Guard)
     (before : Checked width) (memo : Memo) : Outcome width :=
-  match SourceCurrentConjunctionWorker.call p h budget memo query (physical before) with
+  match SourceCurrentConjunctionTupleWorker.call p h budget memo query (physical before) with
   | .done (answer, saved) after => .done answer (advancePhysical before after) saved
   | .failed fault after => .failed fault (advancePhysical before after) memo
 
@@ -46,19 +47,19 @@ variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq 
 theorem call_hit (p h budget : Nat) (query original : Value Symbol Guard) (before : Checked width)
     (memo : Memo) (answer : Bool) (found : memo query.referenceOf = some (original, answer)) :
     call p h budget query before memo = .done answer before memo := by
-  simp only [call, SourceCurrentConjunctionWorker.call, found, SourceCurrentAllocatedConjunctionMemo.advance_self]
+  simp only [call, SourceCurrentConjunctionTupleWorker.call, found, SourceCurrentAllocatedConjunctionMemo.advance_self]
 
 /-- A completed physical call yields the same answer and full checked return. -/
 theorem call_lift {p h budget : Nat} {query : Value Symbol Guard} {before : Checked width}
     {memo saved : Memo} {answer : Bool} {after : Physical}
-    (done : SourceCurrentConjunctionWorker.call p h budget memo query (physical before) = .done (answer, saved) after) :
+    (done : SourceCurrentConjunctionTupleWorker.call p h budget memo query (physical before) = .done (answer, saved) after) :
     call p h budget query before memo = .done answer (advancePhysical before after) saved := by
   simp only [call, done]
 
 /-- A physical failure retains its exact reached state and installs no fourth-memo entry. -/
 theorem call_failed_lift {p h budget : Nat} {query : Value Symbol Guard} {before : Checked width}
     {memo : Memo} {fault : Fault} {after : Physical}
-    (failed : SourceCurrentConjunctionWorker.call p h budget memo query (physical before) = .failed fault after) :
+    (failed : SourceCurrentConjunctionTupleWorker.call p h budget memo query (physical before) = .failed fault after) :
     call p h budget query before memo = .failed fault (advancePhysical before after) memo := by
   simp only [call, failed]
 
@@ -66,9 +67,9 @@ theorem call_failed_lift {p h budget : Nat} {query : Value Symbol Guard} {before
 theorem call_done {p h budget : Nat} {query : Value Symbol Guard} {before after : Checked width}
     {memo saved : Memo} {answer : Bool}
     (done : call p h budget query before memo = .done answer after saved) :
-    ∃ reached, SourceCurrentConjunctionWorker.call p h budget memo query (physical before) = .done (answer, saved) reached ∧
+    ∃ reached, SourceCurrentConjunctionTupleWorker.call p h budget memo query (physical before) = .done (answer, saved) reached ∧
       after = advancePhysical before reached := by
-  cases observed : SourceCurrentConjunctionWorker.call p h budget memo query (physical before) with
+  cases observed : SourceCurrentConjunctionTupleWorker.call p h budget memo query (physical before) with
   | done output reached =>
       obtain ⟨result, current⟩ := output
       simp only [call, observed] at done
@@ -81,9 +82,9 @@ theorem call_failed {p h budget : Nat} {query : Value Symbol Guard} {before afte
     {memo saved : Memo} {fault : Fault}
     (failed : call p h budget query before memo = .failed fault after saved) :
     saved = memo ∧ ∃ reached,
-      SourceCurrentConjunctionWorker.call p h budget memo query (physical before) = .failed fault reached ∧
+      SourceCurrentConjunctionTupleWorker.call p h budget memo query (physical before) = .failed fault reached ∧
         after = advancePhysical before reached := by
-  cases observed : SourceCurrentConjunctionWorker.call p h budget memo query (physical before) with
+  cases observed : SourceCurrentConjunctionTupleWorker.call p h budget memo query (physical before) with
   | done output reached =>
       obtain ⟨result, current⟩ := output
       simp only [call, observed] at failed

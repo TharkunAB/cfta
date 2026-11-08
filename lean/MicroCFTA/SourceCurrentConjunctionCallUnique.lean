@@ -1,4 +1,5 @@
 import MicroCFTA.SourceCurrentConjunctionWorkerCompletion
+import MicroCFTA.SourceCurrentConjunctionTupleExecution
 
 /-!
 # Exact return uniqueness for the actual conjunction memo call
@@ -24,6 +25,23 @@ theorem call [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [Decidabl
     firstAnswer = secondAnswer ∧ firstAfter = secondAfter ∧ firstSaved = secondSaved := by
   obtain ⟨firstP, firstH, firstStable⟩ := SourceCurrentConjunctionWorkerCompletion.call_complete first
   obtain ⟨secondP, secondH, secondStable⟩ := SourceCurrentConjunctionWorkerCompletion.call_complete second
+  have firstAt := firstStable (max firstP secondP) (max firstH secondH)
+    (Nat.le_max_left _ _) (Nat.le_max_left _ _)
+  have secondAt := secondStable (max firstP secondP) (max firstH secondH)
+    (Nat.le_max_right _ _) (Nat.le_max_right _ _)
+  obtain ⟨pair, state⟩ := Outcome.done.inj (firstAt.symm.trans secondAt)
+  obtain ⟨answer, saved⟩ := Prod.mk.inj pair
+  exact ⟨answer, state, saved⟩
+
+/-- Two tuple-budget graphs identify the same answer, complete state, and saved memo. -/
+theorem tuple_call [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq (Value Symbol Guard)]
+    {budget : Nat} {memo firstSaved secondSaved : Memo} {query : Value Symbol Guard}
+    {before firstAfter secondAfter : Physical} {firstAnswer secondAnswer : Bool}
+    (first : SourceCurrentConjunctionTupleExecution.Call budget memo query before firstAnswer firstAfter firstSaved)
+    (second : SourceCurrentConjunctionTupleExecution.Call budget memo query before secondAnswer secondAfter secondSaved) :
+    firstAnswer = secondAnswer ∧ firstAfter = secondAfter ∧ firstSaved = secondSaved := by
+  obtain ⟨firstP, firstH, firstStable⟩ := SourceCurrentConjunctionTupleExecution.call_complete first
+  obtain ⟨secondP, secondH, secondStable⟩ := SourceCurrentConjunctionTupleExecution.call_complete second
   have firstAt := firstStable (max firstP secondP) (max firstH secondH)
     (Nat.le_max_left _ _) (Nat.le_max_left _ _)
   have secondAt := secondStable (max firstP secondP) (max firstH secondH)

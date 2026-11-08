@@ -188,7 +188,7 @@ theorem complete (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver :
                 receipt.frame.ready.semantic receipt.frame.ready.costs
               have scalarFits := (SourceCurrentConstrainedCapRequiredResources.of_checked queryFits).scalar_fits
               obtain ⟨answer, later, savedMemo, decision, memoEffects, memoCorrect, _sound, retained, _guards, memoKnown, bounded, memoDone⟩ :=
-                SourceCurrentConjunctionAlphabetBounds.memo_complete formulas solver nextPlan.1 budget memo query (physical middle)
+                SourceCurrentConjunctionAlphabetBounds.tuple_memo_complete formulas solver nextPlan.1 budget memo query (physical middle)
                   (SourceCurrentConstrainedCapTargetForecast.scalar
                     (SourceCurrentConstrainedCapSeededForecast.finalProfile values.length (paths.map (List.map Int.ofNat))
                       (gateProfile paths (gateProfile paths profile)))) physicalReady receipt.available scalarFits queryCorrect
@@ -209,7 +209,7 @@ theorem complete (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver :
                     (advanceHeap (advanceHeap before other) nextAnchor) ∧
                   ∀ otherQuery otherMiddle, SourceCurrentAllocatedSeededQuery.Seeded values (paths.map (List.map Int.ofNat))
                     (advanceHeap (advanceHeap before other) nextAnchor) otherQuery otherMiddle →
-                    ∀ otherLater otherSaved, SourceCurrentConjunctionMemo.Call budget memo otherQuery (physical otherMiddle) false otherLater otherSaved →
+                    ∀ otherLater otherSaved, SourceCurrentConjunctionTupleExecution.Call budget memo otherQuery (physical otherMiddle) false otherLater otherSaved →
                       answer = false ∧ otherLater = later ∧ otherSaved = savedMemo := by
                 intro other actual nextAnchor otherSecondary
                 obtain ⟨_same, rfl⟩ := EndpointStatefulGateTrace.class_trace_unique source reaches values paths
@@ -219,7 +219,7 @@ theorem complete (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver :
                 refine ⟨seededRanges, ?_⟩
                 intro otherQuery otherMiddle otherSeeded otherLater otherSaved otherCall
                 obtain ⟨rfl, rfl⟩ := seeded.unique otherSeeded
-                obtain ⟨sameAnswer, sameLater, sameSaved⟩ := SourceCurrentConjunctionCallUnique.call decision otherCall
+                obtain ⟨sameAnswer, sameLater, sameSaved⟩ := SourceCurrentConjunctionCallUnique.tuple_call decision otherCall
                 exact ⟨sameAnswer, sameLater.symm, sameSaved.symm⟩
               cases answer with
               | false =>
@@ -251,7 +251,7 @@ theorem complete (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver :
                         obtain ⟨_same, rfl⟩ := SourceCurrentSecondaryTrace.class_trace_unique source values paths heap
                           false false anchor nextAnchor secondary otherSecondary
                         exact otherSeeded)
-                      obtain ⟨_same, rfl, rfl⟩ := SourceCurrentConjunctionCallUnique.call decision otherCall
+                      obtain ⟨_same, rfl, rfl⟩ := SourceCurrentConjunctionCallUnique.tuple_call decision otherCall
                       exact rest.ranges
                   · intro g s p h n enoughG enoughS enoughP enoughH enoughN
                     have first := firstDone g (Nat.le_trans (Nat.le_trans limits.1 localFuel) enoughG)

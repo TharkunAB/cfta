@@ -37,18 +37,18 @@ theorem call_fourth_extends {width : Nat} (p h budget : Nat) (query : Node)
   cases present : memo query.referenceOf with
   | some entry =>
     rcases entry with ⟨original, answer⟩
-    simp only [SourceCurrentAllocatedConjunctionWorker.call, SourceCurrentConjunctionWorker.call,
+    simp only [SourceCurrentAllocatedConjunctionWorker.call, SourceCurrentConjunctionTupleWorker.call,
       present, SourceCurrentAllocatedConjunctionWorker.Outcome.memo]
     exact fun _ _ found => found
   | none =>
-    cases actual : SourceCurrentConjunctionWorker.decision p h budget query (physical before) with
+    cases actual : SourceCurrentConjunctionTupleWorker.decision p h budget query (physical before) with
     | done answer after =>
-      simp only [SourceCurrentAllocatedConjunctionWorker.call, SourceCurrentConjunctionWorker.call,
+      simp only [SourceCurrentAllocatedConjunctionWorker.call, SourceCurrentConjunctionTupleWorker.call,
         present, actual, SourceCurrentConjunctionWorker.Outcome.bind,
         SourceCurrentAllocatedConjunctionWorker.Outcome.memo]
       exact insert_extends memo query answer present
     | failed fault after =>
-      simp only [SourceCurrentAllocatedConjunctionWorker.call, SourceCurrentConjunctionWorker.call,
+      simp only [SourceCurrentAllocatedConjunctionWorker.call, SourceCurrentConjunctionTupleWorker.call,
         present, actual, SourceCurrentConjunctionWorker.Outcome.bind,
         SourceCurrentAllocatedConjunctionWorker.Outcome.memo]
       exact fun _ _ found => found
@@ -85,9 +85,9 @@ theorem call_retained {width : Nat}
     At formulas solver inventory actual.state ∧
       SourceCurrentMemoMergeEffects.Stored actual.state.native.machine.heap before.merge ∧
       SourceCurrentEmptinessMemo.Correct formulas solver actual.state.native.machine.heap before.fourth := by
-  have effects := SourceCurrentConjunctionWorkerEffects.call_effects p h budget before.fourth query
+  have effects := SourceCurrentConjunctionTupleWeakEffects.call_effects p h budget before.fourth query
     (physical before.checked) context.ready.semantic.ready.semantic context.ready.semantic.ready.covered available closed
-  cases actual : SourceCurrentConjunctionWorker.call p h budget before.fourth query (physical before.checked) with
+  cases actual : SourceCurrentConjunctionTupleWorker.call p h budget before.fourth query (physical before.checked) with
   | done output after =>
     rcases output with ⟨answer, saved⟩
     simp only [actual, SourceCurrentConjunctionWorker.Outcome.state] at effects
@@ -112,7 +112,7 @@ theorem call_failed_correct {width : Nat}
     | .done _ _ _ => True
     | .failed _ after saved => SourceCurrentEmptinessMemo.Correct formulas solver after.native.machine.heap saved := by
   have retained := call_retained p h budget query before memos context available closed
-  cases actual : SourceCurrentConjunctionWorker.call p h budget before.fourth query (physical before.checked) with
+  cases actual : SourceCurrentConjunctionTupleWorker.call p h budget before.fourth query (physical before.checked) with
   | done output after =>
     rcases output with ⟨answer, saved⟩
     simp only [SourceCurrentAllocatedConjunctionWorker.call, actual]

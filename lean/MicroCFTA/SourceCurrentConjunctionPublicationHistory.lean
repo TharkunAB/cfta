@@ -1,4 +1,4 @@
-import MicroCFTA.SourceCurrentConjunctionMemo
+import MicroCFTA.SourceCurrentConjunctionTupleSoundness
 import MicroCFTA.SourceCurrentConjunctionRowsSoundness
 import MicroCFTA.SourceCurrentRequiredPublicationHistory
 
@@ -15,7 +15,8 @@ open InternedNestedProvenance (Values Edges)
 open MergedColdReaderClosedInputs (ClosedValues ClosedEdges)
 open SourceEqualityRequiredSemanticCache (SemanticReady)
 open SourceCurrentConjunctionRowsAllocation (Ready Tuple Tuples Rows)
-open SourceCurrentConjunctionWorklist (Run PendingReady)
+open SourceCurrentConjunctionWorklist (PendingReady)
+open SourceCurrentConjunctionTupleExecution (Admission Run)
 open SourceCurrentNativeMuPublication (History)
 local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
 local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
@@ -133,6 +134,19 @@ private theorem rows [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {
           ready.semantic ready.costs ready.fields available closed chosen member).2.2)
       exact ⟨.trans initial later⟩
 
+private theorem admission [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    {budget : Nat} {nodes : List Node} {before after : Physical}
+    {result : SourceCurrentConjunctionTupleAdmission.Result Symbol FullSyntax.Formula}
+    (actual : Admission budget nodes before result after) (ready : Ready before)
+    (available : Values before.heap nodes) (closed : ClosedValues nodes) :
+    Nonempty (History before.heap after.heap) := by
+  cases result with
+  | overflow =>
+      cases actual with
+      | overflow reads _ => exact exposures reads ready.semantic ready.costs available
+  | zero => exact rows actual.zero_rows ready available closed
+  | positive predecessor values => exact rows actual.positive_rows.2 ready available closed
+
 private theorem run [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {budget : Nat} {table final : List (SourceCurrentConjunctionEmptinessTable.Entry Node)}
     {pending : List (List Node)} {before after : Physical}
     (actual : Run budget table pending before final after) (ready : Ready before)
@@ -141,24 +155,46 @@ private theorem run [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {b
   | done => exact ⟨.refl _⟩
   | empty _ _ ih => exact ih ready (fun nodes member => available nodes (List.mem_cons_of_mem _ member))
   | skip _ _ _ ih => exact ih ready (fun nodes member => available nodes (List.mem_cons_of_mem _ member))
-  | @admit budget table nodes before values middle pending final after _ fresh actual rest ih =>
-      have admitted := SourceCurrentConjunctionEmptinessTable.admitted SourceCurrentConjunctionRequirements.key
-        SourceCurrentConjunctionWorklist.closed budget table nodes fresh
-      have closed := SourceCurrentConjunctionWorklist.closed_values nodes admitted.2.1
-      have own := SourceCurrentConjunctionRowsSoundness.rows_verified actual ready (available nodes List.mem_cons_self) closed
-      have nextPending : PendingReady middle (values.flatten ++ pending) := by
+  | overflow _ fresh actual _ ih =>
+      have inputs := available _ List.mem_cons_self
+      have closed := SourceCurrentConjunctionWorklist.closed_values _
+        (SourceCurrentConjunctionEmptinessTable.admitted SourceCurrentConjunctionRequirements.key
+          SourceCurrentConjunctionWorklist.closed _ _ _ fresh).2.1
+      have own := actual.effects ready inputs closed
+      obtain ⟨initial⟩ := admission actual ready inputs closed
+      obtain ⟨later⟩ := ih own.ready
+        (SourceCurrentConjunctionWorklist.pending_keeps own.keeps
+          (fun nodes member => available nodes (List.mem_cons_of_mem _ member)))
+      exact ⟨.trans initial later⟩
+  | zero _ fresh actual _ ih =>
+      have inputs := available _ List.mem_cons_self
+      have closed := SourceCurrentConjunctionWorklist.closed_values _
+        (SourceCurrentConjunctionEmptinessTable.admitted SourceCurrentConjunctionRequirements.key
+          SourceCurrentConjunctionWorklist.closed _ _ _ fresh).2.1
+      have own := actual.effects ready inputs closed
+      obtain ⟨initial⟩ := admission actual ready inputs closed
+      obtain ⟨later⟩ := ih own.ready
+        (SourceCurrentConjunctionWorklist.pending_keeps own.keeps
+          (fun nodes member => available nodes (List.mem_cons_of_mem _ member)))
+      exact ⟨.trans initial later⟩
+  | positive _ fresh actual _ ih =>
+      have inputs := available _ List.mem_cons_self
+      have closed := SourceCurrentConjunctionWorklist.closed_values _
+        (SourceCurrentConjunctionEmptinessTable.admitted SourceCurrentConjunctionRequirements.key
+          SourceCurrentConjunctionWorklist.closed _ _ _ fresh).2.1
+      have own := SourceCurrentConjunctionRowsSoundness.rows_verified actual.positive_rows.2 ready inputs closed
+      obtain ⟨initial⟩ := admission actual ready inputs closed
+      obtain ⟨later⟩ := ih own.1.ready (by
         intro requirement member
         rcases List.mem_append.mp member with generated | earlier
         · obtain ⟨row, rowIn, requirementIn⟩ := List.mem_flatten.mp generated
           exact (own.2 row rowIn requirement requirementIn).1
-        · exact fun value included => own.1.keeps.available value
-            (available requirement (List.mem_cons_of_mem _ earlier) value included)
-      obtain ⟨initial⟩ := rows actual ready (available nodes List.mem_cons_self) closed
-      obtain ⟨later⟩ := ih own.1.ready nextPending
+        · exact SourceCurrentConjunctionWorklist.pending_keeps own.1.keeps
+            (fun nodes member => available nodes (List.mem_cons_of_mem _ member)) requirement earlier)
       exact ⟨.trans initial later⟩
 
 private theorem decision [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Node] {budget : Nat} {value : Node} {before after : Physical} {answer : Bool}
-    (actual : SourceCurrentConjunctionDecision.Decision budget value before answer after)
+    (actual : SourceCurrentConjunctionTupleExecution.Decision budget value before answer after)
     (ready : Ready before) (available : Available before.heap value) : Nonempty (History before.heap after.heap) := by
   cases actual with
   | open_input => exact ⟨.refl _⟩
@@ -168,7 +204,7 @@ private theorem decision [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard
 
 /-- An actual memo call derives its own causal publication interval from physical readiness. -/
 theorem call [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Node] {budget : Nat} {memo saved : Memo} {query : Node} {before after : Physical} {answer : Bool}
-    (actual : SourceCurrentConjunctionMemo.Call budget memo query before answer after saved)
+    (actual : SourceCurrentConjunctionTupleExecution.Call budget memo query before answer after saved)
     (ready : Ready before) (available : Available before.heap query) :
     Nonempty (History before.heap after.heap) := by
   cases actual with

@@ -52,7 +52,7 @@ inductive Retained [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
       {secondary : SourceCurrentSecondaryTrace.ClassTrace unconstrained values paths heap false anchor}
       {seeded : SourceCurrentAllocatedSeededQuery.Seeded values (paths.map (List.map Int.ofNat))
         (advanceHeap (advanceHeap before heap) anchor) query middle}
-      {decision : SourceCurrentConjunctionMemo.Call budget memo query (physical middle) false later savedMemo}
+      {decision : SourceCurrentConjunctionTupleExecution.Call budget memo query (physical middle) false later savedMemo}
       {rest : Scan budget unconstrained reaches values classes (advancePhysical middle later)
         savedMemo outcome selected after saved}
       {record : Record} {records kept : List Record}
@@ -64,7 +64,7 @@ inductive Retained [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
       {secondary : SourceCurrentSecondaryTrace.ClassTrace unconstrained values paths heap false anchor}
       {seeded : SourceCurrentAllocatedSeededQuery.Seeded values (paths.map (List.map Int.ofNat))
         (advanceHeap (advanceHeap before heap) anchor) query middle}
-      {decision : SourceCurrentConjunctionMemo.Call budget memo query (physical middle) true later saved}
+      {decision : SourceCurrentConjunctionTupleExecution.Call budget memo query (physical middle) true later saved}
       {record : Record} {records : List Record}
       (head : record.paths = paths) (remaining : records.map Record.paths = classes) :
       Retained (.stopped (classes := classes) primary secondary seeded decision) (record :: records) []
