@@ -1,3 +1,179 @@
+## R162: complete Parent fields for Type and Program rows
+
+Updated 2026-11-08 17:12 CET. The full goal remains ACTIVE. R161 was verified progress.
+Five new modules add 17 checked public laws. Earlier proof sources,
+Audit imports, counterexamples, repairs and marked drafts remain unchanged.
+No production Haskell source changes in this checkpoint.
+
+Successful Parent work now preserves a complete recursive Program row or
+a complete annotated Type row. Each theorem retains the SAME actual body,
+source reads, physical receipt and full caller Post. Each also retains
+native shared readiness, physical extension, resident result, closed
+children and the causal profile at that exact returned checked state.
+Actual cached field loading and precheck derive inside the public laws.
+Neither public Parent law takes a local-output classifier, a completed
+graph, a future receipt or a completion supplier.
+
+NativeTypeHereditaryParentWorker.edge starts from full input EdgeFields.
+The annotation, application and filter cases supply their exact full guard,
+layout and recursive operands. The literal precheck selects unchanged,
+emptyChildren or classes. The classes case uses R161's actual stronger
+local return. Canonical source expressions instantiate the exact guard
+footprints; no source occurrence or runtime symbol classification is a
+new public premise. The actual reduce_length and SAME MkEdge receipt retain
+source guard and source arity together, or Top with the single Empty
+sentinel. The retained slots reconstruct the complete returned EdgeFields.
+The rejection result has an annotated Empty child and the exact Top guard.
+
+NativeTypeAnnotatedLocalWorker.classes follows literal Scan, Required and
+class Pass. A fully annotated forest supplies every structural Type path.
+Required uses no assigned Program positions. Its actual return supplies
+annotations on every adjusted Type operand. The actual source precheck and
+Scan supply coherent retained records. Actual class soundness derives the
+same Pass graph. Route transport at the empty path gives annotations on
+complete results. The stopped Scan returns Empty at every position.
+reduce includes unchanged and emptyChildren at their exact returned states.
+Both laws retain readiness, extension, closed availability and the profile.
+They require the actual precheck receipt and genuine reached range plans.
+
+NativeTypeAnnotatedParentWorker.edge covers arbitrary Type-row guards and
+arities when Origin holds on the input guard and all input children are
+Annotated. This includes more than the earlier Top singleton case.
+The actual load derives precheck, and the generic annotated local law gives
+its literal adjusted children. The same constructor retains the original
+Origin guard and those children, or Top and Empty. The full caller tuple
+and native Type facts remain attached to that same observed Parent return.
+
+Both Parent laws still require initial Context, shared Type readiness,
+causal profile, inherited readiness, resident input, closed input children,
+successful execution and actual reached range plans. They prove local
+preservation. They do not derive these inputs at every recursive entry,
+classify failed prefixes, establish completion or derive a global bound.
+
+HereditaryMemoFields.NodeFields carries independent conditional annotation
+and recursive Program implications for the complete captured node request.
+EdgeFields carries the corresponding full Type-row and recursive Program
+row implications. History uses actual FlatMemoThunk.CellSpec for BOTH
+nodeResults and edgeResults. The initial, advance, begin and finish laws
+retain both physical families. Ready hits use checked physical key equality
+to recover the complete owner, including its inherited constraint.
+The generic finish laws still require the respective publication proof.
+They do not prove that all actual cold recursive bodies supply that proof.
+This distinction remains part of the next source induction.
+
+HereditaryRawRebuild.edge derives the actual returned row certificate from
+its genuine replacement request. Direct annotated/application/filter laws
+construct that request from exact original metadata and the actual new
+Type and recursive Program child vectors. They need no result-row oracle.
+modify follows the exact ordered-ID test. The unchanged branch retains the
+original value certificate. The changed branch uses actual makeNode on
+certified resident rows. Existing raw receipts supply physical effects;
+no duplicate native-state framework is introduced.
+
+Verified source targets:
+- `SourceSynthesisHereditaryMemoFields`: 8 public laws. SHA256 `9eafb1bca04d80b8431be99eeccb28b287f3696974dc30c7ed19d16e19d49a5e`.
+- `SourceSynthesisHereditaryRawRebuild`: 5 public laws. SHA256 `bc2620d7c0bf3a36c8ebf6a61826fa959c3011866b973d0db8fdd934c6071a7f`.
+- `SourceSynthesisNativeTypeAnnotatedLocalWorker`: 2 public laws. SHA256 `295840d289aa98012a894db9dde1b0818da864978c665eca750f23848de545fc`.
+- `SourceSynthesisNativeTypeAnnotatedParentWorker`: 1 public laws. SHA256 `0a603bfceee7c0144c1cea9732e91e2c98623d3cc7adaf095e18c6c4e02eda1c`.
+- `SourceSynthesisNativeTypeHereditaryParentWorker`: 1 public laws. SHA256 `d1b4b1b0f7149e7bbb60f4ab8c87a8f9b73d097e3fdfdb51b7a0b2ff01f01978`.
+
+Reviewable proof commits based on `c05be71443ec822a76ebd107572d8f2eae6065ff`:
+- `033902de95810c2d039d7fdef4d98735c5fad6b1`: SourceSynthesisHereditaryMemoFields.
+- `da1e13040a44ff5180cf3ed2a7da135cb98f0b36`: SourceSynthesisHereditaryRawRebuild.
+- `a3bcb93a72c042529a86a3ec038266856fd16888`: SourceSynthesisNativeTypeAnnotatedLocalWorker.
+- `f7dcc67612a757991eb019fa742878ff9d9b8b1b`: SourceSynthesisNativeTypeAnnotatedParentWorker.
+- `afc5d93a8467be78bfc56e1ee2525ea84024de93`: SourceSynthesisNativeTypeHereditaryParentWorker.
+
+Each source has a compact reproducible packet in
+lean/restart-evidence/20261108-<slug>/. Actual project Nix/Lake compilation,
+strict own-source warnings, every public name and namespace, standard axioms
+and exact source hashes pass. ROOT ran one compiler at a time. The actual
+scope records memory.max and memory.high of 4,294,967,296 bytes and
+memory.swap.max of zero. All owned compiler handles are terminal.
+Earlier proof sources and Audit imports remain unchanged. The R139 full
+Audit baseline is retained. It is not rerun here.
+
+The general original-input endpoint remains R137
+SourceSynthesisOriginalTupleCall.request. R160 derives recursive fields
+from accepted original signed firstOrderRaw construction and its actual
+empty-store Label build. R161 preserves recursive mixed fields through
+actual local classes. R162 derives complete local Type and Program Parent
+returns, both conditional cache families and actual raw reconstruction.
+The whole recursive worker and enumeration driver are not yet derived
+from the original input. Origin annotations certify provenance. They do
+not establish the complete generated Type grammar, lexical scopes or
+semantic Program typing.
+
+Next proof work, without reducing the full objective:
+
+1. Carry both Type and recursive Program certificates through actual
+   PartialWorker.walk/children/descendants/rows/nodeBody. Use each actual
+   inherited prefix and sibling state. Preserve the exact row schema from
+   Parent through child returns and raw reconstruction. Derive both cold
+   node and edge publications from that same execution. Connect the strong
+   captured-owner History to actual entry/return states. Do not substitute
+   its generic finish premise for a source proof. Use actual roles and
+   certified constructors; runtime symbols alone do not establish them.
+2. Discharge Context, shared readiness, profile, inherited readiness,
+   residency, closedness and range obligations at ALL generated, reached,
+   intermediate, failing, rejected, returned and subsequent entries.
+   Retain exact native/equality operations, fourth memo, physical and typed
+   Merge stores and historical targets. Prove the full generated Type
+   grammar, scopes and joint Program/constrained-Type progress. Original
+   entry construction and successful Parent preservation are insufficient.
+3. Derive ONE original-input/request/actual-caller resource bound for BOTH
+   the selected optimized worker AND the COMPLETE enumeration driver.
+   Include every sibling and every reached and native state. Derive finite
+   Word, Int, key and allocation safety. Existing reached range plans must
+   derive at their actual prefix states. Recursive fields and Type routes
+   do not discharge them. The R146 normalized path3-to4 source boundary
+   prevents a maximum-initial-path rank. Top descent remains segment-only.
+   Do not replace this goal with supplied success, graph, trace, fuel,
+   ranges, finite carrier, closure, final validity, OriginalInput or future
+   completion.
+4. Complete faithful native lazy pull-cursor execution, arity/raw-match
+   suspension, demand order, B+1 stopping and faults. Establish exact
+   accepted terms by NODE COUNT, exact counts and size order, BOTH SIGNED
+   rank/unrank inverses through actual sparse execution, and ALL Sized,
+   fallback, failure and productive infinite paths. Include tables, maps,
+   sets, cache, hashing, native Word/Int, allocation, wrappers, lookup,
+   Curried and Specftacular. Do not invent sizes for size-free
+   enumerateOutUVarWith or enumerateUntil'. The recorded native tuple
+   difference concerns demand order only. It proves no cache inequality,
+   nontermination or Haskell bug.
+
+R156's profile correction remains in force. Actual checked native-query and
+successful Seeded/classes/reduce causal-profile preservation already exists.
+Reuse those laws. GuardHeap does not annotate the entire mixed heap.
+No production Haskell file was changed. No Haskell fix was established here.
+Record every future Haskell fix in root FINDINGS as well, with its source
+location and reproducible evidence, so external work can use it.
+
+Restart and publication:
+- Branch formalize. Pushes remain explicitly authorized. Preserve .hypha/.
+- Main is bd5a406a6a3f84b7e3ae0906082783911509df83 and is an ancestor.
+  Fetch exact main/formalize refs before further proof work.
+- Runtime: /tmp/mcfta-type-parent-joint-20261108-1659/. Read RESUME.json,
+  publication.json, canonical-board-readback.json and terminal-audit.json.
+  They record exact pushed/fetched refs, board sequence, checked hashes,
+  complete tracked-file coverage and terminal process state. The compact
+  effective-caps.jsonl report records actual compiler cgroup limits.
+- Publication covers 28 changed tracked files: five new proof sources,
+  their four-file replay packets and these three root documents. Every
+  historical document byte remains exact. The full goal remains active.
+- Retain one ROOT compiler at a time, 4 GiB and zero swap. Reuse the actual
+  returned handle after a yield. Do not change queue concurrency. Focused
+  checks pass. No broader Audit rerun is needed for this checkpoint.
+- Continue to measure /tmp. The directory-inclusive 17:06 audit found
+  29,376,512 bytes of readable allocation, about28 MiB, with about246 GiB
+  free. Five protected unreadable entries were excluded. No cleanup was
+  needed or performed. Keep compact scripts, source hashes and reports.
+  Do not retain build archives or large proof-output copies.
+
+The older checkpoint text below remains history. This R162 entry supersedes
+its immediate next-step instructions. Retain every earlier source repair,
+accepted counterexample, rejected shortcut and marked draft.
+
 ## R161: recursive fields through actual edits and local class work
 
 Updated 2026-11-08 16:49 CET. The full goal remains ACTIVE. R160 was verified progress.
