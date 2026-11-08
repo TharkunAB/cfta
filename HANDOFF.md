@@ -1,3 +1,137 @@
+# Current checkpoint: R149 selected Type fields through actual mixed operations
+
+Updated 2026-11-08 11:50 CET. Goal ACTIVE. R149 made PROGRESS. Branch formalize.
+Runtime: /tmp/mcfta-type-field-flow-20261108-1139/RESUME.json.
+Parent: 83d0c7f3e82c647165d1f9a79383a6af803dfcda (R148).
+Main bd5a406a6a3f84b7e3ae0906082783911509df83 remains incorporated.
+
+FOUR new modules and FOURTEEN public laws pass actual Nix/Lake, strict
+own-source reports, exact public names, standard axiom reports and final
+source hashes. Existing Lean sources, production Haskell and Audit imports
+are unchanged. R139 full Audit remains a prior baseline, NOT rerun for
+these modules. The existing Plain endpoints remain available.
+
+## Correct the open-domain assessment
+
+Public node intersection starts intersectOpen with emptyIntersectionDom
+(cfta/src/Data/CFTA/Interned/Operations.hs:406-409,460-461). This applies
+also to warm calls; it does not reset their physical domain cache.
+Equality/Operations.hs:222-239 and Enumeration.hs:208 use that public
+entry. Internal Mu branches insert actual encountered Mu identities and
+records, retain the pair in seen, and resolve those exact bindings during
+recursive reads (Interned/Operations.hs:506-541,578). These names are not
+source Ty variable strings. The existing R147 native annotation proof
+already handles these internal open domains through Bindings.enter/read.
+
+Earlier wording about open-domain ancestry identified a possible generic
+ingress obligation. It was too broad as the next public-query gap. Even
+for physically scoped ORIGINAL domains, OriginalBindings supplies exact
+available Mu witnesses and R146 gives their Top-annotated bodies. Thus
+that original-source annotation binding can be derived. A source Path
+alone supplies reference values, not native domain membership or completed
+Mu records at an active reservation. The remaining actual caller problem
+is selecting Type operands from mixed Program data after edits and
+retaining the causal store and scope invariants through every such prefix.
+These source observations do not establish full Haskell correspondence.
+
+## Joint Type query return at the same actual state
+
+SourceSynthesisNativeTypeClosedRequests has TWO laws. Ready joins physical
+Good, SemanticReady, scoped completed memo results, idle native tables and
+universal conditional TypeOrigin stores. cold_ready derives its semantic,
+scope, idle and store fields from the accepted original Label build and
+empty native tables. Initial physical Good remains a genuine premise.
+
+completed consumes the ACTUAL TargetQuery.Step and available closed
+TypeOrigin-annotated operands. It derives the full generic annotation
+Return, Ready at the actual returned state, and result.free=[]. Existing
+ActualScope.step derives word checks from the same actual checked trace
+and aligns the scope proof to that exact returned state. No range plan,
+returned closedness, future store or cache reset is supplied. A previous
+result can therefore supply the next operand's annotation and closedness.
+Unrelated next operands still need their actual caller derivation.
+TypeOrigin records guard provenance, not structural or scoped Type validity.
+Completed execution and input operand roles remain explicit local inputs.
+
+## Indexed Type preservation without annotating Program siblings
+
+SourceCurrentHereditaryTypeFieldMerge has THREE laws. children_index
+follows the actual RequireChildren graph and keeps the selected returned
+value at the same physical list index. Positions before it must be
+unselected by the actual needed-map lookup. The selected call uses the
+incoming Mu store before any later calls. Later Program work can mutate
+the heap without any annotation premise on those Program children.
+requireAll_index consumes the actual global memo read receipt and the
+same compiled-map footprint. requireAll_done_head derives the graph from
+the actual bounded requireAll.done and handles index zero without a
+footprint premise. No future Mu store or all-forest annotation is supplied.
+There is deliberately no final Mu-store assertion after arbitrary later
+Program edits. An edited earlier Program slot before a later Type slot
+still requires a separate causal store argument.
+
+SourceSynthesisOriginalTypeRequired has FOUR original-source consumers:
+component, argument, application and filter. They combine R148's exact
+row slot with the actual bounded requireAll return. The accepted original
+Label build derives SemanticReady, CostHeap and the initial Mu store.
+Actual earlier ordered child builds derive closedness for ALL original
+children. Retained edge residency and final Cached derive their reader
+availability. No annotation is required for Program siblings. Each actual
+Required return retains its exact TypeOrigin operand at slot zero.
+The application result concerns the universe at slot zero; this does not
+claim arbitrary preservation of its marker after an edited earlier slot.
+Local row receipts, source shape and completed requireAll remain explicit.
+These laws do not derive every subsequent caller or its incoming store.
+
+## Actual projection from selected mixed fields
+
+SourceCurrentHereditaryProjection has FIVE laws. node follows actual
+Project calls on annotated Type values. rows needs annotations only for
+children selected by the literal signed position. Parent Program guards
+and other children are unrestricted. ordinary uses these selected fields
+for the actual first step through a mixed Program row. forest_selected
+requires only the forest value at its selected root position to be
+annotated. union follows the actual ReadAll/nodeEdges graph, then the
+literal makeNode, on annotated projected values. Every law derives the
+returned annotation and conditional Mu store from actual source effects.
+They need no CostHeap or global Type-annotated heap. Actual incoming
+semantic readiness, availability, closedness, Mu store and selected input
+annotations remain local premises. These are completed projection laws,
+not a fresh source path classifier for every edited Program forest.
+
+## Remaining objective and next attachment
+
+Feed these results into the SAME actual refused-class Seeded/Fold and
+selected Required/class/force callers. Derive their selected Type path
+facts from original field geometry and preserve them after each edit.
+Retain causal Mu/native stores through mixed Program prefixes, including
+an edited Program position before a Type position. Bindings for generated
+queries follow the established native scope rules; arbitrary original
+reference annotations must not substitute for those rules.
+
+The full goal remains joint Program/constrained-Type closure and progress
+at EVERY actual reached state, including siblings, generated operands,
+failed/rejected branches, continuations, returned and subsequent states.
+Derive ONE original-input resource bound for BOTH the selected optimized
+worker and COMPLETE driver, with finite Word/Int/key safety and completion.
+Do not use supplied future results, body outcomes, trace existence, fuel,
+closure, finite carriers, final validity or lookup/OriginalInput oracles
+in place of this original-input theorem. R146's original conjunction
+boundary still raises maximum path length from three to four. Top-only
+descent is only a segment result, not the global progress proof.
+
+Connect exact accepted terms, NODE-COUNT size, counts and ordering, and
+BOTH SIGNED rank/unrank inverses through actual sparse execution. Retain
+all Sized/fallback/failure/productive infinite behavior and all wrappers.
+Match native lazy cursor/demand/order/stop/fault behavior; the existing
+tuple-demand mismatch remains open. Give size-free APIs no invented size.
+
+No Haskell edit or new established Haskell fix in R149. Future Haskell
+repairs must also be recorded here in root FINDINGS.md. Keep only small
+reproducible reports and restart data in /tmp. Publication measures /tmp
+again. The previous goal turn was PROGRESS: R148 was verified and pushed.
+
+---
+
 # Current checkpoint: R148 original Type operands and changed-heap query composition
 
 Updated 2026-11-08 11:25 CET. Goal ACTIVE. R148 made PROGRESS. Branch formalize.
