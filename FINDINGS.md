@@ -1,3 +1,286 @@
+# Source child retention and current root stages — 2026-11-09 22:29 CET
+
+## Restart and full objective
+
+The full goal is active. Work on `formalize`. Standing push permission
+remains in force. Preserve unrelated `?? .hypha/`. Read this common header
+before the older checkpoints. No production Haskell source changes occur
+in this checkpoint. The new Haskell file is a small public API replay.
+
+Keep the optimized interned core. Keep older constructor and equality work
+as secondary targets. Prove original-source soundness and completeness,
+component count and general node count, finite execution, actual size and
+order, and BOTH signed API inverse directions. Include generated, rejected,
+failed, sibling and later states. Include warm caches and cache identity,
+fixed Word/Int behavior, lazy productivity and sharing, and full native and
+Haskell correspondence. Local laws, theorem counts and passing builds do
+not finish this goal. Concrete accepted-term and exact-count obligations
+must remain distinct from the documented partial truncation contract.
+
+The proof/replay head is `b4f1c2006177a1cc4c9ff04dcefcdfba9dacf805`. It follows base `5532c622b2aa2e2478edb18b610ab189ee4dbd2b`.
+Five small proof/replay commits precede the checkpoint commit that contains
+this header. Included main is `849029e5b55a5d1c0152c24b55117b38419a6279`.
+The runtime ledger and final-head receipt record the exact published tip.
+
+## Strongest current statement
+
+The formalization connects substantial parts of the actual optimized
+execution. It does not yet prove the whole generator correct from every
+original input.
+
+1. The accepted-root and component-count bridge still relates one accepted
+   original FirstOrder typed root to its checked native package and exact
+   full-symbol Program decoding. It uses the same computed room and root.
+   Acceptance is an input to that result. It is not a theorem that every
+   emitted Program has an accepted original typed completion.
+2. `SharedPreparedRecursive.finite_complete` and
+   `run_finite_complete_resources` prove fuel stabilization for the ACTUAL
+   shared prepared worker at ANY chosen finite recursive depth. They use
+   CURRENT Packet/Fits/carrier, edge membership/length, a suspended-mass
+   ceiling and the original shared reservation. One exact outcome is stable
+   at every larger work fuel. It can stop. This is not source completeness,
+   selector coverage, adequate source depth, or one original-input bound.
+3. The current partial-output observer uses the SAME actual output cache,
+   caller, query, full final memos, metadata and resource packet. With an
+   allocated root, it gives finite exact partial rendering and represents
+   each existing model of that CURRENT cache. It requires no model-existence
+   premise. It does not construct an original-source completion.
+4. The new source row laws derive full bucket retention for successful
+   Program operands and direct application/filter Type inputs. They derive
+   this fact from the literal field layouts, guard projection, indexed
+   inputs and actual successful child row. They do not assume retention.
+   The later selected-slot source lineage remains separate.
+5. New actual child/traversal/selected/captured stages never decrease their
+   attached cache counters. Startup allocates root zero. Current callbacks,
+   successful aligned finalization and selected startup edges have checked
+   allocation facts. General positive-depth startup-to-every-output root
+   allocation is still open. The depth-zero result is not that theorem.
+
+## New checked modules
+
+All four modules use their real public namespaces. Every public theorem
+has an explicit `#check` and an axiom audit. Allowed axioms remain only
+`propext`, `Classical.choice` and `Quot.sound`. No new axioms or sorry occur.
+There are 17 new public laws and 696 new Lean lines.
+
+- `SourceSynthesisSelectedProgramChildRetention`: 4 laws, 212 lines, SHA `d0892a3d8f27e567e916885ebfd52e76c5f9a090147285dd4bd7d60084550db2`.
+- `SourcePruningEnumerationSharedPreparedLiveRoot`: 6 laws, 142 lines, SHA `0324f0a1ebd093b4f63f56654367013d515f53a5f907971d7352a5cd938d4107`.
+- `SourcePruningEnumerationSharedSelectedCounterGrowth`: 4 laws, 212 lines, SHA `a2be95971dd92b42d634e77cb8a83fe6fd2ed0046e5ea4cb0e8471a784607bbc`.
+- `SourceSynthesisOwnChildTerminals`: 3 laws, 130 lines, SHA `2a304772e93d4155cc02f8ba1d2068df513d8f6fcbb19cd8f2d92dd4c4541051`.
+
+`SourceSynthesisSelectedProgramChildRetention` has four laws. Actual
+one-layer selected preparation keeps an empty or ordinary Program value
+verbatim. Actual indexed child construction derives the recursive field
+certificate and both descended buckets. A successful shared child row
+excludes Empty and derives an ordinary child with full retention. Its
+neutral-language consumer uses the same actual observation and all bucket
+restrictions. Type children and global later-slot lineage are not covered.
+
+`SourceSynthesisOwnChildTerminals` has three laws. The literal application
+and filter guards project their actual canonical equality classes. Own
+classes put a terminal in application Type inputs zero and one, and filter
+Type input zero. The conclusion uses the actual projected tries and actual
+indexed child-input list. It permits arbitrary inherited restrictions and
+arbitrary Type shape. The annotated variable row has no own classes and is
+excluded. Program operands have the separate certificate above.
+
+The private normalization proof does not evaluate the conservative
+`EqualityTermination.normalizationBound`. That bound enumerates a large
+finite path domain. Prove it positive, use the first fixed-point step, and
+compute only the small literal prepared classes. Lean 4.34 `cbv` produces
+proofs for finite equations through well-founded sort definitions. Plain
+`decide` and kernel reduction can stop at opaque accessibility proofs.
+`native_decide`, larger heartbeat limits and larger memory caps are not
+needed. The standard-axiom audits pass.
+
+`SourcePruningEnumerationSharedSelectedCounterGrowth` has four laws. The
+actual attached child and traversal caches never decrease the counter.
+The selected/captured laws preserve complete, rejected, stopped and
+finalization receipts. They require the CURRENT selected guard projection.
+No Context, Ready, successful future execution or old backend history
+supplies the counter conclusion. An absent attached cache supplies no
+cache conclusion.
+
+`SourcePruningEnumerationSharedPreparedLiveRoot` has six laws. Literal
+startup allocates slot zero with counter one and its supplied handle.
+An actual successful recordTypes callback preserves counter and Total.
+Successful actual finalization plus returned alignment derives positivity.
+A complete actual captured edge from startup retains positivity. The
+literal emitted extractor includes stopped prefixes. Every depth-zero
+output retains the same cache, caller and query, with root counter one.
+No result adds positivity to OutputResources by assumption.
+
+## Raw and reduced source Type boundary
+
+The new six-file packet is
+`lean/restart-evidence/20261109-source-type-boundary/`.
+It contains `repro.hs`, `observed.txt`, `audit.md`, `check.py`, `checked.json`
+and `README.md`. It builds the actual generator offline with one Cabal job
+inside the project Nix environment plus GMP. It checks Fourmolu, Cabal-gild,
+current source hashes, exact full output and effective cgroup limits.
+
+The public fixture uses component `f : a`, query argument `x : A`, goal `B`
+and size two. It runs FirstOrder, Curried AnyHead with an empty map, and
+Curried OnlyDefault with an empty map. In ALL three encodings:
+
+- The raw source accepts an explicit finite witness with `f : A -> B`.
+- The raw typed run renders the Type annotation of `f` as the marker Mu.
+  The explicit partial-term API reports TruncatedRecursion.
+- Raw programRuns decodes the result as `f x`.
+- The reduced typed run exposes the ordinary annotation `A -> B`.
+- Reduced programRuns and solutionsOfSize return `f x`.
+- The normal generator has cardinality one and values `[f x]`.
+
+This is an executable source-reachable raw Type truncation. It refutes a
+claim that source field roles alone exclude opaque Type children with
+nonterminal descendant buckets. It is not a checked original-source
+history for the formal shared worker. It proves no reduced typing defect
+and emits no demonstrated incorrect concrete Program.
+
+The raw source chain is explicit. Generalizing a bare component TVar uses
+allTypes, a real recursive Type universe. Application class paths
+`[2,0,0]`, `[2,0,1]` and `[2,0,2]` descend through the function Program and
+its annotation to `[0]`, `[1]` and `[2]`. This bucket is nonempty and has no
+terminal. The actual enumerator drops it at an opaque recursive boundary,
+as documented. `programRuns` removes the annotation during decoding.
+
+An older formal result already locates structural removal at REQUIRED.
+`SourceSynthesisUniverseRequiredBoundary.required_child_exceeds_application`
+starts from an analogous actual f:a size-two source and exposes an ordinary
+singleton arrow annotation with three children. Its query and execution
+are different. Do not cast it into the current shared worker.
+
+## Biggest gap and concrete next work
+
+The largest gap is still ORIGINAL-source meaning at every actual reached
+prepared output. The current target is the recursive Type annotation
+under a variable row. The direct application/filter Type fields now have
+own terminals. Successful Program children now have full retention.
+
+Current hereditary facts do not close the remaining Type case. Annotated
+admits Mu and union. TypePath.annotated permits every continuation path.
+ValueFields, TypeRow, origin history and closed memos retain source roles
+and closedness. They do not assert an ordinary Type prefix or Arrow shape.
+Language equivalence and free-list/domain closure do not assert that shape.
+
+Next prove `requireAll_prefixes_ordinary` from the literal CURRENT successful
+requireAll and its compiled required-path trie. Every strict required
+prefix must be empty or ordinary. Terminal endpoints may remain opaque.
+Use CURRENT semantic, residency and cost facts. RequireNode with a nonempty
+child trie goes through recursive exposure and ordinary head construction.
+Rows that lack a required child are rejected. The current
+SharedScanRequiredNumeric receipt retains actual requireAll and its reads
+at the SAME post-Scan heap. Instantiate that receipt at function annotation
+prefix `[2,0]` with required descendants `[0]`, `[1]`, `[2]`.
+
+Then prove that the actual class pass and later native narrowing preserve
+that prefix certificate. Attach the result to the actual selected child
+and consume the existing retention-conditioned language theorem. Exact
+Arrow(A,B) in the replay needs the later class edits and literal child
+readback. Source origin or an older executed trace is not enough.
+
+The root-allocation work has a separate precise continuation. Current
+narrowed prefix facts already supply Ready for the selected target, hence
+positivity. Underlying parked PrefixValid has counter equality, but the
+current scalar capsule omits it. Actual completed-head resources contain
+FragmentHistory growth and Admitted.safe. The callback counter law can
+transport these facts. Thread them through ONE actual positive-depth
+output-path induction or strengthen the local finite IH. Do not infer
+positivity from OutputResources alone: that capsule permits counter zero.
+Do not replace the actual producer with an old backend history or a new
+future-state supplier.
+
+The other top-level gaps remain:
+
+- Derive CURRENT startup Packet, reservation, nonempty source policies and
+  adequate recursive depth/work from one original Library/Query input.
+- Prove source completeness and selector coverage. Current edgesOf
+  membership and length permit omissions. They do not establish coverage.
+- Connect the actual emitted Program set, exact general node/component
+  counts, requested size, output order and BOTH signed API inverse laws.
+  Algebraic inverse results are not both concrete signed API instances.
+- Close arbitrary reached/fault invariants, warm caches and identity,
+  fixed Word/Int arithmetic, lazy productivity and sharing, and complete
+  native/Haskell correspondence.
+
+The prior canonical native opaque countermodel remains valid. Its heap,
+shared row and partial output are checked, but full Context, source-history
+reachability and fixed-word capacity are not. It models documented dropped
+constraints at truncation. It does not establish a Haskell defect. The
+partial marker does not establish a nonempty language below it. Exact
+concrete acceptance and partial over-approximation must remain distinct.
+
+## Haskell pickup for an external agent
+
+There is NO new production Haskell repair in this checkpoint. The new raw
+source observation has a valid finite typing completion, and the reduced
+fixture exposes the required arrow. Do not report it as an unsound concrete
+synthesis result or change documented truncation behavior on this evidence.
+
+PR204 is already merged on included main:
+https://github.com/TharkunAB/cfta/pull/204 .
+The original repair commit is
+`113de3d85f7776d623c45fd3e31157e4254af1fb`.
+It matches full interned symbols and physical arity for app/4 and filter/2.
+The fallback uses symbolText. Interned symbol identity remains the Eq key.
+
+The exact source is
+`cfta-generator/src/Data/CFTA/Gen/Synthesis.hs`, SHA
+`dfffbf454516649e115d890e65b6289217dbcf352ccb08e86415d719b32fbc3a`.
+The exact test is
+`cfta-generator/test/Data/CFTA/Gen/SynthesisSpec.hs`, SHA
+`8f931875e18cd32a21a58072de1363530df3b03189b576fca614f009063fbe47`.
+These are not cfta/src/Data/CFTA/Gen/Synthesis.hs or cfta/test/Spec.hs.
+The previous compact synthesis-decoder-shapes packet retains the full
+before/after thirteen-case output in all three encodings and format checks.
+Both live hashes remain exact. Record any later Haskell fixes in FINDINGS
+with exact paths, commit, reproduction, result and remaining boundary.
+
+## Validation and compact reproducibility
+
+All four strict own-source targets pass. All six current packets pass from
+cwd `/tmp`: four proof packets, source-type-boundary, and compatibility.
+The full affected frontier is Audit. It has 5688 live modules,
+5 affected modules, 4685 imports and 92296 axiom records.
+The first Audit took 6.42 seconds; the portable Audit took 2.29 seconds.
+Every affected source hash remained exact. All old Audit bytes remain as
+an exact suffix after four new imports. Public declarations were not removed.
+
+The compatibility packet is
+`lean/restart-evidence/20261109-source-child-compatibility/`.
+Each proof packet has README, checker, checked hash/axiom report and exact
+public theorem list. Reproduction reads the committed source directly.
+The artifacts are small recipes and reports. They do not require retained
+source snapshots, object archives, historical builds or giant logs.
+
+Keep ONE serial heavy process. Use heavy-management/bin/capped, 4 GiB for
+both memory.max and memory.high, swap zero and LEAN_NUM_THREADS=1. Do not
+raise memory, concurrency or heartbeat limits. Root is the sole compiler
+and Git publisher. Source-only fan-out is allowed by the current AGENTS.
+Use one current process handle until terminal completion. A tool call
+aborted before dispatch has not started a process. Retry it idempotently.
+For an idle completed worker, followup_task starts new work; send_message
+does not. Preserve source hashes while their checks run.
+
+Latest /tmp scan: 29,700,235 bytes of visible regular files
+(about 28.3 MiB), 254,183,501,824 free bytes
+(about 236.7 GiB). Six inaccessible entries are excluded.
+Removed 42,662 bytes of obsolete resolved diagnostics and the temporary
+reduction probe. There are no new source or object archives. The public
+fixture is about two KiB. Keep runtime records small. Store durable recipes
+and exact findings in the branch. Do not recreate the former evidence
+archives or delete another task's data.
+
+The small current runtime is `/tmp/mcfta-source-child-20261109-2200`.
+It holds targets, verified-modules, frontier, portable reports, commit ledger,
+source replay runner, tmp audit and cleanup receipt, and publication state.
+All persistent proof and replay material is in the branch. Record the exact
+remote tip after an authorized non-force push, then persist and fully
+read back the shared board post. Keep the full goal ACTIVE after this
+checkpoint. The current work is progress, not completion or a pause.
+
+---
+
 # Native opaque boundary and prepared partial output — 2026-11-09 21:54 CET
 
 ## Restart and full objective
