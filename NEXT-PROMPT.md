@@ -1,3 +1,418 @@
+# R203 checkpoint: actual shared terminal completion and branch-aware callback admission
+
+Checkpoint time: 2026-11-09T17:58:28+01:00. Branch: formalize. Persistent goal: ACTIVE.
+This prefix supersedes older status statements. It preserves EVERY prior byte
+in NEXT-PROMPT.md, HANDOFF.md and root FINDINGS.md. The prior R202 common prefix
+has 36,694 bytes, SHA-256 559ba46575377e88bc6e3dae477dc92b937f0cd8ff9817017767a42f618ce8a2.
+R203 base: 50b354ea52da826ceabee0a9ae0ef4c40e94c942. Refreshed main: 9f5f77783b9f936a1edf4225373cbad9dc6a9ed5. Main remains an ancestor.
+The previous goal turn made progress: R202 published twelve commits with eleven
+modules and 41 laws. The full Audit, twelve portable packets, exact remote and
+board seq 1061 were verified. R203 adds the twelve proof commits below. Its
+final checkpoint commit adds this prefix, Audit and the compatibility packet.
+Get that commit hash from HEAD. The runtime final-head and board receipts record
+publication. The board request UUID is 51c71c7b-8ff7-47ec-a3e5-b6feb18dbd31.
+
+## Full objective and status
+
+Prove the COMPLETE CFTA system for original accepted inputs. Include complete
+SOURCE component-size enumeration, actual selected route order and BOTH signed
+rank/unrank inverse directions at that API. Include generated, rejected,
+failed, sibling and later states. Include warm caches, identity, native fixed
+Word/Int arithmetic, lazy execution and the optimized interned core. Prove
+correspondence with the actual Haskell implementation. Preserve older
+constructor/equality proofs as secondary targets. Preserve all counterexamples,
+repairs, marked drafts and existing proof contracts. Green local modules or
+larger theorem totals do not establish complete system correctness.
+
+The work remains active. R203 closes the local actual shared cached-fold and
+terminal composition cut. It does not close recursive enumeration coverage.
+Every module and all prior source bytes remain. No production Haskell file,
+test or configuration changes in this increment. Old proof sources stay
+unchanged except the added Audit imports, which retain all old Audit bytes.
+
+## Strongest current statements
+
+The strongest original-input attachment remains
+SourceSynthesisOriginalCheckedSharedProgramCount.accepted. Successful
+firstOrderRaw construction supplies ONE original built graph and prepared
+caller. Under the SAME computed native Room condition, all sufficient literal
+shared outer fuels return the SAME normalized root and full caller. The full
+literal ranges, checked graph, ordered endpoint reads, Post, Frame, Fits, guard
+carrier, resident closed result, Type readiness, guard origins, memo history
+and hereditary Program/Type fields remain. EVERY typed term accepted at that
+returned root projects to Program, agrees with the repaired modeled literal
+decoder and has exactly signed.toNat component/argument occurrences. This uses
+the SAME built package and result-to-input language law. It adds no initializer,
+independent root, new field/policy supplier or stronger capacity condition.
+Components count Var occurrences; App adds both operands. Type annotation
+children remain unrestricted and do not contribute to the count.
+
+The strongest NEW operational composition is
+SourcePruningEnumerationSharedCachedTerminal.terminalAdapter_complete_resources,
+in SourcePruningEnumerationSharedTerminalAdapterResources. From current cached
+entry facts and ONE original shared query reservation, it CONSTRUCTS sufficient
+representative/native/worker/index bounds and the actual terminal result/cache.
+It retains the actual pure union prefix, actual ordered shared fold, actual
+shared incoming write, full returned caller and query memo, exact sequential
+Post/memo bundle, current storage, realized pending slots, waiting counts,
+candidate flags, off-list values, protected classes and allowed references.
+It derives numeric Fits and guard carrier at BOTH the fold caller and final
+caller. It derives native ranges internally. It does not ask the caller for a
+future successful fold, future storage/cache/flag certificate, range callback
+or a completed traversal trace. It does not execute an old backend wrapper.
+
+The NEW general state law SharedFoldState.run_state covers EVERY literal rawFold
+outcome, including faults, unsupported observations and rejection. It preserves
+StorageValid, fixed waiting-count correctness and a frame with counter, length,
+representatives, obligations, expansion ancestry, recursion ancestry away from
+target, off-list values, enumerated origins, conditional target pending and old
+eliminated slots. run_allowed preserves a fixed reference predicate at every
+such endpoint. These are enumeration-state laws. They do NOT prove a native
+Post/resource/Ready/Type/history packet for arbitrary tiny-fuel failures.
+
+## Twelve verified proof commits
+
+| Module | Lines | Public laws | Commit |
+| --- | ---: | ---: | --- |
+| SourcePruningEnumerationCallbackPolicies | 109 | 5 | 4e8f3caf3525db0e605eb1a09c3a0a558b783b38 |
+| SourcePruningEnumerationSharedCachedFoldCompletion | 478 | 1 | 19169e2cfa33f3793b228ccfa2c13d730639a3ec |
+| SourcePruningEnumerationSharedCachedFoldResources | 98 | 1 | ed2e9890428796385eb0afc34370fbc1122fb0d8 |
+| SourcePruningEnumerationSharedCachedIncoming | 315 | 2 | 56e3e135dd4cda31824df45b07ff826da0f1f3eb |
+| SourcePruningEnumerationSharedDispatchShape | 169 | 1 | f52173f7aaad031e218cb338aa2de853e3eac8c5 |
+| SourcePruningEnumerationSharedFoldState | 292 | 5 | 69d6fc09bd7edfcc6d54274654b82a54b8925a37 |
+| SourcePruningEnumerationSharedFoldUnique | 119 | 2 | 23f848dfafb134701b0bb1b3c4db239fe666027c |
+| SourcePruningEnumerationSharedTerminalAdapterCompletion | 380 | 2 | 1cfc75ae99097f9abecb51f90783f17012bc4a29 |
+| SourcePruningEnumerationSharedTerminalAdapterResources | 266 | 1 | d4ee256b2355b3e00c10f7c0e4c9d928f76e38b7 |
+| SourcePruningEnumerationSharedTerminalAdmission | 107 | 2 | b366610138c39e615e2f21a4b15805396778d8ec |
+| SourcePruningEnumerationSharedTerminalCompletion | 378 | 1 | 15ea2ccfaeaa61d0bd8a0d0e2937632e55339eb3 |
+| SourcePruningEnumerationSharedTerminalResources | 237 | 1 | e30b9b913b2384ca6e4c9dc73aceea91f41e7178 |
+
+There are 2,948 added Lean source lines and 24 public laws. Each source commit
+contains exactly that source plus README.md, check.py, checked.json and
+theorems.json. Every public law has an explicit check and axiom report. The
+checks require exact public namespaces and allow only propext, Classical.choice
+and Quot.sound. The final checkpoint supplies eight additional files: three
+root documents, Audit and the four-file compatibility packet.
+
+Exact proof source SHA-256 and packet locations:
+
+- SourcePruningEnumerationCallbackPolicies: 42c5ed3adcfc4df6bc104b92d23abb727295e7f75c0e7a57175ef974643200e0; packet: lean/restart-evidence/20261109-callback-policies
+- SourcePruningEnumerationSharedCachedFoldCompletion: 0f1530499c1b23d5c1785f104fbfcb21d046097e8f4f6ba97b0aca4e4b3dd11b; packet: lean/restart-evidence/20261109-shared-cached-fold-completion
+- SourcePruningEnumerationSharedCachedFoldResources: c531a8c7d51119aa42965f3467bf99f8d82a1ae2a9f9d311f061bee40b40732f; packet: lean/restart-evidence/20261109-shared-cached-fold-resources
+- SourcePruningEnumerationSharedCachedIncoming: 902b2e6fe3ad7e2687f7cf14a1207de43943c1a28490d25f7c22579fd21f619d; packet: lean/restart-evidence/20261109-shared-cached-incoming
+- SourcePruningEnumerationSharedDispatchShape: df268cd0ae661a5edef5845a1c547c8e03b12dfce49d15f29423fa5881159661; packet: lean/restart-evidence/20261109-shared-dispatch-shape
+- SourcePruningEnumerationSharedFoldState: 938ea0e6ed0076856411a5716201c0f59079a3c2896f4114fe4743b3a78d8539; packet: lean/restart-evidence/20261109-shared-fold-state
+- SourcePruningEnumerationSharedFoldUnique: 1aad3be8b6145de100922e6433381a936b4ba37e2d507d202b45c9d06b8cea0b; packet: lean/restart-evidence/20261109-shared-fold-unique
+- SourcePruningEnumerationSharedTerminalAdapterCompletion: bd6b2aa023e849c65a1b20093718b7b196336b3622fcabe95112cd9d6a619897; packet: lean/restart-evidence/20261109-shared-terminal-adapter-completion
+- SourcePruningEnumerationSharedTerminalAdapterResources: bb465723a61e976964dc2912bbd4cbdc97a2ff0c0e3357c815fbd744ea705adc; packet: lean/restart-evidence/20261109-shared-terminal-adapter-resources
+- SourcePruningEnumerationSharedTerminalAdmission: 2b399e5a0ec98cab1d81f99fb561d99c2ffdfe7bb7128e512475956b30d9e496; packet: lean/restart-evidence/20261109-shared-terminal-admission
+- SourcePruningEnumerationSharedTerminalCompletion: ca5ce7b64cccf20d433ea8c63741f1e4c1ca325007a5b94cb40c0d1c52200f23; packet: lean/restart-evidence/20261109-shared-terminal-completion
+- SourcePruningEnumerationSharedTerminalResources: e65cbd00a86b2d0186fe18104766539e07d44eb5c373dee0007c72d0ba4b82df; packet: lean/restart-evidence/20261109-shared-terminal-resources
+
+## Actual fold, incoming and terminal contracts
+
+SharedFoldUnique.rawFold_ok_unique aligns result, full caller, query memo and
+outer core across two actual successful observations at arbitrary bounds.
+fold_ok_unique lifts this through the actual fold_erase. It aligns only the
+primary observation. It does not equate optional private caches across bounds.
+
+SharedDispatchShape.singleton derives the literal no-op or exact assimilation
+shape from the NEW shared dispatcher. SharedFoldState uses that shape and pure
+assimilation lemmas. Its all-outcome recursion uses actual rawFold, including
+the full SharedEnabledEmpty fault type. The allowed-reference laws reuse only
+the pure NativeReferences.assimilated_allowed lemma. The old executed
+NativeReferences.fold_allowed cannot justify new execution and is not used.
+
+SharedCachedFoldCompletion.cachedFold_complete constructs actual fold and its
+SOME cache, stable under larger native/worker bounds. It derives the same Post,
+queries, root paths, StorageValid, PendingRealized, waiting counts, candidate
+flags, []/singleton shape, target pending, old eliminations, completed source
+eliminations, off-list values and no-new-enumerated facts. Its private head law
+obtains the actual new dispatcher packet. Pure CachedAssimilation.complete and
+CachedAdapter.adapt attach the cache at the same returned heap. They are pure
+arithmetic helpers, not old dispatch execution. The resource companion derives
+Ranges from current SharedReserved and appends returned Fits/carrier through
+the actual fold_erase and rawFold resource law.
+
+SharedCachedIncoming.complete obtains the actual SharedIncomingNode packet and
+constructs its cache with pure NativeIndex.gained_complete at the SAME returned
+caller, replacement and decoded handle. incomingCacheAdapter_complete executes
+the actual new incomingCacheAdapter at all sufficient index bounds. It retains
+exact read, write, StorageValid, realization, Post/memos, replacement meaning,
+waiting counts, flags and absent/present old-node cases. Empty replacement uses
+the proved zero handle. It does not fabricate a shared success or reset native
+effects. The terminal outer state is incoming read; its successful row contains
+after.core. These states remain distinct in the packet.
+
+SharedTerminalCompletion.terminal_complete preserves the full older terminal
+packet while replacing EVERY executed dispatcher/fold/incoming/terminal call
+with its literal new shared counterpart. The pure prefix keeps the recorded
+source slots, winner, moved waiting index and representative union. Successful
+full assimilation restores Safe using that actual prefix/root alignment.
+Generic arbitrary assimilation can eliminate a distinct root while leaving the
+representative forest fixed. It therefore cannot preserve LiveRoots/Safe in
+general. No false generic Safe transport was added.
+
+SharedTerminalAdmission.terminal_initial_ranges derives TerminalRanges from
+current Context, Safe, roots, counts, selected pending inputs, realization,
+incoming residency/closure, Fits, carrier and SharedReserved. The unchanged pure
+prefix proves recorded.length=(first::rest).length. Shared rawFold uniqueness
+aligns the actual observed fold caller/core with a completed fold before the
+next incoming request. The proof consumes that many reserved slots and ONE
+following incoming slot. It derives current WordRanges at that same cut.
+No future-state supplier, domain-zero reseed, old Demand forecast or numeric
+transport from mere alphabet inclusion is used.
+
+SharedTerminalResources.terminal_complete_resources retains every logical
+terminal field and appends native Fits/carrier at foldCaller and afterCaller.
+The rejected branch retains foldCaller/foldFinal/foldInventory and foldPost.
+It conservatively pads the unused incoming slot in the bound. It does not
+claim another allocation occurred. The live branch obtains actual incoming
+resources with foldPost.context and foldFinal, then composes the same Post.
+
+SharedTerminalAdapterCompletion.terminalAdapter_complete proves actual run
+returns exactly that raw observation plus SOME resultCache. The rejected fold
+keeps its real native effects and cache. A completed fold attaches the actual
+incoming write cache, including empty replacement. The cache has correct
+counter, root paths, storage, realization, waiting index, candidate flags,
+off-list values, conditional Safe, protected classes, enumerated origins and
+fixed allowed-reference transport. terminal_protects is the pure representative
+class law. Its resource companion removes caller-supplied TerminalRanges and
+keeps BOTH actual endpoint bounds at that SAME completion.
+
+The strongest terminal producers require nonempty incoming, current logical
+entry validity, bounded selected/incoming suspended IDs and sufficient original
+reservation. Empty incoming is already an immediate literal branch in run.
+The existential completion bounds do not promise success at arbitrary small
+fuels. The actual cached terminal/fold retain raw cache-miss fallback paths.
+Completion constructs SOME cache under the stated current valid-cache facts;
+it does not declare every arbitrary bounded fallback complete.
+
+## Source-policy finding and correction
+
+The old OriginPolicies requires Avoids and ProgramEncoding at every ProgramAt
+position of EVERY structural subtree origin, including Type children. This is
+a conservative sufficient condition. It cannot be derived uniformly from root
+ProgramEncoding while Type annotations remain unrestricted. Even templates=[]
+retained the encoding premise although actual recordTypes skips its oracle.
+
+SourcePruningEnumerationCallbackPolicies adds CallbackOriginPolicies as
+templates=[] OR OriginPolicies templates whole. Its empty law derives that
+policy for EVERY whole term. Restriction and assignment laws retain actual
+structural origins. recordTypes_inl_refutes_of_callback_origin proves the real
+callback preserves bounded old pending refutation and returns false. Its empty
+branch needs NO encoding/avoidance premise. Its nonempty branch retains the old
+sufficient policy. All older laws remain unchanged.
+
+The checked encoded_root_not_origin_policy witness gives an encoded constant
+with an unrestricted Type app/4 subtree. The new empty policy holds, while old
+OriginPolicies [] fails. This is a Lean admission-premise boundary, not a new
+Haskell defect. For nonempty templates, raw source acceptance does not imply
+Avoids: runtime templates intentionally remove terms. The final language must
+include the actual rewrite admission, or derive it from the real eligibility
+gate. Do not identify Library.libraryAvoid with the runtime rewrite catalog.
+Do not add reserved-name or Type-grammar restrictions to bypass this gap.
+
+The actual Specftacular caller checks its signature before choosing templates.
+Its skeleton path can select a filtered catalog. Compiled pruning retains
+residual templates on success and falls back to original graph/full templates
+on failure. Empty catalog still retains typing rejection and actual stop/order
+callbacks. The source caller selector and these effective catalogs are not yet
+linked to the generic original finite driver. The exact audit follows below.
+
+## Haskell FINDINGS and external handoff
+
+No new Haskell bug or repair was established in R203. No Haskell source, test,
+configuration or production behavior changes. Unchanged Haskell tests were not
+rerun. The existing decoder repair on formalize remains commit
+113de3d85f7776d623c45fd3e31157e4254af1fb. It matches app/4 and filter/2 exactly.
+The public size-one component/query-argument filter counterexample and all
+three encodings are recorded in
+lean/restart-evidence/20261109-synthesis-decoder-shapes. The packet preserves
+the actual failing baseline, repaired runtime result and 13 passing examples.
+
+External agent claude-gondolin ported that repair to
+https://github.com/TharkunAB/cfta/pull/204. Live metadata was checked again in
+R203: open, unmerged, mergeable, non-draft; head
+2e586a7313997b16c508cc2c066674d4ff21dbf0 on fix/synthesis-decoder-shapes; base
+main 9f5f77783b9f936a1edf4225373cbad9dc6a9ed5. It changes two files with 32 additions and two deletions. Do not
+duplicate or merge that agent's repair without task authorization. Refresh main
+and integrate it when it lands. The local formalize branch already contains it.
+
+Haskell toProgram compares the FULL interned Symbol to ordinary overloaded
+literal Symbols in its two patterns. Symbol Eq compares interned identities.
+Only fallback extracts symbolText. No redundant text-only decoder was added.
+Synthesis.hs remains SHA-256
+dfffbf454516649e115d890e65b6289217dbcf352ccb08e86415d719b32fbc3a.
+SynthesisSpec.hs remains SHA-256
+8f931875e18cd32a21a58072de1363530df3b03189b576fca614f009063fbe47.
+
+## Verification and temporary storage
+
+All twelve strict Nix/Lake source checks passed. They preserve exact public
+namespaces, source hashes and only the three standard axioms. Own-source
+warnings are errors. The full Audit covers 5,610 live modules, thirteen affected
+modules, frontier Audit, 4,607 Audit imports and 91,597 axiom-report records.
+Its first final build took 13.91 seconds. All thirteen proof/compatibility
+packets passed when invoked from cwd /tmp. Hashes and axiom reports matched.
+The runtime stores the first Audit receipt before portable replay.
+
+The compiler cap remains ONE serial heavy-management job, memory.max and
+memory.high 4,294,967,296 bytes, swap zero and LEAN_NUM_THREADS=1. The full Audit
+peaked at the enforced 4 GiB cap and passed. The cold final terminal-adapter
+resource check peaked near 2,025 MiB. Never increase the cap or concurrency.
+Preserve a live handle until its real terminal result; a yield is not failure.
+
+Resolved draft failures were mechanical: an unqualified raw name was shadowed
+by a result binder, one incoming-run replacement was too broad, Frame.eliminated
+needed explicit constructor/index types, one list-update inequality had the
+wrong orientation, and the witness needed nondependent constructor elimination
+before child-length contradiction. The checked final statements retain their
+intended premises. No axiom or admitted hole was added. Small failure logs stay
+in the runtime. The semantic Safe and Type-policy boundaries remain explicit.
+
+Runtime: /tmp/mcfta-shared-terminal-20261109-1731.
+At 2026-11-09T17:58:28+01:00, readable regular /tmp files totalled 26875980 bytes
+(25.63 MiB) in 6879 files, with 0 skipped/vanished entries.
+Free space was 258594549760 bytes (240.83 GiB). This measures readable logical
+file sizes. No archive, source-tree copy or large evidence log was created.
+Git stores pinned sources and small reproducible check scripts/reports. Hundreds
+of GiB of generated evidence are not required. Preserve unknown/active files
+and unrelated .hypha. Keep checking /tmp size during later work.
+
+## Biggest remaining gaps and exact next work
+
+1. Lift this terminal packet and the existing pure shallow-child completion to
+the ACTUAL SharedSelectedContinuations.ChildDispatch.observe/run. The executable
+already exists there; do not add a second backend or call an old executed
+ChildDispatch/IncomingCacheAdapter/CachedAdapter completion theorem. Split its
+literal empty, shallow and terminal routes. Use the new terminal resource law
+and the same current cached entry/root/selected facts. Retain rejected and
+unsupported outcomes and its exact caller/query/cache endpoints.
+
+2. CONSTRUCT actual SharedSelectedContinuations.ChildTraversal traces from
+current child packets. trace_complete consumes a supplied Trace; it is not a
+coverage producer. Thread current storage, waiting counts, flags, residency,
+roots, Post, memos, Fits and carrier through each child and sibling. Keep actual
+cache-miss suffix execution. Then lift to SelectedEdge, CapturedEdge finalizer,
+NativeContinuations and SharedRecursive. Include finalizeStopped, and retain
+Stop.edge's known endpoint. Do not lose failure outputs or reset to old state.
+
+3. Derive ONE actual new recursive finite resource recurrence and whole-driver
+bound from current inputs. Tiny-fuel native/shared errors still need separate
+all-outcome native Post/Ready/Type/history/resource laws. Current all-outcome
+fold state/reference laws do not establish those native properties.
+
+4. Model the ACTUAL signature/template selector, compiled residual catalog and
+fallback at real caller inputs. The empty-catalog callback policy gap is closed
+locally. Nonempty source policy admission and the exact rewrite-admitted target
+language remain open. Root encoding does not make arbitrary Type subtrees
+Program encodings. Arbitrary always-stop/typing/narrowing callbacks cannot be
+declared complete. Keep all unsupported/failed callback cases.
+
+5. PRODUCE sufficient recursion depth for each finite accepted TYPED term from
+actual selected-edge/child/sibling coverage and proper structural subterm
+progress. Existing moreDepth only preserves an already complete run. Component
+count is not full typed-term height. Type annotation depth remains unpaid by
+source component count and cannot be bounded by it without an actual source
+grammar theorem.
+
+6. Connect local accepted-language facts to complete SOURCE size classes and
+actual route order. BOTH signed rank/unrank inverse algebra directions are
+already proved for reference classes and prepared grouped fields. The open
+part is concrete source-class coverage/order and the native signed sparse API,
+zero coefficients/minimum metadata, fallback and signed errors. Do not call
+both inverse directions wholly missing or impose old reference order on a
+documented different fast route.
+
+7. Prove productive lazy/infinite enumeration, fixed native Word/Int and cache
+identity correspondence, and full actual Haskell implementation correspondence.
+Preserve finite/error/unsupported/infinite count distinctions. No accepted-source
+guarded-Mu starvation witness is verified. The full goal remains ACTIVE.
+
+## Full preserved focused reviews
+
+The two read-only audits below are preserved byte-for-byte. Their line references
+and initial proposed names are historical review context. The checked final
+source names/contracts above take precedence. The cache review predated the
+checked final adapter, which is now DONE. The source-policy audit's proposed
+empty-catalog correction is now DONE. Its actual selector, nonempty admission
+and recursion-depth gaps remain open. Neither audit establishes a Haskell bug.
+
+Review file: terminal-resource-review.md; original SHA-256 280bcd9629e1da1716a2a5f3d401c42becf33a75339a1bb9c9b22520161652fb.
+
+# R203 terminal resource review
+
+Read-only review at 2026-11-09 17:43 CET. No source edits or compiler run. No semantic defect found in the four reviewed producers. This review does not establish the final adapter or recursive driver.
+
+All source paths below are under lean/MicroCFTA/ and start with SourcePruningEnumerationShared.
+
+1. CachedIncoming.lean:110-171 obtains one actual IncomingNode.run_complete packet. The logical cache is derived by the pure NativeIndex.gained_complete at that SAME returned heap, with the same replacement, decoded handle and write. The adapter at 273-312 reuses this packet. Its empty replacement uses handle zero, rather than a fabricated successful shared observation. No old incoming execution is used.
+
+2. TerminalCompletion.lean:219-240 uses actual cachedFold_complete and derives its raw observation by fold_erase. Rejection at 292-307 returns foldCaller, foldQueries, foldFinal, foldInventory and folded.core, with foldPost. It does not reset to the original caller or discard rejected-fold effects. The live branch at 308-346 invokes incoming completion with foldInventory, foldCaller and foldFinal. It transports incoming residency through foldPost.effects.keeps and composes foldPost.trans incomingPost. This preserves the same sequential global bundle. Query equality only changes the query-table argument; it does not replace the bundle or reindex reads.
+
+3. TerminalAdmission.lean:71-105 derives ranges for every actual successful pure prefix and subsequent actual singleton fold. rawFold_ok_unique aligns the full caller/core of a separately completed fold with the observed fold. Its Post is used only for current Ready/residency when deriving the next native WordRanges. It is not used to identify independently chosen read bundles. The reservation starts at the original current seed, consumes recorded.length slots and reserves the remaining incoming slot by after_prefix. No future callback is supplied to this producer.
+
+4. TerminalResources.lean:178-237 derives that range predicate internally, then keeps the single logical completion packet. Fold bounds are attached to its actual base rawFold observation. The live branch uses observed_resources on its SAME actual incoming observation and foldPost.context. The rejected branch conservatively pads one unused incoming slot with step_profile_ge and step_alphabet_ge. This is a bound, not a claim of actual extra allocation. No domain-zero reseed or numeric transport from mere alphabet inclusion appears.
+
+Adapter conditions and scope:
+- The raw terminal outer state is incoming `read`; the successful row contains `after.core`. Keep these distinct. The cached result is attached separately.
+- These completion APIs require nonempty incoming and adequate existential bounds. They do not give resources for arbitrary tiny-fuel faults, nor prove all terminal branches now use the cached adapter.
+- Generic terminal_complete explicitly retains TerminalRanges. terminal_complete_resources removes that caller-supplied range predicate using current Fits, SharedReserved, carrier and the current logical inputs.
+- Shared failure observations remain the new runtime type. The successful packet does not export a private shared snapshot or an ordered enabled-call receipt at every replay bound. Do not describe it as such. No old Demand graph is substituted.
+
+Reviewed SHA prefixes: CachedIncoming 902b2e6f; TerminalCompletion ca5ce7b6; TerminalAdmission 2b399e5a; TerminalResources e65cbd00.
+
+Review file: source-policy-admission-audit.md; original SHA-256 1a578ded8f7d37efb364b8ca49ea3730fc3045a779879f7267a2e5ace5b067f6.
+
+# Actual source pruning admission and policy boundary
+
+Audit completed before additive source work, 2026-11-09 17:37 CET. No old source, Haskell, compiler or Git changes. The new callback-policy module needs no Library/name/Type restriction.
+
+## Actual Haskell selection
+
+`specftacular/src/Specftacular.hs:1233` computes canPrune from absence of ("app",4) in allConstructors of compl_sig's type representations. Utils.hs:148–155 computes that list by recursively visiting the signature types. This is a caller gate, not a universal Type grammar invariant.
+
+At1281–1283, skeleton templates are `filter annotationFree(pruningTemplates...)` only when canPrune AND skeletonTemplates; otherwise []. At1304–1306 the ordinary bucket similarly selects pruningTemplates only when canPrune; otherwise []. `Rewriting.hs:326–362` constructs these from actual rules: linear variables, size bound, application lhs, principal/specialized typing and strict-decrease tests. `rawTemplate` inserts the fixed singleton arrow marker.
+
+`CompiledPruning.preparePruning` (50–68) either returns compiled/reduced graph + residual templates, or falls back to the ORIGINAL graph and FULL template list. Graph/role/cycle/cap/marker failures are real fallback. Compilation success proves exclusions only for eligible templates; it does not turn arbitrary accepted inputs into matches/avoidance or establish recursive cutoff-stream order.
+
+`Pruning.hs:55` uses runsInterned for prunedTerms []. Nonempty templates use the real template oracle. prunedPrograms (95–133) still uses termsPruneUntil at empty catalog, but recordTypes (107–112) skips the oracle then. It retains the actual type metadata, stop and typing callbacks; an empty catalog does NOT disable typing rejection. Keep extend=None, narrow/admits/fits rejection and atTypes stopping distinct.
+
+## Exact Lean mismatch
+
+`SourcePruningEnumerationPolicyOrigins.OriginPolicies` (18–20) unconditionally requires BOTH Avoids templates term AND ProgramEncoding at every ProgramAt of EVERY structural subtree Origin. `Origins.Origin` is an actual atPath, including Type children. `ProgramTypeOriginBoundary.encoded_type_hole_not_program_origin` already gives an encoded constant with an unrestricted Type app/4 subtree. Root encoding alone therefore supplies neither whole-origin encoding nor source Program provenance inside annotations.
+
+Even templates=[] leaves the encoding obligation in OriginPolicies. This is strictly stronger than the actual empty-catalog callback branch. `SourcePruningRecordTypesRefutation.recordTypes_inl_refutes` (37–39) already proves its empty branch using only current pending refutation and literal success_pure; avoids/encoded are unused there. `recordTypes_empty` and recordTypes_inr in SourcePruningRecordTypes (81,87) expose the exact read-free behavior. The new source ProgramSize/Projection certificates intentionally leave Type annotations unrestricted and cannot discharge the blanket policy.
+
+For NONEMPTY arbitrary templates, Avoids cannot follow from FirstOrder source acceptance alone: templates intentionally remove a subset of that language. The semantic target must be accepted AND admitted by the selected pruning catalog, or must derive admission from an actual rewrite-eligibility test. Library.libraryAvoid is a distinct size-two name exclusion mechanism, not this runtime rewrite-template catalog. Do not identify the two.
+
+No Lean runtime selector for Specftacular's canPrune/compl_sig/pruningTemplates gate was found in the inspected policy/driver modules. Generic OriginalFiniteDriver takes arbitrary templates/stop/order/fits/admits. The Specftacular caller's signature and query origin must be modeled before transferring its gate to arbitrary Library/Query data; their constructor catalogs are not already equated.
+
+## Small sound next proof cut
+
+1. The new SourcePruningEnumerationCallbackPolicies module adds a branch-aware admission predicate `templates=[] OR OriginPolicies templates whole` (or use the disjunction directly). Derive the empty branch internally; retain restriction/assignment transport for the nonempty branch. A given-current `recordTypes_inl_refutes_of_admission` splits the literal catalog: [] uses recordTypes_empty and success_pure, nonempty uses existing origin refutation. No added success/future/encoding premise at the empty branch. Old stronger policy theorems remain unchanged. Its boundary witness states `ProgramEncoding whole AND NOT OriginPolicies [] whole` for the existing Type app/4 example. This records conservative-premise scope, not a Haskell bug.
+
+2. Then model the ACTUAL caller selector and compiled/residual fallback, at its real signature/rule inputs. Derive empty-catalog admission when the gate disables pruning. Nonempty coverage must explicitly use the wanted rewrite-admitted target language and the actual fixed-marker source encoding; arbitrary stop callbacks cannot be complete. Proving safe Program-role encoding alone does not prove all structural Type origins safe. Do not add reserved-name/type grammar premises to repair this.
+
+## Next depth dependency
+
+Accepted-term structural origin/height progress already exists in SourcePruningEnumerationOrigins.origin_height. PreparedRecursiveDepth only preserves an already complete run at larger depth. Producing a sufficient depth still needs concrete selected-edge/sibling coverage, a target-preserving callback/typing/narrowing policy and a productive actual stop/order route. Depth must depend on the full finite typed term, not unpaid source component count. AllSized/sparse classes, compiled fallback, errors and productive infinite enumeration remain separate obligations.
+
+
+## Resume protocol
+
+Read this COMPLETE common prefix before work. Read CONTEXT.md. Classify the
+previous turn as progress before choosing the next cut. Refresh main and
+formalize, preserve unrelated dirt and keep the full goal active. Verify all
+source/check hashes and remote publication receipts. Root is the sole compiler
+and Git publisher. Reuse bounded agents for independent work when useful.
+Follow the serial 4 GiB/zero-swap/one-thread cap. Preserve prior source contracts,
+proofs, counterexamples, marked drafts and all old document bytes. Continue from
+actual child dispatch/traversal resources; do not restart fold/terminal work.
+
+---
+
 # R202 checkpoint: actual shared fold completion and returned-root component counts
 
 Checkpoint time: 2026-11-09T17:22:41+01:00. Branch: formalize. Persistent goal: ACTIVE.
