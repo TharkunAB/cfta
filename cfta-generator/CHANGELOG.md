@@ -207,16 +207,41 @@ tree automata of `cfta`, with QuickCheck integration.
   weights of `completionSymbols`, and `b` is the size bound. A uniform
   integer below the total, decoded, is one draw in proportion to the weight.
   With the weight one for each symbol, the intervals are the ranks.
+  `bestCompletions` gives the completions with the largest weights. Without
+  constraints, it reads them from the count table without a list of the
+  completions. `completionWeightBy` gives the total weight for a weight of
+  each symbol in any number type.
 - `Data.CFTA.Sized.Prefix.QuickCheck`: `sampleCompletion` draws a rank of the
   completions uniformly and unranks it, and `sampleWeighted` draws a
   completion in proportion to its weight.
-- `Data.CFTA.Sized.Prefix.Parents`: weights that read the parent of a node.
-  `withParents` labels each symbol of an automaton without constraints with
-  the token of its node and with the token and the position of its parent.
-  Each term has one labelling, so the completions of the labelled automaton
-  are those of the automaton, and a weight of a labelled symbol is a weight
-  of a token in a context. `labelParents`, `unlabelParents`, and
-  `labelPrefix` move terms and prefixes between the two automata.
+- `Data.CFTA.Sized.Prefix.Parents`: weights that read the context of a node.
+  A `Context` holds the nearest ancestors of the node, each with the position
+  of the path, and the root token of its left sibling. A `Reach` gives the
+  number of ancestors and whether the context has the sibling. `withParents`
+  labels each symbol of an automaton without constraints with the token of
+  its node and with the context of the node. Each term has one labelling, so
+  the completions of the labelled automaton are those of the automaton, and a
+  weight of a labelled symbol is a weight of a token in a context.
+  `labelParents`, `unlabelParents`, and `labelPrefix` move terms and prefixes
+  between the two automata.
+- `Data.CFTA.Sized.Prefix.Train`: fit the weights of the symbols to a corpus
+  of terms. `distill` gives the log-weights with the maximum likelihood of
+  the corpus for the terms of an automaton within a size bound, with an L2
+  prior and two pseudo terms of the uniform model. The gradient is the mean
+  count of each symbol in the corpus minus its expected count. The expected
+  counts come from the count table in dual numbers, or from inside-outside on
+  the sizes. `fit` is the optimizer, L-BFGS. `withLogWeights` gives the
+  completions with the weights of log-weights, and `atTemperature` gives the
+  log-weights of a temperature. `logProbability` and `nextTokenDistribution`
+  give probabilities as `Double`.
+- `Data.CFTA.Sized.Prefix.Model`: a model of the terms of an automaton
+  without constraints, within a size bound. `train` fits a weight for each
+  token in each context of a `Reach` to a corpus of terms. For a prefix of
+  tokens, `nextTokenProbabilities` gives the probability of each next token,
+  `sampleTerm` draws a completion in proportion to its probability, and
+  `bestTerms` gives the completions with the largest probabilities.
+  `termLogProbability` gives the log-probability of a term, and
+  `withTemperature` sets the temperature of whole terms.
 - Terms are `Term symbol` from `Data.CFTA.Term` of `cfta`:
   `fromAutomaton`, `fromAutomatonUpToDepth`, `termAt`, `rankOf`, `ranksOf`,
   `rankOfTerm`, `surface`, and the refinement witnesses take and give `Term`
