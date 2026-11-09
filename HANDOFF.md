@@ -1,3 +1,253 @@
+# R191: actual shared outer execution, protected owners and numeric leaves
+
+Verified at 2026-11-09 10:33 CET. Base R190 is `82434dabbb875813d52a450e0c82de9bf8133c78`.
+Ten new modules add 89 public laws. All strict source checks pass.
+The full affected Audit and all eleven portable source packets pass.
+The goal remains ACTIVE. The WHOLE eight-function shared outer executor now
+selects SharedParent. Actual successful returns derive shared graphs and
+protected-owner frames. Numeric and observed parent leaves retain full Post.
+Full recursive semantic/numeric prefix invariants and original-input completion
+remain open. The historical original endpoint and enumeration still select old
+workers. No Haskell source change, new Haskell bug or Haskell fix is included.
+Preserve .hypha, all older proofs/counterexamples/repairs and marked drafts.
+The complete published R190 document follows this section unchanged.
+
+## Strongest current statement
+
+The NEW AllocatedSharedPartialWorker contains the COMPLETE eight-function
+mutual execution, not an unused edge-body helper beside old recursive calls.
+Its nodeCall, nodeBody, edgeCall, edgeBody, rows, descendants, children and
+walk all recurse within the shared version. edgeBody selects SharedParent.
+Fault.parent retains SharedParent.Fault and every nested private snapshot.
+The two result families keep the exact begin/evaluate/finish protocol,
+captured request, selected handle, ready/busy/absent cases and source order.
+
+For ANY actual successful return of EACH of these eight functions, the
+WorkerGraph laws derive its corresponding new completed graph. They take
+no Context, Ranges, readiness or future graph as input. With the current
+structural Protocol they also derive the new structural Frame directly.
+Both result families retain earlier key links, protected evaluating owners
+and completed results. Only the selected new owner can be finished.
+This structural Frame is not the native numeric Frame or full semantic Context.
+
+Current Context, native Frame, Fits, conditional current resident/inherited
+facts and the NEW initial resident reservation construct the actual shared
+outer Parent leaf at ALL nine independently larger sufficient lower bounds.
+The outer fuel is unused by that leaf. Its numeric receipt retains full Post,
+native Frame/Fits at one SAME returned inventory, guarded language, physical
+stores and fourth/Merge/global memo laws from the actual R190 pipeline.
+Raw rejection still skips live fields, children, inherited facts and Room.
+
+An arbitrary observed successful shared parent body identifies ALL four
+returned components with that numeric construction. It therefore obtains
+the canonical receipt at the SAME endpoint, its full Post/native Frame/Fits,
+and a shared graph that retains the OBSERVED nine bounds. Ready node/edge
+hits use the actual demand return and need zero recursion or parent bounds.
+
+Shared CallSteps finish laws now protect the stored evaluating owner via
+SHARED graphs and Frames. They derive full caller Post and the candidate
+semantic law from the actual body Post and body law. These are INTERNAL
+composition inputs, not a new original-input termination supplier.
+
+## Exact read and completion boundary
+
+Canonical Parent Receipt.reads remains attached to its own numeric construction.
+The observed Graph.parent retains its own actual nine bounds. Success uniqueness
+identifies result/checked/fourth/Merge endpoints ONLY. It does NOT reindex the
+canonical ordered receipt to the observed p/h or claim an identical read trace
+at different bounds. Raw shared call stability preserves its actual snapshot;
+logical source-read receipts still do not claim literal GHC event traces.
+
+The new actual graph and owner-frame laws do NOT construct a successful outer
+run for every original input. They do not provide full semantic Context,
+native Frame/Fits, hereditary field/closedness history or rank decrease at every
+recursive prefix. The original verified endpoint still invokes the OLD outer
+worker. No old/shared physical-state equality or old graph cast is used.
+These remain mathematical completion/resource and partial-correctness results.
+They do not establish fixed 64-bit capacity or whole-driver runtime/space.
+True proves emptiness; false can be inconclusive.
+
+## Supporting modules
+
+SharedScan/RecordScan/Local/Parent WorkerStability adds 24 laws for increasing
+bounds and successful-return uniqueness within the SAME shared family.
+The decision proof extracts its actual checked/raw success and snapshot,
+uses EXISTING SharedWorkerStability.call_done_stable, then lifts that SAME
+snapshot. Required and class editing keep their existing unchanged stability.
+The conjunction budget stays fixed. No old Demand/shared execution equality
+or additional current/future premise is introduced.
+
+SharedPartialGraph versions all eight relations. Its parent constructor
+stores the literal SharedParent.edge success with NINE EXPLICIT fuels and
+its exact checked/fourth/Merge return. It has no old ParentEdge.Edge, loaded
+field slot, initial Context or leaf-success supplier. descend and prefixState
+retain the same pure current operation behavior. Graph arity laws remain.
+
+SharedPartialFrames retains both result families' structural protocol,
+key extension, protected running cells and returned cells. Shared CallSteps
+uses these frames at exact owner publication. Existing NodeLaw/EdgeLaw and
+pure start/hit/binder/key facts are reused without an old execution cast.
+WorkerGraph derives actual graphs by strong fuel induction and source bind
+prefixes, then derives all eight actual-success owner frames without a
+supplied completed graph. Terminal and zero-fuel ready returns are covered.
+
+SharedPartialWorkerLeafNumeric.edgeBody_complete derives the numeric leaf.
+edgeBody_verified identifies an arbitrary observed success at that same endpoint.
+node_ready/edge_ready derive exact candidate laws, residency and full caller Post.
+They do not need a future body, metadata oracle or recursive completion law.
+
+## Verified source and commit map
+
+- `SourceCurrentAllocatedSharedLocalWorkerStability`: 11 public laws; 230 lines.
+  SHA256 `05db6c48a631bd9e45fca6e076172fb4d2ec2a362d0fb370ba836ea8e897957b`.
+  Commit `63af40e10f9f338861596d88c686a5efcd9afc45`.
+  Packet `lean/restart-evidence/20261109-allocated-shared-local-stability`.
+- `SourceCurrentAllocatedSharedParentWorkerStability`: 3 public laws; 95 lines.
+  SHA256 `143037cefac87849c62044270e5e933f030d0e8b184d77f9bb872799e4182d1d`.
+  Commit `a01840fa70840c31eea22c7bfbd13450f7008e93`.
+  Packet `lean/restart-evidence/20261109-allocated-shared-parent-stability`.
+- `SourceCurrentAllocatedSharedPartialCallSteps`: 8 public laws; 201 lines.
+  SHA256 `f7fe5c12f384cddbe0908be2fd074863fc404cd1b2f5d872fff842a6446ad15b`.
+  Commit `05536b6f8b6729a5571faa722c85b68c96470376`.
+  Packet `lean/restart-evidence/20261109-allocated-shared-partial-call-steps`.
+- `SourceCurrentAllocatedSharedPartialFrames`: 19 public laws; 309 lines.
+  SHA256 `f5b5c11db84c89bccf27b3efbace2da422aa4bc6e615e9bb942b7e6a5d3ac805`.
+  Commit `62a7b934823e5e1a326318dba33cfdb0e98eb638`.
+  Packet `lean/restart-evidence/20261109-allocated-shared-partial-frames`.
+- `SourceCurrentAllocatedSharedPartialGraph`: 6 public laws; 180 lines.
+  SHA256 `30e5c2f986fde41c999f8ccd099b818b3be948c55a994321bcbd1f9739de3fee`.
+  Commit `e3b1e4ff7771627d45de4463a82c43713a16ca70`.
+  Packet `lean/restart-evidence/20261109-allocated-shared-partial-graph`.
+- `SourceCurrentAllocatedSharedPartialWorkerLeafNumeric`: 4 public laws; 135 lines.
+  SHA256 `da5c8d389b5aa65d32a5521571572f390e5ac0cb2d016ab5060a2a960f664349`.
+  Commit `008bfd6bac581fe471455a1ff3f006f388e9cae6`.
+  Packet `lean/restart-evidence/20261109-allocated-shared-partial-leaf-numeric`.
+- `SourceCurrentAllocatedSharedPartialWorker`: 12 public laws; 288 lines.
+  SHA256 `e247dbe982332262ab203fdbace2b94b28003e679621b5463f3190eb68ec06aa`.
+  Commit `6e73effae82bc689ccbecb9e6d0646982ffaa9fa`.
+  Packet `lean/restart-evidence/20261109-allocated-shared-partial-worker`.
+- `SourceCurrentAllocatedSharedPartialWorkerGraph`: 16 public laws; 340 lines.
+  SHA256 `90e5fc59dc3a9ed3f37f11ab469daddf0e77add7a50863daf440a3806ddef135`.
+  Commit `780286743f207c2183fd1822cb6ebadeff342224`.
+  Packet `lean/restart-evidence/20261109-allocated-shared-partial-worker-graph`.
+- `SourceCurrentAllocatedSharedRecordScanWorkerStability`: 3 public laws; 81 lines.
+  SHA256 `62fa3409e40349ebe1bde97cb0066806c63e8f48d379f0e50c04bec70b5fdbea`.
+  Commit `81212f520ea6345d1a4420220a12f338b3f18dcf`.
+  Packet `lean/restart-evidence/20261109-allocated-shared-record-scan-stability`.
+- `SourceCurrentAllocatedSharedScanWorkerStability`: 7 public laws; 149 lines.
+  SHA256 `4e9e61a568a7135725658ea0884215ec4c5635e6020c5e02b403abb4a9b75962`.
+  Commit `16e382394bbc39bc8731acf430480475b8d35a9f`.
+  Packet `lean/restart-evidence/20261109-allocated-shared-scan-stability`.
+
+Every public name and namespace matches its theorems.json. The source/commit
+map matches actual commit files. It does not zip differently ordered lists.
+Every old proof source and source packet remains exact.
+
+## Next central proof: shared recursive caller invariants
+
+First add small SHARED graph-indexed WalkLaw, ChildrenLaw and RowsLaw wrappers
+and their constructor laws. Reuse pure DescendedSat, RowsMeaning, RawRebuild
+receipts, InheritedPrefix, PartialDescent and PartialStepEffects. Their pure
+prefixState/descend endpoints are definitionally the same; their OLD worker
+or graph theorems are not new shared execution theorems.
+
+Derive EdgeLaw and edge residency from the new parent leaf's canonical semantic
+receipt, using edgeMeaning_all to relate the original physical edge to raw
+meaning. It needs no old Parent graph. For global memo composition, name any
+new shared read schema explicitly as ENDPOINT-ASSOCIATED canonical reads.
+It may sit beside an observed Graph.parent at different bounds, but it must
+not claim those bounds executed the canonical read schedule.
+
+Then implement the shared eight-phase semantic/caller induction. Derive each
+continuation Context from the preceding actual Post. Start captures the owner;
+smaller body results and shared finish publish that SAME protected owner.
+Rows run parent, returned-edge descendants and original suffix in that order.
+Descendants use the actual inherited-prefix return and same-arity rebuilding.
+Walk uses actual current descent/index and the actual returned state for the
+tail. Grow unprocessed inputs and inherited readiness through actual effects.
+Do not return old Checks, old SourceReads or old WorkerRanges for shared traces.
+A completed graph can serve internal composition; it is not an original-input
+completion premise. Do not request future Contexts or successful leaves at
+the original boundary.
+
+The next quantitative producer MUST be shared too. OuterInitialSchedule.parent
+still uses OLD ParentUniformGuardAlphabet.forecast/ParentUniformEnvelope.profile.
+That old formula is not proved to dominate SharedParentForecast. Add a shared
+uniform parent current-input alphabet/profile producer and shared six-phase
+schedule with its actual reservation and fuel inequalities. Reuse the recurrence
+form, not the old parent image by assumption. Port the actual initial-prefix
+proof to derive later native Frame/Fits/carrier from the SAME initial seed.
+Cover unfinished and failing prefixes as well as successful returns.
+
+After those producers, derive shared completion/rank and hereditary histories
+from original accepted source facts. Original initialization/build facts are
+pure and reusable. OriginalVerifiedCompletion.accepted, OriginalRankCompletion,
+OuterRankAdequacy and HereditaryOuterTraversal still select OLD worker/range
+relations. A shared endpoint must re-establish UnionNormal, positive support,
+causal Mu history, merge storage, writer origins, closed input/cell invariants
+and idle families along ACTUAL shared steps. R191 owner frames and leaf Post
+do not by themselves establish that history or exclude busy recursion.
+
+The DISTINCT enumeration chain remains historical. Fold/Dispatch.afterQuery:39
+still selects old EnabledEmpty before Incoming. Terminal.run:54,
+IncomingCacheAdapter.run:75 and CachedTerminalAdapter.run:63 still select old
+IncomingNode.run. Port their cached/fallback paths and child/selected/captured/
+continuation/recursive consumers explicitly. Pruning Action.prepare ->
+OuterNarrow.narrow is a separate heap-only route, not allocated nodeCall.
+Preserve native gates/skips/query memos/errors and complete private diagnostics.
+
+## Full scope and verification
+
+The full goal remains original-input whole-system formalization: ALL siblings,
+generated/rejected/failed/returned/subsequent states; exact accepted terms per
+source Program leaf-size, counts and size order; BOTH signed rank/unrank
+inverses on actual sparse classes; AllSized/fallback/failure/productive infinity;
+and source type-site/program-occurrence progress through generated intersections.
+Native Word/Int capacity, all hashes/caches/lazy tables/allocation, wrappers,
+lookup/Curried/Specftacular and full Haskell correspondence remain open.
+Term leaf-size, expanded annotation nodes and observation fuel differ.
+Keep older constructor/equality targets. Do not substitute initial-only,
+success-only, U-only, unselected, compatibility, future trace/fuel/closure/carrier
+or completion oracles. Builds and theorem counts do not complete this goal.
+All-fault full caller Post/memo contracts also remain open. The new executable
+fault lifts retain every reached state and nested diagnostic.
+
+All 89 laws pass strict own-source warning/type/namespace/axiom checks.
+Only propext, Classical.choice and Quot.sound are allowed. The live graph has
+5481 modules; affected closure 11; Audit imports 4478; Audit reports 89718
+checked theorem axiom dependencies. Full Audit passes in 12.19 seconds at
+recorded 3506M peak. The eleven-packet portable job reports 218M. Effective
+memory.max=memory.high=4294967296, swap zero, one thread remain unchanged.
+All eleven checkers reproduce from /tmp; frozen source hashes match.
+The complete base Audit bytes follow its additive import prefix. Each root
+document retains its ENTIRE published R190 bytes after this prefix.
+
+The only proof repair changed local names removed by equality substitution.
+No public assumption was added. Eight direct actual-frame corollaries were
+then added and strictly rechecked. No Haskell source, bug or fix changed.
+Record every future Haskell fix in root FINDINGS for the external agent.
+
+## Runtime and restart
+
+Runtime /tmp/mcfta-shared-outer-20261109-1012/ holds small helpers, manifests,
+one compact failed-attempt log and two read-only audits:
+- `shared-partial-leaf-contract-review.md` SHA256 `2bc161f6365c00474006ffa108e4b9ed130879a15bee70895c2d8b95b9f31ad0`.
+- `next-shared-outer-contracts.md` SHA256 `35805f1622041b8ef5fc8d4949478a915cd82b8d2c524bfb054ee1283da409ab`.
+Their substantive next proof dependencies are preserved above if /tmp is removed.
+No archives or proof-tree copies were made. Readable allocated /tmp was
+41.97 MiB with 241.52 GiB free at 10:29 CET. Permission-denied entries are
+excluded from that readable allocation figure. Keep /tmp small.
+Use targets.json, verified-modules.json, proof-commits.json,
+compatibility-frontier.json, compatibility-check.json, portable-check.json,
+final-prefix.md, document-history.json, peaks, publication.json and turn-state.json.
+Final publication files are completed after docs/Audit commit and remote check.
+No compiler remains live. All three bounded tasks are frozen and idle. Root is
+sole compiler and publisher at the existing serial 4 GiB cap. Preserve .hypha.
+Refresh upstream before the next round. User authorization to push formalize
+persists. Goal remains ACTIVE. Next: shared recursive language/Post composition
+and shared initial uniform parent/outer numeric producers, then original-source
+completion/history and the real enumeration consumers.
+
 # R190: actual shared Required, class, Local and Parent completion
 
 Verified at 2026-11-09 10:07 CET. Base R189 is `d4be2f8baeba0959af7fb05a5b6186f7d1a14211`.
