@@ -1,3 +1,236 @@
+# R190: actual shared Required, class, Local and Parent completion
+
+Verified at 2026-11-09 10:07 CET. Base R189 is `d4be2f8baeba0959af7fb05a5b6186f7d1a14211`.
+Nine new modules add 18 public laws. All strict source checks pass.
+The full affected Audit and all ten portable source packets pass.
+The goal remains ACTIVE. Shared Local and Parent now have initial numeric
+completion, actual ordered reads, language and full caller postconditions.
+The original outer and enumeration selectors still use historical workers.
+No Haskell source change, new Haskell bug or Haskell fix is included.
+Preserve .hypha, all older proofs/counterexamples/repairs and marked drafts.
+The complete published R189 document follows this section unchanged.
+
+## Strongest current statement
+
+Current Context, native Frame, Fits and the NEW initial mathematical native
+reservation construct successful ACTUAL shared Local and Parent returns.
+Local additionally uses the initial stored field, inherited readiness and
+available children. Parent needs these live inputs only when its original
+raw guard is not contradictory. Its resident API derives the cached field
+load and original Values from the current resident input and Context.
+
+The returned caller has full Post, the full native Frame at the SAME next
+inventory, final Fits from the original input forecast, ordered source
+reads, physical/memo preservation and guarded language guarantees.
+All nine independently larger sufficient bounds return the identical
+result, checked state, fourth memo and Merge memo. The budget stays fixed.
+Parent narrows the original edge language and preserves it under the
+inherited equality condition. Local retains the analogous forest law.
+Raw rejection needs no field load, inherited readiness, Values or Room.
+
+This now COMPOSES R189 shared Scan into actual Required, class editing,
+Local and Parent. It does not supply a future Scan/Ranges callback,
+completed graph, successful suffix, returned closure or selected support.
+The input Frame/Fits and NEW native reservation remain explicit. These are
+mathematical completion/resource bounds, not native 64-bit adequacy or a
+practical whole-driver time/space bound. True proves emptiness; false can
+be inconclusive. This is not a complete emptiness decision procedure.
+
+## Actual preparation and class contracts
+
+SharedScanRequiredWorker.prepare uses EXISTING AllocatedSharedLocalWorker
+scan and required stages. Its classes law factors the complete actual
+classes body for ALL outcomes. It preserves failed phase observations.
+It does not introduce an alternate unused source execution.
+
+SharedScanRequiredNumeric.complete uses the DERIVED R189 selected-primary
+output at the EXACT scanned caller. RequiredInitialNumeric.caller constructs
+requireAll.done and ordered RequireAllReads there. The returned Required
+receipt proves ForestClosed for EVERY original path of EVERY kept record,
+not only maximal tips. Coherence and nontriviality follow from original
+facts and kept.Sublist. Stopped Scan erases original values and skips
+Required; StoppedSound supplies the stopped language case.
+
+The new preparation Execution/Reads retain literal shared record-Scan and
+Required equations. Its receipt supplies Frame/Fits/full Post, original and
+result Values, length, sublist, selected fields/domains, language and six
+independently larger bound replay. There is no old Demand Ranges field.
+
+SharedClassesNumeric.complete starts the UNCHANGED actual class editor at
+those prepared values, returned checked state, fourth memo and warm Merge
+memo. It derives selected domains from preparation. Its NEW Execution/Reads
+retain the shared preparation and exact ClassPass.Pass/PassReads. They do
+not manufacture an old Scan-dependent graph. All nine bounds are initial.
+
+SharedLocalNumeric.complete derives the actual precheck from initial fields.
+Unchanged, erased and classes branches retain their original source order.
+Its NEW Execution/Reads contain only the actual reached shared classes
+continuation. It reuses the OLD PURE LocalReduction.Receipt for semantics.
+That semantic record has no old Reduction, Scan, Reads or Ranges field.
+
+SharedParentNumeric.Reads retains either raw rejection or the SAME complete
+shared Local receipt followed by the literal MkEdge.build equation at that
+local return. The constructor adds no global query reads. Caller Post,
+Frame, Fits and language all refer to that SAME result/state/memo endpoint.
+It reuses only the PURE ParentEdge.Receipt semantic record. It does not
+cast new execution into an old Parent Edge graph. resident_complete derives
+current field and children facts and retains independent nine-bound replay.
+
+Ordered shared call receipts remain pinned to each branch's OWN base p/h
+and actual private snapshot. Larger-fuel output replay is a SEPARATE field.
+No proof reindexes the ordered receipt to a different global replay bound.
+These are logical source-read receipts, not literal GHC event traces.
+
+## Initial forecasts
+
+SharedScanRequiredForecast substitutes the NEW shared Scan schedule/fuel.
+Original record selections still bound Required paths, workers and readers.
+SharedClassesForecast retains the original-record class bounds and combines
+them with actual shared preparation. SharedLocalForecast selects the pure
+initial precheck; SharedParentForecast selects the initial raw/load branch.
+Their explicit unchanged/rejected laws prove exact zero local fuel and no
+local reservation for those branches. A historical Demand reservation is
+not silently reused for the larger shared schedule. Alphabet membership
+inclusion is not used as numeric monotonicity of duplicate-sensitive sums.
+
+## Verified source and commit map
+
+- `SourceCurrentSharedClassesForecast`: 5 public laws; 73 lines.
+  SHA256 `dce1219490df43c7f3670e514dff115f400cb2f6ab5fb2c1a6fd5ea742b9318b`.
+  Commit `dc00f1dc2f8849ef0a5e49577848beb731f4fa2d`.
+  Packet `lean/restart-evidence/20261109-shared-classes-forecast`.
+- `SourceCurrentSharedClassesNumeric`: 1 public laws; 208 lines.
+  SHA256 `0695db88fa4cecc9016542a5b78fb8848f9b7fa940965837af1900de6aec88db`.
+  Commit `2e84d7f557d6b9f2eed260b71bb771e0dcf1a1aa`.
+  Packet `lean/restart-evidence/20261109-shared-classes-numeric`.
+- `SourceCurrentSharedLocalForecast`: 1 public laws; 55 lines.
+  SHA256 `8ec446b5f33e55e10cb6e1bf5a95dda1a9acf12ed9da2d9fdf7b094582534211`.
+  Commit `c8120f3bedc2d6ca2ef8c244cafa59ea43912498`.
+  Packet `lean/restart-evidence/20261109-shared-local-forecast`.
+- `SourceCurrentSharedLocalNumeric`: 1 public laws; 234 lines.
+  SHA256 `52db601c90f81b99921c77c0e28794e1aa1439ffc0935588214c99eac91357bc`.
+  Commit `63a8d6775d584f42ab8f44917861f628bb249bcd`.
+  Packet `lean/restart-evidence/20261109-shared-local-numeric`.
+- `SourceCurrentSharedParentForecast`: 1 public laws; 73 lines.
+  SHA256 `4aa86376fe61df4bac76954fc17ed3d6e3d1e6a554cb446b78a5047deb616c2f`.
+  Commit `0818be3ae5f5771a977611abaf0e1ecac6c2aec1`.
+  Packet `lean/restart-evidence/20261109-shared-parent-forecast`.
+- `SourceCurrentSharedParentNumeric`: 3 public laws; 280 lines.
+  SHA256 `5a696a152eaf8fd6d3fe448cfb7590af68691a8470464d1b90615fcfd3ef7f0c`.
+  Commit `6c8af33a45c5a7a69398869426da9b646f5712de`.
+  Packet `lean/restart-evidence/20261109-shared-parent-numeric`.
+- `SourceCurrentSharedScanRequiredForecast`: 4 public laws; 58 lines.
+  SHA256 `91583da7b6e66c24bd76299af8774e42e16b6f4948b6376ac818da9ad431c066`.
+  Commit `4a2a7323cd9d6765ae87ffdfc62b1b159a853b32`.
+  Packet `lean/restart-evidence/20261109-shared-scan-required-forecast`.
+- `SourceCurrentSharedScanRequiredNumeric`: 1 public laws; 212 lines.
+  SHA256 `a0fcab8f27cdd51edeb213ed6e937c728560762cc34d05eb69ea27e37d52bc50`.
+  Commit `11aa4681827e8ddedb8774f9e07a4775c1541ca4`.
+  Packet `lean/restart-evidence/20261109-shared-scan-required-numeric`.
+- `SourceCurrentSharedScanRequiredWorker`: 1 public laws; 55 lines.
+  SHA256 `98a334ca08f09277070e42ee386853566bfdd956a3e1f841548a189f4bca1e82`.
+  Commit `a31b46eca757b9e85fd3df2564fb88cb588bdc74`.
+  Packet `lean/restart-evidence/20261109-shared-scan-required-worker`.
+
+The exact public names and namespaces match every theorems.json. The source
+hash-to-commit map matches actual commit files; it does not zip differently
+ordered module lists. Every older proof source and packet remains exact.
+
+## Next: the actual outer component and its shared leaf
+
+The next minimal executable unit is a VERSIONED WHOLE eight-function mutual
+SourceCurrentAllocatedPartialWorker. Its edgeBody:113 still selects old
+Parent.edge, and Fault.parent:39 contains the old parent fault. Version
+nodeCall, nodeBody, edgeCall, edgeBody, rows, descendants, children and walk
+together. Keep begin/evaluate/finish ordering, stored owner identity, ready
+hits, busy/absent behavior, literal sibling order, complete states and all
+fault diagnostics. The new parent fault must retain nested shared snapshots.
+Preserve the historical worker as its own proved secondary target.
+
+Then construct a shared leaf receipt with SharedParentNumeric.resident_complete
+at its computed bounds. Arbitrary observed shared Parent success needs its
+OWN success stability/uniqueness; old ParentWorkerStability cannot identify
+different physical schedules. Port the leaf/read schema or prove the mutual
+worker directly. Old PartialGraph.EdgeBody.parent:78 and SourceReads fix the
+OLD Parent Edge/Reads types. Do not fabricate an old graph for the new call.
+
+Port complete caller Post and owner framing through begin/finish. Start/hit
+protocol facts are pure and reusable. Existing finish proofs depend on old
+body graphs and PartialFrames. New body framing must protect evaluating
+owners and both outer cell families at the actual new endpoints. The same
+stored owner must publish; it is not replaced by a later candidate.
+
+Port the outer numeric/reservation forecasts at actual reached prefixes,
+then successful stability/completion and original accepted-input adequacy.
+The old OriginalVerifiedCompletion endpoint still selects the historical
+nodeCall and old outer range interfaces. The new Parent theorem alone does
+not migrate all mutually reached future prefixes or discharge native Room.
+
+Enumeration is a DISTINCT remaining selector chain. Terminal.run:54,
+IncomingCacheAdapter.run:75 and CachedTerminalAdapter.run:63 still select old
+IncomingNode.run. Fold -> Dispatch.afterQuery:39 ALSO selects old EnabledEmpty
+before Incoming. Port Dispatch/Fold, CachedAdapter/CachedFold and their
+fallbacks, all three Incoming callers, then child/selected/captured/
+continuation/recursive consumers. Retain native gates, skips, query memos,
+error ordering and full private diagnostics. Do not coerce shared faults to
+historical Rows faults. Pruning Action.prepare -> OuterNarrow.narrow remains
+a separate heap-only route; it does not call allocated outer nodeCall.
+The source-facing connection between those chains remains unproved.
+
+The read-only review is outer-port-review.md; SHA256
+53fd9bbf189b46a10d68dc6182a34c6530a7a641adfb64406d3efb927d9d01b4.
+It covers actual endpoints, pure semantic reuse, and each next source unit.
+Its substantive next steps are preserved here if /tmp is removed.
+
+## Full scope and verification
+
+The full goal remains original-input whole-system formalization: ALL siblings,
+generated/rejected/failed/returned/subsequent states; exact accepted terms per
+source Program leaf-size, counts and size order; BOTH signed rank/unrank
+inverses on actual sparse classes; AllSized/fallback/failure/productive infinity;
+and source type-site/program-occurrence progress through generated intersections.
+Native Word/Int capacity, all hashes/caches/lazy tables/allocation, wrappers,
+lookup/Curried/Specftacular and full Haskell correspondence remain open.
+Term leaf-size, expanded annotation nodes and observation fuel differ.
+Keep older constructor/equality targets. Do not substitute initial-only,
+success-only, U-only, unselected, compatibility, future trace/fuel/closure/carrier
+or completion oracles. Builds and theorem counts do not complete this goal.
+Full failed-prefix Local/Parent caller Post/memo contracts remain open.
+Their executable phase errors and diagnostics remain preserved.
+
+All 18 laws pass strict own-source warning/type/namespace/axiom checks.
+Only propext, Classical.choice and Quot.sound are allowed. The live graph has
+5471 modules; affected closure 10; Audit imports 4468; Audit reports 89480
+checked theorem axiom dependencies. Full Audit passes in 10.09 seconds at
+recorded 3133M peak. The ten-packet portable job reports 194M. Effective
+memory.max=memory.high=4294967296, swap zero, one thread remain unchanged.
+All ten checkers reproduce from /tmp. Every frozen source SHA256 matches.
+The complete base Audit bytes follow its additive import prefix. Each root
+document retains its ENTIRE published R189 bytes after this prefix.
+
+Proof repairs pinned an implicit preparation read equation and replaced TWO
+stale LocalForecast references in the new Parent proof with SharedLocalForecast.
+No public assumption was added. The actual Scan/Local/Parent/Haskell operational
+definitions were not changed this round. No Haskell source change, new bug or
+fix was needed. Record every future Haskell fix in root FINDINGS for external use.
+
+## Runtime and restart
+
+Runtime /tmp/mcfta-shared-parent-20261109-0951/ contains small helpers, manifests,
+compact failed-attempt logs, and the read-only outer-port-review.md.
+No archives or proof-tree copies were made. Readable allocated /tmp was
+41.48 MiB with 241.56 GiB free at 10:04 CET. Permission-denied entries are
+excluded from that readable allocation figure. Keep /tmp small.
+Use targets.json, verified-modules.json, proof-commits.json,
+compatibility-frontier.json, compatibility-check.json, portable-check.json,
+final-prefix.md, document-history.json, peaks, publication.json and turn-state.json.
+Final publication files are completed after docs/Audit commit and remote check.
+No compiler remains live. All three bounded tasks are frozen and idle. Root is
+sole compiler and publisher at the existing serial 4 GiB cap. Preserve .hypha.
+Refresh upstream before the next round. User authorization to push formalize
+persists. Goal remains ACTIVE. Next: whole shared mutual outer worker and
+its actual parent leaf/owner framing, then real enumeration selectors.
+
 # R189: complete actual shared Scans from initial numeric resources
 
 Verified at 2026-11-09 09:45 CET. Base R188 is `d8c0a07b45dfa6fb4d2a8b5030245a87c348bb19`.
