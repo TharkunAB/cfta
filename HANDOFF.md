@@ -1,3 +1,189 @@
+# R177: conservative shared decisions and memo contracts
+
+Updated: 2026-11-09 03:44 CET. Full goal ACTIVE. Formalize pushes authorized.
+Preserve unrelated .hypha/. Proof HEAD before documentation commit:
+234622d40c485c0c2902e870032b55eac1ebc73b. Main 9f5f77783b9f936a1edf4225373cbad9dc6a9ed5 remains integrated.
+Read Git and runtime publication.json for final HEAD and remote verification.
+Complete published R176 document bytes follow this prefix unchanged.
+No old proof, finding, counterexample, repair, or marked draft was removed.
+Previous goal turn and R177 both made authoritative checked source progress.
+
+## Strongest new statement
+
+The ACTUAL shared decision model now has conservative Boolean soundness.
+From CURRENT original Ready and query Available, an actual successful True
+answer proves that the query accepts NO finite term, in every language
+environment. No completed future table, read, coverage, origin, closure,
+carrier, or rank supplier is supplied. Fixed native p/h and the original
+tuple budget remain explicit. Existing finite iteration returns a Boolean
+or the exact native exploration fault; the new soundness law certifies the
+successful Boolean result. False does not prove nonemptiness. Insufficient
+native allowances can still fault. No sufficient native bound is claimed.
+
+SharedWorkerSoundness.decision_sound proves true-verdict exclusion at any
+environment. decision_answer_sound also derives open-query False and gathers
+all environments into SourceCurrentEmptinessMemo.AnswerSound.
+SharedWorkerMemoSoundness.call_sound/call_verified add CURRENT incoming
+Memo.Correct to Ready and query Available. Hits identify the stored query by
+its resident reference and retain the actual initial snapshot/memo. Actual
+successful misses publish the exact derived query/answer. The returned memo
+is Correct at the actual returned heap, satisfies AnswerSound, and Extends
+every earlier completed entry. Arbitrary incoming memo answers are not
+certified. Fault branches of call_verified assert True, not a successful
+memo/answer result. The call definition publishes no completed miss on fault.
+Existing all-outcome physical/closure laws remain separate and in force.
+
+The new SharedWorker remains UNSELECTED by both checked conjunction callers.
+These are proofs of the shared Lean source model, not complete Haskell/GHC
+correspondence or whole-library enumeration completion.
+
+## What closes the previous semantic gap
+
+RequirementRowsSemantics defines ONE coupled origin list and aligned
+spine-source list. Each pending/cached head records its own original raw
+source. A cached live head retains contradictory rejected prefix, chosen
+tuple/classes, exact registered descriptor range, and literal tail source.
+RowsPublication derives this data from the SAME actual rejection/preparation
+trace and original origin prefix. RowsSemanticsStep preserves the same pair
+through the actual nextRow, including exact fresh tail and descriptor appends.
+
+SharedWorklistTableSources derives raw accepted-tuple coverage from the actual
+fitting sample and links its new table entry to that SAME allocated spine.
+SharedWorklistSemantics carries the coupled certificate through actual
+successful steps/Run/explore, initialized internally at []/[]. Intermediate
+Ready/Values/Closed facts come from the actual transition invariants. No
+independent existential batch/trace join or future metadata is used.
+
+Materialization.readRows_eq exposes the SAME cached reader and strict stored
+credit check. MaterializationGraph derives exact ordered row/table read
+graphs and replays the same reader. MaterializationSoundness uses that graph
+and the coupled current certificate to prove TableSoundness.Covered of the
+SAME actual materialized table. StoredDomain derives all-outcome exclusion
+of Empty table operands, and actual reader/current Values/Closed derive
+query closure/residency and cached requirement residency at the same heap.
+
+Decision soundness splits the literal explore/read/grow computation. Both
+semantic Covered and physical StoredDomain use the SAME readTable equation
+and table. Current key faithfulness and actual query availability supply
+TableSoundness.answer_sound. Read-only contract review found no semantic
+defect and confirmed these current-only and same-execution boundaries.
+
+## Largest remaining gaps and next bounded target
+
+Start with SharedWorkerProbes.call_probes at the EXACT returned
+storage.requirements.physical.heap on EVERY outcome. Current call_effects
+supplies Ready and growth, but not Context.probes. Reuse
+Pull.projection_singleton, RowsProbes.projections_heap,
+CellsExecution.force_pending_run/failed, Rows.prepareTuple_physical,
+TuplePullTotalEffects.sample_probes, and the actual finite Run graph. Keep
+hits, missing handles, and failed prefixes exact.
+
+Before switching BOTH checked callers, derive all existing callee contracts:
+- Full caller Post via probes, existing lift_effects, memo correctness/growth.
+- Ordered actual singleton projection/sample/equality and failure receipts.
+  Cached forces and pure materialization add no native reads.
+- Weak SemanticHeap/Covered/growth/issued-history effects without strengthening
+  existing weak callers to Ready.
+- Shared counterparts of DemandGuard.call/call_annotations and
+  DemandArity.call_heap at the same returned heap.
+- Sufficient p/h for success, plus replay stability/uniqueness.
+- Initial-derived resource/numeric forecasts for deferred projections even
+  after budget reaches zero. Old budget-only bounds do not transfer directly.
+- An explicit failure diagnostic/snapshot interface. Legacy outcomes retain
+  eager row/grow faults; shared outcomes retain requirement handles, stopped
+  cursors and private storage. Preserve the information during adoption.
+
+AllocatedTupleConjunctionCaller.verified/actual/finite and
+WorkerResources.finite_resources/raw_done_resources consume these contracts.
+Do not select the shared worker with weaker guarantees or drop failure paths
+and numeric consumers used by the full enumeration driver. No eager/shared
+execution equality is required or justified. Selected DemandWorker and R164
+OriginalVerifiedCompletion/R171 same-return driver results remain in force
+with their documented hypotheses and bounds.
+
+The FULL objective remains: original-derived sufficient enumeration depth,
+retained Type/Program occurrence identity, complete enumeration through all
+siblings/subsequent/generated/rejected/failing/returned work; exact accepted
+terms by SOURCE Program leaf size; count/order/BOTH signed inverse laws;
+AllSized/fallback/productive infinity/lazy structures; full Haskell maps,
+caches, hashing, Word/Int, allocation, wrappers, lookup, Curried/Specftacular.
+Annotation-expanded Term.nodes and recursive fuel are different measures.
+Do not add a size parameter to size-free fully/until. This milestone does not
+prove whole-library completion or full native correspondence.
+
+## Validation and old-source preservation
+
+Eleven changed modules: ten NEW and one additive old reader law. Forty public
+laws pass strict own-source checks; 35 are new and all five old reader laws
+remain. Exact public names and real namespaces are explicit. Warnings are
+errors in own sources. Allowed axioms: propext, Classical.choice, Quot.sound.
+Full changed reverse closure: 19 of 5386 modules. Frontier Audit imports 4383
+modules and reports 88702 theorem axiom dependencies. It passed in 14.45 seconds,
+peak 1073 MiB. Effective memory.max/high=4294967296, swap.max=0, one compiler
+and LEAN_NUM_THREADS=1. No global queue/concurrency settings changed.
+
+From cwd /tmp, packets reproduced current reader equation, decision soundness,
+memo soundness, and full affected compatibility. Portable peak 181 MiB.
+Compatibility packet: 20261109-coupled-spines-compatibility. Source packets
+contain README.md/check.py/checked.json/theorems.json only; compatibility
+uses frontier.json instead of theorems.json. No archived build is required.
+All compilers terminal. Complete old Audit bytes remain an exact suffix.
+
+Old Materialization has ONLY one added theorem, readRows_eq. Every old byte
+before its namespace end and the namespace end itself remain exact. Every
+old definition/theorem/statement is intact. Its historical R173 packet's
+four files are unchanged and remain tied to that old revision. New packet
+20261109-materialization-read-equation checks all SIX current public laws.
+materialization-addition.json verifies these exact preservation assertions.
+Preserve old SharedWorklistOrigins spine-credit proofs; cell origins use
+SharedWorklistCellOrigins. Verify every new path is unused before adding it.
+
+Proof commits:
+- f15360ef51623bd998a9c537f33ab995f0a69765 Expose the exact cached row reader equation
+- d7779a097ecf185c1ce42919f9d50947bb377698 Derive exact graphs for cached table materialization
+- 9a02d4e7e3e8f174855ef83787b8e27e47543843 Link row publications to coupled semantic origins
+- 0ee8e8e50951a4f371fe656f34c0cad4448b014d Derive actual table sources through successful shared execution
+- 0a971290a906c5c1ed65bbb95c3037888721200a Prove semantic and physical receipts for materialized tables
+- 234622d40c485c0c2902e870032b55eac1ebc73b Prove shared emptiness decisions and memo calls sound
+
+Frozen sources (SHA256; public laws; new laws):
+- SourceCurrentConjunctionSharedWorklistMaterializationGraph: 8e482bd34536783484b245eb3aa21823eaf7eabe43a3a398ab1c35b4f8ad5e1c; 6; 6
+- SourceCurrentConjunctionSharedWorklistMaterialization: 9855173c125ca252ef83d4dab1b85e159abf300df309d377daa763c91090dfe6; 6; 1
+- SourceCurrentConjunctionSharedWorklistMaterializationSoundness: 901475ecbb803355843af43853514b65ff7b98eb3672f7cbc6ba7de5189ddcf3; 2; 2
+- SourceCurrentConjunctionRequirementRowsPublication: 11a1ebf6f37d27ba8aa3f33e5d1306480f04bee6852e28c7602309ae8a17dbd7; 1; 1
+- SourceCurrentConjunctionRequirementRowsSemantics: 94b740dcec752edcf229e85aca76fb36d2e8772f80dd4c88f88f7898a07af8b6; 6; 6
+- SourceCurrentConjunctionRequirementRowsSemanticsStep: d2c2b17e74ee2d297e4e40383eef3b016272ff85358b8f7a0b2a941c7bc699cf; 1; 1
+- SourceCurrentConjunctionSharedWorkerMemoSoundness: 2b73e55baa1cdfd0d2f259a1cdc84b69ad26c609478702e3fc1fbf59e5363c63; 2; 2
+- SourceCurrentConjunctionSharedWorkerSoundness: 5f91b62272bb04df05fdccda120ede51adacd933c4f278260ed884863a969faa; 2; 2
+- SourceCurrentConjunctionSharedWorklistSemantics: 35683b2ad47dbd5b4f5975e317d615506d3fc2d20a15ca5a4984e0c55f5bf8a3; 3; 3
+- SourceCurrentConjunctionSharedWorklistStoredDomain: 2fa9bc29fb2fc210592bf979073414dc0e9e3caf9752376ed07f3d3d22232a6a; 6; 6
+- SourceCurrentConjunctionSharedWorklistTableSources: e355e4b406b3891d4ef14eb0d7d158d2fcedf42f200b5098c755940bbe18b6d3; 5; 5
+
+Ownership: Beta RowsSemantics/RowsSemanticsStep/SharedWorklistSemantics/
+StoredDomain; Gamma RowsPublication/SharedWorkerSoundness; Alpha additive
+reader equation/MaterializationGraph/MaterializationSoundness; root
+TableSources/MemoSoundness, all compilation and Git. All proof work is
+committed; documentation/Audit commit follows. Preserve unrelated .hypha/.
+Runtime: /tmp/mcfta-coupled-spines-20261109-0304/.
+Read verified-modules.json, compatibility-frontier.json,
+compatibility-check.json, portable-check.json, proof-commits.json,
+materialization-addition.json, next-cutover-target.md, peaks, publication.json,
+and board-published.json. Refresh Git and live process state before edits.
+Use existing user-bus/heavy-management setup: ONE serial 4 GiB memory.max/high,
+swap 0, LEAN_NUM_THREADS=1. Readable allocated /tmp: 36.45 MiB; free: 242.3 GiB.
+Keep compact source-based packets and protected old drafts. No build archives.
+
+## Haskell findings for external follow-up
+
+No Haskell executable file changed in R177. No new Haskell defect or fix was
+identified. Main was refreshed before publication and remains 9f5f77783.
+All earlier Haskell fixes, LPO findings, counterexamples, repairs and marked
+drafts remain in the exact preserved document suffixes. Record EVERY future
+Haskell fix in FINDINGS.md too. Full goal ACTIVE. Continue without asking
+whether to continue. Do not mark it complete after this component milestone.
+
+---
+
 # R176: actual row origins and persistent semantic witnesses
 
 Updated: 2026-11-09 03:01 CET. Full goal ACTIVE. Formalize pushes authorized.
