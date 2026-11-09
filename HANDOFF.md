@@ -1,3 +1,167 @@
+# R185: original-budget storage and calculated local shared steps
+
+R184 is published at `ae7cd04728a8a9856e0156c1493cb78d8bc945ae`.
+R185 adds six proof modules and 18 public laws. All strict own checks pass.
+The affected Audit and all seven source packets reproduced from `/tmp` pass.
+The goal remains ACTIVE. Both selected formal callers still use DemandWorker.
+No executable Haskell change, new Haskell bug, or Haskell fix is included.
+Preserve unrelated `.hypha/` and every older proof, repair and marked draft.
+The complete published R184 document follows this new section unchanged.
+
+## Strongest current statement
+
+The shared candidate completes at some finite sufficient projection and read
+bounds from current readiness and an available query. The complete checked
+adapter retains the answer, checked state, memo, exact fault and private
+snapshot. The existing full initial context gives the same ordered receipt
+bundle, full postconditions and sound emptiness answers at the base call.
+Every larger sufficient pair returns the identical complete outcome.
+The stronger Boolean and receipt conclusions still need their full stated
+context. The weaker heap-preservation laws do not imply those conclusions.
+A false answer is not a proof of nonemptiness.
+
+R185 gives unconditional original-budget storage bounds. For every actual
+exploration outcome, success or fault, with original tuple budget B:
+
+- The number of stored spines is at most 2*B.
+- Cached live rows + stored pending raw tuples + remaining budget is at most B.
+- For every natural extra charge e, actual steps conserve or lower
+  mass(e,storage) + (e+1)*remainingBudget.
+
+Actual forcing cannot increase the maximum stored cell size. That size
+bounds operands, pending path depth, forest width, and collected plus pending
+job count. This law includes faults and needs no Ready or future-state input.
+Canonical readback cannot increase occurrence count. A pending force returns
+at most its initial collected count plus pending job count.
+
+Actual tuple preparation derives its own normalized classes and descriptor
+batch. Current readiness, resident tuple data and Fits derive current guard
+and width bounds. The same returned handles identify that exact batch.
+Current Frame, Values, Closed, queued-handle validity and Fits now derive ONE
+successful worklist step at explicit projection and reader ceilings. Every
+larger pair returns the same event and complete private state. The computed
+schedule also bounds its final native value heap. Closedness for a sampling
+visit is derived from its actual admission test.
+
+The remaining budget and the original B+2 queue coordinates form one strictly
+decreasing vector of dimension B+3. Each continuing step derives its own next
+frame. The current budget and literal queue size bound every coordinate.
+The global numeric growth function and controlled-path composition remain
+open. These local results do not select the shared candidate.
+
+## Checked sources
+
+- `SourceCurrentConjunctionRequirementCellsOutputBounds`: 3 public laws; 107 lines.
+  SHA256 `c3f827d608709da6924cc59ebe99512dca51710aa93ca886178b39db3f571b62`.
+  Commit `007ecaf1d6c3bdeb13ab5b6b1921a5e63bf3266e`.
+- `SourceCurrentConjunctionRequirementCellsSize`: 3 public laws; 149 lines.
+  SHA256 `7d20a1216b65dd5d1083df13e770580aafe107976916d2ea4aca39c707d677b4`.
+  Commit `5fcf614ee8496a379126cce0407b4fe695757096`.
+- `SourceCurrentConjunctionRequirementRowsSizes`: 3 public laws; 200 lines.
+  SHA256 `3527d6bf6191aaf4e017c827108f692afb55dc29b4a7b6df99e181c3122a407d`.
+  Commit `592890557b192122327afacc0af3236b9c77c82f`.
+- `SourceCurrentConjunctionSharedWorklistNumericControl`: 3 public laws; 158 lines.
+  SHA256 `d7214ed5c8dec32b86b62935b6219fb5f00d153ab510ae93f60ca9025f3b23e8`.
+  Commit `eafa6064165377ee2287ccac280212de003f131c`.
+- `SourceCurrentConjunctionSharedWorklistStepNumeric`: 2 public laws; 209 lines.
+  SHA256 `fb9d34ef2e8ff1ae02a7a096ce7f9b80ec4888fbecc45d9255e1d64cbc224f80`.
+  Commit `37a520c0f9b9faea9437fe278781f0f3e181e370`.
+- `SourceCurrentConjunctionSharedWorklistStorageBounds`: 4 public laws; 313 lines.
+  SHA256 `203dd1eb1b90c2a7cc90951d5e0f886b930e256abae22d8f7d04d6345d8320cd`.
+  Commit `e3c4c34325ec5dee38186df37be23ef688907d82`.
+
+The cell output and size laws use actual lists without semantic assumptions.
+RowSizes.prepareTuple_current_sizes derives the CURRENT guard carrier. It
+does not by itself fix the original carrier across a complete execution.
+StorageBounds.explore_storage_bound is unconditional on readiness and covers
+fault returns. It does not bound requirement-cell count or the native heap.
+StepNumeric.complete is a current-state theorem. It does not bound all future
+steps from one original input. NumericControl.step_below derives the actual
+next frame and the fixed vector decrease. It supplies no growth function.
+
+## Verification and reproduction
+
+The live import graph has 5439 modules. The affected closure has seven.
+Its frontier is Audit. Audit imports 4436 modules and reports 89121 theorem
+axiom dependencies. The full affected check took 12.30 seconds. The recorded
+peak was 3880M under the effective 4 GiB memory.max/high cap and swap zero.
+All checks used one Lean thread and one serial heavy-management job.
+The seven portable packets pass from `/tmp`; the recorded peak was 196M.
+Each own packet checks exact public namespaces, explicit theorem names,
+strict warnings, source hashes and standard axiom dependencies.
+
+Canonical compatibility packet:
+`lean/restart-evidence/20261109-shared-control-compatibility/`.
+Its checker derives the repository root from its source path and writes
+checked.json directly. Source and the pinned toolchain suffice. No archive
+is required. Six additive imports precede the COMPLETE old Audit bytes.
+Older source modules and packets remain unchanged.
+
+Runtime: `/tmp/mcfta-shared-control-20261109-0656/`.
+Keep only compact checkers, manifests, reports and failure logs. Do not create
+source or build archives. The last readable `/tmp` measurement was 36.99 MiB,
+with 241.70 GiB free. Recheck before more sustained work.
+
+Repairs in this pass were local Lean reductions and lemma names. List proofs
+needed List.length_nil after unfolding cons. Nat comparisons needed explicit
+Nat.le_trans and Nat.le_of_eq. Row outcome proofs had to reduce both distinct
+Outcome.state functions. The top packed coordinate needed reduction of its
+literal true conditional. No semantic counterexample or Haskell fix arose.
+
+## Next required work
+
+1. Derive one numeric control function from a fixed original guard alphabet A,
+   original budget B and current scalar s. Include native Fits, cell size,
+   cell count, pending/table operand widths, raw tuple widths, queue size and
+   table length. Do not infer duplicate list width from residency or Fits.
+2. Use SharedWorklistAnnotations to carry the original A through actual
+   forcing and sampling. TuplePullShapes.sample_fit gives exact tuple width
+   equal to sampled operand width. RowsSizes gives the descriptor producer.
+   RequirementCellsSize.force_size prevents forcing from increasing captured
+   dimensions. RowsFrame retains old cells; nextRow allocates at most one
+   live descriptor batch after rejected tuples. Bound that batch internally.
+3. Bound StepNumeric's exact forecasts and ceilings by a monotone strict
+   function g(A,B,s). Queue size can grow by the new row's descriptor count
+   plus one. Table length can grow on zero-fit visits without budget charge;
+   do not substitute B+1 for table length.
+4. Build HeightOrderControlled.Path with dimension B+3 from the actual finite
+   Run. Its final_le/length_le give M=majorant g (B+3) initialControl. Derive the
+   initial control once from the original scalar, budget and initial task.
+   Existing completion derives an actual Run internally; a future graph or
+   successful force must not become an extra public caller input.
+5. Replay the exact Run at the computed uniform ceilings. Use actual step
+   stability/uniqueness to match the locally computed endpoint. Do not assume
+   the computed bound is larger than an existential old successful allowance.
+   Add the terminal step and bound materialization from actual table length.
+6. Port the outer fault/snapshot carriers and resource proofs, then select
+   BOTH formal callers. Global AllocatedScanWorker.decision still uses the
+   old allocated conjunction call. Enumeration EnabledEmpty.check still uses
+   the old allocated tuple call at budget 10000 and retains the real skipped
+   gate branch. Preserve exact faults, memo, snapshot and success resources.
+
+The current shared local bound still does not discharge either selected
+caller's initial-only numeric resource contract. Additional unselected
+wrappers do not count as adoption. R184 provides the lossless adapter needed
+for the port; preserve all old declarations and histories.
+
+## Full objective remains open
+
+Retain the optimized interned core and the older constructor/equality targets.
+The final theorem must derive the optimized complete worker and COMPLETE
+original enumeration from original accepted input and request data. It must
+cover every sibling and generated, rejected, failed, returned and subsequent
+state. It must establish exact source Program leaf size, counts, order and
+both signed rank/unrank inverses on actual sparse size classes.
+AllSized, fallback, productive infinite languages, lazy tables/maps/sets,
+caches, hashes, machine Word/Int bounds, allocation, wrappers, lookup,
+Curried and Specftacular remain within scope. Native 64-bit capacity is not
+proved. Mathematical heap Fits is not native capacity or total runtime work.
+Original recursive adequacy remains distinct from stabilization of an already
+complete return. No future closure, carrier, sufficient-fuel, depth or complete
+execution oracle can replace an initial-only theorem.
+
+All historical R184 and earlier details follow.
+
 # R184: lossless checked shared calls and calculated local forcing bounds
 
 Updated: 2026-11-09 06:46 CET. Full goal ACTIVE. Formalize pushes authorized.
