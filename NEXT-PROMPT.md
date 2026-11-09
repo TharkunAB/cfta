@@ -1,3 +1,167 @@
+# R180: physical annotations at every shared caller outcome
+
+Updated: 2026-11-09 05:06 CET. Full goal ACTIVE. Formalize pushes authorized.
+Proof HEAD before documentation commit: e50016bb7d9e85352547993bfd77a4ebb5dfe212.
+Main 9f5f77783b9f936a1edf4225373cbad9dc6a9ed5 remains integrated.
+Read current Git and runtime publication.json for the final published HEAD.
+Complete published R179 document bytes follow unchanged. Preserve all prior
+proofs, counterexamples, repairs and marked drafts. Preserve unrelated .hypha/.
+
+## Strongest new contract
+
+The full current outer Context, query Available, and an INITIAL physical
+annotation predicate now derive the SAME ordered global memo bundle, full
+Post, and annotation predicate at EVERY actual shared call outcome, including
+faults. AllocatedSharedConjunctionAnnotations.verified uses the identical
+call expression as R179. One final bundle supplies BOTH CallReads and Post.
+All eight Context fields, both completed-table histories, query availability,
+unfolding extension and unchanged query tables remain. Initial annotations
+are an explicit CURRENT heap premise; no future certificate is supplied.
+
+The physical predicate is SourceEqualityAnnotationHeap.Heap P: every cached
+edge-record key has a guard that satisfies P. It is DISTINCT from causal Mu
+body/probe observations and whole-record arity. It does not certify source
+Type ancestry or a new native resource bound. A successful call retains its
+literal saved fourth memo and AnswerSound. A failed call retains the incoming
+fourth memo, exact diagnostic/private snapshot and full Post. Annotation and
+Post are OUTSIDE the outcome match. Only the answer clause asserts True on
+failure, because no Boolean was returned. False remains inconclusive; True
+excludes every accepted finite term at every environment.
+
+Public worker annotations require current Ready, query Available and initial
+Heap P. They need NO closed-query premise. Closed pending jobs derive from
+current storage invariants at their actual reached state. Instrumented p/h
+remain explicit logical proof/observation bounds, NOT native API parameters.
+Insufficient bounds can fault. No sufficient initial p/h follows. Both checked
+callers remain UNSELECTED for shared execution. No native GHC sharing, unsafe
+publication order, exception or whole-library correspondence claim is added.
+
+## Actual proof composition
+
+RequirementCellsAnnotations.force_heap covers cached, column, missing-handle,
+successful pending and failed pending outcomes. Current CellsValues and
+CellsClosed derive CompletionReads.Inputs for each captured cursor. The
+private singleton adapter uses the literal projections call. Its cursor
+induction keeps annotations at each actual returned projection heap, stops
+at first Empty, and transports current readiness/remaining inputs through
+actual Effects. force_pending_run/failed identify the SAME physical endpoint,
+including the final stopped cursor and original failure diagnostic.
+
+SharedWorklistAnnotations.visit_heap uses the existing all-outcome
+DemandAnnotations.sample_annotation_heap, which needs no closedness premise.
+step_heap uses actual forcing, actual readiness/returned values on success,
+and unconditional nextRow_heap for row preparation. Every sampler/cell/row
+fault returns its exact annotation heap. run_heap follows the actual finite
+Run and derives current Values and Closed invariants at every intermediate
+state. explore_heap derives both initial invariants internally. Closed
+storage initializes even for an open query; a closed-query supplier is not
+needed at either public worker or caller boundary.
+
+SharedWorkerAnnotations.decision_heap/call_heap use exact decision_state and
+call_state. Pure materialization, table growth and fourth publication leave
+the exploration heap unchanged; hits and open-query short circuits retain
+the initial heap. Full caller verified adds annotations to R179's SAME call
+and SAME existential bundle. failed rewrites that same theorem at the exact
+failed equation. An independent read-only contract audit found no omitted
+fault endpoint, unrelated execution join or hidden future/success premise.
+
+## Next bounded target and remaining gates
+
+Add ALL-outcome causal guard and whole-record arity preservation below the
+cursor, at actual OutcomePrimitives.reached forest outcomes. The old
+ConstrainedCapProjectionGuard and ProjectionArity APIs use successful graphs.
+Do not supply a completed graph at a public failure boundary. Derive any
+successful graph ONLY internally from the exact actual done equation.
+
+Primitive support exists in MergeGuardEffects.nodeEdges_heap:82,
+GuardHeap.preserve:35, makeNode_noNewMu, ProbeExposureArity.nodeEdges_heap:91,
+and ArityOrigins.node_heap:86. R179 all-outcome effects supply each actual
+intermediate semantic readiness, costs, growth and residency. Preserve all
+four Result constructors, completed head then failed body, selected child
+then failed suffix, fallback calls and exact endpoints. Causal guard is
+generic Symbol/Guard with GuardHeap P. Arity is generic Symbol with Guard
+fixed to Constraint FullSyntax.Formula. Lift the actual lower forest result
+through cursor/cells/worklist/worker/caller without future state suppliers.
+Runtime next-cutover-target.md records precise source pointers and scope.
+
+Before BOTH checked callers select shared execution, also retain original
+weak SemanticHeap/Covered/available-closed effects WITHOUT strengthening to
+Ready/CostHeap; sufficient p/h and replay stability/uniqueness; original
+numeric/resource forecasts covering deferred force even at budget zero;
+and a LOSSLESS selected diagnostic/private-state adapter. Full Post plus
+physical annotations does not itself discharge these separate obligations.
+Keep old failure/numeric consumers. Do not require eager/shared equality.
+
+The full objective remains original-derived sufficient COMPLETE enumeration
+depth, Type/Program occurrence identity, all siblings/subsequent/generated/
+rejected/failing/returned work, exact accepted terms by SOURCE Program leaf
+size/count/order/BOTH signed inverses, AllSized/fallback/productive infinity/
+lazy structures, and full Haskell maps/caches/hashing/Word/Int/allocation/
+wrappers/lookup/Curried/Specftacular. Source leaf size differs from Term.nodes
+and recursive fuel. Do not add a size parameter to size-free fully/until.
+R164 completion and R171 same-return driver keep their documented conditions.
+Preserve older constructor/equality work as secondary targets. Goal ACTIVE.
+
+## Verification, commits and restart
+
+Four NEW modules contain nine NEW public laws. All pass strict own-source
+warnings-as-errors, exact public names/namespaces, hashes and standard axioms
+only (propext/Classical.choice/Quot.sound). All old modules and packets are
+unchanged except four additive Audit imports. Complete old Audit bytes stay.
+Full affected closure: five of 5409 modules. Audit imports 4406 modules and
+reports 88822 theorem axiom dependencies. PASS in 4.83 seconds. All four own
+packets and complete compatibility reproduce from cwd /tmp using source and
+the pinned Nix/Lake toolchain. No build archive is required. Each own packet
+contains README.md/check.py/checked.json/theorems.json. Compatibility is
+20261109-shared-annotations-compatibility with frontier.json. Every public
+law has an explicit #check and axiom report; no theorem count implies full
+coverage. All compiler handles are terminal.
+
+Effective memory.max/high are 4294967296, swap.max is 0, LEAN_NUM_THREADS=1.
+Root runs ONE serial compiler via the existing heavy-management user-bus cap.
+No global queue/concurrency setting changed. Measured capped runs:
+- 2026-11-09T05:01:21 python3 4G 195M 1
+- 2026-11-09T05:02:12 python3 4G 227M 0
+- 2026-11-09T05:03:00 python3 4G 461M 0
+- 2026-11-09T05:04:02 python3 4G 195M 0
+
+Proof commits:
+- 606ba6094d2923d97b71defa332b5573af2da142 Preserve physical annotations through every shared cell force
+- 1d90cbb3eaac6bc8e46ea8f2ffb4b86fdd2b1ee6 Retain heap annotations through actual shared worklist outcomes
+- e50016bb7d9e85352547993bfd77a4ebb5dfe212 Preserve full annotated caller contracts on shared call failures
+
+Frozen source SHA256/public laws:
+- SourceCurrentAllocatedSharedConjunctionAnnotations: 07c743b0a6bd9e4cd387a7234f8e34fb6516b384e299ad011e70331a35438618; 2
+- SourceCurrentConjunctionRequirementCellsAnnotations: 193de7db9b6c8513393865f769925826923b0197e63767666f415d45aa6537d1; 1
+- SourceCurrentConjunctionSharedWorkerAnnotations: 13b907232fb45253fc5d7f4713d105ef466069580be484b7ae1fce2b3ba02b9a; 2
+- SourceCurrentConjunctionSharedWorklistAnnotations: 8498d2fc95f4474026cbfe97a84a1f80cdf70ec291c4bf21a8b41a453c21f848; 4
+
+One compiler repair changed only named private cursor induction arguments:
+ready/inputs/heap were generalized in a different order. Named arguments
+make their roles explicit. No theorem statement changed. Gamma owns the
+cell proof; Beta owns the worklist; root owns worker/caller composition,
+compilation, compatibility, reproduction, commits and publication. Alpha's
+independent contract audit was read-only. No source writer/compiler is live.
+
+Runtime: /tmp/mcfta-shared-annotations-20261109-0457/. Read verified-modules,
+compatibility-frontier/check, portable-check, proof-commits, publication,
+board-published and turn-state JSON, next-cutover-target.md and peaks. Refresh
+upstream and inspect ACTUAL live processes before edits; state files alone
+are not liveness evidence. Readable allocated /tmp is 37.48 MiB, with 241.8
+GiB free. Keep compact source-based text and bounded failure diagnostics.
+Do not retain build archives or repeated large compiler output snapshots.
+
+## Haskell findings for external follow-up
+
+No Haskell executable source changed in R180. No new Haskell defect or fix
+was identified. This closes a FORMAL physical annotation gap. It does not
+establish GHC runtime behavior. Every earlier Haskell fix, LPO finding and
+repair remains in the exact preserved suffix. Record EVERY future Haskell
+fix in FINDINGS too. Continue without asking whether to continue. The full
+goal stays ACTIVE after this component milestone.
+
+---
+
 # R179: full shared caller Post and ordered memos on EVERY outcome
 
 Updated: 2026-11-09 04:54 CET. Full goal ACTIVE. Formalize pushes authorized.
