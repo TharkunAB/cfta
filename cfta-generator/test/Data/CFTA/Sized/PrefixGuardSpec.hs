@@ -235,6 +235,8 @@ walksAsEager walking bound graph = do
         , completionTerms completions
         , undecidedTerms completions
         , completionCount completions
+        , -- With the weight one half, the total depends on the size bound of the intervals.
+          weightedTotal <$> withWeights (const (1 / 2)) completions
         )
 
 -- | A walk after the tokens of a prefix, the first token first.
