@@ -1,3 +1,354 @@
+# R200: Literal shared query checks from one original completion
+
+Verified at 2026-11-09 15:39 CET.
+Base R199 is 374736631995cad1e7dbd05561dc7dc1417b623f.
+Seven modules add 52 public laws. All seven strict source checks pass.
+The full affected Audit and all eight portable packets pass.
+The seven proof commits and their exact source hashes appear below.
+This handoff, the additive Audit and its packet form the eighth commit.
+The goal remains ACTIVE. This round is PROGRESS, not completion.
+Retain the full original accepted-input, complete SOURCE-size enumeration,
+BOTH signed rank/unrank inverses, native capacity and Haskell correspondence
+objective. Keep the optimized interned core and older constructor/equality
+proofs, counterexamples, repairs and marked drafts. Preserve .hypha.
+No Haskell source change, new Haskell bug or Haskell fix is included.
+Record every future Haskell repair in root FINDINGS.md.
+This section supersedes the R199 missing-range and missing-Checks statements.
+The complete published R199 document follows this section unchanged.
+
+## Strongest current original-input statement
+
+OriginalCheckedHereditarySharedCompletion.accepted starts from firstOrderRaw
+acceptance. ONE existing original completion supplies the actual build,
+preparation, cold caller, result, returned caller and endpoint certificate.
+Under ONE computed combined Room test, the literal shared root worker
+completes with an available, language-preserving result. Every outer fuel
+at least the computed base returns the SAME result and full caller at the
+fixed nine computed lower bounds. The SAME graph now carries shared Checks.
+The BASE run and EVERY such larger successful outer-fuel run also satisfy
+the new literal native-query range predicate.
+
+The same endpoint retains full recursive Program ValueFields, NodeFields,
+closedness, conditional Type readiness, Origin GuardHeap, captured-owner
+memo History, physical Post, Frame/Fits, annotation carrier and one canonical
+ordered endpoint-read bundle. Initial fields, Context and resources derive
+from the SAME accepted source witnesses. There is no second initializer,
+future graph-check supplier, future field/context callback or old Demand
+range plan in this original-input contract.
+
+The larger-fuel literal checks require a new reverse proof. Endpoint equality
+alone does not identify internal reads or imply Room for a larger forecast.
+The completed graph's Checks plus each actual larger successful worker
+equation derive that run's own literal ranges. The canonical endpoint reads
+remain attached to the original selected graph and physical bundle. No
+larger-fuel trace identity or larger-forecast Room claim is made.
+
+The numeric capacity condition remains explicit. It is not discharged for
+all accepted inputs at a fixed native Word/Int width. Complete enumeration,
+original-derived sufficient driver depth, total driver work and full Haskell
+execution remain open. Type annotation facts do not establish an external
+Haskell typechecker or host-runtime correspondence.
+
+## New source contracts
+
+1. SharedPartialWorkerRanges defines eight literal worker range predicates.
+   The evaluated edge body always requires current ResidentRanges before
+   matching Parent's outcome. Failed Parent and native-query prefixes retain
+   their own checks. After skips only a continuation that did not execute.
+   The five public laws expose these exact cuts. No whole-root success or
+   caller-supplied future graph certificate is required.
+2. SharedOuterInitialLiteralRanges derives all six outer phase predicates by
+   strong induction on ACTUAL outer fuel. Current Context, Frame/Fits, carrier,
+   inherited/input availability and ONE phase forecast Room suffice. The
+   observed nine lower fuels are parameters; no root done premise is used.
+   Each successful sibling supplies its own actual returned seed and resource
+   receipt. At rows, R199 rows_call_ranges is applied at the local reflexive
+   Reached entry before matching Parent's outcome. All six laws therefore
+   cover literal executed failure prefixes as well as successful runs.
+3. SharedPartialWorkerCompletion ports all eight finite-graph completion laws
+   to ONLY the new shared graph/worker/outcome families. A given finite graph
+   produces a StableRun with the SAME result and full caller at ten adequate
+   independent bounds. The Parent leaf uses its captured successful bounds
+   and SharedParentWorkerStability. It needs no Context, Room or future graph.
+   Replay at maxima is used for determinism of actual intermediate indices;
+   it is not a proof of larger forecast capacity.
+4. SharedPartialChecksComposition gives 16 genuine graph constructors. It
+   aligns hidden actual intermediate states through StableRun uniqueness
+   before identifying proof terms. edge_body uses the exact new unconditional
+   ResidentRanges leaf. Prop proof irrelevance is used only after ALL physical
+   request, caller, result and returned-caller indices agree.
+5. SharedPartialChecksFromRanges gives eight bridges from literal ranges and
+   actual successful execution to Checks on a GIVEN SAME-index shared graph.
+   Its six-phase actual-fuel induction follows each true completed prefix.
+   Direct paths through other graph presentations use the genuine composition
+   uniqueness proof. It neither reindexes canonical reads nor casts old graph
+   executions to the new family. edge_body needs ranges and the graph alone.
+6. SharedPartialRangesFromChecks gives the reverse eight bridges. Its API is
+   node_call (graph := graph) checks actualDone, with equivalent other phases.
+   It decomposes the actual successful run, builds actual child graphs,
+   restricts Direct paths, and obtains the exact-fuel literal child ranges.
+   It has no Context or capacity premise. It is success-only; it does not
+   pretend that completed graph Checks describe an arbitrary failed run.
+7. OriginalCheckedHereditarySharedCompletion.accepted applies these laws to
+   ONE R199 original package. Constructed derives current facts on its exact
+   built/prepared witnesses. cover_ge extracts BASE forecast Room from the
+   existing combined Room. The base producer and forward bridge attach Checks
+   to the existing graph. The reverse bridge and each actual stable done run
+   then produce literal ranges at every sufficient outer fuel. All original
+   endpoint metadata and the SAME ordered read bundle remain in the result.
+
+## Exact verification and reproduction
+
+Each source packet records the source SHA256, every exact public theorem
+name, explicit #check output and its axiom dependencies. All own-source
+warnings are errors. Every theorem uses only the existing standard allowed
+axioms propext, Classical.choice and Quot.sound. Existing public proofs and
+all older Audit imports remain intact.
+
+The complete source DAG is acyclic. It has 5579 live modules,
+8 affected modules and frontier ['Audit'].
+The additive Audit has 4576 imports and checks
+91115 theorem axiom reports. The first full Audit
+passes in 12.74 seconds. All eight packet
+scripts also pass with cwd=/tmp. Only the final compatibility report is
+rewritten by that replay; the first full Audit report remains in the active
+runtime as compatibility-first.json.
+The first full Audit peaks at 3778M. Portable replay peaks at 214M.
+
+All checks use the existing serial heavy-management cap: memory.max =
+memory.high = 4294967296, memory.swap.max = 0, LEAN_NUM_THREADS = 1.
+Only Root runs compilers and Git. Never increase these limits or concurrency.
+Two first strict drafts needed explicit unfolding of opaque mutual range
+predicates. The final forward and reverse bridges pass; no assumptions,
+axioms or interface premises were added to repair those elaboration errors.
+No Haskell build, test or formatter was run because Haskell did not change.
+
+Reproduce each module with python3 <packet>/check.py under that cap.
+Reproduce the full affected Audit with:
+lean/restart-evidence/20261109-shared-literal-ranges-compatibility/check.py.
+The committed packet scripts derive the repository root from their own path.
+They require neither saved compiler output nor a copy of the source tree.
+These small reports record checks and hashes. They are reproducible from the
+source and pinned Nix/Lake toolchain. Do not create full-tree evidence archives.
+
+### Exact verified modules and proof commits
+
+- SourceCurrentAllocatedSharedPartialChecksComposition: 326 lines, 16 public laws.
+  Source SHA256 47b1d7a949663cc84bcea6a4897c41d6f6e548121ce58f19d01df1d72eef90d5.
+  Proof commit 184d6f399fc653262cf12a9a9087b6d192d6cc70.
+  Packet lean/restart-evidence/20261109-allocated-shared-partial-checks-composition.
+- SourceCurrentAllocatedSharedPartialChecksFromRanges: 324 lines, 8 public laws.
+  Source SHA256 ad9310210a405c36f3c77781eb869b805b99dcf98162bf06605d58e9704c05e0.
+  Proof commit 33ed248af61cf0bfa4773aa7fdd93539a17a0ac6.
+  Packet lean/restart-evidence/20261109-allocated-shared-partial-checks-from-ranges.
+- SourceCurrentAllocatedSharedPartialRangesFromChecks: 314 lines, 8 public laws.
+  Source SHA256 86ff1e5b1de7a59d7d0ea7da5e2ed165b636a40d96f32e8e0a7906e39128eb1f.
+  Proof commit 8915746e5abd0c60bce285ca7f32104208e0d722.
+  Packet lean/restart-evidence/20261109-allocated-shared-partial-ranges-from-checks.
+- SourceCurrentAllocatedSharedPartialWorkerCompletion: 403 lines, 8 public laws.
+  Source SHA256 3273da3f81625959865ebaf1f37b5789b99f03e0b86df5632d0020658e1cc9ca.
+  Proof commit b550f9d531fadfcb0b563c5f84ba79fbd4abec62.
+  Packet lean/restart-evidence/20261109-allocated-shared-partial-worker-completion.
+- SourceCurrentAllocatedSharedPartialWorkerRanges: 148 lines, 5 public laws.
+  Source SHA256 252440050a895ec46638e43fd052cf73f984c2d447532d82781da509399214fc.
+  Proof commit 43cff5c90aa7ce8af6ae7ca9a740694fc4aa994a.
+  Packet lean/restart-evidence/20261109-allocated-shared-partial-worker-ranges.
+- SourceSynthesisOriginalCheckedHereditarySharedCompletion: 137 lines, 1 public laws.
+  Source SHA256 c0bb59641d203a69cffe1ee31f066b3ef7de17354f45df3e2a201d5c46e76c45.
+  Proof commit 860bf7e043cc4967f43cd2ee4646e2e718f8b29f.
+  Packet lean/restart-evidence/20261109-original-checked-hereditary-shared-completion.
+- SourceCurrentSharedOuterInitialLiteralRanges: 373 lines, 6 public laws.
+  Source SHA256 5067dae16338041265325e1ec6dfbdcb4b92d646c17541088ae50cf3d5218b75.
+  Proof commit 0ce6e917bd3ecdef57218a23e4d17740bf06f915.
+  Packet lean/restart-evidence/20261109-shared-outer-initial-literal-ranges.
+
+## Biggest gaps and next implementation cuts
+
+The immediate enumeration integration gap is selected execution. The actual
+pruning Recursive/Terminal/CachedFold chain still selects the old checked
+Demand family. Changing IncomingNode alone leaves Dispatch.afterQuery's old
+EnabledEmpty call and the raw Fold fallback reachable. The next four concrete
+cuts are SharedDispatch, SharedCachedTerminal, SharedSelectedContinuations,
+and a SharedPreparedDriver attached to the SAME returned original root/caller.
+The complete source-backed audit below specifies their arguments, order,
+cache misses, skipped/performed checks, exact faults and resource boundaries.
+Haskell already uses the same lazy provablyEmpty at both checked callers.
+The Lean handle model has no proved host-runtime correspondence yet.
+
+The next all-outcome cut must distinguish two specifications. Under the
+existing adequate nine lower bounds, derive full returned Post/resources and
+hereditary/Type/History facts for both outer outcomes. Existing no_parent_failure
+can discharge Parent faults at those bounds. For ARBITRARY too-small lower
+fuels, a native execute can stop after it installs an evaluating cell. Full
+Ready includes Idle and is false at such an interrupted snapshot. That larger
+cut needs an active-control prefix invariant that permits evaluating cells
+and derives actual Fields/InputsThrough. It must not assume future readiness
+or discard the retained snapshot. This is a formal contract obstruction,
+not a new established Haskell bug. The full audit below gives the exact laws.
+
+Preserve the full remaining scope: every generated, rejected, failed, returned,
+sibling and later driver state; complete accepted terms per SOURCE Program
+size and count order; original-derived sufficient depth and policy productivity;
+BOTH signed rank/unrank inverses over actual sparse classes; AllSized and
+fallback/failure behavior; productive infinite enumeration where applicable;
+fixed native Word/Int bounds, hashes/maps/sets, caches, lazy allocation,
+lookup, Curried, Specftacular and full Haskell correspondence. Source size,
+annotation-expanded nodes, observer fuel, progress rank and enumeration rank
+are distinct measures. Arbitrary guarded-Mu pathologies do not establish an
+original-input starvation counterexample. True emptiness is sound; false
+can be inconclusive. A passed Audit or larger theorem count is not completion.
+
+## Disk, handoff and next-turn protocol
+
+The active runtime is /tmp/mcfta-shared-literal-ranges-20261109-1508.
+At its last measurement /tmp had 25695795 readable file
+bytes (24.51 MiB) across 6618 files,
+with 241.13 GiB available. This runtime held only
+77966 bytes at that measurement. No source-tree archive or
+large compiler log is retained. Keep tracking /tmp. No cleanup is required
+for this round. Preserve unrelated .hypha and other projects' files.
+
+All known compiler handles are terminal after the portable pass. Strict
+source reports, targets.json, verified-modules.json, the full frontier,
+compatibility-first.json, portable-check.json and the two audit notes support
+this checkpoint. They are small; the committed packet scripts reproduce the
+checks. Keep both audit texts and marked source drafts before any cleanup.
+
+At restart, read the full shared latest prefix of NEXT-PROMPT.md, HANDOFF.md
+and FINDINGS.md. Verify their shared bytes. Read memory lines 600-601 and the
+latest board note with full identity/content/metadata verification. Refresh
+main/formalize while preserving all local work. Classify this round as
+PROGRESS, not a no-progress stop. Reuse the existing three bounded writer
+slots; Root alone compiles and publishes. No blanket scope reduction or
+new proof obligation callback is permitted. Do not ask whether to continue.
+The goal remains ACTIVE and pushes to formalize remain explicitly authorized.
+
+## Complete next-cut audit: fault states
+
+This audit was written before the final reverse bridge passed. R200 now also
+derives larger successful runs' literal ranges through that reverse proof.
+The audit's warning about endpoint stability alone remains valid. The other
+state, idleness and next-cut boundaries remain current.
+Audit bytes 10087; SHA256 ae45a552b9d8f22483a76ab36639ce77560a0e27cb7aa133b1828f3744eab4f1.
+
+# R200 next fault-state cut
+
+Read-only source audit, 2026-11-09 15:25 CET. No compilation or repository edits.
+
+## What R200 now covers
+
+`SourceCurrentAllocatedSharedPartialWorkerRanges` follows the literal worker at the supplied bounds. `After` inspects only an executed successful continuation. An evaluated edge body requires `SharedParentUniformRanges.ResidentRanges` regardless of whether Parent succeeds. `SharedOuterInitialLiteralRanges.node_call/node_body/rows/descendants/children/walk` (308–373) derives this plan from current Context/Frame/Fits/carrier/Inputs and ONE phase Room. It has no whole-root success premise and no lower-fuel adequacy premise. The plan covers the actual executed query prefixes, including the prefix that fails. A second ancestry extractor is not needed to obtain this same plan.
+
+This is a range/check interface, not a returned-state invariant. `ResidentRanges` (SharedParentUniformRanges:63) conditionally follows the actual loaded field, then the actual scan and completed Required/class-edit cuts. It does not assert final native idleness, typed values, native scope ownership, or a resource profile for an interrupted state. FromRanges adds Checks to a successful SAME-index graph. The original checked hereditary package adds BASE literal ranges/Checks to the SAME completed source run. Larger-fuel endpoint stability does not by itself add those internal checks to a different trace.
+
+## Exact fault state and existing protection
+
+* SharedPartialWorker:111–126 lifts both SharedParent outcomes through the SAME `PartialState.advance before checked fourth merge`. `edgeBody_failed` (195) recovers the literal failed Parent equation, nested fault and exact Caller equality. No successful Parent receipt can substitute for that equation.
+* SharedParentWorker.Fault nests SharedLocal.Fault. SharedLocal:required advances to the actual pending/unresolved/exhausted heap; pass retains the actual failed ClassWorker shared state. Precheck also retains its actual equality-operation return. SharedLocal.scan_failed recovers the literal failed RecordScan, checked state and fourth memo; the merge memo stays unchanged at this scan stage.
+* SharedScanWorker.Fault (25) distinguishes gate, seeded query, decision and selected-suffix failures. `.decision paths fault snapshot` retains the COMPLETE actual shared worklist snapshot. `decision_failed` recovers the SAME checked shared-call failure. A selected-prefix wrapper changes the diagnostic, not its checked endpoint.
+* SharedConjunctionWorker.Fault (27) distinguishes explore, materialization and grow. Outcome.state (39) is the actual full WorkState on both branches. The allocated adapter retains the exact raw observation/snapshot and advances its physical heap/equality state; it does not fabricate a generic read failure.
+* On a failed shared decision, the incoming FOURTH memo is retained. This does not mean that the whole global memo bundle is unchanged. Failed projection/exposure prefixes can extend unfolding receipts, and successful earlier siblings can change fourth/merge tables before a later fault. Keep the all-outcome ordered reads and their literal final bundle.
+
+The inner shared-decision fault boundary is already strong:
+
+1. `AllocatedSharedConjunctionWorkerEffects.verified` (53) takes current Context, query availability and three distinct current predicates (AnnotationHeap, causal GuardHeap, ArityHeap). It returns ONE base-indexed CallReads bundle and full Post, with those predicates at the exact adapter state on EVERY outcome. Its AnswerSound component applies only on success.
+2. `ConjunctionSharedWorkerEffects.call_effects` and `SharedWorkerGuardArity.call_guard_heap/call_arity_heap` already operate on the literal raw endpoint, including failure.
+3. `NativeTypeSharedScan.call` (62) already derives Type-native Ready, CostHeap, Extension and Origin GuardHeap at the exact checked shared-call state for ALL outcomes. Do not reprove this as an unresolved inner-decision gap.
+4. `HereditarySharedOuterEdgeWorker.edgeBody_history` (129) already preserves BOTH captured-owner outer histories for EVERY Parent outcome because Parent leaves outer node/edge result tables unchanged. `edgeCall_fields` (185) already has an all-outcome History component, in addition to its successful classified result component.
+
+The missing composition is above and beside these laws: arbitrary failed Gate/Seeded/Required/Class prefixes, then their complete failed Local/Parent endpoint, then the eight outer functions' final endpoint after completed siblings. `NativeTypeSharedScan.scan` (116) consumes successful ScanReads; it is not an all-outcome Scan theorem. Successful Parent/outer numeric or field receipts also do not establish a failed return.
+
+## Important obstruction: full Ready is false for some interrupted native requests
+
+Do not specify an unconditional arbitrary-lower-fuel Parent/outer theorem with `TypeClosedRequests.Ready` or `ConjunctionClassScan.Ready` at every fault state. Both structures include native `Idle` (TypeClosedRequests:32–37; ClassScan:110–115). `NativeIdle.Idle` explicitly forbids evaluating cells (15–17).
+
+`AllocatedSeededWorker.leaf` executes a real native request and wraps EVERY non-done observation as a native fault while retaining its state (59–67). `RecursiveIntersectionNative.step` can demand a cold node/edge, install an evaluating cell and yield its body (58–72); a finite execute can stop there. That is an unfinished, non-idle state. Merely being a correctly retained fault state does not make it Ready for a fresh independent request. An arbitrary-fuel all-outcome theorem must retain active owners/continuation and prove a prefix invariant that permits evaluating cells. It must not add idleness as a future supplier.
+
+The lower partial producer `AllocatedNativePhysicalCompletion.execute_invariants` (152) is relevant: it proves Good, Extension, Keeps, equality growth and OutcomeFields for EVERY native observation, given genuine current Fields and actual InputsThrough. It does not promise Idle. `AllocatedNativeEffects.execute_effects` (33) similarly needs actual field/execution inputs to derive physical Effects. R200's range plan is not a derivation of these semantic/field hypotheses. This is the exact remaining bridge for arbitrary interrupted native snapshots, including conditional Type stores and active control ownership.
+
+## Smallest next source-backed cut
+
+There are two materially different specifications. Start with the first; do not silently advertise it as the second.
+
+1. NEW `SourceCurrentSharedOuterInitialOutcomePost`: derive the literal six-phase returned Caller Post/resources on BOTH outcomes from the current initial Context/Frame/Fits/carrier/Inputs/ONE phase Room AND the existing nine `phaseNeed <= lowerFuel` bounds. No whole-root success premise. Reuse `SharedOuterInitialParentFailure.no_parent_failure` (38) to exclude failed Parent at these bounds. LocalFaults already excludes binder/inherited/missing diagnostics at their true cuts. Remaining exhaustion, memo and reference leaves retain their exact entry/activation state; successful siblings supply SAME-endpoint Post through SharedInitialActual/EdgeGuardAlphabet. Begin/finish protocol changes use the actual frame/soundness laws. This avoids any claim that a too-small native execution is idle. Endpoint resources use the original phase forecast. Do not use graph replay at a larger fuel to manufacture Room.
+
+2. NEW `SourceSynthesisHereditarySharedOuterOutcomes`: add classified current inputs, initial Type state/Origin guards and ClosedMemo.History to that SAME actual-outcome induction. At completed siblings use the existing successful hereditary result/publication facts; on failed leaves retain the exact current facts. At Parent under the adequate lower schedule it completes, so the existing R198 field law applies; outer evaluating cells remain allowed by captured-owner History. Reuse the already all-outcome edgeBody_history/edgeCall_fields instead of duplicating edge-table protocol. Return state facts on every outcome; NodeFields/result classification only under an actual done equation. Do not invent a value for a failed node. A small third original wrapper can initialize these premises from ONE accepted-source package, preserving the SAME outcome/endpoint/global bundle.
+
+These modules would establish a useful current-root all-OUTER-outcome producer under the existing computed adequate lower schedule. They require neither a future Context callback nor new top-level closedness/field oracles. Existing original full completion is a special done case; the new value is arbitrary outer exhaustion/diagnostics and intermediate completed-sibling state under that schedule.
+
+If the intended next target instead quantifies over ALL arbitrary lower bounds, first implement a distinct `NativeTypeSeededOutcome` prefix theorem over actual execute outcomes, with an active-control/native-store invariant that omits Idle and derives its Fields/InputsThrough from genuine typed operands. Then lift it through actual Scan/Required/Class/Local/Parent failures. This is a larger cut than the first two modules. The existing all-outcome shared-decision theorem alone cannot discharge the seeded-native branch. Do not hide this branch behind a public all-outcome preservation callback.
+
+## Remaining scope
+
+Physical Good/semantic/cost facts, completed Type/Program result fields, active conditional stores, captured-owner History, causal GuardHeap, arbitrary AnnotationHeap and edge-record arity are different predicates. None can be substituted for another. Type-origin provenance is not full source Type grammar. Literal query range checks are not a proof that every failed snapshot satisfies the completed profile or native Idle. Original accepted root completion/BASE checks do not yet cover arbitrary external warm roots, every too-small native continuation, all enumeration-driver states, or full fixed-word/Haskell sharing and complete-enumeration correspondence. Preserve these boundaries in the next contract.
+
+
+## Complete next-cut audit: shared pruning and source enumeration
+
+Audit bytes 12946; SHA256 cd16686694740248eb594554504c42abaef1bdcb9c306529f9f20aa08d8ea6f4.
+
+# Next shared pruning and enumeration integration
+
+Audit: 2026-11-09 15:27 CET. Read-only source review. No compiler, Git, Haskell execution, or repository edits.
+
+## Result
+
+The first missing selected leaf is `SourcePruningEnumerationDispatch.afterQuery`, not another cold outer-worker theorem. It still calls old `EnabledEmpty.check`. A change to IncomingNode alone would leave that call and the raw Fold fallback reachable. The new shared incoming companions already provide part of the required replacement. They do not select themselves in the existing continuation chain.
+
+There are three distinct contracts. The new SharedParent/SharedPartialWorker family invokes the checked shared backend. The existing pruning Recursive/Terminal/CachedFold family still invokes the old checked Demand backend. Haskell invokes its existing lazy `provablyEmpty`. A theorem about one family must not identify its physical trace with either other family.
+
+## Actual Haskell
+
+- `cfta/src/Data/CFTA/Enumeration.hs:204-217`: `intersectUVarValue` uses `checkEmpty && reachesConstrainedMu n && provablyEmpty n`. Both assimilation and incoming merge use this function. `assimilateUvarVal` around 489-512 checks Empty before its writes. `mergeNodeIntoUVarVal` around 515-526 writes the incoming value and suspended constraints before its Empty check. The distinction is part of the contract.
+- `cfta/src/Data/CFTA/Equality/Operations.hs:195-244`: `reduceEqConstraints` partitions refused classes, performs the secondary constrained-Mu check, and calls the same `provablyEmpty` on their projected conjunction. This is the second checked caller. Selected classes then use actual `requireAll` and class reduction.
+- `cfta/src/Data/CFTA/Enumeration.hs:571-574,604-660`: the global `TypeableMemoCache` memoizes `provablyEmpty`. Its `tupleRows` binding is used both in `Map.insert ... tupleRows` and `concat tupleRows <> rest`. Haskell shares those lazy rows and requirements. The tuple cut is `take (budget+1)`, with budget 10000. Empty, open, cached, budget-zero, and overflow paths retain their actual short-circuits. A missing/open table entry is conservative; false is not a nonempty witness.
+- The new Lean requirement-cell and row-spine handles are an explicit operational model. These Haskell files do not allocate those named handles. No new Haskell selector or repair follows from their Lean proofs. A host correspondence theorem still has to relate actual lazy forcing, cache hits, repeats, native allocation, and failure behavior to the handle execution.
+- `cfta/src/Data/CFTA/Enumeration.hs:725-756`: nonterminal Mu/union deferral must be read together with the later representative/waiting/assimilation/incoming state. It is not a new established constraint-loss bug. This audit executes no counterexample and establishes no new Haskell defect.
+- `specftacular/src/Specftacular/Pruning.hs:95-145`: the literal policy uses template ordering, then a non-Type hole; records Type positions; extends typing on actual program fragments; and tests actual remaining open program holes. `narrow` exempts Mu and Type positions. `emptyAt` exempts Mu alone. The source call at `specftacular/src/Specftacular.hs:1293` supplies actual `startTyping`, `extendTyping`, canonical hole keys, constant fits, and Type admission. Arbitrary callback/order pathologies do not establish a defect in this policy.
+- `Enumeration.hs:913-927,958-1013,1170-1204`: fully/until restart after actual selected expansion or parking. `termsPruneUntil` uses shallow enumeration and the literal stop/oracle. Native APIs have no added recursive-depth argument. A Lean chosen finite recursive depth is an observation boundary, not a new Haskell input or proof of productive infinite enumeration.
+
+## Selected Lean call path and exact replacement boundary
+
+`Recursive.run:118 -> resume:83 -> SelectedStep.runPrefix:43 -> NativeOrdinaryContinuations.run:20 -> NativeContinuations.run:44 -> CapturedEdge.run:25 -> SelectedEdge.run:69 -> ChildTraversal.run:25 -> ChildDispatch.run -> CachedTerminalAdapter.run:32`.
+
+The terminal branch runs its captured TerminalPrefix, recorded-slot fold, incoming merge, and winner write in that order. `CachedTerminalAdapter` uses old `CachedFold`. If that fold returns a successful core without a cache, it uses old `IncomingNode.run`. With a recovered cache, it uses old `IncomingCacheAdapter.run`, which itself obtains the old IncomingNode observation. `CachedFold.run:14` also falls back to old raw `Fold.run` when cache recovery fails. Raw `Fold.run:17` calls old `Dispatch.dispatch`, whose `afterQuery:30` calls old `EnabledEmpty.check` before the assimilation action. All paths need the same backend change.
+
+The old `ChildDispatch.Observation` explicitly contains `SourceCurrentAllocatedConjunctionWorker.Outcome`. That outcome has three returned fields and a Demand fault. The shared checked outcome has the actual private snapshot as a fourth field and its own stopped state/fault. Replacing an import or erasing the snapshot does not prove the required observation contract.
+
+Existing usable shared leaves:
+
+- `SourcePruningEnumerationSharedEnabledEmpty.check:31`: actual skipped versus performed distinction; performed retains the entire shared outcome. A skipped branch has no invented private snapshot or worker read.
+- `SourcePruningEnumerationSharedIncomingQuery.complete:41`: current Context and available/closed operands, genuine native request WordRanges, same query state/inventory, larger-fuel success, Post, sound replacement, and its own base shared CallReads. The native range condition precedes the actual query. It is not supplied by completion of the later emptiness check.
+- `SourcePruningEnumerationSharedIncomingNode.run:40`: same representative lookup, native query, and shared enabled check; reuses the pure incoming finish. Its fault sum retains the native outcome versus the shared enabled outcome. This companion is not called by old IncomingCacheAdapter.
+- `SourceCurrentAllocatedSharedConjunctionCallerCompletion.finite`: logical completion at current Context + Available. Computed resources use `SharedConjunctionWorkerResources` at the same call. Current fixed-alphabet bounds and monotonicity may be reused. Do not compare alphabet numeric shape through membership alone.
+
+## Four concrete implementation targets
+
+These are four cohesive new modules with local namespaces where needed. They are an implementation sequence, not a claim that the complete source objective requires only four lemmas. Preserve old definitions until every selected caller has an adequate replacement.
+
+1. **`SourcePruningEnumerationSharedDispatch`**. Define shared `afterQuery` and `dispatch` at the old source/target/queries/caller argument order. Reuse pure `finishOptional` and `Assimilation.finish`. Native query order must remain source then target. At an already queried state, run only the shared enabled check; do not repeat the native query. Preserve source=target, eliminated, missing, optional-node, native-fault, failed-check, rejection, and successful-action branches. The proof must derive full Post and same returned Caller/Fourth/Merge/global memos from current facts. A performed read stays indexed at its own actual base; a skip has no worker receipt. The current native request WordRanges must come from an adopted admission/resource producer, not a later successful native trace. This is the smallest immediate code target.
+
+2. **`SourcePruningEnumerationSharedCachedTerminal`**. Put the small shared raw Fold, cached adapter/fold, incoming-cache adapter, and raw/cached Terminal definitions behind one module interface. Reuse the existing pure candidate-index and winner-write functions. The cache-miss suffix must invoke the new shared raw Fold, and the no-cache incoming suffix must invoke SharedIncomingNode. Prove cache erasure against the NEW shared raw terminal observation, not the old Demand execution. Keep rejected raw results, missing cache candidates, prefix faults, failed native queries, failed shared checks, moved waiting counts, suspended constraints, and the actual reached state. Expose one terminal contract with full Post, current native resource bounds, exact success/fault observation, and optional valid candidate cache. No final candidate, future Context, or future native range is a caller premise.
+
+3. **`SourcePruningEnumerationSharedSelectedContinuations`**. Define the concrete shared ChildDispatch/Traversal and SelectedEdge/CapturedEdge/NativeContinuations operations as local components. Keep pure ShallowChild and pure edge preparation/finalization. `SelectedStep.runPrefix` can remain the existing heap-only prefix: it does not run ordinary siblings. Its result/fault type must be handled explicitly. Continue children only after the actual successful singleton with a candidate cache. Retain the completed child/edge prefix and the stopping observation. A stopped child must not finalize the parent. Siblings retain their captured enumeration input and branch metadata; only the actual returned native Caller/queries pass to the next sibling. Run the Left callback once after an actual completed fragment, and keep its returned state before the next sibling. Export an actual selected continuation, not an unused wrapper around a shared cold worker.
+
+4. **`SourcePruningEnumerationSharedPreparedDriver`**. Wire the new concrete continuations into the recursive prepared driver and attach it to the SAME original shared completion's returned root, caller, native counters, Fourth/Merge tables, and global bundles. Port the existing finite-resource depth induction to the new leaf forecasts. Use one computable original-input admission condition for the worker and the chosen driver depth. Keep the actual returned domain count; do not call a cold seed on the returned heap. Keep actual stopped/unsupported/fault outcomes and fallback paths. This target establishes selected shared finite execution and its resource/semantic contracts. It must not assert sufficient recursive depth, AllSized, productive infinite enumeration, or either signed inverse until their separate source-derived hypotheses are proved.
+
+## Independent policy and full-goal obligations
+
+`SelectedStep.runPrefix` calls `PruningEnumerationAction.prepare:17`, which calls `SourcePruningOuterNarrow.narrow`. `SourcePruningNativeView.narrowAt:33` reads actual rows, filters them by full-label and annotation tests, and constructs a node at the returned heap. `emptyAt:46` performs the actual second read of that narrowed node. This is not the new outer SharedParent execution. Its current ready/resource/cache proofs can be reused where they match; recursive ValueFields/Type-site preservation through actual filtering and native Program intersections must be proved if a later consumer needs them. Do not infer those facts from a symbol or assume a whole mixed Program heap is Type-annotated.
+
+Existing `Recursive.run_finite_complete_resources` in `SourcePruningEnumerationFiniteResources:55` derives an outcome stable in workFuel at a FIXED recursiveFuel. It retains current Packet/Fits/guard-carrier, actual edge-selection restrictions, initial suspended mass, and Reserved. That outcome may stop. `PreparedRecursiveDepth.run_complete_moreDepth:196` assumes an already complete result before proving stability at larger depth. It supplies no original-derived adequate depth. `StorageProgress.finalize_pendingSize_lt:231` is useful concrete progress at actual productive finalization; it does not cover arbitrary neutral Type preparation, parking, or every sibling by itself.
+
+`SourceSynthesisOriginalVerifiedFiniteDriver.accepted:56` is the reusable same-return initialization pattern, but it still imports the old worker/recursive family. Reusing the pattern requires the new shared returned witnesses, not a second cold initializer. The new R200 graph Checks and literal range attachments settle actual modeled machine checks at their stated runs. They do not settle the upper driver selectors or native capacity at every later warm query.
+
+`SourcePruningEnumerationSelectedNativeSized.complete:59` is an existing all-size compiler/evaluation contract for an exposed value. It still takes its actual active-edge and native compiler Ranges conditions. It is not a theorem that the literal recursive pruning policy reaches every intended source-size term or preserves its count order. The remaining complete goal includes that source-policy coverage/productivity, the relation between source size and Term.nodes, exact order/counts, BOTH signed rank/unrank inverses, fallback/failure behavior, and fixed native Word/Int/cache/lazy-allocation correspondence. None is supplied by endpoint replay or by transferring one accepted branch to all siblings.
+
+No Haskell bug or fix is established by this audit. Keep the existing deferred-Mu/union and native-capacity findings distinct from unexecuted counterexample candidates.
+
+
+## Complete preceding published R199 record
+
 # R199: Original hereditary shared completion and actual native query ranges
 
 Verified at 2026-11-09 15:03 CET.
