@@ -1,3 +1,206 @@
+# Shared execution language checkpoint — 2026-11-09 21:06 CET
+
+## Restart and full objective
+
+The goal is active. Continue the whole-library formalization on `formalize`.
+Push permission remains in force for this branch. Preserve `?? .hypha/`.
+Read this common checkpoint before the older checkpoints below.
+
+Keep the optimized interned core. Keep constructor and equality work as
+secondary targets. Prove original-source soundness and completeness.
+Keep component count and general node count as separate contracts. Prove
+finite execution, actual size and order, and both signed API inverse
+directions. Include generated, rejected, failed, sibling and later states.
+Include warm caches, cache identity, fixed Word/Int behavior, lazy
+productivity, sharing, and full native/Haskell correspondence. Local
+conditional laws and passing builds do not complete this objective.
+
+The incoming base is `b2fdd8e049fd9a256a09706d903e9f5aa89d13b0`.
+The source/replay checkpoint is `3b2b8540246394d796b1922146b1e24852876ad8`.
+There are 14 new commits before the documentation checkpoint. Thirteen
+commits add proof packets. One commit records the public truncation replay.
+Main remains `849029e5b55a5d1c0152c24b55117b38419a6279` and is included.
+No existing Lean source changes except added Audit imports. No production
+Haskell source changes occur in this checkpoint.
+
+## Strongest current statement
+
+The previous prepared-driver result remains valid. At each chosen finite
+depth, current Packet, Fits, guard/carrier, selection, mass and reservation
+premises give a bound and one literal actual prepared outcome. Every larger
+work fuel returns that outcome. The proof follows the actual preparation,
+shared callbacks, sibling continuation and restart. It does not require a
+supplied future execution. The outcome can still be a stopped outcome.
+Its memo witness belongs to the actual caller and query. This statement
+does not identify every ghost memo bundle across all executions.
+
+This checkpoint adds language laws for the same actual shared incoming,
+dispatch, fold and cached-terminal executions. Constructive completion
+packets carry the captured-slot neutral-language equivalence. Stable child,
+traversal and ordinary selected-edge observations carry the same equivalence
+with the actual returned caller, query and cache. They use current resource
+and cache facts. They do not cast an old executed worker into the new worker.
+Pure backend-independent language lemmas remain reusable.
+
+The exact child predicate uses the bucket the implementation retains.
+Ordinary children retain the supplied bucket. Opaque children retain it
+when it contains a terminal trie. Other opaque children retain `[]`.
+Traversal and selected-edge laws retain this distinction. They do not prove
+that every supplied descendant constraint holds at an opaque boundary.
+
+The opaque finalization law uses the same actual shared-child producer and
+actual finalizer at its actual caller. Its original-slot soundness law also
+requires current decoding, prepared/source meaning agreement and the
+explicit retention condition: ordinary value, a terminal member, or an
+empty supplied bucket. The selected-edge soundness law still requires
+inherited validity, nonterminal input, fresh arity, child retention and the
+stated annotation/projection gates. These gates are not consequences of
+completion alone. No ProperState premise makes these results vacuous.
+
+The older original-source accepted-term/count bridge also remains valid.
+A term already accepted by the checked original root decodes with the full
+interned app4/filter2 shapes. Its Program.components count is the declared
+signed-size conversion. This counts variable occurrences and application
+components. It is not the general annotated AST node count. The bridge is
+not yet composed with every actual selected-driver output.
+
+## Biggest gap: original constraints at actual outputs
+
+The next semantic obligation is to connect actual prepared outputs to the
+original root. The new laws close local shared-execution meaning. They do
+not close full-driver source soundness. A full-bucket statement needs a
+reached-state invariant at opaque nonterminal children, or a justified
+semantics for the public truncation boundary. Do not replace the full-source
+objective with a retained-bucket objective without stating the change.
+
+A precise source boundary is now reproducible. The public fixture uses
+`U = b | mu X.(a | p(X))`, parent `r(U,a)`, and equality paths
+`[[0,0],[1]]`. The union is genuinely opaque and closed. The parent survives
+construction. Recognition rejects `r(b,a)` and accepts `r(p(a),a)`.
+`termsPrune` returns `r(Mu,a)`. `truncatedTerms` reports TruncatedRecursion
+at that position. The bad concrete term is not emitted. Exposing one layer
+of the child returns the valid concrete term. Recognition rejects the
+marker term too. Do not claim ground-term membership for every marker
+result. This replay does not establish a concrete public-output defect,
+an accepted-synthesis counterexample, or a Haskell repair.
+
+Internally, enumerateNode and shallow preparation allocate a nonterminal
+opaque child with an empty suspended bucket. The proposed assignment
+countermodel uses a nullary accepted child with a required descendant
+path. Its exact native resident Context and shared-run witness remain
+unproved. Accepted-synthesis reachability also remains unproved. An
+all-ordinary union is not a valid opaque witness: construction merges it
+into an ordinary node.
+
+Next: construct the exact native witness and actual shared row, or derive
+an original-source reached-cut condition that makes all discarded buckets
+empty or redundant. Inspect the public partial-term contract before
+classifying this as a Haskell defect. Then compose the prepared recursive
+outcome language law with the original checked-root bridge. Retain every
+current semantic gate until its producer discharges it.
+
+Other global gaps remain: source completeness and edge coverage; adequate
+original-input depth and a total work/capacity bound; Type annotation depth;
+actual order and general node count; both actual signed API inverse
+instances; complete native failure/history/context preservation; Word/Int
+limits; lazy productivity, sharing and cache identity; and whole Haskell
+correspondence. Membership/length selection rules do not prove coverage.
+Arbitrary pruning or typing callbacks need explicit contracts.
+
+## Haskell findings for external pickup
+
+The app4/filter2 decoder repair is already on main in PR 204:
+https://github.com/TharkunAB/cfta/pull/204 . The original repair commit is
+`113de3d85f7776d623c45fd3e31157e4254af1fb`. It compares the full interned
+Symbol shape. Only the fallback uses symbolText. Keep interned equality.
+The before/after replay covers all three encodings, 13 tests and formatting
+in `lean/restart-evidence/20261109-synthesis-decoder-shapes/`.
+`cfta-generator/src/Data/CFTA/Gen/Synthesis.hs` SHA256 remains
+`dfffbf454516649e115d890e65b6289217dbcf352ccb08e86415d719b32fbc3a`.
+`cfta-generator/test/Data/CFTA/Gen/SynthesisSpec.hs` SHA256 remains
+`8f931875e18cd32a21a58072de1363530df3b03189b576fca614f009063fbe47`.
+No new production Haskell fix is made or required by the new replay alone.
+
+The new boundary packet is
+`lean/restart-evidence/20261109-opaque-bucket-boundary/`.
+It contains repro.hs, observed.txt, audit.md, check.py, checked.json and
+README.md. Its checker builds the current library offline in the project
+Nix shell with GMP, runs the public fixture, compares the complete output,
+and checks exact source hashes. Run it from any working directory under
+the serial 4 GiB cap. The historical audit was written before the replay;
+the replay and observed output supply the later executable observation.
+The packet contains no source archive or compiled build tree.
+
+## Verification and resource limits
+
+Thirteen new Lean modules expose 14 public laws in 2520 lines.
+Every own-source diagnostic check passes with warnings as errors. Each
+packet checks all public declarations, the real namespaces, exact source
+hashes and standard Lean axioms. Existing source declarations remain.
+
+The complete Audit frontier passes: 5677 live modules, 14 affected modules,
+4674 Audit imports and 92194 axiom-report records. These are validation
+counts, not completed-goal counts. First Audit replay took 7.39 seconds.
+All 15 portable packet checks pass from `/tmp`: thirteen proof packets,
+one complete Audit packet and the public Haskell build/replay packet.
+The portable Audit replay took 2.28 seconds. The Haskell output is exact.
+
+Keep ONE serial heavy compiler/test process. Use
+`/home/tritlo/Code/heavy-management/bin/capped --mem 4G`.
+The checked limits are memory.max=memory.high=4294967296, swap.max=0.
+Keep LEAN_NUM_THREADS=1. Do not raise memory or concurrency.
+Runtime helpers and small logs are in
+`/tmp/mcfta-shared-language-20261109-2036/`.
+The latest scan measured 28953658 bytes of visible regular files in `/tmp`
+and 254268633088 free bytes. Six inaccessible entries were excluded.
+Do not copy source trees, object trees or archives into `/tmp`.
+
+A bounded independent contract review found no concrete defect. It checked
+actual worker linkage, effective buckets, opaque restoration, selected-edge
+gates, absence of ProperState vacuity and absence of closure-from-residency
+inference. The review does not supply whole-driver soundness.
+
+## New proof modules and public laws
+
+- `SourcePruningEnumerationSharedCachedTerminalNeutralLanguage` (244 lines):
+  `MicroCFTA.SourcePruningEnumerationSharedCachedTerminal.complete_neutral_semantics`.
+- `SourcePruningEnumerationSharedChildStableNeutral` (268 lines):
+  `MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.ChildDispatch.stable_neutral_semantics`.
+- `SourcePruningEnumerationSharedDispatchNeutralLanguage` (237 lines):
+  `MicroCFTA.SourcePruningEnumerationSharedDispatch.dispatch_complete_neutral_semantics`.
+- `SourcePruningEnumerationSharedDispatchObservedNeutral` (119 lines):
+  `MicroCFTA.SourcePruningEnumerationSharedDispatch.observed_neutral_packet`.
+- `SourcePruningEnumerationSharedFoldObservedNeutral` (155 lines):
+  `MicroCFTA.SourcePruningEnumerationSharedCachedTerminal.observed_neutral_semantics`.
+- `SourcePruningEnumerationSharedIncomingNeutralLanguage` (163 lines):
+  `MicroCFTA.SourcePruningEnumerationSharedIncomingNode.run_complete_neutral_semantics`.
+- `SourcePruningEnumerationSharedIncomingStableNeutral` (127 lines):
+  `MicroCFTA.SourcePruningEnumerationSharedIncomingNode.stable_neutral_semantics`.
+- `SourcePruningEnumerationSharedPreparedOpaqueLanguage` (252 lines):
+  `MicroCFTA.SourcePruningEnumerationSharedSelectedOpaqueDispatch.stable_complete_neutral_resources`.
+  `MicroCFTA.SourcePruningEnumerationSharedSelectedOpaqueDispatch.stable_complete_sound_retained_resources`.
+- `SourcePruningEnumerationSharedSelectedEdgeNeutralResourceSoundness` (123 lines):
+  `MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.stable_complete_neutral_sound_current_resources`.
+- `SourcePruningEnumerationSharedSelectedEdgeStableResourceNeutral` (164 lines):
+  `MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.stable_complete_neutral_semantics_resources`.
+- `SourcePruningEnumerationSharedTerminalNeutralLanguage` (329 lines):
+  `MicroCFTA.SourcePruningEnumerationSharedCachedTerminal.terminal_complete_neutral_semantics`.
+- `SourcePruningEnumerationSharedTerminalStableNeutral` (116 lines):
+  `MicroCFTA.SourcePruningEnumerationSharedCachedTerminal.stable_neutral_semantics`.
+- `SourcePruningEnumerationSharedTraversalStableResourceNeutral` (223 lines):
+  `MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.ChildTraversal.stable_complete_neutral_semantics_resources`.
+
+The corresponding proof packets use the module contract in their source
+comments. `20261109-shared-language-compatibility` records exact frontier
+hashes and the full Audit replay. The runtime verified-modules.json records
+all source hashes. commit-ledger.json records each small commit.
+
+Do not mark the goal complete or blocked at this checkpoint. Continue the
+source-constraint and prepared-outcome obligations above. The older bytes
+follow without changes.
+
+---
+
 # R207 checkpoint: prepared shared finite-depth resources closed
 
 Updated 2026-11-09 20:31 CET. Full-system goal ACTIVE. Previous turn: PROGRESS.
