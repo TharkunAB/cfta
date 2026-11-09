@@ -1,3 +1,267 @@
+# R199: Original hereditary shared completion and actual native query ranges
+
+Verified at 2026-11-09 15:03 CET.
+Base R198 is e1f39b798b6faceb540107bcd893a0575380b8b1.
+Seven modules add 16 public laws. Every strict source check passes.
+The full affected Audit and all eight portable packets pass.
+The seven proof commits end at b17ca9ca133f7e612111931458d4c6d7bb0b42dd.
+This handoff and the additive Audit form the eighth commit.
+The goal remains ACTIVE. Retain the full original accepted-input,
+complete source enumeration, native capacity and Haskell correspondence
+objective. Keep the optimized interned core and older constructor/equality
+proofs, counterexamples, repairs and marked drafts. Preserve .hypha.
+No Haskell source change, new Haskell bug or Haskell fix is included.
+Record every future Haskell repair in root FINDINGS.md.
+The complete published R198 document follows this section unchanged.
+
+## Strongest current original-input statement
+
+OriginalHereditarySharedCompletion.accepted now starts from firstOrderRaw
+acceptance and derives ONE original build, allocation preparation and cold
+caller. Under ONE computed combined capacity test, the literal shared node
+worker returns an available, language-preserving result at every sufficient
+outer fuel. All larger outer fuels return the SAME result and full caller.
+The same completed endpoint carries full recursive Program ValueFields,
+closedness, conditional NodeFields, Type readiness, Origin GuardHeap,
+complete captured-owner memo History, physical Post, Frame/Fits, annotation
+carrier and one genuine shared graph with canonical ordered endpoint reads.
+All initial classifications follow from that same accepted original source.
+No independent initializer, future field/context supplier or old range plan
+is an input. The Type facts describe formal annotation structure and state;
+they are not a separate Haskell typechecker or runtime correspondence proof.
+
+The numeric Room test remains explicit. It is not discharged for every
+accepted input at a fixed native width. Complete enumeration, total driver
+work and full Haskell execution remain separate obligations. The theorem
+does not yet return graph-wide shared Checks or a literal all-outcome root
+range predicate. Do not infer those facts from the successful endpoint.
+
+## Actual shared traversal field proof
+
+HereditarySharedOuterTraversal.nodeCall_fields replaces the old traversal's
+range-dependent execution family with the literal shared worker. Its six
+private phase laws use strong induction on actual outer fuel. Each successful
+head or sibling supplies its own SAME-state resource receipt through
+SharedOuterInitialActual. The next sibling uses that actual returned seed,
+Context, Frame/Fits and carrier. Current input classifications remain genuine
+local premises here; the original-input wrapper derives them from construction.
+
+The edge step uses R198 SharedOuterEdgeWorker.edgeCall_verified_fields.
+The full captured owner, inherited constraints and actual evaluating cell
+supply warm and cold memo fields. Mu uses pure reconstruction completion and
+physical effects; it does not cast an old worker equation. Node publication
+uses the actual body frame and complete captured-owner equality. The final
+public package selects ONE graph/read/Post/resource receipt together and
+attaches state-only fields. It does not join two independent global bundles.
+
+OriginalHereditarySharedCompletion reuses ONE OriginalSharedRankCompletion
+built/prepared/completed package. Constructed derives Context on those exact
+witnesses. Original source field, Type and guard producers derive the initial
+metadata; the cold memo history is empty. The field traversal runs ONLY at
+the computed BASE envelope outer fuel. The original combined Room covers
+that base schedule by cover_ge. Literal stable success transports the fixed
+endpoint fields to every larger outer fuel. It does not prove Room for every
+larger forecast or identify larger-bound internal traces.
+
+## Genuine native query range producers
+
+- ClassPassInitialRanges exposes the worker-independent class and pass
+  arguments. Initial current resources and class reservations derive the
+  unchanged native edit ranges. Tail completion identifies each actual
+  completed class-fold prefix. No old Scan is an input.
+- SharedScanInitialRanges defines a NEW predicate over the literal shared
+  gate/query/decision sequence. It quantifies all five actual Scan bounds.
+  A reached seeded query requires SeededRanges BEFORE its outcome is matched.
+  Thus the query is checked even when it later fails. After is True on a
+  failed prefix only for its unexecuted continuation. Actual successful gates
+  supply their own Frame/Fits, and actual seeded success aligns only its own
+  intermediate endpoint. The shared decision uses its own p/h resources.
+- SharedParentUniformRanges.classes_ranges and resident_ranges derive new
+  ClassesRanges, LocalRanges and ResidentRanges. ClassesRanges includes ALL
+  five literal Scan bounds and every actual successful Scan/Required cut.
+  A genuine preparation uniqueness proof aligns its Scan and Required states
+  individually. The unchanged class-pass producer then uses that exact
+  prepared state. No Parent endpoint or canonical read schedule is reindexed.
+  Current Context, Frame/Fits, resident input and a finite Shared UniformReserved
+  are the initial hypotheses. A completed Parent is not required.
+- AllocatedSharedPartialChecks defines new Trace/Direct/Reach/Checks over
+  ONLY the eight shared graph families. Its seven structural laws restrict
+  the exact new ResidentRanges leaf. CallRanges follows actual beginEdge
+  and its captured evaluated owner. These are structural laws; they do not
+  derive an initial graph-wide check certificate.
+- SharedOuterInitialRanges.rows_call_ranges derives that owner range at EVERY
+  supplied literal six-phase Reached prefix ending at a nonempty row entry
+  with remaining outer fuel. SharedOuterInitialPrefix supplies the current
+  seed, Context, Frame/Fits, carrier, Inputs and residual Room from ONE root
+  forecast Room. Parent reservation follows parent <= descendants <= rows.
+  Actual beginEdge retains the checked state and supplies the captured owner's
+  readiness and residency. No edge, Parent or whole-root success is assumed.
+  This covers a Parent that later fails. It does not yet extract every nested
+  runtime fault prefix or prove graph-wide Checks.
+
+Native node/edge WordRanges are distinct from constraint-store validity,
+heap-reference validity, semantic readiness and annotation carrier. Gates,
+shared conjunction and enabled-empty create exposure/equality work rather
+than the preceding native intersection request. That preceding request still
+needs its own native range certificate in IncomingQuery. Current capacity
+facts are conditional, and Haskell machine overflow is not proved absent.
+
+## Verified sources and incremental commits
+
+- SourceCurrentAllocatedSharedPartialChecks: 193 lines, 7 public laws.
+  Commit 989f6ada19c843c6ea3fa7450c99836cdf84ca09.
+  SHA256 e0e2aa0d521ea792ce67b0eb9d08816fa4d725aefdf8a883d34043c05870822e.
+- SourceCurrentClassPassInitialRanges: 109 lines, 2 public laws.
+  Commit 20bdfcef3c27e82f92a17706a19130b25f981a90.
+  SHA256 41f087933f9ee6b20dd08c9200da26e3c05e8c06dc48a8b6548436d2ec91e81e.
+- SourceSynthesisHereditarySharedOuterTraversal: 626 lines, 1 public laws.
+  Commit 71356d8b29dcb1657998f20683c380b2722ffbcb.
+  SHA256 0af525168d8145a3851b3e26cf102bc99e193c0a7d44e0c60dcce56605d1eb36.
+- SourceSynthesisOriginalHereditarySharedCompletion: 136 lines, 1 public laws.
+  Commit ba3a53e9aed6022a9882c2c83c3dcced723dd232.
+  SHA256 448c0b4f9aec6177ae45e07ed1806091f40f40e333d01acf35480674d21ea681.
+- SourceCurrentSharedOuterInitialRanges: 85 lines, 1 public laws.
+  Commit b17ca9ca133f7e612111931458d4c6d7bb0b42dd.
+  SHA256 91a8b27d75660555170db909dc7d115fc05252886c0708bfc9e38f9295da76e1.
+- SourceCurrentSharedParentUniformRanges: 198 lines, 2 public laws.
+  Commit c6aeec8fdf1c1e8f27b07ece3409e97edf124a23.
+  SHA256 594c2d6736e7d86c1c9ee6acdc3ebb95ba592735eb551fcfd6d087e3d9287610.
+- SourceCurrentSharedScanInitialRanges: 312 lines, 2 public laws.
+  Commit 7e3772ab722e200bda0cc5d0f84ebf1e89e157c1.
+  SHA256 ab92d0ba379368dbf2593587497167288fd77e42869c1227ba3cad66ae991ac8.
+
+## Validation, publication and storage
+
+Every strict packet treats own-source warnings as errors, checks every
+public declaration in its real namespace and emits explicit #check and
+axiom reports. The source hashes match the compiled frozen files. Only
+propext, Classical.choice and Quot.sound occur in their axiom reports.
+No previous public declaration or Audit import is removed.
+
+The full affected Audit passes with 5,572 live modules, eight affected modules,
+4,569 direct imports and 90,917 theorem axiom reports. Its first build takes
+53.43 seconds and reaches the existing 4,096M cap. It passes without increasing
+that cap. All eight portable packets pass from cwd /tmp, with a 736M peak.
+Keep ONE compiler, LEAN_NUM_THREADS=1, memory.max=memory.high=4 GiB and swap.max=0.
+Do not increase the cap or concurrency. No Haskell tests or formatters are
+needed for these Lean-only changes.
+
+Compatibility: lean/restart-evidence/20261109-shared-outer-fields-compatibility.
+Runtime: /tmp/mcfta-shared-outer-fields-20261109-1438.
+Only small helpers, reports, manifests and the next-step audit are stored
+there. No archives or proof-tree copies are created. At 15:01 CET readable
+/tmp is 24.34 MiB and free space is 241.18 GiB. Continue monitoring /tmp.
+Preserve necessary proof work and active runtime files.
+
+Main was refreshed before R199 source work. It remains
+9f5f77783b9f936a1edf4225373cbad9dc6a9ed5 and is included in formalize.
+R198 publication and the full board record were verified at seq 1056.
+Push this verified batch to the already-authorized formalize branch. Fetch
+and verify the exact remote head and included main ancestry. Then post and
+read back the full board status. Preserve unrelated .hypha.
+
+## Immediate next cut and full remaining scope
+
+Prove literal all-outcome shared outer range coverage next. Add the NEW eight
+literal WorkerRanges predicates. Its edgeBody must ALWAYS require the new
+ResidentRanges, even when Parent fails. Copying the old failed-Parent => True
+case would omit real executed queries. Then use the same six-phase current
+seed resource induction to derive these predicates from ONE initial phase
+Room with NO whole-root success premise. Each failed prefix retains its own
+left range check; only the unexecuted continuation is omitted. Successful
+siblings supply their actual next resources through SharedInitialActual.
+Attach the base-bound literal range to the SAME original completion package.
+Endpoint stability does not itself transport internal checks to larger bounds.
+
+Graph-wide Checks attachment remains separate. Direct/Reach can expose hidden
+intermediate physical indices. Root graph proof irrelevance does not align
+those indices. A genuine shared graph Completion -> ChecksComposition ->
+InitialChecks port can align them by success uniqueness. Use replay at larger
+bounds only for determinism, never to infer a larger forecast's capacity.
+The detailed source-backed audit below compares these two proof cuts.
+
+Retain all original reached, sibling, generated, rejected, failing, failed,
+returned and later states; source Type-sites and Program occurrences; real
+finite DAG progress for generated intersections and warm winners; complete
+source-size/count order; BOTH signed rank/unrank inverse laws; AllSized,
+fallback/failure and productive infinite languages; fixed native Word/Int,
+hashes/maps/sets/caches/lazy allocation and complete host/Haskell correspondence.
+Consume an occurrence/demand, merge distinct finite cells, or repeat a REAL
+ancestry key. Arbitrary guarded Mu is not an original starvation witness.
+No verified executed original-input starvation counterexample is known.
+
+The new shared worker, the pruning continuation/incoming-cache chain with
+its old selectors and fallback, and PruningAction.prepare through heap-only
+NativeView.narrowAt remain distinct execution chains. Do not claim complete
+enumeration or Haskell sharing from the cold worker theorem. Keep the full
+goal active until its original requirements are actually verified. Component
+law counts and passing builds do not establish that completion.
+
+## Source-backed next-step audit
+
+Read-only audit SHA256 1ef6405cef8b8a3e74be6b84131ba5d0567384fe45a2f35ef09600d3c5a52941.
+
+# Shared literal ranges and graph Checks: next cuts
+
+2026-11-09 14:59 CET. Read-only audit. No source, compiler, or Git changes.
+
+## Recommendation: prove literal all-outcome ranges first
+
+The smallest useful actual-system cut is TWO new modules: a shared literal range interface, then its initial resource producer. This is stronger for runtime failures than proving Checks only for a completed graph. Keep the graph-wide attachment as a subsequent three-module structural port. Do not claim the direct literal result already proves every arbitrary Direct/Reach path in the proposition-valued completed graph.
+
+### 1. SourceCurrentAllocatedSharedPartialWorkerRanges
+
+Version the 187-line old PartialWorkerRanges to the actual shared worker. Retain After, the eight branch-sensitive predicates, after_of_done, nodeCall_of_evaluate and edgeCall_of_evaluate. Change the edge-body definition substantially:
+
+`edgeBody (_fuel g s r e p h m c n budget) request before := SharedParentUniformRanges.ResidentRanges budget request before`.
+
+It must not inspect Parent's outcome. In particular it must NOT copy the old done -> ResidentRanges / failed -> True split (old source lines76–83). An edge evaluating its captured owner always requires that owner's current range plan, even if the literal shared Parent later fails. Ready/busy/absent edge demands execute no body; their call predicate can remain True. After is True on failure only for an unexecuted continuation; the check of the failed prefix itself remains the left conjunct.
+
+ResidentRanges is the genuine R199 current-input predicate (`SharedParentUniformRanges.lean:59`): each actual live field load supplies LocalRanges, whose ClassesRanges.scan quantifies all FIVE literal Scan bounds and whose pass clause follows each actual successful Scan and Required cut (`:42`). It is not a canonical-read certificate or a supplied future range.
+
+### 2. SourceCurrentSharedOuterInitialLiteralRanges
+
+Six-phase strong induction on the ACTUAL outer fuel, using the existing schedule and no whole-call success premise. Suggested public six APIs:
+
+`node_call fuel seed initial frame fits known inherited available room : NewRanges.nodeCall fuel g s r e p h m c n budget request before`
+
+and old-shaped body/rows/descendants/children/walk analogues. Current caller width is bits+2. The one room is `Room bits (Schedule.<phase> fuel budget seed).2`; inputs are the phase's current inherited readiness and Available/Values/Edges, exactly as SharedOuterInitialActual. All nine observed lower bounds are arbitrary. No Type fields, closed-input classification, completed suffix, native profile callback, or future Context is added.
+
+Proof branches:
+
+* Node demand: literal beginNode; evaluate derives running Context with SharedPartialCallSteps.node_start and unchanged checked/merge/fourth components. Transfer Frame/Fits/carrier at the same seed and use the body IH. Hits/busy/absent are query-free. Body ordinary at fuel f+1 uses rows IH at f; other node forms require no Parent range. Fuel exhaustion also requires no unexecuted row work.
+* Rows at f+1: FIRST derive the head CallRanges before inspecting its outcome. Reuse `SharedOuterInitialRanges.rows_call_ranges:66` at the LOCAL reflexive phase `.rows (f+1) inherited (original::rest) before`; its initial Room is the current row Room. It derives the exact evaluated captured owner's ResidentRanges before Parent success/failure is known. Then case the literal shared edgeCall. Failure discharges only After; the left head range is already proved. Success obtains the SAME edge Post/Frame/Fits/carrier from SharedOuterEdgeGuardAlphabet.edge_call at `edgeSeed=Schedule.parent budget seed`. Descendants IH runs at f and edgeSeed. Only an actual successful descendants equation permits the row tail; SharedOuterInitialActual.descendants on that SAME equation supplies current Context/resources at `childSeed=Schedule.descendants f budget edgeSeed`. Tail IH runs at f and childSeed. Extract all residual Room by the existing parent/descendants/rows ge laws.
+* Descendants: error/none inherited prefix executes no child query. For an actual some payload, identify it with InheritedNumeric.resident_complete, then use its same prefix Context/Frame/Fits and child IH. The raw constructor after children adds no recursive Parent check.
+* Children: contradiction erases without queries; live uses walk IH at the same outer fuel and seed.
+* Walk at f+1: derive actual descent metadata with InheritedNumeric.descent; head node IH at f/seed establishes the whole reached head range irrespective of its outcome. Only actual head success exposes the tail. SharedOuterInitialActual.node_call on that SAME success supplies the tail Context/Frame/Fits/carrier at `Schedule.node f budget seed`; tail IH at f uses that seed. Failure does not require metadata at the returned fault snapshot.
+
+These are the SAME resource transitions already checked in SharedOuterInitialActual at lines178/251/298/353 and the newly checked hereditary traversal. The proof does not need a completed root, a graph completion theorem, or an edge phase in the six-case Reached relation. R199 rows_call_ranges already bridges that missing edge phase through actual beginEdge and the actual owner at the local row entry.
+
+### Optional third immediate module: original attachment
+
+A new original shared checked-completion attachment can consume the SAME selected built/prepared/caller package as OriginalHereditarySharedCompletion, reconstruct its initial Context/Frame/Fits/carrier as that proof already does, and add the new literal nodeCall range at BASE envelope fuel output.1 and the computed nine `need` bounds. Keep the existing actual graph/read/Post/fields package intact; no second initialization or independent final global bundle is joined.
+
+The original combined capacity test covers the base root forecast by cover_ge. It does not cover schedules at every arbitrarily larger outer fuel. Stable success preserves the endpoint for larger bounds, but endpoint equality alone does not prove larger-bound internal range predicates or read-trace equality. State the literal range at base bounds unless a separate same-control-trace transport is proved.
+
+## Exact graph-wide Checks cut, when required
+
+Current SharedPartialChecks.lean:94–136 defines Direct over eight graph families; Checks at :159 quantifies ALL Reach paths to edge bodies. Root graph proof irrelevance does not align hidden intermediate physical indices. For example, Direct.rows_descendants/rows_tail can select another edge result and middle state, and Direct.walk_tail can select another head middle state. Equality of the enclosing proposition-valued graph proofs gives no usable injection of those hidden existential indices. Only AFTER those physical inputs/results/states agree may proof irrelevance identify the remaining graph certificates.
+
+The source-backed lowest-risk port is:
+
+1. NEW AllocatedSharedPartialWorkerCompletion (old402L): eight graph -> StableRun theorems with ten sufficient independent bounds. Keep a NEW StableRun over SharedWorker.Outcome; old Outcome/Fault is a different carrier. At the new EdgeBody.parent constructor, start from its GIVEN literal shared Parent success at nine bounds, and apply SharedParentWorkerStability.edge_done_stable:45. No Parent semantic-graph bridge, Context, Room, or future supplier is needed.
+2. NEW AllocatedSharedPartialChecksComposition (old~378L): preserve private Input/input and compose. Its stable_unique compares two completed graphs at componentwise maximum of the two derived bound tuples; constructor proofs then align all intermediate state/result indices before using proof irrelevance. This comparison is ONLY a determinism proof. Never infer a larger replay fuel's resource Room. New edge_body takes the genuine shared ResidentRanges directly; omit the obsolete old resident_ranges conversion.
+3. NEW SharedOuterInitialChecks: use a six-phase literal runtime induction with the same current resource schedule and ONE root Room. Derive each edge-body check using rows_call_ranges before the observed outcome; compose child Checks with the new constructor laws. At the public boundary accept the GIVEN root SharedGraph with the exact same request/before/result/after as the literal successful run and derive Checks for that graph. One internally constructed checked graph can be replaced by the given proof only at those fully equal root indices. The old whole-proof strategy plus the new literal ranges can support this adapter, but no arbitrary subgraph-to-runtime equality may be assumed.
+
+A direct mutual graph-determinism lemma could replace graph completion solely for intermediate alignment. There is no existing such shared lemma in the inspected sources; its dependent cases would be another new proof. The copied completion/composition route already has mature matching source proofs and is safer than asserting that arbitrary Direct paths are automatically the selected runtime tree.
+
+## Scope
+
+The literal range producer advances ALL actual executed query prefixes, including a Parent that fails, without claiming current Ready at the returned fault heap. The returned diagnostic/private snapshot remains unchanged. An independent public extraction theorem for arbitrary nested runtime faults may still be needed to expose the precise parent-entry/row prefix externally. Do not confuse that entry with the possibly later returned Parent-fault physical heap. Completed-graph Checks alone does not cover failed whole runs. Neither route proves source error absence, fixed native-word capacity for all sources, complete driver enumeration, native CAF initialization, or Haskell lazy sharing correspondence.
+
+
+---
+
 # R198: Complete shared Parent fields and captured edge memo fields
 
 Verified at 2026-11-09 14:30 CET.
