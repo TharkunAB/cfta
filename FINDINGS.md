@@ -1,3 +1,226 @@
+# R183: initial-derived finite shared calls with the full caller contract
+
+Updated: 2026-11-09 06:25 CET. Full goal ACTIVE. Formalize pushes authorized.
+Proof HEAD before documentation commit: 645ad71925fda489dda76eb191a78b007f8b9cf9.
+Read current Git/runtime publication.json for the final published HEAD.
+Main 9f5f77783b9f936a1edf4225373cbad9dc6a9ed5 remains integrated.
+Preserve unrelated .hypha/. The complete published R182 document follows
+unchanged. Preserve every older proof, counterexample, repair and marked
+draft. The previous goal turn made progress; this turn also adds checked
+source laws. Keep the original complete formalization objective intact.
+
+## Strongest current statement and remaining gap
+
+The shared candidate now has INITIAL-DERIVED SUCCESSFUL COMPLETION.
+SharedWorklistCompletion.explore_initial takes only CURRENT Ready and query
+Available. It derives finite p/h and one drained WorkState returned by the
+literal exploration at EVERY larger P/H. SharedWorkerCompletion.call_initial
+also derives the SAME answer, full private state and fourth memo at all
+larger bounds. The ORIGINAL algorithmic budget stays fixed, including zero.
+No future successful force/sample/run, graph, closure, queue-validity or
+Frame supplier is a public premise. p/h remain proof observations, NOT
+native API size/fuel arguments. These existential bounds are NOT computed
+resource ceilings or a native overflow guarantee.
+
+AllocatedSharedConjunctionCompletion.finite takes full CURRENT Context,
+query Available, and the three CURRENT annotation/causal/arity heap
+predicates. It derives ONE actual successful base call, ONE ordered global
+bundle, full Post, all three preserved heap predicates, a conservative sound
+answer, query availability and ordered global extensions at that SAME
+actual physical endpoint. Successful True proves emptiness; False remains
+inconclusive under the fixed algorithmic budget. Exact call replay at every
+larger bound retains the SAME answer, private state and fourth memo. CallReads
+is indexed ONLY by the derived BASE p/h. The theorem does not assert the
+same receipt at every larger pair without a separate receipt replay proof.
+
+R182's original WEAK SemanticHeap/Covered[]/Available/closed-query contract
+remains separate: every actual success/fault heap retains semantic validity,
+coverage, growth and issued history without Ready/CostHeap. It does not give
+Boolean/Post correctness under those weaker premises. R181 all-outcome full
+Post/three invariants and exact failed diagnostics/private snapshots remain.
+The new finite theorem removes their future-success requirement for one
+successful base call. It does not weaken fault guarantees.
+
+The immediate blockers are now an explicit shared resource forecast and
+lossless checked failure/private-state adapters before BOTH formal callers.
+They still select DemandWorker. Full original-derived COMPLETE enumeration,
+source leaf-size/count/order/BOTH signed inverses and Haskell correspondence
+remain open. A verified candidate is not selected execution or full-library
+completion. Runtime next-cutover-target.md names exact next consumers.
+
+## Actual completion and replay composition
+
+CellsCompletion.force_done_stable replays an actual successful force at
+larger p/h with SAME complete Cells state and no Ready premise. force_complete
+derives sufficient stable bounds from CURRENT Ready, CellsValues, CellsClosed
+and a PRESENT handle. Actual singleton projections derive their own forest
+completion graphs. Finite pending jobs, first Empty stop, current effects
+and maxima combine the exact prefix/tail bounds. The same output retains
+Effects, all cell invariants and resident closed nodes. Symbol/Formula are
+generic. No future force success, post-state or completed graph is supplied.
+
+RowsCompletion.prepareTuple_success derives the literal equality fold from
+CURRENT Ready and resident raw tuple edges. fold_heap_correct excludes BOTH
+.error and .ok none; actual contradictory tuples still return done none.
+nextRow_success uses CURRENT SpineInputs and PRESENT spine. Finite rejected
+prefix recursion retains the literal equality-memo changes, raw heap/spine
+identity, cached tails, exhausted rows and live row endpoint. It needs no
+projection allowance, closure or SameArity premise.
+
+QueuedHandles.Invariant combines existing cached/table HandleValidity.Valid
+with allocation bounds for EVERY requirement task in the actual queue.
+initial/visit_preserves/step_preserves/run_preserves/explore_handles derive it
+on success AND failure. nextRow_handles derives all newly queued handles from
+that actual row publication; force preserves length and row preparation only
+appends. Coverage's reverse direction is no longer used as a substitute.
+This closes the missing formal invariant; no native bug was established.
+
+ReadExtensionality.readRows_credit_eq/readTable_credit_eq give FULL Option
+equality under ANY two valid current credit certificates, including failed
+reads. readTable_ext also permits different budget/pending metadata when
+actual storage/table match. Cached-tail graphs recredit actual row reads.
+No Ready/cost/Cached/success premise or chosen-vector equality is required.
+
+WorklistStability.visit_done_stable/step_done_stable follows successful
+sample/force equations. Finite Run replay plus deterministic Run uniqueness
+identifies the complete table/pending/cells/spines/native physical state;
+explore_done_unique compares arbitrary successful bounds. WorkerStability
+uses two independently derived endpointCredits_valid facts and credit-
+independent readTable, never Classical.choose vector defeq. Its successful
+decision/call replay and call uniqueness retain the same full saved memo.
+Neither replay source requires Ready or supplies adequate bounds by itself.
+
+WorklistCompletion derives each actual local successful transition from
+CURRENT value/closed/queued invariants. Frame.present plus Credits.length
+supplies row presence; queued bounds supply cell presence. An actual false
+skip supplies closed sampling operands. ORIGINAL B fixes the private rank
+vector. Public frame WF, step_frame and step_decreases derive the next frame.
+Actual step_values/step_closed/queued preservation supply current IH inputs.
+Finite maxima and successful step replay derive a drained Run at every larger
+bound. Deterministic Run comparison identifies literal explore despite its
+internally chosen frame certificates. WorkerCompletion derives the exact
+cached read and grow(table.length+1), then hit/miss publication. The strongest
+caller theorem applies GuardArity.verified ONCE at that same derived base
+call, selecting its ONE actual final bundle/Post. No other call is joined.
+
+Independent read-only reviews found no hidden Ready/future premise in replay,
+no credit defeq assumption, no weak Boolean claim and no substituted eager
+execution. Small proof repairs retained all public signatures: rebuilt an
+indexed Valid from its unchanged fields; matched lowered do branches before
+bind equality; closed two local cursor/state aliases by rfl; explicitly
+projected heap from the actual equality-memo update; split a mixed namespace
+open command. No old proof, API premise or heartbeat setting changed.
+
+## Next numeric/adapter target and full original scope
+
+Inspect BOTH old Allocated*ConjunctionWorker Outcome interfaces. Their old
+fault/checked-state/memo carrier cannot erase the shared fault or full private
+WorkState. Build a concrete lossless adapter and port each required weak,
+strong, resource and exact replay consumer before selection. Do not declare
+another unselected wrapper to be adoption. Do not discard old proof artifacts.
+
+Derive a NEW quantitative forecast for actual deferred forcing, including
+forces after budget zero. Old DemandNumeric.call_bound/call_complete does
+not apply after reordering; eager F0=r is not justified for deferred work.
+Begin with CURRENT cell job-count/operand-size and actual projection cost,
+then derive all stored-work bounds from the ORIGINAL budget/input/profile.
+No caller future-work supplier. Prove endpoint Fits and SAME-call replay at
+computed workerFuel/readerFuel ceilings. BOTH WorkerResources.finite_resources
+and raw_done_resources require Context+Fits+Available and SAME receipt/Post/
+answer/final Fits. Keep initial domain capacity unchanged as required.
+Lift new success stability/uniqueness through BOTH exact adapters. EnabledEmpty
+still uses old tuple worker at budget10000; global worker also uses Demand.
+
+Full goal remains original-derived sufficient COMPLETE enumeration across ALL
+generated/rejected/failing/returned/subsequent/sibling work; Type/Program
+occurrence identity; exact accepted terms by SOURCE Program leaf-size/count/
+order/BOTH signed inverses and actual sparse classes; AllSized/fallback/
+productive infinity/lazy structures; full Haskell maps/caches/hashes/Word/Int/
+allocation/wrappers/lookup/Curried/Specftacular and GHC demand/publication.
+Source leaf size, Term.nodes and recursive fuel are DISTINCT. Keep size-free
+fully/until. R164 original completion retains its computed initial Room;
+R171 same-return finite driver keeps chosen depth/capacity, not adequate
+depth. Preserve older constructor/equality as secondary targets. Never
+substitute local success, carrier/closure/lookup assumptions or a green Audit
+for the complete original objective. Goal stays ACTIVE.
+
+## Verification, source hashes and restart
+
+Nine NEW modules contain 24 NEW public laws. Strict own-source warnings,
+exact public names/namespaces/source hashes and standard axioms only
+(propext/Classical.choice/Quot.sound) pass. Every old proof module and packet
+remains unchanged. Nine additive imports precede complete old Audit bytes.
+The full affected closure is 10 of 5429 modules. Audit has 4426 imports and
+88979 theorem axiom reports. PASS in 9.69 seconds, peak 2737 MiB. All nine own
+packets and full compatibility reproduce from cwd /tmp, peak 185 MiB. Source
+plus pinned Nix/Lake toolchain suffice; no archive is required. Compatibility:
+20261109-shared-completion-compatibility (README/check/checked/frontier).
+No theorem count or green build certifies full-library completeness.
+
+Root runs ONE serial compiler through heavy-management/user-bus; actual
+memory.max/high 4294967296, swap.max 0, LEAN_NUM_THREADS=1. No global queue or
+concurrency change. All compiler handles are terminal. The graph is acyclic;
+every affected source snapshot is exact. Bounded failure logs preserve the
+reported elaboration repairs. Measured runs:
+- 2026-11-09T06:00:47 python3 4G 486M 1
+- 2026-11-09T06:01:31 python3 4G 190M 1
+- 2026-11-09T06:02:41 python3 4G 217M 0
+- 2026-11-09T06:04:16 python3 4G 211M 1
+- 2026-11-09T06:06:50 python3 4G 223M 0
+- 2026-11-09T06:07:51 python3 4G 192M 1
+- 2026-11-09T06:10:16 python3 4G 266M 0
+- 2026-11-09T06:13:15 python3 4G 673M 0
+- 2026-11-09T06:16:48 python3 4G 312M 1
+- 2026-11-09T06:17:47 python3 4G 229M 0
+- 2026-11-09T06:19:25 python3 4G 2737M 0
+- 2026-11-09T06:20:28 python3 4G 185M 0
+- 2026-11-09T06:24:07 python3 4G 172M 0
+
+Proof commits:
+- ba631370c4b8e5dfd9fc644e89fb5d6524f9054f Derive stable completion of current requirement cells
+- bd5b9a067d72037be8af02a224d3626154e6cdf7 Complete resident shared rows from current equality readiness
+- 9629d38aa5314ba3f4516773bd3e40f34197daa5 Derive every queued requirement handle from actual allocation
+- e13da0596dedc80b628670a801234c8434d87d56 Make cached table reading independent of valid credit certificates
+- 463d42c06b0e1a5a504646591371518724936666 Replay successful shared execution with the same complete state
+- bbf8e763a86a96fe7ace440b499fca11c8cd0010 Derive finite shared calls from the current initial state
+- 645ad71925fda489dda76eb191a78b007f8b9cf9 Retain the full caller contract at a derived finite shared call
+
+Frozen source SHA256/public laws:
+- SourceCurrentAllocatedSharedConjunctionCompletion: 7e4751332fbacfd5a4d4d7ba06d0ffbfbb09583ff193e481fbe587f6dea3001f; 1
+- SourceCurrentConjunctionRequirementCellsCompletion: 62a72a7783be251a08dd6d911afff74f4388b2f3ad1b8ca4cd32ec8617b193e8; 2
+- SourceCurrentConjunctionRequirementRowsCompletion: 4d0e01a45d0efc6f5cd4d1b903db5b418e9313396b8c8878e497a89d71033015; 2
+- SourceCurrentConjunctionSharedWorkerCompletion: 68af65ccfc4ae5d542fb7ea9eb4af12f93e585b4e2538d77bbc4ed0d0fc1f899; 2
+- SourceCurrentConjunctionSharedWorkerStability: 83c1e764d346b4a2b46b5550a8219b5553e6ae7a93b31ef1025f8ab578b3e823; 3
+- SourceCurrentConjunctionSharedWorklistCompletion: 864810b60a3bec7a4d9ab4c5f6a59e4e4e3fc2a6366741c0597bede260d98d48; 1
+- SourceCurrentConjunctionSharedWorklistQueuedHandles: 0f601aa358d245fe99055f2a43eb38fe4c5bc12823b77ef6fe463b8d9a899564; 6
+- SourceCurrentConjunctionSharedWorklistReadExtensionality: 8a912216f144057cec3748df7af42a49aedca4e617c8aebc80f3ea32a375422d; 3
+- SourceCurrentConjunctionSharedWorklistStability: 817929fd1cf826fe662641e7928bde0af8bff8d6f17de7529a23fe30555f5433; 4
+
+Alpha owns read extensionality, independent review and finite caller
+attachment. Beta owns queued handles, row success and next adequacy audit.
+Gamma owns cell/whole-worklist completion. Root owns worklist/worker replay,
+worker completion, small repairs, all compiler/Git/reproduction/publication.
+No source writer or compiler remains live. Root alone performs publication.
+
+Runtime /tmp/mcfta-shared-completion-20261109-0600/. Read targets, verified-
+modules, compatibility-frontier/check, portable-check, proof-commits,
+next-cutover-target.md, publication, board-published, turn-state and peaks.
+Refresh upstream and inspect ACTUAL handles/processes; state files alone
+are not liveness evidence. Readable allocated /tmp is 38.66 MiB; free 241.73 GiB.
+Keep compact source-based reports and bounded diagnostics only. No build
+archives or repeated large snapshots. Preserve unrelated .hypha/.
+
+## Haskell findings for external follow-up
+
+No executable Haskell file changed in R183. No new Haskell bug or fix was
+identified. Formal initial-derived completion and replay do not establish
+GHC sharing, publication, native exception/overflow behavior or full Haskell
+correspondence. All older Haskell/LPO fixes, counterexamples and repairs remain
+in the exact preserved suffix. Record EVERY future Haskell fix in FINDINGS
+for external pickup. Continue without asking whether to continue. Goal ACTIVE.
+
+---
+
 # R182: original weak heap effects through every shared call outcome
 
 Updated: 2026-11-09 05:53 CET. Full goal ACTIVE. Formalize pushes authorized.
