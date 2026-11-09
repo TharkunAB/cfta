@@ -1,3 +1,212 @@
+# R196: computed completion of the original shared worker
+
+Verified at 2026-11-09 13:25 CET.
+Base R195 is 8efab441d23f34276388ef5f5c8338866000fd4e.
+Three new modules add three public laws. All strict source checks pass.
+The full affected Audit and all four portable packets pass.
+The three proof commits end at d06769d073a97ea8639a7a60c6d093b19203c641.
+This handoff and the additive Audit form the fourth commit.
+The goal remains ACTIVE. Preserve the full original accepted-input,
+enumeration, native capacity, and Haskell correspondence objective.
+Preserve .hypha, all older proofs, counterexamples, repairs, and marked drafts.
+No Haskell source change, new Haskell bug, or Haskell fix is included.
+The complete published R195 document follows this section unchanged.
+
+## Strongest current statement
+
+For an original input accepted by firstOrderRaw, the ACTUAL cold shared
+worker has a computed sufficient outer fuel. If its computed combined
+capacity test holds, it returns an available language-preserving result.
+Every larger outer fuel returns the SAME result and complete caller state.
+The nine lower allowances use one computed phaseNeed value. Initialization
+and the cold-table invariants follow from the original accepted input.
+No successful execution or future invariant is an input to this theorem.
+
+The exact theorem is
+SourceSynthesisOriginalSharedRankCompletion.accepted.
+Its accepted-input premise is firstOrderRaw lib query signed = .ok expression.
+The formulas and solver remain parameters of the specified semantics.
+The theorem derives the actual ordinary Label build, guard preparation,
+empty-cache allocation, and literal initial caller.
+It derives initial Context, Frame, Fits, finite guard carrier, inherited
+readiness, availability, union normality, native positive support, causal
+publication history, merge storage and positivity, NEW writer Origins,
+NEW stored-node closure, input closure, and idle node and edge tables.
+Its final language law is the existing PartialMemoSound.NodeLaw for the
+original physical request and the SAME returned shared result.
+
+One numeric premise remains explicit:
+Room bits (cover [output.2.2.2] (forecast budget first (seed heap)).2).
+Here output is the NEW shared rank envelope for the original inherited
+positive-class count and input value mass. first uses output.1 as its
+outer fuel. The seed comes from actual initial record guards and heap
+node, edge, domain and value-mass bounds. The capacity test covers BOTH
+the initial reached-prefix forecast and the envelope output profile.
+It has not been proved for every accepted input at native fixed widths.
+
+## Proofs and exact dependency order
+
+1. SourceCurrentSharedOuterRankEnvelopeResources.node_call, 491 lines.
+   A successful literal shared call preserves resources at its finite
+   rank envelope. The induction follows actual shared rows, descendants,
+   selected child calls, and completed sibling returns. SharedOlderOwnerLineage
+   derives strict positive-quotient-count/value-mass descent internally.
+   Each next candidate uses its CURRENT post-parent or post-sibling seed.
+   One initial Room supplies all actual reached resource continuations.
+   The theorem assumes the observed successful call only to preserve its
+   resources. The adequacy theorem below derives that success separately.
+2. SourceCurrentSharedOuterRankAdequacy.initial_node_call, 531 lines.
+   The shared rank envelope and SharedOuterDoneOrExhausted exclude every
+   outer exhausted branch under the computed work bound. The actual
+   shared Parent schedule and phaseNeed bounds supply lower completion.
+   Resource continuations supply sibling seeds. The pure Mu reconstruction
+   facts prove the NEW nodeBody equation. Shared worker stability extends
+   the SAME completed return to all larger outer fuel values.
+   Its capacity premise is the exact combined Room test above.
+3. SourceSynthesisOriginalSharedRankCompletion.accepted, 127 lines.
+   The original accepted-input initializer supplies the cold facts. The
+   new adequacy theorem gives literal SharedPartialWorker.nodeCall success.
+   SharedOuterInitialActual.node_call supplies availability and NodeLaw
+   at the SAME observed returned caller. No old completed-worker proof
+   is cast to the new graph or outcome family.
+
+Old ConstructorBounds.descend and prefix_state are pure state operations.
+The proof unfolds the old and shared graph utility definitions where needed.
+This reuse does not identify the old and shared execution families.
+The old rank, traversal and original verified theorems remain unchanged.
+
+## Validation and reproducible evidence
+
+All three new sources pass the project Nix/Lake target and their own strict
+warnings-as-errors check. Each packet checks the exact public theorem name
+and reports its axiom dependencies. Only propext, Classical.choice and
+Quot.sound are allowed. Each checked.json records its exact source hash.
+All source snapshots match before and after the compatibility build.
+The complete import graph is acyclic.
+Audit has 4551 direct imports. It preserves the ENTIRE previous
+import list after three new imports and one blank line.
+The graph has 5554 live modules. Four modules are affected.
+Audit is the complete affected frontier. Its axiom report covers
+90754 theorems. This count does not establish system coverage.
+The first full build took 6.49 seconds and peaked at 1551M.
+All four packets reproduce from cwd /tmp; the portable group peaked at 255M.
+Every compiler job used one thread, memory.max=memory.high=4294967296,
+and memory.swap.max=0. Root is the sole compiler and Git publisher.
+No Haskell formatter, build or test is needed for this Lean-only change.
+
+Packets are under lean/restart-evidence/20261109-:
+- shared-outer-rank-envelope-resources
+- shared-outer-rank-adequacy
+- original-shared-rank-completion
+- shared-adequacy-compatibility
+
+Each checker derives its reports from source. The compatibility packet
+contains its affected-frontier manifest and checks frozen hashes before
+and after the build. These are small reports and runnable scripts. No
+archive, duplicate proof tree, heap dump or complete compiler log is needed.
+Runtime helpers and compact failed attempts are in
+/tmp/mcfta-shared-adequacy-20261109-1312/.
+At 13:22 CET, /tmp held 23.79 MiB of readable files with 241.26 GiB free.
+Keep checking size. Do not create source or build archives.
+
+## Biggest remaining gaps and next work
+
+The conditional cold shared worker completion theorem is now proved.
+The full verified original shared return still needs SAME-return hereditary
+Type and Program fields, captured-owner histories, and explicit machine
+Checks/WordRanges. The old OriginalVerifiedCompletion output has these
+categories for the OLD worker. It cannot certify the new return by a cast.
+
+Reuse worker-independent OriginalHereditaryProgramFields, TypeSharedState,
+HereditaryChildTransport, and HereditaryClosedMemo definitions and laws.
+First prove typed preservation for literal SharedScanCallerNumeric.ScanReads.
+Use actual SharedWorker effects and causal guard arity. Compose the SAME
+canonical SharedParentNumeric reads with the unchanged Required and
+ClassPass graphs. Then port the genuinely indexed Parent, edge and outer
+traversal producers. Do not request future Type readiness or body fields.
+
+Explicit Checks is a separate obligation. Define checks on the actual
+shared graph and derive genuine shared Scan/local/Parent range plans from
+one initial reservation. Shared EndpointReads has no ranges field.
+Canonical Parent endpoint equality does not reindex its read bounds to
+all nine observed Parent bounds. Do not relabel old Checks as shared Checks.
+The read-only audit below records exact producer boundaries.
+
+Complete enumeration remains a larger system gap. The current selected
+DemandWorker routes and heap-only NativeView narrowing do not become the
+new shared outer worker from this theorem. Version the real selected
+Terminal, IncomingCacheAdapter and CachedTerminalAdapter routes, including
+the EnabledEmpty route before incoming dispatch. Preserve native gates,
+skips, query memos, order, full faults and returned snapshots. Follow the
+full SelectedStep/continuation/recursive driver chain. Incoming merge uses
+native requestNode; outer completion does not provide its whole driver bound.
+
+Retain ALL original accepted inputs and all generated, rejected, failed,
+returned and subsequent states. Prove exact terms and counts by SOURCE
+Program leaf size, size order, and BOTH signed rank/unrank inverses with
+actual sparse classes. Include AllSized, fallback and productive infinity.
+Prove finite source Program-occurrence progress for generated intersections
+and warm winners. A smaller positive quotient, smaller value mass, native
+observer fuel, annotation nodes and enumeration rank are distinct measures.
+There is no verified executed original-input starvation counterexample.
+Keep native Word/Int capacity, allocation, caches, maps/sets/hashes, host
+wrappers, lookup, Curried/Specftacular and complete Haskell correspondence.
+Keep older constructor and equality targets. Do not mark the goal complete
+from component counts, this cold entry theorem, or passing builds.
+
+## Haskell findings for an external agent
+
+No Haskell fix or new Haskell defect was found in R196. No production
+Haskell behavior changed. Every future Haskell defect or required fix must
+be recorded in this root FINDINGS.md with its trigger, affected code,
+expected behavior and verification status. Preserve all prior fix notes.
+The inherited main ref is 9f5f77783b9f936a1edf4225373cbad9dc6a9ed5.
+It is already included. The LPO change remains integrated.
+Standing authorization permits normal pushes to formalize. Do not force.
+
+## Next original verified shared entry audit
+
+# Next original verified shared entry
+
+Read-only audit, 2026-11-09 13:19 CET. No repository source, compiler or Git changes.
+
+## Existing output and the exact indexed break
+
+OriginalVerifiedCompletion.accepted:49 returns one actual result/after for every sufficient outer fuel, then the SAME graph/read schedule, Checks, Post, availability/language, TypeSharedState.Ready, conditional GuardHeap Origin, both captured-owner histories, closedness and hereditary Program fields. Its proof at119-132 calls OLD InitialWorkerRanges.nodeCall_ranges and OLD HereditaryOuterTraversal.nodeCall_fields. The new shared rank return cannot instantiate those worker-indexed premises.
+
+SharedOuterInitialActual.node_call already supplies a shared graph, SharedPartialEndpointReads.NodeCallReads, full Post, Frame/Fits/carrier, availability and language at the SAME observed return. It can replace the old WorkerActual semantic pass. Do not port that whole pass merely to obtain another Post.
+
+## Reuse without new worker versions
+
+- OriginalHereditaryProgramFields.firstOrderRaw_fields, OriginalCallerInitialization.accepted, OriginalTypeSharedState.initial_ready, and ConstrainedCapGuardExecution.closed_heap derive the actual initial fields/Context/Type state/conditional guard profile from the accepted Label build.
+- HereditaryProgramFields.ValueFields/EdgeFields, HereditaryMemoFields.TypeRow/NodeFields/EdgeFields, and HereditaryClosedMemo.History/NodeFields/EdgeFields contain values, captured requests and FlatMemoThunk tables, not an old worker or graph. Reuse their initial/advance/begin/finish and node_ready/edge_ready laws. The latter need the old PURE Good/NodeReady/EdgeReady types; derive Good from current Context as the existing context_good proof does. Do not infer a new body certificate from the generic finish law.
+- HereditaryChildTransport, HereditaryRawRebuild, TypeSharedState, native Type operand/merge/Required and class-pass graph facts describe unchanged callees. Required execution and ClassPass.Pass did not change in the shared Scan cutover.
+- NativeTypeCallerSteps prefix/descent/raw constructor contracts contain pure operations and unchanged raw construction. Unfold old/new Graph.prefixState/descend where necessary. No whole ConstructorBounds port is required.
+
+## First genuine producer: typed shared Scan and Parent
+
+The missing causal bridge is not a new memo History definition. NativeTypeScan.decision:66 explicitly takes DemandWorklistExecution.Call. NativeTypeScanWorker.decision_return:83 extracts that old graph from the old checked caller. RecordScanWorker.scan:72 and HereditaryLocalWorker:117-145 then use OLD Scan/Retained/ranges at exact scanned state. HereditaryParentWorker.edge:258 and AnnotatedParentWorker.edge remain OLD Parent equations. R194 publication/support/closedness do not imply hereditary Type or Program fields.
+
+Smallest useful first statement: an induction on SharedScanCallerNumeric.ScanReads, from current NativeTypeClosedRequests.Ready +costs+Values/ClosedValues originals+all original record Type routes+GuardHeap Origin, returns Ready/costs/Extension/GuardHeap Origin and original Values at that SAME shared scanned endpoint. Its decision case uses SharedWorkerEffects.call_effects and SharedWorkerGuardArity.call_guard_heap:102, then checked advance and UniversalStore.advance, as NativeTypeScan.advance does. Cached fourth hits and shared private snapshots must stay literal. No old Demand graph or future ready supplier is needed.
+
+Next compose SharedParentNumeric.Receipt.reads at the SAME canonical endpoint. SharedClassesNumeric.Reads.completed retains the real unchanged ClassPass.Pass and preparation retains actual Required execution. Existing hereditary Required and pass_fields can be applied to these objects. Derive source app/filter footprint facts from the literal guard/precheck receipt, as the old Parent proof does. Handle annotated Top and fully Type rows too. Return conditional TypeRow/Program EdgeFields implications, closed children, TypeSharedReady and GuardHeap. Canonical endpoint equality does NOT reindex any reads to the observed nine Parent fuels.
+
+Then a shared HereditaryOuterEdgeWorker and shared HereditaryOuterTraversal can follow the eight literal shared calls. Cold publication uses that body's returned fields and exact protected owner. Warm hits use existing pure HereditaryClosedMemo.node_ready/edge_ready. Root numeric prefix resources supply current Context/Post at every reached cut; they must not be replaced by a future Context callback.
+
+## Explicit Checks is a separate remaining obligation
+
+Old PartialChecks.Checks:143 quantifies actual reached OLD Graph.EdgeBody and demands old PartialEdgeActual.Ranges. Old WorkerRanges.After:22 branches on OLD Outcome; its edgeBody:66 matches OLD Parent and demands ResidentRanges. ResidentRanges:45 enters LocalReduction.Ranges, which still contains the OLD Scan schedule. Neither is a pure type alias for the new execution.
+
+SharedPartialEndpointReads:65 intentionally associates an observed Parent graph with a canonical SharedParentNumeric.Receipt. That receipt has reads/semantic/frame/fits/post/run, but no WordRanges/Checks field. EndpointReads plus Post therefore does not already prove the explicit old range category. For a full output, define the corresponding checks over the shared graph and derive genuine shared Scan/local/Parent plans from the new reservation/Room schedule. Unchanged Seeded WordRanges and ClassRanges are reusable. If using a WorkerRanges interface, version After and the eight actual branches, then SharedInitialWorkerRanges from the ONE root Room. OriginalWorkerRanges itself is only a thin accepted-source wrapper. Do not add ranges as a final original-input premise or replace checks by a receipt-exists tautology.
+
+## Final original composition and boundary
+
+Once typed shared Parent/traversal and genuine shared Checks exist, a thin OriginalSharedVerifiedCompletion composes the new rank return, the original build-derived initial facts, and those SAME-return certificates. Keep the combined initial Room test. No initial output fields/history/guard heap or future success is a caller premise.
+
+This proves the explicitly named shared cold caller. It does not switch old OriginalVerifiedCompletion, the old Demand selectors, complete enumeration, or NativeView. Incoming merges still use native requestNode; warm WordRanges/capacity, driver work and source/Haskell correspondence remain separate. The shared EndpointReads guarantee must retain its stated canonical-endpoint scope rather than inherit the old source-read wording by a cast.
+
+## Complete previous published document
+
 # R195: actual shared owner rank and done-or-exhausted
 
 Verified at 2026-11-09 13:08 CET. Base R194 is 72adedf775a357a8552153f766ac6c08d34bbc35.
