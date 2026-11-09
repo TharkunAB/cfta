@@ -1,3 +1,194 @@
+# R182: original weak heap effects through every shared call outcome
+
+Updated: 2026-11-09 05:53 CET. Full goal ACTIVE. Formalize pushes authorized.
+Proof HEAD before documentation commit: 29b10e2c6d817844c9a567b5965dec826c918c84.
+Read current Git/runtime publication.json for the final published HEAD.
+Main 9f5f77783b9f936a1edf4225373cbad9dc6a9ed5 remains integrated.
+Preserve unrelated .hypha/. Complete published R181 document bytes follow
+unchanged. Preserve every earlier proof, counterexample, repair and marked
+draft. R179/R180/R181/R182 each add checked source progress.
+
+## New exact weak contract and strongest existing result
+
+SharedWorkerWeakEffects.call_effects retains SemanticHeap, Covered [],
+record Grows and issued Extends at EVERY actual returned physical heap from
+ONLY current SemanticHeap, Covered [], query Available and query.free=[].
+No Ready, CostHeap, equality validity, memo correctness, future state or
+successful execution is a data premise. AllocatedSharedConjunctionWeakEffects.
+checked_effects/caller_effects derives the SAME four facts for the literal
+checked/outer state update of that same actual call. Both legacy checked
+caller families need this exact weak contract. Neither selector changed.
+
+These are HEAP EFFECT laws. They do NOT certify Boolean answers, fourth
+correctness or full Context/Post under the weaker premises. The strongest
+answer/caller statement remains R181: full CURRENT Context plus query
+Available and three initial invariants gives ONE ordered global bundle,
+full Post, physical annotations, causal Mu profiles and whole-record arity
+at every actual success/fault. Failed calls retain incoming fourth memo,
+exact diagnostic/private snapshot; successful True proves emptiness and
+False remains inconclusive. No sufficient p/h or native bound follows.
+Instrumented p/h remain proof/observation bounds, NOT native API parameters.
+
+Scope: old ProjectionWorkerPhysical.forest_effects fixes Symbol to
+SourcePruningTemplates.Symbol. Templates:17 defines this as EXACT abbrev
+SourceObservations.Label FullSyntax.Formula, the alphabet used by BOTH checked
+callers. Cells/worklist/decision weak laws use that actual alphabet and
+arbitrary Formula; call/checked/outer use FullSyntax.Formula. RowsWeakValues
+remains generic Symbol/Formula. This retains the original selected-source
+scope and avoids an unnecessary generic copy of the lower projection proof.
+It does not add a claim for every unrelated generic Symbol instantiation.
+
+## Actual proof composition and repair
+
+RowsWeakValues.descriptors_values derives children from current semantic.
+normal.facts.cached.edges. prepareTuple_values/nextRow_values follow actual
+rejected/live/fault row preparation, retaining complete CellsValues and
+pending raw tuple residency. Pure allocation and exact nextRow_heap need no
+Ready, costs or closedness premise.
+
+CellsWeakEffects.force_effects follows the literal singleton projection,
+actual cursor/first-Empty step and finite remaining jobs. Weak forest effects
+supply semantic validity, coverage, growth/history and successful resident
+closed projected values. Current CellsValues/CellsClosed are preserved even
+at a stopped fault cursor. All other cells move through actual native growth.
+Returned successful nodes are resident and closed. No future force success
+or completed graph is supplied. Cached/column/missing branches are covered.
+
+The legacy forest theorem uses a derived native symbol equality and classical
+guard equality. A broad proposition congruence attempted Subsingleton Prop;
+it was invalid. Root replaced it with equality of the CONCRETE forest call:
+capture the given EdgeEq, use congrArg on that actual function with
+Subsingleton.elim for equality instances, rewrite the legacy execution,
+then case-split that same actual call. No future heap or successful prefix
+is joined. No API premise, old theorem or heartbeat limit changed.
+
+SharedWorklistWeakEffects defines a private CURRENT storage invariant with
+cell/raw residency and closedness, pending query residency and table operand
+residency. It embeds NO Ready/cost assumption. Initial empty storage derives
+all stored facts. An actual admitted skip=false derives closedness before
+sampling, even when the original query was open. Existing weak sample law
+supplies resident closed fitting rows. Actual forcing uses the new weak cell
+law; actual row preparation uses weak residency plus existing pure closedness.
+Finite Run induction threads the four heap effects and all storage facts.
+Public explore_effects needs NO closed-query premise. Computational equality
+instances are explicit, with full Constraint Formula binders; no implicit
+classical instance selects a different call.
+
+SharedWorkerWeakEffects.decision_effects uses the exact closed-query state
+identity, and call_effects covers hits and misses at the literal call_state.
+Pure materialization/grow/memo stages leave exploration state unchanged.
+Checked/outer laws advance that exact physical component. Independent
+read-only review found no omitted fault, stronger hidden data premise or
+weak Boolean correctness assertion. The current weak gate is CLOSED for
+the candidate shared call; BOTH old selectors still use DemandWorker.
+
+## Next bounded target and remaining gates
+
+Derive RequirementCellsCompletion.force_complete from CURRENT Ready,
+CellsValues, CellsClosed and a PRESENT handle. Produce sufficient p/h and
+one actual successful force stable at EVERY larger P/H, with Effects and
+resident closed nodes. Use ProjectionComplete.forest_complete plus
+WorkerComplete.forest_stable, singleton projection, actual Empty stop,
+finite jobs and max of prefix/tail bounds. Do not supply future success.
+Add force_done_stable from ACTUAL success without Ready. Then replay exact
+shared visit/step/Run with total sample stability; nextRow is p/h-independent.
+
+Whole-run adequacy also needs INTERNAL queued-handle validity. Frame row
+credits and HandleValidity cached/table handles do not cover EVERY pending
+requirements task. Coverage proves unfinished cell ->scheduled, the reverse
+direction. Derive handle<cells.length for every queued requirement from
+actual initial empty tasks and actual live/cached row returns. Do not add a
+future validity or success premise to the caller. This is a missing formal
+invariant, not an executed original-input or Haskell bug counterexample.
+
+Successful decision replay needs SAME readTable under ANY two valid endpoint
+credit certificates. endpointCredits uses Classical.choose; different p/h
+need not yield definitionally identical credits. Use valid cached reader
+equations/readRows_eq. Combine current invariants with original fixed B/rank
+WF and local completion/replay to derive shared call_initial. Numeric ceilings
+remain separate: the eager F0=r cannot cover deferred forces at budget zero.
+Do not transfer that forecast by claiming eager/shared execution equality.
+Lossless selected diagnostic/private-state adapters also precede BOTH caller
+adoption. Runtime next-cutover-target.md has exact consumer APIs and pointers.
+
+Full objective remains original-derived sufficient COMPLETE enumeration,
+Type/Program occurrence identity and all siblings/subsequent/generated/
+rejected/failing/returned work; exact accepted terms by SOURCE Program leaf
+size/count/order/BOTH signed inverses; AllSized/fallback/productive infinity/
+lazy structures; full Haskell maps/caches/hashing/Word/Int/allocation/wrappers/
+lookup/Curried/Specftacular. Source leaf size, Term.nodes and recursive fuel
+are DISTINCT. Keep size-free fully/until. R164 completion and R171 same-return
+driver retain documented conditions. Preserve older constructor/equality work
+as secondary targets. The complete goal remains ACTIVE.
+
+## Verification and restart
+
+Five NEW modules contain nine NEW public laws. Strict own-source warnings,
+exact public names/namespaces/source hashes and standard axioms only
+(propext/Classical.choice/Quot.sound) pass. Every old proof module and packet
+remains unchanged; five additive imports precede complete old Audit bytes.
+The full affected closure is six of 5420 modules. Audit has 4417 imports and
+88915 theorem axiom reports. PASS in 10.30 seconds, peak 2623 MiB. All five
+packets and complete compatibility reproduce from cwd /tmp, peak 185 MiB.
+Source plus pinned Nix/Lake toolchain suffice; no archive is required.
+Compatibility: 20261109-shared-weak-effects-compatibility. Own packets contain
+README.md/check.py/checked.json/theorems.json; compatibility has frontier.json.
+No theorem total or green Audit implies full-library completion.
+
+Root runs ONE serial compiler through heavy-management/user-bus, effective
+memory.max/high 4294967296, swap.max 0, LEAN_NUM_THREADS=1. No global queue or
+concurrency change. All handles are terminal. Acyclic graph and every affected
+source snapshot are checked. Measured capped runs:
+- 2026-11-09T05:30:31 python3 4G 233M 0
+- 2026-11-09T05:37:06 python3 4G 1024M 1
+- 2026-11-09T05:39:19 python3 4G 206M 1
+- 2026-11-09T05:40:47 python3 4G 212M 1
+- 2026-11-09T05:41:51 nix-shell 4G 158M 0
+- 2026-11-09T05:42:34 python3 4G 207M 1
+- 2026-11-09T05:44:22 python3 4G 377M 0
+- 2026-11-09T05:45:02 python3 4G 218M 1
+- 2026-11-09T05:46:06 python3 4G 228M 1
+- 2026-11-09T05:47:01 python3 4G 340M 0
+- 2026-11-09T05:48:06 python3 4G 2623M 0
+- 2026-11-09T05:50:53 python3 4G 185M 0
+
+Proof commits:
+- ecb57378c6d18547f7f5eb2369d95f98db4a612f Derive shared row residency from original semantic heap facts
+- f84fd74b983e6b20b8f642ad1f983d8fef00d06f Retain weak effects through every deferred cell force
+- 5c43c9c2d301a0668e5a561d8d0c277d10235c18 Preserve original weak heap effects through shared worklists
+- 29b10e2c6d817844c9a567b5965dec826c918c84 Retain both caller weak contracts at actual shared endpoints
+
+Frozen source SHA256/public laws:
+- SourceCurrentAllocatedSharedConjunctionWeakEffects: ff8934e80adcc0688bff0e281d073d14aa03ac4232c576732bffe8a06a0a3661; 2
+- SourceCurrentConjunctionRequirementCellsWeakEffects: 89dd39eb9fb4135e887cdd4404a329a7ab3a0c6c1ddc42676dc87529f3dcb035; 1
+- SourceCurrentConjunctionRequirementRowsWeakValues: 43b8a2baf5396e64d3f148c41d84a6f40f609cbd839444453ceafddaedb6f59e; 3
+- SourceCurrentConjunctionSharedWorkerWeakEffects: d66ceba22b85ea4ac3e4aa89e3e9ddb7eb778470bf599daa95bc4754614e1800; 2
+- SourceCurrentConjunctionSharedWorklistWeakEffects: 0c447fe6a7290949d8f84512fb057ac6dde03dba528c6e0e877ca8e6ef06b6e8; 1
+
+Alpha owns row residency and read-only contract review. Gamma owns cell weak
+effects. Beta owns weak worklist and next replay/adequacy audit. Root owns
+worker/caller composition, instance repairs, all compiler/Git/reproduction/
+publication work. No source writer or compiler remains live.
+
+Runtime: /tmp/mcfta-shared-weak-effects-20261109-0523/. Read targets, verified-
+modules, compatibility-frontier/check, portable-check, proof-commits,
+publication, board-published and turn-state JSON, next-cutover-target.md and
+peaks. Refresh upstream and inspect ACTUAL tool handles/processes before
+edits; a state file alone is not liveness evidence. Readable allocated /tmp:
+38.25 MiB; free: 241.76 GiB. Keep compact source-based text and bounded failure
+diagnostics only. No build archives or repeated large output snapshots.
+
+## Haskell findings for external follow-up
+
+No executable Haskell file changed in R182. No new Haskell bug or fix was
+identified. This closes a formal weak heap contract; it does not establish
+GHC sharing, publication, native exception/overflow behavior or full Haskell
+correspondence. Earlier Haskell/LPO fixes, counterexamples and repairs remain
+in the exact preserved suffix. Record EVERY future Haskell fix in FINDINGS.
+Continue without asking whether to continue. Keep the full goal ACTIVE.
+
+---
+
 # R181: annotations, causal guards and arity on every shared outcome
 
 Updated: 2026-11-09 05:21 CET. Full goal ACTIVE. Formalize pushes authorized.
