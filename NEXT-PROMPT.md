@@ -1,3 +1,180 @@
+# R181: annotations, causal guards and arity on every shared outcome
+
+Updated: 2026-11-09 05:21 CET. Full goal ACTIVE. Formalize pushes authorized.
+Proof HEAD before documentation commit: 1a101e2961168734aae9acdada7b04e53c21b29d.
+Read current Git and runtime publication.json for final published HEAD.
+Main 9f5f77783b9f936a1edf4225373cbad9dc6a9ed5 remains integrated.
+Preserve unrelated .hypha/. Complete published R180 document bytes follow
+unchanged. All earlier proofs, counterexamples, repairs and marked drafts
+remain. R179/R180/R181 each add checked source progress.
+
+## Strongest new contract
+
+Current full outer Context, query Available and THREE initial heap invariants
+now derive the SAME ordered global bundle, full caller Post and all three
+invariants at EVERY actual shared call outcome, including faults:
+- SourceEqualityAnnotationHeap.Heap P checks cached edge guards.
+- SourceCurrentConstrainedCapGuardHeap.Heap Q equates stored Mu body/probe
+  guard profiles. Q is independent of P.
+- SourcePruningEnumerationArityOrigins.Heap checks projected paths against
+  each cached edge key's canonical child count.
+
+AllocatedSharedConjunctionGuardArity.verified uses one literal call and one
+final global bundle for every clause. Failed calls retain incoming fourth
+memo, exact diagnostic and full private snapshot. Full Post and all three
+heap predicates are OUTSIDE the outcome match; only the answer clause asserts
+True on failure because no Boolean was returned. Query Available, unfolding
+extension, exact query tables and both completed-table histories remain.
+Successful True excludes every accepted finite term at every environment;
+False remains inconclusive. No future graph, state, annotation, closure,
+context or successful execution supplier is input.
+
+These are preservation results from explicit CURRENT invariants. They do
+not initialize all three from an arbitrary original request. Public worker
+results need current Ready/Available/initial predicates, with NO closed-query
+premise. Instrumented p/h are explicit proof/observation bounds, NOT native
+API parameters. Insufficient bounds can fault. Sufficient initial bounds,
+selected shared adapters, GHC thunk sharing/publication, native exceptions
+and complete Haskell correspondence remain separate. Both checked callers
+still select DemandWorker; no eager/shared execution equality is asserted.
+
+## Actual proof layers and review
+
+ProjectionGuardOutcome covers actual project/rows/forest endpoints. Its
+private primitive laws use actual nodeEdges, literal readAll/head/union and
+no-new-Mu ordinary reconstruction. ProjectionArityOutcome adds six public
+readAll/head/union/project/rows/forest laws. All four Result constructors,
+completed head then failed body, selected child then failed suffix and
+fallback reads keep the exact reached heap. R179 effects derive intermediate
+semantic readiness, costs and resident operands from actual done equations.
+No successful graph or Closed premise is supplied at a public boundary.
+
+CellsGuardArity.force_guard_heap/force_arity_heap use CURRENT Ready and
+CellsValues only. Closedness is not needed. One private predicate induction
+follows literal singleton projection, cursor first-Empty stop and suffixes.
+Both concrete lower forest capabilities are discharged internally. Actual
+force_pending_run/failed identifies the SAME physical endpoint, stopped
+cursor and diagnostic; cached/column/missing branches keep the initial heap.
+
+WorklistGuardArity uses one private induction for actual sample/force/row
+transitions and finite Run. Public explore_guard_heap/explore_arity_heap
+supply concrete lower capabilities internally. Initialization derives all
+current Values; no public callback or future state remains. nextRow_heap
+is unconditional identity. WorkerGuardArity exposes both decision/call laws
+using exact decision_state/call_state. Pure table/grow/memo stages preserve
+the exploration state. The caller adds these to R180's SAME call and SAME
+returned bundle; failed specializes that exact theorem. Independent review
+found no omitted fault endpoint, unrelated execution join or hidden future
+premise. Physical annotations, causal profiles and arity stay DISTINCT.
+
+Compiler repair: the local decision notation captured ambient parameters
+in a second generic arity section. Fully qualifying the actual decision and
+naming Symbol/Formula parameters resolves the intended arity instance.
+No larger heartbeat allowance or stronger theorem premise was introduced.
+All own-source warnings remain errors. No Haskell defect is inferred.
+
+## Next bounded target: original weak effects
+
+BOTH checked selectors still use DemandWorker. WorkerEffects.allocated_call_
+effects:129 and TupleCallPost.allocated_weak_effects:38 promise all-outcome
+SemanticHeap / Covered [] / Grows / issued Extends from ONLY current
+SemanticHeap, Covered [], Available query and query.free=[]. Do NOT add
+Ready, CostHeap, future storage, success or completion to those contracts.
+NativeIncomingOldKnownAll.call_lookup/tuple_call_old_known, EnabledEmpty.
+check_old_known/currentTupleBudget and CallGlobals.call_globals consume them.
+
+Add SharedWorkerWeakEffects.call_effects with exactly those premises at the
+literal shared call.state.storage.requirements.physical. Existing weak
+TuplePullWeakEffects.sample_effects:307 and ProjectionWorkerPhysical.forest_
+effects (ProjectionWorkerEffects:205) already cover all sample/forest tags.
+The missing bridge is weak deferred cursor/cell force and weak storage
+preservation through actual shared step/Run. CellsExecution.force_pending_
+run/failed links SAME endpoints. nextRow_heap is exact heap identity.
+Descriptor availability can derive from semantic.1.normal.facts.cached.edges;
+RowsValues.descriptors_values:78 uses Ready only for this semantic fact.
+
+Existing SharedWorklistValues.Invariant embeds Ready; it cannot discharge
+the original weak contract. Closed.step_closed/Cells.force_values require
+Ready too. Derive separate current weak storage predicates as needed; prove
+every intermediate fact from actual operations and initialize from original
+weak inputs. Runtime next-cutover-target.md has exact source references.
+Before BOTH callers adopt shared execution, also derive sufficient p/h and
+replay stability/uniqueness, original numeric/resource forecasts covering
+deferred force at budget zero, and a lossless selected diagnostic/private-
+state adapter. Keep old weak/failure/numeric consumers.
+
+Full objective remains original-derived sufficient COMPLETE enumeration,
+Type/Program occurrence identity and all siblings/subsequent/generated/
+rejected/failing/returned work; exact accepted terms by SOURCE Program leaf
+size/count/order/BOTH signed inverses; AllSized/fallback/productive infinity/
+lazy structures; full Haskell maps/caches/hashing/Word/Int/allocation/wrappers/
+lookup/Curried/Specftacular. Source leaf size, Term.nodes and recursive fuel
+are DISTINCT. Do not add a size parameter to size-free fully/until. R164
+completion and R171 same-return driver retain documented conditions. Keep
+older constructor/equality work as secondary targets. Goal ACTIVE.
+
+## Verification and publication
+
+Six NEW modules contain 19 NEW checked public laws. Exact public names and
+namespaces, source SHA256, own warnings-as-errors and standard axioms only
+(propext/Classical.choice/Quot.sound) pass. All old proof modules/packets stay
+unchanged; six additive Audit imports precede complete old Audit bytes.
+The full affected closure is seven of 5415 modules. Audit has 4412 imports
+and 88859 theorem axiom reports. PASS in 4.40 seconds, peak 438 MiB.
+All six packets and complete compatibility reproduce from cwd /tmp, peak
+195 MiB. Source and the pinned Nix/Lake toolchain suffice; no build archive
+is required. Compatibility: 20261109-shared-guard-arity-compatibility.
+Each own packet has README.md/check.py/checked.json/theorems.json; compatibility
+has frontier.json. No theorem count implies whole-library completion.
+
+Root runs ONE serial compiler under actual memory.max/high 4294967296,
+swap.max 0, LEAN_NUM_THREADS=1, via heavy-management/user-bus. No global queue
+or concurrency change. All compiler handles are terminal. Full graph is
+acyclic and affected source snapshots remain exact. Measured capped runs:
+- 2026-11-09T05:15:09 python3 4G 225M 1
+- 2026-11-09T05:15:59 python3 4G 204M 1
+- 2026-11-09T05:17:34 python3 4G 231M 0
+- 2026-11-09T05:18:05 python3 4G 438M 0
+- 2026-11-09T05:19:10 python3 4G 195M 0
+
+Proof commits:
+- 1770c77ad8124f9cea91d44e331f636052a6b866 Retain causal guard profiles through every projection outcome
+- 5680670788986e76374c473957abd6f44e2eb065 Preserve complete edge arity at every projection endpoint
+- c3ec13635914de01342e547b86f8348fe410b8db Preserve causal guards and arity through deferred cell faults
+- 1a101e2961168734aae9acdada7b04e53c21b29d Retain all physical caller invariants through shared call failures
+
+Frozen source SHA256/public laws:
+- SourceCurrentAllocatedSharedConjunctionGuardArity: f3a2269c104d59eae5ca50d3dc181ba862ea7d72a96ada3281ba1e9921ccc197; 2
+- SourcePruningEnumerationProjectionArityOutcome: c568c2d23fc1715cab37ca838ad3b98d3062c571b1133158da9a3865f5feacae; 6
+- SourceCurrentConstrainedCapProjectionGuardOutcome: 72939044fba2d8b7cc8fc4a82939b6b5ac2333ece2d7551ea65e35e22e51f85e; 3
+- SourceCurrentConjunctionRequirementCellsGuardArity: 9a8129ac9ac1f87915f55fa30135901b4d3a222da46bfc1590e2e674c2a1c43c; 2
+- SourceCurrentConjunctionSharedWorkerGuardArity: d2a2d215b4ab6754d286bd2dc0ac50d5f3558307ff07bfb739c84405e625dbf6; 4
+- SourceCurrentConjunctionSharedWorklistGuardArity: fc83938e07c6301f942ae7f1151aa87d7f9b9e0113688aff6c3328e5c9452265; 2
+
+Alpha owns lower guard and independent contract review. Beta owns lower
+arity and the read-only weak-effects audit. Gamma owns cells. Root owns
+worklist/worker/caller, all compilation, packets, reproduction, commits and
+publication. No source writer or compiler remains live.
+
+Runtime: /tmp/mcfta-shared-guard-arity-20261109-0509/. Read targets, verified-
+modules, compatibility-frontier/check, portable-check, proof-commits,
+publication, board-published and turn-state JSON, next-cutover-target.md and
+peaks. Refresh upstream and inspect ACTUAL live processes before edits;
+a state file alone is not liveness evidence. Readable allocated /tmp is
+37.85 MiB, with 241.77 GiB free. Keep compact text and bounded diagnostics.
+Do not retain build archives or repeated large output snapshots.
+
+## Haskell findings for external follow-up
+
+No executable Haskell source changed in R181. No new Haskell defect or fix
+was identified. This closes formal all-outcome guard/arity preservation;
+it does not establish native runtime behavior. Every earlier Haskell fix,
+LPO finding, repair and counterexample remains in the exact preserved suffix.
+Record EVERY future Haskell fix in FINDINGS too. Continue without asking
+whether to continue. Keep the complete goal ACTIVE after this milestone.
+
+---
+
 # R180: physical annotations at every shared caller outcome
 
 Updated: 2026-11-09 05:06 CET. Full goal ACTIVE. Formalize pushes authorized.
