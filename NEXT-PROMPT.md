@@ -1,3 +1,164 @@
+# R172: finite actual shared worklist execution
+
+Updated: 2026-11-09 01:17 CET. Full goal ACTIVE. Pushes to formalize remain authorized.
+Preserve unrelated .hypha/. No production Haskell file changes here.
+No new Haskell defect or fix is established. Record every future Haskell fix
+in FINDINGS as well. All published R171 document bytes follow this prefix.
+
+## Strongest new statement
+
+SourceCurrentConjunctionSharedWorklistRun.explore_graph derives a FINITE
+actual execution graph of the new shared lazy conjunction queue. It starts
+from the query, original tuple budget, and physical state with empty private
+storage. It has no additional caller work-fuel parameter. Every continuing
+transition lowers remaining tuple budget or its fixed finite queue vector.
+The iterator ends at a drained private state or an exact native fault.
+Native observation allowances p/h remain explicit. This is a Lean source
+model result; it does not establish an unbounded native Haskell execution.
+
+The private certificates derive from original allocation and actual steps.
+No caller supplies a future rank, heap, success, or closure. Every new row
+credit is at most ORIGINAL tuple budget B. Cached tails have smaller credits.
+Reuse existing HeightOrder.vector_wellFounded(B+2). Ordinary nodes contribute
+one coefficient at level 0, requirement lists contribute length+1 at level 0,
+and row handles contribute one at credit+1. Pending old handles retain their
+weights under credit extension. B is the existing conjunction tuple budget;
+it is not an enumeration term-size or recursive-depth parameter.
+
+The table and pending queue hold the SAME raw-row handle. A requirement is
+forced before Empty/budget/open/seen tests. New descendants precede remaining
+parent requirements and row tails. Equality rejection allocates no cells.
+Columns precede class cursors. A successful force publishes the SAME exact
+returned value at its handle. Values remain resident under the proved weak
+current-input hypotheses. Faults retain private heaps and unforced tasks.
+Budget-zero suffixes still force queued requirements for the Empty test.
+
+Queue drain does NOT YET prove table materialization, Boolean soundness, or
+resource/read contracts for this new worker. Selected callers STILL use the
+published R170 DemandWorker and eager RowsWorker requirements. R171's verified
+worker-to-driver theorem at the SAME returned node/caller/final memos remains
+valid and unchanged, with explicit original Room AND driver-final Capacity
+at CHOSEN recursive depth. No sufficient-depth or complete-enumeration claim.
+
+## Checked sources and exact commits
+
+Fourteen NEW modules, 60 strict own-source public laws:
+RequirementRowsOrigins6; RequirementRowsCreditBounds3; RequirementRowsEffects3;
+RequirementCellsValues5; RequirementPublication2; SharedWorklistStep14;
+SharedWorklistOrigins3; SharedWorklistCreditBounds3; SharedWorklistWeight10;
+SharedWorklistRefs4; SharedWorklistVisitProgress1; SharedWorklistFrame2;
+SharedWorklistStepProgress1; SharedWorklistRun3.
+All names above have the SourceCurrentConjunction prefix. Exact source hashes,
+public theorem names, namespaces, and axiom reports are in their four-file
+packets under lean/restart-evidence/20261109-*. All previous public laws remain.
+
+Base: 197468824146570816304a3db50c978734f63691. Refreshed main remains
+bd5a406a6a3f84b7e3ae0906082783911509df83, an ancestor. Proof commits:
+15cf6750dd8b132cc203773beb668cc782d0079c row credits and physical effects;
+6a78e2e45036a9a7ceaddf28f0dc4a0b011de2e5 value availability/cache publication;
+e76af325cb038f043772972f420512758c9ffabc shared steps and bounded credits;
+5eba5dff1df0539ac16fcd5288435a99ae0fe012 finite queue-vector algebra;
+35a2847d9c0df6b923d1106dab3fbd9059dcaf11 actual progress and total iteration.
+The following documentation commit contains this prefix and Audit imports.
+
+The graph has 5,348 modules. Audit covers the complete 15-module changed
+reverse-import closure. Its 4,345 direct imports expose 88,308 axiom-checked
+theorems, including private/generated helpers. Only propext, Classical.choice,
+and Quot.sound are allowed. Public source checks treat warnings as errors.
+All previous Audit bytes and all R171 root-document bytes remain exact.
+Compatibility packet: lean/restart-evidence/20261109-shared-worklist-compatibility/.
+It and the shared-worklist-run own-source checker pass from cwd /tmp.
+No retained temporary directory or build archive is required for reproduction.
+
+All compilation used one serial heavy-management command at a time with
+memory.max/high of 4 GiB, swap of zero, LEAN_NUM_THREADS=1, and the existing user bus.
+Audit took 16.34 s; scope peak of 4 GiB, exit code 0. Portable replay passed. The global
+queue/concurrency is unchanged. All Root handles through 37115 are terminal.
+No compiler remains active. Do not repeat broad checks without a new reason.
+
+## Next adoption proof
+
+Maintain two global scheduling obligations: every allocated requirement cell
+is .done OR its handle occurs in a pending .requirements task; every pending
+row spine has its handle in a pending .rows task. Both .column and .pending
+cells are outstanding. Live row publication schedules exactly the new handles
+and tail. A forced requirement becomes .done before its task is removed.
+Empty, skip, overflow and failures retain the other tasks. Budget zero does
+not bypass forcing. At pending=[] all allocated cells and spines are cached.
+This proposed invariant is audited against the actual code, NOT YET proved.
+
+Also derive valid table row handles and valid requirement handles in cached
+rows. Current RowsPresent certifies queued row handles only. It is not table
+coverage. Cached-tail existence/descent already follows from Origins.cached_tail.
+Use Publication.force_done/nextRow_done and CellsEffects.force_other.
+Use Rows.allocateCells_order/handles, prepareTuple_spines, nextRow_live_tail.
+Needed lower frame laws: force retains cell length; rejection/fault preparation
+allocates no requirement cells; nextRow preserves OLD requirement lookups and
+OTHER OLD spine lookups; live publication has exact descriptor handle range.
+Old-spine framing needs prior presence/index bounds, since fresh tails were
+absent and become present. Never force unfinished cells for old diagnostics.
+
+Then materialize by reading only cached spines/cells, with strict tail credit
+decrease and identical physical/private state. Reuse grow/answer. Prove actual
+ordered memo receipts, effects, language coverage, numeric/guard/arity/
+annotation contracts, then select the new worker through both checked callers.
+Do not replay an eager tuple batch as the new interleaving. Preserve all weak
+all-outcome premises. Native machine capacity and practical bounds remain real.
+
+## Separate biggest complete-enumeration gap
+
+No ORIGINAL-derived sufficient-depth bound yet covers neutral Type/recursion
+preparations across ALL actual siblings. Larger-depth stability assumes an
+ALREADY complete run. opaque_transfer_pendingSize preserves cost exactly.
+ValueFields/Origin lose original Type-site and Program-instantiation identity.
+A finite source-type equation/DAG witness must be DERIVED and retained through
+actual terminal merges, native intersections, and captured warm winners.
+Each neutral renewal must consume finite source demand, merge distinct finite
+type cells, or repeat a recursionKey in its own ancestry. Do not supply a finite
+key carrier, future iteration count, or one accepted branch as all-sibling proof.
+General outer worker rank remains proved and separate.
+
+Beta found NO verified original-constructible starvation counterexample.
+SourceSynthesisNativeTypeSites.firstOrderRaw_mu_bodies proves original Mu
+bodies are Top. SourceSynthesisTypeGuardSites.generalize_nonTop and
+.generalize_interior_top restrict original non-Top guards to the outer row.
+Generated intersections can change this. R146 TypeConjunctionBoundary
+refutes global prefix-free/max-original-path claims, not source divergence.
+InheritedGrowthBoundary.actual_prefix is not a reached original recursive run.
+FirstOrder programRuns uses the literal enumerateFully policy. Specftacular
+prunedPrograms has its separate typesLast/atTypes finite-template policy.
+Native enumerateFully/Until is size-free. Source signed size counts Program
+leaves, not expanded annotation nodes or selected recursive restarts.
+
+Mu/Union empty stored buckets for nonterminal scs are ALREADY documented
+(CachedPrepare.boundary_complete, RetentionBoundary.valid_bucket_not_retained).
+Parent equality target cells and waiting are separate carriers. Empty child
+storage alone does not prove original equality loss. No new repair is needed
+on that evidence. All earlier Haskell findings remain below for external work.
+
+Full scope remains: complete enumeration on the actual returned graph, exact
+accepted terms per source size/count/order/BOTH signed inverse laws through
+actual sparse execution, AllSized/fallback/failure/productive infinity,
+lazy tables/maps/sets/caches/hash/Word/Int/allocation, wrappers/lookup/Curried/
+Specftacular, and complete Haskell correspondence. This checkpoint is not
+completion. Keep the full goal ACTIVE and continue authorized regular pushes.
+
+## Restart state
+
+Runtime: /tmp/mcfta-row-queue-20261109-0029/. It contains small source manifests,
+check failures, publication scripts and reports. Root is sole compiler.
+Reuse existing bounded agents; no child compiler/Git. All 14 sources are frozen.
+Root owned Step/Publication/VisitProgress/Frame/Run; Alpha Origins/CreditBounds/
+StepProgress; Gamma RowsEffects/CellsValues/Refs; Beta Weight and read-only
+depth/coverage audits. Check live ownership before follow-up edits.
+Preserve unrelated .hypha/. Keep monitoring /tmp. Our file payload is about
+28 MiB; readable /tmp including directory blocks is about 35 MiB. Repository
+Lean cache is 6.3 GiB, outside /tmp. Marked source drafts remain protected.
+
+All published R171 document bytes follow unchanged.
+
+---
+
 # R171: checked driver on the returned worker state and shared requirement primitives
 
 Updated: 2026-11-09 00:20 CET. The full goal remains ACTIVE. Pushes to formalize remain
