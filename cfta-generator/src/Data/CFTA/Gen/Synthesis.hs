@@ -916,8 +916,8 @@ programRuns encoding space = go Set.empty $ map (toProgram . fst) $ listRuns "Mu
 -- | The programs of a term of the search space: the types go.
 toProgram :: Term Symbol -> Program
 toProgram term = case (Term.rootLabel term, Term.subForest term) of
-    ("app", children@(_ : _ : _)) -> App (toProgram $ children !! (length children - 2)) (toProgram $ last children)
-    ("filter", children@(_ : _)) -> toProgram $ last children
+    ("app", [_, _, function, argument]) -> App (toProgram function) (toProgram argument)
+    ("filter", [_, candidates]) -> toProgram candidates
     (symbol, _) -> Var (symbolText symbol)
 
 -- | The programs of a search space, one for each typed term, in Hectare's order.
