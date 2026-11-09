@@ -1,3 +1,415 @@
+# R195: actual shared owner rank and done-or-exhausted
+
+Verified at 2026-11-09 13:08 CET. Base R194 is 72adedf775a357a8552153f766ac6c08d34bbc35.
+Fifteen new modules add 31 public laws. All strict source checks pass.
+The full affected Audit and all sixteen portable packets pass.
+The fifteen proof commits end at e574dd109062844b8383c43fa1795f9c216b3ae1.
+This handoff and the additive Audit form the sixteenth commit.
+The goal remains ACTIVE with the complete original-input, enumeration,
+native capacity, and Haskell correspondence objective. Preserve .hypha,
+all older proofs, counterexamples, repairs, and marked drafts.
+No Haskell source change, new Haskell bug, or Haskell fix is included.
+The complete published R194 document follows this section unchanged.
+
+## Strongest current statement
+
+The ACTUAL shared outer phase run succeeds or exhausts its outer fuel under
+the existing initial invariants and computed reservation. The theorem is
+SharedOuterDoneOrExhausted.done_or_exhausted. Its companion failed_exhausted
+preserves the exact fault and complete returned caller, and proves that any
+failed outcome is an outer exhausted diagnostic.
+
+The inputs remain explicit: initial Context, native Frame, Fits, finite
+guard carrier, phase Inputs, ONE computed forecast Room, union normality,
+native positive support, causal publication history, stored and positive
+merge facts, NEW shared writer Origins, closed stored node cells, closed
+phase inputs, initially idle node/edge tables, and nine phaseNeed lower
+inequalities. Empty initial tables discharge their history and idle facts.
+No future Context, closure, writer, rank decrease, or successful enclosing
+call is supplied. Original accepted-input initialization still needs its
+own shared theorem. The computed capacity condition is still explicit.
+
+Strict recursive owner descent is now proved for the actual shared worker.
+The progress measure is the lexicographic pair of positive quotient count
+and structural value mass. A nonplain source row decreases positive count.
+A plain row retains the count bound and decreases mass when counts match.
+This measure is separate from enumeration rank and SOURCE Program size.
+
+The same actual captured Parent writer supplies closed children and
+backwards positive ancestry. Actual completed siblings retain native
+support, causal history, merge facts, normality, and writer Origins.
+The actual unfinished prefixes retain these facts and closed inputs.
+Actual busy failures construct their own reached dispatch and captured
+owner. A repeated request contradicts strict owner descent. Reference
+failures supply their actual closed-input cut. Absent-node failures supply
+their actual invalid demand cut, which weak NodeValid excludes.
+
+This result does not prove that the computed outer fuel is sufficient.
+It does not prove the original source endpoint selects the shared worker,
+fixed native capacity, complete enumeration, or Haskell correspondence.
+Those remain part of the full objective.
+
+## What changed and why
+
+1. SharedActualParentBranchCases follows the literal shared Local and
+   Parent calls. The return keeps input children, erases slots, returns
+   Empty, or completes the same nonempty selected Scan/Required/class pass.
+   Its local entry probe Good comes from the SAME historical writer Context
+   inside the public writer consumers. Their original inputs stay exact.
+2. SharedResourceParentClosed.children proves closed returned children.
+   SharedResourceParentPositiveBack.children proves plain-row Shape and
+   the backwards relation for every positive returned child position.
+   Both consume NEW SharedResourceParentWriters.Written. R194's new selected
+   sublist and final-scan primary traces replace the old Retained dependency.
+3. SharedUnionNormalLocalParent and SharedUnionNormalOuter preserve the
+   original normality-only hypothesis for ALL actual stopping outcomes.
+   SharedOuterUnionNormalHistory carries it through actual prefixes and
+   their stopping outcome. No Ready or future callback is added.
+4. SharedOuterNativeStores derives support, causal publication history,
+   merge stores, merge positive support, and normality through completed
+   actual shared calls. The Parent leaf uses its nine OBSERVED bounds
+   directly. SharedOuterPrefixNativeStores carries the exact current stores
+   through the existing SharedStep/Reached family from one initial seed.
+5. SharedOuterResourceWriters preserves NEW Origins through all completed
+   calls and actual unfinished prefixes. Warm returned cells retain the
+   SAME complete historical captured request. SharedOuterClosedInputs then
+   derives closed node cells and phase inputs at those same reached states.
+6. SharedActualChildRank.dispatch consumes the actual Parent writer,
+   positive ancestry, pure quotient-count law, actual earlier child prefix,
+   and current shared resources. It constructs the actual next dispatch and
+   the strict count/mass decrease. It adds no closed-input or rank premise.
+7. SharedOlderOwnerLineage.body_rank_lt derives strict descent to every
+   nested candidate from the same captured body and real first-child cut.
+   SharedOlderOwnerBusy.no_node_busy combines it with the weak runtime
+   NodeValid owner producer. SharedOuterReferenceAbsent excludes references
+   and absent-node diagnostics at their actual returned cuts.
+8. SharedOuterDoneOrExhausted composes those results with the existing R193
+   initialized Parent, edge memo, and local-fault exclusions. It does not
+   duplicate the lower extraction proofs or infer an all-fault caller Post.
+
+Two API details are material. R192 SharedOuterEdgeGuardAlphabet.Receipt and
+R194 SharedEdgeCallNumeric.Receipt are distinct types. The new outer native
+store producer consumes the former directly. Its actual graph suffices;
+there is no receipt or read-graph cast. The busy proof calls
+SharedOuterExecutionRuntime.Reached.owners explicitly with weak NodeValid.
+The stronger dual-table Protocol API is not a new public premise.
+
+The shortest strict-rank path does not use old owner-selection/pair or
+inherited-key separation wrappers. ActualChildRank previously imported
+ResourceOwnerInheritedDispatch only for transitive helpers. The new proof
+imports the actual shared producers and pure count law directly. Keep all
+old proofs as published. Port their stronger standalone APIs only when a
+real remaining consumer requires them.
+
+SourceCurrentSharedOuterWalkPrefix.walk_prefix is at the module namespace.
+Workers is a SECTION in that source, not a namespace. Preserve the actual
+public name from its checked theorem packet. Physical endpoint equality
+still does not reindex canonical read traces to arbitrary observed bounds.
+
+## New verified modules and commits
+
+- SourceCurrentSharedActualChildRank: 1 public laws; commit 35e7ec3b4bb60a0df115bc15130ed83ffadd8850; source SHA256 a0b7b24223359cf2589961c89552a6cb122f4e5a671747f831c8661d3e844868.
+- SourceCurrentSharedActualParentBranchCases: 1 public laws; commit 802be6da5c036938cd3a91489e400e809849b700; source SHA256 6aadf4141cd77c68e322341bd4c7c2dd1f25d703a024b79afe515947c0f8a01c.
+- SourceCurrentSharedOlderOwnerBusy: 1 public laws; commit 29c0629d9175e66b437556cbbc77eacedc35bbf9; source SHA256 066e30de37db0b8e676eadc5982fe622dcf37ca6ca5e5e7330e43c5b7bf71305.
+- SourceCurrentSharedOlderOwnerLineage: 1 public laws; commit 5cd38732192f8c8f0d62a745b4c60861c27cb3e5; source SHA256 ad220d1edd347b8022ba2b37f142cd6df1af5ea3b27d66db709c48f5da129ae5.
+- SourceCurrentSharedOuterClosedInputs: 3 public laws; commit 3edb8fe72a91e5de9accf09cff804ed0c73f7916; source SHA256 3e8fdf872e14833fced50c6785bc76a454230230c461b58d099103986b8e35d6.
+- SourceCurrentSharedOuterDoneOrExhausted: 2 public laws; commit e574dd109062844b8383c43fa1795f9c216b3ae1; source SHA256 e51127c4b1e63545bafbb986337456031973b6389b290ef76ca36060334ff75a.
+- SourceCurrentSharedOuterNativeStores: 3 public laws; commit 1c6137506fecdf19c5e74a52085e99d4c5b23f67; source SHA256 8823f8854a6c62c7cfd74b97e900922efdbf8d8c84e464f5a7a1dab3bde90d9a.
+- SourceCurrentSharedOuterPrefixNativeStores: 1 public laws; commit 019cd9b9d04a80fd4f25b539598f1a2203649ef0; source SHA256 b6fa391cdbbfa6d2534a8e26fd26fdbc4b888931125e8ec214228cfa148c3a90.
+- SourceCurrentSharedOuterReferenceAbsent: 1 public laws; commit 40d02959fd669c483adb6ca55143d3494ca5f0fb; source SHA256 1bd83b621e8e4d405ce7d0eac82c7b20a20c59a554b52c470386e3c3f37b0056.
+- SourceCurrentSharedOuterResourceWriters: 2 public laws; commit e46ec63e67657a199d450acf6473f9935776e805; source SHA256 07055df5d202f4e99fe4988cb34148f0498482e6786198756dc8c748f61ebd70.
+- SourceCurrentSharedOuterUnionNormalHistory: 3 public laws; commit 65d1c70ab334faa6c44c579a8a6c375b088b2eff; source SHA256 42e24d77bbaa2c82035847e78ccdaa9c3fc97157fc896ad43d87973bf805cb10.
+- SourceCurrentSharedResourceParentClosed: 1 public laws; commit 8b2d41e6a85d2d65efbad834672c5bae2af5305b; source SHA256 9da9bac5827433537709fe3c3f3862dae117c4476d755ea360b3ad00eae16c40.
+- SourceCurrentSharedResourceParentPositiveBack: 1 public laws; commit 751cb4f4ea5faa7818def6fcb6caf2d3c0cc69f9; source SHA256 65b9f167ff7416b3f698686823a02577f7d0932acb2a15c0a8ff01b0fb42c63c.
+- SourceCurrentSharedUnionNormalLocalParent: 2 public laws; commit 5e053e98e309825c2e0352e754c1ad40b7ebef6b; source SHA256 5aae17bca828ef6c13bb0aa3190f601b4e591de93d2d762ec797d5a7fad118fc.
+- SourceCurrentSharedUnionNormalOuter: 8 public laws; commit 45ef0cefd9eab844c9cd62965125f272ef94db2a; source SHA256 68c3764472172167bd8f88932c30b9be83e07dcb087274974cdfc89a382e1003.
+
+Each source has a small committed packet under lean/restart-evidence.
+The checker records its hash, emits an explicit check and an axiom report
+for EVERY public theorem, verifies the actual namespaces, and treats its
+own warnings as errors. Allowed axioms are propext, Classical.choice, and
+Quot.sound. All prior sources, counterexamples, repairs and packets remain.
+This evidence is reproducible from source. Do not retain generated copies.
+
+## Verification and storage
+
+- Strict own-source checks: 15 modules and 31 public laws pass.
+- Full affected import DAG: 5551 live modules; 16 affected modules; frontier
+  Audit; 4548 direct Audit imports. All dependencies are acyclic.
+- Full Audit: 90686 theorem axiom dependency reports; 9.79 seconds; 3487M
+  recorded peak. All sixteen source snapshots stay exact before/after.
+- All sixteen source/compatibility packets reproduce from cwd /tmp.
+  Their combined recorded peak is 237M.
+- The cap remains ONE job, memory.max = memory.high = 4294967296 bytes,
+  memory.swap.max = 0, and LEAN_NUM_THREADS = 1. Do not raise the cap or
+  queue concurrency. Root runs the sole compiler and publishes Git.
+- Readable /tmp was about 45 MiB, with 241.29 GiB free at 13:02 CET.
+  No archive or proof-tree copy was created. Keep only small helpers,
+  compact failure logs, source manifests, and publication records.
+- Audit adds fifteen imports and preserves every prior Audit byte.
+  These three root documents preserve every prior R194 byte below.
+- No production Haskell source changed. Haskell formatting and Cabal tests
+  do not apply to this Lean-only change. Record EVERY future Haskell fix in
+  root FINDINGS.md with its source location, behavior, repair, and check so
+  an external agent can implement or verify it.
+
+Committed compatibility packet:
+lean/restart-evidence/20261109-shared-writer-closure-compatibility.
+Small runtime directory: /tmp/mcfta-shared-writer-closure-20261109-1240.
+The source packets and full compatibility checker locate the repository
+from their own path. No preserved temporary tree is needed to reproduce.
+
+## Biggest gap and next proof
+
+The next core gap is a COMPUTED sufficient outer fuel, followed by original
+accepted-input shared completion. The shared rank envelope and stage
+arithmetic already exist from R193. Their resource-continuation and adequacy
+proofs must now consume actual shared execution and the newly proved strict
+child/owner rank. No rank, future resource, or completion oracle is allowed.
+
+Construct SharedOuterRankEnvelopeResources from the old 481-line module
+using genuine shared schedules, graphs, callbacks, histories and prefix
+resources. Construct SharedOuterRankAdequacy from the old 517-line module
+using new shared done-or-exhausted and strict child rank. Then version the
+old 127-line OriginalRankCompletion with the ORIGINAL accepted initializer.
+The original source-facing verified endpoint must actually select the new
+worker. Native fixed-width capacity remains a separate condition to prove
+or compare with the real Haskell behavior. A mathematical Room hypothesis
+does not prove that Word64 or Int execution meets it.
+
+The next audits below state exact dependencies and physical/read-schedule
+boundaries. The owner-rank audit was written before its listed R195 proofs
+passed. All fifteen modules have now passed; its remaining boundary notes
+and explanation of the shorter path remain useful.
+
+## Full objective and selector boundaries
+
+Keep the optimized interned core. The top-level objective covers ORIGINAL
+accepted inputs and requests, every sibling and generated/rejected/failing
+path, returned states, and subsequent states. Prove exact accepted terms per
+SOURCE Program leaf-size, counts, size order, and BOTH signed rank/unrank
+inverse laws. Keep AllSized, fallbacks, failures, and productive infinity
+as separate contracts. Source leaf-size, annotation expansion, and observer
+fuel are different measures.
+
+Prove source Type-site and Program-occurrence finite-DAG progress for
+generated intersections and warm winners. Each step must consume actual
+occurrence/demand work, merge distinct finite cells, or repeat a real
+ancestry key. Arbitrary guarded Mu or prefix growth is not an original
+source divergence witness. There is no newly verified executed original
+starvation counterexample in this round.
+
+Retain all native Word/Int capacity, hashes, maps, sets, caches, lazy
+allocation, host wrappers, lookup, Curried, Specftacular, and full Haskell
+correspondence targets. Older constructor and equality work remain real
+secondary targets. A U-only, initial-only, success-only, unselected, or
+compatibility theorem does not complete this objective. Future traces,
+future closure, carrier, fuel, and completion oracles are not acceptable
+substitutes for actual producers. A sound True empty result and a possibly
+inconclusive False result remain different contracts.
+
+Three selector boundaries remain separate:
+
+1. NEW allocated SharedPartialWorker calls the NEW shared Parent. The
+   original source endpoint OriginalVerifiedCompletion still selects the
+   OLD PartialWorker.nodeCall. Old graph/read/range/rank/history indices
+   cannot be cast to the new family.
+2. Pruning enumeration reaches Terminal, IncomingCacheAdapter, and
+   CachedTerminalAdapter through Recursive/resume/SelectedStep and native
+   continuations. These retain three OLD Incoming selectors. Fold's
+   Dispatch.afterQuery also calls OLD EnabledEmpty before Incoming.
+   CachedFold/CachedAdapter retain old Dispatch and old Fold fallbacks.
+   Version the actual selectors and full upper call chain while preserving
+   gates, skip order, query memos, and complete fault snapshots. A new
+   SharedFault does not cast to an old RowsFault.
+3. PruningAction.prepare reaches OuterNarrow and HEAP-ONLY NativeView.narrowAt.
+   It does not call PartialWorker.nodeCall. A source-facing connection is
+   still required.
+
+## Read-only audits for the next proof
+
+# Next shared owner-rank proof cut
+
+Read-only source audit, 2026-11-09. No Lean source or compiler change.
+
+## Recommendation
+
+Port `SourceCurrentActualChildRank.dispatch` directly to a new
+`SourceCurrentSharedActualChildRank`. Do not port the entire owner-pair
+chain first. The old file imports ResourceOwnerInheritedDispatch at line 1,
+but its proof never calls that module. The proof uses only the actual
+writer, positive-back law, pure quotient count, current inherited-prefix
+facts, literal sibling prefix, and returned resources.
+
+The existing shared producers already supply these inputs:
+
+- SharedResourceParentPositiveBack.children:71: plain-row Shape plus the
+  backwards relation for every actual positive returned child.
+- PositiveQuotientCount.child_count:129: the descended positive count is
+  bounded by the owner count; it is strict for a nonplain source row.
+- SharedOuterWalkPrefix.walk_prefix:34: actual completed earlier siblings
+  produce the exact next Shared Reached node entry. No remaining success
+  is an input.
+- SharedOuterResourceWriters.reached:438 and SharedResourceParentWriters.edge_call:159:
+  recover the actual same captured Parent writer from current original
+  resources, including a warm returned cell.
+- SharedOuterPrefixNativeStores.reached:167 and SharedOuterInitialActual.walk:534:
+  supply current contexts, native stores, exact earlier-call effects and
+  the operations growth required by literal descend.
+- SharedOuterOwnerPrefix.first_child:162 already extracts the exact first
+  child of a body-to-node Shared Reached path. It retains selected row,
+  parent call, inherited-prefix result, earlier child calls and node tail.
+
+## Minimal new dependency order
+
+1. **SharedActualChildRank.dispatch** (old ActualChildRank:108 onward).
+   Keep the old current initial premises: Context, Frame, Fits, guard
+   carrier, Shared Inputs, one scheduled Room, normality, support, causal
+   history, merge stores and initial shared writer Origins. Keep actual
+   past-to-row, source row membership, successful shared Parent call,
+   combined prefix and live payload, successful earlier walk, and selected
+   returned child. Derive the next Shared Reached request and
+   `Prod.Lex Nat.lt Nat.lt (count childPayload child, mass child)
+   (count inherited owner, mass owner)`. There is no active-handle,
+   selected-family, future Body or Type-classification input.
+
+   Copy the three private pure/current helpers from ActualChildRank:27,
+   :56 and :88 (reservation with new schedule, prefix_data, shape_mass).
+   Import SharedOuterWalkPrefix directly instead of old
+   ResourceOwnerInheritedDispatch/OuterUntouchedProgress. Nonplain rows
+   decrease quotient count; plain rows use the Shape half of PositiveBack
+   to decrease structural mass if the quotient counts are equal.
+
+2. **SharedOlderOwnerLineage.body_rank_lt** (old OlderOwnerLineage:95).
+   Use existing SharedOuterOwnerPrefix.first_child and the new child rank.
+   Keep genuine initial context/resources/store/origin premises and actual
+   body-to-candidate Reached. Its strong induction is on enclosing body
+   fuel. The pure fuel, lex-transitivity and key-to-complete-request proofs
+   remain usable. Shared initial-prefix Post and Shared node_start derive
+   captured-owner readiness internally. No extra runtime ancestry premise
+   or successful enclosing body is needed.
+
+3. **SharedOlderOwnerBusy.no_node_busy** (old OlderOwnerBusy:26).
+   Combine SharedOuterInitialBusy.busy:60, the new lineage law, and
+   SharedOuterExecutionRuntime.Reached.owners:419. The initial condition is
+   still no evaluating node cell. Empty initial node tables discharge it.
+   Equal busy owner/candidate requests contradict the strict lex rank.
+   Use the weak NodeValid owner API, not a new external Protocol premise.
+
+4. **SharedOuterReferenceAbsent.no_reference_or_node_absent** (old :214),
+   independently after Gamma's SharedOuterClosedInputs. Port its literal
+   six-phase failure-cut extraction to the Shared worker/Step/Reached.
+   SharedOuterClosedInputs.reached:423 gives closed inputs at the actual
+   reference-body cut, so `[name] = []` is impossible. The absent-node cut
+   is excluded by beginNode link validity and
+   SharedOuterExecutionRuntime.Reached.valid:350. Keep the old combined
+   public input shape. A separate absence-only law could use just initial
+   NodeValid: its proof does not need Room, closure, or native stores.
+
+5. **SharedOuterDoneOrExhausted.done_or_exhausted** (old :23).
+   Reuse existing SharedOuterLocalFaults.failed_cases:55,
+   SharedOuterInitialParentFailure.no_parent_failure:38 and
+   SharedOuterInitialEdgeMemoFailure.no_edge_memo_failure:71. Add the two
+   exclusions above. Keep initial node/edge idle, NodeStored, InputsClosed
+   and all nine `SharedOuterInitialFuel.phaseNeed <= g/s/r/e/p/h/m/c/n`
+   premises. This concludes literal success OR outer-fuel exhaustion;
+   it does not yet remove exhaustion or prove sufficient original depth.
+
+## Which old owner modules need new selection/pair APIs
+
+- ResourceOwnerProgress.key_ne_top:21 explicitly calls
+  ActualOwnerSelection.selected:59 and ActualOwnerPair.required_pair:91.
+  Those old signatures contain old Parent/Scan/Retained and cannot accept
+  the new actual calls. A literal port needs a new selected branch and a
+  pair helper indexed by the new selectedSublist plus final-scan primary.
+  The pair arithmetic itself is pure PositiveOwnerPair.same_child_pair.
+- ResourceOwnerInheritedProgress.key_ne_inherited:80 repeats the selected
+  certificate extraction, then uses pure
+  PositiveInheritedChildSeparation.same_child_payload_ne. A new proof can
+  obtain its backwards premise directly from SharedPositiveBack, but its
+  stronger guard equality/nonplain conclusions still require the coupled
+  constructor/selected-branch argument. A mechanical rename is invalid.
+- ResourceOwnerInheritedDispatch.key_ne_inherited:60 genuinely calls that
+  inherited-progress result at :179. It must version the actual Shared
+  parent/walk and Shared Reached/runtime-growth methods. It is a separate
+  same-owner key-exclusion interface, not a prerequisite of the strict
+  lex rank proof above.
+- Therefore none of these three modules, nor an old Retained replacement,
+  is needed for the shortest lineage/busy-exclusion path. Avoid introducing
+  extra exposed selection or pair APIs merely to preserve transitive imports.
+
+## Closure and fault boundaries
+
+Gamma's new ClosedInputs source currently states initial:50,
+reached:423 and node_call:449. With the same initial shared Origins,
+NodeStored and InputsClosed, it supplies all actual reached closed phase
+inputs and closed successful node results. These are current/initial
+invariants, not future result suppliers. Cold initial NodeStored is empty.
+
+BusyOwner retention alone is not busy exclusion. The old OuterBusyOwners
+is indexed by the old Outcome and worker. Reuse only its pure beginNode or
+beginEdge lookup facts; the necessary actual Shared failed-node extraction
+and weak owner ancestry already exist in SharedOuterExecutionRuntime and
+SharedOuterInitialBusy. Do not cast an old run or owner-retention graph.
+
+The combined rank argument does not require a new source Type measure or
+joint prefix-free premise. It ranks positive quotients and structural mass
+for the actual finite values, with positive-back derived from the captured
+shared writer. It still requires the explicit initial invariants and
+computed scheduled Room above. Whole shared sufficient-fuel completion
+still needs the resource/envelope adequacy port after DoneOrExhausted.
+Original source initialization, finite native capacity and full driver
+productivity remain distinct obligations; no unconditional native or
+Haskell completion follows here.
+
+## Porting details
+
+Shared Step/Reached are reused relations in SharedOuterExecutionAncestry.
+Their `.valid`, `.running` and `.owners` laws live in the separate
+SharedOuterExecutionRuntime or SharedOuterActiveAncestry namespaces.
+Use explicit qualified calls; dot lookup on the relation otherwise selects
+its declaration namespace. Prefer Runtime's NodeValid versions to avoid
+strengthening premises. Keep canonical Parent read bounds separate from
+actual observed shared-call bounds, as in the existing endpoint receipts.
+
+
+# Next shared rank adequacy cut
+
+Read-only audit, 2026-11-09 13:05 CET. Root reports the shared envelope, stages, lineage and lower writer/closure laws verified. Shared DoneOrExhausted source is present; its current check was pending at assignment. No compiler or Git was run for this audit.
+
+## Smallest proof chain: three new files
+
+1. `SourceCurrentSharedOuterRankEnvelopeResources.node_call`, from old `SourceCurrentOuterRankEnvelopeResources.lean:175`. Keep the root Context/Frame/Fits/carrier/Inputs/Room, support, causal history, merge support and shared writer Origins premises. For an actual reached successful shared node call, derive Fits and guard membership at the NEW shared envelope output. The finite child images must use each CURRENT post-Parent/post-sibling seed. This law is a resource continuation after actual success; it is not completion. Use SharedOlderOwnerLineage.body_rank_lt, SharedOuterInitialPrefix.reached, SharedOuterEdgeGuardAlphabet.edge_call and SharedOuterInitialActual.children/rows. Port the local finite-fold equation to the NEW shared envelope recipe.
+
+2. `SourceCurrentSharedOuterRankAdequacy.initial_node_call`, from old `SourceCurrentOuterRankAdequacy.lean:168`. Keep the same current hypotheses, shared NodeStored/InputsClosed and initial node/edge idleness. For O = SharedOuterRankEnvelope.envelope B (count inherited value) (mass value) seed, first = node O.1 request before, need = SharedOuterInitialFuel.phaseNeed B first seed, require each of the nine lower fuels >= need. Then derive one result/after with literal SharedPartialWorker.nodeCall f ... = done result after for EVERY f >= O.1. SharedDoneOrExhausted gives only exhaustion or success; lexical count/mass induction plus shared stage_bounds excludes exhaustion. The resource law in (1) supplies the exact next sibling seed. Do not assume success or a future prefix certificate.
+
+3. `SourceSynthesisOriginalSharedRankCompletion.accepted`, from old `SourceSynthesisOriginalRankCompletion.lean:46`. Accepted signed firstOrderRaw input derives its literal Label build, guard preparation and cold caller via OriginalCallerInitialization.accepted. Reuse the worker-independent ConstructedOuterInitial.frame proof. Use the shared writer/closed/idleness empty-table initial laws. Apply (2), then SharedOuterInitialActual.node_call to obtain returned availability, language law and, if desired, its SAME shared graph/endpoint reads/Post. The existing original accepted theorem and VerifiedCompletion still name the OLD worker and cannot be used as a shared return.
+
+## Exact small proof changes
+
+- Replace all Parent schedule/profile/fuel references with SharedOuterInitialSchedule.parent and SharedParentUniformEnvelope. The shared admission defers requirement jobs and retains private storage on failures. No old Parent envelope dominance or old/shared state equality is established.
+- The actual shared Parent branch retains nine observed bounds in SharedPartialGraph.EdgeBody.parent. SharedOuterEdgeGuardAlphabet.edge_call:104 returns the shared graph, canonical endpoint reads, pure semantic receipt and SAME Post/Frame. Read bounds stay canonical; endpoint uniqueness does not reindex reads to the observed bounds.
+- Adequacy lines 300-304 call the OLD worker-indexed MuReconstructionEffects.node_body. Its .physical/.complete facts are worker independent. Use those facts and unfold NEW nodeBody locally. A new Mu framework is unnecessary.
+- Constructor profile, raw edge/modify bounds, finite cover/maximum, inherited-prefix completion and probe/key injectivity remain usable. Old ConstructorBounds.descend/prefix_state mention old Graph utility definitions, but the definitions only update operations; unfold the two literal utilities or prove their component facts directly. Do not cast worker outcomes. Use NEW children/rows actual receipts for lengths and residency.
+- SharedActive.Reached.failed and SharedRuntime.Reached.valid are namespace extensions of the reused relation. Call them explicitly. Their names do not live under SharedExecutionAncestry.Reached.
+
+## Remaining capacity, source and selection boundaries
+
+The one capacity premise is exactly
+
+    Room bits (cover [O.2.2.2] (SharedOuterInitialPrefix.forecast B first seed).2).
+
+It supplies BOTH the root finite-fuel forecast room and the recursive envelope output room. Initial fits or only the root forecast room does not replace it. Room means nodes < 2^bits, edges <= 2^(bits+2), and domains + 2^(nodes + nodes*nodes) < 2^(bits+1) (NativeResourceForecast:105). Original construction does not derive this native capacity test. No claim that all original libraries pass it is justified.
+
+Use the actual cold seed (GuardUniverse.guards heap, <nodes.next, edges.next, 0, initialBound heap>). Accepted firstOrderRaw(lib,query,SIGNEDsize) remains the source branch condition; source errors remain explicit. No supplied build, Context, final guard carrier, role oracle or native memo is needed in the original wrapper.
+
+Selector adoption is separate. Current AllocatedConjunctionWorker.call:37 and AllocatedTupleConjunctionWorker.call:27 still execute DemandWorker. SharedEnabledEmpty:21 and SharedIncomingNode:73 are explicit new shared routes. Existing OriginalRankCompletion and OriginalVerifiedCompletion retain old PartialWorker/old graph references. A new accepted shared theorem proves its named shared execution; it does not silently switch those selectors.
+
+The enumeration incoming merge itself is native execute(requestNode emptyDomain incoming old), in BOTH IncomingNode:67 and SharedIncomingNode:68. It is not the outer nodeCall. Therefore this rank port does not discharge warm driver native WordRanges, all sibling/recursive driver capacity, total-work bounds, or Haskell demand correspondence. Keep those obligations separate from sufficient outer fuel for this one initialized request.
+
+
+---
+
 # R194: shared Parent writers and exact read certificates
 
 Verified at 2026-11-09 12:34 CET. Base R193 is 679d9ec09702d3e22e2ab65af4549e78a585831e.
