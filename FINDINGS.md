@@ -1,3 +1,229 @@
+# Native opaque boundary and prepared partial output — 2026-11-09 21:54 CET
+
+## Restart and full objective
+
+The full goal is active. Continue on `formalize`. Push permission remains
+in force. Preserve unrelated `?? .hypha/`. Read this common checkpoint
+before the older checkpoints below. No production Haskell source changes
+occur in this checkpoint.
+
+Keep the optimized interned core. Preserve older constructor and equality
+work as secondary targets. Prove original-source soundness and completeness,
+component count and general node count, finite execution, actual size and
+order, and both signed API inverse directions. Include generated, rejected,
+failed, sibling and later states. Include warm caches and cache identity,
+fixed Word/Int behavior, lazy productivity and sharing, and full native and
+Haskell correspondence. Local laws and passing builds do not finish this
+objective. Keep exact accepted-term/node-count contracts distinct from the
+documented partial API contract.
+
+Base: `76c0789cedfd11e15a2be6a31688920cc270e5f5`.
+Seven proof commits end at `34bd51651987c491040b3a32a1d5ae5bbccd8f34`.
+The documentation/Audit checkpoint follows those seven commits.
+Main `849029e5b55a5d1c0152c24b55117b38419a6279` is included and unchanged.
+Every old Lean source byte remains, except for added Audit imports.
+The three handoff files retain every previous byte below this prefix.
+
+## Strongest new positive statement
+
+`SharedPreparedRecursive.OutputResources.root_partial_complete` takes the
+resources of the SAME current prepared output. It also takes the explicit
+current fact `0 < output.cache.core.counter`. It derives one finite partial
+root observation at that output's actual heap and cache. Every larger
+rendering fuel returns that term and the same post-state. The result keeps
+the actual native caller, full final memos, query identity, metadata packet,
+Fits and guard carrier. It retains RenderStable, compression Frame and
+stratification, and derives the packet for the observed cache.
+
+The observer is constructed before model observers. For every assignment
+that satisfies the current output state, it proves that the SAME observed
+term completes to that assignment's root. It requires no model-existence
+premise. It does not construct a satisfying model or an original-source
+accepted completion. The resource capsule has no input/output enum-counter
+relation, so initial positivity alone was not used to infer current root
+allocation. That producer obligation remains explicit.
+
+The previous prepared finite-depth result remains valid. Current Packet,
+Fits, carrier, selection, mass and reservation premises derive one bound
+and one literal actual prepared outcome stable at larger work fuel. The
+proof follows actual preparation, shared callbacks, sibling continuation,
+Left and restart. A stable outcome can stop. Its memo witness belongs to
+its actual caller and query. It does not identify all ghost memo bundles.
+Rendering fuel and prepared work fuel are still separate bounds.
+
+`SharedPreparedSelectedDriver.run_selected` is the new prepared entry.
+Historical `SharedPreparedDriver.run` still uses ordinary SharedRecursive.
+This checkpoint does not switch the default executor. The older original
+accepted-term/full-symbol decoder/component-count bridge also remains
+valid. It is not yet composed with every actual selected output. Program
+components are not the general annotated AST node count.
+
+## Checked native limit of full-bucket preservation
+
+The earlier canonical-heap and actual-row witness gap is now closed.
+`InternedOpaqueUnionWitness` builds
+`U = union[a[], mu X.(a[] | a[X])]` from empty caches with the actual fresh
+constructor. The root has identity 5 and handle 6. The recursive member
+prevents the all-ordinary union reduction. The same returned heap has
+constructor facts, canonical coherence, availability, closedness and exact
+readback. The actual payload accepts a nullary term and a unary term under
+its stated guard. This is a constructor witness, not a synthesis history.
+
+`OpaqueBucketAssignment` starts with two independent pure slots. The valid
+nonterminal bucket requires path `[0]` to equal the assignment at slot 1.
+Actual opaque preparation allocates slot 2 with an empty stored bucket.
+A nullary native assignment satisfies the before and returned states. It
+fails the supplied descendant obligation. Writing that same bucket into
+the same fresh slot rejects the assignment. No fresh future execution is
+supplied as a premise.
+
+`OpaqueBucketCurrent.current` certifies the literal input cache: Safe,
+Canonical, PendingRealized, identity Roots, correct zero canonical waiting
+counts, all-false native candidate flags and zero waiting reads. It needs
+no hypothesis about the native heap. The native shared countermodel uses
+that exact cache definition.
+
+`SharedOpaqueBucketBoundary.run_exact` proves the actual complete shared
+opaque row for ALL five fuel arguments. Any two nonterminal buckets give
+the same observation and cache. A correct input index leaves the new opaque
+slot parked. The actual caller, query memo and captured outer state stay
+exact. The stored fresh bucket is empty.
+
+`NativeOpaqueCountermodel.native_shared_countermodel` composes the actual
+canonical constructor, actual source PCS Top guard, the exact current cache
+and one literal shared call. No accepted-nullary language hypothesis or
+residency hypothesis remains to be supplied. Its returned state admits a
+native model that fails the supplied valid bucket. The caller starts with
+empty native and query memos. Full caller Context, word-capacity eligibility
+and accepted-synthesis reachability are NOT proved by this example.
+
+`NativeOpaquePartial.fresh_partial_exact` then observes the SAME allocated
+slot at the SAME native heap. Every positive rendering fuel returns the
+explicit truncated symbol and the exact post-state. The post-state includes
+the representative entry inserted by reading the fresh slot. The marker
+statement is not a bad concrete returned term or a synthesis counterexample.
+
+## The documented contract and biggest remaining source obligation
+
+`cfta/README.md:443` documents that constraints descending into a truncated
+Mu are dropped. It also says a marker does not establish a nonempty language
+below it. `Enumeration.hs:1185` gives the same limit for early partial
+branches. This behavior is part of the library as it is. Do not classify
+the native countermodel alone as a Haskell bug or silently require every
+marker to have an original-source accepted completion.
+
+`Completes.truncated` permits every complete subtree. It retains neither
+native membership nor omitted equalities. Independent choices for several
+markers do not establish ONE source-accepted term satisfying cross-path
+constraints. The new positive theorem represents current models and does
+not assert that any model exists.
+
+The next original-source step is to follow child descriptors from ONE
+accepted source through actual shared execution. Derive the per-child
+retention gate where concrete source acceptance requires it: ordinary value,
+a terminal member, or an empty bucket. Alternatively, give the explicit
+partial semantics for the constraints omitted at truncation. This must be
+an internal producer argument. Do not replace it with another caller
+premise or an independently completed run.
+
+Current hereditary Program fields restrict Program positions to Empty or
+ordinary values. Their Type fields require Annotated(Origin lib); they do
+not forbid Mu/union or prove all-reached bucket retention. The original
+accepted/startup ValueFields package therefore does not settle this step.
+The native example still has no original-source route or full Context.
+
+Other gaps remain: concrete/source completeness and selector coverage;
+adequate original-input depth and total work/capacity; unpaid Type depth;
+actual order and general node count; both actual signed API inverse
+instances; native fault/context/history preservation; Word/Int limits;
+lazy productivity, sharing and cache identity; and whole Haskell
+correspondence. Selection membership/length does not prove coverage.
+Arbitrary pruning and typing callbacks require their own contracts.
+
+## Haskell status and external pickup
+
+No production Haskell repair is made here. The new limit is documented
+behavior. Keep it separate from the earlier field-pool invariant issue.
+The prior app4/filter2 decoder repair is already on included main in PR204:
+https://github.com/TharkunAB/cfta/pull/204 . Its original commit is
+`113de3d85f7776d623c45fd3e31157e4254af1fb`.
+The actual repaired files remain:
+
+- `cfta-generator/src/Data/CFTA/Gen/Synthesis.hs`, SHA256
+  `dfffbf454516649e115d890e65b6289217dbcf352ccb08e86415d719b32fbc3a`.
+- `cfta-generator/test/Data/CFTA/Gen/SynthesisSpec.hs`, SHA256
+  `8f931875e18cd32a21a58072de1363530df3b03189b576fca614f009063fbe47`.
+
+Keep full interned Symbol equality for app4/filter2. Only the decoder's
+fallback uses symbolText. The older decoder packet records all three
+encodings, 13 tests and formatting. No unchanged Haskell test is repeated
+in this proof-only checkpoint.
+
+Synthesis uses runsBy/runsNarrowedBy and the common expandUVarWith marker
+renderer. It does not call termsPrune directly here. Removing annotation
+fields in toProgram does not establish a joint original typing completion.
+The earlier public replay in `20261109-opaque-bucket-boundary` still returns
+`r(Mu,a)`, rejects proposed bad ground term `r(b,a)` and exposes a valid
+`r(p(a),a)` control. That fixture is executable evidence about the shared
+renderer contract, not a verified synthesis defect.
+
+## Verification, reproduction and storage
+
+Seven new modules add 21 public laws in 769 Lean lines. Every own-source
+check passes with warnings as errors. Every public declaration is checked
+under its real namespace with the exact source hash and standard axioms.
+The full Audit passes: 5684 live modules, 8 affected, 4681 imports and
+92251 axiom-report records. First Audit took 11.60 seconds. All eight
+portable packets pass from `/tmp`, with exact hashes and axiom maps. The
+portable Audit took 3.88 seconds. Counts measure validation, not completion.
+
+The bounded independent review found no caller/heap/query mismatch, hidden
+model-existence assertion, or hidden Context/source-reachability claim.
+It confirmed the remaining internal original-source producer obligation.
+The final direct cache link reuses the exact certified cache definition.
+
+Run a packet's check.py from any working directory under the existing cap.
+`20261109-opaque-native-compatibility` includes the full frontier and a small
+contract-audit.md. That audit was written before the positive attachment;
+SharedPreparedPartialOutput now proves the attachment with current root
+allocation explicit. Checkers read sources directly. No archive is needed.
+
+Use ONE serial heavy compiler/test process through
+`/home/tritlo/Code/heavy-management/bin/capped --mem 4G`.
+Effective memory.max=memory.high=4294967296, swap.max=0. Keep
+LEAN_NUM_THREADS=1. Do not raise memory or concurrency.
+Runtime helpers and small logs are in
+`/tmp/mcfta-opaque-native-20261109-2110/`.
+Two obsolete diagnostic logs were removed after the constructor passed;
+they totalled 3097980 bytes. The subsequent scan measured 29192269 bytes
+of visible regular files in `/tmp`, 254218244096 free bytes and six
+inaccessible entries excluded. No source/object tree or archive was copied.
+
+## Module map
+
+- `InternedOpaqueUnionWitness`: 8 laws, 199 lines.
+  SHA256 `4eeffe9428a770dc764c095293e98f46098b0a02af75e178436251c6bc038812`.
+- `SourcePruningEnumerationNativeOpaqueCountermodel`: 2 laws, 109 lines.
+  SHA256 `45a196ebc3e36e85f358b2cc985b82474c855c1c6f108c5c2186c8459da2f3d3`.
+- `SourcePruningEnumerationNativeOpaquePartial`: 1 laws, 49 lines.
+  SHA256 `d74b19781951744c02817b823e2fd2843f8f329616d264d6d490ca594d29df55`.
+- `SourcePruningEnumerationOpaqueBucketAssignment`: 5 laws, 141 lines.
+  SHA256 `e67489586db74c42ae15b37f6bd62e6690db04c36cea745e977b4ae6920b7bfd`.
+- `SourcePruningEnumerationOpaqueBucketCurrent`: 1 laws, 84 lines.
+  SHA256 `e11a4d7be4321bc9666182666a144b0f34e3d0e36c22031815d50839660eb6d0`.
+- `SourcePruningEnumerationSharedOpaqueBucketBoundary`: 3 laws, 111 lines.
+  SHA256 `c991905cac42a7a00f325c34f4043aebec8122d046208f26c1ae714c435aaeeb`.
+- `SourcePruningEnumerationSharedPreparedPartialOutput`: 1 laws, 76 lines.
+  SHA256 `6727a3f290210e5e72e34bbfeaf40a54d8d0902f9121253237401868ff7cc1a4`.
+
+Proof packets contain README.md, check.py, checked.json and theorems.json.
+The compatibility packet also carries contract-audit.md. Runtime
+verified-modules.json and commit-ledger.json record exact sources and
+commits. The full goal remains active. Do not mark it complete or blocked.
+The older checkpoint bytes follow without changes.
+
+---
+
 # Shared execution language checkpoint — 2026-11-09 21:06 CET
 
 ## Restart and full objective
