@@ -1,3 +1,142 @@
+# R175: stored descriptor witnesses, refinement, and closedness
+
+Updated: 2026-11-09 02:34 CET. Full goal ACTIVE. Formalize pushes are authorized.
+Preserve unrelated .hypha/. Proof HEAD before the documentation commit:
+0c9a6839de1a2697b66a6d75552a2f4cc0bbd999. Main 9f5f77783b9f936a1edf4225373cbad9dc6a9ed5 remains integrated.
+Read Git and runtime publication.json for final HEAD and remote verification.
+Complete published R174 document bytes follow this prefix unchanged.
+No old proof, finding, counterexample, or marked draft was removed.
+The previous goal turn and this turn both make checked source progress.
+
+## Strongest new statements
+
+RequirementCellsExecution connects ACTUAL pending-cell force to literal
+Pull.run from its original cursor and physical state, on success and failure.
+Failure retains the raw projection fault and FINAL stopped cursor at the same
+handle. It need not equal the initial cursor. No readiness, semantics,
+closure, future result, or additional work-fuel premise is used here.
+
+CellsClosed/RowsClosed derive closure of stored columns, cursor jobs,
+collected values, and cached outputs through actual allocation and forcing.
+RowsClosed needs current stored closure and explicit closed tuple/raw inputs.
+It needs no Ready or residency premise: row allocation does not project.
+CellsClosed needs CURRENT Ready, CellsValues.Invariant, and stored closure
+because forcing can project values. SharedWorklistClosed/SharedWorkerClosed
+lift stored closure to ALL exploration, decision, and memo-call outcomes.
+No ClosedValues query premise is needed. The actual skip/admission check
+supplies closed sampled tuples. Pending query tasks may remain open.
+Private stored closure does not assert closure of every query task.
+
+DescriptorsSoundness derives a strictly smaller accepted witness for each
+literal column/class descriptor from accepted original children and active,
+satisfied equality classes. It does not project or assume class success.
+CellsSoundness carries a CommonCell claim through an ACTUAL successful force
+using current cell residency/closure and semantic/cost/annotation heaps.
+Its actual class-force witness remains conditional on local success.
+
+CellsRefinement defines a ghost list of original descriptors. Its invariant
+aligns lengths and each original/current index. Refines preserves EVERY
+CommonCell claim for all language environments. Initialization derives [].
+Actual allocation appends the literal descriptor. Actual successful forcing
+preserves the SAME origin list and handles, using current Ready, CellsValues,
+CellsClosed, and prior refinement. Failed-force refinement is not claimed.
+The complete Rows/SharedRun origin invariant is NOT yet derived. Do not
+supply future origins or witnesses at the top call.
+
+## Next proof target and largest gaps
+
+1. Lift origin refinement through actual allocateCells, prepareTuple,
+   nextRow, and successful SharedStep/Run. Derive exact fresh handle-to-
+   descriptor correspondence. Track original raw tuples and rejected suffixes
+   for each row spine. Derive metadata from actual steps.
+2. Combine sampler coverage, equality-fold readback, descriptor witnesses,
+   and stable-handle refinement to prove SEMANTIC table coverage. Scheduling
+   Coverage and residency do not prove it. Reuse TableSoundness.Covered,
+   grow_complete/answer_sound, and key_faithful. Prove shared Boolean soundness
+   and real MemoCorrect preservation. Arbitrary memo Bool values are not
+   certified by physical effect or closure laws.
+3. Establish ordered read/failure tapes, operation probes, resource/native-
+   number bounds, guard/arity/annotation laws. Then switch BOTH checked
+   conjunction callers from selected DemandWorker to the shared path.
+   SharedWorker remains unselected. Do not assert caller adoption now.
+4. Preserve the full original-input complete-enumeration objective: all
+   siblings/subsequent calls and generated/rejected/failing/returned cases;
+   exact accepted terms by SOURCE Program leaf size; count/order/BOTH signed
+   inverses; AllSized, fallback, productive infinity, lazy structures,
+   Word/Int limits, wrappers, lookup, Curried/Specftacular, native Haskell.
+   Annotation-expanded Term.nodes and recursive depth are different measures.
+   Do not add a size parameter to size-free fully/until APIs.
+
+OriginalVerifiedCompletion and selected original-input caller/driver results
+remain in force with their documented hypotheses and bounds. R175 is
+component progress for the new shared path. It does not prove complete
+enumeration, one original-input total-work bound for all reached operations,
+or whole-library Haskell correspondence.
+
+## Validation and restart
+
+Eight new modules, 26 checked public laws. Exact public names and namespaces
+are checked explicitly. Own sources pass with warnings as errors. Allowed
+axioms: propext, Classical.choice, Quot.sound. The changed reverse closure
+has 9 modules in a graph of 5369. Frontier Audit has 4366 imports and 88589
+theorem axiom reports. Full affected check passed in 6.01 seconds. Effective
+memory.max/high were 4294967296, swap.max 0, LEAN_NUM_THREADS=1. Root used ONE
+serial compiler. Compatibility peak 958 MiB; portable peak 185 MiB. No queue
+or global concurrency setting changed. All compiler handles are terminal.
+
+From cwd /tmp, source packets reproduced descriptor soundness, cell
+refinement, shared call closedness, and full affected compatibility.
+The compatibility packet is 20261109-cell-meaning-compatibility. Each source
+packet contains README.md, check.py, checked.json, theorems.json only. The
+compatibility packet uses frontier.json instead of theorems.json. They
+regenerate from committed source; build archives are not required. The
+complete old Audit file remains an exact suffix.
+
+Proof commits:
+- 0b6d0e57dfff1d471911b4f7280982b0cd50d8e6 Prove literal pending cell execution correspondence
+- 684ecaea090b896a44c4faedb34eb02537edc5b7 Preserve closed values in deferred cells and rows
+- d5738facf2c223836e557111f3a3a31e82cb6945 Carry descriptor witnesses through stable cell refinement
+- 0c9a6839de1a2697b66a6d75552a2f4cc0bbd999 Derive stored closedness through shared worklist calls
+
+Frozen sources (SHA256; public laws):
+- SourceCurrentConjunctionRequirementCellsClosed: 2ea28c0c4d4123d4cc6ac12040ed8f1f91f3dab671042fc9823728aaf3bd6a76; 5
+- SourceCurrentConjunctionRequirementCellsExecution: 5c53ab3498ecf956725ad1ad46bfd0aa7eab68e94759ea64ff00d65546e79ce3; 2
+- SourceCurrentConjunctionRequirementCellsRefinement: f6dd58b4c84882fd47be2ef032cf90ed02e61cf62ee67c70c545166cdc634778; 4
+- SourceCurrentConjunctionRequirementCellsSoundness: f4f6f927c99d97b7b37efac4f65216981b597c57b493528f867f5c2381b56af2; 2
+- SourceCurrentConjunctionRequirementDescriptorsSoundness: c3641e29dba67cc83b2aaeddde880f4c83e06e577bf2205443c4254802724fa2; 2
+- SourceCurrentConjunctionRequirementRowsClosed: 2b82b0b2aacfb45e7101709dc692e87f3c940c848a38a6b43c612b1d5f9909aa; 4
+- SourceCurrentConjunctionSharedWorkerClosed: 46ea0d7a3af2ad1f1db3df705c8efc54f696576a41491ee4dd2f97d327baafda; 2
+- SourceCurrentConjunctionSharedWorklistClosed: 0f5c1952c2785941a044702c72573693cfe7ab607380615e5855f4d55b964986; 5
+
+Ownership: Beta CellsExecution/CellsRefinement; Gamma CellsClosed; Alpha
+RowsClosed/DescriptorsSoundness/SharedWorklistClosed; root CellsSoundness/
+SharedWorkerClosed, all compilation and Git. Read-only contract review found
+no concrete defect and confirmed the premise boundaries above.
+All proof work is committed; documentation commit follows. Preserve .hypha/.
+
+Runtime: /tmp/mcfta-cell-meaning-20261109-0214/.
+Read verified-modules.json, compatibility-frontier.json,
+compatibility-check.json, portable-check.json, proof-commits.json, peaks,
+publication.json, board-published.json. Refresh Git and process state.
+Use the existing serial heavy-management/user-bus setup: 4 GiB memory.max/
+high, swap 0, LEAN_NUM_THREADS=1. Keep source-hash/axiom packets small.
+Readable /tmp is 36 MiB; free space exceeds 243 GiB. Do not create build
+archives. Protected old marked drafts remain in place.
+
+## Haskell findings for external follow-up
+
+No Haskell executable file changed in R175. No new Haskell defect or fix was
+identified. Main was refreshed before publication and remains 9f5f77783.
+The PR #202 getter/union-find comment correction and PR #203 libraryAvoid/
+HooglePlus documentation correction remain in the preserved R173 findings.
+All prior repairs, LPO findings, counterexamples, and marked drafts remain.
+Record every future Haskell fix in FINDINGS.md as well.
+
+Continue the full goal. Do not mark it complete because component checks
+pass. Do not ask whether to continue.
+
+---
+
 # R174: deferred class witnesses and actual shared caller effects
 
 Updated: 2026-11-09 02:10 CET. Full goal ACTIVE. Formalize pushes are authorized.
