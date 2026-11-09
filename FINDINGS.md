@@ -1,3 +1,46 @@
+# Paused at the requested usage threshold — 2026-11-10 00:01 CET
+
+The goal is PAUSED at the user's explicit usage threshold. The workers
+have stopped. The last complete proof checkpoint is d54a99ddb7787ca019188b13c0f30a2d281aa18f,
+pushed and remote-verified on formalize. It contains the eight checked
+modules, 35 laws and nine portable replays described in the complete
+previous header below. The full library objective is unchanged.
+
+The next iteration refreshed main/formalize and read all three complete
+current headers. Main remains 849029e5b55a5d1c0152c24b55117b38419a6279.
+Only .hypha/ was untracked. No new Lean draft was created and no build
+was running when the workers stopped. There are no additional verified
+proof claims or production Haskell fixes in this pause checkpoint.
+
+Two source-only audits changed the next action. These observations have
+not been added as new checked lemmas:
+
+- SharedScanCallerNumeric.ScanReads.skipped retains primary=true and
+  secondary=true. The secondary flag is a refusal condition, not a proof
+  that the equality class is satisfied. The continued branch retains
+  primary=true, secondary=false, SeededReads and CallReads for a shared
+  call returning false. AnswerSound(false) has no positive language
+  consequence. A kept-path OR already-satisfied-class theorem therefore
+  cannot follow from these receipts and Context alone. Inspect the actual
+  omission semantics before making the next retention producer claim.
+- InternedGuardedExecution.closed_language, near line 195, already connects
+  the actual InternedFreshOrdinaryConstruction.build to independent guarded
+  syntax evaluation, including binders. It derives the cold context inside
+  the proof. Given the SAME original build, the proposed finite typing
+  witness can be proved in guarded syntax, then transported to its native
+  root. The remaining producer is finite source-universe/substitution
+  membership and the joint application/filter guards. Do not supply an
+  unproved native witness as a premise.
+
+On an explicit resume, check the intended usage measure before sustained
+work. The exposed weekly-quota percentage differs from paid-credit usage.
+Local observation metadata is in /tmp/mcfta-pause-20261110-0001/.
+Keep the serial 4 GiB/no-swap/thread-one build discipline. Visible /tmp
+was about 29 MiB at the last full scan. No source/object archives were
+created. Preserve .hypha/ and all previous proof and handoff bytes.
+
+---
+
 # Required-path producers and all-depth root allocation — 2026-11-09 23:50 CET
 
 This is the current checkpoint. Read this complete header in NEXT-PROMPT.md,
