@@ -1,3 +1,601 @@
+# R201 checkpoint: shared recursive entry and source component counts
+
+Checkpoint time: 2026-11-09T16:49:11+01:00. Branch: formalize. Goal: ACTIVE.
+This section supersedes the older checkpoints below. It preserves every older
+byte in NEXT-PROMPT.md, HANDOFF.md and FINDINGS.md. The R200 common prefix is 37,976
+bytes. Its SHA-256 is 5d30942c681a8a9bd0c1f098e317169d43e494a77ec748a75ad899fe14d5fa15.
+R201 base: 5753ee67f465b47901fce984ba81817abbfd6db5. Main at the initial refresh: 9f5f77783b9f936a1edf4225373cbad9dc6a9ed5.
+The previous turn made progress: R200 published eight commits with seven modules
+and 52 laws. R201 adds eight modules and 48 laws. It also fixes one reproduced
+Haskell decoder defect. The final publication checkpoint follows the nine
+source commits listed below. Read its exact hash from git HEAD. Refresh main,
+verify its ancestry, push formalize, and verify the remote before reporting
+publication. The runtime publication receipt and board entry record that step.
+
+## Full objective and present boundary
+
+Prove the complete system for its original accepted inputs. Include complete
+SOURCE component-size enumeration and the selected route order. Prove both
+signed rank/unrank inverse directions at that API. Include generated, rejected,
+failed, sibling and later states. Include native fixed Word/Int arithmetic,
+memo identity, current cache domains, lazy execution and the optimized interned
+core. Prove correspondence with the actual Haskell implementation. Constructor
+and equality interfaces remain part of the objective. Local completion and
+green builds do not discharge these global obligations.
+
+The strongest established statement still starts from an accepted original
+firstOrderRaw input and the existing computed native-capacity admission. R200
+produces one prepared cold caller and one returned heap, with language
+preservation, recursive Program and Type fields, closure, Type readiness,
+origin guards, history, Post, frame, resources, carrier, checked graph and an
+ordered read bundle. It proves the same result and full caller for every
+sufficiently large literal shared outer fuel, with fixed computed inner bounds.
+Its checked graph and native range facts apply to each such actual successful
+outer call. A larger checked call requires the stated reverse bridge. It does
+not require a new future-capacity oracle or a reindexed read receipt.
+
+R201 now starts the NEW shared recursive enumeration driver at that SAME
+returned caller and query memo. The accepted entry theorem executes the literal
+shared root worker before it starts the driver. It uses no independent
+initializer. The actual selected-child, terminal, captured-edge, sibling and
+recursive callback definitions now select the shared backend. Their explicit
+stop observations retain the native caller and query memo that were reached.
+This is an executable connection and a set of structural laws. It does not
+prove that a fixed driver work fuel or recursion depth is sufficient.
+
+R201 also derives component-count certificates for the SOURCE expression and
+rows made by the synthesis tables. Application adds the two Program counts.
+Type annotations do not contribute to this count. This is not yet a theorem
+about literal Haskell toProgram, accepted typed terms, full enumeration order,
+cardinality or ranked API execution.
+
+Both signed inverse algebra directions ALREADY EXIST for reference classes and
+prepared grouped fields. Do not describe both inverse laws as wholly missing.
+The missing proof connects the original source, selected enumeration routes,
+native signed sparse tables and lazy Haskell execution to those laws.
+
+## Verified source commits
+
+All eight new Lean sources passed the strict scoped checker and axiom audit.
+All their exported theorems use only propext, Classical.choice and Quot.sound.
+Every listed source hash is frozen. Root owns the only compiler and publisher.
+
+| Module | Lines | Laws | Commit |
+| --- | ---: | ---: | --- |
+| SourceCurrentSharedOuterInitialOutcomePost | 536 | 6 | 0edbd42e900454df9f68e4659d33b52a7d6c78a1 |
+| SourcePruningEnumerationSharedCachedTerminal | 535 | 6 | 2b8d120b000492d6f7988a178594dac0da44fb96 |
+| SourcePruningEnumerationSharedDispatch | 417 | 1 | 57acf48459775ebd1859daf514e716ec267ac395 |
+| SourcePruningEnumerationSharedIncomingQueryResources | 234 | 2 | 36f73aba075e8f29c284bad2261b025497bc6a37 |
+| SourcePruningEnumerationSharedPreparedDriver | 202 | 2 | fdb422765795893d4d7edc3228cb4aa561e6bb45 |
+| SourcePruningEnumerationSharedRecursive | 227 | 5 | bd5348636e7cae3103d974837ba44bc689d29bbc |
+| SourcePruningEnumerationSharedSelectedContinuations | 756 | 21 | 1c88703c624691a8e4bd67495546ac3a4ad6d353 |
+| SourceSynthesisProgramSourceSize | 283 | 5 | 7d9cb3c642cf16ef21fe56d6d4f26e8d5510e8af |
+
+Haskell repair commit: 113de3d85f7776d623c45fd3e31157e4254af1fb.
+It contains the two Haskell files and the five-file compact regression packet.
+The final checkpoint contains the three common-prefix documents, additive Audit
+imports and four-file compatibility packet. The intended round total is ten
+commits and 55 changed files. Preserve the unrelated untracked .hypha directory.
+
+Exact Lean source SHA-256 values and packet paths:
+
+- SourceCurrentSharedOuterInitialOutcomePost: 548ebe2f98dbaa4bafd663931554e8049feb52a8d1d9d84cad883e2a2a97cd45; packet: lean/restart-evidence/20261109-shared-outer-initial-outcome-post
+- SourcePruningEnumerationSharedCachedTerminal: b1348a2b2706306a9b743797dcc26194c49ff16e59eed39688c6d00c7282a341; packet: lean/restart-evidence/20261109-shared-cached-terminal
+- SourcePruningEnumerationSharedDispatch: 00d96754df5b8f9b264ddde85134e717206e67ccd628fdf2ca7b654abb10d51d; packet: lean/restart-evidence/20261109-shared-dispatch
+- SourcePruningEnumerationSharedIncomingQueryResources: 8b0ff19e3db395179a8d6c4d4968b7c99021b92aaf24a5ef106db4139343a935; packet: lean/restart-evidence/20261109-shared-incoming-query-resources
+- SourcePruningEnumerationSharedPreparedDriver: 5f4989560cd965083cfc2c88529e9fde18143757f3299a5062ba7f5197286ebb; packet: lean/restart-evidence/20261109-shared-prepared-driver
+- SourcePruningEnumerationSharedRecursive: 3ef92ad252844182a3462b3af89415c1b47191f4e2011b203e9d8bffa68191f9; packet: lean/restart-evidence/20261109-shared-recursive
+- SourcePruningEnumerationSharedSelectedContinuations: 9474c9741172be699ae91bf448a91db0bf7e44394255fc5441dab4bbb3c9b559; packet: lean/restart-evidence/20261109-shared-selected-continuations
+- SourceSynthesisProgramSourceSize: 29ec6cff9647ad797c056284862bc01ed559f42a5bff6f21de8e8d6cc48a3373; packet: lean/restart-evidence/20261109-program-source-size
+
+## Contracts of the eight new modules
+
+1. SourceCurrentSharedOuterInitialOutcomePost proves six phase laws: node_call,
+   node_body, rows, descendants, children and walk. At every outer fuel, with
+   the existing nine adequate inner bounds and current input, Context, Frame,
+   Fits, carrier and forecast-room hypotheses, it returns Post at the EXACT
+   literal outcome.state on either result branch. It also returns Frame, Fits
+   at the ORIGINAL root forecast and carrier. It follows the actual failing
+   prefix. Successful siblings use the same endpoint. It uses current begin
+   protocol laws and Post.rebase. It does not use a future Context or arbitrary
+   root completion hypothesis. It does not prove readiness for an arbitrary
+   too-small native bound. An active native cell can survive such an exhaustion.
+
+2. SourcePruningEnumerationSharedDispatch defines the shared dispatch and proves
+   dispatch_complete. It performs the native source query and target query in
+   order. It performs the shared emptiness check BEFORE assimilation writes.
+   Its outcome retains skipped and performed checks and the full private fault
+   snapshot. No-op, eliminated, missing, optional node, native fault, shared
+   fault and rejected-action observations remain distinct. Completion uses the
+   current Context, PendingRealized, safe slots and native Word ranges. It
+   derives adequate stable completion and the complete logical/read/post
+   package. Old assimilation helpers are pure; no old backend is executed.
+
+3. SourcePruningEnumerationSharedCachedTerminal defines rawFold, cachedAdapter,
+   fold, incomingCacheAdapter, raw and run. Both terminal dispatch paths use
+   SharedDispatch. The fold miss uses the NEW rawFold. Both incoming branches
+   use SharedIncomingNode. Six laws prove erasure to this NEW raw observation,
+   singleton core behavior and exact stopped-prefix preservation. The faults,
+   reached caller, query memo, outer observation and waiting states remain in
+   the result. These laws do not establish a final warm resource budget.
+
+4. SourcePruningEnumerationSharedSelectedContinuations contains six local
+   namespaces and 21 laws. ChildDispatch uses the new shared terminal and fault
+   sum. ChildTraversal proves ordered traces in both directions. stopped_trace
+   reconstructs the actual completed prefix and exact stopped call. SelectedEdge
+   and CapturedEdge preserve pure preparation and use the new child traversal.
+   NativeContinuations runs a recursive hook before the next captured sibling.
+   NativeOrdinaryContinuations uses the actual entry readback and entered state.
+   The old preparation, candidate and prefix helpers used here are pure or
+   heap-only. The selected prefix has no ordinary call.
+
+   Two new formal observations preserve information that the draft discarded.
+   SelectedEdge.Result.finalizeStopped retains the completed child caller,
+   queries and pre-finalization cache when pure finalization returns None.
+   NativeContinuations.Stop.edge retains a known caller/query endpoint even
+   when the edge receipt is absent or unsupported. A stopped edge uses that
+   actual reached endpoint, including earlier completed siblings and hooks.
+   No later sibling or hook runs after the stop. These repairs affect the new
+   formal observation types. They do not change Haskell backend execution.
+
+5. SourcePruningEnumerationSharedRecursive defines the actual endpoint, finish,
+   continueWith, resume and run. It selects the new ordinary and selected-child
+   chain after the heap-only selected prefix. A left recordTypes callback runs
+   once. Its actual returned core and restart enter the recursive continuation
+   before the next sibling. Captured metadata and cache remain the captured
+   inputs. The next sibling receives the caller and queries actually returned
+   by the previous callback. Exhaustion, selected prefix, raw callback,
+   ordinary and alternative failures retain their receipts and known endpoint.
+   Five laws establish the endpoint, recorded/rejected continuation, zero-depth
+   and actual successful-singleton ordinary branches. They do not prove an
+   adequate depth or finite resource convergence.
+
+6. SourcePruningEnumerationSharedIncomingQueryResources extends the existing
+   SharedIncomingQuery namespace. forecast_ge and complete_resources derive
+   native ranges BEFORE intersection from current admission. They combine the
+   literal native step forecast with the shared worker alphabet forecast. The
+   result keeps the complete logical package of the SAME actual raw call.
+   The independent numeric helper contributes only its endpoint Fits and replay
+   facts. Its independent logical bundle is discarded. Carrier is proved at
+   the same actual shared heap. The native step adds its domain allocation;
+   the shared forecast preserves those INPUT domains. No warm domain reset or
+   old Demand numeric forecast is used.
+
+7. SourcePruningEnumerationSharedPreparedDriver defines start and run. Failed
+   root results retain the complete root fault, caller and queries. Unencoded
+   roots remain unencoded. Encoded success produces started with the actual
+   new recursive run. start_failed and accepted are the two public laws.
+   accepted consumes ONE original checked hereditary shared completion package.
+   It retains that package's result, language, fields, Type/history, graph,
+   reads, Post and resources. It derives the pure initial packet on the SAME
+   returned Context, availability, closure, caller and memos. For every adequate
+   root outer fuel, actual run observes the actual new recursive driver at
+   those same values. Driver work fuel and depth are fixed parameters here.
+   No driver convergence, final capacity or source coverage is inferred.
+
+8. SourceSynthesisProgramSourceSize defines mutual ProgramSize and RowSize on
+   the actual source layouts. A component or argument row has one Type child
+   and count one. An application has four children and adds function and
+   argument counts. A filter has two children and uses the candidate count.
+   Every node/union alternative must have the count. An empty alternatives
+   list has the certificate vacuously. Type children remain uncounted and
+   unrestricted. Strong size induction follows the actual table construction,
+   including name-only lookup, last-winner behavior and the special size-two
+   avoid condition. Five laws cover ordinary and relevant rows, firstOrderRaw
+   size, nonnegativity and the full result sum. Error cases make no successful
+   output claim. No accepted-term, complete-driver or future-depth premise is
+   added. Typed-term transport and the literal decoder bridge remain open.
+
+## Haskell finding and repair: component named filter
+
+This is a VERIFIED implementation defect, not just a static concern. The old
+decoder in cfta-generator/src/Data/CFTA/Gen/Synthesis.hs around line 917 matched
+application rows with at least two children and filter rows with at least one.
+Actual generated Program application rows have EXACTLY four children:
+[types, arrow marker, function, argument]. Actual generated filter rows have
+EXACTLY two children: [goal, candidates]. Component and query argument rows
+have EXACTLY one Type annotation child. All three source type encodings use
+the same Program application and filter arities.
+
+Before the repair, a component or argument called filter matched the broad
+built-in filter pattern. Its Type annotation was decoded as a Program. The
+public reproduction used an exported Library constructor with this input:
+
+    typ = TCons "app" [TCons "A" [], TCons "B" []]
+    lib = Library [("filter", typ, ["filter"])] [] [] FirstOrder
+    query = Query [] typ
+    source component size = 1
+
+The accepted raw witness was filter[app[A,B],filter[app[A,B]]]. Freshly rebuilt
+pre-fix public APIs returned solutionsOfSize = [App (Var "A") (Var "B")].
+programsOfSize returned cardinality Right 1 and that same value. The decoded
+component count was Right [2], although the requested source size was one.
+A and B were not library components. The smart library normally renames its
+component representatives. That does not restrict the exported constructor.
+An ordinary query argument named filter can also reach the unary collision.
+Both public roles now have regression checks.
+
+The production repair changes only the two decoder patterns:
+
+    ("app", [_, _, function, argument]) ->
+      App (toProgram function) (toProgram argument)
+    ("filter", [_, candidates]) -> toProgram candidates
+
+The existing fallback preserves unary component and argument names as Var.
+No reserved-name restriction, new dependency or caller premise is added.
+The repaired public reproduction returns [Var "filter"], count Right 1,
+values Right [Var "filter"] and decoded component counts Right [1].
+
+Pre-fix Synthesis.hs SHA-256:
+9d540082ba0aaa371fe854e9579eb1c44df59546f720002714b86cbeaa3d6ed0.
+Post-fix Synthesis.hs SHA-256:
+dfffbf454516649e115d890e65b6289217dbcf352ccb08e86415d719b32fbc3a.
+Formatted SynthesisSpec.hs SHA-256:
+8f931875e18cd32a21a58072de1363530df3b03189b576fca614f009063fbe47.
+
+The existing cfta-generator/test/Data/CFTA/Gen/SynthesisSpec.hs has two new
+examples. They check component and argument names in FirstOrder, Curried
+AnyHead and Curried OnlyDefault. They also check ordinary application in all
+three encodings. The examples contain 27 assertions across nine cases. They
+check solutions, exact generator values and exact generator counts.
+
+Actual validation passed under the unchanged serial 4 GiB/swap0 cap:
+
+- Fourmolu 0.20.1.0 on both changed Haskell files.
+- cabal-gild 1.8.4.2 in check mode on the unchanged package file.
+- cabal test -j1 --offline cfta-generator:gen-tests with
+  --test-options=--match=Data.CFTA.Gen.Synthesis and --test-show-details=direct.
+  This matched Synthesis and Synthesis.States: 13 examples, zero failures.
+  Build and test took 14.79 seconds. Peak was 1335 MiB.
+- The compact packet checker rebuilt both current libraries and reran the
+  actual repaired public reproduction. It checked all source hashes before
+  and after. It passed from the repository and again with cwd /tmp.
+
+The plain project shell lacked GMP in the linker path. Its initial build
+failed with cannot find -lgmp before any reproduction ran. That setup failure
+is not evidence for the source defect. The verified build used the existing
+project shell as inputsFrom and added pkgs.gmp. The selected compiler was GHC
+9.14.1 at -O0. The baseline build/reproduction then passed under 4 GiB.
+This is the same small derived-shell approach used by the older R119 packet.
+No project shell or Cabal dependency file changed.
+
+The five-file packet is lean/restart-evidence/20261109-synthesis-decoder-shapes.
+before.json records the actual old run, public script/input/output, source
+hashes, Git source trees, base revision and cap. tests.json records the actual
+formatting and 13-example test run with exact source hashes. check.py rebuilds
+the current libraries, checks the repaired public input, and deletes its
+temporary Main.hs. checked.json records the repaired run. README.md explains
+the boundary. Reproduce the old result by checking out the recorded base and
+running its embedded script. No whole source-tree copy is needed.
+
+This fix removes the demonstrated decoder collision. It does not by itself
+prove literal source projection, all typed-term counts, complete enumeration,
+signed sparse execution, capacity or full Haskell correspondence. Keep this
+finding and repair in FINDINGS so an external agent can use it directly.
+
+## Verification and storage
+
+All eight new strict checks passed, including explicit theorem names, exact
+source snapshots, own-source warnings and standard-axiom audits. Manifest
+refresh verifies exactly eight modules and 48 public laws. No failed draft
+remains in the published sources. The full additive Audit passed. Its import
+graph has 5587 live modules, 9 affected
+modules and frontier Audit. It has 4584 direct imports and
+91406 axiom report records. The first full Audit took
+18.56 seconds. It passed at the existing 4 GiB memory limit. The old Audit
+bytes remain intact after the eight additive imports.
+
+All TEN portable packets passed from cwd /tmp: eight source packets, the whole
+Audit compatibility packet and the actual Haskell reproduction packet. The
+portable run peaked at 3590 MiB. Every compiler/test process is terminal.
+No cap or compiler concurrency was increased. The first full-Audit report is
+saved separately from the later portable report. Peak reports are compact.
+
+Runtime: /tmp/mcfta-shared-driver-20261109-1547.
+At 2026-11-09T16:49:11+01:00, the readable regular files in /tmp totalled 26158776 bytes
+(24.95 MiB) across 6720 files. 0 entries were
+inaccessible or vanished during the scan. Available space was 258849701888 bytes
+(241.07 GiB). This is a logical readable-file measurement, not
+an allocation total for another mount or a promise about inaccessible files.
+The new prefix and compact receipts add only a small amount to that total.
+No archive, duplicate source tree, large compiler log or broad cleanup was
+created. The committed packets pin source hashes and contain reproducible
+checks. Keep /tmp small. Do not delete unknown or active work.
+
+The runtime stores the verified manifest, first full-Audit report, portable
+result, nine source-commit receipts, short Haskell output and three focused
+audits. The next section preserves the FULL audit texts, so their runtime
+copies are not the only record. The compact reproducibility packets are in
+Git. There is no need to retain hundreds of GiB of generated evidence.
+
+## Biggest gaps and exact next producers
+
+The immediate largest gap is the finite resource and depth proof for the NEW
+shared recursive driver. The entry and actual transition chain now exist.
+Do not reuse old executed Demand graphs, old outcome constructors or old
+resource receipts by a type alias. Pure predicates and data helpers can be
+reused. Produce the facts at the new literal calls.
+
+First implement a shared ordered reservation producer. Its step must use the
+NEW incoming-query forecast, not the old forecast. Prove that this forecast
+dominates the literal native step, not just its input. Prove head, tail and
+stopped-prefix reservations, preserving warm native domain increments. Derive
+one final room/capacity obligation from this actual ordered trace. Native
+domain allocation must not be reset after the root call. Numeric forecasts
+that count duplicate alphabet entries need a numeric monotonicity proof;
+membership alone does not establish it.
+
+Then prove shared dispatch/fold resource producers on actual observations.
+Derive current Word ranges from PendingRealized and admission. Extend these
+to terminal/cache-miss/incoming paths, actual adaptation and candidate writes,
+child traversal, edge finalization and every recorded prefix. Finally lift
+those producers through the new recursive callback, sibling and ordinary
+continuations. Include finalizeStopped and the known endpoint on Stop.edge.
+Retaining a fault snapshot alone does not establish Post, Fits or readiness.
+Adequate-fuel eventual success and arbitrary native-fuel failure contracts are
+different obligations. Whole-root hereditary fields/Type/history on every
+failed native state are not supplied by the six new resource-only phase laws.
+
+The next global gap is accepted-term progress and source policy coverage.
+The new source expression component certificate is available. Transport it
+through original build and accepted typed terms, then prove the literal
+decoder bridge against the repaired exact row shapes. Derive OriginPolicies
+from the actual source/template compiler. Do not assume a subtree-avoidance
+or encoding policy supplier. Derive an adequate recursion depth for each
+accepted term by structural progress. The old theorem that preserves an
+already complete run at larger depth does not produce the first adequate
+depth. A component count does not bound unrestricted Type annotation depth.
+
+Then connect source classes, actual route selection and cached signed sparse
+execution to the EXISTING two inverse laws. Respect documented route orders:
+the grouped/deterministic fast route need not have the old reference order.
+Treat fallback, sparse zero coefficients, actual minimum-size metadata,
+negative ranks and signed size branches explicitly. The optimized fromTable
+branch has a signed rank guard, not a general signed size guard. Do not erase
+error or infinite/unsupported counting cases. Keep source component count,
+Program AST nodes, typed-term nodes, observer fuel, progress rank and enum rank
+distinct. Prove lazy productivity and native/Haskell correspondence on the
+actual implementations. Do not infer them from finite class algebra.
+
+There is no verified accepted-source guarded-Mu starvation counterexample.
+An arbitrary callback or an invalid unguarded Mu example does not establish
+one. The concrete Haskell decoder defect above WAS verified and is fixed.
+
+## Full preserved focused audits
+
+The following audits are frozen working analyses from this round. Their bytes
+are preserved unchanged. Two status statements are now historical: the
+source-size first cut is DONE in SourceSynthesisProgramSourceSize, and the
+decoder collision is now RUNTIME VERIFIED AND FIXED. The actual prepared
+shared entry is now connected as described above. The later finite resource,
+depth, policy, class and Haskell obligations remain open.
+
+
+### Frozen audit: next-shared-finite-resources.md
+
+SHA-256: 1b213c9ad21c6ecd3dd9d00ac6d8e1b9a6048521c3d3aaae8e5fc3a3665aaf76
+
+# Next shared finite-resource cut
+
+2026-11-09 16:11 CET. Read-only source audit. No compiler or Git.
+
+The next cut is the ordered warm query schedule, not another original cold call. SharedIncomingQuery.complete_resources now has the correct leaf: CURRENT Context/Fits/Admits/carrier and resident closed operands produce one logical packet, explicit native/shared ceilings, and resources at its SAME checked return. SharedCachedTerminal and SharedSelectedContinuations select this backend, but their erasure proofs do not supply the missing resource induction.
+
+## Exact existing chain
+
+- SourcePruningEnumerationDispatchResources.lean:34 initial_ranges; :91 observed_resources. The first derives native WordRanges from CURRENT Ready, realized slots, Fits and Admits. The second bounds a GIVEN outer .ok dispatcher observation, including missing/rejected raw actions. Its cached wrapper starts at :252. IncomingObservedResources.lean:23 optional_done_unique and :79 raw_done_resources supply the crucial observed-endpoint alignment. These executable statements use OLD EnabledEmpty/Dispatch and must be versioned.
+- There is no SourcePruningEnumerationTerminalResources.lean. The relevant files are FoldAdmission.lean (observed_singleton/initial_ranges), FoldResources.lean:29 observed_resources, TerminalAdmission.lean:32 observed_prefix/:59 initial_ranges, TerminalObservedResources.lean:30 observed_resources, CachedTerminalResources.lean:34 complete_resources and CachedTerminalAdapterResources.lean:34 complete_resources. Prefix recording, union/waiting arithmetic, candidate/write and pure frame facts remain reusable. OLD Fold/Terminal execution and their uniqueness/range predicates do not.
+- ChildObservedResources.lean:32 and ChildResources.lean:34/:98 lift the terminal to a complete child packet. They currently index OLD ChildDispatch. The new target is SharedSelectedContinuations.ChildDispatch.run/observe, then ChildTraversal and CapturedEdge. Cache erasure is against NEW SharedCachedTerminal.raw.
+- FiniteResources.lean:28/:55 is only the final 80-line induction. It depends on FiniteRunStep.lean:28, FiniteExpansionResources, FiniteOrdinaryForecastResources, FiniteSiblingResources, FiniteCallbackResources and their actual old receipt/output types. It cannot be ported by changing its final run name alone.
+
+## Four cohesive producers
+
+1. NEW SharedIncomingReservation. Reuse the worker-independent Seed type (A,P). Define sharedStep(A,P)=(queryAlphabet A P, SharedIncomingQuery.forecast A P), ordered advance and Reserved bits seed count := forall i<count, Admits bits (advance seed i).profile. Derive head/tail/prefix and reserved_of_final_room/capacity from a single computed final profile. OLD IncomingReservation.step (:22) hardcodes OLD IncomingQuery.forecast; its reserved_of_final_capacity (:130) calls OLD tupleCallerForecast_ge. Neither is a shared reservation. A needed small law is NativeResourceForecast.Le (NativeResourceForecast.step P) (SharedIncomingQuery.forecast A P); Beta proves its substance through private shared_ge, so expose or rederive this exact component law. Do not replace it by P<=forecast or alphabet inclusion.
+
+2. NEW SharedDispatchFoldResources. Use SharedIncomingQuery.complete_resources and SharedConjunctionWorkerActual.call_done_unique to derive shared optional-success uniqueness and raw_done_resources at GIVEN observations. Keep the original canonical memo bundle; align only complete checked/Fourth/query/private endpoints. Derive dispatcher WordRanges from current PendingRealized, then actual singleton continuation Context/realization/Fits/carrier. Induct on the ACTUAL SharedCachedTerminal.rawFold and fold. Returned singleton -> next seed/current caller; rejection/missing -> stop there. Both cachedAdapter and cache-miss rawFold use SharedDispatch, so do not route the latter through OLD FoldAdmission. No final API should require a future Context or recursively quantified future range callback.
+
+3. NEW SharedTerminalChildResources. Combine pure observed_prefix with step 2 and the literal SharedIncomingNode resource lift. Charge recorded.length for the fold and one additional incoming slot; use length(recorded)=length(first::rest). Apply the SAME post-fold Context/Fits/carrier at the incoming call. The cached incoming adapter AND foldCache=none fallback must use SharedIncomingNode, with the same full fault observation. Then lift the actual terminal/shallow partition and ChildTraversal to current child/edge resource packets, retaining outer, moved waiting, cache, fourth, merge, saved queries and ordered final memos. The derived cache candidate must come from actual adapt/write; never supply final flags or a future cache certificate. Existing pure shallow preparation and winner/write lemmas can be reused.
+
+4. NEW SharedFiniteResources (after genuine child/edge packet producers, not a thin alias). Version the finite reservation recurrence and the actual SharedRecursive continuation proof. Pure Packet/CacheValid, callback bounds and unchanged SelectedStep.runPrefix/narrowing arithmetic can be reused: runPrefix leaves ordinary execution unexecuted (SelectedStep.lean:97). Do not reuse SelectedStep.run, OLD NativeBranches or OLD NativeContinuations outcomes. SharedRecursive.resume (:100) runs each captured sibling at the caller returned by the previous edge AND its recursive callback; preserve that chronology through the smaller-depth IH and discharge the IH by depth induction. Version OutcomeResources/OutputResources over the NEW HookResult/Output/Failure, including finalizeStopped and Stop.edge's known endpoint. Keep exhausted/done/stuck/parked/callback/ordinary diagnostics explicit. The old final recurrence is in FiniteReservation.lean:57 final/:180 Reserved/:286 reserved_of_final_room; replace its afterHead/advance by the shared schedule. This last producer needs actual edge/history/callback transports; it is not achieved by four namespace replacements.
+
+## Warm counters, alphabets and scope
+
+Fits.domains (GeneratedQueryResources.lean:39) bounds actual caller.checked.native.machine.domains.next. NativeResourceForecast.step (:44) adds instructionBound to P.domains. SharedWorkerActual.forecast_with_alphabet (WorkerResources.lean:38) keeps its INPUT domains component, so the combined shared step retains P.domains+instructionBound, not zero. headProfile (:51) also keeps domains. Thread the actual post-fold and post-callback caller into every next request. For a same-return original wrapper, seed from the SAME returned caller/profile in its one package; do not construct an independent cold caller or reseed the domain counter.
+
+The fixed alphabet at each query is queryAlphabet A P. Numeric shared forecasts are duplicate-sensitive: membership inclusion is valid for carrier transport, not for comparing numeric forecasts. Count monotonicity follows one exact ordered seed schedule.
+
+Outer .ok observed-resource lemmas do not cover arbitrary tiny-fuel native/shared failures. A finite completion proof can construct sufficiently large successful admitted leaf calls and retain the remaining explicit driver stops. A stronger claim about resources at every arbitrary fault endpoint needs its own all-outcome credit producer; snapshot retention alone does not prove Context/Fits there.
+
+This audit does not establish unbounded driver termination, selector/template completeness, NativeView, or Haskell correspondence. The full original/enumeration/native objective remains active.
+
+
+### Frozen audit: next-source-size-inverses.md
+
+SHA-256: 61315e6bd6596ac196a905bb054c302bdf5e0399f3151a7b03a46da1fd2c5afd
+
+# Source size, policy coverage and signed Sized inverses after shared wiring
+
+Read-only audit of current sources, 2026-11-09 16:10 CET. No compilation, Haskell changes or runtime experiments. The operational shared-driver cut and its backend resource ports do not supply the size/order/coverage facts below.
+
+## Authoritative Haskell contracts
+
+`cfta-generator/src/Data/CFTA/Sized.hs` is the current public explicit-FTA Sized implementation. Its size is `length term`, the number of ALL term nodes (4–10, fromClasses:292–302). It is not the synthesis input's component count.
+
+* `referenceStates` (213–232) uses `Ordinary.sortedRows automaton`, builds each positive size from strictly smaller child sizes, filters equalities and takes first-occurrence `nubOrd`. `candidates` (277–288) retains the nested product's left-size ascending order and left-major splits. Original rows matter: Table.sortedRows (456–476) derives canonical classes from the whole original graph; a language-preserving trim or duplicate change is not an order theorem.
+* `sizedStates` (149–174) selects plain count rows, bounded determinization, equal-child intersection rows, or reference fallback. Its fallback is operationally real. The deterministic/grouped orders can differ from the original reference order; the public module documents this explicitly (45–74). A proof must identify the selected route, not demand universal equality to one historical order.
+* `fromTable` (180–200) guards the signed RANK against the actual count, then uses the independent selector. It has no explicit signed SIZE guard. `fromClasses` rejects negative ranks and builds rank by searching the class at `length term`. Do not silently insert a size guard into the modeled optimized branch.
+* `sizedUpTo` (243–270) retains Yes/No/Unknown guard decisions; Unknown is GuardUnknown, not an empty class or a successful proof of rejection. ResidualGuard and preparation-limit fallback also remain separate cases.
+* `Ranked/Internal/Size.hs`: pure=0, atom=1, product adds, pay adds one and scale multiplies (4–23). Sparse class counts can contain zero-count entries (26–40). `sizeClassOf` (196–208) skips a zero-count class; `fromMinimum` (839–841) seeds the actual minimum even when its coefficient is zero. Productive infinite knots require the documented guarded-occurrence condition. These are not consequences of a finite list theorem.
+
+Synthesis uses another measure. `Gen/Synthesis.hs:640–643` says a source size counts components and query arguments. `rawSearchSpace` (734–793) assigns size one to component/argument rows and splits an application into positive function/argument sizes; metadata/type children are not paid. `toProgram` (917–921) erases annotation structure. `synthesize` (943–944) concatenates requested source sizes, whereas `programsOfSize` (954–955) maps a typed automaton generator to Programs. The latter explicitly retains different ranks for different typed terms with the same Program and documents CannotCountConstrainedEdges for polymorphic recursive Type annotations (947–952). `programsOfSizeUpToDepth` is exact only for its chosen typed-term depth.
+
+Consequently: source component size, erased Program AST node count, full typed Term.nodes, native heap node count, work fuel, recursive enumeration depth and in-class/size-major rank are distinct quantities. A fixed number of Program components does not bound arbitrary Type annotations.
+
+## Strongest existing Lean results
+
+1. `SourcePruningEnumerationSelectedNativeSized.prepare/complete` (24,59): actual selected Mu/Union preparation preserves warm native tables and language; actual cold row collection and native compilation yield distinct exact-size classes, counts, natural decode/reference equality, ordered size prefixes and rank/unrank equivalence for the ORIGINAL selected value. This is strong. It still takes compiler Ready, operand availability/closedness, actual active-edge facts, and `NativeCompiler.Ranges`. Its compiler is SourceCyclicRows, not a theorem identifying every Data.CFTA.Sized fast route or the literal recursive pruning driver.
+2. `SourceSizedApiLaws.Exact/reference` (19,35) packages finite ClassEvaluation, distinct accepted terms, counts, invalid signed-rank rejection, rank existence, BOTH signed inverses and exact ordered prefixes. `SourceSizedQueries.unrankSigned_rankSigned/rankSigned_unrankSigned` (135,146) already prove the two directions; the second needs genuinely sized, duplicate-free classes. Sparse empty intermediate sizes are retained by through/prefix, not treated as language exhaustion.
+3. `SourceSizedFiniteKeysPublic.public_correct/public_api_eq` (61,90) derives public language/order/query laws from validated raw keys and actual dispatch success. The general public_api_eq strengthens to lawful/transitive ordering for the original canonical reference sequence. This theorem concerns its modeled dispatcher; the documented alternative Haskell fast-route orders still require their route-specific contracts.
+4. `SourceSizedGroupedSignedRank.rankSigned_unrank_iff` (91) proves BOTH signed directions for actual validated, scoped-unambiguous, successfully prepared grouped fields. Its rank is bottom-up, not a class-list search. Its header explicitly leaves native signed sparse lookup, lazy sharing and cached execution separate. `SourceSizedGroupedSparseFields.requested_count/requested_classes` (549,556) proves literal finite sparse storage agrees with independently constructed counts/classes at request bound size+1. Its evaluator computes per-unfolding minima; it does not identify the shared knot's global minimum metadata or prove infinite productivity. Do not describe all signed inverse algebra as missing.
+5. `SourceSynthesisFirstOrderConstruction.termsRows/relevantRows/firstOrderRaw` (84,112,140) implements actual decreasing source-size table dependencies, including special size-two avoid rows and last-writer name-key resolution. `ProgramRoles.firstOrderRaw_roles` (280) derives structural Program roles from successful source evaluation. Existing `ProgramHeight` is an operational max-height projection, not the source component-sum measure.
+6. Coverage/depth is conditional in different ways. `PolicyOrigins.OriginPolicies` (18) explicitly assumes avoidance/encoding at every original subtree. Its restrict/assignment laws transport that assumption; they do not derive it from an original Library/query. PreparedFiniteHead/SiblingCoverage retain a smaller-depth `Complete`, selected-edge membership, current packets and policy data. `PreparedRecursiveDepth.resume_complete_moreDepth/run_complete_moreDepth` (70,196) preserve an ALREADY COMPLETE result at greater depth. They do not produce sufficient depth for an accepted term. OriginalFiniteDriver/OriginalVerifiedFiniteDriver headers retain stopped outcomes and explicitly separate sufficient depth, policy values and canonical/weighted order.
+
+## First missing source-derived lemma and a real readback caveat
+
+The smallest independent positive cut is a source-size certificate derived by the actual `termsRows/relevantRows` mutual recursion. Define the measure on the existing SOURCE ROLE/layout: annotated component/argument =1; application =sum of function/argument; filter =candidate; union alternatives inherit the requested size. Prove successful `firstOrderRaw lib query signed` derives that certificate and every accepted, role-directed Program projection has component count `signed.toNat`. No completed driver, rank, or future depth may be a premise. Preserve size zero/negative behavior and actual repeated-name key resolution. Type children remain unrestricted and uncounted.
+
+However, equating that role-directed projection to the literal Haskell `toProgram` needs care already visible in current code. Library (227–244) has unrestricted Text names, and component builds `[annotation]` (740). `toProgram` recognizes a root named `filter` with ANY nonempty children, while `app` with at least two children becomes App (919–920). Direct evaluation of these displayed branches gives:
+
+    toProgram (filter [app [A [], B []]]) = App (Var "A") (Var "B")
+
+The source role may instead be one annotated component named `filter`, whose rigid annotation has a Type constructor named `app` of arity two. Role-directed component count is one, while the displayed readback has two leaves. This is a STATIC branch calculation, not a compiled reproduction or a verified full searchSpace counterexample. No reserved-name validation was found in the inspected Library constructor/source construction. Do not assume name injectivity, add an unrequested name restriction, or claim a full original toProgram-size theorem from ProgramRoles alone. Keep the role measure theorem useful on its own; settle literal decoder correspondence with an exact source instance/proof before strengthening it.
+
+## Cohesive next cut: at most four modules, independent of backend resources
+
+1. `SourceSynthesisProgramSourceSize`: mutual source-size witnesses for actual termsRows/relevantRows and successful firstOrderRaw, retaining special size-two policy and repeated-name selection. This is the first noncircular producer.
+2. `SourceSynthesisOriginalProgramTermSize`: actual fresh construction/accepted-term bridge from that SAME witness to the role-directed Program component count. Reuse original Program/recursive field roles and existing build semantics. State decoder correspondence separately and retain the above concrete name/shape issue; do not pretend full typed nodeSize equals the source input.
+3. `SourcePruningEnumerationOriginalPolicies`: derive the concrete policy predicates at original accepted term origins from actual source avoid/selection rules and actual template compilation. Start with exact supported source branches. Generic arbitrary stop/order/fits/admit functions cannot be declared complete: an always-stop policy is a real allowed input. Preserve unsupported/stopped outcomes and original fallback.
+4. `SourcePruningEnumerationAcceptedTermDepth`: for one finite accepted TYPED term and the concrete complete policies, derive sufficient recursion depth from proper structural subterm progress and actual stored/selected row coverage. Use that term's structural size/depth, not source component count or native work fuel. The result must PRODUCE depth, then invoke existing finite-work and larger-depth stability; it must not take Complete at that depth, a successful whole enumeration, or a future accepted callback as an external oracle. Shared driver versioning is an execution attachment, not the source of this semantic induction.
+
+These four advance source-size meaning and per-term eventual coverage. Existing exact-class/signed inverse theorems can be attached once the SAME selected class order and distinction policy are established. They do not yet prove the literal sparse shared knot's rank/cache behavior. A subsequent route-specific signed sparse execution bridge must combine actual minimum metadata, signed lookup, selector and bottom-up rank observations at the SAME fields, without replacing the fields by a supplied correct class list.
+
+## Boundaries to retain
+
+AllSized includes empty/sparse classes and fallback; an empty class does not terminate all later sizes. Distinct typed terms, distinct decoded Programs and weighted run occurrences have different counts/orders (`ProgramRunAccounting` explicitly starts from an already completed run list). Per-term eventual coverage does not by itself give fair productive infinite enumeration under the chosen lazy order. The compiler's finite model, literal source projection, current pruning policy, actual sparse/lazy sharing, native machine conversions and source Haskell behavior need their separate bridges. No new defect in the Sized recurrence or signed inverse proofs is asserted by this audit.
+
+
+### Frozen audit: decoder-collision-repro.md
+
+SHA-256: fb09203e0d272a35ceb638ad187bf440845e6bfa3bc54abf03bf576c72cd4cbb
+
+# Public synthesis decoder collision
+
+2026-11-09 16:24 CET. STATIC source reproduction. The code below has not been compiled or run. No Haskell source was changed. Runtime output and any Lean certificate remain for Root to check.
+
+## Input and predicted result
+
+Use the public Library constructor, Query, rawSearchSpace, solutionsOfSize and programsOfSize from cfta-generator/src/Data/CFTA/Gen/Synthesis.hs. The library has one monomorphic component named filter, of type TCons "app" [TCons "A" [], TCons "B" []]. The query has no arguments and the same goal type. Request size 1.
+
+The expected accepted typed term is:
+
+    filter(app(A,B), filter(app(A,B)))
+
+Here the outer filter is the built-in two-child goal check. The inner filter is the one-child component with its type annotation. There is exactly one typed term in the source language. Its intended Program is Var "filter", which has one component occurrence.
+
+At Synthesis.hs:919 the pattern (_ : _ : _) accepts AT LEAST TWO children. At :920 the pattern (_ : _) accepts AT LEAST ONE child. The outer filter unwraps the component, then the inner unary filter wrongly unwraps its annotation. The two-child type app(A,B) is then decoded as App (Var "A") (Var "B"). The resulting program has two component occurrences, although the request has size 1. A and B are not component names in this library.
+
+Predictions, not runtime observations:
+
+- accepts (rawSearchSpace lib query 1) witness = True.
+- raw term list = [witness].
+- solutionsOfSize lib query 1 = [App (Var "A") (Var "B")].
+- cardinality (programsOfSize lib query 1) = Right 1.
+- values (programsOfSize lib query 1) = Right [App (Var "A") (Var "B")].
+- The intended decoded list after the repair is [Var "filter"], with the same typed-term count 1.
+
+The public smart constructor library renames ordinary component groups to f0, f1, etc. Therefore this example intentionally uses the exported Library constructor, as SynthesisSpec does for distinct representative names. No API validation forbids filter. A second source-reachable variant uses library [] [] [] and Query [("filter", typ)] typ: query argument names are retained by rawSearchSpace, and the same witness and misdecode apply.
+
+## Small standalone check for Root
+
+Save this block as /tmp/mcfta-shared-driver-20261109-1547/DecoderCollision.hs. It imports only public APIs. It checks the CURRENT bug prediction; it must be changed to expect Var "filter" after a repair.
+
+```haskell
+{-# LANGUAGE OverloadedStrings #-}
+module Main (main) where
+
+import Control.Monad (unless)
+import qualified Data.CFTA.Equality as E
+import qualified Data.CFTA.Gen.Equality as G
+import Data.CFTA.Gen.Synthesis
+import Data.CFTA.Symbol (Symbol, symbolText)
+import qualified Data.CFTA.Term as T
+
+leafCount :: Program -> Int
+leafCount (Var _) = 1
+leafCount (App f x) = leafCount f + leafCount x
+
+main :: IO ()
+main = do
+    let typ = TCons "app" [TCons "A" [], TCons "B" []]
+        lib = Library [("filter", typ, ["filter"])] [] [] FirstOrder
+        query = Query [] typ
+        annotation = T.Node "app" [T.Node "A" [], T.Node "B" []] :: T.Term Symbol
+        witness = T.Node "filter" [annotation, T.Node "filter" [annotation]]
+        raw = rawSearchSpace lib query 1
+        generated = programsOfSize lib query 1
+        listed = solutionsOfSize lib query 1
+        predicted = App (Var "A") (Var "B")
+    print ("raw accepts witness", E.accepts raw witness)
+    print ("raw terms", map (fmap symbolText) (E.terms raw))
+    print ("solutionsOfSize", listed)
+    print ("programsOfSize cardinality", G.cardinality generated)
+    print ("programsOfSize values", G.values generated)
+    print ("decoded component counts", fmap (map leafCount) (G.values generated))
+    unless (E.accepts raw witness && E.terms raw == [witness]) $
+        fail "The raw source-language prediction differs."
+    unless (listed == [predicted] && G.cardinality generated == Right 1
+            && G.values generated == Right [predicted]) $
+        fail "The decoder or count prediction differs."
+```
+
+From the checkout root, Root can run this through the existing capped executor:
+
+```sh
+nix-shell --run 'cabal exec -- runghc-9.14.1 -package-id=cfta-0.1.0.0-inplace -package-id=cfta-generator-0.1.0.0-inplace /tmp/mcfta-shared-driver-20261109-1547/DecoderCollision.hs'
+```
+
+The two exact package IDs are present in dist-newstyle/packagedb/ghc-9.14.1. cabal.project selects ghc-9.14.1. The current shell.nix supplies the project solver environment. If the main libraries need a build, Root can first use its serial capped executor for nix-shell --run 'cabal build -j1 cfta:lib:cfta cfta-generator:lib:cfta-generator'. No full test suite is needed for this reproduction. The existing regression-test location is cfta-generator/test/Data/CFTA/Gen/SynthesisSpec.hs; its Cabal component is cfta-generator:gen-tests.
+
+## Built-in shape check and smallest repair candidate
+
+- Synthesis.hs:593-606 application always creates exactly FOUR children: [types, arrowMarker, function, argument]. Every ordinary application route calls this function, including size 2, larger sizes and relevant argument selections (:759-790).
+- Synthesis.hs:609-611 ofType always creates exactly TWO children: [goal, candidates]. Both rawSearchSpace (:734) and rawSaturatedSearchSpace (:827-832) call it.
+- Saturated application construction (:875) also calls the same four-child application function. There is no variadic program app constructor in this module.
+- Curried changes Type nodes, not Program layout. typeNodeWith (:409-416) and allCurriedTypes (:448 onward) build type applications through the distinct symbol @ with TWO children (:419-420). Function types keep the -> row with THREE children and the zero-child (->) marker. Components and query arguments still have ONE annotation child (:739/:743).
+- programRuns (:905-913) selects a different enumerator for some Curried settings, but it still calls the SAME toProgram. programsIn, solutionsOfSize and both programsOfSize variants also use this decoder. There is no Curried-specific program arity that requires a broad app/filter match.
+
+The smallest source repair candidate is therefore:
+
+    ("app", [_, _, function, argument]) -> App (toProgram function) (toProgram argument)
+    ("filter", [_, candidates]) -> toProgram candidates
+
+Keep the existing fallback (symbol, _) -> Var (symbolText symbol). This preserves literal one-child component and argument names, including app and filter, and stops traversal before their Type annotations. No symbol renaming, name reservation, injectivity premise or marker test is needed for the generated Program grammar.
+
+For the same direct-library input with Curried AnyHead Map.empty or Curried OnlyDefault Map.empty, the annotation becomes @(@(app,A),B). STATIC prediction for the current decoder is Var "@", still count 1; after exact-shape decoding it is Var "filter". These are useful small follow-up checks, not verified observations. Full arbitrary-Space decoding, the rest of the size audit, and Haskell/Lean correspondence are not established by this example.
+
+
+## Resume and publication checklist
+
+Keep the persistent goal active. The root is the sole compiler and publisher.
+Use one serial capped job at 4 GiB with swap0 and LEAN_NUM_THREADS=1. Do not
+increase the cap. Poll a live process until its actual terminal result.
+An observation timeout is not a failed check. A truncated tool result can
+still have executed. Inspect state before replaying a mutation.
+
+Verify final source hashes, exact public theorem set, old document bytes and
+old Audit bytes. Run git diff --check. Do not broaden the test suite after
+these successful focused checks unless another edit or failure requires it.
+Stage the eight final checkpoint paths explicitly. Keep .hypha untracked.
+Refresh main and formalize. The user explicitly authorized pushes to formalize.
+Verify the destination, ancestry and exact remote HEAD after pushing.
+
+The shared message-board thread is 1c1333d7-46ea-4f46-a9a1-b5d13e577337.
+The username is mcfta-lean-review. R200 was seq 1058, request/post id
+22de582d-8e45-41ff-9505-f12b9dee44d9. Its full content, metadata and identity
+were verified at this round's start. Publish the R201 checkpoint with a saved
+new UUID payload. Read back and compare FULL content, metadata, id, author,
+thread and type. A matching title or sequence alone is insufficient. Save the
+new publication, remote and terminal-check receipt in the compact runtime
+turn-state.json. The board and remote receipt complete this checkpoint.
+
+Read this entire prefix on resume. Inspect the live branch, current main,
+remote, dirty files, goal and compiler process before further source edits.
+The concrete next work is shared ordered reservations and dispatch/fold
+resources, followed by accepted-term depth and the source class bridge.
+
+---
+The complete prior document follows. R201 supersedes its status statements.
+
 # R200: Literal shared query checks from one original completion
 
 Verified at 2026-11-09 15:39 CET.
