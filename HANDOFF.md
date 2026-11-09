@@ -1,3 +1,178 @@
+# R176: actual row origins and persistent semantic witnesses
+
+Updated: 2026-11-09 03:01 CET. Full goal ACTIVE. Formalize pushes authorized.
+Preserve unrelated .hypha/. Proof HEAD before documentation commit:
+9d074ebb4870b27cb19b054f6125cd3efe2235ea. Main 9f5f77783b9f936a1edf4225373cbad9dc6a9ed5 remains integrated.
+Read Git and runtime publication.json for final HEAD and remote verification.
+Complete published R175 document bytes follow this prefix unchanged.
+No old proof, finding, counterexample, repair, or marked draft was removed.
+The previous goal turn and R176 both made authoritative source progress.
+
+## Strongest new statements
+
+RequirementRowsRefinement lifts descriptor origins through actual ordered
+allocation, tuple preparation, and nextRow on ALL row outcomes. Existing
+origin indices remain unchanged. A fresh handle identifies its exact
+position in origins ++ literal descriptors. Rejection, faults, and cache
+hits add no descriptors. Live preparation records actual equality readback,
+literal classes, and the exact returned range. nextRow appends either no
+batch or one literal descriptor batch. It does not force requirement cells.
+
+RequirementRowsTrace derives the literal source-order nextRow trace without
+Ready, meaning, or future execution premises. It records each actual rejected
+preparation, the exact remaining suffix, first live preparation, allocated
+unforced tail, cached head, and exact fault or exhausted endpoint.
+RequirementRowsRejectionSoundness adds CURRENT Ready and resident raw tuples.
+Each actual rejection has combined equality classes = none. The entire
+rejected prefix therefore has no common accepted term. The native value
+heap stays identical. Equality-operation caches can grow. Readiness is
+derived at the exact reached state. No ClosedEdges premise is needed here.
+
+RequirementRowsWitness derives ACTUAL live preparation from accepted raw
+tuple edges, tuple nonemptiness, and current Ready/resident/closed inputs.
+No successful preparation is supplied. The same fold/allocation supplies
+literal handles, appended descriptors, Ready physical state, descriptor
+closure, and strictly smaller accepted CommonCell witnesses.
+RequirementRowsOriginWitness registers those witnesses at the exact returned
+handles in the SAME extended origin list. Its stored_done_witness transfers
+a registered CommonCell claim through current refinement into acceptance by
+the cached nodes. It needs no separate successful-force premise.
+
+SharedWorklistCellOrigins derives origin refinement through actual successful
+steps and finite Run graphs. It starts with empty origins and records literal
+descriptor batches from actual row allocation. Current Values/Closed facts
+are derived at each prefix through the R174/R175 transition laws. The top
+explore_origins requires only original CURRENT Ready and start availability.
+Its successful branch derives the final origin invariant. Fault branches
+assert True; failed-force semantic refinement remains outside this theorem.
+run_stored_witness carries an exact registered descriptor claim through an
+ACTUAL successful suffix to its cached final cell, using the exact initial
+origin lookup and final done lookup. It does not invent final cell contents.
+SharedWorkerOrigins lifts origin derivation to successful actual decisions
+and memo calls. Open inputs and hits have the empty initial origin list.
+An arbitrary memo answer is not certified by this storage theorem.
+
+## Largest remaining gap and next target
+
+A global invariant must couple each table entry to its OWN sampled raw spine,
+that spine's cached head/tail chain, and the SAME registered cell origins.
+The Batch record currently contains tuple/classes and supplies descriptor
+shape. It does not export proof that its tuple belongs to a particular table
+entry's sampled spine. Independently obtaining final batches and a local
+RowsTrace does not connect their allocation handles and execution history.
+Structural no-orphans/materialization and scheduling Coverage do not prove
+semantic table coverage.
+
+Planned certificate: ONE origin list and an aligned spineSources list of
+original raw tuple lists. Each global per-handle spec describes its pending
+source or cached rejected-prefix/chosen-tuple/range/tail-source publication.
+The global specs supply tail facts; no recursive predicate is needed. Existing
+Credits bounds the terminal reader recursion. At complete successful queue
+steps, pending raw lists can equal their original source: intermediate
+rejected suffix states stay inside the derived local RowsTrace.
+
+First bounded lemma: couple actual nextRow publication to ONE given origin
+prefix. Join actual Trace.pending, Rejected semantic readback, chosen actual
+prepareTuple_some, and prepareTuple_origins. Return the SAME registered range,
+origin lookups, selected source tuple, and fresh tail suffix. Extend both
+origin and spine-source metadata together in the next step proof.
+Terminal materialization also needs cached nil/cons reader equations or an
+exact read graph for private readRowsAt. Its existing completeness/order
+statements alone do not connect semantic coverage to the same actual reader.
+
+Build one coupled certificate derived from actual visit.sample.fit:
+- The new table entry and its allocated spine refer to the same raw tuple list.
+- A pending spine retains an exact suffix after semantically contradictory
+  rejections. A cached live head retains its selected tuple, literal classes,
+  exact original descriptor range, and fresh tail's original suffix.
+- Origin extension, cell forcing, descendant visits, later row allocations,
+  and cache hits preserve these same links.
+Then combine sampler coverage, rejection soundness, exact handle witnesses,
+terminal done cells, and run_stored_witness to derive materialized
+TableSoundness.Covered. Reuse grow_complete/answer_sound and key_faithful.
+Prove shared Boolean soundness and real MemoCorrect preservation.
+
+Ordered read/failure tapes, probes, native numeric/resource bounds, and
+causal guard/arity/annotation laws still precede switching BOTH checked
+callers. SharedWorker remains unselected; selected DemandWorker results stay
+in force. Preserve R164 OriginalVerifiedCompletion and R171 same-return
+driver at chosen depth with their documented hypotheses and bounds.
+
+The FULL objective remains: original-derived sufficient enumeration depth,
+retained Type/Program occurrence identity, complete enumeration across all
+siblings/subsequent/generated/rejected/failing/returned work; exact accepted
+terms by SOURCE Program leaf size; count/order/BOTH signed inverse laws;
+AllSized/fallback/productive infinity/lazy structures; full Haskell maps,
+caches, hashing, Word/Int, allocation, wrappers, lookup, Curried/Specftacular.
+Annotation-expanded Term.nodes and recursive fuel are different measures.
+Do not add a size parameter to size-free fully/until. Component checks do
+not establish whole-library completion or full native correspondence.
+
+## Validation and source preservation
+
+Seven new modules have 23 strict checked public laws. Exact public names and
+real namespaces are checked explicitly. Own-source warnings are errors.
+Allowed axioms: propext, Classical.choice, Quot.sound. Changed reverse closure:
+8 modules of 5376. Frontier Audit imports 4373 modules and reports 88639
+theorem axioms. Full affected check passed in 10.30 seconds, peak 1641 MiB.
+Effective memory.max/high =4294967296; memory.swap.max=0; one compiler/thread.
+No queue or global concurrency setting changed. All compiler handles terminal.
+
+From cwd /tmp, source-based packets reproduced rejection soundness,
+SharedWorklistCellOrigins, SharedWorkerOrigins, and full compatibility.
+Portable peak 189 MiB. Compatibility packet: 20261109-row-origins-compatibility.
+Each source packet has README.md/check.py/checked.json/theorems.json only.
+The compatibility packet has frontier.json instead of theorems.json.
+No build archive is needed. Complete old Audit bytes remain an exact suffix.
+
+A temporary module-name collision was corrected before commit. The old
+SharedWorklistOrigins is the R172 SPINE-CREDIT proof. Its source and all four
+old packet files were restored byte for byte from the R175 HEAD. New
+CELL-DESCRIPTOR proofs use SharedWorklistCellOrigins. Their imports were
+rechecked after the rename; the full graph is acyclic. Before adding a new
+module or packet, check that its path is unused. Do not overwrite the old
+credit module. naming-correction.json records the exact restored paths.
+
+Proof commits:
+- 201559567a366499355eca8d763977bab8bd187b Preserve literal row descriptor origins and execution traces
+- a175c335b3075df3fd9ffacbf67d004afca839dd Derive live witnesses and semantic rejection from actual rows
+- f68e93542a0681d576ec9a8bd6896c71e7e920db Connect allocated handles to original descriptor witnesses
+- 9d074ebb4870b27cb19b054f6125cd3efe2235ea Derive cell origins through actual shared execution and calls
+
+Frozen sources (SHA256; public laws):
+- SourceCurrentConjunctionRequirementRowsOriginWitness: eecdfe3ee9a22772c2d01ef9f6fa8c6098ec79c393fbb00cf83cac03041747ff; 2
+- SourceCurrentConjunctionRequirementRowsRefinement: 8eeedc8c115ab8cdd04eb6eeeb05a1d22e5fb27a893f619e25f5ec8a8487f803; 4
+- SourceCurrentConjunctionRequirementRowsRejectionSoundness: 8668ec10b74e3da51e429b9c5c283d970c067bd84c804c2b4a12486593e107fc; 3
+- SourceCurrentConjunctionRequirementRowsTrace: ed5c65e6f65fa8bd12012f90f5d0c8109c5844b1af535d0c53fca484ad9ae159; 4
+- SourceCurrentConjunctionRequirementRowsWitness: df6a6d772a79d99340e11b8e142bd6e8ae2587a789529cd1161b0027028739b3; 2
+- SourceCurrentConjunctionSharedWorkerOrigins: 47cc951310262d79386f721775c5fe53740a6a52cccceeedcff83bb1d315bad1; 2
+- SourceCurrentConjunctionSharedWorklistCellOrigins: 75558807ee667e4396f010efca899c7c81dc5c575c652fbaf6258d9965785d4b; 6
+
+Ownership: Beta RowsRefinement; Gamma RowsTrace/RowsRejectionSoundness; Alpha
+RowsWitness/RowsOriginWitness; root SharedWorklistCellOrigins/WorkerOrigins,
+all compilation and Git. Read-only contract review confirmed current-only
+premises and identified the precise missing global table/spine link.
+All proof work is committed; the documentation/Audit commit follows.
+Runtime: /tmp/mcfta-row-origins-20261109-0237/.
+Read verified-modules.json, compatibility-frontier.json,
+compatibility-check.json, portable-check.json, proof-commits.json, peaks,
+naming-correction.json, publication.json, and board-published.json.
+Refresh Git and live process state before edits. Use the existing user-bus
+heavy-management setup with one serial 4 GiB job, swap0, LEAN_NUM_THREADS=1.
+Readable allocated /tmp: 35.96 MiB. Free: 243.54 GiB. Keep compact source-based
+packets and protected old drafts. Do not create build archives.
+
+## Haskell findings for external follow-up
+
+No Haskell executable file changed in R176. No new Haskell defect or fix was
+identified. Main was refreshed before publication and remains 9f5f77783.
+All earlier Haskell fixes, LPO findings, counterexamples, and marked drafts
+remain in the exact preserved document suffixes. Record EVERY future Haskell
+fix in FINDINGS.md too. The full goal remains ACTIVE. Continue without asking
+whether to continue. Do not mark it complete after these component checks.
+
+---
+
 # R175: stored descriptor witnesses, refinement, and closedness
 
 Updated: 2026-11-09 02:34 CET. Full goal ACTIVE. Formalize pushes are authorized.
