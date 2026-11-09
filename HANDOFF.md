@@ -1,3 +1,190 @@
+# R178: shared probes, ordered memo receipts, and full caller Post
+
+Updated: 2026-11-09 04:16 CET. Full goal ACTIVE. Formalize pushes authorized.
+Preserve unrelated .hypha/. Proof HEAD before documentation commit:
+e2b3294fb6678ca670c60644cf171fa95ac15b34. Main 9f5f77783b9f936a1edf4225373cbad9dc6a9ed5 remains integrated.
+Read Git and runtime publication.json for final HEAD and remote verification.
+Complete published R177 document bytes follow this prefix unchanged.
+No old proof, finding, counterexample, repair, or marked draft was removed.
+R177 and R178 both made authoritative checked source progress.
+
+## Strongest new statement
+
+CURRENT full outer Context and query Available now derive the full returned
+Post and ordered global memo bundle of every ACTUAL successful shared call.
+AllocatedSharedConjunctionCaller.actual uses the same completed call equation
+for effects, conservative answer/fourth-memo correctness, global reads, and
+probes. The returned caller advances by the EXACT physical component of the
+shared call's full returned WorkState. It uses the actual saved fourth memo
+and unchanged merge memo. The receipt retains that same full private state.
+No independently chosen execution or future heap/read/memo supplier is joined.
+
+All eight existing Context fields are reconstructed: checked readiness,
+original inventory, outer memo soundness, stored warm merges, merge language
+coverage, fourth-memo correctness, all global memo validity, and probes.
+Post retains physical Effects and both completed-table extension histories.
+The same result includes AnswerSound, final query Available, unfolding memo
+Extends, and exact equality of the global query-table bundle. Incoming
+fourth-memo correctness and global validity come from CURRENT Context.
+
+Caller.verified states this contract by matching the actual call from current
+inputs. Its failed branch asserts True; it does NOT certify a failed terminal
+projection's final global bundle or a full failure Post. Native p/h remain
+explicit and can fault. No sufficient numerical bound or original-request
+completion follows. False remains inconclusive; True excludes every accepted
+finite term. Existing R177 soundness/memo and earlier physical laws remain.
+
+Probe preservation is stronger in outcome scope: CellsProbes, RowsProbes,
+WorklistProbes and WorkerProbes preserve ProbeHeap at the EXACT returned heap
+on ALL outcomes, including failures. Row prepareTuple_heap and nextRow_heap
+are unconditional literal heap identities. The whole call needs current
+Ready, probes and Available; it needs no query Closed or future state supplier.
+
+These companions remain UNSELECTED. Both checked routes still use the old
+DemandWorker adapter. Logical source read receipts do not establish native
+Haskell lazy demand/publication or full GHC correspondence. The full goal
+has NOT been achieved.
+
+## Actual ordered reads and same-execution composition
+
+RequirementPullMemos.StepReads/RunReads retain every actual singleton
+projection in source order, including repetitions and the exact first-Empty
+stop. Replay laws recover those same actual steps/runs. Current Ready and
+resident/closed cursor Inputs derive each returned Valid global bundle,
+unfolding Extends, and unchanged query tables. The induction explicitly
+carries the actual run, current Ready/Inputs, and reached physical endpoints.
+
+RequirementCellsMemos.ForceStepReads/ForceReads retain actual pending cursor
+receipts. Cached completed cells and columns add no global reads. Current
+CellsValues and CellsClosed derive pending Inputs internally; no extra
+future cursor premise is supplied. Missing handles cannot succeed. The
+successful force keeps the exact physical endpoint of the literal run.
+
+SharedWorklistMemos.VisitReads/StepReads/RunReads retain actual sampling
+receipts and actual force-before-visit order. Row preparation retains its
+literal nextRow equation and adds no global call. Worklist Values/Closed
+thread the actual successful Run and derive all intermediate facts. Explore
+initializes both invariants internally. SharedWorkerMemos then retains the
+same explore/read/grow outcome and memo hit/miss. Pure materialization/grow,
+open queries and fourth-memo hits add no native projection calls.
+
+A read-only contract audit found no inconsistency: no successful reads are
+omitted, coupled endpoints remain exact, all eight Context fields return,
+and native faults/False/selection bounds are stated honestly. All nine source
+modules also passed the strict compiler and public-signature checks.
+
+## Next bounded target: all-outcome projection memo receipts
+
+The missing failure layer is BELOW the cursor. The literal projection worker
+can finish reads, then fail. A Mu head can complete before recursive worker
+exhaustion. This is a source audit, not an executed counterexample claim.
+SourceEqualityProjectionMemos.ForestReads (line 85),
+SourceEqualityQueryGlobalMemos.forest_memos (line 59), and
+ConjunctionGlobalMemos.projections_memos (line 160) cover successful graphs.
+
+Existing lower support is sufficient to start the extension:
+- SourceEqualityExposureMemos.nodeEdges_reads:128 records unfolding receipts,
+  Correct and Extends at the actual heap on EVERY exposure outcome.
+- ConjunctionProjectionWarmEffects.forest_effects:187 derives all-outcome
+  Effects from current Ready and Values, without a Closed premise.
+
+Add ONE outcome memo companion for ProjectionWorker.readAll/project/rows/
+forest. Its receipts must retain exposure failure, completed head followed
+by failed body, and completed selected child followed by failed tail. Return
+unfolding Correct and Extends at the literal reached heap. Keep repeated
+reads and exposure fallback calls. Then lift through singleton projections,
+Pull Step/Run, and CellsExecution.force_pending_failed to the same final
+stopped cursor and physical endpoint. Transport both query tables with the
+actual physical growth/history. Derive the final global bundle internally.
+Do not classify failure as read-free or assume a successful Forest graph.
+
+Runtime next-failure-target.md contains the same detailed audit. Full Haskell
+exception correspondence remains separate from modeled prefix accounting.
+
+Before switching BOTH checked callers, also retain weak effects WITHOUT
+strengthening legacy callers to Ready, guard/annotation and arity contracts,
+sufficient native p/h and replay stability, deferred-force numeric forecasts
+even at budget zero, and a lossless diagnostic/private-snapshot interface.
+Do not discard old failure/numeric consumers. No eager/shared execution
+equality is required or justified. Existing selected caller, R164 original
+completion and R171 same-return chosen-depth driver claims remain intact.
+
+The FULL objective remains original-derived sufficient COMPLETE enumeration
+depth and retained Type/Program occurrence identity; all siblings/subsequent/
+generated/rejected/failing/returned work; exact accepted terms by SOURCE
+Program leaf size, count/order/BOTH signed inverses; AllSized/fallback/
+productive infinity/lazy structures; full Haskell maps/caches/hashing/Word/
+Int/allocation/wrappers/lookup/Curried/Specftacular. Annotation-expanded
+Term.nodes and recursive fuel are distinct measures. Do not add a size
+parameter to size-free fully/until. Preserve constructor/equality secondary
+work and every existing counterexample and marked draft.
+
+## Validation, commits, and restart
+
+Nine NEW modules and 26 NEW public laws passed. Own-source warnings are
+errors. Every public name and real namespace is explicit. Allowed axioms
+are only propext, Classical.choice and Quot.sound. No old source changed
+except nine additive Audit imports. Complete old Audit bytes remain exact.
+
+Full affected closure: 10 of 5395 modules. Audit imports 4392 modules and
+reports 88746 theorem axiom dependencies. Passed in 6.49 seconds, peak 436 MiB.
+Effective memory.max/high=4294967296, swap.max=0, LEAN_NUM_THREADS=1, ONE
+serial compiler. No global queue/concurrency settings changed. From cwd /tmp,
+worker probes, worker memos, full caller and complete affected compatibility
+reproduced from SOURCE packets. Portable peak 171 MiB. No archive is needed.
+All compiler handles are terminal. Preserve protected old proof drafts.
+Compatibility packet: 20261109-shared-probes-compatibility. Nine source packets
+have README/check.py/checked.json/theorems.json; compatibility has frontier.json
+instead of theorems.json. Exact source hashes are checked before/after builds.
+
+Proof commits:
+- dcb3c49856393d7794826e889f3281fc19e6838b Preserve probes through shared cells and rows
+- 25205e756b7850335921cb03db50bd551777a644 Preserve probes through actual shared worklists and calls
+- 726f628d33e490be02144e792b58fc7486330c13 Derive ordered memo receipts for deferred requirement forces
+- 84574c1a64a6cd6344b04c627a106d55519bef29 Thread actual memo receipts through successful shared execution
+- e2b3294fb6678ca670c60644cf171fa95ac15b34 Retain the full caller after successful shared conjunction calls
+
+Frozen sources (SHA256; public laws):
+- SourceCurrentAllocatedSharedConjunctionCaller: cde93922856023972df9f86ed1f158894a187fa747d747ea60878284aeffe466; 2
+- SourceCurrentConjunctionRequirementCellsMemos: f10567cdfc590e3f92d99edd2316a85cff59f790dabe8a15039cbbd0680642f8; 2
+- SourceCurrentConjunctionRequirementCellsProbes: b763a6603cf88a56d6cfbdd0d7ec7c22dde3505c2689e55416c0843258e7e091; 1
+- SourceCurrentConjunctionRequirementPullMemos: 303840bb3e93904cdbc4c032527b68b5fe97e8c3211bbdc6590ebf51768cd7ee; 5
+- SourceCurrentConjunctionRequirementRowsProbes: 41dbb4fc317983913dc742ba9edcf6d029bc5c7e22033ac29595c72a8f7c56a4; 4
+- SourceCurrentConjunctionSharedWorkerMemos: 213af313f34dab17a5a3b00ecd1d7e8f92d4a70217a088ee037810271400495b; 2
+- SourceCurrentConjunctionSharedWorkerProbes: dc8cc4cd2209ecabfba3a76a59906ec625e24558b7ce1eda6853509c80636fac; 2
+- SourceCurrentConjunctionSharedWorklistMemos: 89c2a60c3171559e305647625942f6b7689c05e5003db834ae154d49a7e1f547; 4
+- SourceCurrentConjunctionSharedWorklistProbes: 4ef64c300fe652f9ada5a10923b21093d07d0992827a10a93eb5c0b4bb20207d; 4
+
+Ownership: Alpha cell/row probes and failure-layer/source contract audits;
+Beta worklist/worker probes and worklist memo receipts; Gamma cursor/cell
+memo receipts; root worker memo/full caller composition and all compilation/
+Git. Induction repair: expose cursor pending Inputs and actual run before
+induction; explicitly revert Ready/Inputs/Memos/Valid/actual; use NAMED
+generalized collected/before/after/nodes arguments at the reached state.
+For indexed actual-call receipts, split the dependent outcome match; cases
+would generalize away the call equation required by the receipt's type.
+
+Runtime: /tmp/mcfta-shared-probes-20261109-0353/. Read verified-modules.json,
+compatibility-frontier.json, compatibility-check.json, portable-check.json,
+proof-commits.json, next-failure-target.md, peaks, publication.json and
+board-published.json. Refresh Git and actual processes before edits. Reuse
+ONE capped compiler with the user-bus/heavy-management setup; 4 GiB memory.max/
+high, swap 0, LEAN_NUM_THREADS=1. Do not change queue concurrency. Readable
+allocated /tmp: 36.8 MiB; free: 242.1 GiB. This turn's compact runtime is small;
+no build archives or repeated large output snapshots are retained.
+
+## Haskell findings for external follow-up
+
+No Haskell executable file changed in R178. No new Haskell defect or fix was
+identified. The failed-projection memo gap is a FORMAL RECEIPT gap, not an
+asserted Haskell bug. Main was refreshed before publication and remains
+9f5f77783. All earlier Haskell fixes, LPO findings and counterexamples remain
+in the exact preserved document suffixes. Record EVERY future Haskell fix
+in FINDINGS.md as well. Full goal ACTIVE. Continue without asking whether
+to continue; do not mark it complete after this component milestone.
+
+---
+
 # R177: conservative shared decisions and memo contracts
 
 Updated: 2026-11-09 03:44 CET. Full goal ACTIVE. Formalize pushes authorized.
