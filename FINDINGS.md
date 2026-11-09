@@ -1,3 +1,254 @@
+# R197: Type state and recursive Program fields through shared local returns
+
+Verified at 2026-11-09 14:00 CET.
+Base R196 is b628abb0d7c1db8258cf7d84a7a10890cd23ae2b.
+Seven new modules add 21 public laws. All strict source checks pass.
+The full affected Audit and all eight portable packets pass.
+The seven proof commits end at 7df7b6a0138f9764798b23d068cf2cc513a8d5d5.
+This handoff and the additive Audit form the eighth commit.
+The goal remains ACTIVE. Keep the full original accepted-input, complete
+enumeration, native capacity and Haskell correspondence objective.
+Preserve .hypha and all older proofs, counterexamples, repairs and drafts.
+No Haskell source change, new Haskell bug, or Haskell fix is included.
+The complete published R196 document follows this section unchanged.
+
+## Strongest current statement
+
+R196 still gives the strongest original-input completion theorem:
+OriginalSharedRankCompletion.accepted derives the cold shared caller from
+firstOrderRaw acceptance. Under ONE computed combined capacity test, the
+literal shared worker returns an available language-preserving result at
+every sufficient outer fuel. Larger outer fuel returns the SAME result
+and full caller. Initial facts follow from the accepted original input.
+The numeric Room test is still explicit. It is not proved for every
+accepted input at native fixed widths. Enumeration and Haskell execution
+are not consequences of this cold worker theorem.
+
+R197 supplies the missing LOCAL Type and Program field producers for the
+new shared family. Every checked shared conjunction outcome preserves its
+Type readiness, cost facts, physical extension and conditional Origin guard
+heap. The result includes failed outcomes at their actual returned state.
+This is a state invariant. It does not classify every returned value as Type.
+Actual successful shared record scans retain those facts at the SAME
+scanned endpoint. They also retain availability of the original forest.
+
+Actual shared local app and filter returns now preserve readiness, physical
+extension, result availability, closedness, conditional Origin guard facts,
+source Type routes, and FULL recursive Program fields at assigned slots.
+The generic all-Type branch also preserves annotation on every returned
+child. It needs no app/filter source occurrence. This covers the lower
+branch required for arbitrary TypeRow inputs in the next Parent proof.
+These are local theorems from genuine current input classifications and
+literal shared read receipts. The whole outer induction must still derive
+those classifications at every reached call. R197 does not assert that
+OriginalSharedRankCompletion already returns these additional certificates.
+
+## Exact proof contracts
+
+- NativeTypeSharedScan.call covers the actual checked call.state on EVERY
+  outcome. SharedWorkerEffects.call_effects and SharedWorkerGuardArity retain
+  the literal physical snapshot. Checked call_state and call_snapshot align
+  its actual endpoint. No old Demand graph or success premise is used.
+- NativeTypeSharedScan.scan inducts on the GIVEN SharedScanCallerNumeric.ScanReads.
+  Each real gate, seeded query, memo call, and suffix supplies its own state.
+  Current Type readiness, costs, original Values/ClosedValues, source routes
+  and Origin GuardHeap are the initial hypotheses. No future Ready supplier
+  or old class Scan is an input. No unused formulas/solver parameter is added.
+- ActualSharedSelectedProgramFootprints derives kept.Sublist records directly
+  from the same ScanReads. The pure precheck_regions law gives coherent
+  source regions. Source app/filter equations then derive the full annotation
+  footprint and annotation-only compiled Required obligations. No footprint
+  oracle or old SelectedRootOrigins/Retained proof is an input.
+- SharedTypeRequiredRoutes uses those actual selected footprints with the
+  exact unchanged Required equation and its actual fuel, read fuel and heap.
+  The old pure application_paths/filter_paths laws remain reusable.
+- NativeTypeSharedRequiredPass composes that actual shared Scan selection,
+  the SAME Required return and actual unchanged ClassPass.Pass. Current warm
+  Type state and input classifications at Scan's return remain local inputs.
+- NativeTypeSharedLocalWorker composes actual SharedClassesNumeric.Reads
+  and SharedLocalNumeric.Reads. It returns the full old app/filter metadata
+  and source-route categories at the NEW endpoint. No old Ranges is assumed.
+  RequiredGuard.requireAll consumes the actual ordered Required reads.
+  AllocatedClassWorkerCompletion.pass_complete supplies the literal unchanged
+  pass equation used by LowerGuardHeapReturns.class_pass. This derives the
+  final Origin GuardHeap without a future guard assumption.
+- NativeTypeHereditarySharedLocalWorker adds full recursive ValueFields at
+  assigned Program slots. It uses the same completed preparation, actual
+  Required equation and actual ClassPass.Pass. HereditaryRequired and
+  HereditaryClassFields operate on unchanged callees. Metadata comes from
+  the new shared local producer. No old Scan graph or range plan is cast.
+- NativeTypeAnnotatedSharedLocalWorker.classes and reduce handle generic
+  all-Annotated forests. Every path follows from TypePath.annotated.
+  Required uses assigned constantly False. The actual unchanged class pass
+  transports the full forest route at []. Early unchanged/erased branches
+  keep their literal precheck states. The source Precheck.Receipt supplies
+  current entry facts. No separate future Context is requested.
+
+The shared reads retain the actual ordered global bundles. Parent canonical
+receipt reads remain separate from its nine observed Parent fuel values.
+Endpoint equality does not reindex the read schedule. The next Parent law
+must use SharedActualParentSemanticReads.parent at the SAME returned state.
+The existing old worker, Parent, SourceReads and range theorems are unchanged.
+
+## Verified sources and incremental commits
+
+- SourceSynthesisActualSharedSelectedProgramFootprints: 169 lines, 5 public laws.
+  Commit 1334a6e11fd9cb00b53a0a30af2528aa7b925aba.
+  SHA256 7093e6872b46ec1cd86a08a1ed822f96ba6a0d3c4b30e94a301e71791386b65f.
+- SourceSynthesisNativeTypeSharedScan: 163 lines, 2 public laws.
+  Commit f67437f193fd803bfaa30ae6e8e3a19107e58e02.
+  SHA256 6f4d848c950dd7583e7e4a0c6e4a1b51f860665d684ef55f143998613011ccf0.
+- SourceSynthesisNativeTypeAnnotatedSharedLocalWorker: 262 lines, 2 public laws.
+  Commit 0c7b88b0b81bd2450c7e0b063eb864d3dc74a4bb.
+  SHA256 a0ff5560268337cbe4d17cafef72f45ab51efab91684b5a47fe293c50e28cd83.
+- SourceSynthesisSharedTypeRequiredRoutes: 128 lines, 2 public laws.
+  Commit bba02372d499e9e73f5fad2b5b80513ee5a12a84.
+  SHA256 7514f1f48e780a4706f82389f6e77cabcbf097c033af4ca1c2b00f3e4a760158.
+- SourceSynthesisNativeTypeSharedRequiredPass: 145 lines, 2 public laws.
+  Commit 2432b207c490b5e7eb57aa6e32352de411beb883.
+  SHA256 f4a9f66caf520f0a138f26f08261893af66ac173fcb3f0331aedb4e238951c2c.
+- SourceSynthesisNativeTypeSharedLocalWorker: 380 lines, 4 public laws.
+  Commit dceccfb285d07b6e1455422afe7e7b184dee94e7.
+  SHA256 72c51b6c816ecea213fba65a3c2f9dfdc07433f4e70bb91a7a401e7d9dfa0cff.
+- SourceSynthesisNativeTypeHereditarySharedLocalWorker: 337 lines, 4 public laws.
+  Commit 7df7b6a0138f9764798b23d068cf2cc513a8d5d5.
+  SHA256 a38d302165a4fcf10bca7fac32cd174a8c0d6d3d08d4b9fd4eb1c5e594265728.
+
+## Validation and reproducibility
+
+All seven source targets pass Nix/Lake and their own strict warnings-as-errors
+report. Each report emits an explicit #check and an axiom report for EVERY
+public theorem in its exact namespace. Only propext, Classical.choice and
+Quot.sound are allowed. Exact source hashes and declaration lists match.
+The complete import graph is acyclic. No previous source theorem is removed.
+Audit preserves its ENTIRE previous import list after seven imports and one
+blank line. The graph has 5561 live modules and 8 affected modules.
+Audit is the complete affected frontier. It has 4558 direct imports.
+The axiom report covers 90804 theorems. Counts do not establish system coverage.
+The first full build took 12.84 seconds and peaked at 3959M.
+All eight packets reproduce from cwd /tmp. Their combined peak was 222M.
+All source hashes match before and after the full build and portable checks.
+Each compiler job used one thread, memory.max=memory.high=4294967296 and
+memory.swap.max=0. Root remains the sole compiler and Git publisher.
+No Haskell formatter, build or test is needed for this Lean-only change.
+
+Each source packet has README.md, check.py, checked.json and theorems.json.
+The compatibility packet is
+lean/restart-evidence/20261109-shared-types-compatibility/.
+It adds a frozen affected-frontier manifest and checks all hashes before
+and after the build. Run its check.py under the existing serial 4 GiB cap.
+The individual packet paths and exact contracts follow from each source
+entry and its 20261109 restart-evidence directory.
+
+## Proof extraction fixes and review boundaries
+
+Invert GIVEN SharedLocalNumeric.Reads directly. First eliminating its
+Prop-indexed Execution does not exclude other read constructors by proof
+identity. Match each read constructor's actual precheck equation against
+the current Precheck.Receipt, then extract its class continuation.
+
+Read case patterns omit the uniform budget, loaded, inherited and values
+parameters. The unchanged/emptyChildren cases bind before/fourth/memo,
+observed precheck and memos. The classes case binds the fourteen remaining
+fields. Use the existing verified ParentScan.local_scan pattern.
+
+A completed preparation must retain its concrete r/read witnesses and the
+actual Required proof. Anonymous existential fuel placeholders cannot be
+recovered from RequireAllReads, which intentionally omits those bounds.
+These were proof-elaboration repairs. No theorem premise or output was
+weakened. Do not add future fields, a supplied range plan or a second bundle
+just to make the next producer type-check.
+
+## Biggest remaining gaps and next work
+
+The next bounded cut has three genuine Parent/outer producers:
+1. NativeTypeAnnotatedSharedParentWorker.edge.
+2. NativeTypeHereditarySharedParentWorker.edge.
+3. HereditarySharedOuterEdgeWorker.edgeCall_verified_fields.
+
+Use the new generic all-Type local law and recursive app/filter local laws.
+Use the SAME SharedParentNumeric.Receipt.reads at the actual observed return.
+Reuse ParentHeap.build/reject, pure MkEdge receipts, TypeRow, recursive field
+predicates and HereditaryClosedMemo. The next audit below states exact inputs,
+outputs and captured-owner conditions. Then port the whole shared outer
+field/history induction and derive a full original accepted shared return.
+
+Explicit machine Checks/WordRanges remains a SEPARATE gap. Old Checks and
+WorkerRanges quantify the old Parent and old Scan families. Shared EndpointReads
+has no ranges field. Derive genuine new plans from one original root Room;
+do not relabel old Checks or replace it with receipt existence.
+Unchanged SeededInitialRanges.complete and EditListNumericRanges can supply
+the actual Seeded and class-edit word plans. The new shared continuation
+must keep its actual source call and state. Do not reindex read fuels or
+assert all future fuel configurations from one endpoint equality.
+
+Complete enumeration is a larger system gap. The selected historical Demand
+routes and heap-only NativeView narrowing remain unchanged. Version the
+actual EnabledEmpty/Terminal/IncomingCacheAdapter/CachedTerminalAdapter paths
+and full continuation/SelectedStep/recursive driver. Preserve gates, skips,
+query memos, size order, full faults and returned snapshots. Incoming merge
+still uses native requestNode. Outer rank is not the whole driver work bound.
+
+Keep ALL original accepted inputs and generated/rejected/failing/returned/
+subsequent states. Prove exact terms and counts by SOURCE Program leaf size,
+size order, BOTH signed rank/unrank inverses with sparse classes, AllSized,
+fallback and productive infinity. Derive finite source Program-occurrence
+progress for generated intersections and warm winners. Value mass, positive
+quotient count, annotation node count, observer fuel and enumeration rank
+are separate measures. There is no verified executed original-input
+starvation counterexample. Retain native Word/Int capacity, allocation,
+hashes/maps/sets/caches, host wrappers, lookup, Curried/Specftacular and full
+Haskell correspondence. Keep older constructor and equality targets.
+Do not complete the goal from these local producers or passing builds.
+
+## Haskell findings and temporary storage
+
+No Haskell fix or new Haskell defect was found in R197. No production Haskell
+behavior changed. Every future Haskell defect or required fix MUST enter
+root FINDINGS.md with trigger, affected code, expected result and verification
+status. Preserve every older fix note for an external implementation agent.
+Main9f5f77783b9f936a1edf4225373cbad9dc6a9ed5 is unchanged and included.
+The LPO change remains integrated. Normal formalize pushes are authorized.
+
+At 13:54 CET, /tmp held 23.97 MiB of readable files and had 241.23 GiB free.
+R197 runtime helpers and compact errors used about 71 KiB at that point.
+Keep /tmp small. Create no build/source archives or duplicate proof trees.
+No such archives were created. Runtime:
+/tmp/mcfta-shared-types-20261109-1335/.
+All known compiler handles are terminal after the verified portable group.
+The previous goal turn made verified progress. This round also makes
+verified progress. The goal remains ACTIVE.
+
+## Next shared Parent field audit
+
+# Next shared Parent field cut
+
+The next field proofs must consume the SAME `SourceCurrentSharedParentNumeric.Receipt.reads` at the observed SharedParent return. Existing `SourceCurrentSharedActualParentSemanticReads.parent` (37) already derives this receipt from the original Context, Frame, Fits, LiveInputs, shared reservation, and literal successful nine-bound Parent observation. It aligns all returned components by same-worker uniqueness. The receipt keeps its canonical read bounds. This does not reindex those reads to the observed bounds.
+
+## Necessary lower producer
+
+App/filter SharedLocal laws are insufficient for arbitrary Type rows. `HereditaryMemoFields.TypeRow` (36) requires Origin on the guard and Annotated on EVERY child. It supplies no application/filter source occurrence. Add `SourceSynthesisNativeTypeAnnotatedSharedLocalWorker.reduce`, the genuine SharedLocalNumeric.Reads counterpart of old AnnotatedLocalWorker.reduce (238). Inputs are the current pure Precheck.Receipt, SharedReady, Values, ClosedValues, GuardHeap Origin, all children Annotated, and the GIVEN shared local reads. The Parent derives that precheck receipt from its current Context; the local law needs no additional Context premise. No old Ranges. Derive all paths from TypePath.annotated; use SharedScan, Required with assigned constantly False, then actual unchanged ClassPass and ALLForestRoutes at []. The unchanged and erased precheck branches retain their literal states. The new AnnotatedSharedLocalWorker source now provides classes/reduce with this exact boundary; strict checking remains with Root.
+
+## Next three public contracts
+
+1. `NativeTypeAnnotatedSharedParentWorker.edge`: take the literal SharedParent.done plus the same initial numeric/context premises used by the existing semantic-read producer, current SharedReady, GuardHeap Origin, EdgeReady, ClosedValues children, and TypeRow input. Internally obtain ONE canonical numeric receipt at the observed result/checked/fourth/merge. Induct its Reads: rejected uses ParentHeap.reject; live invokes generic AnnotatedSharedLocal.reduce on lower.reads, then ParentHeap.build at its exact built equation. Return that SAME numeric receipt/Post and Shared graph/EndpointReads, final SharedReady/Extension/residency/closedness/guard heap, TypeRow result, and guard/layout Coupled. The accepted guard is the original full guard; rejection gives Top/[Empty]. Do not limit this to Top singleton Type rows.
+
+2. `NativeTypeHereditarySharedParentWorker.edge`: same endpoint/resources, but input is HereditaryProgramFields.EdgeFields (Origin lib) literal. Cases are exact annotated/app/filter constructors, not symbol tests. App/filter invoke the new hereditary SharedLocal reads laws using the actual full schema, recursive fields, and all-nonzero annotation-only footprints. Annotated singleton uses the generic Type law above and exact constructor coupling/length. Return recursive EdgeFields result plus the SAME shared receipt/Post/physical facts. Metadata-only NativeTypeParentWorker.application/filter can use the same constructor finish proof with weaker mixed slots; they cannot substitute for this recursive law. `ValueFields.fields` (90) provides the valid projection in the opposite direction when recursive fields already hold.
+
+3. `HereditarySharedOuterEdgeWorker.edgeCall_verified_fields`: use actual SharedPartialWorker edgeCall.done, current Context/Frame/Fits/carrier/shared reservation, EdgeReady, SharedReady, GuardHeap, closed children, classified input TypeRow OR recursive Program EdgeFields, and existing HereditaryClosedMemo.History. Derive the observed owner/body graph directly. Publish both conditional field implications and conditional closedness for the captured complete owner. Warm hits use ClosedMemo.edge_ready (154), whose physical complete-key equality includes inherited data. Return SAME new SharedGraph/EndpointReads, chosen full Post, updated History, owner-conditioned fields, and actual typed/closed physical post for the classified input. No old WorkerRanges, old source-read relation, or body-field callback. Generic History alone cannot produce physical Ready without classified actual input.
+
+## Exact reuse and replacement
+
+Safe unchanged pieces: TypeRow; MixedSlots/Coupled (NativeTypeParentWorker 48/54); recursive ValueFields/EdgeFields and their roles/fields/congr laws; HereditaryClosedMemo definitions and FlatMemo history operations; pure Precheck.loaded_complete; load_ready; MkEdge.finite/Receipt/RejectReceipt; ParentHeap.build/reject (81/105); LocalReduction.Receipt.length (86), available/effects/ready/admitted. The SharedParent live constructor stores a full SharedLocalNumeric.Receipt plus exact MkEdge.build (SharedParentNumeric 44-62). Its semantic local receipt supplies length, so no old LocalWorker.reduce_length call is needed.
+
+Must version: old Parent/LocalWorker operational inversions, old ParentWorkerActual.resident_verified and LocalWorkerActual.sound, every old WorkerRanges input, old PartialWorkerBody/Call graphs and SourceReads. Replace them with SharedParentNumeric.Reads, SharedLocalNumeric.Reads, the actual shared worker/graph, and SharedPartialEndpointReads. Keep each supplied ordered global bundle; do not join a second existential bundle by endpoint equality. No old/shared graph or read-schedule cast is justified.
+
+## Boundary
+
+These are local successful-return and captured-history laws. Current type routes and recursive input fields remain genuine hypotheses until the whole shared outer induction derives them. Shared rank completion supplies actual execution under its computed Room, not the missing hereditary field induction, a fixed native word bound, or complete Haskell/enumeration correspondence. Shared fault-prefix field preservation is a separate theorem.
+
+## Complete previous published document
+
 # R196: computed completion of the original shared worker
 
 Verified at 2026-11-09 13:25 CET.
