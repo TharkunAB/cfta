@@ -1,3 +1,216 @@
+# R186: original-data bounds for the complete shared call
+
+R185 is published at `74a1c887603777525d04fe20646b906363f72607`.
+R186 adds seven modules and 29 public laws. All strict own checks pass.
+The affected Audit and all eight source packets reproduced from `/tmp` pass.
+The goal remains ACTIVE. Both selected formal callers still use DemandWorker.
+No executable Haskell change, new Haskell bug or Haskell fix is included.
+Preserve unrelated `.hypha/`, every older proof and all marked drafts.
+The complete published R185 document follows this section unchanged.
+
+## Strongest new statement
+
+Current physical Ready, query availability and a current heap Fits bound now
+derive explicit projection and reader ceilings for the COMPLETE shared
+exploration, decision and fourth-memo call. Every larger sufficient pair
+returns the identical answer, saved memo and complete private WorkState.
+The returned value heap and private dimensions satisfy one explicit profile
+from the original call heap, original tuple budget and original scalar.
+No future trace, successful force, completed normalized classes, closure,
+sufficient fuel or final profile is supplied by the public caller.
+The query can be open. Open decisions and memo hits retain the initial
+private snapshot and checked resource profile under the final forecast.
+
+These are mathematical value-heap and private-storage bounds. The profile
+includes native value-heap Fits, requirement-cell count, maximum cell size,
+maximum cached row length, literal queue size, table length, queued/table
+operand widths and stored raw tuple widths. R185 separately bounds spines
+by 2*originalBudget on every exploration outcome. This profile does not
+measure the byte size of every cache or prove native capacity or runtime.
+The old semantic caller theorems still supply answer soundness under their
+full stated initial context. Numeric completion alone does not establish
+semantic correctness of an arbitrary incoming memo. False can mean unknown.
+
+## Explicit original-data forecast
+
+Let A be GuardUniverse.guards of the ORIGINAL call heap. Let B be the ORIGINAL
+algorithmic tuple budget and r the current constructor-heap Fits scalar.
+The following functions use finite source data only:
+
+```
+s0 = max r (max B 1)
+U(s) = Exposure.forecast s (ProjectionResources.jobsBound s s s s)
+shape(A,s) = TupleBounds.shapeThrough A s
+fresh(A,s) = RowsNumericControl.freshSize A s s
+g(A,s) = 1 + max (U(s)) (2*s + shape(A,s) + fresh(A,s) + 2)
+M = HeightOrderControlled.majorant (g A) (B+3) s0
+P = StepNumericBounds.projectionFuel M
+H = StepNumericBounds.readerFuel M
+F = g(A,M)
+```
+
+P is the common projection ceiling. H is the common recursive reader ceiling.
+F bounds the final quantitative profile. The full initial seed is at most F.
+The functions are explicit mathematical definitions. The finite guard-shape
+functions use classical finite bounds. These bounds can be extremely large.
+They are not a practical memory estimate or an execution-time benchmark.
+B remains the algorithmic tuple budget. It is not a source term-size request.
+
+The fixed original guard carrier survives actual forcing and sampling.
+Actual tuple shape gives raw tuple width equal to sampled operand width.
+Rows derive their own normalized classes and exact new handle range. Cached
+row length counts duplicate occurrences. Valid handles alone do not bound
+that list length. Actual forcing cannot increase captured cell size.
+Zero-fit table insertion is counted even when it consumes no tuple budget.
+
+The actual budget above B+2 queue coordinates gives dimension B+3. Each
+continuing transition derives a next Frame and a strict vector decrease.
+The strict monotone growth function controls the current quantitative
+profile. The actual successful Run is derived internally from readiness.
+Its induction builds a controlled Path and exact same-state replay.
+Path.final_le bounds its last scalar by M. The terminal transition gives F.
+The proof compares actual steps at their computed local ceilings. It does
+not assume that the computed ceilings exceed an old existential allowance.
+Decision completion derives actual table read and table.length+1 growth.
+Existing credit extensionality retains that exact decision at larger bounds.
+
+## Verified sources and commits
+
+- `SourceCurrentConjunctionRequirementRowsNumericControl`: 6 laws; 401 lines.
+  SHA256 `2d03e5bfd8bc20c34425ac25b2d618efb6b9a9ebc678ca13e09bb9846227b1f9`.
+  Commit `fa8dea97ff8a4193674bcd32e6e851ed6212b2b0`.
+- `SourceCurrentConjunctionSharedWorkerNumeric`: 3 laws; 113 lines.
+  SHA256 `51243161a1589a35f5ee114cd7950e2d0509107bd3f763f93cf0bdaed7e6c455`.
+  Commit `9f66c2a5d5de47c2ac2b888cb7cc2bcbbcb57de8`.
+- `SourceCurrentConjunctionSharedWorklistCountBounds`: 3 laws; 253 lines.
+  SHA256 `2bbaf675bada33c7781911a011a515932d0438138fb809ba5ff6177a230a5eac`.
+  Commit `20b9b559c3ed515bb7071a6962f867b5f9cad2db`.
+- `SourceCurrentConjunctionSharedWorklistNumeric`: 2 laws; 202 lines.
+  SHA256 `a12c8a07af50b2bcd5f7984fa74f2e0bc605880f686f46e6ccccf56a50caf412`.
+  Commit `b3a15d2b9c1a8a59f01e9ecf75083d7efd1e1cbd`.
+- `SourceCurrentConjunctionSharedWorklistResourceControl`: 6 laws; 147 lines.
+  SHA256 `e24ac2b25eb79c06e224c571e786c9c4eb4b451470763fd677af96e58a515a70`.
+  Commit `df57fe39e5b181ee45fcf475bb538ac04cbb066b`.
+- `SourceCurrentConjunctionSharedWorklistStepNumericBounds`: 5 laws; 170 lines.
+  SHA256 `5d6f5112a3ce223f55d80abfd0ff1b411e097cdf476ba3e84f28e89b9c586036`.
+  Commit `41a27a8295d735e75e4d5ad8753144255e66a006`.
+- `SourceCurrentConjunctionSharedWorklistWidthBounds`: 4 laws; 235 lines.
+  SHA256 `f718b8101e67cb6ed5c5424ea62d7fcac3561ca1ad672502b9e18289792bce78`.
+  Commit `b2e0960700691c37fed9891ba1275ff4d13fadfe`.
+
+The final two endpoints are WorklistNumeric.explore_initial and
+SharedWorkerNumeric.decision_initial/call_initial. Their public input is
+current Ready, Available and Fits. Frames, fixed alphabet validity, raw tuple
+shape and all future profiles are derived inside the proof. The same-state
+replay includes the private storage and saved fourth memo.
+
+## R185 reference correction
+
+Four commit associations in R185's source list were incorrect. The source
+hashes, checked statements and successful checks were correct. This is the
+exact map, derived by matching each source path to its actual commit files:
+
+- `SourceCurrentConjunctionRequirementCellsOutputBounds`: `007ecaf1d6c3bdeb13ab5b6b1921a5e63bf3266e`.
+- `SourceCurrentConjunctionRequirementCellsSize`: `e3c4c34325ec5dee38186df37be23ef688907d82`.
+- `SourceCurrentConjunctionRequirementRowsSizes`: `5fcf614ee8496a379126cce0407b4fe695757096`.
+- `SourceCurrentConjunctionSharedWorklistNumericControl`: `592890557b192122327afacc0af3236b9c77c82f`.
+- `SourceCurrentConjunctionSharedWorklistStepNumeric`: `37a520c0f9b9faea9437fe278781f0f3e181e370`.
+- `SourceCurrentConjunctionSharedWorklistStorageBounds`: `eafa6064165377ee2287ccac280212de003f131c`.
+
+R186 matches sources to commit files explicitly. It does not zip lists whose
+orders can differ. The earlier complete document remains below as history.
+
+## Verification and compact reproduction
+
+The live import graph has 5446 modules. The affected closure has eight.
+Its frontier is Audit. Audit imports 4443 modules and reports 89229 theorem
+axiom dependencies. The full affected check took 14.83 seconds. Its recorded
+peak was 4096M within the effective memory.max/high cap of 4 GiB. Swap was
+zero. All checks used one Lean thread and one serial heavy-management job.
+All eight portable packets pass from `/tmp`; their recorded peak was 211M.
+Each own packet checks every public declaration, exact namespace, source hash,
+strict warnings, explicit #check and standard axiom dependencies.
+
+Canonical packet:
+`lean/restart-evidence/20261109-shared-growth-compatibility/`.
+The checker derives its repository root from its source path and writes
+checked.json directly. Source and the pinned toolchain suffice. No archive
+is required. Seven additive imports precede the COMPLETE old Audit bytes.
+Every older proof source and packet remains unchanged.
+
+Runtime: `/tmp/mcfta-shared-growth-20261109-0722/`.
+Keep compact checkers, manifests, reports and short failure logs only.
+No archive was created. The last readable `/tmp` measurement was 39.73 MiB,
+with 241.66 GiB free. Recheck before sustained work. All compiler jobs and
+proof writers are terminal at this checked checkpoint.
+
+Repairs were local Lean reductions and lemma elaboration. The minimal Lean
+imports did not provide Nat.max_le_max; explicit Nat.max_le proofs replaced
+it. Source state equalities needed Outcome.state reduction before rewriting.
+One private width lemma omitted an unused DecidableEq Symbol instance.
+The decision theorem needed an explicit answer witness. Adding Profile.mono
+also required regeneration of the exact public-name manifest. The complete
+worklist bound passed its first compiler check. No semantic counterexample
+or Haskell fix arose.
+
+## Immediate next target: actual caller integration
+
+The shared worker's original-data numeric bound is now proved. The two
+selected formal caller paths still use DemandWorker and its eager positive
+row preparation. R184's lossless shared checked adapter is available.
+Additional unselected wrappers do not constitute the caller cutover.
+
+1. Port the actual resource contracts in
+   SourceCurrentAllocatedConjunctionWorkerResources and
+   SourceCurrentAllocatedTupleConjunctionWorkerResources. Both expose
+   finite_resources and raw_done_resources. Their current Call/CallReads and
+   numeric ceilings are Demand-specific. The new port must use the SAME
+   actual shared call and base receipt bundle, full Post, AnswerSound,
+   residency, memo extensions, final checked Fits and computed exact replay.
+2. Lift the value-heap scalar into the checked caller's resource Profile.
+   Retain the original domain bound and the unchanged native table/domain
+   caches. SourceCurrentConjunctionCallerNumeric currently supplies the old
+   Demand forecast and must receive a real shared resource port.
+3. Global SourceCurrentAllocatedScanWorker.decision calls the old allocated
+   conjunction worker. Its Fault.decision stores the old worker fault.
+   Enumeration SourcePruningEnumerationEnabledEmpty.check calls the old
+   allocated tuple worker at currentTupleBudget=10000. Its guard-false branch
+   is genuinely skipped. Do not invent a shared call receipt for that branch.
+4. Preserve the exact shared fault and reached private snapshot at the caller
+   boundary. Retain the exact checked state and saved memo on success.
+   Keep the older Demand declarations and proofs as secondary targets. Audit
+   each selected consumer and its resource/effect receipts before claiming
+   adoption. A trace supplied by a future caller is not an initial-only port.
+5. Determine the precise monotonicity laws needed by those actual resource
+   consumers. Use the fixed original alphabet and the existing controlled
+   majorant dimension/resource monotonicity. Do not replace its original
+   budget by the remaining budget after a deferred operation.
+
+All R183/R184 base receipt limitations remain: receipts are indexed by their
+actual base p/h. Larger-bound equality of the returned state does not itself
+prove larger-index receipt equality. The existing full Context/annotation/
+causal/arity contracts must refer to one actual call and one receipt bundle.
+
+## Full objective remains open
+
+Retain the optimized interned core and the older constructor/equality targets.
+The final theorem must derive the optimized worker and COMPLETE enumeration
+from original accepted input and request data. Cover every sibling and every
+generated, rejected, failed, returned and subsequent state. Establish exact
+source Program leaf size, counts, order and both signed rank/unrank inverses
+on actual sparse size classes. Keep source size distinct from expanded
+annotation term nodes and recursive execution allowance.
+AllSized, fallback, productive infinite languages, lazy tables/maps/sets,
+caches, hashes, machine Word/Int bounds, allocation, wrappers, lookup,
+Curried and Specftacular remain within scope. Native 64-bit capacity and full
+Haskell correspondence remain open. Original-input recursive adequacy is
+separate from stabilization of an already complete return. Preserve the
+R164 original accepted-input Room theorem and R171 chosen-driver composition.
+No future closure, carrier, sufficient fuel, adequate depth or completed
+execution oracle can replace an original-input theorem.
+
+The complete historical R185 and earlier handoff follows.
+
 # R185: original-budget storage and calculated local shared steps
 
 R184 is published at `ae7cd04728a8a9856e0156c1493cb78d8bc945ae`.
