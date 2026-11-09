@@ -154,4 +154,48 @@ theorem readRows_complete (credits : List Nat) (handle : Nat) (before : Storage)
   simp only [readRows, own]
   exact found
 
+/-- One reader step exposes only its actual cached cells and strict stored tail credit. -/
+theorem readRows_eq (credits : List Nat) (handle : Nat) (before : Storage) :
+    readRows credits handle before =
+      match credits[handle]? with
+      | none => none
+      | some credit =>
+          match SpineLookup handle before with
+          | some (.done none) => some []
+          | some (.done (some (handles, tail))) =>
+              (readRow handles before).bind fun row =>
+                (credits[tail]?).bind fun next =>
+                  if next < credit then
+                    (readRows credits tail before).map (fun rows => row :: rows)
+                  else none
+          | _ => none := by
+  cases own : credits[handle]? with
+  | none => simp [readRows, own]
+  | some credit =>
+      rw [readRows, own]
+      change readRowsAt credits before credit handle = _
+      rw [readRowsAt]
+      cases cached : SpineLookup handle before with
+      | none => rfl
+      | some spine =>
+          cases spine with
+          | pending tuples => rfl
+          | done cachedRow =>
+              cases cachedRow with
+              | none => rfl
+              | some pair =>
+                  rcases pair with ⟨handles, tail⟩
+                  dsimp only
+                  cases row : readRow handles before with
+                  | none => simp_all
+                  | some values =>
+                      cases nextFound : credits[tail]? with
+                      | none => simp_all
+                      | some next =>
+                          by_cases smaller : next < credit
+                          · simp_all [readRows]
+                            cases readRowsAt credits before next tail <;> rfl
+                          · simp_all
+                            simp only [ite_eq_right (Nat.not_lt.mpr smaller)]
+
 end MicroCFTA.SourceCurrentConjunctionSharedWorklistMaterialization
