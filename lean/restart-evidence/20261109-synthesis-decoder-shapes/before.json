@@ -1,0 +1,36 @@
+{
+  "at": "2026-11-09T16:33:38.839947+01:00",
+  "base": "5753ee67f465b47901fce984ba81817abbfd6db5",
+  "haskell_source": "cfta-generator/src/Data/CFTA/Gen/Synthesis.hs",
+  "source_sha256": "9d540082ba0aaa371fe854e9579eb1c44df59546f720002714b86cbeaa3d6ed0",
+  "source_trees": {
+    "cfta": "692bceac9a13bc3318b7ea23a737be254f4befa4",
+    "cfta-generator": "599f7f2dc15f96b9b525a155958219af181f2971"
+  },
+  "verified_before_fix": true,
+  "public_repro_source": "{-# LANGUAGE OverloadedStrings #-}\nmodule Main (main) where\n\nimport Control.Monad (unless)\nimport qualified Data.CFTA.Equality as E\nimport qualified Data.CFTA.Gen.Equality as G\nimport Data.CFTA.Gen.Synthesis\nimport Data.CFTA.Symbol (Symbol, symbolText)\nimport qualified Data.CFTA.Term as T\n\nleafCount :: Program -> Int\nleafCount (Var _) = 1\nleafCount (App f x) = leafCount f + leafCount x\n\nmain :: IO ()\nmain = do\n    let typ = TCons \"app\" [TCons \"A\" [], TCons \"B\" []]\n        lib = Library [(\"filter\", typ, [\"filter\"])] [] [] FirstOrder\n        query = Query [] typ\n        annotation = T.Node \"app\" [T.Node \"A\" [], T.Node \"B\" []] :: T.Term Symbol\n        witness = T.Node \"filter\" [annotation, T.Node \"filter\" [annotation]]\n        raw = rawSearchSpace lib query 1\n        generated = programsOfSize lib query 1\n        listed = solutionsOfSize lib query 1\n        predicted = App (Var \"A\") (Var \"B\")\n    print (\"raw accepts witness\", E.accepts raw witness)\n    print (\"raw terms\", map (fmap symbolText) (E.terms raw))\n    print (\"solutionsOfSize\", listed)\n    print (\"programsOfSize cardinality\", G.cardinality generated)\n    print (\"programsOfSize values\", G.values generated)\n    print (\"decoded component counts\", fmap (map leafCount) (G.values generated))\n    unless (E.accepts raw witness && E.terms raw == [witness]) $\n        fail \"The raw source-language prediction differs.\"\n    unless (listed == [predicted] && G.cardinality generated == Right 1\n            && G.values generated == Right [predicted]) $\n        fail \"The decoder or count prediction differs.\"\n",
+  "report": {
+    "limits": {
+      "memory.max": "4294967296",
+      "memory.high": "4294967296",
+      "memory.swap.max": "0"
+    },
+    "results": [
+      {
+        "phase": "build",
+        "exit": 0,
+        "seconds": 6.73,
+        "output_bytes": 957
+      },
+      {
+        "phase": "repro",
+        "exit": 0,
+        "seconds": 1.83,
+        "output_bytes": 333
+      }
+    ],
+    "passed": true
+  },
+  "output": "(\"raw accepts witness\",True)\n(\"raw terms\",[Node \"filter\" [Node \"app\" [Node \"A\" [],Node \"B\" []],Node \"filter\" [Node \"app\" [Node \"A\" [],Node \"B\" []]]]])\n(\"solutionsOfSize\",[App (Var \"A\") (Var \"B\")])\n(\"programsOfSize cardinality\",Right 1)\n(\"programsOfSize values\",Right [App (Var \"A\") (Var \"B\")])\n(\"decoded component counts\",Right [2])\n",
+  "scope": "One public FirstOrder component/filter collision. This is not a complete synthesis or Haskell correspondence proof."
+}
