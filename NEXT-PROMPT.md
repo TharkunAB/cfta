@@ -1,3 +1,367 @@
+# R207 checkpoint: prepared shared finite-depth resources closed
+
+Updated 2026-11-09 20:31 CET. Full-system goal ACTIVE. Previous turn: PROGRESS.
+Base: `725237a0dc09205b146b238d2e7d2eb31e494aeb`.
+Verified proof head: `36ad8c5b17b0793c34245bc77debb172a56c16cd`.
+The final checkpoint commit follows the fifteen proof commits below.
+Read its hash from Git. Refresh upstream before further repository work.
+Main `849029e5b55a5d1c0152c24b55117b38419a6279` is included.
+The user explicitly authorized regular pushes to `formalize`. Do not ask
+again. Keep unrelated `.hypha/`. Preserve all earlier work and source bytes.
+
+## Current strongest execution result
+
+`SourcePruningEnumerationSharedPreparedRecursive.finite_complete` and
+`run_finite_complete_resources` now discharge the ACTUAL prepared worker's
+smaller-depth hypothesis by Nat induction. The public result has no
+supplied future execution theorem. It covers the R206 worker's one common
+selected preparation, actual shared ordinary siblings and opaque/terminal
+receipts, concrete Left callbacks and smaller-depth restart. The original
+stored target remains separate from the prepared parent.
+
+For ANY chosen finite recursive depth, CURRENT Packet, numeric Fits,
+guard carrier, actual selected-edge membership/length, current suspended
+mass ceiling and original SharedPreparedReservation derive a work bound
+and ONE literal executable outcome. That outcome stays identical at all
+larger common work fuel. Each emitted output retains its OWN metadata,
+cache, caller, query and full resource Packet. A stop retains its actual
+reason, prior outputs and optional endpoint. Ghost full memo witnesses
+need not be identical across different outputs or observation bounds.
+
+This is sufficient-bound resource completion. The stable outcome can
+contain an exhausted or unsupported stop. It is not a theorem that the
+chosen recursive depth is enough, that every path emits an answer, or
+that every valid source term is enumerated. The exact final bound comes
+from the ORIGINAL selected seed and prepared reservation, not a supplied
+future cache or a reset native caller.
+
+The new selected entry API also has a resource law:
+`SourcePruningEnumerationSharedPreparedSelectedDriver.run_selected_complete_resources`.
+It uses ONE literal actual shared root.done and encoded handle, the SAME
+returned caller/query/startup, CURRENT startup Packet/full memos/metadata,
+Fits/carrier and prepared reservation. It derives startup suspended mass
+zero internally, then attaches the proved finite prepared run at all
+larger work fuel. Resources are relative to that actual after-root caller.
+It does NOT derive the root-to-enumeration capacity from original input.
+
+`SharedPreparedSelectedDriver.accepted_selected` retains one original
+accepted root package and appends the new selected-execution equation.
+It calls no old Driver.run and uses no second initializer. The new API
+coexists with the historical driver. Historical SharedPreparedDriver.run
+STILL calls ordinary SharedRecursive.run. No default switch is claimed.
+The older accepted-term Program component-count law remains unchanged.
+A full accepted-source enumeration theorem still needs to combine the
+source policies, original capacity and semantic/output contracts.
+
+## Full objective and limits that remain
+
+Formalize the whole library as it is. Keep the optimized interned core.
+Preserve every local proof, counterexample, repair and marked draft.
+Keep the older constructor and equality targets as secondary work.
+Retain the original accepted-source objective: source component size AND
+general node count, finite execution, actual selected-route size and
+order, BOTH signed rank/unrank inverse directions, generated/rejected/
+failed/sibling/later states, warm caches, cache identity and full native
+Haskell correspondence. Separate mathematical room from fixed Word/Int
+capacity and finite-depth existence from lazy productivity or sharing.
+
+The highest-priority remaining cut is whole shared-child/terminal
+backward satisfaction and language meaning. R206 FinalizationAt only
+relates a completed finalizer to its actual neutralized child cache and
+captured assignment. It does not prove that the filled fragment satisfies
+the prepared value and full retained bucket, or restore removed native
+slot restrictions. The old ChildStableNeutral/PreparedOpaqueLanguage
+worker is a DIFFERENT executed backend and cannot be cast to the shared
+one. Use the same actual shared child and terminal receipt.
+
+Then close the original nonempty template/selector/origin/fallback and
+target-language coverage contracts. The edge selector currently has only
+membership and length conditions. It is allowed to omit valid rows.
+Arbitrary always-stop, typing and narrowing policies cannot establish
+unrestricted completeness. The empty-template structural-origin branch
+is closed. Encoded app4 Type origins are not uniformly structural.
+Root Program encoding alone does not establish all source Type policies.
+
+Derive adequate recursive depth and total work from ONE original input.
+Derive the CURRENT root Packet and prepared reservation from that SAME
+accepted source package and source metadata/policy. The new entry
+resource law still takes these current conditions. Do not turn them into
+an independent initializer or an assumed future Context/closure result.
+Unpaid Type annotations can have depth independent of Program components.
+No accepted-source guarded-Mu starvation counterexample has been verified.
+An unrelated cyclic fixture is insufficient evidence for one.
+
+Instantiate exact size/order and BOTH actual signed API inverse laws.
+The reference/prepared algebraic inverse directions already exist.
+Program.components counts Var occurrences and sums App components. It
+is not general Program AST count or full typed-term/annotation depth.
+Keep all three measurements separate. Stable finite resources do not
+supply output ordering or ranks.
+
+Close required readiness/type/history/Post/resource invariants at
+arbitrary native fault endpoints. Exact fault heaps and unconditional
+scalar bounds do not establish Context at every tiny-fuel failure.
+Retain the actual-prefix root-restoration argument. Arbitrary distinct
+root assimilation is unsafe. Complete fixed native Word/Int adequacy,
+lazy productivity, cache identity/sharing and Haskell correspondence.
+Computed mathematical width is not a fixed64 proof. No extracted or
+verified native Haskell executable is claimed.
+
+## Exact R207 composition
+
+- `SelectedPreparation.complete_resources_current` extends the SAME
+  checked common resource/carrier result. It retains the full original
+  entry/native observation, resident closed prepared value, original
+  decoded handle, Post, Packet, Ready/stored target, original/prepared
+  language and Satisfies statements, normalization Fits/mass and guard
+  predicate. Literal values equality retains suspended mass. The actual
+  RenderStable entry transports local IncomingAvoid. Exact flags/waiting
+  derive frame entered.core before = entered. One preparation is used.
+- `SharedPreparedHookCertificates` aliases only backend-independent
+  OutputResources fields. Its actual receipt packet uses the same shared
+  Admitted/Pending/FragmentHistory. It does not cast ordinary outcomes.
+  NEW OutcomeResources directly indexes the R206 Prepared.Failure.
+  Its Post/mono/completed-captured/finish laws retain actual output and
+  endpoint packages. Each output can have its own memo witness.
+- Prepared callback and hook induction use the concrete recordTypes Left
+  result and actual updated metadata/framed cache. CURRENT ResumeComplete
+  is the internal smaller-depth hypothesis. HeadCacheBounds derives the
+  actual completed receipt mass before using that hypothesis. Depth-zero
+  retains the exact restart decision, including exhausted stops.
+- Prepared finite head uses the R206 generalized native head producer.
+  CURRENT prepared-parent Available and free=[] replace decoded-parent
+  equality. Original Ready/stored target still controls finalization.
+  All current source resources and optional stop fields remain.
+- Prepared siblings run a head and recursive callback before the suffix.
+  The actual hook caller AND full memo proof bundle reach the next
+  sibling. Post.keeps.available retains the SAME prepared parent there.
+  Every sibling retains its original captured cache and metadata.
+  Actual Output fields remain separate from that captured sibling input.
+  Unsupported work uses its known entry pair and Post.refl. Callback
+  stops retain reason, previous outputs and optional endpoint.
+- The ordinary fold helper widens each actual output through count_mono
+  in ONE original stage schedule, then finishes without inventing an
+  endpoint. It adds no Entry call or normalization.
+- The opaque finite producer uses the R206 actual shared opaque receipt
+  once, then its actual receipt continuation and Left/smaller-depth run.
+  ONE Post/memo bundle supplies the head caller/cache/resources. The
+  full callback resource result is already relative to original caller;
+  it is not composed with head Post a second time. The actual scalar
+  bound and current Fits positivity pay scs.length+1 in the NEW shared
+  incoming schedule. FinalizationAt is retained at the combined bound.
+  Empty and actual terminal rejection paths retain their real shape.
+- Prepared finite dispatch captures ONE common preparation/current Packet.
+  Its actual prepared resident node width bounds ordinary selected rows.
+  The opaque path uses the extra first stage. Both paths use SAME entered
+  cache and SelectedValueCaller.advance caller heap, with original target.
+  The returned stable literal preparation and fold are exact.
+- Prepared finite expansion reuses only the unchanged common prefix.
+  CurrentPrefixFacts.right_packet supplies middleMemos/Post/Packet from
+  that SAME observation. Pure narrowed_admission supplies local selected
+  IncomingAvoid and current bucket bounds. Its separate existential memo
+  bundle is discarded, not equated with current middleMemos. Common entry
+  then transports IncomingAvoid by RenderStable. Ready alone is not used
+  to infer IncomingAvoid, and no global Packet field was added.
+- Parked restarts conservatively pay prepared/head forecast before their
+  smaller-depth continuation. Empty/pruned paths only widen resource
+  bounds. An unused forecast charge is not claimed to have executed.
+- The final positive-depth theorem receives the PROVED smaller-depth IH
+  from actual Nat induction. No future execution, mass or Context supplier
+  remains in the public finite theorem. This closes the R206 prepared
+  finite-resource cut; do not keep reporting that cut as still open.
+- New SelectedOutcome/start_selected/run_selected use ONE actual nodeCall
+  and the original startup. Failed/unencoded root observations stay exact.
+  The new started case stores the actual Prepared.Failure HookResult.
+  run_selected_of_done and accepted_selected preserve the SAME original
+  returned root, encoded handle, after-root caller/query and startup.
+  The resource companion uses that literal equation and the finite law.
+  Startup mass=0 is derived. Historical APIs and proofs stay unchanged.
+
+## Retained original-source statement
+
+`SourceSynthesisOriginalCheckedSharedProgramCount.accepted` remains the
+strong original accepted-term/count bridge. A successful firstOrderRaw
+build gives ONE original built/prepared package under the SAME computed
+room. Sufficient literal shared outer fuel returns the same root/full
+caller with checked graph/native ranges, ordered endpoint reads,
+Post/Frame/Fits, resident closure, Type readiness, origin/memo history
+and hereditary Program/Type fields. Its SAME NodeLaw maps each accepted
+root term back to original input. Exact app4/filter2 decoder agreement
+and Program.components=signed.toNat refer to that SAME package.
+It proves accepted-term soundness/count, not complete source enumeration.
+The source law does not imply that every new selected output satisfies
+the root language; that still needs the shared backward language proof.
+R205 ordinary-only finite results and all R206 prepared components remain.
+
+## Haskell findings for external pickup
+
+NO production Haskell changes, repairs, format changes or tests in R207.
+No new Haskell bug is established. The decoder repair remains merged in
+main through https://github.com/TharkunAB/cfta/pull/204 . Do not duplicate
+that repair. The external owner confirmed no open repair PRs in board
+reply 1064. Main is `849029e5b55a5d1c0152c24b55117b38419a6279`.
+Formalize includes that main ancestry; the repaired files stay identical.
+
+The decoder matches FULL internedSymbol and exact app FOUR/filter TWO
+children. Only fallback uses symbolText. Symbol equality uses interned
+identity. Do not replace shape matching with text-only symbol matching.
+The PublicLibrary/queryArgFilter Type app(A,B), size 1 regression returns
+Var filter, component count/cardinality 1, instead of App A B/count 2.
+Original repair commit: `113de3d85f7776d623c45fd3e31157e4254af1fb`.
+Synthesis.hs SHA256:
+`dfffbf454516649e115d890e65b6289217dbcf352ccb08e86415d719b32fbc3a`.
+Spec.hs SHA256:
+`8f931875e18cd32a21a58072de1363530df3b03189b576fca614f009063fbe47`.
+Compact before/after and thirteen-example validation packet:
+`lean/restart-evidence/20261109-synthesis-decoder-shapes/`.
+Any later Haskell repair MUST be noted in root FINDINGS for external pickup.
+
+## Verification, reproduction and temporary storage
+
+Fifteen new modules, 2,421 Lean source lines, 29 new public laws.
+All strict own-source checks pass. Each checker explicitly checks every
+public theorem in its real namespace, compares the exact declaration set,
+checks source hashes and rejects nonstandard axioms. Only propext,
+Classical.choice and Quot.sound may occur. Source whitespace gates pass.
+Every older public law remains; no older source module was edited.
+Audit adds ONLY a 1,119-byte import prefix. Every prior Audit byte stays.
+All three handoff files have this identical new prefix and retain every
+prior document byte. No Haskell tests were needed for unchanged Haskell.
+
+Full affected Audit PASS: 5,664 live modules, 16 affected, frontier Audit,
+4,661 imports and 92,146 axiom-report records. First full Audit: 4.59 seconds.
+All fifteen proof packets AND compatibility packet reproduce from /tmp.
+Their source hashes and axiom maps match exactly. All sixteen portable
+checks pass. The compatibility packet checks all affected source hashes
+before and after Lake. No large archive is needed: check.py reads the
+committed source directly from any working directory.
+
+ROOT remains the sole compiler/Git publisher. ONE serial heavy job only:
+4 GiB memory.max=memory.high, memory.swap.max=0, LEAN_NUM_THREADS=1.
+Use the existing heavy-management/capped wrapper and project Nix shell.
+Never increase memory/concurrency. An observation timeout is not terminal;
+poll the SAME known job handle. Do not restart a live job. All R207 jobs
+are terminal. Passing checks need no repetition without a source change,
+failure or unresolved concern. No final proof heartbeat increase was used:
+local irreducible step/headProfile avoided excessive forecast unfolding.
+Local preparedCaller equality required an explicit definitional rewrite.
+The opaque hook mass match needed constructor normalization because Lean
+captured proof binders in a generalized match. These were proof repairs,
+not changes to the executable or public current-input contracts.
+
+New compatibility packet:
+`lean/restart-evidence/20261109-shared-prepared-finite-compatibility/`.
+Transient helpers/receipts/logs are small, reproducible metadata in
+`/tmp/mcfta-shared-prepared-finite-20261109-2005/`.
+No source archive or source-tree copy was created. At 20:25 CET, visible
+regular /tmp files totaled 27.12 MiB; filesystem free space was 237.18 GiB. Keep checking
+/tmp and do not regenerate the earlier large evidence archives.
+
+Two independent read-only reviews found no concrete coupling defect.
+They checked actual prefix ingress, one preparation/current caller/cache,
+prepared parent transport, memo/Post composition, captured sibling inputs,
+optional endpoints, conservative parking/opaque padding, actual Nat IH
+closure and the conditional same-root entry. They do not claim original
+input capacity, semantic coverage or a historical default-driver switch.
+Review conclusions are preserved above; temporary review files are not
+required to reproduce or resume:
+- shared-prepared-finite-review.md:3,350B; SHA256
+  `9502c4a590a6eb764b92e9bd3b15a51787987108277e733a999ff00d294564be`.
+- shared-prepared-composition-review.md:4,164B; SHA256
+  `7dd8c147955bd4c6c9a6780920ba477b6d64a1ec293db9adcedb81ac4cdf9e6c`.
+
+## Verified incremental proof commits and source hashes
+
+- `2bebf6ee7acaf5f2ee8386cfdec133e15b73a2bc`: `SourcePruningEnumerationSelectedPreparationCurrent`.
+  99 lines; 1 public laws. SHA256
+  `e2bf87c2d3e17ca17b491ab290d692a393ac828540196f9efdde579f0ac999bb`.
+  Packet: `lean/restart-evidence/20261109-selected-preparation-current/`.
+- `a1100e87fe7db22f12730b2d63e360ce21e6527f`: `SourcePruningEnumerationSharedPreparedHookCertificates`.
+  76 lines; 3 public laws. SHA256
+  `d76732e06bd67c051a78d9051b7c474fc3f739cd33033a53d9513bd9c7d3ac64`.
+  Packet: `lean/restart-evidence/20261109-shared-prepared-hook-certificates/`.
+- `1e83060a56f59ed0d7d86108cf71359f29237926`: `SourcePruningEnumerationSharedPreparedOutcomeResources`.
+  128 lines; 4 public laws. SHA256
+  `c35b85d4213139dd2ffedeb3e904bdca0d1b5f15ccde22621f82ee4e3110e6f6`.
+  Packet: `lean/restart-evidence/20261109-shared-prepared-outcome-resources/`.
+- `145f220f0e0dc2c624d39f4d2fff7c74c3ca126e`: `SourcePruningEnumerationSharedPreparedCallbackResources`.
+  85 lines; 1 public laws. SHA256
+  `07b030d1ed5f339ca41a937471418533c024554816251fb5a5f2800c93766af4`.
+  Packet: `lean/restart-evidence/20261109-shared-prepared-callback-resources/`.
+- `8eb0326dbc328901e0d318cc3baad3eee195e4f4`: `SourcePruningEnumerationSharedPreparedHookInduction`.
+  287 lines; 3 public laws. SHA256
+  `ebfd84f13dce41a267c5f2fb1509073d1972529cce6cc139ad1efd99466ad15f`.
+  Packet: `lean/restart-evidence/20261109-shared-prepared-hook-induction/`.
+- `1e39d9bb7d433647746d73dc1ad739004f49337c`: `SourcePruningEnumerationSharedPreparedZeroOutcomeResources`.
+  95 lines; 2 public laws. SHA256
+  `431a1b445590a3aa6c8fc4ccf27de76ef566e27b383d461800a926b2436ba75f`.
+  Packet: `lean/restart-evidence/20261109-shared-prepared-zero-outcome-resources/`.
+- `1eed66add9da5d2047eee4cbc89e803075ad9630`: `SourcePruningEnumerationSharedPreparedFiniteHeadResources`.
+  181 lines; 1 public laws. SHA256
+  `a1043b8caf9034e6c208c1e5c495c63ec9e107ba1c2772999d6c631c5c2bd2b6`.
+  Packet: `lean/restart-evidence/20261109-shared-prepared-finite-head-resources/`.
+- `543ec3f858d235f4211bb7c815ab339e631758d0`: `SourcePruningEnumerationSharedPreparedFiniteSiblingResources`.
+  349 lines; 4 public laws. SHA256
+  `c5666a7bd9d2df2f09b31402bcc2dd907786f44a6a9cf36302f2109c22ae7ea6`.
+  Packet: `lean/restart-evidence/20261109-shared-prepared-finite-sibling-resources/`.
+- `8485f0085b0eaf0f282bd174a65fb518ac7f4377`: `SourcePruningEnumerationSharedPreparedFiniteOrdinaryResources`.
+  95 lines; 1 public laws. SHA256
+  `8f032ab3f96a1992504adb244d4a51f8b8b21ac9144622191906a3a86bd046d0`.
+  Packet: `lean/restart-evidence/20261109-shared-prepared-finite-ordinary-resources/`.
+- `2280a3fb99f8e2579f72bd03255c091b35e2f0bf`: `SourcePruningEnumerationSharedPreparedFiniteOpaqueResources`.
+  232 lines; 1 public laws. SHA256
+  `af3bee7ffd0a807bc195b8e22101930811e490bc56ca3310bb641195ace23ec2`.
+  Packet: `lean/restart-evidence/20261109-shared-prepared-finite-opaque-resources/`.
+- `1ac1729e19bc5038ee24d670d4ed1fd5229fd8c2`: `SourcePruningEnumerationSharedPreparedFiniteDispatchResources`.
+  180 lines; 1 public laws. SHA256
+  `ad4ac7a9800c41d0bb06636db4e18a0fba96b4df32be9b424289e0ee5358576f`.
+  Packet: `lean/restart-evidence/20261109-shared-prepared-finite-dispatch-resources/`.
+- `3bab9853e8f6bfbc9701ee108b4c444d42da2f2d`: `SourcePruningEnumerationSharedPreparedFiniteExpansionResources`.
+  214 lines; 1 public laws. SHA256
+  `058da99e0102e3a65ff0bc7457c010c8135145f8429d16d8c6c446e777d1b1b7`.
+  Packet: `lean/restart-evidence/20261109-shared-prepared-finite-expansion-resources/`.
+- `46cd98f7e6be161c98fb032a43e5a678551aadd9`: `SourcePruningEnumerationSharedPreparedFiniteResources`.
+  99 lines; 2 public laws. SHA256
+  `e19e37036975fa08a9ef4a25425ed65b5159abfd4080fa0c72701a8b74a6a2e4`.
+  Packet: `lean/restart-evidence/20261109-shared-prepared-finite-resources/`.
+- `ff2f3a2d4e5b95704ce2c7cacdcd0bb24cc7400f`: `SourcePruningEnumerationSharedPreparedSelectedDriver`.
+  222 lines; 3 public laws. SHA256
+  `934c49d9d0c644aa958171fd190e12df312292893ed5257b14b2b3a6046d8940`.
+  Packet: `lean/restart-evidence/20261109-shared-prepared-selected-driver/`.
+- `36ad8c5b17b0793c34245bc77debb172a56c16cd`: `SourcePruningEnumerationSharedPreparedSelectedDriverResources`.
+  79 lines; 1 public laws. SHA256
+  `6d4296c45bdbb946e4fd5c95d253c735a2bcefbcfc336b6ba1af79771871ec67`.
+  Packet: `lean/restart-evidence/20261109-shared-prepared-selected-driver-resources/`.
+
+Fifteen proof commits plus one checkpoint commit. The checkpoint contains
+these identical three headers, the Audit import prefix and four compact
+compatibility files. Regular non-force push to formalize is authorized.
+Verify a fresh fetched remote matches local HEAD and main is included.
+Keep only unrelated .hypha untracked. Post one idempotent board checkpoint
+and verify its full identity, content and metadata on readback.
+
+## Restart order
+
+1. Verify date, branch/worktree/process state. Refresh upstream and preserve
+   all local proof work. Read the complete identical R207 header in these
+   three files. The entire prior R206 header follows unchanged.
+2. Keep the SAME full-system goal ACTIVE. Classify this turn as PROGRESS:
+   current prepared depth induction, actual selected entry/resource bridge,
+   strict/Audit/portable evidence, reviews, handoff and publication.
+3. Next prove actual shared-child/terminal backward satisfaction and
+   language. Use SAME shared receipt and native endpoints, not old executed
+   ChildStableNeutral. Retain whole guards/buckets and failed/rejected paths.
+4. Derive original source Packet/metadata/policy, prepared capacity and
+   adequate depth/work from ONE original accepted package. Preserve exact
+   component/general-node/depth/order measurements and both API directions.
+5. Keep fixed native Word/Int, lazy productivity/cache identity and Haskell
+   correspondence explicit. Note any Haskell fix in FINDINGS. Preserve the
+   optimized interned core and historical constructor/equality targets.
+6. Do not mark complete from theorem totals or green builds. The new
+   finite-resource cut is closed; the full original objective is not.
+
+--- End R207 common header. Every prior byte follows unchanged. ---
+
 # R206 checkpoint: one selected preparation in the shared worker
 
 Updated 2026-11-09 20:00 CET. The full-system goal remains ACTIVE.
