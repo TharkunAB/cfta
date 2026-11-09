@@ -1,3 +1,185 @@
+# R189: complete actual shared Scans from initial numeric resources
+
+Verified at 2026-11-09 09:45 CET. Base R188 is `d8c0a07b45dfa6fb4d2a8b5030245a87c348bb19`.
+Four new modules add 13 public laws. All strict own-source checks pass.
+The full affected Audit and all five portable source packets pass.
+The goal remains ACTIVE. The new shared Scan has its full caller receipt.
+Required/classes/Local/Parent composition and original outer/Fold/terminal/cache
+selection remain open. Do not claim full original-target adoption.
+No Haskell source change, new Haskell bug or Haskell fix is included.
+Preserve .hypha, all older proofs/counterexamples/repairs and marked drafts.
+The complete published R188 document follows this section unchanged.
+
+## Strongest new statement
+
+Current Context, current native Frame, current Fits, original Values, original
+proper/active record paths, CURRENT alphabet membership and the NEW initial
+mathematical native reservation derive one successful ACTUAL shared record
+Scan. No old Demand Scan, future Ranges callback, completed graph, returned
+closedness, final inventory, successful suffix or supplied selected support
+is a public premise.
+
+The same exact return has branch-pinned ordered ScanReads, full caller Post,
+Frame at the SAME next inventory, final Fits and annotation carrier from the
+original schedule, original Values, kept.Sublist records, and stopped-class
+soundness. Every selected record also has an effect-free false-primary
+certificate at the SAME final heap. That is a derived OUTPUT. It does not
+execute another gate or add a caller assumption.
+
+All five independently larger sufficient gate/projection/read/native bounds
+return the identical selected/stopped result, checked state and fourth memo.
+Receipt.path_run derives the literal shared PATH Scan from that same record
+return through scan_mapPaths. Induction follows literal original records,
+including duplicate occurrences, early stop and omitted suffix work.
+
+The ordered receipt has five exact branches: nil, selected, skipped, continued
+and stopped. Each continued/stopped shared call stores its OWN base p/h,
+actual checked four-field success, private snapshot and CallReads at THOSE
+same p/h. Uniform larger-fuel record/path replay is a SEPARATE receipt field.
+No proof reindexes ordered receipts to different observation fuels. These
+remain logical source-read receipts, not a claim about literal GHC table events.
+
+StoppedSound says that the stopped class is an original class that no accepted
+original forest can satisfy. The native seeded Includes law and actual shared
+AnswerSound derive it. True certifies emptiness; false can be inconclusive.
+This is not a complete emptiness decision procedure or whole enumeration proof.
+
+## Supporting contracts
+
+SharedConjunctionCallerNumeric.of_call transports the complete native Frame
+through the SAME actual checked shared success from current Frame and query
+availability. It adds no Correct, Fits, metadata, closure or future premise.
+It uses adapter.call_done, shared all-outcome effects/causal guard preservation,
+exact native tables and OperandFrame.advance.
+
+SharedScanNumericForecast retains both gate stages, native seeded stages,
+finalAlphabet and original source order. Only the memo profile and its two
+observation ceilings change to the fixed-alphabet shared resource functions.
+Its eight public laws retain component bounds, carrier inclusion, prefix
+bounds and exact classFuel coverage. The recursive native reservation uses
+the NEW suffix profiles. An old Demand reservation is not automatically enough.
+Alphabet membership inclusion is used only for annotation membership. It is
+not used to compare duplicate-sensitive numeric shape sums.
+
+SharedScanCallerSteps.primary_post/secondary_post derive actual ordered reads
+and full Post at each exact gate return from Context and Values. They add no
+Frame or closed-forest premise. Native seeded Post uses the ALREADY existing
+SeededCallerNumeric.of_receipt law. No duplicate seeded helper was added.
+
+## Verified source and commit map
+
+- `SourceCurrentSharedConjunctionCallerNumeric`: 1 public laws; 61 lines.
+  SHA256 `7e426a4e4d9651d280aaba40453e744f372f2ba3734bdaa5da8e1c7c8d500bf4`.
+  Commit `023ae45ab44111feb719afcc52695f93d994c863`.
+  Packet `lean/restart-evidence/20261109-shared-conjunction-caller-numeric`.
+- `SourceCurrentSharedScanCallerNumeric`: 2 public laws; 374 lines.
+  SHA256 `08f7487ab4dffe614f5dd380c675674370bf4aa9c353890e64f504e708d1e22a`.
+  Commit `cfec12b0c2b74ad6f5e937c7899c31d4d5ad0fea`.
+  Packet `lean/restart-evidence/20261109-shared-scan-caller-numeric`.
+- `SourceCurrentSharedScanCallerSteps`: 2 public laws; 88 lines.
+  SHA256 `9dcedde650440638efebb66c5f1eaa00646090c6f98ad54b70447b2bcc23765e`.
+  Commit `ccfe9545988ed0f0fdee6fa27110f22580bb64b1`.
+  Packet `lean/restart-evidence/20261109-shared-scan-caller-steps`.
+- `SourceCurrentSharedScanNumericForecast`: 8 public laws; 153 lines.
+  SHA256 `deb813cf794cee051aa15204400deac71b51cc611dcb79d3803b1c968cfb99c5`.
+  Commit `b7ff542f7feb91e738e9cc1710a54c987030d7fa`.
+  Packet `lean/restart-evidence/20261109-shared-scan-numeric-forecast`.
+
+The exact public names/namespaces are checked against each theorems.json.
+The source-to-commit map matches actual commit files. It does not zip lists
+in different orders. All old Demand sources and source packets remain exact.
+
+## Next proof: actual Required and class composition
+
+The direct Scan receipt now contains the missing bridge:
+Receipt.primary gives a false source-primary trace for EACH kept record at
+its actual final heap. The selected head uses PrimaryReplay.class_replay
+through suffix growth; selected tails use the recursive receipt. Nil/stopped
+kept lists are empty. This derives support without rebuilding prefix effects
+from generic ScanReads and without an old Demand graph or future support oracle.
+
+1. Add a shared ScanRequired forecast. Replace the old Scan schedule/fuel only.
+   Keep the original-record upper bounds for Required paths. Derive selected
+   path propriety, coherence and activity from kept.Sublist and original facts.
+2. Call SourceCurrentRequiredInitialNumeric.caller at the EXACT scanned caller,
+   with receipt.post.context, receipt.frame, computed scan Fits, receipt.available,
+   selected path propriety and receipt.primary. It needs no old Scan/Ranges.
+   It derives requireAll.done, actual RequireAllReads, full Post/Frame/Fits,
+   length, exact tables and computed stable r/h.
+3. Its Required receipt.paths gives ForestClosed for EVERY original path in
+   EVERY selected record. Do not replace this with maximal-tip closure alone.
+   Stopped Scan erases original values and skips Required. Keep that branch
+   separate and use current StoppedSound for language preservation.
+4. Compose unchanged ClassCallerNumeric.complete at those actual prepared
+   values and warm Merge memo. Derive selected domains and original coherent/
+   nontrivial class facts. Do not supply future Required or class success.
+5. Port SharedLocal/Parent numeric certificates at their ACTUAL existing bodies.
+   Reuse precheck and MkEdge input proofs. Derive full Post/language/Frame/Fits
+   and all independent lower bounds. Full failed-prefix Local/Parent memo/Post
+   contracts remain open; retain every actual reached state and diagnostic.
+
+The original selected routes remain historical: AllocatedPartialWorker.edgeBody
+still calls old Parent and embeds its fault. Version the entire eight-function
+mutual outer component. Enumeration still selects old Incoming through Terminal,
+IncomingCacheAdapter and CachedTerminalAdapter. Fold -> Dispatch.afterQuery
+also calls old EnabledEmpty before Incoming. CachedFold/CachedAdapter and their
+fallbacks need ports, followed by child/continuation/recursive selectors.
+Do not miss the Fold check. Do not cast shared snapshots/faults into Rows faults.
+Pruning Action.prepare -> SourcePruningOuterNarrow.narrow is a distinct heap-only
+chain; it does not call allocated outer nodeCall. Their source-facing connection
+is not established by shared naming. The complete R188 audit follows below.
+
+## Full scope and verification
+
+The full goal remains original-input whole-system formalization: ALL siblings,
+generated/rejected/failed/returned/subsequent states; exact accepted terms per
+source Program leaf-size, counts and size order; both signed rank/unrank
+inverses on actual sparse classes; AllSized/fallback/failure/productive infinity;
+and source type-site/program-occurrence progress through generated intersections.
+Native Word/Int capacity, all hashes/caches/lazy tables/allocation, wrappers,
+lookup/Curried/Specftacular and full Haskell correspondence remain open.
+Term leaf-size, expanded annotation nodes and observation fuel differ.
+Keep older constructor/equality targets. Do not substitute initial-only,
+success-only, U-only, unselected, compatibility, future trace/fuel/closure/carrier
+or completion oracles. Build success and theorem counts do not complete this goal.
+
+All 13 public laws pass strict own-source warning/type/namespace/axiom checks.
+Only propext, Classical.choice and Quot.sound are allowed. The live graph has
+5462 modules; affected closure five; Audit imports 4459; Audit reports 89398
+checked theorem axiom dependencies. Full Audit passes in 13.54 seconds at
+recorded 4096M peak. The five-packet portable job reports 229M. Effective
+memory.max=memory.high=4294967296, swap zero, one thread remain unchanged.
+All five source checkers reproduce from /tmp. All source SHA256 values match.
+The complete base Audit bytes follow the additive import prefix. Every root
+document retains its ENTIRE published R188 bytes after this prefix.
+
+The main proof repairs were local rewrite normalization of path/caller aliases
+and explicit original-list membership. No public assumption was added. The
+selected-primary output was then derived and passes strict checks. The actual
+operational Scan/Local/Parent/Haskell definitions were not changed this round.
+No Haskell source change, new bug or fix was needed. Record every future Haskell
+fix in root FINDINGS so the external agent can pick it up.
+
+## Runtime and restart
+
+Runtime /tmp/mcfta-shared-scan-20261109-0914/ contains small helpers, exact
+manifests, compact failed-attempt logs and required-port-review.md. That review
+identified a missing output; Receipt.primary NOW RESOLVES it. Review SHA256:
+8c5201ded57f016be6e0754363e73f8f3e3fb68c19743e3f7b3d5c2357232f4b.
+Its substantive next steps are preserved above if /tmp is removed.
+No archives or proof-tree copies were made. Readable allocated /tmp was
+40.98 MiB, with 241.58 GiB free at 09:38 CET. Permission-denied entries are
+excluded from that readable allocation figure. Keep /tmp small.
+Use targets.json, verified-modules.json, proof-commits.json,
+compatibility-frontier.json, compatibility-check.json, portable-check.json,
+final-prefix.md, document-history.json, peaks, publication.json and turn-state.json.
+Final publication files are completed after docs/Audit commit and remote check.
+No compiler remains live. All three bounded tasks are frozen and idle. Root is
+sole compiler and publisher at the existing serial 4 GiB cap. Preserve .hypha.
+Fetch upstream before the next round. User authorization to push formalize
+persists. Goal remains ACTIVE. Next: actual Required/classes/Local/Parent
+composition from this now-proved Scan, then the real selector chains.
+
 # R188: shared Incoming completion and actual shared Parent bodies
 
 Verified at 2026-11-09 09:04 CET. R187 base is `3e6d09d1be6e9e32d215b85f68a4dca2a18b778b`.
