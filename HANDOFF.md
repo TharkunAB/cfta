@@ -1,3 +1,459 @@
+# R205 checkpoint: actual shared resources at every finite recursive depth
+
+Recorded 2026-11-09T19:31:19+01:00. This checkpoint supersedes the R204 prefix below.
+Preserve every previous byte after this prefix. The goal remains ACTIVE.
+Finite resource preservation is progress toward the complete system proof.
+
+## Full objective and operating rules
+
+Prove the complete CFTA contract on the original accepted input domain
+and compare the model with the actual Haskell implementation. Retain the
+optimized interned core. Preserve all local proofs, counterexamples,
+repairs, marked drafts and public contracts. Keep the older constructor
+and equality targets as secondary work.
+
+The full contract includes exact accepted terms per source component
+size and general node count, finite execution, actual selected-route
+size/order enumeration, both signed rank/unrank API inverse directions,
+native returned states, generated/rejected/failed/sibling/later states,
+warm caches, cache identity, fixed Word/Int arithmetic, lazy productivity
+and Haskell correspondence. The source component measure is not a
+substitute for general node count or full typed-term depth. Passing a
+local theorem or Audit does not prove this complete contract.
+
+Read the entire current prefix in NEXT-PROMPT.md, HANDOFF.md and root
+FINDINGS.md, then read CONTEXT.md. Refresh main/formalize before work.
+Preserve unrelated `.hypha/`. Push regularly to formalize under the
+user's explicit standing authorization. Do not ask whether to continue.
+Root owns Git and the only compiler/test process. Keep ONE serial
+heavy-management job at memory.max=memory.high=4 GiB, swap zero and
+LEAN_NUM_THREADS=1. Do not increase memory or concurrency. Keep /tmp
+small. Do not make source archives or source-tree copies.
+
+## Current publication and exact evidence
+
+The previous published head is 7048e6fffd6fd1b660859aec71a19f96aeede6b8. The nineteen proof
+commits below add 3,451 Lean lines and 73 public laws. The next checkpoint
+commit adds these identical prefixes, nineteen Audit imports and the
+compatibility packet. Inspect Git for its final hash; a commit cannot
+include its own hash. Publication is complete only after exact remote
+head and main-ancestry readback. Runtime final-head.json records it.
+
+Main remains 849029e5b55a5d1c0152c24b55117b38419a6279, already included by the R204
+integration ac7e1eec5debe165a3ce247f997ead822a25914f. Upstream was
+refreshed before this proof increment and before full verification.
+The two Haskell repair files remain byte-identical to main.
+
+All nineteen strict checks passed after the final source edits. Every
+public declaration has its real namespace, explicit #check, exact SHA
+and axiom report. The only admitted axioms are propext, Classical.choice
+and Quot.sound. No sorryAx or private-name substitution is accepted.
+All twenty packet scripts also passed from cwd=/tmp under the same cap.
+
+The full affected frontier and Audit passed with 5640
+live modules, 20 affected modules, 4637
+Audit imports and 91901 axiom report records.
+The refreshed Audit took 2.35 seconds.
+The first Audit before the one-byte format correction took 7.7 seconds
+and peaked at 449 MiB. All observed scopes enforced the fixed 4 GiB
+limit. These counts describe verification, not completed system scope.
+
+The publication whitespace gate caught one extra final newline in the
+new SharedIncomingScalarBounds file. Only that newline was removed.
+No theorem statement or proof body changed. Its final SHA is
+2998562086043d4965d8d2cb6c01e9804a7190b8fba98d1cfe37cb90cfd4330d.
+Its strict check, coherent frontier/Audit receipt and all portable packet
+receipts were refreshed. The runtime preparer now checks new-source
+trailing whitespace and extra EOF lines BEFORE strict verification.
+Apply that early gate to future new sources.
+
+| Module under lean/MicroCFTA | Lines | Public laws | Proof commit |
+| --- | ---: | ---: | --- |
+| SourcePruningEnumerationSharedCallbackResources | 85 | 1 | e1205cb6e609cd1bbdb61581f23d98563a45083b |
+| SourcePruningEnumerationSharedCapturedEdgeScalarBounds | 61 | 1 | 16dc1947c730c99ec0ce67fdaa9e8e6887fdb3ae |
+| SourcePruningEnumerationSharedChildScalarBounds | 70 | 1 | 2dab4fca45a0a304bcd0c1b67eec300b7a555894 |
+| SourcePruningEnumerationSharedDispatchScalarBounds | 168 | 1 | 513e53d7ea99a91d2e0cc2b422b5eff21321d92d |
+| SourcePruningEnumerationSharedFiniteExpansionResources | 403 | 1 | 325fc0d5e1052537be8fa380503dec6465fa7ff0 |
+| SourcePruningEnumerationSharedFiniteHeadResources | 183 | 1 | f7cbb175d5823b104f6f280ff361f5f1e2142591 |
+| SourcePruningEnumerationSharedFiniteResources | 101 | 2 | 7ccd0020ec0b5f4f709b967fcf16140152f1068d |
+| SourcePruningEnumerationSharedFiniteSiblingResources | 347 | 4 | 36f74c50a2beeb137dcc7287419ff40de1d13232 |
+| SourcePruningEnumerationSharedHookInduction | 287 | 3 | bdc46e0364ebb28b34a8867b3e458d519ee28996 |
+| SourcePruningEnumerationSharedIncomingScalarBounds | 181 | 2 | b2c4610c36ab21f7fce61649216941f42c50bdb4 |
+| SourcePruningEnumerationSharedNativeBranchBoundedResources | 149 | 2 | 65ac36d5d068d34325d3c7a9f960625cea6cc0f6 |
+| SourcePruningEnumerationSharedOutcomeResources | 70 | 2 | b083881bd254dc61bf516640331159c46a42a7a7 |
+| SourcePruningEnumerationSharedPrefixResources | 318 | 3 | 105013ebcd8aa8f5fae1c4a0b1e9e5eeb07792eb |
+| SourcePruningEnumerationSharedRecursiveReservation | 324 | 36 | 6297e52db7bb11aaf8a3dc0157faeb634e7e1c9a |
+| SourcePruningEnumerationSharedRecursiveReservationBounds | 75 | 3 | bc9293d38e06ebffd4c8b40e60a2a342b602ac9a |
+| SourcePruningEnumerationSharedSelectedEdgeScalarBounds | 94 | 1 | fc4750b4244d0274000b8269063ea8e1e377df0d |
+| SourcePruningEnumerationSharedTerminalScalarBounds | 350 | 6 | d36b19fd453d843f44d89d19cace433bc7f83131 |
+| SourcePruningEnumerationSharedTraversalScalarBounds | 90 | 1 | 0511280c696bcee6baa91621fa32a314a7740a77 |
+| SourcePruningEnumerationSharedZeroOutcomeResources | 95 | 2 | 80eb150d474739ded0187ea14f0e12397b34ad0e |
+
+## New strongest local execution statement
+
+SourcePruningEnumerationSharedRecursive.finite_complete discharges
+ResumeComplete by induction on the actual finite recursive depth.
+run_finite_complete_resources exposes the result from current inputs.
+The public result has NO smaller-depth execution supplier, future
+Context supplier, completed trace or future cache-bound hypothesis.
+
+For any chosen finite recursive depth, a CURRENT Packet, Fits/carrier,
+actual edge-selection membership/length rules, current suspended-mass
+ceiling and original SharedRecursiveReservation.Reserved produce a
+sufficient work bound and ONE actual outcome. Every larger work bound
+returns that same outcome through the literal SharedRecursive.run.
+The resource result uses the finite forecast computed from that same
+original seed, depth and mass ceiling.
+
+The outcome retains its actual caller/query and a coupled full memo/Post
+witness. Every emitted output retains its OWN cache, caller, query,
+metadata Packet and bounds. A stopped outcome retains its actual reason,
+already emitted outputs and optional endpoint. No endpoint is invented
+for None. Each full memo witness belongs to the SAME endpoint/Post/query.
+The theorem does not equate full memo witnesses across different outputs
+or forecasts. It does not prove a whole-driver ordered memo trace.
+
+This is an eventual-stability and resource/Post theorem for the CURRENT
+shared recursive model. The model currently selects ordinary Entry
+continuations. Unsupported, terminal, Mu/union and exhausted observations
+remain real stops where that worker does not support them. This theorem
+does not establish complete source normalization, source coverage,
+accepted-output meaning, source order or adequate recursive depth.
+It does not derive one original-source total-work bound, computed worker
+fuel adequacy or capacity at a fixed host width such as 64 bits.
+
+### Actual callback, head and sibling composition
+
+SharedCallbackResources.callback_complete_resources derives the actual
+Left recordTypes result from the current Packet and allocated fragment.
+It retains one stable raw singleton, updated metadata, framed cache,
+RenderStable, Frame, typing/open-hole/type facts and SAME seed resources.
+The callback itself does not change the native caller or query memos.
+
+SharedHookInduction defines the legitimate smaller-depth ResumeComplete
+hypothesis on CURRENT inputs. callback_induction_complete_resources
+invokes it only after the actual callback has returned its updated
+metadata and framed cache. Frame.values derives that cache's mass bound.
+receipt_induction_complete_resources first derives this CURRENT Packet
+from the actual new shared receipt. Callback rejection emits no output.
+The arbitrary raw-failure law retains its exact observation and endpoint.
+
+SharedFiniteHeadResources derives the literal captured-edge receipt,
+stable head bound, full same-return Post/memos, actual cache bounds and
+callback resources from CURRENT decoded target facts and reservation.
+It derives selected parent availability/closedness from current realized
+data. It does not use an independently supplied prepared parent.
+
+SharedFiniteSiblingResources executes the actual recursive hook BEFORE
+the next alternative. Each alternative restores the ORIGINAL captured
+enumeration cache and metadata, but receives the actual caller/query and
+full memo witness returned by the preceding recursive hook. It retains
+per-receipt head bounds, per-output callback-stage bounds and the first
+actual stop. A callback stop retains its own outputs and nested reason.
+An unsupported head stops at the literal ENTRY caller/query using
+Post.refl; the proof does not use the generic head packet's unrelated
+existential endpoint to justify that stop.
+
+SharedOutcomeResources derives the original captured-cache Packet from
+that actual native Post. finish_resources_general retains arbitrary
+stopped outputs and the actual optional endpoint on the NEW shared type.
+
+### Actual prefix and complete depth induction
+
+SharedPrefixResources projects only the actual current prefix facts,
+Post, full memo/query witness, cache Packet, headProfile and carrier.
+No old finish or old continuation execution is in its public predicate.
+The actual Right callback is pure (false, original metadata), so the
+returned metadata Packet is the current original metadata Packet.
+
+The complete raw PrefixResult need not be equal at different work fuel:
+its prepared action can capture the fuel. checkpoint_resources fixes
+the actual branch endpoints and permits an action witness at each bound.
+Do not replace this with false equality of the complete prefix value.
+
+SharedFiniteExpansionResources consumes that current checkpoint and
+the actual shared sibling scan. Old prefix laws are reused PRIVATELY
+only for backend-independent suspended-mass/bucket-length facts of the
+SAME unchanged runPrefix. Subsequent caller/cache/final memo/Packet
+facts come from ONE new-prefix right_packet bundle. Parked recursion
+uses the legitimate smaller-depth hypothesis. Empty retains its reached
+endpoint. Nonordinary/terminal entry retains its literal unsupported stop.
+
+SharedZeroOutcomeResources proves every actual zero-depth decision,
+including the exhausted expansion receipt. SharedFiniteResources then
+uses that base, the positive expansion law and monotone padding for
+nonexpand decisions. Its induction removes the recursive supplier.
+
+### Same original mixed reservation
+
+SharedRecursiveReservation.narrowSeed pays only headProfile for the
+actual heap-only prefix. afterHead uses the NEW shared incoming advance,
+with original child/guard cost ceilings. step pays that head followed by
+its smaller-depth callback. stage iterates this pair in sibling order.
+The positive final forecast includes one extra row for parked recursion.
+Reserved and the final-Room laws cover every nested scheduled query.
+
+SharedRecursiveReservationBounds proves the actual NEW edge cost fits
+the original scalar count. Its list-cost equality is pure arithmetic;
+it reuses no old executed backend. Numeric profile comparisons and guard
+carrier inclusion are proved separately within the same seed schedule.
+The SAME returned checked state fits the planned afterHead endpoint.
+No numeric capacity follows from inclusion between unrelated alphabets.
+
+This schedule deliberately has no SelectedValue normalizationProfile:
+the current shared driver does not execute that phase. The prepared
+shared driver must pay that real phase when its executor is added.
+
+### All-observation cache bounds
+
+Eight Shared*ScalarBounds/SharedNativeBranchBoundedResources modules
+derive bounds for the ACTUAL shared dispatch, incoming action, fold,
+terminal, child, traversal, selected edge and captured edge. They need
+no future successful cache or Context supplier. Scalar observers hold
+at arbitrary observation bounds for every attached cache they describe.
+
+The incoming action's read core remains separate from its successful
+raw row. The returned write adds the exact incoming suspended length.
+Fold/terminal and child/traversal laws bound counters and pending mass
+through actual failure and stop candidates. Finalize retains the counter
+and cannot add suspended mass. finalizeStopped retains the PRE-finalize
+cache and its genuine selected-edge bounds. It is not relabeled success.
+
+HeadCacheBounds and head_complete_cache_bounds retain the entire actual
+head packet and append these derived bounds. This supplies the positive
+callback's current mass ceiling. It replaces a missing future mass
+premise. These scalar laws do not prove all native failure Ready, Type,
+history or Post properties at arbitrary tiny bounds.
+
+## Strongest original-input source statement remains unchanged
+
+SourceSynthesisOriginalCheckedSharedProgramCount.accepted starts with
+successful firstOrderRaw and ONE original built/prepared package. Under
+the SAME computed Room, every sufficiently large literal shared outer
+fuel returns the SAME root and full caller. It retains the checked graph,
+word ranges, ordered endpoint reads, Post, Frame, Fits, carrier, resident
+closure, TypeReady, guard origins, memo history and hereditary Program/
+Type fields.
+
+Every typed term accepted at that returned root has the role projection,
+full-Symbol exact app/4 and filter/2 decoder agreement, and decoded
+Program.components equal to the signed count converted with toNat.
+The SAME built NodeLaw result is bridged to the original input; no
+separate initializer, root or larger-capacity/field supplier is used.
+Components count Var occurrences and add across App. This is neither
+full Program AST node count nor full typed-term depth nor rank.
+
+This accepted-output soundness/count law does not show every accepted
+source program is reached. The new finite resource result starts from a
+current enumeration Packet; it does not itself bridge all source input
+packages to complete enumerator coverage. Both signed inverse directions
+already have reference/prepared algebra proofs. Their actual source/
+native API instantiation remains open.
+
+## Biggest next cut: actual prepared shared source routes
+
+The source audit confirms enumerateOutUVarWith performs EXACTLY ONE
+outer Mu unfolding, or makes Node(nodeEdges n) for a union, AFTER the
+Right callback and BEFORE enumerateNode. Do not normalize before the
+Right oracle or repeat until the result is ordinary. Terminal, opaque
+and nonterminal Mu/union results need their actual source dispatch.
+The current ordinary-only shared model does not cover those routes.
+This is a model coverage gap, not an established Haskell defect.
+
+SelectedValue.run is a COMMON heap-only kernel. It performs stored Mu
+unfolding, nodeEdges+makeNode for union, and identity otherwise. It does
+not execute the old Demand conjunction backend. Reuse its exact common
+kernel, caller/resource and language/arity/projectability proofs. The
+older prepared WHOLE executable and old incoming forecast still cannot
+be cast or renamed into shared execution.
+
+Add actual SharedSelectedOpaqueDispatch and SharedPreparedContinuations.
+Capture ONE SelectedPreparation pair. Dispatch its actual done, ordinary,
+terminal and opaque results through shared execution. Preserve errors,
+unresolved/pending/exhausted fault heaps, every shared terminal snapshot,
+stopped endpoint and finalizeStopped cache. Charge normalizationProfile
+exactly once from the SAME reached current caller/memos/Packet.
+
+The prepared-head contract must distinguish the ORIGINAL captured
+handle from the CURRENT prepared parent. A Mu/union handle need not
+decode to the new ordinary parent. Raw shared CapturedEdge.run already
+takes explicit edge+target without doing a parent lookup. Generalize its
+resource producer to current Available/closed prepared parent and
+selected row plus the original ready/stored target. Preserve exact
+prepared/original language meaning. Finalization still writes the
+original target. Do not invent a false decoded-parent identity.
+
+Then add/select a prepared shared recursive/resource layer deliberately.
+Keep actual callback-before-sibling native effects and captured-cache
+restoration. Derive the phase schedule from its real execution. The full
+normalization audit below pins exact source and proof dependencies.
+
+## Other full-system obligations retained
+
+- Derive actual nonempty callback template selector/origin/fallback
+  policy and admitted target language. Empty templates use the proved
+  CallbackOriginPolicies branch. rootProgramEncoding does not establish
+  the old universal OriginPolicies. The encoded Type app/4 counterexample
+  to the old empty-policy claim remains. No accepted-source guarded Mu
+  starvation counterexample has been verified.
+- Derive adequate source recursive depth and route coverage. Arbitrary
+  stop/typing/narrowing policies may remove witnesses. Unpaid Type
+  annotations mean Program component count does not bound term depth.
+- Prove exact source component-size and general node-count enumeration,
+  actual selected-route order, and both concrete signed inverse API laws.
+  Retain the existing reference/prepared inverse algebra.
+- Lift arity, proper tries, per-invocation/output history and semantic
+  meaning through the SAME new returned packets and native phases.
+  Carrier membership proves none of these by itself. Safe across
+  arbitrary distinct-root assimilation remains false; retain the actual
+  prefix-root restoration argument.
+- Complete native Haskell correspondence: closure/dedup/order and
+  interned identity, warm caches and sharing, fixed Word/Int capacity,
+  lazy tuple/requirement demand and productivity, and exact generated,
+  rejected, failed, sibling and later states. Scalar cache bounds are
+  not all-outcome Ready/Type/history/Post proofs.
+
+## Haskell fixes and external pickup
+
+No new production Haskell edit or bug was introduced or established in
+R205. PR #204 is merged on main and already integrated into formalize.
+The verified exact-shape decoder repair remains in FINDINGS for external
+pickup. Its original formalize commit is
+113de3d85f7776d623c45fd3e31157e4254af1fb; external port owner was
+claude-gondolin; do not duplicate that repair.
+
+toProgram matches the FULL interned Symbol through ordinary overloaded
+literal patterns: app has exactly four children and filter exactly two.
+Only the fallback uses symbolText. Symbol equality is interned identity;
+a text-only rewrite would be wrong. A public Library component or query
+argument named filter with Type app(A,B) formerly decoded size 1 as
+App A B (count 2). It now decodes Var filter (count/cardinality 1).
+The existing compact synthesis-decoder-shapes packet retains actual
+before/after evidence, all three encodings, 13 passing examples and
+format checks. No unchanged Haskell checks were repeated this round.
+
+- PR: https://github.com/TharkunAB/cfta/pull/204
+- Main merge: 849029e5b55a5d1c0152c24b55117b38419a6279.
+- Synthesis.hs SHA: dfffbf454516649e115d890e65b6289217dbcf352ccb08e86415d719b32fbc3a.
+- SynthesisSpec.hs SHA: 8f931875e18cd32a21a58072de1363530df3b03189b576fca614f009063fbe47.
+
+## Reproduction, preservation and /tmp
+
+Each source packet has only README.md, check.py, checked.json and
+theorems.json. The compatibility packet has README.md, check.py,
+checked.json and frontier.json. These files pin source hashes, public
+names and successful standard-axiom checks. Reproduce from Git with
+the pinned Nix/Lean toolchain; no source archive is needed.
+
+```sh
+env XDG_RUNTIME_DIR=/run/user/1000 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus LEAN_NUM_THREADS=1 HEAVY_PEAKS=/tmp/mcfta-shared-positive-20261109-1845/peaks /home/tritlo/Code/heavy-management/bin/capped --mem 4G --time 10m python3 /home/tritlo/Code/mcfta/lean/restart-evidence/20261109-shared-positive-compatibility/check.py
+```
+
+Nineteen imports and one blank line precede the entire previous Audit
+byte sequence. This identical prefix precedes the entire previous bytes
+of all three current documents. The old common prefix was 35,417 bytes,
+SHA4470d427e4148385c3d707ea320149fdd704936590f03da76a4152d2da89d6b9.
+No old proof, contract, counterexample, repair or marked draft was removed.
+
+Observed regular /tmp files total 27874680 bytes (26.58 MiB)
+across 7092 files. Filesystem free space is 237.27 GiB.
+The scan did not follow symlinks; 5 directory/file observations
+were inaccessible or disappeared. No archive/source copy was created.
+Keep monitoring /tmp. Runtime /tmp/mcfta-shared-positive-20261109-1845 contains only
+small reproducible helpers, receipts and review notes. Preserve user
+work and unrelated `.hypha/`. Do not silently delete protected data.
+
+Durable board request UUID: 7eafabcc-6801-48bd-b4eb-7d02663a201d. Post the concise
+checkpoint only after the authorized push and exact remote readback.
+Verify full author/type/thread/request identity, content and metadata,
+not only the sequence number. Runtime board-payload.json, board-readback
+and final-head.json retain those publication acknowledgments.
+
+### Exact source hashes and packets
+
+- SourcePruningEnumerationSharedCallbackResources: 44d27453ab73f202b8646a77d6b4fe79727564f8b4d1737ad0016a9ef5db5d7e; packet: lean/restart-evidence/20261109-shared-callback-resources
+- SourcePruningEnumerationSharedCapturedEdgeScalarBounds: 1ce29d535206fc22532bcfc8a611205669d33dec2feef798dacba84bb3ae15e3; packet: lean/restart-evidence/20261109-shared-captured-edge-scalar-bounds
+- SourcePruningEnumerationSharedChildScalarBounds: 1ee89081630e49e6bca89e7f72596fb49dbe5ab1d00c7a4c35340649d70f9b9a; packet: lean/restart-evidence/20261109-shared-child-scalar-bounds
+- SourcePruningEnumerationSharedDispatchScalarBounds: 05183b97c07afa74d62c703ca6aee3006ff1de569fb9a5556aaf9ececdedcc9e; packet: lean/restart-evidence/20261109-shared-dispatch-scalar-bounds
+- SourcePruningEnumerationSharedFiniteExpansionResources: 1ce8c0cde899a639ca686798c5b08b85aa590fdc597c7d71f236bfd7e032ea29; packet: lean/restart-evidence/20261109-shared-finite-expansion-resources
+- SourcePruningEnumerationSharedFiniteHeadResources: 9e6f39054da3843110ffab7d57fd21a14059206d9c336c86692b5cb8d4e90b73; packet: lean/restart-evidence/20261109-shared-finite-head-resources
+- SourcePruningEnumerationSharedFiniteResources: c0c4a72f389ba5e7577e7e185c6c7f8ceade0e20c87edc257495ade9954b0cf5; packet: lean/restart-evidence/20261109-shared-finite-resources
+- SourcePruningEnumerationSharedFiniteSiblingResources: aae5089703730114c81f29fe3948c7daf521dcdafc2abcc1708299fa29aa52f3; packet: lean/restart-evidence/20261109-shared-finite-sibling-resources
+- SourcePruningEnumerationSharedHookInduction: 0483db389a1304c48d2c98751e11267e2f99fd93dba1dffe6b023802c0026d92; packet: lean/restart-evidence/20261109-shared-hook-induction
+- SourcePruningEnumerationSharedIncomingScalarBounds: 2998562086043d4965d8d2cb6c01e9804a7190b8fba98d1cfe37cb90cfd4330d; packet: lean/restart-evidence/20261109-shared-incoming-scalar-bounds
+- SourcePruningEnumerationSharedNativeBranchBoundedResources: a091b7757fecbd324226c3fec5b8b75f2a24c588c56525fa88d2f98dbf903685; packet: lean/restart-evidence/20261109-shared-native-branch-bounded-resources
+- SourcePruningEnumerationSharedOutcomeResources: f2bef5047647f663409653b9b66c1579cd7a5b7a44c7c242dd7e106469849026; packet: lean/restart-evidence/20261109-shared-outcome-resources
+- SourcePruningEnumerationSharedPrefixResources: be72c8b16e1a904f4152b70b53906ad9bf2b5f296eae94eb08f34bf7f2256648; packet: lean/restart-evidence/20261109-shared-prefix-resources
+- SourcePruningEnumerationSharedRecursiveReservation: 9e33e68f60e249a4a9500a64d78e0bf3dba6957fe34d79b69ab13c94bc1300f9; packet: lean/restart-evidence/20261109-shared-recursive-reservation
+- SourcePruningEnumerationSharedRecursiveReservationBounds: d9800344e01a2d462ed352c85607b90b4ecf4111ffaa7ef9e4795cc2684f2156; packet: lean/restart-evidence/20261109-shared-recursive-reservation-bounds
+- SourcePruningEnumerationSharedSelectedEdgeScalarBounds: ba3a5f195832da8bed456e189013686f8e7b0471cb8131d5c49c42ea77f5cf6c; packet: lean/restart-evidence/20261109-shared-selected-edge-scalar-bounds
+- SourcePruningEnumerationSharedTerminalScalarBounds: 7163b9024a9e6fdc96c129355d50e839663bdb5e53802970548fbc2afe526b16; packet: lean/restart-evidence/20261109-shared-terminal-scalar-bounds
+- SourcePruningEnumerationSharedTraversalScalarBounds: ed6bf9bcf5abbcbb605970a89838e91469a961a25e7b653d80019e848e304040; packet: lean/restart-evidence/20261109-shared-traversal-scalar-bounds
+- SourcePruningEnumerationSharedZeroOutcomeResources: 376ee830830c7cf489aee17f5c071655eb38ac4bc34ee96a8558efd1877787ed; packet: lean/restart-evidence/20261109-shared-zero-outcome-resources
+
+## Read-only source reviews preserved in full
+
+The reviews below are source audits, not independent execution theorems.
+
+
+Review file: shared-normalization-next.md. SHA256: c9b96bb300ce3e9e3714e0fe4cf3bd90fb3592e6ae137274bb7d7616601eed86.
+
+# Shared selected normalization: next cut
+
+2026-11-09 19:14 CET. Read-only audit.
+
+Source demand
+
+Enumeration.hs:968-1018 runs stop/order/repetition, narrowing and the Right oracle BEFORE expansion. enumerateOutUVarWith:893-912 installs recursion ancestry, then expands exactly ONE outer Mu unfolding, or Node(nodeEdges n) for union. It clears ancestry and writes UVarEnumerated after expansion succeeds. Do not normalize before the Right oracle or repeat until ordinary.
+
+Interned/Operations.hs:144-151 confirms one outer Mu layer; its result can remain Mu/union. nodeEdges:153-182 instead takes finite recursive/union closure, suppresses revisited identities, deduplicates/orders through Set, and raises on unresolved union Rec. enumerateNode:724-755 rejects Empty, defers nonterminal Mu/union into a slot, assimilates terminal endpoints, and raises on direct Rec. enumerateShallowHere/prepareShallowChild:791-809 defer eligible ordinary children. Missing model coverage does not imply a Haskell defect.
+
+Current cut and reusable kernel
+
+SharedRecursive.resume:136-167 runs SelectedStep.runPrefix, then only SharedSelectedContinuations.NativeOrdinaryContinuations.run. Its entry (:712-729) accepts a decoded .node without terminal trie; other entries yield None. SharedDispatch:55-93 performs assimilation/intersection/emptiness; SharedParent transforms a row. Neither supplies selected-root normalization.
+
+Old SelectedContinuations.run:35-67, selected by PreparedRecursive.resume, prepares once and dispatches ordinary OR opaque/terminal expansion. Do not cast these executions to shared. Actual preparation is SelectedPreparation.run and SelectedPreparationResources.complete_resources.
+
+SelectedValue.run:24-40 is a COMMON heap-only kernel: stored unfold for Mu, nodeEdges+makeNode for union, identity otherwise. It invokes no old Demand or shared conjunction. Reuse run_complete, SelectedValueCaller.complete/normalizationProfile/complete_resources, SelectedConstraintHeap.run_heap and preparation resource/arity/projectability laws. Caller.complete:55-77 uses current Context, native effects and memo growth; its old-named readiness helper is not an executed old call. Reuse this normalizer.
+
+Prepared-head proof contract
+
+R205 SharedNativeBranchResources.head_complete_resources:50-76 requires the captured handle to decode to the selected ordinary parent. Preparation keeps this slot/handle but can produce a DIFFERENT parent. Claiming that the old Mu/union handle decodes to that new .node would be false.
+
+Raw SharedSelectedContinuations.CapturedEdge.run:523-531 already takes explicit edge and target, independently of parent lookup. SharedSelectedEdgeResources.complete_with_fragments_resources:48-60 already takes Available selectedParent, closed parent and selected row. Add a prepared-head producer with original ready/stored target and original decoded value, CURRENT available/closed prepared parent and selected row, plus prepared/original language equivalence for target semantics. Generalize the captured/head proof, not the stored identity. Finalize still writes the original target. Actual scalar observers already cover this executor and finalizeStopped.
+
+Minimal next chain
+
+1. Add SharedSelectedOpaqueDispatch +SharedPreparedContinuations. Capture ONE SelectedPreparation pair. On native done use its literal heap/entered cache; ordinary nonterminal values scan edgesOf(prepared) through shared NativeContinuations; remaining values use shared ChildDispatch and original-target finalization. Empty rejects. Preserve entry errors, pending/unresolved/exhausted fault heaps, terminal shared snapshots, stopped endpoints and finalizeStopped pre-finalize cache. No old executed wrapper.
+2. Add prepared captured/head resources with the generalized contract above. CURRENT Packet, ready/stored slot and Fits/carrier derive SAME preparation/Post/Packet/RenderStable and result availability/closedness/language. Charge normalizationProfile once, then shared work from that endpoint. Keep captured handle, values, counter and waiting unchanged during preparation. Keep fourth/merge/query/global bundle unless an actual child changes it. No future result/cache ceiling supplier.
+3. Add a prepared shared mixed reservation/recursive layer, then select it deliberately. Ordinary, terminal and opaque routes need their real schedules. Current ordinary-only finite resource laws do not cover them automatically. Keep callback-before-next-sibling and all failures.
+
+Meaning and scope
+
+Use exact language equivalence and entry Satisfies transport. Select edgesOf(prepared), not concatenated operand rows. Host correspondence still needs actual closure/dedup/order and interned identity linkage; language equivalence does not supply them. Source-policy/depth coverage, unrestricted unpaid Type annotations, complete enumeration and both signed inverses, fixed Word/Int adequacy, lazy tuple/requirement demand and host sharing remain separate obligations.
+
+
+Review file: shared-positive-composition-review.md. SHA256: b5332d0327a78df51f6aacfe9a02faa0104ccd5224561eab096e9ca29150f4bb.
+
+# Shared positive-depth composition
+
+2026-11-09 19:18 CET. Read-only review of frozen composition and current SharedFiniteResources draft. No semantic defect found in the inspected coupling. Root owns compilation.
+
+HookInduction.ResumeComplete:92 takes CURRENT Packet/Fits/carrier, edge membership/length, current mass and reservation. Its callback producer derives the actual Left result and framed Packet; Frame.values transports mass into that SAME cache. The continuing branch supplies the smaller-depth IH; rejection returns no outputs. FiniteResources.finite_complete discharges the IH by depth induction. No recursive completion supplier remains public.
+
+FiniteHeadResources retains ONE captured-head receipt with its SAME caller, saved query, middleMemos/Post, bounds and stable observation. Complete cache mass comes from actual HeadCacheBounds. receipt_induction_complete_resources aligns advance(receipt) with reached caller/final.query before invoking the callback. completed_captured_packet derives a Packet for the ORIGINAL captured cache using that actual post.
+
+FiniteSiblingResources runs callback/native recursion BEFORE the tail. Its tail receives hookCaller/hookMemos and restored captured cache. NativeContinuations.continued_head and the callback equation prove this order. It does not pass a callback-expanded enumeration cache into the next captured alternative. Outputs retain their actual cache/caller/query. Each existential full memo bundle belongs to its SAME endpoint/Post/query. The contract does not equate bundles across different outputs or larger-bound schedules, or claim a whole-driver ordered memo trace.
+
+Unsupported .unhandled stops at actual ENTRY caller/query. Recursive stops retain their actual reason, outputs and optional endpoint. OutcomeResources allows endpoint=None; it does not manufacture a known endpoint. finalizeStopped keeps pre-finalize cache in executor/scalar observers. It is not Admitted, so sufficiently bounded admitted-head completion excludes it, rather than treating it as success.
+
+PrefixResources derives actual heap-only prefix facts/Post from CURRENT Packet, with no external future Context/trace. Expansion threads that SAME post into entry/ordinary work. Nonordinary/terminal entries remain concrete unsupported stops. RecursiveReservation charges narrowSeed, then shared afterHead and smaller-depth work per sibling stage; the extra row covers parked recursion. It does NOT charge SelectedValue Mu/union normalization, consistently with the current ordinary-only run.
+
+The final claim is existence/stability of actual finite-depth outcomes and resource/Post packets under CURRENT reservation. It does not establish source coverage, accepted-output meaning, host enumeration order, adequate recursive depth, computed worker-fuel adequacy, fixed 64-bit capacity or Haskell correspondence. Mu/union and terminal/opaque preparation remain the separate audited next cut.
+
+
+---
+
 # R204 checkpoint: actual shared children, captured edges and zero-depth alternative scan
 
 Recorded 2026-11-09T18:41:19+01:00. This checkpoint supersedes the R203 prefix below.
