@@ -1,3 +1,189 @@
+# R184: lossless checked shared calls and calculated local forcing bounds
+
+Updated: 2026-11-09 06:46 CET. Full goal ACTIVE. Formalize pushes authorized.
+Proof HEAD before documentation commit: 000e38f7a14904d60acddc42934df688dbe61c20.
+Read current Git/runtime publication.json for the final published HEAD.
+Main 9f5f77783b9f936a1edf4225373cbad9dc6a9ed5 remains integrated.
+Preserve unrelated .hypha/. Complete published R183 document bytes follow
+unchanged. Preserve all older proofs, repairs, counterexamples and marked
+drafts. Previous and current goal turns made checked source progress.
+
+## New exact checked interface and strongest existing result
+
+AllocatedSharedConjunctionWorker.call executes the SAME literal SharedWorker.
+call and retains its full diagnostic/private WorkState. Both Outcome.done and
+Outcome.failed carry checked state, fourth memo and complete private snapshot.
+call_observation reconstructs the original raw outcome exactly. call_snapshot
+identifies the actual private endpoint. call_state advances the checked state
+with that same physical component. call_memo supplies the returned fourth;
+a failed call retains the incoming memo. call_done/call_failed invert both
+literal outcomes. call_tables retains native tables and domain cache even
+on failure. call_hit retains the original checked state and ACTUAL empty
+initial private snapshot. No fault or private storage is erased.
+
+WorkerEffects.weak_effects retains old SemanticHeap/Covered[]/Available/
+closed-query heap effects without Ready/costs. verified takes full CURRENT
+Context+Available+three CURRENT annotation/causal/arity predicates and returns
+ONE base CallReads/global bundle/full Post/three heap invariants at the actual
+adapter .state/.memo. Faults retain their original full snapshot. Boolean
+soundness remains conditional on successful raw outcomes and stronger entry
+facts. The weak theorem does not certify Boolean answers or full Post.
+
+WorkerActual.call_done_stable/unique retains all FOUR result components:
+answer, complete checked state, fourth memo and private snapshot. verified
+attaches full caller facts to supplied actual success. finite DERIVES one
+successful checked call from CURRENT Context+Available+three CURRENT heap
+predicates, with its BASE read receipt, same full Post and invariants,
+conservative sound answer, global extensions and exact replay at all larger
+p/h. The raw and checked calls share one physical/private endpoint. Receipts
+are BASE p/h only; larger-bounds receipt stability is not asserted.
+
+R183 initial-derived shared logical completion/replay remains exact. R182
+original weak all-outcome and R181 strong all-outcome contracts remain exact.
+Successful True proves emptiness; False remains inconclusive at the fixed
+algorithmic budget. p/h are proof observations, NOT native API size/fuel
+parameters. The new checked adapter is CONCRETE but UNSELECTED. BOTH old
+formal callers still use DemandWorker. Outer fault carriers and actual
+resource consumers still need ports before selection.
+
+## First explicit numeric bound for actual deferred forcing
+
+CellsNumeric uses only literal CURRENT data. pendingJobs is the stored cell's
+pending list; cached/column/missing cases use []. depth and width are maxima
+of job path.length and job forest.length. For k jobs and initial scalar r:
+
+- d = depth jobs; w = width jobs; k = jobs.length.
+- step(d,w,r) = unionGrowth w (bound d (r+1)).
+- F = ProjectionResources.jobsBound d w k r, the k-step scalar schedule.
+- P = workerFuel d = 2*d+1.
+- H = ProjectionUnionResources.readFuel F.
+
+forecast/projectionFuel/readerFuel are explicit PURE functions of the current
+cell and scalar. They do not select fuels from an existential completion.
+bound proves final Fits F and exact whole-cell replay of an actual success
+at EVERY computed larger P/H. complete DERIVES the success from CURRENT
+Ready+Fits+CellsValues+CellsClosed+PRESENT handle and returns actual Effects,
+stored invariants and resident closed outputs with that SAME endpoint.
+No future force/graph/heap profile is a public supplier.
+
+The proof follows the actual consumed cursor prefix. First Empty retains its
+own endpoint and does NOT force the suffix. Prefix schedules fit the full
+current-job schedule. Actual projection graphs replay at computed bounds;
+force success/failure correspondence and existing full-cell stability identify
+the SAME private state. Cached hits and columns use zero projection jobs.
+This bound does not depend on remaining tuple budget and covers zero-budget
+forces. It bounds the native PHYSICAL heap scalar, not all private-storage
+or task counts. No whole-worker original-input numeric forecast follows yet.
+
+Small elaboration repairs changed no public premise or formula: explicit
+physical(before) in warm-hit proof, fully qualified Outcome namespace uses,
+explicit pair projections before arithmetic, empty-list/iterate reduction,
+and final reflexive endpoint equations. No old proof or heartbeat setting
+changed. No Haskell executable edit or bug fix was required.
+
+## Next full-run resource and selected-caller target
+
+Derive quantitative bounds on actual private cells, job counts/path lengths/
+forest widths, raw tuples, cached tails and pending tasks from ORIGINAL B,
+initial heap/profile and fixed guard carrier. R184's local CURRENT profile
+must be derived at each reached force, not supplied as a top-level future
+work invariant. Inspect actual allocateCells/descriptors, shapeThrough,
+RowsCreditBounds/Frame and controlled lexicographic bounds. R183 original-B
+WF and finite maxima give existential completion, not computed ceilings.
+Combine actual sampling/row/forcing costs into a NEW shared forecast with
+final Fits and SAME-call replay at computed workerFuel/readerFuel. Keep domain
+capacity unchanged. Old eager DemandNumeric F0=r is not valid after deferral;
+requirements execute BEFORE budget tests, including remaining budget0.
+Do not assume eager/shared execution equality or relabel old eager receipts.
+
+Concrete GLOBAL selector: AllocatedScanWorker.decision:71–75 wraps the old
+three-field outcome and old fault as .decision paths fault. Its outer carrier
+must retain SharedFault and snapshot. Concrete ENUM selector: EnabledEmpty.
+check:27–34 returns old Outcome and calls old tuple worker at budget10000.
+Gate-false is genuinely SKIPPED. Raw-call correspondence belongs ONLY to the
+gate-true branch. Do not invent a SharedWorker.call receipt on gate-false.
+BOTH WorkerResources.finite_resources/raw_done_resources still expose old
+Demand Call/CallReads/numeric forecast; port actual shared receipts and
+Context+Fits+Available ->same call/Post/answer/final Fits/computed replay.
+The new adapter alone is NOT selected adoption. Map and port all actual
+dependent theorems while preserving original proof semantics and artifacts.
+Runtime next-cutover-target.md records exact next tasks and source pointers.
+
+Full objective remains original-derived sufficient COMPLETE enumeration over
+ALL generated/rejected/failing/returned/subsequent/sibling work; Type/Program
+occurrence identity; exact terms by SOURCE Program leaf-size/count/order/
+BOTH signed inverses and actual sparse classes; AllSized/fallback/productive
+infinity/lazy structures; full Haskell maps/caches/hashes/Word/Int/allocation/
+wrappers/lookup/Curried/Specftacular and GHC demand/publication. Source leaf
+size, Term.nodes and recursive fuel are DISTINCT. Keep size-free fully/until.
+R164 computed initial Room and R171 SAME-return driver at chosen depth/
+capacity retain their conditions. No adequate depth is proved. Keep older
+constructor/equality work as secondary targets. No theorem count, local
+bound, unselected adapter or green Audit certifies the complete goal.
+
+## Verification and restart
+
+Four NEW modules contain 18 NEW public laws. Strict own-source warnings,
+exact public names/namespaces/source hashes and standard axioms only
+(propext/Classical.choice/Quot.sound) pass. Every old proof module and packet
+remains unchanged. Four additive imports precede complete old Audit bytes.
+The full affected closure is five of 5433 modules. Audit has 4430 imports and
+89013 theorem axiom reports. PASS in 10.15 seconds, peak 2480 MiB. All four
+own packets and full compatibility reproduce from cwd /tmp, peak 186 MiB.
+Source plus pinned Nix/Lake toolchain suffice; no archive is needed.
+Compatibility: 20261109-shared-adapter-compatibility (README/check/checked/
+frontier). The canonical checker writes checked.json directly.
+
+Root runs ONE serial compiler via heavy-management/user-bus. Actual memory.
+max/high 4294967296, swap.max 0, LEAN_NUM_THREADS=1. No global queue or
+concurrency change. All handles are terminal. The graph is acyclic and every
+affected source snapshot is exact. Bounded failure diagnostics remain.
+Measured runs:
+- 2026-11-09T06:31:05 python3 4G 245M 0
+- 2026-11-09T06:32:36 python3 4G 197M 1
+- 2026-11-09T06:33:48 python3 4G 233M 0
+- 2026-11-09T06:35:50 python3 4G 229M 0
+- 2026-11-09T06:39:57 python3 4G 793M 1
+- 2026-11-09T06:42:06 python3 4G 235M 0
+- 2026-11-09T06:43:25 python3 4G 2480M 0
+- 2026-11-09T06:45:08 python3 4G 186M 0
+
+Proof commits:
+- d3803eb3a1f8fc58035298bf1bbf8c040b2e96db Retain complete shared observations in checked conjunction calls
+- e51c9581ae6eff525efb23455cabc215c47f483e Retain weak and full caller contracts through checked shared calls
+- 905de62b463be524e4ad87f2556a092fb9f64996 Replay complete checked shared calls with their private snapshots
+- 000e38f7a14904d60acddc42934df688dbe61c20 Compute local requirement cell bounds from actual pending jobs
+
+Frozen source SHA256/public laws:
+- SourceCurrentAllocatedSharedConjunctionWorker: 8ee89490c6f0277002149510956e4da72d5055547ed721cc0530b7c0adf926ba; 10
+- SourceCurrentAllocatedSharedConjunctionWorkerActual: eaf392422022a7afef0a5afd34ddac9a99b2c67804aa6dbe1146dfdcb264e64e; 4
+- SourceCurrentAllocatedSharedConjunctionWorkerEffects: 4521cc2b1eb64a8b1c57b5d444a9f3e83f7de2aae0a22d0587221ee933e5c4fa; 2
+- SourceCurrentConjunctionRequirementCellsNumeric: 0f9d3406fc2b7a010935ccd258717b625bfed4a84dbaa4f8e66e9a2407c34b8f; 2
+
+Alpha owns all-outcome adapter effects and selected-consumer audit. Gamma
+owns exact adapter replay and finite caller contracts. Beta owns current-cell
+numeric forcing. Root owns concrete adapter, repairs and all compiler/Git/
+reproduction/publication work. No source writer or compiler remains live.
+
+Runtime /tmp/mcfta-shared-adapter-20261109-0631/. Read targets, verified-
+modules, compatibility-frontier/check, portable-check, proof-commits,
+publication, board-published, turn-state, peaks and next-cutover-target.md.
+Refresh upstream and inspect ACTUAL handles/processes; a state file is not
+liveness evidence. Readable allocated /tmp is 39.0 MiB; free 241.7 GiB.
+Keep compact source-based text and bounded diagnostics only. No build/source
+archives or repeated large snapshots. Preserve unrelated .hypha/.
+
+## Haskell findings for external follow-up
+
+No executable Haskell file changed in R184. No new Haskell bug or fix was
+identified. The adapter and local numeric theorem do not establish GHC demand,
+publication, native exception/overflow or full Haskell correspondence. All
+older Haskell/LPO fixes, counterexamples and repairs remain in the exact
+preserved suffix. Record EVERY future Haskell fix in FINDINGS for external
+pickup. Continue without asking whether to continue. Full goal stays ACTIVE.
+
+---
+
 # R183: initial-derived finite shared calls with the full caller contract
 
 Updated: 2026-11-09 06:25 CET. Full goal ACTIVE. Formalize pushes authorized.
