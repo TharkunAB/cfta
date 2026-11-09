@@ -1,3 +1,178 @@
+# R174: deferred class witnesses and actual shared caller effects
+
+Updated: 2026-11-09 02:10 CET. Full goal ACTIVE. Formalize pushes are authorized.
+Preserve unrelated .hypha/. Proof HEAD before the documentation commit:
+5cdd602530704ed52fd5361a3827ba28f370ca32. Main 9f5f77783b9f936a1edf4225373cbad9dc6a9ed5 remains integrated.
+The documentation/Audit commit follows. Read Git and the runtime publication
+report for final HEAD and verified remote state. Complete published R173
+bytes follow this prefix unchanged. No old proof or marked draft was removed.
+
+## Strongest new statements
+
+SourceCurrentConjunctionSharedWorker.decision_total derives an actual shared
+decision from the original query, original tuple budget, physical state,
+and fixed native p/h. It returns a Boolean or the exact native shared
+exploration fault. Pure table materialization and fixed-point growth cannot
+produce an internal failure. No added work fuel, future completed table,
+closure, heap, frame, rank, or read result is supplied. Open inputs return
+false without native reads. Memo hits retain the original memo and physical
+state. Successful misses alone insert the fourth memo. Failed misses retain
+the exact fault and full private snapshot.
+
+SharedWorkerEffects.decision_state/call_state identify the ENTIRE actual
+snapshot. Closed decisions retain the actual explore endpoint; open inputs
+and hits retain the initial empty-private snapshot. Misses retain the actual
+decision endpoint. The read-free initial snapshot still has its unforced
+initial query task. It need not be a drained execution.
+
+SharedWorkerEffects.decision_effects/call_effects require only CURRENT
+RowsAllocation.Ready and query availability. They derive physical Effects
+and readiness, resident cached cell values, pending raw tuple edges, queued
+conjunction operands, and stored table queries on ALL outcomes. They require
+no closed query, future Ready, inventory, completion, or memo-correctness
+supplier. They certify physical/value invariants. They do not certify the
+stored Boolean of an arbitrary memo hit. Weaker existing branch laws remain.
+
+RequirementPullSoundness.classConjunction_witness proves a semantic result
+for an ACTUAL SUCCESSFUL class force. Initial closed/resident forests,
+SemanticReady, CostHeap, annotation heap, nonempty forests, common accepted
+child terms, and an active satisfied class derive a strictly smaller accepted
+common subtree. Every projection comes from the literal singleton execution.
+An accepted witness excludes first Empty. The proof does not fabricate a
+complete eager graph. This is a conditional local soundness theorem; it does
+not derive adequate native p/h or replace whole-call completion.
+
+The shared call remains a noncomputable source model with internally derived
+ghost credits. Selected checked callers STILL use R170 DemandWorker. Whole
+Boolean soundness, semantic provenance through stored rows/cells, ordered
+receipts, adequate native resource bounds, and caller adoption remain open.
+The full enumeration and Haskell correspondence objective remains unchanged.
+
+## Checked changes and reproduction
+
+Five new modules and 30 public laws pass Nix/Lake, strict own-source checks,
+explicit #check for every public theorem, exact namespace/source-hash checks,
+and allowed-axiom reports. Only propext, Classical.choice, and Quot.sound are
+permitted. No previous public law or historical file was removed.
+
+- SourceCurrentConjunctionRequirementPullSoundness: 3 laws; SHA256 918c71103a1f4152f3cfb827fbd60018e932d65c1148c94a653868ff6136f4a7.
+- SourceCurrentConjunctionRequirementRowsValues: 7 laws; SHA256 62951ef9cd8640a86f189a70931cd1f06ddf6e6b360adce9bc0e19776808d4b8.
+- SourceCurrentConjunctionSharedWorker: 11 laws; SHA256 6cd793b78d2a42a6068f7825812242cade74eefd7eb884e054864a56eef756c4.
+- SourceCurrentConjunctionSharedWorkerEffects: 4 laws; SHA256 7b37b0b39f46200b9acd5bf183c5492542ff3ce096224f0cb954d7307ce4aade.
+- SourceCurrentConjunctionSharedWorklistValues: 5 laws; SHA256 7473d1582b0871490a3d4ba95ba98cf42bc0ad996434fae0ae143df1f446f3cb.
+
+RowsValues derives strong stored-value invariants through actual descriptor
+allocation and finite nextRow traversal. It also supplies current-only Keeps
+lifts. SharedWorklistValues combines Ready, cells, raw spines, pending nodes,
+and table queries. It derives initialization, actual visit/step preservation,
+actual finite Run preservation, and original explore effects. SharedWorker
+adds the unselected decision/memo boundary. WorkerEffects composes the exact
+snapshot laws with those actual run effects. PullSoundness supplies the first
+local semantic bridge. Residency does NOT imply ClosedValues or row meaning.
+
+The graph has 5,361 modules. Audit covers the complete
+6-module changed reverse-import closure. Its 4,358 direct imports expose
+88,539 axiom-checked theorems, including private/generated helpers. Full affected
+compatibility passed in 12.7 seconds. The full previous Audit file is an
+exact suffix after five new imports. All previous R173 document bytes remain.
+
+Portable reproduction passed from cwd=/tmp for the deferred-class source
+checker, shared-caller effects source checker, and full compatibility checker.
+Each checker derives the repository root from its file. Each source has a
+four-file compact packet. Full compatibility is under
+lean/restart-evidence/20261109-shared-semantics-compatibility/.
+No retained build archive or temporary tree is needed for reproduction.
+
+All compiler jobs used ONE serial heavy-management cap: memory.max/high4GiB,
+swap zero, LEAN_NUM_THREADS=1. Root is sole compiler. No compiler remains live.
+Keep the established user-bus environment. No queue/concurrency change.
+Audit peak was about3499MiB. Runtime:
+/tmp/mcfta-shared-semantics-20261109-0153/.
+Readable /tmp remains about35MiB (du rounds to36MiB), with about244GiB free.
+The repository Lean cache is outside /tmp. Continue to monitor temporary size.
+
+Verified proof commits:
+- 6dce78ba796b65adc9a62fb1cab3b65d75d05653: Preserve stored values through actual row preparation.
+- fbe6a09925591676333540c1d09ef13882fa4baf: Prove accepted witnesses for deferred class reads.
+- df5f4c97cbf6fd1e76c97248daf64a1bf20a0e9b: Add shared decision and completed memo handling.
+- 5cdd602530704ed52fd5361a3827ba28f370ca32: Preserve actual shared execution and caller effects.
+
+The following documentation commit contains Audit, compact full-compatibility
+reproduction, and these lossless handoffs. Git gives its final hash.
+All delegated source edits are frozen. No child compiler or Git job ran.
+An independent premise audit found no future supplier or Boolean overclaim.
+
+## Next semantic target
+
+1. Add force_pending_run: a present .pending cursor and actual successful
+   Cells.force imply the SAME literal Pull.run result at the SAME physical
+   endpoint. It requires no Ready, closure, or semantic premise. Induct the
+   finite pending-job measure. Rewrite force_step, inspect actual Pull.step,
+   and use lookup_update to retain the same handle for a continuation.
+   Reuse force_done for final publication and force_other for other handles.
+   Avoid a whole list-set equality when exact lookup framing suffices.
+2. Reuse checked run_common for a force_pending_common semantic adapter.
+   Keep cached hits, pure column canonicalization, and missing handles
+   separate. A present pending cell cannot become a missing handle. For a
+   failed projection, retain the FINAL stopped cursor and exact native fault.
+   The stopped cursor can differ from the original cursor. A useful failure
+   law also retains lookup(handle,after)=some(.pending stopped).
+3. Add a real CellClosed invariant. Column/done cells need ClosedValues nodes.
+   Pending cells need ClosedValues collected and closed pending job forests.
+   Derive initial/allocate and all-outcome force_closed using actual singleton
+   projection verification and canonical_values. CellsValues proves only
+   residency. CellClosed plus CellValues supplies later run_common Inputs.
+4. Attach class/column obligations to actual descriptor allocation. Preserve
+   semantic origins through cell updates, generated descendants, cached row
+   spines, and pure materialization. A CommonCell predicate can hold accepted
+   nodes for column/done and PullSoundness.Common for pending cursors. Keep
+   the strictly smaller witness with its original parent row obligation.
+   Derive every origin from initial allocation and actual transitions. Do not
+   supply future row meaning, completion, or a finite source carrier.
+5. Recover TableSoundness.StoredDomain and SEMANTIC Covered at materialization.
+   Scheduling Coverage only proves that unfinished cells stay queued. Then
+   reuse answer_sound/grow_complete and existing key_faithful. Add the actual
+   memo-correctness premise for hit soundness. Preserve original weak laws.
+6. Complete actual ordered read receipts and their failure prefixes. Repeated
+   demands remain repeated. Sampling/projection fault tapes still need the
+   actual native boundary bridge. Do not replay eager TuplesReads to stand
+   for the new interleaving. Add numerical, clean-probe, guard, arity, and
+   annotation contracts. Switch BOTH checked callers only after these hold.
+
+The R173 detailed source map remains below. Lower physical readiness and
+all-outcome value preservation are now discharged by this checkpoint; do not
+repeat them or treat them as future hypotheses. Whole semantic coverage and
+selected adoption are still open. A full goal audit must retain all remaining
+contracts below, not count these component laws as completion.
+
+## Haskell findings and complete scope
+
+No new Haskell executable or documentation change occurs in R174. No new
+runtime defect, executable repair, or source-starvation witness is claimed.
+R173 integrated and recorded PR#202/ce4ee6d82 (UVar lookups leave union-find
+unchanged) and PR#203/e019ce41d (libraryAvoid retains required-argument f x).
+All earlier Haskell fixes/findings remain exact below. Record every future
+Haskell fix in FINDINGS for the external agent as well.
+
+Preserve R164 verified original-input completion and R171's finite driver on
+the SAME returned worker node/caller/final memos. Sufficient original-source
+recursive depth remains open, including original Type-site/Program occurrence
+identity through generated intersections and warm winners. Do not use
+arbitrary guarded-Mu fixtures as original-source divergence witnesses or
+invent a size parameter on the size-free fully/until API.
+
+The full objective remains one original-input/request bound for optimized
+workers and COMPLETE enumeration across all reached siblings, generated,
+rejected, failed, returned, and subsequent work; exact accepted terms per
+SOURCE size/node count; counting/order/BOTH signed rank-unrank inverses through
+actual sparse execution; AllSized/fallback/failure/productive infinity; lazy
+table/map/set/cache/hash, Word/Int/allocation, wrappers, lookup, Curried,
+Specftacular, and full native Haskell/GHC correspondence. No supplied future
+trace/fuel/closure/carrier or unselected/success-only subset closes the goal.
+Keep the optimized interned core and older constructor/equality proofs.
+
+---
+
 # R173: complete cached tables at actual shared-worklist endpoints
 
 Updated: 2026-11-09 01:46 CET. Full goal ACTIVE. Formalize pushes are authorized.
