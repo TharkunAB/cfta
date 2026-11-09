@@ -61,7 +61,8 @@ withComponents allComponents =
         -- The original code means to apply the Maybe functions to anything
         -- but Nothing, but its rule selects components by their names, and the
         -- components are group representatives, so the rule selects none:
-        -- no Maybe function heads a term of size two. This library does the
+        -- no Maybe function heads a term of size two, unless it applies to an
+        -- argument of the query that the term must use. This library does the
         -- same, so its program spaces equal the original's, size by size.
         [ (listFunctions, Just ["Nil"])
         , (maybeFunctions, Nothing)

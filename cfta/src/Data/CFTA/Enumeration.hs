@@ -411,7 +411,7 @@ inheritAncestry idx = do
         modify' $
             \s -> s{_recursionAncestry = IntMap.insertWith HashSet.union idx current (_recursionAncestry s)}
 
--- | Return the current representative for a UVar, updating union-find state.
+-- | Return the current representative for a UVar. The union-find stays the same.
 getUVarRepresentative :: UVar -> EnumerateM symbol UVar
 getUVarRepresentative uv = do
     uf <- gets _uvarRepresentative
@@ -419,7 +419,7 @@ getUVarRepresentative uv = do
     modify' $ \s -> s{_uvarRepresentative = uf'}
     return uv'
 
--- | Look up the value for a UVar after path-compressing its representative.
+-- | Look up the value stored at a UVar's representative.
 getUVarValue :: UVar -> EnumerateM symbol (UVarValue symbol)
 getUVarValue uv = do
     uv' <- getUVarRepresentative uv
