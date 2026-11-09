@@ -1,3 +1,202 @@
+# R173: complete cached tables at actual shared-worklist endpoints
+
+Updated: 2026-11-09 01:46 CET. Full goal ACTIVE. Formalize pushes are authorized.
+Preserve unrelated .hypha/. Proof HEAD before the documentation commit:
+0c7135364d06fa80dc8519d5648a1874e9e20cc0. Upstream main 9f5f77783b9f936a1edf4225373cbad9dc6a9ed5 is integrated.
+The documentation/Audit commit follows. Read the runtime publication report
+or Git for its final HEAD and remote verification. All R172 document bytes
+follow this prefix unchanged. No marked draft or old proof was removed.
+
+## Strongest new statement
+
+SourceCurrentConjunctionSharedWorklistTerminalMaterialization.explore_total
+derives a FINITE actual shared-queue execution from the original query,
+original tuple budget, and physical state with empty private storage. For
+fixed native observation allowances p/h, it returns an exact shared fault
+with the full reached state, or a drained state whose complete table can be
+read by pure cached lookups. All allocated requirement cells and row spines
+are done on the drained branch. Table query order remains identical.
+
+The original caller supplies no extra work fuel, future cache completion,
+future heap, closure, success, rank, or frame. Credits derive from allocation
+and actual transitions. Every credit is at most ORIGINAL tuple budget B.
+Cached tails strictly decrease. The finite vector rank from R172 remains.
+The reader performs no projection, equality fold, or additional worker step.
+It changes no physical or private state. Failed execution is not materialized
+and retains its exact private state and unfinished task suffix.
+
+This is a Lean source-model control and storage result. It does not prove
+sufficient native p/h, Boolean soundness, practical machine bounds, complete
+enumeration, or full Haskell/GHC demand and allocation correspondence.
+Selected callers STILL use the R170 DemandWorker with eager requirements.
+Current scheduling Coverage means that unfinished cells stay queued. It is
+not the semantic Covered property from ConjunctionTableSoundness.
+
+## Checked implementation and evidence
+
+Eight new modules and 32 public laws pass Nix/Lake and strict own-source
+checks. Every public theorem has an explicit #check and axiom report under
+its exact namespace. Source hashes match. Allowed axioms are only propext,
+Classical.choice, and Quot.sound. No previous public law was removed.
+
+- SourceCurrentConjunctionRequirementCellsFrame: 3 laws; SHA256 3db67cc407bb6129f9673db60e124a0514b371b139b41393d54ef7b268858eef.
+- SourceCurrentConjunctionRequirementRowsFrame: 9 laws; SHA256 b197a1944451dffe4a4f4e813edbef44a26eb711a0e0e9b3bc893d4d4169c57e.
+- SourceCurrentConjunctionSharedWorklistCoverage: 3 laws; SHA256 7e531f3a302fe1e66018cd94a830ccf512ca2164965e096fde9ef849e4542546.
+- SourceCurrentConjunctionSharedWorklistHandleValidity: 4 laws; SHA256 83d2cc1a00a3cc7b1b5c772e30135e7ecf68cd9614e1084798c91bbc2d9429e6.
+- SourceCurrentConjunctionSharedWorklistMaterialization: 5 laws; SHA256 4042e5ca7dd746f4d28fd9fcf8e0b25834767b921a1a8d6409bfc49df236383d.
+- SourceCurrentConjunctionSharedWorklistRunFrame: 3 laws; SHA256 e5f6a7b9e97ed059d38c7774bc294f1aa1f52b9d5944f7c40721a0b1cd76e9b8.
+- SourceCurrentConjunctionSharedWorklistTableRead: 2 laws; SHA256 ec3af6313e179b599be58f4342f206ffa8a7e026b394a1b53bce39a842be5841.
+- SourceCurrentConjunctionSharedWorklistTerminalMaterialization: 3 laws; SHA256 9260a4ec48b5889ccb01f57edef50ef352d3a049410031fc1e9944ea77d7cedc.
+
+CellsFrame preserves cell length and every present old handle on all force
+outcomes. RowsFrame preserves old requirement lookups and other PRESENT old
+spine lookups; both private heaps can grow. It does not equate a previously
+absent fresh tail lookup. HandleValidity derives all table row handles and
+cached-row requirement handle bounds from actual allocation and transitions.
+
+Coverage proves that every allocated cell is done or scheduled by a queued
+requirements task, and every pending spine is queued as a rows task. Both
+column and pending requirement cells are unfinished. A successful force
+publishes done before task removal. Live row preparation queues its exact
+new requirement handles and tail. Rejection and faults retain the required
+coverage. At pending=[] all allocated records are cached.
+
+RunFrame derives the exact endpoint frame on successful and failed paths.
+It also derives pending=[] from an actual drained return. Materialization
+reads cached cells in stored order and recurses by derived tail credits.
+TableRead reads every valid cached entry and preserves literal query order.
+TerminalMaterialization composes these facts from ORIGINAL initialization.
+Its public theorem has no future-completion or caller-ready-cache premise.
+
+The graph has 5,356 modules. Audit covers the complete
+9-module changed reverse-import closure. Its 4,353 direct imports expose
+88,447 axiom-checked theorems, including private/generated helpers. Full affected
+compatibility passes in 8.89 seconds. The complete previous Audit file is
+an exact suffix of the new file. Only eight imports were prefixed.
+
+Portable reproduction passed from cwd=/tmp for the terminal own-source
+checker and the full compatibility checker. Each derives the repository root
+from its file. The compact packet is:
+lean/restart-evidence/20261109-cached-materialization-compatibility/.
+Each source has its own four-file packet under lean/restart-evidence/.
+No retained temporary tree or build archive is needed for reproduction.
+
+All compiler jobs used ONE serial heavy-management cap: memory.max/high
+4GiB, swap zero, LEAN_NUM_THREADS=1. Root is sole compiler. No job remains
+live. Runtime: /tmp/mcfta-cached-materialization-20261109-0121/.
+Keep the existing user-bus environment with capped. Do not change global
+queue or concurrency. Audit peak was about2368MiB; no archive was retained.
+Readable /tmp is about35MiB; its filesystem has about244GiB free. The Lean
+build cache is inside the repository, outside /tmp. Continue to monitor size.
+
+## Commits and upstream Haskell documentation corrections
+
+Integrated upstream main through merge20067f97b563f40901aaff267c033cc57575f92f.
+The fresh main tip is 9f5f77783b9f936a1edf4225373cbad9dc6a9ed5. This imports PR#202 and PR#203.
+
+- ce4ee6d82 corrects the Haskell comments of getUVarRepresentative and
+  getUVarValue in cfta/src/Data/CFTA/Enumeration.hs. Looking up the
+  representative leaves union-find unchanged. The old comment claimed a
+  state update or path compression. Executable definitions do not change.
+- e019ce41d corrects libraryAvoid documentation in
+  cfta-generator/src/Data/CFTA/Gen/Synthesis.hs and the HooglePlus comment.
+  A size-two application to a REQUIRED query argument is retained: f x stays
+  when x must be used. The blanket claim for Nothing now states this
+  exception. Executable pruning definitions do not change.
+
+These are upstream Haskell DOCUMENTATION corrections, now recorded in
+FINDINGS for the external agent. No new Haskell runtime defect, executable
+repair, or divergence witness is established here. All earlier Haskell
+findings and repairs remain in the exact historical document suffix.
+No Haskell test run was needed for this comment-only upstream merge.
+
+Verified proof commits:
+- 46736fb285f61c4e29eeada4f7629b1873e0cb1d: Prove private handle preservation for shared work.
+- 99b294ec3c1c26695a2625ca0c02171bf80a579e: Read completed requirement rows without forcing.
+- 0c7135364d06fa80dc8519d5648a1874e9e20cc0: Derive complete cached tables from actual shared execution.
+
+Audit, compact full-compatibility evidence, and these lossless handoffs are
+in the following documentation commit. Git gives its final hash.
+
+## Immediate proof targets
+
+The largest immediate gap is semantic soundness and selected caller adoption.
+Structural scheduling coverage and readable caches do not prove that rows
+cover the accepted language. Preserve this distinction.
+
+1. Prove deferred class forcing soundness from the actual finite pull graph.
+   RequirementPullExecution.run_graph retains real singleton projection reads
+   and first-Empty termination. RowsWorkerActual.projections_graph and
+   CompletionReads.projection_included connect the reads to accepted subterms.
+   RequirementsSoundness.projections_common/class_witness give the common
+   proper subterm. For an accepted witness, exclude early Empty by its empty
+   language. Do not fabricate an eager complete projection graph for a
+   general early-Empty run. Columns can reuse EmptinessRows.columns_accept
+   and Requirements.canonical_accepts.
+2. Preserve semantic provenance through actual private allocation/publication.
+   Each row spine must cover its original sampled raw tuples. Each class or
+   column handle must retain its smaller-witness obligation through the real
+   cursor and done value. TuplePullCoverage.sample_fit supplies initial raw
+   coverage. Equality.fold_heap_correct supplies the actual combined readback.
+   RowsSoundness.tuple_witness is a guide; its eager graph cannot replace the
+   new actual interleaving. Also preserve stored forest/result closedness.
+3. Recover ConjunctionTableSoundness.StoredDomain and semantic Covered at pure
+   materialization. Then reuse TableSoundness.answer_sound and the pure
+   grow_complete/table.length+1 argument. WorklistSoundness.key_faithful is
+   already available. Do not replay the old eager execution for its effects.
+4. Lift physical effects and residency. First derive strong descriptor/row
+   value preservation: allocateCells_values, descriptors_values, nextRow_values.
+   RowsEffects currently preserves only weak pending-job Inputs; it cannot
+   alone feed CellsValues.force_values. Combine Ready, queued-node residency,
+   CellsValues.Invariant, and RowsEffects.SpineInputs for actual step/run
+   preservation. Existing sample_effects/sample_probes, force_values, and
+   nextRow_effects are the exact lower producers, including faults.
+5. Lift ordered read receipts. PullExecution already retains successful
+   singleton prefixes and the exact failed singleton. Successful sampler and
+   projection memo producers exist; failed sampling/projection tapes still
+   need the actual Worker.forest/native nodeEdges bridge. Repeated demands
+   remain repeated. Equality allocation, columns, and cached hits add no read.
+   Old eager TuplesReads cannot witness the new interleaving.
+6. Add the shared decision/memo boundary: open returns false without reads;
+   closed uses actual explore, derived pure table, grow, and answer. Cache hits
+   retain state; failed misses retain the old memo and exact shared fault.
+   Then port required effects/read/language/numerical/guard/arity/annotation
+   contracts before switching BOTH checked callers. AllocatedConjunctionWorker
+   still literally selects DemandWorker.call. Keep shared private failure
+   snapshots; do not coerce them to an eager diagnostic fault.
+
+The independent read-only premise audit found no future supplier in
+explore_total. Native p/h adequacy and semantic row coverage remain explicit
+limitations. All delegated R173 source edits are frozen and checked.
+
+## Remaining full objective
+
+Keep R164's verified original-input completion and R171's finite driver on
+that SAME worker return, caller, and final memos. The finite driver is still
+at chosen recursive depth under explicit room/capacity assumptions. It does
+not derive sufficient depth from original source syntax.
+
+Derive one original-input/request bound for optimized workers and COMPLETE
+enumeration across all siblings, generated/rejected/failing paths, returned
+states, and subsequent work. Preserve exact accepted terms per SOURCE size,
+node counts, counting, enumeration order, and BOTH signed rank/unrank inverse
+laws through actual sparse execution. Preserve AllSized, fallback, failures,
+productive infinite enumeration, wrappers, lookup, Curried, Specftacular,
+lazy table/map/set/cache/hash behavior, Word/Int, and allocation correspondence.
+No U-only, initial-only, success-only, supplied future trace/fuel/closure/key
+carrier, unselected worker, or supplied completion oracle closes this goal.
+
+The separate depth gap still needs original Type-site and Program occurrence
+identity through generated intersections and warm winners. Original Mu bodies
+are Top; generalized original non-Top guards occur only on outer rows. Do not
+use arbitrary guarded-Mu fixtures as original-source divergence witnesses.
+Known empty native Mu/Union buckets have already been documented. Parent
+cells and waiting constraints are separate carriers. No new verified source
+starvation counterexample was found. Do not invent a size parameter on the
+size-free fully/until API. All previous boundaries and evidence follow.
+
+---
+
 # R172: finite actual shared worklist execution
 
 Updated: 2026-11-09 01:17 CET. Full goal ACTIVE. Pushes to formalize remain authorized.
