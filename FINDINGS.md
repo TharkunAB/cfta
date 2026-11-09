@@ -1,3 +1,195 @@
+# R187: checked shared resources and versioned caller bodies
+
+Verified at 2026-11-09 08:34 CET. Base R186 is `38ff6e51b75ece20387da4d9ff7b46b76c73be63`.
+Six new modules add 26 public laws. All strict own checks pass.
+The complete affected Audit and all seven portable source packets pass.
+The goal remains ACTIVE. Parent and Incoming still select the old Demand path.
+The new versioned scan and enabled-check bodies call the shared worker.
+They are ready for the next integration step. They are not an adoption claim.
+No Haskell source change, new Haskell bug or Haskell fix is included.
+Preserve unrelated `.hypha/`, every older proof and all marked drafts.
+The complete published R186 document follows this section unchanged.
+
+## Strongest new statement
+
+The original checked caller Context, a current checked Fits profile and
+query availability derive an actual checked shared conjunction success at
+explicit projection and reader ceilings. That SAME base call supplies its
+ordered CallReads receipt, full Post, Boolean answer soundness, query
+residency, unfolding-cache extension and returned checked Fits profile.
+All larger sufficient ceilings return the identical answer, checked state,
+fourth memo and complete private WorkState snapshot.
+
+A caller can also supply an already observed success at its own p/h.
+The theorem derives that success's receipt at those original p/h. It uses
+numeric completion and result uniqueness only to identify the four actual
+returned components. It never transports the ordered receipt to a different
+base call. The native domain profile stays exact.
+
+The default laws derive the current guard alphabet internally. They add no
+annotation, causal-guard or arity premise to Context + Fits + Available.
+Fixed-alphabet variants need only a current annotation-heap membership fact.
+They do not request future heap membership, a completed run, a closure proof,
+sufficient observation fuel, a materialized row list or a final Fits oracle.
+The forecast and both observation ceilings increase with the tuple budget
+and scalar input bound at the SAME alphabet. This is numeric monotonicity.
+It does not assert that changing the algorithmic budget keeps the answer.
+Alphabet membership inclusion alone is not a valid numeric comparison:
+shapeThrough sums literal words and counts duplicate alphabet occurrences.
+
+The shared numeric core still bounds its private dimensions from original
+call data. These are mathematical resource bounds. They do not establish
+native capacity, byte size of every cache, machine-word fit or runtime.
+
+## Actual versioned callers
+
+SourceCurrentAllocatedSharedScanWorker copies the actual gate and seeded
+query order. Its decision invokes AllocatedSharedConjunctionWorker.call.
+A successful decision exposes the SAME callee and an existential literal
+success snapshot. A failed decision stores paths, the exact shared fault
+and the complete failure snapshot. Its receipt recovers that exact call
+and proves that the incoming fourth memo was retained.
+SourceCurrentAllocatedSharedRecordScanWorker retains literal source records
+and duplicate occurrences. Its recursive scan_mapPaths theorem projects
+every outcome to the new shared path scan. It preserves selected failures.
+
+SourcePruningEnumerationSharedEnabledEmpty.check runs the ACTUAL descendant
+memo first at the unchanged tuple budget of 10000. A false gate returns an
+explicit skipped outcome with the original checked state and fourth memo.
+A true gate retains the complete four-field shared success or failure.
+Both branches keep the ACTUAL updated query memo. Inversion laws recover
+the real gate result. Only a performed branch recovers a conjunction call.
+No skipped branch fabricates a private call snapshot or a CallReads receipt.
+
+The old ScanWorker, RecordScanWorker, LocalWorker, ParentWorker, EnabledEmpty
+and IncomingNode sources and their Demand receipts remain byte exact.
+Do not rewrite their old theorem claims as claims about a shared execution.
+Lazy allocation can produce different physical endpoints from eager Demand.
+Shared failures have no truthful coercion into the older Rows worker fault.
+
+## Verified source and commit map
+
+- `SourceCurrentAllocatedSharedConjunctionWorkerResources`: 4 public laws; 191 lines.
+  SHA256 `d4abb4be8f7547752bcaa0630c72eeab396e10f85fed861369008eccf4616f51`.
+  Commit `fdf33deaf6a6c1d0e2374893baffbf7108b8ce86`.
+  Packet `lean/restart-evidence/20261109-allocated-shared-conjunction-worker-resources`.
+- `SourceCurrentAllocatedSharedRecordScanWorker`: 4 public laws; 99 lines.
+  SHA256 `763b51b15204366aa8b447d93b41a09d572c3f2efa847663571e8941116029f0`.
+  Commit `bed566a8c40779297175f3c52a28d39b4068bc2f`.
+  Packet `lean/restart-evidence/20261109-allocated-shared-record-scan-worker`.
+- `SourceCurrentAllocatedSharedScanWorker`: 5 public laws; 150 lines.
+  SHA256 `72fa9e4e35c272bcd16d2a55dd0079badb79652845c3a2558337f5538834904f`.
+  Commit `96e8ee1c8f1d75887d4bb40b54dac362139677b8`.
+  Packet `lean/restart-evidence/20261109-allocated-shared-scan-worker`.
+- `SourcePruningEnumerationSharedEnabledEmpty`: 4 public laws; 89 lines.
+  SHA256 `cfbd1c7f1b9b5eb6e20702982b972484a16c62e9e4b77bde7e2c3f591afb12fa`.
+  Commit `03381a98039ce95cdc8c7d0b762c3259691f624a`.
+  Packet `lean/restart-evidence/20261109-pruning-enumeration-shared-enabled-empty`.
+- `SourceCurrentConjunctionSharedFixedAlphabetNumeric`: 4 public laws; 269 lines.
+  SHA256 `d971894242108429026dd64b59108775781323184a24f6921c1ebbe16bff9e45`.
+  Commit `e95da9801d371763777cb3fbb3ab1db887ee6fd7`.
+  Packet `lean/restart-evidence/20261109-shared-fixed-alphabet-numeric`.
+- `SourceCurrentConjunctionSharedNumericMonotone`: 5 public laws; 74 lines.
+  SHA256 `4b91c6296704bd3e2c629881362f356846ad449c7c47da86f5435f5eb557163c`.
+  Commit `e550cb868ffa6396f94490671f2c138dd95c9b9b`.
+  Packet `lean/restart-evidence/20261109-shared-numeric-monotone`.
+
+The resources file extends namespace
+MicroCFTA.SourceCurrentAllocatedSharedConjunctionWorkerActual.
+Its four new names are finite_resources_with_alphabet,
+raw_done_resources_with_alphabet, finite_resources and raw_done_resources.
+The exact public namespaces are recorded in each theorems.json.
+The commit map is matched by source filename. It does not zip different
+module orders. The R186 correction of four R185 commit associations remains
+in the unchanged historical document below.
+
+## Verification and preservation
+
+- The six own-source checks reject warnings and issue explicit #check and
+  axiom reports for all 26 public laws. They allow only propext,
+  Classical.choice and Quot.sound. All six source SHA256 values match.
+- The live module graph has 5452 modules. The affected closure has seven
+  modules. Audit imports 4449 modules and reports 89297 checked theorem
+  axiom dependencies. Its complete affected build passes in 13.48 seconds.
+- The serial job uses one Lean thread, memory.max=memory.high=4294967296
+  and memory.swap.max=0. Full Audit reports a peak of 4096M and exit zero.
+  The cap was not raised. The seven-packet portable job reports 190M.
+- All seven packet checkers run from /tmp using their repository paths.
+  The compatibility checker derives its root from its own file location.
+  Each source hash is checked before and after the complete frontier build.
+- Only six new proof sources and an additive Audit import prefix change the
+  proof tree. The ENTIRE base Audit bytes follow that prefix. Every older
+  proof source and source packet remains exact. Each root document retains
+  its ENTIRE published R186 bytes after this new prefix.
+- Repairs were local Lean proof repairs: a local notation collided with a
+  proof binder; a checked heap goal needed physical_advance; case analysis
+  had already rewritten two descendant-memo receipt goals. Final strict
+  checks pass. No Haskell behavior or Haskell fix is involved.
+
+## Next executable integration
+
+1. Add the shared local worker using SharedRecordScanWorker.scan. Preserve
+   the actual RequiredExecution and class-pass stages and all failure state.
+   Port the existing Context/Fits/availability contracts to its actual calls.
+2. Add the shared parent path. The current exact site is
+   SourceCurrentAllocatedParentWorker.reduceChildren, which calls
+   SourceCurrentAllocatedLocalWorker.reduce. Preserve raw guard rejection,
+   field loading, missing-field errors, constructors and both warm memos.
+3. Integrate the shared enabled check at the actual Incoming selector:
+   SourcePruningEnumerationIncomingNode.run currently calls
+   SourcePruningEnumerationEnabledEmpty.check at line 74. Match skipped and
+   performed outcomes explicitly. Retain real failure snapshots and paths.
+4. Route the actual selected Parent/Incoming target through these bodies.
+   Merely defining an unused wrapper or a compatible result is not adoption.
+   Preserve old Demand namespaces and proof packets as legacy targets.
+5. Port the fixed-alphabet incoming resource callers. The existing
+   SourcePruningEnumerationIncomingQueryResources supplies queryAlphabet A P.
+   Apply the new SAME-alphabet budget/resource monotonicity. Derive current
+   guard membership from the caller. Do not substitute membership inclusion
+   for a numeric inequality and do not add future heap or closure premises.
+6. Derive the ordered receipts at each actual base call. Use result uniqueness
+   only for result components. Prove the full postcondition on the selected
+   path before claiming original-input outer completion for that path.
+
+## Full unfinished objective
+
+Complete original-input enumeration remains open. The target includes ALL
+siblings, generated, rejected, failed, returned and subsequent states. It
+includes exact accepted terms per source Program leaf-size, literal counts
+and size order, both signed rank/unrank inverses on actual sparse classes,
+AllSized, fallback and failure behavior, productive infinite behavior and
+source type-site/program-occurrence progress through generated intersections.
+It also includes complete hash/cache/lazy table and native Word/Int/allocation
+behavior, wrappers, lookup/Curried and Specftacular, and full Haskell
+correspondence. Source Program leaf-size, expanded annotation nodes and
+recursive observation fuel are different quantities.
+Do not supply future trace, sufficient fuel, closure, carrier or completion
+oracles as original-input proof assumptions. Do not replace the full target
+with U-only, initial-only, success-only, unselected or compatibility results.
+The original accepted-input completion proofs and older constructor/equality
+targets remain preserved. They do not prove complete original enumeration.
+Do not mark the goal complete from build success or theorem counts.
+
+## Runtime and handoff
+
+Runtime: /tmp/mcfta-shared-caller-20261109-0818/.
+It holds small scripts, exact manifests and compact failed-attempt logs.
+No archive or proof-tree copy was created. Readable allocated /tmp is
+40.13 MiB with 241.63 GiB free at 08:30 CET. Permission-denied entries are
+excluded from the readable allocation figure. Keep this figure small.
+Important runtime files: targets.json, verified-modules.json,
+proof-commits.json, compatibility-frontier.json, compatibility-check.json,
+portable-check.json, final-prefix.md, document-history.json, peaks,
+publication.json, turn-state.json and tmp-size.json. The last publication
+files are written after the final docs/Audit commit and remote verification.
+No compiler job remains active. Root remains the sole compiler and publisher.
+All three bounded source-writing tasks are frozen and idle.
+Use the same existing 4 GiB cap and one thread. Do not raise queue concurrency.
+User authorization to push formalize persists. Fetch main and formalize
+before the next round. Preserve .hypha and all older proof work.
+Record every future Haskell fix in root FINDINGS for the external agent.
+No Haskell change or fix was needed in R187. The full goal stays ACTIVE.
+
 # R186 caller-cutover addendum
 
 The complete numeric proof checkpoint is `0b884c8959cd8e6e315a510e3b702686e5f42a75`.
