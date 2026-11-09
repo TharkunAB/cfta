@@ -5,6 +5,7 @@
 module Data.CFTA.Gen.SynthesisSpec (spec) where
 
 import Control.Exception (evaluate)
+import Control.Monad (forM_)
 import Data.List (find)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (catMaybes, fromMaybe, mapMaybe)
@@ -12,6 +13,7 @@ import qualified Data.Set as Set
 import qualified Data.Text as Text
 import Test.Hspec (Spec, describe, it, shouldBe, shouldSatisfy)
 
+import qualified Data.CFTA.Gen.Equality as ECTAGen
 import Data.CFTA.Gen.Synthesis
 import Data.CFTA.Gen.Synthesis.HegelBenchmarks
 import Data.CFTA.Gen.Synthesis.HooglePlus
@@ -20,6 +22,34 @@ import Data.CFTA.Gen.Synthesis.Liquid (LiquidQuery (..), baseOf, componentRoles,
 spec :: Spec
 spec = describe "Data.CFTA.Gen.Synthesis" $ do
     saturatedSpec
+    it "keeps components and query arguments named filter when decoding programs" $ do
+        let name = Text.pack "filter"
+            typ = TCons (Text.pack "app") [TCons (Text.pack "A") [], TCons (Text.pack "B") []]
+            expected = [Var name]
+            encodings = [FirstOrder, Curried AnyHead Map.empty, Curried OnlyDefault Map.empty]
+        forM_ encodings $ \encoding -> do
+            let fromLibrary = Library [(name, typ, [name])] [] [] encoding
+                fromArgument = (library [] [] []){libraryEncoding = encoding}
+                cases = [(fromLibrary, Query [] typ), (fromArgument, Query [(name, typ)] typ)]
+            forM_ cases $ \(lib, query) -> do
+                solutionsOfSize lib query 1 `shouldBe` expected
+                let generated = programsOfSize lib query 1
+                ECTAGen.cardinality generated `shouldBe` Right 1
+                ECTAGen.values generated `shouldBe` Right expected
+    it "decodes applications in every type encoding" $ do
+        let argumentType = TCons (Text.pack "A") []
+            resultType = TCons (Text.pack "B") []
+            function = Text.pack "f"
+            argument = Text.pack "x"
+            query = Query [(argument, argumentType)] resultType
+            expected = [App (Var function) (Var argument)]
+            encodings = [FirstOrder, Curried AnyHead Map.empty, Curried OnlyDefault Map.empty]
+        forM_ encodings $ \encoding -> do
+            let lib = Library [(function, TFun argumentType resultType, [function])] [] [] encoding
+                generated = programsOfSize lib query 2
+            solutionsOfSize lib query 2 `shouldBe` expected
+            ECTAGen.cardinality generated `shouldBe` Right 1
+            ECTAGen.values generated `shouldBe` Right expected
     it "parses the Hoogle+ data, and the printers give each type and program back" $ do
         let benchmarks = hooglePlusBenchmarks <> stackOverflowBenchmarks
             types =
