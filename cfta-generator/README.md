@@ -429,7 +429,12 @@ prefix.
 weight of a term is the product of the weights of its nodes.
 `nextTokenWeights` gives the total weight of the completions after each next
 token, `tokenProbability` the probability of a token after the prefix, and
-`drawCompletion` draws a completion in proportion to its weight. This is the
+`drawCompletion` draws a completion in proportion to its weight.
+`weightedTotal`, `unrankWeighted`, and `rankWeighted` give each completion an
+interval of integers with a length in proportion to its weight, so one
+uniform integer below the total is one draw. `Data.CFTA.Sized.Prefix.Parents`
+labels each symbol with the token and the position of its parent, so a weight
+can depend on the parent of a node. The weight of `nextTokenWeights` is the
 mass that grammar-aligned decoding needs (Park et al., *Grammar-Aligned
 Decoding*, NeurIPS 2024), exact for a weight that is a product over the
 nodes. With the weight one for each symbol, the weights are the counts.

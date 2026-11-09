@@ -200,10 +200,23 @@ tree automata of `cfta`, with QuickCheck integration.
   `Rational` weight, and the weight of a term is the product over its nodes:
   `completionWeight`, `nextTokenWeights`, and `tokenProbability` give the
   exact masses and probabilities, and `drawCompletion` draws a completion in
-  proportion to its weight.
+  proportion to its weight. `weightedTotal`, `unrankWeighted`, and
+  `rankWeighted` give each completion an interval of integers, in the order
+  of `completionTerms`. The length of the interval is the weight of the
+  completion times `d ^ b`: `d` is the least common denominator of the
+  weights of `completionSymbols`, and `b` is the size bound. A uniform
+  integer below the total, decoded, is one draw in proportion to the weight.
+  With the weight one for each symbol, the intervals are the ranks.
 - `Data.CFTA.Sized.Prefix.QuickCheck`: `sampleCompletion` draws a rank of the
   completions uniformly and unranks it, and `sampleWeighted` draws a
   completion in proportion to its weight.
+- `Data.CFTA.Sized.Prefix.Parents`: weights that read the parent of a node.
+  `withParents` labels each symbol of an automaton without constraints with
+  the token of its node and with the token and the position of its parent.
+  Each term has one labelling, so the completions of the labelled automaton
+  are those of the automaton, and a weight of a labelled symbol is a weight
+  of a token in a context. `labelParents`, `unlabelParents`, and
+  `labelPrefix` move terms and prefixes between the two automata.
 - Terms are `Term symbol` from `Data.CFTA.Term` of `cfta`:
   `fromAutomaton`, `fromAutomatonUpToDepth`, `termAt`, `rankOf`, `ranksOf`,
   `rankOfTerm`, `surface`, and the refinement witnesses take and give `Term`
