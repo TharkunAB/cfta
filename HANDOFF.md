@@ -1,3 +1,47 @@
+# R186 caller-cutover addendum
+
+The complete numeric proof checkpoint is `0b884c8959cd8e6e315a510e3b702686e5f42a75`.
+All seven sources, 29 public laws, full Audit and eight portable packets pass.
+This addendum changes documentation only. The goal remains ACTIVE.
+No Haskell change, new Haskell bug or Haskell fix is included.
+
+A source audit identified the exact next prerequisites:
+
+- SourcePruningEnumerationIncomingQueryResources:137 supplies a query alphabet A P. Expose a fixed-A
+  numeric exploration/decision/call theorem with the CURRENT annotation
+  Heap(member A) as input. Derive that annotation from the existing caller.
+  Keep the public initial-heap-alphabet endpoint as its existing special case.
+- Prove resource/budget monotonicity for forecast and projection/read ceilings
+  at that fixed A. Do not infer alphabet numeric monotonicity from membership
+  inclusion. shapeThrough is a SUM over words and counts duplicate entries.
+- Add shared counterparts of finite_resources/raw_done_resources. Preserve
+  the existing Context + checked Fits + query Available premise strength.
+  Use AllocatedSharedConjunctionOutcome.verified for ONE actual CallReads/full
+  Post. WorkerActual.verified has extra annotation/causal/arity premises and
+  must not become a stronger requirement for the existing resource callers.
+- Combine the fixed-A numeric call with the SAME adapter.call_lift and actual
+  caller outcome. For any observed success, use shared call_done_unique
+  against the numeric canonical success. Retain all four components. Do not
+  compare its returned physical heap with an eager Demand execution.
+- Retain native table/domain caches and the original domain resource bound.
+  Lift the new value-heap scalar to the checked resource Profile.
+- Old WorkerResources and CallerNumeric state Demand.Call, Demand.CallReads
+  and old Demand ceilings. Those statements cannot remain claims about a
+  switched executable definition. Keep the old executable namespaces and
+  packets as legacy. Use versioned shared scan/enabled modules and route the
+  actual Parent/Incoming selectors to them before claiming adoption.
+- Both consumers continue with answer, checked state and saved memo. A success
+  snapshot can remain existential in the SAME-call receipt. A failure must
+  retain its exact shared fault and reached WorkState in the observable
+  carrier. Do not map explore/materialization/grow faults to old row faults.
+- The selected scan fault must retain paths, SharedWorker.Fault and the exact
+  reached snapshot. Enumeration must distinguish a performed call from the
+  real skipped guard branch, or use a lossless carrier with a separate skip
+  proof. Do not invent a worker CallReads receipt for a skipped branch.
+
+The compact audit is stored in the runtime next to next-cutover-target.md.
+The complete checked R186 handoff and its full historical suffix follow.
+
 # R186: original-data bounds for the complete shared call
 
 R185 is published at `74a1c887603777525d04fe20646b906363f72607`.
