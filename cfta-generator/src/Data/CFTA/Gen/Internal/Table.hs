@@ -349,7 +349,7 @@ prefixedTable plainRows = table
         -- each child.
         branchesAt state position
             | position >= size =
-                [ (transition, prefixes, zip (FTA.transitionChildren transition) (repeat size))
+                [ (transition, prefixes, map (,size) (FTA.transitionChildren transition))
                 | (transition, prefixes) <- prefixesOf state
                 ]
             | otherwise =
