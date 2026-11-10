@@ -158,6 +158,10 @@ Wilf, and Feat (ranking).
   (QuickCheck's word). Not the real-valued weight of a Boltzmann sampler.
   The weight of a term is the product of the weights of the symbols of its
   nodes (`withWeights`).
+- **Ticket**: one unit of a weight (the word of lottery scheduling,
+  Waldspurger and Weihl). An alternative with the weight *w* holds *w*
+  consecutive tickets, and a weighted selection draws one ticket uniformly.
+  A **ticket table** gives the alternative that holds each ticket.
 - **Checked rank**: a rank of a term with whether the ranking checked every
   symbol of the term.
 - **Occurrence**: the identifier of one recursion probe.

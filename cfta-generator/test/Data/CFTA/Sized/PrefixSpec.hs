@@ -24,6 +24,8 @@ import Data.CFTA.Gen.Typing (TypingState)
 import Data.CFTA.Gen.UntypedExpressionLanguage (expressionAutomaton)
 import Data.CFTA.Generic (Constructor (..))
 import Data.CFTA.Index (Cardinality (..), ClassRank (..), Rank (..), Size (..))
+import qualified Data.CFTA.Ranked as Ranked
+import Data.CFTA.Ranked.Internal.Sampler (Exact (..))
 import Data.CFTA.Refinement.Verdict (Entailment (Entailment), Verdict (..))
 import Data.CFTA.Sized (SizedError (..), countOfSize, sized, sizedStates, termsOfSize, unrankOfSize)
 import Data.CFTA.Sized.Prefix
@@ -104,6 +106,7 @@ spec = describe "Data.CFTA.Sized.Prefix" $ do
         (completionWeight one, tokenProbability one ("zero", 0), isJust $ drawCompletion proportional one)
             `shouldBe` (0, Nothing, False)
         (weightedTotal one, rankWeighted one (Term.Node "one" []), unrankWeighted one 0) `shouldBe` (0, Just (0, 0), Nothing)
+        isJust (rankedCompletions completions) `shouldBe` False
     it "rejects a negative weight" $
         isJust (withWeights (\symbol -> if symbol == "one" then -1 else 1) $ start 3 expressionAutomaton) `shouldBe` False
     it "has no completion below size one" $ do
@@ -112,6 +115,7 @@ spec = describe "Data.CFTA.Sized.Prefix" $ do
         map fst (nextTokens completions) `shouldBe` []
         isComplete completions `shouldBe` False
         isJust (sampleCompletion completions) `shouldBe` False
+        isJust (rankedCompletions completions) `shouldBe` False
 
 -- | The checks of the completions of an automaton up to 'sizeBound'.
 fixture :: (Ord state, Ord symbol, Show symbol) => String -> FTA.FTA state symbol Constraint -> Spec
@@ -211,20 +215,23 @@ fixtureUpTo bound name graph = describe name $ do
                                , bruteWeight prefix
                                )
         it "draws each completion with its weight over the total weight" $
-            forM_ prefixes $ \prefix -> forM_ [const 1, weight] $ \each -> do
+            forM_ prefixes $ \prefix -> forM_ [const 1, weight, withoutFirst] $ \each -> do
                 let completions = weightedBy each $ after prefix
                     total = sum [termWeight each term | term <- accepted, prefix `isPrefixOf` preorder term]
-                (prefix, fmap distribution $ drawCompletion proportional completions)
-                    `shouldBe` ( prefix
-                               , Just $
-                                    Map.fromListWith
-                                        (+)
-                                        [ (term, termWeight each term / total)
-                                        | term <- accepted
-                                        , prefix `isPrefixOf` preorder term
-                                        , termWeight each term > 0
-                                        ]
-                               )
+                    expected
+                        | total <= 0 = Nothing
+                        | otherwise =
+                            Just $
+                                Map.fromListWith
+                                    (+)
+                                    [ (term, termWeight each term / total)
+                                    | term <- accepted
+                                    , prefix `isPrefixOf` preorder term
+                                    , termWeight each term > 0
+                                    ]
+                    outcomes sampler = Map.fromListWith (+) [(term, mass) | (mass, term) <- runExact sampler]
+                (prefix, fmap distribution $ drawCompletion proportional completions) `shouldBe` (prefix, expected)
+                (prefix, outcomes <$> lowerCompletions completions) `shouldBe` (prefix, expected)
         it "gives the completions with the largest weights, the largest first, each once with its weight" $
             forM_ prefixes $ \prefix -> forM_ [1, 3, 1000] $ \count -> do
                 let best = bestCompletions count $ weightedBy weight $ after prefix
@@ -277,6 +284,16 @@ fixtureUpTo bound name graph = describe name $ do
                     )
                     `shouldBe` (prefix, [Just term | (term, width) <- zip listed widths, width > 0, _ <- [(), ()]])
                 (prefix, map (unrankWeighted completions) [-1, total]) `shouldBe` (prefix, [Nothing, Nothing])
+        it "samples the ranked language of the completions, each with its rank and with its weight over the total weight" $
+            forM_ prefixes $ \prefix -> forM_ [const 1, double] $ \each -> do
+                let completions = weightedBy each $ after prefix
+                    listed = completionTerms completions
+                    total = sum $ map (termWeight each) listed
+                    samples ranked = Map.fromListWith (+) [(sample, mass) | (mass, sample) <- runExact $ Ranked.lowerWithRank ranked]
+                (prefix, samples <$> rankedCompletions completions)
+                    `shouldBe` ( prefix
+                               , Just $ Map.fromList [(Ranked.RankedValue rank term, termWeight each term / total) | (rank, term) <- zip [0 ..] listed]
+                               )
     -- An automaton with constraints has no labelled automaton.
     it "labels each node with its ancestors and its left sibling, one labelling for each term" $
         forM_ reaches $ \reach -> forM_ (withParents reach rootContext graph) $ \labelled -> do
@@ -323,6 +340,10 @@ fixtureUpTo bound name graph = describe name $ do
     symbols = nubOrd $ map fst alphabet
     weight symbol = maybe 0 (\place -> fromIntegral (place + 1) / 3) $ lookup symbol $ zip symbols [0 :: Int ..]
     bruteWeight prefix = sum [termWeight weight term | term <- accepted, prefix `isPrefixOf` preorder term]
+    -- The weight zero for the first symbol: the terms with that symbol have the weight zero.
+    withoutFirst symbol = if [symbol] == take 1 symbols then 0 else weight symbol
+    -- The weight two for the first symbol and one for the others: integer weights, so the tickets are few.
+    double symbol = if [symbol] == take 1 symbols then 2 else 1
     -- Each token of the automaton, and each symbol with one more child.
     alphabet =
         nubOrd $
