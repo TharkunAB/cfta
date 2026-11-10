@@ -467,8 +467,11 @@ probability of a term is the sum, over the components, of the share times
 the probability of the term in the component. `Mixture.train` fits the
 components to a corpus that the caller splits into groups, with expectation
 maximization (Dempster, Laird, and Rubin, 1977). The components have one
-count table. The next-token probabilities, the samples, and the
-log-probabilities are exact for the mixture.
+count table. The next-token probabilities, the samples, the most probable
+completions, and the log-probabilities are exact for the mixture. The most
+probable term of a sum is not always the most probable term of a component,
+so `Mixture.bestTerms` searches the best terms of the components with the
+threshold algorithm of Fagin, Lotem, and Naor (2003).
 
 The [query-generation example](examples/explainfuzz/README.md) learns weights
 from query ASTs, restricts the language with structural requirements, and

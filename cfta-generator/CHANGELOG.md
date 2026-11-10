@@ -229,7 +229,8 @@ tree automata of `cfta`, with QuickCheck integration.
   `bestCompletions` gives the completions with the largest weights. Without
   constraints, it reads them from the count table without a list of the
   completions. `completionWeightBy` gives the total weight for a weight of
-  each symbol in any number type.
+  each symbol in any number type, and `weightOfTerm` gives the weight of one
+  term.
 - `Data.CFTA.Sized.Prefix.QuickCheck`: `sampleCompletion` draws a rank of the
   completions uniformly and unranks it, and `sampleWeighted` is the
   QuickCheck generator of `lowerCompletions`. Without constraints, it is the
@@ -271,9 +272,11 @@ tree automata of `cfta`, with QuickCheck integration.
   maximization (`distillMixture` of `Data.CFTA.Sized.Prefix.Train`). For a
   prefix of tokens, `nextTokenProbabilities` gives the probability of each
   next token, `componentProbabilities` gives the probability of each
-  component, and `sampleTerm` and `lowerTerm` draw a completion in proportion
-  to its probability. `termLogProbability` gives the log-probability of a
-  term. The components have one count table.
+  component, `sampleTerm` and `lowerTerm` draw a completion in proportion to
+  its probability, and `bestTerms` gives the completions with the largest
+  probabilities. `bestTerms` finds them with the threshold algorithm of
+  Fagin, Lotem, and Naor over the components. `termLogProbability` gives the
+  log-probability of a term. The components have one count table.
 - Terms are `Term symbol` from `Data.CFTA.Term` of `cfta`:
   `fromAutomaton`, `fromAutomatonUpToDepth`, `termAt`, `rankOf`, `ranksOf`,
   `rankOfTerm`, `surface`, and the refinement witnesses take and give `Term`
