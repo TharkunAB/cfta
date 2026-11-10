@@ -100,8 +100,13 @@ interval of integers whose length is in proportion to its weight. The
 intervals follow the order of 'completionTerms'. So a uniform integer below the
 total draws a completion in proportion to its weight, and the draw is one
 integer. With the weight one for each symbol, the interval of a completion
-holds only its rank. 'rankedCompletions' gives the completions to
-"Data.CFTA.Ranked", with these integers as its sampling tickets.
+holds only its rank.
+
+'rankedCompletions' gives the completions to "Data.CFTA.Ranked": a ranked
+language with the ranks of 'unrankCompletion', whose samples are in
+proportion to the weights. Without constraints, its sampler is a walk of the
+count table with the weights. Otherwise these integers are its sampling
+tickets.
 
 A 'Completions' value does not change, so a decoder that keeps the values of
 its prefix can go back one token with the value before it. When 'nextTokens'
@@ -169,8 +174,10 @@ import Data.CFTA.Index (Cardinality (..), ClassRank (..), Rank (..), Size (..), 
 import Data.CFTA.Interned (Node (Node), edgeChildren, fromFTA, nodeEdges, nodeIdentity, setChildren)
 import Data.CFTA.Path (ChildIndex (..), Path, getPath, path, unPath)
 import Data.CFTA.Ranked (Ranked, WeightedIndexed (..), fromWeightedIndexedOnDemand)
-import Data.CFTA.Ranked.Internal.Decoder (RankedValue (..))
-import Data.CFTA.Ranked.Internal.Size (SizeIndex, SizedRank (..), countAtSize, sizeClassSelect)
+import Data.CFTA.Ranked.Internal (fromSizeClasses)
+import Data.CFTA.Ranked.Internal.Decoder (RankedValue (..), SizeClass (..))
+import Data.CFTA.Ranked.Internal.Sampler (SampleIndex, boundedMassSampler)
+import Data.CFTA.Ranked.Internal.Size (SizeIndex, SizedRank (..), countAtSize, sizeClassSelect, sizeClasses)
 import Data.CFTA.Refinement.Evaluate (evaluateConstraint)
 import Data.CFTA.Refinement.Verdict (Entailment, Verdict (..), andVerdicts, orVerdicts)
 import Data.CFTA.Sized (Sized, SizedError (..), sized, sizedStates, termsOfSize)
@@ -215,6 +222,8 @@ data Table state symbol = Table
     -- ^ The initial state.
     , tablePrefixed :: [Token symbol] -> (SizeIndex (Term symbol), Term symbol -> Maybe SizedRank)
     -- ^ The index of the terms with a prefix, the first token first, and their positions.
+    , tableSampling :: [Token symbol] -> Size -> (symbol -> Rational) -> (Size -> Rational, SampleIndex (Term symbol))
+    -- ^ The weight of each size and the sampler of the terms with a prefix, the first token first, for a weight of each symbol.
     , tableTokens :: [Token symbol]
     -- ^ The tokens of the transitions that the initial state reaches, in ascending order.
     }
@@ -231,12 +240,14 @@ prefixCompletions (Size bound) automaton
     | any (any (residual . FTA.transitionConstraint)) reached = Left ResidualGuard
     | all (all ((== noConstraint) . FTA.transitionConstraint)) reached
     , Just rows <- Ordinary.countingRows (FTA.mapConstraints (const ()) automaton) =
-        let table =
+        let prefixed = Ordinary.prefixedTable rows (Left initial)
+            table =
                 Table
                     { tableBound = bound
                     , tableRows = rows
                     , tableInitial = Left initial
-                    , tablePrefixed = Ordinary.prefixedTable rows (Left initial)
+                    , tablePrefixed = \prefix -> let (index, position, _) = prefixed prefix in (index, position)
+                    , tableSampling = \prefix -> let (_, _, sampling) = prefixed prefix in sampling
                     , tableTokens =
                         Set.toAscList $ Set.fromList [tokenOf transition | transitions <- Map.elems reached, transition <- transitions]
                     }
@@ -1009,20 +1020,35 @@ rankWeighted completions = case completionsRoute completions of
 
 {- | The completions as a ranked language of "Data.CFTA.Ranked". A rank of the
 language is a rank of 'unrankCompletion', so the weights do not change the
-ranks. A sampling ticket is an integer below 'weightedTotal', and the rank at
-a ticket is the rank of the completion of 'unrankWeighted'. So a sample has a
-probability in proportion to its weight, and 'Data.CFTA.Ranked.lowerWithRank'
-gives the sample with its rank.
+ranks. A sample has a probability in proportion to its weight, and
+'Data.CFTA.Ranked.lowerWithRank' gives the sample with its rank.
+
+Without constraints, a sample is one walk of the term. The sampler selects a
+size in proportion to the total weight of the completions of that size. Then,
+at each node, it selects a transition and the sizes of the children in
+proportion to the weight of the terms that they give. The size of a member of
+the language is its number of nodes.
+
+With constraints, a sampling ticket is an integer below 'weightedTotal', and
+the rank at a ticket is the rank of the completion of 'unrankWeighted'. A
+sample decodes the ticket, ranks the term, and unranks the rank. The language
+has one size class.
 
 'Nothing' when there is no completion, and when a symbol of
 'completionSymbols' has the weight zero: each rank of a ranked language must
-have a ticket.
+have a positive probability.
 -}
 rankedCompletions :: (Eq symbol) => Completions symbol -> Maybe (Ranked (Term symbol))
 rankedCompletions completions
     | any ((<= 0) . completionsWeight completions) $ completionSymbols completions = Nothing
-    | otherwise =
-        either (const Nothing) Just $
+    | otherwise = either (const Nothing) Just $ case completionsRoute completions of
+        Indexed table index _ ->
+            let bound = Size $ tableBound table
+                classes = sizeClasses bound index
+                (mass, sampling) = tableSampling table (completionPrefix completions) bound (completionsWeight completions)
+             in fromSizeClasses classes $
+                    boundedMassSampler [(sizeClass, mass $ classSize sizeClass) | sizeClass <- classes] sampling
+        Listed{} ->
             fromWeightedIndexedOnDemand
                 WeightedIndexed
                     { weightedIndexedCardinality = completionCount completions

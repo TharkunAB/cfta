@@ -433,8 +433,10 @@ token, `tokenProbability` the probability of a token after the prefix, and
 `weightedTotal`, `unrankWeighted`, and `rankWeighted` give each completion an
 interval of integers with a length in proportion to its weight, so one
 uniform integer below the total is one draw. `rankedCompletions` gives the
-completions to `Data.CFTA.Ranked` with these integers as its sampling
-tickets, so `toGenWithRank` gives a weighted sample with its replay rank.
+completions to `Data.CFTA.Ranked`, so `toGenWithRank` gives a weighted
+sample with its replay rank. Without constraints, a sample is one walk of
+the term through the count table. With constraints, these integers are the
+sampling tickets.
 `Data.CFTA.Sized.Prefix.Parents`
 labels each symbol with the token and the position of its parent, so a weight
 can depend on the parent of a node. The weight of `nextTokenWeights` is the

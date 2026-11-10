@@ -62,6 +62,7 @@ module Data.CFTA.Ranked.Internal.Sampler (
     Sampler (..),
     SampleIndex (..),
     atomicSampleIndex,
+    boundedMassSampler,
     boundedSampler,
     choiceMassSampleIndex,
     choiceSampleIndex,
@@ -558,6 +559,18 @@ boundedSampler classes sampling =
         countAlternatives
             [ (countWeight count, (offset, samplerAtSize sampling size))
             | (offset, SizeClass{classSize = size, classCardinality = count}) <- withOffsets classCardinality classes
+            ]
+
+{- | Sample one bounded size class in proportion to its mass, then recover its
+global size-major rank. The counts of the classes still give the rank offsets.
+One class at least must have a positive mass.
+-}
+boundedMassSampler :: [(SizeClass a, Rational)] -> SampleIndex a -> Sampler a
+boundedMassSampler classes sampling =
+    choiceSampler $
+        massAlternatives
+            [ (mass, (offset, samplerAtSize sampling $ classSize sizeClass))
+            | (offset, (sizeClass, mass)) <- withOffsets (classCardinality . fst) classes
             ]
 
 {- | Select one of the compiled alternatives. An alternative is a sampler with
