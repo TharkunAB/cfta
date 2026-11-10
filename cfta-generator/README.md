@@ -446,6 +446,13 @@ mass that grammar-aligned decoding needs (Park et al., *Grammar-Aligned
 Decoding*, NeurIPS 2024), exact for a weight that is a product over the
 nodes. With the weight one for each symbol, the weights are the counts.
 
+`Data.CFTA.Sized.Prefix.Train` fits these weights to a corpus of terms.
+`distillWithReport` returns the final weights, stopping reason, step count,
+and retained and dropped corpus counts. A finite result can stop before
+convergence. `Model.trainWithReport` returns the same report together with
+the contextual model, so callers can inspect the fit and use its normal query
+and sampling functions without constructing context labels themselves.
+
 The [query-generation example](examples/explainfuzz/README.md) learns weights
 from query ASTs, restricts the language with structural requirements, and
 emits seeded SQL samples. It adapts the ExplainFuzz workflow to a restricted
