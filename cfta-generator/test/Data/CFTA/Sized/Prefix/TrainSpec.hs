@@ -10,6 +10,7 @@ import Test.Hspec (Spec, describe, it, shouldBe, shouldSatisfy)
 import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint, equalityConstraint, noConstraint)
 import qualified Data.CFTA.Equality as ECTA
+import Data.CFTA.Ranked.Internal.Sampler (Exact (..))
 import Data.CFTA.Sized.Prefix (
     Completions,
     Token,
@@ -19,6 +20,7 @@ import Data.CFTA.Sized.Prefix (
     prefixCompletions,
     withWeights,
  )
+import qualified Data.CFTA.Sized.Prefix.Mixture as Mixture
 import qualified Data.CFTA.Sized.Prefix.Model as Model
 import Data.CFTA.Sized.Prefix.Parents (Reach (..))
 import Data.CFTA.Sized.Prefix.QuickCheck (sampleWeighted)
@@ -275,6 +277,91 @@ spec = describe "Data.CFTA.Sized.Prefix.Train" $ do
                     let drawn = QCGen.unGen (QC.vectorOf 50 $ fromJust $ Model.sampleTerm model prefix) (QCRandom.mkQCGen 3) 30
                     (reach, prefix, filter (not . isPrefixOf prefix . preorder) drawn) `shouldBe` (reach, prefix, [])
                 (reach, isNothing $ Model.sampleTerm model [("x", 0), ("y", 0)]) `shouldBe` (reach, True)
+
+    describe "Mixture" $ do
+        let reaches = [Reach 0 False, Reach 1 False, Reach 2 True]
+            terms = completionTerms $ completionsOf 5 expressions
+            prefixes = nubOrd $ concatMap (inits . preorder) terms
+            probability mixture = exp . fromJust . Mixture.termLogProbability mixture
+            close left right = abs (left - right) < 1e-7
+            -- The terms whose leaves are all the given variable.
+            only variable = [term | term <- terms, and [symbol == variable | (symbol, 0) <- preorder term]]
+            -- The fit of two components is slow with the largest reach, so the laws of two components use the first two.
+            mixtures = [(reach, fromJust $ Mixture.train reach expressions 5 [only "x", only "y"]) | reach <- take 2 reaches]
+            negated left right = Term.Node "add" [Term.Node "neg" [Term.Node left []], Term.Node "neg" [Term.Node right []]]
+        it "is the model when the corpus has one group" $
+            forM_ reaches $ \reach -> do
+                let mixture = fromJust $ Mixture.train reach expressions 5 [corpus]
+                    model = fromJust $ Model.train reach expressions 5 corpus
+                (reach, Mixture.componentProbabilities mixture []) `shouldBe` (reach, Just [1])
+                forM_ terms $ \term ->
+                    (reach, term, close (probability mixture term) . exp <$> Model.termLogProbability model term)
+                        `shouldBe` (reach, term, Just True)
+                forM_ prefixes $ \prefix -> do
+                    let found = fromJust $ Mixture.nextTokenProbabilities mixture prefix
+                        expected = fromJust $ Model.nextTokenProbabilities model prefix
+                    (reach, prefix, map fst found) `shouldBe` (reach, prefix, map fst expected)
+                    (reach, prefix, and $ zipWith close (map snd found) (map snd expected)) `shouldBe` (reach, prefix, True)
+        it "gives each term within the bound a probability, and the probabilities sum to one" $
+            forM_ mixtures $ \(reach, mixture) -> do
+                (reach, close (sum $ map (probability mixture) terms) 1) `shouldBe` (reach, True)
+                forM_ [Term.Node "outside" [], iterate (Term.Node "neg" . pure) (Term.Node "x" []) !! 5] $ \term ->
+                    (reach, term, Mixture.termLogProbability mixture term) `shouldBe` (reach, term, Nothing)
+        it "gives each next token the probability of its completions" $
+            forM_ mixtures $ \(reach, mixture) ->
+                forM_ prefixes $ \prefix -> do
+                    let within = [(preorder term, probability mixture term) | term <- terms, prefix `isPrefixOf` preorder term]
+                        total = sum $ map snd within
+                        expected =
+                            Map.toList $
+                                Map.fromListWith
+                                    (+)
+                                    [(tokens !! length prefix, value / total) | (tokens, value) <- within, length tokens > length prefix]
+                        found = fromJust $ Mixture.nextTokenProbabilities mixture prefix
+                    (reach, prefix, map fst found) `shouldBe` (reach, prefix, map fst expected)
+                    (reach, prefix, and $ zipWith close (map snd found) (map snd expected)) `shouldBe` (reach, prefix, True)
+        it "gives each component a probability after a prefix: the mean of its probabilities after the next tokens" $
+            forM_ mixtures $ \(reach, mixture) ->
+                forM_ prefixes $ \prefix -> do
+                    let components = fromJust $ Mixture.componentProbabilities mixture prefix
+                        next = fromJust $ Mixture.nextTokenProbabilities mixture prefix
+                        later =
+                            [ map (* value) $ fromJust $ Mixture.componentProbabilities mixture (prefix <> [token])
+                            | (token, value) <- next
+                            ]
+                    (reach, prefix, length components, close (sum components) 1) `shouldBe` (reach, prefix, 2, True)
+                    (reach, prefix, null next || and (zipWith close components $ foldr1 (zipWith (+)) later))
+                        `shouldBe` (reach, prefix, True)
+        it "learns that the leaves of a term are equal, which one model cannot learn" $
+            forM_ mixtures $ \(reach, mixture) -> do
+                let model = fromJust $ Model.train reach expressions 5 (only "x" <> only "y")
+                    single = exp . fromJust . Model.termLogProbability model
+                    equal value = value (negated "x" "x") * value (negated "y" "y")
+                    different value = value (negated "x" "y") * value (negated "y" "x")
+                -- The four terms have the same sum of counts, so one table of weights gives the same product.
+                (reach, close (different single) (equal single)) `shouldBe` (reach, True)
+                (reach, different (probability mixture) < equal (probability mixture) / 16) `shouldBe` (reach, True)
+        it "moves the terms of an incorrect split to their component" $
+            forM_ (take 2 reaches) $ \reach -> do
+                -- Six of the terms with y are in the group of the terms with x.
+                let mixture = fromJust $ Mixture.train reach expressions 5 [only "x" <> take 6 (only "y"), drop 6 $ only "y"]
+                    shares = fromJust . Mixture.componentProbabilities mixture
+                (reach, map ((< 0.05) . abs . subtract 0.5) $ shares []) `shouldBe` (reach, [True, True])
+                (reach, map (> 0.9) $ shares $ preorder $ negated "x" "x") `shouldBe` (reach, [True, False])
+                (reach, map (> 0.9) $ shares $ preorder $ negated "y" "y") `shouldBe` (reach, [False, True])
+        it "samples each completion of a prefix with its probability" $
+            forM_ mixtures $ \(reach, mixture) -> do
+                forM_ [[], [("add", 2)], [("add", 2), ("neg", 1), ("y", 0)]] $ \prefix -> do
+                    let within = [term | term <- terms, prefix `isPrefixOf` preorder term]
+                        total = sum $ map (probability mixture) within
+                        drawn = Map.fromListWith (+) [(term, mass) | (mass, term) <- runExact $ fromJust $ Mixture.lowerTerm mixture prefix]
+                    (reach, prefix, Map.keys drawn, sum drawn) `shouldBe` (reach, prefix, sort within, 1)
+                    forM_ (Map.toList drawn) $ \(term, mass) ->
+                        (reach, prefix, term, close (fromRational mass) (probability mixture term / total))
+                            `shouldBe` (reach, prefix, term, True)
+                    let sampled = QCGen.unGen (QC.vectorOf 50 $ fromJust $ Mixture.sampleTerm mixture prefix) (QCRandom.mkQCGen 3) 30
+                    (reach, prefix, filter (not . isPrefixOf prefix . preorder) sampled) `shouldBe` (reach, prefix, [])
+                (reach, isNothing $ Mixture.sampleTerm mixture [("x", 0), ("y", 0)]) `shouldBe` (reach, True)
 
 -- | The log partition and expected count of one Bernoulli feature, with a constant offset.
 bernoulliOracle :: Double -> Oracle String
