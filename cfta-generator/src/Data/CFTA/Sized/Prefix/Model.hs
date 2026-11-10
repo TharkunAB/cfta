@@ -27,6 +27,7 @@ module Data.CFTA.Sized.Prefix.Model (
     train,
     trainWithReport,
     withTemperature,
+    condition,
     nextTokenProbabilities,
     sampleTerm,
     bestTerms,
@@ -37,13 +38,14 @@ import qualified Data.Map.Strict as Map
 import qualified Test.QuickCheck as QC
 
 import qualified Data.CFTA as FTA
-import Data.CFTA.Constraint (Constraint)
+import Data.CFTA.Constraint (Constraint, noConstraint)
 import Data.CFTA.Index (Size (..))
 import Data.CFTA.Sized.Prefix (
     Completions,
     Token,
     afterPrefix,
     bestCompletions,
+    completionCount,
     completionWeight,
     prefixCompletions,
  )
@@ -79,13 +81,13 @@ data Model symbol = Model
     -- ^ The fitted log-weights, at the temperature one.
     , modelTemperature :: Double
     , modelAutomaton :: FTA.FTA Int (Parented symbol) Constraint
-    -- ^ The labelled automaton, with the states numbered.
+    -- ^ The labelled automaton, or its product with the events of 'condition', with the states numbered.
     , modelBound :: Int
     -- ^ The size bound.
     , modelPrior :: Completions (Parented symbol)
-    -- ^ The completions of the empty prefix of the labelled automaton, with the weights at the temperature.
+    -- ^ The completions of the empty prefix of the labelled automaton, before 'condition', with the weights at the temperature.
     , modelCompletions :: Completions (Parented symbol)
-    -- ^ The completions of the empty prefix of the automaton, with the weights at the temperature.
+    -- ^ The completions of the empty prefix of 'modelAutomaton', with the weights at the temperature.
     }
 
 {- | Fit a model with a reach to a corpus of terms of an automaton, for the
@@ -166,6 +168,40 @@ withTemperature temperature model
         prior <- withLogWeights logWeights (modelPrior model)
         weighted <- withLogWeights logWeights (modelCompletions model)
         Just model{modelTemperature = temperature, modelPrior = prior, modelCompletions = weighted}
+
+{- | The model given an event: the terms of the model that the event also
+accepts, each with its probability divided by the probability of the event.
+The event is an automaton over the plain symbols. The result reads the
+product of the automaton of the model and the event ('FTA.intersectWith'). A
+labelled symbol matches an event symbol when its plain symbol is the event
+symbol. The product keeps the labelled symbol, so each node keeps its
+weight. A term outside the event has the probability zero, and the queries
+of the result read only the terms of the event. Conditioning on two events,
+one after the other, gives the model given both events. The temperature does
+not change.
+
+When the event accepts a term by two runs, the product also accepts it by two
+runs. 'prefixCompletions' gives each term once also then, with one weight, so
+the probabilities stay exact. The queries then read the bottom-up
+deterministic rows of the product, or, when these have more than 1024
+states, a list of the terms up to the bound.
+
+'Nothing' when a transition of the event has a constraint other than
+'noConstraint': an equality constraint compares the subterms at two paths,
+and their labelled subterms have different contexts. 'Nothing' also when the
+event accepts no term of the model within the bound.
+-}
+condition :: (Ord state, Ord symbol) => FTA.FTA state symbol Constraint -> Model symbol -> Maybe (Model symbol)
+condition event model
+    | any (any ((/= noConstraint) . FTA.transitionConstraint)) (FTA.transitionTable event) = Nothing
+    | otherwise = do
+        let automaton = numbered $ FTA.intersectWith match (\_ _ -> noConstraint) (modelAutomaton model) event
+            match label symbol = if fst (fst label) == symbol then Just label else Nothing
+        completions <- either (const Nothing) Just $ prefixCompletions (Size $ toInteger $ modelBound model) automaton
+        weighted <- withLogWeights (logWeightsOf model) completions
+        if completionCount completions == 0
+            then Nothing
+            else Just model{modelAutomaton = automaton, modelCompletions = weighted}
 
 {- | The probability of each next token after a prefix, in ascending order of
 the tokens. A complete prefix has no next token. 'Nothing' when no

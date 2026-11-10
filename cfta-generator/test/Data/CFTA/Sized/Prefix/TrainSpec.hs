@@ -193,6 +193,18 @@ spec = describe "Data.CFTA.Sized.Prefix.Train" $ do
                 ]
             everything model = fromJust $ Model.bestTerms 100000 model []
             close left right = abs (left - right) < 1e-7
+            -- Whether two lists of terms with probabilities have the same terms, each with a close probability.
+            closeTerms left right =
+                let (first, second) = (Map.fromList left, Map.fromList right)
+                 in Map.keys first == Map.keys second && and (Map.intersectionWith close first second)
+            -- The prefixes of the terms within the bound.
+            prefixes = nubOrd $ concatMap (inits . preorder) $ completionTerms $ completionsOf 5 expressions
+            -- Each model with the name of an event, the event, and the model given the event.
+            given =
+                [ (reach, name, event, model, fromJust $ Model.condition event model)
+                | (reach, model) <- models
+                , (name, event) <- [("without y", withoutY), ("root add", rootAdd)]
+                ]
         it "returns the same model queries with an inspectable training report" $
             forM_ models $ \(reach, model) -> do
                 let (reported, report) = either (error . show) id $ Model.trainWithReport reach expressions 5 corpus
@@ -266,6 +278,45 @@ spec = describe "Data.CFTA.Sized.Prefix.Train" $ do
                     let drawn = QCGen.unGen (QC.vectorOf 50 $ fromJust $ Model.sampleTerm model prefix) (QCRandom.mkQCGen 3) 30
                     (reach, prefix, filter (not . isPrefixOf prefix . preorder) drawn) `shouldBe` (reach, prefix, [])
                 (reach, isNothing $ Model.sampleTerm model [("x", 0), ("y", 0)]) `shouldBe` (reach, True)
+        it "keeps each probability given an event that each term is in" $
+            forM_ models $ \(reach, model) -> do
+                let conditioned = fromJust $ Model.condition expressions model
+                (reach, closeTerms (everything conditioned) (everything model)) `shouldBe` (reach, True)
+                forM_ prefixes $ \prefix -> do
+                    let found = fromJust $ Model.nextTokenProbabilities conditioned prefix
+                        expected = fromJust $ Model.nextTokenProbabilities model prefix
+                    (reach, prefix, map fst found) `shouldBe` (reach, prefix, map fst expected)
+                    (reach, prefix, and $ zipWith close (map snd found) (map snd expected)) `shouldBe` (reach, prefix, True)
+        it "gives each term of an event its probability over the probability of the event, and no other term a probability" $
+            forM_ given $ \(reach, name, event, model, conditioned) -> do
+                let best = everything model
+                    total = sum [probability | (term, probability) <- best, FTA.accepts event term]
+                (reach, name, close (sum $ map snd $ everything conditioned) 1) `shouldBe` (reach, name, True)
+                forM_ best $ \(term, probability) ->
+                    (reach, name, term, close (log $ probability / total) <$> Model.termLogProbability conditioned term)
+                        `shouldBe` (reach, name, term, if FTA.accepts event term then Just True else Nothing)
+        it "gives the same model when it conditions at a temperature and when it sets the temperature after" $
+            forM_ given $ \(reach, name, event, model, conditioned) -> do
+                let first = fromJust $ Model.condition event $ fromJust $ Model.withTemperature 0.5 model
+                    second = fromJust $ Model.withTemperature 0.5 conditioned
+                (reach, name, everything first) `shouldBe` (reach, name, everything second)
+                (reach, name, Model.nextTokenProbabilities first []) `shouldBe` (reach, name, Model.nextTokenProbabilities second [])
+        it "gives the model given both events when it conditions twice" $
+            forM_ models $ \(reach, model) -> do
+                let twice = fromJust $ Model.condition rootAdd =<< Model.condition withoutY model
+                    both =
+                        FTA.intersectWith (\left right -> if left == right then Just left else Nothing) (\_ _ -> noConstraint) withoutY rootAdd
+                    once = fromJust $ Model.condition both model
+                (reach, closeTerms (everything twice) (everything once)) `shouldBe` (reach, True)
+        it "gives no model for an event with a constraint or without a term in the bound, and draws only terms of the event" $ do
+            forM_ models $ \(reach, model) -> do
+                (reach, isNothing $ Model.condition doubles model) `shouldBe` (reach, True)
+                -- A term with six nodes, beyond the bound.
+                let deep = iterate (\term -> Term.Node "neg" [term]) (Term.Node "x" []) !! 5
+                (reach, isNothing $ Model.condition (FTA.fromTerms [deep]) model) `shouldBe` (reach, True)
+            forM_ given $ \(reach, name, event, _, conditioned) -> do
+                let drawn = QCGen.unGen (QC.vectorOf 50 $ fromJust $ Model.sampleTerm conditioned []) (QCRandom.mkQCGen 3) 30
+                (reach, name, filter (not . FTA.accepts event) drawn) `shouldBe` (reach, name, [])
 
 -- | The log partition and expected count of one Bernoulli feature, with a constant offset.
 bernoulliOracle :: Double -> Oracle String
@@ -299,6 +350,27 @@ ambiguousExpressions =
         FTA.mkFTA
             "e"
             [ ("e", [node "x" [], node "y" [], node "neg" ["e"], node "add" ["e", "e"], node "add" ["v", "e"]])
+            , ("v", [node "x" [], node "y" []])
+            ]
+  where
+    node symbol children = FTA.Transition symbol children noConstraint
+
+-- | The event that a term has no y.
+withoutY :: FTA.FTA String String Constraint
+withoutY =
+    either (error . show) id $
+        FTA.mkFTA "e" [("e", [node "x" [], node "neg" ["e"], node "add" ["e", "e"]])]
+  where
+    node symbol children = FTA.Transition symbol children noConstraint
+
+-- | The event that the root is add. The terms add(x, e) and add(y, e) have two runs: an ambiguous event.
+rootAdd :: FTA.FTA String String Constraint
+rootAdd =
+    either (error . show) id $
+        FTA.mkFTA
+            "r"
+            [ ("r", [node "add" ["e", "e"], node "add" ["v", "e"]])
+            , ("e", [node "x" [], node "y" [], node "neg" ["e"], node "add" ["e", "e"]])
             , ("v", [node "x" [], node "y" []])
             ]
   where
