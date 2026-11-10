@@ -1188,11 +1188,6 @@ countUpTo bound index = sum [countAtSize index (Size size) | size <- [1 .. bound
 termWeight :: (Num weight) => (symbol -> weight) -> Term symbol -> weight
 termWeight weight = foldr ((*) . weight) 1
 
--- | The total weight of the completions of the 'Indexed' route, for each size from zero.
-indexedWeights :: (Ord state, Eq symbol) => Completions symbol -> Table state symbol -> [Rational]
-indexedWeights completions table =
-    prefixedWeights (completionsWeight completions) (tableRows table) (completionPrefix completions) (tableInitial table) 0
-
 {- | The total weight of the terms of a state whose preorder starts with the
 part of a prefix at a position, for each size from zero. A position at the
 end of the prefix has every term of the state. The weight of a term is the
