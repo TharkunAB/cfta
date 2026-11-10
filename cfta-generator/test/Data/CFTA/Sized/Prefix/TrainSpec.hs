@@ -155,6 +155,23 @@ spec = describe "Data.CFTA.Sized.Prefix.Train" $ do
                         found = fromJust $ Model.nextTokenProbabilities model prefix
                     (reach, prefix, map fst found) `shouldBe` (reach, prefix, map fst expected)
                     (reach, prefix, and $ zipWith close (map snd found) (map snd expected)) `shouldBe` (reach, prefix, True)
+        it "gives each next token its probability when the weight of the prefix is outside the range of Double" $
+            forM_ models $ \(reach, model) -> do
+                -- At this temperature, the weight of some prefixes is outside the range of Double.
+                let cold = fromJust $ Model.withTemperature 0.007 model
+                forM_ (nubOrd $ concatMap (inits . preorder . fst) $ everything model) $ \prefix -> do
+                    let expected =
+                            Map.toList $
+                                Map.fromListWith
+                                    (+)
+                                    [ (tokens !! length prefix, probability)
+                                    | (term, probability) <- fromJust $ Model.bestTerms 100000 cold prefix
+                                    , let tokens = preorder term
+                                    , length tokens > length prefix
+                                    ]
+                        found = fromJust $ Model.nextTokenProbabilities cold prefix
+                    (reach, prefix, map fst found) `shouldBe` (reach, prefix, map fst expected)
+                    (reach, prefix, and $ zipWith close (map snd found) (map snd expected)) `shouldBe` (reach, prefix, True)
         it "raises the probabilities of the terms to one over the temperature" $
             forM_ models $ \(reach, model) -> do
                 let best = everything model
