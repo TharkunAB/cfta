@@ -481,6 +481,15 @@ probable term of a sum is not always the most probable term of a component,
 so `Mixture.bestTerms` searches the best terms of the components with the
 threshold algorithm of Fagin, Lotem, and Naor (2003).
 
+`Mixture.condition` restricts a mixture to an event, as `Model.condition`
+restricts a model. The mixture given an event is the mixture of the components
+given the event. The new share of a component is its share times the
+probability of the event in the component, over the probability of the event.
+For a corpus of terms with only `x` and terms with only `y`, in two groups,
+the event "no `y`" moves almost all of the share to the component of the terms
+with `x`. `Mixture.eventProbability` gives the probability of the event after
+a prefix, in the mixture before conditioning, for a decoder with a lookahead.
+
 The [query-generation example](examples/explainfuzz/README.md) learns weights
 from query ASTs, restricts the language with structural requirements, and
 emits seeded SQL samples. It adapts the ExplainFuzz workflow to a restricted

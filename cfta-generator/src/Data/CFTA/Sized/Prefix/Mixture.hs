@@ -31,6 +31,13 @@ The queries take a prefix of plain tokens and are exact for the mixture:
 * 'bestTerms': the completions of the prefix with the largest probabilities;
 * 'termLogProbability': the log-probability of a term.
 
+'condition' gives the mixture given an event: the terms that a second
+automaton accepts. The mixture given the event is the mixture of the
+components given the event, with new shares. The queries above then read
+only the terms of the event. 'eventProbability' gives the probability of the
+event after a prefix, in the mixture before 'condition'. A decoder with a
+lookahead needs this probability.
+
 A mixture has no temperature: a power of a sum of probabilities is not a sum
 of powers, so the terms at a temperature are not a mixture of the components
 at that temperature.
@@ -155,9 +162,9 @@ train reach automaton bound groups = do
 accepts, each with its probability divided by the probability of the event.
 The event is an automaton over the plain symbols, as for
 'Data.CFTA.Sized.Prefix.Model.condition'. The mixture given the event is the
-mixture of the components given the event. The share of each component is
-multiplied by the probability of the event in the component, and the shares
-are then divided by their sum:
+mixture of the components given the event. The new share of a component is
+its share times the probability of the event in the component, over the
+probability of the event in the mixture:
 
 > P(t | E) = Σ_k share'_k P_k(t | E)
 > share'_k = share_k P_k(E) / Σ_j share_j P_j(E)

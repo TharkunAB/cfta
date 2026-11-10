@@ -285,6 +285,14 @@ tree automata of `cfta`, with QuickCheck integration.
   probabilities. `bestTerms` finds them with the threshold algorithm of
   Fagin, Lotem, and Naor over the components. `termLogProbability` gives the
   log-probability of a term. The components have one count table.
+- `Mixture.condition` gives the mixture given an event, as `Model.condition`
+  gives the model given an event. It is the mixture of the components given
+  the event. The new share of a component is its share times the probability
+  of the event in the component, over the probability of the event, and the
+  new shares are exact. `Mixture.eventProbability` gives the probability of
+  the event after a prefix, in the mixture before `condition`, for the
+  lookahead of constrained decoding. Conditioning twice gives the mixture
+  given both events.
 - Terms are `Term symbol` from `Data.CFTA.Term` of `cfta`:
   `fromAutomaton`, `fromAutomatonUpToDepth`, `termAt`, `rankOf`, `ranksOf`,
   `rankOfTerm`, `surface`, and the refinement witnesses take and give `Term`
