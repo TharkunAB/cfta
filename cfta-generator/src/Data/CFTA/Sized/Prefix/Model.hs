@@ -21,6 +21,11 @@ The queries take a prefix of plain tokens and are exact for the model:
 * 'termLogProbability': the log-probability of a term.
 
 'withTemperature' sets the temperature of whole terms ('atTemperature').
+
+The context of a weight is bounded. So a model cannot hold a property of the
+whole term, for example that all the leaves of a term are the same variable.
+A mixture of models can hold such a property
+("Data.CFTA.Sized.Prefix.Mixture").
 -}
 module Data.CFTA.Sized.Prefix.Model (
     Model,

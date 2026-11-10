@@ -262,6 +262,18 @@ tree automata of `cfta`, with QuickCheck integration.
   `bestTerms` gives the completions with the largest probabilities.
   `termLogProbability` gives the log-probability of a term, and
   `withTemperature` sets the temperature of whole terms.
+- `Data.CFTA.Sized.Prefix.Mixture`: a mixture of models, for a property of
+  the whole term that the bounded context of one model cannot hold. A mixture
+  has components, each with a share and the weights of one model. The
+  probability of a term is the sum, over the components, of the share times
+  the probability of the term in the component. `train` fits the components
+  to a corpus that the caller splits into groups, with expectation
+  maximization (`distillMixture` of `Data.CFTA.Sized.Prefix.Train`). For a
+  prefix of tokens, `nextTokenProbabilities` gives the probability of each
+  next token, `componentProbabilities` gives the probability of each
+  component, and `sampleTerm` and `lowerTerm` draw a completion in proportion
+  to its probability. `termLogProbability` gives the log-probability of a
+  term. The components have one count table.
 - Terms are `Term symbol` from `Data.CFTA.Term` of `cfta`:
   `fromAutomaton`, `fromAutomatonUpToDepth`, `termAt`, `rankOf`, `ranksOf`,
   `rankOfTerm`, `surface`, and the refinement witnesses take and give `Term`

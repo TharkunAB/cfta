@@ -214,6 +214,15 @@ Wilf, and Feat (ranking).
   are undecided. An undecided token is neither offered nor rejected.
 - **Walk**: a path of tokens with the verdicts of the solver kept for each
   step (`Deciding`). It asks the solver only when a query needs a verdict.
+- **Mixture**: a distribution over the completions that is a sum of
+  distributions, each with a share. The probability of a term is the sum,
+  over the mixture components, of the share times the probability of the
+  term in the component (`Data.CFTA.Sized.Prefix.Mixture`). Not a *mode*: in
+  statistics, the mode is the most probable value.
+- **Mixture component, share**: one distribution of a mixture, and the
+  probability that a term of the mixture is a term of this distribution. The
+  shares of a mixture sum to one. The component of a term is hidden. Not the
+  component of a join (**Component index**).
 
 ## Generators
 

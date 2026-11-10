@@ -459,6 +459,17 @@ convergence. `Model.trainWithReport` returns the same report together with
 the contextual model, so callers can inspect the fit and use its normal query
 and sampling functions without constructing context labels themselves.
 
+`Data.CFTA.Sized.Prefix.Mixture` is a mixture of models. One model has one
+table of weights with a bounded context, so it cannot hold a property of the
+whole term, for example that all the leaves are the same variable. A mixture
+has components, each with a share and its own table of weights. The
+probability of a term is the sum, over the components, of the share times
+the probability of the term in the component. `Mixture.train` fits the
+components to a corpus that the caller splits into groups, with expectation
+maximization (Dempster, Laird, and Rubin, 1977). The components have one
+count table. The next-token probabilities, the samples, and the
+log-probabilities are exact for the mixture.
+
 The [query-generation example](examples/explainfuzz/README.md) learns weights
 from query ASTs, restricts the language with structural requirements, and
 emits seeded SQL samples. It adapts the ExplainFuzz workflow to a restricted
