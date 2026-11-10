@@ -161,7 +161,7 @@ distillationInput ::
     [Term symbol] ->
     Either TrainingError (Oracle symbol, Map.Map symbol Double, Int)
 distillationInput automaton bound terms = do
-    oracle <- maybe (Left UnsupportedTrainingLanguage) Right chooseOracle
+    oracle <- maybe (Left UnsupportedTrainingLanguage) Right $ distillationOracle automaton bound
     if null kept
         then Left NoRetainedTerms
         else do
@@ -170,18 +170,27 @@ distillationInput automaton bound terms = do
                 counts = mixCounts (fromIntegral retained) (meanCounts kept) 2 uniform
             pure (oracle, counts, retained)
   where
-    kept = [term | term <- terms, length (foldr (:) [] term) <= bound, FTA.accepts automaton term]
+    kept = retainedTerms automaton bound terms
+
+-- | The oracle of 'distill' for an automaton and a size bound. 'Nothing' when 'distill' has no route for the automaton.
+distillationOracle :: (Ord state, Ord symbol) => FTA.FTA state symbol Constraint -> Int -> Maybe (Oracle symbol)
+distillationOracle automaton bound
+    | unconstrained && unambiguous = Just $ automatonOracle automaton bound
+    | unconstrained =
+        (\rows -> groupedOracle (Left $ FTA.initialState automaton) (Map.map (map plain) rows) bound)
+            <$> Ordinary.deterministicCountingRows (FTA.mapConstraints (const ()) automaton)
+    | unambiguous = constrainedOracle automaton bound
+    | otherwise = Nothing
+  where
     reached = FTA.transitionTable $ FTA.trim automaton
     unconstrained = all (all ((== noConstraint) . FTA.transitionConstraint)) reached
     unambiguous = Ordinary.unambiguousRows (Map.map (map void) reached)
-    chooseOracle
-        | unconstrained && unambiguous = Just $ automatonOracle automaton bound
-        | unconstrained =
-            (\rows -> groupedOracle (Left $ FTA.initialState automaton) (Map.map (map plain) rows) bound)
-                <$> Ordinary.deterministicCountingRows (FTA.mapConstraints (const ()) automaton)
-        | unambiguous = constrainedOracle automaton bound
-        | otherwise = Nothing
     plain transition = (FTA.transitionSymbol transition, [(child, 1) | child <- FTA.transitionChildren transition])
+
+-- | The terms that 'distill' retains: the terms within the bound that the automaton accepts.
+retainedTerms :: (Ord state, Eq symbol) => FTA.FTA state symbol Constraint -> Int -> [Term symbol] -> [Term symbol]
+retainedTerms automaton bound terms =
+    [term | term <- terms, length (foldr (:) [] term) <= bound, FTA.accepts automaton term]
 
 {- | The completions with the weights of log-weights, for the queries of
 "Data.CFTA.Sized.Prefix": 'nextTokenWeights', 'tokenProbability' and
