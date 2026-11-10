@@ -429,7 +429,8 @@ prefix.
 weight of a term is the product of the weights of its nodes.
 `nextTokenWeights` gives the total weight of the completions after each next
 token, `tokenProbability` the probability of a token after the prefix, and
-`drawCompletion` draws a completion in proportion to its weight.
+`lowerCompletions` gives a sampler of the completions, each in proportion to
+its weight; `sampleWeighted` is its QuickCheck generator.
 `weightedTotal`, `unrankWeighted`, and `rankWeighted` give each completion an
 interval of integers with a length in proportion to its weight, so one
 uniform integer below the total is one draw. `rankedCompletions` gives the

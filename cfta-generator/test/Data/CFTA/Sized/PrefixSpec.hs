@@ -206,20 +206,23 @@ fixtureUpTo bound name graph = describe name $ do
                                , bruteWeight prefix
                                )
         it "draws each completion with its weight over the total weight" $
-            forM_ prefixes $ \prefix -> forM_ [const 1, weight] $ \each -> do
+            forM_ prefixes $ \prefix -> forM_ [const 1, weight, withoutFirst] $ \each -> do
                 let completions = weightedBy each $ after prefix
                     total = sum [termWeight each term | term <- accepted, prefix `isPrefixOf` preorder term]
-                (prefix, fmap distribution $ drawCompletion proportional completions)
-                    `shouldBe` ( prefix
-                               , Just $
-                                    Map.fromListWith
-                                        (+)
-                                        [ (term, termWeight each term / total)
-                                        | term <- accepted
-                                        , prefix `isPrefixOf` preorder term
-                                        , termWeight each term > 0
-                                        ]
-                               )
+                    expected
+                        | total <= 0 = Nothing
+                        | otherwise =
+                            Just $
+                                Map.fromListWith
+                                    (+)
+                                    [ (term, termWeight each term / total)
+                                    | term <- accepted
+                                    , prefix `isPrefixOf` preorder term
+                                    , termWeight each term > 0
+                                    ]
+                    outcomes sampler = Map.fromListWith (+) [(term, mass) | (mass, term) <- runExact sampler]
+                (prefix, fmap distribution $ drawCompletion proportional completions) `shouldBe` (prefix, expected)
+                (prefix, outcomes <$> lowerCompletions completions) `shouldBe` (prefix, expected)
         it "gives the next tokens and the complete prefix probabilities that sum to one" $
             forM_ prefixes $ \prefix -> do
                 let completions = weightedBy weight $ after prefix
@@ -314,6 +317,8 @@ fixtureUpTo bound name graph = describe name $ do
     symbols = nubOrd $ map fst alphabet
     weight symbol = maybe 0 (\place -> fromIntegral (place + 1) / 3) $ lookup symbol $ zip symbols [0 :: Int ..]
     bruteWeight prefix = sum [termWeight weight term | term <- accepted, prefix `isPrefixOf` preorder term]
+    -- The weight zero for the first symbol: the terms with that symbol have the weight zero.
+    withoutFirst symbol = if [symbol] == take 1 symbols then 0 else weight symbol
     -- The weight two for the first symbol and one for the others: integer weights, so the tickets are few.
     double symbol = if [symbol] == take 1 symbols then 2 else 1
     -- Each token of the automaton, and each symbol with one more child.
