@@ -41,6 +41,7 @@ import Data.CFTA.Sized.Prefix.Parents (
     unlabelParents,
     withParents,
  )
+import Data.CFTA.Sized.Prefix.QuickCheck (sampleWeighted)
 import qualified Data.CFTA.Sized.Prefix.Train as Train
 import Data.CFTA.Term (Term (..))
 
@@ -183,13 +184,11 @@ probabilities space =
     total = weightedTotal space
     interval = rankWeighted space
 
--- | Draw ranks with a fixed seed. The decoder retains its tables across all draws.
+-- | Draw queries with a fixed seed. One generator keeps its tables across all draws.
 sample :: Int -> Int -> Completions Label -> [Term Label]
 sample seed count space = QCGen.unGen (QC.vectorOf count draw) (QCRandom.mkQCGen seed) 30
   where
-    total = weightedTotal space
-    decode = unrankWeighted space
-    draw = fromMaybe (error "A weighted rank below the total must decode.") . decode <$> QC.chooseInteger (0, total - 1)
+    draw = fromMaybe (error "A language with positive mass must have a sampler.") $ sampleWeighted space
 
 -- | Test the structural requirement independently of the event automaton.
 satisfies :: Requirement -> Term String -> Bool

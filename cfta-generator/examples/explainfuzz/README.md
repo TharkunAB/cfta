@@ -83,9 +83,11 @@ conditional probabilities, and weighted rank intervals are exact for those
 rational potentials. They are not exact arithmetic for the original real
 exponentials. Displayed probabilities are rounded to nine decimal places.
 
-Sampling draws one uniform integer below `weightedTotal`, then calls a
-retained `unrankWeighted` decoder. A fixed seed replays the same sequence
-with the same corpus, bound, fitted weights, and QuickCheck version.
+Sampling uses `sampleWeighted`, the QuickCheck generator of the weighted
+completions. It draws each query in proportion to its weight. The example
+builds the generator once for each run, so the sampler keeps its tables for
+all draws. A fixed seed replays the same sequence with the same corpus,
+bound, fitted weights, and QuickCheck version.
 
 ## Ambiguous outputs
 
