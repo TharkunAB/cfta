@@ -47,11 +47,10 @@ module Data.CFTA.Sized.Prefix.Model (
     eventProbability,
 ) where
 
-import qualified Data.Map.Strict as Map
 import qualified Test.QuickCheck as QC
 
 import qualified Data.CFTA as FTA
-import Data.CFTA.Constraint (Constraint, noConstraint)
+import Data.CFTA.Constraint (Constraint)
 import Data.CFTA.Index (Size (..))
 import Data.CFTA.Sized.Prefix (
     Completions,
@@ -65,8 +64,10 @@ import Data.CFTA.Sized.Prefix (
 import Data.CFTA.Sized.Prefix.Parents (
     Parented,
     Reach,
+    intersectEvent,
     labelParents,
     labelPrefix,
+    numbered,
     rootContext,
     unlabelParents,
     withParents,
@@ -205,21 +206,18 @@ deterministic rows of the product, or, when these have more than 1024
 states, a list of the terms up to the bound.
 
 'Nothing' when a transition of the event has a constraint other than
-'noConstraint': an equality constraint compares the subterms at two paths,
-and their labelled subterms have different contexts. 'Nothing' also when the
-event accepts no term of the model within the bound.
+'Data.CFTA.Constraint.noConstraint': an equality constraint compares the
+subterms at two paths, and their labelled subterms have different contexts.
+'Nothing' also when the event accepts no term of the model within the bound.
 -}
 condition :: (Ord state, Ord symbol) => FTA.FTA state symbol Constraint -> Model symbol -> Maybe (Model symbol)
-condition event model
-    | any (any ((/= noConstraint) . FTA.transitionConstraint)) (FTA.transitionTable event) = Nothing
-    | otherwise = do
-        let automaton = numbered $ FTA.intersectWith match (\_ _ -> noConstraint) (modelAutomaton model) event
-            match label symbol = if fst (fst label) == symbol then Just label else Nothing
-        completions <- either (const Nothing) Just $ prefixCompletions (Size $ toInteger $ modelBound model) automaton
-        weighted <- withLogWeights (logWeightsOf model) completions
-        if completionCount completions == 0
-            then Nothing
-            else Just model{modelAutomaton = automaton, modelCompletions = weighted}
+condition event model = do
+    automaton <- intersectEvent event (modelAutomaton model)
+    completions <- either (const Nothing) Just $ prefixCompletions (Size $ toInteger $ modelBound model) automaton
+    weighted <- withLogWeights (logWeightsOf model) completions
+    if completionCount completions == 0
+        then Nothing
+        else Just model{modelAutomaton = automaton, modelCompletions = weighted}
 
 {- | The probability of each next token after a prefix, in ascending order of
 the tokens. A complete prefix has no next token. 'Nothing' when no
@@ -284,12 +282,6 @@ eventProbability model prefix = do
         Just conditioned -> exp $ logPartition logWeights conditioned - logPartition logWeights prior
   where
     logWeights = logWeightsOf model
-
--- | An automaton with each state renamed to its position in the ascending order of the states.
-numbered :: (Ord state) => FTA.FTA state symbol constraint -> FTA.FTA Int symbol constraint
-numbered automaton = FTA.mapStates (numbers Map.!) automaton
-  where
-    numbers = Map.fromList $ zip (FTA.states automaton) [0 ..]
 
 -- | The log-weights of a model at its temperature.
 logWeightsOf :: Model symbol -> LogWeights (Parented symbol)
