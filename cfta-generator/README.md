@@ -459,6 +459,11 @@ convergence. `Model.trainWithReport` returns the same report together with
 the contextual model, so callers can inspect the fit and use its normal query
 and sampling functions without constructing context labels themselves.
 
+The [query-generation example](examples/explainfuzz/README.md) learns weights
+from query ASTs, restricts the language with structural requirements, and
+emits seeded SQL samples. It adapts the ExplainFuzz workflow to a restricted
+finite grammar.
+
 Grammar-constrained decoders compute a mask over the subword tokens of a
 language model at each step: XGrammar with a pushdown automaton and
 precomputed token sets ([arXiv:2411.15100](https://arxiv.org/abs/2411.15100)),
