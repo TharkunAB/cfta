@@ -46,7 +46,7 @@ data Reach = Reach
     { reachAncestors :: Int
     -- ^ The number of the nearest ancestors.
     , reachLeftSibling :: Bool
-    -- ^ Whether the root token of the left sibling.
+    -- ^ Whether the context has the root token of the left sibling.
     }
     deriving (Eq, Show)
 

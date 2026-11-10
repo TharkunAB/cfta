@@ -14,6 +14,7 @@ module Data.CFTA.Ranked.Internal (
     fromIndexed,
     fromIndexedOnDemand,
     fromWeightedIndexedOnDemand,
+    fromSizeClasses,
     share,
     pay,
     scale,
@@ -196,6 +197,15 @@ fromWeightedIndexedOnDemand
         -- The tickets are the ranks of a uniform language with one member for each ticket.
         Weight ticketCount = weightedIndexedTotalWeight
         tickets = uniformSampler (Cardinality ticketCount) (\(Rank ticket) -> weightedIndexedRankAtTicket ticket)
+
+{- | Build a ranked language from its size classes, in ascending order of
+size, and a sampler of its members. The ranks are size-major, and the rank of
+a sample must be the rank of its member.
+-}
+fromSizeClasses :: [SizeClass a] -> Sampler a -> Either RankedError (Ranked a)
+fromSizeClasses classes sampler
+    | all ((<= 0) . classCardinality) classes = Left EmptyRanked
+    | otherwise = Right $ makeRanked (PlanSized classes) sampler
 
 {- | Reuse a compiled subplan without expanding it at each parent occurrence.
 
