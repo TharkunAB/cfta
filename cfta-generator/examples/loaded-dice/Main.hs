@@ -3,7 +3,6 @@ module Main (main) where
 
 import Control.Monad (forM, forM_, replicateM, unless)
 import qualified Data.Map.Strict as Map
-import Data.Maybe (isNothing)
 import System.Environment (getArgs)
 import System.Exit (die)
 import qualified Test.QuickCheck as QC
@@ -15,6 +14,7 @@ import Text.Read (readMaybe)
 import qualified Data.CFTA.Gen as G
 import qualified Data.CFTA.Gen.QuickCheck as GQ
 import Data.CFTA.Index (Rank (..))
+import qualified Data.CFTA.Ranked.QuickCheck as RQ
 import qualified Data.CFTA.Sized.Prefix as P
 import Data.CFTA.Term (Term)
 
@@ -62,15 +62,11 @@ weighted parameters = do
 draw :: Int -> QC.Gen value -> [value]
 draw count generator = unGen (QC.vectorOf count generator) (mkQCGen 1729) 30
 
--- | Draw weighted integer ranks with one retained total and decoder.
-drawTerms :: Int -> P.Completions Choice -> Either String [Term Choice]
-drawTerms count completions = do
-    let total = P.weightedTotal completions
-        decodeRank = P.unrankWeighted completions
-    unless (total > 0) $ Left "The generator has zero total sampling mass."
-    traverse
-        (\ticket -> maybe (Left "A weighted rank has no completion.") Right $ decodeRank ticket)
-        (draw count $ QC.chooseInteger (0, total - 1))
+-- | Draw terms in proportion to their weights, each with its replay rank.
+drawTerms :: Int -> P.Completions Choice -> Either String [G.RankedValue (Term Choice)]
+drawTerms count completions =
+    maybe (Left "A symbol of the generator has zero sampling mass.") (Right . draw count . RQ.toGenWithRank) $
+        P.rankedCompletions completions
 
 -- | Count observed lengths, including repeated samples.
 counts :: [[value]] -> Map.Map Int Int
@@ -82,19 +78,16 @@ demo = either die display $ do
     (fitted, beforeKL, afterKL) <- fit
     before <- weighted initial
     after <- weighted fitted
-    beforeTerms <- drawTerms 10000 before
-    afterTerms <- drawTerms 10000 after
-    beforeLists <- traverse decode beforeTerms
-    afterLists <- traverse decode afterTerms
+    beforeDraws <- drawTerms 10000 before
+    afterDraws <- drawTerms 10000 after
+    beforeLists <- traverse (decode . G.rankedValue) beforeDraws
+    afterLists <- traverse (decode . G.rankedValue) afterDraws
     beforeMasses <- rationalWeights initial >>= lengthMasses
     afterMasses <- rationalWeights fitted >>= lengthMasses
     target <- targetMasses requestedWeights
     direct <- directGenerator requestedWeights
     let directDraws = draw 10000 $ GQ.toGenWithRank direct
-    replays <- forM (take 5 afterTerms) $ \term -> do
-        rank <- maybe (Left "A generated term has no replay rank.") Right $ P.rankCompletion after term
-        value <- decode term
-        pure (rank, value)
+        replays = take 5 $ zip (map G.valueRank afterDraws) afterLists
     pure (beforeKL, afterKL, beforeMasses, afterMasses, target, counts beforeLists, counts afterLists, directDraws, replays)
   where
     display (beforeKL, afterKL, beforeMasses, afterMasses, target, beforeCounts, afterCounts, directDraws, replays) = do
@@ -143,19 +136,14 @@ checks = do
         weights <- rationalWeights parameters
         let total = P.weightedTotal full
             interval = P.rankWeighted full
-            decodeRank = P.unrankWeighted full
-        ensure "Weighted ranks outside the ticket space must be rejected." $
-            isNothing (decodeRank (-1)) && isNothing (decodeRank total)
-        terms <- drawTerms 100 full
-        forM_ terms $ \term -> do
+        samples <- drawTerms 100 full
+        forM_ samples $ \(G.RankedValue rank term) -> do
             value <- decode term
             ensure "A sample violates the length or element bound." $ valid value
-            (start, width) <- maybe (Left "A sample has no weighted interval.") Right $ interval term
-            ensure "A weighted interval has an invalid boundary." $
-                width > 0 && decodeRank start == Just term && decodeRank (start + width - 1) == Just term
+            (_, width) <- maybe (Left "A sample has no weighted interval.") Right $ interval term
             ensure "A weighted interval has the wrong probability." $
                 fromInteger width / fromInteger total == product (map weights $ foldr (:) [] term)
-            rank <- maybe (Left "A sample has no term rank.") Right $ P.rankCompletion full term
+            ensure "A sample has the wrong term rank." $ P.rankCompletion full term == Just rank
             restored <- replay "cfta" rank
             ensure "CFTA replay changed the list." $ restored == value
     direct <- directGenerator requestedWeights
