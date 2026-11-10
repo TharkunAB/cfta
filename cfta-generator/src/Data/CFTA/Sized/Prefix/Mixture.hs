@@ -283,7 +283,10 @@ given number.
 The work of a round is one 'bestCompletions' in each component and, for each
 candidate in each component, a product over the nodes of the candidate
 ('weightOfTerm'). The masses are exact 'Rational' numbers, so rounding does
-not change the order or the end of the search.
+not change the order or the end of the search. The lists grow when the
+components put the completions in very different orders, or when many
+completions have the probability of the last result. In the worst case, the
+lists hold all the completions of the prefix.
 -}
 bestTerms :: (Ord symbol) => Int -> Mixture symbol -> [Token symbol] -> Maybe [(Term symbol, Double)]
 bestTerms count mixture prefix = do
