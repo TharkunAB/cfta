@@ -577,6 +577,28 @@ spec = describe "Data.CFTA.Sized.Prefix.Train" $ do
                 forM_ prefixes $ \prefix ->
                     (reach, prefix, close <$> Mixture.eventProbability twice prefix <*> Mixture.eventProbability once prefix)
                         `shouldBe` (reach, prefix, Just True)
+        it "gives the completions of a prefix with the largest probabilities given an event, the most probable first" $
+            forM_ given $ \(reach, name, event, mixture, conditioned) ->
+                forM_ prefixes $ \prefix -> do
+                    -- The terms of the event with the prefix, each with its probability before the event.
+                    let within =
+                            Map.fromList
+                                [(term, probability mixture term) | term <- terms, FTA.accepts event term, prefix `isPrefixOf` preorder term]
+                        total = sum within
+                        expected = sortOn Down $ map (/ total) $ Map.elems within
+                        near left right = abs (left - right) < 1e-9
+                        every = Mixture.bestTerms (Map.size within + 1) conditioned prefix
+                    if Map.null within
+                        then (reach, name, prefix, every) `shouldBe` (reach, name, prefix, Nothing)
+                        else forM_ [1, 2, 5, Map.size within + 1] $ \count -> do
+                            let found = fromJust $ Mixture.bestTerms count conditioned prefix
+                            (reach, name, prefix, count, length found, and $ zipWith near (map snd found) expected)
+                                `shouldBe` (reach, name, prefix, count, min count (Map.size within), True)
+                            forM_ found $ \(term, value) ->
+                                (reach, name, prefix, count, term, near value . (/ total) <$> Map.lookup term within)
+                                    `shouldBe` (reach, name, prefix, count, term, Just True)
+                            (reach, name, prefix, count, nubOrd $ map fst found) `shouldBe` (reach, name, prefix, count, map fst found)
+                            (reach, name, prefix, count, found) `shouldBe` (reach, name, prefix, count, take count $ fromJust every)
         it "is the model given the event when the corpus has one group" $
             forM_ reaches $ \reach -> do
                 let mixture = fromJust $ Mixture.train reach expressions 5 [corpus]
