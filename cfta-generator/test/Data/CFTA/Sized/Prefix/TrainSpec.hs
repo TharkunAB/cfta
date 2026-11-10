@@ -23,6 +23,7 @@ import qualified Data.CFTA.Sized.Prefix.Model as Model
 import Data.CFTA.Sized.Prefix.Parents (Reach (..))
 import Data.CFTA.Sized.Prefix.QuickCheck (sampleWeighted)
 import Data.CFTA.Sized.Prefix.Train
+import Data.CFTA.Template (Exclusion (..), Template (..), excludeAllFTA, restrictFTA)
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
 import qualified Test.QuickCheck as QC
@@ -353,6 +354,15 @@ spec = describe "Data.CFTA.Sized.Prefix.Train" $ do
                 forM_ prefixes $ \prefix ->
                     (reach, prefix, close <$> Model.eventProbability twice prefix <*> Model.eventProbability once prefix)
                         `shouldBe` (reach, prefix, Just True)
+        it "conditions on the restriction to a template, or to the terms that no exclusion rejects, as on the same event" $
+            forM_ models $ \(reach, model) -> do
+                let restricted =
+                        [ ("without y", withoutY, Model.condition (excludeAllFTA [Anywhere (TemplateNode "y" [])] expressions) model)
+                        , ("root add", rootAdd, Model.condition (restrictFTA (TemplateNode "add" [Hole, Hole]) expressions) model)
+                        ]
+                forM_ restricted $ \(name, event, conditioned) ->
+                    (reach, name, closeTerms (everything $ fromJust $ Model.condition event model) . everything <$> conditioned)
+                        `shouldBe` (reach, name, Just True)
         it "gives no model for an event with a constraint or without a term in the bound, and draws only terms of the event" $ do
             forM_ models $ \(reach, model) -> do
                 (reach, isNothing $ Model.condition doubles model) `shouldBe` (reach, True)

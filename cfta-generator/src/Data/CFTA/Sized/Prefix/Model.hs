@@ -180,7 +180,11 @@ withTemperature temperature model
 
 {- | The model given an event: the terms of the model that the event also
 accepts, each with its probability divided by the probability of the event.
-The event is an automaton over the plain symbols. The result reads the
+The event is an automaton over the plain symbols. The automaton of 'train',
+restricted to the terms that match a template
+('Data.CFTA.Template.restrictFTA'), is an event. The automaton of 'train',
+restricted to the terms that no exclusion rejects
+('Data.CFTA.Template.excludeAllFTA'), is also an event. The result reads the
 product of the automaton of the model and the event ('FTA.intersectWith'). A
 labelled symbol matches an event symbol when its plain symbol is the event
 symbol. The product keeps the labelled symbol, so each node keeps its
