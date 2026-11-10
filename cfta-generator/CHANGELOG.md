@@ -207,6 +207,9 @@ tree automata of `cfta`, with QuickCheck integration.
   weights of `completionSymbols`, and `b` is the size bound. A uniform
   integer below the total, decoded, is one draw in proportion to the weight.
   With the weight one for each symbol, the intervals are the ranks.
+  `rankedCompletions` gives the completions as a `Ranked` language: its ranks
+  are the ranks of `unrankCompletion`, and its sampling tickets are the
+  integers of the intervals.
 - `Data.CFTA.Sized.Prefix.QuickCheck`: `sampleCompletion` draws a rank of the
   completions uniformly and unranks it, and `sampleWeighted` draws a
   completion in proportion to its weight.

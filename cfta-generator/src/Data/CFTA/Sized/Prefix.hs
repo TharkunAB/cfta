@@ -100,7 +100,8 @@ interval of integers whose length is in proportion to its weight. The
 intervals follow the order of 'completionTerms'. So a uniform integer below the
 total draws a completion in proportion to its weight, and the draw is one
 integer. With the weight one for each symbol, the interval of a completion
-holds only its rank.
+holds only its rank. 'rankedCompletions' gives the completions to
+"Data.CFTA.Ranked", with these integers as its sampling tickets.
 
 A 'Completions' value does not change, so a decoder that keeps the values of
 its prefix can go back one token with the value before it. When 'nextTokens'
@@ -136,6 +137,7 @@ module Data.CFTA.Sized.Prefix (
     weightedTotal,
     unrankWeighted,
     rankWeighted,
+    rankedCompletions,
 
     -- * Verdicts on demand
     Deciding,
@@ -154,7 +156,7 @@ import qualified Data.IntMap.Lazy as IntMap
 import Data.List (elemIndex, genericDrop, genericIndex, genericLength, genericTake, mapAccumL)
 import qualified Data.Map.Lazy as LazyMap
 import qualified Data.Map.Strict as Map
-import Data.Maybe (catMaybes, listToMaybe)
+import Data.Maybe (catMaybes, fromMaybe, listToMaybe)
 import Data.Ratio (denominator, numerator)
 import qualified Data.Set as Set
 
@@ -163,9 +165,10 @@ import Data.CFTA.Constraint (Constraint, constraintPaths, equalities, equalityCo
 import qualified Data.CFTA.Enumeration as Enumeration
 import Data.CFTA.Equality.Constraint (EqConstraints (EqConstraints), unPathEClass)
 import qualified Data.CFTA.Gen.Internal.Table as Ordinary
-import Data.CFTA.Index (Cardinality (..), ClassRank (..), Rank (..), Size (..))
+import Data.CFTA.Index (Cardinality (..), ClassRank (..), Rank (..), Size (..), Weight (..))
 import Data.CFTA.Interned (Node (Node), edgeChildren, fromFTA, nodeEdges, nodeIdentity, setChildren)
 import Data.CFTA.Path (ChildIndex (..), Path, getPath, path, unPath)
+import Data.CFTA.Ranked (Ranked, WeightedIndexed (..), fromWeightedIndexedOnDemand)
 import Data.CFTA.Ranked.Internal.Decoder (RankedValue (..))
 import Data.CFTA.Ranked.Internal.Size (SizeIndex, SizedRank (..), countAtSize, sizeClassSelect)
 import Data.CFTA.Refinement.Evaluate (evaluateConstraint)
@@ -1003,6 +1006,33 @@ rankWeighted completions = case completionsRoute completions of
     Listed bound _ ->
         let intervals = listedIntervals completions bound
          in \term -> listToMaybe [(start, width) | (listed, start, width) <- intervals, listed == term]
+
+{- | The completions as a ranked language of "Data.CFTA.Ranked". A rank of the
+language is a rank of 'unrankCompletion', so the weights do not change the
+ranks. A sampling ticket is an integer below 'weightedTotal', and the rank at
+a ticket is the rank of the completion of 'unrankWeighted'. So a sample has a
+probability in proportion to its weight, and 'Data.CFTA.Ranked.lowerWithRank'
+gives the sample with its rank.
+
+'Nothing' when there is no completion, and when a symbol of
+'completionSymbols' has the weight zero: each rank of a ranked language must
+have a ticket.
+-}
+rankedCompletions :: (Eq symbol) => Completions symbol -> Maybe (Ranked (Term symbol))
+rankedCompletions completions
+    | any ((<= 0) . completionsWeight completions) $ completionSymbols completions = Nothing
+    | otherwise =
+        either (const Nothing) Just $
+            fromWeightedIndexedOnDemand
+                WeightedIndexed
+                    { weightedIndexedCardinality = completionCount completions
+                    , weightedIndexedTotalWeight = Weight $ weightedTotal completions
+                    , weightedIndexedSelect = found . unrankCompletion completions
+                    , weightedIndexedRankAtTicket = \ticket -> found $ rankCompletion completions =<< atTicket ticket
+                    }
+  where
+    atTicket = unrankWeighted completions
+    found = fromMaybe (error "cfta-generator bug: a rank or a ticket outside the completions")
 
 -- | The number of terms of an index with at most the given number of nodes.
 countUpTo :: Integer -> SizeIndex (Term symbol) -> Cardinality

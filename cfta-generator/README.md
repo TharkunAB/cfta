@@ -432,7 +432,10 @@ token, `tokenProbability` the probability of a token after the prefix, and
 `drawCompletion` draws a completion in proportion to its weight.
 `weightedTotal`, `unrankWeighted`, and `rankWeighted` give each completion an
 interval of integers with a length in proportion to its weight, so one
-uniform integer below the total is one draw. `Data.CFTA.Sized.Prefix.Parents`
+uniform integer below the total is one draw. `rankedCompletions` gives the
+completions to `Data.CFTA.Ranked` with these integers as its sampling
+tickets, so `toGenWithRank` gives a weighted sample with its replay rank.
+`Data.CFTA.Sized.Prefix.Parents`
 labels each symbol with the token and the position of its parent, so a weight
 can depend on the parent of a node. The weight of `nextTokenWeights` is the
 mass that grammar-aligned decoding needs (Park et al., *Grammar-Aligned
