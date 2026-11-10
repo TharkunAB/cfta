@@ -263,6 +263,14 @@ tree automata of `cfta`, with QuickCheck integration.
   `bestTerms` gives the completions with the largest probabilities.
   `termLogProbability` gives the log-probability of a term, and
   `withTemperature` sets the temperature of whole terms.
+- `Model.condition` gives the model given an event: the terms that a second
+  automaton without constraints accepts, each with its probability divided
+  by the probability of the event. The other queries of the model read only
+  the terms of the event. `Model.eventProbability` gives the probability of
+  the event after a prefix, in the model before `condition`, for the
+  lookahead of constrained decoding (GeLaTo, arXiv:2304.07438). Conditioning
+  and `withTemperature` commute, and conditioning twice gives the model given
+  both events.
 - `Data.CFTA.Sized.Prefix.Mixture`: a mixture of models, for a property of
   the whole term that the bounded context of one model cannot hold. A mixture
   has components, each with a share and the weights of one model. The

@@ -459,6 +459,14 @@ convergence. `Model.trainWithReport` returns the same report together with
 the contextual model, so callers can inspect the fit and use its normal query
 and sampling functions without constructing context labels themselves.
 
+`Model.condition` restricts a model to an event, the terms that a second
+automaton accepts. It divides the probability of each term of the event by the
+probability of the event. `Model.eventProbability` gives the probability of the
+event after a prefix, in the model before conditioning. A decoder with a
+lookahead, as in GeLaTo ([arXiv:2304.07438](https://arxiv.org/abs/2304.07438)),
+multiplies the probability of a next token `x` after a prefix `p` by
+`P(E | p <> [x]) / P(E | p)`.
+
 `Data.CFTA.Sized.Prefix.Mixture` is a mixture of models. One model has one
 table of weights with a bounded context, so it cannot hold a property of the
 whole term, for example that all the leaves are the same variable. A mixture
