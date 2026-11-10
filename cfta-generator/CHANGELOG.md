@@ -12,7 +12,7 @@ tree automata of `cfta`, with QuickCheck integration.
   step count. Corpus fits also report retained and dropped terms. Reporting
   validates finite numerical results and does not evaluate another point
   after the step budget is spent. Existing training functions keep their
-  behavior. See [Inspect training results](docs/training-results.md).
+  behavior.
 - Reject nonfinite or zero exponential potentials in `withLogWeights`, and
   nonfinite temperatures in `Model.withTemperature`. A public-API check found
   that NaN, infinity, overflow, and underflow could become zero rational

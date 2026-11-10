@@ -127,7 +127,11 @@ distill automaton bound terms = do
     (oracle, counts, _) <- either (const Nothing) Just $ distillationInput automaton bound terms
     pure $ stepWeights $ last $ take 2000 $ fit 1e-3 oracle counts Map.empty
 
--- | A corpus fit, with the number of terms retained and dropped before fitting.
+{- | A corpus fit, with the number of terms retained and dropped before fitting.
+Each occurrence of a term in the corpus counts one time. A dropped term is a
+term that the automaton rejects or that is larger than the bound. The pseudo
+terms are not in the counts.
+-}
 data DistillReport symbol = DistillReport
     { distillFit :: FitReport symbol
     , distillRetained :: !Int
@@ -495,12 +499,18 @@ data Step symbol = Step
     }
     deriving (Show)
 
--- | Why the optimizer stopped. 'GradientTolerance' records a stop caused by the gradient tolerance.
+-- | Why the optimizer stopped.
 data FitStopReason
-    = GradientTolerance
-    | ObjectiveTolerance
-    | LineSearchFailed
-    | StepLimit
+    = -- | The norm of the gradient is below @1e-9@.
+      GradientTolerance
+    | {- | A step improved the objective by less than @1e-13@ times its size.
+      The norm of the gradient can be above @1e-9@.
+      -}
+      ObjectiveTolerance
+    | -- | The line search found no step up.
+      LineSearchFailed
+    | -- | The step limit was reached before another stop was known.
+      StepLimit
     deriving (Eq, Show)
 
 -- | A finite final step, the number of steps evaluated, and the stop reason.
@@ -513,14 +523,26 @@ data FitReport symbol = FitReport
 
 -- | An invalid input or numerical failure of a reporting fit.
 data TrainingError
-    = InvalidStepLimit
-    | InvalidPrecision
-    | InvalidCounts
-    | InvalidInitialWeights
-    | NonFiniteStep
-    | UnrepresentableWeights
-    | NoRetainedTerms
-    | UnsupportedTrainingLanguage
+    = -- | The step limit is not positive.
+      InvalidStepLimit
+    | -- | The precision is negative or not finite.
+      InvalidPrecision
+    | -- | A count is negative or not finite.
+      InvalidCounts
+    | -- | An initial log-weight is not finite.
+      InvalidInitialWeights
+    | -- | A step has a weight, an objective, or a gradient norm that is not finite.
+      NonFiniteStep
+    | {- | The fitted log-weights do not give finite positive potentials for
+      sampling. The fit itself was finite.
+      -}
+      UnrepresentableWeights
+    | -- | The corpus has no term that the automaton accepts within the bound.
+      NoRetainedTerms
+    | {- | The automaton is outside the limits of 'distill'. The contextual
+      model also gives this error for each automaton with constraints.
+      -}
+      UnsupportedTrainingLanguage
     deriving (Eq, Show)
 
 {- | Run at most the given number of steps with the objective of 'fit'. The
