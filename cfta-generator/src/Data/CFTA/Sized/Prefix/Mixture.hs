@@ -45,6 +45,7 @@ module Data.CFTA.Sized.Prefix.Mixture (
     sampleTerm,
     bestTerms,
     termLogProbability,
+    eventProbability,
 ) where
 
 import Data.Containers.ListUtils (nubOrd)
@@ -98,6 +99,8 @@ data Mixture symbol = Mixture
     -- ^ The labelled automaton, or its product with the events of 'condition', with the states numbered.
     , mixtureBound :: Int
     -- ^ The size bound.
+    , mixturePrior :: [Component symbol]
+    -- ^ The components before 'condition'.
     , mixtureComponents :: [Component symbol]
     }
 
@@ -145,7 +148,8 @@ train reach automaton bound groups = do
                     weighted
                     (logPartition logWeights weighted)
                     (completionWeight weighted)
-    Mixture reach renumbered bound <$> traverse component fitted
+    components <- traverse component fitted
+    Just $ Mixture reach renumbered bound components components
 
 {- | The mixture given an event: the terms of the mixture that the event also
 accepts, each with its probability divided by the probability of the event.
@@ -305,6 +309,38 @@ termLogProbability mixture term = logSum <$> traverse part (mixtureComponents mi
     part component =
         (logShare component +)
             <$> logProbability (componentLogWeights component) (componentCompletions component) labelled
+
+{- | The probability of the event of a mixture, given that the term starts with
+a prefix, in the mixture before 'condition'. The event of a mixture is the
+intersection of the events of each 'condition' of the mixture. The
+probability is the probability of the completions of the prefix that the
+event accepts, over the probability of all the completions of the prefix, in
+the mixture before 'condition':
+
+> P(E | p) = (Σ_k share_k W_k(p, E) / Z_k) / (Σ_k share_k W_k(p) / Z_k)
+
+Here @share_k@ and @Z_k@ are the share and the total weight of the component
+@k@ before 'condition'. @W_k(p)@ is the weight of the completions of @p@ in
+the component, and @W_k(p, E)@ is the weight of the completions of @p@ that
+the event accepts. The probability is one for each prefix with a completion
+when the mixture has no 'condition', and zero when the event accepts no
+completion of the prefix. 'Nothing' when no completion of the mixture before
+'condition' starts with the prefix.
+
+With 'nextTokenProbabilities' before and after 'condition', this gives the
+lookahead of constrained decoding, as
+'Data.CFTA.Sized.Prefix.Model.eventProbability' gives it for a model:
+
+> P(x | p, E) / P(x | p) = P(E | p <> [x]) / P(E | p)
+-}
+eventProbability :: (Ord symbol) => Mixture symbol -> [Token symbol] -> Maybe Double
+eventProbability mixture prefix = do
+    prior <- after mixture{mixtureComponents = mixturePrior mixture} prefix
+    let total = logSum $ map (uncurry logMass) prior
+    Just $ case after mixture prefix of
+        Nothing -> 0
+        -- The share and the total of each component before 'condition', with the completions after it.
+        Just current -> exp $ logSum [logMass component completions | ((component, _), (_, completions)) <- zip prior current] - total
 
 -- | The completions of a prefix in each component. 'Nothing' when the prefix has no completion.
 after ::

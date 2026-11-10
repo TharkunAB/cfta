@@ -538,6 +538,35 @@ spec = describe "Data.CFTA.Sized.Prefix.Train" $ do
                 (reach, masses conditioned) `shouldBe` (reach, masses mixture)
                 forM_ terms $ \term ->
                     (reach, term, close (probability mixture term) (probability conditioned term)) `shouldBe` (reach, term, True)
+                forM_ prefixes $ \prefix -> do
+                    (reach, prefix, Mixture.eventProbability mixture prefix) `shouldBe` (reach, prefix, Just 1)
+                    (reach, prefix, close 1 <$> Mixture.eventProbability conditioned prefix) `shouldBe` (reach, prefix, Just True)
+        it "gives the probability of an event after each prefix, as the sums over the terms give it, and the lookahead" $
+            forM_ given $ \(reach, name, event, mixture, conditioned) -> do
+                let after = Map.fromList [(prefix, Mixture.eventProbability conditioned prefix) | prefix <- prefixes]
+                    probabilityAfter prefix = fromJust $ after Map.! prefix
+                forM_ prefixes $ \prefix -> do
+                    let within = [(probability mixture term, FTA.accepts event term) | term <- terms, prefix `isPrefixOf` preorder term]
+                        inEvent = sum [value | (value, True) <- within]
+                    if inEvent == 0
+                        then (reach, name, prefix, after Map.! prefix) `shouldBe` (reach, name, prefix, Just 0)
+                        else
+                            (reach, name, prefix, close (inEvent / sum (map fst within)) <$> after Map.! prefix)
+                                `shouldBe` (reach, name, prefix, Just True)
+                    -- P(x | p, E) P(E | p) = P(x | p) P(E | p <> [x])
+                    let lookahead = fromMaybe [] $ Mixture.nextTokenProbabilities conditioned prefix
+                    forM_ (fromJust $ Mixture.nextTokenProbabilities mixture prefix) $ \(token, value) ->
+                        ( reach
+                        , name
+                        , prefix
+                        , token
+                        , close
+                            (fromMaybe 0 (lookup token lookahead) * probabilityAfter prefix)
+                            (value * probabilityAfter (prefix <> [token]))
+                        )
+                            `shouldBe` (reach, name, prefix, token, True)
+                forM_ [[("x", 0), ("y", 0)], [("neg", 2)]] $ \prefix ->
+                    (reach, name, prefix, Mixture.eventProbability conditioned prefix) `shouldBe` (reach, name, prefix, Nothing)
         it "gives the mixture given both events when it conditions twice" $
             forM_ mixtures $ \(reach, mixture) -> do
                 let twice = fromJust $ Mixture.condition rootAdd =<< Mixture.condition withoutY mixture
@@ -545,6 +574,9 @@ spec = describe "Data.CFTA.Sized.Prefix.Train" $ do
                         FTA.intersectWith (\left right -> if left == right then Just left else Nothing) (\_ _ -> noConstraint) withoutY rootAdd
                     once = fromJust $ Mixture.condition both mixture
                 (reach, masses twice) `shouldBe` (reach, masses once)
+                forM_ prefixes $ \prefix ->
+                    (reach, prefix, close <$> Mixture.eventProbability twice prefix <*> Mixture.eventProbability once prefix)
+                        `shouldBe` (reach, prefix, Just True)
         it "is the model given the event when the corpus has one group" $
             forM_ reaches $ \reach -> do
                 let mixture = fromJust $ Mixture.train reach expressions 5 [corpus]
@@ -559,6 +591,9 @@ spec = describe "Data.CFTA.Sized.Prefix.Train" $ do
                         , close <$> fmap exp (Mixture.termLogProbability conditioned term) <*> fmap exp (Model.termLogProbability expected term)
                         )
                             `shouldBe` (reach, name, term, if FTA.accepts event term then Just True else Nothing)
+                    forM_ prefixes $ \prefix ->
+                        (reach, name, prefix, close <$> Mixture.eventProbability conditioned prefix <*> Model.eventProbability expected prefix)
+                            `shouldBe` (reach, name, prefix, Just True)
         it "gives no mixture for an event with a constraint or without a term in the bound" $
             forM_ mixtures $ \(reach, mixture) -> do
                 (reach, isNothing $ Mixture.condition doubles mixture) `shouldBe` (reach, True)
