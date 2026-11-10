@@ -428,12 +428,17 @@ prefix.
 `withWeights` gives each symbol a weight, a non-negative `Rational`, and the
 weight of a term is the product of the weights of its nodes.
 `nextTokenWeights` gives the total weight of the completions after each next
-token, `tokenProbability` the probability of a token after the prefix,
-`drawCompletion` draws a completion in proportion to its weight, and
+token, `tokenProbability` the probability of a token after the prefix, and
 `bestCompletions` gives the completions with the largest weights.
+`lowerCompletions` gives a sampler of the completions, each in proportion to
+its weight; `sampleWeighted` is its QuickCheck generator.
 `weightedTotal`, `unrankWeighted`, and `rankWeighted` give each completion an
 interval of integers with a length in proportion to its weight, so one
-uniform integer below the total is one draw. `Data.CFTA.Sized.Prefix.Parents`
+uniform integer below the total is one draw. `rankedCompletions` gives the
+completions to `Data.CFTA.Ranked`, so `toGenWithRank` gives a weighted
+sample with its replay rank. Without constraints, a sample is one walk of
+the term through the count table. With constraints, these integers are the
+sampling tickets. `Data.CFTA.Sized.Prefix.Parents`
 labels each symbol with the context of its node: the nearest ancestors, each
 with the position of the path, and the root token of the left sibling. A
 weight can then depend on the context. The weight of `nextTokenWeights` is the

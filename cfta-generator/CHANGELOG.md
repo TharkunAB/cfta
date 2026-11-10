@@ -199,21 +199,30 @@ tree automata of `cfta`, with QuickCheck integration.
   the terms up to the bound. `withWeights` gives each symbol a non-negative
   `Rational` weight, and the weight of a term is the product over its nodes:
   `completionWeight`, `nextTokenWeights`, and `tokenProbability` give the
-  exact masses and probabilities, and `drawCompletion` draws a completion in
-  proportion to its weight. `weightedTotal`, `unrankWeighted`, and
-  `rankWeighted` give each completion an interval of integers, in the order
-  of `completionTerms`. The length of the interval is the weight of the
-  completion times `d ^ b`: `d` is the least common denominator of the
-  weights of `completionSymbols`, and `b` is the size bound. A uniform
-  integer below the total, decoded, is one draw in proportion to the weight.
-  With the weight one for each symbol, the intervals are the ranks.
+  exact masses and probabilities, and `lowerCompletions` gives a sampler of
+  the completions for a backend of `Data.CFTA.Ranked`, each completion in
+  proportion to its weight. `drawCompletion` draws a completion with a
+  function that chooses an index of a list of weights. `weightedTotal`,
+  `unrankWeighted`, and `rankWeighted` give each completion an interval of
+  integers, in the order of `completionTerms`. The length of the interval is
+  the weight of the completion times `d ^ b`: `d` is the least common
+  denominator of the weights of `completionSymbols`, and `b` is the size
+  bound. A uniform integer below the total, decoded, is one draw in
+  proportion to the weight. With the weight one for each symbol, the
+  intervals are the ranks.
+  `rankedCompletions` gives the completions as a `Ranked` language: its ranks
+  are the ranks of `unrankCompletion`, and a sample has a probability in
+  proportion to its weight. Without constraints, a sample is one walk of the
+  term through the count table. With constraints, the sampling tickets are
+  the integers of the intervals.
   `bestCompletions` gives the completions with the largest weights. Without
   constraints, it reads them from the count table without a list of the
   completions. `completionWeightBy` gives the total weight for a weight of
   each symbol in any number type.
 - `Data.CFTA.Sized.Prefix.QuickCheck`: `sampleCompletion` draws a rank of the
-  completions uniformly and unranks it, and `sampleWeighted` draws a
-  completion in proportion to its weight.
+  completions uniformly and unranks it, and `sampleWeighted` is the
+  QuickCheck generator of `lowerCompletions`. Without constraints, it is the
+  generator of `rankedCompletions` without the ranks.
 - `Data.CFTA.Sized.Prefix.Parents`: weights that read the context of a node.
   A `Context` holds the nearest ancestors of the node, each with the position
   of the path, and the root token of its left sibling. A `Reach` gives the
