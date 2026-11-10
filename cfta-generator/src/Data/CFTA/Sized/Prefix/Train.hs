@@ -67,6 +67,7 @@ import qualified Data.CFTA.Gen.Internal.Table as Ordinary
 import Data.CFTA.Path (ChildIndex (..))
 import Data.Functor (void)
 import Data.Ratio (approxRational)
+import Numeric (log1p)
 
 import Data.CFTA.Sized.Prefix (
     Completions,
@@ -176,9 +177,32 @@ expectedCounts weight completions = (total, Map.map (/ total) derivatives)
     Dual total derivatives = completionWeightBy dual completions
     dual symbol = Dual (weight symbol) (Map.singleton symbol (weight symbol))
 
--- | The logarithm of the total weight of the completions under log-weights.
+{- | A number that is not negative, as its logarithm. Zero has the logarithm
+negative infinity. The sum and the product use the logarithms only, so a
+number outside the range of 'Double' keeps its value. 'completionWeightBy'
+uses the sum, the product, and 'fromInteger'.
+-}
+newtype LogNumber = LogNumber {logarithm :: Double}
+
+instance Num LogNumber where
+    LogNumber left + LogNumber right
+        | isInfinite larger = LogNumber larger
+        | otherwise = LogNumber $ larger + log1p (exp (smaller - larger))
+      where
+        larger = max left right
+        smaller = min left right
+    LogNumber left * LogNumber right = LogNumber (left + right)
+    fromInteger = LogNumber . log . fromInteger
+    abs = id
+    signum (LogNumber value) = LogNumber $ if value == -1 / 0 then value else 0
+    negate _ = error "LogNumber: a number that is not negative has no negation"
+
+{- | The logarithm of the total weight of the completions under log-weights.
+The calculation uses the logarithms of the weights, so a total weight outside
+the range of 'Double' has a correct logarithm.
+-}
 logPartition :: (Ord symbol) => LogWeights symbol -> Completions symbol -> Double
-logPartition logWeights = log . completionWeightBy (weightOf logWeights)
+logPartition logWeights = logarithm . completionWeightBy (\symbol -> LogNumber $ Map.findWithDefault 0 symbol logWeights)
 
 -- | The weight of a symbol under log-weights.
 weightOf :: (Ord symbol) => LogWeights symbol -> symbol -> Double
@@ -514,15 +538,16 @@ logProbability logWeights completions term = case rankCompletion completions ter
 {- | The probability of each next token after the prefix of the completions,
 under log-weights: the weight of the completions after the token over the
 weight of the completions. The weight of the prefix is in both, so it
-cancels. This is the next-token distribution of the weights as a language
-model over tokens in preorder.
+cancels. The calculation uses the logarithms of the weights ('logPartition'),
+so a prefix with a weight outside the range of 'Double' has a correct
+distribution. This is the next-token distribution of the weights as a
+language model over tokens in preorder.
 -}
 nextTokenDistribution :: (Ord symbol) => LogWeights symbol -> Completions symbol -> [(Token symbol, Double)]
 nextTokenDistribution logWeights completions =
-    [ (token, completionWeightBy weight after / total)
+    [ (token, exp $ logPartition logWeights after - total)
     | (token, _) <- nextTokens completions
     , Just after <- [afterToken completions token]
     ]
   where
-    weight = weightOf logWeights
-    total = completionWeightBy weight completions
+    total = logPartition logWeights completions

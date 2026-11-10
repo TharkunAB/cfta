@@ -39,6 +39,14 @@ import Data.CFTA.Equality.Constraint (EqConstraints, subsumptionOrderedEclasses,
 import Data.CFTA.Index (Arity (..), Size, TransitionIndex (..), childIndexes)
 import Data.CFTA.Interned (NodeId (..), canonicalClasses)
 import Data.CFTA.Path (ChildIndex (..), unPath)
+import Data.CFTA.Ranked.Internal.Sampler (
+    SampleIndex,
+    choiceMassSampleIndex,
+    emptySampleIndex,
+    mapSampleIndex,
+    productMassSampleIndex,
+    uniformSampleIndex,
+ )
 import Data.CFTA.Ranked.Internal.Size (
     ChoiceIndex (..),
     MinimumSize (..),
@@ -242,8 +250,10 @@ scaled factor index = scaleIndex factor index
 consumeChild ::
     SizeIndex ([Term symbol] -> Term symbol) -> SizeIndex (Term symbol) -> SizeIndex ([Term symbol] -> Term symbol)
 consumeChild built = productIndex (mapIndex prepend built)
-  where
-    prepend build term arguments = build (term : arguments)
+
+-- | A function of the children of a node with one more child, the first of those that the function takes.
+prepend :: ([Term symbol] -> Term symbol) -> Term symbol -> [Term symbol] -> Term symbol
+prepend build term arguments = build (term : arguments)
 
 {- | The size index of the terms of a state whose preorder starts with a
 prefix, and the size and position of each such term in that index.
@@ -257,6 +267,15 @@ a product or a choice keeps the order of the whole. So the order of the terms
 is the order of 'tableIndex', restricted to the terms with the prefix. The
 index is empty when tokens remain after the first term of the prefix.
 
+The third part is for a bound on the size and a weight of each symbol, where
+the weight of a term is the product of the weights of its symbols: the total
+weight of the terms of each size, and a sampler of the terms of a size, for
+the sizes up to the bound. A sample has a probability in
+proportion to its weight, and its rank is its position in the size class of
+the index. The sampler has the structure of the index. A choice takes a
+transition by the weights of the transitions, and a product takes the sizes of
+its two sides by their weights. The counts of the index give the positions.
+
 The rows must be unambiguous, as for 'tablePosition', and they have no
 classes of equal children. Apply the function to the rows once: the prefixes
 then share one table of the states.
@@ -266,15 +285,22 @@ prefixedTable ::
     Map.Map state [FTA.Transition state symbol ()] ->
     state ->
     [(symbol, Int)] ->
-    (SizeIndex (Term symbol), Term symbol -> Maybe SizedRank)
+    ( SizeIndex (Term symbol)
+    , Term symbol -> Maybe SizedRank
+    , Size -> (symbol -> Rational) -> (Size -> Rational, SampleIndex (Term symbol))
+    )
 prefixedTable plainRows = table
   where
     rows = Map.map (map ([] <$)) plainRows
-    stateIndexes@(indexOf, _) = stateTable rows
+    stateIndexes@(indexOf, prefixesOf) = stateTable rows
     positionsOf = termPositions rows stateIndexes
     table initial prefix
-        | maybe False (/= size) end = (choiceIndex [], const Nothing)
-        | otherwise = (indexAt initial 0, positionAt initial 0)
+        | maybe False (/= size) end = (choiceIndex [], const Nothing, \_ _ -> (const 0, emptySampleIndex))
+        | otherwise =
+            ( indexAt initial 0
+            , positionAt initial 0
+            , \bound weight -> let (masses, sampling) = weighted bound weight initial 0 in (massAt bound masses, sampling)
+            )
       where
         size = length prefix
         tokens = listArray (0, size - 1) prefix
@@ -317,6 +343,79 @@ prefixedTable plainRows = table
           where
             branches = nodes LazyMap.! (state, position)
         addChild built (prefixIndex, childIndex, childPosition) = productPosition prefixIndex childIndex built childPosition
+        -- The transitions of a state with the part of the prefix at a
+        -- position, or all of them at the end of the prefix. Each has the
+        -- indexes of its child prefixes, and the state and the position of
+        -- each child.
+        branchesAt state position
+            | position >= size =
+                [ (transition, prefixes, zip (FTA.transitionChildren transition) (repeat size))
+                | (transition, prefixes) <- prefixesOf state
+                ]
+            | otherwise =
+                [ (transition, prefixes, zip (FTA.transitionChildren transition) (starts position))
+                | (transition, prefixes) <- nodes LazyMap.! (state, position)
+                ]
+        -- The weights for each size from zero, and the sampler, of the terms
+        -- of a state with the part of the prefix at a position.
+        weighted bound weight = partsAt
+          where
+            partsAt state position = LazyMap.findWithDefault (repeat 0, emptySampleIndex) (state, min position size) parts
+            parts =
+                LazyMap.fromList
+                    [ ((state, position), stateParts $ map branchParts $ branchesAt state position)
+                    | state <- Map.keys rows
+                    , position <- [0 .. size]
+                    ]
+            -- A term has one node at least, so the first weight is known
+            -- before the weights of the children: a state that reaches
+            -- itself can read its own smaller sizes.
+            stateParts branches =
+                ( 0 : foldr (\(masses, _, _) -> zipWith (+) masses) (repeat 0) branches
+                , choiceMassSampleIndex [(index, massAt bound (0 : masses), sampling) | (masses, index, sampling) <- branches]
+                )
+            -- The weights of the terms of a transition for each size of its
+            -- children from zero, its index, and its sampler.
+            branchParts (transition, prefixes, children) =
+                ( map (weight (FTA.transitionSymbol transition) *) childrenMasses
+                , mapIndex ($ []) $ NonEmpty.last prefixes
+                , mapSampleIndex ($ []) sampling
+                )
+              where
+                (childrenMasses, sampling) =
+                    foldl'
+                        addSampled
+                        (1 : repeat 0, uniformSampleIndex $ NonEmpty.head prefixes)
+                        (zip (NonEmpty.toList prefixes) children)
+            -- One more child. The weights of the children so far, without the
+            -- weight of the symbol, choose the sizes of the two sides: the
+            -- weight of the symbol is the same for each choice of the sizes.
+            addSampled (childrenMasses, built) (builtIndex, (child, position)) =
+                ( convolve childrenMasses childMasses
+                , productMassSampleIndex
+                    (mapIndex prepend builtIndex)
+                    (massAt bound $ 0 : childrenMasses)
+                    (mapSampleIndex prepend built)
+                    (indexAt child position)
+                    (massAt bound childMasses)
+                    childSampling
+                )
+              where
+                (childMasses, childSampling) = partsAt child position
+
+{- | The weight of a size up to a bound, from the weights for each size from
+zero. Apply the function to the bound and the weights once: the sizes then
+share one array.
+-}
+massAt :: Size -> [Rational] -> Size -> Rational
+massAt bound masses = \size -> if size < 0 || size > bound then 0 else table ! fromEnum size
+  where
+    table = listArray (0, fromEnum bound) masses
+
+-- | The convolution of two lists of weights by size, from size zero. The lists can be infinite.
+convolve :: [Rational] -> [Rational] -> [Rational]
+convolve [] _ = repeat 0
+convolve (first : rest) others = zipWith (+) (map (first *) others) (0 : convolve rest others)
 
 {- | The parts of a preorder prefix. For each position of a token, the position
 where the prefix of each child of the token starts, in order. A child that the

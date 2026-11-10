@@ -84,17 +84,18 @@ still list the candidates.
 of a term is the product of the weights of the symbols of its nodes.
 'nextTokenWeights' gives the total weight of the completions after each token,
 'tokenProbability' the probability of a token after the prefix,
-'drawCompletion' draws a completion in proportion to its weight, and
-'bestCompletions' gives the completions with the largest weights. A decoder
-that mixes the scores of a model with a grammar needs this mass of the
-grammatical completions; see Park, Wang, Berg-Kirkpatrick, Polikarpova, and
-D'Antoni, /Grammar-Aligned Decoding/, NeurIPS 2024 (arXiv:2405.21047). Here
-the mass is exact for a weight that is a product over the nodes, not for the
-distribution of a language model. Without constraints, the weights of a
-prefix are a convolution over its transitions, as the counts are; ambiguous
-rows give them from their bottom-up deterministic rows. Otherwise they are
-sums over the listed completions. Weights on the symbols, not on the
-transitions, give each completion one weight, also when two runs accept it.
+'lowerCompletions' gives a sampler of the completions, each in proportion to
+its weight, and 'bestCompletions' gives the completions with the largest
+weights. A decoder that mixes the scores of a model with a grammar needs this
+mass of the grammatical completions; see Park, Wang, Berg-Kirkpatrick,
+Polikarpova, and D'Antoni, /Grammar-Aligned Decoding/, NeurIPS 2024
+(arXiv:2405.21047). Here the mass is exact for a weight that is a product over
+the nodes, not for the distribution of a language model. Without constraints,
+the weights of a prefix are a convolution over its transitions, as the counts
+are; ambiguous rows give them from their bottom-up deterministic rows.
+Otherwise they are sums over the listed completions. Weights on the symbols,
+not on the transitions, give each completion one weight, also when two runs
+accept it.
 
 'weightedTotal', 'unrankWeighted', and 'rankWeighted' give each completion an
 interval of integers whose length is in proportion to its weight. The
@@ -102,6 +103,12 @@ intervals follow the order of 'completionTerms'. So a uniform integer below the
 total draws a completion in proportion to its weight, and the draw is one
 integer. With the weight one for each symbol, the interval of a completion
 holds only its rank.
+
+'rankedCompletions' gives the completions to "Data.CFTA.Ranked": a ranked
+language with the ranks of 'unrankCompletion', whose samples are in
+proportion to the weights. Without constraints, its sampler is a walk of the
+count table with the weights, and it is the sampler of 'lowerCompletions'.
+Otherwise these integers are its sampling tickets.
 
 A 'Completions' value does not change, so a decoder that keeps the values of
 its prefix can go back one token with the value before it. When 'nextTokens'
@@ -134,11 +141,13 @@ module Data.CFTA.Sized.Prefix (
     completionWeightBy,
     nextTokenWeights,
     tokenProbability,
+    lowerCompletions,
     drawCompletion,
     bestCompletions,
     weightedTotal,
     unrankWeighted,
     rankWeighted,
+    rankedCompletions,
 
     -- * Verdicts on demand
     Deciding,
@@ -157,7 +166,7 @@ import qualified Data.IntMap.Lazy as IntMap
 import Data.List (elemIndex, genericDrop, genericIndex, genericLength, genericTake, mapAccumL, sortOn)
 import qualified Data.Map.Lazy as LazyMap
 import qualified Data.Map.Strict as Map
-import Data.Maybe (catMaybes, listToMaybe)
+import Data.Maybe (catMaybes, fromMaybe, listToMaybe)
 import Data.Ord (Down (..))
 import Data.Ratio (denominator, numerator)
 import qualified Data.Set as Set
@@ -167,11 +176,14 @@ import Data.CFTA.Constraint (Constraint, constraintPaths, equalities, equalityCo
 import qualified Data.CFTA.Enumeration as Enumeration
 import Data.CFTA.Equality.Constraint (EqConstraints (EqConstraints), unPathEClass)
 import qualified Data.CFTA.Gen.Internal.Table as Ordinary
-import Data.CFTA.Index (Cardinality (..), ClassRank (..), Rank (..), Size (..))
+import Data.CFTA.Index (Cardinality (..), ClassRank (..), Rank (..), Size (..), Weight (..))
 import Data.CFTA.Interned (Node (Node), edgeChildren, fromFTA, nodeEdges, nodeIdentity, setChildren)
 import Data.CFTA.Path (ChildIndex (..), Path, getPath, path, unPath)
-import Data.CFTA.Ranked.Internal.Decoder (RankedValue (..))
-import Data.CFTA.Ranked.Internal.Size (SizeIndex, SizedRank (..), countAtSize, sizeClassSelect)
+import Data.CFTA.Ranked (Ranked, WeightedIndexed (..), fromWeightedIndexedOnDemand)
+import Data.CFTA.Ranked.Internal (fromSizeClasses)
+import Data.CFTA.Ranked.Internal.Decoder (RankedValue (..), SizeClass (..))
+import Data.CFTA.Ranked.Internal.Sampler (GenBackend (..), SampleIndex, Sampler (..), boundedMassSampler, integerMasses)
+import Data.CFTA.Ranked.Internal.Size (SizeIndex, SizedRank (..), countAtSize, sizeClassSelect, sizeClasses)
 import Data.CFTA.Refinement.Evaluate (evaluateConstraint)
 import Data.CFTA.Refinement.Verdict (Entailment, Verdict (..), andVerdicts, orVerdicts)
 import Data.CFTA.Sized (Sized, SizedError (..), sized, sizedStates, termsOfSize)
@@ -216,6 +228,8 @@ data Table state symbol = Table
     -- ^ The initial state.
     , tablePrefixed :: [Token symbol] -> (SizeIndex (Term symbol), Term symbol -> Maybe SizedRank)
     -- ^ The index of the terms with a prefix, the first token first, and their positions.
+    , tableSampling :: [Token symbol] -> Size -> (symbol -> Rational) -> (Size -> Rational, SampleIndex (Term symbol))
+    -- ^ The weight of each size and the sampler of the terms with a prefix, the first token first, for a weight of each symbol.
     , tableTokens :: [Token symbol]
     -- ^ The tokens of the transitions that the initial state reaches, in ascending order.
     }
@@ -232,12 +246,14 @@ prefixCompletions (Size bound) automaton
     | any (any (residual . FTA.transitionConstraint)) reached = Left ResidualGuard
     | all (all ((== noConstraint) . FTA.transitionConstraint)) reached
     , Just rows <- Ordinary.countingRows (FTA.mapConstraints (const ()) automaton) =
-        let table =
+        let prefixed = Ordinary.prefixedTable rows (Left initial)
+            table =
                 Table
                     { tableBound = bound
                     , tableRows = rows
                     , tableInitial = Left initial
-                    , tablePrefixed = Ordinary.prefixedTable rows (Left initial)
+                    , tablePrefixed = \prefix -> let (index, position, _) = prefixed prefix in (index, position)
+                    , tableSampling = \prefix -> let (_, _, sampling) = prefixed prefix in sampling
                     , tableTokens =
                         Set.toAscList $ Set.fromList [tokenOf transition | transitions <- Map.elems reached, transition <- transitions]
                     }
@@ -936,12 +952,38 @@ tokenProbability completions token
   where
     total = completionWeight completions
 
+{- | A sampler of the completions for a backend of "Data.CFTA.Ranked". A
+sample has a probability in proportion to its weight. 'Nothing' when the
+completions have the weight zero. A symbol can have the weight zero: the
+sampler does not give a completion with the weight zero.
+
+Without constraints, the sampler is the sampler of 'rankedCompletions': it
+selects a size, and then a sample is one walk of the term. The sampler keeps
+the compiled weights of the choices that a sample visited. With constraints,
+the sampler selects one of the listed completions.
+
+'Data.CFTA.Sized.Prefix.QuickCheck.sampleWeighted' is the sampler for
+QuickCheck. The t'Data.CFTA.Ranked.Internal.Sampler.Exact' backend gives the
+outcomes of the sampler with their probabilities.
+-}
+lowerCompletions :: (GenBackend gen) => Completions symbol -> Maybe (gen (Term symbol))
+lowerCompletions completions
+    | completionWeight completions <= 0 = Nothing
+    | otherwise = Just $ case completionsRoute completions of
+        Indexed table index _ -> runValueSampler $ snd $ indexedSampler completions table index
+        Listed _ listed ->
+            frequencyGen $
+                integerMasses [(mass, pure term) | (term, _, Yes) <- listed, let mass = termWeight weight term, mass > 0]
+  where
+    weight = completionsWeight completions
+
 {- | A completion, drawn with a function that chooses an index of a list of
 weights. 'Nothing' when the completions have the weight zero. The draw gives
 each completion a probability in proportion to its weight when the function
 chooses the index @i@ with the probability of the weight @i@ over the sum of
-the weights, as 'Data.CFTA.Sized.Prefix.QuickCheck.sampleWeighted' does. The
-draw takes an index outside the list modulo the length of the list.
+the weights. The draw takes an index outside the list modulo the length of
+the list. The draw computes the weights again at each node, so
+'lowerCompletions' is the sampler for many draws.
 
 Without constraints, the draw chooses the size of the completion, then a
 transition of the rows of the count table and the sizes of its children at
@@ -1112,6 +1154,60 @@ rankWeighted completions = case completionsRoute completions of
     Listed bound _ ->
         let intervals = listedIntervals completions bound
          in \term -> listToMaybe [(start, width) | (listed, start, width) <- intervals, listed == term]
+
+{- | The completions as a ranked language of "Data.CFTA.Ranked". A rank of the
+language is a rank of 'unrankCompletion', so the weights do not change the
+ranks. A sample has a probability in proportion to its weight, and
+'Data.CFTA.Ranked.lowerWithRank' gives the sample with its rank.
+
+Without constraints, a sample is one walk of the term. The sampler selects a
+size in proportion to the total weight of the completions of that size. Then,
+at each node, it selects a transition and the sizes of the children in
+proportion to the weight of the terms that they give. The size of a member of
+the language is its number of nodes.
+
+With constraints, a sampling ticket is an integer below 'weightedTotal', and
+the rank at a ticket is the rank of the completion of 'unrankWeighted'. A
+sample decodes the ticket, ranks the term, and unranks the rank. The language
+has one size class.
+
+'Nothing' when there is no completion, and when a symbol of
+'completionSymbols' has the weight zero: each rank of a ranked language must
+have a positive probability.
+-}
+rankedCompletions :: (Eq symbol) => Completions symbol -> Maybe (Ranked (Term symbol))
+rankedCompletions completions
+    | any ((<= 0) . completionsWeight completions) $ completionSymbols completions = Nothing
+    | otherwise = either (const Nothing) Just $ case completionsRoute completions of
+        Indexed table index _ -> uncurry fromSizeClasses $ indexedSampler completions table index
+        Listed{} ->
+            fromWeightedIndexedOnDemand
+                WeightedIndexed
+                    { weightedIndexedCardinality = completionCount completions
+                    , weightedIndexedTotalWeight = Weight $ weightedTotal completions
+                    , weightedIndexedSelect = found . unrankCompletion completions
+                    , weightedIndexedRankAtTicket = \ticket -> found $ rankCompletion completions =<< atTicket ticket
+                    }
+  where
+    atTicket = unrankWeighted completions
+    found = fromMaybe (error "cfta-generator bug: a rank or a ticket outside the completions")
+
+{- | The size classes of the completions of the 'Indexed' route, and their
+sampler: it selects a size in proportion to the total weight of the
+completions of that size, and then walks the term. One completion at least
+must have a positive weight.
+-}
+indexedSampler ::
+    Completions symbol ->
+    Table state symbol ->
+    SizeIndex (Term symbol) ->
+    ([SizeClass (Term symbol)], Sampler (Term symbol))
+indexedSampler completions table index =
+    (classes, boundedMassSampler [(sizeClass, mass $ classSize sizeClass) | sizeClass <- classes] sampling)
+  where
+    bound = Size $ tableBound table
+    classes = sizeClasses bound index
+    (mass, sampling) = tableSampling table (completionPrefix completions) bound (completionsWeight completions)
 
 -- | The number of terms of an index with at most the given number of nodes.
 countUpTo :: Integer -> SizeIndex (Term symbol) -> Cardinality
