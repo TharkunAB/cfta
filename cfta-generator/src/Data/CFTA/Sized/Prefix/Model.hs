@@ -33,6 +33,7 @@ module Data.CFTA.Sized.Prefix.Model (
     termLogProbability,
 ) where
 
+import qualified Data.Map.Strict as Map
 import qualified Test.QuickCheck as QC
 
 import qualified Data.CFTA as FTA
@@ -77,8 +78,14 @@ data Model symbol = Model
     , modelLogWeights :: LogWeights (Parented symbol)
     -- ^ The fitted log-weights, at the temperature one.
     , modelTemperature :: Double
-    , modelCompletions :: Completions (Parented symbol)
+    , modelAutomaton :: FTA.FTA Int (Parented symbol) Constraint
+    -- ^ The labelled automaton, with the states numbered.
+    , modelBound :: Int
+    -- ^ The size bound.
+    , modelPrior :: Completions (Parented symbol)
     -- ^ The completions of the empty prefix of the labelled automaton, with the weights at the temperature.
+    , modelCompletions :: Completions (Parented symbol)
+    -- ^ The completions of the empty prefix of the automaton, with the weights at the temperature.
     }
 
 {- | Fit a model with a reach to a corpus of terms of an automaton, for the
@@ -91,9 +98,19 @@ train ::
 train reach automaton bound terms = do
     labelled <- withParents reach rootContext automaton
     logWeights <- distill labelled bound (map (labelParents reach rootContext) terms)
-    completions <- either (const Nothing) Just $ prefixCompletions (Size $ toInteger bound) labelled
+    let renumbered = numbered labelled
+    completions <- either (const Nothing) Just $ prefixCompletions (Size $ toInteger bound) renumbered
     weighted <- withLogWeights logWeights completions
-    Just $ Model reach logWeights 1 weighted
+    Just
+        Model
+            { modelReach = reach
+            , modelLogWeights = logWeights
+            , modelTemperature = 1
+            , modelAutomaton = renumbered
+            , modelBound = bound
+            , modelPrior = weighted
+            , modelCompletions = weighted
+            }
 
 {- | Fit the same model as 'train', with the optimizer's stop reason and
 retained and dropped corpus counts. The report's weights use context-labelled
@@ -116,10 +133,22 @@ trainWithReport reach automaton bound terms = do
     if any unrepresentable logWeights
         then Left UnrepresentableWeights
         else do
+            let renumbered = numbered labelled
             completions <-
-                either (const $ Left UnsupportedTrainingLanguage) Right $ prefixCompletions (Size $ toInteger bound) labelled
+                either (const $ Left UnsupportedTrainingLanguage) Right $ prefixCompletions (Size $ toInteger bound) renumbered
             weighted <- maybe (Left UnrepresentableWeights) Right $ withLogWeights logWeights completions
-            pure (Model reach logWeights 1 weighted, report)
+            pure
+                ( Model
+                    { modelReach = reach
+                    , modelLogWeights = logWeights
+                    , modelTemperature = 1
+                    , modelAutomaton = renumbered
+                    , modelBound = bound
+                    , modelPrior = weighted
+                    , modelCompletions = weighted
+                    }
+                , report
+                )
   where
     unrepresentable logWeight = let value = exp logWeight in isNaN value || isInfinite value || value <= 0
 
@@ -133,8 +162,10 @@ withTemperature :: (Ord symbol) => Double -> Model symbol -> Maybe (Model symbol
 withTemperature temperature model
     | isNaN temperature || isInfinite temperature || temperature <= 0 = Nothing
     | otherwise = do
-        weighted <- withLogWeights (atTemperature temperature $ modelLogWeights model) (modelCompletions model)
-        Just model{modelTemperature = temperature, modelCompletions = weighted}
+        let logWeights = atTemperature temperature $ modelLogWeights model
+        prior <- withLogWeights logWeights (modelPrior model)
+        weighted <- withLogWeights logWeights (modelCompletions model)
+        Just model{modelTemperature = temperature, modelPrior = prior, modelCompletions = weighted}
 
 {- | The probability of each next token after a prefix, in ascending order of
 the tokens. A complete prefix has no next token. 'Nothing' when no
@@ -168,6 +199,12 @@ bestTerms count model prefix = do
 termLogProbability :: (Ord symbol) => Model symbol -> Term symbol -> Maybe Double
 termLogProbability model =
     logProbability (logWeightsOf model) (modelCompletions model) . labelParents (modelReach model) rootContext
+
+-- | An automaton with each state renamed to its position in the ascending order of the states.
+numbered :: (Ord state) => FTA.FTA state symbol constraint -> FTA.FTA Int symbol constraint
+numbered automaton = FTA.mapStates (numbers Map.!) automaton
+  where
+    numbers = Map.fromList $ zip (FTA.states automaton) [0 ..]
 
 -- | The log-weights of a model at its temperature.
 logWeightsOf :: Model symbol -> LogWeights (Parented symbol)
