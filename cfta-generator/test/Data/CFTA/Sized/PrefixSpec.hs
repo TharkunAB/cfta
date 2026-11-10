@@ -1,6 +1,6 @@
 module Data.CFTA.Sized.PrefixSpec (spec) where
 
-import Control.Monad (ap, forM_)
+import Control.Monad (forM_)
 import Data.Containers.ListUtils (nubOrd)
 import Data.Either (fromRight)
 import Data.Functor (void)
@@ -96,15 +96,15 @@ spec = describe "Data.CFTA.Sized.Prefix" $ do
             sums = [term | term <- listed, take 1 (preorder term) == [("add", 2)]]
         forM_ [const 1, \symbol -> if symbol == "one" then 3 else 1 / 2] $ \each -> do
             let total = sum $ map (termWeight each) sums
-            fmap distribution (drawCompletion proportional $ weightedBy each add)
+            fmap outcomes (lowerCompletions $ weightedBy each add)
                 `shouldBe` Just (Map.fromListWith (+) [(term, termWeight each term / total) | term <- sums])
     it "keeps a token whose completions have the weight zero, with the probability zero" $ do
         let completions = weightedBy (\symbol -> if symbol == "one" then 0 else 1) $ start 3 expressionAutomaton
             one = fromMaybe (error "no one") $ afterToken completions ("one", 0)
         lookup ("one", 0) (nextTokenWeights completions) `shouldBe` Just 0
         tokenProbability completions ("one", 0) `shouldBe` Just 0
-        (completionWeight one, tokenProbability one ("zero", 0), isJust $ drawCompletion proportional one)
-            `shouldBe` (0, Nothing, False)
+        (completionWeight one, tokenProbability one ("zero", 0), outcomes <$> lowerCompletions one)
+            `shouldBe` (0, Nothing, Nothing)
         (weightedTotal one, rankWeighted one (Term.Node "one" []), unrankWeighted one 0) `shouldBe` (0, Just (0, 0), Nothing)
         isJust (rankedCompletions completions) `shouldBe` False
     it "rejects a negative weight" $
@@ -229,8 +229,6 @@ fixtureUpTo bound name graph = describe name $ do
                                     , prefix `isPrefixOf` preorder term
                                     , termWeight each term > 0
                                     ]
-                    outcomes sampler = Map.fromListWith (+) [(term, mass) | (mass, term) <- runExact sampler]
-                (prefix, fmap distribution $ drawCompletion proportional completions) `shouldBe` (prefix, expected)
                 (prefix, outcomes <$> lowerCompletions completions) `shouldBe` (prefix, expected)
         it "gives the completions with the largest weights, the largest first, each once with its weight" $
             forM_ prefixes $ \prefix -> forM_ [1, 3, 1000] $ \count -> do
@@ -363,32 +361,9 @@ fixtureUpTo bound name graph = describe name $ do
 termWeight :: (symbol -> Rational) -> Term symbol -> Rational
 termWeight weight = foldr ((*) . weight) 1
 
--- | A distribution over values, as a list of values with their probabilities.
-newtype Distribution value = Distribution [(value, Rational)]
-
-instance Functor Distribution where
-    fmap f (Distribution weighted) = Distribution [(f value, probability) | (value, probability) <- weighted]
-
-instance Applicative Distribution where
-    pure value = Distribution [(value, 1)]
-    (<*>) = ap
-
-instance Monad Distribution where
-    Distribution weighted >>= next =
-        Distribution
-            [ (result, probability * probability')
-            | (value, probability) <- weighted
-            , let Distribution results = next value
-            , (result, probability') <- results
-            ]
-
--- | The choice of an index in proportion to the weights.
-proportional :: [Rational] -> Distribution Int
-proportional weights = Distribution [(index, weight / sum weights) | (index, weight) <- zip [0 ..] weights, weight > 0]
-
--- | The probability of each value of a distribution.
-distribution :: (Ord value) => Distribution value -> Map.Map value Rational
-distribution (Distribution weighted) = Map.fromListWith (+) weighted
+-- | The probability of each outcome of a sampler.
+outcomes :: (Ord value) => Exact value -> Map.Map value Rational
+outcomes sampler = Map.fromListWith (+) [(value, mass) | (mass, value) <- runExact sampler]
 
 -- | The largest size of the completions.
 sizeBound :: Integer
