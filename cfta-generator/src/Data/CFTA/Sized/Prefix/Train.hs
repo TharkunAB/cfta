@@ -140,7 +140,7 @@ distill automaton bound terms = do
 
 {- | The completions with the weights of log-weights, for the queries of
 "Data.CFTA.Sized.Prefix": 'nextTokenWeights', 'tokenProbability' and
-'drawCompletion'. Each weight is the exponential of the log-weight as a
+'lowerCompletions'. Each weight is the exponential of the log-weight as a
 'Rational' within a relative error of @10^-9@. A symbol without a log-weight
 has the weight one.
 -}
