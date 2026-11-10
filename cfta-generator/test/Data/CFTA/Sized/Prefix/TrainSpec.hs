@@ -396,6 +396,15 @@ spec = describe "Data.CFTA.Sized.Prefix.Train" $ do
             -- The fit of two components is slow with the largest reach, so the laws of two components use the first two.
             mixtures = [(reach, fromJust $ Mixture.train reach expressions 5 [only "x", only "y"]) | reach <- take 2 reaches]
             negated left right = Term.Node "add" [Term.Node "neg" [Term.Node left []], Term.Node "neg" [Term.Node right []]]
+            -- The exact mass of each term in the draws of a mixture.
+            masses mixture = Map.fromListWith (+) [(term, mass) | (mass, term) <- runExact $ fromJust $ Mixture.lowerTerm mixture []]
+            events = [("without y", withoutY), ("root add", rootAdd)]
+            -- Each mixture of two components with the name of an event, the event, and the mixture given the event.
+            given =
+                [ (reach, name, event, mixture, fromJust $ Mixture.condition event mixture)
+                | (reach, mixture) <- mixtures
+                , (name, event) <- events
+                ]
         it "is the model when the corpus has one group" $
             forM_ reaches $ \reach -> do
                 let mixture = fromJust $ Mixture.train reach expressions 5 [corpus]
@@ -499,6 +508,63 @@ spec = describe "Data.CFTA.Sized.Prefix.Train" $ do
                         (reach, prefix, count, found) `shouldBe` (reach, prefix, count, take count every)
                 (reach, Mixture.bestTerms 1 mixture [("x", 0), ("y", 0)]) `shouldBe` (reach, Nothing)
                 (reach, map (\count -> Mixture.bestTerms count mixture []) [0, -1]) `shouldBe` (reach, [Just [], Just []])
+        it "gives each term of an event its probability over the probability of the event, and draws it with this exact mass" $
+            forM_ given $ \(reach, name, event, mixture, conditioned) -> do
+                let inEvent = filter (FTA.accepts event) terms
+                    total = sum $ map (probability mixture) inEvent
+                    drawn = masses conditioned
+                forM_ terms $ \term ->
+                    (reach, name, term, close (probability mixture term / total) . exp <$> Mixture.termLogProbability conditioned term)
+                        `shouldBe` (reach, name, term, if FTA.accepts event term then Just True else Nothing)
+                (reach, name, Map.keys drawn, sum drawn) `shouldBe` (reach, name, sort inEvent, 1)
+                forM_ (Map.toList drawn) $ \(term, mass) ->
+                    (reach, name, term, close (fromRational mass) (probability conditioned term)) `shouldBe` (reach, name, term, True)
+        it "multiplies the share of each component by the probability of the event in the component" $
+            forM_ given $ \(reach, name, event, mixture, conditioned) -> do
+                -- For each component, the probability of the component and the event: the sum, over the terms of the
+                -- event, of the probability of the term times the probability of the component after the term.
+                let joint =
+                        foldr1
+                            (zipWith (+))
+                            [ map (* probability mixture term) $ fromJust $ Mixture.componentProbabilities mixture (preorder term)
+                            | term <- terms
+                            , FTA.accepts event term
+                            ]
+                (reach, name, zipWith close (map (/ sum joint) joint) <$> Mixture.componentProbabilities conditioned [])
+                    `shouldBe` (reach, name, Just [True, True])
+        it "keeps each probability given an event that each term is in" $
+            forM_ mixtures $ \(reach, mixture) -> do
+                let conditioned = fromJust $ Mixture.condition expressions mixture
+                (reach, masses conditioned) `shouldBe` (reach, masses mixture)
+                forM_ terms $ \term ->
+                    (reach, term, close (probability mixture term) (probability conditioned term)) `shouldBe` (reach, term, True)
+        it "gives the mixture given both events when it conditions twice" $
+            forM_ mixtures $ \(reach, mixture) -> do
+                let twice = fromJust $ Mixture.condition rootAdd =<< Mixture.condition withoutY mixture
+                    both =
+                        FTA.intersectWith (\left right -> if left == right then Just left else Nothing) (\_ _ -> noConstraint) withoutY rootAdd
+                    once = fromJust $ Mixture.condition both mixture
+                (reach, masses twice) `shouldBe` (reach, masses once)
+        it "is the model given the event when the corpus has one group" $
+            forM_ reaches $ \reach -> do
+                let mixture = fromJust $ Mixture.train reach expressions 5 [corpus]
+                    model = fromJust $ Model.train reach expressions 5 corpus
+                forM_ events $ \(name, event) -> do
+                    let conditioned = fromJust $ Mixture.condition event mixture
+                        expected = fromJust $ Model.condition event model
+                    forM_ terms $ \term ->
+                        ( reach
+                        , name
+                        , term
+                        , close <$> fmap exp (Mixture.termLogProbability conditioned term) <*> fmap exp (Model.termLogProbability expected term)
+                        )
+                            `shouldBe` (reach, name, term, if FTA.accepts event term then Just True else Nothing)
+        it "gives no mixture for an event with a constraint or without a term in the bound" $
+            forM_ mixtures $ \(reach, mixture) -> do
+                (reach, isNothing $ Mixture.condition doubles mixture) `shouldBe` (reach, True)
+                -- A term with six nodes, beyond the bound.
+                let deep = iterate (Term.Node "neg" . pure) (Term.Node "x" []) !! 5
+                (reach, isNothing $ Mixture.condition (FTA.fromTerms [deep]) mixture) `shouldBe` (reach, True)
 
 -- | The log partition and expected count of one Bernoulli feature, with a constant offset.
 bernoulliOracle :: Double -> Oracle String

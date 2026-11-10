@@ -38,6 +38,7 @@ at that temperature.
 module Data.CFTA.Sized.Prefix.Mixture (
     Mixture,
     train,
+    condition,
     nextTokenProbabilities,
     componentProbabilities,
     lowerTerm,
@@ -63,6 +64,7 @@ import Data.CFTA.Sized.Prefix (
     afterPrefix,
     afterToken,
     bestCompletions,
+    completionCount,
     completionWeight,
     lowerCompletions,
     nextTokens,
@@ -72,8 +74,10 @@ import Data.CFTA.Sized.Prefix (
 import Data.CFTA.Sized.Prefix.Parents (
     Parented,
     Reach,
+    intersectEvent,
     labelParents,
     labelPrefix,
+    numbered,
     rootContext,
     unlabelParents,
     withParents,
@@ -90,6 +94,10 @@ import Data.CFTA.Term (Term)
 -- | A mixture of models of the terms of an automaton within a size bound. It has one component or more.
 data Mixture symbol = Mixture
     { mixtureReach :: Reach
+    , mixtureAutomaton :: FTA.FTA Int (Parented symbol) Constraint
+    -- ^ The labelled automaton, or its product with the events of 'condition', with the states numbered.
+    , mixtureBound :: Int
+    -- ^ The size bound.
     , mixtureComponents :: [Component symbol]
     }
 
@@ -99,7 +107,7 @@ data Component symbol = Component
     -- ^ Positive. The sum of the shares of a mixture is one.
     , componentLogWeights :: LogWeights (Parented symbol)
     , componentCompletions :: Completions (Parented symbol)
-    -- ^ The completions of the empty prefix in the labelled automaton, with the weights of the component.
+    -- ^ The completions of the empty prefix of 'mixtureAutomaton', with the weights of the component.
     , componentLogTotal :: Double
     -- ^ The logarithm of the total weight of the completions.
     , componentTotal :: Rational
@@ -125,7 +133,8 @@ train ::
 train reach automaton bound groups = do
     labelled <- withParents reach rootContext automaton
     fitted <- distillMixture labelled bound $ map (map $ labelParents reach rootContext) groups
-    completions <- either (const Nothing) Just $ prefixCompletions (Size $ toInteger bound) labelled
+    let renumbered = numbered labelled
+    completions <- either (const Nothing) Just $ prefixCompletions (Size $ toInteger bound) renumbered
     let total = sum $ map (toRational . fst) fitted
         component (share, logWeights) = do
             weighted <- withLogWeights logWeights completions
@@ -136,7 +145,55 @@ train reach automaton bound groups = do
                     weighted
                     (logPartition logWeights weighted)
                     (completionWeight weighted)
-    Mixture reach <$> traverse component fitted
+    Mixture reach renumbered bound <$> traverse component fitted
+
+{- | The mixture given an event: the terms of the mixture that the event also
+accepts, each with its probability divided by the probability of the event.
+The event is an automaton over the plain symbols, as for
+'Data.CFTA.Sized.Prefix.Model.condition'. The mixture given the event is the
+mixture of the components given the event. The share of each component is
+multiplied by the probability of the event in the component, and the shares
+are then divided by their sum:
+
+> P(t | E) = Σ_k share'_k P_k(t | E)
+> share'_k = share_k P_k(E) / Σ_j share_j P_j(E)
+
+The new shares are exact. The components read one product of the automaton
+of the mixture and the event ('intersectEvent'), and one set of completions
+of the product. A term outside the event has the probability zero, and the
+queries of the result read only the terms of the event. Conditioning on two
+events, one after the other, gives the mixture given both events.
+
+'Nothing' when a transition of the event has a constraint other than
+'Data.CFTA.Constraint.noConstraint'. 'Nothing' also when the event accepts no
+term of the mixture within the bound.
+-}
+condition :: (Ord state, Ord symbol) => FTA.FTA state symbol Constraint -> Mixture symbol -> Maybe (Mixture symbol)
+condition event mixture = do
+    automaton <- intersectEvent event (mixtureAutomaton mixture)
+    completions <- either (const Nothing) Just $ prefixCompletions (Size $ toInteger $ mixtureBound mixture) automaton
+    joint <-
+        if completionCount completions == 0
+            then Nothing
+            else traverse (given completions) (mixtureComponents mixture)
+    let total = sum $ map componentShare joint
+    Just
+        mixture
+            { mixtureAutomaton = automaton
+            , mixtureComponents = [component{componentShare = componentShare component / total} | component <- joint]
+            }
+  where
+    -- The component given the event. Its share is the share times the probability of the event in the component.
+    given completions component = do
+        weighted <- withLogWeights (componentLogWeights component) completions
+        let weight = completionWeight weighted
+        Just
+            component
+                { componentShare = componentShare component * weight / componentTotal component
+                , componentCompletions = weighted
+                , componentLogTotal = logPartition (componentLogWeights component) weighted
+                , componentTotal = weight
+                }
 
 {- | The next tokens after a prefix, each with its probability: the
 probability that a term of the mixture with this prefix continues with the
