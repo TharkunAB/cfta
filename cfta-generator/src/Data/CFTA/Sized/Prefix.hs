@@ -140,7 +140,6 @@ module Data.CFTA.Sized.Prefix (
     nextTokenWeights,
     tokenProbability,
     lowerCompletions,
-    drawCompletion,
     weightedTotal,
     unrankWeighted,
     rankWeighted,
@@ -961,34 +960,6 @@ lowerCompletions completions
   where
     weight = completionsWeight completions
 
-{- | A completion, drawn with a function that chooses an index of a list of
-weights. 'Nothing' when the completions have the weight zero. The draw gives
-each completion a probability in proportion to its weight when the function
-chooses the index @i@ with the probability of the weight @i@ over the sum of
-the weights. The draw takes an index outside the list modulo the length of
-the list. The draw computes the weights again at each node, so
-'lowerCompletions' is the sampler for many draws.
-
-Without constraints, the draw chooses the size of the completion, then a
-transition of the rows of the count table and the sizes of its children at
-each node, each in proportion to the weights of its terms. Otherwise it
-chooses one listed completion. The draw does not choose a rank, so with the
-weight one for each symbol the probabilities are uniform, but one draw can
-give another completion than an unranked uniform rank.
--}
-drawCompletion :: (Monad m) => ([Rational] -> m Int) -> Completions symbol -> Maybe (m (Term symbol))
-drawCompletion choose completions
-    | completionWeight completions <= 0 = Nothing
-    | otherwise = Just $ case completionsRoute completions of
-        Indexed table _ _ -> do
-            size <- drawOne choose (genericIndex weights) [1 .. tableBound table]
-            drawPrefixed choose weight (tableRows table) (completionPrefix completions) (tableInitial table) size
-          where
-            weights = indexedWeights completions table
-        Listed _ listed -> drawOne choose (termWeight weight) [term | (term, _, Yes) <- listed]
-  where
-    weight = completionsWeight completions
-
 {- | The sum of the lengths of the weighted intervals of the completions. Each
 completion has an interval of integers, and the intervals follow the order of
 'completionTerms', one after another from zero. So a uniform integer below the
@@ -1155,50 +1126,6 @@ prefixedWeights weight rows prefix = weightsAt
     childPositions position transition
         | position >= size = map (const size) $ FTA.transitionChildren transition
         | otherwise = starts position
-
-{- | A term of a state whose preorder starts with the part of a prefix at the
-start, with the given size, drawn in proportion to its weight as
-'drawCompletion' draws it. The completions of the prefix with this size must
-have a positive weight.
--}
-drawPrefixed ::
-    (Monad m, Ord state, Eq symbol) =>
-    ([Rational] -> m Int) ->
-    (symbol -> Rational) ->
-    Map.Map state [FTA.Transition state symbol ()] ->
-    [Token symbol] ->
-    state ->
-    Integer ->
-    m (Term symbol)
-drawPrefixed choose weight rows prefix initial = drawAt initial 0
-  where
-    size = length prefix
-    (starts, _) = Ordinary.childStarts prefix
-    weightsAt = prefixedWeights weight rows prefix
-    childPositions position transition
-        | position >= size = map (const size) $ FTA.transitionChildren transition
-        | otherwise = starts position
-    -- A term of a state with the part of the prefix at a position, and a size.
-    drawAt state position termSize = do
-        transition <- drawOne choose (transitionWeight termSize) (branches rows prefix state position)
-        let children = zip (FTA.transitionChildren transition) (childPositions position transition)
-        Term.Node (FTA.transitionSymbol transition) <$> drawChildren children (termSize - 1)
-      where
-        transitionWeight total transition =
-            weight (FTA.transitionSymbol transition)
-                * genericIndex
-                    (childrenWeights $ zip (FTA.transitionChildren transition) (childPositions position transition))
-                    (total - 1)
-    -- The terms of the children, with the given total size.
-    drawChildren [] _ = pure []
-    drawChildren ((child, position) : rest) total = do
-        first <-
-            drawOne
-                choose
-                (\first -> genericIndex (weightsAt child position) first * genericIndex (childrenWeights rest) (total - first))
-                [1 .. total]
-        (:) <$> drawAt child position first <*> drawChildren rest (total - first)
-    childrenWeights = foldr (convolve . uncurry weightsAt) (1 : repeat 0)
 
 {- | The least common denominator @d@ of the weights of 'completionSymbols', and
 the integer weight of each of these symbols: its weight times @d@.
@@ -1371,15 +1298,6 @@ branches rows prefix state position =
 convolve :: (Num weight) => [weight] -> [weight] -> [weight]
 convolve [] _ = repeat 0
 convolve (first : rest) others = zipWith (+) (map (first *) others) (0 : convolve rest others)
-
-{- | An option, drawn with a function that chooses an index of the list of
-their weights, as 'drawCompletion' describes it. The list of options is not
-empty.
--}
-drawOne :: (Monad m) => ([Rational] -> m Int) -> (option -> Rational) -> [option] -> m option
-drawOne choose weightOf options = do
-    index <- choose $ map weightOf options
-    pure $ options !! (index `mod` length options)
 
 {- | The fillings of a stack of pending states with the given total size, in
 order: the term of the first pending node varies slowest.
