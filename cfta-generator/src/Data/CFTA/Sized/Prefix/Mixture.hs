@@ -28,6 +28,7 @@ The queries take a prefix of plain tokens and are exact for the mixture:
   prefix;
 * 'sampleTerm' and 'lowerTerm': a completion of the prefix, in proportion to
   its probability;
+* 'bestTerms': the completions of the prefix with the largest probabilities;
 * 'termLogProbability': the log-probability of a term.
 
 A mixture has no temperature: a power of a sum of probabilities is not a sum
@@ -41,9 +42,13 @@ module Data.CFTA.Sized.Prefix.Mixture (
     componentProbabilities,
     lowerTerm,
     sampleTerm,
+    bestTerms,
     termLogProbability,
 ) where
 
+import Data.Containers.ListUtils (nubOrd)
+import Data.List (sortOn)
+import Data.Ord (Down (..))
 import qualified Test.QuickCheck as QC
 
 import qualified Data.CFTA as FTA
@@ -57,10 +62,12 @@ import Data.CFTA.Sized.Prefix (
     Token,
     afterPrefix,
     afterToken,
+    bestCompletions,
     completionWeight,
     lowerCompletions,
     nextTokens,
     prefixCompletions,
+    weightOfTerm,
  )
 import Data.CFTA.Sized.Prefix.Parents (
     Parented,
@@ -173,13 +180,65 @@ lowerTerm mixture prefix = do
   where
     choice (component, completions) = do
         generator <- lowerCompletions completions
-        Just (componentShare component * completionWeight completions / componentTotal component, generator)
+        Just (exactMass component $ completionWeight completions, generator)
 
 -- | The QuickCheck generator of 'lowerTerm'.
 sampleTerm :: (Ord symbol) => Mixture symbol -> [Token symbol] -> Maybe (QC.Gen (Term symbol))
 sampleTerm mixture prefix = generator <$> lowerTerm mixture prefix
   where
     generator (QuickCheckBackend generated) = generated
+
+{- | The completions of a prefix with the largest probabilities, at most the
+given number, the most probable first. Each probability is among the
+completions of the prefix. Completions with equal probabilities come in
+ascending order of the terms. The order compares the exact probabilities, so
+two completions whose probabilities give the same 'Double' keep the order of
+their exact probabilities. 'Nothing' when the prefix has no completion.
+
+The probability of a term is a sum over the components. The most probable
+term of a sum is not always the most probable term of a component. So the
+largest weights of each component ('bestCompletions') do not directly give
+the result, and a search is necessary. The search is the threshold algorithm
+of Fagin, Lotem, and Naor (/Optimal aggregation algorithms for middleware/,
+2003). A round takes the @n@ completions with the largest weights in each
+component. Each of these candidates gets its mass: the sum, over the
+components, of the share times the weight of the term over the total weight
+of the component. A term that is not a candidate has, in each component, at
+most the weight of the last term of the list of the component. So its mass is
+at most the bound: the sum, over the components, of the share times the
+weight of the last term of the list over the total weight of the component.
+The round gives the result when the lists hold every completion, or when the
+candidate at the given number has a mass larger than the bound. Otherwise,
+the next round takes twice as many completions. The first round takes the
+given number.
+
+The work of a round is one 'bestCompletions' in each component and, for each
+candidate in each component, a product over the nodes of the candidate
+('weightOfTerm'). The masses are exact 'Rational' numbers, so rounding does
+not change the order or the end of the search.
+-}
+bestTerms :: (Ord symbol) => Int -> Mixture symbol -> [Token symbol] -> Maybe [(Term symbol, Double)]
+bestTerms count mixture prefix = do
+    current <- after mixture prefix
+    let total = sum [exactMass component $ completionWeight completions | (component, completions) <- current]
+        search n
+            | complete || snd (last found) > bound = found
+            | otherwise = search (2 * n)
+          where
+            lists = [bestCompletions n completions | (_, completions) <- current]
+            -- The components have the same completions, so all the lists have the same length.
+            complete = any ((< n) . length) lists
+            found =
+                take count $
+                    sortOn
+                        (\(term, value) -> (Down value, term))
+                        [ ( unlabelParents term
+                          , sum [exactMass component $ weightOfTerm (componentCompletions component) term | (component, _) <- current]
+                          )
+                        | term <- nubOrd $ map fst $ concat lists
+                        ]
+            bound = sum [exactMass component $ snd $ last list | ((component, _), list) <- zip current lists]
+    Just $ if count <= 0 then [] else [(term, fromRational $ value / total) | (term, value) <- search count]
 
 -- | The log-probability of a term. 'Nothing' when the term is not a term of the automaton within the bound.
 termLogProbability :: (Ord symbol) => Mixture symbol -> Term symbol -> Maybe Double
@@ -206,6 +265,14 @@ one of these completions of the component.
 logMass :: (Ord symbol) => Component symbol -> Completions (Parented symbol) -> Double
 logMass component completions =
     logShare component + logPartition (componentLogWeights component) completions - componentLogTotal component
+
+{- | The share of a component times a weight over the total weight of the
+component. For the weight of some completions of the component, it is the
+probability that a term of the mixture is one of these completions of the
+component, as 'logMass' gives its logarithm.
+-}
+exactMass :: Component symbol -> Rational -> Rational
+exactMass component weight = componentShare component * weight / componentTotal component
 
 -- | The logarithm of the share of a component.
 logShare :: Component symbol -> Double

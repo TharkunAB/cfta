@@ -2,9 +2,10 @@ module Data.CFTA.Sized.Prefix.TrainSpec (spec) where
 
 import Control.Monad (forM_)
 import Data.Containers.ListUtils (nubOrd)
-import Data.List (inits, isPrefixOf, sort)
+import Data.List (inits, isPrefixOf, sort, sortOn)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (fromJust, isNothing)
+import Data.Ord (Down (..))
 import Test.Hspec (Spec, describe, it, shouldBe, shouldSatisfy)
 
 import qualified Data.CFTA as FTA
@@ -302,6 +303,16 @@ spec = describe "Data.CFTA.Sized.Prefix.Train" $ do
                         expected = fromJust $ Model.nextTokenProbabilities model prefix
                     (reach, prefix, map fst found) `shouldBe` (reach, prefix, map fst expected)
                     (reach, prefix, and $ zipWith close (map snd found) (map snd expected)) `shouldBe` (reach, prefix, True)
+                    let every = Map.fromList $ fromJust $ Mixture.bestTerms 100000 mixture prefix
+                        expectedEvery = Map.fromList $ fromJust $ Model.bestTerms 100000 model prefix
+                    (reach, prefix, Map.keys every, and $ Map.intersectionWith close every expectedEvery)
+                        `shouldBe` (reach, prefix, Map.keys expectedEvery, True)
+                -- The model can give the completions with equal probabilities in another order.
+                forM_ [1, 2, 5] $ \count -> do
+                    let best = fromJust $ Mixture.bestTerms count mixture []
+                        expectedBest = fromJust $ Model.bestTerms count model []
+                    (reach, count, length best, and $ zipWith close (map snd best) (map snd expectedBest))
+                        `shouldBe` (reach, count, length expectedBest, True)
         it "gives each term within the bound a probability, and the probabilities sum to one" $
             forM_ mixtures $ \(reach, mixture) -> do
                 (reach, close (sum $ map (probability mixture) terms) 1) `shouldBe` (reach, True)
@@ -362,6 +373,26 @@ spec = describe "Data.CFTA.Sized.Prefix.Train" $ do
                     let sampled = QCGen.unGen (QC.vectorOf 50 $ fromJust $ Mixture.sampleTerm mixture prefix) (QCRandom.mkQCGen 3) 30
                     (reach, prefix, filter (not . isPrefixOf prefix . preorder) sampled) `shouldBe` (reach, prefix, [])
                 (reach, isNothing $ Mixture.sampleTerm mixture [("x", 0), ("y", 0)]) `shouldBe` (reach, True)
+        it "gives the completions of a prefix with the largest probabilities, the most probable first" $
+            forM_ mixtures $ \(reach, mixture) -> do
+                forM_ prefixes $ \prefix -> do
+                    let within = Map.fromList [(term, probability mixture term) | term <- terms, prefix `isPrefixOf` preorder term]
+                        total = sum within
+                        expected = sortOn Down $ map (/ total) $ Map.elems within
+                        near left right = abs (left - right) < 1e-9
+                        every = fromJust $ Mixture.bestTerms (Map.size within + 1) mixture prefix
+                    forM_ [1, 2, 5, Map.size within + 1] $ \count -> do
+                        let found = fromJust $ Mixture.bestTerms count mixture prefix
+                        (reach, prefix, count, length found, and $ zipWith near (map snd found) expected)
+                            `shouldBe` (reach, prefix, count, min count (Map.size within), True)
+                        forM_ found $ \(term, value) ->
+                            (reach, prefix, count, term, near value . (/ total) <$> Map.lookup term within)
+                                `shouldBe` (reach, prefix, count, term, Just True)
+                        (reach, prefix, count, nubOrd $ map fst found) `shouldBe` (reach, prefix, count, map fst found)
+                        -- The order is fixed, so a smaller count gives the first completions of a larger count.
+                        (reach, prefix, count, found) `shouldBe` (reach, prefix, count, take count every)
+                (reach, Mixture.bestTerms 1 mixture [("x", 0), ("y", 0)]) `shouldBe` (reach, Nothing)
+                (reach, map (\count -> Mixture.bestTerms count mixture []) [0, -1]) `shouldBe` (reach, [Just [], Just []])
 
 -- | The log partition and expected count of one Bernoulli feature, with a constant offset.
 bernoulliOracle :: Double -> Oracle String

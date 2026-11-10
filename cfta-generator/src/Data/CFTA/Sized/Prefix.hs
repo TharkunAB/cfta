@@ -139,6 +139,7 @@ module Data.CFTA.Sized.Prefix (
     completionSymbols,
     completionWeight,
     completionWeightBy,
+    weightOfTerm,
     nextTokenWeights,
     tokenProbability,
     lowerCompletions,
@@ -928,6 +929,13 @@ completionWeightBy weight completions = case completionsRoute completions of
             $ drop 1
             $ prefixedWeights weight (tableRows table) (completionPrefix completions) (tableInitial table) 0
     Listed _ listed -> sum [termWeight weight term | (term, _, Yes) <- listed]
+
+{- | The weight of a term: the product of the weights of the symbols of its
+nodes, with the weights of 'withWeights'. A completion has this weight in
+'bestCompletions'. The term does not have to be a completion.
+-}
+weightOfTerm :: Completions symbol -> Term symbol -> Rational
+weightOfTerm completions = termWeight (completionsWeight completions)
 
 {- | The tokens of 'nextTokens', each with the total weight of the completions
 that start with the prefix and the token. A token with completions whose
