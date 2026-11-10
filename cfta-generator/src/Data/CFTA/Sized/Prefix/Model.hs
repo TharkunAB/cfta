@@ -32,6 +32,7 @@ module Data.CFTA.Sized.Prefix.Model (
     sampleTerm,
     bestTerms,
     termLogProbability,
+    eventProbability,
 ) where
 
 import qualified Data.Map.Strict as Map
@@ -68,6 +69,7 @@ import Data.CFTA.Sized.Prefix.Train (
     atTemperature,
     distill,
     distillWithReport,
+    logPartition,
     logProbability,
     nextTokenDistribution,
     withLogWeights,
@@ -235,6 +237,37 @@ bestTerms count model prefix = do
 termLogProbability :: (Ord symbol) => Model symbol -> Term symbol -> Maybe Double
 termLogProbability model =
     logProbability (logWeightsOf model) (modelCompletions model) . labelParents (modelReach model) rootContext
+
+{- | The probability of the event of a model, given that the term starts with a
+prefix, in the model before 'condition'. The event of a model is the
+intersection of the events of each 'condition' of the model. The probability
+is the weight of the completions of the prefix that the event accepts, over
+the weight of all the completions of the prefix, at the temperature of the
+model. It is one for each prefix with a completion when the model has no
+'condition', and zero when the event accepts no completion of the prefix.
+'Nothing' when no completion of the model before 'condition' starts with the
+prefix.
+
+With the next-token probabilities before and after 'condition', this gives
+the lookahead of constrained decoding. For a next token @x@ after a prefix
+@p@ and an event @E@:
+
+> P(x | p, E) / P(x | p) = P(E | p <> [x]) / P(E | p)
+
+'nextTokenProbabilities' of the model after 'condition' gives the numerator
+on the left, and 'eventProbability' gives the right side. See Zhang, Dang,
+Peng, and Van den Broeck, /Tractable Control for Autoregressive Language
+Generation/, ICML 2023 (arXiv:2304.07438).
+-}
+eventProbability :: (Ord symbol) => Model symbol -> [Token symbol] -> Maybe Double
+eventProbability model prefix = do
+    labelled <- labelPrefix (modelReach model) rootContext prefix
+    prior <- afterPrefix (modelPrior model) labelled
+    Just $ case afterPrefix (modelCompletions model) labelled of
+        Nothing -> 0
+        Just conditioned -> exp $ logPartition logWeights conditioned - logPartition logWeights prior
+  where
+    logWeights = logWeightsOf model
 
 -- | An automaton with each state renamed to its position in the ascending order of the states.
 numbered :: (Ord state) => FTA.FTA state symbol constraint -> FTA.FTA Int symbol constraint

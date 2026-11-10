@@ -4,7 +4,7 @@ import Control.Monad (forM_)
 import Data.Containers.ListUtils (nubOrd)
 import Data.List (inits, isPrefixOf, sort)
 import qualified Data.Map.Strict as Map
-import Data.Maybe (fromJust, isNothing)
+import Data.Maybe (fromJust, fromMaybe, isNothing)
 import Test.Hspec (Spec, describe, it, shouldBe, shouldSatisfy)
 
 import qualified Data.CFTA as FTA
@@ -199,11 +199,19 @@ spec = describe "Data.CFTA.Sized.Prefix.Train" $ do
                  in Map.keys first == Map.keys second && and (Map.intersectionWith close first second)
             -- The prefixes of the terms within the bound.
             prefixes = nubOrd $ concatMap (inits . preorder) $ completionTerms $ completionsOf 5 expressions
-            -- Each model with the name of an event, the event, and the model given the event.
+            -- Each model with the name of an event, the event, the model given the event, and the probability of
+            -- the event after each prefix.
             given =
-                [ (reach, name, event, model, fromJust $ Model.condition event model)
+                [ ( reach
+                  , name
+                  , event
+                  , model
+                  , conditioned
+                  , Map.fromList [(prefix, Model.eventProbability conditioned prefix) | prefix <- prefixes]
+                  )
                 | (reach, model) <- models
                 , (name, event) <- [("without y", withoutY), ("root add", rootAdd)]
+                , let conditioned = fromJust $ Model.condition event model
                 ]
         it "returns the same model queries with an inspectable training report" $
             forM_ models $ \(reach, model) -> do
@@ -283,24 +291,58 @@ spec = describe "Data.CFTA.Sized.Prefix.Train" $ do
                 let conditioned = fromJust $ Model.condition expressions model
                 (reach, closeTerms (everything conditioned) (everything model)) `shouldBe` (reach, True)
                 forM_ prefixes $ \prefix -> do
+                    (reach, prefix, Model.eventProbability model prefix) `shouldBe` (reach, prefix, Just 1)
+                    (reach, prefix, close 1 <$> Model.eventProbability conditioned prefix) `shouldBe` (reach, prefix, Just True)
                     let found = fromJust $ Model.nextTokenProbabilities conditioned prefix
                         expected = fromJust $ Model.nextTokenProbabilities model prefix
                     (reach, prefix, map fst found) `shouldBe` (reach, prefix, map fst expected)
                     (reach, prefix, and $ zipWith close (map snd found) (map snd expected)) `shouldBe` (reach, prefix, True)
         it "gives each term of an event its probability over the probability of the event, and no other term a probability" $
-            forM_ given $ \(reach, name, event, model, conditioned) -> do
+            forM_ given $ \(reach, name, event, model, conditioned, _) -> do
                 let best = everything model
                     total = sum [probability | (term, probability) <- best, FTA.accepts event term]
                 (reach, name, close (sum $ map snd $ everything conditioned) 1) `shouldBe` (reach, name, True)
                 forM_ best $ \(term, probability) ->
                     (reach, name, term, close (log $ probability / total) <$> Model.termLogProbability conditioned term)
                         `shouldBe` (reach, name, term, if FTA.accepts event term then Just True else Nothing)
+        it "gives the probability of an event after each prefix, as the sums over the terms give it" $
+            forM_ given $ \(reach, name, event, model, conditioned, after) -> do
+                let flagged = [(preorder term, probability, FTA.accepts event term) | (term, probability) <- everything model]
+                forM_ prefixes $ \prefix -> do
+                    let within = [(probability, accepted) | (tokens, probability, accepted) <- flagged, prefix `isPrefixOf` tokens]
+                        inEvent = sum [probability | (probability, True) <- within]
+                    if inEvent == 0
+                        then (reach, name, prefix, after Map.! prefix) `shouldBe` (reach, name, prefix, Just 0)
+                        else
+                            (reach, name, prefix, close (inEvent / sum (map fst within)) <$> after Map.! prefix)
+                                `shouldBe` (reach, name, prefix, Just True)
+                forM_ [[("x", 0), ("y", 0)], [("neg", 2)]] $ \prefix ->
+                    (reach, name, prefix, Model.eventProbability conditioned prefix) `shouldBe` (reach, name, prefix, Nothing)
+        it "gives the next-token probabilities of the lookahead: P(x | p, E) P(E | p) = P(x | p) P(E | p <> [x])" $
+            forM_ given $ \(reach, name, _, model, conditioned, after) -> do
+                let probabilityAfter prefix = fromJust $ after Map.! prefix
+                forM_ prefixes $ \prefix -> do
+                    let lookahead = fromMaybe [] $ Model.nextTokenProbabilities conditioned prefix
+                    forM_ (fromJust $ Model.nextTokenProbabilities model prefix) $ \(token, probability) ->
+                        ( reach
+                        , name
+                        , prefix
+                        , token
+                        , close
+                            (fromMaybe 0 (lookup token lookahead) * probabilityAfter prefix)
+                            (probability * probabilityAfter (prefix <> [token]))
+                        )
+                            `shouldBe` (reach, name, prefix, token, True)
         it "gives the same model when it conditions at a temperature and when it sets the temperature after" $
-            forM_ given $ \(reach, name, event, model, conditioned) -> do
+            forM_ given $ \(reach, name, event, model, conditioned, _) -> do
                 let first = fromJust $ Model.condition event $ fromJust $ Model.withTemperature 0.5 model
                     second = fromJust $ Model.withTemperature 0.5 conditioned
                 (reach, name, everything first) `shouldBe` (reach, name, everything second)
                 (reach, name, Model.nextTokenProbabilities first []) `shouldBe` (reach, name, Model.nextTokenProbabilities second [])
+                -- The prefixes with at most two tokens, to keep the law fast.
+                forM_ (filter ((<= 2) . length) prefixes) $ \prefix ->
+                    (reach, name, prefix, Model.eventProbability first prefix)
+                        `shouldBe` (reach, name, prefix, Model.eventProbability second prefix)
         it "gives the model given both events when it conditions twice" $
             forM_ models $ \(reach, model) -> do
                 let twice = fromJust $ Model.condition rootAdd =<< Model.condition withoutY model
@@ -308,13 +350,16 @@ spec = describe "Data.CFTA.Sized.Prefix.Train" $ do
                         FTA.intersectWith (\left right -> if left == right then Just left else Nothing) (\_ _ -> noConstraint) withoutY rootAdd
                     once = fromJust $ Model.condition both model
                 (reach, closeTerms (everything twice) (everything once)) `shouldBe` (reach, True)
+                forM_ prefixes $ \prefix ->
+                    (reach, prefix, close <$> Model.eventProbability twice prefix <*> Model.eventProbability once prefix)
+                        `shouldBe` (reach, prefix, Just True)
         it "gives no model for an event with a constraint or without a term in the bound, and draws only terms of the event" $ do
             forM_ models $ \(reach, model) -> do
                 (reach, isNothing $ Model.condition doubles model) `shouldBe` (reach, True)
                 -- A term with six nodes, beyond the bound.
                 let deep = iterate (\term -> Term.Node "neg" [term]) (Term.Node "x" []) !! 5
                 (reach, isNothing $ Model.condition (FTA.fromTerms [deep]) model) `shouldBe` (reach, True)
-            forM_ given $ \(reach, name, event, _, conditioned) -> do
+            forM_ given $ \(reach, name, event, _, conditioned, _) -> do
                 let drawn = QCGen.unGen (QC.vectorOf 50 $ fromJust $ Model.sampleTerm conditioned []) (QCRandom.mkQCGen 3) 30
                 (reach, name, filter (not . FTA.accepts event) drawn) `shouldBe` (reach, name, [])
 
