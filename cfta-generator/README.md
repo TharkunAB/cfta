@@ -429,6 +429,7 @@ prefix.
 weight of a term is the product of the weights of its nodes.
 `nextTokenWeights` gives the total weight of the completions after each next
 token, `tokenProbability` the probability of a token after the prefix, and
+`bestCompletions` gives the completions with the largest weights.
 `lowerCompletions` gives a sampler of the completions, each in proportion to
 its weight; `sampleWeighted` is its QuickCheck generator.
 `weightedTotal`, `unrankWeighted`, and `rankWeighted` give each completion an
@@ -437,13 +438,31 @@ uniform integer below the total is one draw. `rankedCompletions` gives the
 completions to `Data.CFTA.Ranked`, so `toGenWithRank` gives a weighted
 sample with its replay rank. Without constraints, a sample is one walk of
 the term through the count table. With constraints, these integers are the
-sampling tickets.
-`Data.CFTA.Sized.Prefix.Parents`
-labels each symbol with the token and the position of its parent, so a weight
-can depend on the parent of a node. The weight of `nextTokenWeights` is the
+sampling tickets. `Data.CFTA.Sized.Prefix.Parents`
+labels each symbol with the context of its node: the nearest ancestors, each
+with the position of the path, and the root token of the left sibling. A
+weight can then depend on the context. The weight of `nextTokenWeights` is the
 mass that grammar-aligned decoding needs (Park et al., *Grammar-Aligned
 Decoding*, NeurIPS 2024), exact for a weight that is a product over the
 nodes. With the weight one for each symbol, the weights are the counts.
+
+The runnable [Loaded Dice recipe](examples/loaded-dice/README.md) tunes a
+recursive list generator toward a target length distribution. It uses these
+weighted count tables, compares direct class selection with `Gen.frequency`,
+and prints ranks that replay the generated lists. Run
+`cabal run cfta-generator:cfta-loaded-dice -- demo`.
+
+`Data.CFTA.Sized.Prefix.Train` fits these weights to a corpus of terms.
+`distillWithReport` returns the final weights, stopping reason, step count,
+and retained and dropped corpus counts. A finite result can stop before
+convergence. `Model.trainWithReport` returns the same report together with
+the contextual model, so callers can inspect the fit and use its normal query
+and sampling functions without constructing context labels themselves.
+
+The [query-generation example](examples/explainfuzz/README.md) learns weights
+from query ASTs, restricts the language with structural requirements, and
+emits seeded SQL samples. It adapts the ExplainFuzz workflow to a restricted
+finite grammar.
 
 Grammar-constrained decoders compute a mask over the subword tokens of a
 language model at each step: XGrammar with a pushdown automaton and
