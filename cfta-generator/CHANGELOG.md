@@ -7,6 +7,18 @@ Before release, the package was called `microcfta-generator`.
 Initial release. `cfta-generator` is one generator over the constrained
 tree automata of `cfta`, with QuickCheck integration.
 
+- Add `fitWithReport`, `distillWithReport`, and `Model.trainWithReport`.
+  Reports expose the final step, the optimizer's stopping reason, and the
+  step count. Corpus fits also report retained and dropped terms. Reporting
+  validates finite numerical results and does not evaluate another point
+  after the step budget is spent. Existing training functions keep their
+  behavior.
+- Reject nonfinite or zero exponential potentials in `withLogWeights`, and
+  nonfinite temperatures in `Model.withTemperature`. A public-API check found
+  that NaN, infinity, overflow, and underflow could become zero rational
+  weights and silently change the sampled support. Missing weights still
+  default to one. Unused entries remain ignored, and `withWeights` still
+  accepts explicit zeros. Ordinary finite conversions keep their results.
 - Add `Data.CFTA.Sized.Checkpoint`: resume a size-ordered listing of the
   terms of a graph, or a sampled run of draws from it, also in a new process.
   `start` gives the checkpoint before the first term. `resume` builds the size
