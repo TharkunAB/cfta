@@ -128,6 +128,15 @@ spec = describe "Data.CFTA.Sized.Prefix.Train" $ do
             scale = difference "add"
         forM_ ["x", "y", "neg", "add"] $ \symbol ->
             abs (difference symbol - scale * arityLess symbol) `shouldSatisfy` (< 1e-5)
+    it "fits a mixture of one group to the log-weights of distill" $ do
+        let fitted = fromJust $ distillMixture expressions 9 [[], corpus, [Term.Node "outside" []]]
+            direct = fromJust $ distill expressions 9 corpus
+            deep = equalityConstraint $ ECTA.mkEqConstraints [[ECTA.path [0, 0], ECTA.path [1, 0]]]
+        map fst fitted `shouldBe` [1]
+        forM_ (Map.toList direct) $ \(symbol, weight) ->
+            (symbol, [abs (found Map.! symbol - weight) < 1e-6 | (_, found) <- fitted]) `shouldBe` (symbol, [True])
+        isNothing (distillMixture expressions 1 [[], [Term.Node "outside" []]]) `shouldBe` True
+        isNothing (distillMixture (FTA.mapConstraints (const deep) expressions) 5 [corpus]) `shouldBe` True
 
     describe "training reports" $ do
         it "reports the retained corpus and preserves the default fit" $ do
