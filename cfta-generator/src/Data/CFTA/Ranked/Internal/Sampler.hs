@@ -3,6 +3,58 @@
 This module is an exposed internal module. The generator layers of
 cfta-generator use it directly. Its exports are not covered by the PVP
 contract of the package.
+
+A t'Sampler' is a plan, and each backend interprets the plan. The meaning of
+a sampler is its distribution. With the t'Exact' backend, a field of a
+sampler is the list of the outcomes with their probabilities, and
+'exactPmfAtSize' reads that list. The compiled data and the tables of this
+module do not change a distribution. They change only the work and the
+memory of a draw.
+
+A field of a t'Sampler' is a function of the backend. Thus a value that a
+field computes is computed again at each use of the field, unless the value
+is bound outside the field. For this reason, the combinators of a recursive
+language keep their data outside the fields:
+
+* A choice or a product compiles its alternatives one time for each size
+  class (@Alternatives@). The compiled alternatives hold the weights, the
+  ticket table of the weights ('compileTickets'), and the samplers of the
+  parts. The two fields of the sampler share them.
+
+* A choice or a product keeps the sampler of each size class in a table
+  (@memoSampleIndex@). The lowering of a generator applies a combinator one
+  time for each node of the generator, so each node has one table.
+
+A draw makes one selection at each node that it visits
+('selectAlternative'), and it builds only the generator of the selected
+alternative. The memory of a sampler has a bound that the generator and the
+largest requested size give. The count of the draws does not change the
+bound.
+
+The functions of this module obey these laws. The selection law and the law
+of the compiled alternatives are equalities of distributions, and they hold
+for every backend. With t'Exact', the two sides are the same list of
+outcomes.
+
+* Selection: for one or more positive weights,
+  @selectAlternative weights (compileTickets weights) run@ is
+  @frequencyGen (zip weights (map run [0 ..]))@.
+
+* Ticket table: for the positive weights @w0@ to @wn@, 'compileTickets'
+  gives the total @w0 + .. + wn@. For each ticket @t@ from zero and below
+  the total, it gives the smallest position @i@ with @t < w0 + .. + wi@.
+
+* Compiled alternatives:
+  @chooseAlternative (countAlternatives [(weight, x)]) run@ is @run x@. For
+  two or more alternatives,
+  @chooseAlternative (countAlternatives weighted) run@ is
+  @frequencyGen [(weight, run x) | (weight, x) <- weighted]@. And
+  @massAlternatives weighted@ is @countAlternatives (integerMasses live)@,
+  where @live@ holds the alternatives of @weighted@ that have a positive
+  mass. As a precondition, the list of the alternatives is not empty, each
+  weight is positive, and one mass at least is positive.
+
+* Memo: @samplerAtSize (memoSampleIndex build) size@ is @build size@.
 -}
 module Data.CFTA.Ranked.Internal.Sampler (
     GenBackend (..),
@@ -13,6 +65,7 @@ module Data.CFTA.Ranked.Internal.Sampler (
     boundedSampler,
     choiceMassSampleIndex,
     choiceSampleIndex,
+    compileTickets,
     compileWeighted,
     emptySampleIndex,
     exactPmfAtSize,
@@ -28,17 +81,17 @@ module Data.CFTA.Ranked.Internal.Sampler (
     uniformSampler,
 ) where
 
-import Data.List (mapAccumL)
+import Data.List (genericIndex, mapAccumL)
 import qualified Data.Map.Strict as Map
 import Data.Ratio (denominator, numerator)
-import GHC.Arr (listArray, unsafeAt)
+import GHC.Arr (Array, listArray, unsafeAt, (!))
 
 import Data.CFTA.Index (
     Cardinality (..),
     ClassRank (..),
     Rank (..),
     RankOffset,
-    Size,
+    Size (..),
     Weight (..),
     countWeight,
     everyRank,
@@ -74,6 +127,24 @@ class (Applicative gen) => GenBackend gen where
     -}
     selectWeighted :: [(Weight, a)] -> (Int, Int -> a) -> gen a
     selectWeighted _ (bound, decode) = decode <$> selectInt bound
+
+    {- | Select one alternative by weight, then run the generator of that
+    alternative.
+
+    The alternatives are the positions from zero. The list gives the positive
+    weight of each position. The pair is the ticket table that
+    'compileTickets' gives for these weights: the count of the tickets, and
+    the position that holds each ticket. The function gives the generator of
+    a position.
+
+    The result has the distribution of the default, which is 'frequencyGen'
+    on the generators of all the positions. A backend that draws one outcome
+    overrides the default: it draws one ticket, and it builds only the
+    generator of the position that holds the ticket. Thus the backend keeps
+    no generator of an alternative after a draw.
+    -}
+    selectAlternative :: [Weight] -> (Integer, Integer -> Int) -> (Int -> gen a) -> gen a
+    selectAlternative weights _ run = frequencyGen $ zip weights $ map run [0 ..]
 
 -- | A finite exact interpretation of one sampler, for distribution checks.
 newtype Exact a = Exact {runExact :: [(Rational, a)]}
@@ -132,12 +203,6 @@ newtype SampleIndex a = SampleIndex
 -- | Sample one value of the given size class.
 runValueAtSize :: (GenBackend gen) => SampleIndex a -> Size -> gen a
 runValueAtSize sampling = runValueSampler . samplerAtSize sampling
-
-{- | Sample one value of the given size class with its rank. The rank is a
-position in that size class.
--}
-runRankAtSize :: (GenBackend gen) => SampleIndex a -> Size -> gen (RankedValue a)
-runRankAtSize sampling = runRankSampler . samplerAtSize sampling
 
 {- | Aggregate the exact value distribution of one recursive size class.
 
@@ -227,24 +292,80 @@ mapSampleIndex :: (a -> b) -> SampleIndex a -> SampleIndex b
 mapSampleIndex transform sampling =
     SampleIndex $ mapSampler transform . samplerAtSize sampling
 
-{- | How to choose among weighted alternatives.
+{- | The alternatives of one choice at one size class, compiled for selection.
 
-The field is rank-2 for the same reason 'Sampler' is: one plan is built once
-and then run at whatever backend the caller lowers to. It exists so that the
-count-weighted and mass-weighted variants below are one function each instead
-of two copies each.
+The value is data and does not depend on a backend. A sampler of a recursive
+language keeps one such value for each size class, and builds the generator
+of an alternative only when a draw selects that alternative. An alternative
+of a choice or of a product holds the samplers of its parts.
 -}
-newtype Choose weight = Choose
-    { runChoose :: forall gen a. (GenBackend gen) => [(weight, gen a)] -> gen a
-    }
+data Alternatives alternative
+    = -- | One alternative. The choice draws no ticket.
+      OneAlternative alternative
+    | {- | Two or more alternatives: the weight of each position, the ticket
+      table of these weights, and the alternative at each position.
+      -}
+      ManyAlternatives [Weight] (Integer, Integer -> Int) (Array Int alternative)
 
--- | Choose in proportion to structural member counts.
-byCount :: Choose Weight
-byCount = Choose chooseWeighted
+-- | Compile alternatives with positive integer weights, such as member counts.
+countAlternatives :: [(Weight, alternative)] -> Alternatives alternative
+countAlternatives [(_, alternative)] = OneAlternative alternative
+countAlternatives weighted@(_ : _ : _) =
+    ManyAlternatives weights (compileTickets weights) (listArray (0, length weighted - 1) (map snd weighted))
+  where
+    weights = map fst weighted
+countAlternatives [] =
+    error $
+        "cfta-generator bug in Data.CFTA.Ranked.Internal.Sampler.countAlternatives: "
+            <> "no live alternative"
 
--- | Choose in proportion to unnormalized probability masses.
-byMass :: Choose Rational
-byMass = Choose chooseMassWeighted
+{- | Compile alternatives with exact rational masses. An alternative with no
+positive mass is not selected. The other masses become the smallest
+equivalent integer weights.
+-}
+massAlternatives :: [(Rational, alternative)] -> Alternatives alternative
+massAlternatives weighted =
+    case integerMasses [(mass, alternative) | (mass, alternative) <- weighted, mass > 0] of
+        [] ->
+            error $
+                "cfta-generator bug in Data.CFTA.Ranked.Internal.Sampler.massAlternatives: "
+                    <> "no positive mass"
+        live -> countAlternatives live
+
+{- | Select one of the compiled alternatives, then run the generator of that
+alternative. The function builds a generator from an alternative. It is
+applied after the selection, to the selected alternative only.
+-}
+chooseAlternative :: (GenBackend gen) => Alternatives alternative -> (alternative -> gen a) -> gen a
+chooseAlternative (OneAlternative alternative) run = run alternative
+chooseAlternative (ManyAlternatives weights tickets alternatives) run =
+    selectAlternative weights tickets (run . (alternatives !))
+
+{- | Compile positive weights to a ticket table: the count of the tickets, and
+the position that holds each ticket.
+
+Position @i@ holds as many tickets as weight @i@. The tickets of one position
+are consecutive, and the positions are in order: the first ticket of position
+@i@ is the sum of the weights before @i@. A ticket is valid from zero to the
+count less one.
+-}
+compileTickets :: [Weight] -> (Integer, Integer -> Int)
+compileTickets weights = (total, \ticket -> pick ticket 0 lastIndex)
+  where
+    (total, upperBounds) = mapAccumL accumulateWeight 0 weights
+    accumulateWeight before (Weight weight) = let upperBound = before + weight in (upperBound, upperBound)
+    lastIndex = length upperBounds - 1
+    table = listArray (0, lastIndex) upperBounds
+    -- Search for the first position whose upper bound is above the ticket.
+    -- The upper bounds do not decrease, so a binary search finds the
+    -- position that a linear scan finds.
+    pick :: Integer -> Int -> Int -> Int
+    pick ticket low high
+        | low == high = low
+        | ticket < table ! middle = pick ticket low middle
+        | otherwise = pick ticket (middle + 1) high
+      where
+        middle = low + (high - low) `quot` 2
 
 -- | One non-empty size split of a product.
 data ProductPart = ProductPart
@@ -264,40 +385,44 @@ the supplied weights.
 Sampling inside each side is delegated to that side, so an atomic sampler can
 remain non-uniform without changing product counts or positions, and the
 weights choose only between splits, never within one.
+
+The first argument compiles the weighted splits of one size class:
+'countAlternatives' for weights that are counts, and 'massAlternatives' for
+weights that are masses.
 -}
 productSampleIndexBy ::
-    Choose weight ->
+    (forall alternative. [(weight, alternative)] -> Alternatives alternative) ->
     (ProductPart -> weight) ->
     SizeIndex (a -> b) ->
     SampleIndex (a -> b) ->
     SizeIndex a ->
     SampleIndex a ->
     SampleIndex b
-productSampleIndexBy choose weightOf indexF samplingF indexX samplingX =
-    SampleIndex $ \size ->
-        Sampler
-            ( runChoose
-                choose
-                [ ( weightOf part
-                  , liftA2
-                        ($)
-                        (runValueAtSize samplingF $ partFunctionSize part)
-                        (runValueAtSize samplingX $ partArgumentSize part)
-                  )
-                | part <- productSampleParts indexF indexX size
-                ]
-            )
-            ( runChoose
-                choose
-                [ ( weightOf part
-                  , liftA2
+productSampleIndexBy compile weightOf indexF samplingF indexX samplingX =
+    memoSampleIndex $ \size ->
+        -- Both fields share the compiled splits of this size class. A split
+        -- holds the samplers of its two sides.
+        let splits =
+                compile
+                    [ ( weightOf part
+                      ,
+                          ( part
+                          , samplerAtSize samplingF $ partFunctionSize part
+                          , samplerAtSize samplingX $ partArgumentSize part
+                          )
+                      )
+                    | part <- productSampleParts indexF indexX size
+                    ]
+         in Sampler
+                ( chooseAlternative splits $ \(_, function, argument) ->
+                    liftA2 ($) (runValueSampler function) (runValueSampler argument)
+                )
+                ( chooseAlternative splits $ \(part, function, argument) ->
+                    liftA2
                         (combine (partOffset part) (partArgumentCount part))
-                        (runRankAtSize samplingF $ partFunctionSize part)
-                        (runRankAtSize samplingX $ partArgumentSize part)
-                  )
-                | part <- productSampleParts indexF indexX size
-                ]
-            )
+                        (runRankSampler function)
+                        (runRankSampler argument)
+                )
   where
     combine offset argumentCount (RankedValue functionPosition function) (RankedValue argumentPosition argument) =
         RankedValue (offsetRank offset $ pairRank argumentCount functionPosition argumentPosition) (function argument)
@@ -309,7 +434,7 @@ productSampleIndex ::
     SizeIndex a ->
     SampleIndex a ->
     SampleIndex b
-productSampleIndex = productSampleIndexBy byCount (countWeight . partBlock)
+productSampleIndex = productSampleIndexBy countAlternatives (countWeight . partBlock)
 
 {- | Sample a product whose two sides are conditioned key groups.
 
@@ -325,7 +450,7 @@ productMassSampleIndex ::
     SampleIndex a ->
     SampleIndex b
 productMassSampleIndex indexF massF samplingF indexX massX samplingX =
-    productSampleIndexBy byMass splitMass indexF samplingF indexX samplingX
+    productSampleIndexBy massAlternatives splitMass indexF samplingF indexX samplingX
   where
     splitMass part = massF (partFunctionSize part) * massX (partArgumentSize part)
 
@@ -355,33 +480,23 @@ Rank offsets always come from the structural counts, whatever the weights are:
 an alternative that is skipped because its weight is zero still occupies its
 positions in the size class. The weight function is handed that count so it
 never has to recompute it.
+
+The first argument compiles the weighted alternatives of one size class, as
+for 'productSampleIndexBy'.
 -}
 choiceSampleIndexBy ::
-    Choose weight ->
+    (forall alternative. [(weight, alternative)] -> Alternatives alternative) ->
     [(SizeIndex a, Cardinality -> Size -> Maybe weight, SampleIndex a)] ->
     SampleIndex a
-choiceSampleIndexBy choose alternatives =
-    SampleIndex $ \size ->
-        Sampler
-            ( runChoose
-                choose
-                [ (weight, runValueAtSize sampling size)
-                | (weight, _, sampling) <- parts size
-                ]
-            )
-            ( runChoose
-                choose
-                [ (weight, offsetRankedValue offset <$> runRankAtSize sampling size)
-                | (weight, offset, sampling) <- parts size
-                ]
-            )
+choiceSampleIndexBy compile alternatives =
+    memoSampleIndex $ \size -> choiceSampler $ compile $ parts size
   where
     parts size = go 0 alternatives
       where
         go _ [] = []
         go offset ((index, weightAt, sampling) : rest) =
             case weightAt count size of
-                Just weight -> (weight, offset, sampling) : go (nextOffset offset count) rest
+                Just weight -> (weight, (offset, samplerAtSize sampling size)) : go (nextOffset offset count) rest
                 Nothing -> go (nextOffset offset count) rest
           where
             count = countAtSize index size
@@ -390,7 +505,7 @@ choiceSampleIndexBy choose alternatives =
 choiceSampleIndex :: [(SizeIndex a, SampleIndex a)] -> SampleIndex a
 choiceSampleIndex alternatives =
     choiceSampleIndexBy
-        byCount
+        countAlternatives
         [(index, liveCount, sampling) | (index, sampling) <- alternatives]
   where
     liveCount count _ = if count > 0 then Just (countWeight count) else Nothing
@@ -405,7 +520,7 @@ choiceMassSampleIndex ::
     SampleIndex a
 choiceMassSampleIndex alternatives =
     choiceSampleIndexBy
-        byMass
+        massAlternatives
         [(index, liveMass massAtSize, sampling) | (index, massAtSize, sampling) <- alternatives]
   where
     liveMass massAtSize count size
@@ -421,42 +536,39 @@ fixSampleIndex build = sampling
   where
     sampling = build sampling
 
+{- | Build the sampler of each size class one time.
+
+@samplerAtSize (memoSampleIndex build) size@ is @build size@. The sampler of a
+size class from zero is built at the first request for that size class. Each
+later request gets the same sampler, so all the draws share the compiled
+alternatives of a size class.
+-}
+memoSampleIndex :: (Size -> Sampler a) -> SampleIndex a
+memoSampleIndex build = SampleIndex atSize
+  where
+    samplers = map (build . Size) [0 ..]
+    atSize size@(Size natural)
+        | natural >= 0 = samplers `genericIndex` natural
+        | otherwise = build size
+
 -- | Sample one bounded size class, then recover its global size-major rank.
 boundedSampler :: [SizeClass a] -> SampleIndex a -> Sampler a
 boundedSampler classes sampling =
-    Sampler
-        ( chooseWeighted
-            [ (countWeight count, runValueAtSize sampling size)
-            | SizeClass{classSize = size, classCardinality = count} <- classes
-            ]
-        )
-        ( chooseWeighted
-            [ (countWeight count, offsetRankedValue offset <$> runRankAtSize sampling size)
+    choiceSampler $
+        countAlternatives
+            [ (countWeight count, (offset, samplerAtSize sampling size))
             | (offset, SizeClass{classSize = size, classCardinality = count}) <- withOffsets classCardinality classes
             ]
-        )
 
--- | Avoid a random branch selection when only one branch is live.
-chooseWeighted :: (GenBackend gen) => [(Weight, gen a)] -> gen a
-chooseWeighted [(_, generated)] = generated
-chooseWeighted alternatives@(_ : _ : _) = frequencyGen alternatives
-chooseWeighted [] =
-    error $
-        "cfta-generator bug in Data.CFTA.Ranked.Internal.Sampler.chooseWeighted: "
-            <> "no live alternative"
-
--- | Choose from exact rational masses after removing their common scale.
-chooseMassWeighted :: (GenBackend gen) => [(Rational, gen a)] -> gen a
-chooseMassWeighted [(mass, generated)]
-    | mass > 0 = generated
-chooseMassWeighted alternatives =
-    case integerMasses [(mass, generated) | (mass, generated) <- alternatives, mass > 0] of
-        [(_, generated)] -> generated
-        weighted@(_ : _ : _) -> frequencyGen weighted
-        [] ->
-            error $
-                "cfta-generator bug in Data.CFTA.Ranked.Internal.Sampler.chooseMassWeighted: "
-                    <> "no positive mass"
+{- | Select one of the compiled alternatives. An alternative is a sampler with
+the rank offset of its first member. The two fields share the compiled
+alternatives.
+-}
+choiceSampler :: Alternatives (RankOffset, Sampler a) -> Sampler a
+choiceSampler alternatives =
+    Sampler
+        (chooseAlternative alternatives $ \(_, sampler) -> runValueSampler sampler)
+        (chooseAlternative alternatives $ \(offset, sampler) -> offsetRankedValue offset <$> runRankSampler sampler)
 
 {- | Convert rational masses to the smallest equivalent integer weights.
 
