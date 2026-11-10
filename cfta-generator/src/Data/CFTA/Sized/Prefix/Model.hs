@@ -21,6 +21,13 @@ The queries take a prefix of plain tokens and are exact for the model:
 * 'termLogProbability': the log-probability of a term.
 
 'withTemperature' sets the temperature of whole terms ('atTemperature').
+
+'condition' gives the model given an event: the terms that a second
+automaton accepts. Each term of the event has its probability divided by the
+probability of the event, and the queries above read only the terms of the
+event. 'eventProbability' gives the probability of the event after a prefix,
+in the model before 'condition'. A decoder with a lookahead needs this
+probability.
 -}
 module Data.CFTA.Sized.Prefix.Model (
     Model,
