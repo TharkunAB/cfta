@@ -46,13 +46,9 @@ import qualified Data.IntSet as IntSet
 newtype UVarGen = UVarGen Int
     deriving (Eq, Ord, Show)
 
-{-@ initUVarGen :: {v:UVarGen | v == 0} @-}
-
 -- | Initial variable supply.
 initUVarGen :: UVarGen
 initUVarGen = UVarGen 0
-
-{-@ nextUVar :: g:UVarGen -> ({v:UVarGen | v == g + 1}, {v:UVar | v == g}) @-}
 
 -- | Allocate one fresh variable and advance the supply.
 nextUVar :: UVarGen -> (UVarGen, UVar)
@@ -66,13 +62,9 @@ nextUVar (UVarGen n) = (UVarGen (n + 1), UVar n)
 newtype UVar = UVar Int
     deriving (Eq, Ord, Show)
 
-{-@ uvarToInt :: u:UVar -> {v:Int | v == u} @-}
-
 -- | Convert a variable to its dense integer id.
 uvarToInt :: UVar -> Int
 uvarToInt (UVar i) = i
-
-{-@ intToUVar :: i:Int -> {v:UVar | v == i} @-}
 
 -- | Reconstruct a variable from its dense integer id.
 intToUVar :: Int -> UVar
@@ -81,14 +73,6 @@ intToUVar = UVar
 ---------------------------
 -------- Union-find data structure
 ---------------------------
-
--- The number of members of a Root is at most its size. The bound is not an
--- equality, because the specification of IntSet.union does not say that the
--- two sets are disjoint.
-{-@ data Entry
-      = Parent {entryParent :: UVar}
-      | Root {entrySize :: {v:Int | 0 < v}, entryMembers :: {s:IntSet | intSetSize s <= entrySize}}
-@-}
 
 {- | What the forest stores for one variable.
 
@@ -141,8 +125,6 @@ unionRoots r1 r2 (UnionFind m) =
         Just (Root size set) -> (size, set)
         _ -> (1, IntSet.singleton (uvarToInt r))
 
-{-@ find :: uv:UVar -> uf:UnionFind -> (UVar, {v:UnionFind | v == uf}) @-}
-
 -- | Find a variable's representative. The forest stays the same.
 find :: UVar -> UnionFind -> (UVar, UnionFind)
 find uv uf = (root uv uf, uf)
@@ -152,3 +134,28 @@ root :: UVar -> UnionFind -> UVar
 root uv (UnionFind m) = case IntMap.lookup (uvarToInt uv) m of
     Just (Parent p) -> p
     _ -> uv
+
+---------------------------
+-------- LiquidHaskell specifications
+---------------------------
+
+-- The specifications are after the code. A specification above a definition
+-- moves the source locations that GHC writes into the object file.
+
+{-@ initUVarGen :: {v:UVarGen | v == 0} @-}
+
+{-@ nextUVar :: g:UVarGen -> ({v:UVarGen | v == g + 1}, {v:UVar | v == g}) @-}
+
+{-@ uvarToInt :: u:UVar -> {v:Int | v == u} @-}
+
+{-@ intToUVar :: i:Int -> {v:UVar | v == i} @-}
+
+-- The number of members of a Root is at most its size. The bound is not an
+-- equality, because the specification of IntSet.union does not say that the
+-- two sets are disjoint.
+{-@ data Entry
+      = Parent {entryParent :: UVar}
+      | Root {entrySize :: {v:Int | 0 < v}, entryMembers :: {s:IntSet | intSetSize s <= entrySize}}
+@-}
+
+{-@ find :: uv:UVar -> uf:UnionFind -> (UVar, {v:UnionFind | v == uf}) @-}
