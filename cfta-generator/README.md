@@ -429,10 +429,71 @@ prefix.
 weight of a term is the product of the weights of its nodes.
 `nextTokenWeights` gives the total weight of the completions after each next
 token, `tokenProbability` the probability of a token after the prefix, and
-`drawCompletion` draws a completion in proportion to its weight. This is the
+`bestCompletions` gives the completions with the largest weights.
+`lowerCompletions` gives a sampler of the completions, each in proportion to
+its weight; `sampleWeighted` is its QuickCheck generator.
+`weightedTotal`, `unrankWeighted`, and `rankWeighted` give each completion an
+interval of integers with a length in proportion to its weight, so one
+uniform integer below the total is one draw. `rankedCompletions` gives the
+completions to `Data.CFTA.Ranked`, so `toGenWithRank` gives a weighted
+sample with its replay rank. Without constraints, a sample is one walk of
+the term through the count table. With constraints, these integers are the
+sampling tickets. `Data.CFTA.Sized.Prefix.Parents`
+labels each symbol with the context of its node: the nearest ancestors, each
+with the position of the path, and the root token of the left sibling. A
+weight can then depend on the context. The weight of `nextTokenWeights` is the
 mass that grammar-aligned decoding needs (Park et al., *Grammar-Aligned
 Decoding*, NeurIPS 2024), exact for a weight that is a product over the
 nodes. With the weight one for each symbol, the weights are the counts.
+
+The runnable [Loaded Dice recipe](examples/loaded-dice/README.md) tunes a
+recursive list generator toward a target length distribution. It uses these
+weighted count tables, compares direct class selection with `Gen.frequency`,
+and prints ranks that replay the generated lists. Run
+`cabal run cfta-generator:cfta-loaded-dice -- demo`.
+
+`Data.CFTA.Sized.Prefix.Train` fits these weights to a corpus of terms.
+`distillWithReport` returns the final weights, stopping reason, step count,
+and retained and dropped corpus counts. A finite result can stop before
+convergence. `Model.trainWithReport` returns the same report together with
+the contextual model, so callers can inspect the fit and use its normal query
+and sampling functions without constructing context labels themselves.
+
+`Model.condition` restricts a model to an event, the terms that a second
+automaton accepts. It divides the probability of each term of the event by the
+probability of the event. `Model.eventProbability` gives the probability of the
+event after a prefix, in the model before conditioning. A decoder with a
+lookahead, as in GeLaTo ([arXiv:2304.07438](https://arxiv.org/abs/2304.07438)),
+multiplies the probability of a next token `x` after a prefix `p` by
+`P(E | p <> [x]) / P(E | p)`.
+
+`Data.CFTA.Sized.Prefix.Mixture` is a mixture of models. One model has one
+table of weights with a bounded context, so it cannot hold a property of the
+whole term, for example that all the leaves are the same variable. A mixture
+has components, each with a share and its own table of weights. The
+probability of a term is the sum, over the components, of the share times
+the probability of the term in the component. `Mixture.train` fits the
+components to a corpus that the caller splits into groups, with expectation
+maximization (Dempster, Laird, and Rubin, 1977). The components have one
+count table. The next-token probabilities, the samples, the most probable
+completions, and the log-probabilities are exact for the mixture. The most
+probable term of a sum is not always the most probable term of a component,
+so `Mixture.bestTerms` searches the best terms of the components with the
+threshold algorithm of Fagin, Lotem, and Naor (2003).
+
+`Mixture.condition` restricts a mixture to an event, as `Model.condition`
+restricts a model. The mixture given an event is the mixture of the components
+given the event. The new share of a component is its share times the
+probability of the event in the component, over the probability of the event.
+For a corpus of terms with only `x` and terms with only `y`, in two groups,
+the event "no `y`" moves almost all of the share to the component of the terms
+with `x`. `Mixture.eventProbability` gives the probability of the event after
+a prefix, in the mixture before conditioning, for a decoder with a lookahead.
+
+The [query-generation example](examples/explainfuzz/README.md) learns weights
+from query ASTs, restricts the language with structural requirements, and
+emits seeded SQL samples. It adapts the ExplainFuzz workflow to a restricted
+finite grammar.
 
 Grammar-constrained decoders compute a mask over the subword tokens of a
 language model at each step: XGrammar with a pushdown automaton and

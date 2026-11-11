@@ -246,10 +246,7 @@ joinOutcomeIndex left right groups = do
         if isJust (snd $ staticSampling left) || isJust (snd $ staticSampling right)
             then do
                 samplings <- sequence $ zipWith3 groupSampling groups sidePlans pairWeights
-                -- Build the sampler of each size class once.
-                let sampling = choiceMassSampleIndex samplings
-                    bySize = Map.fromSet (samplerAtSize sampling) (Map.keysSet classWeights)
-                pure $ Just (SampleIndex $ \size -> Map.findWithDefault (samplerAtSize sampling size) size bySize, Right . weight)
+                pure $ Just (choiceMassSampleIndex samplings, Right . weight)
             else pure Nothing
     pure $
         ( mkOutcomeIndex

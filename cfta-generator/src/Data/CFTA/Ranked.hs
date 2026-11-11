@@ -18,7 +18,8 @@ language and not the automaton that it came from.
 
 * t'GenBackend' is a sampling backend. It selects a rank below a
   cardinality, an 'Int' below a bound, one of several weighted generators,
-  and one of several weighted values.
+  and one of several weighted values. It also selects one of several
+  weighted alternatives, and then builds the generator of that alternative.
 
 * t'Ranked' is a compiled language. This module does not export its
   constructor. It has 'Functor' and 'Applicative' instances.
