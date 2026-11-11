@@ -1,0 +1,47 @@
+{
+  "at": "2026-11-11T18:13:23.783057+01:00",
+  "source_hashes": {
+    "cfta-generator/src/Data/CFTA/Sized/Prefix/Train.hs": "ec58f291550b76dfd54b1801e4a271546f55ef901479bc2173103b0514b86059",
+    "cfta-generator/src/Data/CFTA/Sized/Prefix.hs": "1623ff3856918360d175e1b5da4d4e9d584e2fac6f854b781a75e8eaa2e4e02f",
+    "cfta-generator/src/Data/CFTA/Gen/Internal/Table.hs": "03fcbf7b7a24978672683108cb0df9bb2bd2236283882fc1c06c8648996213e9",
+    "cfta-generator/src/Data/CFTA/Gen/Internal/Join.hs": "d97c946575f5a162cccc504f94282fef0ef8ab03ccd6817e3d297e915c58f18d"
+  },
+  "repro_sha256": "0573668a11b4653c82d8fac3cce34ab8ccc0af1bb09370812bf686ab9b037d72",
+  "limits": {
+    "memory.max": "4294967296",
+    "memory.high": "4294967296",
+    "memory.swap.max": "0"
+  },
+  "commands": [
+    [
+      "fourmolu",
+      "--mode",
+      "check",
+      "/home/tritlo/Code/mcfta/lean/restart-evidence/20261111-training-oracle-overflow/repro.hs"
+    ],
+    [
+      "cabal",
+      "build",
+      "cfta-generator:lib:cfta-generator",
+      "--offline",
+      "--disable-optimization",
+      "-j1"
+    ],
+    [
+      "cabal",
+      "exec",
+      "--offline",
+      "--",
+      "runghc-9.14.1",
+      "-package-id=cfta-0.1.0.0-inplace",
+      "-package-id=cfta-generator-0.1.0.0-inplace",
+      "/home/tritlo/Code/mcfta/lean/restart-evidence/20261111-training-oracle-overflow/repro.hs"
+    ]
+  ],
+  "observed": "completion_log_partition = 800.0\nautomaton_log_partition = Infinity\ncompletion_expectations = (Infinity,fromList [(\"a\",NaN)])\nautomaton_expectations = (Infinity,fromList [(\"a\",NaN)])\n",
+  "correct_log_partition": 800,
+  "correct_expected_count_a": 2,
+  "known_failure_reproduced": true,
+  "numerical_contract_satisfied": false,
+  "larger_mixture_probe_returned": false
+}
