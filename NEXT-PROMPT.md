@@ -1,3 +1,131 @@
+# Restart checkpoint: 2026-11-11, actual selected edge and proper shared paths
+
+Work continues after the user's resume. Pushes to formalize remain authorized.
+The goal controller reports paused and has no resume tool. Continue when invoked.
+Do not replace or complete the full goal. Preserve unrelated .hypha/.
+Previous published checkpoint: d3b9e50fa6b5c08fb219f8d6ca2201d0e90aae7b.
+Checked source head: 413591d7762205f20e029855ee10248d964a7f86.
+Fresh main: 2abbfe8ea91aff49122c03e8c96ffa539053b7e1, already integrated.
+Publish the complete checkpoint and verify its exact remote tip.
+
+## Strongest new statement
+
+One current accepted ordinary edge now constructs a COMPLETE actual shared
+SelectedEdge result. R214 derives its SAME own plan. R217 completes its ordered
+child preparation. Literal residual recording retains the filled parent term.
+One final assignment satisfies the old core at its original heap and the returned
+core at its reached heap. It agrees below the old counter, fills the actual parent
+fragment to the SAME chosen term, retains all inherited Holds facts and gives
+origins for all allocated values. The complete resource, native Post, index,
+reference and conditional protection packet remains attached to that SAME result.
+All sufficiently large relevant bounds give the literal result. Residual truth is
+derived from the same accepted row. No future child model or successful SelectedEdge observation is supplied as a
+premise. No additional residual-truth premise is needed.
+
+The available prepared parent need not equal the original captured handle's value.
+The fragments can still contain pending holes. Captured parent-slot finalization,
+callback acceptance and emission by the root driver remain separate operations.
+This statement does not establish original-input enumeration completeness.
+
+Two actual shared structural operations now preserve ProperState. Dispatch needs
+current ProperState and its literal singleton action; both payloads come from the
+current core. Its missing-handle branch forces both old handles to be absent and
+therefore both proper buckets to be empty. Incoming preserves reached reads on all
+outcomes, successful raw singletons and attached cache candidates. This includes
+the raw-empty synthetic Empty write. Incoming constraints must satisfy ProperTrie.
+An exact terminal partition of a ProperInputs full bucket supplies that condition.
+ProperTrie requires valid, nonempty, nonterminal paths. ProperInputs can contain a
+terminal trie before partition. No old executed-backend theorem is cast to a shared
+worker. Unchanged pure adapter and value-write proofs are reused directly.
+
+## Exact verification
+
+Three modules contain 659 lines and five public laws:
+
+- SourcePruningEnumerationSharedDispatchProper.lean, 224 lines, one law:
+  SharedDispatch.dispatch_proper; SHA256
+  58049056e0955d89354078b869faaed54b0e5a1eb0d2593e3b13293e92ae6e10.
+- SourcePruningEnumerationSharedIncomingProper.lean, 185 lines, three laws:
+  SharedIncomingNode.run_proper, SharedCachedTerminal.incoming_cache_proper and
+  SharedCachedTerminal.incoming_cache_partition_proper; SHA256
+  9ad64029b87cde9a15950233d10407d255c631d89e5d576036e176eccf094ace.
+- SourcePruningEnumerationSharedSelectedEdgeModels.lean, 250 lines, one law:
+  SharedSelectedContinuations.SelectedEdge.complete_models_resources; SHA256
+  56ccd4daeb582b711d294ca48f41e0758b2293b40edca281d6e4eee5ef9ac3d2.
+
+Every public name, real namespace, source hash and permitted axiom dependency passes
+its strict focused check. Own-source warnings are errors. The full affected Audit
+passes: 5,711 live modules, 4 affected, 4,708 imports, 92,584 theorem axiom checks.
+All prior Audit bytes remain. The import graph has no cycle. All four portable
+packets pass under lean/restart-evidence/: 20261111-shared-dispatch-proper,
+20261111-shared-incoming-proper, 20261111-shared-selected-edge-models and
+20261111-selected-edge-model-compatibility. These are reproducible source checks.
+No binary archive is needed. No production Haskell changed.
+
+All compilation used one serial job, 4 GiB memory.max/high, zero swap and one Lean
+thread. No cap, concurrency or heartbeat changed. All checks are terminal.
+Runtime: /tmp/mcfta-selected-edge-model-20261111-2030/.
+Only small source plans, manifests and logs are retained. Monitor /tmp and usage.
+Latest fresh usage: 8 percent at 2026-11-11T19:45:43.338Z. Pause and notify the user
+if fresh usage exceeds 80 percent. No cleanup of protected work is authorized here.
+
+## Next cuts and Liquid Haskell contracts
+
+The pure scheduler bridge ALREADY exists: Restart.not_stuck_of_proper consumes
+CURRENT CacheValid, Safe, ProperState and the SAME finite model. Native selection
+also gives a ready choice from current work when no stop applies. Do not reprove
+this bridge. Continue ProperState through actual SharedFold, terminal, child and
+traversal workers, then combine it at the SAME semantic/resource endpoint.
+
+The next fold file needs rawFold_proper on all tags, rawFold_singleton_core tying
+its actual outer cache to its returned singleton, fold_proper through literal
+fold_erase, and fold_candidate_proper including rejected raw-empty caches.
+The next terminal file uses these actual fold facts, common TerminalPrefix proper
+preservation, and the new incoming candidate law. No future Ready, Protected,
+model, Context or Good supplier is an acceptable replacement for those proofs.
+Source-only plans are next-shared-fold-proper.md and shared-terminal-proper-next.md
+in this runtime. They do not require additional compilation before source editing.
+
+For the captured selected root, derive protection and fragment avoidance from the
+actual selection, same finite model and current path invariant. R217 provides
+terminal-subset protection for the SAME child cache. Keep full-bucket conditional
+FragmentAvoid distinct. Ready comes from actual selection; a stored Packet alone
+does not prove it. Keep prepared parent and original stored handle distinct.
+Callbacks can prune; later recursion can stop. Empty-template metadata still changes.
+
+Liquid Haskell contracts can reduce the concrete Haskell/Lean correspondence gap.
+Prioritize ID/representative/waiting invariants, strict stored paths after partition,
+actual state preservation and count/order/rank laws. Checked/reflected theorems need
+an explicit relation to Lean's concrete-state model. assume and assume reflect are
+trust boundaries. No Liquid Haskell dependency or annotation was added in this work.
+
+## Haskell findings and full remaining scope
+
+Keep the confirmed numerical repair in FINDINGS for the external Haskell agent.
+The +400/bound-2 a(a) example has correct completion logPartition 800 but grouped
+logPartition Infinity and both normalized expectations NaN. Stabilize grouped log
+partition and BOTH expectation implementations. Completion logPartition is already
+correct. Preserve generic exact Rational expectedCounts. The full repair sites,
+checked training/mixture concerns and replay packet remain below. No fix is claimed.
+
+Actual eager runsBy and deferred termsPruneUntil differ in ORDER on the ordinary
+finite grammar r(f(a|b),c|d): ac,ad,bc,bd versus ac,bc,ad,bd. Both return the SAME four
+terms and no holes. The committed default-driver-order-boundary packet reproduces
+this distinction. It is not a decoded synthesis Program counterexample or a new
+production bug. A general ordered identification is false. Membership/deferral
+simulation and the source-exact eager model remain open. No Haskell change was made.
+
+Retain the FULL objective: original-input soundness and completeness; exact node and
+Program component counts; actual size/order/multiplicities; BOTH directions of BOTH
+actual signed APIs; source-derived recursive depth and total work; rejected, failed,
+sibling and later states; warm-cache identity; machine bounds; lazy productivity;
+and actual Haskell correspondence. The optimized interned backend remains primary.
+Preserve all old constructor/equality proofs. Arbitrary policy callbacks and typed
+clients need their own stated contracts. Local completion is not global emission.
+Green Audit and theorem totals do not prove the full objective.
+
+---
+
 # Restart checkpoint: 2026-11-11, complete shared child preparation model
 
 Work continues after the user's resume. Pushes to formalize remain authorized.
