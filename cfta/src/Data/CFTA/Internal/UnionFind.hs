@@ -138,6 +138,8 @@ unionRoots r1 r2 (UnionFind m) =
         Just (Root size set) -> (size, set)
         _ -> (1, IntSet.singleton (uvarToInt r))
 
+{-@ find :: uv:UVar -> uf:UnionFind -> (UVar, {v:UnionFind | v == uf}) @-}
+
 -- | Find a variable's representative. The forest stays the same.
 find :: UVar -> UnionFind -> (UVar, UnionFind)
 find uv uf = (root uv uf, uf)
