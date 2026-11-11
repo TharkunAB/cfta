@@ -1,3 +1,147 @@
+# Restart checkpoint: 2026-11-11, captured work decrease and complex finite type instances
+
+Work continues after the user's resume. Pushes to formalize remain authorized.
+The goal controller remains paused and has no resume tool. Continue when invoked.
+Do not replace or complete the full objective. Preserve unrelated .hypha/.
+Previous published checkpoint: 3e9f079b515e57f7c223254c16206d090d9a0e99.
+Checked source head: 3349ddd0fa69f913a979189d77c5052dca94210a. Integrated main: a248ab6aa4b29571fc7ec5331640aaccf2850f79.
+Publish this complete checkpoint and verify its exact remote tip.
+
+## Strongest new statements
+
+An actual COMPLETE shared ordinary captured step strictly reduces pending native
+witness work: pendingSize(after, extended)+1 <= pendingSize(before, original).
+The result retains the ENTIRE existing resource/semantic packet and the SAME
+returned finite assignment. It adds no new current premise to R219's producer.
+It invokes that semantic producer ONCE. A plain selected-resource producer, which
+constructs no assignment, supplies protection at common stable bounds. The proof
+derives the actual PRE-finalize pending payload. It discards that plain producer's
+globals and retains only the original full resource bundle. It never uses the final
+enumerated payload as a pre-finalize fact. Old-counter assignment agreement converts
+the input work to the original assignment. No future slot, protection, alignment or
+per-step decrease supplier is added.
+
+The structural selected observer requires only CURRENT counter=values.length and
+a literal complete result, for ANY fixed assignment. It proves selectedAfter+1 <=
+before+size(fill parent fragment). Own-class None slots cost zero. Their actual
+allocation derives middle alignment. The actual ordered traversal supplies the
+child-size sum and all later alignment. Residual recording preserves values.
+The parent node contributes one unit. The captured finalizer removes that parent's
+full size under the SAME assignment, giving strict decrease. This is NATIVE finite
+annotated witness-tree size. It is not public Program component count, native fuel,
+elapsed time, or a total cost for visiting every alternative.
+
+The actual prepared-branch producer retains ONE preparation carrier and ONE captured
+progress call. The unchanged preparation's entered.values=before.values transports
+current ProperState directly. Current properness and stored-slot facts derive the
+previous no-terminal gate internally. At the SAME final caller/cache/assignment,
+the full old resource/model packet now carries properness and a restart decision
+other than some stuck for every stop/order/metadata choice. Stop and finish remain
+possible. This does not establish policy-prefix reachability, selector coverage,
+complete branch traversal or root emission.
+
+Generalized source type schemes now accept their consistent finite instances.
+The new instantiate operation uses ACTUAL recognized encoded leaf symbols as keys.
+Occurrence paths derive every generated equality class internally. The PCS equality
+guard follows from those classes and the source normalizer. Main generalize_member
+requires actual universe membership ONLY for demanded substitution images. Rigid
+constructor positions need no separate allTypes admission. Nullary var1/var_* aliases
+and the TWO-argument Fun arrow alias follow source behavior. Non-arrow Fun arities,
+rigid var_e images and other catalog exceptions are not silently admitted to the
+universe. No generated-guard acceptance premise or future whole-build membership
+is supplied. This covers complex schemes, not a general original program witness.
+
+## Exact verification
+
+Four new modules contain 953 lines and six public laws:
+
+- SourcePruningEnumerationSharedCapturedPendingSize.lean: 212 lines, 1 public laws;
+  SHA256 ebd6c4a67e7d32bfdd4c020f3fb6b5ef90626b4e43d1b76aef8fe40c0bdf343d.
+- SourcePruningEnumerationSharedPreparedBranchProgress.lean: 254 lines, 1 public laws;
+  SHA256 3fdd18cf14179884986e809d730f14862cbbb3200dc43f19cf07d9a4b7364b25.
+- SourcePruningEnumerationSharedSelectedPendingSize.lean: 123 lines, 1 public laws;
+  SHA256 539522252d3a8938171afb940cdc44b98356590cf68ad47a583685e14d400f26.
+- SourceSynthesisGeneralizeFiniteInstances.lean: 364 lines, 3 public laws;
+  SHA256 1694623d56edd06c0eb71d5cce3dafe670444ab2d9525415ae7517489a6de209.
+
+All strict focused checks PASS: exact public names/namespaces, source hashes,
+standard Lean axioms, and own-source warnings as errors. Full affected Audit PASS:
+5,727 live modules, 5 affected, 4,724 imports, 92,749 axiom checks.
+Every prior Audit byte remains. The import graph has no cycle. All four source
+packets plus 20261111-captured-decrease-compatibility replay from /tmp (five PASS).
+All heavy jobs are terminal. One serial 4 GiB memory.max/high, swap0 and
+LEAN_NUM_THREADS=1 remain. No heartbeat, queue or memory limit changed.
+No production Haskell changed. No Haskell suite was repeated without a source change.
+
+## Next concrete work
+
+1. Close the opaque branch. pendingSize can transfer unchanged to a fresh opaque
+   native slot. Use existing A=(EnumerationIndexSelection.candidates cache).length
+   as the secondary measure. Derive A<=pendingSize from CURRENT alignment and native
+   flags. Each true flag is a stored Some slot with positive finite assigned size.
+   Actual opaque allocation parks a fresh false flag; original-target finalization
+   clears the selected true flag. Derive A(after)+1=A(before) from literal effects.
+   A current chosen decision supplies the old true flag; Ready alone does not.
+   No extra retained-class counter or supplied future counter ceiling is needed.
+2. Derive whole-cycle work. After deriving P<=B from the INITIAL finite assignment,
+   W_B=(B+1)*P+A decreases for ordinary or opaque completion. Callback Frame.values
+   and counter preserve P/A. Prefix/preparation must retain the SAME compatible
+   model and nonincrease at the actual entered cache, including parked-prefix
+   recursion. This is a proposed proof, not a verified whole-driver allowance.
+   Dead/incompatible branches and complete alternative scans remain separate.
+3. Join actual policy runPrefix to prepared progress. BOTH shared driver families
+   literally invoke SourcePruningEnumerationSelectedStep.runPrefix. Existing common
+   prefix validity/model laws are reusable; no old recursive executor is substituted.
+   Use the three exact current unary/app/filter fits/admits conditions and ACTUAL
+   chosen selection. PrefixAdmission derives waiting=None/IncomingAvoid at the same
+   returned Packet. Prefix properness, counter equality and model preservation then
+   feed ONE prepared-progress producer. Right recordTypes is exactly pure(false,
+   metadata); no Left callback premise belongs there. Fix edgesOf=nodeEdges or prove
+   static row coverage before claiming the accepting branch occurs in the real list.
+4. Lift generalized type instances into whole original source witnesses. Use actual
+   FirstOrder leaf rows, source name allocation and last-name lookup, per-OCCURRENCE
+   scheme instances and appType equalities. Native assignment is not a global source
+   type substitution. Preserve exact source size and catalog/encoding conditions.
+   Existing build-language/NodeLaw/startup transfer closes only the downstream stage.
+
+Concrete next-cut source audits are tracked in
+lean/restart-evidence/20261111-captured-decrease-compatibility/source-audit.md.
+The runtime also retains next-total-work.md, next-policy-model-prefix.md and
+next-original-build-witness.md. The source audit records a minimal mutual
+TermsTyping/RelevantTyping relation over existing Program values. No general source
+typing judgment exists yet. Actual .ok is only syntax identity for its proposed
+membership law; producing .ok also needs ordered-selection and all-mapM lookup
+closure for every alternative.
+Do not reprove common recordTypes, the pure scheduler bridge or old abstract inverses.
+
+## Haskell fixes and full remaining scope
+
+Main PR207 remains integrated. FINDINGS retains the stable logarithmic oracle repair,
+unchanged exact Rational expectedCounts, checked distill route, final mixture checks,
+and the positive a(a)/bound2 +/-400 replay for BOTH backends. All 529 generator
+examples, formatting and both examples passed at R219. Historical failure source
+hashes/output remain. No new Haskell fix or confirmed defect is claimed here.
+Intermediate mixture checks/nonempty guards remain contract questions, not a proved
+exception. No Liquid Haskell annotations or dependency were added. Planned checked
+contracts can help source correspondence; assumptions do not prove implementation.
+The eager/deferred ORDER distinction remains; it is not a decoded Program defect.
+
+Retain FULL original-input soundness/completeness, exact NODE and Program component
+counts, actual size/order/multiplicities, BOTH directions of BOTH signed APIs,
+source-derived adequate recursive depth AND total work, rejected/failed/sibling/later
+states, warm-cache identity, Word/Int bounds, lazy productivity and actual Haskell
+correspondence. Keep optimized interned as primary and all old constructor/equality
+proofs. Local captured decrease, type-instance membership and a green Audit do not
+establish complete original-source enumeration or the full library objective.
+
+Runtime: /tmp/mcfta-captured-decrease-20261111-2217/.
+Keep only small source plans/logs/manifests. No binary archive was created.
+/tmp filesystem free: 205.6 GiB.
+Fresh usage: 10 percent at 2026-11-11T21:35:21.962Z.
+Pause and notify the user if fresh usage exceeds 80 percent.
+
+---
+
 # Restart checkpoint: 2026-11-11, actual local progress and shared child-work bounds
 
 Work continues after the user's resume. Pushes to formalize remain authorized.
