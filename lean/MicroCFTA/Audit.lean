@@ -1,3 +1,5 @@
+import MicroCFTA.SourcePruningEnumerationStoredOwnChildOrigins
+
 import MicroCFTA.SourceSynthesisFiniteApplicationWitness
 import MicroCFTA.SourceSynthesisRequiredAnnotationClassPass
 import MicroCFTA.SourceSynthesisRequiredAnnotationParentReturn
