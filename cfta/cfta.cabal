@@ -137,7 +137,12 @@ library
 
   if flag(liquid)
     build-depends: liquidhaskell >=0.9.14 && <0.10
-    ghc-options: -fplugin=LiquidHaskell
+    -- Without --smtsolver, the plugin looks for four SMT solvers in each
+    -- directory of the PATH, two times in each module. On WSL2, with the
+    -- Windows directories in the PATH, this takes about 0.4 s in each module.
+    ghc-options:
+      -fplugin=LiquidHaskell
+      -fplugin-opt=LiquidHaskell:--smtsolver=z3
 
 test-suite unit-tests
   import: warnings, extensions
