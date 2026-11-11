@@ -214,6 +214,14 @@ inferred. On 12 cores, all 27 configurations complete. In this matrix,
 each of the 25 configurations that complete in both modes prints the same
 output on one core and on 12 cores, byte for byte.
 
+With the Knuth-Bendix order, the default, a search of phase 1 first finds
+the definitions of the signature, and the order prefers their bodies. The
+outputs of ListMonad 7 and of HugeLists 5 to 7 name one defined symbol,
+`>=>`, and the other outputs name none. With `--no-definitions`, this
+search does not run, and ListMonad 7-p4 prints 9 laws on one core. On 12
+cores with `--no-definitions`, HugeLists 6-p4 prints 690 laws, and 7-p4
+with `--type-depth 2 --recheck 2000` prints 1,413.
+
 HugeLists 6-p4 with the defaults completes in both modes, with 691 laws:
 in 384 seconds on one core, with a maximum residency of 2.1 GB, and in 316
 seconds on 12 cores, with a maximum residency of 5.0 GB. At `b07337367`,
