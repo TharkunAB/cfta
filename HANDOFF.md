@@ -1,3 +1,152 @@
+# Restart checkpoint: 2026-11-11, captured write, proper traversal and stable training
+
+Work continues after the user's resume. Pushes to formalize remain authorized.
+The goal controller remains paused and has no resume tool. Continue when invoked.
+Do not replace or complete the full goal. Preserve unrelated .hypha/.
+Previous published checkpoint: 1d64559a77975526cd949f4f657f7afe61ecc244.
+Checked code/evidence head: a619b2d48195f029e03f8ff6cc5267a2e03398cd.
+Main a248ab6aa4b29571fc7ec5331640aaccf2850f79 is integrated by e55cb69a59d8f747c46039f36e069cbed81accfb.
+Publish the complete checkpoint and verify its exact remote tip.
+
+## Strongest new semantic statement
+
+A current genuine Ready slot and an accepted prepared ordinary row now complete
+ACTUAL captured-slot finalization. ONE final assignment agrees below the original
+counter, satisfies the original core at its old heap and the final core at its
+reached heap, fills the actual fragment to BOTH the original and extended value
+of the captured slot, retains inherited Holds and gives every allocated value
+origins in the original witness. The ENTIRE previous actual resource packet stays
+attached to the SAME result. Arity, inherited Holds and chosen Origin derive from
+current inputs. Ready.avoids supplies protection; no new trie validity is needed.
+The original stored handle remains independent of the available prepared parent.
+
+The proof constructs the semantic result, then compares the FULL literal run at
+common larger bounds with the existing resource result. It keeps only the resource
+global memo bundle. No independent ghost bundles are equated. IncomingAvoid is NOT
+inferred from Ready: the existing pending-reference history remains conditional.
+Callbacks and whole-driver emission remain outside this captured-write statement.
+Fragments can retain pending holes. This is not original-input completeness.
+
+## Proper paths through actual shared workers
+
+Actual rawFold preserves ProperState at its returned outer core for ALL result
+tags. Cached fold candidates include raw-empty rejected prefixes. The ALREADY
+existing NEW-backend rawFold_singleton_core in SharedTerminalScalarBounds is reused
+unchanged. The earlier plan missed that declaration; no duplicate was added.
+
+Actual terminal candidates preserve proper paths from current ProperState and
+strict descendants. The exact terminal partition of current ProperInputs derives
+the strict condition. Actual child dispatch includes every attached candidate,
+including rejection; its successful singleton corollary uses literal cache identity.
+Actual ChildTraversal complete traces and stopped prefixes compose these same child
+observations. A stopped candidate needs no Safe claim. No old executed worker is
+cast to shared. Pure unchanged prefix/adapter/nonterminal helpers are reused.
+
+These are structural postconditions of literal observations. Existing constructive
+semantic/resource packets discharge the complete observations. They do not add a
+future successful-run, Context, model, Ready or leaf-preservation supplier to the
+completion theorem. Current input ProperState/ProperInputs remain explicit.
+
+## Exact verification
+
+Five new modules contain 686 lines and 10 public laws:
+
+- SourcePruningEnumerationSharedTerminalProper.lean: 128 lines, 2 public laws;
+  SHA256 9af081a94de875ef3d8109dd7cf1f75ed358f66478e682fbd2f4ce5513ef20c0.
+- SourcePruningEnumerationSharedCapturedEdgeModels.lean: 226 lines, 1 public laws;
+  SHA256 2e32ec970e84266445610ef96705f155c5fb5d2022c510a8e7e3f7505087f23c.
+- SourcePruningEnumerationSharedChildProper.lean: 72 lines, 2 public laws;
+  SHA256 719d49b971ef1b3dab8cf5b3c41a19f0b7f727142d81aceb4a15b189056d7c4a.
+- SourcePruningEnumerationSharedFoldProper.lean: 186 lines, 3 public laws;
+  SHA256 5e58291067da4e225aca1f358e922dbbeb169a1c9d2973806b5ba89d5d2e2a4c.
+- SourcePruningEnumerationSharedTraversalProper.lean: 74 lines, 2 public laws;
+  SHA256 140adca38cd8c46ec7c6929292db4912bc130ce037e83365d06bbdcf9b3c936c.
+
+All strict focused names, real namespaces, exact hashes, own-source warnings and
+permitted axiom dependencies pass. Full affected Audit passes: 5,716 live modules,
+6 affected, 4,713 imports and 92,611 theorem axiom checks. All prior Audit bytes
+remain and the import graph has no cycle. Five source packets and
+20261111-captured-model-proper-compatibility reproduce from /tmp (six PASS).
+All affected Lean hashes remain exact after the Haskell merge; no duplicate Audit
+run was needed. The current numerical packet below passes separately in project Nix.
+
+## Haskell repair integrated from main PR207
+
+The confirmed +400 training-oracle defect is REPAIRED in main a248ab6aa. Both
+expectation backends and grouped logPartition use LogNumber throughout. The generic
+exact Rational expectedCounts remains unchanged. distill now uses checked reporting.
+Mixture fitting checks FINAL shares and log-weights before positive filtering and
+before Mixture.train converts shares to Rational. The NaN sum repair prevents an
+infinite operand from masking a NaN operand. No additional production Haskell fix
+was made on formalize. FINDINGS must retain this verified repair for external work.
+
+Actual Nix/GMP validation passes: fourmolu on the three changed Haskell files,
+cabal-gild, all 529 generator examples (zero failures), Loaded Dice and ExplainFuzz.
+New source-pinned packet 20261111-training-oracle-stable-logarithms checks a(a),
+bound 2, at BOTH log-weights 400 and -400. Completion logPartition and BOTH oracle
+partitions/expectations give finite log totals 800/-800 and expected count a=2
+within 1e-9. Output is rounded only AFTER assertions. The old failing packet retains
+its OLD hashes/output; its README now identifies it as a historical snapshot.
+
+repair-review.md in the new packet records the exact source repair and limits.
+Mixture component fits still use legacy fit and validation is FINAL, rather than
+an explicit check of every intermediate objective/gradient/score/responsibility.
+There is no explicit post-filter nonempty or fitted/total guard at Mixture.train.
+These remain source-contract questions, NOT a reproduced Just[] or exception.
+The older bound-1025 probe only timed out. Do not relabel it as a demonstrated bug.
+This regression evidence does not prove all floating-point training in Lean.
+
+## Next concrete proof cuts
+
+Continue actual SelectedEdge/Captured proper preservation. Literal CachedOwn.prepare
+and unchanged suspendMany_proper give the SAME own cache. prepare_inputs and pure
+children_proper_inputs derive the exact child buckets from inherited validity and
+valid projected tries. Current cached row-guard readback supplies the latter.
+Current stored payload plus ProperState supplies inherited validity in the captured
+wrapper. Actual arity rejection keeps entry proper. Residual recording changes no
+stored paths. Pure Finalize.run_proper handles success; finalizeStopped keeps its
+actual pre-finalize cache. No heavy old Context/EdgeInputs packet needs porting.
+Plan: runtime/next-shared-selected-proper.md.
+
+The semantic preparation bridge ALREADY exists: SelectedPreparation.complete and
+complete_resources_current retain the SAME actual observation, model equivalence
+and prepared-node acceptance. Unchanged counter transports origins. Raw
+SelectorLanguage.interned_accepting gives a compatible resident prepared row.
+Use preparedSeed at the reached endpoint. Never require stored handle=prepared
+parent. Arbitrary edgesOf with only selectionMembers+selectionLength can be []:
+real accepting-row coverage needs raw selection or actual canonical map/fallback
+permutation. Ordinary dispatch also needs its current no-terminal gate; Ready alone
+does not give that gate. Prior arbitrary hooks can stop before the accepting sibling.
+Plan: runtime/next-shared-prepared-model.md.
+
+The pure scheduler bridge ALREADY exists: Restart.not_stuck_of_proper and current
+native selection consume the SAME current cache/Safe/ProperState/finite model.
+Compose current producers; do not assume future readiness or replay old workers.
+Liquid Haskell contracts can help the concrete source bridge. They need explicit
+interpretations and checked proofs. assume/assume-reflect stay trust boundaries.
+No Liquid Haskell annotations or dependency were added by this checkpoint.
+
+## Runtime and full remaining objective
+
+Runtime: /tmp/mcfta-captured-model-proper-20261111-2052/.
+All heavy checks are terminal. One serial 4 GiB memory.max/high, zero swap and one
+Lean thread were retained. Generator tests used one runtime capability and 2 GiB
+heap inside that cap. No queue, cap or heartbeat changed. Keep only small source
+plans/logs/manifests; no binary archive was created. Recent /tmp filesystem free
+space was 201 GiB. Latest fresh usage: 9 percent at 2026-11-11T20:17:38.737Z.
+Pause and notify the user if fresh usage exceeds 80 percent.
+
+Retain original-input soundness/completeness, exact node and Program component
+counts, actual size/order/multiplicities, BOTH directions of BOTH signed APIs,
+source-derived adequate recursive depth and total work, failed/rejected/sibling/
+later states, warm-cache identity, machine bounds, lazy productivity and actual
+Haskell correspondence. Preserve the optimized interned core and old constructor/
+equality proofs. The reproduced eager/deferred ORDER distinction remains unchanged.
+Local model-preserving completion does not establish root-driver emission or all
+source-to-current witness construction. A green Audit is not end-to-end completion.
+
+---
+
 # Restart checkpoint: 2026-11-11, actual selected edge and proper shared paths
 
 Work continues after the user's resume. Pushes to formalize remain authorized.
