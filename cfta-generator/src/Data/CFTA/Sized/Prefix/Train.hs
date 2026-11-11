@@ -352,9 +352,10 @@ expectedCounts weight completions = (total, Map.map (/ total) derivatives)
     dual symbol = Dual (weight symbol) (Map.singleton symbol (weight symbol))
 
 {- | A number that is not negative, as its logarithm. Zero has the logarithm
-negative infinity. The sum and the product use the logarithms only, so a
-number outside the range of 'Double' keeps its value. 'completionWeightBy'
-uses the sum, the product, and 'fromInteger'.
+negative infinity. The sum, the product, and the quotient use the logarithms
+only, so a number outside the range of 'Double' keeps its value.
+'completionWeightBy' uses the sum, the product, and 'fromInteger'.
+'expectedCounts' also uses the quotient.
 -}
 newtype LogNumber = LogNumber {logarithm :: Double}
 
@@ -371,16 +372,20 @@ instance Num LogNumber where
     signum (LogNumber value) = LogNumber $ if value == -1 / 0 then value else 0
     negate _ = error "LogNumber: a number that is not negative has no negation"
 
+instance Fractional LogNumber where
+    LogNumber left / LogNumber right = LogNumber (left - right)
+    fromRational = LogNumber . log . fromRational
+
 {- | The logarithm of the total weight of the completions under log-weights.
 The calculation uses the logarithms of the weights, so a total weight outside
 the range of 'Double' has a correct logarithm.
 -}
 logPartition :: (Ord symbol) => LogWeights symbol -> Completions symbol -> Double
-logPartition logWeights = logarithm . completionWeightBy (\symbol -> LogNumber $ Map.findWithDefault 0 symbol logWeights)
+logPartition logWeights = logarithm . completionWeightBy (weightOf logWeights)
 
--- | The weight of a symbol under log-weights.
-weightOf :: (Ord symbol) => LogWeights symbol -> symbol -> Double
-weightOf logWeights symbol = exp $ Map.findWithDefault 0 symbol logWeights
+-- | The weight of a symbol under log-weights, as its logarithm.
+weightOf :: (Ord symbol) => LogWeights symbol -> symbol -> LogNumber
+weightOf logWeights symbol = LogNumber $ Map.findWithDefault 0 symbol logWeights
 
 -- | The mean number of nodes with each symbol in the terms of a corpus. The corpus must not be empty.
 meanCounts :: (Ord symbol) => [Term symbol] -> Map.Map symbol Double
@@ -418,14 +423,20 @@ data Oracle symbol = Oracle
     , oracleExpectations :: LogWeights symbol -> (Double, Map.Map symbol Double)
     }
 
--- | The oracle of the completions of a prefix, with dual numbers: exact in any number type, and slow for many symbols.
+{- | The oracle of the completions of a prefix, with dual numbers
+('expectedCounts') of 'LogNumber'. The calculation uses the logarithms of the
+weights, so a total weight outside the range of 'Double' gives a correct
+result. An expected count is at most the size bound, so it is a 'Double'. The
+calculation is slow for many symbols.
+-}
 completionsOracle :: (Ord symbol) => Completions symbol -> Oracle symbol
 completionsOracle completions =
     Oracle
         { oracleSymbols = Set.toAscList $ Set.fromList $ completionSymbols completions
         , oracleLogPartition = (`logPartition` completions)
         , oracleExpectations = \logWeights ->
-            let (total, expected) = expectedCounts (weightOf logWeights) completions in (log total, expected)
+            let (total, expected) = expectedCounts (weightOf logWeights) completions
+             in (logarithm total, Map.map (exp . logarithm) expected)
         }
 
 {- | The oracle of the terms that an automaton accepts with at most a number of
