@@ -1,3 +1,99 @@
+# Restart checkpoint: 2026-11-11, complete shared child preparation model
+
+Work continues after the user's resume. Pushes to formalize remain authorized.
+The goal controller still reports paused and cannot be set active with its tools.
+Continue when invoked. Do not replace or complete the full goal.
+Previous published checkpoint: 30f3b771da1425eab7dbaf70675528e21e43fa57.
+Checked source head: ffb975a47b84f1452f3d5f330dd4669d0dc7b78d.
+Fresh main: 2abbfe8ea91aff49122c03e8c96ffa539053b7e1, already integrated.
+Push the complete checkpoint and verify its remote tip. Preserve unrelated .hypha/.
+
+## Strongest new statement
+
+Current compatible ordered child terms now produce a COMPLETE actual shared child
+PREPARATION traversal. One final assignment satisfies the original core at its old
+heap and the returned core at its reached heap. It agrees below the original counter,
+fills the actual ordered fragment list to the same ordered terms, retains every child
+language and bucket Holds fact, and gives origins for every allocated assignment value.
+The complete resource, native Post, cache/index, reference and fragment packet remains.
+No future child model or successful traversal observation is an external input.
+
+The proof directly threads each actual child result into the next call. Existing
+retained_inputs and Post.keeps.available derive later pending status and residency.
+Counter growth and assignment agreement transport later restrictions. fill_bounded
+preserves earlier fragment meanings under later assignment extensions. This completes
+local child preparation. The fragments can still contain pending holes. It does not
+prove that the root driver has emitted the chosen finite term or Program.
+
+A separate invariant proves Protected for an old root that avoids ONLY the terminal
+subset of a child bucket. It accepts a literal stable-return equation. The existing
+constructive child packet supplies that equation. It is a postcondition, not a new
+completeness premise or a future model supplier. Empty/fresh branches preserve old
+roots directly. Terminal branches identify the SAME cache from current native
+completion. No Canonical premise or stronger FragmentAvoid result is introduced.
+
+## Exact verification
+
+Two new modules contain 449 lines and two public laws:
+
+- SourcePruningEnumerationSharedChildTraversalModelResources.lean: 302 lines.
+  ChildTraversal.complete_models_origins_resources; SHA256
+  15d5a4ce59669c69cc19eac3b3096c116c8084df31c279a96bfbd6fd90994fd2.
+- SourcePruningEnumerationSharedChildTerminalProtection.lean: 147 lines.
+  ChildDispatch.stable_run_protects_terminal_avoiding_root; SHA256
+  2f271f31a1bae281019ad57ef19fde7d6188ed8814e6cb003dc2fab4ed36a5bc.
+
+Both strict focused checks pass with every public name, real namespace, source hash
+and permitted axiom dependency checked. The full affected Audit passes: 5,708 live
+modules, 3 affected, 4,705 imports, 92,540 theorem axiom checks. All prior Audit bytes
+remain and the import graph has no cycle. Three packets reproduce from /tmp:
+20261111-shared-child-traversal-model-resources, 20261111-shared-child-terminal-protection,
+and 20261111-child-traversal-model-compatibility under lean/restart-evidence/.
+No production Haskell changed. Its prior validation and reproductions remain below.
+
+All compilation used one serial job, 4 GiB memory.max/high, zero swap and one Lean
+thread. No cap, concurrency or heartbeat changed. All checks are terminal.
+Runtime: /tmp/mcfta-child-traversal-model-20261111-2005/.
+Only small source plans and logs are retained. No binary archive was created.
+Latest fresh usage: 7 percent. Pause and notify the user if usage exceeds 80 percent.
+
+## Next cuts and source-contract work
+
+Compose R214's SAME accepted own row/plan with this traversal into actual SelectedEdge
+and parent finalization. The residual model follows from that row's ResidualHolds and
+exact node-fragment fill. Use R216 terminal proper-child separation and the new actual
+protection postcondition for the selected parent. Keep prepared parent and original
+stored handle distinct. Selected readiness comes from actual selection, not an
+arbitrary stored Packet. Empty-template callbacks return false with changed ghost
+type metadata; arbitrary callbacks can prune and later recursion can stop.
+
+The current pure scheduler bridge ALREADY exists: Restart.not_stuck_of_proper in
+SourcePruningEnumerationNativeProgress. NativeSelectionProgress.expand_of_pending
+also gives a ready choice with current work and no stop. Both consume the SAME
+current cache/model. The missing structural chain is ProperState preservation through
+ACTUAL shared dispatch, incoming, fold and terminal operations. Startup, common own
+allocation/nonterminal preparation/finalization already have reusable pure producers.
+Old executed backend proofs cannot be cast to the new calls.
+
+ProperInputs allows terminal inputs but requires valid nonempty tries. ProperState
+requires stored waiting tries to be nonterminal too. Empty buckets are permitted.
+An invalid branch[] has vacuous Holds. A valid empty trie also has vacuous Holds.
+Canonical alone excludes the first but does not exclude the second or a terminal.
+A real strict descendant path is what supports the finite-model readiness proof.
+These are useful first LiquidHaskell source-contract targets. Planned source
+contracts still need explicit correspondence to Lean predicates; no LH code landed.
+
+The full goal remains original-input soundness/completeness, exact node and Program
+counts, actual size/order/multiplicities, both directions of both signed rank APIs,
+a source-derived sufficient depth/work bound, rejected/sibling/later states, warm
+caches/identity, Word/Int limits, lazy productivity and Haskell correspondence, for
+both optimized interned and older constructor/equality work. The eager/deferred raw
+Haskell ordering distinction is reproduced below. Both expectation calculations and
+the grouped log-partition still need the recorded numerical Haskell repair; completion
+log-partition already returns 800. All prior proof work and detailed findings remain.
+
+---
+
 # Restart checkpoint: 2026-11-11, one child model at its resource result
 
 Work continues after the user's resume. Pushes to formalize remain authorized.
