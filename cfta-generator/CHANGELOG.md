@@ -7,6 +7,18 @@ Before release, the package was called `microcfta-generator`.
 Initial release. `cfta-generator` is one generator over the constrained
 tree automata of `cfta`, with QuickCheck integration.
 
+- Add `fitWithReport`, `distillWithReport`, and `Model.trainWithReport`.
+  Reports expose the final step, the optimizer's stopping reason, and the
+  step count. Corpus fits also report retained and dropped terms. Reporting
+  validates finite numerical results and does not evaluate another point
+  after the step budget is spent. Existing training functions keep their
+  behavior.
+- Reject nonfinite or zero exponential potentials in `withLogWeights`, and
+  nonfinite temperatures in `Model.withTemperature`. A public-API check found
+  that NaN, infinity, overflow, and underflow could become zero rational
+  weights and silently change the sampled support. Missing weights still
+  default to one. Unused entries remain ignored, and `withWeights` still
+  accepts explicit zeros. Ordinary finite conversions keep their results.
 - Add `Data.CFTA.Sized.Checkpoint`: resume a size-ordered listing of the
   terms of a graph, or a sampled run of draws from it, also in a new process.
   `start` gives the checkpoint before the first term. `resume` builds the size
@@ -199,11 +211,88 @@ tree automata of `cfta`, with QuickCheck integration.
   the terms up to the bound. `withWeights` gives each symbol a non-negative
   `Rational` weight, and the weight of a term is the product over its nodes:
   `completionWeight`, `nextTokenWeights`, and `tokenProbability` give the
-  exact masses and probabilities, and `drawCompletion` draws a completion in
-  proportion to its weight.
+  exact masses and probabilities, and `lowerCompletions` gives a sampler of
+  the completions for a backend of `Data.CFTA.Ranked`, each completion in
+  proportion to its weight. `weightedTotal`, `unrankWeighted`, and
+  `rankWeighted` give each completion an interval of integers, in the
+  order of `completionTerms`. The length of the interval is
+  the weight of the completion times `d ^ b`: `d` is the least common
+  denominator of the weights of `completionSymbols`, and `b` is the size
+  bound. A uniform integer below the total, decoded, is one draw in
+  proportion to the weight. With the weight one for each symbol, the
+  intervals are the ranks.
+  `rankedCompletions` gives the completions as a `Ranked` language: its ranks
+  are the ranks of `unrankCompletion`, and a sample has a probability in
+  proportion to its weight. Without constraints, a sample is one walk of the
+  term through the count table. With constraints, the sampling tickets are
+  the integers of the intervals.
+  `bestCompletions` gives the completions with the largest weights. Without
+  constraints, it reads them from the count table without a list of the
+  completions. `completionWeightBy` gives the total weight for a weight of
+  each symbol in any number type, and `weightOfTerm` gives the weight of one
+  term.
 - `Data.CFTA.Sized.Prefix.QuickCheck`: `sampleCompletion` draws a rank of the
-  completions uniformly and unranks it, and `sampleWeighted` draws a
-  completion in proportion to its weight.
+  completions uniformly and unranks it, and `sampleWeighted` is the
+  QuickCheck generator of `lowerCompletions`. Without constraints, it is the
+  generator of `rankedCompletions` without the ranks.
+- `Data.CFTA.Sized.Prefix.Parents`: weights that read the context of a node.
+  A `Context` holds the nearest ancestors of the node, each with the position
+  of the path, and the root token of its left sibling. A `Reach` gives the
+  number of ancestors and whether the context has the sibling. `withParents`
+  labels each symbol of an automaton without constraints with the token of
+  its node and with the context of the node. Each term has one labelling, so
+  the completions of the labelled automaton are those of the automaton, and a
+  weight of a labelled symbol is a weight of a token in a context.
+  `labelParents`, `unlabelParents`, and `labelPrefix` move terms and prefixes
+  between the two automata.
+- `Data.CFTA.Sized.Prefix.Train`: fit the weights of the symbols to a corpus
+  of terms. `distill` gives the log-weights with the maximum likelihood of
+  the corpus for the terms of an automaton within a size bound, with an L2
+  prior and two pseudo terms of the uniform model. The gradient is the mean
+  count of each symbol in the corpus minus its expected count. The expected
+  counts come from the count table in dual numbers, or from inside-outside on
+  the sizes. `fit` is the optimizer, L-BFGS. `withLogWeights` gives the
+  completions with the weights of log-weights, and `atTemperature` gives the
+  log-weights of a temperature. `logProbability` and `nextTokenDistribution`
+  give probabilities as `Double`.
+- `Data.CFTA.Sized.Prefix.Model`: a model of the terms of an automaton
+  without constraints, within a size bound. `train` fits a weight for each
+  token in each context of a `Reach` to a corpus of terms. For a prefix of
+  tokens, `nextTokenProbabilities` gives the probability of each next token,
+  `sampleTerm` draws a completion in proportion to its probability, and
+  `bestTerms` gives the completions with the largest probabilities.
+  `termLogProbability` gives the log-probability of a term, and
+  `withTemperature` sets the temperature of whole terms.
+- `Model.condition` gives the model given an event: the terms that a second
+  automaton without constraints accepts, each with its probability divided
+  by the probability of the event. The other queries of the model read only
+  the terms of the event. `Model.eventProbability` gives the probability of
+  the event after a prefix, in the model before `condition`, for the
+  lookahead of constrained decoding (GeLaTo, arXiv:2304.07438). Conditioning
+  and `withTemperature` commute, and conditioning twice gives the model given
+  both events.
+- `Data.CFTA.Sized.Prefix.Mixture`: a mixture of models, for a property of
+  the whole term that the bounded context of one model cannot hold. A mixture
+  has components, each with a share and the weights of one model. The
+  probability of a term is the sum, over the components, of the share times
+  the probability of the term in the component. `train` fits the components
+  to a corpus that the caller splits into groups, with expectation
+  maximization (`distillMixture` of `Data.CFTA.Sized.Prefix.Train`). For a
+  prefix of tokens, `nextTokenProbabilities` gives the probability of each
+  next token, `componentProbabilities` gives the probability of each
+  component, `sampleTerm` and `lowerTerm` draw a completion in proportion to
+  its probability, and `bestTerms` gives the completions with the largest
+  probabilities. `bestTerms` finds them with the threshold algorithm of
+  Fagin, Lotem, and Naor over the components. `termLogProbability` gives the
+  log-probability of a term. The components have one count table.
+- `Mixture.condition` gives the mixture given an event, as `Model.condition`
+  gives the model given an event. It is the mixture of the components given
+  the event. The new share of a component is its share times the probability
+  of the event in the component, over the probability of the event, and the
+  new shares are exact. `Mixture.eventProbability` gives the probability of
+  the event after a prefix, in the mixture before `condition`, for the
+  lookahead of constrained decoding. Conditioning twice gives the mixture
+  given both events.
 - Terms are `Term symbol` from `Data.CFTA.Term` of `cfta`:
   `fromAutomaton`, `fromAutomatonUpToDepth`, `termAt`, `rankOf`, `ranksOf`,
   `rankOfTerm`, `surface`, and the refinement witnesses take and give `Term`

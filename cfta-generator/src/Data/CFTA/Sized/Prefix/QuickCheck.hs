@@ -5,11 +5,11 @@ module Data.CFTA.Sized.Prefix.QuickCheck (
 ) where
 
 import Data.Maybe (fromMaybe)
-import Data.Ratio (denominator, numerator)
 import qualified Test.QuickCheck as QC
 
 import Data.CFTA.Index (Cardinality (..), Rank (..))
-import Data.CFTA.Sized.Prefix (Completions, completionCount, drawCompletion, unrankCompletion)
+import Data.CFTA.Ranked.QuickCheck (QuickCheckBackend (..))
+import Data.CFTA.Sized.Prefix (Completions, completionCount, lowerCompletions, unrankCompletion)
 import Data.CFTA.Term (Term)
 
 {- | A generator of the completions, each with the same probability. It draws
@@ -29,15 +29,11 @@ sampleCompletion completions
     Cardinality count = completionCount completions
 
 {- | A generator of the completions, each with a probability in proportion to
-its weight, as 'drawCompletion' draws it. 'Nothing' when the completions have
-the weight zero. Each choice scales its weights to integers and draws one of
-them, so the probabilities are exact.
+its weight: the sampler of 'lowerCompletions' for QuickCheck. 'Nothing' when
+the completions have the weight zero. The weights become integers, so the
+probabilities are exact.
 -}
 sampleWeighted :: Completions symbol -> Maybe (QC.Gen (Term symbol))
-sampleWeighted = drawCompletion chooseIndex
+sampleWeighted completions = generator <$> lowerCompletions completions
   where
-    chooseIndex weights = do
-        let scale = foldr (lcm . denominator) 1 weights
-            scaled = [numerator (weight * fromInteger scale) | weight <- weights]
-        drawn <- QC.chooseInteger (0, sum scaled - 1)
-        pure $ length $ takeWhile (<= drawn) $ scanl1 (+) scaled
+    generator (QuickCheckBackend generated) = generated
