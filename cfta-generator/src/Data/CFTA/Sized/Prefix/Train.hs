@@ -365,15 +365,16 @@ expectedCounts weight completions = (total, Map.map (/ total) derivatives)
 
 {- | A number that is not negative, as its logarithm. Zero has the logarithm
 negative infinity. The sum, the product, and the quotient use the logarithms
-only, so a number outside the range of 'Double' keeps its value.
-'completionWeightBy' uses the sum, the product, and 'fromInteger'.
-'expectedCounts' and 'groupedOracle' also use the quotient.
+only, so a number outside the range of 'Double' keeps its value. A sum with
+an operand that is NaN is NaN. 'completionWeightBy' uses the sum, the
+product, and 'fromInteger'. 'expectedCounts' and 'groupedOracle' also use
+the quotient.
 -}
 newtype LogNumber = LogNumber {logarithm :: Double}
 
 instance Num LogNumber where
     LogNumber left + LogNumber right
-        | isInfinite larger = LogNumber larger
+        | isInfinite larger = LogNumber (if isNaN smaller then smaller else larger)
         | otherwise = LogNumber $ larger + log1p (exp (smaller - larger))
       where
         larger = max left right

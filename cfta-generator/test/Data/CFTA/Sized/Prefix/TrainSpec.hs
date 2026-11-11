@@ -645,6 +645,18 @@ spec = describe "Data.CFTA.Sized.Prefix.Train" $ do
                 (Map.fromList [("f", -400), ("a", 400), ("b", 400 + log 2)])
                 (400 + log 5, Map.fromList [("a", 0.4), ("b", 1.6), ("f", 1)])
 
+    describe "a log-weight that is NaN" $
+        it "gives a NaN log-partition from the completions, the automaton, the intersections, and logPartition" $
+            forM_ [(nested, 2, "a"), (bigOrOther, 3, "big"), (bigOrOther, 3, "small"), (bigOrOther, 3, "other")] $
+                \(automaton, bound, symbol) -> do
+                    let logWeights = Map.singleton symbol (0 / 0)
+                        completions = completionsOf (toInteger bound) automaton
+                        oracles = [completionsOracle completions, automatonOracle automaton bound, fromJust $ constrainedOracle automaton bound]
+                    (symbol, isNaN $ logPartition logWeights completions) `shouldBe` (symbol, True)
+                    forM_ oracles $ \oracle ->
+                        (symbol, isNaN $ oracleLogPartition oracle logWeights, isNaN $ fst $ oracleExpectations oracle logWeights)
+                            `shouldBe` (symbol, True, True)
+
 -- | Expect an oracle to give, at the log-weights, the logarithm of the total weight and the expected counts, each within @1e-9@.
 oracleGives :: Oracle String -> LogWeights String -> (Double, Map.Map String Double) -> Expectation
 oracleGives oracle logWeights expected =
