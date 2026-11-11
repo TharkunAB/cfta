@@ -1,3 +1,123 @@
+# Restart checkpoint: 2026-11-11, shared child forward assignments
+
+Work continues after the user's resume. Pushes to formalize remain authorized.
+The goal controller still reports paused. Its tools cannot set active. Continue
+when invoked. Do not replace the full goal or mark it complete.
+Previous published checkpoint: 2834979307a90e18076d57a6b3ee64135313eedc.
+Checked source head: 8011d02bcf8177072ac8c894db3ab3a4341f5210.
+Main remains 2abbfe8ea91aff49122c03e8c96ffa539053b7e1 after a fresh fetch.
+The checkpoint commit adds this header, two Audit imports and compatibility reports.
+Push that complete commit and verify the remote tip. Preserve unrelated .hypha/.
+
+## Strongest new statement
+
+A current compatible term now produces a successful result through each modeled
+shared child operation. The term must satisfy EVERY supplied bucket entry under
+ONE current assignment. A nonterminal child installs that term at the fresh slot.
+The extended assignment agrees below the old counter and satisfies the old and
+returned states. The returned hole fills to the chosen term. Assignment origins
+remain within the same original witness. The actual stable singleton observation
+retains the unchanged caller and query memos and all storage and index fields.
+
+The terminal adapter preserves the SAME assignment and counter. It derives the
+actual singleton result, its full state model, its fragment meaning and origins.
+It retains the entire existing adapter receipt, including stable fuel equations,
+Post, reached native endpoints, indexes, rejection and completed-branch facts.
+Its constructive language equivalence excludes rejection from current compatibility.
+No future successful row, observed output, ProperState or parent-specific Avoids
+premise is supplied. A fresh unallocated index removes neutralization on both states.
+
+The terminal law covers the actual cached adapter. The full child partition and
+resource composition are the next step. These are literal shared Lean operations.
+The default Haskell API correspondence remains a separate obligation, detailed below.
+
+## Verification and reproduction
+
+Two new source modules contain 462 lines and two public laws:
+
+- SourcePruningEnumerationSharedNonterminalChildModels.lean: 141 lines.
+  Public law: ChildDispatch.nonterminal_models_origins. SHA256
+  8d46a3ff90fef27cf8bc262c91d26e2cd48e8017739642126a4f62863fb53de1.
+- SourcePruningEnumerationSharedTerminalChildModels.lean: 321 lines.
+  Public law: SharedCachedTerminal.complete_forward_models. SHA256
+  7bc01cad076f9e58b8cd2432cc66c23fa16084b7fd59f33ab2d72c65c7f0231d.
+
+Both focused checks pass with all public names, actual namespaces, exact source
+hashes, standard axiom dependencies and strict own-source warnings checked.
+The affected Audit passes: 5,704 live modules, 3 affected modules, 4,701 imports,
+92,522 theorem axiom dependency checks. All prior Audit bytes remain. No import
+cycle exists. Both source packets, compatibility and source operation-map packets
+replay from /tmp: four PASS. The source operation-map PASS verifies hashes only.
+It is neither a runtime replay nor a proof of equivalence.
+
+Packets in lean/restart-evidence/:
+
+- 20261111-shared-nonterminal-child-models
+- 20261111-shared-terminal-child-models
+- 20261111-shared-child-witness-compatibility
+- 20261111-default-driver-operation-boundary
+
+The three current runtime directories total about 0.4 MiB. No binary archive was
+created. Runtime: /tmp/mcfta-shared-child-witness-20261111-1924/.
+All compilation used one serial job, 4 GiB memory.max/high, zero swap and one Lean
+thread. No cap, concurrency or heartbeat changed. Latest fresh usage was 6 percent;
+pause and notify the user if usage exceeds 80 percent. All checks are terminal.
+
+## Concrete Haskell correspondence finding
+
+Haskell Gen FirstOrder programRuns uses runsBy, runsFrom, then enumerateFully.
+cfta/src/Data/CFTA/Enumeration.hs:927 supplies enumerateNode. Its ordinary edge
+recursively calls enumerateNode on children (:757-777). The shared modeled driver
+instead reaches ChildDispatch and ShallowChild.prepareChild. That operation defers
+ordinary children into fresh pending slots. Haskell has that shallow operation,
+but supplies it to termsPruneUntil (:1198-1201), which Specftacular uses.
+
+The complete operation map and 13 source hashes are in the fourth packet above.
+This is a model/runtime adapter gap. It does not establish a production behavior
+bug. Callbacks, preference and early stop can distinguish the two routes. Default
+erased-term simulation is plausible but unproved. Ordered outputs need a separate
+proof. Constant true policies and erasure of recorded metadata do not supply either
+proof. Do not identify typedTypes/extendTyping with the recording callback.
+
+Required adapter work: target the actual shallow API explicitly, or prove a finite
+deferral/render simulation for the default eager API. Relate the same root, current
+assignments, native effects, rendered terms, obligations and decoding/deduplication.
+Do not assert equality of intermediate states or arbitrary callback traces. Do not
+change Haskell expansion behavior merely to match the current formal driver.
+
+The previously reproduced training-oracle overflow still needs a Haskell repair.
+The two-node a(a) case with log weight 400 has true log-partition 800 and expected
+count 2. Current public expectation APIs return Infinity/NaN. Keep the stable
+log-partition and normalized-expectation repair for BOTH completion and grouped
+oracles, validation checks and exact Rational behavior described below. No Haskell
+production file changed here. The prior 523-example and formatting results remain
+the relevant Haskell validation. The old source packet reproduces the known failure.
+
+## Next proof and full remaining scope
+
+Compose the current complete_with_fragments_resources packet with the new forward
+models for the full actual ChildDispatch. initial_ranges already derives current
+terminal ranges from seed, Fits, original reservations and guard-alphabet facts.
+Use the actual partition. Retain ONE returned cache/caller/raw tuple and assignment.
+If two constructive receipts are used, identify their actual returns at common
+larger bounds before transferring any model. Do not combine unrelated existential
+assignments. Then compose child traversal and the protected parent continuation.
+Parent protection still needs its stated capture-avoidance and trie-validity facts.
+
+The R214 joint own-class plan and all earlier results remain below. Initial model
+and origins already exist. Finite resource completion needs no inhabited model;
+dead branches can reject or stop. Selector subset/length bounds do not prove row
+coverage. The opaque nonterminal backward law still needs bucket retention.
+
+The full goal remains original-input soundness and completeness for the optimized
+interned core and the older constructor/equality code; exact node and Program counts,
+real size/order/multiplicities, both directions of both signed rank/unrank instances,
+a source-derived sufficient depth/work bound, every rejected/sibling/later state,
+warm caches and identity, Word/Int bounds, lazy productivity, and actual Haskell
+correspondence. These local forward proofs do not complete that goal.
+
+---
+
 # Restart checkpoint: 2026-11-11, joint class plans with source origins
 
 Work continues after the user's resume instruction. Pushes to formalize remain

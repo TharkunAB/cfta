@@ -1,3 +1,5 @@
+import MicroCFTA.SourcePruningEnumerationSharedNonterminalChildModels
+import MicroCFTA.SourcePruningEnumerationSharedTerminalChildModels
 import MicroCFTA.SourcePruningEnumerationStoredOwnChildOrigins
 
 import MicroCFTA.SourceSynthesisFiniteApplicationWitness
