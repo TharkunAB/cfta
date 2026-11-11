@@ -136,7 +136,10 @@ library
     unordered-containers >=0.2 && <0.3,
 
   if flag(liquid)
-    build-depends: liquidhaskell >=0.9.14 && <0.10
+    build-depends:
+      cfta:liquid-specs,
+      liquidhaskell >=0.9.14 && <0.10,
+
     -- Without --smtsolver, the plugin looks for four SMT solvers in each
     -- directory of the PATH, two times in each module. On WSL2, with the
     -- Windows directories in the PATH, this takes about 0.4 s in each module.
@@ -146,6 +149,30 @@ library
       -fplugin=LiquidHaskell
       -fplugin-opt=LiquidHaskell:--smtsolver=z3
       -fplugin-opt=LiquidHaskell:--no-annotations
+
+-- LiquidHaskell specifications of containers functions. When a checked
+-- module imports a module M, the plugin reads the module M_LHAssumptions.
+-- The plugin reads an M_LHAssumptions module only from a different unit.
+-- So the specifications are in a separate library. GHC does not record
+-- that a checked module uses this library. After a change here, check
+-- with an empty build directory.
+library liquid-specs
+  hs-source-dirs: liquid-specs
+  default-language: Haskell2010
+  exposed-modules: Data.IntSet_LHAssumptions
+
+  if flag(liquid)
+    build-depends:
+      base,
+      containers,
+      liquidhaskell,
+
+    ghc-options:
+      -fplugin=LiquidHaskell
+      -fplugin-opt=LiquidHaskell:--smtsolver=z3
+      -fplugin-opt=LiquidHaskell:--no-annotations
+  else
+    buildable: False
 
 test-suite unit-tests
   import: warnings, extensions
