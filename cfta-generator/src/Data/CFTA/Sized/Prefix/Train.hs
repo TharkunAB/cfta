@@ -110,8 +110,9 @@ instance (Ord symbol, Num number) => Num (Dual symbol number) where
 terms within a size bound: the maximum-likelihood weights of the module, with
 an L2 prior of precision @10^-3@ and two pseudo terms of the uniform model
 mixed into the counts. The objective is concave. The optimizer uses
-'Double' and can stop before its gradient is small. 'distillWithReport'
-returns the stop reason and the number of terms retained.
+'Double' and can stop before its gradient is small. The result is the
+log-weights of the final step of 'distillWithReport', which also returns the
+stop reason and the number of terms retained.
 
 The oracle follows the automaton. Without constraints, unambiguous rows use
 'automatonOracle', and ambiguous rows their bottom-up deterministic rows.
@@ -119,15 +120,15 @@ With equalities between direct children, the rows must be unambiguous
 without their constraints, and 'constrainedOracle' reads their intersections.
 Terms that the automaton rejects, or that are larger than the bound, have
 the probability zero, so they are left out. 'Nothing' when no term is left,
-or when the automaton has another constraint, ambiguity with constraints, or
-more than 1024 deterministic states or intersections.
+when the automaton has another constraint, ambiguity with constraints, or
+more than 1024 deterministic states or intersections, or when a step of the
+fit is not finite.
 -}
 distill ::
     (Ord state, Ord symbol) =>
     FTA.FTA state symbol Constraint -> Int -> [Term symbol] -> Maybe (LogWeights symbol)
-distill automaton bound terms = do
-    (oracle, counts, _) <- either (const Nothing) Just $ distillationInput automaton bound terms
-    pure $ stepWeights $ last $ take 2000 $ fit 1e-3 oracle counts Map.empty
+distill automaton bound terms =
+    either (const Nothing) (Just . stepWeights . fitFinalStep . distillFit) $ distillWithReport automaton bound terms
 
 {- | A corpus fit, with the number of terms retained and dropped before fitting.
 Each occurrence of a term in the corpus counts one time. A dropped term is a
@@ -192,10 +193,12 @@ the terms by the property that the mixture must learn.
 
 The terms are filtered as in 'distill'. A group without a retained term gives
 no component, and a component whose share becomes zero is removed. The
-components keep the order of their groups. With one group, the result is one
-component with the share one and the log-weights of 'distill', within the
-tolerance of the optimizer. 'Nothing' when no term is retained, or when
-'distill' does not support the automaton.
+components keep the order of their groups. A result has one component or
+more. Each share is finite and positive, and each log-weight is finite. With
+one group, the result is one component with the share one and the
+log-weights of 'distill', within the tolerance of the optimizer. 'Nothing'
+when no term is retained, when 'distill' does not support the automaton, or
+when a share or a log-weight of the fit is not finite.
 -}
 distillMixture ::
     (Ord state, Ord symbol) =>
@@ -203,7 +206,7 @@ distillMixture ::
 distillMixture automaton bound groups = do
     oracle <- distillationOracle automaton bound
     let retained = filter (not . null) $ map (map symbolCounts . retainedTerms automaton bound) groups
-    if null retained then Nothing else Just $ fitMixture oracle retained
+    if null retained then Nothing else fitMixture oracle retained
   where
     symbolCounts term = Map.fromListWith (+) [(symbol, 1) | symbol <- foldr (:) [] term]
 
@@ -215,10 +218,19 @@ component, the log-likelihood of the two pseudo terms and the logarithm of
 the prior. The prior of a component has the precision that 'distill' gives
 the terms of its group, in all rounds. So each step of a round is a step up
 of one objective, and the objective does not decrease.
+
+'Nothing' when a share or a log-weight after the rounds is not finite. A
+share that is not finite stays not finite in each later round. A log-weight
+that is not finite also stays not finite. Thus a check after the rounds is
+sufficient.
 -}
-fitMixture :: (Ord symbol) => Oracle symbol -> [[Map.Map symbol Double]] -> [(Double, LogWeights symbol)]
-fitMixture oracle groups = filter ((> 0) . fst) $ rounds (0 :: Int) (-1 / 0) first
+fitMixture :: (Ord symbol) => Oracle symbol -> [[Map.Map symbol Double]] -> Maybe [(Double, LogWeights symbol)]
+fitMixture oracle groups
+    | all (\(share, logWeights) -> finite share && all finite logWeights) final =
+        Just $ filter ((> 0) . fst) final
+    | otherwise = Nothing
   where
+    final = rounds (0 :: Int) (-1 / 0) first
     terms = concat groups
     size = fromIntegral $ length terms
     uniform = snd $ oracleExpectations oracle Map.empty
@@ -352,15 +364,17 @@ expectedCounts weight completions = (total, Map.map (/ total) derivatives)
     dual symbol = Dual (weight symbol) (Map.singleton symbol (weight symbol))
 
 {- | A number that is not negative, as its logarithm. Zero has the logarithm
-negative infinity. The sum and the product use the logarithms only, so a
-number outside the range of 'Double' keeps its value. 'completionWeightBy'
-uses the sum, the product, and 'fromInteger'.
+negative infinity. The sum, the product, and the quotient use the logarithms
+only, so a number outside the range of 'Double' keeps its value. A sum with
+an operand that is NaN is NaN. 'completionWeightBy' uses the sum, the
+product, and 'fromInteger'. 'expectedCounts' and 'groupedOracle' also use
+the quotient.
 -}
 newtype LogNumber = LogNumber {logarithm :: Double}
 
 instance Num LogNumber where
     LogNumber left + LogNumber right
-        | isInfinite larger = LogNumber larger
+        | isInfinite larger = LogNumber (if isNaN smaller then smaller else larger)
         | otherwise = LogNumber $ larger + log1p (exp (smaller - larger))
       where
         larger = max left right
@@ -371,16 +385,20 @@ instance Num LogNumber where
     signum (LogNumber value) = LogNumber $ if value == -1 / 0 then value else 0
     negate _ = error "LogNumber: a number that is not negative has no negation"
 
+instance Fractional LogNumber where
+    LogNumber left / LogNumber right = LogNumber (left - right)
+    fromRational = LogNumber . log . fromRational
+
 {- | The logarithm of the total weight of the completions under log-weights.
 The calculation uses the logarithms of the weights, so a total weight outside
 the range of 'Double' has a correct logarithm.
 -}
 logPartition :: (Ord symbol) => LogWeights symbol -> Completions symbol -> Double
-logPartition logWeights = logarithm . completionWeightBy (\symbol -> LogNumber $ Map.findWithDefault 0 symbol logWeights)
+logPartition logWeights = logarithm . completionWeightBy (weightOf logWeights)
 
--- | The weight of a symbol under log-weights.
-weightOf :: (Ord symbol) => LogWeights symbol -> symbol -> Double
-weightOf logWeights symbol = exp $ Map.findWithDefault 0 symbol logWeights
+-- | The weight of a symbol under log-weights, as its logarithm.
+weightOf :: (Ord symbol) => LogWeights symbol -> symbol -> LogNumber
+weightOf logWeights symbol = LogNumber $ Map.findWithDefault 0 symbol logWeights
 
 -- | The mean number of nodes with each symbol in the terms of a corpus. The corpus must not be empty.
 meanCounts :: (Ord symbol) => [Term symbol] -> Map.Map symbol Double
@@ -410,7 +428,10 @@ logLikelihood oracle counts logWeights = (value, gradient)
     gradient = Map.unionWith (+) counts (Map.map negate expected)
 
 {- | What a fit reads of a language: its symbols, and for log-weights, the
-logarithm of the total weight and the expected count of each symbol.
+logarithm of the total weight and the expected count of each symbol. The
+oracles of this module calculate with the logarithms of the weights
+('LogNumber'). Thus a total weight outside the range of 'Double' gives a
+correct logarithm and correct expected counts.
 -}
 data Oracle symbol = Oracle
     { oracleSymbols :: [symbol]
@@ -418,14 +439,20 @@ data Oracle symbol = Oracle
     , oracleExpectations :: LogWeights symbol -> (Double, Map.Map symbol Double)
     }
 
--- | The oracle of the completions of a prefix, with dual numbers: exact in any number type, and slow for many symbols.
+{- | The oracle of the completions of a prefix, with dual numbers
+('expectedCounts') of 'LogNumber'. The calculation uses the logarithms of the
+weights, so a total weight outside the range of 'Double' gives a correct
+result. An expected count is at most the size bound, so it is a 'Double'. The
+calculation is slow for many symbols.
+-}
 completionsOracle :: (Ord symbol) => Completions symbol -> Oracle symbol
 completionsOracle completions =
     Oracle
         { oracleSymbols = Set.toAscList $ Set.fromList $ completionSymbols completions
         , oracleLogPartition = (`logPartition` completions)
         , oracleExpectations = \logWeights ->
-            let (total, expected) = expectedCounts (weightOf logWeights) completions in (log total, expected)
+            let (total, expected) = expectedCounts (weightOf logWeights) completions
+             in (logarithm total, Map.map (exp . logarithm) expected)
         }
 
 {- | The oracle of the terms that an automaton accepts with at most a number of
@@ -485,12 +512,16 @@ symbol sums, over the transitions with the symbol and the multipliers, m times
 the weight times the outside weight times the convolution, over the total
 weight: the derivative of w^m by the log-weight is m w^m. A multiplier above
 the bound reads no term, so the tables are finite.
+
+The tables hold 'LogNumber': the logarithms of the weights. Thus a weight
+outside the range of 'Double' keeps its value. An expected count is at most
+the bound, so it is a 'Double'.
 -}
 groupedOracle :: (Ord key, Ord symbol) => key -> Map.Map key [(symbol, [(key, Int)])] -> Int -> Oracle symbol
 groupedOracle root rows bound =
     Oracle
         { oracleSymbols = Set.toAscList $ Set.fromList [symbol | (_, symbol, _) <- transitions]
-        , oracleLogPartition = \logWeights -> log $ total (tables logWeights)
+        , oracleLogPartition = logarithm . total . tables
         , oracleExpectations = expectations
         }
   where
@@ -523,14 +554,14 @@ groupedOracle root rows bound =
                 )
     nodeNumber = Map.fromList (zip nodes [0 :: Int ..])
     sizes = [0 .. bound]
-    poweredWeight logWeights symbol multiplier = exp $ fromIntegral multiplier * Map.findWithDefault 0 symbol logWeights
+    poweredWeight logWeights symbol multiplier = LogNumber $ fromIntegral multiplier * Map.findWithDefault 0 symbol logWeights
     total (insideAt, _) = sum [insideAt rootNode size | size <- [1 .. bound]]
     -- The inside weights of the nodes, and the convolution of the groups of each transition at each multiplier, all as lazy arrays.
     tables logWeights = (insideAt, convolutionOf)
       where
         insideArray =
             listArray ((0, 0), (length nodes - 1, bound)) [value node size | node <- nodes, size <- sizes] ::
-                Array (Int, Int) Double
+                Array (Int, Int) LogNumber
         insideAt node size = maybe 0 (\number -> insideArray ! (number, size)) (Map.lookup node nodeNumber)
         value (key, multiplier) size
             | size < 1 = 0
@@ -547,7 +578,7 @@ groupedOracle root rows bound =
                 ]
         convolutionOf entry = convolutions LazyMap.! entry
     -- The convolution of groups at a multiplier, as an array over the sizes: a group of r positions reads its key with r times the multiplier, at r times the size.
-    convolve insideAt multiplier = foldr step (listArray (0, bound) (1 : replicate bound 0) :: Array Int Double)
+    convolve insideAt multiplier = foldr step (listArray (0, bound) (1 : replicate bound 0) :: Array Int LogNumber)
       where
         step (child, factor) rest =
             listArray
@@ -559,7 +590,7 @@ groupedOracle root rows bound =
                     ]
                 | size <- sizes
                 ]
-    expectations logWeights = (log grand, Map.map (/ grand) counts)
+    expectations logWeights = (logarithm grand, Map.map (exp . logarithm . (/ grand)) counts)
       where
         built@(insideAt, convolutionOf) = tables logWeights
         grand = total built
@@ -584,7 +615,7 @@ groupedOracle root rows bound =
                 ]
         outsideArray =
             listArray ((0, 0), (length nodes - 1, bound)) [outsideValue node size | node <- nodes, size <- sizes] ::
-                Array (Int, Int) Double
+                Array (Int, Int) LogNumber
         outsideAt node size = outsideArray ! (nodeNumber Map.! node, size)
         outsideValue node size
             | size < 1 = 0

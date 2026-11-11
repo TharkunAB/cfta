@@ -6,7 +6,7 @@ import Data.List (inits, isPrefixOf, sort, sortOn)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (fromJust, fromMaybe, isNothing)
 import Data.Ord (Down (..))
-import Test.Hspec (Spec, describe, it, shouldBe, shouldSatisfy)
+import Test.Hspec (Expectation, Spec, describe, it, shouldBe, shouldSatisfy)
 
 import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint, equalityConstraint, noConstraint)
@@ -622,6 +622,97 @@ spec = describe "Data.CFTA.Sized.Prefix.Train" $ do
                 -- A term with six nodes, beyond the bound.
                 let deep = iterate (Term.Node "neg" . pure) (Term.Node "x" []) !! 5
                 (reach, isNothing $ Mixture.condition (FTA.fromTerms [deep]) mixture) `shouldBe` (reach, True)
+
+    describe "weights outside the range of Double" $ do
+        it "gives the log-partition and the expected counts of a(a) with the log-weights 400 and -400, from the completions" $
+            -- The one term has the log-weight 2 w and two nodes a.
+            forM_ [400, -400] $ \weight ->
+                oracleGives (completionsOracle $ completionsOf 2 nested) (Map.singleton "a" weight) (2 * weight, Map.singleton "a" 2)
+        it "keeps a term whose weights underflow in a product, from the completions" $
+            oracleGives (completionsOracle $ completionsOf 3 bigOrOther) bigOrOtherWeights bigOrOtherExpected
+        it "gives the log-partition and the expected counts of a(a) with the log-weights 400 and -400, from the automaton" $
+            forM_ [400, -400] $ \weight ->
+                oracleGives (automatonOracle nested 2) (Map.singleton "a" weight) (2 * weight, Map.singleton "a" 2)
+        it "keeps a term whose weights underflow in a product, from the automaton and from the intersections" $ do
+            oracleGives (automatonOracle bigOrOther 3) bigOrOtherWeights bigOrOtherExpected
+            oracleGives (fromJust $ constrainedOracle bigOrOther 3) bigOrOtherWeights bigOrOtherExpected
+        it "gives the log-partition and the expected counts of equal children with log-weights near 400, from the intersections" $
+            -- The term f(a, a) has the log-weight -400 + 2 * 400 = 400, and f(b, b) has -400 + 2 * (400 + log 2) =
+            -- 400 + log 4. So the total weight is 5 exp(400), and f(a, a) has the probability 1 / 5. The expected
+            -- counts are f = 1, a = 2 * 1 / 5 = 0.4, and b = 2 * 4 / 5 = 1.6.
+            oracleGives
+                (fromJust $ constrainedOracle equalPairs 3)
+                (Map.fromList [("f", -400), ("a", 400), ("b", 400 + log 2)])
+                (400 + log 5, Map.fromList [("a", 0.4), ("b", 1.6), ("f", 1)])
+
+    describe "a log-weight that is NaN" $
+        it "gives a NaN log-partition from the completions, the automaton, the intersections, and logPartition" $
+            forM_ [(nested, 2, "a"), (bigOrOther, 3, "big"), (bigOrOther, 3, "small"), (bigOrOther, 3, "other")] $
+                \(automaton, bound, symbol) -> do
+                    let logWeights = Map.singleton symbol (0 / 0)
+                        completions = completionsOf (toInteger bound) automaton
+                        oracles = [completionsOracle completions, automatonOracle automaton bound, fromJust $ constrainedOracle automaton bound]
+                    (symbol, isNaN $ logPartition logWeights completions) `shouldBe` (symbol, True)
+                    forM_ oracles $ \oracle ->
+                        (symbol, isNaN $ oracleLogPartition oracle logWeights, isNaN $ fst $ oracleExpectations oracle logWeights)
+                            `shouldBe` (symbol, True, True)
+
+-- | Expect an oracle to give, at the log-weights, the logarithm of the total weight and the expected counts, each within @1e-9@.
+oracleGives :: Oracle String -> LogWeights String -> (Double, Map.Map String Double) -> Expectation
+oracleGives oracle logWeights expected =
+    (logWeights, expected, oracleLogPartition oracle logWeights, oracleExpectations oracle logWeights)
+        `shouldSatisfy` \(_, (logTotal, counts), foundPartition, (foundTotal, found)) ->
+            near logTotal foundPartition
+                && near logTotal foundTotal
+                && Map.keys found == Map.keys counts
+                && and (Map.intersectionWith near counts found)
+  where
+    near left right = abs (left - right) < 1e-9
+
+-- | The one term a(a).
+nested :: FTA.FTA String String Constraint
+nested =
+    either (error . show) id $
+        FTA.mkFTA "r" [("r", [node "a" ["l"]]), ("l", [node "a" []])]
+  where
+    node symbol children = FTA.Transition symbol children noConstraint
+
+-- | The terms big(small, small) and other.
+bigOrOther :: FTA.FTA String String Constraint
+bigOrOther =
+    either (error . show) id $
+        FTA.mkFTA "r" [("r", [node "big" ["s", "s"], node "other" []]), ("s", [node "small" []])]
+  where
+    node symbol children = FTA.Transition symbol children noConstraint
+
+-- | The terms f(a, a) and f(b, b): the two children of f are equal.
+equalPairs :: FTA.FTA String String Constraint
+equalPairs =
+    either (error . show) id $
+        FTA.mkFTA "r" [("r", [FTA.Transition "f" ["c", "c"] equal]), ("c", [node "a" [], node "b" []])]
+  where
+    node symbol children = FTA.Transition symbol children noConstraint
+    equal = equalityConstraint $ ECTA.mkEqConstraints [[ECTA.path [0], ECTA.path [1]]]
+
+{- | Log-weights of 'bigOrOther'. The weight of small squared is below the
+smallest 'Double', and the weight of big times it is not.
+-}
+bigOrOtherWeights :: LogWeights String
+bigOrOtherWeights = Map.fromList [("big", 700), ("small", -400), ("other", -300)]
+
+{- | The logarithm of the total weight and the expected counts of
+'bigOrOtherWeights'. The term big(small, small) has the log-weight
+700 - 2 * 400 = -100, and other has -300. So the total weight is
+exp(-100) (1 + exp(-200)), and its logarithm is near -100. The probability of
+other is exp(-200) / (1 + exp(-200)), near zero.
+-}
+bigOrOtherExpected :: (Double, Map.Map String Double)
+bigOrOtherExpected =
+    ( -100 + log (1 + other)
+    , Map.fromList [("big", 1 / (1 + other)), ("other", other / (1 + other)), ("small", 2 / (1 + other))]
+    )
+  where
+    other = exp (-200)
 
 -- | The log partition and expected count of one Bernoulli feature, with a constant offset.
 bernoulliOracle :: Double -> Oracle String

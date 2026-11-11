@@ -134,8 +134,9 @@ The work of the fit can be many times the work of
 'Data.CFTA.Sized.Prefix.Model.train'. The components keep the order of their
 groups. With one group, the mixture is the model of
 'Data.CFTA.Sized.Prefix.Model.train'. 'Nothing' when the automaton has a
-constraint, when 'distillMixture' gives no result, or when the completions do
-not accept the bound.
+constraint, when 'distillMixture' gives no result (also when the fit is not
+finite), when the completions do not accept the bound, or when
+'withLogWeights' rejects the log-weights of a component.
 -}
 train ::
     (Ord state, Ord symbol) =>
