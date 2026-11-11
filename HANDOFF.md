@@ -1,3 +1,193 @@
+# Restart checkpoint: 2026-11-11, annotation retention and a joint finite witness
+
+Work resumed at the user's request. Earlier pause instructions below are historical.
+The user continues to authorize pushes to formalize. Keep the full library objective.
+The goal controller still returns paused. Its available tools cannot set active.
+Do not replace or complete that goal. Current work is authorized by the resume message.
+Automatic continuation can require the user to use the goal's Resume control.
+
+## Exact source and publication state
+
+- Previous published checkpoint: 87c9e6f226304ce567baf81dda5e1f3c137e0818.
+- Integrated main: 2abbfe8ea91aff49122c03e8c96ffa539053b7e1.
+- Verified main merge: 3812f76e3f009d5acb4d4d771ac78499d89d8f03.
+- Last new proof commit: 7c758dcf4c698d317b519216a70639144192282d.
+- Numerical counterexample commit: 9274610a8d90879e0eeb4e76b38f6e9c1c1648ef.
+- This header, Audit imports, and compatibility packet form the next checkpoint commit.
+  The final publication step pushes that complete commit and verifies the remote tip.
+- Fresh fetch before publication still found main at the integrated hash above.
+  Preserve the unrelated untracked .hypha/ directory.
+
+## Strongest new statements
+
+The formalized interned constructor can build the original FirstOrder size-2 query
+with library f : a, argument x : A, and goal B. Its language contains one explicit
+annotated f x witness. The witness assigns Arrow(A,B) to f and A to x. All application
+and filter equalities hold on that same tree. The proof derives the source grammar,
+checks its actual PCS guard interpretation, and derives an actual closed construction.
+No accepted-tree or guard-truth certificate is an input. This is one concrete query.
+It does not prove that the enumeration driver emits it or prove all reached coverage.
+
+For one given completed selected application branch, a retained path below the
+function annotation derives its ordinary physical shape. The same Required execution,
+literal class fold, and actual Parent constructor retain that shape. The Parent proof
+also retains its existing readiness, extension, residency, closure, guard-heap, coupling,
+and child-field facts. It derives Scan readiness from current caller facts. It adds no
+future readiness or input-shape supplier. Its ParentDemand predicate names a cut of
+the given current reads. It still requires a retained descendant in that selected cut.
+It does not establish that condition for unchanged or skipped scans. OrdinaryAt permits
+Empty. This shape result alone does not prove positive language membership.
+
+The earlier prepared finite-run result remains conditional: at one chosen finite
+unfolding depth, a current packet, Fits, carrier, selection member/length, suspension
+ceiling, and reservation facts yield a stable finite outcome for large enough work
+fuel. That outcome can stop. The R211 counter-floor result is unconditional for every
+fuel and depth. The original-source projection and component count remain conditional
+on accepted annotated terms. The constructive fixture does not supply the general
+SharedPreparedSelectedDriver packet or a source-derived adequate depth.
+
+## New proof inventory and verification
+
+Five new source modules contain 1,244 lines and 23 public laws:
+
+- SourceSynthesisTypeUniverseMembership: 143 lines, 5 laws. Finite variables, declared
+  constructors, and arrows inhabit the original universe; the same closed build retains
+  generalized-variable membership.
+- SourceSynthesisRequiredAnnotationClassPass: 469 lines, 10 laws. Actual edits and the
+  tail-first class fold preserve a protected ordinary path. The same source occurrence,
+  precheck, and Scan derive class exclusion facts.
+- SourceSynthesisRequiredAnnotationPreparationPass: 124 lines, 2 laws. The actual
+  Required result supplies the initial shape; the same application pass retains it.
+- SourceSynthesisRequiredAnnotationParentReturn: 266 lines, 2 laws. Current-read demand
+  predicates attach the selected result to the same Parent's physical returned children.
+- SourceSynthesisFiniteApplicationWitness: 242 lines, 4 laws. The exact original query,
+  joint source membership, same-build membership, and existential native construction
+  use one explicit finite witness. Curried encoding and later enumeration are outside
+  this concrete result.
+
+Each source packet checks every public declaration, its actual namespace, source hash,
+and axiom report. Each own-source check treats warnings as errors. Only propext,
+Classical.choice, and Quot.sound occur in the permitted axiom set. The complete earlier
+Audit bytes remain after five new imports. The affected import graph has no cycle.
+
+Full affected Audit: PASS. Live modules: 5,701. Affected modules: 6. Frontier: Audit.
+Explicit Audit imports: 4,698. Axiom dependencies checked: 92,512 MicroCFTA theorems.
+All five source packets and the full compatibility packet replay from /tmp: six PASS.
+The current packets are under lean/restart-evidence/20261111-*. The complete frontier,
+hashes, build report, portable reports, and upstream validation are in
+lean/restart-evidence/20261111-class-pass-compatibility/.
+
+The integrated Haskell update passes fourmolu on all 19 changed Haskell files,
+cabal-gild, 523 generator examples with zero failures, and both loaded-dice and
+explainfuzz example checks. The 27 merged paths match their validation hashes.
+Passing those checks does not cover the confirmed numerical failure below.
+
+## Haskell repair for an external agent: confirmed oracle overflow
+
+No production Haskell repair was made in this iteration. Main adds weighted APIs.
+The one-term language a(a), size bound 2, and log-weight a=400 has log-partition
+800 and expected count a=2. Each per-symbol weight exp(400) is finite. The current
+exported APIs produce:
+
+```text
+completion_log_partition = 800.0
+automaton_log_partition = Infinity
+completion_expectations = (Infinity,fromList [("a",NaN)])
+automaton_expectations = (Infinity,fromList [("a",NaN)])
+```
+
+This is a confirmed runtime failure. The checked source reproduction is in
+lean/restart-evidence/20261111-training-oracle-overflow/. It includes exact source
+hashes, commands, expected observed output, and checked metadata. The packet is about
+8 KiB. It requires no binary archive. Checker exit 0 means the defect was reproduced;
+checked.json explicitly sets numerical_contract_satisfied=false.
+
+Repair cfta-generator/src/Data/CFTA/Sized/Prefix/Train.hs:
+
+- completionsOracle, lines 422-428: compute stable log-partition and normalized expected
+  counts together. Its stable partition field and raw expectation field now disagree.
+- groupedOracle, lines 490-611: use stable arithmetic through inside weights,
+  convolutions, outside weights, and count normalization. Taking log after a raw
+  overflowing sum does not repair the failure. Preserve generic expectedCounts,
+  lines 347-352, including its exact Rational interpretation.
+- Unchecked fits at lines 130 and 235: propagate numeric failures. Keep the current
+  step limit and precision. Validate uniform pseudo-counts, objectives, scores,
+  responsibilities, and shares. fitWithReport at 682-699 already checks returned steps.
+- fitMixture at 220: reject nonfinite shares before filtering actual zero shares.
+  NaN must not disappear through (>0).
+- Prefix/Mixture.hs, lines 143-159: reject empty fitted components and invalid shares
+  before toRational or normalization. Protect the nonempty component invariant.
+- Extend the existing Prefix/TrainSpec.hs. Cover log-weights +400 and -400, expected
+  count 2, finite fields, direct-child equality multipliers, and failure propagation.
+  Only the positive two-node case was executed in this checkpoint.
+
+The larger grammar S -> a | u(S) | v(S), bound 1025, with groups [a] and [u(a)],
+Reach 0 False, is a separate source concern for Mixture.train. The probe reached its
+3-minute cap, exit 124, before returning. It did not demonstrate an empty mixture or
+an exception. Keep that timeout separate from the confirmed oracle failure.
+The earlier PR204 FullSymbol/arity repair and its counterexamples remain in the
+complete prior history below. Do not discard those Haskell findings.
+
+## Largest gaps and next work
+
+The main gap is a general producer of joint finite facts for the same reached source
+branch. One finite source example and a selected Parent shape condition do not supply
+models for every call. The producer must cover source domains, aliases, suspended
+constraints, residual guards, skipped scans, failure prefixes, siblings, and later
+selections. Do not impose an all-markers-ordinary policy: valid Type Mu values remain
+opaque. Scan's skipped secondary=true means refusal, not equality satisfaction.
+AnswerSound(false) does not supply positive language membership.
+
+The next proof should connect original-source finite witnesses to the actual selected
+plans and their later slot lineage, or prove the appropriate semantic alternative for
+opaque values. Derive current caller facts and the selected cut. Do not add a supplier
+of future readiness, completed traces, accepted trees, or class certificates.
+
+The new weighted Haskell paths also need formal implementation correspondence.
+upstream-coverage.md records sampler composition, probability representation,
+parent-feature, conditioning, posterior, top-k, numerical, and convergence boundaries.
+The older Sized.hs deterministic and direct-child intersection routes predate this
+merge. Sized.hs is not among the 27 changed paths. The current nativeSized adapter
+models a narrower dispatch; its theorem does not cover the whole actual dispatcher.
+
+The full objective remains the whole library as-is, with the optimized interned core
+as the primary target and the older constructor/equality work as secondary targets:
+original-input soundness and completeness; general node and Program-component counts;
+actual size and order, including multiplicities; both directions of both actual signed
+API instances; one finite execution bound derived from the source; every failure,
+rejection, sibling, and later state; warm caches, sharing, identity, and machine bounds;
+lazy productivity; and correspondence with actual Haskell. Do not call local proofs,
+conditional adapters, successful examples, or a passing audit end-to-end completion.
+The prepared entry remains SharedPreparedSelectedDriver. The historical ordinary
+SharedPreparedDriver is a separate target. Do not identify the two executions by cast.
+
+## Reproduction, resources, and restart
+
+Root is the sole compiler and Git publisher. Use one serial heavy-management job with
+memory.max=memory.high=4 GiB, swap=0, and LEAN_NUM_THREADS=1. Do not increase caps,
+concurrency, or heartbeats. Use the project Nix environment. Independent workers may
+edit bounded source files; they must not compile or publish. All current workers and
+checks are stopped. There is no pending compiler handle at this checkpoint.
+
+Run each packet's check.py under that cap. The compatibility checker builds the full
+affected frontier. The oracle checker builds the Haskell library and reproduces the
+known defect in the GMP-equipped project Nix shell. Source and small metadata are
+sufficient. Do not create source or object archives in /tmp.
+
+Current runtime: /tmp/mcfta-class-pass-20261111-1735/. It stores small scripts, failure
+logs, capped-job records, a commit ledger, and publication state. It was 128 KiB before
+the final audit metadata. /tmp had 220 GiB free. Check its size during further work.
+Latest fresh primary usage meter: 4 percent at 2026-11-11T17:34:09.343Z,
+window 10080 minutes. This is the quota meter, not a credit balance.
+Pause and notify the user if fresh usage exceeds 80 percent. Do not pause merely
+because an older sample predates the reset. Preserve .hypha/ and all prior proof work.
+
+This same header prefixes NEXT-PROMPT.md, HANDOFF.md, and FINDINGS.md. Every byte of
+the previous documents follows unchanged. The full earlier objective and evidence
+remain available below. Read this entire current header before interpreting history.
+
+---
+
 # Paused at the requested usage threshold — 2026-11-10 00:01 CET
 
 The goal is PAUSED at the user's explicit usage threshold. The workers
