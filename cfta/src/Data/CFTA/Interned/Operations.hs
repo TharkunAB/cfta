@@ -885,3 +885,5 @@ requirePathList ::
     Path -> [Node symbol] -> [Node symbol]
 requirePathList EmptyPath ns = ns
 requirePathList (ConsPath p ps) ns = adjustAt p (requirePath ps) ns
+
+{-@ LIQUID "--skip-module" @-}

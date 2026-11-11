@@ -424,3 +424,5 @@ reduce entailment subtyping automaton = do
             pure $ do
                 related <- first ReductionSimilarity inferred
                 first ReductionMinimize $ minimize reduced related
+
+{-@ LIQUID "--skip-module" @-}

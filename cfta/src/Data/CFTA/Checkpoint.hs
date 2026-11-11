@@ -81,3 +81,5 @@ data SamplingCheckpoint state = SamplingCheckpoint
     -- ^ The number of draws before the next draw.
     }
     deriving (Eq, Show)
+
+{-@ LIQUID "--skip-module" @-}

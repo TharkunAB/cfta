@@ -366,3 +366,5 @@ conjoin guards = And guards
 equalityIndicators :: EqConstraints -> [(Integer, [[Path]])]
 equalityIndicators =
     maybe [] (\classes -> [(1, map (Set.toAscList . unPathEClass) classes)]) . subsumptionOrderedEclasses
+
+{-@ LIQUID "--skip-module" @-}

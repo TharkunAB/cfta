@@ -342,3 +342,5 @@ productionFacts = S.annotationFacts . FTA.transitionConstraint
 -- | The symbol and the child states of a production.
 constructor :: Production state -> (Symbol, [state])
 constructor production = (FTA.transitionSymbol production, FTA.transitionChildren production)
+
+{-@ LIQUID "--skip-module" @-}

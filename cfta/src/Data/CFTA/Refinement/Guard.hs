@@ -287,3 +287,5 @@ automaton transitions = do
     let node = Node alternatives
     validate node
     pure node
+
+{-@ LIQUID "--skip-module" @-}

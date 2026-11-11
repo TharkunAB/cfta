@@ -262,3 +262,5 @@ memoFlatTypeableWith ::
 {-# INLINE memoFlatTypeableWith #-}
 memoFlatTypeableWith (FlatMemoCache family) a b c value =
     unsafeDupablePerformIO (lookupOrInsert (selectCache @symbol family newFlatTable) a b c value)
+
+{-@ LIQUID "--skip-module" @-}

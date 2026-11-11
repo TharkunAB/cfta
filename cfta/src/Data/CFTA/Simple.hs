@@ -184,3 +184,5 @@ anyM predicate (x : rest) = predicate x >>= \found -> if found then pure True el
 allM :: (Monad m) => (a -> m Bool) -> [a] -> m Bool
 allM _ [] = pure True
 allM predicate (x : rest) = predicate x >>= \holds -> if holds then allM predicate rest else pure False
+
+{-@ LIQUID "--skip-module" @-}

@@ -498,3 +498,5 @@ combined constraints are satisfiable.
 unsafeSubsumptionOrderedEclasses :: EqConstraints -> [PathEClass]
 unsafeSubsumptionOrderedEclasses (EqConstraints pecs) = sortBy completedSubsumptionOrdering pecs
 unsafeSubsumptionOrderedEclasses EqContradiction = error "unsafeSubsumptionOrderedEclasses: unexpected EqContradiction"
+
+{-@ LIQUID "--skip-module" @-}

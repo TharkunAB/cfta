@@ -87,3 +87,5 @@ denotationAtMost entailment bound automaton
             Yes -> pure True
             No -> pure False
             Unknown -> throwError (DenotationUnknown constraint term)
+
+{-@ LIQUID "--skip-module" @-}

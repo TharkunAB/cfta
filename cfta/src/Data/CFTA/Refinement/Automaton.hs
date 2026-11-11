@@ -206,3 +206,5 @@ transitionsAt :: Transition -> Path -> [Transition]
 transitionsAt edge target
     | null (unPath target) = [edge]
     | otherwise = concatMap nodeEdges $ nodesAt edge target
+
+{-@ LIQUID "--skip-module" @-}

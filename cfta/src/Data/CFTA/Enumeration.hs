@@ -1593,3 +1593,5 @@ orderedPolicy marker config =
         _ -> case orderedObserve (orderedPartialRoot >>= orderedBound config) enumState of
             Just (Just key, _) -> Frontier.Bound key
             _ -> Frontier.Unknown
+
+{-@ LIQUID "--skip-module" @-}

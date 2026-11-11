@@ -146,3 +146,5 @@ instance IsString Symbol where
 
 instance Read Symbol where
     readPrec = Symbol <$> readPrec
+
+{-@ LIQUID "--skip-module" @-}

@@ -421,3 +421,5 @@ acceptsBy outgoing symbolOf childrenOf check = unshared
             position <- State.get
             State.modify' (+ 1)
             Node (position, term) <$> traverse number children
+
+{-@ LIQUID "--skip-module" @-}

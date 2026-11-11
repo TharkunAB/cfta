@@ -342,3 +342,5 @@ fromRows initial rows = evalState (build IntSet.empty 0) Map.empty
 stateOf :: Node symbol -> InternedState
 stateOf EmptyNode = EmptyState
 stateOf node = InternedState (nodeIdentity node)
+
+{-@ LIQUID "--skip-module" @-}

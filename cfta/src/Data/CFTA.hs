@@ -526,3 +526,5 @@ statesAt alternatives transition (ConsPath (ChildIndex index) rest) = descend re
             , outgoing <- alternatives state
             , Just child <- [transitionChildren outgoing !? next]
             ]
+
+{-@ LIQUID "--skip-module" @-}

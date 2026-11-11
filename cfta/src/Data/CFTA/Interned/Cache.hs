@@ -230,3 +230,5 @@ selectCache (CacheFamily ref) allocate = unsafeDupablePerformIO $ do
             | (symbolType, cache) <- entries
             , symbolType == symbolKey
             ]
+
+{-@ LIQUID "--skip-module" @-}

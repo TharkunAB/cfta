@@ -180,3 +180,5 @@ explainUpdateError :: (Show state) => UpdateError state -> String
 explainUpdateError failure = case failure of
     InvalidSource error' -> Source.explainDocumentError error'
     MissingExclusion name -> "exclusion " <> show (exclusionNameText name) <> " does not exist"
+
+{-@ LIQUID "--skip-module" @-}

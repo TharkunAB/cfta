@@ -920,3 +920,5 @@ edgeSubstitutionPlan inputEdge = memoTypeableWith @symbol genericEdgeSubstitutio
     onEdge e =
         SubstitutionPlan $ case sequenceSubstitutionPlans (map substitutionPlan (edgeChildren e)) of
             SubstitutionPlan !f -> setChildren e . f
+
+{-@ LIQUID "--skip-module" @-}

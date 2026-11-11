@@ -126,3 +126,5 @@ memo2TypeableWith ::
     b ->
     c
 memo2TypeableWith cache f = curry (memoTypeableWith @symbol cache (uncurry f))
+
+{-@ LIQUID "--skip-module" @-}

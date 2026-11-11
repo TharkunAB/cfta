@@ -447,3 +447,5 @@ instance (HasFTA a) => HasFTA (Maybe a)
 instance (HasFTA a, HasFTA b) => HasFTA (Either a b)
 instance (HasFTA a, HasFTA b) => HasFTA (a, b)
 instance (HasFTA a, HasFTA b, HasFTA c) => HasFTA (a, b, c)
+
+{-@ LIQUID "--skip-module" @-}

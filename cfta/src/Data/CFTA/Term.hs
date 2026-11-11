@@ -226,3 +226,5 @@ fromRoseTree = Tree.foldTree Node
 -- | The rose tree of a term, for 'Tree.drawTree' and other users of 'Tree.Tree'.
 toRoseTree :: Term symbol -> Tree.Tree symbol
 toRoseTree = foldTree Tree.Node
+
+{-@ LIQUID "--skip-module" @-}

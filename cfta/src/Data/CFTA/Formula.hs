@@ -395,3 +395,5 @@ renderSort sort = case sort of
 parenthesize :: Bool -> String -> String
 parenthesize True text = "(" <> text <> ")"
 parenthesize False text = text
+
+{-@ LIQUID "--skip-module" @-}

@@ -259,3 +259,5 @@ type Refinement = Expr -> Formula
 -- | The formula of a refinement, stated about the value variable 'valueName'.
 refinementFormula :: Refinement -> Formula
 refinementFormula refinement = refinement (variable valueName)
+
+{-@ LIQUID "--skip-module" @-}

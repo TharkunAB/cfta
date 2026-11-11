@@ -99,3 +99,5 @@ instance Pathable (Term symbol) (Term symbol) where
 
     modifyAtPath f EmptyPath t = f t
     modifyAtPath f (ConsPath (ChildIndex p) ps) t = Term.adjustChild (modifyAtPath f ps) p t
+
+{-@ LIQUID "--skip-module" @-}

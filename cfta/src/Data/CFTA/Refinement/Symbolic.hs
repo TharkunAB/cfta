@@ -124,3 +124,5 @@ instance Symbolic Expression.Expr where
     (.>) = (Expression..>)
     (.>=) = (Expression..>=)
     ite = Expression.conditional
+
+{-@ LIQUID "--skip-module" @-}

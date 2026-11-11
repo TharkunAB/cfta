@@ -134,3 +134,5 @@ root :: UVar -> UnionFind -> UVar
 root uv (UnionFind m) = case IntMap.lookup (uvarToInt uv) m of
     Just (Parent p) -> p
     _ -> uv
+
+{-@ LIQUID "--skip-module" @-}

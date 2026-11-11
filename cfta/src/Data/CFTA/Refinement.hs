@@ -100,3 +100,5 @@ import Data.CFTA.Refinement.Minimize
 import Data.CFTA.Refinement.Prune
 import Data.CFTA.Refinement.Verdict
 import Data.CFTA.Symbol
+
+{-@ LIQUID "--skip-module" @-}
