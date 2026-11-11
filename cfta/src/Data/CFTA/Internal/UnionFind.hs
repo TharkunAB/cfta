@@ -82,6 +82,11 @@ intToUVar = UVar
 -------- Union-find data structure
 ---------------------------
 
+{-@ data Entry
+      = Parent {entryParent :: UVar}
+      | Root {entrySize :: {v:Int | 0 < v}, entryMembers :: IntSet}
+@-}
+
 {- | What the forest stores for one variable.
 
 A 'Parent' points to the representative of the set of the variable. A
