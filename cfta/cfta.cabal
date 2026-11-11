@@ -25,6 +25,14 @@ source-repository head
   location: https://github.com/TharkunAB/cfta.git
   subdir: cfta
 
+flag liquid
+  description:
+    Check the library with the LiquidHaskell plugin. The plugin does not
+    check a module that has the LIQUID pragma --skip-module.
+
+  default: False
+  manual: True
+
 common warnings
   ghc-options:
     -Wall
@@ -126,6 +134,10 @@ library
     text >=2.1 && <2.2,
     transformers >=0.6 && <0.7,
     unordered-containers >=0.2 && <0.3,
+
+  if flag(liquid)
+    build-depends: liquidhaskell >=0.9.14 && <0.10
+    ghc-options: -fplugin=LiquidHaskell
 
 test-suite unit-tests
   import: warnings, extensions
