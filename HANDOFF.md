@@ -1,3 +1,176 @@
+# Restart checkpoint: 2026-11-11, joint class plans with source origins
+
+Work continues after the user's resume instruction. Pushes to formalize remain
+explicitly authorized. Do not apply older pause instructions. The goal controller
+still reports paused and its available tools cannot set active. Continue authorized
+work when invoked; do not replace or complete the goal.
+
+Previous published checkpoint: dbca54f2b345dfa91da108c62545f48c59a17cb0.
+Main remains 2abbfe8ea91aff49122c03e8c96ffa539053b7e1 and was freshly fetched.
+New source proof head: 1d24203b6f809d7cbfc92e8c168c4bdb335a5547.
+This header, the new Audit import, and compatibility reports form the next checkpoint.
+The final publication step must push that complete commit and verify the remote tip.
+The unrelated .hypha/ directory remains protected.
+
+## Strongest new statement
+
+At a current ordinary pending slot, one compatible model of the current state now
+produces a compatible resident row and the complete actual own-class plan. One
+extended assignment satisfies the old and returned states, the inherited and fresh
+suspended constraints, and every child language and bucket. The actual projection
+also retains its residual guard truth. The extension agrees with the old assignment
+on every previously allocated identifier. Every fresh value and child term is a
+subtree of the same original witness. Every stored suspended path at the returned
+core lies in that witness's finite relative-path set and satisfies the height bound.
+
+The inputs are current Packet, the actual stored pending slot, its ordinary native
+lookup, current Satisfies, and current AssignmentOrigins. Accepted row and inherited
+bucket certificates are derived. No future model, trace, selected-edge certificate,
+ProperState or target-Ready premise is added. The row selection uses literal
+nodeEdges, which has the required coverage. Arbitrary subset/length bounds do not:
+an empty row provider satisfies those bounds.
+
+This is a constructor/plan result before child execution. Ordinary lookup alone does
+not force the driver to choose its ordinary route for terminal buckets. Dead branches
+need no positive model. The theorem does not establish semantics of every shared
+child output, a sufficient recursive depth, or complete enumeration.
+
+## Exact changes and validation
+
+Two source modules were checked, with three public laws in total and two new laws:
+
+- SourcePruningEnumerationOwnChildModelProgress is now 377 lines. Its original private
+  helper and accepted_own_children statement/proof remain byte for byte unchanged.
+  An Origins import and accepted_own_children_origins add 146 lines. The same actual
+  CachedOwn.prepare equation, complete packet, joint assignment and cost are retained.
+  The fresh-class construction now gives origins for that same assignment and every
+  child term. It does not combine independently chosen existential assignments.
+- SourcePruningEnumerationStoredOwnChildOrigins is a new 165-line module with
+  stored_own_children_origins. It derives native availability/closure, actual accepted
+  row, inherited Holds, reference bounds and pending inputs from the current packet
+  and model. It invokes the strengthened common constructor and bounds every stored
+  suspended path at the same returned state with the same extended assignment.
+
+Both focused checks pass. All old public names remain. Each checker verifies every
+public declaration, actual namespace, exact source hash and permitted axiom report.
+Only propext, Classical.choice and Quot.sound occur. Own-source warnings are errors.
+The old common-constructor namespace prefix was also compared byte for byte.
+
+The full affected Audit passes: 5,702 live modules, 11 affected modules, frontier
+Audit, 4,699 explicit Audit imports, and 92,518 theorem axiom dependency checks.
+All prior Audit bytes remain after one new import. The import graph has no cycle.
+Both source packets and the compatibility packet replay from /tmp: three PASS.
+The small source packets are 20261111-own-child-model-origins,
+20261111-stored-own-child-origins, and 20261111-own-class-origin-compatibility.
+Their location is lean/restart-evidence/. No binary archive is needed.
+
+The preceding checkpoint below retains its five new modules, 23 laws, constructive
+FirstOrder f x witness, Parent annotation retention, Haskell validation, and all
+previous proof work. No production Haskell changed in this iteration, so its
+523-example suite, two example checks, fourmolu and cabal-gild results remain the
+relevant Haskell validation. The confirmed training-oracle defect remains open.
+
+## What the resource theorem does and does not require
+
+SharedPreparedFiniteResources.run_finite_complete_resources requires operational
+Packet, Fits, guard-alphabet membership, row subset/length, mass and reservation
+facts. It has no inhabitation or semantic selected-plan field. Packet contains
+Context, Safe, pending references, cache validity, stratification and allocated
+pending IDs. These allow rejection, empty outputs and explicit stops.
+
+InitialModel/InitialOrigins already supply the genuine startup assignment and
+origins for an original accepted native root term. Do not duplicate that initial
+glue and present it as a solution to the later semantic gap. The new laws advance
+that joint invariant through the common own-class plan. Later execution is separate.
+
+## Next semantic producer and remaining limits
+
+The next target is SharedChildDispatch.nonterminal_models_origins over the ACTUAL
+shared child operation. Use the original nonterminal_complete inputs, no terminal
+bucket, current Satisfies, one accepted incoming term satisfying every supplied
+bucket entry, and current origins. Derive its actual stable observation. Extend
+only at the old counter, retain agreement below that counter, derive the same returned
+core's model and origins, and fill its returned fragment with the incoming term.
+Reuse pure shallow-child semantics and install/origin lemmas. Do not reuse an
+executed old child backend or assume an observed successful output.
+
+Terminal children need a separate producer. The existing exact successful-row
+semantics does not prove a compatible term produces a nonempty result. Use full
+bucket compatibility, the actual shared intersection meaning, and the terminal
+winner/alias equations to exclude rejection and retain the whole-state model.
+
+The attached child cache stores candidate and waiting indexes. The actual shared
+child operation has no child-fragment memo-hit route. Nonterminal ordinary storage
+allocates at the old counter. Actual term reuse is through terminal representatives;
+boolean/native query memos are governed by full Context. Do not invent a missing
+fragment-cache completeness oracle. Current acceptance alone does not let a specified
+term replace a terminal winner: that same term must satisfy EVERY bucket entry.
+The new per-child model tuple supplies those obligations.
+
+Parent protection is a further current condition. SharedChildCompletion states it
+under Avoids held bucket. Packet.valid alone does not derive avoidance. The existing
+ParentChildSeparation lemmas use joint child models, finite parent terms, valid own
+tries and ValidSuspended inherited buckets, or current Canonical plus stored parent.
+The new wrapper does not assume inherited Canonical and does not establish an
+unconditional Protected parent result. Derive the appropriate source validity and
+avoidance when composing the parent continuation.
+
+Backward opaque meaning remains separate. The actual nonterminal opaque route drops
+a nonempty incoming bucket. Its backward restoration theorem needs the retained-bucket
+condition, which cannot hold universally. Forward preservation can still hold because
+removing restrictions enlarges the model set. This is a formal semantic obstruction;
+it is not a new observed source/Haskell defect. Do not claim whole-source soundness
+for that route without the missing source/projection argument.
+
+Source policy routes are also distinct. Gen.Synthesis FirstOrder uses runsBy and
+identity narrowing, no stop, and the default callback. Constant-true fits/admits
+satisfy the local narrowing policy conditions. A precise adapter to the actual shared
+prepared driver is still needed. Specftacular prunedPrograms supplies the typed policy
+family instead. Its typedTypes callback runs extendTyping/dead-hole logic absent from
+the modeled recordTypes callback. Curried marked modes use an intentional head subset.
+Do not infer global completeness for arbitrary policies or incomplete row providers.
+
+The full objective is unchanged: whole-library original-input soundness/completeness,
+general node and Program-component counts, actual size/order/multiplicities, both
+directions of both actual signed API instances, a source-derived total work bound,
+all rejection/failure/sibling/later states, warm sharing and identity, Word/Int bounds,
+lazy productivity, and actual Haskell correspondence. The optimized interned core
+remains primary. SharedPreparedSelectedDriver and the historical ordinary driver
+remain separate executions. Local models and passing audits do not complete the goal.
+
+## Haskell findings and restart resources
+
+The confirmed training-oracle defect and repair recipe are in the complete previous
+header below and lean/restart-evidence/20261111-training-oracle-overflow/.
+For the finite a(a) language with log-weight a=400, the correct log-partition is 800
+and expected count is 2. The automaton partition returns Infinity; both expectation
+backends return Infinity/NaN. The source packet reproduces that failure. No repair
+was made here. The larger mixture probe timed out; it did not observe an empty mixture.
+Keep both expectation backends, failure propagation and the nonempty component
+invariant in the external Haskell repair task. The older PR204 arity repair remains
+in the full history. New weighted API coverage and older sized-dispatch gaps remain.
+
+Current runtime: /tmp/mcfta-source-branch-witness-20261111-1845/. It held 80 KiB before
+final reports. The previous runtime held 220 KiB. Both contain small scripts, notes,
+hashes and metadata; no source or object archive. Keep checking /tmp during work.
+Read-only audits there record Type instantiation and per-occurrence substitutions,
+source policy distinctions, and joint assignment/origin requirements. They make no
+additional checked claims. No source draft remains in this checkpoint.
+
+Root remains the sole compiler and Git publisher. Use one serial 4 GiB job with
+memory.high=memory.max, swap=0, LEAN_NUM_THREADS=1, and the project Nix environment.
+Do not increase caps, concurrency or heartbeats. Source-only bounded workers are
+allowed. All R214 compiler handles are terminal; the next child proof is not started.
+The latest primary quota sample is 5 percent at 2026-11-11T18:03:17.822Z.
+Pause and notify the user above 80 percent. Do not confuse quota with a credit balance
+or use a stale pre-reset sample. Preserve .hypha/ and all prior proof/counterexample work.
+
+The same current header prefixes NEXT-PROMPT.md, HANDOFF.md and FINDINGS.md.
+Every byte of the preceding documents follows unchanged. Read this entire current
+header before interpreting the older checkpoints and pause instructions.
+
+---
+
 # Restart checkpoint: 2026-11-11, annotation retention and a joint finite witness
 
 Work resumed at the user's request. Earlier pause instructions below are historical.
