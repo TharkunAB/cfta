@@ -1,3 +1,126 @@
+# Restart checkpoint: 2026-11-11, one child model at its resource result
+
+Work continues after the user's resume. Pushes to formalize remain authorized.
+The goal controller still reports paused and cannot be set active with its tools.
+Continue when invoked. Do not replace or complete the full goal.
+Previous published checkpoint: 3c0c709543221a02da150668ff66f5a7f7b3410a.
+Checked source head: 38c160373f2a9b0322943eff15928f81ef0d9835.
+Fresh main: 2abbfe8ea91aff49122c03e8c96ffa539053b7e1, already integrated.
+Push the complete checkpoint and verify the remote tip. Preserve unrelated .hypha/.
+
+## Strongest new statement
+
+The FULL actual shared child dispatcher now produces a successful singleton from
+one compatible current term and the existing current resource assumptions. One
+extended assignment satisfies the old core at its original heap and the returned
+core at its reached heap. It agrees below the old counter, fills the actual returned
+fragment with the chosen term, retains every supplied bucket Holds fact, and keeps
+all assigned terms within the original witness. No future success or model supplier
+is assumed. Native Context, Fits, original reservations and alphabet facts remain
+explicit current inputs.
+
+The proof retains the ENTIRE existing resource packet and its SAME actual cache,
+caller, raw row, query, Post, resource bounds and annotation carrier. Nonterminal
+runs meet at the same r/n/p/h and a common larger index bound. Terminal runs meet
+at common larger bounds in all five coordinates. Equality identifies the complete
+literal observation. Only the resource packet's global bundle is returned.
+Independent existential assignments or global memo bundles are never identified.
+
+Two further laws derive parent avoidance for the terminal subset of a proper child.
+They use the same current model, finite parent/child terms and actual partition.
+No Canonical or ValidSuspended premise is required. This supplies the exact terminal
+adapter avoidance condition. It does not assert full-bucket avoidance or an executed
+protected parent. Whole child traversal and parent continuation remain next.
+
+## Verification
+
+Two new modules contain 298 lines and three public laws:
+
+- SourcePruningEnumerationSharedChildModelResources.lean: 230 lines, one public law
+  ChildDispatch.complete_models_origins_resources; SHA256
+  79c55c93ff8a1494776a66f933192ba6031a3f5314d52321f8e2d50c19147470.
+- SourcePruningEnumerationTerminalParentSeparation.lean: 68 lines, public laws
+  terminal_child_avoids_parent and partition_child_avoids_parent; SHA256
+  927022d1da2450d6c9610cc0e260f8fbc21bb8b4bdcd3e4bdef2d267d63334b0.
+
+Strict focused checks pass. They cover every public name, actual namespace, exact
+source hash and permitted axiom dependency. Own-source warnings are errors.
+The full affected Audit passes: 5,706 live modules, 3 affected, 4,703 explicit imports,
+92,534 theorem axiom checks. All prior Audit bytes remain. No import cycle exists.
+Four packets reproduce from /tmp:
+
+- 20261111-shared-child-model-resources
+- 20261111-terminal-parent-separation
+- 20261111-child-model-resources-compatibility
+- 20261111-default-driver-order-boundary
+
+The last packet checks formatting, rebuilds cfta and replays BOTH public Haskell
+APIs inside Nix with GMP. Its PASS reproduces an ordering distinction. It is not
+an equivalence proof. No Haskell production file changed. No binary archive exists.
+All heavy jobs were serial with 4 GiB memory.max/high, zero swap and one Lean thread.
+No cap, concurrency or heartbeat changed. All checks are terminal.
+Runtime: /tmp/mcfta-child-model-resources-20261111-1944/.
+The four current runtime directories total about 0.6 MiB. Latest fresh usage: 7 percent.
+Pause and notify the user if usage exceeds 80 percent.
+
+## Confirmed eager/deferred order boundary and Haskell follow-up
+
+The public Haskell grammar r(f(a|b),c|d) gives eager order ac, ad, bc, bd and deferred
+order ac, bc, ad, bd. Here ac means r(f(a),c). Both return the same four concrete
+terms with the same multiplicities. There are no eager residuals or shallow holes.
+runsBy(const 0) uses eager enumerateFully. termsPruneUntil uses deferred children
+with Unit, no preference, identity narrowing, no stop and a false callback.
+The fourth packet contains repro.hs, exact output, source hashes and a checker.
+
+This is NOT a production bug. It confirms that these public expansion strategies
+cannot be directly identified as ordered enumerations even under those simple
+policies. The shared Lean driver uses deferred children. Its default eager API
+adapter still needs a finite membership/render simulation. Exact default order
+requires modeling the eager operation or a separately proved order relation.
+The fixture does not execute Lean. It does not distinguish decoded synthesis
+Programs: the toy r term would decode to Var r. It proves nothing about Sized's
+signed rank APIs. Keep those scope boundaries.
+
+The actual numerical Haskell repair remains open. The earlier training-oracle
+packet uses a(a), weight 400, true log-partition 800 and expected count 2.
+Completion log-partition already returns 800. Grouped log-partition returns Infinity.
+Both expectation APIs return Infinity/NaN. Stabilize the grouped log-partition and
+both normalized expectation calculations. Preserve exact Rational behavior. The
+full recipe and validation cases remain below for the external Haskell repair.
+
+Matti plans LiquidHaskell contracts and theorems. Checked source preservation laws
+can reduce the implementation gap. Align them with Satisfies, Roots, Fits and bucket
+Holds through explicit concrete-state interpretations. Start with allocation,
+writes, representatives and merges. Checked contracts differ from assume/assume
+reflect. Source contracts need an explicit bridge to the Lean predicates. They do
+not automatically prove the eager/deferred adapter or transfer proofs to Lean.
+No LiquidHaskell dependency or production annotation was added here.
+
+## Next work and remaining full scope
+
+Lift the joint model through the ACTUAL ChildTraversal at its existing resource
+endpoint. Track one assignment through every child, preserving all later bucket
+bounds, Holds, InputsPending and native availability from CURRENT facts. Use the
+actual reached caller/cache after each child. Do not add future child models or a
+successful traversal observation as an external supplier. Then compose the parent
+continuation, using the correct terminal-subset protection condition.
+
+Startup Canonical already exists. The R214 suspended-state equation plus pure
+suspension_canonical gives own-plan Canonical. Current Packet.valid and Satisfies
+do not imply Canonical. Shared nonterminal preparation has a common canonical
+lemma. Actual shared terminal/fold canonical preservation needs its own producer;
+old executed Fold/Terminal/Child canonical theorems cannot be cast to this backend.
+Terminal-only avoidance above avoids needing that stronger premise for protection.
+
+The full goal remains original-input soundness/completeness, exact node and Program
+counts, actual size/order/multiplicities, both directions of both signed rank APIs,
+a sufficient source-derived depth/work bound, rejected/sibling/later states, warm
+caches and identity, Word/Int limits, lazy productivity and Haskell correspondence.
+Keep optimized interned and older constructor/equality work. The new local result
+does not complete that goal. Prior proof work and detailed findings remain below.
+
+---
+
 # Restart checkpoint: 2026-11-11, shared child forward assignments
 
 Work continues after the user's resume. Pushes to formalize remain authorized.
