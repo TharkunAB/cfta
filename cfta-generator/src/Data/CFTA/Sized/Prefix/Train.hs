@@ -110,8 +110,9 @@ instance (Ord symbol, Num number) => Num (Dual symbol number) where
 terms within a size bound: the maximum-likelihood weights of the module, with
 an L2 prior of precision @10^-3@ and two pseudo terms of the uniform model
 mixed into the counts. The objective is concave. The optimizer uses
-'Double' and can stop before its gradient is small. 'distillWithReport'
-returns the stop reason and the number of terms retained.
+'Double' and can stop before its gradient is small. The result is the
+log-weights of the final step of 'distillWithReport', which also returns the
+stop reason and the number of terms retained.
 
 The oracle follows the automaton. Without constraints, unambiguous rows use
 'automatonOracle', and ambiguous rows their bottom-up deterministic rows.
@@ -119,15 +120,15 @@ With equalities between direct children, the rows must be unambiguous
 without their constraints, and 'constrainedOracle' reads their intersections.
 Terms that the automaton rejects, or that are larger than the bound, have
 the probability zero, so they are left out. 'Nothing' when no term is left,
-or when the automaton has another constraint, ambiguity with constraints, or
-more than 1024 deterministic states or intersections.
+when the automaton has another constraint, ambiguity with constraints, or
+more than 1024 deterministic states or intersections, or when a step of the
+fit is not finite.
 -}
 distill ::
     (Ord state, Ord symbol) =>
     FTA.FTA state symbol Constraint -> Int -> [Term symbol] -> Maybe (LogWeights symbol)
-distill automaton bound terms = do
-    (oracle, counts, _) <- either (const Nothing) Just $ distillationInput automaton bound terms
-    pure $ stepWeights $ last $ take 2000 $ fit 1e-3 oracle counts Map.empty
+distill automaton bound terms =
+    either (const Nothing) (Just . stepWeights . fitFinalStep . distillFit) $ distillWithReport automaton bound terms
 
 {- | A corpus fit, with the number of terms retained and dropped before fitting.
 Each occurrence of a term in the corpus counts one time. A dropped term is a
@@ -192,10 +193,12 @@ the terms by the property that the mixture must learn.
 
 The terms are filtered as in 'distill'. A group without a retained term gives
 no component, and a component whose share becomes zero is removed. The
-components keep the order of their groups. With one group, the result is one
-component with the share one and the log-weights of 'distill', within the
-tolerance of the optimizer. 'Nothing' when no term is retained, or when
-'distill' does not support the automaton.
+components keep the order of their groups. A result has one component or
+more. Each share is finite and positive, and each log-weight is finite. With
+one group, the result is one component with the share one and the
+log-weights of 'distill', within the tolerance of the optimizer. 'Nothing'
+when no term is retained, when 'distill' does not support the automaton, or
+when a share or a log-weight of the fit is not finite.
 -}
 distillMixture ::
     (Ord state, Ord symbol) =>
@@ -203,7 +206,7 @@ distillMixture ::
 distillMixture automaton bound groups = do
     oracle <- distillationOracle automaton bound
     let retained = filter (not . null) $ map (map symbolCounts . retainedTerms automaton bound) groups
-    if null retained then Nothing else Just $ fitMixture oracle retained
+    if null retained then Nothing else fitMixture oracle retained
   where
     symbolCounts term = Map.fromListWith (+) [(symbol, 1) | symbol <- foldr (:) [] term]
 
@@ -215,10 +218,19 @@ component, the log-likelihood of the two pseudo terms and the logarithm of
 the prior. The prior of a component has the precision that 'distill' gives
 the terms of its group, in all rounds. So each step of a round is a step up
 of one objective, and the objective does not decrease.
+
+'Nothing' when a share or a log-weight after the rounds is not finite. A
+share that is not finite stays not finite in each later round. A log-weight
+that is not finite also stays not finite. Thus a check after the rounds is
+sufficient.
 -}
-fitMixture :: (Ord symbol) => Oracle symbol -> [[Map.Map symbol Double]] -> [(Double, LogWeights symbol)]
-fitMixture oracle groups = filter ((> 0) . fst) $ rounds (0 :: Int) (-1 / 0) first
+fitMixture :: (Ord symbol) => Oracle symbol -> [[Map.Map symbol Double]] -> Maybe [(Double, LogWeights symbol)]
+fitMixture oracle groups
+    | all (\(share, logWeights) -> finite share && all finite logWeights) final =
+        Just $ filter ((> 0) . fst) final
+    | otherwise = Nothing
   where
+    final = rounds (0 :: Int) (-1 / 0) first
     terms = concat groups
     size = fromIntegral $ length terms
     uniform = snd $ oracleExpectations oracle Map.empty
