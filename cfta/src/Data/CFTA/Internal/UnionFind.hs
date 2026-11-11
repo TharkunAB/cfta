@@ -46,9 +46,13 @@ import qualified Data.IntSet as IntSet
 newtype UVarGen = UVarGen Int
     deriving (Eq, Ord, Show)
 
+{-@ initUVarGen :: {v:UVarGen | v == 0} @-}
+
 -- | Initial variable supply.
 initUVarGen :: UVarGen
 initUVarGen = UVarGen 0
+
+{-@ nextUVar :: g:UVarGen -> ({v:UVarGen | v == g + 1}, {v:UVar | v == g}) @-}
 
 -- | Allocate one fresh variable and advance the supply.
 nextUVar :: UVarGen -> (UVarGen, UVar)
@@ -62,9 +66,13 @@ nextUVar (UVarGen n) = (UVarGen (n + 1), UVar n)
 newtype UVar = UVar Int
     deriving (Eq, Ord, Show)
 
+{-@ uvarToInt :: u:UVar -> {v:Int | v == u} @-}
+
 -- | Convert a variable to its dense integer id.
 uvarToInt :: UVar -> Int
 uvarToInt (UVar i) = i
+
+{-@ intToUVar :: i:Int -> {v:UVar | v == i} @-}
 
 -- | Reconstruct a variable from its dense integer id.
 intToUVar :: Int -> UVar
@@ -134,5 +142,3 @@ root :: UVar -> UnionFind -> UVar
 root uv (UnionFind m) = case IntMap.lookup (uvarToInt uv) m of
     Just (Parent p) -> p
     _ -> uv
-
-{-@ LIQUID "--skip-module" @-}
