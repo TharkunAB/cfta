@@ -1,3 +1,163 @@
+# Restart checkpoint: 2026-11-11, native work and actual policy-prefix progress
+
+Work continues after the user's resume. Pushes to formalize remain authorized.
+The goal controller remains paused and has no resume tool. Continue when invoked.
+Do not replace or complete the full objective. Preserve unrelated .hypha/.
+Previous published checkpoint: 7d2784f022b693aca9e9903797067f1f4be00047.
+Checked source head: 4672336f1c757b88594b08a78e6a62a5c33973eb. Integrated main: a248ab6aa4b29571fc7ec5331640aaccf2850f79.
+Publish this complete checkpoint and verify its exact remote tip.
+
+## Strongest new statements
+
+Define P as pendingSize and A as the length of the ACTUAL finite candidates list.
+The scalar W_B=(B+1)*P+A now strictly decreases at the SAME actual completed
+ordinary captured step and returned finite assignment. The producer retains the
+ENTIRE previous resource/semantic packet and its P decrease. Its only added premise
+is the CURRENT before P<=B. Actual returned storage alignment and native flags
+internally derive A_after<=P_after<=B. There is ONE semantic producer call, no new
+model/global bundle and no future candidate bound or scalar decrease supplier.
+The driver must still derive B from the initial finite witness and retain that
+SAME B across its whole path. This is a local scalar result, not a whole-driver bound.
+
+Current alignment plus actual NativeIndex flags prove A<=P for ANY finite assignment.
+Every true flag denotes a stored Some native slot with positive assigned term size.
+No model, proper trie or Ready premise is needed for this bound. Equality-only None
+slots cost zero and have false flags. The ACTUAL opaque completion observer derives
+its fresh hole, unchanged caller/query, counter increment, full allocated/written
+value list, disabled-original flag function, and A_after+1=A_before. Its old active
+flag is a CURRENT input, later derived from actual chosen selection. Ready alone
+does not give it. Original stored and independently prepared handles stay distinct.
+The observer constructs no semantic assignment. Its P/model/work attachment is next.
+
+Every successful actual recordTypes call preserves W_B at the SAME assignment.
+The proof derives Frame from literal Success and current total representatives.
+It handles either input side and verdict. Metadata can change. The core frame
+preserves P/A. No future Frame or scalar equality is assumed. Current shared
+recording resource/model receipts already supply these exact observed Success facts.
+
+The actual policy runPrefix now connects current Packet/ProperState/model/origins,
+CURRENT chosen selection, original capacity/reservation and the EXACT three current
+unary/app/filter fits/admits conditions to one prepared progress packet. It derives
+prefix validity directly from the COMMON literal prefix and retains SAME-assignment
+model/properness. Parked outcomes are explicit. The narrowed case uses ONE admission
+bundle and ONE R222 preparation producer, retaining its ENTIRE resource/model packet.
+Posts compose to the original caller. Both shared driver families literally invoke
+SelectedStep.runPrefix; no old recursive executor is substituted. Right recordTypes
+is pure(false,metadata), so no Left oracle premise belongs here. The accepting branch
+uses all rows; arbitrary selector coverage and complete scans remain unproved.
+
+Finite structural TypeIn witnesses now derive supplied-universe membership and
+remove R222 generalize_member's semantic admission premise. Their constructors are
+exactly default var1..var4 leaves, actual catalog arity/child witnesses and built-in
+arrow shape. Each component occurrence can use independent substitution images.
+The separate rigidTerm/typeNode law covers EVERY finite Ty with actual encoded
+variable and Fun arity2 behavior, with NO universe premise. Rigid var_e and non-arrow
+Fun positions remain distinct from demanded substitution-image admission. This is
+generic type witness construction, not a general original-program typing derivation.
+
+## Exact verification
+
+Five new modules contain 929 lines and eight public laws:
+
+- SourcePruningEnumerationNativeWork.lean: 48 lines, 1 public laws;
+  SHA256 b479963465ecce7eed3e15371f901957cc109ecaadb5ab07a6bae8751f2f6aac.
+- SourcePruningEnumerationSharedCapturedWork.lean: 147 lines, 1 public laws;
+  SHA256 c774010381c51c6745fadc2ba3da7d40543a6f10c6f84f5c8a648158981e7d85.
+- SourcePruningEnumerationSharedOpaqueWork.lean: 263 lines, 2 public laws;
+  SHA256 5333e688a7c8d000bef42a75baed2eb502002e4a5c658846cc29a40d1e28cdcb.
+- SourcePruningEnumerationSharedPolicyPreparedProgress.lean: 319 lines, 1 public laws;
+  SHA256 b30f8083ef0e8444275ad19eb931e45dd2053573978a4b7eedd31c31c187ba50.
+- SourceSynthesisFiniteTypeWitnesses.lean: 152 lines, 3 public laws;
+  SHA256 e5e95fb2ae6cffeb4ca5452d8f98171ab0316e034b305d51b94b3fc4f8c24013.
+
+All strict focused checks PASS: exact public names/namespaces, source hashes,
+standard Lean axioms, own-source warnings as errors. Full affected Audit PASS:
+5,732 live modules, 6 affected, 4,729 imports, 92,800 axiom checks.
+Every prior Audit byte remains. The import graph has no cycle. All five source
+packets plus 20261111-driver-work-compatibility replay from /tmp (six PASS).
+All heavy jobs are terminal. One serial 4 GiB memory.max/high, swap0 and
+LEAN_NUM_THREADS=1 remain. No heartbeat, queue or memory limit changed.
+No production Haskell changed. No Haskell suite was repeated without a source change.
+
+## Next concrete work
+
+1. Attach the opaque model and scalar at ONE actual completed HEAD resource receipt.
+   opaque_complete_resources ALREADY returns FinalizationAt, tying the SAME child
+   cache, finalizer and assignment equation. ChildDispatch.nonterminal_models_origins
+   supplies install assignment at fresh before.counter with chosen term=old sigma uv.
+   Derive bucket Holds from the stored current model and its origin from old origins.
+   available_readback derives the prepared handle separately. Actual run_exact aligns
+   the child/caller/cache. FinalizationAt plus neutralize_satisfies gives the SAME
+   final model; counter equality gives origins. Derive the actual allocation and use
+   opaque_transfer_pendingSize, then complete_candidates. Expected exact result is
+   W_B(after,new)+1=W_B(before,old) for ANY B. Preserve ONE resource/global bundle.
+   The finite opaque helper already calls back/recur; do not attach a HEAD assignment
+   to its whole outcome. Backward bucket retention/soundness remains separate.
+2. Add SAME-observation prefix work. Parked retains a Some slot, so P is EQUAL;
+   it clears its selected active flag, so A drops1. Existing ParkedActiveCount proves
+   this for its own genuine receipt. Observe R223's literal prefix/adapt receipt;
+   do not substitute an independently chosen parked existential at another fuel.
+   Narrowed is NOT a full values Frame: Some oldHandle becomes Some newHandle.
+   Nevertheless P is equal and only its already-active flag changes, so A/W cannot
+   increase. Common preparation's exact values/counter/expandable equalities keep
+   P/A/W equal. A counts all flags, not merely unblocked offers. Clearing waiting
+   can unblock other offers without increasing A. Current chosen supplies activity.
+3. Combine prefix, preparation, ordinary/opaque completion, actual callback frame
+   and restart into a genuine model-conditioned cycle allowance with initial B.
+   Keep SAME model, memos and physical heap indices. Do not replace this with a
+   future per-step decrease/adequate-depth premise. Dead/incompatible branches,
+   failed/rejected work, siblings and COMPLETE alternative traversal still require
+   their own source-derived budget and preservation. Local W is not CPU/native fuel.
+4. Add generic actual application/ofType witnesses before the source typing induction.
+   Current function/argument memberships, their exact annotation paths and structural
+   TypeIn codomain supply app[codomain,marker,function,argument]. Derive all three
+   generated equality classes internally from marker/domain/codomain paths.
+   ofType needs current annotation=goal and typeNode_member, with no TypeIn goal
+   requirement. Existing Program Projection constructors retain decoder/component
+   count. Then follow ACTUAL termsRows/relevantRows/root mapM equations, All2 input/
+   output pairs, chosen split/offset/permutation and flattened membership. Do not
+   identify an ordinary AST with firstOrderRaw merely from roles or source size.
+   Same ordinarySymbols mapSyntax and closed_language close the native build stage.
+   General TermsTyping/RelevantTyping, exact last-name winners/avoid rules and
+   producing .ok via all-mapM lookup closure remain separate missing producers.
+
+Detailed source audits are tracked in
+lean/restart-evidence/20261111-driver-work-compatibility/source-audit.md.
+Runtime notes: next-prefix-work.md, next-annotated-program-witness.md and
+next-opaque-model-work.md. Do not reprove candidate-count, common recordTypes,
+old abstract inverses or the literal common-prefix bridge.
+
+## Haskell fixes and full remaining scope
+
+Main PR207 remains integrated. FINDINGS retains both stable log-domain oracle
+backends, unchanged exact Rational expectedCounts, checked distill/final mixture
+validation, the positive a(a)/bound2 +/-400 replay and all 529 generator examples.
+Historical failure source hashes/output remain. No new Haskell fix or confirmed
+runtime defect is claimed. Planned Liquid Haskell contracts can help prove current
+ID/state and fits/admits obligations; explicit source/Lean correspondence is still
+needed. No Liquid Haskell dependency or annotation was added. In Gen.Synthesis the
+actual helper names are application and ofType; use those names for guard layouts.
+The eager/deferred ORDER distinction remains, not a decoded Program defect.
+Weighted training/Table/sampler composition still has validation rather than a full
+formal correspondence proof. Intermediate mixture checks/nonempty guards remain
+contract questions, not reproduced exceptions.
+
+Retain FULL original-input soundness/completeness, exact NODE and Program component
+counts, actual size/order/multiplicities, BOTH directions of BOTH signed APIs,
+source-derived adequate recursive depth AND total work, rejected/failed/sibling/later
+states, warm-cache identity, Word/Int bounds, lazy productivity and actual Haskell
+correspondence. Keep optimized interned as primary and all old constructor/equality
+proofs. Local scalar decrease, source type witnesses and green Audit totals do not
+establish whole-library completion or complete original-source enumeration.
+
+Runtime: /tmp/mcfta-driver-work-20261111-2244/.
+Keep only small source plans/logs/manifests. No binary archive was created.
+/tmp filesystem free: 204.8 GiB.
+Fresh usage: 11 percent at 2026-11-11T22:04:24.205Z.
+Pause and notify the user if fresh usage exceeds 80 percent.
+
+---
+
 # Restart checkpoint: 2026-11-11, captured work decrease and complex finite type instances
 
 Work continues after the user's resume. Pushes to formalize remain authorized.
