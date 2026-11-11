@@ -1,3 +1,142 @@
+# Restart checkpoint: 2026-11-11, current preparation derives its accepting branch
+
+Work continues after the user's resume. Pushes to formalize remain authorized.
+The goal controller stays paused and has no resume tool. Continue when invoked.
+Do not replace or complete the full goal. Preserve unrelated .hypha/.
+Previous published checkpoint: b97517035eda9b2ed2f50948adb40af9dcab9b6f.
+Checked source head: bfec010f666d33c060d188aca5279e7b5e97eed0. Integrated main: a248ab6aa4b29571fc7ec5331640aaccf2850f79.
+Publish the complete checkpoint and verify its exact remote tip.
+
+## Strongest new statement
+
+Current Packet/Ready/stored-slot facts, a no-terminal gate, ONE finite model and
+origins, current capacity and the ORIGINAL shared reservation derive the SAME
+actual preparation and its full resource/carrier/meaning packet. It retains the
+same assignment and prepared-node acceptance. In each ordinary constructor case
+of THAT returned value, raw interned selection derives a resident accepting row,
+its actual projected guard and its reservation from Reserved.first plus current
+shape/cost bounds. It then completes the ACTUAL captured write with the entire
+R219 resource/model packet. Preparation Post composes into the SAME final bundle.
+No accepting row, future row reservation/model, or successful future observation
+is supplied. Use preparedSeed after preparation, not the original seed.
+
+Preparation need not always return an ordinary node. Arbitrary edgesOf is not an
+argument. Generic subset/length conditions permit []; canonical coverage still
+needs an actual permutation producer. No prior-hook reach, callback acceptance,
+whole-fold result, root emission or original-input completeness follows here.
+The original stored handle remains independent of the prepared parent's value.
+
+## Structural current-state preservation
+
+Actual selected/captured observers now preserve ProperState at every retained cache:
+complete, arity/project rejection, stopped attached candidates and failed finalization.
+They derive the actual CachedOwn.prepare receipt and child input buckets directly,
+then use actual shared traversal, literal residual recording and pure finalization.
+The selected observer uses current ProperState, inherited ValidSuspended and Cached
+readback of the SAME current row guard. The captured observer derives inherited
+validity from current ProperState and the literal stored slot. Neither needs
+Context, Ready, a model, future validity nor an old executed selected-worker cast.
+
+A third law derives current shared prefix resources AND properness of the SAME
+actual attached prefix cache from initial ProperState. It derives two sufficient
+bounds from identical current inputs and aligns them by addition. It keeps only
+the SHARED current resource packet and uses existing validity of the identical
+unchanged runPrefix. It never substitutes an old recursive worker or mixes globals.
+
+ProperState plus the literal stored bucket also derives the no-terminal gate.
+Ready alone does not. Existing NativeOrdinaryContinuations.entered supplies the
+actual entry equation. Current Context.annotation_heap plus resident selected row
+(or selected_projected_complete) supplies Cached. Do not add duplicate wrappers.
+
+## Exact verification
+
+Three new modules contain 486 lines and four public laws:
+
+- SourcePruningEnumerationSharedSelectedProper.lean: 178 lines, 2 public laws;
+  SHA256 75735d789400775dedf3561f63b028c2b7608fb80fd74a5298e3f4ba1a20b932.
+- SourcePruningEnumerationSharedPreparedBranchModels.lean: 236 lines, 1 public laws;
+  SHA256 2e500dfdf1971a30160aa9b4d31934ce58927d8ab03659c0f319fb3efaaa6482.
+- SourcePruningEnumerationSharedPrefixProperResources.lean: 72 lines, 1 public laws;
+  SHA256 84a8841002ff7910784570007dd6bd64b98232437a300e8257ae2500350f5c4d.
+
+All strict focused public-name/namespace/hash/axiom and own-warning checks PASS.
+The full affected Audit PASS has 5,719 live modules, 4 affected, 4,716 imports and
+92,620 theorem axiom checks. All prior Audit bytes remain; no import cycle exists.
+All three source packets plus 20261111-selected-ingress-compatibility replay from
+/tmp (four PASS). The prepared proof uses existing adjacent local irreducibility
+settings to avoid resource-profile expansion. No heartbeat or memory cap increased.
+No production Haskell changed in this checkpoint. Prior PR207 validation remains.
+
+## Next cuts already audited
+
+Join current model and properness at the SAME actual completed prepared/captured
+endpoint, then apply existing NativeProgress.Restart.not_stuck_of_proper. Derive
+CacheValid from the actual resource packet; never supply future cache validity,
+Ready, ProperState or model predicates. Prefix properness now accompanies its
+current packet. Retain incoming-history conditions until actual selection supplies
+them. Native selection/current packet distinctions remain explicit.
+
+Callback reuse already exists. recordTypes_success_semantics and recordTypes_frame
+retain values and counters. satisfies_frame retains the SAME assignment/model at
+the unchanged reached native heap. Existing BACKEND-INDEPENDENT
+PreparedCallbackProgress.callback_record_progress consumes actual common recordTypes
+Success plus current Packet/FragmentBound/ProperState/model and derives framed
+packet/proper/model/not-stuck. SharedPrepared callback_complete_resources already
+constructs that SAME actual Success/Frame. Attach these producers; do not reprove
+the common callback or cast an old recursive executor. A false verdict needs real
+policy/origin-refutation facts; templates=[] is false while type metadata can change.
+Specftacular typedTypes/extendTyping remains a different callback contract.
+
+The next work measure should use existing StorageProgress.pendingSize over native
+Some slots, with NumberedTerms.size of assigned terms. Own suspension creates
+None/empty placeholders and preserves that measure. Current cached guards also
+exclude the generic empty/root-only-class concern. Actual new native child slots
+and terminal winners denote strict selected-child subterms; aliases merge/eliminate.
+The MISSING actual shared head/traversal bound is increase ≤ sum of chosen-child
+sizes. Then full captured ordinary finalization removes the selected size and should
+drop pendingSize by at least one. This is not yet proved. Preparation alone can
+increase work. Counting all allocated IDs or using a naive height sum is incorrect.
+Origin whole alone is weaker than the strict selected-child fact needed here.
+Opaque transfer can preserve all-pending-Some size while moving to a parked Mu or
+union slot with candidate=false. This refutes strict all-Some descent for opaque
+steps, not active-candidate descent. A global candidate-weighted measure needs real
+heap/candidate frame laws. Prefix properness does not preserve models for arbitrary
+fits/admits: retain genuine policy compatibility or start at a current prepared model.
+
+Audits are in this runtime: current-ingress-contracts.md,
+next-current-model-progress.md, next-recorded-model-progress.md and
+next-witness-work-measure.md. Some bounded audits may still be in progress at the
+moment this header is written; inspect their final messages before source editing.
+
+## Haskell findings and full remaining scope
+
+PR207 a248ab6aa is already integrated and verified below: BOTH expectation backends
+and grouped logPartition use stable logarithms; exact Rational expectedCounts stays.
+The ±400/bound2 a(a) replay gives finite ±800 and expected count2 within1e-9.
+All529 generator examples, formatting and both example checks passed. The new
+training-oracle-stable-logarithms packet is current; the old failure packet retains
+historical hashes/output. No new Haskell fix or defect is claimed. Intermediate
+mixture validation/nonempty guards remain contract questions, not a reproduced
+exception. Keep these fixes and remaining limits in FINDINGS for external work.
+The eager/deferred ORDER counterexample remains; it is not a decoded Program bug.
+
+Retain FULL original-input soundness/completeness, exact node and Program component
+counts, actual size/order/multiplicities, BOTH directions of BOTH signed APIs,
+source-derived adequate depth and total work, rejected/failed/sibling/later states,
+warm-cache identity, Word/Int bounds, lazy productivity and actual Haskell
+correspondence. Preserve optimized interned and older constructor/equality proofs.
+No Liquid Haskell annotation/dependency was added. Checked source contracts still
+need explicit Lean interpretations; assume/assume-reflect are trust boundaries.
+A green Audit and these local witness constructors are not end-to-end completion.
+
+Runtime: /tmp/mcfta-selected-ingress-20261111-2120/. All heavy checks are terminal.
+One serial 4 GiB memory.max/high, swap0 and LEAN_NUM_THREADS=1 remain. No queue or
+heartbeat change. Keep small source plans/logs/manifests only; no binary archives.
+/tmp filesystem free: 206.5 GiB. Fresh usage: 9 percent at 2026-11-11T20:41:16.122Z.
+Pause and notify the user if fresh usage exceeds80 percent.
+
+---
+
 # Restart checkpoint: 2026-11-11, captured write, proper traversal and stable training
 
 Work continues after the user's resume. Pushes to formalize remain authorized.
