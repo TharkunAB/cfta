@@ -459,6 +459,37 @@ convergence. `Model.trainWithReport` returns the same report together with
 the contextual model, so callers can inspect the fit and use its normal query
 and sampling functions without constructing context labels themselves.
 
+`Model.condition` restricts a model to an event, the terms that a second
+automaton accepts. It divides the probability of each term of the event by the
+probability of the event. `Model.eventProbability` gives the probability of the
+event after a prefix, in the model before conditioning. A decoder with a
+lookahead, as in GeLaTo ([arXiv:2304.07438](https://arxiv.org/abs/2304.07438)),
+multiplies the probability of a next token `x` after a prefix `p` by
+`P(E | p <> [x]) / P(E | p)`.
+
+`Data.CFTA.Sized.Prefix.Mixture` is a mixture of models. One model has one
+table of weights with a bounded context, so it cannot hold a property of the
+whole term, for example that all the leaves are the same variable. A mixture
+has components, each with a share and its own table of weights. The
+probability of a term is the sum, over the components, of the share times
+the probability of the term in the component. `Mixture.train` fits the
+components to a corpus that the caller splits into groups, with expectation
+maximization (Dempster, Laird, and Rubin, 1977). The components have one
+count table. The next-token probabilities, the samples, the most probable
+completions, and the log-probabilities are exact for the mixture. The most
+probable term of a sum is not always the most probable term of a component,
+so `Mixture.bestTerms` searches the best terms of the components with the
+threshold algorithm of Fagin, Lotem, and Naor (2003).
+
+`Mixture.condition` restricts a mixture to an event, as `Model.condition`
+restricts a model. The mixture given an event is the mixture of the components
+given the event. The new share of a component is its share times the
+probability of the event in the component, over the probability of the event.
+For a corpus of terms with only `x` and terms with only `y`, in two groups,
+the event "no `y`" moves almost all of the share to the component of the terms
+with `x`. `Mixture.eventProbability` gives the probability of the event after
+a prefix, in the mixture before conditioning, for a decoder with a lookahead.
+
 The [query-generation example](examples/explainfuzz/README.md) learns weights
 from query ASTs, restricts the language with structural requirements, and
 emits seeded SQL samples. It adapts the ExplainFuzz workflow to a restricted

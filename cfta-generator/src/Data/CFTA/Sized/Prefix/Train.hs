@@ -37,6 +37,7 @@ module Data.CFTA.Sized.Prefix.Train (
     distill,
     distillWithReport,
     DistillReport (..),
+    distillMixture,
     withLogWeights,
     atTemperature,
 
@@ -63,6 +64,7 @@ module Data.CFTA.Sized.Prefix.Train (
 ) where
 
 import Data.Array (Array, listArray, (!))
+import Data.List (transpose)
 import qualified Data.Map.Lazy as LazyMap
 import qualified Data.Map.Strict as Map
 import qualified Data.Set as Set
@@ -153,6 +155,114 @@ distillWithReport automaton bound terms = do
     report <- fitWithReport 2000 1e-3 oracle counts Map.empty
     pure $ DistillReport report retained dropped
 
+{- | Fit a mixture of distributions to a corpus that the caller splits into
+groups. A mixture is a list of components. Each component has a share and
+the log-weights of one distribution. The shares are positive, and their sum
+is one. A term has the probability
+
+> P(t) = Σ_k share_k P_k(t)
+
+where @P_k@ is the distribution of the log-weights of the component @k@.
+
+The logarithm of the probability of one distribution is linear in the symbol
+counts. Thus one distribution gives @add(x, y)@ the geometric mean of the
+probabilities of @add(x, x)@ and @add(y, y)@, and it cannot prefer the terms
+with equal leaves. A mixture can: one component prefers @x@, and one
+component prefers @y@.
+
+The method is expectation maximization (Dempster, Laird, and Rubin, /Maximum
+likelihood from incomplete data via the EM algorithm/, 1977). Each group
+gives the first estimate of one component: the fit of 'distill' to the terms
+of the group. Then each round calculates the probability of each component
+for each term, and fits each component to all the terms, each term weighted
+by that probability. Thus a term can go to a component that is not the
+component of its group. Each component keeps the two pseudo terms of
+'distill' and the prior that 'distill' gives the terms of its group. Thus the
+rounds increase one objective: the log-likelihood of the terms and the
+pseudo terms, plus the logarithms of the priors. The rounds stop when a round
+increases the objective by less than @1e-4@ times the number of terms, or
+after 100 rounds. Each round fits each component one time, so the work can
+be many times the work of 'distill'.
+
+The result depends on the split. A round moves a term to another component
+only through the symbols that the term shares with other terms. When few
+terms share a symbol, the change of each round is small, and the rounds can
+stop while the components are near the split. So use a split that separates
+the terms by the property that the mixture must learn.
+
+The terms are filtered as in 'distill'. A group without a retained term gives
+no component, and a component whose share becomes zero is removed. The
+components keep the order of their groups. With one group, the result is one
+component with the share one and the log-weights of 'distill', within the
+tolerance of the optimizer. 'Nothing' when no term is retained, or when
+'distill' does not support the automaton.
+-}
+distillMixture ::
+    (Ord state, Ord symbol) =>
+    FTA.FTA state symbol Constraint -> Int -> [[Term symbol]] -> Maybe [(Double, LogWeights symbol)]
+distillMixture automaton bound groups = do
+    oracle <- distillationOracle automaton bound
+    let retained = filter (not . null) $ map (map symbolCounts . retainedTerms automaton bound) groups
+    if null retained then Nothing else Just $ fitMixture oracle retained
+  where
+    symbolCounts term = Map.fromListWith (+) [(symbol, 1) | symbol <- foldr (:) [] term]
+
+{- | The components of 'distillMixture', from the symbol counts of the terms
+of each group. Each group has a term.
+
+The objective of the rounds is the log-likelihood of the terms plus, for each
+component, the log-likelihood of the two pseudo terms and the logarithm of
+the prior. The prior of a component has the precision that 'distill' gives
+the terms of its group, in all rounds. So each step of a round is a step up
+of one objective, and the objective does not decrease.
+-}
+fitMixture :: (Ord symbol) => Oracle symbol -> [[Map.Map symbol Double]] -> [(Double, LogWeights symbol)]
+fitMixture oracle groups = filter ((> 0) . fst) $ rounds (0 :: Int) (-1 / 0) first
+  where
+    terms = concat groups
+    size = fromIntegral $ length terms
+    uniform = snd $ oracleExpectations oracle Map.empty
+    -- The precision of the prior of each component, for the sum of the log-likelihoods of its terms.
+    precisions = [1e-3 * (fromIntegral (length members) + 2) | members <- groups]
+    -- Each term has the probability one for the component of its group.
+    first =
+        maximize
+            [[if other == group then 1 else 0 | other <- indices] | (group, members) <- zip indices groups, _ <- members]
+            (map (const Map.empty) groups)
+    indices = [0 .. length groups - 1]
+    -- Fit each component to the terms, weighted by the probabilities of the component, from its last log-weights.
+    maximize probabilities starts =
+        [ (weight / size, stepWeights $ last $ take 2000 $ fit (precision / (weight + 2)) oracle counts start)
+        | (column, precision, start) <- zip3 (transpose probabilities) precisions starts
+        , let weight = sum column
+              mean =
+                Map.map (/ weight) $
+                    Map.unionsWith (+) [Map.map (* part) term | (part, term) <- zip column terms, part > 0]
+              counts = mixCounts weight mean 2 uniform
+        ]
+    -- The objective divided by the number of terms, and the probability of each component for each term.
+    expect components = ((sum (map fst scored) + sum priors) / size, map snd scored)
+      where
+        tables =
+            [ (log share, logWeights, oracleLogPartition oracle logWeights)
+            | (share, logWeights) <- components
+            ]
+        priors =
+            [ 2 * (inner uniform logWeights - logTotal) - precision / 2 * sum (Map.map (^ (2 :: Int)) logWeights)
+            | ((_, logWeights, logTotal), precision) <- zip tables precisions
+            ]
+        scored = map score terms
+        score term = (total, [exp (value - total) | value <- values])
+          where
+            values = [logShare + inner term logWeights - logTotal | (logShare, logWeights, logTotal) <- tables]
+            total = logarithm $ sum $ map LogNumber values
+    inner counts logWeights = sum [count * Map.findWithDefault 0 symbol logWeights | (symbol, count) <- Map.toList counts]
+    rounds count before components
+        | count >= 100 || objective - before < 1e-4 = components
+        | otherwise = rounds (count + 1) objective $ maximize probabilities $ map snd components
+      where
+        (objective, probabilities) = expect components
+
 -- | Select the existing oracle route and prepare the regularized corpus counts.
 distillationInput ::
     (Ord state, Ord symbol) =>
@@ -161,7 +271,7 @@ distillationInput ::
     [Term symbol] ->
     Either TrainingError (Oracle symbol, Map.Map symbol Double, Int)
 distillationInput automaton bound terms = do
-    oracle <- maybe (Left UnsupportedTrainingLanguage) Right chooseOracle
+    oracle <- maybe (Left UnsupportedTrainingLanguage) Right $ distillationOracle automaton bound
     if null kept
         then Left NoRetainedTerms
         else do
@@ -170,18 +280,27 @@ distillationInput automaton bound terms = do
                 counts = mixCounts (fromIntegral retained) (meanCounts kept) 2 uniform
             pure (oracle, counts, retained)
   where
-    kept = [term | term <- terms, length (foldr (:) [] term) <= bound, FTA.accepts automaton term]
+    kept = retainedTerms automaton bound terms
+
+-- | The oracle of 'distill' for an automaton and a size bound. 'Nothing' when 'distill' has no route for the automaton.
+distillationOracle :: (Ord state, Ord symbol) => FTA.FTA state symbol Constraint -> Int -> Maybe (Oracle symbol)
+distillationOracle automaton bound
+    | unconstrained && unambiguous = Just $ automatonOracle automaton bound
+    | unconstrained =
+        (\rows -> groupedOracle (Left $ FTA.initialState automaton) (Map.map (map plain) rows) bound)
+            <$> Ordinary.deterministicCountingRows (FTA.mapConstraints (const ()) automaton)
+    | unambiguous = constrainedOracle automaton bound
+    | otherwise = Nothing
+  where
     reached = FTA.transitionTable $ FTA.trim automaton
     unconstrained = all (all ((== noConstraint) . FTA.transitionConstraint)) reached
     unambiguous = Ordinary.unambiguousRows (Map.map (map void) reached)
-    chooseOracle
-        | unconstrained && unambiguous = Just $ automatonOracle automaton bound
-        | unconstrained =
-            (\rows -> groupedOracle (Left $ FTA.initialState automaton) (Map.map (map plain) rows) bound)
-                <$> Ordinary.deterministicCountingRows (FTA.mapConstraints (const ()) automaton)
-        | unambiguous = constrainedOracle automaton bound
-        | otherwise = Nothing
     plain transition = (FTA.transitionSymbol transition, [(child, 1) | child <- FTA.transitionChildren transition])
+
+-- | The terms that 'distill' retains: the terms within the bound that the automaton accepts.
+retainedTerms :: (Ord state, Eq symbol) => FTA.FTA state symbol Constraint -> Int -> [Term symbol] -> [Term symbol]
+retainedTerms automaton bound terms =
+    [term | term <- terms, length (foldr (:) [] term) <= bound, FTA.accepts automaton term]
 
 {- | The completions with the weights of log-weights, for the queries of
 "Data.CFTA.Sized.Prefix": 'nextTokenWeights', 'tokenProbability' and

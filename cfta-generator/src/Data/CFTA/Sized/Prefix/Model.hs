@@ -21,16 +21,30 @@ The queries take a prefix of plain tokens and are exact for the model:
 * 'termLogProbability': the log-probability of a term.
 
 'withTemperature' sets the temperature of whole terms ('atTemperature').
+
+'condition' gives the model given an event: the terms that a second
+automaton accepts. Each term of the event has its probability divided by the
+probability of the event, and the queries above read only the terms of the
+event. 'eventProbability' gives the probability of the event after a prefix,
+in the model before 'condition'. A decoder with a lookahead needs this
+probability.
+
+The context of a weight is bounded. So a model cannot hold a property of the
+whole term, for example that all the leaves of a term are the same variable.
+A mixture of models can hold such a property
+("Data.CFTA.Sized.Prefix.Mixture").
 -}
 module Data.CFTA.Sized.Prefix.Model (
     Model,
     train,
     trainWithReport,
     withTemperature,
+    condition,
     nextTokenProbabilities,
     sampleTerm,
     bestTerms,
     termLogProbability,
+    eventProbability,
 ) where
 
 import qualified Test.QuickCheck as QC
@@ -43,14 +57,17 @@ import Data.CFTA.Sized.Prefix (
     Token,
     afterPrefix,
     bestCompletions,
+    completionCount,
     completionWeight,
     prefixCompletions,
  )
 import Data.CFTA.Sized.Prefix.Parents (
     Parented,
     Reach,
+    intersectEvent,
     labelParents,
     labelPrefix,
+    numbered,
     rootContext,
     unlabelParents,
     withParents,
@@ -65,6 +82,7 @@ import Data.CFTA.Sized.Prefix.Train (
     atTemperature,
     distill,
     distillWithReport,
+    logPartition,
     logProbability,
     nextTokenDistribution,
     withLogWeights,
@@ -77,8 +95,14 @@ data Model symbol = Model
     , modelLogWeights :: LogWeights (Parented symbol)
     -- ^ The fitted log-weights, at the temperature one.
     , modelTemperature :: Double
+    , modelAutomaton :: FTA.FTA Int (Parented symbol) Constraint
+    -- ^ The labelled automaton, or its product with the events of 'condition', with the states numbered.
+    , modelBound :: Int
+    -- ^ The size bound.
+    , modelPrior :: Completions (Parented symbol)
+    -- ^ The completions of the empty prefix of the labelled automaton, before 'condition', with the weights at the temperature.
     , modelCompletions :: Completions (Parented symbol)
-    -- ^ The completions of the empty prefix of the labelled automaton, with the weights at the temperature.
+    -- ^ The completions of the empty prefix of 'modelAutomaton', with the weights at the temperature.
     }
 
 {- | Fit a model with a reach to a corpus of terms of an automaton, for the
@@ -91,9 +115,19 @@ train ::
 train reach automaton bound terms = do
     labelled <- withParents reach rootContext automaton
     logWeights <- distill labelled bound (map (labelParents reach rootContext) terms)
-    completions <- either (const Nothing) Just $ prefixCompletions (Size $ toInteger bound) labelled
+    let renumbered = numbered labelled
+    completions <- either (const Nothing) Just $ prefixCompletions (Size $ toInteger bound) renumbered
     weighted <- withLogWeights logWeights completions
-    Just $ Model reach logWeights 1 weighted
+    Just
+        Model
+            { modelReach = reach
+            , modelLogWeights = logWeights
+            , modelTemperature = 1
+            , modelAutomaton = renumbered
+            , modelBound = bound
+            , modelPrior = weighted
+            , modelCompletions = weighted
+            }
 
 {- | Fit the same model as 'train', with the optimizer's stop reason and
 retained and dropped corpus counts. The report's weights use context-labelled
@@ -116,10 +150,22 @@ trainWithReport reach automaton bound terms = do
     if any unrepresentable logWeights
         then Left UnrepresentableWeights
         else do
+            let renumbered = numbered labelled
             completions <-
-                either (const $ Left UnsupportedTrainingLanguage) Right $ prefixCompletions (Size $ toInteger bound) labelled
+                either (const $ Left UnsupportedTrainingLanguage) Right $ prefixCompletions (Size $ toInteger bound) renumbered
             weighted <- maybe (Left UnrepresentableWeights) Right $ withLogWeights logWeights completions
-            pure (Model reach logWeights 1 weighted, report)
+            pure
+                ( Model
+                    { modelReach = reach
+                    , modelLogWeights = logWeights
+                    , modelTemperature = 1
+                    , modelAutomaton = renumbered
+                    , modelBound = bound
+                    , modelPrior = weighted
+                    , modelCompletions = weighted
+                    }
+                , report
+                )
   where
     unrepresentable logWeight = let value = exp logWeight in isNaN value || isInfinite value || value <= 0
 
@@ -133,8 +179,45 @@ withTemperature :: (Ord symbol) => Double -> Model symbol -> Maybe (Model symbol
 withTemperature temperature model
     | isNaN temperature || isInfinite temperature || temperature <= 0 = Nothing
     | otherwise = do
-        weighted <- withLogWeights (atTemperature temperature $ modelLogWeights model) (modelCompletions model)
-        Just model{modelTemperature = temperature, modelCompletions = weighted}
+        let logWeights = atTemperature temperature $ modelLogWeights model
+        prior <- withLogWeights logWeights (modelPrior model)
+        weighted <- withLogWeights logWeights (modelCompletions model)
+        Just model{modelTemperature = temperature, modelPrior = prior, modelCompletions = weighted}
+
+{- | The model given an event: the terms of the model that the event also
+accepts, each with its probability divided by the probability of the event.
+The event is an automaton over the plain symbols. The automaton of 'train',
+restricted to the terms that match a template
+('Data.CFTA.Template.restrictFTA'), is an event. The automaton of 'train',
+restricted to the terms that no exclusion rejects
+('Data.CFTA.Template.excludeAllFTA'), is also an event. The result reads the
+product of the automaton of the model and the event ('FTA.intersectWith'). A
+labelled symbol matches an event symbol when its plain symbol is the event
+symbol. The product keeps the labelled symbol, so each node keeps its
+weight. A term outside the event has the probability zero, and the queries
+of the result read only the terms of the event. Conditioning on two events,
+one after the other, gives the model given both events. The temperature does
+not change.
+
+When the event accepts a term by two runs, the product also accepts it by two
+runs. 'prefixCompletions' gives each term once also then, with one weight, so
+the probabilities stay exact. The queries then read the bottom-up
+deterministic rows of the product, or, when these have more than 1024
+states, a list of the terms up to the bound.
+
+'Nothing' when a transition of the event has a constraint other than
+'Data.CFTA.Constraint.noConstraint': an equality constraint compares the
+subterms at two paths, and their labelled subterms have different contexts.
+'Nothing' also when the event accepts no term of the model within the bound.
+-}
+condition :: (Ord state, Ord symbol) => FTA.FTA state symbol Constraint -> Model symbol -> Maybe (Model symbol)
+condition event model = do
+    automaton <- intersectEvent event (modelAutomaton model)
+    completions <- either (const Nothing) Just $ prefixCompletions (Size $ toInteger $ modelBound model) automaton
+    weighted <- withLogWeights (logWeightsOf model) completions
+    if completionCount completions == 0
+        then Nothing
+        else Just model{modelAutomaton = automaton, modelCompletions = weighted}
 
 {- | The probability of each next token after a prefix, in ascending order of
 the tokens. A complete prefix has no next token. 'Nothing' when no
@@ -168,6 +251,37 @@ bestTerms count model prefix = do
 termLogProbability :: (Ord symbol) => Model symbol -> Term symbol -> Maybe Double
 termLogProbability model =
     logProbability (logWeightsOf model) (modelCompletions model) . labelParents (modelReach model) rootContext
+
+{- | The probability of the event of a model, given that the term starts with a
+prefix, in the model before 'condition'. The event of a model is the
+intersection of the events of each 'condition' of the model. The probability
+is the weight of the completions of the prefix that the event accepts, over
+the weight of all the completions of the prefix, at the temperature of the
+model. It is one for each prefix with a completion when the model has no
+'condition', and zero when the event accepts no completion of the prefix.
+'Nothing' when no completion of the model before 'condition' starts with the
+prefix.
+
+With the next-token probabilities before and after 'condition', this gives
+the lookahead of constrained decoding. For a next token @x@ after a prefix
+@p@ and an event @E@:
+
+> P(x | p, E) / P(x | p) = P(E | p <> [x]) / P(E | p)
+
+'nextTokenProbabilities' of the model after 'condition' gives the numerator
+on the left, and 'eventProbability' gives the right side. See Zhang, Dang,
+Peng, and Van den Broeck, /Tractable Control for Autoregressive Language
+Generation/, ICML 2023 (arXiv:2304.07438).
+-}
+eventProbability :: (Ord symbol) => Model symbol -> [Token symbol] -> Maybe Double
+eventProbability model prefix = do
+    labelled <- labelPrefix (modelReach model) rootContext prefix
+    prior <- afterPrefix (modelPrior model) labelled
+    Just $ case afterPrefix (modelCompletions model) labelled of
+        Nothing -> 0
+        Just conditioned -> exp $ logPartition logWeights conditioned - logPartition logWeights prior
+  where
+    logWeights = logWeightsOf model
 
 -- | The log-weights of a model at its temperature.
 logWeightsOf :: Model symbol -> LogWeights (Parented symbol)

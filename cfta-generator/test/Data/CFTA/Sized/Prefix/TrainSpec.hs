@@ -2,14 +2,16 @@ module Data.CFTA.Sized.Prefix.TrainSpec (spec) where
 
 import Control.Monad (forM_)
 import Data.Containers.ListUtils (nubOrd)
-import Data.List (inits, isPrefixOf, sort)
+import Data.List (inits, isPrefixOf, sort, sortOn)
 import qualified Data.Map.Strict as Map
-import Data.Maybe (fromJust, isNothing)
+import Data.Maybe (fromJust, fromMaybe, isNothing)
+import Data.Ord (Down (..))
 import Test.Hspec (Spec, describe, it, shouldBe, shouldSatisfy)
 
 import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint, equalityConstraint, noConstraint)
 import qualified Data.CFTA.Equality as ECTA
+import Data.CFTA.Ranked.Internal.Sampler (Exact (..))
 import Data.CFTA.Sized.Prefix (
     Completions,
     Token,
@@ -19,10 +21,12 @@ import Data.CFTA.Sized.Prefix (
     prefixCompletions,
     withWeights,
  )
+import qualified Data.CFTA.Sized.Prefix.Mixture as Mixture
 import qualified Data.CFTA.Sized.Prefix.Model as Model
 import Data.CFTA.Sized.Prefix.Parents (Reach (..))
 import Data.CFTA.Sized.Prefix.QuickCheck (sampleWeighted)
 import Data.CFTA.Sized.Prefix.Train
+import Data.CFTA.Template (Exclusion (..), Template (..), excludeAllFTA, restrictFTA)
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
 import qualified Test.QuickCheck as QC
@@ -128,6 +132,15 @@ spec = describe "Data.CFTA.Sized.Prefix.Train" $ do
             scale = difference "add"
         forM_ ["x", "y", "neg", "add"] $ \symbol ->
             abs (difference symbol - scale * arityLess symbol) `shouldSatisfy` (< 1e-5)
+    it "fits a mixture of one group to the log-weights of distill" $ do
+        let fitted = fromJust $ distillMixture expressions 9 [[], corpus, [Term.Node "outside" []]]
+            direct = fromJust $ distill expressions 9 corpus
+            deep = equalityConstraint $ ECTA.mkEqConstraints [[ECTA.path [0, 0], ECTA.path [1, 0]]]
+        map fst fitted `shouldBe` [1]
+        forM_ (Map.toList direct) $ \(symbol, weight) ->
+            (symbol, [abs (found Map.! symbol - weight) < 1e-6 | (_, found) <- fitted]) `shouldBe` (symbol, [True])
+        isNothing (distillMixture expressions 1 [[], [Term.Node "outside" []]]) `shouldBe` True
+        isNothing (distillMixture (FTA.mapConstraints (const deep) expressions) 5 [corpus]) `shouldBe` True
 
     describe "training reports" $ do
         it "reports the retained corpus and preserves the default fit" $ do
@@ -193,6 +206,26 @@ spec = describe "Data.CFTA.Sized.Prefix.Train" $ do
                 ]
             everything model = fromJust $ Model.bestTerms 100000 model []
             close left right = abs (left - right) < 1e-7
+            -- Whether two lists of terms with probabilities have the same terms, each with a close probability.
+            closeTerms left right =
+                let (first, second) = (Map.fromList left, Map.fromList right)
+                 in Map.keys first == Map.keys second && and (Map.intersectionWith close first second)
+            -- The prefixes of the terms within the bound.
+            prefixes = nubOrd $ concatMap (inits . preorder) $ completionTerms $ completionsOf 5 expressions
+            -- Each model with the name of an event, the event, the model given the event, and the probability of
+            -- the event after each prefix.
+            given =
+                [ ( reach
+                  , name
+                  , event
+                  , model
+                  , conditioned
+                  , Map.fromList [(prefix, Model.eventProbability conditioned prefix) | prefix <- prefixes]
+                  )
+                | (reach, model) <- models
+                , (name, event) <- [("without y", withoutY), ("root add", rootAdd)]
+                , let conditioned = fromJust $ Model.condition event model
+                ]
         it "returns the same model queries with an inspectable training report" $
             forM_ models $ \(reach, model) -> do
                 let (reported, report) = either (error . show) id $ Model.trainWithReport reach expressions 5 corpus
@@ -266,6 +299,329 @@ spec = describe "Data.CFTA.Sized.Prefix.Train" $ do
                     let drawn = QCGen.unGen (QC.vectorOf 50 $ fromJust $ Model.sampleTerm model prefix) (QCRandom.mkQCGen 3) 30
                     (reach, prefix, filter (not . isPrefixOf prefix . preorder) drawn) `shouldBe` (reach, prefix, [])
                 (reach, isNothing $ Model.sampleTerm model [("x", 0), ("y", 0)]) `shouldBe` (reach, True)
+        it "keeps each probability given an event that each term is in" $
+            forM_ models $ \(reach, model) -> do
+                let conditioned = fromJust $ Model.condition expressions model
+                (reach, closeTerms (everything conditioned) (everything model)) `shouldBe` (reach, True)
+                forM_ prefixes $ \prefix -> do
+                    (reach, prefix, Model.eventProbability model prefix) `shouldBe` (reach, prefix, Just 1)
+                    (reach, prefix, close 1 <$> Model.eventProbability conditioned prefix) `shouldBe` (reach, prefix, Just True)
+                    let found = fromJust $ Model.nextTokenProbabilities conditioned prefix
+                        expected = fromJust $ Model.nextTokenProbabilities model prefix
+                    (reach, prefix, map fst found) `shouldBe` (reach, prefix, map fst expected)
+                    (reach, prefix, and $ zipWith close (map snd found) (map snd expected)) `shouldBe` (reach, prefix, True)
+        it "gives each term of an event its probability over the probability of the event, and no other term a probability" $
+            forM_ given $ \(reach, name, event, model, conditioned, _) -> do
+                let best = everything model
+                    total = sum [probability | (term, probability) <- best, FTA.accepts event term]
+                (reach, name, close (sum $ map snd $ everything conditioned) 1) `shouldBe` (reach, name, True)
+                forM_ best $ \(term, probability) ->
+                    (reach, name, term, close (log $ probability / total) <$> Model.termLogProbability conditioned term)
+                        `shouldBe` (reach, name, term, if FTA.accepts event term then Just True else Nothing)
+        it "gives the probability of an event after each prefix, as the sums over the terms give it" $
+            forM_ given $ \(reach, name, event, model, conditioned, after) -> do
+                let flagged = [(preorder term, probability, FTA.accepts event term) | (term, probability) <- everything model]
+                forM_ prefixes $ \prefix -> do
+                    let within = [(probability, accepted) | (tokens, probability, accepted) <- flagged, prefix `isPrefixOf` tokens]
+                        inEvent = sum [probability | (probability, True) <- within]
+                    if inEvent == 0
+                        then (reach, name, prefix, after Map.! prefix) `shouldBe` (reach, name, prefix, Just 0)
+                        else
+                            (reach, name, prefix, close (inEvent / sum (map fst within)) <$> after Map.! prefix)
+                                `shouldBe` (reach, name, prefix, Just True)
+                forM_ [[("x", 0), ("y", 0)], [("neg", 2)]] $ \prefix ->
+                    (reach, name, prefix, Model.eventProbability conditioned prefix) `shouldBe` (reach, name, prefix, Nothing)
+        it "gives the next-token probabilities of the lookahead: P(x | p, E) P(E | p) = P(x | p) P(E | p <> [x])" $
+            forM_ given $ \(reach, name, _, model, conditioned, after) -> do
+                let probabilityAfter prefix = fromJust $ after Map.! prefix
+                forM_ prefixes $ \prefix -> do
+                    let lookahead = fromMaybe [] $ Model.nextTokenProbabilities conditioned prefix
+                    forM_ (fromJust $ Model.nextTokenProbabilities model prefix) $ \(token, probability) ->
+                        ( reach
+                        , name
+                        , prefix
+                        , token
+                        , close
+                            (fromMaybe 0 (lookup token lookahead) * probabilityAfter prefix)
+                            (probability * probabilityAfter (prefix <> [token]))
+                        )
+                            `shouldBe` (reach, name, prefix, token, True)
+        it "gives the same model when it conditions at a temperature and when it sets the temperature after" $
+            forM_ given $ \(reach, name, event, model, conditioned, _) -> do
+                let first = fromJust $ Model.condition event $ fromJust $ Model.withTemperature 0.5 model
+                    second = fromJust $ Model.withTemperature 0.5 conditioned
+                (reach, name, everything first) `shouldBe` (reach, name, everything second)
+                (reach, name, Model.nextTokenProbabilities first []) `shouldBe` (reach, name, Model.nextTokenProbabilities second [])
+                -- The prefixes with at most two tokens, to keep the law fast.
+                forM_ (filter ((<= 2) . length) prefixes) $ \prefix ->
+                    (reach, name, prefix, Model.eventProbability first prefix)
+                        `shouldBe` (reach, name, prefix, Model.eventProbability second prefix)
+        it "gives the model given both events when it conditions twice" $
+            forM_ models $ \(reach, model) -> do
+                let twice = fromJust $ Model.condition rootAdd =<< Model.condition withoutY model
+                    both =
+                        FTA.intersectWith (\left right -> if left == right then Just left else Nothing) (\_ _ -> noConstraint) withoutY rootAdd
+                    once = fromJust $ Model.condition both model
+                (reach, closeTerms (everything twice) (everything once)) `shouldBe` (reach, True)
+                forM_ prefixes $ \prefix ->
+                    (reach, prefix, close <$> Model.eventProbability twice prefix <*> Model.eventProbability once prefix)
+                        `shouldBe` (reach, prefix, Just True)
+        it "conditions on the restriction to a template, or to the terms that no exclusion rejects, as on the same event" $
+            forM_ models $ \(reach, model) -> do
+                let restricted =
+                        [ ("without y", withoutY, Model.condition (excludeAllFTA [Anywhere (TemplateNode "y" [])] expressions) model)
+                        , ("root add", rootAdd, Model.condition (restrictFTA (TemplateNode "add" [Hole, Hole]) expressions) model)
+                        ]
+                forM_ restricted $ \(name, event, conditioned) ->
+                    (reach, name, closeTerms (everything $ fromJust $ Model.condition event model) . everything <$> conditioned)
+                        `shouldBe` (reach, name, Just True)
+        it "gives no model for an event with a constraint or without a term in the bound, and draws only terms of the event" $ do
+            forM_ models $ \(reach, model) -> do
+                (reach, isNothing $ Model.condition doubles model) `shouldBe` (reach, True)
+                -- A term with six nodes, beyond the bound.
+                let deep = iterate (\term -> Term.Node "neg" [term]) (Term.Node "x" []) !! 5
+                (reach, isNothing $ Model.condition (FTA.fromTerms [deep]) model) `shouldBe` (reach, True)
+            forM_ given $ \(reach, name, event, _, conditioned, _) -> do
+                let drawn = QCGen.unGen (QC.vectorOf 50 $ fromJust $ Model.sampleTerm conditioned []) (QCRandom.mkQCGen 3) 30
+                (reach, name, filter (not . FTA.accepts event) drawn) `shouldBe` (reach, name, [])
+
+    describe "Mixture" $ do
+        let reaches = [Reach 0 False, Reach 1 False, Reach 2 True]
+            terms = completionTerms $ completionsOf 5 expressions
+            prefixes = nubOrd $ concatMap (inits . preorder) terms
+            probability mixture = exp . fromJust . Mixture.termLogProbability mixture
+            close left right = abs (left - right) < 1e-7
+            -- The terms whose leaves are all the given variable.
+            only variable = [term | term <- terms, and [symbol == variable | (symbol, 0) <- preorder term]]
+            -- The fit of two components is slow with the largest reach, so the laws of two components use the first two.
+            mixtures = [(reach, fromJust $ Mixture.train reach expressions 5 [only "x", only "y"]) | reach <- take 2 reaches]
+            negated left right = Term.Node "add" [Term.Node "neg" [Term.Node left []], Term.Node "neg" [Term.Node right []]]
+            -- The exact mass of each term in the draws of a mixture.
+            masses mixture = Map.fromListWith (+) [(term, mass) | (mass, term) <- runExact $ fromJust $ Mixture.lowerTerm mixture []]
+            events = [("without y", withoutY), ("root add", rootAdd)]
+            -- Each mixture of two components with the name of an event, the event, and the mixture given the event.
+            given =
+                [ (reach, name, event, mixture, fromJust $ Mixture.condition event mixture)
+                | (reach, mixture) <- mixtures
+                , (name, event) <- events
+                ]
+        it "is the model when the corpus has one group" $
+            forM_ reaches $ \reach -> do
+                let mixture = fromJust $ Mixture.train reach expressions 5 [corpus]
+                    model = fromJust $ Model.train reach expressions 5 corpus
+                (reach, Mixture.componentProbabilities mixture []) `shouldBe` (reach, Just [1])
+                forM_ terms $ \term ->
+                    (reach, term, close (probability mixture term) . exp <$> Model.termLogProbability model term)
+                        `shouldBe` (reach, term, Just True)
+                forM_ prefixes $ \prefix -> do
+                    let found = fromJust $ Mixture.nextTokenProbabilities mixture prefix
+                        expected = fromJust $ Model.nextTokenProbabilities model prefix
+                    (reach, prefix, map fst found) `shouldBe` (reach, prefix, map fst expected)
+                    (reach, prefix, and $ zipWith close (map snd found) (map snd expected)) `shouldBe` (reach, prefix, True)
+                    let every = Map.fromList $ fromJust $ Mixture.bestTerms 100000 mixture prefix
+                        expectedEvery = Map.fromList $ fromJust $ Model.bestTerms 100000 model prefix
+                    (reach, prefix, Map.keys every, and $ Map.intersectionWith close every expectedEvery)
+                        `shouldBe` (reach, prefix, Map.keys expectedEvery, True)
+                -- The model can give the completions with equal probabilities in another order.
+                forM_ [1, 2, 5] $ \count -> do
+                    let best = fromJust $ Mixture.bestTerms count mixture []
+                        expectedBest = fromJust $ Model.bestTerms count model []
+                    (reach, count, length best, and $ zipWith close (map snd best) (map snd expectedBest))
+                        `shouldBe` (reach, count, length expectedBest, True)
+        it "gives each term within the bound a probability, and the probabilities sum to one" $
+            forM_ mixtures $ \(reach, mixture) -> do
+                (reach, close (sum $ map (probability mixture) terms) 1) `shouldBe` (reach, True)
+                forM_ [Term.Node "outside" [], iterate (Term.Node "neg" . pure) (Term.Node "x" []) !! 5] $ \term ->
+                    (reach, term, Mixture.termLogProbability mixture term) `shouldBe` (reach, term, Nothing)
+        it "gives each next token the probability of its completions" $
+            forM_ mixtures $ \(reach, mixture) ->
+                forM_ prefixes $ \prefix -> do
+                    let within = [(preorder term, probability mixture term) | term <- terms, prefix `isPrefixOf` preorder term]
+                        total = sum $ map snd within
+                        expected =
+                            Map.toList $
+                                Map.fromListWith
+                                    (+)
+                                    [(tokens !! length prefix, value / total) | (tokens, value) <- within, length tokens > length prefix]
+                        found = fromJust $ Mixture.nextTokenProbabilities mixture prefix
+                    (reach, prefix, map fst found) `shouldBe` (reach, prefix, map fst expected)
+                    (reach, prefix, and $ zipWith close (map snd found) (map snd expected)) `shouldBe` (reach, prefix, True)
+        it "gives each component a probability after a prefix: the mean of its probabilities after the next tokens" $
+            forM_ mixtures $ \(reach, mixture) ->
+                forM_ prefixes $ \prefix -> do
+                    let components = fromJust $ Mixture.componentProbabilities mixture prefix
+                        next = fromJust $ Mixture.nextTokenProbabilities mixture prefix
+                        later =
+                            [ map (* value) $ fromJust $ Mixture.componentProbabilities mixture (prefix <> [token])
+                            | (token, value) <- next
+                            ]
+                    (reach, prefix, length components, close (sum components) 1) `shouldBe` (reach, prefix, 2, True)
+                    (reach, prefix, null next || and (zipWith close components $ foldr1 (zipWith (+)) later))
+                        `shouldBe` (reach, prefix, True)
+        it "learns that the leaves of a term are equal, which one model cannot learn" $
+            forM_ mixtures $ \(reach, mixture) -> do
+                let model = fromJust $ Model.train reach expressions 5 (only "x" <> only "y")
+                    single = exp . fromJust . Model.termLogProbability model
+                    equal value = value (negated "x" "x") * value (negated "y" "y")
+                    different value = value (negated "x" "y") * value (negated "y" "x")
+                -- The four terms have the same sum of counts, so one table of weights gives the same product.
+                (reach, close (different single) (equal single)) `shouldBe` (reach, True)
+                (reach, different (probability mixture) < equal (probability mixture) / 16) `shouldBe` (reach, True)
+        it "moves the terms of an incorrect split to their component" $
+            forM_ (take 2 reaches) $ \reach -> do
+                -- Six of the terms with y are in the group of the terms with x.
+                let mixture = fromJust $ Mixture.train reach expressions 5 [only "x" <> take 6 (only "y"), drop 6 $ only "y"]
+                    shares = fromJust . Mixture.componentProbabilities mixture
+                (reach, map ((< 0.05) . abs . subtract 0.5) $ shares []) `shouldBe` (reach, [True, True])
+                (reach, map (> 0.9) $ shares $ preorder $ negated "x" "x") `shouldBe` (reach, [True, False])
+                (reach, map (> 0.9) $ shares $ preorder $ negated "y" "y") `shouldBe` (reach, [False, True])
+        it "samples each completion of a prefix with its probability" $
+            forM_ mixtures $ \(reach, mixture) -> do
+                forM_ [[], [("add", 2)], [("add", 2), ("neg", 1), ("y", 0)]] $ \prefix -> do
+                    let within = [term | term <- terms, prefix `isPrefixOf` preorder term]
+                        total = sum $ map (probability mixture) within
+                        drawn = Map.fromListWith (+) [(term, mass) | (mass, term) <- runExact $ fromJust $ Mixture.lowerTerm mixture prefix]
+                    (reach, prefix, Map.keys drawn, sum drawn) `shouldBe` (reach, prefix, sort within, 1)
+                    forM_ (Map.toList drawn) $ \(term, mass) ->
+                        (reach, prefix, term, close (fromRational mass) (probability mixture term / total))
+                            `shouldBe` (reach, prefix, term, True)
+                    let sampled = QCGen.unGen (QC.vectorOf 50 $ fromJust $ Mixture.sampleTerm mixture prefix) (QCRandom.mkQCGen 3) 30
+                    (reach, prefix, filter (not . isPrefixOf prefix . preorder) sampled) `shouldBe` (reach, prefix, [])
+                (reach, isNothing $ Mixture.sampleTerm mixture [("x", 0), ("y", 0)]) `shouldBe` (reach, True)
+        it "gives the completions of a prefix with the largest probabilities, the most probable first" $
+            forM_ mixtures $ \(reach, mixture) -> do
+                forM_ prefixes $ \prefix -> do
+                    let within = Map.fromList [(term, probability mixture term) | term <- terms, prefix `isPrefixOf` preorder term]
+                        total = sum within
+                        expected = sortOn Down $ map (/ total) $ Map.elems within
+                        near left right = abs (left - right) < 1e-9
+                        every = fromJust $ Mixture.bestTerms (Map.size within + 1) mixture prefix
+                    forM_ [1, 2, 5, Map.size within + 1] $ \count -> do
+                        let found = fromJust $ Mixture.bestTerms count mixture prefix
+                        (reach, prefix, count, length found, and $ zipWith near (map snd found) expected)
+                            `shouldBe` (reach, prefix, count, min count (Map.size within), True)
+                        forM_ found $ \(term, value) ->
+                            (reach, prefix, count, term, near value . (/ total) <$> Map.lookup term within)
+                                `shouldBe` (reach, prefix, count, term, Just True)
+                        (reach, prefix, count, nubOrd $ map fst found) `shouldBe` (reach, prefix, count, map fst found)
+                        -- The order is fixed, so a smaller count gives the first completions of a larger count.
+                        (reach, prefix, count, found) `shouldBe` (reach, prefix, count, take count every)
+                (reach, Mixture.bestTerms 1 mixture [("x", 0), ("y", 0)]) `shouldBe` (reach, Nothing)
+                (reach, map (\count -> Mixture.bestTerms count mixture []) [0, -1]) `shouldBe` (reach, [Just [], Just []])
+        it "gives each term of an event its probability over the probability of the event, and draws it with this exact mass" $
+            forM_ given $ \(reach, name, event, mixture, conditioned) -> do
+                let inEvent = filter (FTA.accepts event) terms
+                    total = sum $ map (probability mixture) inEvent
+                    drawn = masses conditioned
+                forM_ terms $ \term ->
+                    (reach, name, term, close (probability mixture term / total) . exp <$> Mixture.termLogProbability conditioned term)
+                        `shouldBe` (reach, name, term, if FTA.accepts event term then Just True else Nothing)
+                (reach, name, Map.keys drawn, sum drawn) `shouldBe` (reach, name, sort inEvent, 1)
+                forM_ (Map.toList drawn) $ \(term, mass) ->
+                    (reach, name, term, close (fromRational mass) (probability conditioned term)) `shouldBe` (reach, name, term, True)
+        it "multiplies the share of each component by the probability of the event in the component" $
+            forM_ given $ \(reach, name, event, mixture, conditioned) -> do
+                -- For each component, the probability of the component and the event: the sum, over the terms of the
+                -- event, of the probability of the term times the probability of the component after the term.
+                let joint =
+                        foldr1
+                            (zipWith (+))
+                            [ map (* probability mixture term) $ fromJust $ Mixture.componentProbabilities mixture (preorder term)
+                            | term <- terms
+                            , FTA.accepts event term
+                            ]
+                (reach, name, zipWith close (map (/ sum joint) joint) <$> Mixture.componentProbabilities conditioned [])
+                    `shouldBe` (reach, name, Just [True, True])
+        it "keeps each probability given an event that each term is in" $
+            forM_ mixtures $ \(reach, mixture) -> do
+                let conditioned = fromJust $ Mixture.condition expressions mixture
+                (reach, masses conditioned) `shouldBe` (reach, masses mixture)
+                forM_ terms $ \term ->
+                    (reach, term, close (probability mixture term) (probability conditioned term)) `shouldBe` (reach, term, True)
+                forM_ prefixes $ \prefix -> do
+                    (reach, prefix, Mixture.eventProbability mixture prefix) `shouldBe` (reach, prefix, Just 1)
+                    (reach, prefix, close 1 <$> Mixture.eventProbability conditioned prefix) `shouldBe` (reach, prefix, Just True)
+        it "gives the probability of an event after each prefix, as the sums over the terms give it, and the lookahead" $
+            forM_ given $ \(reach, name, event, mixture, conditioned) -> do
+                let after = Map.fromList [(prefix, Mixture.eventProbability conditioned prefix) | prefix <- prefixes]
+                    probabilityAfter prefix = fromJust $ after Map.! prefix
+                forM_ prefixes $ \prefix -> do
+                    let within = [(probability mixture term, FTA.accepts event term) | term <- terms, prefix `isPrefixOf` preorder term]
+                        inEvent = sum [value | (value, True) <- within]
+                    if inEvent == 0
+                        then (reach, name, prefix, after Map.! prefix) `shouldBe` (reach, name, prefix, Just 0)
+                        else
+                            (reach, name, prefix, close (inEvent / sum (map fst within)) <$> after Map.! prefix)
+                                `shouldBe` (reach, name, prefix, Just True)
+                    -- P(x | p, E) P(E | p) = P(x | p) P(E | p <> [x])
+                    let lookahead = fromMaybe [] $ Mixture.nextTokenProbabilities conditioned prefix
+                    forM_ (fromJust $ Mixture.nextTokenProbabilities mixture prefix) $ \(token, value) ->
+                        ( reach
+                        , name
+                        , prefix
+                        , token
+                        , close
+                            (fromMaybe 0 (lookup token lookahead) * probabilityAfter prefix)
+                            (value * probabilityAfter (prefix <> [token]))
+                        )
+                            `shouldBe` (reach, name, prefix, token, True)
+                forM_ [[("x", 0), ("y", 0)], [("neg", 2)]] $ \prefix ->
+                    (reach, name, prefix, Mixture.eventProbability conditioned prefix) `shouldBe` (reach, name, prefix, Nothing)
+        it "gives the mixture given both events when it conditions twice" $
+            forM_ mixtures $ \(reach, mixture) -> do
+                let twice = fromJust $ Mixture.condition rootAdd =<< Mixture.condition withoutY mixture
+                    both =
+                        FTA.intersectWith (\left right -> if left == right then Just left else Nothing) (\_ _ -> noConstraint) withoutY rootAdd
+                    once = fromJust $ Mixture.condition both mixture
+                (reach, masses twice) `shouldBe` (reach, masses once)
+                forM_ prefixes $ \prefix ->
+                    (reach, prefix, close <$> Mixture.eventProbability twice prefix <*> Mixture.eventProbability once prefix)
+                        `shouldBe` (reach, prefix, Just True)
+        it "gives the completions of a prefix with the largest probabilities given an event, the most probable first" $
+            forM_ given $ \(reach, name, event, mixture, conditioned) ->
+                forM_ prefixes $ \prefix -> do
+                    -- The terms of the event with the prefix, each with its probability before the event.
+                    let within =
+                            Map.fromList
+                                [(term, probability mixture term) | term <- terms, FTA.accepts event term, prefix `isPrefixOf` preorder term]
+                        total = sum within
+                        expected = sortOn Down $ map (/ total) $ Map.elems within
+                        near left right = abs (left - right) < 1e-9
+                        every = Mixture.bestTerms (Map.size within + 1) conditioned prefix
+                    if Map.null within
+                        then (reach, name, prefix, every) `shouldBe` (reach, name, prefix, Nothing)
+                        else forM_ [1, 2, 5, Map.size within + 1] $ \count -> do
+                            let found = fromJust $ Mixture.bestTerms count conditioned prefix
+                            (reach, name, prefix, count, length found, and $ zipWith near (map snd found) expected)
+                                `shouldBe` (reach, name, prefix, count, min count (Map.size within), True)
+                            forM_ found $ \(term, value) ->
+                                (reach, name, prefix, count, term, near value . (/ total) <$> Map.lookup term within)
+                                    `shouldBe` (reach, name, prefix, count, term, Just True)
+                            (reach, name, prefix, count, nubOrd $ map fst found) `shouldBe` (reach, name, prefix, count, map fst found)
+                            (reach, name, prefix, count, found) `shouldBe` (reach, name, prefix, count, take count $ fromJust every)
+        it "is the model given the event when the corpus has one group" $
+            forM_ reaches $ \reach -> do
+                let mixture = fromJust $ Mixture.train reach expressions 5 [corpus]
+                    model = fromJust $ Model.train reach expressions 5 corpus
+                forM_ events $ \(name, event) -> do
+                    let conditioned = fromJust $ Mixture.condition event mixture
+                        expected = fromJust $ Model.condition event model
+                    forM_ terms $ \term ->
+                        ( reach
+                        , name
+                        , term
+                        , close <$> fmap exp (Mixture.termLogProbability conditioned term) <*> fmap exp (Model.termLogProbability expected term)
+                        )
+                            `shouldBe` (reach, name, term, if FTA.accepts event term then Just True else Nothing)
+                    forM_ prefixes $ \prefix ->
+                        (reach, name, prefix, close <$> Mixture.eventProbability conditioned prefix <*> Model.eventProbability expected prefix)
+                            `shouldBe` (reach, name, prefix, Just True)
+        it "gives no mixture for an event with a constraint or without a term in the bound" $
+            forM_ mixtures $ \(reach, mixture) -> do
+                (reach, isNothing $ Mixture.condition doubles mixture) `shouldBe` (reach, True)
+                -- A term with six nodes, beyond the bound.
+                let deep = iterate (Term.Node "neg" . pure) (Term.Node "x" []) !! 5
+                (reach, isNothing $ Mixture.condition (FTA.fromTerms [deep]) mixture) `shouldBe` (reach, True)
 
 -- | The log partition and expected count of one Bernoulli feature, with a constant offset.
 bernoulliOracle :: Double -> Oracle String
@@ -299,6 +655,27 @@ ambiguousExpressions =
         FTA.mkFTA
             "e"
             [ ("e", [node "x" [], node "y" [], node "neg" ["e"], node "add" ["e", "e"], node "add" ["v", "e"]])
+            , ("v", [node "x" [], node "y" []])
+            ]
+  where
+    node symbol children = FTA.Transition symbol children noConstraint
+
+-- | The event that a term has no y.
+withoutY :: FTA.FTA String String Constraint
+withoutY =
+    either (error . show) id $
+        FTA.mkFTA "e" [("e", [node "x" [], node "neg" ["e"], node "add" ["e", "e"]])]
+  where
+    node symbol children = FTA.Transition symbol children noConstraint
+
+-- | The event that the root is add. The terms add(x, e) and add(y, e) have two runs: an ambiguous event.
+rootAdd :: FTA.FTA String String Constraint
+rootAdd =
+    either (error . show) id $
+        FTA.mkFTA
+            "r"
+            [ ("r", [node "add" ["e", "e"], node "add" ["v", "e"]])
+            , ("e", [node "x" [], node "y" [], node "neg" ["e"], node "add" ["e", "e"]])
             , ("v", [node "x" [], node "y" []])
             ]
   where

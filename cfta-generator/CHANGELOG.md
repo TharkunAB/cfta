@@ -229,7 +229,8 @@ tree automata of `cfta`, with QuickCheck integration.
   `bestCompletions` gives the completions with the largest weights. Without
   constraints, it reads them from the count table without a list of the
   completions. `completionWeightBy` gives the total weight for a weight of
-  each symbol in any number type.
+  each symbol in any number type, and `weightOfTerm` gives the weight of one
+  term.
 - `Data.CFTA.Sized.Prefix.QuickCheck`: `sampleCompletion` draws a rank of the
   completions uniformly and unranks it, and `sampleWeighted` is the
   QuickCheck generator of `lowerCompletions`. Without constraints, it is the
@@ -262,6 +263,36 @@ tree automata of `cfta`, with QuickCheck integration.
   `bestTerms` gives the completions with the largest probabilities.
   `termLogProbability` gives the log-probability of a term, and
   `withTemperature` sets the temperature of whole terms.
+- `Model.condition` gives the model given an event: the terms that a second
+  automaton without constraints accepts, each with its probability divided
+  by the probability of the event. The other queries of the model read only
+  the terms of the event. `Model.eventProbability` gives the probability of
+  the event after a prefix, in the model before `condition`, for the
+  lookahead of constrained decoding (GeLaTo, arXiv:2304.07438). Conditioning
+  and `withTemperature` commute, and conditioning twice gives the model given
+  both events.
+- `Data.CFTA.Sized.Prefix.Mixture`: a mixture of models, for a property of
+  the whole term that the bounded context of one model cannot hold. A mixture
+  has components, each with a share and the weights of one model. The
+  probability of a term is the sum, over the components, of the share times
+  the probability of the term in the component. `train` fits the components
+  to a corpus that the caller splits into groups, with expectation
+  maximization (`distillMixture` of `Data.CFTA.Sized.Prefix.Train`). For a
+  prefix of tokens, `nextTokenProbabilities` gives the probability of each
+  next token, `componentProbabilities` gives the probability of each
+  component, `sampleTerm` and `lowerTerm` draw a completion in proportion to
+  its probability, and `bestTerms` gives the completions with the largest
+  probabilities. `bestTerms` finds them with the threshold algorithm of
+  Fagin, Lotem, and Naor over the components. `termLogProbability` gives the
+  log-probability of a term. The components have one count table.
+- `Mixture.condition` gives the mixture given an event, as `Model.condition`
+  gives the model given an event. It is the mixture of the components given
+  the event. The new share of a component is its share times the probability
+  of the event in the component, over the probability of the event, and the
+  new shares are exact. `Mixture.eventProbability` gives the probability of
+  the event after a prefix, in the mixture before `condition`, for the
+  lookahead of constrained decoding. Conditioning twice gives the mixture
+  given both events.
 - Terms are `Term symbol` from `Data.CFTA.Term` of `cfta`:
   `fromAutomaton`, `fromAutomatonUpToDepth`, `termAt`, `rankOf`, `ranksOf`,
   `rankOfTerm`, `surface`, and the refinement witnesses take and give `Term`

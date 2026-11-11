@@ -19,6 +19,9 @@ change.
 The root of a term has a context too: 'rootContext' for a term that is not
 the child of a node, or the ancestors and the left sibling of a position
 outside the term, as for a hole in an expression.
+
+'intersectEvent' keeps the labelled terms of an event: the terms that an
+automaton over the plain symbols accepts.
 -}
 module Data.CFTA.Sized.Prefix.Parents (
     Reach (..),
@@ -29,10 +32,13 @@ module Data.CFTA.Sized.Prefix.Parents (
     labelParents,
     unlabelParents,
     labelPrefix,
+    intersectEvent,
+    numbered,
 ) where
 
 import Data.Containers.ListUtils (nubOrd)
 import Data.Either (fromRight)
+import qualified Data.Map.Strict as Map
 import qualified Data.Set as Set
 
 import qualified Data.CFTA as FTA
@@ -146,6 +152,32 @@ labelPrefix reach root = go [[within reach root]]
         children = [childContext reach token context position Nothing | position <- [0 .. count - 1]]
         next (sibling : others) = within reach sibling{contextLeftSibling = Just token} : others
         next [] = []
+
+{- | The product of a labelled automaton and an event, with the states
+numbered ('numbered'). The event is an automaton over the plain symbols. A
+labelled symbol matches an event symbol when its plain symbol is the event
+symbol. The product keeps the labelled symbol. So the product accepts each
+labelled term of the automaton whose term ('unlabelParents') the event
+accepts. 'Nothing' when a transition of the event has a constraint other
+than 'noConstraint': an equality constraint compares the subterms at two
+paths, and their labelled subterms have different contexts.
+-}
+intersectEvent ::
+    (Ord state, Eq symbol) =>
+    FTA.FTA state symbol Constraint ->
+    FTA.FTA Int (Parented symbol) Constraint ->
+    Maybe (FTA.FTA Int (Parented symbol) Constraint)
+intersectEvent event labelled
+    | any (any ((/= noConstraint) . FTA.transitionConstraint)) (FTA.transitionTable event) = Nothing
+    | otherwise = Just $ numbered $ FTA.intersectWith match (\_ _ -> noConstraint) labelled event
+  where
+    match label symbol = if fst (fst label) == symbol then Just label else Nothing
+
+-- | An automaton with each state renamed to its position in the ascending order of the states.
+numbered :: (Ord state) => FTA.FTA state symbol constraint -> FTA.FTA Int symbol constraint
+numbered automaton = FTA.mapStates (numbers Map.!) automaton
+  where
+    numbers = Map.fromList $ zip (FTA.states automaton) [0 ..]
 
 -- | The context of the child of a node at a position, with the root token of its left sibling.
 childContext :: Reach -> Token symbol -> Context symbol -> Int -> Maybe (Token symbol) -> Context symbol
