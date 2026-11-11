@@ -30,3 +30,12 @@ direct-child equality backend. Only the positive case was executed here.
 A separate bound-1025 mixture probe timed out after 3 minutes, with exit 124.
 It did not return a mixture. An empty mixture and downstream exceptions remain
 source-derived concerns. They are not observations from this packet.
+
+## Historical source snapshot
+
+Main PR207 (a248ab6aa) repairs this failure. The checker above retains its
+OLD source hashes and failing output. Run it at the historical snapshot,
+not against the repaired Train.hs. The current regression is in the
+sibling 20261111-training-oracle-stable-logarithms packet. Its assertions
+check both oracle paths at log-weights 400 and -400. This packet's old
+observations remain unchanged.

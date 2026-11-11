@@ -1,0 +1,56 @@
+{
+  "at": "2026-11-11T21:15:13.279743+01:00",
+  "source_hashes": {
+    "cfta-generator/src/Data/CFTA/Sized/Prefix/Train.hs": "037580f31052e49d3f75ca18ebbe2fdb45f4421b3e72953d27105195eb75e615",
+    "cfta-generator/src/Data/CFTA/Sized/Prefix.hs": "1623ff3856918360d175e1b5da4d4e9d584e2fac6f854b781a75e8eaa2e4e02f",
+    "cfta-generator/src/Data/CFTA/Gen/Internal/Table.hs": "03fcbf7b7a24978672683108cb0df9bb2bd2236283882fc1c06c8648996213e9",
+    "cfta-generator/src/Data/CFTA/Gen/Internal/Join.hs": "d97c946575f5a162cccc504f94282fef0ef8ab03ccd6817e3d297e915c58f18d",
+    "cfta-generator/src/Data/CFTA/Sized/Prefix/Mixture.hs": "7265358bed4a504409fd3346d59df36956295843ea4607659144424408d4f787",
+    "cfta-generator/test/Data/CFTA/Sized/Prefix/TrainSpec.hs": "d45ed52792541cd40c4c94606c42162bfd473837b4534466fd9617b86d37dbb5",
+    "cfta-generator/CHANGELOG.md": "5246a5ddcb96c5f9c4ae705d7639ec252331fe1442ea07a24361a69f66fb8eb0"
+  },
+  "repro_sha256": "282819967b04866ac83fef1f2b4e801b1491e642a8907d724fd09eb596f6b33a",
+  "limits": {
+    "memory.max": "4294967296",
+    "memory.high": "4294967296",
+    "memory.swap.max": "0"
+  },
+  "commands": [
+    [
+      "fourmolu",
+      "--mode",
+      "check",
+      "/home/tritlo/Code/mcfta/lean/restart-evidence/20261111-training-oracle-stable-logarithms/repro.hs"
+    ],
+    [
+      "cabal",
+      "build",
+      "cfta-generator:lib:cfta-generator",
+      "--offline",
+      "--disable-optimization",
+      "-j1"
+    ],
+    [
+      "cabal",
+      "exec",
+      "--offline",
+      "--",
+      "runghc-9.14.1",
+      "-package-id=cfta-0.1.0.0-inplace",
+      "-package-id=cfta-generator-0.1.0.0-inplace",
+      "/home/tritlo/Code/mcfta/lean/restart-evidence/20261111-training-oracle-stable-logarithms/repro.hs"
+    ]
+  ],
+  "observed": "weight=400 completion=(800,2) grouped=(800,2)\nweight=-400 completion=(-800,2) grouped=(-800,2)\n",
+  "correct_log_partition": 800,
+  "correct_expected_count_a": 2,
+  "historical_failure_fixed": true,
+  "numerical_contract_satisfied": true,
+  "log_weights_checked": [
+    400,
+    -400
+  ],
+  "tolerance": 1e-09,
+  "historical_packet": "20261111-training-oracle-overflow",
+  "whole_training_formalized": false
+}

@@ -1,0 +1,61 @@
+{
+  "at": "2026-11-11T21:14:02.270723+01:00",
+  "main": "a248ab6aa4b29571fc7ec5331640aaccf2850f79",
+  "limits": {
+    "memory.max": "4294967296",
+    "memory.high": "4294967296",
+    "memory.swap.max": "0"
+  },
+  "source_hashes": {
+    "cfta-generator/CHANGELOG.md": "5246a5ddcb96c5f9c4ae705d7639ec252331fe1442ea07a24361a69f66fb8eb0",
+    "cfta-generator/src/Data/CFTA/Sized/Prefix/Mixture.hs": "7265358bed4a504409fd3346d59df36956295843ea4607659144424408d4f787",
+    "cfta-generator/src/Data/CFTA/Sized/Prefix/Train.hs": "037580f31052e49d3f75ca18ebbe2fdb45f4421b3e72953d27105195eb75e615",
+    "cfta-generator/test/Data/CFTA/Sized/Prefix/TrainSpec.hs": "d45ed52792541cd40c4c94606c42162bfd473837b4534466fd9617b86d37dbb5"
+  },
+  "all_snapshots_exact": true,
+  "results": [
+    {
+      "step": "fourmolu",
+      "command": "fourmolu --mode check cfta-generator/src/Data/CFTA/Sized/Prefix/Mixture.hs cfta-generator/src/Data/CFTA/Sized/Prefix/Train.hs cfta-generator/test/Data/CFTA/Sized/Prefix/TrainSpec.hs",
+      "exit": 0,
+      "seconds": 1.19,
+      "summaries": []
+    },
+    {
+      "step": "cabal-gild",
+      "command": "cabal-gild --mode check --input cfta-generator/cfta-generator.cabal",
+      "exit": 0,
+      "seconds": 0.45,
+      "summaries": []
+    },
+    {
+      "step": "gen-tests",
+      "command": "cabal test cfta-generator:gen-tests --offline --disable-optimization -j1 --test-show-details=direct --test-options=\"+RTS -N1 -M2G -RTS\"",
+      "exit": 0,
+      "seconds": 71.17,
+      "summaries": [
+        "Test suite gen-tests: RUNNING...",
+        "529 examples, 0 failures",
+        "Test suite gen-tests: PASS",
+        "Test suite logged to:"
+      ]
+    },
+    {
+      "step": "loaded-dice",
+      "command": "cabal run cfta-generator:cfta-loaded-dice --offline --disable-optimization -j1 -- check +RTS -M2G -RTS",
+      "exit": 0,
+      "seconds": 7.5,
+      "summaries": [
+        "PASS: exact masses, requested classes, bounded samples, and rank replay."
+      ]
+    },
+    {
+      "step": "explainfuzz",
+      "command": "cabal run cfta-generator:cfta-explainfuzz --offline --disable-optimization -j1 -- check +RTS -M2G -RTS",
+      "exit": 0,
+      "seconds": 5.59,
+      "summaries": []
+    }
+  ],
+  "passed": true
+}
