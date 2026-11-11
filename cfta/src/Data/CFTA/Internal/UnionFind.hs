@@ -82,9 +82,12 @@ intToUVar = UVar
 -------- Union-find data structure
 ---------------------------
 
+-- The number of members of a Root is at most its size. The bound is not an
+-- equality, because the specification of IntSet.union does not say that the
+-- two sets are disjoint.
 {-@ data Entry
       = Parent {entryParent :: UVar}
-      | Root {entrySize :: {v:Int | 0 < v}, entryMembers :: IntSet}
+      | Root {entrySize :: {v:Int | 0 < v}, entryMembers :: {s:IntSet | intSetSize s <= entrySize}}
 @-}
 
 {- | What the forest stores for one variable.
