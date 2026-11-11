@@ -1,0 +1,50 @@
+{
+  "at": "2026-11-11T20:00:33.117748+01:00",
+  "source_hashes": {
+    "cfta/src/Data/CFTA/Enumeration.hs": "26236dc68be7019b28c10d4b42d1bbecf89f9145c41bad7977fc177332b597f8",
+    "cfta/src/Data/CFTA/Equality.hs": "d15b61e5be06bd92ec9893ea8b44aad7277344d9be726a785dbb51d02f1e1837",
+    "cfta/src/Data/CFTA/Symbol.hs": "31983078475d136d2e69f5d94461f56f7c2fa3b3822144be1eee324ba0637f02",
+    "cfta/src/Data/CFTA/Term.hs": "9201ca9e5f7a7a5dc89b3737b71e406c2245cec2a36aa68ae32fb3eef8572e3f"
+  },
+  "repro_sha256": "cf1cb55aabb637720d2b810a64cf9ce62c06dff056af5b49e0dda916dd265b76",
+  "limits": {
+    "memory.max": "4294967296",
+    "memory.high": "4294967296",
+    "memory.swap.max": "0"
+  },
+  "commands": [
+    [
+      "fourmolu",
+      "--mode",
+      "check",
+      "/home/tritlo/Code/mcfta/lean/restart-evidence/20261111-default-driver-order-boundary/repro.hs"
+    ],
+    [
+      "cabal",
+      "build",
+      "cfta:lib:cfta",
+      "--offline",
+      "--disable-optimization",
+      "-j1"
+    ],
+    [
+      "cabal",
+      "exec",
+      "--offline",
+      "--",
+      "runghc-9.14.1",
+      "-package-id=cfta-0.1.0.0-inplace",
+      "/home/tritlo/Code/mcfta/lean/restart-evidence/20261111-default-driver-order-boundary/repro.hs"
+    ]
+  ],
+  "observed": "eager=[Node \"r\" [Node \"f\" [Node \"a\" []],Node \"c\" []],Node \"r\" [Node \"f\" [Node \"a\" []],Node \"d\" []],Node \"r\" [Node \"f\" [Node \"b\" []],Node \"c\" []],Node \"r\" [Node \"f\" [Node \"b\" []],Node \"d\" []]]\nshallow_raw=[Node (ConcreteSymbol \"r\") [Node (ConcreteSymbol \"f\") [Node (ConcreteSymbol \"a\") []],Node (ConcreteSymbol \"c\") []],Node (ConcreteSymbol \"r\") [Node (ConcreteSymbol \"f\") [Node (ConcreteSymbol \"b\") []],Node (ConcreteSymbol \"c\") []],Node (ConcreteSymbol \"r\") [Node (ConcreteSymbol \"f\") [Node (ConcreteSymbol \"a\") []],Node (ConcreteSymbol \"d\") []],Node (ConcreteSymbol \"r\") [Node (ConcreteSymbol \"f\") [Node (ConcreteSymbol \"b\") []],Node (ConcreteSymbol \"d\") []]]\nshallow_concrete=Just [Node \"r\" [Node \"f\" [Node \"a\" []],Node \"c\" []],Node \"r\" [Node \"f\" [Node \"b\" []],Node \"c\" []],Node \"r\" [Node \"f\" [Node \"a\" []],Node \"d\" []],Node \"r\" [Node \"f\" [Node \"b\" []],Node \"d\" []]]\n(\"eager_matches_prediction\",True)\n(\"shallow_matches_prediction\",True)\n(\"same_order\",False)\n(\"same_multiset\",True)\n(\"eager_residuals_empty\",True)\n(\"counts\",4,Just 4)\n",
+  "fixture_same_multiset": true,
+  "fixture_eager_count": 4,
+  "fixture_shallow_count": 4,
+  "ordering_counterexample_reproduced": true,
+  "ordered_equivalence": false,
+  "runtime_haskell": true,
+  "runtime_lean": false,
+  "public_program_projection_counterexample": false,
+  "production_behavior_bug_established": false
+}
