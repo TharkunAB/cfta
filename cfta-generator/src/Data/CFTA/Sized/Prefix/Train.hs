@@ -355,7 +355,7 @@ expectedCounts weight completions = (total, Map.map (/ total) derivatives)
 negative infinity. The sum, the product, and the quotient use the logarithms
 only, so a number outside the range of 'Double' keeps its value.
 'completionWeightBy' uses the sum, the product, and 'fromInteger'.
-'expectedCounts' also uses the quotient.
+'expectedCounts' and 'groupedOracle' also use the quotient.
 -}
 newtype LogNumber = LogNumber {logarithm :: Double}
 
@@ -415,7 +415,10 @@ logLikelihood oracle counts logWeights = (value, gradient)
     gradient = Map.unionWith (+) counts (Map.map negate expected)
 
 {- | What a fit reads of a language: its symbols, and for log-weights, the
-logarithm of the total weight and the expected count of each symbol.
+logarithm of the total weight and the expected count of each symbol. The
+oracles of this module calculate with the logarithms of the weights
+('LogNumber'). Thus a total weight outside the range of 'Double' gives a
+correct logarithm and correct expected counts.
 -}
 data Oracle symbol = Oracle
     { oracleSymbols :: [symbol]
@@ -496,12 +499,16 @@ symbol sums, over the transitions with the symbol and the multipliers, m times
 the weight times the outside weight times the convolution, over the total
 weight: the derivative of w^m by the log-weight is m w^m. A multiplier above
 the bound reads no term, so the tables are finite.
+
+The tables hold 'LogNumber': the logarithms of the weights. Thus a weight
+outside the range of 'Double' keeps its value. An expected count is at most
+the bound, so it is a 'Double'.
 -}
 groupedOracle :: (Ord key, Ord symbol) => key -> Map.Map key [(symbol, [(key, Int)])] -> Int -> Oracle symbol
 groupedOracle root rows bound =
     Oracle
         { oracleSymbols = Set.toAscList $ Set.fromList [symbol | (_, symbol, _) <- transitions]
-        , oracleLogPartition = \logWeights -> log $ total (tables logWeights)
+        , oracleLogPartition = logarithm . total . tables
         , oracleExpectations = expectations
         }
   where
@@ -534,14 +541,14 @@ groupedOracle root rows bound =
                 )
     nodeNumber = Map.fromList (zip nodes [0 :: Int ..])
     sizes = [0 .. bound]
-    poweredWeight logWeights symbol multiplier = exp $ fromIntegral multiplier * Map.findWithDefault 0 symbol logWeights
+    poweredWeight logWeights symbol multiplier = LogNumber $ fromIntegral multiplier * Map.findWithDefault 0 symbol logWeights
     total (insideAt, _) = sum [insideAt rootNode size | size <- [1 .. bound]]
     -- The inside weights of the nodes, and the convolution of the groups of each transition at each multiplier, all as lazy arrays.
     tables logWeights = (insideAt, convolutionOf)
       where
         insideArray =
             listArray ((0, 0), (length nodes - 1, bound)) [value node size | node <- nodes, size <- sizes] ::
-                Array (Int, Int) Double
+                Array (Int, Int) LogNumber
         insideAt node size = maybe 0 (\number -> insideArray ! (number, size)) (Map.lookup node nodeNumber)
         value (key, multiplier) size
             | size < 1 = 0
@@ -558,7 +565,7 @@ groupedOracle root rows bound =
                 ]
         convolutionOf entry = convolutions LazyMap.! entry
     -- The convolution of groups at a multiplier, as an array over the sizes: a group of r positions reads its key with r times the multiplier, at r times the size.
-    convolve insideAt multiplier = foldr step (listArray (0, bound) (1 : replicate bound 0) :: Array Int Double)
+    convolve insideAt multiplier = foldr step (listArray (0, bound) (1 : replicate bound 0) :: Array Int LogNumber)
       where
         step (child, factor) rest =
             listArray
@@ -570,7 +577,7 @@ groupedOracle root rows bound =
                     ]
                 | size <- sizes
                 ]
-    expectations logWeights = (log grand, Map.map (/ grand) counts)
+    expectations logWeights = (logarithm grand, Map.map (exp . logarithm . (/ grand)) counts)
       where
         built@(insideAt, convolutionOf) = tables logWeights
         grand = total built
@@ -595,7 +602,7 @@ groupedOracle root rows bound =
                 ]
         outsideArray =
             listArray ((0, 0), (length nodes - 1, bound)) [outsideValue node size | node <- nodes, size <- sizes] ::
-                Array (Int, Int) Double
+                Array (Int, Int) LogNumber
         outsideAt node size = outsideArray ! (nodeNumber Map.! node, size)
         outsideValue node size
             | size < 1 = 0

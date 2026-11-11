@@ -630,6 +630,20 @@ spec = describe "Data.CFTA.Sized.Prefix.Train" $ do
                 oracleGives (completionsOracle $ completionsOf 2 nested) (Map.singleton "a" weight) (2 * weight, Map.singleton "a" 2)
         it "keeps a term whose weights underflow in a product, from the completions" $
             oracleGives (completionsOracle $ completionsOf 3 bigOrOther) bigOrOtherWeights bigOrOtherExpected
+        it "gives the log-partition and the expected counts of a(a) with the log-weights 400 and -400, from the automaton" $
+            forM_ [400, -400] $ \weight ->
+                oracleGives (automatonOracle nested 2) (Map.singleton "a" weight) (2 * weight, Map.singleton "a" 2)
+        it "keeps a term whose weights underflow in a product, from the automaton and from the intersections" $ do
+            oracleGives (automatonOracle bigOrOther 3) bigOrOtherWeights bigOrOtherExpected
+            oracleGives (fromJust $ constrainedOracle bigOrOther 3) bigOrOtherWeights bigOrOtherExpected
+        it "gives the log-partition and the expected counts of equal children with log-weights near 400, from the intersections" $
+            -- The term f(a, a) has the log-weight -400 + 2 * 400 = 400, and f(b, b) has -400 + 2 * (400 + log 2) =
+            -- 400 + log 4. So the total weight is 5 exp(400), and f(a, a) has the probability 1 / 5. The expected
+            -- counts are f = 1, a = 2 * 1 / 5 = 0.4, and b = 2 * 4 / 5 = 1.6.
+            oracleGives
+                (fromJust $ constrainedOracle equalPairs 3)
+                (Map.fromList [("f", -400), ("a", 400), ("b", 400 + log 2)])
+                (400 + log 5, Map.fromList [("a", 0.4), ("b", 1.6), ("f", 1)])
 
 -- | Expect an oracle to give, at the log-weights, the logarithm of the total weight and the expected counts, each within @1e-9@.
 oracleGives :: Oracle String -> LogWeights String -> (Double, Map.Map String Double) -> Expectation
@@ -658,6 +672,15 @@ bigOrOther =
         FTA.mkFTA "r" [("r", [node "big" ["s", "s"], node "other" []]), ("s", [node "small" []])]
   where
     node symbol children = FTA.Transition symbol children noConstraint
+
+-- | The terms f(a, a) and f(b, b): the two children of f are equal.
+equalPairs :: FTA.FTA String String Constraint
+equalPairs =
+    either (error . show) id $
+        FTA.mkFTA "r" [("r", [FTA.Transition "f" ["c", "c"] equal]), ("c", [node "a" [], node "b" []])]
+  where
+    node symbol children = FTA.Transition symbol children noConstraint
+    equal = equalityConstraint $ ECTA.mkEqConstraints [[ECTA.path [0], ECTA.path [1]]]
 
 {- | Log-weights of 'bigOrOther'. The weight of small squared is below the
 smallest 'Double', and the weight of big times it is not.
