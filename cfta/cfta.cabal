@@ -140,9 +140,12 @@ library
     -- Without --smtsolver, the plugin looks for four SMT solvers in each
     -- directory of the PATH, two times in each module. On WSL2, with the
     -- Windows directories in the PATH, this takes about 0.4 s in each module.
+    -- Without --no-annotations, the plugin writes HTML and JSON files into
+    -- a .liquid directory next to each checked source file.
     ghc-options:
       -fplugin=LiquidHaskell
       -fplugin-opt=LiquidHaskell:--smtsolver=z3
+      -fplugin-opt=LiquidHaskell:--no-annotations
 
 test-suite unit-tests
   import: warnings, extensions
