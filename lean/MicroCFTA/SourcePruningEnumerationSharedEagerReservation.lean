@@ -222,3 +222,160 @@ theorem first_row_callback_le_final (depth : Nat) (seed : Seed) (ceiling : Nat)
   simpa only [heightSame, fallbackPlan, captured, limit, own, eagerFinal] using included
 
 end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+open SourceCurrentAllocatedNativeResourceForecast (Le Room)
+open SourcePruningEnumerationSharedIncomingReservation (Seed advance)
+open SourcePruningEnumerationFiniteReservation (iterate iterate_ge iterate_add)
+open SourcePruningEnumerationSharedPreparedReservation (preparedSeed)
+local notation "scalar" => SourceCurrentConstrainedCapTargetForecast.scalar
+
+private def fallbackReserved (bits bound ceiling : Nat)
+    (admitted : Nat → Seed → Prop) (seed : Seed) : Prop :=
+  SourcePruningEnumerationSharedIncomingReservation.Reserved bits seed (bound + 1) ∧
+    admitted (ceiling + bound) (advance seed (bound + 1))
+
+private def tupleReserved
+    (child : Nat → Nat → (Nat → Seed → Seed) → Seed → Seed)
+    (childReserved : Nat → Nat → (Nat → Seed → Seed) → (Nat → Seed → Prop) → Seed → Prop) :
+    Nat → Nat → Nat → (Nat → Seed → Seed) → (Nat → Seed → Prop) → Seed → Prop
+  | 0, _bound, ceiling, _continuation, admitted, seed => admitted ceiling seed
+  | count + 1, bound, ceiling, continuation, admitted, seed =>
+      childReserved bound ceiling
+        (fun retained current => tuplePlan child count bound retained continuation current)
+        (fun retained current => tupleReserved child childReserved count bound retained continuation admitted current)
+        seed
+
+private def nodeReserved (bits limit own : Nat) :
+    Nat → Nat → Nat → (Nat → Seed → Seed) → (Nat → Seed → Prop) → Seed → Prop
+  | 0, bound, ceiling, _continuation, admitted, seed => fallbackReserved bits bound ceiling admitted seed
+  | height + 1, bound, ceiling, continuation, admitted, seed =>
+      let first := fallbackPlan bound ceiling continuation seed
+      let row := fun current => tuplePlan (nodePlan limit own height)
+        limit (bound + own) ceiling continuation current
+      fallbackReserved bits bound ceiling admitted seed ∧
+        ∀ index, index < limit →
+          tupleReserved (nodePlan limit own height) (nodeReserved bits limit own height)
+            limit (bound + own) ceiling continuation admitted (iterate row first index)
+
+/-- Check native entry admission at every stage of the original ordered plan. -/
+def eagerReserved (bits : Nat) : Nat → Seed → Nat → Prop
+  | 0, _seed, _ceiling => True
+  | depth + 1, seed, ceiling =>
+      let captured := preparedSeed seed
+      let limit := scalar captured.2
+      let own := SourcePruningEnumerationGuardWidth.width captured.1
+      nodeReserved bits limit own limit ceiling ceiling
+        (fun retained current => eagerFinal depth current retained)
+        (fun retained current => eagerReserved bits depth current retained) captured
+
+private theorem iterate_index_le
+    (next : Seed → Seed)
+    (growth : ∀ current, Le current.2 (next current).2 ∧ current.1 ⊆ (next current).1)
+    (seed : Seed) (first last : Nat) (counts : first ≤ last) :
+    Le (iterate next seed first).2 (iterate next seed last).2 ∧
+      (iterate next seed first).1 ⊆ (iterate next seed last).1 := by
+  obtain ⟨extra, rfl⟩ := Nat.exists_eq_add_of_le counts
+  rw [iterate_add]
+  exact iterate_ge next growth (iterate next seed first) extra
+
+private theorem fallbackReserved_of_room (bits bound ceiling : Nat)
+    (continuation : Nat → Seed → Seed) (admitted : Nat → Seed → Prop)
+    (growth : ∀ retained current, Le current.2 (continuation retained current).2 ∧
+      current.1 ⊆ (continuation retained current).1)
+    (accepted : ∀ retained current, Room bits (continuation retained current).2 → admitted retained current)
+    (seed : Seed) (room : Room bits (fallbackPlan bound ceiling continuation seed).2) :
+    fallbackReserved bits bound ceiling admitted seed := by
+  have later := growth (ceiling + bound) (advance seed (bound + 1))
+  exact ⟨SourcePruningEnumerationSharedIncomingReservation.reserved_of_final_room
+      bits seed (bound + 1) (room.mono later.1),
+    accepted (ceiling + bound) (advance seed (bound + 1)) room⟩
+
+private theorem tupleReserved_of_room (bits : Nat)
+    (child : Nat → Nat → (Nat → Seed → Seed) → Seed → Seed)
+    (childReserved : Nat → Nat → (Nat → Seed → Seed) → (Nat → Seed → Prop) → Seed → Prop)
+    (childGrowth : ∀ bound ceiling continuation,
+      (∀ retained current, Le current.2 (continuation retained current).2 ∧
+        current.1 ⊆ (continuation retained current).1) →
+      ∀ seed, Le seed.2 (child bound ceiling continuation seed).2 ∧
+        seed.1 ⊆ (child bound ceiling continuation seed).1)
+    (childRoom : ∀ bound ceiling continuation admitted,
+      (∀ retained current, Le current.2 (continuation retained current).2 ∧
+        current.1 ⊆ (continuation retained current).1) →
+      (∀ retained current, Room bits (continuation retained current).2 → admitted retained current) →
+      ∀ seed, Room bits (child bound ceiling continuation seed).2 →
+        childReserved bound ceiling continuation admitted seed)
+    (count : Nat) :
+    ∀ bound ceiling continuation admitted,
+      (∀ retained current, Le current.2 (continuation retained current).2 ∧
+        current.1 ⊆ (continuation retained current).1) →
+      (∀ retained current, Room bits (continuation retained current).2 → admitted retained current) →
+      ∀ seed, Room bits (tuplePlan child count bound ceiling continuation seed).2 →
+        tupleReserved child childReserved count bound ceiling continuation admitted seed := by
+  induction count with
+  | zero =>
+      intro bound ceiling continuation admitted growth accepted seed room
+      exact accepted ceiling seed room
+  | succ count ih =>
+      intro bound ceiling continuation admitted growth accepted seed room
+      exact childRoom bound ceiling
+        (fun retained current => tuplePlan child count bound retained continuation current)
+        (fun retained current => tupleReserved child childReserved count bound retained continuation admitted current)
+        (fun retained current => tuplePlan_ge child childGrowth count bound retained continuation growth current)
+        (fun retained current covered => ih bound retained continuation admitted growth accepted current covered)
+        seed room
+
+private theorem nodeReserved_of_room (bits limit own height : Nat) :
+    ∀ bound ceiling continuation admitted,
+      (∀ retained current, Le current.2 (continuation retained current).2 ∧
+        current.1 ⊆ (continuation retained current).1) →
+      (∀ retained current, Room bits (continuation retained current).2 → admitted retained current) →
+      ∀ seed, Room bits (nodePlan limit own height bound ceiling continuation seed).2 →
+        nodeReserved bits limit own height bound ceiling continuation admitted seed := by
+  induction height with
+  | zero =>
+      intro bound ceiling continuation admitted growth accepted seed room
+      exact fallbackReserved_of_room bits bound ceiling continuation admitted growth accepted seed room
+  | succ height ih =>
+      intro bound ceiling continuation admitted growth accepted seed room
+      let first := fallbackPlan bound ceiling continuation seed
+      let row := fun current => tuplePlan (nodePlan limit own height)
+        limit (bound + own) ceiling continuation current
+      have rowGrowth : ∀ current, Le current.2 (row current).2 ∧ current.1 ⊆ (row current).1 := by
+        intro current
+        exact tuplePlan_ge (nodePlan limit own height) (nodePlan_ge limit own height)
+          limit (bound + own) ceiling continuation growth current
+      have firstBelow := iterate_ge row rowGrowth first limit
+      constructor
+      · exact fallbackReserved_of_room bits bound ceiling continuation admitted growth accepted seed
+          (room.mono firstBelow.1)
+      · intro index less
+        have below := iterate_index_le row rowGrowth first (index + 1) limit (by omega)
+        have nextEntry : iterate row first (index + 1) = row (iterate row first index) := by
+          rw [iterate_add]
+          rfl
+        rw [nextEntry] at below
+        have rowRoom : Room bits (row (iterate row first index)).2 := room.mono below.1
+        exact tupleReserved_of_room bits (nodePlan limit own height) (nodeReserved bits limit own height)
+          (nodePlan_ge limit own height) ih limit (bound + own) ceiling continuation admitted growth accepted
+          (iterate row first index) rowRoom
+
+/-- Room at the computed original plan supplies every planned query entry. -/
+theorem eagerReserved_of_final_room (bits depth : Nat) (seed : Seed) (ceiling : Nat)
+    (room : Room bits (eagerFinal depth seed ceiling).2) :
+    eagerReserved bits depth seed ceiling := by
+  induction depth generalizing seed ceiling with
+  | zero => trivial
+  | succ depth ih =>
+      simp only [eagerReserved]
+      simp only [eagerFinal] at room
+      generalize preparedSeed seed = captured at room ⊢
+      generalize scalar captured.2 = limit at room ⊢
+      generalize SourcePruningEnumerationGuardWidth.width captured.1 = own at room ⊢
+      exact nodeReserved_of_room bits limit own limit ceiling ceiling
+        (fun retained current => eagerFinal depth current retained)
+        (fun retained current => eagerReserved bits depth current retained)
+        (fun retained current => eagerFinal_ge depth current retained)
+        (fun retained current covered => ih current retained covered) captured room
+
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
