@@ -1,3 +1,195 @@
+# Restart checkpoint: 2026-11-12, policy/head work and actual source membership
+
+Goal status is ACTIVE. Continue the FULL objective. Pushes to formalize remain
+authorized. Preserve .hypha/. Prior published checkpoint:
+7009cb54336d5b4832544378fda7e8d35ea1837a. Checked source head: 19aecc7d59f7876dc5e93bd28afa332c34fdc0d6.
+Integrated main: a248ab6aa4b29571fc7ec5331640aaccf2850f79; fresh fetch at 04:59 CET.
+Publish this complete checkpoint and verify the exact remote tip before new source work.
+
+## Strongest new native statement
+
+A compatible finite current assignment survives ONE actual chosen policy prefix,
+ONE admission and ONE preparation, followed by its accepting ordinary or opaque
+HEAD. The same complete resource/Post/global memo packet remains attached to its
+assignment extension. It preserves every old variable, fills, origins and inherited
+Holds. Ordinary P_after+1<=P_ORIGINAL and W_B_after<W_B_ORIGINAL hold. Opaque
+P_after=P_ORIGINAL and W_B_after+1=W_B_ORIGINAL hold. Returned storage is ProperState
+and its restart decision is not stuck. These are HEAD-boundary results before Left
+callback recursion and actual list reach; do not describe them as whole enumeration.
+
+The prepared-head producer calls the prior ordinary prepared producer ONCE and
+retains its complete common carrier and ordinary implication. The SAME carrier
+supplies one R225 opaque head and its entire resource/model/FinalizationAt packet.
+It takes CURRENT IncomingAvoid immediately after stored. Ready/properness alone do
+not imply this condition. Actual policy admission supplies it; SAME RenderStable
+moves it through preparation. No future-active premise appears. Properness and
+non-stuck progress refer to the SAME completed receipt and canonical assignment.
+
+The policy work producer calls prefix_complete ONCE, observes R225 exact target debit
+at its SAME PrefixValid/runPrefix equation, and retains the SAME model/proper/resource/
+admission outputs. It calls the prepared-head producer ONCE. Complementary prefix/head
+bits consume the originally chosen flag exactly once, including narrowing that clears
+it. Original stored/prepared handles remain distinct. All resources are retained;
+physical endpoint equality never substitutes for a global bundle or semantic witness.
+Its new inputs are fixed initialBound B and CURRENT pendingSize<=B. The three current
+unary/application/filter compatibility tests remain. No future assignment/heap/depth
+supplier was added. B is not yet derived from an original public input.
+
+Quantifiers remain: one prefix bound; for each larger actual prefix, its own later
+preparation/head bounds. This does NOT yet produce a FIXED diagonal common native
+workFuel. PrefixValid at every larger fuel does not make its native receipt fixed.
+Keep fixed-receipt stability/uniform forecasts separate from adequate recursive depth.
+
+## Strongest new source statement
+
+A source-admissible RelevantTyping derivation belongs to the union of its ACTUAL
+successful relevantRows output. The proof extracts actual split and offset mapM
+outputs with existing all₂_child and retains each last-name resolver winner.
+Recursive calls resolve the winner's take/drop names again. No assumption that a
+winner's physical rows survive slicing is used. Component instances remain per use.
+
+For any original library/query/signed size and literal firstOrderRaw .ok expression,
+a derivation at an ACTUAL root permutation with the rigid query-goal annotation
+belongs to that exact filter expression. The existing role-directed Program
+projection and Program.components=size.toNat follow. It uses actual permutation
+outputs and flatten/union/ofType; no future table-membership or arbitrary assignment
+supplier occurs in the source derivation. Generic application equality guards are
+already derived. Universe admission is required only at demanded scheme images and
+application RESULT annotations, not rigid argument/goal types in general.
+
+These are FirstOrder source syntax laws. Literal .ok is an OUTPUT IDENTITY and is
+still a hypothesis. They do not prove all-mapM/lookup totality or show that every
+ordinarily well-typed Program has an admissible derivation. Universe/pruning/role/
+winner conditions remain explicit extra source obligations. Curried, actual Haskell
+decoding and implementation correspondence remain separate.
+
+## Actual finite scan meaning and the reach gap
+
+ONE existing alternatives_finite_complete_resources call retains its ENTIRE Post,
+full memos, captured Packet, Fits/Heap, receipt/output bounds and stopped/complete
+shape. Its recursive completion is derived internally by finite_complete at the
+CURRENT explicit recursiveFuel. NativeLanguage.satisfies_keeps with current realized
+handles and SAME post.effects.keeps retains the ORIGINAL assignment at its certified
+native caller. The captured enumeration cache is unchanged. A stopped outcome may
+have no exposed endpoint; the statement keeps that distinction.
+
+The unconditional literal NativeContinuations.run_append equation is closed. A
+stopped prefix remains stopped. A completed prefix passes its exact caller/query to
+the suffix and appends the actual processed receipts/outputs. No future endpoint,
+model or capacity supplier is assumed. Existing ScanReserved.prefix/after_prefix
+already provides original reservations at reached prefixes; do not reprove them.
+
+REACH remains missing. Unsupported earlier rows and stopped recursive hooks halt
+later rows. Depth-zero expansion returns exhausted; a false callback propagates it;
+NativeContinuations.run lines 630-632 stops before later siblings. A true callback
+returns complete [] and permits the next sibling. Stable complete-or-stopped finite
+resources plus an accepting member do NOT prove that member is reached. Adequate
+source-derived recursion must cover those preceding hooks and supported rows. No
+native/Haskell divergence counterexample or production defect was established here.
+
+## Exact verification
+
+Four modules contain 1117 lines and six public laws:
+
+- SourcePruningEnumerationSharedPolicyPreparedWork.lean: 454 lines, 1 public laws;
+  SHA256 993a46ca72725b0a20ede116f8877dcef3fab7e6e7deadf1aafa1fca8cdd37e2.
+- SourcePruningEnumerationSharedPreparedHeadWork.lean: 313 lines, 1 public laws;
+  SHA256 5884f80a65df541fa722725810f91c1fd8e0c18cde2ac781dc9a5692258691f7.
+- SourcePruningEnumerationSharedScanModels.lean: 190 lines, 2 public laws;
+  SHA256 3a492a12679dddd7fe68a24dc79b05d343c6e5b553f395cef4c02a05dee22542.
+- SourceSynthesisSourceRelevantTyping.lean: 160 lines, 2 public laws;
+  SHA256 1128e61cd87b2523232bfcfceee710408331d78e43e6a43602f57fe858fa4117.
+
+All four strict focused checks PASS. Exact public names/namespaces/source hashes
+match. Own-source warnings are errors. Only standard Lean axioms occur. Full affected
+Audit PASS: 5,745 live modules, 5 affected, 4,742 imports,
+92,925 axiom checks. All 256868 prior Audit bytes remain; no import cycle.
+All four source packets plus 20261112-policy-head-work-compatibility replay from /tmp
+(five PASS). Every heavy job is terminal. Serial 4 GiB memory.max/high, swap0,
+project Nix and LEAN_NUM_THREADS=1 remain. No heartbeat/queue/cap change.
+No Haskell changed or Haskell suite repeated without a source change.
+
+Lean-only repairs: explicit same-observation match case reduction aligns the two
+prefix propositions; pendingSize needs EnumerationStorageProgress opened. In the
+scan equation, prefix is a reserved binder; use earlierRows. Reduce actual run []
+and constructed match values, use List.cons_append, and keep dsimp only before the
+stopped-row append induction rewrite. The advanced simp argument was unnecessary,
+but its constructor reduction was needed. No linter was disabled or statement
+weakened. These are not Haskell fixes.
+
+## Concrete next source cuts
+
+1. Prove source all-mapM/lookup totality. The frozen plan is tracked in compatibility/
+   source-audit.md and runtime next-source-totality.md. Root-key existence and winner-
+   name identity are ALREADY closed. New work is closure of actual resolved winner
+   take/drop keys with duplicate occurrences preserved. The custom GHC permutations
+   needs its own soundness/completeness worker invariant; do not silently replace it
+   with Std permutations or claim exact order/multiplicity equivalence from sets.
+   Std exists_perm_sublist/take_sublist/drop_sublist and existing pure_mapM_total
+   can then close every actual split/offset, including unused alternatives.
+   Target: relevantRows succeeds exactly when its initial static names key resolves;
+   firstOrderRaw has SOME .ok output iff signed size>=0. Size zero may give successful
+   EMPTY syntax. This is distinct from inhabitance. No typing assumption is needed
+   for that proposed totality theorem. It is an UNPROVED plan, not a checked new law.
+2. Compose the new source membership with completed source normalization/guard/compiler
+   and initial model/origin/Packet laws, retaining ACTUAL .ok and source-data derivation.
+   Then remove .ok with totality. Ordinary well-typedness->admissible derivation is a
+   separate bridge; derive its exact universe/pruning/role/winner conditions or expose
+   an API/domain discrepancy. Do not narrow the full objective silently. Program
+   Projection alone is not the actual Haskell source decoder or native-run theorem.
+3. Attach ONE existing actual Left callback producer to the SAME head Packet/global
+   bundle/model/proper/origins. NativeWork.recordTypes_work keeps W at its literal
+   Success. False callback/restart requires current OriginPolicies, all old pending
+   entries refuted by the SAME assignment, target range and fill equation. Preserve
+   this refutation and derive next-selected policy compatibility at actual metadata.
+   Head progress alone does not prove recursion or all-alternative reach.
+4. Close actual scan reach, source-derived adequate recursive depth AND common native
+   work. Reuse fixed-depth scan resources/model/append facts. Do not introduce future
+   completed hooks or a wanted reached-state model as public hypotheses. All rejected,
+   dead, failed, sibling and later states remain. The local P/A/W scalar is not CPU
+   work or native fuel. Fixed input B and current proper/native model bounds need to
+   remain invariant through the SAME real states. Preserve backward opaque-bucket
+   soundness separately; forward canonical head models do not recover dropped buckets.
+
+Tracked exact notes:
+lean/restart-evidence/20261112-policy-head-work-compatibility/source-audit.md.
+It contains all four source contracts and the unproved totality plan. Earlier R224/
+R225 source audits retain full prefix/head/callback, source derivation and scan plans.
+TermsTyping precedes RelevantTyping; no mutual inductives are needed. Do not reprove
+closed generic app/filter guards, P/A observers or recordTypes frames.
+
+## Haskell findings and retained full objective
+
+No new Haskell change or verified defect. FINDINGS retains main PR207 stable log-
+domain oracle repair, unchanged exact Rational expectedCounts, checked distill/final
+mixture validation, positive BOTH-backend +/-400 replay, historical failure hashes
+and all 529 generator examples. The opaque flag seam and current dependency facts
+were formal composition issues; this checkpoint adds no production-bug claim.
+Planned Liquid Haskell current ID/state and fits/admits contracts can help explicit
+obligations; implementation/Lean correspondence is still necessary. No LH dependency
+or annotation was added. Source helpers remain application/ofType. The path lemma is
+Language.atPath_append. Reserved encoded aliases, rigid var_e and non-arrow Fun
+remain positional domain boundaries. The actual default eager/shared deferred ORDER
+difference remains reproduced; it is not a decoded Program defect. Training/Table/
+sampler composition has validation, not full formal correspondence. Intermediate
+mixture/nonempty guards remain contract questions, not observed failures.
+
+Retain FULL original-input soundness/completeness, exact NODE and Program component
+counts, actual size/order/multiplicities, BOTH directions of BOTH signed APIs,
+source-derived adequate recursive depth AND total work, failed/rejected/sibling/later
+states, warm-cache identity, Word/Int bounds, lazy productivity and Haskell
+correspondence. Optimized interned remains primary. Keep every older constructor/
+equality proof, counterexample, repair and marked draft. Green totals and local head
+progress do not establish whole-library completion or complete original enumeration.
+
+Runtime: /tmp/mcfta-policy-head-work-20261112-0433/.
+Only small source/log/manifest plans remain. No binary archive was created.
+/tmp filesystem free: 195.6 GiB.
+Latest usage: 12.0 percent at 2026-11-12T03:52:02.019Z.
+Pause and notify the user if fresh usage exceeds 80 percent.
+
+---
+
 # Restart checkpoint: 2026-11-12, exact activity debit and source term derivations
 
 Goal status is ACTIVE. Continue the FULL objective. Pushes to formalize remain
