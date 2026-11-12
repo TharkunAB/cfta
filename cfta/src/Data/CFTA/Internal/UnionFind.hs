@@ -158,4 +158,7 @@ root uv (UnionFind m) = case IntMap.lookup (uvarToInt uv) m of
       | Root {entrySize :: {v:Int | 0 < v}, entryMembers :: {s:IntSet | intSetSize s <= entrySize}}
 @-}
 
+-- The new representative is one of the two old representatives.
+{-@ unionRoots :: r1:UVar -> r2:UVar -> UnionFind -> ({v:UVar | v == r1 || v == r2}, UnionFind) @-}
+
 {-@ find :: uv:UVar -> uf:UnionFind -> (UVar, {v:UnionFind | v == uf}) @-}
