@@ -37,6 +37,13 @@ tree automata of `cfta`, with QuickCheck integration.
   encoding. Before, the type variable `a` and the type constructor `var1`
   had the same node, so the query arguments `f : a -> B` and `x : var1`
   gave the program `f x`.
+- In `Data.CFTA.Gen.Synthesis`, two query arguments with the same name both
+  have the type of the last argument with that name. Each of them is still
+  an argument that a program must use. Before, each required use of the
+  name had the type of the last argument, but a further use of the name
+  could have the type of each argument. So with `g : A -> C -> C -> R`, the
+  query arguments `x : A` and `x : C` gave the program `g x x x`, and
+  `x : C` and `x : A` gave none.
 - Add `Data.CFTA.Sized.Checkpoint`: resume a size-ordered listing of the
   terms of a graph, or a sampled run of draws from it, also in a new process.
   `start` gives the checkpoint before the first term. `resume` builds the size

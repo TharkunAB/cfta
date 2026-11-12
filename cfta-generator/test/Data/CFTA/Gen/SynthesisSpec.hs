@@ -83,6 +83,29 @@ spec = describe "Data.CFTA.Gen.Synthesis" $ do
         forM_ encodings $ \encoding -> forM_ cases $ \(functionType, argumentType, expected) -> do
             let lib = (library [] [] []){libraryEncoding = encoding}
             solutionsOfSize lib (Query [(function, functionType), (argument, argumentType)] b) 2 `shouldBe` expected
+    it "gives each argument the type of the last argument with its name" $ do
+        let constant name = TCons (Text.pack name) []
+            a = constant "A"
+            c = constant "C"
+            r = constant "R"
+            g = Text.pack "g"
+            k = Text.pack "k"
+            x = Text.pack "x"
+            query types = Query [(x, typ) | typ <- types] r
+            encodings = [FirstOrder, Curried AnyHead Map.empty, Curried OnlyDefault Map.empty]
+            -- g x x x needs an x of type A first, but each x has the last type.
+            packet = Library [(g, TFun a (TFun c (TFun c r)), [g])] [] []
+            twoC = Library [(k, TFun c (TFun c r), [k])] [] []
+            saturated types = rawSaturatedSearchSpace (Saturation (Map.fromList [(g, 3)]) []) (packet FirstOrder) (query types) 4
+        forM_ encodings $ \encoding -> do
+            rawSearchSpace (packet encoding) (query [a, c]) 4 == rawSearchSpace (packet encoding) (query [c, c]) 4 `shouldBe` True
+            rawSearchSpace (packet encoding) (query [c, a]) 4 == rawSearchSpace (packet encoding) (query [a, a]) 4 `shouldBe` True
+            solutionsOfSize (packet encoding) (query [a, c]) 4 `shouldBe` []
+            solutionsOfSize (packet encoding) (query [c, a]) 4 `shouldBe` []
+            -- Each argument stays an argument that the program must use.
+            solutionsOfSize (twoC encoding) (query [a, c]) 3 `shouldBe` [App (App (Var k) (Var x)) (Var x)]
+            solutionsOfSize (twoC encoding) (query [a, c, c]) 3 `shouldBe` []
+        saturated [a, c] == saturated [c, c] `shouldBe` True
     it "parses the Hoogle+ data, and the printers give each type and program back" $ do
         let benchmarks = hooglePlusBenchmarks <> stackOverflowBenchmarks
             types =

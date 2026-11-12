@@ -317,12 +317,27 @@ library components argumentOnly avoid =
     memberToRepresentative =
         Map.fromList [(member, representativeOf index) | (index, (_, members)) <- zip [0 :: Int ..] groups, member <- members]
 
--- | A query: the arguments with their types, and the goal type.
+{- | A query: the arguments with their types, and the goal type.
+
+Two arguments can have the same name. Then each of them has the type of the
+last argument with that name. Each of them is still an argument that a
+program must use, so a program uses the name at least once for each
+argument with that name.
+-}
 data Query = Query
     { queryArguments :: [(Text, Type)]
     , queryGoal :: Type
     }
     deriving (Eq, Show)
+
+{- | The arguments of a query in their order, each with the type of the last
+argument with its name ('Query'). 'Map.fromList' keeps the last value of a
+key.
+-}
+queryBindings :: Query -> [(Text, Type)]
+queryBindings query = [(name, Map.findWithDefault typ name types) | (name, typ) <- queryArguments query]
+  where
+    types = Map.fromList (queryArguments query)
 
 -- Programs
 
@@ -770,7 +785,7 @@ rawSearchSpace lib query size = ofType (relevantOfSize size) (typeNodeWith encod
     components = [(name, component name typ) | (name, typ, _) <- libraryGroups lib]
     anyFunction = Node (map snd components)
     argumentOnly = Node [component name typ | (name, typ) <- libraryArgumentOnly lib]
-    argumentEdges = [(name, Edge (Symbol name) [typeNodeWith encoding typ]) | (name, typ) <- queryArguments query]
+    argumentEdges = [(name, Edge (Symbol name) [typeNodeWith encoding typ]) | (name, typ) <- queryBindings query]
     anyArgument = Node (map snd argumentEdges)
     without names = Node [edge | (name, edge) <- components, name `notElem` names]
     restricted = concatMap fst (libraryAvoid lib)
@@ -832,7 +847,7 @@ typesOf lib query = case libraryEncoding lib of
         nubOrd $
             concatMap (\(_, typ, _) -> constructorsOf typ) (libraryGroups lib)
                 <> concatMap (constructorsOf . snd) (libraryArgumentOnly lib)
-                <> concatMap (constructorsOf . snd) (queryArguments query)
+                <> concatMap (constructorsOf . snd) (queryBindings query)
                 <> constructorsOf (queryGoal query)
 
 {- | How the components of a library form terms in which each head is applied
@@ -868,7 +883,7 @@ rawSaturatedSearchSpace saturation lib query size =
             , Map.lookup name (saturationArities saturation) == Just parameters
             ]
     values = Node [component name typ | (name, typ, _) <- libraryGroups lib, name `elem` saturationValues saturation]
-    argumentEdges = [(name, Edge (Symbol name) [typeNode typ]) | (name, typ) <- queryArguments query]
+    argumentEdges = [(name, Edge (Symbol name) [typeNode typ]) | (name, typ) <- queryBindings query]
     anyArgument = Node (map snd argumentEdges)
     largestArity = maximum (1 : Map.elems (saturationArities saturation))
     selections = concatMap permutations (subsequences argumentEdges)
