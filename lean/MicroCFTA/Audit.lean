@@ -1,3 +1,6 @@
+import MicroCFTA.SourceSynthesisCurrentGroupAdmission
+import MicroCFTA.SourceSynthesisCurrentTypeAdmission
+import MicroCFTA.SourcePruningEnumerationSharedBranching
 import MicroCFTA.SourcePruningEnumerationSharedPreparedMarkerOutput
 import MicroCFTA.SourceSynthesisPr210Substitution
 import MicroCFTA.SourceSynthesisCurrentContext
