@@ -260,4 +260,5 @@ type Refinement = Expr -> Formula
 refinementFormula :: Refinement -> Formula
 refinementFormula refinement = refinement (variable valueName)
 
-{-@ LIQUID "--skip-module" @-}
+-- The positivity check rejects Term (Data.CFTA.Formula), but Term is positive.
+{-@ LIQUID "--no-positivity-check" @-}

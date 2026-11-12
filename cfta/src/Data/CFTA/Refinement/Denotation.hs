@@ -88,4 +88,5 @@ denotationAtMost entailment bound automaton
             No -> pure False
             Unknown -> throwError (DenotationUnknown constraint term)
 
-{-@ LIQUID "--skip-module" @-}
+-- The positivity check rejects Term (Data.CFTA.Term), but Term is positive.
+{-@ LIQUID "--no-positivity-check" @-}
