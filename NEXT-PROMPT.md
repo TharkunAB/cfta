@@ -1,3 +1,83 @@
+# Current capacity, eager bases and Type inversions: 2026-11-12 17:42 CET
+
+The full formalization goal remains ACTIVE. Base bf723bd595dab57ef2d6e8f17ec898b64e728351.
+Integrated main remains e53852064d3ef5a2eafec47d754c27504b11de5f (PR210/211).
+Eight new modules contain 1583 lines and eleven public laws. Full Audit passes:
+5830 live modules, nine affected, 4827 imports, 94048 axiom reports. All nine
+portable checks pass. All 261559 old Audit bytes remain after eight imports.
+Every earlier proof, public statement and source version remains.
+
+Strongest new CURRENT positive statement: an original ordinary Program with
+raw per-use Eligible, empty libraryAvoid and tokens.Perm ORIGINAL query
+arguments passes through actual current construction and ONE checked native
+pruning return to enumeration startup, with its SAME exact annotated term,
+Program/goal/count, valid assignment/origins/exact pending size and startup
+work. Its sufficient mathematical word width now comes from ORIGINAL inputs
+and budget. No external Room premise remains. Complete initializer, checked
+endpoint/ranges/fullglobals+final and startup receipts all describe ONE run.
+Fixed Haskell word capacity, executable correspondence and whole enumeration
+are separate. The selector is a mathematical noncomputable source observer.
+
+CurrentInitialComputedRoom identifies the exact initial profile independent of
+cache/width using the SAME returned source/build. Existing roomBits supplies
+sufficient Room. CurrentComputedWidthSharedCompletion preserves the entire
+checked raw-worker packet. CurrentOrdinaryComputedWidthModelWork preserves
+all 55 conjunctions/four universal quantifiers, full original Program witness,
+startup Packet/canonical/waiting/candidate/graph/reference receipts and model.
+Its local-width let was definitionally expanded at eight sites after a runtime
+probe isolated a header elaboration failure. No fact/premise was weakened.
+Work is (N+1)*N plus root-expandability; N is annotated-term size, not Program
+component count. This is an initial receipt, not a whole-work bound.
+
+Actual eager NullaryResources and FrontierResources now retain full same-run
+Post/Caller/inventory/full Memos/query/Fits/physical Heap/Packet and coupled
+before/after model/fill/origins. Projection/arity derive from CURRENT acceptance.
+The frontier has only nonordinary/fallback children. Its Reserved edgeCost
+is legitimate ONLY there. Neither law claims arbitrary consume preservation,
+complete captured Admitted before Finalize or deeper ordinary budgets.
+
+Reverse current Type primitives are checked: GeneralizeReification485 extracts
+one uniform raw rho and only demanded-image RawAdmitted from actual canonical
+PCS acceptance; RigidTypeReification109 gives exact ordered Type meaning;
+ArrowReification119 excludes internal marker spoofs and derives arrow shape
+modulo documented Fun/2 for ALL rigid raw types, including outside the universe.
+No extra typing hierarchy, AliasSafe/catalog/future instance supplier appears.
+Complete source reverse soundness still needs application/leaf/row/root work.
+
+Reproduce from lean/restart-evidence/20261112-current-eager-foundations-compatibility/.
+Its source-audit.md retains exact hashes, whole contracts, header repair and
+frozen next plans. Runtime /tmp/mcfta-current-eager-foundations-20261112-1650/.
+R246 points here. Preserve all proofs/counters/repairs/drafts/historical pins
+and .hypha/. ROOT alone compiles/publishes. No binary archive is copied.
+
+NEXT runtime-only work is UNVERIFIED: CurrentApplicationTyping (Beta) on
+actual four-child forest/PCS paths+same child IH; CurrentLeafTyping (Gamma)
+from actual current size-one rows and original group/argument/query origins;
+SharedEagerUnaryNullaryResources (Alpha) on actual ordinary descent into a
+singleton nullary row with full CPS complete/stopped receipt wrapping.
+Deeper resource IH must cover all visited rows and interleaved callback/native
+costs. Old shallow costs/receipt-length bounds cannot substitute for that proof.
+
+No Haskell source/Cabal changes or new ROOT runtime reproduction. FINDINGS
+retains external post1182's reproduced Liquid duplicate-name defect and pending
+LAST type+refinement repair under fix/liquid-repeated-argument-names. No pushed
+repair/PR/merge is reported yet; do not duplicate the owner. Liquid use is
+optional, Hectare required token coverage permits extra unmarked uses. Prior
+PR210/211 checks and historical pins remain. Liquid Haskell does not
+automatically enter Lean or certify Haskell execution.
+
+Primary usage is 23% at event/read 17:42 CET. Check by 17:57. ABOVE 80%, save
+handoff, pause goal and notify Matti. Free space is 179.9 GiB. The last
+/tmp sample was dominated by /tmp/claude-1000; proof runtimes remain small text.
+Continue original-input whole work/depth/fixed-host capacity, earlier hooks/
+all alternatives, reduction/refold/weights, source order/multiplicity/lazy
+demand, both inverses, full guards/signed/Word/Int/errors, refinement/training
+and Haskell correspondence. Derived guard origins alone are not literal
+physical projectability. Default does not call boundDepth. Goal stays ACTIVE
+and incomplete after publication.
+
+---
+
 # Current checked pruning and ordinary startup: 2026-11-12 16:45 CET
 
 The full formalization goal remains ACTIVE. Base 77be632308956b58f39ff12281b0d3f4008b6e17.
