@@ -10,7 +10,9 @@ heap cap imply the SAME cap at the SAME returned heap and at every returned row.
 The proof follows actual construction, substitution, and exposure worklists.
 It does not replace the numerical cap with a guard/path Fits predicate.
 
-Preserving this cap through the whole native bounded copier is the next step.
+The existing edge_heap and node_heap constructor laws are now public.
+Their proof bodies are unchanged. The separate native-bound-depth-heap-arity
+packet preserves the cap through the SAME whole copy.
 Full enumerator work and machine-integer correspondence remain separate.
 
 The strict checker emits an explicit #check and an axiom report for every public

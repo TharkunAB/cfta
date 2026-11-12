@@ -35,7 +35,7 @@ private def EdgesChecked (bound : Nat) : List (EdgeSyntax Symbol Guard) → Prop
       children.length ≤ bound ∧ ManyChecked bound children ∧ EdgesChecked bound rest
 end
 
-private theorem edge_heap [DecidableEq (EdgeKey Symbol Guard)]
+theorem edge_heap [DecidableEq (EdgeKey Symbol Guard)]
     (symbol : Symbol) (constraint : Guard) (children : List (Value Symbol Guard))
     (state : State Symbol Guard) (heap : Heap bound state)
     (checked : children.length ≤ bound) :
@@ -48,7 +48,7 @@ private theorem edge_heap [DecidableEq (EdgeKey Symbol Guard)]
   · cases same.2
     exact checked
 
-private theorem node_heap [DecidableEq (EdgeKey Symbol Guard)]
+theorem node_heap [DecidableEq (EdgeKey Symbol Guard)]
     (edges : List (EdgeValue Symbol Guard)) (state : State Symbol Guard)
     (heap : Heap bound state) : Heap bound (run (makeNode edges) state).2 := by
   simp only [makeNode]
