@@ -1,3 +1,159 @@
+# Restart checkpoint: 2026-11-12, admitted ordinary bodies and query profiles
+
+Goal status is ACTIVE. Continue the FULL objective. Pushes to formalize remain
+explicitly authorized. Preserve .hypha/ and all unpublished drafts.
+Prior published checkpoint: a97d4d09ce428474da52adffd30d43c9d48b68e4.
+Checked source head: 606957118560609fb4f42e5d0d6250dbc66e88f1.
+Integrated main: dedd47da878e78aa5be9947247d8156675956b59; fresh fetch at 08:25 CET.
+Main is unchanged. Prepared at 2026-11-12 08:27 CET. Verify the published tip before new work.
+This header overrides historical restart instructions. Every prior byte of all
+three handoffs remains below. No production Haskell/Liquid Haskell fix is applied.
+
+## Strongest new constructive typing statement
+
+For a library with empty libraryAvoid, an external ProgramEligible certificate
+constructs BOTH independent ordinary Typed and an actual source TermsTyping
+body for the SAME ordinary Program/raw result. The certificate has three cases:
+admitted leaf, application and ordinary conversion. Leaves use the checked raw
+binding/image certificate. Application uses function role=false, argument role=true
+and TypeIn ONLY for its result annotation. Rigid query types keep no blanket TypeIn.
+There is no future source typing, membership, .ok, sigma or reflection supplier.
+
+eligible_program_member supplies ACTUAL termsRows membership, exact raw annotation,
+Program projection/decoder identity and component-count equality. The source size
+is the original Program's component count. The result concerns ordinary BODY
+terms. Relevant/root query coverage and original signed API correspondence remain
+separate. Empty avoid is explicit; this is not completeness for arbitrary pruning.
+
+The internal size2 helper inverts the SAME derived size-one TermsTyping receipt
+and moves its actual row to fallbackFunctionRows. Positive child component counts
+show both children have size1. Larger applications use the exact positive split.
+No independent function receipt or future argument-role proof is requested.
+Ordinary Typed remains independent of these algorithm admission conditions.
+
+## Strongest new query-resource statement
+
+TargetQueryResourcesProjectable derives WordRanges from CURRENT Ready/Fits/Admits
+and calls the projectable finite query producer ONCE. Its full receipt, inventory,
+value, returned state, memo history and SAME physical trace remain. It retains
+returned Heap support, all-finite physical plans and all exact finite observation
+support. The SAME receipt supplies full caller Post, exact profile-ceiling replay
+and matching guard carrier forecast. No independent resource producer or numeric
+observer is recomputed. No new final Fits/mass or original-input machine-budget
+claim is made. Current profile fit and arithmetic admission remain explicit.
+
+All earlier native ordinary/opaque callback/restart, properness, model, resources,
+origins, original P/W progress and stop/finish wrappers remain preserved. A common
+stage fuel does not prove whole recursive completion or one total-work bound.
+
+## Biggest global gap now has a concrete source boundary
+
+A fixed Program component count does NOT bound annotated native term size.
+The source family ignore:List a->Int and nil:List a, goal Int, uses the SAME
+Program ignore nil at size2. Instantiating a with n nested List constructors
+makes its exact typed native annotation grow. A bounded kernel proof draft is
+being prepared; no new family theorem is claimed yet.
+
+This is NOT a Haskell defect or a divergence result. Synthesis.hs module docs
+22-33 already explain that an unfixed type variable retains the all-types node,
+so one Program can have many typed terms and the import cannot count them.
+programsOfSizeUpToDepth bounds typed terms by depth. Actual recursive/union type
+boundaries can stay opaque. An infinite annotation family can have one opaque
+representative. Do not refute a small-model/opaque-representative theorem with
+this family. Keep bounded-depth/finite/error cases of the actual APIs separate.
+
+The missing native global proof must bound all actual prior/incompatible/dead
+branches, not only the chosen accepted witness. Finite trie-list key shapes alone
+do not supply a source-derived finite catalog of native handles/guards after
+queries allocate. The ranked acyclic SymbolicStructuralBudget belongs to another
+driver; the default recursive type universe does not satisfy its premise.
+Adequate whole depth/work needs the actual opaque protocol or an original-input
+symbolic state bound. Do not assume all-row termination from a local P/W decrease.
+
+## Relevant/root contract and static Haskell comment discrepancy
+
+Source inspection shows required TOKEN coverage with additional unmarked query
+uses allowed. relevant [] falls back to unrestricted terms, and the size-one
+pool still contains all query rows. Do not impose an exact-once ban on reuse.
+Duplicate names require one discharged mark per input token, including multiplicity.
+The actual marked singleton uses last-binding lookup; earlier duplicate payloads
+must not be treated as independent ordinary last-binding variables.
+
+Synthesis.hs comments at 640-641 and 771 say arguments are used once. The equations
+permit extra unmarked uses. Record this as a static documentation/contract
+clarification for an external agent, NOT a newly executed Haskell defect or an
+implemented behavior change. A future root bridge must follow the actual equations.
+The next helper proves general singleton resolver/ordinary reverse-lookup agreement
+from actual subsequence/permutation order. Membership alone cannot prove last-winner
+semantics. Root permutation membership itself is already available.
+
+## Outstanding Haskell repair status
+
+The TWO executed production defects remain UNFIXED and preserved in FINDINGS:
+1. Raw reserved namespace collision: f:a->B with x:TCons var1[] returns f x at
+size2 although the independent ordinary judgment assigns it no type. The exported
+raw constructors bypass parsing. Fix requires disjoint raw constructor/variable/
+internal encoding, with Fun/2 alias preserved. A parser-only check is insufficient.
+Reproduce 20261112-type-encoding-runtime/check.py under the established cap.
+2. Parsed Fun/0 and Fun/3 application results reject well-typed f x. Ordinary Z,
+Fun2-alias and rigid Fun0 leaf controls succeed. constructorsOf must exclude ONLY
+Fun/2, not every Fun arity. Recurse through arguments normally. Check other modes
+when repairing. Reproduce 20261112-fun-arity-universe/check.py. PASS reproduces the
+defect. Both packets pin source/output and preserve the original Haskell snapshot.
+No production encoder, constructor discovery or comment was changed here.
+
+## Validation and publication
+
+Two new modules contain 213 lines and three public laws. Both pass project Nix/
+Lake and strict own-source checks. Public theorem names/namespaces, exact hashes
+and standard axiom sets are checked. No sorry/new axiom is added. Full Audit passes:
+5769 live modules, 3 affected, 4766 imports and 93189 axiom reports. All 258437
+prior Audit bytes remain after two new imports. Every prior proof/counterexample/
+repair/marked draft remains preserved. Three independent /tmp replays pass.
+Compatibility: lean/restart-evidence/20261112-program-query-compatibility/.
+frontier.json pins the acyclic source frontier. checked.json records full Audit.
+portable-check.json records both source packets and compatibility. No unchanged
+Haskell test was repeated for this Lean-only checkpoint.
+
+Two source commits after the prior checkpoint:
+- 1191b577661de8538ed1d4d9ce98f5b665cd23ea: Construct source membership for admitted ordinary Program bodies.
+- 606957118560609fb4f42e5d0d6250dbc66e88f1: Retain admitted query profile and supported caller receipt.
+
+Runtime: /tmp/mcfta-program-query-20261112-0815/. Source notes and frozen global/
+relevant next-cut audits are copied into compatibility/source-audit.md.
+/tmp had 188.3 GiB free at 08:25 CET. Keep runtime metadata small; no binary/build
+archives. ROOT remains sole compiler/Git publisher. One serial heavy job, 4 GiB
+memory.max/high, swap0 and LEAN_NUM_THREADS=1. Do not change queue/caps.
+
+## Next work and full retained objective
+
+Current source-only tasks write runtime drafts, outside this checkpoint:
+SourceSynthesisProgramNativeSizeUnbounded.lean (exact one-root annotation family),
+SourceSynthesisRelevantSingletonLookup.lean (general exact last singleton lookup),
+and a read-only parent-local guard audit. No draft result is claimed. Materialize
+and strictly check new modules only after verifying this published checkpoint.
+
+Parent local support has useful existing primitives: requireAll preserves ANY
+predicate; allocated merges erase to the generic call_heap with supported Top;
+class edits copy literal original guards. The missing composition is actual
+query/leaf receipts through the edit ListReads. Do not assume generic arbitrary
+conjoin closure; it is stronger than needed and false for sourceEqualities support.
+
+Keep FULL goal: original-input soundness/completeness; exact accepted native terms
+and Program component counts at each size; actual order/multiplicity; both inverse
+directions of BOTH actual signed APIs; Word/Int bounds; finite execution/productivity
+under actual API conditions; warm-cache identity; Haskell correspondence. Preserve
+the eager/deferred order counterexample. Optimized interned remains primary; older
+constructor/equality work remains secondary and preserved. Weighted training,
+Table and sampler composition remain outside the end-to-end formal theorem.
+
+Last fresh primary usage: 14% at 08:25 CET. Seek ONLY the last 1 MiB of the multi-GB
+primary rollout about every 15 minutes; next check about 08:40 CET. If fresh usage
+exceeds 80%, save a detailed handoff, pause the goal and notify Matti.
+The goal remains ACTIVE while required work remains.
+
+--- Preserved prior handoff ---
+
 # Restart checkpoint: 2026-11-12, actual query plans and ordinary false restart
 
 Goal status is ACTIVE. Continue the FULL objective. Pushes to formalize remain
