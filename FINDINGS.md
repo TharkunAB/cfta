@@ -1,3 +1,108 @@
+## 2026-11-13 00:03 CET — current-input Program outputs and computed eager admission
+
+Goal ACTIVE. Keep the full objective: exact accepted terms per count, finite
+execution, size order, both rank/unrank inverse laws and actual Haskell
+correspondence. Preserve all old proofs, counters, repairs, marked drafts,
+the optimized interned core and untracked `.hypha/`. Standing authorization
+covers pushes to `formalize`. Continue work after publication.
+
+Three modules contain 630 lines and six public laws. Four laws are new.
+Two existing forecast laws and the full checked 224-line source prefix remain
+byte-identical. Every strict compiler and explicit public declaration/axiom
+check passes. Complete Audit passes: 5890 live modules, 4 affected modules,
+4887 imports and 94539 axiom reports. All four portable packet checkers pass
+from `/tmp` under the sole serial 4 GiB cap. All 265474 prior Audit bytes
+remain an exact suffix. Only two NEW module imports are prepended; the old
+forecast import remains in place. Evidence:
+`lean/restart-evidence/20261112-current-enumeration-width-eager-admission-compatibility/`.
+Runtime: `/tmp/mcfta-current-enumeration-width-eager-admission-20261112-2347/`.
+Base `1fe4b017b0d8e09341c0c51acf739f58ed2711d5` is published and remote-verified.
+A fresh upstream fetch still has integrated main at `e53852064d3ef5a2eafec47d754c27504b11de5f`.
+
+The current-source Program-output producer now starts from ORIGINAL library,
+query, signed size and chosen recursive depth. Its public source condition is
+the SAME successful current front-end equation. Current empty-pending metadata,
+formulas/solver and driver configuration remain explicit. The pure selector
+chooses a sufficient MATHEMATICAL width for final depth(seed heap)0. It is not
+a fixed host-word guarantee. Its two laws use only the SAME source/build
+equations and existing reserved_computed. There is no Room/provider premise
+and no second build producer. The older NodeCall width covers a different
+forecast and is not substituted without proof.
+
+ONE current ProgramSlots initializer runs at the empty cache. Its ENTIRE
+original tuple survives. The SAME Context/value/handle derives startup and
+carrier Packet, exact physical seed Fits/Heap, mass zero, nodeEdges selection,
+initial ProgramSlots and mark0. Two current encodeNode equations align the
+handle. The selected original-input width supplies Reserved. ONE checked
+no-stop ProgramOutputs worker then supplies its ENTIRE old stable all-fuel
+OutcomeResources and every per-output full Program-root receipt. There is no
+future Packet, roles, model, Room, finishedness or completed-worker provider.
+No initializer, native producer, worker or root reader is repeated. Old
+completed-nodeCall endpoints are not renamed as raw startup. The exact
+96-line header and both whole old conclusions pass independent mechanical
+comparison after only the stated source/width/empty-cache substitutions.
+
+New strongest worker statement: for a successful current front-end construction,
+a chosen recursive depth and the existing current configuration conditions,
+the modeled cold initializer and one finite no-stop SHALLOW worker have a
+stable resource result. EVERY emitted output has an actual partial-root
+Program readback. Every full completion of that partial root projects to the
+same Program. Startup invariants and a sufficient mathematical capacity come
+from the original inputs. The theorem does not prove output existence, adequate
+source depth, a satisfying Type assignment, or full eager/default correctness.
+The strongest exact construction/pruning statement remains accepted language
+versus Eligible with ORIGINAL token permutation, under empty inherited avoids
+and its mathematical derived-width boundary. Keep these claims separate.
+No avoid-empty premise is needed for this structure/startup cut.
+
+The eager arithmetic bridge is now CHECKED. eagerReserved depends only on
+original bits/depth/Seed/mass and deterministic finite plan positions. It
+closes every private tuple/row/continuation admission parameter recursively.
+Its public Room premise refers ONLY to the ORIGINAL computed eagerFinal
+profile. Reserved/Admits/Room are numeric inequalities, not future execution
+Fits, Packet or model suppliers. The law proves planned arithmetic admission;
+it does NOT prove actual eager execution, work-fuel adequacy, native/full-Memos
+resource preservation or Program roles. The initial final proof timed out at
+200000 compiler heartbeats. The corrected proof unfolds selected equations
+and generalizes computed limits. No heartbeat setting, definition or public
+header changed. This compiler repair is not a runtime bound.
+
+NEXT: implement the actual concrete runEager/continueWith resource producer.
+Use the checked ordered forecast, current captured payload limits and computed
+admissions. Private outer-depth/inner-height/tuple/consumer hypotheses must be
+discharged internally for the SAME concrete worker. Keep full native caller,
+Memos, stopped prefixes and every old OutcomeResources field. Arbitrary public
+consumers can replace the shared caller and are not valid resource suppliers.
+Do not assume cross-seed forecast monotonicity. Use within-plan growth/padding.
+Parent finalization keeps native caller/memos; its reads still need fuel.
+The copied combined operational draft and contracts are under
+`/tmp/mcfta-eager-admission-20261112-2328/`; public operational proof is UNPROVED.
+Do not expose all private forecast helpers before the required interface is clear.
+Then extend the Program-role proof to actual eager descendants and address
+satisfying Type models/default Mu semantics, original-input total work/word
+capacity, stream order/multiplicity, both inverses and Haskell correspondence.
+
+No Haskell source changed in this batch. Keep the external Liquid repeated-name
+finding visible in FINDINGS. Owner `claude-gondolin` has branch
+`fix/liquid-repeated-argument-names`. All query readers need the LAST type and
+refinement. Conflicting duplicate refinements can form false environments and
+prove arbitrary results. Mixed Int/Bool duplicate readers also disagree.
+No merged repair is known at the current main pin. PR210 constructor escaping
+and PR211 Hectare LAST query types are integrated. Preserve all old source-pinned
+counters and repaired current counterparts. Prior focused Haskell validation
+had 16 examples and 0 failures. No full Haskell suite or benchmark ran here.
+LiquidHaskell contracts help the source interface but do not import source
+proofs automatically into Lean.
+
+The 31179-byte source audit records all statements, current source pins,
+independent admission/current-input scope reviews and the exact replayed
+failed-admission patch. Earlier checkpoints preserve every previous marked
+draft and counter. These records are reproducible from source. No execution
+archives were added. Latest primary usage is 32 percent; /tmp has 169.5 GiB
+free at 00:02 CET. Read only the final 1 MiB of the rollout for the next primary
+quota event. Above 80 percent: stop workers, save this handoff, pause the goal
+and notify Matti. Otherwise keep going.
+
 ## 2026-11-12 23:43 CET — no-stop Program outputs and ordered eager forecast components
 
 Goal ACTIVE. Keep the full objective: exact accepted terms per count, finite
