@@ -1,3 +1,126 @@
+# Restart checkpoint: 2026-11-12, source totality and checked projection
+
+Goal status is ACTIVE. Continue the FULL objective. Pushes to formalize remain
+authorized. Preserve .hypha/. Prior published checkpoint:
+61f01f90fcf7eb3fed9b314789a76c98ebe7646e. Checked source head: 2f0282c29148a23f9bf6d3a5b0c527fc585f3f25.
+Integrated main: a248ab6aa4b29571fc7ec5331640aaccf2850f79; fresh fetch at 05:29 CET.
+Verify the published branch tip before new source work. This header overrides older
+restart instructions. Every prior byte of the three root handoffs remains below.
+
+## Strongest new source statement
+
+For every finite original library/query and signed size >= 0, the literal
+firstOrderRaw constructor returns an actual .ok expression. Its successful size
+domain is exactly the nonnegative integers. This is constructor totality; its
+language can be empty, including at size zero. It is not a Haskell runtime claim.
+
+Every current relevantRows cell succeeds exactly when its current names key
+resolves. Strong size induction derives every split/offset lookup from actual
+take/drop closure of the GHC-style selections. It covers unused rows as well.
+The new selection specifications prove membership and permutation facts. They do
+not prove exact enumeration order or output multiplicity. Duplicate keys remain
+allowed. Resolution can choose different physical rows after slicing names.
+
+The same internally produced .ok root expression contains each source-admissible
+RelevantTyping witness at an actual root permutation with the rigid goal type.
+Its existing role-directed Program projection and components=size.toNat follow.
+No future .ok or table-membership supplier occurs in this theorem. Ordinary typing
+must still be connected to the finite universe, pruning, roles, and last-name
+winner conditions. Curried and actual Haskell decoding remain separate.
+
+## Strongest native continuation statement
+
+The R226 policy/preparation/head theorem remains intact. One compatible finite
+current assignment survives one actual chosen prefix, admission and preparation,
+and its ordinary or opaque head. Its full Post/resource/global memo packet,
+old-variable agreement, fills, origins, Holds, properness and non-stuck decision
+remain attached to the same assignment extension. Ordinary pending work strictly
+decreases. The prefix and opaque head together consume the originally chosen
+flag. Current P<=B is still an input. B is not yet derived from an original public input.
+
+The new R227 callback theorem retains its entire prior success/run/continueWith/
+Frame/Packet/metadata/origin/properness packet for either verdict. Recording types
+preserves pendingSize and W_B, for every B, under that same finite assignment.
+P is pendingSize across stored values. A counts all current true expandable
+flags. W_B=(B+1)*P+A. These are logical progress scalars. They do not measure
+runtime work. The theorem calls the existing callback producer once. These facts are not yet one public recursive closure theorem.
+
+## Checked guards and the remaining row-history gap
+
+ready_projectable has the exact current ready_fits inputs. The actual allocated
+ready gate supplies acceptance, sourceEqualities=some classes, its canonical
+project=some result, valid tries, and Fits. observed_build_projectable exposes
+successful projection and own bounds for either observed checked constructor
+return by reusing checked_projected_arity. It adds no arbitrary future heap premise.
+
+The actual allocated query route ALREADY checks constraints and arity. It uses
+SourceEqualityNativeDemand and SourceEqualityIntersectionEdgeAllocation. Rejected
+or mismatched gates produce the Top/[empty] sentinel. Generic unchecked makeEdge
+alone does not describe this route. No Haskell defect was established here.
+Projection failure is tied to failed source equalities; residual guards can project.
+The remaining proof must carry checked construction history through every retained
+parent row. Fits/Heap alone are vacuous at failed projections. Local gate results
+do not supply this global invariant.
+
+## Next concrete cuts
+
+1. Join the SAME R226 head receipt with ONE R227 callback and its literal false
+   restart equation. Add only CURRENT original-term OriginPolicies and refutation
+   of original pending groups. Existing bounds/agreement transfer that refutation
+   to each internally derived head assignment. Startup already gets refutation
+   from empty pending metadata. Preserve the full ordinary and opaque packets.
+   next-callback-restart.md records exact bindings. This still proves one restart.
+2. Lift the checked projection receipts through actual allocation/native traces
+   into history for all retained rows. next-source-projectability.md records the
+   checked route and existing helpers. Do not introduce a future Projectable
+   supplier or classify residual syntax as unsupported.
+3. Derive public policy/encoding and next-hole typing compatibility. Packet bounds
+   raw pending IDs only. It does not bound typing/openHoles fields or prove their
+   sortedness, uniqueness or correctness. Keep these obligations explicit.
+4. Close source-derived adequate recursive depth AND a total common work bound.
+   Per-larger-prefix later bounds do not give one fixed diagonal native workFuel.
+   Finite fixed-depth sibling resource/model coverage is already retained.
+5. Connect ordinary first-order typing with actual source admission and inversion.
+   Keep constructor totality, source membership and native execution distinct.
+
+## Haskell findings and retained full objective
+
+No Haskell file changed in R227. No new Haskell repair was identified. Retain all
+prior root FINDINGS, especially the integrated PR207 stable log-domain training
+repair, PR205 Table/training/sampling boundaries, earlier invariant/LPO fixes, and
+all replayable counterexamples. No Liquid Haskell dependency or contracts were
+added. Future Haskell repairs MUST also be recorded in root FINDINGS for external work.
+
+The complete objective remains original-input soundness/completeness; exact Node
+and Program component counts; actual size/order/multiplicity; BOTH directions of
+BOTH actual signed APIs; adequate recursive depth AND original-input total work;
+failed/rejected/sibling/later states; warm-cache identity; Word/Int bounds; lazy
+productivity; and complete Haskell correspondence. Weighted training/Table/sampler
+composition also remains outside the formal proof. The optimized interned core
+is primary. All older constructor/equality proofs and marked drafts remain.
+The eager/deferred fixture still refutes ordered equivalence. Do not weaken scope.
+
+## Verification and publication
+
+Four additive modules contain 629 lines and 15 public laws. All focused Nix/Lake
+checks pass, with warnings as errors for each own-source report, exact public
+namespaces and only standard axioms. The full acyclic import graph has 5,749 live
+modules. Audit covers all five affected modules through 4,746 direct imports and
+checks 92,955 theorem axiom dependencies. All 257,109 prior Audit bytes remain.
+Five portable replays from /tmp pass: all four source packets and compatibility.
+
+Evidence: lean/restart-evidence/20261112-source-totality-compatibility/.
+source-audit.md retains four source notes and two next-cut audits. Each source
+packet has its own check.py, checked.json, theorems.json and README. These source
+checks are reproducible. No build archive was created. Runtime metadata at
+/tmp/mcfta-source-totality-20261112-0506 was about 65 KiB before portable reports.
+The serial 4 GiB memory.max/high, swap=0 and LEAN_NUM_THREADS=1 remain unchanged.
+At 05:26 CET, the fresh primary usage report was 12% and /tmp had 195.0 GiB free.
+Read only the bounded usage tail; pause and notify if fresh primary usage exceeds
+80%. Keep the goal ACTIVE otherwise. Do not stop solely at this checkpoint.
+
+---
+
 # Restart checkpoint: 2026-11-12, policy/head work and actual source membership
 
 Goal status is ACTIVE. Continue the FULL objective. Pushes to formalize remain
