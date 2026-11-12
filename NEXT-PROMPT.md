@@ -1,3 +1,165 @@
+# Restart checkpoint: 2026-11-12, common opaque fuel and raw type collision
+
+Goal status is ACTIVE. Continue the FULL objective. Pushes to formalize remain
+explicitly authorized. Preserve .hypha/ and all unpublished proof drafts.
+Prior published checkpoint: 52b2a083c008ce79a61f29d8f9278803cfb571c1.
+Checked source head: 3221660104231da94b9bc6a6e51ab2ccc217854e.
+Integrated main: dedd47da878e78aa5be9947247d8156675956b59; fresh fetch at 07:11 CET.
+Main is unchanged since the documentation-only PR208 merge. This header overrides
+historical restart instructions. Every prior byte of these three handoffs remains.
+Prepared at 2026-11-12 07:17 CET. Verify the published tip before new source work.
+
+## Haskell finding and required repair for an external agent
+
+CONFIRMED, NOT FIXED: the exported raw synthesis API conflates a rigid type
+variable with a distinct raw constructor. With empty library, explicit FirstOrder
+encoding, query arguments f : TVar "a" -> B and x : TCons "var1" [], goal B,
+and size 2, solutionsOfSize returns App (Var "f") (Var "x"). Literal raw-language
+acceptance is also true. TVar "a" and TCons "var1" [] are distinct raw Types.
+typeNode maps both to the same leaf. The ordinary nominal application is ill typed.
+
+Positive control x : TVar "a" returns the application. Negative controls
+x : TVar "b" and x : TCons "A" [] return no program and reject the literal raw
+term. These controls distinguish rigid query types from polymorphic component
+specialization. No case timed out. This is an executed public raw-input defect.
+It is not a claim that every parser or TypeRep route produces the bad constructor.
+
+Reproduce from any working directory under the existing serial 4 GiB cap:
+python3 /home/tritlo/Code/mcfta/lean/restart-evidence/20261112-type-encoding-runtime/check.py
+The packet retains repro.hs, exact expected.txt, six owned Haskell source hashes,
+check.py, README.md and checked.json. The checker uses the project Nix/GMP shell,
+checks fourmolu, builds only cfta-generator's library offline with -j1, and runs
+runghc-9.14.1. Its cgroup has memory.max=memory.high=4294967296 and swap.max=0.
+PASS means the defect was reproduced. No production Haskell repair is applied.
+
+Repair requirements: distinguish raw constructor names from encoded variable
+names and internal type tags throughout encoding and variable recognition.
+Do not silently restrict the exported Type/Library/Query constructors to parser
+inputs. Any explicit public input-domain change needs a separate API decision.
+Retain the documented Fun/2 arrow alias. Keep Fun at other arities separate.
+Check both encoding modes and all public raw routes when implementing the repair;
+this packet has executed only FirstOrder. Require the reserved-constant case to
+reject while the three controls retain their intended results. Then update the
+Lean source encoder and its correspondence claims. Preserve this historical
+counterexample and its source snapshots. An input check on only parseType does
+not repair the raw public route. No Liquid Haskell contract has been added here.
+
+Owned source confirms Type(..), Library(..), and Query(..) are exported. library
+retains supplied Type values. rawSearchSpace encodes query arguments directly.
+There is no mandatory parseType, TypeRep, qualification, or validation gate.
+The source-route audit is retained in the compatibility packet's source-audit.md.
+The parser alone treats lowercase var1 as a TVar name. That narrower grammar
+therefore does not exclude raw constructor calls through the exported API.
+
+A separate kernel theorem, reserved_variable_constant_collision, proves the raw
+Ty inequality, rigidTerm equality, and failure of AliasSafe for TCons "var1" [].
+Unrestricted encoded equality implies ordinary raw-type equality is FALSE.
+The checked per-use substitution lift keeps AliasSafe explicit. Do not remove
+that premise or present a restricted domain as a proof of the full public API.
+
+## Strongest new native statement
+
+The SAME R228 policy/preparation carrier now has one derived common native stage
+fuel for its internally derived OPAQUE head: prefix, preparation, head, recording
+callback and actual false restart CALL all use F+extra. The entire prior full
+assignment, resources, global memos, origins, properness, pending refutation,
+old-variable agreement, physical endpoints and finish wrappers remain attached
+to the same witnesses. No future completion/model/refutation supplier is added.
+
+The proof calls the R228 producer once and the fixed prefix observer once.
+It selects one full bundle at baseline W0=p+q. Physical prefix caller/cache/query
+stability permits reuse of that SAME bundle for larger outer observations.
+The common opaque stage bound is F=W0+preparationFuel+headFuel+callbackFuel.
+It is an adequate stage fuel. It is not a bound for whole recursive depth,
+total runtime work, or completion of the arbitrary recursive continuation.
+The full ordinary one-witnessed-edge result is retained. It still does not prove
+that the selected ordinary head is reached after all prior sibling callbacks.
+
+Generated requestNode, requestEdge and body prefix laws now derive supported
+native guards throughout actual generated recursive/cache-hit code. Three success
+laws derive the same support for observed successful endpoints. Current physical
+InputsThrough plans and current annotation supports remain explicit. The laws
+retain exact observed states. They do not cover arbitrary Code.work, all failure
+wrappers, or outer-parent history. New terminal-outcome work is an unpublished
+next packet and must pass the strict ROOT checker before it is claimed.
+
+For each accepted original finite native term of size S, the initial producer
+now retains the SAME assignment and entire initial packet with P_startup=S.
+Choosing B=S gives W_B_startup=(S+1)*S+(if recursiveBoundary value then 0 else 1).
+P sums pending native-term sizes. A counts all in-range true expandable flags,
+including blocked flags. W_B=(B+1)*P+A. These are logical progress scalars.
+The size S is a native annotated-term size, not erased Program size or runtime.
+The bound is pointwise per accepted witness, not uniform over every library term.
+The existing callback progress still compares against the ORIGINAL pending state.
+
+Raw type substitutions now construct their own encoded sigma through decodeVariable
+and liftSubstitution. Each component/group/argument-only occurrence has its own
+raw substitution. Only demanded encoded images require finite-universe admission.
+Rigid query types do not acquire a blanket TypeIn premise. Source leaf typing
+and source-admissible firstOrderRaw membership remain separate from independent
+ordinary Program typing. Constructor totality for nonnegative signed sizes and
+initial whole-heap guard support remain checked from original source inputs.
+
+## Validation and publication
+
+Five new Lean modules contain 1611 source lines and 17 public laws. All pass the
+project Nix/Lake target and strict own-source warning checks. All public theorem
+names, real namespaces, exact source hashes and standard axiom sets are checked.
+No sorry or new axiom was added. Full Audit passes: 5759 live modules, 6 affected,
+4756 direct Audit imports and 93103 axiom reports. All 257656 prior Audit bytes
+remain after the five new imports. Every older proof/counterexample/draft remains.
+
+Compatibility: lean/restart-evidence/20261112-common-opaque-compatibility/.
+frontier.json pins the acyclic source frontier. checked.json records full Audit.
+portable-check.json records seven passing packet executions from /tmp: five Lean
+packets, full compatibility, and the separate public Haskell collision probe.
+Runtime notes: /tmp/mcfta-common-opaque-20261112-0616/. They contain no binary or
+build archives. The recent runtime directory is about 116 KiB. /tmp had 188.4 GiB
+free at 07:13 CET. Continue watching disk use. The proof and probe are reproducible
+from tracked source; transient binary archives are not needed.
+
+Six source commits after the prior checkpoint:
+- ea8630e686e705eade0a2f29d69b13cdf788949b: Prove exact startup work from accepted native terms.
+- 61b320ff7c9fe63629376dc443828df2345773e0: Preserve guard support through generated native queries.
+- 2d4f6e5057f2894a62fd7aecd36c96d943303cf4: Lift raw substitutions into encoded source type instances.
+- 0785e59ca916025586fbb980d8f27c2bddcd77a7: Align opaque head and restart stages at one fuel.
+- d5d527d432b38fcb9178fc51507868f6a96dfeb0: Prove reserved variable and raw constructor encoding collision.
+- 3221660104231da94b9bc6a6e51ab2ccc217854e: Reproduce raw synthesis type collision with rigid controls.
+
+ROOT owns all compilation and Git publication. Keep one serial heavy job,
+4 GiB memory.max/high, swap0 and LEAN_NUM_THREADS=1. Do not change queue or caps.
+Use bounded source-only fanout. Current next work: actual completed sibling prefix
+to selected prepared head at its reached caller; terminal outcome guard support;
+and an independent ordinary raw Program typing foundation. Their source drafts
+are outside this checkpoint. Do not stage or claim them without strict checking.
+
+## Biggest gaps and full retained objective
+
+First close the independent ordinary typing bridge and the raw encoding defect.
+Then complete actual prior-sibling reach and outer-parent physical guard histories.
+Derive adequate whole recursive depth and one original-input total-work bound;
+a common stage fuel or a descending logical scalar alone does not supply either.
+Retain early stop, rejected/failed, blocked, sibling, later-state and warm-cache
+identity cases. Do not assume prior callbacks complete or replace a reached caller
+with an independent witness. Charge ScanReserved.after_prefix at the actual index.
+
+The full goal still includes original-input soundness and completeness, exact
+accepted native terms and Program component counts for each size, actual ordered
+enumeration and multiplicity, both inverse directions of both actual signed APIs,
+Word/Int bounds, finite execution, lazy productivity, and Haskell correspondence.
+The optimized interned implementation remains primary. Preserve the older
+constructor/equality proofs as the secondary development. Keep the known eager
+versus deferred order counterexample; equal multisets do not prove equal order.
+Weighted training, Table and sampler composition also remain outside the formal
+end-to-end theorem. Existing finite numerical and sampling checks are empirical.
+
+Last primary usage check: 13% at 07:06 CET. Check fresh usage about every 15 minutes
+by reading ONLY the last 1 MiB of the primary rollout, never the full multi-GB log.
+If fresh usage is above 80%, save a complete handoff, pause the goal and notify Matti.
+The full goal remains ACTIVE while these obligations remain.
+
+--- Preserved prior handoff ---
+
 # Restart checkpoint: 2026-11-12, actual false restart and initial heap support
 
 Goal status is ACTIVE. Continue the FULL objective. Pushes to formalize remain
