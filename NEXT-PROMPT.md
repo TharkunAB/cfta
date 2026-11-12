@@ -1,3 +1,181 @@
+# Restart checkpoint: 2026-11-12 10:06 CET, original/checked native startup and source collision acceptance
+
+The persistent goal is ACTIVE. Continue after publication. The base is
+b417f9e3d6c623e7f9c3b92ff2814937569bb76d. The checked source head is 3836700c57e5c0f0e18d117fd47841240bc1fcf6.
+Integrated main is dedd47da878e78aa5be9947247d8156675956b59, last fetched09:26 CET.
+The runtime records the final checkpoint hash. Push the exact verified commits
+to the explicitly authorized formalize branch. Verify the remote tip and main
+ancestry. Persist a board request before posting; verify canonical readback.
+Preserve .hypha/, every prior proof/counterexample/repair and marked draft.
+
+## Strongest current positive and negative results
+
+For an explicitly admitted ordinary typed Program with required query-token
+coverage, actual modeled firstOrderRaw succeeds and accepts an exact annotation.
+The same annotation projects/decodes to the original Program and component
+count. It reaches the original modeled native build and a valid initial
+enumeration assignment. It also passes through actual modeled checked reduction
+when the existing computed Room condition holds. The full worker packet and
+the SAME annotation/assignment are retained. The initial pending potential is
+P=N. The initial work is W=(N+1)*N+actual initial flag. N is whole annotation size.
+These are pointwise initialization laws. They do not prove whole-run completion.
+Empty library avoid, admission, query coverage, width/budget and machine-domain
+limits remain explicit. No unrestricted Haskell runtime theorem is claimed.
+
+The kernel also constructs actual firstOrderRaw success and literal root
+acceptance for the reserved-name collision query. Its decoded Program is f x,
+with two components. Independent ordinary typing rejects f x at EVERY raw type.
+This proves a source-model acceptance counterexample. The separately checked
+Haskell reproduction establishes the corresponding production behavior. No
+new Haskell execution or complete correspondence proof is claimed here.
+
+The fixed two-component annotation family remains checked: ONE source expression
+accepts rootTerm n for every n, decoded to SAME ignore nil, native size2*n+14.
+There is no universal native annotation-size bound from Program component count.
+This expected family is not runtime divergence or a small-model refutation.
+
+## Four new exact source modules
+
+- SourceSynthesisOrdinaryInitialModelWork.lean:150L,uses_native_initial.
+  SHA65c7db7fb6bbaf50a1fc7f731ce9dedbbcbd3cf7a6706ca85037c2ae7bbd6811.
+  One root admission, one original caller/build, same-build membership and
+  projectability, one initial packet/work producer, SAME selected assignment.
+  The full original caller/startup packet and carriers remain intact.
+- SourceSynthesisOrdinaryCheckedInitialModelWork.lean:230L,
+  uses_checked_native_initial.
+  SHAea2257c250970d8fcd82ad4bf20c07c3d41b82945d4d58e48f46257ac4feaac9.
+  One root admission and one complete conditional checked producer. Keep its
+  computed Room/seed/forecast, graph/checks/reads/final Memos, Post/Frame/Fits,
+  known physical Heap, value/Type/history/Mu-profile fields, ranges/equations,
+  and universal returned Program count law. NodeLaw reverse transfers SAME
+  whole under actual emptyValue_live. One startup producer uses Post.context.
+  Private membership transports use DecidableEq subsingleton equality. No new
+  premise or canonical-instance restriction. An unused existential proof binder
+  is only renamed _built. The public contract is not weakened.
+- SourcePruningEnumerationSharedPreparationReadsProjectable.lean:61L,
+  preparation_reads_projectable.
+  SHAe4dd01c2caf30f6d34c17d35e43cf19723fa7def18bcd405fc50eead738b9131.
+  Actual stopped/prepared Reads retain original/result availability and physical
+  source-equality support at SAME endpoint. The prepared branch observes its
+  exact requireAll execution. No final Ready/Frame/domain/memo or whole-parent
+  claim. No future packet supplier or independent finite producer.
+- SourceSynthesisOrdinaryCollisionAcceptance.lean:127L,source_accepts_untypable.
+  SHAa329c85eeecaad277d0b21b68eceb592239e4eb5528b757593b0ed52f73d82d6.
+  Reuses exact old emptyLibrary/badQuery and all-raw-type rejection. Actual pair
+  and singleton selections plus actual B catalog membership derive source
+  RelevantTyping directly. One firstOrderRaw_member_total gives success and
+  acceptance. No impossible ordinary UsesEligible certificate is assumed.
+
+## Biggest remaining gaps and next work
+
+The largest gap is source-derived depth/work coverage of the full optimized
+run, including earlier hooks and all alternatives. The existing bounded grammar
+and memoized copier already have exact guarded bounded-language laws.
+EnumerationBuilderRuntime/FastPaths retain scoped canonical sharing. Do not
+write a duplicate abstract copied grammar. MergedFreshOrdinaryColdTermination
+already derives finite stable closed exposure from CURRENT semantic readiness.
+
+The missing native bounded-copy realization is documented in the frozen
+next-native-depth-bridge.md, SHA8024f6441dcf910cfaac32bb35616a2459f512d80274664df30b774b2ee6714b.
+SourceCompileImportExecution still accepts boundDepth as an external callback.
+Model actual exposure, ordered child copies, same-arity edge interning, node
+normalization, signed branches and local memo. Derive one common reader cutoff
+from current source-height recursion; do not ask for a future completion/view.
+Native Value.depth is Mu depth, not constructor height. Canonical sharing means
+one physical ID need not decode to one (remaining-depth,source-ID) key. Native
+IDs start at zero; the old abstract row zero sentinel needs explicit encoding.
+The old source heap can still contain Mu. A copied component rank is not a rank
+for the entire final heap. OperationRows/AllocatedRows/compiled rows remain
+separate correspondence obligations. Term bounds do not bound heap mass or
+prior-hook work. Preserve raw Rec/error, pending/open, negative, empty, Room,
+unsupported finite and CannotCountConstrainedEdges/ambiguity cases.
+
+Physical annotation projectability Heap, origin-alphabet annotation Heap, and
+ConstrainedCapGuardHeap body/probe profile equality at stored Mu records are
+DIFFERENT predicates. Do not relabel Mu profiles as physical edge support.
+Shared numeric parent pass support still needs CURRENT admission/selected
+domains/memos at the exact preparation endpoint. Reads retain preparation/pass
+histories but drop the intermediate full preparation Post/Frame packet. Final
+facts cannot replace those intermediate facts. Existing completed query/target
+and historical parent reduction Heap observers are already checked.
+
+An UNVERIFIED next-cycle arrow encoding draft exists only in the runtime:
+SourceSynthesisInternalArrowEncodingCollision.lean,53L,one proposed law,
+SHA9a2cb98ba9d5bd5bdf1edd329c1f23faaf68b12442f428d087a999fb2749036e.
+It proposes that function A->B and raw ->[(->)[],A,B] are AliasSafe, encode equally,
+and are not ordinary Equivalent. No kernel/runtime claim until checked. The
+frozen reflection audit is next-encoding-reflection-domain.md,
+SHAb1788f0294ac91b86904cb1735c2c62bf8ba4ca346e1bd0ef5f9937e3e652a9e.
+Current AliasSafe is imposed on original schemes, not every query/rho image.
+Variable-key decoding/injection and normalization/lift laws exist; no whole Ty
+decoder/reflection law was found. A proposed minimal layout safety condition is
+not substitution-closed. Do not confuse it with current AliasSafe or silently
+restrict the exported raw API. Native Haskell tag repair and reflection remain
+explicit separate work.
+
+Keep the FULL original scope: optimized interned primary, constructor/equality
+secondary; original-input soundness/completeness; exact accepted native terms
+and Program components per size; BOTH directions of BOTH inverse laws; actual
+signed APIs; order/multiplicity; finite execution; source-derived full native
+work/depth and machine limits; failed/rejected/blocked/sibling/later states;
+warm cache identity; Word/Int; lazy productivity; Haskell correspondence; and
+training/Table/sampler composition. None is discharged by theorem counts alone.
+
+## Haskell findings and repair guidance for the external agent
+
+No production Haskell or Liquid Haskell source changed. Both reproduced defects
+remain unfixed as of integrated main. PASS in their packets reproduces the bug.
+
+1. Public raw type encoding aliases TVar a with TCons var1[]. Query
+   f:TVar a->B,x:TCons var1[],goalB accepts f x at size2. The new kernel law now
+   derives the full source acceptance and independent every-type rejection.
+   Runtime packet:lean/restart-evidence/20261112-type-encoding-runtime/.
+   Separate constructor, variable and internal tag namespaces across all encode,
+   recognition, generalization and universe routes. Preserve Fun/2 alias behavior.
+   A parser-only guard or a restriction on variable-like constructor names alone
+   does not establish whole encoding reflection. Keep raw API unrestricted.
+2. constructorsOf drops Fun at every arity; typeNodeWith aliases only Fun/2.
+   Parsed Fun/0 and Fun/3 result types are missing from the finite app universe.
+   Runtime packet:lean/restart-evidence/20261112-fun-arity-universe/.
+   Include non-two arities as ordinary constructors; recurse through all args.
+   Preserve the two-argument alias. Evaluate other modes separately.
+
+The source once comments need clarification: relevance covers required tokens
+and permits extra unmarked query uses. Duplicate names retain token multiplicity
+but marked singleton lookup uses the last payload. No comment/behavior repair
+has been applied here. Record ALL future Haskell fixes in FINDINGS.
+
+## Validation, publication, and continuation
+
+Four additive modules have 568 lines and four public laws. All four strict
+own-source checks pass, with exact public namespaces/name sets/source hashes
+and standard axiom sets. The graph is acyclic:5777 live modules,five affected,
+4774 Audit imports,93270 axiom reports. All258814 prior Audit bytes remain after
+four new imports. All FIVE portable checks pass from /tmp. Source commits:
+
+- SourceSynthesisOrdinaryInitialModelWork: 0fa0354ccb31a145c3a4f83ca9f21403787fd043
+- SourcePruningEnumerationSharedPreparationReadsProjectable: 33f49293d3ba8b548a2233af4b587a2db66cf181
+- SourceSynthesisOrdinaryCollisionAcceptance: 8fae9d2c5ac9758063664170034790ef23784004
+- SourceSynthesisOrdinaryCheckedInitialModelWork: 3836700c57e5c0f0e18d117fd47841240bc1fcf6
+
+Evidence:lean/restart-evidence/20261112-native-admission-compatibility/.
+Runtime:/tmp/mcfta-native-admission-20261112-0927/. All previous root bytes follow
+unchanged. Reuse the repo Lake cache. Do not archive binaries under /tmp.
+Runtime had113.6KiB at09:57; /tmp had188.2GiB free. Watch space during long work.
+Only root compiles/publishes. Agents edit assigned NEW runtime sources only.
+Use ONE serial heavy job:memory.max=memory.high=4GiB,swap0,LEAN_NUM_THREADS=1,
+project Nix shell. Do not change caps/concurrency/heartbeat. Wait for terminal
+completion before dependent mutations or another heavy job.
+
+Primary usage was16.0% at2026-11-12 09:57 CET.
+Next check10:12 CET. Read ONLY last1MiB of
+/home/tritlo/.codex/sessions/2026/10/15/rollout-2026-10-15T10-25-57-01a13eab-04a5-7d13-9f8c-5287118602cc.jsonl.
+Use newest complete token_count with non-null rate_limits.primary. Print no
+credits. If fresh usage exceeds80%, save handoff, pause goal, notify Matti.
+Otherwise continue. Do not mark the entire objective complete.
+
+--- Previous checkpoint follows unchanged ---
+
 # Restart checkpoint: 2026-11-12 09:25 CET, ordinary root admission and actual shared scan support
 
 The persistent goal is ACTIVE. Continue after this checkpoint. The base is
