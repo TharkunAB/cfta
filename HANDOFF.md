@@ -1,3 +1,84 @@
+## 2026-11-12 20:52 CET — terminal protection and finite Program readback
+
+Goal ACTIVE. Keep the full system objective: exact accepted terms per count,
+finite execution, size order, both rank/unrank inverse laws and actual Haskell
+correspondence. Preserve the optimized interned core, every old proof and
+counterexample, and untracked `.hypha/`. Standing authorization permits pushes
+to `formalize`. Do not stop after publication.
+
+Six modules contain 896 lines and six public laws. Strict checks pass. Full
+Audit passes: 5868 live modules, 7 affected modules, 4865 imports and 94304
+axiom reports. All seven packet checkers pass from `/tmp` under the serial
+4 GiB cap. All 263941 previous Audit bytes remain after six new imports.
+Evidence: `lean/restart-evidence/20261112-current-program-role-driver-compatibility/`.
+Runtime: `/tmp/mcfta-current-program-role-driver-20261112-2015/`.
+
+The strongest exact construction/pruning theorem remains `accepted_exact`.
+The SAME successful current first-order initialization and completed pruning
+run preserve exactly eligible Programs at the requested count and original
+query coverage, with avoid=[]. Full native and typing observations remain.
+Its input-derived width is mathematical, not a fixed Haskell host bound.
+
+New `SourceSynthesisProgramRolesPartialCompletion.complete_program_root`
+starts with the actual finished Packet, noStop done, ProgramSlots and mark0.
+It derives a finite, stable rootPartial result and ALL larger-fuel singleton
+runs. The same result projects to one Program, retained by every completion.
+It keeps RenderStable, the entire Core Frame, Stratified and ALL original
+conditional model observers. No readback success, fuel, model/completion
+witness, source acceptance or rank is supplied. This is a readback theorem
+conditional on the current role invariant. It does not prove a satisfying
+type assignment exists or complete default semantic soundness.
+
+The literal terminal-prefix UF operation now preserves marked roots/stores
+and separates them from the merge winner. It does NOT claim Safe after the
+prefix before payload assimilation. Both actual raw finish actions preserve
+roles with exact reached states and root protection, without that invalid
+Safe premise. Parent finalization derives its own finalized Packet from
+CURRENT ordered-child receipts. One actual finalizer and one callback keep
+both ENTIRE original resource tuples, full native/Memos endpoints and roles.
+The full callback/driver role induction remains open.
+
+Important scope finding: the existing finite SharedPreparedRecursive.run
+resource producer is the shallow runWithChild specialization. Actual eager
+traversal needs its separate height induction. Sibling edge scans restore
+captured enumeration Core while threading native endpoints; each output
+branch needs its own marked set. Do not substitute a global mark map or
+call the shallow producer a complete proof of current Haskell enumeration.
+
+Original-input eager work/capacities, all native query totals, default Mu
+semantics, residual satisfiability, reduce/refold, output order/multiplicity,
+rank/unrank inverses and native Haskell/FFI correspondence remain separate.
+
+Continue R254 at `/tmp/mcfta-current-program-role-loop-20261112-2043/`.
+Alpha has frozen a 255-line SourceSynthesisProgramRolesSharedTerminal.lean
+that calls the existing terminal resource carrier once, retains its entire
+original receipt and appends roles at the same endpoint. It needs ROOT strict
+compilation. Gamma is proving the literal CachedOwn.suspendMany equality
+class allocator preserves old marks and leaves new equality slots unmarked.
+Beta is freezing the exact driver/eager induction audit and missing seams.
+All files remain runtime-only until ROOT copies/checks them.
+ROOT remains the sole compiler and publisher. Clone only the eight standard
+helpers for the next verified base; keep source commits in dependency order.
+Do not rewrite history, weaken source-pinned counters or change memory caps.
+
+Latest usage: 27% at 20:49 CET. Next check by 21:04 CET. `/tmp` has
+176.25 GiB free. Read only the final 1 MiB of the rollout for usage.
+If primary usage exceeds 80%, stop workers, save a handoff and pause the goal.
+Do not delete other owners' active data, including `/tmp/claude-1000`.
+
+Haskell is unchanged. Main was refreshed at 20:49 CET and remains
+`e53852064d3ef5a2eafec47d754c27504b11de5f`, including PR210/211. The earlier
+focused Nix synthesis run passed 16 examples; it is not a full-suite claim.
+No Haskell formatting/test rerun followed these Lean-only changes.
+
+Preserve the external Liquid duplicate-name/refinement defect below. Owner
+`claude-gondolin` reported vacuous refinement entailment and inconsistent
+FIRST/LAST readers on current main. Branch:
+`fix/liquid-repeated-argument-names`. No merged repair was present at 20:49.
+Do not duplicate that work. Record and integrate its eventual repair.
+
+Previous checkpoint follows.
+
 ## 2026-11-12 20:20 CET — actual Program role preservation cases
 
 Goal ACTIVE. Keep the full system objective: exact accepted terms per count,
