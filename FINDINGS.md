@@ -1,3 +1,79 @@
+## 2026-11-12 20:20 CET — actual Program role preservation cases
+
+Goal ACTIVE. Keep the full system objective: exact accepted terms per count,
+finite execution, size order, both rank/unrank inverse laws and actual Haskell
+correspondence. Preserve the optimized interned core, all old proofs and
+counterexamples, and untracked `.hypha/`. Standing push authorization remains
+for `formalize`. Do not stop after publication.
+
+Nine new modules contain 779 lines and nine public laws. Strict checks pass.
+Full Audit passes: 5862 live modules, 10 affected modules, 4859 imports and
+94280 axiom reports. All ten packet checkers pass from `/tmp` under the serial
+4 GiB cap. All 263447 previous Audit bytes remain after nine new imports.
+Evidence: `lean/restart-evidence/20261112-current-program-slot-scope-compatibility/`.
+Runtime: `/tmp/mcfta-current-program-slot-scope-20261112-1934/`.
+
+The strongest construction/pruning claim remains `accepted_exact` from
+SourceSynthesisCurrentComputedWidthExactProgramLanguage. The SAME current
+first-order initializer and completed pruning run retain exactly eligible
+Programs with original query coverage and the requested count, when avoid=[];
+all previous native/caller invariants and the full typing observer remain.
+The input-derived width is mathematical. It is not a fixed host bound.
+
+The new laws derive actual Program-child native fields, annotation-only trie
+scope and exact source-variable ranges. The SAME full terminal observer has
+at most rest.length+2 explicit intersection calls. A finished actual noStop
+packet cannot retain a pending value certified as a Program.
+
+ProgramSlots now records marked raw UVar bounds, live roots, IncomingAvoid
+and actual stored native fields or literal fragment roles. Literal startup
+establishes the predicate for slot0. The actual fresh-child action derives
+the complete reached state, Safe and old marks plus the fresh mark. The
+actual enumerated-fragment write, compression frame and native Keeps retain
+ProgramSlots. Current caller Post.effects.keeps supplies that native relation.
+No new desired after-role, model, Projection or rank supplier proves these cases.
+
+These are operational cases. Terminal UF merges, ordered parent callback
+composition, the full driver and actual finished partial readback remain to
+compose. Existing Stratified facts supply rank. Source-variable bounds alone
+do not prove UF separation. FragmentRoles alone does not prove Safe or rank.
+IncomingAvoid concerns suspended equality references, not legal fragment holes.
+
+Full eager native-query totals, original-input total work, default Mu
+rendering, reduce/refold, output order/multiplicity, both inverse laws and
+native Haskell/FFI correspondence remain separate. This is not completion of
+the system proof.
+
+Haskell is unchanged in this checkpoint. ROOT refreshed main at 20:20 CET;
+main remains `e53852064d3ef5a2eafec47d754c27504b11de5f`, with PR210/211.
+The earlier focused Nix synthesis run passed 16 examples; no full-suite claim
+follows. Lean-only work required no repeated Haskell formatting/test run.
+
+Preserve the external Liquid duplicate-name/refinement defect below. Owner
+`claude-gondolin` reported vacuous refinement entailment and inconsistent
+FIRST/LAST readers on current main. Its branch is
+`fix/liquid-repeated-argument-names`; no merged repair was present at 20:20.
+Do not duplicate that Haskell work. Record and integrate the eventual repair.
+
+Continue R253 at `/tmp/mcfta-current-program-role-driver-20261112-2015/`.
+Alpha is deriving actual TerminalPrefix UF role preservation. Beta is checking
+actual rootPartial Program projection from the existing packet/roles/finished
+state. Beta must check marker scope, opaque annotation reads and shared holes
+before freezing a claim; report any missing fact rather than add a desired
+Projection premise. Gamma is inspecting the actual parent callback and ordered
+child receipt needed for fragment assembly and final write. Runtime files only.
+ROOT remains the sole compiler and publisher. Clone only eight standard
+helpers against the next verified base. Keep source commits in dependency
+order. Do not rewrite old history or change memory caps.
+
+Latest primary usage: 27% at 20:21 CET. Next check by 20:36 CET. `/tmp` has
+176.37 GiB free. R251 runtime used 12084 KiB; early R252 runtime used 156 KiB.
+These are source/log/check data. Do not delete other active owners' artifacts,
+including `/tmp/claude-1000`. Read only the final 1 MiB of the rollout for usage.
+If primary usage exceeds 80%, stop workers, save a handoff and pause the goal.
+
+Previous checkpoint follows.
+
 ## 2026-11-12 19:48 CET — terminal events and Program completion shape
 
 Goal ACTIVE. Preserve the full system objective, all prior proofs and
