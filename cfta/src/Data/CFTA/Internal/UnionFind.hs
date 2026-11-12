@@ -153,12 +153,25 @@ root uv (UnionFind m) = case IntMap.lookup (uvarToInt uv) m of
 -- The number of members of a Root is at most its size. The bound is not an
 -- equality, because the specification of IntSet.union does not say that the
 -- two sets are disjoint.
-{-@ data Entry
-      = Parent {entryParent :: UVar}
+-- The abstract refinement p is a condition on the parent of each Parent. The
+-- caller chooses p, for example "the id is less than n".
+{-@ data Entry <p :: UVar -> Bool>
+      = Parent {entryParent :: UVar<p>}
       | Root {entrySize :: {v:Int | 0 < v}, entryMembers :: {s:IntSet | intSetSize s <= entrySize}}
 @-}
 
--- The new representative is one of the two old representatives.
-{-@ unionRoots :: r1:UVar -> r2:UVar -> UnionFind -> ({v:UVar | v == r1 || v == r2}, UnionFind) @-}
+-- All entries of a forest have the same p.
+{-@ data UnionFind <p :: UVar -> Bool> = UnionFind {getUnionFindMap :: IntMap (Entry<p>)} @-}
 
-{-@ find :: uv:UVar -> uf:UnionFind -> (UVar, {v:UnionFind | v == uf}) @-}
+-- A new forest has no Parent. So the variables need no condition.
+{-@ withInitialValues :: forall <p :: UVar -> Bool>. [UVar] -> UnionFind<p> @-}
+
+{-@ union :: forall <p :: UVar -> Bool>. UVar<p> -> UVar<p> -> UnionFind<p> -> UnionFind<p> @-}
+
+-- The new representative is one of the two old representatives.
+{-@ unionRoots :: forall <p :: UVar -> Bool>. r1:UVar<p> -> r2:UVar<p> -> UnionFind<p> -> ({v:UVar<p> | v == r1 || v == r2}, UnionFind<p>) @-}
+
+{-@ find :: forall <p :: UVar -> Bool>. uv:UVar<p> -> uf:UnionFind<p> -> (UVar<p>, {v:UnionFind<p> | v == uf}) @-}
+
+-- When p holds for a variable, p holds for its representative.
+{-@ root :: forall <p :: UVar -> Bool>. UVar<p> -> UnionFind<p> -> UVar<p> @-}
