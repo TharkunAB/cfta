@@ -467,11 +467,15 @@ isTypeDomain :: Domain -> Bool
 isTypeDomain (TypeDomain _) = True
 isTypeDomain (HeadDomain _ _) = False
 
--- | The type constructors of a type with their arities.
+{- | The type constructors of a type with their arities. @Fun@ with two
+arguments is a function type, as in 'typeNode', so it is not in the result.
+@Fun@ with another number of arguments is a type constructor.
+-}
 constructorsOf :: Type -> [(Text, Int)]
 constructorsOf (TVar _) = []
 constructorsOf (TFun argument result) = constructorsOf argument <> constructorsOf result
-constructorsOf (TCons name arguments) = [(name, length arguments) | name /= "Fun"] <> concatMap constructorsOf arguments
+constructorsOf (TCons "Fun" [argument, result]) = constructorsOf argument <> constructorsOf result
+constructorsOf (TCons name arguments) = (name, length arguments) : concatMap constructorsOf arguments
 
 {- | A component type with each type variable replaced by the node of all
 types, and equality constraints that tie the occurrences of each variable.

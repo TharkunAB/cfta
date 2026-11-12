@@ -50,6 +50,18 @@ spec = describe "Data.CFTA.Gen.Synthesis" $ do
             solutionsOfSize lib query 2 `shouldBe` expected
             ECTAGen.cardinality generated `shouldBe` Right 1
             ECTAGen.values generated `shouldBe` Right expected
+    it "applies a function whose result type is Fun with other than two arguments" $ do
+        let argumentType = TCons (Text.pack "A") []
+            function = Text.pack "f"
+            argument = Text.pack "x"
+            expected = [App (Var function) (Var argument)]
+            encodings = [FirstOrder, Curried AnyHead Map.empty, Curried OnlyDefault Map.empty]
+        forM_ [0, 1, 3] $ \arity -> forM_ encodings $ \encoding -> do
+            let resultType = TCons (Text.pack "Fun") (replicate arity argumentType)
+                lib = (library [] [] []){libraryEncoding = encoding}
+                query = Query [(function, TFun argumentType resultType), (argument, argumentType)] resultType
+            solutionsOfSize lib query 2 `shouldBe` expected
+            ECTAGen.values (programsOfSize lib query 2) `shouldBe` Right expected
     it "parses the Hoogle+ data, and the printers give each type and program back" $ do
         let benchmarks = hooglePlusBenchmarks <> stackOverflowBenchmarks
             types =

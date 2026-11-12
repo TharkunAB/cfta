@@ -24,6 +24,11 @@ tree automata of `cfta`, with QuickCheck integration.
   give a correct log-partition and correct expected counts. Before, they gave
   `Infinity`, `NaN`, or a wrong finite value. `distill` and `distillMixture`
   give `Nothing` when the fit is nonfinite.
+- In `Data.CFTA.Gen.Synthesis`, a type constructor `Fun` with zero, one, or
+  three or more arguments can be the result type of an application. Only
+  `Fun` with two arguments is a function type. Before, the node of all types
+  left out `Fun` with every number of arguments, so the search gave no
+  application with such a result type.
 - Add `Data.CFTA.Sized.Checkpoint`: resume a size-ordered listing of the
   terms of a graph, or a sampled run of draws from it, also in a new process.
   `start` gives the checkpoint before the first term. `resume` builds the size
