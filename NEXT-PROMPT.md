@@ -1,3 +1,103 @@
+## 2026-11-12 21:50 CET — actual ordered children and captured-parent roles
+
+Goal ACTIVE. Keep the full objective: exact accepted terms per count, finite
+execution, size order, both rank/unrank inverse laws and actual Haskell
+correspondence. Preserve all previous proofs, counters, repairs, drafts, the
+optimized interned core and untracked `.hypha/`. Standing push authorization
+covers `formalize`. Continue work after publication.
+
+Four new modules contain 1161 lines and four public laws. All strict checks
+pass. Complete Audit passes: 5880 live modules, 5 affected modules, 4877
+imports and 94352 axiom reports. All five portable packet checkers pass from
+`/tmp` under the serial 4 GiB cap. All 264764 prior Audit bytes remain after
+four new imports. Evidence:
+`lean/restart-evidence/20261112-current-program-role-traversal-compatibility/`.
+Runtime: `/tmp/mcfta-current-program-role-traversal-20261112-2110/`.
+Base `7c767bd067dfdd1f4c2e234a9c97669e33dd4576` is published and remote-verified.
+
+The SAME actual own-edge producer retains its complete cached/raw/resource
+receipt and derives ProgramSlots, marked-root protection and each actual child
+bucket's avoidance from the CURRENT stored parent bucket. It requests no
+future child-state exclusion. The coupled ordered-child producer retains the
+ENTIRE original resource result, including stopped prefixes, and derives its
+own extending mark set and exact indexed Program fragment roles. Current
+parent fields and actual EdgeInputs derive each child field/scope internally.
+
+Both captured-parent cases now use the actual selected-edge data. The unmarked
+case retains every old resource field and the unchanged Program marks. It
+uses the selected producer's current incoming-history/protection/Post receipt
+before that information is hidden, then the full actual unmarked finalizer.
+The marked case constructs one enriched producer from one own-edge producer,
+one coupled child traversal and one ParentCallbackRoles producer. It derives
+its finalized Packet internally and retains the SAME computed finalizer and
+metadata callback receipt, including all larger-fuel runs, full native/Memos,
+Frame/Packet/roles and literal continueWith equation. The outer proof can use
+that callback receipt directly. It must not replay a hidden child producer or
+callback to supply roles afterward.
+
+Independent header review checked all four old resource conclusions plus the
+proposed full-driver conclusion. Each old conclusion survives unchanged as
+an exact normalized prefix, apart from grouping parentheses. No old field,
+fuel quantifier, stopped endpoint or full native/Memos result was dropped.
+New premises describe current source/state data. No future child-role,
+after-Packet, Projection, model or completion supplier was introduced.
+The review is in source-audit.md. Kernel checks cover the four implemented
+laws. The driver header review is NOT a completed driver theorem.
+
+The strongest exact construction/pruning claim remains `accepted_exact`:
+the SAME current successful first-order initialization and pruning result
+retain exactly eligible Programs with original query coverage and requested
+count when avoid=[]. Its derived width is mathematical, not a fixed host
+bound. Current startup already derives slot-zero roles from that SAME build.
+Finished Program readback already derives its own finite stable result and
+all larger-fuel runs, with one Program retained by every completion, from
+current finished Packet/noStop done/ProgramSlots/mark0. It still does not
+establish a satisfying type assignment or default semantic soundness.
+
+The full public shallow-driver role theorem is STILL UNPROVED. Alpha owns
+its runtime working SourceSynthesisProgramRolesSharedDriver.lean in R255.
+Only the immutable 179-line private scaffold has passed strict compilation:
+`shared-driver-scaffold-78ba5038.lean`, SHA
+`78ba5038b40b4cee4c4ca1f75778c7a17874ae7f924b702ef097dff36cc1a962`.
+It checks zero-depth and computed callback glue. It has ZERO public laws.
+The frozen proposed 53-line driver header is preserved separately. Alpha is
+composing actual prefix/scan/depth cases with the checked captures. Do not
+copy or count that working file as an implemented public theorem.
+
+Prepare the next compiler/publication runtime at `/tmp/mcfta-current-program-role-driver-integration-20261112-2150/`
+ONLY after this checkpoint is pushed and remote-verified. Clone only the eight
+standard helpers from R255 and set the new verified base. Alpha can continue
+its R255 working source; ROOT copies an immutable frozen cut into the new
+runtime when ready. ROOT is the sole compiler and publisher. Keep dependency
+order in source commits and never rewrite history or weaken old source pins.
+
+The checked finite worker remains the shallow runWithChild specialization.
+Actual eager Haskell traversal needs separate height/resource induction.
+Sibling row scans restore captured Core while global native/Memos endpoints
+thread; each emitted branch needs its OWN extending marks. Original-input
+work/capacities, total native query work, default Mu semantics, residual/model
+existence, reduce/refold, stream order/multiplicity, both inverses and full
+native Haskell/FFI correspondence remain separate obligations.
+
+No Haskell or Cabal source changed. Main was refreshed at 21:28 CET and is
+`e53852064d3ef5a2eafec47d754c27504b11de5f`, with PR210/211 integrated.
+The earlier focused Nix synthesis run passed 16 examples; it is not a full-suite
+claim. Haskell formatting/tests were not repeated for these Lean-only changes.
+The external optional Liquid duplicate-name/refinement defect remains in
+FINDINGS. Owner claude-gondolin has branch
+`fix/liquid-repeated-argument-names`; no merged repair was present at refresh.
+Do not duplicate that repair. Record and integrate it when it lands. Preserve
+all older source-pinned negative packets and their intended repaired-main
+rejections.
+
+Latest primary usage: 29 percent at 21:39 CET. Next check by 21:54 CET.
+`/tmp` has 175.49 GiB free. The latest two temporary proof workspaces measured
+464 KiB and 300 KiB at 21:46 CET. Read only the rollout's final 1 MiB for usage.
+If primary usage exceeds 80 percent, stop workers, save a handoff and pause
+the goal. Do not delete other owners' active data, including claude-1000.
+
+Previous checkpoint follows.
+
 ## 2026-11-12 21:24 CET — current startup and actual Program-role transitions
 
 Goal ACTIVE. Keep the full objective: exact accepted terms per count, finite
