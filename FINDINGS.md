@@ -1,3 +1,146 @@
+# Restart checkpoint: 2026-11-12 09:25 CET, ordinary root admission and actual shared scan support
+
+The persistent goal is ACTIVE. Continue after this checkpoint. The base is
+cc0cbc906fdbb62071479a052f29fdb64cf5daad. The checked source head is b1134eb07118d6690f94a7b46262fd007553f282.
+Integrated main is dedd47da878e78aa5be9947247d8156675956b59, last fetched 09:05 CET.
+The final checkpoint commit records its own hash in the runtime. Push to the
+explicitly authorized formalize branch, verify the exact remote tip, then post
+the concise board result with a persisted request and canonical readback.
+Preserve .hypha/, all proofs, counterexamples, repairs, and marked drafts.
+
+## Strongest new result
+
+An explicit ordinary program admission certificate and an exact permutation of
+required query tokens construct an accepted root annotation for actual
+firstOrderRaw. Empty library avoid is explicit. The same annotation projects
+and decodes to the original Program. Its component count is exact.
+This is sufficient-domain completeness for the modeled source constructor.
+It is not unrestricted raw-API soundness or a whole-run termination result.
+
+SourceSynthesisOrdinaryRelevantCompleteness.lean has 272 lines and two public
+laws: uses_relevant_member and uses_root_member. Its SHA is
+63c7faa8ccbf533e25f5d1788497537ec893dbb83699f47bafda7de2d41b6522.
+UsesEligible has four cases: an unmarked ProgramEligible subtree, a marked query
+leaf, application, and ordinary type conversion. Marked tokens retain duplicate
+multiplicity. A marked leaf uses the actual last ordinary query binding.
+Additional unmarked query uses are permitted. The proof derives resolver
+success, actual row membership and source success. It assumes none of them.
+Raw substitutions, demanded finite type images, alias safety and application
+result admission remain explicit inside the sufficient certificate.
+
+SourcePruningEnumerationSharedScanReadsProjectable.lean has 219 lines and one
+public law: scan_reads_projectable. Its SHA is
+bc3f087eae9fe9e05e081ef82b2a30e99c1d37fc3eecc7d2dd353ff3d819b7ef.
+It observes actual selected, skipped, continued and stopped shared ScanReads.
+Current readiness, original value availability, and physical source-equality
+support hold at the SAME actual endpoint. Completed seeded traces derive their
+own range checks. Existing completed query observers are reused. The proof
+assumes no future heap/guard/range callback or independent finite producer.
+It does not prove scan completion or full shared parent projection attachment.
+
+## Remaining work and preserved distinctions
+
+The largest gap is a source-derived bound for the full optimized run. The
+bounded grammar already has exact copied-language and abstract coverage laws.
+Remaining depth gives the copied graph a decreasing rank. This does not yet
+connect to actual native bounded allocation/exposure or bound work before the
+cap. A native accepted-term bound alone does not bound physical heap mass or
+show shared prior hooks complete. Signed negative depth, unsupported rawRec,
+CannotCountConstrainedEdges, ambiguity, empty and Room branches stay separate.
+
+Do not repeat old parent projection proofs. Completed native node/edge query
+Heap observers, allocated targets, and historical parent reduction_heap already
+exist. The new shared ScanReads observer fills a different attachment step.
+Projectability means a present sourceEqualities payload, equivalently project
+is not none. This equivalence does not require Cached. Physical annotation
+Heap, origin-alphabet annotation Heap, and ConstrainedCapGuardHeap body/probe
+profiles at stored Mu records are DIFFERENT predicates.
+
+The original source/build/caller/startup proof already has the raw composition
+primitives. The next UNVERIFIED runtime draft is
+SourceSynthesisOrdinaryInitialModelWork.lean:146L,one public uses_native_initial,
+SHA de86edd35cb3a6e8927d91b9e8c494d313238c4f58459a71b3539fee2baab117.
+It composes one root admission, one original caller/build, same-build membership
+and projectability, and one InitialModelWork producer. It retains the full
+startup packet and SAME assignment with P=N and W=(N+1)*N+actual initial flag.
+N is whole native annotation size, not Program component count. This draft is
+not checked. A checked-reduction alternative keeps its computed Room/profile
+and full return packet; its Mu GuardHeap is not physical projectability.
+
+The shared numeric attachment audit is frozen in the runtime at SHA
+85e409cebdca42723ed458ceabb33c30ec5e7b098aa1eccd3a8e3e336159eca9.
+Proper normalized record paths can be derived from actual precheck/cache/load.
+Full classes Read evidence drops the intermediate preparation Post/Frame/domain
+packet needed by pass_heap. Do not substitute final facts at that intermediate
+state. Retain or derive those CURRENT facts at the exact prepared endpoint.
+An independent full source collision-acceptance draft may be in progress only
+under /tmp. Do not claim it before strict checking. Older collision and raw
+untypability laws plus the separate Haskell reproductions remain checked.
+
+Keep the entire original objective: optimized interned path first; original
+inputs; soundness/completeness; exact accepted native terms and Program component
+counts per size; BOTH directions of BOTH public inverse laws; actual signed
+APIs; order/multiplicity; finite execution; full current/native resource and
+work/depth coverage; failures, rejections, blocks, siblings and later states;
+warm-cache identity; Word/Int; lazy productivity; Haskell correspondence; and
+training/Table/sampler composition. Keep the constructor/equality path too.
+
+## Haskell findings for the external repair agent
+
+No production Haskell or Liquid Haskell code changed here. Two defects remain
+unfixed as of integrated main. Their portable checks reproduce the defects;
+a PASS does not mean a repair.
+
+1. Reserved raw constructor names collide with variable encoding. The public
+   raw API accepts f:TVar a -> B applied to x:TCons var1[] under the bad query.
+   Independent ordinary typing rejects f x at EVERY raw type. Reproduction:
+   lean/restart-evidence/20261112-type-encoding-runtime/. The repair must separate
+   raw constructor, variable and internal tags across encoding and recognition.
+   Preserve Fun/2 alias behavior. A parser-only check does not repair raw API use.
+2. constructorsOf drops Fun at ALL arities, but typeNodeWith aliases ONLY Fun/2.
+   Parsed Fun/0 and Fun/3 result types make the finite app universe incomplete.
+   Reproduction:lean/restart-evidence/20261112-fun-arity-universe/. Include other
+   Fun arities as ordinary constructors and recurse through their arguments.
+   Preserve the two-argument alias and check other modes separately.
+
+The source comments that arguments are used once need clarification. Actual
+relevance covers required tokens and permits additional unmarked query uses.
+Duplicate names retain token multiplicity but use last-binding payload lookup.
+No documentation or behavior repair has been applied. Record future Haskell
+repairs in FINDINGS. These source facts do not narrow the public API silently.
+
+## Validation and restart commands
+
+Two additive modules contain 491 lines and three public laws. Both own-source
+strict reports pass with exact theorem namespaces, source hashes, public-name
+coverage, and standard axiom sets. Public headers stay unchanged after private
+elaboration repairs. The acyclic graph has 5773 live modules and three affected
+modules. Audit has 4770 imports and 93256 axiom reports. All 258685 previous
+Audit bytes remain after the two new imports. All three portable checks pass
+from /tmp. The exact source commits are:
+
+- SourceSynthesisOrdinaryRelevantCompleteness: f66e744c0d83040a4227a0dcaac92f52c47f22e5
+- SourcePruningEnumerationSharedScanReadsProjectable: b1134eb07118d6690f94a7b46262fd007553f282
+
+Evidence:lean/restart-evidence/20261112-ordinary-shared-compatibility/.
+Runtime:/tmp/mcfta-ordinary-shared-20261112-0906/. It contains only source drafts,
+small logs and metadata. Reuse the repo Lake cache; do not archive binaries in
+/tmp. Available /tmp space was 188.2 GiB at09:09. Check it during long work.
+
+Only root compiles or publishes Git. Agents edit assigned runtime source only.
+Use one serial heavy job: memory.max=memory.high=4GiB,swap=0,LEAN_NUM_THREADS=1,
+project Nix shell. Do not change caps/concurrency/heartbeat. Existing helpers
+prepare exact packets/manifests, preserve old Audit bytes, check the full
+closure, and reproduce from /tmp. Keep mutations and waits sequential.
+
+Primary usage was15.0% at2026-11-12 09:25 CET. Next check09:40 CET. Read ONLY the last1MiB of
+/home/tritlo/.codex/sessions/2026/10/15/rollout-2026-10-15T10-25-57-01a13eab-04a5-7d13-9f8c-5287118602cc.jsonl.
+Take the newest complete token_count with non-null rate_limits.primary; never
+print credits. If fresh usage exceeds80%, save the handoff, pause the goal and
+notify Matti. Otherwise keep working. Do not mark the whole objective complete.
+
+--- Previous checkpoint follows unchanged ---
+
 # Restart checkpoint: 2026-11-12, exact annotation family and last singleton lookup
 
 Goal status is ACTIVE. Continue the FULL objective. Pushes to formalize remain
