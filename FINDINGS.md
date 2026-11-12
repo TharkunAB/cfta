@@ -1,3 +1,162 @@
+# Restart checkpoint: 2026-11-12, actual false restart and initial heap support
+
+Goal status is ACTIVE. Continue the FULL objective. Pushes to formalize remain
+authorized. Preserve .hypha/. Prior published checkpoint:
+1f62420379f88154e3c98f431a064b1b3180aecd. Checked source/merge head: f0a1dc58df4811b1abee71afde25ff9712463e7b.
+Integrated main: dedd47da878e78aa5be9947247d8156675956b59; fresh fetch at 06:09 CET.
+PR208 changes only specftacular/README.md and docs/SPECTACULAR_COMPARISON.md.
+It updates empirical comparison data and revision qualifiers. It changes no Haskell
+or Lean source. Its benchmark data is not formal correctness evidence. No new
+Haskell build/test was needed for this documentation-only merge.
+Verify the published tip before new source work. This header overrides historical
+restart instructions. Every prior byte of all three root handoffs remains below.
+
+## Strongest new native statement
+
+The SAME R226 policy/preparation carrier now retains its completed ordinary or
+opaque head through ONE actual recording callback and false restart CALL. Its
+internally derived finite assignment, full Post/resources/global memo packet,
+old-variable agreement, fills, origins, Holds, properness and non-stuck progress
+remain attached to the same head. The callback verdict is false. Updated pending
+refutation holds under that SAME assignment. For arbitrary recur, continueWith
+has the literal false-restart equation at its derived cache/decision and saved query.
+A restart CALL does not establish a completed recursive result. Retain finish wrappers.
+
+The public header adds only CURRENT OriginPolicies templates whole and refutation
+of original pending groups. Existing pending bounds and old-variable agreement
+transfer refutation using the ORIGINAL counter, not the larger head counter.
+Startup already supplies refutation from empty pending metadata. The main theorem
+calls R226 once. Its private callback adapter calls R227 once per derived completed
+head. It retains each entire old head and callback packet, rather than replacing
+physical endpoints with unrelated witnesses. No future model/refutation supplier
+or ResumeComplete/depth input was added.
+
+After callback, ordinary P_after+1<=P_ORIGINAL and W_B_after<W_B_ORIGINAL hold.
+Opaque P_after=P_ORIGINAL and W_B_after+1=W_B_ORIGINAL hold. P is pendingSize
+across stored values. A counts all in-range true expandable flags, including
+blocked ones. W_B=(B+1)*P+A is a logical progress scalar, not measured runtime work.
+Current P<=B remains an input. A public original-input common budget is still open.
+
+The ordinary output supplies ONE semantically witnessed edge under its prepared
+node implication. It is not a function proving every row or execution through all
+preceding alternatives. Arbitrary recur outcomes and stop behavior remain intact.
+The existing three current unary/application/filter compatibility tests remain.
+
+## Fixed prefix endpoints and the common-bound gap
+
+checkpoint_resources_work_stable uses the same current Packet/chosen decision,
+resource profile/Fits and annotation Heap header as checkpoint_resources. It calls
+prefix_checkpoint_complete once. Fixed parked cache, empty narrowed heap, or
+nonempty narrowed heap/value/cache occur OUTSIDE all larger fuels. The explicit
+advance expression fixes the entire reached Caller. Saved query, Right metadata
+and core are fixed. The stored action function may vary.
+
+At every SAME observation, full PrefixValid and native Resources are retained.
+The exact selected-flag debit holds for every B and assignment. No model premise
+is needed for these scalar equalities. Parked P is unchanged and A/W decrease by
+one. Narrowed P, counter and other flags are unchanged; selected A/W debit is 0 or
+1 according to the new selected flag. This does not yet choose one common later fuel.
+
+next-common-work.md gives the smallest actual operational next cut: align R228
+and the fixed checkpoint at W0=p+q, select ONE full bundle at that SAME observation,
+and retain its preparation/head/callback witnesses. Physical caller/cache/query
+stability permits reuse without proving uniqueness of independently chosen memos.
+For the internally derived opaque arm, F=W0+prepBound+headBound+callbackFuel can be
+reindexed through the existing stable equations, resume_prepared and actual opaque
+continuation, with finish wrappers retained. Ordinary row diagonalization alone
+still does not prove reach at the caller left by prior siblings. Adequate recursive
+depth is a separate obligation. Do not claim this uncompiled next cut is closed.
+
+## Projection now derives from source construction and actual receipts
+
+NativeAcceptedProjectable retains the ENTIRE accepted_body_produced result and
+adds sourceEqualities=some, project=some, valid tries and own bounds for the SAME
+literal returned edge. accepted_receipt_projectable obtains these facts from the
+actual physical Receipt, retaining the entire old child-history/native-endpoint
+result. It does not request a separate rich walk or future guard/heap supplier.
+
+OriginalGuardsProjectable derives generalized guard support from generated_equalities
+and normalize_sat using a finite satisfying term. Top and the fixed application/
+filter guards also have finite witnesses. The actual OriginalGuardAlphabet is
+supported. Existing generic annotation construction then gives the whole initial
+Heap (fun c => exists classes, sourceEqualities c=some classes). complete derives
+the firstOrderRaw expression, actual mapped build/root and that Heap from the
+original library/query/nonnegative signed size. It has no future .ok/build/support
+premise. Constructor success still does not imply an inhabited resulting language.
+
+All later retained-row history remains open. Reuse the EXISTING annotation Heap,
+SafeWork and generated-prefix arity proof structure. Arbitrary NativeDemand Code
+can execute unchecked .work. A universal Code preservation claim is false at that
+interface; restrict the proof to actual generated requestNode/requestEdge/body
+prefixes. Include checked rejects/mismatch Top/[empty] and canonical cache hits.
+The actual allocated query route was already checked. No Haskell defect was found.
+Residual guards can project. Fits/Heap arity facts alone are vacuous at failed
+projection. The initial source-support part of the frozen history plan is now closed.
+
+The frozen history audit had an illustrative filter-witness error. Correct children
+are [s, node [s]], because its equality is [0]=[1,0]. The new source and strict check
+use the correct witness. Its source note records this correction. Preserve the audit.
+
+## Ordinary raw type instances now supply source leaves
+
+TypeSubstitutionWitnesses defines simultaneous raw substTy and explicit original
+scheme AliasSafe compatibility. Structural correspondence connects per-use raw rho
+and encoded sigma to actual rigid annotations, including Fun/2 arrow normalization.
+Actual group/component, argument-only and rigid query bindings derive LeafTyping
+or size-one TermsTyping directly. Only demanded image admission occurs. Rigid query
+arguments need no TypeIn or alias premise. Duplicate literal row origins remain.
+
+Encoded sigma/coherence remains explicit per occurrence. No full conventional
+Program typing judgment or ordinary typing admission/soundness theorem was added.
+The compatibility condition restricts this theorem; it is not a new public input
+validation rule. A small private elaboration helper obtains registered equations
+from the public typeVariables wrapper. It hard-codes no generated private name and
+adds no axiom. All resulting proofs pass kernel/axiom checks. This avoids changes
+to the old hash-pinned type syntax module. Keep ordinary typing and source policy distinct.
+
+## Full remaining objective and Haskell findings
+
+No Haskell file changed in R228. No Haskell repair or new production defect was
+identified. Retain all prior FINDINGS, PR207 stable log-domain training repair,
+PR205 Table/training/sampling boundaries, invariant/LPO repairs and counterexamples.
+No Liquid Haskell contracts or dependency were added. Record EVERY future Haskell
+repair in root FINDINGS for external work.
+
+Next work: opaque common native workFuel; all-row generated native history;
+ordinary previous-sibling endpoint reach; public policy/encoding and next-hole
+compatibility; source-derived adequate recursive depth AND total original-input
+work; independent Program typing/admission/inversion; exact Node and Program counts;
+actual size/order/multiplicity; BOTH directions of BOTH actual signed APIs;
+failed/rejected/sibling/later states; warm-cache identity; Word/Int bounds; lazy
+productivity; complete Haskell correspondence; weighted training/Table/sampler
+composition. Packet bounds raw pending IDs only. It does not bound typing/openHoles
+or prove their sorting, uniqueness or correctness. Keep that gap explicit.
+The optimized interned core is primary. All old constructor/equality proofs,
+marked drafts and counterexamples remain. Eager/deferred ordered equivalence is
+still refuted by the retained fixture. Preserve the full scope.
+
+## Verification and restart procedure
+
+Five additive modules contain 1,268 lines and 15 public laws. All focused project
+Nix/Lake checks pass. Own-source reports treat warnings as errors, check every
+public name in its actual namespace, and permit only standard axioms. The acyclic
+graph has 5,754 live modules. Audit covers six affected modules through 4,751
+imports and checks 93,014 theorem axiom dependencies. All 257,340 prior Audit bytes
+remain after five additive imports. All six portable replays from /tmp pass.
+The main merge changes only two documentation files, so checked source hashes stay exact.
+
+Evidence: lean/restart-evidence/20261112-policy-restart-compatibility/ and each
+source packet. source-audit.md retains five source notes and three next-cut audits,
+with completed parts and the filter-witness correction identified. Reproduce from
+source check.py files under the existing serial 4 GiB cap. No binary archive exists.
+Runtime: /tmp/mcfta-policy-restart-20261112-0535. No heavy job remains after checks.
+At 06:01 CET fresh primary usage was 13% and /tmp had 195.0 GiB free; runtime metadata
+was about 85 KiB before portable reports. Read only the bounded usage tail. Pause
+and notify if fresh primary usage exceeds 80%. LEAN_NUM_THREADS=1, memory.max/high
+4 GiB and swap=0 remain unchanged. Keep ACTIVE and continue after publication.
+
+---
+
 # Restart checkpoint: 2026-11-12, source totality and checked projection
 
 Goal status is ACTIVE. Continue the FULL objective. Pushes to formalize remain
