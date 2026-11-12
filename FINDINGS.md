@@ -1,3 +1,76 @@
+## 2026-11-12 19:48 CET — terminal events and Program completion shape
+
+Goal ACTIVE. Preserve the full system objective, all prior proofs and
+counterexamples, the optimized interned core, and untracked `.hypha/`.
+Standing authorization permits pushes to `formalize`.
+
+Five new modules contain 840 lines and five public laws. Strict checks pass.
+The complete Audit passes with 5853 live modules, 6 affected modules, 4850
+Audit imports and 94246 axiom reports. All six packet checkers pass from
+`/tmp`, under the serial 4 GiB cap. All 263138 previous Audit bytes remain.
+Evidence: `lean/restart-evidence/20261112-current-decoder-terminal-events-compatibility/`.
+Runtime: `/tmp/mcfta-current-decoder-terminal-events-20261112-1912/`.
+
+The strongest construction/pruning statement remains
+`SourceSynthesisCurrentComputedWidthExactProgramLanguage.accepted_exact`.
+For successful current first-order construction with no avoid rules, the SAME
+input-derived-width initialization and completed pruning run retain exactly
+the eligible Programs at the requested component count and original query
+coverage. Its entire initializer, worker result, native/cache invariants and
+seven-field typing observer remain. The width is a mathematical value, not
+a fixed Haskell host-capacity guarantee.
+
+New laws preserve the decoded Program across every completion of a projected
+opened partial term; identify the exact hole and complete state of an actual
+Program-child action; and retain actual query events through incoming, raw
+fold, cached fold and full terminal operations. Full cached/raw results,
+errors, Core, Caller and query memos remain. Fold events precede incoming
+events. Counts cover explicit intersection execute sites. Internal enabled
+worker calls and arbitrary consumer work remain outside those counts.
+
+The main default-output gap is Program-slot and fragment-role preservation
+through actual child, callback and UF updates. Mark raw UVar occurrences,
+not native IDs. Derive annotation-only suspended paths at actual Program
+children. Keep literal leaf/app/filter arities 1/4/2. Preserve live roots and
+actual native readbacks. Existing Stratified facts already supply readback
+rank; do not add a new rank or future Projection premise. Metadata.types is
+a UVar slot. It is not a native node ID.
+
+Complete eager resource accounting, original-input total work, default Mu
+rendering, reduce/refold, output order and duplicate handling, both rank/unrank
+inverse laws, Haskell/FFI correspondence and other library features remain
+separate obligations. These checks do not complete the system proof.
+
+Production Haskell is unchanged in this checkpoint. Main remains
+`e53852064d3ef5a2eafec47d754c27504b11de5f`, including PR210/211. The earlier
+focused Nix synthesis test run passed 16 examples; it is not a full-suite
+claim. No Haskell formatter/test rerun was required by these Lean-only edits.
+
+Keep the external Liquid duplicate-name/refinement defect below. The owner
+`claude-gondolin` reported vacuous refinement checks and inconsistent FIRST/
+LAST readers on current main. Its repair branch is
+`fix/liquid-repeated-argument-names`. ROOT refreshed main and board at 19:30
+CET; no newer pushed repair or PR was present then. Do not duplicate that
+owner's Haskell work. Record and integrate its eventual repair.
+
+Continue R252 at `/tmp/mcfta-current-program-slot-scope-20261112-1934/`.
+Gamma has a frozen 200-line `SourceSynthesisProgramChildScope.lean` with one
+actual guard-to-child scope observer. Beta has a frozen 74-line
+`SourceSynthesisNoPendingProgramSlot.lean` with the exact noStop/actual-packet
+exclusion law. Both need ROOT strict compilation. Alpha is deriving a count
+from the original terminal source list, using the SAME checked observer.
+Do not compile concurrently or change memory caps. Agents edit only their
+new runtime source/note files. ROOT owns compilation and publication.
+Clone only the eight standard helpers for the next verified base. Keep
+source commits in explicit dependency order. Do not rewrite prior history.
+
+Latest usage read: 26% at 19:45 CET. Next check by 20:00 CET. `/tmp` has
+176.55 GiB free. Check only the final 1 MiB of the rollout log for usage.
+Pause workers, save a handoff and pause the goal if primary usage exceeds
+80%. Do not delete `/tmp/claude-1000` or other active owners' artifacts.
+
+Previous checkpoint follows.
+
 # Exact pruned Program language and checked rendering: 2026-11-12 19:09 CET
 
 The full formalization goal remains ACTIVE. Base 3f1b999d4b7a9255d31e663162041d9636d4b5db.
