@@ -448,4 +448,22 @@ instance (HasFTA a, HasFTA b) => HasFTA (Either a b)
 instance (HasFTA a, HasFTA b) => HasFTA (a, b)
 instance (HasFTA a, HasFTA b, HasFTA c) => HasFTA (a, b, c)
 
-{-@ LIQUID "--skip-module" @-}
+-- The positivity check rejects Term (Data.CFTA.Term), but Term is positive.
+{-@ LIQUID "--no-positivity-check" @-}
+
+-- gDecode matches on the pattern synonym Term.Node. The match is complete
+-- because of the COMPLETE pragma of Node. LiquidHaskell does not read COMPLETE
+-- pragmas, so it finds the match incomplete.
+{-@ LIQUID "--no-totality" @-}
+
+-- The local recursive functions terminate:
+-- typeLabel in constructorLabel and typeSize in deriveFTAWithGrowthLimit get a
+-- type argument of a finite type representation.
+-- visit in deriveFTAWithGrowthLimit stops at a type that is in the rows, or
+-- when a type grows more than growthLimit times along its ancestors. Each
+-- other call adds a new type to the rows.
+-- LiquidHaskell cannot prove this with its default metric. The lazy
+-- annotation turns off the termination check of each function below and of
+-- its local functions.
+{-@ lazy constructorLabel @-}
+{-@ lazy deriveFTAWithGrowthLimit @-}
