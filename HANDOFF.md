@@ -1,3 +1,78 @@
+# Current source closure and eager children: 2026-11-12 15:57 CET
+
+The full formalization goal remains ACTIVE. Base c7e63738b1441c4f17742933f82ddcc64eaebfb0.
+Integrated main remains e53852064d3ef5a2eafec47d754c27504b11de5f (PR210/211).
+Seven new modules contain 1498 lines and twenty-one public laws. Full Audit
+passes: 5814 live modules, eight affected, 4811 imports, 93928 axiom reports.
+All eight portable checks pass. All 260650 old Audit bytes remain after seven
+imports. Every earlier proof, public statement and source version remains.
+
+Every current source return now derives Program roles/counts, complete guards
+in the once-encoded library alphabet, PlainMu and Allowed for EVERY ordered
+Type operand. All avoid rules remain covered. One nonnegative request produces
+ONE actual native build with complete physical guard origins. Current cache
+preparation returns its full Receipt/cache/conjunction Fields on that same
+heap. Current component/argument-only Type slots retain the exact physical
+value, Available, closedness and annotation through actual prefix construction.
+No old/current context equality, future normalization/store/model supplier or
+second native build is used. Derived guard origins alone do not prove physical
+projectability. Whole native ValueFields attachment is the next hereditary gap.
+
+The eager child operation now has checked height recursion and seven laws.
+It uses the same shared visitSelected/scan path, executes each child-product
+continuation before siblings, retains full receipts/stops/native endpoints,
+and keeps terminal/opaque dispatch. The rank fallback is unreachable for
+actual staged payload children under current selector membership. No new
+public depth/outcome/config type or source error is invented. This does not
+yet wire the complete common driver or prove default/lazy/runtime equivalence.
+
+The strongest preceding SOURCE result remains constructive current FirstOrder
+whole-root admission under the raw per-use certificate, empty libraryAvoid
+and tokens.Perm ORIGINAL queryArguments. It retains ordinary Typed, actual
+success/membership, SAME goal annotation, Projection/toProgram/count and token
+multiplicity with last-query types. Reverse source soundness remains separate.
+
+Reproduce from lean/restart-evidence/20261112-current-source-closure-compatibility/.
+Its source-audit.md retains exact hashes, scope and the frozen Type-operand/
+raw-startup audits. Source packets are dated 20261112: current-program-structure,
+current-source-guards, current-guard-preparation, current-native-guard-origins,
+current-type-field-calls, shared-eager-children, current-type-operands.
+Runtime /tmp/mcfta-current-source-closure-20261112-1523/. R243 points here.
+Preserve all proofs/counters/repairs/drafts, historical pins and .hypha/.
+
+Next runtime-only sources are UNVERIFIED: CurrentCallerInitialization (Beta),
+ProgramTypeFieldConstruction (Gamma); Alpha audits common eager driver wiring.
+The real driver calls SharedPreparedContinuations, not the older ordinary
+wrapper. Preserve its same preparation/Fits/narrowing/recordTypes/hook endpoint.
+Existing finish drops processed receipts on completed driver outcomes; do not
+claim those receipts appear in its HookResult. ROOT alone compiles/publishes.
+
+Cold raw initialization/startup can compose before a worker without Room or
+whole TypeFields; it is distinct from startup at a pruned result. Preserve
+full endpoint/model/work packets and exact computed Room for later worker
+composition. No Room discharge, model inhabitance or full original-input work
+bound follows from startup counts or syntax totality.
+
+Fresh primary usage was 20% at event 15:53 CET, read at 15:53. Check by 16:08.
+ABOVE 80%, save handoff, pause goal and notify Matti. Free space was 183.9 GiB.
+Last readable /tmp total about 35 GiB excludes six private directories. Keep
+runtime records as text and reuse repository Lake cache; copy no binary archive.
+
+No new Haskell repair/runtime defect is established. FINDINGS retains merged
+namespace/Fun-arity/query fixes and local validation through the prior audits.
+Historical negative source pins remain. Liquid synthesis duplicate readers
+remain externally reviewed; Curried markers/raw generated-variable admission
+stay separate. Liquid Haskell results do not automatically enter Lean or
+certify Haskell execution. Do not blanket-restrict rigid query/goal types.
+
+Continue full scope: earlier hooks/alternatives, original-input work/depth,
+reduction/refold/weights, source order/multiplicity, both inverses, full guards/
+signed/Word/Int/errors/lazy demand, refinement/training. Native annotation size
+is not Program count. Default does not call boundDepth. The full goal remains
+incomplete and ACTIVE after publication.
+
+---
+
 # Current whole-root admission: 2026-11-12 15:18 CET
 
 The full formalization goal remains ACTIVE. Base 8331f9c10f444e1cd9715e6837190049fb2dc11b.
