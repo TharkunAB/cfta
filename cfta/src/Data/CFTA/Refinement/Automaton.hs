@@ -207,4 +207,25 @@ transitionsAt edge target
     | null (unPath target) = [edge]
     | otherwise = concatMap nodeEdges $ nodesAt edge target
 
-{-@ LIQUID "--skip-module" @-}
+-- The pattern synonym Transition matches on the pattern synonym RefinedSymbol.
+-- That match is complete because of the COMPLETE pragma of RefinedSymbol.
+-- LiquidHaskell does not read COMPLETE pragmas, so it finds the match
+-- incomplete.
+{-@ LIQUID "--no-totality" @-}
+
+-- The local function collect in located terminates on a finite graph. Each
+-- step removes a node from the pending list, or adds a new identity to the
+-- seen map. LiquidHaskell cannot prove this with its default metric. The lazy
+-- annotation turns off the termination check of located and of its local
+-- functions.
+{-@ lazy located @-}
+
+-- The plugin does not check the calls of nodeIdentity in validate, located,
+-- and nodesAt. The module imports nodeIdentity through Data.CFTA.Interned, and
+-- the plugin skips that module, so it does not see the precondition
+-- hasIdentity. With the precondition, these calls are open obligations: they
+-- need the rule that a built automaton has no EmptyNode child and no Rec other
+-- than RecInt.
+
+-- A correct caller never calls fromViewError.
+{-@ fromViewError :: {e:FTA.FTAError InternedState | false} -> AutomatonError @-}
