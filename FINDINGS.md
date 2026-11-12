@@ -1,3 +1,42 @@
+# Marker agreement and repaired source contracts: 2026-11-12 13:43 CET
+
+The full formalization goal remains ACTIVE. Integrated main is
+`e53852064d3ef5a2eafec47d754c27504b11de5f`; both PR 210 and PR 211 are merged.
+Proof base: `22de6369f7d5d9a72764fa7f2a69fbfb4aea9a8c`. Three new modules
+contain 675 lines and nine checked public laws. Full Audit passes: 5794 live
+modules, 4 affected, 4791 imports and 93547 axiom reports. All four portable
+checks pass from `/tmp`. All 259770 old Audit bytes remain after three imports.
+
+The concrete/tagged default renderer law retains stable actual observations
+from the SAME current finished cache. Existing openProgram true gives exact
+root equality and the full ordered residual attachment map. Each actual
+compression endpoint, both Frames/RenderStable, and concrete Canonical remain.
+It uses only current Packet/canonical/carrier/counter/finished facts. It does
+not prove ground satisfaction, model existence or whole traversal completion.
+
+The repaired FirstOrder rigid encoding has a decoder roundtrip and equality
+iff ordinary type equivalence modulo Fun/2, without extra admission or name
+restrictions. Query normalization preserves names/order/length/last lookup,
+gives every row the last binding type, preserves coherence and is idempotent.
+Those are type-syntax/query-list contracts. Whole native/program acceptance
+and completeness require the remaining source-context and pipeline bridges.
+
+For Haskell/Liquid Haskell contract work: the merged code fixes constructor
+namespace collisions, non-two Fun discovery and inconsistent duplicate-query
+types. Current pure query and type-representation rules now have the checked
+Lean contracts above. This does not import external proof results into Lean
+or certify the Haskell compiler/runtime. Liquid synthesis duplicate-name
+readers remain under external review with no new runtime defect established.
+Curried domain marker names and reported rigid raw variables outside a..d
+remain separate. The universe audit explains the limited generated variable
+alphabet, but its full membership iff is still a proposed theorem. Do not
+blanket-restrict all rigid query/goal types or erase historical findings.
+
+The compatibility source audit retains the local Haskell validation receipt
+and source versions. No additional Haskell fix or runtime defect is claimed.
+
+---
+
 # Main integrated and checked: 2026-11-12 13:23 CET
 
 PR 210 and PR 211 are MERGED. Upstream main is

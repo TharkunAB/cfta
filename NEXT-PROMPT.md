@@ -1,3 +1,77 @@
+# Marker agreement and repaired source contracts: 2026-11-12 13:43 CET
+
+The full formalization goal remains ACTIVE. Integrated main is
+`e53852064d3ef5a2eafec47d754c27504b11de5f`; both PR 210 and PR 211 are merged.
+Proof base: `22de6369f7d5d9a72764fa7f2a69fbfb4aea9a8c`. Three new modules
+contain 675 lines and nine checked public laws. Full Audit passes: 5794 live
+modules, 4 affected, 4791 imports and 93547 axiom reports. All four portable
+checks pass from `/tmp`. All 259770 old Audit bytes remain after three imports.
+
+The concrete/tagged default renderer law retains stable actual observations
+from the SAME current finished cache. Existing openProgram true gives exact
+root equality and the full ordered residual attachment map. Each actual
+compression endpoint, both Frames/RenderStable, and concrete Canonical remain.
+It uses only current Packet/canonical/carrier/counter/finished facts. It does
+not prove ground satisfaction, model existence or whole traversal completion.
+
+The repaired FirstOrder rigid encoding has a decoder roundtrip and equality
+iff ordinary type equivalence modulo Fun/2, without extra admission or name
+restrictions. Query normalization preserves names/order/length/last lookup,
+gives every row the last binding type, preserves coherence and is idempotent.
+Those are type-syntax/query-list contracts. Whole native/program acceptance
+and completeness require the remaining source-context and pipeline bridges.
+
+Next strict target: runtime-only SourcePruningEnumerationSharedPreparedMarkerOutput
+(231 lines, SHA c57aeb56e003e1706890c29bce40596a236b1b524f537a8ae1578b701ffdb1e2),
+UNVERIFIED. Alpha owns it. It calls the checked agreement once, extracts its
+SAME root observation and restores the complete global/resource/conditional
+model receipt without another root producer. Read next-default-marker-model-wrapper.md
+and shared-prepared-marker-output-note.md. ROOT alone compiles and publishes.
+
+The current Context factory/admission and exact type-universe criterion have
+frozen read-only audits in next-current-synthesis-context.md and
+next-current-type-universe-contract.md. Gamma and Beta own those audits.
+Reuse old row evaluators; add current constructor discovery and canonical
+query bindings. Keep old source Context/firstOrderRaw and counterexamples.
+
+The main execution gap is the actual default eager branching path: current
+native child traversal is shallow/singleton. Control specialization alone
+does not close it. Preserve full branch/order/failure/native-effect receipts.
+Continue all original-input work/depth across earlier hooks and alternatives,
+full reduction/refold/weights and source ordering/multiplicity, both inverse
+contracts, Word/Int/source errors/full guards/lazy demand/refinement/training.
+Native annotation size is not Program size. Default synthesis does not call
+boundDepth. The full goal is not complete.
+
+Reproduction: `lean/restart-evidence/20261112-default-partial-compatibility/`.
+Its source-audit.md retains the exact scope, current source hashes, frozen
+audit notes and focused Haskell validation commands/hashes. The source
+packets are `20261112-default-partial-agreement`, `20261112-pr210-type-reflection`
+and `20261112-pr211-query-bindings`. Main integration already passed local
+Nix Fourmolu and 16 focused SynthesisSpec cases with zero failures. No full
+suite/benchmark was rerun and no Cabal file changed. Historical runtime
+packets keep their old expected outputs and pinned source versions.
+
+Runtime: `/tmp/mcfta-default-partial-20261112-1303/`. At 13:34 CET it contained
+218158 bytes; the filesystem had 184.3 GiB free. The earlier readable /tmp
+measurement was about 35 GiB and excluded six private directories. Reuse the
+repository Lake cache; copy no binary archive. Fresh primary usage was 18%
+at event 13:33 CET. Check by 13:50 CET. Above 80%, save handoff, pause the
+goal and notify Matti. Old lower-priority thresholds below are historical.
+
+For Haskell/Liquid Haskell contract work: the merged code fixes constructor
+namespace collisions, non-two Fun discovery and inconsistent duplicate-query
+types. Current pure query and type-representation rules now have the checked
+Lean contracts above. This does not import external proof results into Lean
+or certify the Haskell compiler/runtime. Liquid synthesis duplicate-name
+readers remain under external review with no new runtime defect established.
+Curried domain marker names and reported rigid raw variables outside a..d
+remain separate. The universe audit explains the limited generated variable
+alphabet, but its full membership iff is still a proposed theorem. Do not
+blanket-restrict all rigid query/goal types or erase historical findings.
+
+---
+
 # Main integrated and checked: 2026-11-12 13:23 CET
 
 PR 210 and PR 211 are MERGED. Upstream main is
