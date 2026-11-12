@@ -343,4 +343,7 @@ productionFacts = S.annotationFacts . FTA.transitionConstraint
 constructor :: Production state -> (Symbol, [state])
 constructor production = (FTA.transitionSymbol production, FTA.transitionChildren production)
 
-{-@ LIQUID "--skip-module" @-}
+-- The plugin stops at the do block of mergeProductionAt in the monad
+-- ([Conflict state], _): "This expression has a refined monadic type". This
+-- option changes how the plugin reads >>= and return. It turns off no check.
+{-@ LIQUID "--no-pattern-inline" @-}
