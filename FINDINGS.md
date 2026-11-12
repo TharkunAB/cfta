@@ -1,3 +1,166 @@
+# Restart checkpoint: 2026-11-12, exact annotation family and last singleton lookup
+
+Goal status is ACTIVE. Continue the FULL objective. Pushes to formalize remain
+explicitly authorized. Preserve .hypha/ and all unpublished drafts.
+Prior published checkpoint: abfb587b086a7e3dc198f7a17c8ff34d64538bd6.
+Checked source head: 299764e90a0555b4ce429d80c6f85ddce6c5ca25.
+Integrated main: dedd47da878e78aa5be9947247d8156675956b59; fresh fetch at 08:52 CET.
+Main is unchanged. Prepared at 2026-11-12 09:01 CET. Verify the published tip before new work.
+This header overrides historical restart instructions. Every prior byte of all
+three handoffs remains below. No production Haskell/Liquid Haskell fix is applied.
+
+## New kernel result: one source root, fixed Program size, unbounded native size
+
+fixed_program_unbounded_annotations constructs ONE ACTUAL firstOrderRaw expression
+at signed size2, outside foralln. The fixed library has ignore:List a->Int and
+nil:List a, with empty query arguments and goal Int. For EVERY n, that SAME root
+accepts the explicit rootTerm n. Each exact member projects/decodes to the SAME
+Program ignore nil with Program.components=2. Its NumberedTerms.size is EXACTLY
+2*n+14. no_native_size_bound reuses that family once to refute any universal native
+size bound for its accepted terms. No future .ok/member supplier is assumed.
+
+The proof constructs each exact component/argument leaf from a raw substitution,
+uses the actual size2 fallback, RelevantTyping.empty, firstOrderRaw_total ONCE,
+and original-root membership for each n. It does not hide the chosen annotations
+behind an existential Program witness. Source repairs only expose actual catalog,
+rigidTerm/substTy/AliasSafe/context equations and concrete duplicate removal.
+No public statement or linter was weakened.
+
+This is documented intended annotation behavior, NOT a Haskell defect or runtime
+divergence theorem. Opaque recursive boundaries can represent the whole family
+with one result. This does not refute a small-model theorem for representatives.
+Synthesis.hs950-963 distinguishes programsOfSize's CannotCountConstrainedEdges
+case from programsOfSizeUpToDepth's exact count at a requested typed-term depth.
+Do not collapse Program component count, native annotation size, and runtime work.
+
+## New kernel result: exact source singleton lookup
+
+resolveSelection_singleton proves generic actual source singleton resolution is
+ordinary reversed-list lookup mapped to the matching singleton. It preserves
+actual subsequence/permutation order, duplicate multiplicity and the LAST payload.
+No DecidableEq on payloads is required. queryLookup_resolve_singleton transfers
+this exact fact to the actual source query-row context and ordinary raw Ty lookup.
+
+The private proof extracts singleton selections IN ORDER. Permutation length
+filtering reuses the existing exact spec; actual subsequence fold induction
+retains singleton order and nonemptiness. Lookup ignores every nonsingleton key.
+This is stronger than membership closure and closes the marked-leaf last-winner
+helper. Ordinary relevant/root completeness remains the NEXT unverified draft.
+
+The actual source root requires discharged query TOKENS with multiplicity.
+Additional unmarked query uses remain permitted. Duplicate earlier payloads are
+not substituted for the last-binding ordinary query type. Keep these facts in
+the independent admission certificate, outside ordinary Typed itself.
+
+## Corrected parent guard gap: reuse the checked existing laws
+
+A proposed new TargetReads preservation law was found to duplicate existing
+SourcePruningEnumerationParentProjectionTargets.target_heap, force/leaf helpers,
+and completed native node_query_heap in NativeQueryProjectionHeap. Those modules
+are already in Audit despite historical draft wording. Do NOT materialize the
+duplicate runtime TargetReads draft. Their predicate project guard!=none is
+UNCONDITIONALLY equivalent to sourceEqualities guard=some classes for some classes;
+Cached is not needed for this equivalence. Existing completed node_query_heap
+has no future Heap/guard supplier. R229 adds arbitrary remaining-control prefixes;
+R230/R231 add all observed outcomes and internally derived all-fuel plans.
+
+The genuine attachment mismatch is physical history type. Existing
+ParentProjectionHeap.reduction_heap consumes historical AllocatedLocalReductionActual.Reads.
+The actual resident_complete Numeric packet retains SharedLocalNumeric.Reads,
+SharedClassesNumeric.Reads, SharedScanRequiredNumeric.Reads and
+SharedScanCallerNumeric.ScanReads. Its semantic Graph.Receipt does NOT itself
+supply that older actual scan/read history. Do not substitute one for the other.
+
+Next compose support through the ACTUAL shared ScanReads using checkedCall and
+actual seeded operand/fold traces. Observed pure-return traces derive WordRanges;
+uniqueness aligns retained prefixes and derives FoldRanges internally. Existing
+seeded observers internally prove completion/uniqueness, but the new wrapper must
+retain the original actual endpoint and call no independent finite producer.
+Existing required/merge/class-edit laws remain reusable. Failed outer projection/
+merge/head/edit prefixes and full parent attachment retain their exact scope.
+
+## Global bound direction and exact remaining limits
+
+The accepted-model P/W budget is pointwise. It does not cover earlier incompatible
+or dead branches just because one chosen witness is finite. The unbounded family
+now PROVES why a universal annotation bound cannot follow from Program size alone.
+A native symbolic handle/guard catalog or actual opaque protocol rank is still
+needed for the default shared driver. Trie-list key shapes alone do not bound
+new native handles allocated by later queries.
+
+For the graph explicitly produced by depth bounding, existing BoundDepth.bound
+copies states as (remaining,node) and decreases remaining on EVERY child.
+GraphBudget.ofRank supplies all-row pre-guard work decrease using arity/rank,
+including dead/rejected rows. That rank is source-derived for the copied graph;
+it is not a valid transplant onto the original recursive Mu graph.
+EnumerationBoundedRows and SourceDenotationEnumeration already give exact bounded
+acceptance/intersection and finite abstract coverage. Native bounded-node exposure,
+binder conversion and allocated-handle correspondence remain separate. This audit
+direction is not a newly checked end-to-end native depth/work theorem.
+
+## Haskell fix status and full scope remain unchanged
+
+Both executed production defects remain UNFIXED, with full repair requirements
+and exact source/output probes preserved in prior FINDINGS headers:
+- Reserved raw constructor/variable encoding collision returns the ordinarily
+  untypable f x. Fix needs disjoint encoding tags; parser-only checks are insufficient.
+  Historical packet20261112-type-encoding-runtime.
+- Parsed Fun/0 and Fun/3 application results are omitted from typesOf because
+  constructorsOf excludes ALL Fun arities. Omit ONLY Fun/2 and preserve that alias.
+  Historical packet20261112-fun-arity-universe. Other modes need checks on repair.
+The static once-comment discrepancy remains a documentation/contract task;
+required-token coverage permits extra unmarked uses. No new runtime defect is
+claimed for the annotation family or the parent projection/conjoin illustration.
+
+Keep FULL goal: original-input soundness/completeness; exact accepted native terms
+and Program component counts at each size; actual order/multiplicity; BOTH inverse
+directions of BOTH actual signed APIs; Word/Int bounds; finite execution/productivity
+under actual API conditions; warm-cache identity; Haskell correspondence. Preserve
+the eager/deferred order counterexample. Optimized interned remains primary; old
+constructor/equality work remains secondary and preserved. Weighted training,
+Table and sampler composition remain outside the end-to-end formal theorem.
+
+## Validation, publication and next work
+
+Two modules contain 412 lines and four public laws. Both pass project Nix/Lake
+and strict own-source checks. Public theorem names/namespaces, exact hashes and
+standard axiom sets are checked. No sorry/new axiom is added. Full Audit passes:
+5771 live modules, 3 affected, 4768 imports and 93229 axiom reports. All 258570
+prior Audit bytes remain after two new imports. Every prior proof/counterexample/
+repair/marked draft remains preserved. Three independent /tmp replays pass.
+Compatibility: lean/restart-evidence/20261112-source-boundaries-compatibility/.
+frontier.json pins source hashes, checked.json full Audit, portable-check.json
+both source replays plus compatibility. No unchanged Haskell test was repeated.
+
+Two source commits after the prior checkpoint:
+- bcdd7b85aa6ae9926a97b73298f4b07fa6bb6555: Prove unbounded native annotations at fixed Program size.
+- 299764e90a0555b4ce429d80c6f85ddce6c5ca25: Resolve singleton source selections by the last query binding.
+
+Runtime: /tmp/mcfta-source-boundaries-20261112-0833/. It was85.2KiB at08:59CET;
+/tmp had188.2GiBfree. Keep metadata small and avoid binary/build archives.
+ROOT owns all compilation/Git publication. One serial heavy job, 4GiB
+memory.max/high, swap0, LEAN_NUM_THREADS=1. Do not change queue/caps.
+
+Ready UNVERIFIED next runtime source:
+SourceSynthesisOrdinaryRelevantCompleteness.lean,268L,
+1a4353c3e623e093c31acbd1577b7cf28e91685dbcb065f1f3df1f97e1af6a00.
+Its four-case UsesEligible certificate derives actual relevant row membership,
+then firstOrderRaw success/filter witness/annotation/projection/decoder/count
+from empty avoid and raw token Perm coverage. Winner-name take/drop resolutions
+remain private derived facts. Materialize and strictly check after publication.
+SourcePruningEnumerationSharedScanReadsProjectable.lean is also an UNVERIFIED
+runtime draft:213L,3aa200a931b2b4b8704a91ce364bd1f1e309589218ff908946ecf3b7213f7f3c.
+It observes the actual shared continued/stopped scan endpoint. Do not claim it.
+Do not use the duplicate TargetReads draft. The frozen next-depth-domain.md audit
+records signed negative empty, rawRec rejection, and nonnegative leaf-zero depth
+mapping H=d.toNat+1. Native exposure/binder/allocation correspondence stays open.
+
+Last fresh primary usage:15% at08:55CET; nextcheckabout09:10CET. Seek ONLY last1MiB
+of the multi-GB primary rollout. If fresh usage exceeds80%, save a detailed handoff,
+pause the goal and notify Matti. Goal remains ACTIVE while required work remains.
+
+--- Preserved prior handoff ---
+
 # Restart checkpoint: 2026-11-12, admitted ordinary bodies and query profiles
 
 Goal status is ACTIVE. Continue the FULL objective. Pushes to formalize remain
