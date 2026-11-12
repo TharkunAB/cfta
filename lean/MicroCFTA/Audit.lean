@@ -1,3 +1,6 @@
+import MicroCFTA.SourceNativeBoundDepthMeaning
+import MicroCFTA.SourceNativeReadArityHeap
+import MicroCFTA.SourceSynthesisDuplicateQueryAcceptance
 import MicroCFTA.SourceSynthesisInternalArrowEncodingCollision
 import MicroCFTA.SourceNativeBoundDepth
 import MicroCFTA.SourceNativeBoundDepthChildArity

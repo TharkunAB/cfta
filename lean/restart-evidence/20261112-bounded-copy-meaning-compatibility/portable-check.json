@@ -1,0 +1,153 @@
+{
+  "at": "2026-11-12T11:18:50.141896+01:00",
+  "results": [
+    {
+      "packet": "20261112-duplicate-query-acceptance",
+      "cwd": "/tmp",
+      "passed": true,
+      "report": {
+        "compiler_exit": 0,
+        "source_sha256": "c4beea0d68c8f4cb5330e9633c2c22ba18fb1be5ce2e8391cf27280bbfee837e",
+        "axioms": {
+          "MicroCFTA.SourceSynthesisDuplicateQueryAcceptance.duplicate_query_source_counterexample": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ]
+        }
+      }
+    },
+    {
+      "packet": "20261112-source-read-arity-heap",
+      "cwd": "/tmp",
+      "passed": true,
+      "report": {
+        "compiler_exit": 0,
+        "source_sha256": "84b566beeddc09d415d6153b0fdbd94f906faf6e7b8d41e008a6f2f10e3dde73",
+        "axioms": {
+          "MicroCFTA.SourceNativeReadArityHeap.initial_heap": [
+            "propext",
+            "Quot.sound"
+          ],
+          "MicroCFTA.SourceNativeReadArityHeap.read_arity_heap": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ]
+        }
+      }
+    },
+    {
+      "packet": "20261112-native-bound-depth-meaning",
+      "cwd": "/tmp",
+      "passed": true,
+      "report": {
+        "compiler_exit": 0,
+        "source_sha256": "5e2b94180117c4feb839961032c41f548e87db2225e29043fc247555aaa1ef07",
+        "axioms": {
+          "MicroCFTA.SourceNativeBoundDepthMeaning.complete_exact": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ]
+        }
+      }
+    },
+    {
+      "packet": "20261112-duplicate-query-runtime",
+      "cwd": "/tmp",
+      "passed": true,
+      "report": {
+        "at": "2026-11-12T11:18:47.714408+01:00",
+        "source_hashes": {
+          "cfta-generator/src/Data/CFTA/Gen/Synthesis.hs": "dfffbf454516649e115d890e65b6289217dbcf352ccb08e86415d719b32fbc3a",
+          "cfta/src/Data/CFTA/Constraint.hs": "dee73d12be74af16c54f1c6856a3a60b1c1ae612ad8a15d1665210e2c63641f3",
+          "cfta/src/Data/CFTA/Equality.hs": "d15b61e5be06bd92ec9893ea8b44aad7277344d9be726a785dbb51d02f1e1837",
+          "cfta/src/Data/CFTA/Interned/Type.hs": "f79fbaf37d986569e572649e6779084a7e7c78429b0f82558de867418c690b77",
+          "cfta/src/Data/CFTA/Symbol.hs": "31983078475d136d2e69f5d94461f56f7c2fa3b3822144be1eee324ba0637f02",
+          "cfta/src/Data/CFTA/Term.hs": "9201ca9e5f7a7a5dc89b3737b71e406c2245cec2a36aa68ae32fb3eef8572e3f"
+        },
+        "repro_sha256": "888850f29cf7f2cf617e6dea8991d9cfb5c25d7967ccda7fbcdfa9763d26f73c",
+        "limits": {
+          "memory.max": "4294967296",
+          "memory.high": "4294967296",
+          "memory.swap.max": "0"
+        },
+        "commands": [
+          [
+            "fourmolu",
+            "--mode",
+            "check",
+            "/home/tritlo/Code/mcfta/lean/restart-evidence/20261112-duplicate-query-runtime/repro.hs"
+          ],
+          [
+            "cabal",
+            "build",
+            "cfta-generator:lib:cfta-generator",
+            "--offline",
+            "--disable-optimization",
+            "-j1"
+          ],
+          [
+            "cabal",
+            "exec",
+            "--offline",
+            "--",
+            "runghc-9.14.1",
+            "-package-id=cfta-0.1.0.0-inplace",
+            "-package-id=cfta-generator-0.1.0.0-inplace",
+            "/home/tritlo/Code/mcfta/lean/restart-evidence/20261112-duplicate-query-runtime/repro.hs"
+          ]
+        ],
+        "observed": "(\"mixed duplicate A,C\",Just \"(True,[App (App (App (Var \\\"g\\\") (Var \\\"x\\\")) (Var \\\"x\\\")) (Var \\\"x\\\")])\")\n(\"only last C\",Just \"(False,[])\")\n(\"coherent duplicate C,C\",Just \"(False,[])\")\n(\"mixed reversed C,A\",Just \"(False,[])\")\n(\"distinct names\",Just \"(True,[App (App (App (Var \\\"g\\\") (Var \\\"a\\\")) (Var \\\"c\\\")) (Var \\\"c\\\")])\")\n",
+        "counterexample_reproduced": true,
+        "public_raw_synthesis_inconsistent_query_bindings": true,
+        "literal_library_matches_source_example": true,
+        "mixed_duplicate_accepted_and_generated": true,
+        "last_only_negative_control": true,
+        "coherent_duplicate_negative_control": true,
+        "reversed_mixed_negative_control": true,
+        "distinct_names_positive_control": true,
+        "all_cases_finished": true,
+        "per_case_timeout_seconds": 10,
+        "first_order_size": 4,
+        "public_unique_query_name_contract_established": false,
+        "production_haskell_fix_applied": false,
+        "parser_route_affected_established": false,
+        "whole_program_soundness_formalized": false
+      }
+    },
+    {
+      "packet": "20261112-bounded-copy-meaning-compatibility",
+      "cwd": "/tmp",
+      "passed": true,
+      "report": {
+        "at": "2026-11-12T11:18:50.135443+01:00",
+        "limits": {
+          "memory.max": "4294967296",
+          "memory.high": "4294967296",
+          "memory.swap.max": "0"
+        },
+        "cgroup": "/user.slice/user-1000.slice/user@1000.service/app.slice/run-rf5854d3b29d74795bc682285f75d7d65.scope",
+        "live_modules": 5784,
+        "affected_count": 4,
+        "frontier": [
+          "Audit"
+        ],
+        "audit_imports": 4781,
+        "all_snapshots_exact": true,
+        "results": [
+          {
+            "module": "Audit",
+            "exit": 0,
+            "elapsed_seconds": 2.4,
+            "output_lines": 126
+          }
+        ],
+        "passed": true,
+        "audit_axiom_theorems": 93431
+      }
+    }
+  ],
+  "passed": true
+}

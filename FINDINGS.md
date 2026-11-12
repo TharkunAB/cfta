@@ -1,3 +1,135 @@
+# Restart checkpoint: 2026-11-12 11:28 CET, exact native bounded-copy language and query coherence
+
+The persistent goal is ACTIVE. Continue after publication. The base is
+073737c31d9049751b9add5350d29559d86f3876. The checked source head is 6630241dc01dbf61df87c36d76f54a12ac623f3a.
+Integrated main is dedd47da878e78aa5be9947247d8156675956b59, refreshed 11:21 CET.
+The runtime records the final checkpoint hash. Push exact verified commits to
+explicitly authorized formalize. Wait for terminal push; then refresh and verify
+exact remote tip and main ancestry. Persist the board request before posting.
+Verify canonical readback. Preserve .hypha/, all proofs, counterexamples,
+repairs, drafts, and previous checkpoint bytes.
+
+## Strongest new positive statement
+
+The SAME modeled native bounded-copy run now has exact independent language.
+Current SemanticReady, root Available, and root closedness derive ONE stable
+successful cutoff, returned value, heap, and memo. Every larger reader fuel
+returns those SAME objects. The entire old receipt remains: readiness, full
+Keeps, original/root/result availability and closedness, and availability and
+closedness of EVERY memo value. The producer calls old completion ONCE.
+
+The returned component is recursively ordinary. Its existing ordinary height
+is at most (depth+1).toNat. For EVERY guard interpretation, ambient environment,
+and term, result meaning holds exactly when input meaning holds and the signed
+term height is at most depth+1. No future read, meaning, copy, graph, or memo
+supplier is required. This is modeled component execution and semantics.
+Whole Haskell/enumerator termination and machine arithmetic remain open.
+
+A separate SAME-read observer preserves a fixed numerical child-arity cap at
+EVERY physical edge record in the returned heap and EVERY returned row.
+The current issued inventory derives the initial cap. This is a numerical
+length fact. It is not a guard/path Fits predicate. Extending it through the
+whole SAME copy is the next small step.
+
+The prior original-input result remains: admitted ordinary Programs with exact
+required-token coverage and empty avoid construct actual firstOrderRaw success,
+exact accepted annotations, projection, decoder, component count, original
+native caller/startup, and checked native startup under computed Room.
+The full worker/startup packet and SAME assignment/P=N/W=(N+1)*N+actualflag remain.
+N is whole native annotation size. It is not bounded by Program size. The prior
+fixed-Program unbounded-annotation counterexample remains visible.
+
+## New checked negative statement and Haskell contract guidance
+
+Kernel source and separate Haskell execution now both cover the literal public
+Library g:A->C->C->R, empty avoid, FirstOrder, query x:A,x:C, goal R, and size 4.
+The exact annotation of g x x x is accepted. Projection, decoder, and component
+count are exact. Independent ordinary LAST-binding typing rejects this Program
+at EVERY raw type. A, C, and R are ordinary constructor names.
+
+Both query entries remain in unrestricted rows. Required singleton uses
+re-resolve x to the LAST type C. An earlier unmarked x:A fills the first slot,
+followed by two required x:C uses. The decoder retains only each occurrence's
+name x. The raw API has no established uniqueness/coherence gate.
+
+The Haskell five-case packet accepts and generates the mixed duplicate case.
+It rejects x:C alone, coherent x:C,x:C, and reversed x:C,x:A. Distinct a:A,c:C
+accepts and generates g a c c. Every case finishes within ten seconds.
+The exported literal Library matches the formal example. The library helper's
+representative renaming is not confused with a literal source node name.
+Packets:lean/restart-evidence/20261112-duplicate-query-acceptance/ and
+lean/restart-evidence/20261112-duplicate-query-runtime/.
+
+An external repair must state the query-name contract. Same-name ordinary
+Equivalent types suffice for this row-origin typing gap without dropping
+required-token multiplicity. Unique names are stronger. Raw type equality is
+stricter; encoded equality is unsafe. One consistent lookup rule is another
+repair route. Do not silently remove repeated required tokens.
+The source audit records the existing Liquid.hs FIRST lookup, Map-LAST binding,
+and all-refinements policies separately. This static mismatch is NOT a newly
+reproduced Liquid-route failure. Parser reachability was not executed here.
+
+No production Haskell or Liquid Haskell code changed. Earlier repairs remain
+needed: separate ALL constructor/variable/internal encoding namespaces, including
+the AliasSafe internal-arrow collision; and make constructorsOf skip Fun ONLY
+at arity two. Existing var1 collision and Fun-non-two runtime packets remain
+checked and unfixed. The namespace repair alone does not address this new
+query-coherence case. Keep every counterexample and positive admission result.
+
+## Remaining full objective and exact next steps
+
+1. Attach a full-Guard ordinary snapshot to the SAME copied result and heap.
+   Reuse SourcePreparedSharedRows.read/reference/exposure and SourceInternedRows.
+   Derive its finite domain from actual after.nodes.next. Do not rerun the other
+   bounded copier. Old final-heap Mu records remain; component DeepOrdinary does
+   not imply a global Prepared/ordinary heap. Preserve `none` versus `some 0`.
+2. Preserve the fixed current physical arity cap through the SAME successful copy.
+   Existing private edge_heap/node_heap already prove the constructor facts.
+   Expose those exact bodies if needed. Observe actual reads and ordered child
+   scans; use children_length. Append the cap to ONE complete_exact receipt.
+3. Connect actual symbolic operations, allocated histories, compact/indicator/
+   symbolic compilation, validation/errors, guard projection, and rows. A finite
+   row view or ordinary rank does not by itself prove OperationRows/AllocatedRows.
+4. Derive original-input work/depth bounds across PRECAP earlier hooks, retained
+   caches, siblings, and ALL alternatives. P counts all Some native stored slots;
+   A counts all in-range true expandable flags. W_B=(B+1)P+A is logical work.
+   Preserve payload mass, owner/nesting distinctions, all guards, and chosen
+   admission. This is not a runtime bound or a Program-component bound.
+5. Prove BOTH signed API directions and BOTH inverse contracts with exact order
+   and multiplicity. Retain actual Word/Int limits, source errors, lazy demand,
+   raw substitutions, refinement checks, and training boundaries. Main eager and
+   formal deferred order still need a separate correspondence. Current positive
+   theorems do not establish unrestricted raw API soundness.
+
+## Verification, retention, and restart
+
+Three new source modules: 1,188 lines and four public laws. Own-source strict checks
+pass with explicit #check, exact namespaces, and permitted standard axiom lists.
+Graph: 5,784 live modules and four affected. Audit imports 4,781 modules and retains
+ALL 259,273 previous bytes after three new imports. Full Audit passes with
+93,431 axiom reports. This count is not a full-system correctness claim.
+All FIVE portable checks pass from /tmp, including the Haskell reproduction.
+Compatibility/source audit:
+lean/restart-evidence/20261112-bounded-copy-meaning-compatibility/.
+That source-audit includes all three next-step plans and external Haskell guidance.
+
+Runtime: /tmp/mcfta-bounded-copy-meaning-20261112-1051/.
+It retains initial failed drafts, focused repairs, command receipts, and small
+reports. It used 324 KiB at 11:21 CET; no binary archive is required. Reuse the
+repository Lake cache. Do not regenerate large evidence copies in /tmp.
+Free filesystem space 187.6 GiB at 11:16. Primary usage 16% at 11:16; next check 11:31.
+Read only the final 1 MiB of the usage log and report primary only. If FRESH
+primary exceeds 80%, save the handoff, pause the goal, and notify Matti.
+
+ROOT remains sole compiler/Git publisher. Use ONE serial project-Nix job with
+LEAN_NUM_THREADS=1, memory.max=memory.high=4 GiB, and zero swap. Keep existing
+heavy-management queue/caps/heartbeat. Delegate only bounded independent source
+or audit work. Do not run a second heavy job. Wait for every Git operation to
+finish before its dependent step. User push authorization for formalize persists.
+Do not pause or mark complete after publishing this checkpoint; continue.
+
+---
+
 # Restart checkpoint: 2026-11-12 10:48 CET, native bounded-copy success and encoding reflection boundary
 
 The persistent goal is ACTIVE. Continue after publication. The base is
