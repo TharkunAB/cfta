@@ -1,3 +1,161 @@
+# Restart checkpoint: 2026-11-12, actual query plans and ordinary false restart
+
+Goal status is ACTIVE. Continue the FULL objective. Pushes to formalize remain
+explicitly authorized. Preserve .hypha/ and all unpublished drafts.
+Prior published checkpoint: 1f5cd8d24f33f874bf500abf798ddb369d3dc832.
+Checked source head: 1585a5a200a62995047600fb803d8fb1faefca88.
+Integrated main: dedd47da878e78aa5be9947247d8156675956b59; fresh fetch at 08:10 CET.
+Main is unchanged. Prepared at 2026-11-12 08:13 CET. Verify the published tip before new work.
+This header overrides historical restart instructions. Every prior byte of all
+three root handoffs remains below. No production Haskell/Liquid Haskell fix is applied.
+
+## Strongest new checked native statement
+
+The actual admitted target query now constructs ONE full receipt and its SAME
+physical pure-return trace. That trace derives InputsThrough for EVERY finite
+fuel internally. The SAME receipt retains its next inventory, value, state and
+memo history. Guard support holds at its exact returned heap and at every finite
+observed generated outcome, including errors, blocking and fuel exhaustion.
+There is no public future plan or completion supplier. Current Ready, inventory
+admission, operand availability/closedness and WordRanges remain explicit.
+TargetQueryProjectable.finite calls the existing target-query producer once.
+
+The ordinary completed sibling-prefix/selected-head carrier now retains ONE
+actual recording callback and false restart CALL. Its full earlier prefix/head
+models, properness, resources, origins, original assignment agreement and global
+memos remain attached to the SAME witnesses. The callback has false verdict,
+updated pending refutation, original strict P/W progress, and a common native
+prefix/head/callback stage fuel. The actual selected one-row continuation and
+finish wrappers remain. The earlier full-list append equation remains separately.
+A false restart CALL does not establish a completed recursive result.
+
+Only CURRENT OriginPolicies and original pending refutation are added to the
+R230 header. The prefix keeps literal original metadata and the SAME assignment.
+Transfer to the extended head assignment uses pending_refutes_extension at the
+ORIGINAL captured counter with the original Packet.bounded/head agreement.
+The prefix/head producer and recording callback producer are each called once.
+Arbitrary recur applies to the LATER callback/selected-row equation. The earlier
+prefix retains its actual bounded resume hook. Stop outcomes remain intact.
+
+The private proof repairs preserve the public header and all packets: the recur
+Caller width is bits+2, a shadowing inherited proof binder is renamed, and the
+same actual recursive result is reduced through both continuation match motives.
+A common stage fuel is not a whole recursive-depth or runtime-work bound.
+
+## Independent ordinary typing now constructs actual admitted leaves
+
+LeafEligible is a small external certificate indexed by the EXISTING ordinary
+lib/query/role/Program/rawTy judgment. It records one admitted raw derivation.
+Its four cases are group, argument-only, rigid query argument, and conversion.
+Each selected raw rho keeps exactly its demanded image TypeIn facts. Original
+schemes keep AliasSafe. Argument-only keeps the true role. Rigid query types
+need no blanket TypeIn. There is no application case or future membership/.ok/
+source-typing/encoded-sigma supplier in this certificate.
+
+eligible_leaf_terms jointly constructs ordinary Typed and the exact literal
+size-one source TermsTyping. eligible_leaf_member constructs membership in the
+ACTUAL termsRows alternative for that SAME literal term, annotation, Program
+projection and decoder result. Conversions use only one-way equivalent_rigidTerm.
+Ordinary Typed remains unchanged and independent of source admission.
+
+The initial plan tried to compute eligibility by matching on a Prop proof.
+The implemented certificate instead witnesses an admitted derivation for the
+ordinary judgment. It does not claim to distinguish proof-irrelevant Typed proofs
+and has no redundant Typed input. Whole Program/relevant/root admission remains
+separate. A next whole-body draft is ready under the runtime directory.
+
+## Haskell repairs remain required; formal Fun boundary added
+
+BOTH executed Haskell defects remain unfixed. Preserve their exact packets and
+external repair requirements in the preceding header below:
+- Reserved namespace collision: public raw FirstOrder f:a->B, x:TCons var1[]
+  returns the ordinarily untypable f x at size2. Packet20261112-type-encoding-runtime.
+  Separate kernel laws prove encoded equality and no ordinary type. Repair needs
+  disjoint raw constructor/variable/internal tags; parser-only validation is insufficient.
+- Constructor discovery: parsed Fun/0 and Fun/3 application results reject f x;
+  ordinary Z/Fun2 results and rigid Fun0 leaf controls succeed.
+  Packet20261112-fun-arity-universe. Discover non-two Fun arities normally while
+  preserving ONLY Fun/2 as the documented arrow alias. Other modes need checks.
+
+NEW formal SourceSynthesisFunArityBoundary result: the literal Fun0 query has
+ACTUAL constructorCatalog=[("A",0)]. Its result annotation has NO structural
+TypeIn witness. The SAME f x nevertheless has independent ordinary typing at
+that raw Fun0 result. The proof is a structural-admission boundary. It does not
+infer arbitrary source nonmembership from failure of a sufficient TypeIn witness.
+The separate historical Haskell packet establishes actual raw/reduced rejection.
+No source encoder or constructor-discovery function was repaired in this packet.
+
+## Validation, commits and reproducibility
+
+Four new Lean modules contain 664 lines and seven public laws. All pass project
+Nix/Lake and strict own-source checking. Public theorem names, real namespaces,
+exact hashes and standard axiom sets are checked. No sorry/new axiom is added.
+Full Audit passes with 5767 live modules, 5 affected, 4764 imports and 93172 axiom
+reports. All 258200 prior Audit bytes remain after the four new imports.
+Every prior proof/counterexample/repair/marked draft remains preserved.
+Compatibility: lean/restart-evidence/20261112-query-plan-compatibility/.
+frontier.json pins the acyclic source frontier. checked.json records full Audit.
+portable-check.json records five passing independent /tmp executions: four source
+packets and compatibility. Haskell packets retain their historical source hashes;
+no unchanged Haskell build/test was repeated for these new Lean-only modules.
+
+Four source commits after the prior checkpoint:
+- e57be285baab5d30a6d358c120152b84ce554419: Derive physical plans from the actual admitted query trace.
+- 3f849e664da388dc36f7121149330d7db8e08b9e: Prove ordinary Fun result lacks structural universe admission.
+- b6c634fdc02f477760475822a70b087a514879ca: Construct exact source membership for admitted ordinary leaves.
+- 1585a5a200a62995047600fb803d8fb1faefca88: Retain ordinary callback and restart at actual reached heads.
+
+Runtime: /tmp/mcfta-query-plan-20261112-0750/. Current source notes and next-cut
+audits are in compatibility/source-audit.md. The runtime was 115.5 KiB at 08:11
+CET. /tmp had 188.3 GiB free. Keep watching disk use. No binary/build archive is
+needed; the source packets reproduce these checks.
+
+## Next work and biggest gaps
+
+ROOT remains sole compiler/Git publisher. One serial heavy job; 4 GiB
+memory.max/high, swap0 and LEAN_NUM_THREADS=1. Do not change queue/caps.
+Two unverified next drafts remain ONLY under the runtime during this checkpoint:
+SourceSynthesisOrdinaryProgramCompleteness.lean,136L,54f3bce9439439e7af7933e13fd4b5441e9896e6d2043d260286f4dff6aa9147;
+SourcePruningEnumerationTargetQueryResourcesProjectable.lean,77L,bf4eb7e46a8bc7f53b22861eec9bb6858ba7214460e422b1407dd6fb08a766c0.
+Materialize, inspect and strictly check them next. Do not claim draft results.
+
+The Program draft constructs whole admitted ordinary BODY terms for empty
+libraryAvoid, with exact source membership, annotation, decoding and component
+count. Its source helper derives the size2 fallback from the SAME existing
+size-one function receipt; larger applications use positive child-size splits.
+Relevant/root query-use, duplicate/last-binding names and original signed API
+admission remain separate. Never assume future membership or raw reflection.
+
+The query-resource draft derives WordRanges from CURRENT Ready/Fits/Admits,
+uses the new query producer once, and adds full caller Post plus SAME-receipt
+exact profile replay/carrier forecast. It excludes an optional numeric observer
+that internally recomputes another producer. Original-input machine feasibility
+and full parent local scan/required/class-edit histories remain separate.
+
+The main native gap is global actual completion: source-derived adequate recursive
+depth and ONE original-input total-work bound that also covers earlier incompatible
+siblings, rejected/failed/blocked states and later states. A finite chosen witness
+supplies a pointwise P/W bound. It does not supply a uniform budget for every prior
+branch. Do not infer all-row termination from same-head progress or common stage
+fuel. A bounded audit is examining the exact global resource seam.
+
+Keep FULL objective: original-input soundness/completeness; exact accepted native
+terms and Program component counts at each size; actual ordered enumeration and
+multiplicity; both inverse directions of BOTH actual signed APIs; Word/Int bounds;
+finite execution and lazy productivity; warm-cache identity; Haskell correspondence.
+Preserve the known eager/deferred order counterexample. Optimized interned remains
+primary; older constructor/equality work remains secondary and preserved.
+Weighted training, Table and sampler composition remain outside the end-to-end
+formal theorem. Repair the two actual Haskell defects before unrestricted ordinary
+typing soundness/completeness can be claimed for the full public raw API.
+
+Last fresh primary usage: 14% at 08:08 CET. Check about every 15 minutes by seeking
+ONLY the last 1 MiB of the primary multi-GB rollout. Next check about 08:23 CET.
+If fresh usage exceeds 80%, save a detailed handoff, pause the goal and notify Matti.
+The goal remains ACTIVE while required work remains.
+
+--- Preserved prior handoff ---
+
 # Restart checkpoint: 2026-11-12, ordinary typing and actual sibling endpoints
 
 Goal status is ACTIVE. Continue the FULL objective. Pushes to formalize remain
