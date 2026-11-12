@@ -1,3 +1,87 @@
+# Current source typing and ordinary eager descent: 2026-11-12 18:11 CET
+
+The full formalization goal remains ACTIVE. Base 35fe4e4f7c195830ae8ece7b501b967f4c287db5.
+Integrated and refreshed main remains e53852064d3ef5a2eafec47d754c27504b11de5f (PR210/211).
+Six new modules contain 1112 lines and six public laws. Full Audit passes:
+5836 live modules, seven affected, 4833 imports, 94090 axiom reports.
+All seven portable checks pass. All 262073 previous Audit bytes remain after
+six new imports. Every earlier proof, public statement and source pin remains.
+
+Strongest new source statement: every term accepted by the CURRENT FirstOrder
+source root decodes to an ordinary well-typed Program at the ORIGINAL query
+goal and requested component count. The same exact filter/body annotations,
+projection and decoder are retained. The theorem permits arbitrary avoid
+rules, duplicate names and rigid query types outside the generated universe.
+The count adds component and query-variable occurrences. It excludes
+application nodes and Type annotations. This is the existing formal ordinary
+typing judgment, with explicit binding origins and documented Fun/2 conversion.
+It is not a GHC scope-priority or extracted Haskell execution theorem.
+
+CurrentApplicationTyping120 joins actual forest/PCS receipts.
+CurrentLeafTyping169 derives original group, argument-only or LAST query origins.
+CurrentTermsTyping209 proves unrestricted row soundness by strong induction.
+CurrentRelevantTyping227 directly follows successful selection/split traversals.
+CurrentRootTyping102 observes the same returned chunks and actual goal filter.
+No Eligible, avoid=[], blanket query/goal admission, future typed child, model
+or Room supplier is required for source-root soundness. Required query-token
+coverage and the converse admissible-language characterization remain separate.
+In particular, relevant rows need not be a subset of unrestricted terms rows
+under nonempty avoid rules. The source-audit gives the concrete size-two case.
+
+The previous positive direction remains checked: an original ordinary Program
+with raw per-use Eligible, empty libraryAvoid and tokens.Perm ORIGINAL query
+arguments reaches current source construction, ONE checked native pruning
+return and startup at a sufficient mathematical width derived from ORIGINAL
+inputs and budget. The complete initializer, checked endpoint, full globals,
+startup model/origins/pending size and exact initial work describe ONE run.
+This width selector is noncomputable. Fixed Haskell capacity and total default
+enumeration work are separate. The source converse still needs derived
+eligibility and marked-token coverage before an exact iff can be claimed.
+
+SharedEagerUnaryNullaryResources285 checks genuine ordinary descent through
+one unary parent into one ordinary nullary child. It derives both actual
+prefixes, all same-run Packets and full native globals, exact allocation,
+Heap/Fits, protection/order/origins, and one coupled model at all endpoints.
+Its CPS identity retains the FULL complete/stopped consumer result and prepends
+the inner receipt. It makes no arbitrary consumer resource or work assertion.
+The earlier nullary and fallback-frontier laws remain. Arbitrary ordinary
+descendants, all alternatives, and interleaved callback costs remain open.
+Branch core growth uses maxima. Shared native work uses ordered sums and
+success multiplicities. Old shallow costs and outer receipt lengths do not
+supply the missing general bound.
+
+Reproduce from lean/restart-evidence/20261112-current-typed-eager-step-compatibility/.
+source-audit.md gives full headers, exact hashes, repairs and scope.
+Runtime: /tmp/mcfta-current-typed-eager-step-20261112-1745/.
+R247 points here. ROOT alone compiles and publishes. Preserve all existing
+proofs/counters/repairs/marked drafts/historical pins and untracked .hypha/.
+No binary archive is copied. Checks use Nix, one compiler and the unchanged
+4 GiB memory.max/high, zero-swap cap.
+
+Next runtime-only work is UNVERIFIED: Alpha audits the next unbounded eager
+callback-input forecast; Beta audits derived source eligibility and ORIGINAL
+marked-token coverage; Gamma drafts full current native initialization with
+the new ordinary-typing observer. Do not import these drafts into this packet.
+Native initialization must retain its entire existing producer tuple and use
+ONE build. General eager callbacks can mutate the caller, so their own work
+must remain symbolic or be specialized to actual resume/continueWith.
+
+No production Haskell or Cabal changes and no new ROOT runtime reproduction.
+FINDINGS retains external post1182's Liquid duplicate-name/refinement defect.
+The owner branch is fix/liquid-repeated-argument-names; no pushed repair, PR or
+merge is reported as of board read 2026-11-12 18:11 CET. Do not duplicate its owner.
+The repair must use the LAST type AND refinement in every reader. Liquid
+query use remains optional. Hectare required-token coverage permits extra
+unmarked uses. Earlier reserved Curried marker and exact-runtime boundaries
+remain. Preserve all historical source-pinned counterexamples.
+
+PRIMARY usage was 23% at 17:58 CET; /tmp filesystem had 179.4 GiB free.
+Next fresh usage read is due by 18:13 CET. Read only the final 1 MiB of the
+thread log. If fresh PRIMARY usage exceeds 80%, stop workers, save a handoff,
+pause the goal, and notify Matti. Do not delete another agent's files.
+
+---
+
 # Current capacity, eager bases and Type inversions: 2026-11-12 17:42 CET
 
 The full formalization goal remains ACTIVE. Base bf723bd595dab57ef2d6e8f17ec898b64e728351.
