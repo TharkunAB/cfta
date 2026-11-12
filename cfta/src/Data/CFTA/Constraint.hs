@@ -367,4 +367,21 @@ equalityIndicators :: EqConstraints -> [(Integer, [[Path]])]
 equalityIndicators =
     maybe [] (\classes -> [(1, map (Set.toAscList . unPathEClass) classes)]) . subsumptionOrderedEclasses
 
-{-@ LIQUID "--skip-module" @-}
+-- A match on the pattern synonym EqConstraints and the constructor
+-- EqContradiction is complete because of a COMPLETE pragma. LiquidHaskell
+-- does not read COMPLETE pragmas, so it finds the match incomplete.
+{-@ LIQUID "--no-totality" @-}
+
+-- A guard is a finite tree. Each recursive call of positiveEqualities,
+-- splitGuard, containsSame, and the local functions guardTerms in
+-- constraintIndicators, go in collectGuardPaths, and conjuncts in
+-- combineGuards gets a part of the guard, so they terminate. The calls go
+-- through lists of guards, and LiquidHaskell cannot see this. The lazy
+-- annotation turns off the termination check of each function below and of
+-- its local functions.
+{-@ lazy positiveEqualities @-}
+{-@ lazy constraintIndicators @-}
+{-@ lazy collectGuardPaths @-}
+{-@ lazy combineGuards @-}
+{-@ lazy splitGuard @-}
+{-@ lazy containsSame @-}
