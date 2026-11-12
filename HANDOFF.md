@@ -1,3 +1,73 @@
+# Verified default rendering checkpoint: 2026-11-12 12:55 CET
+
+The full formalization goal remains ACTIVE. Base: `876b7ecb56bda1debc627999a7368a2a5b311e9e`.
+Integrated main: `dedd47da878e78aa5be9947247d8156675956b59`.
+Two new modules add 435 lines and five kernel-checked public laws.
+Full Audit passes: 5791 live modules, 3 affected, 4788 imports, 93490 axiom
+reports. All three portable checks pass from `/tmp`. All 259649 previous
+Audit bytes remain after two imports. No production Haskell source changed.
+
+`SourcePruningEnumerationDefaultFinishedRendering.default_finished_render`
+derives one stable concrete term, ordered pending attachments and actual
+after core from the SAME current Packet, Canonical cache, reference/root
+carriers, positive counter and actual default `next=done`. Every larger
+rendering bound returns the SAME observation. RenderStable, compression
+Frame and Canonical after are retained. No future rendering, no-hole, model
+or Discharged supplier is required. Ground satisfaction, residual guard
+truth, default traversal termination and full stream equality remain open.
+
+`SourceSynthesisPr210ConstructorEscape` proves constructor-name roundtrip,
+injectivity, and separation from actual variable and arrow symbols for the
+proposed PR 210 rule. PR 210 was still OPEN and UNMERGED at 12:46 CET, head
+`79f74df2c3c9d3c864e57a960cb64c8c28883ec9`. This is a separate candidate
+namespace. Do not relabel the integrated historical encoders or erase their
+counterexamples. Full type reflection and raw API completeness remain open.
+
+Runtime: `/tmp/mcfta-default-marker-20261112-1215/`. Reproduction packet:
+`lean/restart-evidence/20261112-default-marker-compatibility/`. The two
+source packets are `20261112-default-finished-rendering` and
+`20261112-pr210-constructor-escape`. Source hashes, frozen audit notes, full
+compatibility and portable receipts are retained there. Existing failed
+drafts remain in the runtime. Reuse the repository Lake cache; do not copy
+binary archives. Readable `/tmp` measured about 35 GiB at 12:37 CET; six
+private directories were unreadable. The filesystem had 184.4 GiB free at
+12:49 CET. The active runtime then contained 184383 bytes.
+
+Fresh primary usage was 18% at event 12:48 CET, read at 12:49 CET. Next check
+by 13:04 CET. The latest user threshold is ABOVE 80%: save a detailed handoff,
+pause the goal and notify Matti. Old 1%-remaining notes below are historical.
+
+Next: prove actual default concrete/tagged output agreement. Reuse existing
+`openProgram true` at the fixed Mu/top marker. Keep each actual compression
+endpoint and the ordered guard/term attachment map. Read
+`next-default-marker-partial-agreement.md` in the runtime. Alpha owns ONLY
+the new runtime `SourcePruningEnumerationDefaultPartialAgreement.lean`.
+Beta audits candidate first-order type reflection. Gamma audits the smallest
+shared native hook factoring. ROOT remains the sole compiler and publisher.
+Do not add future result suppliers or a second operational worker.
+
+The graph-worker default equations already exist. The actual prepared native
+worker still hardwires narrowing and recordTypes; permissive predicates and
+an empty catalog do not make that path identical to default enumeration.
+Continue the full original objective, including actual reduction/refold and
+weights, all earlier hooks/alternatives and original-input work/depth bounds,
+both inverse contracts, order/multiplicity, Word/Int and source errors, lazy
+demand, guards, refinement and training. Keep optimized interned operations.
+The bounded-copy source route remains separate from default synthesis.
+
+For the external Haskell owner: FINDINGS retains all old verified source
+and runtime counterexamples. PR 210 proposes the Fun/non-two discovery and
+constructor namespace fixes. The candidate escape names now have the checked
+local laws above, but this workspace has not tested or merged that branch.
+The duplicate-query repair remains separate: use the LAST binding type at
+EVERY occurrence while retaining EACH original required token. Its catalog
+normalization scope must be stated separately. Curried `?`/`?any`/`?nodefault`
+marker names and reported raw rigid variables beyond a..d remain open.
+Do not present those reported raw-variable results as locally reproduced.
+No new Haskell runtime defect is established by the rendering theorem.
+
+---
+
 # Upstream Haskell repair status: 2026-11-12 12:24 CET
 
 [PR #210](https://github.com/TharkunAB/cfta/pull/210) is OPEN and UNMERGED.
