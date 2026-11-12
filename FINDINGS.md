@@ -1,3 +1,44 @@
+# Full marker resources and current context: 2026-11-12 14:18 CET
+
+The full formalization goal remains ACTIVE. Base:
+`988f00eb37fa9d60ac3b126bf97ed67f29f1a90a`. Integrated main remains
+`e53852064d3ef5a2eafec47d754c27504b11de5f`, with PR 210/211 merged.
+Four new modules contain 629 lines and thirteen checked public laws. Full
+Audit passes: 5798 live modules, 5 affected, 4795 imports, 93591 axiom reports.
+All five portable checks pass. All 259938 old Audit bytes remain after four
+imports. No production Haskell source changed or old proof was removed.
+
+The current marker producer retains the ENTIRE global inventory/full-memo/
+metadata/Post/query/Packet/Fits/physical-Heap tuple. One agreement producer
+supplies both concrete/tagged observations and the same actual tagged root.
+Its observed-root helper restores exact all-larger-fuel raw singleton and
+Success, root Frame/RenderStable/stratification/Packet and conditional Completes.
+The SAME supplied assignment still satisfies rootAfter, concreteAfter and
+partialAfter. The ordered residual map and all actual endpoints remain.
+This does not produce a model or prove literal marker ground satisfaction.
+
+Encoding is AliasSafe for every raw scheme, and simultaneous substitution
+commutes with encoding of its images. The current Context factory uses the
+existing five-field Context and old row evaluators, with repaired constructor
+discovery/escaping and canonical query bindings in BOTH arguments/catalog.
+It proves actual query-leaf membership, original Typed, exact annotation,
+Projection, decoding and count one. The generated type universe has exact
+TypeIn semantics in both directions under topHeld, for arbitrary catalogs.
+These component facts do not silently transfer old hardwired whole admission.
+
+No new Haskell repair or runtime defect is established. The merged namespace,
+Fun-arity and duplicate-query repairs remain recorded with local validation
+in the previous audit. Their historical negative source/runtime packets stay
+pinned to their old versions. Current type/query contracts and model observers
+are Lean results; external Liquid Haskell proofs do not automatically enter
+Lean or certify Haskell execution. Liquid synthesis duplicate-name readers
+remain under external review. Curried markers and raw rigid-variable admission
+remain separate; do not blanket-restrict rigid query/goal types.
+
+Full scope and source versions are retained in the compatibility source-audit.md.
+
+---
+
 # Marker agreement and repaired source contracts: 2026-11-12 13:43 CET
 
 The full formalization goal remains ACTIVE. Integrated main is

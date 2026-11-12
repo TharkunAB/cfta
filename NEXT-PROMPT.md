@@ -1,3 +1,79 @@
+# Full marker resources and current context: 2026-11-12 14:18 CET
+
+The full formalization goal remains ACTIVE. Base:
+`988f00eb37fa9d60ac3b126bf97ed67f29f1a90a`. Integrated main remains
+`e53852064d3ef5a2eafec47d754c27504b11de5f`, with PR 210/211 merged.
+Four new modules contain 629 lines and thirteen checked public laws. Full
+Audit passes: 5798 live modules, 5 affected, 4795 imports, 93591 axiom reports.
+All five portable checks pass. All 259938 old Audit bytes remain after four
+imports. No production Haskell source changed or old proof was removed.
+
+The current marker producer retains the ENTIRE global inventory/full-memo/
+metadata/Post/query/Packet/Fits/physical-Heap tuple. One agreement producer
+supplies both concrete/tagged observations and the same actual tagged root.
+Its observed-root helper restores exact all-larger-fuel raw singleton and
+Success, root Frame/RenderStable/stratification/Packet and conditional Completes.
+The SAME supplied assignment still satisfies rootAfter, concreteAfter and
+partialAfter. The ordered residual map and all actual endpoints remain.
+This does not produce a model or prove literal marker ground satisfaction.
+
+Encoding is AliasSafe for every raw scheme, and simultaneous substitution
+commutes with encoding of its images. The current Context factory uses the
+existing five-field Context and old row evaluators, with repaired constructor
+discovery/escaping and canonical query bindings in BOTH arguments/catalog.
+It proves actual query-leaf membership, original Typed, exact annotation,
+Projection, decoding and count one. The generated type universe has exact
+TypeIn semantics in both directions under topHeld, for arbitrary catalogs.
+These component facts do not silently transfer old hardwired whole admission.
+
+Next strict targets are runtime-only and UNVERIFIED: CurrentGroupAdmission
+137 lines, SHA c194a61c99b1c36e9788621634104e486ae5286f03923fb588cdcc28c1f53435
+(Gamma), and CurrentTypeAdmission236 lines,
+SHA beadf7110957212f532c08801a1f7f9adda9cbe8134279ae9a2686ff3bd48201
+(Beta). Group/library-argument-only leaves use only genuine demanded per-use
+TypeIn and the checked substitution helpers. RawAdmitted states the exact
+four-variable/current-signature criterion; its source/semantic iff is not
+yet checked. Do not count these next drafts as established. ROOT alone
+compiles, runs Git and publishes. Preserve all old code and failed drafts.
+
+Read next-default-native-branching.md (Alpha's frozen read-only audit). The
+actual default path needs eager recursive child branching in the SAME shared
+selected-edge path. Branch Core/metadata copies and depth-first shared native
+caller/memo effects must follow the source. Ordinary eager children do not
+allocate/finalize an outer selected UVar. Do not precompute all child rows
+before tails or infer whole-worker halts from local empty-child receipts.
+Lazy Haskell demand/native sharing still need their own correspondence.
+
+Continue the full original scope: all earlier hooks/alternatives and original-
+input work/depth; actual reduction/refold/weights; source order/multiplicity;
+both inverse contracts; Word/Int/source errors/full guards/lazy demand;
+refinement/training. Keep optimized interned operations. Native annotation
+size is not Program size. Default synthesis does not call boundDepth.
+The full goal is not complete.
+
+Reproduce from `lean/restart-evidence/20261112-marker-model-compatibility/`.
+Its source-audit.md retains current hashes, exact scope, source audits and
+next obligations. Four source packets: `20261112-shared-prepared-marker-output`,
+`20261112-pr210-substitution`, `20261112-current-synthesis-context`,
+`20261112-type-universe-exact`. Current runtime:
+`/tmp/mcfta-marker-model-20261112-1348/`. Prior runtime links point here.
+Copy no binary archive; reuse the repository Lake cache. The filesystem had
+184.3 GiB free at 14:05 CET. The last readable /tmp total was about 35 GiB,
+excluding six private directories. Fresh primary usage was 18% at event
+14:03 CET, read at 14:05. Check by 14:20. ABOVE 80%, save handoff, pause
+the goal and notify Matti. Earlier thresholds below are historical.
+
+No new Haskell repair or runtime defect is established. The merged namespace,
+Fun-arity and duplicate-query repairs remain recorded with local validation
+in the previous audit. Their historical negative source/runtime packets stay
+pinned to their old versions. Current type/query contracts and model observers
+are Lean results; external Liquid Haskell proofs do not automatically enter
+Lean or certify Haskell execution. Liquid synthesis duplicate-name readers
+remain under external review. Curried markers and raw rigid-variable admission
+remain separate; do not blanket-restrict rigid query/goal types.
+
+---
+
 # Marker agreement and repaired source contracts: 2026-11-12 13:43 CET
 
 The full formalization goal remains ACTIVE. Integrated main is
