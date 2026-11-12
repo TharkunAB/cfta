@@ -145,10 +145,14 @@ library
     -- Windows directories in the PATH, this takes about 0.4 s in each module.
     -- Without --no-annotations, the plugin writes HTML and JSON files into
     -- a .liquid directory next to each checked source file.
+    -- Without --check-derived, the plugin gives a type without refinements
+    -- to each function that a hand-written Eq or Ord instance uses, so the
+    -- specification of the function is lost.
     ghc-options:
       -fplugin=LiquidHaskell
       -fplugin-opt=LiquidHaskell:--smtsolver=z3
       -fplugin-opt=LiquidHaskell:--no-annotations
+      -fplugin-opt=LiquidHaskell:--check-derived
 
 -- LiquidHaskell specifications of containers functions. When a checked
 -- module imports a module M, the plugin reads the module M_LHAssumptions.
