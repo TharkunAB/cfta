@@ -263,4 +263,16 @@ memoFlatTypeableWith ::
 memoFlatTypeableWith (FlatMemoCache family) a b c value =
     unsafeDupablePerformIO (lookupOrInsert (selectCache @symbol family newFlatTable) a b c value)
 
-{-@ LIQUID "--skip-module" @-}
+-- Nothing reads the value of an empty slot. A lookup reads a value only at a
+-- slot where it found the key, and grow copies only the slots that have a key.
+-- The plugin cannot see this, so it does not check emptyValue.
+{-@ ignore emptyValue @-}
+
+-- The search stops at the key or at an empty slot. The table always has an
+-- empty slot, because an insert grows the table before it is more than half
+-- full. The plugin cannot prove this, so this pragma turns off the termination
+-- check for findSlot and its local go.
+{-@ lazy findSlot @-}
+
+-- The local copy of grow counts from 0 up to mask.
+{-@ copy :: i:Int -> IO (Slots value) / [mask + 1 - i] @-}
