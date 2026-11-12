@@ -124,6 +124,9 @@ import qualified Data.CFTA.Term as Term
 
 {- | A type: a type variable, a function type, or a type constructor with its
 arguments. The constructor @Fun@ with two arguments is a function type too.
+The encoding keeps each other type constructor different from the type
+variables and the function types, also when its name is one that the
+encoding uses, as @var1@ or @->@.
 -}
 data Type
     = TVar Text
@@ -252,6 +255,9 @@ data Encoding
       @?Foldable t0@ or @?Ord t1@, is a type variable whose domain the map
       gives, by the text after the @?@ up to the first space (the names of
       the variable's classes, as @Foldable@ or @Applicative,Foldable@).
+      The names @?@, @?any@ and @?nodefault@ are reserved for the encoding:
+      a type constructor with one of these names has the same leaf as a
+      marker of the domains.
       -}
       Curried Defaulting (Map.Map Text Domain)
     deriving (Show)
@@ -388,19 +394,38 @@ arrowType :: Node Symbol -> Node Symbol -> Node Symbol
 arrowType argument result = Node [Edge "->" [arrowMarker, argument, result]]
 
 {- | The node of a type, with each type variable a rigid leaf. A component
-type replaces these leaves by the node of all types ('generalize').
+type replaces these leaves by the node of all types ('generalize'). A type
+constructor has the symbol 'escapeConstructor', so that it is different from
+each type variable and from a function type.
 -}
 typeNode :: Type -> Node Symbol
 typeNode (TVar name) = Node [Edge (variableSymbol name) []]
 typeNode (TFun argument result) = arrowType (typeNode argument) (typeNode result)
 typeNode (TCons "Fun" [argument, result]) = arrowType (typeNode argument) (typeNode result)
-typeNode (TCons name arguments) = Node [Edge (Symbol name) (map typeNode arguments)]
+typeNode (TCons name arguments) = Node [Edge (Symbol (escapeConstructor name)) (map typeNode arguments)]
 
 {- | The symbol of a type variable. The paper names the first four variables
 @var1@ to @var4@, and the node of all types contains these four.
 -}
 variableSymbol :: Text -> Symbol
 variableSymbol name = Symbol $ fromMaybe ("var_" <> name) $ lookup name [("a", "var1"), ("b", "var2"), ("c", "var3"), ("d", "var4")]
+
+{- | The symbol name of a type constructor. The encoding uses the names
+@var1@ to @var4@ and the names that start with @var_@ for type variables
+('variableSymbol'), and @->@ and @(->)@ for function types ('arrowType').
+A type constructor with one of these names, or with a name that starts with
+@con:@, gets the prefix @con:@. Each other name stays the same. So two
+different type constructors always have two different symbols.
+-}
+escapeConstructor :: Text -> Text
+escapeConstructor name
+    | reserved = "con:" <> name
+    | otherwise = name
+  where
+    reserved =
+        name `elem` ["var1", "var2", "var3", "var4", "->", "(->)"]
+            || "var_" `Text.isPrefixOf` name
+            || "con:" `Text.isPrefixOf` name
 
 {- | The node of a type in an encoding: 'typeNode' for 'FirstOrder'. In the
 curried encoding, a type constructor is a leaf, and an application of a
@@ -413,7 +438,7 @@ typeNodeWith (Curried _ _) = curried
     curried (TVar name) = Node [Edge (variableSymbol name) []]
     curried (TFun argument result) = arrowType (curried argument) (curried result)
     curried (TCons "Fun" [argument, result]) = arrowType (curried argument) (curried result)
-    curried (TCons name arguments) = foldl typeApplication (Node [Edge (Symbol name) []]) (map curried arguments)
+    curried (TCons name arguments) = foldl typeApplication (Node [Edge (Symbol (escapeConstructor name)) []]) (map curried arguments)
 
 -- | In the curried encoding, the application of a type to a type.
 typeApplication :: Node Symbol -> Node Symbol -> Node Symbol
@@ -467,15 +492,16 @@ isTypeDomain :: Domain -> Bool
 isTypeDomain (TypeDomain _) = True
 isTypeDomain (HeadDomain _ _) = False
 
-{- | The type constructors of a type with their arities. @Fun@ with two
-arguments is a function type, as in 'typeNode', so it is not in the result.
-@Fun@ with another number of arguments is a type constructor.
+{- | The type constructors of a type with their arities, each by its symbol
+name in the encoding ('escapeConstructor'). @Fun@ with two arguments is a
+function type, as in 'typeNode', so it is not in the result. @Fun@ with
+another number of arguments is a type constructor.
 -}
 constructorsOf :: Type -> [(Text, Int)]
 constructorsOf (TVar _) = []
 constructorsOf (TFun argument result) = constructorsOf argument <> constructorsOf result
 constructorsOf (TCons "Fun" [argument, result]) = constructorsOf argument <> constructorsOf result
-constructorsOf (TCons name arguments) = (name, length arguments) : concatMap constructorsOf arguments
+constructorsOf (TCons name arguments) = (escapeConstructor name, length arguments) : concatMap constructorsOf arguments
 
 {- | A component type with each type variable replaced by the node of all
 types, and equality constraints that tie the occurrences of each variable.
