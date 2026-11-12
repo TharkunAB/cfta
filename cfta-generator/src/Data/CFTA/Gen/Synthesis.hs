@@ -124,6 +124,9 @@ import qualified Data.CFTA.Term as Term
 
 {- | A type: a type variable, a function type, or a type constructor with its
 arguments. The constructor @Fun@ with two arguments is a function type too.
+The encoding keeps each other type constructor different from the type
+variables and the function types, also when its name is one that the
+encoding uses, as @var1@ or @->@.
 -}
 data Type
     = TVar Text
@@ -252,6 +255,9 @@ data Encoding
       @?Foldable t0@ or @?Ord t1@, is a type variable whose domain the map
       gives, by the text after the @?@ up to the first space (the names of
       the variable's classes, as @Foldable@ or @Applicative,Foldable@).
+      The names @?@, @?any@ and @?nodefault@ are reserved for the encoding:
+      a type constructor with one of these names has the same leaf as a
+      marker of the domains.
       -}
       Curried Defaulting (Map.Map Text Domain)
     deriving (Show)
@@ -311,12 +317,27 @@ library components argumentOnly avoid =
     memberToRepresentative =
         Map.fromList [(member, representativeOf index) | (index, (_, members)) <- zip [0 :: Int ..] groups, member <- members]
 
--- | A query: the arguments with their types, and the goal type.
+{- | A query: the arguments with their types, and the goal type.
+
+Two arguments can have the same name. Then each of them has the type of the
+last argument with that name. Each of them is still an argument that a
+program must use, so a program uses the name at least once for each
+argument with that name.
+-}
 data Query = Query
     { queryArguments :: [(Text, Type)]
     , queryGoal :: Type
     }
     deriving (Eq, Show)
+
+{- | The arguments of a query in their order, each with the type of the last
+argument with its name ('Query'). 'Map.fromList' keeps the last value of a
+key.
+-}
+queryBindings :: Query -> [(Text, Type)]
+queryBindings query = [(name, Map.findWithDefault typ name types) | (name, typ) <- queryArguments query]
+  where
+    types = Map.fromList (queryArguments query)
 
 -- Programs
 
@@ -388,19 +409,38 @@ arrowType :: Node Symbol -> Node Symbol -> Node Symbol
 arrowType argument result = Node [Edge "->" [arrowMarker, argument, result]]
 
 {- | The node of a type, with each type variable a rigid leaf. A component
-type replaces these leaves by the node of all types ('generalize').
+type replaces these leaves by the node of all types ('generalize'). A type
+constructor has the symbol 'escapeConstructor', so that it is different from
+each type variable and from a function type.
 -}
 typeNode :: Type -> Node Symbol
 typeNode (TVar name) = Node [Edge (variableSymbol name) []]
 typeNode (TFun argument result) = arrowType (typeNode argument) (typeNode result)
 typeNode (TCons "Fun" [argument, result]) = arrowType (typeNode argument) (typeNode result)
-typeNode (TCons name arguments) = Node [Edge (Symbol name) (map typeNode arguments)]
+typeNode (TCons name arguments) = Node [Edge (Symbol (escapeConstructor name)) (map typeNode arguments)]
 
 {- | The symbol of a type variable. The paper names the first four variables
 @var1@ to @var4@, and the node of all types contains these four.
 -}
 variableSymbol :: Text -> Symbol
 variableSymbol name = Symbol $ fromMaybe ("var_" <> name) $ lookup name [("a", "var1"), ("b", "var2"), ("c", "var3"), ("d", "var4")]
+
+{- | The symbol name of a type constructor. The encoding uses the names
+@var1@ to @var4@ and the names that start with @var_@ for type variables
+('variableSymbol'), and @->@ and @(->)@ for function types ('arrowType').
+A type constructor with one of these names, or with a name that starts with
+@con:@, gets the prefix @con:@. Each other name stays the same. So two
+different type constructors always have two different symbols.
+-}
+escapeConstructor :: Text -> Text
+escapeConstructor name
+    | reserved = "con:" <> name
+    | otherwise = name
+  where
+    reserved =
+        name `elem` ["var1", "var2", "var3", "var4", "->", "(->)"]
+            || "var_" `Text.isPrefixOf` name
+            || "con:" `Text.isPrefixOf` name
 
 {- | The node of a type in an encoding: 'typeNode' for 'FirstOrder'. In the
 curried encoding, a type constructor is a leaf, and an application of a
@@ -413,7 +453,7 @@ typeNodeWith (Curried _ _) = curried
     curried (TVar name) = Node [Edge (variableSymbol name) []]
     curried (TFun argument result) = arrowType (curried argument) (curried result)
     curried (TCons "Fun" [argument, result]) = arrowType (curried argument) (curried result)
-    curried (TCons name arguments) = foldl typeApplication (Node [Edge (Symbol name) []]) (map curried arguments)
+    curried (TCons name arguments) = foldl typeApplication (Node [Edge (Symbol (escapeConstructor name)) []]) (map curried arguments)
 
 -- | In the curried encoding, the application of a type to a type.
 typeApplication :: Node Symbol -> Node Symbol -> Node Symbol
@@ -467,11 +507,16 @@ isTypeDomain :: Domain -> Bool
 isTypeDomain (TypeDomain _) = True
 isTypeDomain (HeadDomain _ _) = False
 
--- | The type constructors of a type with their arities.
+{- | The type constructors of a type with their arities, each by its symbol
+name in the encoding ('escapeConstructor'). @Fun@ with two arguments is a
+function type, as in 'typeNode', so it is not in the result. @Fun@ with
+another number of arguments is a type constructor.
+-}
 constructorsOf :: Type -> [(Text, Int)]
 constructorsOf (TVar _) = []
 constructorsOf (TFun argument result) = constructorsOf argument <> constructorsOf result
-constructorsOf (TCons name arguments) = [(name, length arguments) | name /= "Fun"] <> concatMap constructorsOf arguments
+constructorsOf (TCons "Fun" [argument, result]) = constructorsOf argument <> constructorsOf result
+constructorsOf (TCons name arguments) = (escapeConstructor name, length arguments) : concatMap constructorsOf arguments
 
 {- | A component type with each type variable replaced by the node of all
 types, and equality constraints that tie the occurrences of each variable.
@@ -740,7 +785,7 @@ rawSearchSpace lib query size = ofType (relevantOfSize size) (typeNodeWith encod
     components = [(name, component name typ) | (name, typ, _) <- libraryGroups lib]
     anyFunction = Node (map snd components)
     argumentOnly = Node [component name typ | (name, typ) <- libraryArgumentOnly lib]
-    argumentEdges = [(name, Edge (Symbol name) [typeNodeWith encoding typ]) | (name, typ) <- queryArguments query]
+    argumentEdges = [(name, Edge (Symbol name) [typeNodeWith encoding typ]) | (name, typ) <- queryBindings query]
     anyArgument = Node (map snd argumentEdges)
     without names = Node [edge | (name, edge) <- components, name `notElem` names]
     restricted = concatMap fst (libraryAvoid lib)
@@ -802,7 +847,7 @@ typesOf lib query = case libraryEncoding lib of
         nubOrd $
             concatMap (\(_, typ, _) -> constructorsOf typ) (libraryGroups lib)
                 <> concatMap (constructorsOf . snd) (libraryArgumentOnly lib)
-                <> concatMap (constructorsOf . snd) (queryArguments query)
+                <> concatMap (constructorsOf . snd) (queryBindings query)
                 <> constructorsOf (queryGoal query)
 
 {- | How the components of a library form terms in which each head is applied
@@ -838,7 +883,7 @@ rawSaturatedSearchSpace saturation lib query size =
             , Map.lookup name (saturationArities saturation) == Just parameters
             ]
     values = Node [component name typ | (name, typ, _) <- libraryGroups lib, name `elem` saturationValues saturation]
-    argumentEdges = [(name, Edge (Symbol name) [typeNode typ]) | (name, typ) <- queryArguments query]
+    argumentEdges = [(name, Edge (Symbol name) [typeNode typ]) | (name, typ) <- queryBindings query]
     anyArgument = Node (map snd argumentEdges)
     largestArity = maximum (1 : Map.elems (saturationArities saturation))
     selections = concatMap permutations (subsequences argumentEdges)
