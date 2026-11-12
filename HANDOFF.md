@@ -1,3 +1,35 @@
+# Proposed duplicate-query repair: 2026-11-12 13:07 CET
+
+[PR #211](https://github.com/TharkunAB/cfta/pull/211) is OPEN and UNMERGED.
+ROOT inspected its GitHub patch at 13:04 CET. Head:
+`a3092c6c780b7138654b2de00578815fb9df7e6b`; base main:
+`dedd47da878e78aa5be9947247d8156675956b59`. It includes the unmerged PR 210
+changes plus the duplicate-query repair. No proposed Haskell code is merged
+or applied in this workspace. The published proof checkpoint is `e39ffc4ba`.
+
+The new `queryBindings` keeps every original argument in its original order.
+Each entry receives the LAST type bound to its name through `Map.fromList`.
+`rawSearchSpace`, `rawSaturatedSearchSpace`, and `typesOf` all read that list.
+Thus x:A,x:C becomes x:C,x:C, with TWO required tokens. Constructors mentioned
+only by an earlier shadowed type also leave the query type catalog unless a
+component or goal mentions them. This addresses the earlier catalog caveat.
+The Query Haddock states both the last-type rule and required multiplicity.
+
+The author reports that the recorded mixed-duplicate reproduction now gives
+no program, while all four controls remain unchanged. The author also reports
+equal canonical automata, encoding/saturated-route checks, unchanged corpus
+digests, 532 generator/180 refinement/35 ghc-fits examples, golden tests and
+formatting checks. ROOT has reviewed the patch and has NOT rerun that branch.
+Retain the old source/runtime counterexamples as historical source versions.
+
+Liquid duplicate-name lookup policies remain under external runtime review.
+No new Liquid runtime failure is established here. PR 211 leaves those readers
+unchanged. It also leaves Curried marker names and raw rigid-variable limits
+separate. Continue ordinary/query contract formalization in versioned candidate
+namespaces. The full system goal remains ACTIVE.
+
+---
+
 # Verified default rendering checkpoint: 2026-11-12 12:55 CET
 
 The full formalization goal remains ACTIVE. Base: `876b7ecb56bda1debc627999a7368a2a5b311e9e`.
