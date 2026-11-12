@@ -1,3 +1,116 @@
+## 2026-11-12 23:43 CET — no-stop Program outputs and ordered eager forecast components
+
+Goal ACTIVE. Keep the full objective: exact accepted terms per count, finite
+execution, size order, both rank/unrank inverse laws and actual Haskell
+correspondence. Preserve all old proofs, counters, repairs, marked drafts,
+the optimized interned core and untracked `.hypha/`. Standing authorization
+covers pushes to `formalize`. Continue work after publication.
+
+Four modules contain 713 lines and five public laws. Every strict compiler
+and explicit public declaration/axiom check passes. Complete Audit passes:
+5888 live modules, 5 affected modules, 4885 imports and 94526 axiom reports.
+All five portable packet checkers pass from `/tmp` under the sole serial
+4 GiB cap. All 265222 prior Audit bytes remain as an exact suffix.
+Packet: `lean/restart-evidence/20261112-shared-complete-program-outputs-compatibility/`.
+Runtime: `/tmp/mcfta-shared-complete-program-outputs-20261112-2258/`.
+Base `747866e8aa062b3fa430b3d62a4e8c4b1b3b5f0a` is published and remote-verified.
+A fresh upstream fetch still has integrated main at `e53852064d3ef5a2eafec47d754c27504b11de5f`.
+
+The actual finite SHALLOW worker now has a control law at ALL work/depth
+fuels, including stopped prefixes. Emitted metadata=None implies actual
+next(noStop)=done. Stop=None implies emitted metadata=None. This law needs
+no Packet, model, capacity, callback or adequate-depth supplier. It proves
+no output existence or search completeness. Its 317-line proof keeps the
+original header. Root fixed only one local-notation simp item at the end:
+use the fully qualified NativeContinuations.advance declaration in simp.
+The local notation advance there is a function term, not an unfoldable name.
+
+The no-stop Program-output producer calls the previous full readback producer
+ONCE. It transports membership through the SAME stable actual run at extra 0.
+The control law derives finishedness for every SAME emitted output. It uses
+that output's own full Memos, Packet, root and mark/role witnesses. No second
+worker, native producer or root readback runs. EVERY output gets the ENTIRE
+old all-larger-fuel run/OutcomeResources result, full partial-root readback,
+RenderStable/Frame/stratification, every conditional model observer, and one
+Program projection shared by EVERY completion. No after-state finishedness
+premise remains. All old CURRENT starting-state/reservation/selection/mark
+inputs remain. Recursive depth is explicit. No Type model or ground completion
+is supplied. The exact 65-line header survives independent token comparison
+with the old 64-line receipt specialized to stop=None.
+
+The eager captured-heap bridge derives height, row, arity and projected-trie
+limits from CURRENT Linked, HeapFits and physical guard membership. These
+are bounds on immutable OLD Available payloads and their literal descendants.
+Do not assert that all later heap records retain the old guard alphabet.
+Root replaced two unsupported Nat .trans fields with explicit Nat.le_trans.
+The exact original header remains. This is not eager execution domination.
+
+The pure eager forecast keeps the original depth/Seed/mass-only definitions.
+It proves profile/alphabet growth and locates the first row's callback in
+that SAME row's tuple reservation. It covers unused-child padding in that
+row. It assumes no cross-seed query-forecast monotonicity. Parent finalization
+and recordTypes keep the native caller and memos; their reads still need fuel.
+The first-row law does not certify all actual rows, full eager execution,
+admission, capacity, work-fuel adequacy or OutcomeResources. Independent scope
+review reports no concern. Only standard Lean axioms occur.
+
+Strongest construction/pruning claim remains exact accepted Program language
+versus Eligible with ORIGINAL token permutation, under empty inherited avoids
+and mathematical input-derived width. Keep it separate from this enumeration
+result. New strongest worker statement: under the existing CURRENT input and
+reservation conditions, EVERY emitted output of the finite no-stop shallow
+worker has an actual Program readback shared by every completion. This does
+not establish that any output or satisfying Type assignment exists. The full
+eager/default path, original-input total work/host-word capacity, adequate
+source depth, default Mu semantics, order/multiplicity, both inverses and
+verified Haskell compiler/extraction/FFI correspondence remain open.
+
+NEXT arithmetic/source work, already frozen and UNVERIFIED:
+1. Current source enumeration width 62, two definitions/two laws, SHA256
+   `737c1c72eaf371d8777b7f9f884ff6af5f5ffb81b69a5ca07d8160cabdc6131a`,
+   at `/tmp/mcfta-current-program-role-driver-integration-20261112-2150/SourceSynthesisCurrentProgramEnumerationWidth.lean`.
+   It chooses a mathematical width for final depth(seed heap)0 from original
+   lib/query/signed/depth, using the SAME source/build equations and existing
+   reserved_computed. It adds no Room/future-state/provider gate.
+2. Eager admission 379, SHA256
+   `d07876368198c985f41d63346642b8998f8f369874d1a2a91df06bc9d0b8a07a`,
+   at `/tmp/mcfta-eager-admission-20261112-2328/SourcePruningEnumerationSharedEagerReservation.lean`.
+   It retains checked 224 exactly and defines only the original computed plan's
+   admission predicate. Proposed eagerReserved_of_final_room derives all
+   planned admissions from Room at computed eagerFinal. It does NOT certify
+   actual execution or resource preservation. The private coupled CPS/height/
+   tuple/consumer contracts are frozen in that runtime. Future child/consumer
+   resource assumptions must be discharged internally for the concrete worker.
+
+After width 62 passes, use ONE current ProgramSlotsInitialization71 and
+initial_packet_carriers at the SAME context/value/handle. Exact seed Fits/Heap
+and nodeEdges selection derive from current data. Ceiling=0. Then invoke ONE
+ProgramOutputs worker with initial mark0. Preserve the ENTIRE initializer
+receipt. Do not relabel208/112/Typed158 completed-nodeCall outputs as raw startup.
+CurrentInitialComputedRoom.bits covers a different forecast; do not assume it
+reserves the enumeration final profile. No avoid=[] premise is needed for this
+structure/startup cut. Positive language completeness retains its avoid domain.
+
+No Haskell source changed in this batch. Keep the external Liquid repeated-name
+finding in FINDINGS. Owner `claude-gondolin` has branch
+`fix/liquid-repeated-argument-names`. All query readers need the LAST type and
+refinement. Conflicting duplicate refinements can form false environments and
+prove arbitrary results. Mixed Int/Bool duplicate readers also disagree. No
+merged repair is known at the current main pin. PR210 constructor escaping and
+PR211 Hectare LAST query types are integrated. Preserve all old source-pinned
+counters and repaired counterparts. Prior focused Haskell validation had
+16 examples and 0 failures. No full Haskell suite or benchmark ran here.
+LiquidHaskell contracts do not automatically transfer source proofs to Lean.
+
+Evidence is small and reproducible. The 79604-byte source audit contains
+all public declarations, scope reviews, eight replayed reverse source patches,
+the full unverified width 62 draft and a replayed forward patch for admission 379.
+These drafts add ZERO checked laws to this packet. All marked source survives
+/tmp retention. No execution archives were added. Latest primary usage is
+32 percent; /tmp has 170.22 GiB free. Read only the final 1 MiB of the rollout
+for the next primary quota event. Above 80 percent: stop workers, save this
+handoff, pause the goal and notify Matti. Otherwise continue autonomously.
+
 ## 2026-11-12 22:48 CET — finite shallow worker Program roles and finished-output readback
 
 Goal ACTIVE. Keep the full objective: exact accepted terms per count, finite
