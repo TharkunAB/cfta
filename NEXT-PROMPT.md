@@ -1,3 +1,126 @@
+# Restart checkpoint: 2026-11-12 12:11 CET, finite native rows, term size, and structural budget
+
+The persistent goal is ACTIVE. Continue after publication. Base:
+f251a7babe1240f96fbae74e1dbaf34f9f03c0a5. Checked source head:
+47f7a4af5c5ce14101345b69ab300457d3cd31b7. Integrated main:
+dedd47da878e78aa5be9947247d8156675956b59, refreshed at 12:03 CET.
+The runtime records the final checkpoint hash. User authorization to push
+verified changes to formalize persists. Wait for terminal Git operations.
+Refresh and verify the exact remote tip/main ancestry after push. Persist each
+board request before posting and verify its canonical readback.
+Preserve .hypha/, ALL proofs, counterexamples, repairs, marked drafts, and old bytes.
+
+## Strongest checked combined statement
+
+For a CURRENT semantically ready native heap, available root, and closed root,
+ONE modeled bounded-copy completion yields one stable cutoff, result, heap,
+and memo. All larger proof reader fuels return these SAME objects.
+The full previous receipt remains: readiness, full Keeps, original/result
+availability and closedness, EVERY memo value's availability and closedness,
+DeepOrdinary, ordinary-height bound, exact bounded independent meaning, and
+physical arity cap derived from the ORIGINAL heap's issued inventory.
+The wrapper chain calls original completion ONCE. It adds no future supplier.
+
+That SAME component now has a stable finite full-guard raw row table.
+The row-traversal cutoff is derived from the actual allocation counter.
+At every larger row fuel the SAME table returns. For every guard interpretation,
+ambient environment, and term, its table language is EXACTLY the original native
+meaning restricted to signed term height at most depth+1.
+EVERY accepted table term has unweighted NumberedTerms.size at most
+nodeCount 1 initialArity (depth+1).toNat, using the existing recurrence.
+A structuralBudget for the SAME after-heap snapshot follows from actual payload
+heights. Each complete child-budget tuple is smaller than its parent before
+any guard evaluation. No width or future-success oracle is needed.
+
+The snapshot preserves actual payloads, native IDs, full guards, row order,
+and child order. Empty none differs from native identity some 0.
+Only ordinary nodes contribute snapshot rows. The retained heap can still
+contain old Mu and union records. Component language requires DeepOrdinary;
+structural rank covers all ordinary snapshot rows. This is not a global
+retained native-Mu language theorem, a global Prepared premise, an allocated
+history, or a compiled/validated automaton success theorem.
+
+## Default synthesis is a separate correspondence
+
+The bounded-copy operator is used by constrained bounded refinement denotation.
+Default solutionsOfSize instead calls orderedSearchSpace, programsIn, and
+runsBy with Mu representatives. No boundDepth call occurs in that pipeline.
+Do not infer its termination/Room/API correctness from this bounded component.
+The rendered representatives are not simply all ground accepted native terms.
+
+Existing OutputResources.root_partial_complete in
+SourcePruningEnumerationSharedPreparedPartialOutput already gives SAME-packet
+exact tagged partial output and completion of every carried model without
+Discharged. OpaqueOutputAttachment proves that Discharged excludes normal
+opaque output. Keep that counterexample.
+The next small default adapter should derive actual concrete marker rendering
+from CURRENT finished-cache Packet.valid/exact flags, Canonical, root/reference
+carriers, and next=done. Do not assume future rendering/no holes/model output.
+Check the candidate header in the source audit before implementation.
+No-op/full-list callback specialization, all-branch eager progress, actual full
+reduction/refold history, then stream order/multiplicity remain separate gaps.
+
+## Full original goal and Haskell findings remain
+
+Keep BOTH signed API directions and BOTH inverse contracts. Preserve actual
+order and multiplicity, Word/Int limits, errors, lazy demand, source constraints,
+refinement, and training boundaries. Derive original-input total work/depth
+across PRECAP earlier hooks, retained caches, siblings, and ALL alternatives.
+P counts all Some native payload slots. A counts all true expandable flags.
+W_B=(B+1)P+A is logical work. Do not identify raw accepted-term size, weighted
+size sigma, Program component count, read/traversal fuel, or elapsed runtime.
+The actual operation/allocation/compiler and validation/error bridges remain.
+
+The prior admitted ordinary Program/required-token/source-annotation/native
+startup result still retains exact projection/decoder/count, SAME assignment,
+full worker packets, and computed Room conditions. The fixed-Program unbounded
+annotation counterexample remains. None of these complete the full objective.
+
+No production Haskell or Liquid Haskell code changed. FINDINGS still contains:
+
+- The var1 constructor/variable encoding collision, with kernel acceptance,
+  independent ordinary untypability, and Haskell reproduction.
+- The Fun/non-two constructor discovery defect. Skip Fun ONLY at arity two.
+- The inconsistent duplicate-query case x:A,x:C with g:A->C->C->R, accepting
+  and generating g x x x. Ordinary LAST-binding typing rejects EVERY raw type.
+  Same-name ordinary Equivalent coherence or consistent lookup must be stated;
+  uniqueness is stronger. Preserve duplicate required-token multiplicity.
+The AliasSafe internal-arrow reflection counterexample also remains checked.
+Repair ALL constructor/variable/internal namespaces. A namespace fix alone
+will not fix query coherence. Static Liquid FIRST/Map-LAST/refinement policies
+remain separately documented, with no new runtime defect claim for that route.
+External agents can use the existing source/runtime packets and repair guidance.
+
+## Validation and restart
+
+Five new modules add 710 lines. Two existing constructor lemmas become public
+with UNCHANGED bodies. Six checked sources: 1,103 lines, 18 public laws,
+16 new public laws. All old public theorems remain. Strict checks emit explicit
+#check, exact namespace lists, source hashes, and permitted standard axiom reports.
+Full acyclic graph: 5,789 live modules, seven affected, 4,786 Audit imports.
+ALL 259,420 prior Audit bytes remain after five new imports. Full Audit passes
+with 93,463 axiom reports. This count is not a full-system correctness result.
+All SEVEN portable checks pass from /tmp. No unrelated Haskell tests reran.
+Compatibility, source audit, and exact next headers:
+lean/restart-evidence/20261112-native-copy-rows-compatibility/.
+
+Runtime: /tmp/mcfta-native-copy-rows-20261112-1134/.
+It retains initial failed drafts, canonical EOF records, proof repairs, and
+small reports. At 12:03 it used 188,292 bytes; filesystem free space was
+186.6 GiB. Reuse the repository Lake cache; do not archive copies in /tmp.
+Primary usage was 17% at 12:03. Next check: 12:18 CET. Read only the final
+1 MiB of the usage log and report primary. At FRESH primary above 80%, save
+handoff, pause the goal, and notify Matti. Otherwise continue after publication.
+
+ROOT remains sole compiler/Git publisher. Use ONE serial project-Nix job,
+LEAN_NUM_THREADS=1, memory.max=memory.high=4 GiB, and zero swap. Keep the
+existing heavy-management queue, caps, and heartbeat. Delegate bounded source
+or read-only audit work. Wait for each Git operation to finish before its
+dependent step. User authorization for verified formalize pushes persists.
+Do not pause or mark complete after this checkpoint. Continue the full goal.
+
+---
+
 # Restart checkpoint: 2026-11-12 11:28 CET, exact native bounded-copy language and query coherence
 
 The persistent goal is ACTIVE. Continue after publication. The base is

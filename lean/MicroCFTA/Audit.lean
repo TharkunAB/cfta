@@ -1,3 +1,8 @@
+import MicroCFTA.SourceNativeBoundDepthHeapArity
+import MicroCFTA.SourceNativeBoundDepthRows
+import MicroCFTA.SourceNativeOrdinaryRows
+import MicroCFTA.SourceNativeOrdinaryRowsBudget
+import MicroCFTA.SourceNativeOrdinaryTermSize
 import MicroCFTA.SourceNativeBoundDepthMeaning
 import MicroCFTA.SourceNativeReadArityHeap
 import MicroCFTA.SourceSynthesisDuplicateQueryAcceptance
