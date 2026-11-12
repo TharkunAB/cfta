@@ -1,3 +1,101 @@
+# Exact current source language and pruned typing: 2026-11-12 18:47 CET
+
+The full formalization goal remains ACTIVE. Base 17ef855d5f58c596d517fb7782792656db5ca7ca.
+Refreshed and integrated main remains e53852064d3ef5a2eafec47d754c27504b11de5f (PR210/211).
+Nine new modules contain 1440 source lines and ten public laws. Full Audit
+passes: 5845 live modules, ten affected, 4842 imports, 94157 axiom reports.
+All ten portable checks pass. All 262409 previous Audit bytes remain after
+nine imports. Every earlier proof, public statement and source pin remains.
+
+Strongest new source result: with libraryAvoid=[], the CURRENT FirstOrder
+source construction represents exactly the Programs certified by the existing
+raw per-use Eligible predicate at the ORIGINAL goal with a permutation of
+ORIGINAL query argument tokens. The certificate retains binding origins,
+argument-only roles and only demanded-image/application-result admission.
+It permits duplicate names, original duplicate payloads, colliding names,
+raw substitutions and rigid query types outside the generated universe.
+Every original required occurrence is marked. Extra unmarked uses are allowed.
+The SAME Program projection, decoder and component count remain. The reverse
+eligibility/coverage law permits arbitrary avoid rules; the iff needs avoid=[].
+Annotations are existential. This result does not prove finite enumeration of
+annotations or ordinary Haskell completeness without the explicit certificate.
+
+CurrentNativeTyping82 extends ONE full initializer with typing of every term
+at the SAME native root. CurrentComputedWidthTypedSharedCompletion158 extends
+ONE full checked pruning producer with typing of every term accepted by its
+ACTUAL returned result. All seven SourceRootTyping fields remain: exact
+filter/body, ordinary Typed at original goal, both annotations, projection,
+decoder and signed.toNat component count. The original value and returned
+result remain distinct. NodeLaw sends result acceptance back to the original
+value; closed_language uses the SAME actual build. No second initializer or
+future source-acceptance/model/Room/NodeLaw supplier appears. All original
+pruning endpoint, larger-fuel/ranges, full globals, Frame/Fits/Heap/history,
+readiness, NodeFields and ValueFields receipts remain. Mathematical sufficient
+width comes from original inputs and budget; the selector is noncomputable.
+Fixed Haskell capacity and executable correspondence remain separate.
+
+Checked source converse modules: LeafEligibility54, ApplicationEligibility130,
+TermsEligibility210, QueryTokenPermutation42, RelevantEligibility259 and
+RootEligibility142. Query permutation lifting removes original occurrences;
+it assumes no injective names or equality with canonical LAST payloads.
+Relevant induction follows actual selection and split calls directly.
+Application admission comes from its actual first universe field.
+No extra typing hierarchy or blanket query/goal admission gate appears.
+
+SharedEagerScalarObservers363 is the first unbounded eager callback-input
+state-growth result. Its derived counter/suspended-mass pair uses actual
+payloads/selector/rank guard, max across rows and sum across ordered children.
+The FULL CPS result is preserved when consumers agree on those bounded inputs.
+It retains actual stopped candidates and nested receipt behavior. It does not
+measure native query calls or assert arbitrary consumer work/model preservation.
+General shared native work needs ordered sums, success multiplicities and the
+actual interleaved callback continuations. Queries/Memos/Caller allocation IDs
+are not execution counters. Cache-None rawFold tails still execute queries.
+An actual query-event observer with full result projection is the next step.
+
+The previous positive certificate route through source, ONE checked pruning
+return and startup remains, including original Program/goal/count, same exact
+annotated term, assignment/origins/P=N/exact initial work. Whole default
+programsIn completion, lazy order/multiplicity, finite total work, full reached
+closure, rank/unrank inverses, refinement/training and Haskell execution remain
+separate full-system contracts. Initial work is not a whole-generator bound.
+
+Reproduce from lean/restart-evidence/20261112-current-native-eligibility-compatibility/.
+source-audit.md gives every exact public header, source hash, repair and limit.
+Runtime /tmp/mcfta-current-native-eligibility-20261112-1816/; R248 points here.
+ROOT alone compiles/publishes. Preserve every existing proof/counter/repair/
+marked draft/historical source pin and untracked .hypha/. No binary archive
+is copied. All checks use Nix, one compiler, memory.max/high=4 GiB and swap=0.
+
+NEXT runtime-only draft is UNVERIFIED: Beta's CurrentRenderedTyping121,
+SHA3a583eb190c3d5ac9e644c9b4d0a76c93912b477242398ff7c6d9bcaa37bb708.
+It composes actual ResourceHistory rendering with source typing under WHOLE
+Discharged and checked residuals. It does not supply a model or source
+acceptance. Full default Mu output is outside Discharged. Root marker
+agreement gives only conditional Completes, not a completion witness.
+Alpha's current-eager-work-observer-next.md pins an actual dispatch 0/1 event
+observer, full projection and later terminal/eager CPS interleaving. Do not
+substitute pure Q arithmetic or allocation IDs for actual execution counts.
+Both audits remain explicit next proof boundaries, not completed default work.
+
+No production Haskell/Cabal change or new ROOT runtime reproduction. FINDINGS
+retains external Liquid defect1182 and the owner branch
+fix/liquid-repeated-argument-names. No pushed repair/PR/merge is reported as
+of board read 18:45 CET; main remains e53852064. Do not duplicate that owner.
+The repair must use LAST type AND refinement in every reader. Liquid use is
+optional. Historical source-pinned counterexamples and Curried reserved-marker
+findings remain. The prior focused Haskell run had 16 examples and zero failures;
+no new full runtime suite, corpus or benchmark is claimed.
+
+PRIMARY usage was 24% at 18:42 CET; /tmp filesystem had 178.1 GiB free.
+The two current proof runtimes were about 12.2 MiB at 18:29 CET. Other active
+agent data in /tmp/claude-1000 was about 38.9 GiB; do not delete its files.
+Next fresh usage read is due by 18:57 CET. Read ONLY the final 1 MiB of the
+thread log. If fresh PRIMARY usage exceeds 80%, stop workers, save the handoff,
+pause the goal and notify Matti. Continue the full goal after publication.
+
+---
+
 # Current source typing and ordinary eager descent: 2026-11-12 18:11 CET
 
 The full formalization goal remains ACTIVE. Base 35fe4e4f7c195830ae8ece7b501b967f4c287db5.
