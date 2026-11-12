@@ -253,5 +253,3 @@ explainDocumentError failure = case failure of
     StalePatch -> "the document changed after this patch was prepared"
   where
     target state name = "production " <> show (productionNameText name) <> " in state " <> show state
-
-{-@ LIQUID "--skip-module" @-}

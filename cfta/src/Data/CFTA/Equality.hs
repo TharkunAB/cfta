@@ -132,5 +132,3 @@ import Data.CFTA.Template
 >>> import Data.CFTA.Symbol
 >>> import GHC.Generics (Generic)
 -}
-
-{-@ LIQUID "--skip-module" @-}

@@ -150,5 +150,3 @@ next policy fuel limit cursor
                     Result branch value -> case recheck branch of
                         Nothing -> reject
                         Just _ -> Yield value popped
-
-{-@ LIQUID "--skip-module" @-}

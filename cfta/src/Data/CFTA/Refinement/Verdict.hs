@@ -158,5 +158,3 @@ orVerdicts (action : rest) = do
     case verdict of
         Yes -> pure Yes
         _ -> orVerdict verdict <$> orVerdicts rest
-
-{-@ LIQUID "--skip-module" @-}
