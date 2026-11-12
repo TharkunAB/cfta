@@ -1,3 +1,189 @@
+# Restart checkpoint: 2026-11-12, ordinary typing and actual sibling endpoints
+
+Goal status is ACTIVE. Continue the FULL objective. Pushes to formalize remain
+explicitly authorized. Preserve .hypha/ and all unpublished drafts.
+Prior published checkpoint: ce58bbeaa580914f32573b269810e246eea37672.
+Checked source head: b4bad655b08d0ab9221254f9bce4cc53cf04a766.
+Integrated main: dedd47da878e78aa5be9947247d8156675956b59; fresh fetch at 07:37 CET.
+Main is unchanged. Prepared at 2026-11-12 07:45 CET. Verify the published tip before new work.
+This header overrides historical restart instructions. Every prior byte of all
+three root handoffs remains below. No production Haskell/Liquid Haskell fix is applied.
+
+## Outstanding Haskell repairs for an external agent
+
+1. CONFIRMED raw type namespace collision, retained from R229.
+With empty library, FirstOrder, f : TVar "a" -> B, x : TCons "var1" [], goal B,
+size 2, public solutionsOfSize returns f x. Literal raw-language acceptance is
+true. Raw argument types differ, but typeNode maps them to the same leaf.
+Positive x : TVar "a" succeeds. Negative x : TVar "b" and x : TCons "A" [] fail.
+The exported Type/Library/Query constructors bypass the narrower parser grammar.
+Reproduction: lean/restart-evidence/20261112-type-encoding-runtime/check.py.
+
+Repair requirements remain: distinguish raw constructor names from encoded
+variable names and internal type tags. Update encoding and variable recognition
+together. Preserve the documented Fun/2 arrow alias. Do not silently restrict
+raw public constructors to parser input. A public domain change needs its own API
+decision. Check both encoding modes when implementing the repair; the executed
+counterexample uses FirstOrder. Preserve historical evidence and update the Lean
+source encoder after a repair. A parseType-only check does not fix the raw API.
+
+NEW FORMAL RESULT: OrdinaryTypeCollision.badQuery_untypable now proves that this
+literal App (Var "f") (Var "x") has NO ordinary type, for every raw result Ty.
+The proof uses independent typing rules, empty library, literal query lookup,
+and normalized raw type inequality. It assumes no encoded reflection, source
+membership, TypeIn, AliasSafe, or future supplier. A second law retains the
+encoded equality together with untypability. The separate Haskell packet shows
+actual input/output reachability. No whole Haskell correspondence theorem is claimed.
+
+2. NEW CONFIRMED positional completeness defect for non-arrow Fun arities.
+parseType accepts Fun/0 and Fun/3. For each such result R, an empty-library query
+f : A -> R, x : A, goal R at size 2 produces no solution and rejects the literal
+raw f x term. The ordinary Z result and documented Fun/2 alias both return f x.
+A rigid query x : Fun/0, goal Fun/0 at size 1 returns x. Thus the failure concerns
+application-result admission, not a blanket rejection of every Fun/0 position.
+All four application cases finish within their ten-second limits.
+Reproduction: lean/restart-evidence/20261112-fun-arity-universe/check.py.
+
+Owned cause: cfta-generator/src/Data/CFTA/Gen/Synthesis.hs constructorsOf at
+471-474 excludes name Fun at EVERY arity. typeNodeWith at 393-397 treats ONLY
+Fun with TWO arguments as an arrow. rawSearchSpace at 733-766 uses typesOf for
+application-result annotations. The missing ordinary constructor therefore makes
+the well-typed application unavailable at that position.
+
+Suggested minimum repair: omit the Fun constructor from discovery ONLY when
+name="Fun" and the argument list has length TWO. Discover Fun/0, Fun/1, Fun/3,
+and every other non-two arity normally. Recurse through arguments in all cases.
+Retain the Fun/2 alias and the existing ordinary-constructor behavior. Verify the
+two failed result cases become accepted and the three positive controls remain.
+Check curried/kind-related behavior separately; this runtime packet uses explicit
+FirstOrder only. Update the Lean constructor-discovery function after a repair.
+This is a repair requirement, not an implemented or universally validated fix.
+
+Both packets keep repro.hs, check.py, expected.txt, source-hashes.json, README.md
+and checked.json. They pin six owned Haskell files. They run inside the project
+Nix/GMP shell, check fourmolu, build only the generator library offline with -j1,
+and compare full runghc-9.14.1 output. PASS reproduces the respective defect.
+Use the existing serial 4 GiB heavy-management cap from any working directory.
+No retained binary archive is needed to reproduce either result.
+
+## Strongest new checked proof results
+
+SourceSynthesisOrdinaryTyping defines independent ordinary Program typing on the
+existing raw Ty/Program AST. It uses per-occurrence scheme substitutions, rigid
+last-binding query lookup, application and conversion. Type equality normalizes
+ONLY the documented Fun/2 arrow alias. The rules contain no finite universe,
+source role/avoid pruning, table winner or algorithm .ok premise. Rigid encoding
+preserves this equality. Its unrestricted converse is false, as the new concrete
+untypability theorem and R229 encoding counterexample show.
+
+NativeGeneratedTerminalProjectable retains supported guards at the exact state
+of EVERY observed generated requestNode/requestEdge/body outcome: done, failed,
+constraintError, blocked, and fuel exhaustion. Current finite InputsThrough plans,
+Good/current Heap and body operand readiness remain explicit. Arbitrary Code.work
+is outside these generated-code statements. Outer-parent history is still open.
+The final three wrapper fixes pass their exact literal control before Fields
+elaboration. No public premise or endpoint was weakened.
+
+SharedScanPreparedHead retains the ENTIRE actual finite prior-sibling prefix
+packet. It also retains the literal full-list run_append equation. IF that SAME
+prefix completes, it supplies the ENTIRE selected CapturedProgressWork packet at
+the ACTUAL returned caller, inventory and full Memos/query. The same original
+assignment survives the prefix; head agreement retains its required range.
+Current admission comes from Post.context.annotation_heap and availability from
+effects.keeps.available. The prefix producer and reached-head producer are each
+called once. The theorem keeps properness, origins, resources, models and scalar
+progress. ScanReserved.after_prefix.head.edge pays at the ACTUAL index.
+A common native prefix/head stage fuel refers to those SAME witnesses.
+
+The prefix may stop. The theorem retains its full stopped packet. It does not
+assume or prove completion of all earlier hooks, all later rows, adequate global
+recursive depth or total original-input runtime work. Ordinary same-head recording,
+false restart and callback common fuel are the next additive stage. The earlier
+R229 common opaque prefix/preparation/head/callback/restart result remains intact.
+The logical P/A/W scalars retain their original meanings and native-size boundary.
+
+## Validation and preserved source
+
+Four new Lean modules contain 681 lines and 11 public laws. Every source passes
+the project Nix/Lake target and strict own-source warnings. Public declaration
+names, namespaces, hashes and standard axiom sets are exact. No sorry/new axiom
+was added. Full Audit passes with 5763 live modules, 5 affected modules, 4760
+imports and 93154 axiom reports. All 257959 prior Audit bytes remain after four
+new imports. Every older proof, counterexample, repair and marked draft remains.
+
+Compatibility: lean/restart-evidence/20261112-ordinary-prefix-compatibility/.
+frontier.json pins the acyclic source frontier; checked.json records full Audit.
+portable-check.json records six passing independent executions from /tmp: four
+source packets, full compatibility and the Fun-arity reproduction. The R229 raw
+namespace-collision packet remains preserved at its original Haskell snapshot.
+A local wrapper initially parsed two JSON reports as one. Its stream parser was
+corrected and complete reports were regenerated; no mathematical source changed.
+
+Five source commits after the prior checkpoint:
+- 5578769710f88cffedb77d986837a2aec2e91697: Define ordinary typing for raw synthesis programs.
+- d9f9958b8ba06708a9f74f552b65c090e18d2caa: Preserve guards at all generated native outcomes.
+- 3ee6d68cecf950f9a92cf754af03b2fa7f56f43b: Complete selected heads at actual sibling-prefix endpoints.
+- 994120e6d7338aed64e10d6e42f1da20672a8d15: Prove reserved type collision has no ordinary program type.
+- b4bad655b08d0ab9221254f9bce4cc53cf04a766: Reproduce omitted Fun arities in application result types.
+
+Runtime: /tmp/mcfta-ordinary-prefix-20261112-0720/. Full source notes and frozen
+next-cut audits are copied into compatibility/source-audit.md. This runtime has
+only small source/metadata/log files. /tmp had 188.3 GiB free at 07:35 CET.
+Continue watching disk use. Do not recreate binary/build archives.
+
+## Next work and exact remaining scope
+
+ROOT remains sole compiler/Git publisher. Keep one serial heavy job, 4 GiB
+memory.max/high, swap0 and LEAN_NUM_THREADS=1. Do not change queue/caps.
+New candidate sources remain under the runtime directory during this checkpoint:
+SourcePruningEnumerationTargetQueryProjectable.lean (89L, draft d5a557d1...),
+SourcePruningEnumerationSharedScanRecordedRestart.lean (in progress), and
+SourceSynthesisOrdinaryLeafCompleteness.lean (in progress). Do not claim these
+unverified drafts. Materialize and strictly check them in the next packet.
+
+TargetQuery.finite already returns its actual physical trace. A pure-return trace
+can derive plans for every finite fuel internally. The next additive law retains
+that entire receipt and endpoint/all-observation Heap support, without a public
+future plan/completion supplier. Current WordRanges, Ready/admission, operands,
+residency and closedness remain independent current machine conditions.
+
+Ordinary callback refutation needs no future prefix premise: prefix metadata is
+literally original metadata and the same sigma remains. Use pending_refutes_extension
+at the ORIGINAL captured counter with original Packet.bounded and head agreement.
+Build the actual head Packet and call R227 once on the SAME head chi/final Memos.
+Add callbackFuel to the retained prefix/head common bound. Arbitrary recur is valid
+for the later callback equation; the earlier prefix keeps its actual bounded hook.
+Retain stopped prefixes and all finish/continuation wrappers.
+
+The smallest ordinary typing bridge constructs the SAME literal typed leaf and
+its actual termsRows membership/annotation/Program projection. Per-occurrence
+AliasSafe/demanded TypeIn and argument-only role admission stay OUTSIDE Typed.
+Conversions use only one-way equivalent_rigidTerm. Do not assume future membership,
+.ok, an encoded sigma, unrestricted reflection or blanket TypeIn for rigid queries.
+Whole application/relevant/root admission remains separate.
+
+Biggest gaps: repair the two actual Haskell encoding/universe defects; complete
+the independent ordinary typing/source admission bridge; derive actual outer-parent
+histories and all relevant sibling/callback states; prove adequate whole recursive
+depth and one original-input total-work bound. Stage fuels and descending logical
+scalars alone do not prove these global statements.
+
+Keep FULL scope: original-input soundness/completeness; exact accepted terms and
+native/Program component counts for each size; actual size order and multiplicity;
+both inverse directions of BOTH actual signed APIs; Word/Int bounds; finite
+execution and lazy productivity; warm-cache identity; Haskell correspondence.
+Keep failed/rejected/blocked/stopped/later states. Preserve the known eager/deferred
+order counterexample. The optimized interned implementation remains primary;
+older constructor/equality work remains secondary and preserved. Weighted training,
+Table and sampler composition remain outside the end-to-end formal theorem.
+
+Last fresh primary usage: 14% at 07:37 CET. Check about every 15 minutes by seeking
+ONLY the last 1 MiB of the primary rollout, never reading the multi-GB log in full.
+If fresh usage exceeds 80%, save a complete handoff, pause the goal and notify Matti.
+The goal remains ACTIVE while required obligations remain.
+
+--- Preserved prior handoff ---
+
 # Restart checkpoint: 2026-11-12, common opaque fuel and raw type collision
 
 Goal status is ACTIVE. Continue the FULL objective. Pushes to formalize remain
