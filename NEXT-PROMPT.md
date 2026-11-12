@@ -1,3 +1,99 @@
+## 2026-11-12 22:48 CET — finite shallow worker Program roles and finished-output readback
+
+Goal ACTIVE. Keep the full objective: exact accepted terms per count, finite
+execution, size order, both rank/unrank inverse laws and actual Haskell
+correspondence. Preserve all old proofs, counters, repairs, marked drafts,
+the optimized interned core and untracked `.hypha/`. Standing authorization
+covers pushes to `formalize`. Continue work after publication.
+
+Four new modules contain 2298 lines and four public laws. Every strict
+compiler and explicit public declaration/axiom check passes. Complete Audit
+passes: 5884 live modules, 5 affected modules, 4881 imports and 94446 axiom
+reports. All five portable packet checkers pass from `/tmp` under the sole
+serial 4 GiB cap. All 264999 prior Audit bytes remain as an exact suffix.
+Packet: `lean/restart-evidence/20261112-current-program-role-driver-integration-compatibility/`.
+Runtime: `/tmp/mcfta-current-program-role-driver-integration-20261112-2150/`.
+Base `e718ef73532d63f45e39ebdd3a34cecd02bb68b1` is published and remote-verified.
+A fresh upstream fetch still has integrated main at
+`e53852064d3ef5a2eafec47d754c27504b11de5f`.
+
+The full finite SHALLOW worker now derives ProgramSlots at EVERY actual
+emitted output, including stopped prefixes. It retains the complete old
+all-larger-work-fuel run equality and OutcomeResources predicate. Each output
+has its own extending mark set, marked root0, actual native heap and cache.
+The proof closes ordered children, computed parent callbacks, actual prefix
+observations, siblings and recursive depth internally. It uses each callback
+receipt from the same producer. It does not rerun a native producer to obtain
+an unrelated role witness. Siblings restore the captured Core and marks while
+the native caller and full Memos remain shared. A marked EMPTY value rejects
+and emits no output. Only nonempty opaque values are derived unmarked.
+
+The minimal reader uses each SAME output resource Packet and full Memos.
+Whenever that output's actual noStop selection is done, one root producer
+derives a stable partial read, full compression frame, all-larger-read-fuel
+singleton equality, stratification and every old conditional model observer.
+It also derives one Program projection shared by EVERY completion of that
+partial root. No satisfying Type assignment or completion witness is supplied.
+Finishedness is a conclusion observer, not an input after-state provider.
+
+The driver retains CURRENT Packet, Fits, Heap, row membership/length,
+suspended-mass ceiling, Reserved, ProgramSlots and mark0 hypotheses. Recursive
+depth is explicit. The earlier exact initializer derives the initial roles.
+The declared driver header has 29 lines. Its original 53-line freeze includes
+the operational prelude. Both retain the same declaration. The reader keeps
+its exact 64-line frozen header. The independent 75-line coupling review
+reports no substantive concern. Only standard Lean axioms occur.
+
+The strongest construction/pruning statement remains exact current accepted
+Program language versus Eligible with the original argument-token permutation,
+under empty inherited avoids and noncomputable input-derived width. Keep that
+statement separate from this worker/readback result. This batch proves the
+Program shape of finished output states. It does not establish default eager
+soundness or completeness, a satisfying Type model, an original-input total
+work/word-capacity bound, stream order/multiplicity, both inverse laws or a
+verified Haskell compiler/extraction/FFI link.
+
+The next eager obstacle is an ordered native Seed reservation. Each child
+success executes its remaining tuple and concrete outer callback. Scalar
+branch maxima alone do not pay that work. The new actual narrowing law keeps
+Ordinary and never increases its original height. Together with the checked
+prepared-child law, it supplies the ordinary descent bound. Generic eager
+resources and roles remain open. Do not assume cross-seed query-forecast
+monotonicity. Use planned-stage padding and checked within-schedule growth.
+Audit: `/tmp/mcfta-eager-resource-induction-20261112-2235/current-generic-eager-resources-next.md`.
+
+NEXT: strictly check the frozen 285-line actual output-control draft at
+`/tmp/mcfta-current-program-role-driver-integration-20261112-2150/SourceSynthesisSharedPreparedOutputControl.lean`,
+SHA256 `87ee1d9533b39b7a0a64eaef138bd54b92a73d7bdf34e52e74d885d15db7be01`.
+Its full source is also in the source audit. It is UNVERIFIED and is not a
+repository target. It proposes that emitted
+metadata=None implies actual next(noStop)=done, and stop=None implies emitted
+metadata=None. It requests no Packet/model/adequate-depth supplier. Use a
+checked version to remove the reader's finished-output condition for noStop
+runs. Then continue the concrete eager resource induction. Do not claim that
+an output-only control observer proves adequate recursive depth or completeness.
+
+No Haskell source changed in this batch. FINDINGS must keep the external
+Liquid repeated-name defect visible. Owner `claude-gondolin` has branch
+`fix/liquid-repeated-argument-names`. All query readers must use the LAST type
+and refinement. Conflicting duplicate refinements currently conjoin to false
+and can prove arbitrary results. Mixed Int/Bool duplicate query readers also
+disagree. No merged repair is known at the current main pin. PR210 escaped
+constructor names and PR211 LAST Hectare query types are already integrated.
+Retain every old source-pinned counter and each repaired current counterpart.
+The earlier focused Haskell check had 16 examples and 0 failures. No full
+Haskell suite or benchmark was run here. LiquidHaskell contracts can help the
+source interface; they do not automatically import Haskell proofs into Lean.
+
+Evidence is small and reproducible. The source audit includes a standard,
+replayed reverse patch chain for 12 marked driver snapshots (128254 bytes).
+It reconstructs them from the checked source and records each exact SHA256.
+The audit has 191143 bytes, including both unverified next drafts.
+No execution archives were added. Primary usage is 31 percent. `/tmp` has
+172.03 GiB free at the latest observation. Read only the final 1 MiB of the
+rollout for the next primary quota event. Above 80 percent: stop workers,
+save the handoff, pause this goal and notify Matti. Otherwise keep going.
+
 ## 2026-11-12 21:50 CET — actual ordered children and captured-parent roles
 
 Goal ACTIVE. Keep the full objective: exact accepted terms per count, finite
