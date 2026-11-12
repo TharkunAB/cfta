@@ -1,3 +1,70 @@
+# Current whole-root admission: 2026-11-12 15:18 CET
+
+The full formalization goal remains ACTIVE. Base 8331f9c10f444e1cd9715e6837190049fb2dc11b.
+Integrated main remains e53852064d3ef5a2eafec47d754c27504b11de5f (PR210/211).
+Six new modules contain 1136 lines and fourteen checked public laws. Full
+Audit passes: 5807 live modules, seven affected, 4804 imports, 93766 axiom
+reports. All seven portable checks pass. All 260317 old Audit bytes remain
+after six imports. Every old proof, public statement and source version remains.
+
+Strongest CURRENT SOURCE statement: with empty libraryAvoid, a Program
+satisfying the raw per-use Eligible certificate and tokens.Perm ORIGINAL
+queryArguments has actual current FirstOrder root membership at its component
+count. It derives original ordinary Typed and actual construction success.
+The SAME filtered term retains the exact goal annotation, Projection,
+toProgram and component count. Required token multiplicity and last-query
+types remain. The fixed ORIGINAL normalization function maps permutations.
+No future membership/model/worker/Room supplier is a premise. This is positive
+admission on the stated certificate, not unrestricted two-way soundness.
+
+Current type-universe members also reify to admitted raw Ty with EXACT encoded
+term equality. The current signed constructor succeeds iff nonnegative and
+retains original names in negative errors. Generic application membership
+uses actual table splits/offsets and exact child terms. Shared child callbacks
+retain the own prefix/residual/outer finalization; their shallow policy is
+FULL old Result equality and rewrites directly into the old shared scan.
+They add no eager recursive policy or whole traversal/lazy-demand claim.
+
+Reproduce from lean/restart-evidence/20261112-current-root-compatibility/.
+Its source-audit.md records exact hashes, scope and the full frozen native
+source-closure audit. Source packets: current-type-reification,
+context-applications, current-root-construction, shared-child-visitors,
+current-program-admission and current-relevant-admission, all dated 20261112.
+Runtime /tmp/mcfta-current-root-20261112-1448/. R242 root-progress points here.
+Preserve all old proofs/counters/repairs/drafts, historical pins and .hypha/.
+
+The biggest native gap is current source-wide roles/counts/full guard/PlainMu
+closure, then hereditary Type fields at actual prefixes of the SAME build.
+Old/current context equality fails on genuine Fun/3. Once-encoded library
+origins remain reusable. Generic build/allocation/initialization/rank/graph/
+startup consumers already exist. Preserve exact conditional Room and complete
+same-endpoint graph/global/memo/model/work packets. Positive root membership
+does not by itself derive these native facts. Source soundness remains separate.
+
+Next runtime-only drafts are UNVERIFIED: CurrentProgramStructure (Gamma),
+CurrentSourceGuards (Beta), and next-eager-child-policy.md (Alpha read-only).
+ROOT alone compiles, runs Git and publishes. Do not count future drafts as laws.
+Fresh primary usage was 20% at event 15:07 CET, read at 15:07. Check by 15:22.
+ABOVE 80%, save handoff, pause goal and notify Matti. Free space 184.0 GiB;
+last readable /tmp total about 35 GiB excludes six private directories. Runtime
+records are text; repository Lake cache is reused with no binary archive.
+
+No new Haskell repair/runtime defect is established. FINDINGS preserves merged
+namespace/Fun-arity/query fixes and focused local validation via prior audits.
+Historical negative packets retain source pins. Liquid synthesis duplicate
+readers remain externally reviewed. Curried marker names and generated raw
+variable admission remain separate. Liquid Haskell proofs do not automatically
+enter Lean or certify the compiler/runtime. Keep rigid query/goal types free
+of blanket universe restrictions.
+
+Continue the full original scope: earlier hooks/alternatives, original-input
+work/depth, reduction/refold/weights, source order/multiplicity, both inverses,
+full guards/signed/Word/Int/errors/lazy demand, refinement/training. Native
+annotation size is not Program count. Default does not call boundDepth.
+The goal is incomplete and remains ACTIVE after publication.
+
+---
+
 # Current type admission and native scan: 2026-11-12 14:43 CET
 
 The full formalization goal remains ACTIVE. Base a75af3a25fba672b807960f38d8b8f0a4830e3d8.
