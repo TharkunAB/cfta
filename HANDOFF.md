@@ -1,3 +1,46 @@
+# Main integrated and checked: 2026-11-12 13:23 CET
+
+PR 210 and PR 211 are MERGED. Upstream main is
+`e53852064d3ef5a2eafec47d754c27504b11de5f`. The local integration commit is
+`89a77f0637f25f98ea52525d59b7dc7453c54da3`. Earlier open/unmerged notes below
+record their earlier source snapshots. No old proof or finding was removed.
+
+The integrated Haskell code now escapes reserved constructor names, includes
+Fun constructors at each arity other than two, and uses the last type of each
+query name while retaining every required token. The type catalog uses those
+same normalized bindings. Both patches were reviewed before integration.
+
+Local validation passed in Nix under the serial 4 GiB cap: Fourmolu checks
+for Synthesis.hs and SynthesisSpec.hs; the existing focused SynthesisSpec
+run, 16 examples and zero failures, with one RTS capability. This is not a
+new full-suite or benchmark run. No Cabal file changed. Commands and source
+hashes are in `/tmp/mcfta-default-partial-20261112-1303/merged-synthesis-checked.json`.
+
+The old reserved-name, Fun-arity, and duplicate-query runtime packets retain
+their original source hashes and expected results. Their checked negative
+results are historical source versions, not claims that repaired main still
+accepts those examples. Their source-sensitive checkers must reject a changed
+source hash. Reproduce the old packets from the prior formalize checkpoint
+`e39ffc4ba5de872f57cd7b487a7b1b544cfb3998` in an isolated checkout. Keep the
+fixtures and counterexample theorems. Do not delete or rewrite their results.
+
+Published proof checkpoint: `e39ffc4ba`. The new concrete/tagged marker
+agreement passes its strict check (389 lines, one public law); full checkpoint
+compatibility is still pending. Type-reflection and last-binding query laws
+are being checked. Their versioned namespaces identify the same reviewed
+heads now merged into main. Do not count unchecked drafts as established.
+
+The full formalization goal remains ACTIVE. Default native eager branching,
+actual order/cache effects, full model completion, original-input work/depth
+across all earlier hooks/alternatives, both inverse contracts, Word/Int/source
+errors, refinement and training remain within scope. Liquid duplicate-name
+readers remain under external review; no new runtime defect is established.
+Curried reserved marker names and raw rigid-variable admission remain distinct
+from the repaired constructor namespace. Fresh primary usage was 18% at
+13:20 CET; check by 13:35. Pause only at the user's ABOVE-80% threshold.
+
+---
+
 # Proposed duplicate-query repair: 2026-11-12 13:07 CET
 
 [PR #211](https://github.com/TharkunAB/cfta/pull/211) is OPEN and UNMERGED.
