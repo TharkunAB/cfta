@@ -1,3 +1,83 @@
+# Current checked pruning and ordinary startup: 2026-11-12 16:45 CET
+
+The full formalization goal remains ACTIVE. Base 77be632308956b58f39ff12281b0d3f4008b6e17.
+Integrated main remains e53852064d3ef5a2eafec47d754c27504b11de5f (PR210/211).
+Four new modules contain 787 lines and seven public laws. Full Audit passes:
+5822 live modules, five affected, 4819 imports, 94008 axiom reports. All five
+portable checks pass. All 261283 old Audit bytes remain after four imports.
+Every earlier proof, public statement and source version remains.
+
+Strongest new CURRENT positive statement: an original ordinary Program with
+raw per-use Eligible, empty libraryAvoid and tokens.Perm ORIGINAL query
+arguments passes through actual current construction and ONE checked native
+pruning return to enumeration startup, with the SAME exact annotated term,
+Program/goal/count, valid assignment/origins/exact pending size and startup
+work. Its computed native storage forecast must satisfy Room. This theorem
+retains the COMPLETE initializer, checked endpoint and startup receipts.
+
+CurrentCheckedHereditarySharedCompletion derives cold readiness, source
+support, whole native ValueFields/Mu store, history/normality/stored/idle facts
+from the SAME actual build. One rank producer returns base literal ranges,
+all larger SAME done results and ranges, one graph/next/final with Checks,
+full Reads globals-to-final, Post/Frame/Fits/full physical forecast Heap,
+Available/NodeLaw/SharedReady/Type-profile GuardHeap/History/closed/NodeFields/
+ValueFields. No future Ready/build/worker/model supplier or old/current Context
+equality is assumed. All Type indices use the once-encoded library.
+
+CurrentOrdinaryInitialModelWork supplies the cold pre-worker specific Program
+witness, complete packet and universal counted observer. Its stronger sibling
+CurrentOrdinarySharedModelWork preserves the whole checked tuple and derives
+one SAME-result postworker startup. closed_language and SAME NodeLaw transfer
+the original exact source term; there is no independent chosen endpoint or
+term. Work is (N+1)*N plus the root-expandability bit. N is complete annotated
+term size, not Program.components. This is not a full traversal/work bound.
+
+SharedPreparedRecursiveChildPolicy now carries the actual child policy
+through smaller-depth callbacks and one common preparation per reached
+branch. All old operations/types/endpoints/metadata/Caller/full Memos remain.
+Four laws include ENTIRE shallow HookResult equality at every depth. The eager
+adapter exists; its deeper semantic/resource preservation remains NEXT.
+Existing finish can discard processed receipts on completed driver results.
+
+Reproduce from lean/restart-evidence/20261112-current-checked-closure-compatibility/.
+Its source-audit.md retains hashes, exact full contracts and the now-discharged
+postworker composition plan. Source packets: current-checked-hereditary-shared-
+completion, shared-prepared-recursive-child-policy, current-ordinary-initial-
+model-work, current-ordinary-shared-model-work. Runtime
+/tmp/mcfta-current-checked-closure-20261112-1629/. R245 points here.
+Preserve all proofs/counters/repairs/drafts, historical pins and .hypha/.
+
+NEXT read-only audits: genuine eager CPS resource preservation, reverse
+current source generalized-instance extraction and width/forecast dependence.
+Old shallow bucket cost is not an eager descendant/all-alternative budget.
+Do not replace this gap with another shallow adapter or future contract gate.
+ROOT alone compiles/publishes. Original-input bounds and fixed machine width
+remain open even when exact computed Room implies finite worker completion.
+
+HASKELL FINDING: external owner post1182 reproduced Liquid duplicate-name
+contradictory-refinement and first/each/last-reader defects on main e53852064.
+FINDINGS retains the report and controls. Owner branch
+fix/liquid-repeated-argument-names applies LAST type AND refinement to every
+reader; no PR/pushed repair is yet reported. ROOT did not repeat the runtime
+experiment. Do not duplicate its repair. Liquid argument use is optional;
+Hectare query-use rules stay separate. No production Haskell changes here.
+Earlier PR210/211 validation and historical negative pins remain preserved.
+
+Primary usage is 21% at event/read 16:39 CET. Check by 16:54. ABOVE 80%, save
+handoff, pause goal and notify Matti. Free space is 180.6 GiB. Last readable
+/tmp was about 37 GiB, dominated by /tmp/claude-1000. Six private directories
+were unreadable. Keep runtime records as text and reuse repository Lake cache.
+
+Continue full scope: source reverse soundness, earlier hooks/alternatives,
+original-input work/depth/capacity, reduction/refold/weights, source order and
+multiplicity/lazy demand, both inverses, full guards/signed/Word/Int/errors,
+refinement/training and Haskell correspondence. Liquid Haskell results do not
+automatically enter Lean or certify execution. Do not blanket-restrict rigid
+query/goal types. Default does not call boundDepth. Goal stays ACTIVE after
+publication; it remains incomplete.
+
+---
+
 # Current native Type fields and cold startup: 2026-11-12 16:23 CET
 
 The full formalization goal remains ACTIVE. Base 85cd534cf7c43c3eef4d84b2b2cc90fce1032dae.
