@@ -1,3 +1,63 @@
+# Current type admission and native scan: 2026-11-12 14:43 CET
+
+The full formalization goal remains ACTIVE. Base a75af3a25fba672b807960f38d8b8f0a4830e3d8.
+Integrated main remains e53852064d3ef5a2eafec47d754c27504b11de5f (PR210/211).
+Three new modules contain 493 lines and nine checked public laws. Full Audit
+passes: 5801 live modules, four affected, 4798 imports, 93653 axiom reports.
+All four portable checks pass. All 260153 old Audit bytes remain after three
+imports. Every old source definition and public theorem remains.
+
+Current group and argument-only leaves retain original Typed, actual current
+termsRows membership, exact substituted annotation, Projection/toProgram and
+count one. Only demanded per-use substitution images require TypeIn.
+Current raw TypeIn and semantic universe membership now have the exact
+RawAdmitted iff: four generated rigid variables a..d, current escaped
+constructor signatures and the Fun/2 alias. Current catalog separation is
+derived. Query/goal types do not blanket-require universe admission.
+
+The shared ordered scan retains complete native endpoints, every processed
+receipt, outputs and stopped prefixes. Its existing captured-edge adapter is
+FULL Result equality with the old NativeContinuations.run. The same captured
+Core is restored for siblings; reached native Caller/full Memos feed suffixes.
+It does not yet implement eager recursive child dispatch or lazy source demand.
+
+Reproduce from lean/restart-evidence/20261112-current-admission-compatibility/.
+Its source-audit.md retains exact hashes, scope, full root/native source audits,
+Haskell findings and all remaining obligations. Source packets are
+20261112-current-group-admission, 20261112-current-type-admission and
+20261112-shared-branching. Runtime /tmp/mcfta-current-admission-20261112-1424/.
+Prior runtime root-progress points here. Preserve all old proofs/counters/
+repairs/drafts, historical source pins and .hypha/. Copy no binary archive.
+
+Next runtime-only targets are UNVERIFIED: CurrentTypeReification (Beta) and
+ContextApplications (Gamma), plus next-eager-child-dispatch.md (Alpha audit).
+Do not count them as proved. ROOT alone compiles and publishes. The current
+root Eligible certificate must follow original binding/rho/token choices and
+current per-use admission. Generic membership closure uses exact child terms.
+Current native startup still needs source-wide roles/cache/type-field origins.
+Retain SAME endpoint/model/computed Room; positive membership does not discharge
+Room or transfer old hardwired source wrappers.
+
+Fresh primary usage was 19% at event 14:35 CET, read at 14:35. Check by 14:51.
+ABOVE 80%, save handoff, pause goal and notify Matti. Filesystem free space was
+184.3 GiB. Last readable /tmp total was about 35 GiB, excluding six private
+directories. Active runtime records are text and reuse repository Lake cache.
+
+No new production Haskell repair or runtime defect is established. FINDINGS
+retains merged namespace/Fun-arity/query repairs and local validation through
+the prior audits. Liquid synthesis duplicate-name readers remain externally
+reviewed. Curried markers and raw generated-variable admission stay separate.
+Liquid Haskell proofs do not automatically enter Lean or certify Haskell
+execution. Keep all old negative packets on their explicit historical pins.
+
+Continue the full original scope: all earlier hooks/alternatives and original-
+input work/depth; reduction/refold/weights; source order/multiplicity; both
+inverse contracts; full guards/signed/Word/Int/errors/lazy demand; refinement/
+training. Annotation size is not Program count. Default does not call boundDepth.
+The full goal is not complete. Do not pause it after this publication.
+
+---
+
 # Full marker resources and current context: 2026-11-12 14:18 CET
 
 The full formalization goal remains ACTIVE. Base:
