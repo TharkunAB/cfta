@@ -38,24 +38,24 @@ the same host: an AMD Ryzen 9 7950X with 24 logical CPUs for a WSL2 VM.
 
 - Spectacular: the ICST 2023 artifact, with GHC 8.10.7 and a limit of 60
   seconds.
-- Specftacular: revision `8c44a0d9b`, with GHC 9.14.1. One core: the
+- Specftacular: revision `2abbfe8ea9`, with GHC 9.14.1. One core: the
   defaults and a limit of 900 seconds. 12 cores:
   `--parallel-tests 64 --speculate 64` and `+RTS -N12 -qn4 -A64m`, with no
-  limit.
+  time limit.
 
 QuickSpec 2 does not run on this host in the comparison.
 
 | Signature | Size | Spectacular s | Spectacular laws | Specftacular, one core s | Specftacular, 12 cores s | Specftacular laws |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Lists | 7 | > 60 | — | 23.90 | 11.47 | 41 |
-| Octonions | 7 | 0.22 | 8 | 1.00 | 0.48 | 15 |
-| Regex | 7 | 5.84 | 42 | 51.68 | 34.12 | 60 |
-| ListMonad | 7 | 18.04 | 42 | 4.61 | 3.43 | 9 |
-| HugeLists | 3 | 0.64 | 33 | 2.54 | 1.43 | 46 |
-| HugeLists | 4 | 28.43 | 90 | 8.58 | 5.87 | 122 |
-| HugeLists | 5 | > 60 | — | 55.90 | 42.10 | 291 |
-| HugeLists | 6 | > 60 | — | 491.05 | 364.06 | 690 |
-| HugeLists | 7 | > 60 | — | > 900 | 3392.93 ᵈ | 1413 ᵈ |
+| Lists | 7 | > 60 | — | 20.31 | 10.68 | 41 |
+| Octonions | 7 | 0.22 | 8 | 0.91 | 0.45 | 15 |
+| Regex | 7 | 5.84 | 42 | 46.59 | 32.17 | 60 |
+| ListMonad | 7 | 18.04 | 42 | 3.98 | 2.97 | 8 |
+| HugeLists | 3 | 0.64 | 33 | 2.43 | 1.36 | 46 |
+| HugeLists | 4 | 28.43 | 90 | 7.58 | 5.58 | 122 |
+| HugeLists | 5 | > 60 | — | 50.29 | 38.70 | 291 |
+| HugeLists | 6 | > 60 | — | 384.04 | 316.11 | 691 |
+| HugeLists | 7 | > 60 | — | > 900 | 2383.28 ᵈ | 1392 ᵈ |
 
 `ᵈ`: with `--type-depth 2 --recheck 2000`. Without the depth bound,
 phase 3 at size 7 does not finish.
