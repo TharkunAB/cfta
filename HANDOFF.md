@@ -1,3 +1,46 @@
+# Upstream Haskell repair status: 2026-11-12 12:24 CET
+
+[PR #210](https://github.com/TharkunAB/cfta/pull/210) is OPEN and UNMERGED.
+The GitHub snapshot was checked at 12:19 CET. It is based on integrated main
+`dedd47da878e78aa5be9947247d8156675956b59`; its head is
+`79f74df2c3c9d3c864e57a960cb64c8c28883ec9`.
+The reviewed patch fixes the reported Fun/non-two discovery and reserved
+constructor/type-variable/function-marker collisions. It escapes the reserved
+names and every `con:` prefix, and applies that encoding consistently to the
+FirstOrder, Curried, and constructor-catalog paths. Only Fun with arity two is
+omitted from constructor discovery. Its test/performance results are reported
+by the PR; this workspace has not independently run that branch.
+
+The external Haskell owner plans the duplicate-query repair separately:
+EVERY use takes the LAST binding's type, and EACH original entry remains a
+required token. Thus x:A,x:C has payloads x:C,x:C while retaining two tokens.
+This matches the existing ordinary last-binding typing convention. No commit
+for that repair was posted in the inspected board notes. It is not in PR #210.
+The Liquid lookup and parser routes remain part of that external review.
+
+Open limits to retain in FINDINGS:
+
+- Curried constructors named `?`, `?any`, or `?nodefault` still collide with
+  domain markers. PR #210 documents this reserved namespace and leaves it.
+- The external owner reports a RAW-API completeness gap for rigid type
+  variables outside a..d: f:A->v,y:A,goal v,size2 returns f y for a/d and no
+  output for e/x/t0 in the three encodings. This is an external reported
+  reproduction, not a new kernel or local runtime result from this workspace.
+- Application still checks the arrow marker child rather than the root symbol.
+  The escaping repair separates the reported forged raw constructor case.
+  Full reflection/correspondence still requires its explicit proof.
+
+The formalize branch still integrates dedd47da87. No production Haskell repair
+is merged here yet. Preserve ALL old counterexamples and source-pinned packets
+as historical evidence for that version when the repair lands. Add a versioned
+current encoding/catalog layer rather than silently changing their meaning.
+The native core proofs quantify over symbols and guards. The source-version
+adaptation belongs mainly to the synthesis encoding, catalog, and call layers.
+The persistent goal remains ACTIVE. Continue default finished-cache rendering
+in `/tmp/mcfta-default-marker-20261112-1215/`; keep the full checkpoint below.
+
+---
+
 # Restart checkpoint: 2026-11-12 12:11 CET, finite native rows, term size, and structural budget
 
 The persistent goal is ACTIVE. Continue after publication. Base:
