@@ -1,3 +1,103 @@
+# Exact pruned Program language and checked rendering: 2026-11-12 19:09 CET
+
+The full formalization goal remains ACTIVE. Base 3f1b999d4b7a9255d31e663162041d9636d4b5db.
+Refreshed and integrated main remains e53852064d3ef5a2eafec47d754c27504b11de5f (PR210/211).
+Three new modules contain 462 source lines and three public laws. Full Audit
+passes: 5848 live modules, four affected, 4845 imports, 94163 axiom reports.
+All four portable checks pass. All 262944 previous Audit bytes remain after
+three imports. Every earlier proof, public statement and source pin remains.
+
+Strongest new prefix result: the CURRENT FirstOrder construction and the SAME
+completed native pruning run preserve exactly the projected Program language
+specified by existing raw per-use eligibility, ORIGINAL query-token coverage
+and requested component count, when libraryAvoid=[]. The returned native node
+is the ACTUAL result, distinct from the original value. The theorem retains
+its ENTIRE typed pruning producer tuple and ALL seven universal typing fields.
+It derives both language directions from NodeLaw and the SAME original build.
+The positive direction derives empty inherited satisfaction, matching signed
+request and uniqueness of the actual returned source expression. ONE checked
+producer executes. No second initializer/build or future source acceptance,
+model, NodeLaw or Room supplier appears. The sufficient mathematical width
+comes from original inputs and budget; its selector is noncomputable.
+This is a formal construction/pruning guarantee. Fixed Haskell word capacity,
+Haskell execution and complete default Program enumeration remain separate.
+
+CurrentComputedWidthExactProgramLanguage205 appends this conditional iff to
+all prior initializer/worker endpoint/ranges/fullglobals/Frame/Fits/Heap/
+readiness/history/NodeFields/ValueFields and universal ordinary typing fields.
+The certificate retains original binding choices, argument-only roles and
+only demanded-image/application-result admission. Query duplicates preserve
+original raw token payloads while typing uses LAST lookup. Extra unmarked
+uses are allowed. Annotations remain existential; they can be infinite for
+one Program. Root's typed-producer-header-preservation.json checks every old
+header field and observer remains. The source reverse law still permits all
+avoid rules; an unrestricted all-avoids iff is not claimed.
+
+CurrentRenderedTyping139 derives an assignment from the SAME actual successful
+ResourceHistory rendering under WHOLE cache Discharged, actual next/canonical
+initial state/final arity, checked residuals and the same source build/readback.
+It retains ALL seven render_sound receipt fields: original/output/after
+Satisfies, original native acceptance, suspended restrictions, root assignment
+and compression Frame. It appends the SAME Program/goal/count/filter/body/
+projection/decoder/annotations from RootTyping. It assumes no source language
+acceptance or model. Full default Mu rendering is outside WHOLE Discharged.
+programsIn dropping residuals and the actual reduction/refold/lazy output
+adapters still need proof. Conditional marker Completes supplies no witness.
+
+SharedDispatchQueryEvents118 records actual native query attempts in the
+CURRENT dispatcher. Its observed operation retains the entire old Result,
+counts zero or one at the exact actual control branch, and records SAME full
+Caller/Queries/input nodes/native Outcome. It invokes execute and afterQuery
+once, and retains the returned Core action without executing it twice.
+It does not use allocation IDs or memo-table sizes as execution counters.
+No complete eager query count, arbitrary consumer work or total runtime bound
+is claimed. Terminal cache-None rawFold tails still execute and must be logged.
+The earlier unbounded G/M callback-input observer remains checked separately.
+
+Reproduce from lean/restart-evidence/20261112-current-rendered-events-compatibility/.
+source-audit.md retains full public headers, frozen operations, exact source
+hashes, repairs and limits. Runtime
+/tmp/mcfta-current-rendered-events-20261112-1852/; R249 points here.
+ROOT alone compiles/publishes. Preserve all proofs/counters/repairs/marked
+drafts/historical source pins and untracked .hypha/. No binary archive is
+copied. Checks use Nix, one compiler and unchanged 4 GiB max/high, swap=0.
+
+NEXT work is UNVERIFIED: Gamma's pure completion decoder observer from the
+CURRENT Projection(openProgram true partial), without assuming a completion
+exists. Actual enumeration must still DERIVE that Projection from strict
+ValueFields through current slots/fragments/UF aliases/readback and noStop
+finished flags. ProgramValue permits opaque union at Program positions and
+is insufficient. Packet/recordTypes_metadata do not preserve Program roles.
+metadata.types contains UVar-slot classifications; do not confuse these with
+native value IDs or assert an unverified alias defect. Future atTypes stopping
+needs extra type-set role soundness; noStop finished does not use that stop rule.
+Alpha audits actual terminal-fold query-event propagation, including raw tails;
+Beta audits the smallest operational role invariant. No new typing hierarchy
+or assumed future projection/model/work bound should replace those proofs.
+
+Largest gaps remain whole current default Mu completion and decoder stability,
+all-alternative native query/work accounting with actual interleaved callbacks,
+complete finite original-input execution/order/multiplicity, full reached
+closure, rank/unrank/refinement/training and Haskell runtime correspondence.
+The exact pruned language is a semantic result, not a complete enumeration run.
+
+No production Haskell/Cabal change or new ROOT runtime reproduction. FINDINGS
+retains external Liquid defect1182, its exact pin/examples and owner branch
+fix/liquid-repeated-argument-names. No newer repair/PR/merge is reported; main
+remains e53852064 after fresh fetch. Do not duplicate that owner. The planned
+repair uses LAST type AND refinement in every reader. Liquid use is optional.
+All historical source-pinned counterexamples remain. The earlier focused
+Haskell check remains 16 examples, zero failures; no new full suite/corpus/
+benchmark is claimed.
+
+PRIMARY usage was 25% at 18:56 CET; /tmp filesystem had 177.8 GiB free.
+Next fresh usage read is due by 19:11 CET. Read ONLY the final 1 MiB of the
+thread log. If fresh PRIMARY usage exceeds 80%, stop workers, save a handoff,
+pause the goal and notify Matti. Keep watching /tmp and preserve active files.
+Continue the full goal after publication.
+
+---
+
 # Exact current source language and pruned typing: 2026-11-12 18:47 CET
 
 The full formalization goal remains ACTIVE. Base 17ef855d5f58c596d517fb7782792656db5ca7ca.
