@@ -928,12 +928,6 @@ edgeSubstitutionPlan inputEdge = memoTypeableWith @symbol genericEdgeSubstitutio
 -- The specifications are after the code. A specification above a definition
 -- moves the source locations that GHC writes into the object file.
 
--- The plugin trusts the instances of classes such as Show, and it gives the
--- variables that they use a type without refinements. The Show instance of
--- Node uses internedMuBody. With this option, the plugin checks the instances,
--- and internedMuBody keeps the refinement of its result.
-{-@ LIQUID "--check-derived" @-}
-
 {-@ data InternedMu symbol = MkInternedMu
       { internedMuId :: NodeId
       , internedMuBody :: Node symbol
