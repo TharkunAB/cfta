@@ -1,0 +1,35 @@
+--- repair4-290.lean
++++ repair5.lean
+@@ -280,8 +280,24 @@
+-      · exact SourceSynthesisCurrentInitialPrefixOrigin.initial_prefix_preparation_rows
+-          (width := SourceSynthesisCurrentProgramEagerEnumerationWidth.enumBits
+-            lib query signed (Nat.succ smaller) + 2)
+-          lib query signed expression returned value heap built cache handle decoded
+-          holeKey fits admits graph templates none order metadata
+-          (bound + extra) (bound + extra) (bound + extra) (bound + extra)
+-          (bound + extra) (bound + extra) (bound + extra) (bound + extra)
+-          SourceCurrentAllocatedPartialInitialization.globals.query
++      · have preparation :=
++          SourceSynthesisCurrentInitialPrefixOrigin.initial_prefix_preparation_rows
++            (width := SourceSynthesisCurrentProgramEagerEnumerationWidth.enumBits
++              lib query signed (Nat.succ smaller) + 2)
++            lib query signed expression returned value heap built cache handle decoded
++            holeKey fits admits graph templates none order metadata
++            (bound + extra) (bound + extra) (bound + extra) (bound + extra)
++            (bound + extra) (bound + extra) (bound + extra) (bound + extra)
++            SourceCurrentAllocatedPartialInitialization.globals.query
++        dsimp only at preparation
++        split
++        · rename_i checked narrowed action narrowedHeap reached saved actionCore candidate
++            updated callbackCore prefixEq
++          rw [prefixEq] at preparation
++          obtain ⟨savedSame, metadataSame, callbackSame, reachedHeap, ordinary,
++              newHandle, newlyEncoded, newlyDecoded, newlyStored, selected⟩ := preparation
++          refine ⟨savedSame, metadataSame, callbackSame, reachedHeap, ordinary,
++            newHandle, newlyEncoded, newlyDecoded, newlyStored, ?_⟩
++          split
++          · rename_i target readHandle scs decodedValue entered preparedValue preparedHeap selectedEq
++            rw [selectedEq] at selected
++            exact selected
++          · exact True.intro
++        · exact True.intro

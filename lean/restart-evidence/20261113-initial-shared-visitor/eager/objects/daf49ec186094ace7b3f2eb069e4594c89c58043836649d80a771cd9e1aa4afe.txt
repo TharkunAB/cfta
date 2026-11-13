@@ -1,0 +1,44 @@
+    := by
+  let caller := SourceCurrentAllocatedPartialInitialization.caller width cache heap
+  let startup : Cached :=
+    ⟨EnumerationState.initial handle,
+      fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary value else false,
+      fun _ => none⟩
+  dsimp only
+  have zero : ∀ uv,
+      SourcePruningEnumerationRestart.decision stop order metadata startup = some (.expand uv) →
+      uv = 0 := by
+    intro uv chosen
+    have selected : EnumerationPureSelection.next (order metadata) startup = .expand uv := by
+      cases stop with
+      | none => exact Option.some.inj chosen
+      | some rule =>
+          dsimp only [SourcePruningEnumerationRestart.decision] at chosen
+          split at chosen
+          · cases chosen
+          · exact Option.some.inj chosen
+    have inside := (SourcePruningEnumerationSelection.offered startup (order metadata) uv selected).1
+    change uv < 1 at inside
+    omega
+  refine ⟨zero, ?_⟩
+  have fixed :
+      (match SourcePruningEnumerationRestart.decision stop order metadata startup with
+        | some (.expand _) => some (.expand 0)
+        | other => other) =
+      SourcePruningEnumerationRestart.decision stop order metadata startup := by
+    cases chosen : SourcePruningEnumerationRestart.decision stop order metadata startup with
+    | none => rfl
+    | some next =>
+        cases next with
+        | done => rfl
+        | stuck => rfl
+        | expand uv =>
+            have same := zero uv chosen
+            subst uv
+            rfl
+  exact congrArg
+    (SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild
+      (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty
+        workFuel workFuel workFuel workFuel workFuel InternedEdgeResidency.nodeEdges)
+      holeKey fits admits graph templates checkEmpty InternedEdgeResidency.nodeEdges stop order
+      workFuel depth metadata caller queries startup) fixed.symm

@@ -1,0 +1,28 @@
+private theorem initial_runEager_canonical
+    {Typing Key : Type} {width : Nat}
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Node]
+    (cache : Cache.State SourceEqualityPartialConstraintKey.Key)
+    (value : Node) (heap : InternedConstructorTemplates.State Symbol Guard) (handle : Nat)
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat)
+    (workFuel depth : Nat) (metadata : Metadata Typing) (queries : SourceEndpointMemo.Memos) :
+    let caller := SourceCurrentAllocatedPartialInitialization.caller width cache heap
+    let startup : Cached :=
+      ⟨EnumerationState.initial handle,
+        fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary value else false,
+        fun _ => none⟩
+    let firstDecision := SourcePruningEnumerationRestart.decision stop order metadata startup
+    (∀ uv, firstDecision = some (.expand uv) → uv = 0) ∧
+    SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.runEager
+      holeKey fits admits graph templates checkEmpty InternedEdgeResidency.nodeEdges stop order
+      workFuel depth metadata caller queries startup =
+    SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild
+      (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty
+        workFuel workFuel workFuel workFuel workFuel InternedEdgeResidency.nodeEdges)
+      holeKey fits admits graph templates checkEmpty InternedEdgeResidency.nodeEdges stop order
+      workFuel depth metadata caller queries startup
+      (match firstDecision with
+        | some (.expand _) => some (.expand 0)
+        | other => other)

@@ -1,0 +1,89 @@
+{
+  "schema": "visitor-exact-strict-inputs-v1",
+  "source_file": "source.lean",
+  "apply_patch_command": [
+    "patch",
+    "--batch",
+    "--fuzz=0",
+    "-p0",
+    "-i",
+    "ABSOLUTE_PATCH_PATH"
+  ],
+  "stage_reconstruction": "Copy base once and apply the four transitions in order in an isolated temporary directory. Verify each sha256 before instrumentation.",
+  "checks": [
+    {
+      "name": "check1",
+      "stage": "raw-264",
+      "instrumentation": "history/instrument-check1.patch",
+      "expected_input_sha256": "c2aa669d9e52e7e3ea6db7d5307efbd7a773d3700cff83c5e86d3453f8a2b3ae",
+      "expected_historical_exit": 1,
+      "checker": "objects/d245fd109caecc494ec5683404a2e21df6a393420378db75118100aad7ba21a2.py",
+      "checker_argv": [
+        "EXTRACTED_CHECK_LEAN",
+        "c2aa669d9e52e7e3ea6db7d5307efbd7a773d3700cff83c5e86d3453f8a2b3ae"
+      ]
+    },
+    {
+      "name": "check2",
+      "stage": "repair-266",
+      "instrumentation": "history/instrument-check2.patch",
+      "expected_input_sha256": "0f966c57ce76e3baaa19f4168cdd5cf31e8815a1203641a34e0658e1e1b93a02",
+      "expected_historical_exit": 1,
+      "checker": "objects/d245fd109caecc494ec5683404a2e21df6a393420378db75118100aad7ba21a2.py",
+      "checker_argv": [
+        "EXTRACTED_CHECK_LEAN",
+        "0f966c57ce76e3baaa19f4168cdd5cf31e8815a1203641a34e0658e1e1b93a02"
+      ]
+    },
+    {
+      "name": "check3",
+      "stage": "match-alpha-268",
+      "instrumentation": "history/instrument-check3.patch",
+      "expected_input_sha256": "1b5be58d3db8cf69c9dff33336c1ff41b91437aa997d291e9aa4f8f6c09145d2",
+      "expected_historical_exit": 1,
+      "checker": "objects/d245fd109caecc494ec5683404a2e21df6a393420378db75118100aad7ba21a2.py",
+      "checker_argv": [
+        "EXTRACTED_CHECK_LEAN",
+        "1b5be58d3db8cf69c9dff33336c1ff41b91437aa997d291e9aa4f8f6c09145d2"
+      ]
+    },
+    {
+      "name": "check4",
+      "stage": "type0-267",
+      "instrumentation": "history/instrument-check4.patch",
+      "expected_input_sha256": "a0a1b254860a7b1391a0961ca723007b3a34d677c0b0b2635a56ab47ae235831",
+      "expected_historical_exit": 0,
+      "checker": "objects/d245fd109caecc494ec5683404a2e21df6a393420378db75118100aad7ba21a2.py",
+      "checker_argv": [
+        "EXTRACTED_CHECK_LEAN",
+        "a0a1b254860a7b1391a0961ca723007b3a34d677c0b0b2635a56ab47ae235831"
+      ]
+    },
+    {
+      "name": "check5",
+      "stage": "universe-267",
+      "instrumentation": "history/instrument-check5.patch",
+      "expected_input_sha256": "550620552c0c8f9ba586f6fc7d3549e8b32e8f4d3ced8ff8d6ecdb29e4ff6c02",
+      "expected_historical_exit": 0,
+      "checker": "objects/d245fd109caecc494ec5683404a2e21df6a393420378db75118100aad7ba21a2.py",
+      "checker_argv": [
+        "EXTRACTED_CHECK_LEAN",
+        "550620552c0c8f9ba586f6fc7d3549e8b32e8f4d3ced8ff8d6ecdb29e4ff6c02"
+      ]
+    }
+  ],
+  "limits": {
+    "memory.max": "4294967296",
+    "memory.high": "4294967296",
+    "memory.swap.max": "0"
+  },
+  "compiler_command": "lake env lean -j1 -DwarningAsError=true EXTRACTED_CHECK_LEAN",
+  "environment": {
+    "LEAN_NUM_THREADS": "1",
+    "LEAN_SYSROOT": "unset"
+  },
+  "nix_shell": "/home/tritlo/Code/mcfta/shell.nix",
+  "cwd": "/home/tritlo/Code/mcfta/lean",
+  "execution": "Root only; no extraction, GNU replay or compilation has been run by preparer.",
+  "checker_execution": "Copy each content-addressed checker to the isolated check directory before execution. Do not execute it from packet/objects: it writes draft-output.txt and draft-checked.json beside itself."
+}

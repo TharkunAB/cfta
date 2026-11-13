@@ -1,0 +1,69 @@
+/tmp/mcfta-initial-shared-visitor-check2-20261113-1806/check.lean:95:16: error: Tactic `assumption` failed
+
+case some.none
+heap : State Symbol Guard
+edge : EdgeValue Symbol Guard
+captured : Cached
+tries : List EqualityTrie.Trie
+residual : Option Guard
+projectionEq : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual)
+allocated : SourcePruningEnumerationCachedOwn.suspendMany heap tries captured = none
+⊢ match
+    match some (tries, residual) with
+    | none => none
+    | some (tries, residual) =>
+      Option.map
+        (fun result =>
+          [((edge.entry.key.symbol,
+                List.map
+                  (fun indexed =>
+                    (indexed.fst, descendScs indexed.snd [] ++ descendScs indexed.snd result.fst,
+                      SourcePruningEnumerationShallowChild.prepareChild
+                        (descendScs indexed.snd [] ++ descendScs indexed.snd result.fst) indexed.fst))
+                  edge.children.zipIdx,
+                residual),
+              result.snd)])
+        (SourcePruningEnumerationCachedOwn.suspendMany heap tries captured) with
+  | some [((symbol, staged, _residual), _ownAfter)] =>
+    symbol = edge.entry.key.symbol ∧ List.map (fun input => input.fst) staged = edge.children
+  | x => True
+/tmp/mcfta-initial-shared-visitor-check2-20261113-1806/check.lean:98:17: error: Invalid `⟨...⟩` notation: The expected type
+  match
+    match some (tries, residual) with
+    | none => none
+    | some (tries, residual) =>
+      Option.map
+        (fun result =>
+          [((edge.entry.key.symbol,
+                List.map
+                  (fun indexed =>
+                    (indexed.fst, descendScs indexed.snd [] ++ descendScs indexed.snd result.fst,
+                      SourcePruningEnumerationShallowChild.prepareChild
+                        (descendScs indexed.snd [] ++ descendScs indexed.snd result.fst) indexed.fst))
+                  edge.children.zipIdx,
+                residual),
+              result.snd)])
+        (SourcePruningEnumerationCachedOwn.suspendMany heap tries captured) with
+  | some [((symbol, staged, _residual), _ownAfter)] =>
+    symbol = edge.entry.key.symbol ∧ List.map (fun input => input.fst) staged = edge.children
+  | x => True
+is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+/tmp/mcfta-initial-shared-visitor-check2-20261113-1806/check.lean:99:10: error: No goals to be solved
+/tmp/mcfta-initial-shared-visitor-check2-20261113-1806/check.lean:135:33: error: Variable name `narrowed` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _narrowed
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/tmp/mcfta-initial-shared-visitor-check2-20261113-1806/check.lean:135:57: error: Variable name `narrowedHeap` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _narrowedHeap
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+'_private._stdin.0.MicroCFTA.SourceSynthesisCurrentInitialSharedVisitorOrigin.initial_prepared_shared_root_scan_origin' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

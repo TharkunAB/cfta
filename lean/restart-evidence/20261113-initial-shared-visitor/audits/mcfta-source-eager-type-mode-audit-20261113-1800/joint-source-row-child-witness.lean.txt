@@ -1,0 +1,14 @@
+-- UNPROVED added CONCLUSION at the SAME completed actual source-row tuple.
+-- sourceRow is its causally derived ORIGINAL source EdgeValue, not a caller-
+-- supplied desired row. fragments are the SAME ordered actual child results.
+-- Source-origin/native/Post/memo/tuple receipts remain those of that execution.
+-- This is a local proof target, not a public model/unifier input or a claim
+-- that arbitrary native rows/tuples satisfy it. No shallow Trace is introduced.
+∃ assignment : Nat → Language.Term Symbol,
+  List.Forall₂
+    (fun value fragment => InternedGuardedLanguage.meaning
+      (SourceEqualityPCSGuard.holds formulas solver) [] value
+      (Fragments.fill assignment fragment))
+    sourceRow.children fragments ∧
+  SourceEqualityPCSGuard.holds formulas solver sourceRow.entry.key.constraint
+    (.node sourceRow.entry.key.symbol (fragments.map (Fragments.fill assignment))) = true

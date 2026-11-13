@@ -1,0 +1,28 @@
+    := by
+  dsimp only
+  let bits := SourceSynthesisCurrentProgramEagerEnumerationWidth.enumBits lib query signed depth
+  obtain ⟨fields, cache, value, heap, built, prepared, conjunctionFields, context,
+      facts, available, roles, growth, issued, origins, identity, emptySame, emptyReady,
+      closed, original, valueFields, handle, encoded, decoded, slots, startupReceipt,
+      initialFits, initialHeap, reservation, bound, outcome, retained, outputs⟩ :=
+    accepted lib query signed expression returned depth formulas solver metadata emptyPending
+      holeKey fits admits graph templates checkEmpty order
+  refine ⟨fields, cache, value, heap, built, prepared, conjunctionFields, context,
+    facts, available, roles, growth, issued, origins, identity, emptySame, emptyReady,
+    closed, original, valueFields, handle, encoded, decoded, slots, startupReceipt,
+    initialFits, initialHeap, reservation, bound, outcome, ?_, retained, outputs⟩
+  intro extra
+  let workFuel := bound + extra
+  have canonical := initial_runEager_canonical (width := bits + 2) cache value heap handle
+    holeKey fits admits graph templates checkEmpty none order workFuel depth metadata
+    SourceCurrentAllocatedPartialInitialization.globals.query
+  dsimp only at canonical
+  refine ⟨canonical.1, (retained.1 extra).symm.trans canonical.2, ?_⟩
+  have preparation :=
+    SourceSynthesisCurrentInitialPreparationOrigin.initial_prefix_preparation_rows
+      (width := bits + 2) lib query signed expression returned value heap built cache handle decoded
+      holeKey fits admits graph templates none order metadata
+      workFuel workFuel workFuel workFuel workFuel workFuel workFuel workFuel
+      SourceCurrentAllocatedPartialInitialization.globals.query
+  dsimp only at preparation
+  split <;> first | exact preparation | exact True.intro

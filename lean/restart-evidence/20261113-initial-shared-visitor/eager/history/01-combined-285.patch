@@ -1,0 +1,173 @@
+--- SourceSynthesisCurrentInitialEagerControl.lean
++++ SourceSynthesisCurrentInitialEagerInvocation.lean
+@@ -113,0 +114,170 @@
++variable {Typing Key : Type}
++variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++
++private theorem accepted_initial_prefix
++    (lib : Library) (query : Query) (signed : Int) (expression : Expression)
++    (returned : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok expression)
++    (depth : Nat)
++    (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula)
++    (metadata : Metadata Typing) (emptyPending : metadata.pending = [])
++    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
++    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
++    (checkEmpty : Bool) (order : Metadata Typing → List Nat → Option Nat) :
++    let bits := SourceSynthesisCurrentProgramEagerEnumerationWidth.enumBits lib query signed depth
++    ∃ fields cache value heap,
++      ∃ built : InternedFreshOrdinaryConstruction.build (ordinarySymbols expression) [] empty = .done value heap,
++      SourceEqualityOriginalAllocationPreparation.Receipt (guards (ordinarySymbols expression)) Cache.emptyState fields cache ∧
++      SourceCurrentConjunctionEquality.Fields (SourceEqualityConstraintMemoAllocation.initial cache) heap ∧
++      Context formulas solver (SourceCurrentAllocatedPartialInitialization.inventory (ordinarySymbols expression) value heap built)
++        (SourceCurrentAllocatedPartialInitialization.caller (bits + 2) cache heap) SourceCurrentAllocatedPartialInitialization.globals ∧
++      Facts heap ∧ Available heap value ∧
++      SourceSynthesisProgramBuildRolesGeneric.ProgramValue literal value ∧
++      Grows empty heap ∧ Cache.Extends (empty : State Symbol Guard).nodes.issued heap.nodes.issued ∧
++      SourceEqualityAnnotationHeap.Heap
++        (Derived (alphabet (encodedLibrary lib)) top SourceEqualityPCSNativeEdge.conjoin) heap ∧
++      ∃ identity, SourceCurrentAllocatedPartialInitialization.emptyValue cache = .live identity [] ∧
++        SourceEqualityConstraintAllocation.Ready
++          (SourceCurrentAllocatedPartialInitialization.caller (bits + 2) cache heap).checked.operations.constraints
++          (.live identity []) ∧ value.free = [] ∧ SourceRecursiveIntersectionInputView.Original value ∧
++        ValueFields (Origin (encodedLibrary lib)) literal value ∧
++        ∃ handle, encodeNode value = some handle ∧ lookupNode heap handle = some value ∧
++          ProgramSlots (Origin (encodedLibrary lib)) literal heap
++            (EnumerationState.initial handle) (fun uv => uv = 0) ∧
++          let startup : Cached :=
++            ⟨EnumerationState.initial handle,
++              fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary value else false,
++              fun _ => none⟩
++          let initialCaller := SourceCurrentAllocatedPartialInitialization.caller (bits + 2) cache heap
++          let initialSeed := seed heap
++          ((Packet formulas solver
++              (SourceCurrentAllocatedPartialInitialization.inventory (ordinarySymbols expression) value heap built)
++              initialCaller SourceCurrentAllocatedPartialInitialization.globals metadata startup ∧
++            EnumerationValidity.Canonical startup.core ∧
++            startup.core.values[0]? = some (.unenumerated (some handle) []) ∧
++            SourcePruningEnumerationPrefixAdmission.suspendedBound startup.core = 0 ∧
++            EnumerationCanonicalWaiting.Correct (fun uv => uv) startup.core.values startup.waiting ∧
++            ∀ slot, SourcePruningEnumerationNativeIndex.candidate heap
++              ((startup.core.values[slot]?).getD .eliminated) = some (startup.expandable slot)) ∧
++            EnumerationCarriers.CarriesGraph startup.core 0 ∧
++            EnumerationGraphReferences.ReferencesCarry startup.core) ∧
++          Fits initialSeed.2 initialCaller.checked ∧
++          Heap (fun guard => guard ∈ initialSeed.1) heap ∧
++          SourcePruningEnumerationSharedEagerReservation.eagerReserved bits depth initialSeed 0 ∧
++    ∃ bound outcome,
++      (∀ extra,
++        let workFuel := bound + extra
++        let firstDecision := SourcePruningEnumerationRestart.decision none order metadata startup
++        (∀ uv, firstDecision = some (.expand uv) → uv = 0) ∧
++        outcome = SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild
++          (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty
++            workFuel workFuel workFuel workFuel workFuel InternedEdgeResidency.nodeEdges)
++          holeKey fits admits graph templates checkEmpty InternedEdgeResidency.nodeEdges none order
++          workFuel depth metadata initialCaller
++          SourceCurrentAllocatedPartialInitialization.globals.query startup
++          (match firstDecision with
++            | some (.expand _) => some (.expand 0)
++            | other => other) ∧
++        match depth, firstDecision with
++        | Nat.succ _, some (.expand _) =>
++              match SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates
++                none order metadata workFuel workFuel workFuel workFuel workFuel workFuel
++                0 initialCaller startup SourceCurrentAllocatedPartialInitialization.globals.query with
++              | .narrowed _checked (.done (narrowed, some _action) narrowedHeap) reached saved
++                  (some [.ok ((), _actionCore)]) (some candidate)
++                  (some [.ok ((false, updated), callbackCore)]) none =>
++                  saved = SourceCurrentAllocatedPartialInitialization.globals.query ∧ updated = metadata ∧ callbackCore = candidate.core ∧
++                  reached.checked.native.machine.heap = narrowedHeap ∧
++                  SourceEqualityRequiredCache.Ordinary narrowed ∧
++                  ∃ newHandle : Nat,
++                    SourcePruningEnumerationNodes.encodeNode narrowed = some newHandle ∧
++                    SourcePruningEnumerationNodes.lookupNode narrowedHeap newHandle = some narrowed ∧
++                    candidate.core.values[0]? = some (.unenumerated (some newHandle) []) ∧
++                    match SourcePruningEnumerationSelectedPreparation.run workFuel workFuel
++                      0 reached candidate with
++                    | ([.ok ((target, readHandle, scs, decodedValue), entered)],
++                        some (.done prepared preparedHeap)) =>
++                        target = 0 ∧ readHandle = newHandle ∧ scs = [] ∧
++                        decodedValue = narrowed ∧ prepared = narrowed ∧ preparedHeap = narrowedHeap ∧
++                        EnumerationDriver.RenderStable candidate.core entered ∧
++                        (SourcePruningEnumerationSelectedValueCaller.advance reached
++                          preparedHeap).checked.native.machine.heap = narrowedHeap ∧
++                        ∀ row ∈ InternedEdgeResidency.nodeEdges prepared,
++                          row ∈ InternedEdgeResidency.nodeEdges value
++                    | _ => True
++              | _ => True
++        | _, _ => True) ∧
++      (
++      (∀ extra, SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.runEager
++        holeKey fits admits graph templates checkEmpty InternedEdgeResidency.nodeEdges none order
++        (bound + extra) depth metadata initialCaller SourceCurrentAllocatedPartialInitialization.globals.query startup = outcome) ∧
++      OutcomeResources formulas solver initialCaller
++        (SourcePruningEnumerationSharedEagerReservation.eagerFinal depth initialSeed 0) outcome ∧
++      ∀ output ∈ emitted outcome,
++        output.metadata = none ∧ EnumerationPureSelection.next (fun _ => none) output.cache = .done ) ∧
++      ∀ output ∈ emitted outcome, ∃ finalMarked : Nat → Prop,
++        (∀ uv, uv = 0 → finalMarked uv) ∧ finalMarked 0 ∧
++        SourceSynthesisProgramEnumerationRoles.ProgramSlots (Origin (encodedLibrary lib)) literal
++          output.caller.checked.native.machine.heap output.cache.core finalMarked ∧
++          ∃ (next : SourceCurrentAllocatedNativeInventoryState.Inventory) (final : EndpointMemoGateTrace.Memos) (outputMetadata : Metadata Typing),
++            SourceCurrentAllocatedPartialInvariant.Post formulas solver next initialCaller output.caller final ∧
++            final.query = output.queries ∧
++            Packet formulas solver next output.caller final outputMetadata output.cache ∧
++            (output.metadata = none ∨ output.metadata = some outputMetadata) ∧
++            Fits (SourcePruningEnumerationSharedEagerReservation.eagerFinal depth initialSeed 0).2
++              output.caller.checked ∧
++            Heap (fun guard => guard ∈
++              (SourcePruningEnumerationSharedEagerReservation.eagerFinal depth initialSeed 0).1)
++              output.caller.checked.native.machine.heap ∧
++            ∃ (level : Nat → Nat) (frontier : Nat),
++              EnumerationOrder.Stratified output.cache.core level frontier ∧
++              ∃ (readFuel : Nat) (actualPartial : SourcePruningTemplates.PartialTerm)
++                (after : EnumerationState.State Symbol Constraint),
++                (∀ extra,
++                  EnumerationCorrectness.Success (SourcePruningEnumerationPartialOutput.rootPartial
++                    output.caller.checked.native.machine.heap (readFuel + extra))
++                    output.cache.core actualPartial after ∧
++                  ExceptT.run (SourcePruningEnumerationPartialOutput.rootPartial
++                    output.caller.checked.native.machine.heap (readFuel + extra) output.cache.core) =
++                    [.ok (actualPartial, after)]) ∧
++                EnumerationDriver.RenderStable output.cache.core after ∧
++                EnumerationCompressionFrame.Frame output.cache.core after ∧
++                EnumerationOrder.Stratified after level frontier ∧
++                (∀ (language : EnumerationCorrectness.NodeLanguage Symbol) (meaning : Constraint → Language.Term Symbol → Prop)
++                  (assignment : Nat → Language.Term Symbol),
++                  EnumerationCorrectness.Satisfies language meaning assignment output.cache.core →
++                    EnumerationCorrectness.Satisfies language meaning assignment after ∧
++                    SourcePruningPartialMatch.Completes assignment actualPartial (assignment 0)) ∧
++                ∃ program, SourceSynthesisProgramTermSize.Projection literal Prod.fst
++                    (SourcePruningPositions.openProgram true actualPartial) program ∧
++                  ∀ (assignment : Nat → Language.Term Symbol) (full : Language.Term Symbol),
++                    SourcePruningPartialMatch.Completes assignment actualPartial full →
++                      SourceSynthesisProgramTermSize.Projection literal Prod.fst full program
++    := by
++  dsimp only
++  let bits := SourceSynthesisCurrentProgramEagerEnumerationWidth.enumBits lib query signed depth
++  obtain ⟨fields, cache, value, heap, built, prepared, conjunctionFields, context,
++      facts, available, roles, growth, issued, origins, identity, emptySame, emptyReady,
++      closed, original, valueFields, handle, encoded, decoded, slots, startupReceipt,
++      initialFits, initialHeap, reservation, bound, outcome, retained, outputs⟩ :=
++    accepted lib query signed expression returned depth formulas solver metadata emptyPending
++      holeKey fits admits graph templates checkEmpty order
++  refine ⟨fields, cache, value, heap, built, prepared, conjunctionFields, context,
++    facts, available, roles, growth, issued, origins, identity, emptySame, emptyReady,
++    closed, original, valueFields, handle, encoded, decoded, slots, startupReceipt,
++    initialFits, initialHeap, reservation, bound, outcome, ?_, retained, outputs⟩
++  intro extra
++  let workFuel := bound + extra
++  have canonical := initial_runEager_canonical (width := bits + 2) cache value heap handle
++    holeKey fits admits graph templates checkEmpty none order workFuel depth metadata
++    SourceCurrentAllocatedPartialInitialization.globals.query
++  dsimp only at canonical
++  refine ⟨canonical.1, (retained.1 extra).symm.trans canonical.2, ?_⟩
++  have preparation :=
++    SourceSynthesisCurrentInitialPreparationOrigin.initial_prefix_preparation_rows
++      (width := bits + 2) lib query signed expression returned value heap built cache handle decoded
++      holeKey fits admits graph templates none order metadata
++      workFuel workFuel workFuel workFuel workFuel workFuel workFuel workFuel
++      SourceCurrentAllocatedPartialInitialization.globals.query
++  dsimp only at preparation
++  split <;> first | exact preparation | exact True.intro

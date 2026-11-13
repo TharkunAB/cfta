@@ -1,0 +1,42 @@
+      (∀ extra,
+        let workFuel := bound + extra
+        let firstDecision := SourcePruningEnumerationRestart.decision none order metadata startup
+        (∀ uv, firstDecision = some (.expand uv) → uv = 0) ∧
+        outcome = SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild
+          (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty
+            workFuel workFuel workFuel workFuel workFuel InternedEdgeResidency.nodeEdges)
+          holeKey fits admits graph templates checkEmpty InternedEdgeResidency.nodeEdges none order
+          workFuel depth metadata initialCaller
+          SourceCurrentAllocatedPartialInitialization.globals.query startup
+          (match firstDecision with
+            | some (.expand _) => some (.expand 0)
+            | other => other) ∧
+        match depth, firstDecision with
+        | Nat.succ _, some (.expand _) =>
+              match SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates
+                none order metadata workFuel workFuel workFuel workFuel workFuel workFuel
+                0 initialCaller startup SourceCurrentAllocatedPartialInitialization.globals.query with
+              | .narrowed _checked (.done (narrowed, some _action) narrowedHeap) reached saved
+                  (some [.ok ((), _actionCore)]) (some candidate)
+                  (some [.ok ((false, updated), callbackCore)]) none =>
+                  saved = SourceCurrentAllocatedPartialInitialization.globals.query ∧ updated = metadata ∧ callbackCore = candidate.core ∧
+                  reached.checked.native.machine.heap = narrowedHeap ∧
+                  SourceEqualityRequiredCache.Ordinary narrowed ∧
+                  ∃ newHandle : Nat,
+                    SourcePruningEnumerationNodes.encodeNode narrowed = some newHandle ∧
+                    SourcePruningEnumerationNodes.lookupNode narrowedHeap newHandle = some narrowed ∧
+                    candidate.core.values[0]? = some (.unenumerated (some newHandle) []) ∧
+                    match SourcePruningEnumerationSelectedPreparation.run workFuel workFuel
+                      0 reached candidate with
+                    | ([.ok ((target, readHandle, scs, decodedValue), entered)],
+                        some (.done prepared preparedHeap)) =>
+                        target = 0 ∧ readHandle = newHandle ∧ scs = [] ∧
+                        decodedValue = narrowed ∧ prepared = narrowed ∧ preparedHeap = narrowedHeap ∧
+                        EnumerationDriver.RenderStable candidate.core entered ∧
+                        (SourcePruningEnumerationSelectedValueCaller.advance reached
+                          preparedHeap).checked.native.machine.heap = narrowedHeap ∧
+                        ∀ row ∈ InternedEdgeResidency.nodeEdges prepared,
+                          row ∈ InternedEdgeResidency.nodeEdges value
+                    | _ => True
+              | _ => True
+        | _, _ => True) ∧

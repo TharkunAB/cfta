@@ -1,3 +1,118 @@
+## Initial shared visitor and eager startup (2026-11-13 18:43 CET)
+
+The FULL goal remains ACTIVE. Pushes to formalize remain authorized.
+Proof commit 3069c1a978f5332e178fe6d53755e06b9b1bc5b7 is pushed and remote-verified.
+Main remains e53852064d3ef5a2eafec47d754c27504b11de5f and is an ancestor.
+All earlier bytes remain an exact suffix. Preserve all proofs and drafts.
+
+NEW PUBLIC: SourceSynthesisCurrentInitialSharedVisitorOrigin (277 lines) exports
+initial_prepared_shared_root_scan_origin. The SAME actual prefix and preparation
+supply captured Core, native rows, first caller and saved queries. At each indexed
+row, its ACTUAL completed take-prefix supplies THAT sibling caller and queries.
+The theorem retains the whole complete/stopped scan equation, full original-root
+row membership, source filter construction/goal/candidate interval, and the SAME
+CachedOwn.prepare symbol and ordered child fields. It uses nodeEdges and supplies
+no model, Ready, original-member or Parent premise. Arbitrary fuels, stop modes,
+metadata and child/hooks remain supported. Unsupported observations remain True.
+Output/Reason universes were strengthened for the actual eager Failure : Type 1.
+The earlier checked Type 0 version remains component evidence only. Two unused
+pattern names changed by alpha equivalence; the original header and inverse remain.
+
+NEW PUBLIC: SourceSynthesisCurrentInitialEagerInvocation (309 lines) exports TWO laws in
+namespace SourceSynthesisCurrentProgramEagerOutputs. initial_runEager_canonical
+proves that every initial expansion selects slot 0 in every stop mode. It retains
+the complete runEager/resume equation. accepted_initial_prefix invokes ONE old
+accepted producer and retains its ENTIRE startup/output/readback receipt, bound
+and outcome. At every bound+extra it adds that canonical equation and the SAME
+initial preparation/source-row observer in the positive-depth active branch.
+Its global scope remains NO STOP; depth 0 has no invented prefix observation.
+The exact 28/139 headers remain unchanged. Five failed combined stages remain
+failed. The successful repair in the 306-line draft reduces the SAME observed
+prefix/preparation constructors to align two generated matchers. It runs no
+second initializer.
+
+FULL strict Audit PASS: 5913 modules, 4911 imports, 95075 theorem dependency checks.
+All THREE public laws import and print only propext, Classical.choice, Quot.sound.
+The public visitor and wrapper strict checks pass. Four final compiler calls exit 0;
+the unchanged earlier public visitor check was hash-verified and reused.
+All 5911 earlier live sources remain byte-exact except TWO new Audit imports.
+Source tree SHA256:
+201b76a2d6ee497d1f4f5308f26adc654094874be13dfda989ebbc4301bd2b1d.
+Checks ran serially in Nix with 4 GiB max/high, swap 0, one Lean thread.
+
+Packet lean/restart-evidence/20261113-initial-shared-visitor/ holds 175 files,
+1952158 bytes and no build archive. Root independently replayed 28 exact GNU
+zero-fuzz patches and checked all 174 payload hashes. It preserves 12 raw stages,
+2 unchecked assembly forks, 11 exact private check inputs (3 PASS/8 FAIL), public
+promotions/checks, full Audit inputs/reports/pins, all repairs and frozen plans.
+Its SHA256SUMS fingerprint is:
+74bc6c6e3f5fe9155593c193ddccc920474c3c1f4a3efa3226b1a0e2aa18af9b.
+The child manifests retain their historical private scope. The root manifest
+records final publication. Failed recovery axioms receive no proof credit.
+Git reports four trailing-space warnings in the first failed diagnostic file.
+Its original bytes are retained. Published Lean and new prose have none.
+
+COVERAGE FINDING: CurrentProgramEagerOutputs proves execution/resources and
+partial Program readback for the configured shared eager worker on its original
+RAW source build. Default Haskell solutionsOfSize first uses orderedSearchSpace:
+up to 30 reducePartially/withoutRedundantEdges rounds, refoldEdges and birth-based
+canonical ordering. runsBy derives checkEmpty from THAT processed root and uses
+literal identity narrowing plus the false/unchanged oracle. The corresponding
+preprocessing and whole-run observational hook-erasure links remain UNPROVED.
+recordTypes_empty preserves pending/typing/openHoles and core; it can update types.
+Those metadata updates alone establish no behavioral difference. Existing checked
+nodeCall is a separate reduction stage, not this entire prefix or the eager run.
+This corrects proof coverage. It is not a new Haskell defect or counterexample.
+The pinned default-entry plan (96 lines) and contract sketch (28 lines) record
+the remaining language preservation BOTH ways, physical/source-row/Type-field provenance, actual selector
+and flag, full caller/Memos, composed capacity and hook-erasure obligations.
+
+MODE FINDING: literal empty incoming merges are rejected in BOTH checkEmpty
+modes. checkEmpty=true remains conservative and is not a SAT certificate.
+The g : Int / goal Bool mechanism is not an established source counterexample.
+S I I has a finite-typing contradiction, but its actual source traversal,
+rejection or emission remains unproved. Audit (90 lines), unproved joint child witness (14 lines),
+S I I candidate (42 lines) and default plan remain preserved without counterexample credit.
+
+NEXT: implement the approved concrete eager attachment header (116 lines), SHA
+8b71b8a7dc29b2468298b8b6ce7d569b8cb2aa1307252262b92cbad4d9ea13a1,
+in packet visitor/objects/<SHA>.txt; its plan (72 lines) is
+visitor/objects/ae2461f4570dd7a15f482f6869c6292d9fc72b1780e9e47ea7c9cc14a7a9b408.md.
+Both required public dependencies now pass. Instantiate the ACTUAL eagerChild and
+continueWith(resumeWithChild ... predecessorDepth) using SAME updated metadata,
+fuels and slot 0. Match its SAME first decision/prefix/preparation. Derive full
+runEager=finish0(actual scan), with the indexed visitor/source facts and actual
+sibling endpoints. Preserve every stop mode and the explicit depth 0 boundary.
+No generic replacement hook, Parent call, future provider or new member premise.
+Header (116 lines) is approved but has NO BODY and is UNPROVED.
+
+BIGGEST semantic gap: construct ONE finite term accepted by the SAME ORIGINAL
+root that completes the SAME actual emitted partial root. The next local target
+returns ONE compatible assignment for ALL actual ordered child fragments and
+the FULL source-row guard. Separate child witnesses or a supplied future unifier
+do not close it. Existing model/resource laws preserve supplied assignments.
+Supported sharing, aliases, domains, residuals and parked backward recompletion
+remain required. Original typing, depth adequacy/completeness, default LPO and
+reduction/refolding, streams/order/multiplicity/lazy demand, exact accepted terms
+per node-count size, counts/weights/training, BOTH rank/unrank inverses, host bounds
+and compiled Haskell correspondence remain the FULL objective. Optimized interned
+shared work is PRIMARY; old constructor/equality/nonshared work stays SECONDARY.
+The strongest global finite execution/resource/partial Program result now has
+additional initial-entry observations. It still supplies no joint completion.
+
+Haskell/Cabal/test edits and new Haskell defects/fixes: NONE. Record EVERY future
+Haskell fix in FINDINGS for external implementation work. Liquid Haskell contracts
+remain UNCHECKED proposals: prioritize interning/cache invariants, semantic
+preservation through equality/narrowing, and enumeration/inverse guarantees.
+Checked contracts can support implementation correspondence; they do not transfer
+automatically to Lean or construct the missing joint witness. Assumed primitive
+contracts remain explicit trust boundaries. Repeated-name work remains external.
+Preserve .hypha. PRIMARY 61 percent and /tmp 154.37 GiB free at 18:40 CET; refresh
+within 15 minutes. Above 80 percent, save the full handoff, stop workers, pause and
+notify Matti. Root remains sole compiler, Git publisher and board writer.
+
+---
+
 ## Actual initial selected preparation (2026-11-13 17:46 CET)
 
 The FULL goal remains ACTIVE. Pushes to formalize remain authorized.

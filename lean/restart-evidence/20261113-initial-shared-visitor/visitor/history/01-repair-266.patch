@@ -1,0 +1,13 @@
+--- source.lean
++++ source.lean
+@@ -9,0 +10 @@
++local notation "State" => InternedConstructorTemplates.State
+@@ -88 +89,2 @@
+-  cases projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
++  generalize projectionEq : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = projection
++  cases projection with
+@@ -90,2 +92,2 @@
+-  | some projected =>
+-      obtain ⟨tries, residual⟩ := projected
++  | some projectedPair =>
++      obtain ⟨tries, residual⟩ := projectedPair
