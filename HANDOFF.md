@@ -1,3 +1,106 @@
+## Initial root provenance and the actual eager entry (2026-11-13 16:58 CET)
+
+The FULL goal remains ACTIVE. Pushes to formalize remain authorized.
+Proof commit b385da09a95e7f69318f3b93558c46142feab068 is pushed and remote-verified.
+Main remains e53852064d3ef5a2eafec47d754c27504b11de5f.
+Preserve all earlier notes, proofs, counterexamples, repairs, and marked drafts.
+All earlier bytes remain an exact suffix of this file.
+
+IMPORTANT COVERAGE CORRECTION: the actual first eager row visitor does not call
+SourceCurrentAllocatedParentWorker.edge. It runs SelectedStep.runPrefix,
+Action.prepare, OuterNarrow.narrow, SelectedPreparation, and CachedOwn.prepare.
+The older checked first_filter_current_app_source_ancestor327 consumes the
+NONSHARED Parent worker. It remains valid conditional component evidence.
+It is secondary to the actual shared eager path. Optional terminal checks use
+SourceCurrentAllocatedSharedConjunctionWorker.call and can be skipped when
+checkEmpty=false. No same-run bridge to the old Parent receipt is established.
+This is a proof coverage correction. It is not a discovered Haskell defect.
+
+NEW PUBLIC LAWS in four modules:
+- CurrentCandidateAppOperands259 derives the SAME factory chunks, current
+  allTypes operands, and direct-node OR union-of-node-pools function syntax.
+  Identity membership still needs a concrete source case.
+- CurrentInitialOuterNarrowRows103 proves complete narrowed rows belong to the
+  SAME original source root. It derives ordinary root shape from accepted
+  firstOrderRaw and its actual build. Metadata bypass and arbitrary fuel remain.
+- CurrentInitialFilterInterval209 derives the original filter fields, goal
+  build from empty, adjacent candidate build interval, CapContext, and factory
+  facts. current_narrowed_filter_interval composes actual narrowing to remove
+  the original-source-row membership premise. It needs an observed narrowed row.
+- CurrentCandidateSourceApp256 retains the SAME SourceRow.union member and
+  source app RowCall. It derives the current allTypes operand and function
+  node/union alternative from the full app guard. It preserves all endpoints.
+The interval and source-app declarations use namespace
+MicroCFTA.SourceSynthesisCurrentFirstFilterSourceLink.
+
+NEW PRIVATE, CHECKED: initial_prefix_narrowed_rows235/8eba0fbc follows the actual
+runPrefix at literal startup slot0 and the SAME decoded root. It derives the
+getValue and false-check observations, compression Frame, Action.prepare and
+OuterNarrow equations, reached caller, unchanged queries, ordinary=none, and
+full source-row inclusion. All six fuels, metadata, templates, stop and order
+remain arbitrary. Unsupported branches retain True. No Ready, Packet, model,
+source-membership supplier, or second initializer is used. This is an initial
+prefix observer. It does not yet attach SelectedPreparation or the whole run.
+The first draft failed at native-result reduction and concrete caller heap
+alignment. The second failed only at eight check-result witnesses. The final
+uses the actual checkEq receipts. All failed drafts remain failed.
+
+FULL live Audit PASS: 5906 modules, 4904 imports, 94990 theorem dependency checks.
+All five public declarations pass strict warnings and actual import checks.
+The full source tree hash is
+4e8747d86eff84ad56ebd3ae4bec7b49a357281b2042003b2d1c4272c451450c.
+The first public checker used the wrong namespace for two modules. Its exact
+failed instrumentation is retained. Correct qualified names pass without
+repeating the already successful checks. All checked new proofs use only
+propext, Classical.choice and Quot.sound. Checks ran serially in Nix with
+4GiB memory.max/high, swap0, and one Lean thread.
+
+Source-only packet lean/restart-evidence/20261113-initial-root-source-origin/
+stores 33 stages, seven bases and 26 exact GNU zero-fuzz patch steps. Root
+independently replayed it and matched all current source pins. The payload is
+1233231 bytes. Packet lean/restart-evidence/20261113-initial-prefix-origin/
+stores seven more stages and six exact GNU patch steps. Root replayed both
+packets and verified all artifact hashes. The combined payload is1543053 bytes
+in178 files. No build archive is stored. The second packet preserves the
+private observer, failed checks, repairs and the next unproved plan. It also
+records the Liquid contract priorities as UNCHECKED proposals.
+
+The next initial_prefix_preparation_rows52/9e1193a1 header and plan80 are
+APPROVED PLANNING ONLY. No body or compiler check exists for that next theorem.
+
+NEXT PRIMARY CUT: attach the SAME active initial prefix's narrowed handle,
+native lookup, Entry and SelectedPreparation to the actual root row scan.
+Derive narrowing result Facts/Available/Ordinary from the SAME original build
+and filtered makeNode. Do not obtain these from another narrow_complete call.
+Use the SAME initializer witnesses from CurrentProgramEagerOutputs.accepted.
+Then follow later source edits and shared constraints to finite completion.
+
+Strongest original-input global claim remains finite stable no-stop eager
+execution with resources and stable partial Program readback. BIGGEST GAP:
+ONE finite term accepted by the SAME original root jointly completes the SAME
+emitted partial root, with shared aliases, domains and residuals consistent.
+Original typing, depth adequacy/completeness, default LPO/reduction/refolding,
+streams/order/multiplicity/lazy demand, exact sizes/counts/weights/training,
+BOTH rank/unrank inverses, host bounds and compiled Haskell correspondence
+remain in the FULL objective. The optimized interned shared core is PRIMARY.
+Older constructor, equality and nonshared results remain SECONDARY.
+
+Haskell/Cabal/test-suite edits and new Haskell defects/fixes: NONE.
+Record every future Haskell fix in FINDINGS for external implementation work.
+Liquid Haskell contracts are proposed, not checked here. Useful targets are
+mkEdge/mkNode/cache interning, equality reduction/requireAll, and enumeration.
+Checked contracts can support implementation correspondence. They do not
+transfer automatically to Lean or establish one joint completion by themselves.
+The actual interning primitive uses unsafeDupablePerformIO and atomic IORef
+updates. An assumed primitive contract remains an explicit trust boundary.
+The source also leaves some recursive equality-reduction termination cases open.
+Repeated-name Liquid work remains external. Preserve .hypha and all drafts.
+PRIMARY54 percent and /tmp159.42GiB free at16:55 CET. Refresh within15 minutes.
+Above80 percent, save the full handoff, stop workers, pause and notify Matti.
+Root remains sole compiler, Git publisher and board writer. Continue the goal.
+
+---
+
 ## Next source-link proof plan (2026-11-13 15:49 CET)
 
 The checked checkpoint below remains current. Both new headers are PLANNING ONLY.
