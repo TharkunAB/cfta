@@ -1,3 +1,4 @@
+import MicroCFTA.SourceSynthesisCurrentProgramEagerOutputs
 import MicroCFTA.SourceSynthesisCurrentProgramEagerResources
 import MicroCFTA.SourceSynthesisProgramRolesOwnInputsAvoids
 import MicroCFTA.SourceSynthesisCurrentProgramEagerEnumerationWidth
