@@ -1,3 +1,44 @@
+## Selected Type case and immediate witness plan (2026-11-13 11:11 CET)
+
+The FULL goal remains ACTIVE. Whole eager-worker marker preservation is PROVED;
+source 8246/abe55dcd and its public law remain unchanged. Published checkpoint:
+0dbdd1343d361af8fb6645d966cd0daf62ebe0d7. Pushes to formalize remain authorized.
+Previous notes stay an exact byte suffix. No new theorem/body is added here.
+
+Selected case: a component with generalized type a -> a, after an actual required
+read of field 0. Its ORIGINAL finite PCS instance already follows from
+GeneralizeFiniteInstances.generalize_member. Its TYPE arrow guard is the real
+eqGuard [[[1],[2]]]; its Program row alone is Top. Current ProgramSlots and
+Annotated facts do not link a retained emitted Type occurrence to this source
+scheme, the SAME results[0] read, or a surviving finite instance after narrowing.
+The missing operational clause and 14 source hashes are preserved in
+lean/restart-evidence/20261113-type-productivity-next-cut/selected-case.json.
+If prior edits changed the input, retain their exact chain; do not assume direct
+source-value equality. This clause is UNPROVED and is not a new input gate.
+
+NEXT BOUNDED PLAN: source_table_typing_audit is checking an IMMEDIATE concrete
+identity-Type required read, separate from the global emitted-origin bridge.
+SourceCurrentRequiredLanguage.requireAll_keep already preserves accepted terms
+for supported paths that exist. Check whether the app-shaped field paths
+[[0,0],[0,1],[0,2]] are the actual relevant source case. Derive ForestSupport,
+primary classification and path existence from real source/call data. Keep the
+Type equality guard and known finite instance. No arbitrary support, SAT,
+positivity, future model or instance-survival provider may become a premise.
+Only a NEW /tmp header/plan is authorized. Root reviews it before any body.
+If this path shape or support cannot be derived, report the exact blocker.
+
+The guarded retained witness, joint sharing/residual consistency, accepted
+original-root/actual-partial completion, original typing and full remaining
+library/runtime scope stay OPEN as described below. No Haskell/Cabal/test-suite
+file changes or repair is established. Every future Haskell fix belongs in
+FINDINGS for external agents. No repeated build/probe is needed for these notes.
+Preserve sources, counterexamples, repairs, marked drafts and .hypha. Root is
+sole compiler/Git publisher. PRIMARY 46 percent at 11:11 CET; /tmp has 162.6 GiB free.
+Refresh within 15 minutes; above 80 percent save handoff, stop workers, pause goal
+and notify Matti. Finish this reviewed documentation commit/push, then CONTINUE.
+
+---
+
 ## Next semantic cut: productivity of an actual Type domain (2026-11-13 10:48 CET)
 
 The FULL formalization goal remains ACTIVE. Whole eager-worker marker

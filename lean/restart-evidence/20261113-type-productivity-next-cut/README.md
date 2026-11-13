@@ -23,3 +23,12 @@ and derives its provenance and shape. It must prove or refute productivity
 there. It must not assume positivity, a model, or future support as a new input.
 The unchanged allTypes/rigid literal cases are already covered by prior work.
 No new Haskell defect or repair is established.
+
+[selected-case.json](selected-case.json) selects the generalized identity scheme
+`a -> a` after an actual required read. Its original finite PCS instance already
+exists. Its Type arrow has a repeated-variable equality guard. The missing
+operational clause links the retained Type to the same original component field,
+ordered required-read result, or exact intervening edit chain. No surviving
+instance after arbitrary narrowing is claimed. A separate bounded plan checks
+whether an immediate supported app-shaped read preserves that known instance;
+its support and path facts must come from the actual source case.
