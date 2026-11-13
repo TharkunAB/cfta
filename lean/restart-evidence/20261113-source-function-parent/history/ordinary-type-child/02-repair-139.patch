@@ -1,0 +1,23 @@
+--- source.lean
++++ source.lean
+@@ -44 +44,6 @@
+-              simp_all [SourceEqualityNeeded.fits, SourceEqualityNeeded.maxIndex]
++              have rejected : SourceEqualityNeeded.fits (.node [(0, wanted)]) 1 = false := by
++                assumption
++              have matched : SourceEqualityNeeded.fits (.node [(0, wanted)]) 1 = true := by
++                cbv
++              have impossible : true = false := matched.symm.trans rejected
++              cases impossible
+@@ -49 +54,5 @@
+-              | unselected _tail => simp_all [SourceEqualityNeededMap.lookup]
++              | unselected _tail =>
++                  have absent : SourceEqualityNeededMap.lookup 0 [(0, wanted)] = none := by
++                    assumption
++                  change some wanted = none at absent
++                  cases absent
+@@ -50,0 +60,3 @@
++                  have found : some wanted = some _ := by assumption
++                  have same := Option.some.inj found
++                  cases same
+@@ -52 +63,0 @@
+-                  simp_all [SourceEqualityNeededMap.lookup]

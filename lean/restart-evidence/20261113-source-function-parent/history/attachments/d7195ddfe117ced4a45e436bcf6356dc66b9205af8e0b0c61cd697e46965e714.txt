@@ -1,0 +1,50 @@
+private theorem actual_app_identity_function_parent
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (heap : State Symbol Guard)
+    (built : build (ordinarySymbols whole) [] empty = .done rootValue heap)
+    (original : SourceSynthesisOriginalTypeAnnotations.OriginalType lib
+      (.tFun (.tVar "a") (.tVar "a")))
+    (functionRows : List Row) (sourceIndex : Nat) (name : String)
+    (identity : functionRows[sourceIndex]? = some (.mk name top
+      [generalize (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query))
+        (SourceSynthesisPr210TypeReflection.encodeTy (.tFun (.tVar "a") (.tVar "a")))]))
+    (argument : Expression)
+    {parentExpressions : List (EdgeSyntax Symbol Guard)} {before after : State Symbol Guard}
+    {parentOutputs : List (EdgeValue Symbol Guard)} {parentIndex : Nat}
+    (parent : SourceCurrentStoredMuRetainedAlignment.RowCall parentExpressions []
+      before parentOutputs after heap parentIndex (literal "app")
+      (SourceSynthesisGeneralizeSyntax.eqGuard
+        [[[1], [2, 0, 0]], [[3, 0], [2, 0, 1]], [[0], [2, 0, 2]]])
+      [ordinarySymbols (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query)),
+        ordinarySymbols (SourceSynthesisTypeSyntax.arrowMarker top),
+        ordinarySymbols (.node functionRows), ordinarySymbols argument]) :
+    ∃ functionValue functionStart functionAfter rows nodeHeap,
+      parent.output.children[2]? = some functionValue ∧
+      InternedFreshOrdinaryContext.Context functionStart [] ∧
+      build (ordinarySymbols (.node functionRows)) [] functionStart =
+        .done functionValue functionAfter ∧
+      Grows functionStart heap ∧ Grows functionAfter heap ∧
+      InternedFreshOrdinaryConstruction.buildEdges
+        (SourceSynthesisUniverseCallerBoundary.ordinaryEdges functionRows) [] functionStart =
+        .done rows nodeHeap ∧
+      run (makeNode rows) nodeHeap = (functionValue, functionAfter) ∧
+      ∃ call : SourceCurrentStoredMuRetainedAlignment.RowCall
+          (SourceSynthesisUniverseCallerBoundary.ordinaryEdges functionRows) []
+          functionStart rows nodeHeap heap sourceIndex (literal name) top
+          [ordinarySymbols (generalize
+            (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query))
+            (SourceSynthesisPr210TypeReflection.encodeTy (.tFun (.tVar "a") (.tVar "a"))))],
+        ∃ canonicalIndex : Nat, ∃ typeValue,
+          (InternedEdgeResidency.nodeEdges functionValue)[canonicalIndex]? = some call.output ∧
+          call.output.children = [typeValue] ∧ Available heap typeValue ∧ typeValue.free = [] ∧
+          SourceEqualityAnnotationLanguage.Annotated
+            (SourceSynthesisNativeTypeTrace.Origin
+              (SourceSynthesisCurrentSourceGuards.encodedLibrary lib)) typeValue ∧
+          ∀ ambient : InternedGuardedLanguage.Env Symbol,
+            InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)
+              ambient typeValue
+              (.node (literal "->")
+                [.node (literal "(->)") [], .node (literal "var1") [], .node (literal "var1") []])

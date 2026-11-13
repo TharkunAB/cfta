@@ -1,0 +1,42 @@
+--- source.lean
++++ source.lean
+@@ -10,0 +11 @@
++    (wanted : SourceEqualityNeeded.Needed)
+@@ -13 +14 @@
+-    (trace : RequireRows [(0, SourceEqualityNeeded.build [[0]])]
++    (trace : RequireRows [(0, wanted)]
+@@ -21 +22 @@
+-      (∃ earlier : RequireRows [(0, SourceEqualityNeeded.build [[0]])]
++      (∃ earlier : RequireRows [(0, wanted)]
+@@ -24 +25 @@
+-      (∃ actual : RequireNode (SourceEqualityNeeded.build [[0]])
++      (∃ actual : RequireNode (wanted)
+@@ -29 +30 @@
+-      (∃ later : RequireRows [(0, SourceEqualityNeeded.build [[0]])]
++      (∃ later : RequireRows [(0, wanted)]
+@@ -65 +66 @@
+-            rows_singleton_type_child index _ restReads edge annotation selected singleton
++            rows_singleton_type_child wanted index _ restReads edge annotation selected singleton
+@@ -75 +76 @@
+-            rows_singleton_type_child index _ restReads edge annotation selected singleton
++            rows_singleton_type_child wanted index _ restReads edge annotation selected singleton
+@@ -83,0 +85 @@
++    (wanted : SourceEqualityNeeded.Needed)
+@@ -90 +92 @@
+-      (SourceEqualityNeeded.build [[0, 0]]) (.node entry edges depth free)
++      (.node [(0, wanted)]) (.node entry edges depth free)
+@@ -97 +99 @@
+-          [(0, SourceEqualityNeeded.build [[0]])]
++          [(0, wanted)]
+@@ -101 +103 @@
+-          (SourceEqualityNeeded.build [[0]]) annotation rowBefore annotationResult typeAfter,
++          (wanted) annotation rowBefore annotationResult typeAfter,
+@@ -106 +108 @@
+-          [(0, SourceEqualityNeeded.build [[0]])]
++          [(0, wanted)]
+@@ -110 +112 @@
+-  change RequireNode (.node [(0, SourceEqualityNeeded.build [[0]])])
++  change RequireNode (.node [(0, wanted)])
+@@ -118 +120 @@
+-        rows_singleton_type_child index _ rowReads edge annotation selected singleton
++        rows_singleton_type_child wanted index _ rowReads edge annotation selected singleton

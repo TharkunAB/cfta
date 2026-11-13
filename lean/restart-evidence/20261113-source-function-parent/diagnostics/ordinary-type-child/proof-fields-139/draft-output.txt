@@ -1,0 +1,593 @@
+/tmp/mcfta-type-child-proof-fields-20261113-1305/Check.lean:88:17: error: don't know how to synthesize implicit argument `p`
+  @Exists.intro (Value Symbol Guard)
+    (fun annotationResult =>
+      ∃ rebuilt suffixResults rowBefore typeAfter edgeAfter rowMemos typeMemos,
+        x✝ :: x✝¹ = ?m.1803 :: prefixResults ++ rebuilt :: suffixResults ∧
+          (∃ earlier, RowsReads earlier memos rowMemos) ∧
+            (∃ actual, NodeReads actual rowMemos typeMemos) ∧
+              run (makeEdge edge.entry.key.symbol edge.entry.key.constraint [annotationResult]) typeAfter =
+                  (rebuilt, edgeAfter) ∧
+                ∃ later, RowsReads later typeMemos saved)
+    annotationResult
+    (Exists.intro rebuilt
+      (Exists.intro suffixResults
+        (Exists.intro rowBefore
+          (Exists.intro typeAfter
+            (Exists.intro edgeAfter
+              (Exists.intro rowMemos (Exists.intro typeMemos ⟨?m.1822, ⟨?m.1825, ⟨actual, ⟨made, later⟩⟩⟩⟩)))))))
+context:
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+wanted : SourceEqualityNeeded.Needed
+before after : State Symbol Guard
+memos saved : EndpointMemoGateTrace.Memos
+edge : EdgeValue Symbol Guard
+annotation : Value Symbol Guard
+singleton : edge.children = [annotation]
+index : Nat
+x✝⁶ : EdgeValue Symbol Guard
+x✝⁵ : List (Value Symbol Guard)
+x✝⁴ : State Symbol Guard
+middleMemo✝ : EndpointMemoGateTrace.Memos
+x✝³ : List (EdgeValue Symbol Guard)
+x✝² : State Symbol Guard
+x✝¹ : List (EdgeValue Symbol Guard)
+x✝ : EdgeValue Symbol Guard
+rebuilt✝ : run (makeEdge x✝⁶.entry.key.symbol x✝⁶.entry.key.constraint x✝⁵) x✝⁴ = (x✝, x✝²)
+fits✝ : SourceEqualityNeeded.fits (SourceEqualityNeeded.Needed.node [(0, wanted)]) x✝⁶.children.length = true
+selected : x✝³[index]? = some edge
+childTrace✝ : RequireChildren [(0, wanted)] 0 x✝⁶.children before x✝⁵ x✝⁴
+restTrace✝ : RequireRows [(0, wanted)] x✝³ x✝² x✝¹ after
+childReads : ChildrenReads childTrace✝ memos middleMemo✝
+restReads : RowsReads restTrace✝ middleMemo✝ saved
+prefixResults : List (EdgeValue Symbol Guard)
+annotationResult : Value Symbol Guard
+rebuilt : EdgeValue Symbol Guard
+suffixResults : List (EdgeValue Symbol Guard)
+rowBefore typeAfter edgeAfter : State Symbol Guard
+rowMemos typeMemos : EndpointMemoGateTrace.Memos
+resultSame : x✝¹ = prefixResults ++ rebuilt :: suffixResults
+earlier : RequireRows [(0, wanted)] (List.take index x✝³) x✝² prefixResults rowBefore
+earlierReads : RowsReads earlier middleMemo✝ rowMemos
+actual : ∃ actual, NodeReads actual rowMemos typeMemos
+made :
+  run (makeEdge edge.entry.key.symbol edge.entry.key.constraint [annotationResult]) typeAfter = (rebuilt, edgeAfter)
+later : ∃ later, RowsReads later typeMemos saved
+⊢ Value Symbol Guard → Prop
+/tmp/mcfta-type-child-proof-fields-20261113-1305/Check.lean:88:17: error: don't know how to synthesize implicit argument `p`
+  @Exists.intro (EdgeValue Symbol Guard)
+    (fun rebuilt =>
+      ∃ suffixResults rowBefore typeAfter edgeAfter rowMemos typeMemos,
+        x✝ :: x✝¹ = ?m.1803 :: prefixResults ++ rebuilt :: suffixResults ∧
+          (∃ earlier, RowsReads earlier memos rowMemos) ∧
+            (∃ actual, NodeReads actual rowMemos typeMemos) ∧
+              run (makeEdge edge.entry.key.symbol edge.entry.key.constraint [annotationResult]) typeAfter =
+                  (rebuilt, edgeAfter) ∧
+                ∃ later, RowsReads later typeMemos saved)
+    rebuilt
+    (Exists.intro suffixResults
+      (Exists.intro rowBefore
+        (Exists.intro typeAfter
+          (Exists.intro edgeAfter
+            (Exists.intro rowMemos (Exists.intro typeMemos ⟨?m.1822, ⟨?m.1825, ⟨actual, ⟨made, later⟩⟩⟩⟩))))))
+context:
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+wanted : SourceEqualityNeeded.Needed
+before after : State Symbol Guard
+memos saved : EndpointMemoGateTrace.Memos
+edge : EdgeValue Symbol Guard
+annotation : Value Symbol Guard
+singleton : edge.children = [annotation]
+index : Nat
+x✝⁶ : EdgeValue Symbol Guard
+x✝⁵ : List (Value Symbol Guard)
+x✝⁴ : State Symbol Guard
+middleMemo✝ : EndpointMemoGateTrace.Memos
+x✝³ : List (EdgeValue Symbol Guard)
+x✝² : State Symbol Guard
+x✝¹ : List (EdgeValue Symbol Guard)
+x✝ : EdgeValue Symbol Guard
+rebuilt✝ : run (makeEdge x✝⁶.entry.key.symbol x✝⁶.entry.key.constraint x✝⁵) x✝⁴ = (x✝, x✝²)
+fits✝ : SourceEqualityNeeded.fits (SourceEqualityNeeded.Needed.node [(0, wanted)]) x✝⁶.children.length = true
+selected : x✝³[index]? = some edge
+childTrace✝ : RequireChildren [(0, wanted)] 0 x✝⁶.children before x✝⁵ x✝⁴
+restTrace✝ : RequireRows [(0, wanted)] x✝³ x✝² x✝¹ after
+childReads : ChildrenReads childTrace✝ memos middleMemo✝
+restReads : RowsReads restTrace✝ middleMemo✝ saved
+prefixResults : List (EdgeValue Symbol Guard)
+annotationResult : Value Symbol Guard
+rebuilt : EdgeValue Symbol Guard
+suffixResults : List (EdgeValue Symbol Guard)
+rowBefore typeAfter edgeAfter : State Symbol Guard
+rowMemos typeMemos : EndpointMemoGateTrace.Memos
+resultSame : x✝¹ = prefixResults ++ rebuilt :: suffixResults
+earlier : RequireRows [(0, wanted)] (List.take index x✝³) x✝² prefixResults rowBefore
+earlierReads : RowsReads earlier middleMemo✝ rowMemos
+actual : ∃ actual, NodeReads actual rowMemos typeMemos
+made :
+  run (makeEdge edge.entry.key.symbol edge.entry.key.constraint [annotationResult]) typeAfter = (rebuilt, edgeAfter)
+later : ∃ later, RowsReads later typeMemos saved
+⊢ EdgeValue Symbol Guard → Prop
+/tmp/mcfta-type-child-proof-fields-20261113-1305/Check.lean:88:17: error: don't know how to synthesize implicit argument `p`
+  @Exists.intro (List (EdgeValue Symbol Guard))
+    (fun suffixResults =>
+      ∃ rowBefore typeAfter edgeAfter rowMemos typeMemos,
+        x✝ :: x✝¹ = ?m.1803 :: prefixResults ++ rebuilt :: suffixResults ∧
+          (∃ earlier, RowsReads earlier memos rowMemos) ∧
+            (∃ actual, NodeReads actual rowMemos typeMemos) ∧
+              run (makeEdge edge.entry.key.symbol edge.entry.key.constraint [annotationResult]) typeAfter =
+                  (rebuilt, edgeAfter) ∧
+                ∃ later, RowsReads later typeMemos saved)
+    suffixResults
+    (Exists.intro rowBefore
+      (Exists.intro typeAfter
+        (Exists.intro edgeAfter
+          (Exists.intro rowMemos (Exists.intro typeMemos ⟨?m.1822, ⟨?m.1825, ⟨actual, ⟨made, later⟩⟩⟩⟩)))))
+context:
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+wanted : SourceEqualityNeeded.Needed
+before after : State Symbol Guard
+memos saved : EndpointMemoGateTrace.Memos
+edge : EdgeValue Symbol Guard
+annotation : Value Symbol Guard
+singleton : edge.children = [annotation]
+index : Nat
+x✝⁶ : EdgeValue Symbol Guard
+x✝⁵ : List (Value Symbol Guard)
+x✝⁴ : State Symbol Guard
+middleMemo✝ : EndpointMemoGateTrace.Memos
+x✝³ : List (EdgeValue Symbol Guard)
+x✝² : State Symbol Guard
+x✝¹ : List (EdgeValue Symbol Guard)
+x✝ : EdgeValue Symbol Guard
+rebuilt✝ : run (makeEdge x✝⁶.entry.key.symbol x✝⁶.entry.key.constraint x✝⁵) x✝⁴ = (x✝, x✝²)
+fits✝ : SourceEqualityNeeded.fits (SourceEqualityNeeded.Needed.node [(0, wanted)]) x✝⁶.children.length = true
+selected : x✝³[index]? = some edge
+childTrace✝ : RequireChildren [(0, wanted)] 0 x✝⁶.children before x✝⁵ x✝⁴
+restTrace✝ : RequireRows [(0, wanted)] x✝³ x✝² x✝¹ after
+childReads : ChildrenReads childTrace✝ memos middleMemo✝
+restReads : RowsReads restTrace✝ middleMemo✝ saved
+prefixResults : List (EdgeValue Symbol Guard)
+annotationResult : Value Symbol Guard
+rebuilt : EdgeValue Symbol Guard
+suffixResults : List (EdgeValue Symbol Guard)
+rowBefore typeAfter edgeAfter : State Symbol Guard
+rowMemos typeMemos : EndpointMemoGateTrace.Memos
+resultSame : x✝¹ = prefixResults ++ rebuilt :: suffixResults
+earlier : RequireRows [(0, wanted)] (List.take index x✝³) x✝² prefixResults rowBefore
+earlierReads : RowsReads earlier middleMemo✝ rowMemos
+actual : ∃ actual, NodeReads actual rowMemos typeMemos
+made :
+  run (makeEdge edge.entry.key.symbol edge.entry.key.constraint [annotationResult]) typeAfter = (rebuilt, edgeAfter)
+later : ∃ later, RowsReads later typeMemos saved
+⊢ List (EdgeValue Symbol Guard) → Prop
+/tmp/mcfta-type-child-proof-fields-20261113-1305/Check.lean:88:17: error: don't know how to synthesize implicit argument `p`
+  @Exists.intro (State Symbol Guard)
+    (fun rowBefore =>
+      ∃ typeAfter edgeAfter rowMemos typeMemos,
+        x✝ :: x✝¹ = ?m.1803 :: prefixResults ++ rebuilt :: suffixResults ∧
+          (∃ earlier, RowsReads earlier memos rowMemos) ∧
+            (∃ actual, NodeReads actual rowMemos typeMemos) ∧
+              run (makeEdge edge.entry.key.symbol edge.entry.key.constraint [annotationResult]) typeAfter =
+                  (rebuilt, edgeAfter) ∧
+                ∃ later, RowsReads later typeMemos saved)
+    rowBefore
+    (Exists.intro typeAfter
+      (Exists.intro edgeAfter
+        (Exists.intro rowMemos (Exists.intro typeMemos ⟨?m.1822, ⟨?m.1825, ⟨actual, ⟨made, later⟩⟩⟩⟩))))
+context:
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+wanted : SourceEqualityNeeded.Needed
+before after : State Symbol Guard
+memos saved : EndpointMemoGateTrace.Memos
+edge : EdgeValue Symbol Guard
+annotation : Value Symbol Guard
+singleton : edge.children = [annotation]
+index : Nat
+x✝⁶ : EdgeValue Symbol Guard
+x✝⁵ : List (Value Symbol Guard)
+x✝⁴ : State Symbol Guard
+middleMemo✝ : EndpointMemoGateTrace.Memos
+x✝³ : List (EdgeValue Symbol Guard)
+x✝² : State Symbol Guard
+x✝¹ : List (EdgeValue Symbol Guard)
+x✝ : EdgeValue Symbol Guard
+rebuilt✝ : run (makeEdge x✝⁶.entry.key.symbol x✝⁶.entry.key.constraint x✝⁵) x✝⁴ = (x✝, x✝²)
+fits✝ : SourceEqualityNeeded.fits (SourceEqualityNeeded.Needed.node [(0, wanted)]) x✝⁶.children.length = true
+selected : x✝³[index]? = some edge
+childTrace✝ : RequireChildren [(0, wanted)] 0 x✝⁶.children before x✝⁵ x✝⁴
+restTrace✝ : RequireRows [(0, wanted)] x✝³ x✝² x✝¹ after
+childReads : ChildrenReads childTrace✝ memos middleMemo✝
+restReads : RowsReads restTrace✝ middleMemo✝ saved
+prefixResults : List (EdgeValue Symbol Guard)
+annotationResult : Value Symbol Guard
+rebuilt : EdgeValue Symbol Guard
+suffixResults : List (EdgeValue Symbol Guard)
+rowBefore typeAfter edgeAfter : State Symbol Guard
+rowMemos typeMemos : EndpointMemoGateTrace.Memos
+resultSame : x✝¹ = prefixResults ++ rebuilt :: suffixResults
+earlier : RequireRows [(0, wanted)] (List.take index x✝³) x✝² prefixResults rowBefore
+earlierReads : RowsReads earlier middleMemo✝ rowMemos
+actual : ∃ actual, NodeReads actual rowMemos typeMemos
+made :
+  run (makeEdge edge.entry.key.symbol edge.entry.key.constraint [annotationResult]) typeAfter = (rebuilt, edgeAfter)
+later : ∃ later, RowsReads later typeMemos saved
+⊢ State Symbol Guard → Prop
+/tmp/mcfta-type-child-proof-fields-20261113-1305/Check.lean:88:17: error: don't know how to synthesize implicit argument `p`
+  @Exists.intro (State Symbol Guard)
+    (fun typeAfter =>
+      ∃ edgeAfter rowMemos typeMemos,
+        x✝ :: x✝¹ = ?m.1803 :: prefixResults ++ rebuilt :: suffixResults ∧
+          (∃ earlier, RowsReads earlier memos rowMemos) ∧
+            (∃ actual, NodeReads actual rowMemos typeMemos) ∧
+              run (makeEdge edge.entry.key.symbol edge.entry.key.constraint [annotationResult]) typeAfter =
+                  (rebuilt, edgeAfter) ∧
+                ∃ later, RowsReads later typeMemos saved)
+    typeAfter
+    (Exists.intro edgeAfter
+      (Exists.intro rowMemos (Exists.intro typeMemos ⟨?m.1822, ⟨?m.1825, ⟨actual, ⟨made, later⟩⟩⟩⟩)))
+context:
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+wanted : SourceEqualityNeeded.Needed
+before after : State Symbol Guard
+memos saved : EndpointMemoGateTrace.Memos
+edge : EdgeValue Symbol Guard
+annotation : Value Symbol Guard
+singleton : edge.children = [annotation]
+index : Nat
+x✝⁶ : EdgeValue Symbol Guard
+x✝⁵ : List (Value Symbol Guard)
+x✝⁴ : State Symbol Guard
+middleMemo✝ : EndpointMemoGateTrace.Memos
+x✝³ : List (EdgeValue Symbol Guard)
+x✝² : State Symbol Guard
+x✝¹ : List (EdgeValue Symbol Guard)
+x✝ : EdgeValue Symbol Guard
+rebuilt✝ : run (makeEdge x✝⁶.entry.key.symbol x✝⁶.entry.key.constraint x✝⁵) x✝⁴ = (x✝, x✝²)
+fits✝ : SourceEqualityNeeded.fits (SourceEqualityNeeded.Needed.node [(0, wanted)]) x✝⁶.children.length = true
+selected : x✝³[index]? = some edge
+childTrace✝ : RequireChildren [(0, wanted)] 0 x✝⁶.children before x✝⁵ x✝⁴
+restTrace✝ : RequireRows [(0, wanted)] x✝³ x✝² x✝¹ after
+childReads : ChildrenReads childTrace✝ memos middleMemo✝
+restReads : RowsReads restTrace✝ middleMemo✝ saved
+prefixResults : List (EdgeValue Symbol Guard)
+annotationResult : Value Symbol Guard
+rebuilt : EdgeValue Symbol Guard
+suffixResults : List (EdgeValue Symbol Guard)
+rowBefore typeAfter edgeAfter : State Symbol Guard
+rowMemos typeMemos : EndpointMemoGateTrace.Memos
+resultSame : x✝¹ = prefixResults ++ rebuilt :: suffixResults
+earlier : RequireRows [(0, wanted)] (List.take index x✝³) x✝² prefixResults rowBefore
+earlierReads : RowsReads earlier middleMemo✝ rowMemos
+actual : ∃ actual, NodeReads actual rowMemos typeMemos
+made :
+  run (makeEdge edge.entry.key.symbol edge.entry.key.constraint [annotationResult]) typeAfter = (rebuilt, edgeAfter)
+later : ∃ later, RowsReads later typeMemos saved
+⊢ State Symbol Guard → Prop
+/tmp/mcfta-type-child-proof-fields-20261113-1305/Check.lean:88:17: error: don't know how to synthesize implicit argument `p`
+  @Exists.intro (State Symbol Guard)
+    (fun edgeAfter =>
+      ∃ rowMemos typeMemos,
+        x✝ :: x✝¹ = ?m.1803 :: prefixResults ++ rebuilt :: suffixResults ∧
+          (∃ earlier, RowsReads earlier memos rowMemos) ∧
+            (∃ actual, NodeReads actual rowMemos typeMemos) ∧
+              run (makeEdge edge.entry.key.symbol edge.entry.key.constraint [annotationResult]) typeAfter =
+                  (rebuilt, edgeAfter) ∧
+                ∃ later, RowsReads later typeMemos saved)
+    edgeAfter (Exists.intro rowMemos (Exists.intro typeMemos ⟨?m.1822, ⟨?m.1825, ⟨actual, ⟨made, later⟩⟩⟩⟩))
+context:
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+wanted : SourceEqualityNeeded.Needed
+before after : State Symbol Guard
+memos saved : EndpointMemoGateTrace.Memos
+edge : EdgeValue Symbol Guard
+annotation : Value Symbol Guard
+singleton : edge.children = [annotation]
+index : Nat
+x✝⁶ : EdgeValue Symbol Guard
+x✝⁵ : List (Value Symbol Guard)
+x✝⁴ : State Symbol Guard
+middleMemo✝ : EndpointMemoGateTrace.Memos
+x✝³ : List (EdgeValue Symbol Guard)
+x✝² : State Symbol Guard
+x✝¹ : List (EdgeValue Symbol Guard)
+x✝ : EdgeValue Symbol Guard
+rebuilt✝ : run (makeEdge x✝⁶.entry.key.symbol x✝⁶.entry.key.constraint x✝⁵) x✝⁴ = (x✝, x✝²)
+fits✝ : SourceEqualityNeeded.fits (SourceEqualityNeeded.Needed.node [(0, wanted)]) x✝⁶.children.length = true
+selected : x✝³[index]? = some edge
+childTrace✝ : RequireChildren [(0, wanted)] 0 x✝⁶.children before x✝⁵ x✝⁴
+restTrace✝ : RequireRows [(0, wanted)] x✝³ x✝² x✝¹ after
+childReads : ChildrenReads childTrace✝ memos middleMemo✝
+restReads : RowsReads restTrace✝ middleMemo✝ saved
+prefixResults : List (EdgeValue Symbol Guard)
+annotationResult : Value Symbol Guard
+rebuilt : EdgeValue Symbol Guard
+suffixResults : List (EdgeValue Symbol Guard)
+rowBefore typeAfter edgeAfter : State Symbol Guard
+rowMemos typeMemos : EndpointMemoGateTrace.Memos
+resultSame : x✝¹ = prefixResults ++ rebuilt :: suffixResults
+earlier : RequireRows [(0, wanted)] (List.take index x✝³) x✝² prefixResults rowBefore
+earlierReads : RowsReads earlier middleMemo✝ rowMemos
+actual : ∃ actual, NodeReads actual rowMemos typeMemos
+made :
+  run (makeEdge edge.entry.key.symbol edge.entry.key.constraint [annotationResult]) typeAfter = (rebuilt, edgeAfter)
+later : ∃ later, RowsReads later typeMemos saved
+⊢ State Symbol Guard → Prop
+/tmp/mcfta-type-child-proof-fields-20261113-1305/Check.lean:88:17: error: don't know how to synthesize implicit argument `p`
+  @Exists.intro EndpointMemoGateTrace.Memos
+    (fun rowMemos =>
+      ∃ typeMemos,
+        x✝ :: x✝¹ = ?m.1803 :: prefixResults ++ rebuilt :: suffixResults ∧
+          (∃ earlier, RowsReads earlier memos rowMemos) ∧
+            (∃ actual, NodeReads actual rowMemos typeMemos) ∧
+              run (makeEdge edge.entry.key.symbol edge.entry.key.constraint [annotationResult]) typeAfter =
+                  (rebuilt, edgeAfter) ∧
+                ∃ later, RowsReads later typeMemos saved)
+    rowMemos (Exists.intro typeMemos ⟨?m.1822, ⟨?m.1825, ⟨actual, ⟨made, later⟩⟩⟩⟩)
+context:
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+wanted : SourceEqualityNeeded.Needed
+before after : State Symbol Guard
+memos saved : EndpointMemoGateTrace.Memos
+edge : EdgeValue Symbol Guard
+annotation : Value Symbol Guard
+singleton : edge.children = [annotation]
+index : Nat
+x✝⁶ : EdgeValue Symbol Guard
+x✝⁵ : List (Value Symbol Guard)
+x✝⁴ : State Symbol Guard
+middleMemo✝ : EndpointMemoGateTrace.Memos
+x✝³ : List (EdgeValue Symbol Guard)
+x✝² : State Symbol Guard
+x✝¹ : List (EdgeValue Symbol Guard)
+x✝ : EdgeValue Symbol Guard
+rebuilt✝ : run (makeEdge x✝⁶.entry.key.symbol x✝⁶.entry.key.constraint x✝⁵) x✝⁴ = (x✝, x✝²)
+fits✝ : SourceEqualityNeeded.fits (SourceEqualityNeeded.Needed.node [(0, wanted)]) x✝⁶.children.length = true
+selected : x✝³[index]? = some edge
+childTrace✝ : RequireChildren [(0, wanted)] 0 x✝⁶.children before x✝⁵ x✝⁴
+restTrace✝ : RequireRows [(0, wanted)] x✝³ x✝² x✝¹ after
+childReads : ChildrenReads childTrace✝ memos middleMemo✝
+restReads : RowsReads restTrace✝ middleMemo✝ saved
+prefixResults : List (EdgeValue Symbol Guard)
+annotationResult : Value Symbol Guard
+rebuilt : EdgeValue Symbol Guard
+suffixResults : List (EdgeValue Symbol Guard)
+rowBefore typeAfter edgeAfter : State Symbol Guard
+rowMemos typeMemos : EndpointMemoGateTrace.Memos
+resultSame : x✝¹ = prefixResults ++ rebuilt :: suffixResults
+earlier : RequireRows [(0, wanted)] (List.take index x✝³) x✝² prefixResults rowBefore
+earlierReads : RowsReads earlier middleMemo✝ rowMemos
+actual : ∃ actual, NodeReads actual rowMemos typeMemos
+made :
+  run (makeEdge edge.entry.key.symbol edge.entry.key.constraint [annotationResult]) typeAfter = (rebuilt, edgeAfter)
+later : ∃ later, RowsReads later typeMemos saved
+⊢ EndpointMemoGateTrace.Memos → Prop
+/tmp/mcfta-type-child-proof-fields-20261113-1305/Check.lean:88:17: error: don't know how to synthesize implicit argument `p`
+  @Exists.intro EndpointMemoGateTrace.Memos
+    (fun typeMemos =>
+      x✝ :: x✝¹ = ?m.1803 :: prefixResults ++ rebuilt :: suffixResults ∧
+        (∃ earlier, RowsReads earlier memos rowMemos) ∧
+          (∃ actual, NodeReads actual rowMemos typeMemos) ∧
+            run (makeEdge edge.entry.key.symbol edge.entry.key.constraint [annotationResult]) typeAfter =
+                (rebuilt, edgeAfter) ∧
+              ∃ later, RowsReads later typeMemos saved)
+    typeMemos ⟨?m.1822, ⟨?m.1825, ⟨actual, ⟨made, later⟩⟩⟩⟩
+context:
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+wanted : SourceEqualityNeeded.Needed
+before after : State Symbol Guard
+memos saved : EndpointMemoGateTrace.Memos
+edge : EdgeValue Symbol Guard
+annotation : Value Symbol Guard
+singleton : edge.children = [annotation]
+index : Nat
+x✝⁶ : EdgeValue Symbol Guard
+x✝⁵ : List (Value Symbol Guard)
+x✝⁴ : State Symbol Guard
+middleMemo✝ : EndpointMemoGateTrace.Memos
+x✝³ : List (EdgeValue Symbol Guard)
+x✝² : State Symbol Guard
+x✝¹ : List (EdgeValue Symbol Guard)
+x✝ : EdgeValue Symbol Guard
+rebuilt✝ : run (makeEdge x✝⁶.entry.key.symbol x✝⁶.entry.key.constraint x✝⁵) x✝⁴ = (x✝, x✝²)
+fits✝ : SourceEqualityNeeded.fits (SourceEqualityNeeded.Needed.node [(0, wanted)]) x✝⁶.children.length = true
+selected : x✝³[index]? = some edge
+childTrace✝ : RequireChildren [(0, wanted)] 0 x✝⁶.children before x✝⁵ x✝⁴
+restTrace✝ : RequireRows [(0, wanted)] x✝³ x✝² x✝¹ after
+childReads : ChildrenReads childTrace✝ memos middleMemo✝
+restReads : RowsReads restTrace✝ middleMemo✝ saved
+prefixResults : List (EdgeValue Symbol Guard)
+annotationResult : Value Symbol Guard
+rebuilt : EdgeValue Symbol Guard
+suffixResults : List (EdgeValue Symbol Guard)
+rowBefore typeAfter edgeAfter : State Symbol Guard
+rowMemos typeMemos : EndpointMemoGateTrace.Memos
+resultSame : x✝¹ = prefixResults ++ rebuilt :: suffixResults
+earlier : RequireRows [(0, wanted)] (List.take index x✝³) x✝² prefixResults rowBefore
+earlierReads : RowsReads earlier middleMemo✝ rowMemos
+actual : ∃ actual, NodeReads actual rowMemos typeMemos
+made :
+  run (makeEdge edge.entry.key.symbol edge.entry.key.constraint [annotationResult]) typeAfter = (rebuilt, edgeAfter)
+later : ∃ later, RowsReads later typeMemos saved
+⊢ EndpointMemoGateTrace.Memos → Prop
+/tmp/mcfta-type-child-proof-fields-20261113-1305/Check.lean:88:17: error: don't know how to synthesize implicit argument `b`
+  @And.intro (x✝ :: x✝¹ = ?m.1803 :: prefixResults ++ rebuilt :: suffixResults)
+    ((∃ earlier, RowsReads earlier memos rowMemos) ∧
+      (∃ actual, NodeReads actual rowMemos typeMemos) ∧
+        run (makeEdge edge.entry.key.symbol edge.entry.key.constraint [annotationResult]) typeAfter =
+            (rebuilt, edgeAfter) ∧
+          ∃ later, RowsReads later typeMemos saved)
+    ?m.1822 ⟨?m.1825, ⟨actual, ⟨made, later⟩⟩⟩
+context:
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+wanted : SourceEqualityNeeded.Needed
+before after : State Symbol Guard
+memos saved : EndpointMemoGateTrace.Memos
+edge : EdgeValue Symbol Guard
+annotation : Value Symbol Guard
+singleton : edge.children = [annotation]
+index : Nat
+x✝⁶ : EdgeValue Symbol Guard
+x✝⁵ : List (Value Symbol Guard)
+x✝⁴ : State Symbol Guard
+middleMemo✝ : EndpointMemoGateTrace.Memos
+x✝³ : List (EdgeValue Symbol Guard)
+x✝² : State Symbol Guard
+x✝¹ : List (EdgeValue Symbol Guard)
+x✝ : EdgeValue Symbol Guard
+rebuilt✝ : run (makeEdge x✝⁶.entry.key.symbol x✝⁶.entry.key.constraint x✝⁵) x✝⁴ = (x✝, x✝²)
+fits✝ : SourceEqualityNeeded.fits (SourceEqualityNeeded.Needed.node [(0, wanted)]) x✝⁶.children.length = true
+selected : x✝³[index]? = some edge
+childTrace✝ : RequireChildren [(0, wanted)] 0 x✝⁶.children before x✝⁵ x✝⁴
+restTrace✝ : RequireRows [(0, wanted)] x✝³ x✝² x✝¹ after
+childReads : ChildrenReads childTrace✝ memos middleMemo✝
+restReads : RowsReads restTrace✝ middleMemo✝ saved
+prefixResults : List (EdgeValue Symbol Guard)
+annotationResult : Value Symbol Guard
+rebuilt : EdgeValue Symbol Guard
+suffixResults : List (EdgeValue Symbol Guard)
+rowBefore typeAfter edgeAfter : State Symbol Guard
+rowMemos typeMemos : EndpointMemoGateTrace.Memos
+resultSame : x✝¹ = prefixResults ++ rebuilt :: suffixResults
+earlier : RequireRows [(0, wanted)] (List.take index x✝³) x✝² prefixResults rowBefore
+earlierReads : RowsReads earlier middleMemo✝ rowMemos
+actual : ∃ actual, NodeReads actual rowMemos typeMemos
+made :
+  run (makeEdge edge.entry.key.symbol edge.entry.key.constraint [annotationResult]) typeAfter = (rebuilt, edgeAfter)
+later : ∃ later, RowsReads later typeMemos saved
+⊢ Prop
+/tmp/mcfta-type-child-proof-fields-20261113-1305/Check.lean:88:17: error: don't know how to synthesize implicit argument `a`
+  @And.intro (x✝ :: x✝¹ = ?m.1803 :: prefixResults ++ rebuilt :: suffixResults)
+    ((∃ earlier, RowsReads earlier memos rowMemos) ∧
+      (∃ actual, NodeReads actual rowMemos typeMemos) ∧
+        run (makeEdge edge.entry.key.symbol edge.entry.key.constraint [annotationResult]) typeAfter =
+            (rebuilt, edgeAfter) ∧
+          ∃ later, RowsReads later typeMemos saved)
+    ?m.1822 ⟨?m.1825, ⟨actual, ⟨made, later⟩⟩⟩
+context:
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+wanted : SourceEqualityNeeded.Needed
+before after : State Symbol Guard
+memos saved : EndpointMemoGateTrace.Memos
+edge : EdgeValue Symbol Guard
+annotation : Value Symbol Guard
+singleton : edge.children = [annotation]
+index : Nat
+x✝⁶ : EdgeValue Symbol Guard
+x✝⁵ : List (Value Symbol Guard)
+x✝⁴ : State Symbol Guard
+middleMemo✝ : EndpointMemoGateTrace.Memos
+x✝³ : List (EdgeValue Symbol Guard)
+x✝² : State Symbol Guard
+x✝¹ : List (EdgeValue Symbol Guard)
+x✝ : EdgeValue Symbol Guard
+rebuilt✝ : run (makeEdge x✝⁶.entry.key.symbol x✝⁶.entry.key.constraint x✝⁵) x✝⁴ = (x✝, x✝²)
+fits✝ : SourceEqualityNeeded.fits (SourceEqualityNeeded.Needed.node [(0, wanted)]) x✝⁶.children.length = true
+selected : x✝³[index]? = some edge
+childTrace✝ : RequireChildren [(0, wanted)] 0 x✝⁶.children before x✝⁵ x✝⁴
+restTrace✝ : RequireRows [(0, wanted)] x✝³ x✝² x✝¹ after
+childReads : ChildrenReads childTrace✝ memos middleMemo✝
+restReads : RowsReads restTrace✝ middleMemo✝ saved
+prefixResults : List (EdgeValue Symbol Guard)
+annotationResult : Value Symbol Guard
+rebuilt : EdgeValue Symbol Guard
+suffixResults : List (EdgeValue Symbol Guard)
+rowBefore typeAfter edgeAfter : State Symbol Guard
+rowMemos typeMemos : EndpointMemoGateTrace.Memos
+resultSame : x✝¹ = prefixResults ++ rebuilt :: suffixResults
+earlier : RequireRows [(0, wanted)] (List.take index x✝³) x✝² prefixResults rowBefore
+earlierReads : RowsReads earlier middleMemo✝ rowMemos
+actual : ∃ actual, NodeReads actual rowMemos typeMemos
+made :
+  run (makeEdge edge.entry.key.symbol edge.entry.key.constraint [annotationResult]) typeAfter = (rebuilt, edgeAfter)
+later : ∃ later, RowsReads later typeMemos saved
+⊢ Prop
+/tmp/mcfta-type-child-proof-fields-20261113-1305/Check.lean:88:17: error: don't know how to synthesize implicit argument `a`
+  @And.intro (∃ earlier, RowsReads earlier memos rowMemos)
+    ((∃ actual, NodeReads actual rowMemos typeMemos) ∧
+      run (makeEdge edge.entry.key.symbol edge.entry.key.constraint [annotationResult]) typeAfter =
+          (rebuilt, edgeAfter) ∧
+        ∃ later, RowsReads later typeMemos saved)
+    ?m.1825 ⟨actual, ⟨made, later⟩⟩
+context:
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+wanted : SourceEqualityNeeded.Needed
+before after : State Symbol Guard
+memos saved : EndpointMemoGateTrace.Memos
+edge : EdgeValue Symbol Guard
+annotation : Value Symbol Guard
+singleton : edge.children = [annotation]
+index : Nat
+x✝⁶ : EdgeValue Symbol Guard
+x✝⁵ : List (Value Symbol Guard)
+x✝⁴ : State Symbol Guard
+middleMemo✝ : EndpointMemoGateTrace.Memos
+x✝³ : List (EdgeValue Symbol Guard)
+x✝² : State Symbol Guard
+x✝¹ : List (EdgeValue Symbol Guard)
+x✝ : EdgeValue Symbol Guard
+rebuilt✝ : run (makeEdge x✝⁶.entry.key.symbol x✝⁶.entry.key.constraint x✝⁵) x✝⁴ = (x✝, x✝²)
+fits✝ : SourceEqualityNeeded.fits (SourceEqualityNeeded.Needed.node [(0, wanted)]) x✝⁶.children.length = true
+selected : x✝³[index]? = some edge
+childTrace✝ : RequireChildren [(0, wanted)] 0 x✝⁶.children before x✝⁵ x✝⁴
+restTrace✝ : RequireRows [(0, wanted)] x✝³ x✝² x✝¹ after
+childReads : ChildrenReads childTrace✝ memos middleMemo✝
+restReads : RowsReads restTrace✝ middleMemo✝ saved
+prefixResults : List (EdgeValue Symbol Guard)
+annotationResult : Value Symbol Guard
+rebuilt : EdgeValue Symbol Guard
+suffixResults : List (EdgeValue Symbol Guard)
+rowBefore typeAfter edgeAfter : State Symbol Guard
+rowMemos typeMemos : EndpointMemoGateTrace.Memos
+resultSame : x✝¹ = prefixResults ++ rebuilt :: suffixResults
+earlier : RequireRows [(0, wanted)] (List.take index x✝³) x✝² prefixResults rowBefore
+earlierReads : RowsReads earlier middleMemo✝ rowMemos
+actual : ∃ actual, NodeReads actual rowMemos typeMemos
+made :
+  run (makeEdge edge.entry.key.symbol edge.entry.key.constraint [annotationResult]) typeAfter = (rebuilt, edgeAfter)
+later : ∃ later, RowsReads later typeMemos saved
+⊢ Prop
+/tmp/mcfta-type-child-proof-fields-20261113-1305/Check.lean:88:18: error: don't know how to synthesize placeholder for argument `head`
+context:
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+wanted : SourceEqualityNeeded.Needed
+before after : State Symbol Guard
+memos saved : EndpointMemoGateTrace.Memos
+edge : EdgeValue Symbol Guard
+annotation : Value Symbol Guard
+singleton : edge.children = [annotation]
+index : Nat
+x✝⁶ : EdgeValue Symbol Guard
+x✝⁵ : List (Value Symbol Guard)
+x✝⁴ : State Symbol Guard
+middleMemo✝ : EndpointMemoGateTrace.Memos
+x✝³ : List (EdgeValue Symbol Guard)
+x✝² : State Symbol Guard
+x✝¹ : List (EdgeValue Symbol Guard)
+x✝ : EdgeValue Symbol Guard
+rebuilt✝ : run (makeEdge x✝⁶.entry.key.symbol x✝⁶.entry.key.constraint x✝⁵) x✝⁴ = (x✝, x✝²)
+fits✝ : SourceEqualityNeeded.fits (SourceEqualityNeeded.Needed.node [(0, wanted)]) x✝⁶.children.length = true
+selected : x✝³[index]? = some edge
+childTrace✝ : RequireChildren [(0, wanted)] 0 x✝⁶.children before x✝⁵ x✝⁴
+restTrace✝ : RequireRows [(0, wanted)] x✝³ x✝² x✝¹ after
+childReads : ChildrenReads childTrace✝ memos middleMemo✝
+restReads : RowsReads restTrace✝ middleMemo✝ saved
+prefixResults : List (EdgeValue Symbol Guard)
+annotationResult : Value Symbol Guard
+rebuilt : EdgeValue Symbol Guard
+suffixResults : List (EdgeValue Symbol Guard)
+rowBefore typeAfter edgeAfter : State Symbol Guard
+rowMemos typeMemos : EndpointMemoGateTrace.Memos
+resultSame : x✝¹ = prefixResults ++ rebuilt :: suffixResults
+earlier : RequireRows [(0, wanted)] (List.take index x✝³) x✝² prefixResults rowBefore
+earlierReads : RowsReads earlier middleMemo✝ rowMemos
+actual : ∃ actual, NodeReads actual rowMemos typeMemos
+made :
+  run (makeEdge edge.entry.key.symbol edge.entry.key.constraint [annotationResult]) typeAfter = (rebuilt, edgeAfter)
+later : ∃ later, RowsReads later typeMemos saved
+⊢ EdgeValue Symbol Guard
+'_private._stdin.0.MicroCFTA.SourceSynthesisActualOrdinaryTypeSubtrace.rows_singleton_type_child' depends on axioms: [propext,
+ sorryAx,
+ Quot.sound]
+'_private._stdin.0.MicroCFTA.SourceSynthesisActualOrdinaryTypeSubtrace.actual_ordinary_singleton_type_child' depends on axioms: [propext,
+ sorryAx,
+ Quot.sound]

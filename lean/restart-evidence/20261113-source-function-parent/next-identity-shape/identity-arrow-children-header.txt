@@ -1,0 +1,39 @@
+private theorem identity_component_arrow_children
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (heap : State Symbol Guard)
+    (built : build (ordinarySymbols whole) [] empty = .done rootValue heap)
+    {expressions : List (EdgeSyntax Symbol Guard)} {before after : State Symbol Guard}
+    {outputs : List (EdgeValue Symbol Guard)} {rowIndex : Nat} {symbol : Symbol}
+    (original : SourceSynthesisOriginalTypeAnnotations.OriginalType lib
+      (.tFun (.tVar "a") (.tVar "a")))
+    (call : SourceCurrentStoredMuRetainedAlignment.RowCall
+      expressions [] before outputs after heap rowIndex symbol top
+      [ordinarySymbols (generalize
+        (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query))
+        (SourceSynthesisPr210TypeReflection.encodeTy (.tFun (.tVar "a") (.tVar "a"))))]) :
+    ∃ (typeValue : Value Symbol Guard) (arrow : EdgeValue Symbol Guard)
+        (marker domain result : Value Symbol Guard),
+      call.output.children[0]? = some typeValue ∧ Available heap typeValue ∧
+      (∃ entry depth, typeValue = .node entry [arrow] depth []) ∧
+      arrow.entry.key.symbol = literal "->" ∧
+      arrow.entry.key.constraint = eqGuard [[[1], [2]]] ∧
+      arrow.children = [marker, domain, result] ∧
+      (∃ markerEntry (markerRow : EdgeValue Symbol Guard),
+        marker = .node markerEntry [markerRow] 0 [] ∧
+        markerRow.entry.key.symbol = literal "(->)" ∧
+        markerRow.entry.key.constraint = top ∧ markerRow.children = []) ∧
+      (∀ child ∈ [domain, result], Available heap child ∧ child.free = [] ∧
+        SourceEqualityAnnotationLanguage.Annotated (fun guard => guard = top) child ∧
+        SourceMemoGate.unconstrained child = true) ∧
+      ∃ (first middle last : State Symbol Guard), BasicContext first [] ∧
+        build (ordinarySymbols
+          (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query))) [] first =
+            .done domain middle ∧
+        BasicContext middle [] ∧
+        build (ordinarySymbols
+          (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query))) [] middle =
+            .done result last ∧
+        Grows first heap ∧ Grows middle heap ∧ Grows last heap

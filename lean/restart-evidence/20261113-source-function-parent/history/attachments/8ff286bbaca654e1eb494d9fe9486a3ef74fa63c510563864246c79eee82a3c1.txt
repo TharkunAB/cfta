@@ -1,0 +1,28 @@
+private theorem actual_ordinary_singleton_type_child
+    [DecidableEq (EdgeKey Symbol Guard)]
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (edges : List (EdgeValue Symbol Guard)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference)
+    (before after : State Symbol Guard) (result : Value Symbol Guard)
+    (memos saved : EndpointMemoGateTrace.Memos)
+    (trace : SourceEqualityRequiredGraph.RequireNode
+      (SourceEqualityNeeded.build [[0, 0]]) (.node entry edges depth free)
+      before result after)
+    (reads : SourceCurrentRequiredQueryMemos.NodeReads trace memos saved) :
+    ∀ index edge annotation, edges[index]? = some edge → edge.children = [annotation] →
+    ∃ prefixResults annotationResult rebuilt suffixResults
+        rowBefore typeAfter edgeAfter rowsAfter rowMemos typeMemos,
+      (∃ earlier : SourceEqualityRequiredGraph.RequireRows
+          [(0, SourceEqualityNeeded.build [[0]])]
+          (edges.take index) before prefixResults rowBefore,
+        SourceCurrentRequiredQueryMemos.RowsReads earlier memos rowMemos) ∧
+      (∃ actual : SourceEqualityRequiredGraph.RequireNode
+          (SourceEqualityNeeded.build [[0]]) annotation rowBefore annotationResult typeAfter,
+        SourceCurrentRequiredQueryMemos.NodeReads actual rowMemos typeMemos) ∧
+      run (makeEdge edge.entry.key.symbol edge.entry.key.constraint [annotationResult])
+        typeAfter = (rebuilt, edgeAfter) ∧
+      (∃ later : SourceEqualityRequiredGraph.RequireRows
+          [(0, SourceEqualityNeeded.build [[0]])]
+          (edges.drop (index + 1)) edgeAfter suffixResults rowsAfter,
+        SourceCurrentRequiredQueryMemos.RowsReads later typeMemos saved) ∧
+      run (makeNode (prefixResults ++ rebuilt :: suffixResults)) rowsAfter = (result, after)

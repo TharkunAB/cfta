@@ -1,0 +1,36 @@
+--- source.lean
++++ source.lean
+@@ -81,0 +82,5 @@
++  have lowered : (InternedFreshOrdinaryConstruction.buildEdges nativeRows [] functionStart).bind
++      (fun rows nodeHeap => InternedNestedConstruction.work (makeNode rows) nodeHeap) =
++      .done functionValue functionAfter := by
++    change build (.node nativeRows) [] functionStart = .done functionValue functionAfter
++    exact functionBuilt
+@@ -84,3 +89,2 @@
+-    simp only [SourceSynthesisUniverseCallerBoundary.ordinarySymbols, build,
+-      rowsDone, Outcome.bind] at functionBuilt
+-    cases functionBuilt
++    simp only [rowsDone, Outcome.bind] at lowered
++    cases lowered
+@@ -93,7 +97,8 @@
+-    have made : run (makeNode rows) nodeHeap = (functionValue, functionAfter) := Prod.ext
+-      (Outcome.done.inj (by simpa only
+-        [SourceSynthesisUniverseCallerBoundary.ordinarySymbols, build, rowsDone,
+-          Outcome.bind, InternedNestedConstruction.work] using functionBuilt)).1
+-      (Outcome.done.inj (by simpa only
+-        [SourceSynthesisUniverseCallerBoundary.ordinarySymbols, build, rowsDone,
+-          Outcome.bind, InternedNestedConstruction.work] using functionBuilt)).2
++    have finished : InternedNestedConstruction.work (makeNode rows) nodeHeap =
++        .done functionValue functionAfter := by
++      simpa only [rowsDone, Outcome.bind] using lowered
++    have endpoints : (run (makeNode rows) nodeHeap).1 = functionValue ∧
++        (run (makeNode rows) nodeHeap).2 = functionAfter := by
++      simpa only [InternedNestedConstruction.work, Outcome.done.injEq] using finished
++    have made : run (makeNode rows) nodeHeap = (functionValue, functionAfter) :=
++      Prod.ext endpoints.1 endpoints.2
+@@ -109 +114 @@
+-      simp only [Option.map_some, SourceSynthesisProgramBuildRolesGeneric.mapEdge,
++      simp only [field, Option.map_some, SourceSynthesisProgramBuildRolesGeneric.mapEdge,
+@@ -137 +142 @@
+-      simpa only [same, InternedGuardedLanguage.meaning] using acceptedTerm
++      simp only [same, InternedGuardedLanguage.meaning] at acceptedTerm

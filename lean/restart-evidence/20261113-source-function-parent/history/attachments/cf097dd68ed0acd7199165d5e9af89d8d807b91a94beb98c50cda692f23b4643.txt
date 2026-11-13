@@ -1,0 +1,101 @@
+# Fresh identity application class coverage
+
+Status: source audit only. No Lean compilation, runtime probe, or new theorem.
+Read at 2026-11-13 12:31 CET. Exact source hashes are in source-pins.sha256.
+
+The marker-only receipt does not cover the intended untouched identity case.
+If the actual four inputs have the fresh shapes below, both marker and result
+classes have false primary gates. All three classes have false gates in the
+concrete id/x branch described below. The public identity membership theorem
+does not itself identify these shapes or the complete function operand.
+
+## Source classes and their three orders
+
+FirstOrderConstruction.application:46 has children [T, marker, function, argument].
+Its declared classes are M=[[1],[2,0,0]], A=[[3,0],[2,0,1]], R=[[0],[2,0,2]].
+OwnChildTerminals.application_projection:39 proves the normalized guard payload
+is [R,M,A'], with A'=[[2,0,1],[3,0]]. This is the enumeration own-class order.
+The native physical gate has a separate order: ClassOrder.completedCompare:25
+uses strict trie subsumption, then reverse path-list comparison. These three
+classes have no cross-class strict prefix pair, so its order is [A',M,R].
+Precheck.precheck:77 calls unsafeOrdered on OWN records after its rejection
+checks. SelectionEntry.runChecked:34 uses those records, not payload order.
+The concrete order calculation follows the definitions; it is not a new law.
+If a guard stage rejects before selection, there is no selected-list receipt.
+
+## Why the result class must stay for the identified fresh shapes
+
+CurrentContext.context:52 uses T=allTypes top (constructorCatalog lib query).
+GeneralizeSyntax.replace:94, finish:104, generalize:109 and encodeTy:47 give
+the exact identity field syntax node ["->",eqGuard [[[1],[2]]],[marker,T,T]].
+TypeSyntax.arrowType:80 fixes marker/domain/result positions 0/1/2.
+This identity arrow ROOT is constrained. Do not call the whole field plain.
+The two inserted T subvalues have Top guards instead; see TypeSyntax:256,270.
+
+EndpointStatefulGateTrace.NodeTrace.closed:33 returns false for a closed Mu
+with unconstrained=true, for EVERY remaining path. finite:24 returns false
+for a closed ordinary depth-zero value. branches:28 follows every ordinary
+row without testing its own guard. Thus an ordinary identity Program row
+follows annotation slot0, then arrow slot2, to the plain/closed T result.
+The [2,0,2] path is false. Fresh application child0 is also T, so [0] is false.
+Both paths in R are false. The arrow's repeated-variable guard does not
+change this: the gate reads the selected children, not that ordinary guard.
+Likewise M visits two finite marker leaves and is false.
+
+The older InternedFreshOrdinaryStatefulGateTrace has the same finite/closed
+and ordinary-descent rules at 23-38. Selection.selected:22 filters !blocked;
+Trace.original:135 preserves every input occurrence. In the current scan,
+ConjunctionClassScan.Scan.selected:44 retains each primary-false class.
+Both graphs therefore require retaining R and M once these SAME shapes hold.
+Closedness alone is insufficient: a union returns true before descent, and
+another ordinary function row can make the disjunction true. All actual
+function alternatives must be included. A single accepted identity term is
+not a gate result for the complete function value.
+
+## Small source case and exact remaining attachment
+
+Use distinct id/x names, groups=[id:a->a], no argument-only entries or avoid
+rules, query arguments=[x:Int], and goal Int. For size2, relevantRows:112-132
+has split1/offset0: the function is union(termsRows ctx false 1), the argument
+is the singleton x row. termsRows:84-88 supplies x and id function rows.
+This establishes a concrete SOURCE branch by definition, not native execution.
+In its fresh native shape, x's rigid Int annotation is finite; id's domain
+and result are T. Every row encountered by M/R/A' is therefore clear. Native
+makeUnion:275-283 merges those ordinary rows, rather than installing a union
+tag. For this case the proper target is ALL THREE classes, in physical order.
+
+The attachment proof remains to be written: observe the SAME original app
+RowCall and its ordered child builds; invert the identity/rigid source calls;
+derive actual ordinary rows, Top T bodies, closure and unconstrained T;
+then build the exact false path/class traces at that reached cache. Existing
+many_call:37 returns the real prefix build and growth; TypeFieldCalls
+prefix_muStored:121 and NativeTypeSites.build_mu_bodies:71 give current Mu
+annotations; HereditaryUnconstrained.unconstrained:126 supplies the predicate
+from full plain annotations. Native constructor/tag and row identification
+must still be derived, rather than supplied as future success premises.
+
+IdentityNativeWitness.identity_component_native_member:25 retains only the
+actual component Type slot, availability, closure, Origin annotation and the
+finite guarded term. It does not return the app call, ordinary arrow shape,
+all other function rows, or their gate decisions. It cannot alone justify
+onlyMarker, all-three, or exact path coverage after prior native operations.
+For an argument path that is blocked while R/M stay clear, the retained set
+would be {R,M}; no source-reachable instance of that case is asserted here.
+
+## Required subtrace correction before composition
+
+SelectedRequired.paths:22 sorts the union of all retained paths. For {R,M},
+the function needs build [[0,0],[0,2]]. For {A',M,R}, it needs
+build [[0,0],[0,1],[0,2]] and the argument needs build [[0]].
+RequireNode.identity:30 makes root-only requests on children0/1 literal no-ops.
+The all-three function request ends at an INTERNAL cache/Memos endpoint,
+before the actual argument request. Retain its suffix; do not identify that
+middle endpoint with the full requireAll endpoint without an actual identity
+proof. The checked marker-only observer has no such nonempty argument suffix.
+
+Recommended next cut: an additive all-three actual RequireAllReads observer
+with the SAME function NodeReads at that middle endpoint AND the actual
+argument suffix, followed by the bounded same-source id/x shape observer.
+Retain the existing marker-only law unchanged. This closes operational
+coverage only. It establishes no SAT, joint model, default-wide fact, runtime
+defect, or whole enumeration completion.

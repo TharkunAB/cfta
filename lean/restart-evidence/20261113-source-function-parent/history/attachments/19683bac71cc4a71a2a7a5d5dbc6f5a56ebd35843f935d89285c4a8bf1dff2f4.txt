@@ -1,0 +1,57 @@
+Status: HEADER AND PLAN ONLY. No body or compiler run.
+
+The 29-line candidate observes ALL THREE retained source app classes.
+Its classes are the actual selected-class data from the recorded pass.
+The allThree observation allows their actual order to vary. Each physical
+class uses canonicalClass, as recordOf stores its ascending path set.
+It is an observed current case, not a claim that every app pass selects it.
+Root review is required before implementation of this new header.
+
+Current source pins and exact requested trees:
+- FirstOrderConstruction.application:46-49 supplies marker, argument, and
+  result equality classes and the four ordered app children.
+- SourceEqualityClassOrder.recordOf:72-73 canonicalizes each class's path
+  list. orderedPaths_perm:63-64 retains each occurrence in source ordering.
+  Thus the header uses permutation of canonical classes, without guessing
+  one physical selection order or retaining the raw reversed argument pair.
+- SelectedRequired.paths:22-23 sorts/deduplicates their complete path union.
+  Under this observed allThree case it is exactly
+  [[0],[1],[2,0,0],[2,0,1],[2,0,2],[3,0]].
+- Needed.build:31-32 compiles this to the root map
+  [(0,node []),(1,node []),
+   (2,node [(0,build [[0],[1],[2]])]),(3,build [[0]])].
+  The function Type request is therefore wanted=build [[0],[1],[2]].
+  It is not the earlier marker-only build [[0]] request.
+
+Staged operational proof:
+1. Derive equality of canonical path unions from allThree, using the exact
+   permutation's membership equivalence and canonicalClass_ext. Compute
+   the fixed finite canonical union and Needed map locally with cbv.
+   No path-map or fit supplier appears in the header.
+2. Unpack the SAME RequireAllReads into its graph and ChildrenReads.
+   Case ChildrenReads as the source of that dependent graph. Do not
+   independently split the graph and create mismatched proof indices.
+3. Extract actual resultType then marker reads at their reached endpoints.
+   Both empty Needed maps force identity, but retain their receipt and
+   table fields in the conclusion. No prefix action is replayed.
+4. Extract the actual function read with before=afterMarker and
+   after=afterFunction, and its exact markerMemos/functionMemos.
+5. Extract the FOLLOWING argument read for build [[0]], from afterFunction
+   to the whole call's after heap and saved Memos. The final nil fixes those
+   whole-call endpoints. The function's returned heap/tables are not
+   silently identified with after/saved. The old marker-only endpoint
+   simplification is inapplicable to this nonempty following requirement.
+6. The repaired generic ordinary-row observer can inspect this SAME
+   function read with wanted=build [[0],[1],[2]] once the function is
+   observed ordinary. It keeps earlier/later row heap and memo endpoints.
+
+This source-local allThree gate does not assert the case actually occurs
+for every input. Gamma's source-shape audit can instantiate it from the
+actual selected-class observation. If a client retains only marker+result,
+that different current case has wanted=build [[0],[2]] and no following
+argument requirement; it needs its own observation or a later generalized
+footprint lemma. Do not cast that case into this allThree header.
+
+Identity-row ancestry remains Beta's independent planning task. No identity
+membership, original Type-instance survival, model/support assumption,
+positive minimum, joint alias consistency, or whole-output claim is added.

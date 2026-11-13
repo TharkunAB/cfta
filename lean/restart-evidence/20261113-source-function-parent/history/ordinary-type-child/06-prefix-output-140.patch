@@ -1,0 +1,12 @@
+--- source.lean
++++ source.lean
+@@ -82,0 +83 @@
++          rename_i prefixInput prefixValues prefixChildAfter prefixSaved tailEdges prefixAfter tailOutputs prefixOutput prefixMade prefixFits prefixChildrenTrace prefixRowsTrace
+@@ -88 +89 @@
+-          refine ⟨_ :: prefixResults, annotationResult, rebuilt, suffixResults,
++          refine ⟨prefixOutput :: prefixResults, annotationResult, rebuilt, suffixResults,
+@@ -90,2 +91,2 @@
+-          · simpa only [List.cons_append] using congrArg (List.cons _) resultSame
+-          · exact ⟨.kept (by assumption) _ (by assumption) earlier, .kept (fits := by assumption) (rebuilt := by assumption) childReads earlierReads⟩
++          · simpa only [List.cons_append] using congrArg (List.cons prefixOutput) resultSame
++          · exact ⟨.kept prefixFits prefixChildrenTrace prefixMade earlier, .kept (fits := prefixFits) (rebuilt := prefixMade) childReads earlierReads⟩

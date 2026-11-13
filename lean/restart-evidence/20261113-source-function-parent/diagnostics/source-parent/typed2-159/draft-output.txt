@@ -1,0 +1,106 @@
+/tmp/mcfta-source-function-parent-typed2-20261113-1246/Check.lean:86:4: error: Dependent elimination failed: Failed to solve equation
+  Outcome.done functionValue functionAfter =
+    match
+      InternedFreshOrdinaryConstruction.buildEdges (SourceSynthesisUniverseCallerBoundary.ordinaryEdges functionRows) []
+        functionStart with
+    | Outcome.done value state => InternedNestedConstruction.work (makeNode value) state
+    | Outcome.pending key state => Outcome.pending key state
+/tmp/mcfta-source-function-parent-typed2-20261113-1246/Check.lean:94:28: error: Type mismatch: After simplification, term
+  functionBuilt
+ has type
+  (match
+      InternedFreshOrdinaryConstruction.buildEdges (SourceSynthesisUniverseCallerBoundary.ordinaryEdges functionRows) []
+        functionStart with
+    | Outcome.done value state => Outcome.done (run (makeNode value) state).fst (run (makeNode value) state).snd
+    | Outcome.pending key state => Outcome.pending key state) =
+    Outcome.done functionValue functionAfter
+but is expected to have type
+  Outcome.done (run (makeNode rows) nodeHeap).fst ?m.597 = Outcome.done functionValue ?m.599
+/tmp/mcfta-source-function-parent-typed2-20261113-1246/Check.lean:97:28: error: Type mismatch: After simplification, term
+  functionBuilt
+ has type
+  (match
+      InternedFreshOrdinaryConstruction.buildEdges (SourceSynthesisUniverseCallerBoundary.ordinaryEdges functionRows) []
+        functionStart with
+    | Outcome.done value state => Outcome.done (run (makeNode value) state).fst (run (makeNode value) state).snd
+    | Outcome.pending key state => Outcome.pending key state) =
+    Outcome.done functionValue functionAfter
+but is expected to have type
+  Outcome.done ?m.606 (run (makeNode rows) nodeHeap).snd = Outcome.done ?m.608 functionAfter
+/tmp/mcfta-source-function-parent-typed2-20261113-1246/Check.lean:105:65: error: unsolved goals
+inst✝¹ : DecidableEq FullSyntax.Formula
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+lib : Library
+query : Query
+signed : Int
+whole : Expression
+accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole
+rootValue : Value Symbol Guard
+heap : InternedConstructorTemplates.State Symbol Guard
+built : build (ordinarySymbols whole) [] empty = Outcome.done rootValue heap
+original : SourceSynthesisOriginalTypeAnnotations.OriginalType lib ((Ty.tVar "a").tFun (Ty.tVar "a"))
+functionRows : List Row
+sourceIndex : Nat
+name : String
+identity :
+  functionRows[sourceIndex]? =
+    some
+      (EdgeSyntax.mk name top
+        [generalize (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query))
+            (SourceSynthesisPr210TypeReflection.encodeTy ((Ty.tVar "a").tFun (Ty.tVar "a")))])
+argument : Expression
+parentExpressions : List (EdgeSyntax Symbol Guard)
+before after : InternedConstructorTemplates.State Symbol Guard
+parentOutputs : List (EdgeValue Symbol Guard)
+parentIndex : Nat
+parent :
+  SourceCurrentStoredMuRetainedAlignment.RowCall parentExpressions [] before parentOutputs after heap parentIndex
+    (literal "app") (SourceSynthesisGeneralizeSyntax.eqGuard [[[1], [2, 0, 0]], [[3, 0], [2, 0, 1]], [[0], [2, 0, 2]]])
+    [ordinarySymbols (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query)),
+      ordinarySymbols (arrowMarker top), ordinarySymbols (Syntax.node functionRows), ordinarySymbols argument]
+field : Expression :=
+  generalize (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query))
+    (SourceSynthesisPr210TypeReflection.encodeTy ((Ty.tVar "a").tFun (Ty.tVar "a")))
+nativeRows : List (EdgeSyntax Symbol Guard) := SourceSynthesisUniverseCallerBoundary.ordinaryEdges functionRows
+functionValue : Value Symbol Guard
+functionStart functionAfter : InternedConstructorTemplates.State Symbol Guard
+selectedFunction : parent.values[2]? = some functionValue
+functionContext : InternedFreshOrdinaryContext.Context functionStart []
+functionBuilt :
+  build (ordinarySymbols (Syntax.node functionRows)) [] functionStart = Outcome.done functionValue functionAfter
+firstGrowth : Grows functionStart heap
+lastGrowth : Grows functionAfter heap
+parentSlot : parent.output.children[2]? = some functionValue
+rows : List (EdgeValue Symbol Guard)
+nodeHeap : InternedConstructorTemplates.State Symbol Guard
+rowsDone : InternedFreshOrdinaryConstruction.buildEdges nativeRows [] functionStart = Outcome.done rows nodeHeap
+checked :
+  InternedNestedFacts.Verified functionStart (InternedFreshOrdinaryConstruction.buildEdges nativeRows [] functionStart)
+    InternedNestedProvenance.Edges
+facts : InternedNestedFacts.Facts nodeHeap
+resident : InternedNestedProvenance.Edges nodeHeap rows
+made : run (makeNode rows) nodeHeap = (functionValue, functionAfter)
+nodeChecked : InternedNestedFacts.Verified nodeHeap (InternedNestedConstruction.work (makeNode rows) nodeHeap) Available
+nodeGrowth : Grows nodeHeap heap
+⊢ some
+      (EdgeSyntax.mk (literal name) top
+        [ordinarySymbols
+            (generalize (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query))
+              (SourceSynthesisPr210TypeReflection.encodeTy ((Ty.tVar "a").tFun (Ty.tVar "a"))))]) =
+    some (EdgeSyntax.mk (literal name) top [ordinarySymbols field])
+/tmp/mcfta-source-function-parent-typed2-20261113-1246/Check.lean:137:6: error: Try `simp at acceptedTerm` instead of `simpa using acceptedTerm`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/tmp/mcfta-source-function-parent-typed2-20261113-1246/Check.lean:85:6: error: This simp argument is unused:
+  rowsDone
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceSynthesisUniverseCallerBoundary.ordinarySymbols, build, Outcome.bind] at functionBuilt
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'_private._stdin.0.MicroCFTA.SourceSynthesisCurrentFunctionParent.actual_app_identity_function_parent' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,113 @@
+import MicroCFTA.SourceCurrentRequiredQueryMemos
+import MicroCFTA.SourceEqualitySelectedRequired
+
+namespace MicroCFTA.SourceSynthesisActualAppAllThreeSubtrace
+open InternedConstructorTemplates
+open SourceEqualityRequiredGraph SourceCurrentRequiredQueryMemos
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+
+private theorem actual_app_all_three_function_subtrace
+    [DecidableEq (EdgeKey Symbol Guard)]
+    (classes : EqualityNormalize.Constraints)
+    (allThree : classes.Perm
+      [EqualityNormalize.canonicalClass [[1], [2, 0, 0]],
+       EqualityNormalize.canonicalClass [[3, 0], [2, 0, 1]],
+       EqualityNormalize.canonicalClass [[0], [2, 0, 2]]])
+    (resultType marker function argument : Value Symbol Guard)
+    (results : List (Value Symbol Guard)) (before after : State Symbol Guard)
+    (memos saved : EndpointMemoGateTrace.Memos)
+    (reads : SourceCurrentRequiredQueryMemos.RequireAllReads
+      (SourceEqualitySelectedRequired.paths classes)
+      [resultType, marker, function, argument] results before after memos saved) :
+    ∃ resultTypeResult markerResult functionResult argumentResult
+        afterResult afterMarker afterFunction resultMemos markerMemos functionMemos,
+      results = [resultTypeResult, markerResult, functionResult, argumentResult] ∧
+      (∃ actual : SourceEqualityRequiredGraph.RequireNode (.node [])
+          resultType before resultTypeResult afterResult,
+        SourceCurrentRequiredQueryMemos.NodeReads actual memos resultMemos) ∧
+      (∃ actual : SourceEqualityRequiredGraph.RequireNode (.node [])
+          marker afterResult markerResult afterMarker,
+        SourceCurrentRequiredQueryMemos.NodeReads actual resultMemos markerMemos) ∧
+      (∃ actual : SourceEqualityRequiredGraph.RequireNode
+          (.node [(0, SourceEqualityNeeded.build [[0], [1], [2]])])
+          function afterMarker functionResult afterFunction,
+        SourceCurrentRequiredQueryMemos.NodeReads actual markerMemos functionMemos) ∧
+      (∃ actual : SourceEqualityRequiredGraph.RequireNode
+          (SourceEqualityNeeded.build [[0]]) argument afterFunction argumentResult after,
+        SourceCurrentRequiredQueryMemos.NodeReads actual functionMemos saved) := by
+  let expected : EqualityNormalize.Constraints :=
+    [EqualityNormalize.canonicalClass [[1], [2, 0, 0]],
+     EqualityNormalize.canonicalClass [[3, 0], [2, 0, 1]],
+     EqualityNormalize.canonicalClass [[0], [2, 0, 2]]]
+  have members : ∀ path, path ∈ classes.flatten ↔ path ∈ expected.flatten := by
+    intro path
+    constructor
+    · intro member
+      obtain ⟨group, included, inside⟩ := List.mem_flatten.mp member
+      exact List.mem_flatten.mpr ⟨group, allThree.mem_iff.mp included, inside⟩
+    · intro member
+      obtain ⟨group, included, inside⟩ := List.mem_flatten.mp member
+      exact List.mem_flatten.mpr ⟨group, allThree.mem_iff.mpr included, inside⟩
+  have canonicalSame : EqualityNormalize.canonicalClass classes.flatten =
+      EqualityNormalize.canonicalClass expected.flatten :=
+    EqualityNormalize.canonicalClass_ext _ _ members
+  have selectedPaths : SourceEqualitySelectedRequired.paths classes =
+      [[0], [1], [2, 0, 0], [2, 0, 1], [2, 0, 2], [3, 0]] := by
+    unfold SourceEqualitySelectedRequired.paths
+    rw [canonicalSame]
+    cbv
+  have compiled : SourceEqualityNeeded.build
+      (SourceEqualitySelectedRequired.paths classes) =
+      .node [(0, .node []), (1, .node []),
+        (2, .node [(0, SourceEqualityNeeded.build [[0], [1], [2]])]),
+        (3, SourceEqualityNeeded.build [[0]])] := by
+    rw [selectedPaths]
+    cbv
+  simp only [SourceCurrentRequiredQueryMemos.RequireAllReads, compiled] at reads
+  obtain ⟨_trace, memoReads⟩ := reads
+  cases memoReads with
+  | unselected _tail =>
+      have impossible : some (SourceEqualityNeeded.Needed.node []) = none := by assumption
+      cases impossible
+  | selected resultRead after0 =>
+      rename_i resultNeeded remaining0 resultValue resultAfter resultMemo resultFound resultTrace resultRest
+      have aligned : SourceEqualityNeeded.Needed.node [] = resultNeeded :=
+        Option.some.inj resultFound
+      cases aligned
+      cases after0 with
+      | unselected _tail =>
+          have impossible : some (SourceEqualityNeeded.Needed.node []) = none := by assumption
+          cases impossible
+      | selected markerRead after1 =>
+          rename_i markerNeeded remaining1 markerValue markerAfter markerMemo markerFound markerTrace markerRest
+          have aligned : SourceEqualityNeeded.Needed.node [] = markerNeeded :=
+            Option.some.inj markerFound
+          cases aligned
+          cases after1 with
+          | unselected _tail =>
+              have impossible : some (SourceEqualityNeeded.Needed.node
+                  [(0, SourceEqualityNeeded.build [[0], [1], [2]])]) = none := by assumption
+              cases impossible
+          | selected functionRead after2 =>
+              rename_i functionNeeded remaining2 functionValue functionAfter functionMemo functionFound functionTrace functionRest
+              have aligned : SourceEqualityNeeded.Needed.node
+                  [(0, SourceEqualityNeeded.build [[0], [1], [2]])] = functionNeeded :=
+                Option.some.inj functionFound
+              cases aligned
+              cases after2 with
+              | unselected _tail =>
+                  have impossible : some (SourceEqualityNeeded.build [[0]]) = none := by assumption
+                  cases impossible
+              | selected argumentRead after3 =>
+                  rename_i argumentNeeded remaining3 argumentValue argumentAfter argumentMemo argumentFound argumentTrace argumentRest
+                  have aligned : SourceEqualityNeeded.build [[0]] = argumentNeeded :=
+                    Option.some.inj argumentFound
+                  cases aligned
+                  cases after3
+                  exact ⟨resultValue, markerValue, functionValue, argumentValue,
+                    resultAfter, markerAfter, functionAfter, resultMemo, markerMemo, functionMemo,
+                    rfl, ⟨_, resultRead⟩, ⟨_, markerRead⟩,
+                    ⟨_, functionRead⟩, ⟨_, argumentRead⟩⟩
+
+end MicroCFTA.SourceSynthesisActualAppAllThreeSubtrace

@@ -1,0 +1,13 @@
+private theorem current_allTypes_root_cases
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (heap : State Symbol Guard)
+    (built : build (ordinarySymbols whole) [] empty = .done rootValue heap)
+    (start finish : State Symbol Guard) (value : Value Symbol Guard)
+    (context : BasicContext start []) (growth : Grows start heap)
+    (actual : build (ordinarySymbols
+      (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query))) [] start =
+        .done value finish)
+    (finishGrowth : Grows finish heap) :
+    (∃ entry body depth ordinary, value = .mu entry body depth ordinary) ∨
+      (∃ entry edges, value = .node entry edges 0 [])

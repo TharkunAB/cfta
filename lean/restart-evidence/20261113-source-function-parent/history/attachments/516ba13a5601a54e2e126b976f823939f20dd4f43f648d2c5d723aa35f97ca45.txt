@@ -1,0 +1,7 @@
+theorem row_call (expressions : List (EdgeSyntax Symbol Guard)) (environment : List (Value Symbol Guard))
+    (before after reader : State Symbol Guard) (context : Context before environment)
+    (outputs : List (EdgeValue Symbol Guard))
+    (actual : buildEdges expressions environment before = .done outputs after)
+    (growth : Grows after reader) (index : Nat) (symbol : Symbol) (guard : Guard)
+    (children : List (Syntax Symbol Guard)) (found : expressions[index]? = some (.mk symbol guard children)) :
+    Nonempty (RowCall expressions environment before outputs after reader index symbol guard children)

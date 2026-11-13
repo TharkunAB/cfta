@@ -1,0 +1,24 @@
+private theorem rows_singleton_type_child
+    [DecidableEq (EdgeKey Symbol Guard)]
+    (wanted : SourceEqualityNeeded.Needed)
+    (index : Nat) {edges results : List (EdgeValue Symbol Guard)}
+    {before after : State Symbol Guard} {memos saved : EndpointMemoGateTrace.Memos}
+    (trace : RequireRows [(0, wanted)]
+      edges before results after)
+    (reads : RowsReads trace memos saved)
+    (edge : EdgeValue Symbol Guard) (annotation : Value Symbol Guard)
+    (selected : edges[index]? = some edge) (singleton : edge.children = [annotation]) :
+    ∃ prefixResults annotationResult rebuilt suffixResults
+        rowBefore typeAfter edgeAfter rowMemos typeMemos,
+      results = prefixResults ++ rebuilt :: suffixResults ∧
+      (∃ earlier : RequireRows [(0, wanted)]
+          (edges.take index) before prefixResults rowBefore,
+        RowsReads earlier memos rowMemos) ∧
+      (∃ actual : RequireNode (wanted)
+          annotation rowBefore annotationResult typeAfter,
+        NodeReads actual rowMemos typeMemos) ∧
+      run (makeEdge edge.entry.key.symbol edge.entry.key.constraint [annotationResult])
+        typeAfter = (rebuilt, edgeAfter) ∧
+      (∃ later : RequireRows [(0, wanted)]
+          (edges.drop (index + 1)) edgeAfter suffixResults after,
+        RowsReads later typeMemos saved)

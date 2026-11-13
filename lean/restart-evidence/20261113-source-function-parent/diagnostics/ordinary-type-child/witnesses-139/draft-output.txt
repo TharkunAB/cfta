@@ -1,0 +1,40 @@
+/tmp/mcfta-type-child-check-20261113-1256/Check.lean:81:52: error: don't know how to synthesize implicit argument `rejected`
+  @RowsReads.rejected inst✝ [(0, wanted)] (List.take index x✝¹) before prefixResults rowBefore earlier memos rowMemos x✝
+    ?m.1592 earlierReads
+context:
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+wanted : SourceEqualityNeeded.Needed
+results : List (EdgeValue Symbol Guard)
+before after : State Symbol Guard
+memos saved : EndpointMemoGateTrace.Memos
+edge : EdgeValue Symbol Guard
+annotation : Value Symbol Guard
+singleton : edge.children = [annotation]
+index : Nat
+x✝¹ : List (EdgeValue Symbol Guard)
+x✝ : EdgeValue Symbol Guard
+rejected✝ : SourceEqualityNeeded.fits (SourceEqualityNeeded.Needed.node [(0, wanted)]) x✝.children.length = false
+selected : x✝¹[index]? = some edge
+restTrace✝ : RequireRows [(0, wanted)] x✝¹ before results after
+restReads : RowsReads restTrace✝ memos saved
+prefixResults : List (EdgeValue Symbol Guard)
+annotationResult : Value Symbol Guard
+rebuilt : EdgeValue Symbol Guard
+suffixResults : List (EdgeValue Symbol Guard)
+rowBefore typeAfter edgeAfter : State Symbol Guard
+rowMemos typeMemos : EndpointMemoGateTrace.Memos
+resultSame : results = prefixResults ++ rebuilt :: suffixResults
+earlier : RequireRows [(0, wanted)] (List.take index x✝¹) before prefixResults rowBefore
+earlierReads : RowsReads earlier memos rowMemos
+actual : ∃ actual, NodeReads actual rowMemos typeMemos
+made :
+  run (makeEdge edge.entry.key.symbol edge.entry.key.constraint [annotationResult]) typeAfter = (rebuilt, edgeAfter)
+later : ∃ later, RowsReads later typeMemos saved
+⊢ SourceEqualityNeeded.fits (SourceEqualityNeeded.Needed.node [(0, wanted)]) x✝.children.length = false
+/tmp/mcfta-type-child-check-20261113-1256/Check.lean:92:0: error: unused `termination_by`, function is not recursive
+'_private._stdin.0.MicroCFTA.SourceSynthesisActualOrdinaryTypeSubtrace.rows_singleton_type_child' depends on axioms: [propext,
+ sorryAx,
+ Quot.sound]
+'_private._stdin.0.MicroCFTA.SourceSynthesisActualOrdinaryTypeSubtrace.actual_ordinary_singleton_type_child' depends on axioms: [propext,
+ sorryAx,
+ Quot.sound]

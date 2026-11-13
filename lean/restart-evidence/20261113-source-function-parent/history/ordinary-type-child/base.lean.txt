@@ -1,0 +1,126 @@
+import MicroCFTA.SourceCurrentRequiredQueryMemos
+
+namespace MicroCFTA.SourceSynthesisActualOrdinaryTypeSubtrace
+open InternedConstructorTemplates
+open SourceEqualityRequiredGraph SourceCurrentRequiredQueryMemos
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+
+private theorem rows_singleton_type_child
+    [DecidableEq (EdgeKey Symbol Guard)]
+    (index : Nat) {edges results : List (EdgeValue Symbol Guard)}
+    {before after : State Symbol Guard} {memos saved : EndpointMemoGateTrace.Memos}
+    (trace : RequireRows [(0, SourceEqualityNeeded.build [[0]])]
+      edges before results after)
+    (reads : RowsReads trace memos saved)
+    (edge : EdgeValue Symbol Guard) (annotation : Value Symbol Guard)
+    (selected : edges[index]? = some edge) (singleton : edge.children = [annotation]) :
+    ∃ prefixResults annotationResult rebuilt suffixResults
+        rowBefore typeAfter edgeAfter rowMemos typeMemos,
+      results = prefixResults ++ rebuilt :: suffixResults ∧
+      (∃ earlier : RequireRows [(0, SourceEqualityNeeded.build [[0]])]
+          (edges.take index) before prefixResults rowBefore,
+        RowsReads earlier memos rowMemos) ∧
+      (∃ actual : RequireNode (SourceEqualityNeeded.build [[0]])
+          annotation rowBefore annotationResult typeAfter,
+        NodeReads actual rowMemos typeMemos) ∧
+      run (makeEdge edge.entry.key.symbol edge.entry.key.constraint [annotationResult])
+        typeAfter = (rebuilt, edgeAfter) ∧
+      (∃ later : RequireRows [(0, SourceEqualityNeeded.build [[0]])]
+          (edges.drop (index + 1)) edgeAfter suffixResults after,
+        RowsReads later typeMemos saved) := by
+  cases index with
+  | zero =>
+      cases edge with
+      | mk own values =>
+          change values = [annotation] at singleton
+          subst values
+          cases reads with
+          | nil => simp at selected
+          | rejected _rest =>
+              simp only [List.getElem?_cons_zero, Option.some.injEq] at selected
+              cases selected
+              simp_all [SourceEqualityNeeded.fits, SourceEqualityNeeded.maxIndex]
+          | kept childReads restReads =>
+              simp only [List.getElem?_cons_zero, Option.some.injEq] at selected
+              cases selected
+              cases childReads with
+              | unselected _tail => simp_all [SourceEqualityNeededMap.lookup]
+              | selected first tail =>
+                  cases tail
+                  simp_all [SourceEqualityNeededMap.lookup]
+                  refine ⟨[], _, _, _, _, _, _, _, _, rfl, ?_, ?_, ?_, ?_⟩
+                  · exact ⟨.nil, .nil⟩
+                  · exact ⟨_, first⟩
+                  · assumption
+                  · exact ⟨_, restReads⟩
+  | succ index =>
+      cases reads with
+      | nil => simp at selected
+      | rejected restReads =>
+          simp only [List.getElem?_cons_succ] at selected
+          obtain ⟨prefixResults, annotationResult, rebuilt, suffixResults,
+              rowBefore, typeAfter, edgeAfter, rowMemos, typeMemos,
+              resultSame, ⟨earlier, earlierReads⟩, actual, made, later⟩ :=
+            rows_singleton_type_child index _ restReads edge annotation selected singleton
+          refine ⟨prefixResults, annotationResult, rebuilt, suffixResults,
+            rowBefore, typeAfter, edgeAfter, rowMemos, typeMemos,
+            resultSame, ?_, actual, made, later⟩
+          exact ⟨.rejected (by assumption) earlier, .rejected earlierReads⟩
+      | kept childReads restReads =>
+          simp only [List.getElem?_cons_succ] at selected
+          obtain ⟨prefixResults, annotationResult, rebuilt, suffixResults,
+              rowBefore, typeAfter, edgeAfter, rowMemos, typeMemos,
+              resultSame, ⟨earlier, earlierReads⟩, actual, made, later⟩ :=
+            rows_singleton_type_child index _ restReads edge annotation selected singleton
+          refine ⟨_ :: prefixResults, annotationResult, rebuilt, suffixResults,
+            rowBefore, typeAfter, edgeAfter, rowMemos, typeMemos, ?_, ?_, actual, made, later⟩
+          · simpa only [List.cons_append] using congrArg (List.cons _) resultSame
+          · exact ⟨.kept (by assumption) _ (by assumption) earlier, .kept childReads earlierReads⟩
+termination_by index
+
+private theorem actual_ordinary_singleton_type_child
+    [DecidableEq (EdgeKey Symbol Guard)]
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (edges : List (EdgeValue Symbol Guard)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference)
+    (before after : State Symbol Guard) (result : Value Symbol Guard)
+    (memos saved : EndpointMemoGateTrace.Memos)
+    (trace : SourceEqualityRequiredGraph.RequireNode
+      (SourceEqualityNeeded.build [[0, 0]]) (.node entry edges depth free)
+      before result after)
+    (reads : SourceCurrentRequiredQueryMemos.NodeReads trace memos saved) :
+    ∀ index edge annotation, edges[index]? = some edge → edge.children = [annotation] →
+    ∃ prefixResults annotationResult rebuilt suffixResults
+        rowBefore typeAfter edgeAfter rowsAfter rowMemos typeMemos,
+      (∃ earlier : SourceEqualityRequiredGraph.RequireRows
+          [(0, SourceEqualityNeeded.build [[0]])]
+          (edges.take index) before prefixResults rowBefore,
+        SourceCurrentRequiredQueryMemos.RowsReads earlier memos rowMemos) ∧
+      (∃ actual : SourceEqualityRequiredGraph.RequireNode
+          (SourceEqualityNeeded.build [[0]]) annotation rowBefore annotationResult typeAfter,
+        SourceCurrentRequiredQueryMemos.NodeReads actual rowMemos typeMemos) ∧
+      run (makeEdge edge.entry.key.symbol edge.entry.key.constraint [annotationResult])
+        typeAfter = (rebuilt, edgeAfter) ∧
+      (∃ later : SourceEqualityRequiredGraph.RequireRows
+          [(0, SourceEqualityNeeded.build [[0]])]
+          (edges.drop (index + 1)) edgeAfter suffixResults rowsAfter,
+        SourceCurrentRequiredQueryMemos.RowsReads later typeMemos saved) ∧
+      run (makeNode (prefixResults ++ rebuilt :: suffixResults)) rowsAfter = (result, after) := by
+  change RequireNode (.node [(0, SourceEqualityNeeded.build [[0]])])
+    (.node entry edges depth free) before result after at trace
+  cases reads with
+  | ordinary rowReads =>
+      intro index edge annotation selected singleton
+      obtain ⟨prefixResults, annotationResult, rebuilt, suffixResults,
+          rowBefore, typeAfter, edgeAfter, rowMemos, typeMemos,
+          resultSame, earlier, actual, made, later⟩ :=
+        rows_singleton_type_child index _ rowReads edge annotation selected singleton
+      refine ⟨prefixResults, annotationResult, rebuilt, suffixResults,
+        rowBefore, typeAfter, edgeAfter, _, rowMemos, typeMemos,
+        earlier, actual, made, later, ?_⟩
+      rw [← resultSame]
+      assumption
+  | recursive _head _body => simp_all [SourceEqualityRequiredGraph.Recursive]
+
+end MicroCFTA.SourceSynthesisActualOrdinaryTypeSubtrace

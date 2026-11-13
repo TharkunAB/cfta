@@ -1,0 +1,42 @@
+⚠ [753/1023] Replayed MicroCFTA.InternedFreshOrdinaryClosedCompletion
+warning: MicroCFTA/InternedFreshOrdinaryClosedCompletion.lean:24:5: Variable name `inputs` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _inputs
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Build completed successfully (1023 jobs).
+/tmp/mcfta-ordinary-type-child-wanted-20261113-1225/SourceSynthesisActualOrdinaryTypeSubtrace.lean:41:27: error: unsolved goals
+case zero.mk.rejected.refl
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+wanted : SourceEqualityNeeded.Needed
+results : List (EdgeValue Symbol Guard)
+before after : State Symbol Guard
+memos saved : EndpointMemoGateTrace.Memos
+annotation : Value Symbol Guard
+own : Cache.Interned (EdgeKey Symbol Guard)
+x✝ : List (EdgeValue Symbol Guard)
+restTrace✝ : RequireRows [(0, wanted)] x✝ before results after
+_rest : RowsReads restTrace✝ memos saved
+rejected✝ : (EdgeValue.mk own [annotation]).children = []
+⊢ ∃ prefixResults annotationResult rebuilt suffixResults,
+    results = prefixResults ++ rebuilt :: suffixResults ∧
+      ∃ x x_1 x_2 x_3,
+        (∃ earlier, RowsReads ⋯ memos x_3) ∧
+          ∃ x_4,
+            (∃ actual, NodeReads actual x_3 x_4) ∧
+              run
+                    (makeEdge (EdgeValue.mk own [annotation]).entry.key.symbol
+                      (EdgeValue.mk own [annotation]).entry.key.constraint [annotationResult])
+                    x_1 =
+                  (rebuilt, x_2) ∧
+                ∃ h, RowsReads ⋯ x_4 saved
+/tmp/mcfta-ordinary-type-child-wanted-20261113-1225/SourceSynthesisActualOrdinaryTypeSubtrace.lean:53:54: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.1062 = ?m.1062
+but is expected to have type
+  ∃ h, RowsReads ⋯ memos ?m.1058
+in the application
+  And.intro rfl
+/tmp/mcfta-ordinary-type-child-wanted-20261113-1225/SourceSynthesisActualOrdinaryTypeSubtrace.lean:81:0: error: unused `termination_by`, function is not recursive

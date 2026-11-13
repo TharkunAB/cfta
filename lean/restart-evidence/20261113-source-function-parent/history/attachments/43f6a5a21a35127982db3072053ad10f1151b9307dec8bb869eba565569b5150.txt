@@ -1,0 +1,29 @@
+private theorem actual_app_all_three_function_subtrace
+    [DecidableEq (EdgeKey Symbol Guard)]
+    (classes : EqualityNormalize.Constraints)
+    (allThree : classes.Perm
+      [EqualityNormalize.canonicalClass [[1], [2, 0, 0]],
+       EqualityNormalize.canonicalClass [[3, 0], [2, 0, 1]],
+       EqualityNormalize.canonicalClass [[0], [2, 0, 2]]])
+    (resultType marker function argument : Value Symbol Guard)
+    (results : List (Value Symbol Guard)) (before after : State Symbol Guard)
+    (memos saved : EndpointMemoGateTrace.Memos)
+    (reads : SourceCurrentRequiredQueryMemos.RequireAllReads
+      (SourceEqualitySelectedRequired.paths classes)
+      [resultType, marker, function, argument] results before after memos saved) :
+    ∃ resultTypeResult markerResult functionResult argumentResult
+        afterResult afterMarker afterFunction resultMemos markerMemos functionMemos,
+      results = [resultTypeResult, markerResult, functionResult, argumentResult] ∧
+      (∃ actual : SourceEqualityRequiredGraph.RequireNode (.node [])
+          resultType before resultTypeResult afterResult,
+        SourceCurrentRequiredQueryMemos.NodeReads actual memos resultMemos) ∧
+      (∃ actual : SourceEqualityRequiredGraph.RequireNode (.node [])
+          marker afterResult markerResult afterMarker,
+        SourceCurrentRequiredQueryMemos.NodeReads actual resultMemos markerMemos) ∧
+      (∃ actual : SourceEqualityRequiredGraph.RequireNode
+          (.node [(0, SourceEqualityNeeded.build [[0], [1], [2]])])
+          function afterMarker functionResult afterFunction,
+        SourceCurrentRequiredQueryMemos.NodeReads actual markerMemos functionMemos) ∧
+      (∃ actual : SourceEqualityRequiredGraph.RequireNode
+          (SourceEqualityNeeded.build [[0]]) argument afterFunction argumentResult after,
+        SourceCurrentRequiredQueryMemos.NodeReads actual functionMemos saved)

@@ -1,0 +1,159 @@
+import MicroCFTA.SourceSynthesisCurrentIdentityNativeWitness
+import MicroCFTA.EqualityLeafProjectionPhysical
+
+namespace MicroCFTA.SourceSynthesisCurrentFunctionParent
+open Language Cache InternedConstructorTemplates InternedProbeProvenance
+open InternedNestedConstruction (Syntax EdgeSyntax Outcome)
+open InternedFreshOrdinaryConstruction (build)
+open SourceSynthesisTypeSyntax
+open SourceSynthesisGeneralizeSyntax (Guard top generalize)
+open SourceSynthesisFirstOrderConstruction (Expression Row)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "literal" => SourceSynthesisLabelProgramBuildRoles.literal
+local notation "ordinarySymbols" => SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+variable [DecidableEq FullSyntax.Formula] [DecidableEq (EdgeKey Symbol Guard)]
+
+/-- The actual application child retains its source identity row and Type operand. -/
+private theorem actual_app_identity_function_parent
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (heap : State Symbol Guard)
+    (built : build (ordinarySymbols whole) [] empty = .done rootValue heap)
+    (original : SourceSynthesisOriginalTypeAnnotations.OriginalType lib
+      (.tFun (.tVar "a") (.tVar "a")))
+    (functionRows : List Row) (sourceIndex : Nat) (name : String)
+    (identity : functionRows[sourceIndex]? = some (.mk name top
+      [generalize (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query))
+        (SourceSynthesisPr210TypeReflection.encodeTy (.tFun (.tVar "a") (.tVar "a")))]))
+    (argument : Expression)
+    {parentExpressions : List (EdgeSyntax Symbol Guard)} {before after : State Symbol Guard}
+    {parentOutputs : List (EdgeValue Symbol Guard)} {parentIndex : Nat}
+    (parent : SourceCurrentStoredMuRetainedAlignment.RowCall parentExpressions []
+      before parentOutputs after heap parentIndex (literal "app")
+      (SourceSynthesisGeneralizeSyntax.eqGuard
+        [[[1], [2, 0, 0]], [[3, 0], [2, 0, 1]], [[0], [2, 0, 2]]])
+      [ordinarySymbols (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query)),
+        ordinarySymbols (SourceSynthesisTypeSyntax.arrowMarker top),
+        ordinarySymbols (.node functionRows), ordinarySymbols argument]) :
+    ∃ functionValue functionStart functionAfter rows nodeHeap,
+      parent.output.children[2]? = some functionValue ∧
+      InternedFreshOrdinaryContext.Context functionStart [] ∧
+      build (ordinarySymbols (.node functionRows)) [] functionStart =
+        .done functionValue functionAfter ∧
+      Grows functionStart heap ∧ Grows functionAfter heap ∧
+      InternedFreshOrdinaryConstruction.buildEdges
+        (SourceSynthesisUniverseCallerBoundary.ordinaryEdges functionRows) [] functionStart =
+        .done rows nodeHeap ∧
+      run (makeNode rows) nodeHeap = (functionValue, functionAfter) ∧
+      ∃ call : SourceCurrentStoredMuRetainedAlignment.RowCall
+          (SourceSynthesisUniverseCallerBoundary.ordinaryEdges functionRows) []
+          functionStart rows nodeHeap heap sourceIndex (literal name) top
+          [ordinarySymbols (generalize
+            (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query))
+            (SourceSynthesisPr210TypeReflection.encodeTy (.tFun (.tVar "a") (.tVar "a"))))],
+        ∃ canonicalIndex typeValue,
+          (InternedEdgeResidency.nodeEdges functionValue)[canonicalIndex]? = some call.output ∧
+          call.output.children = [typeValue] ∧ Available heap typeValue ∧ typeValue.free = [] ∧
+          SourceEqualityAnnotationLanguage.Annotated
+            (SourceSynthesisNativeTypeTrace.Origin
+              (SourceSynthesisCurrentSourceGuards.encodedLibrary lib)) typeValue ∧
+          ∀ ambient : InternedGuardedLanguage.Env Symbol,
+            InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)
+              ambient typeValue
+              (.node (literal "->")
+                [.node (literal "(->)") [], .node (literal "var1") [], .node (literal "var1") []]) := by
+  let field : Expression := generalize
+    (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query))
+    (SourceSynthesisPr210TypeReflection.encodeTy (.tFun (.tVar "a") (.tVar "a")))
+  let nativeRows := SourceSynthesisUniverseCallerBoundary.ordinaryEdges functionRows
+  obtain ⟨functionValue, functionStart, functionAfter, selectedFunction, functionContext,
+    functionBuilt, firstGrowth, lastGrowth⟩ :=
+    SourceSynthesisOriginalProgramTypeFields.many_call
+      [ordinarySymbols (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query)),
+        ordinarySymbols (SourceSynthesisTypeSyntax.arrowMarker top),
+        ordinarySymbols (.node functionRows), ordinarySymbols argument]
+      parent.current parent.middle heap parent.context parent.values parent.called
+      parent.middle_growth 2 (ordinarySymbols (.node functionRows)) rfl
+  have parentSlot : parent.output.children[2]? = some functionValue := by
+    rw [parent.children_eq]
+    exact selectedFunction
+  cases rowsDone : InternedFreshOrdinaryConstruction.buildEdges nativeRows [] functionStart with
+  | pending key state =>
+    simp only [SourceSynthesisUniverseCallerBoundary.ordinarySymbols, build,
+      rowsDone, Outcome.bind] at functionBuilt
+    cases functionBuilt
+  | done rows nodeHeap =>
+    have checked := InternedFreshOrdinaryFacts.buildEdges_verified nativeRows [] functionStart
+      functionContext.normal.facts functionContext.inputs
+    have facts : InternedNestedFacts.Facts nodeHeap := by
+      simpa only [rowsDone, Outcome.state] using checked.facts
+    have resident := checked.result rows nodeHeap rowsDone
+    have made : run (makeNode rows) nodeHeap = (functionValue, functionAfter) := Prod.ext
+      (Outcome.done.inj (by simpa only
+        [SourceSynthesisUniverseCallerBoundary.ordinarySymbols, build, rowsDone,
+          Outcome.bind, InternedNestedConstruction.work] using functionBuilt)).1
+      (Outcome.done.inj (by simpa only
+        [SourceSynthesisUniverseCallerBoundary.ordinarySymbols, build, rowsDone,
+          Outcome.bind, InternedNestedConstruction.work] using functionBuilt)).2
+    have nodeChecked := InternedNestedFacts.node_verified rows nodeHeap facts resident
+    have nodeGrowth : Grows nodeHeap heap := grows_trans
+      (by simpa only [InternedNestedConstruction.work, made, Outcome.state] using nodeChecked.growth)
+      lastGrowth
+    have sourceLookup : nativeRows[sourceIndex]? =
+        some (.mk (literal name) top [ordinarySymbols field]) := by
+      change (SourceSynthesisUniverseCallerBoundary.ordinaryEdges functionRows)[sourceIndex]? = _
+      rw [← SourceSynthesisLabelProgramBuildRoles.mapEdges_ordinaryEdges,
+        SourceSynthesisProgramBuildRolesGeneric.mapEdges_eq_map, List.getElem?_map, identity]
+      simp only [Option.map_some, SourceSynthesisProgramBuildRolesGeneric.mapEdge,
+        SourceSynthesisProgramBuildRolesGeneric.mapChildren,
+        SourceSynthesisLabelProgramBuildRoles.mapSyntax_ordinarySymbols]
+    obtain ⟨call⟩ := SourceCurrentStoredMuRetainedAlignment.row_call nativeRows []
+      functionStart nodeHeap heap functionContext rows rowsDone nodeGrowth sourceIndex
+      (literal name) top [ordinarySymbols field] sourceLookup
+    obtain ⟨typeValue, typeSlot, available, closed, annotated, member⟩ :=
+      SourceSynthesisCurrentIdentityNativeWitness.identity_component_native_member
+        formulas solver lib query signed whole accepted rootValue heap built original call
+    have children : call.output.children = [typeValue] := by
+      have called := call.called
+      cases childDone : build (ordinarySymbols field) [] call.current with
+      | pending key state =>
+        simp only [InternedFreshOrdinaryConstruction.buildMany, childDone, Outcome.bind] at called
+        cases called
+      | done child next =>
+        have actual : [child] = call.values ∧ next = call.middle := by
+          simpa only [InternedFreshOrdinaryConstruction.buildMany, childDone,
+            Outcome.bind, Outcome.done.injEq] using called
+        have one : call.output.children = [child] := call.children_eq.trans actual.1.symm
+        have same : child = typeValue := by
+          have found := typeSlot
+          rw [one] at found
+          exact Option.some.inj found
+        simpa only [same] using one
+    have notEmpty : typeValue ≠ .empty := by
+      intro same
+      have acceptedTerm := member (fun _ _ => False)
+      simpa only [same, InternedGuardedLanguage.meaning] using acceptedTerm
+    have referenceNotEmpty : typeValue.referenceOf ≠ .empty := by
+      intro same
+      exact notEmpty ((EqualityLeafProjectionPhysical.reference_empty typeValue).mp same)
+    have live : EqualityLeafProjectionPhysical.dead call.output = false := by
+      simpa only [EqualityLeafProjectionPhysical.dead, children, List.any_cons,
+        List.any_nil, Bool.or_false] using (beq_eq_false_iff_ne.mpr referenceNotEmpty)
+    have rawMember : call.output ∈ rows := List.mem_of_getElem? call.selected
+    have kept : call.output ∈ canonicalEdges (surviving rows) :=
+      (EqualityLeafProjectionPhysical.normalized_member nodeHeap facts.coherent rows
+        resident call.output).mpr ⟨rawMember, live⟩
+    have actualMember : call.output ∈ InternedEdgeResidency.nodeEdges functionValue := by
+      have edges := EqualityLeafProjectionPhysical.makeNode_edges rows nodeHeap facts.coherent
+        facts.linked resident
+      rw [made] at edges
+      rw [edges]
+      exact kept
+    obtain ⟨canonicalIndex, canonicalSlot⟩ := List.mem_iff_getElem?.mp actualMember
+    exact ⟨functionValue, functionStart, functionAfter, rows, nodeHeap, parentSlot,
+      functionContext, functionBuilt, firstGrowth, lastGrowth, rowsDone, made, call,
+      canonicalIndex, typeValue, canonicalSlot, children, available, closed, annotated, member⟩
+
+end MicroCFTA.SourceSynthesisCurrentFunctionParent

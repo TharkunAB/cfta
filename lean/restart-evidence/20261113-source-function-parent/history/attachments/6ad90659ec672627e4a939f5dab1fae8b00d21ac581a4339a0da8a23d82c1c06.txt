@@ -1,0 +1,68 @@
+Status: HEADER AND PLAN ONLY. No body, compilation, or runtime work.
+
+The existing call and read receipts do not yet imply identity ancestry.
+The app helper extracts a read of its CURRENT function operand. The public
+identity witness identifies one original constructed component Type child.
+Those operands are not identified in either theorem's inputs or conclusions.
+
+Existing exact receipt boundaries:
+- restart-evidence/20261113-app-marker-subtrace/source.lean.txt:10-24 has
+  an arbitrary function parameter and the exact function NodeReads result.
+- SourceSynthesisCurrentIdentityNativeWitness.lean:25-50 retains the original
+  RowCall and its annotation value, closedness, origin, and finite PCS witness.
+- SourceCurrentStoredMuRetainedAlignment.lean:82-120 records the original
+  source row index, ordered build prefix, children, makeEdge, suffix, and
+  outputs[index]. It has no CURRENT required-read function parameter.
+- InternedConstructorTemplates.lean:234-252 filters empty-child rows and
+  sorts/deduplicates physical edge IDs before makeNode stores its payload.
+  Thus raw RowCall.index is not the required-read row position.
+- InternedEdgeResidency.lean:260-267 already preserves complete resident
+  row payloads through canonicalEdges. Its makeNode_retains:271-285 retains
+  a descendant value, which alone does not identify the Program row/path.
+- SourceSynthesisProgramEnumerationRoles.lean:25-35 leaves Type fragments
+  unrestricted. ProgramSlots cannot recover a source component identity.
+
+Smallest supported operational cut:
+ordinary-type-child-header.lean.txt proposes one private current-row observer.
+It takes the SAME recorded ordinary function RequireNode/NodeReads. Its
+conclusion covers every observed CURRENT singleton row. It accepts no future
+row member or new read. The indexed row/shape tests are on its input edges;
+they do not assert that the original identity call is present there.
+The header exposes the actual earlier-row heap/Memos, Type-child read,
+edge reconstruction, remaining-row heap/Memos, and final node reconstruction.
+The other rows can perform work. No endpoint is replaced by the app's start.
+The header is a candidate, not an elaborated or proved declaration.
+
+Staged proof of this operational observer:
+1. Compute build [[0,0]] = node [(0,build [[0]])] internally.
+   RequiredGraph.lean:28-39 and RequiredQueryMemos.lean:37-46 force the
+   ordinary branch for the observed .node input. Invert the memo receipt
+   as the source of its dependent graph, as in the checked app helper.
+2. Induct on SAME RowsReads at index. RequiredGraph.lean:55-66 and
+   RequiredQueryMemos.lean:70-77 preserve the prefix and suffix endpoints.
+   At earlier rows, retain either rejected or kept constructor literally.
+   At the observed singleton row, fits (build [[0,0]]) 1 is true, so an
+   actual rejected branch contradicts its recorded false equation.
+3. Invert SAME kept ChildrenReads. Its only child0 is selected with
+   build [[0]], and the remaining nil shares typeAfter/typeMemos. Retain
+   exact makeEdge and suffix receipts. Reassemble the original makeNode
+   result from prefixResults ++ rebuilt :: suffixResults.
+4. Do not connect this observer to the identity witness without deriving
+   the history in missing-identity-occurrence.txt from an actual source
+   event. For a fresh direct .node construction, retain its literal
+   buildEdges and subsequent makeNode result on the SAME parent value.
+   Derive identity-row liveness from the existing finite witness, then
+   use resident canonical-edge retention, not a new membership premise.
+   For union/Mu exposure or edited operands, the corresponding actual
+   head/edit ancestry is a separate missing attachment. Do not assume
+   that direct fresh-node case covers them or every source app pass.
+
+Once actual identity ancestry is attached, its singleton Type child is the
+same original value only for an unchanged row. Prefix Keeps then transports
+original availability to rowBefore. Derive read support from that value's
+free=[] inside the later witness proof. If edits changed it, original
+finite-instance survival is another proof obligation, not automatic.
+
+This plan proves no positive minimum, SAT/model existence, source instance
+survival, joint alias/residual consistency, or whole-output coverage.
+No arbitrary CFTA counterexample, production defect, or Haskell fix is claimed.
