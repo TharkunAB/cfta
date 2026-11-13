@@ -119,7 +119,8 @@ structure RowCall (expressions : List (EdgeSyntax Symbol Guard)) (environment : 
   /-- The row return heap grows into the common reader. -/
   next_growth : Grows next reader
 
-private theorem row_call (expressions : List (EdgeSyntax Symbol Guard)) (environment : List (Value Symbol Guard))
+/-- Each source row retains its actual ordered construction call. -/
+theorem row_call (expressions : List (EdgeSyntax Symbol Guard)) (environment : List (Value Symbol Guard))
     (before after reader : State Symbol Guard) (context : Context before environment)
     (outputs : List (EdgeValue Symbol Guard))
     (actual : buildEdges expressions environment before = .done outputs after)
