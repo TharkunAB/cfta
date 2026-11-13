@@ -4975,3 +4975,6 @@ run_cmd do
 
 #check MicroCFTA.SourceRecursiveIntersectionInputView.empty_originalInput
 #print axioms MicroCFTA.SourceRecursiveIntersectionInputView.empty_originalInput
+
+#check MicroCFTA.SourcePruningEnumerationSharedEagerReservation.runEager_finite_complete_resources
+#print axioms MicroCFTA.SourcePruningEnumerationSharedEagerReservation.runEager_finite_complete_resources
