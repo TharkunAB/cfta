@@ -1,3 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationSharedReceiptContinuation
 import MicroCFTA.SourcePruningEnumerationSharedBranching
 
 /-!
@@ -189,5 +190,34 @@ theorem run_eq_scan_shallow
     scan visit before edges caller queries)
   funext edge reached saved after
   exact (visitCapturedWith_shallow hook checkEmpty r n p h k target scs edge reached saved after).symm
+
+omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node] in
+/-- Expose captured finalization through the public receipt continuation. -/
+theorem visitCapturedWith_eq_receipts
+    (visit : Visitor)
+    (hook : Fragment → Caller width → Queries → Cached → HookResult Output Reason width)
+    (k target : Nat) (scs : List Suspended) (edge : Edge)
+    (caller : Caller width) (queries : Queries) (before : Cached) :
+    visitCapturedWith visit hook k target scs edge caller queries before =
+      visitSelected visit (fun receipt =>
+        match receipt with
+        | .complete fragment reached saved after =>
+            match SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap k target fragment after with
+            | some finished => SourcePruningEnumerationSharedReceiptContinuation.run hook caller queries
+                (some (.complete fragment reached saved finished))
+            | none => SourcePruningEnumerationSharedReceiptContinuation.run hook caller queries
+                (some (.finalizeStopped fragment reached saved after))
+        | other => SourcePruningEnumerationSharedReceiptContinuation.run hook caller queries (some other))
+        scs edge caller before queries := by
+  have same (receipt : Receipt width) :
+      finishReceipt hook caller queries receipt =
+        SourcePruningEnumerationSharedReceiptContinuation.run hook caller queries (some receipt) := by
+    cases receipt with
+    | complete fragment reached saved after =>
+        cases called : hook fragment reached saved after <;>
+          simp only [finishReceipt, SourcePruningEnumerationSharedReceiptContinuation.run, called]
+    | unhandled | rejected _ _ _ | stopped _ _ _ | finalizeStopped _ _ _ _ => rfl
+  unfold visitCapturedWith
+  simp only [same]
 
 end MicroCFTA.SourcePruningEnumerationSharedChildVisitors
