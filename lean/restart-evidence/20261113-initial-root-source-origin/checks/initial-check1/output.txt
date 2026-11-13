@@ -1,0 +1,231 @@
+/tmp/mcfta-current-initial-filter-check1-20261113-1607/check.lean:91:17: error: unsolved goals
+case node.succ
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+lib : SourceSynthesisTypeSyntax.Library
+query : SourceSynthesisTypeSyntax.Query
+signed : Int
+whole : Expression
+accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole
+rootValue : Value Symbol Guard
+heap : InternedConstructorTemplates.State Symbol Guard
+built : build (ordinarySymbols whole) [] empty = Outcome.done rootValue heap
+rootRow : EdgeValue Symbol Guard
+rootMember : rootRow ∈ InternedEdgeResidency.nodeEdges rootValue
+chunks : List (List Expression)
+chunksRun :
+  List.mapM
+      (fun selected =>
+        SourceSynthesisFirstOrderConstruction.relevantRows (SourceSynthesisCurrentContext.context lib query) true
+          signed.toNat (List.map Prod.fst selected))
+      (SourceSynthesisSelections.permutations (SourceSynthesisCurrentContext.context lib query).argumentEdges) =
+    Except.ok chunks
+wholeShape :
+  whole =
+    SourceSynthesisFirstOrderConstruction.ofType (Syntax.union chunks.flatten)
+      (SourceSynthesisCurrentContext.typeNode query.queryGoal)
+factory :
+  ∀ (candidate : Expression),
+    candidate ∈ chunks.flatten →
+      ∃ rows,
+        candidate = Syntax.node rows ∧
+          ∀ (types function argument : Expression),
+            EdgeSyntax.mk "app" appGuard [types, SourceSynthesisTypeSyntax.arrowMarker top, function, argument] ∈ rows →
+              types =
+                  SourceSynthesisTypeSyntax.allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query) ∧
+                ((∃ functionRows, function = Syntax.node functionRows) ∨
+                  ∃ pools, function = Syntax.union (List.map (fun functionRows => Syntax.node functionRows) pools))
+rootAt : SourceCurrentStoredLiteralRowLineage.RowAt rootValue rootRow
+initial : SourceCurrentConstrainedCapSourceHistory.Context empty []
+rows : List (EdgeValue Symbol SourceSynthesisGeneralizeSyntax.Guard)
+middle : InternedConstructorTemplates.State Symbol SourceSynthesisGeneralizeSyntax.Guard
+symbol : Symbol
+guard : SourceSynthesisGeneralizeSyntax.Guard
+children : List (Syntax Symbol SourceSynthesisGeneralizeSyntax.Guard)
+outputIndex : Nat
+rowsBuilt :
+  buildEdges
+      [EdgeSyntax.mk (literal "filter") filterGuard
+          [ordinarySymbols (SourceSynthesisCurrentContext.typeNode query.queryGoal),
+            ordinarySymbols (Syntax.union chunks.flatten)]]
+      [] empty =
+    Outcome.done rows middle
+made : run (makeNode rows) middle = (rootValue, heap)
+selected : (InternedEdgeResidency.nodeEdges rootValue)[outputIndex]? = some rootRow
+index : Nat
+call :
+  SourceCurrentStoredMuRetainedAlignment.RowCall
+    [EdgeSyntax.mk (literal "filter") filterGuard
+        [ordinarySymbols (SourceSynthesisCurrentContext.typeNode query.queryGoal),
+          ordinarySymbols (Syntax.union chunks.flatten)]]
+    [] empty rows middle heap (index + 1) symbol guard children
+same : call.output = rootRow
+source : none = some (EdgeSyntax.mk symbol guard children)
+⊢ ∃ chunks goalValue candidateValue candidateStart candidateAfter edgeAfter,
+    List.mapM
+          (fun selected =>
+            SourceSynthesisFirstOrderConstruction.relevantRows (SourceSynthesisCurrentContext.context lib query) true
+              signed.toNat (List.map Prod.fst selected))
+          (SourceSynthesisSelections.permutations (SourceSynthesisCurrentContext.context lib query).argumentEdges) =
+        Except.ok chunks ∧
+      whole =
+          SourceSynthesisFirstOrderConstruction.ofType (Syntax.union chunks.flatten)
+            (SourceSynthesisCurrentContext.typeNode query.queryGoal) ∧
+        rootRow.entry.key.symbol = literal "filter" ∧
+          rootRow.entry.key.constraint = filterGuard ∧
+            rootRow.children = [goalValue, candidateValue] ∧
+              build (ordinarySymbols (SourceSynthesisCurrentContext.typeNode query.queryGoal)) [] empty =
+                  Outcome.done goalValue candidateStart ∧
+                SourceCurrentConstrainedCapSourceHistory.Context candidateStart [] ∧
+                  build (ordinarySymbols (Syntax.union chunks.flatten)) [] candidateStart =
+                      Outcome.done candidateValue candidateAfter ∧
+                    run (makeEdge (literal "filter") filterGuard [goalValue, candidateValue]) candidateAfter =
+                        (rootRow, edgeAfter) ∧
+                      run (makeNode [rootRow]) edgeAfter = (rootValue, heap) ∧
+                        Grows candidateAfter heap ∧
+                          ∀ (candidate : Expression),
+                            candidate ∈ chunks.flatten →
+                              ∃ rows,
+                                candidate = Syntax.node rows ∧
+                                  ∀ (types function argument : Expression),
+                                    EdgeSyntax.mk "app" appGuard
+                                          [types, SourceSynthesisTypeSyntax.arrowMarker top, function, argument] ∈
+                                        rows →
+                                      types =
+                                          SourceSynthesisTypeSyntax.allTypes top
+                                            (SourceSynthesisCurrentContext.constructorCatalog lib query) ∧
+                                        ((∃ functionRows, function = Syntax.node functionRows) ∨
+                                          ∃ pools,
+                                            function = Syntax.union (List.map (fun rows => Syntax.node rows) pools))
+/tmp/mcfta-current-initial-filter-check1-20261113-1607/check.lean:103:8: error: 'change' tactic failed, pattern
+  Outcome.done [] empty = Outcome.done [] call.current
+is not definitionally equal to target
+  buildEdges
+      (List.take 0
+        [EdgeSyntax.mk (literal "filter") filterGuard
+            [ordinarySymbols (SourceSynthesisCurrentContext.typeNode query.queryGoal),
+              ordinarySymbols (Syntax.union chunks.flatten)]])
+      [] empty =
+    Outcome.done (List.take 0 rows) call.current
+/tmp/mcfta-current-initial-filter-check1-20261113-1607/check.lean:121:25: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => run (makeNode [call.output]) _a = (rootValue, heap)
+Error: Application type mismatch: The argument
+  call
+has type
+  SourceCurrentStoredMuRetainedAlignment.RowCall
+    [EdgeSyntax.mk (literal "filter") filterGuard
+        [ordinarySymbols (SourceSynthesisCurrentContext.typeNode query.queryGoal),
+          ordinarySymbols (Syntax.union chunks.flatten)]]
+    [] empty rows middle heap 0 (literal "filter") filterGuard
+    [ordinarySymbols (SourceSynthesisCurrentContext.typeNode query.queryGoal),
+      ordinarySymbols (Syntax.union chunks.flatten)]
+but is expected to have type
+  SourceCurrentStoredMuRetainedAlignment.RowCall
+    [EdgeSyntax.mk (literal "filter") filterGuard
+        [ordinarySymbols (SourceSynthesisCurrentContext.typeNode query.queryGoal),
+          ordinarySymbols (Syntax.union chunks.flatten)]]
+    [] empty rows _a heap 0 (literal "filter") filterGuard
+    [ordinarySymbols (SourceSynthesisCurrentContext.typeNode query.queryGoal),
+      ordinarySymbols (Syntax.union chunks.flatten)]
+in the application
+  call.output
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+lib : SourceSynthesisTypeSyntax.Library
+query : SourceSynthesisTypeSyntax.Query
+signed : Int
+whole : Expression
+accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole
+rootValue : Value Symbol Guard
+heap : InternedConstructorTemplates.State Symbol Guard
+built : build (ordinarySymbols whole) [] empty = Outcome.done rootValue heap
+rootRow : EdgeValue Symbol Guard
+rootMember : rootRow ∈ InternedEdgeResidency.nodeEdges rootValue
+chunks : List (List Expression)
+chunksRun :
+  List.mapM
+      (fun selected =>
+        SourceSynthesisFirstOrderConstruction.relevantRows (SourceSynthesisCurrentContext.context lib query) true
+          signed.toNat (List.map Prod.fst selected))
+      (SourceSynthesisSelections.permutations (SourceSynthesisCurrentContext.context lib query).argumentEdges) =
+    Except.ok chunks
+wholeShape :
+  whole =
+    SourceSynthesisFirstOrderConstruction.ofType (Syntax.union chunks.flatten)
+      (SourceSynthesisCurrentContext.typeNode query.queryGoal)
+factory :
+  ∀ (candidate : Expression),
+    candidate ∈ chunks.flatten →
+      ∃ rows,
+        candidate = Syntax.node rows ∧
+          ∀ (types function argument : Expression),
+            EdgeSyntax.mk "app" appGuard [types, SourceSynthesisTypeSyntax.arrowMarker top, function, argument] ∈ rows →
+              types =
+                  SourceSynthesisTypeSyntax.allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query) ∧
+                ((∃ functionRows, function = Syntax.node functionRows) ∨
+                  ∃ pools, function = Syntax.union (List.map (fun functionRows => Syntax.node functionRows) pools))
+rootAt : SourceCurrentStoredLiteralRowLineage.RowAt rootValue rootRow
+initial : SourceCurrentConstrainedCapSourceHistory.Context empty []
+rows : List (EdgeValue Symbol SourceSynthesisGeneralizeSyntax.Guard)
+middle : InternedConstructorTemplates.State Symbol SourceSynthesisGeneralizeSyntax.Guard
+outputIndex : Nat
+rowsBuilt :
+  buildEdges
+      [EdgeSyntax.mk (literal "filter") filterGuard
+          [ordinarySymbols (SourceSynthesisCurrentContext.typeNode query.queryGoal),
+            ordinarySymbols (Syntax.union chunks.flatten)]]
+      [] empty =
+    Outcome.done rows middle
+made : run (makeNode rows) middle = (rootValue, heap)
+selected : (InternedEdgeResidency.nodeEdges rootValue)[outputIndex]? = some rootRow
+call :
+  SourceCurrentStoredMuRetainedAlignment.RowCall
+    [EdgeSyntax.mk (literal "filter") filterGuard
+        [ordinarySymbols (SourceSynthesisCurrentContext.typeNode query.queryGoal),
+          ordinarySymbols (Syntax.union chunks.flatten)]]
+    [] empty rows middle heap 0 (literal "filter") filterGuard
+    [ordinarySymbols (SourceSynthesisCurrentContext.typeNode query.queryGoal),
+      ordinarySymbols (Syntax.union chunks.flatten)]
+same : call.output = rootRow
+source :
+  some
+      (EdgeSyntax.mk (literal "filter") filterGuard
+        [ordinarySymbols (SourceSynthesisCurrentContext.typeNode query.queryGoal),
+          ordinarySymbols (Syntax.union chunks.flatten)]) =
+    some
+      (EdgeSyntax.mk (literal "filter") filterGuard
+        [ordinarySymbols (SourceSynthesisCurrentContext.typeNode query.queryGoal),
+          ordinarySymbols (Syntax.union chunks.flatten)])
+current : call.current = empty
+called :
+  buildMany
+      [ordinarySymbols (SourceSynthesisCurrentContext.typeNode query.queryGoal),
+        ordinarySymbols (Syntax.union chunks.flatten)]
+      [] empty =
+    Outcome.done call.values call.middle
+observedRows :
+  buildEdges
+      [EdgeSyntax.mk (literal "filter") filterGuard
+          [ordinarySymbols (SourceSynthesisCurrentContext.typeNode query.queryGoal),
+            ordinarySymbols (Syntax.union chunks.flatten)]]
+      [] empty =
+    Outcome.done [call.output] call.next
+endpoints : rows = [call.output] ∧ middle = call.next
+actual : run (makeNode [call.output]) middle = (rootValue, heap)
+⊢ run (makeNode [rootRow]) call.next = (rootValue, heap)
+/tmp/mcfta-current-initial-filter-check1-20261113-1607/check.lean:140:47: error: Application type mismatch: The argument
+  goalDone
+has type
+  build (ordinarySymbols (SourceSynthesisCurrentContext.typeNode query.queryGoal)) [] empty =
+    Outcome.done goalValue candidateStart
+but is expected to have type
+  Outcome.done goalValue candidateStart = Outcome.done goalValue candidateStart
+in the application
+  And.intro goalDone
+'_private._stdin.0.MicroCFTA.SourceSynthesisCurrentFirstFilterSourceLink.current_initial_filter_interval' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

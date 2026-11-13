@@ -1,0 +1,35 @@
+/tmp/mcfta-current-source-app-check1-20261113-1612/check.lean:32:34: error: Dependent elimination failed: Failed to solve equation
+  "filter" = "app"
+/tmp/mcfta-current-source-app-check1-20261113-1612/check.lean:31:6: error: Dependent elimination failed: Failed to solve equation
+  (match EqualityNormalize.mkEqConstraints (EqualityTermination.normalizationBound [[[0], [1, 0]]]) [[[0], [1, 0]]] with
+    | EqualityNormalize.RunResult.timeout => none
+    | EqualityNormalize.RunResult.contradiction => none
+    | EqualityNormalize.RunResult.normalized classes => some classes) =
+    some []
+/tmp/mcfta-current-source-app-check1-20261113-1612/check.lean:37:60: error: Tactic `decide` failed for proposition
+  top ≠ appGuard
+because its `Decidable` instance
+  instDecidableNot
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `decidable_of_decidable_of_iff`, `decidable_of_iff`, `instDecidableAnd`, `instDecidableEqBool`, `instDecidableNot`, `Bool.decEq`, `Option.instDecidableEq`, and `MicroCFTA.SourceSynthesisLabelProgramBuildRoles.instDecidableEqGuard✝`, reduction got stuck at the `Decidable` instance
+  match appGuard.equalities with
+  | none => isFalse ⋯
+  | some b =>
+    match (fun a b => instDecidableEqList a b) [] b with
+    | isTrue h => isTrue ⋯
+    | isFalse n => isFalse ⋯
+/tmp/mcfta-current-source-app-check1-20261113-1612/check.lean:118:12: error: Type mismatch: After simplification, term
+  mappedSource
+ has type
+  some (ordinarySymbols (Syntax.node sourceRows)) = some expression
+but is expected to have type
+  ordinarySymbols (Syntax.node sourceRows) = expression
+/tmp/mcfta-current-source-app-check1-20261113-1612/check.lean:172:45: error(lean.unknownIdentifier): Unknown identifier `sourceGuard`
+/tmp/mcfta-current-source-app-check1-20261113-1612/check.lean:181:50: error(lean.unknownIdentifier): Unknown identifier `sourceGuard`
+/tmp/mcfta-current-source-app-check1-20261113-1612/check.lean:195:43: error: Dependent elimination failed: Failed to solve equation
+  "app" = "filter"
+'_private._stdin.0.MicroCFTA.SourceSynthesisCurrentFirstFilterSourceLink.current_candidate_source_app' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

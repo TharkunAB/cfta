@@ -1,0 +1,48 @@
+private theorem initial_prefix_narrowed_rows
+    {Typing Key : Type} {width : Nat}
+    [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : SourceSynthesisTypeSyntax.Library) (query : SourceSynthesisTypeSyntax.Query)
+    (signed : Int) (whole : SourceSynthesisFirstOrderConstruction.Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Node) (heap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build
+      (SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+      InternedConstructorTemplates.empty = .done rootValue heap)
+    (cache : Cache.State SourceEqualityPartialConstraintKey.Key)
+    (handle : Nat)
+    (decoded : SourcePruningEnumerationNodes.lookupNode heap handle = some rootValue)
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
+    (admits : Key → Node → Bool)
+    (graph : Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+    (readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel : Nat)
+    (queries : SourceEndpointMemo.Memos) :
+    let caller := SourceCurrentAllocatedPartialInitialization.caller width cache heap
+    let startup : Cached :=
+      ⟨EnumerationState.initial handle,
+        fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+        fun _ => none⟩
+    match SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates
+      stop order metadata readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel
+      0 caller startup queries with
+    | .narrowed checked (.done (result, action) after) reached saved
+        _raw _candidate _right ordinary =>
+        ∃ readAfter : Core,
+          ExceptT.run (getValue readFuel 0 startup.core) =
+            [.ok (.unenumerated (some handle) [], readAfter)] ∧
+          ExceptT.run (SourcePruningEnumerationRecursion.checkRepeated
+            heap checkFuel 0 handle [] readAfter) = [.ok (false, checked)] ∧
+          EnumerationCompressionFrame.Frame startup.core checked ∧
+          SourcePruningEnumerationAction.prepare holeKey fits admits metadata
+            nativeFuel representativeFuel 0 handle [] rootValue heap =
+              .done (result, action) after ∧
+          SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel
+            0 rootValue heap = .done result after ∧
+          reached = SourceCurrentAllocatedPartialState.advance caller
+            (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+              ⟨after, caller.checked.operations⟩) caller.fourth caller.merge ∧
+          saved = queries ∧ ordinary = none ∧
+          ∀ row ∈ InternedEdgeResidency.nodeEdges result,
+            row ∈ InternedEdgeResidency.nodeEdges rootValue
+    | _ => True

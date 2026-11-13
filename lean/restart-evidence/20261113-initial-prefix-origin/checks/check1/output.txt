@@ -1,0 +1,2283 @@
+/tmp/mcfta-initial-prefix-origin-check1-20261113-1645/check.lean:101:74: error: Application type mismatch: The argument
+  prepared
+has type
+  (match SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel 0 rootValue heap with
+    | MergedSourceComparison.Result.failed fault after => MergedSourceComparison.Result.failed fault after
+    | MergedSourceComparison.Result.done result nextHeap =>
+      MergedSourceComparison.Result.done
+        (result,
+          match result with
+          | Value.empty => some reject
+          | x =>
+            match SourcePruningEnumerationNodes.encodeNode result with
+            | none => none
+            | some newHandle =>
+              some
+                (if newHandle = handle then pure ()
+                else do
+                  let selected ← representative representativeFuel 0
+                  setValue selected (UVarValue.unenumerated (some newHandle) [])))
+        nextHeap) =
+    MergedSourceComparison.Result.done (result, action) after
+but is expected to have type
+  MergedSourceComparison.Result.done ?m.432 ?m.433 = MergedSourceComparison.Result.done ?m.434 ?m.435
+in the application
+  MergedSourceComparison.Result.done.inj prepared
+/tmp/mcfta-initial-prefix-origin-check1-20261113-1645/check.lean:102:43: error: Type mismatch
+  congrArg Prod.fst same
+has type
+  Prod.fst ?m.432 = Prod.fst ?m.434
+but is expected to have type
+  value = result
+/tmp/mcfta-initial-prefix-origin-check1-20261113-1645/check.lean:135:23: error: Tactic `assumption` failed
+
+case cons.nil.ok.nil
+Typing Key : Type
+width : Nat
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+lib : SourceSynthesisTypeSyntax.Library
+query : SourceSynthesisTypeSyntax.Query
+signed : Int
+whole : SourceSynthesisFirstOrderConstruction.Expression
+accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole
+rootValue : Node
+heap : InternedConstructorTemplates.State Symbol Guard
+built :
+  InternedFreshOrdinaryConstruction.build (SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) [] empty =
+    InternedNestedConstruction.Outcome.done rootValue heap
+cache : Cache.State SourceEqualityPartialConstraintKey.Key
+handle : Nat
+decoded : SourcePruningEnumerationNodes.lookupNode heap handle = some rootValue
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Guard
+templates : List (Template.Pattern Symbol)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+metadata : Metadata Typing
+readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel : Nat
+queries : SourceEndpointMemo.Memos
+initialRead :
+  ∀ (pending : UVarValue Symbol) (readAfter : Core),
+    (getValue readFuel 0 (initial handle)).run = [Except.ok (pending, readAfter)] →
+      pending = UVarValue.unenumerated (some handle) [] ∧ EnumerationCompressionFrame.Frame (initial handle) readAfter
+narrowObservation :
+  ∀ (result : Node) (action : Option (EnumerateM Symbol Guard Unit))
+    (after : InternedConstructorTemplates.State Symbol Guard),
+    SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle []
+          rootValue heap =
+        MergedSourceComparison.Result.done (result, action) after →
+      SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel 0 rootValue heap =
+        MergedSourceComparison.Result.done result after
+readAfter : Core
+readFrame : EnumerationCompressionFrame.Frame (initial handle) readAfter
+readEq : (getValue readFuel 0 (initial handle)).run = [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)]
+checkEq : (SourcePruningEnumerationRecursion.checkRepeated heap checkFuel 0 handle [] readAfter).run = []
+⊢ match
+    match
+      (SourcePruningEnumerationRecursion.checkRepeated
+          (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap checkFuel 0
+          handle [] readAfter).run with
+    | [Except.ok (true, checked)] =>
+      SourcePruningEnumerationSelectedStep.Result.parked checked
+        (SourcePruningEnumerationParkedRestart.adapt
+          (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap indexFuel 0
+          handle []
+          { core := initial handle,
+            expandable := fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+            waiting := fun x => none }
+          checked)
+        (Option.map (fun parked => (SourcePruningEnumerationRestart.run stop order metadata parked checked).run)
+          (SourcePruningEnumerationParkedRestart.adapt
+            (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap indexFuel
+            0 handle []
+            { core := initial handle,
+              expandable := fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+              waiting := fun x => none }
+            checked))
+    | [Except.ok (false, checked)] =>
+      match
+        SourcePruningEnumerationNodes.lookupNode
+          (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap handle with
+      | none =>
+        SourcePruningEnumerationSelectedStep.Result.stopped
+          [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)]
+          (some
+            (SourcePruningEnumerationRecursion.checkRepeated
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap
+                checkFuel 0 handle [] readAfter).run)
+      | some oldValue =>
+        match
+          SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle []
+            oldValue
+            (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap with
+        | MergedSourceComparison.Result.failed _fault _heap =>
+          SourcePruningEnumerationSelectedStep.Result.narrowed checked
+            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle
+              [] oldValue
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+            (SourceCurrentAllocatedPartialState.advance
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+              (SourceCurrentAllocatedQueryMemo.advancePhysical
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                {
+                  heap :=
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                        handle [] oldValue
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                  heap).checked.native.machine.heap).state,
+                  equality :=
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+            queries none none none none
+        | MergedSourceComparison.Result.done (_value, none) _heap =>
+          SourcePruningEnumerationSelectedStep.Result.narrowed checked
+            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle
+              [] oldValue
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+            (SourceCurrentAllocatedPartialState.advance
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+              (SourceCurrentAllocatedQueryMemo.advancePhysical
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                {
+                  heap :=
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                        handle [] oldValue
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                  heap).checked.native.machine.heap).state,
+                  equality :=
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+            queries none none none none
+        | MergedSourceComparison.Result.done (value, some action) heap_1 =>
+          match (action checked).run with
+          | [Except.ok (PUnit.unit, observed)] =>
+            match SourcePruningEnumerationNodes.encodeNode value with
+            | none =>
+              SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                  handle [] oldValue
+                  (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+                (SourceCurrentAllocatedPartialState.advance
+                  (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                  (SourceCurrentAllocatedQueryMemo.advancePhysical
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                    {
+                      heap :=
+                        (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                            representativeFuel 0 handle [] oldValue
+                            (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                      heap).checked.native.machine.heap).state,
+                      equality :=
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                  (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                  (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+                queries (some (action checked).run) none none none
+            | some newHandle =>
+              match
+                SourcePruningEnumerationNarrowAdapter.adapt heap_1 indexFuel 0 handle newHandle []
+                  { core := initial handle,
+                    expandable := fun slot =>
+                      if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+                    waiting := fun x => none }
+                  observed with
+              | none =>
+                SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                  (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                    handle [] oldValue
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+                  (SourceCurrentAllocatedPartialState.advance
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                    (SourceCurrentAllocatedQueryMemo.advancePhysical
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                      {
+                        heap :=
+                          (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                              representativeFuel 0 handle [] oldValue
+                              (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                        heap).checked.native.machine.heap).state,
+                        equality :=
+                          (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+                  queries (some (action checked).run) none none none
+              | some attached =>
+                match
+                  (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata 0 (Sum.inr newHandle)
+                      attached.core).run with
+                | [Except.ok ((false, _updated), callbackCore)] =>
+                  SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                      handle [] oldValue
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+                    (SourceCurrentAllocatedPartialState.advance
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                      (SourceCurrentAllocatedQueryMemo.advancePhysical
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                        {
+                          heap :=
+                            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                representativeFuel 0 handle [] oldValue
+                                (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                          heap).checked.native.machine.heap).state,
+                          equality :=
+                            (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+                    queries (some (action checked).run) (some (EnumerationExpandableIndex.frame callbackCore attached))
+                    (some
+                      (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata 0 (Sum.inr newHandle)
+                          attached.core).run)
+                    none
+                | x =>
+                  SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                      handle [] oldValue
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+                    (SourceCurrentAllocatedPartialState.advance
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                      (SourceCurrentAllocatedQueryMemo.advancePhysical
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                        {
+                          heap :=
+                            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                representativeFuel 0 handle [] oldValue
+                                (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                          heap).checked.native.machine.heap).state,
+                          equality :=
+                            (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+                    queries (some (action checked).run) (some attached)
+                    (some
+                      (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata 0 (Sum.inr newHandle)
+                          attached.core).run)
+                    none
+          | x =>
+            SourcePruningEnumerationSelectedStep.Result.narrowed checked
+              (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                handle [] oldValue
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+              (SourceCurrentAllocatedPartialState.advance
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                (SourceCurrentAllocatedQueryMemo.advancePhysical
+                  (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                  {
+                    heap :=
+                      (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel
+                          0 handle [] oldValue
+                          (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                    heap).checked.native.machine.heap).state,
+                    equality :=
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+              queries (some (action checked).run) none none none
+    | x =>
+      SourcePruningEnumerationSelectedStep.Result.stopped
+        [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)]
+        (some
+          (SourcePruningEnumerationRecursion.checkRepeated
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap
+              checkFuel 0 handle [] readAfter).run) with
+  |
+  SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (result, action) after) reached saved _raw _candidate _right ordinary =>
+    ∃ readAfter_1,
+      [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)] =
+          [Except.ok (UVarValue.unenumerated (some handle) [], readAfter_1)] ∧
+        (SourcePruningEnumerationRecursion.checkRepeated heap checkFuel 0 handle [] readAfter_1).run =
+            [Except.ok (false, checked)] ∧
+          EnumerationCompressionFrame.Frame (initial handle) checked ∧
+            SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle
+                  [] rootValue heap =
+                MergedSourceComparison.Result.done (result, action) after ∧
+              SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel 0 rootValue heap =
+                  MergedSourceComparison.Result.done result after ∧
+                reached =
+                    SourceCurrentAllocatedPartialState.advance
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                      (SourceCurrentAllocatedQueryMemo.advancePhysical
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                        { heap := after,
+                          equality :=
+                            (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge ∧
+                  saved = queries ∧
+                    ordinary = none ∧
+                      ∀ (row : EdgeValue Symbol Guard),
+                        row ∈ InternedEdgeResidency.nodeEdges result → row ∈ InternedEdgeResidency.nodeEdges rootValue
+  | x => True
+/tmp/mcfta-initial-prefix-origin-check1-20261113-1645/check.lean:140:39: error: Tactic `assumption` failed
+
+case cons.nil.ok.cons.cons.error
+Typing Key : Type
+width : Nat
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+lib : SourceSynthesisTypeSyntax.Library
+query : SourceSynthesisTypeSyntax.Query
+signed : Int
+whole : SourceSynthesisFirstOrderConstruction.Expression
+accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole
+rootValue : Node
+heap : InternedConstructorTemplates.State Symbol Guard
+built :
+  InternedFreshOrdinaryConstruction.build (SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) [] empty =
+    InternedNestedConstruction.Outcome.done rootValue heap
+cache : Cache.State SourceEqualityPartialConstraintKey.Key
+handle : Nat
+decoded : SourcePruningEnumerationNodes.lookupNode heap handle = some rootValue
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Guard
+templates : List (Template.Pattern Symbol)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+metadata : Metadata Typing
+readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel : Nat
+queries : SourceEndpointMemo.Memos
+initialRead :
+  ∀ (pending : UVarValue Symbol) (readAfter : Core),
+    (getValue readFuel 0 (initial handle)).run = [Except.ok (pending, readAfter)] →
+      pending = UVarValue.unenumerated (some handle) [] ∧ EnumerationCompressionFrame.Frame (initial handle) readAfter
+narrowObservation :
+  ∀ (result : Node) (action : Option (EnumerateM Symbol Guard Unit))
+    (after : InternedConstructorTemplates.State Symbol Guard),
+    SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle []
+          rootValue heap =
+        MergedSourceComparison.Result.done (result, action) after →
+      SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel 0 rootValue heap =
+        MergedSourceComparison.Result.done result after
+readAfter : Core
+readFrame : EnumerationCompressionFrame.Frame (initial handle) readAfter
+readEq : (getValue readFuel 0 (initial handle)).run = [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)]
+second : Except Error (Bool × Core)
+rest : List (Except Error (Bool × Core))
+error : Error
+checkEq :
+  (SourcePruningEnumerationRecursion.checkRepeated heap checkFuel 0 handle [] readAfter).run =
+    Except.error error :: second :: rest
+⊢ match
+    match
+      (SourcePruningEnumerationRecursion.checkRepeated
+          (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap checkFuel 0
+          handle [] readAfter).run with
+    | [Except.ok (true, checked)] =>
+      SourcePruningEnumerationSelectedStep.Result.parked checked
+        (SourcePruningEnumerationParkedRestart.adapt
+          (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap indexFuel 0
+          handle []
+          { core := initial handle,
+            expandable := fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+            waiting := fun x => none }
+          checked)
+        (Option.map (fun parked => (SourcePruningEnumerationRestart.run stop order metadata parked checked).run)
+          (SourcePruningEnumerationParkedRestart.adapt
+            (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap indexFuel
+            0 handle []
+            { core := initial handle,
+              expandable := fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+              waiting := fun x => none }
+            checked))
+    | [Except.ok (false, checked)] =>
+      match
+        SourcePruningEnumerationNodes.lookupNode
+          (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap handle with
+      | none =>
+        SourcePruningEnumerationSelectedStep.Result.stopped
+          [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)]
+          (some
+            (SourcePruningEnumerationRecursion.checkRepeated
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap
+                checkFuel 0 handle [] readAfter).run)
+      | some oldValue =>
+        match
+          SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle []
+            oldValue
+            (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap with
+        | MergedSourceComparison.Result.failed _fault _heap =>
+          SourcePruningEnumerationSelectedStep.Result.narrowed checked
+            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle
+              [] oldValue
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+            (SourceCurrentAllocatedPartialState.advance
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+              (SourceCurrentAllocatedQueryMemo.advancePhysical
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                {
+                  heap :=
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                        handle [] oldValue
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                  heap).checked.native.machine.heap).state,
+                  equality :=
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+            queries none none none none
+        | MergedSourceComparison.Result.done (_value, none) _heap =>
+          SourcePruningEnumerationSelectedStep.Result.narrowed checked
+            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle
+              [] oldValue
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+            (SourceCurrentAllocatedPartialState.advance
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+              (SourceCurrentAllocatedQueryMemo.advancePhysical
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                {
+                  heap :=
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                        handle [] oldValue
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                  heap).checked.native.machine.heap).state,
+                  equality :=
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+            queries none none none none
+        | MergedSourceComparison.Result.done (value, some action) heap_1 =>
+          match (action checked).run with
+          | [Except.ok (PUnit.unit, observed)] =>
+            match SourcePruningEnumerationNodes.encodeNode value with
+            | none =>
+              SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                  handle [] oldValue
+                  (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+                (SourceCurrentAllocatedPartialState.advance
+                  (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                  (SourceCurrentAllocatedQueryMemo.advancePhysical
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                    {
+                      heap :=
+                        (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                            representativeFuel 0 handle [] oldValue
+                            (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                      heap).checked.native.machine.heap).state,
+                      equality :=
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                  (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                  (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+                queries (some (action checked).run) none none none
+            | some newHandle =>
+              match
+                SourcePruningEnumerationNarrowAdapter.adapt heap_1 indexFuel 0 handle newHandle []
+                  { core := initial handle,
+                    expandable := fun slot =>
+                      if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+                    waiting := fun x => none }
+                  observed with
+              | none =>
+                SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                  (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                    handle [] oldValue
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+                  (SourceCurrentAllocatedPartialState.advance
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                    (SourceCurrentAllocatedQueryMemo.advancePhysical
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                      {
+                        heap :=
+                          (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                              representativeFuel 0 handle [] oldValue
+                              (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                        heap).checked.native.machine.heap).state,
+                        equality :=
+                          (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+                  queries (some (action checked).run) none none none
+              | some attached =>
+                match
+                  (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata 0 (Sum.inr newHandle)
+                      attached.core).run with
+                | [Except.ok ((false, _updated), callbackCore)] =>
+                  SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                      handle [] oldValue
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+                    (SourceCurrentAllocatedPartialState.advance
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                      (SourceCurrentAllocatedQueryMemo.advancePhysical
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                        {
+                          heap :=
+                            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                representativeFuel 0 handle [] oldValue
+                                (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                          heap).checked.native.machine.heap).state,
+                          equality :=
+                            (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+                    queries (some (action checked).run) (some (EnumerationExpandableIndex.frame callbackCore attached))
+                    (some
+                      (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata 0 (Sum.inr newHandle)
+                          attached.core).run)
+                    none
+                | x =>
+                  SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                      handle [] oldValue
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+                    (SourceCurrentAllocatedPartialState.advance
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                      (SourceCurrentAllocatedQueryMemo.advancePhysical
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                        {
+                          heap :=
+                            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                representativeFuel 0 handle [] oldValue
+                                (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                          heap).checked.native.machine.heap).state,
+                          equality :=
+                            (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+                    queries (some (action checked).run) (some attached)
+                    (some
+                      (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata 0 (Sum.inr newHandle)
+                          attached.core).run)
+                    none
+          | x =>
+            SourcePruningEnumerationSelectedStep.Result.narrowed checked
+              (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                handle [] oldValue
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+              (SourceCurrentAllocatedPartialState.advance
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                (SourceCurrentAllocatedQueryMemo.advancePhysical
+                  (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                  {
+                    heap :=
+                      (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel
+                          0 handle [] oldValue
+                          (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                    heap).checked.native.machine.heap).state,
+                    equality :=
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+              queries (some (action checked).run) none none none
+    | x =>
+      SourcePruningEnumerationSelectedStep.Result.stopped
+        [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)]
+        (some
+          (SourcePruningEnumerationRecursion.checkRepeated
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap
+              checkFuel 0 handle [] readAfter).run) with
+  |
+  SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (result, action) after) reached saved _raw _candidate _right ordinary =>
+    ∃ readAfter_1,
+      [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)] =
+          [Except.ok (UVarValue.unenumerated (some handle) [], readAfter_1)] ∧
+        (SourcePruningEnumerationRecursion.checkRepeated heap checkFuel 0 handle [] readAfter_1).run =
+            [Except.ok (false, checked)] ∧
+          EnumerationCompressionFrame.Frame (initial handle) checked ∧
+            SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle
+                  [] rootValue heap =
+                MergedSourceComparison.Result.done (result, action) after ∧
+              SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel 0 rootValue heap =
+                  MergedSourceComparison.Result.done result after ∧
+                reached =
+                    SourceCurrentAllocatedPartialState.advance
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                      (SourceCurrentAllocatedQueryMemo.advancePhysical
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                        { heap := after,
+                          equality :=
+                            (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge ∧
+                  saved = queries ∧
+                    ordinary = none ∧
+                      ∀ (row : EdgeValue Symbol Guard),
+                        row ∈ InternedEdgeResidency.nodeEdges result → row ∈ InternedEdgeResidency.nodeEdges rootValue
+  | x => True
+/tmp/mcfta-initial-prefix-origin-check1-20261113-1645/check.lean:143:45: error: Tactic `assumption` failed
+
+case cons.nil.ok.cons.cons.ok.false
+Typing Key : Type
+width : Nat
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+lib : SourceSynthesisTypeSyntax.Library
+query : SourceSynthesisTypeSyntax.Query
+signed : Int
+whole : SourceSynthesisFirstOrderConstruction.Expression
+accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole
+rootValue : Node
+heap : InternedConstructorTemplates.State Symbol Guard
+built :
+  InternedFreshOrdinaryConstruction.build (SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) [] empty =
+    InternedNestedConstruction.Outcome.done rootValue heap
+cache : Cache.State SourceEqualityPartialConstraintKey.Key
+handle : Nat
+decoded : SourcePruningEnumerationNodes.lookupNode heap handle = some rootValue
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Guard
+templates : List (Template.Pattern Symbol)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+metadata : Metadata Typing
+readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel : Nat
+queries : SourceEndpointMemo.Memos
+initialRead :
+  ∀ (pending : UVarValue Symbol) (readAfter : Core),
+    (getValue readFuel 0 (initial handle)).run = [Except.ok (pending, readAfter)] →
+      pending = UVarValue.unenumerated (some handle) [] ∧ EnumerationCompressionFrame.Frame (initial handle) readAfter
+narrowObservation :
+  ∀ (result : Node) (action : Option (EnumerateM Symbol Guard Unit))
+    (after : InternedConstructorTemplates.State Symbol Guard),
+    SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle []
+          rootValue heap =
+        MergedSourceComparison.Result.done (result, action) after →
+      SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel 0 rootValue heap =
+        MergedSourceComparison.Result.done result after
+readAfter : Core
+readFrame : EnumerationCompressionFrame.Frame (initial handle) readAfter
+readEq : (getValue readFuel 0 (initial handle)).run = [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)]
+second : Except Error (Bool × Core)
+rest : List (Except Error (Bool × Core))
+_checked : Core
+checkEq :
+  (SourcePruningEnumerationRecursion.checkRepeated heap checkFuel 0 handle [] readAfter).run =
+    Except.ok (false, _checked) :: second :: rest
+⊢ match
+    match
+      (SourcePruningEnumerationRecursion.checkRepeated
+          (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap checkFuel 0
+          handle [] readAfter).run with
+    | [Except.ok (true, checked)] =>
+      SourcePruningEnumerationSelectedStep.Result.parked checked
+        (SourcePruningEnumerationParkedRestart.adapt
+          (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap indexFuel 0
+          handle []
+          { core := initial handle,
+            expandable := fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+            waiting := fun x => none }
+          checked)
+        (Option.map (fun parked => (SourcePruningEnumerationRestart.run stop order metadata parked checked).run)
+          (SourcePruningEnumerationParkedRestart.adapt
+            (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap indexFuel
+            0 handle []
+            { core := initial handle,
+              expandable := fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+              waiting := fun x => none }
+            checked))
+    | [Except.ok (false, checked)] =>
+      match
+        SourcePruningEnumerationNodes.lookupNode
+          (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap handle with
+      | none =>
+        SourcePruningEnumerationSelectedStep.Result.stopped
+          [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)]
+          (some
+            (SourcePruningEnumerationRecursion.checkRepeated
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap
+                checkFuel 0 handle [] readAfter).run)
+      | some oldValue =>
+        match
+          SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle []
+            oldValue
+            (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap with
+        | MergedSourceComparison.Result.failed _fault _heap =>
+          SourcePruningEnumerationSelectedStep.Result.narrowed checked
+            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle
+              [] oldValue
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+            (SourceCurrentAllocatedPartialState.advance
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+              (SourceCurrentAllocatedQueryMemo.advancePhysical
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                {
+                  heap :=
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                        handle [] oldValue
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                  heap).checked.native.machine.heap).state,
+                  equality :=
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+            queries none none none none
+        | MergedSourceComparison.Result.done (_value, none) _heap =>
+          SourcePruningEnumerationSelectedStep.Result.narrowed checked
+            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle
+              [] oldValue
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+            (SourceCurrentAllocatedPartialState.advance
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+              (SourceCurrentAllocatedQueryMemo.advancePhysical
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                {
+                  heap :=
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                        handle [] oldValue
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                  heap).checked.native.machine.heap).state,
+                  equality :=
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+            queries none none none none
+        | MergedSourceComparison.Result.done (value, some action) heap_1 =>
+          match (action checked).run with
+          | [Except.ok (PUnit.unit, observed)] =>
+            match SourcePruningEnumerationNodes.encodeNode value with
+            | none =>
+              SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                  handle [] oldValue
+                  (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+                (SourceCurrentAllocatedPartialState.advance
+                  (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                  (SourceCurrentAllocatedQueryMemo.advancePhysical
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                    {
+                      heap :=
+                        (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                            representativeFuel 0 handle [] oldValue
+                            (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                      heap).checked.native.machine.heap).state,
+                      equality :=
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                  (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                  (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+                queries (some (action checked).run) none none none
+            | some newHandle =>
+              match
+                SourcePruningEnumerationNarrowAdapter.adapt heap_1 indexFuel 0 handle newHandle []
+                  { core := initial handle,
+                    expandable := fun slot =>
+                      if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+                    waiting := fun x => none }
+                  observed with
+              | none =>
+                SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                  (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                    handle [] oldValue
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+                  (SourceCurrentAllocatedPartialState.advance
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                    (SourceCurrentAllocatedQueryMemo.advancePhysical
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                      {
+                        heap :=
+                          (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                              representativeFuel 0 handle [] oldValue
+                              (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                        heap).checked.native.machine.heap).state,
+                        equality :=
+                          (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+                  queries (some (action checked).run) none none none
+              | some attached =>
+                match
+                  (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata 0 (Sum.inr newHandle)
+                      attached.core).run with
+                | [Except.ok ((false, _updated), callbackCore)] =>
+                  SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                      handle [] oldValue
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+                    (SourceCurrentAllocatedPartialState.advance
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                      (SourceCurrentAllocatedQueryMemo.advancePhysical
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                        {
+                          heap :=
+                            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                representativeFuel 0 handle [] oldValue
+                                (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                          heap).checked.native.machine.heap).state,
+                          equality :=
+                            (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+                    queries (some (action checked).run) (some (EnumerationExpandableIndex.frame callbackCore attached))
+                    (some
+                      (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata 0 (Sum.inr newHandle)
+                          attached.core).run)
+                    none
+                | x =>
+                  SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                      handle [] oldValue
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+                    (SourceCurrentAllocatedPartialState.advance
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                      (SourceCurrentAllocatedQueryMemo.advancePhysical
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                        {
+                          heap :=
+                            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                representativeFuel 0 handle [] oldValue
+                                (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                          heap).checked.native.machine.heap).state,
+                          equality :=
+                            (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+                    queries (some (action checked).run) (some attached)
+                    (some
+                      (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata 0 (Sum.inr newHandle)
+                          attached.core).run)
+                    none
+          | x =>
+            SourcePruningEnumerationSelectedStep.Result.narrowed checked
+              (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                handle [] oldValue
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+              (SourceCurrentAllocatedPartialState.advance
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                (SourceCurrentAllocatedQueryMemo.advancePhysical
+                  (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                  {
+                    heap :=
+                      (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel
+                          0 handle [] oldValue
+                          (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                    heap).checked.native.machine.heap).state,
+                    equality :=
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+              queries (some (action checked).run) none none none
+    | x =>
+      SourcePruningEnumerationSelectedStep.Result.stopped
+        [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)]
+        (some
+          (SourcePruningEnumerationRecursion.checkRepeated
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap
+              checkFuel 0 handle [] readAfter).run) with
+  |
+  SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (result, action) after) reached saved _raw _candidate _right ordinary =>
+    ∃ readAfter_1,
+      [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)] =
+          [Except.ok (UVarValue.unenumerated (some handle) [], readAfter_1)] ∧
+        (SourcePruningEnumerationRecursion.checkRepeated heap checkFuel 0 handle [] readAfter_1).run =
+            [Except.ok (false, checked)] ∧
+          EnumerationCompressionFrame.Frame (initial handle) checked ∧
+            SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle
+                  [] rootValue heap =
+                MergedSourceComparison.Result.done (result, action) after ∧
+              SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel 0 rootValue heap =
+                  MergedSourceComparison.Result.done result after ∧
+                reached =
+                    SourceCurrentAllocatedPartialState.advance
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                      (SourceCurrentAllocatedQueryMemo.advancePhysical
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                        { heap := after,
+                          equality :=
+                            (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge ∧
+                  saved = queries ∧
+                    ordinary = none ∧
+                      ∀ (row : EdgeValue Symbol Guard),
+                        row ∈ InternedEdgeResidency.nodeEdges result → row ∈ InternedEdgeResidency.nodeEdges rootValue
+  | x => True
+/tmp/mcfta-initial-prefix-origin-check1-20261113-1645/check.lean:143:45: error: Tactic `assumption` failed
+
+case cons.nil.ok.cons.cons.ok.true
+Typing Key : Type
+width : Nat
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+lib : SourceSynthesisTypeSyntax.Library
+query : SourceSynthesisTypeSyntax.Query
+signed : Int
+whole : SourceSynthesisFirstOrderConstruction.Expression
+accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole
+rootValue : Node
+heap : InternedConstructorTemplates.State Symbol Guard
+built :
+  InternedFreshOrdinaryConstruction.build (SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) [] empty =
+    InternedNestedConstruction.Outcome.done rootValue heap
+cache : Cache.State SourceEqualityPartialConstraintKey.Key
+handle : Nat
+decoded : SourcePruningEnumerationNodes.lookupNode heap handle = some rootValue
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Guard
+templates : List (Template.Pattern Symbol)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+metadata : Metadata Typing
+readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel : Nat
+queries : SourceEndpointMemo.Memos
+initialRead :
+  ∀ (pending : UVarValue Symbol) (readAfter : Core),
+    (getValue readFuel 0 (initial handle)).run = [Except.ok (pending, readAfter)] →
+      pending = UVarValue.unenumerated (some handle) [] ∧ EnumerationCompressionFrame.Frame (initial handle) readAfter
+narrowObservation :
+  ∀ (result : Node) (action : Option (EnumerateM Symbol Guard Unit))
+    (after : InternedConstructorTemplates.State Symbol Guard),
+    SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle []
+          rootValue heap =
+        MergedSourceComparison.Result.done (result, action) after →
+      SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel 0 rootValue heap =
+        MergedSourceComparison.Result.done result after
+readAfter : Core
+readFrame : EnumerationCompressionFrame.Frame (initial handle) readAfter
+readEq : (getValue readFuel 0 (initial handle)).run = [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)]
+second : Except Error (Bool × Core)
+rest : List (Except Error (Bool × Core))
+_checked : Core
+checkEq :
+  (SourcePruningEnumerationRecursion.checkRepeated heap checkFuel 0 handle [] readAfter).run =
+    Except.ok (true, _checked) :: second :: rest
+⊢ match
+    match
+      (SourcePruningEnumerationRecursion.checkRepeated
+          (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap checkFuel 0
+          handle [] readAfter).run with
+    | [Except.ok (true, checked)] =>
+      SourcePruningEnumerationSelectedStep.Result.parked checked
+        (SourcePruningEnumerationParkedRestart.adapt
+          (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap indexFuel 0
+          handle []
+          { core := initial handle,
+            expandable := fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+            waiting := fun x => none }
+          checked)
+        (Option.map (fun parked => (SourcePruningEnumerationRestart.run stop order metadata parked checked).run)
+          (SourcePruningEnumerationParkedRestart.adapt
+            (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap indexFuel
+            0 handle []
+            { core := initial handle,
+              expandable := fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+              waiting := fun x => none }
+            checked))
+    | [Except.ok (false, checked)] =>
+      match
+        SourcePruningEnumerationNodes.lookupNode
+          (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap handle with
+      | none =>
+        SourcePruningEnumerationSelectedStep.Result.stopped
+          [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)]
+          (some
+            (SourcePruningEnumerationRecursion.checkRepeated
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap
+                checkFuel 0 handle [] readAfter).run)
+      | some oldValue =>
+        match
+          SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle []
+            oldValue
+            (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap with
+        | MergedSourceComparison.Result.failed _fault _heap =>
+          SourcePruningEnumerationSelectedStep.Result.narrowed checked
+            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle
+              [] oldValue
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+            (SourceCurrentAllocatedPartialState.advance
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+              (SourceCurrentAllocatedQueryMemo.advancePhysical
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                {
+                  heap :=
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                        handle [] oldValue
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                  heap).checked.native.machine.heap).state,
+                  equality :=
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+            queries none none none none
+        | MergedSourceComparison.Result.done (_value, none) _heap =>
+          SourcePruningEnumerationSelectedStep.Result.narrowed checked
+            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle
+              [] oldValue
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+            (SourceCurrentAllocatedPartialState.advance
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+              (SourceCurrentAllocatedQueryMemo.advancePhysical
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                {
+                  heap :=
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                        handle [] oldValue
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                  heap).checked.native.machine.heap).state,
+                  equality :=
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+            queries none none none none
+        | MergedSourceComparison.Result.done (value, some action) heap_1 =>
+          match (action checked).run with
+          | [Except.ok (PUnit.unit, observed)] =>
+            match SourcePruningEnumerationNodes.encodeNode value with
+            | none =>
+              SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                  handle [] oldValue
+                  (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+                (SourceCurrentAllocatedPartialState.advance
+                  (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                  (SourceCurrentAllocatedQueryMemo.advancePhysical
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                    {
+                      heap :=
+                        (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                            representativeFuel 0 handle [] oldValue
+                            (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                      heap).checked.native.machine.heap).state,
+                      equality :=
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                  (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                  (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+                queries (some (action checked).run) none none none
+            | some newHandle =>
+              match
+                SourcePruningEnumerationNarrowAdapter.adapt heap_1 indexFuel 0 handle newHandle []
+                  { core := initial handle,
+                    expandable := fun slot =>
+                      if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+                    waiting := fun x => none }
+                  observed with
+              | none =>
+                SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                  (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                    handle [] oldValue
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+                  (SourceCurrentAllocatedPartialState.advance
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                    (SourceCurrentAllocatedQueryMemo.advancePhysical
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                      {
+                        heap :=
+                          (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                              representativeFuel 0 handle [] oldValue
+                              (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                        heap).checked.native.machine.heap).state,
+                        equality :=
+                          (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+                  queries (some (action checked).run) none none none
+              | some attached =>
+                match
+                  (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata 0 (Sum.inr newHandle)
+                      attached.core).run with
+                | [Except.ok ((false, _updated), callbackCore)] =>
+                  SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                      handle [] oldValue
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+                    (SourceCurrentAllocatedPartialState.advance
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                      (SourceCurrentAllocatedQueryMemo.advancePhysical
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                        {
+                          heap :=
+                            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                representativeFuel 0 handle [] oldValue
+                                (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                          heap).checked.native.machine.heap).state,
+                          equality :=
+                            (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+                    queries (some (action checked).run) (some (EnumerationExpandableIndex.frame callbackCore attached))
+                    (some
+                      (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata 0 (Sum.inr newHandle)
+                          attached.core).run)
+                    none
+                | x =>
+                  SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                      handle [] oldValue
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+                    (SourceCurrentAllocatedPartialState.advance
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                      (SourceCurrentAllocatedQueryMemo.advancePhysical
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                        {
+                          heap :=
+                            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                representativeFuel 0 handle [] oldValue
+                                (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                          heap).checked.native.machine.heap).state,
+                          equality :=
+                            (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+                    queries (some (action checked).run) (some attached)
+                    (some
+                      (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata 0 (Sum.inr newHandle)
+                          attached.core).run)
+                    none
+          | x =>
+            SourcePruningEnumerationSelectedStep.Result.narrowed checked
+              (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                handle [] oldValue
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+              (SourceCurrentAllocatedPartialState.advance
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                (SourceCurrentAllocatedQueryMemo.advancePhysical
+                  (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                  {
+                    heap :=
+                      (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel
+                          0 handle [] oldValue
+                          (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                    heap).checked.native.machine.heap).state,
+                    equality :=
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+              queries (some (action checked).run) none none none
+    | x =>
+      SourcePruningEnumerationSelectedStep.Result.stopped
+        [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)]
+        (some
+          (SourcePruningEnumerationRecursion.checkRepeated
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap
+              checkFuel 0 handle [] readAfter).run) with
+  |
+  SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (result, action) after) reached saved _raw _candidate _right ordinary =>
+    ∃ readAfter_1,
+      [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)] =
+          [Except.ok (UVarValue.unenumerated (some handle) [], readAfter_1)] ∧
+        (SourcePruningEnumerationRecursion.checkRepeated heap checkFuel 0 handle [] readAfter_1).run =
+            [Except.ok (false, checked)] ∧
+          EnumerationCompressionFrame.Frame (initial handle) checked ∧
+            SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle
+                  [] rootValue heap =
+                MergedSourceComparison.Result.done (result, action) after ∧
+              SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel 0 rootValue heap =
+                  MergedSourceComparison.Result.done result after ∧
+                reached =
+                    SourceCurrentAllocatedPartialState.advance
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                      (SourceCurrentAllocatedQueryMemo.advancePhysical
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                        { heap := after,
+                          equality :=
+                            (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge ∧
+                  saved = queries ∧
+                    ordinary = none ∧
+                      ∀ (row : EdgeValue Symbol Guard),
+                        row ∈ InternedEdgeResidency.nodeEdges result → row ∈ InternedEdgeResidency.nodeEdges rootValue
+  | x => True
+/tmp/mcfta-initial-prefix-origin-check1-20261113-1645/check.lean:146:39: error: Tactic `assumption` failed
+
+case cons.nil.ok.cons.nil.error
+Typing Key : Type
+width : Nat
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+lib : SourceSynthesisTypeSyntax.Library
+query : SourceSynthesisTypeSyntax.Query
+signed : Int
+whole : SourceSynthesisFirstOrderConstruction.Expression
+accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole
+rootValue : Node
+heap : InternedConstructorTemplates.State Symbol Guard
+built :
+  InternedFreshOrdinaryConstruction.build (SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) [] empty =
+    InternedNestedConstruction.Outcome.done rootValue heap
+cache : Cache.State SourceEqualityPartialConstraintKey.Key
+handle : Nat
+decoded : SourcePruningEnumerationNodes.lookupNode heap handle = some rootValue
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Guard
+templates : List (Template.Pattern Symbol)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+metadata : Metadata Typing
+readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel : Nat
+queries : SourceEndpointMemo.Memos
+initialRead :
+  ∀ (pending : UVarValue Symbol) (readAfter : Core),
+    (getValue readFuel 0 (initial handle)).run = [Except.ok (pending, readAfter)] →
+      pending = UVarValue.unenumerated (some handle) [] ∧ EnumerationCompressionFrame.Frame (initial handle) readAfter
+narrowObservation :
+  ∀ (result : Node) (action : Option (EnumerateM Symbol Guard Unit))
+    (after : InternedConstructorTemplates.State Symbol Guard),
+    SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle []
+          rootValue heap =
+        MergedSourceComparison.Result.done (result, action) after →
+      SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel 0 rootValue heap =
+        MergedSourceComparison.Result.done result after
+readAfter : Core
+readFrame : EnumerationCompressionFrame.Frame (initial handle) readAfter
+readEq : (getValue readFuel 0 (initial handle)).run = [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)]
+error : Error
+checkEq :
+  (SourcePruningEnumerationRecursion.checkRepeated heap checkFuel 0 handle [] readAfter).run = [Except.error error]
+⊢ match
+    match
+      (SourcePruningEnumerationRecursion.checkRepeated
+          (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap checkFuel 0
+          handle [] readAfter).run with
+    | [Except.ok (true, checked)] =>
+      SourcePruningEnumerationSelectedStep.Result.parked checked
+        (SourcePruningEnumerationParkedRestart.adapt
+          (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap indexFuel 0
+          handle []
+          { core := initial handle,
+            expandable := fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+            waiting := fun x => none }
+          checked)
+        (Option.map (fun parked => (SourcePruningEnumerationRestart.run stop order metadata parked checked).run)
+          (SourcePruningEnumerationParkedRestart.adapt
+            (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap indexFuel
+            0 handle []
+            { core := initial handle,
+              expandable := fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+              waiting := fun x => none }
+            checked))
+    | [Except.ok (false, checked)] =>
+      match
+        SourcePruningEnumerationNodes.lookupNode
+          (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap handle with
+      | none =>
+        SourcePruningEnumerationSelectedStep.Result.stopped
+          [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)]
+          (some
+            (SourcePruningEnumerationRecursion.checkRepeated
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap
+                checkFuel 0 handle [] readAfter).run)
+      | some oldValue =>
+        match
+          SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle []
+            oldValue
+            (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap with
+        | MergedSourceComparison.Result.failed _fault _heap =>
+          SourcePruningEnumerationSelectedStep.Result.narrowed checked
+            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle
+              [] oldValue
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+            (SourceCurrentAllocatedPartialState.advance
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+              (SourceCurrentAllocatedQueryMemo.advancePhysical
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                {
+                  heap :=
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                        handle [] oldValue
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                  heap).checked.native.machine.heap).state,
+                  equality :=
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+            queries none none none none
+        | MergedSourceComparison.Result.done (_value, none) _heap =>
+          SourcePruningEnumerationSelectedStep.Result.narrowed checked
+            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle
+              [] oldValue
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+            (SourceCurrentAllocatedPartialState.advance
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+              (SourceCurrentAllocatedQueryMemo.advancePhysical
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                {
+                  heap :=
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                        handle [] oldValue
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                  heap).checked.native.machine.heap).state,
+                  equality :=
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+            queries none none none none
+        | MergedSourceComparison.Result.done (value, some action) heap_1 =>
+          match (action checked).run with
+          | [Except.ok (PUnit.unit, observed)] =>
+            match SourcePruningEnumerationNodes.encodeNode value with
+            | none =>
+              SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                  handle [] oldValue
+                  (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+                (SourceCurrentAllocatedPartialState.advance
+                  (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                  (SourceCurrentAllocatedQueryMemo.advancePhysical
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                    {
+                      heap :=
+                        (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                            representativeFuel 0 handle [] oldValue
+                            (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                      heap).checked.native.machine.heap).state,
+                      equality :=
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                  (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                  (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+                queries (some (action checked).run) none none none
+            | some newHandle =>
+              match
+                SourcePruningEnumerationNarrowAdapter.adapt heap_1 indexFuel 0 handle newHandle []
+                  { core := initial handle,
+                    expandable := fun slot =>
+                      if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+                    waiting := fun x => none }
+                  observed with
+              | none =>
+                SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                  (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                    handle [] oldValue
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+                  (SourceCurrentAllocatedPartialState.advance
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                    (SourceCurrentAllocatedQueryMemo.advancePhysical
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                      {
+                        heap :=
+                          (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                              representativeFuel 0 handle [] oldValue
+                              (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                        heap).checked.native.machine.heap).state,
+                        equality :=
+                          (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+                  queries (some (action checked).run) none none none
+              | some attached =>
+                match
+                  (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata 0 (Sum.inr newHandle)
+                      attached.core).run with
+                | [Except.ok ((false, _updated), callbackCore)] =>
+                  SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                      handle [] oldValue
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+                    (SourceCurrentAllocatedPartialState.advance
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                      (SourceCurrentAllocatedQueryMemo.advancePhysical
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                        {
+                          heap :=
+                            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                representativeFuel 0 handle [] oldValue
+                                (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                          heap).checked.native.machine.heap).state,
+                          equality :=
+                            (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+                    queries (some (action checked).run) (some (EnumerationExpandableIndex.frame callbackCore attached))
+                    (some
+                      (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata 0 (Sum.inr newHandle)
+                          attached.core).run)
+                    none
+                | x =>
+                  SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                      handle [] oldValue
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+                    (SourceCurrentAllocatedPartialState.advance
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                      (SourceCurrentAllocatedQueryMemo.advancePhysical
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                        {
+                          heap :=
+                            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                representativeFuel 0 handle [] oldValue
+                                (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                          heap).checked.native.machine.heap).state,
+                          equality :=
+                            (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+                    queries (some (action checked).run) (some attached)
+                    (some
+                      (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata 0 (Sum.inr newHandle)
+                          attached.core).run)
+                    none
+          | x =>
+            SourcePruningEnumerationSelectedStep.Result.narrowed checked
+              (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                handle [] oldValue
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+              (SourceCurrentAllocatedPartialState.advance
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                (SourceCurrentAllocatedQueryMemo.advancePhysical
+                  (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                  {
+                    heap :=
+                      (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel
+                          0 handle [] oldValue
+                          (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                    heap).checked.native.machine.heap).state,
+                    equality :=
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+              queries (some (action checked).run) none none none
+    | x =>
+      SourcePruningEnumerationSelectedStep.Result.stopped
+        [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)]
+        (some
+          (SourcePruningEnumerationRecursion.checkRepeated
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap
+              checkFuel 0 handle [] readAfter).run) with
+  |
+  SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (result, action) after) reached saved _raw _candidate _right ordinary =>
+    ∃ readAfter_1,
+      [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)] =
+          [Except.ok (UVarValue.unenumerated (some handle) [], readAfter_1)] ∧
+        (SourcePruningEnumerationRecursion.checkRepeated heap checkFuel 0 handle [] readAfter_1).run =
+            [Except.ok (false, checked)] ∧
+          EnumerationCompressionFrame.Frame (initial handle) checked ∧
+            SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle
+                  [] rootValue heap =
+                MergedSourceComparison.Result.done (result, action) after ∧
+              SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel 0 rootValue heap =
+                  MergedSourceComparison.Result.done result after ∧
+                reached =
+                    SourceCurrentAllocatedPartialState.advance
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                      (SourceCurrentAllocatedQueryMemo.advancePhysical
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                        { heap := after,
+                          equality :=
+                            (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge ∧
+                  saved = queries ∧
+                    ordinary = none ∧
+                      ∀ (row : EdgeValue Symbol Guard),
+                        row ∈ InternedEdgeResidency.nodeEdges result → row ∈ InternedEdgeResidency.nodeEdges rootValue
+  | x => True
+/tmp/mcfta-initial-prefix-origin-check1-20261113-1645/check.lean:150:36: error: Tactic `assumption` failed
+
+case cons.nil.ok.cons.nil.ok.true
+Typing Key : Type
+width : Nat
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+lib : SourceSynthesisTypeSyntax.Library
+query : SourceSynthesisTypeSyntax.Query
+signed : Int
+whole : SourceSynthesisFirstOrderConstruction.Expression
+accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole
+rootValue : Node
+heap : InternedConstructorTemplates.State Symbol Guard
+built :
+  InternedFreshOrdinaryConstruction.build (SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) [] empty =
+    InternedNestedConstruction.Outcome.done rootValue heap
+cache : Cache.State SourceEqualityPartialConstraintKey.Key
+handle : Nat
+decoded : SourcePruningEnumerationNodes.lookupNode heap handle = some rootValue
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Guard
+templates : List (Template.Pattern Symbol)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+metadata : Metadata Typing
+readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel : Nat
+queries : SourceEndpointMemo.Memos
+initialRead :
+  ∀ (pending : UVarValue Symbol) (readAfter : Core),
+    (getValue readFuel 0 (initial handle)).run = [Except.ok (pending, readAfter)] →
+      pending = UVarValue.unenumerated (some handle) [] ∧ EnumerationCompressionFrame.Frame (initial handle) readAfter
+narrowObservation :
+  ∀ (result : Node) (action : Option (EnumerateM Symbol Guard Unit))
+    (after : InternedConstructorTemplates.State Symbol Guard),
+    SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle []
+          rootValue heap =
+        MergedSourceComparison.Result.done (result, action) after →
+      SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel 0 rootValue heap =
+        MergedSourceComparison.Result.done result after
+readAfter : Core
+readFrame : EnumerationCompressionFrame.Frame (initial handle) readAfter
+readEq : (getValue readFuel 0 (initial handle)).run = [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)]
+checked : Core
+checkEq :
+  (SourcePruningEnumerationRecursion.checkRepeated heap checkFuel 0 handle [] readAfter).run =
+    [Except.ok (true, checked)]
+⊢ match
+    match
+      (SourcePruningEnumerationRecursion.checkRepeated
+          (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap checkFuel 0
+          handle [] readAfter).run with
+    | [Except.ok (true, checked)] =>
+      SourcePruningEnumerationSelectedStep.Result.parked checked
+        (SourcePruningEnumerationParkedRestart.adapt
+          (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap indexFuel 0
+          handle []
+          { core := initial handle,
+            expandable := fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+            waiting := fun x => none }
+          checked)
+        (Option.map (fun parked => (SourcePruningEnumerationRestart.run stop order metadata parked checked).run)
+          (SourcePruningEnumerationParkedRestart.adapt
+            (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap indexFuel
+            0 handle []
+            { core := initial handle,
+              expandable := fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+              waiting := fun x => none }
+            checked))
+    | [Except.ok (false, checked)] =>
+      match
+        SourcePruningEnumerationNodes.lookupNode
+          (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap handle with
+      | none =>
+        SourcePruningEnumerationSelectedStep.Result.stopped
+          [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)]
+          (some
+            (SourcePruningEnumerationRecursion.checkRepeated
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap
+                checkFuel 0 handle [] readAfter).run)
+      | some oldValue =>
+        match
+          SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle []
+            oldValue
+            (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap with
+        | MergedSourceComparison.Result.failed _fault _heap =>
+          SourcePruningEnumerationSelectedStep.Result.narrowed checked
+            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle
+              [] oldValue
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+            (SourceCurrentAllocatedPartialState.advance
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+              (SourceCurrentAllocatedQueryMemo.advancePhysical
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                {
+                  heap :=
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                        handle [] oldValue
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                  heap).checked.native.machine.heap).state,
+                  equality :=
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+            queries none none none none
+        | MergedSourceComparison.Result.done (_value, none) _heap =>
+          SourcePruningEnumerationSelectedStep.Result.narrowed checked
+            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle
+              [] oldValue
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+            (SourceCurrentAllocatedPartialState.advance
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+              (SourceCurrentAllocatedQueryMemo.advancePhysical
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                {
+                  heap :=
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                        handle [] oldValue
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                  heap).checked.native.machine.heap).state,
+                  equality :=
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+            queries none none none none
+        | MergedSourceComparison.Result.done (value, some action) heap_1 =>
+          match (action checked).run with
+          | [Except.ok (PUnit.unit, observed)] =>
+            match SourcePruningEnumerationNodes.encodeNode value with
+            | none =>
+              SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                  handle [] oldValue
+                  (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+                (SourceCurrentAllocatedPartialState.advance
+                  (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                  (SourceCurrentAllocatedQueryMemo.advancePhysical
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                    {
+                      heap :=
+                        (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                            representativeFuel 0 handle [] oldValue
+                            (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                      heap).checked.native.machine.heap).state,
+                      equality :=
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                  (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                  (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+                queries (some (action checked).run) none none none
+            | some newHandle =>
+              match
+                SourcePruningEnumerationNarrowAdapter.adapt heap_1 indexFuel 0 handle newHandle []
+                  { core := initial handle,
+                    expandable := fun slot =>
+                      if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+                    waiting := fun x => none }
+                  observed with
+              | none =>
+                SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                  (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                    handle [] oldValue
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+                  (SourceCurrentAllocatedPartialState.advance
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                    (SourceCurrentAllocatedQueryMemo.advancePhysical
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                      {
+                        heap :=
+                          (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                              representativeFuel 0 handle [] oldValue
+                              (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                        heap).checked.native.machine.heap).state,
+                        equality :=
+                          (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+                  queries (some (action checked).run) none none none
+              | some attached =>
+                match
+                  (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata 0 (Sum.inr newHandle)
+                      attached.core).run with
+                | [Except.ok ((false, _updated), callbackCore)] =>
+                  SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                      handle [] oldValue
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+                    (SourceCurrentAllocatedPartialState.advance
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                      (SourceCurrentAllocatedQueryMemo.advancePhysical
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                        {
+                          heap :=
+                            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                representativeFuel 0 handle [] oldValue
+                                (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                          heap).checked.native.machine.heap).state,
+                          equality :=
+                            (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+                    queries (some (action checked).run) (some (EnumerationExpandableIndex.frame callbackCore attached))
+                    (some
+                      (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata 0 (Sum.inr newHandle)
+                          attached.core).run)
+                    none
+                | x =>
+                  SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                      handle [] oldValue
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+                    (SourceCurrentAllocatedPartialState.advance
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                      (SourceCurrentAllocatedQueryMemo.advancePhysical
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                        {
+                          heap :=
+                            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                representativeFuel 0 handle [] oldValue
+                                (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                          heap).checked.native.machine.heap).state,
+                          equality :=
+                            (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+                    queries (some (action checked).run) (some attached)
+                    (some
+                      (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata 0 (Sum.inr newHandle)
+                          attached.core).run)
+                    none
+          | x =>
+            SourcePruningEnumerationSelectedStep.Result.narrowed checked
+              (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                handle [] oldValue
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+              (SourceCurrentAllocatedPartialState.advance
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                (SourceCurrentAllocatedQueryMemo.advancePhysical
+                  (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                  {
+                    heap :=
+                      (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel
+                          0 handle [] oldValue
+                          (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                    heap).checked.native.machine.heap).state,
+                    equality :=
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+              queries (some (action checked).run) none none none
+    | x =>
+      SourcePruningEnumerationSelectedStep.Result.stopped
+        [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)]
+        (some
+          (SourcePruningEnumerationRecursion.checkRepeated
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap
+              checkFuel 0 handle [] readAfter).run) with
+  |
+  SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (result, action) after) reached saved _raw _candidate _right ordinary =>
+    ∃ readAfter_1,
+      [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)] =
+          [Except.ok (UVarValue.unenumerated (some handle) [], readAfter_1)] ∧
+        (SourcePruningEnumerationRecursion.checkRepeated heap checkFuel 0 handle [] readAfter_1).run =
+            [Except.ok (false, checked)] ∧
+          EnumerationCompressionFrame.Frame (initial handle) checked ∧
+            SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle
+                  [] rootValue heap =
+                MergedSourceComparison.Result.done (result, action) after ∧
+              SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel 0 rootValue heap =
+                  MergedSourceComparison.Result.done result after ∧
+                reached =
+                    SourceCurrentAllocatedPartialState.advance
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                      (SourceCurrentAllocatedQueryMemo.advancePhysical
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                        { heap := after,
+                          equality :=
+                            (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge ∧
+                  saved = queries ∧
+                    ordinary = none ∧
+                      ∀ (row : EdgeValue Symbol Guard),
+                        row ∈ InternedEdgeResidency.nodeEdges result → row ∈ InternedEdgeResidency.nodeEdges rootValue
+  | x => True
+/tmp/mcfta-initial-prefix-origin-check1-20261113-1645/check.lean:162:34: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  SourcePruningEnumerationNodes.lookupNode heap handle
+in the target expression
+  match
+    match
+      (SourcePruningEnumerationRecursion.checkRepeated
+          (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap checkFuel 0
+          handle [] readAfter).run with
+    | [Except.ok (true, checked)] =>
+      SourcePruningEnumerationSelectedStep.Result.parked checked
+        (SourcePruningEnumerationParkedRestart.adapt
+          (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap indexFuel 0
+          handle []
+          { core := initial handle,
+            expandable := fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+            waiting := fun x => none }
+          checked)
+        (Option.map (fun parked => (SourcePruningEnumerationRestart.run stop order metadata parked checked).run)
+          (SourcePruningEnumerationParkedRestart.adapt
+            (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap indexFuel
+            0 handle []
+            { core := initial handle,
+              expandable := fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+              waiting := fun x => none }
+            checked))
+    | [Except.ok (false, checked)] =>
+      match
+        SourcePruningEnumerationNodes.lookupNode
+          (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap handle with
+      | none =>
+        SourcePruningEnumerationSelectedStep.Result.stopped
+          [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)]
+          (some
+            (SourcePruningEnumerationRecursion.checkRepeated
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap
+                checkFuel 0 handle [] readAfter).run)
+      | some oldValue =>
+        match
+          SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle []
+            oldValue
+            (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap with
+        | MergedSourceComparison.Result.failed _fault _heap =>
+          SourcePruningEnumerationSelectedStep.Result.narrowed checked
+            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle
+              [] oldValue
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+            (SourceCurrentAllocatedPartialState.advance
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+              (SourceCurrentAllocatedQueryMemo.advancePhysical
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                {
+                  heap :=
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                        handle [] oldValue
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                  heap).checked.native.machine.heap).state,
+                  equality :=
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+            queries none none none none
+        | MergedSourceComparison.Result.done (_value, none) _heap =>
+          SourcePruningEnumerationSelectedStep.Result.narrowed checked
+            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle
+              [] oldValue
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+            (SourceCurrentAllocatedPartialState.advance
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+              (SourceCurrentAllocatedQueryMemo.advancePhysical
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                {
+                  heap :=
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                        handle [] oldValue
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                  heap).checked.native.machine.heap).state,
+                  equality :=
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+            queries none none none none
+        | MergedSourceComparison.Result.done (value, some action) heap_1 =>
+          match (action checked).run with
+          | [Except.ok (PUnit.unit, observed)] =>
+            match SourcePruningEnumerationNodes.encodeNode value with
+            | none =>
+              SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                  handle [] oldValue
+                  (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+                (SourceCurrentAllocatedPartialState.advance
+                  (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                  (SourceCurrentAllocatedQueryMemo.advancePhysical
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                    {
+                      heap :=
+                        (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                            representativeFuel 0 handle [] oldValue
+                            (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                      heap).checked.native.machine.heap).state,
+                      equality :=
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                  (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                  (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+                queries (some (action checked).run) none none none
+            | some newHandle =>
+              match
+                SourcePruningEnumerationNarrowAdapter.adapt heap_1 indexFuel 0 handle newHandle []
+                  { core := initial handle,
+                    expandable := fun slot =>
+                      if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+                    waiting := fun x => none }
+                  observed with
+              | none =>
+                SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                  (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                    handle [] oldValue
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+                  (SourceCurrentAllocatedPartialState.advance
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                    (SourceCurrentAllocatedQueryMemo.advancePhysical
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                      {
+                        heap :=
+                          (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                              representativeFuel 0 handle [] oldValue
+                              (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                        heap).checked.native.machine.heap).state,
+                        equality :=
+                          (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+                  queries (some (action checked).run) none none none
+              | some attached =>
+                match
+                  (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata 0 (Sum.inr newHandle)
+                      attached.core).run with
+                | [Except.ok ((false, _updated), callbackCore)] =>
+                  SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                      handle [] oldValue
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+                    (SourceCurrentAllocatedPartialState.advance
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                      (SourceCurrentAllocatedQueryMemo.advancePhysical
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                        {
+                          heap :=
+                            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                representativeFuel 0 handle [] oldValue
+                                (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                          heap).checked.native.machine.heap).state,
+                          equality :=
+                            (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+                    queries (some (action checked).run) (some (EnumerationExpandableIndex.frame callbackCore attached))
+                    (some
+                      (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata 0 (Sum.inr newHandle)
+                          attached.core).run)
+                    none
+                | x =>
+                  SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                      handle [] oldValue
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+                    (SourceCurrentAllocatedPartialState.advance
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                      (SourceCurrentAllocatedQueryMemo.advancePhysical
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                        {
+                          heap :=
+                            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                representativeFuel 0 handle [] oldValue
+                                (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                          heap).checked.native.machine.heap).state,
+                          equality :=
+                            (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+                    queries (some (action checked).run) (some attached)
+                    (some
+                      (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata 0 (Sum.inr newHandle)
+                          attached.core).run)
+                    none
+          | x =>
+            SourcePruningEnumerationSelectedStep.Result.narrowed checked
+              (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                handle [] oldValue
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+              (SourceCurrentAllocatedPartialState.advance
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                (SourceCurrentAllocatedQueryMemo.advancePhysical
+                  (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                  {
+                    heap :=
+                      (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel
+                          0 handle [] oldValue
+                          (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                    heap).checked.native.machine.heap).state,
+                    equality :=
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+              queries (some (action checked).run) none none none
+    | x =>
+      SourcePruningEnumerationSelectedStep.Result.stopped
+        [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)]
+        (some
+          (SourcePruningEnumerationRecursion.checkRepeated
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap
+              checkFuel 0 handle [] readAfter).run) with
+  |
+  SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (result, action) after) reached saved _raw _candidate _right ordinary =>
+    ∃ readAfter_1,
+      [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)] =
+          [Except.ok (UVarValue.unenumerated (some handle) [], readAfter_1)] ∧
+        (SourcePruningEnumerationRecursion.checkRepeated heap checkFuel 0 handle [] readAfter_1).run =
+            [Except.ok (false, checked)] ∧
+          EnumerationCompressionFrame.Frame (initial handle) checked ∧
+            SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle
+                  [] rootValue heap =
+                MergedSourceComparison.Result.done (result, action) after ∧
+              SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel 0 rootValue heap =
+                  MergedSourceComparison.Result.done result after ∧
+                reached =
+                    SourceCurrentAllocatedPartialState.advance
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                      (SourceCurrentAllocatedQueryMemo.advancePhysical
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                        { heap := after,
+                          equality :=
+                            (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge ∧
+                  saved = queries ∧
+                    ordinary = none ∧
+                      ∀ (row : EdgeValue Symbol Guard),
+                        row ∈ InternedEdgeResidency.nodeEdges result → row ∈ InternedEdgeResidency.nodeEdges rootValue
+  | x => True
+
+case cons.nil.ok.cons.nil.ok.false
+Typing Key : Type
+width : Nat
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+lib : SourceSynthesisTypeSyntax.Library
+query : SourceSynthesisTypeSyntax.Query
+signed : Int
+whole : SourceSynthesisFirstOrderConstruction.Expression
+accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole
+rootValue : Node
+heap : InternedConstructorTemplates.State Symbol Guard
+built :
+  InternedFreshOrdinaryConstruction.build (SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) [] empty =
+    InternedNestedConstruction.Outcome.done rootValue heap
+cache : Cache.State SourceEqualityPartialConstraintKey.Key
+handle : Nat
+decoded : SourcePruningEnumerationNodes.lookupNode heap handle = some rootValue
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Guard
+templates : List (Template.Pattern Symbol)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+metadata : Metadata Typing
+readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel : Nat
+queries : SourceEndpointMemo.Memos
+initialRead :
+  ∀ (pending : UVarValue Symbol) (readAfter : Core),
+    (getValue readFuel 0 (initial handle)).run = [Except.ok (pending, readAfter)] →
+      pending = UVarValue.unenumerated (some handle) [] ∧ EnumerationCompressionFrame.Frame (initial handle) readAfter
+narrowObservation :
+  ∀ (result : Node) (action : Option (EnumerateM Symbol Guard Unit))
+    (after : InternedConstructorTemplates.State Symbol Guard),
+    SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle []
+          rootValue heap =
+        MergedSourceComparison.Result.done (result, action) after →
+      SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel 0 rootValue heap =
+        MergedSourceComparison.Result.done result after
+readAfter : Core
+readFrame : EnumerationCompressionFrame.Frame (initial handle) readAfter
+readEq : (getValue readFuel 0 (initial handle)).run = [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)]
+checked : Core
+checkEq :
+  (SourcePruningEnumerationRecursion.checkRepeated heap checkFuel 0 handle [] readAfter).run =
+    [Except.ok (false, checked)]
+checkSuccess :
+  EnumerationCorrectness.Success (SourcePruningEnumerationRecursion.checkRepeated heap checkFuel 0 handle []) readAfter
+    false checked
+frame : EnumerationCompressionFrame.Frame (initial handle) checked
+⊢ match
+    match
+      (SourcePruningEnumerationRecursion.checkRepeated
+          (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap checkFuel 0
+          handle [] readAfter).run with
+    | [Except.ok (true, checked)] =>
+      SourcePruningEnumerationSelectedStep.Result.parked checked
+        (SourcePruningEnumerationParkedRestart.adapt
+          (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap indexFuel 0
+          handle []
+          { core := initial handle,
+            expandable := fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+            waiting := fun x => none }
+          checked)
+        (Option.map (fun parked => (SourcePruningEnumerationRestart.run stop order metadata parked checked).run)
+          (SourcePruningEnumerationParkedRestart.adapt
+            (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap indexFuel
+            0 handle []
+            { core := initial handle,
+              expandable := fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+              waiting := fun x => none }
+            checked))
+    | [Except.ok (false, checked)] =>
+      match
+        SourcePruningEnumerationNodes.lookupNode
+          (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap handle with
+      | none =>
+        SourcePruningEnumerationSelectedStep.Result.stopped
+          [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)]
+          (some
+            (SourcePruningEnumerationRecursion.checkRepeated
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap
+                checkFuel 0 handle [] readAfter).run)
+      | some oldValue =>
+        match
+          SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle []
+            oldValue
+            (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap with
+        | MergedSourceComparison.Result.failed _fault _heap =>
+          SourcePruningEnumerationSelectedStep.Result.narrowed checked
+            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle
+              [] oldValue
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+            (SourceCurrentAllocatedPartialState.advance
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+              (SourceCurrentAllocatedQueryMemo.advancePhysical
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                {
+                  heap :=
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                        handle [] oldValue
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                  heap).checked.native.machine.heap).state,
+                  equality :=
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+            queries none none none none
+        | MergedSourceComparison.Result.done (_value, none) _heap =>
+          SourcePruningEnumerationSelectedStep.Result.narrowed checked
+            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle
+              [] oldValue
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+            (SourceCurrentAllocatedPartialState.advance
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+              (SourceCurrentAllocatedQueryMemo.advancePhysical
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                {
+                  heap :=
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                        handle [] oldValue
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                  heap).checked.native.machine.heap).state,
+                  equality :=
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+            queries none none none none
+        | MergedSourceComparison.Result.done (value, some action) heap_1 =>
+          match (action checked).run with
+          | [Except.ok (PUnit.unit, observed)] =>
+            match SourcePruningEnumerationNodes.encodeNode value with
+            | none =>
+              SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                  handle [] oldValue
+                  (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+                (SourceCurrentAllocatedPartialState.advance
+                  (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                  (SourceCurrentAllocatedQueryMemo.advancePhysical
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                    {
+                      heap :=
+                        (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                            representativeFuel 0 handle [] oldValue
+                            (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                      heap).checked.native.machine.heap).state,
+                      equality :=
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                  (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                  (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+                queries (some (action checked).run) none none none
+            | some newHandle =>
+              match
+                SourcePruningEnumerationNarrowAdapter.adapt heap_1 indexFuel 0 handle newHandle []
+                  { core := initial handle,
+                    expandable := fun slot =>
+                      if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+                    waiting := fun x => none }
+                  observed with
+              | none =>
+                SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                  (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                    handle [] oldValue
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+                  (SourceCurrentAllocatedPartialState.advance
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                    (SourceCurrentAllocatedQueryMemo.advancePhysical
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                      {
+                        heap :=
+                          (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                              representativeFuel 0 handle [] oldValue
+                              (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                        heap).checked.native.machine.heap).state,
+                        equality :=
+                          (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                    (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+                  queries (some (action checked).run) none none none
+              | some attached =>
+                match
+                  (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata 0 (Sum.inr newHandle)
+                      attached.core).run with
+                | [Except.ok ((false, _updated), callbackCore)] =>
+                  SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                      handle [] oldValue
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+                    (SourceCurrentAllocatedPartialState.advance
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                      (SourceCurrentAllocatedQueryMemo.advancePhysical
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                        {
+                          heap :=
+                            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                representativeFuel 0 handle [] oldValue
+                                (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                          heap).checked.native.machine.heap).state,
+                          equality :=
+                            (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+                    queries (some (action checked).run) (some (EnumerationExpandableIndex.frame callbackCore attached))
+                    (some
+                      (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata 0 (Sum.inr newHandle)
+                          attached.core).run)
+                    none
+                | x =>
+                  SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                      handle [] oldValue
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+                    (SourceCurrentAllocatedPartialState.advance
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                      (SourceCurrentAllocatedQueryMemo.advancePhysical
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                        {
+                          heap :=
+                            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                representativeFuel 0 handle [] oldValue
+                                (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                          heap).checked.native.machine.heap).state,
+                          equality :=
+                            (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+                    queries (some (action checked).run) (some attached)
+                    (some
+                      (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata 0 (Sum.inr newHandle)
+                          attached.core).run)
+                    none
+          | x =>
+            SourcePruningEnumerationSelectedStep.Result.narrowed checked
+              (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                handle [] oldValue
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap)
+              (SourceCurrentAllocatedPartialState.advance
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                (SourceCurrentAllocatedQueryMemo.advancePhysical
+                  (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                  {
+                    heap :=
+                      (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel
+                          0 handle [] oldValue
+                          (SourceCurrentAllocatedPartialInitialization.caller width cache
+                                    heap).checked.native.machine.heap).state,
+                    equality :=
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge)
+              queries (some (action checked).run) none none none
+    | x =>
+      SourcePruningEnumerationSelectedStep.Result.stopped
+        [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)]
+        (some
+          (SourcePruningEnumerationRecursion.checkRepeated
+              (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.native.machine.heap
+              checkFuel 0 handle [] readAfter).run) with
+  |
+  SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (result, action) after) reached saved _raw _candidate _right ordinary =>
+    ∃ readAfter_1,
+      [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)] =
+          [Except.ok (UVarValue.unenumerated (some handle) [], readAfter_1)] ∧
+        (SourcePruningEnumerationRecursion.checkRepeated heap checkFuel 0 handle [] readAfter_1).run =
+            [Except.ok (false, checked)] ∧
+          EnumerationCompressionFrame.Frame (initial handle) checked ∧
+            SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle
+                  [] rootValue heap =
+                MergedSourceComparison.Result.done (result, action) after ∧
+              SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel 0 rootValue heap =
+                  MergedSourceComparison.Result.done result after ∧
+                reached =
+                    SourceCurrentAllocatedPartialState.advance
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+                      (SourceCurrentAllocatedQueryMemo.advancePhysical
+                        (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+                        { heap := after,
+                          equality :=
+                            (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+                      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge ∧
+                  saved = queries ∧
+                    ordinary = none ∧
+                      ∀ (row : EdgeValue Symbol Guard),
+                        row ∈ InternedEdgeResidency.nodeEdges result → row ∈ InternedEdgeResidency.nodeEdges rootValue
+  | x => True
+'_private._stdin.0.MicroCFTA.SourceSynthesisCurrentInitialPrefixOrigin.initial_prefix_narrowed_rows' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

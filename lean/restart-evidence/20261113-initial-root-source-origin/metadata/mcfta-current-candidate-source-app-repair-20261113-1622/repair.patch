@@ -1,0 +1,94 @@
+--- source.lean
++++ source.lean
+@@ -27,0 +28,2 @@
++  change SourceSynthesisProgramRoles.ProgramSyntax
++    (.node [.mk "filter" filterGuard [goal, candidate]]) at checked
+@@ -29,4 +31,16 @@
+-  | node rows checked =>
+-      have selected := checked _ List.mem_cons_self
+-      cases selected with
+-      | application actual _ _ => cases actual
++  | node _ rows =>
++      have own := rows _ (List.mem_singleton_self _)
++      generalize selected : (.mk "filter" filterGuard [goal, candidate] : Row) = row at own
++      cases own with
++      | annotated name annotation =>
++          have lengths := congrArg (fun row : Row => match row with
++            | .mk _ _ children => children.length) selected
++          change (2 : Nat) = 1 at lengths
++          omega
++      | application actual _ _ =>
++          rw [← selected] at actual
++          have names := congrArg (fun expression : Expression => match expression with
++            | .node [.mk name _ _] => name
++            | _ => "") actual
++          change ("app" : String) = "filter" at names
++          exact False.elim ((by decide : ("app" : String) ≠ "filter") names)
+@@ -34,4 +48,34 @@
+-          cases actual
+-          exact candidateRole
+-
+-private theorem top_ne_app : (top : Guard) ≠ appGuard := by decide
++          rename_i sourceCandidates sourceGoal
++          rw [← selected] at actual
++          have children := congrArg (fun expression : Expression => match expression with
++            | .node [.mk _ _ children] => children
++            | _ => []) actual
++          change [sourceGoal, sourceCandidates] = [goal, candidate] at children
++          have same : sourceCandidates = candidate :=
++            (List.cons.inj (List.cons.inj children).2).1
++          exact same ▸ candidateRole
++
++private theorem stable_guard (input output : EqualityNormalize.Constraints)
++    (prepared : EqualityNormalize.complete (EqualityNormalize.prepare input) = output)
++    (stable : EqualityNormalize.congruenceStep output = some output) :
++    SourceSynthesisGeneralizeSyntax.eqGuard input = (⟨some output, .top⟩ : Guard) := by
++  have positive : 0 < EqualityTermination.normalizationBound input := Nat.zero_lt_succ _
++  unfold SourceSynthesisGeneralizeSyntax.eqGuard EqualityNormalize.mkEqConstraints
++  rw [prepared]
++  cases bound : EqualityTermination.normalizationBound input with
++  | zero => rw [bound] at positive; exact (Nat.not_lt_zero _ positive).elim
++  | succ fuel =>
++      simp only [EqualityNormalize.fixMaybe, stable, ite_true,
++        SymbolicEqualityBridge.resultClasses]
++
++private theorem app_payload : appGuard =
++    (⟨some [[[0], [2, 0, 2]], [[1], [2, 0, 0]], [[2, 0, 1], [3, 0]]], .top⟩ : Guard) := by
++  apply stable_guard <;> cbv
++
++private theorem top_ne_app : (top : Guard) ≠ appGuard := by
++  intro same
++  have payload := congrArg (fun guard : Guard => guard.equalities) same
++  rw [app_payload] at payload
++  change (some [] : Option EqualityNormalize.Constraints) =
++    some [[[0], [2, 0, 2]], [[1], [2, 0, 0]], [[2, 0, 1], [3, 0]]] at payload
++  cases payload
+@@ -117,0 +162 @@
++            apply Option.some.inj
+@@ -172 +217 @@
+-                      have sourceGuardSame : sourceGuard = appGuard :=
++                      have sourceGuardSame : ownGuard = appGuard :=
+@@ -175,0 +221,2 @@
++                      generalize selectedRow : (EdgeSyntax.mk "app" ownGuard sourceChildren : Row) =
++                        sourceRow at sourceRole
+@@ -177 +224,5 @@
+-                      | annotated name annotation => exact False.elim (top_ne_app sourceGuardSame)
++                      | annotated name annotation =>
++                          have guardSame := congrArg (fun row : Row => match row with
++                            | .mk _ guard _ => guard) selectedRow
++                          change ownGuard = top at guardSame
++                          exact False.elim (top_ne_app (guardSame.symm.trans sourceGuardSame))
+@@ -178,0 +230 @@
++                          rw [← selectedRow] at actual
+@@ -181 +233 @@
+-                              EdgeSyntax.mk "app" sourceGuard sourceChildren :=
++                              EdgeSyntax.mk "app" ownGuard sourceChildren :=
+@@ -195 +247,7 @@
+-                      | filter actual _ => cases actual
++                      | filter actual _ =>
++                          rw [← selectedRow] at actual
++                          have names := congrArg (fun expression : Expression => match expression with
++                            | .node [.mk name _ _] => name
++                            | _ => "") actual
++                          change ("filter" : String) = "app" at names
++                          exact False.elim ((by decide : ("filter" : String) ≠ "app") names)

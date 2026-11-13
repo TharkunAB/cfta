@@ -1,0 +1,22 @@
+--- initial-draft-148
++++ initial-repair-150
+@@ -93,0 +94 @@
++      cases source
+@@ -103,3 +104,2 @@
+-        change Outcome.done ([] : List (EdgeValue Symbol Guard)) empty =
+-          .done [] call.current at earlier
+-        exact (Outcome.done.inj earlier).2.symm
++        have observed := congrArg Outcome.state earlier
++        simpa only [List.take_zero, buildEdges, Outcome.state] using observed.symm
+@@ -120,3 +120,5 @@
+-        have actual := made
+-        rw [endpoints.1, endpoints.2, same] at actual
+-        exact actual
++        have roots : rows = [rootRow] :=
++          endpoints.1.trans (congrArg (fun edge => [edge]) same)
++        have aligned : (rows, middle) = ([rootRow], call.next) := Prod.ext roots endpoints.2
++        exact (congrArg (fun pair : List (EdgeValue Symbol Guard) × State Symbol Guard =>
++          run (makeNode pair.1) pair.2) aligned).symm.trans made
+@@ -140 +142 @@
+-            chunksRun, wholeShape, ?_, ?_, ?_, goalDone, candidateContext, candidateDone, ?_,
++            chunksRun, wholeShape, ?_, ?_, ?_, rfl, candidateContext, rfl, ?_,

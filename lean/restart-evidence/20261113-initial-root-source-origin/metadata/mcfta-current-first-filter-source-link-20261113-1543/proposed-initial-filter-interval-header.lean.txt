@@ -1,0 +1,42 @@
+private theorem current_initial_filter_interval
+    [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : SourceSynthesisTypeSyntax.Library) (query : SourceSynthesisTypeSyntax.Query)
+    (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (heap : State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue heap)
+    (rootRow : EdgeValue Symbol Guard)
+    (rootMember : rootRow ∈ InternedEdgeResidency.nodeEdges rootValue) :
+    let ctx := SourceSynthesisCurrentContext.context lib query
+    ∃ (chunks : List (List Expression))
+        (goalValue candidateValue : Value Symbol Guard)
+        (candidateStart candidateAfter edgeAfter : State Symbol Guard),
+      (SourceSynthesisSelections.permutations ctx.argumentEdges).mapM
+        (fun selected => SourceSynthesisFirstOrderConstruction.relevantRows
+          ctx true signed.toNat (selected.map Prod.fst)) = .ok chunks ∧
+      whole = SourceSynthesisFirstOrderConstruction.ofType (.union chunks.flatten)
+        (SourceSynthesisCurrentContext.typeNode query.queryGoal) ∧
+      rootRow.entry.key.symbol = literal "filter" ∧
+      rootRow.entry.key.constraint = filterGuard ∧
+      rootRow.children = [goalValue, candidateValue] ∧
+      InternedFreshOrdinaryConstruction.build
+        (ordinarySymbols (SourceSynthesisCurrentContext.typeNode query.queryGoal)) [] empty =
+          .done goalValue candidateStart ∧
+      SourceCurrentConstrainedCapSourceHistory.Context candidateStart [] ∧
+      InternedFreshOrdinaryConstruction.build
+        (ordinarySymbols (.union chunks.flatten)) [] candidateStart =
+          .done candidateValue candidateAfter ∧
+      run (makeEdge (literal "filter") filterGuard [goalValue, candidateValue]) candidateAfter =
+        (rootRow, edgeAfter) ∧
+      run (makeNode [rootRow]) edgeAfter = (rootValue, heap) ∧
+      Grows candidateAfter heap ∧
+      ∀ candidate ∈ chunks.flatten,
+        ∃ rows : List Row, candidate = .node rows ∧
+          ∀ (types function argument : Expression),
+            EdgeSyntax.mk "app" appGuard
+              [types, SourceSynthesisTypeSyntax.arrowMarker top, function, argument] ∈ rows →
+            types = SourceSynthesisTypeSyntax.allTypes top
+              (SourceSynthesisCurrentContext.constructorCatalog lib query) ∧
+            ((∃ functionRows : List Row, function = .node functionRows) ∨
+              ∃ pools : List (List Row), function = .union (pools.map fun rows => .node rows))

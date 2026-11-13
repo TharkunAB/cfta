@@ -1,0 +1,17 @@
+--- candidate-roles-failed-55
++++ candidate-roles-checked-63
+@@ -5 +5 @@
+-open SourceSynthesisFirstOrderConstruction (Expression ofType application)
++open SourceSynthesisFirstOrderConstruction (Expression Row ofType application)
+@@ -15,0 +16 @@
++      generalize selected : (.mk "filter" (eqGuard [[[0], [1, 0]]]) [goal, candidates] : Row) = row at own
+@@ -16,0 +18,5 @@
++      | annotated name annotation =>
++          have lengths := congrArg (fun row : Row => match row with
++            | .mk _ _ children => children.length) selected
++          change (2 : Nat) = 1 at lengths
++          omega
+@@ -17,0 +24 @@
++          rw [← selected] at actual
+@@ -24,0 +32 @@
++          rw [← selected] at actual

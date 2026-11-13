@@ -1,0 +1,16 @@
+--- candidate-app-internal-194
++++ candidate-app-failed-197
+@@ -178,2 +178,6 @@
+-                      | application actual _ _ =>
+-                          cases actual
++                      | @application types function argument row actual _ _ =>
++                          have rowSame : EdgeSyntax.mk "app" appGuard
++                              [types, SourceSynthesisTypeSyntax.arrowMarker top, function, argument] =
++                              EdgeSyntax.mk "app" sourceGuard sourceChildren :=
++                            (List.cons.inj (Syntax.node.inj actual)).1
++                          cases rowSame
+@@ -181 +185 @@
+-                              [_, SourceSynthesisTypeSyntax.arrowMarker top, _, _] ∈ sourceRows :=
++                              [types, SourceSynthesisTypeSyntax.arrowMarker top, function, argument] ∈ sourceRows :=
+@@ -184 +187,0 @@
+-                          rename_i types function argument

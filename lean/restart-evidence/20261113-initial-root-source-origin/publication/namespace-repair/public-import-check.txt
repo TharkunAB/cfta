@@ -1,0 +1,360 @@
+MicroCFTA.SourceSynthesisCurrentCandidateAppOperands.current_candidate_app_operands
+  (lib : MicroCFTA.SourceSynthesisTypeSyntax.Library) (query : MicroCFTA.SourceSynthesisTypeSyntax.Query) (signed : Int)
+  (whole : MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression)
+  (returned : MicroCFTA.SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole) :
+  have ctx := MicroCFTA.SourceSynthesisCurrentContext.context lib query;
+  ∃ chunks,
+    List.mapM
+          (fun selected =>
+            MicroCFTA.SourceSynthesisFirstOrderConstruction.relevantRows ctx true signed.toNat
+              (List.map Prod.fst selected))
+          (MicroCFTA.SourceSynthesisSelections.permutations ctx.argumentEdges) =
+        Except.ok chunks ∧
+      whole =
+          MicroCFTA.SourceSynthesisFirstOrderConstruction.ofType
+            (MicroCFTA.InternedNestedConstruction.Syntax.union chunks.flatten)
+            (MicroCFTA.SourceSynthesisCurrentContext.typeNode query.queryGoal) ∧
+        ∀ (candidate : MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression),
+          candidate ∈ chunks.flatten →
+            ∃ rows,
+              candidate = MicroCFTA.InternedNestedConstruction.Syntax.node rows ∧
+                ∀ (types function argument : MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression),
+                  MicroCFTA.InternedNestedConstruction.EdgeSyntax.mk "app"
+                        (MicroCFTA.SourceSynthesisGeneralizeSyntax.eqGuard
+                          [[[1], [2, 0, 0]], [[3, 0], [2, 0, 1]], [[0], [2, 0, 2]]])
+                        [types,
+                          MicroCFTA.SourceSynthesisTypeSyntax.arrowMarker MicroCFTA.SourceSynthesisGeneralizeSyntax.top,
+                          function, argument] ∈
+                      rows →
+                    types =
+                        MicroCFTA.SourceSynthesisTypeSyntax.allTypes MicroCFTA.SourceSynthesisGeneralizeSyntax.top
+                          (MicroCFTA.SourceSynthesisCurrentContext.constructorCatalog lib query) ∧
+                      ((∃ functionRows, function = MicroCFTA.InternedNestedConstruction.Syntax.node functionRows) ∨
+                        ∃ pools,
+                          function =
+                            MicroCFTA.InternedNestedConstruction.Syntax.union
+                              (List.map
+                                (fun functionRows => MicroCFTA.InternedNestedConstruction.Syntax.node functionRows)
+                                pools))
+'MicroCFTA.SourceSynthesisCurrentCandidateAppOperands.current_candidate_app_operands' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceSynthesisCurrentInitialOuterNarrowRows.initial_outer_narrow_rows {Typing Key : Type}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (lib : MicroCFTA.SourceSynthesisTypeSyntax.Library) (query : MicroCFTA.SourceSynthesisTypeSyntax.Query) (signed : Int)
+  (whole : MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression)
+  (accepted : MicroCFTA.SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole)
+  (rootValue :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (heap :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (built :
+    MicroCFTA.InternedFreshOrdinaryConstruction.build
+        (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+        MicroCFTA.InternedConstructorTemplates.empty =
+      MicroCFTA.InternedNestedConstruction.Outcome.done rootValue heap)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing) (holeKey : Typing → Nat → Key)
+  (fits : Key → MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula → Bool)
+  (admits :
+    Key →
+      MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        Bool)
+  (fuel : Nat)
+  (result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (after :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (observed :
+    MicroCFTA.SourcePruningOuterNarrow.narrow holeKey fits admits metadata fuel 0 rootValue heap =
+      MicroCFTA.MergedSourceComparison.Result.done result after)
+  (row :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) :
+  row ∈ MicroCFTA.InternedEdgeResidency.nodeEdges result → row ∈ MicroCFTA.InternedEdgeResidency.nodeEdges rootValue
+'MicroCFTA.SourceSynthesisCurrentInitialOuterNarrowRows.initial_outer_narrow_rows' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceSynthesisCurrentFirstFilterSourceLink.current_initial_filter_interval
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (lib : MicroCFTA.SourceSynthesisTypeSyntax.Library) (query : MicroCFTA.SourceSynthesisTypeSyntax.Query) (signed : Int)
+  (whole : MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression)
+  (accepted : MicroCFTA.SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole)
+  (rootValue :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (heap :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (built :
+    MicroCFTA.InternedFreshOrdinaryConstruction.build
+        (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+        MicroCFTA.InternedConstructorTemplates.empty =
+      MicroCFTA.InternedNestedConstruction.Outcome.done rootValue heap)
+  (rootRow :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (rootMember : rootRow ∈ MicroCFTA.InternedEdgeResidency.nodeEdges rootValue) :
+  have ctx := MicroCFTA.SourceSynthesisCurrentContext.context lib query;
+  ∃ chunks goalValue candidateValue candidateStart candidateAfter edgeAfter,
+    List.mapM
+          (fun selected =>
+            MicroCFTA.SourceSynthesisFirstOrderConstruction.relevantRows ctx true signed.toNat
+              (List.map Prod.fst selected))
+          (MicroCFTA.SourceSynthesisSelections.permutations ctx.argumentEdges) =
+        Except.ok chunks ∧
+      whole =
+          MicroCFTA.SourceSynthesisFirstOrderConstruction.ofType
+            (MicroCFTA.InternedNestedConstruction.Syntax.union chunks.flatten)
+            (MicroCFTA.SourceSynthesisCurrentContext.typeNode query.queryGoal) ∧
+        rootRow.entry.key.symbol = MicroCFTA.SourceSynthesisLabelProgramBuildRoles.literal "filter" ∧
+          rootRow.entry.key.constraint = MicroCFTA.SourceSynthesisGeneralizeSyntax.eqGuard [[[0], [1, 0]]] ∧
+            rootRow.children = [goalValue, candidateValue] ∧
+              MicroCFTA.InternedFreshOrdinaryConstruction.build
+                    (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+                      (MicroCFTA.SourceSynthesisCurrentContext.typeNode query.queryGoal))
+                    [] MicroCFTA.InternedConstructorTemplates.empty =
+                  MicroCFTA.InternedNestedConstruction.Outcome.done goalValue candidateStart ∧
+                MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context candidateStart [] ∧
+                  MicroCFTA.InternedFreshOrdinaryConstruction.build
+                        (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+                          (MicroCFTA.InternedNestedConstruction.Syntax.union chunks.flatten))
+                        [] candidateStart =
+                      MicroCFTA.InternedNestedConstruction.Outcome.done candidateValue candidateAfter ∧
+                    MicroCFTA.InternedConstructorTemplates.run
+                          (MicroCFTA.InternedConstructorTemplates.makeEdge
+                            (MicroCFTA.SourceSynthesisLabelProgramBuildRoles.literal "filter")
+                            (MicroCFTA.SourceSynthesisGeneralizeSyntax.eqGuard [[[0], [1, 0]]])
+                            [goalValue, candidateValue])
+                          candidateAfter =
+                        (rootRow, edgeAfter) ∧
+                      MicroCFTA.InternedConstructorTemplates.run
+                            (MicroCFTA.InternedConstructorTemplates.makeNode [rootRow]) edgeAfter =
+                          (rootValue, heap) ∧
+                        MicroCFTA.InternedConstructorTemplates.Grows candidateAfter heap ∧
+                          ∀ (candidate : MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression),
+                            candidate ∈ chunks.flatten →
+                              ∃ rows,
+                                candidate = MicroCFTA.InternedNestedConstruction.Syntax.node rows ∧
+                                  ∀
+                                    (types function argument :
+                                      MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression),
+                                    MicroCFTA.InternedNestedConstruction.EdgeSyntax.mk "app"
+                                          (MicroCFTA.SourceSynthesisGeneralizeSyntax.eqGuard
+                                            [[[1], [2, 0, 0]], [[3, 0], [2, 0, 1]], [[0], [2, 0, 2]]])
+                                          [types,
+                                            MicroCFTA.SourceSynthesisTypeSyntax.arrowMarker
+                                              MicroCFTA.SourceSynthesisGeneralizeSyntax.top,
+                                            function, argument] ∈
+                                        rows →
+                                      types =
+                                          MicroCFTA.SourceSynthesisTypeSyntax.allTypes
+                                            MicroCFTA.SourceSynthesisGeneralizeSyntax.top
+                                            (MicroCFTA.SourceSynthesisCurrentContext.constructorCatalog lib query) ∧
+                                        ((∃ functionRows,
+                                            function = MicroCFTA.InternedNestedConstruction.Syntax.node functionRows) ∨
+                                          ∃ pools,
+                                            function =
+                                              MicroCFTA.InternedNestedConstruction.Syntax.union
+                                                (List.map
+                                                  (fun rows => MicroCFTA.InternedNestedConstruction.Syntax.node rows)
+                                                  pools))
+'MicroCFTA.SourceSynthesisCurrentFirstFilterSourceLink.current_initial_filter_interval' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceSynthesisCurrentFirstFilterSourceLink.current_narrowed_filter_interval {Typing Key : Type}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (lib : MicroCFTA.SourceSynthesisTypeSyntax.Library) (query : MicroCFTA.SourceSynthesisTypeSyntax.Query) (signed : Int)
+  (whole : MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression)
+  (accepted : MicroCFTA.SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole)
+  (rootValue :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (heap :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (built :
+    MicroCFTA.InternedFreshOrdinaryConstruction.build
+        (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+        MicroCFTA.InternedConstructorTemplates.empty =
+      MicroCFTA.InternedNestedConstruction.Outcome.done rootValue heap)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing) (holeKey : Typing → Nat → Key)
+  (fits : Key → MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula → Bool)
+  (admits :
+    Key →
+      MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        Bool)
+  (fuel : Nat)
+  (narrowed :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (narrowedAfter :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (narrowedCall :
+    MicroCFTA.SourcePruningOuterNarrow.narrow holeKey fits admits metadata fuel 0 rootValue heap =
+      MicroCFTA.MergedSourceComparison.Result.done narrowed narrowedAfter)
+  (rootRow :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (narrowedMember : rootRow ∈ MicroCFTA.InternedEdgeResidency.nodeEdges narrowed) :
+  have ctx := MicroCFTA.SourceSynthesisCurrentContext.context lib query;
+  ∃ chunks goalValue candidateValue candidateStart candidateAfter edgeAfter,
+    List.mapM
+          (fun selected =>
+            MicroCFTA.SourceSynthesisFirstOrderConstruction.relevantRows ctx true signed.toNat
+              (List.map Prod.fst selected))
+          (MicroCFTA.SourceSynthesisSelections.permutations ctx.argumentEdges) =
+        Except.ok chunks ∧
+      whole =
+          MicroCFTA.SourceSynthesisFirstOrderConstruction.ofType
+            (MicroCFTA.InternedNestedConstruction.Syntax.union chunks.flatten)
+            (MicroCFTA.SourceSynthesisCurrentContext.typeNode query.queryGoal) ∧
+        rootRow.entry.key.symbol = MicroCFTA.SourceSynthesisLabelProgramBuildRoles.literal "filter" ∧
+          rootRow.entry.key.constraint = MicroCFTA.SourceSynthesisGeneralizeSyntax.eqGuard [[[0], [1, 0]]] ∧
+            rootRow.children = [goalValue, candidateValue] ∧
+              MicroCFTA.InternedFreshOrdinaryConstruction.build
+                    (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+                      (MicroCFTA.SourceSynthesisCurrentContext.typeNode query.queryGoal))
+                    [] MicroCFTA.InternedConstructorTemplates.empty =
+                  MicroCFTA.InternedNestedConstruction.Outcome.done goalValue candidateStart ∧
+                MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context candidateStart [] ∧
+                  MicroCFTA.InternedFreshOrdinaryConstruction.build
+                        (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+                          (MicroCFTA.InternedNestedConstruction.Syntax.union chunks.flatten))
+                        [] candidateStart =
+                      MicroCFTA.InternedNestedConstruction.Outcome.done candidateValue candidateAfter ∧
+                    MicroCFTA.InternedConstructorTemplates.run
+                          (MicroCFTA.InternedConstructorTemplates.makeEdge
+                            (MicroCFTA.SourceSynthesisLabelProgramBuildRoles.literal "filter")
+                            (MicroCFTA.SourceSynthesisGeneralizeSyntax.eqGuard [[[0], [1, 0]]])
+                            [goalValue, candidateValue])
+                          candidateAfter =
+                        (rootRow, edgeAfter) ∧
+                      MicroCFTA.InternedConstructorTemplates.run
+                            (MicroCFTA.InternedConstructorTemplates.makeNode [rootRow]) edgeAfter =
+                          (rootValue, heap) ∧
+                        MicroCFTA.InternedConstructorTemplates.Grows candidateAfter heap ∧
+                          ∀ (candidate : MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression),
+                            candidate ∈ chunks.flatten →
+                              ∃ rows,
+                                candidate = MicroCFTA.InternedNestedConstruction.Syntax.node rows ∧
+                                  ∀
+                                    (types function argument :
+                                      MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression),
+                                    MicroCFTA.InternedNestedConstruction.EdgeSyntax.mk "app"
+                                          (MicroCFTA.SourceSynthesisGeneralizeSyntax.eqGuard
+                                            [[[1], [2, 0, 0]], [[3, 0], [2, 0, 1]], [[0], [2, 0, 2]]])
+                                          [types,
+                                            MicroCFTA.SourceSynthesisTypeSyntax.arrowMarker
+                                              MicroCFTA.SourceSynthesisGeneralizeSyntax.top,
+                                            function, argument] ∈
+                                        rows →
+                                      types =
+                                          MicroCFTA.SourceSynthesisTypeSyntax.allTypes
+                                            MicroCFTA.SourceSynthesisGeneralizeSyntax.top
+                                            (MicroCFTA.SourceSynthesisCurrentContext.constructorCatalog lib query) ∧
+                                        ((∃ functionRows,
+                                            function = MicroCFTA.InternedNestedConstruction.Syntax.node functionRows) ∨
+                                          ∃ pools,
+                                            function =
+                                              MicroCFTA.InternedNestedConstruction.Syntax.union
+                                                (List.map
+                                                  (fun rows => MicroCFTA.InternedNestedConstruction.Syntax.node rows)
+                                                  pools))
+'MicroCFTA.SourceSynthesisCurrentFirstFilterSourceLink.current_narrowed_filter_interval' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceSynthesisCurrentFirstFilterSourceLink.current_candidate_source_app
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (lib : MicroCFTA.SourceSynthesisTypeSyntax.Library) (query : MicroCFTA.SourceSynthesisTypeSyntax.Query) (signed : Int)
+  (whole : MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression)
+  (accepted : MicroCFTA.SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole)
+  (chunks : List (List MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression))
+  (chunksRun :
+    List.mapM
+        (fun selected =>
+          MicroCFTA.SourceSynthesisFirstOrderConstruction.relevantRows
+            (MicroCFTA.SourceSynthesisCurrentContext.context lib query) true signed.toNat (List.map Prod.fst selected))
+        (MicroCFTA.SourceSynthesisSelections.permutations
+          (MicroCFTA.SourceSynthesisCurrentContext.context lib query).argumentEdges) =
+      Except.ok chunks)
+  (candidateStart candidateAfter :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (candidateValue :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (ancestor :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (part :
+    MicroCFTA.SourceCurrentBuildStructuralRowOrigins.SourceRow
+      (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+        (MicroCFTA.InternedNestedConstruction.Syntax.union chunks.flatten))
+      [] candidateStart candidateValue candidateAfter ancestor)
+  (ancestorSymbol : ancestor.entry.key.symbol = MicroCFTA.SourceSynthesisLabelProgramBuildRoles.literal "app")
+  (ancestorGuard :
+    ancestor.entry.key.constraint =
+      MicroCFTA.SourceSynthesisGeneralizeSyntax.eqGuard [[[1], [2, 0, 0]], [[3, 0], [2, 0, 1]], [[0], [2, 0, 2]]]) :
+  ∃ candidateIndex sourceRows values unionMiddle memberValue memberStart memberAfter,
+    chunks.flatten[candidateIndex]? = some (MicroCFTA.InternedNestedConstruction.Syntax.node sourceRows) ∧
+      MicroCFTA.InternedFreshOrdinaryConstruction.buildMany
+            (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinaryChildren chunks.flatten) [] candidateStart =
+          MicroCFTA.InternedNestedConstruction.Outcome.done values unionMiddle ∧
+        MicroCFTA.InternedConstructorTemplates.run (MicroCFTA.InternedConstructorTemplates.makeUnion values)
+              unionMiddle =
+            (candidateValue, candidateAfter) ∧
+          values[candidateIndex]? = some memberValue ∧
+            MicroCFTA.InternedFreshOrdinaryConstruction.buildMany
+                  (List.take candidateIndex
+                    (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinaryChildren chunks.flatten))
+                  [] candidateStart =
+                MicroCFTA.InternedNestedConstruction.Outcome.done (List.take candidateIndex values) memberStart ∧
+              MicroCFTA.SourceCurrentConstrainedCapSourceHistory.Context memberStart [] ∧
+                MicroCFTA.InternedFreshOrdinaryConstruction.build
+                      (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+                        (MicroCFTA.InternedNestedConstruction.Syntax.node sourceRows))
+                      [] memberStart =
+                    MicroCFTA.InternedNestedConstruction.Outcome.done memberValue memberAfter ∧
+                  MicroCFTA.InternedFreshOrdinaryConstruction.buildMany
+                        (List.drop (candidateIndex + 1)
+                          (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinaryChildren chunks.flatten))
+                        [] memberAfter =
+                      MicroCFTA.InternedNestedConstruction.Outcome.done (List.drop (candidateIndex + 1) values)
+                        unionMiddle ∧
+                    MicroCFTA.InternedConstructorTemplates.Grows memberAfter candidateAfter ∧
+                      ∃ rawRows nodeMiddle sourceRowIndex outputRowIndex function argument,
+                        MicroCFTA.InternedFreshOrdinaryConstruction.buildEdges
+                              (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinaryEdges sourceRows) []
+                              memberStart =
+                            MicroCFTA.InternedNestedConstruction.Outcome.done rawRows nodeMiddle ∧
+                          MicroCFTA.InternedConstructorTemplates.run
+                                (MicroCFTA.InternedConstructorTemplates.makeNode rawRows) nodeMiddle =
+                              (memberValue, memberAfter) ∧
+                            (MicroCFTA.InternedEdgeResidency.nodeEdges memberValue)[outputRowIndex]? = some ancestor ∧
+                              ∃ call,
+                                call.output = ancestor ∧
+                                  ((∃ functionRows,
+                                      function = MicroCFTA.InternedNestedConstruction.Syntax.node functionRows) ∨
+                                    ∃ pools,
+                                      function =
+                                        MicroCFTA.InternedNestedConstruction.Syntax.union
+                                          (List.map (fun rows => MicroCFTA.InternedNestedConstruction.Syntax.node rows)
+                                            pools))
+'MicroCFTA.SourceSynthesisCurrentFirstFilterSourceLink.current_candidate_source_app' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

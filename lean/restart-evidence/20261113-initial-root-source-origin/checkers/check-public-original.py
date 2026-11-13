@@ -1,0 +1,85 @@
+from pathlib import Path
+import datetime
+import hashlib
+import json
+import os
+import re
+import shlex
+import subprocess
+
+root = Path('/home/tritlo/Code/mcfta')
+runtime = Path(__file__).parent
+allowed = {'propext', 'Classical.choice', 'Quot.sound'}
+cg = next(line.split(':', 2)[2] for line in Path('/proc/self/cgroup').read_text().splitlines()
+          if line.startswith('0::'))
+directory = Path('/sys/fs/cgroup') / cg.lstrip('/')
+limits = {name: (directory / name).read_text().strip()
+          for name in ['memory.max', 'memory.high', 'memory.swap.max']}
+assert limits == {'memory.max': '4294967296', 'memory.high': '4294967296', 'memory.swap.max': '0'}
+
+def sha(data):
+    return hashlib.sha256(data).hexdigest()
+
+def snapshot():
+    sources = sorted((root / 'lean/MicroCFTA').glob('*.lean'))
+    return '\n'.join(p.name + ' ' + sha(p.read_bytes()) for p in sources) + '\n'
+
+before = snapshot()
+(runtime / 'source-pins.txt').write_text(before)
+environment = dict(os.environ)
+environment.pop('LEAN_SYSROOT', None)
+environment['LEAN_NUM_THREADS'] = '1'
+results = []
+
+def run(name, command, minimum=0):
+    outcome = subprocess.run(['nix-shell', str(root / 'shell.nix'), '--run', command],
+                             cwd=root / 'lean', env=environment, capture_output=True, text=True)
+    output = outcome.stdout + outcome.stderr
+    (runtime / (name + '.txt')).write_text(output)
+    groups = [set(x.strip() for x in group.split(',') if x.strip())
+              for group in re.findall(r'depends on axioms:\s*\[([^]]*)\]', output, re.S)]
+    result = {'name': name, 'exit': outcome.returncode, 'axiom_groups': len(groups),
+              'nonstandard_axioms': sorted(set().union(*groups) - allowed) if groups else []}
+    results.append(result)
+    (runtime / 'partial-report.json').write_text(json.dumps(results, indent=2) + '\n')
+    assert outcome.returncode == 0, name
+    assert len(groups) >= minimum, name
+    assert 'sorryAx' not in output and not result['nonstandard_axioms'], name
+
+run('full-audit-build', 'exec lake build MicroCFTA.Audit')
+laws = {
+    'SourceSynthesisCurrentCandidateAppOperands': ['current_candidate_app_operands'],
+    'SourceSynthesisCurrentInitialOuterNarrowRows': ['initial_outer_narrow_rows'],
+    'SourceSynthesisCurrentInitialFilterInterval': ['current_initial_filter_interval', 'current_narrowed_filter_interval'],
+    'SourceSynthesisCurrentCandidateSourceApp': ['current_candidate_source_app'],
+}
+probe = ''
+for module, declarations in laws.items():
+    source = (root / 'lean/MicroCFTA' / (module + '.lean')).read_text()
+    for declaration in declarations:
+        source += '\n#print axioms MicroCFTA.' + module + '.' + declaration + '\n'
+    path = runtime / (module + '.lean')
+    path.write_text(source)
+    run(module + '-strict', 'exec lake env lean -j1 -DwarningAsError=true ' + shlex.quote(str(path)),
+        len(declarations))
+    probe += 'import MicroCFTA.' + module + '\n'
+for module, declarations in laws.items():
+    for declaration in declarations:
+        probe += '\n#check MicroCFTA.' + module + '.' + declaration + '\n'
+        probe += '#print axioms MicroCFTA.' + module + '.' + declaration + '\n'
+path = runtime / 'public-import-check.lean'
+path.write_text(probe)
+run('public-import-check', 'exec lake env lean -j1 -DwarningAsError=true ' + shlex.quote(str(path)), 5)
+path = runtime / 'Audit.lean'
+path.write_bytes((root / 'lean/MicroCFTA/Audit.lean').read_bytes())
+run('full-audit-strict', 'exec lake env lean -j1 -DwarningAsError=true ' + shlex.quote(str(path)), 1)
+audit_counts = re.findall(r'Checked axiom dependencies of (\d+) MicroCFTA theorems', (runtime / 'full-audit-strict.txt').read_text())
+assert len(audit_counts) == 1 and int(audit_counts[0]) >= 94957
+assert snapshot() == before
+report = {'at': datetime.datetime.now().astimezone().isoformat(), 'limits': limits,
+          'live_modules': len(before.splitlines()), 'source_tree_sha256': sha(before.encode()),
+          'audited_theorems': int(audit_counts[0]),
+          'audit_imports': sum(line.startswith('import ') for line in path.read_text().splitlines()),
+          'checks': results, 'haskell_changes': False, 'joint_completion_proved': False}
+(runtime / 'checked.json').write_text(json.dumps(report, indent=2) + '\n')
+print(json.dumps(report))

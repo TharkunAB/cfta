@@ -1,0 +1,55 @@
+import MicroCFTA.SourceSynthesisCurrentCandidateAppOperands
+import MicroCFTA.SourceSynthesisCurrentProgramStructure
+
+namespace MicroCFTA.SourceSynthesisCurrentCandidateRoles
+open SourceSynthesisFirstOrderConstruction (Expression ofType application)
+open SourceSynthesisProgramRoles (ProgramSyntax ProgramRowSyntax)
+open SourceSynthesisGeneralizeSyntax (eqGuard)
+
+private theorem filter_body_roles (candidates goal : Expression)
+    (roles : ProgramSyntax (ofType candidates goal)) : ProgramSyntax candidates := by
+  change ProgramSyntax (.node [.mk "filter" (eqGuard [[[0], [1, 0]]])
+    [goal, candidates]]) at roles
+  cases roles with
+  | node _ rows =>
+      have own := rows _ (List.mem_singleton_self _)
+      cases own with
+      | application actual _ _ =>
+          have names := congrArg (fun expression : Expression => match expression with
+            | .node [.mk name _ _] => name
+            | _ => "") actual
+          change ("app" : String) = "filter" at names
+          exact False.elim ((by decide : ("app" : String) ≠ "filter") names)
+      | filter actual candidateRole =>
+          rename_i sourceCandidates sourceGoal
+          have children := congrArg (fun expression : Expression => match expression with
+            | .node [.mk _ _ children] => children
+            | _ => []) actual
+          change [sourceGoal, sourceCandidates] = [goal, candidates] at children
+          have same : sourceCandidates = candidates :=
+            (List.cons.inj (List.cons.inj children).2).1
+          exact same ▸ candidateRole
+
+private theorem current_candidates_roles
+    (lib : SourceSynthesisTypeSyntax.Library) (query : SourceSynthesisTypeSyntax.Query)
+    (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (chunks : List (List Expression))
+    (chunksRun :
+      (SourceSynthesisSelections.permutations
+        (SourceSynthesisCurrentContext.context lib query).argumentEdges).mapM
+        (fun selected => SourceSynthesisFirstOrderConstruction.relevantRows
+          (SourceSynthesisCurrentContext.context lib query) true signed.toNat
+          (selected.map Prod.fst)) = .ok chunks) :
+    ProgramSyntax (.union chunks.flatten) := by
+  obtain ⟨actualChunks, actualRun, wholeEq, _facts⟩ :=
+    SourceSynthesisCurrentCandidateAppOperands.current_candidate_app_operands
+      lib query signed whole accepted
+  have same : actualChunks = chunks := Except.ok.inj (actualRun.symm.trans chunksRun)
+  cases same
+  have roles := (SourceSynthesisCurrentProgramStructure.current_root_structure
+    lib query signed whole accepted).1
+  rw [wholeEq] at roles
+  exact filter_body_roles _ _ roles
+
+end MicroCFTA.SourceSynthesisCurrentCandidateRoles
