@@ -1,3 +1,69 @@
+## Source node function rows and actual Type-read observers (2026-11-13 13:35 CET)
+
+The FULL goal remains ACTIVE. Pushes to formalize remain authorized. Main is
+still e53852064d3ef5a2eafec47d754c27504b11de5f. Prior notes remain an exact byte
+suffix. Keep the complete objective below. Base for this checkpoint is 9d499f087.
+
+NEW public SourceSynthesisCurrentFunctionParent.actual_app_identity_function_parent
+proves row survival for an original application whose function instruction is
+.node functionRows. From the SAME actual parent RowCall and a PURE source syntax
+lookup for a library scheme a -> a, it DERIVES the function build interval, its
+component RowCall, and a canonical native row index. The COMPLETE row retains the
+SAME singleton Type child and its finite guarded arrow(var1,var1) instance.
+The canonical index can differ from the source index. No future native row or
+membership supplier is an input. Existing StoredMuRetainedAlignment.row_call is
+now public; its proof body and statement are unchanged.
+
+Two PRIVATE proof pieces are checked in the new packet. The all-three-class
+observer113/1a434ca6 retains all four child reads from the actual selected-class
+permutation. Its function return precedes the FOLLOWING argument read. The
+generic ordinary-row observer140/58f5025b accepts the actual requested Type tree.
+It retains the real row prefix, Type-child read, edge construction, suffix, and
+node construction with every actual heap and full Memos endpoint.
+
+Standalone reproduction ran FROM /tmp under sole serial Nix4GiB max/high/swap0
+and one Lean thread. Full Audit PASS: 5898 live modules, 4895 Audit imports,
+94924 axiom reports. All FIVE public/private declaration checks pass with ONLY
+propext/Classical.choice/Quot.sound; the two generic laws use only propext and
+Quot.sound. EIGHTEEN source stages and THIRTEEN actual GNU zero-context replays
+are checked. Packet: lean/restart-evidence/20261113-source-function-parent/.
+It stores small source patches and diagnostics, including every failed stage.
+It contains no build archive. Runtime: /tmp/mcfta-source-parent-publication-20261113-1305/.
+
+SCOPE: the public parent theorem covers original .node function pools. Default
+union functions, Mu exposure, and later edits still require their actual origin
+history. An outer query filter can edit parent child0 while leaving function
+slot2 unchanged. Gamma's composition header100/be04d2a5 and ancestry addendum are
+PLANNING ONLY; their unedited whole-parent input cannot cover that edit by itself.
+The old marker-only59 observer remains valid for its observed case. That case
+misses the identified fresh source shapes that also retain result equality.
+
+NEXT: derive the same original Type occurrence through the ACTUAL current
+parent/head/edit history. Then derive support and prefix effects from that call
+and use the checked guarded-language law to preserve a finite Type instance
+through the required read. Native arrow-layout/closed-plain planning is archived in the packet under
+next-identity-shape/; it has NO BODY/CHECK yet.
+Closed/plain alone does not exclude Union or clear other function rows' gates.
+Do not add the missing origin, shape, Ready, support, or model as a provider.
+
+The original-input global theorem remains CurrentProgramEagerOutputs221/b7d297f1:
+finite stable eager execution, output resources, and stable Program readback.
+Whole-worker isolated-boundary preservation8246/abe55dcd is unchanged. Joint
+shared/alias/residual consistency and accepted SAME-original-root/SAME-emitted-
+partial completion remain the BIGGEST gap. Original typing, adequate depth,
+default LPO/reduction/refolding/lazy demand, counts/weights/training, BOTH rank
+and unrank inverses, host bounds, and compiled Haskell correspondence remain in
+scope. These local results do not prove those global claims.
+
+Haskell/Cabal/test-suite edits and Haskell defects/fixes in this checkpoint: NONE.
+Record every future Haskell fix in FINDINGS for the external implementation work.
+Preserve .hypha, all proofs, counterexamples, repairs, and marked drafts.
+PRIMARY is 48 percent at 13:32 CET; /tmp has 162.07 GiB free. Refresh within 15
+minutes. Above 80 percent, save the full handoff, stop workers, pause, and notify
+Matti. Publish this checkpoint, then CONTINUE. Root remains sole compiler.
+
+---
+
 ## Actual app marker-class function read checked locally (2026-11-13 12:06 CET)
 
 The FULL goal remains ACTIVE. Public native Type membership and its full Audit
