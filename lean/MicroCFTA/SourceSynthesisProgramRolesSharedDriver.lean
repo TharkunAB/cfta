@@ -534,7 +534,8 @@ private theorem observed_finish_shape
       split <;> simp_all only [SourcePruningEnumerationSelectedStep.Result.narrowed.injEq] <;> subst_vars <;>
         simp only [true_and] <;> exact ⟨_, rfl⟩
 
-private theorem observed_prefix_slots
+/-- The same actual prefix observation retains the marked Program slots. -/
+theorem observed_prefix_slots
     (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
     (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
     (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
@@ -715,7 +716,8 @@ private theorem callback_program_complete
     framed (fun extra => (callback extra).2.1)
 
 omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node] in
-private theorem render_stable_slots
+/-- A stable read retains the same marked Program slots. -/
+theorem render_stable_slots
     (heap : NativeHeap) (before after : Core) (valid : Constraint → Prop) (marked : Nat → Prop)
     (stable : EnumerationDriver.RenderStable before after)
     (slots : ProgramSlots valid literal heap before marked) :
@@ -737,7 +739,8 @@ private theorem render_stable_slots
     exact ⟨payload, by simpa only [stable.values] using stored, role⟩
 
 omit [DecidableEq Symbol] [DecidableEq Node] in
-private theorem prepared_marked_fields
+/-- The same successful preparation retains the marked Program fields and bucket scope. -/
+theorem prepared_marked_fields
     (entryFuel nativeFuel uv handle : Nat) (scs : List Suspended)
     (caller : Caller (bits + 2)) (before entered : Cached) (decoded value : Node) (heap : NativeHeap)
     (valid : Constraint → Prop) (marked : Nat → Prop)
