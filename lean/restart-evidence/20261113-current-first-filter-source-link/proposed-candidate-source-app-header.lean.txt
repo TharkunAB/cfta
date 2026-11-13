@@ -1,0 +1,52 @@
+private theorem current_candidate_source_app
+    [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : SourceSynthesisTypeSyntax.Library) (query : SourceSynthesisTypeSyntax.Query)
+    (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (chunks : List (List Expression))
+    (chunksRun :
+      (SourceSynthesisSelections.permutations
+        (SourceSynthesisCurrentContext.context lib query).argumentEdges).mapM
+        (fun selected => SourceSynthesisFirstOrderConstruction.relevantRows
+          (SourceSynthesisCurrentContext.context lib query) true signed.toNat
+          (selected.map Prod.fst)) = .ok chunks)
+    (candidateStart candidateAfter : State Symbol Guard)
+    (candidateValue : Value Symbol Guard) (ancestor : EdgeValue Symbol Guard)
+    (part : SourceCurrentBuildStructuralRowOrigins.SourceRow
+      (ordinarySymbols (.union chunks.flatten)) [] candidateStart candidateValue candidateAfter ancestor)
+    (ancestorSymbol : ancestor.entry.key.symbol = literal "app")
+    (ancestorGuard : ancestor.entry.key.constraint = appGuard) :
+    ∃ (candidateIndex : Nat) (sourceRows : List Row)
+        (values : List (Value Symbol Guard)) (unionMiddle : State Symbol Guard)
+        (memberValue : Value Symbol Guard) (memberStart memberAfter : State Symbol Guard),
+      chunks.flatten[candidateIndex]? = some (.node sourceRows) ∧
+      InternedFreshOrdinaryConstruction.buildMany (ordinaryChildren chunks.flatten) [] candidateStart =
+        .done values unionMiddle ∧
+      run (makeUnion values) unionMiddle = (candidateValue, candidateAfter) ∧
+      values[candidateIndex]? = some memberValue ∧
+      InternedFreshOrdinaryConstruction.buildMany
+        ((ordinaryChildren chunks.flatten).take candidateIndex) [] candidateStart =
+          .done (values.take candidateIndex) memberStart ∧
+      SourceCurrentConstrainedCapSourceHistory.Context memberStart [] ∧
+      InternedFreshOrdinaryConstruction.build (ordinarySymbols (.node sourceRows)) [] memberStart =
+        .done memberValue memberAfter ∧
+      InternedFreshOrdinaryConstruction.buildMany
+        ((ordinaryChildren chunks.flatten).drop (candidateIndex + 1)) [] memberAfter =
+          .done (values.drop (candidateIndex + 1)) unionMiddle ∧
+      Grows memberAfter candidateAfter ∧
+      ∃ (rawRows : List (EdgeValue Symbol Guard)) (nodeMiddle : State Symbol Guard)
+          (sourceRowIndex outputRowIndex : Nat) (function argument : Expression),
+        InternedFreshOrdinaryConstruction.buildEdges (ordinaryEdges sourceRows) [] memberStart =
+          .done rawRows nodeMiddle ∧
+        run (makeNode rawRows) nodeMiddle = (memberValue, memberAfter) ∧
+        (InternedEdgeResidency.nodeEdges memberValue)[outputRowIndex]? = some ancestor ∧
+        ∃ call : SourceCurrentStoredMuRetainedAlignment.RowCall
+            (ordinaryEdges sourceRows) [] memberStart rawRows nodeMiddle candidateAfter
+            sourceRowIndex (literal "app") appGuard
+            [ordinarySymbols (SourceSynthesisTypeSyntax.allTypes top
+              (SourceSynthesisCurrentContext.constructorCatalog lib query)),
+              ordinarySymbols (SourceSynthesisTypeSyntax.arrowMarker top),
+              ordinarySymbols function, ordinarySymbols argument],
+          call.output = ancestor ∧
+          ((∃ functionRows : List Row, function = .node functionRows) ∨
+            ∃ pools : List (List Row), function = .union (pools.map fun rows => .node rows))
