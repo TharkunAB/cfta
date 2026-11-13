@@ -1,0 +1,59 @@
+import MicroCFTA.SourceCurrentRequiredQueryMemos
+import MicroCFTA.SourceEqualitySelectedRequired
+
+namespace MicroCFTA.SourceSynthesisActualAppMarkerSubtrace
+open InternedConstructorTemplates
+open SourceEqualityRequiredGraph SourceCurrentRequiredQueryMemos
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+
+private theorem actual_app_marker_function_subtrace
+    [DecidableEq (EdgeKey Symbol Guard)]
+    (classes : EqualityNormalize.Constraints)
+    (onlyMarker : classes = [[[1], [2, 0, 0]]])
+    (resultType marker function argument : Value Symbol Guard)
+    (results : List (Value Symbol Guard)) (before after : State Symbol Guard)
+    (memos saved : EndpointMemoGateTrace.Memos)
+    (reads : SourceCurrentRequiredQueryMemos.RequireAllReads
+      (SourceEqualitySelectedRequired.paths classes)
+      [resultType, marker, function, argument] results before after memos saved) :
+    ∃ functionResult,
+      results = [resultType, marker, functionResult, argument] ∧
+      ∃ actual : SourceEqualityRequiredGraph.RequireNode
+          (SourceEqualityNeeded.build [[0, 0]]) function before functionResult after,
+        SourceCurrentRequiredQueryMemos.NodeReads actual memos saved := by
+  subst classes
+  have selectedPaths : SourceEqualitySelectedRequired.paths [[[1], [2, 0, 0]]] =
+      [[1], [2, 0, 0]] := by
+    cbv
+  have compiled : SourceEqualityNeeded.build
+      (SourceEqualitySelectedRequired.paths [[[1], [2, 0, 0]]]) =
+      .node [(1, .node []), (2, SourceEqualityNeeded.build [[0, 0]])] := by
+    rw [selectedPaths]
+    rfl
+  simp only [SourceCurrentRequiredQueryMemos.RequireAllReads, compiled] at reads
+  obtain ⟨_trace, memoReads⟩ := reads
+  cases memoReads with
+  | unselected after0 =>
+      cases after0 with
+      | unselected _rest => simp_all [SourceEqualityNeededMap.lookup]
+      | selected markerReads after1 =>
+          cases markerReads with
+          | identity =>
+              cases after1 with
+              | unselected _rest => simp_all [SourceEqualityNeededMap.lookup]
+              | selected functionReads after2 =>
+                  cases after2 with
+                  | unselected after3 =>
+                      cases after3
+                      simp_all [SourceEqualityNeededMap.lookup] <;>
+                        first
+                        | exact ⟨_, rfl, _, functionReads⟩
+                        | exact ⟨_, functionReads⟩
+                  | selected _first _rest => simp_all [SourceEqualityNeededMap.lookup]
+          | empty => simp_all [SourceEqualityNeededMap.lookup]
+          | ordinary => simp_all [SourceEqualityNeededMap.lookup]
+          | recursive => simp_all [SourceEqualityNeededMap.lookup]
+  | selected _first _rest => simp_all [SourceEqualityNeededMap.lookup]
+
+end MicroCFTA.SourceSynthesisActualAppMarkerSubtrace
