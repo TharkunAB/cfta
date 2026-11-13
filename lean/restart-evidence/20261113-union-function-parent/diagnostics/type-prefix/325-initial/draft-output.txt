@@ -1,0 +1,41 @@
+/tmp/mcfta-type-read-prefix-check-20261113-1428/SourceSynthesisActualOrdinaryTypeSubtrace.lean:240:8: error: Dependent elimination failed: Failed to solve equation
+  InternedNestedConstruction.Outcome.done call.values call.middle =
+    match
+      InternedFreshOrdinaryConstruction.build
+        (ordinarySymbols
+          (SourceSynthesisGeneralizeSyntax.generalize
+            (SourceSynthesisTypeSyntax.allTypes SourceSynthesisGeneralizeSyntax.top
+              (SourceSynthesisCurrentContext.constructorCatalog lib query))
+            (SourceSynthesisPr210TypeReflection.encodeTy
+              ((SourceSynthesisTypeSyntax.Ty.tVar "a").tFun (SourceSynthesisTypeSyntax.Ty.tVar "a")))))
+        [] call.current with
+    | InternedNestedConstruction.Outcome.done value state => InternedNestedConstruction.Outcome.done [value] state
+    | InternedNestedConstruction.Outcome.pending key state => InternedNestedConstruction.Outcome.pending key state
+/tmp/mcfta-type-read-prefix-check-20261113-1428/SourceSynthesisActualOrdinaryTypeSubtrace.lean:243:10: error: Type mismatch: After simplification, term
+  called
+ has type
+  (match
+      InternedFreshOrdinaryConstruction.build
+        (ordinarySymbols
+          (SourceSynthesisGeneralizeSyntax.generalize
+            (SourceSynthesisTypeSyntax.allTypes SourceSynthesisGeneralizeSyntax.top
+              (SourceSynthesisCurrentContext.constructorCatalog lib query))
+            (SourceSynthesisPr210TypeReflection.encodeTy
+              ((SourceSynthesisTypeSyntax.Ty.tVar "a").tFun (SourceSynthesisTypeSyntax.Ty.tVar "a")))))
+        [] call.current with
+    | InternedNestedConstruction.Outcome.done value state => InternedNestedConstruction.Outcome.done [value] state
+    | InternedNestedConstruction.Outcome.pending key state => InternedNestedConstruction.Outcome.pending key state) =
+    InternedNestedConstruction.Outcome.done call.values call.middle
+but is expected to have type
+  [child] = call.values ∧ next = call.middle
+/tmp/mcfta-type-read-prefix-check-20261113-1428/SourceSynthesisActualOrdinaryTypeSubtrace.lean:238:64: error: This simp argument is unused:
+  childDone
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [InternedFreshOrdinaryConstruction.buildMany, InternedNestedConstruction.Outcome.bind] at called
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'_private._stdin.0.MicroCFTA.SourceSynthesisActualOrdinaryTypeSubtrace.actual_identity_type_read_prefix' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

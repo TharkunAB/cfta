@@ -1,0 +1,126 @@
+--- source.lean
++++ source.lean
+@@ -17 +17 @@
+-open InternedNestedConstruction (Syntax Outcome)
++open InternedNestedConstruction (Syntax EdgeSyntax Outcome)
+@@ -46,0 +47,19 @@
++private theorem guard_records (input classes : EqualityNormalize.Constraints)
++    (payload : eqGuard input = (⟨some classes, .top⟩ : Guard)) :
++    ∃ records : List SourceEqualityClassOrder.Record,
++      SourceEqualityPhysicalPayload.own (eqGuard input) = .ok (some records) ∧
++      records.map SourceEqualityClassOrder.Record.paths = classes := by
++  have cached : SourceEqualityGuardReadback.Cached (eqGuard input).equalities := by
++    rw [SourceSynthesisGeneralizeSyntax.eqGuard_eq_source]
++    exact SourceEqualityGuardReadback.normalize_cached input
++  have normal : SourceEqualityGuardReadback.NormalClasses classes := by
++    apply SourceEqualityGuardReadback.source_cached (eqGuard input) cached classes
++    rw [payload]
++    simp only [SourceCompactGuards.sourceEqualities, SourceCompactGuards.positiveNormalized]
++  obtain ⟨records, built, _valid, paths⟩ :=
++    SourceEqualityPhysicalPayload.normal_records classes normal
++  refine ⟨records, ?_, paths⟩
++  rw [SourceEqualityPhysicalPayload.own, payload]
++  simp only [SourceCompactGuards.sourceEqualities, SourceCompactGuards.positiveNormalized,
++    SourceEqualityPhysicalPayload.read, built]
++
+@@ -51,3 +70,5 @@
+-  cases values[index]? with
+-  | none => cases found
+-  | some previous => exact ⟨previous, rfl, Option.some.inj found⟩
++  cases original : values[index]? with
++  | none => rw [original] at found; cases found
++  | some previous =>
++      rw [original] at found
++      exact ⟨previous, rfl, Option.some.inj found⟩
+@@ -96 +117 @@
+-            (expressions.drop (index + 1)) [] next
++            ((SourceSynthesisUniverseCallerBoundary.ordinaryChildren members).drop (index + 1)) [] next
+@@ -102 +123 @@
+-          have unionGrowth : Grows middle after := by
++          have unionGrowth : Grows middle stop := by
+@@ -110 +130,0 @@
+-  simp only [Syntax.union.sizeOf_spec]
+@@ -185,6 +205,2 @@
+-  let filterRecord : SourceEqualityClassOrder.Record :=
+-    ⟨EnumerationEquality.classTrie [[0], [1, 0]], [[0], [1, 0]]⟩
+-  have filterOwn : SourceEqualityPhysicalPayload.own (eqGuard [[[0], [1, 0]]]) =
+-      .ok (some [filterRecord]) := by
+-    rw [filter_payload]
+-    rfl
++  obtain ⟨filterRecords, filterOwn, filterPaths⟩ :=
++    guard_records [[[0], [1, 0]]] [[[0], [1, 0]]] filter_payload
+@@ -195 +211 @@
+-    have same : [filterRecord] = originals :=
++    have same : filterRecords = originals :=
+@@ -198,4 +214,4 @@
+-    have sameRecord : record = filterRecord := List.mem_singleton.mp member
+-    subst record
+-    change ∀ path ∈ [[0], [1, 0]],
+-      SourceEqualityEditCompiledPaths.Disjoint (path.map Int.ofNat) [Int.ofNat 1, Int.ofNat 2]
++    have recordPaths : record.paths ∈ [[[0], [1, 0]]] := by
++      rw [← filterPaths]
++      exact List.mem_map.mpr ⟨record, member, rfl⟩
++    have samePaths : record.paths = [[0], [1, 0]] := List.mem_singleton.mp recordPaths
+@@ -202,0 +219 @@
++    rw [samePaths] at member
+@@ -204 +221 @@
+-    · decide +kernel
++    · simp [SourceEqualityEditCompiledPaths.Disjoint, List.cons_prefix_cons]
+@@ -207 +224 @@
+-      decide +kernel
++      simp [SourceEqualityEditCompiledPaths.Disjoint, List.cons_prefix_cons]
+@@ -210,4 +227,4 @@
+-  let appRecords : List SourceEqualityClassOrder.Record :=
+-    [⟨EnumerationEquality.classTrie [[0], [2, 0, 2]], [[0], [2, 0, 2]]⟩,
+-      ⟨EnumerationEquality.classTrie [[1], [2, 0, 0]], [[1], [2, 0, 0]]⟩,
+-      ⟨EnumerationEquality.classTrie [[2, 0, 1], [3, 0]], [[2, 0, 1], [3, 0]]⟩]
++  obtain ⟨appRecords, appOwn, appPaths⟩ :=
++    guard_records
++      [[[1], [2, 0, 0]], [[3, 0], [2, 0, 1]], [[0], [2, 0, 2]]]
++      [[[0], [2, 0, 2]], [[1], [2, 0, 0]], [[2, 0, 1], [3, 0]]] app_payload
+@@ -216,2 +233,6 @@
+-    rw [currentGuard, app_payload]
+-    rfl
++    rw [currentGuard]
++    exact appOwn
++  have nonempty : appRecords ≠ [] := by
++    intro empty
++    rw [empty] at appPaths
++    cases appPaths
+@@ -219 +240,5 @@
+-    link.positive currentMember currentOwn (by intro impossible; cases impossible)
++    link.positive currentMember currentOwn nonempty
++  have rowAt : SourceCurrentStoredLiteralRowLineage.RowAt sourceCandidates ancestor := by
++    cases sourceCandidates <;>
++      simp only [InternedEdgeResidency.nodeEdges, List.getElem?_nil] at sourceAt <;> try contradiction
++    exact .node sourceAt
+@@ -222 +247 @@
+-    sourceContext sourceBuilt ancestor (.node (index := sourceIndex) sourceAt)
++    sourceContext sourceBuilt ancestor rowAt
+@@ -264,7 +289,3 @@
+-        have rowSame :
+-            EdgeSyntax.mk "app"
+-              (eqGuard [[[1], [2, 0, 0]], [[3, 0], [2, 0, 1]], [[0], [2, 0, 2]]])
+-              [types, SourceSynthesisTypeSyntax.arrowMarker top, function, argument] = sourceRow := by
+-          exact (List.cons.inj (Syntax.node.inj actual)).1
+-        cases rowSame
+-        have builtNode : build (ordinarySymbols (.node sourceRows)) [] before = .done raw after := by
++        cases actual
++        have builtNode : build (ordinarySymbols (.node sourceRows)) [] nodeStart =
++            .done nodeValue nodeAfter := by
+@@ -273,3 +294,4 @@
+-        refine ⟨types, function, argument, sourceRows, before, middle, after,
+-          rows, raw, sourceIndex, outputIndex, builtNode, built, made, selected, nodeGrowth, ?_⟩
+-        have observed : ∃ retained : RowCall expressions [] before rows middle sourceAfter
++        refine ⟨types, function, argument, sourceRows, nodeStart, middle, nodeAfter,
++          rows, nodeValue, sourceIndex, outputIndex, builtNode, built, made, selected, nodeGrowth, ?_⟩
++        have observed : ∃ retained : RowCall
++            (SourceSynthesisUniverseCallerBoundary.ordinaryEdges sourceRows) [] nodeStart rows middle sourceAfter
+@@ -280 +302 @@
+-            retained.output = row ∧ currentApp.children[2]? = retained.output.children[2]? :=
++            retained.output = ancestor ∧ currentApp.children[2]? = retained.output.children[2]? :=
+@@ -286,3 +308 @@
+-        have rowSame : EdgeSyntax.mk "filter" (eqGuard [[[0], [1, 0]]]) [goal, candidates] = sourceRow := by
+-          exact (List.cons.inj (Syntax.node.inj actual)).1
+-        cases rowSame
++        cases actual

@@ -1,0 +1,120 @@
+/tmp/mcfta-identity-arrow-shape-check4-20261113-1418/SourceSynthesisCurrentIdentityShape.lean:280:20: error(lean.unknownIdentifier): Unknown identifier `arrowChildren`
+/tmp/mcfta-identity-arrow-shape-check4-20261113-1418/SourceSynthesisCurrentIdentityShape.lean:279:73: error: unsolved goals
+inst✝¹ : DecidableEq FullSyntax.Formula
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+lib : Library
+query : Query
+signed : Int
+whole : Expression
+accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole
+rootValue : Value Symbol Guard
+heap : InternedConstructorTemplates.State Symbol Guard
+built : build (ordinarySymbols whole) [] empty = Outcome.done rootValue heap
+expressions : List (EdgeSyntax Symbol Guard)
+before after : InternedConstructorTemplates.State Symbol Guard
+outputs : List (EdgeValue Symbol Guard)
+rowIndex : Nat
+symbol : Symbol
+original : SourceSynthesisOriginalTypeAnnotations.OriginalType lib ((Ty.tVar "a").tFun (Ty.tVar "a"))
+call :
+  SourceCurrentStoredMuRetainedAlignment.RowCall expressions [] before outputs after heap rowIndex symbol top
+    [ordinarySymbols
+        (generalize (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query))
+          (SourceSynthesisPr210TypeReflection.encodeTy ((Ty.tVar "a").tFun (Ty.tVar "a"))))]
+field : Expression :=
+  generalize (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query))
+    (SourceSynthesisPr210TypeReflection.encodeTy ((Ty.tVar "a").tFun (Ty.tVar "a")))
+universeSyntax : Syntax Symbol Guard :=
+  ordinarySymbols (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query))
+markerSyntax : Syntax Symbol Guard := ordinarySymbols (arrowMarker top)
+typeValue : Value Symbol Guard
+typeSlot : call.output.children[0]? = some typeValue
+typeAvailable : Available heap typeValue
+typeClosed : typeValue.free = []
+_typeAnnotated :
+  SourceEqualityAnnotationLanguage.Annotated
+    (SourceSynthesisNativeTypeTrace.Origin (SourceSynthesisCurrentSourceGuards.encodedLibrary lib)) typeValue
+member :
+  ∀ (ambient : InternedGuardedLanguage.Env Symbol),
+    InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient typeValue
+      (Term.node (literal "->")
+        [Term.node (literal "(->)") [], Term.node (literal "var1") [], Term.node (literal "var1") []])
+start finish : InternedConstructorTemplates.State Symbol Guard
+context : BasicContext start []
+_startGrowth : Grows start heap
+finishGrowth : Grows finish heap
+slot nativeSlot : call.values[0]? = some typeValue
+actual :
+  build
+      (Syntax.node [EdgeSyntax.mk (literal "->") (eqGuard [[[1], [2]]]) [markerSyntax, universeSyntax, universeSyntax]])
+      [] start =
+    Outcome.done typeValue finish
+fieldSyntax :
+  ordinarySymbols field =
+    Syntax.node [EdgeSyntax.mk (literal "->") (eqGuard [[[1], [2]]]) [markerSyntax, universeSyntax, universeSyntax]]
+nonempty : typeValue ≠ Value.empty
+arrow : EdgeValue Symbol Guard
+arrowResident : InternedEdgeResidency.EdgeResident heap arrow
+arrowEntry : Interned InternedBinderProtocol.NodeKey
+marker : Value Symbol Guard
+first : InternedConstructorTemplates.State Symbol Guard
+markerDone : build markerSyntax [] start = Outcome.done marker first
+domain : Value Symbol Guard
+middle : InternedConstructorTemplates.State Symbol Guard
+domainDone : build universeSyntax [] first = Outcome.done domain middle
+result : Value Symbol Guard
+last : InternedConstructorTemplates.State Symbol Guard
+resultDone : build universeSyntax [] middle = Outcome.done result last
+arrowKey :
+  arrow.entry.key =
+    { symbol := literal "->", children := List.map Value.referenceOf arrow.children,
+      constraint := eqGuard [[[1], [2]]] }
+childLive : ∀ (child : Value Symbol Guard), child ∈ arrow.children → child ≠ Value.empty
+arrowShape : typeValue = Value.node arrowEntry [arrow] (maximumDepth arrow.children) (childFree arrow.children)
+valuesEq : arrow.children = [marker, domain, result]
+childGrowth : Grows last heap
+childCalls :
+  InternedFreshOrdinaryConstruction.buildMany [markerSyntax, universeSyntax, universeSyntax] [] start =
+    Outcome.done arrow.children last
+ordered : [marker, domain, result] = arrow.children ∧ last = last
+firstContext : BasicContext first []
+middleContext : BasicContext middle []
+domainChecked : InternedNestedFacts.Verified first (build universeSyntax [] first) Available
+resultChecked : InternedNestedFacts.Verified middle (build universeSyntax [] middle) Available
+middleGrowth : Grows middle heap
+firstGrowth : Grows first heap
+domainClosed : domain.free = []
+domainAnnotated : SourceEqualityAnnotationLanguage.Annotated (fun guard => guard = top) domain
+domainPlain : SourceMemoGate.unconstrained domain = true
+resultClosed : result.free = []
+resultAnnotated : SourceEqualityAnnotationLanguage.Annotated (fun guard => guard = top) result
+resultPlain : SourceMemoGate.unconstrained result = true
+⊢ marker ∈ arrow.children
+/tmp/mcfta-identity-arrow-shape-check4-20261113-1418/SourceSynthesisCurrentIdentityShape.lean:296:16: error: Type mismatch: After simplification, term
+  typeClosed
+ has type
+  childFree arrow.children = []
+but is expected to have type
+  childFree [marker, domain, result] = []
+/tmp/mcfta-identity-arrow-shape-check4-20261113-1418/SourceSynthesisCurrentIdentityShape.lean:299:18: error: Type mismatch: After simplification, term
+  arrowShape
+ has type
+  typeValue = Value.node arrowEntry [arrow] (maximumDepth arrow.children) (childFree arrow.children)
+but is expected to have type
+  typeValue = Value.node arrowEntry [arrow] (maximumDepth [marker, domain, result]) []
+/tmp/mcfta-identity-arrow-shape-check4-20261113-1418/SourceSynthesisCurrentIdentityShape.lean:308:20: error(lean.unknownIdentifier): Unknown identifier `arrowChildren`
+/tmp/mcfta-identity-arrow-shape-check4-20261113-1418/SourceSynthesisCurrentIdentityShape.lean:312:16: error(lean.unknownIdentifier): Unknown identifier `arrowChildren`
+/tmp/mcfta-identity-arrow-shape-check4-20261113-1418/SourceSynthesisCurrentIdentityShape.lean:322:74: error: Application type mismatch: The argument
+  List.mem_singleton_self
+has type
+  ∀ (a : ?m.1450), a ∈ [a]
+but is expected to have type
+  result ∈ [result]
+in the application
+  List.mem_cons_of_mem domain List.mem_singleton_self
+'_private._stdin.0.MicroCFTA.SourceSynthesisCurrentIdentityShape.identity_component_arrow_children' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

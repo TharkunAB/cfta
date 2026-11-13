@@ -1,0 +1,85 @@
+# Default ordinary function-pool union
+
+Status: PLANNING ONLY. Header and proof plan are uncompiled. No body exists.
+No live source, compiler, Haskell, Git, board, or runtime action was changed.
+
+## Bounded conclusion
+
+The actual size-two default function pool already takes an ordinary merge.
+Its members can have recursive Type children. Those children do not make
+an ordinary Program root a Mu root. No singleton-union assumption is needed.
+The next cut can extend the node-pool API to a union of source node pools.
+It can retain the SAME complete identity row and SAME native Type handle.
+It does not need a new actual head-read or head-history premise for this case.
+
+## Actual current source cases
+
+Use SourceSynthesisCurrentContext.context lib query, not the old context.
+CurrentContext.lean:52-61 encodes types and uses canonical query bindings.
+CurrentConstruction.lean:21-30 passes that context to the old row evaluator.
+
+Let ctx denote that CURRENT context and let C/A be its component/argument rows.
+1. FirstOrderConstruction.lean:94-96 has function syntax .union [.node F,.node A],
+   where F filters ctx.components by NOT membership in ctx.avoid.flatMap Prod.fst.
+   Instantiate pools=[F,A], poolIndex=0. An excluded identity has no source lookup.
+2. relevantRows:123-129 at size=2,left=1,offset=0 requests relevantRows ctx false 1 [].
+   resolveArguments [] returns []; lines117-118 and termsRows:87 give [.node A,.node C].
+   Instantiate pools=[A,C], poolIndex=1. This case requires no pruning filter on C.
+   Offset=1 can instead yield a required-argument-only singleton; do not insert
+   a library identity into that source cell without its actual source lookup.
+3. Avoid-specific size-two function pools at lines90-93 are .node F already.
+   The published actual_app_identity_function_parent handles those node pools.
+
+Synthesis.hs:785-790,800-813,827-835 has the same actual source order.
+Operations.hs:715-722 union uses Node(concatMap nodeEdges) when all operands
+have edges. Ordinary nodes satisfy that test, even with recursive children.
+Type.hs:592-605 createUnion also flattens and merges ordinary operands.
+Do not infer global Haskell/Lean union correspondence from this ordinary case.
+
+## Exact proposed interface
+
+proposed-header.lean.txt freezes one theorem actual_app_identity_union_function_parent.
+It changes the function syntax to .union(pools.map Syntax.node).
+Its poolSource/identity premises are PURE SOURCE lookups, not native membership.
+All original source acceptance/build/OriginalType/actual parent RowCall inputs remain.
+No native ordinary shape, retained row, model, support, read, or completion is supplied.
+The conclusion keeps actual union/member build intervals and makeUnion equation,
+full component RowCall, final canonical row index, singleton SAME Type handle,
+Available/free=[]/Annotated and the existing finite guarded identity instance.
+The finite arrow instance uses the existing equality guard. It does not assert Top.
+
+## Staged proof; all stages remain unproved
+
+1. many_call (OriginalProgramTypeFields.lean:37) extracts actual app child2 once.
+   Unfold only that actual union build (FreshOrdinaryConstruction.lean:112-119).
+   Keep actual buildMany values/unionStart and run(makeUnion values) result.
+2. Apply many_call to that SAME buildMany at poolIndex and poolSource.
+   Retain member componentStart/componentAfter/context/growth. Invert its .node build.
+   Use row_call and the static identity lookup exactly as CurrentFunctionParent:113-130.
+3. Reuse identity_component_native_member, then the existing singleton-child and
+   nonempty-row reasoning (CurrentFunctionParent:131-160). This retains call.output
+   in nodeEdges componentValue; canonical indices need not equal sourceIndex.
+4. Derive EVERY actual member's OrdinaryRoot from its source .node instruction.
+   Use the actual buildMany induction, node verified residency and
+   EqualityLeafProjectionUnion.makeNode_ordinary:129. Empty members are allowed.
+   A small private shape lemma can case makeUnion:275-285, use ordinary_edges:31,
+   and makeNode_ordinary. Do not expose a future ordinary-shape premise.
+   The existing StoredOrdinaryUnionObservations private union_ordinary:98 has
+   the same shape argument but requires Ready; do not add Ready just to call it.
+5. Context.many:39 gives actual unionStart.normal including live stored rows.
+   buildMany_verified supplies Values unionStart values. Apply
+   SourceCurrentLiteralUnionParts.row:165 to SAME makeUnion execution.
+   Its Row result is literal full-edge retention, not a semantic-only witness.
+   Derived OrdinaryRoot converts Row to nodeEdges; getElem? supplies canonicalIndex.
+   This preserves symbol, guard, ordered children, and the exact typeValue.
+
+## Boundaries
+
+This extends original construction only. The parent RowCall is still an actual
+operational input. No theorem here extracts every app occurrence from a root build.
+Source component survival through later filter/intersection edits remains separate.
+Arbitrary Mu/union function roots need their actual head-exposure history; the
+ordinary source-pool proof supplies no such history and must not assume it.
+No after-read finite survival, minimumSizes positivity, PCS/joint model,
+source typing, output existence, or default runtime correspondence is proved.
+Haskell changes and fixes: NONE. No defect is established.

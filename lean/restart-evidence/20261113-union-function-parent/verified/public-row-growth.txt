@@ -1,0 +1,16 @@
+MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.grows {Symbol Guard : Type}
+  [DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  {expressions : List (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol Guard)}
+  {environment : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)}
+  {before : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  {outputs : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)}
+  {after reader : MicroCFTA.InternedConstructorTemplates.State Symbol Guard} {index : Nat} {symbol : Symbol}
+  {guard : Guard} {children : List (MicroCFTA.InternedNestedConstruction.Syntax Symbol Guard)}
+  (call :
+    MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall expressions environment before outputs after reader index
+      symbol guard children)
+  {later : MicroCFTA.InternedConstructorTemplates.State Symbol Guard}
+  (growth : MicroCFTA.InternedConstructorTemplates.Grows reader later) :
+  MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall expressions environment before outputs after later index
+    symbol guard children
+'MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall.grows' depends on axioms: [propext, Quot.sound]

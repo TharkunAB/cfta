@@ -1,0 +1,72 @@
+private theorem first_filter_current_app_source_ancestor
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    [DecidableEq (Value Symbol Guard)]
+    {width : Nat}
+    (candidatesExpression : SourceSynthesisFirstOrderConstruction.Expression)
+    (sourceRoles : SourceSynthesisProgramRoles.ProgramSyntax candidatesExpression)
+    (sourceStart sourceAfter : State Symbol Guard)
+    (sourceCandidates : Value Symbol Guard)
+    (sourceContext : SourceCurrentConstrainedCapSourceHistory.Context sourceStart [])
+    (sourceBuilt : InternedFreshOrdinaryConstruction.build
+      (ordinarySymbols candidatesExpression) [] sourceStart =
+        .done sourceCandidates sourceAfter)
+    (g s r e p h m c n budget : Nat)
+    (inherited : SourceEqualityConstraintAllocation.Value)
+    (goalValue : Value Symbol Guard)
+    (before after : SourceEqualityNativeDemand.State width)
+    (fourth savedFourth : SourceCurrentEmptinessMemo.Memo)
+    (memo savedMemo : SourceCurrentMemoMergeGraph.Memo Symbol Guard)
+    (returned : EdgeValue Symbol Guard)
+    (actual : SourceCurrentAllocatedParentWorker.edge g s r e p h m c n budget
+      (literal "filter")
+      (SourceSynthesisGeneralizeSyntax.eqGuard [[[0], [1, 0]]])
+      inherited [goalValue, sourceCandidates] before fourth memo =
+        .done returned after savedFourth savedMemo)
+    (good : SourceCurrentNativeOperationHeap.Good before)
+    (stored : SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo)
+    (live : SourceEqualityMkEdgeAllocation.contradictory
+        (SourceSynthesisGeneralizeSyntax.eqGuard [[[0], [1, 0]]]) = false →
+      SourceCurrentConjunctionEquality.FieldAvailable before.operations
+        (SourceSynthesisGeneralizeSyntax.eqGuard [[[0], [1, 0]]]) ∧
+      SourceEqualityConstraintAllocation.Ready before.operations.constraints inherited ∧
+      InternedNestedProvenance.Values before.native.machine.heap [goalValue, sourceCandidates])
+    (guards : SourceCurrentConstrainedCapGuardHeap.Heap
+      (fun guard : Guard => SourceMemoGate.plain guard = true)
+      before.native.machine.heap)
+    (currentCandidates : Value Symbol Guard)
+    (currentSlot : returned.children[1]? = some currentCandidates)
+    (currentApp : EdgeValue Symbol Guard)
+    (currentMember : currentApp ∈ InternedEdgeResidency.nodeEdges currentCandidates)
+    (currentSymbol : currentApp.entry.key.symbol = literal "app")
+    (currentGuard : currentApp.entry.key.constraint =
+      SourceSynthesisGeneralizeSyntax.eqGuard
+        [[[1], [2, 0, 0]], [[3, 0], [2, 0, 1]], [[0], [2, 0, 2]]]) :
+    SourceCurrentActualRequiredRowOrigins.Link 2 sourceCandidates currentCandidates ∧
+    ∃ sourceIndex : Nat, ∃ ancestor : EdgeValue Symbol Guard,
+      (InternedEdgeResidency.nodeEdges sourceCandidates)[sourceIndex]? = some ancestor ∧
+      SourceCurrentRequiredGuardOrigins.RowOrigin ancestor currentApp ∧
+      currentApp.children[2]? = ancestor.children[2]? ∧
+      SourceCurrentBuildStructuralRowOrigins.SourceRow
+        (ordinarySymbols candidatesExpression) [] sourceStart sourceCandidates sourceAfter ancestor ∧
+      ∃ typesExpression functionExpression argumentExpression
+          (sourceRows : List SourceSynthesisFirstOrderConstruction.Row)
+          nodeStart nodeMiddle nodeAfter (rawRows : List (EdgeValue Symbol Guard))
+          (nodeValue : Value Symbol Guard) (sourceRowIndex outputRowIndex : Nat),
+        InternedFreshOrdinaryConstruction.build
+          (ordinarySymbols (.node sourceRows)) [] nodeStart = .done nodeValue nodeAfter ∧
+        InternedFreshOrdinaryConstruction.buildEdges
+          (SourceSynthesisUniverseCallerBoundary.ordinaryEdges sourceRows) [] nodeStart =
+            .done rawRows nodeMiddle ∧
+        run (makeNode rawRows) nodeMiddle = (nodeValue, nodeAfter) ∧
+        (InternedEdgeResidency.nodeEdges nodeValue)[outputRowIndex]? = some ancestor ∧
+        Grows nodeAfter sourceAfter ∧
+        ∃ call : SourceCurrentStoredMuRetainedAlignment.RowCall
+            (SourceSynthesisUniverseCallerBoundary.ordinaryEdges sourceRows) []
+            nodeStart rawRows nodeMiddle sourceAfter sourceRowIndex (literal "app")
+            (SourceSynthesisGeneralizeSyntax.eqGuard
+              [[[1], [2, 0, 0]], [[3, 0], [2, 0, 1]], [[0], [2, 0, 2]]])
+            [ordinarySymbols typesExpression,
+              ordinarySymbols (SourceSynthesisTypeSyntax.arrowMarker SourceSynthesisGeneralizeSyntax.top),
+              ordinarySymbols functionExpression, ordinarySymbols argumentExpression],
+          call.output = ancestor ∧
+          currentApp.children[2]? = call.output.children[2]?

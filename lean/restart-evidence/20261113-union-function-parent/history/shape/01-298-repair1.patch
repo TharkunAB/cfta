@@ -1,0 +1,38 @@
+--- source.lean
++++ source.lean
+@@ -65 +65 @@
+-        | false => exact selected
++        | false => rfl
+@@ -99 +99 @@
+-      refine ⟨made.1, values, middle, childDone, grows_trans edgeGrowth finalGrowth,
++      refine ⟨made.1, values, middle, rfl, grows_trans edgeGrowth finalGrowth,
+@@ -140 +140,2 @@
+-    (fun (guard : Guard) (same : guard = top) => by rw [same]; rfl) annotated
++    (second := fun guard => SourceMemoGate.plain guard = true)
++    (fun (guard : Guard) (same : guard = top) => by rw [same]) annotated
+@@ -166 +167 @@
+-      (∃ markerEntry (markerRow : EdgeValue Symbol Guard),
++      (∃ markerEntry, ∃ markerRow : EdgeValue Symbol Guard,
+@@ -185 +186 @@
+-  let universe : Syntax Symbol Guard := ordinarySymbols
++  let universeSyntax : Syntax Symbol Guard := ordinarySymbols
+@@ -201 +202 @@
+-      (eqGuard [[[1], [2]]]) [markerSyntax, universe, universe]] := by
++      (eqGuard [[[1], [2]]]) [markerSyntax, universeSyntax, universeSyntax]] := by
+@@ -210 +211 @@
+-    singleton_actual (literal "->") (eqGuard [[[1], [2]]]) [markerSyntax, universe, universe]
++    singleton_actual (literal "->") (eqGuard [[[1], [2]]]) [markerSyntax, universeSyntax, universeSyntax]
+@@ -217 +218 @@
+-      cases domainDone : build universe [] first with
++      cases domainDone : build universeSyntax [] first with
+@@ -223 +224 @@
+-          cases resultDone : build universe [] middle with
++          cases resultDone : build universeSyntax [] middle with
+@@ -239,2 +240,2 @@
+-                simpa only [domainDone, Outcome.state] using firstContext.build universe
+-              have domainChecked := InternedFreshOrdinaryFacts.build_verified universe [] first
++                simpa only [domainDone, Outcome.state] using firstContext.build universeSyntax
++              have domainChecked := InternedFreshOrdinaryFacts.build_verified universeSyntax [] first
+@@ -242 +243 @@
+-              have resultChecked := InternedFreshOrdinaryFacts.build_verified universe [] middle
++              have resultChecked := InternedFreshOrdinaryFacts.build_verified universeSyntax [] middle

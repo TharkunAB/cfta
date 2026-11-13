@@ -1,0 +1,24 @@
+--- source.lean
++++ source.lean
+@@ -93 +93 @@
+-  cases expression with
++  cases shape : expression with
+@@ -129,0 +130,2 @@
++  rw [shape]
++  change sizeOf member < 1 + sizeOf members
+@@ -275 +277 @@
+-      have rawGuard : sourceGuard =
++      have rawGuard : guard =
+@@ -305,2 +307,7 @@
+-        simpa only [SourceSynthesisProgramBuildRolesGeneric.mapChildren,
+-          SourceSynthesisLabelProgramBuildRoles.mapSyntax_ordinarySymbols] using observed
++        simp only [SourceSynthesisProgramBuildRolesGeneric.mapChildren] at observed
++        rw [SourceSynthesisLabelProgramBuildRoles.mapSyntax_ordinarySymbols types,
++          SourceSynthesisLabelProgramBuildRoles.mapSyntax_ordinarySymbols
++            (SourceSynthesisTypeSyntax.arrowMarker top),
++          SourceSynthesisLabelProgramBuildRoles.mapSyntax_ordinarySymbols function,
++          SourceSynthesisLabelProgramBuildRoles.mapSyntax_ordinarySymbols argument] at observed
++        exact observed
+@@ -310 +317 @@
+-        cases names
++        exact False.elim ((by decide : ("filter" : String) ≠ "app") names)

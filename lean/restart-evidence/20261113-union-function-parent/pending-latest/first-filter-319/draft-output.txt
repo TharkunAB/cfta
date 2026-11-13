@@ -1,0 +1,120 @@
+/tmp/mcfta-first-filter-origin-check4-20261113-1445/SourceSynthesisFirstFilterCurrentAppSourceAncestor.lean:94:13: error: Dependent elimination failed: Failed to solve equation
+  ordinarySymbols expression = Syntax.var slot✝
+/tmp/mcfta-first-filter-origin-check4-20261113-1445/SourceSynthesisFirstFilterCurrentAppSourceAncestor.lean:95:14: error: unsolved goals
+case var.empty
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+start : InternedConstructorTemplates.State Symbol Guard
+value : Value Symbol Guard
+stop : InternedConstructorTemplates.State Symbol Guard
+row : EdgeValue Symbol Guard
+index : Nat
+part : SourceRow (ordinarySymbols Syntax.empty) [] start value stop row
+shape : Syntax.empty = Syntax.var index
+⊢ ∃ sourceRows nodeStart nodeValue nodeAfter,
+    (∀ (sourceRow : Row), sourceRow ∈ sourceRows → ProgramRowSyntax sourceRow) ∧
+      SourceRow (ordinarySymbols (Syntax.node sourceRows)) [] nodeStart nodeValue nodeAfter row ∧ Grows nodeAfter stop
+
+case var.node
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+start : InternedConstructorTemplates.State Symbol Guard
+value : Value Symbol Guard
+stop : InternedConstructorTemplates.State Symbol Guard
+row : EdgeValue Symbol Guard
+index : Nat
+rows✝ : List Row
+checked✝ : ∀ (row : Row), row ∈ rows✝ → ProgramRowSyntax row
+part : SourceRow (ordinarySymbols (Syntax.node rows✝)) [] start value stop row
+shape : Syntax.node rows✝ = Syntax.var index
+⊢ ∃ sourceRows nodeStart nodeValue nodeAfter,
+    (∀ (sourceRow : Row), sourceRow ∈ sourceRows → ProgramRowSyntax sourceRow) ∧
+      SourceRow (ordinarySymbols (Syntax.node sourceRows)) [] nodeStart nodeValue nodeAfter row ∧ Grows nodeAfter stop
+
+case var.union
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+start : InternedConstructorTemplates.State Symbol Guard
+value : Value Symbol Guard
+stop : InternedConstructorTemplates.State Symbol Guard
+row : EdgeValue Symbol Guard
+index : Nat
+members✝ : List Expression
+checked✝ : ∀ (member : Expression), member ∈ members✝ → ProgramSyntax member
+part : SourceRow (ordinarySymbols (Syntax.union members✝)) [] start value stop row
+shape : Syntax.union members✝ = Syntax.var index
+⊢ ∃ sourceRows nodeStart nodeValue nodeAfter,
+    (∀ (sourceRow : Row), sourceRow ∈ sourceRows → ProgramRowSyntax sourceRow) ∧
+      SourceRow (ordinarySymbols (Syntax.node sourceRows)) [] nodeStart nodeValue nodeAfter row ∧ Grows nodeAfter stop
+/tmp/mcfta-first-filter-origin-check4-20261113-1445/SourceSynthesisFirstFilterCurrentAppSourceAncestor.lean:96:22: error: unsolved goals
+case binder.empty
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+start : InternedConstructorTemplates.State Symbol Guard
+value : Value Symbol Guard
+stop : InternedConstructorTemplates.State Symbol Guard
+row : EdgeValue Symbol Guard
+smart : Bool
+body : Syntax String SourceSynthesisGeneralizeSyntax.Guard
+part : SourceRow (ordinarySymbols Syntax.empty) [] start value stop row
+shape : Syntax.empty = Syntax.binder smart body
+⊢ ∃ sourceRows nodeStart nodeValue nodeAfter,
+    (∀ (sourceRow : Row), sourceRow ∈ sourceRows → ProgramRowSyntax sourceRow) ∧
+      SourceRow (ordinarySymbols (Syntax.node sourceRows)) [] nodeStart nodeValue nodeAfter row ∧ Grows nodeAfter stop
+
+case binder.node
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+start : InternedConstructorTemplates.State Symbol Guard
+value : Value Symbol Guard
+stop : InternedConstructorTemplates.State Symbol Guard
+row : EdgeValue Symbol Guard
+smart : Bool
+body : Syntax String SourceSynthesisGeneralizeSyntax.Guard
+rows✝ : List Row
+checked✝ : ∀ (row : Row), row ∈ rows✝ → ProgramRowSyntax row
+part : SourceRow (ordinarySymbols (Syntax.node rows✝)) [] start value stop row
+shape : Syntax.node rows✝ = Syntax.binder smart body
+⊢ ∃ sourceRows nodeStart nodeValue nodeAfter,
+    (∀ (sourceRow : Row), sourceRow ∈ sourceRows → ProgramRowSyntax sourceRow) ∧
+      SourceRow (ordinarySymbols (Syntax.node sourceRows)) [] nodeStart nodeValue nodeAfter row ∧ Grows nodeAfter stop
+
+case binder.union
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+start : InternedConstructorTemplates.State Symbol Guard
+value : Value Symbol Guard
+stop : InternedConstructorTemplates.State Symbol Guard
+row : EdgeValue Symbol Guard
+smart : Bool
+body : Syntax String SourceSynthesisGeneralizeSyntax.Guard
+members✝ : List Expression
+checked✝ : ∀ (member : Expression), member ∈ members✝ → ProgramSyntax member
+part : SourceRow (ordinarySymbols (Syntax.union members✝)) [] start value stop row
+shape : Syntax.union members✝ = Syntax.binder smart body
+⊢ ∃ sourceRows nodeStart nodeValue nodeAfter,
+    (∀ (sourceRow : Row), sourceRow ∈ sourceRows → ProgramRowSyntax sourceRow) ∧
+      SourceRow (ordinarySymbols (Syntax.node sourceRows)) [] nodeStart nodeValue nodeAfter row ∧ Grows nodeAfter stop
+/tmp/mcfta-first-filter-origin-check4-20261113-1445/SourceSynthesisFirstFilterCurrentAppSourceAncestor.lean:99:59: error: Application type mismatch: The argument
+  checked
+has type
+  ∀ (row : Row), row ∈ rows✝ → ProgramRowSyntax row
+but is expected to have type
+  ∀ (sourceRow : Row), sourceRow ∈ rows → ProgramRowSyntax sourceRow
+in the application
+  And.intro checked
+/tmp/mcfta-first-filter-origin-check4-20261113-1445/SourceSynthesisFirstFilterCurrentAppSourceAncestor.lean:99:68: error: Application type mismatch: The argument
+  part
+has type
+  SourceRow (ordinarySymbols (Syntax.node rows✝)) [] start value stop row
+but is expected to have type
+  SourceRow (ordinarySymbols (Syntax.node rows)) [] start value stop row
+in the application
+  And.intro part
+/tmp/mcfta-first-filter-origin-check4-20261113-1445/SourceSynthesisFirstFilterCurrentAppSourceAncestor.lean:98:6: error: Alternative `empty` has not been provided
+/tmp/mcfta-first-filter-origin-check4-20261113-1445/SourceSynthesisFirstFilterCurrentAppSourceAncestor.lean:98:6: error: Alternative `union` has not been provided
+/tmp/mcfta-first-filter-origin-check4-20261113-1445/SourceSynthesisFirstFilterCurrentAppSourceAncestor.lean:103:8: error: 'change' tactic failed, pattern
+  SourceRow (Syntax.union (SourceSynthesisUniverseCallerBoundary.ordinaryChildren members)) [] start value stop row
+is not definitionally equal to target
+  SourceRow (ordinarySymbols (Syntax.union members✝)) [] start value stop row
+/tmp/mcfta-first-filter-origin-check4-20261113-1445/SourceSynthesisFirstFilterCurrentAppSourceAncestor.lean:101:6: error: Alternative `empty` has not been provided
+/tmp/mcfta-first-filter-origin-check4-20261113-1445/SourceSynthesisFirstFilterCurrentAppSourceAncestor.lean:101:6: error: Alternative `node` has not been provided
+/tmp/mcfta-first-filter-origin-check4-20261113-1445/SourceSynthesisFirstFilterCurrentAppSourceAncestor.lean:128:0: error: unused termination hints, function is not recursive
+'_private._stdin.0.MicroCFTA.SourceSynthesisFirstFilterCurrentAppSourceAncestor.first_filter_current_app_source_ancestor' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

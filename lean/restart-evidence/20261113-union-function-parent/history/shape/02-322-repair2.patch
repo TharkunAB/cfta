@@ -1,0 +1,44 @@
+--- source.lean
++++ source.lean
+@@ -141 +141,5 @@
+-    (fun (guard : Guard) (same : guard = top) => by rw [same]) annotated
++    (fun (guard : Guard) (same : guard = top) => by
++      rw [same]
++      change SourceMemoGate.plain
++        (SourceEqualityConstraintConstructors.top (Formula := FullSyntax.Formula)) = true
++      rfl) annotated
+@@ -143,0 +148,19 @@
++omit [DecidableEq FullSyntax.Formula] [DecidableEq (EdgeKey Symbol Guard)] in
++private theorem identity_syntax (types : Expression) :
++    ordinarySymbols (generalize types
++      (SourceSynthesisPr210TypeReflection.encodeTy (.tFun (.tVar "a") (.tVar "a")))) =
++      .node [.mk (literal "->") (eqGuard [[[1], [2]]])
++        [ordinarySymbols (arrowMarker top), ordinarySymbols types, ordinarySymbols types]] := by
++  have classes : SourceSynthesisGeneralizeSyntax.equalityClasses
++      (.tFun (.tVar "a") (.tVar "a")) = [[[1], [2]]] := by
++    simp [SourceSynthesisGeneralizeSyntax.equalityClasses,
++      SourceSynthesisGeneralizeSyntax.variables, SourceSynthesisGeneralizeSyntax.pathsOf,
++      SourceSynthesisGeneralizeSyntax.occurrences, SourceSynthesisGeneralizeSyntax.shift,
++      variableSymbol, List.eraseDups_cons]
++  simp only [SourceSynthesisPr210TypeReflection.encodeTy, generalize,
++    SourceSynthesisGeneralizeSyntax.rootSymbol, classes, SourceSynthesisGeneralizeSyntax.replace,
++    arrowType, SourceSynthesisGeneralizeSyntax.finish,
++    SourceSynthesisUniverseCallerBoundary.ordinarySymbols,
++    SourceSynthesisUniverseCallerBoundary.ordinaryEdges,
++    SourceSynthesisUniverseCallerBoundary.ordinaryChildren]
++
+@@ -202,2 +225,2 @@
+-      (eqGuard [[[1], [2]]]) [markerSyntax, universeSyntax, universeSyntax]] := by
+-    rfl
++      (eqGuard [[[1], [2]]]) [markerSyntax, universeSyntax, universeSyntax]] :=
++    identity_syntax (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query))
+@@ -255 +278 @@
+-              have markerNonempty : marker ≠ .empty := childLive marker (by simp)
++              have markerNonempty : marker ≠ .empty := childLive marker List.mem_cons_self
+@@ -267 +290,2 @@
+-              change marker = .node markerEntry [markerRow] 0 [] at markerShape
++              have markerNode : marker = .node markerEntry [markerRow] 0 [] := by
++                simpa [maximumDepth, childFree, canonicalFree] using markerShape
+@@ -285 +309 @@
+-                arrowChildren, ⟨markerEntry, markerRow, markerShape,
++                arrowChildren, ⟨markerEntry, markerRow, markerNode,

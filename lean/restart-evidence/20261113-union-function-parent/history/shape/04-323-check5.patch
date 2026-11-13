@@ -1,0 +1,13 @@
+--- source.lean
++++ source.lean
+@@ -259 +259 @@
+-              subst values
++              rw [valuesEq] at arrowChildren childLive arrowShape
+@@ -279,3 +279 @@
+-              have markerNonempty : marker ≠ .empty := childLive marker (by
+-                rw [arrowChildren]
+-                exact List.mem_cons_self)
++              have markerNonempty : marker ≠ .empty := childLive marker List.mem_cons_self
+@@ -322 +320 @@
+-                exact ⟨childAvailable result (List.mem_cons_of_mem domain List.mem_singleton_self),
++                exact ⟨childAvailable result (List.mem_cons_of_mem domain (List.mem_singleton_self result)),

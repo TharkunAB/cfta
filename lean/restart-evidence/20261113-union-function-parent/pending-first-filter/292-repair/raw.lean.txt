@@ -1,0 +1,292 @@
+import MicroCFTA.SourceCurrentActualParentRowOrigins
+import MicroCFTA.SourceCurrentBuildStructuralRowOrigins
+import MicroCFTA.SourceSynthesisOwnChildTerminals
+import MicroCFTA.SourceSynthesisProgramRoles
+import MicroCFTA.SourceSynthesisLabelProgramBuildRoles
+
+import MicroCFTA.SourceCurrentSourceRowTerminalSuffix
+import MicroCFTA.SourceCurrentStoredRowCallGrowth
+
+namespace MicroCFTA.SourceSynthesisFirstFilterCurrentAppSourceAncestor
+open Cache InternedConstructorTemplates InternedProbeProvenance
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "literal" => SourceSynthesisLabelProgramBuildRoles.literal
+local notation "ordinarySymbols" => SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+
+open InternedNestedConstruction (Syntax Outcome)
+open InternedFreshOrdinaryConstruction (build buildEdges buildMany)
+open SourceSynthesisFirstOrderConstruction (Expression Row)
+open SourceSynthesisProgramRoles (ProgramSyntax ProgramRowSyntax)
+open SourceCurrentBuildStructuralRowOrigins (SourceRow)
+open SourceCurrentStoredMuRetainedAlignment (RowCall)
+open SourceSynthesisGeneralizeSyntax (eqGuard top)
+
+private theorem stable_guard (input output : EqualityNormalize.Constraints)
+    (prepared : EqualityNormalize.complete (EqualityNormalize.prepare input) = output)
+    (stable : EqualityNormalize.congruenceStep output = some output) :
+    eqGuard input = (⟨some output, .top⟩ : Guard) := by
+  have positive : 0 < EqualityTermination.normalizationBound input := Nat.zero_lt_succ _
+  unfold eqGuard EqualityNormalize.mkEqConstraints
+  rw [prepared]
+  cases bound : EqualityTermination.normalizationBound input with
+  | zero => rw [bound] at positive; exact (Nat.not_lt_zero _ positive).elim
+  | succ fuel =>
+      simp only [EqualityNormalize.fixMaybe, stable, ite_true,
+        SymbolicEqualityBridge.resultClasses]
+
+private theorem app_payload :
+    eqGuard [[[1], [2, 0, 0]], [[3, 0], [2, 0, 1]], [[0], [2, 0, 2]]] =
+      (⟨some [[[0], [2, 0, 2]], [[1], [2, 0, 0]], [[2, 0, 1], [3, 0]]], .top⟩ : Guard) := by
+  apply stable_guard <;> cbv
+
+private theorem filter_payload :
+    eqGuard [[[0], [1, 0]]] = (⟨some [[[0], [1, 0]]], .top⟩ : Guard) := by
+  apply stable_guard <;> cbv
+
+private theorem mapped_lookup {A B : Type} (f : A → B) {values : List A}
+    {index : Nat} {value : B} (found : (values.map f)[index]? = some value) :
+    ∃ original, values[index]? = some original ∧ f original = value := by
+  rw [List.getElem?_map] at found
+  cases values[index]? with
+  | none => cases found
+  | some previous => exact ⟨previous, rfl, Option.some.inj found⟩
+
+private theorem ordinary_children_map (members : List Expression) :
+    SourceSynthesisUniverseCallerBoundary.ordinaryChildren members = members.map ordinarySymbols := by
+  induction members with
+  | nil => rfl
+  | cons first rest ih =>
+      simp only [SourceSynthesisUniverseCallerBoundary.ordinaryChildren, List.map_cons, ih]
+
+private theorem program_node_terminal [DecidableEq (EdgeKey Symbol Guard)]
+    (expression : Expression) (roles : ProgramSyntax expression)
+    {start : State Symbol Guard} {value : Value Symbol Guard} {stop : State Symbol Guard}
+    {row : EdgeValue Symbol Guard}
+    (part : SourceRow (ordinarySymbols expression) [] start value stop row) :
+    ∃ (sourceRows : List Row) (nodeStart : State Symbol Guard)
+        (nodeValue : Value Symbol Guard) (nodeAfter : State Symbol Guard),
+      (∀ sourceRow ∈ sourceRows, ProgramRowSyntax sourceRow) ∧
+      SourceRow (ordinarySymbols (.node sourceRows)) [] nodeStart nodeValue nodeAfter row ∧
+      Grows nodeAfter stop := by
+  cases expression with
+  | empty => cases part
+  | var index => cases roles
+  | binder smart body => cases roles
+  | node rows =>
+      cases roles with
+      | node _ checked => exact ⟨rows, start, value, stop, checked, part, grows_refl _⟩
+  | union members =>
+      cases roles with
+      | union _ checked =>
+        change SourceRow (.union (SourceSynthesisUniverseCallerBoundary.ordinaryChildren members))
+          [] start value stop row at part
+        cases part with
+        | @union expressions inputs before raw after values middle expression value current next row index
+            built made source selected earlier context called suffix nested =>
+          have originalLookup : (members.map ordinarySymbols)[index]? = some expression := by
+            simpa only [ordinary_children_map] using source
+          obtain ⟨member, memberAt, sameMember⟩ := mapped_lookup ordinarySymbols originalLookup
+          subst expression
+          obtain ⟨sourceRows, nodeStart, nodeValue, nodeAfter, sourceChecked, terminal, growth⟩ :=
+            program_node_terminal member (checked member (List.mem_of_getElem? memberAt)) nested
+          have returnContext : SourceCurrentConstrainedCapSourceHistory.Context next [] := by
+            simpa only [called, Outcome.state] using context.build (ordinarySymbols member)
+          have suffixFacts := InternedFreshOrdinaryFacts.buildMany_verified
+            (expressions.drop (index + 1)) [] next
+            returnContext.base.normal.facts returnContext.base.inputs
+          have suffixGrowth : Grows next middle := by
+            simpa only [suffix, Outcome.state] using suffixFacts.growth
+          have middleValid : Valid middle := by
+            simpa only [suffix, Outcome.state] using suffixFacts.facts.coherent.valid
+          have unionGrowth : Grows middle after := by
+            simpa only [made] using
+              (InternedConstructorTemplates.run_correct (makeUnion values) middle middleValid).2
+          exact ⟨sourceRows, nodeStart, nodeValue, nodeAfter, sourceChecked, terminal,
+            grows_trans growth (grows_trans suffixGrowth unionGrowth)⟩
+termination_by sizeOf expression
+decreasing_by
+  have smaller := List.sizeOf_lt_of_mem (List.mem_of_getElem? memberAt)
+  simp only [Syntax.union.sizeOf_spec]
+  omega
+
+private theorem first_filter_current_app_source_ancestor
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    [DecidableEq (Value Symbol Guard)]
+    {width : Nat}
+    (candidatesExpression : SourceSynthesisFirstOrderConstruction.Expression)
+    (sourceRoles : SourceSynthesisProgramRoles.ProgramSyntax candidatesExpression)
+    (sourceStart sourceAfter : State Symbol Guard)
+    (sourceCandidates : Value Symbol Guard)
+    (sourceContext : SourceCurrentConstrainedCapSourceHistory.Context sourceStart [])
+    (sourceBuilt : InternedFreshOrdinaryConstruction.build
+      (ordinarySymbols candidatesExpression) [] sourceStart =
+        .done sourceCandidates sourceAfter)
+    (g s r e p h m c n budget : Nat)
+    (inherited : SourceEqualityConstraintAllocation.Value)
+    (goalValue : Value Symbol Guard)
+    (before after : SourceEqualityNativeDemand.State width)
+    (fourth savedFourth : SourceCurrentEmptinessMemo.Memo)
+    (memo savedMemo : SourceCurrentMemoMergeGraph.Memo Symbol Guard)
+    (returned : EdgeValue Symbol Guard)
+    (actual : SourceCurrentAllocatedParentWorker.edge g s r e p h m c n budget
+      (literal "filter")
+      (SourceSynthesisGeneralizeSyntax.eqGuard [[[0], [1, 0]]])
+      inherited [goalValue, sourceCandidates] before fourth memo =
+        .done returned after savedFourth savedMemo)
+    (good : SourceCurrentNativeOperationHeap.Good before)
+    (stored : SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo)
+    (live : SourceEqualityMkEdgeAllocation.contradictory
+        (SourceSynthesisGeneralizeSyntax.eqGuard [[[0], [1, 0]]]) = false →
+      SourceCurrentConjunctionEquality.FieldAvailable before.operations
+        (SourceSynthesisGeneralizeSyntax.eqGuard [[[0], [1, 0]]]) ∧
+      SourceEqualityConstraintAllocation.Ready before.operations.constraints inherited ∧
+      InternedNestedProvenance.Values before.native.machine.heap [goalValue, sourceCandidates])
+    (guards : SourceCurrentConstrainedCapGuardHeap.Heap
+      (fun guard : Guard => SourceMemoGate.plain guard = true)
+      before.native.machine.heap)
+    (currentCandidates : Value Symbol Guard)
+    (currentSlot : returned.children[1]? = some currentCandidates)
+    (currentApp : EdgeValue Symbol Guard)
+    (currentMember : currentApp ∈ InternedEdgeResidency.nodeEdges currentCandidates)
+    (currentSymbol : currentApp.entry.key.symbol = literal "app")
+    (currentGuard : currentApp.entry.key.constraint =
+      SourceSynthesisGeneralizeSyntax.eqGuard
+        [[[1], [2, 0, 0]], [[3, 0], [2, 0, 1]], [[0], [2, 0, 2]]]) :
+    SourceCurrentActualRequiredRowOrigins.Link 2 sourceCandidates currentCandidates ∧
+    ∃ sourceIndex : Nat, ∃ ancestor : EdgeValue Symbol Guard,
+      (InternedEdgeResidency.nodeEdges sourceCandidates)[sourceIndex]? = some ancestor ∧
+      SourceCurrentRequiredGuardOrigins.RowOrigin ancestor currentApp ∧
+      currentApp.children[2]? = ancestor.children[2]? ∧
+      SourceCurrentBuildStructuralRowOrigins.SourceRow
+        (ordinarySymbols candidatesExpression) [] sourceStart sourceCandidates sourceAfter ancestor ∧
+      ∃ (typesExpression functionExpression argumentExpression : SourceSynthesisFirstOrderConstruction.Expression)
+          (sourceRows : List SourceSynthesisFirstOrderConstruction.Row)
+          (nodeStart nodeMiddle nodeAfter : State Symbol Guard) (rawRows : List (EdgeValue Symbol Guard))
+          (nodeValue : Value Symbol Guard) (sourceRowIndex outputRowIndex : Nat),
+        InternedFreshOrdinaryConstruction.build
+          (ordinarySymbols (.node sourceRows)) [] nodeStart = .done nodeValue nodeAfter ∧
+        InternedFreshOrdinaryConstruction.buildEdges
+          (SourceSynthesisUniverseCallerBoundary.ordinaryEdges sourceRows) [] nodeStart =
+            .done rawRows nodeMiddle ∧
+        run (makeNode rawRows) nodeMiddle = (nodeValue, nodeAfter) ∧
+        (InternedEdgeResidency.nodeEdges nodeValue)[outputRowIndex]? = some ancestor ∧
+        Grows nodeAfter sourceAfter ∧
+        ∃ call : SourceCurrentStoredMuRetainedAlignment.RowCall
+            (SourceSynthesisUniverseCallerBoundary.ordinaryEdges sourceRows) []
+            nodeStart rawRows nodeMiddle sourceAfter sourceRowIndex (literal "app")
+            (SourceSynthesisGeneralizeSyntax.eqGuard
+              [[[1], [2, 0, 0]], [[3, 0], [2, 0, 1]], [[0], [2, 0, 2]]])
+            [ordinarySymbols typesExpression,
+              ordinarySymbols (SourceSynthesisTypeSyntax.arrowMarker SourceSynthesisGeneralizeSyntax.top),
+              ordinarySymbols functionExpression, ordinarySymbols argumentExpression],
+          call.output = ancestor ∧
+          currentApp.children[2]? = call.output.children[2]? := by
+  let filterRecord : SourceEqualityClassOrder.Record :=
+    ⟨EnumerationEquality.classTrie [[0], [1, 0]], [[0], [1, 0]]⟩
+  have filterOwn : SourceEqualityPhysicalPayload.own (eqGuard [[[0], [1, 0]]]) =
+      .ok (some [filterRecord]) := by
+    rw [filter_payload]
+    rfl
+  have footprint : ∀ originals : List SourceEqualityClassOrder.Record,
+      SourceEqualityPhysicalPayload.own (eqGuard [[[0], [1, 0]]]) = .ok (some originals) →
+      ∀ record ∈ originals, SourceCurrentClassPositionalFootprints.Unselected record 1 2 := by
+    intro originals read record member
+    have same : [filterRecord] = originals :=
+      Option.some.inj (Except.ok.inj (filterOwn.symm.trans read))
+    subst originals
+    have sameRecord : record = filterRecord := List.mem_singleton.mp member
+    subst record
+    change ∀ path ∈ [[0], [1, 0]],
+      SourceEqualityEditCompiledPaths.Disjoint (path.map Int.ofNat) [Int.ofNat 1, Int.ofNat 2]
+    intro path member
+    rcases List.mem_cons.mp member with rfl | member
+    · decide +kernel
+    · have samePath := List.mem_singleton.mp member
+      subst path
+      decide +kernel
+  have link := SourceCurrentActualParentRowOrigins.edge actual good stored live guards 1 2
+    footprint (by rfl) currentSlot
+  let appRecords : List SourceEqualityClassOrder.Record :=
+    [⟨EnumerationEquality.classTrie [[0], [2, 0, 2]], [[0], [2, 0, 2]]⟩,
+      ⟨EnumerationEquality.classTrie [[1], [2, 0, 0]], [[1], [2, 0, 0]]⟩,
+      ⟨EnumerationEquality.classTrie [[2, 0, 1], [3, 0]], [[2, 0, 1], [3, 0]]⟩]
+  have currentOwn : SourceEqualityPhysicalPayload.own currentApp.entry.key.constraint =
+      .ok (some appRecords) := by
+    rw [currentGuard, app_payload]
+    rfl
+  obtain ⟨sourceIndex, ancestor, sourceAt, origin, unchanged⟩ :=
+    link.positive currentMember currentOwn (by intro impossible; cases impossible)
+  have sourcePart := SourceCurrentBuildStructuralRowOrigins.build_row_origin
+    (ordinarySymbols candidatesExpression) [] sourceStart sourceCandidates sourceAfter
+    sourceContext sourceBuilt ancestor (.node (index := sourceIndex) sourceAt)
+  have ancestorGuard : ancestor.entry.key.constraint =
+      eqGuard [[[1], [2, 0, 0]], [[3, 0], [2, 0, 1]], [[0], [2, 0, 2]]] :=
+    origin.1.symm.trans currentGuard
+  have ancestorSymbol : ancestor.entry.key.symbol = literal "app" :=
+    origin.2.1.symm.trans currentSymbol
+  refine ⟨link, sourceIndex, ancestor, sourceAt, origin, unchanged, sourcePart, ?_⟩
+  obtain ⟨sourceRows, nodeStart, nodeValue, nodeAfter, checked, terminal, nodeGrowth⟩ :=
+    program_node_terminal candidatesExpression sourceRoles sourcePart
+  change SourceRow (.node (SourceSynthesisUniverseCallerBoundary.ordinaryEdges sourceRows))
+    [] nodeStart nodeValue nodeAfter ancestor at terminal
+  cases terminal with
+  | @node expressions inputs before raw after rows middle symbol guard children row sourceIndex outputIndex
+      built made selected call same =>
+    have originalLookup : (sourceRows.map
+        (SourceSynthesisProgramBuildRolesGeneric.mapEdge literal))[sourceIndex]? =
+        some (.mk symbol guard children) := by
+      simpa only [← SourceSynthesisLabelProgramBuildRoles.mapEdges_ordinaryEdges,
+        SourceSynthesisProgramBuildRolesGeneric.mapEdges_eq_map] using call.source
+    obtain ⟨sourceRow, sourceRowAt, mapped⟩ :=
+      mapped_lookup (SourceSynthesisProgramBuildRolesGeneric.mapEdge literal) originalLookup
+    have rowRole := checked sourceRow (List.mem_of_getElem? sourceRowAt)
+    cases sourceRow with
+    | mk name sourceGuard sourceChildren =>
+      change EdgeSyntax.mk (literal name) sourceGuard
+        (SourceSynthesisProgramBuildRolesGeneric.mapChildren literal sourceChildren) =
+          .mk symbol guard children at mapped
+      cases mapped
+      have rawGuard : sourceGuard =
+          eqGuard [[[1], [2, 0, 0]], [[3, 0], [2, 0, 1]], [[0], [2, 0, 2]]] := by
+        rw [← call.guard_eq, same]
+        exact ancestorGuard
+      have rawSymbol : literal name = literal "app" := by
+        rw [← call.symbol_eq, same]
+        exact ancestorSymbol
+      cases rowRole with
+      | annotated name annotation =>
+        have impossible := congrArg SourceSymbolicIndex.Constraint.equalities rawGuard
+        rw [app_payload] at impossible
+        change some [] = some [[[0], [2, 0, 2]], [[1], [2, 0, 0]], [[2, 0, 1], [3, 0]]] at impossible
+        cases impossible
+      | @application types function argument sourceRow actual functionRole argumentRole =>
+        have rowSame :
+            EdgeSyntax.mk "app"
+              (eqGuard [[[1], [2, 0, 0]], [[3, 0], [2, 0, 1]], [[0], [2, 0, 2]]])
+              [types, SourceSynthesisTypeSyntax.arrowMarker top, function, argument] = sourceRow := by
+          exact (List.cons.inj (Syntax.node.inj actual)).1
+        cases rowSame
+        have builtNode : build (ordinarySymbols (.node sourceRows)) [] before = .done raw after := by
+          simp only [SourceSynthesisUniverseCallerBoundary.ordinarySymbols, build, built,
+            Outcome.bind, InternedNestedConstruction.work, made]
+        refine ⟨types, function, argument, sourceRows, before, middle, after,
+          rows, raw, sourceIndex, outputIndex, builtNode, built, made, selected, nodeGrowth, ?_⟩
+        have observed : ∃ retained : RowCall expressions [] before rows middle sourceAfter
+            sourceIndex (literal "app")
+            (eqGuard [[[1], [2, 0, 0]], [[3, 0], [2, 0, 1]], [[0], [2, 0, 2]]])
+            (SourceSynthesisProgramBuildRolesGeneric.mapChildren literal
+              [types, SourceSynthesisTypeSyntax.arrowMarker top, function, argument]),
+            retained.output = row ∧ currentApp.children[2]? = retained.output.children[2]? :=
+          ⟨call.grows nodeGrowth, same,
+            unchanged.trans (congrArg (fun edge : EdgeValue Symbol Guard => edge.children[2]?) same.symm)⟩
+        simpa only [SourceSynthesisProgramBuildRolesGeneric.mapChildren,
+          SourceSynthesisLabelProgramBuildRoles.mapSyntax_ordinarySymbols] using observed
+      | @filter candidates goal sourceRow actual candidateRole =>
+        have rowSame : EdgeSyntax.mk "filter" (eqGuard [[[0], [1, 0]]]) [goal, candidates] = sourceRow := by
+          exact (List.cons.inj (Syntax.node.inj actual)).1
+        cases rowSame
+        have names : ("filter" : String) = "app" := congrArg Prod.fst rawSymbol
+        cases names
+
+end MicroCFTA.SourceSynthesisFirstFilterCurrentAppSourceAncestor

@@ -1,0 +1,297 @@
+import MicroCFTA.SourceSynthesisCurrentIdentityNativeWitness
+import MicroCFTA.EqualityLeafProjectionPhysical
+import MicroCFTA.SourceCurrentHereditaryUnconstrained
+
+namespace MicroCFTA.SourceSynthesisCurrentIdentityShape
+open Language Cache InternedConstructorTemplates InternedProbeProvenance
+open InternedNestedConstruction (Syntax EdgeSyntax Outcome)
+open InternedFreshOrdinaryConstruction (build)
+open SourceSynthesisTypeSyntax
+open SourceSynthesisGeneralizeSyntax (Guard top eqGuard generalize)
+open SourceSynthesisFirstOrderConstruction (Expression)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "literal" => SourceSynthesisLabelProgramBuildRoles.literal
+local notation "ordinarySymbols" => SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+local notation "BasicContext" => InternedFreshOrdinaryContext.Context
+variable [DecidableEq FullSyntax.Formula] [DecidableEq (EdgeKey Symbol Guard)]
+
+omit [DecidableEq FullSyntax.Formula] in
+private theorem singleton_actual
+    (symbol : Symbol) (guard : Guard) (children : List (Syntax Symbol Guard))
+    (start finish reader : State Symbol Guard) (context : BasicContext start [])
+    (value : Value Symbol Guard)
+    (actual : build (.node [.mk symbol guard children]) [] start = .done value finish)
+    (growth : Grows finish reader) (nonempty : value ≠ .empty) :
+    ∃ (row : EdgeValue Symbol Guard) (values : List (Value Symbol Guard))
+        (middle : State Symbol Guard),
+      InternedFreshOrdinaryConstruction.buildMany children [] start = .done values middle ∧
+      Grows middle reader ∧ InternedEdgeResidency.EdgeResident reader row ∧
+      row.children = values ∧ row.entry.key = ⟨symbol, values.map Value.referenceOf, guard⟩ ∧
+      (∀ child ∈ values, child ≠ .empty) ∧
+      ∃ entry, value = .node entry [row] (maximumDepth values) (childFree values) := by
+  cases childDone : InternedFreshOrdinaryConstruction.buildMany children [] start with
+  | pending key state =>
+      simp only [build, InternedFreshOrdinaryConstruction.buildEdges, childDone,
+        Outcome.bind] at actual
+      cases actual
+  | done values middle =>
+      let made := run (makeEdge symbol guard values) middle
+      have childChecked := InternedFreshOrdinaryFacts.buildMany_verified children [] start
+        context.normal.facts context.inputs
+      have middleFacts : InternedNestedFacts.Facts middle := by
+        simpa only [childDone, Outcome.state] using childChecked.facts
+      have available := childChecked.result values middle childDone
+      have edgeChecked := InternedNestedFacts.edge_verified symbol guard values middle
+        middleFacts available
+      have edgeFacts : InternedNestedFacts.Facts made.2 := edgeChecked.facts
+      have resident : InternedEdgeResidency.EdgeResident made.2 made.1 :=
+        edgeChecked.result _ _ rfl
+      have childrenEq : made.1.children = values :=
+        InternedShallowValues.makeEdge_children symbol guard values middle
+          middleFacts.coherent middleFacts.cached available
+      have keyEq : made.1.entry.key = ⟨symbol, values.map Value.referenceOf, guard⟩ :=
+        InternedOrdinaryAbsenceReplay.makeEdge_key symbol guard values middle middleFacts.coherent
+      have finished : InternedNestedConstruction.work (makeNode [made.1]) made.2 =
+          .done value finish := by
+        simpa only [build, InternedFreshOrdinaryConstruction.buildEdges, childDone,
+          Outcome.bind, InternedNestedConstruction.work] using actual
+      have endpoints : (run (makeNode [made.1]) made.2).1 = value ∧
+          (run (makeNode [made.1]) made.2).2 = finish := by
+        simpa only [InternedNestedConstruction.work, Outcome.done.injEq] using finished
+      have nodeDone : run (makeNode [made.1]) made.2 = (value, finish) :=
+        Prod.ext endpoints.1 endpoints.2
+      have live : values.any (fun child => child.referenceOf == .empty) = false := by
+        cases selected : values.any (fun child => child.referenceOf == .empty) with
+        | false => exact selected
+        | true =>
+            have normalized : canonicalEdges (surviving [made.1]) = [] := by
+              simp [surviving, childrenEq, selected, canonicalEdges,
+                EnumerationBuilderCaches.canonicalIds]
+            have emptyValue : (.empty : Value Symbol Guard) = value := by
+              simpa only [makeNode, normalized, run] using congrArg Prod.fst nodeDone
+            exact False.elim (nonempty emptyValue.symm)
+      have canonical : canonicalEdges [made.1] = [made.1] := by
+        simp [canonicalEdges, EnumerationBuilderCaches.canonicalIds, List.eraseDups_cons]
+      have normalized : canonicalEdges (surviving [made.1]) = [made.1] := by
+        simp only [surviving, List.filter_cons, childrenEq, live, Bool.not_false,
+          ↓reduceIte, List.filter_nil, canonical]
+      obtain ⟨entry, readback⟩ := InternedEdgeResidency.identifyNode_readback [made.1]
+        made.2 edgeFacts.coherent edgeFacts.linked (by
+          intro edge member
+          have same := List.mem_singleton.mp member
+          subst edge
+          exact resident)
+      have shape : value = .node entry [made.1] (maximumDepth values) (childFree values) := by
+        have raw : (run (makeNode [made.1]) made.2).1 =
+            .node entry [made.1] (maximumDepth values) (childFree values) := by
+          simpa only [makeNode, normalized, run, identifyNode, List.flatMap_cons,
+            List.flatMap_nil, List.append_nil, childrenEq] using readback
+        exact endpoints.1.symm.trans raw
+      have nodeChecked := InternedNestedFacts.node_verified [made.1] made.2 edgeFacts (by
+        intro edge member
+        have same := List.mem_singleton.mp member
+        subst edge
+        exact resident)
+      have nodeGrowth : Grows made.2 finish := by
+        simpa only [InternedNestedConstruction.work, nodeDone, Outcome.state] using nodeChecked.growth
+      have edgeGrowth : Grows middle made.2 := edgeChecked.growth
+      have finalGrowth := grows_trans nodeGrowth growth
+      refine ⟨made.1, values, middle, childDone, grows_trans edgeGrowth finalGrowth,
+        InternedEdgeResidency.edge_grows made.2 reader finalGrowth made.1 resident,
+        childrenEq, keyEq, ?_, entry, shape⟩
+      intro child member same
+      have impossible : values.any (fun item => item.referenceOf == .empty) = true :=
+        List.any_eq_true.mpr ⟨child, member, by simp [same, Value.referenceOf]⟩
+      exact Bool.noConfusion (live.symm.trans impossible)
+
+omit [DecidableEq FullSyntax.Formula] in
+private theorem universe_fields
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (heap : State Symbol Guard)
+    (built : build (ordinarySymbols whole) [] empty = .done rootValue heap)
+    (start finish : State Symbol Guard) (value : Value Symbol Guard)
+    (context : BasicContext start []) (growth : Grows start heap)
+    (actual : build (ordinarySymbols
+      (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query))) [] start =
+        .done value finish) :
+    value.free = [] ∧
+      SourceEqualityAnnotationLanguage.Annotated (fun guard => guard = top) value ∧
+      SourceMemoGate.unconstrained value = true := by
+  have stored := SourceSynthesisCurrentTypeFieldCalls.prefix_muStored
+    (fun guard => guard = top) rfl lib query signed whole accepted rootValue heap built start growth
+  have allowed : SourceEqualityAnnotationConstruction.Allowed (fun guard => guard = top)
+      (ordinarySymbols (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query))) := by
+    simpa only [SourceSynthesisLabelProgramBuildRoles.mapSyntax_ordinarySymbols] using
+      SourceSynthesisCurrentTypeFieldCalls.allTypes_allowed literal
+        (fun guard => guard = top) rfl (SourceSynthesisCurrentContext.constructorCatalog lib query)
+  have checked := SourceCurrentHereditaryConstruction.build (fun guard => guard = top)
+    (ordinarySymbols (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query)))
+    [] start context.normal.facts context.inputs allowed (by intro child member; cases member) stored
+  have annotated := checked.result value finish actual
+  have closed : value.free = [] := by
+    apply List.eq_nil_iff_forall_not_mem.mpr
+    intro name member
+    obtain ⟨input, absent, _⟩ := InternedFreshOrdinarySourceFreeNames.build_free_origins
+      (ordinarySymbols (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query)))
+      [] start context.normal context.inputs context.freeNames context.profiles value finish actual name member
+    cases absent
+  have plain := SourceCurrentHereditaryUnconstrained.annotated_mono
+    (fun (guard : Guard) (same : guard = top) => by rw [same]; rfl) annotated
+  exact ⟨closed, annotated, SourceCurrentHereditaryUnconstrained.unconstrained value plain⟩
+
+private theorem identity_component_arrow_children
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (heap : State Symbol Guard)
+    (built : build (ordinarySymbols whole) [] empty = .done rootValue heap)
+    {expressions : List (EdgeSyntax Symbol Guard)} {before after : State Symbol Guard}
+    {outputs : List (EdgeValue Symbol Guard)} {rowIndex : Nat} {symbol : Symbol}
+    (original : SourceSynthesisOriginalTypeAnnotations.OriginalType lib
+      (.tFun (.tVar "a") (.tVar "a")))
+    (call : SourceCurrentStoredMuRetainedAlignment.RowCall
+      expressions [] before outputs after heap rowIndex symbol top
+      [ordinarySymbols (generalize
+        (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query))
+        (SourceSynthesisPr210TypeReflection.encodeTy (.tFun (.tVar "a") (.tVar "a"))))]) :
+    ∃ (typeValue : Value Symbol Guard) (arrow : EdgeValue Symbol Guard)
+        (marker domain result : Value Symbol Guard),
+      call.output.children[0]? = some typeValue ∧ Available heap typeValue ∧
+      (∃ entry depth, typeValue = .node entry [arrow] depth []) ∧
+      arrow.entry.key.symbol = literal "->" ∧
+      arrow.entry.key.constraint = eqGuard [[[1], [2]]] ∧
+      arrow.children = [marker, domain, result] ∧
+      (∃ markerEntry (markerRow : EdgeValue Symbol Guard),
+        marker = .node markerEntry [markerRow] 0 [] ∧
+        markerRow.entry.key.symbol = literal "(->)" ∧
+        markerRow.entry.key.constraint = top ∧ markerRow.children = []) ∧
+      (∀ child ∈ [domain, result], Available heap child ∧ child.free = [] ∧
+        SourceEqualityAnnotationLanguage.Annotated (fun guard => guard = top) child ∧
+        SourceMemoGate.unconstrained child = true) ∧
+      ∃ (first middle last : State Symbol Guard), BasicContext first [] ∧
+        build (ordinarySymbols
+          (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query))) [] first =
+            .done domain middle ∧
+        BasicContext middle [] ∧
+        build (ordinarySymbols
+          (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query))) [] middle =
+            .done result last ∧
+        Grows first heap ∧ Grows middle heap ∧ Grows last heap := by
+  let field : Expression := generalize
+    (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query))
+    (SourceSynthesisPr210TypeReflection.encodeTy (.tFun (.tVar "a") (.tVar "a")))
+  let universe : Syntax Symbol Guard := ordinarySymbols
+    (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query))
+  let markerSyntax : Syntax Symbol Guard := ordinarySymbols (arrowMarker top)
+  obtain ⟨typeValue, typeSlot, typeAvailable, typeClosed, _typeAnnotated, member⟩ :=
+    SourceSynthesisCurrentIdentityNativeWitness.identity_component_native_member
+      formulas solver lib query signed whole accepted rootValue heap built original call
+  obtain ⟨native, start, finish, nativeSlot, context, actual, _startGrowth, finishGrowth⟩ :=
+    SourceSynthesisOriginalProgramTypeFields.many_call [ordinarySymbols field]
+      call.current call.middle heap call.context call.values call.called call.middle_growth
+      0 (ordinarySymbols field) rfl
+  have slot : call.values[0]? = some typeValue := by
+    rw [← call.children_eq]
+    exact typeSlot
+  have same : native = typeValue := Option.some.inj (nativeSlot.symm.trans slot)
+  subst native
+  have fieldSyntax : ordinarySymbols field = .node [.mk (literal "->")
+      (eqGuard [[[1], [2]]]) [markerSyntax, universe, universe]] := by
+    rfl
+  rw [fieldSyntax] at actual
+  have nonempty : typeValue ≠ .empty := by
+    intro same
+    have acceptedTerm := member (fun _ _ => False)
+    simp only [same, InternedGuardedLanguage.meaning] at acceptedTerm
+  obtain ⟨arrow, values, childEnd, childCalls, childGrowth, arrowResident, arrowChildren,
+      arrowKey, childLive, arrowEntry, arrowShape⟩ :=
+    singleton_actual (literal "->") (eqGuard [[[1], [2]]]) [markerSyntax, universe, universe]
+      start finish heap context typeValue actual finishGrowth nonempty
+  cases markerDone : build markerSyntax [] start with
+  | pending key state =>
+      simp only [InternedFreshOrdinaryConstruction.buildMany, markerDone, Outcome.bind] at childCalls
+      cases childCalls
+  | done marker first =>
+      cases domainDone : build universe [] first with
+      | pending key state =>
+          simp only [InternedFreshOrdinaryConstruction.buildMany, markerDone, domainDone,
+            Outcome.bind] at childCalls
+          cases childCalls
+      | done domain middle =>
+          cases resultDone : build universe [] middle with
+          | pending key state =>
+              simp only [InternedFreshOrdinaryConstruction.buildMany, markerDone, domainDone,
+                resultDone, Outcome.bind] at childCalls
+              cases childCalls
+          | done result last =>
+              have ordered : [marker, domain, result] = values ∧ last = childEnd := by
+                simpa only [InternedFreshOrdinaryConstruction.buildMany, markerDone, domainDone,
+                  resultDone, Outcome.bind, Outcome.done.injEq] using childCalls
+              have valuesEq : values = [marker, domain, result] := ordered.1.symm
+              have endEq : childEnd = last := ordered.2.symm
+              subst values
+              subst childEnd
+              have firstContext : BasicContext first [] := by
+                simpa only [markerDone, Outcome.state] using context.build markerSyntax
+              have middleContext : BasicContext middle [] := by
+                simpa only [domainDone, Outcome.state] using firstContext.build universe
+              have domainChecked := InternedFreshOrdinaryFacts.build_verified universe [] first
+                firstContext.normal.facts firstContext.inputs
+              have resultChecked := InternedFreshOrdinaryFacts.build_verified universe [] middle
+                middleContext.normal.facts middleContext.inputs
+              have middleGrowth : Grows middle heap := grows_trans
+                (by simpa only [resultDone, Outcome.state] using resultChecked.growth) childGrowth
+              have firstGrowth : Grows first heap := grows_trans
+                (by simpa only [domainDone, Outcome.state] using domainChecked.growth) middleGrowth
+              obtain ⟨domainClosed, domainAnnotated, domainPlain⟩ :=
+                universe_fields lib query signed whole accepted rootValue heap built first middle domain
+                  firstContext firstGrowth domainDone
+              obtain ⟨resultClosed, resultAnnotated, resultPlain⟩ :=
+                universe_fields lib query signed whole accepted rootValue heap built middle last result
+                  middleContext middleGrowth resultDone
+              have markerNonempty : marker ≠ .empty := childLive marker (by simp)
+              have markerBuilt : build (.node [.mk (literal "(->)") top []]) [] start =
+                  .done marker first := markerDone
+              obtain ⟨markerRow, markerValues, markerEnd, markerCalls, _markerGrowth,
+                  _markerResident, markerChildren, markerKey, _markerLive, markerEntry, markerShape⟩ :=
+                singleton_actual (literal "(->)") top [] start first heap context marker markerBuilt
+                  firstGrowth markerNonempty
+              have markerValuesNil : markerValues = [] := by
+                have pair : [] = markerValues ∧ start = markerEnd := by
+                  simpa only [InternedFreshOrdinaryConstruction.buildMany, Outcome.done.injEq] using markerCalls
+                exact pair.1.symm
+              rw [markerValuesNil] at markerChildren markerShape
+              change marker = .node markerEntry [markerRow] 0 [] at markerShape
+              have fieldFree : childFree [marker, domain, result] = [] := by
+                simpa only [arrowShape, Value.free] using typeClosed
+              have typeShape : ∃ entry depth, typeValue = .node entry [arrow] depth [] :=
+                ⟨arrowEntry, maximumDepth [marker, domain, result], by
+                  simpa only [fieldFree] using arrowShape⟩
+              have originalChecked := InternedFreshOrdinaryFacts.build_verified
+                (ordinarySymbols whole) [] empty InternedNestedFacts.empty_facts
+                (by intro child absent; cases absent)
+              have finalFacts : InternedNestedFacts.Facts heap := by
+                simpa only [built, Outcome.state] using originalChecked.facts
+              have childAvailable : ∀ child ∈ [domain, result], Available heap child := by
+                intro child present
+                apply finalFacts.cached.edges arrow.entry.key arrow arrowResident child
+                rw [arrowChildren]
+                exact List.mem_cons_of_mem marker present
+              refine ⟨typeValue, arrow, marker, domain, result, typeSlot, typeAvailable,
+                typeShape, congrArg EdgeKey.symbol arrowKey, congrArg EdgeKey.constraint arrowKey,
+                arrowChildren, ⟨markerEntry, markerRow, markerShape,
+                  congrArg EdgeKey.symbol markerKey, congrArg EdgeKey.constraint markerKey,
+                  markerChildren⟩, ?_, first, middle, last, firstContext, domainDone,
+                middleContext, resultDone, firstGrowth, middleGrowth, childGrowth⟩
+              intro child present
+              rcases List.mem_cons.mp present with same | tail
+              · subst child
+                exact ⟨childAvailable domain List.mem_cons_self, domainClosed, domainAnnotated, domainPlain⟩
+              · have same : child = result := List.mem_singleton.mp tail
+                subst child
+                exact ⟨childAvailable result (List.mem_cons_of_mem domain List.mem_singleton_self),
+                  resultClosed, resultAnnotated, resultPlain⟩
+
+end MicroCFTA.SourceSynthesisCurrentIdentityShape

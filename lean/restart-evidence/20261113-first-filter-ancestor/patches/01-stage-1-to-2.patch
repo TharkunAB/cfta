@@ -1,0 +1,21 @@
+--- source.lean
++++ source.lean
+@@ -51,5 +51,3 @@
+-  cases original : values[index]? with
+-  | none => simp only [original, Option.map_none] at found; cases found
+-  | some previous =>
+-      exact ⟨previous, original,
+-        Option.some.inj (by simpa only [original, Option.map_some] using found)⟩
++  cases values[index]? with
++  | none => cases found
++  | some previous => exact ⟨previous, rfl, Option.some.inj found⟩
+@@ -69 +67,2 @@
+-    ∃ (sourceRows : List Row) nodeStart nodeValue nodeAfter,
++    ∃ (sourceRows : List Row) (nodeStart : State Symbol Guard)
++        (nodeValue : Value Symbol Guard) (nodeAfter : State Symbol Guard),
+@@ -164 +163 @@
+-      ∃ typesExpression functionExpression argumentExpression
++      ∃ (typesExpression functionExpression argumentExpression : SourceSynthesisFirstOrderConstruction.Expression)
+@@ -166 +165 @@
+-          nodeStart nodeMiddle nodeAfter (rawRows : List (EdgeValue Symbol Guard))
++          (nodeStart nodeMiddle nodeAfter : State Symbol Guard) (rawRows : List (EdgeValue Symbol Guard))

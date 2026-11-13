@@ -1,3 +1,88 @@
+## Source function unions and actual Type-read preservation (2026-11-13 14:56 CET)
+
+The full goal remains ACTIVE. Pushes to formalize remain authorized.
+Proof commit: 118752dffc196b6334d81a6e607b16701704951c.
+Main remains e53852064d3ef5a2eafec47d754c27504b11de5f.
+All earlier notes remain an exact byte suffix. Preserve the full objective below.
+
+PUBLIC: SourceSynthesisCurrentUnionFunctionParent334/91f9c20f proves
+actual_app_identity_union_function_parent. The same actual application RowCall
+supplies its function build. Pure source pool and identity lookups derive the
+component call and final canonical index. The COMPLETE identity row and SAME
+singleton Type handle survive the actual union of source node pools. This covers
+the default size-two pools when that source identity is present. Empty and
+multiple-member normalization require no supplied native shape or Ready premise.
+The source Type keeps its real equality guard and finite arrow(var1,var1) instance.
+
+PUBLIC: SourceCurrentStoredRowCallGrowth23/cfc05056 adds RowCall.grows.
+It retains every recorded call, value, ordered child and endpoint.
+Only three reader growth proofs change. StoredMuRetainedAlignment270/f18bf980
+and all its existing proofs remain byte-exact.
+
+PRIVATE, CHECKED: identity_component_arrow_children323/b0e5ee01 derives the SAME
+singleton arrow row, equality guard [[[1],[2]]], literal marker and adjacent
+actual domain/result universe calls. Their results are closed and hereditary Top.
+It does not prove the current warm-universe root classifier or clear other rows.
+
+PRIVATE, CHECKED: actual_identity_type_read_prefix327/e30d3083 extends the exact
+checked ordinary observer140. One actual full function read supplies the actual
+row prefix, Type read, edge, suffix, node rebuild, all heaps and full Memos.
+Source function closure and available row children derive prefix semantic facts.
+The SAME source Type's free=[] supplies NodeSupport for every trie directly.
+The fixed actual Type read build[[0],[1],[2]] retains the finite guarded identity
+arrow. No future Type-prefix Ready, support, availability or model is supplied.
+This read PRECEDES later application intersections/edits. They can remove that
+instance. This result does not prove final Type inhabitation or joint consistency.
+
+PRIVATE, CHECKED: first_filter_current_app_source_ancestor327/bb7e565e traces a
+current application row through the actual first filter Parent return to its
+original source build, SourceRow and RowCall. Full nonempty app guard, not the
+name alone, removes the plain branch. The SAME function child2 is retained.
+The causally selected function syntax is returned; no source parent match or
+prior row survival is supplied. It covers original candidates at this first
+filter entry. Later own application passes still require their actual history.
+Exact repaired 72-line header29aacf5c changes only parser binder syntax from40c6138e.
+
+Standalone source-only packet: lean/restart-evidence/20261113-union-function-parent/.
+It ran FROM /tmp under serial Nix4GiB max/high/swap0 and one Lean thread.
+FULL Audit PASS: 5900 live modules, 4898 imports, 94935 theorem axiom reports.
+All four public/private declaration reports use standard Lean axioms only.
+Seventeen source stages and twenty-four actual GNU zero-context replays pass.
+No build archive is stored. The first-filter observer has its own strict PASS.
+Its six-stage source packet is lean/restart-evidence/20261113-first-filter-ancestor/.
+It reconstructs twelve actual GNU source/instrumentation/header patches.
+All failed drafts remain failed; their recovery sorryAx prints are not proof evidence.
+
+NEXT: attach the source ancestor, retained function row and Type read to the SAME
+current application execution. Preserve the earlier result/marker read effects.
+The all-three selection remains conditional. A new 35-line selected-Type-paths
+header49d49cc9 and plan72/e0165a12 are PLANNING ONLY in pending-latest/.
+The planned observer would bound the actual selected Type paths to a subset of
+[[0],[1],[2]] at the unchanged source app guard. No all-three-clear or Matches
+provider is proposed. Earlier guard edits need provenance. Do not replace the
+actual occurrence, prefix effects, later intersections or joint model with inputs.
+
+The strongest original-input global result remains CurrentProgramEagerOutputs221:
+finite stable no-stop eager execution, complete output resources and stable
+partial Program readback. Whole-worker isolated-boundary preservation8246 remains.
+The BIGGEST gap is one finite term accepted by the SAME original root that jointly
+completes the SAME emitted partial root. Shared aliases, domains and residual
+constraints must agree in that one assignment. Local finite witnesses do not
+supply it. Original typing and depth adequacy/completeness remain open.
+Default LPO/reduction/refolding/streams, order/multiplicity/lazy demand, exact
+sizes/counts/weights/training, BOTH rank/unrank inverses, host bounds and compiled
+Haskell correspondence remain in the full objective. Do not shrink that scope.
+
+Haskell/Cabal/test-suite changes and Haskell defects/fixes in this checkpoint: NONE.
+Record every future Haskell fix in FINDINGS for the external implementation work.
+Liquid repeated-name/refinement work stays with claude-gondolin. Do not duplicate it.
+Preserve .hypha and all proofs, counterexamples, repairs and marked drafts.
+PRIMARY50 percent and /tmp161.76GiB free at14:46 CET. Refresh within15 minutes.
+Above80 percent, save the full handoff, stop workers, pause and notify Matti.
+Root remains the sole compiler, Git publisher and board writer. Continue the goal.
+
+---
+
 ## Source node function rows and actual Type-read observers (2026-11-13 13:35 CET)
 
 The FULL goal remains ACTIVE. Pushes to formalize remain authorized. Main is
