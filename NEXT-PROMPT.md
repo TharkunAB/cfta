@@ -1,3 +1,165 @@
+## Current checkpoint: original-input eager Program outputs (2026-11-13 07:24 CET)
+
+The FULL library formalization goal stays ACTIVE. Pushes to formalize are
+explicitly authorized. This checked checkpoint starts from ea77dc5ca53cdc75dd16619c71946a8da4d20131.
+The previous checkpoint and all older root notes remain exact byte suffixes.
+Main was e53852064d3ef5a2eafec47d754c27504b11de5f at the last remote readback.
+
+### Strongest checked statement
+
+Accepted original first-order raw library/query input and a chosen recursion
+depth now give ONE computed eager width, ONE actual initializer and ONE actual
+eager-role worker. The proof derives Packet/Fits/Heap/reservation internally.
+One finite common work bound returns the SAME actual outcome for every larger
+common work budget. The ENTIRE old initialization/resource/control receipt stays
+first under those same witnesses. The noStop outputs have metadata=None and
+actual default-next=done. No second resource worker is used to join witnesses.
+
+EVERY SAME emitted output retains its actual native endpoint, full Memos/query,
+Post, Packet, capacity and guard alphabet. Its own extending mark set retains
+root0 and ProgramSlots at that output heap/cache. ONE root producer per output
+gives a finite stable actual partial readback, all-larger-fuel exact singleton
+runs, RenderStable, Frame and stratification. The partial readback has ONE Program
+projection shared by EVERY actual completion. All old conditional model and
+completion observers remain. This reaches the actual eager worker from the
+original-input boundary. It supersedes the earlier missing eager role/readback
+status; the old shallow theorem keeps its own unchanged statement and source.
+
+The result does not construct a finite Type assignment or prove the Program
+satisfies the ORIGINAL library/query. Output existence, sufficient recursion
+depth, language completeness, default stream behavior and Haskell correspondence
+remain separate. These are manually written Lean algorithms. The mathematical
+width is not a fixed host-capacity or compiled-runtime guarantee.
+
+### Source contracts and checks
+
+SourcePruningEnumerationSharedEagerReservation has 6627 lines, SHA256
+442ecd918be668287bed3ab48f4412677ab4684c777c6ab64ce40b00a1f1b260.
+Five public laws include ONE new runEager_finite_complete_resources_program_slots.
+Its existing resource conjunction stays FIRST, followed by an explicit public
+emitted/extending-marks/ProgramSlots observer. It exposes no private predicates.
+All concrete child, captured-row, preparation, expansion and Resume/depth role
+suppliers are closed internally. Current valid/marked/Slots are inputs, not
+future-state gates. It needs no arbitrary root0 premise. Current root0 extends
+to each output when used by the original initializer.
+
+Opaque 5520, captured 5899, ordered rows 6053, preparation 6322, expansion 6535 and
+final depth/public 6627 each passed their FIRST strict Lean check. The row scope
+repair binds current inputs under their actual forall; its old 57 was an UNPROVED
+proposal. No checked contract was changed. Empty preparation is split FIRST;
+marked empty rejects with no output. Nonempty opaque is internally unmarked.
+Captured Core and marks reset for siblings; native Post.keeps transports slots
+to actual endpoints. Full native/Memos/resources and stopped prefixes remain.
+The old public 20 header, four public proofs, workers, plans and data stay exact.
+
+NEW SourceSynthesisCurrentProgramEagerOutputs has 221 lines, SHA256
+b7d297f14f92db6dc8903f2cbd79e0e2e05f8987203afcdfb5a8bfbaf913524a.
+Its ONE public accepted theorem uses the exact approved 97 input/result header.
+It calls the initializer once and the new eager-role worker once. It derives
+control from the SAME running0, projects the SAME output resource/Packet, extends
+mark0 and calls complete_program_root once for that output. It imports old 159 for
+dependencies and does not invoke its accepted resource producer. Original 159
+and shallow 187 remain byte-exact. The original exact-language accepted_exact
+law still has its distinct completed nodeCall endpoint; it is not relabeled
+as the shared startup/output language theorem.
+
+Two own Nix/Lake packets pass. They explicitly check SIX public names and their
+standard axiom sets: five Math laws and one original-entry law, TWO laws new.
+Full Audit passes: 5895 live modules, five affected modules, 4892 Audit imports,
+94860 axiom reports. The count includes generated private declarations and is
+not proof progress. All THREE portable packets pass from /tmp under the same
+serial 4 GiB max/high, swap 0, one-thread cap. No warning or heartbeat is changed.
+All old 266642 Audit bytes remain an exact suffix; one new import is prepended.
+No Haskell/Cabal file changes. No Haskell formatting/test repeat is needed.
+
+Evidence packets:
+- lean/restart-evidence/20261113-eager-whole-output-roles/
+- lean/restart-evidence/20261113-current-eager-program-outputs/
+- lean/restart-evidence/20261113-current-eager-program-outputs-compatibility/
+
+Source audit has 172934 bytes, EIGHT source stages, SIX actually replayed GNU
+reverse patches and 14 frozen contract/source/semantic appendices.
+The seven Math stages reconstruct published 5387 through checked 6627. The new
+original 221 source is pinned separately. Raw strict receipts do not count public
+API names; the own packets explicitly establish the actual five-plus-one list.
+Patch payloads preserve exact bytes as JSON strings. No large execution archive.
+The runtime-only verified-modules.json is not another evidence packet.
+
+### Main semantic gap and next useful proof
+
+The original partial Type model remains the largest gap. Parked clearing drops
+suspended path requirements. A repeated native-handle/trie key omits variable
+identities. The checked satisfaction iff and conditional root observers transport
+an EXISTING assignment; they do not supply all removed Suspended.Holds or a new
+original-input assignment preserving the SAME emitted Program. The retained 100
+parked audit and old UNPROVED 9 isolation /14 original-pullback targets still apply.
+Full genuine partial-Type completions remain in scope; whole-only discharge
+cannot replace them. Creation and one successful child transport of isolated
+markers are checked; the separate whole marker-retention target stays open.
+
+A new 99-line allocated-class audit identifies a precise limitation: existing
+fresh_classes/install/holds_extension lemmas preserve all OLD allocated values.
+state_assignment_congr reduces such fresh-only repair to same-assignment truth.
+Thus that technique cannot repair already false old Suspended.Holds. The missing
+private 15 branch target permits recomputing allocated Type classes while keeping
+the SAME Program. neutralize_restore and actual parked/read iff can then transfer
+the reconstructed model backward. That target is UNPROVED, not a public provider.
+Model existence after opaque Type holes remains a separate base obligation.
+
+A separate 99-line correlation audit finds no actual bucket grouping by UF class
+or merged trie in the current Haskell/Lean paths. Native guard normalization is
+separate. Its 19-line witness specification and 6-line possible invariant remain
+UNPROVED. A raw equal-key/different-sharing list is NOT an actual source-reachable
+countermodel. Source ancestry and native semantics may still constrain sharing.
+A new 83-line precheck audit shows actual repetition precedes current narrowing.
+Retained boundary identity is already checked. Prior incoming queries conjoin
+native values and keep suspended buckets separate; no source support-entailment
+witness is supplied by those interfaces. A new 94-line finite-model audit shows
+checkEmpty is root-derived in Haskell, and conservative provablyEmpty certifies
+only TRUE empty answers. No-terminal opaque allocation can bypass that checker.
+Original allTypes has four finite variable leaves, so an empty-catalog claim
+would be wrong. The SAME reached constrained handles still need joint witnesses.
+An UNPROVED 12 per-output model conclusion records this separate existence goal.
+Its validity for arbitrary configurations is not claimed. Current 221's Bool has
+no proved equality yet to the Haskell root-derived flag. No Haskell defect
+is established here. Every actual Haskell fix must be recorded in FINDINGS for
+external agents. External Liquid duplicate-name/refinement work remains owned
+by claude-gondolin; reserved curried markers remain open. Do not duplicate it.
+
+The full objective also retains LPO/refolding, programsIn/runsByMu default paths,
+rendered-term dedup BEFORE projection versus Programs dedup AFTER projection,
+stream order/multiplicity/lazy demand, sizes, counts, weights, training, BOTH
+rank/unrank inverse directions, adequate depth and compiled Haskell linkage.
+The earlier focused Haskell result is 16 examples, zero failures, not a full
+suite/corpus/benchmark result. No new Haskell result is claimed at this checkpoint.
+
+### Runtime and continuation
+
+Root runtime: /tmp/mcfta-eager-whole-output-roles-20261113-0648/.
+Strict hub: /tmp/mcfta-eager-resource-cps-check-20261113-0009/.
+Original221 owner: /tmp/mcfta-current-eager-program-outputs-20261113-0657/.
+Allocated model audit: /tmp/mcfta-parked-allocated-recompletion-20261113-0639/.
+Correlation audit: /tmp/mcfta-suspended-variable-correlation-20261113-0653/.
+Root is the only compiler/Git publisher. Agents write NEW /tmp files only.
+Keep ONE serial heavy job in Nix, memory.max=memory.high=4 GiB, swap 0 and
+LEAN_NUM_THREADS=1. The user bus needs XDG_RUNTIME_DIR=/run/user/1000 and
+DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus in the current tool shell.
+Do not raise caps/concurrency. Preserve .hypha, sources, counterexamples, repairs
+and all marked drafts. Keep Git mutations terminal before the next mutation.
+
+Fresh PRIMARY at 07:17 CET is 41 percent, window 10080 minutes. /tmp has 164.24 GiB
+free. Last readable du at 05:59 was about 46 GiB; some private/system paths were
+unreadable. No cleanup is needed. Refresh usage within 15 minutes. If fresh
+PRIMARY exceeds 80 percent, stop workers, save a full handoff, pause the goal
+and notify Matti. Do not infer usage from elapsed time.
+
+Finish the three small checkpoint commits, authorized push, remote verification
+and exact board readback. Then CONTINUE the full objective. Advance allocated
+Type/model reconstruction and output model existence from actual current source
+facts. Do not add assumed future models, narrow the goal or stop after publishing.
+
+---
+
 ## Current checkpoint: common role observations and eager callback leaves (2026-11-13 06:33 CET)
 
 The full library formalization goal stays ACTIVE. Publication to formalize is
