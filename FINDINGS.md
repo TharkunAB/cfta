@@ -1,3 +1,134 @@
+## Current checkpoint: common role observations and eager callback leaves (2026-11-13 06:33 CET)
+
+The full library formalization goal stays ACTIVE. Publication to formalize is
+explicitly authorized. This checkpoint starts from 15e254a046182ec6e7f8c469508e5700e18ec190.
+Remote main was e53852064d3ef5a2eafec47d754c27504b11de5f at 05:52 CET.
+The sections below this block preserve the prior checkpoint byte for byte.
+
+### Checked source and resulting claim
+
+SourceSynthesisProgramRolesSharedDriver has 1862 lines, SHA256
+f0ac41fb137fce6ca8262ddb1bad3c9f4ab8cf7e7017048385e061a2ae0c09d8.
+Three existing local lemmas become public: observed_prefix_slots,
+render_stable_slots and prepared_marked_fields. Their actual namespace is
+MicroCFTA.SourcePruningEnumerationSharedPreparedRecursive. Their headers and
+proof bodies stay exact. The inverse visibility change restores old 1859 exactly.
+The module has four public laws. Its import closure has no Reservation cycle.
+These lemmas supply current prefix/preparation observations; they do not convert
+whole shallow runs into eager runs or supply assumed future-state invariants.
+
+SourcePruningEnumerationSharedEagerReservation has 5387 lines, SHA256
+82b10ab658fedde650e794b0a57aa306775a18ed7bd1c06a687d4fb7625a8ed9.
+Its private 119-line unmarked observer uses one actual finalizer and one callback
+receipt. Current entry slots, the actual write and the callback frame give the
+role facts. Its private 101-line recorded-callback helper consumes the ENTIRE
+same callback receipt. The false arm invokes lower concrete Resume once. The
+true arm returns empty output. No native producer, callback or finalizer runs a
+second time to obtain a second witness. No output property is required for Type
+positions. The old full native Post/Memos/resource packets remain.
+
+Both modules have eight public laws together. Three existing LOCAL observations
+become callable. No whole eager output-role law is added. The old four Math
+public laws, workers, data and exact public 20-line resource header stay exact.
+The recorded-callback repair only supplies the SAME Typing explicitly at the
+empty outcome and prefixes its unused allocation parameter with an underscore.
+The original bound premise and conclusion remain. Failed sources and diagnostics
+are retained. No warning is disabled and no resource limit is raised.
+
+### Strongest current public statement and remaining gaps
+
+For accepted first-order raw library/query input, the current mathematical eager
+entry point computes width and its actual startup tuple once. For each fixed
+recursion depth, it produces one finite common work bound and the SAME actual
+eager result for all larger common budgets. The full checked resource/control
+packet holds at that result. These facts do not assert that output exists.
+The current new work does not yet attach ProgramSlots, partial Root/readback,
+original-source typing or original-model pullback to the whole eager output.
+The existing shallow-output and nodeCall exact-language theorems keep their
+own endpoints. They must not be described as the whole eager output theorem.
+
+The immediate operational gap is composition of the concrete positive-depth
+roles through ordered rows, preparation, expansion and outer Resume/depth.
+Later PRIVATE opaque 5520 and single captured 5899 candidates passed strict Lean
+outside live 5387. They retain the same full receipts and all-fuel result.
+The later PRIVATE ordered row 6053 candidate passed strict Lean at 06:30 CET.
+It is not a public or live claim. Preparation now uses that checked dependency.
+The old UNPROVED 57-line row header put current slots/fields before forall bound
+the actual caller/cache/uv/list. Its corrected 57 b7e811cb moves those SAME
+premises inside the actual inputs. No premise is added. No checked theorem is
+changed by this draft repair. Five other unproved headers show no matching scope
+defect. The old header and exact corrected header are retained in source-audit.
+
+The largest semantic gap remains the original partial Type. Parked clearing
+removes suspended guards. A repeated recursion key does not prove that every
+removed guard holds in the same assignment. The checked prepared satisfaction
+receipt is stronger than native language meaning. Output completion/readback
+alone does not construct the missing original-input assignment. The retained
+100-line audit and UNPROVED 9-line isolation / 14-line model-pullback fields
+state this gap. The desired model must preserve the SAME emitted Program.
+No countermodel or Haskell soundness defect is established by this gap.
+Output/model existence, adequate recursion depth and completeness are separate.
+Full partial Type completions remain in scope. Whole-only or bounded statements
+cannot replace that objective. Default LPO/refolding, before/after-projection
+deduplication, output order/multiplicity/lazy demand, sizes, counts, weights,
+training and BOTH rank/unrank inverse directions also remain in scope.
+These are manually written Lean algorithms. A compiled Haskell/runtime bridge
+remains unproved. The existing mathematical width proof is not host capacity.
+
+### Reproducible verification and storage
+
+Two own Nix/Lake packets pass. Full compatibility passes with 5894 live modules,
+eight affected modules, 4891 Audit imports and 94824 checked theorem declarations.
+The count includes generated private declarations and is not proof progress.
+All checked axiom sets are standard. All THREE portable packets pass from /tmp.
+Audit's old 266043 bytes are an exact prefix of the new 266642-byte file.
+Only three explicit name checks and three axiom reports are appended.
+No Haskell or Cabal file changes. No Haskell formatting/test repeat is needed.
+The earlier focused Haskell result remains 16 examples, zero failures, not the
+full suite/corpus/bench. External duplicate-Liquid-name repairs remain owned by
+claude-gondolin; do not duplicate that work. Reserved curried markers remain open.
+Any actual Haskell repair must also be recorded in FINDINGS for external agents.
+
+Evidence packets:
+- lean/restart-evidence/20261113-shared-prefix-observers/
+- lean/restart-evidence/20261113-eager-positive-role-leaves/
+- lean/restart-evidence/20261113-eager-positive-role-leaves-compatibility/
+
+Source history has seven stages and FIVE actual GNU reverse-patch replays.
+It retains 22 frozen fragments/draft appendices, three later private PASS receipts
+the additional checked 153-line row fragment, and two exact draft scope headers.
+source-audit.md has 209881 bytes.
+Patch payloads use JSON when required to preserve exact trailing whitespace.
+This is source reconstruction, not a large execution archive. The own packets
+pin actual namespaces, exact source hashes and explicit axiom reports. The
+runtime-only verified-modules.json is not a fourth evidence packet.
+
+Root runtime: /tmp/mcfta-eager-positive-role-leaves-20261113-0556/.
+Private strict hub: /tmp/mcfta-eager-resource-cps-check-20261113-0009/.
+Alpha row draft: /tmp/mcfta-eager-program-captured-rows-20261113-0624/.
+Gamma prepared plan: /tmp/mcfta-eager-program-preparation-plan-20261113-0621/.
+Private source owners write only new /tmp files; Root is the sole compiler and
+Git publisher. Keep ONE serial heavy job, Nix, 4 GiB memory.max=memory.high,
+swap 0 and LEAN_NUM_THREADS=1. Do not raise caps or queue concurrency. Preserve
+.hypha, all proof/counterexample/repair sources and all marked drafts.
+
+Usage at 06:29 CET: fresh PRIMARY 40 percent, 10080-minute window. Refresh within
+15 minutes. Pause workers, save a handoff, pause the goal and notify Matti if a
+fresh PRIMARY exceeds 80 percent. /tmp has 164.33 GiB free. Last readable du at
+05:59 was about 46 GiB; some system/private directories were unreadable. No new
+cleanup is needed. Do not delete protected source or reinterpret a percentage.
+
+### Next work
+
+Finish the three small checked checkpoint commits and push formalize with remote
+verification and exact board readback. Then keep working. Check the actual row
+candidate, assign preparation only after row PASS, and finish positive-depth
+composition using SAME current observations and SAME result witnesses. Do not
+replace concrete proofs with assumed output-role gates. Keep the independent
+partial-Type model and whole-system correspondence gaps visible.
+
+---
+
 ## Current checkpoint: eager subtree output properties
 
 Time: 2026-11-13 05:46 CET. Branch: formalize. Base: c78484d22dd8b62ef2f8f548a28e0675d33e8c4f.
