@@ -1,3 +1,93 @@
+## Selected Type paths and the actual function boundary (2026-11-13 15:41 CET)
+
+The FULL goal remains ACTIVE. Pushes to formalize remain authorized.
+Proof commit f93d80f072257cb4714ed649780efffc8cfef4eb is pushed and remote-verified.
+Main remains e53852064d3ef5a2eafec47d754c27504b11de5f, verified at15:31 CET.
+All earlier notes remain an exact byte suffix. Preserve the full objective below.
+
+PUBLIC SourceSynthesisActualAppSelectedTypeSubset125 derives the actual selected
+Type paths from the SAME unchanged source app guard, allocated precheck receipt,
+and successful ScanReads. The paths form a Sublist of [[0],[1],[2]]. Their exact
+compiled function lookup is none when empty, or node[(0,build typePaths)] when
+nonempty. Matches of the finite identity arrow is DERIVED. There is no all-three
+selection, class-clearance, Matches, model, or compiled-map provider premise.
+Inherited constraints are arbitrary at this local receipt boundary. Earlier
+edits of the source guard still require their actual provenance.
+
+PUBLIC SourceSynthesisActualAppFunctionPrefix169 extracts the SAME actual first
+two child reads, function step, and final argument read. Initial SemanticReady,
+CostHeap, and Values at RequireAll entry derive the function site's Keeps,
+SemanticReady, costs, and untouched function availability. The physical proof
+uses RequiredHeapEffects.children(True). It needs no preceding closedness input.
+Both selected and unselected function branches retain their actual Memos.
+An absent function request copies only that slot. The prefix and suffix can
+still change their heaps and Memos. Do not treat the whole call as identity.
+
+PRIVATE, CHECKED actual_identity_type_read_prefix_sublist512/7cab272f extends
+the exact checked327/e30d base with one185-line theorem. A pure Sublist condition
+replaces the fixed full trie. The SAME actual Type read retains its finite
+guarded identity arrow. Support, prefix readiness, availability, and Matches are
+derived as before. This observer does not create a Type read for an empty
+function footprint. It still precedes later intersections and edits.
+
+PRIVATE, CHECKED current_candidate_app_operands258/4ecf2348 derives the current
+allTypes catalog and function syntax from the SAME successful current factory.
+Function syntax is a direct node OR a union of node pools. Avoid rules require
+the direct-node case. Actual root chunks and their mapM result are retained.
+Identity component membership is not universal. It needs a concrete source case.
+
+PRIVATE, CHECKED actual_app_selected_function_boundary122 composes the new public
+laws at SAME scanned.native.machine.heap and SAME returned scanMemos. It derives
+the Type-path subset, Matches, actual prefix2, empty/selected function step,
+suffix1, and function-site physical invariants. There is no future readiness or
+compiled-lookup provider. The first compiler draft failed at two equality
+witnesses after cases rewrote their goals. Replacing those witnesses with rfl
+preserves the exact62-line header. The strict repaired proof uses standard axioms.
+
+FULL live Audit PASS: 5902 modules, 4900 imports, 94957 theorem dependency checks.
+Both public modules also pass strict warning checks and actual import checks.
+The wrapper initially confused16 explicit print reports with the global count.
+All five compiler calls exited zero. The parser was repaired without repeating
+them. Initial and corrected scripts and reports are preserved. Every new private
+proof passed its own strict serial Nix4GiB max/high/swap0 check with one Lean
+thread and only propext, Classical.choice, and Quot.sound.
+
+Source-only packet lean/restart-evidence/20261113-selected-app-type-paths/ stores
+ten main source stages, four auxiliary stages, and18 actual GNU zero-fuzz patch
+replays. Root reconstructed it, extracted it, and checked exact current source
+pins FROM/tmp. It is831695 bytes and contains no build cache. The actual boundary
+composition is in lean/restart-evidence/20261113-selected-function-boundary/.
+Its three stages reconstruct, and all five source/instrumentation/header patches
+passed actual GNU zero-fuzz replay. Current import hashes match. Preserve failed sources and
+their diagnostics; failed sorryAx output receives no proof credit.
+
+NEXT: retain the SAME SourceRow.union candidate-member link when joining the
+first-filter ancestor327 to the factory258. Derive the source catalog and the
+node/union function case for that actual call. Identity membership needs a real
+positive source case. Then join that call, boundary122, and Type-sublist512.
+Later application edits and Type intersections still need their actual history.
+Do not replace a final productive Type or joint assignment with a provider.
+
+The strongest original-input global theorem is still CurrentProgramEagerOutputs:
+finite stable no-stop eager execution, complete resources, and stable partial
+Program readback. The BIGGEST gap remains ONE finite term accepted by the SAME
+original root that jointly completes the SAME emitted partial root. Shared
+aliases, domains, and residual constraints must agree in that one assignment.
+Original typing, depth adequacy/completeness, default LPO/reduction/refolding/
+streams, order/multiplicity/lazy demand, exact sizes/counts/weights/training,
+BOTH rank/unrank inverses, host bounds, and compiled Haskell correspondence remain
+in the FULL objective. Keep the optimized interned core as the primary target.
+Preserve older constructor and equality work as secondary targets.
+
+Haskell/Cabal/test-suite changes, and new Haskell defects/fixes: NONE.
+Record every future Haskell fix in FINDINGS for external implementation work.
+Liquid repeated-name/refinement work remains external. Preserve .hypha and drafts.
+PRIMARY51 percent and /tmp161.48GiB free at15:34 CET. Refresh within15 minutes.
+Above80 percent, save the full handoff, stop workers, pause and notify Matti.
+Root remains sole compiler, Git publisher, and board writer. Continue the goal.
+
+---
+
 ## Source function unions and actual Type-read preservation (2026-11-13 14:56 CET)
 
 The full goal remains ACTIVE. Pushes to formalize remain authorized.
