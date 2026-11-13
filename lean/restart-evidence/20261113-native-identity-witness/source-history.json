@@ -1,0 +1,107 @@
+{
+  "base": "5a86481a3c41d08fb1d6950ecacb063a702c43f3",
+  "stages": {
+    "native-raw": {
+      "sha256": "6fa8667a9ef224bf24b9a6efdd8c8aa2c1930a634c0323002b6bb2a8af62c910",
+      "lines": 87
+    },
+    "native-normalized": {
+      "sha256": "cdf5547579dd4d0a0a6d15899fa5aa015e04ec722e00300780a69e6a8a8e2412",
+      "lines": 89
+    },
+    "native-unfold-rejected": {
+      "sha256": "9cd45a6a11888bd6f7e62e32aa0aedc693a4990c4c2d1fa47a276a1de23d90a0",
+      "lines": 90
+    },
+    "native-api-private": {
+      "sha256": "c4329bbd08eb9da59fbf2dfce5743bc0fb1598976209f10c26896dc12938a0b2",
+      "lines": 90
+    },
+    "native-public": {
+      "sha256": "b9f7cf3a9042f8545b0e1bf9348b65138de23d955d3ccfd232e157780388f564",
+      "lines": 98
+    },
+    "arrow-equation-rfl-rejected": {
+      "sha256": "c01332fc8b273d87ec27c590787380f50314f901620974abbe36c2e3f8c4c347",
+      "lines": 371
+    },
+    "arrow-equation-public": {
+      "sha256": "5d6bba7fd41f5b9e35849475d8d152d239e93cf481cf4ea721c24c78426bca36",
+      "lines": 371
+    },
+    "arrow-base": {
+      "sha256": "1694623d56edd06c0eb71d5cce3dafe670444ab2d9525415ae7517489a6de209",
+      "lines": 364
+    }
+  },
+  "seeds": {
+    "native-public": "lean/MicroCFTA/SourceSynthesisCurrentIdentityNativeWitness.lean",
+    "arrow-equation-public": "lean/MicroCFTA/SourceSynthesisGeneralizeFiniteInstances.lean"
+  },
+  "patches": [
+    {
+      "from": "native-public",
+      "to": "native-api-private",
+      "patch": "--- Source.lean\n+++ Source.lean\n@@ -3,8 +2,0 @@\n-\n-/-!\n-# A finite guarded instance at an actual component call\n-\n-The recorded child call supplies the same native identity Type value.\n-The theorem retains a finite instance and its equality guard in that value.\n-Later reads and joint completion require separate proofs.\n--/\n@@ -25 +17 @@\n-theorem identity_component_native_member\n+private theorem identity_component_native_member\n",
+      "sha256": "327f31d30d16f1df2f22c9bd6602f5b31cf1dd7f5023f6e0199b45692b0d980c"
+    },
+    {
+      "from": "native-api-private",
+      "to": "native-normalized",
+      "patch": "--- Source.lean\n+++ Source.lean\n@@ -69 +68,0 @@\n-      SourceSynthesisGeneralizeFiniteInstances.instantiate_fun,\n",
+      "sha256": "b0246f09dc1559a3d67543d8cdcfd007215451561d75e320be008e71f3e2b94a"
+    },
+    {
+      "from": "native-normalized",
+      "to": "native-raw",
+      "patch": "--- Source.lean\n+++ Source.lean\n@@ -68,3 +68 @@\n-    simpa only [field, SourceSynthesisPr210TypeReflection.encodeTy,\n-      SourceSynthesisGeneralizeFiniteInstances.instantiate] using\n-      SourceSynthesisGeneralizeFiniteInstances.generalize_member formulas solver\n+    exact SourceSynthesisGeneralizeFiniteInstances.generalize_member formulas solver\n",
+      "sha256": "b59e0508934802f764d94a5cf1a1556bb4c9a933fa046cd20d29497fd88284e1"
+    },
+    {
+      "from": "native-normalized",
+      "to": "native-unfold-rejected",
+      "patch": "--- Source.lean\n+++ Source.lean\n@@ -68,11 +68,12 @@\n-    simpa only [field, SourceSynthesisPr210TypeReflection.encodeTy,\n-      SourceSynthesisGeneralizeFiniteInstances.instantiate] using\n-      SourceSynthesisGeneralizeFiniteInstances.generalize_member formulas solver\n-      (SourceSynthesisCurrentContext.constructorCatalog lib query)\n-      (SourceSynthesisPr210TypeReflection.encodeTy (.tFun (.tVar \"a\") (.tVar \"a\")))\n-      (fun _ => .node (literal \"var1\") []) (by\n-        intro _ _\n-        exact SourceSynthesisTypeUniverseMembership.variable_member literal\n-          (SourceEqualityPCSGuard.holds formulas solver)\n-          (SourceEqualityPCSConstructors.top_true formulas solver)\n-          (SourceSynthesisCurrentContext.constructorCatalog lib query) \"var1\" (by decide))\n+    with_unfolding_all\n+      simpa only [field, SourceSynthesisPr210TypeReflection.encodeTy,\n+        SourceSynthesisGeneralizeFiniteInstances.instantiate] using\n+        SourceSynthesisGeneralizeFiniteInstances.generalize_member formulas solver\n+        (SourceSynthesisCurrentContext.constructorCatalog lib query)\n+        (SourceSynthesisPr210TypeReflection.encodeTy (.tFun (.tVar \"a\") (.tVar \"a\")))\n+        (fun _ => .node (literal \"var1\") []) (by\n+          intro _ _\n+          exact SourceSynthesisTypeUniverseMembership.variable_member literal\n+            (SourceEqualityPCSGuard.holds formulas solver)\n+            (SourceEqualityPCSConstructors.top_true formulas solver)\n+            (SourceSynthesisCurrentContext.constructorCatalog lib query) \"var1\" (by decide))\n",
+      "sha256": "65466aa16d6d403cad9359b496713d7518dd6d674e90ed66664aa4e503fd1b45"
+    },
+    {
+      "from": "arrow-equation-public",
+      "to": "arrow-base",
+      "patch": "--- Source.lean\n+++ Source.lean\n@@ -36,7 +35,0 @@\n-\n-/-- A substituted arrow retains its marker and ordered endpoint instances. -/\n-theorem instantiate_fun (substitution : String \u2192 Term Symbol) (argument result : Ty) :\n-    instantiate substitution (.tFun argument result) =\n-      .node (literal \"->\") [.node (literal \"(->)\") [],\n-        instantiate substitution argument, instantiate substitution result] := by\n-  simp only [instantiate, arrow]\n",
+      "sha256": "86d04066d91eb72adfa11f7f39329be2bdbfe2a20cbf9fe4388c9d0fcc144b41"
+    },
+    {
+      "from": "arrow-equation-public",
+      "to": "arrow-equation-rfl-rejected",
+      "patch": "--- Source.lean\n+++ Source.lean\n@@ -42 +42 @@\n-  simp only [instantiate, arrow]\n+  rfl\n",
+      "sha256": "af9e242ece42c009826004a636fb9df0baa59dba35ff872bba19bbcc9e24011d"
+    }
+  ],
+  "actual_gnu_zero_context_replays": 6,
+  "original_source_pins": {
+    "lean/MicroCFTA/SourceSynthesisFirstOrderConstruction.lean": "0ea950025cdad3421465c42a4d76baa5a9f3553ea4b37c7b0539cdbd8d7547d8",
+    "lean/MicroCFTA/SourceSynthesisCurrentTypeFieldCalls.lean": "fe28ec68e74bdb1bebd5dc8b712c96f7d15c3c0f3ea141038410ed758eb60dec",
+    "lean/MicroCFTA/SourceSynthesisOriginalProgramTypeFields.lean": "e8f1bddb953463572687f257aa865b7f748fedbd382d84801c16402a09d7e90e",
+    "lean/MicroCFTA/SourceSynthesisGeneralizeFiniteInstances.lean": "1694623d56edd06c0eb71d5cce3dafe670444ab2d9525415ae7517489a6de209",
+    "lean/MicroCFTA/SourceSynthesisTypeUniverseMembership.lean": "01b6e35108146e58cc93618550fef35613cc4a95860ca89d9eaf8bae1e1716ea",
+    "lean/MicroCFTA/SourceCurrentRequiredQueryMemos.lean": "640a92bd071b92c629a007f8cc0d6501f0943de8deb605668e2e8cf4907e4fef",
+    "lean/MicroCFTA/SourceCurrentRequiredSupport.lean": "abeaf7ed201c9e6658f6362b5c266642bda539af3630cfbcd6b40a28e3433994",
+    "lean/MicroCFTA/SourceCurrentSecondaryProjectionSupport.lean": "d464f85ab6b1c79e6ac6e4a1e8a009c0414621ebea0974e141d3ec1ee2835473",
+    "lean/MicroCFTA/SourceEqualityRequiredAPI.lean": "7649ace1333223551a9be1b9c4522d3ba1410ea581a4b86fbe269abe2dbe869e",
+    "lean/MicroCFTA/SourceEqualityRequiredExecution.lean": "5620907ee44463c809818aa2681e16425461707026ceeea03910ea5f5a6603f5",
+    "lean/MicroCFTA/SourceEqualityRequiredSemanticCache.lean": "797e08006478d3a1236fe3aafd33e9983ae4f211bf29d298afdc236b3dd96420",
+    "lean/MicroCFTA/InternedGuardedExecution.lean": "01bdf63eef5477530c70d8664c9b1d85febc90e3b3b01245e6aa2e0304bcb5e8",
+    "lean/MicroCFTA/InternedGuardedProbeHeap.lean": "f949834bfba08fa610726545c02a985fb6b3b5ec7a6d532b45cc59972f81ee38",
+    "lean/MicroCFTA/SourceEqualitySelectedRequired.lean": "ad37586ae254638466e2fb757b891a584f84f12a6f2825c739d835c7b25b6807"
+  },
+  "rejected_trial_diagnostics": {
+    "trial-1": "/tmp/mcfta-native-identity-witness-20261113-1128/SourceSynthesisCurrentIdentityNativeWitness.lean:68:4: error: Type mismatch\n  SourceSynthesisGeneralizeFiniteInstances.generalize_member formulas solver\n    (SourceSynthesisCurrentContext.constructorCatalog lib query)\n    (SourceSynthesisPr210TypeReflection.encodeTy ((Ty.tVar \"a\").tFun (Ty.tVar \"a\")))\n    (fun x => Term.node (literal \"var1\") []) fun name a =>\n    SourceSynthesisTypeUniverseMembership.variable_member literal (SourceEqualityPCSGuard.holds formulas solver)\n      (SourceEqualityPCSConstructors.top_true formulas solver)\n      (SourceSynthesisCurrentContext.constructorCatalog lib query) \"var1\" (of_decide_eq_true (id (Eq.refl true)))\nhas type\n  InternedGuardedSyntax.evaluate (SourceEqualityPCSGuard.holds formulas solver) []\n    (SourceSynthesisProgramBuildRolesGeneric.mapSyntax literal\n      (generalize (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query))\n        (SourceSynthesisPr210TypeReflection.encodeTy ((Ty.tVar \"a\").tFun (Ty.tVar \"a\")))))\n    (SourceSynthesisGeneralizeFiniteInstances.instantiate (fun x => Term.node (literal \"var1\") [])\n      (SourceSynthesisPr210TypeReflection.encodeTy ((Ty.tVar \"a\").tFun (Ty.tVar \"a\"))))\nbut is expected to have type\n  InternedGuardedSyntax.evaluate (SourceEqualityPCSGuard.holds formulas solver) []\n    (SourceSynthesisProgramBuildRolesGeneric.mapSyntax literal field)\n    (Term.node (literal \"->\")\n      [Term.node (literal \"(->)\") [], Term.node (literal \"var1\") [], Term.node (literal \"var1\") []])\n",
+    "trial-2": "/tmp/mcfta-native-identity-witness-repair-20261113-1133/SourceSynthesisCurrentIdentityNativeWitness.lean:68:4: error: Type mismatch: After simplification, term\n  SourceSynthesisGeneralizeFiniteInstances.generalize_member formulas solver\n    (SourceSynthesisCurrentContext.constructorCatalog lib query)\n    (SourceSynthesisPr210TypeReflection.encodeTy ((Ty.tVar \"a\").tFun (Ty.tVar \"a\")))\n    (fun x => Term.node (literal \"var1\") []) fun name a =>\n    SourceSynthesisTypeUniverseMembership.variable_member literal (SourceEqualityPCSGuard.holds formulas solver)\n      (SourceEqualityPCSConstructors.top_true formulas solver)\n      (SourceSynthesisCurrentContext.constructorCatalog lib query) \"var1\" (of_decide_eq_true (id (Eq.refl true)))\n has type\n  @InternedGuardedSyntax.evaluate (SourceSymbolicIndex.Constraint FullSyntax.Formula) Symbol\n    (SourceEqualityPCSGuard.holds formulas solver) []\n    (SourceSynthesisProgramBuildRolesGeneric.mapSyntax literal\n      (generalize (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query))\n        ((Ty.tVar \"a\").tFun (Ty.tVar \"a\"))))\n    (MicroCFTA.SourceSynthesisGeneralizeFiniteInstances.arrow\u271d (Term.node (literal \"var1\") [])\n      (Term.node (literal \"var1\") []))\nbut is expected to have type\n  @InternedGuardedSyntax.evaluate (SourceSymbolicIndex.Constraint FullSyntax.Formula) Symbol\n    (SourceEqualityPCSGuard.holds formulas solver) []\n    (SourceSynthesisProgramBuildRolesGeneric.mapSyntax literal\n      (generalize (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query))\n        ((Ty.tVar \"a\").tFun (Ty.tVar \"a\"))))\n    (Term.node (literal \"->\")\n      [Term.node (literal \"(->)\") [], Term.node (literal \"var1\") [], Term.node (literal \"var1\") []])\n",
+    "trial-3": "/tmp/mcfta-native-identity-witness-unfold-20261113-1137/SourceSynthesisCurrentIdentityNativeWitness.lean:69:6: error: Type mismatch: After simplification, term\n  SourceSynthesisGeneralizeFiniteInstances.generalize_member formulas solver\n    (SourceSynthesisCurrentContext.constructorCatalog lib query)\n    (SourceSynthesisPr210TypeReflection.encodeTy ((Ty.tVar \"a\").tFun (Ty.tVar \"a\")))\n    (fun x => Term.node (literal \"var1\") []) fun name a =>\n    SourceSynthesisTypeUniverseMembership.variable_member literal (SourceEqualityPCSGuard.holds formulas solver)\n      (SourceEqualityPCSConstructors.top_true formulas solver)\n      (SourceSynthesisCurrentContext.constructorCatalog lib query) \"var1\" (of_decide_eq_true (id (Eq.refl true)))\n has type\n  @InternedGuardedSyntax.evaluate (SourceSymbolicIndex.Constraint FullSyntax.Formula) Symbol\n    (SourceEqualityPCSGuard.holds formulas solver) []\n    (SourceSynthesisProgramBuildRolesGeneric.mapSyntax literal\n      (generalize (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query))\n        ((Ty.tVar \"a\").tFun (Ty.tVar \"a\"))))\n    (MicroCFTA.SourceSynthesisGeneralizeFiniteInstances.arrow\u271d (Term.node (literal \"var1\") [])\n      (Term.node (literal \"var1\") []))\nbut is expected to have type\n  @InternedGuardedSyntax.evaluate (SourceSymbolicIndex.Constraint FullSyntax.Formula) Symbol\n    (SourceEqualityPCSGuard.holds formulas solver) []\n    (SourceSynthesisProgramBuildRolesGeneric.mapSyntax literal\n      (generalize (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query))\n        ((Ty.tVar \"a\").tFun (Ty.tVar \"a\"))))\n    (Term.node (literal \"->\")\n      [Term.node (literal \"(->)\") [], Term.node (literal \"var1\") [], Term.node (literal \"var1\") []])\n",
+    "arrow-equation-trial-1": "/tmp/mcfta-native-identity-arrow-equation-20261113-1139/SourceSynthesisGeneralizeFiniteInstances.lean:42:2: error: Tactic `rfl` failed: The left-hand side\n  instantiate substitution (argument.tFun result)\nis not definitionally equal to the right-hand side\n  Term.node (literal \"->\")\n    [Term.node (literal \"(->)\") [], instantiate substitution argument, instantiate substitution result]\n\nsubstitution : String \u2192 Term Symbol\nargument result : Ty\n\u22a2 instantiate substitution (argument.tFun result) =\n    Term.node (literal \"->\")\n      [Term.node (literal \"(->)\") [], instantiate substitution argument, instantiate substitution result]\n"
+  },
+  "private_header": "private theorem identity_component_native_member\n    (formulas : SourceGuards.Formulas FullSyntax.Formula)\n    (solver : SourceGuards.Entailment FullSyntax.Formula)\n    (lib : Library) (query : Query) (signed : Int) (whole : Expression)\n    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)\n    (rootValue : Value Symbol Guard) (heap : State Symbol Guard)\n    (built : build (ordinarySymbols whole) [] empty = .done rootValue heap)\n    {expressions : List (EdgeSyntax Symbol Guard)} {before after : State Symbol Guard}\n    {outputs : List (EdgeValue Symbol Guard)} {rowIndex : Nat} {symbol : Symbol}\n    (original : SourceSynthesisOriginalTypeAnnotations.OriginalType lib\n      (.tFun (.tVar \"a\") (.tVar \"a\")))\n    (call : SourceCurrentStoredMuRetainedAlignment.RowCall\n      expressions [] before outputs after heap rowIndex symbol top\n      [ordinarySymbols (generalize\n        (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query))\n        (SourceSynthesisPr210TypeReflection.encodeTy (.tFun (.tVar \"a\") (.tVar \"a\"))))]) :\n    \u2203 value, call.output.children[0]? = some value \u2227 Available heap value \u2227\n      value.free = [] \u2227\n      SourceEqualityAnnotationLanguage.Annotated\n        (SourceSynthesisNativeTypeTrace.Origin\n          (SourceSynthesisCurrentSourceGuards.encodedLibrary lib)) value \u2227\n      \u2200 ambient : InternedGuardedLanguage.Env Symbol,\n        InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)\n          ambient value\n          (.node (literal \"->\")\n            [.node (literal \"(->)\") [], .node (literal \"var1\") [], .node (literal \"var1\") []])\n",
+  "public_header": "theorem identity_component_native_member\n    (formulas : SourceGuards.Formulas FullSyntax.Formula)\n    (solver : SourceGuards.Entailment FullSyntax.Formula)\n    (lib : Library) (query : Query) (signed : Int) (whole : Expression)\n    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)\n    (rootValue : Value Symbol Guard) (heap : State Symbol Guard)\n    (built : build (ordinarySymbols whole) [] empty = .done rootValue heap)\n    {expressions : List (EdgeSyntax Symbol Guard)} {before after : State Symbol Guard}\n    {outputs : List (EdgeValue Symbol Guard)} {rowIndex : Nat} {symbol : Symbol}\n    (original : SourceSynthesisOriginalTypeAnnotations.OriginalType lib\n      (.tFun (.tVar \"a\") (.tVar \"a\")))\n    (call : SourceCurrentStoredMuRetainedAlignment.RowCall\n      expressions [] before outputs after heap rowIndex symbol top\n      [ordinarySymbols (generalize\n        (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query))\n        (SourceSynthesisPr210TypeReflection.encodeTy (.tFun (.tVar \"a\") (.tVar \"a\"))))]) :\n    \u2203 value, call.output.children[0]? = some value \u2227 Available heap value \u2227\n      value.free = [] \u2227\n      SourceEqualityAnnotationLanguage.Annotated\n        (SourceSynthesisNativeTypeTrace.Origin\n          (SourceSynthesisCurrentSourceGuards.encodedLibrary lib)) value \u2227\n      \u2200 ambient : InternedGuardedLanguage.Env Symbol,\n        InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)\n          ambient value\n          (.node (literal \"->\")\n            [.node (literal \"(->)\") [], .node (literal \"var1\") [], .node (literal \"var1\") []])\n",
+  "native_plan": "# Native identity field: first proposed cut\n\nStatus: planning only. No theorem body, compiler, live source, or Haskell change.\nThis cut supersedes the read-shaped proposal as the next implementation target.\nThe read proposal stays frozen and unproved in the 1123 directory.\n\n## Exact statement\n\nprivate-native-identity-header.txt retains the entire actual component_call input domain.\nIt specializes the original library scheme to a -> a.\nIt retains that theorem's SAME slot, availability, closedness, and annotation receipt.\nIt appends finite membership of ->((->),var1,var1) in that SAME native Type value.\nPCS holds uses the supplied formulas and solver. Membership holds in every ambient environment.\nThere is no read/path-shape, SemanticReady, support, accepted-instance, or model premise.\nThe uniform substitution belongs to this one witness; it is not a library-wide substitution.\n\n## Source bridge and body plan\n\n1. Invoke CurrentTypeFieldCalls.component_call:192-201 once.\n   Keep its SAME slot value and complete annotation/closedness/availability receipt.\n\n2. Invoke OriginalProgramTypeFields.many_call:37-45 at index 0 of call.called.\n   call.context and call.middle_growth supply the actual context and prefix growth.\n   It yields the SAME field build at start, BasicContext start [], and Grows start heap.\n   call.children_eq and the two index-0 equations identify its value with step 1.\n   This inspects the recorded build. It does not run a second source producer.\n\n3. Use GuardedExecution.closed_heap:208-211 for ordinarySymbols whole.\n   Rewrite built to obtain GuardedProbeHeap.Heap heap.\n   Derive Heap start by its state-independent definition at GuardedProbeHeap:30-32:\n   intro key entry body depth ordinary present\n   exact globalHeap key entry body depth ordinary (growth.nodeRecords key _ present)\n   No prefix semantic-heap supplier is added.\n\n4. Apply GuardedExecution.build_language:21-25 at that actual start and BasicContext.\n   Specialize its Checked receipt using the SAME actual child build equation.\n   It gives meaning = evaluate for the original field, for every holds and ambient.\n   Never use closed_language from empty for this nonempty prefix.\n\n5. Use GeneralizeFiniteInstances.generalize_member:317 with the actual current catalog.\n   Use the constant substitution that maps each demanded key to the literal var1 leaf.\n   TypeUniverseMembership.variable_member:69-78 derives each demanded image's membership.\n   Its top premise is SourceEqualityPCSConstructors.top_true.\n   encodeTy leaves this raw arrow and both variables unchanged.\n   The result is exactly ->((->),var1,var1).\n   Its original generalized outer guard is eqGuard [[[1],[2]]], not Top.\n   generalize_member supplies that real PCS equality check for equal endpoint images.\n\n6. Rewrite the source evaluation via mapSyntax_ordinarySymbols and step 4.\n   Append the resulting guarded membership to the unchanged receipt from step 1.\n   No other native state, source origin, or Type field is selected.\n\n## Next read stage and exact boundary\n\nThe local native witness is now independent of the speculative literal requireAll shape.\nIt does not assert that an actual application later reads [[0,0]] or the combined triple.\nFirstOrderConstruction.application:46-49 gives the function suffix contribution [0,0].\nSelectedRequired.paths:22-23 uses the union of retained classes.\nA later read proof must use the actual nested RequireChildren/Node receipt and same slot.\nIt must not create a top-level requireAll call to fit requireAll_keep.\n\nThe source field's free=[] supplies the closed disjunct of Support:118.\nThus source-derived closedness discharges NodeSupport/ForestSupport for this original value.\nFor a later source-linked read, use children_exact/node_exact with that actual receipt,\nits actual Needed paths, and path existence in this witness.\nIf prior edits changed the value or heap, their actual history is still required.\n\nThis cut proves only a finite guarded native source-field witness.\nIt proves no minimum-size table result, emitted Type origin, global model existence,\noriginal partial-Type assignment pullback, or whole default Haskell correspondence.\nNo defect or repair is established.\n",
+  "old_read_proposal_status": "PARKED_UNPROVED_NO_BODY",
+  "new_haskell_changes": false
+}
