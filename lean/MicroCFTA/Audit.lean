@@ -1,3 +1,5 @@
+import MicroCFTA.SourceSynthesisCurrentUnionFunctionParent
+import MicroCFTA.SourceCurrentStoredRowCallGrowth
 import MicroCFTA.SourceSynthesisCurrentFunctionParent
 import MicroCFTA.SourceSynthesisCurrentIdentityNativeWitness
 import MicroCFTA.SourcePruningEnumerationSharedChildIsolation
