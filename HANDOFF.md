@@ -1,3 +1,56 @@
+## Native identity Type field has a finite guarded member (2026-11-13 11:51 CET)
+
+The FULL goal remains ACTIVE. The two new public laws are checked. This
+checkpoint is based on 5a86481a3c41d08fb1d6950ecacb063a702c43f3. Pushes to
+formalize remain authorized. Previous notes remain an exact byte suffix.
+
+SourceSynthesisCurrentIdentityNativeWitness.lean is 98 lines, b9f7cf3a.
+identity_component_native_member retains the SAME component_call slot value,
+availability, closedness and annotation. For the original a -> a scheme, that
+native field accepts ->((->),var1,var1) under the REAL PCS equality guard, for
+every ambient environment. The recorded many_call and actual build_language
+supply the bridge. The completed original build and Grows.nodeRecords derive
+the earlier semantic heap. No model, support or read-survival premise is added.
+GeneralizeFiniteInstances371/5d6bba7f adds ONLY the seven-line instantiate_fun
+equation. Removing that addition reconstructs all old 364 source lines exactly.
+The old eager8246/abe55dcd and original-input resource/readback results stay exact.
+
+Own real Lake build, strict TWO-name axiom report and complete affected Audit
+PASS. Only propext, Classical.choice and Quot.sound occur. The frontier covers
+75 affected modules: 5897 live, 4894 Audit imports, 94923 axiom reports including
+private/generated declarations. Both standalone checks ran FROM /tmp in the
+same sole serial Nix4GiB max/high/swap0/one-Lean-thread scope. No repeat is needed.
+Packet lean/restart-evidence/20261113-native-identity-witness/ retains EIGHT source
+stages and SIX actual GNU zero-context patch replays, rejected diagnostics,
+original14 source pins and precise unproved next-read plans. Packet96KiB;
+root runtime /tmp/mcfta-native-identity-witness-check-20261113-1126/ is380KiB.
+
+NEXT: actual application marker-class function subtrace. Its exact private15
+header is f80e5cb7 in /tmp/mcfta-actual-app-marker-read-plan-20261113-1138/.
+The first private71/fc63e539 draft FAILED its strict check. It needs explicit
+Needed computation and dependent alignment of the SAME graph/Memos receipt.
+Focused repair59/e22773ff is READY but UNCOMPILED in
+/tmp/mcfta-actual-app-marker-repair-20261113-1154/. Root is sole compiler/publisher.
+The actual identity-row visit and nested Type-child read remain UNPROVED. Do
+not invent a singleton requireAll or assume the combined app suffix triple.
+The earlier singleton proposal stays parked and unproved. next-read.json
+retains its exact scope, raw failed draft and diagnostics. Publish this checked
+native checkpoint independently; do not block it on the next-read repair.
+
+BIGGEST GAP: one finite term accepted by the SAME original root that jointly
+completes the SAME emitted partial output. Later narrowing, emitted Type origins,
+shared alias/domain/residual consistency, genuine partial Type assignments,
+original typing, depth adequacy, default LPO/reduction/refolding/streams,
+order/multiplicity/lazy demand, sizes/counts/weights/training, BOTH rank/unrank
+inverses, host capacity and compiled Haskell correspondence remain in scope.
+No Haskell/Cabal/test-suite change or Haskell defect/repair is established here.
+Record every future Haskell fix in FINDINGS for external agents. Preserve all
+proofs, counterexamples, repairs, marked drafts and .hypha. PRIMARY46 percent
+at11:51 CET; /tmp162.44GiB free. Refresh within15min; above80 percent save the
+handoff, stop workers, pause the goal and notify Matti. Continue after publication.
+
+---
+
 ## Selected Type case and immediate witness plan (2026-11-13 11:11 CET)
 
 The FULL goal remains ACTIVE. Whole eager-worker marker preservation is PROVED;
