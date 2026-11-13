@@ -1,3 +1,86 @@
+## Current checkpoint: isolated-marker callback leaves (2026-11-13 08:44 CET)
+
+The FULL library formalization goal stays ACTIVE. Publication to formalize is
+explicitly authorized. This checkpoint starts from a0573776b952eb8c0f13acd6c68accde17960b2e.
+Main remains e53852064d3ef5a2eafec47d754c27504b11de5f at the 08:29 CET readback.
+Previous root notes remain an exact byte suffix.
+
+SourcePruningEnumerationSharedEagerReservation now has 6861 lines, SHA256
+1ae84d0029467f87537d5058003315afdbe2d8aca65b36ff4e88f4c6bcac90c6.
+It adds FOUR PRIVATE lemmas and TWO PRIVATE predicates. The same-child/finalizer
+adapter retains an isolated pending slot when the write targets a different
+slot. The literal-output leaf retains Program roles and original markers. The
+zero-depth lemma calls the old zero producer ONCE and keeps its exact bound,
+outcome, all-larger-budget equation and full resource component. The recorded
+callback uses ONE lower recursive result at the actual framed cache. Its Frame
+moves original markers; its native caller supplies the SAME lookup/boundary.
+The rejected arm emits no output. The concrete property indexes the ORIGINAL
+caller/cache. No arbitrary future invariant or model supplier becomes public.
+
+ALL old 6627 source bytes reconstruct exactly. Six source stages and FIVE actual
+GNU zero-context reverse-patch replays preserve successful cuts and raw6680.
+That raw stage fails only because two new doc comments precede omit...in.
+The fixed stage moves those comments; headers and proof bodies stay exact.
+The raw source and diagnostics remain reproducible. Every later cut passes its
+first strict check. Existing aliases, zero/positive helpers, all FIVE public
+headers/proofs, workers, plans and data remain exact. No public law is added.
+The original eager width/resource159/output221 sources and Audit stay unchanged.
+
+The own module build and exact five-name/standard-axiom report PASS. The full
+Audit frontier PASS covers all five affected modules: Math, current eager width,
+current eager resources, current eager outputs, and Audit. Scope is 5895 live
+modules, 4892 Audit imports and 94865 axiom reports. Counts include private and
+generated declarations; they are not proof progress. BOTH standalone packets
+pass from /tmp under the SAME serial 4 GiB max/high, swap 0, one-thread scope.
+No heartbeat, warning or cap changes. No redundant repeat is needed.
+
+Evidence:
+lean/restart-evidence/20261113-eager-isolated-callback-leaves/
+lean/restart-evidence/20261113-eager-isolated-callback-leaves-compatibility/
+The source-history JSON stores small patches, not a large execution archive.
+Root runtime: /tmp/mcfta-eager-isolated-callback-leaves-20261113-0838/.
+Strict hub: /tmp/mcfta-eager-resource-cps-check-20261113-0009/.
+
+The strongest PUBLIC statement is unchanged. Accepted original first-order
+raw inputs and fixed recursion depth give one computed eager width/initializer,
+one finite common work bound and the SAME outcome for every larger common work
+budget. Every actual output retains full resources, extending ProgramSlots and
+one stable partial Program readback shared by every completion. No positive
+finite Type assignment or original-library/query typing theorem follows yet.
+
+Next: shared opaque preservation, then captured rows, preparation, expansion and
+positive Resume depth. A local helper must retain isolated slots DIFFERENT from
+the selected write target. Ready contains Safe/inside/root/bucket avoidance; it
+does not exclude an isolated target. The final full-marker goal stays exact.
+Actual packet_restart_ne and prefix_isolated can exclude the selected target
+for ORIGINAL markers. Do not weaken that outer statement. An existing opaque
+isolation helper uses the nonshared worker; it cannot be cast to the current
+shared head. Reuse the SAME actual child/finalizer receipt. The local predicate
+and next header remain planning work, not a proved public observer.
+
+Whole-worker marker retention and finite output-model construction remain OPEN.
+The largest semantic gap is still a finite original Type model, including genuine
+partial completions and allocated-class reconstruction that preserves the SAME
+Program. Keep adequate depth/completeness, default LPO/reduction/refolding and
+streams, order/multiplicity/lazy demand, sizes/counts/weights/training, BOTH
+rank/unrank inverses, host capacity and compiled Haskell correspondence in scope.
+Keep the optimized interned core and older constructor/equality targets.
+
+The prior three source probes remain bounded observations with flag=False.
+No production Haskell/Cabal or test-suite files change here. No Haskell repair
+is established. Record every future Haskell fix in FINDINGS for external agents.
+Liquid repeated-name/refinement work stays with claude-gondolin.
+
+Root is the sole compiler/Git publisher. Agents write NEW /tmp files only.
+Preserve sources, counterexamples, repairs, marked drafts and .hypha. PRIMARY
+is 43 percent at 08:41 CET; /tmp has 164.03 GiB free. Refresh within 15 minutes.
+If PRIMARY exceeds 80 percent, stop workers, save a full handoff, pause the goal
+and notify Matti. Verify local and remote checkpoint state. Finish any pending
+reviewed commits, authorized push and exact board receipt. Then CONTINUE the
+full objective.
+
+---
+
 ## Current observations: finite-type source probes (2026-11-13 08:25 CET)
 
 The FULL formalization goal stays ACTIVE. Pushes to formalize are authorized.
