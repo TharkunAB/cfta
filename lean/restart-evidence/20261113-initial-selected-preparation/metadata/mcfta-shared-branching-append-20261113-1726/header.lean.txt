@@ -1,0 +1,12 @@
+theorem scan_append
+    (visit : Edge → Caller width → Queries → Cached → Result Output Reason width)
+    (before : Cached) (earlierRows suffix : List Edge) (caller : Caller width) (queries : Queries) :
+    scan visit before (earlierRows ++ suffix) caller queries =
+      match scan visit before earlierRows caller queries with
+      | .stopped processed outputs current => .stopped processed outputs current
+      | .complete processed outputs reached saved =>
+          match scan visit before suffix reached saved with
+          | .complete later more finalCaller finalQueries =>
+              .complete (processed ++ later) (outputs ++ more) finalCaller finalQueries
+          | .stopped later more current =>
+              .stopped (processed ++ later) (outputs ++ more) current

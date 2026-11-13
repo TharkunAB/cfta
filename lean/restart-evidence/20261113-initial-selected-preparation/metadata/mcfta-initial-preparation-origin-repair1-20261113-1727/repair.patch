@@ -1,0 +1,19 @@
+--- before
++++ after
+@@ -203,2 +203 @@
+-      rw [reading, checking, decoded, prepared]
+-      dsimp only
++      simp only [reading, checking, decoded, prepared]
+@@ -270 +269 @@
+-        (by decide) initialRoot readingSuccess
++        (by change 0 < 1; decide) initialRoot readingSuccess
+@@ -277 +276 @@
+-      readSafe (by simpa only [readCounter] using (show 0 < startup.core.counter by decide))
++      readSafe (by simpa only [readCounter] using (show 0 < startup.core.counter by change 0 < 1; decide))
+@@ -281 +280 @@
+-    have checkedInside : 0 < checked.counter := by rw [checkedFrame.counter]; decide
++    have checkedInside : 0 < checked.counter := by rw [checkedFrame.counter]; change 0 < 1; decide
+@@ -327,2 +326 @@
+-    rw [reading, checking, decoded, prepared, executedRaw, encoded] at actualPrefix
+-    dsimp only at actualPrefix
++    simp only [reading, checking, decoded, prepared, executedRaw, encoded] at actualPrefix

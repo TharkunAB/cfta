@@ -1,0 +1,1321 @@
+/tmp/mcfta-initial-preparation-origin-check2-20261113-1725/check.lean:203:19: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (SourcePruningEnumerationRecursion.checkRepeated heap checkFuel 0 handle [] readAfter).run
+in the target expression
+  (match
+      match [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)] with
+      | [Except.ok (UVarValue.unenumerated (some oldHandle) scs, readAfter_1)] =>
+        match (SourcePruningEnumerationRecursion.checkRepeated heap checkFuel 0 oldHandle scs readAfter_1).run with
+        | [Except.ok (true, checked)] =>
+          SourcePruningEnumerationSelectedStep.Result.parked checked
+            (SourcePruningEnumerationParkedRestart.adapt heap indexFuel 0 oldHandle scs
+              { core := initial handle,
+                expandable := fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+                waiting := fun x => none }
+              checked)
+            (Option.map (fun parked => (SourcePruningEnumerationRestart.run stop order metadata parked checked).run)
+              (SourcePruningEnumerationParkedRestart.adapt heap indexFuel 0 oldHandle scs
+                { core := initial handle,
+                  expandable := fun slot =>
+                    if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+                  waiting := fun x => none }
+                checked))
+        | [Except.ok (false, checked)] =>
+          match lookupNode heap oldHandle with
+          | none =>
+            SourcePruningEnumerationSelectedStep.Result.stopped
+              [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)]
+              (some (SourcePruningEnumerationRecursion.checkRepeated heap checkFuel 0 oldHandle scs readAfter_1).run)
+          | some oldValue =>
+            match
+              SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                oldHandle scs oldValue heap with
+            | MergedSourceComparison.Result.failed _fault _heap =>
+              SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                  oldHandle scs oldValue heap)
+                (SourceCurrentAllocatedPartialState.advance
+                  {
+                    checked :=
+                      {
+                        native :=
+                          { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                            edges := FlatMemoThunk.empty },
+                        operations := SourceCurrentAllocatedPartialInitialization.operations cache },
+                    merge := SourceCurrentMemoMergeGraph.empty, fourth := SourceCurrentEmptinessMemo.empty,
+                    nodeResults := FlatMemoThunk.empty, edgeResults := FlatMemoThunk.empty }
+                  (SourceCurrentAllocatedQueryMemo.advancePhysical
+                    {
+                      native :=
+                        { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                          edges := FlatMemoThunk.empty },
+                      operations := SourceCurrentAllocatedPartialInitialization.operations cache }
+                    {
+                      heap :=
+                        (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                            representativeFuel 0 oldHandle scs oldValue heap).state,
+                      equality := SourceCurrentAllocatedPartialInitialization.operations cache })
+                  SourceCurrentEmptinessMemo.empty SourceCurrentMemoMergeGraph.empty)
+                queries none none none none
+            | MergedSourceComparison.Result.done (_value, none) _heap =>
+              SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                  oldHandle scs oldValue heap)
+                (SourceCurrentAllocatedPartialState.advance
+                  {
+                    checked :=
+                      {
+                        native :=
+                          { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                            edges := FlatMemoThunk.empty },
+                        operations := SourceCurrentAllocatedPartialInitialization.operations cache },
+                    merge := SourceCurrentMemoMergeGraph.empty, fourth := SourceCurrentEmptinessMemo.empty,
+                    nodeResults := FlatMemoThunk.empty, edgeResults := FlatMemoThunk.empty }
+                  (SourceCurrentAllocatedQueryMemo.advancePhysical
+                    {
+                      native :=
+                        { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                          edges := FlatMemoThunk.empty },
+                      operations := SourceCurrentAllocatedPartialInitialization.operations cache }
+                    {
+                      heap :=
+                        (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                            representativeFuel 0 oldHandle scs oldValue heap).state,
+                      equality := SourceCurrentAllocatedPartialInitialization.operations cache })
+                  SourceCurrentEmptinessMemo.empty SourceCurrentMemoMergeGraph.empty)
+                queries none none none none
+            | MergedSourceComparison.Result.done (value, some action) heap_1 =>
+              match (action checked).run with
+              | [Except.ok (PUnit.unit, observed)] =>
+                match encodeNode value with
+                | none =>
+                  SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                      oldHandle scs oldValue heap)
+                    (SourceCurrentAllocatedPartialState.advance
+                      {
+                        checked :=
+                          {
+                            native :=
+                              { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                                edges := FlatMemoThunk.empty },
+                            operations := SourceCurrentAllocatedPartialInitialization.operations cache },
+                        merge := SourceCurrentMemoMergeGraph.empty, fourth := SourceCurrentEmptinessMemo.empty,
+                        nodeResults := FlatMemoThunk.empty, edgeResults := FlatMemoThunk.empty }
+                      (SourceCurrentAllocatedQueryMemo.advancePhysical
+                        {
+                          native :=
+                            { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                              edges := FlatMemoThunk.empty },
+                          operations := SourceCurrentAllocatedPartialInitialization.operations cache }
+                        {
+                          heap :=
+                            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                representativeFuel 0 oldHandle scs oldValue heap).state,
+                          equality := SourceCurrentAllocatedPartialInitialization.operations cache })
+                      SourceCurrentEmptinessMemo.empty SourceCurrentMemoMergeGraph.empty)
+                    queries (some (action checked).run) none none none
+                | some newHandle =>
+                  match
+                    SourcePruningEnumerationNarrowAdapter.adapt heap_1 indexFuel 0 oldHandle newHandle scs
+                      { core := initial handle,
+                        expandable := fun slot =>
+                          if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+                        waiting := fun x => none }
+                      observed with
+                  | none =>
+                    SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                      (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel
+                        0 oldHandle scs oldValue heap)
+                      (SourceCurrentAllocatedPartialState.advance
+                        {
+                          checked :=
+                            {
+                              native :=
+                                { machine := { heap := heap, domains := Cache.emptyState },
+                                  nodes := FlatMemoThunk.empty, edges := FlatMemoThunk.empty },
+                              operations := SourceCurrentAllocatedPartialInitialization.operations cache },
+                          merge := SourceCurrentMemoMergeGraph.empty, fourth := SourceCurrentEmptinessMemo.empty,
+                          nodeResults := FlatMemoThunk.empty, edgeResults := FlatMemoThunk.empty }
+                        (SourceCurrentAllocatedQueryMemo.advancePhysical
+                          {
+                            native :=
+                              { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                                edges := FlatMemoThunk.empty },
+                            operations := SourceCurrentAllocatedPartialInitialization.operations cache }
+                          {
+                            heap :=
+                              (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                  representativeFuel 0 oldHandle scs oldValue heap).state,
+                            equality := SourceCurrentAllocatedPartialInitialization.operations cache })
+                        SourceCurrentEmptinessMemo.empty SourceCurrentMemoMergeGraph.empty)
+                      queries (some (action checked).run) none none none
+                  | some attached =>
+                    match
+                      (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata 0 (Sum.inr newHandle)
+                          attached.core).run with
+                    | [Except.ok ((false, _updated), callbackCore)] =>
+                      SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                        (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                          representativeFuel 0 oldHandle scs oldValue heap)
+                        (SourceCurrentAllocatedPartialState.advance
+                          {
+                            checked :=
+                              {
+                                native :=
+                                  { machine := { heap := heap, domains := Cache.emptyState },
+                                    nodes := FlatMemoThunk.empty, edges := FlatMemoThunk.empty },
+                                operations := SourceCurrentAllocatedPartialInitialization.operations cache },
+                            merge := SourceCurrentMemoMergeGraph.empty, fourth := SourceCurrentEmptinessMemo.empty,
+                            nodeResults := FlatMemoThunk.empty, edgeResults := FlatMemoThunk.empty }
+                          (SourceCurrentAllocatedQueryMemo.advancePhysical
+                            {
+                              native :=
+                                { machine := { heap := heap, domains := Cache.emptyState },
+                                  nodes := FlatMemoThunk.empty, edges := FlatMemoThunk.empty },
+                              operations := SourceCurrentAllocatedPartialInitialization.operations cache }
+                            {
+                              heap :=
+                                (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                    representativeFuel 0 oldHandle scs oldValue heap).state,
+                              equality := SourceCurrentAllocatedPartialInitialization.operations cache })
+                          SourceCurrentEmptinessMemo.empty SourceCurrentMemoMergeGraph.empty)
+                        queries (some (action checked).run)
+                        (some (EnumerationExpandableIndex.frame callbackCore attached))
+                        (some
+                          (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata 0
+                              (Sum.inr newHandle) attached.core).run)
+                        none
+                    | x =>
+                      SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                        (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                          representativeFuel 0 oldHandle scs oldValue heap)
+                        (SourceCurrentAllocatedPartialState.advance
+                          {
+                            checked :=
+                              {
+                                native :=
+                                  { machine := { heap := heap, domains := Cache.emptyState },
+                                    nodes := FlatMemoThunk.empty, edges := FlatMemoThunk.empty },
+                                operations := SourceCurrentAllocatedPartialInitialization.operations cache },
+                            merge := SourceCurrentMemoMergeGraph.empty, fourth := SourceCurrentEmptinessMemo.empty,
+                            nodeResults := FlatMemoThunk.empty, edgeResults := FlatMemoThunk.empty }
+                          (SourceCurrentAllocatedQueryMemo.advancePhysical
+                            {
+                              native :=
+                                { machine := { heap := heap, domains := Cache.emptyState },
+                                  nodes := FlatMemoThunk.empty, edges := FlatMemoThunk.empty },
+                              operations := SourceCurrentAllocatedPartialInitialization.operations cache }
+                            {
+                              heap :=
+                                (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                    representativeFuel 0 oldHandle scs oldValue heap).state,
+                              equality := SourceCurrentAllocatedPartialInitialization.operations cache })
+                          SourceCurrentEmptinessMemo.empty SourceCurrentMemoMergeGraph.empty)
+                        queries (some (action checked).run) (some attached)
+                        (some
+                          (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata 0
+                              (Sum.inr newHandle) attached.core).run)
+                        none
+              | x =>
+                SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                  (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                    oldHandle scs oldValue heap)
+                  (SourceCurrentAllocatedPartialState.advance
+                    {
+                      checked :=
+                        {
+                          native :=
+                            { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                              edges := FlatMemoThunk.empty },
+                          operations := SourceCurrentAllocatedPartialInitialization.operations cache },
+                      merge := SourceCurrentMemoMergeGraph.empty, fourth := SourceCurrentEmptinessMemo.empty,
+                      nodeResults := FlatMemoThunk.empty, edgeResults := FlatMemoThunk.empty }
+                    (SourceCurrentAllocatedQueryMemo.advancePhysical
+                      {
+                        native :=
+                          { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                            edges := FlatMemoThunk.empty },
+                        operations := SourceCurrentAllocatedPartialInitialization.operations cache }
+                      {
+                        heap :=
+                          (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                              representativeFuel 0 oldHandle scs oldValue heap).state,
+                        equality := SourceCurrentAllocatedPartialInitialization.operations cache })
+                    SourceCurrentEmptinessMemo.empty SourceCurrentMemoMergeGraph.empty)
+                  queries (some (action checked).run) none none none
+        | x =>
+          SourcePruningEnumerationSelectedStep.Result.stopped
+            [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)]
+            (some (SourcePruningEnumerationRecursion.checkRepeated heap checkFuel 0 oldHandle scs readAfter_1).run)
+      | x =>
+        SourcePruningEnumerationSelectedStep.Result.stopped
+          [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)] none with
+    |
+    SourcePruningEnumerationSelectedStep.Result.narrowed checked prepared caller queries raw candidate right ordinary =>
+      raw
+    | x => none) =
+    some (action checked).run
+
+Typing Key : Type
+width : Nat
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+lib : SourceSynthesisTypeSyntax.Library
+query : SourceSynthesisTypeSyntax.Query
+signed : Int
+whole : SourceSynthesisFirstOrderConstruction.Expression
+accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole
+rootValue : Node
+heap : InternedConstructorTemplates.State Symbol Guard
+built :
+  InternedFreshOrdinaryConstruction.build (SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) [] empty =
+    InternedNestedConstruction.Outcome.done rootValue heap
+cache : Cache.State SourceEqualityPartialConstraintKey.Key
+handle : Nat
+decoded : lookupNode heap handle = some rootValue
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Guard
+templates : List (Template.Pattern Symbol)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+metadata : Metadata Typing
+readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel entryFuel preparationFuel : Nat
+queries : SourceEndpointMemo.Memos
+caller : SourceCurrentAllocatedPartialState.State width :=
+  SourceCurrentAllocatedPartialInitialization.caller width cache heap
+startup : Cached :=
+  { core := initial handle,
+    expandable := fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+    waiting := fun x => none }
+x✝ : SourcePruningEnumerationSelectedStep.Result width Typing
+checked : Core
+narrowed : Node
+action : EnumerateM Symbol Guard Unit
+narrowedHeap : InternedConstructorTemplates.State Symbol Guard
+reached : SourceCurrentAllocatedPartialState.State width
+saved : SourceEndpointMemo.Memos
+actionCore : Core
+candidate : Cached
+updated : Metadata Typing
+callbackCore : Core
+prefixEq :
+  SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata readFuel
+      checkFuel nativeFuel representativeFuel indexFuel callbackFuel 0
+      (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+      { core := initial handle,
+        expandable := fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+        waiting := fun x => none }
+      queries =
+    SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (narrowed, some action) narrowedHeap) reached saved
+      (some [Except.ok (PUnit.unit, actionCore)]) (some candidate) (some [Except.ok ((false, updated), callbackCore)])
+      none
+readAfter : Core
+reading : (getValue readFuel 0 (initial handle)).run = [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)]
+checking :
+  (SourcePruningEnumerationRecursion.checkRepeated heap checkFuel 0 handle [] readAfter).run =
+    [Except.ok (false, checked)]
+checkedFrame : Frame (initial handle) checked
+prepared :
+  SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle []
+      rootValue heap =
+    MergedSourceComparison.Result.done (narrowed, some action) narrowedHeap
+native :
+  SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel 0 rootValue heap =
+    MergedSourceComparison.Result.done narrowed narrowedHeap
+reachedSame :
+  reached =
+    SourceCurrentAllocatedPartialState.advance (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+      (SourceCurrentAllocatedQueryMemo.advancePhysical
+        (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+        { heap := narrowedHeap,
+          equality := (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge
+savedSame : saved = queries
+_ordinaryNone : none = none
+included :
+  ∀ (row : EdgeValue Symbol Guard),
+    row ∈ InternedEdgeResidency.nodeEdges narrowed → row ∈ InternedEdgeResidency.nodeEdges rootValue
+nativeFacts : Facts narrowedHeap
+nativeAvailable : Available narrowedHeap narrowed
+ordinary : SourceEqualityRequiredCache.Ordinary narrowed
+reachedHeap : reached.checked.native.machine.heap = narrowedHeap
+⊢ (match
+      match [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)] with
+      | [Except.ok (UVarValue.unenumerated (some oldHandle) scs, readAfter_1)] =>
+        match (SourcePruningEnumerationRecursion.checkRepeated heap checkFuel 0 oldHandle scs readAfter_1).run with
+        | [Except.ok (true, checked)] =>
+          SourcePruningEnumerationSelectedStep.Result.parked checked
+            (SourcePruningEnumerationParkedRestart.adapt heap indexFuel 0 oldHandle scs
+              { core := initial handle,
+                expandable := fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+                waiting := fun x => none }
+              checked)
+            (Option.map (fun parked => (SourcePruningEnumerationRestart.run stop order metadata parked checked).run)
+              (SourcePruningEnumerationParkedRestart.adapt heap indexFuel 0 oldHandle scs
+                { core := initial handle,
+                  expandable := fun slot =>
+                    if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+                  waiting := fun x => none }
+                checked))
+        | [Except.ok (false, checked)] =>
+          match lookupNode heap oldHandle with
+          | none =>
+            SourcePruningEnumerationSelectedStep.Result.stopped
+              [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)]
+              (some (SourcePruningEnumerationRecursion.checkRepeated heap checkFuel 0 oldHandle scs readAfter_1).run)
+          | some oldValue =>
+            match
+              SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                oldHandle scs oldValue heap with
+            | MergedSourceComparison.Result.failed _fault _heap =>
+              SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                  oldHandle scs oldValue heap)
+                (SourceCurrentAllocatedPartialState.advance
+                  {
+                    checked :=
+                      {
+                        native :=
+                          { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                            edges := FlatMemoThunk.empty },
+                        operations := SourceCurrentAllocatedPartialInitialization.operations cache },
+                    merge := SourceCurrentMemoMergeGraph.empty, fourth := SourceCurrentEmptinessMemo.empty,
+                    nodeResults := FlatMemoThunk.empty, edgeResults := FlatMemoThunk.empty }
+                  (SourceCurrentAllocatedQueryMemo.advancePhysical
+                    {
+                      native :=
+                        { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                          edges := FlatMemoThunk.empty },
+                      operations := SourceCurrentAllocatedPartialInitialization.operations cache }
+                    {
+                      heap :=
+                        (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                            representativeFuel 0 oldHandle scs oldValue heap).state,
+                      equality := SourceCurrentAllocatedPartialInitialization.operations cache })
+                  SourceCurrentEmptinessMemo.empty SourceCurrentMemoMergeGraph.empty)
+                queries none none none none
+            | MergedSourceComparison.Result.done (_value, none) _heap =>
+              SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                  oldHandle scs oldValue heap)
+                (SourceCurrentAllocatedPartialState.advance
+                  {
+                    checked :=
+                      {
+                        native :=
+                          { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                            edges := FlatMemoThunk.empty },
+                        operations := SourceCurrentAllocatedPartialInitialization.operations cache },
+                    merge := SourceCurrentMemoMergeGraph.empty, fourth := SourceCurrentEmptinessMemo.empty,
+                    nodeResults := FlatMemoThunk.empty, edgeResults := FlatMemoThunk.empty }
+                  (SourceCurrentAllocatedQueryMemo.advancePhysical
+                    {
+                      native :=
+                        { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                          edges := FlatMemoThunk.empty },
+                      operations := SourceCurrentAllocatedPartialInitialization.operations cache }
+                    {
+                      heap :=
+                        (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                            representativeFuel 0 oldHandle scs oldValue heap).state,
+                      equality := SourceCurrentAllocatedPartialInitialization.operations cache })
+                  SourceCurrentEmptinessMemo.empty SourceCurrentMemoMergeGraph.empty)
+                queries none none none none
+            | MergedSourceComparison.Result.done (value, some action) heap_1 =>
+              match (action checked).run with
+              | [Except.ok (PUnit.unit, observed)] =>
+                match encodeNode value with
+                | none =>
+                  SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                      oldHandle scs oldValue heap)
+                    (SourceCurrentAllocatedPartialState.advance
+                      {
+                        checked :=
+                          {
+                            native :=
+                              { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                                edges := FlatMemoThunk.empty },
+                            operations := SourceCurrentAllocatedPartialInitialization.operations cache },
+                        merge := SourceCurrentMemoMergeGraph.empty, fourth := SourceCurrentEmptinessMemo.empty,
+                        nodeResults := FlatMemoThunk.empty, edgeResults := FlatMemoThunk.empty }
+                      (SourceCurrentAllocatedQueryMemo.advancePhysical
+                        {
+                          native :=
+                            { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                              edges := FlatMemoThunk.empty },
+                          operations := SourceCurrentAllocatedPartialInitialization.operations cache }
+                        {
+                          heap :=
+                            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                representativeFuel 0 oldHandle scs oldValue heap).state,
+                          equality := SourceCurrentAllocatedPartialInitialization.operations cache })
+                      SourceCurrentEmptinessMemo.empty SourceCurrentMemoMergeGraph.empty)
+                    queries (some (action checked).run) none none none
+                | some newHandle =>
+                  match
+                    SourcePruningEnumerationNarrowAdapter.adapt heap_1 indexFuel 0 oldHandle newHandle scs
+                      { core := initial handle,
+                        expandable := fun slot =>
+                          if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+                        waiting := fun x => none }
+                      observed with
+                  | none =>
+                    SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                      (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel
+                        0 oldHandle scs oldValue heap)
+                      (SourceCurrentAllocatedPartialState.advance
+                        {
+                          checked :=
+                            {
+                              native :=
+                                { machine := { heap := heap, domains := Cache.emptyState },
+                                  nodes := FlatMemoThunk.empty, edges := FlatMemoThunk.empty },
+                              operations := SourceCurrentAllocatedPartialInitialization.operations cache },
+                          merge := SourceCurrentMemoMergeGraph.empty, fourth := SourceCurrentEmptinessMemo.empty,
+                          nodeResults := FlatMemoThunk.empty, edgeResults := FlatMemoThunk.empty }
+                        (SourceCurrentAllocatedQueryMemo.advancePhysical
+                          {
+                            native :=
+                              { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                                edges := FlatMemoThunk.empty },
+                            operations := SourceCurrentAllocatedPartialInitialization.operations cache }
+                          {
+                            heap :=
+                              (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                  representativeFuel 0 oldHandle scs oldValue heap).state,
+                            equality := SourceCurrentAllocatedPartialInitialization.operations cache })
+                        SourceCurrentEmptinessMemo.empty SourceCurrentMemoMergeGraph.empty)
+                      queries (some (action checked).run) none none none
+                  | some attached =>
+                    match
+                      (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata 0 (Sum.inr newHandle)
+                          attached.core).run with
+                    | [Except.ok ((false, _updated), callbackCore)] =>
+                      SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                        (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                          representativeFuel 0 oldHandle scs oldValue heap)
+                        (SourceCurrentAllocatedPartialState.advance
+                          {
+                            checked :=
+                              {
+                                native :=
+                                  { machine := { heap := heap, domains := Cache.emptyState },
+                                    nodes := FlatMemoThunk.empty, edges := FlatMemoThunk.empty },
+                                operations := SourceCurrentAllocatedPartialInitialization.operations cache },
+                            merge := SourceCurrentMemoMergeGraph.empty, fourth := SourceCurrentEmptinessMemo.empty,
+                            nodeResults := FlatMemoThunk.empty, edgeResults := FlatMemoThunk.empty }
+                          (SourceCurrentAllocatedQueryMemo.advancePhysical
+                            {
+                              native :=
+                                { machine := { heap := heap, domains := Cache.emptyState },
+                                  nodes := FlatMemoThunk.empty, edges := FlatMemoThunk.empty },
+                              operations := SourceCurrentAllocatedPartialInitialization.operations cache }
+                            {
+                              heap :=
+                                (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                    representativeFuel 0 oldHandle scs oldValue heap).state,
+                              equality := SourceCurrentAllocatedPartialInitialization.operations cache })
+                          SourceCurrentEmptinessMemo.empty SourceCurrentMemoMergeGraph.empty)
+                        queries (some (action checked).run)
+                        (some (EnumerationExpandableIndex.frame callbackCore attached))
+                        (some
+                          (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata 0
+                              (Sum.inr newHandle) attached.core).run)
+                        none
+                    | x =>
+                      SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                        (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                          representativeFuel 0 oldHandle scs oldValue heap)
+                        (SourceCurrentAllocatedPartialState.advance
+                          {
+                            checked :=
+                              {
+                                native :=
+                                  { machine := { heap := heap, domains := Cache.emptyState },
+                                    nodes := FlatMemoThunk.empty, edges := FlatMemoThunk.empty },
+                                operations := SourceCurrentAllocatedPartialInitialization.operations cache },
+                            merge := SourceCurrentMemoMergeGraph.empty, fourth := SourceCurrentEmptinessMemo.empty,
+                            nodeResults := FlatMemoThunk.empty, edgeResults := FlatMemoThunk.empty }
+                          (SourceCurrentAllocatedQueryMemo.advancePhysical
+                            {
+                              native :=
+                                { machine := { heap := heap, domains := Cache.emptyState },
+                                  nodes := FlatMemoThunk.empty, edges := FlatMemoThunk.empty },
+                              operations := SourceCurrentAllocatedPartialInitialization.operations cache }
+                            {
+                              heap :=
+                                (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                    representativeFuel 0 oldHandle scs oldValue heap).state,
+                              equality := SourceCurrentAllocatedPartialInitialization.operations cache })
+                          SourceCurrentEmptinessMemo.empty SourceCurrentMemoMergeGraph.empty)
+                        queries (some (action checked).run) (some attached)
+                        (some
+                          (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata 0
+                              (Sum.inr newHandle) attached.core).run)
+                        none
+              | x =>
+                SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                  (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                    oldHandle scs oldValue heap)
+                  (SourceCurrentAllocatedPartialState.advance
+                    {
+                      checked :=
+                        {
+                          native :=
+                            { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                              edges := FlatMemoThunk.empty },
+                          operations := SourceCurrentAllocatedPartialInitialization.operations cache },
+                      merge := SourceCurrentMemoMergeGraph.empty, fourth := SourceCurrentEmptinessMemo.empty,
+                      nodeResults := FlatMemoThunk.empty, edgeResults := FlatMemoThunk.empty }
+                    (SourceCurrentAllocatedQueryMemo.advancePhysical
+                      {
+                        native :=
+                          { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                            edges := FlatMemoThunk.empty },
+                        operations := SourceCurrentAllocatedPartialInitialization.operations cache }
+                      {
+                        heap :=
+                          (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                              representativeFuel 0 oldHandle scs oldValue heap).state,
+                        equality := SourceCurrentAllocatedPartialInitialization.operations cache })
+                    SourceCurrentEmptinessMemo.empty SourceCurrentMemoMergeGraph.empty)
+                  queries (some (action checked).run) none none none
+        | x =>
+          SourcePruningEnumerationSelectedStep.Result.stopped
+            [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)]
+            (some (SourcePruningEnumerationRecursion.checkRepeated heap checkFuel 0 oldHandle scs readAfter_1).run)
+      | x =>
+        SourcePruningEnumerationSelectedStep.Result.stopped
+          [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)] none with
+    |
+    SourcePruningEnumerationSelectedStep.Result.narrowed checked prepared caller queries raw candidate right ordinary =>
+      raw
+    | x => none) =
+    some (action checked).run
+/tmp/mcfta-initial-preparation-origin-check2-20261113-1725/check.lean:251:19: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.ok` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `Except.ok`
+  [apply] `EST.Out.ok`
+  [apply] `EStateM.Result.ok`
+  [apply] `Std.Http.Response.ok`
+  [apply] `Std.Http.Status.ok`
+/tmp/mcfta-initial-preparation-origin-check2-20261113-1725/check.lean:270:12: error: Expected type must not contain free variables
+  0 <
+    { core := initial handle,
+          expandable := fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+          waiting := fun x => none }.core.counter
+
+Hint: Use the `+revert` option to automatically clean up and revert free variables
+/tmp/mcfta-initial-preparation-origin-check2-20261113-1725/check.lean:277:84: error: Expected type must not contain free variables
+  0 <
+    { core := initial handle,
+          expandable := fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+          waiting := fun x => none }.core.counter
+
+Hint: Use the `+revert` option to automatically clean up and revert free variables
+/tmp/mcfta-initial-preparation-origin-check2-20261113-1725/check.lean:281:78: error: Expected type must not contain free variables
+  0 < (initial handle).counter
+
+Hint: Use the `+revert` option to automatically clean up and revert free variables
+/tmp/mcfta-initial-preparation-origin-check2-20261113-1725/check.lean:327:17: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (SourcePruningEnumerationRecursion.checkRepeated heap checkFuel 0 handle [] readAfter).run
+in the target expression
+  (match [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)] with
+    | [Except.ok (UVarValue.unenumerated (some oldHandle) scs, readAfter_1)] =>
+      match (SourcePruningEnumerationRecursion.checkRepeated heap checkFuel 0 oldHandle scs readAfter_1).run with
+      | [Except.ok (true, checked)] =>
+        SourcePruningEnumerationSelectedStep.Result.parked checked
+          (SourcePruningEnumerationParkedRestart.adapt heap indexFuel 0 oldHandle scs
+            { core := initial handle,
+              expandable := fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+              waiting := fun x => none }
+            checked)
+          (Option.map (fun parked => (SourcePruningEnumerationRestart.run stop order metadata parked checked).run)
+            (SourcePruningEnumerationParkedRestart.adapt heap indexFuel 0 oldHandle scs
+              { core := initial handle,
+                expandable := fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+                waiting := fun x => none }
+              checked))
+      | [Except.ok (false, checked)] =>
+        match lookupNode heap oldHandle with
+        | none =>
+          SourcePruningEnumerationSelectedStep.Result.stopped
+            [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)]
+            (some (SourcePruningEnumerationRecursion.checkRepeated heap checkFuel 0 oldHandle scs readAfter_1).run)
+        | some oldValue =>
+          match
+            SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+              oldHandle scs oldValue heap with
+          | MergedSourceComparison.Result.failed _fault _heap =>
+            SourcePruningEnumerationSelectedStep.Result.narrowed checked
+              (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                oldHandle scs oldValue heap)
+              (SourceCurrentAllocatedPartialState.advance
+                {
+                  checked :=
+                    {
+                      native :=
+                        { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                          edges := FlatMemoThunk.empty },
+                      operations := SourceCurrentAllocatedPartialInitialization.operations cache },
+                  merge := SourceCurrentMemoMergeGraph.empty, fourth := SourceCurrentEmptinessMemo.empty,
+                  nodeResults := FlatMemoThunk.empty, edgeResults := FlatMemoThunk.empty }
+                (SourceCurrentAllocatedQueryMemo.advancePhysical
+                  {
+                    native :=
+                      { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                        edges := FlatMemoThunk.empty },
+                    operations := SourceCurrentAllocatedPartialInitialization.operations cache }
+                  {
+                    heap :=
+                      (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel
+                          0 oldHandle scs oldValue heap).state,
+                    equality := SourceCurrentAllocatedPartialInitialization.operations cache })
+                SourceCurrentEmptinessMemo.empty SourceCurrentMemoMergeGraph.empty)
+              queries none none none none
+          | MergedSourceComparison.Result.done (_value, none) _heap =>
+            SourcePruningEnumerationSelectedStep.Result.narrowed checked
+              (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                oldHandle scs oldValue heap)
+              (SourceCurrentAllocatedPartialState.advance
+                {
+                  checked :=
+                    {
+                      native :=
+                        { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                          edges := FlatMemoThunk.empty },
+                      operations := SourceCurrentAllocatedPartialInitialization.operations cache },
+                  merge := SourceCurrentMemoMergeGraph.empty, fourth := SourceCurrentEmptinessMemo.empty,
+                  nodeResults := FlatMemoThunk.empty, edgeResults := FlatMemoThunk.empty }
+                (SourceCurrentAllocatedQueryMemo.advancePhysical
+                  {
+                    native :=
+                      { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                        edges := FlatMemoThunk.empty },
+                    operations := SourceCurrentAllocatedPartialInitialization.operations cache }
+                  {
+                    heap :=
+                      (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel
+                          0 oldHandle scs oldValue heap).state,
+                    equality := SourceCurrentAllocatedPartialInitialization.operations cache })
+                SourceCurrentEmptinessMemo.empty SourceCurrentMemoMergeGraph.empty)
+              queries none none none none
+          | MergedSourceComparison.Result.done (value, some action) heap_1 =>
+            match (action checked).run with
+            | [Except.ok (PUnit.unit, observed)] =>
+              match encodeNode value with
+              | none =>
+                SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                  (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                    oldHandle scs oldValue heap)
+                  (SourceCurrentAllocatedPartialState.advance
+                    {
+                      checked :=
+                        {
+                          native :=
+                            { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                              edges := FlatMemoThunk.empty },
+                          operations := SourceCurrentAllocatedPartialInitialization.operations cache },
+                      merge := SourceCurrentMemoMergeGraph.empty, fourth := SourceCurrentEmptinessMemo.empty,
+                      nodeResults := FlatMemoThunk.empty, edgeResults := FlatMemoThunk.empty }
+                    (SourceCurrentAllocatedQueryMemo.advancePhysical
+                      {
+                        native :=
+                          { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                            edges := FlatMemoThunk.empty },
+                        operations := SourceCurrentAllocatedPartialInitialization.operations cache }
+                      {
+                        heap :=
+                          (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                              representativeFuel 0 oldHandle scs oldValue heap).state,
+                        equality := SourceCurrentAllocatedPartialInitialization.operations cache })
+                    SourceCurrentEmptinessMemo.empty SourceCurrentMemoMergeGraph.empty)
+                  queries (some (action checked).run) none none none
+              | some newHandle =>
+                match
+                  SourcePruningEnumerationNarrowAdapter.adapt heap_1 indexFuel 0 oldHandle newHandle scs
+                    { core := initial handle,
+                      expandable := fun slot =>
+                        if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+                      waiting := fun x => none }
+                    observed with
+                | none =>
+                  SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                      oldHandle scs oldValue heap)
+                    (SourceCurrentAllocatedPartialState.advance
+                      {
+                        checked :=
+                          {
+                            native :=
+                              { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                                edges := FlatMemoThunk.empty },
+                            operations := SourceCurrentAllocatedPartialInitialization.operations cache },
+                        merge := SourceCurrentMemoMergeGraph.empty, fourth := SourceCurrentEmptinessMemo.empty,
+                        nodeResults := FlatMemoThunk.empty, edgeResults := FlatMemoThunk.empty }
+                      (SourceCurrentAllocatedQueryMemo.advancePhysical
+                        {
+                          native :=
+                            { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                              edges := FlatMemoThunk.empty },
+                          operations := SourceCurrentAllocatedPartialInitialization.operations cache }
+                        {
+                          heap :=
+                            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                representativeFuel 0 oldHandle scs oldValue heap).state,
+                          equality := SourceCurrentAllocatedPartialInitialization.operations cache })
+                      SourceCurrentEmptinessMemo.empty SourceCurrentMemoMergeGraph.empty)
+                    queries (some (action checked).run) none none none
+                | some attached =>
+                  match
+                    (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata 0 (Sum.inr newHandle)
+                        attached.core).run with
+                  | [Except.ok ((false, _updated), callbackCore)] =>
+                    SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                      (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel
+                        0 oldHandle scs oldValue heap)
+                      (SourceCurrentAllocatedPartialState.advance
+                        {
+                          checked :=
+                            {
+                              native :=
+                                { machine := { heap := heap, domains := Cache.emptyState },
+                                  nodes := FlatMemoThunk.empty, edges := FlatMemoThunk.empty },
+                              operations := SourceCurrentAllocatedPartialInitialization.operations cache },
+                          merge := SourceCurrentMemoMergeGraph.empty, fourth := SourceCurrentEmptinessMemo.empty,
+                          nodeResults := FlatMemoThunk.empty, edgeResults := FlatMemoThunk.empty }
+                        (SourceCurrentAllocatedQueryMemo.advancePhysical
+                          {
+                            native :=
+                              { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                                edges := FlatMemoThunk.empty },
+                            operations := SourceCurrentAllocatedPartialInitialization.operations cache }
+                          {
+                            heap :=
+                              (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                  representativeFuel 0 oldHandle scs oldValue heap).state,
+                            equality := SourceCurrentAllocatedPartialInitialization.operations cache })
+                        SourceCurrentEmptinessMemo.empty SourceCurrentMemoMergeGraph.empty)
+                      queries (some (action checked).run)
+                      (some (EnumerationExpandableIndex.frame callbackCore attached))
+                      (some
+                        (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata 0
+                            (Sum.inr newHandle) attached.core).run)
+                      none
+                  | x =>
+                    SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                      (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel
+                        0 oldHandle scs oldValue heap)
+                      (SourceCurrentAllocatedPartialState.advance
+                        {
+                          checked :=
+                            {
+                              native :=
+                                { machine := { heap := heap, domains := Cache.emptyState },
+                                  nodes := FlatMemoThunk.empty, edges := FlatMemoThunk.empty },
+                              operations := SourceCurrentAllocatedPartialInitialization.operations cache },
+                          merge := SourceCurrentMemoMergeGraph.empty, fourth := SourceCurrentEmptinessMemo.empty,
+                          nodeResults := FlatMemoThunk.empty, edgeResults := FlatMemoThunk.empty }
+                        (SourceCurrentAllocatedQueryMemo.advancePhysical
+                          {
+                            native :=
+                              { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                                edges := FlatMemoThunk.empty },
+                            operations := SourceCurrentAllocatedPartialInitialization.operations cache }
+                          {
+                            heap :=
+                              (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                  representativeFuel 0 oldHandle scs oldValue heap).state,
+                            equality := SourceCurrentAllocatedPartialInitialization.operations cache })
+                        SourceCurrentEmptinessMemo.empty SourceCurrentMemoMergeGraph.empty)
+                      queries (some (action checked).run) (some attached)
+                      (some
+                        (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata 0
+                            (Sum.inr newHandle) attached.core).run)
+                      none
+            | x =>
+              SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                  oldHandle scs oldValue heap)
+                (SourceCurrentAllocatedPartialState.advance
+                  {
+                    checked :=
+                      {
+                        native :=
+                          { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                            edges := FlatMemoThunk.empty },
+                        operations := SourceCurrentAllocatedPartialInitialization.operations cache },
+                    merge := SourceCurrentMemoMergeGraph.empty, fourth := SourceCurrentEmptinessMemo.empty,
+                    nodeResults := FlatMemoThunk.empty, edgeResults := FlatMemoThunk.empty }
+                  (SourceCurrentAllocatedQueryMemo.advancePhysical
+                    {
+                      native :=
+                        { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                          edges := FlatMemoThunk.empty },
+                      operations := SourceCurrentAllocatedPartialInitialization.operations cache }
+                    {
+                      heap :=
+                        (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                            representativeFuel 0 oldHandle scs oldValue heap).state,
+                      equality := SourceCurrentAllocatedPartialInitialization.operations cache })
+                  SourceCurrentEmptinessMemo.empty SourceCurrentMemoMergeGraph.empty)
+                queries (some (action checked).run) none none none
+      | x =>
+        SourcePruningEnumerationSelectedStep.Result.stopped
+          [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)]
+          (some (SourcePruningEnumerationRecursion.checkRepeated heap checkFuel 0 oldHandle scs readAfter_1).run)
+    | x =>
+      SourcePruningEnumerationSelectedStep.Result.stopped
+        [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)] none) =
+    SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (narrowed, some action) narrowedHeap) reached saved
+      (some [Except.ok (PUnit.unit, actionCore)]) (some candidate) (some [Except.ok ((false, updated), callbackCore)])
+      none
+
+case h_1
+Typing Key : Type
+width : Nat
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+lib : SourceSynthesisTypeSyntax.Library
+query : SourceSynthesisTypeSyntax.Query
+signed : Int
+whole : SourceSynthesisFirstOrderConstruction.Expression
+accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole
+rootValue : Node
+heap : InternedConstructorTemplates.State Symbol Guard
+built :
+  InternedFreshOrdinaryConstruction.build (SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) [] empty =
+    InternedNestedConstruction.Outcome.done rootValue heap
+cache : Cache.State SourceEqualityPartialConstraintKey.Key
+handle : Nat
+decoded : lookupNode heap handle = some rootValue
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Guard
+templates : List (Template.Pattern Symbol)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+metadata : Metadata Typing
+readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel entryFuel preparationFuel : Nat
+queries : SourceEndpointMemo.Memos
+caller : SourceCurrentAllocatedPartialState.State width :=
+  SourceCurrentAllocatedPartialInitialization.caller width cache heap
+startup : Cached :=
+  { core := initial handle,
+    expandable := fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+    waiting := fun x => none }
+x✝ : SourcePruningEnumerationSelectedStep.Result width Typing
+checked : Core
+narrowed : Node
+action : EnumerateM Symbol Guard Unit
+narrowedHeap : InternedConstructorTemplates.State Symbol Guard
+reached : SourceCurrentAllocatedPartialState.State width
+saved : SourceEndpointMemo.Memos
+actionCore : Core
+candidate : Cached
+updated : Metadata Typing
+callbackCore : Core
+prefixEq :
+  SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata readFuel
+      checkFuel nativeFuel representativeFuel indexFuel callbackFuel 0
+      (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+      { core := initial handle,
+        expandable := fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+        waiting := fun x => none }
+      queries =
+    SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (narrowed, some action) narrowedHeap) reached saved
+      (some [Except.ok (PUnit.unit, actionCore)]) (some candidate) (some [Except.ok ((false, updated), callbackCore)])
+      none
+readAfter : Core
+reading : (getValue readFuel 0 (initial handle)).run = [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)]
+checking :
+  (SourcePruningEnumerationRecursion.checkRepeated heap checkFuel 0 handle [] readAfter).run =
+    [Except.ok (false, checked)]
+checkedFrame : Frame (initial handle) checked
+prepared :
+  SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle []
+      rootValue heap =
+    MergedSourceComparison.Result.done (narrowed, some action) narrowedHeap
+native :
+  SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel 0 rootValue heap =
+    MergedSourceComparison.Result.done narrowed narrowedHeap
+reachedSame :
+  reached =
+    SourceCurrentAllocatedPartialState.advance (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+      (SourceCurrentAllocatedQueryMemo.advancePhysical
+        (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked
+        { heap := narrowedHeap,
+          equality := (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations })
+      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).fourth
+      (SourceCurrentAllocatedPartialInitialization.caller width cache heap).merge
+savedSame : saved = queries
+_ordinaryNone : none = none
+included :
+  ∀ (row : EdgeValue Symbol Guard),
+    row ∈ InternedEdgeResidency.nodeEdges narrowed → row ∈ InternedEdgeResidency.nodeEdges rootValue
+nativeFacts : Facts narrowedHeap
+nativeAvailable : Available narrowedHeap narrowed
+ordinary : SourceEqualityRequiredCache.Ordinary narrowed
+reachedHeap : reached.checked.native.machine.heap = narrowedHeap
+copied :
+  (match
+      SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata readFuel
+        checkFuel nativeFuel representativeFuel indexFuel callbackFuel 0 caller startup queries with
+    |
+    SourcePruningEnumerationSelectedStep.Result.narrowed checked prepared caller queries raw candidate right ordinary =>
+      raw
+    | x => none) =
+    some (action checked).run
+fields :
+  (match
+      SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata readFuel
+        checkFuel nativeFuel representativeFuel indexFuel callbackFuel 0
+        (SourceCurrentAllocatedPartialInitialization.caller width cache heap)
+        { core := initial handle,
+          expandable := fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+          waiting := fun x => none }
+        queries with
+    |
+    SourcePruningEnumerationSelectedStep.Result.narrowed checked prepared caller queries raw candidate right ordinary =>
+      raw
+    | x => none) =
+    match
+      SourcePruningEnumerationSelectedStep.Result.narrowed checked
+        (MergedSourceComparison.Result.done (narrowed, some action) narrowedHeap) reached saved
+        (some [Except.ok (PUnit.unit, actionCore)]) (some candidate) (some [Except.ok ((false, updated), callbackCore)])
+        none with
+    |
+    SourcePruningEnumerationSelectedStep.Result.narrowed checked prepared caller queries raw candidate right ordinary =>
+      raw
+    | x => none
+executedRaw : (action checked).run = [Except.ok ((), actionCore)]
+executed : Success action checked () actionCore
+nonempty : narrowed ≠ Value.empty
+newHandle : Nat
+encoded : encodeNode narrowed = some newHandle
+nativeDecoded : lookupNode narrowedHeap newHandle = some narrowed
+readingSuccess : Success (getValue readFuel 0) startup.core (UVarValue.unenumerated (some handle) []) readAfter
+initialSafe : Safe startup.core
+initialRoot : IsRoot startup.core.representatives 0
+readSafe : Safe readAfter
+readCounter : readAfter.counter = startup.core.counter
+readProtection : EnumerationDriver.Protected 0 startup.core readAfter
+_readStored : readAfter.values[0]? = some (UVarValue.unenumerated (some handle) [])
+checkSuccess :
+  Success (SourcePruningEnumerationRecursion.checkRepeated heap checkFuel 0 handle []) readAfter false checked
+checkedSafe : Safe checked
+checkedRoot : IsRoot checked.representatives 0
+checkedInside : 0 < checked.counter
+checkedStored : checked.values[0]? = some (UVarValue.unenumerated (some handle) [])
+fixedPreparation :
+  SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0 handle []
+      rootValue heap =
+    MergedSourceComparison.Result.done
+      (narrowed,
+        some
+          (if newHandle = handle then pure ()
+          else do
+            let selected ← representative representativeFuel 0
+            setValue selected (UVarValue.unenumerated (some newHandle) [])))
+      narrowedHeap
+actionSame :
+  action =
+    if newHandle = handle then pure ()
+    else do
+      let selected ← representative representativeFuel 0
+      setValue selected (UVarValue.unenumerated (some newHandle) [])
+actionFacts :
+  Safe actionCore ∧
+    0 < actionCore.counter ∧
+      IsRoot actionCore.representatives 0 ∧ actionCore.values[0]? = some (UVarValue.unenumerated (some newHandle) [])
+actualPrefix :
+  (match [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)] with
+    | [Except.ok (UVarValue.unenumerated (some oldHandle) scs, readAfter_1)] =>
+      match (SourcePruningEnumerationRecursion.checkRepeated heap checkFuel 0 oldHandle scs readAfter_1).run with
+      | [Except.ok (true, checked)] =>
+        SourcePruningEnumerationSelectedStep.Result.parked checked
+          (SourcePruningEnumerationParkedRestart.adapt heap indexFuel 0 oldHandle scs
+            { core := initial handle,
+              expandable := fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+              waiting := fun x => none }
+            checked)
+          (Option.map (fun parked => (SourcePruningEnumerationRestart.run stop order metadata parked checked).run)
+            (SourcePruningEnumerationParkedRestart.adapt heap indexFuel 0 oldHandle scs
+              { core := initial handle,
+                expandable := fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+                waiting := fun x => none }
+              checked))
+      | [Except.ok (false, checked)] =>
+        match lookupNode heap oldHandle with
+        | none =>
+          SourcePruningEnumerationSelectedStep.Result.stopped
+            [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)]
+            (some (SourcePruningEnumerationRecursion.checkRepeated heap checkFuel 0 oldHandle scs readAfter_1).run)
+        | some oldValue =>
+          match
+            SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+              oldHandle scs oldValue heap with
+          | MergedSourceComparison.Result.failed _fault _heap =>
+            SourcePruningEnumerationSelectedStep.Result.narrowed checked
+              (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                oldHandle scs oldValue heap)
+              (SourceCurrentAllocatedPartialState.advance
+                {
+                  checked :=
+                    {
+                      native :=
+                        { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                          edges := FlatMemoThunk.empty },
+                      operations := SourceCurrentAllocatedPartialInitialization.operations cache },
+                  merge := SourceCurrentMemoMergeGraph.empty, fourth := SourceCurrentEmptinessMemo.empty,
+                  nodeResults := FlatMemoThunk.empty, edgeResults := FlatMemoThunk.empty }
+                (SourceCurrentAllocatedQueryMemo.advancePhysical
+                  {
+                    native :=
+                      { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                        edges := FlatMemoThunk.empty },
+                    operations := SourceCurrentAllocatedPartialInitialization.operations cache }
+                  {
+                    heap :=
+                      (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel
+                          0 oldHandle scs oldValue heap).state,
+                    equality := SourceCurrentAllocatedPartialInitialization.operations cache })
+                SourceCurrentEmptinessMemo.empty SourceCurrentMemoMergeGraph.empty)
+              queries none none none none
+          | MergedSourceComparison.Result.done (_value, none) _heap =>
+            SourcePruningEnumerationSelectedStep.Result.narrowed checked
+              (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                oldHandle scs oldValue heap)
+              (SourceCurrentAllocatedPartialState.advance
+                {
+                  checked :=
+                    {
+                      native :=
+                        { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                          edges := FlatMemoThunk.empty },
+                      operations := SourceCurrentAllocatedPartialInitialization.operations cache },
+                  merge := SourceCurrentMemoMergeGraph.empty, fourth := SourceCurrentEmptinessMemo.empty,
+                  nodeResults := FlatMemoThunk.empty, edgeResults := FlatMemoThunk.empty }
+                (SourceCurrentAllocatedQueryMemo.advancePhysical
+                  {
+                    native :=
+                      { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                        edges := FlatMemoThunk.empty },
+                    operations := SourceCurrentAllocatedPartialInitialization.operations cache }
+                  {
+                    heap :=
+                      (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel
+                          0 oldHandle scs oldValue heap).state,
+                    equality := SourceCurrentAllocatedPartialInitialization.operations cache })
+                SourceCurrentEmptinessMemo.empty SourceCurrentMemoMergeGraph.empty)
+              queries none none none none
+          | MergedSourceComparison.Result.done (value, some action) heap_1 =>
+            match (action checked).run with
+            | [Except.ok (PUnit.unit, observed)] =>
+              match encodeNode value with
+              | none =>
+                SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                  (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                    oldHandle scs oldValue heap)
+                  (SourceCurrentAllocatedPartialState.advance
+                    {
+                      checked :=
+                        {
+                          native :=
+                            { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                              edges := FlatMemoThunk.empty },
+                          operations := SourceCurrentAllocatedPartialInitialization.operations cache },
+                      merge := SourceCurrentMemoMergeGraph.empty, fourth := SourceCurrentEmptinessMemo.empty,
+                      nodeResults := FlatMemoThunk.empty, edgeResults := FlatMemoThunk.empty }
+                    (SourceCurrentAllocatedQueryMemo.advancePhysical
+                      {
+                        native :=
+                          { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                            edges := FlatMemoThunk.empty },
+                        operations := SourceCurrentAllocatedPartialInitialization.operations cache }
+                      {
+                        heap :=
+                          (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                              representativeFuel 0 oldHandle scs oldValue heap).state,
+                        equality := SourceCurrentAllocatedPartialInitialization.operations cache })
+                    SourceCurrentEmptinessMemo.empty SourceCurrentMemoMergeGraph.empty)
+                  queries (some (action checked).run) none none none
+              | some newHandle =>
+                match
+                  SourcePruningEnumerationNarrowAdapter.adapt heap_1 indexFuel 0 oldHandle newHandle scs
+                    { core := initial handle,
+                      expandable := fun slot =>
+                        if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+                      waiting := fun x => none }
+                    observed with
+                | none =>
+                  SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                      oldHandle scs oldValue heap)
+                    (SourceCurrentAllocatedPartialState.advance
+                      {
+                        checked :=
+                          {
+                            native :=
+                              { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                                edges := FlatMemoThunk.empty },
+                            operations := SourceCurrentAllocatedPartialInitialization.operations cache },
+                        merge := SourceCurrentMemoMergeGraph.empty, fourth := SourceCurrentEmptinessMemo.empty,
+                        nodeResults := FlatMemoThunk.empty, edgeResults := FlatMemoThunk.empty }
+                      (SourceCurrentAllocatedQueryMemo.advancePhysical
+                        {
+                          native :=
+                            { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                              edges := FlatMemoThunk.empty },
+                          operations := SourceCurrentAllocatedPartialInitialization.operations cache }
+                        {
+                          heap :=
+                            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                representativeFuel 0 oldHandle scs oldValue heap).state,
+                          equality := SourceCurrentAllocatedPartialInitialization.operations cache })
+                      SourceCurrentEmptinessMemo.empty SourceCurrentMemoMergeGraph.empty)
+                    queries (some (action checked).run) none none none
+                | some attached =>
+                  match
+                    (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata 0 (Sum.inr newHandle)
+                        attached.core).run with
+                  | [Except.ok ((false, _updated), callbackCore)] =>
+                    SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                      (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel
+                        0 oldHandle scs oldValue heap)
+                      (SourceCurrentAllocatedPartialState.advance
+                        {
+                          checked :=
+                            {
+                              native :=
+                                { machine := { heap := heap, domains := Cache.emptyState },
+                                  nodes := FlatMemoThunk.empty, edges := FlatMemoThunk.empty },
+                              operations := SourceCurrentAllocatedPartialInitialization.operations cache },
+                          merge := SourceCurrentMemoMergeGraph.empty, fourth := SourceCurrentEmptinessMemo.empty,
+                          nodeResults := FlatMemoThunk.empty, edgeResults := FlatMemoThunk.empty }
+                        (SourceCurrentAllocatedQueryMemo.advancePhysical
+                          {
+                            native :=
+                              { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                                edges := FlatMemoThunk.empty },
+                            operations := SourceCurrentAllocatedPartialInitialization.operations cache }
+                          {
+                            heap :=
+                              (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                  representativeFuel 0 oldHandle scs oldValue heap).state,
+                            equality := SourceCurrentAllocatedPartialInitialization.operations cache })
+                        SourceCurrentEmptinessMemo.empty SourceCurrentMemoMergeGraph.empty)
+                      queries (some (action checked).run)
+                      (some (EnumerationExpandableIndex.frame callbackCore attached))
+                      (some
+                        (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata 0
+                            (Sum.inr newHandle) attached.core).run)
+                      none
+                  | x =>
+                    SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                      (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel
+                        0 oldHandle scs oldValue heap)
+                      (SourceCurrentAllocatedPartialState.advance
+                        {
+                          checked :=
+                            {
+                              native :=
+                                { machine := { heap := heap, domains := Cache.emptyState },
+                                  nodes := FlatMemoThunk.empty, edges := FlatMemoThunk.empty },
+                              operations := SourceCurrentAllocatedPartialInitialization.operations cache },
+                          merge := SourceCurrentMemoMergeGraph.empty, fourth := SourceCurrentEmptinessMemo.empty,
+                          nodeResults := FlatMemoThunk.empty, edgeResults := FlatMemoThunk.empty }
+                        (SourceCurrentAllocatedQueryMemo.advancePhysical
+                          {
+                            native :=
+                              { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                                edges := FlatMemoThunk.empty },
+                            operations := SourceCurrentAllocatedPartialInitialization.operations cache }
+                          {
+                            heap :=
+                              (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                  representativeFuel 0 oldHandle scs oldValue heap).state,
+                            equality := SourceCurrentAllocatedPartialInitialization.operations cache })
+                        SourceCurrentEmptinessMemo.empty SourceCurrentMemoMergeGraph.empty)
+                      queries (some (action checked).run) (some attached)
+                      (some
+                        (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata 0
+                            (Sum.inr newHandle) attached.core).run)
+                      none
+            | x =>
+              SourcePruningEnumerationSelectedStep.Result.narrowed checked
+                (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel 0
+                  oldHandle scs oldValue heap)
+                (SourceCurrentAllocatedPartialState.advance
+                  {
+                    checked :=
+                      {
+                        native :=
+                          { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                            edges := FlatMemoThunk.empty },
+                        operations := SourceCurrentAllocatedPartialInitialization.operations cache },
+                    merge := SourceCurrentMemoMergeGraph.empty, fourth := SourceCurrentEmptinessMemo.empty,
+                    nodeResults := FlatMemoThunk.empty, edgeResults := FlatMemoThunk.empty }
+                  (SourceCurrentAllocatedQueryMemo.advancePhysical
+                    {
+                      native :=
+                        { machine := { heap := heap, domains := Cache.emptyState }, nodes := FlatMemoThunk.empty,
+                          edges := FlatMemoThunk.empty },
+                      operations := SourceCurrentAllocatedPartialInitialization.operations cache }
+                    {
+                      heap :=
+                        (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                            representativeFuel 0 oldHandle scs oldValue heap).state,
+                      equality := SourceCurrentAllocatedPartialInitialization.operations cache })
+                  SourceCurrentEmptinessMemo.empty SourceCurrentMemoMergeGraph.empty)
+                queries (some (action checked).run) none none none
+      | x =>
+        SourcePruningEnumerationSelectedStep.Result.stopped
+          [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)]
+          (some (SourcePruningEnumerationRecursion.checkRepeated heap checkFuel 0 oldHandle scs readAfter_1).run)
+    | x =>
+      SourcePruningEnumerationSelectedStep.Result.stopped
+        [Except.ok (UVarValue.unenumerated (some handle) [], readAfter)] none) =
+    SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (narrowed, some action) narrowedHeap) reached saved
+      (some [Except.ok (PUnit.unit, actionCore)]) (some candidate) (some [Except.ok ((false, updated), callbackCore)])
+      none
+⊢ saved = queries ∧
+    updated = metadata ∧
+      callbackCore = candidate.core ∧
+        reached.checked.native.machine.heap = narrowedHeap ∧
+          SourceEqualityRequiredCache.Ordinary narrowed ∧
+            ∃ newHandle,
+              encodeNode narrowed = some newHandle ∧
+                lookupNode narrowedHeap newHandle = some narrowed ∧
+                  candidate.core.values[0]? = some (UVarValue.unenumerated (some newHandle) []) ∧
+                    match
+                      SourcePruningEnumerationSelectedPreparation.run entryFuel preparationFuel 0 reached candidate with
+                    |
+                    ([Except.ok ((target, readHandle, scs, decodedValue), entered)],
+                        some (MergedSourceComparison.Result.done prepared preparedHeap)) =>
+                      target = 0 ∧
+                        readHandle = newHandle ∧
+                          scs = [] ∧
+                            decodedValue = narrowed ∧
+                              prepared = narrowed ∧
+                                preparedHeap = narrowedHeap ∧
+                                  EnumerationDriver.RenderStable candidate.core entered ∧
+                                    (SourcePruningEnumerationSelectedValueCaller.advance reached
+                                                  preparedHeap).checked.native.machine.heap =
+                                        narrowedHeap ∧
+                                      ∀ (row : EdgeValue Symbol Guard),
+                                        row ∈ InternedEdgeResidency.nodeEdges prepared →
+                                          row ∈ InternedEdgeResidency.nodeEdges rootValue
+                    | x => True
+'_private._stdin.0.MicroCFTA.SourceSynthesisCurrentInitialPrefixOrigin.initial_prefix_preparation_rows' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,20 @@
+import MicroCFTA.SourceSynthesisCurrentInitialPrefixOrigin
+import MicroCFTA.SourceSynthesisCurrentInitialOuterNarrowFacts
+import MicroCFTA.SourcePruningEnumerationSelectedPreparation
+import MicroCFTA.SourcePruningEnumerationSelectedStepCompletion
+
+namespace MicroCFTA.SourceSynthesisCurrentInitialPrefixOrigin
+open InternedConstructorTemplates InternedProbeProvenance InternedNestedFacts
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationCompressionFrame
+open SourcePruningEnumerationNodes
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Guard
+local notation "Core" => EnumerationState.State Symbol Guard
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Guard
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+
+local instance preparationMonadList : Monad List where
+  pure value := [value]
+  bind values continuation := values.flatMap continuation
+

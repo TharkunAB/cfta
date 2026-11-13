@@ -1,0 +1,19 @@
+ := by
+  induction earlierRows generalizing caller queries with
+  | nil =>
+      simp only [List.nil_append, scan]
+      cases scan visit before suffix caller queries <;> rfl
+  | cons edge earlierRows ih =>
+      rw [List.cons_append]
+      cases head : visit edge caller queries before with
+      | stopped processed outputs current =>
+          simp only [scan, head]
+      | complete processed outputs reached saved =>
+          simp only [scan, head]
+          rw [ih]
+          cases scan visit before earlierRows reached saved with
+          | stopped later more current => rfl
+          | complete later more middleCaller middleQueries =>
+              dsimp only
+              cases scan visit before suffix middleCaller middleQueries <;>
+                simp only [List.append_assoc]

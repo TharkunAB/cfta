@@ -1,3 +1,94 @@
+## Actual initial selected preparation (2026-11-13 17:46 CET)
+
+The FULL goal remains ACTIVE. Pushes to formalize remain authorized.
+Proof commit e38047c8612210b43bfe0406c2a276d6714310a1 is pushed and remote-verified.
+Main remains e53852064d3ef5a2eafec47d754c27504b11de5f and is contained in formalize.
+All earlier bytes remain an exact suffix. Preserve all proofs and drafts.
+
+NEW PUBLIC: SourceSynthesisCurrentInitialPrefixOrigin236 promotes the checked
+initial-prefix observer. SourceSynthesisCurrentInitialOuterNarrowFacts101 derives
+Facts, Available and Ordinary for the SAME observed narrowing result and heap.
+It uses the original closed build and the actual metadata identity or filtered
+makeNode. It supplies no model, readiness or shape premise and runs no producer.
+
+NEW PUBLIC: SourceSynthesisCurrentInitialPreparationOrigin399 exports
+SourceSynthesisCurrentInitialPrefixOrigin.initial_prefix_preparation_rows.
+It follows the SAME actual active prefix, action, encoded handle, adapter,
+callback, stored slot0, Entry and SelectedValue. It derives the actual native
+lookup, unchanged queries/metadata, ordinary narrowed value, entry target0 and
+empty bucket, SAME prepared=narrowed value/heap, RenderStable, and complete
+source-root row inclusion. Six prefix fuels plus entry/preparation fuels and
+all metadata/modes remain arbitrary. Safety is derived internally. There is
+no Ready/Packet/model/source-member supplier or second initializer.
+This is a concrete startup observer. The outer eager decision, actual row
+visitor and later edits still require their SAME operational attachments.
+
+NEW PUBLIC: SourcePruningEnumerationSharedBranching.scan_append49 preserves
+complete/stopped results, receipts and outputs. Each suffix starts from its
+prefix's ACTUAL reached caller and saved queries. Do not reuse the first native
+caller for every sibling. Arbitrary Output/Reason universes remain supported.
+
+NEW PUBLIC: SourceSynthesisCurrentZeroProgramObstruction29 proves that the
+front end succeeds at signed0 while no Program has zero components. This
+excludes a false bootstrap from construction success to a correctly sized
+Program. It is not an emitted-output or native-language counterexample.
+No actual emitted-source counterexample is established by this work.
+
+FULL Audit PASS: 5911 live modules, 4909 imports, 95033 theorem dependency checks.
+All five new public declarations pass actual import/axiom checks. The public
+preparation module also passes strict warnings. Earlier unchanged strict
+checks were hash-verified and reused. Final four compiler calls all exit0.
+Source tree SHA256:
+102d5b24ba5d8e9320b0e6fb094a1327fb9f55d771111a2a512a5b669c5a6cbc.
+All new checked laws use only propext, Classical.choice and Quot.sound. Checks
+ran serially in Nix with 4GiB max/high, swap0 and one Lean thread.
+Preparation stages395,396,394 FAILED; repaired398 PASSED and public399 PASSED.
+The repairs reduce SAME let/match observations, use closed initial bounds,
+align the SAME adapter and annotate the SAME raw list. Exact52 header retained.
+Recovery axioms in failed outputs receive no proof credit.
+
+Source-only packet lean/restart-evidence/20261113-initial-selected-preparation/
+preserves all stages, exact strict inputs, failures, repairs, source pins and
+actual final reports. It also preserves the semantic audit94, necessary
+same-output witness target10, and next unproved visitor header105/plan66.
+Root replayed25 stages through17 exact GNU zero-fuzz patches and checked
+all hashes/current source pins. The packet holds113 files and1310718 bytes.
+All5906 earlier live sources remain byte-exact except the new Audit imports.
+No build archive is stored. All older source packets remain unchanged.
+
+NEXT: implement initial_prepared_shared_root_scan_origin105/5a7c65ac using
+checked preparation399, scan_append49 and original filter interval209.
+Use the actual nodeEdges selector, SAME captured Core and full runWithChild
+observation. At each position MATCH its actual take-prefix scan. A completed
+prefix supplies THAT sibling's caller/queries. Derive original row membership
+from the actual indexed lookup, then retain its source filter build interval
+and CachedOwn.prepare observation. Do not invent a Parent call or assume
+Facts at an arbitrary hook's reached caller. Header105 is UNPROVED.
+The earlier nonshared Parent ancestor remains valid SECONDARY component work.
+
+BIGGEST semantic gap: construct ONE finite term accepted by the SAME ORIGINAL
+root that completes the SAME actual emitted partial root. Existing model and
+resource laws preserve supplied assignments. Local Type inhabitants and one
+initial accepted witness do not solve every emitted branch. The audit's
+same-output witness is a first necessary existential. Supported sharing,
+aliases, domains, residuals and parked backward recompletion remain required.
+Do not replace the missing proof with a future model/unifier premise.
+Original typing, depth adequacy/completeness, default LPO/reduction/refolding,
+streams/order/multiplicity/lazy demand, exact sizes/counts/weights/training,
+BOTH rank/unrank inverses, host bounds and compiled Haskell correspondence
+remain in the FULL objective. The optimized interned shared core is PRIMARY.
+The strongest original-input global execution/resource/readback result is
+unchanged. The new preparation/source laws do not establish global completion.
+
+Haskell/Cabal/test edits and new Haskell defects/fixes: NONE. Record every future
+Haskell fix in FINDINGS for external implementation work. Liquid contracts
+remain proposals; repeated-name work remains external. Preserve .hypha.
+PRIMARY58 percent and /tmp154.9GiB free at17:45 CET. Refresh within15 minutes.
+Above80 percent, save the full handoff, stop workers, pause and notify Matti.
+Root remains sole compiler, Git publisher and board writer. Continue the goal.
+
+---
+
 ## Initial root provenance and the actual eager entry (2026-11-13 16:58 CET)
 
 The FULL goal remains ACTIVE. Pushes to formalize remain authorized.

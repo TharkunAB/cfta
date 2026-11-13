@@ -1,0 +1,6 @@
+theorem size_zero_frontend_without_program
+    (lib : SourceSynthesisTypeSyntax.Library) (query : SourceSynthesisTypeSyntax.Query) :
+    ∃ expression : SourceSynthesisFirstOrderConstruction.Expression,
+      SourceSynthesisCurrentConstruction.firstOrderRaw lib query (0 : Int) = .ok expression ∧
+      ¬∃ program : SourceSynthesisProgramTermSize.Program,
+        program.components = (0 : Int).toNat

@@ -1,0 +1,52 @@
+private theorem initial_prefix_preparation_rows
+    {Typing Key : Type} {width : Nat}
+    [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : SourceSynthesisTypeSyntax.Library) (query : SourceSynthesisTypeSyntax.Query)
+    (signed : Int) (whole : SourceSynthesisFirstOrderConstruction.Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Node) (heap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build
+      (SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+      InternedConstructorTemplates.empty = .done rootValue heap)
+    (cache : Cache.State SourceEqualityPartialConstraintKey.Key)
+    (handle : Nat)
+    (decoded : SourcePruningEnumerationNodes.lookupNode heap handle = some rootValue)
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
+    (admits : Key → Node → Bool)
+    (graph : Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+    (readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel : Nat)
+    (entryFuel preparationFuel : Nat)
+    (queries : SourceEndpointMemo.Memos) :
+    let caller := SourceCurrentAllocatedPartialInitialization.caller width cache heap
+    let startup : Cached :=
+      ⟨EnumerationState.initial handle,
+        fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+        fun _ => none⟩
+    match SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates
+      stop order metadata readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel
+      0 caller startup queries with
+    | .narrowed _checked (.done (narrowed, some _action) narrowedHeap) reached saved
+        (some [.ok ((), _actionCore)]) (some candidate)
+        (some [.ok ((false, updated), callbackCore)]) none =>
+        saved = queries ∧ updated = metadata ∧ callbackCore = candidate.core ∧
+        reached.checked.native.machine.heap = narrowedHeap ∧
+        SourceEqualityRequiredCache.Ordinary narrowed ∧
+        ∃ newHandle : Nat,
+          SourcePruningEnumerationNodes.encodeNode narrowed = some newHandle ∧
+          SourcePruningEnumerationNodes.lookupNode narrowedHeap newHandle = some narrowed ∧
+          candidate.core.values[0]? = some (.unenumerated (some newHandle) []) ∧
+          match SourcePruningEnumerationSelectedPreparation.run entryFuel preparationFuel
+            0 reached candidate with
+          | ([.ok ((target, readHandle, scs, decodedValue), entered)],
+              some (.done prepared preparedHeap)) =>
+              target = 0 ∧ readHandle = newHandle ∧ scs = [] ∧
+              decodedValue = narrowed ∧ prepared = narrowed ∧ preparedHeap = narrowedHeap ∧
+              EnumerationDriver.RenderStable candidate.core entered ∧
+              (SourcePruningEnumerationSelectedValueCaller.advance reached
+                preparedHeap).checked.native.machine.heap = narrowedHeap ∧
+              ∀ row ∈ InternedEdgeResidency.nodeEdges prepared,
+                row ∈ InternedEdgeResidency.nodeEdges rootValue
+          | _ => True
+    | _ => True

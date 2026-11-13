@@ -1,0 +1,98 @@
+private theorem ordinary_encoded_lookup
+    (heap : InternedConstructorTemplates.State Symbol Guard) (value : Node)
+    (facts : Facts heap) (available : Available heap value)
+    (ordinary : SourceEqualityRequiredCache.Ordinary value)
+    (handle : Nat) (encoded : encodeNode value = some handle) :
+    lookupNode heap handle = some value := by
+  cases value with
+  | empty =>
+      simp only [encodeNode, Option.some.injEq] at encoded
+      subst handle
+      rfl
+  | reference | union | mu => cases ordinary
+  | node entry rows depth free =>
+      simp only [encodeNode, Option.some.injEq] at encoded
+      subst handle
+      have canonical : heap.nodes.table entry.key = some entry :=
+        InternedFreshProbeKeys.resident_entry heap facts.coherent _ available.resident entry rfl
+      have issued : heap.nodes.issued entry.identity = some entry.key :=
+        (facts.coherent.valid.2.2 entry.key entry canonical).2
+      simpa only [lookupNode, issued, canonical, ↓reduceIte] using available.resident entry rfl
+
+private theorem false_check_safe
+    (heap : InternedConstructorTemplates.State Symbol Guard) (value : Node)
+    (fuel handle : Nat) (before after : Core)
+    (safe : Safe before) (inside : 0 < before.counter)
+    (root : IsRoot before.representatives 0)
+    (decoded : lookupNode heap handle = some value)
+    (observed : Success (SourcePruningEnumerationRecursion.checkRepeated
+      heap fuel 0 handle []) before false after) : Safe after := by
+  by_cases boundary : MergedOrdinaryHeight.recursiveBoundary value = true
+  · simp only [SourcePruningEnumerationRecursion.checkRepeated, decoded,
+      boundary, ↓reduceIte] at observed
+    obtain ⟨selected, resolved, resolution, continued⟩ := (success_bind _ _ _ _ _).mp observed
+    obtain ⟨selectedSame, resolvedSafe, _counter, _protected⟩ :=
+      EnumerationDriver.representative_root fuel 0 selected before resolved safe inside root resolution
+    subst selected
+    obtain ⟨current, readAfter, reading, continued⟩ := (success_bind _ _ _ _ _).mp continued
+    obtain ⟨currentSame, readSame⟩ := (EnumerationDriver.get_success resolved readAfter current).mp reading
+    subst current
+    subst readAfter
+    by_cases seen : recursionKey handle [] ∈ resolved.recursionAncestry 0
+    · rw [ite_eq_left seen] at continued
+      obtain ⟨token, written, _writing, finished⟩ := (success_bind _ _ _ _ _).mp continued
+      cases token
+      have impossible := (success_pure true false written after).mp finished
+      cases impossible.1
+    · rw [ite_eq_right seen] at continued
+      obtain ⟨_same, rfl⟩ := (success_pure false false resolved after).mp continued
+      exact resolvedSafe
+  · have pureRead : Success (pure false) before false after := by
+      simpa only [SourcePruningEnumerationRecursion.checkRepeated, decoded,
+        ite_eq_right boundary] using observed
+    obtain ⟨_same, rfl⟩ := (success_pure false false before after).mp pureRead
+    exact safe
+
+private theorem entered_zero_observation
+    (heap : InternedConstructorTemplates.State Symbol Guard) (value : Node)
+    (fuel handle : Nat) (before after : Core)
+    (entry : Nat × Nat × List Suspended × Node)
+    (safe : Safe before) (inside : 0 < before.counter)
+    (root : IsRoot before.representatives 0)
+    (stored : before.values[0]? = some (.unenumerated (some handle) []))
+    (decoded : lookupNode heap handle = some value)
+    (observed : ExceptT.run (SourcePruningEnumerationEntry.enter heap fuel 0 before) =
+      [.ok (entry, after)]) :
+    entry = (0, handle, [], value) ∧ EnumerationDriver.RenderStable before after := by
+  have success : Success (SourcePruningEnumerationEntry.enter heap fuel 0) before entry after := by
+    unfold Success
+    rw [observed]
+    exact List.mem_cons_self
+  unfold SourcePruningEnumerationEntry.enter at success
+  obtain ⟨pending, readAfter, reading, continued⟩ := (success_bind _ _ _ _ _).mp success
+  obtain ⟨readSafe, readCounter, readProtection, readStored⟩ :=
+    EnumerationDriver.getValue_root fuel 0 before readAfter pending safe inside root reading
+  have pendingSame : pending = .unenumerated (some handle) [] :=
+    Option.some.inj (readStored.symm.trans (readProtection.value.trans stored))
+  subst pending
+  obtain ⟨target, resolved, resolution, continued⟩ := (success_bind _ _ _ _ _).mp continued
+  obtain ⟨targetSame, resolvedSafe, _counter, _protection⟩ :=
+    EnumerationDriver.representative_root fuel 0 target readAfter resolved readSafe
+      (by simpa only [readCounter] using inside) readProtection.root resolution
+  subst target
+  rw [decoded] at continued
+  obtain ⟨token, written, writing, finished⟩ := (success_bind _ _ _ _ _).mp continued
+  cases token
+  have shape := (EnumerationDriver.modify_success _ resolved written).mp writing
+  obtain ⟨entrySame, afterSame⟩ :=
+    (success_pure (0, handle, [], value) entry written after).mp finished
+  have readFrame := (getValue_frame fuel 0 before readAfter _ safe.1.total reading).1
+  have resolvedFrame := representative_frame fuel 0 0 readAfter resolved readSafe.1.total resolution
+  have wholeFrame := readFrame.trans resolvedFrame
+  refine ⟨entrySame, ?_⟩
+  rw [afterSame, shape]
+  refine ⟨EnumerationDriver.ancestry_safe resolved _ resolvedSafe,
+    wholeFrame.counter, wholeFrame.values, wholeFrame.obligations, ?_⟩
+  intro left right
+  simp only [UnionFind.SameClass, wholeFrame.reaches]
+

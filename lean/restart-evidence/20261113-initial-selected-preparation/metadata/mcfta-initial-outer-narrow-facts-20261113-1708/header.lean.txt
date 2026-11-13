@@ -1,0 +1,21 @@
+theorem initial_outer_narrow_facts
+    {Typing Key : Type}
+    [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)]
+    (lib : SourceSynthesisTypeSyntax.Library) (query : SourceSynthesisTypeSyntax.Query)
+    (signed : Int) (whole : SourceSynthesisFirstOrderConstruction.Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : InternedConstructorTemplates.Value Symbol Guard)
+    (heap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build
+      (SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+      InternedConstructorTemplates.empty = .done rootValue heap)
+    (metadata : SourcePruningRecordTypes.Metadata Typing)
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
+    (admits : Key → InternedConstructorTemplates.Value Symbol Guard → Bool)
+    (fuel : Nat) (result : InternedConstructorTemplates.Value Symbol Guard)
+    (after : InternedConstructorTemplates.State Symbol Guard)
+    (observed : SourcePruningOuterNarrow.narrow holeKey fits admits metadata
+      fuel 0 rootValue heap = .done result after) :
+    InternedNestedFacts.Facts after ∧
+      InternedProbeProvenance.Available after result ∧
+      SourceEqualityRequiredCache.Ordinary result
