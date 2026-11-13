@@ -1885,4 +1885,169 @@ private theorem eager_rows_complete_of_child
                     · exact (retained output fresh).post post
 end ActualRowsResources
 
+section ActualVisitorCongruence
+
+private theorem children_members_congr (left right : Visitor) (inputs : List (Node × List Suspended)) :
+    (∀ child bucket, (child, bucket) ∈ inputs → ∀ caller before queries done stopped,
+      left bucket child caller before queries done stopped = right bucket child caller before queries done stopped) →
+    ∀ done stopped caller before queries,
+      SourcePruningEnumerationSharedChildVisitors.visitChildren left done stopped inputs caller before queries =
+        SourcePruningEnumerationSharedChildVisitors.visitChildren right done stopped inputs caller before queries := by
+  induction inputs with
+  | nil => intro _ _ _ _ _ _; rfl
+  | cons input rest ih =>
+      rcases input with ⟨child, bucket⟩
+      intro same done stopped caller before queries
+      simp only [SourcePruningEnumerationSharedChildVisitors.visitChildren]
+      rw [same child bucket (by simp)]
+      apply congrArg (fun yes => right bucket child caller before queries yes
+        (fun observation candidate => stopped [] observation candidate))
+      funext fragment reached saved after
+      exact ih (fun value retained member => same value retained (List.mem_cons_of_mem _ member))
+        (fun fragments => done (fragment :: fragments))
+        (fun completed => stopped (fragment :: completed)) reached after saved
+
+private theorem scan_members_congr
+    (left right : EdgeValue Symbol Constraint → Caller (bits + 2) → Queries → Cached → Fold)
+    (before : Cached) (rows : List (EdgeValue Symbol Constraint))
+    (same : ∀ edge ∈ rows, ∀ caller queries, left edge caller queries before = right edge caller queries before)
+    (caller : Caller (bits + 2)) (queries : Queries) :
+    SourcePruningEnumerationSharedBranching.scan left before rows caller queries =
+      SourcePruningEnumerationSharedBranching.scan right before rows caller queries := by
+  induction rows generalizing caller queries with
+  | nil => rfl
+  | cons edge rest ih =>
+      simp only [SourcePruningEnumerationSharedBranching.scan, same edge List.mem_cons_self caller queries]
+      cases observed : right edge caller queries before with
+      | stopped processed outputs current => rfl
+      | complete processed outputs reached saved =>
+          simp only [ih (fun chosen member => same chosen (List.mem_cons_of_mem _ member)) reached saved]
+
+end ActualVisitorCongruence
+
+section ActualPreparedGuard
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+private theorem selected_guarded_eq
+    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (rows : List (EdgeValue Symbol Constraint)) (depth : Nat) (free : List InternedBinderProtocol.Reference)
+    (edge : EdgeValue Symbol Constraint) (selected : edge ∈ rows) (scs : List Suspended)
+    (caller : Caller (bits + 2)) (before : Cached) (queries : Queries)
+    (consume : SelectedEdge.Result (bits + 2) → Fold) :
+    SourcePruningEnumerationSharedChildVisitors.visitSelected
+      (fun bucket child current cache memos yes no =>
+        if _lower : MergedOrdinaryHeight.height child < MergedOrdinaryHeight.height (.node parentEntry rows depth free) then
+          SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty r n p h k edgesOf
+            bucket child current cache memos yes no
+        else SourcePruningEnumerationSharedChildVisitors.shallowVisit checkEmpty r n p h k
+          bucket child current cache memos yes no)
+      consume scs edge caller before queries =
+    SourcePruningEnumerationSharedChildVisitors.visitSelected
+      (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty r n p h k edgesOf)
+      consume scs edge caller before queries := by
+  cases prepared : SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs edge before with
+  | none => simp only [SourcePruningEnumerationSharedChildVisitors.visitSelected, prepared]
+  | some results =>
+      cases results with
+      | nil => simp only [SourcePruningEnumerationSharedChildVisitors.visitSelected, prepared]
+      | cons first rest =>
+          cases rest with
+          | cons second rest => simp only [SourcePruningEnumerationSharedChildVisitors.visitSelected, prepared]
+          | nil =>
+              rcases first with ⟨⟨symbol, staged, residual⟩, middle⟩
+              simp only [SourcePruningEnumerationSharedChildVisitors.visitSelected, prepared]
+              apply children_members_congr
+              intro child bucket member current cache memos yes no
+              obtain ⟨_tries, _projected, _inputs, lower⟩ := SourcePruningEnumerationSharedEagerChildren.prepared_child_lt
+                caller.checked.native.machine.heap parentEntry rows depth free edge selected scs before middle
+                symbol staged residual prepared child bucket member
+              exact dite_eq_left lower
+
+end ActualPreparedGuard
+
+section ActualHeightResources
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+private theorem eager_child_height_complete
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (captured : InternedConstructorTemplates.State Symbol Constraint) (limit own height : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula) :
+    EagerChildComplete (Typing := Typing) (bits := bits) checkEmpty edgesOf captured limit own height formulas solver := by
+  induction height with
+  | zero => exact eager_child_height_zero_complete checkEmpty edgesOf captured limit own formulas solver
+  | succ height ih =>
+      intro inventory caller memos metadata before seed bound ceiling bucket incoming uv continuation admitted done stopped
+        packet fits known available kept closed bounded pending mass bucketBound ranked shapes selectionMembers selectionLength
+        reserved growth consumers
+      by_cases ordinary : SourcePruningEnumerationSharedEagerChildren.ordinaryNonterminal bucket incoming = true
+      · cases incoming with
+        | empty => simp [SourcePruningEnumerationSharedEagerChildren.ordinaryNonterminal] at ordinary
+        | reference name => simp [SourcePruningEnumerationSharedEagerChildren.ordinaryNonterminal] at ordinary
+        | union entry members depth free => simp [SourcePruningEnumerationSharedEagerChildren.ordinaryNonterminal] at ordinary
+        | mu entry body depth payload => simp [SourcePruningEnumerationSharedEagerChildren.ordinaryNonterminal] at ordinary
+        | node entry rows depth free =>
+            let first := fallbackPlan bound ceiling continuation seed
+            have initial := fallbackPlan_ge bound ceiling continuation growth seed
+            have firstFits : Fits first.2 caller.checked := fits.mono initial.1
+            have firstKnown : Heap (fun guard => guard ∈ first.1) caller.checked.native.machine.heap := by
+              intro key edge found
+              exact initial.2 (known key edge found)
+            have alternativesLength : (edgesOf (.node entry rows depth free)).length ≤ limit :=
+              Nat.le_trans (selectionLength entry rows depth free) (shapes entry rows depth free available).1
+            have rowsComplete := eager_rows_complete_of_child (Typing := Typing) (bits := bits)
+              checkEmpty edgesOf captured limit own height formulas solver ih limit
+            obtain ⟨fuel, outcome, running, resources⟩ := rowsComplete inventory caller memos metadata before first
+              bound ceiling bucket uv continuation admitted done stopped packet firstFits firstKnown kept mass bucketBound
+              entry rows depth free available closed ranked bounded pending (edgesOf (.node entry rows depth free))
+              alternativesLength (selectionMembers entry rows depth free) shapes selectionMembers selectionLength reserved.2 growth consumers
+            refine ⟨fuel, outcome, ?_, resources⟩
+            intro extra
+            let work := fuel + extra
+            let full : EdgeValue Symbol Constraint → Caller (bits + 2) → Queries → Cached → Fold :=
+              fun edge reached saved cached => SourcePruningEnumerationSharedChildVisitors.visitSelected
+                (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty work work work work work edgesOf)
+                (SourcePruningEnumerationSharedEagerChildren.consumeSelected (done work) reached saved)
+                bucket edge reached cached saved
+            let guarded : EdgeValue Symbol Constraint → Caller (bits + 2) → Queries → Cached → Fold :=
+              fun edge reached saved cached => SourcePruningEnumerationSharedChildVisitors.visitSelected
+                (fun inherited child current cache memos yes no =>
+                  if _lower : MergedOrdinaryHeight.height child < MergedOrdinaryHeight.height (.node entry rows depth free) then
+                    SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty work work work work work edgesOf
+                      inherited child current cache memos yes no
+                  else SourcePruningEnumerationSharedChildVisitors.shallowVisit checkEmpty work work work work work
+                    inherited child current cache memos yes no)
+                (SourcePruningEnumerationSharedEagerChildren.consumeSelected (done work) reached saved)
+                bucket edge reached cached saved
+            have same : SourcePruningEnumerationSharedBranching.scan guarded before
+                (edgesOf (.node entry rows depth free)) caller memos.query =
+                SourcePruningEnumerationSharedBranching.scan full before
+                  (edgesOf (.node entry rows depth free)) caller memos.query := by
+              apply scan_members_congr
+              intro edge member reached saved
+              exact selected_guarded_eq checkEmpty work work work work work edgesOf entry rows depth free
+                edge (selectionMembers entry rows depth free edge member) bucket reached before saved
+                (SourcePruningEnumerationSharedEagerChildren.consumeSelected (done work) reached saved)
+            have sourceRun := SourcePruningEnumerationSharedEagerChildren.eagerChild_ordinary checkEmpty
+              work work work work work edgesOf bucket (.node entry rows depth free) caller before memos.query
+              (done work) (stopped work) ordinary
+            exact sourceRun.trans (same.trans (running extra))
+      · have fallback : SourcePruningEnumerationSharedEagerChildren.ordinaryNonterminal bucket incoming = false := by
+          cases classified : SourcePruningEnumerationSharedEagerChildren.ordinaryNonterminal bucket incoming with
+          | false => rfl
+          | true => exact (ordinary classified).elim
+        obtain ⟨fuel, outcome, running, resources⟩ := eager_fallback_resources seed bound ceiling continuation admitted
+          formulas solver inventory caller memos metadata before checkEmpty edgesOf bucket incoming uv done stopped packet
+          bounded pending (kept.available incoming available) closed fits known mass bucketBound
+          (nodeReserved_fallback bits limit own (height + 1) bound ceiling continuation admitted seed reserved) fallback
+          (fun fragment reached saved after data fitted supported afterMass accepted =>
+            consumers.1 fragment reached saved after data (advance seed (bound + 1)) (ceiling + bound)
+              fitted supported afterMass accepted)
+          (fun reached saved after outer waiting next final post query fitted supported accepted =>
+            consumers.2 reached saved after outer waiting next final post query (advance seed (bound + 1)) (ceiling + bound)
+              fitted supported accepted)
+        have included := fallbackPlan_le_nodePlan limit own (height + 1) bound ceiling continuation growth seed
+        exact ⟨fuel, outcome, running, resources.mono included.1 included.2⟩
+end ActualHeightResources
+
 end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
