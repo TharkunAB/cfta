@@ -1,3 +1,63 @@
+## Current observations: finite-type source probes (2026-11-13 08:25 CET)
+
+The FULL formalization goal stays ACTIVE. Pushes to formalize are authorized.
+Main and formalize were remote-verified at 08:18 CET: e53852064d3ef5a2eafec47d754c27504b11de5f
+and 9318e653ebca99913f307a416b24aef0668a3678. The checked public Lean statement
+is unchanged: original-input fixed-depth eager execution has one finite common
+work bound, the same all-larger-budget outcome, full resources, and stable
+partial Program readback for each same output. This does not construct a finite
+Type assignment or establish original-library/query typing.
+
+Three actual FirstOrder source cases now give finite runtime observations.
+`sink (bound bound)` and `sink (s i i)` are absent after BOTH public and separate
+typed streams exhaust. `sink (s k k)` and polymorphic `i i` occur. BOUND scans
+1/1 results; SKI scans 451/2551; POLY finds its candidate at 1/1 and stops without
+an exhaustion claim. Each case exits 0 without timeout. Independent GHC controls
+accept both positive forms and reject both negative forms for actual type errors.
+All three reduced roots have reachesConstrainedMu=False. No flag-positive path,
+general model theorem, new public law, or Haskell defect is established.
+
+Reproduction, exact temporary sources, source hashes, commands, complete logs,
+and the raw/reduced recursive-guard distinction are in:
+lean/restart-evidence/20261113-source-finite-type-probes/README.md
+and observations.json. The packet is source and small metadata only. Loader
+failures precede successful runs and are not reported as CFTA results. Exact
+Cabal package IDs fix exposed-text ambiguity; matching Nix zlib/gmp paths fix
+the child loader. No production Haskell/Cabal or test-suite file changes.
+There is no Haskell fix to hand to an external agent in this checkpoint.
+Every future Haskell fix must still be recorded in FINDINGS. External Liquid
+repeated-name/refinement work remains owned by claude-gondolin. Checked Liquid
+contracts can support implementation proofs; unchecked assumptions do not
+become Lean theorems. Do not duplicate that work.
+
+Next: carry original isolated-boundary markers through the SAME eager worker.
+Outside the live tree, finalizer6652 and concrete property/literal6680 now pass
+strict Lean checks. The latter SHA is 0461de123ab8c485b8326f4e674aace8bb36789d25e677f57c4af32d12ab3657.
+Its raw6680 failed only because two new doc comments preceded omit...in.
+The corrected comments follow omit...in; declarations and proof bodies stay
+exact. Raw source and failure receipts remain in the strict hub. NEW private
+resume alias and zero6752 pass at 08:26 CET, SHA
+9d57568f73dc733094156e639cf0ff05691d754b970095dd1a978d1ad7fd6ef1.
+The zero proof calls the old producer once and keeps its exact witnesses.
+Next: the recorded callback, then positive recursion-depth marker induction.
+Whole marker preservation and positive output-model construction remain OPEN.
+No source module, Audit import, public header or published proof changed here.
+
+Keep the original full scope: genuine partial-Type models and original typing,
+adequate depth and completeness, default reduction/LPO/refolding and streams,
+order/multiplicity/lazy demand, sizes/counts/weights/training, both rank/unrank
+inverse laws, host-capacity and compiled-Haskell correspondence. Keep the
+optimized interned core and older constructor/equality targets.
+
+Root is the sole compiler/Git publisher. Use ONE serial Nix heavy job, 4 GiB
+max/high, swap 0, one Lean thread. Preserve sources, counterexamples, repairs,
+marked drafts and .hypha. PRIMARY is 43 percent at 08:19 CET; /tmp has 164.09 GiB
+free. Refresh usage within 15 minutes. If PRIMARY exceeds 80 percent, stop
+workers, save a full handoff, pause the goal and notify Matti. Continue after
+publication. The previous notes remain an exact byte suffix.
+
+---
+
 ## Current checkpoint: original-input eager Program outputs (2026-11-13 07:24 CET)
 
 The FULL library formalization goal stays ACTIVE. Pushes to formalize are

@@ -1,0 +1,714 @@
+{
+  "classification": "FINITE_OBSERVATIONS_NO_COUNTEREXAMPLE_NO_GENERAL_SOUNDNESS_PROOF",
+  "archived_at": "2026-11-13T08:23:42.095063+01:00",
+  "proof_checkpoint": "9318e653ebca99913f307a416b24aef0668a3678",
+  "main": "e53852064d3ef5a2eafec47d754c27504b11de5f",
+  "source_hashes": {
+    "cfta-generator/src/Data/CFTA/Gen/Synthesis.hs": "abbd34f76d87164cdedfc63bd96fe771efe16686711ff723485982de752a2c0d",
+    "cfta/src/Data/CFTA/Enumeration.hs": "26236dc68be7019b28c10d4b42d1bbecf89f9145c41bad7977fc177332b597f8",
+    "cfta/src/Data/CFTA/Term.hs": "9201ca9e5f7a7a5dc89b3737b71e406c2245cec2a36aa68ae32fb3eef8572e3f",
+    "cfta/src/Data/CFTA/Constraint.hs": "dee73d12be74af16c54f1c6856a3a60b1c1ae612ad8a15d1665210e2c63641f3",
+    "cfta/src/Data/CFTA/Symbol.hs": "31983078475d136d2e69f5d94461f56f7c2fa3b3822144be1eee324ba0637f02",
+    "cabal.project": "b45ebca653068a8f58383887846eee2306df274c825f0fabfe5288c73ae3116a"
+  },
+  "diagnostic_sources": {
+    "Probe.hs": {
+      "sha256": "74d27515297a6175c6e61017ba3b866051e8ce449e0984d1c949c17aa0fe8a75",
+      "text": "{-# LANGUAGE BangPatterns #-}\n{-# LANGUAGE OverloadedStrings #-}\n\n-- | Probe the current public source API and its default typed-run route.\nmodule Main (main) where\n\nimport Control.Monad (when)\nimport Data.CFTA.Constraint (Constraint)\nimport qualified Data.CFTA.Enumeration as E\nimport Data.CFTA.Gen.Synthesis\n    ( Encoding (FirstOrder)\n    , Library (..)\n    , Program (..)\n    , Query (..)\n    , Space (..)\n    , Type (..)\n    , rawSearchSpace\n    , reduceWithOrder\n    , renderProgram\n    , solutionsOfSize\n    , (~>)\n    )\nimport Data.CFTA.Symbol (Symbol, symbolText)\nimport Data.CFTA.Term (Term)\nimport qualified Data.CFTA.Term as Term\nimport Data.Text (Text)\nimport System.Environment (getArgs)\nimport System.Exit (die)\nimport System.IO (BufferMode (LineBuffering), hFlush, hSetBuffering, stdout)\n\n-- | A source AST and its independent finite-HM membership expectation.\ndata Candidate = Candidate\n    { candidateName :: String\n    , candidateProgram :: Program\n    , finiteHMExpected :: Bool\n    }\n\n-- | One library, query, source size, and finite list of candidate ASTs.\ndata ProbeCase = ProbeCase\n    { caseName :: String\n    , caseLibrary :: Library\n    , caseQuery :: Query\n    , caseSize :: Int\n    , caseCandidates :: [Candidate]\n    }\n\n-- | The observed prefix count, exhaustion flag, and matched candidate ASTs.\ndata Summary = Summary !Integer !Bool [Program]\n\n-- | Build singleton component groups with the ordinary first-order encoding.\nmkLibrary :: [(Text, Type)] -> Library\nmkLibrary entries = Library [(name, typ, [name]) | (name, typ) <- entries] [] [] FirstOrder\n\n-- | Select one of the three source-generated cases.\nlookupCase :: String -> Maybe ProbeCase\nlookupCase name = case name of\n    \"BOUND\" -> Just $ ProbeCase name boundLibrary boundQuery 3\n        [Candidate \"bound_self_application\" (App (Var \"sink\") (App (Var \"bound\") (Var \"bound\"))) False]\n    \"SKI\" -> Just $ ProbeCase name skiLibrary (Query [] bool) 4\n        [ Candidate \"ski_self_application\" (App (Var \"sink\") (App (App (Var \"s\") (Var \"i\")) (Var \"i\"))) False\n        , Candidate \"ski_finite_control\" (App (Var \"sink\") (App (App (Var \"s\") (Var \"k\")) (Var \"k\"))) True\n        ]\n    \"POLY\" -> Just $ ProbeCase name (mkLibrary [(\"i\", a ~> a)]) (Query [] (bool ~> bool)) 2\n        [Candidate \"polymorphic_identity_control\" (App (Var \"i\") (Var \"i\")) True]\n    _ -> Nothing\n  where\n    a = TVar \"a\"\n    b = TVar \"b\"\n    c = TVar \"c\"\n    bool = TCons \"Bool\" []\n    sinkType = a ~> bool\n    boundLibrary = mkLibrary [(\"sink\", sinkType)]\n    boundQuery = Query [(\"bound\", a ~> b)] bool\n    skiLibrary = mkLibrary\n        [ (\"sink\", sinkType)\n        , (\"s\", (a ~> b ~> c) ~> (a ~> b) ~> a ~> c)\n        , (\"i\", a ~> a)\n        , (\"k\", a ~> b ~> a)\n        ]\n\n-- | Decode exactly as Synthesis.toProgram at source lines 963-966.\n-- This function only observes the typed run. It does not run enumeration.\nprogramOfTypedTerm :: Term Symbol -> Program\nprogramOfTypedTerm term = case (Term.rootLabel term, Term.subForest term) of\n    (\"app\", [_, _, function, argument]) -> App (programOfTypedTerm function) (programOfTypedTerm argument)\n    (\"filter\", [_, candidates]) -> programOfTypedTerm candidates\n    (symbol, _) -> Var (symbolText symbol)\n\n-- | Flush phase progress before source construction or enumeration starts.\nprogress :: String -> IO ()\nprogress message = putStrLn message >> hFlush stdout\n\n-- | Print one bounded value and state whether its encoding is complete.\nprintBounded :: (Show a) => String -> a -> IO ()\nprintBounded label value = do\n    let limit = 16384\n        prefix = take (limit + 1) (show value)\n    putStrLn $ label <> \".show_complete=\" <> show (length prefix <= limit)\n    putStrLn $ label <> \"=\" <> take limit prefix\n\n-- | Scan each public program at most once. Retain only candidate ASTs.\nscanPublic :: [Candidate] -> [Program] -> IO Summary\nscanPublic candidates = go 0 []\n  where\n    go !count !found programs\n        | all ((`elem` found) . candidateProgram) candidates = pure $ Summary count False found\n        | otherwise = case programs of\n            [] -> pure $ Summary count True found\n            program : rest -> do\n                let matching = filter ((== program) . candidateProgram) candidates\n                    firstMatch = not (null matching) && program `notElem` found\n                    !newFound = if firstMatch then program : found else found\n                when firstMatch $ do\n                    putStrLn $ \"public.match=\" <> show (map candidateName matching)\n                    printBounded \"public.ast\" program\n                    hFlush stdout\n                go (count + 1) newFound rest\n\n-- | Scan one default typed-run stream and retain its exact first matched pairs.\n-- At most one pair per candidate is printed. Oversized output is marked.\nscanTyped :: [Candidate] -> [(Term Symbol, [(Constraint, Term Symbol)])] -> IO Summary\nscanTyped candidates = go 0 []\n  where\n    go !count !found runs\n        | all ((`elem` found) . candidateProgram) candidates = pure $ Summary count False found\n        | otherwise = case runs of\n            [] -> pure $ Summary count True found\n            run@(term, _) : rest -> do\n                let program = programOfTypedTerm term\n                    matching = filter ((== program) . candidateProgram) candidates\n                    firstMatch = not (null matching) && program `notElem` found\n                    !newFound = if firstMatch then program : found else found\n                when firstMatch $ do\n                    putStrLn $ \"typed.match=\" <> show (map candidateName matching)\n                    printBounded \"typed.ast\" program\n                    printBounded \"typed.same_run_term_and_residuals\" run\n                    hFlush stdout\n                go (count + 1) newFound rest\n\n-- | Report presence, or absence only after the observed stream is exhausted.\nprintSummary :: String -> [Candidate] -> Summary -> IO ()\nprintSummary phase candidates (Summary count exhausted found) = do\n    putStrLn $ phase <> \".scanned=\" <> show count\n    putStrLn $ phase <> \".exhausted=\" <> show exhausted\n    mapM_ report candidates\n    hFlush stdout\n  where\n    report candidate = do\n        let present = candidateProgram candidate `elem` found\n            status\n                | present = \"present\"\n                | exhausted = \"absent_after_exhaustion\"\n                | otherwise = \"unobserved\"\n        putStrLn $ phase <> \".candidate=\" <> show (candidateName candidate)\n            <> \" status=\" <> status\n            <> \" finite_hm_expected=\" <> show (finiteHMExpected candidate)\n\n-- | Evaluate the public and diagnostic routes once each, as separate runs.\nrunCase :: ProbeCase -> IO ()\nrunCase config = do\n    progress $ \"case=\" <> caseName config\n    putStrLn $ \"source_size=\" <> show (caseSize config)\n    printBounded \"library\" (caseLibrary config)\n    printBounded \"query\" (caseQuery config)\n    mapM_ (printBounded \"candidate.ast\" . candidateProgram) (caseCandidates config)\n    mapM_ (printBounded \"candidate.source\" . renderProgram . candidateProgram) (caseCandidates config)\n    progress \"phase=public.solutionsOfSize.begin\"\n    publicSummary <- scanPublic (caseCandidates config) $\n        solutionsOfSize (caseLibrary config) (caseQuery config) (caseSize config)\n    printSummary \"public\" (caseCandidates config) publicSummary\n    progress \"phase=typed.default.begin; evaluation=separate_from_public\"\n    let space = reduceWithOrder $ rawSearchSpace (caseLibrary config) (caseQuery config) (caseSize config)\n    printBounded \"typed.reduced_root_reachesConstrainedMu\" (E.reachesConstrainedMu (spaceNode space))\n    progress \"phase=typed.default.root_ready\"\n    typedSummary <- scanTyped (caseCandidates config) $\n        E.runsBy (spaceOrder space) \"Mu\" (spaceNode space)\n    printSummary \"typed\" (caseCandidates config) typedSummary\n    progress \"case_complete=True; observations_only=True; partial_type_scope=retained\"\n\n-- | Run exactly one named case in this process.\nmain :: IO ()\nmain = do\n    hSetBuffering stdout LineBuffering\n    args <- getArgs\n    case args of\n        [name] | Just config <- lookupCase name -> runCase config\n        _ -> die \"Usage: probe BOUND|SKI|POLY\"\n"
+    },
+    "Good.hs": {
+      "sha256": "d620274c21dd819f16f94f9d961d17131078f5f63ee411baf402c201a784ca52",
+      "text": "-- | Ordinary finite-type Haskell controls. This module does not import CFTA.\nmodule Good where\n\n-- | The ordinary S combinator.\ns :: (a -> b -> c) -> (a -> b) -> a -> c\ns f g x = f x (g x)\n\n-- | The polymorphic identity.\ni :: a -> a\ni x = x\n\n-- | The ordinary K combinator.\nk :: a -> b -> a\nk x _ = x\n\n-- | Discard a value of any monotype.\nsink :: a -> Bool\nsink _ = True\n\n-- | SKK has a finite type. Instantiate its argument type to Bool.\ngoodSKI :: Bool\ngoodSKI = sink (s k k :: Bool -> Bool)\n\n-- | Two uses of polymorphic identity have separate finite instances.\ngoodPoly :: Bool -> Bool\ngoodPoly = i i\n"
+    },
+    "BadSKI.hs": {
+      "sha256": "200f0eafb4051e514401e0d15f8d05b2a08052875977d6050ccdaa057a896632",
+      "text": "-- | Expected ordinary GHC type error: SII requires an infinite type.\nmodule BadSKI where\n\nimport Good (i, s, sink)\n\n-- | SII cannot have a finite ordinary Haskell type.\nbadSKI :: Bool\nbadSKI = sink (s i i)\n"
+    },
+    "BadBound.hs": {
+      "sha256": "0d80e307e2124755678cd5adad89855e7776e5835f7a943131a42295e5238822",
+      "text": "-- | Expected ordinary GHC type error: the same bound variable applies to itself.\nmodule BadBound where\n\nimport Good (sink)\n\n-- | The query gives bound one rigid monomorphic function type.\nbadBound :: (a -> b) -> Bool\nbadBound bound = sink (bound bound)\n"
+    }
+  },
+  "observations": [
+    {
+      "case": "BOUND",
+      "candidate_statuses": {
+        "bound_self_application": "absent_after_exhaustion"
+      },
+      "public_scanned": 1,
+      "separate_typed_scanned": 1,
+      "both_exhausted": true,
+      "root_reachesConstrainedMu": false,
+      "shown_values_complete": true
+    },
+    {
+      "case": "SKI",
+      "candidate_statuses": {
+        "ski_self_application": "absent_after_exhaustion",
+        "ski_finite_control": "present"
+      },
+      "public_scanned": 451,
+      "separate_typed_scanned": 2551,
+      "both_exhausted": true,
+      "root_reachesConstrainedMu": false,
+      "shown_values_complete": true
+    },
+    {
+      "case": "POLY",
+      "candidate_statuses": {
+        "polymorphic_identity_control": "present"
+      },
+      "public_scanned": 1,
+      "separate_typed_scanned": 1,
+      "both_exhausted": false,
+      "root_reachesConstrainedMu": false,
+      "shown_values_complete": true
+    }
+  ],
+  "runtime_reports": {
+    "runtime-check.json": {
+      "started": "2026-11-13T07:57:35.284488+01:00",
+      "head": "9318e653ebca99913f307a416b24aef0668a3678",
+      "source_pins": {
+        "status": "UNCOMPILED_UNRUN",
+        "created": "2026-11-13T06:55:20.644771+00:00",
+        "files": {
+          "BadBound.hs": {
+            "sha256": "0d80e307e2124755678cd5adad89855e7776e5835f7a943131a42295e5238822",
+            "lines": 8
+          },
+          "BadSKI.hs": {
+            "sha256": "200f0eafb4051e514401e0d15f8d05b2a08052875977d6050ccdaa057a896632",
+            "lines": 8
+          },
+          "COMMANDS.md": {
+            "sha256": "7a42cb7beb0e3f442544e5072a4eac855dae6a5292cdc19a2cf14e535bd7a728",
+            "lines": 96
+          },
+          "Good.hs": {
+            "sha256": "d620274c21dd819f16f94f9d961d17131078f5f63ee411baf402c201a784ca52",
+            "lines": 26
+          },
+          "Probe.hs": {
+            "sha256": "74d27515297a6175c6e61017ba3b866051e8ce449e0984d1c949c17aa0fe8a75",
+            "lines": 187
+          }
+        },
+        "source_hashes": {
+          "cfta-generator/src/Data/CFTA/Gen/Synthesis.hs": "abbd34f76d87164cdedfc63bd96fe771efe16686711ff723485982de752a2c0d",
+          "cfta/src/Data/CFTA/Enumeration.hs": "26236dc68be7019b28c10d4b42d1bbecf89f9145c41bad7977fc177332b597f8",
+          "cfta/src/Data/CFTA/Term.hs": "9201ca9e5f7a7a5dc89b3737b71e406c2245cec2a36aa68ae32fb3eef8572e3f",
+          "cfta/src/Data/CFTA/Constraint.hs": "dee73d12be74af16c54f1c6856a3a60b1c1ae612ad8a15d1665210e2c63641f3",
+          "cfta/src/Data/CFTA/Symbol.hs": "31983078475d136d2e69f5d94461f56f7c2fa3b3822144be1eee324ba0637f02",
+          "cabal.project": "b45ebca653068a8f58383887846eee2306df274c825f0fabfe5288c73ae3116a"
+        },
+        "case_count": 3,
+        "candidate_ast_count": 4,
+        "public_stream_evaluations_per_case": 1,
+        "separate_typed_stream_evaluations_per_case": 1,
+        "diagnostic_show_character_limit": 16384,
+        "runtime_checks": 0,
+        "compiler_checks": 0,
+        "repository_changes": 0,
+        "result_classification": "PENDING_ROOT"
+      },
+      "stages": [
+        {
+          "phase": "compiler-version",
+          "argv": [
+            "ghc",
+            "--version"
+          ],
+          "exit": 0,
+          "timeout": false,
+          "seconds": 0.06,
+          "log": "/tmp/mcfta-source-finite-type-runtime-20261113-0757/compiler-version.log",
+          "log_bytes": 64
+        },
+        {
+          "phase": "current-libraries",
+          "argv": [
+            "cabal",
+            "build",
+            "cfta:lib:cfta",
+            "cfta-generator:lib:cfta-generator",
+            "-j1"
+          ],
+          "exit": 0,
+          "timeout": false,
+          "seconds": 0.72,
+          "log": "/tmp/mcfta-source-finite-type-runtime-20261113-0757/current-libraries.log",
+          "log_bytes": 11
+        },
+        {
+          "phase": "probe-compile",
+          "argv": [
+            "cabal",
+            "exec",
+            "--",
+            "ghc",
+            "-O0",
+            "-Wall",
+            "-j1",
+            "-threaded",
+            "-rtsopts",
+            "-package=cfta",
+            "-package=cfta-generator",
+            "-package=text",
+            "-outputdir",
+            "/tmp/mcfta-source-finite-type-runtime-20261113-0757/ghc",
+            "-o",
+            "/tmp/mcfta-source-finite-type-runtime-20261113-0757/probe",
+            "/tmp/mcfta-source-finite-type-runtime-20261113-0757/Probe.hs"
+          ],
+          "exit": 1,
+          "timeout": false,
+          "seconds": 1.32,
+          "log": "/tmp/mcfta-source-finite-type-runtime-20261113-0757/probe-compile.log",
+          "log_bytes": 552
+        },
+        {
+          "phase": "typecheck-Good",
+          "argv": [
+            "ghc",
+            "-O0",
+            "-Wall",
+            "-fno-code",
+            "-fforce-recomp",
+            "-i/tmp/mcfta-source-finite-type-runtime-20261113-0757",
+            "-outputdir",
+            "/tmp/mcfta-source-finite-type-runtime-20261113-0757/control-Good",
+            "/tmp/mcfta-source-finite-type-runtime-20261113-0757/Good.hs"
+          ],
+          "exit": 0,
+          "timeout": false,
+          "seconds": 0.26,
+          "log": "/tmp/mcfta-source-finite-type-runtime-20261113-0757/typecheck-Good.log",
+          "log_bytes": 200
+        },
+        {
+          "phase": "typecheck-BadSKI",
+          "argv": [
+            "ghc",
+            "-O0",
+            "-Wall",
+            "-fno-code",
+            "-fforce-recomp",
+            "-i/tmp/mcfta-source-finite-type-runtime-20261113-0757",
+            "-outputdir",
+            "/tmp/mcfta-source-finite-type-runtime-20261113-0757/control-BadSKI",
+            "/tmp/mcfta-source-finite-type-runtime-20261113-0757/BadSKI.hs"
+          ],
+          "exit": 1,
+          "timeout": false,
+          "seconds": 0.26,
+          "log": "/tmp/mcfta-source-finite-type-runtime-20261113-0757/typecheck-BadSKI.log",
+          "log_bytes": 743
+        },
+        {
+          "phase": "typecheck-BadBound",
+          "argv": [
+            "ghc",
+            "-O0",
+            "-Wall",
+            "-fno-code",
+            "-fforce-recomp",
+            "-i/tmp/mcfta-source-finite-type-runtime-20261113-0757",
+            "-outputdir",
+            "/tmp/mcfta-source-finite-type-runtime-20261113-0757/control-BadBound",
+            "/tmp/mcfta-source-finite-type-runtime-20261113-0757/BadBound.hs"
+          ],
+          "exit": 1,
+          "timeout": false,
+          "seconds": 0.26,
+          "log": "/tmp/mcfta-source-finite-type-runtime-20261113-0757/typecheck-BadBound.log",
+          "log_bytes": 1227
+        }
+      ],
+      "observations_only": true,
+      "limits": {
+        "memory.max": "4294967296",
+        "memory.high": "4294967296",
+        "memory.swap.max": "0"
+      },
+      "finished": "2026-11-13T07:57:38.182986+01:00",
+      "source_unchanged": true
+    },
+    "runtime-check-pinned.json": {
+      "started": "2026-11-13T08:00:34.065924+01:00",
+      "observations_only": true,
+      "package_ids": [
+        "cfta-0.1.0.0-inplace",
+        "cfta-generator-0.1.0.0-inplace",
+        "text-2.1.3-2a27"
+      ],
+      "stages": [
+        {
+          "phase": "probe-compile-pinned",
+          "argv": [
+            "cabal",
+            "exec",
+            "--",
+            "ghc",
+            "-hide-all-packages",
+            "-package",
+            "base",
+            "-package-id",
+            "cfta-0.1.0.0-inplace",
+            "-package-id",
+            "cfta-generator-0.1.0.0-inplace",
+            "-package-id",
+            "text-2.1.3-2a27",
+            "-O0",
+            "-Wall",
+            "-j1",
+            "-threaded",
+            "-rtsopts",
+            "-outputdir",
+            "/tmp/mcfta-source-finite-type-runtime-20261113-0757/ghc",
+            "-o",
+            "/tmp/mcfta-source-finite-type-runtime-20261113-0757/probe",
+            "/tmp/mcfta-source-finite-type-runtime-20261113-0757/Probe.hs"
+          ],
+          "exit": 0,
+          "timeout": false,
+          "seconds": 3.07,
+          "log": "/tmp/mcfta-source-finite-type-runtime-20261113-0757/probe-compile-pinned.log",
+          "log_bytes": 373
+        },
+        {
+          "phase": "case-BOUND",
+          "argv": [
+            "timeout",
+            "--kill-after=3s",
+            "60s",
+            "/tmp/mcfta-source-finite-type-runtime-20261113-0757/probe",
+            "BOUND",
+            "+RTS",
+            "-N1",
+            "-M3072m",
+            "-RTS"
+          ],
+          "exit": 127,
+          "timeout": false,
+          "seconds": 0.01,
+          "log": "/tmp/mcfta-source-finite-type-runtime-20261113-0757/case-BOUND.log",
+          "log_bytes": 166
+        },
+        {
+          "phase": "case-SKI",
+          "argv": [
+            "timeout",
+            "--kill-after=3s",
+            "60s",
+            "/tmp/mcfta-source-finite-type-runtime-20261113-0757/probe",
+            "SKI",
+            "+RTS",
+            "-N1",
+            "-M3072m",
+            "-RTS"
+          ],
+          "exit": 127,
+          "timeout": false,
+          "seconds": 0.01,
+          "log": "/tmp/mcfta-source-finite-type-runtime-20261113-0757/case-SKI.log",
+          "log_bytes": 166
+        },
+        {
+          "phase": "case-POLY",
+          "argv": [
+            "timeout",
+            "--kill-after=3s",
+            "60s",
+            "/tmp/mcfta-source-finite-type-runtime-20261113-0757/probe",
+            "POLY",
+            "+RTS",
+            "-N1",
+            "-M3072m",
+            "-RTS"
+          ],
+          "exit": 127,
+          "timeout": false,
+          "seconds": 0.01,
+          "log": "/tmp/mcfta-source-finite-type-runtime-20261113-0757/case-POLY.log",
+          "log_bytes": 166
+        }
+      ],
+      "prior_controls": "runtime-check.json",
+      "source_pins": {
+        "status": "UNCOMPILED_UNRUN",
+        "created": "2026-11-13T06:55:20.644771+00:00",
+        "files": {
+          "BadBound.hs": {
+            "sha256": "0d80e307e2124755678cd5adad89855e7776e5835f7a943131a42295e5238822",
+            "lines": 8
+          },
+          "BadSKI.hs": {
+            "sha256": "200f0eafb4051e514401e0d15f8d05b2a08052875977d6050ccdaa057a896632",
+            "lines": 8
+          },
+          "COMMANDS.md": {
+            "sha256": "7a42cb7beb0e3f442544e5072a4eac855dae6a5292cdc19a2cf14e535bd7a728",
+            "lines": 96
+          },
+          "Good.hs": {
+            "sha256": "d620274c21dd819f16f94f9d961d17131078f5f63ee411baf402c201a784ca52",
+            "lines": 26
+          },
+          "Probe.hs": {
+            "sha256": "74d27515297a6175c6e61017ba3b866051e8ce449e0984d1c949c17aa0fe8a75",
+            "lines": 187
+          }
+        },
+        "source_hashes": {
+          "cfta-generator/src/Data/CFTA/Gen/Synthesis.hs": "abbd34f76d87164cdedfc63bd96fe771efe16686711ff723485982de752a2c0d",
+          "cfta/src/Data/CFTA/Enumeration.hs": "26236dc68be7019b28c10d4b42d1bbecf89f9145c41bad7977fc177332b597f8",
+          "cfta/src/Data/CFTA/Term.hs": "9201ca9e5f7a7a5dc89b3737b71e406c2245cec2a36aa68ae32fb3eef8572e3f",
+          "cfta/src/Data/CFTA/Constraint.hs": "dee73d12be74af16c54f1c6856a3a60b1c1ae612ad8a15d1665210e2c63641f3",
+          "cfta/src/Data/CFTA/Symbol.hs": "31983078475d136d2e69f5d94461f56f7c2fa3b3822144be1eee324ba0637f02",
+          "cabal.project": "b45ebca653068a8f58383887846eee2306df274c825f0fabfe5288c73ae3116a"
+        },
+        "case_count": 3,
+        "candidate_ast_count": 4,
+        "public_stream_evaluations_per_case": 1,
+        "separate_typed_stream_evaluations_per_case": 1,
+        "diagnostic_show_character_limit": 16384,
+        "runtime_checks": 0,
+        "compiler_checks": 0,
+        "repository_changes": 0,
+        "result_classification": "PENDING_ROOT"
+      },
+      "limits": {
+        "memory.max": "4294967296",
+        "memory.high": "4294967296",
+        "memory.swap.max": "0"
+      },
+      "finished": "2026-11-13T08:00:37.163451+01:00",
+      "source_unchanged": true
+    },
+    "runtime-check-host-linker.json": {
+      "started": "2026-11-13T08:03:56.425309+01:00",
+      "observations_only": true,
+      "package_ids": [
+        "cfta-0.1.0.0-inplace",
+        "cfta-generator-0.1.0.0-inplace",
+        "text-2.1.3-2a27"
+      ],
+      "stages": [
+        {
+          "phase": "probe-compile-host-linker",
+          "argv": [
+            "cabal",
+            "exec",
+            "--",
+            "ghc",
+            "-hide-all-packages",
+            "-package",
+            "base",
+            "-package-id",
+            "cfta-0.1.0.0-inplace",
+            "-package-id",
+            "cfta-generator-0.1.0.0-inplace",
+            "-package-id",
+            "text-2.1.3-2a27",
+            "-pgml",
+            "/usr/bin/gcc",
+            "-pgmc",
+            "/usr/bin/gcc",
+            "-O0",
+            "-Wall",
+            "-j1",
+            "-threaded",
+            "-rtsopts",
+            "-outputdir",
+            "/tmp/mcfta-source-finite-type-runtime-20261113-0757/ghc",
+            "-o",
+            "/tmp/mcfta-source-finite-type-runtime-20261113-0757/probe",
+            "/tmp/mcfta-source-finite-type-runtime-20261113-0757/Probe.hs"
+          ],
+          "exit": 0,
+          "timeout": false,
+          "seconds": 1.27,
+          "log": "/tmp/mcfta-source-finite-type-runtime-20261113-0757/probe-compile-host-linker.log",
+          "log_bytes": 133
+        },
+        {
+          "phase": "case-host-BOUND",
+          "argv": [
+            "timeout",
+            "--kill-after=3s",
+            "60s",
+            "/tmp/mcfta-source-finite-type-runtime-20261113-0757/probe",
+            "BOUND",
+            "+RTS",
+            "-N1",
+            "-M3072m",
+            "-RTS"
+          ],
+          "exit": 127,
+          "timeout": false,
+          "seconds": 0.01,
+          "log": "/tmp/mcfta-source-finite-type-runtime-20261113-0757/case-host-BOUND.log",
+          "log_bytes": 166
+        },
+        {
+          "phase": "case-host-SKI",
+          "argv": [
+            "timeout",
+            "--kill-after=3s",
+            "60s",
+            "/tmp/mcfta-source-finite-type-runtime-20261113-0757/probe",
+            "SKI",
+            "+RTS",
+            "-N1",
+            "-M3072m",
+            "-RTS"
+          ],
+          "exit": 127,
+          "timeout": false,
+          "seconds": 0.01,
+          "log": "/tmp/mcfta-source-finite-type-runtime-20261113-0757/case-host-SKI.log",
+          "log_bytes": 166
+        },
+        {
+          "phase": "case-host-POLY",
+          "argv": [
+            "timeout",
+            "--kill-after=3s",
+            "60s",
+            "/tmp/mcfta-source-finite-type-runtime-20261113-0757/probe",
+            "POLY",
+            "+RTS",
+            "-N1",
+            "-M3072m",
+            "-RTS"
+          ],
+          "exit": 127,
+          "timeout": false,
+          "seconds": 0.01,
+          "log": "/tmp/mcfta-source-finite-type-runtime-20261113-0757/case-host-POLY.log",
+          "log_bytes": 166
+        }
+      ],
+      "prior_controls": "runtime-check.json",
+      "source_pins": {
+        "status": "UNCOMPILED_UNRUN",
+        "created": "2026-11-13T06:55:20.644771+00:00",
+        "files": {
+          "BadBound.hs": {
+            "sha256": "0d80e307e2124755678cd5adad89855e7776e5835f7a943131a42295e5238822",
+            "lines": 8
+          },
+          "BadSKI.hs": {
+            "sha256": "200f0eafb4051e514401e0d15f8d05b2a08052875977d6050ccdaa057a896632",
+            "lines": 8
+          },
+          "COMMANDS.md": {
+            "sha256": "7a42cb7beb0e3f442544e5072a4eac855dae6a5292cdc19a2cf14e535bd7a728",
+            "lines": 96
+          },
+          "Good.hs": {
+            "sha256": "d620274c21dd819f16f94f9d961d17131078f5f63ee411baf402c201a784ca52",
+            "lines": 26
+          },
+          "Probe.hs": {
+            "sha256": "74d27515297a6175c6e61017ba3b866051e8ce449e0984d1c949c17aa0fe8a75",
+            "lines": 187
+          }
+        },
+        "source_hashes": {
+          "cfta-generator/src/Data/CFTA/Gen/Synthesis.hs": "abbd34f76d87164cdedfc63bd96fe771efe16686711ff723485982de752a2c0d",
+          "cfta/src/Data/CFTA/Enumeration.hs": "26236dc68be7019b28c10d4b42d1bbecf89f9145c41bad7977fc177332b597f8",
+          "cfta/src/Data/CFTA/Term.hs": "9201ca9e5f7a7a5dc89b3737b71e406c2245cec2a36aa68ae32fb3eef8572e3f",
+          "cfta/src/Data/CFTA/Constraint.hs": "dee73d12be74af16c54f1c6856a3a60b1c1ae612ad8a15d1665210e2c63641f3",
+          "cfta/src/Data/CFTA/Symbol.hs": "31983078475d136d2e69f5d94461f56f7c2fa3b3822144be1eee324ba0637f02",
+          "cabal.project": "b45ebca653068a8f58383887846eee2306df274c825f0fabfe5288c73ae3116a"
+        },
+        "case_count": 3,
+        "candidate_ast_count": 4,
+        "public_stream_evaluations_per_case": 1,
+        "separate_typed_stream_evaluations_per_case": 1,
+        "diagnostic_show_character_limit": 16384,
+        "runtime_checks": 0,
+        "compiler_checks": 0,
+        "repository_changes": 0,
+        "result_classification": "PENDING_ROOT"
+      },
+      "limits": {
+        "memory.max": "4294967296",
+        "memory.high": "4294967296",
+        "memory.swap.max": "0"
+      },
+      "finished": "2026-11-13T08:03:57.717966+01:00",
+      "source_unchanged": true
+    },
+    "runtime-check-libraries.json": {
+      "started": "2026-11-13T08:07:31.366340+01:00",
+      "source_pins": {
+        "status": "UNCOMPILED_UNRUN",
+        "created": "2026-11-13T06:55:20.644771+00:00",
+        "files": {
+          "BadBound.hs": {
+            "sha256": "0d80e307e2124755678cd5adad89855e7776e5835f7a943131a42295e5238822",
+            "lines": 8
+          },
+          "BadSKI.hs": {
+            "sha256": "200f0eafb4051e514401e0d15f8d05b2a08052875977d6050ccdaa057a896632",
+            "lines": 8
+          },
+          "COMMANDS.md": {
+            "sha256": "7a42cb7beb0e3f442544e5072a4eac855dae6a5292cdc19a2cf14e535bd7a728",
+            "lines": 96
+          },
+          "Good.hs": {
+            "sha256": "d620274c21dd819f16f94f9d961d17131078f5f63ee411baf402c201a784ca52",
+            "lines": 26
+          },
+          "Probe.hs": {
+            "sha256": "74d27515297a6175c6e61017ba3b866051e8ce449e0984d1c949c17aa0fe8a75",
+            "lines": 187
+          }
+        },
+        "source_hashes": {
+          "cfta-generator/src/Data/CFTA/Gen/Synthesis.hs": "abbd34f76d87164cdedfc63bd96fe771efe16686711ff723485982de752a2c0d",
+          "cfta/src/Data/CFTA/Enumeration.hs": "26236dc68be7019b28c10d4b42d1bbecf89f9145c41bad7977fc177332b597f8",
+          "cfta/src/Data/CFTA/Term.hs": "9201ca9e5f7a7a5dc89b3737b71e406c2245cec2a36aa68ae32fb3eef8572e3f",
+          "cfta/src/Data/CFTA/Constraint.hs": "dee73d12be74af16c54f1c6856a3a60b1c1ae612ad8a15d1665210e2c63641f3",
+          "cfta/src/Data/CFTA/Symbol.hs": "31983078475d136d2e69f5d94461f56f7c2fa3b3822144be1eee324ba0637f02",
+          "cabal.project": "b45ebca653068a8f58383887846eee2306df274c825f0fabfe5288c73ae3116a"
+        },
+        "case_count": 3,
+        "candidate_ast_count": 4,
+        "public_stream_evaluations_per_case": 1,
+        "separate_typed_stream_evaluations_per_case": 1,
+        "diagnostic_show_character_limit": 16384,
+        "runtime_checks": 0,
+        "compiler_checks": 0,
+        "repository_changes": 0,
+        "result_classification": "PENDING_ROOT"
+      },
+      "probe_sha256": "74d27515297a6175c6e61017ba3b866051e8ce449e0984d1c949c17aa0fe8a75",
+      "binary_sha256": "fa06c393cb94cb7397b747590d1d9440c8efb8f982bdd859e5a478dac430ecbf",
+      "runtime_library_path": "/nix/store/6qi8skh85ci2k9gvl27nnh3kiy32qnsz-zlib-1.3.1/lib:/nix/store/k8bqvzzw3xll9sjkai15skrj7ab4f8gg-gmp-with-cxx-6.3.0/lib",
+      "stages": [
+        {
+          "case": "BOUND",
+          "argv": [
+            "timeout",
+            "--kill-after=3s",
+            "60s",
+            "/tmp/mcfta-source-finite-type-runtime-20261113-0757/probe",
+            "BOUND",
+            "+RTS",
+            "-N1",
+            "-M3072m",
+            "-RTS"
+          ],
+          "exit": 0,
+          "seconds": 0.02,
+          "log": "/tmp/mcfta-source-finite-type-runtime-20261113-0757/case-libraries-BOUND.log",
+          "log_bytes": 1084
+        },
+        {
+          "case": "SKI",
+          "argv": [
+            "timeout",
+            "--kill-after=3s",
+            "60s",
+            "/tmp/mcfta-source-finite-type-runtime-20261113-0757/probe",
+            "SKI",
+            "+RTS",
+            "-N1",
+            "-M3072m",
+            "-RTS"
+          ],
+          "exit": 0,
+          "seconds": 1.22,
+          "log": "/tmp/mcfta-source-finite-type-runtime-20261113-0757/case-libraries-SKI.log",
+          "log_bytes": 3019
+        },
+        {
+          "case": "POLY",
+          "argv": [
+            "timeout",
+            "--kill-after=3s",
+            "60s",
+            "/tmp/mcfta-source-finite-type-runtime-20261113-0757/probe",
+            "POLY",
+            "+RTS",
+            "-N1",
+            "-M3072m",
+            "-RTS"
+          ],
+          "exit": 0,
+          "seconds": 0.02,
+          "log": "/tmp/mcfta-source-finite-type-runtime-20261113-0757/case-libraries-POLY.log",
+          "log_bytes": 1686
+        }
+      ],
+      "observations_only": true,
+      "limits": {
+        "memory.max": "4294967296",
+        "memory.high": "4294967296",
+        "memory.swap.max": "0"
+      },
+      "finished": "2026-11-13T08:07:32.627301+01:00",
+      "source_unchanged": true
+    }
+  },
+  "logs": {
+    "compiler-version.log": {
+      "sha256": "1773ae668eb2bcf7950eaf0ccc613a00121442cc92c2f1915954503f994de417",
+      "text": "The Glorious Glasgow Haskell Compilation System, version 9.14.1\n"
+    },
+    "current-libraries.log": {
+      "sha256": "215517150aee2d4e7c37e9a89aed453be29626db56807e943248b5085841cc31",
+      "text": "Up to date\n"
+    },
+    "typecheck-Good.log": {
+      "sha256": "a2c68d50ab992841918431522e02164f6b56713d8524515af0c8c70645ef674d",
+      "text": "Loaded package environment from /home/tritlo/.ghc/x86_64-linux-9.14.1/environments/default\n[1 of 1] Compiling Good             ( /tmp/mcfta-source-finite-type-runtime-20261113-0757/Good.hs, nothing )\n"
+    },
+    "typecheck-BadSKI.log": {
+      "sha256": "3f79fbef1999defe34845d5c07eb059379862d1dfe68653f833cc304a1a94231",
+      "text": "Loaded package environment from /home/tritlo/.ghc/x86_64-linux-9.14.1/environments/default\n[1 of 2] Compiling Good             ( /tmp/mcfta-source-finite-type-runtime-20261113-0757/Good.hs, nothing )\n[2 of 2] Compiling BadSKI           ( /tmp/mcfta-source-finite-type-runtime-20261113-0757/BadSKI.hs, nothing )\n/tmp/mcfta-source-finite-type-runtime-20261113-0757/BadSKI.hs:8:20: error: [GHC-27958]\n    • Couldn't match type ‘b0’ with ‘b0 -> c0’\n      Expected: (b0 -> c0) -> b0\n        Actual: (b0 -> c0) -> b0 -> c0\n    • In the second argument of ‘s’, namely ‘i’\n      In the first argument of ‘sink’, namely ‘(s i i)’\n      In the expression: sink (s i i)\n  |\n8 | badSKI = sink (s i i)\n  |                    ^\n\n"
+    },
+    "typecheck-BadBound.log": {
+      "sha256": "1caacc38d76aeae147dcc0d81612bcd0e12bc171aec1771d3c9a0ee042cdd97d",
+      "text": "Loaded package environment from /home/tritlo/.ghc/x86_64-linux-9.14.1/environments/default\n[1 of 2] Compiling Good             ( /tmp/mcfta-source-finite-type-runtime-20261113-0757/Good.hs, nothing )\n[2 of 2] Compiling BadBound         ( /tmp/mcfta-source-finite-type-runtime-20261113-0757/BadBound.hs, nothing )\n/tmp/mcfta-source-finite-type-runtime-20261113-0757/BadBound.hs:8:30: error: [GHC-25897]\n    • Couldn't match expected type ‘a’ with actual type ‘a -> b’\n      ‘a’ is a rigid type variable bound by\n        the type signature for:\n          badBound :: forall a b. (a -> b) -> Bool\n        at /tmp/mcfta-source-finite-type-runtime-20261113-0757/BadBound.hs:7:1-28\n    • In the first argument of ‘bound’, namely ‘bound’\n      In the first argument of ‘sink’, namely ‘(bound bound)’\n      In the expression: sink (bound bound)\n    • Relevant bindings include\n        bound :: a -> b\n          (bound at /tmp/mcfta-source-finite-type-runtime-20261113-0757/BadBound.hs:8:10)\n        badBound :: (a -> b) -> Bool\n          (bound at /tmp/mcfta-source-finite-type-runtime-20261113-0757/BadBound.hs:8:1)\n  |\n8 | badBound bound = sink (bound bound)\n  |                              ^^^^^\n\n"
+    },
+    "probe-compile.log": {
+      "sha256": "0e8af34744147a04033f60ec5620a3144f78cdc992fd7b64f3615f4a55dc7a8b",
+      "text": "Loaded package environment from /home/tritlo/Code/mcfta/dist-newstyle/tmp/environment.-12323290/.ghc.environment.x86_64-linux-9.14.1\n[1 of 2] Compiling Main             ( /tmp/mcfta-source-finite-type-runtime-20261113-0757/Probe.hs, /tmp/mcfta-source-finite-type-runtime-20261113-0757/ghc/Main.o )\n/tmp/mcfta-source-finite-type-runtime-20261113-0757/Probe.hs:26:1: error: [GHC-45102]\n    Ambiguous module name ‘Data.Text’.\n    it was found in multiple packages: text-2.1.3 text-2.1.4\n   |\n26 | import Data.Text (Text)\n   | ^^^^^^^^^^^^^^^^^^^^^^^\n\n"
+    },
+    "probe-compile-pinned.log": {
+      "sha256": "b454315f0926069508ea96a20018a0fdda5e9bd2970db65c4b8da9df68f5ab59",
+      "text": "Loaded package environment from /home/tritlo/Code/mcfta/dist-newstyle/tmp/environment.-12341940/.ghc.environment.x86_64-linux-9.14.1\n[1 of 2] Compiling Main             ( /tmp/mcfta-source-finite-type-runtime-20261113-0757/Probe.hs, /tmp/mcfta-source-finite-type-runtime-20261113-0757/ghc/Main.o )\n[2 of 2] Linking /tmp/mcfta-source-finite-type-runtime-20261113-0757/probe\n"
+    },
+    "probe-compile-host-linker.log": {
+      "sha256": "11c65ea4ac2a61f549d5d44f57bc662886969af1b47d1e04861af3d535184a38",
+      "text": "Loaded package environment from /home/tritlo/Code/mcfta/dist-newstyle/tmp/environment.-12367430/.ghc.environment.x86_64-linux-9.14.1\n"
+    },
+    "case-libraries-BOUND.log": {
+      "sha256": "21863850b8468d645c08bd56cfc3b4b86d640939deb691a415683fcde95d670c",
+      "text": "case=BOUND\nsource_size=3\nlibrary.show_complete=True\nlibrary=Library {libraryGroups = [(\"sink\",TFun (TVar \"a\") (TCons \"Bool\" []),[\"sink\"])], libraryArgumentOnly = [], libraryAvoid = [], libraryEncoding = FirstOrder}\nquery.show_complete=True\nquery=Query {queryArguments = [(\"bound\",TFun (TVar \"a\") (TVar \"b\"))], queryGoal = TCons \"Bool\" []}\ncandidate.ast.show_complete=True\ncandidate.ast=App (Var \"sink\") (App (Var \"bound\") (Var \"bound\"))\ncandidate.source.show_complete=True\ncandidate.source=\"sink (bound bound)\"\nphase=public.solutionsOfSize.begin\npublic.scanned=1\npublic.exhausted=True\npublic.candidate=\"bound_self_application\" status=absent_after_exhaustion finite_hm_expected=False\nphase=typed.default.begin; evaluation=separate_from_public\ntyped.reduced_root_reachesConstrainedMu.show_complete=True\ntyped.reduced_root_reachesConstrainedMu=False\nphase=typed.default.root_ready\ntyped.scanned=1\ntyped.exhausted=True\ntyped.candidate=\"bound_self_application\" status=absent_after_exhaustion finite_hm_expected=False\ncase_complete=True; observations_only=True; partial_type_scope=retained\n"
+    },
+    "case-libraries-SKI.log": {
+      "sha256": "6e510ff3c867d7ed834f2c6ae4e6e9a0b8703d69ed65b40fe03ff016e89c23bf",
+      "text": "case=SKI\nsource_size=4\nlibrary.show_complete=True\nlibrary=Library {libraryGroups = [(\"sink\",TFun (TVar \"a\") (TCons \"Bool\" []),[\"sink\"]),(\"s\",TFun (TFun (TVar \"a\") (TFun (TVar \"b\") (TVar \"c\"))) (TFun (TFun (TVar \"a\") (TVar \"b\")) (TFun (TVar \"a\") (TVar \"c\"))),[\"s\"]),(\"i\",TFun (TVar \"a\") (TVar \"a\"),[\"i\"]),(\"k\",TFun (TVar \"a\") (TFun (TVar \"b\") (TVar \"a\")),[\"k\"])], libraryArgumentOnly = [], libraryAvoid = [], libraryEncoding = FirstOrder}\nquery.show_complete=True\nquery=Query {queryArguments = [], queryGoal = TCons \"Bool\" []}\ncandidate.ast.show_complete=True\ncandidate.ast=App (Var \"sink\") (App (App (Var \"s\") (Var \"i\")) (Var \"i\"))\ncandidate.ast.show_complete=True\ncandidate.ast=App (Var \"sink\") (App (App (Var \"s\") (Var \"k\")) (Var \"k\"))\ncandidate.source.show_complete=True\ncandidate.source=\"sink (s i i)\"\ncandidate.source.show_complete=True\ncandidate.source=\"sink (s k k)\"\nphase=public.solutionsOfSize.begin\npublic.match=[\"ski_finite_control\"]\npublic.ast.show_complete=True\npublic.ast=App (Var \"sink\") (App (App (Var \"s\") (Var \"k\")) (Var \"k\"))\npublic.scanned=451\npublic.exhausted=True\npublic.candidate=\"ski_self_application\" status=absent_after_exhaustion finite_hm_expected=False\npublic.candidate=\"ski_finite_control\" status=present finite_hm_expected=True\nphase=typed.default.begin; evaluation=separate_from_public\ntyped.reduced_root_reachesConstrainedMu.show_complete=True\ntyped.reduced_root_reachesConstrainedMu=False\nphase=typed.default.root_ready\ntyped.match=[\"ski_finite_control\"]\ntyped.ast.show_complete=True\ntyped.ast=App (Var \"sink\") (App (App (Var \"s\") (Var \"k\")) (Var \"k\"))\ntyped.same_run_term_and_residuals.show_complete=True\ntyped.same_run_term_and_residuals=(Node \"filter\" [Node \"Bool\" [],Node \"app\" [Node \"Bool\" [],Node \"(->)\" [],Node \"sink\" [Node \"->\" [Node \"(->)\" [],Node \"->\" [Node \"(->)\" [],Node \"Mu\" [],Node \"Mu\" []],Node \"Bool\" []]],Node \"app\" [Node \"->\" [Node \"(->)\" [],Node \"Mu\" [],Node \"Mu\" []],Node \"(->)\" [],Node \"app\" [Node \"->\" [Node \"(->)\" [],Node \"->\" [Node \"(->)\" [],Node \"Mu\" [],Node \"->\" [Node \"(->)\" [],Node \"Mu\" [],Node \"Mu\" []]],Node \"->\" [Node \"(->)\" [],Node \"Mu\" [],Node \"Mu\" []]],Node \"(->)\" [],Node \"s\" [Node \"->\" [Node \"(->)\" [],Node \"->\" [Node \"(->)\" [],Node \"Mu\" [],Node \"->\" [Node \"(->)\" [],Node \"->\" [Node \"(->)\" [],Node \"Mu\" [],Node \"Mu\" []],Node \"Mu\" []]],Node \"->\" [Node \"(->)\" [],Node \"->\" [Node \"(->)\" [],Node \"Mu\" [],Node \"->\" [Node \"(->)\" [],Node \"Mu\" [],Node \"Mu\" []]],Node \"->\" [Node \"(->)\" [],Node \"Mu\" [],Node \"Mu\" []]]]],Node \"k\" [Node \"->\" [Node \"(->)\" [],Node \"Mu\" [],Node \"->\" [Node \"(->)\" [],Node \"->\" [Node \"(->)\" [],Node \"Mu\" [],Node \"Mu\" []],Node \"Mu\" []]]]],Node \"k\" [Node \"->\" [Node \"(->)\" [],Node \"Mu\" [],Node \"->\" [Node \"(->)\" [],Node \"Mu\" [],Node \"Mu\" []]]]]]],[])\ntyped.scanned=2551\ntyped.exhausted=True\ntyped.candidate=\"ski_self_application\" status=absent_after_exhaustion finite_hm_expected=False\ntyped.candidate=\"ski_finite_control\" status=present finite_hm_expected=True\ncase_complete=True; observations_only=True; partial_type_scope=retained\n"
+    },
+    "case-libraries-POLY.log": {
+      "sha256": "14f8cf130a2daee666a3b73edb16b7bac5e24e2a3b6e1c9917d828dc4674eeab",
+      "text": "case=POLY\nsource_size=2\nlibrary.show_complete=True\nlibrary=Library {libraryGroups = [(\"i\",TFun (TVar \"a\") (TVar \"a\"),[\"i\"])], libraryArgumentOnly = [], libraryAvoid = [], libraryEncoding = FirstOrder}\nquery.show_complete=True\nquery=Query {queryArguments = [], queryGoal = TFun (TCons \"Bool\" []) (TCons \"Bool\" [])}\ncandidate.ast.show_complete=True\ncandidate.ast=App (Var \"i\") (Var \"i\")\ncandidate.source.show_complete=True\ncandidate.source=\"i i\"\nphase=public.solutionsOfSize.begin\npublic.match=[\"polymorphic_identity_control\"]\npublic.ast.show_complete=True\npublic.ast=App (Var \"i\") (Var \"i\")\npublic.scanned=1\npublic.exhausted=False\npublic.candidate=\"polymorphic_identity_control\" status=present finite_hm_expected=True\nphase=typed.default.begin; evaluation=separate_from_public\ntyped.reduced_root_reachesConstrainedMu.show_complete=True\ntyped.reduced_root_reachesConstrainedMu=False\nphase=typed.default.root_ready\ntyped.match=[\"polymorphic_identity_control\"]\ntyped.ast.show_complete=True\ntyped.ast=App (Var \"i\") (Var \"i\")\ntyped.same_run_term_and_residuals.show_complete=True\ntyped.same_run_term_and_residuals=(Node \"filter\" [Node \"->\" [Node \"(->)\" [],Node \"Bool\" [],Node \"Bool\" []],Node \"app\" [Node \"->\" [Node \"(->)\" [],Node \"Bool\" [],Node \"Bool\" []],Node \"(->)\" [],Node \"i\" [Node \"->\" [Node \"(->)\" [],Node \"->\" [Node \"(->)\" [],Node \"Bool\" [],Node \"Bool\" []],Node \"->\" [Node \"(->)\" [],Node \"Bool\" [],Node \"Bool\" []]]],Node \"i\" [Node \"->\" [Node \"(->)\" [],Node \"Bool\" [],Node \"Bool\" []]]]],[])\ntyped.scanned=1\ntyped.exhausted=False\ntyped.candidate=\"polymorphic_identity_control\" status=present finite_hm_expected=True\ncase_complete=True; observations_only=True; partial_type_scope=retained\n"
+    }
+  },
+  "constrained_mu_source_audit": {
+    "sha256": "a238a44770f46e958d922035c6f2e352d3a213b243ec9e84693fd1e6ea8af8e2",
+    "text": "# FirstOrder source roots and the constrained-recursion flag\n\nStatus: bounded read-only audit. No positive source witness was established.\nNo compilation, runtime probe, test, source change, or cache experiment was run.\nNo conclusion about every reduced root is claimed.\n\n## Existing source restriction\n\n`cfta-generator/src/Data/CFTA/Gen/Synthesis.hs:131-135` represents a finite parsed\nType by TVar, TFun, and TCons. Library/Query contain these Types, not user-provided\nCFTA nodes (`Library:230-244`). This is the finite parsed input domain; arbitrary\nHaskell cyclic values or bottoms are not a separate source encoding.\n\nFor FirstOrder, `typesOf:841-843` selects `allTypes`. Its one recursive definition\nat475-482 contains arrows, four variable leaves, and constructor rows. All these\nedges have no constraints. The other createMu site, at490, belongs to Curried\nencoding. It is not a FirstOrder example.\n\n`typeNode:416-420` builds finite rigid Types. `generalize:525-532` replaces source\nvariables by allTypes and adds repeated-variable equalities to the finite outer\nordinary row. `rawSearchSpace:779-839` builds finite Program rows with application\nand goal-filter equalities. None of those source definitions writes a constraint\ninside the recursive allTypes body. Source names and reserved markers are not\nneeded to obtain this structural restriction.\n\nThe checked Lean law is exact and already exists:\n`lean/MicroCFTA/SourceSynthesisCurrentSourceGuards.lean:320-323`,\n`firstOrderRaw_guards_plainMu`, derives `PlainMu top expression` for every actual\nsuccessful CURRENT FirstOrder construction, with arbitrary source inputs/avoid rules.\n`SourceSynthesisRecursiveOrigins.lean:23-37` defines PlainMu: every binder body\nhas only Top guards; finite ordinary ancestors may have equality guards.\n`allTypes_plainMu:118`, `generalize_plainMu:189`, and the final current law cover\nthe source operations. No additional input freshness or provider gate is involved.\n\nThus there is a source-based reason to expect a raw FirstOrder root to have\n`reachesConstrainedMu = False`. This is not a theorem of the Haskell Boolean\nimplementation: the syntax/build/Boolean correspondence is a separate bridge.\n\n## Why this does not yet settle the DEFAULT reduced root\n\n`Synthesis.hs:671-683` applies up to30 rounds of\n`withoutRedundantEdges . reducePartially`. `orderedSearchSpace:774-775` then uses\n`reduceWithOrder`; `orderedSpace:724-729` applies `refoldEdges` to the final round.\nThe flag is set from THAT reached root by `Enumeration.hs:296-311`.\n\n`Enumeration.hs:545-561` checks whether a reachable Mu has ANY equality/residual\nconstraint in its body. Ordinary constrained ancestors alone do not make the\nflag True. This distinction explains why a polymorphic Program or a graph with\nmany ordinary equalities need not exercise the flag-positive branch.\n\n`cfta/src/Data/CFTA/Equality/Operations.hs:83-86` leaves an encountered Mu unchanged.\nHowever, `reduceEqConstraints:216-239` also forms intersections at equality paths.\n`requireAll:292-303` and `editAll:328-334` can expose Mu rows at finite paths.\n`cfta/src/Data/CFTA/Interned/Operations.hs:504-508,544-552` can create a new Mu\nthrough `intersectOpen`/`maybeMu`; the recursive reference must actually recur.\n`refold:191-203`/`refoldEdges:211-226` replace exact existing unfoldings by binders.\nThese operations require a preservation argument, not only the source restriction.\n\nThe existing `SourceSynthesisRecursiveOrigins.lean:5-11` documentation explicitly\nlimits PlainMu to constructor instructions and excludes a preservation claim for\nnative normalization, projection, intersection, and enumeration. I did not find\nan existing closure law that proves the Haskell reduced/refolded Boolean is False.\n\n## Exact remaining question, with no future gate\n\nFor finite parsed FirstOrder Library/Query inputs and the actual successful\nsource size, the candidate source-only claim is:\n\n    not (reachesConstrainedMu\n      (spaceNode (orderedSearchSpace lib query size)))\n\nThis remains UNPROVED. A route must establish the raw/build correspondence and\npreservation of equality-free recursive bodies through the actual bounded reduction\nand refolding, including newly created intersection binders. Merely observing\n`go _ (Mu n) = Mu n` is insufficient. If this closure holds, the default FirstOrder\nflag-positive path is unreachable, although generic CFTA enumeration still needs it.\n\n## Search result and limit\n\nThe inspected actual source examples were `SynthesisSpec.hs` (FirstOrder cases and\nhistoryQueries), its Hybrid/States/Liquid companion references, the component-\nsynthesis README section, and Synthesis construction/reduction definitions.\nNo example there asserts `reachesConstrainedMu` True for an actual FirstOrder root.\nThe positive constrained-Mu cases found in `cfta/test/Data/CFTA/EqualitySpec.hs`\n(461,488,512,543,757) construct CFTA nodes directly. They do not satisfy this task's\nsource-API requirement and are not proposed as runtime cases. No new run is proposed\nuntil review. The three earlier runtime roots are Root's evidence, not a proof of\nthis general negative property. No Haskell defect or counterexample is established.\n"
+  },
+  "repository_haskell_or_cabal_changes": false,
+  "new_lean_theorems": 0,
+  "separate_public_and_typed_evaluations": true,
+  "finite_type_model_existence_proved": false,
+  "original_input_typing_proved": false
+}
