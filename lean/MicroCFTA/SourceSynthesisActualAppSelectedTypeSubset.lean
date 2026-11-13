@@ -1,0 +1,125 @@
+import MicroCFTA.SourceSynthesisActualSharedSelectedProgramFootprints
+import MicroCFTA.SourceEqualityNeededMeaning
+import MicroCFTA.SourceSynthesisLabelProgramBuildRoles
+
+namespace MicroCFTA.SourceSynthesisActualAppSelectedTypeSubset
+open Language InternedConstructorTemplates SourceEqualityClassOrder
+open SourceSynthesisFirstOrderConstruction (Expression application)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSynthesisGeneralizeSyntax.Guard
+local notation "literal" => SourceSynthesisLabelProgramBuildRoles.literal
+
+private theorem app_classes :
+    SourceCompactGuards.sourceEqualities
+      (SourceSynthesisGeneralizeSyntax.eqGuard
+        [[[1], [2, 0, 0]], [[3, 0], [2, 0, 1]], [[0], [2, 0, 2]]]) =
+      some [[[0], [2, 0, 2]], [[1], [2, 0, 0]], [[2, 0, 1], [3, 0]]] := by
+  rw [SourceSynthesisGeneralizeSyntax.eqGuard_eq_source]
+  change SourceCompactGuards.normalize
+      [[[1], [2, 0, 0]], [[3, 0], [2, 0, 1]], [[0], [2, 0, 2]]] = _
+  unfold SourceCompactGuards.normalize
+  rw [SourceEqualityNormalizationReceipt.observed_eq 4]
+  cbv
+
+/-- The actual source app scan derives its Type paths and exact function lookup. -/
+theorem actual_app_selected_type_paths
+    {width : Nat} [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    [DecidableEq (Value Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : SourceCurrentAllocatedNativeInventoryState.Inventory)
+    (types functionSource argumentSource : Expression)
+    (sourceName : String) (guard : Guard) (sourceChildren : List Expression)
+    (occurrence : application types functionSource argumentSource =
+      .node [.mk sourceName guard sourceChildren])
+    (loaded : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula)
+    (inherited own : SourceEqualityConstraintAllocation.Value)
+    (before scanned : SourceEqualityNativeDemand.State width)
+    (records kept : List Record) (budget : Nat)
+    (resultType marker function argument : Value Symbol Guard)
+    (fourth savedFourth : SourceCurrentEmptinessMemo.Memo)
+    (memos final : EndpointMemoGateTrace.Memos)
+    (receipt : SourceCurrentAllocatedPrecheck.Receipt formulas solver inventory
+      guard loaded inherited before own (.classes records))
+    (scan : SourceCurrentSharedScanCallerNumeric.ScanReads budget
+      [resultType, marker, function, argument] records
+      (SourceCurrentAllocatedPrecheck.state before loaded inherited) fourth
+      none kept scanned savedFourth memos final) :
+    ∃ typePaths : List SourceEqualityNeeded.Path,
+      typePaths.Sublist [[0], [1], [2]] ∧
+      (∀ entries : List (Int × SourceEqualityNeeded.Needed),
+        SourceEqualityNeeded.build
+          (SourceEqualitySelectedRequired.paths (kept.map Record.paths)) = .node entries →
+        SourceEqualityNeededMap.lookup 2 entries =
+          if typePaths = [] then none
+          else some (.node [(0, SourceEqualityNeeded.build typePaths)])) ∧
+      SourceEqualityNeededMeaning.Matches (SourceEqualityNeeded.build typePaths)
+        (.node (literal "->")
+          [.node (literal "(->)") [], .node (literal "var1") [],
+            .node (literal "var1") []]) := by
+  let fullPaths : EqualityNormalize.Class :=
+    [[0], [1], [2, 0, 0], [2, 0, 1], [2, 0, 2], [3, 0]]
+  have guardSame : guard = SourceSynthesisGeneralizeSyntax.eqGuard
+      [[[1], [2, 0, 0]], [[3, 0], [2, 0, 1]], [[0], [2, 0, 2]]] := by
+    cases occurrence
+    rfl
+  have endpoints : ∀ path ∈ EqualityNormalize.members
+      ((SourceCompactGuards.sourceEqualities guard).getD []), path ∈ fullPaths := by
+    rw [guardSame, app_classes]
+    intro path member
+    simp only [Option.getD_some, EqualityNormalize.members, List.flatten_cons,
+      List.flatten_nil, List.append_nil, List.cons_append, List.nil_append,
+      List.mem_eraseDups, List.mem_cons, List.not_mem_nil, or_false] at member
+    rcases member with rfl | rfl | rfl | rfl | rfl | rfl
+    all_goals simp [fullPaths]
+  have selected := SourceSynthesisActualSharedSelectedProgramFootprints.selected_regions
+    receipt scan (fun path => path ∈ fullPaths) endpoints
+  let flat := (kept.map Record.paths).flatten
+  have included : ∀ path ∈ flat, path ∈ fullPaths := by
+    intro path member
+    obtain ⟨paths, present, inside⟩ := List.mem_flatten.mp member
+    obtain ⟨record, retained, rfl⟩ := List.mem_map.mp present
+    exact (selected record retained).2 path inside
+  let chosen := fullPaths.filter fun path => decide (path ∈ flat)
+  have canonicalSame : EqualityNormalize.canonicalClass flat =
+      EqualityNormalize.canonicalClass chosen := by
+    apply EqualityNormalize.canonicalClass_ext
+    intro path
+    simp only [chosen, List.mem_filter, decide_eq_true_eq]
+    exact ⟨fun member => ⟨included path member, member⟩, fun member => member.2⟩
+  let naturalTypes : List (List Nat) := [[0], [1], [2]]
+  let typePaths := (naturalTypes.filter fun path => decide ([2, 0] ++ path ∈ flat)).map
+    (List.map Int.ofNat)
+  have sublist : typePaths.Sublist [[0], [1], [2]] := by
+    have retained : (naturalTypes.filter fun path => decide ([2, 0] ++ path ∈ flat)).Sublist
+        naturalTypes := List.filter_sublist
+    have mapped := List.Sublist.map (List.map Int.ofNat) retained
+    change typePaths.Sublist (naturalTypes.map (List.map Int.ofNat))
+    exact mapped
+  refine ⟨typePaths, sublist, ?_, ?_⟩
+  · intro entries built
+    change SourceEqualityNeeded.build
+      ((EqualityNormalize.canonicalClass flat).map (List.map Int.ofNat)) = .node entries at built
+    rw [canonicalSame] at built
+    by_cases zero : [0] ∈ flat <;>
+      by_cases one : [1] ∈ flat <;>
+      by_cases functionZero : [2, 0, 0] ∈ flat <;>
+      by_cases functionOne : [2, 0, 1] ∈ flat <;>
+      by_cases functionTwo : [2, 0, 2] ∈ flat <;>
+      by_cases argument : [3, 0] ∈ flat
+    all_goals
+      simp [chosen, fullPaths, zero, one, functionZero, functionOne, functionTwo, argument] at built
+      simp [typePaths, naturalTypes, functionZero, functionOne, functionTwo]
+      cbv at built
+      cases built
+      rfl
+  · apply (SourceEqualityNeededMeaning.build_exact typePaths _).mpr
+    intro path member
+    have possible := sublist.subset member
+    simp only [List.mem_cons, List.not_mem_nil, or_false] at possible
+    rcases possible with rfl | rfl | rfl
+    · exact ⟨.node (literal "(->)") [], rfl⟩
+    · exact ⟨.node (literal "var1") [], rfl⟩
+    · exact ⟨.node (literal "var1") [], rfl⟩
+
+end MicroCFTA.SourceSynthesisActualAppSelectedTypeSubset
