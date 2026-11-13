@@ -1,3 +1,147 @@
+## Current checkpoint: eager subtree output properties
+
+Time: 2026-11-13 05:46 CET. Branch: formalize. Base: c78484d22dd8b62ef2f8f548a28e0675d33e8c4f.
+Main remains e53852064d3ef5a2eafec47d754c27504b11de5f, fetched at 05:16 CET.
+The full library formalization goal remains ACTIVE. This checkpoint is a component result.
+Pushes to formalize remain explicitly authorized. Do not force-push.
+
+### Strongest public statement
+
+The Lean model of the actual eager enumerator has a finite work bound at each
+fixed recursion depth. Under its admitted current inputs, every larger common
+work budget returns the same result with the full native resource/cache receipt.
+The original-input theorem derives startup, width and admission from the accepted
+first-order library/query. It retains that same execution and no-stop control.
+This is SourceSynthesisCurrentProgramEagerResources.accepted, 159 lines, unchanged.
+It does not yet give whole eager Program output roles, source typing, a satisfying
+assignment, output existence, adequate recursion depth or Haskell correspondence.
+
+Keep the existing shallow original-input Program-output theorem separate.
+Keep CurrentComputedWidthExactProgramLanguage.accepted_exact at its completed
+nodeCall endpoint. Neither result is a whole shared eager output theorem.
+
+### Checked private progress
+
+SourcePruningEnumerationSharedEagerReservation now has 5163 lines, SHA256
+50293984554f44cf27329f5000b86fffd01a3ef00e1eb181c7067b596e3a68f4.
+It keeps four public laws and adds ZERO public laws. The old 20-line public
+runEager_finite_complete_resources header remains byte-exact at 01c37c9d.
+Arithmetic plans, actual workers, old resource aliases and child/tuple data stay exact.
+All old proof bodies remain available through the source history.
+
+1. OutcomeResourcesWithOutputs keeps the ENTIRE old resource result as its first
+   field and a property for every emitted output as its second field. The six
+   checked laws cover growth, Post, True specialization, finish, ordered append
+   and actual stopped scan. Each output keeps its own native caller/cache witness.
+2. Ten private generic/Program consumer and completion aliases retain the same
+   property. Sixteen proof bodies are generalized once. Exact old theorem headers
+   use thin True wrappers. No induction or executable producer is duplicated.
+   Program Type positions call the generic theorem with the SAME output predicate.
+   Ordered scans retain the same complete/stopped prefix and one fuel/outcome witness.
+   This closes the previous generic-Type return-property loss. Actual concrete
+   outer consumers must still discharge the private continuation premises.
+3. The marked finalized callback observer retains ONE finalizer and ONE callback
+   receipt, full Memos/Post/Packet/Frame, literal raw/types/typing fields and the
+   combined all-fuel continuation equation. It uses finalized callback operands.
+4. child_inputs_isolated_pending retains ENTIRE successful ChildInputs. Current
+   Safe and its stored marker derive the bound and fresh separation. The same
+   actual protected/reference fields retain IsolatedPending at after.core.
+   It makes no guarantee about failed child states or partial-Type model existence.
+5. EagerProgramResumeComplete is concrete: current ProgramSlots justify direct
+   emission. Its depth-zero proof uses ONE old resource witness and classifies
+   that SAME execution. It is not an arbitrary-output-property Resume theorem.
+   Concrete positive-depth/captured/prepared/Resume closure remains open.
+
+### Verification and preservation
+
+Strict private checks, the actual own Nix/Lake target and explicit standard-only
+axiom checks pass. The exact public namespace list contains four inherited laws.
+The full acyclic graph has 5894 live modules. Its affected closure has 4 modules.
+Audit has 4891 imports and 94828 axiom reports. The entire 266043-byte Audit is unchanged.
+Both own and compatibility packets also PASS from /tmp. No setting or cap grew.
+Every compiler job uses the existing serial 4 GiB maximum/high, swap 0 and one Lean thread.
+
+The own packet is lean/restart-evidence/20261113-eager-subtree-return-properties/.
+The compatibility packet is lean/restart-evidence/20261113-eager-subtree-return-properties-compatibility/.
+Its source-audit.md has 381376 bytes. It preserves 17 pinned stages and 16 replayed
+GNU reverse patches and 23 frozen checked-context appendices. Thirteen next-stage
+drafts are retained separately and explicitly marked UNCOMPILED/UNPROVED.
+Failed callback matches, missing emitted import, explicit outcome binder repair,
+duplicate/incorrectly omitted instance and dependent local match repairs remain.
+Compiler recovery diagnostics about sorry are not source admissions. Early private
+checker public-count/height-status fields were wrong metadata; the exact source
+name audit establishes four inherited public laws and zero new laws and the earlier checked child-height result.
+All later private reports use the corrected metadata. This is not a Haskell fix.
+
+No Haskell source changed. Keep .hypha/ and unrelated work intact. Full build/output
+archives are unnecessary. Source, patches, frozen headers and checkers reproduce
+the evidence. Runtime directory: /tmp/mcfta-eager-subtree-return-properties-20261113-0524/.
+Latest fresh PRIMARY usage is 39 percent at 05:38 CET. /tmp has 164.93 GiB free.
+Continue monitoring both. If fresh PRIMARY exceeds 80 percent, stop workers, save
+the complete handoff, pause the goal and notify Matti. Do not infer approval from time.
+
+### Next proof work and pending drafts
+
+The next main task is concrete positive-depth output roles. Attach current
+ProgramSlots to the SAME actual prefix/preparation/captured/Resume entries.
+Use the new generic/Program output-property child certificates. Close callbacks
+and the outer depth IH internally. Keep the whole old resource receipt first.
+Do not add public future Packet, child, continuation, role, model or capacity suppliers.
+Do not equate the shallow child worker with eagerChild.
+
+The unmarked finalizer/callback draft is in
+/tmp/mcfta-unmarked-callback-observer-20261113-0528/.
+Its 119-line fragment and 70-line header are UNCOMPILED. It derives middle roles
+from CURRENT entry slots and full ChildInputs, calls the finalizer-packet producer
+ONCE, uses the SAME returned core with UnmarkedWrite, and keeps the SAME callback
+Frame/full Memos. It demands no Program FragmentRoles of Type data.
+
+The prefix reuse draft is in /tmp/mcfta-eager-prefix-local-laws-20261113-0528/.
+Its 216-line SelectedPrefix draft only exposes existing narrowed_fields/write_slots
+and adds two comments. Their proofs and old public producer remain byte-exact.
+Its 74-line actual repeated-clear observer is UNCOMPILED. The full observed-prefix
+26-line contract and remaining 8/19-line native availability/action interfaces are
+UNPROVED. Reuse current public local laws; do not copy the shallow 400-line observer
+stack or align different producers by query equality. Own class allocation already
+has the checked SAME-observation ClassAllocation.suspendMany_program_slots law.
+The initial preparation already has public prepared_fields and small pure role
+transport ingredients. Reuse them at the SAME existing preparation receipt.
+The positive-depth owner is freezing exact private captured/prepared/Resume maps.
+No positive-depth implementation or whole eager role claim is implied by this note.
+
+### Semantic and whole-system gaps
+
+The parked/partial 100-line audit and unproved 9/14-line targets remain in the prior
+20261113-eager-child-height-roles-compatibility/source-audit.md. Parked prefix
+backward semantics still requires all removed Suspended.Holds facts. A recursion
+key drops variable IDs; key membership is not a ground assignment witness.
+CreatedIsolation.packet_parked_created_isolated already proves marker creation.
+The new child adapter handles one transport step. Full reached marker retention,
+existential original-input model pullback with SAME emitted Program projection,
+and finite model existence remain separate. Whole Discharged is only a conditional
+route; support for genuinely partial Type completions stays in scope.
+No countermodel or Haskell defect is established by this semantic audit.
+
+Keep the FULL original objective: actual library semantics; native allocation and
+cache effects; whole startup/output typing and model language; adequacy and output
+existence; real default lazy order/multiplicity/termination; size/count/weights and
+training behavior; both rank/unrank inverse directions; compiled Haskell linkage.
+The older infinite-annotation argument does not prove actual default divergence.
+The actual default deduplicates rendered terms before Program projection; the
+separate distinctProgramsIn deduplicates afterward. Preserve that distinction.
+
+### Haskell findings and Liquid Haskell
+
+No new Haskell repair was authored here. Existing duplicate-name Liquid issues
+and their external owner remain in the earlier FINDINGS sections. At unchanged
+main e538, those reproduced issues remain relevant. The external
+fix/liquid-repeated-argument-names work owns the last-type/last-refinement policy.
+Do not duplicate that work. Reserved marker names remain an open external follow-up.
+The prior focused 16-example smoke result is not a full suite or runtime proof.
+Liquid Haskell contracts can check actual source invariants and expose mismatches.
+They still need an explicit correspondence to Lean; no automatic import or
+verified Haskell execution theorem follows from these component proofs.
+
 ## 2026-11-13 04:43 CET — actual eager Program-child height induction closes privately
 
 Goal ACTIVE. Continue the FULL system formalization. Preserve the optimized interned core, older constructor/equality targets, all proofs/counterexamples/repairs/marked drafts and `.hypha/`. Standing authorization permits pushes to `formalize`. Base: `ede2b6270ac2b3b40f08a23b1b19415886796a54`. Main remains `e53852064d3ef5a2eafec47d754c27504b11de5f`, freshly fetched unchanged at 04:23 CET.
