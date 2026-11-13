@@ -1,3 +1,100 @@
+## Current checkpoint: whole eager-worker marker preservation (2026-11-13 10:34 CET)
+
+The FULL library formalization goal stays ACTIVE. Pushes to formalize are
+explicitly authorized. Base: d20e211412d8e0aedf1c75513e08069f1b7e54b7.
+Main was remote-verified as e53852064d3ef5a2eafec47d754c27504b11de5f at 10:13 CET.
+All previous root notes remain an exact byte suffix.
+
+THE WHOLE-MARKER STRUCTURAL SUBGOAL IS CLOSED. SharedEagerReservation now has
+8246 lines, SHA256 abe55dcd8fcd7d55c5e9016306803a73d12c45086f38948eda167878f2900ed5.
+New PUBLIC theorem: runEager_finite_complete_resources_program_slots_isolated.
+It keeps ALL old inputs, one bound/outcome, every larger-work run equation and
+full eagerFinal resource receipt. At EACH SAME emitted output it retains the
+old extending ProgramSlots witness. It also retains EVERY ORIGINAL isolated
+pending boundary slot, its raw handle, and the SAME decoded native value.
+The native boundary condition is recursiveBoundary value = true. Existing
+packet, resource, selector and slot assumptions still apply.
+
+There is NO selected-target exclusion in this public statement. The full
+expansion proof derives that exclusion from the actual original restart.
+It uses the SAME unrewritten legacy0 prefix receipt, actual parked/narrowed
+phase equality, prefix_isolated and native Post lookup. The all-depth proof
+uses the checked zero and full expansion cases. Thus the formerly conditional
+lower-depth marker premise is now CLOSED by induction for EVERY finite depth.
+No future-state invariant or model supplier is introduced. One acyclic pinned
+PrefixIsolatedHistory import supplies existing transport. No worker/data/plan
+or production behavior changes.
+
+The explicit public header has 35 lines. It exposes no private predicate and
+adds no input. Its five-line wrapper specializes the full all-depth helper
+ONCE and returns the SAME execution/resource witnesses. All FIVE old public
+headers/proof bodies remain exact. Two private lemmas and ONE public law are
+added. No original-input initialization wrapper is added: startup need not
+contain any original isolated Type slot, so such an observer can be vacuous.
+
+Full expansion8154, full Resume8204 and public8246 EACH pass their FIRST strict
+check. Three actual GNU zero-context reverse patches recover every prior cut
+and the exact published7909 base. Own actual Lake build and SIX-name axiom
+report PASS with only propext, Classical.choice and Quot.sound. Complete affected
+Audit PASS: 5896 live modules, FIVE affected, 4893 Audit imports, 94921 axiom reports.
+Counts include private/generated declarations. Both standalone packets pass
+FROM /tmp under the same serial Nix 4 GiB max/high, swap 0, one Lean thread.
+No redundant repeat is needed. Audit, public child-isolation module and original
+eager width/resource159/output221 sources remain byte-identical.
+
+Evidence:
+lean/restart-evidence/20261113-eager-whole-marker/
+lean/restart-evidence/20261113-eager-whole-marker-compatibility/
+Runtime: /tmp/mcfta-eager-whole-marker-checkpoint-20261113-1026/.
+Strict hub: /tmp/mcfta-eager-resource-cps-check-20261113-0009/.
+The public statement is a checked law about the Lean worker. Compiled Haskell
+correspondence remains a separate obligation.
+
+The strongest ORIGINAL-INPUT public result remains the 221-line eager output
+result: accepted first-order raw input, empty pending metadata and fixed depth
+give one computed no-stop initializer/width, finite common work bound, SAME
+outcome at all larger budgets, full resources, extending ProgramSlots and one
+stable partial Program projection shared by every completion. The new general
+worker law adds structural retention under its existing inputs.
+It does NOT prove an output exists, an accepted finite completion exists,
+original typing, or adequate depth/completeness.
+
+BIGGEST SEMANTIC GAP: construct a finite term accepted by the SAME ORIGINAL
+root that genuinely completes the SAME emitted partial root. Existing completion
+projection then identifies the SAME Program, and original-root typing supplies
+its goal type and size. This joint witness remains UNPROVED. The previous
+semantic-audit.json records the exact target and 15 source hashes. Whole-cache
+Satisfies remains stronger; its actual alias/domain/residual support cannot be
+replaced by independent hole inhabitants or a hidden model hypothesis.
+
+NEXT: finish reviewed commits, authorized push/remote readback and exact board
+receipt. Then advance the joint accepted-completion witness. Read prior root-
+supported and current-opaque-model audits first. Locate a checked finite native
+inhabitant law and its actual source-derived premises, or state the precise
+reachable-shape/emptiness-completeness fact still needed. Do not repeat that
+Available/noStop/false provablyEmpty are not SAT. Do not assume a future model,
+choose a second initializer/endpoint, or substitute an arbitrary opaque CFTA
+for an actually reachable first-order source case. A bounded read-only plan
+is assigned to cycle_packet_audit in NEW /tmp. No body or runtime probe is
+currently authorized for that plan. Root reviews the next interface first.
+
+Keep the FULL scope: genuinely partial Type models and sharing, original-input
+pullback, adequate depth/completeness, default LPO/reduction/refolding/streams,
+order/multiplicity/lazy demand, sizes/counts/weights/training, BOTH rank/unrank
+inverses, host capacity and compiled Haskell correspondence. Optimized interned
+code stays primary; old constructor/equality work stays secondary. No Haskell/
+Cabal/test-suite files change and no Haskell repair is established here. Record
+EVERY future Haskell fix in FINDINGS for external agents. Liquid repeated-name/
+refinement work remains with claude-gondolin.
+
+Root is sole compiler/Git publisher. Agents write NEW /tmp only. Preserve all
+sources, counterexamples, repairs, marked drafts and .hypha. PRIMARY 45 percent
+at 10:23 CET; /tmp has 163.78 GiB free. Refresh within 15 minutes. If PRIMARY exceeds 80
+percent, stop workers, save full handoff, pause goal and notify Matti.
+After publication, CONTINUE the full objective. Do not mark the full goal complete.
+
+---
+
 ## Current checkpoint: captured rows and preparation retain markers (2026-11-13 10:09 CET)
 
 The FULL library formalization goal stays ACTIVE. Pushes to formalize are
