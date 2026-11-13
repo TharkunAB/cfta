@@ -34,6 +34,13 @@ def instantiate (substitution : String → Term Symbol) : Ty → Term Symbol
       else .node (literal name) [instantiate substitution argument, instantiate substitution result]
   | .tCons name arguments => .node (literal name) (arguments.map (instantiate substitution))
 
+/-- A substituted arrow retains its marker and ordered endpoint instances. -/
+theorem instantiate_fun (substitution : String → Term Symbol) (argument result : Ty) :
+    instantiate substitution (.tFun argument result) =
+      .node (literal "->") [.node (literal "(->)") [],
+        instantiate substitution argument, instantiate substitution result] := by
+  simp only [instantiate, arrow]
+
 private theorem shift_member (index : Nat) (items : List (String × List Nat)) (name : String) (path : List Nat) :
     (name, path) ∈ shift index items ↔ ∃ rest, path = index :: rest ∧ (name, rest) ∈ items := by
   simp only [shift, List.mem_map]
