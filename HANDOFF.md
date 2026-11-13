@@ -1,3 +1,13 @@
+## Next source-link proof plan (2026-11-13 15:49 CET)
+
+The checked checkpoint below remains current. Both new headers are PLANNING ONLY.
+Read lean/restart-evidence/20261113-current-first-filter-source-link/plan.md.
+The first uses the actual initial root-row observation to derive its filter build
+interval. The second retains the SAME SourceRow.union member and source app call.
+No body or compiler check exists for these headers. The full goal remains ACTIVE.
+
+---
+
 ## Selected Type paths and the actual function boundary (2026-11-13 15:41 CET)
 
 The FULL goal remains ACTIVE. Pushes to formalize remain authorized.
