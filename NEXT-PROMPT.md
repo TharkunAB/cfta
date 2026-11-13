@@ -1,3 +1,52 @@
+## Next semantic cut: productivity of an actual Type domain (2026-11-13 10:48 CET)
+
+The FULL formalization goal remains ACTIVE. Whole eager-worker marker
+preservation is PROVED and pushed through dc0e24393805235f41152f458d6103b9285d2399.
+The exact board readback is 245d8f89-017b-4aa8-b516-67607714de8c, sequence 1233.
+Main remains e53852064d3ef5a2eafec47d754c27504b11de5f at 10:37 CET.
+Previous notes remain an exact byte suffix. Pushes to formalize are authorized.
+
+New READ-ONLY finding: finite native row extraction and exact guarded-language
+correspondence are ALREADY checked in prechecked_table. The existing minimum
+adapter constructs a finite structural term from a present minimum entry.
+The missing local fact is minimumSizes(...).isSome=true for an ACTUAL retained
+source-Type domain. The output context supplies the physical heap facts; the
+actual Type-read receipt must supply the same value, availability and closure.
+No new extraction producer or independent endpoint is needed.
+
+This minimum erases guards. Guard validation, joint alias/residual consistency,
+parked reconstruction and the accepted original-root/actual-partial witness
+remain OPEN. Raw PlainMu permits guarded finite prefixes. It does not prove
+hereditary unconstrainedness of every reached Type domain. No positive
+productivity fact or model is claimed from marker retention.
+
+Evidence: lean/restart-evidence/20261113-type-productivity-next-cut/.
+audit.json pins 15 sources, the exact note and an explicitly UNPROVED local
+conclusion. Runtime: /tmp/mcfta-type-productivity-next-cut-20261113-1048/.
+No Lean source, Haskell/Cabal/test-suite file or public theorem changes here.
+No Haskell defect/repair is established. Record EVERY future Haskell fix in
+FINDINGS for external agents. No repeated proof build or runtime probe is needed.
+
+NEXT: actual_row_scan is selecting ONE concrete source-origin narrowed Type-read
+case beyond unchanged allTypes/rigid literals. It must pin the actual producer,
+operation receipt and guard shape, or name the missing origin/history clause.
+Only a NEW /tmp plan/header is authorized; no body, probe or live change yet.
+Root reviews it before implementation. Do not add positivity/model/support
+providers, require all dead classes, or replace an actual source case with an
+arbitrary opaque CFTA. Preserve genuine partial Type sharing and the SAME
+original initializer, emitted output and partial-root receipt.
+
+Keep the full remaining scope from the previous checkpoint: accepted completion,
+original typing/pullback, adequacy/completeness, default reduction/LPO/refolding/
+streams/order/multiplicity/lazy demand, size/count/weights/training, BOTH inverses,
+host capacity and compiled Haskell correspondence. Preserve all proof sources,
+counterexamples, repairs, marked drafts and .hypha. Root is sole compiler/Git
+publisher. PRIMARY 45 percent at 10:37 CET; /tmp has 163.76 GiB free. Refresh within 15
+minutes; above 80 percent stop workers, save handoff, pause goal and notify Matti.
+After the reviewed documentation commit/push, CONTINUE the full objective.
+
+---
+
 ## Current checkpoint: whole eager-worker marker preservation (2026-11-13 10:34 CET)
 
 The FULL library formalization goal stays ACTIVE. Pushes to formalize are
