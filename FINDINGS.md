@@ -1,3 +1,108 @@
+## Current checkpoint: shared-child and opaque isolation (2026-11-13 09:42 CET)
+
+The FULL library formalization goal stays ACTIVE. Pushes to formalize are
+explicitly authorized. This checkpoint starts from
+c35b242b5fd2947553ced68243fd19a4cfc38ce6. The 09:38 CET remote readback confirms
+that base and main e53852064d3ef5a2eafec47d754c27504b11de5f.
+All previous root notes remain an exact byte suffix.
+
+NEW PUBLIC LOCAL LAW: SourcePruningEnumerationSharedChildIsolation has 369 lines,
+SHA256 ada94bee92a6de405cd29f1d0c38a0858f8d13bb161f1a73634f256b04134aa2.
+Its sole public theorem, observed_isolated_pending, observes the SAME successful
+shared ChildDispatch.run singleton. Safe input, an existing isolated pending
+slot, bounded child constraints and avoidance of that slot's union-find class
+imply that the SAME slot retains its isolation certificate in the actual
+returned core. Five private helpers follow dispatch, fold, incoming operations
+and the terminal path. No second worker or endpoint is chosen. No future model
+or output-state invariant is supplied. Native lookup at a changed caller is
+transported separately by the actual native Post.
+
+The public thirteen-line interface retains bits + 2. Its six proof bodies are
+exact extractions from a checked private trial, with only the final name and
+visibility changed. Four private source trials, including all failed diagnostics,
+remain reconstructible. Three actual GNU zero-context reverse patches recover
+the earlier fragments. The archived enclosing patch and pinned base reconstruct
+ALL four complete trial hashes. The final Lean repair removes an unused error
+wrapper from a PRIVATE write observer. That observer takes the actual successful
+state equality directly. This fixes the universe mismatch without changing any
+state premise, worker or endpoint. No production Haskell fix is involved.
+
+SourcePruningEnumerationSharedEagerReservation now has 7032 lines, SHA256
+35418335bc33bd7b6d322deadcf49047da45b275e9eb70c36d9846226f4d5a52.
+Its new PRIVATE opaque composition uses the public shared-child observer,
+SAME FinalizationAt child/finalizer receipts and ONE recorded callback in the
+selected successful arm. It retains Program roles and original isolated slots
+DIFFERENT from the selected write target. It retains every old resource field,
+profile, fallback plan and all-larger-fuel equation. Its recursive premise is
+the FULL lower-depth ResumeWithIsolated goal. That induction is not closed.
+
+This local exclusion is required: Ready does not exclude an isolated selected
+target, which the finalizer overwrites. The final full-marker Resume statement
+is unchanged. Its future outer proof must use actual packet_restart_ne and
+prefix_isolated facts for ORIGINAL markers. No public input is strengthened.
+All old 6861 source bytes restore exactly with one actual GNU reverse patch.
+The old FIVE public headers and proof bodies remain exact. No new public eager
+law, worker, evaluator, plan or data type is added.
+
+CHECKS PASS: the new module's build and exact one-name axiom report; the eager
+module's build and exact five-name report; and the combined full Audit frontier.
+Each own report uses only propext, Classical.choice and Quot.sound. The frontier
+covers all SIX affected modules, 5896 live modules, 4893 Audit imports and 94893
+axiom reports. These counts include private/generated declarations and are not
+proof progress. Audit adds ONE import; its previous 266701 bytes remain an exact
+suffix. The original eager width/resource159/output221 sources stay exact.
+All standalone packets pass from /tmp in the existing serial Nix 4 GiB max/high,
+swap 0, one-thread scope. No repeat is needed without a new change or concern.
+
+Evidence:
+lean/restart-evidence/20261113-shared-child-isolation/
+lean/restart-evidence/20261113-eager-opaque-isolated/
+lean/restart-evidence/20261113-shared-child-isolation-compatibility/
+Root runtime: /tmp/mcfta-shared-child-isolation-checkpoint-20261113-0926/.
+Strict hub: /tmp/mcfta-eager-resource-cps-check-20261113-0009/.
+The packets retain small source patches and checks, not large execution archives.
+
+The strongest GLOBAL PUBLIC result is unchanged: accepted original first-order
+raw inputs and fixed recursion depth give one computed eager width/initializer,
+one finite common work bound and the SAME outcome for every larger common work
+budget. Every actual output retains full resources, extending ProgramSlots and
+one stable partial Program readback shared by every completion. This does not
+construct a finite original Type model, prove original-library/query typing,
+prove an output exists, or prove adequate depth/completeness.
+
+NEXT: captured-row marker composition, then preparation, expansion and positive
+Resume depth. Its frozen 55-line header and 82-line plan are in
+/tmp/mcfta-eager-captured-isolated-plan-20261113-0935/.
+The captured proof is authorized as a NEW /tmp draft only. Existing aggregate
+TupleInputs/ChildInputs, finalized_child_inputs_isolated_pending and the checked
+recorded callback supply the needed transports. Keep the ORIGINAL caller/cache/
+target output index and FULL recursive premise. Do not copy a generic CPS stack
+or introduce future-state/model suppliers. Root reviews and compiles each draft
+before live integration. Current private opaque preservation is not a completed
+whole-worker theorem.
+
+The largest semantic gap remains finite original Type model construction,
+including genuine partial completions and allocated-class reconstruction that
+preserves the SAME Program. Keep adequate depth/completeness, default LPO,
+reduction/refolding and streams, order/multiplicity/lazy demand, sizes/counts/
+weights/training, BOTH rank/unrank inverses, host capacity and compiled Haskell
+correspondence in scope. Keep the optimized interned core as the primary target.
+Preserve the older constructor and equality work as secondary targets.
+
+The three prior source probes remain bounded observations with flag=False.
+No Haskell/Cabal/test-suite files change here. No Haskell defect or repair is
+established. Record EVERY future Haskell fix in FINDINGS for external agents.
+Liquid repeated-name/refinement work remains with claude-gondolin.
+
+Root is the sole compiler/Git publisher. Agents write NEW /tmp files only.
+Preserve all sources, counterexamples, repairs, marked drafts and .hypha.
+PRIMARY is 44 percent at 09:38 CET; /tmp has 163.87 GiB free. Refresh within
+15 minutes. If PRIMARY exceeds 80 percent, stop workers, save the full handoff,
+pause the goal and notify Matti. Verify reviewed commits, the authorized push,
+remote readback and exact board receipt. Then CONTINUE the full objective.
+
+---
+
 ## Current checkpoint: isolated-marker callback leaves (2026-11-13 08:44 CET)
 
 The FULL library formalization goal stays ACTIVE. Publication to formalize is
