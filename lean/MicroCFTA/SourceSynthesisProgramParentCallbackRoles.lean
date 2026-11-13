@@ -244,4 +244,16 @@ theorem parent_callback_roles
       finalFlags, finalStorage, finalRealized, safeFinish⟩,
     beforePacket, callback, parentRoles, beforeSlots, afterSlots⟩
 
+omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node] in
+/-- Ordered child roles determine the same assembled Program fragment. -/
+theorem fragment_roles_of_children (valid : Constraint → Prop) (marked : Nat → Prop)
+    (edge : EdgeValue Symbol Constraint) (fields : EdgeFields valid literal edge)
+    (fragments : List Fragment) (length : fragments.length = edge.children.length)
+    (childrenRoles : ∀ index child,
+      ((edge.entry.key.symbol = literal "app" ∧ (index = 2 ∨ index = 3)) ∨
+        (edge.entry.key.symbol = literal "filter" ∧ index = 1)) →
+      fragments[index]? = some child → FragmentRoles literal marked child) :
+    FragmentRoles literal marked (.node edge.entry.key.symbol fragments) := by
+  exact assembled_roles valid marked edge fields fragments length childrenRoles
+
 end MicroCFTA.SourceSynthesisProgramParentCallbackRoles
