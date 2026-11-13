@@ -1,0 +1,101 @@
+import MicroCFTA.SourceSynthesisCurrentInitialOuterNarrowRows
+
+namespace MicroCFTA.SourceSynthesisCurrentInitialOuterNarrowFacts
+open InternedConstructorTemplates InternedProbeProvenance InternedNestedFacts
+open InternedNestedConstruction (Syntax EdgeSyntax Outcome work)
+open InternedFreshOrdinaryConstruction (build buildEdges)
+open InternedNestedProvenance (Edges)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+
+/-- The same initial narrowing retains valid records, result availability, and ordinary shape. -/
+theorem initial_outer_narrow_facts
+    {Typing Key : Type}
+    [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)]
+    (lib : SourceSynthesisTypeSyntax.Library) (query : SourceSynthesisTypeSyntax.Query)
+    (signed : Int) (whole : SourceSynthesisFirstOrderConstruction.Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : InternedConstructorTemplates.Value Symbol Guard)
+    (heap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build
+      (SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+      InternedConstructorTemplates.empty = .done rootValue heap)
+    (metadata : SourcePruningRecordTypes.Metadata Typing)
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
+    (admits : Key → InternedConstructorTemplates.Value Symbol Guard → Bool)
+    (fuel : Nat) (result : InternedConstructorTemplates.Value Symbol Guard)
+    (after : InternedConstructorTemplates.State Symbol Guard)
+    (observed : SourcePruningOuterNarrow.narrow holeKey fits admits metadata
+      fuel 0 rootValue heap = .done result after) :
+    InternedNestedFacts.Facts after ∧
+      InternedProbeProvenance.Available after result ∧
+      SourceEqualityRequiredCache.Ordinary result
+ := by
+  obtain ⟨_chunks, _chunksRun, wholeShape, _factory⟩ :=
+    SourceSynthesisCurrentCandidateAppOperands.current_candidate_app_operands
+      lib query signed whole accepted
+  have rootSyntax : ∃ rows : List (EdgeSyntax Symbol Guard),
+      SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole = .node rows := by
+    rw [wholeShape]
+    exact ⟨_, rfl⟩
+  obtain ⟨sourceRows, sourceShape⟩ := rootSyntax
+  have ordinary : SourceEqualityRequiredCache.Ordinary rootValue := by
+    have nodeBuilt := built
+    rw [sourceShape, build] at nodeBuilt
+    have checked := InternedFreshOrdinaryFacts.buildEdges_verified sourceRows []
+      (empty : State Symbol Guard) empty_facts (by intro value member; cases member)
+    cases rowsDone : buildEdges sourceRows [] (empty : State Symbol Guard) with
+    | pending key state =>
+        simp only [rowsDone, Outcome.bind] at nodeBuilt
+        cases nodeBuilt
+    | done rows middle =>
+        have same :
+            (run (makeNode rows) middle).1 = rootValue ∧
+              (run (makeNode rows) middle).2 = heap := by
+          apply Outcome.done.inj
+          simpa only [rowsDone, Outcome.bind, work] using nodeBuilt
+        have middleFacts : Facts middle := by
+          simpa only [rowsDone, Outcome.state] using checked.facts
+        rw [← same.1]
+        exact SourceEqualityRequiredCache.node_ordinary rows middle middleFacts
+          (checked.result rows middle rowsDone)
+  have checked := InternedFreshOrdinaryFacts.closed_verified
+    (SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole)
+  have facts : Facts heap := by
+    simpa only [built, Outcome.state] using checked.facts
+  have available : Available heap rootValue := checked.result rootValue heap built
+  by_cases inside : 0 ∈ metadata.types
+  · rw [SourcePruningOuterNarrow.narrow_type
+      holeKey fits admits metadata fuel 0 rootValue heap inside] at observed
+    obtain ⟨rfl, rfl⟩ := MergedSourceComparison.Result.done.inj observed
+    exact ⟨facts, available, ordinary⟩
+  · have notMu : ∀ entry body depth ordinaryShape,
+        rootValue ≠ .mu entry body depth ordinaryShape := by
+      intro entry body depth ordinaryShape same
+      rw [same] at ordinary
+      cases ordinary
+    rw [SourcePruningOuterNarrow.narrow_fallback
+      holeKey fits admits metadata fuel 0 rootValue heap notMu inside] at observed
+    have exposed : MergedFreshOrdinaryExposure.nodeEdges fuel rootValue heap =
+        .done (InternedEdgeResidency.nodeEdges rootValue) heap := by
+      cases rootValue with
+      | empty | node => rfl
+      | reference | union | mu => cases ordinary
+    rw [SourcePruningNativeView.narrowAt, exposed] at observed
+    let selected := (InternedEdgeResidency.nodeEdges rootValue).filter
+      (SourcePruningNativeView.keeps fits admits (holeKey metadata.typing 0))
+    have same : (run (makeNode selected) heap).1 = result ∧
+        (run (makeNode selected) heap).2 = after :=
+      MergedSourceComparison.Result.done.inj observed
+    have originalResident : Edges heap (InternedEdgeResidency.nodeEdges rootValue) :=
+      InternedEdgeResidency.resident_edges heap facts.linked rootValue available.resident
+    have selectedResident : Edges heap selected := by
+      intro row member
+      exact originalResident row (List.mem_filter.mp member).1
+    have reconstructed := node_verified selected heap facts selectedResident
+    have ordinaryResult := SourceEqualityRequiredCache.node_ordinary selected heap facts selectedResident
+    rw [← same.1, ← same.2]
+    refine ⟨?_, reconstructed.result _ _ rfl, ordinaryResult⟩
+    simpa only [work, Outcome.state] using reconstructed.facts
+
+end MicroCFTA.SourceSynthesisCurrentInitialOuterNarrowFacts

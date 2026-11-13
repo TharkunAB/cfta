@@ -1,0 +1,236 @@
+import MicroCFTA.SourceSynthesisCurrentInitialOuterNarrowRows
+import MicroCFTA.SourceSynthesisCurrentProgramSlotsInitialization
+import MicroCFTA.SourcePruningEnumerationSelectedStep
+import MicroCFTA.SourcePruningEnumerationRecursionOrder
+
+namespace MicroCFTA.SourceSynthesisCurrentInitialPrefixOrigin
+open InternedConstructorTemplates EnumerationState
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Guard
+local notation "Core" => EnumerationState.State Symbol Guard
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Guard
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+
+/-- Trace the actual initial eager prefix to its original source rows. -/
+theorem initial_prefix_narrowed_rows
+    {Typing Key : Type} {width : Nat}
+    [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : SourceSynthesisTypeSyntax.Library) (query : SourceSynthesisTypeSyntax.Query)
+    (signed : Int) (whole : SourceSynthesisFirstOrderConstruction.Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Node) (heap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build
+      (SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+      InternedConstructorTemplates.empty = .done rootValue heap)
+    (cache : Cache.State SourceEqualityPartialConstraintKey.Key)
+    (handle : Nat)
+    (decoded : SourcePruningEnumerationNodes.lookupNode heap handle = some rootValue)
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
+    (admits : Key → Node → Bool)
+    (graph : Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+    (readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel : Nat)
+    (queries : SourceEndpointMemo.Memos) :
+    let caller := SourceCurrentAllocatedPartialInitialization.caller width cache heap
+    let startup : Cached :=
+      ⟨EnumerationState.initial handle,
+        fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+        fun _ => none⟩
+    match SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates
+      stop order metadata readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel
+      0 caller startup queries with
+    | .narrowed checked (.done (result, action) after) reached saved
+        _raw _candidate _right ordinary =>
+        ∃ readAfter : Core,
+          ExceptT.run (getValue readFuel 0 startup.core) =
+            [.ok (.unenumerated (some handle) [], readAfter)] ∧
+          ExceptT.run (SourcePruningEnumerationRecursion.checkRepeated
+            heap checkFuel 0 handle [] readAfter) = [.ok (false, checked)] ∧
+          EnumerationCompressionFrame.Frame startup.core checked ∧
+          SourcePruningEnumerationAction.prepare holeKey fits admits metadata
+            nativeFuel representativeFuel 0 handle [] rootValue heap =
+              .done (result, action) after ∧
+          SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel
+            0 rootValue heap = .done result after ∧
+          reached = SourceCurrentAllocatedPartialState.advance caller
+            (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+              ⟨after, caller.checked.operations⟩) caller.fourth caller.merge ∧
+          saved = queries ∧ ordinary = none ∧
+          ∀ row ∈ InternedEdgeResidency.nodeEdges result,
+            row ∈ InternedEdgeResidency.nodeEdges rootValue
+    | _ => True := by
+  have initialRead (pending : UVarValue Symbol) (readAfter : Core)
+      (read : ExceptT.run (getValue readFuel 0 (EnumerationState.initial handle : Core)) =
+        [.ok (pending, readAfter)]) :
+      pending = .unenumerated (some handle) [] ∧
+        EnumerationCompressionFrame.Frame (EnumerationState.initial handle) readAfter := by
+    have success : EnumerationCorrectness.Success (getValue readFuel 0)
+        (EnumerationState.initial handle : Core) pending readAfter := by
+      unfold EnumerationCorrectness.Success
+      rw [read]
+      exact List.mem_cons_self
+    obtain ⟨found, lookup, stored, _shape⟩ :=
+      (EnumerationCorrectness.getValue_success readFuel 0
+        (EnumerationState.initial handle : Core) readAfter pending).mp success
+    have representativeSame : found.representative = 0 :=
+      (UnionFind.reaches_unique (UnionFind.findRoot_correct readFuel
+        (EnumerationState.initial handle : Core).representatives 0 found lookup).1
+        (.root (UnionFind.read_initial [0] 0))).1
+    have pendingSame : pending = .unenumerated (some handle) [] := by
+      simpa only [EnumerationState.initial, representativeSame,
+        List.getElem?_cons_zero, Option.some.injEq] using stored.symm
+    exact ⟨pendingSame, (EnumerationCompressionFrame.getValue_frame readFuel 0
+      (EnumerationState.initial handle : Core) readAfter pending
+      (UnionFind.initial_total [0]) success).1⟩
+  have narrowObservation (result : Node)
+      (action : Option (EnumerateM Symbol Guard Unit))
+      (after : InternedConstructorTemplates.State Symbol Guard)
+      (prepared : SourcePruningEnumerationAction.prepare holeKey fits admits metadata
+        nativeFuel representativeFuel 0 handle [] rootValue heap =
+          .done (result, action) after) :
+      SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel
+        0 rootValue heap = .done result after := by
+    unfold SourcePruningEnumerationAction.prepare at prepared
+    cases native : SourcePruningOuterNarrow.narrow holeKey fits admits metadata
+        nativeFuel 0 rootValue heap with
+    | failed fault next =>
+        simp only [native] at prepared
+        cases prepared
+    | done value next =>
+        simp only [native] at prepared
+        obtain ⟨same, heapSame⟩ := MergedSourceComparison.Result.done.inj prepared
+        have valueSame : value = result := congrArg Prod.fst same
+        cases valueSame
+        cases heapSame
+        rfl
+  dsimp only
+  unfold SourcePruningEnumerationSelectedStep.runPrefix
+  dsimp only
+  generalize readEq : ExceptT.run
+    (getValue readFuel 0 (EnumerationState.initial handle : Core)) = read
+  cases read with
+  | nil => trivial
+  | cons first rest =>
+      cases rest with
+      | cons second rest =>
+          cases first with
+          | error error => trivial
+          | ok pair =>
+              obtain ⟨pending, _readAfter⟩ := pair
+              cases pending with
+              | eliminated | enumerated => trivial
+              | unenumerated node scs => cases node <;> trivial
+      | nil =>
+          cases first with
+          | error error => trivial
+          | ok pair =>
+              obtain ⟨pending, readAfter⟩ := pair
+              obtain ⟨pendingSame, readFrame⟩ := initialRead pending readAfter readEq
+              subst pending
+              dsimp only [SourceCurrentAllocatedPartialInitialization.caller,
+                SourceCurrentAllocatedPartialState.initial,
+                SourceCurrentAllocatedPartialInitialization.checked,
+                SourceRecursiveIntersectionThunks.initial]
+              generalize checkEq : ExceptT.run
+                (SourcePruningEnumerationRecursion.checkRepeated
+                  heap checkFuel 0 handle [] readAfter) = check
+              cases check with
+              | nil => trivial
+              | cons first rest =>
+                  cases rest with
+                  | cons second rest =>
+                      cases first with
+                      | error error => trivial
+                      | ok pair =>
+                          obtain ⟨repeated, _checked⟩ := pair
+                          cases repeated <;> trivial
+                  | nil =>
+                      cases first with
+                      | error error => trivial
+                      | ok pair =>
+                          obtain ⟨repeated, checked⟩ := pair
+                          cases repeated with
+                          | true => trivial
+                          | false =>
+                              have checkSuccess : EnumerationCorrectness.Success
+                                  (SourcePruningEnumerationRecursion.checkRepeated
+                                    heap checkFuel 0 handle []) readAfter false checked := by
+                                unfold EnumerationCorrectness.Success
+                                rw [checkEq]
+                                exact List.mem_cons_self
+                              have frame := readFrame.trans
+                                (SourcePruningEnumerationRecursionOrder.checkRepeated_false_frame
+                                  heap checkFuel 0 handle [] readAfter checked
+                                  (readFrame.total (UnionFind.initial_total [0])) checkSuccess)
+                              rw [decoded]
+                              dsimp only
+                              generalize preparedEq : (SourcePruningEnumerationAction.prepare
+                                holeKey fits admits metadata nativeFuel representativeFuel
+                                0 handle [] rootValue heap :
+                                  MergedSourceComparison.Result Symbol Guard
+                                    (Node × Option (EnumerateM Symbol Guard Unit))) = prepared
+                              cases prepared with
+                              | failed fault after => trivial
+                              | done pair after =>
+                                  obtain ⟨result, action⟩ := pair
+                                  have native := narrowObservation result action after preparedEq
+                                  have included :=
+                                    SourceSynthesisCurrentInitialOuterNarrowRows.initial_outer_narrow_rows
+                                      lib query signed whole accepted rootValue heap built metadata
+                                      holeKey fits admits nativeFuel result after native
+                                  cases action with
+                                  | none =>
+                                      exact ⟨readAfter, rfl, checkEq, frame, rfl, native,
+                                        rfl, rfl, rfl, included⟩
+                                  | some action =>
+                                      dsimp only
+                                      generalize ExceptT.run (action checked) = raw
+                                      cases raw with
+                                      | nil =>
+                                          exact ⟨readAfter, rfl, checkEq, frame, rfl, native,
+                                            rfl, rfl, rfl, included⟩
+                                      | cons first rest =>
+                                          cases rest with
+                                          | cons second rest =>
+                                              cases first with
+                                              | error error =>
+                                                  exact ⟨readAfter, rfl, checkEq, frame, rfl, native,
+                                                    rfl, rfl, rfl, included⟩
+                                              | ok pair =>
+                                                  obtain ⟨token, _observed⟩ := pair
+                                                  cases token
+                                                  exact ⟨readAfter, rfl, checkEq, frame, rfl, native,
+                                                    rfl, rfl, rfl, included⟩
+                                          | nil =>
+                                              cases first with
+                                              | error error =>
+                                                  exact ⟨readAfter, rfl, checkEq, frame, rfl, native,
+                                                    rfl, rfl, rfl, included⟩
+                                              | ok pair =>
+                                                  obtain ⟨token, observed⟩ := pair
+                                                  cases token
+                                                  dsimp only
+                                                  cases SourcePruningEnumerationNodes.encodeNode result with
+                                                  | none =>
+                                                      exact ⟨readAfter, rfl, checkEq, frame, rfl, native,
+                                                        rfl, rfl, rfl, included⟩
+                                                  | some newHandle =>
+                                                      dsimp only
+                                                      cases SourcePruningEnumerationNarrowAdapter.adapt after
+                                                        indexFuel 0 handle newHandle []
+                                                        ⟨EnumerationState.initial handle,
+                                                          fun slot => if slot = 0 then
+                                                            !MergedOrdinaryHeight.recursiveBoundary rootValue
+                                                            else false,
+                                                          fun _ => none⟩ observed with
+                                                      | none =>
+                                                          exact ⟨readAfter, rfl, checkEq, frame, rfl, native,
+                                                            rfl, rfl, rfl, included⟩
+                                                      | some attached =>
+                                                          rw [SourcePruningRecordTypes.recordTypes_inr]
+                                                          exact ⟨readAfter, rfl, checkEq, frame, rfl, native,
+                                                            rfl, rfl, rfl, included⟩
+
+end MicroCFTA.SourceSynthesisCurrentInitialPrefixOrigin
