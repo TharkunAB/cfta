@@ -1,3 +1,46 @@
+## Actual app marker-class function read checked locally (2026-11-13 12:06 CET)
+
+The FULL goal remains ACTIVE. Public native Type membership and its full Audit
+are pushed and remote-verified through 85e7e4b9ac1b4f48b0fa0e8c7b9f7839d8dd5be0.
+Its board receipt 0053a053-db53-4d91-8feb-42016d4d9650 is exact, sequence 1236.
+Main remains e53852064d3ef5a2eafec47d754c27504b11de5f. Pushes remain authorized.
+Previous notes remain an exact byte suffix. Keep the full objective below.
+
+New PRIVATE local observer 59/5621765f passes strict Lean and its actual axiom
+report: ONLY propext and Quot.sound. Exact15 header f80e5cb7 is unchanged. The
+actual full four-child RequireAllReads, when its recorded selected classes
+are [[1],[2,0,0]], yields function RequireNode(build [[0,0]]) plus SAME actual
+NodeReads, before/after heaps and full Memos. The other three children stay unchanged.
+This is an observed case, not an unconditional app footprint or singleton read.
+The proof inverts the SAME dependent memo receipt. cbv proves closed path
+computation through checked equations. No native-evaluation axiom is used.
+
+Packet lean/restart-evidence/20261113-app-marker-subtrace/ keeps the checked
+PRIVATE draft in source.lean.txt, FIVE source stages, FOUR actual GNU zero-context
+replays and all rejected diagnostics. Its standalone checker ran FROM/tmp in
+sole serial Nix4GiB max/high/swap0/one-Lean-thread scope. Root runtime:
+/tmp/mcfta-actual-app-marker-check-20261113-1148/. No live module or public law
+is added here. All live library sources and the prior 75-module Audit remain
+exact. No full rebuild is needed for this source-only proof checkpoint.
+
+NEXT: derive the ACTUAL identity-row visit and nested Type-child read from that
+function receipt. Retain row-prefix/suffix heaps and full Memos, and the SAME
+source field/actual occurrence. The exact missing ancestry is in the prior packet
+next-read.json and /tmp/mcfta-actual-app-marker-read-plan-20261113-1138/missing-nested-type-receipt.txt. Do not add it as a future
+receipt/model/support supplier. Derive support from the actual source field's
+free=[] after its occurrence has been established. The finite guarded native
+source witness is proved; its survival through this actual nested read is OPEN.
+Joint alias/residual consistency and accepted SAME-original-root/SAME-emitted-
+partial completion remain the BIGGEST gap, with original typing and all full
+library/default/runtime objectives below. No Haskell/Cabal/test-suite edit or
+Haskell defect/repair is established. Put every future Haskell fix in FINDINGS.
+Preserve all proofs, counterexamples, repairs, marked drafts and .hypha.
+PRIMARY 47 percent at 12:06 CET; /tmp has 162.39 GiB free. Refresh within 15 minutes; above 80
+percent save the handoff, stop workers, pause the goal and notify Matti.
+Publish this proof checkpoint, then CONTINUE the full goal. Root is sole compiler.
+
+---
+
 ## Native identity Type field has a finite guarded member (2026-11-13 11:51 CET)
 
 The FULL goal remains ACTIVE. The two new public laws are checked. This
