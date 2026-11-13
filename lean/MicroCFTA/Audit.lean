@@ -1,3 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationSharedChildIsolation
 import MicroCFTA.SourceSynthesisCurrentProgramEagerOutputs
 import MicroCFTA.SourceSynthesisCurrentProgramEagerResources
 import MicroCFTA.SourceSynthesisProgramRolesOwnInputsAvoids
