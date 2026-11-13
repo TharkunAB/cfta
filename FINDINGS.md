@@ -1,3 +1,90 @@
+## Current checkpoint: captured rows and preparation retain markers (2026-11-13 10:09 CET)
+
+The FULL library formalization goal stays ACTIVE. Pushes to formalize are
+explicitly authorized. Base: b75364237a50b951ce19f54b4cf48086f1bf0c6c.
+The 10:08 CET remote readback confirms that base and main
+e53852064d3ef5a2eafec47d754c27504b11de5f. Previous notes remain an exact suffix.
+
+SharedEagerReservation now has 7909 lines, SHA256
+a11cf3bd657ab93e6c537ded4501761590f527b7fb499c45cd32dfcf47cc8e28.
+THREE new PRIVATE lemmas retain Program roles and original isolated markers
+DIFFERENT from the selected write target. Captured rows use the SAME aggregate
+child/finalizer receipt and one recorded callback in each exclusive success arm.
+The row fold keeps the SAME captured core for each alternative. It rebases the
+tail's native lookup through the completed head Post. Preparation uses ONE actual
+preparation producer and the SAME ordinary/opaque branch receipts. RenderStable
+and that preparation's native Post transport the original marker and lookup.
+Every old resource field, profile, actual endpoint and all-larger-fuel equation
+remains. The recursive premise is the FULL lower-depth marker goal.
+
+The 55/57/37-line headers stay exact. Captured7453, rows7617 and prepared7909
+EACH pass their FIRST strict check. Three actual GNU zero-context reverse patches
+recover every preceding source and the exact published7032 base. ALL old helpers,
+workers, plans, data and FIVE public headers/proof bodies remain exact. No public
+law, evaluator, predicate, adapter or import is added by these three cuts.
+The public shared-child isolation theorem from the previous checkpoint is exact.
+
+Own Lake build, strict five-name standard-axiom report and complete affected
+Audit frontier PASS: 5896 live modules, FIVE affected, 4893 Audit imports and
+94912 axiom reports. Counts include private/generated declarations. Both standalone
+packets pass FROM /tmp under the same serial Nix 4 GiB max/high, swap 0 and one
+Lean thread. No redundant repeat is needed. Audit and the original eager
+width/resource159/output221 sources stay byte-identical.
+
+Evidence:
+lean/restart-evidence/20261113-eager-captured-prepared-isolated/
+lean/restart-evidence/20261113-eager-captured-prepared-isolated-compatibility/
+Runtime: /tmp/mcfta-eager-captured-prepared-isolation-20261113-0957/.
+Strict hub: /tmp/mcfta-eager-resource-cps-check-20261113-0009/.
+
+A READ-ONLY semantic audit sharpens the missing typing witness. Existing
+Satisfies adapters require a model for ALL retained slots, forest equalities and
+residuals. The original startup has one slot. The typing endpoint can instead
+use ONE finite term accepted by the SAME ORIGINAL root that genuinely completes
+the SAME actual partial readback. The existing completion projection then gives
+the SAME emitted Program, and original-root typing gives its goal type and size.
+This joint witness remains UNPROVED. It is not a new assumption or provider.
+Independent hole inhabitants do not suffice. Truncation loses raw UVar IDs, and
+actual alias/domain support still needs proof for any full-cache model claim.
+semantic-audit.json preserves the exact audit, unproved target and source hashes.
+No root-supported model, satisfiability or original typing theorem is added.
+
+The strongest GLOBAL PUBLIC result stays unchanged. In the Lean model, accepted
+original first-order raw inputs, empty starting pending metadata and a fixed
+depth give one computed no-stop eager width/initializer, a finite common work
+bound and the SAME outcome for all larger common budgets. Every emitted output
+has full resources, extending ProgramSlots and a stable partial Program readback
+shared by every completion. Finite accepted completion, original typing, output
+existence and adequate depth/completeness remain open.
+
+NEXT: FULL original-marker expansion and all-depth Resume closure. Exact reviewed
+headers28/9 and plan95 are in /tmp/mcfta-eager-full-isolated-plan-20261113-1004/.
+Only the expansion body is authorized as a NEW /tmp draft now. One proposed
+PrefixIsolatedHistory import is acyclic and pinned at258/f5f3c31d. Derive selected
+write-target exclusion internally from ORIGINAL packet_restart_ne. Use the SAME
+unrewritten legacy0 prefix receipt, actual phase equality, prefix_isolated and
+native Post lookup. NO Except restriction enters the FULL outer statement.
+Root checks expansion before authorizing the all-depth body. The whole marker
+induction is still OPEN. Do not add future invariant/model suppliers or generic
+CPS copies. Finish reviewed commits, push/readback and exact board receipt.
+
+Retain genuine partial Type models, original-input pullback, default LPO,
+reduction/refolding/streams, order/multiplicity/lazy demand, sizes/counts/weights/
+training, BOTH rank/unrank inverses, host capacity and compiled Haskell
+correspondence. Optimized interned code stays primary; older constructor and
+equality proofs remain secondary targets. No Haskell/Cabal/test-suite file
+changes or Haskell repair is established here. Record EVERY future Haskell fix
+in FINDINGS for external agents. Liquid repeated-name/refinement work remains
+with claude-gondolin.
+
+Root is the sole compiler/Git publisher. Agents write NEW /tmp files only.
+Preserve sources, counterexamples, repairs, marked drafts and .hypha. PRIMARY is
+45 percent at 10:08 CET; /tmp has 163.8 GiB free. Refresh within 15 minutes.
+If PRIMARY exceeds 80 percent, stop workers, save the full handoff, pause the
+goal and notify Matti. After publication, CONTINUE the full objective.
+
+---
+
 ## Current checkpoint: shared-child and opaque isolation (2026-11-13 09:42 CET)
 
 The FULL library formalization goal stays ACTIVE. Pushes to formalize are
