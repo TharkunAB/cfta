@@ -1,0 +1,72 @@
+/tmp/mcfta-actual-function-prefix-20261113-1510/draft.lean:41:16: error: Type mismatch: After simplification, term
+  later
+ has type
+  @Exists (RequireChildren entries (index + (count + 1)) (List.drop count values) middle suffixResults after) fun h =>
+    ChildrenReads ⋯ middleMemos saved
+but is expected to have type
+  @Exists
+    (RequireChildren entries (index + (count + 1)) (List.drop (count + 1) (value :: values)) middle suffixResults after)
+    fun later => ChildrenReads later middleMemos saved
+/tmp/mcfta-actual-function-prefix-20261113-1510/draft.lean:50:16: error: Type mismatch: After simplification, term
+  later
+ has type
+  @Exists (RequireChildren entries (index + (count + 1)) (List.drop count values) middle suffixResults after) fun h =>
+    ChildrenReads ⋯ middleMemos saved
+but is expected to have type
+  @Exists
+    (RequireChildren entries (index + (count + 1)) (List.drop (count + 1) (value :: values)) middle suffixResults after)
+    fun later => ChildrenReads later middleMemos saved
+/tmp/mcfta-actual-function-prefix-20261113-1510/draft.lean:87:40: error: Expected type must not contain free variables
+  2 ≤ [resultType, marker, function, argument].length
+
+Hint: Use the `+revert` option to automatically clean up and revert free variables
+/tmp/mcfta-actual-function-prefix-20261113-1510/draft.lean:94:27: error: Application type mismatch: The argument
+  h
+has type
+  value = marker ∨ value ∈ []
+but is expected to have type
+  value = marker
+in the application
+  Or.inl h
+/tmp/mcfta-actual-function-prefix-20261113-1510/draft.lean:96:39: error: Tactic `assumption` failed
+
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+paths : List (List Int)
+entries : List (Int × SourceEqualityNeeded.Needed)
+wanted : SourceEqualityNeeded.Needed
+compiled : SourceEqualityNeeded.build paths = SourceEqualityNeeded.Needed.node entries
+selected : SourceEqualityNeededMap.lookup 2 entries = some wanted
+resultType marker function argument : Value Symbol Guard
+results : List (Value Symbol Guard)
+before after : State Symbol Guard
+memos saved : EndpointMemoGateTrace.Memos
+semantic : SourceEqualityRequiredSemanticCache.SemanticReady before
+costs : InternedFreshOrdinaryCostHeap.Heap before
+available : Values before [resultType, marker, function, argument]
+trace : RequireChildren entries 0 [resultType, marker, function, argument] before results after
+reads : ChildrenReads trace memos saved
+prefixResults suffixResults : List (Value Symbol Guard)
+middle : State Symbol Guard
+middleMemos : EndpointMemoGateTrace.Memos
+aligned : results = prefixResults ++ suffixResults
+earlier : RequireChildren entries 0 (List.take 2 [resultType, marker, function, argument]) before prefixResults middle
+earlierReads : ChildrenReads earlier memos middleMemos
+later :
+  RequireChildren entries (0 + 2) (List.drop 2 [resultType, marker, function, argument]) middle suffixResults after
+laterReads : ChildrenReads later middleMemos saved
+prefixAvailable : Values before [resultType, marker]
+⊢ SourceEqualityAnnotationHeap.Heap (fun x => True) before
+/tmp/mcfta-actual-function-prefix-20261113-1510/draft.lean:91:30: error: This simp argument is unused:
+  List.mem_singleton
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [List.mem_cons] at member ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'_private._stdin.0.MicroCFTA.SourceSynthesisActualAppFunctionPrefix.children_split_at' depends on axioms: [propext,
+ sorryAx,
+ Quot.sound]
+'_private._stdin.0.MicroCFTA.SourceSynthesisActualAppFunctionPrefix.actual_app_function_read_prefix' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

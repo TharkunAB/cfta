@@ -1,0 +1,9 @@
+--- artifact
++++ artifact
+@@ -74 +74,3 @@
+-run('full-audit-strict', 'exec lake env lean -j1 -DwarningAsError=true ' + shlex.quote(str(path)), 94935)
++run('full-audit-strict', 'exec lake env lean -j1 -DwarningAsError=true ' + shlex.quote(str(path)), 1)
++audit_counts = re.findall(r'Checked axiom dependencies of (\d+) MicroCFTA theorems', (runtime / 'full-audit-strict.txt').read_text())
++assert len(audit_counts) == 1 and int(audit_counts[0]) >= 94935
+@@ -77,0 +80 @@
++          'audited_theorems': int(audit_counts[0]),

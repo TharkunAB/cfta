@@ -1,0 +1,35 @@
+theorem actual_app_selected_type_paths
+    {width : Nat} [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    [DecidableEq (Value Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : SourceCurrentAllocatedNativeInventoryState.Inventory)
+    (types functionSource argumentSource : Expression)
+    (sourceName : String) (guard : Guard) (sourceChildren : List Expression)
+    (occurrence : application types functionSource argumentSource =
+      .node [.mk sourceName guard sourceChildren])
+    (loaded : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula)
+    (inherited own : SourceEqualityConstraintAllocation.Value)
+    (before scanned : SourceEqualityNativeDemand.State width)
+    (records kept : List Record) (budget : Nat)
+    (resultType marker function argument : Value Symbol Guard)
+    (fourth savedFourth : SourceCurrentEmptinessMemo.Memo)
+    (memos final : EndpointMemoGateTrace.Memos)
+    (receipt : SourceCurrentAllocatedPrecheck.Receipt formulas solver inventory
+      guard loaded inherited before own (.classes records))
+    (scan : SourceCurrentSharedScanCallerNumeric.ScanReads budget
+      [resultType, marker, function, argument] records
+      (SourceCurrentAllocatedPrecheck.state before loaded inherited) fourth
+      none kept scanned savedFourth memos final) :
+    ∃ typePaths : List SourceEqualityNeeded.Path,
+      typePaths.Sublist [[0], [1], [2]] ∧
+      (∀ entries : List (Int × SourceEqualityNeeded.Needed),
+        SourceEqualityNeeded.build
+          (SourceEqualitySelectedRequired.paths (kept.map Record.paths)) = .node entries →
+        SourceEqualityNeededMap.lookup 2 entries =
+          if typePaths = [] then none
+          else some (.node [(0, SourceEqualityNeeded.build typePaths)])) ∧
+      SourceEqualityNeededMeaning.Matches (SourceEqualityNeeded.build typePaths)
+        (.node (literal "->")
+          [.node (literal "(->)") [], .node (literal "var1") [],
+            .node (literal "var1") []]) := by

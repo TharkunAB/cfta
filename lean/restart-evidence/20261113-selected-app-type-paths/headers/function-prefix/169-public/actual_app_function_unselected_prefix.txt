@@ -1,0 +1,26 @@
+theorem actual_app_function_unselected_prefix
+    [DecidableEq (EdgeKey Symbol Guard)]
+    (paths : List (List Int)) (entries : List (Int × SourceEqualityNeeded.Needed))
+    (compiled : SourceEqualityNeeded.build paths = .node entries)
+    (unselected : SourceEqualityNeededMap.lookup 2 entries = none)
+    (resultType marker function argument : Value Symbol Guard)
+    (results : List (Value Symbol Guard)) (before after : State Symbol Guard)
+    (memos saved : EndpointMemoGateTrace.Memos)
+    (reads : RequireAllReads paths [resultType, marker, function, argument]
+      results before after memos saved)
+    (semantic : SourceEqualityRequiredSemanticCache.SemanticReady before)
+    (costs : InternedFreshOrdinaryCostHeap.Heap before)
+    (available : Values before [resultType, marker, function, argument]) :
+    ∃ prefixResults suffixResults functionBefore functionMemos,
+      results = prefixResults ++ function :: suffixResults ∧
+      prefixResults.length = 2 ∧
+      (∃ earlier : RequireChildren entries 0 [resultType, marker]
+          before prefixResults functionBefore,
+        ChildrenReads earlier memos functionMemos) ∧
+      (∃ later : RequireChildren entries 3 [argument]
+          functionBefore suffixResults after,
+        ChildrenReads later functionMemos saved) ∧
+      SourceEqualityRequiredCache.Keeps before functionBefore ∧
+      SourceEqualityRequiredSemanticCache.SemanticReady functionBefore ∧
+      InternedFreshOrdinaryCostHeap.Heap functionBefore ∧
+      Available functionBefore function := by

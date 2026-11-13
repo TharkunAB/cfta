@@ -1,0 +1,8 @@
+--- source.lean
++++ source.lean
+@@ -100,2 +100,3 @@
+-        simp only [empty, ↓reduceIte]
+-        exact ⟨rfl, rfl, rfl⟩
++        simpa only [empty, ↓reduceIte] using
++          (show function = function ∧ functionBefore = functionBefore ∧
++              functionMemos = functionMemos from ⟨rfl, rfl, rfl⟩)

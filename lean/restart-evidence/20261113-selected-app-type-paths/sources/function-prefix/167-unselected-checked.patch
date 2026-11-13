@@ -1,0 +1,57 @@
+--- artifact
++++ artifact
+@@ -112,0 +113,54 @@
++private theorem actual_app_function_unselected_prefix
++    [DecidableEq (EdgeKey Symbol Guard)]
++    (paths : List (List Int)) (entries : List (Int × SourceEqualityNeeded.Needed))
++    (compiled : SourceEqualityNeeded.build paths = .node entries)
++    (unselected : SourceEqualityNeededMap.lookup 2 entries = none)
++    (resultType marker function argument : Value Symbol Guard)
++    (results : List (Value Symbol Guard)) (before after : State Symbol Guard)
++    (memos saved : EndpointMemoGateTrace.Memos)
++    (reads : RequireAllReads paths [resultType, marker, function, argument]
++      results before after memos saved)
++    (semantic : SourceEqualityRequiredSemanticCache.SemanticReady before)
++    (costs : InternedFreshOrdinaryCostHeap.Heap before)
++    (available : Values before [resultType, marker, function, argument]) :
++    ∃ prefixResults suffixResults functionBefore functionMemos,
++      results = prefixResults ++ function :: suffixResults ∧
++      prefixResults.length = 2 ∧
++      (∃ earlier : RequireChildren entries 0 [resultType, marker]
++          before prefixResults functionBefore,
++        ChildrenReads earlier memos functionMemos) ∧
++      (∃ later : RequireChildren entries 3 [argument]
++          functionBefore suffixResults after,
++        ChildrenReads later functionMemos saved) ∧
++      SourceEqualityRequiredCache.Keeps before functionBefore ∧
++      SourceEqualityRequiredSemanticCache.SemanticReady functionBefore ∧
++      InternedFreshOrdinaryCostHeap.Heap functionBefore ∧
++      Available functionBefore function := by
++  simp only [RequireAllReads, compiled] at reads
++  obtain ⟨trace, reads⟩ := reads
++  obtain ⟨prefixResults, suffixResults, middle, middleMemos,
++      aligned, ⟨earlier, earlierReads⟩, ⟨later, laterReads⟩⟩ :=
++    children_split_at 2 trace reads (by simp)
++  have prefixAvailable : Values before [resultType, marker] := by
++    intro value member
++    apply available value
++    simp only [List.mem_cons, List.not_mem_nil, or_false] at member ⊢
++    rcases member with h | h
++    · exact Or.inl h
++    · exact Or.inr (Or.inl h)
++  have effects := SourceCurrentRequiredHeapEffects.children (fun _ => True)
++    earlier semantic costs (by intro _ _ _; trivial) prefixAvailable
++  have retained : Available middle function :=
++    effects.1.available function (available function (by simp))
++  cases laterReads with
++  | unselected rest =>
++      exact ⟨prefixResults, _, middle, middleMemos, aligned, earlier.length,
++        ⟨earlier, earlierReads⟩, ⟨_, rest⟩, effects.1, effects.2.1,
++        effects.2.2.1, retained⟩
++  | selected _actual _rest =>
++      have found : ∃ wanted, SourceEqualityNeededMap.lookup 2 entries = some wanted :=
++        ⟨_, by assumption⟩
++      obtain ⟨wanted, found⟩ := found
++      rw [unselected] at found
++      cases found
++

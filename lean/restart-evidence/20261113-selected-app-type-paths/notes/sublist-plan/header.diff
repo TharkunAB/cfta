@@ -1,0 +1,48 @@
+--- checked-fixed-header
++++ proposed-sublist-header
+@@ -1,4 +1,4 @@
+-private theorem actual_identity_type_read_prefix
++private theorem actual_identity_type_read_prefix_sublist
+     [DecidableEq FullSyntax.Formula] [DecidableEq (EdgeKey Symbol Guard)]
+     (formulas : SourceGuards.Formulas FullSyntax.Formula)
+     (solver : SourceGuards.Entailment FullSyntax.Formula)
+@@ -33,8 +33,10 @@
+     (memos saved : EndpointMemoGateTrace.Memos)
+     (semantic : SourceEqualityRequiredSemanticCache.SemanticReady before)
+     (available : Available before (.node entry edges depth free))
++    (typePaths : List (List Int))
++    (typePathsSublist : typePaths.Sublist [[0], [1], [2]])
+     (trace : RequireNode
+-      (.node [(0, SourceEqualityNeeded.build [[0], [1], [2]])])
++      (.node [(0, SourceEqualityNeeded.build typePaths)])
+       (.node entry edges depth free) before result after)
+     (reads : NodeReads trace memos saved) :
+     ∃ annotation prefixResults annotationResult rebuilt suffixResults
+@@ -44,15 +46,15 @@
+       SourceEqualityAnnotationLanguage.Annotated
+         (SourceSynthesisNativeTypeTrace.Origin
+           (SourceSynthesisCurrentSourceGuards.encodedLibrary lib)) annotation ∧
+-      ((∃ earlier : RequireRows [(0, SourceEqualityNeeded.build [[0], [1], [2]])]
++      ((∃ earlier : RequireRows [(0, SourceEqualityNeeded.build typePaths)]
+           (edges.take index) before prefixResults rowBefore,
+         RowsReads earlier memos rowMemos) ∧
+-       (∃ actual : RequireNode (SourceEqualityNeeded.build [[0], [1], [2]])
++       (∃ actual : RequireNode (SourceEqualityNeeded.build typePaths)
+           annotation rowBefore annotationResult typeAfter,
+         NodeReads actual rowMemos typeMemos) ∧
+        run (makeEdge call.output.entry.key.symbol call.output.entry.key.constraint [annotationResult])
+           typeAfter = (rebuilt, edgeAfter) ∧
+-       (∃ later : RequireRows [(0, SourceEqualityNeeded.build [[0], [1], [2]])]
++       (∃ later : RequireRows [(0, SourceEqualityNeeded.build typePaths)]
+           (edges.drop (index + 1)) edgeAfter suffixResults rowsAfter,
+         RowsReads later typeMemos saved) ∧
+        run (makeNode (prefixResults ++ rebuilt :: suffixResults)) rowsAfter = (result, after)) ∧
+@@ -68,7 +70,7 @@
+         InternedGuardedLanguage.meaning holds ambient annotationResult term ↔
+           InternedGuardedLanguage.meaning holds ambient annotation term ∧
+             SourceEqualityNeededMeaning.Matches
+-              (SourceEqualityNeeded.build [[0], [1], [2]]) term) ∧
++              (SourceEqualityNeeded.build typePaths) term) ∧
+       ∀ ambient : InternedGuardedLanguage.Env Symbol,
+         InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)
+           ambient annotationResult

@@ -1,0 +1,76 @@
+private theorem actual_identity_type_read_prefix
+    [DecidableEq FullSyntax.Formula] [DecidableEq (EdgeKey Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (lib : SourceSynthesisTypeSyntax.Library) (query : SourceSynthesisTypeSyntax.Query)
+    (signed : Int) (whole : SourceSynthesisFirstOrderConstruction.Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (heap : State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue heap)
+    (original : SourceSynthesisOriginalTypeAnnotations.OriginalType lib
+      (.tFun (.tVar "a") (.tVar "a")))
+    {componentExpressions : List (InternedNestedConstruction.EdgeSyntax Symbol Guard)}
+    {componentBefore componentAfter : State Symbol Guard}
+    {componentOutputs : List (EdgeValue Symbol Guard)} {componentIndex : Nat} {name : String}
+    (call : SourceCurrentStoredMuRetainedAlignment.RowCall componentExpressions []
+      componentBefore componentOutputs componentAfter heap componentIndex (literal name)
+      SourceSynthesisGeneralizeSyntax.top
+      [ordinarySymbols (SourceSynthesisGeneralizeSyntax.generalize
+        (SourceSynthesisTypeSyntax.allTypes SourceSynthesisGeneralizeSyntax.top
+          (SourceSynthesisCurrentContext.constructorCatalog lib query))
+        (SourceSynthesisPr210TypeReflection.encodeTy (.tFun (.tVar "a") (.tVar "a"))))])
+    (functionSource : SourceSynthesisFirstOrderConstruction.Expression)
+    (sourceStart sourceAfter : State Symbol Guard)
+    (sourceContext : InternedFreshOrdinaryContext.Context sourceStart [])
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (edges : List (EdgeValue Symbol Guard)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference)
+    (sourceBuilt : InternedFreshOrdinaryConstruction.build (ordinarySymbols functionSource) []
+      sourceStart = .done (.node entry edges depth free) sourceAfter)
+    (index : Nat) (sourceSlot : edges[index]? = some call.output)
+    (before after : State Symbol Guard) (result : Value Symbol Guard)
+    (memos saved : EndpointMemoGateTrace.Memos)
+    (semantic : SourceEqualityRequiredSemanticCache.SemanticReady before)
+    (available : Available before (.node entry edges depth free))
+    (trace : RequireNode
+      (.node [(0, SourceEqualityNeeded.build [[0], [1], [2]])])
+      (.node entry edges depth free) before result after)
+    (reads : NodeReads trace memos saved) :
+    ∃ annotation prefixResults annotationResult rebuilt suffixResults
+        rowBefore typeAfter edgeAfter rowsAfter rowMemos typeMemos,
+      call.output.children = [annotation] ∧
+      Available heap annotation ∧ annotation.free = [] ∧
+      SourceEqualityAnnotationLanguage.Annotated
+        (SourceSynthesisNativeTypeTrace.Origin
+          (SourceSynthesisCurrentSourceGuards.encodedLibrary lib)) annotation ∧
+      ((∃ earlier : RequireRows [(0, SourceEqualityNeeded.build [[0], [1], [2]])]
+          (edges.take index) before prefixResults rowBefore,
+        RowsReads earlier memos rowMemos) ∧
+       (∃ actual : RequireNode (SourceEqualityNeeded.build [[0], [1], [2]])
+          annotation rowBefore annotationResult typeAfter,
+        NodeReads actual rowMemos typeMemos) ∧
+       run (makeEdge call.output.entry.key.symbol call.output.entry.key.constraint [annotationResult])
+          typeAfter = (rebuilt, edgeAfter) ∧
+       (∃ later : RequireRows [(0, SourceEqualityNeeded.build [[0], [1], [2]])]
+          (edges.drop (index + 1)) edgeAfter suffixResults rowsAfter,
+        RowsReads later typeMemos saved) ∧
+       run (makeNode (prefixResults ++ rebuilt :: suffixResults)) rowsAfter = (result, after)) ∧
+      SourceEqualityRequiredCache.Keeps before rowBefore ∧
+      SourceEqualityRequiredSemanticCache.SemanticReady rowBefore ∧
+      Available rowBefore annotation ∧
+      (∀ unconstrained anchor needed,
+        SourceCurrentRequiredSupport.NodeSupport unconstrained anchor needed annotation) ∧
+      SourceEqualityRequiredCache.Keeps rowBefore typeAfter ∧
+      SourceEqualityRequiredSemanticCache.SemanticReady typeAfter ∧
+      Available typeAfter annotationResult ∧ annotationResult.free = [] ∧
+      (∀ holds ambient term,
+        InternedGuardedLanguage.meaning holds ambient annotationResult term ↔
+          InternedGuardedLanguage.meaning holds ambient annotation term ∧
+            SourceEqualityNeededMeaning.Matches
+              (SourceEqualityNeeded.build [[0], [1], [2]]) term) ∧
+      ∀ ambient : InternedGuardedLanguage.Env Symbol,
+        InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)
+          ambient annotationResult
+          (.node (literal "->")
+            [.node (literal "(->)") [], .node (literal "var1") [], .node (literal "var1") []])

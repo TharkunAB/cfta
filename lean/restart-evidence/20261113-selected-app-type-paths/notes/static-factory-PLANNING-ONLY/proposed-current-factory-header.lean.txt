@@ -1,0 +1,26 @@
+private theorem current_candidate_app_operands
+    (lib : SourceSynthesisTypeSyntax.Library) (query : SourceSynthesisTypeSyntax.Query)
+    (signed : Int) (whole : SourceSynthesisFirstOrderConstruction.Expression)
+    (returned : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole) :
+    let ctx := SourceSynthesisCurrentContext.context lib query
+    ∃ chunks : List (List SourceSynthesisFirstOrderConstruction.Expression),
+      (SourceSynthesisSelections.permutations ctx.argumentEdges).mapM
+        (fun selected => SourceSynthesisFirstOrderConstruction.relevantRows
+          ctx true signed.toNat (selected.map Prod.fst)) = .ok chunks ∧
+      whole = SourceSynthesisFirstOrderConstruction.ofType (.union chunks.flatten)
+        (SourceSynthesisCurrentContext.typeNode query.queryGoal) ∧
+      ∀ candidate ∈ chunks.flatten,
+        ∃ rows : List SourceSynthesisFirstOrderConstruction.Row,
+          candidate = .node rows ∧
+          ∀ (types function argument : SourceSynthesisFirstOrderConstruction.Expression),
+            InternedNestedConstruction.EdgeSyntax.mk "app"
+              (SourceSynthesisGeneralizeSyntax.eqGuard
+                [[[1], [2, 0, 0]], [[3, 0], [2, 0, 1]], [[0], [2, 0, 2]]])
+              [types, SourceSynthesisTypeSyntax.arrowMarker SourceSynthesisGeneralizeSyntax.top,
+                function, argument] ∈ rows →
+            types = SourceSynthesisTypeSyntax.allTypes SourceSynthesisGeneralizeSyntax.top
+              (SourceSynthesisCurrentContext.constructorCatalog lib query) ∧
+            ((∃ functionRows : List SourceSynthesisFirstOrderConstruction.Row,
+                function = .node functionRows) ∨
+              ∃ pools : List (List SourceSynthesisFirstOrderConstruction.Row),
+                function = .union (pools.map fun functionRows => .node functionRows))

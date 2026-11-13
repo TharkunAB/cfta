@@ -1,0 +1,62 @@
+private theorem actual_app_selected_function_boundary
+    {width : Nat} [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    [DecidableEq (Value Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : SourceCurrentAllocatedNativeInventoryState.Inventory)
+    (types functionSource argumentSource : Expression)
+    (sourceName : String) (guard : Guard) (sourceChildren : List Expression)
+    (occurrence : application types functionSource argumentSource =
+      .node [.mk sourceName guard sourceChildren])
+    (loaded : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula)
+    (inherited own : SourceEqualityConstraintAllocation.Value)
+    (before scanned : SourceEqualityNativeDemand.State width)
+    (records kept : List Record) (budget : Nat)
+    (resultType marker function argument : Value Symbol Guard)
+    (fourth savedFourth : SourceCurrentEmptinessMemo.Memo)
+    (memos scanMemos saved : EndpointMemoGateTrace.Memos)
+    (receipt : SourceCurrentAllocatedPrecheck.Receipt formulas solver inventory
+      guard loaded inherited before own (.classes records))
+    (scan : SourceCurrentSharedScanCallerNumeric.ScanReads budget
+      [resultType, marker, function, argument] records
+      (SourceCurrentAllocatedPrecheck.state before loaded inherited) fourth
+      none kept scanned savedFourth memos scanMemos)
+    (results : List (Value Symbol Guard)) (requiredAfter : State Symbol Guard)
+    (reads : RequireAllReads
+      (SourceEqualitySelectedRequired.paths (kept.map Record.paths))
+      [resultType, marker, function, argument] results
+      scanned.native.machine.heap requiredAfter scanMemos saved)
+    (semantic : SourceEqualityRequiredSemanticCache.SemanticReady scanned.native.machine.heap)
+    (costs : InternedFreshOrdinaryCostHeap.Heap scanned.native.machine.heap)
+    (available : Values scanned.native.machine.heap [resultType, marker, function, argument]) :
+    ∃ typePaths entries prefixResults functionResult suffixResults
+        functionBefore functionAfter functionMemos returnedMemos,
+      typePaths.Sublist ([[0], [1], [2]] : List SourceEqualityNeeded.Path) ∧
+      SourceEqualityNeededMeaning.Matches (SourceEqualityNeeded.build typePaths)
+        (.node (literal "->")
+          [.node (literal "(->)") [], .node (literal "var1") [],
+            .node (literal "var1") []]) ∧
+      SourceEqualityNeeded.build
+        (SourceEqualitySelectedRequired.paths (kept.map Record.paths)) = .node entries ∧
+      SourceEqualityNeededMap.lookup 2 entries =
+        (if typePaths = [] then none
+         else some (.node [(0, SourceEqualityNeeded.build typePaths)])) ∧
+      results = prefixResults ++ functionResult :: suffixResults ∧
+      prefixResults.length = 2 ∧ suffixResults.length = 1 ∧
+      (∃ earlier : RequireChildren entries 0 [resultType, marker]
+          scanned.native.machine.heap prefixResults functionBefore,
+        ChildrenReads earlier scanMemos functionMemos) ∧
+      (if typePaths = [] then
+        functionResult = function ∧ functionAfter = functionBefore ∧
+          returnedMemos = functionMemos
+       else
+        ∃ actual : RequireNode (.node [(0, SourceEqualityNeeded.build typePaths)])
+            function functionBefore functionResult functionAfter,
+          NodeReads actual functionMemos returnedMemos) ∧
+      (∃ later : RequireChildren entries 3 [argument]
+          functionAfter suffixResults requiredAfter,
+        ChildrenReads later returnedMemos saved) ∧
+      SourceEqualityRequiredCache.Keeps scanned.native.machine.heap functionBefore ∧
+      SourceEqualityRequiredSemanticCache.SemanticReady functionBefore ∧
+      InternedFreshOrdinaryCostHeap.Heap functionBefore ∧
+      Available functionBefore function

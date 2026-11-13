@@ -1,0 +1,30 @@
+private theorem actual_app_function_read_prefix
+    [DecidableEq (EdgeKey Symbol Guard)]
+    (paths : List (List Int)) (entries : List (Int × SourceEqualityNeeded.Needed))
+    (wanted : SourceEqualityNeeded.Needed)
+    (compiled : SourceEqualityNeeded.build paths = .node entries)
+    (selected : SourceEqualityNeededMap.lookup 2 entries = some wanted)
+    (resultType marker function argument : Value Symbol Guard)
+    (results : List (Value Symbol Guard)) (before after : State Symbol Guard)
+    (memos saved : EndpointMemoGateTrace.Memos)
+    (reads : RequireAllReads paths [resultType, marker, function, argument]
+      results before after memos saved)
+    (semantic : SourceEqualityRequiredSemanticCache.SemanticReady before)
+    (costs : InternedFreshOrdinaryCostHeap.Heap before)
+    (available : Values before [resultType, marker, function, argument]) :
+    ∃ prefixResults functionResult suffixResults functionBefore functionAfter
+        functionMemos returnedMemos,
+      results = prefixResults ++ functionResult :: suffixResults ∧
+      prefixResults.length = 2 ∧
+      (∃ earlier : RequireChildren entries 0 [resultType, marker]
+          before prefixResults functionBefore,
+        ChildrenReads earlier memos functionMemos) ∧
+      (∃ actual : RequireNode wanted function functionBefore functionResult functionAfter,
+        NodeReads actual functionMemos returnedMemos) ∧
+      (∃ later : RequireChildren entries 3 [argument]
+          functionAfter suffixResults after,
+        ChildrenReads later returnedMemos saved) ∧
+      SourceEqualityRequiredCache.Keeps before functionBefore ∧
+      SourceEqualityRequiredSemanticCache.SemanticReady functionBefore ∧
+      InternedFreshOrdinaryCostHeap.Heap functionBefore ∧
+      Available functionBefore function
