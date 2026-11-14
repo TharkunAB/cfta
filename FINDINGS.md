@@ -1,3 +1,32 @@
+# Mapped body algebra and stored dependency paths checked (2026-11-14 10:43 CET)
+
+All four laws in SourceSynthesisUniverseMappedRowNormalization,
+SourceSynthesisUniverseMappedBodyCanonical and SourceSynthesisUniverseMappedBodyExactFree
+are public and checked. They derive actual canonical body products and the exact
+pending reference, including repeated catalog rows and both cross directions.
+SourceSynthesisCurrentUniverseOwnership.current_stored_universe_body_replay
+also derives the original callback at every later record growth. All earlier
+ownership bytes remain intact around the additive theorem.
+
+EnumerationStoredDependencies adds a Prop relation over actual stored suspended
+references and fragment holes. Six checked path laws use existing
+PendingReferences and Stratified. No positive closed path can touch an expanded
+record. Actual whole identity-worker history coverage remains OPEN; the existing
+whole output resource proof applies to the configured narrowing worker.
+Metadata erasure does not convert that narrowing configuration to identity.
+
+Thirteen public checks pass at 10:35:23 CET: 95,896 aggregate theorems and
+separately 78 reports, 76 standard-axiom and two axiom-free. There are 5,936
+source modules and 4,934 direct Audit imports. No nonstandard axiom occurs.
+
+NEXT: the original exact current_stored_universe_reference_identity target
+passed PRIVATE check2 at 10:40:56 CET. Public verification is pending. Its fixed
+header retains only accepted/build/stored/cacheValid inputs. It derives body and
+probe results internally and returns the full original Mu at formal fuel 13
+and every larger value. Packet: /tmp/mcfta-current-universe-reference-identity-check-20261114-1040.
+The full finite common-witness objective below remains OPEN and unchanged.
+No Haskell implementation change, new defect or fix was established. Goal ACTIVE.
+
 # Both original source probe packets checked (2026-11-14 10:25 CET)
 
 SourceSynthesisCurrentUniverseProbeRows.current_stored_universe_probe_rows is
