@@ -1,3 +1,50 @@
+# Same-source initialization now reaches the identity worker (2026-11-14 14:40 CET)
+
+GOAL ACTIVE. Keep the complete original objective: ONE finite accepted SAME-original-
+root term with ONE consistent assignment per actual emitted partial root, including
+paths/domains/aliases/residuals/readback and parked backward recompletion. Preserve
+all typing, depth adequacy/completeness, default LPO/reduction/refolding and both
+language directions, stream/order/lazy demand, exact accepted node-count classes,
+count/weight/training/BOTH rank-unrank inverses, host bounds and Haskell correspondence.
+
+NEW PUBLIC BRIDGE: SourceSynthesisCurrentProgramEagerResources.
+accepted_initial_identity_emitted_history in
+SourceSynthesisCurrentProgramIdentityEagerResources.lean. Its full header matches
+the pinned CURRENT target. The SAME current accepted firstOrderRaw source and ONE
+original initializer derive every allocation receipt, field/role fact, actual
+startup invariant, width and reservation. The checked public identity-worker
+theorem then derives ONE stable actual result at every sufficiently large common
+budget. Each actual output has full OutcomeResources, PendingReferences and a
+Stratified dependency order. No future resource/callback/result provider or
+alternate initializer is supplied. No fake Key/fits/admits selects a surrogate.
+This is source-to-RESOURCE integration. It does not prove finite accepted
+completions or every-budget worker history. The finite-depth stopped results
+remain actual permitted outcomes. Original full proof scope remains OPEN.
+
+All five public checks PASS. Strict Audit:96,009 aggregate imported-theorem axiom
+dependencies; separately90 reports,88 standard-axiom and2 axiom-free. Only propext,
+Classical.choice and Quot.sound occur. Source modules5944; direct imports4942.
+Effective memory max/high4GiB;zero swap. Public compiler handles are terminal.
+Bridge source SHA25602788032b13c672dc854b58ec6444160d50231b95f7e00d3b82a23451a638a52.
+Private check: /tmp/mcfta-current-identity-source-bridge-check-20261114-1433.
+Public scripts/logs/pins: /tmp/mcfta-current-identity-source-bridge-publication-20261114-1437.
+All previous source proofs, target headers, counterexamples and marked drafts
+remain intact. Whole-worker resource commitf8bbe13c78073078b3ec1e3dafa4a1b47bace2d7
+is pushed and independently verified. Main remainse53852064d3ef5a2eafec47d754c27504b11de5f.
+
+Next prove actual worker output-history safety at EVERY common budget, including
+.stopped partial outputs. Eventual completion alone does not prove that target.
+The actual finite common-witness/removed-bucket Holds gap remains central.
+Mixed REF(U)/U is checked. BODY(U)/U and full two-alias/generated-type closure
+remain OPEN. Its lower helper repair2 has only two strict lint errors; repair3
+and unchanged dependent full wrapper are prepared at
+/tmp/mcfta-source-body-alias-check3-20261114-1437. Run lower first, then wrapper
+using only the private new-object path; no copied dependency overlay. Root owns
+all live edits and compiler/Git jobs. Keep /tmp small and preserve all failed/
+marked source inputs without credit. Preserve unrelated .hypha/.
+No Haskell/Cabal/test/Liquid Haskell annotation changed. No new implementation
+fix was established. Record every future Haskell fix in FINDINGS.
+
 # Whole literal-identity worker resource closure checked (2026-11-14 14:30 CET)
 
 GOAL ACTIVE. The full original objective remains ONE finite accepted term of the
