@@ -1,3 +1,81 @@
+# Pointwise prefix and actual shared replay checkpoint (2026-11-14 16:35 CET)
+
+GOAL ACTIVE. Checked source: 0a34ff7eb50e5aa289879865079368008acfcdca. Prior checkpoint:d7f090074e57047760efbc4f2e715b26fe1f9c20.
+New packet:lean/restart-evidence/20261114-pointwise-prefix-and-actual-shared-replay.
+Source tree SHA256:bbb3b99e9a47b118028455ceb072a73b6b8e5adc8297058985588d02ec308123. Older immutable archives remain unchanged.
+
+At EACH supplied common budget, actual supported identity prefixes now retain
+exact parked,empty-fresh and nonempty-fresh observations and their resources.
+Every supported phase has Ready and IncomingAvoid. Parked mass is bounded;
+fresh mass is exact; the nonempty original bucket has its length bound.
+The existing initial header stays fixed. No future phase or result provider is
+added. The actual unsupported/missing-adapter/failed prefix consumers stop with
+local outputs[]. This local result does not discard outputs already retained
+by an enclosing stopped scan or callback. Every-budget worker history is OPEN.
+
+The ACTUAL optimized shared replay chain now covers SharedEnabledEmpty,
+SharedDispatch,SharedIncomingNode,and SharedCachedTerminal rawFold/cachedAdapter/
+fold. Empty rejection and successful singleton rows retain every actual reached
+endpoint and optional cache. Performed calls retain the checked endpoint,fourth
+memo,private worklist snapshot and saved query memo. The semantic tuple budget
+is fixed. Legacy ChildDispatchStability is a DIFFERENT backend. It cannot close
+the actual shared target. Common pure helper laws may be reused only for the
+same definitions. Full raw/cached terminal and complete child replay remain
+OPEN. Their eventual original resource producer must then be transported to
+actual observed small bounds. No future resource/callback provider is supplied.
+
+Native reference descendant equations retain actual sorting and fuel costs.
+Ordinary Q/refU at n+2 and reverse at n+3 reduce to the actual lower empty-domain
+call at the SAME machine. Union Q distributes BEFORE reference lookup. Its
+n+1/reverse n+2 equations retain ordered member calls and makeUnion. They do
+not assert a direct whole-union reset or completion. Literal mixed entry replay
+uses existing make_domain_replay. At actual later Extension it returns the
+ORIGINAL domain and leaves the later cache unchanged. Checked original-U alias
+leaves therefore transport to later endpoints in that original entry. Full
+coupled closed/mixed generated-Type atom induction remains OPEN.
+
+The previous same-source initializer and sufficiently-large-budget literal-
+identity worker resource results remain checked. They allow stopped outcomes.
+The central missing theorem remains ONE finite accepted term of the SAME
+ORIGINAL root and ONE compatible assignment per actual emitted causal branch.
+It must realize final domains,aliases,fragments,residuals,partial readback AND
+every actually removed suspended constraint. Derive branch receipts from actual
+emitted membership. Sibling alternatives can reuse IDs and need separate models.
+Post-clear satisfaction alone supplies no removed Holds. Actual ancestry-hit
+provenance and terminal finite productivity remain missing. No reachable source
+counterexample or Haskell defect was established. An arbitrary initial Mu is
+not a source-reachable example. No final model is accepted as a theorem input.
+
+Keep all original typing,depth adequacy/completeness,default LPO/reduction/
+refolding,both language directions,stream order/multiplicity/lazy demand,exact
+accepted terms per node-count size,counts/weights/training,both rank/unrank
+inverses,host bounds and compiled Haskell correspondence. No component theorem
+count closes these obligations. The optimized interned shared core is primary.
+Older constructor/equality proofs remain secondary targets.
+
+Latest7public gates PASS. Strict Audit checks96,121 imported theorem axiom
+dependencies and122 explicit reports:120standard-axiom and2axiom-free. Only
+propext,Classical.choice,Quot.sound. Source modules5957; direct imports4955.
+Serial4GiB max/high,zero swap; source pins unchanged. Exact failed inputs and
+repairs remain separate from successful runs. Prefix check1 needed case-control
+repair; native helpers needed narrower instance scope. No operation changed.
+The new raw/cached fold,incoming,entry and dispatch proof checks passed without
+proof repair. All compiler handles are terminal at this source checkpoint.
+The packet contains no compiled objects or copied import overlays. Public
+source suffices to reproduce the checked proofs. Logs are derived records.
+
+No Haskell,Cabal,test or Liquid Haskell annotation changed. No implementation
+fix was established. Record every future Haskell fix in FINDINGS for external
+readers. A concept used by several Haskell definitions needs one owning GHC-style
+Note and references at the other definitions. Root owns live/compiler/Git writes.
+Preserve .hypha/ and unrelated work. The source above is pushed and independently
+verified. Main remains e53852064d3ef5a2eafec47d754c27504b11de5f. Use per-command
+SSH443 with the existing github.com HostKeyAlias while SSH22 times out.
+Canonical board note:ad6d9542-b828-4de5-9839-755c74e6e786,sequence1319. Exact request
+and canonical fields are retained. Primary usage7% at16:32; /tmp filesystem free
+146,214,969,344bytes. Keep /tmp small. Do not pause or complete the active goal
+on this milestone. New terminal and coupled atom drafts still need validation.
+
 # Original entry transport and actual shared incoming/folds checked (2026-11-14 16:31 CET)
 
 GOAL ACTIVE. Preserve the complete original proof objective below.
