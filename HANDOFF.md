@@ -1,3 +1,42 @@
+# Actual prepared and identity-expansion resources checked (2026-11-14 14:16 CET)
+
+GOAL ACTIVE. The complete original finite joint-witness, language, typing,
+depth, LPO, stream, size/count/weight/rank and compiled-Haskell objectives below
+remain unchanged. ONE partial output requires ONE finite accepted SAME-original-root
+term with ONE consistent assignment, including parked backward recompletion.
+
+The callback, captured-child, row, opaque and now prepared proofs retain the SAME
+actual narrowing operation. All configured headers remain exact. The new fixed
+literal-identity expansion derives parked/Empty/nonempty resource outcomes from
+identity_checkpoint_resources and the generic prepared proof. No fake Key,
+fits/admits selection or future prefix/callback/result provider is an input.
+It uses Unit metadata, identity narrow, empty templates and the actual none/default
+restart policy. The proof adds only one import and isolated proof sections;
+operational code is unchanged. SharedEagerReservation SHA256:
+fd86480dd9ea76d468e66951471a87f10a93a103237c4a20e63585baa239b41f.
+
+All five public checks PASS. Latest strict Audit checks96,005 aggregate imported
+theorem axiom dependencies. Separately88 reports include86 standard-axiom and2
+axiom-free reports. Only propext/Classical.choice/Quot.sound occur. Source modules5943;
+direct Audit imports4941. Serial4GiB max/high,zero swap. All known published-source
+compiler handles are terminal. Public scripts/pins/logs:
+/tmp/mcfta-prepared-identity-expansion-publication-20261114-1412.
+Both private prepared/identity-expansion checks pass at
+/tmp/mcfta-prepared-and-identity-expansion-check-20261114-1407.
+
+Mixed ref alias/control commit9aae8d9b681a2306805d6bf5f84bdd4e75d5ae40 is pushed
+and independently verified. Main remainse53852064d3ef5a2eafec47d754c27504b11de5f.
+Next finish the literal-identity depth induction with the exact initial resource
+header; do not add provider premises or use a configured surrogate. Whole-worker
+resource completion and all-budget output history remain OPEN. Source body(U)/U,
+full two-alias closure, generated-type closure and ONE finite common completion
+remain OPEN. The frozen body-readback/wrapper drafts are UNVERIFIED. Root checks
+the lower module before importing its private object into the wrapper check.
+Do not copy large dependency overlays. Preserve all failed inputs without credit.
+No Haskell/Cabal/test/Liquid Haskell annotation changed; no new implementation
+fix was established. Record every future Haskell fix in FINDINGS. Keep /tmp small,
+preserve .hypha/ and use fresh primary limits for the above80% pause condition.
+
 # Actual mixed-domain reference alias checked (2026-11-14 14:08 CET)
 
 GOAL ACTIVE. Preserve the complete original finite joint-witness, language,
