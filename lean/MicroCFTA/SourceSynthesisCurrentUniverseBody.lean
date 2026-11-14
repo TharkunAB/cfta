@@ -6,8 +6,8 @@ import MicroCFTA.SourceSynthesisUniverseBody
 
 The proof executes the mapped source body in its incoming labeled heap.
 It derives an ordinary body with depth zero and its exact local free name.
-Cleanup retains the resulting Mu. The first source occurrence and its
-reservation remain separate obligations.
+Cleanup retains the resulting Mu. The row theorem retains the same marker,
+ordered catalog rows and final heap. The root build supplies its reservation.
 -/
 namespace MicroCFTA.SourceSynthesisCurrentUniverseBody
 open Cache Language SourceSynthesisTypeSyntax
@@ -223,14 +223,44 @@ private theorem body_inputs (top : Guard) (catalog : List (String × Nat)) (name
   exact ⟨marker, arrow, values, middle, by simp only [buildMany, arrowDone, Outcome.bind, rowsDone],
     markerShape, arrowShape, shapes⟩
 
-/-- The actual mapped callback derives its ordinary node and exact local free name. -/
-private theorem labeled_callback_node (top : Guard) (catalog : List (String × Nat))
+omit [DecidableEq (EdgeKey Symbol Guard)] in
+private theorem labeled_row_keys (top : Guard) (name : Reference)
+    (rows : List (String × Nat)) (values : List (Value Symbol Guard))
+    (aligned : All₂ (fun descriptor value =>
+      RowReadback descriptor.1 top (List.replicate descriptor.2 (.reference name)) value) rows values) :
+    All₂ (fun (descriptor : String × Nat) (row : EdgeValue Symbol Guard) =>
+      row.children = List.replicate descriptor.2 (.reference name) ∧
+      row.entry.key = ⟨literal descriptor.1, List.replicate descriptor.2 (.ref name), top⟩)
+      rows (values.flatMap nodeEdges) := by
+  induction aligned with
+  | nil => exact .nil
+  | @cons descriptor value rest values own tail ih =>
+      obtain ⟨entry, edge, same, children, key⟩ := own
+      simp only [List.flatMap_cons, same, nodeEdges, List.singleton_append]
+      exact .cons ⟨children, by simpa [List.map_replicate, Value.referenceOf] using key⟩ ih
+
+/-- The same callback retains its actual arrow, catalog rows, and resident records. -/
+private theorem labeled_callback_rows (top : Guard) (catalog : List (String × Nat))
     (name : Reference) (state : State Symbol Guard) (facts : Facts state)
     (available : Available state (.reference name)) :
-    ∃ (entry : Interned NodeKey) (edges : List (EdgeValue Symbol Guard))
+    ∃ (entry : Interned NodeKey) (marker : Value Symbol Guard)
+      (arrow : EdgeValue Symbol Guard) (rows : List (EdgeValue Symbol Guard))
       (final : State Symbol Guard),
       callback (mapSyntax literal (allTypesBody top catalog)) [] name state =
-        .done (.node entry edges 0 [name]) final := by
+        .done (.node entry (canonicalEdges (arrow :: rows)) 0 [name]) final ∧
+      RowReadback "(->)" top [] marker ∧
+      arrow.children = [marker, .reference name, .reference name] ∧
+      arrow.entry.key = ⟨literal "->", [marker.referenceOf, .ref name, .ref name], top⟩ ∧
+      All₂ (fun (descriptor : String × Nat) (row : EdgeValue Symbol Guard) =>
+        row.children = List.replicate descriptor.2 (.reference name) ∧
+        row.entry.key = ⟨literal descriptor.1, List.replicate descriptor.2 (.ref name), top⟩)
+        (descriptors catalog) rows ∧
+      Facts final ∧ Available final (.node entry (canonicalEdges (arrow :: rows)) 0 [name]) ∧
+      (∀ row ∈ arrow :: rows, EdgeResident final row) ∧
+      marker.free = [] ∧ Available final marker ∧
+      (∀ row ∈ canonicalEdges (arrow :: rows), row.entry.key.constraint = top ∧
+        ∀ child ∈ row.children, child = marker ∨ child = .reference name) ∧
+      arrow ∈ canonicalEdges (arrow :: rows) := by
   obtain ⟨marker, arrow, values, middle, partsDone, markerShape, arrowShape, aligned⟩ :=
     body_inputs top catalog name state facts available
   have checked := buildMany_verified
@@ -256,6 +286,7 @@ private theorem labeled_callback_node (top : Guard) (catalog : List (String × N
       (resident first firstMem) (resident second secondMem) firstShape secondShape
   have unionEq := makeUnion_eq_makeNode (arrow :: values) middle middleFacts.coherent middleFacts.linked
     ordinary resident first second firstMem secondMem different
+  have markerReadback := markerShape
   obtain ⟨markerEntry, markerEdge, markerEq, _, _⟩ := markerShape
   have markerGood : Good name marker := by
     simp [markerEq, Good, Value.depth, Value.free, maximumDepth, childFree, canonicalFree]
@@ -301,7 +332,71 @@ private theorem labeled_callback_node (top : Guard) (catalog : List (String × N
     rfl
   have done : callback (mapSyntax literal (allTypesBody top catalog)) [] name state = .done result.1 result.2 := by
     simp only [callback, bodyDone, Outcome.bind, work, resultEq, withoutSelfReference, run]
-  exact ⟨entry, _, result.2, resultEq ▸ done⟩
+  have finalChecked := callback_verified (mapSyntax literal (allTypesBody top catalog)) [] name state facts
+    (input_reference state name available)
+  have finalFacts : Facts result.2 := by
+    simpa only [done, Outcome.state] using finalChecked.facts
+  have rawAligned := labeled_row_keys top name (descriptors catalog) values aligned
+  have rawEq : (arrow :: values).flatMap nodeEdges = arrowEdge :: values.flatMap nodeEdges := by
+    simp only [List.flatMap_cons, arrowEq, nodeEdges, List.singleton_append]
+  have rawSurvive : surviving (arrowEdge :: values.flatMap nodeEdges) =
+      arrowEdge :: values.flatMap nodeEdges := by
+    unfold surviving
+    apply List.filter_eq_self.mpr
+    intro edge member
+    rcases List.mem_cons.mp member with rfl | later
+    · simp [arrowChildren, markerEq, Value.referenceOf]
+    · obtain ⟨descriptor, _, related⟩ := output_origin rawAligned edge later
+      simp [related.1, Value.referenceOf]
+  have canonicalResult : result.1 =
+      .node entry (canonicalEdges (arrowEdge :: values.flatMap nodeEdges)) 0 [name] := by
+    simpa only [rawEq, rawSurvive] using resultEq
+  have growth : Grows middle result.2 :=
+    (InternedConstructorTemplates.run_correct (makeUnion (arrow :: values)) middle middleFacts.coherent.valid).2
+  have rawResident : ∀ row ∈ arrowEdge :: values.flatMap nodeEdges, EdgeResident result.2 row := by
+    intro row member
+    apply edge_grows middle result.2 growth row
+    exact rows_resident (arrow :: values) middle middleFacts.linked resident row (rawEq.symm ▸ member)
+  have rawFields : ∀ row ∈ arrowEdge :: values.flatMap nodeEdges,
+      row.entry.key.constraint = top ∧ ∀ child ∈ row.children, child = marker ∨ child = .reference name := by
+    intro row member
+    rcases List.mem_cons.mp member with same | later
+    · subst row
+      refine ⟨congrArg EdgeKey.constraint arrowKey, ?_⟩
+      intro child included
+      rw [arrowChildren] at included
+      simpa only [List.mem_cons, List.not_mem_nil, or_false, or_self] using included
+    · obtain ⟨descriptor, _, related⟩ := output_origin rawAligned row later
+      refine ⟨congrArg EdgeKey.constraint related.2, ?_⟩
+      intro child included
+      rw [related.1] at included
+      exact Or.inr (List.eq_of_mem_replicate included)
+  have markerClosed : marker.free = [] := by
+    simp [markerEq, Value.free, childFree, canonicalFree]
+  have markerAvailable : Available result.2 marker :=
+    finalFacts.cached.edges arrowEdge.entry.key arrowEdge (rawResident arrowEdge List.mem_cons_self) marker
+      (by rw [arrowChildren]; exact List.mem_cons_self)
+  refine ⟨entry, marker, arrowEdge, values.flatMap nodeEdges, result.2,
+    canonicalResult ▸ done, markerReadback, arrowChildren, ?_, rawAligned, finalFacts,
+    ?_, rawResident, markerClosed, markerAvailable, ?_, ?_⟩
+  · simpa only [List.map_cons, List.map_nil, Value.referenceOf] using arrowKey
+  · rw [← canonicalResult]
+    exact finalChecked.result _ _ done
+  · intro row member
+    exact rawFields row (canonicalEdges_member _ row member)
+  · exact canonicalEdges_retains result.2 finalFacts.coherent _ arrowEdge rawResident List.mem_cons_self
+
+/-- The actual mapped callback derives its ordinary node and exact local free name. -/
+private theorem labeled_callback_node (top : Guard) (catalog : List (String × Nat))
+    (name : Reference) (state : State Symbol Guard) (facts : Facts state)
+    (available : Available state (.reference name)) :
+    ∃ (entry : Interned NodeKey) (edges : List (EdgeValue Symbol Guard))
+      (final : State Symbol Guard),
+      callback (mapSyntax literal (allTypesBody top catalog)) [] name state =
+        .done (.node entry edges 0 [name]) final := by
+  obtain ⟨entry, marker, arrow, rows, final, done, _⟩ :=
+    labeled_callback_rows top catalog name state facts available
+  exact ⟨entry, _, final, done⟩
 
 end Callback
 
@@ -340,6 +435,46 @@ theorem current_types_callback_cleanup
   refine ⟨.node bodyEntry edges 0 [.interned entry.identity], final, called, ?_, ?_⟩
   · simp [finish, cleanup, Value.free, Value.referenceOf]
   · simp [Value.free]
+
+
+/-- The current catalog supplies the exact callback rows in the same returned heap. -/
+theorem current_types_callback_rows
+    [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (name : Reference)
+    (state : State Symbol Guard) (facts : Facts state)
+    (available : Available state (.reference name)) :
+    ∃ (entry : Interned NodeKey) (marker : Value Symbol Guard)
+      (arrow : EdgeValue Symbol Guard) (rows : List (EdgeValue Symbol Guard))
+      (final : State Symbol Guard),
+      callback (ordinarySymbols (allTypesBody top
+        (SourceSynthesisCurrentContext.constructorCatalog lib query))) [] name state =
+        .done (.node entry (canonicalEdges (arrow :: rows)) 0 [name]) final ∧
+      (∃ (markerEntry : Interned NodeKey) (markerRow : EdgeValue Symbol Guard),
+        marker = .node markerEntry [markerRow] 0 [] ∧ markerRow.children = [] ∧
+        markerRow.entry.key = ⟨literal "(->)", [], top⟩) ∧
+      arrow.children = [marker, .reference name, .reference name] ∧
+      arrow.entry.key = ⟨literal "->", [marker.referenceOf, .ref name, .ref name], top⟩ ∧
+      All₂ (fun (descriptor : String × Nat) (row : EdgeValue Symbol Guard) =>
+        row.children = List.replicate descriptor.2 (.reference name) ∧
+        row.entry.key = ⟨literal descriptor.1, List.replicate descriptor.2 (.ref name), top⟩)
+        (descriptors (SourceSynthesisCurrentContext.constructorCatalog lib query)) rows ∧
+      Facts final ∧ Available final (.node entry (canonicalEdges (arrow :: rows)) 0 [name]) ∧
+      (∀ row ∈ arrow :: rows, EdgeResident final row) ∧
+      marker.free = [] ∧ Available final marker ∧
+      (∀ row ∈ canonicalEdges (arrow :: rows), row.entry.key.constraint = top ∧
+        ∀ child ∈ row.children, child = marker ∨ child = .reference name) ∧
+      arrow ∈ canonicalEdges (arrow :: rows) := by
+  obtain ⟨entry, marker, arrow, rows, final, called, markerShape, children, key,
+    aligned, finalFacts, nodeAvailable, resident, markerClosed, markerAvailable, fields, retained⟩ :=
+    labeled_callback_rows top (SourceSynthesisCurrentContext.constructorCatalog lib query)
+      name state facts available
+  obtain ⟨markerEntry, markerRow, markerEq, markerChildren, markerKey⟩ := markerShape
+  refine ⟨entry, marker, arrow, rows, final, ?_, ?_, children, key, aligned,
+    finalFacts, nodeAvailable, resident, markerClosed, markerAvailable, fields, retained⟩
+  · simpa only [SourceSynthesisLabelProgramBuildRoles.mapSyntax_ordinarySymbols] using called
+  · refine ⟨markerEntry, markerRow, ?_, markerChildren, markerKey⟩
+    simpa [maximumDepth, childFree, canonicalFree] using markerEq
+
 
 
 end MicroCFTA.SourceSynthesisCurrentUniverseBody
