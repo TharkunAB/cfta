@@ -1,3 +1,4 @@
+import MicroCFTA.SourceSynthesisUniverseOffDiagonalBody
 import MicroCFTA.SourceSynthesisCurrentProgramIdentityEagerResources
 import MicroCFTA.SourceSynthesisUniverseOffDiagonalReferenceControl
 import MicroCFTA.SourcePruningEnumerationObservedPrefixFuel
@@ -5236,3 +5237,6 @@ run_cmd do
 
 #check @MicroCFTA.SourceSynthesisCurrentProgramEagerResources.accepted_initial_identity_emitted_history
 #print axioms MicroCFTA.SourceSynthesisCurrentProgramEagerResources.accepted_initial_identity_emitted_history
+
+#check @MicroCFTA.SourceSynthesisUniverseOffDiagonalBody.node_target_readback
+#print axioms MicroCFTA.SourceSynthesisUniverseOffDiagonalBody.node_target_readback
