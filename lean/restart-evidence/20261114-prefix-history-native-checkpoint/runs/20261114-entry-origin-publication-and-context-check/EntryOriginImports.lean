@@ -1,0 +1,7 @@
+import MicroCFTA.SourcePruningEnumerationEntryRecordedBucketOrigin
+
+#check @MicroCFTA.SourcePruningEnumerationEntry.enter_recorded_bucket_origin
+#print axioms MicroCFTA.SourcePruningEnumerationEntry.enter_recorded_bucket_origin
+
+#check @MicroCFTA.SourcePruningEnumerationEntry.enter_active_key_origin
+#print axioms MicroCFTA.SourcePruningEnumerationEntry.enter_active_key_origin

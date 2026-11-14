@@ -1,0 +1,138 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261114-ordinary-prefix-and-native-fields-check/source/MicroCFTA/SourceSynthesisCurrentComponentFieldNativeAtoms.lean:120:4: error: Type mismatch: After simplification, term
+  exactKernel 0
+ has type
+  @Eq (Result Symbol Guard (Value Symbol Guard))
+    (execute top SourceEqualityPCSNativeEdge.conjoin bound request.domain request.left request.right before.machine)
+    (Result.done value after.machine)
+but is expected to have type
+  @Eq (Result Symbol Guard (Value Symbol Guard))
+    (execute top SourceEqualityPCSNativeEdge.conjoin bound IntersectionEmptyDomain.emptyDomain left right machine)
+    (Result.done value after.machine)
+@MicroCFTA.SourceSynthesisCurrentComponentFieldNativeAtoms.current_component_fields_cold_native_result_atoms : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)]
+  (lib : MicroCFTA.SourceSynthesisTypeSyntax.Library) (query : MicroCFTA.SourceSynthesisTypeSyntax.Query) (signed : Int)
+  (whole : MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression),
+  MicroCFTA.SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole →
+    ∀
+      (rootValue :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)
+      (sourceHeap :
+        MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard),
+      MicroCFTA.InternedFreshOrdinaryConstruction.build
+            (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+            MicroCFTA.InternedConstructorTemplates.empty =
+          MicroCFTA.InternedNestedConstruction.Outcome.done rootValue sourceHeap →
+        ∀ (key : MicroCFTA.InternedBinderProtocol.NodeKey)
+          (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+          (body depth ordinary :
+            MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard),
+          sourceHeap.nodeRecords key =
+              some (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary) →
+            ∀
+              {leftExpressions rightExpressions :
+                List
+                  (MicroCFTA.InternedNestedConstruction.EdgeSyntax
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)}
+              {leftBefore leftAfter rightBefore rightAfter :
+                MicroCFTA.InternedConstructorTemplates.State
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard}
+              {leftOutputs rightOutputs :
+                List
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)}
+              {leftIndex rightIndex : Nat}
+              {leftSymbol rightSymbol : MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula}
+              (leftScheme rightScheme : MicroCFTA.SourceSynthesisTypeSyntax.Ty),
+              MicroCFTA.SourceSynthesisOriginalTypeAnnotations.OriginalType lib leftScheme →
+                MicroCFTA.SourceSynthesisOriginalTypeAnnotations.OriginalType lib rightScheme →
+                  ∀
+                    (leftCall :
+                      MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall leftExpressions [] leftBefore leftOutputs
+                        leftAfter sourceHeap leftIndex leftSymbol MicroCFTA.SourceSynthesisGeneralizeSyntax.top
+                        [MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+                            (MicroCFTA.SourceSynthesisGeneralizeSyntax.generalize
+                              (MicroCFTA.SourceSynthesisTypeSyntax.allTypes
+                                MicroCFTA.SourceSynthesisGeneralizeSyntax.top
+                                (MicroCFTA.SourceSynthesisCurrentContext.constructorCatalog lib query))
+                              (MicroCFTA.SourceSynthesisPr210TypeReflection.encodeTy leftScheme))])
+                    (rightCall :
+                      MicroCFTA.SourceCurrentStoredMuRetainedAlignment.RowCall rightExpressions [] rightBefore
+                        rightOutputs rightAfter sourceHeap rightIndex rightSymbol
+                        MicroCFTA.SourceSynthesisGeneralizeSyntax.top
+                        [MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+                            (MicroCFTA.SourceSynthesisGeneralizeSyntax.generalize
+                              (MicroCFTA.SourceSynthesisTypeSyntax.allTypes
+                                MicroCFTA.SourceSynthesisGeneralizeSyntax.top
+                                (MicroCFTA.SourceSynthesisCurrentContext.constructorCatalog lib query))
+                              (MicroCFTA.SourceSynthesisPr210TypeReflection.encodeTy rightScheme))])
+                    (left right :
+                      MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard),
+                    leftCall.output.children[0]? = some left →
+                      rightCall.output.children[0]? = some right →
+                        ∀ (width : Nat),
+                          have machine := { heap := sourceHeap, domains := MicroCFTA.Cache.emptyState };
+                          have before := MicroCFTA.SourceRecursiveIntersectionThunks.initial width machine;
+                          have request :=
+                            { domain := MicroCFTA.IntersectionEmptyDomain.emptyDomain, left := left, right := right };
+                          ∀ (nativeFuel : Nat)
+                            (value :
+                              MicroCFTA.InternedConstructorTemplates.Value
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)
+                            (after :
+                              MicroCFTA.SourceRecursiveIntersectionThunks.State width
+                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)
+                            (actual :
+                              MicroCFTA.SourceRecursiveIntersectionNative.execute
+                                  MicroCFTA.SourceSynthesisGeneralizeSyntax.top
+                                  MicroCFTA.SourceEqualityPCSNativeEdge.conjoin nativeFuel
+                                  (MicroCFTA.SourceRecursiveIntersectionCode.Code.node request
+                                    MicroCFTA.SourceRecursiveIntersectionCode.Code.pure)
+                                  before =
+                                MicroCFTA.SourceRecursiveIntersectionNative.Outcome.done value after),
+                            MicroCFTA.SourceRecursiveIntersectionNative.Bounds ⋯ →
+                              (MicroCFTA.InternedProbeProvenance.Available sourceHeap left ∧
+                                  left.free = [] ∧
+                                    MicroCFTA.SourceEqualityAnnotationLanguage.Annotated
+                                        (MicroCFTA.SourceSynthesisNativeTypeTrace.Origin
+                                          (MicroCFTA.SourceSynthesisCurrentSourceGuards.encodedLibrary lib))
+                                        left ∧
+                                      ∀ (atom : MicroCFTA.InternedBinderProtocol.NodeRef),
+                                        atom ∈ MicroCFTA.InternedBoundaryAtoms.atoms left →
+                                          atom = MicroCFTA.InternedBinderProtocol.NodeRef.mu entry.identity) ∧
+                                (MicroCFTA.InternedProbeProvenance.Available sourceHeap right ∧
+                                    right.free = [] ∧
+                                      MicroCFTA.SourceEqualityAnnotationLanguage.Annotated
+                                          (MicroCFTA.SourceSynthesisNativeTypeTrace.Origin
+                                            (MicroCFTA.SourceSynthesisCurrentSourceGuards.encodedLibrary lib))
+                                          right ∧
+                                        ∀ (atom : MicroCFTA.InternedBinderProtocol.NodeRef),
+                                          atom ∈ MicroCFTA.InternedBoundaryAtoms.atoms right →
+                                            atom = MicroCFTA.InternedBinderProtocol.NodeRef.mu entry.identity) ∧
+                                  MicroCFTA.SourceRecursiveIntersectionThunks.Valid width
+                                      MicroCFTA.SourceSynthesisGeneralizeSyntax.top
+                                      MicroCFTA.SourceEqualityPCSNativeEdge.conjoin after ∧
+                                    MicroCFTA.SourceRecursiveIntersectionKernel.Extension machine after.machine ∧
+                                      MicroCFTA.InternedProbeProvenance.Available after.machine.heap value ∧
+                                        value.free = [] ∧
+                                          ∀ (atom : MicroCFTA.InternedBinderProtocol.NodeRef),
+                                            atom ∈ MicroCFTA.InternedBoundaryAtoms.atoms value →
+                                              atom = MicroCFTA.InternedBinderProtocol.NodeRef.mu entry.identity
+'MicroCFTA.SourceSynthesisCurrentComponentFieldNativeAtoms.current_component_fields_cold_native_result_atoms' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

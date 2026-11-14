@@ -1,0 +1,60 @@
+@MicroCFTA.SourceSynthesisCurrentSharedIncomingNativeObservation.shared_incoming_success_native_or_unchanged : ∀
+  {width : Nat} [inst : DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (checkEmpty : Bool) (representativeFuel nativeFuel p h target : Nat)
+  (incoming :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (incomingScs : List MicroCFTA.EnumerationState.Suspended) (memos : MicroCFTA.EndpointMemoGateTrace.Memos)
+  (queries : MicroCFTA.SourceEndpointMemo.Memos),
+  MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory caller memos →
+    MicroCFTA.SourcePruningEnumerationObservation.PendingRealized caller.checked.native.machine.heap before →
+      MicroCFTA.InternedProbeProvenance.Available caller.checked.native.machine.heap incoming →
+        ∀
+          (raw :
+            List
+              (Except MicroCFTA.EnumerationState.Error
+                (Unit ×
+                  MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))
+          (afterCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+          (savedQueries : MicroCFTA.SourceEndpointMemo.Memos)
+          (read :
+            MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+          MicroCFTA.SourcePruningEnumerationSharedIncomingNode.run checkEmpty representativeFuel nativeFuel p h caller
+                before target incoming incomingScs queries =
+              (Except.ok (some raw), afterCaller, savedQueries, read) →
+            afterCaller = caller ∨
+              ∃ found oldHandle oldScs old query queried phase phaseQueries answer handle,
+                MicroCFTA.UnionFind.findRoot representativeFuel before.representatives target = some found ∧
+                  before.values[found.representative]? =
+                      some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some oldHandle) oldScs) ∧
+                    MicroCFTA.SourcePruningEnumerationNodes.lookupNode caller.checked.native.machine.heap oldHandle =
+                        some old ∧
+                      MicroCFTA.InternedProbeProvenance.Available caller.checked.native.machine.heap old ∧
+                        old.free = [] ∧
+                          MicroCFTA.SourceEqualityNativeDemand.execute nativeFuel
+                                (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                                  (MicroCFTA.SourceRecursiveIntersectionCode.requestNode
+                                    MicroCFTA.IntersectionEmptyDomain.emptyDomain incoming old))
+                                caller.checked =
+                              MicroCFTA.SourceEqualityNativeDemand.Outcome.done query queried ∧
+                            ⋯ ∧ ⋯
+'MicroCFTA.SourceSynthesisCurrentSharedIncomingNativeObservation.shared_incoming_success_native_or_unchanged' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

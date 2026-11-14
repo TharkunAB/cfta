@@ -1,0 +1,34 @@
+@MicroCFTA.SourcePruningEnumerationEntry.enter_recorded_bucket_origin : ∀ {EnumGuard NativeGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (fuel uv : Nat) (before after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (target handle : Nat) (bucket : List MicroCFTA.EnumerationState.Suspended)
+  (decoded : MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol NativeGuard),
+  MicroCFTA.UnionFind.Total before.representatives →
+    MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.SourcePruningEnumerationEntry.enter heap fuel uv) before
+        (target, handle, bucket, decoded) after →
+      ∃ size,
+        MicroCFTA.UnionFind.Reaches before.representatives uv target size ∧
+          before.values[target]? = some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle) bucket) ∧
+            after.values = before.values ∧
+              MicroCFTA.SourcePruningEnumerationNodes.lookupNode heap handle = some decoded ∧
+                after.recursionAncestry = before.recursionAncestry ∧
+                  after.expansionAncestry =
+                    if MicroCFTA.MergedOrdinaryHeight.recursiveBoundary decoded = true then
+                      (MicroCFTA.EnumerationState.recursionKey handle bucket ::
+                          before.recursionAncestry target).eraseDups
+                    else before.recursionAncestry target
+'MicroCFTA.SourcePruningEnumerationEntry.enter_recorded_bucket_origin' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourcePruningEnumerationEntry.enter_active_key_origin : ∀ {EnumGuard NativeGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (fuel uv : Nat) (before after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (target handle : Nat) (bucket : List MicroCFTA.EnumerationState.Suspended)
+  (decoded : MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol NativeGuard),
+  MicroCFTA.UnionFind.Total before.representatives →
+    MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.SourcePruningEnumerationEntry.enter heap fuel uv) before
+        (target, handle, bucket, decoded) after →
+      ∀ (key : MicroCFTA.EnumerationState.RecursionKey),
+        key ∈ after.expansionAncestry →
+          key ∈ before.recursionAncestry target ∨
+            MicroCFTA.MergedOrdinaryHeight.recursiveBoundary decoded = true ∧
+              key = MicroCFTA.EnumerationState.recursionKey handle bucket
+'MicroCFTA.SourcePruningEnumerationEntry.enter_active_key_origin' depends on axioms: [propext, Quot.sound]

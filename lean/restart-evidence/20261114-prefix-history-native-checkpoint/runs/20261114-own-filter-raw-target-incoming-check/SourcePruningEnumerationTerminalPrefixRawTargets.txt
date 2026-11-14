@@ -1,0 +1,47 @@
+@MicroCFTA.SourcePruningEnumerationTerminalPrefix.run_raw_target_incidence : ∀ {EnumGuard : Type} (fuel : Nat)
+  (first : MicroCFTA.EnumerationState.Suspended) (rest : List MicroCFTA.EnumerationState.Suspended)
+  (waiting : MicroCFTA.EnumerationWaitingIndex.Waiting)
+  (before after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (recorded : List Nat) (winner : Nat) (moved : MicroCFTA.EnumerationWaitingIndex.Waiting) (roots : Nat → Nat),
+  MicroCFTA.EnumerationSchedule.Roots before.representatives roots →
+    (MicroCFTA.SourcePruningEnumerationTerminalPrefix.run fuel first rest waiting before).run =
+        [Except.ok ((recorded, winner, moved), after)] →
+      recorded = List.map (fun sc => roots sc.var) (first :: rest) ∧
+        after.values = before.values ∧
+          ∀ (sc : MicroCFTA.EnumerationState.Suspended),
+            sc ∈ first :: rest → MicroCFTA.UnionFind.SameClass after.representatives winner sc.var
+'MicroCFTA.SourcePruningEnumerationTerminalPrefix.run_raw_target_incidence' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourcePruningEnumerationEntry.entered_terminal_prefix_raw_targets : ∀ {EnumGuard NativeGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (entryFuel prefixFuel uv : Nat)
+  (before entered joined : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (target handle : Nat) (bucket : List MicroCFTA.EnumerationState.Suspended)
+  (decoded : MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol NativeGuard),
+  MicroCFTA.UnionFind.Total before.representatives →
+    MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.SourcePruningEnumerationEntry.enter heap entryFuel uv) before
+        (target, handle, bucket, decoded) entered →
+      ∀ (first : MicroCFTA.EnumerationState.Suspended) (rest descendants : List MicroCFTA.EnumerationState.Suspended),
+        List.partition (fun sc => MicroCFTA.EqualityTrie.isTerminal sc.trie) bucket = (first :: rest, descendants) →
+          ∀ (waiting : MicroCFTA.EnumerationWaitingIndex.Waiting) (recorded : List Nat) (winner : Nat)
+            (moved : MicroCFTA.EnumerationWaitingIndex.Waiting) (roots : Nat → Nat),
+            MicroCFTA.EnumerationSchedule.Roots entered.representatives roots →
+              (MicroCFTA.SourcePruningEnumerationTerminalPrefix.run prefixFuel first rest waiting entered).run =
+                  [Except.ok ((recorded, winner, moved), joined)] →
+                ∃ size,
+                  MicroCFTA.UnionFind.Reaches before.representatives uv target size ∧
+                    before.values[target]? =
+                        some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle) bucket) ∧
+                      joined.values[target]? =
+                          some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle) bucket) ∧
+                        recorded =
+                            List.map (fun sc => roots sc.var)
+                              (List.filter (fun sc => MicroCFTA.EqualityTrie.isTerminal sc.trie) bucket) ∧
+                          ∀ (sc : MicroCFTA.EnumerationState.Suspended),
+                            sc ∈ bucket →
+                              [] ∈ MicroCFTA.EqualityTrie.fromPathTrie sc.trie →
+                                MicroCFTA.UnionFind.SameClass joined.representatives winner sc.var
+'MicroCFTA.SourcePruningEnumerationEntry.entered_terminal_prefix_raw_targets' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

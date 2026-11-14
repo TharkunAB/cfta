@@ -1,0 +1,68 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261114-genuine-shared-incoming-and-child-check/source/MicroCFTA/SourcePruningEnumerationSharedChildRawTargets.lean:187:56: error: Application type mismatch: The argument
+  partitioned
+has type
+  List.partition (fun sc => EqualityTrie.isTerminal sc.trie) bucket = (first :: rest, descendants)
+but is expected to have type
+  (first :: rest, descendants) = (first :: rest, descendants)
+in the application
+  And.intro partitioned
+@MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.ChildDispatch.terminal_singleton_raw_target_incidence : ∀
+  {width : Nat} [inst : DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (checkEmpty : Bool) (r n p h k : Nat) (bucket : List MicroCFTA.EnumerationState.Suspended)
+  (incoming :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (queries : MicroCFTA.SourceEndpointMemo.Memos),
+  (bucket.any fun sc => MicroCFTA.EqualityTrie.isTerminal sc.trie) = true →
+    ∀ (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+      (afterCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+      (savedQueries : MicroCFTA.SourceEndpointMemo.Memos)
+      (read after :
+        MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (moved : MicroCFTA.EnumerationWaitingIndex.Waiting)
+      (afterCache :
+        Option
+          (MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+      (roots : Nat → Nat),
+      MicroCFTA.EnumerationSchedule.Roots before.core.representatives roots →
+        MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.ChildDispatch.run checkEmpty r n p h k bucket
+              incoming caller before queries =
+            ((Except.ok (some [Except.ok (fragment, after)]), afterCaller, savedQueries, read, moved), afterCache) →
+          ∃ first rest descendants recorded winner joined foldCaller foldQueries folded foldOuter,
+            List.partition (fun sc => MicroCFTA.EqualityTrie.isTerminal sc.trie) bucket = (first :: rest, descendants) ∧
+              (MicroCFTA.SourcePruningEnumerationTerminalPrefix.run r first rest before.waiting before.core).run =
+                  [Except.ok ((recorded, winner, moved), joined)] ∧
+                MicroCFTA.SourcePruningEnumerationSharedCachedTerminal.rawFold checkEmpty n p h recorded caller joined
+                      winner queries =
+                    (Except.ok (some [Except.ok ((), folded)]), foldCaller, foldQueries, foldOuter) ∧
+                  folded = foldOuter ∧
+                    MicroCFTA.SourcePruningEnumerationSharedIncomingNode.run checkEmpty r n p h foldCaller folded winner
+                          incoming descendants foldQueries =
+                        (Except.ok (some [Except.ok ((), after)]), afterCaller, savedQueries, read) ∧
+                      recorded =
+                          List.map (fun sc => roots sc.var)
+                            (List.filter (fun sc => MicroCFTA.EqualityTrie.isTerminal sc.trie) bucket) ∧
+                        joined.values = before.core.values ∧
+                          fragment = MicroCFTA.Fragments.Fragment.hole winner ∧
+                            ∀ (sc : MicroCFTA.EnumerationState.Suspended),
+                              sc ∈ bucket →
+                                [] ∈ MicroCFTA.EqualityTrie.fromPathTrie sc.trie →
+                                  MicroCFTA.UnionFind.SameClass joined.representatives winner sc.var
+'MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.ChildDispatch.terminal_singleton_raw_target_incidence' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
