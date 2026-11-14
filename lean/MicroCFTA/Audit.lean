@@ -1,3 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationSharedSelectedOpaqueStability
 import MicroCFTA.SourceSynthesisUniverseClosedResetSteps
 import MicroCFTA.SourceSynthesisCurrentUniverseBodyChildClassification
 import MicroCFTA.SourcePruningEnumerationSharedOutputOrigin
@@ -5399,3 +5400,6 @@ run_cmd do
 
 #check MicroCFTA.SourceSynthesisUniverseClosedResetSteps.closed_reset_atoms_of_fuel_induction
 #print axioms MicroCFTA.SourceSynthesisUniverseClosedResetSteps.closed_reset_atoms_of_fuel_induction
+
+#check MicroCFTA.SourcePruningEnumerationSharedSelectedOpaqueDispatch.complete_stable
+#print axioms MicroCFTA.SourcePruningEnumerationSharedSelectedOpaqueDispatch.complete_stable
