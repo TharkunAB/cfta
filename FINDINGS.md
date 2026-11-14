@@ -1,3 +1,46 @@
+# Original-domain strict-descendant freshness checked (2026-11-14 15:53 CET)
+
+GOAL ACTIVE. Preserve the complete original proof objective below.
+
+NEW PUBLIC SourceSynthesisUniverseMixedDescendantFreshness has four producers.
+Closed available values with the same native identity have the same readback.
+Strict ordinary-and-union PrefixHeight therefore separates descendant identity
+from ancestor identity. Both operand orders exclude that descendant pair from
+the ORIGINAL literal entered(U,P) domain. Actual later valid Extension transports
+that domain and its binding lookup still returns the FULL ORIGINAL U.
+The source wrapper derives the initial U availability and closedness from the
+SAME accepted source/build/stored equation. No future provider or SemanticHeap
+premise was added. These are freshness and lookup laws, not a reference-reset
+execution equation or complete generated-Type closure.
+
+All5public gates PASS. Strict Audit checks96,062 aggregate imported theorem
+axiom dependencies and107 explicit reports:105standard-axiom,2axiom-free.
+Only propext,Classical.choice,Quot.sound. Source modules5951; direct imports4949.
+Effective4GiB max/high,swap0. Logs/pins are in
+/tmp/mcfta-mixed-descendant-freshness-publication-20261114-1552.
+Private check1 failed because intro consumed three outer let binders.
+Check2 reduced those lets and passed all4original headers. Earlier failed
+inputs remain uncredited. No operational definition or old declaration changed.
+
+The actual observed preparation resource theorem is public and independently
+pushed at055f0743720f18efe801fd46c956825749ba5867. Pointwise supported-prefix phase
+fields are being prepared separately. They still need strict proof validation.
+Every-budget worker histories must also retain outputs from stopped scans and
+callbacks. Full native body/reference descendant execution and ordinary/union
+products remain OPEN. Finite productivity and one consistent original-root model
+per emitted causal branch remain the central semantic gap. All removed suspended
+constraints must hold under that SAME model. No final model is supplied as input.
+
+Keep all original typing,depth adequacy/completeness,LPO/reduction/refolding,
+both language directions,stream order/multiplicity/lazy demand,exact sizes,
+counts/weights/training,both rank/unrank inverses,host bounds and compiled Haskell
+correspondence. No Haskell/Cabal/test/Liquid Haskell annotation changed. No new
+Haskell fix or reachable source counterexample was established. Keep every future
+Haskell fix in FINDINGS. Root owns live/compiler/Git. Preserve .hypha/ and all
+failed/marked inputs. All compiler handles are terminal. Latest primary usage7%.
+At15:52 the63mcfta /tmp directories total147,560,485bytes; filesystem free is
+146,553,733,120bytes. No copied compiled import overlays are used.
+
 # Actual observed preparation resources checked (2026-11-14 15:49 CET)
 
 GOAL ACTIVE. The complete original objective remains in scope.
