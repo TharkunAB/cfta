@@ -11689,3 +11689,719 @@ private theorem identity_reservation_position_reserved
 
 end OrderedPositionAdmission
 end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+section ActualCallbackFrames
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
+open SourcePruningEnumerationRecursive (Packet)
+open SourcePruningEnumerationSharedPreparedRecursive (Output Failure)
+open SourcePruningEnumerationSharedSelectedContinuations
+open SourcePruningEnumerationSharedPreparedRecursiveChildPolicy (resumeWithNarrow)
+open SourceCurrentAllocatedNativeResourceForecast (Le)
+open SourcePruningEnumerationSharedIncomingReservation (Seed advance)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Heap" => SourceEqualityAnnotationHeap.Heap
+variable {bits : Nat}
+local notation "Fold" => NativeContinuations.Result
+  (Output (bits + 2) Unit) (Failure (bits + 2) Unit) (bits + 2)
+local notation "Done" => List Fragment → Caller (bits + 2) → Queries → Cached → Fold
+local notation "Stopped" => List Fragment → ChildDispatch.Observation (bits + 2) → Option Cached → Fold
+local notation "ChildDone" => Fragment → Caller (bits + 2) → Queries → Cached → Fold
+local notation "Visitor" => List Suspended → Node → Caller (bits + 2) → Cached → Queries → ChildDone →
+  (ChildDispatch.Observation (bits + 2) → Option Cached → Fold) → Fold
+
+/-- Store the literal root callback or one literal selected-row parent tail. -/
+private inductive IdentityActualCallbackFrame (bits : Nat) where
+  | captured (edge : EdgeValue Symbol Constraint) (residual : Option Constraint)
+      (caller : Caller (bits + 2)) (queries : Queries)
+  | selected (parent : IdentityActualCallbackFrame bits)
+      (completedPrefix : List Fragment) (rest : List (Node × List Suspended))
+      (edge : EdgeValue Symbol Constraint) (residual : Option Constraint)
+      (caller : Caller (bits + 2)) (queries : Queries)
+      (parentHeight remainingCount parentBound : Nat)
+
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+/-- Use the actual remaining-parent-tuple closure after an assembled child. -/
+private noncomputable def identity_actual_parent_tail
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint)) (workFuel : Nat)
+    (callbacks : Done × Stopped) (completedPrefix : List Fragment)
+    (rest : List (Node × List Suspended)) : ChildDone :=
+  fun fragment reached saved after =>
+    SourcePruningEnumerationSharedChildVisitors.visitChildren
+      (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty
+        workFuel workFuel workFuel workFuel workFuel edgesOf)
+      (fun fragments => callbacks.1 (completedPrefix ++ fragment :: fragments))
+      (fun completed => callbacks.2 (completedPrefix ++ fragment :: completed))
+      rest reached after saved
+
+/-- Evaluate only the actual source closures stored in the callback frame. -/
+private noncomputable def identity_actual_frame_callbacks
+    (graph : Graph Symbol Constraint) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint)) (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Unit) (uv : Nat) : IdentityActualCallbackFrame bits → Done × Stopped
+  | .captured edge residual caller queries =>
+      let hook := SourcePruningEnumerationSharedPreparedRecursive.continueWith
+        (resumeWithNarrow (Typing := Unit) (width := bits + 2)
+          (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty
+            workFuel workFuel workFuel workFuel workFuel edgesOf)
+          (fun _ _ _ node state => .done node state) graph [] checkEmpty edgesOf
+          none (fun _ _ => none) workFuel recursiveDepth)
+        graph [] none (fun _ _ => none) workFuel metadata uv
+      (fun fragments reached saved after =>
+        let fragment := Fragments.Fragment.node edge.entry.key.symbol fragments
+        let middle := SelectedEdge.finish residual fragment after
+        match SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap workFuel uv fragment middle with
+        | some finished => SourcePruningEnumerationSharedReceiptContinuation.run hook caller queries
+            (some (.complete fragment reached saved finished))
+        | none => SourcePruningEnumerationSharedReceiptContinuation.run hook caller queries
+            (some (.finalizeStopped fragment reached saved middle)),
+       fun completed observation candidate => SourcePruningEnumerationSharedReceiptContinuation.run
+         hook caller queries (some (.stopped completed observation candidate)))
+  | .selected parent completedPrefix rest edge residual caller queries _parentHeight _remainingCount _parentBound =>
+      let inherited := identity_actual_frame_callbacks graph checkEmpty edgesOf recursiveDepth workFuel metadata uv parent
+      let tail := identity_actual_parent_tail checkEmpty edgesOf workFuel inherited completedPrefix rest
+      (fun fragments reached saved after =>
+        let fragment := Fragments.Fragment.node edge.entry.key.symbol fragments
+        SourcePruningEnumerationSharedEagerChildren.consumeSelected tail caller queries
+          (.complete fragment reached saved (SelectedEdge.finish residual fragment after)),
+       fun completed observation candidate => SourcePruningEnumerationSharedEagerChildren.consumeSelected
+         tail caller queries (.stopped completed observation candidate))
+
+omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node] in
+/-- Retain the mathematical parent tail inside every selected-row callback. -/
+private noncomputable def identity_actual_frame_plan (recursiveDepth limit own : Nat) :
+    IdentityActualCallbackFrame bits → Nat → Seed → Seed
+  | .captured _edge _residual _caller _queries => fun retained current => eagerFinal recursiveDepth current retained
+  | .selected parent _completed _rest _edge _residual _caller _queries parentHeight remainingCount parentBound =>
+      fun retained current => tuplePlan (nodePlan limit own parentHeight)
+        remainingCount parentBound retained (identity_actual_frame_plan recursiveDepth limit own parent) current
+
+omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node] in
+/-- Store capacity for the exact mathematical parent tail, without a native resource provider. -/
+private noncomputable def identity_actual_frame_reserved (bits recursiveDepth limit own : Nat) :
+    IdentityActualCallbackFrame bits → Nat → Seed → Prop
+  | .captured _edge _residual _caller _queries => fun retained current => eagerReserved bits recursiveDepth current retained
+  | .selected parent _completed _rest _edge _residual _caller _queries parentHeight remainingCount parentBound =>
+      fun retained current => tupleReserved (nodePlan limit own parentHeight) (nodeReserved bits limit own parentHeight)
+        remainingCount parentBound retained (identity_actual_frame_plan recursiveDepth limit own parent)
+        (identity_actual_frame_reserved bits recursiveDepth limit own parent) current
+
+omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node] in
+/-- Every actual callback frame retains its forecast input profile and alphabet. -/
+private theorem identity_actual_frame_plan_ge
+    (recursiveDepth limit own : Nat) (frame : IdentityActualCallbackFrame bits) :
+    ∀ retained current,
+      Le current.2 (identity_actual_frame_plan recursiveDepth limit own frame retained current).2 ∧
+      current.1 ⊆ (identity_actual_frame_plan recursiveDepth limit own frame retained current).1 := by
+  induction frame with
+  | captured _edge _residual _caller _queries =>
+      intro retained current
+      exact eagerFinal_ge recursiveDepth current retained
+  | selected parent _completedPrefix _rest _edge _residual _caller _queries parentHeight remainingCount parentBound ih =>
+      intro retained current
+      exact tuplePlan_ge (nodePlan limit own parentHeight) (nodePlan_ge limit own parentHeight)
+        remainingCount parentBound retained (identity_actual_frame_plan recursiveDepth limit own parent) ih current
+
+/-- The generated root frame is the literal actual captured-row operation. -/
+private theorem identity_captured_frame_generation
+    (graph : Graph Symbol Constraint) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint)) (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Unit) (uv : Nat) (caller : Caller (bits + 2)) (queries : Queries)
+    (before own : Cached) (scs : List Suspended) (edge : EdgeValue Symbol Constraint)
+    (residual : Option Constraint)
+    (staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)))
+    (prepared : SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs edge before =
+      some [((edge.entry.key.symbol, staged, residual), own)]) :
+    let child := SourcePruningEnumerationSharedEagerChildren.eagerChild
+      (width := bits + 2) (Output := Output (bits + 2) Unit) (Reason := Failure (bits + 2) Unit)
+      checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf
+    let hook := SourcePruningEnumerationSharedPreparedRecursive.continueWith
+      (resumeWithNarrow (Typing := Unit) (width := bits + 2) child
+        (fun _ _ _ node state => .done node state) graph [] checkEmpty edgesOf
+        none (fun _ _ => none) workFuel recursiveDepth)
+      graph [] none (fun _ _ => none) workFuel metadata uv
+    let callbacks := identity_actual_frame_callbacks graph checkEmpty edgesOf recursiveDepth workFuel metadata uv
+      (.captured edge residual caller queries)
+    SourcePruningEnumerationSharedChildVisitors.visitCapturedWith child hook workFuel uv scs edge caller queries before =
+      SourcePruningEnumerationSharedChildVisitors.visitChildren child callbacks.1 callbacks.2
+        (staged.map (fun input => (input.1, input.2.1))) caller own queries := by
+  dsimp only
+  rw [SourcePruningEnumerationSharedChildVisitors.visitCapturedWith_eq_receipts]
+  simp only [SourcePruningEnumerationSharedChildVisitors.visitSelected, prepared, identity_actual_frame_callbacks]
+  rfl
+
+/-- The actual selected-row callback invokes its literal parent tail and retains its receipt. -/
+private theorem identity_selected_frame_callback
+    (graph : Graph Symbol Constraint) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint)) (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Unit) (uv : Nat) (parent : IdentityActualCallbackFrame bits)
+    (completedPrefix : List Fragment) (rest : List (Node × List Suspended))
+    (edge : EdgeValue Symbol Constraint) (residual : Option Constraint)
+    (caller : Caller (bits + 2)) (queries : Queries) (parentHeight remainingCount parentBound : Nat)
+    (fragments : List Fragment) (reached : Caller (bits + 2)) (saved : Queries) (after : Cached) :
+    let inherited := identity_actual_frame_callbacks graph checkEmpty edgesOf recursiveDepth workFuel metadata uv parent
+    let tail := identity_actual_parent_tail checkEmpty edgesOf workFuel inherited completedPrefix rest
+    let fragment := Fragments.Fragment.node edge.entry.key.symbol fragments
+    let returned := SelectedEdge.finish residual fragment after
+    (identity_actual_frame_callbacks graph checkEmpty edgesOf recursiveDepth workFuel metadata uv
+      (.selected parent completedPrefix rest edge residual caller queries parentHeight remainingCount parentBound)).1
+      fragments reached saved after =
+      match tail fragment reached saved returned with
+      | .complete processed outputs finalCaller finalQueries =>
+          .complete (.complete fragment reached saved returned :: processed) outputs finalCaller finalQueries
+      | .stopped processed outputs current =>
+          .stopped (.complete fragment reached saved returned :: processed) outputs current := by
+  dsimp only
+  simp only [identity_actual_frame_callbacks, SourcePruningEnumerationSharedEagerChildren.consumeSelected]
+  cases identity_actual_parent_tail checkEmpty edgesOf workFuel
+      (identity_actual_frame_callbacks graph checkEmpty edgesOf recursiveDepth workFuel metadata uv parent)
+      completedPrefix rest (.node edge.entry.key.symbol fragments) reached saved
+      (SelectedEdge.finish residual (.node edge.entry.key.symbol fragments) after) <;> rfl
+
+end ActualCallbackFrames
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+section ActualCallbackFrameHandoff
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
+open SourcePruningEnumerationRecursive (Packet)
+open SourcePruningEnumerationSharedPreparedRecursive (Output Failure)
+open SourcePruningEnumerationSharedSelectedContinuations
+open SourceCurrentAllocatedNativeResourceForecast (Le)
+open SourcePruningEnumerationSharedIncomingReservation (Seed advance)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Heap" => SourceEqualityAnnotationHeap.Heap
+variable {bits : Nat}
+local notation "Fold" => NativeContinuations.Result
+  (Output (bits + 2) Unit) (Failure (bits + 2) Unit) (bits + 2)
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+/-- An actual completed inner tuple derives its literal parent-tail entry and reservation. -/
+private theorem identity_selected_frame_actual_handoff
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (graph : Graph Symbol Constraint) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint)) (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Unit) (uv : Nat) (limit own innerHeight innerCount innerBound innerMass : Nat)
+    (innerSeed : Seed) (parent : IdentityActualCallbackFrame bits)
+    (parentHeight remainingCount parentBound : Nat)
+    (original : Caller (bits + 2)) (scopeBefore : Cached)
+    (inputs : List (Node × List Suspended)) (completedPrefix : List Fragment)
+    (rest : List (Node × List Suspended))
+    (caller : Caller (bits + 2)) (queries : Queries) (before : Cached)
+    (incoming : Node) (scs : List Suspended) (edge : EdgeValue Symbol Constraint)
+    (residual : Option Constraint) (middle : Cached)
+    (staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)))
+    (fragments : List Fragment) (reached : Caller (bits + 2)) (saved : Queries) (after : Cached)
+    (previous : TupleInputs formulas solver original metadata scopeBefore inputs completedPrefix caller queries before)
+    (member : (incoming, scs) ∈ inputs)
+    (pending : InputsPending before.core scs)
+    (prepared : SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs edge before =
+      some [((edge.entry.key.symbol, staged, residual), middle)])
+    (history : TupleInputs formulas solver caller metadata middle
+      (staged.map (fun input => (input.1, input.2.1))) fragments reached saved after)
+    (currentFits : Fits innerSeed.2 reached.checked)
+    (currentKnown : Heap (fun guard => guard ∈ innerSeed.1) reached.checked.native.machine.heap)
+    (currentMass : SourcePruningEnumerationPrefixAdmission.suspendedBound after.core ≤ innerMass)
+    (counted : rest.length ≤ remainingCount)
+    (reserved : tupleReserved (nodePlan limit own innerHeight) (nodeReserved bits limit own innerHeight)
+      innerCount innerBound innerMass
+      (identity_actual_frame_plan recursiveDepth limit own
+        (.selected parent completedPrefix rest edge residual caller queries parentHeight remainingCount parentBound))
+      (identity_actual_frame_reserved bits recursiveDepth limit own
+        (.selected parent completedPrefix rest edge residual caller queries parentHeight remainingCount parentBound)) innerSeed) :
+    let frame := IdentityActualCallbackFrame.selected parent completedPrefix rest edge residual caller queries
+      parentHeight remainingCount parentBound
+    let callbackSeed := advance innerSeed (innerCount * (innerBound + 1))
+    let callbackMass := innerMass + innerCount * innerBound
+    let fragment := Fragments.Fragment.node edge.entry.key.symbol fragments
+    let returned := SelectedEdge.finish residual fragment after
+    ChildInputs formulas solver caller metadata before scs fragment reached saved returned ∧
+    TupleInputs formulas solver original metadata scopeBefore inputs
+      (completedPrefix ++ [fragment]) reached saved returned ∧
+    Fits callbackSeed.2 reached.checked ∧
+    Heap (fun guard => guard ∈ callbackSeed.1) reached.checked.native.machine.heap ∧
+    SourcePruningEnumerationPrefixAdmission.suspendedBound returned.core ≤ callbackMass ∧
+    rest.length ≤ remainingCount ∧
+    tupleReserved (nodePlan limit own parentHeight) (nodeReserved bits limit own parentHeight)
+      remainingCount parentBound callbackMass
+      (identity_actual_frame_plan recursiveDepth limit own parent)
+      (identity_actual_frame_reserved bits recursiveDepth limit own parent) callbackSeed ∧
+    (Le (tuplePlan (nodePlan limit own parentHeight) remainingCount parentBound callbackMass
+        (identity_actual_frame_plan recursiveDepth limit own parent) callbackSeed).2
+        (tuplePlan (nodePlan limit own innerHeight) innerCount innerBound innerMass
+          (identity_actual_frame_plan recursiveDepth limit own frame) innerSeed).2 ∧
+      (tuplePlan (nodePlan limit own parentHeight) remainingCount parentBound callbackMass
+        (identity_actual_frame_plan recursiveDepth limit own parent) callbackSeed).1 ⊆
+        (tuplePlan (nodePlan limit own innerHeight) innerCount innerBound innerMass
+          (identity_actual_frame_plan recursiveDepth limit own frame) innerSeed).1) ∧
+    ((identity_actual_frame_callbacks graph checkEmpty edgesOf recursiveDepth workFuel metadata uv frame).1
+      fragments reached saved after =
+      SourcePruningEnumerationSharedEagerChildren.consumeSelected
+        (identity_actual_parent_tail checkEmpty edgesOf workFuel
+          (identity_actual_frame_callbacks graph checkEmpty edgesOf recursiveDepth workFuel metadata uv parent)
+          completedPrefix rest)
+        caller queries (.complete fragment reached saved returned)) ∧
+    ∃ (next : Inventory) (final : Memos),
+      SourceCurrentAllocatedPartialInvariant.Post formulas solver next original reached final ∧
+      final.query = saved ∧ Packet formulas solver next reached final metadata returned ∧
+      SourceEqualityRequiredCache.Keeps original.checked.native.machine.heap reached.checked.native.machine.heap := by
+  let frame : IdentityActualCallbackFrame bits := .selected parent completedPrefix rest edge residual caller queries
+    parentHeight remainingCount parentBound
+  let callbackSeed := advance innerSeed (innerCount * (innerBound + 1))
+  let callbackMass := innerMass + innerCount * innerBound
+  let fragment := Fragments.Fragment.node edge.entry.key.symbol fragments
+  let returned := SelectedEdge.finish residual fragment after
+  have sourcePacket : ∃ (inventory : Inventory) (memos : Memos),
+      Packet formulas solver inventory caller memos metadata before := by
+    obtain ⟨inventory, memos, _post, _query, packet, _rest⟩ := previous
+    exact ⟨inventory, memos, packet⟩
+  obtain ⟨inventory, memos, packet⟩ := sourcePacket
+  have head : ChildInputs formulas solver caller metadata before scs fragment reached saved returned :=
+    identity_observed_own_tuple_child_inputs formulas solver inventory caller memos metadata before scs edge residual
+      middle staged packet prepared fragments reached saved after history
+  have outerPrefix := tuple_inputs_extend_current_head formulas solver original metadata scopeBefore
+    inputs completedPrefix caller queries before incoming scs fragment reached saved returned previous member pending head
+  have callbackFits : Fits callbackSeed.2 reached.checked := currentFits.mono
+    (SourcePruningEnumerationSharedIncomingReservation.advance_profile_ge innerSeed (innerCount * (innerBound + 1)))
+  have callbackKnown : Heap (fun guard => guard ∈ callbackSeed.1) reached.checked.native.machine.heap := by
+    intro key row found
+    exact (SourcePruningEnumerationSharedIncomingReservation.advance_alphabet_ge innerSeed
+      (innerCount * (innerBound + 1))) (currentKnown key row found)
+  have callbackMassBound : SourcePruningEnumerationPrefixAdmission.suspendedBound returned.core ≤ callbackMass := by
+    change SourcePruningEnumerationPrefixAdmission.suspendedBound after.core ≤ innerMass + innerCount * innerBound
+    exact Nat.le_trans currentMass (Nat.le_add_right _ _)
+  have tailReserved : tupleReserved (nodePlan limit own parentHeight) (nodeReserved bits limit own parentHeight)
+      remainingCount parentBound callbackMass
+      (identity_actual_frame_plan recursiveDepth limit own parent)
+      (identity_actual_frame_reserved bits recursiveDepth limit own parent) callbackSeed :=
+    tupleReserved_first_callback bits limit own innerHeight innerCount innerBound innerMass
+      (identity_actual_frame_plan recursiveDepth limit own frame)
+      (identity_actual_frame_reserved bits recursiveDepth limit own frame) innerSeed reserved
+  have forecast := first_callback_le_tuple_of_growth limit own innerHeight innerCount innerBound innerMass
+    (identity_actual_frame_plan recursiveDepth limit own frame)
+    (identity_actual_frame_plan_ge recursiveDepth limit own frame) innerSeed
+  have endpoint : ∃ (next : Inventory) (final : Memos),
+      SourceCurrentAllocatedPartialInvariant.Post formulas solver next original reached final ∧
+      final.query = saved ∧ Packet formulas solver next reached final metadata returned ∧
+      SourceEqualityRequiredCache.Keeps original.checked.native.machine.heap reached.checked.native.machine.heap := by
+    obtain ⟨next, final, post, query, afterPacket, _remaining⟩ := outerPrefix
+    exact ⟨next, final, post, query, afterPacket, post.effects.keeps⟩
+  exact ⟨head, outerPrefix, callbackFits, callbackKnown, callbackMassBound, counted, tailReserved,
+    forecast, rfl, endpoint⟩
+
+end ActualCallbackFrameHandoff
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+section ActualSelectedFrameGeneration
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+open SourcePruningEnumerationSharedPreparedRecursive (Output Failure)
+open SourcePruningEnumerationSharedSelectedContinuations
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+variable {bits : Nat}
+local notation "Fold" => NativeContinuations.Result
+  (Output (bits + 2) Unit) (Failure (bits + 2) Unit) (bits + 2)
+local notation "Done" => List Fragment → Caller (bits + 2) → Queries → Cached → Fold
+local notation "Stopped" => List Fragment → ChildDispatch.Observation (bits + 2) → Option Cached → Fold
+local notation "ChildDone" => Fragment → Caller (bits + 2) → Queries → Cached → Fold
+local notation "Visitor" => List Suspended → Node → Caller (bits + 2) → Cached → Queries → ChildDone →
+  (ChildDispatch.Observation (bits + 2) → Option Cached → Fold) → Fold
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+/-- Retain the exact eager child's ordinary-height guard at the same work budget. -/
+private noncomputable def identity_actual_guarded_child
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint)) (workFuel : Nat)
+    (parent : Node) : Visitor :=
+  fun bucket child current cache queries yes no =>
+    if _lower : MergedOrdinaryHeight.height child < MergedOrdinaryHeight.height parent then
+      SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty
+        workFuel workFuel workFuel workFuel workFuel edgesOf bucket child current cache queries yes no
+    else SourcePruningEnumerationSharedChildVisitors.shallowVisit checkEmpty
+      workFuel workFuel workFuel workFuel workFuel bucket child current cache queries yes no
+
+/-- Actual strictly smaller row children use the same eager backend at every callback. -/
+private theorem identity_actual_guarded_children_eq
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint)) (workFuel : Nat)
+    (parent : Node) (inputs : List (Node × List Suspended))
+    (caller : Caller (bits + 2)) (before : Cached) (queries : Queries) (done : Done) (stopped : Stopped)
+    (lower : ∀ child bucket, (child, bucket) ∈ inputs →
+      MergedOrdinaryHeight.height child < MergedOrdinaryHeight.height parent) :
+    SourcePruningEnumerationSharedChildVisitors.visitChildren
+      (identity_actual_guarded_child checkEmpty edgesOf workFuel parent) done stopped inputs caller before queries =
+    SourcePruningEnumerationSharedChildVisitors.visitChildren
+      (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty
+        workFuel workFuel workFuel workFuel workFuel edgesOf) done stopped inputs caller before queries := by
+  revert lower
+  induction inputs generalizing caller before queries done stopped with
+  | nil =>
+      intro _lower
+      rfl
+  | cons input rest ih =>
+      intro lower
+      let leftYes : ChildDone := fun fragment reached saved after =>
+        SourcePruningEnumerationSharedChildVisitors.visitChildren
+          (identity_actual_guarded_child checkEmpty edgesOf workFuel parent)
+          (fun fragments => done (fragment :: fragments))
+          (fun completed => stopped (fragment :: completed)) rest reached after saved
+      let rightYes : ChildDone := fun fragment reached saved after =>
+        SourcePruningEnumerationSharedChildVisitors.visitChildren
+          (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty
+            workFuel workFuel workFuel workFuel workFuel edgesOf)
+          (fun fragments => done (fragment :: fragments))
+          (fun completed => stopped (fragment :: completed)) rest reached after saved
+      have yesSame : leftYes = rightYes := by
+        funext fragment reached saved after
+        exact ih (caller := reached) (before := after) (queries := saved)
+          (done := fun fragments => done (fragment :: fragments))
+          (stopped := fun completed => stopped (fragment :: completed))
+          (fun child bucket member => lower child bucket (List.mem_cons_of_mem input member))
+      have headSource : identity_actual_guarded_child checkEmpty edgesOf workFuel parent
+          input.2 input.1 caller before queries leftYes (fun observation candidate => stopped [] observation candidate) =
+          SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty
+            workFuel workFuel workFuel workFuel workFuel edgesOf input.2 input.1 caller before queries
+            leftYes (fun observation candidate => stopped [] observation candidate) := by
+        unfold identity_actual_guarded_child
+        split
+        · rfl
+        · rename_i notLower
+          exact (notLower (lower input.1 input.2 List.mem_cons_self)).elim
+      change identity_actual_guarded_child checkEmpty edgesOf workFuel parent
+          input.2 input.1 caller before queries leftYes (fun observation candidate => stopped [] observation candidate) =
+          SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty
+            workFuel workFuel workFuel workFuel workFuel edgesOf input.2 input.1 caller before queries
+            rightYes (fun observation candidate => stopped [] observation candidate)
+      rw [headSource, yesSame]
+
+/-- The actual general selected row generates its literal nested callback frame. -/
+private theorem identity_selected_frame_generation
+    (graph : Graph Symbol Constraint) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint)) (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Unit) (uv : Nat) (parent : IdentityActualCallbackFrame bits)
+    (completedPrefix : List Fragment) (rest : List (Node × List Suspended))
+    (row : EdgeValue Symbol Constraint) (residual : Option Constraint)
+    (parentValue : Node) (scs : List Suspended) (caller : Caller (bits + 2)) (queries : Queries)
+    (before middle : Cached) (parentHeight remainingCount parentBound : Nat)
+    (staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)))
+    (prepared : SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs row before =
+      some [((row.entry.key.symbol, staged, residual), middle)])
+    (lower : ∀ child bucket, (child, bucket) ∈ staged.map (fun input => (input.1, input.2.1)) →
+      MergedOrdinaryHeight.height child < MergedOrdinaryHeight.height parentValue) :
+    let inherited := identity_actual_frame_callbacks graph checkEmpty edgesOf recursiveDepth workFuel metadata uv parent
+    let tail := identity_actual_parent_tail checkEmpty edgesOf workFuel inherited completedPrefix rest
+    let frame := IdentityActualCallbackFrame.selected parent completedPrefix rest row residual caller queries
+      parentHeight remainingCount parentBound
+    let callbacks := identity_actual_frame_callbacks graph checkEmpty edgesOf recursiveDepth workFuel metadata uv frame
+    SourcePruningEnumerationSharedChildVisitors.visitSelected
+      (identity_actual_guarded_child checkEmpty edgesOf workFuel parentValue)
+      (SourcePruningEnumerationSharedEagerChildren.consumeSelected tail caller queries)
+      scs row caller before queries =
+    SourcePruningEnumerationSharedChildVisitors.visitChildren
+      (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty
+        workFuel workFuel workFuel workFuel workFuel edgesOf) callbacks.1 callbacks.2
+      (staged.map (fun input => (input.1, input.2.1))) caller middle queries := by
+  dsimp only
+  rw [SourcePruningEnumerationSharedChildVisitors.visitSelected, prepared]
+  exact identity_actual_guarded_children_eq checkEmpty edgesOf workFuel parentValue
+    (staged.map (fun input => (input.1, input.2.1))) caller middle queries
+    (identity_actual_frame_callbacks graph checkEmpty edgesOf recursiveDepth workFuel metadata uv
+      (.selected parent completedPrefix rest row residual caller queries parentHeight remainingCount parentBound)).1
+    (identity_actual_frame_callbacks graph checkEmpty edgesOf recursiveDepth workFuel metadata uv
+      (.selected parent completedPrefix rest row residual caller queries parentHeight remainingCount parentBound)).2 lower
+
+end ActualSelectedFrameGeneration
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+section ActualCapturedFrameCurrentResources
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
+open SourcePruningEnumerationRecursive (Packet)
+open SourcePruningEnumerationSharedPreparedRecursive (Output Failure finish emitted)
+open SourcePruningEnumerationSharedSelectedContinuations
+open SourcePruningEnumerationSharedIncomingReservation (Seed advance)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Heap" => SourceEqualityAnnotationHeap.Heap
+variable {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+/-- The actual root frame derives its callback resources from the current inner budget. -/
+private theorem identity_captured_frame_current_resources
+    (graph : Graph Symbol Constraint) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint)) (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Unit) (uv handle : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (workerIH : IdentityEagerEmittedCompleteAtDepth (bits := bits) graph checkEmpty edgesOf formulas solver recursiveDepth)
+    (inventory : Inventory) (capturedCaller : Caller (bits + 2)) (memos : Memos)
+    (capturedQueries : Queries) (capturedBefore : Cached) (scs : List Suspended)
+    (edge : EdgeValue Symbol Constraint) (residual : Option Constraint) (ownCache : Cached)
+    (staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)))
+    (packet : Packet formulas solver inventory capturedCaller memos metadata capturedBefore)
+    (ready : EnumerationDriver.Ready uv capturedBefore.core)
+    (stored : capturedBefore.core.values[uv]? = some (.unenumerated (some handle) scs))
+    (incoming : EnumerationReferences.IncomingAvoid uv capturedBefore.core)
+    (prepared : SourcePruningEnumerationCachedOwn.prepare capturedCaller.checked.native.machine.heap scs edge capturedBefore =
+      some [((edge.entry.key.symbol, staged, residual), ownCache)])
+    (fragments : List Fragment) (caller : Caller (bits + 2)) (queries : Queries) (current : Cached)
+    (history : TupleInputs formulas solver capturedCaller metadata ownCache
+      (staged.map (fun input => (input.1, input.2.1))) fragments caller queries current)
+    (limit own height unusedCount bound retainedMass : Nat) (currentSeed : Seed)
+    (currentFits : Fits currentSeed.2 caller.checked)
+    (currentKnown : Heap (fun guard => guard ∈ currentSeed.1) caller.checked.native.machine.heap)
+    (currentMass : SourcePruningEnumerationPrefixAdmission.suspendedBound current.core ≤ retainedMass)
+    (selectionMembers : ∀ entry rows depth free, ∀ selected ∈ edgesOf (.node entry rows depth free), selected ∈ rows)
+    (selectionLength : ∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length)
+    (reserved : tupleReserved (nodePlan limit own height) (nodeReserved bits limit own height)
+      unusedCount bound retainedMass (fun retained seed => eagerFinal recursiveDepth seed retained)
+      (fun retained seed => eagerReserved bits recursiveDepth seed retained) currentSeed) :
+    IdentityEmittedCompleteResources formulas solver capturedCaller
+      (tuplePlan (nodePlan limit own height) unusedCount bound retainedMass
+        (fun retained seed => eagerFinal recursiveDepth seed retained) currentSeed)
+      (finish uv ((identity_actual_frame_callbacks graph checkEmpty edgesOf recursiveDepth workFuel metadata uv
+        (.captured edge residual capturedCaller capturedQueries)).1 fragments caller queries current)) := by
+  let callbackSeed := advance currentSeed (unusedCount * (bound + 1))
+  let callbackMass := retainedMass + unusedCount * bound
+  let plan := tuplePlan (nodePlan limit own height) unusedCount bound retainedMass
+    (fun retained seed => eagerFinal recursiveDepth seed retained) currentSeed
+  let fragment : Fragment := .node edge.entry.key.symbol fragments
+  let childAfter := SelectedEdge.finish residual fragment current
+  let child := SourcePruningEnumerationSharedEagerChildren.eagerChild
+    (width := bits + 2) (Output := Output (bits + 2) Unit) (Reason := Failure (bits + 2) Unit)
+    checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf
+  let hook := SourcePruningEnumerationSharedPreparedRecursive.continueWith
+    (SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow (Typing := Unit) (width := bits + 2) child
+      (fun _ _ _ node state => .done node state) graph [] checkEmpty edgesOf
+      none (fun _ _ => none) workFuel recursiveDepth)
+    graph [] none (fun _ _ => none) workFuel metadata uv
+  have callbackReserved : eagerReserved bits recursiveDepth callbackSeed callbackMass :=
+    tupleReserved_first_callback bits limit own height unusedCount bound retainedMass
+      (fun retained seed => eagerFinal recursiveDepth seed retained)
+      (fun retained seed => eagerReserved bits recursiveDepth seed retained) currentSeed reserved
+  have included := first_callback_le_tuple_of_growth limit own height unusedCount bound retainedMass
+    (fun retained seed => eagerFinal recursiveDepth seed retained)
+    (fun retained seed => eagerFinal_ge recursiveDepth seed retained) currentSeed
+  have callbackFits : Fits callbackSeed.2 caller.checked := currentFits.mono
+    (SourcePruningEnumerationSharedIncomingReservation.advance_profile_ge currentSeed (unusedCount * (bound + 1)))
+  have callbackKnown : Heap (fun guard => guard ∈ callbackSeed.1) caller.checked.native.machine.heap := by
+    intro key row found
+    exact (SourcePruningEnumerationSharedIncomingReservation.advance_alphabet_ge currentSeed
+      (unusedCount * (bound + 1))) (currentKnown key row found)
+  have data := identity_observed_own_tuple_child_inputs formulas solver inventory capturedCaller memos metadata
+    capturedBefore scs edge residual ownCache staged packet prepared fragments caller queries current history
+  have childMass : SourcePruningEnumerationPrefixAdmission.suspendedBound childAfter.core ≤ callbackMass := by
+    change SourcePruningEnumerationPrefixAdmission.suspendedBound current.core ≤ retainedMass + unusedCount * bound
+    exact Nat.le_trans currentMass (Nat.le_add_right _ _)
+  change IdentityEmittedCompleteResources formulas solver capturedCaller plan
+    (finish uv ((identity_actual_frame_callbacks graph checkEmpty edgesOf recursiveDepth workFuel metadata uv
+      (.captured edge residual capturedCaller capturedQueries)).1 fragments caller queries current))
+  rw [identity_actual_frame_callbacks]
+  change IdentityEmittedCompleteResources formulas solver capturedCaller plan
+    (finish uv (match SourcePruningEnumerationFinalize.run caller.checked.native.machine.heap workFuel uv fragment childAfter with
+      | some finished => SourcePruningEnumerationSharedReceiptContinuation.run hook capturedCaller capturedQueries
+          (some (.complete fragment caller queries finished))
+      | none => SourcePruningEnumerationSharedReceiptContinuation.run hook capturedCaller capturedQueries
+          (some (.finalizeStopped fragment caller queries childAfter))))
+  cases observedFinish : SourcePruningEnumerationFinalize.run caller.checked.native.machine.heap workFuel uv fragment childAfter with
+  | none =>
+      constructor
+      · intro output member
+        cases member
+      · trivial
+  | some finished =>
+      obtain ⟨next, final, finalFuel, canonicalAfter, post, querySame, finalAt,
+          finishedPacket, _fragmentBound, _core, finalMass, _stored, _root⟩ :=
+        finalize_child_inputs_packet formulas solver capturedCaller caller metadata capturedBefore childAfter uv handle scs
+          fragment queries ready stored incoming data
+      have observedLater := SourcePruningEnumerationFinalize.run_some_moreFuel
+        caller.checked.native.machine.heap workFuel finalFuel uv fragment childAfter finished observedFinish
+      have canonicalLater := finalAt workFuel
+      rw [Nat.add_comm workFuel finalFuel] at observedLater
+      have sameCache : canonicalAfter = finished := Option.some.inj (canonicalLater.symm.trans observedLater)
+      subst canonicalAfter
+      have actualMass : SourcePruningEnumerationPrefixAdmission.suspendedBound finished.core ≤ callbackMass :=
+        Nat.le_trans finalMass childMass
+      have callback := identity_callback_emitted_complete_at_any_budget graph checkEmpty edgesOf formulas solver recursiveDepth
+        workerIH next caller final finished metadata uv fragment callbackSeed callbackMass finishedPacket callbackFits callbackKnown
+        selectionMembers selectionLength actualMass callbackReserved workFuel
+      rw [querySame] at callback
+      have enlarged := identity_emitted_complete_mono included.1 included.2 callback
+      have framed := identity_emitted_complete_post post enlarged
+      have actualHook : IdentityEmittedCompleteResources formulas solver capturedCaller plan
+          (hook fragment caller queries finished) := by
+        simpa only [hook, child] using framed
+      cases observedHook : hook fragment caller queries finished with
+      | complete outputs reached saved =>
+          simpa only [SourcePruningEnumerationSharedReceiptContinuation.run, observedHook, finish] using actualHook
+      | stopped outputs reason endpoint =>
+          simpa only [SourcePruningEnumerationSharedReceiptContinuation.run, observedHook, finish,
+            IdentityEmittedCompleteResources, emitted] using actualHook
+
+end ActualCapturedFrameCurrentResources
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+section ActualFrameReturnSteps
+open EnumerationState InternedConstructorTemplates
+open SourcePruningEnumerationNodes
+open SourcePruningEnumerationSharedSelectedContinuations
+open SourcePruningEnumerationSharedPreparedRecursive (Output Failure)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+variable {bits : Nat}
+
+/-- Count the remaining child calls and the deferred actual continuation. -/
+private def identity_actual_tuple_steps (child : Nat → Nat) : Nat → Nat → Nat
+  | 0, continuation => continuation + 1
+  | count + 1, continuation => child (identity_actual_tuple_steps child count continuation) + 1
+
+/-- Count the fallback and all bounded row attempts, including deferred tails. -/
+private def identity_actual_node_steps (limit : Nat) : Nat → Nat → Nat
+  | 0, continuation => continuation + 1
+  | height + 1, continuation => continuation + 2 +
+      (limit + 1) * (identity_actual_tuple_steps (identity_actual_node_steps limit height)
+        limit (continuation + 1) + 1)
+
+/-- Every node call has room for its literal deferred continuation. -/
+private theorem identity_actual_node_steps_gt (limit height continuation : Nat) :
+    continuation < identity_actual_node_steps limit height continuation := by
+  cases height <;> simp only [identity_actual_node_steps] <;> omega
+
+/-- A larger tuple count includes every smaller remaining tuple. -/
+private theorem identity_actual_tuple_steps_count_le
+    (child : Nat → Nat) (growth : ∀ continuation, continuation < child continuation)
+    (first last continuation : Nat) (within : first ≤ last) :
+    identity_actual_tuple_steps child first continuation ≤
+      identity_actual_tuple_steps child last continuation := by
+  induction last generalizing first with
+  | zero =>
+      have same : first = 0 := by omega
+      subst first
+      exact Nat.le_refl _
+  | succ last ih =>
+      by_cases previous : first ≤ last
+      · have smaller := ih first previous
+        have next := growth (identity_actual_tuple_steps child last continuation)
+        simp only [identity_actual_tuple_steps]
+        omega
+      · have same : first = last + 1 := by omega
+        subst first
+        exact Nat.le_refl _
+
+/-- Retain every deferred ancestor tail in the actual source frame. -/
+private def identity_actual_frame_steps (limit : Nat) : IdentityActualCallbackFrame bits → Nat
+  | .captured _edge _residual _caller _queries => 1
+  | .selected parent _completedPrefix _rest _edge _residual _caller _queries
+      parentHeight remainingCount _parentBound =>
+      identity_actual_tuple_steps (identity_actual_node_steps limit parentHeight)
+        remainingCount (identity_actual_frame_steps limit parent) + 1
+
+/-- The literal actual parent-tail call is smaller than its selected-row frame. -/
+private theorem identity_selected_frame_return_steps
+    (limit : Nat) (parent : IdentityActualCallbackFrame bits)
+    (completedPrefix : List Fragment) (rest : List (Node × List Suspended))
+    (edge : EdgeValue Symbol Constraint) (residual : Option Constraint)
+    (caller : Caller (bits + 2)) (queries : Queries)
+    (parentHeight remainingCount parentBound : Nat) (counted : rest.length ≤ remainingCount) :
+    identity_actual_tuple_steps (identity_actual_node_steps limit parentHeight)
+      rest.length (identity_actual_frame_steps limit parent) <
+      identity_actual_frame_steps limit
+        (.selected parent completedPrefix rest edge residual caller queries
+          parentHeight remainingCount parentBound) := by
+  have smaller := identity_actual_tuple_steps_count_le
+    (identity_actual_node_steps limit parentHeight)
+    (identity_actual_node_steps_gt limit parentHeight)
+    rest.length remainingCount (identity_actual_frame_steps limit parent) counted
+  change identity_actual_tuple_steps (identity_actual_node_steps limit parentHeight)
+      rest.length (identity_actual_frame_steps limit parent) <
+    identity_actual_tuple_steps (identity_actual_node_steps limit parentHeight)
+      remainingCount (identity_actual_frame_steps limit parent) + 1
+  omega
+
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+/-- The exact selected callback invokes this smaller actual parent-tail task. -/
+private theorem identity_selected_frame_actual_smaller_return
+    (graph : Graph Symbol Constraint) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint)) (recursiveDepth workFuel limit : Nat)
+    (metadata : Metadata Unit) (uv : Nat) (parent : IdentityActualCallbackFrame bits)
+    (completedPrefix : List Fragment) (rest : List (Node × List Suspended))
+    (edge : EdgeValue Symbol Constraint) (residual : Option Constraint)
+    (caller : Caller (bits + 2)) (queries : Queries) (parentHeight remainingCount parentBound : Nat)
+    (fragments : List Fragment) (reached : Caller (bits + 2)) (saved : Queries) (after : Cached)
+    (counted : rest.length ≤ remainingCount) :
+    let frame := IdentityActualCallbackFrame.selected parent completedPrefix rest edge residual caller queries
+      parentHeight remainingCount parentBound
+    let inherited := identity_actual_frame_callbacks graph checkEmpty edgesOf recursiveDepth workFuel metadata uv parent
+    let tail := identity_actual_parent_tail checkEmpty edgesOf workFuel inherited completedPrefix rest
+    let fragment := Fragments.Fragment.node edge.entry.key.symbol fragments
+    let returned := SelectedEdge.finish residual fragment after
+    (identity_actual_tuple_steps (identity_actual_node_steps limit parentHeight)
+      rest.length (identity_actual_frame_steps limit parent) < identity_actual_frame_steps limit frame) ∧
+    ((identity_actual_frame_callbacks graph checkEmpty edgesOf recursiveDepth workFuel metadata uv frame).1
+      fragments reached saved after =
+      match tail fragment reached saved returned with
+      | .complete processed outputs finalCaller finalQueries =>
+          .complete (.complete fragment reached saved returned :: processed) outputs finalCaller finalQueries
+      | .stopped processed outputs current =>
+          .stopped (.complete fragment reached saved returned :: processed) outputs current) := by
+  constructor
+  · exact identity_selected_frame_return_steps limit parent completedPrefix rest edge residual
+      caller queries parentHeight remainingCount parentBound counted
+  · exact identity_selected_frame_callback graph checkEmpty edgesOf recursiveDepth workFuel metadata uv parent
+      completedPrefix rest edge residual caller queries parentHeight remainingCount parentBound
+      fragments reached saved after
+
+end ActualFrameReturnSteps
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
