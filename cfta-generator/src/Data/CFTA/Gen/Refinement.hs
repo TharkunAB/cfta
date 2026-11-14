@@ -54,6 +54,9 @@ module Data.CFTA.Gen.Refinement (
     compileAssuming,
     compileWith,
     validOutcomes,
+
+    -- * Ranks of terms
+    ranksOfSurface,
 ) where
 
 import Control.Applicative ((<|>))
@@ -83,6 +86,7 @@ import qualified Data.CFTA.Gen.Internal.Flat as Flat
 import Data.CFTA.Gen.Internal.Types (Gen (..), Language (..), Recipe (..), withRecipe, pattern Transparent)
 import Data.CFTA.Gen.Refinement.Internal.Compile (namedTerms, spineArity, validOutcomes)
 import qualified Data.CFTA.Gen.Refinement.Internal.Compile as Compile
+import Data.CFTA.Gen.Refinement.Internal.Rank (ranksOfSurface)
 import Data.CFTA.Generic (TypedFTA, constructorLabel, constructorName, datatypeDecode, datatypeFTA)
 import Data.CFTA.Index (ArgumentIndex (..), Depth)
 import Data.CFTA.Refinement (
