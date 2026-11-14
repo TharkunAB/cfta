@@ -1,3 +1,35 @@
+# Exact native source-universe identity checked (2026-11-14 10:49 CET)
+
+SourceSynthesisCurrentUniverseReferenceIdentity.current_stored_universe_reference_identity
+is public and checked. Its original actual-input header is unchanged. From an
+accepted CURRENT source, its SAME actual source-build heap, an observed stored
+Mu U and any valid incoming domain cache, the real ref(U)/Mu(U) request returns
+the FULL ORIGINAL U at formal fuel 13 and all larger values. The exact complete
+final machine, cache validity, semantic heap, full coverage, growth, original
+root/U availability and original stored equation all survive. Both probe results
+and original Mu cache selection are DERIVED inside the proof. There is no result,
+body product, callback, outer-MaybeMu equality or future provider input.
+
+Five public checks pass at 10:43:52 CET. Full Audit checks 95,936 aggregate
+theorems and separately 79 explicit reports: 77 standard-axiom and two axiom-free.
+Only propext, Classical.choice and Quot.sound occur. There are 5,937 source
+modules and 4,935 direct Audit imports. The first private check failed in one
+marker inequality simp step; check2 repairs only that proof. All headers remain
+exact. The failed input and log are preserved without proof credit.
+
+NEXT: derive the same identity for valid later heaps extending the original
+source build; this public theorem starts at the source-build heap itself. Then
+use the real stage invariants and prove arbitrary generated-type closure.
+Separately derive whole-output PendingReferences/Stratified for the actual
+identity eager worker. Existing configured-worker closure cannot be reused by
+choosing fake Key/fits/admits inputs or by metadata erasure. The new header-only
+route packet is /tmp/mcfta-identity-emitted-history-route-20261114-1043.
+
+The complete ONE finite original-root term / ONE consistent assignment goal
+below remains OPEN and unchanged, as do runtime/Haskell correspondence and all
+other scope clauses. No Haskell change, defect or fix was established. Goal ACTIVE.
+Primary usage was 5% at 10:45 CET. About 90 GiB disk remained free.
+
 # Mapped body algebra and stored dependency paths checked (2026-11-14 10:43 CET)
 
 All four laws in SourceSynthesisUniverseMappedRowNormalization,

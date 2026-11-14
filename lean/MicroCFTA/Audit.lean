@@ -1,3 +1,4 @@
+import MicroCFTA.SourceSynthesisCurrentUniverseReferenceIdentity
 import MicroCFTA.EnumerationStoredDependencies
 import MicroCFTA.SourceSynthesisUniverseMappedBodyExactFree
 import MicroCFTA.SourceSynthesisUniverseMappedBodyCanonical
@@ -5195,3 +5196,6 @@ run_cmd do
 
 #check @MicroCFTA.EnumerationReferences.enumerated_closed_dependency_path_impossible
 #print axioms MicroCFTA.EnumerationReferences.enumerated_closed_dependency_path_impossible
+
+#check @MicroCFTA.SourceSynthesisCurrentUniverseReferenceIdentity.current_stored_universe_reference_identity
+#print axioms MicroCFTA.SourceSynthesisCurrentUniverseReferenceIdentity.current_stored_universe_reference_identity
