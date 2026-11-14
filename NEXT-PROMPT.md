@@ -1,3 +1,38 @@
+# Captured-child composition retains the actual narrowing index (2026-11-14 12:24 CET)
+
+SourcePruningEnumerationSharedEagerReservation now proves captured-child
+completion once over actual narrow/resumeWithNarrow and the checked generic
+callback. The old configured eager_captured_resources keeps its exact original
+header as a specialization. All other section bytes, operational definitions
+and child/tuple/row kernels remain unchanged. Net source change: 62 lines.
+This is composition stage2, not whole literal-identity-worker closure.
+
+The first private captured-stage check and all five public checks pass.
+Other drafts in the same private batch FAILED and receive no credit.
+Strict full Audit at 12:22:51 CET checks 95,957 aggregate theorems and separately
+84 explicit reports: 82 standard-axiom and two axiom-free. Only propext,
+Classical.choice and Quot.sound occur. Source modules/direct imports remain
+5,941/4,939. All affected configured clients rebuild successfully.
+Validation: /tmp/mcfta-captured-mixed-alias-budget-check-20261114-1209 and
+/tmp/mcfta-eager-narrow-captured-stage2-publication-20261114-1220.
+
+NEXT: captured rows, opaque and prepared composition, then actual prefix
+capability and whole depth induction. Stage3 is a TMP draft in progress.
+The mixed ref-only draft still FAILED after reserved-identifier repair; its
+native branch match and existential binder are repaired in the new UNCOMPILED
+/tmp/mcfta-current-mixed-reference-alias-repair-v2-20261114-1221.
+The complete all-budget prefix draft also FAILED on namespace/instance scope;
+new UNCOMPILED /tmp/mcfta-identity-prefix-all-budget-draft-v2-20261114-122148
+keeps all proof bodies and the public header, with scoped fixes only.
+Root will recheck both before assigning any proof credit.
+
+The body(U)/U half remains OPEN. Two off-diagonal control laws are UNCOMPILED
+in /tmp/mcfta-current-mixed-body-alias-control-v2-20261114-1213.
+The full ONE finite accepted original-root term under ONE shared assignment,
+whole identity-worker output history, all-fuel safety and all other scope
+clauses remain OPEN and unchanged. No Haskell source, contract, new defect
+or fix was added or established. Goal ACTIVE. Preserve unrelated .hypha/.
+
 # Actual narrowing index retained through eager callback (2026-11-14 12:08 CET)
 
 SourcePruningEnumerationSharedEagerReservation now proves its recursive Left
