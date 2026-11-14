@@ -5102,3 +5102,6 @@ run_cmd do
 
 #check @MicroCFTA.SourceSynthesisCurrentUniverseOwnership.current_build_single_universe
 #print axioms MicroCFTA.SourceSynthesisCurrentUniverseOwnership.current_build_single_universe
+
+#check @MicroCFTA.SourceSynthesisCurrentUniverseBody.current_types_callback_rows
+#print axioms MicroCFTA.SourceSynthesisCurrentUniverseBody.current_types_callback_rows
