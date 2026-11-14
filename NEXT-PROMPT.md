@@ -1,3 +1,36 @@
+# Actual off-diagonal body readback checked (2026-11-14 14:48 CET)
+
+GOAL ACTIVE. Preserve the complete original finite common-term/assignment,
+typing/language/LPO/stream/size/count/weight/rank/host/Haskell objective below.
+The public source-to-identity RESOURCE bridge and whole identity-worker RESOURCE
+closure remain checked. Finite common accepted completion and every-budget
+worker partial-output history remain OPEN.
+
+NEW PUBLIC PREREQUISITE: SourceSynthesisUniverseOffDiagonalBody.node_target_readback.
+The actual ordered native body product with the body/Mu cutoff derives its exact
+product/final machine, Valid/Extension, source-ordered target row fields, resident
+live rows and complete makeNode readback. It retains the actual reference-domain
+allocation effects. Its structural actual-value/catalog premises remain for the
+same-source body wrapper to derive. No body/result/callback future provider is
+an input. This is NOT the source body(U)/U alias theorem.
+All five public checks PASS. Strict Audit:96,017 aggregate imported theorem axiom
+dependencies; separately91 reports,89 standard-axiom and2 axiom-free. Only the
+standard propext/Classical.choice/Quot.sound axioms occur. Source modules5945;
+direct Audit imports4943. Serial4GiB max/high,zero swap. All public handles terminal.
+Public scripts/logs/pins: /tmp/mcfta-off-diagonal-body-readback-publication-20261114-1443.
+
+The same-source body wrapper remains UNVERIFIED. Its first attempted check3
+stopped at import resolution because Root's partial private MicroCFTA namespace
+masked the normal compiled namespace. The lower strict check passed. The fix
+publishes this necessary checked dependency through the normal path, then checks
+the unchanged wrapper without any overlay. This setup failure is not proof credit.
+The complete body/two-alias/generated-type closure remains OPEN. Preserve all
+failed/marked inputs. Source bridge commita9e0382e7698676c744116b2d5bbe97d77c601eb
+is pushed and independently verified. Main remainse53852064d3ef5a2eafec47d754c27504b11de5f.
+Root owns live edits and all compiler/Git jobs. Keep /tmp small; preserve .hypha/.
+No Haskell/Cabal/test/Liquid Haskell annotation changed. No new implementation
+fix was established. Record every future Haskell fix in FINDINGS.
+
 # Same-source initialization now reaches the identity worker (2026-11-14 14:40 CET)
 
 GOAL ACTIVE. Keep the complete original objective: ONE finite accepted SAME-original-
