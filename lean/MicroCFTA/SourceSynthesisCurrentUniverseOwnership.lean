@@ -507,4 +507,39 @@ theorem current_stored_universe_source_probes
 
 
 
+/-- The same stored writer replays its complete actual body after record growth. -/
+theorem current_stored_universe_body_replay
+    [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (heap : State Symbol Guard)
+    (built : build (ordinarySymbols whole) [] empty = .done rootValue heap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : heap.nodeRecords key = some (.mu entry body depth ordinary)) :
+    ∀ (later : State Symbol Guard), Grows heap later →
+      callback (ordinarySymbols (allTypesBody top
+        (SourceSynthesisCurrentContext.constructorCatalog lib query))) []
+        (.interned entry.identity) later = .done body later := by
+  obtain ⟨event, site, _keySame, valueSame, _missing, _prefix, _depthPath, _ordinaryPath,
+      _bodyPath, growth, _issued⟩ :=
+    SourceCurrentCompletedBuildRootedWriters.build_writer (ordinarySymbols whole) [] empty
+      SourceCurrentConstrainedCapSourceHistory.empty_context
+      (by intro key entry body depth ordinary absent; cases absent)
+      rootValue heap built key entry body depth ordinary stored
+  obtain ⟨_smartSame, expressionSame, environmentSame⟩ :=
+    current_reached_binder lib query signed whole accepted site
+  have fields := Value.mu.inj valueSame
+  have originalEntry := fields.1
+  have originalBody := fields.2.1
+  obtain ⟨_depthContext, _cutContext, bodyContext⟩ := SourceCurrentNativeMuPublicationCallbacks.contexts event
+  intro later laterGrowth
+  have afterGrowth : Grows event.after later := grows_trans growth laterGrowth
+  have bodyGrowth : Grows event.afterBody later :=
+    grows_trans (SourceCurrentNativeMuGrowthHistory.publication_growth event) afterGrowth
+  have bodyReplay := InternedFreshOrdinaryReplay.callback_replays event.expression event.environment
+    (.interned event.entry.identity) event.allocated later event.body event.afterBody
+    bodyContext.base.normal.facts.coherent.valid event.bodyDone bodyGrowth
+  simpa only [expressionSame, environmentSame, originalEntry, originalBody] using bodyReplay
+
+
 end MicroCFTA.SourceSynthesisCurrentUniverseOwnership
