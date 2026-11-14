@@ -1,3 +1,23 @@
+# Both original source probe packets checked (2026-11-14 10:25 CET)
+
+SourceSynthesisCurrentUniverseProbeRows.current_stored_universe_probe_rows is
+now public and checked. The SAME accepted source/build/stored-Mu receipts derive
+both complete C8 row packets in the SAME final source heap. They retain the
+exact ordinaryLevel depth name and one common complete source marker. No
+callback, rows or universe supplier enters this theorem. Two proof-only local
+definition conversions repaired the first private draft; its header is exact.
+
+Public build, strict check, independent import and full Audit pass at
+10:20:26 CET: 95,846 aggregate theorems and separately 67 explicit reports,
+65 standard-axiom and two axiom-free reports. There are 5,932 source modules
+and 4,930 direct Audit imports. Exact native Mu identity remains OPEN.
+
+NEXT: check the three UNCOMPILED mapped body algebra modules in
+/tmp/mcfta-mapped-universe-body-algebra-20261114-101113. A same-writer body callback
+replay will expose raw body-row residency through C8 at this same heap. Do not
+supply that residency as an external provider. The full objective below remains
+unchanged. No Haskell change, defect or fix was established. Goal stays ACTIVE.
+
 # Source probe replay and mapped rows checked (2026-11-14 10:11 CET)
 
 The two prerequisite candidates named below are now public and checked:

@@ -1,3 +1,4 @@
+import MicroCFTA.SourceSynthesisCurrentUniverseProbeRows
 import MicroCFTA.SourceSynthesisUniverseMappedProbeRows
 import MicroCFTA.SourcePruningEnumerationSelectedClearCycles
 import MicroCFTA.SourceSynthesisCurrentUniverseReferenceCompletion
@@ -5154,3 +5155,6 @@ run_cmd do
 
 #check @MicroCFTA.SourceSynthesisUniverseMappedProbeRows.raw_rows_replay
 #print axioms MicroCFTA.SourceSynthesisUniverseMappedProbeRows.raw_rows_replay
+
+#check @MicroCFTA.SourceSynthesisCurrentUniverseProbeRows.current_stored_universe_probe_rows
+#print axioms MicroCFTA.SourceSynthesisCurrentUniverseProbeRows.current_stored_universe_probe_rows
