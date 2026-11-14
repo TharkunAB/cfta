@@ -1,3 +1,28 @@
+# Source probe replay and mapped rows checked (2026-11-14 10:11 CET)
+
+The two prerequisite candidates named below are now public and checked:
+SourceSynthesisCurrentUniverseOwnership.current_stored_universe_source_probes
+and all five laws in SourceSynthesisUniverseMappedProbeRows. The actual source
+writer replays both complete original probes at the SAME final source heap and
+all later record growth. The mapped row laws keep the original symbol type.
+All previous ownership bytes remain around the additive theorem.
+
+Both modules pass builds, strict checks and independent imports. Full Audit
+passes at 10:09:43 CET: 95,845 aggregate theorems and separately 66 explicit
+reports, comprising 64 standard-axiom and two axiom-free reports. Only propext,
+Classical.choice and Quot.sound occur. There are 5,931 project source modules
+and 4,929 direct Audit imports. The first independent-import harness had an
+import after commands; its failed input is preserved. The corrected harness
+reuses the four already-passed unchanged-source module checks.
+
+NEXT: strictly check the UNCOMPILED SourceSynthesisCurrentUniverseProbeRows
+candidate in /tmp/mcfta-current-universe-probe-row-packets-20261114-100641.
+It derives both full probe packets from the SAME build, retains ordinaryLevel
+depth and aligns the complete source marker. The mapped product normalization
+and exact native Mu identity remain open. The full objective below is unchanged.
+No Haskell/Cabal/test source changed. No Haskell defect or fix was established.
+Goal remains ACTIVE. Checkpoint 43ffe583f preserves the prior complete handoff.
+
 # Actual source merge, native return and cycle obstruction checked (2026-11-14 09:55 CET)
 
 GOAL ACTIVE. Continue the complete optimized interned shared eager objective.

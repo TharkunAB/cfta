@@ -1,3 +1,4 @@
+import MicroCFTA.SourceSynthesisUniverseMappedProbeRows
 import MicroCFTA.SourcePruningEnumerationSelectedClearCycles
 import MicroCFTA.SourceSynthesisCurrentUniverseReferenceCompletion
 import MicroCFTA.SourceSynthesisCurrentInitialIdentityMetadataErasure
@@ -5135,3 +5136,21 @@ run_cmd do
 
 #check @MicroCFTA.SourcePruningEnumerationRecursion.selected_clear_proper_cycle_unsatisfiable
 #print axioms MicroCFTA.SourcePruningEnumerationRecursion.selected_clear_proper_cycle_unsatisfiable
+
+#check @MicroCFTA.SourceSynthesisCurrentUniverseOwnership.current_stored_universe_source_probes
+#print axioms MicroCFTA.SourceSynthesisCurrentUniverseOwnership.current_stored_universe_source_probes
+
+#check @MicroCFTA.SourceSynthesisUniverseMappedProbeRows.marker_eq
+#print axioms MicroCFTA.SourceSynthesisUniverseMappedProbeRows.marker_eq
+
+#check @MicroCFTA.SourceSynthesisUniverseMappedProbeRows.catalog_row_replay
+#print axioms MicroCFTA.SourceSynthesisUniverseMappedProbeRows.catalog_row_replay
+
+#check @MicroCFTA.SourceSynthesisUniverseMappedProbeRows.arrow_row_replay
+#print axioms MicroCFTA.SourceSynthesisUniverseMappedProbeRows.arrow_row_replay
+
+#check @MicroCFTA.SourceSynthesisUniverseMappedProbeRows.catalog_rows_replay
+#print axioms MicroCFTA.SourceSynthesisUniverseMappedProbeRows.catalog_rows_replay
+
+#check @MicroCFTA.SourceSynthesisUniverseMappedProbeRows.raw_rows_replay
+#print axioms MicroCFTA.SourceSynthesisUniverseMappedProbeRows.raw_rows_replay
