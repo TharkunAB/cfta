@@ -1,3 +1,29 @@
+# Pure probe composition through an actual cutoff checked (2026-11-14 11:51 CET)
+
+SourceSynthesisUniverseProbeCutoffComposition.input_compose_at is public and
+checked. For each closed marker or original source-owner reference, substitution
+through ANY selected cutoff and then the requested probe equals the direct
+source-owner-to-probe substitution. This removes the old diagonal-cutoff
+restriction needed by the actual body(U)/U alias case. It is a pure equality
+law. It does not establish native product completion or mixed-domain identity.
+
+The first private check and all five public checks pass. Strict full Audit at
+11:47:48 CET checks 95,955 aggregate theorems and separately 84 explicit reports:
+82 standard-axiom and two axiom-free. Only propext, Classical.choice and Quot.sound
+occur. Source modules: 5,941. Direct Audit imports: 4,939.
+Validation: /tmp/mcfta-universe-cutoff-composition-check-20261114-1145 and
+/tmp/mcfta-universe-cutoff-composition-publication-20261114-1147.
+
+The actual root-narrowing and stable identity-checkpoint laws below are checked
+and pushed at 7f1c2e8f2ce750c5c48462c7ad74222f8f23c4cf. NEXT: strictly check the
+staged narrowing-independent eager callback proof in
+/tmp/mcfta-eager-narrow-callback-stage1-20261114-1144. It preserves old configured
+headers and kernels while generalizing the private recursion index; UNCOMPILED.
+Continue actual mixed-entry alias proofs and the separate all-fuel prefix-safety
+route. The full ONE common finite original-root witness and all scope clauses
+remain OPEN. No Haskell source, contract, new defect or fix was established.
+Goal ACTIVE. The compact immutable checkpoint f2e625838 remains available.
+
 # Actual root-narrow effects and stable identity checkpoints checked (2026-11-14 11:44 CET)
 
 SourceSynthesisCurrentUniverseRootNarrowIdentity.
