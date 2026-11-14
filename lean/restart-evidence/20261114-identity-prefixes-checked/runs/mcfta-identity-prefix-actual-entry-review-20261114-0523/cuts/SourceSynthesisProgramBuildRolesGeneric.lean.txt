@@ -1,0 +1,44 @@
+=== lean/MicroCFTA/SourceSynthesisProgramBuildRolesGeneric.lean ORIGINAL LINES 97-139 ===
+97: mutual
+98: /-- Program positions contain only empty, ordinary, or union records. -/
+99: inductive ProgramValue (literal : String → Symbol) : Value Symbol Guard → Prop where
+100:   | empty : ProgramValue literal .empty
+101:   | node (entry : Interned NodeKey) (rows : List (EdgeValue Symbol Guard)) (depth : Nat)
+102:       (free : List Reference) (checked : ∀ row ∈ rows, ProgramEdge literal row) :
+103:       ProgramValue literal (.node entry rows depth free)
+104:   | union (entry : Interned NodeKey) (members : List (Value Symbol Guard)) (depth : Nat)
+105:       (free : List Reference) (checked : ∀ member ∈ members, ProgramValue literal member) :
+106:       ProgramValue literal (.union entry members depth free)
+107: 
+108: /-- Each complete Program row retains its source guard and assigned child roles. -/
+109: inductive ProgramEdge (literal : String → Symbol) : EdgeValue Symbol Guard → Prop where
+110:   | annotated (edge : EdgeValue Symbol Guard) (annotation : Value Symbol Guard)
+111:       (guard : edge.entry.key.constraint = top) (children : edge.children = [annotation]) :
+112:       ProgramEdge literal edge
+113:   | application (edge : EdgeValue Symbol Guard) (types marker function argument : Value Symbol Guard)
+114:       (symbol : edge.entry.key.symbol = literal "app")
+115:       (guard : edge.entry.key.constraint =
+116:         eqGuard [[[1], [2, 0, 0]], [[3, 0], [2, 0, 1]], [[0], [2, 0, 2]]])
+117:       (children : edge.children = [types, marker, function, argument])
+118:       (functionRole : ProgramValue literal function) (argumentRole : ProgramValue literal argument) : ProgramEdge literal edge
+119:   | filter (edge : EdgeValue Symbol Guard) (goal candidates : Value Symbol Guard)
+120:       (symbol : edge.entry.key.symbol = literal "filter")
+121:       (guard : edge.entry.key.constraint = eqGuard [[[0], [1, 0]]])
+122:       (children : edge.children = [goal, candidates])
+123:       (candidateRole : ProgramValue literal candidates) : ProgramEdge literal edge
+124: end
+125: 
+126: variable (literal : String → Symbol)
+127: 
+128: /-- A Program position cannot be a captured reference. -/
+129: theorem ProgramValue.not_reference (name : Reference) : ¬ ProgramValue literal (.reference name) := by
+130:   intro role
+131:   cases role
+132: 
+133: /-- A Program position cannot be a recursive record. -/
+134: theorem ProgramValue.not_mu (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard) :
+135:     ¬ ProgramValue literal (.mu entry body depth ordinary) := by
+136:   intro role
+137:   cases role
+138: 
+139: /-- The actual stored guard has one of the source Program endpoint regions. -/

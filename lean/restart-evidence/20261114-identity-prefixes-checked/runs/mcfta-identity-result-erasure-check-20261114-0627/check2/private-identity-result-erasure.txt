@@ -1,0 +1,252 @@
+/tmp/mcfta-identity-result-erasure-check-20261114-0627/check2/IdentityResultMetadataErasure.lean:102:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  SourcePruningEnumerationSharedBranching.scan
+    (fun edge reached saved cache => eraseFold (visit edge reached saved cache)) before rest reached saved
+in the target expression
+  (match
+      match SourcePruningEnumerationSharedBranching.scan visit before rest reached saved with
+      |
+      SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.complete later remaining
+          finalCaller finalQueries =>
+        SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.complete (processed ++ later)
+          (outputs ++ remaining) finalCaller finalQueries
+      |
+      SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.stopped later remaining current =>
+        SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.stopped (processed ++ later)
+          (outputs ++ remaining) current with
+    |
+    SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.complete processed outputs caller
+        queries =>
+      SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.complete processed
+        (List.map eraseOutput outputs) caller queries
+    |
+    SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.stopped processed outputs current =>
+      SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.stopped processed
+        (List.map eraseOutput outputs) (eraseStop current)) =
+    match
+      SourcePruningEnumerationSharedBranching.scan
+        (fun edge reached saved cache =>
+          match visit edge reached saved cache with
+          |
+          SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.complete processed outputs
+              caller queries =>
+            SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.complete processed
+              (List.map eraseOutput outputs) caller queries
+          |
+          SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.stopped processed outputs
+              current =>
+            SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.stopped processed
+              (List.map eraseOutput outputs) (eraseStop current))
+        before rest reached saved with
+    |
+    SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.complete later remaining finalCaller
+        finalQueries =>
+      SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.complete (processed ++ later)
+        (List.map eraseOutput outputs ++ remaining) finalCaller finalQueries
+    | SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.stopped later remaining current =>
+      SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.stopped (processed ++ later)
+        (List.map eraseOutput outputs ++ remaining) current
+
+case cons.complete
+width : Nat
+Typing : Type
+visit : Edge → Caller width → Queries → Cached → Fold (Output width Typing) (Failure width Typing) width
+before : Cached
+edge : Edge
+rest : List Edge
+ih :
+  ∀ (caller : Caller width) (queries : Queries),
+    eraseFold (SourcePruningEnumerationSharedBranching.scan visit before rest caller queries) =
+      SourcePruningEnumerationSharedBranching.scan
+        (fun edge reached saved cache => eraseFold (visit edge reached saved cache)) before rest caller queries
+caller : Caller width
+queries : Queries
+processed : List (Receipt width)
+outputs : List (Output width Typing)
+reached : Caller width
+saved : Queries
+observed :
+  visit edge caller queries before =
+    SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.complete processed outputs reached
+      saved
+⊢ (match
+      match SourcePruningEnumerationSharedBranching.scan visit before rest reached saved with
+      |
+      SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.complete later remaining
+          finalCaller finalQueries =>
+        SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.complete (processed ++ later)
+          (outputs ++ remaining) finalCaller finalQueries
+      |
+      SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.stopped later remaining current =>
+        SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.stopped (processed ++ later)
+          (outputs ++ remaining) current with
+    |
+    SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.complete processed outputs caller
+        queries =>
+      SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.complete processed
+        (List.map eraseOutput outputs) caller queries
+    |
+    SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.stopped processed outputs current =>
+      SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.stopped processed
+        (List.map eraseOutput outputs) (eraseStop current)) =
+    match
+      SourcePruningEnumerationSharedBranching.scan
+        (fun edge reached saved cache =>
+          match visit edge reached saved cache with
+          |
+          SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.complete processed outputs
+              caller queries =>
+            SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.complete processed
+              (List.map eraseOutput outputs) caller queries
+          |
+          SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.stopped processed outputs
+              current =>
+            SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.stopped processed
+              (List.map eraseOutput outputs) (eraseStop current))
+        before rest reached saved with
+    |
+    SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.complete later remaining finalCaller
+        finalQueries =>
+      SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.complete (processed ++ later)
+        (List.map eraseOutput outputs ++ remaining) finalCaller finalQueries
+    | SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.stopped later remaining current =>
+      SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.stopped (processed ++ later)
+        (List.map eraseOutput outputs ++ remaining) current
+/tmp/mcfta-identity-result-erasure-check-20261114-0627/check2/IdentityResultMetadataErasure.lean:120:54: error: Tactic `rfl` failed: The left-hand side
+  eraseFold
+    (SourcePruningEnumerationSharedReceiptContinuation.run hook caller queries
+      (some
+        (SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result.complete fragment reached saved
+          after)))
+is not definitionally equal to the right-hand side
+  SourcePruningEnumerationSharedReceiptContinuation.run
+    (fun fragment reached saved after => eraseResult (hook fragment reached saved after)) caller queries
+    (some
+      (SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result.complete fragment reached saved after))
+
+case some.complete.complete
+width : Nat
+Typing : Type
+hook : Fragment → Caller width → Queries → Cached → Hook (Output width Typing) (Failure width Typing) width
+caller : Caller width
+queries : Queries
+fragment : Fragment
+reached : Caller width
+saved : Queries
+after : Cached
+outputs✝ : List (Output width Typing)
+caller✝ : Caller width
+queries✝ : Queries
+⊢ eraseFold
+      (SourcePruningEnumerationSharedReceiptContinuation.run hook caller queries
+        (some
+          (SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result.complete fragment reached saved
+            after))) =
+    SourcePruningEnumerationSharedReceiptContinuation.run
+      (fun fragment reached saved after => eraseResult (hook fragment reached saved after)) caller queries
+      (some
+        (SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result.complete fragment reached saved after))
+/tmp/mcfta-identity-result-erasure-check-20261114-0627/check2/IdentityResultMetadataErasure.lean:120:54: error: Tactic `rfl` failed: The left-hand side
+  eraseFold
+    (SourcePruningEnumerationSharedReceiptContinuation.run hook caller queries
+      (some
+        (SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result.complete fragment reached saved
+          after)))
+is not definitionally equal to the right-hand side
+  SourcePruningEnumerationSharedReceiptContinuation.run
+    (fun fragment reached saved after => eraseResult (hook fragment reached saved after)) caller queries
+    (some
+      (SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result.complete fragment reached saved after))
+
+case some.complete.stopped
+width : Nat
+Typing : Type
+hook : Fragment → Caller width → Queries → Cached → Hook (Output width Typing) (Failure width Typing) width
+caller : Caller width
+queries : Queries
+fragment : Fragment
+reached : Caller width
+saved : Queries
+after : Cached
+outputs✝ : List (Output width Typing)
+reason✝ : Failure width Typing
+reached✝ : Option (Caller width × Queries)
+⊢ eraseFold
+      (SourcePruningEnumerationSharedReceiptContinuation.run hook caller queries
+        (some
+          (SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result.complete fragment reached saved
+            after))) =
+    SourcePruningEnumerationSharedReceiptContinuation.run
+      (fun fragment reached saved after => eraseResult (hook fragment reached saved after)) caller queries
+      (some
+        (SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result.complete fragment reached saved after))
+/tmp/mcfta-identity-result-erasure-check-20261114-0627/check2/IdentityResultMetadataErasure.lean:127:20: error: Tactic `rfl` failed: The left-hand side
+  eraseFold
+    (SourcePruningEnumerationSharedReceiptContinuation.run hook caller queries
+      (some
+        (SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result.stopped fragments observation
+          candidate)))
+is not definitionally equal to the right-hand side
+  SourcePruningEnumerationSharedReceiptContinuation.run
+    (fun fragment reached saved after => eraseResult (hook fragment reached saved after)) caller queries
+    (some
+      (SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result.stopped fragments observation candidate))
+
+case some.stopped.none
+width : Nat
+Typing : Type
+hook : Fragment → Caller width → Queries → Cached → Hook (Output width Typing) (Failure width Typing) width
+caller : Caller width
+queries : Queries
+fragments : List Fragment
+observation : SourcePruningEnumerationSharedSelectedContinuations.ChildDispatch.Observation width
+candidate : Option Cached
+⊢ eraseFold
+      (SourcePruningEnumerationSharedReceiptContinuation.run hook caller queries
+        (some
+          (SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result.stopped fragments observation
+            candidate))) =
+    SourcePruningEnumerationSharedReceiptContinuation.run
+      (fun fragment reached saved after => eraseResult (hook fragment reached saved after)) caller queries
+      (some
+        (SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result.stopped fragments observation
+          candidate))
+/tmp/mcfta-identity-result-erasure-check-20261114-0627/check2/IdentityResultMetadataErasure.lean:128:45: error: Tactic `rfl` failed: The left-hand side
+  eraseFold
+    (SourcePruningEnumerationSharedReceiptContinuation.run hook caller queries
+      (some
+        (SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result.stopped fragments observation
+          candidate)))
+is not definitionally equal to the right-hand side
+  SourcePruningEnumerationSharedReceiptContinuation.run
+    (fun fragment reached saved after => eraseResult (hook fragment reached saved after)) caller queries
+    (some
+      (SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result.stopped fragments observation candidate))
+
+case some.stopped.some.mk
+width : Nat
+Typing : Type
+hook : Fragment → Caller width → Queries → Cached → Hook (Output width Typing) (Failure width Typing) width
+caller : Caller width
+queries : Queries
+fragments : List Fragment
+observation : SourcePruningEnumerationSharedSelectedContinuations.ChildDispatch.Observation width
+candidate : Option Cached
+fst✝ : Caller width
+snd✝ : Queries
+⊢ eraseFold
+      (SourcePruningEnumerationSharedReceiptContinuation.run hook caller queries
+        (some
+          (SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result.stopped fragments observation
+            candidate))) =
+    SourcePruningEnumerationSharedReceiptContinuation.run
+      (fun fragment reached saved after => eraseResult (hook fragment reached saved after)) caller queries
+      (some
+        (SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result.stopped fragments observation
+          candidate))
+'MicroCFTA.SourcePruningEnumerationIdentityResultMetadataErasure.eraseFailure_alternatives' does not depend on any axioms
+'MicroCFTA.SourcePruningEnumerationIdentityResultMetadataErasure.finish_erasure' does not depend on any axioms
+'MicroCFTA.SourcePruningEnumerationIdentityResultMetadataErasure.scan_erasure' depends on axioms: [propext, sorryAx]
+'MicroCFTA.SourcePruningEnumerationIdentityResultMetadataErasure.receipt_erasure' depends on axioms: [propext, sorryAx]
+'MicroCFTA.SourcePruningEnumerationIdentityResultMetadataErasure.continue_empty_exact' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

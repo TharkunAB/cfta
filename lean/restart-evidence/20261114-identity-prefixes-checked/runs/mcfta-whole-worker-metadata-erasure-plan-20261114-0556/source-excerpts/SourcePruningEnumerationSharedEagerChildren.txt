@@ -1,0 +1,39 @@
+-- lean/MicroCFTA/SourcePruningEnumerationSharedEagerChildren.lean: 37-54
+37: def ordinaryNonterminal (scs : List Suspended) : Node → Bool
+38:   | .node .. => !(scs.any (fun sc => EqualityTrie.isTerminal sc.trie))
+39:   | _ => false
+40: 
+41: /-- Invoke each completed child's tuple continuation before the next ordinary edge. -/
+42: def consumeSelected
+43:     (done : Fragment → Caller width → Queries → Cached → Result Output Reason width)
+44:     (caller : Caller width) (queries : Queries) (receipt : Receipt width) : Result Output Reason width :=
+45:   match receipt with
+46:   | .complete fragment reached saved after =>
+47:       match done fragment reached saved after with
+48:       | .complete processed outputs finalCaller finalQueries =>
+49:           .complete (receipt :: processed) outputs finalCaller finalQueries
+50:       | .stopped processed outputs current => .stopped (receipt :: processed) outputs current
+51:   | other =>
+52:       match advance other with
+53:       | none => .stopped [] [] (.edge (some other) (endpoint other caller queries))
+54:       | some (reached, saved) => .complete [other] [] reached saved
+
+-- lean/MicroCFTA/SourcePruningEnumerationSharedEagerChildren.lean: 133-150
+133: /-- Recurse eagerly on ordinary children and preserve the existing dispatch elsewhere. -/
+134: noncomputable def eagerChild
+135:     (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List Edge)
+136:     (scs : List Suspended) (incoming : Node) (caller : Caller width) (before : Cached) (queries : Queries)
+137:     (done : Fragment → Caller width → Queries → Cached → Result Output Reason width)
+138:     (stopped : Observation width → Option Cached → Result Output Reason width) : Result Output Reason width :=
+139:   if ordinaryNonterminal scs incoming then
+140:     scan (fun edge reached saved captured =>
+141:       visitSelected
+142:         (fun bucket child current cache memos yes no =>
+143:           if _lower : MergedOrdinaryHeight.height child < MergedOrdinaryHeight.height incoming then
+144:             eagerChild checkEmpty r n p h k edgesOf bucket child current cache memos yes no
+145:           else shallowVisit checkEmpty r n p h k bucket child current cache memos yes no)
+146:         (consumeSelected done reached saved) scs edge reached captured saved)
+147:       before (edgesOf incoming) caller queries
+148:   else shallowVisit checkEmpty r n p h k scs incoming caller before queries done stopped
+149: termination_by MergedOrdinaryHeight.height incoming
+150: decreasing_by exact _lower

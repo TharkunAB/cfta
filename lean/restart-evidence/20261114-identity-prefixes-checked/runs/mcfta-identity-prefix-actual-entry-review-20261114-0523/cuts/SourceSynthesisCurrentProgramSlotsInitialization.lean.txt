@@ -1,0 +1,71 @@
+=== lean/MicroCFTA/SourceSynthesisCurrentProgramSlotsInitialization.lean ORIGINAL LINES 1-70 ===
+1: import MicroCFTA.SourceSynthesisCurrentCallerInitialization
+2: import MicroCFTA.SourceSynthesisProgramTypeFieldConstruction
+3: import MicroCFTA.SourceSynthesisProgramEnumerationRoles
+4: 
+5: /-!
+6: # Initial Program slots from one current source build
+7: 
+8: One current initializer retains its complete cold caller receipt.
+9: The same build supplies all physical Type fields and its exact native handle.
+10: Raw enumeration initialization marks only slot zero as a Program occurrence.
+11: This result does not execute an enumeration worker.
+12: -/
+13: namespace MicroCFTA.SourceSynthesisCurrentProgramSlotsInitialization
+14: open Cache InternedConstructorTemplates InternedNestedFacts InternedProbeProvenance
+15: open SourceSynthesisTypeSyntax (Library Query)
+16: open SourceSynthesisFirstOrderConstruction (Expression)
+17: open SourceSynthesisUniverseCallerBoundary (ordinarySymbols)
+18: open SourceSynthesisGeneralizeSyntax (top)
+19: open SourceSynthesisCurrentSourceGuards (encodedLibrary)
+20: open SourceSynthesisOriginalGuardAlphabet (alphabet)
+21: open SourceEqualityConstraintOrigins (guards Derived)
+22: open SourceCurrentAllocatedPartialInvariant (Context)
+23: open SourceSynthesisNativeTypeTrace (Origin)
+24: open SourceSynthesisHereditaryProgramFields (ValueFields)
+25: open SourceSynthesisProgramEnumerationRoles (ProgramSlots)
+26: open SourcePruningEnumerationNodes (encodeNode lookupNode)
+27: local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+28: local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+29: local notation "Key" => SourceEqualityPartialConstraintKey.Key
+30: local notation "literal" => SourceSynthesisLabelProgramBuildRoles.literal
+31: variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+32: 
+33: /-- One current initializer derives all initial Program-slot roles at its same native root. -/
+34: theorem accepted (lib : Library) (query : Query) (signed : Int) (expression : Expression)
+35:     (returned : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok expression)
+36:     (width : Nat) (initial : Cache.State Key) (valid : Cache.Valid initial)
+37:     (formulas : SourceGuards.Formulas FullSyntax.Formula)
+38:     (solver : SourceGuards.Entailment FullSyntax.Formula) :
+39:     ∃ fields cache value heap,
+40:       ∃ built : InternedFreshOrdinaryConstruction.build (ordinarySymbols expression) [] empty = .done value heap,
+41:       SourceEqualityOriginalAllocationPreparation.Receipt (guards (ordinarySymbols expression)) initial fields cache ∧
+42:       SourceCurrentConjunctionEquality.Fields (SourceEqualityConstraintMemoAllocation.initial cache) heap ∧
+43:       Context formulas solver (SourceCurrentAllocatedPartialInitialization.inventory (ordinarySymbols expression) value heap built)
+44:         (SourceCurrentAllocatedPartialInitialization.caller width cache heap) SourceCurrentAllocatedPartialInitialization.globals ∧
+45:       Facts heap ∧ Available heap value ∧
+46:       SourceSynthesisProgramBuildRolesGeneric.ProgramValue literal value ∧
+47:       Grows empty heap ∧ Cache.Extends (empty : State Symbol Guard).nodes.issued heap.nodes.issued ∧
+48:       SourceEqualityAnnotationHeap.Heap
+49:         (Derived (alphabet (encodedLibrary lib)) top SourceEqualityPCSNativeEdge.conjoin) heap ∧
+50:       ∃ identity, SourceCurrentAllocatedPartialInitialization.emptyValue cache = .live identity [] ∧
+51:         SourceEqualityConstraintAllocation.Ready
+52:           (SourceCurrentAllocatedPartialInitialization.caller width cache heap).checked.operations.constraints
+53:           (.live identity []) ∧ value.free = [] ∧ SourceRecursiveIntersectionInputView.Original value ∧
+54:         ValueFields (Origin (encodedLibrary lib)) literal value ∧
+55:         ∃ handle, encodeNode value = some handle ∧ lookupNode heap handle = some value ∧
+56:           ProgramSlots (Origin (encodedLibrary lib)) literal heap
+57:             (EnumerationState.initial handle) (fun uv => uv = 0) := by
+58:   obtain ⟨fields, cache, value, heap, built, prepared, conjunctionFields, context,
+59:       facts, available, roles, growth, issued, origins, identity, emptySame, emptyReady, closed, original⟩ :=
+60:     SourceSynthesisCurrentCallerInitialization.accepted lib query signed expression returned
+61:       width initial valid formulas solver
+62:   have valueFields := (SourceSynthesisProgramTypeFieldConstruction.current_root_fields
+63:     lib query signed expression returned value heap built).2
+64:   obtain ⟨handle, encoded, decoded⟩ := SourcePruningEnumerationNodes.available_readback
+65:     heap value facts.coherent available closed
+66:   exact ⟨fields, cache, value, heap, built, prepared, conjunctionFields, context,
+67:     facts, available, roles, growth, issued, origins, identity, emptySame, emptyReady, closed,
+68:     original, valueFields, handle, encoded, decoded,
+69:     SourceSynthesisProgramEnumerationRoles.initial_program_slots heap handle value decoded valueFields⟩
+70: 

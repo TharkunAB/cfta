@@ -1,0 +1,73 @@
+-- lean/MicroCFTA/SourcePruningEnumerationSharedSelectedContinuations.lean: 575-646
+575: /-- A completed continuation supplies the native endpoint for the next alternative. -/
+576: inductive HookResult (Output : Type u) (Reason : Type v) (width : Nat) where
+577:   /-- Empty output includes normal pruning and a stuck restart. -/
+578:   | complete (outputs : List Output) (caller : Caller width) (queries : Queries)
+579:   /-- Keep the explicit stop reason and any actual reached native endpoint. -/
+580:   | stopped (outputs : List Output) (reason : Reason) (reached : Option (Caller width × Queries))
+581: 
+582: /-- Keep the exact edge receipt or continuation stop without inventing an endpoint. -/
+583: inductive Stop (Reason : Type v) (width : Nat) where
+584:   /-- A missing or noncontinuable edge stops before the hook and the suffix. -/
+585:   | edge (current : Option (Receipt width)) (reached : Caller width × Queries)
+586:   /-- A stopped hook retains its actual completed edge receipt. -/
+587:   | continuation (current : Receipt width) (reason : Reason)
+588:       (reached : Option (Caller width × Queries))
+589: 
+590: /-- Retain ordered edge receipts, continuation outputs and the exact stopping context. -/
+591: inductive Result (Output : Type u) (Reason : Type v) (width : Nat) where
+592:   /-- Every edge and invoked continuation completed. -/
+593:   | complete (processed : List (Receipt width)) (outputs : List Output)
+594:       (caller : Caller width) (queries : Queries)
+595:   /-- Retain the finished prefix and the current edge or continuation stop. -/
+596:   | stopped (processed : List (Receipt width)) (outputs : List Output) (current : Stop Reason width)
+597: 
+598: /-- Valid rejections retain their actual caller without invoking a fragment continuation. -/
+599: def advance : Receipt width → Option (Caller width × Queries)
+600:   | .complete _ caller queries _ => some (caller, queries)
+601:   | .rejected caller queries _ => some (caller, queries)
+602:   | .stopped _ (.ok (some []), caller, queries, _outer, _waiting) (some _) => some (caller, queries)
+603:   | _ => none
+604: 
+605: /-- Read the actual child endpoint or retain the entry endpoint of an unsupported pure prefix. -/
+606: def endpoint (receipt : Receipt width) (caller : Caller width) (queries : Queries) : Caller width × Queries :=
+607:   match receipt with
+608:   | .complete _ reached saved _ => (reached, saved)
+609:   | .rejected reached saved _ => (reached, saved)
+610:   | .stopped _ (_, reached, saved, _, _) _ => (reached, saved)
+611:   | .finalizeStopped _ reached saved _ => (reached, saved)
+612:   | .unhandled => (caller, queries)
+613: 
+614: variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+615: 
+616: /-- Run each completed edge's continuation before the next edge at its returned native endpoint.
+617: The captured enumeration input is fixed. The hook can close over fixed sibling metadata.
+618: This bounded worker does not prove completion or full source-effect correspondence. -/
+619: noncomputable def run
+620:     (hook : Fragment → Caller width → Queries → Cached → HookResult Output Reason width)
+621:     (checkEmpty : Bool) (r n p h k target : Nat) (scs : List Suspended) (before : Cached) :
+622:     List (EdgeValue Symbol Constraint) → Caller width → Queries → Result Output Reason width
+623:   | [], caller, queries => .complete [] [] caller queries
+624:   | edge :: rest, caller, queries =>
+625:       match SourcePruningEnumerationSharedSelectedContinuations.CapturedEdge.run checkEmpty r n p h k target scs edge caller before queries with
+626:       | none => .stopped [] [] (.edge none (caller, queries))
+627:       | some receipt =>
+628:           match receipt with
+629:           | .complete fragment reached saved after =>
+630:               match hook fragment reached saved after with
+631:               | .stopped outputs reason endpoint =>
+632:                   .stopped [] outputs (.continuation receipt reason endpoint)
+633:               | .complete outputs middleCaller middleQueries =>
+634:                   match run hook checkEmpty r n p h k target scs before rest middleCaller middleQueries with
+635:                   | .complete processed later finalCaller finalQueries =>
+636:                       .complete (receipt :: processed) (outputs ++ later) finalCaller finalQueries
+637:                   | .stopped processed later current =>
+638:                       .stopped (receipt :: processed) (outputs ++ later) current
+639:           | other =>
+640:               match SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.advance other with
+641:               | none => .stopped [] [] (.edge (some other) (endpoint other caller queries))
+642:               | some (middleCaller, middleQueries) =>
+643:                   match run hook checkEmpty r n p h k target scs before rest middleCaller middleQueries with
+644:                   | .complete processed outputs finalCaller finalQueries =>
+645:                       .complete (other :: processed) outputs finalCaller finalQueries
+646:                   | .stopped processed outputs current => .stopped (other :: processed) outputs current

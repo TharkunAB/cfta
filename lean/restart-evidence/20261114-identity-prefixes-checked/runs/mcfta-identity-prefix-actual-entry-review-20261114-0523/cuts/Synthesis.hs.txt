@@ -1,0 +1,96 @@
+=== cfta-generator/src/Data/CFTA/Gen/Synthesis.hs ORIGINAL LINES 660-689 ===
+660: sizes the rounds do not converge: on takeNdropM at size 7 the automaton
+661: stays near 3,400 nodes, and the enumeration of the bounded result finds the
+662: solution. Reduction does not change the language, so the bound only stops
+663: earlier.
+664: -}
+665: reduceFully :: Node Symbol -> Node Symbol
+666: reduceFully = last . reductions
+667: 
+668: {- | The spaces of 'reduceFully': the input, and the space after each round,
+669: until a round changes nothing or after 'reductionRounds' rounds.
+670: -}
+671: reductions :: Node Symbol -> [Node Symbol]
+672: reductions = go reductionRounds
+673:   where
+674:     go 0 node = [node]
+675:     go rounds node
+676:         | next == node = [node]
+677:         | otherwise = node : go (rounds - 1) next
+678:       where
+679:         next = withoutRedundantEdges (reducePartially node)
+680: 
+681: -- | The bound of 'reduceFully' on reduction rounds: 30, as in the paper.
+682: reductionRounds :: Int
+683: reductionRounds = 30
+684: 
+685: {- | The automaton of the programs of a size that use every argument of the
+686: query once and have the goal type, reduced and refolded. A size counts the
+687: components and arguments of a program.
+688: -}
+689: searchSpace :: Library -> Query -> Int -> Node Symbol
+=== cfta-generator/src/Data/CFTA/Gen/Synthesis.hs ORIGINAL LINES 714-742 ===
+714: solutions at 1.07 times their rank in that order (the geometric mean of the
+715: rank plus one). The canonical order alone lists them at 1.32 times that rank,
+716: and solves 51.
+717: -}
+718: reduceWithOrder :: Node Symbol -> Space
+719: reduceWithOrder = orderedSpace . reductions
+720: 
+721: {- | The last space of a reduction ('reductions'), refolded, with Hectare's
+722: order of its edges ('reduceWithOrder').
+723: -}
+724: orderedSpace :: [Node Symbol] -> Space
+725: orderedSpace spaces = rounds `seq` Space folded order
+726:   where
+727:     (born, final, count) = births spaces
+728:     (folded, refolded) = refoldEdges final
+729:     rounds =
+730:         IntMap.unionWith min born $
+731:             IntMap.fromListWith
+732:                 min
+733:                 [ (edgeKey (refolded edge), index)
+734:                 | edges <- IntMap.elems (reachable final)
+735:                 , edge <- edges
+736:                 , Just index <- [IntMap.lookup (edgeKey edge) born]
+737:                 ]
+738:     order edge = negate (fromIntegral (IntMap.findWithDefault count (edgeKey edge) rounds))
+739: 
+740: {- | The first round of each edge of the spaces of a reduction, by its
+741: identity, with the last space and the number of spaces. A round reads the
+742: edges that the enumeration reads ('reachable'), and it stops at the nodes of
+=== cfta-generator/src/Data/CFTA/Gen/Synthesis.hs ORIGINAL LINES 770-784 ===
+770: edgeKey :: Edge Symbol -> Int
+771: edgeKey edge = let EdgeId identity = edgeIdentity edge in identity
+772: 
+773: -- | 'searchSpace', with Hectare's order of its edges.
+774: orderedSearchSpace :: Library -> Query -> Int -> Space
+775: orderedSearchSpace lib query = reduceWithOrder . rawSearchSpace lib query
+776: 
+777: -- | The automaton of 'searchSpace' before the reduction.
+778: rawSearchSpace :: Library -> Query -> Int -> Node Symbol
+779: rawSearchSpace lib query size = ofType (relevantOfSize size) (typeNodeWith encoding $ queryGoal query)
+780:   where
+781:     encoding = libraryEncoding lib
+782:     types = typesOf lib query
+783:     nodes = domainNodes encoding types
+784:     component name typ = Edge (Symbol name) [generalizeWith encoding nodes types (typeNodeWith encoding typ)]
+=== cfta-generator/src/Data/CFTA/Gen/Synthesis.hs ORIGINAL LINES 962-979 ===
+962: toProgram :: Term Symbol -> Program
+963: toProgram term = case (Term.rootLabel term, Term.subForest term) of
+964:     ("app", [_, _, function, argument]) -> App (toProgram function) (toProgram argument)
+965:     ("filter", [_, candidates]) -> toProgram candidates
+966:     (symbol, _) -> Var (symbolText symbol)
+967: 
+968: -- | The programs of a search space, one for each typed term, in Hectare's order.
+969: programsIn :: Space -> [Program]
+970: programsIn space = map toProgram $ nubOrd $ map fst $ runsBy (spaceOrder space) "Mu" (spaceNode space)
+971: 
+972: -- | The programs of a size that solve the query, with representatives.
+973: solutionsOfSize :: Library -> Query -> Int -> [Program]
+974: solutionsOfSize lib query = programsIn . orderedSearchSpace lib query
+975: 
+976: {- | The programs of a size that solve the query, each once, in the order in
+977: which 'solutionsOfSize' first lists them. 'solutionsOfSize' keeps a set of
+978: the typed terms, and a large size has millions of them; this lists the runs
+979: of the search space and keeps a set of the programs only, which needs much

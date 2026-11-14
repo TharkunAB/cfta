@@ -1,0 +1,46 @@
+/tmp/mcfta-identity-prefix-erasure-check-20261114-0538/SourcePruningEnumerationIdentityPrefixMetadataErasure.lean:122:42: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case cons.nil.ok.unenumerated.some.cons.nil.ok.true.some
+width : Nat
+Typing : Type
+inst✝ : DecidableEq (EdgeKey Symbol Constraint)
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+order : List Nat → Option Nat
+metadata : Metadata Typing
+unitMetadata : Metadata Unit
+readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv : Nat
+caller : Caller width
+before : Cached
+queries : Queries
+readAfter : Core
+scs : List Suspended
+oldHandle : Nat
+checked : Core
+parked : Cached
+⊢ Result.parked checked (some parked)
+      (some
+        (List.map
+          (fun x =>
+            match x with
+            | Except.error fault => Except.error fault
+            | Except.ok ((metadata, next), after) => Except.ok ((eraseMetadata metadata, next), after))
+          (if some (EnumerationPureSelection.next (fun candidates => order candidates) parked) = some Next.stuck then []
+            else
+              [Except.ok
+                  ((metadata, some (EnumerationPureSelection.next (fun candidates => order candidates) parked)),
+                    checked)]).run)) =
+    Result.parked checked (some parked)
+      (some
+        (List.map
+          (fun x =>
+            match x with
+            | Except.error fault => Except.error fault
+            | Except.ok ((metadata, next), after) => Except.ok ((eraseMetadata metadata, next), after))
+          (if some (EnumerationPureSelection.next (fun candidates => order candidates) parked) = some Next.stuck then []
+            else
+              [Except.ok
+                  ((unitMetadata, some (EnumerationPureSelection.next (fun candidates => order candidates) parked)),
+                    checked)]).run))

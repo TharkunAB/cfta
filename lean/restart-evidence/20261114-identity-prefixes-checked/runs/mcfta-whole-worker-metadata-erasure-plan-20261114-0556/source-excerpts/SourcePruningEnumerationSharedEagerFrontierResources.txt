@@ -1,0 +1,20 @@
+-- lean/MicroCFTA/SourcePruningEnumerationSharedEagerFrontierResources.lean: 47-65
+47: private theorem children_congr (left right : Visitor width) (inputs : List (Node × List Suspended)) :
+48:     (∀ child bucket, (child, bucket) ∈ inputs → ∀ caller before queries done stopped,
+49:       left bucket child caller before queries done stopped = right bucket child caller before queries done stopped) →
+50:     ∀ done stopped caller before queries,
+51:       visitChildren left done stopped inputs caller before queries =
+52:         visitChildren right done stopped inputs caller before queries := by
+53:   induction inputs with
+54:   | nil => intro _ _ _ _ _ _; rfl
+55:   | cons input rest ih =>
+56:       rcases input with ⟨child, bucket⟩
+57:       intro same done stopped caller before queries
+58:       simp only [visitChildren]
+59:       rw [same child bucket (by simp)]
+60:       apply congrArg (fun yes => right bucket child caller before queries yes
+61:         (fun observation candidate => stopped [] observation candidate))
+62:       funext fragment reached saved after
+63:       exact ih (fun value retained member => same value retained (List.mem_cons_of_mem _ member))
+64:         (fun fragments => done (fragment :: fragments))
+65:         (fun completed => stopped (fragment :: completed)) reached after saved

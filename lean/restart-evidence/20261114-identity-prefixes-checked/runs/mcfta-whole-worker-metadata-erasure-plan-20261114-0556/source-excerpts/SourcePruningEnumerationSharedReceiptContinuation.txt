@@ -1,0 +1,16 @@
+-- lean/MicroCFTA/SourcePruningEnumerationSharedReceiptContinuation.lean: 25-39
+25: /-- Continue one receipt and preserve the known endpoint on every edge stop. -/
+26: def run
+27:     (hook : Fragment → Caller width → Queries → Cached → HookResult Output Reason width)
+28:     (caller : Caller width) (queries : Queries) : Option (Receipt width) → Result Output Reason width
+29:   | none => .stopped [] [] (.edge none (caller, queries))
+30:   | some receipt =>
+31:       match receipt with
+32:       | .complete fragment reached saved after =>
+33:           match hook fragment reached saved after with
+34:           | .complete outputs actual returned => .complete [receipt] outputs actual returned
+35:           | .stopped outputs reason actual => .stopped [] outputs (.continuation receipt reason actual)
+36:       | other =>
+37:           match advance other with
+38:           | none => .stopped [] [] (.edge (some other) (endpoint other caller queries))
+39:           | some (reached, saved) => .complete [other] [] reached saved

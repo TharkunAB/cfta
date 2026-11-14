@@ -1,0 +1,10 @@
+private theorem prepare_identity_metadata {Typing : Type}
+    (metadata : Metadata Typing) (unitMetadata : Metadata Unit)
+    (nativeFuel representativeFuel uv oldHandle : Nat) (scs : List Suspended)
+    (oldValue : Node) (heap : NativeHeap) :
+    SourcePruningEnumerationAction.prepareWithNarrow (EnumGuard := Constraint)
+      (fun _ _ _ value heap => .done value heap) metadata nativeFuel representativeFuel
+      uv oldHandle scs oldValue heap =
+    SourcePruningEnumerationAction.prepareWithNarrow (EnumGuard := Constraint)
+      (fun _ _ _ value heap => .done value heap) unitMetadata nativeFuel representativeFuel
+      uv oldHandle scs oldValue heap := rfl

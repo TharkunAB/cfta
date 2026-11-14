@@ -1,0 +1,205 @@
+--- lean/MicroCFTA/SourceSynthesisUniverseOrigins.lean:18-49 ---
+18: def Children (P : Expression → Prop) (row : Row) : Prop :=
+19:   ∀ child ∈ (match row with | .mk _ _ children => children), P child
+20: 
+21: /-- A finite source prefix uses one exact recursive universe as its only atom. -/
+22: inductive OverUniverse (types : Expression) : Expression → Prop where
+23:   | atom : OverUniverse types types
+24:   | node (rows : List Row)
+25:       (children : ∀ row ∈ rows, Children (OverUniverse types) row) :
+26:       OverUniverse types (.node rows)
+27:   | union (members : List Expression)
+28:       (children : ∀ child ∈ members, OverUniverse types child) :
+29:       OverUniverse types (.union members)
+30: 
+31: /-- A binder in the prefix is exactly the selected universe. -/
+32: theorem binder_eq (types : Expression) (smart : Bool) (body : Expression)
+33:     (origin : OverUniverse types (.binder smart body)) : .binder smart body = types := by
+34:   cases origin
+35:   rfl
+36: 
+37: /-- The computed recursive universe excludes a bare lexical variable from its prefix. -/
+38: theorem not_var (constructors : List (String × Nat)) (index : Nat) :
+39:     ¬ OverUniverse (allTypes top constructors) (.var index) := by
+40:   intro origin
+41:   change OverUniverse (.binder true (allTypesBody top constructors)) (.var index) at origin
+42:   cases origin
+43: 
+44: /-- These two constructor rules suffice for the source program-table induction. -/
+45: structure Closed (P : Expression → Prop) : Prop where
+46:   node : ∀ rows, (∀ row ∈ rows, Children P row) → P (.node rows)
+47:   union : ∀ members, (∀ child ∈ members, P child) → P (.union members)
+48: 
+49: private theorem over_closed (types : Expression) : Closed (OverUniverse types) :=
+
+--- lean/MicroCFTA/SourceSynthesisUniverseOrigins.lean:304-329 ---
+304: end Closure
+305: 
+306: /-- Induct over the actual constructor and error control for any closed source property. -/
+307: theorem firstOrderRaw_induction (P : Expression → Prop) (closed : Closed P)
+308:     (lib : Library) (query : Query) (size : Int) (expression : Expression)
+309:     (contextP : ContextClosed P (context lib query)) (goalP : P (typeNode top query.queryGoal))
+310:     (returned : firstOrderRaw lib query size = .ok expression) : P expression := by
+311:   unfold firstOrderRaw at returned
+312:   split at returned
+313:   · cases returned
+314:   · obtain ⟨chunks, chunksResult, completed⟩ := bind_ok _ _ _ returned
+315:     have same := Except.ok.inj completed
+316:     subst expression
+317:     apply ofType_closed closed
+318:     · apply closed.union
+319:       intro row member
+320:       obtain ⟨chunk, included, inside⟩ := List.mem_flatten.mp member
+321:       have chunksP : ∀ chunk ∈ chunks, ∀ row ∈ chunk, P row := by
+322:         apply mapM_preserves (fun chunk => ∀ row ∈ chunk, P row) _ _ _ _ chunksResult
+323:         intro arguments rows result
+324:         exact relevantRows_closed closed _ contextP size.toNat true _ rows result
+325:       exact chunksP chunk included row inside
+326:     · exact goalP
+327: 
+328: /-- Every rigid original type is an ordinary prefix over any selected universe. -/
+329: theorem typeNode_overUniverse (types : Expression) (typ : Ty) :
+
+--- lean/MicroCFTA/SourceSynthesisCurrentContext.lean:33-63 ---
+33: /-- Encode the current rigid type through the historical instruction constructor. -/
+34: def typeNode (typ : Ty) : Expression := SourceSynthesisTypeSyntax.typeNode top (encodeTy typ)
+35: 
+36: /-- Discover escaped constructors and exclude only the two-argument Fun alias. -/
+37: def constructorsOf : Ty → List (String × Nat)
+38:   | .tVar _ => []
+39:   | .tFun argument result => constructorsOf argument ++ constructorsOf result
+40:   | .tCons name children =>
+41:       (if name = "Fun" ∧ children.length = 2 then []
+42:        else [(escapeConstructor name, children.length)]) ++ children.flatMap constructorsOf
+43: 
+44: /-- Discover the current catalog in source order from canonical query bindings. -/
+45: def constructorCatalog (lib : Library) (query : Query) : List (String × Nat) :=
+46:   (lib.libraryGroups.flatMap (fun entry => constructorsOf entry.2.1) ++
+47:     lib.libraryArgumentOnly.flatMap (fun entry => constructorsOf entry.2) ++
+48:     (queryBindings query).flatMap (fun entry => constructorsOf entry.2) ++
+49:     constructorsOf query.queryGoal).eraseDups
+50: 
+51: /-- Build the current FirstOrder fields in the existing source context. -/
+52: def context (lib : Library) (query : Query) : Context :=
+53:   let types := allTypes top (constructorCatalog lib query)
+54:   { types := types
+55:     components := lib.libraryGroups.map fun entry =>
+56:       (entry.1, component types entry.1 (encodeTy entry.2.1))
+57:     argumentEdges := (queryBindings query).map fun entry =>
+58:       (entry.1, .mk entry.1 top [typeNode entry.2])
+59:     argumentOnly := .node (lib.libraryArgumentOnly.map fun entry =>
+60:       component types entry.1 (encodeTy entry.2))
+61:     avoid := lib.libraryAvoid }
+62: 
+63: /-- The current two-argument Fun contributes only its argument constructors. -/
+
+--- lean/MicroCFTA/SourceSynthesisCurrentConstruction.lean:17-25 ---
+17:     Except MissingKey Expression :=
+18:   let ctx := SourceSynthesisCurrentContext.context lib query
+19:   if signed < 0 then .error (.relevant true signed (ctx.argumentEdges.map Prod.fst))
+20:   else do
+21:     let chunks ← (permutations ctx.argumentEdges).mapM fun selected =>
+22:       relevantRows ctx true signed.toNat (selected.map Prod.fst)
+23:     pure (ofType (.union chunks.flatten) (SourceSynthesisCurrentContext.typeNode query.queryGoal))
+24: 
+25: /-- A negative request retains its signed size and all original query names. -/
+
+--- lean/MicroCFTA/SourceSynthesisUniverseCallerBoundary.lean:82-103 ---
+82:   | .var index => .var index
+83:   | .node edges => .node (ordinaryEdges edges)
+84:   | .union values => .union (ordinaryChildren values)
+85:   | .binder smart body => .binder smart (ordinarySymbols body)
+86: 
+87: /-- Preserve the complete source order of child instructions. -/
+88: def ordinaryChildren : List (Syntax String Guard) → List (Syntax Symbol Guard)
+89:   | [] => []
+90:   | first :: rest => ordinarySymbols first :: ordinaryChildren rest
+91: 
+92: /-- Preserve each source edge guard and child list while refining only its name. -/
+93: def ordinaryEdges : List (EdgeSyntax String Guard) → List (EdgeSyntax Symbol Guard)
+94:   | [] => []
+95:   | .mk name guard children :: rest =>
+96:       .mk (name, .top) guard (ordinaryChildren children) :: ordinaryEdges rest
+97: end
+98: 
+99: /-- Execute the actual original source expression in the ordinary-symbol representation. -/
+100: def expression : Syntax Symbol Guard :=
+101:   ordinarySymbols SourceSynthesisUniverseRequiredBoundary.expression
+102: 
+103: /-- The original signed source request succeeds before the exact symbol representation adapter. -/
+
+--- lean/MicroCFTA/InternedFreshOrdinaryConstruction.lean:113-141 ---
+113: termination_by sizeOf expression
+114: 
+115: /-- Child expression executes in source order and retains every completed value. -/
+116: def buildMany [DecidableEq (EdgeKey Symbol Guard)] (expression : List (Syntax Symbol Guard))
+117:     (environment : List (Value Symbol Guard)) (state : InternedConstructorTemplates.State Symbol Guard) :
+118:     Outcome Symbol Guard (List (Value Symbol Guard)) :=
+119:   match expression with
+120:   | [] => .done [] state
+121:   | first :: rest => (build first environment state).bind fun value next =>
+122:       (buildMany rest environment next).bind fun values final => .done (value :: values) final
+123: termination_by sizeOf expression
+124: 
+125: /-- Edge construction occurs after its actual nested child computations complete. -/
+126: def buildEdges [DecidableEq (EdgeKey Symbol Guard)] (expression : List (EdgeSyntax Symbol Guard))
+127:     (environment : List (Value Symbol Guard)) (state : InternedConstructorTemplates.State Symbol Guard) :
+128:     Outcome Symbol Guard (List (EdgeValue Symbol Guard)) :=
+129:   match expression with
+130:   | [] => .done [] state
+131:   | .mk symbol constraint children :: rest =>
+132:       (buildMany children environment state).bind fun values next =>
+133:       (work (makeEdge symbol constraint values) next).bind fun edge afterEdge =>
+134:       (buildEdges rest environment afterEdge).bind fun edges final => .done (edge :: edges) final
+135: termination_by sizeOf expression
+136: end
+137: 
+138: end MicroCFTA.InternedFreshOrdinaryConstruction
+
+--- lean/MicroCFTA/SourceSynthesisOriginalProgramTypeFields.lean:37-75 ---
+37: theorem many_call (expressions : List (Syntax Symbol Guard))
+38:     (before after reader : State Symbol Guard) (context : BasicContext before [])
+39:     (values : List (Value Symbol Guard)) (actual : buildMany expressions [] before = .done values after)
+40:     (growth : Grows after reader) (index : Nat) (expression : Syntax Symbol Guard)
+41:     (found : expressions[index]? = some expression) :
+42:     ∃ value start finish, values[index]? = some value ∧ BasicContext start [] ∧
+43:       build expression [] start = .done value finish ∧ Grows start reader ∧ Grows finish reader := by
+44:   induction expressions generalizing before values index with
+45:   | nil => simp only [List.getElem?_nil] at found; cases found
+46:   | cons first rest ih =>
+47:       cases one : build first [] before with
+48:       | pending key state => simp only [buildMany, one, Outcome.bind] at actual; cases actual
+49:       | done value middle =>
+50:           cases tail : buildMany rest [] middle with
+51:           | pending key state => simp only [buildMany, one, tail, Outcome.bind] at actual; cases actual
+52:           | done remaining final =>
+53:               simp only [buildMany, one, tail, Outcome.bind, Outcome.done.injEq] at actual
+54:               obtain ⟨rfl, rfl⟩ := actual
+55:               have nextContext : BasicContext middle [] := by
+56:                 simpa only [one, Outcome.state] using context.build first
+57:               have tailChecked := InternedFreshOrdinaryFacts.buildMany_verified rest [] middle
+58:                 nextContext.normal.facts nextContext.inputs
+59:               have tailGrowth : Grows middle final := by
+60:                 simpa only [tail, Outcome.state] using tailChecked.growth
+61:               have nextGrowth := grows_trans tailGrowth growth
+62:               cases index with
+63:               | zero =>
+64:                   have field : first = expression := Option.some.inj found
+65:                   subst expression
+66:                   have checked := InternedFreshOrdinaryFacts.build_verified first [] before
+67:                     context.normal.facts context.inputs
+68:                   have firstGrowth : Grows before middle := by
+69:                     simpa only [one, Outcome.state] using checked.growth
+70:                   exact ⟨value, before, middle, rfl, context, one,
+71:                     grows_trans firstGrowth nextGrowth, nextGrowth⟩
+72:               | succ index =>
+73:                   obtain ⟨chosen, start, finish, selected, entered, called, initial, last⟩ :=
+74:                     ih middle nextContext remaining tail index found
+75:                   exact ⟨chosen, start, finish, selected, entered, called, initial, last⟩
+
+--- lean/MicroCFTA/SourceSynthesisUniverseNativeInput.lean:69-73 ---
+69: theorem allTypesBody_binderFree (top : Guard) (catalog : List (String × Nat)) :
+70:     BinderFree (allTypesBody top catalog) :=
+71:   (noBinders_iff_binderFree _).mp (allTypesBody_noBinders top catalog)
+72: 
+73: /-- The actual smart universe constructor completes in any fully covered cache. -/

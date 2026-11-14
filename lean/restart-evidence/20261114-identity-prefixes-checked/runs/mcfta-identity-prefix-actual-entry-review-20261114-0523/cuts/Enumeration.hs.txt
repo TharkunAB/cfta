@@ -1,0 +1,214 @@
+=== cfta/src/Data/CFTA/Enumeration.hs ORIGINAL LINES 287-315 ===
+287: recursionKey :: Node symbol -> Seq SuspendedConstraint -> RecursionKey
+288: recursionKey n scs =
+289:     RecursionKey
+290:         { recursiveNode = nodeIdentity n
+291:         , suspendedTries = HashSet.fromList $ map scGetPathTrie $ Foldable.toList scs
+292:         }
+293: 
+294: {- | Initial state whose root UVar contains the node being enumerated, with
+295: the order of the edges of each node.
+296: -}
+297: initEnumerationState :: (Typeable symbol) => (Node symbol -> [Edge symbol]) -> Node symbol -> EnumerationState symbol
+298: initEnumerationState edgesOf n =
+299:     let (uvg, uv) = UnionFind.nextUVar UnionFind.initUVarGen
+300:         value = UVarUnenumerated (Just n) Sequence.Empty
+301:      in EnumerationState
+302:             uvg
+303:             (UnionFind.withInitialValues [uv])
+304:             (IntMap.singleton (uvarToInt uv) value)
+305:             (if expandable value then IntSet.singleton (uvarToInt uv) else IntSet.empty)
+306:             IntMap.empty
+307:             []
+308:             IntMap.empty
+309:             HashSet.empty
+310:             edgesOf
+311:             (reachesConstrainedMu n)
+312: 
+313: ---------------------------------------------------------------------------
+314: ---------------------------- Enumeration monad ----------------------------
+315: ---------------------------------------------------------------------------
+=== cfta/src/Data/CFTA/Enumeration.hs ORIGINAL LINES 708-718 ===
+708: canonicalEdgesOf ::
+709:     (Hashable symbol, Ord symbol, Typeable symbol) =>
+710:     Maybe (Edge symbol -> Double) -> Node symbol -> Node symbol -> [Edge symbol]
+711: canonicalEdgesOf weights root = edgesOf
+712:   where
+713:     byWeights = maybe id byWeight weights
+714:     ordered = IntMap.map byWeights (canonicalOrder root)
+715:     edgesOf n =
+716:         let NodeId ident = nodeIdentity n
+717:          in fromMaybe (byWeights (canonicalEdges n)) (IntMap.lookup ident ordered)
+718: 
+=== cfta/src/Data/CFTA/Enumeration.hs ORIGINAL LINES 855-861 ===
+855: -}
+856: type ExpansionOrder state = state -> [UVar] -> Maybe UVar
+857: 
+858: -- | The 'ExpansionOrder' that always leaves the choice to the enumerator.
+859: noExpansionPreference :: ExpansionOrder state
+860: noExpansionPreference _ _ = Nothing
+861: 
+=== cfta/src/Data/CFTA/Enumeration.hs ORIGINAL LINES 900-935 ===
+900:                 { _expansionAncestry = if recursiveBoundary n then HashSet.insert (recursionKey n scs) ancestry else ancestry
+901:                 }
+902: 
+903:         t <- case n of
+904:             Mu _ -> expandNode scs (unfoldOuterRec n)
+905:             InternedUnion _ -> expandNode scs (Node $ nodeEdges n)
+906:             _ -> expandNode scs n
+907: 
+908:         modify' $ \s -> s{_expansionAncestry = HashSet.empty}
+909:         setUVarValue uv' (UVarEnumerated t)
+910:         return t
+911: 
+912: -- | Expand the root UVar until it represents a complete term.
+913: enumerateFully :: (Hashable symbol, Typeable symbol) => EnumerateM symbol ()
+914: enumerateFully =
+915:     enumerateFully' () noExpansionPreference (\state _ _ -> return (False, state))
+916: 
+917: {- | 'enumerateUntil'' without a stop rule and without narrowing: enumerate
+918: until the root term is complete.
+919: -}
+920: enumerateFully' ::
+921:     forall symbol a.
+922:     (Hashable symbol, Typeable symbol) =>
+923:     a ->
+924:     ExpansionOrder a ->
+925:     (a -> UVar -> Either (TermFragment symbol) (Node symbol) -> EnumerateM symbol (Bool, a)) ->
+926:     EnumerateM symbol ()
+927: enumerateFully' ost order oracle = void (enumerateUntil' Nothing (\_ _ n -> n) enumerateNode ost order oracle)
+928: 
+929: {- | Enumerate until the root term is complete, with optional oracle pruning.
+930: 
+931: The oracle is called twice around each UVar it expands:
+932: 
+933: * @Right node@ is passed before expanding the node, so callers can drop a
+934:   whole branch early when the node about to be expanded is already known to
+935:   be uninteresting.
+=== cfta/src/Data/CFTA/Enumeration.hs ORIGINAL LINES 948-1027 ===
+948: Before the choice of an edge, the narrowing function can drop edges of the
+949: node of the UVar. It sees the state and the UVar. A node without edges ends
+950: the branch. The node expansion function expands the chosen node, for example
+951: 'enumerateNode'.
+952: 
+953: With a stop rule, enumeration also ends when the rule accepts every UVar that
+954: is still to expand, the blocked ones included. The result is then the state at
+955: that point. Without a stop rule, or at the end of the enumeration, the result
+956: is 'Nothing'.
+957: -}
+958: enumerateUntil' ::
+959:     forall symbol a.
+960:     (Hashable symbol, Typeable symbol) =>
+961:     Maybe (a -> UVar -> Bool) ->
+962:     (a -> UVar -> Node symbol -> Node symbol) ->
+963:     (Seq SuspendedConstraint -> Node symbol -> EnumerateM symbol (TermFragment symbol)) ->
+964:     a ->
+965:     ExpansionOrder a ->
+966:     (a -> UVar -> Either (TermFragment symbol) (Node symbol) -> EnumerateM symbol (Bool, a)) ->
+967:     EnumerateM symbol (Maybe a)
+968: enumerateUntil' stop narrow expandNode ost order oracle = case stop of
+969:     Just rule -> do
+970:         remaining <- gets _expandableUVars
+971:         if not (IntSet.null remaining) && all (rule ost . intToUVar) (IntSet.toList remaining)
+972:             then return (Just ost)
+973:             else step
+974:     Nothing -> step
+975:   where
+976:     step = do
+977:         muv <- nextExpandableUVar (order ost)
+978:         case muv of
+979:             ExpansionStuck -> mzero
+980:             ExpansionDone -> return Nothing
+981:             ExpansionNext uv -> expandNext uv
+982:     expandNext uv =
+983:         let continue ost' = do
+984:                 tf <- enumerateOutUVarWith expandNode uv
+985:                 (should_prune, ost'') <- oracle ost' uv (Left tf)
+986:                 if should_prune
+987:                     then mzero
+988:                     else enumerateUntil' stop narrow expandNode ost'' order oracle
+989:             expand n scs = do
+990:                 let narrowed = narrow ost uv n
+991:                 case narrowed of
+992:                     EmptyNode -> mzero
+993:                     _
+994:                         | nodeIdentity narrowed == nodeIdentity n -> pure ()
+995:                         | otherwise -> do
+996:                             uv' <- getUVarRepresentative uv
+997:                             setUVarValue uv' (UVarUnenumerated (Just narrowed) scs)
+998:                 (should_prune, ost') <- oracle ost uv (Right narrowed)
+999:                 if should_prune then mzero else continue ost'
+1000:          in do
+1001:                 UVarUnenumerated (Just n) scs <- getUVarValue uv
+1002:                 case n of
+1003:                     _ | recursiveBoundary n -> do
+1004:                         uv' <- getUVarRepresentative uv
+1005:                         ancestry <- gets $ IntMap.findWithDefault HashSet.empty (uvarToInt uv') . _recursionAncestry
+1006:                         if HashSet.member (recursionKey n scs) ancestry
+1007:                             then do
+1008:                                 -- The expansion of this node with these paths led to it
+1009:                                 -- again, so each further expansion repeats the last one.
+1010:                                 -- Enumeration stops here, as at an unconstrained 'Mu'.
+1011:                                 setUVarValue uv' (UVarUnenumerated (Just n) Sequence.Empty)
+1012:                                 enumerateUntil' stop narrow expandNode ost order oracle
+1013:                             else expand n scs
+1014:                     _ -> expand n scs
+1015: 
+1016: ---------------------
+1017: -------- Expanding an enumerated term fragment into a term
+1018: ---------------------
+1019: 
+1020: {- | The fragment the root UVar holds, or the root hole itself.
+1021: 
+1022: An automaton that is a bare 'Mu' is never expanded, because an unconstrained
+1023: 'Mu' is where enumeration stops. Its root stays a hole, exactly as a nested one
+1024: does.
+1025: -}
+1026: rootTermFrag :: EnumerateM symbol (TermFragment symbol)
+1027: rootTermFrag = do
+=== cfta/src/Data/CFTA/Enumeration.hs ORIGINAL LINES 1245-1265 ===
+1245:     symbol -> Node symbol -> [(Term symbol, [(Constraint, Term symbol)])]
+1246: runs = runsFrom (canonicalEdgesOf Nothing)
+1247: 
+1248: {- | 'runs' with a weight for each edge. The enumeration tries the edges of a
+1249: node with larger weights first, and edges with equal weights in the order of
+1250: 'runs'. The weights only change the order of the edges of each node, so the
+1251: result has the runs of 'runs', in another order. A weight must not be NaN.
+1252: -}
+1253: runsBy ::
+1254:     (Hashable symbol, Ord symbol, Typeable symbol) =>
+1255:     (Edge symbol -> Double) -> symbol -> Node symbol -> [(Term symbol, [(Constraint, Term symbol)])]
+1256: runsBy weight = runsFrom (canonicalEdgesOf (Just weight))
+1257: 
+1258: {- | 'runsBy' with a function on the edges of each node, which the
+1259: enumeration applies before it tries them. It sees the node of the current
+1260: run: in a run, a node that an equality constraint reaches is the
+1261: intersection of the nodes of all the paths of its class, because the
+1262: enumeration expands it only after all of them. A function that keeps a
+1263: subset of the edges keeps a subset of the runs.
+1264: -}
+1265: runsNarrowedBy ::
+=== cfta/src/Data/CFTA/Enumeration.hs ORIGINAL LINES 1278-1300 ===
+1278: -}
+1279: runsInterned ::
+1280:     (Hashable symbol, Typeable symbol) =>
+1281:     symbol -> Node symbol -> [(Term symbol, [(Constraint, Term symbol)])]
+1282: runsInterned = runsFrom (const nodeEdges)
+1283: 
+1284: -- | 'runs' with the order of the edges of each node, from the root.
+1285: runsFrom ::
+1286:     (Hashable symbol, Typeable symbol) =>
+1287:     (Node symbol -> Node symbol -> [Edge symbol]) -> symbol -> Node symbol -> [(Term symbol, [(Constraint, Term symbol)])]
+1288: runsFrom order recursionSymbol n =
+1289:     map fst $ flip allBranches (initEnumerationState (order n) n) $ do
+1290:         enumerateFully
+1291:         term <- expandUVarWith recursionSymbol (intToUVar 0)
+1292:         obligations <- gets _obligations
+1293:         pending <- mapM (\(constraint, fragment) -> (constraint,) <$> expandTermFragWith recursionSymbol fragment) obligations
+1294:         return (term, pending)
+1295: 
+1296: -- | Each term once, in the enumeration order of its first run. The order is kept, unlike a set.
+1297: dedup :: (Hashable symbol) => [Term symbol] -> [Term symbol]
+1298: dedup = go HashSet.empty
+1299:   where
+1300:     go _ [] = []

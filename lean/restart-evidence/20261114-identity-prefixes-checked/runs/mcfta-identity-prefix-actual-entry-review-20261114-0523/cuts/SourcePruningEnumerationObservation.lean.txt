@@ -1,0 +1,27 @@
+=== lean/MicroCFTA/SourcePruningEnumerationObservation.lean ORIGINAL LINES 19-44 ===
+19: def PendingRealized (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+20:     (state : EnumerationState.State Symbol EnumGuard) : Prop :=
+21:   ∀ (slot node : Nat) (scs : List EnumerationState.Suspended),
+22:     state.values[slot]? = some (.unenumerated (some node) scs) →
+23:       ∃ value : InternedConstructorTemplates.Value Symbol NativeGuard,
+24:         lookupNode heap node = some value ∧
+25:         InternedProbeProvenance.Available heap value ∧ value.free = []
+26: 
+27: /-- A closed available input derives the handle in the actual initial slot. -/
+28: theorem initial_realized (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+29:     (value : InternedConstructorTemplates.Value Symbol NativeGuard)
+30:     (coherent : InternedRecordCoherence.Coherent heap)
+31:     (available : InternedProbeProvenance.Available heap value) (closed : value.free = []) :
+32:     ∃ node, encodeNode value = some node ∧
+33:       PendingRealized heap (EnumerationState.initial node : EnumerationState.State Symbol EnumGuard) := by
+34:   obtain ⟨node, encoded, decoded⟩ := available_readback heap value coherent available closed
+35:   refine ⟨node, encoded, ?_⟩
+36:   intro slot storedNode scs stored
+37:   cases slot with
+38:   | zero =>
+39:       simp [EnumerationState.initial] at stored
+40:       obtain ⟨rfl, rfl⟩ := stored
+41:       exact ⟨value, decoded, available, closed⟩
+42:   | succ => simp [EnumerationState.initial] at stored
+43: 
+44: /-- A full enumeration frame and actual native growth retain realized slots. -/

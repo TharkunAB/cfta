@@ -1,0 +1,34 @@
+=== lean/MicroCFTA/EnumerationCompressionFrame.lean ORIGINAL LINES 1-22 ===
+1: import MicroCFTA.EnumerationDriver
+2: 
+3: /-!
+4: # Complete frames for enumeration path compression
+5: 
+6: The frame preserves every nonforest field and every root path with its size.
+7: It makes no claim about equal lookup fuel in different forests.
+8: -/
+9: 
+10: namespace MicroCFTA.EnumerationCompressionFrame
+11: open Language Fragments EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDriver
+12: 
+13: local instance : Monad List where
+14:   pure value := [value]
+15:   bind values continuation := values.flatMap continuation
+16: 
+17: variable {Symbol Guard : Type}
+18: 
+19: /-- Compression changes only the forest and preserves exact root paths. -/
+20: structure Frame (before after : State Symbol Guard) : Prop where
+21:   /-- Compression keeps the allocation counter. -/
+22:   counter : after.counter = before.counter
+=== lean/MicroCFTA/EnumerationCompressionFrame.lean ORIGINAL LINES 31-40 ===
+31:   /-- Every finite root path has the same representative and size. -/
+32:   reaches : ∀ uv root size,
+33:     UnionFind.Reaches after.representatives uv root size ↔
+34:       UnionFind.Reaches before.representatives uv root size
+35: 
+36: /-- An unchanged state satisfies the complete frame. -/
+37: theorem Frame.refl (state : State Symbol Guard) : Frame state state :=
+38:   ⟨rfl, rfl, rfl, rfl, rfl, fun _ _ _ => Iff.rfl⟩
+39: 
+40: /-- Consecutive frames preserve the same fields and root paths. -/

@@ -1,0 +1,28 @@
+-- lean/MicroCFTA/SourcePruningEnumerationSelectedContinuationCompletedCongruence.lean: 24-33
+24: /-- Preserve the exact completed single-receipt dispatch under agreement on completed hooks. -/
+25: theorem run_complete_congr
+26:     (first second : Fragment → Caller width → Queries → Cached → HookResult Output Reason width)
+27:     (same : ∀ fragment reached saved after outputs middleCaller middleQueries,
+28:       first fragment reached saved after = .complete outputs middleCaller middleQueries →
+29:       second fragment reached saved after = .complete outputs middleCaller middleQueries)
+30:     (current : Option (Receipt width)) (processed : List (Receipt width))
+31:     (outputs : List Output) (finalCaller : Caller width) (finalQueries : Queries)
+32:     (actual : run first current = .complete processed outputs finalCaller finalQueries) :
+33:     run second current = .complete processed outputs finalCaller finalQueries := by
+
+-- lean/MicroCFTA/SourcePruningEnumerationSelectedContinuationCompletedCongruence.lean: 67-81
+67: /-- Preserve the exact completed fold after the same actual selected preparation. -/
+68: theorem run_complete_congr
+69:     (first second : Fragment → Caller width → Queries → Cached → HookResult Output Reason width)
+70:     (checkEmpty : Bool) (entryFuel nativeFuel r n p h k uv : Nat)
+71:     (edgesOf : Node → List (EdgeValue Symbol Constraint)) (caller : Caller width)
+72:     (before : Cached) (queries : Queries)
+73:     (same : ∀ fragment reached saved after outputs middleCaller middleQueries,
+74:       first fragment reached saved after = .complete outputs middleCaller middleQueries →
+75:       second fragment reached saved after = .complete outputs middleCaller middleQueries)
+76:     (processed : List (Receipt width)) (outputs : List Output)
+77:     (finalCaller : Caller width) (finalQueries : Queries)
+78:     (actual : (run first checkEmpty entryFuel nativeFuel r n p h k uv edgesOf caller before queries).2 =
+79:       some (.complete processed outputs finalCaller finalQueries)) :
+80:     (run second checkEmpty entryFuel nativeFuel r n p h k uv edgesOf caller before queries).2 =
+81:       some (.complete processed outputs finalCaller finalQueries) := by

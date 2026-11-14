@@ -1,0 +1,12 @@
+=== lean/MicroCFTA/SourcePruningEnumerationRestart.lean ORIGINAL LINES 13-23 ===
+13: def decision (stop : Option (Metadata Typing → Nat → Bool))
+14:     (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+15:     (before : EnumerationExpandableIndex.Cached Symbol Constraint) : Option Next :=
+16:   match stop with
+17:   | none => some (EnumerationPureSelection.next (order metadata) before)
+18:   | some rule =>
+19:       let remaining := EnumerationIndexSelection.candidates before
+20:       if !remaining.isEmpty && remaining.all (rule metadata) then none
+21:       else some (EnumerationPureSelection.next (order metadata) before)
+22: 
+23: /-- Reject blocked work and otherwise retain the exact metadata and enumeration state. -/

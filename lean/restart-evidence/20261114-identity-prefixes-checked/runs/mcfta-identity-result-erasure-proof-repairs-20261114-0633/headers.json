@@ -1,0 +1,27 @@
+[
+  {
+    "name": "eraseFailure_alternatives",
+    "sha256": "016f4ef1c4ba62781bd1c384d34b1366495751702975899f5cebf38084f7d4af",
+    "header": "theorem eraseFailure_alternatives {Typing : Type} (uv : Nat) (processed : List (Receipt width))\n    (current : Stop (Failure width Typing) width) :\n    eraseFailure (.alternatives uv processed current) =\n      .alternatives uv processed (eraseStop current) := by"
+  },
+  {
+    "name": "finish_erasure",
+    "sha256": "e105a62faf6e5cc782edd571d09186080deff687f716cb0a2c1ecdb3ad375f2d",
+    "header": "theorem finish_erasure {Typing : Type} (uv : Nat)\n    (folded : Fold (Output width Typing) (Failure width Typing) width) :\n    eraseResult (finish uv folded) = finish uv (eraseFold folded) := by"
+  },
+  {
+    "name": "scan_erasure",
+    "sha256": "6a183638ead6b06d9625843ae7ebeb73b383d9a8b536fb9b4cd255e85408b032",
+    "header": "theorem scan_erasure {Typing : Type}\n    (visit : Edge \u2192 Caller width \u2192 Queries \u2192 Cached \u2192\n      Fold (Output width Typing) (Failure width Typing) width)\n    (before : Cached) (edges : List Edge) (caller : Caller width) (queries : Queries) :\n    eraseFold (SourcePruningEnumerationSharedBranching.scan visit before edges caller queries) =\n      SourcePruningEnumerationSharedBranching.scan\n        (fun edge reached saved cache => eraseFold (visit edge reached saved cache))\n        before edges caller queries := by"
+  },
+  {
+    "name": "receipt_erasure",
+    "sha256": "c90d637e6799eb71a1f3695fb77def2a7425272b7858ff1ee536ff9e2dd2b76a",
+    "header": "theorem receipt_erasure {Typing : Type}\n    (hook : Fragment \u2192 Caller width \u2192 Queries \u2192 Cached \u2192\n      Hook (Output width Typing) (Failure width Typing) width)\n    (caller : Caller width) (queries : Queries) (receipt : Option (Receipt width)) :\n    eraseFold (SourcePruningEnumerationSharedReceiptContinuation.run hook caller queries receipt) =\n      SourcePruningEnumerationSharedReceiptContinuation.run\n        (fun fragment reached saved after => eraseResult (hook fragment reached saved after))\n        caller queries receipt := by"
+  },
+  {
+    "name": "continue_empty_exact",
+    "sha256": "c5d77016c568595152e093136099519bbf330cc16027032a28c506cabef3134e",
+    "header": "theorem continue_empty_exact {Typing : Type}\n    (recur : Metadata Typing \u2192 Caller width \u2192 Queries \u2192 Cached \u2192 Option Next \u2192\n      Hook (Output width Typing) (Failure width Typing) width)\n    (graph : Graph Symbol Constraint) (callbackFuel : Nat) (metadata : Metadata Typing) (uv : Nat)\n    (fragment : Fragment) (caller : Caller width) (queries : Queries) (before : Cached) :\n    continueWith recur graph [] none (fun _ _ => none) callbackFuel metadata uv\n      fragment caller queries before =\n    recur {metadata with types := SourcePruningRecordTypes.updatedTypes metadata uv (.inl fragment)}\n      caller queries (EnumerationExpandableIndex.frame before.core before)\n      (some (EnumerationPureSelection.next (fun _ => none)\n        (EnumerationExpandableIndex.frame before.core before))) := by"
+  }
+]

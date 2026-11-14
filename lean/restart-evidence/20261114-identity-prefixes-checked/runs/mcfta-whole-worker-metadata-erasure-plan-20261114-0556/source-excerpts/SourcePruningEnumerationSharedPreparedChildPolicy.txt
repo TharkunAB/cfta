@@ -1,0 +1,41 @@
+-- lean/MicroCFTA/SourcePruningEnumerationSharedPreparedChildPolicy.lean: 38-77
+38: /-- Prepare once and use the supplied child operation only inside the ordinary row scan. -/
+39: noncomputable def runWithChild
+40:     (child : Visitor)
+41:     (hook : Fragment → Caller width → Queries → Cached → HookResult Output Reason width)
+42:     (checkEmpty : Bool) (entryFuel nativeFuel r n p h k uv : Nat)
+43:     (edgesOf : Node → List Edge) (caller : Caller width) (before : Cached) (queries : Queries) :
+44:     Preparation × Option (Fold Output Reason width) :=
+45:   let observation := SourcePruningEnumerationSelectedPreparation.run entryFuel nativeFuel uv caller before
+46:   (observation, match observation.2 with
+47:     | some (.done value heap) =>
+48:         match observation.1 with
+49:         | [.ok ((target, _handle, scs, _decoded), entered)] =>
+50:             some (if scs.any (fun sc => EqualityTrie.isTerminal sc.trie) then
+51:               SourcePruningEnumerationSharedReceiptContinuation.run hook
+52:                 (SourcePruningEnumerationSelectedValueCaller.advance caller heap) queries
+53:                 (SourcePruningEnumerationSharedSelectedOpaqueDispatch.run checkEmpty r n p h k target scs value
+54:                   (SourcePruningEnumerationSelectedValueCaller.advance caller heap)
+55:                   (EnumerationExpandableIndex.frame entered before) queries)
+56:             else match value with
+57:               | parent@(.node ..) =>
+58:                   scan (visitCapturedWith child hook k target scs)
+59:                     (EnumerationExpandableIndex.frame entered before) (edgesOf parent)
+60:                     (SourcePruningEnumerationSelectedValueCaller.advance caller heap) queries
+61:               | _ =>
+62:                   SourcePruningEnumerationSharedReceiptContinuation.run hook
+63:                     (SourcePruningEnumerationSelectedValueCaller.advance caller heap) queries
+64:                     (SourcePruningEnumerationSharedSelectedOpaqueDispatch.run checkEmpty r n p h k target scs value
+65:                       (SourcePruningEnumerationSelectedValueCaller.advance caller heap)
+66:                       (EnumerationExpandableIndex.frame entered before) queries))
+67:         | _ => none
+68:     | _ => none)
+69: 
+70: /-- Install the actual eager child visitor in this same common preparation path. -/
+71: noncomputable def runEager
+72:     (hook : Fragment → Caller width → Queries → Cached → HookResult Output Reason width)
+73:     (checkEmpty : Bool) (entryFuel nativeFuel r n p h k uv : Nat)
+74:     (edgesOf : Node → List Edge) (caller : Caller width) (before : Cached) (queries : Queries) :
+75:     Preparation × Option (Fold Output Reason width) :=
+76:   runWithChild (eagerChild checkEmpty r n p h k edgesOf) hook
+77:     checkEmpty entryFuel nativeFuel r n p h k uv edgesOf caller before queries

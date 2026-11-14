@@ -1,0 +1,4 @@
+import MicroCFTA.SourceSynthesisCurrentInitialIdentityPrefix
+
+#check @MicroCFTA.SourceSynthesisCurrentInitialIdentityPrefix.accepted_initial_identity_prefix
+#print axioms MicroCFTA.SourceSynthesisCurrentInitialIdentityPrefix.accepted_initial_identity_prefix

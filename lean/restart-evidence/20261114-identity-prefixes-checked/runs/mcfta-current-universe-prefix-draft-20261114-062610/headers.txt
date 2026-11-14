@@ -1,0 +1,24 @@
+theorem relevantRows_induction (P : Expression → Prop) (closed : Closed P)
+    (ctx : Context) (contextP : ContextClosed P ctx) (size : Nat)
+    (asArgument : Bool) (names : List String) (rows : List Expression)
+    (returned : relevantRows ctx asArgument size names = .ok rows) :
+    ∀ row ∈ rows, P row
+
+private theorem context_closed (lib : Library) (query : Query) :
+    ContextClosed (OverUniverse (SourceSynthesisCurrentContext.context lib query).types)
+      (SourceSynthesisCurrentContext.context lib query)
+
+private theorem bind_ok {Error Input Output : Type} (action : Except Error Input)
+    (next : Input → Except Error Output) (value : Output)
+    (returned : (action >>= next) = .ok value) :
+    ∃ input, action = .ok input ∧ next input = .ok value
+
+private theorem mapM_preserves {Error Input Output : Type} (P : Output → Prop)
+    (action : Input → Except Error Output) (inputs : List Input) (outputs : List Output)
+    (checked : ∀ input output, action input = .ok output → P output)
+    (returned : inputs.mapM action = .ok outputs) : ∀ output ∈ outputs, P output
+
+private theorem firstOrderRaw_overUniverse (lib : Library) (query : Query) (signed : Int)
+    (expression : Expression)
+    (returned : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok expression) :
+    OverUniverse (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query)) expression

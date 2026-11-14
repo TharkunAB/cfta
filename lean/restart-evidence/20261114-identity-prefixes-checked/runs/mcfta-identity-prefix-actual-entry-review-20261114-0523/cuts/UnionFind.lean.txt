@@ -1,0 +1,33 @@
+=== lean/MicroCFTA/UnionFind.lean ORIGINAL LINES 108-130 ===
+108:   representative : Nat
+109:   size : Nat
+110:   forest : Forest
+111: 
+112: /-- Execute the Haskell lookup with an explicit finite recursion bound. -/
+113: def findRoot : Nat → Forest → Nat → Option Result
+114:   | 0, _, _ => none
+115:   | fuel + 1, forest, uv =>
+116:     match forest uv with
+117:     | none => some ⟨uv, 1, put forest uv (.root 1)⟩
+118:     | some (.root size) => some ⟨uv, size, forest⟩
+119:     | some (.parent next) => do
+120:       let found ← findRoot fuel forest next
+121:       some {found with forest := put found.forest uv (.parent found.representative)}
+122: 
+123: /-- Every successful lookup follows an original path and preserves all original paths. -/
+124: theorem findRoot_correct (fuel : Nat) (forest : Forest) (uv : Nat) (found : Result)
+125:     (result : findRoot fuel forest uv = some found) :
+126:     Reaches forest uv found.representative found.size ∧
+127:       (∀ {other root count}, Reaches forest other root count → Reaches found.forest other root count) := by
+128:   induction fuel generalizing forest uv found with
+129:   | zero => simp [findRoot] at result
+130:   | succ fuel ih =>
+=== lean/MicroCFTA/UnionFind.lean ORIGINAL LINES 428-435 ===
+428: def withInitialValues (variables : List Nat) : Forest :=
+429:   fun uv => if uv ∈ variables then some (.root 1) else none
+430: 
+431: @[simp] theorem read_empty (uv : Nat) : read empty uv = .root 1 := rfl
+432: 
+433: @[simp] theorem read_initial (variables : List Nat) (uv : Nat) :
+434:     read (withInitialValues variables) uv = .root 1 := by
+435:   simp only [read, withInitialValues]

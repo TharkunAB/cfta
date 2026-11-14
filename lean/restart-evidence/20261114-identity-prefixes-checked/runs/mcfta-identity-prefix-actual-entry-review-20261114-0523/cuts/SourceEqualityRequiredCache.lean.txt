@@ -1,0 +1,16 @@
+=== lean/MicroCFTA/SourceEqualityRequiredCache.lean ORIGINAL LINES 19-24 ===
+19: structure Ready (state : State Symbol Guard) : Prop where
+20:   semantic : SemanticHeap state
+21:   covered : Covered [] state
+22:   depth : InternedOpenDepthReadback.Heap state
+23: 
+24: /-- A completed reconstruction retains the full ready cache and both histories. -/
+=== lean/MicroCFTA/SourceEqualityRequiredCache.lean ORIGINAL LINES 45-52 ===
+45: theorem constructed [DecidableEq (EdgeKey Symbol Guard)] (expression : InternedNestedConstruction.Syntax Symbol Guard)
+46:     (value : Value Symbol Guard) (state : State Symbol Guard)
+47:     (built : InternedFreshOrdinaryConstruction.build expression [] empty = .done value state) : Ready state := by
+48:   refine ⟨SourceRecursiveIntersectionSemanticHeap.constructed expression value state built,
+49:     InternedFreshOrdinaryCoverage.closed_covered expression value state built, ?_⟩
+50:   simpa only [built, InternedNestedConstruction.Outcome.state] using InternedOpenDepthExecution.closed_heap expression
+51: 
+52: /-- Actual edge rebuilding retains all invariants and the exact ordered child payload. -/

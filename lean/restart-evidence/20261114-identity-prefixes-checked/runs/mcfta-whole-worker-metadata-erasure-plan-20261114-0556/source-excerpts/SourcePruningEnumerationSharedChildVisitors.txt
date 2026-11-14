@@ -1,0 +1,78 @@
+-- lean/MicroCFTA/SourcePruningEnumerationSharedChildVisitors.lean: 28-104
+28: variable {width : Nat} {Output : Type u} {Reason : Type v}
+29: local notation "Visitor" => List Suspended → Node → Caller width → Cached → Queries →
+30:   (Fragment → Caller width → Queries → Cached → Result Output Reason width) →
+31:   (Observation width → Option Cached → Result Output Reason width) → Result Output Reason width
+32: 
+33: /-- Invoke the remaining children inside each actual child success callback. -/
+34: noncomputable def visitChildren
+35:     (visit : Visitor)
+36:     (done : List Fragment → Caller width → Queries → Cached → Result Output Reason width)
+37:     (stopped : List Fragment → Observation width → Option Cached → Result Output Reason width) :
+38:     List (Node × List Suspended) → Caller width → Cached → Queries → Result Output Reason width
+39:   | [], caller, before, queries => done [] caller queries before
+40:   | (value, bucket) :: rest, caller, before, queries =>
+41:       visit bucket value caller before queries
+42:         (fun fragment reached saved after =>
+43:           visitChildren visit
+44:             (fun fragments => done (fragment :: fragments))
+45:             (fun completed => stopped (fragment :: completed)) rest reached after saved)
+46:         (fun observation candidate => stopped [] observation candidate)
+47: 
+48: /-- Execute the actual own-class prefix and retain every selected-edge receipt. -/
+49: noncomputable def visitSelected
+50:     (visit : Visitor) (consume : Receipt width → Result Output Reason width)
+51:     (scs : List Suspended) (edge : Edge) (caller : Caller width) (before : Cached) (queries : Queries) :
+52:     Result Output Reason width :=
+53:   match SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs edge before with
+54:   | none => consume .unhandled
+55:   | some [] => consume (.rejected caller queries before)
+56:   | some [((symbol, staged, residual), middle)] =>
+57:       visitChildren visit
+58:         (fun fragments reached saved after =>
+59:           let fragment := Fragments.Fragment.node symbol fragments
+60:           consume (.complete fragment reached saved (SelectedEdge.finish residual fragment after)))
+61:         (fun completed observation candidate => consume (.stopped completed observation candidate))
+62:         (staged.map (fun input => (input.1, input.2.1))) caller middle queries
+63:   | _ => consume .unhandled
+64: 
+65: private def finishReceipt
+66:     (hook : Fragment → Caller width → Queries → Cached → HookResult Output Reason width)
+67:     (caller : Caller width) (queries : Queries) (receipt : Receipt width) : Result Output Reason width :=
+68:   match receipt with
+69:   | .complete fragment reached saved after =>
+70:       match hook fragment reached saved after with
+71:       | .stopped outputs reason reachedEndpoint =>
+72:           .stopped [] outputs (.continuation receipt reason reachedEndpoint)
+73:       | .complete outputs finalCaller finalQueries => .complete [receipt] outputs finalCaller finalQueries
+74:   | other =>
+75:       match advance other with
+76:       | none => .stopped [] [] (.edge (some other) (endpoint other caller queries))
+77:       | some (reached, saved) => .complete [other] [] reached saved
+78: 
+79: /-- Finalize only the captured selected target and retain the exact hook outcome. -/
+80: noncomputable def visitCapturedWith
+81:     (visit : Visitor)
+82:     (hook : Fragment → Caller width → Queries → Cached → HookResult Output Reason width)
+83:     (k target : Nat) (scs : List Suspended) (edge : Edge)
+84:     (caller : Caller width) (queries : Queries) (before : Cached) : Result Output Reason width :=
+85:   visitSelected visit (fun receipt =>
+86:     match receipt with
+87:     | .complete fragment reached saved after =>
+88:         match SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap k target fragment after with
+89:         | some finished => finishReceipt hook caller queries (.complete fragment reached saved finished)
+90:         | none => finishReceipt hook caller queries (.finalizeStopped fragment reached saved after)
+91:     | other => finishReceipt hook caller queries other) scs edge caller before queries
+92: 
+93: variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+94: 
+95: /-- Execute the existing shallow dispatch and invoke the matching actual callback. -/
+96: noncomputable def shallowVisit
+97:     (checkEmpty : Bool) (r n p h k : Nat)
+98:     (scs : List Suspended) (incoming : Node) (caller : Caller width) (before : Cached) (queries : Queries)
+99:     (done : Fragment → Caller width → Queries → Cached → Result Output Reason width)
+100:     (stopped : Observation width → Option Cached → Result Output Reason width) : Result Output Reason width :=
+101:   match ChildDispatch.run checkEmpty r n p h k scs incoming caller before queries with
+102:   | ((.ok (some [.ok (fragment, _returned)]), reached, saved, _outer, _waiting), some after) =>
+103:       done fragment reached saved after
+104:   | (observation, candidate) => stopped observation candidate

@@ -1,0 +1,10 @@
+=== lean/MicroCFTA/SourceCurrentAllocatedPartialInitialization.lean ORIGINAL LINES 40-48 ===
+40: def caller (width : Nat) (cache : Cache.State Key) (heap : State Symbol Guard) : Caller width :=
+41:   SourceCurrentAllocatedPartialState.initial (checked width cache heap)
+42:     SourceCurrentMemoMergeGraph.empty SourceCurrentEmptinessMemo.empty
+43: 
+44: /-- The three global memo families start with no saved entries. -/
+45: def globals : EndpointMemoGateTrace.Memos :=
+46:   ⟨InternedFreshOrdinaryUnfoldMemo.empty, SourceEndpointMemo.empty⟩
+47: 
+48: /-- Empty allocation returns a live value with exactly the empty payload. -/

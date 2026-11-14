@@ -1,0 +1,60 @@
+-- lean/MicroCFTA/SourcePruningEnumerationSharedPreparedRecursive.lean: 30-88
+30: /-- Use the same output fields as the shared ordinary driver. -/
+31: abbrev Output (width : Nat) (Typing : Type) := SourcePruningEnumerationSharedRecursive.Output width Typing
+32: local notation "Preparation" => SourcePruningEnumerationSharedPreparedContinuations.Preparation
+33: local notation "CallbackRaw" => fun Typing => List (Except EnumerationState.Error ((Bool × Metadata Typing) × Core))
+34: 
+35: /-- Retain the exact bounded or unsupported observation that prevents continuation. -/
+36: inductive Failure (width : Nat) (Typing : Type) : Type 1 where
+37:   /-- The recursive budget does not permit the selected expansion. -/
+38:   | exhausted (uv : Nat) (metadata : Metadata Typing) (before : Cached)
+39:   /-- The actual selected prefix cannot supply a supported continuation. -/
+40:   | selected (uv : Nat) (observed : SourcePruningEnumerationSelectedStep.Result width Typing)
+41:   /-- The actual fragment callback does not return a singleton success. -/
+42:   | callback (uv : Nat) (raw : CallbackRaw Typing)
+43:   /-- Preparation retains its complete entry and native result, including a fault heap. -/
+44:   | preparation (uv : Nat) (raw : Preparation)
+45:   /-- Retain the processed alternatives and their exact edge or recursive stop. -/
+46:   | alternatives (uv : Nat) (processed : List (Receipt width))
+47:       (current : FoldStop (Failure width Typing) width)
+48: 
+49: variable {Typing Key : Type} {width : Nat}
+50: local notation "Result" => HookResult (Output width Typing) (Failure width Typing) width
+51: 
+52: /-- Read only a native endpoint supplied by the actual stopped receipt. -/
+53: def endpoint : FoldStop (Failure width Typing) width → Option (Caller width × Queries)
+54:   | .edge _ reached => some reached
+55:   | .continuation _ _ reached => reached
+56: 
+57: /-- Every edge stop keeps the actual known endpoint carried by that stop. -/
+58: theorem endpoint_edge (current : Option (Receipt width)) (reached : Caller width × Queries) :
+59:     endpoint (Typing := Typing) (.edge current reached) = some reached := rfl
+60: 
+61: /-- Convert the ordered alternative result without losing its outputs or stopped receipts. -/
+62: def finish (uv : Nat) : Fold (Output width Typing) (Failure width Typing) width → Result
+63:   | .complete _processed outputs caller queries => .complete outputs caller queries
+64:   | .stopped processed outputs current =>
+65:       .stopped outputs (.alternatives uv processed current) (endpoint current)
+66: 
+67: /-- A stopped fold retains its processed receipts, reason, outputs and endpoint. -/
+68: theorem finish_stopped (uv : Nat) (processed : List (Receipt width))
+69:     (outputs : List (Output width Typing)) (current : FoldStop (Failure width Typing) width) :
+70:     finish uv (.stopped processed outputs current) =
+71:       .stopped outputs (.alternatives uv processed current) (endpoint current) := rfl
+72: 
+73: /-- Run the concrete Left callback once before its own recursive continuation. -/
+74: noncomputable def continueWith
+75:     (recur : Metadata Typing → Caller width → Queries → Cached → Option Next → Result)
+76:     (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+77:     (stop : Option (Metadata Typing → Nat → Bool))
+78:     (order : Metadata Typing → List Nat → Option Nat)
+79:     (callbackFuel : Nat) (metadata : Metadata Typing) (uv : Nat)
+80:     (fragment : Fragment) (caller : Caller width) (queries : Queries) (before : Cached) : Result :=
+81:   let raw := ExceptT.run (SourcePruningRecordTypes.recordTypes
+82:     graph templates callbackFuel metadata uv (.inl fragment) before.core)
+83:   match raw with
+84:   | [.ok ((true, _updated), _observed)] => .complete [] caller queries
+85:   | [.ok ((false, updated), observed)] =>
+86:       let after := EnumerationExpandableIndex.frame observed before
+87:       recur updated caller queries after (SourcePruningEnumerationRestart.decision stop order updated after)
+88:   | _ => .stopped [] (.callback uv raw) (some (caller, queries))

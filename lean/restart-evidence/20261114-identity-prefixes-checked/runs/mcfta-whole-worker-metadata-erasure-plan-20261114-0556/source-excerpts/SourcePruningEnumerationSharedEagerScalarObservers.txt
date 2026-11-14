@@ -1,0 +1,15 @@
+-- lean/MicroCFTA/SourcePruningEnumerationSharedEagerScalarObservers.lean: 260-273
+260: omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node] in
+261: private theorem scan_congr (left right : Edge → Caller width → Queries → Cached → Fold)
+262:     (before : Cached) (edges : List Edge)
+263:     (same : ∀ edge ∈ edges, ∀ caller queries, left edge caller queries before = right edge caller queries before)
+264:     (caller : Caller width) (queries : Queries) :
+265:     scan left before edges caller queries = scan right before edges caller queries := by
+266:   induction edges generalizing caller queries with
+267:   | nil => rfl
+268:   | cons edge rest ih =>
+269:       simp only [scan, same edge List.mem_cons_self caller queries]
+270:       cases observed : right edge caller queries before with
+271:       | stopped processed outputs current => rfl
+272:       | complete processed outputs reached saved =>
+273:           simp only [ih (fun chosen member => same chosen (List.mem_cons_of_mem _ member)) reached saved]

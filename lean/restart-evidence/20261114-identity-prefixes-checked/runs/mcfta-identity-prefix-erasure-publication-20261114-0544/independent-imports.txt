@@ -1,0 +1,30 @@
+@MicroCFTA.SourcePruningEnumerationIdentityPrefixMetadataErasure.runPrefix_identity_metadata_erasure : ∀ {width : Nat}
+  {Typing : Type}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (graph :
+    MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol))
+  (order : List Nat → Option Nat) (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (unitMetadata : MicroCFTA.SourcePruningRecordTypes.Metadata Unit)
+  (readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv : Nat)
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (queries : MicroCFTA.SourceEndpointMemo.Memos),
+  MicroCFTA.SourcePruningEnumerationIdentityPrefixMetadataErasure.erasePrefix
+      (MicroCFTA.SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
+        (fun x x_1 x_2 value heap => MicroCFTA.MergedSourceComparison.Result.done value heap) graph templates none
+        (fun x candidates => order candidates) metadata readFuel checkFuel nativeFuel representativeFuel indexFuel
+        callbackFuel uv caller before queries) =
+    MicroCFTA.SourcePruningEnumerationIdentityPrefixMetadataErasure.erasePrefix
+      (MicroCFTA.SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
+        (fun x x_1 x_2 value heap => MicroCFTA.MergedSourceComparison.Result.done value heap) graph templates none
+        (fun x candidates => order candidates) unitMetadata readFuel checkFuel nativeFuel representativeFuel indexFuel
+        callbackFuel uv caller before queries)
+'MicroCFTA.SourcePruningEnumerationIdentityPrefixMetadataErasure.runPrefix_identity_metadata_erasure' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

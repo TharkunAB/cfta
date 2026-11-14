@@ -1,0 +1,70 @@
+-- lean/MicroCFTA/SourcePruningEnumerationIdentityPrefixMetadataErasure.lean: 1-69
+1: import MicroCFTA.SourcePruningEnumerationSelectedStep
+2: 
+3: set_option autoImplicit false
+4: 
+5: /-!
+6: # Metadata erasure in the actual identity-selected prefix
+7: 
+8: The projection preserves every field except metadata.
+9: It covers the selected prefix at the same actual inputs and fuels.
+10: It does not cover an eager worker or a Haskell execution.
+11: -/
+12: namespace MicroCFTA.SourcePruningEnumerationIdentityPrefixMetadataErasure
+13: open EnumerationState InternedConstructorTemplates
+14: open SourcePruningEnumerationNodes
+15: open SourcePruningEnumerationSelectedStep (Result runPrefixWithNarrow)
+16: local notation "Symbol" => SourcePruningTemplates.Symbol
+17: local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+18: local notation "Node" => Value Symbol Constraint
+19: local notation "NativeHeap" => InternedConstructorTemplates.State Symbol Constraint
+20: local notation "Core" => EnumerationState.State Symbol Constraint
+21: local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+22: local notation "Caller" => SourceCurrentAllocatedPartialState.State
+23: local notation "Queries" => SourceEndpointMemo.Memos
+24: local notation "Metadata" => SourcePruningRecordTypes.Metadata
+25: variable {width : Nat}
+26: 
+27: /-- Replace metadata with the canonical Unit record. -/
+28: def eraseMetadata {Typing : Type} (_metadata : Metadata Typing) : Metadata Unit :=
+29:   ⟨[], [], [], ()⟩
+30: 
+31: /-- Erase metadata in the existing prefix result and retain every other field. -/
+32: def erasePrefix {Typing : Type} : Result width Typing → Result width Unit
+33:   | .stopped read checked => .stopped read checked
+34:   | .parked checked candidate raw =>
+35:       .parked checked candidate (raw.map fun rows => rows.map fun
+36:         | .error fault => .error fault
+37:         | .ok ((metadata, next), after) => .ok ((eraseMetadata metadata, next), after))
+38:   | .narrowed checked prepared caller queries action candidate right ordinary =>
+39:       .narrowed checked prepared caller queries action candidate
+40:         (right.map fun rows => rows.map fun
+41:           | .error fault => .error fault
+42:           | .ok ((flag, metadata), after) => .ok ((flag, eraseMetadata metadata), after)) ordinary
+43: 
+44: /-- Identity preparation does not inspect metadata. -/
+45: private theorem prepare_identity_metadata {Typing : Type}
+46:     (metadata : Metadata Typing) (unitMetadata : Metadata Unit)
+47:     (nativeFuel representativeFuel uv oldHandle : Nat) (scs : List Suspended)
+48:     (oldValue : Node) (heap : NativeHeap) :
+49:     SourcePruningEnumerationAction.prepareWithNarrow (EnumGuard := Constraint)
+50:       (fun _ _ _ value heap => .done value heap) metadata nativeFuel representativeFuel
+51:       uv oldHandle scs oldValue heap =
+52:     SourcePruningEnumerationAction.prepareWithNarrow (EnumGuard := Constraint)
+53:       (fun _ _ _ value heap => .done value heap) unitMetadata nativeFuel representativeFuel
+54:       uv oldHandle scs oldValue heap := rfl
+55: 
+56: /-- Identity prefixes have the same erased observation at the same actual inputs. -/
+57: theorem runPrefix_identity_metadata_erasure {Typing : Type}
+58:     [DecidableEq (EdgeKey Symbol Constraint)]
+59:     (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+60:     (order : List Nat → Option Nat)
+61:     (metadata : Metadata Typing) (unitMetadata : Metadata Unit)
+62:     (readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv : Nat)
+63:     (caller : Caller width) (before : Cached) (queries : Queries) :
+64:     erasePrefix (runPrefixWithNarrow (fun _ _ _ value heap => .done value heap)
+65:       graph templates none (fun _ candidates => order candidates) metadata
+66:       readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv caller before queries) =
+67:     erasePrefix (runPrefixWithNarrow (fun _ _ _ value heap => .done value heap)
+68:       graph templates none (fun _ candidates => order candidates) unitMetadata
+69:       readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv caller before queries) := by

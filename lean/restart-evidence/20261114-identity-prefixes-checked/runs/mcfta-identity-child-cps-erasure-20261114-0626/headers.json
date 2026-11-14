@@ -1,0 +1,50 @@
+[
+  {
+    "name": "visitChildren_transport",
+    "start_line": 38,
+    "header": "theorem visitChildren_transport {Typing : Type} (left : Visitor Typing) (right : Visitor Unit)\n    (transport : \u2200 scs incoming current cache memos yes no,\n      eraseFold (left scs incoming current cache memos yes no) =\n        right scs incoming current cache memos\n          (fun fragment reached saved after => eraseFold (yes fragment reached saved after))\n          (fun observation candidate => eraseFold (no observation candidate)))\n    (inputs : List (Node \u00d7 List Suspended))\n    (done : List Fragment \u2192 Caller width \u2192 Queries \u2192 Cached \u2192 FoldFor Typing)\n    (stopped : List Fragment \u2192 Observation width \u2192 Option Cached \u2192 FoldFor Typing)\n    (caller : Caller width) (before : Cached) (queries : Queries) :\n    eraseFold (visitChildren left done stopped inputs caller before queries) =\n      visitChildren right\n        (fun fragments reached saved after => eraseFold (done fragments reached saved after))\n        (fun completed observation candidate => eraseFold (stopped completed observation candidate))\n        inputs caller before queries := by",
+    "header_sha256": "d0dbd92b26fd8126f6075e36339543e27c1b853c29f8c283cdab707455de656d"
+  },
+  {
+    "name": "visitSelected_transport",
+    "start_line": 66,
+    "header": "theorem visitSelected_transport {Typing : Type} (left : Visitor Typing) (right : Visitor Unit)\n    (transport : \u2200 scs incoming current cache memos yes no,\n      eraseFold (left scs incoming current cache memos yes no) =\n        right scs incoming current cache memos\n          (fun fragment reached saved after => eraseFold (yes fragment reached saved after))\n          (fun observation candidate => eraseFold (no observation candidate)))\n    (consume : Receipt width \u2192 FoldFor Typing)\n    (scs : List Suspended) (edge : Edge) (caller : Caller width) (before : Cached) (queries : Queries) :\n    eraseFold (visitSelected left consume scs edge caller before queries) =\n      visitSelected right (fun receipt => eraseFold (consume receipt)) scs edge caller before queries := by",
+    "header_sha256": "07cb5431b148369485ba15f9752d95dc3ac8020f270d330eb2ba04a770b5d6aa"
+  },
+  {
+    "name": "shallowVisit_erasure",
+    "start_line": 92,
+    "header": "theorem shallowVisit_erasure {Typing : Type}\n    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]\n    (checkEmpty : Bool) (r n p h k : Nat) (scs : List Suspended) (incoming : Node)\n    (caller : Caller width) (before : Cached) (queries : Queries)\n    (done : Fragment \u2192 Caller width \u2192 Queries \u2192 Cached \u2192 FoldFor Typing)\n    (stopped : Observation width \u2192 Option Cached \u2192 FoldFor Typing) :\n    eraseFold (shallowVisit checkEmpty r n p h k scs incoming caller before queries done stopped) =\n      shallowVisit checkEmpty r n p h k scs incoming caller before queries\n        (fun fragment reached saved after => eraseFold (done fragment reached saved after))\n        (fun observation candidate => eraseFold (stopped observation candidate)) := by",
+    "header_sha256": "e93cb1dbe95721edf1569d292ac0f6f805d502457cc009880f256306505267ce"
+  },
+  {
+    "name": "consumeSelected_erasure",
+    "start_line": 125,
+    "header": "theorem consumeSelected_erasure {Typing : Type}\n    (done : Fragment \u2192 Caller width \u2192 Queries \u2192 Cached \u2192 FoldFor Typing)\n    (caller : Caller width) (queries : Queries) (receipt : Receipt width) :\n    eraseFold (consumeSelected done caller queries receipt) =\n      consumeSelected\n        (fun fragment reached saved after => eraseFold (done fragment reached saved after))\n        caller queries receipt := by",
+    "header_sha256": "55cef4eb7acca45c44251f7e04bde0e10f9b0364cfb65c451713a86957c6733d"
+  },
+  {
+    "name": "visitCapturedWith_transport",
+    "start_line": 144,
+    "header": "theorem visitCapturedWith_transport {Typing : Type} (left : Visitor Typing) (right : Visitor Unit)\n    (transport : \u2200 scs incoming current cache memos yes no,\n      eraseFold (left scs incoming current cache memos yes no) =\n        right scs incoming current cache memos\n          (fun fragment reached saved after => eraseFold (yes fragment reached saved after))\n          (fun observation candidate => eraseFold (no observation candidate)))\n    (hook : Fragment \u2192 Caller width \u2192 Queries \u2192 Cached \u2192 HookFor Typing)\n    (k target : Nat) (scs : List Suspended) (edge : Edge)\n    (caller : Caller width) (queries : Queries) (before : Cached) :\n    eraseFold (visitCapturedWith left hook k target scs edge caller queries before) =\n      visitCapturedWith right\n        (fun fragment reached saved after => eraseResult (hook fragment reached saved after))\n        k target scs edge caller queries before := by",
+    "header_sha256": "223af155062e4d1bfee29b2c56c89b0127e073009521e10c0483f475039ef89b"
+  },
+  {
+    "name": "eagerChild_erasure",
+    "start_line": 177,
+    "header": "theorem eagerChild_erasure {Typing : Type}\n    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]\n    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node \u2192 List Edge)\n    (scs : List Suspended) (incoming : Node) (caller : Caller width) (before : Cached) (queries : Queries)\n    (done : Fragment \u2192 Caller width \u2192 Queries \u2192 Cached \u2192 FoldFor Typing)\n    (stopped : Observation width \u2192 Option Cached \u2192 FoldFor Typing) :\n    eraseFold (eagerChild checkEmpty r n p h k edgesOf scs incoming caller before queries done stopped) =\n      eagerChild checkEmpty r n p h k edgesOf scs incoming caller before queries\n        (fun fragment reached saved after => eraseFold (done fragment reached saved after))\n        (fun observation candidate => eraseFold (stopped observation candidate)) := by",
+    "header_sha256": "23ffadc4b286e8596ec9c956688b5c65ef7af6de8c3b7fe17e26cac2c1f5c61a"
+  },
+  {
+    "name": "runWithChild_transport",
+    "start_line": 240,
+    "header": "theorem runWithChild_transport {Typing : Type}\n    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]\n    (left : Visitor Typing) (right : Visitor Unit)\n    (transport : \u2200 scs incoming current cache memos yes no,\n      eraseFold (left scs incoming current cache memos yes no) =\n        right scs incoming current cache memos\n          (fun fragment reached saved after => eraseFold (yes fragment reached saved after))\n          (fun observation candidate => eraseFold (no observation candidate)))\n    (hook : Fragment \u2192 Caller width \u2192 Queries \u2192 Cached \u2192 HookFor Typing)\n    (checkEmpty : Bool) (entryFuel nativeFuel r n p h k uv : Nat)\n    (edgesOf : Node \u2192 List Edge) (caller : Caller width) (before : Cached) (queries : Queries) :\n    let actual := SourcePruningEnumerationSharedPreparedChildPolicy.runWithChild left hook\n      checkEmpty entryFuel nativeFuel r n p h k uv edgesOf caller before queries\n    (actual.1, actual.2.map eraseFold) =\n      SourcePruningEnumerationSharedPreparedChildPolicy.runWithChild right\n        (fun fragment reached saved after => eraseResult (hook fragment reached saved after))\n        checkEmpty entryFuel nativeFuel r n p h k uv edgesOf caller before queries := by",
+    "header_sha256": "b226e9a6267e456c0f2ea8cea7e36459d76af575789f979e80159d059a420bac"
+  },
+  {
+    "name": "prepared_erasure",
+    "start_line": 307,
+    "header": "theorem prepared_erasure {Typing : Type}\n    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]\n    (hook : Fragment \u2192 Caller width \u2192 Queries \u2192 Cached \u2192 HookFor Typing)\n    (checkEmpty : Bool) (entryFuel nativeFuel r n p h k uv : Nat)\n    (edgesOf : Node \u2192 List Edge) (caller : Caller width) (before : Cached) (queries : Queries) :\n    let actual := SourcePruningEnumerationSharedPreparedChildPolicy.runEager hook\n      checkEmpty entryFuel nativeFuel r n p h k uv edgesOf caller before queries\n    (actual.1, actual.2.map eraseFold) =\n      SourcePruningEnumerationSharedPreparedChildPolicy.runEager\n        (fun fragment reached saved after => eraseResult (hook fragment reached saved after))\n        checkEmpty entryFuel nativeFuel r n p h k uv edgesOf caller before queries := by",
+    "header_sha256": "670680fe35126fd83fd79bc444d7c4bc06121415251700accad37d8b5382feed"
+  }
+]

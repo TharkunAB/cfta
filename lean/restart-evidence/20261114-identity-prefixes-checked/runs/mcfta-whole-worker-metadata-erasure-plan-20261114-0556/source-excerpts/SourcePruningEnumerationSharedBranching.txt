@@ -1,0 +1,15 @@
+-- lean/MicroCFTA/SourcePruningEnumerationSharedBranching.lean: 28-41
+28: /-- Execute ordered row visitors with branch-local caches and shared native endpoints. -/
+29: noncomputable def scan
+30:     (visit : Edge → Caller width → Queries → Cached → Result Output Reason width)
+31:     (before : Cached) : List Edge → Caller width → Queries → Result Output Reason width
+32:   | [], caller, queries => .complete [] [] caller queries
+33:   | edge :: rest, caller, queries =>
+34:       match visit edge caller queries before with
+35:       | .stopped processed outputs current => .stopped processed outputs current
+36:       | .complete processed outputs reached saved =>
+37:           match scan visit before rest reached saved with
+38:           | .complete later remaining finalCaller finalQueries =>
+39:               .complete (processed ++ later) (outputs ++ remaining) finalCaller finalQueries
+40:           | .stopped later remaining current =>
+41:               .stopped (processed ++ later) (outputs ++ remaining) current

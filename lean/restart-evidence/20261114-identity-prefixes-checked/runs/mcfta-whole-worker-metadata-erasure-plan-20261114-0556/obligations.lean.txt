@@ -1,0 +1,77 @@
+-- Proposed theorem interfaces. No theorem bodies or checked claims in this file.
+-- These interfaces use the pure projections in the accompanying draft module.
+import MicroCFTA.SourcePruningEnumerationIdentityResultMetadataErasure
+
+set_option autoImplicit false
+namespace MicroCFTA.SourcePruningEnumerationIdentityResultMetadataErasure
+open EnumerationState InternedConstructorTemplates
+open SourcePruningEnumerationSharedPreparedRecursive (Output Failure)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Edge" => EdgeValue Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Observation" => SourcePruningEnumerationSharedSelectedContinuations.ChildDispatch.Observation
+local notation "Hook" => SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.HookResult
+local notation "Fold" => SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result
+variable {width : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+theorem eagerChild_erasure {Typing : Type}
+    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List Edge)
+    (scs : List Suspended) (incoming : Node) (caller : Caller width) (before : Cached) (queries : Queries)
+    (done : Fragment → Caller width → Queries → Cached →
+      Fold (Output width Typing) (Failure width Typing) width)
+    (stopped : Observation width → Option Cached →
+      Fold (Output width Typing) (Failure width Typing) width) :
+    eraseFold (SourcePruningEnumerationSharedEagerChildren.eagerChild
+      checkEmpty r n p h k edgesOf scs incoming caller before queries done stopped) =
+    SourcePruningEnumerationSharedEagerChildren.eagerChild
+      checkEmpty r n p h k edgesOf scs incoming caller before queries
+      (fun fragment reached saved after => eraseFold (done fragment reached saved after))
+      (fun observation candidate => eraseFold (stopped observation candidate))
+
+
+theorem prepared_erasure {Typing : Type}
+    (hook : Fragment → Caller width → Queries → Cached →
+      Hook (Output width Typing) (Failure width Typing) width)
+    (checkEmpty : Bool) (entryFuel nativeFuel r n p h k uv : Nat)
+    (edgesOf : Node → List Edge) (caller : Caller width) (before : Cached) (queries : Queries) :
+    let actual := SourcePruningEnumerationSharedPreparedChildPolicy.runEager hook
+      checkEmpty entryFuel nativeFuel r n p h k uv edgesOf caller before queries
+    (actual.1, actual.2.map eraseFold) =
+      SourcePruningEnumerationSharedPreparedChildPolicy.runEager
+        (fun fragment reached saved after => eraseResult (hook fragment reached saved after))
+        checkEmpty entryFuel nativeFuel r n p h k uv edgesOf caller before queries
+
+
+theorem resume_identity_metadata_erasure {Typing : Type}
+    (graph : Graph Symbol Constraint) (checkEmpty : Bool) (edgesOf : Node → List Edge)
+    (workFuel recursiveFuel : Nat) (metadata : Metadata Typing) (unitMetadata : Metadata Unit)
+    (caller : Caller width) (queries : Queries) (before : Cached) (decision : Option Next) :
+    eraseResult (SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow
+      (SourcePruningEnumerationSharedEagerChildren.eagerChild
+        checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
+      (fun _ _ _ value heap => .done value heap) graph [] checkEmpty edgesOf
+      none (fun _ _ => none) workFuel recursiveFuel metadata caller queries before decision) =
+    eraseResult (SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow
+      (SourcePruningEnumerationSharedEagerChildren.eagerChild
+        checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
+      (fun _ _ _ value heap => .done value heap) graph [] checkEmpty edgesOf
+      none (fun _ _ => none) workFuel recursiveFuel unitMetadata caller queries before decision)
+
+
+theorem runEager_identity_metadata_erasure {Typing : Type}
+    (graph : Graph Symbol Constraint) (checkEmpty : Bool) (edgesOf : Node → List Edge)
+    (workFuel recursiveFuel : Nat) (metadata : Metadata Typing) (unitMetadata : Metadata Unit)
+    (caller : Caller width) (queries : Queries) (before : Cached) :
+    eraseResult (SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.runEagerWithNarrow
+      (fun _ _ _ value heap => .done value heap) graph [] checkEmpty edgesOf
+      none (fun _ _ => none) workFuel recursiveFuel metadata caller queries before) =
+    eraseResult (SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.runEagerWithNarrow
+      (fun _ _ _ value heap => .done value heap) graph [] checkEmpty edgesOf
+      none (fun _ _ => none) workFuel recursiveFuel unitMetadata caller queries before)

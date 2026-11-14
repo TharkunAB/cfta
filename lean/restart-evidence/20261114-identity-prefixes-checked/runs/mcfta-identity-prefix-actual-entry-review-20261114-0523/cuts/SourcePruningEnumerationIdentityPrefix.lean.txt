@@ -1,0 +1,122 @@
+=== lean/MicroCFTA/SourcePruningEnumerationIdentityPrefix.lean ORIGINAL LINES 1-55 ===
+1: import MicroCFTA.SourcePruningEnumerationSelectedStep
+2: 
+3: set_option autoImplicit false
+4: 
+5: /-!
+6: # Identity narrowing for actual pending reads
+7: 
+8: The preparation law retains the selected value, handle and native heap.
+9: The prefix law retains the actual non-repeated observations and caller advance.
+10: Both laws use the same pending read.
+11: -/
+12: 
+13: namespace MicroCFTA.SourcePruningEnumerationAction
+14: open EnumerationState EnumerationCorrectness EnumerationCompressionFrame
+15: open InternedConstructorTemplates InternedProbeProvenance
+16: open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+17: open SourcePruningRecordTypes (Metadata)
+18: local notation "Symbol" => SourcePruningTemplates.Symbol
+19: variable {EnumGuard NativeGuard Typing : Type}
+20: attribute [local instance] SourcePruningEnumerationAction.actionMonadList
+21: 
+22: /-- Identity preparation retains the actual pending value, handle and native heap. -/
+23: theorem prepare_identity_pending_complete
+24:     (metadata : Metadata Typing)
+25:     (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+26:     (before readAfter entry : EnumerationState.State Symbol EnumGuard)
+27:     (readFuel uv oldHandle : Nat) (scs : List EnumerationState.Suspended)
+28:     (ready : SourceEqualityRequiredCache.Ready heap) (realized : PendingRealized heap before)
+29:     (total : UnionFind.Total before.representatives)
+30:     (observed : Success (getValue readFuel uv) before (.unenumerated (some oldHandle) scs) readAfter)
+31:     (entered : Frame readAfter entry) :
+32:     ∃ oldValue : InternedConstructorTemplates.Value Symbol NativeGuard,
+33:       lookupNode heap oldHandle = some oldValue ∧ encodeNode oldValue = some oldHandle ∧
+34:       Available heap oldValue ∧ oldValue.free = [] ∧
+35:       SourceEqualityRequiredCache.Keeps heap heap ∧
+36:       Frame before readAfter ∧ PendingRealized heap entry ∧
+37:       (EnumerationReferences.PendingReferences before → EnumerationReferences.PendingReferences entry) ∧
+38:       (∀ held, EnumerationReferences.IncomingAvoid held before → EnumerationReferences.IncomingAvoid held entry) ∧
+39:       (oldValue = .empty → ∀ nativeFuel representativeFuel,
+40:         prepareWithNarrow (EnumGuard := EnumGuard) (fun _ _ _ value heap => .done value heap)
+41:           metadata nativeFuel representativeFuel uv oldHandle scs oldValue heap =
+42:             .done (oldValue, some (reject : EnumerateM Symbol EnumGuard Unit)) heap ∧
+43:         ExceptT.run ((reject : EnumerateM Symbol EnumGuard Unit) entry) = []) ∧
+44:       (oldValue ≠ .empty → ∀ nativeFuel representativeFuel,
+45:         prepareWithNarrow (EnumGuard := EnumGuard) (fun _ _ _ value heap => .done value heap)
+46:           metadata nativeFuel representativeFuel uv oldHandle scs oldValue heap =
+47:             .done (oldValue, some (pure () : EnumerateM Symbol EnumGuard Unit)) heap ∧
+48:         ExceptT.run ((pure () : EnumerateM Symbol EnumGuard Unit) entry) = [.ok ((), entry)]) := by
+49:   classical
+50:   obtain ⟨found, _lookup, stored, _readState⟩ :=
+51:     (getValue_success readFuel uv before readAfter (.unenumerated (some oldHandle) scs)).mp observed
+52:   obtain ⟨oldValue, oldDecoded, oldAvailable, oldClosed⟩ :=
+53:     realized found.representative oldHandle scs stored
+54:   have oldEncoded : encodeNode oldValue = some oldHandle := by
+55:     exact SourcePruningEnumerationIdentity.lookup_encode heap oldHandle oldValue
+=== lean/MicroCFTA/SourcePruningEnumerationIdentityPrefix.lean ORIGINAL LINES 85-149 ===
+85: 
+86: 
+87: namespace MicroCFTA.SourcePruningEnumerationSelectedStep
+88: open EnumerationState EnumerationCorrectness EnumerationCompressionFrame
+89: open InternedConstructorTemplates InternedProbeProvenance
+90: open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+91: open SourceCurrentAllocatedQueryMemo (advancePhysical)
+92: local notation "Symbol" => SourcePruningTemplates.Symbol
+93: local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+94: local notation "Node" => Value Symbol Constraint
+95: local notation "Core" => EnumerationState.State Symbol Constraint
+96: local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+97: local notation "Caller" => SourceCurrentAllocatedPartialState.State
+98: local notation "Queries" => SourceEndpointMemo.Memos
+99: local notation "Metadata" => SourcePruningRecordTypes.Metadata
+100: variable {Typing : Type} {width : Nat}
+101: attribute [local instance] SourcePruningEnumerationAction.actionMonadList
+102: 
+103: /-- Identity narrowing retains the exact non-repeated selected prefix. -/
+104: theorem runPrefix_identity_pending
+105:     (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+106:     (stop : Option (Metadata Typing → Nat → Bool))
+107:     (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+108:     (caller : Caller width) (before : Cached) (queries : Queries)
+109:     (readFuel checkFuel uv oldHandle : Nat) (scs : List Suspended)
+110:     (readAfter checked : Core)
+111:     (ready : SourceEqualityRequiredCache.Ready caller.checked.native.machine.heap)
+112:     (realized : PendingRealized caller.checked.native.machine.heap before.core)
+113:     (total : UnionFind.Total before.core.representatives)
+114:     (reading : ExceptT.run (getValue readFuel uv before.core) =
+115:       [.ok (.unenumerated (some oldHandle) scs, readAfter)])
+116:     (checking : ExceptT.run (SourcePruningEnumerationRecursion.checkRepeated
+117:       caller.checked.native.machine.heap checkFuel uv oldHandle scs readAfter) = [.ok (false, checked)])
+118:     (entered : Frame readAfter checked) :
+119:     ∃ oldValue : Node,
+120:       lookupNode caller.checked.native.machine.heap oldHandle = some oldValue ∧
+121:       encodeNode oldValue = some oldHandle ∧
+122:       Available caller.checked.native.machine.heap oldValue ∧ oldValue.free = [] ∧
+123:       (oldValue = .empty → ∀ nativeFuel representativeFuel indexFuel callbackFuel,
+124:         runPrefixWithNarrow (fun _ _ _ value heap => .done value heap)
+125:           graph templates stop order metadata readFuel checkFuel nativeFuel representativeFuel
+126:           indexFuel callbackFuel uv caller before queries =
+127:         .narrowed checked
+128:           (.done (oldValue, some (reject : EnumerateM Symbol Constraint Unit)) caller.checked.native.machine.heap)
+129:           (SourceCurrentAllocatedPartialState.advance caller
+130:             (advancePhysical caller.checked ⟨caller.checked.native.machine.heap, caller.checked.operations⟩)
+131:             caller.fourth caller.merge)
+132:           queries (some []) none none none) ∧
+133:       (oldValue ≠ .empty → ∀ nativeFuel representativeFuel indexFuel callbackFuel,
+134:         runPrefixWithNarrow (fun _ _ _ value heap => .done value heap)
+135:           graph templates stop order metadata readFuel checkFuel nativeFuel representativeFuel
+136:           indexFuel callbackFuel uv caller before queries =
+137:         .narrowed checked
+138:           (.done (oldValue, some (pure () : EnumerateM Symbol Constraint Unit)) caller.checked.native.machine.heap)
+139:           (SourceCurrentAllocatedPartialState.advance caller
+140:             (advancePhysical caller.checked ⟨caller.checked.native.machine.heap, caller.checked.operations⟩)
+141:             caller.fourth caller.merge)
+142:           queries (some [.ok ((), checked)]) (some (EnumerationExpandableIndex.frame checked before))
+143:             (some [.ok ((false, metadata), checked)]) none) := by
+144:   have observed : Success (getValue readFuel uv) before.core
+145:       (.unenumerated (some oldHandle) scs) readAfter := by
+146:     rw [Success, reading]
+147:     exact List.mem_singleton_self _
+148:   obtain ⟨oldValue, decoded, encoded, available, closed, _kept, _firstFrame, _entryRealized,
+149:       _pending, _incoming, emptyBranch, nonemptyBranch⟩ :=

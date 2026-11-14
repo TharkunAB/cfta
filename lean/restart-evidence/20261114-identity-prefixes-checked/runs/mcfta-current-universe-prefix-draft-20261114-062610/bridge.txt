@@ -1,0 +1,8 @@
+/-- The existing row evaluator preserves each closed context property. -/
+theorem relevantRows_induction (P : Expression → Prop) (closed : Closed P)
+    (ctx : Context) (contextP : ContextClosed P ctx) (size : Nat)
+    (asArgument : Bool) (names : List String) (rows : List Expression)
+    (returned : relevantRows ctx asArgument size names = .ok rows) :
+    ∀ row ∈ rows, P row :=
+  relevantRows_closed closed ctx contextP size asArgument names rows returned
+

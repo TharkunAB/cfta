@@ -1,0 +1,15 @@
+=== lean/MicroCFTA/EnumerationIndexSelection.lean ORIGINAL LINES 30-43 ===
+30:     simp
+31:   pure_seq := by intros; simp [Seq.seq, Functor.map, pure]
+32:   bind_pure_comp := by intros; simp [bind, pure, Functor.map, ← List.map_eq_flatMap]
+33:   bind_map := by intros; rfl
+34:   pure_bind := by intros; simp [pure, bind]
+35:   bind_assoc := by intros; exact List.flatMap_assoc
+36: 
+37: /-- The increasing finite view of the cached expandable set uses the allocated slot domain. -/
+38: def candidates (state : Cached Symbol Guard) : List Nat :=
+39:   (List.range state.core.counter).filter state.expandable
+40: 
+41: /-- The finite map's key enumeration contains exactly its stored entries. -/
+42: def WaitingKeys (state : Cached Symbol Guard) (keys : List Nat) : Prop :=
+43:   ∀ uv, uv ∈ keys ↔ state.waiting uv ≠ none

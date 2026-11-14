@@ -1,0 +1,38 @@
+-- lean/MicroCFTA/SourcePruningRecordTypes.lean: 24-32
+24: structure Metadata (Typing : Type) where
+25:   /-- Pending template checks retain order and repeated occurrences. -/
+26:   pending : List (Pending Symbol)
+27:   /-- Raw type-position IDs model the source IntSet observation. -/
+28:   types : List Nat
+29:   /-- Raw open-program IDs use the same source set representation. -/
+30:   openHoles : List Nat
+31:   /-- The caller's typing state is unchanged by recording. -/
+32:   typing : Typing
+
+-- lean/MicroCFTA/SourcePruningRecordTypes.lean: 44-55
+44: /-- Classify fragment holes from the incoming raw current membership. -/
+45: def updatedTypes (metadata : Metadata Typing) (uv : Nat) : Sum (Fragment Symbol) Nat → List Nat
+46:   | .inl fragment => SourcePruningPositions.typePositions (metadata.types.contains uv) fragment metadata.types
+47:   | .inr _ => metadata.types
+48: 
+49: /-- The actual callback updates only the pending checks and type-position set. -/
+50: def recordTypes (graph : Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
+51:     (fuel : Nat) : Oracle Symbol Guard (Metadata Typing) := fun metadata uv input => do
+52:   let types := updatedTypes metadata uv input
+53:   let observed ← if templates.isEmpty then pure (false, metadata.pending)
+54:     else SourcePruningOracle.oracle graph templates fuel metadata.pending uv input
+55:   pure (observed.1, {metadata with pending := observed.2, types := types})
+
+-- lean/MicroCFTA/SourcePruningRecordTypes.lean: 75-86
+75: /-- An empty catalog performs the pure metadata update without an oracle call. -/
+76: theorem recordTypes_empty (graph : Graph Symbol Guard) (fuel : Nat)
+77:     (metadata : Metadata Typing) (uv : Nat) (input : Sum (Fragment Symbol) Nat) :
+78:     recordTypes graph [] fuel metadata uv input =
+79:       pure (false, {metadata with types := updatedTypes metadata uv input}) := by
+80:   rfl
+81: 
+82: /-- Pre-expansion events return the complete original metadata without state reads. -/
+83: theorem recordTypes_inr (graph : Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
+84:     (fuel : Nat) (metadata : Metadata Typing) (uv node : Nat) :
+85:     recordTypes graph templates fuel metadata uv (.inr node) = pure (false, metadata) := by
+86:   cases templates <;> rfl

@@ -1,0 +1,37 @@
+-- PROPOSED PRIVATE HEADER ONLY. UNCOMPILED. No proof is asserted.
+-- Use the existing source names below. Do not add this as a public input gate.
+-- Root must extract the first universe occurrence from the one actual built run.
+
+open MicroCFTA
+open InternedConstructorTemplates InternedProbeProvenance
+open SourceSynthesisTypeSyntax (Library Query allTypes)
+open SourceSynthesisGeneralizeSyntax (Guard top)
+open SourceSynthesisFirstOrderConstruction (Expression)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "ordinarySymbols" => SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+
+private theorem current_build_single_universe
+    [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (heap : State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue heap) :
+    (∀ (key : InternedBinderProtocol.NodeKey)
+      (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+      (body depth ordinary : Value Symbol Guard),
+      heap.nodeRecords key ≠ some (.mu entry body depth ordinary)) ∨
+    ∃ (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+      (body depth ordinary : Value Symbol Guard),
+      heap.nodeRecords (muKey depth ordinary) = some (.mu entry body depth ordinary) ∧
+      Available heap (.mu entry body depth ordinary) ∧
+      (Value.mu entry body depth ordinary).free = [] ∧
+      (∀ later : State Symbol Guard, Grows heap later →
+        InternedFreshOrdinaryConstruction.build
+          (ordinarySymbols ((SourceSynthesisCurrentContext.context lib query).types)) [] later =
+            .done (.mu entry body depth ordinary) later) ∧
+      (∀ (key : InternedBinderProtocol.NodeKey)
+        (other : Cache.Interned InternedBinderProtocol.NodeKey)
+        (otherBody otherDepth otherOrdinary : Value Symbol Guard),
+        heap.nodeRecords key = some (.mu other otherBody otherDepth otherOrdinary) →
+          Value.mu other otherBody otherDepth otherOrdinary = .mu entry body depth ordinary)

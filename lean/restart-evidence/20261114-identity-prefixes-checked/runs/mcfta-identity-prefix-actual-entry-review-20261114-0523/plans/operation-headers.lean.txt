@@ -1,0 +1,75 @@
+-- Proposed operation headers. These declarations have no bodies and are not checked.
+-- Each namespace uses the existing aliases and instances from its owning module.
+namespace MicroCFTA.SourcePruningEnumerationAction
+variable {EnumGuard NativeGuard Typing : Type}
+def prepareWithNarrow
+    (narrow : SourcePruningRecordTypes.Metadata Typing → Nat → Nat →
+      InternedConstructorTemplates.Value SourcePruningTemplates.Symbol NativeGuard →
+      InternedConstructorTemplates.State SourcePruningTemplates.Symbol NativeGuard →
+      MergedSourceComparison.Result SourcePruningTemplates.Symbol NativeGuard
+        (InternedConstructorTemplates.Value SourcePruningTemplates.Symbol NativeGuard))
+    (metadata : SourcePruningRecordTypes.Metadata Typing)
+    (nativeFuel representativeFuel uv oldHandle : Nat)
+    (scs : List EnumerationState.Suspended)
+    (oldValue : InternedConstructorTemplates.Value SourcePruningTemplates.Symbol NativeGuard)
+    (heap : InternedConstructorTemplates.State SourcePruningTemplates.Symbol NativeGuard) :
+    MergedSourceComparison.Result SourcePruningTemplates.Symbol NativeGuard
+      (InternedConstructorTemplates.Value SourcePruningTemplates.Symbol NativeGuard ×
+        Option (EnumerationState.EnumerateM SourcePruningTemplates.Symbol EnumGuard Unit))
+end MicroCFTA.SourcePruningEnumerationAction
+
+namespace MicroCFTA.SourcePruningEnumerationSelectedStep
+-- Symbol, Constraint, Node, Caller, Cached, Queries and Metadata are existing aliases.
+variable {Typing : Type} {width : Nat}
+noncomputable def runPrefixWithNarrow
+    (narrow : Metadata Typing → Nat → Nat → Node →
+      InternedConstructorTemplates.State Symbol Constraint →
+      MergedSourceComparison.Result Symbol Constraint Node)
+    (graph : EnumerationState.Graph Symbol Constraint)
+    (templates : List (Template.Pattern Symbol))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+    (readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv : Nat)
+    (caller : Caller width) (before : Cached) (queries : Queries) : Result width Typing
+end MicroCFTA.SourcePruningEnumerationSelectedStep
+
+namespace MicroCFTA.SourcePruningEnumerationSharedPreparedRecursiveChildPolicy
+-- Result, Visitor and all source aliases have their existing meanings.
+variable {Typing : Type} {width : Nat}
+variable [DecidableEq Symbol] [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)]
+variable [DecidableEq Node]
+noncomputable def resumeWithNarrow
+    (child : Visitor)
+    (narrow : Metadata Typing → Nat → Nat → Node →
+      InternedConstructorTemplates.State Symbol Constraint →
+      MergedSourceComparison.Result Symbol Constraint Node)
+    (graph : EnumerationState.Graph Symbol Constraint)
+    (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List Edge)
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (workFuel : Nat) :
+    Nat → Metadata Typing → Caller width → Queries → Cached → Option EnumerationState.Next → Result
+
+noncomputable def runWithNarrow
+    (child : Visitor)
+    (narrow : Metadata Typing → Nat → Nat → Node →
+      InternedConstructorTemplates.State Symbol Constraint →
+      MergedSourceComparison.Result Symbol Constraint Node)
+    (graph : EnumerationState.Graph Symbol Constraint)
+    (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List Edge)
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (workFuel recursiveFuel : Nat)
+    (metadata : Metadata Typing) (caller : Caller width) (queries : Queries) (before : Cached) : Result
+
+noncomputable def runEagerWithNarrow
+    (narrow : Metadata Typing → Nat → Nat → Node →
+      InternedConstructorTemplates.State Symbol Constraint →
+      MergedSourceComparison.Result Symbol Constraint Node)
+    (graph : EnumerationState.Graph Symbol Constraint)
+    (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List Edge)
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (workFuel recursiveFuel : Nat)
+    (metadata : Metadata Typing) (caller : Caller width) (queries : Queries) (before : Cached) : Result
+end MicroCFTA.SourcePruningEnumerationSharedPreparedRecursiveChildPolicy

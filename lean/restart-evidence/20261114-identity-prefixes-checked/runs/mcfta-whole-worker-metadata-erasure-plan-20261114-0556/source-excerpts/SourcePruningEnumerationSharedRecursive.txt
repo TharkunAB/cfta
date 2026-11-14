@@ -1,0 +1,11 @@
+-- lean/MicroCFTA/SourcePruningEnumerationSharedRecursive.lean: 53-62
+53: /-- Retain each source output at its own enumeration cache and native endpoint. -/
+54: structure Output (width : Nat) (Typing : Type) where
+55:   /-- A stop rule returns metadata. Exhausted candidate selection returns none. -/
+56:   metadata : Option (Metadata Typing)
+57:   /-- The enumeration cache belongs to this output branch. -/
+58:   cache : Cached
+59:   /-- The caller is the native endpoint when this output is emitted. -/
+60:   caller : Caller width
+61:   /-- The saved queries belong to the same endpoint. -/
+62:   queries : Queries

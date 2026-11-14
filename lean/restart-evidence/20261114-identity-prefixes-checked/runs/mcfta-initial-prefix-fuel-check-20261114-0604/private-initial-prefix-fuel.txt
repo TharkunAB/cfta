@@ -1,0 +1,30 @@
+/tmp/mcfta-initial-prefix-fuel-check-20261114-0604/InitialPrefixFuel.lean:33:2: error: Tactic `rfl` failed: The left-hand side
+  runPrefixWithNarrow narrow graph templates stop order metadata (readExtra + 1) (checkExtra + 1) nativeFuel
+    representativeFuel indexFuel callbackFuel 0 caller
+    { core := initial handle, expandable := expandable, waiting := waiting } queries
+is not definitionally equal to the right-hand side
+  runPrefixWithNarrow narrow graph templates stop order metadata 1 1 nativeFuel representativeFuel indexFuel
+    callbackFuel 0 caller { core := initial handle, expandable := expandable, waiting := waiting } queries
+
+Typing : Type
+width : Nat
+narrow : Metadata Typing → Nat → Nat → Node → Heap → MergedSourceComparison.Result Symbol Constraint Node
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+metadata : Metadata Typing
+readExtra checkExtra nativeFuel representativeFuel indexFuel callbackFuel handle : Nat
+caller : Caller width
+queries : SourceEndpointMemo.Memos
+expandable : Nat → Bool
+waiting : EnumerationWaitingIndex.Waiting
+⊢ let before := { core := initial handle, expandable := expandable, waiting := waiting };
+  runPrefixWithNarrow narrow graph templates stop order metadata (readExtra + 1) (checkExtra + 1) nativeFuel
+      representativeFuel indexFuel callbackFuel 0 caller before queries =
+    runPrefixWithNarrow narrow graph templates stop order metadata 1 1 nativeFuel representativeFuel indexFuel
+      callbackFuel 0 caller before queries
+'_private._stdin.0.MicroCFTA.SourcePruningEnumerationSelectedStep.runPrefix_initial_read_check_fuel' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

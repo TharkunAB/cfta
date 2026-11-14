@@ -1,0 +1,70 @@
+=== lean/MicroCFTA/EnumerationState.lean ORIGINAL LINES 76-94 ===
+76: def initial (root : Nat) : State Symbol Guard :=
+77:   ⟨1, UnionFind.withInitialValues [0], [.unenumerated (some root) []], [], fun _ => [], []⟩
+78: 
+79: /-- Source invariant failures and explicit finite execution bounds. -/
+80: inductive Error where
+81:   | fuelExhausted | representativeFuel | invalidSlot | invalidIntersection
+82:   | unresolvedReference | unfinishedFragment
+83:   deriving DecidableEq, Repr
+84: 
+85: /-- State and errors are local to each nondeterministic alternative. -/
+86: abbrev EnumerateM (Symbol Guard : Type) := StateT (State Symbol Guard) (ExceptT Error List)
+87: 
+88: /-- Reject one branch, as the list monad does. -/
+89: def reject : EnumerateM Symbol Guard α := fun _ => []
+90: 
+91: /-- Choose each alternative with the same input state. -/
+92: def choose (values : List α) : EnumerateM Symbol Guard α := fun state =>
+93:   values.map fun value => .ok (value, state)
+94: 
+=== lean/MicroCFTA/EnumerationState.lean ORIGINAL LINES 103-130 ===
+103: def setValue (uv : Nat) (value : UVarValue Symbol) : EnumerateM Symbol Guard Unit :=
+104:   modify fun state => {state with values := state.values.set uv value}
+105: 
+106: /-- Read one raw slot. -/
+107: def rawValue (uv : Nat) : EnumerateM Symbol Guard (UVarValue Symbol) := do
+108:   match (← get).values[uv]? with
+109:   | none => failure .invalidSlot
+110:   | some value => pure value
+111: 
+112: /-- Find and path-compress a representative. -/
+113: def representative (fuel uv : Nat) : EnumerateM Symbol Guard Nat := do
+114:   let state ← get
+115:   match UnionFind.findRoot fuel state.representatives uv with
+116:   | none => failure .representativeFuel
+117:   | some found =>
+118:       set {state with representatives := found.forest}
+119:       pure found.representative
+120: 
+121: /-- Read the current representative's slot. -/
+122: def getValue (fuel uv : Nat) : EnumerateM Symbol Guard (UVarValue Symbol) := do
+123:   rawValue (← representative fuel uv)
+124: 
+125: /-- Give a variable the ancestry of the current expansion. -/
+126: def inheritAncestry (uv : Nat) : EnumerateM Symbol Guard Unit :=
+127:   modify fun state => {state with recursionAncestry := (fun other =>
+128:     if other = uv then (state.expansionAncestry ++ state.recursionAncestry uv).eraseDups
+129:     else state.recursionAncestry other)}
+130: 
+=== lean/MicroCFTA/EnumerationState.lean ORIGINAL LINES 264-283 ===
+264: /-- No work, blocked work, or the next dependency-safe variable. -/
+265: inductive Next where
+266:   | done | stuck | expand (uv : Nat)
+267:   deriving DecidableEq, Repr
+268: 
+269: /-- An invalid ordering hint falls back to the first available variable. -/
+270: def pickNext (preference : List Nat → Option Nat) : Option (List Nat) → Next
+271:   | none => .done
+272:   | some [] => .stuck
+273:   | some (first :: rest) =>
+274:       match preference (first :: rest) with
+275:       | some preferred => if preferred ∈ first :: rest then .expand preferred else .expand first
+276:       | none => .expand first
+277: 
+278: /-- Expand one selected UVar and store its fragment. -/
+279: def enumerateOut (graph : Graph Symbol Guard) (fuel uv : Nat) :
+280:     EnumerateM Symbol Guard (Fragment Symbol) := do
+281:   match ← getValue (fuel + 1) uv with
+282:   | .unenumerated (some node) scs =>
+283:       let root ← representative (fuel + 1) uv

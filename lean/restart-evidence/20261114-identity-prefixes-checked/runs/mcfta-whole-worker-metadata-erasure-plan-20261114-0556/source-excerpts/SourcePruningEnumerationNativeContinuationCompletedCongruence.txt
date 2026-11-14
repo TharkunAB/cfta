@@ -1,0 +1,14 @@
+-- lean/MicroCFTA/SourcePruningEnumerationNativeContinuationCompletedCongruence.lean: 23-35
+23: /-- Agreement on completed hook results retains the exact completed sibling scan. -/
+24: theorem run_complete_congr
+25:     (first second : Fragment → Caller width → Queries → Cached → HookResult Output Reason width)
+26:     (checkEmpty : Bool) (r n p h k target : Nat) (scs : List Suspended) (before : Cached)
+27:     (same : ∀ fragment reached saved after outputs middleCaller middleQueries,
+28:       first fragment reached saved after = .complete outputs middleCaller middleQueries →
+29:       second fragment reached saved after = .complete outputs middleCaller middleQueries)
+30:     (edges : List (EdgeValue Symbol Constraint)) (caller : Caller width) (queries : Queries) :
+31:     ∀ processed outputs finalCaller finalQueries,
+32:       run first checkEmpty r n p h k target scs before edges caller queries =
+33:         .complete processed outputs finalCaller finalQueries →
+34:       run second checkEmpty r n p h k target scs before edges caller queries =
+35:         .complete processed outputs finalCaller finalQueries := by

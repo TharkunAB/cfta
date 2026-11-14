@@ -1,0 +1,13 @@
+theorem runPrefix_identity_metadata_erasure {Typing : Type}
+    [DecidableEq (EdgeKey Symbol Constraint)]
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (order : List Nat → Option Nat)
+    (metadata : Metadata Typing) (unitMetadata : Metadata Unit)
+    (readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv : Nat)
+    (caller : Caller width) (before : Cached) (queries : Queries) :
+    erasePrefix (runPrefixWithNarrow (fun _ _ _ value heap => .done value heap)
+      graph templates none (fun _ candidates => order candidates) metadata
+      readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv caller before queries) =
+    erasePrefix (runPrefixWithNarrow (fun _ _ _ value heap => .done value heap)
+      graph templates none (fun _ candidates => order candidates) unitMetadata
+      readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv caller before queries) := by

@@ -1,0 +1,6 @@
+import MicroCFTA.SourcePruningEnumerationIdentityPrefix
+
+#check @MicroCFTA.SourcePruningEnumerationAction.prepare_identity_pending_complete
+#print axioms MicroCFTA.SourcePruningEnumerationAction.prepare_identity_pending_complete
+#check @MicroCFTA.SourcePruningEnumerationSelectedStep.runPrefix_identity_pending
+#print axioms MicroCFTA.SourcePruningEnumerationSelectedStep.runPrefix_identity_pending

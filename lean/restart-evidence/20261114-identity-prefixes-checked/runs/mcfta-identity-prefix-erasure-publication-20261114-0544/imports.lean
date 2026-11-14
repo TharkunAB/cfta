@@ -1,0 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationIdentityPrefixMetadataErasure
+
+#check @MicroCFTA.SourcePruningEnumerationIdentityPrefixMetadataErasure.runPrefix_identity_metadata_erasure
+#print axioms MicroCFTA.SourcePruningEnumerationIdentityPrefixMetadataErasure.runPrefix_identity_metadata_erasure

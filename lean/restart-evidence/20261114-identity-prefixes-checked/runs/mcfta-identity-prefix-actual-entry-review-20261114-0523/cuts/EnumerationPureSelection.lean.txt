@@ -1,0 +1,11 @@
+=== lean/MicroCFTA/EnumerationPureSelection.lean ORIGINAL LINES 165-174 ===
+165: def find (state : Cached Symbol Guard) : Option (List Nat) :=
+166:   let candidates := EnumerationIndexSelection.candidates state
+167:   if candidates.isEmpty then none
+168:   else some (candidates.filter fun uv => (state.waiting uv).isNone)
+169: 
+170: /-- Apply the source preference rule to the pure candidate-minus-waiting result. -/
+171: def next (preference : List Nat → Option Nat) (state : Cached Symbol Guard) : Next :=
+172:   pickNext preference (find state)
+173: 
+174: /-- Execute the pure lookup through the existing source CPS state operation. -/

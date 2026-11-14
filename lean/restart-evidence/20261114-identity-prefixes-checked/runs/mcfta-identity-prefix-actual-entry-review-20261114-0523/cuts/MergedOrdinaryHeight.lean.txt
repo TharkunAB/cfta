@@ -1,0 +1,11 @@
+=== lean/MicroCFTA/MergedOrdinaryHeight.lean ORIGINAL LINES 87-96 ===
+87: 
+88: /-- The source recursive-boundary test stops at Mu and explicit union records. -/
+89: def recursiveBoundary : Value Symbol Guard → Bool
+90:   | .mu .. | .union .. => true
+91:   | _ => false
+92: 
+93: /-- A closed operand without a recursive boundary is empty or an ordinary node. -/
+94: theorem ordinary_operand (value : Value Symbol Guard) (closed : value.free = [])
+95:     (clear : recursiveBoundary value = false) :
+96:     value = .empty ∨ ∃ entry edges depth free, value = .node entry edges depth free := by
