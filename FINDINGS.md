@@ -1,3 +1,34 @@
+# Original source-universe identity survives heap growth (2026-11-14 11:11 CET)
+
+SourceSynthesisCurrentUniverseReferenceIdentity.current_stored_universe_reference_identity_after_growth
+is public and checked. The SAME accepted CURRENT source, actual original build
+and stored Mu now suffice at any current heap with Facts and Grows from that
+source heap, with any valid incoming domain cache. The actual empty-domain
+ref(U)/Mu(U) native request returns the FULL ORIGINAL U at formal fuel 13 and
+all larger values, with the SAME complete final machine. It retains cache
+validity, heap extension, root/U availability and the stored original equation.
+No result, callback, product or prior call-final extension is an input.
+Coverage for each pending scope and SemanticHeap are preserved when present
+in the incoming heap. Facts and Grows alone do not imply those predicates.
+The original source-heap theorem header and all five private helpers remain
+unchanged. The original theorem is now a reflexive-growth specialization.
+
+The first private check and all five public checks pass. Full strict Audit at
+11:09:55 CET checks 95,937 aggregate theorems and separately 80 explicit reports:
+78 standard-axiom and two axiom-free. Only propext, Classical.choice and Quot.sound
+occur. Source modules remain 5,937; direct Audit imports remain 4,935.
+Validation: /tmp/mcfta-current-universe-reference-growth-check-20261114-1101 and
+/tmp/mcfta-current-universe-reference-growth-publication-20261114-1109.
+
+NEXT: check the sealed UNCOMPILED identity-prefix resource proof in
+/tmp/mcfta-identity-prefix-resources-proof-20261114-1058. Then compose actual
+whole identity-worker output history and separately establish all-fuel safety.
+Apply the growth identity with actual stage Facts/Grows and prove closure of
+arbitrary generated types. These are not supplied provider assumptions.
+The full finite original-root completion under ONE consistent assignment and
+all scope clauses below remain OPEN. No Haskell source, contract, defect or fix
+was added or established. Goal ACTIVE. Primary usage was 5% at 11:09 CET.
+
 # Exact native source-universe identity checked (2026-11-14 10:49 CET)
 
 SourceSynthesisCurrentUniverseReferenceIdentity.current_stored_universe_reference_identity
