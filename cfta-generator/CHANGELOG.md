@@ -2,6 +2,17 @@
 
 ## 0.1.0.0 - Unreleased
 
+- `Data.CFTA.Guided`: `guide` is a guided search. It writes the terms of the
+  completions one token at a time from the log-scores of a `Scorer`, greedy,
+  best-first, or in a beam, within limits on visits, found terms, and
+  wall-clock time. The mask of each prefix is `nextTokens`, the scores are
+  normalized over the mask, and the weights of the completions can multiply
+  them (`tokenProbability`). The result has the found terms with their total
+  log-scores, a trace with one record for each visit, the reason for the stop,
+  and a `MaskCache` of the mask states of the prefixes, which a later search
+  on the same language reads. `Beam width` keeps the best `width` prefixes of
+  each depth. `repair` continues the longest prefix of a token sequence that
+  the mask accepts, and gives the place of the first refused token.
 - Add `Data.CFTA.Extension`: `checkExtension` checks that a later automaton
   is a definitional extension of an earlier automaton by a template lowering.
   It reports another initial state, a lost or changed old production, an old

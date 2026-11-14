@@ -16,6 +16,7 @@ import qualified Data.CFTA.Gen.SynthesisSpec
 import qualified Data.CFTA.Gen.TowerSpec
 import qualified Data.CFTA.Gen.TypingSpec
 import qualified Data.CFTA.GenSpec
+import qualified Data.CFTA.GuidedSpec
 import qualified Data.CFTA.RankedSpec
 import qualified Data.CFTA.Sized.Prefix.TrainSpec
 import qualified Data.CFTA.Sized.PrefixGuardSpec
@@ -28,6 +29,7 @@ main =
     hspec $ do
         Data.CFTA.RankedSpec.spec
         Data.CFTA.GenSpec.spec
+        Data.CFTA.GuidedSpec.spec
         Data.CFTA.Gen.Equality.DatatypeGenSpec.spec
         Data.CFTA.Gen.Equality.GenSpec.spec
         Data.CFTA.Gen.Equality.IFCExpressionGenSpec.spec

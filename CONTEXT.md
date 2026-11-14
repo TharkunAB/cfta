@@ -218,6 +218,14 @@ Wilf, and Feat (ranking).
   are undecided. An undecided token is neither offered nor rejected.
 - **Walk**: a path of tokens with the verdicts of the solver kept for each
   step (`Deciding`). It asks the solver only when a query needs a verdict.
+- **Mask**: the tokens that can come next after a prefix: the tokens of
+  `nextTokens`.
+- **Scorer**: a function from a prefix to the log-scores of the next tokens
+  (`Data.CFTA.Guided`). Not a trained model of weights
+  (`Data.CFTA.Sized.Prefix.Model`).
+- **Guided search**: a search over the terms of a language whose steps a
+  scorer scores, under the mask (`Data.CFTA.Guided`). Machine learning calls it
+  constrained decoding; here, to decode is to unrank.
 - **Event**: a set of terms, as in probability: the terms that an automaton
   accepts. A model given an event (`condition`) gives each term of the event
   its probability divided by the probability of the event. Not a diagnostic

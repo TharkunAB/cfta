@@ -520,6 +520,32 @@ queries are pure, so the values of a batch of prefixes can be computed in
 parallel. A walk of `deciding` keeps its verdicts in memories that grow
 during the walk; use it in one thread.
 
+### Guided search
+
+`Data.CFTA.Guided` is a guided search: a search over the terms of a language
+whose steps a scorer scores, under the mask. Machine learning calls this
+constrained decoding. It writes a term one token at a time, over the prefixes
+of `Data.CFTA.Sized.Prefix`. The scorer is a function from a prefix to the
+log-scores of the next tokens. At each prefix, `guide` keeps the tokens of
+`nextTokens` (the mask), normalizes the scores over them, and, with weights,
+adds the log of `tokenProbability` to each score first. `Greedy` continues
+with the best token. `BestFirst` takes the open prefix with the highest total
+log-score, so it finds the terms in descending order of their total
+log-scores. Both take the best open prefix after a found term or at a dead
+end: a prefix where the scorer scores no token of the mask. For an automaton
+without constraints the mask itself has no dead end, because each token of the
+mask has a completion within the size bound. `SearchLimits` bounds the visits,
+the found terms, and the wall-clock time. The result has the found terms in
+the order that the search finds them, each with its total log-score, one
+`Visit` record for each visit (the prefix, the mask, the scores of the scorer,
+the step log-probabilities, and the choice), and the `Stop` reason. `guide`
+takes a `MaskCache` (`emptyMaskCache` to start) and gives it back with the
+mask state of each prefix that it opened, so a later search on the same
+language and weights does not compute them again. `Beam width` goes one depth
+at a time and keeps the best `width` children of each depth. `repair` keeps
+the longest prefix of a token sequence that the mask accepts, gives the place
+of the first refused token, and searches the completions of the prefix.
+
 ### Check a definitional extension
 
 A definitional extension adds constructors to a language, and a template
