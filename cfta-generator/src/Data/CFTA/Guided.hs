@@ -65,9 +65,14 @@ set of weights and one kind of token.
 The trace has one 'Visit' for each prefix that the search visits. The search
 does not visit a complete prefix: it adds the terms of the prefix to the found
 terms.
+
+"Data.CFTA.Guided.Model" has the 'Scorer' of a trained model, which needs no
+outside model. 'cachedScorer' wraps a scorer with a memory, so that the
+scorer answers once for each prefix.
 -}
 module Data.CFTA.Guided (
     Scorer,
+    cachedScorer,
     Weighing (..),
     Strategy (..),
     SearchLimits (..),
@@ -86,6 +91,7 @@ module Data.CFTA.Guided (
     maskCacheSize,
 ) where
 
+import Data.IORef (atomicModifyIORef', newIORef, readIORef)
 import Data.List (sortOn)
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
@@ -96,6 +102,25 @@ import Data.CFTA.Mask (Mask (..), Refusal)
 
 -- | A scorer: the log-scores of the next tokens after a prefix, the first token of the prefix first.
 type Scorer token = [token] -> IO [(token, Double)]
+
+{- | A scorer with a memory: it calls the given scorer once for each prefix,
+and gives the kept result for a prefix that it has seen. The memory grows with
+the number of prefixes. Use one cached scorer for one scorer, so for one
+language and one model. The memory is safe when threads share it, but two
+threads that ask for the same new prefix at the same time can both call the
+given scorer.
+-}
+cachedScorer :: (Ord token) => Scorer token -> IO (Scorer token)
+cachedScorer scorer = do
+    memory <- newIORef Map.empty
+    pure $ \prefix -> do
+        kept <- Map.lookup prefix <$> readIORef memory
+        case kept of
+            Just scores -> pure scores
+            Nothing -> do
+                scores <- scorer prefix
+                atomicModifyIORef' memory $ \known -> (Map.insert prefix scores known, ())
+                pure scores
 
 -- | What a step adds to the score of each offered token before the normalization.
 data Weighing

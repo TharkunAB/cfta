@@ -561,6 +561,18 @@ keeps the longest prefix of a token sequence whose tokens the masks offer,
 gives the place and the `Refusal` of the first refused token, and searches
 from the prefix.
 
+`modelScorer` of `Data.CFTA.Guided.Model` is the scorer of a trained `Model`: the score of a token is the
+log of its probability after the prefix. It needs no outside model. A prefix
+that the model does not know has no scores, so the search ends there at a dead
+end. `cachedScorer` gives a scorer a memory, so that it answers once for each
+prefix.
+
+```haskell
+scorer <- cachedScorer (modelScorer model)
+(result, cache) <-
+    guide Greedy limits MaskOnly scorer emptyMaskCache (completionsMask completions)
+```
+
 ### Check a definitional extension
 
 A definitional extension adds constructors to a language, and a template

@@ -1,21 +1,27 @@
 module Data.CFTA.GuidedSpec (spec) where
 
 import Control.Monad (forM_)
+import Data.IORef (modifyIORef', newIORef, readIORef)
 import Data.List (inits, sort, sortOn)
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromJust, fromMaybe)
 import Data.Ord (Down (..))
 import Test.Hspec (Spec, describe, it, shouldBe, shouldSatisfy)
 
 import qualified Data.CFTA as FTA
+import Data.CFTA.Gen.ExpressionLanguage (equalAutomaton, structuralAutomaton)
 import Data.CFTA.Gen.UntypedExpressionLanguage (expressionAutomaton)
 import Data.CFTA.Guided
+import Data.CFTA.Guided.Model (modelScorer)
 import Data.CFTA.Index (Size (..))
 import Data.CFTA.Mask (completionsMask)
 import Data.CFTA.Sized.Prefix hiding (Token)
+import qualified Data.CFTA.Sized.Prefix.Model as Model
+import Data.CFTA.Sized.Prefix.Parents (Reach (..))
 import Data.CFTA.Sized.PrefixGuardSpec (guardedPairs, number, partialEntailment, sym)
 import Data.CFTA.Symbol (Symbol)
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
+import qualified Data.Set as Set
 
 -- | A token of the untyped expressions.
 type Token = (String, Int)
@@ -222,6 +228,37 @@ spec = describe "Data.CFTA.Guided" $ do
             [] -> fail "no visit"
         map fst (guidedTerms weighted) `shouldBe` [Term.Node "one" []]
 
+    describe "modelScorer" $ do
+        it "scores each token with the log of its probability in the model, and gives no score outside the model" $ do
+            forM_ (inits $ preorder equalSum) $ \prefix -> do
+                scores <- modelScorer expressionModel prefix
+                Just scores `shouldBe` fmap (map (fmap log)) (Model.nextTokenProbabilities expressionModel prefix)
+            outside <- modelScorer expressionModel [('c', 0)]
+            outside `shouldBe` []
+
+        it "keeps a greedy search in the restricted language when the model prefers a token that the mask refuses" $ do
+            (result, _) <-
+                guide Greedy (limits 1000 1) MaskOnly (modelScorer expressionModel) emptyMaskCache (completionsMask equalExpressions)
+            map (FTA.accepts equalAutomaton . fst) (guidedTerms result) `shouldBe` [True]
+            case [visit | visit <- guidedTrace result, visitPrefix visit == [('+', 2), ('a', 0)]] of
+                visit : _ -> do
+                    fmap fst (best' $ visitScores visit) `shouldBe` Just unequalToken
+                    visitMask visit `shouldSatisfy` notElem unequalToken
+                [] -> fail "no visit after + a"
+
+    describe "cachedScorer" $
+        it "asks the given scorer once for each prefix, and keeps the results of the search" $ do
+            asked <- newIORef []
+            let counting prefix = modifyIORef' asked (prefix :) >> pure (byLength prefix)
+            cached <- cachedScorer counting
+            first <- search BestFirst (limits 1000 5) MaskOnly cached
+            second <- search BestFirst (limits 1000 5) MaskOnly cached
+            prefixes <- readIORef asked
+            length prefixes `shouldBe` Set.size (Set.fromList prefixes)
+            length prefixes `shouldSatisfy` (> 1)
+            plain <- search BestFirst (limits 1000 5) MaskOnly (scorer byLength)
+            (first, second) `shouldBe` (plain, plain)
+
 -- | The untyped expressions with at most six nodes: 74 terms.
 language :: Completions String
 language = either (error . show) id $ prefixCompletions (Size 6) expressionAutomaton
@@ -270,7 +307,7 @@ ranked scores = sortOn (Down . snd) [(term, total term) | term <- completionTerm
          in score token - log (sum $ map exp finite)
 
 -- | The token with the highest score.
-best' :: [(Token, Double)] -> Maybe (Token, Double)
+best' :: [(token, Double)] -> Maybe (token, Double)
 best' [] = Nothing
 best' scores = Just $ foldr1 (\left right -> if snd left >= snd right then left else right) scores
 
@@ -281,3 +318,33 @@ uniformPairs _ = pure [(token, 0) | token <- (sym "g", 2) : [(number value, 0) |
 -- | The tokens of a term in preorder.
 preorder :: Term symbol -> [(symbol, Int)]
 preorder (Term.Node symbol children) = (symbol, length children) : concatMap preorder children
+
+-- | The expressions with the equality with at most seven nodes.
+equalExpressions :: Completions Char
+equalExpressions = either (error . show) id $ prefixCompletions (Size 7) equalAutomaton
+
+-- | A sum with two equal children: @(b)+(b)@.
+equalSum :: Term Char
+equalSum = Term.Node '+' [Term.Node '(' [Term.Node 'b' []], Term.Node '(' [Term.Node 'b' []]]
+
+-- | The sum with two different children that the corpus repeats, so that the model prefers it: @a+b@.
+unequalSum :: Term Char
+unequalSum = Term.Node '+' [Term.Node 'a' [], Term.Node 'b' []]
+
+-- | The token of 'unequalSum' after @+@ and @a@. The mask with the equality refuses it.
+unequalToken :: (Char, Int)
+unequalToken = ('b', 0)
+
+{- | A model of the expressions without the equality, trained on ten
+expressions with the equality and forty copies of 'unequalSum'. The context
+of a node has the parent of the node, so the model learns that @b@ comes
+after @+@ and @a@.
+-}
+expressionModel :: Model.Model Char
+expressionModel =
+    fromJust $
+        Model.train
+            (Reach 1 False)
+            structuralAutomaton
+            7
+            (equalSum : take 9 (completionTerms equalExpressions) <> replicate 40 unequalSum)

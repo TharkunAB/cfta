@@ -25,7 +25,11 @@
   later search on the same language reads. `Beam width` keeps the best `width`
   prefixes of each depth. `repair` continues the longest prefix of a token
   sequence whose tokens the masks offer, and gives the place and the `Refusal`
-  of the first refused token.
+  of the first refused token. `cachedScorer` gives a scorer a memory, so that
+  it calls the given scorer once for each prefix.
+- `Data.CFTA.Guided.Model`: `modelScorer` is the `Scorer` of a trained
+  `Model`: the score of a token is the log of its probability after the
+  prefix. A guided search with it needs no outside model.
 - Add `Data.CFTA.Extension`: `checkExtension` checks that a later automaton
   is a definitional extension of an earlier automaton by a template lowering.
   It reports another initial state, a lost or changed old production, an old
