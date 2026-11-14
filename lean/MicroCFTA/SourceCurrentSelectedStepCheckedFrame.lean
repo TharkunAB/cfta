@@ -89,14 +89,16 @@ theorem complete
         cases repeated with
         | false =>
           have frame := (notRepeated rfl).1
-          simp only [SourcePruningEnumerationSelectedStep.runPrefix, read, check, lookup] at hp
+          simp only [SourcePruningEnumerationSelectedStep.runPrefix,
+            SourcePruningEnumerationSelectedStep.runPrefixWithNarrow, read, check, lookup] at hp
           repeat first
             | split at hp
             | (injection hp with checked_eq
                cases checked_eq
                exact frame)
         | true =>
-          simp only [SourcePruningEnumerationSelectedStep.runPrefix, read, check] at hp
+          simp only [SourcePruningEnumerationSelectedStep.runPrefix,
+            SourcePruningEnumerationSelectedStep.runPrefixWithNarrow, read, check] at hp
           all_goals cases hp
     generalize hout : SourcePruningEnumerationSelectedStep.run holeKey fits admits graph templates
       checkEmpty edgesOf stop order metadata ((stepRead + selectedRead) + er)

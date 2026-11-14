@@ -39,9 +39,11 @@ variable {Typing Key : Type} {width : Nat}
 section Prefix
 variable [DecidableEq (EdgeKey Symbol Constraint)]
 
-/-- Observe the selected prefix through Right recording without scanning ordinary siblings. -/
-noncomputable def runPrefix
-    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+/-- Use the supplied narrowing operation in the same selected prefix. -/
+noncomputable def runPrefixWithNarrow
+    (narrow : Metadata Typing → Nat → Nat → Node →
+      InternedConstructorTemplates.State Symbol Constraint →
+      MergedSourceComparison.Result Symbol Constraint Node)
     (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
     (stop : Option (Metadata Typing → Nat → Bool))
     (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
@@ -62,7 +64,7 @@ noncomputable def runPrefix
           match lookupNode caller.checked.native.machine.heap oldHandle with
           | none => .stopped read (some check)
           | some oldValue =>
-              let prepared := SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+              let prepared := SourcePruningEnumerationAction.prepareWithNarrow narrow metadata nativeFuel
                 representativeFuel uv oldHandle scs oldValue caller.checked.native.machine.heap
               let reached := SourceCurrentAllocatedPartialState.advance caller
                 (advancePhysical caller.checked ⟨prepared.state, caller.checked.operations⟩) caller.fourth caller.merge
@@ -93,6 +95,32 @@ noncomputable def runPrefix
       | _ => .stopped read (some check)
   | _ => .stopped read none
 
+/-- Observe the selected prefix through Right recording without scanning ordinary siblings. -/
+noncomputable def runPrefix
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+    (readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv : Nat)
+    (caller : Caller width) (before : Cached) (queries : Queries) : Result width Typing :=
+  runPrefixWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
+    graph templates stop order metadata readFuel checkFuel nativeFuel representativeFuel
+    indexFuel callbackFuel uv caller before queries
+
+/-- The configured wrapper retains every actual prefix observation. -/
+theorem runPrefix_configured_eq
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+    (readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv : Nat)
+    (caller : Caller width) (before : Cached) (queries : Queries) :
+    runPrefix holeKey fits admits graph templates stop order metadata readFuel checkFuel nativeFuel
+        representativeFuel indexFuel callbackFuel uv caller before queries =
+      runPrefixWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        graph templates stop order metadata readFuel checkFuel nativeFuel
+        representativeFuel indexFuel callbackFuel uv caller before queries := rfl
+
 /-- Every prefix observation leaves the ordinary continuation unexecuted. -/
 theorem prefix_no_ordinary
     (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
@@ -105,7 +133,7 @@ theorem prefix_no_ordinary
       representativeFuel indexFuel callbackFuel uv caller before queries with
     | .narrowed _ _ _ _ _ _ _ ordinary => ordinary = none
     | _ => True := by
-  unfold runPrefix
+  unfold runPrefix runPrefixWithNarrow
   dsimp only
   generalize ExceptT.run (getValue readFuel uv before.core) = read
   cases read with
@@ -156,7 +184,8 @@ theorem prefix_no_ordinary
                                       | none => trivial
                                       | some oldValue =>
                                           dsimp only
-                                          generalize SourcePruningEnumerationAction.prepare holeKey fits admits metadata
+                                          generalize SourcePruningEnumerationAction.prepareWithNarrow
+                                            (SourcePruningOuterNarrow.narrow holeKey fits admits) metadata
                                             nativeFuel representativeFuel uv oldHandle scs oldValue
                                             caller.checked.native.machine.heap = prepared
                                           cases prepared with

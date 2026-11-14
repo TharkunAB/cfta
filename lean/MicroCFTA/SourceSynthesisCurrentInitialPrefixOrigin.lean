@@ -92,7 +92,7 @@ theorem initial_prefix_narrowed_rows
           .done (result, action) after) :
       SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel
         0 rootValue heap = .done result after := by
-    unfold SourcePruningEnumerationAction.prepare at prepared
+    unfold SourcePruningEnumerationAction.prepare SourcePruningEnumerationAction.prepareWithNarrow at prepared
     cases native : SourcePruningOuterNarrow.narrow holeKey fits admits metadata
         nativeFuel 0 rootValue heap with
     | failed fault next =>
@@ -106,8 +106,8 @@ theorem initial_prefix_narrowed_rows
         cases heapSame
         rfl
   dsimp only
-  unfold SourcePruningEnumerationSelectedStep.runPrefix
-  dsimp only
+  unfold SourcePruningEnumerationSelectedStep.runPrefix SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
+  simp only [← SourcePruningEnumerationAction.prepare_configured_eq]
   generalize readEq : ExceptT.run
     (getValue readFuel 0 (EnumerationState.initial handle : Core)) = read
   cases read with

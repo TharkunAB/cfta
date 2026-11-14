@@ -43,9 +43,12 @@ theorem prepared_action
   cases value with
   | empty => exact False.elim (nonempty rfl)
   | reference name => simp [encodeNode] at encoded
-  | node entry edges depth free => simp only [SourcePruningEnumerationAction.prepare, narrowed, encoded]
-  | union entry members depth free => simp only [SourcePruningEnumerationAction.prepare, narrowed, encoded]
-  | mu entry body depth ordinary => simp only [SourcePruningEnumerationAction.prepare, narrowed, encoded]
+  | node entry edges depth free => simp only [SourcePruningEnumerationAction.prepare,
+      SourcePruningEnumerationAction.prepareWithNarrow, narrowed, encoded]
+  | union entry members depth free => simp only [SourcePruningEnumerationAction.prepare,
+      SourcePruningEnumerationAction.prepareWithNarrow, narrowed, encoded]
+  | mu entry body depth ordinary => simp only [SourcePruningEnumerationAction.prepare,
+      SourcePruningEnumerationAction.prepareWithNarrow, narrowed, encoded]
 
 /-- Successful preparation has one raw row at its actual reached core. -/
 theorem prepared_singleton
@@ -138,8 +141,8 @@ theorem run_eq_legacy
                      | _ => .narrowed checked prepared reached queries (some raw) none none none
          | _ => .stopped read (some check)
      | _ => .stopped read none) := by
-  unfold run runPrefix
-  dsimp only
+  unfold run runPrefix runPrefixWithNarrow
+  simp only [← SourcePruningEnumerationAction.prepare_configured_eq]
   generalize ExceptT.run (getValue readFuel uv before.core) = read
   cases read with
   | nil => rfl
@@ -245,7 +248,7 @@ theorem run_parked
       readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel r n p h k uv caller before queries =
       .parked checked (some parked)
         (some (ExceptT.run (SourcePruningEnumerationRestart.run stop order metadata parked checked))) := by
-  simp only [run, runPrefix, read, check, adapted, Option.map_some, finish]
+  simp only [run_eq_legacy, read, check, adapted, Option.map_some]
 
 /-- Empty narrowing retains the reached caller and rejects before later callbacks. -/
 theorem run_empty
@@ -266,7 +269,7 @@ theorem run_empty
         (SourceCurrentAllocatedPartialState.advance caller
           (advancePhysical caller.checked ⟨heap, caller.checked.operations⟩) caller.fourth caller.merge)
         queries (some []) none none none := by
-  simp only [run, runPrefix, read, check, decoded, prepared, finish]
+  simp only [run_eq_legacy, read, check, decoded, prepared]
   rfl
 
 /-- A successful actual action and attached cache reach the concrete Right callback and ordinary worker. -/
@@ -301,7 +304,7 @@ theorem run_narrowed
       (.inr newHandle) after.core) = [.ok ((false, metadata), after.core)] := by
     rw [SourcePruningRecordTypes.recordTypes_inr]
     rfl
-  simp only [run, runPrefix, read, check, decoded, prepared, raw, encoded, adapted, right, finish]
+  simp only [run_eq_legacy, read, check, decoded, prepared, raw, encoded, adapted, right]
   rfl
 
 /-- Admit only reached parked or nonempty caches; retain Empty rejection and bounded ordinary observations. -/

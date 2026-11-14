@@ -89,7 +89,7 @@ theorem complete
         representativeFuel uv oldHandle scs oldValue heap = .done (value, some operation) afterHeap)
       (total : UnionFind.Total input.representatives) (successful : Success operation input () output) :
       UnionFind.Total output.representatives := by
-    dsimp only [SourcePruningEnumerationAction.prepare] at prepared
+    dsimp only [SourcePruningEnumerationAction.prepare, SourcePruningEnumerationAction.prepareWithNarrow] at prepared
     all_goals try (split at prepared)
     all_goals try (split at prepared)
     all_goals try (split at prepared)
@@ -168,7 +168,7 @@ theorem complete
                               stop order metadata (readFuel + er) (checkFuel + ec) nativeFuel
                               representativeFuel (indexFuel + ei) callbackFuel uv caller before memos.query)).symm.trans
                             (congrArg retain actual)
-                          dsimp only [SourcePruningEnumerationSelectedStep.runPrefix] at observedAction
+                          dsimp only [SourcePruningEnumerationSelectedStep.runPrefix, SourcePruningEnumerationSelectedStep.runPrefixWithNarrow] at observedAction
                           all_goals try (split at observedAction)
                           all_goals try (split at observedAction)
                           all_goals try (split at observedAction)

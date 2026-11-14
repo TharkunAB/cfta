@@ -134,7 +134,8 @@ theorem narrowed_boundary_identity
         .narrowed checked (.done (value, some selectedAction) heap) caller memos.query
           (some [.ok ((), checked)]) (some (EnumerationExpandableIndex.frame checked before))
           (some [.ok ((false, metadata), checked)]) none := by
-      simp only [runPrefix, reading, checking, decoded, preparing, raw, publicEncoded, adapted, recorded,
+      simp only [runPrefix, runPrefixWithNarrow,
+        ← SourcePruningEnumerationAction.prepare_configured_eq, reading, checking, decoded, preparing, raw, publicEncoded, adapted, recorded,
         MergedSourceComparison.Result.state]
       rw [advanced]
       rfl

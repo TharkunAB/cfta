@@ -327,7 +327,9 @@ private theorem observed_prefix_action
         uv caller before queries with
     | .narrowed _ _ _ _ action _ _ _ => action
     | _ => none) = some (ExceptT.run (selectedAction checked)) := by
-    simp only [SourcePruningEnumerationSelectedStep.runPrefix, reading, checking, decoded, prepared]
+    simp only [SourcePruningEnumerationSelectedStep.runPrefix,
+      SourcePruningEnumerationSelectedStep.runPrefixWithNarrow,
+      ← SourcePruningEnumerationAction.prepare_configured_eq, reading, checking, decoded, prepared]
     cases execution : ExceptT.run (selectedAction checked) with
     | nil => rfl
     | cons first rest =>

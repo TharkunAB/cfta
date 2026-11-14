@@ -150,7 +150,8 @@ private theorem narrowed_raw
         uv caller before queries with
     | .narrowed _ _ _ _ action _ _ _ => action
     | _ => none) = some (ExceptT.run (selectedAction checked)) := by
-    simp only [runPrefix, reading, checking, decoded, prepared]
+    simp only [runPrefix, SourcePruningEnumerationSelectedStep.runPrefixWithNarrow,
+      ← SourcePruningEnumerationAction.prepare_configured_eq, reading, checking, decoded, prepared]
     cases execution : ExceptT.run (selectedAction checked) with
     | nil => rfl
     | cons first rest =>
@@ -284,7 +285,9 @@ theorem retained_work_target_debit
               | .narrowed _ _ _ _ _ candidate _ _ => candidate
               | _ => none) = SourcePruningEnumerationNarrowAdapter.adapt heap fuel uv oldHandle newHandle
                 scs before after.core := by
-              simp only [runPrefix, reading, checking, decoded, preparedRun, execution, encoded]
+              simp only [runPrefix, SourcePruningEnumerationSelectedStep.runPrefixWithNarrow,
+                ← SourcePruningEnumerationAction.prepare_configured_eq, reading, checking, decoded,
+                preparedRun, execution, encoded]
               cases attached : SourcePruningEnumerationNarrowAdapter.adapt heap fuel uv oldHandle newHandle
                   scs before after.core with
               | none => rfl

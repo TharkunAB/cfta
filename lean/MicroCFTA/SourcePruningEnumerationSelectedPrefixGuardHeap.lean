@@ -37,7 +37,7 @@ theorem runPrefix_heap (P : Constraint → Prop) [DecidableEq (EdgeKey Symbol Co
       representativeFuel indexFuel callbackFuel uv caller before queries with
     | .narrowed _ _ reached _ _ _ _ _ => Heap P reached.checked.native.machine.heap
     | _ => True := by
-  unfold runPrefix
+  unfold runPrefix runPrefixWithNarrow
   dsimp only
   generalize readEq : ExceptT.run (getValue readFuel uv before.core) = read
   cases read with
@@ -102,6 +102,7 @@ theorem runPrefix_heap (P : Constraint → Prop) [DecidableEq (EdgeKey Symbol Co
                                             Option.some.inj (decoded.symm.trans actualLookup)
                                           subst resident
                                           dsimp only
+                                          simp only [← SourcePruningEnumerationAction.prepare_configured_eq]
                                           generalize preparedEq : SourcePruningEnumerationAction.prepare holeKey fits admits metadata
                                             nativeFuel representativeFuel uv oldHandle scs oldValue
                                             caller.checked.native.machine.heap = prepared

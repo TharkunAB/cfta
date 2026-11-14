@@ -32,6 +32,7 @@ theorem runPrefix_paths {Typing Key : Type} {width : Nat}
       holeKey fits admits graph templates stop order metadata readFuel checkFuel nativeFuel
       representativeFuel indexFuel callbackFuel uv caller before queries) := by
   unfold SourcePruningEnumerationSelectedStep.runPrefix
+    SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
   generalize readEq : ExceptT.run (getValue readFuel uv before.core) = read
   have readPaths : RawPaths P read := by
     intro value after member
@@ -109,6 +110,7 @@ theorem runPrefix_paths {Typing Key : Type} {width : Nat}
                                       | none => simpa [SelectedPrefixPaths] using And.intro readPaths checkPaths
                                       | some oldValue =>
                                           dsimp only
+                                          simp only [← SourcePruningEnumerationAction.prepare_configured_eq]
                                           generalize preparedEq : SourcePruningEnumerationAction.prepare
                                             holeKey fits admits metadata nativeFuel representativeFuel uv oldHandle scs oldValue
                                             caller.checked.native.machine.heap = prepared

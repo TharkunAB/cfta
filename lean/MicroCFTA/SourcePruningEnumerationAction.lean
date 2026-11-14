@@ -13,17 +13,20 @@ local instance actionMonadList : Monad List where
   pure value := [value]
   bind values continuation := values.flatMap continuation
 
-/-- Narrow once and retain the complete value beside the actual enumeration action. -/
-def prepare [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol NativeGuard)]
-    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
-    (admits : Key → InternedConstructorTemplates.Value Symbol NativeGuard → Bool)
+/-- Compute the same action with the supplied native narrowing operation. -/
+def prepareWithNarrow
+    (narrow : Metadata Typing → Nat → Nat →
+      InternedConstructorTemplates.Value Symbol NativeGuard →
+      InternedConstructorTemplates.State Symbol NativeGuard →
+      MergedSourceComparison.Result Symbol NativeGuard
+        (InternedConstructorTemplates.Value Symbol NativeGuard))
     (metadata : Metadata Typing) (nativeFuel representativeFuel uv oldHandle : Nat)
     (scs : List EnumerationState.Suspended) (oldValue : InternedConstructorTemplates.Value Symbol NativeGuard)
     (heap : InternedConstructorTemplates.State Symbol NativeGuard) :
     MergedSourceComparison.Result Symbol NativeGuard
       (InternedConstructorTemplates.Value Symbol NativeGuard × Option (EnumerateM Symbol EnumGuard Unit))
  :=
-  match SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue heap with
+  match narrow metadata nativeFuel uv oldValue heap with
   | .failed fault after => .failed fault after
   | .done result nextHeap =>
       .done (result,
@@ -39,6 +42,30 @@ def prepare [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol NativeGuar
                   else
                     representative representativeFuel uv >>= fun selected =>
                       setValue selected (.unenumerated (some newHandle) scs))) nextHeap
+
+/-- Narrow once and retain the complete value beside the actual enumeration action. -/
+def prepare [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol NativeGuard)]
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
+    (admits : Key → InternedConstructorTemplates.Value Symbol NativeGuard → Bool)
+    (metadata : Metadata Typing) (nativeFuel representativeFuel uv oldHandle : Nat)
+    (scs : List EnumerationState.Suspended) (oldValue : InternedConstructorTemplates.Value Symbol NativeGuard)
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard) :
+    MergedSourceComparison.Result Symbol NativeGuard
+      (InternedConstructorTemplates.Value Symbol NativeGuard × Option (EnumerateM Symbol EnumGuard Unit))
+ :=
+  prepareWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
+    metadata nativeFuel representativeFuel uv oldHandle scs oldValue heap
+
+/-- The configured wrapper retains the same action and native result. -/
+theorem prepare_configured_eq [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol NativeGuard)]
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
+    (admits : Key → InternedConstructorTemplates.Value Symbol NativeGuard → Bool)
+    (metadata : Metadata Typing) (nativeFuel representativeFuel uv oldHandle : Nat)
+    (scs : List EnumerationState.Suspended) (oldValue : InternedConstructorTemplates.Value Symbol NativeGuard)
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard) :
+    prepare (EnumGuard := EnumGuard) holeKey fits admits metadata nativeFuel representativeFuel uv oldHandle scs oldValue heap =
+      prepareWithNarrow (EnumGuard := EnumGuard) (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        metadata nativeFuel representativeFuel uv oldHandle scs oldValue heap := rfl
 
 /-- Connect the computed action to the same actual pending observation and branch states. -/
 theorem prepare_pending_complete
@@ -109,7 +136,7 @@ theorem prepare_pending_complete
     survivingOld, ?_, ?_, ?_⟩
   · intro emptyResult representativeFuel
     refine ⟨?_, emptyBranch emptyResult⟩
-    simp only [prepare, narrowed, emptyResult]
+    simp only [prepare, prepareWithNarrow, narrowed, emptyResult]
   · intro nonempty sameHandle
     obtain ⟨equalValue, equalSuccess⟩ := equalBranch nonempty sameHandle
     refine ⟨equalValue, ?_, equalSuccess⟩
@@ -118,11 +145,11 @@ theorem prepare_pending_complete
     | empty => exact False.elim (nonempty rfl)
     | reference name => simp [encodeNode] at newEncoded
     | node nodeEntry edges depth free =>
-        simp only [prepare, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_left sameHandle]
+        simp only [prepare, prepareWithNarrow, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_left sameHandle]
     | union unionEntry members depth free =>
-        simp only [prepare, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_left sameHandle]
+        simp only [prepare, prepareWithNarrow, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_left sameHandle]
     | mu muEntry body depthShape ordinaryShape =>
-        simp only [prepare, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_left sameHandle]
+        simp only [prepare, prepareWithNarrow, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_left sameHandle]
   · intro nonempty changedHandle
     obtain ⟨root, size, rereadFuel, rereadAfter, final, rootPath, secondRead, secondFrame,
         wholeFrame, oldStored, bound, rereadRealized, written, finalShape, finalStored,
@@ -141,10 +168,10 @@ theorem prepare_pending_complete
       | empty => exact False.elim (nonempty rfl)
       | reference name => simp [encodeNode] at newEncoded
       | node nodeEntry edges depth free =>
-          simp only [prepare, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_right changedHandle]
+          simp only [prepare, prepareWithNarrow, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_right changedHandle]
       | union unionEntry members depth free =>
-          simp only [prepare, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_right changedHandle]
+          simp only [prepare, prepareWithNarrow, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_right changedHandle]
       | mu muEntry body depthShape ordinaryShape =>
-          simp only [prepare, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_right changedHandle]
+          simp only [prepare, prepareWithNarrow, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_right changedHandle]
 
 end MicroCFTA.SourcePruningEnumerationAction

@@ -88,6 +88,7 @@ theorem prepare_related [DecidableEq (EdgeKey Symbol NativeGuard)]
       (prepare holeKey fits admits metadata nativeFuel uv oldHandle scs oldValue heap)
       (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel fuel uv oldHandle scs oldValue heap) := by
   unfold prepare SourcePruningEnumerationAction.prepare
+    SourcePruningEnumerationAction.prepareWithNarrow
   cases observed : SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue heap with
   | failed fault after => exact ⟨rfl, rfl⟩
   | done result after =>

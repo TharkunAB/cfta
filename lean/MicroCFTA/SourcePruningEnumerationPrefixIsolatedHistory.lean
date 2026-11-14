@@ -50,7 +50,8 @@ private theorem retained_action_success
       uv caller before queries = .narrowed checked preparedField reached queries
         (some [.ok ((), after.core)]) (some after) right ordinary) :
     Success selectedAction checked () after.core := by
-  simp only [runPrefix, reading, checking, decoded, prepared] at actual
+  simp only [runPrefix, runPrefixWithNarrow, reading, checking, decoded,
+    ← SourcePruningEnumerationAction.prepare_configured_eq, prepared] at actual
   cases rawEq : ExceptT.run (selectedAction checked) with
   | nil => simp only [rawEq] at actual; cases actual
   | cons first rest =>

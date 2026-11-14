@@ -103,27 +103,33 @@ theorem prepare_actions_paths {EnumGuard NativeGuard Typing Key : Type}
         inherited written
   cases narrowed : SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue heap with
   | failed fault nextHeap =>
-      simp only [SourcePruningEnumerationAction.prepare, narrowed]
+      simp only [SourcePruningEnumerationAction.prepare,
+        SourcePruningEnumerationAction.prepareWithNarrow, narrowed]
   | done value nextHeap =>
       cases value with
       | empty =>
-          simp only [SourcePruningEnumerationAction.prepare, narrowed]
+          simp only [SourcePruningEnumerationAction.prepare,
+            SourcePruningEnumerationAction.prepareWithNarrow, narrowed]
           intro action same before after _paths success
           have equal := Option.some.inj same
           cases equal
           simp only [Success, EnumerationState.reject, ExceptT.run, List.not_mem_nil] at success
       | reference name =>
-          simp only [SourcePruningEnumerationAction.prepare, narrowed, SourcePruningEnumerationNodes.encodeNode]
+          simp only [SourcePruningEnumerationAction.prepare,
+            SourcePruningEnumerationAction.prepareWithNarrow, narrowed, SourcePruningEnumerationNodes.encodeNode]
           intro action impossible
           cases impossible
       | node entry edges depth free =>
-          simpa only [SourcePruningEnumerationAction.prepare, narrowed, SourcePruningEnumerationNodes.encodeNode]
+          simpa only [SourcePruningEnumerationAction.prepare,
+            SourcePruningEnumerationAction.prepareWithNarrow, narrowed, SourcePruningEnumerationNodes.encodeNode]
             using writes (entry.identity + 1)
       | union entry members depth free =>
-          simpa only [SourcePruningEnumerationAction.prepare, narrowed, SourcePruningEnumerationNodes.encodeNode]
+          simpa only [SourcePruningEnumerationAction.prepare,
+            SourcePruningEnumerationAction.prepareWithNarrow, narrowed, SourcePruningEnumerationNodes.encodeNode]
             using writes (entry.identity + 1)
       | mu entry body depthShape ordinaryShape =>
-          simpa only [SourcePruningEnumerationAction.prepare, narrowed, SourcePruningEnumerationNodes.encodeNode]
+          simpa only [SourcePruningEnumerationAction.prepare,
+            SourcePruningEnumerationAction.prepareWithNarrow, narrowed, SourcePruningEnumerationNodes.encodeNode]
             using writes (entry.identity + 1)
 
 /-- A prefix keeps paths in every retained core and successful raw row. -/

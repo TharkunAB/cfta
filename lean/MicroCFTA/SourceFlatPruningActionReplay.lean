@@ -70,7 +70,7 @@ theorem prepare_replays [DecidableEq (EdgeKey Symbol NativeGuard)]
         .done (value, some flatAction) afterHeap ∧
       Replays flatAction action ∧
       (value = .empty → flatAction = EnumerationFlatState.reject) := by
-  unfold SourcePruningEnumerationAction.prepare at prepared
+  unfold SourcePruningEnumerationAction.prepare SourcePruningEnumerationAction.prepareWithNarrow at prepared
   cases narrowed : SourcePruningOuterNarrow.narrow holeKey fits admits metadata
       nativeFuel uv oldValue heap with
   | failed fault reached =>

@@ -126,7 +126,8 @@ theorem selected_repeated_progress
   · intro er ec ei nativeFuel representativeFuel callbackFuel
     have adapted := SourcePruningEnumerationParkedRestart.adapt_after_write caller.checked.native.machine.heap
       (countFuel + ei) uv oldHandle scs before checked resolved checked.core written (indexed ei) rfl
-    simp only [SourcePruningEnumerationSelectedStep.runPrefix, readExact er, checkExact ec,
+    simp only [SourcePruningEnumerationSelectedStep.runPrefix,
+      SourcePruningEnumerationSelectedStep.runPrefixWithNarrow, readExact er, checkExact ec,
       repeatedEq, adapted, Option.map_some]
   · simpa only [counterSame] using decreased
 
