@@ -1,3 +1,60 @@
+# Exact mixed aliases and successful native fuels checked (2026-11-14 15:18 CET)
+
+GOAL ACTIVE. Preserve the complete original proof objective below.
+NEW PUBLIC current_stored_universe_open_alias_after_mixed_entry matches the
+original pinned full two-alias target. Only reserved universe was alpha-renamed
+and the inferred budget binder was explicitly typed Nat. One selected ref(U)
+or BODY(U) alias returns FULL ORIGINAL U from the SAME actual mixed U/pattern
+entry of the SAME accepted source/build/stored U. Each selected alias has a
+finite bound and its own valid extended final machine at every larger budget.
+NEW PUBLIC current_stored_universe_open_alias_at_every_successful_fuel retains
+that result and proves ANY actual successful native fuel returns exactly U and
+that selected alias's exact final machine. No future result/provider is supplied.
+The combined case split preserves body through named hypotheses and rewriting.
+All19 previously checked declarations remain byte-identical. Failed check1 and
+successful check2 remain separate records. The private driver also needed its
+2explicit axiom probes; the raw candidate contained no probes.
+
+NEW PUBLIC SourcePruningEnumerationSelectedValue.run_done_moreFuel replays an
+actual successful native value preparation with the SAME value and heap at any
+larger fuel. Its union case uses actual nodeEdges_stable. This is the first
+necessary producer for arbitrary-common-budget WORKER history, not that history.
+All6public gates PASS. Strict Audit:96,034 imported theorem axiom dependencies;
+95separate reports,93standard-axiom and2axiom-free. Only propext,Classical.choice,
+Quot.sound. Source modules5946; direct imports4944. Effective4GiB max/high,swap0.
+Public pins/logs: /tmp/mcfta-current-open-alias-replay-publication-20261114-1515.
+Private combined check2: /tmp/mcfta-current-source-open-alias-check2-20261114-1513.
+Private value replay: /tmp/mcfta-selected-value-replay-check-20261114-1506.
+Public compiler handles are terminal. Body checkpoint22bcb60eb93a5dedfc8f914e9c0300312cd89630
+is independently pushed. Main independently remains e53852064d3ef5a2eafec47d754c27504b11de5f.
+
+Semantic review: /tmp/mcfta-finite-common-witness-review-20261114-1511-wz0h2at0.
+The central missing result is per emitted causal branch: construct ONE finite
+term of the SAME ORIGINAL root and ONE assignment satisfying final domains,
+aliases,fragments,residuals,partial readback AND all actually removed suspended
+path constraints. Causal receipts must be derived from emitted membership.
+Sibling alternatives may reuse IDs; do not union their events or assignments.
+Post-clear Satisfies alone cannot give removed Holds. The required next lift is
+EXISTENTIAL compatible-model construction, not a universal statement about all
+post-clear models. Derive actual ancestry-hit provenance to earlier expansion
+and CURRENT target aliases/domains; key retention alone supplies neither.
+Finite productivity of retained pending domains remains a separate obligation.
+No reachable accepted-source counterexample or new Haskell defect was established.
+The original source excludes arbitrary initial Mu examples. Later generated-Type
+closure and required-path calls are still OPEN. Literal alias(U,U) leaves do
+not solve bodyU/Q under an ancestor(U,P) domain for strict descendant patterns.
+
+Next: exact generated-Type/startup-atom producers and successful actual selected-
+preparation replay. Keep every-budget worker stopped partial outputs OPEN. Keep
+all typing,depth adequacy/completeness,LPO/reduction/refolding,both language
+directions,stream order/multiplicity/lazy demand,exact node-count sizes,counts,
+weights/training,both rank/unrank inverses,host bounds and compiled Haskell
+correspondence in scope. Root owns live/compiler/Git. Preserve .hypha/ and all
+failed/marked inputs. No Haskell/Cabal/test/Liquid Haskell annotation changed.
+No implementation fix was established; record future Haskell fixes in FINDINGS.
+/tmp has about137GiB free at15:16. Latest compact checkpoint1750 precedes these
+body/combined/replay proofs; create a small next checkpoint with all later inputs.
+
 # Same-source mixed body alias checked (2026-11-14 15:08 CET)
 
 GOAL ACTIVE. Preserve the full original common finite-witness, typing/language,
