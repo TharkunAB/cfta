@@ -204,16 +204,17 @@ local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
 local notation "literal" => SourceSynthesisLabelProgramBuildRoles.literal
 local notation "ordinarySymbols" => SourceSynthesisUniverseCallerBoundary.ordinarySymbols
 
-/-- The actual current open-universe request returns the original complete Mu and exact final machine. -/
-theorem current_stored_universe_reference_identity
+/-- The actual universe request returns its original Mu after valid source heap growth. -/
+theorem current_stored_universe_reference_identity_after_growth
     [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
     (lib : Library) (query : Query) (signed : Int) (whole : Expression)
     (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
-    (rootValue : Value Symbol Guard) (heap : State Symbol Guard)
+    (rootValue : Value Symbol Guard) (sourceHeap : State Symbol Guard)
     (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
-      .done rootValue heap)
+      .done rootValue sourceHeap)
     (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
-    (stored : heap.nodeRecords key = some (.mu entry body depth ordinary))
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (heap : State Symbol Guard) (facts : Facts heap) (growth : Grows sourceHeap heap)
     (domains : Cache.State IntersectionFlatMemoKeyDomain.DomainKey)
     (cacheValid : Cache.Valid domains) :
     let initial : Machine Symbol Guard := ⟨heap, domains⟩
@@ -221,25 +222,29 @@ theorem current_stored_universe_reference_identity
       execute top SourceEqualityPCSNativeEdge.conjoin 13 IntersectionEmptyDomain.emptyDomain
         (.reference (.interned entry.identity)) (.mu entry body depth ordinary) initial =
           .done (.mu entry body depth ordinary) final ∧
-      SourceRecursiveIntersectionKernel.Valid final ∧
-      SourceRecursiveIntersectionSemanticHeap.SemanticHeap final.heap ∧
-      Extension initial final ∧ Covered [] final.heap ∧
+      SourceRecursiveIntersectionKernel.Valid final ∧ Extension initial final ∧
       Available final.heap (.mu entry body depth ordinary) ∧ Available final.heap rootValue ∧
       final.heap.nodeRecords key = some (.mu entry body depth ordinary) ∧
       (∀ extra, execute top SourceEqualityPCSNativeEdge.conjoin (13 + extra) IntersectionEmptyDomain.emptyDomain
         (.reference (.interned entry.identity)) (.mu entry body depth ordinary) initial =
-          .done (.mu entry body depth ordinary) final) := by
+          .done (.mu entry body depth ordinary) final) ∧
+      (∀ pending, Covered pending heap → Covered pending final.heap) ∧
+      (SourceRecursiveIntersectionSemanticHeap.SemanticHeap heap →
+        SourceRecursiveIntersectionSemanticHeap.SemanticHeap final.heap) := by
   let initial : Machine Symbol Guard := ⟨heap, domains⟩
-  have checked := InternedFreshOrdinaryFacts.build_verified (ordinarySymbols whole) [] empty
-    InternedNestedFacts.empty_facts (by intro value member; cases member)
-  have facts : Facts heap := by
-    simpa only [built, Outcome.state] using checked.facts
-  have rootAvailable : Available heap rootValue := checked.result rootValue heap built
-  have universeAvailable : Available heap (.mu entry body depth ordinary) := facts.cached.nodes key _ stored
+  have sourceGrowth : Grows sourceHeap heap := growth
+  have storedNow : heap.nodeRecords key = some (.mu entry body depth ordinary) :=
+    sourceGrowth.nodeRecords key _ stored
+  have rootReplay := InternedFreshOrdinaryReplay.empty_replay
+    (ordinarySymbols whole) rootValue sourceHeap heap built sourceGrowth
+  have checked := InternedFreshOrdinaryFacts.build_verified (ordinarySymbols whole) [] heap facts
+    (by intro value member; cases member)
+  have rootAvailable : Available heap rootValue := checked.result rootValue heap rootReplay
+  have universeAvailable : Available heap (.mu entry body depth ordinary) := facts.cached.nodes key _ storedNow
   have referenceAvailable : Available heap (.reference (.interned entry.identity)) :=
     reference_available_mu heap facts entry body depth ordinary universeAvailable
   have bodyReplay := SourceSynthesisCurrentUniverseOwnership.current_stored_universe_body_replay
-    lib query signed whole accepted rootValue heap built key entry body depth ordinary stored heap (grows_refl heap)
+    lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored heap sourceGrowth
   obtain ⟨b, marker, arrow, rows, finalBody, calledBody, markerRead, arrowChildren, arrowKey,
       catalogRows, _bodyFacts, _bodyAvailable, sourceResident, _markerClosed, markerAvailable, coarseKinds, arrowMember⟩ :=
     SourceSynthesisCurrentUniverseBody.current_types_callback_rows
@@ -304,10 +309,15 @@ theorem current_stored_universe_reference_identity
   obtain ⟨_probeFacts, probeMarkerEntry, probeMarkerRow, _probeLeaf, probeMarkerKey,
       _probeMarkerClosed, probeMarkerAvailable, probePackets⟩ :=
     SourceSynthesisCurrentUniverseProbeRows.current_stored_universe_probe_rows
-      lib query signed whole accepted rootValue heap built key entry body depth ordinary stored
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+  have probeMarkerResident : sourceHeap.nodeRecords probeMarkerEntry.key =
+      some (.node probeMarkerEntry [probeMarkerRow] 0 []) :=
+    probeMarkerAvailable.resident probeMarkerEntry rfl
+  have currentProbeMarker : Available heap (.node probeMarkerEntry [probeMarkerRow] 0 []) :=
+    facts.cached.nodes probeMarkerEntry.key _ (sourceGrowth.nodeRecords _ _ probeMarkerResident)
   have probeMarkerSame : Value.node probeMarkerEntry [probeMarkerRow] 0 [] = .node m [markerRow] 0 [] :=
     SourceSynthesisUniverseMappedProbeRows.marker_eq (literal "(->)") top
-      probeMarkerEntry m probeMarkerRow markerRow heap facts probeMarkerAvailable nativeMarker probeMarkerKey markerKey
+      probeMarkerEntry m probeMarkerRow markerRow heap facts currentProbeMarker nativeMarker probeMarkerKey markerKey
   have sourceCurrent : ∀ row ∈ arrow :: rows, EdgeResident middle.heap row := by
     intro row member
     exact edge_grows heap middle.heap totalGrowth.heap row (sourceResident row member)
@@ -323,7 +333,7 @@ theorem current_stored_universe_reference_identity
     let probe : Reference := if ordinaryProbe then .uninterned (InternedFreshOrdinaryConstruction.ordinaryLevel depth) else .depth
     let target : Value Symbol Guard := if ordinaryProbe then ordinary else depth
     obtain ⟨probeEntry, probeArrow, probeRows, _probeCalled, probeEq, probeChildren, probeKey,
-        probeAligned, probeAvailable, probeResident, _probeKinds, _probeRetained⟩ := probePackets ordinaryProbe
+        probeAligned, _probeAvailable, probeResident, _probeKinds, _probeRetained⟩ := probePackets ordinaryProbe
     have nativeProbeChildren : probeArrow.children = [.node m [markerRow] 0 [], .reference probe, .reference probe] := by
       simpa only [probeMarkerSame] using probeChildren
     have nativeProbeKey : probeArrow.entry.key = ⟨literal "->", [(Value.node m [markerRow] 0 []).referenceOf,
@@ -331,8 +341,13 @@ theorem current_stored_universe_reference_identity
       simpa only [probeMarkerSame] using probeKey
     have probeCurrent : ∀ row ∈ probeArrow :: probeRows, EdgeResident middle.heap row := by
       intro row member
-      exact edge_grows heap middle.heap totalGrowth.heap row (probeResident row member)
-    have targetCurrent : Available middle.heap target := totalGrowth.available _ probeAvailable
+      exact edge_grows sourceHeap middle.heap (grows_trans sourceGrowth totalGrowth.heap)
+        row (probeResident row member)
+    have targetAvailable : Available heap target := by
+      cases ordinaryProbe with
+      | false => exact universeAvailable.children depth (by simp [InternedProbeProvenance.children])
+      | true => exact universeAvailable.children ordinary (by simp [InternedProbeProvenance.children])
+    have targetCurrent : Available middle.heap target := totalGrowth.available _ targetAvailable
     have replayed := mapped_product_probe literal top
       (SourceSynthesisUniverseBody.descriptors (SourceSynthesisCurrentContext.constructorCatalog lib query))
       entry.identity probe (.node m [markerRow] 0 []) arrow rows probeEntry probeArrow probeRows target
@@ -372,23 +387,68 @@ theorem current_stored_universe_reference_identity
         .done (.mu entry body depth ordinary) middle := by
     simpa only [bodyEq, bodyRows] using nativeIdentity
   have initialValid : SourceRecursiveIntersectionKernel.Valid initial := ⟨facts, cacheValid⟩
-  have incomingCovered := InternedFreshOrdinaryCoverage.closed_covered (ordinarySymbols whole) rootValue heap built
-  have finalCovered : InternedRecordCoherence.Covered [] middle.heap :=
-    SourceRecursiveIntersectionKernelCoverage.execute_covered (pending := []) top SourceEqualityPCSNativeEdge.conjoin
-      13 IntersectionEmptyDomain.emptyDomain (.reference (.interned entry.identity)) (.mu entry body depth ordinary)
+  have retainedCoverage : ∀ pending, Covered pending heap → Covered pending middle.heap := by
+    intro pending incomingCovered
+    exact SourceRecursiveIntersectionKernelCoverage.execute_covered (pending := pending)
+      top SourceEqualityPCSNativeEdge.conjoin 13 IntersectionEmptyDomain.emptyDomain
+      (.reference (.interned entry.identity)) (.mu entry body depth ordinary)
       initial initialValid (empty_domain initial) referenceAvailable universeAvailable incomingCovered
       (.mu entry body depth ordinary) middle done
-  have semantic := SourceRecursiveIntersectionSemanticHeap.constructed (ordinarySymbols whole) rootValue heap built
-  have scopeResult := SourceRecursiveIntersectionScopeCalls.execute_scoped top SourceEqualityPCSNativeEdge.conjoin
-    13 IntersectionEmptyDomain.emptyDomain (.reference (.interned entry.identity)) (.mu entry body depth ordinary)
-    initial initialValid (empty_domain initial) referenceAvailable universeAvailable semantic
-    (.mu entry body depth ordinary) middle done
-  refine ⟨middle, done, middleValid, scopeResult.1, totalGrowth, finalCovered, finalUniverse,
-    totalGrowth.available _ rootAvailable, totalGrowth.heap.nodeRecords key _ stored, ?_⟩
+  have retainedSemantic : SourceRecursiveIntersectionSemanticHeap.SemanticHeap heap →
+      SourceRecursiveIntersectionSemanticHeap.SemanticHeap middle.heap := by
+    intro semantic
+    have observed := SourceRecursiveIntersectionScopeCalls.execute_scoped
+      top SourceEqualityPCSNativeEdge.conjoin 13 IntersectionEmptyDomain.emptyDomain
+      (.reference (.interned entry.identity)) (.mu entry body depth ordinary)
+      initial initialValid (empty_domain initial) referenceAvailable universeAvailable semantic
+      (.mu entry body depth ordinary) middle done
+    exact observed.1
+  refine ⟨middle, done, middleValid, totalGrowth, finalUniverse,
+    totalGrowth.available _ rootAvailable, totalGrowth.heap.nodeRecords key _ storedNow, ?_,
+    retainedCoverage, retainedSemantic⟩
   intro extra
   exact (SourceRecursiveIntersectionKernel.execute_stable top SourceEqualityPCSNativeEdge.conjoin
     13 extra IntersectionEmptyDomain.emptyDomain (.reference (.interned entry.identity))
     (.mu entry body depth ordinary) initial (by rw [done]; trivial)).trans done
+
+/-- The actual current open-universe request returns the original complete Mu and exact final machine. -/
+theorem current_stored_universe_reference_identity
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (heap : State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue heap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : heap.nodeRecords key = some (.mu entry body depth ordinary))
+    (domains : Cache.State IntersectionFlatMemoKeyDomain.DomainKey)
+    (cacheValid : Cache.Valid domains) :
+    let initial : Machine Symbol Guard := ⟨heap, domains⟩
+    ∃ final : Machine Symbol Guard,
+      execute top SourceEqualityPCSNativeEdge.conjoin 13 IntersectionEmptyDomain.emptyDomain
+        (.reference (.interned entry.identity)) (.mu entry body depth ordinary) initial =
+          .done (.mu entry body depth ordinary) final ∧
+      SourceRecursiveIntersectionKernel.Valid final ∧
+      SourceRecursiveIntersectionSemanticHeap.SemanticHeap final.heap ∧
+      Extension initial final ∧ Covered [] final.heap ∧
+      Available final.heap (.mu entry body depth ordinary) ∧ Available final.heap rootValue ∧
+      final.heap.nodeRecords key = some (.mu entry body depth ordinary) ∧
+      (∀ extra, execute top SourceEqualityPCSNativeEdge.conjoin (13 + extra) IntersectionEmptyDomain.emptyDomain
+        (.reference (.interned entry.identity)) (.mu entry body depth ordinary) initial =
+          .done (.mu entry body depth ordinary) final) := by
+  have checked := InternedFreshOrdinaryFacts.build_verified (ordinarySymbols whole) [] empty
+    InternedNestedFacts.empty_facts (by intro value member; cases member)
+  have facts : Facts heap := by
+    simpa only [built, Outcome.state] using checked.facts
+  obtain ⟨final, done, valid, growth, universeAvailable, rootAvailable, retained, stable,
+      retainedCoverage, retainedSemantic⟩ :=
+    current_stored_universe_reference_identity_after_growth
+      lib query signed whole accepted rootValue heap built key entry body depth ordinary stored
+      heap facts (grows_refl heap) domains cacheValid
+  have covered := InternedFreshOrdinaryCoverage.closed_covered (ordinarySymbols whole) rootValue heap built
+  have semantic := SourceRecursiveIntersectionSemanticHeap.constructed (ordinarySymbols whole) rootValue heap built
+  exact ⟨final, done, valid, retainedSemantic semantic, growth, retainedCoverage [] covered,
+    universeAvailable, rootAvailable, retained, stable⟩
 
 
 end MicroCFTA.SourceSynthesisCurrentUniverseReferenceIdentity
