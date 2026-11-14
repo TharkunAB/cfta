@@ -1,3 +1,4 @@
+import MicroCFTA.SourceSynthesisCurrentInitialIdentityPrefix
 import MicroCFTA.SourcePruningEnumerationIdentityPrefixMetadataErasure
 import MicroCFTA.SourcePruningEnumerationIdentityCompletion
 import MicroCFTA.SourcePruningEnumerationIdentityPrefix
@@ -5039,3 +5040,6 @@ run_cmd do
 
 #check @MicroCFTA.SourcePruningEnumerationIdentityPrefixMetadataErasure.runPrefix_identity_metadata_erasure
 #print axioms MicroCFTA.SourcePruningEnumerationIdentityPrefixMetadataErasure.runPrefix_identity_metadata_erasure
+
+#check @MicroCFTA.SourceSynthesisCurrentInitialIdentityPrefix.accepted_initial_identity_prefix
+#print axioms MicroCFTA.SourceSynthesisCurrentInitialIdentityPrefix.accepted_initial_identity_prefix
