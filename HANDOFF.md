@@ -1,3 +1,42 @@
+# Same-source mixed body alias checked (2026-11-14 15:08 CET)
+
+GOAL ACTIVE. Preserve the full original common finite-witness, typing/language,
+depth/LPO/stream/size/count/weight/rank/host/Haskell objective below.
+NEW PUBLIC current_stored_universe_body_alias_after_mixed_entry in
+SourceSynthesisCurrentUniverseReferenceIdentity.lean proves the SAME accepted
+source/build/stored U returns FULL ORIGINAL U from actual BODY(U)/U after the
+literal mixed U/available closed ordinary-or-union pattern entry. It derives a
+finite bound, exact completion at every larger budget, final Valid and Extension.
+It derives actual ordered row readback, selected off-diagonal cutoff, both
+original-U probes and original Mu-key selection. No body/product/callback/result
+receipt or future provider is an input. All16 earlier checked proof bytes and
+the original public body target remain exact. Ref(U)/U is already public/checked.
+Each alias may retain its OWN final complete machine. Do not equate caches from
+different control orders. The pinned full two-alias target permits separate
+finals; combine the two checked laws with its exact selected-alias case split.
+
+All five public checks PASS. Strict Audit:96,025 aggregate imported theorem axiom
+dependencies; separately92 reports,90 standard-axiom and2 axiom-free. Only propext,
+Classical.choice and Quot.sound occur. Source modules5945; direct imports4943.
+Effective4GiB max/high,zero swap; public compiler handles terminal. Private strict
+check6: /tmp/mcfta-source-body-wrapper-check6-20261114-1501. Public logs/pins:
+/tmp/mcfta-current-source-body-alias-publication-20261114-1503.
+Earlier failed repairs remain uncredited. No Haskell implementation defect follows.
+
+Next compile the exact combined source open-alias target and actual successful-
+fuel corollary. Native execute success is stable; stopped WORKER partial-output
+history remains a separate OPEN target. The successful native comparison cannot
+prove every-budget worker history. Generated-type closure remains OPEN. The
+central ONE finite accepted original-root term with ONE consistent assignment
+and removed-bucket Holds law remain OPEN. Resource/source-worker milestones below
+remain checked. Checkpoint1750d9d8fc067cd9472dd4bd0800e812ea7c5e55 is pushed and
+independently verified; its immutable source snapshot precedes this body theorem.
+Root owns all live writes/compiler/Git jobs. Preserve .hypha/ and all failed/
+marked inputs. Keep /tmp small. No Haskell/Cabal/test/Liquid Haskell annotation
+changed. No new implementation fix was established; record future Haskell fixes
+in FINDINGS. The selected-value replay draft remains UNCOMPILED pending its
+prepared driver /tmp/mcfta-selected-value-replay-check-20261114-1506.
+
 # Same-source identity-worker resource checkpoint (2026-11-14 14:55 CET)
 
 GOAL ACTIVE. Keep the full optimized interned shared eager objective. For EACH
