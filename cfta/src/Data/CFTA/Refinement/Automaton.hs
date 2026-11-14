@@ -215,17 +215,21 @@ transitionsAt edge target
 
 -- The local function collect in located terminates on a finite graph. Each
 -- step removes a node from the pending list, or adds a new identity to the
--- seen map. LiquidHaskell cannot prove this with its default metric. The lazy
--- annotation turns off the termination check of located and of its local
--- functions.
-{-@ lazy located @-}
+-- seen map. LiquidHaskell cannot prove this with its default metric.
 
--- The plugin does not check the calls of nodeIdentity in validate, located,
--- and nodesAt. The module imports nodeIdentity through Data.CFTA.Interned, and
--- the plugin skips that module, so it does not see the precondition
--- hasIdentity. With the precondition, these calls are open obligations: they
--- need the rule that a built automaton has no EmptyNode child and no Rec other
--- than RecInt.
+-- Open obligation: the precondition hasIdentity of nodeIdentity needs the rule
+-- that a built automaton has no EmptyNode child and no Rec other than RecInt.
+-- LiquidHaskell cannot prove this rule. LiquidHaskell does not check the body
+-- of an ignored function, so it does not check the calls of nodeIdentity in the
+-- ignored functions below.
+
+-- located calls nodeIdentity on each node of its work list, validate on the
+-- nodes that a guard inspects, and nodesAt on each node at a path. The ignore
+-- annotation also turns off the termination check of located and of its local
+-- functions.
+{-@ ignore located @-}
+{-@ ignore validate @-}
+{-@ ignore nodesAt @-}
 
 -- A correct caller never calls fromViewError.
 {-@ fromViewError :: {e:FTA.FTAError InternedState | false} -> AutomatonError @-}
