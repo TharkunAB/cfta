@@ -1,0 +1,32 @@
+import MicroCFTA.SourcePruningEnumerationSharedDispatch
+import MicroCFTA.SourcePruningEnumerationSharedEnabledEmptyStability
+
+/-!
+# Successful shared dispatcher observations at larger bounds
+
+The actual native query retains its exact checked endpoint.
+The shared enabled check retains its exact observation and query memo.
+The actual shared dispatcher retains its action and every returned field.
+-/
+namespace MicroCFTA.SourcePruningEnumerationSharedDispatch
+open EnumerationState InternedConstructorTemplates
+open SourcePruningEnumerationNodes
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+variable {EnumGuard : Type} {width : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+theorem afterQuery_ok_stable
+    {checkEmpty : Bool} {p h P H source target : Nat}
+    {sourceScs targetScs : List Suspended} {query : Node} {queried : Checked width}
+    {beforeCaller afterCaller : Caller width} {queries savedQueries : Queries}
+    {action : Option (EnumerateM Symbol EnumGuard Unit)}
+    (observed : afterQuery checkEmpty p h source target sourceScs targetScs
+      query queried beforeCaller queries = (.ok action, afterCaller, savedQueries))
+    (enoughP : p ≤ P) (enoughH : h ≤ H) :
+    afterQuery checkEmpty P H source target sourceScs targetScs
+      query queried beforeCaller queries = (.ok action, afterCaller, savedQueries)

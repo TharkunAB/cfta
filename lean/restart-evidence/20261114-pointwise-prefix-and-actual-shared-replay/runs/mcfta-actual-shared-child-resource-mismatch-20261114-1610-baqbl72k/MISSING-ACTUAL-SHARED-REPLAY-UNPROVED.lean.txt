@@ -1,0 +1,37 @@
+import MicroCFTA.SourcePruningEnumerationSharedChildResources
+
+namespace MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.ChildDispatch
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedPartialInvariant (Context Post)
+open SourcePruningEnumerationSharedIncomingReservation (Seed advance Reserved)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Core" => EnumerationState.State Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Raw" => List (Except EnumerationState.Error (Fragment × Core))
+local notation "Heap" => SourceEqualityAnnotationHeap.Heap
+variable {width : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+-- MARKED TARGET ONLY. The existing legacy theorem has another run operation.
+theorem run_some_stable
+    {checkEmpty : Bool} {r R n N p P h H k K : Nat}
+    {scs : List Suspended} {incoming : Node} {beforeCaller afterCaller : Caller width}
+    {before after : Cached} {outer : Core} {moved : EnumerationWaitingIndex.Waiting}
+    {queries savedQueries : Queries} {raw : Raw}
+    (observed : SourcePruningEnumerationSharedSelectedContinuations.ChildDispatch.run checkEmpty r n p h k scs incoming beforeCaller before queries =
+      ((.ok (some raw), afterCaller, savedQueries, outer, moved), some after))
+    (successful : raw = [] ∨ ∃ fragment returned, raw = [.ok (fragment, returned)])
+    (enoughRepresentative : r ≤ R) (enoughNative : n ≤ N) (enoughP : p ≤ P)
+    (enoughH : h ≤ H) (enoughIndex : k ≤ K) :
+    SourcePruningEnumerationSharedSelectedContinuations.ChildDispatch.run checkEmpty R N P H K scs incoming beforeCaller before queries =
+      ((.ok (some raw), afterCaller, savedQueries, outer, moved), some after)

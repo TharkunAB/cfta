@@ -1,0 +1,206 @@
+/-- Unsupported or failed prefix observations stop with no local outputs. -/
+theorem unsupported_or_failed_prefix_stops
+    (child : Visitor)
+    (narrow : Metadata Unit → Nat → Nat → Node →
+      InternedConstructorTemplates.State Symbol Constraint →
+      MergedSourceComparison.Result Symbol Constraint Node)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Unit → Nat → Bool))
+    (order : Metadata Unit → List Nat → Option Nat)
+    (workFuel recursiveFuel uv : Nat)
+    (metadata : Metadata Unit) (caller : Caller width) (queries : Queries) (before : Cached)
+    (observed : SourcePruningEnumerationSelectedStep.Result width Unit)
+    (observing : SourcePruningEnumerationSelectedStep.runPrefixWithNarrow narrow graph templates
+      stop order metadata workFuel workFuel workFuel workFuel workFuel workFuel
+      uv caller before queries = observed)
+    (unsupported : match observed with
+      | .stopped _ _ => True
+      | .parked _ none _ => True
+      | .narrowed _ (.failed _ _) _ _ none none none none => True
+      | _ => False) :
+    resumeWithNarrow child narrow graph templates checkEmpty edgesOf stop order workFuel
+      (recursiveFuel + 1) metadata caller queries before (some (.expand uv)) =
+      .stopped [] (.selected uv observed)
+        (some (match observed with
+          | .narrowed _ _ reached saved _ _ _ _ => (reached, saved)
+          | _ => (caller, queries))) := by
+  cases observed with
+  | stopped reading checking => simp only [resumeWithNarrow, observing]
+  | parked checked candidate raw =>
+      cases candidate with
+      | none => simp only [resumeWithNarrow, observing]
+      | some saved => cases unsupported
+  | narrowed checked prepared reached saved action candidate right ordinary =>
+      cases prepared with
+      | done payload heap => cases unsupported
+      | failed fault heap =>
+          cases action <;> cases candidate <;> cases right <;> cases ordinary <;>
+            first
+            | contradiction
+            | simp only [resumeWithNarrow, observing]
+
+section ObservedIdentityCheckpointPhases
+open SourceCurrentAllocatedQueryMemo (advancePhysical)
+open SourcePruningEnumerationPrefixAdmission (suspendedBound)
+
+/-- Every supported observed identity prefix has the actual checkpoint phase fields. -/
+theorem prefix_identity_phase_resources_at_any_budget
+    (graph : Graph Symbol Constraint)
+    (metadata : Metadata Unit)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller width) (memos : Memos) (before : Cached)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (profile : Profile) (property : Constraint → Prop)
+    (bounded : SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile caller.checked)
+    (known : SourceEqualityAnnotationHeap.Heap property caller.checked.native.machine.heap)
+    (fuel selected : Nat)
+    (chosen : SourcePruningEnumerationRestart.decision none (fun _ _ => none)
+      metadata before = some (.expand selected)) :
+    let observed := SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
+      (fun _ _ _ node state => .done node state) graph [] none (fun _ _ => none) metadata
+      fuel fuel fuel fuel fuel fuel selected caller before memos.query
+    match observed with
+    | .stopped _ _ => True
+    | .parked _ none _ => True
+    | .narrowed _ (.failed _ _) _ _ _ _ _ _ => True
+    | _ => (∃ after : Cached,
+        EnumerationDriver.Ready selected after.core ∧
+        EnumerationReferences.IncomingAvoid selected after.core ∧
+        suspendedBound after.core ≤ suspendedBound before.core ∧
+        observed =
+          .parked after.core (some after)
+            (some (ExceptT.run (SourcePruningEnumerationRestart.run none (fun _ _ => none) metadata after after.core))) ∧
+          CurrentPrefixResources none (fun _ _ => none) metadata formulas solver inventory selected caller before memos profile property
+            observed) ∨
+      (∃ checked : Core,
+        EnumerationDriver.Ready selected checked ∧
+        EnumerationReferences.IncomingAvoid selected checked ∧
+        suspendedBound checked = suspendedBound before.core ∧
+        observed =
+          .narrowed checked (.done (.empty, some (reject : EnumerateM Symbol Constraint Unit)) caller.checked.native.machine.heap)
+            (SourceCurrentAllocatedPartialState.advance caller
+              (advancePhysical caller.checked ⟨caller.checked.native.machine.heap, caller.checked.operations⟩)
+              caller.fourth caller.merge)
+            memos.query (some []) none none none ∧
+          CurrentPrefixResources none (fun _ _ => none) metadata formulas solver inventory selected caller before memos profile property
+            observed) ∨
+      (∃ (handle : Nat) (scs : List Suspended) (value : Node) (after : Cached),
+        value ≠ .empty ∧ encodeNode value = some handle ∧
+        EnumerationDriver.Ready selected after.core ∧
+        after.core.values[selected]? = some (.unenumerated (some handle) scs) ∧
+        EnumerationReferences.IncomingAvoid selected after.core ∧
+        scs.length ≤ suspendedBound before.core ∧
+        suspendedBound after.core = suspendedBound before.core ∧
+        observed =
+          .narrowed after.core (.done (value, some (pure () : EnumerateM Symbol Constraint Unit)) caller.checked.native.machine.heap)
+            (SourceCurrentAllocatedPartialState.advance caller
+              (advancePhysical caller.checked ⟨caller.checked.native.machine.heap, caller.checked.operations⟩)
+              caller.fourth caller.merge)
+            memos.query (some [.ok ((), after.core)]) (some after)
+            (some [.ok ((false, metadata), after.core)]) none ∧
+          CurrentPrefixResources none (fun _ _ => none) metadata formulas solver inventory selected caller before memos profile property
+            observed) := by
+  classical
+  have selection : EnumerationPureSelection.next (fun _ => none) before = .expand selected :=
+    Option.some.inj chosen
+  obtain ⟨roots, paths, _storage, realized, counts, flags⟩ := packet.valid
+  obtain ⟨receiptFuel, originalHandle, originalScs, originalValue, readAfter, repeated, receiptAfter,
+      _stored, _decoded, _encoded, _available, _closed, _reads, checks, readFrame,
+      receiptReady, _afterPaths, _afterRealized, _afterCounts, _afterFlags, receiptIncoming,
+      _pending, running⟩ :=
+    SourcePruningEnumerationSelectedStep.runPrefix_identity_selected_complete
+      graph [] none (fun _ _ => none) metadata caller before memos.query (fun _ => none) selected roots
+      packet.context.ready.good.heap packet.safe selection realized paths counts flags
+  obtain ⟨checkpointBound, phases⟩ := identity_checkpoint_resources graph false (fun _ => []) metadata
+    formulas solver inventory caller memos before packet profile property bounded known selected chosen
+  let bound := checkpointBound + receiptFuel
+  have receiptShift : receiptFuel + (checkpointBound + fuel) = fuel + bound := by
+    dsimp only [bound]
+    omega
+  have phaseShift : checkpointBound + (receiptFuel + fuel) = fuel + bound := by
+    dsimp only [bound]
+    omega
+  have checkSuccess : Success
+      (SourcePruningEnumerationRecursion.checkRepeated caller.checked.native.machine.heap
+        receiptFuel selected originalHandle originalScs) readAfter repeated receiptAfter.core := by
+    rw [Success, ← Nat.add_zero receiptFuel, checks 0]
+    exact List.mem_singleton_self _
+  have admission :
+      match SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
+        (fun _ _ _ node state => .done node state) graph [] none (fun _ _ => none) metadata
+        (fuel + bound) (fuel + bound) (fuel + bound) (fuel + bound) (fuel + bound) (fuel + bound)
+        selected caller before memos.query with
+      | .parked checked _ _ =>
+          EnumerationDriver.Ready selected checked ∧
+          EnumerationReferences.IncomingAvoid selected checked
+      | .narrowed checked _ _ _ _ _ _ _ =>
+          EnumerationDriver.Ready selected checked ∧
+          EnumerationReferences.IncomingAvoid selected checked ∧
+          suspendedBound checked = suspendedBound before.core
+      | .stopped _ _ => False := by
+    cases repeated with
+    | true =>
+        have actual := (running (checkpointBound + fuel)
+          (fuel + bound) (fuel + bound) (fuel + bound)).1 rfl
+        rw [receiptShift] at actual
+        rw [actual]
+        exact ⟨receiptReady, receiptIncoming⟩
+    | false =>
+        have checkedFrame := SourcePruningEnumerationRecursionOrder.checkRepeated_false_frame
+          caller.checked.native.machine.heap receiptFuel selected originalHandle originalScs
+          readAfter receiptAfter.core (readFrame.total packet.safe.1.total) checkSuccess
+        have sameMass : suspendedBound receiptAfter.core = suspendedBound before.core :=
+          SourcePruningEnumerationPrefixAdmission.suspendedBound_values before.core receiptAfter.core
+            (readFrame.trans checkedFrame).values
+        by_cases empty : originalValue = .empty
+        · have actual := ((running (checkpointBound + fuel)
+            (fuel + bound) (fuel + bound) (fuel + bound)).2 rfl).1 empty
+          rw [receiptShift] at actual
+          rw [actual]
+          exact ⟨receiptReady, receiptIncoming, sameMass⟩
+        · have actual := ((running (checkpointBound + fuel)
+            (fuel + bound) (fuel + bound) (fuel + bound)).2 rfl).2 empty
+          rw [receiptShift] at actual
+          rw [actual]
+          exact ⟨receiptReady, receiptIncoming, sameMass⟩
+  have replay := prefix_identity_supported_moreFuel graph [] none (fun _ _ => none) metadata
+    caller before memos.query packet.context.ready.good.heap realized packet.safe.1.total
+    fuel bound selected
+  dsimp only at replay ⊢
+  generalize observedEq : SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
+    (fun _ _ _ node state => .done node state) graph [] none (fun _ _ => none) metadata
+    fuel fuel fuel fuel fuel fuel selected caller before memos.query = observed at replay ⊢
+  cases observed with
+  | stopped reading checking => trivial
+  | parked checked candidate raw => cases candidate
+  | narrowed checked prepared reached saved action candidate right ordinary => cases prepared
+  all_goals try trivial
+  all_goals
+    rcases phases with ⟨parked, parkedMass, phase⟩ | ⟨emptyCore, phase⟩ |
+      ⟨handle, scs, value, after, nonempty, encoded, afterReady, afterStored, incoming,
+        lengths, sameMass, phase⟩
+    · have phaseAt := phase (receiptFuel + fuel)
+      rw [phaseShift] at phaseAt
+      have canonicalAdmission := admission
+      rw [phaseAt.1] at canonicalAdmission
+      obtain ⟨parkedReady, parkedIncoming⟩ := canonicalAdmission
+      refine Or.inl ⟨parked, parkedReady, parkedIncoming, parkedMass,
+        replay.symm.trans phaseAt.1, ?_⟩
+      simpa only [replay] using phaseAt.2
+    · have phaseAt := phase (receiptFuel + fuel)
+      rw [phaseShift] at phaseAt
+      have canonicalAdmission := admission
+      rw [phaseAt.1] at canonicalAdmission
+      obtain ⟨emptyReady, emptyIncoming, emptyMass⟩ := canonicalAdmission
+      refine Or.inr (Or.inl ⟨emptyCore, emptyReady, emptyIncoming, emptyMass,
+        replay.symm.trans phaseAt.1, ?_⟩)
+      simpa only [replay] using phaseAt.2
+    · have phaseAt := phase (receiptFuel + fuel)
+      rw [phaseShift] at phaseAt
+      refine Or.inr (Or.inr ⟨handle, scs, value, after, nonempty, encoded, afterReady,
+        afterStored, incoming, lengths, sameMass, replay.symm.trans phaseAt.1, ?_⟩)
+      simpa only [replay] using phaseAt.2
+
+end ObservedIdentityCheckpointPhases

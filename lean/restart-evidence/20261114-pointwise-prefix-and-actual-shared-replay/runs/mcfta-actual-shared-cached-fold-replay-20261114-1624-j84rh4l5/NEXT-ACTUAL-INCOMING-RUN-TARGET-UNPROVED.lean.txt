@@ -1,0 +1,25 @@
+import MicroCFTA.SourcePruningEnumerationSharedIncomingNode
+
+namespace MicroCFTA.SourcePruningEnumerationSharedIncomingNode
+open EnumerationState InternedConstructorTemplates SourcePruningEnumerationNodes
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Core" => EnumerationState.State Symbol
+variable {EnumGuard : Type} {width : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+-- MARKED TARGET ONLY. No proof is supplied.
+theorem run_ok_stable
+    {checkEmpty : Bool} {r n p h R N P H : Nat}
+    {caller reached : Caller width} {before read : Core EnumGuard}
+    {uv : Nat} {incoming : Node} {incomingScs : List Suspended} {queries saved : Queries}
+    {raw : List (Except EnumerationState.Error (Unit × Core EnumGuard))}
+    (observed : run checkEmpty r n p h caller before uv incoming incomingScs queries =
+      (.ok (some raw), reached, saved, read))
+    (successful : raw = [] ∨ ∃ returned : Core EnumGuard, raw = [.ok ((), returned)])
+    (enoughR : r ≤ R) (enoughN : n ≤ N) (enoughP : p ≤ P) (enoughH : h ≤ H) :
+    run checkEmpty R N P H caller before uv incoming incomingScs queries =
+      (.ok (some raw), reached, saved, read)

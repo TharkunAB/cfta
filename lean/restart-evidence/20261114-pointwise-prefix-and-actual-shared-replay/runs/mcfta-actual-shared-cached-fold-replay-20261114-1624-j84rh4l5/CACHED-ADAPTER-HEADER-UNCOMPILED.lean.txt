@@ -1,0 +1,32 @@
+import MicroCFTA.SourcePruningEnumerationSharedCachedTerminal
+import MicroCFTA.SourcePruningEnumerationSharedDispatchStability
+
+/-!
+# Exact outer successful shared fold observations
+
+The shared dispatcher retains its action and native endpoint.
+The pure cache adapter uses that same reached heap and raw action result.
+Both fold paths retain the raw option, caller, query memo, core and optional cache.
+-/
+namespace MicroCFTA.SourcePruningEnumerationSharedCachedTerminal
+open EnumerationState InternedConstructorTemplates
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Core" => EnumerationState.State Symbol Constraint
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Raw" => List (Except EnumerationState.Error (Unit × Core))
+variable {width : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+theorem cachedAdapter_ok_stable
+    {checkEmpty : Bool} {n N p P h H : Nat}
+    {beforeCaller afterCaller : Caller width} {before : Cached}
+    {source target : Nat} {queries savedQueries : Queries} {raw : Option Raw} {after : Option Cached}
+    (observed : cachedAdapter checkEmpty n p h beforeCaller before source target queries =
+      (.ok raw, afterCaller, savedQueries, after))
+    (enoughNative : n ≤ N) (enoughP : p ≤ P) (enoughH : h ≤ H) :
+    cachedAdapter checkEmpty N P H beforeCaller before source target queries =
+      (.ok raw, afterCaller, savedQueries, after)

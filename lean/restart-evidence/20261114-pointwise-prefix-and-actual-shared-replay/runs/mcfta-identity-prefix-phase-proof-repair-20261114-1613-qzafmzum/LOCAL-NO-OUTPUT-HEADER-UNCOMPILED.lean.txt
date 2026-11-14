@@ -1,0 +1,27 @@
+/-- Unsupported or failed prefix observations stop with no local outputs. -/
+theorem unsupported_or_failed_prefix_stops
+    (child : Visitor)
+    (narrow : Metadata Unit → Nat → Nat → Node →
+      InternedConstructorTemplates.State Symbol Constraint →
+      MergedSourceComparison.Result Symbol Constraint Node)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Unit → Nat → Bool))
+    (order : Metadata Unit → List Nat → Option Nat)
+    (workFuel recursiveFuel uv : Nat)
+    (metadata : Metadata Unit) (caller : Caller width) (queries : Queries) (before : Cached)
+    (observed : SourcePruningEnumerationSelectedStep.Result width Unit)
+    (observing : SourcePruningEnumerationSelectedStep.runPrefixWithNarrow narrow graph templates
+      stop order metadata workFuel workFuel workFuel workFuel workFuel workFuel
+      uv caller before queries = observed)
+    (unsupported : match observed with
+      | .stopped _ _ => True
+      | .parked _ none _ => True
+      | .narrowed _ (.failed _ _) _ _ none none none none => True
+      | _ => False) :
+    resumeWithNarrow child narrow graph templates checkEmpty edgesOf stop order workFuel
+      (recursiveFuel + 1) metadata caller queries before (some (.expand uv)) =
+      .stopped [] (.selected uv observed)
+        (some (match observed with
+          | .narrowed _ _ reached saved _ _ _ _ => (reached, saved)
+          | _ => (caller, queries)))

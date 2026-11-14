@@ -1,0 +1,5 @@
+import MicroCFTA.SourcePruningEnumerationSharedDispatchStability
+#check @MicroCFTA.SourcePruningEnumerationSharedDispatch.afterQuery_ok_stable
+#print axioms MicroCFTA.SourcePruningEnumerationSharedDispatch.afterQuery_ok_stable
+#check @MicroCFTA.SourcePruningEnumerationSharedDispatch.dispatch_ok_stable
+#print axioms MicroCFTA.SourcePruningEnumerationSharedDispatch.dispatch_ok_stable

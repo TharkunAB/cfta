@@ -1,0 +1,55 @@
+@MicroCFTA.SourcePruningEnumerationSharedDispatch.afterQuery_ok_stable : ∀ {EnumGuard : Type} {width : Nat}
+  [inst : DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {checkEmpty : Bool} {p h P H source target : Nat} {sourceScs targetScs : List MicroCFTA.EnumerationState.Suspended}
+  {query :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {queried : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {beforeCaller afterCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {queries savedQueries : MicroCFTA.SourceEndpointMemo.Memos}
+  {action : Option (MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol EnumGuard Unit)},
+  MicroCFTA.SourcePruningEnumerationSharedDispatch.afterQuery checkEmpty p h source target sourceScs targetScs query
+        queried beforeCaller queries =
+      (Except.ok action, afterCaller, savedQueries) →
+    p ≤ P →
+      h ≤ H →
+        MicroCFTA.SourcePruningEnumerationSharedDispatch.afterQuery checkEmpty P H source target sourceScs targetScs
+            query queried beforeCaller queries =
+          (Except.ok action, afterCaller, savedQueries)
+'MicroCFTA.SourcePruningEnumerationSharedDispatch.afterQuery_ok_stable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourcePruningEnumerationSharedDispatch.dispatch_ok_stable : ∀ {EnumGuard : Type} {width : Nat}
+  [inst : DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {checkEmpty : Bool} {n p h N P H : Nat}
+  {beforeCaller afterCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {before : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard} {source target : Nat}
+  {queries savedQueries : MicroCFTA.SourceEndpointMemo.Memos}
+  {action : Option (MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol EnumGuard Unit)},
+  MicroCFTA.SourcePruningEnumerationSharedDispatch.dispatch checkEmpty n p h beforeCaller before source target queries =
+      (Except.ok action, afterCaller, savedQueries) →
+    n ≤ N →
+      p ≤ P →
+        h ≤ H →
+          MicroCFTA.SourcePruningEnumerationSharedDispatch.dispatch checkEmpty N P H beforeCaller before source target
+              queries =
+            (Except.ok action, afterCaller, savedQueries)
+'MicroCFTA.SourcePruningEnumerationSharedDispatch.dispatch_ok_stable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

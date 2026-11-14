@@ -1,0 +1,37 @@
+import MicroCFTA.SourcePruningEnumerationSharedCachedTerminal
+import MicroCFTA.SourcePruningEnumerationSharedCachedFoldStability
+
+/-!
+# Exact outer successful shared fold observations
+
+The shared dispatcher retains its action and native endpoint.
+The pure cache adapter uses that same reached heap and raw action result.
+Both fold paths retain the raw option, caller, query memo, core and optional cache.
+-/
+namespace MicroCFTA.SourcePruningEnumerationSharedCachedTerminal
+open EnumerationState InternedConstructorTemplates
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Core" => EnumerationState.State Symbol Constraint
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "TerminalRaw" => List (Except EnumerationState.Error (Fragments.Fragment Symbol × Core))
+variable {width : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+-- MARKED TARGET ONLY. No proof is supplied.
+theorem run_some_stable
+    {checkEmpty : Bool} {r R n N p P h H k K : Nat}
+    {first : Suspended} {rest : List Suspended}
+    {beforeCaller afterCaller : Caller width} {before after : Cached} {outer : Core}
+    {incoming : Node} {incomingScs : List Suspended} {queries savedQueries : Queries}
+    {raw : TerminalRaw} {moved : EnumerationWaitingIndex.Waiting}
+    (observed : run checkEmpty r n p h k first rest beforeCaller before incoming incomingScs queries =
+      ((.ok (some raw), afterCaller, savedQueries, outer, moved), some after))
+    (successful : raw = [] ∨ ∃ fragment returned, raw = [.ok (fragment, returned)])
+    (enoughRepresentative : r ≤ R) (enoughNative : n ≤ N) (enoughP : p ≤ P)
+    (enoughH : h ≤ H) (enoughIndex : k ≤ K) :
+    run checkEmpty R N P H K first rest beforeCaller before incoming incomingScs queries =
+      ((.ok (some raw), afterCaller, savedQueries, outer, moved), some after)

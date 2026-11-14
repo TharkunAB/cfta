@@ -1,0 +1,62 @@
+section ObservedIdentityCheckpointPhases
+open SourceCurrentAllocatedQueryMemo (advancePhysical)
+open SourcePruningEnumerationPrefixAdmission (suspendedBound)
+
+/-- Every supported observed identity prefix has the actual checkpoint phase fields. -/
+theorem prefix_identity_phase_resources_at_any_budget
+    (graph : Graph Symbol Constraint)
+    (metadata : Metadata Unit)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller width) (memos : Memos) (before : Cached)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (profile : Profile) (property : Constraint → Prop)
+    (bounded : SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile caller.checked)
+    (known : SourceEqualityAnnotationHeap.Heap property caller.checked.native.machine.heap)
+    (fuel selected : Nat)
+    (chosen : SourcePruningEnumerationRestart.decision none (fun _ _ => none)
+      metadata before = some (.expand selected)) :
+    let observed := SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
+      (fun _ _ _ node state => .done node state) graph [] none (fun _ _ => none) metadata
+      fuel fuel fuel fuel fuel fuel selected caller before memos.query
+    match observed with
+    | .stopped _ _ => True
+    | .parked _ none _ => True
+    | .narrowed _ (.failed _ _) _ _ _ _ _ _ => True
+    | _ => (∃ after : Cached,
+        EnumerationDriver.Ready selected after.core ∧
+        EnumerationReferences.IncomingAvoid selected after.core ∧
+        suspendedBound after.core ≤ suspendedBound before.core ∧
+        observed =
+          .parked after.core (some after)
+            (some (ExceptT.run (SourcePruningEnumerationRestart.run none (fun _ _ => none) metadata after after.core))) ∧
+          CurrentPrefixResources none (fun _ _ => none) metadata formulas solver inventory selected caller before memos profile property
+            observed) ∨
+      (∃ checked : Core,
+        EnumerationDriver.Ready selected checked ∧
+        EnumerationReferences.IncomingAvoid selected checked ∧
+        suspendedBound checked = suspendedBound before.core ∧
+        observed =
+          .narrowed checked (.done (.empty, some (reject : EnumerateM Symbol Constraint Unit)) caller.checked.native.machine.heap)
+            (SourceCurrentAllocatedPartialState.advance caller
+              (advancePhysical caller.checked ⟨caller.checked.native.machine.heap, caller.checked.operations⟩)
+              caller.fourth caller.merge)
+            memos.query (some []) none none none ∧
+          CurrentPrefixResources none (fun _ _ => none) metadata formulas solver inventory selected caller before memos profile property
+            observed) ∨
+      (∃ (handle : Nat) (scs : List Suspended) (value : Node) (after : Cached),
+        value ≠ .empty ∧ encodeNode value = some handle ∧
+        EnumerationDriver.Ready selected after.core ∧
+        after.core.values[selected]? = some (.unenumerated (some handle) scs) ∧
+        EnumerationReferences.IncomingAvoid selected after.core ∧
+        scs.length ≤ suspendedBound before.core ∧
+        suspendedBound after.core = suspendedBound before.core ∧
+        observed =
+          .narrowed after.core (.done (value, some (pure () : EnumerateM Symbol Constraint Unit)) caller.checked.native.machine.heap)
+            (SourceCurrentAllocatedPartialState.advance caller
+              (advancePhysical caller.checked ⟨caller.checked.native.machine.heap, caller.checked.operations⟩)
+              caller.fourth caller.merge)
+            memos.query (some [.ok ((), after.core)]) (some after)
+            (some [.ok ((false, metadata), after.core)]) none ∧
+          CurrentPrefixResources none (fun _ _ => none) metadata formulas solver inventory selected caller before memos profile property
+            observed)
