@@ -5240,3 +5240,6 @@ run_cmd do
 
 #check @MicroCFTA.SourceSynthesisUniverseOffDiagonalBody.node_target_readback
 #print axioms MicroCFTA.SourceSynthesisUniverseOffDiagonalBody.node_target_readback
+
+#check @MicroCFTA.SourceSynthesisCurrentUniverseReferenceIdentity.current_stored_universe_body_alias_after_mixed_entry
+#print axioms MicroCFTA.SourceSynthesisCurrentUniverseReferenceIdentity.current_stored_universe_body_alias_after_mixed_entry
