@@ -246,6 +246,20 @@ Wilf, and Feat (ranking).
   the normalization. It adds to the score of each offered token zero
   (`MaskOnly`), or the log of the probability of the token under the weights
   of the completions (`WeighCompletions`).
+- **Visit**: one step of a guided search at a prefix that is not complete. The
+  search reads the mask and the scores of the prefix, and keeps them with its
+  choice (`Visit`). The trace of a search is the list of its visits.
+- **Dead end**: a prefix of a guided search that is not complete and has no
+  token with a finite step log-probability. The search takes the best open
+  prefix.
+- **Repair**: the continuation of a token sequence that a mask refuses. It
+  keeps the longest prefix of the sequence whose tokens the masks offer, and
+  searches from that prefix (`repair`).
+- **Mask cache**: the masks of the prefixes that a guided search opened, by
+  prefix (`MaskCache`). A later search on the same language reads them.
+- **Text token**: a character of a text, or the end of the text
+  (`Data.CFTA.Mask.Text.TextToken`). It is a token of the mask of a text. Not
+  a **Token** of a term.
 - **Event**: a set of terms, as in probability: the terms that an automaton
   accepts. A model given an event (`condition`) gives each term of the event
   its probability divided by the probability of the event. Not a diagnostic

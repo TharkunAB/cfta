@@ -6,6 +6,9 @@ import Data.List (inits, sort, sortOn)
 import Data.Maybe (fromJust, fromMaybe)
 import Data.Ord (Down (..))
 import Test.Hspec (Spec, describe, it, shouldBe, shouldSatisfy)
+import qualified Test.QuickCheck as QC
+import qualified Test.QuickCheck.Gen as QCGen
+import qualified Test.QuickCheck.Random as QCRandom
 
 import qualified Data.CFTA as FTA
 import Data.CFTA.Gen.ExpressionLanguage (equalAutomaton, structuralAutomaton)
@@ -246,6 +249,20 @@ spec = describe "Data.CFTA.Guided" $ do
                     visitMask visit `shouldSatisfy` notElem unequalToken
                 [] -> fail "no visit after + a"
 
+    it "keeps the equality, and chooses only offered tokens, for seeded random scorers and each strategy" $ do
+        let seeds = QCGen.unGen (QC.vectorOf 20 QC.arbitrary) (QCRandom.mkQCGen 20261114) 30 :: [Int]
+        results <-
+            sequence
+                [ fst <$> guide strategy (limits 100 3) MaskOnly (randomScorer seed) emptyMaskCache (completionsMask equalExpressions)
+                | seed <- seeds
+                , strategy <- [Greedy, BestFirst, Beam 3]
+                ]
+        map (null . guidedTerms) results `shouldSatisfy` not . or
+        forM_ results $ \result -> do
+            map (FTA.accepts equalAutomaton . fst) (guidedTerms result) `shouldSatisfy` and
+            [maybe True (`elem` visitMask visit) $ visitChoice visit | visit <- guidedTrace result]
+                `shouldSatisfy` and
+
     describe "cachedScorer" $
         it "asks the given scorer once for each prefix, and keeps the results of the search" $ do
             asked <- newIORef []
@@ -348,3 +365,22 @@ expressionModel =
             structuralAutomaton
             7
             (equalSum : take 9 (completionTerms equalExpressions) <> replicate 40 unequalSum)
+
+-- | The tokens of 'structuralAutomaton': each symbol with its number of children.
+expressionTokens :: [(Char, Int)]
+expressionTokens =
+    Set.toList . Set.fromList $
+        [ (FTA.transitionSymbol transition, length $ FTA.transitionChildren transition)
+        | transition <- concat $ FTA.transitionTable structuralAutomaton
+        ]
+
+{- | Scores from a seed, for each token of the expressions, also for tokens
+that the mask of the expressions with the equality does not offer. A prefix
+always gets the same scores.
+-}
+randomScorer :: Int -> Scorer (Char, Int)
+randomScorer seed prefix = pure [(token, noise token) | token <- expressionTokens]
+  where
+    noise token = fromIntegral (foldl mix (seed `mod` 1000003) (concatMap name $ prefix <> [token]) `mod` 1000) / 100 - 5
+    name (symbol, arity) = symbol : show arity
+    mix hashed character = (31 * hashed + fromEnum character) `mod` 1000003

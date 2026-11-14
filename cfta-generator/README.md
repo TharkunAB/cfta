@@ -561,11 +561,11 @@ keeps the longest prefix of a token sequence whose tokens the masks offer,
 gives the place and the `Refusal` of the first refused token, and searches
 from the prefix.
 
-`modelScorer` of `Data.CFTA.Guided.Model` is the scorer of a trained `Model`: the score of a token is the
-log of its probability after the prefix. It needs no outside model. A prefix
-that the model does not know has no scores, so the search ends there at a dead
-end. `cachedScorer` gives a scorer a memory, so that it answers once for each
-prefix.
+`modelScorer` of `Data.CFTA.Guided.Model` is the scorer of a trained `Model`:
+the score of a token is the log of its probability after the prefix. It needs
+no outside model. A prefix that the model does not know has no scores, so the
+search ends there at a dead end. `cachedScorer` gives a scorer a memory, so
+that it answers once for each prefix.
 
 ```haskell
 scorer <- cachedScorer (modelScorer model)
@@ -634,6 +634,14 @@ map fst . maskNext <$> maskStep entryMask 0
 
 After the entry `a+`, the mask of the entries offers `a` and refuses `b`,
 because the two children of the sum are equal.
+
+Two runnable programs use the expressions of
+`Data.CFTA.Gen.ExpressionLanguage`. `cabal run cfta-generator:cfta-text-mask`
+writes the text of an expression through the mask one character at a time,
+and shows where the mask refuses a sum with two different children.
+`cabal run cfta-generator:cfta-guided-search` runs a guided search with the
+scorer of a model that prefers `a+b`: the mask of the expressions with the
+equality stops it, and the trace shows where.
 
 ### Check a definitional extension
 
