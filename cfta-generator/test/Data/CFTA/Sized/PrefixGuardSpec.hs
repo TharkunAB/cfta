@@ -1,4 +1,10 @@
-module Data.CFTA.Sized.PrefixGuardSpec (spec) where
+module Data.CFTA.Sized.PrefixGuardSpec (
+    spec,
+    guardedPairs,
+    partialEntailment,
+    number,
+    sym,
+) where
 
 import Control.Exception (throwIO)
 import Control.Monad (forM, forM_, void, when, zipWithM)

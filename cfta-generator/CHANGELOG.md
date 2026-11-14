@@ -5,17 +5,27 @@
 - `Data.CFTA.Sized.Prefix`: `stepToken` and `stepPrefix` add tokens only when
   the tokens are offered, and otherwise give a `Refusal`: the token is
   rejected, the token is undecided, or the prefix is a whole term.
-- `Data.CFTA.Guided`: `guide` is a guided search. It writes the terms of the
-  completions one token at a time from the log-scores of a `Scorer`, greedy,
+- `Data.CFTA.Mask`: `Mask` is the mask of a prefix of one language, as a
+  record: the prefix, the offered tokens with their probabilities, the
+  undecided tokens, the step after a token (the next mask, or the `Refusal`),
+  and the accepted terms of a complete prefix. The fields are lazy.
+  `completionsMask` gives the mask of each prefix of a `Completions` value:
+  the tokens of `nextTokens` with their `tokenProbability` under the weights
+  of the completions, and the step of `stepToken`.
+- `Data.CFTA.Guided`: `guide` is a guided search. It writes the terms of a
+  language one token at a time from the log-scores of a `Scorer`, greedy,
   best-first, or in a beam, within limits on visits, found terms, and
-  wall-clock time. The mask of each prefix is `nextTokens`, the scores are
-  normalized over the mask, and the weights of the completions can multiply
-  them (`tokenProbability`). The result has the found terms with their total
-  log-scores, a trace with one record for each visit, the reason for the stop,
-  and a `MaskCache` of the mask states of the prefixes, which a later search
-  on the same language reads. `Beam width` keeps the best `width` prefixes of
-  each depth. `repair` continues the longest prefix of a token sequence that
-  the mask accepts, and gives the place of the first refused token.
+  wall-clock time. It reads only the `Mask` of each prefix, so it runs on
+  masks with different tokens. It normalizes the scores over the offered
+  tokens of the mask. With the `Weighing` `WeighCompletions`, it first adds
+  the log of the probability of each token in the mask to its score. The
+  result has the found terms with their total log-scores, a trace with one
+  record for each visit (with the offered and the undecided tokens), the
+  reason for the stop, and a `MaskCache` of the masks of the prefixes, which a
+  later search on the same language reads. `Beam width` keeps the best `width`
+  prefixes of each depth. `repair` continues the longest prefix of a token
+  sequence whose tokens the masks offer, and gives the place and the `Refusal`
+  of the first refused token.
 - Add `Data.CFTA.Extension`: `checkExtension` checks that a later automaton
   is a definitional extension of an earlier automaton by a template lowering.
   It reports another initial state, a lost or changed old production, an old

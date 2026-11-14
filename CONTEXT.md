@@ -221,13 +221,19 @@ Wilf, and Feat (ranking).
 - **Walk**: a path of tokens with the verdicts of the solver kept for each
   step (`Deciding`). It asks the solver only when a query needs a verdict.
 - **Mask**: the tokens that can come next after a prefix: the tokens of
-  `nextTokens`.
+  `nextTokens`. The record `Mask` (`Data.CFTA.Mask`) holds the mask of a
+  prefix and the step after each token. `completionsMask` gives this record
+  for each prefix of a `Completions` value.
 - **Scorer**: a function from a prefix to the log-scores of the next tokens
   (`Data.CFTA.Guided`). Not a trained model of weights
   (`Data.CFTA.Sized.Prefix.Model`).
 - **Guided search**: a search over the terms of a language whose steps a
   scorer scores, under the mask (`Data.CFTA.Guided`). Machine learning calls it
   constrained decoding; here, to decode is to unrank.
+- **Weighing**: how a step of a guided search weighs the offered tokens before
+  the normalization. It adds to the score of each offered token zero
+  (`MaskOnly`), or the log of the probability of the token under the weights
+  of the completions (`WeighCompletions`).
 - **Event**: a set of terms, as in probability: the terms that an automaton
   accepts. A model given an event (`condition`) gives each term of the event
   its probability divided by the probability of the event. Not a diagnostic

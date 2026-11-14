@@ -3,26 +3,29 @@ scores, under the mask. The search writes a term one token at a time, and
 each prefix stays inside the language. Machine learning calls this
 constrained decoding.
 
-A token is a symbol with its number of children, and a prefix is a list of
-tokens in preorder, as in "Data.CFTA.Sized.Prefix". The 'Scorer' is a function
-from a prefix to the scores of the next tokens: log-scores, which need no
-normalization. A token that the scorer does not score has the score minus
-infinity.
+The search reads only the 'Mask' of each prefix ("Data.CFTA.Mask"), so one
+search runs on masks with different tokens. In
+'Data.CFTA.Mask.completionsMask', a token is a symbol with its number of
+children, and a prefix is a list of tokens in preorder, as in
+"Data.CFTA.Sized.Prefix". The 'Scorer' is a function from a prefix to the
+scores of the next tokens: log-scores, which need no normalization. A token
+that the scorer does not score has the score minus infinity.
 
-At each prefix, the search reads the mask: the tokens of 'nextTokens'. Each
-token of the mask has a completion within the size bound, and a token outside
-the mask has none, so the search never writes it. The step log-probability of
-a token of the mask is its score minus the log of the sum of the exponentials
-of the scores of the tokens of the mask: the scores, normalized over the
-mask. With weights (non-negative, as 'withWeights' needs them), the score of each
-token of the mask gets the log of its 'tokenProbability' before the
-normalization: the weight of the
-completions after the token, divided by the weight of the completions of the
-prefix. This is the weight of the grammatical completions of Park, Wang,
-Berg-Kirkpatrick, Polikarpova, and D'Antoni, /Grammar-Aligned Decoding/,
-NeurIPS 2024 (arXiv:2405.21047). It is exact for weights that are a product
-over the nodes, not for the distribution of a language model. The total
-log-score of a prefix is the sum of the step log-probabilities of its tokens.
+At each prefix, the search reads the offered tokens of the mask
+('maskNext'). The search never writes a token that the mask does not offer,
+and it never writes an undecided token ('maskUndecided'). The step
+log-probability of an offered token is its score minus the log of the sum of
+the exponentials of the scores of the offered tokens: the scores, normalized
+over the mask ('MaskOnly'). With 'WeighCompletions', the score of each
+offered token gets the log of its probability in 'maskNext' before the
+normalization. In 'Data.CFTA.Mask.completionsMask', this probability is the
+weight of the completions after the token, divided by the weight of the
+completions of the prefix. This is the weight of the grammatical completions
+of Park, Wang, Berg-Kirkpatrick, Polikarpova, and D'Antoni, /Grammar-Aligned
+Decoding/, NeurIPS 2024 (arXiv:2405.21047). It is exact for weights that are
+a product over the nodes, not for the distribution of a language model. The
+total log-score of a prefix is the sum of the step log-probabilities of its
+tokens.
 
 Each step log-probability is at most zero, so the total log-score of a prefix
 never goes up when the prefix grows. 'BestFirst' takes the open prefix with
@@ -37,24 +40,27 @@ of each complete prefix in the beam. With a width of one it follows the best
 token of each step, as 'Greedy' does until its first found term; with a width
 that holds every prefix, it finds all the terms, by depth.
 
+A complete prefix is a prefix with a term in 'maskTerms'. Each of its terms
+is a found term with the total log-score of the prefix.
+
 'repair' continues a sequence of tokens that the mask refuses: it keeps the
-longest prefix of the sequence that the mask accepts, and searches its
-completions.
+longest prefix of the sequence whose tokens the masks offer ('maskStep'), and
+searches from that prefix.
 
 A dead end is a prefix that is not complete and has no token with a finite
-score. For an automaton without constraints, 'afterToken' keeps only the
-stacks of pending states that fit in the remaining size, so each token of the
-mask has a completion within the bound: the mask alone gives no dead end. A
-dead end comes from the scorer, when it scores no token of the mask, and with
-guards, when the solver decides no completion of a token. At a dead end, the
-search takes the best open prefix.
+step log-probability. In 'Data.CFTA.Mask.completionsMask' of an automaton
+without constraints, each offered token has a completion within the size
+bound, so the mask alone gives no dead end. A dead end comes from the scorer,
+when it scores no offered token, and with guards, at a prefix whose tokens are
+all undecided: the solver accepts no completion of the prefix. At a dead end,
+the search takes the best open prefix.
 
-A 'MaskCache' keeps the mask state of each prefix that a search opens: its
-'Completions', its mask, and, with weights, the 'tokenProbability' of each
-token of the mask. Each part is computed once, when a search first reads it.
-'guide' takes a cache and gives it back with the prefixes that it opened, so a
-later search on the same language reads the mask states of the prefixes that
-it has seen. Use a cache with one language and one set of weights.
+A 'MaskCache' keeps the 'Mask' of each prefix that a search opens. The fields
+of a 'Mask' value are lazy, so each field is computed once, when a search
+first reads it. 'guide' takes a cache and gives it back with the prefixes that
+it opened, so a later search on the same language reads the masks of the
+prefixes that it has seen. Use a cache for the masks of one language, with one
+set of weights and one kind of token.
 
 The trace has one 'Visit' for each prefix that the search visits. The search
 does not visit a complete prefix: it adds the terms of the prefix to the found
@@ -62,6 +68,7 @@ terms.
 -}
 module Data.CFTA.Guided (
     Scorer,
+    Weighing (..),
     Strategy (..),
     SearchLimits (..),
     Stop (..),
@@ -82,25 +89,27 @@ module Data.CFTA.Guided (
 import Data.List (sortOn)
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
-import Data.Maybe (fromMaybe)
 import Data.Ord (Down (..))
 import GHC.Clock (getMonotonicTimeNSec)
 
-import Data.CFTA.Refinement.Verdict (Verdict (..))
-import Data.CFTA.Sized.Prefix (
-    Completions,
-    afterToken,
-    completeVerdict,
-    completionPrefix,
-    completionTerms,
-    nextTokens,
-    tokenProbability,
-    withWeights,
- )
-import Data.CFTA.Term (Term)
+import Data.CFTA.Mask (Mask (..), Refusal)
 
 -- | A scorer: the log-scores of the next tokens after a prefix, the first token of the prefix first.
-type Scorer symbol = [(symbol, Int)] -> IO [((symbol, Int), Double)]
+type Scorer token = [token] -> IO [(token, Double)]
+
+-- | What a step adds to the score of each offered token before the normalization.
+data Weighing
+    = -- | Zero: the step log-probabilities are the scores, normalized over the mask.
+      MaskOnly
+    | {- | The log of the probability of the token in 'maskNext'. In
+      'Data.CFTA.Mask.completionsMask', this probability uses the weights of
+      the completions. Without 'Data.CFTA.Sized.Prefix.withWeights', each
+      symbol has the weight one, so the probability is the number of the
+      completions after the token, divided by the number of the completions of
+      the prefix.
+      -}
+      WeighCompletions
+    deriving (Eq, Show)
 
 -- | How the search takes the next prefix.
 data Strategy
@@ -136,16 +145,18 @@ data Stop
     deriving (Eq, Show)
 
 -- | One visit of a prefix.
-data Visit symbol = Visit
-    { visitPrefix :: [(symbol, Int)]
+data Visit token = Visit
+    { visitPrefix :: [token]
     -- ^ The prefix, the first token first.
-    , visitMask :: [(symbol, Int)]
-    -- ^ The tokens of 'nextTokens', in ascending order.
-    , visitScores :: [((symbol, Int), Double)]
+    , visitMask :: [token]
+    -- ^ The offered tokens of the mask ('maskNext'), in ascending order.
+    , visitUndecided :: [token]
+    -- ^ The undecided tokens of the mask ('maskUndecided'), in ascending order. The search does not write them.
+    , visitScores :: [(token, Double)]
     -- ^ The scores of the scorer, as the scorer gave them, also for tokens outside the mask.
-    , visitSteps :: [((symbol, Int), Double)]
-    -- ^ The step log-probability of each token of the mask: minus infinity for a token without a finite score.
-    , visitChoice :: Maybe (symbol, Int)
+    , visitSteps :: [(token, Double)]
+    -- ^ The step log-probability of each offered token: minus infinity for a token without a finite score.
+    , visitChoice :: Maybe token
     {- ^ The token with the highest step log-probability, the first of equal
     tokens. 'Greedy' continues with it. 'Nothing' at a dead end.
     -}
@@ -153,88 +164,71 @@ data Visit symbol = Visit
     deriving (Eq, Show)
 
 -- | The result of a guided search.
-data Guided symbol = Guided
-    { guidedTerms :: [(Term symbol, Double)]
-    -- ^ The complete terms, each with its total log-score, in the order that the search found them.
-    , guidedTrace :: [Visit symbol]
+data Guided token term = Guided
+    { guidedTerms :: [(term, Double)]
+    -- ^ The terms of the complete prefixes, each with its total log-score, in the order that the search found them.
+    , guidedTrace :: [Visit token]
     -- ^ The visits, in order.
     , guidedStop :: Stop
     }
     deriving (Eq, Show)
 
--- | The mask states of prefixes of one language, by prefix.
-newtype MaskCache symbol = MaskCache (Map [(symbol, Int)] (MaskState symbol))
-
--- | The mask state of a prefix. Each field is computed when a search first reads it.
-data MaskState symbol = MaskState
-    { stateCompletions :: Completions symbol
-    , stateMask :: [(symbol, Int)]
-    -- ^ The tokens of 'nextTokens'.
-    , stateGrammar :: Map (symbol, Int) Double
-    -- ^ The log of the 'tokenProbability' of each token of the mask.
-    }
+-- | The masks of prefixes of one language, by prefix ('maskPrefix').
+newtype MaskCache token term = MaskCache (Map [token] (Mask token term))
 
 -- | A cache without a prefix.
-emptyMaskCache :: MaskCache symbol
+emptyMaskCache :: MaskCache token term
 emptyMaskCache = MaskCache Map.empty
 
 -- | The number of prefixes in a cache.
-maskCacheSize :: MaskCache symbol -> Int
-maskCacheSize (MaskCache states) = Map.size states
-
--- | The mask state of the completions of a prefix.
-maskState :: (Ord symbol) => Completions symbol -> MaskState symbol
-maskState completions = MaskState completions mask grammar
-  where
-    mask = map fst $ nextTokens completions
-    grammar = Map.fromList [(token, maybe (-(1 / 0)) (log . fromRational) $ tokenProbability completions token) | token <- mask]
+maskCacheSize :: MaskCache token term -> Int
+maskCacheSize (MaskCache masks) = Map.size masks
 
 -- | The state of a search.
-data Guiding symbol = Guiding
-    { guidingOpen :: Map (Down Double, Int) [(symbol, Int)]
+data Guiding token term = Guiding
+    { guidingOpen :: Map (Down Double, Int) [token]
     -- ^ The open prefixes, by total log-score and then by the order in which they opened.
-    , guidingStates :: Map [(symbol, Int)] (MaskState symbol)
+    , guidingMasks :: Map [token] (Mask token term)
     -- ^ The mask cache.
-    , guidingTotals :: Map [(symbol, Int)] Double
+    , guidingTotals :: Map [token] Double
     -- ^ The total log-score of each prefix that the search opened.
     , guidingOpened :: !Int
     , guidingVisits :: !Int
-    , guidingFound :: [(Term symbol, Double)]
+    , guidingFound :: [(term, Double)]
     -- ^ The found terms, the last first.
-    , guidingTrace :: [Visit symbol]
+    , guidingTrace :: [Visit token]
     -- ^ The visits, the last first.
     }
 
-{- | Search the completions with the scores of the scorer, from the prefix of
-the completions, with optional weights for the symbols and a mask cache. Each
-found term is a complete term of the completions: a term that the automaton
-accepts within the size bound. The result has the cache with the prefixes
-that the search opened.
+{- | Search the terms of a language with the scores of the scorer, from the
+prefix of a mask, with a 'Weighing' and a mask cache. Each found term is a
+term of a complete prefix ('maskTerms'). In 'Data.CFTA.Mask.completionsMask',
+a found term is a term that the automaton accepts within the size bound. The
+result has the cache with the masks of the prefixes that the search opened.
 -}
 guide ::
-    (Ord symbol) =>
+    (Ord token) =>
     Strategy ->
     SearchLimits ->
-    Maybe (symbol -> Rational) ->
-    Scorer symbol ->
-    MaskCache symbol ->
-    Completions symbol ->
-    IO (Guided symbol, MaskCache symbol)
-guide strategy limits weights scorer (MaskCache cache) start = do
+    Weighing ->
+    Scorer token ->
+    MaskCache token term ->
+    Mask token term ->
+    IO (Guided token term, MaskCache token term)
+guide strategy limits weighing scorer (MaskCache cache) start = do
     begin <- getMonotonicTimeNSec
     let deadline = (\micros -> begin + 1000 * fromIntegral (max 0 micros)) <$> searchMicros limits
-        states = Map.insertWith (\_ known -> known) first (maskState root) cache
-        guiding = Guiding Map.empty states (Map.singleton first 0) 0 0 [] []
+        masks = Map.insertWith (\_ known -> known) first start cache
+        guiding = Guiding Map.empty masks (Map.singleton first 0) 0 0 [] []
     case strategy of
         Beam width -> level deadline width guiding [first]
         _ -> enter deadline guiding first
   where
-    root = maybe start (\weight -> fromMaybe (error "guide: a negative weight") $ withWeights weight start) weights
-    first = completionPrefix root
+    first = maskPrefix start
     finish guiding stop =
         pure
             ( Guided (reverse $ guidingFound guiding) (reverse $ guidingTrace guiding) stop
-            , MaskCache $ guidingStates guiding
+            , MaskCache $ guidingMasks guiding
             )
     -- Whether the limits stop the search before a visit.
     stopped deadline guiding
@@ -242,11 +236,11 @@ guide strategy limits weights scorer (MaskCache cache) start = do
         | otherwise = do
             now <- getMonotonicTimeNSec
             pure $ if maybe False (now >=) deadline then Just OutOfTime else Nothing
-    complete guiding prefix = completeVerdict (stateCompletions $ guidingStates guiding Map.! prefix) == Yes
-    -- Add a complete prefix to the found terms. 'Just' the stop when they reach their limit.
+    complete guiding prefix = not $ null $ maskTerms $ guidingMasks guiding Map.! prefix
+    -- Add the terms of a complete prefix to the found terms. 'Just' the stop when they reach their limit.
     found guiding prefix =
-        let term = take 1 $ completionTerms $ stateCompletions $ guidingStates guiding Map.! prefix
-            foundTerms = [(found', guidingTotals guiding Map.! prefix) | found' <- term] <> guidingFound guiding
+        let terms = maskTerms $ guidingMasks guiding Map.! prefix
+            foundTerms = reverse [(term, guidingTotals guiding Map.! prefix) | term <- terms] <> guidingFound guiding
             guiding' = guiding{guidingFound = foundTerms}
          in (guiding', if length foundTerms >= searchTerms limits then Just EnoughTerms else Nothing)
     -- Take the best open prefix.
@@ -299,76 +293,82 @@ guide strategy limits weights scorer (MaskCache cache) start = do
                         go guiding'' (reverse grown <> children) rest
     {- Visit a prefix: call the scorer, and give its children with a finite
     step log-probability, with their totals, in the order of the mask; the
-    choice; and the search with their mask states, their totals, and the
-    trace record.
+    choice; and the search with their masks, their totals, and the trace
+    record.
     -}
     visit guiding prefix = do
-        let state = guidingStates guiding Map.! prefix
+        let mask = guidingMasks guiding Map.! prefix
             total = guidingTotals guiding Map.! prefix
         scores <- scorer prefix
-        let mask = stateMask state
-            grammarScore = case weights of
-                Nothing -> const 0
-                Just _ -> \token -> Map.findWithDefault (-(1 / 0)) token $ stateGrammar state
-            steps = stepLogProbabilities grammarScore scores mask
+        let offered = map fst $ maskNext mask
+            weighingScore = case weighing of
+                MaskOnly -> const 0
+                WeighCompletions ->
+                    let logProbabilities = Map.fromList [(token, log $ fromRational probability) | (token, probability) <- maskNext mask]
+                     in \token -> Map.findWithDefault (-(1 / 0)) token logProbabilities
+            steps = stepLogProbabilities weighingScore scores offered
             choice = best steps
             children = [(token, prefix <> [token], total + step) | (token, step) <- steps, not $ isInfinite step]
-            -- The mask state of a child that the cache does not have yet.
-            known states (token, childPrefix, _)
-                | Map.member childPrefix states = states
-                | otherwise =
-                    maybe states (\after -> Map.insert childPrefix (maskState after) states) $ afterToken (stateCompletions state) token
+            -- The mask of a child that the cache does not have yet.
+            known masks (token, childPrefix, _)
+                | Map.member childPrefix masks = masks
+                | otherwise = either (const masks) (\after -> Map.insert childPrefix after masks) $ maskStep mask token
         pure
             ( children
             , choice
             , guiding
-                { guidingStates = foldl known (guidingStates guiding) children
+                { guidingMasks = foldl known (guidingMasks guiding) children
                 , guidingTotals =
                     Map.union (guidingTotals guiding) $ Map.fromList [(childPrefix, score) | (_, childPrefix, score) <- children]
                 , guidingVisits = guidingVisits guiding + 1
-                , guidingTrace = Visit prefix mask scores steps choice : guidingTrace guiding
+                , guidingTrace = Visit prefix offered (maskUndecided mask) scores steps choice : guidingTrace guiding
                 }
             )
 
 -- | The repair of a sequence of tokens.
-data Repaired symbol = Repaired
-    { repairedRejected :: Maybe Int
-    -- ^ The place of the first token that the mask refuses, from zero; 'Nothing' when it accepts each token.
-    , repairedSearch :: Guided symbol
-    -- ^ The search of the completions of the longest prefix of the sequence that the mask accepts.
+data Repaired token term = Repaired
+    { repairedRefusal :: Maybe (Int, Refusal)
+    {- ^ The place of the first token that the mask does not offer, from zero,
+    and the reason; 'Nothing' when the masks offer each token.
+    -}
+    , repairedSearch :: Guided token term
+    -- ^ The search from the longest prefix of the sequence whose tokens the masks offer.
     }
     deriving (Eq, Show)
 
 {- | Repair a sequence of tokens, for example the tokens that a language
-model writes without a mask: keep the longest prefix of the sequence that the
-mask accepts (the first token that it refuses and the tokens after it go), and
-search the completions of that prefix with 'guide'. A sequence that is a
-complete term has that term as its first found term, without a visit. The
-total log-scores of the found terms count from the end of the kept prefix.
+model writes without a mask: keep the longest prefix of the sequence whose
+tokens the masks offer, and search from that prefix with 'guide'. The first
+token that a mask does not offer and the tokens after it go. 'maskStep' gives
+the reason for the refusal: the token is rejected, the token is undecided, or
+the prefix is a whole term. A sequence that is a complete term has that term
+as its first found term, without a visit. The total log-scores of the found
+terms count from the end of the kept prefix.
 -}
 repair ::
-    (Ord symbol) =>
+    (Ord token) =>
     Strategy ->
     SearchLimits ->
-    Maybe (symbol -> Rational) ->
-    Scorer symbol ->
-    MaskCache symbol ->
-    Completions symbol ->
-    [(symbol, Int)] ->
-    IO (Repaired symbol, MaskCache symbol)
-repair strategy limits weights scorer cache start tokens = do
-    let (rejected, kept) = accepted 0 start tokens
-    (search, cache') <- guide strategy limits weights scorer cache kept
-    pure (Repaired rejected search, cache')
+    Weighing ->
+    Scorer token ->
+    MaskCache token term ->
+    Mask token term ->
+    [token] ->
+    IO (Repaired token term, MaskCache token term)
+repair strategy limits weighing scorer cache start tokens = do
+    let (refusal, kept) = accepted 0 start tokens
+    (search, cache') <- guide strategy limits weighing scorer cache kept
+    pure (Repaired refusal search, cache')
   where
-    -- The place of the first refused token, and the completions of the tokens before it.
-    accepted _ completions [] = (Nothing, completions)
-    accepted place completions (token : rest) = case afterToken completions token of
-        Just after -> accepted (place + 1 :: Int) after rest
-        Nothing -> (Just place, completions)
+    -- The place and the reason of the first refused token, and the mask of the tokens before it.
+    accepted _ mask [] = (Nothing, mask)
+    accepted place mask (token : rest) = case maskStep mask token of
+        Right after -> accepted (place + 1 :: Int) after rest
+        Left reason -> (Just (place, reason), mask)
 
 {- | The step log-probability of each token of the mask: its score plus the
-grammar term, normalized over the tokens of the mask with a finite sum.
+value that the 'Weighing' gives, normalized over the tokens of the mask with a
+finite sum.
 -}
 stepLogProbabilities :: (Ord token) => (token -> Double) -> [(token, Double)] -> [token] -> [(token, Double)]
 stepLogProbabilities extra scores mask = [(token, raw token - normalizer) | token <- mask]
