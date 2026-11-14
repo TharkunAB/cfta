@@ -1,3 +1,4 @@
+import MicroCFTA.MergedPrefixCompletion
 import MicroCFTA.SourceSynthesisCurrentUniverseOrigins
 import MicroCFTA.SourceSynthesisLabelProgramBuildRoles
 import MicroCFTA.SourceSynthesisUniverseNativeInput
@@ -325,6 +326,137 @@ theorem current_build_single_universe
   · left
     intro key entry body depth ordinary stored
     exact someMu ⟨key, entry, body, depth, ordinary, stored⟩
+
+
+/-- Each Mu in the actual current source heap retains its complete labeled rows. -/
+theorem current_stored_universe_rows
+    [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (heap : State Symbol Guard)
+    (built : build (ordinarySymbols whole) [] empty = .done rootValue heap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : heap.nodeRecords key = some (.mu entry body depth ordinary)) :
+    ∃ (bodyEntry : Interned NodeKey) (marker : Value Symbol Guard)
+      (arrow : EdgeValue Symbol Guard) (rows : List (EdgeValue Symbol Guard)),
+      body = .node bodyEntry (canonicalEdges (arrow :: rows)) 0 [.interned entry.identity] ∧
+      (∃ (markerEntry : Interned NodeKey) (markerRow : EdgeValue Symbol Guard),
+        marker = .node markerEntry [markerRow] 0 [] ∧ markerRow.children = [] ∧
+        markerRow.entry.key = ⟨literal "(->)", [], top⟩) ∧
+      arrow.children = [marker, .reference (.interned entry.identity), .reference (.interned entry.identity)] ∧
+      arrow.entry.key = ⟨literal "->",
+        [marker.referenceOf, .ref (.interned entry.identity), .ref (.interned entry.identity)], top⟩ ∧
+      Language.All₂ (fun (descriptor : String × Nat) (row : EdgeValue Symbol Guard) =>
+        row.children = List.replicate descriptor.2 (.reference (.interned entry.identity)) ∧
+        row.entry.key = ⟨literal descriptor.1,
+          List.replicate descriptor.2 (.ref (.interned entry.identity)), top⟩)
+        (SourceSynthesisUniverseBody.descriptors
+          (SourceSynthesisCurrentContext.constructorCatalog lib query)) rows ∧
+      marker.free = [] ∧ Available heap marker ∧
+      (∀ row ∈ canonicalEdges (arrow :: rows), row.entry.key.constraint = top ∧
+        ∀ child ∈ row.children, child = marker ∨ child = .reference (.interned entry.identity)) ∧
+      arrow ∈ canonicalEdges (arrow :: rows) := by
+  obtain ⟨event, site, _keySame, valueSame, _missing, _prefix, _depthPath, _ordinaryPath,
+      _bodyPath, _growth, _issued⟩ :=
+    SourceCurrentCompletedBuildRootedWriters.build_writer (ordinarySymbols whole) [] empty
+      SourceCurrentConstrainedCapSourceHistory.empty_context
+      (by intro key entry body depth ordinary absent; cases absent)
+      rootValue heap built key entry body depth ordinary stored
+  obtain ⟨_smartSame, expressionSame, environmentSame⟩ :=
+    current_reached_binder lib query signed whole accepted site
+  have fields := Value.mu.inj valueSame
+  have entrySame := fields.1
+  have originalBody := fields.2.1
+  cases entrySame
+  obtain ⟨_depthContext, cutContext, bodyContext⟩ :=
+    SourceCurrentNativeMuPublicationCallbacks.contexts event
+  have localAvailable : Available event.allocated (.reference (.interned event.entry.identity)) :=
+    (InternedConstructionProvenance.reserve_available event.key event.cut
+      cutContext.base.normal.facts.coherent cutContext.base.normal.facts.cached).2
+  obtain ⟨bodyEntry, marker, arrow, rows, final, called, markerRead,
+      arrowChildren, arrowKey, aligned, _finalFacts, _finalAvailable, _resident,
+      closed, _markerAvailable, kinds, retained⟩ :=
+    SourceSynthesisCurrentUniverseBody.current_types_callback_rows lib query
+      (.interned event.entry.identity) event.allocated bodyContext.base.normal.facts localAvailable
+  have calledBody : callback
+      (ordinarySymbols (allTypesBody top (SourceSynthesisCurrentContext.constructorCatalog lib query))) []
+      (.interned event.entry.identity) event.allocated = .done event.body event.afterBody := by
+    simpa only [Publication.entry, Publication.allocated, Publication.key,
+      expressionSame, environmentSame] using event.bodyDone
+  have bodySame := (Outcome.done.inj (called.symm.trans calledBody)).1
+  have bodyEq : body =
+      .node bodyEntry (canonicalEdges (arrow :: rows)) 0 [.interned event.entry.identity] :=
+    originalBody.trans bodySame.symm
+  have checked := InternedFreshOrdinaryFacts.build_verified (ordinarySymbols whole) [] empty
+    InternedNestedFacts.empty_facts (by intro value member; cases member)
+  have heapFacts : InternedNestedFacts.Facts heap := by
+    simpa only [built, Outcome.state] using checked.facts
+  have muAvailable := heapFacts.cached.nodes key _ stored
+  have bodyAvailable : Available heap body :=
+    muAvailable.children body (by simp [InternedProbeProvenance.children])
+  rw [bodyEq] at bodyAvailable
+  have markerAvailable : Available heap marker := by
+    apply bodyAvailable.children marker
+    change marker ∈ (canonicalEdges (arrow :: rows)).flatMap EdgeValue.children
+    exact List.mem_flatMap.mpr ⟨arrow, retained, by simp [arrowChildren]⟩
+  exact ⟨bodyEntry, marker, arrow, rows, bodyEq, markerRead, arrowChildren, arrowKey,
+    aligned, closed, markerAvailable, kinds, retained⟩
+
+/-- The actual current source build stores only bodies with cached depth zero. -/
+theorem current_build_shallow
+    [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (heap : State Symbol Guard)
+    (built : build (ordinarySymbols whole) [] empty = .done rootValue heap) :
+    InternedShallowHeap.Shallow heap := by
+  intro key entry body depth ordinary stored
+  obtain ⟨bodyEntry, marker, arrow, rows, shape, _⟩ :=
+    current_stored_universe_rows lib query signed whole accepted rootValue heap built
+      key entry body depth ordinary stored
+  simp only [shape, Value.depth]
+
+/-- Actual current source construction supplies preparation for native merging. -/
+theorem current_build_prepared
+    [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (heap : State Symbol Guard)
+    (built : build (ordinarySymbols whole) [] empty = .done rootValue heap) :
+    MergedPhysicalWarmup.Prepared heap := by
+  have checked := InternedFreshOrdinaryFacts.build_verified (ordinarySymbols whole) [] empty
+    InternedNestedFacts.empty_facts (by intro value member; cases member)
+  have facts : InternedNestedFacts.Facts heap := by simpa only [built, Outcome.state] using checked.facts
+  exact MergedPhysicalWarmup.prepared_of_shallow heap facts
+    (current_build_shallow lib query signed whole accepted rootValue heap built)
+
+/-- The same current source heap supplies a stable complete native merge. -/
+theorem current_build_merge_complete
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (heap : State Symbol Guard)
+    (built : build (ordinarySymbols whole) [] empty = .done rootValue heap)
+    (clear : Guard → Bool) :
+    ∃ bound result final,
+      (∀ fuel, bound ≤ fuel → MergedColdMerge.execute MergedSourceGrouping.groups
+        clear top fuel rootValue heap = .done result final) ∧
+      MergedColdMerge.Extension heap final ∧ Available final result ∧
+      InternedShallowHeap.NoNewMu heap final ∧ InternedShallowHeap.Shallow final ∧
+      SourceSynthesisUniversePrefixHeight.height result ≤
+        SourceSynthesisUniversePrefixHeight.height rootValue + 1 ∧
+      ∀ atom ∈ InternedBoundaryAtoms.atoms result, atom ∈ InternedBoundaryAtoms.atoms rootValue := by
+  have checked := InternedFreshOrdinaryFacts.build_verified (ordinarySymbols whole) [] empty
+    InternedNestedFacts.empty_facts (by intro value member; cases member)
+  have facts : InternedNestedFacts.Facts heap := by simpa only [built, Outcome.state] using checked.facts
+  have available := checked.result rootValue heap built
+  obtain ⟨bound, result, final, complete, extension, resultAvailable, unchanged, height, atoms⟩ :=
+    MergedPrefixCompletion.source_execute_prefix_complete clear top rootValue heap facts
+      (current_build_prepared lib query signed whole accepted rootValue heap built) available
+  exact ⟨bound, result, final, complete, extension, resultAvailable, unchanged,
+    InternedShallowHeap.shallow_preserved heap final
+      (current_build_shallow lib query signed whole accepted rootValue heap built) unchanged,
+    height, atoms⟩
 
 
 end MicroCFTA.SourceSynthesisCurrentUniverseOwnership

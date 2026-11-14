@@ -5105,3 +5105,15 @@ run_cmd do
 
 #check @MicroCFTA.SourceSynthesisCurrentUniverseBody.current_types_callback_rows
 #print axioms MicroCFTA.SourceSynthesisCurrentUniverseBody.current_types_callback_rows
+
+#check @MicroCFTA.SourceSynthesisCurrentUniverseOwnership.current_stored_universe_rows
+#print axioms MicroCFTA.SourceSynthesisCurrentUniverseOwnership.current_stored_universe_rows
+
+#check @MicroCFTA.SourceSynthesisCurrentUniverseOwnership.current_build_shallow
+#print axioms MicroCFTA.SourceSynthesisCurrentUniverseOwnership.current_build_shallow
+
+#check @MicroCFTA.SourceSynthesisCurrentUniverseOwnership.current_build_prepared
+#print axioms MicroCFTA.SourceSynthesisCurrentUniverseOwnership.current_build_prepared
+
+#check @MicroCFTA.SourceSynthesisCurrentUniverseOwnership.current_build_merge_complete
+#print axioms MicroCFTA.SourceSynthesisCurrentUniverseOwnership.current_build_merge_complete
