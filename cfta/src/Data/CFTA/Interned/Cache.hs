@@ -230,3 +230,10 @@ selectCache (CacheFamily ref) allocate = unsafeDupablePerformIO $ do
             | (symbolType, cache) <- entries
             , symbolType == symbolKey
             ]
+
+-- The positivity check rejects HashMap (unordered-containers), but HashMap is positive.
+{-@ LIQUID "--no-positivity-check" @-}
+
+-- A caller of newTable must give a number of bits from 0 to 62, so that the
+-- shard count 2 ^ bits is a positive Int.
+{-@ newTable :: {bits:Int | 0 <= bits && bits <= 62} -> IO (Table key value) @-}

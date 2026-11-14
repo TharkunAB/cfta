@@ -55,3 +55,5 @@ data NodeIntegers = NodeIntegers
     , nodeMeasures :: !(Map.Map String Integer)
     }
     deriving (Eq, Show)
+
+{-@ LIQUID "--skip-module" @-}

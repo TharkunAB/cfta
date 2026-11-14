@@ -226,3 +226,45 @@ fromRoseTree = Tree.foldTree Node
 -- | The rose tree of a term, for 'Tree.drawTree' and other users of 'Tree.Tree'.
 toRoseTree :: Term symbol -> Tree.Tree symbol
 toRoseTree = foldTree Tree.Node
+
+-- True for a term that holds its children in a Seq.
+{-@ measure isMany :: Term symbol -> Bool
+      isMany (Leaf s) = false
+      isMany (One s a) = false
+      isMany (Two s a b) = false
+      isMany (Three s a b c) = false
+      isMany (Many s cs) = true
+  @-}
+
+-- The number of children in the fields of a term. Many holds its children in a Seq, not in fields.
+{-@ measure fieldArity :: Term symbol -> Int
+      fieldArity (Leaf s) = 0
+      fieldArity (One s a) = 1
+      fieldArity (Two s a b) = 2
+      fieldArity (Three s a b c) = 3
+      fieldArity (Many s cs) = 0
+  @-}
+
+{-@ arity :: t:Term symbol -> {v:Int | not (isMany t) => v == fieldArity t} @-}
+
+-- A caller of childAt must give the index of a child, from 0 to the arity minus 1.
+-- The plugin has no specification of Seq, so for Many it does not check the index.
+-- The Ord instance uses childAt. The --check-derived option in cfta.cabal makes
+-- childAt keep its specification. The plugin does not check the methods of the
+-- Ord instance, so their calls of childAt are not checked.
+{-@ childAt :: i:Int -> {t:Term symbol | isMany t || (0 <= i && i < fieldArity t)} -> Term symbol @-}
+
+-- fromAssocs overwrites each placeholder when its caller gives each index
+-- from 0 to the arity minus 1 once, as its documentation requires. The plugin
+-- cannot state this, so it does not check unfilled.
+{-@ ignore unfilled @-}
+
+-- The local go recurses through foldr into the Seq of a Many. The plugin cannot
+-- see that each child is smaller, so this pragma turns off the termination check
+-- for flatten and its local go.
+{-@ lazy flatten @-}
+
+-- The local go recurses through map into the children. The plugin cannot see
+-- that each child is smaller, so this pragma turns off the termination check
+-- for foldTree and its local go.
+{-@ lazy foldTree @-}

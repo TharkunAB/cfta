@@ -106,10 +106,14 @@ everyRank :: Cardinality -> [Rank]
 everyRank (Cardinality cardinality) = map Rank [0 .. cardinality - 1]
 {-# INLINE everyRank #-}
 
+{-@ hasRank :: c:Cardinality -> r:Rank -> {v:Bool | v <=> (0 <= r && r < c)} @-}
+
 -- | Whether a language with the given cardinality has the rank.
 hasRank :: Cardinality -> Rank -> Bool
 hasRank (Cardinality cardinality) (Rank rank) = rank >= 0 && rank < cardinality
 {-# INLINE hasRank #-}
+
+{-@ pairRank :: radix:Cardinality -> first:Rank -> second:Rank -> {v:Rank | v == first * radix + second} @-}
 
 {- | The rank of a pair in a product language, from the ranks of its two parts.
 
@@ -119,6 +123,14 @@ of the second part.
 pairRank :: Cardinality -> Rank -> Rank -> Rank
 pairRank (Cardinality radix) (Rank first) (Rank second) = Rank (first * radix + second)
 {-# INLINE pairRank #-}
+
+-- Keep the precondition 0 <= r. The quotRem specification of LiquidHaskell
+-- is not correct when the dividend is negative.
+{-@ splitRank ::
+      {radix:Cardinality | 0 < radix} ->
+      {r:Rank | 0 <= r} ->
+      ({v:Rank | 0 <= v && v <= r}, {v:Rank | 0 <= v && v < radix})
+@-}
 
 -- | The ranks of the two parts of a pair in a product language. This is the inverse of 'pairRank'.
 splitRank :: Cardinality -> Rank -> (Rank, Rank)
@@ -134,15 +146,21 @@ The groups of a language follow each other in rank order.
 newtype RankOffset = RankOffset Integer
     deriving newtype (Eq, Ord, Show, Num, Enum)
 
+{-@ nextOffset :: o:RankOffset -> c:Cardinality -> {v:RankOffset | v == o + c} @-}
+
 -- | The offset of the next group, after a group with the given offset and cardinality.
 nextOffset :: RankOffset -> Cardinality -> RankOffset
 nextOffset (RankOffset offset) (Cardinality cardinality) = RankOffset (offset + cardinality)
 {-# INLINE nextOffset #-}
 
+{-@ offsetRank :: o:RankOffset -> r:Rank -> {v:Rank | v == o + r} @-}
+
 -- | The rank of a member in the larger language, from its rank in its group.
 offsetRank :: RankOffset -> Rank -> Rank
 offsetRank (RankOffset offset) (Rank rank) = Rank (offset + rank)
 {-# INLINE offsetRank #-}
+
+{-@ rebaseRank :: o:RankOffset -> r:Rank -> {v:Rank | v == r - o} @-}
 
 -- | The rank of a member in its group, from its rank in the larger language. This is the inverse of 'offsetRank'.
 rebaseRank :: RankOffset -> Rank -> Rank
@@ -166,6 +184,8 @@ The members of a size class with @n@ members have the class ranks
 newtype ClassRank = ClassRank Integer
     deriving newtype (Eq, Ord, Show, Num, Enum)
 
+{-@ classMemberRank :: o:RankOffset -> k:ClassRank -> {v:Rank | v == o + k} @-}
+
 -- | The rank of a member, from the first rank of its size class and its rank in the class.
 classMemberRank :: RankOffset -> ClassRank -> Rank
 classMemberRank (RankOffset offset) (ClassRank classRank) = Rank (offset + classRank)
@@ -178,6 +198,8 @@ not change a rank or a cardinality.
 -}
 newtype Weight = Weight Integer
     deriving newtype (Eq, Ord, Show, Num, Enum, Real)
+
+{-@ countWeight :: c:Cardinality -> {v:Weight | v == c} @-}
 
 -- | The weight of a group with the given number of members, when each member weighs one.
 countWeight :: Cardinality -> Weight

@@ -421,3 +421,28 @@ acceptsBy outgoing symbolOf childrenOf check = unshared
             position <- State.get
             State.modify' (+ 1)
             Node (position, term) <$> traverse number children
+
+-- childrenAccept in acceptsBy calls childAt with an index that is less than
+-- the length of the child list of a matched alternative. The match test
+-- compares this length with the arity of the term, but it uses the argument
+-- childrenOf, and the logic of the plugin cannot apply a function argument.
+-- So the plugin cannot prove the precondition of childAt. acceptsBy has no
+-- refined signature, so its callers lose no specification.
+{-@ ignore acceptsBy @-}
+
+-- The local recursive functions terminate:
+-- visit and transition in toTreeBy stop at a node on the path or a node that
+-- they saw before. Each other step adds a new node to a finite set.
+-- go in explore removes a pending key or adds a new key to a finite set.
+-- grow in trimRows adds keys to a subset of the finite set of keys, and stops
+-- when the set does not change.
+-- collect in termsUpToBy increments the depth up to the bound.
+-- value, fill, fillFirst, and complete go to a part of a finite partial term.
+-- LiquidHaskell cannot prove this with its default metric. The lazy
+-- annotation turns off the termination check of each function below and of
+-- its local functions.
+{-@ lazy toTreeBy @-}
+{-@ lazy explore @-}
+{-@ lazy trimRows @-}
+{-@ lazy termsUpToBy @-}
+{-@ lazy termsByCostBy @-}

@@ -287,3 +287,16 @@ automaton transitions = do
     let node = Node alternatives
     validate node
     pure node
+
+-- The positivity check rejects Formula (Data.CFTA.Formula), but Formula is positive.
+{-@ LIQUID "--no-positivity-check" @-}
+
+-- The local conjuncts recurses through concatMap into the parts of an And.
+-- The plugin cannot see that each part is smaller, so this pragma turns off
+-- the termination check for contract and its local conjuncts.
+{-@ lazy contract @-}
+
+-- The local atoms recurses through concatMap into the parts of And and Or.
+-- The plugin cannot see that each part is smaller, so this pragma turns off
+-- the termination check for contractReach and its local atoms.
+{-@ lazy contractReach @-}

@@ -184,3 +184,33 @@ anyM predicate (x : rest) = predicate x >>= \found -> if found then pure True el
 allM :: (Monad m) => (a -> m Bool) -> [a] -> m Bool
 allM _ [] = pure True
 allM predicate (x : rest) = predicate x >>= \holds -> if holds then allM predicate rest else pure False
+
+-- The match on the pattern synonym Node in fits is complete because of its
+-- COMPLETE pragma. LiquidHaskell does not read COMPLETE pragmas, so it finds
+-- the match incomplete.
+{-@ LIQUID "--no-totality" @-}
+
+-- The recursive functions terminate:
+-- guardHolds gets a part of the guard in each recursive call.
+-- The local functions acceptedAt and fits in acceptsM get a child of the term.
+-- The local functions trees, level, and levels in termsUpToM call each other
+-- with a smaller bound, and stop below 0.
+-- The local function closure in intersect removes a pair from the pending
+-- list, or adds a new pair to a finite set.
+-- LiquidHaskell cannot see this, because the calls go through lists. The lazy
+-- annotation turns off the termination check of each function below and of
+-- its local functions.
+{-@ lazy guardHolds @-}
+{-@ lazy acceptsM @-}
+{-@ lazy termsUpToM @-}
+{-@ lazy intersect @-}
+
+-- Without the termination check, the plugin gives the type false to the local
+-- value levels in termsUpToM. So the plugin checks nothing in levels, trees,
+-- and level, and it does not check the precondition of !! in trees.
+
+-- build calls error when mkFTA fails. union, intersect, and boundDepth give
+-- build a row for each state that a transition names, so mkFTA does not fail.
+-- The proof needs the invariant of FTA that each child state has a row.
+-- LiquidHaskell does not know this invariant.
+{-@ ignore build @-}

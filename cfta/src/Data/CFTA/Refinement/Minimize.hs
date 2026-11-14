@@ -541,3 +541,5 @@ instance Monoid GuardReads where
 unorderedPairs :: [a] -> [(a, a)]
 unorderedPairs [] = []
 unorderedPairs (value : rest) = [(value, other) | other <- rest] <> unorderedPairs rest
+
+{-@ LIQUID "--skip-module" @-}

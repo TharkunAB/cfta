@@ -920,3 +920,73 @@ edgeSubstitutionPlan inputEdge = memoTypeableWith @symbol genericEdgeSubstitutio
     onEdge e =
         SubstitutionPlan $ case sequenceSubstitutionPlans (map substitutionPlan (edgeChildren e)) of
             SubstitutionPlan !f -> setChildren e . f
+
+---------------------------
+-------- LiquidHaskell specifications
+---------------------------
+
+-- The specifications are after the code. A specification above a definition
+-- moves the source locations that GHC writes into the object file.
+
+{-@ data InternedMu symbol = MkInternedMu
+      { internedMuId :: NodeId
+      , internedMuBody :: Node symbol
+      , internedMuShape :: Node symbol
+      , internedMuDepthShape :: Node symbol
+      }
+  @-}
+
+-- The number of Mu nodes in the chain of Mu bodies that starts at a node.
+{-@ measure muChain :: Node symbol -> Int
+      muChain (InternedNode node) = 0
+      muChain EmptyNode = 0
+      muChain (InternedMu mu) = 1 + muChain (internedMuBody mu)
+      muChain (InternedUnion alternatives) = 0
+      muChain (Rec r) = 0
+  @-}
+
+-- The plugin checks this invariant at each construction of a node.
+{-@ using (Node symbol) as {v:Node symbol | 0 <= muChain v} @-}
+
+{-@ numNestedMu :: n:Node symbol -> MuDepth / [muChain n] @-}
+
+{-@ freeVars :: n:Node symbol -> Set RecNodeId / [muChain n] @-}
+
+-- This pragma turns off the termination check for substitutionPlan,
+-- edgeSubstitutionPlan, and the local onNode. The recursion follows the
+-- children of each edge. It does not stop on a cyclic node, and only the raw
+-- constructors can build a cyclic node.
+{-@ lazy substitutionPlan @-}
+
+-- True for a reference to an interned Mu.
+{-@ measure isRecInt :: RecNodeId -> Bool
+      isRecInt (RecInt i) = true
+      isRecInt (RecUnint d) = false
+      isRecInt RecDepth = false
+      isRecInt (RecIntersect i) = false
+      isRecInt (RecState p) = false
+  @-}
+
+-- True for a node that has an identity: not EmptyNode, and not a Rec other than RecInt.
+{-@ measure hasIdentity :: Node symbol -> Bool
+      hasIdentity (InternedNode node) = true
+      hasIdentity EmptyNode = false
+      hasIdentity (InternedMu mu) = true
+      hasIdentity (InternedUnion alternatives) = true
+      hasIdentity (Rec r) = isRecInt r
+  @-}
+
+-- A caller of nodeIdentity must give a node that has an identity.
+{-@ nodeIdentity :: {n:Node symbol | hasIdentity n} -> NodeId @-}
+
+-- True for an InternedNode.
+{-@ measure isInternedNode :: Node symbol -> Bool
+      isInternedNode (InternedNode node) = true
+      isInternedNode EmptyNode = false
+      isInternedNode (InternedMu mu) = false
+      isInternedNode (InternedUnion alternatives) = false
+      isInternedNode (Rec r) = false
+  @-}
+
+-- A caller of modifyNode must give an InternedNode.
+{-@ modifyNode :: {n:Node symbol | isInternedNode n} -> ([Edge symbol] -> [Edge symbol]) -> Node symbol @-}

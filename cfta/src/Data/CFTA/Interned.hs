@@ -342,3 +342,43 @@ fromRows initial rows = evalState (build IntSet.empty 0) Map.empty
 stateOf :: Node symbol -> InternedState
 stateOf EmptyNode = EmptyState
 stateOf node = InternedState (nodeIdentity node)
+
+-- The local function refine in canonicalClasses terminates. A round only
+-- splits classes, because each node keeps its class first in its key. So the
+-- count of classes does not decrease, and it is at most the count of nodes.
+-- refine stops when a round does not change the count. LiquidHaskell cannot
+-- prove this with its default metric. The lazy annotation turns off the
+-- termination check of canonicalClasses and of its local functions.
+{-@ lazy canonicalClasses @-}
+
+-- The local functions of fromRows terminate. walk removes a state from the
+-- pending list, or adds a new state to the seen set. build goes to a child in
+-- another component, and the components make a graph without cycles. Or build
+-- goes to a child of the same component that is not bound. Then the new set of
+-- bound states keeps the old bound states before the child, and adds the child.
+-- So the set gets larger in the order that compares the first different state,
+-- and a component has a finite number of these sets. LiquidHaskell cannot prove
+-- this with its default metric. The lazy annotation turns off the termination
+-- check of fromRows and of its local functions.
+{-@ lazy fromRows @-}
+
+-- Open obligation: the precondition hasIdentity of nodeIdentity needs the rule
+-- that a built automaton has no EmptyNode child and no Rec other than RecInt.
+-- LiquidHaskell cannot prove this rule. LiquidHaskell does not check the body
+-- of an ignored function, so it does not check the calls of nodeIdentity in the
+-- ignored functions below.
+
+-- toFTA and canonicalFTA call error when FTA.mkFTA finds a state that has no
+-- row. The rows of a closed node have a row for each state, so a closed node
+-- does not get to this call. LiquidHaskell cannot prove this. canonicalFTA
+-- also calls nodeIdentity on the nodes of the graph and on their children.
+{-@ ignore toFTA @-}
+{-@ ignore canonicalFTA @-}
+
+-- reachable calls nodeIdentity on each node of its work list, and stateOf calls
+-- it on its argument. Both functions skip EmptyNode, but the node can be a Rec.
+-- The local function collect in reachable terminates on a finite graph. Each
+-- step removes a node from the pending list, or adds a new identity to the seen
+-- map. The ignore annotation also turns off this termination check.
+{-@ ignore reachable @-}
+{-@ ignore stateOf @-}

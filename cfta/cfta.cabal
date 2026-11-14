@@ -25,6 +25,14 @@ source-repository head
   location: https://github.com/TharkunAB/cfta.git
   subdir: cfta
 
+flag liquid
+  description:
+    Check the library with the LiquidHaskell plugin. The plugin does not
+    check a module that has the LIQUID pragma --skip-module.
+
+  default: False
+  manual: True
+
 common warnings
   ghc-options:
     -Wall
@@ -126,6 +134,53 @@ library
     text >=2.1 && <2.2,
     transformers >=0.6 && <0.7,
     unordered-containers >=0.2 && <0.3,
+
+  if flag(liquid)
+    build-depends:
+      cfta:liquid-specs,
+      liquidhaskell >=0.9.14 && <0.10,
+
+    -- Without --smtsolver, the plugin looks for four SMT solvers in each
+    -- directory of the PATH, two times in each module. On WSL2, with the
+    -- Windows directories in the PATH, this takes about 0.4 s in each module.
+    -- Without --no-annotations, the plugin writes HTML and JSON files into
+    -- a .liquid directory next to each checked source file.
+    -- Without --check-derived, the plugin gives a type without refinements
+    -- to each function that an instance of a class such as Eq, Ord, or Show
+    -- uses, so the specification of the function is lost. Examples are
+    -- childAt in the Ord instance of Term and internedMuBody in the Show
+    -- instance of Node.
+    ghc-options:
+      -fplugin=LiquidHaskell
+      -fplugin-opt=LiquidHaskell:--smtsolver=z3
+      -fplugin-opt=LiquidHaskell:--no-annotations
+      -fplugin-opt=LiquidHaskell:--check-derived
+
+-- LiquidHaskell specifications of containers functions. When a checked
+-- module imports a module M, the plugin reads the module M_LHAssumptions.
+-- The plugin reads an M_LHAssumptions module only from a different unit.
+-- So the specifications are in a separate library. GHC does not record
+-- that a checked module uses this library. After a change here, check
+-- with an empty build directory.
+library liquid-specs
+  hs-source-dirs: liquid-specs
+  default-language: Haskell2010
+  exposed-modules:
+    Data.IntMap.Strict_LHAssumptions
+    Data.IntSet_LHAssumptions
+
+  if flag(liquid)
+    build-depends:
+      base >=4.22 && <4.23,
+      containers >=0.8 && <0.9,
+      liquidhaskell >=0.9.14 && <0.10,
+
+    ghc-options:
+      -fplugin=LiquidHaskell
+      -fplugin-opt=LiquidHaskell:--smtsolver=z3
+      -fplugin-opt=LiquidHaskell:--no-annotations
+  else
+    buildable: False
 
 test-suite unit-tests
   import: warnings, extensions

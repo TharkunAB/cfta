@@ -1581,3 +1581,5 @@ ematchByIntersection g pat = case (FTA.mkFTA GRoot graphRows, FTA.mkFTA (-1 :: I
     bind (PVar v) (Node GVar [Node (GNameLeaf i) [], _]) b = Just (Map.insert v (find g (ClassId i)) b)
     bind (PNode _ ps) (Node (GNode _ _) (_ : kids)) b = foldM (\acc (p, t) -> bind p t acc) b (zip ps kids)
     bind _ _ _ = Nothing
+
+{-@ LIQUID "--skip-module" @-}

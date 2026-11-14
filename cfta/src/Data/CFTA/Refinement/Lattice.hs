@@ -624,3 +624,5 @@ bernoulliNumbers = map number [0 ..]
 -- | The binomial coefficient.
 binomial :: Int -> Int -> Integer
 binomial total chosen = product [toInteger (total - chosen + 1) .. toInteger total] `div` product [1 .. toInteger chosen]
+
+{-@ LIQUID "--skip-module" @-}

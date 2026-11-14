@@ -146,3 +146,6 @@ instance IsString Symbol where
 
 instance Read Symbol where
     readPrec = Symbol <$> readPrec
+
+-- The positivity check rejects Formula (Data.CFTA.Formula), but Formula is positive.
+{-@ LIQUID "--no-positivity-check" @-}

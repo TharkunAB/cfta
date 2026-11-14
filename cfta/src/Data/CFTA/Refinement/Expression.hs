@@ -259,3 +259,6 @@ type Refinement = Expr -> Formula
 -- | The formula of a refinement, stated about the value variable 'valueName'.
 refinementFormula :: Refinement -> Formula
 refinementFormula refinement = refinement (variable valueName)
+
+-- The positivity check rejects Term (Data.CFTA.Formula), but Term is positive.
+{-@ LIQUID "--no-positivity-check" @-}

@@ -1,0 +1,24 @@
+-- Check the cfta library with LiquidHaskell:
+--   cabal build cfta:lib:cfta --project-file=cabal.project.liquid --builddir=dist-newstyle/liquid
+-- The separate build directory keeps the normal build products.
+-- The plugin runs inside GHC at compile time. Build it with optimization,
+-- because an unoptimized plugin makes each check slow.
+import: cabal.project
+
+package cfta
+  flags: +liquid
+
+package liquidhaskell-boot
+  optimization: True
+
+package liquidhaskell
+  optimization: True
+
+-- liquidhaskell-boot 0.9.14.1.1 stops with a panic in casesToLg on some
+-- modules of cfta. This commit is the release v0.9.14.1.1 with a fix of one
+-- line. Remove this entry when a release of liquidhaskell-boot has the fix.
+source-repository-package
+  type: git
+  location: https://github.com/Tritlo/liquidhaskell.git
+  tag: f0d336e681e2dc76d16df16379f73043e3dad139
+  subdir: liquidhaskell-boot

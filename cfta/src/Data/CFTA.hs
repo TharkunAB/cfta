@@ -526,3 +526,25 @@ statesAt alternatives transition (ConsPath (ChildIndex index) rest) = descend re
             , outgoing <- alternatives state
             , Just child <- [transitionChildren outgoing !? next]
             ]
+
+-- fromTerms matches on the pattern synonym Term.Node, and statesAt matches on
+-- the pattern synonyms EmptyPath and ConsPath. These matches are complete
+-- because of COMPLETE pragmas. LiquidHaskell does not read COMPLETE pragmas,
+-- so it finds the matches incomplete.
+{-@ LIQUID "--no-totality" @-}
+
+-- The recursive functions terminate:
+-- subterms in fromTerms gets a child of the term.
+-- buildState and buildTransition in boundDepth add a new key to a finite set
+-- of keys, or stop at a known key. The remaining depth of a key is between 0
+-- and the bound.
+-- go in leastCosts stops at a fixed point. The cost condition of termsByCost
+-- makes the costs converge.
+-- descend in statesAt gets the tail of the path.
+-- LiquidHaskell cannot prove this with its default metric. The lazy
+-- annotation turns off the termination check of each function below and of
+-- its local functions.
+{-@ lazy fromTerms @-}
+{-@ lazy boundDepth @-}
+{-@ lazy leastCosts @-}
+{-@ lazy statesAt @-}
