@@ -1,3 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationSharedIncomingBucketHistory
 import MicroCFTA.SourcePruningEnumerationSharedChildTerminalObserver
 import MicroCFTA.SourceSynthesisCurrentSharedSourceGoalFirstWrite
 import MicroCFTA.SourcePruningEnumerationSharedChildFinalRawTargets
@@ -5541,3 +5542,6 @@ run_cmd do
 
 #check @MicroCFTA.SourceSynthesisCurrentSharedSourceGoalFirstWrite.source_goal_first_assignment
 #print axioms MicroCFTA.SourceSynthesisCurrentSharedSourceGoalFirstWrite.source_goal_first_assignment
+
+#check @MicroCFTA.SourcePruningEnumerationSharedIncomingNode.singleton_bucket_history
+#print axioms MicroCFTA.SourcePruningEnumerationSharedIncomingNode.singleton_bucket_history
