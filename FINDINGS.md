@@ -1,3 +1,37 @@
+# Actual optimized shared dispatcher replay checked (2026-11-14 16:24 CET)
+
+GOAL ACTIVE. Preserve the complete original proof objective below.
+NEW PUBLIC SharedDispatch.afterQuery_ok_stable and dispatch_ok_stable retain the
+exact successful action, reached caller and saved query memo at larger native,
+p and h bounds. The proof uses ACTUAL SharedEnabledEmpty skipped/performed-done
+replay and SourceEqualityNativeDemand.done_stable. The fixed tuple budget and
+full private shared snapshot stay on the actual path. No legacy operation or
+future result/resource/callback provider is substituted. Shared terminal folds,
+cache adapters, complete child replay and pointwise child resources remain OPEN.
+
+All5public gates PASS. Strict Audit checks96,100 imported theorem axiom
+dependencies and115 reports:113standard-axiom,2axiom-free. Only propext,
+Classical.choice,Quot.sound. Source modules5954; direct imports4952. Effective
+4GiB max/high,zero swap; all compiler handles terminal. Exact source pins/logs:
+/tmp/mcfta-actual-shared-dispatch-publication-20261114-1623.
+Private check1 also passed unchanged. Source13095550d700f66d3a7013cf6a2a8bc8c9cbcb6f
+is pushed and independently verified. It includes the pointwise prefix phases,
+local unsupported/failed stopped[] law and exact ordinary/union native steps.
+
+Next prove the actual cached terminal fold layer, including empty rejection and
+singleton success with every endpoint. Separately transport the original mixed
+entry through actual extensions via existing Kernel.make_domain_replay, then
+reuse contextual alias leaves at later states. Full generated-Type induction,
+every-budget stopped worker-output inclusion and one finite SAME-original-root
+term with one compatible assignment per emitted causal branch remain OPEN.
+Removed suspended constraints must hold under that SAME assignment. Keep all
+original typing,depth,LPO/refolding,both language directions,stream,exact sizes,
+counts/weights/training,both rank/unrank inverses,host bounds and compiled Haskell
+correspondence. No Haskell/Cabal/test/Liquid Haskell annotation changed. No new
+implementation fix or reachable source counterexample was established. Keep
+future Haskell fixes in FINDINGS. Root owns live/compiler/Git. Preserve .hypha/.
+The immutable d7f090074 checkpoint precedes this new dispatch and prefix work.
+
 # Pointwise prefix phases and actual shared-gate replay checked (2026-11-14 16:20 CET)
 
 GOAL ACTIVE. Preserve the complete original objective below.
