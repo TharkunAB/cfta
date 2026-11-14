@@ -1,0 +1,41 @@
+{
+  "retrieved_at": "2026-11-14 02:48 CET",
+  "data": {
+    "url": "https://github.com/TharkunAB/cfta/pull/212",
+    "number": 212,
+    "state": "open",
+    "merged": false,
+    "mergeable": true,
+    "draft": false,
+    "body": "The review of #211 found a defect in `Data.CFTA.Gen.Synthesis.Liquid`: a query with two arguments of one name had a false environment, and the synthesis gave programs that do not satisfy the goal.\n\n## The defect\n\nWith the components `zero`, `incr`, `decr`, and `sub`, `synthesize` at size 3, and the hybrid route without the fallback at size 5:\n\n| Query | Before | After |\n| --- | --- | --- |\n| `x:{v:Int \\| v > 0} -> x:{v:Int \\| v < 0} -> {v:Int \\| v > 100}` | `x`, `decr x`, `sub x x`, `incr x`; hybrid: `sub x x` | no program |\n| `x:{v:Int \\| v < 0} -> x:{v:Int \\| v > 0} -> {v:Int \\| v > 100}` | `x`, `decr x`, `sub x x`, `incr x`; hybrid: `sub x x` | no program |\n| `x:{v:Int \\| v > 0} -> y:{v:Int \\| v < 0} -> {v:Int \\| v > 100}` | no program | no program |\n| `x:{v:Int \\| v < 0} -> {v:Int \\| v > 100}` | no program | no program |\n\nThe readers of `liquidArguments` did not agree on an argument with a repeated name:\n\n- `synthesize` made a leaf of each argument, with its own refinement type.\n- `environmentOf` put the refinement of each argument on the variable of its name. Two arguments `x` gave `x > 0 && x < 0`. With a false environment, each entailment holds.\n- `checker` and `preciseChecker` used the first argument with the name (`lookup`).\n- The table of the function arguments in `synthesize` used the last one (`Map.fromList`).\n\nFor the first query, `checker` and `preciseChecker` accepted `x`, `zero`, `incr x`, and `sub x x`. Now they accept none of them.\n\n## The contract\n\nThe Haddock of `LiquidQuery` now states the contract:\n\n> Two arguments can have the same name. Then each of them has the refinement type of the last argument with that name.\n\n```diff\n synthesize, headsOf, environmentOf, checkerWith, valued, qualifiers\n-    the refinement type of each argument from liquidArguments\n+    the refinement type of each argument from queryBindings\n```\n\n```haskell\nqueryBindings :: LiquidQuery -> [(Text, RType)]\nqueryBindings query = [(name, Map.findWithDefault typ name types) | (name, typ) <- liquidArguments query]\n  where\n    types = Map.fromList (liquidArguments query)\n```\n\n- This is the rule of `Query` in `Data.CFTA.Gen.Synthesis` (#211). The hybrid route gives the arguments of a `LiquidQuery` to that search, so its two parts now read a query in the same way.\n- A query without a repeated name gives the same results as before: `queryBindings` is then `liquidArguments`.\n- `parseQuery` does not change. It accepts a repeated name and keeps each argument.\n- Two refinements that can hold together are not conjoined: `x:{v:Int | v > 5} -> x:{v:Int | v > 0} -> {v:Int | v > 5}` gave `x` and `incr x`, and gives no program now, because `x` has the refinement `v > 0`. In the other order, the query gives `x` and `incr x`, before and after.\n- A refinement that names the repeated argument refers to the last one: `x:{v:Int | v > 0} -> y:{v:Int | v > x} -> x:{v:Int | v < 0} -> {v:Int | v > 0}` gave `x`, `decr x`, `sub x x`, and `incr x`, and gives `sub y x` now.\n\nTwo arguments with one name and two base types (with the components `and`, `not`, and `isZero` added, and without the reductions of `synthesize`):\n\n| Query | Before | After |\n| --- | --- | --- |\n| `x:Int -> x:Bool -> Bool` | `x`, `and x x`, `isZero x`, `not x`; hybrid: no program | `x`, `and x x`, `not x`; hybrid: `and x x` |\n| `x:Bool -> x:Int -> Bool` | `x`, `and x x`, `isZero x`, `not x`; hybrid: no program | `isZero x`; hybrid: `and (isZero x) (isZero x)` |\n| `x:Bool -> Bool` | `x`, `and x x`, `not x`; hybrid: `x` | the same |\n| `x:Int -> Bool` | `isZero x`; hybrid: `isZero x` | the same |\n\n## Evidence\n\n- A reproduction program has 13 cases, with the results of the two tables. Each control with distinct names or with one argument gives the same results before and after.\n- Seven more cases have an argument `y:{v:Int | v > x}`: five with a repeated `x`, also with `x:Int` and `x:Bool`, and two controls with distinct names. None of them gives an error, before or after. `x:Int -> y:{v:Int | v > x} -> x:Bool -> {v:Int | v > 0}` gives `incr zero` now.\n- The `hegel` benchmark gives the same row for each of its 42 queries (41 solved, 1 timeout), apart from the time. The `hybrid` benchmark without the fallback gives the same row for 36 of them (35 solved, 1 timeout), apart from the time. The other six had four timeouts and two rows without a program before, and did not run again.\n- No query of the Hegel data (42) and of the three queries with the large library has a repeated argument name.\n- Tests: `gen-tests` 532 examples, `refinement-tests` 181 examples, 0 failures. `LiquidSpec` has one new example: the first query of the table gives no program.\n- fourmolu, hlint, cabal-gild, and `cabal check` pass.\n\n## Cost\n\nNo standard benchmark cell uses the Liquid route, so the measure is the query RevApp1 at `-O2` in the `hegel` benchmark and in the `hybrid` benchmark without the fallback (allocation from `+RTS -s`, instructions from cachegrind). Each number is the mean of three runs:\n\n| Cell | Allocation | Instructions |\n| --- | --- | --- |\n| `hegel`, RevApp1 | 495.643 MB to 495.645 MB (+0.0005 %) | 1,551.823 M to 1,551.831 M (+0.0005 %) |\n| `hybrid`, RevApp1, no fallback | 16.926 MB to 16.929 MB (+0.014 %) | 59.398 M to 59.406 M (+0.013 %) |\n\nThe largest change is 3 KB and 8 K instructions. Each run gives the same row and the same solution, `append (rev l) l`.\n\n## Merge Danger\n\n**Door:** two-way\n\n**Blast Radius:** small\n\nA query with a repeated argument name changes: each argument with the name has the refinement type of the last one. Each other query keeps its results.",
+    "title": "cfta-generator: the Liquid route gives each query argument the refinement type of the last argument with its name",
+    "base": "main",
+    "base_sha": "e53852064d3ef5a2eafec47d754c27504b11de5f",
+    "head": "fix/liquid-repeated-argument-names",
+    "head_sha": "438be86d6cc3642a44a25816733ad922a5ee6e99",
+    "head_repo_id": 1419731778,
+    "head_repo_full_name": "TharkunAB/cfta",
+    "merge_commit_sha": "d835d2f1d4fb005d3460cb01e27f805ed43c9ab2",
+    "user": {
+      "login": "Tritlo",
+      "name": "Tritlo",
+      "email": null,
+      "avatar_url": "https://avatars.githubusercontent.com/u/1667287?v=4",
+      "id": 1667287
+    },
+    "requested_reviewers": null,
+    "requested_team_reviewers": null,
+    "diff": null,
+    "comments": null,
+    "created_at": "2026-11-14T01:40:00Z",
+    "updated_at": "2026-11-14T01:40:00Z",
+    "closed_at": null,
+    "merged_at": null,
+    "commits": 1,
+    "changed_files": 3,
+    "additions": 41,
+    "deletions": 13,
+    "display_url": "https://github.com/TharkunAB/cfta/pull/212",
+    "display_title": "cfta-generator: the Liquid route gives each query argument the refinement type of the last argument with its name"
+  }
+}

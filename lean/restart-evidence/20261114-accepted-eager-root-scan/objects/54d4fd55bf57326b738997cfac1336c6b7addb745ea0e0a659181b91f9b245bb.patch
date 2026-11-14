@@ -1,0 +1,50 @@
+--- a/source
++++ b/source
+@@ -318 +318,46 @@
+-                  simpa only [Nat.add_one] using same
++                  simp only [Nat.add_one] at same
++                  obtain ⟨wholeScan, preparedScan, indexed⟩ := same
++                  refine ⟨wholeScan, preparedScan, ?_⟩
++                  intro position
++                  have observedAt := indexed position
++                  split
++                  · trivial
++                  · rename_i prior outputs rowCaller rowQueries scanEq
++                    rw [scanEq] at observedAt
++                    dsimp only at observedAt
++                    split
++                    · trivial
++                    · rename_i rootRow rowLookup
++                      rw [rowLookup] at observedAt
++                      dsimp only at observedAt
++                      obtain ⟨member, ordered, chunks, goalValue, candidateValue,
++                          candidateStart, candidateAfter, edgeAfter, chunksRun, wholeShape,
++                          symbolSame, guardSame, childrenSame, goalCall, sourceContext,
++                          candidateCall, edgeCall, nodeCall, growth, ownFields⟩ := observedAt
++                      refine ⟨member, ?_, chunks, goalValue, candidateValue,
++                        candidateStart, candidateAfter, edgeAfter, chunksRun, wholeShape,
++                        symbolSame, guardSame, childrenSame, goalCall, sourceContext,
++                        candidateCall, edgeCall, nodeCall, growth, ?_⟩
++                      · split
++                        · rename_i processed emitted current headEq
++                          rw [headEq] at ordered
++                          dsimp only at ordered
++                          exact ordered
++                        · rename_i processed emitted nextCaller nextQueries headEq
++                          rw [headEq] at ordered
++                          dsimp only at ordered
++                          split
++                          · rename_i later more finalCaller finalQueries tailEq
++                            rw [tailEq] at ordered
++                            dsimp only at ordered
++                            exact ordered
++                          · rename_i later more current tailEq
++                            rw [tailEq] at ordered
++                            dsimp only at ordered
++                            exact ordered
++                      · split
++                        · rename_i symbol staged residual ownAfter ownEq
++                          rw [ownEq] at ownFields
++                          dsimp only at ownFields
++                          exact ownFields
++                        · trivial

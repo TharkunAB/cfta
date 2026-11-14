@@ -1,0 +1,20 @@
+--- a/source
++++ b/source
+@@ -304 +304,16 @@
+-              simpa only [decisionEq] using observed.2
++              have same := observed.2
++              rw [decisionEq] at same
++              dsimp only at same
++              split
++              · rename_i checked narrowed action narrowedHeap reached saved actionCore
++                  candidate updated callbackCore prefixEq
++                rw [prefixEq] at same
++                dsimp only at same
++                split
++                · rename_i target readHandle scs decodedValue entered entry nativeRows
++                    nodeDepth free preparedHeap preparationEq
++                  rw [preparationEq] at same
++                  dsimp only at same
++                  exact same
++                · trivial
++              · trivial

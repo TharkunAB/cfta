@@ -1,0 +1,122 @@
+from pathlib import Path
+import hashlib
+import json
+import subprocess
+
+root = Path('/home/tritlo/Code/mcfta')
+runtime = Path(__file__).parent
+packet = root / 'lean/restart-evidence/20261114-accepted-eager-root-scan'
+assert not packet.exists()
+(packet / 'objects').mkdir(parents=True)
+sha = lambda b: hashlib.sha256(b).hexdigest()
+manifest = {'proof_commit': 'bbb03345da4197750ebc14d27d9553ec46a1951c',
+            'previous_checkpoint': '3f3777d157a4294eb2c11be07fb992d6731953cf',
+            'files': [], 'external_sources': [], 'deltas': [], 'checks': [],
+            'joint_completion_proved': False, 'default_Haskell_correspondence_proved': False,
+            'repository_haskell_changes': False}
+
+def put(path, label, classification):
+    data = path.read_bytes()
+    digest = sha(data)
+    target = packet / 'objects' / (digest + ('.patch' if path.suffix == '.patch' else '.txt'))
+    target.write_bytes(data)
+    item = {'label': label, 'object': str(target.relative_to(packet)), 'sha256': digest,
+            'bytes': len(data), 'classification': classification}
+    manifest['files'].append(item)
+    return item
+
+def external(path):
+    item = {'path': str(path.relative_to(root)), 'sha256': sha(path.read_bytes())}
+    if item not in manifest['external_sources']:
+        manifest['external_sources'].append(item)
+    return item
+
+def delta(before, after, label):
+    output = subprocess.run(['diff', '-U0', '--label', 'a/source', '--label', 'b/source',
+                             str(before), str(after)], capture_output=True)
+    assert output.returncode == 1
+    patch = runtime / (label + '.patch')
+    patch.write_bytes(output.stdout)
+    item = put(patch, label + '.patch', 'exact GNU zero-context delta')
+    manifest['deltas'].append({'label': label, 'before_sha256': sha(before.read_bytes()),
+                               'after_sha256': sha(after.read_bytes()), 'patch': item['object']})
+
+old_packet = root / 'lean/restart-evidence/20261113-initial-eager-root-scan'
+base = old_packet / 'objects/e3517f9c6921a191f01b9b5c9886b6810aeda09e6fca7c6b76218d02f1c58fd1.txt'
+external(base)
+name = 'SourceSynthesisCurrentAcceptedEagerRootScanOrigin.lean'
+sources = {
+    3: base,
+    4: Path('/tmp/mcfta-accepted-eager-root-scan-repair-20261114-0232') / name,
+    5: Path('/tmp/mcfta-accepted-eager-root-scan-repair-20261114-0236') / name,
+    6: Path('/tmp/mcfta-accepted-eager-root-scan-repair-20261114-0239') / name,
+    7: Path('/tmp/mcfta-accepted-eager-root-scan-repair-20261114-0241') / name,
+    8: Path('/tmp/mcfta-accepted-eager-root-scan-repair-20261114-0247') / name,
+    9: Path('/tmp/mcfta-accepted-eager-root-scan-repair-20261114-0250') / name,
+    10: Path('/tmp/mcfta-accepted-eager-root-scan-repair-20261114-0253') / name}
+parents = {4: 3, 5: 4, 6: 5, 7: 4, 8: 6, 9: 8, 10: 9}
+stamps = {3: '0230', 4: '0232', 5: '0236', 6: '0239', 7: '0241', 8: '0247', 9: '0250', 10: '0253'}
+for index, source in sources.items():
+    if index in parents:
+        delta(sources[parents[index]], source, 'private-stage' + str(index))
+        folder = source.parent
+        if (folder / 'frozen.json').exists():
+            put(folder / 'frozen.json', 'stage' + str(index) + '/frozen.json', 'historical uncompiled inventory')
+    check = Path('/tmp/mcfta-accepted-eager-root-scan-check' + str(index) + '-20261114-' + stamps[index])
+    delta(source, check / 'check.lean', 'instrument-stage' + str(index))
+    report = json.loads((check / 'draft-checked.json').read_text())
+    assert report['compiler_exit'] == (0 if index == 10 else 1)
+    manifest['checks'].append({'stage': index, 'source_sha256': sha(source.read_bytes()),
+                                'source_lines': len(source.read_text().splitlines()),
+                                'compiler_exit': report['compiler_exit']})
+    for leaf in ['draft-output.txt', 'draft-checked.json', 'check-draft.py', 'peaks']:
+        if (check / leaf).exists():
+            put(check / leaf, 'check' + str(index) + '/' + leaf,
+                'private checked pass' if index == 10 else 'failed private check; no proof credit')
+
+public = root / 'lean/MicroCFTA' / name
+delta(sources[10], public, 'public-promotion376')
+delta(public, runtime / 'public-strict.lean', 'public-axiom-instrumentation')
+manifest['public_source'] = {'path': str(public.relative_to(root)), 'sha256': sha(public.read_bytes()),
+                              'lines': len(public.read_text().splitlines())}
+for leaf in ['check-final.py', 'final-checked.json', 'final-partial-report.json',
+             'public-source-pin.json', 'public-imports.lean', 'public-imports.txt',
+             'public-strict.txt', 'audit-build.txt', 'audit-strict.txt', 'peaks']:
+    if (runtime / leaf).exists():
+        put(runtime / leaf, 'publication/' + leaf, 'checked public integration')
+for leaf in ['baseline-live-source-pins.json', 'final-source-pins.txt']:
+    path = runtime / leaf
+    manifest.setdefault('regenerable_inputs', []).append({'name': leaf, 'sha256': sha(path.read_bytes()),
+                                                         'bytes': path.stat().st_size})
+
+headers = Path('/tmp/mcfta-accepted-eager-root-scan-plan-20261113-1933')
+first = Path('/tmp/mcfta-accepted-eager-root-scan-20261113-1941')
+corrected = Path('/tmp/mcfta-accepted-eager-root-scan-repair-20261113-1950')
+for path in [headers / 'old-header.lean.txt', headers / 'header.lean.txt',
+             first / 'header.lean.txt', corrected / 'header.lean.txt']:
+    digest = sha(path.read_bytes())
+    stored = old_packet / 'objects' / (digest + '.txt')
+    assert stored.read_bytes() == path.read_bytes()
+    external(stored)
+for before, after, label in [
+    (headers / 'old-header.lean.txt', headers / 'header.lean.txt', 'header-139-to-231'),
+    (headers / 'header.lean.txt', first / 'header.lean.txt', 'header-width-correction'),
+    (first / 'header.lean.txt', corrected / 'header.lean.txt', 'header-source-name-correction')]:
+    delta(before, after, label)
+    delta(after, before, label + '-inverse')
+
+for folder in [Path('/tmp/mcfta-default-narrow-independent-review-20261114-0235'),
+               Path('/tmp/mcfta-required-shape-eager-boundary-20261114-0244'),
+               Path('/tmp/mcfta-narrow-backend-baseline-20261114-0254')]:
+    for path in sorted(folder.iterdir()):
+        if path.is_file():
+            put(path, folder.name + '/' + path.name,
+                'checked standalone baseline' if 'baseline' in folder.name else 'source audit; no new semantic theorem')
+for leaf in ['board-request.json', 'board-verified.json', 'liquid-pr212.json', 'liquid-finding-prefix.json']:
+    path = Path('/tmp/mcfta-resume-publication-20261114-0242') / leaf
+    put(path, 'external-state/' + leaf, 'source publication or unmerged external fix metadata')
+put(Path(__file__), 'publication/package.py', 'actual packaging driver')
+(packet / 'manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
+print(json.dumps({'packet': str(packet), 'objects': len(list((packet / 'objects').iterdir())),
+                  'deltas': len(manifest['deltas']),
+                  'bytes': sum(p.stat().st_size for p in packet.rglob('*') if p.is_file())}))

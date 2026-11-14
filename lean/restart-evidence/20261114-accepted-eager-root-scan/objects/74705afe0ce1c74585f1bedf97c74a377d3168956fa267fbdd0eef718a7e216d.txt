@@ -1,0 +1,69 @@
+# Independent review of the native narrowing parameter
+
+Status: source review only. No compiler, probe, live edit or Haskell change.
+The review compares the saved candidate with the current three live files.
+All three live files still match the saved original bytes. Public239 is unchanged.
+
+The draft has one recursive implementation. Action.prepareWithNarrow contains
+the previous action body. SelectedStep.runPrefixWithNarrow contains the previous
+selected-prefix body. RecursiveChildPolicy.resumeWithNarrow contains the previous
+recursive body. All three bodies reconstruct the old bytes after only the approved
+callee substitutions. All five old operation signatures and all six old manual
+theorem propositions retain their bytes. Imports and existing datatypes are unchanged.
+
+The same narrowing operation reaches both recursive cases. The parked branch
+passes it to resumeWithNarrow. The prepared branch captures it in the recursive
+continuation passed to the existing continueWith. runWithNarrow uses the same
+Restart.decision. runEagerWithNarrow supplies the same eagerChild with the same
+five work-fuel arguments. No new semantic provider or readiness premise was found.
+
+The body comparison covers complete/stopped results, errors, native heaps, actual
+callers, full query Memos, branch caches and callback observations. The same code
+advances the caller from prepared.state. No field is erased by this draft.
+The five new rfl laws compare the new configured wrappers with the new backend.
+They do not independently compare against an imported historical implementation.
+The source inverses and recompilation of old statements remain necessary evidence.
+
+The smallest first compiler targets are Action, SelectedStep, then
+SharedPreparedRecursiveChildPolicy. The third target also reaches the affected
+SelectedStepCompletion and PreparedFuel files. Do not label source predictions
+as compiler failures. No compilation has run during this review.
+
+Concrete compatibility risks remain:
+
+- ActionTotal:42 unfolds prepare and then splits its match. It may need
+  prepareWithNarrow in that unfold list.
+- PreparedFuel:33 unfolds prepare and rewrites the narrowing result. The new
+  backend may hide that result until prepareWithNarrow is unfolded.
+- PathSelectedPrefix:34 unfolds runPrefix and then generalizes the read.
+  runPrefixWithNarrow may need to be exposed first.
+- SharedEagerReservation:3555 and similar sites rewrite resumeWithChild and
+  then an observed prefix. Both resumeWithNarrow and the configured prefix
+  spelling may need to be exposed.
+- SharedEagerOutputControl:429 reduces resumeWithChild and splits its result.
+  The new backend may need to be included in that reduction.
+
+The saved list has 68 sites in 26 modules. Only 23 modules are in the current
+Audit import closure. ActionTotal, SourceCurrentSelectedStepObservedTotal and
+SourceCurrentSelectedStepAllObservedTotal are outside it. An Audit pass alone
+cannot verify those three files. Check them explicitly if they are intended
+checked secondary targets. Keep marked uncompiled drafts classified as drafts.
+
+The draft adds no identity-specific resource law, metadata erasure proof or
+default-Haskell correspondence. The old resource laws remain configured-worker
+statements. Arbitrary stop/order functions can still inspect metadata. Later
+default claims must use their exact no-stop/constant-order specialization and
+retain the complete observation relation, including nested failure metadata.
+
+review.json records independent source comparisons and import-closure results.
+source-pins.json identifies every reviewed input. No implementation was changed.
+
+The three outside-Audit public declarations for a baseline check are:
+
+- MicroCFTA.SourcePruningEnumerationActionTotal.prepare_total, line 33.
+- MicroCFTA.SourceCurrentSelectedStepObservedTotal.complete, line 29.
+- MicroCFTA.SourceCurrentSelectedStepAllObservedTotal.complete, line 29.
+
+Their baseline compilation status is not established by this review. Compare the
+same focused checks before and after the factoring. Do not attribute a pre-existing
+standalone failure to the new backend.
