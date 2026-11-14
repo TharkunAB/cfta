@@ -1,0 +1,112 @@
+import MicroCFTA.SourcePruningEnumerationSelectedPreparationCurrent
+import MicroCFTA.SourcePruningEnumerationSelectedPreparationReplay
+
+/-!
+# Current resources at an actual successful preparation bound
+
+The actual successful observation replays to a common larger bound.
+The existing completion producer supplies all resources at that same bound.
+Exact result equality transfers those resources to the original observation.
+-/
+namespace MicroCFTA.SourcePruningEnumerationSelectedPreparation
+open EnumerationState EnumerationCorrectness InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedPartialInvariant (Post)
+open SourcePruningEnumerationRecursive (Packet)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Core" => EnumerationState.State Symbol Constraint
+variable {Typing : Type} {width : Nat}
+variable [DecidableEq (EdgeKey Symbol Constraint)]
+
+/-- One actual successful preparation has the full current resource packet at its exact endpoint. -/
+theorem successful_resources_current
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller width) (memos : Memos) (metadata : SourcePruningRecordTypes.Metadata Typing)
+    (before : Cached) (uv handle : Nat) (scs : List Suspended)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (ready : EnumerationDriver.Ready uv before.core)
+    (stored : before.core.values[uv]? = some (.unenumerated (some handle) scs))
+    (profile : SourceCurrentAllocatedNativeResourceForecast.Profile)
+    (fits : SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile caller.checked)
+    (incoming : EnumerationReferences.IncomingAvoid uv before.core)
+    (property : Constraint → Prop)
+    (originalHeap : InternedFreshOrdinaryConstraintHeap.Heap property
+      caller.checked.native.machine.heap)
+    (fuel target preparedHandle : Nat) (preparedScs : List Suspended) (decoded result : Node)
+    (heap : InternedConstructorTemplates.State Symbol Constraint) (entered : Core)
+    (observed : run fuel fuel uv caller before =
+      ([.ok ((target, preparedHandle, preparedScs, decoded), entered)], some (.done result heap))) :
+    let cached : Cached := EnumerationExpandableIndex.frame entered before
+    target = uv ∧ preparedHandle = handle ∧ preparedScs = scs ∧
+      ((∀ extra, run (fuel + extra) (fuel + extra) uv caller before =
+        ([.ok ((target, preparedHandle, preparedScs, decoded), entered)], some (.done result heap))) ∧
+      lookupNode caller.checked.native.machine.heap handle = some decoded ∧
+      Post formulas solver inventory caller
+        (SourcePruningEnumerationSelectedValueCaller.advance caller heap) memos ∧
+      Packet formulas solver inventory
+        (SourcePruningEnumerationSelectedValueCaller.advance caller heap) memos metadata cached ∧
+      EnumerationDriver.RenderStable before.core cached.core ∧
+      EnumerationDriver.Ready uv cached.core ∧
+      cached.core.values[uv]? = some (.unenumerated (some handle) scs) ∧
+      cached.core.counter = before.core.counter ∧ cached.core.values = before.core.values ∧
+      cached.expandable = before.expandable ∧ cached.waiting = before.waiting ∧
+      Available heap result ∧ result.free = [] ∧
+      (∀ holds ambient term,
+        InternedGuardedLanguage.meaning holds ambient result term ↔
+          InternedGuardedLanguage.meaning holds ambient decoded term) ∧
+      ∀ holds ambient residualMeaning assignment,
+        (Satisfies (SourcePruningEnumerationNativeLanguage.handles holds ambient heap)
+          residualMeaning assignment cached.core ↔
+        Satisfies (SourcePruningEnumerationNativeLanguage.handles holds ambient
+          caller.checked.native.machine.heap) residualMeaning assignment before.core) ∧
+        (Satisfies (SourcePruningEnumerationNativeLanguage.handles holds ambient
+          caller.checked.native.machine.heap) residualMeaning assignment before.core →
+          InternedGuardedLanguage.meaning holds ambient result (assignment uv))) ∧
+      SourceCurrentConstrainedCapGeneratedQueryResources.Fits
+        (SourcePruningEnumerationSelectedValueCaller.normalizationProfile profile)
+        (SourcePruningEnumerationSelectedValueCaller.advance caller heap).checked ∧
+      InternedValueMass.value result ≤
+        (SourcePruningEnumerationSelectedValueCaller.normalizationProfile profile).mass ∧
+      InternedFreshOrdinaryConstraintHeap.Heap property heap ∧
+      EnumerationExpandableIndex.frame cached.core before = cached ∧
+      EnumerationReferences.IncomingAvoid uv cached.core ∧
+      SourcePruningEnumerationPrefixAdmission.suspendedBound cached.core =
+        SourcePruningEnumerationPrefixAdmission.suspendedBound before.core := by
+  obtain ⟨bound, canonicalDecoded, canonicalResult, canonicalHeap, canonicalCache, retained,
+      numeric, valueMass, known, canonicalFrame, canonicalIncoming, canonicalMass⟩ :=
+    complete_resources_current formulas solver inventory caller memos metadata before uv handle scs
+      packet ready stored profile fits incoming property originalHeap
+  have replayed := successful_run_moreFuel fuel bound uv target preparedHandle preparedScs decoded result
+    caller before entered heap observed
+  have canonicalAt : run (fuel + bound) (fuel + bound) uv caller before =
+      ([.ok ((uv, handle, scs, canonicalDecoded), canonicalCache.core)],
+        some (.done canonicalResult canonicalHeap)) := by
+    simpa only [Nat.add_comm bound fuel] using retained.1 fuel
+  have common := replayed.symm.trans canonicalAt
+  have rowFields :
+      (target = uv ∧ preparedHandle = handle ∧ preparedScs = scs ∧ decoded = canonicalDecoded) ∧
+        entered = canonicalCache.core := by
+    simpa only [List.cons.injEq, Except.ok.injEq, Prod.mk.injEq, true_and, and_true]
+      using congrArg Prod.fst common
+  obtain ⟨⟨targetSame, handleSame, bucketSame, decodedSame⟩, coreSame⟩ := rowFields
+  obtain ⟨resultSame, heapSame⟩ :=
+    MergedSourceComparison.Result.done.inj (Option.some.inj (congrArg Prod.snd common))
+  have cacheSame : canonicalCache = EnumerationExpandableIndex.frame entered before := by
+    rw [coreSame]
+    exact canonicalFrame.symm
+  subst target preparedHandle preparedScs decoded result heap canonicalCache
+  dsimp only
+  refine ⟨rfl, rfl, rfl, ⟨?_, retained.2⟩, numeric, valueMass, known, rfl,
+    canonicalIncoming, canonicalMass⟩
+  intro extra
+  exact successful_run_moreFuel fuel extra uv uv handle scs canonicalDecoded canonicalResult
+    caller before entered canonicalHeap observed
+
+end MicroCFTA.SourcePruningEnumerationSelectedPreparation
