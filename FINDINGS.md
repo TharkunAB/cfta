@@ -1,3 +1,63 @@
+# Actual captured rows retain the narrowing operation (2026-11-14 13:45 CET)
+
+GOAL ACTIVE. The full finite common-witness, language, typing, depth, default
+LPO/reduction/refolding, stream, size/count/weight/rank, host-bound and compiled
+Haskell objectives below remain unchanged. For each emitted partial root, prove
+ONE finite accepted term of the SAME original root with ONE consistent assignment,
+including aliases, residuals and parked backward recompletion.
+
+The actual callback, captured-child and now captured-row resource proofs retain
+one actual narrow/resumeWithNarrow operation. The new private
+SourcePruningEnumerationSharedEagerReservation.eager_captured_rows_resources_with_narrow
+uses the checked generic captured-child proof. The old configured row theorem
+is an exact specialization. Its full header and every byte outside
+ActualCapturedRowsResources remain unchanged. The proof adds63 lines. It changes
+no operational definition, row/child/tuple kernel or Haskell implementation.
+
+All five public checks PASS: source build, strict source, independent configured
+import, full Audit build and strict Audit. The final strict Audit checks95,969
+aggregate imported-theorem axiom dependencies. Separately85 explicit reports
+include83 standard-axiom and2 axiom-free reports. Only propext, Classical.choice
+and Quot.sound occur. Source modules5942; direct Audit imports4940.
+Private generic/configured axiom reports both pass. Effective memory max/high
+are4GiB with zero swap. All captured-row compiler handles are terminal.
+
+SharedEagerReservation source SHA256:
+4626e813b71adfee4b13cc62381593a5b5ce2959ff90beba1c97c39a5ae1cb69.
+Private checks: /tmp/mcfta-captured-rows-and-off-diagonal-check-20261114-1335.
+Public checks: /tmp/mcfta-eager-narrow-captured-rows-publication-20261114-1341.
+Preserve failed off-diagonal input/logs from the same private batch without credit.
+The opaque helper, repaired mixed reference alias and off-diagonal control repair
+are frozen but UNVERIFIED. Their next check driver is prepared at
+/tmp/mcfta-mixed-alias-and-opaque-check-20261114-1344. Do not start another compiler
+while a known handle is live. Root remains the sole live writer/compiler/Git owner.
+
+Next close opaque and prepared/prefix composition, then the actual whole identity
+worker induction. Every-budget PREFIX resources do not prove every-budget WORKER
+output history. Mixed-domain source ref(U)/U and body(U)/U aliases remain OPEN.
+The central finite joint-witness proof and removed-bucket Holds law remain OPEN.
+Do not replace them with provenance, local nonemptiness, Packet/Stratified or a
+future-provider premise. No Haskell defect follows from a failing Lean draft.
+
+The host reboot at13:20 cleared old /tmp files. Immutable checkpoint31c38ed79d8c23be8a979750b77c986ca79f5338
+is pushed and independently verified. Its6.61MB packet retains307 exact checked,
+failed and marked inputs without compiled objects. Verify its manifest and
+source pins before use. Source code in that checkpoint isccc7f3dc59. Old checked
+claims remain valid. Its document verifier reconstructs the old documents from
+exact saved prefixes; current documents now have this additional status prefix.
+Fresh upstream main remainse53852064d3ef5a2eafec47d754c27504b11de5f.
+Port22 timed out after reboot; the trusted GitHub SSH endpoint on443 works.
+Use per-command core.sshCommand with Hostname=ssh.github.com, HostKeyAlias=github.com,
+port443, BatchMode=yes, ConnectTimeout=15, ServerAliveInterval=10 and
+ServerAliveCountMax=2. The remote configuration was not changed. /tmp has about
+139GiB free. Preserve unrelated .hypha/. Keep usage checks on the fresh primary
+percentage; pause/notify above80% only. Do not use lifetime goal-token totals.
+
+No Haskell/Cabal/test/Liquid Haskell annotation changed. No new implementation
+fix was established. Record every future Haskell fix in FINDINGS.
+
+Implementation note: the first off-diagonal private check failed because branch rewriting left metavariable goals. Its proof receives no credit. The repair remains unverified. This is a Lean proof issue; no Haskell fix was made.
+
 # Actual source-stage and identity-prefix contracts checked (2026-11-14 12:48 CET)
 
 GOAL ACTIVE. Continue the complete optimized interned shared eager objective.
