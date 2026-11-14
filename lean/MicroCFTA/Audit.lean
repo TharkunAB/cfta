@@ -1,3 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationIdentityPrefixMetadataErasure
 import MicroCFTA.SourcePruningEnumerationIdentityCompletion
 import MicroCFTA.SourcePruningEnumerationIdentityPrefix
 import MicroCFTA.SourceSynthesisCurrentAcceptedEagerRootScanOrigin
@@ -5035,3 +5036,6 @@ run_cmd do
 
 #check @MicroCFTA.SourcePruningEnumerationSelectedStep.runPrefix_identity_selected_complete
 #print axioms MicroCFTA.SourcePruningEnumerationSelectedStep.runPrefix_identity_selected_complete
+
+#check @MicroCFTA.SourcePruningEnumerationIdentityPrefixMetadataErasure.runPrefix_identity_metadata_erasure
+#print axioms MicroCFTA.SourcePruningEnumerationIdentityPrefixMetadataErasure.runPrefix_identity_metadata_erasure
