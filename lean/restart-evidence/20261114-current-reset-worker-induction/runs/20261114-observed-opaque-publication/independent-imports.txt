@@ -1,0 +1,93 @@
+@MicroCFTA.SourcePruningEnumerationSharedSelectedOpaqueDispatch.observed_complete_resources : ∀ {Typing : Type}
+  {bits : Nat} [inst : DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (seed : MicroCFTA.SourcePruningEnumerationSharedIncomingReservation.Seed)
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2))
+  (memos : MicroCFTA.EndpointMemoGateTrace.Memos) (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (checkEmpty : Bool) (target handle : Nat) (scs : List MicroCFTA.EnumerationState.Suspended)
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourcePruningEnumerationRecursive.Packet formulas solver inventory caller memos metadata before →
+    MicroCFTA.EnumerationDriver.Ready target before.core →
+      before.core.values[target]? = some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle) scs) →
+        MicroCFTA.EnumerationReferences.IncomingAvoid target before.core →
+          MicroCFTA.InternedProbeProvenance.Available caller.checked.native.machine.heap value →
+            value.free = [] →
+              (match value with
+                  | MicroCFTA.InternedConstructorTemplates.Value.node entry edges depth free =>
+                    !scs.any fun sc => MicroCFTA.EqualityTrie.isTerminal sc.trie
+                  | x => false) =
+                  false →
+                MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits seed.snd caller.checked →
+                  MicroCFTA.SourcePruningEnumerationSharedIncomingReservation.Reserved bits seed (scs.length + 1) →
+                    MicroCFTA.SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.fst)
+                        caller.checked.native.machine.heap →
+                      ∀ (r n p h k : Nat)
+                        (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+                        (reached : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2))
+                        (saved : MicroCFTA.SourceEndpointMemo.Memos)
+                        (after :
+                          MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+                        MicroCFTA.SourcePruningEnumerationSharedSelectedOpaqueDispatch.run checkEmpty r n p h k target
+                              scs value caller before memos.query =
+                            some
+                              (MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result.complete
+                                fragment reached saved after) →
+                          ∃ bound final next,
+                            (∀ (extra : Nat),
+                                MicroCFTA.SourcePruningEnumerationSharedSelectedOpaqueDispatch.run checkEmpty
+                                    (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra)
+                                    target scs value caller before memos.query =
+                                  some
+                                    (MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result.complete
+                                      fragment reached saved after)) ∧
+                              MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver next caller reached
+                                  final ∧
+                                final.query = saved ∧
+                                  MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.advance
+                                        (MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result.complete
+                                          fragment reached saved after) =
+                                      some (reached, saved) ∧
+                                    MicroCFTA.SourcePruningEnumerationSharedNativeBranchCompletion.Admitted target
+                                        (MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result.complete
+                                          fragment reached saved after) ∧
+                                      MicroCFTA.SourcePruningEnumerationSharedNativeBranchCompletion.Pending
+                                          (MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result.complete
+                                            fragment reached saved after) ∧
+                                        MicroCFTA.SourcePruningEnumerationSharedNativeBranchCompletion.FragmentHistory
+                                            before.core
+                                            (MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result.complete
+                                              fragment reached saved after) ∧
+                                          MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits
+                                              (MicroCFTA.SourcePruningEnumerationSharedIncomingReservation.advance seed
+                                                  (scs.length + 1)).snd
+                                              reached.checked ∧
+                                            MicroCFTA.SourceEqualityAnnotationHeap.Heap
+                                                (fun guard =>
+                                                  guard ∈
+                                                    (MicroCFTA.SourcePruningEnumerationSharedIncomingReservation.advance
+                                                        seed (scs.length + 1)).fst)
+                                                reached.checked.native.machine.heap ∧
+                                              (Exists ⋯ ∨ ⋯ ∨ ⋯) ∧
+                                                MicroCFTA.SourcePruningEnumerationSharedSelectedOpaqueDispatch.FinalizationAt
+                                                  checkEmpty bound target scs value caller before memos.query
+                                                  (MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result.complete
+                                                    fragment reached saved after)
+'MicroCFTA.SourcePruningEnumerationSharedSelectedOpaqueDispatch.observed_complete_resources' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

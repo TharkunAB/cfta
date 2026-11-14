@@ -1,0 +1,61 @@
+-- OPEN MARKED HEADER. No body, axiom or proof credit.
+-- Intended inside ActualIdentityCallbackPrefix after its aliases and instances.
+private theorem identity_completed_scan_prefix_resources_at_any_budget
+    (graph : Graph Symbol Constraint)
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (recursiveDepth : Nat)
+    (recursive : IdentityEagerEmittedCompleteAtDepth (bits := bits)
+      graph checkEmpty edgesOf formulas solver recursiveDepth)
+    (captured : InternedConstructorTemplates.State Symbol Constraint) (limit own height : Nat) (count : Nat) :
+  ∀ (inventory : Inventory) (caller : Caller (bits + 2)) (memos : Memos) (metadata : Metadata Unit)
+    (before : Cached) (seed : Seed) (bound ceiling : Nat) (scs : List Suspended) (uv handle : Nat),
+    Packet formulas solver inventory caller memos metadata before →
+    EnumerationDriver.Ready uv before.core →
+    before.core.values[uv]? = some (.unenumerated (some handle) scs) →
+    EnumerationReferences.IncomingAvoid uv before.core →
+    Fits seed.2 caller.checked → Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap →
+    SourceEqualityRequiredCache.Keeps captured caller.checked.native.machine.heap →
+    SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling → scs.length ≤ bound →
+    ∀ (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+      (rows : List (EdgeValue Symbol Constraint)) (depth : Nat) (free : List InternedBinderProtocol.Reference),
+    Available captured (.node parentEntry rows depth free) → free = [] →
+    MergedOrdinaryHeight.height (.node parentEntry rows depth free) ≤ height + 1 →
+    (∀ sc ∈ scs, sc.var < before.core.counter) → InputsPending before.core scs →
+    ∀ (alternatives : List (EdgeValue Symbol Constraint)), alternatives.length ≤ count →
+    (∀ edge ∈ alternatives, edge ∈ rows) →
+    (∀ entry rows depth free, Available captured (.node entry rows depth free) →
+      rows.length ≤ limit ∧ ∀ edge ∈ rows, edge.children.length ≤ limit ∧
+        ∀ tries residual, SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual) →
+          tries.length ≤ own) →
+    (∀ entry rows depth free, ∀ edge ∈ edgesOf (.node entry rows depth free), edge ∈ rows) →
+    (∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length) →
+    (∀ index, index < count → tupleReserved (nodePlan limit own height) (nodeReserved bits limit own height)
+      limit (bound + own) ceiling (fun retained current => eagerFinal recursiveDepth current retained)
+        (fun retained current => eagerReserved bits recursiveDepth current retained)
+        (iterate (fun current => tuplePlan (nodePlan limit own height) limit (bound + own) ceiling
+          (fun retained current => eagerFinal recursiveDepth current retained) current) seed index)) →
+    ∀ (workFuel : Nat)
+      (processed : List (SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result (bits + 2)))
+      (outputs : List (Output (bits + 2) Unit)) (reached : Caller (bits + 2)) (saved : SourceEndpointMemo.Memos),
+      SourcePruningEnumerationSharedBranching.scan
+        (SourcePruningEnumerationSharedChildVisitors.visitCapturedWith
+          (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty
+            workFuel workFuel workFuel workFuel workFuel edgesOf)
+          (SourcePruningEnumerationSharedPreparedRecursive.continueWith
+            (resumeWithNarrow (Typing := Unit) (width := bits + 2)
+              (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty
+                workFuel workFuel workFuel workFuel workFuel edgesOf)
+              (fun _ _ _ node state => .done node state) graph [] checkEmpty edgesOf
+              none (fun _ _ => none) workFuel recursiveDepth)
+            graph [] none (fun _ _ => none) workFuel metadata uv)
+          workFuel uv scs) before alternatives caller memos.query =
+        .complete processed outputs reached saved →
+      let finalSeed := iterate (fun current => tuplePlan (nodePlan limit own height) limit (bound + own) ceiling
+        (fun retained current => eagerFinal recursiveDepth current retained) current) seed count
+      ∃ (next : Inventory) (final : Memos),
+        Post formulas solver next caller reached final ∧ final.query = saved ∧
+        Packet formulas solver next reached final metadata before ∧
+        Fits finalSeed.2 reached.checked ∧
+        Heap (fun guard => guard ∈ finalSeed.1) reached.checked.native.machine.heap ∧
+        ∀ output ∈ outputs, OutputResources formulas solver caller finalSeed output

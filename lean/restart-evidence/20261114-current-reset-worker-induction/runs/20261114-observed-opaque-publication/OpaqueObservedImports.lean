@@ -1,0 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationSharedSelectedOpaqueObservedResources
+
+#check @MicroCFTA.SourcePruningEnumerationSharedSelectedOpaqueDispatch.observed_complete_resources
+#print axioms MicroCFTA.SourcePruningEnumerationSharedSelectedOpaqueDispatch.observed_complete_resources

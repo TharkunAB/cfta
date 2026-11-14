@@ -1,0 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationSharedSelectedOpaqueStability
+
+#check MicroCFTA.SourcePruningEnumerationSharedSelectedOpaqueDispatch.complete_stable
+#print axioms MicroCFTA.SourcePruningEnumerationSharedSelectedOpaqueDispatch.complete_stable

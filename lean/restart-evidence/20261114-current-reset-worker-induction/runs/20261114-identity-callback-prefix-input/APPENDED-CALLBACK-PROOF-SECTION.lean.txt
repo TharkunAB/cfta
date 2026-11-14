@@ -1,0 +1,142 @@
+
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+section ActualIdentityCallbackPrefix
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedPartialInvariant (Post)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
+open SourcePruningEnumerationSharedIncomingReservation (Seed)
+open SourcePruningEnumerationRecursive (Packet)
+open SourcePruningEnumerationSharedPreparedRecursive (Output OutputResources OutcomeResources emitted)
+open SourcePruningEnumerationSharedPreparedRecursiveChildPolicy (runEagerWithNarrow runWithNarrow resumeWithNarrow)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Heap" => SourceEqualityAnnotationHeap.Heap
+variable {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+omit [DecidableEq Symbol] [DecidableEq Node] in
+/-- An earlier native Post retains the same actual outputs and complete endpoint. -/
+private theorem identity_emitted_complete_post
+    {formulas : SourceGuards.Formulas FullSyntax.Formula}
+    {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {original middle : Caller (bits + 2)} {next : Inventory} {final : Memos}
+    {seed : Seed}
+    {outcome : SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.HookResult
+      (Output (bits + 2) Unit) (SourcePruningEnumerationSharedPreparedRecursive.Failure (bits + 2) Unit) (bits + 2)}
+    (post : Post formulas solver next original middle final)
+    (resources : IdentityEmittedCompleteResources formulas solver middle seed outcome) :
+    IdentityEmittedCompleteResources formulas solver original seed outcome := by
+  obtain ⟨outputsValid, completed⟩ := resources
+  constructor
+  · intro output member
+    exact (outputsValid output member).post post
+  · cases outcome with
+    | complete outputs caller queries => exact completed.post post
+    | stopped outputs reason endpoint => trivial
+
+/-- The actual empty-catalog callback uses the same work bound at smaller recursive depth. -/
+private theorem identity_callback_emitted_complete_at_any_budget
+    (graph : Graph Symbol Constraint)
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (recursiveDepth : Nat)
+    (recursive : IdentityEagerEmittedCompleteAtDepth (bits := bits)
+      graph checkEmpty edgesOf formulas solver recursiveDepth)
+    (inventory : Inventory) (caller : Caller (bits + 2)) (memos : Memos)
+    (before : Cached) (metadata : Metadata Unit) (uv : Nat) (fragment : Fragment)
+    (seed : Seed) (ceiling : Nat)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (bounded : Fits seed.2 caller.checked)
+    (known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap)
+    (selectionMembers : ∀ entry rows depth free, ∀ edge ∈ edgesOf (.node entry rows depth free), edge ∈ rows)
+    (selectionLength : ∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length)
+    (mass : SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling)
+    (reserved : eagerReserved bits recursiveDepth seed ceiling) (workFuel : Nat) :
+    IdentityEmittedCompleteResources formulas solver caller (eagerFinal recursiveDepth seed ceiling)
+      (SourcePruningEnumerationSharedPreparedRecursive.continueWith
+        (resumeWithNarrow (Typing := Unit) (width := bits + 2)
+          (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty
+            workFuel workFuel workFuel workFuel workFuel edgesOf)
+          (fun _ _ _ node state => .done node state) graph [] checkEmpty edgesOf
+          none (fun _ _ => none) workFuel recursiveDepth)
+        graph [] none (fun _ _ => none) workFuel metadata uv fragment caller memos.query before) := by
+  let updated : Metadata Unit :=
+    {metadata with types := SourcePruningRecordTypes.updatedTypes metadata uv (.inl fragment)}
+  have updatedPacket : Packet formulas solver inventory caller memos updated before :=
+    ⟨packet.context, packet.safe, packet.pending, packet.valid, packet.ordered, packet.bounded⟩
+  have inherited := recursive inventory caller memos before updated seed ceiling
+    updatedPacket bounded known selectionMembers selectionLength mass reserved workFuel
+  let recur := resumeWithNarrow (Typing := Unit) (width := bits + 2)
+    (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty
+      workFuel workFuel workFuel workFuel workFuel edgesOf)
+    (fun _ _ _ node state => .done node state) graph [] checkEmpty edgesOf
+    none (fun _ _ => none) workFuel recursiveDepth
+  have recorded : ExceptT.run (SourcePruningRecordTypes.recordTypes graph [] workFuel
+      metadata uv (.inl fragment) before.core) = [.ok ((false, updated), before.core)] := by
+    rw [SourcePruningRecordTypes.recordTypes_empty]
+    rfl
+  have actual := SourcePruningEnumerationSharedPreparedRecursive.continue_recorded
+    recur graph [] none (fun _ _ => none) workFuel metadata updated uv fragment caller
+    memos.query before before.core recorded
+  have framed : EnumerationExpandableIndex.frame before.core before = before := by
+    cases before
+    rfl
+  change IdentityEmittedCompleteResources formulas solver caller (eagerFinal recursiveDepth seed ceiling)
+    (SourcePruningEnumerationSharedPreparedRecursive.continueWith recur graph [] none (fun _ _ => none)
+      workFuel metadata uv fragment caller memos.query before)
+  rw [actual]
+  simpa only [framed, runEagerWithNarrow, runWithNarrow, recur] using inherited
+
+/-- An actual completed callback supplies the next captured sibling packet and native resources. -/
+private theorem identity_completed_callback_captured_resources_at_any_budget
+    (graph : Graph Symbol Constraint)
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (recursiveDepth : Nat)
+    (recursive : IdentityEagerEmittedCompleteAtDepth (bits := bits)
+      graph checkEmpty edgesOf formulas solver recursiveDepth)
+    (inventory : Inventory) (caller : Caller (bits + 2)) (memos : Memos)
+    (before : Cached) (metadata : Metadata Unit) (uv : Nat) (fragment : Fragment)
+    (seed : Seed) (ceiling : Nat)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (bounded : Fits seed.2 caller.checked)
+    (known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap)
+    (selectionMembers : ∀ entry rows depth free, ∀ edge ∈ edgesOf (.node entry rows depth free), edge ∈ rows)
+    (selectionLength : ∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length)
+    (mass : SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling)
+    (reserved : eagerReserved bits recursiveDepth seed ceiling) (workFuel : Nat)
+    (outputs : List (Output (bits + 2) Unit)) (reached : Caller (bits + 2)) (saved : SourceEndpointMemo.Memos)
+    (observed : SourcePruningEnumerationSharedPreparedRecursive.continueWith
+      (resumeWithNarrow (Typing := Unit) (width := bits + 2)
+        (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty
+          workFuel workFuel workFuel workFuel workFuel edgesOf)
+        (fun _ _ _ node state => .done node state) graph [] checkEmpty edgesOf
+        none (fun _ _ => none) workFuel recursiveDepth)
+      graph [] none (fun _ _ => none) workFuel metadata uv fragment caller memos.query before =
+        .complete outputs reached saved) :
+    ∃ (next : Inventory) (final : Memos),
+      Post formulas solver next caller reached final ∧ final.query = saved ∧
+      Packet formulas solver next reached final metadata before ∧
+      Fits (eagerFinal recursiveDepth seed ceiling).2 reached.checked ∧
+      Heap (fun guard => guard ∈ (eagerFinal recursiveDepth seed ceiling).1) reached.checked.native.machine.heap ∧
+      ∀ output ∈ outputs,
+        OutputResources formulas solver caller (eagerFinal recursiveDepth seed ceiling) output := by
+  have resources := identity_callback_emitted_complete_at_any_budget graph checkEmpty edgesOf
+    formulas solver recursiveDepth recursive inventory caller memos before metadata uv fragment seed ceiling
+    packet bounded known selectionMembers selectionLength mass reserved workFuel
+  rw [observed] at resources
+  exact SourcePruningEnumerationSharedPreparedRecursive.completed_captured_packet
+    formulas solver inventory caller memos metadata before (eagerFinal recursiveDepth seed ceiling)
+    outputs reached saved packet resources.2
+
+end ActualIdentityCallbackPrefix
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
