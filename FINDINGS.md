@@ -1,3 +1,44 @@
+# Actual observed preparation resources checked (2026-11-14 15:49 CET)
+
+GOAL ACTIVE. The complete original objective remains in scope.
+NEW PUBLIC SourcePruningEnumerationSelectedPreparation.successful_resources_current
+retains every original initial parameter of complete_resources_current. One
+actual successful observation at the supplied common fuel derives the complete
+resource conclusion for THAT exact entry row, core, result and native heap.
+Exact replay at fuel+bound identifies it with the existing sufficient-bound
+producer at bound+fuel. No future result, resource or callback premise is added.
+The actual advanced caller and framed cache retain Post, Packet, RenderStable,
+Ready, stored bucket, counter, values, cache/waiting indexes, Available, closedness,
+meaning/assignment transport, Fits, value/suspended mass, Heap and IncomingAvoid.
+The original initial Packet, Ready, stored bucket, Fits, IncomingAvoid and Heap
+requirements remain explicit. This theorem does not create an initial model.
+
+All5public gates PASS. Strict Audit:96,049 aggregate imported theorem axiom
+dependencies and103 separate reports:101standard-axiom,2axiom-free. Only propext,
+Classical.choice,Quot.sound. Source modules5950; direct imports4948. Effective
+4GiB max/high,swap0. Logs/pins: /tmp/mcfta-observed-preparation-resources-publication-20261114-1547.
+Private check1 at1542 also passed. Public compiler handles are terminal.
+Sourcead831a459242756fef7f3d10758dce41232ab37f is independently pushed.
+
+Next derive the actual prefix phase mass, bucket bounds and IncomingAvoid at
+EACH supported common budget. Stopped/missing-adapter/failed-native local cases
+need their actual no-output equations. Stopped enclosing scans and callbacks
+can retain earlier outputs; their output inclusion remains OPEN. The full
+worker every-budget history is not a consequence of this local success law.
+The strict-descendant original-domain freshness draft failed check1 because
+intro consumed target let binders. The proof-only dsimp repair is UNCOMPILED.
+No freshness or full generated-Type closure claim follows from that failed run.
+
+The main gap remains one finite accepted SAME-original-root term and one
+consistent assignment per actual emitted causal branch. Include final domains,
+paths,aliases,residuals,partial readback AND all actually removed constraints.
+Keep all original typing,depth,LPO/refolding,both language directions,stream,
+exact sizes,counts/weights/training,both rank/unrank,host and compiled-Haskell
+clauses. No Haskell/Cabal/test/Liquid Haskell annotation changed. No new Haskell
+fix or reachable source counterexample was established. Keep future Haskell
+fixes in FINDINGS. Root owns live/compiler/Git. Preserve .hypha/ and all failed/
+marked inputs. New compact archive preparation is active; previous1750 is immutable.
+
 # Startup atoms and exact selected preparation checked (2026-11-14 15:40 CET)
 
 GOAL ACTIVE. Preserve the complete original proof objective below.
