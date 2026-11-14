@@ -11527,3 +11527,165 @@ private theorem tuple_inputs_after_nested_prefix
 
 end ActualNestedPrefixForwardComposition
 end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+open SourcePruningEnumerationSharedIncomingReservation (Seed advance)
+open SourcePruningEnumerationFiniteReservation (iterate iterate_add)
+private inductive IdentityReservationGoal where
+  | worker (depth : Nat) (seed : Seed) (ceiling : Nat)
+  | node (limit own height bound ceiling : Nat)
+      (continuation : Nat → Seed → Seed) (admitted : Nat → Seed → Prop) (seed : Seed)
+  | rows (limit own height count bound ceiling : Nat)
+      (continuation : Nat → Seed → Seed) (admitted : Nat → Seed → Prop) (seed : Seed)
+  | tuple (limit own height count bound ceiling : Nat)
+      (continuation : Nat → Seed → Seed) (admitted : Nat → Seed → Prop) (seed : Seed)
+  | fallback (bound ceiling : Nat)
+      (continuation : Nat → Seed → Seed) (admitted : Nat → Seed → Prop) (seed : Seed)
+  | callback (continuation : Nat → Seed → Seed) (admitted : Nat → Seed → Prop)
+      (seed : Seed) (ceiling : Nat)
+
+private noncomputable def IdentityReservationGoal.forecast : IdentityReservationGoal → Seed
+  | .worker depth seed ceiling => eagerFinal depth seed ceiling
+  | .node limit own height bound ceiling continuation _admitted seed =>
+      nodePlan limit own height bound ceiling continuation seed
+  | .rows limit own height count bound ceiling continuation _admitted seed =>
+      iterate (fun current => tuplePlan (nodePlan limit own height)
+        limit (bound + own) ceiling continuation current) seed count
+  | .tuple limit own height count bound ceiling continuation _admitted seed =>
+      tuplePlan (nodePlan limit own height) count bound ceiling continuation seed
+  | .fallback bound ceiling continuation _admitted seed => fallbackPlan bound ceiling continuation seed
+  | .callback continuation _admitted seed ceiling => continuation ceiling seed
+
+private noncomputable def IdentityReservationGoal.reserved (bits : Nat) : IdentityReservationGoal → Prop
+  | .worker depth seed ceiling => eagerReserved bits depth seed ceiling
+  | .node limit own height bound ceiling continuation admitted seed =>
+      nodeReserved bits limit own height bound ceiling continuation admitted seed
+  | .rows limit own height count bound ceiling continuation admitted seed =>
+      ∀ index, index < count →
+        tupleReserved (nodePlan limit own height) (nodeReserved bits limit own height)
+          limit (bound + own) ceiling continuation admitted
+          (iterate (fun current => tuplePlan (nodePlan limit own height)
+            limit (bound + own) ceiling continuation current) seed index)
+  | .tuple limit own height count bound ceiling continuation admitted seed =>
+      tupleReserved (nodePlan limit own height) (nodeReserved bits limit own height)
+        count bound ceiling continuation admitted seed
+  | .fallback bound ceiling _continuation admitted seed => fallbackReserved bits bound ceiling admitted seed
+  | .callback _continuation admitted seed ceiling => admitted ceiling seed
+
+-- Every position has a source in one original reserved worker plan.
+-- No rule supplies an arbitrary later seed or an arbitrary later capacity.
+private inductive IdentityReservationPosition (bits : Nat) (root : IdentityReservationGoal) :
+    IdentityReservationGoal → Prop where
+  | root : IdentityReservationPosition bits root root
+  | prepared {depth : Nat} {seed : Seed} {ceiling : Nat}
+      (origin : IdentityReservationPosition bits root (.worker (depth + 1) seed ceiling)) :
+      IdentityReservationPosition bits root
+        (.node
+          (SourceCurrentConstrainedCapTargetForecast.scalar
+            (SourcePruningEnumerationSharedPreparedReservation.preparedSeed seed).2)
+          (SourcePruningEnumerationGuardWidth.width
+            (SourcePruningEnumerationSharedPreparedReservation.preparedSeed seed).1)
+          (SourceCurrentConstrainedCapTargetForecast.scalar
+            (SourcePruningEnumerationSharedPreparedReservation.preparedSeed seed).2)
+          ceiling ceiling (fun retained current => eagerFinal depth current retained)
+          (fun retained current => eagerReserved bits depth current retained)
+          (SourcePruningEnumerationSharedPreparedReservation.preparedSeed seed))
+  | nodeFallback {limit own height bound ceiling : Nat}
+      {continuation : Nat → Seed → Seed} {admitted : Nat → Seed → Prop} {seed : Seed}
+      (origin : IdentityReservationPosition bits root
+        (.node limit own height bound ceiling continuation admitted seed)) :
+      IdentityReservationPosition bits root (.fallback bound ceiling continuation admitted seed)
+  | nodeRows {limit own height bound ceiling : Nat}
+      {continuation : Nat → Seed → Seed} {admitted : Nat → Seed → Prop} {seed : Seed}
+      (origin : IdentityReservationPosition bits root
+        (.node limit own (height + 1) bound ceiling continuation admitted seed)) :
+      IdentityReservationPosition bits root
+        (.rows limit own height limit bound ceiling continuation admitted
+          (fallbackPlan bound ceiling continuation seed))
+  | rowsBoundary {limit own height count bound ceiling index : Nat}
+      {continuation : Nat → Seed → Seed} {admitted : Nat → Seed → Prop} {seed : Seed}
+      (origin : IdentityReservationPosition bits root
+        (.rows limit own height count bound ceiling continuation admitted seed))
+      (within : index ≤ count) :
+      IdentityReservationPosition bits root
+        (.rows limit own height (count - index) bound ceiling continuation admitted
+          (iterate (fun current => tuplePlan (nodePlan limit own height)
+            limit (bound + own) ceiling continuation current) seed index))
+  | rowHead {limit own height count bound ceiling : Nat}
+      {continuation : Nat → Seed → Seed} {admitted : Nat → Seed → Prop} {seed : Seed}
+      (origin : IdentityReservationPosition bits root
+        (.rows limit own height (count + 1) bound ceiling continuation admitted seed)) :
+      IdentityReservationPosition bits root
+        (.tuple limit own height limit (bound + own) ceiling continuation admitted seed)
+  | tupleHead {limit own height count bound ceiling : Nat}
+      {continuation : Nat → Seed → Seed} {admitted : Nat → Seed → Prop} {seed : Seed}
+      (origin : IdentityReservationPosition bits root
+        (.tuple limit own height (count + 1) bound ceiling continuation admitted seed)) :
+      IdentityReservationPosition bits root
+        (.node limit own height bound ceiling
+          (fun retained current => tuplePlan (nodePlan limit own height) count bound retained continuation current)
+          (fun retained current => tupleReserved (nodePlan limit own height)
+            (nodeReserved bits limit own height) count bound retained continuation admitted current) seed)
+  | tupleFinishPad {limit own height count bound ceiling : Nat}
+      {continuation : Nat → Seed → Seed} {admitted : Nat → Seed → Prop} {seed : Seed}
+      (origin : IdentityReservationPosition bits root
+        (.tuple limit own height count bound ceiling continuation admitted seed)) :
+      IdentityReservationPosition bits root
+        (.callback continuation admitted (advance seed (count * (bound + 1))) (ceiling + count * bound))
+  | fallbackFinish {bound ceiling : Nat}
+      {continuation : Nat → Seed → Seed} {admitted : Nat → Seed → Prop} {seed : Seed}
+      (origin : IdentityReservationPosition bits root (.fallback bound ceiling continuation admitted seed)) :
+      IdentityReservationPosition bits root
+        (.callback continuation admitted (advance seed (bound + 1)) (ceiling + bound))
+  | tupleTail {limit own height count bound ceiling : Nat}
+      {continuation : Nat → Seed → Seed} {admitted : Nat → Seed → Prop} {seed : Seed}
+      (origin : IdentityReservationPosition bits root
+        (.callback
+          (fun retained current => tuplePlan (nodePlan limit own height) count bound retained continuation current)
+          (fun retained current => tupleReserved (nodePlan limit own height)
+            (nodeReserved bits limit own height) count bound retained continuation admitted current) seed ceiling)) :
+      IdentityReservationPosition bits root
+        (.tuple limit own height count bound ceiling continuation admitted seed)
+  | identityWorker {depth : Nat} {seed : Seed} {ceiling : Nat}
+      (origin : IdentityReservationPosition bits root
+        (.callback (fun retained current => eagerFinal depth current retained)
+          (fun retained current => eagerReserved bits depth current retained) seed ceiling)) :
+      IdentityReservationPosition bits root (.worker depth seed ceiling)
+
+-- The source execution obligations remain open.
+-- Reachable forecast profiles and alphabets lie within the original forecast.
+-- A SOURCE prefix must also derive its actual Packet/Fits/Heap/mass at that position.
+-- The path alone supplies no native effect or source execution invariant.
+
+section OrderedPositionAdmission
+attribute [local irreducible] nodeReserved
+
+/-- Every ordered position inherits admission from its original reservation. -/
+private theorem identity_reservation_position_reserved
+    (bits : Nat) (root goal : IdentityReservationGoal)
+    (position : IdentityReservationPosition bits root goal)
+    (reserved : IdentityReservationGoal.reserved bits root) :
+    IdentityReservationGoal.reserved bits goal := by
+  induction position with
+  | root => exact reserved
+  | prepared origin ih =>
+      simpa only [IdentityReservationGoal.reserved, eagerReserved] using ih
+  | nodeFallback origin ih =>
+      exact nodeReserved_fallback bits _ _ _ _ _ _ _ _ ih
+  | nodeRows origin ih =>
+      simp only [IdentityReservationGoal.reserved, nodeReserved] at ih
+      exact ih.2
+  | @rowsBoundary limit own height count bound ceiling index continuation admitted seed origin within ih =>
+      intro next nextInside
+      have originalInside : index + next < count := by omega
+      simpa only [iterate_add] using ih (index + next) originalInside
+  | rowHead origin ih => exact ih 0 (Nat.zero_lt_succ _)
+  | tupleHead origin ih => exact ih
+  | tupleFinishPad origin ih =>
+      exact tupleReserved_first_callback bits _ _ _ _ _ _ _ _ _ ih
+  | fallbackFinish origin ih => exact ih.2
+  | tupleTail origin ih => exact ih
+  | identityWorker origin ih => exact ih
+
+end OrderedPositionAdmission
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
