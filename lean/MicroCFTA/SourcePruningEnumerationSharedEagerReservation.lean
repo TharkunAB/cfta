@@ -9916,3 +9916,571 @@ private theorem tuple_inputs_extend_current_head
 
 end ActualTuplePrefixExtension
 end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+section ActualTuplePrefixReservation
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+open SourcePruningEnumerationSharedSelectedContinuations
+open SourcePruningEnumerationSharedIncomingReservation (Seed advance advance_add Reserved)
+
+/-- The original tuple reservation covers its complete ordered native fallback schedule. -/
+private theorem tupleReserved_fallback_native_schedule (bits limit own height count bound ceiling : Nat)
+    (continuation : Nat → Seed → Seed) (admitted : Nat → Seed → Prop) (seed : Seed)
+    (reserved : tupleReserved (nodePlan limit own height) (nodeReserved bits limit own height)
+      count bound ceiling continuation admitted seed) :
+    Reserved bits seed (count * (bound + 1)) := by
+  induction count generalizing ceiling seed with
+  | zero =>
+      simpa only [Nat.zero_mul] using
+        SourcePruningEnumerationSharedIncomingReservation.reserved_zero bits seed
+  | succ count ih =>
+      let tail := fun retained current => tuplePlan (nodePlan limit own height) count bound retained continuation current
+      let covered := fun retained current => tupleReserved (nodePlan limit own height) (nodeReserved bits limit own height)
+        count bound retained continuation admitted current
+      have child : nodeReserved bits limit own height bound ceiling tail covered seed := reserved
+      have fallback := nodeReserved_fallback bits limit own height bound ceiling tail covered seed child
+      have later := ih (ceiling + bound) (advance seed (bound + 1)) fallback.2
+      intro index less
+      by_cases first : index < bound + 1
+      · exact fallback.1 index first
+      · have counts : (count + 1) * (bound + 1) = (bound + 1) + count * (bound + 1) := by
+          rw [Nat.succ_mul]
+          omega
+        have remaining : index - (bound + 1) < count * (bound + 1) := by
+          rw [counts] at less
+          omega
+        have room := later (index - (bound + 1)) remaining
+        have offset : (bound + 1) + (index - (bound + 1)) = index := by omega
+        simpa only [← advance_add, offset] using room
+
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+variable {bits : Nat}
+local notation "Fold" => NativeContinuations.Result
+  (SourcePruningEnumerationSharedPreparedRecursive.Output (bits + 2) Unit)
+  (SourcePruningEnumerationSharedPreparedRecursive.Failure (bits + 2) Unit) (bits + 2)
+local notation "Done" => List Fragment → Caller (bits + 2) → Queries → Cached → Fold
+local notation "Stopped" => List Fragment → ChildDispatch.Observation (bits + 2) → Option Cached → Fold
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+/-- Actual captured, fallback and empty-row contexts retain one bounded native schedule. -/
+private theorem identity_actual_tuple_prefix_costs
+    (graph : Graph Symbol Constraint) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint)) (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Unit) (uv : Nat) (capturedCaller : Caller (bits + 2))
+    (capturedQueries : Queries) (capturedBefore : Cached) (scs : List Suspended)
+    (edge : EdgeValue Symbol Constraint) (residual : Option Constraint) (capturedOwn : Cached)
+    (staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)))
+    (initialSeed : Seed) (initialMass bound : Nat)
+    (bounded : ∀ child bucket, (child, bucket) ∈ staged.map (fun input => (input.1, input.2.1)) →
+      bucket.length ≤ bound)
+    (completedPrefix : List Fragment) (inputs : List (Node × List Suspended))
+    (caller : Caller (bits + 2)) (before : Cached) (queries : Queries)
+    (seed : Seed) (mass : Nat) (done : Done) (stopped : Stopped)
+    (context : IdentityActualTupleContext graph checkEmpty edgesOf recursiveDepth workFuel metadata uv
+      capturedCaller capturedQueries capturedBefore scs edge residual capturedOwn staged initialSeed initialMass
+      completedPrefix inputs caller before queries seed mass done stopped) :
+    ∃ consumed,
+      seed = advance initialSeed consumed ∧
+      consumed ≤ completedPrefix.length * (bound + 1) ∧
+      mass ≤ initialMass + completedPrefix.length * bound ∧
+      completedPrefix.length + inputs.length = staged.length ∧
+      (∀ input ∈ inputs, input ∈ staged.map (fun item => (item.1, item.2.1))) := by
+  induction context with
+  | captured _hook _source _prepared =>
+      refine ⟨0, rfl, Nat.zero_le _, ?_, ?_, ?_⟩
+      · simp
+      · simp
+      · intro input member
+        exact member
+  | @fallbackTail completedPrefix _caller _before _queries _seed _mass _done _stopped
+      bucket incoming _rest _fragment _returned _reached _saved _after _outer _waiting
+      _origin _fallback _observed ih =>
+      obtain ⟨consumed, seedAt, paid, retainedMass, lengths, members⟩ := ih
+      have bucketBound : bucket.length ≤ bound := bounded incoming bucket (members _ (by simp))
+      refine ⟨consumed + (bucket.length + 1), ?_, ?_, ?_, ?_, ?_⟩
+      · rw [seedAt, ← advance_add]
+      · simp only [List.length_append, List.length_singleton]
+        rw [Nat.add_mul, Nat.one_mul]
+        omega
+      · simp only [List.length_append, List.length_singleton]
+        rw [Nat.add_mul, Nat.one_mul]
+        omega
+      · simp only [List.length_cons] at lengths
+        simp only [List.length_append, List.length_singleton]
+        omega
+      · intro input member
+        exact members input (List.mem_cons_of_mem _ member)
+  | @ordinaryEmptyTail completedPrefix _caller _before _queries _seed _mass _done _stopped
+      _bucket _rest _parentEntry _rows _depth _free _selectedRow _alternatives _rowResidual _rowOwn
+      _origin _ordinary _first _prepared ih =>
+      obtain ⟨consumed, seedAt, paid, retainedMass, lengths, members⟩ := ih
+      refine ⟨consumed, seedAt, ?_, ?_, ?_, ?_⟩
+      · simp only [List.length_append, List.length_singleton]
+        rw [Nat.add_mul, Nat.one_mul]
+        omega
+      · simp only [List.length_append, List.length_singleton]
+        rw [Nat.add_mul, Nat.one_mul]
+        omega
+      · simp only [List.length_cons] at lengths
+        simp only [List.length_append, List.length_singleton]
+        omega
+      · intro input member
+        exact members input (List.mem_cons_of_mem _ member)
+
+/-- An actual fallback entry receives native admission from the original tuple reservation. -/
+private theorem identity_actual_fallback_native_reservation
+    (graph : Graph Symbol Constraint) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint)) (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Unit) (uv : Nat) (capturedCaller : Caller (bits + 2))
+    (capturedQueries : Queries) (capturedBefore : Cached) (scs : List Suspended)
+    (edge : EdgeValue Symbol Constraint) (residual : Option Constraint) (capturedOwn : Cached)
+    (staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)))
+    (initialSeed : Seed) (initialMass limit own height count bound : Nat)
+    (continuation : Nat → Seed → Seed) (admitted : Nat → Seed → Prop)
+    (bounded : ∀ child bucket, (child, bucket) ∈ staged.map (fun input => (input.1, input.2.1)) →
+      bucket.length ≤ bound)
+    (counted : staged.length ≤ count)
+    (reserved : tupleReserved (nodePlan limit own height) (nodeReserved bits limit own height)
+      count bound initialMass continuation admitted initialSeed)
+    (completedPrefix : List Fragment) (incoming : Node) (bucket : List Suspended)
+    (rest : List (Node × List Suspended)) (caller : Caller (bits + 2))
+    (before : Cached) (queries : Queries) (seed : Seed) (mass : Nat)
+    (done : Done) (stopped : Stopped)
+    (context : IdentityActualTupleContext graph checkEmpty edgesOf recursiveDepth workFuel metadata uv
+      capturedCaller capturedQueries capturedBefore scs edge residual capturedOwn staged initialSeed initialMass
+      completedPrefix ((incoming, bucket) :: rest) caller before queries seed mass done stopped) :
+    Reserved bits seed (bucket.length + 1) := by
+  obtain ⟨consumed, seedAt, paid, _retainedMass, lengths, members⟩ :=
+    identity_actual_tuple_prefix_costs graph checkEmpty edgesOf recursiveDepth workFuel metadata uv
+      capturedCaller capturedQueries capturedBefore scs edge residual capturedOwn staged initialSeed
+      initialMass bound bounded completedPrefix ((incoming, bucket) :: rest) caller before queries
+      seed mass done stopped context
+  have bucketBound : bucket.length ≤ bound := bounded incoming bucket (members _ (by simp))
+  have currentCount : completedPrefix.length + 1 ≤ count := by
+    simp only [List.length_cons] at lengths
+    omega
+  have coverage := Nat.mul_le_mul_right (bound + 1) currentCount
+  rw [Nat.add_mul, Nat.one_mul] at coverage
+  have schedule := tupleReserved_fallback_native_schedule bits limit own height count bound initialMass
+    continuation admitted initialSeed reserved
+  have remaining : Reserved bits initialSeed (consumed + (bucket.length + 1)) :=
+    schedule.prefix (by omega)
+  rw [seedAt]
+  exact remaining.after_prefix
+
+end ActualTuplePrefixReservation
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+section ActualCapturedPrefixEntry
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedPartialInvariant (Post)
+open SourcePruningEnumerationRecursive (Packet)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+variable {bits : Nat}
+variable [DecidableEq (EdgeKey Symbol Constraint)]
+
+/-- The actual captured own receipt derives its Packet and empty completed prefix. -/
+private theorem identity_captured_actual_prefix_entry
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (caller : Caller (bits + 2)) (memos : Memos)
+    (metadata : Metadata Unit) (before : Cached) (scs : List Suspended)
+    (edge : EdgeValue Symbol Constraint) (residual : Option Constraint) (own : Cached)
+    (staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)))
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (prepared : SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs edge before =
+      some [((edge.entry.key.symbol, staged, residual), own)]) :
+    Packet formulas solver inventory caller memos metadata own ∧
+      TupleInputs formulas solver caller metadata own
+        (staged.map (fun input => (input.1, input.2.1))) [] caller memos.query own := by
+  have ownPacket : Packet formulas solver inventory caller memos metadata own := by
+    obtain ⟨roots, paths, storage, realized, counts, flags⟩ := packet.valid
+    have complete := SourcePruningEnumerationCachedOwn.complete caller.checked.native.machine.heap
+      before scs edge roots storage realized paths counts flags
+    by_cases allowed : arityAllows edge.children.length scs = true
+    · simp only [allowed, ↓reduceIte] at complete
+      cases projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+      | none =>
+          simp only [projected] at complete
+          have impossible := complete.1.symm.trans prepared
+          cases impossible
+      | some pair =>
+          obtain ⟨tries, projectedResidual⟩ := pair
+          simp only [projected] at complete
+          obtain ⟨_action, candidate, _prefix, actual, _raw, ownCore, ownCounter, _aligned,
+            _forest, ownPaths, ownStorage, ownRealized, ownCounts, _waiting, _expandable, ownFlags⟩ := complete
+          have endpointSame : candidate = own :=
+            congrArg Prod.snd (List.cons.inj (Option.some.inj (actual.symm.trans prepared))).1
+          subst candidate
+          have ownSafe : Safe own.core := by
+            rw [ownCore]
+            exact suspension_safe tries.length before.core packet.safe
+          have origin : EnumeratedOrigin before.core own.core := by
+            rw [ownCore]
+            exact suspension_origin tries.length before.core
+          have protects (held : Nat) (inside : held < before.core.counter)
+              (root : IsRoot before.core.representatives held) :
+              EnumerationDriver.Protected held before.core own.core := by
+            rw [ownCore]
+            exact EnumerationDriver.suspension_protected held tries.length before.core packet.safe inside root
+          have protectsEnumerated (held : Nat) (fragment : Fragment)
+              (stored : before.core.values[held]? = some (.enumerated fragment)) :
+              EnumerationDriver.Protected held before.core own.core := by
+            obtain ⟨inside, root⟩ := enumerated_root before.core packet.safe held fragment stored
+            exact protects held inside root
+          have afterPending : EnumerationReferences.PendingReferences own.core := by
+            intro held fragment stored
+            have previous := origin held fragment stored
+            have incoming : EnumerationReferences.ReferencesAllowed
+                (fun uv => ¬UnionFind.SameClass before.core.representatives held uv) own.core := by
+              rw [ownCore]
+              exact EnumerationReferences.suspension_allowed _ tries.length before.core
+                (packet.pending held fragment previous)
+            intro value member sc listed related
+            exact incoming value member sc listed
+              (((protectsEnumerated held fragment previous).classes sc.var).mp related)
+          have growth : before.core.counter ≤ own.core.counter := by rw [ownCounter]; omega
+          refine ⟨packet.context, ownSafe, afterPending,
+            ⟨roots, ownPaths, ownStorage, ownRealized, ownCounts, ownFlags⟩, ?_, ?_⟩
+          · obtain ⟨level, frontier, oldOrder⟩ := packet.ordered
+            obtain ⟨nextLevel, afterOrder⟩ := EnumerationOrder.stratified_preserved before.core own.core
+              ownSafe level frontier oldOrder origin protectsEnumerated
+            exact ⟨nextLevel, frontier, afterOrder⟩
+          · intro group member entry listed
+            exact Nat.lt_of_lt_of_le (packet.bounded group member entry listed) growth
+    · simp only [allowed] at complete
+      have impossible := Option.some.inj (complete.1.symm.trans prepared)
+      cases impossible
+  refine ⟨ownPacket, inventory, memos, Post.refl ownPacket.context, rfl, ownPacket,
+    Nat.le_refl _, .refl _, ?_, ?_, (fun _ valid _ _ => valid), ?_, ?_⟩
+  · intro held fragment stored
+    exact EnumerationDriver.Protected.refl held own.core (enumerated_root own.core ownPacket.safe held fragment stored).2
+  · intro held _ root _
+    exact EnumerationDriver.Protected.refl held own.core root
+  · intro fragment member
+    cases member
+  · intro fragment member
+    cases member
+
+end ActualCapturedPrefixEntry
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+section ActualTupleInputTransport
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+variable {bits : Nat}
+variable [DecidableEq (EdgeKey Symbol Constraint)]
+
+/-- A completed prefix retains every original tuple input at its current endpoint. -/
+private theorem tuple_inputs_current_inputs
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (original : Caller (bits + 2)) (metadata : Metadata Unit) (before : Cached)
+    (inputs : List (Node × List Suspended)) (completed : List Fragment)
+    (caller : Caller (bits + 2)) (queries : Queries) (current : Cached)
+    (previous : TupleInputs formulas solver original metadata before inputs completed caller queries current)
+    (genuine : ∀ child bucket, (child, bucket) ∈ inputs →
+      Available original.checked.native.machine.heap child ∧ child.free = [] ∧
+      (∀ sc ∈ bucket, sc.var < before.core.counter) ∧ InputsPending before.core bucket) :
+    ∀ child bucket, (child, bucket) ∈ inputs →
+      Available caller.checked.native.machine.heap child ∧ child.free = [] ∧
+      (∀ sc ∈ bucket, sc.var < current.core.counter) ∧ InputsPending current.core bucket := by
+  obtain ⟨_next, _final, post, _query, _packet, growth, origin, protects,
+    _rootProtection, _references, _bounds, _history⟩ := previous
+  intro child bucket member
+  obtain ⟨available, closed, bounded, pending⟩ := genuine child bucket member
+  refine ⟨post.effects.keeps.available child available, closed,
+    fun sc included => Nat.lt_of_lt_of_le (bounded sc included) growth, ?_⟩
+  intro held fragment stored
+  have originalStored := origin held fragment stored
+  exact (protects held fragment originalStored).avoids bucket
+    (pending held fragment originalStored)
+
+end ActualTupleInputTransport
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+section ActualContextPrefixResources
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
+open SourcePruningEnumerationSharedIncomingReservation (Seed advance)
+open SourcePruningEnumerationRecursive (Packet)
+open SourcePruningEnumerationSharedSelectedContinuations
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+variable {bits : Nat}
+local notation "Fold" => NativeContinuations.Result
+  (SourcePruningEnumerationSharedPreparedRecursive.Output (bits + 2) Unit)
+  (SourcePruningEnumerationSharedPreparedRecursive.Failure (bits + 2) Unit) (bits + 2)
+local notation "Done" => List Fragment → Caller (bits + 2) → Queries → Cached → Fold
+local notation "Stopped" => List Fragment → ChildDispatch.Observation (bits + 2) → Option Cached → Fold
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+omit [DecidableEq Symbol] [DecidableEq Node] in
+/-- An actual empty staged receipt identifies accepted arity, projection and empty children. -/
+private theorem identity_observed_empty_own_shape
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (caller : Caller (bits + 2)) (memos : Memos)
+    (metadata : Metadata Unit) (before : Cached) (bucket : List Suspended)
+    (edge : EdgeValue Symbol Constraint) (residual : Option Constraint) (own : Cached)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (prepared : SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap bucket edge before =
+      some [((edge.entry.key.symbol, [], residual), own)]) :
+    ∃ tries : List EqualityTrie.Trie,
+      arityAllows edge.children.length bucket = true ∧
+      SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual) ∧
+      edge.children = [] := by
+  obtain ⟨roots, paths, storage, realized, counts, flags⟩ := packet.valid
+  have complete := SourcePruningEnumerationCachedOwn.complete caller.checked.native.machine.heap
+    before bucket edge roots storage realized paths counts flags
+  by_cases allowed : arityAllows edge.children.length bucket = true
+  · simp only [allowed, ↓reduceIte] at complete
+    cases projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+    | none =>
+        simp only [projected] at complete
+        have impossible := complete.1.symm.trans prepared
+        cases impossible
+    | some pair =>
+        obtain ⟨tries, projectedResidual⟩ := pair
+        simp only [projected] at complete
+        obtain ⟨_action, _candidate, _prefix, actual, _rest⟩ := complete
+        have same := (List.cons.inj (Option.some.inj (actual.symm.trans prepared))).1
+        have contentsSame := congrArg Prod.fst same
+        have tailSame := congrArg Prod.snd contentsSame
+        have residualSame : projectedResidual = residual := congrArg Prod.snd tailSame
+        have stagedSame := congrArg Prod.fst tailSame
+        refine ⟨tries, allowed, ?_, ?_⟩
+        · exact congrArg (fun replacement => some (tries, replacement)) residualSame
+        · have measured := congrArg List.length stagedSame
+          have emptyLength : edge.children.length = 0 := by
+            simpa only [List.length_map, List.length_zipIdx, List.length_nil] using measured
+          revert emptyLength
+          cases edge.children with
+          | nil => intro _zero; rfl
+          | cons _child _rest =>
+              intro impossible
+              simp only [List.length_cons] at impossible
+              omega
+  · simp only [allowed] at complete
+    have impossible := Option.some.inj (complete.1.symm.trans prepared)
+    cases impossible
+
+/-- Each actual context derives its full completed-prefix resources and remaining input validity. -/
+private theorem identity_actual_context_prefix_resources
+    (graph : Graph Symbol Constraint) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint)) (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Unit) (uv : Nat) (capturedCaller : Caller (bits + 2))
+    (capturedQueries : Queries) (capturedBefore : Cached) (scs : List Suspended)
+    (edge : EdgeValue Symbol Constraint) (residual : Option Constraint) (capturedOwn : Cached)
+    (staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)))
+    (initialSeed : Seed) (initialMass : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (limit own height count bound : Nat)
+    (_workerIH : IdentityEagerEmittedCompleteAtDepth (bits := bits) graph checkEmpty edgesOf formulas solver recursiveDepth)
+    (initialInventory : Inventory) (initialMemos : Memos) (handle : Nat)
+    (initialQuery : initialMemos.query = capturedQueries)
+    (initialPacket : Packet formulas solver initialInventory capturedCaller initialMemos metadata capturedBefore)
+    (_ready : EnumerationDriver.Ready uv capturedBefore.core)
+    (_stored : capturedBefore.core.values[uv]? = some (.unenumerated (some handle) scs))
+    (_incoming : EnumerationReferences.IncomingAvoid uv capturedBefore.core)
+    (initialFits : Fits initialSeed.2 capturedCaller.checked)
+    (initialKnown : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ initialSeed.1)
+      capturedCaller.checked.native.machine.heap)
+    (initialMassBound : SourcePruningEnumerationPrefixAdmission.suspendedBound capturedOwn.core ≤ initialMass)
+    (counted : staged.length ≤ count)
+    (selectorMembers : ∀ entry rows depth free, ∀ selected ∈ edgesOf (.node entry rows depth free), selected ∈ rows)
+    (_selectorLengths : ∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length)
+    (genuine : ∀ child bucket, (child, bucket) ∈ staged.map (fun input => (input.1, input.2.1)) →
+      Available capturedCaller.checked.native.machine.heap child ∧ child.free = [] ∧
+      MergedOrdinaryHeight.height child ≤ height ∧ bucket.length ≤ bound ∧
+      (∀ sc ∈ bucket, sc.var < capturedOwn.core.counter) ∧ InputsPending capturedOwn.core bucket)
+    (reserved : tupleReserved (nodePlan limit own height) (nodeReserved bits limit own height)
+      count bound initialMass (fun retained current => eagerFinal recursiveDepth current retained)
+      (fun retained current => eagerReserved bits recursiveDepth current retained) initialSeed)
+    (completedPrefix : List Fragment) (inputs : List (Node × List Suspended))
+    (caller : Caller (bits + 2)) (before : Cached) (queries : Queries)
+    (seed : Seed) (mass : Nat) (done : Done) (stopped : Stopped)
+    (context : IdentityActualTupleContext graph checkEmpty edgesOf recursiveDepth workFuel metadata uv
+      capturedCaller capturedQueries capturedBefore scs edge residual capturedOwn staged initialSeed initialMass
+      completedPrefix inputs caller before queries seed mass done stopped) :
+    TupleInputs formulas solver capturedCaller metadata capturedOwn
+        (staged.map (fun input => (input.1, input.2.1))) completedPrefix caller queries before ∧
+      Fits seed.2 caller.checked ∧
+      SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap ∧
+      SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ mass ∧
+      (∀ child bucket, (child, bucket) ∈ inputs →
+        Available caller.checked.native.machine.heap child ∧ child.free = [] ∧
+        MergedOrdinaryHeight.height child ≤ height ∧ bucket.length ≤ bound ∧
+        (∀ sc ∈ bucket, sc.var < before.core.counter) ∧ InputsPending before.core bucket) ∧
+      (∃ (currentInventory : Inventory) (currentMemos : Memos),
+        currentMemos.query = queries ∧ Packet formulas solver currentInventory caller currentMemos metadata before) := by
+  have originalInputs : ∀ child bucket, (child, bucket) ∈ staged.map (fun input => (input.1, input.2.1)) →
+      Available capturedCaller.checked.native.machine.heap child ∧ child.free = [] ∧
+      (∀ sc ∈ bucket, sc.var < capturedOwn.core.counter) ∧ InputsPending capturedOwn.core bucket := by
+    intro child bucket member
+    have actual := genuine child bucket member
+    exact ⟨actual.1, actual.2.1, actual.2.2.2.2.1, actual.2.2.2.2.2⟩
+  have originalBounds : ∀ child bucket, (child, bucket) ∈ staged.map (fun input => (input.1, input.2.1)) →
+      bucket.length ≤ bound := fun child bucket member => (genuine child bucket member).2.2.2.1
+  have core : TupleInputs formulas solver capturedCaller metadata capturedOwn
+        (staged.map (fun input => (input.1, input.2.1))) completedPrefix caller queries before ∧
+      Fits seed.2 caller.checked ∧
+      SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap ∧
+      SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ mass := by
+    induction context with
+    | captured _hook _source prepared =>
+        obtain ⟨_ownPacket, emptyPrefix⟩ := identity_captured_actual_prefix_entry formulas solver
+          initialInventory capturedCaller initialMemos metadata capturedBefore scs edge residual capturedOwn staged
+          initialPacket prepared
+        refine ⟨?_, initialFits, initialKnown, initialMassBound⟩
+        simpa only [initialQuery] using emptyPrefix
+    | @fallbackTail completedPrefix caller before queries seed mass done stopped bucket incoming rest
+        fragment returned reached saved after outer waiting origin fallback observed ih =>
+        obtain ⟨previous, fits, known, massBound⟩ := ih
+        obtain ⟨_consumed, _seedAt, _paid, _retainedMass, _lengths, members⟩ :=
+          identity_actual_tuple_prefix_costs graph checkEmpty edgesOf recursiveDepth workFuel metadata uv
+            capturedCaller capturedQueries capturedBefore scs edge residual capturedOwn staged initialSeed
+            initialMass bound originalBounds completedPrefix ((incoming, bucket) :: rest) caller before queries
+            seed mass done stopped origin
+        have transported := tuple_inputs_current_inputs formulas solver capturedCaller metadata capturedOwn
+          (staged.map (fun input => (input.1, input.2.1))) completedPrefix caller queries before previous originalInputs
+        have currentGenuine : ∀ child retained, (child, retained) ∈ (incoming, bucket) :: rest →
+            Available caller.checked.native.machine.heap child ∧ child.free = [] ∧
+            (∀ sc ∈ retained, sc.var < before.core.counter) ∧ InputsPending before.core retained := by
+          intro child retained member
+          exact transported child retained (members _ member)
+        have headGenuine := currentGenuine incoming bucket (by simp)
+        have member : (incoming, bucket) ∈ staged.map (fun input => (input.1, input.2.1)) := members _ (by simp)
+        have currentPacket : ∃ (currentInventory : Inventory) (currentMemos : Memos),
+            currentMemos.query = queries ∧ Packet formulas solver currentInventory caller currentMemos metadata before := by
+          obtain ⟨currentInventory, currentMemos, _post, query, packet, _rest⟩ := previous
+          exact ⟨currentInventory, currentMemos, query, packet⟩
+        obtain ⟨currentInventory, currentMemos, query, packet⟩ := currentPacket
+        have originAtMemos : IdentityActualTupleContext graph checkEmpty edgesOf recursiveDepth workFuel metadata uv
+            capturedCaller capturedQueries capturedBefore scs edge residual capturedOwn staged initialSeed initialMass
+            completedPrefix ((incoming, bucket) :: rest) caller before currentMemos.query seed mass done stopped := by
+          simpa only [query] using origin
+        have observedAtMemos : ChildDispatch.run checkEmpty workFuel workFuel workFuel workFuel workFuel
+            bucket incoming caller before currentMemos.query =
+            ((.ok (some [.ok (fragment, returned)]), reached, saved, outer, waiting), some after) := by
+          simpa only [query] using observed
+        have native := identity_actual_fallback_native_reservation graph checkEmpty edgesOf recursiveDepth workFuel
+          metadata uv capturedCaller capturedQueries capturedBefore scs edge residual capturedOwn staged initialSeed
+          initialMass limit own height count bound
+          (fun retained current => eagerFinal recursiveDepth current retained)
+          (fun retained current => eagerReserved bits recursiveDepth current retained)
+          originalBounds counted reserved completedPrefix incoming bucket rest caller before queries seed mass done stopped origin
+        obtain ⟨head, afterFits, afterKnown, _massGrowth, _remaining, _tailFrame, _source, _next, afterMass⟩ :=
+          identity_fallback_cons_actual_entry seed formulas solver currentInventory caller currentMemos metadata before
+            checkEmpty edgesOf bucket incoming rest packet headGenuine.2.2.1 headGenuine.2.2.2 headGenuine.1 headGenuine.2.1
+            fits native known fallback (fun child retained included => currentGenuine child retained (List.mem_cons_of_mem _ included))
+            workFuel fragment returned outer reached saved after waiting graph recursiveDepth uv capturedCaller capturedQueries
+            capturedBefore scs edge residual capturedOwn staged initialSeed initialMass completedPrefix mass done stopped
+            originAtMemos massBound observedAtMemos
+        have combined := tuple_inputs_extend_current_head formulas solver capturedCaller metadata capturedOwn
+          (staged.map (fun input => (input.1, input.2.1))) completedPrefix caller queries before incoming bucket fragment
+          reached saved after previous member headGenuine.2.2.2 head
+        exact ⟨combined, afterFits, afterKnown, afterMass⟩
+    | @ordinaryEmptyTail completedPrefix caller before queries seed mass done stopped bucket rest
+        parentEntry rows depth free selectedRow alternatives rowResidual rowOwn origin ordinary first prepared ih =>
+        obtain ⟨previous, fits, known, massBound⟩ := ih
+        obtain ⟨_consumed, _seedAt, _paid, _retainedMass, _lengths, members⟩ :=
+          identity_actual_tuple_prefix_costs graph checkEmpty edgesOf recursiveDepth workFuel metadata uv
+            capturedCaller capturedQueries capturedBefore scs edge residual capturedOwn staged initialSeed
+            initialMass bound originalBounds completedPrefix ((.node parentEntry rows depth free, bucket) :: rest)
+            caller before queries seed mass done stopped origin
+        have transported := tuple_inputs_current_inputs formulas solver capturedCaller metadata capturedOwn
+          (staged.map (fun input => (input.1, input.2.1))) completedPrefix caller queries before previous originalInputs
+        have currentGenuine : ∀ child retained, (child, retained) ∈ (.node parentEntry rows depth free, bucket) :: rest →
+            Available caller.checked.native.machine.heap child ∧ child.free = [] ∧
+            (∀ sc ∈ retained, sc.var < before.core.counter) ∧ InputsPending before.core retained := by
+          intro child retained member
+          exact transported child retained (members _ member)
+        have headGenuine := currentGenuine (.node parentEntry rows depth free) bucket (by simp)
+        have member : (.node parentEntry rows depth free, bucket) ∈ staged.map (fun input => (input.1, input.2.1)) := members _ (by simp)
+        have currentPacket : ∃ (currentInventory : Inventory) (currentMemos : Memos),
+            currentMemos.query = queries ∧ Packet formulas solver currentInventory caller currentMemos metadata before := by
+          obtain ⟨currentInventory, currentMemos, _post, query, packet, _rest⟩ := previous
+          exact ⟨currentInventory, currentMemos, query, packet⟩
+        obtain ⟨currentInventory, currentMemos, query, packet⟩ := currentPacket
+        obtain ⟨tries, allowed, projected, empty⟩ := identity_observed_empty_own_shape formulas solver currentInventory
+          caller currentMemos metadata before bucket selectedRow rowResidual rowOwn packet prepared
+        have originAtMemos : IdentityActualTupleContext graph checkEmpty edgesOf recursiveDepth workFuel metadata uv
+            capturedCaller capturedQueries capturedBefore scs edge residual capturedOwn staged initialSeed initialMass
+            completedPrefix ((.node parentEntry rows depth free, bucket) :: rest) caller before currentMemos.query seed mass done stopped := by
+          simpa only [query] using origin
+        obtain ⟨generated, actual, head, afterFits, afterKnown, afterMass, _remaining, _selected, _scan, _next⟩ :=
+          identity_ordinary_empty_row_actual_entry graph checkEmpty edgesOf recursiveDepth workFuel metadata uv
+            capturedCaller capturedQueries capturedBefore scs edge residual capturedOwn staged initialSeed initialMass
+            completedPrefix done stopped formulas solver currentInventory caller currentMemos before bucket rest seed mass
+            parentEntry rows depth free selectedRow alternatives tries rowResidual originAtMemos packet
+            headGenuine.2.2.1 headGenuine.2.2.2 headGenuine.1 headGenuine.2.1 fits known massBound
+            (fun child retained included => currentGenuine child retained (List.mem_cons_of_mem _ included))
+            ordinary first selectorMembers empty allowed projected
+        have cacheSame : generated = rowOwn :=
+          congrArg Prod.snd (List.cons.inj (Option.some.inj (actual.symm.trans prepared))).1
+        subst generated
+        have combined := tuple_inputs_extend_current_head formulas solver capturedCaller metadata capturedOwn
+          (staged.map (fun input => (input.1, input.2.1))) completedPrefix caller queries before
+          (.node parentEntry rows depth free) bucket (.node selectedRow.entry.key.symbol []) caller currentMemos.query
+          (SelectedEdge.finish rowResidual (.node selectedRow.entry.key.symbol []) rowOwn) previous member headGenuine.2.2.2 head
+        refine ⟨?_, afterFits, afterKnown, afterMass⟩
+        simpa only [query] using combined
+  obtain ⟨history, fits, known, massBound⟩ := core
+  have transported := tuple_inputs_current_inputs formulas solver capturedCaller metadata capturedOwn
+    (staged.map (fun input => (input.1, input.2.1))) completedPrefix caller queries before history originalInputs
+  obtain ⟨_consumed, _seedAt, _paid, _retainedMass, _lengths, members⟩ :=
+    identity_actual_tuple_prefix_costs graph checkEmpty edgesOf recursiveDepth workFuel metadata uv
+      capturedCaller capturedQueries capturedBefore scs edge residual capturedOwn staged initialSeed
+      initialMass bound originalBounds completedPrefix inputs caller before queries seed mass done stopped context
+  refine ⟨history, fits, known, massBound, ?_, ?_⟩
+  · intro child bucket member
+    have originalMember := members _ member
+    have actual := transported child bucket originalMember
+    have initial := genuine child bucket originalMember
+    exact ⟨actual.1, actual.2.1, initial.2.2.1, initial.2.2.2.1, actual.2.2.1, actual.2.2.2⟩
+  · obtain ⟨currentInventory, currentMemos, _post, query, packet, _rest⟩ := history
+    exact ⟨currentInventory, currentMemos, query, packet⟩
+
+end ActualContextPrefixResources
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
