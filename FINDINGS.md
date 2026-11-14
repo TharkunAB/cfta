@@ -1,3 +1,47 @@
+# Original entry transport and actual shared incoming/folds checked (2026-11-14 16:31 CET)
+
+GOAL ACTIVE. Preserve the complete original proof objective below.
+NEW PUBLIC SourceSynthesisUniverseMixedEntryReplay composes existing
+Kernel.make_domain_replay. At any actual later valid Extension, literal enter
+with the SAME U/P/identities returns the ORIGINAL domain and leaves the later
+cache unchanged. Its source wrapper transports both Checked aliases at every
+native fuel to that original entry at the actual later machine. The same
+accepted/build/stored source witness stays fixed. No new interner proof or
+future body/result/atom provider is added. Full generated-Type closure stays OPEN.
+
+NEW PUBLIC SharedIncomingNode.run_ok_stable and run_singleton_stable retain
+exact successful empty/singleton raw rows, reached caller, saved query memo
+and outer read core at larger representative/native/p/h bounds. The proof
+follows ACTUAL shared incoming execution and skipped/performed-done constructors.
+NEW PUBLIC SharedCachedTerminal.rawFold_ok_stable,cachedAdapter_ok_stable and
+fold_ok_stable retain every actual shared fold endpoint and optional cache.
+Empty rejection and successful singleton rows are both covered. No legacy
+terminal replay is substituted. Pure helpers are reused only at their actual
+shared definitions. Complete terminal and child replay remain OPEN.
+
+All7public gates PASS. Strict Audit checks96,121 imported theorem axiom
+dependencies and122 reports:120standard-axiom,2axiom-free. Only propext,
+Classical.choice,Quot.sound. Source modules5957; direct imports4955. Effective
+4GiB max/high,zero swap. Private entry/incoming checks and cachedfold check1
+passed unchanged. Exact pins/logs:
+/tmp/mcfta-mixed-entry-incoming-fold-publication-20261114-1630.
+All compiler handles are terminal. Prior dispatch sourced79425c0d25aa47d801ada66f6a51fa463226cfa
+is pushed and independently verified. No operational definition changed.
+
+Next lift the exact successful raw/cached terminal operation, then the ACTUAL
+shared child operation, then its original resources at observed small bounds.
+Retained outputs from stopped scans/callbacks still need their actual history/
+inclusion producer. Native coupled closed/mixed atom induction stays OPEN.
+The central semantic gap remains one finite accepted SAME-original-root term
+and one consistent assignment per emitted causal branch, including every removed
+suspended constraint and partial readback. Keep all original typing,depth,LPO/
+refolding,both language directions,stream,exact sizes,counts/weights/training,
+both rank/unrank inverses,host and compiled Haskell correspondence. No Haskell,
+Cabal,test or Liquid Haskell annotation changed. No new implementation fix or
+reachable source counterexample was established. Keep future Haskell fixes in
+FINDINGS. Root owns live/compiler/Git. Preserve .hypha/ and all failed/marked inputs.
+The immutable d7f090074 checkpoint precedes the new prefix/shared/native stages.
+
 # Actual optimized shared dispatcher replay checked (2026-11-14 16:24 CET)
 
 GOAL ACTIVE. Preserve the complete original proof objective below.
