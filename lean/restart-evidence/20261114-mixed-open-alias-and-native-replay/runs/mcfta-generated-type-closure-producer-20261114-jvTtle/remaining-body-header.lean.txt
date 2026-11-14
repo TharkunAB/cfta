@@ -1,0 +1,53 @@
+-- UNPROVED HEADER ONLY. This file is not compiler input.
+import MicroCFTA.SourceSynthesisCurrentUniverseReferenceIdentity
+import MicroCFTA.InternedBoundaryAtoms
+import MicroCFTA.SourceSynthesisUniversePrefixHeight
+
+set_option autoImplicit false
+
+namespace MicroCFTA.SourceSynthesisCurrentUniverseGeneratedTypeClosure
+open Cache InternedConstructorTemplates InternedProbeProvenance InternedNestedFacts
+open InternedBinderProtocol (NodeKey Reference)
+open SourceSynthesisTypeSyntax (Library Query)
+open SourceSynthesisGeneralizeSyntax (Guard top)
+open SourceSynthesisFirstOrderConstruction (Expression)
+open SourceRecursiveIntersectionKernel
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "ordinarySymbols" => SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+
+theorem current_stored_universe_mixed_body_descendant_atoms
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (heap : State Symbol Guard) (facts : Facts heap) (growth : Grows sourceHeap heap)
+    (domains : Cache.State IntersectionFlatMemoKeyDomain.DomainKey)
+    (cacheValid : Cache.Valid domains)
+    (pattern : Value Symbol Guard) (patternId : Nat)
+    (patternAvailable : Available heap pattern) (patternClosed : pattern.free = [])
+    (patternIdentity : SourceRecursiveIntersectionControl.identity pattern = some patternId)
+    (patternShape : SourceRecursiveIntersectionControl.tag pattern = 1 ∨
+      SourceRecursiveIntersectionControl.tag pattern = 3) :
+    let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+    let entered := SourceRecursiveIntersectionEnvironment.enter domains IntersectionEmptyDomain.emptyKey
+      universeValue pattern entry.identity patternId
+    let initial : Machine Symbol Guard := ⟨heap, entered.2⟩
+    ∀ (later : Machine Symbol Guard), SourceRecursiveIntersectionKernel.Valid later →
+      Extension initial later →
+      ∀ (operand : Value Symbol Guard), Available later.heap operand → operand.free = [] →
+      (∀ atom ∈ InternedBoundaryAtoms.atoms operand, atom = .mu entry.identity) →
+      SourceSynthesisUniversePrefixHeight.height operand ≤
+        SourceSynthesisUniversePrefixHeight.height pattern →
+      ∀ fuel : Nat,
+      Checked later
+        (execute top SourceEqualityPCSNativeEdge.conjoin fuel entered.1 body operand later)
+        (fun after value => Available after.heap value ∧ value.free = [] ∧
+          ∀ atom ∈ InternedBoundaryAtoms.atoms value, atom = .mu entry.identity) ∧
+      Checked later
+        (execute top SourceEqualityPCSNativeEdge.conjoin fuel entered.1 operand body later)
+        (fun after value => Available after.heap value ∧ value.free = [] ∧
+          ∀ atom ∈ InternedBoundaryAtoms.atoms value, atom = .mu entry.identity)

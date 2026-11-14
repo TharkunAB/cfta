@@ -1,0 +1,100 @@
+/tmp/mcfta-source-body-wrapper-check5-20261114-1456/source/MicroCFTA/SourceSynthesisCurrentUniverseReferenceIdentity.lean:1020:98: error: Application type mismatch: The argument
+  targetChildren
+has type
+  targetArrow.children = [marker, Value.reference probe, Value.reference probe]
+but is expected to have type
+  targetArrow.entry.key =
+    { symbol := makeLiteral "->",
+      children :=
+        [marker.referenceOf, InternedBinderProtocol.NodeRef.ref probe, InternedBinderProtocol.NodeRef.ref probe],
+      constraint := top }
+in the application
+  SourceSynthesisUniverseMappedProbeRows.raw_rows_replay makeLiteral top (Reference.interned owner) probe marker
+    sourceArrow targetArrow catalog sources targets current facts closed sourceChildren sourceKey targetChildren
+/tmp/mcfta-source-body-wrapper-check5-20261114-1456/source/MicroCFTA/SourceSynthesisCurrentUniverseReferenceIdentity.lean:1018:104: error: unsolved goals
+S G : Type
+inst✝ : DecidableEq (EdgeKey S G)
+makeLiteral : String → S
+top : G
+catalog : List (String × Nat)
+owner : Nat
+cutoff probe : Reference
+marker : Value S G
+sourceArrow : EdgeValue S G
+sources : List (EdgeValue S G)
+targetEntry : Interned NodeKey
+targetArrow : EdgeValue S G
+targets : List (EdgeValue S G)
+target : Value S G
+productEntry : Interned NodeKey
+products : List (EdgeValue S G)
+current : InternedConstructorTemplates.State S G
+facts : Facts current
+closed : marker.free = []
+nonemptyMarker : marker.referenceOf ≠ InternedBinderProtocol.NodeRef.empty
+sourceChildren :
+  sourceArrow.children =
+    [marker, Value.reference (Reference.interned owner), Value.reference (Reference.interned owner)]
+sourceKey :
+  sourceArrow.entry.key =
+    { symbol := makeLiteral "->",
+      children :=
+        [marker.referenceOf, InternedBinderProtocol.NodeRef.ref (Reference.interned owner),
+          InternedBinderProtocol.NodeRef.ref (Reference.interned owner)],
+      constraint := top }
+sourceAligned :
+  All₂
+    (fun descriptor row =>
+      row.children = List.replicate descriptor.snd (Value.reference (Reference.interned owner)) ∧
+        row.entry.key =
+          { symbol := makeLiteral descriptor.fst,
+            children := List.replicate descriptor.snd (InternedBinderProtocol.NodeRef.ref (Reference.interned owner)),
+            constraint := top })
+    catalog sources
+targetChildren : targetArrow.children = [marker, Value.reference probe, Value.reference probe]
+targetKey :
+  targetArrow.entry.key =
+    { symbol := makeLiteral "->",
+      children :=
+        [marker.referenceOf, InternedBinderProtocol.NodeRef.ref probe, InternedBinderProtocol.NodeRef.ref probe],
+      constraint := top }
+targetAligned :
+  All₂
+    (fun descriptor row =>
+      row.children = List.replicate descriptor.snd (Value.reference probe) ∧
+        row.entry.key =
+          { symbol := makeLiteral descriptor.fst,
+            children := List.replicate descriptor.snd (InternedBinderProtocol.NodeRef.ref probe), constraint := top })
+    catalog targets
+sourceResident : ∀ (row : EdgeValue S G), row ∈ sourceArrow :: sources → EdgeResident current row
+targetResident : ∀ (row : EdgeValue S G), row ∈ targetArrow :: targets → EdgeResident current row
+targetEq : target = Value.node targetEntry (canonicalEdges (targetArrow :: targets)) 0 [probe]
+productAvailable : Available current (Value.node productEntry (canonicalEdges products) 0 [cutoff])
+targetAvailable : Available current target
+sourceKinds :
+  ∀ (row : EdgeValue S G),
+    row ∈ canonicalEdges (sourceArrow :: sources) →
+      ∀ (child : Value S G), child ∈ row.children → child = marker ∨ child = Value.reference (Reference.interned owner)
+readback :
+  All₂
+    (fun source product =>
+      product.children =
+          List.map (input (replacement (Reference.interned owner) (Value.reference cutoff))) source.children ∧
+        product.entry.key =
+          { symbol := source.entry.key.symbol,
+            children :=
+              List.map Value.referenceOf
+                (List.map (input (replacement (Reference.interned owner) (Value.reference cutoff))) source.children),
+            constraint := top })
+    (canonicalEdges (sourceArrow :: sources)) products
+productResident : ∀ (row : EdgeValue S G), row ∈ products → EdgeResident current row
+⊢ InternedFreshOrdinaryStoredSubstitution.execute (Value.node productEntry (canonicalEdges products) 0 [cutoff])
+        (replacement cutoff (Value.reference probe)) current =
+      Outcome.done target current ∧
+    SourceRecursiveIntersectionMaybeMu.callback cutoff (Value.node productEntry (canonicalEdges products) 0 [cutoff])
+        probe current =
+      Outcome.done target current
+'MicroCFTA.SourceSynthesisCurrentUniverseReferenceIdentity.current_stored_universe_body_alias_after_mixed_entry' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,67 @@
+@MicroCFTA.SourceSynthesisCurrentUniverseReferenceIdentity.current_stored_universe_body_alias_after_mixed_entry : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)]
+  (lib : MicroCFTA.SourceSynthesisTypeSyntax.Library) (query : MicroCFTA.SourceSynthesisTypeSyntax.Query) (signed : Int)
+  (whole : MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression),
+  MicroCFTA.SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole →
+    ∀
+      (rootValue :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)
+      (sourceHeap :
+        MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard),
+      MicroCFTA.InternedFreshOrdinaryConstruction.build
+            (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+            MicroCFTA.InternedConstructorTemplates.empty =
+          MicroCFTA.InternedNestedConstruction.Outcome.done rootValue sourceHeap →
+        ∀ (key : MicroCFTA.InternedBinderProtocol.NodeKey)
+          (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+          (body depth ordinary :
+            MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard),
+          sourceHeap.nodeRecords key =
+              some (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary) →
+            ∀
+              (heap :
+                MicroCFTA.InternedConstructorTemplates.State
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard),
+              MicroCFTA.InternedNestedFacts.Facts heap →
+                MicroCFTA.InternedConstructorTemplates.Grows sourceHeap heap →
+                  ∀ (domains : MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey),
+                    MicroCFTA.Cache.Valid domains →
+                      ∀
+                        (pattern :
+                          MicroCFTA.InternedConstructorTemplates.Value
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)
+                        (patternId : Nat),
+                        MicroCFTA.InternedProbeProvenance.Available heap pattern →
+                          pattern.free = [] →
+                            MicroCFTA.SourceRecursiveIntersectionControl.identity pattern = some patternId →
+                              MicroCFTA.SourceRecursiveIntersectionControl.tag pattern = 1 ∨
+                                  MicroCFTA.SourceRecursiveIntersectionControl.tag pattern = 3 →
+                                have universeValue :=
+                                  MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary;
+                                have entered :=
+                                  MicroCFTA.SourceRecursiveIntersectionEnvironment.enter domains
+                                    MicroCFTA.IntersectionEmptyDomain.emptyKey universeValue pattern entry.identity
+                                    patternId;
+                                have initial := { heap := heap, domains := entered.snd };
+                                ∃ bound final,
+                                  (∀ (extra : Nat),
+                                      MicroCFTA.SourceRecursiveIntersectionKernel.execute
+                                          MicroCFTA.SourceSynthesisGeneralizeSyntax.top
+                                          MicroCFTA.SourceEqualityPCSNativeEdge.conjoin (bound + extra) entered.fst body
+                                          universeValue initial =
+                                        MicroCFTA.SourceRecursiveIntersectionKernel.Result.done universeValue final) ∧
+                                    MicroCFTA.SourceRecursiveIntersectionKernel.Valid final ∧
+                                      MicroCFTA.SourceRecursiveIntersectionKernel.Extension initial final
+'MicroCFTA.SourceSynthesisCurrentUniverseReferenceIdentity.current_stored_universe_body_alias_after_mixed_entry' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

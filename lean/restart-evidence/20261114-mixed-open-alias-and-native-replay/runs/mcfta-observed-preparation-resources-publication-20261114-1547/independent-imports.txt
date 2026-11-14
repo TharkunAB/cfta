@@ -1,0 +1,129 @@
+@MicroCFTA.SourcePruningEnumerationSelectedPreparation.successful_resources_current : ∀ {Typing : Type} {width : Nat}
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width) (memos : MicroCFTA.EndpointMemoGateTrace.Memos)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (uv handle : Nat) (scs : List MicroCFTA.EnumerationState.Suspended),
+  MicroCFTA.SourcePruningEnumerationRecursive.Packet formulas solver inventory caller memos metadata before →
+    MicroCFTA.EnumerationDriver.Ready uv before.core →
+      before.core.values[uv]? = some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle) scs) →
+        ∀ (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile),
+          MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile caller.checked →
+            MicroCFTA.EnumerationReferences.IncomingAvoid uv before.core →
+              ∀ (property : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Prop),
+                MicroCFTA.InternedFreshOrdinaryConstraintHeap.Heap property caller.checked.native.machine.heap →
+                  ∀ (fuel target preparedHandle : Nat) (preparedScs : List MicroCFTA.EnumerationState.Suspended)
+                    (decoded result :
+                      MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    (heap :
+                      MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    (entered :
+                      MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+                    MicroCFTA.SourcePruningEnumerationSelectedPreparation.run fuel fuel uv caller before =
+                        ([Except.ok ((target, preparedHandle, preparedScs, decoded), entered)],
+                          some (MicroCFTA.MergedSourceComparison.Result.done result heap)) →
+                      have cached := MicroCFTA.EnumerationExpandableIndex.frame entered before;
+                      target = uv ∧
+                        preparedHandle = handle ∧
+                          preparedScs = scs ∧
+                            ((∀ (extra : Nat),
+                                  MicroCFTA.SourcePruningEnumerationSelectedPreparation.run (fuel + extra)
+                                      (fuel + extra) uv caller before =
+                                    ([Except.ok ((target, preparedHandle, preparedScs, decoded), entered)],
+                                      some (MicroCFTA.MergedSourceComparison.Result.done result heap))) ∧
+                                MicroCFTA.SourcePruningEnumerationNodes.lookupNode caller.checked.native.machine.heap
+                                      handle =
+                                    some decoded ∧
+                                  MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver inventory caller
+                                      (MicroCFTA.SourcePruningEnumerationSelectedValueCaller.advance caller heap)
+                                      memos ∧
+                                    MicroCFTA.SourcePruningEnumerationRecursive.Packet formulas solver inventory
+                                        (MicroCFTA.SourcePruningEnumerationSelectedValueCaller.advance caller heap)
+                                        memos metadata cached ∧
+                                      MicroCFTA.EnumerationDriver.RenderStable before.core cached.core ∧
+                                        MicroCFTA.EnumerationDriver.Ready uv cached.core ∧
+                                          cached.core.values[uv]? =
+                                              some
+                                                (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle) scs) ∧
+                                            cached.core.counter = before.core.counter ∧
+                                              cached.core.values = before.core.values ∧
+                                                cached.expandable = before.expandable ∧
+                                                  cached.waiting = before.waiting ∧
+                                                    MicroCFTA.InternedProbeProvenance.Available heap result ∧
+                                                      result.free = [] ∧
+                                                        (∀
+                                                            (holds :
+                                                              MicroCFTA.SourceSymbolicIndex.Constraint
+                                                                  MicroCFTA.FullSyntax.Formula →
+                                                                MicroCFTA.Language.Term
+                                                                    MicroCFTA.SourcePruningTemplates.Symbol →
+                                                                  Bool)
+                                                            (ambient :
+                                                              MicroCFTA.InternedGuardedLanguage.Env
+                                                                MicroCFTA.SourcePruningTemplates.Symbol)
+                                                            (term :
+                                                              MicroCFTA.Language.Term
+                                                                MicroCFTA.SourcePruningTemplates.Symbol),
+                                                            MicroCFTA.InternedGuardedLanguage.meaning holds ambient
+                                                                result term ↔
+                                                              MicroCFTA.InternedGuardedLanguage.meaning holds ambient
+                                                                decoded term) ∧
+                                                          ∀
+                                                            (holds :
+                                                              MicroCFTA.SourceSymbolicIndex.Constraint
+                                                                  MicroCFTA.FullSyntax.Formula →
+                                                                MicroCFTA.Language.Term
+                                                                    MicroCFTA.SourcePruningTemplates.Symbol →
+                                                                  Bool)
+                                                            (ambient :
+                                                              MicroCFTA.InternedGuardedLanguage.Env
+                                                                MicroCFTA.SourcePruningTemplates.Symbol)
+                                                            (residualMeaning :
+                                                              MicroCFTA.SourceSymbolicIndex.Constraint
+                                                                  MicroCFTA.FullSyntax.Formula →
+                                                                MicroCFTA.Language.Term
+                                                                    MicroCFTA.SourcePruningTemplates.Symbol →
+                                                                  Prop)
+                                                            (assignment :
+                                                              Nat →
+                                                                MicroCFTA.Language.Term
+                                                                  MicroCFTA.SourcePruningTemplates.Symbol),
+                                                            (MicroCFTA.EnumerationCorrectness.Satisfies
+                                                                  (MicroCFTA.SourcePruningEnumerationNativeLanguage.handles
+                                                                    holds ambient heap)
+                                                                  residualMeaning assignment cached.core ↔
+                                                                MicroCFTA.EnumerationCorrectness.Satisfies
+                                                                  (MicroCFTA.SourcePruningEnumerationNativeLanguage.handles
+                                                                    holds ambient caller.checked.native.machine.heap)
+                                                                  residualMeaning assignment before.core) ∧
+                                                              (MicroCFTA.EnumerationCorrectness.Satisfies
+                                                                  (MicroCFTA.SourcePruningEnumerationNativeLanguage.handles
+                                                                    holds ambient caller.checked.native.machine.heap)
+                                                                  residualMeaning assignment before.core →
+                                                                MicroCFTA.InternedGuardedLanguage.meaning holds ambient
+                                                                  result (assignment uv))) ∧
+                              MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits
+                                  (MicroCFTA.SourcePruningEnumerationSelectedValueCaller.normalizationProfile profile)
+                                  (MicroCFTA.SourcePruningEnumerationSelectedValueCaller.advance caller heap).checked ∧
+                                MicroCFTA.InternedValueMass.value result ≤
+                                    (MicroCFTA.SourcePruningEnumerationSelectedValueCaller.normalizationProfile
+                                        profile).mass ∧
+                                  MicroCFTA.InternedFreshOrdinaryConstraintHeap.Heap property heap ∧
+                                    MicroCFTA.EnumerationExpandableIndex.frame cached.core before = cached ∧
+                                      MicroCFTA.EnumerationReferences.IncomingAvoid uv cached.core ∧
+                                        MicroCFTA.SourcePruningEnumerationPrefixAdmission.suspendedBound cached.core =
+                                          MicroCFTA.SourcePruningEnumerationPrefixAdmission.suspendedBound before.core
+'MicroCFTA.SourcePruningEnumerationSelectedPreparation.successful_resources_current' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

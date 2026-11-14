@@ -1,0 +1,168 @@
+@MicroCFTA.SourceSynthesisUniverseMixedDescendantFreshness.closed_identity_injective : ∀ {Symbol Guard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  MicroCFTA.InternedNestedFacts.Facts heap →
+    ∀ (left right : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      MicroCFTA.InternedProbeProvenance.Available heap left →
+        MicroCFTA.InternedProbeProvenance.Available heap right →
+          left.free = [] →
+            right.free = [] →
+              ∀ (name : Nat),
+                MicroCFTA.SourceRecursiveIntersectionControl.identity left = some name →
+                  MicroCFTA.SourceRecursiveIntersectionControl.identity right = some name → left = right
+'MicroCFTA.SourceSynthesisUniverseMixedDescendantFreshness.closed_identity_injective' depends on axioms: [propext,
+ Quot.sound]
+@MicroCFTA.SourceSynthesisUniverseMixedDescendantFreshness.strict_prefix_height_identity_ne : ∀ {Symbol Guard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  MicroCFTA.InternedNestedFacts.Facts heap →
+    ∀ (pattern operand : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      MicroCFTA.InternedProbeProvenance.Available heap pattern →
+        MicroCFTA.InternedProbeProvenance.Available heap operand →
+          pattern.free = [] →
+            operand.free = [] →
+              ∀ (patternId operandId : Nat),
+                MicroCFTA.SourceRecursiveIntersectionControl.identity pattern = some patternId →
+                  MicroCFTA.SourceRecursiveIntersectionControl.identity operand = some operandId →
+                    MicroCFTA.SourceSynthesisUniversePrefixHeight.height operand <
+                        MicroCFTA.SourceSynthesisUniversePrefixHeight.height pattern →
+                      operandId ≠ patternId
+'MicroCFTA.SourceSynthesisUniverseMixedDescendantFreshness.strict_prefix_height_identity_ne' depends on axioms: [propext,
+ Quot.sound]
+@MicroCFTA.SourceSynthesisUniverseMixedDescendantFreshness.mixed_entry_strict_descendant_fresh : ∀ {Symbol Guard : Type}
+  (state : MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol Guard),
+  MicroCFTA.SourceRecursiveIntersectionKernel.Valid state →
+    ∀ (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+      (body depth ordinary : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      MicroCFTA.InternedProbeProvenance.Available state.heap
+          (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary) →
+        ∀ (pattern : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+          MicroCFTA.InternedProbeProvenance.Available state.heap pattern →
+            pattern.free = [] →
+              ∀ (patternId : Nat),
+                MicroCFTA.SourceRecursiveIntersectionControl.identity pattern = some patternId →
+                  have universeValue := MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary;
+                  have entered :=
+                    MicroCFTA.SourceRecursiveIntersectionEnvironment.enter state.domains
+                      MicroCFTA.IntersectionEmptyDomain.emptyKey universeValue pattern entry.identity patternId;
+                  have initial := { heap := state.heap, domains := entered.snd };
+                  ∀ (later : MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol Guard),
+                    MicroCFTA.SourceRecursiveIntersectionKernel.Valid later →
+                      MicroCFTA.SourceRecursiveIntersectionKernel.Extension initial later →
+                        ∀ (operand : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                          MicroCFTA.InternedProbeProvenance.Available later.heap operand →
+                            operand.free = [] →
+                              ∀ (operandId : Nat),
+                                MicroCFTA.SourceRecursiveIntersectionControl.identity operand = some operandId →
+                                  MicroCFTA.SourceSynthesisUniversePrefixHeight.height operand <
+                                      MicroCFTA.SourceSynthesisUniversePrefixHeight.height pattern →
+                                    operandId ≠ patternId ∧
+                                      MicroCFTA.SourceRecursiveIntersectionControl.pair entry.identity operandId ≠
+                                          MicroCFTA.SourceRecursiveIntersectionControl.pair entry.identity patternId ∧
+                                        MicroCFTA.SourceRecursiveIntersectionControl.pair operandId entry.identity ≠
+                                            MicroCFTA.SourceRecursiveIntersectionControl.pair entry.identity patternId ∧
+                                          ¬MicroCFTA.SourceRecursiveIntersectionControl.pair entry.identity operandId ∈
+                                                entered.fst.key.seen ∧
+                                            ¬MicroCFTA.SourceRecursiveIntersectionControl.pair operandId
+                                                    entry.identity ∈
+                                                  entered.fst.key.seen ∧
+                                              MicroCFTA.SourceRecursiveIntersectionKernel.Domain later entered.fst ∧
+                                                MicroCFTA.SourceRecursiveIntersectionDomain.lookup later.heap
+                                                    entered.fst.key entry.identity =
+                                                  some universeValue
+'MicroCFTA.SourceSynthesisUniverseMixedDescendantFreshness.mixed_entry_strict_descendant_fresh' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceSynthesisUniverseMixedDescendantFreshness.current_stored_universe_strict_descendant_fresh_after_mixed_entry : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)]
+  (lib : MicroCFTA.SourceSynthesisTypeSyntax.Library) (query : MicroCFTA.SourceSynthesisTypeSyntax.Query) (signed : Int)
+  (whole : MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression),
+  MicroCFTA.SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole →
+    ∀
+      (rootValue :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)
+      (sourceHeap :
+        MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard),
+      MicroCFTA.InternedFreshOrdinaryConstruction.build
+            (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+            MicroCFTA.InternedConstructorTemplates.empty =
+          MicroCFTA.InternedNestedConstruction.Outcome.done rootValue sourceHeap →
+        ∀ (key : MicroCFTA.InternedBinderProtocol.NodeKey)
+          (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+          (body depth ordinary :
+            MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard),
+          sourceHeap.nodeRecords key =
+              some (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary) →
+            ∀
+              (heap :
+                MicroCFTA.InternedConstructorTemplates.State
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard),
+              MicroCFTA.InternedNestedFacts.Facts heap →
+                MicroCFTA.InternedConstructorTemplates.Grows sourceHeap heap →
+                  ∀ (domains : MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey),
+                    MicroCFTA.Cache.Valid domains →
+                      ∀
+                        (pattern :
+                          MicroCFTA.InternedConstructorTemplates.Value
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard),
+                        MicroCFTA.InternedProbeProvenance.Available heap pattern →
+                          pattern.free = [] →
+                            ∀ (patternId : Nat),
+                              MicroCFTA.SourceRecursiveIntersectionControl.identity pattern = some patternId →
+                                have universeValue :=
+                                  MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary;
+                                universeValue.free = [] ∧
+                                  have entered :=
+                                    MicroCFTA.SourceRecursiveIntersectionEnvironment.enter domains
+                                      MicroCFTA.IntersectionEmptyDomain.emptyKey universeValue pattern entry.identity
+                                      patternId;
+                                  have initial := { heap := heap, domains := entered.snd };
+                                  ∀
+                                    (later :
+                                      MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+                                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                        MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard),
+                                    MicroCFTA.SourceRecursiveIntersectionKernel.Valid later →
+                                      MicroCFTA.SourceRecursiveIntersectionKernel.Extension initial later →
+                                        ∀
+                                          (operand :
+                                            MicroCFTA.InternedConstructorTemplates.Value
+                                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                              MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard),
+                                          MicroCFTA.InternedProbeProvenance.Available later.heap operand →
+                                            operand.free = [] →
+                                              ∀ (operandId : Nat),
+                                                MicroCFTA.SourceRecursiveIntersectionControl.identity operand =
+                                                    some operandId →
+                                                  MicroCFTA.SourceSynthesisUniversePrefixHeight.height operand <
+                                                      MicroCFTA.SourceSynthesisUniversePrefixHeight.height pattern →
+                                                    operandId ≠ patternId ∧
+                                                      MicroCFTA.SourceRecursiveIntersectionControl.pair entry.identity
+                                                            operandId ≠
+                                                          MicroCFTA.SourceRecursiveIntersectionControl.pair
+                                                            entry.identity patternId ∧
+                                                        MicroCFTA.SourceRecursiveIntersectionControl.pair operandId
+                                                              entry.identity ≠
+                                                            MicroCFTA.SourceRecursiveIntersectionControl.pair
+                                                              entry.identity patternId ∧
+                                                          ¬MicroCFTA.SourceRecursiveIntersectionControl.pair
+                                                                  entry.identity operandId ∈
+                                                                entered.fst.key.seen ∧
+                                                            ¬MicroCFTA.SourceRecursiveIntersectionControl.pair operandId
+                                                                    entry.identity ∈
+                                                                  entered.fst.key.seen ∧
+                                                              MicroCFTA.SourceRecursiveIntersectionKernel.Domain later
+                                                                  entered.fst ∧
+                                                                MicroCFTA.SourceRecursiveIntersectionDomain.lookup
+                                                                    later.heap entered.fst.key entry.identity =
+                                                                  some universeValue
+'MicroCFTA.SourceSynthesisUniverseMixedDescendantFreshness.current_stored_universe_strict_descendant_fresh_after_mixed_entry' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

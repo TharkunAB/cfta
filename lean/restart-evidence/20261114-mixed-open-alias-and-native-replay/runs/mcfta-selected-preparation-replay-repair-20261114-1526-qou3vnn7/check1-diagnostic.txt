@@ -1,0 +1,142 @@
+/tmp/mcfta-selected-preparation-replay-check1-20261114-1523/source/MicroCFTA/SourcePruningEnumerationSelectedPreparationReplay.lean:48:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (representative (fuel + extra) uv >>= ?m.225) readAfter
+in the target expression
+  ((match UVarValue.unenumerated (some _handle) _bucket with
+        | UVarValue.unenumerated (some handle) scs => do
+          let target ← representative (fuel + extra) uv
+          match SourcePruningEnumerationNodes.lookupNode heap handle with
+            | none => EnumerationState.failure Error.unresolvedReference
+            | some decoded => do
+              modify fun state =>
+                  { counter := state.counter, representatives := state.representatives, values := state.values,
+                    obligations := state.obligations, recursionAncestry := state.recursionAncestry,
+                    expansionAncestry :=
+                      if MergedOrdinaryHeight.recursiveBoundary decoded = true then
+                        (recursionKey handle scs :: state.recursionAncestry target).eraseDups
+                      else state.recursionAncestry target }
+              pure (target, handle, scs, decoded)
+        | x => reject)
+        readAfter).run =
+    ((match UVarValue.unenumerated (some _handle) _bucket with
+        | UVarValue.unenumerated (some handle) scs => do
+          let target ← representative fuel uv
+          match SourcePruningEnumerationNodes.lookupNode heap handle with
+            | none => EnumerationState.failure Error.unresolvedReference
+            | some decoded => do
+              modify fun state =>
+                  { counter := state.counter, representatives := state.representatives, values := state.values,
+                    obligations := state.obligations, recursionAncestry := state.recursionAncestry,
+                    expansionAncestry :=
+                      if MergedOrdinaryHeight.recursiveBoundary decoded = true then
+                        (recursionKey handle scs :: state.recursionAncestry target).eraseDups
+                      else state.recursionAncestry target }
+              pure (target, handle, scs, decoded)
+        | x => reject)
+        readAfter).run
+
+case unenumerated.some
+EnumGuard NativeGuard : Type
+heap : InternedConstructorTemplates.State Symbol NativeGuard
+fuel extra uv : Nat
+before after : State Symbol EnumGuard
+result : Nat × Nat × List Suspended × InternedConstructorTemplates.Value Symbol NativeGuard
+observed :
+  Success
+    (do
+      let __do_lift ← getValue fuel uv
+      match __do_lift with
+        | UVarValue.unenumerated (some handle) scs => do
+          let target ← representative fuel uv
+          match SourcePruningEnumerationNodes.lookupNode heap handle with
+            | none => EnumerationState.failure Error.unresolvedReference
+            | some decoded => do
+              modify fun state =>
+                  { counter := state.counter, representatives := state.representatives, values := state.values,
+                    obligations := state.obligations, recursionAncestry := state.recursionAncestry,
+                    expansionAncestry :=
+                      if MergedOrdinaryHeight.recursiveBoundary decoded = true then
+                        (recursionKey handle scs :: state.recursionAncestry target).eraseDups
+                      else state.recursionAncestry target }
+              pure (target, handle, scs, decoded)
+        | x => reject)
+    before result after
+readAfter : State Symbol EnumGuard
+_bucket : List Suspended
+_handle : Nat
+reading : Success (getValue fuel uv) before (UVarValue.unenumerated (some _handle) _bucket) readAfter
+continued :
+  Success
+    (match UVarValue.unenumerated (some _handle) _bucket with
+    | UVarValue.unenumerated (some handle) scs => do
+      let target ← representative fuel uv
+      match SourcePruningEnumerationNodes.lookupNode heap handle with
+        | none => EnumerationState.failure Error.unresolvedReference
+        | some decoded => do
+          modify fun state =>
+              { counter := state.counter, representatives := state.representatives, values := state.values,
+                obligations := state.obligations, recursionAncestry := state.recursionAncestry,
+                expansionAncestry :=
+                  if MergedOrdinaryHeight.recursiveBoundary decoded = true then
+                    (recursionKey handle scs :: state.recursionAncestry target).eraseDups
+                  else state.recursionAncestry target }
+          pure (target, handle, scs, decoded)
+    | x => reject)
+    readAfter result after
+oldRead : (getValue fuel uv before).run = [Except.ok (UVarValue.unenumerated (some _handle) _bucket, readAfter)]
+newRead :
+  (getValue (fuel + extra) uv before).run = [Except.ok (UVarValue.unenumerated (some _handle) _bucket, readAfter)]
+target : Nat
+compressed : State Symbol EnumGuard
+resolving : Success (representative fuel uv) readAfter target compressed
+_finished :
+  Success
+    (match SourcePruningEnumerationNodes.lookupNode heap _handle with
+    | none => EnumerationState.failure Error.unresolvedReference
+    | some decoded => do
+      modify fun state =>
+          { counter := state.counter, representatives := state.representatives, values := state.values,
+            obligations := state.obligations, recursionAncestry := state.recursionAncestry,
+            expansionAncestry :=
+              if MergedOrdinaryHeight.recursiveBoundary decoded = true then
+                (recursionKey _handle _bucket :: state.recursionAncestry target).eraseDups
+              else state.recursionAncestry target }
+      pure (target, _handle, _bucket, decoded))
+    compressed result after
+oldResolve : (representative fuel uv readAfter).run = [Except.ok (target, compressed)]
+newResolve : (representative (fuel + extra) uv readAfter).run = [Except.ok (target, compressed)]
+⊢ ((match UVarValue.unenumerated (some _handle) _bucket with
+        | UVarValue.unenumerated (some handle) scs => do
+          let target ← representative (fuel + extra) uv
+          match SourcePruningEnumerationNodes.lookupNode heap handle with
+            | none => EnumerationState.failure Error.unresolvedReference
+            | some decoded => do
+              modify fun state =>
+                  { counter := state.counter, representatives := state.representatives, values := state.values,
+                    obligations := state.obligations, recursionAncestry := state.recursionAncestry,
+                    expansionAncestry :=
+                      if MergedOrdinaryHeight.recursiveBoundary decoded = true then
+                        (recursionKey handle scs :: state.recursionAncestry target).eraseDups
+                      else state.recursionAncestry target }
+              pure (target, handle, scs, decoded)
+        | x => reject)
+        readAfter).run =
+    ((match UVarValue.unenumerated (some _handle) _bucket with
+        | UVarValue.unenumerated (some handle) scs => do
+          let target ← representative fuel uv
+          match SourcePruningEnumerationNodes.lookupNode heap handle with
+            | none => EnumerationState.failure Error.unresolvedReference
+            | some decoded => do
+              modify fun state =>
+                  { counter := state.counter, representatives := state.representatives, values := state.values,
+                    obligations := state.obligations, recursionAncestry := state.recursionAncestry,
+                    expansionAncestry :=
+                      if MergedOrdinaryHeight.recursiveBoundary decoded = true then
+                        (recursionKey handle scs :: state.recursionAncestry target).eraseDups
+                      else state.recursionAncestry target }
+              pure (target, handle, scs, decoded)
+        | x => reject)
+        readAfter).run
+'MicroCFTA.SourcePruningEnumerationEntry.enter_success_raw_moreFuel' depends on axioms: [propext, sorryAx, Quot.sound]
+'MicroCFTA.SourcePruningEnumerationSelectedPreparation.successful_run_moreFuel' depends on axioms: [propext,
+ sorryAx,
+ Quot.sound]

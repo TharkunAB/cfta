@@ -1,0 +1,3 @@
+import MicroCFTA.SourcePruningEnumerationSelectedPreparationObservedResources
+#check @MicroCFTA.SourcePruningEnumerationSelectedPreparation.successful_resources_current
+#print axioms MicroCFTA.SourcePruningEnumerationSelectedPreparation.successful_resources_current

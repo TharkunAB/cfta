@@ -1,0 +1,8 @@
+-- UNCOMPILED exact header from the earlier route. This is a local replay theorem.
+theorem successful_run_moreFuel(fuel extra uv target handle : Nat) (scs : List Suspended) (decoded value : Node)
+    (caller : Caller width) (before : Cached) (entered : Core)
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (observed : SourcePruningEnumerationSelectedPreparation.run fuel fuel uv caller before =
+      ([.ok ((target, handle, scs, decoded), entered)], some (.done value heap))) :
+    SourcePruningEnumerationSelectedPreparation.run (fuel + extra) (fuel + extra) uv caller before =
+      ([.ok ((target, handle, scs, decoded), entered)], some (.done value heap))
