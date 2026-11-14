@@ -1,3 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationSharedSelectedOpaqueObservedResources
 import MicroCFTA.SourcePruningEnumerationSharedSelectedOpaqueStability
 import MicroCFTA.SourceSynthesisUniverseClosedResetSteps
 import MicroCFTA.SourceSynthesisCurrentUniverseBodyChildClassification
@@ -5403,3 +5404,6 @@ run_cmd do
 
 #check MicroCFTA.SourcePruningEnumerationSharedSelectedOpaqueDispatch.complete_stable
 #print axioms MicroCFTA.SourcePruningEnumerationSharedSelectedOpaqueDispatch.complete_stable
+
+#check @MicroCFTA.SourcePruningEnumerationSharedSelectedOpaqueDispatch.observed_complete_resources
+#print axioms MicroCFTA.SourcePruningEnumerationSharedSelectedOpaqueDispatch.observed_complete_resources
