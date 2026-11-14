@@ -210,12 +210,25 @@ baseOf (RArrow _ parameter result) = TFun (baseOf parameter) (baseOf result)
 -- | A library component: its name and its refinement type.
 type Component = (Text, RType)
 
--- | A query: the arguments with their refinement types, and the goal type.
+{- | A query: the arguments with their refinement types, and the goal type.
+
+Two arguments can have the same name. Then each of them has the refinement
+type of the last argument with that name.
+-}
 data LiquidQuery = LiquidQuery
     { liquidArguments :: [(Text, RType)]
     , liquidGoal :: RType
     }
     deriving (Show)
+
+{- | The arguments of a query in their order, each with the refinement type of
+the last argument with its name ('LiquidQuery'). 'Map.fromList' keeps the
+last value of a key.
+-}
+queryBindings :: LiquidQuery -> [(Text, RType)]
+queryBindings query = [(name, Map.findWithDefault typ name types) | (name, typ) <- liquidArguments query]
+  where
+    types = Map.fromList (liquidArguments query)
 
 {- | Parse a query as a function signature in the syntax of 'parseRType': the
 parameters are the arguments, and the result is the goal, as in
@@ -548,13 +561,13 @@ synthesize entailment options components query = do
         catMaybes
             <$> traverse
                 realize
-                ( map argumentLeaf (liquidArguments query)
+                ( map argumentLeaf (queryBindings query)
                     <> [componentLeaf component | component@(_, typ) <- components, valued components query typ]
                 )
     go 1 (Map.singleton 0 leaves)
   where
     heads = headsOf components query
-    functions = Map.fromList [(name, typ) | (name, typ@RArrow{}) <- components <> liquidArguments query]
+    functions = Map.fromList [(name, typ) | (name, typ@RArrow{}) <- components <> queryBindings query]
 
 {- | The heads of a query: the components and the query arguments of function
 type, each with its function value in the logic.
@@ -562,14 +575,14 @@ type, each with its function value in the logic.
 headsOf :: [Component] -> LiquidQuery -> [(Text, RType, Formula.Term)]
 headsOf components query =
     [(name, typ, Formula.Var (functionConstant name)) | (name, typ@RArrow{}) <- components]
-        <> [(name, typ, Formula.Var (Name name)) | (name, typ@RArrow{}) <- liquidArguments query]
+        <> [(name, typ, Formula.Var (Name name)) | (name, typ@RArrow{}) <- queryBindings query]
 
 -- | What the query arguments' refinements state about them.
 environmentOf :: LiquidQuery -> Formula
 environmentOf query =
     Formula.conjunction
-        ( [Formula.substitute [(value, Formula.Var (Name name))] refinement | (name, RBase _ refinement) <- liquidArguments query]
-            <> [lifted (Formula.Var (Name name)) typ | (name, typ@RArrow{}) <- liquidArguments query]
+        ( [Formula.substitute [(value, Formula.Var (Name name))] refinement | (name, RBase _ refinement) <- queryBindings query]
+            <> [lifted (Formula.Var (Name name)) typ | (name, typ@RArrow{}) <- queryBindings query]
         )
 
 {- | The entailment of a run, with the counts of its solver queries and of
@@ -665,7 +678,7 @@ checkerWith abstracts entailment components query = do
         -- The term of a program before its refinement is abstracted.
         pendingOf program = case spine program [] of
             (name, [])
-                | Just typ <- lookup name (liquidArguments query) -> pure $ Just (argumentLeaf (name, typ))
+                | Just typ <- lookup name (queryBindings query) -> pure $ Just (argumentLeaf (name, typ))
                 | Just typ <- lookup name components, valued components query typ -> pure $ Just (componentLeaf (name, typ))
             (name, arguments)
                 | Just (typ, function) <- lookup name heads
@@ -757,7 +770,7 @@ Without such a head, a function value has no use.
 valued :: [Component] -> LiquidQuery -> RType -> Bool
 valued components query typ = case typ of
     RBase{} -> True
-    RArrow{} -> firstOrder typ && any takesFunction (components <> liquidArguments query)
+    RArrow{} -> firstOrder typ && any takesFunction (components <> queryBindings query)
   where
     takesFunction (_, head') = any (isFunction . baseOf . snd) (parametersOf head')
     isFunction TFun{} = True
@@ -1122,7 +1135,7 @@ qualifiers components query =
     isVariable TVar{} = True
     isVariable _ = False
     direct =
-        [(base, atom) | (_, RBase base refinement) <- liquidArguments query, atom <- atoms refinement]
+        [(base, atom) | (_, RBase base refinement) <- queryBindings query, atom <- atoms refinement]
             <> [(base, atom) | RBase base refinement <- [liquidGoal query], atom <- atoms refinement]
             <> [ (base, weakened)
                | RBase base refinement <- [liquidGoal query]
@@ -1136,7 +1149,7 @@ qualifiers components query =
                ]
             <> concatMap (ofComponent fromArguments) components
     atoms = filter (elem value . Formula.freeNames) . conjuncts
-    arguments = [(Name name, baseOf typ) | (name, typ) <- liquidArguments query]
+    arguments = [(Name name, baseOf typ) | (name, typ) <- queryBindings query]
     -- The components as function values: their names and types.
     constants = [(functionConstant name, typ) | (name, typ@RArrow{}) <- components, valued components query typ]
     fromArguments base =
