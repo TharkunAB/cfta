@@ -1,0 +1,19 @@
+-- ORIGINAL CHECKED SOURCE. This file adds no proof.
+private theorem finalize_child_inputs_packet
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (original reached : Caller (bits + 2)) (metadata : Metadata Typing) (before middle : Cached)
+    (uv handle : Nat) (scs : List Suspended) (fragment : Fragment) (saved : Queries)
+    (ready : EnumerationDriver.Ready uv before.core)
+    (stored : before.core.values[uv]? = some (.unenumerated (some handle) scs))
+    (incoming : EnumerationReferences.IncomingAvoid uv before.core)
+    (data : ChildInputs formulas solver original metadata before scs fragment reached saved middle) :
+    ∃ (next : Inventory) (final : Memos) (fuel : Nat) (after : Cached),
+      Post formulas solver next original reached final ∧ final.query = saved ∧
+      (∀ extra, SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap
+        (fuel + extra) uv fragment middle = some after) ∧
+      Packet formulas solver next reached final metadata after ∧
+      FragmentBound after.core.counter fragment ∧
+      after.core = {middle.core with values := middle.core.values.set uv (.enumerated fragment), expansionAncestry := []} ∧
+      SourcePruningEnumerationPrefixAdmission.suspendedBound after.core ≤
+        SourcePruningEnumerationPrefixAdmission.suspendedBound middle.core ∧
+      after.core.values[uv]? = some (.enumerated fragment) ∧ IsRoot after.core.representatives uv

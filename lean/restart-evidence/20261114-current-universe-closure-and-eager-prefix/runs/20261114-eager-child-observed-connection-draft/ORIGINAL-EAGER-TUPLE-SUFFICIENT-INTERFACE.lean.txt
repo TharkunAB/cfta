@@ -1,0 +1,34 @@
+-- ORIGINAL CHECKED SOURCE. This file adds no proof.
+private def EagerTupleCompleteWithOutputs
+    (outputOK : Output (bits + 2) Typing → Prop) (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (captured : InternedConstructorTemplates.State Symbol Constraint) (limit own height count : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula) : Prop :=
+  ∀ (inventory : Inventory) (caller : Caller (bits + 2)) (memos : Memos) (metadata : Metadata Typing)
+    (before : Cached) (seed : Seed) (bound ceiling : Nat) (inputs : List (Node × List Suspended)) (uv : Nat)
+    (continuation : Nat → Seed → Seed) (admitted : Nat → Seed → Prop)
+    (done : Nat → List Fragment → Caller (bits + 2) → Queries → Cached → Fold)
+    (stopped : Nat → List Fragment → ChildDispatch.Observation (bits + 2) → Option Cached → Fold),
+    Packet formulas solver inventory caller memos metadata before → Fits seed.2 caller.checked →
+    Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap →
+    SourceEqualityRequiredCache.Keeps captured caller.checked.native.machine.heap →
+    SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling → inputs.length ≤ count →
+    (∀ child bucket, (child, bucket) ∈ inputs →
+      Available captured child ∧ child.free = [] ∧ MergedOrdinaryHeight.height child ≤ height ∧ bucket.length ≤ bound ∧
+        (∀ sc ∈ bucket, sc.var < before.core.counter) ∧ InputsPending before.core bucket) →
+    (∀ entry rows depth free, Available captured (.node entry rows depth free) →
+      rows.length ≤ limit ∧ ∀ edge ∈ rows, edge.children.length ≤ limit ∧
+        ∀ tries residual, SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual) →
+          tries.length ≤ own) →
+    (∀ entry rows depth free, ∀ edge ∈ edgesOf (.node entry rows depth free), edge ∈ rows) →
+    (∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length) →
+    tupleReserved (nodePlan limit own height) (nodeReserved bits limit own height)
+      count bound ceiling continuation admitted seed →
+    (∀ retained current, Le current.2 (continuation retained current).2 ∧ current.1 ⊆ (continuation retained current).1) →
+    TupleConsumersWithOutputs outputOK formulas solver caller metadata before inputs uv continuation admitted done stopped →
+    ∃ fuel outcome,
+      (∀ extra, SourcePruningEnumerationSharedChildVisitors.visitChildren
+        (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty
+          (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra) edgesOf)
+        (done (fuel + extra)) (stopped (fuel + extra)) inputs caller before memos.query = outcome) ∧
+      OutcomeResourcesWithOutputs outputOK formulas solver caller
+        (tuplePlan (nodePlan limit own height) count bound ceiling continuation seed) (finish uv outcome)

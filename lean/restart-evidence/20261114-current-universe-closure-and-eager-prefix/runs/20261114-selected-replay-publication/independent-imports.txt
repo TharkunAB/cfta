@@ -1,0 +1,146 @@
+@MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.ChildTraversal.Trace.moreBounds : ∀ {width : Nat}
+  [inst : DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {checkEmpty : Bool} {r n p h k R N P H K : Nat}
+  {inputs :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) ×
+        List MicroCFTA.EnumerationState.Suspended)}
+  {beforeCaller afterCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {before after :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {queries afterQueries : MicroCFTA.SourceEndpointMemo.Memos}
+  {fragments : List (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)},
+  MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.ChildTraversal.Trace checkEmpty r n p h k inputs
+      beforeCaller before queries fragments afterCaller after afterQueries →
+    r ≤ R →
+      n ≤ N →
+        p ≤ P →
+          h ≤ H →
+            k ≤ K →
+              MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.ChildTraversal.Trace checkEmpty R N P H K
+                inputs beforeCaller before queries fragments afterCaller after afterQueries
+'MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.ChildTraversal.Trace.moreBounds' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.ChildTraversal.run_complete_moreBounds : ∀ {width : Nat}
+  [inst : DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {checkEmpty : Bool} {r n p h k R N P H K : Nat}
+  {inputs :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) ×
+        List MicroCFTA.EnumerationState.Suspended)}
+  {beforeCaller afterCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {before after :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {queries afterQueries : MicroCFTA.SourceEndpointMemo.Memos}
+  {fragments : List (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)},
+  MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.ChildTraversal.run checkEmpty r n p h k inputs
+        beforeCaller before queries =
+      MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.ChildTraversal.Result.complete fragments afterCaller
+        afterQueries after →
+    r ≤ R →
+      n ≤ N →
+        p ≤ P →
+          h ≤ H →
+            k ≤ K →
+              MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.ChildTraversal.run checkEmpty R N P H K
+                  inputs beforeCaller before queries =
+                MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.ChildTraversal.Result.complete fragments
+                  afterCaller afterQueries after
+'MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.ChildTraversal.run_complete_moreBounds' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.complete_stable : ∀ {width : Nat}
+  [inst : DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {checkEmpty : Bool} {r R n N p P h H k K : Nat} {scs : List MicroCFTA.EnumerationState.Suspended}
+  {edge :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {caller reached : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {before after :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {queries saved : MicroCFTA.SourceEndpointMemo.Memos}
+  {fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol},
+  MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.run checkEmpty r n p h k scs edge caller
+        before queries =
+      MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result.complete fragment reached saved
+        after →
+    r ≤ R →
+      n ≤ N →
+        p ≤ P →
+          h ≤ H →
+            k ≤ K →
+              MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.run checkEmpty R N P H K scs
+                  edge caller before queries =
+                MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result.complete fragment
+                  reached saved after
+'MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.complete_stable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.CapturedEdge.complete_stable : ∀ {width : Nat}
+  [inst : DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {checkEmpty : Bool} {r R n N p P h H k K target : Nat} {scs : List MicroCFTA.EnumerationState.Suspended}
+  {edge :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {caller reached : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {before after :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {queries saved : MicroCFTA.SourceEndpointMemo.Memos}
+  {fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol},
+  MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.CapturedEdge.run checkEmpty r n p h k target scs edge
+        caller before queries =
+      some
+        (MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result.complete fragment reached
+          saved after) →
+    r ≤ R →
+      n ≤ N →
+        p ≤ P →
+          h ≤ H →
+            k ≤ K →
+              MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.CapturedEdge.run checkEmpty R N P H K target
+                  scs edge caller before queries =
+                some
+                  (MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result.complete fragment
+                    reached saved after)
+'MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.CapturedEdge.complete_stable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

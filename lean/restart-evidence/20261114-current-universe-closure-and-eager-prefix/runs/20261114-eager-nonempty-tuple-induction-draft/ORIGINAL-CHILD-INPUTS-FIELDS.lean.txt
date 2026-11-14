@@ -1,0 +1,23 @@
+-- ORIGINAL CHECKED SOURCE. No new proof.
+private def ChildInputs
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (original : Caller (bits + 2)) (metadata : Metadata Typing) (before : Cached) (bucket : List Suspended)
+    (fragment : Fragment) (reached : Caller (bits + 2)) (queries : Queries) (after : Cached) : Prop :=
+  ∃ (next : Inventory) (final : Memos),
+    Post formulas solver next original reached final ∧ final.query = queries ∧
+    Packet formulas solver next reached final metadata after ∧ before.core.counter ≤ after.core.counter ∧
+    EnumeratedOrigin before.core after.core ∧
+    (∀ held, held < before.core.counter → IsRoot before.core.representatives held →
+      Avoids before.core.representatives held bucket → EnumerationDriver.Protected held before.core after.core) ∧
+    (∀ allowed, EnumerationReferences.ReferencesAllowed allowed before.core →
+      EnumerationReferences.InputsAllowed allowed bucket →
+      (∀ uv, before.core.counter ≤ uv → allowed uv) →
+      EnumerationReferences.ReferencesAllowed allowed after.core) ∧
+    FragmentBound after.core.counter fragment ∧ PendingFragment after.core fragment ∧
+    ∀ held, held < before.core.counter → IsRoot before.core.representatives held →
+      Avoids before.core.representatives held bucket → FragmentAvoid after.core.representatives held fragment
+-- Insert in SharedEagerReservation after ChildInputs, before end ActualChildInputs.
+-- Add the cycle-free import MicroCFTA.SourceSynthesisProgramRolesNativeHeap.
+-- Append inside SharedEagerReservation after ChildInputs.
+-- Add the cycle-free import MicroCFTA.SourcePruningEnumerationIsolatedPending.
+section ActualChildIsolation
