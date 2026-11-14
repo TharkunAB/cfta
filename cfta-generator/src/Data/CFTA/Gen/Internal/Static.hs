@@ -28,6 +28,10 @@ module Data.CFTA.Gen.Internal.Static (
     commonRootCount,
 
     -- * Building languages
+    invertibleStatic,
+    invertibleMapStatic,
+    invertiblePairStatic,
+    rankOfValueStatic,
     pureStatic,
     indexedStatic,
     indexedStaticWithLabels,
@@ -164,6 +168,11 @@ data OutcomeIndex symbol a = OutcomeIndex
     weight one. 'mkOutcomeIndex' sets 'Nothing'; 'applyStatic' and
     'frequencyStatic' set a sampler and a weight from their components.
     -}
+    , outcomeRankOfValue :: Maybe (a -> [Rank])
+    {- ^ The ranks of a value, when the language is built from invertible
+    blocks: the inverse of 'outcomeValueAt'. 'Nothing' means that some block
+    has no inverse. A value that the language does not hold has no rank.
+    -}
     }
 
 {- | A rank of a term, and whether the ranking checked every symbol of the
@@ -207,7 +216,7 @@ mkOutcomeIndex ::
     Plan a ->
     OutcomeIndex symbol a
 mkOutcomeIndex total mass select ranks valueAt sampler plan =
-    OutcomeIndex total mass select ranks valueAt sampler plan (sizeIndex plan) (compilePlan total plan) Nothing
+    OutcomeIndex total mass select ranks valueAt sampler plan (sizeIndex plan) (compilePlan total plan) Nothing Nothing
 
 {- | A term as a language reads it when it ranks the term.
 
@@ -739,12 +748,18 @@ frequencyStatic alternatives =
             )
         )
             { outcomeSizeSampling = sizeSampling
+            , outcomeRankOfValue = choiceInverse
             }
         False
         (choiceInspection $ map (staticInspection . snd) alternatives)
         (commonRootCount $ map (staticRootCount . snd) alternatives)
   where
     totalWeight = sum $ map fst alternatives
+    -- The ranks of a value are its ranks in each alternative, moved by the offset of the alternative.
+    choiceInverse = do
+        inverses <-
+            traverse (\(_, offset, _, _, static) -> (,) offset <$> outcomeRankOfValue (staticOutcomes static)) rankedBranches
+        pure $ \value -> concat [map (offsetRank offset) (inverse value) | (offset, inverse) <- inverses]
     rankedBranches =
         [ ( nextOffset offset $ outcomeCardinality (staticOutcomes static)
           , offset
@@ -842,6 +857,50 @@ mapStatic :: (a -> b) -> Static symbol a -> Static symbol b
 mapStatic transform static =
     static{staticOutcomes = mapOutcomeIndex transform $ staticOutcomes static}
 
+-- | The built outcome index, with the inverse of the values of another one.
+keepInverseOf :: OutcomeIndex symbol a -> OutcomeIndex symbol a -> OutcomeIndex symbol a
+keepInverseOf built original = built{outcomeRankOfValue = outcomeRankOfValue original}
+
+{- | A finite indexed source with the inverse of its values, as a block that
+ranks a value. The inverse gives 'Nothing' for a value that the source does not hold.
+-}
+invertibleStatic :: (Hashable symbol, Typeable symbol) => Indexed a -> (a -> Maybe Rank) -> Static symbol a
+invertibleStatic indexed inverse =
+    base{staticOutcomes = (staticOutcomes base){outcomeRankOfValue = Just (maybe [] pure . inverse)}}
+  where
+    base = indexedStatic indexed
+
+{- | Map the values of a static language with a map that has an inverse. The
+inverse gives 'Nothing' for a value that the map does not give.
+-}
+invertibleMapStatic :: (a -> b) -> (b -> Maybe a) -> Static symbol a -> Static symbol b
+invertibleMapStatic transform inverse static =
+    mapped{staticOutcomes = (staticOutcomes mapped){outcomeRankOfValue = inverted}}
+  where
+    mapped = mapStatic transform static
+    inverted = do
+        ranksOf <- outcomeRankOfValue (staticOutcomes static)
+        pure $ maybe [] ranksOf . inverse
+
+{- | The pair of two languages, with the inverse of its values when the two
+parts have one. The ranks are those of the applicative product: the right part varies fastest.
+-}
+invertiblePairStatic ::
+    (Hashable symbol, Typeable symbol) => Static symbol a -> Static symbol b -> Static symbol (a, b)
+invertiblePairStatic left right =
+    pair{staticOutcomes = (staticOutcomes pair){outcomeRankOfValue = inverted}}
+  where
+    pair = applyStatic (mapStatic (,) left) right
+    rightCardinality = outcomeCardinality $ staticOutcomes right
+    inverted = do
+        leftRanks <- outcomeRankOfValue $ staticOutcomes left
+        rightRanks <- outcomeRankOfValue $ staticOutcomes right
+        pure $ \(a, b) -> [pairRank rightCardinality l r | l <- leftRanks a, r <- rightRanks b]
+
+-- | The ranks of a value, when the language is built from invertible blocks.
+rankOfValueStatic :: Static symbol a -> a -> Maybe [Rank]
+rankOfValueStatic static value = ($ value) <$> outcomeRankOfValue (staticOutcomes static)
+
 -- | Map the values of an outcome index.
 mapOutcomeIndex :: (a -> b) -> OutcomeIndex symbol a -> OutcomeIndex symbol b
 mapOutcomeIndex transform outcomes =
@@ -880,6 +939,7 @@ atomicStatic static =
                 (outcomeValueAt outcomes)
                 retainedSampler
                 (PlanSelect (outcomeCardinality outcomes) (outcomeValueAt outcomes))
+                `keepInverseOf` outcomes
         , staticAtomic = True
         }
   where
@@ -910,6 +970,7 @@ resizedStatic size static =
                 ( PlanSized
                     [SizeClass size count (\(ClassRank rank) -> outcomeValueAt outcomes $ Rank rank) (outcomeValueAt outcomes . toEnum)]
                 )
+                `keepInverseOf` outcomes
         }
   where
     outcomes = staticOutcomes static

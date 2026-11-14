@@ -7,6 +7,10 @@ recursion in "Data.CFTA.Gen.Internal.Recur".
 module Data.CFTA.Gen.Internal.Flat (
     -- * Sources
     fromIndexed,
+    invertible,
+    invertibleMap,
+    invertiblePair,
+    rankOfInvertible,
     fromGen,
     elements,
     namedElements,
@@ -45,7 +49,7 @@ import Data.CFTA.Gen.Internal.Support (relabel)
 import Data.CFTA.Gen.Internal.Types
 import Data.CFTA.Gen.Label (Label (..))
 import Data.CFTA.Gen.Sig (On (..))
-import Data.CFTA.Index (Depth, Weight, countWeight)
+import Data.CFTA.Index (Depth, Rank, Weight, countWeight)
 import qualified Data.CFTA.Interned as Common
 import Data.CFTA.Ranked.Internal (Indexed (..))
 import Data.CFTA.Ranked.Internal.Sampler (GenBackend (frequencyGen), choiceSampleIndex, uniformSampleIndex)
@@ -72,6 +76,36 @@ fromIndexed :: (Hashable symbol, Typeable symbol) => Indexed a -> Gen symbol a
 fromIndexed indexed
     | indexedCardinality indexed <= 0 = Transparent $ Left EmptyGenerator
     | otherwise = Transparent $ Right $ indexedStatic indexed
+
+{- | A finite indexed source with the inverse of its values. Use it for the
+leaves of a language whose values can be ranked, with 'invertibleMap',
+'invertiblePair', and the choices of this module.
+-}
+invertible :: (Hashable symbol, Typeable symbol) => Indexed a -> (a -> Maybe Rank) -> Gen symbol a
+invertible indexed inverse
+    | indexedCardinality indexed <= 0 = Transparent $ Left EmptyGenerator
+    | otherwise = Transparent $ Right $ invertibleStatic indexed inverse
+
+-- | 'fmap' with an inverse. A recursive or opaque generator is mapped without one.
+invertibleMap :: (a -> b) -> (b -> Maybe a) -> Gen symbol a -> Gen symbol b
+invertibleMap transform inverse (Transparent result) = Transparent $ invertibleMapStatic transform inverse <$> result
+invertibleMap transform _ other = fmap transform other
+
+-- | The pair of two generators, with an inverse when both are finite and invertible.
+invertiblePair :: (Hashable symbol, Typeable symbol) => Gen symbol a -> Gen symbol b -> Gen symbol (a, b)
+invertiblePair (Transparent left) (Transparent right) = Transparent $ invertiblePairStatic <$> left <*> right
+invertiblePair left right = (,) <$> left <*> right
+
+{- | The ranks of a value in a finite generator built from invertible blocks:
+the inverse of 'Data.CFTA.Gen.unrank'. A value that the generator does not
+hold has no rank. A generator with a block that has no inverse is
+'CannotInspectRecursiveGenerator'.
+-}
+rankOfInvertible :: Gen symbol a -> a -> Either GenError [Rank]
+rankOfInvertible (Transparent result) value = do
+    static <- result
+    maybe (Left CannotInspectRecursiveGenerator) Right $ rankOfValueStatic static value
+rankOfInvertible _ _ = Left CannotInspectRecursiveGenerator
 
 -- | Embed an ordinary QuickCheck generator as an opaque region.
 fromGen :: QC.Gen a -> Gen symbol a
