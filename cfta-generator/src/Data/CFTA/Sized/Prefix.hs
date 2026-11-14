@@ -12,6 +12,10 @@ a prefix and answers these queries:
 * 'afterToken': the completions after one more token. The result is
   'Nothing' when no completion remains, so a caller can reject a token at
   once.
+* 'stepToken': the completions after one more token, only when the token is
+  offered. Otherwise the result is the 'Refusal': the token is rejected, the
+  token is undecided, or the prefix is a whole term. 'stepPrefix' steps
+  through a list of tokens.
 * 'isComplete': whether the prefix is itself an accepted term.
 * 'completionCount', 'completionTerms', 'unrankCompletion', and
   'rankCompletion': the completions, counted, listed, and mapped to and from
@@ -124,6 +128,9 @@ module Data.CFTA.Sized.Prefix (
     preimageCompletionsWith,
     afterToken,
     afterPrefix,
+    Refusal (..),
+    stepToken,
+    stepPrefix,
     completionPrefix,
     nextTokens,
     undecidedTokens,
@@ -842,6 +849,48 @@ no completion starts with the prefix and the tokens.
 -}
 afterPrefix :: (Ord symbol) => Completions symbol -> [Token symbol] -> Maybe (Completions symbol)
 afterPrefix = foldM afterToken
+
+-- | The reason that a token is not offered after a prefix.
+data Refusal
+    = -- | No completion starts with the prefix and the token.
+      TokenRejected
+    | -- | With a solver: no accepted completion, and some undecided completions.
+      TokenUndecided
+    | -- | The prefix is a whole term, so no token can come next.
+      PrefixEnded
+    deriving (Eq, Ord, Show, Read)
+
+{- | The completions after one more token, when the token is offered: a token
+of 'nextTokens'. The value is the value that 'afterToken' gives. Otherwise the
+result is the reason for the refusal. 'TokenUndecided' is the case of a token
+of 'undecidedTokens'. 'afterToken' continues after such a token, so the caller
+sets the policy for it. 'PrefixEnded' is the case of a prefix with a
+'completeVerdict' that is not 'No'.
+-}
+stepToken :: (Ord symbol) => Completions symbol -> Token symbol -> Either Refusal (Completions symbol)
+stepToken completions token = case afterToken completions token of
+    Nothing
+        | completeVerdict completions /= No -> Left PrefixEnded
+        | otherwise -> Left TokenRejected
+    Just next
+        | accepting next -> Right next
+        | otherwise -> Left TokenUndecided
+  where
+    -- On the indexed route, a result of 'afterToken' has an accepted completion.
+    accepting next = case completionsRoute next of
+        Indexed{} -> True
+        Listed _ listed -> any (\(_, _, verdict) -> verdict == Yes) listed
+
+{- | The completions after more tokens, the first token first, with 'stepToken'
+for each token. The 'Left' value has the place of the first token that is not
+offered, 0 for the first token of the list, and the reason.
+-}
+stepPrefix :: (Ord symbol) => Completions symbol -> [Token symbol] -> Either (Int, Refusal) (Completions symbol)
+stepPrefix completions tokens =
+    foldM
+        (\current (place, token) -> either (Left . (,) place) Right $ stepToken current token)
+        completions
+        (zip [0 ..] tokens)
 
 -- | The prefix of the completions, the first token first.
 completionPrefix :: Completions symbol -> [Token symbol]

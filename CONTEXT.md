@@ -216,6 +216,8 @@ Wilf, and Feat (ranking).
   undecided when the solver neither accepts nor rejects it. A token is
   undecided when the solver accepts none of its completions and some of them
   are undecided. An undecided token is neither offered nor rejected.
+- **Refusal**: the reason that a token is not offered after a prefix. The
+  token is rejected, the token is undecided, or the prefix is a whole term.
 - **Walk**: a path of tokens with the verdicts of the solver kept for each
   step (`Deciding`). It asks the solver only when a query needs a verdict.
 - **Mask**: the tokens that can come next after a prefix: the tokens of

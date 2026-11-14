@@ -2,6 +2,9 @@
 
 ## 0.1.0.0 - Unreleased
 
+- `Data.CFTA.Sized.Prefix`: `stepToken` and `stepPrefix` add tokens only when
+  the tokens are offered, and otherwise give a `Refusal`: the token is
+  rejected, the token is undecided, or the prefix is a whole term.
 - `Data.CFTA.Guided`: `guide` is a guided search. It writes the terms of the
   completions one token at a time from the log-scores of a `Scorer`, greedy,
   best-first, or in a beam, within limits on visits, found terms, and

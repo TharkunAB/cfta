@@ -400,6 +400,10 @@ bound of nodes.
 - `afterToken` adds one token, and it gives `Nothing` when no completion
   starts with the result, so a caller can reject a token at once.
   `isComplete` says whether the prefix is an accepted term.
+- `stepToken` and `stepPrefix` add tokens only when the tokens are offered.
+  Otherwise they give a `Refusal`: `TokenRejected`, `TokenUndecided`, or
+  `PrefixEnded`. `stepPrefix` also gives the place of the first token that is
+  refused.
 - `completionCount`, `completionTerms`, `unrankCompletion`, and
   `rankCompletion` count and list the completions, and map them to and from
   their ranks. `Data.CFTA.Sized.Prefix.QuickCheck` samples them.
