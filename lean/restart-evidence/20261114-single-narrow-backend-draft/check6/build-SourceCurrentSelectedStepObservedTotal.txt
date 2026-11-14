@@ -1,0 +1,254 @@
+⚠ [779/800] Replayed MicroCFTA.InternedFreshOrdinaryClosedCompletion
+warning: MicroCFTA/InternedFreshOrdinaryClosedCompletion.lean:24:5: Variable name `inputs` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _inputs
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+✖ [1600/1602] Building MicroCFTA.SourceCurrentSelectedStepCheckedFrame (3.2s)
+trace: .> LEAN_PATH=/home/tritlo/Code/mcfta/lean/.lake/build/lib/lean /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean /home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentSelectedStepCheckedFrame.lean -o /home/tritlo/Code/mcfta/lean/.lake/build/lib/lean/MicroCFTA/SourceCurrentSelectedStepCheckedFrame.olean -i /home/tritlo/Code/mcfta/lean/.lake/build/lib/lean/MicroCFTA/SourceCurrentSelectedStepCheckedFrame.ilean -c /home/tritlo/Code/mcfta/lean/.lake/build/ir/MicroCFTA/SourceCurrentSelectedStepCheckedFrame.c --setup /home/tritlo/Code/mcfta/lean/.lake/build/ir/MicroCFTA/SourceCurrentSelectedStepCheckedFrame.setup.json --json
+error: MicroCFTA/SourceCurrentSelectedStepCheckedFrame.lean:90:16: unsolved goals
+case narrowed.false
+Typing Key : Type
+width : Nat
+inst✝² : DecidableEq (EdgeKey Symbol Constraint)
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+checkEmpty : Bool
+edgesOf : Node → List (EdgeValue Symbol Constraint)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+metadata : Metadata Typing
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq Node
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+caller : Caller width
+memos : Memos
+before : Cached
+preference : List Nat → Option Nat
+uv : Nat
+roots : Nat → Nat
+initial : Context formulas solver inventory caller memos
+safe : Safe before.core
+pending : EnumerationReferences.PendingReferences before.core
+selection : EnumerationPureSelection.next preference before = Next.expand uv
+realized : PendingRealized caller.checked.native.machine.heap before.core
+paths : Roots before.core.representatives roots
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+        (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+stepRead stepCheck nativeFuel representativeFuel indexFuel : Nat
+valid :
+  ∀ (er ec ei callbackFuel r n p h k : Nat),
+    SourcePruningEnumerationSelectedStep.Valid holeKey fits admits graph templates checkEmpty edgesOf stop order
+      metadata formulas solver inventory (stepRead + er) (stepCheck + ec) nativeFuel representativeFuel (indexFuel + ei)
+      callbackFuel r n p h k uv caller before memos
+      (SourcePruningEnumerationSelectedStep.run holeKey fits admits graph templates checkEmpty edgesOf stop order
+        metadata (stepRead + er) (stepCheck + ec) nativeFuel representativeFuel (indexFuel + ei) callbackFuel r n p h k
+        uv caller before memos.query)
+selectedRead handle : Nat
+scs : List Suspended
+value : Node
+readAfter : EnumerationState.State Symbol Constraint
+selectedCheck : Nat
+after : Cached
+_stored : before.core.values[uv]? = some (UVarValue.unenumerated (some handle) scs)
+lookup : lookupNode caller.checked.native.machine.heap handle = some value
+_available : Available caller.checked.native.machine.heap value
+_closed : value.free = []
+reads :
+  ∀ (extra : Nat),
+    (getValue (selectedRead + extra) uv before.core).run =
+      [Except.ok (UVarValue.unenumerated (some handle) scs, readAfter)]
+_readFrame : Frame before.core readAfter
+_ready : EnumerationDriver.Ready uv after.core
+_paths : Roots after.core.representatives roots
+_realized : PendingRealized caller.checked.native.machine.heap after.core
+_counts : EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting
+_flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+        (after.core.values[slot]?.getD UVarValue.eliminated) =
+      some (after.expandable slot)
+_incoming : EnumerationReferences.IncomingAvoid uv after.core
+_pending : EnumerationReferences.PendingReferences before.core → EnumerationReferences.PendingReferences after.core
+er ec ei callbackFuel r n p h k : Nat
+read :
+  (getValue (stepRead + selectedRead + er) uv before.core).run =
+    [Except.ok (UVarValue.unenumerated (some handle) scs, readAfter)]
+checked : EnumerationState.State Symbol Constraint
+prepared : MergedSourceComparison.Result Symbol Constraint (Node × Option (EnumerateM Symbol Constraint Unit))
+reached : Caller width
+queries : SourceEndpointMemo.Memos
+action : Option (List (Except Error (Unit × EnumerationState.State Symbol Constraint)))
+candidate : Option Cached
+right : Option (List (Except Error ((Bool × Metadata Typing) × EnumerationState.State Symbol Constraint)))
+ordinary :
+  Option
+    (List (Except Error ((Nat × Nat × List Suspended × Node) × EnumerationState.State Symbol Constraint)) ×
+      Option (SourcePruningEnumerationNativeBranches.Result width))
+hp :
+  SourcePruningEnumerationSelectedStep.runPrefixWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph
+      templates stop order metadata (stepRead + selectedRead + er) (stepCheck + selectedCheck + ec) nativeFuel
+      representativeFuel (indexFuel + ei) callbackFuel uv caller before memos.query =
+    SourcePruningEnumerationSelectedStep.Result.narrowed checked prepared reached queries action candidate right
+      ordinary
+checks :
+  ∀ (extra : Nat),
+    (SourcePruningEnumerationRecursion.checkRepeated caller.checked.native.machine.heap (selectedCheck + extra) uv
+          handle scs readAfter).run =
+      [Except.ok (false, after.core)]
+notRepeated :
+  false = false →
+    Frame before.core after.core ∧
+      after.expandable = before.expandable ∧
+        after.waiting = before.waiting ∧ after.core.values[uv]? = some (UVarValue.unenumerated (some handle) scs)
+_repeated :
+  false = true →
+    MergedOrdinaryHeight.recursiveBoundary value = true ∧
+      after.core.values[uv]? = some (UVarValue.unenumerated (some handle) []) ∧
+        after.expandable uv = false ∧
+          after.waiting = EnumerationCanonicalWaiting.count roots (-1) scs before.waiting ∧
+            ∃ resolved countFuel,
+              Frame before.core resolved ∧
+                Success (representative selectedCheck uv) readAfter uv resolved ∧
+                  recursionKey handle scs ∈ resolved.recursionAncestry uv ∧
+                    Success (setValue uv (UVarValue.unenumerated (some handle) [])) resolved () after.core ∧
+                      ∀ (extra : Nat),
+                        SourcePruningEnumerationNativeIndex.write caller.checked.native.machine.heap (countFuel + extra)
+                            uv (UVarValue.unenumerated (some handle) []) [] scs
+                            (EnumerationExpandableIndex.frame resolved before) =
+                          some after
+check :
+  (SourcePruningEnumerationRecursion.checkRepeated caller.checked.native.machine.heap (stepCheck + selectedCheck + ec)
+        uv handle scs readAfter).run =
+    [Except.ok (false, after.core)]
+frame : Frame before.core after.core
+⊢ match
+    SourcePruningEnumerationSelectedStep.Result.narrowed checked prepared reached queries action candidate right
+      ordinary with
+  |
+  SourcePruningEnumerationSelectedStep.Result.narrowed checked prepared caller queries action candidate right
+      ordinary =>
+    Frame before.core checked
+  | x => True
+error: MicroCFTA/SourceCurrentSelectedStepCheckedFrame.lean:100:20: Dependent elimination failed: Failed to solve equation
+  SourcePruningEnumerationSelectedStep.Result.narrowed checked prepared reached queries action candidate right
+      ordinary =
+    match (getValue (stepRead + selectedRead + er) uv before.core).run with
+    | [Except.ok (UVarValue.unenumerated (some oldHandle) scs, readAfter)] =>
+      have check :=
+        (SourcePruningEnumerationRecursion.checkRepeated caller.checked.native.machine.heap
+            (stepCheck + selectedCheck + ec) uv oldHandle scs readAfter).run;
+      match check with
+      | [Except.ok (true, checked)] =>
+        have candidate :=
+          SourcePruningEnumerationParkedRestart.adapt caller.checked.native.machine.heap (indexFuel + ei) uv oldHandle
+            scs before checked;
+        SourcePruningEnumerationSelectedStep.Result.parked checked candidate
+          (Option.map (fun parked => (SourcePruningEnumerationRestart.run stop order metadata parked checked).run)
+            candidate)
+      | [Except.ok (false, checked)] =>
+        match lookupNode caller.checked.native.machine.heap oldHandle with
+        | none =>
+          SourcePruningEnumerationSelectedStep.Result.stopped
+            (getValue (stepRead + selectedRead + er) uv before.core).run (some check)
+        | some oldValue =>
+          have prepared :=
+            SourcePruningEnumerationAction.prepareWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
+              metadata nativeFuel representativeFuel uv oldHandle scs oldValue caller.checked.native.machine.heap;
+          have reached :=
+            SourceCurrentAllocatedPartialState.advance caller
+              (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+                { heap := prepared.state, equality := caller.checked.operations })
+              caller.fourth caller.merge;
+          match prepared with
+          | MergedSourceComparison.Result.failed _fault _heap =>
+            SourcePruningEnumerationSelectedStep.Result.narrowed checked prepared reached memos.query none none none
+              none
+          | MergedSourceComparison.Result.done (_value, none) _heap =>
+            SourcePruningEnumerationSelectedStep.Result.narrowed checked prepared reached memos.query none none none
+              none
+          | MergedSourceComparison.Result.done (value, some action) heap =>
+            have raw := (action checked).run;
+            match raw with
+            | [Except.ok (PUnit.unit, observed)] =>
+              match encodeNode value with
+              | none =>
+                SourcePruningEnumerationSelectedStep.Result.narrowed checked prepared reached memos.query (some raw)
+                  none none none
+              | some newHandle =>
+                have candidate :=
+                  SourcePruningEnumerationNarrowAdapter.adapt heap (indexFuel + ei) uv oldHandle newHandle scs before
+                    observed;
+                match candidate with
+                | none =>
+                  SourcePruningEnumerationSelectedStep.Result.narrowed checked prepared reached memos.query (some raw)
+                    none none none
+                | some attached =>
+                  have right :=
+                    (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata uv (Sum.inr newHandle)
+                        attached.core).run;
+                  match right with
+                  | [Except.ok ((false, _updated), callbackCore)] =>
+                    have after := EnumerationExpandableIndex.frame callbackCore attached;
+                    SourcePruningEnumerationSelectedStep.Result.narrowed checked prepared reached memos.query (some raw)
+                      (some after) (some right) none
+                  | x =>
+                    SourcePruningEnumerationSelectedStep.Result.narrowed checked prepared reached memos.query (some raw)
+                      (some attached) (some right) none
+            | x =>
+              SourcePruningEnumerationSelectedStep.Result.narrowed checked prepared reached memos.query (some raw) none
+                none none
+      | x =>
+        SourcePruningEnumerationSelectedStep.Result.stopped (getValue (stepRead + selectedRead + er) uv before.core).run
+          (some check)
+    | x =>
+      SourcePruningEnumerationSelectedStep.Result.stopped (getValue (stepRead + selectedRead + er) uv before.core).run
+        none
+warning: MicroCFTA/SourceCurrentSelectedStepCheckedFrame.lean:92:69: This simp argument is unused:
+  read
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourcePruningEnumerationSelectedStep.runPrefix, check, lookup] at hp
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: MicroCFTA/SourceCurrentSelectedStepCheckedFrame.lean:92:75: This simp argument is unused:
+  check
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourcePruningEnumerationSelectedStep.runPrefix, read, lookup] at hp
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: MicroCFTA/SourceCurrentSelectedStepCheckedFrame.lean:92:82: This simp argument is unused:
+  lookup
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourcePruningEnumerationSelectedStep.runPrefix, read, check] at hp
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: MicroCFTA/SourceCurrentSelectedStepCheckedFrame.lean:99:69: This simp argument is unused:
+  read
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourcePruningEnumerationSelectedStep.runPrefix, check] at hp
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: MicroCFTA/SourceCurrentSelectedStepCheckedFrame.lean:99:75: This simp argument is unused:
+  check
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourcePruningEnumerationSelectedStep.runPrefix, read] at hp
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Some required targets logged failures:
+- MicroCFTA.SourceCurrentSelectedStepCheckedFrame
+error: build failed

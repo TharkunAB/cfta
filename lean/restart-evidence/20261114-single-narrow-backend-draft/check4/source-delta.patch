@@ -1,0 +1,288 @@
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationAction.lean b/lean/MicroCFTA/SourcePruningEnumerationAction.lean
+index a34733d6d..c7b91b1f7 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationAction.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationAction.lean
+@@ -16,4 +16,7 @@ local instance actionMonadList : Monad List where
+-/-- Narrow once and retain the complete value beside the actual enumeration action. -/
+-def prepare [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol NativeGuard)]
+-    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
+-    (admits : Key → InternedConstructorTemplates.Value Symbol NativeGuard → Bool)
++/-- Compute the same action with the supplied native narrowing operation. -/
++def prepareWithNarrow
++    (narrow : Metadata Typing → Nat → Nat →
++      InternedConstructorTemplates.Value Symbol NativeGuard →
++      InternedConstructorTemplates.State Symbol NativeGuard →
++      MergedSourceComparison.Result Symbol NativeGuard
++        (InternedConstructorTemplates.Value Symbol NativeGuard))
+@@ -26 +29 @@ def prepare [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol NativeGuar
+-  match SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue heap with
++  match narrow metadata nativeFuel uv oldValue heap with
+@@ -42,0 +46,24 @@ def prepare [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol NativeGuar
++/-- Narrow once and retain the complete value beside the actual enumeration action. -/
++def prepare [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol NativeGuard)]
++    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
++    (admits : Key → InternedConstructorTemplates.Value Symbol NativeGuard → Bool)
++    (metadata : Metadata Typing) (nativeFuel representativeFuel uv oldHandle : Nat)
++    (scs : List EnumerationState.Suspended) (oldValue : InternedConstructorTemplates.Value Symbol NativeGuard)
++    (heap : InternedConstructorTemplates.State Symbol NativeGuard) :
++    MergedSourceComparison.Result Symbol NativeGuard
++      (InternedConstructorTemplates.Value Symbol NativeGuard × Option (EnumerateM Symbol EnumGuard Unit))
++ :=
++  prepareWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
++    metadata nativeFuel representativeFuel uv oldHandle scs oldValue heap
++
++/-- The configured wrapper retains the same action and native result. -/
++theorem prepare_configured_eq [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol NativeGuard)]
++    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
++    (admits : Key → InternedConstructorTemplates.Value Symbol NativeGuard → Bool)
++    (metadata : Metadata Typing) (nativeFuel representativeFuel uv oldHandle : Nat)
++    (scs : List EnumerationState.Suspended) (oldValue : InternedConstructorTemplates.Value Symbol NativeGuard)
++    (heap : InternedConstructorTemplates.State Symbol NativeGuard) :
++    prepare (EnumGuard := EnumGuard) holeKey fits admits metadata nativeFuel representativeFuel uv oldHandle scs oldValue heap =
++      prepareWithNarrow (EnumGuard := EnumGuard) (SourcePruningOuterNarrow.narrow holeKey fits admits)
++        metadata nativeFuel representativeFuel uv oldHandle scs oldValue heap := rfl
++
+@@ -112 +139 @@ theorem prepare_pending_complete
+-    simp only [prepare, narrowed, emptyResult]
++    simp only [prepare, prepareWithNarrow, narrowed, emptyResult]
+@@ -121 +148 @@ theorem prepare_pending_complete
+-        simp only [prepare, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_left sameHandle]
++        simp only [prepare, prepareWithNarrow, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_left sameHandle]
+@@ -123 +150 @@ theorem prepare_pending_complete
+-        simp only [prepare, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_left sameHandle]
++        simp only [prepare, prepareWithNarrow, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_left sameHandle]
+@@ -125 +152 @@ theorem prepare_pending_complete
+-        simp only [prepare, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_left sameHandle]
++        simp only [prepare, prepareWithNarrow, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_left sameHandle]
+@@ -144 +171 @@ theorem prepare_pending_complete
+-          simp only [prepare, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_right changedHandle]
++          simp only [prepare, prepareWithNarrow, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_right changedHandle]
+@@ -146 +173 @@ theorem prepare_pending_complete
+-          simp only [prepare, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_right changedHandle]
++          simp only [prepare, prepareWithNarrow, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_right changedHandle]
+@@ -148 +175 @@ theorem prepare_pending_complete
+-          simp only [prepare, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_right changedHandle]
++          simp only [prepare, prepareWithNarrow, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_right changedHandle]
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationPreparedFuel.lean b/lean/MicroCFTA/SourcePruningEnumerationPreparedFuel.lean
+index 3509c130f..71ca32452 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationPreparedFuel.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationPreparedFuel.lean
+@@ -33 +33 @@ theorem native_moreFuel
+-  unfold SourcePruningEnumerationAction.prepare at prepared ⊢
++  unfold SourcePruningEnumerationAction.prepare SourcePruningEnumerationAction.prepareWithNarrow at prepared ⊢
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationSelectedStep.lean b/lean/MicroCFTA/SourcePruningEnumerationSelectedStep.lean
+index 836a53c2b..9afca2ab3 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationSelectedStep.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationSelectedStep.lean
+@@ -42,3 +42,5 @@ variable [DecidableEq (EdgeKey Symbol Constraint)]
+-/-- Observe the selected prefix through Right recording without scanning ordinary siblings. -/
+-noncomputable def runPrefix
+-    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
++/-- Use the supplied narrowing operation in the same selected prefix. -/
++noncomputable def runPrefixWithNarrow
++    (narrow : Metadata Typing → Nat → Nat → Node →
++      InternedConstructorTemplates.State Symbol Constraint →
++      MergedSourceComparison.Result Symbol Constraint Node)
+@@ -65 +67 @@ noncomputable def runPrefix
+-              let prepared := SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
++              let prepared := SourcePruningEnumerationAction.prepareWithNarrow narrow metadata nativeFuel
+@@ -95,0 +98,26 @@ noncomputable def runPrefix
++/-- Observe the selected prefix through Right recording without scanning ordinary siblings. -/
++noncomputable def runPrefix
++    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
++    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
++    (stop : Option (Metadata Typing → Nat → Bool))
++    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
++    (readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv : Nat)
++    (caller : Caller width) (before : Cached) (queries : Queries) : Result width Typing :=
++  runPrefixWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
++    graph templates stop order metadata readFuel checkFuel nativeFuel representativeFuel
++    indexFuel callbackFuel uv caller before queries
++
++/-- The configured wrapper retains every actual prefix observation. -/
++theorem runPrefix_configured_eq
++    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
++    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
++    (stop : Option (Metadata Typing → Nat → Bool))
++    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
++    (readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv : Nat)
++    (caller : Caller width) (before : Cached) (queries : Queries) :
++    runPrefix holeKey fits admits graph templates stop order metadata readFuel checkFuel nativeFuel
++        representativeFuel indexFuel callbackFuel uv caller before queries =
++      runPrefixWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
++        graph templates stop order metadata readFuel checkFuel nativeFuel
++        representativeFuel indexFuel callbackFuel uv caller before queries := rfl
++
+@@ -108 +136 @@ theorem prefix_no_ordinary
+-  unfold runPrefix
++  unfold runPrefix runPrefixWithNarrow
+@@ -159 +187,2 @@ theorem prefix_no_ordinary
+-                                          generalize SourcePruningEnumerationAction.prepare holeKey fits admits metadata
++                                          generalize SourcePruningEnumerationAction.prepareWithNarrow
++                                            (SourcePruningOuterNarrow.narrow holeKey fits admits) metadata
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationSelectedStepCompletion.lean b/lean/MicroCFTA/SourcePruningEnumerationSelectedStepCompletion.lean
+index 61083a6f6..f5f11881b 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationSelectedStepCompletion.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationSelectedStepCompletion.lean
+@@ -46,3 +46,6 @@ theorem prepared_action
+-  | node entry edges depth free => simp only [SourcePruningEnumerationAction.prepare, narrowed, encoded]
+-  | union entry members depth free => simp only [SourcePruningEnumerationAction.prepare, narrowed, encoded]
+-  | mu entry body depth ordinary => simp only [SourcePruningEnumerationAction.prepare, narrowed, encoded]
++  | node entry edges depth free => simp only [SourcePruningEnumerationAction.prepare,
++      SourcePruningEnumerationAction.prepareWithNarrow, narrowed, encoded]
++  | union entry members depth free => simp only [SourcePruningEnumerationAction.prepare,
++      SourcePruningEnumerationAction.prepareWithNarrow, narrowed, encoded]
++  | mu entry body depth ordinary => simp only [SourcePruningEnumerationAction.prepare,
++      SourcePruningEnumerationAction.prepareWithNarrow, narrowed, encoded]
+@@ -141,2 +144,2 @@ theorem run_eq_legacy
+-  unfold run runPrefix
+-  dsimp only
++  unfold run runPrefix runPrefixWithNarrow
++  simp only [← SourcePruningEnumerationAction.prepare_configured_eq]
+@@ -248 +251 @@ theorem run_parked
+-  simp only [run, runPrefix, read, check, adapted, Option.map_some, finish]
++  simp only [run_eq_legacy, read, check, adapted, Option.map_some]
+@@ -269 +272 @@ theorem run_empty
+-  simp only [run, runPrefix, read, check, decoded, prepared, finish]
++  simp only [run_eq_legacy, read, check, decoded, prepared]
+@@ -304 +307 @@ theorem run_narrowed
+-  simp only [run, runPrefix, read, check, decoded, prepared, raw, encoded, adapted, right, finish]
++  simp only [run_eq_legacy, read, check, decoded, prepared, raw, encoded, adapted, right]
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.lean b/lean/MicroCFTA/SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.lean
+index a7fd8e302..7efeb877f 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.lean
+@@ -38,2 +38,2 @@ variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [Decidab
+-/-- Execute the actual selected prefix and pass the same child operation through every restart. -/
+-noncomputable def resumeWithChild
++/-- Pass the same narrowing and child operations through every actual restart. -/
++noncomputable def resumeWithNarrow
+@@ -41 +41,3 @@ noncomputable def resumeWithChild
+-    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
++    (narrow : Metadata Typing → Nat → Nat → Node →
++      InternedConstructorTemplates.State Symbol Constraint →
++      MergedSourceComparison.Result Symbol Constraint Node)
+@@ -53 +55 @@ noncomputable def resumeWithChild
+-      let observed := SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates
++      let observed := SourcePruningEnumerationSelectedStep.runPrefixWithNarrow narrow graph templates
+@@ -58 +60 @@ noncomputable def resumeWithChild
+-          resumeWithChild child holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel fuel
++          resumeWithNarrow child narrow graph templates checkEmpty edgesOf stop order workFuel fuel
+@@ -65 +67 @@ noncomputable def resumeWithChild
+-            (continueWith (resumeWithChild child holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel fuel)
++            (continueWith (resumeWithNarrow child narrow graph templates checkEmpty edgesOf stop order workFuel fuel)
+@@ -74,0 +77,42 @@ noncomputable def resumeWithChild
++/-- Execute the actual selected prefix and pass the same child operation through every restart. -/
++noncomputable def resumeWithChild
++    (child : Visitor)
++    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
++    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
++    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
++    (stop : Option (Metadata Typing → Nat → Bool))
++    (order : Metadata Typing → List Nat → Option Nat) (workFuel : Nat) :
++    Nat → Metadata Typing → Caller width → Queries → Cached → Option Next → Result :=
++  resumeWithNarrow child (SourcePruningOuterNarrow.narrow holeKey fits admits)
++    graph templates checkEmpty edgesOf stop order workFuel
++
++/-- The configured wrapper retains the complete recursive observation. -/
++theorem resumeWithChild_configured_eq
++    (child : Visitor)
++    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
++    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
++    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
++    (stop : Option (Metadata Typing → Nat → Bool))
++    (order : Metadata Typing → List Nat → Option Nat) (workFuel : Nat)
++    (recursiveFuel : Nat) (metadata : Metadata Typing) (caller : Caller width)
++    (queries : Queries) (before : Cached) (decision : Option Next) :
++    resumeWithChild child holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel
++        recursiveFuel metadata caller queries before decision =
++      resumeWithNarrow child (SourcePruningOuterNarrow.narrow holeKey fits admits)
++        graph templates checkEmpty edgesOf stop order workFuel
++        recursiveFuel metadata caller queries before decision := rfl
++
++/-- Start the same worker with the supplied narrowing and child operations. -/
++noncomputable def runWithNarrow
++    (child : Visitor)
++    (narrow : Metadata Typing → Nat → Nat → Node →
++      InternedConstructorTemplates.State Symbol Constraint →
++      MergedSourceComparison.Result Symbol Constraint Node)
++    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
++    (checkEmpty : Bool) (edgesOf : Node → List Edge)
++    (stop : Option (Metadata Typing → Nat → Bool))
++    (order : Metadata Typing → List Nat → Option Nat) (workFuel recursiveFuel : Nat)
++    (metadata : Metadata Typing) (caller : Caller width) (queries : Queries) (before : Cached) : Result :=
++  resumeWithNarrow child narrow graph templates checkEmpty edgesOf stop order workFuel recursiveFuel
++    metadata caller queries before (SourcePruningEnumerationRestart.decision stop order metadata before)
++
+@@ -84,2 +128,30 @@ noncomputable def runWithChild
+-  resumeWithChild child holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel recursiveFuel
+-    metadata caller queries before (SourcePruningEnumerationRestart.decision stop order metadata before)
++  runWithNarrow child (SourcePruningOuterNarrow.narrow holeKey fits admits)
++    graph templates checkEmpty edgesOf stop order workFuel recursiveFuel metadata caller queries before
++
++/-- The configured entry retains the same decision and entire result. -/
++theorem runWithChild_configured_eq
++    (child : Visitor)
++    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
++    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
++    (checkEmpty : Bool) (edgesOf : Node → List Edge)
++    (stop : Option (Metadata Typing → Nat → Bool))
++    (order : Metadata Typing → List Nat → Option Nat) (workFuel recursiveFuel : Nat)
++    (metadata : Metadata Typing) (caller : Caller width) (queries : Queries) (before : Cached) :
++    runWithChild child holeKey fits admits graph templates checkEmpty edgesOf stop order
++        workFuel recursiveFuel metadata caller queries before =
++      runWithNarrow child (SourcePruningOuterNarrow.narrow holeKey fits admits)
++        graph templates checkEmpty edgesOf stop order
++        workFuel recursiveFuel metadata caller queries before := rfl
++
++/-- Install the same eager children with the supplied native narrowing operation. -/
++noncomputable def runEagerWithNarrow
++    (narrow : Metadata Typing → Nat → Nat → Node →
++      InternedConstructorTemplates.State Symbol Constraint →
++      MergedSourceComparison.Result Symbol Constraint Node)
++    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
++    (checkEmpty : Bool) (edgesOf : Node → List Edge)
++    (stop : Option (Metadata Typing → Nat → Bool))
++    (order : Metadata Typing → List Nat → Option Nat) (workFuel recursiveFuel : Nat)
++    (metadata : Metadata Typing) (caller : Caller width) (queries : Queries) (before : Cached) : Result :=
++  runWithNarrow (eagerChild checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
++    narrow graph templates checkEmpty edgesOf stop order workFuel recursiveFuel metadata caller queries before
+@@ -95,2 +167,16 @@ noncomputable def runEager
+-  runWithChild (eagerChild checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
+-    holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel recursiveFuel metadata caller queries before
++  runEagerWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
++    graph templates checkEmpty edgesOf stop order workFuel recursiveFuel metadata caller queries before
++
++/-- The configured eager entry retains the same complete bounded result. -/
++theorem runEager_configured_eq
++    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
++    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
++    (checkEmpty : Bool) (edgesOf : Node → List Edge)
++    (stop : Option (Metadata Typing → Nat → Bool))
++    (order : Metadata Typing → List Nat → Option Nat) (workFuel recursiveFuel : Nat)
++    (metadata : Metadata Typing) (caller : Caller width) (queries : Queries) (before : Cached) :
++    runEager holeKey fits admits graph templates checkEmpty edgesOf stop order
++        workFuel recursiveFuel metadata caller queries before =
++      runEagerWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
++        graph templates checkEmpty edgesOf stop order
++        workFuel recursiveFuel metadata caller queries before := rfl
+@@ -119,2 +205,3 @@ theorem resumeWithChild_shallow
+-          resumeWithChild (width := width) (shallowVisit checkEmpty workFuel workFuel workFuel workFuel workFuel)
+-              holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel fuel =
++          resumeWithNarrow (width := width) (shallowVisit checkEmpty workFuel workFuel workFuel workFuel workFuel)
++              (SourcePruningOuterNarrow.narrow holeKey fits admits)
++              graph templates checkEmpty edgesOf stop order workFuel fuel =
+@@ -131 +218 @@ theorem resumeWithChild_shallow
+-              rw [resumeWithChild, SourcePruningEnumerationSharedPreparedRecursive.resume]
++              rw [resumeWithChild, resumeWithNarrow, SourcePruningEnumerationSharedPreparedRecursive.resume]
+@@ -147 +234 @@ theorem runWithChild_shallow
+-  unfold runWithChild SourcePruningEnumerationSharedPreparedRecursive.run
++  unfold runWithChild runWithNarrow SourcePruningEnumerationSharedPreparedRecursive.run
+@@ -198 +285,6 @@ theorem resume_prepared
+-  simp only [resumeWithChild, observedPrefix]
++  have actualPrefix : SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
++      (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates stop order
++      metadata workFuel workFuel workFuel workFuel workFuel workFuel uv caller before queries =
++      .narrowed checked narrowed reached saved (some [.ok ((), actionCore)]) (some after)
++        (some [.ok ((false, updated), core)]) none := observedPrefix
++  simp only [resumeWithChild, resumeWithNarrow, actualPrefix]

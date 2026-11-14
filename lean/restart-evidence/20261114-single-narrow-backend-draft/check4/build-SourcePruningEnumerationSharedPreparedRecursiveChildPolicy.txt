@@ -1,0 +1,1077 @@
+⚠ [779/842] Replayed MicroCFTA.InternedFreshOrdinaryClosedCompletion
+warning: MicroCFTA/InternedFreshOrdinaryClosedCompletion.lean:24:5: Variable name `inputs` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _inputs
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+✔ [1835/1842] Built MicroCFTA.SourcePruningEnumerationPreparedFuel (1.6s)
+✖ [1837/2041] Building MicroCFTA.SourcePruningEnumerationPrefixCompletion (2.5s)
+trace: .> LEAN_PATH=/home/tritlo/Code/mcfta/lean/.lake/build/lib/lean /home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean /home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationPrefixCompletion.lean -o /home/tritlo/Code/mcfta/lean/.lake/build/lib/lean/MicroCFTA/SourcePruningEnumerationPrefixCompletion.olean -i /home/tritlo/Code/mcfta/lean/.lake/build/lib/lean/MicroCFTA/SourcePruningEnumerationPrefixCompletion.ilean -c /home/tritlo/Code/mcfta/lean/.lake/build/ir/MicroCFTA/SourcePruningEnumerationPrefixCompletion.c --setup /home/tritlo/Code/mcfta/lean/.lake/build/ir/MicroCFTA/SourcePruningEnumerationPrefixCompletion.setup.json --json
+error: MicroCFTA/SourcePruningEnumerationPrefixCompletion.lean:98:113: unsolved goals
+Typing Key : Type
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+checkEmpty : Bool
+edgesOf : Node → List (EdgeValue Symbol Constraint)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+metadata : Metadata Typing
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+caller : Caller width
+memos : Memos
+before : Cached
+preference : List Nat → Option Nat
+uv : Nat
+roots : Nat → Nat
+initial : Context formulas solver inventory caller memos
+safe : Safe before.core
+pending : EnumerationReferences.PendingReferences before.core
+selection : EnumerationPureSelection.next preference before = Next.expand uv
+realized : PendingRealized caller.checked.native.machine.heap before.core
+paths : Roots before.core.representatives roots
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+        (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+readFuel oldHandle : Nat
+scs : List Suspended
+oldValue : Node
+readAfter : Core
+checkFuel : Nat
+checked : Cached
+stored : before.core.values[uv]? = some (UVarValue.unenumerated (some oldHandle) scs)
+oldDecoded : lookupNode caller.checked.native.machine.heap oldHandle = some oldValue
+_oldAvailable : Available caller.checked.native.machine.heap oldValue
+_oldClosed : oldValue.free = []
+readExact :
+  ∀ (extra : Nat),
+    (getValue (readFuel + extra) uv before.core).run =
+      [Except.ok (UVarValue.unenumerated (some oldHandle) scs, readAfter)]
+checkReady : EnumerationDriver.Ready uv checked.core
+checkPaths : Roots checked.core.representatives roots
+checkRealized : PendingRealized caller.checked.native.machine.heap checked.core
+checkCounts : EnumerationCanonicalWaiting.Correct roots checked.core.values checked.waiting
+checkFlags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+        (checked.core.values[slot]?.getD UVarValue.eliminated) =
+      some (checked.expandable slot)
+_checkIncoming : EnumerationReferences.IncomingAvoid uv checked.core
+checkPending :
+  EnumerationReferences.PendingReferences before.core → EnumerationReferences.PendingReferences checked.core
+checkExact :
+  ∀ (extra : Nat),
+    (SourcePruningEnumerationRecursion.checkRepeated caller.checked.native.machine.heap (checkFuel + extra) uv oldHandle
+          scs readAfter).run =
+      [Except.ok (true, checked.core)]
+parked :
+  true = true →
+    MergedOrdinaryHeight.recursiveBoundary oldValue = true ∧
+      checked.core.values[uv]? = some (UVarValue.unenumerated (some oldHandle) []) ∧
+        checked.expandable uv = false ∧
+          checked.waiting = EnumerationCanonicalWaiting.count roots (-1) scs before.waiting ∧
+            ∃ resolved countFuel,
+              Frame before.core resolved ∧
+                Success (representative checkFuel uv) readAfter uv resolved ∧
+                  recursionKey oldHandle scs ∈ resolved.recursionAncestry uv ∧
+                    Success (setValue uv (UVarValue.unenumerated (some oldHandle) [])) resolved () checked.core ∧
+                      ∀ (extra : Nat),
+                        SourcePruningEnumerationNativeIndex.write caller.checked.native.machine.heap (countFuel + extra)
+                            uv (UVarValue.unenumerated (some oldHandle) []) [] scs
+                            (EnumerationExpandableIndex.frame resolved before) =
+                          some checked
+continued :
+  true = false →
+    ∃ result nativeFuel heap newHandle final,
+      have afterCaller :=
+        SourceCurrentAllocatedPartialState.advance caller
+          (advancePhysical caller.checked { heap := heap, equality := caller.checked.operations }) caller.fourth
+          caller.merge;
+      SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue
+            caller.checked.native.machine.heap =
+          MergedSourceComparison.Result.done result heap ∧
+        (∀ (extra : Nat),
+            SourcePruningOuterNarrow.narrow holeKey fits admits metadata (nativeFuel + extra) uv oldValue
+                caller.checked.native.machine.heap =
+              MergedSourceComparison.Result.done result heap) ∧
+          Post formulas solver inventory caller afterCaller final ∧
+            Cache.Extends memos.unfolding final.unfolding ∧
+              final.query = memos.query ∧
+                Available afterCaller.checked.native.machine.heap result ∧
+                  result.free = [] ∧
+                    encodeNode result = some newHandle ∧
+                      lookupNode afterCaller.checked.native.machine.heap newHandle = some result ∧
+                        (result = Value.empty →
+                            ∀ (representativeFuel : Nat),
+                              SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                    representativeFuel uv oldHandle scs oldValue caller.checked.native.machine.heap =
+                                  MergedSourceComparison.Result.done (result, some reject) heap ∧
+                                ¬∃ after, Success reject checked.core () after) ∧
+                          (result ≠ Value.empty →
+                            ∃ representativeFuel countFuel action after,
+                              SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                    representativeFuel uv oldHandle scs oldValue caller.checked.native.machine.heap =
+                                  MergedSourceComparison.Result.done (result, some action) heap ∧
+                                Success action checked.core () after.core ∧
+                                  (newHandle = oldHandle ∧
+                                        after = EnumerationExpandableIndex.frame checked.core before ∨
+                                      newHandle ≠ oldHandle ∧
+                                        ∃ rereadAfter,
+                                          Success (representative representativeFuel uv) checked.core uv rereadAfter ∧
+                                            Success (setValue uv (UVarValue.unenumerated (some newHandle) scs))
+                                                rereadAfter () after.core ∧
+                                              ∀ (extra : Nat),
+                                                SourcePruningEnumerationNativeIndex.write
+                                                    afterCaller.checked.native.machine.heap (countFuel + extra) uv
+                                                    (UVarValue.unenumerated (some newHandle) scs) scs scs
+                                                    (EnumerationExpandableIndex.frame rereadAfter before) =
+                                                  some after) ∧
+                                    after.waiting = before.waiting ∧
+                                      EnumerationDriver.Ready uv after.core ∧
+                                        Roots after.core.representatives roots ∧
+                                          PendingRealized afterCaller.checked.native.machine.heap after.core ∧
+                                            after.core.values[uv]? =
+                                                some (UVarValue.unenumerated (some newHandle) scs) ∧
+                                              EnumerationCanonicalWaiting.Correct roots after.core.values
+                                                  after.waiting ∧
+                                                (∀ (slot : Nat),
+                                                    SourcePruningEnumerationNativeIndex.candidate
+                                                        afterCaller.checked.native.machine.heap
+                                                        (after.core.values[slot]?.getD UVarValue.eliminated) =
+                                                      some (after.expandable slot)) ∧
+                                                  (EnumerationReferences.PendingReferences before.core →
+                                                      EnumerationReferences.PendingReferences after.core) ∧
+                                                    EnumerationReferences.IncomingAvoid uv after.core ∧
+                                                      (∀ (callbackFuel : Nat),
+                                                          Success
+                                                            (SourcePruningRecordTypes.recordTypes graph templates
+                                                              callbackFuel metadata uv (Sum.inr newHandle))
+                                                            after.core (false, metadata) after.core) ∧
+                                                        ∀ (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+                                                          (storedEdges : List (EdgeValue Symbol Constraint))
+                                                          (depth : Nat) (free : List InternedBinderProtocol.Reference),
+                                                          result = Value.node parentEntry storedEdges depth free →
+                                                            (scs.any fun sc => EqualityTrie.isTerminal sc.trie) =
+                                                                false →
+                                                              (∀ (edge : EdgeValue Symbol Constraint),
+                                                                  edge ∈
+                                                                      edgesOf
+                                                                        (Value.node parentEntry storedEdges depth
+                                                                          free) →
+                                                                    edge ∈ storedEdges) →
+                                                                ⋯)
+_boundary : MergedOrdinaryHeight.recursiveBoundary oldValue = true
+_cleared : checked.core.values[uv]? = some (UVarValue.unenumerated (some oldHandle) [])
+_disabled : checked.expandable uv = false
+_waiting : checked.waiting = EnumerationCanonicalWaiting.count roots (-1) scs before.waiting
+resolved : Core
+countFuel : Nat
+frame : Frame before.core resolved
+_reading : Success (representative checkFuel uv) readAfter uv resolved
+_seen : recursionKey oldHandle scs ∈ resolved.recursionAncestry uv
+written : Success (setValue uv (UVarValue.unenumerated (some oldHandle) [])) resolved () checked.core
+indexed :
+  ∀ (extra : Nat),
+    SourcePruningEnumerationNativeIndex.write caller.checked.native.machine.heap (countFuel + extra) uv
+        (UVarValue.unenumerated (some oldHandle) []) [] scs (EnumerationExpandableIndex.frame resolved before) =
+      some checked
+counter : checked.core.counter = before.core.counter
+ordered :
+  ∀ (level : Nat → Nat) (frontier : Nat),
+    EnumerationOrder.Stratified before.core level frontier → EnumerationOrder.Stratified checked.core level frontier
+bound : Nat := readFuel + checkFuel + countFuel
+extra : Nat
+w : Nat := bound + extra
+readLe : readFuel ≤ w
+checkLe : checkFuel ≤ w
+countLe : countFuel ≤ w
+reading : (getValue w uv before.core).run = [Except.ok (UVarValue.unenumerated (some oldHandle) scs, readAfter)]
+checking :
+  (SourcePruningEnumerationRecursion.checkRepeated caller.checked.native.machine.heap w uv oldHandle scs
+        readAfter).run =
+    [Except.ok (true, checked.core)]
+index :
+  SourcePruningEnumerationNativeIndex.write caller.checked.native.machine.heap w uv
+      (UVarValue.unenumerated (some oldHandle) []) [] scs (EnumerationExpandableIndex.frame resolved before) =
+    some checked
+adapted :
+  SourcePruningEnumerationParkedRestart.adapt caller.checked.native.machine.heap w uv oldHandle scs before
+      checked.core =
+    some checked
+⊢ runPrefixWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates stop order metadata w w w w
+      w w uv caller before memos.query =
+    Result.parked checked.core (some checked)
+      (some (SourcePruningEnumerationRestart.run stop order metadata checked checked.core).run)
+error: MicroCFTA/SourcePruningEnumerationPrefixCompletion.lean:144:10: Tactic `rfl` failed: The left-hand side
+  runPrefixWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates stop order metadata w w w w
+    w w uv caller before memos.query
+is not definitionally equal to the right-hand side
+  Result.narrowed checked.core (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+    (SourceCurrentAllocatedPartialState.advance caller
+      (advancePhysical caller.checked { heap := heap, equality := caller.checked.operations }) caller.fourth
+      caller.merge)
+    memos.query (some []) none none none
+
+Typing Key : Type
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+checkEmpty : Bool
+edgesOf : Node → List (EdgeValue Symbol Constraint)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+metadata : Metadata Typing
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+caller : Caller width
+memos : Memos
+before : Cached
+preference : List Nat → Option Nat
+uv : Nat
+roots : Nat → Nat
+initial : Context formulas solver inventory caller memos
+safe : Safe before.core
+pending : EnumerationReferences.PendingReferences before.core
+selection : EnumerationPureSelection.next preference before = Next.expand uv
+realized : PendingRealized caller.checked.native.machine.heap before.core
+paths : Roots before.core.representatives roots
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+        (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+readFuel oldHandle : Nat
+scs : List Suspended
+oldValue : Node
+readAfter : Core
+checkFuel : Nat
+checked : Cached
+stored : before.core.values[uv]? = some (UVarValue.unenumerated (some oldHandle) scs)
+oldDecoded : lookupNode caller.checked.native.machine.heap oldHandle = some oldValue
+_oldAvailable : Available caller.checked.native.machine.heap oldValue
+_oldClosed : oldValue.free = []
+readExact :
+  ∀ (extra : Nat),
+    (getValue (readFuel + extra) uv before.core).run =
+      [Except.ok (UVarValue.unenumerated (some oldHandle) scs, readAfter)]
+checkReady : EnumerationDriver.Ready uv checked.core
+checkPaths : Roots checked.core.representatives roots
+checkRealized : PendingRealized caller.checked.native.machine.heap checked.core
+checkCounts : EnumerationCanonicalWaiting.Correct roots checked.core.values checked.waiting
+checkFlags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+        (checked.core.values[slot]?.getD UVarValue.eliminated) =
+      some (checked.expandable slot)
+_checkIncoming : EnumerationReferences.IncomingAvoid uv checked.core
+checkPending :
+  EnumerationReferences.PendingReferences before.core → EnumerationReferences.PendingReferences checked.core
+checkExact :
+  ∀ (extra : Nat),
+    (SourcePruningEnumerationRecursion.checkRepeated caller.checked.native.machine.heap (checkFuel + extra) uv oldHandle
+          scs readAfter).run =
+      [Except.ok (false, checked.core)]
+parked :
+  false = true →
+    MergedOrdinaryHeight.recursiveBoundary oldValue = true ∧
+      checked.core.values[uv]? = some (UVarValue.unenumerated (some oldHandle) []) ∧
+        checked.expandable uv = false ∧
+          checked.waiting = EnumerationCanonicalWaiting.count roots (-1) scs before.waiting ∧
+            ∃ resolved countFuel,
+              Frame before.core resolved ∧
+                Success (representative checkFuel uv) readAfter uv resolved ∧
+                  recursionKey oldHandle scs ∈ resolved.recursionAncestry uv ∧
+                    Success (setValue uv (UVarValue.unenumerated (some oldHandle) [])) resolved () checked.core ∧
+                      ∀ (extra : Nat),
+                        SourcePruningEnumerationNativeIndex.write caller.checked.native.machine.heap (countFuel + extra)
+                            uv (UVarValue.unenumerated (some oldHandle) []) [] scs
+                            (EnumerationExpandableIndex.frame resolved before) =
+                          some checked
+continued :
+  false = false →
+    ∃ result nativeFuel heap newHandle final,
+      have afterCaller :=
+        SourceCurrentAllocatedPartialState.advance caller
+          (advancePhysical caller.checked { heap := heap, equality := caller.checked.operations }) caller.fourth
+          caller.merge;
+      SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue
+            caller.checked.native.machine.heap =
+          MergedSourceComparison.Result.done result heap ∧
+        (∀ (extra : Nat),
+            SourcePruningOuterNarrow.narrow holeKey fits admits metadata (nativeFuel + extra) uv oldValue
+                caller.checked.native.machine.heap =
+              MergedSourceComparison.Result.done result heap) ∧
+          Post formulas solver inventory caller afterCaller final ∧
+            Cache.Extends memos.unfolding final.unfolding ∧
+              final.query = memos.query ∧
+                Available afterCaller.checked.native.machine.heap result ∧
+                  result.free = [] ∧
+                    encodeNode result = some newHandle ∧
+                      lookupNode afterCaller.checked.native.machine.heap newHandle = some result ∧
+                        (result = Value.empty →
+                            ∀ (representativeFuel : Nat),
+                              SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                    representativeFuel uv oldHandle scs oldValue caller.checked.native.machine.heap =
+                                  MergedSourceComparison.Result.done (result, some reject) heap ∧
+                                ¬∃ after, Success reject checked.core () after) ∧
+                          (result ≠ Value.empty →
+                            ∃ representativeFuel countFuel action after,
+                              SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                    representativeFuel uv oldHandle scs oldValue caller.checked.native.machine.heap =
+                                  MergedSourceComparison.Result.done (result, some action) heap ∧
+                                Success action checked.core () after.core ∧
+                                  (newHandle = oldHandle ∧
+                                        after = EnumerationExpandableIndex.frame checked.core before ∨
+                                      newHandle ≠ oldHandle ∧
+                                        ∃ rereadAfter,
+                                          Success (representative representativeFuel uv) checked.core uv rereadAfter ∧
+                                            Success (setValue uv (UVarValue.unenumerated (some newHandle) scs))
+                                                rereadAfter () after.core ∧
+                                              ∀ (extra : Nat),
+                                                SourcePruningEnumerationNativeIndex.write
+                                                    afterCaller.checked.native.machine.heap (countFuel + extra) uv
+                                                    (UVarValue.unenumerated (some newHandle) scs) scs scs
+                                                    (EnumerationExpandableIndex.frame rereadAfter before) =
+                                                  some after) ∧
+                                    after.waiting = before.waiting ∧
+                                      EnumerationDriver.Ready uv after.core ∧
+                                        Roots after.core.representatives roots ∧
+                                          PendingRealized afterCaller.checked.native.machine.heap after.core ∧
+                                            after.core.values[uv]? =
+                                                some (UVarValue.unenumerated (some newHandle) scs) ∧
+                                              EnumerationCanonicalWaiting.Correct roots after.core.values
+                                                  after.waiting ∧
+                                                (∀ (slot : Nat),
+                                                    SourcePruningEnumerationNativeIndex.candidate
+                                                        afterCaller.checked.native.machine.heap
+                                                        (after.core.values[slot]?.getD UVarValue.eliminated) =
+                                                      some (after.expandable slot)) ∧
+                                                  (EnumerationReferences.PendingReferences before.core →
+                                                      EnumerationReferences.PendingReferences after.core) ∧
+                                                    EnumerationReferences.IncomingAvoid uv after.core ∧
+                                                      (∀ (callbackFuel : Nat),
+                                                          Success
+                                                            (SourcePruningRecordTypes.recordTypes graph templates
+                                                              callbackFuel metadata uv (Sum.inr newHandle))
+                                                            after.core (false, metadata) after.core) ∧
+                                                        ∀ (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+                                                          (storedEdges : List (EdgeValue Symbol Constraint))
+                                                          (depth : Nat) (free : List InternedBinderProtocol.Reference),
+                                                          result = Value.node parentEntry storedEdges depth free →
+                                                            (scs.any fun sc => EqualityTrie.isTerminal sc.trie) =
+                                                                false →
+                                                              (∀ (edge : EdgeValue Symbol Constraint),
+                                                                  edge ∈
+                                                                      edgesOf
+                                                                        (Value.node parentEntry storedEdges depth
+                                                                          free) →
+                                                                    edge ∈ storedEdges) →
+                                                                ⋯)
+nativeFuel : Nat
+heap : InternedConstructorTemplates.State Symbol Constraint
+newHandle : Nat
+final : Memos
+post :
+  Post formulas solver inventory caller
+    (SourceCurrentAllocatedPartialState.advance caller
+      (advancePhysical caller.checked { heap := heap, equality := caller.checked.operations }) caller.fourth
+      caller.merge)
+    final
+_retained : Cache.Extends memos.unfolding final.unfolding
+query : final.query = memos.query
+narrowed :
+  SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue
+      caller.checked.native.machine.heap =
+    MergedSourceComparison.Result.done Value.empty heap
+stable :
+  ∀ (extra : Nat),
+    SourcePruningOuterNarrow.narrow holeKey fits admits metadata (nativeFuel + extra) uv oldValue
+        caller.checked.native.machine.heap =
+      MergedSourceComparison.Result.done Value.empty heap
+_available :
+  Available
+    (SourceCurrentAllocatedPartialState.advance caller
+              (advancePhysical caller.checked { heap := heap, equality := caller.checked.operations }) caller.fourth
+              caller.merge).checked.native.machine.heap
+    Value.empty
+_closed : Value.empty.free = []
+encoded : encodeNode Value.empty = some newHandle
+_decoded :
+  lookupNode
+      (SourceCurrentAllocatedPartialState.advance caller
+                (advancePhysical caller.checked { heap := heap, equality := caller.checked.operations }) caller.fourth
+                caller.merge).checked.native.machine.heap
+      newHandle =
+    some Value.empty
+rejected :
+  Value.empty = Value.empty →
+    ∀ (representativeFuel : Nat),
+      SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel uv oldHandle scs
+            oldValue caller.checked.native.machine.heap =
+          MergedSourceComparison.Result.done (Value.empty, some reject) heap ∧
+        ¬∃ after, Success reject checked.core () after
+completed :
+  Value.empty ≠ Value.empty →
+    ∃ representativeFuel countFuel action after,
+      SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel uv oldHandle scs
+            oldValue caller.checked.native.machine.heap =
+          MergedSourceComparison.Result.done (Value.empty, some action) heap ∧
+        Success action checked.core () after.core ∧
+          (newHandle = oldHandle ∧ after = EnumerationExpandableIndex.frame checked.core before ∨
+              newHandle ≠ oldHandle ∧
+                ∃ rereadAfter,
+                  Success (representative representativeFuel uv) checked.core uv rereadAfter ∧
+                    Success (setValue uv (UVarValue.unenumerated (some newHandle) scs)) rereadAfter () after.core ∧
+                      ∀ (extra : Nat),
+                        SourcePruningEnumerationNativeIndex.write
+                            (SourceCurrentAllocatedPartialState.advance caller
+                                      (advancePhysical caller.checked
+                                        { heap := heap, equality := caller.checked.operations })
+                                      caller.fourth caller.merge).checked.native.machine.heap
+                            (countFuel + extra) uv (UVarValue.unenumerated (some newHandle) scs) scs scs
+                            (EnumerationExpandableIndex.frame rereadAfter before) =
+                          some after) ∧
+            after.waiting = before.waiting ∧
+              EnumerationDriver.Ready uv after.core ∧
+                Roots after.core.representatives roots ∧
+                  PendingRealized
+                      (SourceCurrentAllocatedPartialState.advance caller
+                                (advancePhysical caller.checked { heap := heap, equality := caller.checked.operations })
+                                caller.fourth caller.merge).checked.native.machine.heap
+                      after.core ∧
+                    after.core.values[uv]? = some (UVarValue.unenumerated (some newHandle) scs) ∧
+                      EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
+                        (∀ (slot : Nat),
+                            SourcePruningEnumerationNativeIndex.candidate
+                                (SourceCurrentAllocatedPartialState.advance caller
+                                          (advancePhysical caller.checked
+                                            { heap := heap, equality := caller.checked.operations })
+                                          caller.fourth caller.merge).checked.native.machine.heap
+                                (after.core.values[slot]?.getD UVarValue.eliminated) =
+                              some (after.expandable slot)) ∧
+                          (EnumerationReferences.PendingReferences before.core →
+                              EnumerationReferences.PendingReferences after.core) ∧
+                            EnumerationReferences.IncomingAvoid uv after.core ∧
+                              (∀ (callbackFuel : Nat),
+                                  Success
+                                    (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata uv
+                                      (Sum.inr newHandle))
+                                    after.core (false, metadata) after.core) ∧
+                                ∀ (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+                                  (storedEdges : List (EdgeValue Symbol Constraint)) (depth : Nat)
+                                  (free : List InternedBinderProtocol.Reference),
+                                  Value.empty = Value.node parentEntry storedEdges depth free →
+                                    (scs.any fun sc => EqualityTrie.isTerminal sc.trie) = false →
+                                      (∀ (edge : EdgeValue Symbol Constraint),
+                                          edge ∈ edgesOf (Value.node parentEntry storedEdges depth free) →
+                                            edge ∈ storedEdges) →
+                                        SourcePruningEnumerationNativeOrdinary.Ranges checkEmpty uv edgesOf
+                                            (SourceCurrentAllocatedPartialState.advance caller
+                                              (advancePhysical caller.checked
+                                                { heap := heap, equality := caller.checked.operations })
+                                              caller.fourth caller.merge)
+                                            after final.query →
+                                          ∃ r n p h k entered processed lastCaller saved last, Exists ⋯
+bound : Nat := readFuel + checkFuel + nativeFuel
+extra : Nat
+w : Nat := bound + extra
+readLe : readFuel ≤ w
+checkLe : checkFuel ≤ w
+nativeLe : nativeFuel ≤ w
+reading : (getValue w uv before.core).run = [Except.ok (UVarValue.unenumerated (some oldHandle) scs, readAfter)]
+checking :
+  (SourcePruningEnumerationRecursion.checkRepeated caller.checked.native.machine.heap w uv oldHandle scs
+        readAfter).run =
+    [Except.ok (false, checked.core)]
+prepared :
+  SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel w uv oldHandle scs oldValue
+      caller.checked.native.machine.heap =
+    MergedSourceComparison.Result.done (Value.empty, some reject) heap
+_noSuccess : ¬∃ after, Success reject checked.core () after
+preparedAt :
+  SourcePruningEnumerationAction.prepare holeKey fits admits metadata w w uv oldHandle scs oldValue
+      caller.checked.native.machine.heap =
+    MergedSourceComparison.Result.done (Value.empty, some reject) heap
+narrowedAt :
+  SourcePruningOuterNarrow.narrow holeKey fits admits metadata w uv oldValue caller.checked.native.machine.heap =
+    MergedSourceComparison.Result.done Value.empty heap
+⊢ runPrefixWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates stop order metadata w w w w
+      w w uv caller before memos.query =
+    Result.narrowed checked.core (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+      (SourceCurrentAllocatedPartialState.advance caller
+        (advancePhysical caller.checked { heap := heap, equality := caller.checked.operations }) caller.fourth
+        caller.merge)
+      memos.query (some []) none none none
+error: MicroCFTA/SourcePruningEnumerationPrefixCompletion.lean:211:10: Tactic `rfl` failed: The left-hand side
+  runPrefixWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates stop order metadata w w w w
+    w w uv caller before memos.query
+is not definitionally equal to the right-hand side
+  Result.narrowed checked.core (MergedSourceComparison.Result.done (value, some nextAction) heap)
+    (SourceCurrentAllocatedPartialState.advance caller
+      (advancePhysical caller.checked { heap := heap, equality := caller.checked.operations }) caller.fourth
+      caller.merge)
+    memos.query (some [Except.ok ((), after.core)]) (some after) (some [Except.ok ((false, metadata), after.core)]) none
+
+Typing Key : Type
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+checkEmpty : Bool
+edgesOf : Node → List (EdgeValue Symbol Constraint)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+metadata : Metadata Typing
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+caller : Caller width
+memos : Memos
+before : Cached
+preference : List Nat → Option Nat
+uv : Nat
+roots : Nat → Nat
+initial : Context formulas solver inventory caller memos
+safe : Safe before.core
+pending : EnumerationReferences.PendingReferences before.core
+selection : EnumerationPureSelection.next preference before = Next.expand uv
+realized : PendingRealized caller.checked.native.machine.heap before.core
+paths : Roots before.core.representatives roots
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+        (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+readFuel oldHandle : Nat
+scs : List Suspended
+oldValue : Node
+readAfter : Core
+checkFuel : Nat
+checked : Cached
+stored : before.core.values[uv]? = some (UVarValue.unenumerated (some oldHandle) scs)
+oldDecoded : lookupNode caller.checked.native.machine.heap oldHandle = some oldValue
+_oldAvailable : Available caller.checked.native.machine.heap oldValue
+_oldClosed : oldValue.free = []
+readExact :
+  ∀ (extra : Nat),
+    (getValue (readFuel + extra) uv before.core).run =
+      [Except.ok (UVarValue.unenumerated (some oldHandle) scs, readAfter)]
+checkReady : EnumerationDriver.Ready uv checked.core
+checkPaths : Roots checked.core.representatives roots
+checkRealized : PendingRealized caller.checked.native.machine.heap checked.core
+checkCounts : EnumerationCanonicalWaiting.Correct roots checked.core.values checked.waiting
+checkFlags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+        (checked.core.values[slot]?.getD UVarValue.eliminated) =
+      some (checked.expandable slot)
+_checkIncoming : EnumerationReferences.IncomingAvoid uv checked.core
+checkPending :
+  EnumerationReferences.PendingReferences before.core → EnumerationReferences.PendingReferences checked.core
+checkExact :
+  ∀ (extra : Nat),
+    (SourcePruningEnumerationRecursion.checkRepeated caller.checked.native.machine.heap (checkFuel + extra) uv oldHandle
+          scs readAfter).run =
+      [Except.ok (false, checked.core)]
+parked :
+  false = true →
+    MergedOrdinaryHeight.recursiveBoundary oldValue = true ∧
+      checked.core.values[uv]? = some (UVarValue.unenumerated (some oldHandle) []) ∧
+        checked.expandable uv = false ∧
+          checked.waiting = EnumerationCanonicalWaiting.count roots (-1) scs before.waiting ∧
+            ∃ resolved countFuel,
+              Frame before.core resolved ∧
+                Success (representative checkFuel uv) readAfter uv resolved ∧
+                  recursionKey oldHandle scs ∈ resolved.recursionAncestry uv ∧
+                    Success (setValue uv (UVarValue.unenumerated (some oldHandle) [])) resolved () checked.core ∧
+                      ∀ (extra : Nat),
+                        SourcePruningEnumerationNativeIndex.write caller.checked.native.machine.heap (countFuel + extra)
+                            uv (UVarValue.unenumerated (some oldHandle) []) [] scs
+                            (EnumerationExpandableIndex.frame resolved before) =
+                          some checked
+continued :
+  false = false →
+    ∃ result nativeFuel heap newHandle final,
+      have afterCaller :=
+        SourceCurrentAllocatedPartialState.advance caller
+          (advancePhysical caller.checked { heap := heap, equality := caller.checked.operations }) caller.fourth
+          caller.merge;
+      SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue
+            caller.checked.native.machine.heap =
+          MergedSourceComparison.Result.done result heap ∧
+        (∀ (extra : Nat),
+            SourcePruningOuterNarrow.narrow holeKey fits admits metadata (nativeFuel + extra) uv oldValue
+                caller.checked.native.machine.heap =
+              MergedSourceComparison.Result.done result heap) ∧
+          Post formulas solver inventory caller afterCaller final ∧
+            Cache.Extends memos.unfolding final.unfolding ∧
+              final.query = memos.query ∧
+                Available afterCaller.checked.native.machine.heap result ∧
+                  result.free = [] ∧
+                    encodeNode result = some newHandle ∧
+                      lookupNode afterCaller.checked.native.machine.heap newHandle = some result ∧
+                        (result = Value.empty →
+                            ∀ (representativeFuel : Nat),
+                              SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                    representativeFuel uv oldHandle scs oldValue caller.checked.native.machine.heap =
+                                  MergedSourceComparison.Result.done (result, some reject) heap ∧
+                                ¬∃ after, Success reject checked.core () after) ∧
+                          (result ≠ Value.empty →
+                            ∃ representativeFuel countFuel action after,
+                              SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                    representativeFuel uv oldHandle scs oldValue caller.checked.native.machine.heap =
+                                  MergedSourceComparison.Result.done (result, some action) heap ∧
+                                Success action checked.core () after.core ∧
+                                  (newHandle = oldHandle ∧
+                                        after = EnumerationExpandableIndex.frame checked.core before ∨
+                                      newHandle ≠ oldHandle ∧
+                                        ∃ rereadAfter,
+                                          Success (representative representativeFuel uv) checked.core uv rereadAfter ∧
+                                            Success (setValue uv (UVarValue.unenumerated (some newHandle) scs))
+                                                rereadAfter () after.core ∧
+                                              ∀ (extra : Nat),
+                                                SourcePruningEnumerationNativeIndex.write
+                                                    afterCaller.checked.native.machine.heap (countFuel + extra) uv
+                                                    (UVarValue.unenumerated (some newHandle) scs) scs scs
+                                                    (EnumerationExpandableIndex.frame rereadAfter before) =
+                                                  some after) ∧
+                                    after.waiting = before.waiting ∧
+                                      EnumerationDriver.Ready uv after.core ∧
+                                        Roots after.core.representatives roots ∧
+                                          PendingRealized afterCaller.checked.native.machine.heap after.core ∧
+                                            after.core.values[uv]? =
+                                                some (UVarValue.unenumerated (some newHandle) scs) ∧
+                                              EnumerationCanonicalWaiting.Correct roots after.core.values
+                                                  after.waiting ∧
+                                                (∀ (slot : Nat),
+                                                    SourcePruningEnumerationNativeIndex.candidate
+                                                        afterCaller.checked.native.machine.heap
+                                                        (after.core.values[slot]?.getD UVarValue.eliminated) =
+                                                      some (after.expandable slot)) ∧
+                                                  (EnumerationReferences.PendingReferences before.core →
+                                                      EnumerationReferences.PendingReferences after.core) ∧
+                                                    EnumerationReferences.IncomingAvoid uv after.core ∧
+                                                      (∀ (callbackFuel : Nat),
+                                                          Success
+                                                            (SourcePruningRecordTypes.recordTypes graph templates
+                                                              callbackFuel metadata uv (Sum.inr newHandle))
+                                                            after.core (false, metadata) after.core) ∧
+                                                        ∀ (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+                                                          (storedEdges : List (EdgeValue Symbol Constraint))
+                                                          (depth : Nat) (free : List InternedBinderProtocol.Reference),
+                                                          result = Value.node parentEntry storedEdges depth free →
+                                                            (scs.any fun sc => EqualityTrie.isTerminal sc.trie) =
+                                                                false →
+                                                              (∀ (edge : EdgeValue Symbol Constraint),
+                                                                  edge ∈
+                                                                      edgesOf
+                                                                        (Value.node parentEntry storedEdges depth
+                                                                          free) →
+                                                                    edge ∈ storedEdges) →
+                                                                ⋯)
+value : Node
+nativeFuel : Nat
+heap : InternedConstructorTemplates.State Symbol Constraint
+newHandle : Nat
+final : Memos
+narrowed :
+  SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue
+      caller.checked.native.machine.heap =
+    MergedSourceComparison.Result.done value heap
+stable :
+  ∀ (extra : Nat),
+    SourcePruningOuterNarrow.narrow holeKey fits admits metadata (nativeFuel + extra) uv oldValue
+        caller.checked.native.machine.heap =
+      MergedSourceComparison.Result.done value heap
+post :
+  Post formulas solver inventory caller
+    (SourceCurrentAllocatedPartialState.advance caller
+      (advancePhysical caller.checked { heap := heap, equality := caller.checked.operations }) caller.fourth
+      caller.merge)
+    final
+_retained : Cache.Extends memos.unfolding final.unfolding
+query : final.query = memos.query
+_available :
+  Available
+    (SourceCurrentAllocatedPartialState.advance caller
+              (advancePhysical caller.checked { heap := heap, equality := caller.checked.operations }) caller.fourth
+              caller.merge).checked.native.machine.heap
+    value
+_closed : value.free = []
+encoded : encodeNode value = some newHandle
+_decoded :
+  lookupNode
+      (SourceCurrentAllocatedPartialState.advance caller
+                (advancePhysical caller.checked { heap := heap, equality := caller.checked.operations }) caller.fourth
+                caller.merge).checked.native.machine.heap
+      newHandle =
+    some value
+rejected :
+  value = Value.empty →
+    ∀ (representativeFuel : Nat),
+      SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel uv oldHandle scs
+            oldValue caller.checked.native.machine.heap =
+          MergedSourceComparison.Result.done (value, some reject) heap ∧
+        ¬∃ after, Success reject checked.core () after
+completed :
+  value ≠ Value.empty →
+    ∃ representativeFuel countFuel action after,
+      SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel uv oldHandle scs
+            oldValue caller.checked.native.machine.heap =
+          MergedSourceComparison.Result.done (value, some action) heap ∧
+        Success action checked.core () after.core ∧
+          (newHandle = oldHandle ∧ after = EnumerationExpandableIndex.frame checked.core before ∨
+              newHandle ≠ oldHandle ∧
+                ∃ rereadAfter,
+                  Success (representative representativeFuel uv) checked.core uv rereadAfter ∧
+                    Success (setValue uv (UVarValue.unenumerated (some newHandle) scs)) rereadAfter () after.core ∧
+                      ∀ (extra : Nat),
+                        SourcePruningEnumerationNativeIndex.write
+                            (SourceCurrentAllocatedPartialState.advance caller
+                                      (advancePhysical caller.checked
+                                        { heap := heap, equality := caller.checked.operations })
+                                      caller.fourth caller.merge).checked.native.machine.heap
+                            (countFuel + extra) uv (UVarValue.unenumerated (some newHandle) scs) scs scs
+                            (EnumerationExpandableIndex.frame rereadAfter before) =
+                          some after) ∧
+            after.waiting = before.waiting ∧
+              EnumerationDriver.Ready uv after.core ∧
+                Roots after.core.representatives roots ∧
+                  PendingRealized
+                      (SourceCurrentAllocatedPartialState.advance caller
+                                (advancePhysical caller.checked { heap := heap, equality := caller.checked.operations })
+                                caller.fourth caller.merge).checked.native.machine.heap
+                      after.core ∧
+                    after.core.values[uv]? = some (UVarValue.unenumerated (some newHandle) scs) ∧
+                      EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
+                        (∀ (slot : Nat),
+                            SourcePruningEnumerationNativeIndex.candidate
+                                (SourceCurrentAllocatedPartialState.advance caller
+                                          (advancePhysical caller.checked
+                                            { heap := heap, equality := caller.checked.operations })
+                                          caller.fourth caller.merge).checked.native.machine.heap
+                                (after.core.values[slot]?.getD UVarValue.eliminated) =
+                              some (after.expandable slot)) ∧
+                          (EnumerationReferences.PendingReferences before.core →
+                              EnumerationReferences.PendingReferences after.core) ∧
+                            EnumerationReferences.IncomingAvoid uv after.core ∧
+                              (∀ (callbackFuel : Nat),
+                                  Success
+                                    (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata uv
+                                      (Sum.inr newHandle))
+                                    after.core (false, metadata) after.core) ∧
+                                ∀ (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+                                  (storedEdges : List (EdgeValue Symbol Constraint)) (depth : Nat)
+                                  (free : List InternedBinderProtocol.Reference),
+                                  value = Value.node parentEntry storedEdges depth free →
+                                    (scs.any fun sc => EqualityTrie.isTerminal sc.trie) = false →
+                                      (∀ (edge : EdgeValue Symbol Constraint),
+                                          edge ∈ edgesOf (Value.node parentEntry storedEdges depth free) →
+                                            edge ∈ storedEdges) →
+                                        SourcePruningEnumerationNativeOrdinary.Ranges checkEmpty uv edgesOf
+                                            (SourceCurrentAllocatedPartialState.advance caller
+                                              (advancePhysical caller.checked
+                                                { heap := heap, equality := caller.checked.operations })
+                                              caller.fourth caller.merge)
+                                            after final.query →
+                                          ∃ r n p h k entered processed lastCaller saved last, Exists ⋯
+empty : ¬value = Value.empty
+representativeFuel countFuel : Nat
+action : EnumerateM Symbol Constraint Unit
+after : Cached
+prepared :
+  SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel uv oldHandle scs
+      oldValue caller.checked.native.machine.heap =
+    MergedSourceComparison.Result.done (value, some action) heap
+observed : Success action checked.core () after.core
+shape :
+  newHandle = oldHandle ∧ after = EnumerationExpandableIndex.frame checked.core before ∨
+    newHandle ≠ oldHandle ∧
+      ∃ rereadAfter,
+        Success (representative representativeFuel uv) checked.core uv rereadAfter ∧
+          Success (setValue uv (UVarValue.unenumerated (some newHandle) scs)) rereadAfter () after.core ∧
+            ∀ (extra : Nat),
+              SourcePruningEnumerationNativeIndex.write
+                  (SourceCurrentAllocatedPartialState.advance caller
+                            (advancePhysical caller.checked { heap := heap, equality := caller.checked.operations })
+                            caller.fourth caller.merge).checked.native.machine.heap
+                  (countFuel + extra) uv (UVarValue.unenumerated (some newHandle) scs) scs scs
+                  (EnumerationExpandableIndex.frame rereadAfter before) =
+                some after
+waiting : after.waiting = before.waiting
+afterReady : EnumerationDriver.Ready uv after.core
+afterPaths : Roots after.core.representatives roots
+afterRealized :
+  PendingRealized
+    (SourceCurrentAllocatedPartialState.advance caller
+              (advancePhysical caller.checked { heap := heap, equality := caller.checked.operations }) caller.fourth
+              caller.merge).checked.native.machine.heap
+    after.core
+afterStored : after.core.values[uv]? = some (UVarValue.unenumerated (some newHandle) scs)
+afterCounts : EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting
+afterFlags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate
+        (SourceCurrentAllocatedPartialState.advance caller
+                  (advancePhysical caller.checked { heap := heap, equality := caller.checked.operations }) caller.fourth
+                  caller.merge).checked.native.machine.heap
+        (after.core.values[slot]?.getD UVarValue.eliminated) =
+      some (after.expandable slot)
+afterPending : EnumerationReferences.PendingReferences before.core → EnumerationReferences.PendingReferences after.core
+_afterIncoming : EnumerationReferences.IncomingAvoid uv after.core
+_callback :
+  ∀ (callbackFuel : Nat),
+    Success (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata uv (Sum.inr newHandle))
+      after.core (false, metadata) after.core
+ordinary :
+  ∀ (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey) (storedEdges : List (EdgeValue Symbol Constraint))
+    (depth : Nat) (free : List InternedBinderProtocol.Reference),
+    value = Value.node parentEntry storedEdges depth free →
+      (scs.any fun sc => EqualityTrie.isTerminal sc.trie) = false →
+        (∀ (edge : EdgeValue Symbol Constraint),
+            edge ∈ edgesOf (Value.node parentEntry storedEdges depth free) → edge ∈ storedEdges) →
+          SourcePruningEnumerationNativeOrdinary.Ranges checkEmpty uv edgesOf
+              (SourceCurrentAllocatedPartialState.advance caller
+                (advancePhysical caller.checked { heap := heap, equality := caller.checked.operations }) caller.fourth
+                caller.merge)
+              after final.query →
+            ∃ r n p h k entered processed lastCaller saved last next ordinary,
+              (∀ (er en P H ek : Nat),
+                  p ≤ P →
+                    h ≤ H →
+                      SourcePruningEnumerationNativeOrdinary.run checkEmpty (r + er) (n + en) P H (k + ek) uv edgesOf
+                          (SourceCurrentAllocatedPartialState.advance caller
+                            (advancePhysical caller.checked { heap := heap, equality := caller.checked.operations })
+                            caller.fourth caller.merge)
+                          after final.query =
+                        ([Except.ok
+                              ((uv, newHandle, scs, Value.node parentEntry storedEdges depth free), entered.core)],
+                          some ordinary)) ∧
+                EnumerationDriver.RenderStable after.core entered.core ∧
+                  entered.expandable = after.expandable ∧
+                    entered.waiting = after.waiting ∧
+                      Post formulas solver next caller lastCaller last ∧
+                        last.query = saved ∧
+                          (∀ (receipt : SourcePruningEnumerationSelectedEdge.Result width),
+                              receipt ∈ processed →
+                                SourcePruningEnumerationNativeBranchCompletion.Admitted uv receipt) ∧
+                            (∀ (receipt : SourcePruningEnumerationSelectedEdge.Result width),
+                                receipt ∈ processed → SourcePruningEnumerationNativeBranchCompletion.Pending receipt) ∧
+                              (∀ (receipt : SourcePruningEnumerationSelectedEdge.Result width),
+                                  receipt ∈ processed →
+                                    ∃ reached savedQueries receiptInventory receiptMemos,
+                                      SourcePruningEnumerationNativeBranches.advance receipt =
+                                          some (reached, savedQueries) ∧
+                                        Post formulas solver receiptInventory caller reached receiptMemos ∧
+                                          receiptMemos.query = savedQueries) ∧
+                                (∀ (receipt : SourcePruningEnumerationSelectedEdge.Result width),
+                                    receipt ∈ processed →
+                                      SourcePruningEnumerationNativeBranchCompletion.FragmentHistory before.core
+                                        receipt) ∧
+                                  (∀ (receipt : SourcePruningEnumerationSelectedEdge.Result width),
+                                      receipt ∈ processed →
+                                        SourcePruningEnumerationReceiptCallback.Completes graph templates metadata uv
+                                          before.core receipt) ∧
+                                    (ordinary =
+                                          SourcePruningEnumerationNativeBranches.Result.complete processed lastCaller
+                                            saved ∨
+                                        ordinary =
+                                          SourcePruningEnumerationNativeBranches.Result.stopped processed
+                                            (some SourcePruningEnumerationSelectedEdge.Result.unhandled)) ∧
+                                      ((∀ (edge : EdgeValue Symbol Constraint),
+                                          edge ∈ edgesOf (Value.node parentEntry storedEdges depth free) →
+                                            arityAllows edge.children.length scs = true →
+                                              SourcePruningEnumerationConstraint.project edge.entry.key.constraint ≠
+                                                none) →
+                                        ordinary =
+                                          SourcePruningEnumerationNativeBranches.Result.complete processed lastCaller
+                                            saved)
+indexFuel : Nat
+adapted :
+  ∀ (extra : Nat),
+    SourcePruningEnumerationNarrowAdapter.adapt heap (indexFuel + extra) uv oldHandle newHandle scs before after.core =
+      some after
+readSuccess : Success (getValue readFuel uv) before.core (UVarValue.unenumerated (some oldHandle) scs) readAfter
+checkSuccess :
+  Success
+    (SourcePruningEnumerationRecursion.checkRepeated caller.checked.native.machine.heap checkFuel uv oldHandle scs)
+    readAfter false checked.core
+history :
+  after.core.counter = before.core.counter ∧
+    ∀ (level : Nat → Nat) (frontier : Nat),
+      EnumerationOrder.Stratified before.core level frontier → EnumerationOrder.Stratified after.core level frontier
+bound : Nat := readFuel + checkFuel + nativeFuel + representativeFuel + indexFuel
+extra : Nat
+w : Nat := bound + extra
+readLe : readFuel ≤ w
+checkLe : checkFuel ≤ w
+nativeLe : nativeFuel ≤ w
+representativeLe : representativeFuel ≤ w
+indexLe : indexFuel ≤ w
+reading : (getValue w uv before.core).run = [Except.ok (UVarValue.unenumerated (some oldHandle) scs, readAfter)]
+checking :
+  (SourcePruningEnumerationRecursion.checkRepeated caller.checked.native.machine.heap w uv oldHandle scs
+        readAfter).run =
+    [Except.ok (false, checked.core)]
+adaptedAt : SourcePruningEnumerationNarrowAdapter.adapt heap w uv oldHandle newHandle scs before after.core = some after
+nextAction : EnumerateM Symbol Constraint Unit
+preparedAt :
+  SourcePruningEnumerationAction.prepare holeKey fits admits metadata w w uv oldHandle scs oldValue
+      caller.checked.native.machine.heap =
+    MergedSourceComparison.Result.done (value, some nextAction) heap
+raw : (nextAction checked.core).run = [Except.ok ((), after.core)]
+narrowedAt :
+  SourcePruningOuterNarrow.narrow holeKey fits admits metadata w uv oldValue caller.checked.native.machine.heap =
+    MergedSourceComparison.Result.done value heap
+right :
+  (SourcePruningRecordTypes.recordTypes graph templates w metadata uv (Sum.inr newHandle) after.core).run =
+    [Except.ok ((false, metadata), after.core)]
+⊢ runPrefixWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates stop order metadata w w w w
+      w w uv caller before memos.query =
+    Result.narrowed checked.core (MergedSourceComparison.Result.done (value, some nextAction) heap)
+      (SourceCurrentAllocatedPartialState.advance caller
+        (advancePhysical caller.checked { heap := heap, equality := caller.checked.operations }) caller.fourth
+        caller.merge)
+      memos.query (some [Except.ok ((), after.core)]) (some after) (some [Except.ok ((false, metadata), after.core)])
+      none
+warning: MicroCFTA/SourcePruningEnumerationPrefixCompletion.lean:99:30: This simp argument is unused:
+  reading
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [runPrefix, checking, adapted, Option.map_some]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: MicroCFTA/SourcePruningEnumerationPrefixCompletion.lean:99:39: This simp argument is unused:
+  checking
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [runPrefix, reading, adapted, Option.map_some]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: MicroCFTA/SourcePruningEnumerationPrefixCompletion.lean:99:49: This simp argument is unused:
+  adapted
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [runPrefix, reading, checking, Option.map_some]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: MicroCFTA/SourcePruningEnumerationPrefixCompletion.lean:99:58: This simp argument is unused:
+  Option.map_some
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [runPrefix, reading, checking, adapted]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: MicroCFTA/SourcePruningEnumerationPrefixCompletion.lean:143:32: This simp argument is unused:
+  reading
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [runPrefix, checking, oldDecoded, preparedAt]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: MicroCFTA/SourcePruningEnumerationPrefixCompletion.lean:143:41: This simp argument is unused:
+  checking
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [runPrefix, reading, oldDecoded, preparedAt]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: MicroCFTA/SourcePruningEnumerationPrefixCompletion.lean:143:51: This simp argument is unused:
+  oldDecoded
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [runPrefix, reading, checking, preparedAt]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: MicroCFTA/SourcePruningEnumerationPrefixCompletion.lean:143:63: This simp argument is unused:
+  preparedAt
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [runPrefix, reading, checking, oldDecoded]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: MicroCFTA/SourcePruningEnumerationPrefixCompletion.lean:210:32: This simp argument is unused:
+  reading
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [runPrefix, checking, oldDecoded, preparedAt, raw, encoded, adaptedAt, right]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: MicroCFTA/SourcePruningEnumerationPrefixCompletion.lean:210:41: This simp argument is unused:
+  checking
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [runPrefix, reading, oldDecoded, preparedAt, raw, encoded, adaptedAt, right]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: MicroCFTA/SourcePruningEnumerationPrefixCompletion.lean:210:51: This simp argument is unused:
+  oldDecoded
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [runPrefix, reading, checking, preparedAt, raw, encoded, adaptedAt, right]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: MicroCFTA/SourcePruningEnumerationPrefixCompletion.lean:210:63: This simp argument is unused:
+  preparedAt
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [runPrefix, reading, checking, oldDecoded, raw, encoded, adaptedAt, right]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: MicroCFTA/SourcePruningEnumerationPrefixCompletion.lean:210:75: This simp argument is unused:
+  raw
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [runPrefix, reading, checking, oldDecoded, preparedAt, encoded, adaptedAt, right]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: MicroCFTA/SourcePruningEnumerationPrefixCompletion.lean:210:80: This simp argument is unused:
+  encoded
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [runPrefix, reading, checking, oldDecoded, preparedAt, raw, adaptedAt, right]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: MicroCFTA/SourcePruningEnumerationPrefixCompletion.lean:210:89: This simp argument is unused:
+  adaptedAt
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [runPrefix, reading, checking, oldDecoded, preparedAt, raw, encoded, right]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: MicroCFTA/SourcePruningEnumerationPrefixCompletion.lean:210:100: This simp argument is unused:
+  right
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [runPrefix, reading, checking, oldDecoded, preparedAt, raw, encoded, adaptedAt]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Some required targets logged failures:
+- MicroCFTA.SourcePruningEnumerationPrefixCompletion
+error: build failed
