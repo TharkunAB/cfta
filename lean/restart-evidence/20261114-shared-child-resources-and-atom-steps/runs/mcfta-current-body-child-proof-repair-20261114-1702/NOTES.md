@@ -1,0 +1,1 @@
+Root proof-only repair. Remove one redundant dsimp only after the node parameters have already reduced. The first strict check rejected only that no-progress tactic. All public headers, conclusions and all other proof bytes stay unchanged. No Haskell change is made. The original and failed check remain intact. UNCOMPILED until check2 succeeds.

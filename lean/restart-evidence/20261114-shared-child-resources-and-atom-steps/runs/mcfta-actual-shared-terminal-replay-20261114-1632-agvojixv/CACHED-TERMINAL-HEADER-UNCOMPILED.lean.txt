@@ -1,0 +1,42 @@
+import MicroCFTA.SourcePruningEnumerationSharedCachedTerminal
+import MicroCFTA.SourcePruningEnumerationSharedCachedFoldStability
+import MicroCFTA.SourcePruningEnumerationSharedIncomingNodeStability
+import MicroCFTA.SourcePruningEnumerationTerminalPrefixStability
+import MicroCFTA.SourcePruningEnumerationIncomingCacheAdapterStability
+
+/-!
+# Exact successful actual shared terminal observations
+
+Empty rejection and successful singleton rows retain every reached endpoint.
+The pure prefix and index adapter keep their existing operations.
+The native calls use the actual shared incoming and fold replay laws.
+-/
+namespace MicroCFTA.SourcePruningEnumerationSharedCachedTerminal
+open EnumerationState InternedConstructorTemplates
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Core" => EnumerationState.State Symbol Constraint
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Raw" => List (Except EnumerationState.Error (Fragments.Fragment Symbol × Core))
+local notation "IncomingRaw" => List (Except EnumerationState.Error (Unit × Core))
+variable {width : Nat}
+
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+attribute [local instance] sharedTerminalMonadList
+
+theorem run_some_stable
+    {checkEmpty : Bool} {r R n N p P h H k K : Nat}
+    {first : Suspended} {rest : List Suspended}
+    {beforeCaller afterCaller : Caller width} {before after : Cached} {outer : Core}
+    {incoming : Node} {incomingScs : List Suspended} {queries savedQueries : Queries}
+    {raw : Raw} {moved : EnumerationWaitingIndex.Waiting}
+    (observed : run checkEmpty r n p h k first rest beforeCaller before incoming incomingScs queries =
+      ((.ok (some raw), afterCaller, savedQueries, outer, moved), some after))
+    (successful : raw = [] ∨ ∃ fragment returned, raw = [.ok (fragment, returned)])
+    (enoughRepresentative : r ≤ R) (enoughNative : n ≤ N) (enoughP : p ≤ P)
+    (enoughH : h ≤ H) (enoughIndex : k ≤ K) :
+    run checkEmpty R N P H K first rest beforeCaller before incoming incomingScs queries =
+      ((.ok (some raw), afterCaller, savedQueries, outer, moved), some after)

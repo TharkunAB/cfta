@@ -1,0 +1,77 @@
+/tmp/mcfta-closed-reset-and-any-budget-prefix-check1-20261114-1711/source/MicroCFTA/SourceSynthesisUniverseClosedResetSteps.lean:34:22: error(lean.unknownIdentifier): Unknown identifier `SourceRecursiveIntersectionSchedule.entered_key`
+/tmp/mcfta-closed-reset-and-any-budget-prefix-check1-20261114-1711/source/MicroCFTA/SourceSynthesisUniverseClosedResetSteps.lean:28:43: error: unsolved goals
+Symbol Guard : Type
+domains : Cache.State IntersectionFlatMemoKeyDomain.DomainKey
+valid : Cache.Valid domains
+entry : Interned NodeKey
+body depth ordinary pattern : Value Symbol Guard
+patternId : Nat
+universeValue : Value Symbol Guard := Value.mu entry body depth ordinary
+original : Interned IntersectionFlatMemoKeyDomain.DomainKey × Cache.State IntersectionFlatMemoKeyDomain.DomainKey :=
+  enter domains IntersectionEmptyDomain.emptyKey universeValue pattern entry.identity patternId
+added : entry.identity ∈ List.map Prod.fst (bindings universeValue pattern)
+⊢ let universeValue := Value.mu entry body depth ordinary;
+  let original := enter domains IntersectionEmptyDomain.emptyKey universeValue pattern entry.identity patternId;
+  original.fst.key.free.isEmpty = false
+/tmp/mcfta-closed-reset-and-any-budget-prefix-check1-20261114-1711/source/MicroCFTA/SourceSynthesisUniverseClosedResetSteps.lean:57:8: error: `if_pos` has been deprecated: Use `ite_eq_left` instead
+/tmp/mcfta-closed-reset-and-any-budget-prefix-check1-20261114-1711/source/MicroCFTA/SourceSynthesisUniverseClosedResetSteps.lean:64:8: error: `if_neg` has been deprecated: Use `ite_eq_right` instead
+/tmp/mcfta-closed-reset-and-any-budget-prefix-check1-20261114-1711/source/MicroCFTA/SourceSynthesisUniverseClosedResetSteps.lean:92:12: error: `if_pos` has been deprecated: Use `ite_eq_left` instead
+/tmp/mcfta-closed-reset-and-any-budget-prefix-check1-20261114-1711/source/MicroCFTA/SourceSynthesisUniverseClosedResetSteps.lean:96:12: error: `if_neg` has been deprecated: Use `ite_eq_right` instead
+MicroCFTA.SourceSynthesisUniverseClosedResetSteps.mixed_entry_nonempty_free_map {Symbol Guard : Type}
+  (domains : MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+  (valid : MicroCFTA.Cache.Valid domains) (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (body depth ordinary pattern : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (patternId : Nat) :
+  have universeValue := MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary;
+  have original :=
+    MicroCFTA.SourceRecursiveIntersectionEnvironment.enter domains MicroCFTA.IntersectionEmptyDomain.emptyKey
+      universeValue pattern entry.identity patternId;
+  original.fst.key.free.isEmpty = false
+'MicroCFTA.SourceSynthesisUniverseClosedResetSteps.mixed_entry_nonempty_free_map' depends on axioms: [propext,
+ sorryAx,
+ Quot.sound]
+MicroCFTA.SourceSynthesisUniverseClosedResetSteps.execute_closed_nonempty_domain_step {Symbol Guard : Type}
+  [DecidableEq Symbol] [DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (emptyGuard : Guard)
+  (conjoin : Guard → Guard → Guard) (fuel : Nat)
+  (domain : MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+  (nonempty : domain.key.free.isEmpty = false) (left right : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (leftClosed : left.free = []) (rightClosed : right.free = [])
+  (state : MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol Guard) :
+  MicroCFTA.SourceRecursiveIntersectionKernel.execute emptyGuard conjoin (fuel + 1) domain left right state =
+    if MicroCFTA.SourceRecursiveIntersectionControl.hasEmpty left right = true then
+      MicroCFTA.SourceRecursiveIntersectionKernel.Result.done MicroCFTA.InternedConstructorTemplates.Value.empty state
+    else
+      MicroCFTA.SourceRecursiveIntersectionKernel.execute emptyGuard conjoin fuel
+        MicroCFTA.IntersectionEmptyDomain.emptyDomain left right state
+'MicroCFTA.SourceSynthesisUniverseClosedResetSteps.execute_closed_nonempty_domain_step' depends on axioms: [propext,
+ Quot.sound]
+MicroCFTA.SourceSynthesisUniverseClosedResetSteps.closed_reset_atoms_of_fuel_induction {Symbol Guard : Type}
+  [DecidableEq Symbol] [DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (emptyGuard : Guard)
+  (conjoin : Guard → Guard → Guard) (fuel : Nat)
+  (domain : MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+  (nonempty : domain.key.free.isEmpty = false) (ownerId : Nat)
+  (left right : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard) (leftClosed : left.free = [])
+  (rightClosed : right.free = []) (state : MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol Guard)
+  (valid : MicroCFTA.SourceRecursiveIntersectionKernel.Valid state)
+  (known : MicroCFTA.SourceRecursiveIntersectionKernel.Domain state domain)
+  (leftAvailable : MicroCFTA.InternedProbeProvenance.Available state.heap left)
+  (rightAvailable : MicroCFTA.InternedProbeProvenance.Available state.heap right)
+  (fuelInduction :
+    ∀ (smaller : Nat),
+      smaller < fuel →
+        ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+          (after : MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol Guard),
+          MicroCFTA.SourceRecursiveIntersectionKernel.execute emptyGuard conjoin smaller
+                MicroCFTA.IntersectionEmptyDomain.emptyDomain left right state =
+              MicroCFTA.SourceRecursiveIntersectionKernel.Result.done value after →
+            ∀ (atom : MicroCFTA.InternedBinderProtocol.NodeRef),
+              atom ∈ MicroCFTA.InternedBoundaryAtoms.atoms value →
+                atom = MicroCFTA.InternedBinderProtocol.NodeRef.mu ownerId) :
+  MicroCFTA.SourceRecursiveIntersectionKernel.Checked state
+    (MicroCFTA.SourceRecursiveIntersectionKernel.execute emptyGuard conjoin fuel domain left right state)
+    fun after value =>
+    MicroCFTA.InternedProbeProvenance.Available after.heap value ∧
+      ∀ (atom : MicroCFTA.InternedBinderProtocol.NodeRef),
+        atom ∈ MicroCFTA.InternedBoundaryAtoms.atoms value → atom = MicroCFTA.InternedBinderProtocol.NodeRef.mu ownerId
+'MicroCFTA.SourceSynthesisUniverseClosedResetSteps.closed_reset_atoms_of_fuel_induction' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

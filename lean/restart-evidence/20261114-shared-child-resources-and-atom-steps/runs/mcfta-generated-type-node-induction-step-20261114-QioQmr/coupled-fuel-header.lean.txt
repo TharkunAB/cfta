@@ -1,0 +1,63 @@
+-- OPEN. UNPROVED HEADER ONLY. This file is not compiler input.
+import MicroCFTA.SourceSynthesisCurrentUniverseReferenceIdentity
+import MicroCFTA.SourceSynthesisUniversePrefixHeight
+import MicroCFTA.SourceSynthesisUniverseMixedEntryReplay
+import MicroCFTA.SourceSynthesisCurrentUniverseReferenceDescendantSteps
+import MicroCFTA.SourceSynthesisCurrentUniverseStartupAtoms
+
+set_option autoImplicit false
+
+namespace MicroCFTA.SourceSynthesisCurrentUniverseGeneratedTypeClosure
+open Cache InternedConstructorTemplates InternedProbeProvenance InternedNestedFacts
+open InternedBinderProtocol (NodeKey Reference)
+open SourceSynthesisTypeSyntax (Library Query)
+open SourceSynthesisGeneralizeSyntax (Guard top)
+open SourceSynthesisFirstOrderConstruction (Expression)
+open SourceRecursiveIntersectionKernel
+open SourceSynthesisUniversePrefixHeight (height)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "ordinarySymbols" => SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+
+theorem current_stored_universe_coupled_fuel_atoms
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (fuel : Nat) :
+    (∀ (heap : State Symbol Guard) (facts : Facts heap) (growth : Grows sourceHeap heap)
+      (domains : Cache.State IntersectionFlatMemoKeyDomain.DomainKey) (cacheValid : Cache.Valid domains)
+      (left right : Value Symbol Guard),
+      Available heap left → Available heap right → left.free = [] → right.free = [] →
+      (∀ atom ∈ InternedBoundaryAtoms.atoms left, atom = .mu entry.identity) →
+      (∀ atom ∈ InternedBoundaryAtoms.atoms right, atom = .mu entry.identity) →
+      let initial : Machine Symbol Guard := ⟨heap, domains⟩
+      Checked initial
+        (execute top SourceEqualityPCSNativeEdge.conjoin fuel IntersectionEmptyDomain.emptyDomain left right initial)
+        (fun after value => Available after.heap value ∧ value.free = [] ∧
+          ∀ atom ∈ InternedBoundaryAtoms.atoms value, atom = .mu entry.identity)) ∧
+    (∀ (heap : State Symbol Guard) (facts : Facts heap) (growth : Grows sourceHeap heap)
+      (domains : Cache.State IntersectionFlatMemoKeyDomain.DomainKey) (cacheValid : Cache.Valid domains)
+      (pattern : Value Symbol Guard) (patternId : Nat),
+      Available heap pattern → pattern.free = [] →
+      SourceRecursiveIntersectionControl.identity pattern = some patternId →
+      (SourceRecursiveIntersectionControl.tag pattern = 1 ∨ SourceRecursiveIntersectionControl.tag pattern = 3) →
+      let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+      let entered := SourceRecursiveIntersectionEnvironment.enter domains IntersectionEmptyDomain.emptyKey
+        universeValue pattern entry.identity patternId
+      let initial : Machine Symbol Guard := ⟨heap, entered.2⟩
+      ∀ later : Machine Symbol Guard, SourceRecursiveIntersectionKernel.Valid later → Extension initial later →
+      ∀ openAlias : Value Symbol Guard, (openAlias = body ∨ openAlias = .reference (.interned entry.identity)) →
+      ∀ operand : Value Symbol Guard, Available later.heap operand → operand.free = [] →
+      (∀ atom ∈ InternedBoundaryAtoms.atoms operand, atom = .mu entry.identity) →
+      height operand ≤ height pattern →
+      (openAlias = .reference (.interned entry.identity) → height operand < height pattern) →
+      Checked later (execute top SourceEqualityPCSNativeEdge.conjoin fuel entered.1 openAlias operand later)
+        (fun after value => Available after.heap value ∧ value.free = [] ∧
+          ∀ atom ∈ InternedBoundaryAtoms.atoms value, atom = .mu entry.identity) ∧
+      Checked later (execute top SourceEqualityPCSNativeEdge.conjoin fuel entered.1 operand openAlias later)
+        (fun after value => Available after.heap value ∧ value.free = [] ∧
+          ∀ atom ∈ InternedBoundaryAtoms.atoms value, atom = .mu entry.identity))

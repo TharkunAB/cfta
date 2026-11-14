@@ -1,0 +1,210 @@
+MicroCFTA.SourceSynthesisCurrentUniverseNodeAtomInductionSteps.make_edge_atoms_checked {Symbol Guard : Type}
+  [DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (state : MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol Guard)
+  (valid : MicroCFTA.SourceRecursiveIntersectionKernel.Valid state) (ownerId : Nat) (symbol : Symbol)
+  (constraint : Guard) (values : List (MicroCFTA.InternedConstructorTemplates.Value Symbol Guard))
+  (available :
+    ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      value ∈ values → MicroCFTA.InternedProbeProvenance.Available state.heap value)
+  (onlyU :
+    ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      value ∈ values →
+        ∀ (atom : MicroCFTA.InternedBinderProtocol.NodeRef),
+          atom ∈ MicroCFTA.InternedBoundaryAtoms.atoms value →
+            atom = MicroCFTA.InternedBinderProtocol.NodeRef.mu ownerId) :
+  MicroCFTA.SourceRecursiveIntersectionKernel.Checked state
+    (MicroCFTA.SourceRecursiveIntersectionKernel.work
+      (MicroCFTA.InternedConstructorTemplates.makeEdge symbol constraint values) state)
+    fun after edge =>
+    MicroCFTA.InternedEdgeResidency.EdgeResident after.heap edge ∧
+      edge.entry.key.symbol = symbol ∧
+        edge.entry.key.constraint = constraint ∧
+          edge.children = values ∧
+            ∀ (child : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+              child ∈ edge.children →
+                ∀ (atom : MicroCFTA.InternedBinderProtocol.NodeRef),
+                  atom ∈ MicroCFTA.InternedBoundaryAtoms.atoms child →
+                    atom = MicroCFTA.InternedBinderProtocol.NodeRef.mu ownerId
+'MicroCFTA.SourceSynthesisCurrentUniverseNodeAtomInductionSteps.make_edge_atoms_checked' depends on axioms: [propext,
+ Quot.sound]
+MicroCFTA.SourceSynthesisCurrentUniverseNodeAtomInductionSteps.make_node_atoms_checked {Symbol Guard : Type}
+  [DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (state : MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol Guard)
+  (valid : MicroCFTA.SourceRecursiveIntersectionKernel.Valid state) (ownerId : Nat)
+  (edges : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+  (resident :
+    ∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+      edge ∈ edges → MicroCFTA.InternedEdgeResidency.EdgeResident state.heap edge)
+  (onlyU :
+    ∀ (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+      edge ∈ edges →
+        ∀ (child : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+          child ∈ edge.children →
+            ∀ (atom : MicroCFTA.InternedBinderProtocol.NodeRef),
+              atom ∈ MicroCFTA.InternedBoundaryAtoms.atoms child →
+                atom = MicroCFTA.InternedBinderProtocol.NodeRef.mu ownerId) :
+  MicroCFTA.SourceRecursiveIntersectionKernel.Checked state
+    (MicroCFTA.SourceRecursiveIntersectionKernel.work (MicroCFTA.InternedConstructorTemplates.makeNode edges) state)
+    fun after value =>
+    MicroCFTA.InternedProbeProvenance.Available after.heap value ∧
+      ∀ (atom : MicroCFTA.InternedBinderProtocol.NodeRef),
+        atom ∈ MicroCFTA.InternedBoundaryAtoms.atoms value → atom = MicroCFTA.InternedBinderProtocol.NodeRef.mu ownerId
+'MicroCFTA.SourceSynthesisCurrentUniverseNodeAtomInductionSteps.make_node_atoms_checked' depends on axioms: [propext,
+ Quot.sound]
+MicroCFTA.SourceSynthesisCurrentUniverseNodeAtomInductionSteps.ordered_edge_atoms_of_fuel_induction
+  {Symbol Guard : Type} [DecidableEq Symbol] [DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (emptyGuard : Guard) (conjoin : Guard → Guard → Guard) (fuel : Nat)
+  (domain : MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+  (left right : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+  (state : MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol Guard)
+  (valid : MicroCFTA.SourceRecursiveIntersectionKernel.Valid state)
+  (known : MicroCFTA.SourceRecursiveIntersectionKernel.Domain state domain)
+  (leftResident : MicroCFTA.InternedEdgeResidency.EdgeResident state.heap left)
+  (rightResident : MicroCFTA.InternedEdgeResidency.EdgeResident state.heap right) (ownerId : Nat)
+  (fuelInduction :
+    ∀
+      (pair :
+        MicroCFTA.InternedConstructorTemplates.Value Symbol Guard ×
+          MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+      pair ∈ left.children.zip right.children →
+        ∀ (current : MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol Guard),
+          MicroCFTA.SourceRecursiveIntersectionKernel.Valid current →
+            MicroCFTA.SourceRecursiveIntersectionKernel.Extension state current →
+              ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                (after : MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol Guard),
+                MicroCFTA.SourceRecursiveIntersectionKernel.execute emptyGuard conjoin fuel domain pair.fst pair.snd
+                      current =
+                    MicroCFTA.SourceRecursiveIntersectionKernel.Result.done value after →
+                  ∀ (atom : MicroCFTA.InternedBinderProtocol.NodeRef),
+                    atom ∈ MicroCFTA.InternedBoundaryAtoms.atoms value →
+                      atom = MicroCFTA.InternedBinderProtocol.NodeRef.mu ownerId) :
+  MicroCFTA.SourceRecursiveIntersectionKernel.Checked state
+    (MicroCFTA.SourceRecursiveIntersectionKernel.edge emptyGuard conjoin
+      (MicroCFTA.SourceRecursiveIntersectionKernel.execute emptyGuard conjoin fuel domain) left right state)
+    fun after result =>
+    MicroCFTA.InternedEdgeResidency.EdgeResident after.heap result ∧
+      ∀ (child : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+        child ∈ result.children →
+          ∀ (atom : MicroCFTA.InternedBinderProtocol.NodeRef),
+            atom ∈ MicroCFTA.InternedBoundaryAtoms.atoms child →
+              atom = MicroCFTA.InternedBinderProtocol.NodeRef.mu ownerId
+'_private.MicroCFTA.SourceSynthesisCurrentUniverseNodeAtomInductionSteps.0.MicroCFTA.SourceSynthesisCurrentUniverseNodeAtomInductionSteps.ordered_edge_atoms_of_fuel_induction' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceSynthesisCurrentUniverseNodeAtomInductionSteps.ordered_node_atoms_of_fuel_induction
+  {Symbol Guard : Type} [DecidableEq Symbol] [DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (emptyGuard : Guard) (conjoin : Guard → Guard → Guard) (fuel : Nat)
+  (domain : MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+  (left right : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+  (state : MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol Guard)
+  (valid : MicroCFTA.SourceRecursiveIntersectionKernel.Valid state)
+  (known : MicroCFTA.SourceRecursiveIntersectionKernel.Domain state domain)
+  (leftResident :
+    ∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+      row ∈ left → MicroCFTA.InternedEdgeResidency.EdgeResident state.heap row)
+  (rightResident :
+    ∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+      row ∈ right → MicroCFTA.InternedEdgeResidency.EdgeResident state.heap row)
+  (ownerId : Nat)
+  (fuelInduction :
+    ∀
+      (pair :
+        MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard ×
+          MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+      pair ∈ MicroCFTA.SourceRecursiveIntersectionKernel.pairs left right →
+        ∀
+          (children :
+            MicroCFTA.InternedConstructorTemplates.Value Symbol Guard ×
+              MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+          children ∈ pair.fst.children.zip pair.snd.children →
+            ∀ (current : MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol Guard),
+              MicroCFTA.SourceRecursiveIntersectionKernel.Valid current →
+                MicroCFTA.SourceRecursiveIntersectionKernel.Extension state current →
+                  ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                    (after : MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol Guard),
+                    MicroCFTA.SourceRecursiveIntersectionKernel.execute emptyGuard conjoin fuel domain children.fst
+                          children.snd current =
+                        MicroCFTA.SourceRecursiveIntersectionKernel.Result.done value after →
+                      ∀ (atom : MicroCFTA.InternedBinderProtocol.NodeRef),
+                        atom ∈ MicroCFTA.InternedBoundaryAtoms.atoms value →
+                          atom = MicroCFTA.InternedBinderProtocol.NodeRef.mu ownerId) :
+  MicroCFTA.SourceRecursiveIntersectionKernel.Checked state
+    (MicroCFTA.SourceRecursiveIntersectionKernel.node emptyGuard conjoin
+      (MicroCFTA.SourceRecursiveIntersectionKernel.execute emptyGuard conjoin fuel domain) left right state)
+    fun after value =>
+    MicroCFTA.InternedProbeProvenance.Available after.heap value ∧
+      ∀ (atom : MicroCFTA.InternedBinderProtocol.NodeRef),
+        atom ∈ MicroCFTA.InternedBoundaryAtoms.atoms value → atom = MicroCFTA.InternedBinderProtocol.NodeRef.mu ownerId
+'_private.MicroCFTA.SourceSynthesisCurrentUniverseNodeAtomInductionSteps.0.MicroCFTA.SourceSynthesisCurrentUniverseNodeAtomInductionSteps.ordered_node_atoms_of_fuel_induction' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceSynthesisCurrentUniverseNodeAtomInductionSteps.ordinary_closed_nodes_atoms_of_fuel_induction
+  {Symbol Guard : Type} [DecidableEq Symbol] [DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (emptyGuard : Guard) (conjoin : Guard → Guard → Guard) (fuel : Nat)
+  (domain : MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+  (leftEntry rightEntry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (leftRows rightRows : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+  (leftDepth rightDepth : Nat) (leftFree rightFree : List MicroCFTA.InternedBinderProtocol.Reference)
+  (state : MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol Guard)
+  (valid : MicroCFTA.SourceRecursiveIntersectionKernel.Valid state)
+  (known : MicroCFTA.SourceRecursiveIntersectionKernel.Domain state domain) (ownerId : Nat)
+  (leftAvailable :
+    MicroCFTA.InternedProbeProvenance.Available state.heap
+      (MicroCFTA.InternedConstructorTemplates.Value.node leftEntry leftRows leftDepth leftFree))
+  (rightAvailable :
+    MicroCFTA.InternedProbeProvenance.Available state.heap
+      (MicroCFTA.InternedConstructorTemplates.Value.node rightEntry rightRows rightDepth rightFree))
+  (leftClosed : (MicroCFTA.InternedConstructorTemplates.Value.node leftEntry leftRows leftDepth leftFree).free = [])
+  (rightClosed :
+    (MicroCFTA.InternedConstructorTemplates.Value.node rightEntry rightRows rightDepth rightFree).free = [])
+  (leftAtoms :
+    ∀ (atom : MicroCFTA.InternedBinderProtocol.NodeRef),
+      atom ∈
+          MicroCFTA.InternedBoundaryAtoms.atoms
+            (MicroCFTA.InternedConstructorTemplates.Value.node leftEntry leftRows leftDepth leftFree) →
+        atom = MicroCFTA.InternedBinderProtocol.NodeRef.mu ownerId)
+  (rightAtoms :
+    ∀ (atom : MicroCFTA.InternedBinderProtocol.NodeRef),
+      atom ∈
+          MicroCFTA.InternedBoundaryAtoms.atoms
+            (MicroCFTA.InternedConstructorTemplates.Value.node rightEntry rightRows rightDepth rightFree) →
+        atom = MicroCFTA.InternedBinderProtocol.NodeRef.mu ownerId)
+  (selected :
+    MicroCFTA.SourceRecursiveIntersectionControl.decision domain.key
+        (MicroCFTA.InternedConstructorTemplates.Value.node leftEntry leftRows leftDepth leftFree)
+        (MicroCFTA.InternedConstructorTemplates.Value.node rightEntry rightRows rightDepth rightFree) =
+      MicroCFTA.SourceRecursiveIntersectionControl.Branch.ordinary)
+  (fuelInduction :
+    ∀ (left right : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (current : MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol Guard),
+      MicroCFTA.SourceRecursiveIntersectionKernel.Valid current →
+        MicroCFTA.SourceRecursiveIntersectionKernel.Extension state current →
+          MicroCFTA.InternedProbeProvenance.Available current.heap left →
+            MicroCFTA.InternedProbeProvenance.Available current.heap right →
+              left.free = [] →
+                right.free = [] →
+                  (∀ (atom : MicroCFTA.InternedBinderProtocol.NodeRef),
+                      atom ∈ MicroCFTA.InternedBoundaryAtoms.atoms left →
+                        atom = MicroCFTA.InternedBinderProtocol.NodeRef.mu ownerId) →
+                    (∀ (atom : MicroCFTA.InternedBinderProtocol.NodeRef),
+                        atom ∈ MicroCFTA.InternedBoundaryAtoms.atoms right →
+                          atom = MicroCFTA.InternedBinderProtocol.NodeRef.mu ownerId) →
+                      ∀ (value : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+                        (after : MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol Guard),
+                        MicroCFTA.SourceRecursiveIntersectionKernel.execute emptyGuard conjoin fuel domain left right
+                              current =
+                            MicroCFTA.SourceRecursiveIntersectionKernel.Result.done value after →
+                          ∀ (atom : MicroCFTA.InternedBinderProtocol.NodeRef),
+                            atom ∈ MicroCFTA.InternedBoundaryAtoms.atoms value →
+                              atom = MicroCFTA.InternedBinderProtocol.NodeRef.mu ownerId) :
+  MicroCFTA.SourceRecursiveIntersectionKernel.Checked state
+    (MicroCFTA.SourceRecursiveIntersectionKernel.execute emptyGuard conjoin (fuel + 1) domain
+      (MicroCFTA.InternedConstructorTemplates.Value.node leftEntry leftRows leftDepth leftFree)
+      (MicroCFTA.InternedConstructorTemplates.Value.node rightEntry rightRows rightDepth rightFree) state)
+    fun after value =>
+    MicroCFTA.InternedProbeProvenance.Available after.heap value ∧
+      ∀ (atom : MicroCFTA.InternedBinderProtocol.NodeRef),
+        atom ∈ MicroCFTA.InternedBoundaryAtoms.atoms value → atom = MicroCFTA.InternedBinderProtocol.NodeRef.mu ownerId
+'_private.MicroCFTA.SourceSynthesisCurrentUniverseNodeAtomInductionSteps.0.MicroCFTA.SourceSynthesisCurrentUniverseNodeAtomInductionSteps.ordinary_closed_nodes_atoms_of_fuel_induction' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

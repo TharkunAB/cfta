@@ -1,0 +1,39 @@
+import MicroCFTA.SourcePruningEnumerationSharedCachedTerminal
+import MicroCFTA.SourcePruningEnumerationSharedCachedFoldStability
+import MicroCFTA.SourcePruningEnumerationSharedIncomingNodeStability
+import MicroCFTA.SourcePruningEnumerationTerminalPrefixStability
+import MicroCFTA.SourcePruningEnumerationIncomingCacheAdapterStability
+
+/-!
+# Exact successful actual shared terminal observations
+
+Empty rejection and successful singleton rows retain every reached endpoint.
+The pure prefix and index adapter keep their existing operations.
+The native calls use the actual shared incoming and fold replay laws.
+-/
+namespace MicroCFTA.SourcePruningEnumerationSharedCachedTerminal
+open EnumerationState InternedConstructorTemplates
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Core" => EnumerationState.State Symbol Constraint
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Raw" => List (Except EnumerationState.Error (Fragments.Fragment Symbol × Core))
+local notation "IncomingRaw" => List (Except EnumerationState.Error (Unit × Core))
+variable {width : Nat}
+
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+attribute [local instance] sharedTerminalMonadList
+
+theorem incomingCacheAdapter_some_stable
+    {checkEmpty : Bool} {r n p h k R N P H K : Nat}
+    {caller reached : Caller width} {before after : Cached} {read : Core}
+    {target : Nat} {incoming : Node} {incomingScs : List Suspended} {queries saved : Queries} {raw : IncomingRaw}
+    (observed : incomingCacheAdapter checkEmpty r n p h k caller before target incoming incomingScs queries =
+      ((.ok (some raw), reached, saved, read), some after))
+    (successful : raw = [] ∨ ∃ returned : Core, raw = [.ok ((), returned)])
+    (enoughR : r ≤ R) (enoughN : n ≤ N) (enoughP : p ≤ P) (enoughH : h ≤ H) (enoughK : k ≤ K) :
+    incomingCacheAdapter checkEmpty R N P H K caller before target incoming incomingScs queries =
+      ((.ok (some raw), reached, saved, read), some after)
