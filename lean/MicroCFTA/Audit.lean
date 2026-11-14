@@ -1,3 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationIdentityCompletion
 import MicroCFTA.SourcePruningEnumerationIdentityPrefix
 import MicroCFTA.SourceSynthesisCurrentAcceptedEagerRootScanOrigin
 import MicroCFTA.SourceSynthesisCurrentInitialEagerRootScanOrigin
@@ -5031,3 +5032,6 @@ run_cmd do
 #print axioms MicroCFTA.SourcePruningEnumerationAction.prepare_identity_pending_complete
 #check @MicroCFTA.SourcePruningEnumerationSelectedStep.runPrefix_identity_pending
 #print axioms MicroCFTA.SourcePruningEnumerationSelectedStep.runPrefix_identity_pending
+
+#check @MicroCFTA.SourcePruningEnumerationSelectedStep.runPrefix_identity_selected_complete
+#print axioms MicroCFTA.SourcePruningEnumerationSelectedStep.runPrefix_identity_selected_complete
