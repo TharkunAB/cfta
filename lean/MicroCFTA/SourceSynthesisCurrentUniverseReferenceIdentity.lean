@@ -1378,4 +1378,93 @@ theorem current_stored_universe_body_alias_after_mixed_entry
   exact (execute_stable top SourceEqualityPCSNativeEdge.conjoin 10 extra entered.1
     body universeValue initial (by rw [done]; trivial)).trans done
 
+section MixedAliasCompletion
+
+/-- Either original open alias returns the same stored Mu in the actual mixed source domain. -/
+theorem current_stored_universe_open_alias_after_mixed_entry
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (heap : State Symbol Guard) (facts : Facts heap) (growth : Grows sourceHeap heap)
+    (domains : Cache.State IntersectionFlatMemoKeyDomain.DomainKey)
+    (cacheValid : Cache.Valid domains)
+    (pattern : Value Symbol Guard) (patternId : Nat)
+    (patternAvailable : Available heap pattern) (patternClosed : pattern.free = [])
+    (patternIdentity : SourceRecursiveIntersectionControl.identity pattern = some patternId)
+    (patternShape : SourceRecursiveIntersectionControl.tag pattern = 1 ∨
+      SourceRecursiveIntersectionControl.tag pattern = 3)
+    (left : Value Symbol Guard)
+    (leftAlias : left = .reference (.interned entry.identity) ∨ left = body) :
+    let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+    let entered := SourceRecursiveIntersectionEnvironment.enter domains IntersectionEmptyDomain.emptyKey
+      universeValue pattern entry.identity patternId
+    let initial : Machine Symbol Guard := ⟨heap, entered.2⟩
+    ∃ (bound : Nat) (final : Machine Symbol Guard),
+      (∀ extra, execute top SourceEqualityPCSNativeEdge.conjoin (bound + extra) entered.1
+        left universeValue initial = .done universeValue final) ∧
+      SourceRecursiveIntersectionKernel.Valid final ∧ Extension initial final := by
+  rcases leftAlias with leftRef | leftBody
+  · rw [leftRef]
+    exact current_stored_universe_reference_alias_after_mixed_entry
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      heap facts growth domains cacheValid pattern patternId patternAvailable patternClosed patternIdentity patternShape
+  · rw [leftBody]
+    exact current_stored_universe_body_alias_after_mixed_entry
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      heap facts growth domains cacheValid pattern patternId patternAvailable patternClosed patternIdentity patternShape
+
+/-- Every successful native fuel returns the same Mu and exact final machine for the selected alias. -/
+theorem current_stored_universe_open_alias_at_every_successful_fuel
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (heap : State Symbol Guard) (facts : Facts heap) (growth : Grows sourceHeap heap)
+    (domains : Cache.State IntersectionFlatMemoKeyDomain.DomainKey)
+    (cacheValid : Cache.Valid domains)
+    (pattern : Value Symbol Guard) (patternId : Nat)
+    (patternAvailable : Available heap pattern) (patternClosed : pattern.free = [])
+    (patternIdentity : SourceRecursiveIntersectionControl.identity pattern = some patternId)
+    (patternShape : SourceRecursiveIntersectionControl.tag pattern = 1 ∨
+      SourceRecursiveIntersectionControl.tag pattern = 3)
+    (left : Value Symbol Guard)
+    (leftAlias : left = .reference (.interned entry.identity) ∨ left = body) :
+    let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+    let entered := SourceRecursiveIntersectionEnvironment.enter domains IntersectionEmptyDomain.emptyKey
+      universeValue pattern entry.identity patternId
+    let initial : Machine Symbol Guard := ⟨heap, entered.2⟩
+    ∃ (bound : Nat) (final : Machine Symbol Guard),
+      (∀ extra, execute top SourceEqualityPCSNativeEdge.conjoin (bound + extra) entered.1
+        left universeValue initial = .done universeValue final) ∧
+      SourceRecursiveIntersectionKernel.Valid final ∧ Extension initial final ∧
+      (∀ (fuel : Nat) (value : Value Symbol Guard) (after : Machine Symbol Guard),
+        execute top SourceEqualityPCSNativeEdge.conjoin fuel entered.1 left universeValue initial = .done value after →
+          value = universeValue ∧ after = final) := by
+  let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+  let entered := SourceRecursiveIntersectionEnvironment.enter domains IntersectionEmptyDomain.emptyKey
+    universeValue pattern entry.identity patternId
+  let initial : Machine Symbol Guard := ⟨heap, entered.2⟩
+  obtain ⟨bound, final, stable, valid, extension⟩ := current_stored_universe_open_alias_after_mixed_entry
+    lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+    heap facts growth domains cacheValid pattern patternId patternAvailable patternClosed patternIdentity patternShape
+    left leftAlias
+  refine ⟨bound, final, stable, valid, extension, ?_⟩
+  intro fuel value after observed
+  have larger := execute_stable top SourceEqualityPCSNativeEdge.conjoin fuel bound entered.1
+    left universeValue initial (by rw [observed]; trivial)
+  have common := stable fuel
+  rw [Nat.add_comm bound fuel] at common
+  exact Result.done.inj (observed.symm.trans (larger.symm.trans common))
+
+end MixedAliasCompletion
+
 end MicroCFTA.SourceSynthesisCurrentUniverseReferenceIdentity
