@@ -5,6 +5,7 @@
 module Data.CFTA.Gen.SynthesisSpec (spec) where
 
 import Control.Exception (evaluate)
+import Control.Monad (forM_)
 import Data.List (find)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (catMaybes, fromMaybe, mapMaybe)
@@ -12,6 +13,7 @@ import qualified Data.Set as Set
 import qualified Data.Text as Text
 import Test.Hspec (Spec, describe, it, shouldBe, shouldSatisfy)
 
+import qualified Data.CFTA.Gen.Equality as ECTAGen
 import Data.CFTA.Gen.Synthesis
 import Data.CFTA.Gen.Synthesis.HegelBenchmarks
 import Data.CFTA.Gen.Synthesis.HooglePlus
@@ -20,6 +22,90 @@ import Data.CFTA.Gen.Synthesis.Liquid (LiquidQuery (..), baseOf, componentRoles,
 spec :: Spec
 spec = describe "Data.CFTA.Gen.Synthesis" $ do
     saturatedSpec
+    it "keeps components and query arguments named filter when decoding programs" $ do
+        let name = Text.pack "filter"
+            typ = TCons (Text.pack "app") [TCons (Text.pack "A") [], TCons (Text.pack "B") []]
+            expected = [Var name]
+            encodings = [FirstOrder, Curried AnyHead Map.empty, Curried OnlyDefault Map.empty]
+        forM_ encodings $ \encoding -> do
+            let fromLibrary = Library [(name, typ, [name])] [] [] encoding
+                fromArgument = (library [] [] []){libraryEncoding = encoding}
+                cases = [(fromLibrary, Query [] typ), (fromArgument, Query [(name, typ)] typ)]
+            forM_ cases $ \(lib, query) -> do
+                solutionsOfSize lib query 1 `shouldBe` expected
+                let generated = programsOfSize lib query 1
+                ECTAGen.cardinality generated `shouldBe` Right 1
+                ECTAGen.values generated `shouldBe` Right expected
+    it "decodes applications in every type encoding" $ do
+        let argumentType = TCons (Text.pack "A") []
+            resultType = TCons (Text.pack "B") []
+            function = Text.pack "f"
+            argument = Text.pack "x"
+            query = Query [(argument, argumentType)] resultType
+            expected = [App (Var function) (Var argument)]
+            encodings = [FirstOrder, Curried AnyHead Map.empty, Curried OnlyDefault Map.empty]
+        forM_ encodings $ \encoding -> do
+            let lib = Library [(function, TFun argumentType resultType, [function])] [] [] encoding
+                generated = programsOfSize lib query 2
+            solutionsOfSize lib query 2 `shouldBe` expected
+            ECTAGen.cardinality generated `shouldBe` Right 1
+            ECTAGen.values generated `shouldBe` Right expected
+    it "applies a function whose result type is Fun with other than two arguments" $ do
+        let argumentType = TCons (Text.pack "A") []
+            function = Text.pack "f"
+            argument = Text.pack "x"
+            expected = [App (Var function) (Var argument)]
+            encodings = [FirstOrder, Curried AnyHead Map.empty, Curried OnlyDefault Map.empty]
+        forM_ [0, 1, 3] $ \arity -> forM_ encodings $ \encoding -> do
+            let resultType = TCons (Text.pack "Fun") (replicate arity argumentType)
+                lib = (library [] [] []){libraryEncoding = encoding}
+                query = Query [(function, TFun argumentType resultType), (argument, argumentType)] resultType
+            solutionsOfSize lib query 2 `shouldBe` expected
+            ECTAGen.values (programsOfSize lib query 2) `shouldBe` Right expected
+    it "keeps type constructors named as type variables or function types apart from them" $ do
+        let constant name = TCons (Text.pack name) []
+            a = constant "A"
+            b = constant "B"
+            arrowLike = TCons (Text.pack "->") [constant "(->)", a, b]
+            function = Text.pack "f"
+            argument = Text.pack "x"
+            applied = [App (Var function) (Var argument)]
+            encodings = [FirstOrder, Curried AnyHead Map.empty, Curried OnlyDefault Map.empty]
+            -- The function's type, the argument's type, and the programs of size 2.
+            cases =
+                [ (TFun (TVar (Text.pack "a")) b, constant "var1", [])
+                , (TFun (TVar (Text.pack "x")) b, constant "var_x", [])
+                , (arrowLike, a, [])
+                , (TFun (constant "var1") b, constant "var1", applied)
+                ]
+        typeNode (TVar (Text.pack "a")) == typeNode (constant "var1") `shouldBe` False
+        typeNode (TFun a b) == typeNode arrowLike `shouldBe` False
+        forM_ encodings $ \encoding -> forM_ cases $ \(functionType, argumentType, expected) -> do
+            let lib = (library [] [] []){libraryEncoding = encoding}
+            solutionsOfSize lib (Query [(function, functionType), (argument, argumentType)] b) 2 `shouldBe` expected
+    it "gives each argument the type of the last argument with its name" $ do
+        let constant name = TCons (Text.pack name) []
+            a = constant "A"
+            c = constant "C"
+            r = constant "R"
+            g = Text.pack "g"
+            k = Text.pack "k"
+            x = Text.pack "x"
+            query types = Query [(x, typ) | typ <- types] r
+            encodings = [FirstOrder, Curried AnyHead Map.empty, Curried OnlyDefault Map.empty]
+            -- g x x x needs an x of type A first, but each x has the last type.
+            packet = Library [(g, TFun a (TFun c (TFun c r)), [g])] [] []
+            twoC = Library [(k, TFun c (TFun c r), [k])] [] []
+            saturated types = rawSaturatedSearchSpace (Saturation (Map.fromList [(g, 3)]) []) (packet FirstOrder) (query types) 4
+        forM_ encodings $ \encoding -> do
+            rawSearchSpace (packet encoding) (query [a, c]) 4 == rawSearchSpace (packet encoding) (query [c, c]) 4 `shouldBe` True
+            rawSearchSpace (packet encoding) (query [c, a]) 4 == rawSearchSpace (packet encoding) (query [a, a]) 4 `shouldBe` True
+            solutionsOfSize (packet encoding) (query [a, c]) 4 `shouldBe` []
+            solutionsOfSize (packet encoding) (query [c, a]) 4 `shouldBe` []
+            -- Each argument stays an argument that the program must use.
+            solutionsOfSize (twoC encoding) (query [a, c]) 3 `shouldBe` [App (App (Var k) (Var x)) (Var x)]
+            solutionsOfSize (twoC encoding) (query [a, c, c]) 3 `shouldBe` []
+        saturated [a, c] == saturated [c, c] `shouldBe` True
     it "parses the Hoogle+ data, and the printers give each type and program back" $ do
         let benchmarks = hooglePlusBenchmarks <> stackOverflowBenchmarks
             types =

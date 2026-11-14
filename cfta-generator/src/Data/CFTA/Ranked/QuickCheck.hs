@@ -47,15 +47,28 @@ instance Ranked.GenBackend QuickCheckBackend where
               where
                 middle = low + (high - low) `quot` 2
          in QuickCheckBackend $ do
-                selected <-
-                    if total <= toInteger (maxBound :: Int)
-                        then toInteger <$> QC.chooseInt (0, fromInteger total - 1)
-                        else QC.chooseInteger (0, total - 1)
+                selected <- ticketDraw total
                 pick selected 0 lastIndex
       where
         accumulateWeight total (Weight weight, generated) =
             let upperBound = total + weight
              in (upperBound, (upperBound, generated))
+
+    -- Draw the ticket that 'frequencyGen' draws for these weights, then build
+    -- and run only the generator of the position that holds the ticket. For
+    -- each seed, the result is the result of 'frequencyGen' on the generators
+    -- of all the positions: the two draw the same ticket from the same part
+    -- of the seed, and run the generator of the same position.
+    selectAlternative _ (total, positionOf) run =
+        QuickCheckBackend $ do
+            selected <- ticketDraw total
+            case run (positionOf selected) of { QuickCheckBackend generated -> generated }
+
+-- | Draw one ticket below the total, with a machine 'Int' when the total fits.
+ticketDraw :: Integer -> QC.Gen Integer
+ticketDraw total
+    | total <= toInteger (maxBound :: Int) = toInteger <$> QC.chooseInt (0, fromInteger total - 1)
+    | otherwise = QC.chooseInteger (0, total - 1)
 
 -- | Lower a ranked language to a QuickCheck generator.
 toGen :: Ranked.Ranked a -> QC.Gen a
