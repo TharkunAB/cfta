@@ -113,8 +113,8 @@ searchWith goals' walking size avoid kills = do
                 index : _ -> Died index <$ writeIORef held (take index names)
                 [] -> Done True <$ writeIORef held names
         truncate' count = modifyIORef' held (take count)
-        hooks = Hooks (\_ _ -> pure ()) (\_ _ -> pure ()) (\_ -> pure True)
-    (progress, figures) <- searchStatesWith walking (Limits size Nothing Nothing) (Checker truncate' extend) hooks goals' avoid $ \fit ->
+        hooks = Hooks (\_ _ -> pure ()) (\_ _ -> pure ()) (\_ -> pure True) Nothing
+    (progress, figures) <- searchStatesWith walking (Limits size Nothing Nothing []) (Checker truncate' extend) hooks goals' avoid $ \fit ->
         True <$ modifyIORef' found (renderProgram (fitProgram fit) :)
     fits <- reverse <$> readIORef found
     pure (fits, progress, figures)

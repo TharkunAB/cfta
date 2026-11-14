@@ -49,6 +49,13 @@ queries are the queries of Hectare's evaluation, with GHC's library of the
 rung. Next to the Hoogle+ queries, the parent takes the names of the
 differential queries ('differential'), where the erasure loses information.
 
+The variable @HECTARE_GHC_SCORES@ names a fit model, the file that
+@cfta-fit-model@ builds ('loadScore'). With it, the enumerated walks of mode (b) check the programs
+of all sizes together in the order of descending score ('optionScore').
+@HECTARE_GHC_PREFIX@ gives a number @n@: those walks keep only the programs
+that start with the first @n@ tokens of the expected solution, as if the
+user had written them ('optionPrefix').
+
 The variable @HECTARE_GHC_MODE@ gives the mode ('optionMode'): @hectare@
 (mode (a), the default), @states@ (mode (b), "Data.CFTA.GHC.States", in
 preorder), @automaton@ (mode (b) through one cfta automaton for each size,
@@ -71,8 +78,10 @@ import Data.IORef (modifyIORef', newIORef, readIORef, writeIORef)
 import Data.List (elemIndex, intercalate, isPrefixOf, nub, partition, sortOn)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe, isJust, isNothing)
+import qualified Data.Set as Set
 import Data.Text (Text)
 import qualified Data.Text as Text
+import qualified Data.Text.IO as Text
 import GHC.Clock (getMonotonicTime)
 import GHC.Stats (allocated_bytes, getRTSStats, getRTSStatsEnabled, max_mem_in_use_bytes)
 import System.Directory (createDirectoryIfMissing)
@@ -86,11 +95,13 @@ import Text.Read (readMaybe)
 
 import Data.CFTA.GHC.Fits
 import Data.CFTA.GHC.Internal.Check (Counters (..))
+import Data.CFTA.GHC.Model (parseFitModel, tokenScore)
 import Data.CFTA.GHC.Rank (holeState, rankFits)
 import Data.CFTA.GHC.Session
 import Data.CFTA.Gen.Synthesis (Program (..), Query (..), Type (..), parseProgram, renderProgram, renderType)
 import Data.CFTA.Gen.Synthesis.HooglePlus (Benchmark (..), hooglePlusBenchmarks, stackOverflowBenchmarks)
 import Data.CFTA.Gen.Synthesis.States (EdgeOrder (..), Walking (..))
+import qualified Data.CFTA.Gen.Synthesis.Walk as Walk
 import Decision (bothOrders)
 import Decision.Ollama (Ollama (..), defaultOllama, unload, withOllama)
 
@@ -328,6 +339,8 @@ runQuery name rungName' seconds = case [query | query <- allQueries, ghcName que
             pooled <- newIORef []
             solvedAt <- newIORef Nothing
             mode <- maybe (pure (optionMode defaultOptions)) (either fail pure . readMode) =<< lookupEnv "HECTARE_GHC_MODE"
+            score <- traverse loadScore =<< lookupEnv "HECTARE_GHC_SCORES"
+            prefixLength <- maybe 0 (fromMaybe 0 . readMaybe) <$> lookupEnv "HECTARE_GHC_PREFIX"
             -- The walk stops at the time limit; this limit is for the rest.
             outcome <- try . timeout ((seconds + 30) * 1000000) $ withSession (importLines rung) $ \session -> do
                 candidates <- candidatesOf session (rungModules rung)
@@ -347,6 +360,8 @@ runQuery name rungName' seconds = case [query | query <- allQueries, ghcName que
                             , optionOnlyDefaulted = defaulted
                             , optionTypeDomains = not noTypeDomains
                             , optionNormalForms = normalForms
+                            , optionPrefix = maybe [] (take prefixLength . Walk.preorder) (ghcSolution query)
+                            , optionScore = ($ Set.fromList (map fst (ghcArguments query))) <$> score
                             }
                     -- With normal forms, a fit with the normal form of the solution is the solution.
                     isSolution normal program
@@ -476,6 +491,11 @@ runQuery name rungName' seconds = case [query | query <- allQueries, ghcName que
                 (maybe "-" (renderProgram . fitProgram) found)
 
 -- | Read a mode: @hectare@, @states@, @automaton@, or @automaton-canonical@.
+
+-- | The score of a fit model's file ("Data.CFTA.GHC.Model"); stop with the error of a file that is not a model.
+loadScore :: FilePath -> IO (Set.Set Text -> Maybe (Text, Int) -> Int -> (Text, Int) -> Double)
+loadScore path = either (\problem -> fail (path <> ": " <> problem)) (pure . tokenScore) . parseFitModel =<< Text.readFile path
+
 readMode :: String -> Either String Mode
 readMode text = case text of
     "hectare" -> Right Hectare
