@@ -140,7 +140,7 @@ private theorem ordered_edge_atoms_of_fuel_induction
     exact ⟨fields.1, fields.2.2.2.2⟩
 
 /-- The actual ordered hash join and node constructor preserve the lower-fuel owner atoms. -/
-private theorem ordered_node_atoms_of_fuel_induction
+theorem ordered_node_atoms_of_fuel_induction
     [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
     (emptyGuard : Guard) (conjoin : Guard → Guard → Guard) (fuel : Nat)
     (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey)
