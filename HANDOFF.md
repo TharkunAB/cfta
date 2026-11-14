@@ -1,3 +1,81 @@
+# Mixed aliases and native preparation checkpoint (2026-11-14 15:57 CET)
+
+GOAL ACTIVE. Checked source: 80d7b86d403772dd136b7a606c42e88cdc67c42f. Prior compact checkpoint:1750d9d8fc067cd9472dd4bd0800e812ea7c5e55.
+New immutable packet: lean/restart-evidence/20261114-mixed-open-alias-and-native-replay.
+Source tree SHA256: ae237ae3232c4db042b70543e49eaf250a16a30126d3d8855b975a9fcb4aa8ce.
+
+The same accepted current source/build/stored universe U supplies the actual
+mixed ref(U)/U and body(U)/U results. Both return the FULL ORIGINAL U at a finite
+bound and every larger bound. Every actual successful native fuel returns that
+same U and the selected alias's exact final machine. Different selected aliases
+may have different final caches. The original combined target permits this.
+All19 earlier declarations remain exact. The marked malformed original target
+remains archived. Its checked version only normalizes reserved-binder syntax
+and the inferred Nat budget type. The actual body proof retains ordered source
+rows, both original-U probes, the selected cutoff and original Mu-key replay.
+
+Exact successful native value, entry and common preparation replay retain the
+same values, cores, ancestry write and heaps. successful_resources_current
+transfers every existing preparation resource field to an actual observed
+small-bound success. Its initial Packet,Ready,stored,Fits,IncomingAvoid,Heap
+requirements remain explicit. No future observation,resource or callback
+provider is added. Initial atom ownership, after-growth U-only closedness and
+actual alias Checked at every native fuel are public. Strict-descendant identity
+separation now excludes both-order ancestor cutoffs and preserves the original
+entered(U,P) lookup of the FULL ORIGINAL U after an actual later Extension.
+No reference-reset execution equation or full descendant closure is claimed.
+
+The previous literal-identity worker resource theorem and same-source initializer
+bridge remain checked. They give one exact stable result above a sufficient
+common budget at each finite recursion depth. They allow stopped outcomes.
+They do not cover arbitrary smaller-budget worker partial outputs. Pointwise
+prefix phase fields and stopped scan/callback output inclusion remain OPEN.
+Any newly frozen prefix proof in this packet is marked UNCOMPILED and gets no
+proof credit. Check its exact source and headers before further publication.
+
+The largest semantic gap is ONE finite accepted term of the SAME ORIGINAL root
+with ONE consistent assignment per actual emitted causal branch. It must satisfy
+final domains,aliases,fragments,residuals,partial readback AND all suspended
+constraints actually removed earlier. Sibling alternatives can reuse IDs and
+require separate assignments. Derive each branch's receipts from actual emitted
+membership. Post-clear Satisfies does not imply removed Holds for arbitrary
+assignments. The required lift is existential compatible-model construction.
+An ancestry hit must relate its earlier expansion to CURRENT equality targets.
+Finite productivity of retained pending native domains remains separate.
+
+The semantic review establishes no reachable counterexample or Haskell defect.
+The original source excludes arbitrary initial Mu examples. Generated-Type
+closure must cover later ordinary/union products, mixed descendant requests and
+required paths. Haskell recursionKey omits suspended target-variable identities
+and alias classes. This is a source fact and a missing semantic relation. It is
+not a demonstrated bug. The existing true-clear implementation does no finite
+term search. All future Haskell fixes must be recorded in FINDINGS. No Haskell,
+Cabal,test or Liquid Haskell annotation changed in this checkpoint. Use one
+owning GHC-style Note if a future Haskell concept serves several definitions.
+
+Preserve all original typing,depth adequacy/completeness,default LPO/reduction/
+refolding,both language directions,stream order/multiplicity/lazy demand,exact
+accepted terms per node-count size,counts/weights/training,both rank/unrank
+inverses,host bounds and compiled Haskell correspondence. None is removed by
+this resource/atom checkpoint. Older constructor/equality work stays secondary.
+
+Latest5public gates PASS. Strict Audit checks96,062 imported theorem axiom
+dependencies and107 separate reports:105standard-axiom and2axiom-free. Only
+propext,Classical.choice,Quot.sound. Source modules5951; direct imports4949.
+Serial4GiB max/high,zero swap; exact source pins unchanged. Historical failed
+inputs, actual repairs and all marked drafts stay separate from passing runs.
+The packet omits compiled objects and copied import overlays. Public source is
+sufficient to reproduce the checked proofs. Logs are derived records.
+
+Root owns live/compiler/Git writes. Preserve .hypha/ and unrelated work. The
+checked source above is pushed and independently verified on formalize. Main
+remains e53852064d3ef5a2eafec47d754c27504b11de5f. SSH22 times out after reboot;
+per-command SSH443 with existing github.com HostKeyAlias works. Latest canonical
+board note:a64b282b-9996-4480-934a-f288ecb1610c. Request and exact canonical fields
+are preserved. Primary usage7% at15:52. At that time the63mcfta /tmp directories
+total147,560,485bytes and filesystem free146,553,733,120bytes. Continue to limit
+/tmp growth. No compiler or push is pending at the source checkpoint.
+
 # Original-domain strict-descendant freshness checked (2026-11-14 15:53 CET)
 
 GOAL ACTIVE. Preserve the complete original proof objective below.
