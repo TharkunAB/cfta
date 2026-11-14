@@ -1,3 +1,65 @@
+# Startup atoms and exact selected preparation checked (2026-11-14 15:40 CET)
+
+GOAL ACTIVE. Preserve the complete original proof objective below.
+
+Three new public modules pass all seven build, strict, independent-import and
+Audit checks. SourcePruningEnumerationSelectedPreparationReplay proves exact
+successful entry and uniform-budget preparation replay. The complete entry row,
+reached core, ancestry write, native value and heap stay exact at larger budgets.
+No readiness or future resource premise was added. The exact prepared caller
+and cache reconstructed by the actual consumers therefore stay the same.
+
+SourceSynthesisCurrentUniverseStartupAtoms derives the actual initial alternatives
+from one accepted source and the same original build. There is either no stored
+Mu, or one canonical source-universe owner. Every closed available startup value
+has no other boundary atom. The root result follows from the same build. After
+actual heap growth, an available value whose atoms are only that original U is
+closed. No SemanticHeap premise was added or inferred from structural Facts.
+
+SourceSynthesisCurrentUniverseAliasAtoms proves actual Kernel.Checked at EACH
+native fuel for either original ref(U)/U or body(U)/U after the same literal mixed
+entry. Successful results are available, equal the full original U and have only
+its Mu atom. Actual validity and extension also hold at failed native results.
+This uses the checked exact-successful-fuel law. It does not replay stopped
+worker outputs or prove the complete generated-Type intersection induction.
+
+Strict Audit checks96,048 aggregate imported theorem axiom dependencies.
+There are102 explicit reports:100 standard-axiom and2 axiom-free. Only propext,
+Classical.choice and Quot.sound occur. Source modules5949; direct imports4947.
+Effective4GiB max/high and zero swap. All public compiler handles are terminal.
+Logs and unchanged pins: /tmp/mcfta-current-atom-and-preparation-publication-20261114-1538.
+Private successful checks: selected preparation check2 at1527; startup check2
+at1533; alias atoms check2 at1535. Earlier failures remain separate and uncredited.
+Proof repairs exposed actual constructor matches, unfolded boundary atoms, used
+the requested contradiction tactic, and qualified an existing public helper.
+No operational definition or previous public declaration changed.
+
+Next transport the existing complete_resources_current fields to an observed
+successful small-bound preparation via exact replay. Its frozen proof is still
+UNCOMPILED in /tmp/mcfta-selected-preparation-pointwise-resources-20261114-1534-u1_2cqp0.
+Prove original ancestor(U,P) cutoff freshness for strict descendant Q, then the
+actual mixed body/reference calls in that SAME domain. The startup and alias
+leaf producers do not close ordinary/union products or required-path operations.
+Every-common-budget worker history, including stopped partial outputs, stays OPEN.
+
+The central missing result remains ONE finite accepted term of the SAME ORIGINAL
+root and ONE consistent assignment for each actual emitted causal branch. It
+must realize final constraints, partial readback and all removed suspended
+constraints together. Actual ancestry provenance and terminal finite productivity
+remain missing. No reachable source counterexample or Haskell defect was proved.
+Keep all original typing, depth adequacy/completeness, LPO/reduction/refolding,
+both language directions, stream order/multiplicity/lazy demand, exact sizes,
+counts/weights/training, both rank/unrank inverses, host bounds and compiled
+Haskell correspondence in scope. Checkpoint1750 precedes the new body/combined/
+replay/atom proofs; preserve later inputs in the next compact archive.
+
+No Haskell/Cabal/test/Liquid Haskell annotation changed. No new implementation
+fix was established. Record future Haskell fixes in FINDINGS for external readers.
+Use one owning GHC-style Note when a Haskell concept serves several definitions.
+Root owns live writes, compiler and Git. Preserve .hypha/ and failed/marked inputs.
+Source71483312f2ac38670c122154883d3d1674467d27 was independently pushed before this
+addition. Main remains e53852064d3ef5a2eafec47d754c27504b11de5f. Latest primary usage7%.
+
 # Exact mixed aliases and successful native fuels checked (2026-11-14 15:18 CET)
 
 GOAL ACTIVE. Preserve the complete original proof objective below.
