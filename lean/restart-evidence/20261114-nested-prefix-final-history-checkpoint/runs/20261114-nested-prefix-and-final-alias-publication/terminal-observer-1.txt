@@ -1,0 +1,56 @@
+@MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.ChildDispatch.terminal_singleton_terminal_observer : ∀
+  {width : Nat} [inst : DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (checkEmpty : Bool) (r n p h k : Nat) (bucket : List MicroCFTA.EnumerationState.Suspended)
+  (incoming :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (queries : MicroCFTA.SourceEndpointMemo.Memos),
+  (bucket.any fun sc => MicroCFTA.EqualityTrie.isTerminal sc.trie) = true →
+    ∀ (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+      (afterCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+      (savedQueries : MicroCFTA.SourceEndpointMemo.Memos)
+      (read after :
+        MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (moved : MicroCFTA.EnumerationWaitingIndex.Waiting)
+      (afterCache :
+        Option
+          (MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+      (roots : Nat → Nat),
+      MicroCFTA.EnumerationSchedule.Roots before.core.representatives roots →
+        MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.ChildDispatch.run checkEmpty r n p h k bucket
+              incoming caller before queries =
+            ((Except.ok (some [Except.ok (fragment, after)]), afterCaller, savedQueries, read, moved), afterCache) →
+          ∃ winner,
+            fragment = MicroCFTA.Fragments.Fragment.hole winner ∧
+              ∀ (assignment : Nat → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol),
+                (MicroCFTA.UnionFind.Satisfies read.representatives assignment →
+                    ∀ (sc : MicroCFTA.EnumerationState.Suspended),
+                      sc ∈ bucket →
+                        [] ∈ MicroCFTA.EqualityTrie.fromPathTrie sc.trie →
+                          assignment winner = assignment sc.var ∧
+                            MicroCFTA.EnumerationState.Suspended.Holds assignment
+                              (MicroCFTA.Fragments.fill assignment fragment) sc) ∧
+                  (MicroCFTA.UnionFind.Satisfies after.representatives assignment →
+                    ∀ (sc : MicroCFTA.EnumerationState.Suspended),
+                      sc ∈ bucket →
+                        [] ∈ MicroCFTA.EqualityTrie.fromPathTrie sc.trie →
+                          assignment winner = assignment sc.var ∧
+                            MicroCFTA.EnumerationState.Suspended.Holds assignment
+                              (MicroCFTA.Fragments.fill assignment fragment) sc)
+'MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.ChildDispatch.terminal_singleton_terminal_observer' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

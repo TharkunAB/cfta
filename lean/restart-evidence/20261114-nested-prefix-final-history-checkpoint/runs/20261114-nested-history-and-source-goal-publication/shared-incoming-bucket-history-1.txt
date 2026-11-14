@@ -1,0 +1,97 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261114-nested-history-and-source-goal-publication/source/MicroCFTA/SourcePruningEnumerationSharedIncomingBucketHistory.lean:89:32: error: Application type mismatch: The argument
+  lookup
+has type
+  UnionFind.findRoot r before.representatives target = some found
+but is expected to have type
+  some found = some found
+in the application
+  And.intro lookup
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261114-nested-history-and-source-goal-publication/source/MicroCFTA/SourcePruningEnumerationSharedIncomingBucketHistory.lean:89:32: error: Application type mismatch: The argument
+  lookup
+has type
+  UnionFind.findRoot r before.representatives target = some found
+but is expected to have type
+  some found = some found
+in the application
+  And.intro lookup
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261114-nested-history-and-source-goal-publication/source/MicroCFTA/SourcePruningEnumerationSharedIncomingBucketHistory.lean:89:32: error: Application type mismatch: The argument
+  lookup
+has type
+  UnionFind.findRoot r before.representatives target = some found
+but is expected to have type
+  some found = some found
+in the application
+  And.intro lookup
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261114-nested-history-and-source-goal-publication/source/MicroCFTA/SourcePruningEnumerationSharedIncomingBucketHistory.lean:89:32: error: Application type mismatch: The argument
+  lookup
+has type
+  UnionFind.findRoot r before.representatives target = some found
+but is expected to have type
+  some found = some found
+in the application
+  And.intro lookup
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261114-nested-history-and-source-goal-publication/source/MicroCFTA/SourcePruningEnumerationSharedIncomingBucketHistory.lean:89:32: error: Application type mismatch: The argument
+  lookup
+has type
+  UnionFind.findRoot r before.representatives target = some found
+but is expected to have type
+  some found = some found
+in the application
+  And.intro lookup
+@MicroCFTA.SourcePruningEnumerationSharedIncomingNode.singleton_bucket_history : ∀ {width : Nat}
+  [inst : DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (checkEmpty : Bool) (r n p h : Nat) (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (target : Nat)
+  (incoming :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (incomingScs : List MicroCFTA.EnumerationState.Suspended) (queries : MicroCFTA.SourceEndpointMemo.Memos)
+  (after :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (afterCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (savedQueries : MicroCFTA.SourceEndpointMemo.Memos)
+  (read :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourcePruningEnumerationSharedIncomingNode.run checkEmpty r n p h caller before target incoming incomingScs
+        queries =
+      (Except.ok (some [Except.ok ((), after)]), afterCaller, savedQueries, read) →
+    ∃ found oldNode oldScs handle,
+      MicroCFTA.UnionFind.findRoot r before.representatives target = some found ∧
+        before.values[found.representative]? = some (MicroCFTA.EnumerationState.UVarValue.unenumerated oldNode oldScs) ∧
+          read =
+              { counter := before.counter, representatives := found.forest, values := before.values,
+                obligations := before.obligations, recursionAncestry := before.recursionAncestry,
+                expansionAncestry := before.expansionAncestry } ∧
+            after =
+                { counter := read.counter, representatives := read.representatives,
+                  values :=
+                    read.values.set found.representative
+                      (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle) (incomingScs ++ oldScs)),
+                  obligations := read.obligations,
+                  recursionAncestry := fun other =>
+                    if other = found.representative then
+                      (read.expansionAncestry ++ read.recursionAncestry found.representative).eraseDups
+                    else read.recursionAncestry other,
+                  expansionAncestry := read.expansionAncestry } ∧
+              after.values[found.representative]? =
+                  some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle) (incomingScs ++ oldScs)) ∧
+                ∀ (key : MicroCFTA.EnumerationState.RecursionKey),
+                  key ∈ after.recursionAncestry found.representative ↔
+                    key ∈ before.expansionAncestry ∨ key ∈ before.recursionAncestry found.representative
+'MicroCFTA.SourcePruningEnumerationSharedIncomingNode.singleton_bucket_history' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

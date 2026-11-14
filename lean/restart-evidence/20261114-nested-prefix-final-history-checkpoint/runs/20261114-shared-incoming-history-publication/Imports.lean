@@ -1,0 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationSharedIncomingBucketHistory
+
+#check @MicroCFTA.SourcePruningEnumerationSharedIncomingNode.singleton_bucket_history
+#print axioms MicroCFTA.SourcePruningEnumerationSharedIncomingNode.singleton_bucket_history

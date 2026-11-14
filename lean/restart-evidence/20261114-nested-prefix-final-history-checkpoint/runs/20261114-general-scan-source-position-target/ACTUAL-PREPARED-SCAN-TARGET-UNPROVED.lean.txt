@@ -1,0 +1,82 @@
+-- MARKED REQUIRED TARGET ONLY. UNPROVED. No body, axiom, or proof credit.
+-- This is an internal ordinary-scan target after actual selected preparation.
+-- The original full prepared target and its initial premises remain unchanged.
+-- Insert in SharedEagerReservation with its existing aliases and private plans.
+private theorem identity_actual_prepared_scan_prefixes_at_any_budget
+    (graph : Graph Symbol Constraint) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (recursiveDepth workFuel : Nat)
+    (workerIH : IdentityEagerEmittedCompleteAtDepth (bits := bits)
+      graph checkEmpty edgesOf formulas solver recursiveDepth)
+    (inventory : Inventory) (caller : Caller (bits + 2)) (memos : Memos)
+    (metadata : Metadata Unit) (before : Cached) (rawSeed : Seed) (ceiling uv handle : Nat)
+    (scs : List Suspended)
+    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (ready : EnumerationDriver.Ready uv before.core)
+    (stored : before.core.values[uv]? = some (.unenumerated (some handle) scs))
+    (incoming : EnumerationReferences.IncomingAvoid uv before.core)
+    (fits : Fits (SourcePruningEnumerationSharedPreparedReservation.preparedSeed rawSeed).2 caller.checked)
+    (known : Heap (fun guard => guard ∈
+      (SourcePruningEnumerationSharedPreparedReservation.preparedSeed rawSeed).1)
+      caller.checked.native.machine.heap)
+    (mass : SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling)
+    (bucketBound : scs.length ≤ ceiling)
+    (available : Available caller.checked.native.machine.heap (.node parentEntry rows depth free))
+    (closed : free = [])
+    (nonterminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = false)
+    (selectionMembers : ∀ entry rows depth free,
+      ∀ selected ∈ edgesOf (.node entry rows depth free), selected ∈ rows)
+    (selectionLength : ∀ entry rows depth free,
+      (edgesOf (.node entry rows depth free)).length ≤ rows.length)
+    (reserved : eagerReserved bits (recursiveDepth + 1) rawSeed ceiling) :
+    let start := SourcePruningEnumerationSharedPreparedReservation.preparedSeed rawSeed
+    let limit := SourceCurrentConstrainedCapTargetForecast.scalar start.2
+    let own := SourcePruningEnumerationGuardWidth.width start.1
+    let height := limit - 1
+    let continuation := fun retained current => eagerFinal recursiveDepth current retained
+    let admitted := fun retained current => eagerReserved bits recursiveDepth current retained
+    let first := fallbackPlan ceiling ceiling continuation start
+    let row := fun current => tuplePlan (nodePlan limit own height)
+      limit (ceiling + own) ceiling continuation current
+    let seedAt := fun index => iterate row first index
+    let child := SourcePruningEnumerationSharedEagerChildren.eagerChild
+      (width := bits + 2) (Output := Output (bits + 2) Unit) (Reason := Failure (bits + 2) Unit)
+      checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf
+    let hook := SourcePruningEnumerationSharedPreparedRecursive.continueWith
+      (resumeWithNarrow (Typing := Unit) (width := bits + 2) child
+        (fun _ _ _ node state => .done node state) graph [] checkEmpty edgesOf
+        none (fun _ _ => none) workFuel recursiveDepth)
+      graph [] none (fun _ _ => none) workFuel metadata uv
+    let visit := SourcePruningEnumerationSharedChildVisitors.visitCapturedWith child hook workFuel uv scs
+    (∀ value, Available caller.checked.native.machine.heap value →
+      MergedOrdinaryHeight.height value ≤ limit) ∧
+    (∀ entry alternatives level names,
+      Available caller.checked.native.machine.heap (.node entry alternatives level names) →
+      alternatives.length ≤ limit ∧
+      ∀ selected ∈ alternatives, selected.children.length ≤ limit ∧
+        ∀ tries residual, SourcePruningEnumerationConstraint.project selected.entry.key.constraint =
+          some (tries, residual) → tries.length ≤ own) ∧
+    ∀ (attempted remaining : List (EdgeValue Symbol Constraint)),
+      edgesOf (.node parentEntry rows depth free) = attempted ++ remaining →
+      IdentityReservationPosition bits
+        (.worker (recursiveDepth + 1) rawSeed ceiling)
+        (.rows limit own height (limit - attempted.length) ceiling ceiling
+          continuation admitted (seedAt attempted.length)) ∧
+      IdentityEmittedCompleteResources formulas solver caller (seedAt attempted.length)
+        (SourcePruningEnumerationSharedPreparedRecursive.finish uv
+          (SourcePruningEnumerationSharedBranching.scan visit before attempted caller memos.query)) ∧
+      ∀ (processed : List (SelectedEdge.Result (bits + 2)))
+        (outputs : List (Output (bits + 2) Unit)) (reached : Caller (bits + 2)) (saved : Queries),
+        SourcePruningEnumerationSharedBranching.scan visit before attempted caller memos.query =
+          .complete processed outputs reached saved →
+        ∃ (next : Inventory) (final : Memos),
+          SourceCurrentAllocatedPartialInvariant.Post formulas solver next caller reached final ∧
+          final.query = saved ∧ Packet formulas solver next reached final metadata before ∧
+          Fits (seedAt attempted.length).2 reached.checked ∧
+          Heap (fun guard => guard ∈ (seedAt attempted.length).1) reached.checked.native.machine.heap ∧
+          SourceEqualityRequiredCache.Keeps caller.checked.native.machine.heap reached.checked.native.machine.heap ∧
+          SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling
