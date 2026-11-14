@@ -1,3 +1,93 @@
+# Identity prefix laws checked and pushed (2026-11-14 06:48 CET)
+
+GOAL ACTIVE. Continue the complete optimized interned shared eager objective.
+For each actual emitted partial root, prove ONE finite accepted term of the SAME
+original root with ONE consistent assignment for supported domains, paths,
+aliases, residuals and partial readback, including parked backward recompletion.
+Original typing, depth adequacy/completeness, default LPO/reduction/refolding,
+both language directions, stream order/multiplicity/lazy demand, exact accepted
+terms per node-count size, counts/weights/training, BOTH rank/unrank inverses,
+host bounds and compiled Haskell correspondence remain in scope.
+
+Checked code: 4b06f71783c6824be49aed08534d0353a2710242. It is pushed and
+independently verified at refs/heads/formalize. Main is still
+e53852064d3ef5a2eafec47d754c27504b11de5f at the latest remote check.
+The six new public modules add identity-prefix proofs. All older proof modules
+retain their bytes. Audit adds imports and reports while retaining its old bytes.
+The old public376/public239 provenance proofs and the single narrowing backend
+remain. Preserve unrelated .hypha/ and every earlier counterexample and repair.
+
+The strongest new source result uses ONE accepted CURRENT raw initializer.
+It retains the same build receipt, value, heap, handle, caller and initial query
+memos. It gives the exact initial decision and computed identity-prefix result
+at every positive common read/check budget. The decision can be done at a
+recursive boundary. The theorem does not execute the recursive eager worker.
+The preprocessed default entry and compiled Haskell correspondence remain open.
+
+Public additions since a68a1efc:
+- SourcePruningEnumerationIdentityPrefix: actual pending identity preparation and prefix.
+- SourcePruningEnumerationIdentityCompletion: derive read/check receipts and a common bound.
+- SourcePruningEnumerationIdentityPrefixMetadataErasure: exact prefix erasure.
+- SourceSynthesisCurrentInitialIdentityPrefix: derive startup from the same source build.
+- SourcePruningEnumerationInitialPrefixFuel: arbitrary positive initial read/check fuels.
+- SourceSynthesisCurrentInitialIdentityPrefixStable: the same source receipts at one positive budget.
+
+Full Audit builds and passes strict checking. The aggregate covers axiom
+dependencies for 95,308 imported project theorems. Audit has 4,919 direct imports:
+4,918 project imports and Lean. The 30 explicit axiom reports are separate.
+There are 5,921 project source files. That count does not assert a separate check
+of every source file. Only propext, Classical.choice and Quot.sound occur.
+Each new public module also builds, strictly checks and passes an independent
+import. Checks run serially in Nix with one Lean thread, memory.max/high 4 GiB
+and swap0. The three known standalone totality modules outside Audit retain
+their earlier checks; none of their dependencies changed.
+
+The source, drivers, pins, failures and repairs are in
+lean/restart-evidence/20261114-identity-prefixes-checked/.
+The packet is about 1.2 MiB before its final metadata. It has no compiled archive.
+Git and the proof source suffice to reproduce the checked claims. Its tree hash
+is 03ae28fd8181d4e68ba6fe433a0ca82c2dd8ba73461d4d42c1a4259a9bdc3793.
+The packet states the exact digest method. Keep the previous packets unchanged.
+
+The main gap is still ONE jointly consistent finite completion for each actual
+emitted partial root. The next source prerequisite is current-source universe
+ownership. The reviewed target allows either no source Mu records, or one
+resident closed universe from the SAME actual build. Context.types alone does
+not prove residency. A dead branch can build the universe before yielding Empty.
+Intersections and preprocessing can create additional paired Mu owners; source
+ownership alone will not close that later proof.
+
+The current-source syntactic port draft is under
+/tmp/mcfta-current-universe-prefix-draft-20261114-062610/.
+It adds a small public bridge to the historical table proof and a current-source
+module. It is UNCOMPILED. It does not establish the first actual universe build.
+The reviewed ownership target is frozen in this packet's 055838 review run.
+
+Whole-worker metadata erasure also remains open. The five map/scan/receipt/finish
+laws now pass private strict check3 with three standard-axiom and two axiom-free
+reports. They remain private component results:
+/tmp/mcfta-identity-result-erasure-check-20261114-0627/check3/.
+The eight-body CPS v2 draft is frozen under
+/tmp/mcfta-identity-child-cps-erasure-v2-20261114-0635/.
+Root CPS check2 built the temporary maps object, then failed the CPS proofs:
+/tmp/mcfta-identity-child-cps-erasure-check-20261114-0639/check2/.
+A proof-only repair is in progress. Preserve every failed input. Do not replace
+exact stopped/shared erasure with complete-only congruence. The temporary import
+overlay uses symlinks to existing objects; it does not copy a build archive.
+
+Root is the sole live writer, compiler and Git owner. Other work stays in tmp.
+No compiler is active at this checkpoint. Keep checks serial and under the 4 GiB
+cap through /home/tritlo/Code/heavy-management. Check tool exit codes before
+launching dependent work. A truncated tool response may have run; poll its handle.
+The remote push authorization for formalize remains in force.
+
+Fresh primary usage was 3% at 06:19 CET. Pause and ping Matti only if fresh primary
+usage exceeds 80%. Filesystem free space was 97.15 GiB at 06:21 CET. The new proof
+runtime inputs use only a few MiB. Keep watching /tmp. Do not remove unrelated
+/tmp/claude-1000 data or model weights. No Haskell/Cabal/test source changed.
+No new Haskell fix was established. Record every future Haskell fix in FINDINGS.
+Liquid Haskell implementation contracts remain planned, not checked here.
+
 # Single narrowing backend audited and pushed (2026-11-14 05:14 CET)
 
 GOAL ACTIVE. Continue the complete optimized interned shared eager objective.
