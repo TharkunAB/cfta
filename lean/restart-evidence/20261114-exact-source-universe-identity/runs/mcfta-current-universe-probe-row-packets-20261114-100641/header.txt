@@ -1,0 +1,32 @@
+theorem current_stored_universe_probe_rows
+    [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (heap : State Symbol Guard)
+    (built : build (ordinarySymbols whole) [] empty = .done rootValue heap)
+    (key : NodeKey) (owner : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : heap.nodeRecords key = some (.mu owner body depth ordinary)) :
+    InternedNestedFacts.Facts heap ∧
+      ∃ (markerEntry : Interned NodeKey) (markerRow : EdgeValue Symbol Guard),
+        let marker : Value Symbol Guard := .node markerEntry [markerRow] 0 []
+        markerRow.children = [] ∧ markerRow.entry.key = ⟨literal "(->)", [], top⟩ ∧
+        marker.free = [] ∧ Available heap marker ∧
+        ∀ ordinaryProbe : Bool,
+          let probe : Reference := if ordinaryProbe then .uninterned (ordinaryLevel depth) else .depth
+          let value : Value Symbol Guard := if ordinaryProbe then ordinary else depth
+          ∃ (entry : Interned NodeKey) (arrow : EdgeValue Symbol Guard) (rows : List (EdgeValue Symbol Guard)),
+            callback (ordinarySymbols (allTypesBody top
+              (SourceSynthesisCurrentContext.constructorCatalog lib query))) [] probe heap = .done value heap ∧
+            value = .node entry (canonicalEdges (arrow :: rows)) 0 [probe] ∧
+            arrow.children = [marker, .reference probe, .reference probe] ∧
+            arrow.entry.key = ⟨literal "->", [marker.referenceOf, .ref probe, .ref probe], top⟩ ∧
+            Language.All₂ (fun (descriptor : String × Nat) (row : EdgeValue Symbol Guard) =>
+              row.children = List.replicate descriptor.2 (.reference probe) ∧
+              row.entry.key = ⟨literal descriptor.1, List.replicate descriptor.2 (.ref probe), top⟩)
+              (SourceSynthesisUniverseBody.descriptors
+                (SourceSynthesisCurrentContext.constructorCatalog lib query)) rows ∧
+            Available heap value ∧
+            (∀ row ∈ arrow :: rows, EdgeResident heap row) ∧
+            (∀ row ∈ canonicalEdges (arrow :: rows), row.entry.key.constraint = top ∧
+              ∀ child ∈ row.children, child = marker ∨ child = .reference probe) ∧
+            arrow ∈ canonicalEdges (arrow :: rows)

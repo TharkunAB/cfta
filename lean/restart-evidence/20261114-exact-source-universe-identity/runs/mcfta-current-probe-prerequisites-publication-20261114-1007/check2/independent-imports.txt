@@ -1,0 +1,221 @@
+@MicroCFTA.SourceSynthesisCurrentUniverseOwnership.current_stored_universe_source_probes : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)]
+  (lib : MicroCFTA.SourceSynthesisTypeSyntax.Library) (query : MicroCFTA.SourceSynthesisTypeSyntax.Query) (signed : Int)
+  (whole : MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression),
+  MicroCFTA.SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole →
+    ∀
+      (rootValue :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)
+      (heap :
+        MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard),
+      MicroCFTA.InternedFreshOrdinaryConstruction.build
+            (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+            MicroCFTA.InternedConstructorTemplates.empty =
+          MicroCFTA.InternedNestedConstruction.Outcome.done rootValue heap →
+        ∀ (key : MicroCFTA.InternedBinderProtocol.NodeKey)
+          (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+          (body depth ordinary :
+            MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard),
+          heap.nodeRecords key = some (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary) →
+            ∀
+              (later :
+                MicroCFTA.InternedConstructorTemplates.State
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard),
+              MicroCFTA.InternedConstructorTemplates.Grows heap later →
+                MicroCFTA.InternedFreshOrdinaryFacts.callback
+                      (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+                        (MicroCFTA.SourceSynthesisTypeSyntax.allTypesBody MicroCFTA.SourceSynthesisGeneralizeSyntax.top
+                          (MicroCFTA.SourceSynthesisCurrentContext.constructorCatalog lib query)))
+                      [] MicroCFTA.InternedBinderProtocol.Reference.depth later =
+                    MicroCFTA.InternedNestedConstruction.Outcome.done depth later ∧
+                  MicroCFTA.InternedFreshOrdinaryFacts.callback
+                      (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+                        (MicroCFTA.SourceSynthesisTypeSyntax.allTypesBody MicroCFTA.SourceSynthesisGeneralizeSyntax.top
+                          (MicroCFTA.SourceSynthesisCurrentContext.constructorCatalog lib query)))
+                      []
+                      (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+                        (MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel depth))
+                      later =
+                    MicroCFTA.InternedNestedConstruction.Outcome.done ordinary later
+'MicroCFTA.SourceSynthesisCurrentUniverseOwnership.current_stored_universe_source_probes' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceSynthesisUniverseMappedProbeRows.marker_eq : ∀ {Symbol Guard : Type} (symbol : Symbol) (top : Guard)
+  (leftEntry rightEntry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (leftRow rightRow : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+  (heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  MicroCFTA.InternedNestedFacts.Facts heap →
+    MicroCFTA.InternedProbeProvenance.Available heap
+        (MicroCFTA.InternedConstructorTemplates.Value.node leftEntry [leftRow] 0 []) →
+      MicroCFTA.InternedProbeProvenance.Available heap
+          (MicroCFTA.InternedConstructorTemplates.Value.node rightEntry [rightRow] 0 []) →
+        leftRow.entry.key = { symbol := symbol, children := [], constraint := top } →
+          rightRow.entry.key = { symbol := symbol, children := [], constraint := top } →
+            MicroCFTA.InternedConstructorTemplates.Value.node leftEntry [leftRow] 0 [] =
+              MicroCFTA.InternedConstructorTemplates.Value.node rightEntry [rightRow] 0 []
+'MicroCFTA.SourceSynthesisUniverseMappedProbeRows.marker_eq' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourceSynthesisUniverseMappedProbeRows.catalog_row_replay : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (literal : String → Symbol)
+  (top : Guard) (name probe : MicroCFTA.InternedBinderProtocol.Reference) (descriptor : String × Nat)
+  (source target : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+  (current : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  MicroCFTA.InternedNestedFacts.Facts current →
+    MicroCFTA.InternedEdgeResidency.EdgeResident current target →
+      source.children = List.replicate descriptor.snd (MicroCFTA.InternedConstructorTemplates.Value.reference name) →
+        source.entry.key =
+            { symbol := literal descriptor.fst,
+              children := List.replicate descriptor.snd (MicroCFTA.InternedBinderProtocol.NodeRef.ref name),
+              constraint := top } →
+          target.entry.key =
+              { symbol := literal descriptor.fst,
+                children := List.replicate descriptor.snd (MicroCFTA.InternedBinderProtocol.NodeRef.ref probe),
+                constraint := top } →
+            MicroCFTA.InternedConstructorTemplates.run
+                (MicroCFTA.InternedConstructorTemplates.makeEdge source.entry.key.symbol top
+                  (List.map
+                    (MicroCFTA.InternedStoredSubstitution.input
+                      (MicroCFTA.InternedStoredSubstitutionRebind.replacement name
+                        (MicroCFTA.InternedConstructorTemplates.Value.reference probe)))
+                    source.children))
+                current =
+              (target, current)
+'MicroCFTA.SourceSynthesisUniverseMappedProbeRows.catalog_row_replay' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourceSynthesisUniverseMappedProbeRows.arrow_row_replay : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (symbol : Symbol) (top : Guard)
+  (name probe : MicroCFTA.InternedBinderProtocol.Reference)
+  (source target : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+  (marker : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (current : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  MicroCFTA.InternedNestedFacts.Facts current →
+    MicroCFTA.InternedEdgeResidency.EdgeResident current target →
+      marker.free = [] →
+        source.children =
+            [marker, MicroCFTA.InternedConstructorTemplates.Value.reference name,
+              MicroCFTA.InternedConstructorTemplates.Value.reference name] →
+          source.entry.key =
+              { symbol := symbol,
+                children :=
+                  [marker.referenceOf, MicroCFTA.InternedBinderProtocol.NodeRef.ref name,
+                    MicroCFTA.InternedBinderProtocol.NodeRef.ref name],
+                constraint := top } →
+            target.entry.key =
+                { symbol := symbol,
+                  children :=
+                    [marker.referenceOf, MicroCFTA.InternedBinderProtocol.NodeRef.ref probe,
+                      MicroCFTA.InternedBinderProtocol.NodeRef.ref probe],
+                  constraint := top } →
+              MicroCFTA.InternedConstructorTemplates.run
+                  (MicroCFTA.InternedConstructorTemplates.makeEdge source.entry.key.symbol top
+                    (List.map
+                      (MicroCFTA.InternedStoredSubstitution.input
+                        (MicroCFTA.InternedStoredSubstitutionRebind.replacement name
+                          (MicroCFTA.InternedConstructorTemplates.Value.reference probe)))
+                      source.children))
+                  current =
+                (target, current)
+'MicroCFTA.SourceSynthesisUniverseMappedProbeRows.arrow_row_replay' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourceSynthesisUniverseMappedProbeRows.catalog_rows_replay : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (literal : String → Symbol)
+  (top : Guard) (name probe : MicroCFTA.InternedBinderProtocol.Reference) (descriptors : List (String × Nat))
+  (sources targets : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+  (current : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  MicroCFTA.InternedNestedFacts.Facts current →
+    MicroCFTA.Language.All₂
+        (fun descriptor row =>
+          row.children = List.replicate descriptor.snd (MicroCFTA.InternedConstructorTemplates.Value.reference name) ∧
+            row.entry.key =
+              { symbol := literal descriptor.fst,
+                children := List.replicate descriptor.snd (MicroCFTA.InternedBinderProtocol.NodeRef.ref name),
+                constraint := top })
+        descriptors sources →
+      MicroCFTA.Language.All₂
+          (fun descriptor row =>
+            row.children =
+                List.replicate descriptor.snd (MicroCFTA.InternedConstructorTemplates.Value.reference probe) ∧
+              row.entry.key =
+                { symbol := literal descriptor.fst,
+                  children := List.replicate descriptor.snd (MicroCFTA.InternedBinderProtocol.NodeRef.ref probe),
+                  constraint := top })
+          descriptors targets →
+        (∀ (target : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+            target ∈ targets → MicroCFTA.InternedEdgeResidency.EdgeResident current target) →
+          MicroCFTA.Language.All₂
+            (fun source target =>
+              MicroCFTA.InternedConstructorTemplates.run
+                  (MicroCFTA.InternedConstructorTemplates.makeEdge source.entry.key.symbol top
+                    (List.map
+                      (MicroCFTA.InternedStoredSubstitution.input
+                        (MicroCFTA.InternedStoredSubstitutionRebind.replacement name
+                          (MicroCFTA.InternedConstructorTemplates.Value.reference probe)))
+                      source.children))
+                  current =
+                (target, current))
+            sources targets
+'MicroCFTA.SourceSynthesisUniverseMappedProbeRows.catalog_rows_replay' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourceSynthesisUniverseMappedProbeRows.raw_rows_replay : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)] (literal : String → Symbol)
+  (top : Guard) (name probe : MicroCFTA.InternedBinderProtocol.Reference)
+  (marker : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (sourceArrow targetArrow : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)
+  (descriptors : List (String × Nat))
+  (sources targets : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+  (current : MicroCFTA.InternedConstructorTemplates.State Symbol Guard),
+  MicroCFTA.InternedNestedFacts.Facts current →
+    marker.free = [] →
+      sourceArrow.children =
+          [marker, MicroCFTA.InternedConstructorTemplates.Value.reference name,
+            MicroCFTA.InternedConstructorTemplates.Value.reference name] →
+        sourceArrow.entry.key =
+            { symbol := literal "->",
+              children :=
+                [marker.referenceOf, MicroCFTA.InternedBinderProtocol.NodeRef.ref name,
+                  MicroCFTA.InternedBinderProtocol.NodeRef.ref name],
+              constraint := top } →
+          targetArrow.entry.key =
+              { symbol := literal "->",
+                children :=
+                  [marker.referenceOf, MicroCFTA.InternedBinderProtocol.NodeRef.ref probe,
+                    MicroCFTA.InternedBinderProtocol.NodeRef.ref probe],
+                constraint := top } →
+            MicroCFTA.Language.All₂
+                (fun descriptor row =>
+                  row.children =
+                      List.replicate descriptor.snd (MicroCFTA.InternedConstructorTemplates.Value.reference name) ∧
+                    row.entry.key =
+                      { symbol := literal descriptor.fst,
+                        children := List.replicate descriptor.snd (MicroCFTA.InternedBinderProtocol.NodeRef.ref name),
+                        constraint := top })
+                descriptors sources →
+              MicroCFTA.Language.All₂
+                  (fun descriptor row =>
+                    row.children =
+                        List.replicate descriptor.snd (MicroCFTA.InternedConstructorTemplates.Value.reference probe) ∧
+                      row.entry.key =
+                        { symbol := literal descriptor.fst,
+                          children :=
+                            List.replicate descriptor.snd (MicroCFTA.InternedBinderProtocol.NodeRef.ref probe),
+                          constraint := top })
+                  descriptors targets →
+                (∀ (target : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                    target ∈ targetArrow :: targets → MicroCFTA.InternedEdgeResidency.EdgeResident current target) →
+                  MicroCFTA.Language.All₂
+                    (fun source target =>
+                      MicroCFTA.InternedConstructorTemplates.run
+                          (MicroCFTA.InternedConstructorTemplates.makeEdge source.entry.key.symbol top
+                            (List.map
+                              (MicroCFTA.InternedStoredSubstitution.input
+                                (MicroCFTA.InternedStoredSubstitutionRebind.replacement name
+                                  (MicroCFTA.InternedConstructorTemplates.Value.reference probe)))
+                              source.children))
+                          current =
+                        (target, current))
+                    (sourceArrow :: sources) (targetArrow :: targets)
+'MicroCFTA.SourceSynthesisUniverseMappedProbeRows.raw_rows_replay' depends on axioms: [propext, Quot.sound]

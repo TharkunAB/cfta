@@ -1,0 +1,18 @@
+theorem prefix_identity_complete_resources
+    (graph : Graph Symbol Constraint)
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (metadata : Metadata Unit)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller width) (memos : Memos) (before : Cached)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (profile : Profile) (property : Constraint → Prop)
+    (bounded : SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile caller.checked)
+    (known : SourceEqualityAnnotationHeap.Heap property caller.checked.native.machine.heap) :
+    ∃ bound, ∀ extra selected,
+      SourcePruningEnumerationRestart.decision none (fun _ _ => none) metadata before = some (.expand selected) →
+      CurrentPrefixResources none (fun _ _ => none) metadata formulas solver inventory selected caller before memos profile property
+        (SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
+          (fun _ _ _ node state => .done node state) graph [] none (fun _ _ => none) metadata
+          (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra)
+          selected caller before memos.query)

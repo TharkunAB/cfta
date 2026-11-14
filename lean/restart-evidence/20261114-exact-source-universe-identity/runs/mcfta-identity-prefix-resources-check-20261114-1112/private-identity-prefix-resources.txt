@@ -1,0 +1,21 @@
+/tmp/mcfta-identity-prefix-resources-check-20261114-1112/source/MicroCFTA/SourcePruningEnumerationIdentityPrefixResources.lean:64:6: error: unsolved goals
+case neg
+inst✝ : DecidableEq (EdgeKey Symbol Constraint)
+heap : InternedConstructorTemplates.State Symbol Constraint
+before readAfter after : Core
+fuel uv handle : Nat
+scs : List Suspended
+ready : EnumerationDriver.Ready uv readAfter
+stored : before.values[uv]? = some (UVarValue.unenumerated (some handle) scs)
+readFrame : Frame before readAfter
+value : Node
+decoded : lookupNode heap handle = some value
+boundary : ¬MergedOrdinaryHeight.recursiveBoundary value = true
+checked : Except.ok (true, after) ∈ ExceptT.mk [Except.ok (false, readAfter)]
+⊢ after.counter = before.counter ∧
+    ∀ (level : Nat → Nat) (frontier : Nat),
+      EnumerationOrder.Stratified before level frontier → EnumerationOrder.Stratified after level frontier
+'MicroCFTA.SourcePruningEnumerationSharedRecursive.prefix_identity_complete_resources' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,56 @@
+-- UNCOMPILED proof fragment for the exact actual-input identity theorem.
+-- Use the aliases and opens of SourceSynthesisCurrentUniverseReferenceCompletion.
+-- All values below come from its accepted/build/stored inputs in one scope.
+let initial : Machine Symbol Guard := ⟨heap, domains⟩
+have checked := InternedFreshOrdinaryFacts.build_verified (ordinarySymbols whole) [] empty
+  InternedNestedFacts.empty_facts (by intro value member; cases member)
+have facts : Facts heap := by
+  simpa only [built, Outcome.state] using checked.facts
+have universeAvailable : Available heap (.mu entry body depth ordinary) := facts.cached.nodes key _ stored
+obtain ⟨b, marker, arrow, rows, bodyEq, markerRead, arrowChildren, arrowKey,
+    catalogRows, _markerClosed, markerAvailable, _coarseKinds, arrowMember⟩ :=
+  SourceSynthesisCurrentUniverseOwnership.current_stored_universe_rows
+    lib query signed whole accepted rootValue heap built key entry body depth ordinary stored
+let bodyRows := canonicalEdges (arrow :: rows)
+obtain ⟨m, markerRow, markerEq, leaf, markerKey⟩ := markerRead
+have nativeUniverse : Available initial.heap
+    (.mu entry (.node b bodyRows 0 [.interned entry.identity]) depth ordinary) := by
+  simpa only [bodyEq, bodyRows] using universeAvailable
+have nativeMarker : Available initial.heap (.node m [markerRow] 0 []) := markerEq ▸ markerAvailable
+have markerTop : markerRow.entry.key.constraint = top := congrArg EdgeKey.constraint markerKey
+have nativeArrowChildren : arrow.children = [.node m [markerRow] 0 [],
+    .reference (.interned entry.identity), .reference (.interned entry.identity)] := by
+  simpa only [markerEq] using arrowChildren
+have nativeArrowKey : arrow.entry.key = ⟨literal "->", [(Value.node m [markerRow] 0 []).referenceOf,
+    .ref (.interned entry.identity), .ref (.interned entry.identity)], top⟩ := by
+  simpa only [markerEq] using arrowKey
+have classified := SourceSynthesisUniverseMappedBodyCanonical.canonical_row_kinds
+  (literal "->") literal top entry.identity (.node m [markerRow] 0 []) arrow
+  (SourceSynthesisUniverseBody.descriptors
+    (SourceSynthesisCurrentContext.constructorCatalog lib query)) rows
+  nativeArrowChildren nativeArrowKey catalogRows
+have nativeKinds : ∀ source ∈ bodyRows,
+    (source.children = [.node m [markerRow] 0 [], .reference (.interned entry.identity),
+        .reference (.interned entry.identity)] ∧
+      source.entry.key = ⟨literal "->", [(Value.node m [markerRow] 0 []).referenceOf,
+        .ref (.interned entry.identity), .ref (.interned entry.identity)], top⟩) ∨
+    ∃ descriptor : String × Nat,
+      source.children = List.replicate descriptor.2 (.reference (.interned entry.identity)) ∧
+      source.entry.key = ⟨literal descriptor.1,
+        List.replicate descriptor.2 (.ref (.interned entry.identity)), top⟩ := by
+  intro source member
+  rcases classified source member with arrowKind | ⟨descriptor, _present, related⟩
+  · exact Or.inl arrowKind
+  · exact Or.inr ⟨descriptor, related⟩
+obtain ⟨product, middle, productEntry, targets, bodyDone, middleValid, growth, productAvailable,
+    prepared, productRead, aligned, targetResident, targetLive, targetTop, targetChildren,
+    markerMiddle, replay⟩ :=
+  SourceSynthesisUniverseMappedBodyExactFree.node_target_readback
+    (literal "->") literal top entry b m bodyRows markerRow depth ordinary
+    top SourceEqualityPCSNativeEdge.conjoin SourceSynthesisUniverseTopConjunction.native_conjoin_top
+    initial facts cacheValid nativeUniverse nativeMarker leaf markerTop nativeKinds
+    arrow arrowMember nativeArrowChildren nativeArrowKey
+-- bodyDone and productRead are now DERIVED at the same actual source machine.
+-- aligned retains every source occurrence. markerMiddle retains the original marker.
+-- Full source markerKey, arrowKey and catalogRows remain in this same witness scope.
+-- The original probes and final outer MaybeMu identity remain to be composed.

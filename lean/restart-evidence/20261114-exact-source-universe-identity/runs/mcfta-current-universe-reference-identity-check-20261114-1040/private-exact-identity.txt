@@ -1,0 +1,114 @@
+/tmp/mcfta-current-universe-reference-identity-check-20261114-1040/source/MicroCFTA/SourceSynthesisCurrentUniverseReferenceIdentity.lean:137:4: error: unsolved goals
+case inl
+Symbol Guard : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+literal : String → Symbol
+top : Guard
+catalog : List (String × Nat)
+uId : Nat
+probe : Reference
+marker : Value Symbol Guard
+sourceArrow : EdgeValue Symbol Guard
+sources : List (EdgeValue Symbol Guard)
+targetEntry : Interned NodeKey
+targets : List (EdgeValue Symbol Guard)
+target : Value Symbol Guard
+productEntry : Interned NodeKey
+products : List (EdgeValue Symbol Guard)
+current : InternedConstructorTemplates.State Symbol Guard
+facts : Facts current
+closed : marker.free = []
+nonemptyMarker : marker.referenceOf ≠ InternedBinderProtocol.NodeRef.empty
+sourceChildren :
+  sourceArrow.children = [marker, Value.reference (Reference.interned uId), Value.reference (Reference.interned uId)]
+sourceKey :
+  sourceArrow.entry.key =
+    { symbol := literal "->",
+      children :=
+        [marker.referenceOf, InternedBinderProtocol.NodeRef.ref (Reference.interned uId),
+          InternedBinderProtocol.NodeRef.ref (Reference.interned uId)],
+      constraint := top }
+sourceAligned :
+  All₂
+    (fun descriptor row =>
+      row.children = List.replicate descriptor.snd (Value.reference (Reference.interned uId)) ∧
+        row.entry.key =
+          { symbol := literal descriptor.fst,
+            children := List.replicate descriptor.snd (InternedBinderProtocol.NodeRef.ref (Reference.interned uId)),
+            constraint := top })
+    catalog sources
+targetAligned :
+  All₂
+    (fun descriptor row =>
+      row.children = List.replicate descriptor.snd (Value.reference probe) ∧
+        row.entry.key =
+          { symbol := literal descriptor.fst,
+            children := List.replicate descriptor.snd (InternedBinderProtocol.NodeRef.ref probe), constraint := top })
+    catalog targets
+sourceResident : ∀ (row : EdgeValue Symbol Guard), row ∈ sourceArrow :: sources → EdgeResident current row
+productAvailable :
+  Available current
+    (Value.node productEntry (canonicalEdges products) 0 [Reference.intersection (pair uId uId).fst (pair uId uId).snd])
+targetAvailable : Available current target
+sourceKinds :
+  ∀ (row : EdgeValue Symbol Guard),
+    row ∈ canonicalEdges (sourceArrow :: sources) →
+      ∀ (child : Value Symbol Guard),
+        child ∈ row.children → child = marker ∨ child = Value.reference (Reference.interned uId)
+readback : All₂ (Readback top uId) (canonicalEdges (sourceArrow :: sources)) products
+productResident : ∀ (row : EdgeValue Symbol Guard), row ∈ products → EdgeResident current row
+canonicalTargets : List (EdgeValue Symbol Guard)
+canonicalReplay :
+  All₂
+    (fun source target =>
+      run
+          (makeEdge source.entry.key.symbol top
+            (List.map (input (replacement (Reference.interned uId) (Value.reference probe))) source.children))
+          current =
+        (target, current))
+    (canonicalEdges (sourceArrow :: sources)) canonicalTargets
+canonicalResident : ∀ (row : EdgeValue Symbol Guard), row ∈ canonicalTargets → EdgeResident current row
+catalogLive :
+  ∀ (row : EdgeValue Symbol Guard),
+    row ∈ targets → (row.children.any fun child => child.referenceOf == InternedBinderProtocol.NodeRef.empty) = false
+row : EdgeValue Symbol Guard
+targetChildren : row.children = [marker, Value.reference probe, Value.reference probe]
+targetKey :
+  row.entry.key =
+    { symbol := literal "->",
+      children :=
+        [marker.referenceOf, InternedBinderProtocol.NodeRef.ref probe, InternedBinderProtocol.NodeRef.ref probe],
+      constraint := top }
+targetResident : ∀ (row_1 : EdgeValue Symbol Guard), row_1 ∈ row :: targets → EdgeResident current row_1
+targetEq : target = Value.node targetEntry (canonicalEdges (row :: targets)) 0 [probe]
+replayed :
+  All₂
+    (fun source target =>
+      run
+          (makeEdge source.entry.key.symbol top
+            (List.map (input (replacement (Reference.interned uId) (Value.reference probe))) source.children))
+          current =
+        (target, current))
+    (sourceArrow :: sources) (row :: targets)
+_members : ∀ (row_1 : EdgeValue Symbol Guard), row_1 ∈ canonicalTargets ↔ row_1 ∈ row :: targets
+sameNode : makeNode canonicalTargets = makeNode (row :: targets)
+member : row ∈ row :: targets
+markerDead : (marker.referenceOf == InternedBinderProtocol.NodeRef.empty) = false
+⊢ ¬(match marker with
+      | Value.empty => InternedBinderProtocol.NodeRef.empty
+      | Value.reference name => InternedBinderProtocol.NodeRef.ref name
+      | Value.node entry edges depth free => InternedBinderProtocol.NodeRef.node entry.identity
+      | Value.union entry members depth free => InternedBinderProtocol.NodeRef.union entry.identity
+      | Value.mu entry body depthShape ordinaryShape => InternedBinderProtocol.NodeRef.mu entry.identity) =
+      InternedBinderProtocol.NodeRef.empty
+/tmp/mcfta-current-universe-reference-identity-check-20261114-1040/source/MicroCFTA/SourceSynthesisCurrentUniverseReferenceIdentity.lean:139:47: error: This simp argument is unused:
+  markerDead
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [targetChildren, Value.referenceOf]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'MicroCFTA.SourceSynthesisCurrentUniverseReferenceIdentity.current_stored_universe_reference_identity' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

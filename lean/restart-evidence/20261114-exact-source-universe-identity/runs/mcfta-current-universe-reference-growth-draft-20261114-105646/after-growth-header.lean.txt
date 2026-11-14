@@ -1,0 +1,26 @@
+theorem current_stored_universe_reference_identity_after_growth
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (heap : State Symbol Guard) (facts : Facts heap) (growth : Grows sourceHeap heap)
+    (domains : Cache.State IntersectionFlatMemoKeyDomain.DomainKey)
+    (cacheValid : Cache.Valid domains) :
+    let initial : Machine Symbol Guard := ⟨heap, domains⟩
+    ∃ final : Machine Symbol Guard,
+      execute top SourceEqualityPCSNativeEdge.conjoin 13 IntersectionEmptyDomain.emptyDomain
+        (.reference (.interned entry.identity)) (.mu entry body depth ordinary) initial =
+          .done (.mu entry body depth ordinary) final ∧
+      SourceRecursiveIntersectionKernel.Valid final ∧ Extension initial final ∧
+      Available final.heap (.mu entry body depth ordinary) ∧ Available final.heap rootValue ∧
+      final.heap.nodeRecords key = some (.mu entry body depth ordinary) ∧
+      (∀ extra, execute top SourceEqualityPCSNativeEdge.conjoin (13 + extra) IntersectionEmptyDomain.emptyDomain
+        (.reference (.interned entry.identity)) (.mu entry body depth ordinary) initial =
+          .done (.mu entry body depth ordinary) final) ∧
+      (∀ pending, Covered pending heap → Covered pending final.heap) ∧
+      (SourceRecursiveIntersectionSemanticHeap.SemanticHeap heap →
+        SourceRecursiveIntersectionSemanticHeap.SemanticHeap final.heap)

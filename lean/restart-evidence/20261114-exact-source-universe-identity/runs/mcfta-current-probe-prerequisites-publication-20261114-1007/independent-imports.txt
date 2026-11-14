@@ -1,0 +1,51 @@
+@MicroCFTA.SourceSynthesisCurrentUniverseOwnership.current_stored_universe_source_probes : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)]
+  (lib : MicroCFTA.SourceSynthesisTypeSyntax.Library) (query : MicroCFTA.SourceSynthesisTypeSyntax.Query) (signed : Int)
+  (whole : MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression),
+  MicroCFTA.SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole →
+    ∀
+      (rootValue :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)
+      (heap :
+        MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard),
+      MicroCFTA.InternedFreshOrdinaryConstruction.build
+            (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+            MicroCFTA.InternedConstructorTemplates.empty =
+          MicroCFTA.InternedNestedConstruction.Outcome.done rootValue heap →
+        ∀ (key : MicroCFTA.InternedBinderProtocol.NodeKey)
+          (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+          (body depth ordinary :
+            MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard),
+          heap.nodeRecords key = some (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary) →
+            ∀
+              (later :
+                MicroCFTA.InternedConstructorTemplates.State
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard),
+              MicroCFTA.InternedConstructorTemplates.Grows heap later →
+                MicroCFTA.InternedFreshOrdinaryFacts.callback
+                      (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+                        (MicroCFTA.SourceSynthesisTypeSyntax.allTypesBody MicroCFTA.SourceSynthesisGeneralizeSyntax.top
+                          (MicroCFTA.SourceSynthesisCurrentContext.constructorCatalog lib query)))
+                      [] MicroCFTA.InternedBinderProtocol.Reference.depth later =
+                    MicroCFTA.InternedNestedConstruction.Outcome.done depth later ∧
+                  MicroCFTA.InternedFreshOrdinaryFacts.callback
+                      (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+                        (MicroCFTA.SourceSynthesisTypeSyntax.allTypesBody MicroCFTA.SourceSynthesisGeneralizeSyntax.top
+                          (MicroCFTA.SourceSynthesisCurrentContext.constructorCatalog lib query)))
+                      []
+                      (MicroCFTA.InternedBinderProtocol.Reference.uninterned
+                        (MicroCFTA.InternedFreshOrdinaryConstruction.ordinaryLevel depth))
+                      later =
+                    MicroCFTA.InternedNestedConstruction.Outcome.done ordinary later
+'MicroCFTA.SourceSynthesisCurrentUniverseOwnership.current_stored_universe_source_probes' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+/tmp/mcfta-current-probe-prerequisites-publication-20261114-1007/imports.lean:4:0: error: invalid 'import' command, it must be used in the beginning of the file

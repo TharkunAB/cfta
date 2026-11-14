@@ -1,0 +1,141 @@
+MicroCFTA.SourceSynthesisUniverseMappedBodyCanonical.canonical_row_kinds
+theorem canonical_row_kinds [DecidableEq (EdgeKey Symbol Guard)]
+    (arrowSymbol : Symbol) (literal : String → Symbol) (top : Guard) (uId : Nat)
+    (marker : Value Symbol Guard) (arrow : EdgeValue Symbol Guard)
+    (descriptors : List (String × Nat)) (rows : List (EdgeValue Symbol Guard))
+    (arrowChildren : arrow.children = [marker, .reference (.interned uId), .reference (.interned uId)])
+    (arrowKey : arrow.entry.key = ⟨arrowSymbol,
+      [marker.referenceOf, .ref (.interned uId), .ref (.interned uId)], top⟩)
+    (catalogRows : All₂ (fun (descriptor : String × Nat) (row : EdgeValue Symbol Guard) =>
+      row.children = List.replicate descriptor.2 (.reference (.interned uId)) ∧
+      row.entry.key = ⟨literal descriptor.1, List.replicate descriptor.2 (.ref (.interned uId)), top⟩)
+      descriptors rows) :
+    ∀ source ∈ canonicalEdges (arrow :: rows),
+      (source.children = [marker, .reference (.interned uId), .reference (.interned uId)] ∧
+        source.entry.key = ⟨arrowSymbol,
+          [marker.referenceOf, .ref (.interned uId), .ref (.interned uId)], top⟩) ∨
+      ∃ descriptor ∈ descriptors,
+        source.children = List.replicate descriptor.2 (.reference (.interned uId)) ∧
+        source.entry.key = ⟨literal descriptor.1, List.replicate descriptor.2 (.ref (.interned uId)), top⟩
+
+MicroCFTA.SourceSynthesisUniverseMappedBodyCanonical.node_canonical
+theorem node_canonical [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (arrowSymbol : Symbol) (literal : String → Symbol) (top : Guard)
+    (u b m : Interned NodeKey) (bodyRows : List (EdgeValue Symbol Guard))
+    (markerRow : EdgeValue Symbol Guard) (depth ordinary : Value Symbol Guard)
+    (emptyGuard : Guard) (conjoin : Guard → Guard → Guard) (conjoinTop : conjoin top top = top)
+    (original : Machine Symbol Guard) (facts : Facts original.heap)
+    (cacheValid : Cache.Valid original.domains)
+    (universeAvailable : Available original.heap
+      (.mu u (.node b bodyRows 0 [.interned u.identity]) depth ordinary))
+    (markerAvailable : Available original.heap (.node m [markerRow] 0 []))
+    (leaf : markerRow.children = []) (markerTop : markerRow.entry.key.constraint = top)
+    (kinds : ∀ source ∈ bodyRows,
+      (source.children = [.node m [markerRow] 0 [], .reference (.interned u.identity), .reference (.interned u.identity)] ∧
+        source.entry.key = ⟨arrowSymbol, [(Value.node m [markerRow] 0 []).referenceOf,
+          .ref (.interned u.identity), .ref (.interned u.identity)], top⟩) ∨
+      ∃ descriptor : String × Nat,
+        source.children = List.replicate descriptor.2 (.reference (.interned u.identity)) ∧
+        source.entry.key = ⟨literal descriptor.1,
+          List.replicate descriptor.2 (.ref (.interned u.identity)), top⟩)
+    (arrow : EdgeValue Symbol Guard) (arrowMember : arrow ∈ bodyRows)
+    (arrowChildren : arrow.children = [.node m [markerRow] 0 [],
+      .reference (.interned u.identity), .reference (.interned u.identity)])
+    (arrowKey : arrow.entry.key = ⟨arrowSymbol, [(Value.node m [markerRow] 0 []).referenceOf,
+      .ref (.interned u.identity), .ref (.interned u.identity)], top⟩) :
+    ∃ value final products targets,
+      node emptyGuard conjoin
+        (execute emptyGuard conjoin 8 (second u b bodyRows depth ordinary original).1)
+        bodyRows bodyRows (secondState u b bodyRows depth ordinary original) = .done value final ∧
+      SourceRecursiveIntersectionKernel.Valid final ∧
+      Extension (secondState u b bodyRows depth ordinary original) final ∧
+      Available final.heap value ∧ PreparedWithoutMu value ∧
+      (value.free = [] ∨ value.free = [.intersection (pair u.identity u.identity).1
+        (pair u.identity u.identity).2]) ∧
+      All₂ (Readback top u.identity) bodyRows targets ∧
+      All₂ (fun (source : EdgeValue Symbol Guard) target => SourceRecursiveIntersectionKernel.work
+        (makeEdge source.entry.key.symbol top (SourceSynthesisUniverseRowTransform.children u.identity source))
+        final = .done target final) bodyRows targets ∧
+      (∀ row ∈ products, EdgeResident final.heap row) ∧
+      (∀ target ∈ targets, target ∈ products) ∧
+      (∀ target ∈ targets, EdgeResident final.heap target) ∧
+      (∀ target ∈ targets, dead target = false) ∧
+      nodeEdges value = canonicalEdges (surviving products) ∧
+      makeNode products = makeNode targets ∧
+      run (makeNode targets) final.heap = (value, final.heap)
+
+MicroCFTA.SourceSynthesisUniverseMappedBodyExactFree.node_target_readback
+theorem node_target_readback [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (arrowSymbol : Symbol) (literal : String → Symbol) (top : Guard)
+    (u b m : Interned NodeKey) (bodyRows : List (EdgeValue Symbol Guard))
+    (markerRow : EdgeValue Symbol Guard) (depth ordinary : Value Symbol Guard)
+    (emptyGuard : Guard) (conjoin : Guard → Guard → Guard) (conjoinTop : conjoin top top = top)
+    (original : Machine Symbol Guard) (facts : Facts original.heap)
+    (cacheValid : Cache.Valid original.domains)
+    (universeAvailable : Available original.heap
+      (.mu u (.node b bodyRows 0 [.interned u.identity]) depth ordinary))
+    (markerAvailable : Available original.heap (.node m [markerRow] 0 []))
+    (leaf : markerRow.children = []) (markerTop : markerRow.entry.key.constraint = top)
+    (kinds : ∀ source ∈ bodyRows,
+      (source.children = [.node m [markerRow] 0 [], .reference (.interned u.identity), .reference (.interned u.identity)] ∧
+        source.entry.key = ⟨arrowSymbol, [(Value.node m [markerRow] 0 []).referenceOf,
+          .ref (.interned u.identity), .ref (.interned u.identity)], top⟩) ∨
+      ∃ descriptor : String × Nat,
+        source.children = List.replicate descriptor.2 (.reference (.interned u.identity)) ∧
+        source.entry.key = ⟨literal descriptor.1,
+          List.replicate descriptor.2 (.ref (.interned u.identity)), top⟩)
+    (arrow : EdgeValue Symbol Guard) (arrowMember : arrow ∈ bodyRows)
+    (arrowChildren : arrow.children = [.node m [markerRow] 0 [],
+      .reference (.interned u.identity), .reference (.interned u.identity)])
+    (arrowKey : arrow.entry.key = ⟨arrowSymbol, [(Value.node m [markerRow] 0 []).referenceOf,
+      .ref (.interned u.identity), .ref (.interned u.identity)], top⟩) :
+    ∃ value final entry targets,
+      node emptyGuard conjoin
+        (execute emptyGuard conjoin 8 (second u b bodyRows depth ordinary original).1)
+        bodyRows bodyRows (secondState u b bodyRows depth ordinary original) = .done value final ∧
+      SourceRecursiveIntersectionKernel.Valid final ∧
+      Extension (secondState u b bodyRows depth ordinary original) final ∧
+      Available final.heap value ∧ PreparedWithoutMu value ∧
+      value = .node entry (canonicalEdges targets) 0 [.intersection (pair u.identity u.identity).1
+        (pair u.identity u.identity).2] ∧
+      All₂ (Readback top u.identity) bodyRows targets ∧
+      (∀ target ∈ targets, EdgeResident final.heap target) ∧
+      (∀ target ∈ targets, EqualityLeafProjectionPhysical.dead target = false) ∧
+      (∀ target ∈ targets, target.entry.key.constraint = top) ∧
+      (∀ target ∈ targets, ∀ child ∈ target.children,
+        child = .node m [markerRow] 0 [] ∨ child = repeatedValue (pair u.identity u.identity)) ∧
+      Available final.heap (.node m [markerRow] 0 []) ∧
+      run (makeNode targets) final.heap = (value, final.heap)
+
+MicroCFTA.SourceSynthesisUniverseMappedRowNormalization.row_normalizes
+theorem row_normalizes (arrowSymbol : Symbol) (literal : String → Symbol)
+    (u b m : Interned NodeKey) (bodyRows : List (EdgeValue Symbol Guard))
+    (markerRow : EdgeValue Symbol Guard) (depth ordinary : Value Symbol Guard)
+    (emptyGuard : Guard) (conjoin : Guard → Guard → Guard) (top : Guard)
+    (conjoinTop : conjoin top top = top) (original before : Machine Symbol Guard)
+    (_facts : Facts original.heap) (cacheValid : Cache.Valid original.domains)
+    (universeAvailable : Available original.heap
+      (.mu u (.node b bodyRows 0 [.interned u.identity]) depth ordinary))
+    (markerAvailable : Available original.heap (.node m [markerRow] 0 []))
+    (leaf : markerRow.children = []) (markerTop : markerRow.entry.key.constraint = top)
+    (kinds : ∀ source ∈ bodyRows,
+      (source.children = [.node m [markerRow] 0 [], .reference (.interned u.identity), .reference (.interned u.identity)] ∧
+        source.entry.key = ⟨arrowSymbol, [(Value.node m [markerRow] 0 []).referenceOf,
+          .ref (.interned u.identity), .ref (.interned u.identity)], top⟩) ∨
+      ∃ descriptor : String × Nat,
+        source.children = List.replicate descriptor.2 (.reference (.interned u.identity)) ∧
+        source.entry.key = ⟨literal descriptor.1,
+          List.replicate descriptor.2 (.ref (.interned u.identity)), top⟩)
+    (arrow : EdgeValue Symbol Guard) (arrowMember : arrow ∈ bodyRows)
+    (arrowChildren : arrow.children = [.node m [markerRow] 0 [],
+      .reference (.interned u.identity), .reference (.interned u.identity)])
+    (arrowKey : arrow.entry.key = ⟨arrowSymbol, [(Value.node m [markerRow] 0 []).referenceOf,
+      .ref (.interned u.identity), .ref (.interned u.identity)], top⟩)
+    (beforeValid : SourceRecursiveIntersectionKernel.Valid before)
+    (growth : Extension (secondState u b bodyRows depth ordinary original) before)
+    (left right : EdgeValue Symbol Guard) (leftMember : left ∈ bodyRows) (rightMember : right ∈ bodyRows)
+    (sameSymbol : left.entry.key.symbol = right.entry.key.symbol)
+    (row : EdgeValue Symbol Guard) (after : Machine Symbol Guard)
+    (returned : edge emptyGuard conjoin
+      (execute emptyGuard conjoin 8 (second u b bodyRows depth ordinary original).1) left right before = .done row after) :
+    dead row = true ∨ ∃ source ∈ bodyRows, Readback top u.identity source row

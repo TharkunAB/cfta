@@ -1,0 +1,3 @@
+import MicroCFTA.SourcePruningEnumerationIdentityPrefixResources
+
+#print axioms MicroCFTA.SourcePruningEnumerationSharedRecursive.prefix_identity_complete_resources

@@ -1,3 +1,117 @@
+# Source-universe identity and actual identity-prefix resources checked (2026-11-14 11:27 CET)
+
+GOAL ACTIVE. Continue the complete optimized interned shared eager objective.
+For each actual emitted partial root, prove ONE finite accepted term of the SAME
+original root with ONE consistent assignment for supported domains, paths,
+aliases, residuals and partial readback, including parked backward recompletion.
+Original typing, depth adequacy/completeness, default LPO/reduction/refolding,
+both language directions, stream order/multiplicity/lazy demand, exact accepted
+terms per node-count size, counts/weights/training, BOTH rank/unrank inverses,
+host bounds and compiled Haskell correspondence remain in scope.
+
+Checked code: f1fec5d6fa0098bc453dcdee417d1b7aa6a7be68. It is pushed to formalize
+and independently verified. Main remains e53852064d3ef5a2eafec47d754c27504b11de5f
+at the 11:21 CET remote check. Preserve unrelated .hypha/ and all earlier proofs,
+counterexamples, repairs and marked drafts. Standing push authorization remains.
+This section supersedes older status sections. Their exact bytes remain below.
+
+STRONGEST NEW SOURCE RESULT. SourceSynthesisCurrentUniverseReferenceIdentity.
+current_stored_universe_reference_identity_after_growth starts from the accepted
+CURRENT source and its SAME actual original source build and stored full Mu U.
+At any current heap with Facts and Grows from that source heap, and any valid
+incoming domain cache, the actual-model empty-domain native ref(U)/Mu(U) request
+returns the FULL ORIGINAL U at formal fuel 13 and every larger value. The SAME
+complete final machine, cache validity, extension, root/U availability and
+original stored equation survive. The proof derives the body product, both full
+probe results and original Mu cache selection. It accepts no result, callback,
+product equality, supplied universe or prior call-final extension.
+
+Coverage for each pending scope and SemanticHeap are preserved when present in
+the current heap. Facts and Grows alone do not establish those predicates. The
+original source-heap theorem retains its full original header and unconditional
+coverage/semantic conclusions as a reflexive-growth specialization. All five
+private helpers remain unchanged. This is a Lean source-algorithm result. It is
+not a compiled Haskell correspondence theorem or a finite accepted-term witness.
+
+SOURCE PREREQUISITES. The same stored writer derives actual depth, ordinary and
+body callback replay at the original heap and every later record growth. Both
+probe packets retain the exact ordinaryLevel depth name and one common complete
+marker. The mapped row and body algebra retains duplicate catalog rows, symbol
+collisions and both cross directions. It derives canonical products and exact
+pending references from actual runs. No String-heap transport or callback/row
+supplier is an input to the final current-source identity laws.
+
+ACTUAL IDENTITY PREFIX. SourcePruningEnumerationSharedRecursive.
+prefix_identity_complete_resources in SourcePruningEnumerationIdentityPrefixResources
+uses the existing actual Packet, Fits and Heap input contracts. At every
+sufficiently large common budget, the literal identity runPrefixWithNarrow
+retains the complete output Packet, PendingReferences, Stratified dependency
+order, resource bounds and actual Post. Parked, Empty and nonempty outcomes are
+covered. Exact waiting-count equality follows from the actual canonical counts.
+The caller heap is unchanged. No fake Key/fits/admits selection or future output
+or callback provider is an input. This is not yet whole-worker output closure.
+
+STORED DEPENDENCIES. EnumerationStoredDependencies defines a Prop relation over
+actual suspended references and fragment holes. Six checked laws use the
+existing PendingReferences and Stratified contracts. No positive closed stored
+dependency path can touch an enumerated fragment. Pure pending cycles remain a
+separate case. The earlier actual selected-clear obstruction laws remain intact.
+Neither path result establishes every actual emitted output's joint witness.
+
+VALIDATION. All six code increments since the prior checkpoint pass their
+public builds, strict checks, independent imports and full Audit. The final
+strict Audit at 11:19:22 CET checks axiom dependencies for 95,945 imported project
+theorems. Separately, 81 explicit reports include 79 standard-axiom and two
+axiom-free reports. Only propext, Classical.choice and Quot.sound occur. There
+are 5,938 project source modules and 4,936 direct Audit imports: 4,935 project
+modules plus Lean. These counts do not prove the complete objective. Jobs run
+serially with effective 4 GiB memory max/high and zero swap.
+
+NEXT WHOLE-WORKER GAP. CurrentPrefixResources does not expose all the facts used
+by the existing configured-worker composition. Derive actual identity-prefix
+phase stability, retained mass and bucket admission from the selected identity
+producer. PrefixMass.parked_mass supplies the true-clear mass case; the false
+case uses the actual frame and stored bucket. Then generalize narrowing-dependent
+callback/prepared/resume composition once and instantiate literal identity.
+Preserve old configured theorem headers and do not clone a configured proof or
+select artificial Key/fits/admits inputs. Internal contracts must be proved for
+the actual operation before the final source theorem can use them.
+
+The existing source initializer already supplies one SAME canonical initial
+Packet. Reuse its exact build/heap/caller/cache witnesses. Generic metadata
+erasure holds at every work fuel but does not change the narrowing operation.
+Whole-worker resources at all sufficiently large budgets and output invariants
+at EVERY work fuel remain separate obligations. A larger-fuel completion theorem
+does not establish safety of outputs already emitted at smaller budgets.
+
+NEXT SOURCE GAP. Apply the growth identity through actual stage effects, deriving
+Facts/Grows from the SAME source/build rather than accepting a future provider.
+Prove arbitrary generated-type intersection closure with the original computed
+universe. Source-only route reviews are in progress. Unsealed drafts are not
+checked results. The full ONE finite common original-root witness remains OPEN.
+The repeated-clear meaning law still requires Holds for the removed suspended
+bucket. Post-clear satisfaction alone does not supply those facts.
+
+RESTART RECORD. lean/restart-evidence/20261114-exact-source-universe-identity
+stores checked inputs, failed inputs, repairs, marked drafts, scripts, small
+logs, source pins and the checked code patch. It contains no compiled objects
+or copied import overlays. Source tree digest: 9a407e6a1620e3010dd49a898571be4b8c6da9b22b6eb9b71e800eb55089e058.
+Earlier immutable packets remain intact. The latest board post is
+1ecd91c5-9a86-491e-8d64-dce6808bab85, sequence 1308. Its canonical payload matches
+the saved request. The earlier exact-source-heap post 1306 is also preserved.
+Root remains the sole live writer, compiler and Git owner. All compiler handles
+for these published increments are terminal. Compile serially with the existing
+4 GiB cap. Do not edit pinned live sources while a compiler job runs.
+
+HASKELL. No Haskell/Cabal/test source or Liquid Haskell contract changed. No new
+Haskell defect or fix was established. Record every future implementation fix
+in FINDINGS. Liquid Haskell contracts should match the actual state/assignment
+predicates and verify each implementation transition. They do not automatically
+import a proof into Lean. Primary usage remains below the 80% pause threshold;
+read fresh primary rate limits before deciding to pause. Do not use lifetime
+goal-token totals as the usage signal. Keep /tmp small; archive source/scripts
+and derived logs, without compiled files or copied dependency overlays.
+
 # Actual identity-prefix resources checked (2026-11-14 11:21 CET)
 
 SourcePruningEnumerationSharedRecursive.prefix_identity_complete_resources in

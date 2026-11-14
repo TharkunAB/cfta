@@ -1,0 +1,3 @@
+import MicroCFTA.SourceSynthesisCurrentUniverseProbeRows
+#check @MicroCFTA.SourceSynthesisCurrentUniverseProbeRows.current_stored_universe_probe_rows
+#print axioms MicroCFTA.SourceSynthesisCurrentUniverseProbeRows.current_stored_universe_probe_rows

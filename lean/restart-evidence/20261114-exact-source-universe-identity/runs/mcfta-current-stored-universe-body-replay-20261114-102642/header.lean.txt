@@ -1,0 +1,12 @@
+theorem current_stored_universe_body_replay
+    [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (heap : State Symbol Guard)
+    (built : build (ordinarySymbols whole) [] empty = .done rootValue heap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : heap.nodeRecords key = some (.mu entry body depth ordinary)) :
+    ∀ (later : State Symbol Guard), Grows heap later →
+      callback (ordinarySymbols (allTypesBody top
+        (SourceSynthesisCurrentContext.constructorCatalog lib query))) []
+        (.interned entry.identity) later = .done body later

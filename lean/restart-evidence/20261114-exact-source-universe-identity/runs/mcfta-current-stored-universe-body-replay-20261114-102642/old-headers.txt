@@ -1,0 +1,163 @@
+private theorem mapped_free (expression : Expression) (clean : BinderFree expression) :
+    BinderFree (mapSyntax literal expression)
+
+private theorem mapped_many_free (expressions : List Expression) (clean : ManyBinderFree expressions) :
+    ManyBinderFree (mapChildren literal expressions)
+
+private theorem mapped_edges_free (rows : List Row) (clean : EdgesBinderFree rows) :
+    EdgesBinderFree (mapEdges literal rows)
+
+private theorem many_free_member (children : List (Syntax Symbol Guard))
+    (clean : ManyBinderFree children) (child : Syntax Symbol Guard) (member : child ∈ children) :
+    BinderFree child
+
+private theorem row_free_child (rows : List (EdgeSyntax Symbol Guard))
+    (clean : EdgesBinderFree rows) (symbol : Symbol) (guard : Guard)
+    (children : List (Syntax Symbol Guard)) (member : .mk symbol guard children ∈ rows)
+    (child : Syntax Symbol Guard) (inside : child ∈ children) : BinderFree child
+
+private theorem mapped_node_child (rows : List Row)
+    {symbol : Symbol} {guard : Guard} {children : List (Syntax Symbol Guard)}
+    {child : Syntax Symbol Guard}
+    (edge : .mk symbol guard children ∈ mapEdges literal rows) (member : child ∈ children) :
+    ∃ (name : String) (ownGuard : Guard) (sourceChildren : List Expression) (sourceChild : Expression),
+      .mk name ownGuard sourceChildren ∈ rows ∧ sourceChild ∈ sourceChildren ∧
+      child = mapSyntax literal sourceChild
+
+private theorem path_free
+    {root expression : Syntax Symbol Guard} {inputs environment : List (Value Symbol Guard)}
+    {crossings : List (Crossing Symbol Guard)}
+    (path : SourcePath root inputs expression environment crossings)
+    (clean : BinderFree root) : BinderFree expression
+
+private theorem mapped_prefix_binder (catalog : List (String × Nat)) (expression : Expression)
+    (origin : OverUniverse (allTypes top catalog) expression) :
+    ∀ (initial current : List (Value Symbol Guard)) (smart : Bool) (body : Syntax Symbol Guard)
+      (crossings : List (Crossing Symbol Guard)),
+      SourcePath (mapSyntax literal expression) initial (.binder smart body) current crossings →
+      .binder smart body = mapSyntax literal (allTypes top catalog) ∧ current = initial ∧ crossings = []
+
+private theorem current_reached_binder
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    {smart : Bool} {body : Syntax Symbol Guard} {environment : List (Value Symbol Guard)}
+    {state : State Symbol Guard}
+    (site : Reached (ordinarySymbols whole) [] (.binder smart body) environment state) :
+    smart = true ∧
+      body = ordinarySymbols (allTypesBody top (SourceSynthesisCurrentContext.constructorCatalog lib query)) ∧
+      environment = []
+
+private theorem stored_mu_current_resources
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (heap : State Symbol Guard)
+    (built : build (ordinarySymbols whole) [] empty = .done rootValue heap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : heap.nodeRecords key = some (.mu entry body depth ordinary)) :
+    heap.nodeRecords (muKey depth ordinary) = some (.mu entry body depth ordinary) ∧
+      Available heap (.mu entry body depth ordinary) ∧
+      (Value.mu entry body depth ordinary).free = [] ∧
+      ∀ later : State Symbol Guard, Grows heap later →
+        build (ordinarySymbols ((SourceSynthesisCurrentContext.context lib query).types)) [] later =
+          .done (.mu entry body depth ordinary) later
+
+theorem current_build_single_universe
+    [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (heap : State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue heap) :
+    (∀ (key : InternedBinderProtocol.NodeKey)
+      (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+      (body depth ordinary : Value Symbol Guard),
+      heap.nodeRecords key ≠ some (.mu entry body depth ordinary)) ∨
+    ∃ (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+      (body depth ordinary : Value Symbol Guard),
+      heap.nodeRecords (muKey depth ordinary) = some (.mu entry body depth ordinary) ∧
+      Available heap (.mu entry body depth ordinary) ∧
+      (Value.mu entry body depth ordinary).free = [] ∧
+      (∀ later : State Symbol Guard, Grows heap later →
+        InternedFreshOrdinaryConstruction.build
+          (ordinarySymbols ((SourceSynthesisCurrentContext.context lib query).types)) [] later =
+            .done (.mu entry body depth ordinary) later) ∧
+      (∀ (key : InternedBinderProtocol.NodeKey)
+        (other : Cache.Interned InternedBinderProtocol.NodeKey)
+        (otherBody otherDepth otherOrdinary : Value Symbol Guard),
+        heap.nodeRecords key = some (.mu other otherBody otherDepth otherOrdinary) →
+          Value.mu other otherBody otherDepth otherOrdinary = .mu entry body depth ordinary)
+
+theorem current_stored_universe_rows
+    [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (heap : State Symbol Guard)
+    (built : build (ordinarySymbols whole) [] empty = .done rootValue heap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : heap.nodeRecords key = some (.mu entry body depth ordinary)) :
+    ∃ (bodyEntry : Interned NodeKey) (marker : Value Symbol Guard)
+      (arrow : EdgeValue Symbol Guard) (rows : List (EdgeValue Symbol Guard)),
+      body = .node bodyEntry (canonicalEdges (arrow :: rows)) 0 [.interned entry.identity] ∧
+      (∃ (markerEntry : Interned NodeKey) (markerRow : EdgeValue Symbol Guard),
+        marker = .node markerEntry [markerRow] 0 [] ∧ markerRow.children = [] ∧
+        markerRow.entry.key = ⟨literal "(->)", [], top⟩) ∧
+      arrow.children = [marker, .reference (.interned entry.identity), .reference (.interned entry.identity)] ∧
+      arrow.entry.key = ⟨literal "->",
+        [marker.referenceOf, .ref (.interned entry.identity), .ref (.interned entry.identity)], top⟩ ∧
+      Language.All₂ (fun (descriptor : String × Nat) (row : EdgeValue Symbol Guard) =>
+        row.children = List.replicate descriptor.2 (.reference (.interned entry.identity)) ∧
+        row.entry.key = ⟨literal descriptor.1,
+          List.replicate descriptor.2 (.ref (.interned entry.identity)), top⟩)
+        (SourceSynthesisUniverseBody.descriptors
+          (SourceSynthesisCurrentContext.constructorCatalog lib query)) rows ∧
+      marker.free = [] ∧ Available heap marker ∧
+      (∀ row ∈ canonicalEdges (arrow :: rows), row.entry.key.constraint = top ∧
+        ∀ child ∈ row.children, child = marker ∨ child = .reference (.interned entry.identity)) ∧
+      arrow ∈ canonicalEdges (arrow :: rows)
+
+theorem current_build_shallow
+    [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (heap : State Symbol Guard)
+    (built : build (ordinarySymbols whole) [] empty = .done rootValue heap) :
+    InternedShallowHeap.Shallow heap
+
+theorem current_build_prepared
+    [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (heap : State Symbol Guard)
+    (built : build (ordinarySymbols whole) [] empty = .done rootValue heap) :
+    MergedPhysicalWarmup.Prepared heap
+
+theorem current_build_merge_complete
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (heap : State Symbol Guard)
+    (built : build (ordinarySymbols whole) [] empty = .done rootValue heap)
+    (clear : Guard → Bool) :
+    ∃ bound result final,
+      (∀ fuel, bound ≤ fuel → MergedColdMerge.execute MergedSourceGrouping.groups
+        clear top fuel rootValue heap = .done result final) ∧
+      MergedColdMerge.Extension heap final ∧ Available final result ∧
+      InternedShallowHeap.NoNewMu heap final ∧ InternedShallowHeap.Shallow final ∧
+      SourceSynthesisUniversePrefixHeight.height result ≤
+        SourceSynthesisUniversePrefixHeight.height rootValue + 1 ∧
+      ∀ atom ∈ InternedBoundaryAtoms.atoms result, atom ∈ InternedBoundaryAtoms.atoms rootValue
+
+theorem current_stored_universe_source_probes
+    [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (heap : State Symbol Guard)
+    (built : build (ordinarySymbols whole) [] empty = .done rootValue heap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : heap.nodeRecords key = some (.mu entry body depth ordinary)) :
+    ∀ (later : State Symbol Guard), Grows heap later →
+      callback (ordinarySymbols (allTypesBody top
+        (SourceSynthesisCurrentContext.constructorCatalog lib query))) [] .depth later = .done depth later ∧
+      callback (ordinarySymbols (allTypesBody top
+        (SourceSynthesisCurrentContext.constructorCatalog lib query))) []
+        (.uninterned (InternedFreshOrdinaryConstruction.ordinaryLevel depth)) later = .done ordinary later
