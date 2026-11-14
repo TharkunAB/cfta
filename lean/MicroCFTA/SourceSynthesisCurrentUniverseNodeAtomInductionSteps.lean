@@ -191,7 +191,7 @@ theorem ordered_node_atoms_of_fuel_induction
     (fun row member => (properties row member).2)
 
 /-- The selected ordinary branch derives its closed child inputs from the actual parent records. -/
-private theorem ordinary_closed_nodes_atoms_of_fuel_induction
+theorem ordinary_closed_nodes_atoms_of_fuel_induction
     [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
     (emptyGuard : Guard) (conjoin : Guard → Guard → Guard) (fuel : Nat)
     (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey)
