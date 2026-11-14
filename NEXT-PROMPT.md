@@ -1,3 +1,40 @@
+# Actual narrowing index retained through eager callback (2026-11-14 12:08 CET)
+
+SourcePruningEnumerationSharedEagerReservation now proves its recursive Left
+callback once over the actual narrow/resumeWithNarrow index. The configured
+EagerResumeComplete and callback theorem retain exact original headers as
+specializations. All old operational definitions and child/tuple/row kernels
+remain unchanged. The net source change adds 51 lines. No new import or
+public callback/provider premise was added. This is the first composition
+stage; it does not prove whole literal-identity-worker resources.
+
+Strict private check2 and all five public checks pass. The first private
+check used the earlier draft with a missing bits argument; its source and
+log are retained. Root's first axiom-print namespace was also wrong and is
+repaired in check2. Strict full Audit at 12:04:53 CET checks 95,956 aggregate
+theorems and 84 separate explicit reports: 82 standard-axiom and two axiom-free.
+Only propext, Classical.choice and Quot.sound occur. Source modules and direct
+imports remain 5,941 and 4,939. The full configured clients rebuild passes.
+Validation: /tmp/mcfta-eager-narrow-callback-stage1-check-20261114-1152 and
+/tmp/mcfta-eager-narrow-callback-stage1-publication-20261114-1203.
+
+NEXT: strictly check stage2, the captured-child composition, in
+/tmp/mcfta-eager-narrow-captured-stage2-20261114-1202. It is UNCOMPILED.
+The frozen ref(U)/U mixed-entry draft in
+/tmp/mcfta-current-mixed-reference-alias-draft-20261114-115332 is also UNCOMPILED;
+its separate body(U)/U half and the full two-alias target remain OPEN.
+The all-budget route in /tmp/mcfta-identity-prefix-all-budget-route-20261114-115250
+contains four UNCOMPILED replay/consumer helpers and an UNPROVED full resource
+header. Its actual unsupported prefix consumers return stopped with no outputs;
+whole-prefix equality must still be proved before transporting resource facts.
+
+The actual source-stage and stable identity checkpoint laws below remain checked.
+The full ONE finite accepted original-root term under ONE shared assignment,
+all-fuel output history, generated-type closure and every other scope clause
+remain OPEN. No Haskell/Cabal/test source, Liquid Haskell contract, new Haskell
+defect or fix was added or established. Goal ACTIVE. Primary usage was 6% at
+11:53 CET; about 89 GiB remained free at 11:54 CET. Preserve .hypha/.
+
 # Pure probe composition through an actual cutoff checked (2026-11-14 11:51 CET)
 
 SourceSynthesisUniverseProbeCutoffComposition.input_compose_at is public and
