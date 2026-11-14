@@ -1,0 +1,59 @@
+theorem observed_complete_with_history_resources_prepared
+    (seed : Seed)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (caller : Caller (bits + 2)) (before : Cached) (checkEmpty : Bool)
+    (uv handle : Nat) (scs : List Suspended)
+    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (edges : List (EdgeValue Symbol Constraint)) (depth : Nat) (free : List InternedBinderProtocol.Reference)
+    (edge : EdgeValue Symbol Constraint) (roots : Nat → Nat) (memos : Memos)
+    (initial : Context formulas solver inventory caller memos)
+    (ready : EnumerationDriver.Ready uv before.core)
+    (stored : before.core.values[uv]? = some (.unenumerated (some handle) scs))
+    (parentAvailable : Available caller.checked.native.machine.heap (.node parentEntry edges depth free))
+    (parentClosed : free = [])
+    (realized : PendingRealized caller.checked.native.machine.heap before.core)
+    (selected : edge ∈ edges)
+    (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (flags : ∀ slot, SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
+    (pending : InputsPending before.core scs)
+    (allowed : arityAllows edge.children.length scs = true)
+    (tries : List EqualityTrie.Trie) (residual : Option Constraint)
+    (projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual))
+    (fits : Fits seed.2 caller.checked)
+    (reserved : Reserved bits seed (SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.cost edge scs before.core.counter tries))
+    (known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap)
+    (rNow nNow pNow hNow kNow : Nat) (observedFragment : Fragment)
+    (observedCaller : Caller (bits + 2)) (observedQueries : Queries) (observedCache : Cached)
+    (observed : run checkEmpty rNow nNow pNow hNow kNow uv scs edge caller before memos.query =
+      some (.complete observedFragment observedCaller observedQueries observedCache)) :
+    ∃ (r n p h k : Nat) (final : Memos) (next : Inventory) (afterRoots : Nat → Nat),
+      (∀ er en P H ek, p ≤ P → h ≤ H →
+        run checkEmpty (r + er) (n + en) P H (k + ek) uv scs edge caller before memos.query = some (SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result.complete observedFragment observedCaller observedQueries observedCache)) ∧
+      Post formulas solver next caller observedCaller final ∧ final.query = observedQueries ∧
+      before.core.counter ≤ observedCache.core.counter ∧ Roots observedCache.core.representatives afterRoots ∧
+      StorageValid observedCache.core ∧ PendingRealized observedCaller.checked.native.machine.heap observedCache.core ∧
+      EnumerationCanonicalWaiting.Correct afterRoots observedCache.core.values observedCache.waiting ∧
+      (∀ slot, SourcePruningEnumerationNativeIndex.candidate observedCaller.checked.native.machine.heap
+        ((observedCache.core.values[slot]?).getD .eliminated) = some (observedCache.expandable slot)) ∧
+      (∀ held fragment, held ≠ uv → observedCache.core.values[held]? = some (.enumerated fragment) →
+        before.core.values[held]? = some (.enumerated fragment)) ∧
+      InputsPending observedCache.core scs ∧
+      (∀ held, held ≠ uv → held < before.core.counter → IsRoot before.core.representatives held →
+        Avoids before.core.representatives held scs → EnumerationDriver.Protected held before.core observedCache.core) ∧
+      (EnumerationReferences.PendingReferences before.core → EnumerationReferences.IncomingAvoid uv before.core →
+        EnumerationReferences.PendingReferences observedCache.core) ∧
+      ((∃ fragment, (SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result.complete observedFragment observedCaller observedQueries observedCache) = .complete fragment observedCaller observedQueries observedCache ∧
+          Safe observedCache.core ∧ FragmentBound observedCache.core.counter fragment ∧
+          observedCache.core.values[uv]? = some (.enumerated fragment) ∧ observedCache.core.expansionAncestry = [] ∧
+          IsRoot observedCache.core.representatives uv ∧ PendingFragment observedCache.core fragment ∧
+          ∀ level frontier, EnumerationOrder.Stratified before.core level frontier →
+            ∃ nextLevel, EnumerationOrder.Stratified observedCache.core nextLevel (frontier + 1)) ∨
+        ∃ fragments outer waiting, (SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result.complete observedFragment observedCaller observedQueries observedCache) = .stopped fragments
+          (.ok (some []), observedCaller, observedQueries, outer, waiting) (some observedCache)) ∧
+      Fits (advance seed (SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.cost edge scs before.core.counter tries)).2 observedCaller.checked ∧
+      Heap (fun guard => guard ∈ (advance seed
+        (SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.cost edge scs before.core.counter tries)).1)
+        observedCaller.checked.native.machine.heap

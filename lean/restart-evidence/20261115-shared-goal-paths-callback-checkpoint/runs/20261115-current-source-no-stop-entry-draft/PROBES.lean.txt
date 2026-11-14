@@ -1,0 +1,4 @@
+import MicroCFTA.SourceSynthesisCurrentNoStopSourceEntry
+
+#check @MicroCFTA.SourceSynthesisCurrentNoStopSourceEntry.accepted_no_stop_eager_entry
+#print axioms MicroCFTA.SourceSynthesisCurrentNoStopSourceEntry.accepted_no_stop_eager_entry

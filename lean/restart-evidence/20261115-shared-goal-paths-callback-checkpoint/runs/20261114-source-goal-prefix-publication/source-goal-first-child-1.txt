@@ -1,0 +1,94 @@
+@MicroCFTA.SourceSynthesisCurrentSharedRootGoalFirstChild.source_root_goal_first_child : ∀ {width : Nat}
+  [inst : DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (lib : MicroCFTA.SourceSynthesisTypeSyntax.Library) (query : MicroCFTA.SourceSynthesisTypeSyntax.Query) (signed : Int)
+  (whole : MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression),
+  MicroCFTA.SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole →
+    ∀
+      (rootValue :
+        MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      MicroCFTA.InternedFreshOrdinaryConstruction.build
+            (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+            MicroCFTA.InternedConstructorTemplates.empty =
+          MicroCFTA.InternedNestedConstruction.Outcome.done rootValue inventory.source →
+        ∀ (key : MicroCFTA.InternedBinderProtocol.NodeKey)
+          (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+          (body depth ordinary :
+            MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+          inventory.source.nodeRecords key =
+              some (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary) →
+            ∀
+              (rootRow :
+                MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+              rootRow ∈ MicroCFTA.InternedEdgeResidency.nodeEdges rootValue →
+                ∀ (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                  (memos : MicroCFTA.EndpointMemoGateTrace.Memos),
+                  MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory caller memos →
+                    ∀
+                      (captured middle :
+                        MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+                      MicroCFTA.EnumerationCorrectness.StorageValid captured.core →
+                        ∀ (symbol : MicroCFTA.SourcePruningTemplates.Symbol)
+                          (staged :
+                            List
+                              (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) ×
+                                List MicroCFTA.EnumerationState.Suspended ×
+                                  Option
+                                    (MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol
+                                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                      (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol))))
+                          (residual : Option (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+                          MicroCFTA.SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap []
+                                rootRow captured =
+                              some [((symbol, staged, residual), middle)] →
+                            ∀
+                              (incoming :
+                                MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                              (bucket : List MicroCFTA.EnumerationState.Suspended)
+                              (action :
+                                Option
+                                  (MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol))),
+                              staged[0]? = some (incoming, bucket, action) →
+                                ∀ (checkEmpty : Bool) (r n p h k : Nat) (queries : MicroCFTA.SourceEndpointMemo.Memos)
+                                  (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+                                  (after :
+                                    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+                                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                  (afterCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+                                  (savedQueries : MicroCFTA.SourceEndpointMemo.Memos)
+                                  (read :
+                                    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+                                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                  (moved : MicroCFTA.EnumerationWaitingIndex.Waiting)
+                                  (afterCache :
+                                    Option
+                                      (MicroCFTA.EnumerationExpandableIndex.Cached
+                                        MicroCFTA.SourcePruningTemplates.Symbol
+                                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))),
+                                  MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.ChildDispatch.run
+                                        checkEmpty r n p h k bucket incoming caller middle queries =
+                                      ((Except.ok (some [Except.ok (fragment, after)]), afterCaller, savedQueries, read,
+                                          moved),
+                                        afterCache) →
+                                    ∃ goalHeap handle joined, Exists ⋯
+'MicroCFTA.SourceSynthesisCurrentSharedRootGoalFirstChild.source_root_goal_first_child' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

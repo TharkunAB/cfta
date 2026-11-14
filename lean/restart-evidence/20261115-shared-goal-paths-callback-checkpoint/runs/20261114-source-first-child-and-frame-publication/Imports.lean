@@ -1,0 +1,4 @@
+import MicroCFTA.SourceSynthesisCurrentSharedRootGoalFirstChild
+
+#check @MicroCFTA.SourceSynthesisCurrentSharedRootGoalFirstChild.source_root_goal_first_child
+#print axioms MicroCFTA.SourceSynthesisCurrentSharedRootGoalFirstChild.source_root_goal_first_child

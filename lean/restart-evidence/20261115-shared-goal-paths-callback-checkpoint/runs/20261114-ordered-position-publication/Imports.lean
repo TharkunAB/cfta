@@ -1,0 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+
+#check @MicroCFTA.SourcePruningEnumerationSharedEagerReservation.eagerReserved_of_final_room
+#print axioms MicroCFTA.SourcePruningEnumerationSharedEagerReservation.eagerReserved_of_final_room

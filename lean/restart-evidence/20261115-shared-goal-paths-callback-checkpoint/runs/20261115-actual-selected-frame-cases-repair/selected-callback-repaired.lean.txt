@@ -1,0 +1,26 @@
+private theorem identity_selected_frame_callback
+    (graph : Graph Symbol Constraint) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint)) (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Unit) (uv : Nat) (parent : IdentityActualCallbackFrame bits)
+    (completedPrefix : List Fragment) (rest : List (Node × List Suspended))
+    (edge : EdgeValue Symbol Constraint) (residual : Option Constraint)
+    (caller : Caller (bits + 2)) (queries : Queries) (parentHeight remainingCount parentBound : Nat)
+    (fragments : List Fragment) (reached : Caller (bits + 2)) (saved : Queries) (after : Cached) :
+    let inherited := identity_actual_frame_callbacks graph checkEmpty edgesOf recursiveDepth workFuel metadata uv parent
+    let tail := identity_actual_parent_tail checkEmpty edgesOf workFuel inherited completedPrefix rest
+    let fragment := Fragments.Fragment.node edge.entry.key.symbol fragments
+    let returned := SelectedEdge.finish residual fragment after
+    (identity_actual_frame_callbacks graph checkEmpty edgesOf recursiveDepth workFuel metadata uv
+      (.selected parent completedPrefix rest edge residual caller queries parentHeight remainingCount parentBound)).1
+      fragments reached saved after =
+      match tail fragment reached saved returned with
+      | .complete processed outputs finalCaller finalQueries =>
+          .complete (.complete fragment reached saved returned :: processed) outputs finalCaller finalQueries
+      | .stopped processed outputs current =>
+          .stopped (.complete fragment reached saved returned :: processed) outputs current := by
+  dsimp only
+  simp only [identity_actual_frame_callbacks, SourcePruningEnumerationSharedEagerChildren.consumeSelected]
+  cases identity_actual_parent_tail checkEmpty edgesOf workFuel
+      (identity_actual_frame_callbacks graph checkEmpty edgesOf recursiveDepth workFuel metadata uv parent)
+      completedPrefix rest (.node edge.entry.key.symbol fragments) reached saved
+      (SelectedEdge.finish residual (.node edge.entry.key.symbol fragments) after) <;> rfl

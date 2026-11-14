@@ -1,0 +1,121 @@
+
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+section ActualFrameReturnSteps
+open EnumerationState InternedConstructorTemplates
+open SourcePruningEnumerationNodes
+open SourcePruningEnumerationSharedSelectedContinuations
+open SourcePruningEnumerationSharedPreparedRecursive (Output Failure)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+variable {bits : Nat}
+
+/-- Count the remaining child calls and the deferred actual continuation. -/
+private def identity_actual_tuple_steps (child : Nat → Nat) : Nat → Nat → Nat
+  | 0, continuation => continuation + 1
+  | count + 1, continuation => child (identity_actual_tuple_steps child count continuation) + 1
+
+/-- Count the fallback and all bounded row attempts, including deferred tails. -/
+private def identity_actual_node_steps (limit : Nat) : Nat → Nat → Nat
+  | 0, continuation => continuation + 1
+  | height + 1, continuation => continuation + 2 +
+      (limit + 1) * (identity_actual_tuple_steps (identity_actual_node_steps limit height)
+        limit (continuation + 1) + 1)
+
+/-- Every node call has room for its literal deferred continuation. -/
+private theorem identity_actual_node_steps_gt (limit height continuation : Nat) :
+    continuation < identity_actual_node_steps limit height continuation := by
+  cases height <;> simp only [identity_actual_node_steps] <;> omega
+
+/-- A larger tuple count includes every smaller remaining tuple. -/
+private theorem identity_actual_tuple_steps_count_le
+    (child : Nat → Nat) (growth : ∀ continuation, continuation < child continuation)
+    (first last continuation : Nat) (within : first ≤ last) :
+    identity_actual_tuple_steps child first continuation ≤
+      identity_actual_tuple_steps child last continuation := by
+  induction last generalizing first with
+  | zero =>
+      have same : first = 0 := by omega
+      subst first
+      exact Nat.le_refl _
+  | succ last ih =>
+      by_cases previous : first ≤ last
+      · have smaller := ih first previous
+        have next := growth (identity_actual_tuple_steps child last continuation)
+        simp only [identity_actual_tuple_steps]
+        omega
+      · have same : first = last + 1 := by omega
+        subst first
+        exact Nat.le_refl _
+
+/-- Retain every deferred ancestor tail in the actual source frame. -/
+private def identity_actual_frame_steps (limit : Nat) : IdentityActualCallbackFrame bits → Nat
+  | .captured _edge _residual _caller _queries => 1
+  | .selected parent _completedPrefix _rest _edge _residual _caller _queries
+      parentHeight remainingCount _parentBound =>
+      identity_actual_tuple_steps (identity_actual_node_steps limit parentHeight)
+        remainingCount (identity_actual_frame_steps limit parent) + 1
+
+/-- The literal actual parent-tail call is smaller than its selected-row frame. -/
+private theorem identity_selected_frame_return_steps
+    (limit : Nat) (parent : IdentityActualCallbackFrame bits)
+    (completedPrefix : List Fragment) (rest : List (Node × List Suspended))
+    (edge : EdgeValue Symbol Constraint) (residual : Option Constraint)
+    (caller : Caller (bits + 2)) (queries : Queries)
+    (parentHeight remainingCount parentBound : Nat) (counted : rest.length ≤ remainingCount) :
+    identity_actual_tuple_steps (identity_actual_node_steps limit parentHeight)
+      rest.length (identity_actual_frame_steps limit parent) <
+      identity_actual_frame_steps limit
+        (.selected parent completedPrefix rest edge residual caller queries
+          parentHeight remainingCount parentBound) := by
+  have smaller := identity_actual_tuple_steps_count_le
+    (identity_actual_node_steps limit parentHeight)
+    (identity_actual_node_steps_gt limit parentHeight)
+    rest.length remainingCount (identity_actual_frame_steps limit parent) counted
+  change identity_actual_tuple_steps (identity_actual_node_steps limit parentHeight)
+      rest.length (identity_actual_frame_steps limit parent) <
+    identity_actual_tuple_steps (identity_actual_node_steps limit parentHeight)
+      remainingCount (identity_actual_frame_steps limit parent) + 1
+  omega
+
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+/-- The exact selected callback invokes this smaller actual parent-tail task. -/
+private theorem identity_selected_frame_actual_smaller_return
+    (graph : Graph Symbol Constraint) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint)) (recursiveDepth workFuel limit : Nat)
+    (metadata : Metadata Unit) (uv : Nat) (parent : IdentityActualCallbackFrame bits)
+    (completedPrefix : List Fragment) (rest : List (Node × List Suspended))
+    (edge : EdgeValue Symbol Constraint) (residual : Option Constraint)
+    (caller : Caller (bits + 2)) (queries : Queries) (parentHeight remainingCount parentBound : Nat)
+    (fragments : List Fragment) (reached : Caller (bits + 2)) (saved : Queries) (after : Cached)
+    (counted : rest.length ≤ remainingCount) :
+    let frame := IdentityActualCallbackFrame.selected parent completedPrefix rest edge residual caller queries
+      parentHeight remainingCount parentBound
+    let inherited := identity_actual_frame_callbacks graph checkEmpty edgesOf recursiveDepth workFuel metadata uv parent
+    let tail := identity_actual_parent_tail checkEmpty edgesOf workFuel inherited completedPrefix rest
+    let fragment := Fragments.Fragment.node edge.entry.key.symbol fragments
+    let returned := SelectedEdge.finish residual fragment after
+    (identity_actual_tuple_steps (identity_actual_node_steps limit parentHeight)
+      rest.length (identity_actual_frame_steps limit parent) < identity_actual_frame_steps limit frame) ∧
+    ((identity_actual_frame_callbacks graph checkEmpty edgesOf recursiveDepth workFuel metadata uv frame).1
+      fragments reached saved after =
+      match tail fragment reached saved returned with
+      | .complete processed outputs finalCaller finalQueries =>
+          .complete (.complete fragment reached saved returned :: processed) outputs finalCaller finalQueries
+      | .stopped processed outputs current =>
+          .stopped (.complete fragment reached saved returned :: processed) outputs current) := by
+  constructor
+  · exact identity_selected_frame_return_steps limit parent completedPrefix rest edge residual
+      caller queries parentHeight remainingCount parentBound counted
+  · exact identity_selected_frame_callback graph checkEmpty edgesOf recursiveDepth workFuel metadata uv parent
+      completedPrefix rest edge residual caller queries parentHeight remainingCount parentBound
+      fragments reached saved after
+
+end ActualFrameReturnSteps
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation

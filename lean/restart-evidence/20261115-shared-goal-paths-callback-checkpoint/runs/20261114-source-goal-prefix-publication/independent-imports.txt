@@ -1,0 +1,133 @@
+@MicroCFTA.SourceSynthesisCurrentSharedSourceGoalFreshSlot.source_goal_prepared_fresh_slot : ∀ {width : Nat}
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (lib : MicroCFTA.SourceSynthesisTypeSyntax.Library) (query : MicroCFTA.SourceSynthesisTypeSyntax.Query) (signed : Int)
+  (whole : MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression),
+  MicroCFTA.SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole →
+    ∀
+      (rootValue :
+        MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      MicroCFTA.InternedFreshOrdinaryConstruction.build
+            (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+            MicroCFTA.InternedConstructorTemplates.empty =
+          MicroCFTA.InternedNestedConstruction.Outcome.done rootValue inventory.source →
+        ∀
+          (rootRow :
+            MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+          rootRow ∈ MicroCFTA.InternedEdgeResidency.nodeEdges rootValue →
+            ∀ (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+              (captured middle :
+                MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+              MicroCFTA.EnumerationCorrectness.StorageValid captured.core →
+                ∀ (symbol : MicroCFTA.SourcePruningTemplates.Symbol)
+                  (staged :
+                    List
+                      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) ×
+                        List MicroCFTA.EnumerationState.Suspended ×
+                          Option
+                            (MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol))))
+                  (residual : Option (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+                  MicroCFTA.SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap [] rootRow
+                        captured =
+                      some [((symbol, staged, residual), middle)] →
+                    ∃ goal goalHeap action,
+                      MicroCFTA.InternedFreshOrdinaryConstruction.build
+                            (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+                              (MicroCFTA.SourceSynthesisCurrentContext.typeNode query.queryGoal))
+                            [] MicroCFTA.InternedConstructorTemplates.empty =
+                          MicroCFTA.InternedNestedConstruction.Outcome.done goal goalHeap ∧
+                        staged[0]? =
+                            some
+                              (goal, [{ trie := MicroCFTA.EqualityTrie.Trie.terminal, var := captured.core.counter }],
+                                action) ∧
+                          List.partition (fun sc => MicroCFTA.EqualityTrie.isTerminal sc.trie)
+                                [{ trie := MicroCFTA.EqualityTrie.Trie.terminal, var := captured.core.counter }] =
+                              ([{ trie := MicroCFTA.EqualityTrie.Trie.terminal, var := captured.core.counter }], []) ∧
+                            middle.core = MicroCFTA.EnumerationState.allocated none captured.core ∧
+                              middle.waiting = captured.waiting ∧
+                                middle.expandable = captured.expandable ∧
+                                  middle.core.values[captured.core.counter]? =
+                                      some (MicroCFTA.EnumerationState.UVarValue.unenumerated none []) ∧
+                                    middle.core.representatives captured.core.counter = none ∧
+                                      ∀ (fuel : Nat),
+                                        MicroCFTA.UnionFind.findRoot (fuel + 1) middle.core.representatives
+                                              captured.core.counter =
+                                            some
+                                              { representative := captured.core.counter, size := 1,
+                                                forest :=
+                                                  MicroCFTA.UnionFind.put middle.core.representatives
+                                                    captured.core.counter (MicroCFTA.UnionFind.Entry.root 1) } ∧
+                                          (MicroCFTA.EnumerationState.representative (fuel + 1) captured.core.counter
+                                                middle.core).run =
+                                            [Except.ok
+                                                (captured.core.counter,
+                                                  have __src := middle.core;
+                                                  { counter := __src.counter,
+                                                    representatives :=
+                                                      MicroCFTA.UnionFind.put middle.core.representatives
+                                                        captured.core.counter (MicroCFTA.UnionFind.Entry.root 1),
+                                                    values := __src.values, obligations := __src.obligations,
+                                                    recursionAncestry := __src.recursionAncestry,
+                                                    expansionAncestry := __src.expansionAncestry })]
+'MicroCFTA.SourceSynthesisCurrentSharedSourceGoalFreshSlot.source_goal_prepared_fresh_slot' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceSynthesisCurrentSharedGoalSingletonPrefix.singleton_goal_prefix_shared_fold : ∀ {width : Nat}
+  [inst : DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width) (memos : MicroCFTA.EndpointMemoGateTrace.Memos),
+  MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory caller memos →
+    ∀ (checkEmpty : Bool) (fuel nativeFuel p h uv : Nat)
+      (before joined :
+        MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (waiting moved : MicroCFTA.EnumerationWaitingIndex.Waiting) (recorded : List Nat) (winner : Nat)
+      (queries : MicroCFTA.SourceEndpointMemo.Memos),
+      before.representatives uv = none →
+        before.values[uv]? = some (MicroCFTA.EnumerationState.UVarValue.unenumerated none []) →
+          (MicroCFTA.SourcePruningEnumerationTerminalPrefix.run fuel
+                  { trie := MicroCFTA.EqualityTrie.Trie.terminal, var := uv } [] waiting before).run =
+              [Except.ok ((recorded, winner, moved), joined)] →
+            ∃ found,
+              recorded = [uv] ∧
+                winner = uv ∧
+                  moved = waiting ∧
+                    joined =
+                        { counter := before.counter,
+                          representatives :=
+                            MicroCFTA.UnionFind.put before.representatives uv (MicroCFTA.UnionFind.Entry.root 1),
+                          values := before.values, obligations := before.obligations,
+                          recursionAncestry := before.recursionAncestry,
+                          expansionAncestry := before.expansionAncestry } ∧
+                      MicroCFTA.SourcePruningEnumerationSharedCachedTerminal.rawFold checkEmpty nativeFuel p h recorded
+                            caller joined winner queries =
+                          (Except.ok (some [Except.ok ((), joined)]), caller, queries, joined) ∧
+                        MicroCFTA.UnionFind.findRoot fuel joined.representatives winner = some found ∧
+                          found.representative = uv ∧
+                            found.forest = joined.representatives ∧
+                              joined.values[found.representative]? =
+                                  some (MicroCFTA.EnumerationState.UVarValue.unenumerated none []) ∧
+                                MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory
+                                  caller memos
+'MicroCFTA.SourceSynthesisCurrentSharedGoalSingletonPrefix.singleton_goal_prefix_shared_fold' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
