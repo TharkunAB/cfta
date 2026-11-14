@@ -1,0 +1,18 @@
+theorem selected_clear_proper_cycle_unsatisfiable
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (before : EnumerationExpandableIndex.Cached Symbol EnumGuard)
+    (preference : List Nat → Option Nat) (uv : Nat) (roots : Nat → Nat)
+    (safe : Safe before.core) (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (flags : ∀ slot, SourcePruningEnumerationNativeIndex.candidate heap
+      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
+    (selected : EnumerationPureSelection.next preference before = .expand uv)
+    (fuel handle : Nat) (scs : List Suspended) (after : State Symbol EnumGuard)
+    (observed : Success (checkRepeated heap fuel uv handle scs) before.core true after)
+    (language : NodeLanguage Symbol) (meaning : EnumGuard → Term Symbol → Prop)
+    (vertices : List Nat) (nonempty : vertices ≠ [])
+    (cycle : ∀ target ∈ vertices, ∃ source ∈ vertices, ∃ node bucket,
+      before.core.values[source]? = some (.unenumerated node bucket) ∧
+      ∃ sc ∈ bucket, ∃ path ∈ EqualityTrie.fromPathTrie sc.trie,
+        path ≠ [] ∧ UnionFind.SameClass before.core.representatives target sc.var) :
+    ¬ ∃ assignment, Satisfies language meaning assignment after := by

@@ -1,0 +1,102 @@
+@MicroCFTA.SourcePruningEnumerationRecursion.selected_clear_keeps_closed_references : ∀ {EnumGuard NativeGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (before : MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (preference : List Nat → Option Nat) (uv : Nat) (roots : Nat → Nat),
+  MicroCFTA.EnumerationSchedule.Safe before.core →
+    MicroCFTA.EnumerationSchedule.Roots before.core.representatives roots →
+      MicroCFTA.EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting →
+        (∀ (slot : Nat),
+            MicroCFTA.SourcePruningEnumerationNativeIndex.candidate heap
+                (before.core.values[slot]?.getD MicroCFTA.EnumerationState.UVarValue.eliminated) =
+              some (before.expandable slot)) →
+          MicroCFTA.EnumerationPureSelection.next preference before = MicroCFTA.EnumerationState.Next.expand uv →
+            ∀ (fuel handle : Nat) (scs : List MicroCFTA.EnumerationState.Suspended)
+              (after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard),
+              MicroCFTA.EnumerationCorrectness.Success
+                  (MicroCFTA.SourcePruningEnumerationRecursion.checkRepeated heap fuel uv handle scs) before.core true
+                  after →
+                ∀ (vertices : List Nat),
+                  (∀ (target : Nat),
+                      target ∈ vertices →
+                        ∃ source,
+                          source ∈ vertices ∧
+                            ∃ value,
+                              before.core.values[source]? = some value ∧
+                                ∃ sc,
+                                  sc ∈ MicroCFTA.EnumerationSchedule.references value ∧
+                                    MicroCFTA.UnionFind.SameClass before.core.representatives target sc.var) →
+                    (∀ (vertex : Nat), vertex ∈ vertices → after.values[vertex]? = before.core.values[vertex]?) ∧
+                      (∀ (left right : Nat),
+                          MicroCFTA.UnionFind.SameClass after.representatives left right ↔
+                            MicroCFTA.UnionFind.SameClass before.core.representatives left right) ∧
+                        ∀
+                          (language :
+                            MicroCFTA.EnumerationCorrectness.NodeLanguage MicroCFTA.SourcePruningTemplates.Symbol)
+                          (assignment : Nat → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol)
+                          (vertex : Nat),
+                          vertex ∈ vertices →
+                            (MicroCFTA.Fragments.slotSatisfies assignment vertex
+                                (MicroCFTA.EnumerationCorrectness.heap language after.values vertex) ↔
+                              MicroCFTA.Fragments.slotSatisfies assignment vertex
+                                (MicroCFTA.EnumerationCorrectness.heap language before.core.values vertex))
+'MicroCFTA.SourcePruningEnumerationRecursion.selected_clear_keeps_closed_references' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourcePruningEnumerationRecursion.proper_closed_references_no_assignment : ∀ {EnumGuard : Type}
+  (language : MicroCFTA.EnumerationCorrectness.NodeLanguage MicroCFTA.SourcePruningTemplates.Symbol)
+  (meaning : EnumGuard → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol → Prop)
+  (state : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard) (vertices : List Nat),
+  vertices ≠ [] →
+    (∀ (target : Nat),
+        target ∈ vertices →
+          ∃ source,
+            source ∈ vertices ∧
+              ∃ node scs,
+                state.values[source]? = some (MicroCFTA.EnumerationState.UVarValue.unenumerated node scs) ∧
+                  ∃ sc,
+                    sc ∈ scs ∧
+                      ∃ path,
+                        path ∈ MicroCFTA.EqualityTrie.fromPathTrie sc.trie ∧
+                          path ≠ [] ∧ MicroCFTA.UnionFind.SameClass state.representatives target sc.var) →
+      ¬∃ assignment, MicroCFTA.EnumerationCorrectness.Satisfies language meaning assignment state
+'MicroCFTA.SourcePruningEnumerationRecursion.proper_closed_references_no_assignment' depends on axioms: [propext,
+ Quot.sound]
+@MicroCFTA.SourcePruningEnumerationRecursion.selected_clear_proper_cycle_unsatisfiable : ∀
+  {EnumGuard NativeGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (before : MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (preference : List Nat → Option Nat) (uv : Nat) (roots : Nat → Nat),
+  MicroCFTA.EnumerationSchedule.Safe before.core →
+    MicroCFTA.EnumerationSchedule.Roots before.core.representatives roots →
+      MicroCFTA.EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting →
+        (∀ (slot : Nat),
+            MicroCFTA.SourcePruningEnumerationNativeIndex.candidate heap
+                (before.core.values[slot]?.getD MicroCFTA.EnumerationState.UVarValue.eliminated) =
+              some (before.expandable slot)) →
+          MicroCFTA.EnumerationPureSelection.next preference before = MicroCFTA.EnumerationState.Next.expand uv →
+            ∀ (fuel handle : Nat) (scs : List MicroCFTA.EnumerationState.Suspended)
+              (after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard),
+              MicroCFTA.EnumerationCorrectness.Success
+                  (MicroCFTA.SourcePruningEnumerationRecursion.checkRepeated heap fuel uv handle scs) before.core true
+                  after →
+                ∀ (language : MicroCFTA.EnumerationCorrectness.NodeLanguage MicroCFTA.SourcePruningTemplates.Symbol)
+                  (meaning : EnumGuard → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol → Prop)
+                  (vertices : List Nat),
+                  vertices ≠ [] →
+                    (∀ (target : Nat),
+                        target ∈ vertices →
+                          ∃ source,
+                            source ∈ vertices ∧
+                              ∃ node bucket,
+                                before.core.values[source]? =
+                                    some (MicroCFTA.EnumerationState.UVarValue.unenumerated node bucket) ∧
+                                  ∃ sc,
+                                    sc ∈ bucket ∧
+                                      ∃ path,
+                                        path ∈ MicroCFTA.EqualityTrie.fromPathTrie sc.trie ∧
+                                          path ≠ [] ∧
+                                            MicroCFTA.UnionFind.SameClass before.core.representatives target sc.var) →
+                      ¬∃ assignment, MicroCFTA.EnumerationCorrectness.Satisfies language meaning assignment after
+'MicroCFTA.SourcePruningEnumerationRecursion.selected_clear_proper_cycle_unsatisfiable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

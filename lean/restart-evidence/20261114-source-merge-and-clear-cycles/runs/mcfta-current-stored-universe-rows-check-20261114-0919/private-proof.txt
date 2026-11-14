@@ -1,0 +1,141 @@
+/tmp/mcfta-current-stored-universe-rows-check-20261114-0919/source/MicroCFTA/SourceSynthesisCurrentUniverseOwnership.lean:349:6: error(lean.unknownIdentifier): Unknown identifier `All₂`
+
+Note: It is not possible to treat `All₂` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/tmp/mcfta-current-stored-universe-rows-check-20261114-0919/source/MicroCFTA/SourceSynthesisCurrentUniverseOwnership.lean:392:19: error(lean.unknownIdentifier): Unknown identifier `Facts`
+/tmp/mcfta-current-stored-universe-rows-check-20261114-0919/source/MicroCFTA/SourceSynthesisCurrentUniverseOwnership.lean:358:48: error: unsolved goals
+case refl
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+lib : Library
+query : Query
+signed : Int
+whole : Expression
+accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole
+rootValue : Value Symbol Guard
+heap : InternedConstructorTemplates.State Symbol Guard
+built : build (ordinarySymbols whole) [] empty = Outcome.done rootValue heap
+key : NodeKey
+body depth ordinary : Value Symbol Guard
+event : Publication
+site : Reached (ordinarySymbols whole) [] (Syntax.binder event.smart event.expression) event.environment event.before
+_keySame : key = event.key
+_missing : event.afterBody.nodeRecords event.key = none
+_prefix : Nonempty (SourceCurrentNativeMuIssuedHistory.Path empty event.before)
+_depthPath : Nonempty (SourceCurrentNativeMuIssuedHistory.Path event.before event.afterDepth)
+_ordinaryPath : Nonempty (SourceCurrentNativeMuIssuedHistory.Path event.afterDepth event.cut)
+_bodyPath : Nonempty (SourceCurrentNativeMuIssuedHistory.Path event.allocated event.afterBody)
+_growth : Grows event.after heap
+_issued : Extends event.after.nodes.issued heap.nodes.issued
+_smartSame : event.smart = true
+expressionSame :
+  event.expression = ordinarySymbols (allTypesBody top (SourceSynthesisCurrentContext.constructorCatalog lib query))
+environmentSame : event.environment = []
+originalBody : body = event.body
+stored : heap.nodeRecords key = some (Value.mu event.entry body depth ordinary)
+valueSame : Value.mu event.entry body depth ordinary = event.candidate
+fields : event.entry = event.entry ∧ body = event.body ∧ depth = event.depth ∧ ordinary = event.ordinary
+_depthContext : SourceCurrentConstrainedCapSourceHistory.Context event.afterDepth event.environment
+cutContext : SourceCurrentConstrainedCapSourceHistory.Context event.cut event.environment
+bodyContext : SourceCurrentConstrainedCapSourceHistory.Context event.allocated event.environment
+localAvailable : Available event.allocated (Value.reference (Reference.interned event.entry.identity))
+bodyEntry : Interned NodeKey
+marker : Value Symbol Guard
+arrow : EdgeValue Symbol Guard
+rows : List (EdgeValue Symbol Guard)
+final : InternedConstructorTemplates.State Symbol Guard
+called :
+  callback (ordinarySymbols (allTypesBody top (SourceSynthesisCurrentContext.constructorCatalog lib query))) []
+      (Reference.interned event.entry.identity) event.allocated =
+    Outcome.done (Value.node bodyEntry (canonicalEdges (arrow :: rows)) 0 [Reference.interned event.entry.identity])
+      final
+markerRead :
+  ∃ markerEntry markerRow,
+    marker = Value.node markerEntry [markerRow] 0 [] ∧
+      markerRow.children = [] ∧ markerRow.entry.key = { symbol := literal "(->)", children := [], constraint := top }
+arrowChildren :
+  arrow.children =
+    [marker, Value.reference (Reference.interned event.entry.identity),
+      Value.reference (Reference.interned event.entry.identity)]
+arrowKey :
+  arrow.entry.key =
+    { symbol := literal "->",
+      children :=
+        [marker.referenceOf, InternedBinderProtocol.NodeRef.ref (Reference.interned event.entry.identity),
+          InternedBinderProtocol.NodeRef.ref (Reference.interned event.entry.identity)],
+      constraint := top }
+aligned :
+  Language.All₂
+    (fun descriptor row =>
+      row.children = List.replicate descriptor.snd (Value.reference (Reference.interned event.entry.identity)) ∧
+        row.entry.key =
+          { symbol := literal descriptor.fst,
+            children :=
+              List.replicate descriptor.snd
+                (InternedBinderProtocol.NodeRef.ref (Reference.interned event.entry.identity)),
+            constraint := top })
+    (SourceSynthesisUniverseBody.descriptors (SourceSynthesisCurrentContext.constructorCatalog lib query)) rows
+_finalFacts : InternedNestedFacts.Facts final
+_finalAvailable :
+  Available final (Value.node bodyEntry (canonicalEdges (arrow :: rows)) 0 [Reference.interned event.entry.identity])
+_resident : ∀ (row : EdgeValue Symbol Guard), row ∈ arrow :: rows → InternedEdgeResidency.EdgeResident final row
+closed : marker.free = []
+_markerAvailable : Available final marker
+kinds :
+  ∀ (row : EdgeValue Symbol Guard),
+    row ∈ canonicalEdges (arrow :: rows) →
+      row.entry.key.constraint = top ∧
+        ∀ (child : Value Symbol Guard),
+          child ∈ row.children → child = marker ∨ child = Value.reference (Reference.interned event.entry.identity)
+retained : arrow ∈ canonicalEdges (arrow :: rows)
+calledBody :
+  callback (ordinarySymbols (allTypesBody top (SourceSynthesisCurrentContext.constructorCatalog lib query))) []
+      (Reference.interned event.entry.identity) event.allocated =
+    Outcome.done event.body event.afterBody
+bodySame :
+  Value.node bodyEntry (canonicalEdges (arrow :: rows)) 0 [Reference.interned event.entry.identity] = event.body
+bodyEq : body = Value.node bodyEntry (canonicalEdges (arrow :: rows)) 0 [Reference.interned event.entry.identity]
+checked : InternedNestedFacts.Verified empty (build (ordinarySymbols whole) [] empty) Available
+heapFacts : sorry
+⊢ ∃ bodyEntry marker arrow rows,
+    body = Value.node bodyEntry (canonicalEdges (arrow :: rows)) 0 [Reference.interned event.entry.identity] ∧
+      (∃ markerEntry markerRow,
+          marker = Value.node markerEntry [markerRow] 0 [] ∧
+            markerRow.children = [] ∧
+              markerRow.entry.key = { symbol := literal "(->)", children := [], constraint := top }) ∧
+        arrow.children =
+            [marker, Value.reference (Reference.interned event.entry.identity),
+              Value.reference (Reference.interned event.entry.identity)] ∧
+          arrow.entry.key =
+              { symbol := literal "->",
+                children :=
+                  [marker.referenceOf, InternedBinderProtocol.NodeRef.ref (Reference.interned event.entry.identity),
+                    InternedBinderProtocol.NodeRef.ref (Reference.interned event.entry.identity)],
+                constraint := top } ∧
+            sorry ∧
+              marker.free = [] ∧
+                Available heap marker ∧
+                  (∀ (row : EdgeValue Symbol Guard),
+                      row ∈ canonicalEdges (arrow :: rows) →
+                        row.entry.key.constraint = top ∧
+                          ∀ (child : Value Symbol Guard),
+                            child ∈ row.children →
+                              child = marker ∨ child = Value.reference (Reference.interned event.entry.identity)) ∧
+                    arrow ∈ canonicalEdges (arrow :: rows)
+/tmp/mcfta-current-stored-universe-rows-check-20261114-0919/source/MicroCFTA/SourceSynthesisCurrentUniverseOwnership.lean:406:8: error: declaration uses `sorry`
+/tmp/mcfta-current-stored-universe-rows-check-20261114-0919/source/MicroCFTA/SourceSynthesisCurrentUniverseOwnership.lean:429:15: error(lean.unknownIdentifier): Unknown identifier `Facts`
+/tmp/mcfta-current-stored-universe-rows-check-20261114-0919/source/MicroCFTA/SourceSynthesisCurrentUniverseOwnership.lean:451:15: error(lean.unknownIdentifier): Unknown identifier `Facts`
+'MicroCFTA.SourceSynthesisCurrentUniverseOwnership.current_stored_universe_rows' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceSynthesisCurrentUniverseOwnership.current_build_shallow' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceSynthesisCurrentUniverseOwnership.current_build_prepared' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceSynthesisCurrentUniverseOwnership.current_build_merge_complete' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

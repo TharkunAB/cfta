@@ -1,0 +1,2 @@
+import MicroCFTA.SourceSynthesisCurrentUniverseBody
+#print axioms MicroCFTA.SourceSynthesisCurrentUniverseBody.current_types_callback_rows

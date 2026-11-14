@@ -1,0 +1,176 @@
+@MicroCFTA.SourceSynthesisCurrentUniverseOwnership.current_stored_universe_rows : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)]
+  (lib : MicroCFTA.SourceSynthesisTypeSyntax.Library) (query : MicroCFTA.SourceSynthesisTypeSyntax.Query) (signed : Int)
+  (whole : MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression),
+  MicroCFTA.SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole →
+    ∀
+      (rootValue :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)
+      (heap :
+        MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard),
+      MicroCFTA.InternedFreshOrdinaryConstruction.build
+            (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+            MicroCFTA.InternedConstructorTemplates.empty =
+          MicroCFTA.InternedNestedConstruction.Outcome.done rootValue heap →
+        ∀ (key : MicroCFTA.InternedBinderProtocol.NodeKey)
+          (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+          (body depth ordinary :
+            MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard),
+          heap.nodeRecords key = some (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary) →
+            ∃ bodyEntry marker arrow rows,
+              body =
+                  MicroCFTA.InternedConstructorTemplates.Value.node bodyEntry
+                    (MicroCFTA.InternedConstructorTemplates.canonicalEdges (arrow :: rows)) 0
+                    [MicroCFTA.InternedBinderProtocol.Reference.interned entry.identity] ∧
+                (∃ markerEntry markerRow,
+                    marker = MicroCFTA.InternedConstructorTemplates.Value.node markerEntry [markerRow] 0 [] ∧
+                      markerRow.children = [] ∧
+                        markerRow.entry.key =
+                          { symbol := MicroCFTA.SourceSynthesisLabelProgramBuildRoles.literal "(->)", children := [],
+                            constraint := MicroCFTA.SourceSynthesisGeneralizeSyntax.top }) ∧
+                  arrow.children =
+                      [marker,
+                        MicroCFTA.InternedConstructorTemplates.Value.reference
+                          (MicroCFTA.InternedBinderProtocol.Reference.interned entry.identity),
+                        MicroCFTA.InternedConstructorTemplates.Value.reference
+                          (MicroCFTA.InternedBinderProtocol.Reference.interned entry.identity)] ∧
+                    arrow.entry.key =
+                        { symbol := MicroCFTA.SourceSynthesisLabelProgramBuildRoles.literal "->",
+                          children :=
+                            [marker.referenceOf,
+                              MicroCFTA.InternedBinderProtocol.NodeRef.ref
+                                (MicroCFTA.InternedBinderProtocol.Reference.interned entry.identity),
+                              MicroCFTA.InternedBinderProtocol.NodeRef.ref
+                                (MicroCFTA.InternedBinderProtocol.Reference.interned entry.identity)],
+                          constraint := MicroCFTA.SourceSynthesisGeneralizeSyntax.top } ∧
+                      MicroCFTA.Language.All₂
+                          (fun descriptor row =>
+                            row.children =
+                                List.replicate descriptor.snd
+                                  (MicroCFTA.InternedConstructorTemplates.Value.reference
+                                    (MicroCFTA.InternedBinderProtocol.Reference.interned entry.identity)) ∧
+                              row.entry.key =
+                                { symbol := MicroCFTA.SourceSynthesisLabelProgramBuildRoles.literal descriptor.fst,
+                                  children :=
+                                    List.replicate descriptor.snd
+                                      (MicroCFTA.InternedBinderProtocol.NodeRef.ref
+                                        (MicroCFTA.InternedBinderProtocol.Reference.interned entry.identity)),
+                                  constraint := MicroCFTA.SourceSynthesisGeneralizeSyntax.top })
+                          (MicroCFTA.SourceSynthesisUniverseBody.descriptors
+                            (MicroCFTA.SourceSynthesisCurrentContext.constructorCatalog lib query))
+                          rows ∧
+                        marker.free = [] ∧
+                          MicroCFTA.InternedProbeProvenance.Available heap marker ∧
+                            (∀
+                                (row :
+                                  MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard),
+                                row ∈ MicroCFTA.InternedConstructorTemplates.canonicalEdges (arrow :: rows) →
+                                  row.entry.key.constraint = MicroCFTA.SourceSynthesisGeneralizeSyntax.top ∧
+                                    ∀
+                                      (child :
+                                        MicroCFTA.InternedConstructorTemplates.Value
+                                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                          MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard),
+                                      child ∈ row.children →
+                                        child = marker ∨
+                                          child =
+                                            MicroCFTA.InternedConstructorTemplates.Value.reference
+                                              (MicroCFTA.InternedBinderProtocol.Reference.interned entry.identity)) ∧
+                              arrow ∈ MicroCFTA.InternedConstructorTemplates.canonicalEdges (arrow :: rows)
+'MicroCFTA.SourceSynthesisCurrentUniverseOwnership.current_stored_universe_rows' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceSynthesisCurrentUniverseOwnership.current_build_shallow : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)]
+  (lib : MicroCFTA.SourceSynthesisTypeSyntax.Library) (query : MicroCFTA.SourceSynthesisTypeSyntax.Query) (signed : Int)
+  (whole : MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression),
+  MicroCFTA.SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole →
+    ∀
+      (rootValue :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)
+      (heap :
+        MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard),
+      MicroCFTA.InternedFreshOrdinaryConstruction.build
+            (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+            MicroCFTA.InternedConstructorTemplates.empty =
+          MicroCFTA.InternedNestedConstruction.Outcome.done rootValue heap →
+        MicroCFTA.InternedShallowHeap.Shallow heap
+'MicroCFTA.SourceSynthesisCurrentUniverseOwnership.current_build_shallow' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceSynthesisCurrentUniverseOwnership.current_build_prepared : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)]
+  (lib : MicroCFTA.SourceSynthesisTypeSyntax.Library) (query : MicroCFTA.SourceSynthesisTypeSyntax.Query) (signed : Int)
+  (whole : MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression),
+  MicroCFTA.SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole →
+    ∀
+      (rootValue :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)
+      (heap :
+        MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard),
+      MicroCFTA.InternedFreshOrdinaryConstruction.build
+            (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+            MicroCFTA.InternedConstructorTemplates.empty =
+          MicroCFTA.InternedNestedConstruction.Outcome.done rootValue heap →
+        MicroCFTA.MergedPhysicalWarmup.Prepared heap
+'MicroCFTA.SourceSynthesisCurrentUniverseOwnership.current_build_prepared' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceSynthesisCurrentUniverseOwnership.current_build_merge_complete : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)]
+  (lib : MicroCFTA.SourceSynthesisTypeSyntax.Library) (query : MicroCFTA.SourceSynthesisTypeSyntax.Query) (signed : Int)
+  (whole : MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression),
+  MicroCFTA.SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole →
+    ∀
+      (rootValue :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)
+      (heap :
+        MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard),
+      MicroCFTA.InternedFreshOrdinaryConstruction.build
+            (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+            MicroCFTA.InternedConstructorTemplates.empty =
+          MicroCFTA.InternedNestedConstruction.Outcome.done rootValue heap →
+        ∀ (clear : MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard → Bool),
+          ∃ bound result final,
+            (∀ (fuel : Nat),
+                bound ≤ fuel →
+                  MicroCFTA.MergedColdMerge.execute MicroCFTA.MergedSourceGrouping.groups clear
+                      MicroCFTA.SourceSynthesisGeneralizeSyntax.top fuel rootValue heap =
+                    MicroCFTA.MergedSourceComparison.Result.done result final) ∧
+              MicroCFTA.MergedColdMerge.Extension heap final ∧
+                MicroCFTA.InternedProbeProvenance.Available final result ∧
+                  MicroCFTA.InternedShallowHeap.NoNewMu heap final ∧
+                    MicroCFTA.InternedShallowHeap.Shallow final ∧
+                      MicroCFTA.SourceSynthesisUniversePrefixHeight.height result ≤
+                          MicroCFTA.SourceSynthesisUniversePrefixHeight.height rootValue + 1 ∧
+                        ∀ (atom : MicroCFTA.InternedBinderProtocol.NodeRef),
+                          atom ∈ MicroCFTA.InternedBoundaryAtoms.atoms result →
+                            atom ∈ MicroCFTA.InternedBoundaryAtoms.atoms rootValue
+'MicroCFTA.SourceSynthesisCurrentUniverseOwnership.current_build_merge_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

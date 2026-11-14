@@ -1,0 +1,69 @@
+/tmp/mcfta-selected-clear-cycle-check-20261114-0914/source/MicroCFTA/SourcePruningEnumerationSelectedClearCycles.lean:93:37: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case refine_2
+EnumGuard NativeGuard : Type
+heap : InternedConstructorTemplates.State Symbol NativeGuard
+before : EnumerationExpandableIndex.Cached Symbol EnumGuard
+preference : List Nat → Option Nat
+uv : Nat
+roots : Nat → Nat
+safe : Safe before.core
+paths : Roots before.core.representatives roots
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate heap (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+selected : EnumerationPureSelection.next preference before = Next.expand uv
+fuel handle : Nat
+scs : List Suspended
+after : State Symbol EnumGuard
+observed : Success (checkRepeated heap fuel uv handle scs) before.core true after
+vertices : List Nat
+cycle :
+  ∀ (target : Nat),
+    target ∈ vertices →
+      ∃ source,
+        source ∈ vertices ∧
+          ∃ value,
+            before.core.values[source]? = some value ∧
+              ∃ sc, sc ∈ references value ∧ UnionFind.SameClass before.core.representatives target sc.var
+ready : EnumerationDriver.Ready uv before.core
+incoming : EnumerationReferences.IncomingAvoid uv before.core
+separate : ∀ (vertex : Nat), vertex ∈ vertices → vertex ≠ uv
+resolved : State Symbol EnumGuard
+frame : Frame before.core resolved
+written : Success (setValue uv (UVarValue.unenumerated (some handle) [])) resolved () after
+shape :
+  after =
+    { counter := resolved.counter, representatives := resolved.representatives,
+      values := resolved.values.set uv (UVarValue.unenumerated (some handle) []), obligations := resolved.obligations,
+      recursionAncestry := resolved.recursionAncestry, expansionAncestry := resolved.expansionAncestry }
+kept : ∀ (vertex : Nat), vertex ∈ vertices → after.values[vertex]? = before.core.values[vertex]?
+language : NodeLanguage Symbol
+assignment : Nat → Term Symbol
+vertex : Nat
+⊢ vertex ∈ vertices → slotSatisfies assignment vertex (EnumerationCorrectness.heap language after.values vertex) ↔
+    slotSatisfies assignment vertex (EnumerationCorrectness.heap language before.core.values vertex)
+/tmp/mcfta-selected-clear-cycle-check-20261114-0914/source/MicroCFTA/SourcePruningEnumerationSelectedClearCycles.lean:83:10: error: This simp argument is unused:
+  List.getElem?_set
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [separate vertex member, Ne.symm (separate vertex member)]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-selected-clear-cycle-check-20261114-0914/source/MicroCFTA/SourcePruningEnumerationSelectedClearCycles.lean:83:29: error: This simp argument is unused:
+  separate vertex member
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [List.getElem?_set, Ne.symm (separate vertex member)]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-selected-clear-cycle-check-20261114-0914/source/MicroCFTA/SourcePruningEnumerationSelectedClearCycles.lean:119:39: error(lean.unknownIdentifier): Unknown constant `List.length_pos.mpr`
+'MicroCFTA.SourcePruningEnumerationRecursion.selected_clear_keeps_closed_references' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourcePruningEnumerationRecursion.proper_closed_references_no_assignment' depends on axioms: [propext,
+ sorryAx,
+ Quot.sound]

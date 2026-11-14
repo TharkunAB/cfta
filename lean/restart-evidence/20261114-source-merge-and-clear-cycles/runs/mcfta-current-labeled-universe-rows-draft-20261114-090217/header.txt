@@ -1,0 +1,26 @@
+theorem current_types_callback_rows
+    [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (name : Reference)
+    (state : State Symbol Guard) (facts : Facts state)
+    (available : Available state (.reference name)) :
+    ∃ (entry : Interned NodeKey) (marker : Value Symbol Guard)
+      (arrow : EdgeValue Symbol Guard) (rows : List (EdgeValue Symbol Guard))
+      (final : State Symbol Guard),
+      callback (ordinarySymbols (allTypesBody top
+        (SourceSynthesisCurrentContext.constructorCatalog lib query))) [] name state =
+        .done (.node entry (canonicalEdges (arrow :: rows)) 0 [name]) final ∧
+      (∃ (markerEntry : Interned NodeKey) (markerRow : EdgeValue Symbol Guard),
+        marker = .node markerEntry [markerRow] 0 [] ∧ markerRow.children = [] ∧
+        markerRow.entry.key = ⟨literal "(->)", [], top⟩) ∧
+      arrow.children = [marker, .reference name, .reference name] ∧
+      arrow.entry.key = ⟨literal "->", [marker.referenceOf, .ref name, .ref name], top⟩ ∧
+      All₂ (fun (descriptor : String × Nat) (row : EdgeValue Symbol Guard) =>
+        row.children = List.replicate descriptor.2 (.reference name) ∧
+        row.entry.key = ⟨literal descriptor.1, List.replicate descriptor.2 (.ref name), top⟩)
+        (descriptors (SourceSynthesisCurrentContext.constructorCatalog lib query)) rows ∧
+      Facts final ∧ Available final (.node entry (canonicalEdges (arrow :: rows)) 0 [name]) ∧
+      (∀ row ∈ arrow :: rows, EdgeResident final row) ∧
+      marker.free = [] ∧ Available final marker ∧
+      (∀ row ∈ canonicalEdges (arrow :: rows), row.entry.key.constraint = top ∧
+        ∀ child ∈ row.children, child = marker ∨ child = .reference name) ∧
+      arrow ∈ canonicalEdges (arrow :: rows)
