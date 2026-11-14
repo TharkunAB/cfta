@@ -1,3 +1,41 @@
+# Supported identity-prefix resources hold at every budget (2026-11-14 12:33 CET)
+
+SourcePruningEnumerationSharedRecursive.prefix_identity_resources_at_any_budget
+in SourcePruningEnumerationObservedPrefixFuel is public and checked.
+The actual input Packet/Fits/Heap and actual selected slot suffice at EVERY
+common prefix budget. Each supported observed identity outcome retains the
+complete CurrentPrefixResources. Stopped, missing parked-adapter and failed
+preparation cases remain explicit exemptions. The actual positive-depth
+consumer equation for stopped/missing-adapter cases returns stopped with NO
+outputs and the original caller/queries. The proof does not infer small-budget
+safety from eventual completion: successful raw read/check/adapter replay and
+whole-prefix equality transport resources from a larger completed observation.
+
+The exact original public header is unchanged. Strict private check4 passes
+all five reports. Earlier namespace, instance-scope and Boolean simplification
+failures remain preserved without credit. One setup assertion failed before
+any compiler launch; that is a setup failure only. All five public checks pass.
+Strict Audit at 12:31:23 CET checks 95,968 aggregate theorems and separately
+85 explicit reports: 83 standard-axiom and two axiom-free. Only propext,
+Classical.choice and Quot.sound occur. Source modules: 5,942. Direct imports:
+4,940. Validation: /tmp/mcfta-captured-mixed-alias-budget-check-20261114-1209
+and /tmp/mcfta-identity-prefix-any-budget-publication-20261114-1230.
+
+This closes the PREFIX budget gap. It does NOT prove every-budget whole-worker
+output invariants. Continue that actual consumer/child/row/history composition
+separately from eventual whole-worker completion. The once-only callback and
+captured-child generalizations below are checked and pushed at
+9f52624cb0bb666416fbdbe43b01d50300100a78. Captured rows, opaque/prepared
+composition and the actual identity depth induction remain OPEN.
+
+The ref-only mixed-entry alias draft still FAILED check3; new UNCOMPILED repair
+/tmp/mcfta-current-mixed-reference-alias-repair-v3-20261114-1230 fixes its five
+reported obligations without new premises. Body(U)/U and generated-type closure
+remain OPEN. Full finite accepted original-root completion under ONE shared
+assignment and all other scope clauses remain OPEN and unchanged.
+No Haskell source, Liquid Haskell contract, new Haskell defect or fix was
+established. Goal ACTIVE. Preserve unrelated .hypha/.
+
 # Captured-child composition retains the actual narrowing index (2026-11-14 12:24 CET)
 
 SourcePruningEnumerationSharedEagerReservation now proves captured-child

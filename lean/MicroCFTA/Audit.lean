@@ -1,3 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationObservedPrefixFuel
 import MicroCFTA.SourceSynthesisUniverseProbeCutoffComposition
 import MicroCFTA.SourceSynthesisCurrentUniverseRootNarrowIdentity
 import MicroCFTA.SourcePruningEnumerationIdentityPrefixCheckpoint
@@ -5217,3 +5218,6 @@ run_cmd do
 
 #check @MicroCFTA.SourceSynthesisUniverseProbeCutoffComposition.input_compose_at
 #print axioms MicroCFTA.SourceSynthesisUniverseProbeCutoffComposition.input_compose_at
+
+#check @MicroCFTA.SourcePruningEnumerationSharedRecursive.prefix_identity_resources_at_any_budget
+#print axioms MicroCFTA.SourcePruningEnumerationSharedRecursive.prefix_identity_resources_at_any_budget
