@@ -459,4 +459,52 @@ theorem current_build_merge_complete
     height, atoms⟩
 
 
+/-- The same stored writer replays both actual source probes after record growth. -/
+theorem current_stored_universe_source_probes
+    [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (heap : State Symbol Guard)
+    (built : build (ordinarySymbols whole) [] empty = .done rootValue heap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : heap.nodeRecords key = some (.mu entry body depth ordinary)) :
+    ∀ (later : State Symbol Guard), Grows heap later →
+      callback (ordinarySymbols (allTypesBody top
+        (SourceSynthesisCurrentContext.constructorCatalog lib query))) [] .depth later = .done depth later ∧
+      callback (ordinarySymbols (allTypesBody top
+        (SourceSynthesisCurrentContext.constructorCatalog lib query))) []
+        (.uninterned (InternedFreshOrdinaryConstruction.ordinaryLevel depth)) later = .done ordinary later := by
+  obtain ⟨event, site, _keySame, valueSame, _missing, _prefix, _depthPath, ordinaryPaths,
+      bodyPaths, growth, _issued⟩ :=
+    SourceCurrentCompletedBuildRootedWriters.build_writer (ordinarySymbols whole) [] empty
+      SourceCurrentConstrainedCapSourceHistory.empty_context
+      (by intro key entry body depth ordinary absent; cases absent)
+      rootValue heap built key entry body depth ordinary stored
+  obtain ⟨_smartSame, expressionSame, environmentSame⟩ :=
+    current_reached_binder lib query signed whole accepted site
+  have fields := Value.mu.inj valueSame
+  have originalDepth := fields.2.2.1
+  have originalOrdinary := fields.2.2.2
+  obtain ⟨ordinaryPath⟩ := ordinaryPaths
+  obtain ⟨bodyPath⟩ := bodyPaths
+  have cutGrowth : Grows event.cut event.after :=
+    grows_trans (SourceCurrentNativeMuGrowthHistory.reserve_growth event)
+      (grows_trans bodyPath.growth (SourceCurrentNativeMuGrowthHistory.publication_growth event))
+  have depthGrowth : Grows event.afterDepth event.after := grows_trans ordinaryPath.growth cutGrowth
+  obtain ⟨depthContext, _cutContext, _bodyContext⟩ := SourceCurrentNativeMuPublicationCallbacks.contexts event
+  intro later laterGrowth
+  have afterGrowth : Grows event.after later := grows_trans growth laterGrowth
+  have depthReplay := InternedFreshOrdinaryReplay.callback_replays event.expression event.environment .depth
+    event.before later event.depth event.afterDepth event.context.base.normal.facts.coherent.valid event.depthDone
+    (grows_trans depthGrowth afterGrowth)
+  have ordinaryReplay := InternedFreshOrdinaryReplay.callback_replays event.expression event.environment
+    (.uninterned (InternedFreshOrdinaryConstruction.ordinaryLevel event.depth))
+    event.afterDepth later event.ordinary event.cut depthContext.base.normal.facts.coherent.valid event.ordinaryDone
+    (grows_trans cutGrowth afterGrowth)
+  constructor
+  · simpa only [expressionSame, environmentSame, originalDepth] using depthReplay
+  · simpa only [expressionSame, environmentSame, originalDepth, originalOrdinary] using ordinaryReplay
+
+
+
 end MicroCFTA.SourceSynthesisCurrentUniverseOwnership
