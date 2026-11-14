@@ -44,6 +44,13 @@ tree automata of `cfta`, with QuickCheck integration.
   could have the type of each argument. So with `g : A -> C -> C -> R`, the
   query arguments `x : A` and `x : C` gave the program `g x x x`, and
   `x : C` and `x : A` gave none.
+- In `Data.CFTA.Gen.Synthesis.Liquid`, two query arguments with the same
+  name both have the refinement type of the last argument with that name.
+  Before, each argument gave a leaf with its own type, and the environment
+  had the refinements of all of them, but a check of a program used the
+  first of them. So the query
+  `x:{v:Int | v > 0} -> x:{v:Int | v < 0} -> {v:Int | v > 100}` had a false
+  environment and gave the program `x`.
 - Add `Data.CFTA.Sized.Checkpoint`: resume a size-ordered listing of the
   terms of a graph, or a sampled run of draws from it, also in a new process.
   `start` gives the checkpoint before the first term. `resume` builds the size
