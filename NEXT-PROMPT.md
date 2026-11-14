@@ -1,3 +1,119 @@
+# Actual source-stage and identity-prefix contracts checked (2026-11-14 12:48 CET)
+
+GOAL ACTIVE. Continue the complete optimized interned shared eager objective.
+For each actual emitted partial root, prove ONE finite accepted term of the SAME
+original root with ONE consistent assignment for supported domains, paths,
+aliases, residuals and partial readback, including parked backward recompletion.
+Original typing, depth adequacy/completeness, default LPO/reduction/refolding,
+both language directions, stream order/multiplicity/lazy demand, exact accepted
+terms per node-count size, counts/weights/training, BOTH rank/unrank inverses,
+host bounds and compiled Haskell correspondence remain in scope.
+
+Checked code: ccc7f3dc59f50966b90fec1ae49eda7bc54cfc3e. It is pushed to formalize
+and independently verified. Main remains e53852064d3ef5a2eafec47d754c27504b11de5f.
+Preserve unrelated .hypha/ and every earlier proof, counterexample, repair and
+marked draft. Standing push authorization remains. This section supersedes old
+status sections. Their exact bytes remain below.
+
+SOURCE EFFECTS. SourceSynthesisCurrentUniverseRootNarrowIdentity.
+current_stored_universe_reference_identity_after_root_narrowing uses the SAME
+accepted source, original build and stored complete Mu U. An actual successful
+root-slot narrowing receipt derives its EXACT observed heap's Keeps, Facts and
+Grows, with an available closed narrowed result. No Ready, growth, Post or
+identity provider is an input. The original source U then returns from the
+actual-model native ref(U)/Mu(U) request at formal fuel13 and every larger value.
+The SAME complete final machine retains validity, coverage, semantic heap and
+the original source/result records. The actual narrowing receipt is stable at
+every larger narrowing fuel. Pure holeKey/fits/admits/metadata are actual API
+configuration. The theorem does not derive a typing or default Haskell policy.
+
+STABLE IDENTITY CHECKPOINT. SourcePruningEnumerationSharedRecursive.
+identity_checkpoint_resources derives one stable parked, Empty or nonempty
+literal identity prefix at every sufficiently large common budget. Each carries
+the actual CurrentPrefixResources. Parked suspended mass cannot increase. A
+nonempty result retains exact mass, the original bucket-length bound, Ready,
+stored value and IncomingAvoid. These are derived from the actual selected
+producer and the original Packet/Fits/Heap. No phase/mass/admission or future
+callback contract is an input.
+
+EVERY PREFIX BUDGET. SourcePruningEnumerationSharedRecursive.
+prefix_identity_resources_at_any_budget in SourcePruningEnumerationObservedPrefixFuel
+now derives CurrentPrefixResources for EVERY supported observed identity-prefix
+outcome at EVERY common budget. Stopped, missing parked-adapter and failed
+preparation cases remain explicit exemptions. The actual positive-depth
+consumer for stopped/missing-adapter cases returns stopped with NO outputs and
+the original caller/queries. Successful raw read/check/adapter replay and exact
+whole-prefix equality transport resources from a completed larger observation.
+The proof does not infer smaller-budget safety from eventual completion.
+This is a PREFIX result. It does not prove every-budget WORKER output history.
+
+SHARED COMPOSITION. SourcePruningEnumerationSharedEagerReservation now proves
+the recursive callback and captured-child resources once over the actual
+narrow/resumeWithNarrow index. Old configured headers remain exact as
+specializations. The old operational code and child/tuple/row kernels remain
+unchanged. These two stages add 51 and 62 lines. They do not yet close the whole
+literal-identity-worker induction. Captured rows, opaque/prepared composition,
+the actual prefix capability and whole depth induction remain work to finish.
+Do not select artificial Key/fits/admits inputs or add future-provider premises
+to the final fixed-identity or source theorem.
+
+PURE CUTOFF COMPOSITION. SourceSynthesisUniverseProbeCutoffComposition.
+input_compose_at derives source-child substitution through ANY selected cutoff
+followed by a probe from the direct source-owner/probe substitution. It retains
+closed markers and the original owner reference. This pure equality supports
+the off-diagonal body alias. It does not prove its actual execution.
+
+VALIDATION. All five code increments since the prior compact checkpoint pass
+public builds, strict checks, independent imports and full Audit. Final strict
+Audit at12:31:23 CET checks 95,968 aggregate imported-theorem axiom dependencies.
+Separately,85 explicit reports include83 standard-axiom and2 axiom-free reports.
+Only propext, Classical.choice and Quot.sound occur. There are5,942 source
+modules and4,940 direct imports:4,939 project modules plus Lean. These counts do
+not prove the complete goal. Jobs run serially with effective4GiB memory
+max/high and zero swap. All published-source compiler handles are terminal.
+
+MIXED DOMAIN GAP. Empty-domain identity cannot be used inside the actual entered
+Mu domain of a recursive type intersection. Arbitrary-domain identity would be
+false. The frozen contextual target keeps the SAME accepted/build/stored U and
+actual mixed entry against a closed ordinary/union operand. Its ref(U)/U draft
+still FAILS check6 and receives no proof credit. All old source declarations
+remain unchanged. New repairs must retain actual source/catalog/probe receipts
+and derive the exact entered domain, product and original Mu-key selection.
+Do not add a result, callback, product or future-provider premise.
+
+Body(U)/U remains a separate OPEN half. Its ref/ref child creates the diagonal
+cache state but returns an off-diagonal cutoff. Two off-diagonal control laws
+are UNCOMPILED. The pure diagonal transport cannot cover that state change.
+The original full two-alias target and following all-fuel boundary-atom closure
+remain UNPROVED. Startup atom structure must come from the SAME source/build.
+The no-Mu source alternative remains explicit; do not choose a fictitious U.
+
+JOINT WITNESS GAP. Whole identity-worker resource/history closure and all-fuel
+worker safety remain separate. Then prove one finite original-root term with
+one assignment, retaining aliases, required paths, residuals and backward parked
+recompletion. Packet/Stratified and local availability do not supply this proof.
+The actual repeated-clear satisfaction law still requires Holds for the removed
+suspended bucket. Post-clear satisfaction does not establish those facts.
+All original preprocessing, language, typing, stream, size/count/weight/rank,
+host-bound and compiled-Haskell clauses remain open and unchanged.
+
+RESTART RECORD. lean/restart-evidence/20261114-current-stage-and-identity-checkpoints
+preserves checked inputs, failed inputs, repairs, marked drafts, scripts and
+small logs. No compiled objects or copied dependency overlays are archived.
+Source tree digest: 4e35ece2cbc2fbc5dd3033e6a47d5a27234e8b2a31a6ce45de4483729c917573. The preceding immutable checkpoint is
+f2e625838efa2c444487eba46d3a58c9f622424c. Canonical board status and its exact
+saved request are included. Root is the sole live writer, compiler and Git owner.
+Do not edit pinned live sources while a compiler job runs. Resume the exact
+existing handle if a job is still live; do not restart on an observation timeout.
+
+HASKELL. No Haskell/Cabal/test source or Liquid Haskell contract changed. No new
+implementation defect or fix was established. Record every future Haskell fix
+in FINDINGS so an external reader can apply it. Implementation contracts must
+match actual state and assignment meanings. They do not automatically import
+proofs into Lean. Primary usage was6% at12:41 CET. Read fresh primary limits and
+pause/notify only above80%; lifetime goal-token totals are not that signal.
+Keep /tmp small. Source reproduces the proof results; logs record derived history.
+
 # Supported identity-prefix resources hold at every budget (2026-11-14 12:33 CET)
 
 SourcePruningEnumerationSharedRecursive.prefix_identity_resources_at_any_budget
