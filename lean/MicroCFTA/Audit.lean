@@ -1,3 +1,4 @@
+import MicroCFTA.SourceSynthesisCurrentSharedRootGoalFirstChild
 import MicroCFTA.SourceSynthesisCurrentSharedSourceGoalFreshSlot
 import MicroCFTA.SourceSynthesisCurrentSharedGoalSingletonPrefix
 import MicroCFTA.SourcePruningEnumerationSharedIncomingBucketHistory
@@ -5553,3 +5554,6 @@ run_cmd do
 
 #check @MicroCFTA.SourceSynthesisCurrentSharedGoalSingletonPrefix.singleton_goal_prefix_shared_fold
 #print axioms MicroCFTA.SourceSynthesisCurrentSharedGoalSingletonPrefix.singleton_goal_prefix_shared_fold
+
+#check @MicroCFTA.SourceSynthesisCurrentSharedRootGoalFirstChild.source_root_goal_first_child
+#print axioms MicroCFTA.SourceSynthesisCurrentSharedRootGoalFirstChild.source_root_goal_first_child
