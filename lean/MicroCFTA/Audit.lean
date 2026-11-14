@@ -1,3 +1,4 @@
+import MicroCFTA.SourceSynthesisCurrentUniverseBody
 import MicroCFTA.SourceSynthesisCurrentUniverseOrigins
 import MicroCFTA.SourceSynthesisCurrentInitialIdentityPrefixStable
 import MicroCFTA.SourcePruningEnumerationInitialPrefixFuel
@@ -5057,3 +5058,9 @@ run_cmd do
 #print axioms MicroCFTA.SourceSynthesisUniverseOrigins.relevantRows_induction
 #check @MicroCFTA.SourceSynthesisCurrentUniverseOrigins.firstOrderRaw_overUniverse
 #print axioms MicroCFTA.SourceSynthesisCurrentUniverseOrigins.firstOrderRaw_overUniverse
+
+#check @MicroCFTA.SourceSynthesisCurrentUniverseBody.current_types_callback_node
+#print axioms MicroCFTA.SourceSynthesisCurrentUniverseBody.current_types_callback_node
+
+#check @MicroCFTA.SourceSynthesisCurrentUniverseBody.current_types_callback_cleanup
+#print axioms MicroCFTA.SourceSynthesisCurrentUniverseBody.current_types_callback_cleanup
