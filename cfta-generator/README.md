@@ -612,6 +612,29 @@ of the operators. So
 the cost of the mask grows fast with the size bound. A call notation, a
 prefix notation, or brackets around each child do not have this cost.
 
+A model with a tokenizer writes one entry of its vocabulary at each step, and
+an entry is a short sequence of characters. `Data.CFTA.Mask.Vocabulary` gives
+the mask of the entries. The host gives each entry as a name with a list of
+tokens of a mask below, for example the number of the entry and the characters
+of its text, so the library knows no tokenizer. `vocabulary` puts the entries
+in a trie, and `vocabularyMask` gives this mask. It offers an entry when the
+mask below steps through each token of the entry. The probability of an entry
+is the product of the probabilities of its tokens: the share of the
+completions that stay after the entry. One entry can be the start of another
+entry, so the probabilities of a prefix can sum to more than one.
+
+```haskell
+let entries = vocabulary [(0, map Character "a+"), (1, [Character 'a']), (2, [Character 'b']), (3, [EndOfText])]
+    entryMask = vocabularyMask entries (textMask expressionTexts (completionsMask equalCompletions))
+map fst (maskNext entryMask)
+-- [0,1,2]
+map fst . maskNext <$> maskStep entryMask 0
+-- Right [1]
+```
+
+After the entry `a+`, the mask of the entries offers `a` and refuses `b`,
+because the two children of the sum are equal.
+
 ### Check a definitional extension
 
 A definitional extension adds constructors to a language, and a template

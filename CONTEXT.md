@@ -230,6 +230,12 @@ Wilf, and Feat (ranking).
 - **Reading**: a prefix of term tokens with a place in its text. The mask of
   a text prefix holds the readings of the prefix, and each reading has the
   items that are still to come: rests of texts and children.
+- **Vocabulary, entry**: a list of entries, each a name with a list of tokens
+  of a mask (`Data.CFTA.Mask.Vocabulary`). For a tokenizer, an entry is a
+  short sequence of characters. The mask of the entries offers an entry when
+  the mask below steps through each token of the entry. Not a token of the
+  mask below, although machine learning calls an entry of a tokenizer a
+  token.
 - **Scorer**: a function from a prefix to the log-scores of the next tokens
   (`Data.CFTA.Guided`). Not a trained model of weights
   (`Data.CFTA.Sized.Prefix.Model`).

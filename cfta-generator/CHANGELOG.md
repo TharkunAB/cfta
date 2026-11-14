@@ -42,6 +42,18 @@
   gives the terms of a text, or the place, the `Refusal`, and the offered
   tokens of the first refused token. `guide` runs on the mask of the texts as
   on the mask of the terms.
+- `Data.CFTA.Mask.Vocabulary`: `vocabularyMask` gives the mask of the entries
+  of a vocabulary, for example the vocabulary of a tokenizer. The host gives
+  each entry as a name with a list of tokens of a mask below, and `vocabulary`
+  puts the entries in a trie. The mask of the entries offers an entry when the
+  mask below steps through each token of the entry. It refuses another entry
+  with the refusal of its first refused token, and an entry without tokens
+  with `TokenRejected`. The probability of an entry is the product of the
+  probabilities of its tokens: the share of the completions that stay after
+  the entry. The offered entries are not disjoint events, so the probabilities
+  of a prefix can sum to more than one. One walk of the trie along the steps
+  of the mask below gives the offered and the undecided entries, so the
+  entries with a common start share the steps.
 - Add `Data.CFTA.Extension`: `checkExtension` checks that a later automaton
   is a definitional extension of an earlier automaton by a template lowering.
   It reports another initial state, a lost or changed old production, an old

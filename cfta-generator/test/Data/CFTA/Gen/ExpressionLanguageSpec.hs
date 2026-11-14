@@ -5,6 +5,7 @@ module Data.CFTA.Gen.ExpressionLanguageSpec (
     allExpressions,
     equalExpressions,
     singleExpressions,
+    structuralTexts,
     node,
     leaf,
 ) where

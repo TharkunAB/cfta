@@ -1,4 +1,15 @@
-module Data.CFTA.Mask.TextSpec (spec) where
+module Data.CFTA.Mask.TextSpec (
+    spec,
+    equalTextMask,
+    singleParenthesesTextMask,
+    expressionText,
+    singleTexts,
+    prefixCounts,
+    alphabet,
+    limits,
+    lazyMask,
+    pairTexts,
+) where
 
 import Control.Monad (forM_)
 import Data.Containers.ListUtils (nubOrd)
