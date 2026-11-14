@@ -1,0 +1,25 @@
+-- HEADER ONLY. UNCOMPILED. No proof is asserted.
+-- This is a local callback-shape lemma. Its two invariants must come from
+-- the same root build's actual prefix and actual reservation.
+import MicroCFTA.SourceSynthesisCurrentTypeFieldCalls
+import MicroCFTA.SourceSynthesisUniverseBody
+
+open MicroCFTA
+open Cache InternedConstructorTemplates InternedNestedFacts InternedProbeProvenance
+open SourceSynthesisTypeSyntax (Library Query allTypesBody)
+open SourceSynthesisGeneralizeSyntax (Guard top)
+open InternedBinderProtocol (Reference)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "ordinarySymbols" => SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+
+private theorem current_types_callback_node
+    [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (name : Reference)
+    (state : State Symbol Guard) (facts : Facts state)
+    (available : Available state (.reference name)) :
+    ∃ (entry : Interned InternedBinderProtocol.NodeKey)
+      (edges : List (EdgeValue Symbol Guard)) (final : State Symbol Guard),
+      InternedFreshOrdinaryFacts.callback
+        (ordinarySymbols (allTypesBody top
+          (SourceSynthesisCurrentContext.constructorCatalog lib query)))
+        [] name state = .done (.node entry edges 0 [name]) final

@@ -1,0 +1,25 @@
+theorem resume_identity_metadata_erasure {Typing : Type}
+    (graph : Graph Symbol Constraint) (checkEmpty : Bool) (edgesOf : Node → List Edge)
+    (workFuel recursiveFuel : Nat) (metadata : Metadata Typing) (unitMetadata : Metadata Unit)
+    (caller : Caller width) (queries : Queries) (before : Cached) (decision : Option Next) :
+    eraseResult (SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow
+      (SourcePruningEnumerationSharedEagerChildren.eagerChild
+        checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
+      (fun _ _ _ value heap => .done value heap) graph [] checkEmpty edgesOf
+      none (fun _ _ => none) workFuel recursiveFuel metadata caller queries before decision) =
+    eraseResult (SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow
+      (SourcePruningEnumerationSharedEagerChildren.eagerChild
+        checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
+      (fun _ _ _ value heap => .done value heap) graph [] checkEmpty edgesOf
+      none (fun _ _ => none) workFuel recursiveFuel unitMetadata caller queries before decision) := by
+
+theorem runEager_identity_metadata_erasure {Typing : Type}
+    (graph : Graph Symbol Constraint) (checkEmpty : Bool) (edgesOf : Node → List Edge)
+    (workFuel recursiveFuel : Nat) (metadata : Metadata Typing) (unitMetadata : Metadata Unit)
+    (caller : Caller width) (queries : Queries) (before : Cached) :
+    eraseResult (SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.runEagerWithNarrow
+      (fun _ _ _ value heap => .done value heap) graph [] checkEmpty edgesOf
+      none (fun _ _ => none) workFuel recursiveFuel metadata caller queries before) =
+    eraseResult (SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.runEagerWithNarrow
+      (fun _ _ _ value heap => .done value heap) graph [] checkEmpty edgesOf
+      none (fun _ _ => none) workFuel recursiveFuel unitMetadata caller queries before) := by

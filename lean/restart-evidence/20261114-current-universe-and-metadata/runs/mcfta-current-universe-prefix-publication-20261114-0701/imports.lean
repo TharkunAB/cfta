@@ -1,0 +1,5 @@
+import MicroCFTA.SourceSynthesisCurrentUniverseOrigins
+#check @MicroCFTA.SourceSynthesisUniverseOrigins.relevantRows_induction
+#print axioms MicroCFTA.SourceSynthesisUniverseOrigins.relevantRows_induction
+#check @MicroCFTA.SourceSynthesisCurrentUniverseOrigins.firstOrderRaw_overUniverse
+#print axioms MicroCFTA.SourceSynthesisCurrentUniverseOrigins.firstOrderRaw_overUniverse

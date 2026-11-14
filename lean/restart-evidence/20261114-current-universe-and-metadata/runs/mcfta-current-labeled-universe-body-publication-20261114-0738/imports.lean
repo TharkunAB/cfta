@@ -1,0 +1,5 @@
+import MicroCFTA.SourceSynthesisCurrentUniverseBody
+#check @MicroCFTA.SourceSynthesisCurrentUniverseBody.current_types_callback_node
+#print axioms MicroCFTA.SourceSynthesisCurrentUniverseBody.current_types_callback_node
+#check @MicroCFTA.SourceSynthesisCurrentUniverseBody.current_types_callback_cleanup
+#print axioms MicroCFTA.SourceSynthesisCurrentUniverseBody.current_types_callback_cleanup

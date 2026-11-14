@@ -1,0 +1,20 @@
+private theorem current_first_universe_publication
+    [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (heap : State Symbol Guard)
+    (built : build (ordinarySymbols whole) [] empty = .done rootValue heap) :
+    NoNewMu empty heap ∨
+      ∃ (path : IssuedPath empty heap) (event : Publication (Symbol := Symbol) (Guard := Guard)),
+        (events path)[0]? = some event ∧
+        Reached (ordinarySymbols whole) []
+          (ordinarySymbols (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query)))
+          [] event.before ∧
+        event.smart = true ∧
+        event.expression = ordinarySymbols
+          (allTypesBody top (SourceSynthesisCurrentContext.constructorCatalog lib query)) ∧
+        event.environment = [] ∧
+        NoNewMu empty event.before ∧ NoNewMu empty event.afterBody ∧
+        Grows event.after heap ∧
+        build (ordinarySymbols (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query)))
+          [] event.before = .done event.result event.after

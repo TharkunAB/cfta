@@ -1,0 +1,25 @@
+private theorem current_types_callback_node
+    [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (name : Reference)
+    (state : State Symbol Guard) (facts : Facts state)
+    (available : Available state (.reference name)) :
+    ∃ (entry : Interned InternedBinderProtocol.NodeKey)
+      (edges : List (EdgeValue Symbol Guard)) (final : State Symbol Guard),
+      InternedFreshOrdinaryFacts.callback
+        (ordinarySymbols (allTypesBody top
+          (SourceSynthesisCurrentContext.constructorCatalog lib query)))
+        [] name state = .done (.node entry edges 0 [name]) final
+
+private theorem current_types_callback_cleanup
+    [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (entry : Interned NodeKey)
+    (state : State Symbol Guard) (facts : Facts state)
+    (available : Available state (.reference (.interned entry.identity)))
+    (depth ordinary : Value Symbol Guard) :
+    ∃ (body : Value Symbol Guard) (final : State Symbol Guard),
+      InternedFreshOrdinaryFacts.callback
+        (ordinarySymbols (allTypesBody top
+          (SourceSynthesisCurrentContext.constructorCatalog lib query)))
+        [] (.interned entry.identity) state = .done body final ∧
+      finish true (.mu entry body depth ordinary) = .mu entry body depth ordinary ∧
+      (Value.mu entry body depth ordinary).free = []

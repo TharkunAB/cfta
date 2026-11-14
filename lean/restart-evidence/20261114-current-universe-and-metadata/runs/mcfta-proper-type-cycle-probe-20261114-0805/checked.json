@@ -1,0 +1,142 @@
+{
+  "started": "2026-11-14T08:05:01.578186+01:00",
+  "limits": {
+    "memory.max": "4294967296",
+    "memory.high": "4294967296",
+    "memory.swap.max": "0"
+  },
+  "source_pins": 106,
+  "scope": "proper constructor type cycle: raw and default; separate public and paired typed observations",
+  "repeated_default_probe": false,
+  "finite_completion_counterexample_established": false,
+  "stages": [
+    {
+      "name": "current-libraries",
+      "command": [
+        "nix-shell",
+        "--expr",
+        "let pkgs = import <nixpkgs> {}; in pkgs.mkShell { inputsFrom = [ (import ./shell.nix { inherit pkgs; }) ]; packages = [ pkgs.gmp ]; }",
+        "--run",
+        "exec cabal build cfta:lib:cfta cfta-generator:lib:cfta-generator --offline -j1"
+      ],
+      "exit": 0,
+      "seconds": 13.757,
+      "log": "current-libraries.txt",
+      "log_sha256": "b32fc11b061a3a4f6ff7b64b1adb4e79c16c6bfff76ec86c08f1d6ad59de5cba"
+    },
+    {
+      "name": "raw-compile",
+      "command": [
+        "nix-shell",
+        "--expr",
+        "let pkgs = import <nixpkgs> {}; in pkgs.mkShell { inputsFrom = [ (import ./shell.nix { inherit pkgs; }) ]; packages = [ pkgs.gmp ]; }",
+        "--run",
+        "exec cabal exec --offline -- ghc -hide-all-packages -package base -package-id cfta-0.1.0.0-inplace -package-id cfta-generator-0.1.0.0-inplace -package-id text-2.1.3-2a27 -O0 -Wall -j1 -threaded -rtsopts -outputdir /tmp/mcfta-proper-type-cycle-probe-20261114-0805/raw-ghc -o /tmp/mcfta-proper-type-cycle-probe-20261114-0805/raw-probe /tmp/mcfta-proper-type-cycle-probe-20261114-0805/RawProbe.hs"
+      ],
+      "exit": 0,
+      "seconds": 3.257,
+      "log": "raw-compile.txt",
+      "log_sha256": "6c790af501ceb96e450e4547706be2855ecbed974b8e9e8c74c41970217993af"
+    },
+    {
+      "name": "raw-observed",
+      "command": [
+        "timeout",
+        "--kill-after=2s",
+        "5s",
+        "/tmp/mcfta-proper-type-cycle-probe-20261114-0805/raw-probe",
+        "FPROPER",
+        "+RTS",
+        "-N1",
+        "-M3072m",
+        "-RTS"
+      ],
+      "exit": 0,
+      "seconds": 0.011,
+      "log": "raw-observed.txt",
+      "log_sha256": "33274bee73b7cfd20bd37ac9768549eddf71f0373194c53e3faaf369ef41265c"
+    },
+    {
+      "name": "default-compile",
+      "command": [
+        "nix-shell",
+        "--expr",
+        "let pkgs = import <nixpkgs> {}; in pkgs.mkShell { inputsFrom = [ (import ./shell.nix { inherit pkgs; }) ]; packages = [ pkgs.gmp ]; }",
+        "--run",
+        "exec cabal exec --offline -- ghc -hide-all-packages -package base -package-id cfta-0.1.0.0-inplace -package-id cfta-generator-0.1.0.0-inplace -package-id text-2.1.3-2a27 -O0 -Wall -j1 -threaded -rtsopts -outputdir /tmp/mcfta-proper-type-cycle-probe-20261114-0805/default-ghc -o /tmp/mcfta-proper-type-cycle-probe-20261114-0805/default-probe /tmp/mcfta-proper-type-cycle-probe-20261114-0805/DefaultProbe.hs"
+      ],
+      "exit": 0,
+      "seconds": 3.336,
+      "log": "default-compile.txt",
+      "log_sha256": "9b0cf49062d6d029d529beea2b6fd856a71243f2a2a1e894cae4be6ddb0ec9d6"
+    },
+    {
+      "name": "default-observed",
+      "command": [
+        "timeout",
+        "--kill-after=2s",
+        "5s",
+        "/tmp/mcfta-proper-type-cycle-probe-20261114-0805/default-probe",
+        "FPROPER",
+        "+RTS",
+        "-N1",
+        "-M3072m",
+        "-RTS"
+      ],
+      "exit": 0,
+      "seconds": 0.013,
+      "log": "default-observed.txt",
+      "log_sha256": "8887de8d9fbaa97ca046ab09bb9bc7736b238015712e71a172b5ac6c851d6897"
+    }
+  ],
+  "repository_haskell_or_cabal_changes": false,
+  "finite_type_model_existence_proved": false,
+  "child_only_LD_LIBRARY_PATH": "/nix/store/6qi8skh85ci2k9gvl27nnh3kiy32qnsz-zlib-1.3.1/lib:/nix/store/k8bqvzzw3xll9sjkai15skrj7ab4f8gg-gmp-with-cxx-6.3.0/lib",
+  "observations": [
+    {
+      "route": "raw",
+      "exit": 0,
+      "completed": true,
+      "timed_out": false
+    },
+    {
+      "route": "default",
+      "exit": 0,
+      "completed": true,
+      "timed_out": false
+    }
+  ],
+  "raw_binary_sha256": "350928f1835b567f1b309d55413f9bff193d0b739506637de5323aafd860f165",
+  "raw_temporary_build_files_removed": [
+    {
+      "file": "/tmp/mcfta-proper-type-cycle-probe-20261114-0805/raw-probe",
+      "bytes": 10776616
+    },
+    {
+      "file": "/tmp/mcfta-proper-type-cycle-probe-20261114-0805/raw-ghc/Main.o",
+      "bytes": 120360
+    },
+    {
+      "file": "/tmp/mcfta-proper-type-cycle-probe-20261114-0805/raw-ghc/Main.hi",
+      "bytes": 6307
+    }
+  ],
+  "default_binary_sha256": "849a36305b48027f3c67ea82c3b2888b791919565c93bb6409ccf6dcdaa5c135",
+  "default_temporary_build_files_removed": [
+    {
+      "file": "/tmp/mcfta-proper-type-cycle-probe-20261114-0805/default-probe",
+      "bytes": 10780768
+    },
+    {
+      "file": "/tmp/mcfta-proper-type-cycle-probe-20261114-0805/default-ghc/Main.o",
+      "bytes": 121280
+    },
+    {
+      "file": "/tmp/mcfta-proper-type-cycle-probe-20261114-0805/default-ghc/Main.hi",
+      "bytes": 6336
+    }
+  ],
+  "completed": "2026-11-14T08:05:22.001805+01:00",
+  "source_pins_unchanged": true,
+  "memory_peak_bytes": "1092796416"
+}

@@ -1,0 +1,55 @@
+@MicroCFTA.SourceSynthesisCurrentUniverseBody.current_types_callback_node : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)]
+  (lib : MicroCFTA.SourceSynthesisTypeSyntax.Library) (query : MicroCFTA.SourceSynthesisTypeSyntax.Query)
+  (name : MicroCFTA.InternedBinderProtocol.Reference)
+  (state :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard),
+  MicroCFTA.InternedNestedFacts.Facts state →
+    MicroCFTA.InternedProbeProvenance.Available state (MicroCFTA.InternedConstructorTemplates.Value.reference name) →
+      ∃ entry edges final,
+        MicroCFTA.InternedFreshOrdinaryFacts.callback
+            (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+              (MicroCFTA.SourceSynthesisTypeSyntax.allTypesBody MicroCFTA.SourceSynthesisGeneralizeSyntax.top
+                (MicroCFTA.SourceSynthesisCurrentContext.constructorCatalog lib query)))
+            [] name state =
+          MicroCFTA.InternedNestedConstruction.Outcome.done
+            (MicroCFTA.InternedConstructorTemplates.Value.node entry edges 0 [name]) final
+'MicroCFTA.SourceSynthesisCurrentUniverseBody.current_types_callback_node' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceSynthesisCurrentUniverseBody.current_types_callback_cleanup : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)]
+  (lib : MicroCFTA.SourceSynthesisTypeSyntax.Library) (query : MicroCFTA.SourceSynthesisTypeSyntax.Query)
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (state :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard),
+  MicroCFTA.InternedNestedFacts.Facts state →
+    MicroCFTA.InternedProbeProvenance.Available state
+        (MicroCFTA.InternedConstructorTemplates.Value.reference
+          (MicroCFTA.InternedBinderProtocol.Reference.interned entry.identity)) →
+      ∀
+        (depth ordinary :
+          MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard),
+        ∃ body final,
+          MicroCFTA.InternedFreshOrdinaryFacts.callback
+                (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+                  (MicroCFTA.SourceSynthesisTypeSyntax.allTypesBody MicroCFTA.SourceSynthesisGeneralizeSyntax.top
+                    (MicroCFTA.SourceSynthesisCurrentContext.constructorCatalog lib query)))
+                [] (MicroCFTA.InternedBinderProtocol.Reference.interned entry.identity) state =
+              MicroCFTA.InternedNestedConstruction.Outcome.done body final ∧
+            MicroCFTA.InternedNestedConstruction.finish true
+                  (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary) =
+                MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary ∧
+              (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary).free = []
+'MicroCFTA.SourceSynthesisCurrentUniverseBody.current_types_callback_cleanup' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,30 @@
+/tmp/mcfta-current-universe-ownership-check-20261114-0826/check2/source/MicroCFTA/SourceSynthesisCurrentUniverseOwnership.lean:176:30: error: don't know how to synthesize placeholder
+context:
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+catalog : List (String × Nat)
+expression : Expression
+members : List Expression
+children : ∀ (child : Expression), child ∈ members → OverUniverse (allTypes top catalog) child
+ih :
+  ∀ (child : Expression),
+    child ∈ members →
+      ∀ (initial current : List (Value Symbol Guard)) (smart : Bool) (body : Syntax Symbol Guard)
+        (crossings : List (Crossing Symbol Guard)),
+        SourcePath (mapSyntax literal child) initial (Syntax.binder smart body) current crossings →
+          Syntax.binder smart body = mapSyntax literal (allTypes top catalog) ∧ current = initial ∧ crossings = []
+initial current : List (Value Symbol Guard)
+smart : Bool
+body : Syntax Symbol Guard
+crossings : List (Crossing Symbol Guard)
+child✝ : Syntax Symbol Guard
+member : child✝ ∈ mapChildren literal members
+nested : SourcePath child✝ initial (Syntax.binder smart body) current crossings
+⊢ Syntax Symbol Guard
+'_private.MicroCFTA.SourceSynthesisCurrentUniverseOwnership.0.MicroCFTA.SourceSynthesisCurrentUniverseOwnership.current_build_single_universe' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'_private.MicroCFTA.SourceSynthesisCurrentUniverseOwnership.0.MicroCFTA.SourceSynthesisCurrentUniverseOwnership.current_build_single_universe' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

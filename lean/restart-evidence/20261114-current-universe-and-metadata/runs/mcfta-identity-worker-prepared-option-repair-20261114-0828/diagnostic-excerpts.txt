@@ -1,0 +1,73 @@
+Explicit diagnostic matcher occurrences:
+8:      (@resume_identity_metadata_erasure.match_1_11.{2} width Typing
+103:      (@resume_identity_metadata_erasure.match_1_13.{2} width
+201:      (@SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow.match_1.{2} Typing width
+296:      (@SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow.match_1.{2} Unit width
+396:      (@resume_identity_metadata_erasure.match_1_11.{2} width Typing
+491:      (@resume_identity_metadata_erasure.match_1_13.{2} width
+589:      (@SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow.match_1.{2} Typing width
+684:      (@SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow.match_1.{2} Unit width
+
+First expanded helper segment:
+/tmp/mcfta-identity-worker-metadata-erasure-check-20261114-0758/diagnostic4/source/MicroCFTA/SourcePruningEnumerationIdentityWorkerMetadataErasure.lean:335:68: error: Type mismatch: After simplification, term
+  preparedSame updated unitUpdated reached saved after
+ has type
+  @Eq.{2}
+    (SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.HookResult.{1, 1} (Output width Unit)
+      (Failure width Unit) width)
+    (@eraseResult width Typing
+      (@resume_identity_metadata_erasure.match_1_11.{2} width Typing
+        (fun x =>
+          SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.HookResult.{1, 1}
+            (Output width Typing) (Failure width Typing) width)
+        (@Prod.snd.{0, 1} SourcePruningEnumerationSharedPreparedContinuations.Preparation
+          (Option.{1}
+            (SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.{1, 1} (Output width Typing)
+              (Failure width Typing) width))
+          (@SourcePruningEnumerationSharedPreparedChildPolicy.runWithChild.{1, 1} width (Output width Typing)
+            (Failure width Typing) inst✝² inst✝¹ inst✝
+            (@SourcePruningEnumerationSharedEagerChildren.eagerChild.{1, 1} width (Output width Typing)
+              (Failure width Typing) inst✝² inst✝¹ inst✝ checkEmpty workFuel workFuel workFuel workFuel workFuel
+              edgesOf)
+            (@continueWith Typing width
+              (@SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow Typing width inst✝² inst✝¹
+                inst✝
+                (@SourcePruningEnumerationSharedEagerChildren.eagerChild.{1, 1} width (Output width Typing)
+                  (Failure width Typing) inst✝² inst✝¹ inst✝ checkEmpty workFuel workFuel workFuel workFuel workFuel
+                  edgesOf)
+                (fun x x_1 x_2 value heap =>
+                  @MergedSourceComparison.Result.done SourcePruningTemplates.Symbol
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                    (Value SourcePruningTemplates.Symbol (SourceSymbolicIndex.Constraint FullSyntax.Formula)) value
+
+Expanded expected segment:
+but is expected to have type
+  @Eq.{2}
+    (SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.HookResult.{1, 1} (Output width Unit)
+      (Failure width Unit) width)
+    (@eraseResult width Typing
+      (@SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow.match_1.{2} Typing width
+        (fun x =>
+          SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.HookResult.{1, 1}
+            (Output width Typing) (Failure width Typing) width)
+        (@Prod.snd.{0, 1} SourcePruningEnumerationSharedPreparedContinuations.Preparation
+          (Option.{1}
+            (SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.{1, 1} (Output width Typing)
+              (Failure width Typing) width))
+          (@SourcePruningEnumerationSharedPreparedChildPolicy.runWithChild.{1, 1} width (Output width Typing)
+            (Failure width Typing) inst✝² inst✝¹ inst✝
+            (@SourcePruningEnumerationSharedEagerChildren.eagerChild.{1, 1} width (Output width Typing)
+              (Failure width Typing) inst✝² inst✝¹ inst✝ checkEmpty workFuel workFuel workFuel workFuel workFuel
+              edgesOf)
+            (@continueWith Typing width
+              (@SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow Typing width inst✝² inst✝¹
+                inst✝
+                (@SourcePruningEnumerationSharedEagerChildren.eagerChild.{1, 1} width (Output width Typing)
+                  (Failure width Typing) inst✝² inst✝¹ inst✝ checkEmpty workFuel workFuel workFuel workFuel workFuel
+                  edgesOf)
+                (fun x x_1 x_2 value heap =>
+                  @MergedSourceComparison.Result.done SourcePruningTemplates.Symbol
+                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)
+                    (Value SourcePruningTemplates.Symbol (SourceSymbolicIndex.Constraint FullSyntax.Formula)) value
+                    heap)
+                graph (@List.nil.{0} (Template.Pattern SourcePruningTemplates.Symbol)) checkEmpty edgesOf

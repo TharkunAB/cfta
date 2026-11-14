@@ -1,0 +1,21 @@
+MicroCFTA.SourceSynthesisUniverseOrigins.relevantRows_induction : ∀
+  (P : MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression → Prop),
+  MicroCFTA.SourceSynthesisUniverseOrigins.Closed P →
+    ∀ (ctx : MicroCFTA.SourceSynthesisFirstOrderConstruction.Context),
+      MicroCFTA.SourceSynthesisUniverseOrigins.ContextClosed P ctx →
+        ∀ (size : Nat) (asArgument : Bool) (names : List String)
+          (rows : List MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression),
+          MicroCFTA.SourceSynthesisFirstOrderConstruction.relevantRows ctx asArgument size names = Except.ok rows →
+            ∀ (row : MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression), row ∈ rows → P row
+'MicroCFTA.SourceSynthesisUniverseOrigins.relevantRows_induction' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceSynthesisCurrentUniverseOrigins.firstOrderRaw_overUniverse : ∀
+  (lib : MicroCFTA.SourceSynthesisTypeSyntax.Library) (query : MicroCFTA.SourceSynthesisTypeSyntax.Query) (signed : Int)
+  (expression : MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression),
+  MicroCFTA.SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok expression →
+    MicroCFTA.SourceSynthesisUniverseOrigins.OverUniverse
+      (MicroCFTA.SourceSynthesisTypeSyntax.allTypes MicroCFTA.SourceSynthesisGeneralizeSyntax.top
+        (MicroCFTA.SourceSynthesisCurrentContext.constructorCatalog lib query))
+      expression
+'MicroCFTA.SourceSynthesisCurrentUniverseOrigins.firstOrderRaw_overUniverse' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
