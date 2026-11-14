@@ -1,0 +1,51 @@
+/tmp/mcfta-captured-mixed-alias-budget-check-20261114-1209/check3/source/MicroCFTA/SourcePruningEnumerationObservedPrefixFuel.lean:56:6: error: unsolved goals
+case neg
+EnumGuard NativeGuard : Type
+heap : InternedConstructorTemplates.State Symbol NativeGuard
+fuel extra uv handle : Nat
+scs : List Suspended
+before after : EnumerationState.State Symbol EnumGuard
+repeated : Bool
+observed : Success (SourcePruningEnumerationRecursion.checkRepeated heap fuel uv handle scs) before repeated after
+value : Value Symbol NativeGuard
+decoded : lookupNode heap handle = some value
+boundary : ¬MergedOrdinaryHeight.recursiveBoundary value = true
+⊢ ((if false = true then do
+          let root ← representative (fuel + extra) uv
+          let current ← get
+          if recursionKey handle scs ∈ current.recursionAncestry root then do
+              setValue root (UVarValue.unenumerated (some handle) [])
+              pure true
+            else pure false
+        else pure false)
+        before).run =
+    ((if false = true then do
+          let root ← representative fuel uv
+          let current ← get
+          if recursionKey handle scs ∈ current.recursionAncestry root then do
+              setValue root (UVarValue.unenumerated (some handle) [])
+              pure true
+            else pure false
+        else pure false)
+        before).run
+/tmp/mcfta-captured-mixed-alias-budget-check-20261114-1209/check3/source/MicroCFTA/SourcePruningEnumerationObservedPrefixFuel.lean:56:87: error: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourcePruningEnumerationRecursion.checkRepeated, decoded, boundary]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'_private.MicroCFTA.SourcePruningEnumerationObservedPrefixFuel.0.MicroCFTA.SourcePruningEnumerationObservedPrefixFuel.getValue_success_raw_moreFuel' depends on axioms: [propext,
+ Quot.sound]
+'_private.MicroCFTA.SourcePruningEnumerationObservedPrefixFuel.0.MicroCFTA.SourcePruningEnumerationObservedPrefixFuel.checkRepeated_success_raw_moreFuel' depends on axioms: [propext,
+ sorryAx,
+ Quot.sound]
+'_private.MicroCFTA.SourcePruningEnumerationObservedPrefixFuel.0.MicroCFTA.SourcePruningEnumerationObservedPrefixFuel.parked_adapt_some_moreFuel' depends on axioms: [propext,
+ Quot.sound]
+'_private.MicroCFTA.SourcePruningEnumerationObservedPrefixFuel.0.MicroCFTA.SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.unsupported_prefix_stops' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourcePruningEnumerationSharedRecursive.prefix_identity_resources_at_any_budget' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

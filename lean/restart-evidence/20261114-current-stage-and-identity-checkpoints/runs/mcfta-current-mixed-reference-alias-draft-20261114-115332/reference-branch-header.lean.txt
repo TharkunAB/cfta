@@ -1,0 +1,25 @@
+theorem current_stored_universe_reference_alias_after_mixed_entry
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (heap : State Symbol Guard) (facts : Facts heap) (growth : Grows sourceHeap heap)
+    (domains : Cache.State IntersectionFlatMemoKeyDomain.DomainKey)
+    (cacheValid : Cache.Valid domains)
+    (pattern : Value Symbol Guard) (patternId : Nat)
+    (patternAvailable : Available heap pattern) (patternClosed : pattern.free = [])
+    (patternIdentity : SourceRecursiveIntersectionControl.identity pattern = some patternId)
+    (patternShape : SourceRecursiveIntersectionControl.tag pattern = 1 ∨
+      SourceRecursiveIntersectionControl.tag pattern = 3) :
+    let universe : Value Symbol Guard := .mu entry body depth ordinary
+    let entered := SourceRecursiveIntersectionEnvironment.enter domains IntersectionEmptyDomain.emptyKey
+      universe pattern entry.identity patternId
+    let initial : Machine Symbol Guard := ⟨heap, entered.2⟩
+    ∃ bound (final : Machine Symbol Guard),
+      (∀ extra, execute top SourceEqualityPCSNativeEdge.conjoin (bound + extra) entered.1
+        (.reference (.interned entry.identity)) universe initial = .done universe final) ∧
+      SourceRecursiveIntersectionKernel.Valid final ∧ Extension initial final

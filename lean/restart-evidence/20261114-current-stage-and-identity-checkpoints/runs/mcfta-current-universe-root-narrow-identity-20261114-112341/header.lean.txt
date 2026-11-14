@@ -1,0 +1,35 @@
+theorem current_stored_universe_reference_identity_after_root_narrowing
+    {Typing Key : Type}
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
+    (admits : Key → Value Symbol Guard → Bool) (metadata : Metadata Typing)
+    (fuel : Nat) (narrowed : Value Symbol Guard) (heap : State Symbol Guard)
+    (observed : SourcePruningOuterNarrow.narrow holeKey fits admits metadata
+      fuel 0 rootValue sourceHeap = .done narrowed heap)
+    (domains : Cache.State IntersectionFlatMemoKeyDomain.DomainKey)
+    (cacheValid : Cache.Valid domains) :
+    (∀ extra, SourcePruningOuterNarrow.narrow holeKey fits admits metadata
+      (fuel + extra) 0 rootValue sourceHeap = .done narrowed heap) ∧
+    SourceEqualityRequiredCache.Keeps sourceHeap heap ∧
+    Available heap narrowed ∧ narrowed.free = [] ∧
+    let initial : Machine Symbol Guard := ⟨heap, domains⟩
+    ∃ final : Machine Symbol Guard,
+      execute top SourceEqualityPCSNativeEdge.conjoin 13 IntersectionEmptyDomain.emptyDomain
+        (.reference (.interned entry.identity)) (.mu entry body depth ordinary) initial =
+          .done (.mu entry body depth ordinary) final ∧
+      SourceRecursiveIntersectionKernel.Valid final ∧
+      SourceRecursiveIntersectionSemanticHeap.SemanticHeap final.heap ∧
+      Extension initial final ∧ Covered [] final.heap ∧
+      Available final.heap (.mu entry body depth ordinary) ∧ Available final.heap rootValue ∧
+      Available final.heap narrowed ∧
+      final.heap.nodeRecords key = some (.mu entry body depth ordinary) ∧
+      (∀ extra, execute top SourceEqualityPCSNativeEdge.conjoin (13 + extra) IntersectionEmptyDomain.emptyDomain
+        (.reference (.interned entry.identity)) (.mu entry body depth ordinary) initial =
+          .done (.mu entry body depth ordinary) final)

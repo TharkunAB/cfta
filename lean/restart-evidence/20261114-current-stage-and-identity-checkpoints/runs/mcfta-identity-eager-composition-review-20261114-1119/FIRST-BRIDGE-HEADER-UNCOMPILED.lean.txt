@@ -1,0 +1,67 @@
+theorem identity_checkpoint_resources
+    (graph : Graph Symbol Constraint)
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (metadata : Metadata Unit)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller width) (memos : Memos) (before : Cached)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (profile : Profile) (property : Constraint → Prop)
+    (bounded : SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile caller.checked)
+    (known : SourceEqualityAnnotationHeap.Heap property caller.checked.native.machine.heap)
+    (uv : Nat)
+    (chosen : SourcePruningEnumerationRestart.decision none (fun _ _ => none) metadata before = some (.expand uv)) :
+    ∃ fuel,
+      (∃ after : Cached,
+        suspendedBound after.core ≤ suspendedBound before.core ∧
+        ∀ extra,
+          SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
+            (fun _ _ _ node state => .done node state) graph [] none (fun _ _ => none) metadata
+            (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra)
+            uv caller before memos.query =
+          .parked after.core (some after)
+            (some (ExceptT.run (SourcePruningEnumerationRestart.run none (fun _ _ => none) metadata after after.core))) ∧
+          CurrentPrefixResources none (fun _ _ => none) metadata formulas solver inventory uv caller before memos profile property
+            (SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
+              (fun _ _ _ node state => .done node state) graph [] none (fun _ _ => none) metadata
+              (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra)
+              uv caller before memos.query)) ∨
+      (∃ checked : Core,
+        ∀ extra,
+          SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
+            (fun _ _ _ node state => .done node state) graph [] none (fun _ _ => none) metadata
+            (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra)
+            uv caller before memos.query =
+          .narrowed checked (.done (.empty, some (reject : EnumerateM Symbol Constraint Unit)) caller.checked.native.machine.heap)
+            (SourceCurrentAllocatedPartialState.advance caller
+              (advancePhysical caller.checked ⟨caller.checked.native.machine.heap, caller.checked.operations⟩)
+              caller.fourth caller.merge)
+            memos.query (some []) none none none ∧
+          CurrentPrefixResources none (fun _ _ => none) metadata formulas solver inventory uv caller before memos profile property
+            (SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
+              (fun _ _ _ node state => .done node state) graph [] none (fun _ _ => none) metadata
+              (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra)
+              uv caller before memos.query)) ∨
+      (∃ (handle : Nat) (scs : List Suspended) (value : Node) (after : Cached),
+        value ≠ .empty ∧ encodeNode value = some handle ∧
+        EnumerationDriver.Ready uv after.core ∧
+        after.core.values[uv]? = some (.unenumerated (some handle) scs) ∧
+        EnumerationReferences.IncomingAvoid uv after.core ∧
+        scs.length ≤ suspendedBound before.core ∧
+        suspendedBound after.core = suspendedBound before.core ∧
+        ∀ extra,
+          SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
+            (fun _ _ _ node state => .done node state) graph [] none (fun _ _ => none) metadata
+            (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra)
+            uv caller before memos.query =
+          .narrowed after.core (.done (value, some (pure () : EnumerateM Symbol Constraint Unit)) caller.checked.native.machine.heap)
+            (SourceCurrentAllocatedPartialState.advance caller
+              (advancePhysical caller.checked ⟨caller.checked.native.machine.heap, caller.checked.operations⟩)
+              caller.fourth caller.merge)
+            memos.query (some [.ok ((), after.core)]) (some after)
+            (some [.ok ((false, metadata), after.core)]) none ∧
+          CurrentPrefixResources none (fun _ _ => none) metadata formulas solver inventory uv caller before memos profile property
+            (SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
+              (fun _ _ _ node state => .done node state) graph [] none (fun _ _ => none) metadata
+              (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra)
+              uv caller before memos.query))

@@ -1,0 +1,3 @@
+import MicroCFTA.SourcePruningEnumerationObservedPrefixFuel
+
+#print axioms MicroCFTA.SourcePruningEnumerationSharedRecursive.prefix_identity_resources_at_any_budget

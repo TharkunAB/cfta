@@ -1,0 +1,24 @@
+[2026-11-14 12:47 CET]
+
+UNCOMPILED. Full two-alias theorem remains OPEN.
+
+Root requested a pause in body work until the reference spine elaborates. Current priority is the ref-only v4b repair at /tmp/mcfta-current-mixed-reference-alias-repair-v4b-20261114-1243. Its exact candidate SHA is a14072bd63ec36dd1b0333bf2bc6cda569532d648753ab075fe04498646a2790. It preserves all check5-reference theorem headers and replaces inferred native bind continuations with explicit functions. Root remains the sole compiler/live writer.
+
+Body artifacts
+
+1. The 111-line control v1 in this packet is FROZEN and has the reserved identifier universe. Do not compile it. The separate alpha-corrected v2 is /tmp/mcfta-current-mixed-body-alias-control-v2-20261114-1213/candidate/lean/MicroCFTA/SourceSynthesisUniverseOffDiagonalReferenceControl.lean, SHA 37f8e46a05a1985547b64d212922791ca37ecaa3364929ef45dce65bb1a0dd3a. Both are uncompiled. Root received v2 and queued it. The control law derives three actual ref/ref steps and the exact returned domain cache, then stability at fuel eight.
+2. candidate/lean/MicroCFTA/SourceSynthesisUniverseOffDiagonalBody.lean is a 444-line UNCOMPILED draft. It is not a complete source application and has not been sent as a frozen compiler input. It imports the off-diagonal control module. When checking it, stage the v2 control source above, not the v1 source adjacent to it.
+
+The body draft has private ordered-walk completion, exact self-child completion, and native edge completion. Child self calls return the existing source input substitution at pending pair(b,u). Each reference call retains the actual diagonal enter cache. Child walks leave the constructor heap unchanged, so the final actual makeEdge request supplies complete child/key fields. Native node completion uses existing Kernel.rows_checked, rows_pointwise_replay and work_replay. Every source self pair is retained from the actual hash join. Coherent edge records identify every live product with a source-ordered target. Existing makeNode_same_members and makeNode_zero_singleton derive a full ordinary product node with sole free name pending pair(b,u). The draft includes no new datatype, operational definition or provider premise. Its generic field premises must all be derived by the final actual source application.
+
+Remaining implementation
+
+- Check and repair the control and 444-line body drafts. There is no proof credit yet.
+- Add a private mapped_product_probe_at law in the SAME CurrentUniverseReferenceIdentity module, preserving its original private helpers. Use the existing public SourceSynthesisUniverseProbeCutoffComposition.input_compose_at (469743a68). The ordered rows_replay generalization needs no new Readback datatype. Inline the product child/key relation with an arbitrary cutoff Reference. Induct over the two All₂ relations. Compose each child's source-owner -> cutoff -> probe map by input_compose_at. Existing MappedProbeRows.raw_rows_replay, CanonicalRowReplay.canonical_replay and execute_eq_work_of_raw remain unchanged.
+- Derive the same original source body/probe receipts from accepted/build/stored U plus current Facts/Grows. C8 and current_stored_universe_body_replay identify the full original body and original current heap. Actual current catalog separation yields equal child lists for equal-symbol equal-arity matched rows, as in the reference branch.
+- Derive P.id != U.id and P.id != b.id from the SAME coherent read_identity facts and P's ordinary/union tag and closed free list. Entered mixed domain has only pair(U,P). Its actual B/U Mu entry adds pair(b,U), derives u-name binding, preserves U/U absence and B/B absence, and returns the exact known domain/cache. Do not preinsert U/U before native product execution.
+- Apply the generic off-diagonal node result in that actual entered machine. Use the actual source probe packet, lifted into the exact returned product heap, and mapped_product_probe_at at cutoff pending pair(b,U), to derive original depth and ordinary callbacks. available_mu_key then selects the FULL ORIGINAL U. MaybeMu(pair(b,U)) reconstructs U through that existing complete key.
+- Native B/U at fuel ten consists of the right-Mu step, B/B ordinary step, then the fuel-eight body node. Keep the exact returned Machine. Derive validity/extension through execute_checked and stability through execute_stable.
+- Only after both halves pass, compose them under the original leftAlias disjunction. The originally approved full header remains frozen OPEN, with its reserved universe binder and invalid untyped mixed existential syntax. Use only alpha-renaming to universeValue and an explicit Nat bound when preparing the compilable full header. Do not add semantic premises.
+
+No finite common original-root completion or Haskell correspondence is claimed. No Haskell fix was made. No compiler/probe, Git, board or live-file action was performed. This packet is text/source only.

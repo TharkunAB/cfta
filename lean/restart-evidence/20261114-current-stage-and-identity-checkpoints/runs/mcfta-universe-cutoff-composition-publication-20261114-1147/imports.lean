@@ -1,0 +1,3 @@
+import MicroCFTA.SourceSynthesisUniverseProbeCutoffComposition
+
+#print axioms MicroCFTA.SourceSynthesisUniverseProbeCutoffComposition.input_compose_at

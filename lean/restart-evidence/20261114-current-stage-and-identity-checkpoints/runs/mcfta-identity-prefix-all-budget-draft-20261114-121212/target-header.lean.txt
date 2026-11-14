@@ -1,0 +1,42 @@
+import MicroCFTA.SourcePruningEnumerationIdentityPrefixResources
+
+set_option autoImplicit false
+
+namespace MicroCFTA.SourcePruningEnumerationSharedRecursive
+open EnumerationState InternedConstructorTemplates
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedNativeResourceForecast (Profile)
+open SourcePruningEnumerationRecursive (Packet)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+variable {width : Nat}
+variable [DecidableEq (EdgeKey Symbol Constraint)]
+
+/-- Every supported identity prefix retains its packet and resources at any bound. -/
+theorem prefix_identity_resources_at_any_budget
+    (graph : Graph Symbol Constraint)
+    (metadata : Metadata Unit)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller width) (memos : Memos) (before : Cached)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (profile : Profile) (property : Constraint → Prop)
+    (bounded : SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile caller.checked)
+    (known : SourceEqualityAnnotationHeap.Heap property caller.checked.native.machine.heap)
+    (fuel selected : Nat)
+    (chosen : SourcePruningEnumerationRestart.decision none (fun _ _ => none)
+      metadata before = some (.expand selected)) :
+    let observed := SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
+      (fun _ _ _ node state => .done node state) graph [] none (fun _ _ => none) metadata
+      fuel fuel fuel fuel fuel fuel selected caller before memos.query
+    match observed with
+    | .stopped _ _ => True
+    | .parked _ none _ => True
+    | .narrowed _ (.failed _ _) _ _ _ _ _ _ => True
+    | _ => CurrentPrefixResources none (fun _ _ => none) metadata formulas solver inventory
+        selected caller before memos profile property observed

@@ -1,0 +1,27 @@
+-- UNCOMPILED. This stronger arbitrary-domain claim is false.
+-- The approved single-mixed-entry header excludes this diagonal domain.
+-- This proof uses the existing worker and its actual branch order.
+namespace MicroCFTA.SourceSynthesisCurrentUniverseReferenceIdentity
+open Cache InternedConstructorTemplates InternedBinderProtocol
+open SourceRecursiveIntersectionControl SourceRecursiveIntersectionKernel
+
+private theorem diagonal_reference_mu_countercase
+    {S G : Type} [DecidableEq S] [DecidableEq (EdgeKey S G)]
+    (emptyGuard : G) (conjoin : G → G → G)
+    (u : Interned NodeKey) (body depth ordinary : Value S G)
+    (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey) (state : Machine S G)
+    (seen : pair u.identity u.identity ∈ domain.key.seen) :
+    execute emptyGuard conjoin 2 domain (.reference (.interned u.identity))
+      (.mu u body depth ordinary) state = .done (repeatedValue (pair u.identity u.identity)) state := by
+  have tag42 : compare (4 : Nat) 2 = .gt := by decide
+  have tag24 : compare (2 : Nat) 4 = .lt := by decide
+  have swapped : decision domain.key (Value.reference (.interned u.identity) : Value S G)
+      (.mu u body depth ordinary) = .swap := by
+    simp [decision, hasEmpty, reset, closedSelf, greater, compareValue, tag, identity,
+      payload, Value.referenceOf, Value.free, tag42]
+  have repeated : decision domain.key (Value.mu u body depth ordinary : Value S G)
+      (.reference (.interned u.identity)) = .repeated (pair u.identity u.identity) := by
+    simp [decision, hasEmpty, reset, closedSelf, greater, compareValue, tag, identity,
+      payload, Value.referenceOf, Value.free, tag24, seen]
+  rw [execute, onNode, swapped, execute, onNode, repeated]
+end MicroCFTA.SourceSynthesisCurrentUniverseReferenceIdentity
