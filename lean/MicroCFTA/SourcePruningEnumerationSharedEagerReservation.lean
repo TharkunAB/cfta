@@ -10903,3 +10903,499 @@ private theorem identity_actual_tuple_at_of_worker
 
 end ActualClosedTupleCallback
 end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+section ActualGeneralOrdinaryRowPrefix
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
+open SourcePruningEnumerationRecursive (Packet)
+open SourcePruningEnumerationSharedPreparedRecursive (Output Failure)
+open SourcePruningEnumerationSharedSelectedContinuations
+open SourceCurrentAllocatedNativeResourceForecast (Le)
+open SourcePruningEnumerationSharedIncomingReservation (Seed)
+open SourcePruningEnumerationFiniteReservation (iterate)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Heap" => SourceEqualityAnnotationHeap.Heap
+variable {bits : Nat}
+local notation "Fold" => NativeContinuations.Result
+  (Output (bits + 2) Unit) (Failure (bits + 2) Unit) (bits + 2)
+local notation "Visitor" => List Suspended → Node → Caller (bits + 2) → Cached → Queries →
+  (Fragment → Caller (bits + 2) → Queries → Cached → Fold) →
+  (ChildDispatch.Observation (bits + 2) → Option Cached → Fold) → Fold
+variable [DecidableEq (EdgeKey Symbol Constraint)]
+
+/-- An actual row entry derives its nested tuple reservation and current child inputs. -/
+private theorem identity_ordinary_row_prefix_reservation
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (caller : Caller (bits + 2)) (memos : Memos)
+    (metadata : Metadata Unit) (before : Cached)
+    (captured : InternedConstructorTemplates.State Symbol Constraint)
+    (limit own height bound ceiling : Nat) (initialSeed rowSeed : Seed)
+    (continuation : Nat → Seed → Seed) (admitted : Nat → Seed → Prop)
+    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (attempted remaining : List (EdgeValue Symbol Constraint))
+    (edge : EdgeValue Symbol Constraint) (scs : List Suspended)
+    (tries : List EqualityTrie.Trie) (residual : Option Constraint)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (fits : Fits rowSeed.2 caller.checked)
+    (known : Heap (fun guard => guard ∈ rowSeed.1) caller.checked.native.machine.heap)
+    (kept : SourceEqualityRequiredCache.Keeps captured caller.checked.native.machine.heap)
+    (mass : SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling)
+    (bucketBound : scs.length ≤ bound)
+    (available : Available captured (.node parentEntry rows depth free))
+    (closed : free = [])
+    (ranked : MergedOrdinaryHeight.height (.node parentEntry rows depth free) ≤ height + 1)
+    (bounded : ∀ sc ∈ scs, sc.var < before.core.counter)
+    (pending : InputsPending before.core scs)
+    (sourceRows : edgesOf (.node parentEntry rows depth free) = attempted ++ edge :: remaining)
+    (selectionMembers : ∀ selected ∈ edgesOf (.node parentEntry rows depth free), selected ∈ rows)
+    (selectionLength : (edgesOf (.node parentEntry rows depth free)).length ≤ rows.length)
+    (shapes : rows.length ≤ limit ∧ ∀ selected ∈ rows, selected.children.length ≤ limit ∧
+      ∀ projected residual, SourcePruningEnumerationConstraint.project selected.entry.key.constraint =
+        some (projected, residual) → projected.length ≤ own)
+    (allowed : arityAllows edge.children.length scs = true)
+    (projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual))
+    (scheduled : rowSeed = iterate
+      (fun current => tuplePlan (nodePlan limit own height) limit (bound + own) ceiling continuation current)
+      (fallbackPlan bound ceiling continuation initialSeed) attempted.length)
+    (reserved : nodeReserved bits limit own (height + 1) bound ceiling continuation admitted initialSeed)
+    (growth : ∀ retained current, Le current.2 (continuation retained current).2 ∧
+      current.1 ⊆ (continuation retained current).1) :
+    let inputs := SourcePruningEnumerationEdgeInputs.children edge scs before.core.counter tries
+    let staged := inputs.map (fun input =>
+      (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild input.2 input.1))
+    ∃ rowOwn : Cached,
+      SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs edge before =
+        some [((edge.entry.key.symbol, staged, residual), rowOwn)] ∧
+      Packet formulas solver inventory caller memos metadata rowOwn ∧
+      TupleInputs formulas solver caller metadata rowOwn
+        (staged.map (fun input => (input.1, input.2.1))) [] caller memos.query rowOwn ∧
+      Fits rowSeed.2 caller.checked ∧
+      Heap (fun guard => guard ∈ rowSeed.1) caller.checked.native.machine.heap ∧
+      SourcePruningEnumerationPrefixAdmission.suspendedBound rowOwn.core ≤ ceiling ∧
+      inputs.length ≤ limit ∧
+      (∀ child bucket, (child, bucket) ∈ inputs →
+        Available captured child ∧ child.free = [] ∧
+        MergedOrdinaryHeight.height child < MergedOrdinaryHeight.height (.node parentEntry rows depth free) ∧
+        MergedOrdinaryHeight.height child ≤ height ∧ bucket.length ≤ bound + own ∧
+        (∀ sc ∈ bucket, sc.var < rowOwn.core.counter) ∧ InputsPending rowOwn.core bucket) ∧
+      tupleReserved (nodePlan limit own height) (nodeReserved bits limit own height)
+        limit (bound + own) ceiling continuation admitted rowSeed ∧
+      (Le (tuplePlan (nodePlan limit own height) limit (bound + own) ceiling continuation rowSeed).2
+          (nodePlan limit own (height + 1) bound ceiling continuation initialSeed).2 ∧
+        (tuplePlan (nodePlan limit own height) limit (bound + own) ceiling continuation rowSeed).1 ⊆
+          (nodePlan limit own (height + 1) bound ceiling continuation initialSeed).1) ∧
+      ∀ (visit : Visitor) (consume : SelectedEdge.Result (bits + 2) → Fold),
+        SourcePruningEnumerationSharedChildVisitors.visitSelected visit consume scs edge caller before memos.query =
+          SourcePruningEnumerationSharedChildVisitors.visitChildren visit
+            (fun fragments reached saved after =>
+              let fragment := Fragments.Fragment.node edge.entry.key.symbol fragments
+              consume (.complete fragment reached saved (SelectedEdge.finish residual fragment after)))
+            (fun completed observation candidate => consume (.stopped completed observation candidate))
+            inputs caller rowOwn memos.query := by
+  let inputs := SourcePruningEnumerationEdgeInputs.children edge scs before.core.counter tries
+  let staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)) := inputs.map (fun input =>
+    (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild input.2 input.1))
+  have selected : edge ∈ rows := by
+    apply selectionMembers edge
+    rw [sourceRows]
+    exact List.mem_append_right attempted List.mem_cons_self
+  have indexLt : attempted.length < limit := by
+    have selectedLength := selectionLength
+    rw [sourceRows, List.length_append, List.length_cons] at selectedLength
+    have rowBound := shapes.1
+    omega
+  have rowReserved : tupleReserved (nodePlan limit own height) (nodeReserved bits limit own height)
+      limit (bound + own) ceiling continuation admitted rowSeed := by
+    rw [scheduled]
+    exact reserved.2 attempted.length indexLt
+  have rowForecast :
+      Le (tuplePlan (nodePlan limit own height) limit (bound + own) ceiling continuation rowSeed).2
+          (nodePlan limit own (height + 1) bound ceiling continuation initialSeed).2 ∧
+      (tuplePlan (nodePlan limit own height) limit (bound + own) ceiling continuation rowSeed).1 ⊆
+          (nodePlan limit own (height + 1) bound ceiling continuation initialSeed).1 := by
+    let first := fallbackPlan bound ceiling continuation initialSeed
+    let row := fun current => tuplePlan (nodePlan limit own height)
+      limit (bound + own) ceiling continuation current
+    have rowGrowth : ∀ current, Le current.2 (row current).2 ∧ current.1 ⊆ (row current).1 := by
+      intro current
+      exact tuplePlan_ge (nodePlan limit own height) (nodePlan_ge limit own height)
+        limit (bound + own) ceiling continuation growth current
+    have nextSlot : iterate row first (attempted.length + 1) = row rowSeed := by
+      rw [SourcePruningEnumerationFiniteReservation.iterate_add]
+      rw [scheduled]
+      rfl
+    have later := iterate_index_le row rowGrowth first (attempted.length + 1) limit (by omega)
+    rw [nextSlot] at later
+    exact later
+  obtain ⟨_roots, _action, rowOwn, _paths, ownReceipt, rowPacket, rowMass, lower, reducing⟩ :=
+    ordinary_prefix_packet formulas solver inventory caller memos metadata before parentEntry rows depth free
+      edge scs packet (kept.available _ available) closed selected bounded pending allowed tries residual projected
+  have actual : SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs edge before =
+      some [((edge.entry.key.symbol, staged, residual), rowOwn)] := ownReceipt.2.1
+  have emptyPrefix := (identity_captured_actual_prefix_entry formulas solver inventory caller memos metadata
+    before scs edge residual rowOwn staged packet actual).2
+  obtain ⟨_prepared, _middleRun, _raw, _middleCore, _middleCounter, _middleForest, _middleSafe,
+    _middlePaths, _middleRealized, _middleCounts, _middleFlags, _combinedPending, genuine, _middleProtects⟩ := ownReceipt
+  have edgeBounds := shapes.2 edge selected
+  have triesBound := edgeBounds.2 tries residual projected
+  have inputLength : inputs.length ≤ limit := by
+    simpa only [inputs, SourcePruningEnumerationEdgeInputs.children, List.length_map, List.length_zipIdx]
+      using edgeBounds.1
+  have inputFacts : ∀ child bucket, (child, bucket) ∈ inputs →
+      Available captured child ∧ child.free = [] ∧
+      MergedOrdinaryHeight.height child < MergedOrdinaryHeight.height (.node parentEntry rows depth free) ∧
+        MergedOrdinaryHeight.height child ≤ height ∧ bucket.length ≤ bound + own ∧
+      (∀ sc ∈ bucket, sc.var < rowOwn.core.counter) ∧ InputsPending rowOwn.core bucket := by
+    intro child bucket member
+    obtain ⟨_currentAvailable, childClosed, childBounded, childPending⟩ := genuine child bucket member
+    have childRank := lower child bucket member
+    obtain ⟨indexed, indexedMember, same⟩ := List.mem_map.mp member
+    cases same
+    have inherited := SourcePruningEnumerationCostBounds.descend_length_le indexed.2 scs
+    have added := SourcePruningEnumerationCostBounds.descend_length_le indexed.2
+      (suspendedVars before.core.counter tries)
+    rw [SourcePruningEnumerationCostBounds.suspended_length] at added
+    refine ⟨available.children indexed.1 (List.mem_flatMap.mpr
+      ⟨edge, selected, List.fst_mem_of_mem_zipIdx indexedMember⟩), childClosed, childRank, by omega, ?_,
+      childBounded, childPending⟩
+    simp only [List.length_append]
+    omega
+  have ownMass : SourcePruningEnumerationPrefixAdmission.suspendedBound rowOwn.core ≤ ceiling := by
+    rw [rowMass]
+    exact mass
+  exact ⟨rowOwn, actual, rowPacket, emptyPrefix, fits, known, ownMass, inputLength,
+    inputFacts, rowReserved, rowForecast, reducing⟩
+
+end ActualGeneralOrdinaryRowPrefix
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+section ActualNestedOwnPrefixPreservation
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourcePruningEnumerationRecursive (Packet)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+variable {bits : Nat}
+variable [DecidableEq (EdgeKey Symbol Constraint)]
+
+/-- An actual singleton own receipt identifies its source suspension state. -/
+private theorem identity_observed_own_suspension
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (caller : Caller (bits + 2)) (memos : Memos)
+    (metadata : Metadata Unit) (before : Cached) (scs : List Suspended)
+    (edge : EdgeValue Symbol Constraint) (residual : Option Constraint) (own : Cached)
+    (staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)))
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (prepared : SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs edge before =
+      some [((edge.entry.key.symbol, staged, residual), own)]) :
+    ∃ tries : List EqualityTrie.Trie,
+      own.core = suspendedState tries.length before.core ∧
+      own.core.counter = before.core.counter + tries.length := by
+  obtain ⟨roots, paths, storage, realized, counts, flags⟩ := packet.valid
+  have complete := SourcePruningEnumerationCachedOwn.complete caller.checked.native.machine.heap
+    before scs edge roots storage realized paths counts flags
+  by_cases allowed : arityAllows edge.children.length scs = true
+  · simp only [allowed, ↓reduceIte] at complete
+    cases projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+    | none =>
+        simp only [projected] at complete
+        have impossible := complete.1.symm.trans prepared
+        cases impossible
+    | some pair =>
+        obtain ⟨tries, projectedResidual⟩ := pair
+        simp only [projected] at complete
+        obtain ⟨_action, candidate, _prefix, actual, _raw, ownCore, ownCounter, _aligned,
+          _forest, _ownPaths, _ownStorage, _ownRealized, _ownCounts, _waiting, _expandable, _ownFlags⟩ := complete
+        have endpointSame : candidate = own :=
+          congrArg Prod.snd (List.cons.inj (Option.some.inj (actual.symm.trans prepared))).1
+        subst candidate
+        exact ⟨tries, ownCore, ownCounter⟩
+  · simp only [allowed] at complete
+    have impossible := Option.some.inj (complete.1.symm.trans prepared)
+    cases impossible
+
+/-- The actual nested own receipt retains the outer prefix and starts its full inner prefix. -/
+private theorem tuple_inputs_after_observed_own
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (original : Caller (bits + 2)) (metadata : Metadata Unit) (before : Cached)
+    (inputs : List (Node × List Suspended)) (completed : List Fragment)
+    (caller : Caller (bits + 2)) (queries : SourceEndpointMemo.Memos) (current : Cached)
+    (scs : List Suspended) (edge : EdgeValue Symbol Constraint)
+    (residual : Option Constraint) (own : Cached)
+    (staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)))
+    (previous : TupleInputs formulas solver original metadata before inputs completed caller queries current)
+    (prepared : SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs edge current =
+      some [((edge.entry.key.symbol, staged, residual), own)]) :
+    TupleInputs formulas solver original metadata before inputs completed caller queries own ∧
+      TupleInputs formulas solver caller metadata own
+        (staged.map (fun input => (input.1, input.2.1))) [] caller queries own := by
+  obtain ⟨inventory, memos, post, query, packet, previousGrowth, previousOrigin,
+    previousProtected, previousRootsProtected, previousReferences, previousBounds, previousHistory⟩ := previous
+  have actual : SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs edge current =
+      some [((edge.entry.key.symbol, staged, residual), own)] := prepared
+  obtain ⟨ownPacket, nestedPrefix⟩ := identity_captured_actual_prefix_entry
+    formulas solver inventory caller memos metadata current scs edge residual own staged packet actual
+  obtain ⟨tries, ownCore, ownCounter⟩ := identity_observed_own_suspension
+    formulas solver inventory caller memos metadata current scs edge residual own staged packet actual
+  have growth : current.core.counter ≤ own.core.counter := by
+    rw [ownCounter]
+    omega
+  have origin : EnumeratedOrigin current.core own.core := by
+    rw [ownCore]
+    exact suspension_origin tries.length current.core
+  have protects (held : Nat) (inside : held < current.core.counter)
+      (root : IsRoot current.core.representatives held) :
+      EnumerationDriver.Protected held current.core own.core := by
+    rw [ownCore]
+    exact EnumerationDriver.suspension_protected held tries.length current.core packet.safe inside root
+  have protectsEnumerated (held : Nat) (fragment : Fragment)
+      (stored : current.core.values[held]? = some (.enumerated fragment)) :
+      EnumerationDriver.Protected held current.core own.core := by
+    obtain ⟨inside, root⟩ := enumerated_root current.core packet.safe held fragment stored
+    exact protects held inside root
+  have protectsOriginalRoot (held : Nat) (inside : held < before.core.counter)
+      (root : IsRoot before.core.representatives held)
+      (avoids : ∀ child bucket, (child, bucket) ∈ inputs → Avoids before.core.representatives held bucket) :
+      EnumerationDriver.Protected held current.core own.core := by
+    have first := previousRootsProtected held inside root avoids
+    exact protects held (Nat.lt_of_lt_of_le inside previousGrowth) first.root
+  constructor
+  · refine ⟨inventory, memos, post, query, ownPacket, Nat.le_trans previousGrowth growth,
+      previousOrigin.trans origin, ?_, ?_, ?_, ?_, ?_⟩
+    · intro held fragment stored
+      have first := previousProtected held fragment stored
+      exact first.trans (protectsEnumerated held fragment (first.value.trans stored))
+    · intro held inside root avoids
+      exact (previousRootsProtected held inside root avoids).trans
+        (protectsOriginalRoot held inside root avoids)
+    · intro allowed valid supplied future
+      rw [ownCore]
+      exact EnumerationReferences.suspension_allowed allowed tries.length current.core
+        (previousReferences allowed valid supplied future)
+    · intro fragment member
+      exact fragmentBound_mono _ _ growth fragment (previousBounds fragment member)
+    · intro fragment member
+      obtain ⟨fragmentPending, fragmentSeparate⟩ := previousHistory fragment member
+      refine ⟨pendingFragment_preserved current.core own.core packet.safe ownPacket.safe
+        growth fragment (previousBounds fragment member) fragmentPending origin protectsEnumerated, ?_⟩
+      intro held inside root avoids
+      have lastProtection := protectsOriginalRoot held inside root avoids
+      exact (fragmentAvoid_classes current.core.representatives own.core.representatives
+        held fragment lastProtection.classes).mpr (fragmentSeparate held inside root avoids)
+  · rw [query] at nestedPrefix
+    exact nestedPrefix
+
+end ActualNestedOwnPrefixPreservation
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+section ActualNestedChildTwoPrefixes
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourcePruningEnumerationRecursive (Packet)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+variable {bits : Nat}
+variable [DecidableEq (EdgeKey Symbol Constraint)]
+
+/-- The actual own receipt identifies every source input bucket and its suspension. -/
+private theorem identity_observed_own_input_provenance
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (caller : Caller (bits + 2)) (memos : Memos)
+    (metadata : Metadata Unit) (before : Cached) (scs : List Suspended)
+    (edge : EdgeValue Symbol Constraint) (residual : Option Constraint) (own : Cached)
+    (staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)))
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (prepared : SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs edge before =
+      some [((edge.entry.key.symbol, staged, residual), own)]) :
+    ∃ tries : List EqualityTrie.Trie,
+      own.core = suspendedState tries.length before.core ∧
+      staged.map (fun input => (input.1, input.2.1)) =
+        SourcePruningEnumerationEdgeInputs.children edge scs before.core.counter tries := by
+  obtain ⟨roots, paths, storage, realized, counts, flags⟩ := packet.valid
+  have complete := SourcePruningEnumerationCachedOwn.complete caller.checked.native.machine.heap
+    before scs edge roots storage realized paths counts flags
+  by_cases allowed : arityAllows edge.children.length scs = true
+  · simp only [allowed, ↓reduceIte] at complete
+    cases projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+    | none =>
+        simp only [projected] at complete
+        have impossible := complete.1.symm.trans prepared
+        cases impossible
+    | some pair =>
+        obtain ⟨tries, projectedResidual⟩ := pair
+        simp only [projected] at complete
+        obtain ⟨_action, candidate, _prefix, actual, _raw, ownCore, _ownCounter, _aligned,
+          _forest, _ownPaths, _ownStorage, _ownRealized, _ownCounts, _waiting, _expandable, _ownFlags⟩ := complete
+        have pairSame := (List.cons.inj (Option.some.inj (actual.symm.trans prepared))).1
+        have endpointSame : candidate = own := congrArg Prod.snd pairSame
+        have contentsSame := congrArg Prod.fst pairSame
+        have stagedSame := congrArg Prod.fst (congrArg Prod.snd contentsSame)
+        subst candidate
+        change edge.children.zipIdx.map (fun indexed =>
+          (indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.core.counter tries),
+            SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint)
+              (descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.core.counter tries)) indexed.1)) = staged at stagedSame
+        refine ⟨tries, ownCore, ?_⟩
+        simp only [← stagedSame, List.map_map, SourcePruningEnumerationEdgeInputs.children]
+        rfl
+  · simp only [allowed] at complete
+    have impossible := Option.some.inj (complete.1.symm.trans prepared)
+    cases impossible
+
+/-- An actual inner child preserves the outer prefix and extends the inner prefix. -/
+private theorem tuple_inputs_after_nested_child
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (original : Caller (bits + 2)) (metadata : Metadata Unit) (before : Cached)
+    (inputs : List (Node × List Suspended)) (completed : List Fragment)
+    (caller : Caller (bits + 2)) (queries : SourceEndpointMemo.Memos) (current : Cached)
+    (parent : Node) (scs : List Suspended) (edge : EdgeValue Symbol Constraint)
+    (residual : Option Constraint) (own : Cached)
+    (staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)))
+    (incoming : Node) (bucket : List Suspended) (fragment : Fragment)
+    (reached : Caller (bits + 2)) (saved : SourceEndpointMemo.Memos) (after : Cached)
+    (previous : TupleInputs formulas solver original metadata before inputs completed caller queries current)
+    (sourceHead : (parent, scs) ∈ inputs)
+    (prepared : SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs edge current =
+      some [((edge.entry.key.symbol, staged, residual), own)])
+    (member : (incoming, bucket) ∈ staged.map (fun input => (input.1, input.2.1)))
+    (pending : InputsPending own.core bucket)
+    (head : ChildInputs formulas solver caller metadata own bucket fragment reached saved after) :
+    TupleInputs formulas solver original metadata before inputs completed reached saved after ∧
+      TupleInputs formulas solver caller metadata own
+        (staged.map (fun input => (input.1, input.2.1))) [fragment] reached saved after := by
+  obtain ⟨outerOwn, innerOwn⟩ := tuple_inputs_after_observed_own formulas solver original metadata before
+    inputs completed caller queries current scs edge residual own staged previous prepared
+  have innerAfter := tuple_inputs_extend_current_head formulas solver caller metadata own
+    (staged.map (fun input => (input.1, input.2.1))) [] caller queries own
+    incoming bucket fragment reached saved after innerOwn member pending head
+  obtain ⟨currentInventory, currentMemos, _beforePost, _beforeQuery, currentPacket,
+    beforeGrowth, _beforeOrigin, _beforeProtected, beforeRootsProtected, _beforeReferences,
+    _beforeBounds, _beforeHistory⟩ := previous
+  obtain ⟨tries, ownCore, readback⟩ := identity_observed_own_input_provenance formulas solver
+    currentInventory caller currentMemos metadata current scs edge residual own staged currentPacket prepared
+  have canonicalMember : (incoming, bucket) ∈
+      SourcePruningEnumerationEdgeInputs.children edge scs current.core.counter tries := by
+    rw [← readback]
+    exact member
+  have ownFrame (held : Nat) (inside : held < current.core.counter)
+      (root : IsRoot current.core.representatives held) :
+      EnumerationDriver.Protected held current.core own.core := by
+    rw [ownCore]
+    exact EnumerationDriver.suspension_protected held tries.length current.core currentPacket.safe inside root
+  have childAvoids (held : Nat) (inside : held < current.core.counter)
+      (root : IsRoot current.core.representatives held)
+      (avoids : Avoids current.core.representatives held scs) :
+      Avoids own.core.representatives held bucket := by
+    have frame := ownFrame held inside root
+    obtain ⟨indexed, _indexedMember, pairSame⟩ := List.mem_map.mp canonicalMember
+    cases pairSame
+    have inherited := descend_avoids own.core.representatives held indexed.2 scs (frame.avoids scs avoids)
+    have fresh := descend_avoids own.core.representatives held indexed.2
+      (suspendedVars current.core.counter tries)
+      (frame.avoids _ (fresh_avoids current.core currentPacket.safe.1 held inside tries))
+    intro sc listed
+    rcases List.mem_append.mp listed with inheritedMember | freshMember
+    · exact inherited sc inheritedMember
+    · exact fresh sc freshMember
+  have childAllowed (allowed : Nat → Prop)
+      (inherited : EnumerationReferences.InputsAllowed allowed scs)
+      (future : ∀ uv, current.core.counter ≤ uv → allowed uv) :
+      EnumerationReferences.InputsAllowed allowed bucket := by
+    have fresh := EnumerationReferences.suspended_allowed allowed current.core.counter
+      current.core.counter tries (Nat.le_refl _) future
+    obtain ⟨indexed, _indexedMember, pairSame⟩ := List.mem_map.mp canonicalMember
+    cases pairSame
+    have oldAllowed := EnumerationReferences.descend_allowed allowed scs indexed.2 inherited
+    have newAllowed := EnumerationReferences.descend_allowed allowed
+      (suspendedVars current.core.counter tries) indexed.2 fresh
+    intro sc listed
+    rcases List.mem_append.mp listed with inheritedMember | freshMember
+    · exact oldAllowed sc inheritedMember
+    · exact newAllowed sc freshMember
+  obtain ⟨_ownInventory, _ownMemos, previousPost, _previousQuery, ownPacket, previousGrowth,
+    previousOrigin, previousProtected, previousRootsProtected, previousReferences,
+    previousBounds, previousHistory⟩ := outerOwn
+  obtain ⟨next, final, headPost, query, afterPacket, growth, origin, protects,
+    references, _fragmentBound, _fragmentPending, _fragmentSeparate⟩ := head
+  have protectsEnumerated (held : Nat) (old : Fragment)
+      (stored : own.core.values[held]? = some (.enumerated old)) :
+      EnumerationDriver.Protected held own.core after.core := by
+    obtain ⟨inside, root⟩ := enumerated_root own.core ownPacket.safe held old stored
+    exact protects held inside root (pending held old stored)
+  have protectsOriginalRoot (held : Nat) (inside : held < before.core.counter)
+      (root : IsRoot before.core.representatives held)
+      (avoids : ∀ child retained, (child, retained) ∈ inputs →
+        Avoids before.core.representatives held retained) :
+      EnumerationDriver.Protected held own.core after.core := by
+    have atOwn := previousRootsProtected held inside root avoids
+    have atCurrent := beforeRootsProtected held inside root avoids
+    have atBucket := childAvoids held (Nat.lt_of_lt_of_le inside beforeGrowth) atCurrent.root
+      (atCurrent.avoids scs (avoids parent scs sourceHead))
+    exact protects held (Nat.lt_of_lt_of_le inside previousGrowth) atOwn.root atBucket
+  constructor
+  · refine ⟨next, final, previousPost.trans headPost, query, afterPacket,
+      Nat.le_trans previousGrowth growth, previousOrigin.trans origin, ?_, ?_, ?_, ?_, ?_⟩
+    · intro held old stored
+      have first := previousProtected held old stored
+      exact first.trans (protectsEnumerated held old (first.value.trans stored))
+    · intro held inside root avoids
+      exact (previousRootsProtected held inside root avoids).trans
+        (protectsOriginalRoot held inside root avoids)
+    · intro allowed valid supplied future
+      apply references allowed (previousReferences allowed valid supplied future)
+      · exact childAllowed allowed (supplied parent scs sourceHead)
+          (fun uv lower => future uv (Nat.le_trans beforeGrowth lower))
+      · intro uv lower
+        exact future uv (Nat.le_trans previousGrowth lower)
+    · intro child included
+      exact fragmentBound_mono _ _ growth child (previousBounds child included)
+    · intro child included
+      obtain ⟨childPending, childSeparate⟩ := previousHistory child included
+      refine ⟨pendingFragment_preserved own.core after.core ownPacket.safe afterPacket.safe
+        growth child (previousBounds child included) childPending origin protectsEnumerated, ?_⟩
+      intro held inside root avoids
+      have lastProtection := protectsOriginalRoot held inside root avoids
+      exact (fragmentAvoid_classes own.core.representatives after.core.representatives
+        held child lastProtection.classes).mpr (childSeparate held inside root avoids)
+  · exact innerAfter
+
+end ActualNestedChildTwoPrefixes
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
