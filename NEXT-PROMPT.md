@@ -1,3 +1,58 @@
+# Actual mixed-domain reference alias checked (2026-11-14 14:08 CET)
+
+GOAL ACTIVE. Preserve the complete original finite joint-witness, language,
+typing, depth, default LPO/reduction/refolding, stream, size/count/weight/rank,
+host-bound and compiled-Haskell scope below. One emitted partial root requires
+ONE finite accepted term of the SAME original root with ONE consistent assignment.
+
+SourceSynthesisCurrentUniverseReferenceIdentity.
+current_stored_universe_reference_alias_after_mixed_entry now proves the SAME
+accepted current source/build/stored U returns the FULL ORIGINAL U from the
+actual ref(U)/U request after literal mixed U/pattern domain entry. The available
+pattern is closed and ordinary or union. Current heap Facts/Grows and a valid
+cache are inputs. No result, product, callback or future provider is an input.
+The conclusion derives ONE finite bound, stable exact completion at every larger
+budget, final machine Valid and Extension from that exact entered initial state.
+This new theorem has an EXISTENTIAL bound. Do not claim a fixed fuel13 for this
+new entered-domain result. Earlier empty-domain fuel13 results remain unchanged.
+All old checked declarations and all16 target/helper headers remain exact.
+
+SourceSynthesisUniverseOffDiagonalReferenceControl derives the actual ref/ref
+three-step body/Mu cutoff and EXACT reached cache after adding the inner source
+diagonal. Its eight-step theorem retains that exact machine. It takes structural
+Facts, cache validity, original Mu availability, the actual name binding, the
+body/Mu pair already seen and the source diagonal fresh. The future same-source
+body wrapper must derive these facts. This is not the body-alias theorem.
+
+All SIX public checks PASS: both-module build, both strict source checks,
+independent import of all three public laws, full Audit build and strict Audit.
+Strict Audit:95,999 aggregate theorem axiom dependencies; separately88 explicit
+reports,86 standard-axiom and2 axiom-free. Only propext, Classical.choice and
+Quot.sound occur. Source modules5943; direct Audit imports4941. Serial4GiB
+memory max/high,zero swap. Public/private compiler handles are terminal.
+Private check8/control check3: /tmp/mcfta-mixed-reference-check8-and-offdiag-check3-20261114-1353.
+Public scripts/pins/logs: /tmp/mcfta-current-mixed-reference-and-offdiag-publication-20261114-1403.
+Previous failed checks remain uncredited and must be archived with these results.
+
+Opaque commit61b899fd3bb560d2f874d2d8188a91b35c59a306 is pushed and independently
+verified. Main remainse53852064d3ef5a2eafec47d754c27504b11de5f.
+Use trusted per-command SSH443 as recorded below. Preserve unrelated .hypha/.
+Next check the frozen generic prepared proof and fixed-identity expansion.
+Then derive the actual identity depth induction from the checked identity prefix
+producer. No fake Key/fits/admits or future output/callback contract may enter the
+fixed-identity statement. Whole identity-worker completion and every-budget
+worker history remain OPEN. Source body(U)/U and the original two-alias target
+remain OPEN. The central one-finite-common-term proof and removed-bucket Holds
+law remain OPEN. Pending cycles alone do not prove a finite accepted witness.
+
+No Haskell/Cabal/test/Liquid Haskell annotation changed. No new implementation
+fix was established. Root repairs changed only Lean branch normalization, an
+explicit bind continuation, local-let reduction and strict lint arguments.
+Record every future Haskell fix in FINDINGS. Keep /tmp small; preserve frozen
+sources/scripts/logs without compiled objects. Root owns live edits and all
+compiler/Git jobs. Primary usage was6% at13:46; use fresh primary limits and
+pause/notify only above80%. Lifetime goal-token totals are not that signal.
+
 # Opaque resources retain the actual narrowing operation (2026-11-14 13:55 CET)
 
 GOAL ACTIVE. Preserve the full original joint finite-witness and implementation
