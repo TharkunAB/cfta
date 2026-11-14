@@ -1,3 +1,58 @@
+# Whole literal-identity worker resource closure checked (2026-11-14 14:30 CET)
+
+GOAL ACTIVE. The full original objective remains ONE finite accepted term of the
+SAME original root with ONE consistent assignment for each actual emitted partial
+root, including supported paths/domains/aliases/residuals/readback and parked
+backward recompletion. Keep all original typing, depth adequacy/completeness,
+default LPO/reduction/refolding in both language directions, stream/order/demand,
+exact size/count/weight/training/rank, host bounds and compiled-Haskell clauses.
+
+NEW PUBLIC THEOREM: SourcePruningEnumerationSharedEagerReservation.
+runEager_identity_finite_complete_resources. Its header matches the exact pinned
+internal resource target. Given the initial Packet/Fits/Heap, actual selection
+membership/length bounds, initial mass bound and eagerReserved allocation bound,
+for EVERY finite recursive depth there is ONE common fuel bound and EXACT worker
+outcome, stable at every larger common budget, with FULL OutcomeResources.
+It uses actual runEagerWithNarrow, literal identity narrow, Unit metadata, graph,
+empty templates, none stop and the actual default order. Zero/base cases and depth
+induction use the proved actual identity expansion. No fake Key/fits/admits,
+configured surrogate or future prefix/output/callback provider is an input.
+The new130-line isolated proof section preserves ALL previous source bytes.
+SharedEagerReservation SHA25635901fc6dd9143e783d45df6d70126a69ac88d160082c69351e409cad8a6d238.
+
+This is SUFFICIENTLY-LARGE-COMMON-BUDGET RESOURCE closure. It permits the actual
+finite-depth stopped outcomes. It does not prove that each output has an accepted
+finite completion, exact generation/completeness, or safety of every smaller-
+budget worker history. All-budget identity PREFIX resources remain separate.
+The source-initialization-to-worker bridge is being prepared. The original
+one-finite-common-term proof and removed-bucket Holds law remain OPEN.
+
+All FIVE public checks PASS. Strict Audit checks96,008 aggregate imported theorem
+axiom dependencies. Separately89 explicit reports include87 standard-axiom and2
+axiom-free reports. Only propext, Classical.choice and Quot.sound occur. Source
+modules5943; direct Audit imports4941. All public compiler handles are terminal.
+Jobs run serially with actual4GiB max/high and zero swap. Private check:
+/tmp/mcfta-identity-eager-depth-check-20261114-1419. Public scripts/logs/pins:
+/tmp/mcfta-identity-eager-depth-publication-20261114-1422.
+Two Root preparation errors concerned newline-span reconstruction and an already
+created peaks directory. They ran NO Lean compiler and changed NO proof. Their
+exact record is setup-failures.json. The actual private and public checks PASS.
+
+Prepared/expansion commitfb19edc4b71555afb5170d6e315ac6eccebcbb87 is pushed and
+independently verified. Main remainse53852064d3ef5a2eafec47d754c27504b11de5f.
+Mixed-domain REF(U)/U is public/checked. BODY(U)/U and full two-alias/type closure
+remain OPEN. The body-readback lower helper failed its first strict check; the
+full dependent body wrapper was NOT RUN. Lower repair2 and unchanged full wrapper
+are frozen at /tmp/mcfta-source-body-alias-check2-20261114-1426. Check lower first;
+use only its private object path for the dependent wrapper, no copied overlays.
+Root remains sole live writer/compiler/Git owner. Preserve all failed/marked
+inputs without credit. Preserve unrelated .hypha/. Keep /tmp small; latest free
+space was138GiB. Use fresh primary usage; pause/notify above80% only. Use the
+trusted per-command GitHub SSH443 endpoint recorded below; no remote config changed.
+
+No Haskell/Cabal/test/Liquid Haskell annotation changed. No new Haskell defect/fix
+was established. Record every future implementation fix in FINDINGS.
+
 # Actual prepared and identity-expansion resources checked (2026-11-14 14:16 CET)
 
 GOAL ACTIVE. The complete original finite joint-witness, language, typing,
