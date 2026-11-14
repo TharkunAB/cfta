@@ -42,6 +42,7 @@ theorem mu_prepare
   | union _ _ _ _ => cases mu
   | mu _ _ _ _ =>
       intro nativeFuel representativeFuel
-      simp only [SourcePruningEnumerationAction.prepare, SourcePruningOuterNarrow.narrow, encoded]
+      simp only [SourcePruningEnumerationAction.prepare, SourcePruningEnumerationAction.prepareWithNarrow,
+        SourcePruningOuterNarrow.narrow, encoded]
 
 end MicroCFTA.SourceCurrentMuPrepareResources

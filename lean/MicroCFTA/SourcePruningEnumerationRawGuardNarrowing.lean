@@ -92,8 +92,8 @@ theorem prepare_heap (P : NativeGuard → Prop) [DecidableEq (EdgeKey Symbol Nat
   cases narrowed : SourcePruningOuterNarrow.narrow holeKey fits admits metadata
       nativeFuel uv oldValue before with
   | done result after =>
-      simpa only [prepare, narrowed, MergedSourceComparison.Result.state] using retained
+      simpa only [prepare, prepareWithNarrow, narrowed, MergedSourceComparison.Result.state] using retained
   | failed fault after =>
-      simpa only [prepare, narrowed, MergedSourceComparison.Result.state] using retained
+      simpa only [prepare, prepareWithNarrow, narrowed, MergedSourceComparison.Result.state] using retained
 
 end MicroCFTA.SourcePruningEnumerationAction

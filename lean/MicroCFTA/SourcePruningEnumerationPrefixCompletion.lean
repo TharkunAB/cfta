@@ -96,7 +96,7 @@ theorem prefix_complete
       have prefixRun : runPrefix holeKey fits admits graph templates stop order metadata w w w w w w
           uv caller before memos.query = .parked checked.core (some checked)
           (some (ExceptT.run (SourcePruningEnumerationRestart.run stop order metadata checked checked.core))) := by
-        simp only [runPrefix, reading, checking, adapted, Option.map_some]
+        simp only [runPrefix, runPrefixWithNarrow, reading, checking, adapted, Option.map_some]
       refine ⟨prefix_no_ordinary holeKey fits admits graph templates stop order metadata
         w w w w w w uv caller before memos.query, ?_, ?_⟩
       · change Valid holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
@@ -140,7 +140,8 @@ theorem prefix_complete
               (SourceCurrentAllocatedPartialState.advance caller
                 (advancePhysical caller.checked ⟨heap, caller.checked.operations⟩) caller.fourth caller.merge)
               memos.query (some []) none none none := by
-          simp only [runPrefix, reading, checking, oldDecoded, preparedAt]
+          simp only [runPrefix, runPrefixWithNarrow,
+            ← SourcePruningEnumerationAction.prepare_configured_eq, reading, checking, oldDecoded, preparedAt]
           rfl
         refine ⟨prefix_no_ordinary holeKey fits admits graph templates stop order metadata
           w w w w w w uv caller before memos.query, ?_, ?_⟩
@@ -207,7 +208,9 @@ theorem prefix_complete
                 (advancePhysical caller.checked ⟨heap, caller.checked.operations⟩) caller.fourth caller.merge)
               memos.query (some [.ok ((), after.core)]) (some after)
               (some [.ok ((false, metadata), after.core)]) none := by
-          simp only [runPrefix, reading, checking, oldDecoded, preparedAt, raw, encoded, adaptedAt, right]
+          simp only [runPrefix, runPrefixWithNarrow,
+            ← SourcePruningEnumerationAction.prepare_configured_eq,
+            reading, checking, oldDecoded, preparedAt, raw, encoded, adaptedAt, right]
           rfl
         refine ⟨prefix_no_ordinary holeKey fits admits graph templates stop order metadata
           w w w w w w uv caller before memos.query, ?_, ?_⟩

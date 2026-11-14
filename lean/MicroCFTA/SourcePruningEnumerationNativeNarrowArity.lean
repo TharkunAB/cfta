@@ -66,7 +66,8 @@ theorem prepare_heap
     facts heap available
   cases actual : SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv value before with
   | failed fault after | done result after =>
-      simpa only [SourcePruningEnumerationAction.prepare, actual,
+      simpa only [SourcePruningEnumerationAction.prepare,
+        SourcePruningEnumerationAction.prepareWithNarrow, actual,
         MergedSourceComparison.Result.state] using retained
 
 /-- The actual caller advance exposes the prepared heap without restoring an older heap. -/

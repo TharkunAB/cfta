@@ -39,7 +39,7 @@ theorem prepare_total (nativeFuel representativeFuel uv oldHandle : Nat)
       representativeFuel uv oldHandle scs oldValue heap = .done (value, some operation) afterHeap)
     (total : UnionFind.Total input.representatives) (successful : Success operation input () output) :
     UnionFind.Total output.representatives := by
-  dsimp only [SourcePruningEnumerationAction.prepare] at prepared
+  dsimp only [SourcePruningEnumerationAction.prepare, SourcePruningEnumerationAction.prepareWithNarrow] at prepared
   all_goals try (split at prepared)
   all_goals try (split at prepared)
   all_goals try (split at prepared)

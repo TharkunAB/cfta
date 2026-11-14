@@ -41,10 +41,10 @@ private theorem prepare_equal_handle_success_core
     observed = checked := by
   cases narrowed : SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv value heap with
   | failed =>
-      simp only [SourcePruningEnumerationAction.prepare, narrowed] at prepared
+      simp only [SourcePruningEnumerationAction.prepare, SourcePruningEnumerationAction.prepareWithNarrow, narrowed] at prepared
       cases prepared
   | done candidate reached =>
-      simp only [SourcePruningEnumerationAction.prepare, narrowed] at prepared
+      simp only [SourcePruningEnumerationAction.prepare, SourcePruningEnumerationAction.prepareWithNarrow, narrowed] at prepared
       have paired := MergedSourceComparison.Result.done.inj prepared
       have sameValue : candidate = result := congrArg Prod.fst paired.1
       subst candidate
@@ -88,8 +88,8 @@ theorem prefix_changed_stages
       SourcePruningEnumerationNarrowAdapter.adapt nextHeap indexFuel uv oldHandle newHandle scs before observed = some after ∧
       after.core = observed ∧ callbackCore = observed ∧ updated = metadata ∧
       reached.checked.native.machine.heap = nextHeap := by
-  unfold runPrefix at prefixObserved
-  dsimp only at prefixObserved
+  unfold runPrefix runPrefixWithNarrow at prefixObserved
+  simp only [← SourcePruningEnumerationAction.prepare_configured_eq] at prefixObserved
   generalize readEq : ExceptT.run (getValue readFuel uv before.core) = read at prefixObserved
   cases read with
   | nil => cases prefixObserved

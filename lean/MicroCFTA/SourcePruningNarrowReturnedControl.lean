@@ -87,10 +87,10 @@ theorem prepare_changed_returned_control [DecidableEq (EdgeKey Symbol Guard)]
       .done result after := by
     cases query : SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv value before with
     | failed =>
-        simp only [prepare, query] at returned
+        simp only [prepare, prepareWithNarrow, query] at returned
         cases returned
     | done nextValue nextHeap =>
-        simp only [prepare, query] at returned
+        simp only [prepare, prepareWithNarrow, query] at returned
         have same := MergedSourceComparison.Result.done.inj returned
         have sameValue : nextValue = result := congrArg Prod.fst same.1
         have sameHeap : nextHeap = after := same.2

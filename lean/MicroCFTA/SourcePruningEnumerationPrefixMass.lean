@@ -185,7 +185,8 @@ private theorem narrowed_raw
         uv caller before queries with
     | .narrowed _ _ _ _ action _ _ _ => action
     | _ => none) = some (ExceptT.run (selectedAction checked)) := by
-    simp only [runPrefix, reading, checking, decoded, prepared]
+    simp only [runPrefix, runPrefixWithNarrow, reading, checking, decoded,
+      ← SourcePruningEnumerationAction.prepare_configured_eq, prepared]
     cases execution : ExceptT.run (selectedAction checked) with
     | nil => rfl
     | cons first rest =>

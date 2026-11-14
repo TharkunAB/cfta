@@ -82,7 +82,9 @@ private theorem narrowed_observation
     rw [equal] at absent
     cases absent
   have actual := observed
-  simp only [SourcePruningEnumerationSelectedStep.runPrefix, reading, checking, decoded, prepared] at actual
+  simp only [SourcePruningEnumerationSelectedStep.runPrefix,
+    SourcePruningEnumerationSelectedStep.runPrefixWithNarrow,
+    ← SourcePruningEnumerationAction.prepare_configured_eq, reading, checking, decoded, prepared] at actual
   generalize rawEq : ExceptT.run (action checked) = raw at actual
   cases raw with
   | nil => exact (missing _ rfl actual).elim
@@ -185,7 +187,8 @@ theorem run_related_of_valid
         have projected := congrArg (fun result => match result with
           | .parked _ attached _ => attached
           | _ => none) original
-        simpa only [SourcePruningEnumerationSelectedStep.runPrefix, reading, checking] using projected
+        simpa only [SourcePruningEnumerationSelectedStep.runPrefix,
+          SourcePruningEnumerationSelectedStep.runPrefixWithNarrow, reading, checking] using projected
       obtain ⟨flatAfter, flatAdapted, caches⟩ := SourceFlatPruningIndexAdapters.parked_completed
         related checkedRelated caller.checked.native.machine.heap fuel uv oldHandle scs adapted
       have flatCore := SourceFlatPruningIndexAdapters.parked_core caller.checked.native.machine.heap
@@ -226,7 +229,8 @@ theorem run_related_of_valid
           have direct : SourcePruningEnumerationAction.prepare holeKey fits admits metadata fuel fuel
               uv oldHandle scs oldValue caller.checked.native.machine.heap =
               .done (.empty, some (EnumerationState.reject : EnumerateM Symbol Constraint Unit)) heap := by
-            simp only [SourcePruningEnumerationAction.prepare, narrowed]
+            simp only [SourcePruningEnumerationAction.prepare,
+              SourcePruningEnumerationAction.prepareWithNarrow, narrowed]
           rw [preparation] at direct
           exact Option.some.inj (Prod.mk.inj (MergedSourceComparison.Result.done.inj direct).1).2
         have flatReject := flatEmpty rfl

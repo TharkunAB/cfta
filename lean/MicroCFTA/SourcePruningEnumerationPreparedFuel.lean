@@ -30,7 +30,7 @@ theorem native_moreFuel
       uv oldHandle scs oldValue heap = .done (value, action) nextHeap) :
     SourcePruningEnumerationAction.prepare holeKey fits admits metadata (nativeFuel + extra) representativeFuel
       uv oldHandle scs oldValue heap = .done (value, action) nextHeap := by
-  unfold SourcePruningEnumerationAction.prepare at prepared ⊢
+  unfold SourcePruningEnumerationAction.prepare SourcePruningEnumerationAction.prepareWithNarrow at prepared ⊢
   rw [narrowed] at prepared
   rw [stable extra]
   exact prepared

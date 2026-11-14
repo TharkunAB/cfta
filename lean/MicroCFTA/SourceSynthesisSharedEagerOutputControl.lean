@@ -243,6 +243,7 @@ private theorem control_prefix
     ControlPrefixDecision stop order (SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates
       stop order metadata readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv caller before queries) := by
   unfold SourcePruningEnumerationSelectedStep.runPrefix
+    SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
   dsimp only
   split
   · rename_i oldHandle scs readAfter readEq
@@ -426,7 +427,8 @@ private theorem control_resume
       | stuck => intro output member; cases member
       | expand uv =>
         intro output member
-        dsimp only [resumeWithChild] at member
+        dsimp only [resumeWithChild, resumeWithNarrow] at member
+        simp only [← SourcePruningEnumerationSelectedStep.runPrefix_configured_eq] at member
         split at member
         · cases member
         · rename_i checked parked updated next core observed

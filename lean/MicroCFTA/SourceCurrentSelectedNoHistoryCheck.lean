@@ -126,7 +126,9 @@ theorem selected_without_target_history
           (SourceCurrentAllocatedPartialState.advance caller
             (advancePhysical caller.checked ⟨heap, caller.checked.operations⟩) caller.fourth caller.merge)
           memos.query raw candidate right none := by
-      simp only [SourcePruningEnumerationSelectedStep.runPrefix, readExact er, checkFalse ec, decoded, prepared]
+      simp only [SourcePruningEnumerationSelectedStep.runPrefix,
+        SourcePruningEnumerationSelectedStep.runPrefixWithNarrow, readExact er, checkFalse ec, decoded,
+        ← SourcePruningEnumerationAction.prepare_configured_eq, prepared]
       repeat' first
         | exact ⟨_, _, _, rfl⟩
         | split

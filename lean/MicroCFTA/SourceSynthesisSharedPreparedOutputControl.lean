@@ -145,6 +145,7 @@ private theorem control_prefix
     ControlPrefixDecision stop order (SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates
       stop order metadata readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv caller before queries) := by
   unfold SourcePruningEnumerationSelectedStep.runPrefix
+    SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
   dsimp only
   split
   · rename_i oldHandle scs readAfter readEq

@@ -188,7 +188,7 @@ theorem runPrefix_tables
   | stopped => trivial
   | parked => trivial
   | narrowed =>
-      unfold runPrefix at observed
+      unfold runPrefix runPrefixWithNarrow at observed
       repeat' first
         | (cases observed <;> exact ⟨rfl, rfl⟩)
         | split at observed

@@ -151,7 +151,7 @@ theorem prepare_of_normal [DecidableEq (EdgeKey Symbol Guard)]
         split
         · rfl
         · exact repeated
-      simp only [prepare, narrowed]
+      simp only [prepare, prepareWithNarrow, narrowed]
   | reference | union | mu => cases ordinary
   | node entry edges depth free =>
       have narrowed : SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv
@@ -160,6 +160,6 @@ theorem prepare_of_normal [DecidableEq (EdgeKey Symbol Guard)]
         split
         · rfl
         · exact repeated
-      simp only [prepare, narrowed, encoded, ite_true]
+      simp only [prepare, prepareWithNarrow, narrowed, encoded, ite_true]
 
 end MicroCFTA.SourcePruningEnumerationAction

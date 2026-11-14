@@ -3552,7 +3552,9 @@ private theorem eager_expansion_resources
       intro extra
       have observed := (phase extra).1
       rw [SourcePruningEnumerationRestart.run_exact, ite_eq_left blocked] at observed
-      rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild, observed]
+      rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
+        SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow,
+        ← SourcePruningEnumerationSelectedStep.runPrefix_configured_eq, observed]
     · let parkedSeed := advance start (ceiling + 1)
       let parkedMass := ceiling + ceiling
       have headGrowth : Le start.2 parkedSeed.2 ∧ start.1 ⊆ parkedSeed.1 :=
@@ -3577,7 +3579,9 @@ private theorem eager_expansion_resources
       have actual := running (prefixFuel + extra)
       have recursiveCommon : resumeFuel + (prefixFuel + extra) = prefixFuel + resumeFuel + extra := by omega
       rw [recursiveCommon] at actual
-      rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild, observed]
+      rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
+        SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow,
+        ← SourcePruningEnumerationSelectedStep.runPrefix_configured_eq, observed]
       dsimp only
       rw [framed]
       exact actual
@@ -3600,7 +3604,9 @@ private theorem eager_expansion_resources
       exact (List.not_mem_nil member).elim
     refine ⟨prefixFuel, .complete [] reached memos.query, ?_, ?_⟩
     · intro extra
-      rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild, (phase extra).1]
+      rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
+        SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow,
+        ← SourcePruningEnumerationSelectedStep.runPrefix_configured_eq, (phase extra).1]
     · exact certificate.mono stageGrowth.1 stageGrowth.2
   · have phase (extra : Nat) := originalPhase (legacyFuel + extra)
     simp only [shift] at phase
@@ -3640,8 +3646,11 @@ private theorem eager_expansion_resources
     have actual := scanRun (prefixFuel + extra)
     have scanCommon : scanFuel + (prefixFuel + extra) = prefixFuel + scanFuel + extra := by omega
     rw [scanCommon, middleQuery] at actual
-    rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild, currentPrefix]
+    rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
+      SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow,
+      ← SourcePruningEnumerationSelectedStep.runPrefix_configured_eq, currentPrefix]
     dsimp only
+    dsimp only [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild] at actual
     rw [actual]
 
 end ActualEagerExpansion
@@ -3674,7 +3683,8 @@ private theorem eager_resume_complete
             checkEmpty edgesOf stop order formulas solver inventory caller memos before metadata none seed packet bounded known
           refine ⟨0, outcome, ?_, resources.mono growth.1 growth.2⟩
           intro extra
-          simpa only [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild] using running extra
+          simpa only [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
+            SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow] using running extra
       | some selected =>
           cases selected with
           | done =>
@@ -3683,14 +3693,16 @@ private theorem eager_resume_complete
                 packet bounded known
               refine ⟨0, outcome, ?_, resources.mono growth.1 growth.2⟩
               intro extra
-              simpa only [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild] using running extra
+              simpa only [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
+                SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow] using running extra
           | stuck =>
               obtain ⟨outcome, running, resources⟩ := resume_eager_zero_resources holeKey keyMatches admits graph templates
                 checkEmpty edgesOf stop order formulas solver inventory caller memos before metadata (some .stuck) seed
                 packet bounded known
               refine ⟨0, outcome, ?_, resources.mono growth.1 growth.2⟩
               intro extra
-              simpa only [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild] using running extra
+              simpa only [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
+                SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow] using running extra
           | expand uv =>
               exact eager_expansion_resources holeKey keyMatches admits graph templates checkEmpty edgesOf stop order
                 formulas solver depth ih inventory caller memos before metadata uv seed ceiling packet bounded known
@@ -7712,7 +7724,9 @@ private theorem eager_program_expansion_resources
       intro extra
       have observed := (phase extra).1
       rw [SourcePruningEnumerationRestart.run_exact, ite_eq_left blocked] at observed
-      rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild, observed]
+      rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
+        SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow,
+        ← SourcePruningEnumerationSelectedStep.runPrefix_configured_eq, observed]
     · let parkedSeed := advance start (ceiling + 1)
       let parkedMass := ceiling + ceiling
       have headGrowth : Le start.2 parkedSeed.2 ∧ start.1 ⊆ parkedSeed.1 :=
@@ -7737,7 +7751,9 @@ private theorem eager_program_expansion_resources
       have actual := running (prefixFuel + extra)
       have recursiveCommon : resumeFuel + (prefixFuel + extra) = prefixFuel + resumeFuel + extra := by omega
       rw [recursiveCommon] at actual
-      rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild, observed]
+      rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
+        SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow,
+        ← SourcePruningEnumerationSelectedStep.runPrefix_configured_eq, observed]
       dsimp only
       rw [framed]
       exact actual
@@ -7763,7 +7779,9 @@ private theorem eager_program_expansion_resources
         cases member
     refine ⟨prefixFuel, .complete [] reached memos.query, ?_, ?_⟩
     · intro extra
-      rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild, (phase extra).1]
+      rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
+        SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow,
+        ← SourcePruningEnumerationSelectedStep.runPrefix_configured_eq, (phase extra).1]
     · exact resources_outputs_mono stageGrowth.1 stageGrowth.2 certificate
   · have phase (extra : Nat) := originalPhase (legacyFuel + extra)
     simp only [shift] at phase
@@ -7809,8 +7827,11 @@ private theorem eager_program_expansion_resources
     have actual := scanRun (prefixFuel + extra)
     have scanCommon : scanFuel + (prefixFuel + extra) = prefixFuel + scanFuel + extra := by omega
     rw [scanCommon, middleQuery] at actual
-    rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild, currentPrefix]
+    rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
+      SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow,
+      ← SourcePruningEnumerationSelectedStep.runPrefix_configured_eq, currentPrefix]
     dsimp only
+    dsimp only [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild] at actual
     rw [actual]
 
 
@@ -7916,7 +7937,9 @@ private theorem eager_program_expansion_resources_with_isolated
       intro extra
       have observed := (phase extra).1
       rw [SourcePruningEnumerationRestart.run_exact, ite_eq_left blocked] at observed
-      rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild, observed]
+      rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
+        SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow,
+        ← SourcePruningEnumerationSelectedStep.runPrefix_configured_eq, observed]
     · let parkedSeed := advance start (ceiling + 1)
       let parkedMass := ceiling + ceiling
       have headGrowth : Le start.2 parkedSeed.2 ∧ start.1 ⊆ parkedSeed.1 :=
@@ -7958,7 +7981,9 @@ private theorem eager_program_expansion_resources_with_isolated
       have actual := running (prefixFuel + extra)
       have recursiveCommon : resumeFuel + (prefixFuel + extra) = prefixFuel + resumeFuel + extra := by omega
       rw [recursiveCommon] at actual
-      rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild, observed]
+      rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
+        SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow,
+        ← SourcePruningEnumerationSelectedStep.runPrefix_configured_eq, observed]
       dsimp only
       rw [framed]
       exact actual
@@ -7984,7 +8009,9 @@ private theorem eager_program_expansion_resources_with_isolated
         cases member
     refine ⟨prefixFuel, .complete [] reached memos.query, ?_, ?_⟩
     · intro extra
-      rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild, (phase extra).1]
+      rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
+        SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow,
+        ← SourcePruningEnumerationSelectedStep.runPrefix_configured_eq, (phase extra).1]
     · exact resources_outputs_mono stageGrowth.1 stageGrowth.2 certificate
   · have phase (extra : Nat) := originalPhase (legacyFuel + extra)
     simp only [shift] at phase
@@ -8053,8 +8080,11 @@ private theorem eager_program_expansion_resources_with_isolated
     have actual := scanRun (prefixFuel + extra)
     have scanCommon : scanFuel + (prefixFuel + extra) = prefixFuel + scanFuel + extra := by omega
     rw [scanCommon, middleQuery] at actual
-    rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild, currentPrefix]
+    rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
+      SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow,
+      ← SourcePruningEnumerationSelectedStep.runPrefix_configured_eq, currentPrefix]
     dsimp only
+    dsimp only [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild] at actual
     rw [actual]
 
 end ActualProgramEagerExpansion
@@ -8089,7 +8119,8 @@ private theorem eager_program_resume_complete
               selectionMembers selectionLength initialMass (by trivial) valid marked slots
           refine ⟨fuel, outcome, ?_, resources_outputs_mono growth.1 growth.2 resources⟩
           intro extra
-          simpa only [decision, SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild] using running extra
+          simpa only [decision, SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
+            SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow] using running extra
       | some selected =>
           cases selected with
           | done =>
@@ -8099,7 +8130,8 @@ private theorem eager_program_resume_complete
                   selectionMembers selectionLength initialMass (by trivial) valid marked slots
               refine ⟨fuel, outcome, ?_, resources_outputs_mono growth.1 growth.2 resources⟩
               intro extra
-              simpa only [decision, SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild] using running extra
+              simpa only [decision, SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
+                SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow] using running extra
           | stuck =>
               obtain ⟨fuel, outcome, running, resources⟩ :=
                 (eager_program_resume_zero_complete holeKey keyMatches admits graph templates checkEmpty edgesOf stop order formulas solver)
@@ -8107,7 +8139,8 @@ private theorem eager_program_resume_complete
                   selectionMembers selectionLength initialMass (by trivial) valid marked slots
               refine ⟨fuel, outcome, ?_, resources_outputs_mono growth.1 growth.2 resources⟩
               intro extra
-              simpa only [decision, SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild] using running extra
+              simpa only [decision, SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
+                SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow] using running extra
           | expand uv =>
               exact eager_program_expansion_resources holeKey keyMatches admits graph templates checkEmpty edgesOf stop order
                 formulas solver depth ih inventory caller memos before metadata uv seed ceiling packet bounded known
@@ -8139,7 +8172,8 @@ private theorem eager_program_resume_with_isolated_complete
               selectionMembers selectionLength initialMass (by trivial) valid marked slots
           refine ⟨fuel, outcome, ?_, resources_outputs_mono growth.1 growth.2 resources⟩
           intro extra
-          simpa only [decision, SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild] using running extra
+          simpa only [decision, SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
+            SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow] using running extra
       | some selected =>
           cases selected with
           | done =>
@@ -8149,7 +8183,8 @@ private theorem eager_program_resume_with_isolated_complete
                   selectionMembers selectionLength initialMass (by trivial) valid marked slots
               refine ⟨fuel, outcome, ?_, resources_outputs_mono growth.1 growth.2 resources⟩
               intro extra
-              simpa only [decision, SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild] using running extra
+              simpa only [decision, SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
+                SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow] using running extra
           | stuck =>
               obtain ⟨fuel, outcome, running, resources⟩ :=
                 (eager_program_resume_zero_with_isolated_complete holeKey keyMatches admits graph templates checkEmpty edgesOf stop order formulas solver)
@@ -8157,7 +8192,8 @@ private theorem eager_program_resume_with_isolated_complete
                   selectionMembers selectionLength initialMass (by trivial) valid marked slots
               refine ⟨fuel, outcome, ?_, resources_outputs_mono growth.1 growth.2 resources⟩
               intro extra
-              simpa only [decision, SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild] using running extra
+              simpa only [decision, SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
+                SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow] using running extra
           | expand uv =>
               exact eager_program_expansion_resources_with_isolated holeKey keyMatches admits graph templates checkEmpty edgesOf stop order
                 formulas solver depth ih inventory caller memos before metadata uv seed ceiling packet bounded known

@@ -107,10 +107,10 @@ theorem prepare_changed_success_stores_normal [DecidableEq (EdgeKey Symbol Nativ
       setValue selected (.unenumerated (some newHandle) scs)) := by
     cases narrowed : SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv value heap with
     | failed =>
-        simp only [prepare, narrowed] at prepared
+        simp only [prepare, prepareWithNarrow, narrowed] at prepared
         cases prepared
     | done candidate reached =>
-        simp only [prepare, narrowed] at prepared
+        simp only [prepare, prepareWithNarrow, narrowed] at prepared
         have paired := MergedSourceComparison.Result.done.inj prepared
         have sameValue : candidate = result := congrArg Prod.fst paired.1
         subst candidate

@@ -33,7 +33,7 @@ theorem prepare_boundary_retained [DecidableEq (EdgeKey Symbol NativeGuard)]
     result = oldValue ∧ after = heap ∧ action = some (pure ()) := by
   have narrowed : SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue heap =
       .done result after := by
-    unfold prepare at observed
+    unfold prepare prepareWithNarrow at observed
     cases native : SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue heap with
     | failed fault middle =>
         simp only [native] at observed
@@ -53,7 +53,7 @@ theorem prepare_boundary_retained [DecidableEq (EdgeKey Symbol NativeGuard)]
     simpa only [kept.1] using boundary
   have unchanged : prepare holeKey fits admits metadata nativeFuel representativeFuel uv oldHandle
       scs oldValue heap = .done (oldValue, some (pure () : EnumerateM Symbol EnumGuard Unit)) heap := by
-    unfold prepare
+    unfold prepare prepareWithNarrow
     rw [actual]
     cases oldValue <;> simp_all only [MergedOrdinaryHeight.recursiveBoundary, Bool.false_eq_true,
       ↓reduceIte]

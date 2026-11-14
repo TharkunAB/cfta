@@ -239,6 +239,7 @@ private theorem action_counter {Typing Key : Type}
     | .done (_, some selected) _ =>
         ∀ previous next, Success selected previous () next → next.counter = previous.counter := by
     unfold SourcePruningEnumerationAction.prepare
+      SourcePruningEnumerationAction.prepareWithNarrow
     cases narrowed : SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue heap with
     | failed fault reached => trivial
     | done result reached =>
@@ -279,7 +280,8 @@ theorem prefix_counter {Typing Key : Type} {width : Nat}
       templates stop order metadata readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel
       uv caller before queries) := by
   unfold SourcePruningEnumerationSelectedStep.runPrefix
-  dsimp only
+    SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
+  simp only [← SourcePruningEnumerationAction.prepare_configured_eq]
   split
   · rename_i oldHandle scs readAfter readEq
     have readCount := getValue_counter readFuel uv (.unenumerated (some oldHandle) scs) before.core readAfter

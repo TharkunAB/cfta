@@ -197,11 +197,11 @@ theorem initial_prefix_preparation_rows
           0 caller startup queries with
       | .narrowed _ _ _ _ raw _ _ _ => raw
       | _ => none) = some (ExceptT.run (action checked)) := by
-      unfold SourcePruningEnumerationSelectedStep.runPrefix
+      unfold SourcePruningEnumerationSelectedStep.runPrefix SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
       dsimp only [caller, startup, SourceCurrentAllocatedPartialInitialization.caller,
         SourceCurrentAllocatedPartialState.initial, SourceCurrentAllocatedPartialInitialization.checked,
         SourceRecursiveIntersectionThunks.initial]
-      simp only [reading, checking, decoded, prepared]
+      simp only [reading, checking, decoded, ← SourcePruningEnumerationAction.prepare_configured_eq, prepared]
       cases execution : ExceptT.run (action checked) with
       | nil => rfl
       | cons first rest =>
@@ -244,7 +244,7 @@ theorem initial_prefix_preparation_rows
       intro same
       subst narrowed
       have emptyPrepared := prepared
-      simp only [SourcePruningEnumerationAction.prepare, native] at emptyPrepared
+      simp only [SourcePruningEnumerationAction.prepare, SourcePruningEnumerationAction.prepareWithNarrow, native] at emptyPrepared
       have actionSame : (reject : EnumerateM Symbol Guard Unit) = action :=
         Option.some.inj (congrArg Prod.snd (MergedSourceComparison.Result.done.inj emptyPrepared).1)
       rw [← actionSame] at executedRaw
@@ -321,11 +321,11 @@ theorem initial_prefix_preparation_rows
         · rw [shape]
           exact List.getElem?_set_self inside
     have actualPrefix := prefixEq
-    unfold SourcePruningEnumerationSelectedStep.runPrefix at actualPrefix
+    unfold SourcePruningEnumerationSelectedStep.runPrefix SourcePruningEnumerationSelectedStep.runPrefixWithNarrow at actualPrefix
     dsimp only [SourceCurrentAllocatedPartialInitialization.caller,
       SourceCurrentAllocatedPartialState.initial, SourceCurrentAllocatedPartialInitialization.checked,
       SourceRecursiveIntersectionThunks.initial] at actualPrefix
-    simp only [reading, checking, decoded, prepared, executedRaw, encoded] at actualPrefix
+    simp only [reading, checking, decoded, ← SourcePruningEnumerationAction.prepare_configured_eq, prepared, executedRaw, encoded] at actualPrefix
     generalize adapted : SourcePruningEnumerationNarrowAdapter.adapt narrowedHeap indexFuel
         0 handle newHandle []
         ⟨EnumerationState.initial handle,
