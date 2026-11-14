@@ -1,3 +1,48 @@
+# Actual root-narrow effects and stable identity checkpoints checked (2026-11-14 11:44 CET)
+
+SourceSynthesisCurrentUniverseRootNarrowIdentity.
+current_stored_universe_reference_identity_after_root_narrowing is public and
+checked. The SAME accepted source/build/stored Mu and an actual successful
+root-slot narrowing receipt derive that EXACT observed heap's Keeps, Facts,
+growth, result availability and closedness. No Ready, growth, Post or identity
+provider is an input. The original U then returns from the actual native
+ref(U)/Mu(U) request at formal fuel 13 and every larger value, with one exact
+complete final machine and full validity, coverage, semantic heap and retained
+source/result records. The actual narrowing observation is stable at every
+larger narrowing fuel. Its pure holeKey/fits/admits/metadata arguments are the
+actual API configuration; this theorem does not derive a typing/default policy.
+
+SourcePruningEnumerationSharedRecursive.identity_checkpoint_resources in
+SourcePruningEnumerationIdentityPrefixCheckpoint is also public and checked.
+The actual identity prefix has one stable parked, Empty or nonempty outcome
+at every sufficiently large common budget. Each carries CurrentPrefixResources.
+Parked mass cannot increase. A nonempty outcome retains exact suspended mass,
+the original bucket-length bound, Ready, actual stored value and IncomingAvoid.
+These facts are derived from the actual producer and original Packet/Fits/Heap;
+no phase, mass, admission or future callback provider is an input.
+
+Both drafts pass FIRST private checks. All seven public checks pass at
+11:42:26 CET: 95,954 aggregate theorem axiom checks and separately 83 explicit
+reports, 81 standard-axiom and two axiom-free. Only propext, Classical.choice
+and Quot.sound occur. Source modules: 5,940. Direct Audit imports: 4,938.
+Validation: /tmp/mcfta-root-narrow-and-identity-checkpoint-check-20261114-1133 and
+/tmp/mcfta-root-narrow-and-identity-checkpoint-publication-20261114-1140.
+
+NEXT: generalize the configured callback/resume composition once to the actual
+narrowing index and instantiate this identity checkpoint. Preserve configured
+public statements. Whole identity-worker history and ALL-fuel safety are open.
+Separately, arbitrary generated-type closure needs ref(U)/U and body(U)/U alias
+laws INSIDE the actual mixed Mu-entry domain. Empty-domain identity cannot be
+substituted there. Arbitrary-domain identity would be false. The frozen route
+/tmp/mcfta-current-generated-type-closure-route-20261114-113032 retains exact
+UNPROVED contextual and all-fuel atom headers plus one UNCOMPILED pure cutoff
+composition proof. Do not add callback/product/result providers to these targets.
+
+The compact prior checkpoint is pushed at f2e625838efa2c444487eba46d3a58c9f622424c.
+All full original-root/ONE shared assignment and other scope clauses below stay
+OPEN and unchanged. No Haskell/Cabal/test source, Liquid Haskell contract, new
+Haskell defect or fix was added or established. Goal ACTIVE.
+
 # Source-universe identity and actual identity-prefix resources checked (2026-11-14 11:27 CET)
 
 GOAL ACTIVE. Continue the complete optimized interned shared eager objective.
