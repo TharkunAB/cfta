@@ -1,0 +1,69 @@
+# Three-file native narrowing factoring draft
+
+Status: UNCOMPILED. Root owns all compiler and live-source actions.
+Approved scope: the frozen75 operation headers and40 wrapper equations.
+No metadata-erasure body, callback hook, Haskell edit or second backend is included.
+
+1. Exact source changes.
+   SourcePruningEnumerationAction:150→177 lines. The old action body occurs once in
+   prepareWithNarrow. Old prepare has its exact original signature and delegates to
+   that body with OuterNarrow.narrow holeKey fits admits.
+   SourcePruningEnumerationSelectedStep:228→257 lines. The old prefix body occurs once
+   in runPrefixWithNarrow. Old runPrefix is the configured wrapper with the same type.
+   SharedPreparedRecursiveChildPolicy:200→292 lines. The old recursive body occurs
+   once in resumeWithNarrow. runWithNarrow/runEagerWithNarrow install the same decision
+   and eager child operation. All three old names are configured wrappers.
+   The only new operation parameter is the native narrowing function. It is threaded
+   through both actual recursive branches and the existing continueWith closure.
+   All operations preserve their actual input order, six/seven work-fuel uses,
+   branch-local caches, native callers, full Memos and entire Result constructors.
+   No Result/Failure/metadata/visitor datatype, native worker or import changes occur.
+
+2. Five new configured equations have rfl bodies in the candidate.
+   Action.prepare_configured_eq.
+   SelectedStep.runPrefix_configured_eq.
+   RecursiveChildPolicy.resumeWithChild_configured_eq.
+   RecursiveChildPolicy.runWithChild_configured_eq.
+   RecursiveChildPolicy.runEager_configured_eq.
+   These bodies are not compiler evidence. Each exact statement is in its owning
+   candidate source. prepare_configured_eq names EnumGuard explicitly to fix its
+   result-only guard parameter. No new precondition or instance gate is introduced.
+
+3. All existing manual theorem propositions are byte-identical.
+   prepare_pending_complete, prefix_no_ordinary, resumeWithChild_shallow,
+   runWithChild_shallow, resume_zero and resume_prepared have exact source header pins.
+   All five old operation signatures also match their original source bytes up to
+   the old recursive equation delimiter. No manual equation or theorem is removed.
+   Small proof repairs add the new backend to existing unfolds. The shallow proof
+   states its existing local recursion equality at the new backend spelling.
+   resume_prepared gives its existing observation the backend spelling by definitional
+   equality, then unfolds the same outer constructor. No new observation is assumed.
+
+4. Source-only verification already performed.
+   Three actual GNU-U0 patches are retained. All three reverse with GNU patch
+   --batch --fuzz=0 to the exact before SHA. inverse-replay.json records the outcomes.
+   The three moved bodies reconstruct the exact old bodies after only the approved
+   callee substitutions. moved-body-inverse-pins.json records those original hashes.
+   prepare.py asserts old operation signatures and all six old theorem headers.
+   No Lean/compiler/public-name/axiom/Audit/portable check has run for this candidate.
+
+5. Generated equation and external unfold compatibility remain open.
+   The recursive implementation name changes to resumeWithNarrow. Lean-generated
+   resumeWithChild.eq_* names/types and match auxiliaries may change when the old name
+   becomes a wrapper. No qualified external generated-equation reference was found.
+   This is not a compiler guarantee that old generated declarations stay available.
+   external-explicit-unfold-sites.tsv lists68 conservative candidates in26 untouched
+   files, with exact source pins. They are not68 established compiler failures.
+   Important examples: ActionTotal:42, PreparedFuel:33, PathSelectedRaw:106ff,
+   SourceFlatPruningAction:90, CheckedFrame:92/99, PathSelectedPrefix:34,
+   SharedEagerReservation:3555ff/7715ff/7919ff and eager OutputControl:429.
+   Explicit simp/unfold/rw lists may require prepareWithNarrow, runPrefixWithNarrow
+   or resumeWithNarrow, plus the configured prefix equation where observations use
+   old names. Root must inspect the actual diagnostics before any external repair.
+
+6. Preserved frontier.
+   Only these three NEW/tmp candidate files were written. Existing live source,
+   public239/checkpoint5f491ccc7, old resource proofs and every Haskell file were untouched.
+   Existing resources remain claims about the old configured wrappers. This factoring
+   adds no identity-specific resource theorem or default-Haskell correspondence claim.
+   The authority96 preprocessing/refold/order/capacity/model boundaries remain exact.

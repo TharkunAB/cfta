@@ -1,0 +1,38 @@
+-- Proposed observation interfaces. No bodies or checked claims.
+-- Node/Caller/Queries/Cached/Metadata have their existing concrete source meanings.
+-- NativeContinuations.HookResult is the existing complete/stopped result type.
+
+-- Proposed pure projections into EXISTING receipt datatypes:
+-- eraseMetadata sends every Metadata Typing to ⟨[], [], [], ()⟩ : Metadata Unit.
+-- erasePrefix maps the existing SelectedStep.Result as specified in observation.md.
+-- eraseFailure maps the existing PreparedRecursive.Failure as specified there.
+-- eraseResult maps HookResult outputs and failures, preserving every other field.
+
+-- In the new observation module, with the existing equality instances:
+private theorem runEager_identity_metadata_erasure
+    {Typing : Type} {width : Nat}
+    [DecidableEq SourcePruningTemplates.Symbol]
+    [DecidableEq (InternedConstructorTemplates.EdgeKey SourcePruningTemplates.Symbol
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+    [DecidableEq (InternedConstructorTemplates.Value SourcePruningTemplates.Symbol
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+    (graph : EnumerationState.Graph SourcePruningTemplates.Symbol
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+    (checkEmpty : Bool)
+    (edgesOf : InternedConstructorTemplates.Value SourcePruningTemplates.Symbol
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula) →
+      List (InternedConstructorTemplates.EdgeValue SourcePruningTemplates.Symbol
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+    (workFuel recursiveFuel : Nat)
+    (metadata : SourcePruningRecordTypes.Metadata Typing)
+    (unitMetadata : SourcePruningRecordTypes.Metadata Unit)
+    (caller : SourceCurrentAllocatedPartialState.State width)
+    (queries : SourceEndpointMemo.Memos)
+    (before : EnumerationExpandableIndex.Cached SourcePruningTemplates.Symbol
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula)) :
+    eraseResult (SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.runEagerWithNarrow
+      (fun _ _ _ value heap => .done value heap) graph [] checkEmpty edgesOf
+      none (fun _ _ => none) workFuel recursiveFuel metadata caller queries before) =
+    eraseResult (SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.runEagerWithNarrow
+      (fun _ _ _ value heap => .done value heap) graph [] checkEmpty edgesOf
+      none (fun _ _ => none) workFuel recursiveFuel unitMetadata caller queries before)

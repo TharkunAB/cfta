@@ -1,0 +1,40 @@
+-- Proposed equations. Existing binders and instances stay unchanged.
+-- Each equation is intended to close by rfl after the single-backend factoring.
+-- No equation is asserted here as checked.
+
+-- In SourcePruningEnumerationAction, with the exact old prepare binders:
+theorem prepare_configured_eq :
+    prepare holeKey fits admits metadata nativeFuel representativeFuel uv oldHandle scs oldValue heap =
+      prepareWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        metadata nativeFuel representativeFuel uv oldHandle scs oldValue heap
+
+-- In SourcePruningEnumerationSelectedStep, with the exact old runPrefix binders:
+theorem runPrefix_configured_eq :
+    runPrefix holeKey fits admits graph templates stop order metadata readFuel checkFuel nativeFuel
+        representativeFuel indexFuel callbackFuel uv caller before queries =
+      runPrefixWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        graph templates stop order metadata readFuel checkFuel nativeFuel
+        representativeFuel indexFuel callbackFuel uv caller before queries
+
+-- In SourcePruningEnumerationSharedPreparedRecursiveChildPolicy:
+-- Each equation uses the exact old operation's full binders, including decision.
+theorem resumeWithChild_configured_eq :
+    resumeWithChild child holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel
+        recursiveFuel metadata caller queries before decision =
+      resumeWithNarrow child (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        graph templates checkEmpty edgesOf stop order workFuel
+        recursiveFuel metadata caller queries before decision
+
+theorem runWithChild_configured_eq :
+    runWithChild child holeKey fits admits graph templates checkEmpty edgesOf stop order
+        workFuel recursiveFuel metadata caller queries before =
+      runWithNarrow child (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        graph templates checkEmpty edgesOf stop order
+        workFuel recursiveFuel metadata caller queries before
+
+theorem runEager_configured_eq :
+    runEager holeKey fits admits graph templates checkEmpty edgesOf stop order
+        workFuel recursiveFuel metadata caller queries before =
+      runEagerWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        graph templates checkEmpty edgesOf stop order
+        workFuel recursiveFuel metadata caller queries before

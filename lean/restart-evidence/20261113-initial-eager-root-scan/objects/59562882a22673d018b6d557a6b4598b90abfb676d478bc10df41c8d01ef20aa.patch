@@ -1,0 +1,35 @@
+--- source.lean
++++ source.lean
+@@ -195 +195,31 @@
+-              exact observedAt
++              obtain ⟨member, ordered, chunks, goalValue, candidateValue,
++                  candidateStart, candidateAfter, edgeAfter, chunksRun, wholeShape,
++                  symbolSame, guardSame, childrenSame, goalCall, sourceContext,
++                  candidateCall, edgeCall, nodeCall, growth, ownFields⟩ := observedAt
++              refine ⟨member, ?_, chunks, goalValue, candidateValue,
++                candidateStart, candidateAfter, edgeAfter, chunksRun, wholeShape,
++                symbolSame, guardSame, childrenSame, goalCall, sourceContext,
++                candidateCall, edgeCall, nodeCall, growth, ?_⟩
++              · split
++                · rename_i processed emitted current headEq
++                  rw [headEq] at ordered
++                  dsimp only at ordered
++                  exact ordered
++                · rename_i processed emitted nextCaller nextQueries headEq
++                  rw [headEq] at ordered
++                  dsimp only at ordered
++                  split
++                  · rename_i later more finalCaller finalQueries tailEq
++                    rw [tailEq] at ordered
++                    dsimp only at ordered
++                    exact ordered
++                  · rename_i later more current tailEq
++                    rw [tailEq] at ordered
++                    dsimp only at ordered
++                    exact ordered
++              · split
++                · rename_i symbol staged residual ownAfter ownEq
++                  rw [ownEq] at ownFields
++                  dsimp only at ownFields
++                  exact ownFields
++                · trivial

@@ -1,0 +1,48 @@
+--- a/SourcePruningEnumerationSelectedStep.lean
++++ b/SourcePruningEnumerationSelectedStep.lean
+@@ -42,3 +42,5 @@
+-/-- Observe the selected prefix through Right recording without scanning ordinary siblings. -/
+-noncomputable def runPrefix
+-    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
++/-- Use the supplied narrowing operation in the same selected prefix. -/
++noncomputable def runPrefixWithNarrow
++    (narrow : Metadata Typing → Nat → Nat → Node →
++      InternedConstructorTemplates.State Symbol Constraint →
++      MergedSourceComparison.Result Symbol Constraint Node)
+@@ -65 +67 @@
+-              let prepared := SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
++              let prepared := SourcePruningEnumerationAction.prepareWithNarrow narrow metadata nativeFuel
+@@ -95,0 +98,26 @@
++/-- Observe the selected prefix through Right recording without scanning ordinary siblings. -/
++noncomputable def runPrefix
++    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
++    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
++    (stop : Option (Metadata Typing → Nat → Bool))
++    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
++    (readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv : Nat)
++    (caller : Caller width) (before : Cached) (queries : Queries) : Result width Typing :=
++  runPrefixWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
++    graph templates stop order metadata readFuel checkFuel nativeFuel representativeFuel
++    indexFuel callbackFuel uv caller before queries
++
++/-- The configured wrapper retains every actual prefix observation. -/
++theorem runPrefix_configured_eq
++    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
++    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
++    (stop : Option (Metadata Typing → Nat → Bool))
++    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
++    (readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv : Nat)
++    (caller : Caller width) (before : Cached) (queries : Queries) :
++    runPrefix holeKey fits admits graph templates stop order metadata readFuel checkFuel nativeFuel
++        representativeFuel indexFuel callbackFuel uv caller before queries =
++      runPrefixWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
++        graph templates stop order metadata readFuel checkFuel nativeFuel
++        representativeFuel indexFuel callbackFuel uv caller before queries := rfl
++
+@@ -108 +136 @@
+-  unfold runPrefix
++  unfold runPrefix runPrefixWithNarrow
+@@ -159 +187,2 @@
+-                                          generalize SourcePruningEnumerationAction.prepare holeKey fits admits metadata
++                                          generalize SourcePruningEnumerationAction.prepareWithNarrow
++                                            (SourcePruningOuterNarrow.narrow holeKey fits admits) metadata

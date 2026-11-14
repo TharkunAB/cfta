@@ -1,0 +1,207 @@
+from pathlib import Path
+import re,hashlib,json,subprocess
+p=Path(__file__).parent
+sha=lambda b:hashlib.sha256(b).hexdigest()
+files=[x.name for x in (p/'before').iterdir()]
+
+def replace_one(s,old,new):
+ assert s.count(old)==1,(old,s.count(old))
+ return s.replace(old,new,1)
+
+def operation_block(s,begin,end):
+ return s[s.index(begin):s.index(end)]
+
+a=(p/'before/SourcePruningEnumerationAction.lean').read_text()
+old=operation_block(a,'/-- Narrow once','/-- Connect the computed')
+head,sep,body=old.partition('\n :=\n');assert sep
+nhead=replace_one(head,'/-- Narrow once and retain the complete value beside the actual enumeration action. -/',
+ '/-- Compute the same action with the supplied native narrowing operation. -/')
+nhead=replace_one(nhead,'def prepare [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol NativeGuard)]\n    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)\n    (admits : Key → InternedConstructorTemplates.Value Symbol NativeGuard → Bool)',
+ '''def prepareWithNarrow
+    (narrow : Metadata Typing → Nat → Nat →
+      InternedConstructorTemplates.Value Symbol NativeGuard →
+      InternedConstructorTemplates.State Symbol NativeGuard →
+      MergedSourceComparison.Result Symbol NativeGuard
+        (InternedConstructorTemplates.Value Symbol NativeGuard))''')
+nbody=replace_one(body,'match SourcePruningOuterNarrow.narrow holeKey fits admits metadata', 'match narrow metadata')
+wrapper=head+sep+'''  prepareWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
+    metadata nativeFuel representativeFuel uv oldHandle scs oldValue heap
+
+'''
+lawhead=head[head.index('def prepare'):head.rindex(' :\n')].replace('def prepare','theorem prepare_configured_eq',1)
+law='''/-- The configured wrapper retains the same action and native result. -/
+'''+lawhead+''' :
+    prepare (EnumGuard := EnumGuard) holeKey fits admits metadata nativeFuel representativeFuel uv oldHandle scs oldValue heap =
+      prepareWithNarrow (EnumGuard := EnumGuard) (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        metadata nativeFuel representativeFuel uv oldHandle scs oldValue heap := rfl
+
+'''
+a=replace_one(a,old,nhead+sep+nbody+wrapper+law)
+a=a.replace('[prepare, narrowed','[prepare, prepareWithNarrow, narrowed')
+(p/'candidate/SourcePruningEnumerationAction.lean').write_text(a)
+
+s=(p/'before/SourcePruningEnumerationSelectedStep.lean').read_text()
+old=operation_block(s,'/-- Observe the selected prefix','/-- Every prefix observation')
+head,sep,body=old.partition(' :=\n');assert sep
+nhead=replace_one(head,'/-- Observe the selected prefix through Right recording without scanning ordinary siblings. -/',
+ '/-- Use the supplied narrowing operation in the same selected prefix. -/')
+nhead=replace_one(nhead,'noncomputable def runPrefix\n    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)',
+ '''noncomputable def runPrefixWithNarrow
+    (narrow : Metadata Typing → Nat → Nat → Node →
+      InternedConstructorTemplates.State Symbol Constraint →
+      MergedSourceComparison.Result Symbol Constraint Node)''')
+nbody=replace_one(body,'SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel',
+ 'SourcePruningEnumerationAction.prepareWithNarrow narrow metadata nativeFuel')
+wrapper=head+sep+'''  runPrefixWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
+    graph templates stop order metadata readFuel checkFuel nativeFuel representativeFuel
+    indexFuel callbackFuel uv caller before queries
+
+'''
+lawhead=head[head.index('noncomputable def runPrefix'):head.rindex(' : Result width Typing')]
+lawhead=lawhead.replace('noncomputable def runPrefix','theorem runPrefix_configured_eq',1)
+law='''/-- The configured wrapper retains every actual prefix observation. -/
+'''+lawhead+''' :
+    runPrefix holeKey fits admits graph templates stop order metadata readFuel checkFuel nativeFuel
+        representativeFuel indexFuel callbackFuel uv caller before queries =
+      runPrefixWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        graph templates stop order metadata readFuel checkFuel nativeFuel
+        representativeFuel indexFuel callbackFuel uv caller before queries := rfl
+
+'''
+s=replace_one(s,old,nhead+sep+nbody+wrapper+law)
+s=replace_one(s,'  unfold runPrefix\n','  unfold runPrefix runPrefixWithNarrow\n')
+s=replace_one(s,'''generalize SourcePruningEnumerationAction.prepare holeKey fits admits metadata
+                                            nativeFuel representativeFuel uv oldHandle scs oldValue''',
+ '''generalize SourcePruningEnumerationAction.prepareWithNarrow
+                                            (SourcePruningOuterNarrow.narrow holeKey fits admits) metadata
+                                            nativeFuel representativeFuel uv oldHandle scs oldValue''')
+(p/'candidate/SourcePruningEnumerationSelectedStep.lean').write_text(s)
+
+c=(p/'before/SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.lean').read_text()
+resume=operation_block(c,'/-- Execute the actual selected prefix','/-- Start the child-policy worker')
+run=operation_block(c,'/-- Start the child-policy worker','/-- Install eager children')
+eager=operation_block(c,'/-- Install eager children','/-- At every depth')
+narrowhead='''(narrow : Metadata Typing → Nat → Nat → Node →
+      InternedConstructorTemplates.State Symbol Constraint →
+      MergedSourceComparison.Result Symbol Constraint Node)'''
+config='(SourcePruningOuterNarrow.narrow holeKey fits admits)'
+oldparams='(holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)'
+resHead,resSep,resBody=resume.partition('\n  | _fuel');assert resSep
+nrHead=resHead.replace('Execute the actual selected prefix and pass the same child operation through every restart.',
+ 'Pass the same narrowing and child operations through every actual restart.').replace('noncomputable def resumeWithChild','noncomputable def resumeWithNarrow',1)
+nrHead=replace_one(nrHead,oldparams,narrowhead)
+nrBody=resSep+resBody
+nrBody=nrBody.replace('SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits','SourcePruningEnumerationSelectedStep.runPrefixWithNarrow narrow')
+nrBody=nrBody.replace('resumeWithChild child holeKey fits admits','resumeWithNarrow child narrow')
+resWrapper=resHead+''' :=
+  resumeWithNarrow child '''+config+'''
+    graph templates checkEmpty edgesOf stop order workFuel
+
+'''
+resLawHead=resHead[resHead.index('noncomputable def resumeWithChild'):resHead.rindex(' :\n    Nat →')]
+resLawHead=resLawHead.replace('noncomputable def resumeWithChild','theorem resumeWithChild_configured_eq',1)
+resLaw='''/-- The configured wrapper retains the complete recursive observation. -/
+'''+resLawHead+'''
+    (recursiveFuel : Nat) (metadata : Metadata Typing) (caller : Caller width)
+    (queries : Queries) (before : Cached) (decision : Option Next) :
+    resumeWithChild child holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel
+        recursiveFuel metadata caller queries before decision =
+      resumeWithNarrow child '''+config+'''
+        graph templates checkEmpty edgesOf stop order workFuel
+        recursiveFuel metadata caller queries before decision := rfl
+
+'''
+runHead,runSep,runBody=run.partition(' :=\n');assert runSep
+nrunHead=runHead.replace('Start the child-policy worker at the same actual metadata and selection decision.',
+ 'Start the same worker with the supplied narrowing and child operations.').replace('noncomputable def runWithChild','noncomputable def runWithNarrow',1)
+nrunHead=replace_one(nrunHead,oldparams,narrowhead)
+nrunBody=replace_one(runBody,'resumeWithChild child holeKey fits admits','resumeWithNarrow child narrow')
+runWrapper=runHead+runSep+'''  runWithNarrow child '''+config+'''
+    graph templates checkEmpty edgesOf stop order workFuel recursiveFuel metadata caller queries before
+
+'''
+runLawHead=runHead[runHead.index('noncomputable def runWithChild'):runHead.rindex(' : Result')]
+runLawHead=runLawHead.replace('noncomputable def runWithChild','theorem runWithChild_configured_eq',1)
+runLaw='''/-- The configured entry retains the same decision and entire result. -/
+'''+runLawHead+''' :
+    runWithChild child holeKey fits admits graph templates checkEmpty edgesOf stop order
+        workFuel recursiveFuel metadata caller queries before =
+      runWithNarrow child '''+config+'''
+        graph templates checkEmpty edgesOf stop order
+        workFuel recursiveFuel metadata caller queries before := rfl
+
+'''
+eHead,eSep,eBody=eager.partition(' :=\n');assert eSep
+neHead=eHead.replace('Install eager children while retaining the existing outer recursive budget and callbacks.',
+ 'Install the same eager children with the supplied native narrowing operation.').replace('noncomputable def runEager','noncomputable def runEagerWithNarrow',1)
+neHead=replace_one(neHead,oldparams,narrowhead)
+neBody=replace_one(eBody,'runWithChild (eagerChild','runWithNarrow (eagerChild')
+neBody=replace_one(neBody,'    holeKey fits admits graph templates','    narrow graph templates')
+eWrapper=eHead+eSep+'''  runEagerWithNarrow '''+config+'''
+    graph templates checkEmpty edgesOf stop order workFuel recursiveFuel metadata caller queries before
+
+'''
+eLawHead=eHead[eHead.index('noncomputable def runEager'):eHead.rindex(' : Result')]
+eLawHead=eLawHead.replace('noncomputable def runEager','theorem runEager_configured_eq',1)
+eLaw='''/-- The configured eager entry retains the same complete bounded result. -/
+'''+eLawHead+''' :
+    runEager holeKey fits admits graph templates checkEmpty edgesOf stop order
+        workFuel recursiveFuel metadata caller queries before =
+      runEagerWithNarrow '''+config+'''
+        graph templates checkEmpty edgesOf stop order
+        workFuel recursiveFuel metadata caller queries before := rfl
+
+'''
+c=replace_one(c,resume,nrHead+nrBody+resWrapper+resLaw)
+c=replace_one(c,run,nrunHead+runSep+nrunBody+runWrapper+runLaw)
+c=replace_one(c,eager,neHead+eSep+neBody+eWrapper+eLaw)
+c=replace_one(c,'''          resumeWithChild (width := width) (shallowVisit checkEmpty workFuel workFuel workFuel workFuel workFuel)
+              holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel fuel =''',
+ '''          resumeWithNarrow (width := width) (shallowVisit checkEmpty workFuel workFuel workFuel workFuel workFuel)
+              (SourcePruningOuterNarrow.narrow holeKey fits admits)
+              graph templates checkEmpty edgesOf stop order workFuel fuel =''')
+c=replace_one(c,'rw [resumeWithChild, SourcePruningEnumerationSharedPreparedRecursive.resume]',
+ 'rw [resumeWithChild, resumeWithNarrow, SourcePruningEnumerationSharedPreparedRecursive.resume]')
+c=replace_one(c,'unfold runWithChild SourcePruningEnumerationSharedPreparedRecursive.run',
+ 'unfold runWithChild runWithNarrow SourcePruningEnumerationSharedPreparedRecursive.run')
+c=replace_one(c,'''  simp only [resumeWithChild, observedPrefix]''',
+ '''  have actualPrefix : SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
+      (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates stop order
+      metadata workFuel workFuel workFuel workFuel workFuel workFuel uv caller before queries =
+      .narrowed checked narrowed reached saved (some [.ok ((), actionCore)]) (some after)
+        (some [.ok ((false, updated), core)]) none := observedPrefix
+  simp only [resumeWithChild, resumeWithNarrow, actualPrefix]''')
+(p/'candidate/SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.lean').write_text(c)
+
+# Compare every OLD manually declared theorem proposition and operation signature.
+old_names={}
+for f in files:
+ before=(p/'before'/f).read_text();after=(p/'candidate'/f).read_text()
+ names=re.findall(r'^theorem (\w+)\b',before,re.M)
+ entries={}
+ for name in names:
+  def theoremhead(s):
+   i=s.index('theorem '+name+'\n');return s[i:s.index(' := by',i)]
+  b=theoremhead(before);a=theoremhead(after);assert a==b,(f,name)
+  entries[name]=sha(b.encode())
+ old_names[f]=entries
+ # Old nonrecursive operation headers stay exact. The old recursive header remains
+ # exact up to its original equation delimiter, now replaced by := wrapper syntax.
+ for name in {'SourcePruningEnumerationAction.lean':['prepare'],
+              'SourcePruningEnumerationSelectedStep.lean':['runPrefix'],
+              'SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.lean':['resumeWithChild','runWithChild','runEager']}[f]:
+  def ophead(s):
+   pos=re.search(r'^(?:noncomputable )?def '+name+r'\b',s,re.M).start()
+   tail=s[pos:];cuts=[x for x in [tail.find(' :=\n'),tail.find('\n :=\n'),tail.find('\n  | _fuel')]if x>=0]
+   return tail[:min(cuts)]
+  assert ophead(before).rstrip()==ophead(after).rstrip(),(f,name)
+(p/'old-theorem-header-pins.json').write_text(json.dumps(old_names,indent=2)+'\n')
+(p/'patches').mkdir()
+patches={}
+for f in files:
+ args=['diff','-U0','--label','a/'+f,'--label','b/'+f,str(p/'before'/f),str(p/'candidate'/f)]
+ out=subprocess.run(args,capture_output=True,check=False);assert out.returncode==1
+ (p/'patches'/(f+'.patch')).write_bytes(out.stdout)
+ patches[f]={'before':sha((p/'before'/f).read_bytes()),'candidate':sha((p/'candidate'/f).read_bytes()),'patch':sha(out.stdout),'lines':len((p/'candidate'/f).read_bytes().splitlines())}
+(p/'source-history.json').write_text(json.dumps({'status':'UNCOMPILED','families':patches,'old_theorem_headers_exact':old_names},indent=2)+'\n')
+print(json.dumps(patches,indent=2))

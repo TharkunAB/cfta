@@ -1,0 +1,126 @@
+from pathlib import Path
+import hashlib
+import json
+import subprocess
+
+root = Path('/home/tritlo/Code/mcfta')
+runtime = Path(__file__).parent
+packet = root / 'lean/restart-evidence/20261113-initial-eager-root-scan'
+assert not packet.exists()
+objects = packet / 'objects'
+objects.mkdir(parents=True)
+sha = lambda b: hashlib.sha256(b).hexdigest()
+manifest = {'proof_commit': '5f491ccc76de334189997ced27e6b428717e7936',
+            'previous_checkpoint': '58aa02f8ff67ea9e08084242c25ad5c484083780',
+            'classification': 'one checked public law; private failures and unchecked plans retained',
+            'files': [], 'stages': [], 'deltas': [],
+            'joint_finite_completion_proved': False,
+            'default_Haskell_correspondence_proved': False,
+            'repository_haskell_or_cabal_changes': False}
+
+def put(data, label, classification='historical input'):
+    digest = sha(data)
+    suffix = '.patch' if label.endswith('.patch') else '.txt'
+    path = objects / (digest + suffix)
+    if path.exists():
+        assert path.read_bytes() == data
+    else:
+        path.write_bytes(data)
+    ref = {'label': label, 'object': str(path.relative_to(packet)), 'sha256': digest,
+           'bytes': len(data), 'classification': classification}
+    manifest['files'].append(ref)
+    return ref
+
+def file(path, label=None, classification='historical input'):
+    return put(path.read_bytes(), label or str(path), classification)
+
+def delta(before, after, label):
+    result = subprocess.run(['diff', '-U0', '--label', 'a/source', '--label', 'b/source',
+                             str(before), str(after)], capture_output=True)
+    assert result.returncode == 1
+    ref = put(result.stdout, label + '.patch', 'exact GNU zero-context delta')
+    item = {'before_sha256': sha(before.read_bytes()), 'after_sha256': sha(after.read_bytes()),
+            'patch': ref['object'], 'label': label}
+    manifest['deltas'].append(item)
+    return item
+
+source_name = 'SourceSynthesisCurrentInitialEagerRootScanOrigin.lean'
+directories = [
+    '/tmp/mcfta-initial-eager-root-scan-origin-20261113-1857',
+    '/tmp/mcfta-initial-eager-root-scan-origin-repair-20261113-1859',
+    '/tmp/mcfta-initial-eager-root-scan-origin-repair-20261113-1905',
+    '/tmp/mcfta-initial-eager-root-scan-origin-repair-20261113-1916',
+    '/tmp/mcfta-initial-eager-root-scan-origin-repair-20261113-1922']
+checks = ['1901', '1903', '1908', '1917', '1922']
+sources = [Path(name) / source_name for name in directories]
+file(sources[0], 'private-base185.lean', 'failed private base')
+for i, (directory, source, stamp) in enumerate(zip(directories, sources, checks), 1):
+    if i > 1:
+        delta(sources[i - 2], source, 'private-stage' + str(i))
+    check = Path('/tmp/mcfta-initial-eager-root-scan-check' + str(i) + '-20261113-' + stamp)
+    delta(source, check / 'check.lean', 'instrument-stage' + str(i))
+    report = json.loads((check / 'draft-checked.json').read_text())
+    assert report['compiler_exit'] == (0 if i == 5 else 1)
+    manifest['stages'].append({'stage': i, 'source_sha256': sha(source.read_bytes()),
+                               'source_lines': len(source.read_text().splitlines()),
+                               'instrumented_sha256': sha((check / 'check.lean').read_bytes()),
+                               'compiler_exit': report['compiler_exit']})
+    for name in ['draft-output.txt', 'draft-checked.json', 'check-draft.py']:
+        file(check / name, 'check' + str(i) + '/' + name,
+             'checked private pass' if i == 5 else 'failed private check; no proof credit')
+    for path in sorted(Path(directory).iterdir()):
+        if path.is_file() and path != source:
+            file(path, 'stage' + str(i) + '/' + path.name)
+
+public = root / 'lean/MicroCFTA' / source_name
+delta(sources[-1], public, 'public-promotion239')
+delta(public, runtime / 'public-strict.lean', 'public-axiom-instrumentation')
+manifest['public_source'] = {'path': str(public.relative_to(root)), 'sha256': sha(public.read_bytes()),
+                              'lines': len(public.read_text().splitlines())}
+for name in ['check-final.py', 'final-checked.json', 'final-partial-report.json',
+             'public-source-pin.json', 'public-imports.lean', 'public-imports.txt',
+             'public-strict.txt', 'audit-build.txt', 'audit-strict.txt']:
+    file(runtime / name, 'publication/' + name, 'checked final public integration')
+for name in ['baseline-live-source-pins.json', 'final-source-pins.txt']:
+    path = runtime / name
+    manifest.setdefault('regenerable_inputs', []).append({'name': name, 'sha256': sha(path.read_bytes()),
+                                                         'bytes': path.stat().st_size})
+
+raw = Path('/tmp/mcfta-source-raw-ski-check-20261113-1918')
+for path in sorted(raw.iterdir()):
+    if path.is_file() and path.name != 'peaks':
+        file(path, 'raw-source-probe/' + path.name, 'actual bounded raw-source observation; no general typing proof')
+old = Path('/tmp/mcfta-sii-source-candidate-check-20261113-1902')
+for name in ['check-build-plan.py', 'build-plan-output.txt', 'build-plan-report.json',
+             'refresh-libraries.py', 'library-refresh-output.txt', 'library-refresh-report.json',
+             'reused-default-observations.json', 'plan.md']:
+    path = old / name
+    if path.exists():
+        file(path, 'superseded-default-preparation/' + name,
+             'superseded plan or environment diagnostic; default probe was not repeated')
+
+plans = [
+    '/tmp/mcfta-default-literal-hooks-plan-final-20261113-1906',
+    '/tmp/mcfta-actual-shared-tuple-compatibility-plan-20261113-1908',
+    '/tmp/mcfta-source-type-cone-plan-20261113-1926',
+    '/tmp/mcfta-default-single-narrow-backend-plan-20261113-1926',
+    '/tmp/mcfta-accepted-eager-root-scan-plan-20261113-1933']
+for directory in plans:
+    for path in sorted(Path(directory).iterdir()):
+        if path.is_file():
+            file(path, Path(directory).name + '/' + path.name,
+                 'unchecked header/plan; no proof or source-counterexample credit')
+
+manifest['raw_probe_summary'] = {
+    'raw_public_results': 175, 'raw_typed_results': 175,
+    'both_streams_exhausted': True, 'sink_sii': 'absent_after_exhaustion',
+    'sink_skk': 'present', 'raw_reachesConstrainedMu': False,
+    'source_pins_unchanged': 104,
+    'default_prior_observations_reused': '20261113-source-finite-type-probes/observations.json',
+    'prior_default_public_results': 451, 'prior_default_typed_results': 2551,
+    'count_differences_are_not_a_language_preservation_counterexample': True,
+    'temporary_executable_and_objects_removed': True}
+(packet / 'manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
+print(json.dumps({'packet': str(packet), 'objects': len(list(objects.iterdir())),
+                  'bytes': sum(p.stat().st_size for p in packet.rglob('*') if p.is_file()),
+                  'deltas': len(manifest['deltas'])}))

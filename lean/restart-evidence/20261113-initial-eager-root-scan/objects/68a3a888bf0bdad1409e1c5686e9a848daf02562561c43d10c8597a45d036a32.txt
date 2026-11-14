@@ -1,0 +1,57 @@
+from pathlib import Path
+import re,hashlib,json,subprocess,shutil
+p=Path(__file__).parent;sha=lambda b:hashlib.sha256(b).hexdigest()
+files=sorted(x.name for x in (p/'before').iterdir())
+(p/'inverse').mkdir()
+replay=[]
+for f in files:
+ (p/'inverse'/f).write_bytes((p/'candidate'/f).read_bytes())
+ patch=p/'patches'/(f+'.patch')
+ done=subprocess.run(['patch','--batch','--fuzz=0','-R',str(p/'inverse'/f),str(patch)],capture_output=True)
+ assert done.returncode==0,(f,done.stdout,done.stderr)
+ assert (p/'inverse'/f).read_bytes()==(p/'before'/f).read_bytes()
+ replay.append({'file':f,'returncode':done.returncode,'stdout':done.stdout.decode(),'inverse_sha256':sha((p/'inverse'/f).read_bytes())})
+(p/'inverse-replay.json').write_text(json.dumps(replay,indent=2)+'\n')
+# Exact operation body reconstruction. Headers and equations are stored separately.
+def block(s,start,end):return s[s.index(start):s.index(end)]
+before=(p/'before/SourcePruningEnumerationAction.lean').read_text();after=(p/'candidate/SourcePruningEnumerationAction.lean').read_text()
+old=block(before,'def prepare [','/-- Connect').split('\n :=\n',1)[1]
+new=block(after,'def prepareWithNarrow','/-- Narrow once').split('\n :=\n',1)[1]
+assert new.replace('match narrow metadata','match SourcePruningOuterNarrow.narrow holeKey fits admits metadata')==old
+bodypins={'prepare':sha(old.encode())}
+before=(p/'before/SourcePruningEnumerationSelectedStep.lean').read_text();after=(p/'candidate/SourcePruningEnumerationSelectedStep.lean').read_text()
+old=block(before,'noncomputable def runPrefix','/-- Every prefix').split(' :=\n',1)[1]
+new=block(after,'noncomputable def runPrefixWithNarrow','/-- Observe the selected prefix').split(' :=\n',1)[1]
+assert new.replace('SourcePruningEnumerationAction.prepareWithNarrow narrow','SourcePruningEnumerationAction.prepare holeKey fits admits')==old
+bodypins['runPrefix']=sha(old.encode())
+before=(p/'before/SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.lean').read_text();after=(p/'candidate/SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.lean').read_text()
+old=block(before,'noncomputable def resumeWithChild','/-- Start the child-policy').split('\n  | _fuel',1)[1]
+new=block(after,'noncomputable def resumeWithNarrow','/-- Execute the actual selected prefix').split('\n  | _fuel',1)[1]
+new=new.replace('SourcePruningEnumerationSelectedStep.runPrefixWithNarrow narrow','SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits').replace('resumeWithNarrow child narrow','resumeWithChild child holeKey fits admits')
+assert new==old
+bodypins['resumeWithChild']=sha(old.encode())
+(p/'moved-body-inverse-pins.json').write_text(json.dumps(bodypins,indent=2)+'\n')
+# Existing unmodified consumers with explicit unfolds. This is a source audit, not a compiler diagnosis.
+lines=[]
+qualified=re.compile(r'SourcePruningEnumeration(?:Action\.prepare|SelectedStep\.runPrefix|SharedPreparedRecursiveChildPolicy\.(?:resumeWithChild|runWithChild|runEager))\b')
+tactic=re.compile(r'\b(?:unfold|dsimp|simp|simpa|rw)\b')
+for f in sorted(Path('lean/MicroCFTA').glob('*.lean')):
+ if f.name in files:continue
+ text=f.read_text();ss=text.splitlines()
+ openedPrefix='open SourcePruningEnumerationSelectedStep' in text
+ openedPolicy=('open SourcePruningEnumerationSharedPreparedRecursiveChildPolicy' in text or 'namespace MicroCFTA.SourcePruningEnumerationSharedPreparedRecursiveChildPolicy' in text)
+ for i,line in enumerate(ss):
+  symbol=qualified.search(line) or (openedPrefix and re.search(r'\brunPrefix\b',line)) or (openedPolicy and re.search(r'\b(?:resumeWithChild|runWithChild|runEager)\b',line))
+  if not symbol:continue
+  context='\n'.join(ss[max(0,i-2):i+1])
+  if tactic.search(line) or (']' in line and tactic.search(context)):
+   lines.append((str(f),i+1,line.strip()))
+(p/'external-explicit-unfold-sites.tsv').write_text('file\tline\ttext\n'+''.join(f'{f}\t{i}\t{line}\n'for f,i,line in lines))
+(p/'external-site-pins.json').write_text(json.dumps({f:sha(Path(f).read_bytes())for f,_,_ in lines},indent=2)+'\n')
+# No qualified references to generated equation names are currently present.
+generated=[]
+for f in Path('lean/MicroCFTA').glob('*.lean'):
+ for n,line in enumerate(f.read_text().splitlines(),1):
+  if re.search(r'(?:SourcePruningEnumerationAction\.prepare|SourcePruningEnumerationSelectedStep\.runPrefix|SourcePruningEnumerationSharedPreparedRecursiveChildPolicy\.resumeWithChild)\.eq_',line):generated.append((str(f),n,line))
+(p/'generated-equation-references.json').write_text(json.dumps(generated,indent=2)+'\n')
+print(json.dumps({'inverse_replays':len(replay),'body_reconstructions':len(bodypins),'old_theorems':sum(len(x)for x in json.loads((p/'old-theorem-header-pins.json').read_text()).values()),'external_sites':len(lines),'external_files':len(set(x[0]for x in lines)),'qualified_generated_equation_refs':len(generated)},indent=2))

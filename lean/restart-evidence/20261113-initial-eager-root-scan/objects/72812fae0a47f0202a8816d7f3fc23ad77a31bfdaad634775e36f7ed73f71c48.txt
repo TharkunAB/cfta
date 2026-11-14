@@ -1,0 +1,8 @@
+private theorem empty_catalog_graph_default
+    {Guard Typing : Type} (graph : EnumerationState.Graph Symbol Guard)
+    (callbackFuel enumerationFuel : Nat) (metadata : Metadata Typing)
+    (before : EnumerationState.State Symbol Guard) :
+    ExceptT.run (EnumerationState.enumerateFully graph (fun _ _ => none)
+      (recordTypes graph [] callbackFuel) enumerationFuel metadata before) =
+    ExceptT.run (EnumerationState.enumerateFully graph (fun _ _ => none)
+      EnumerationState.noPruning enumerationFuel () before)

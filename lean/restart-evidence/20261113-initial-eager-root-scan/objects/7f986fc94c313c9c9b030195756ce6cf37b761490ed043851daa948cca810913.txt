@@ -1,0 +1,50 @@
+ := by
+  let caller := SourceCurrentAllocatedPartialInitialization.caller width cache heap
+  let startup : Cached :=
+    ⟨EnumerationState.initial handle,
+      fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+      fun _ => none⟩
+  let child := SourcePruningEnumerationSharedEagerChildren.eagerChild
+    (Output := SourcePruningEnumerationSharedPreparedRecursive.Output width Typing)
+    (Reason := SourcePruningEnumerationSharedPreparedRecursive.Failure width Typing)
+    checkEmpty workFuel workFuel workFuel workFuel workFuel InternedEdgeResidency.nodeEdges
+  have canonical := SourceSynthesisCurrentProgramEagerOutputs.initial_runEager_canonical
+    (width := width) cache rootValue heap handle holeKey fits admits graph templates
+    checkEmpty stop order workFuel (depth + 1) metadata queries
+  dsimp only at canonical
+  dsimp only
+  refine ⟨canonical.1, ?_⟩
+  split
+  · rename_i uv firstEq
+    have wholeRun := canonical.2
+    rw [firstEq] at wholeRun
+    split
+    · rename_i checked narrowed action narrowedHeap reached saved actionCore candidate
+        updated callbackCore prefixEq
+      let recur := SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild
+        (width := width) child holeKey fits admits graph templates checkEmpty
+        InternedEdgeResidency.nodeEdges stop order workFuel depth
+      let hook := SourcePruningEnumerationSharedPreparedRecursive.continueWith
+        recur graph templates stop order workFuel updated 0
+      have observed := SourceSynthesisCurrentInitialSharedVisitorOrigin.initial_prepared_shared_root_scan_origin
+        (width := width) lib query signed whole accepted rootValue heap built cache handle decoded
+        holeKey fits admits graph templates stop order metadata
+        workFuel workFuel workFuel workFuel workFuel workFuel workFuel workFuel
+        queries child hook checkEmpty workFuel workFuel workFuel workFuel workFuel
+      dsimp only at observed
+      rw [prefixEq] at observed
+      split
+      · rename_i target readHandle scs decodedValue entered entry nativeRows nodeDepth free
+          preparedHeap preparationEq
+        rw [preparationEq] at observed
+        obtain ⟨preparedRun, indexed⟩ := observed
+        have transition := SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resume_prepared
+          (width := width) child holeKey fits admits graph templates checkEmpty
+          InternedEdgeResidency.nodeEdges stop order workFuel depth 0 metadata updated
+          caller reached queries saved startup candidate checked callbackCore
+          (.done (narrowed, some action) narrowedHeap) actionCore prefixEq
+        refine ⟨wholeRun.trans (transition.trans ?_), preparedRun, indexed⟩
+        rw [preparedRun]
+      · trivial
+    · trivial
+  · trivial

@@ -1,0 +1,220 @@
+/tmp/mcfta-initial-eager-root-scan-check3-20261113-1908/check.lean:181:67: error: Application type mismatch: The argument
+  indexed
+has type
+  ∀ (position : Nat),
+    match
+      SourcePruningEnumerationSharedBranching.scan
+        (SourcePruningEnumerationSharedChildVisitors.visitCapturedWith child hook workFuel 0 [])
+        (EnumerationExpandableIndex.frame entered candidate)
+        (List.take position (InternedEdgeResidency.nodeEdges (Value.node entry nativeRows nodeDepth free)))
+        (SourcePruningEnumerationSelectedValueCaller.advance reached preparedHeap) saved with
+    |
+    SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.stopped _processed _outputs
+        _current =>
+      True
+    |
+    SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.complete prior outputs rowCaller
+        rowQueries =>
+      match (InternedEdgeResidency.nodeEdges (Value.node entry nativeRows nodeDepth free))[position]? with
+      | none => True
+      | some rootRow =>
+        rootRow ∈ InternedEdgeResidency.nodeEdges rootValue ∧
+          (SourcePruningEnumerationSharedBranching.scan
+                (SourcePruningEnumerationSharedChildVisitors.visitCapturedWith child hook workFuel 0 [])
+                (EnumerationExpandableIndex.frame entered candidate)
+                (InternedEdgeResidency.nodeEdges (Value.node entry nativeRows nodeDepth free))
+                (SourcePruningEnumerationSelectedValueCaller.advance reached preparedHeap) saved =
+              match
+                SourcePruningEnumerationSharedChildVisitors.visitCapturedWith child hook workFuel 0 [] rootRow rowCaller
+                  rowQueries (EnumerationExpandableIndex.frame entered candidate) with
+              |
+              SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.stopped processed emitted
+                  current =>
+                SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.stopped
+                  (prior ++ processed) (outputs ++ emitted) current
+              |
+              SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.complete processed emitted
+                  nextCaller nextQueries =>
+                match
+                  SourcePruningEnumerationSharedBranching.scan
+                    (SourcePruningEnumerationSharedChildVisitors.visitCapturedWith child hook workFuel 0 [])
+                    (EnumerationExpandableIndex.frame entered candidate)
+                    (List.drop (position + 1)
+                      (InternedEdgeResidency.nodeEdges (Value.node entry nativeRows nodeDepth free)))
+                    nextCaller nextQueries with
+                |
+                SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.complete later more
+                    finalCaller finalQueries =>
+                  SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.complete
+                    (prior ++ processed ++ later) (outputs ++ emitted ++ more) finalCaller finalQueries
+                |
+                SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.stopped later more
+                    current =>
+                  SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.stopped
+                    (prior ++ processed ++ later) (outputs ++ emitted ++ more) current) ∧
+            ∃ chunks goalValue candidateValue candidateStart candidateAfter edgeAfter,
+              List.mapM
+                    (fun selected =>
+                      SourceSynthesisFirstOrderConstruction.relevantRows
+                        (SourceSynthesisCurrentContext.context lib query) true signed.toNat
+                        (List.map Prod.fst selected))
+                    (SourceSynthesisSelections.permutations
+                      (SourceSynthesisCurrentContext.context lib query).argumentEdges) =
+                  Except.ok chunks ∧
+                whole =
+                    SourceSynthesisFirstOrderConstruction.ofType
+                      (InternedNestedConstruction.Syntax.union chunks.flatten)
+                      (SourceSynthesisCurrentContext.typeNode query.queryGoal) ∧
+                  rootRow.entry.key.symbol = literal "filter" ∧
+                    rootRow.entry.key.constraint = filterGuard ∧
+                      rootRow.children = [goalValue, candidateValue] ∧
+                        InternedFreshOrdinaryConstruction.build
+                              (ordinarySymbols (SourceSynthesisCurrentContext.typeNode query.queryGoal)) [] empty =
+                            InternedNestedConstruction.Outcome.done goalValue candidateStart ∧
+                          SourceCurrentConstrainedCapSourceHistory.Context candidateStart [] ∧
+                            InternedFreshOrdinaryConstruction.build
+                                  (ordinarySymbols (InternedNestedConstruction.Syntax.union chunks.flatten)) []
+                                  candidateStart =
+                                InternedNestedConstruction.Outcome.done candidateValue candidateAfter ∧
+                              run (makeEdge (literal "filter") filterGuard [goalValue, candidateValue]) candidateAfter =
+                                  (rootRow, edgeAfter) ∧
+                                run (makeNode [rootRow]) edgeAfter = (rootValue, heap) ∧
+                                  Grows candidateAfter heap ∧
+                                    match
+                                      SourcePruningEnumerationCachedOwn.prepare rowCaller.checked.native.machine.heap []
+                                        rootRow (EnumerationExpandableIndex.frame entered candidate) with
+                                    | some [((symbol, staged, _residual), _ownAfter)] =>
+                                      symbol = literal "filter" ∧
+                                        List.map (fun input => input.fst) staged = [goalValue, candidateValue]
+                                    | x => True
+but is expected to have type
+  ∀ (position : Nat),
+    match
+      SourcePruningEnumerationSharedBranching.scan
+        (SourcePruningEnumerationSharedChildVisitors.visitCapturedWith
+          (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel workFuel
+            workFuel InternedEdgeResidency.nodeEdges)
+          (SourcePruningEnumerationSharedPreparedRecursive.continueWith
+            (SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild
+              (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel workFuel
+                workFuel InternedEdgeResidency.nodeEdges)
+              holeKey fits admits graph templates checkEmpty InternedEdgeResidency.nodeEdges stop order workFuel depth)
+            graph templates stop order workFuel updated 0)
+          workFuel 0 [])
+        (EnumerationExpandableIndex.frame entered candidate)
+        (List.take position (InternedEdgeResidency.nodeEdges (Value.node entry nativeRows nodeDepth free)))
+        (SourcePruningEnumerationSelectedValueCaller.advance reached preparedHeap) saved with
+    |
+    SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.stopped _processed _outputs
+        _current =>
+      True
+    |
+    SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.complete prior outputs rowCaller
+        rowQueries =>
+      match (InternedEdgeResidency.nodeEdges (Value.node entry nativeRows nodeDepth free))[position]? with
+      | none => True
+      | some rootRow =>
+        rootRow ∈ InternedEdgeResidency.nodeEdges rootValue ∧
+          (SourcePruningEnumerationSharedBranching.scan
+                (SourcePruningEnumerationSharedChildVisitors.visitCapturedWith
+                  (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel workFuel
+                    workFuel InternedEdgeResidency.nodeEdges)
+                  (SourcePruningEnumerationSharedPreparedRecursive.continueWith
+                    (SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild
+                      (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel
+                        workFuel workFuel InternedEdgeResidency.nodeEdges)
+                      holeKey fits admits graph templates checkEmpty InternedEdgeResidency.nodeEdges stop order workFuel
+                      depth)
+                    graph templates stop order workFuel updated 0)
+                  workFuel 0 [])
+                (EnumerationExpandableIndex.frame entered candidate)
+                (InternedEdgeResidency.nodeEdges (Value.node entry nativeRows nodeDepth free))
+                (SourcePruningEnumerationSelectedValueCaller.advance reached preparedHeap) saved =
+              match
+                SourcePruningEnumerationSharedChildVisitors.visitCapturedWith
+                  (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel workFuel
+                    workFuel InternedEdgeResidency.nodeEdges)
+                  (SourcePruningEnumerationSharedPreparedRecursive.continueWith
+                    (SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild
+                      (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel
+                        workFuel workFuel InternedEdgeResidency.nodeEdges)
+                      holeKey fits admits graph templates checkEmpty InternedEdgeResidency.nodeEdges stop order workFuel
+                      depth)
+                    graph templates stop order workFuel updated 0)
+                  workFuel 0 [] rootRow rowCaller rowQueries (EnumerationExpandableIndex.frame entered candidate) with
+              |
+              SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.stopped processed emitted
+                  current =>
+                SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.stopped
+                  (prior ++ processed) (outputs ++ emitted) current
+              |
+              SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.complete processed emitted
+                  nextCaller nextQueries =>
+                match
+                  SourcePruningEnumerationSharedBranching.scan
+                    (SourcePruningEnumerationSharedChildVisitors.visitCapturedWith
+                      (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel
+                        workFuel workFuel InternedEdgeResidency.nodeEdges)
+                      (SourcePruningEnumerationSharedPreparedRecursive.continueWith
+                        (SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild
+                          (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel
+                            workFuel workFuel InternedEdgeResidency.nodeEdges)
+                          holeKey fits admits graph templates checkEmpty InternedEdgeResidency.nodeEdges stop order
+                          workFuel depth)
+                        graph templates stop order workFuel updated 0)
+                      workFuel 0 [])
+                    (EnumerationExpandableIndex.frame entered candidate)
+                    (List.drop (position + 1)
+                      (InternedEdgeResidency.nodeEdges (Value.node entry nativeRows nodeDepth free)))
+                    nextCaller nextQueries with
+                |
+                SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.complete later more
+                    finalCaller finalQueries =>
+                  SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.complete
+                    (prior ++ processed ++ later) (outputs ++ emitted ++ more) finalCaller finalQueries
+                |
+                SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.stopped later more
+                    current =>
+                  SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.stopped
+                    (prior ++ processed ++ later) (outputs ++ emitted ++ more) current) ∧
+            ∃ chunks goalValue candidateValue candidateStart candidateAfter edgeAfter,
+              List.mapM
+                    (fun selected =>
+                      SourceSynthesisFirstOrderConstruction.relevantRows
+                        (SourceSynthesisCurrentContext.context lib query) true signed.toNat
+                        (List.map Prod.fst selected))
+                    (SourceSynthesisSelections.permutations
+                      (SourceSynthesisCurrentContext.context lib query).argumentEdges) =
+                  Except.ok chunks ∧
+                whole =
+                    SourceSynthesisFirstOrderConstruction.ofType
+                      (InternedNestedConstruction.Syntax.union chunks.flatten)
+                      (SourceSynthesisCurrentContext.typeNode query.queryGoal) ∧
+                  rootRow.entry.key.symbol = literal "filter" ∧
+                    rootRow.entry.key.constraint = filterGuard ∧
+                      rootRow.children = [goalValue, candidateValue] ∧
+                        InternedFreshOrdinaryConstruction.build
+                              (ordinarySymbols (SourceSynthesisCurrentContext.typeNode query.queryGoal)) [] empty =
+                            InternedNestedConstruction.Outcome.done goalValue candidateStart ∧
+                          SourceCurrentConstrainedCapSourceHistory.Context candidateStart [] ∧
+                            InternedFreshOrdinaryConstruction.build
+                                  (ordinarySymbols (InternedNestedConstruction.Syntax.union chunks.flatten)) []
+                                  candidateStart =
+                                InternedNestedConstruction.Outcome.done candidateValue candidateAfter ∧
+                              run (makeEdge (literal "filter") filterGuard [goalValue, candidateValue]) candidateAfter =
+                                  (rootRow, edgeAfter) ∧
+                                run (makeNode [rootRow]) edgeAfter = (rootValue, heap) ∧
+                                  Grows candidateAfter heap ∧
+                                    match
+                                      SourcePruningEnumerationCachedOwn.prepare rowCaller.checked.native.machine.heap []
+                                        rootRow (EnumerationExpandableIndex.frame entered candidate) with
+                                    | some [((symbol, staged, _residual), _ownAfter)] =>
+                                      symbol = literal "filter" ∧
+                                        List.map (fun input => input.fst) staged = [goalValue, candidateValue]
+                                    | x => True
+in the application
+  ⟨preparedRun, indexed⟩
+'_private._stdin.0.MicroCFTA.SourceSynthesisCurrentInitialEagerRootScanOrigin.initial_runEager_prepared_root_scan_origin' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

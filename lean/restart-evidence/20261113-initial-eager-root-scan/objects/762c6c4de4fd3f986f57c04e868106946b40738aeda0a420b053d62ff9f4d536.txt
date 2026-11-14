@@ -1,0 +1,10 @@
+private theorem empty_callback_raw
+    {Guard Typing : Type} (graph : EnumerationState.Graph Symbol Guard)
+    (fuel : Nat) (metadata : Metadata Typing) (uv : Nat)
+    (input : Sum (Fragments.Fragment Symbol) Nat)
+    (before : EnumerationState.State Symbol Guard) :
+    let updated := {metadata with types := updatedTypes metadata uv input}
+    ExceptT.run (recordTypes graph [] fuel metadata uv input before) =
+        [.ok ((false, updated), before)] ∧
+      updated.pending = metadata.pending ∧ updated.typing = metadata.typing ∧
+      updated.openHoles = metadata.openHoles

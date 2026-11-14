@@ -1,0 +1,26 @@
+    := by
+  dsimp only
+  obtain ⟨fields, cache, value, heap, built, prepared, conjunctionFields, context,
+      facts, available, roles, growth, issued, origins, identity, emptySame, emptyReady,
+      closed, original, valueFields, handle, encoded, decoded, slots, startupReceipt,
+      initialFits, initialHeap, reservation, bound, outcome, prefixReceipt, retained, outputs⟩ :=
+    accepted_initial_prefix lib query signed expression returned depth formulas solver metadata emptyPending
+      holeKey fits admits graph templates checkEmpty order
+  refine ⟨fields, cache, value, heap, built, prepared, conjunctionFields, context,
+    facts, available, roles, growth, issued, origins, identity, emptySame, emptyReady,
+    closed, original, valueFields, handle, encoded, decoded, slots, startupReceipt,
+    initialFits, initialHeap, reservation, bound, outcome, ⟨prefixReceipt, retained, outputs⟩, ?_⟩
+  intro extra
+  cases depth with
+  | zero => exact True.intro
+  | succ smaller =>
+      have observed := SourceSynthesisCurrentInitialEagerRootScanOrigin.initial_runEager_prepared_root_scan_origin
+        (width := SourceSynthesisCurrentProgramEagerEnumerationWidth.enumBits
+          lib query signed (Nat.succ smaller) + 2)
+        lib query signed expression returned value heap built cache handle decoded
+        holeKey fits admits graph templates none order metadata checkEmpty
+        (bound + extra) smaller SourceCurrentAllocatedPartialInitialization.globals.query
+      dsimp only at observed
+      dsimp only
+      rw [← retained.1 extra]
+      exact observed.2

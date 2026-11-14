@@ -1,0 +1,21 @@
+# Bounded source check for an existential Type obstruction
+
+Status: planned probe. No source counterexample is established.
+Use FirstOrder and explicit component groups with fresh names.
+S has type (a -> b -> c) -> (a -> b) -> a -> c.
+I has type d -> d. Ignore has type e -> Int.
+Query: no arguments, goal Int. Component count: 4.
+Candidate: Ignore ((S I) I).
+S I I requires a = b -> c and a = b, hence a = a -> c.
+The Ignore argument type stays existential and is not fixed by goal Int.
+No finite simple type solves this equation.
+A successful membership observation needs the exact original source build and
+actual emitted Program. A timeout, exception, bound miss or unrelated output
+is not that observation. A negative result is local evidence only.
+Check a positive Ignore I control at count 2 before the count 4 candidate.
+Use the actual default solutionsOfSize entry. Keep the raw entry as a separate
+optional observation, without replacing the default preprocessing path.
+First inspect Cabal's dry-run build plan. Do not start a large rebuild.
+Run serially under Nix and the 4 GiB heavy-management cap.
+Keep stdout, stderr, source hashes and exact commands. Do not edit repository
+Haskell, Cabal files, test suites, or another worker's files.

@@ -1,0 +1,20 @@
+--- source.lean
++++ source.lean
+@@ -181,2 +181,15 @@
+-        refine ⟨wholeRun.trans (transition.trans ?_), preparedRun, indexed⟩
+-        rw [preparedRun]
++        refine ⟨wholeRun.trans (transition.trans ?_), preparedRun, ?_⟩
++        · rw [preparedRun]
++        · intro position
++          have observedAt := indexed position
++          split
++          · trivial
++          · rename_i prior outputs rowCaller rowQueries scanEq
++            rw [scanEq] at observedAt
++            dsimp only at observedAt
++            split
++            · trivial
++            · rename_i rootRow rowLookup
++              rw [rowLookup] at observedAt
++              dsimp only at observedAt
++              exact observedAt

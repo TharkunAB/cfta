@@ -1,0 +1,10 @@
+private theorem narrow_constructed_node_identity
+    {Guard Typing Key : Type} [DecidableEq (EdgeKey Symbol Guard)]
+    (holeKey : Typing → Nat → Key) (metadata : Metadata Typing) (fuel uv : Nat)
+    (edges : List (EdgeValue Symbol Guard))
+    (before : InternedConstructorTemplates.State Symbol Guard)
+    (facts : Facts before)
+    (resident : ∀ edge ∈ edges, InternedEdgeResidency.EdgeResident before edge) :
+    let constructed := run (makeNode edges) before
+    SourcePruningOuterNarrow.narrow holeKey (fun _ _ => true) (fun _ _ => true)
+      metadata fuel uv constructed.1 constructed.2 = .done constructed.1 constructed.2

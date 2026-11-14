@@ -1,0 +1,25 @@
+from pathlib import Path
+import datetime
+import json
+import os
+import subprocess
+
+root = Path('/home/tritlo/Code/mcfta')
+runtime = Path(__file__).parent
+group = next(line.split(':', 2)[2] for line in Path('/proc/self/cgroup').read_text().splitlines()
+             if line.startswith('0::'))
+base = Path('/sys/fs/cgroup') / group.lstrip('/')
+limits = {name: (base / name).read_text().strip()
+          for name in ['memory.max', 'memory.high', 'memory.swap.max']}
+assert limits == {'memory.max': '4294967296', 'memory.high': '4294967296', 'memory.swap.max': '0'}
+command = 'exec cabal build cfta-generator:lib:cfta-generator --dry-run --offline -j1'
+result = subprocess.run(['nix-shell', str(root / 'shell.nix'), '--run', command],
+                        cwd=root, env=dict(os.environ), capture_output=True, text=True)
+(runtime / 'build-plan-output.txt').write_text(result.stdout + result.stderr)
+report = {'at': datetime.datetime.now().astimezone().isoformat(),
+          'command': command, 'exit': result.returncode, 'limits': limits,
+          'compiler_or_probe_started': False}
+(runtime / 'build-plan-report.json').write_text(json.dumps(report, indent=2) + '\n')
+print(json.dumps(report))
+print((result.stdout + result.stderr)[:5000])
+raise SystemExit(result.returncode)

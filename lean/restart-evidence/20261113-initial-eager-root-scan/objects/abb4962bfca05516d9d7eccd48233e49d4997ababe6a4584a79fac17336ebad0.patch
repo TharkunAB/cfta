@@ -1,0 +1,30 @@
+--- DefaultProbe.hs
++++ Probe.hs
+@@ -4 +4 @@
+--- | Probe the current public source API and its default typed-run route.
++-- | Probe the raw source root before reduction and refolding.
+@@ -18 +18 @@
+-    , reduceWithOrder
++    , programsIn
+@@ -20 +19,0 @@
+-    , solutionsOfSize
+@@ -119 +118 @@
+--- | Scan one default typed-run stream and retain its exact first matched pairs.
++-- | Scan one raw typed-run stream and retain its exact first matched pairs.
+@@ -158 +157 @@
+--- | Evaluate the public and diagnostic routes once each, as separate runs.
++-- | Evaluate programsIn and the typed run on one raw root, once per route.
+@@ -167 +166,3 @@
+-    progress "phase=public.solutionsOfSize.begin"
++    let space = Space (rawSearchSpace (caseLibrary config) (caseQuery config) (caseSize config)) (const 0)
++    printBounded "raw.root_reachesConstrainedMu" (E.reachesConstrainedMu (spaceNode space))
++    progress "phase=public.programsIn.raw.begin"
+@@ -169 +170 @@
+-        solutionsOfSize (caseLibrary config) (caseQuery config) (caseSize config)
++        programsIn space
+@@ -171,4 +172 @@
+-    progress "phase=typed.default.begin; evaluation=separate_from_public"
+-    let space = reduceWithOrder $ rawSearchSpace (caseLibrary config) (caseQuery config) (caseSize config)
+-    printBounded "typed.reduced_root_reachesConstrainedMu" (E.reachesConstrainedMu (spaceNode space))
+-    progress "phase=typed.default.root_ready"
++    progress "phase=typed.raw.begin; evaluation=separate_from_public"

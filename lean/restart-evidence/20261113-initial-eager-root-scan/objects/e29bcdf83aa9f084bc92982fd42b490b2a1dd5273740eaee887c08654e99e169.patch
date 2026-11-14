@@ -1,0 +1,63 @@
+--- a/SourcePruningEnumerationAction.lean
++++ b/SourcePruningEnumerationAction.lean
+@@ -16,4 +16,7 @@
+-/-- Narrow once and retain the complete value beside the actual enumeration action. -/
+-def prepare [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol NativeGuard)]
+-    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
+-    (admits : Key → InternedConstructorTemplates.Value Symbol NativeGuard → Bool)
++/-- Compute the same action with the supplied native narrowing operation. -/
++def prepareWithNarrow
++    (narrow : Metadata Typing → Nat → Nat →
++      InternedConstructorTemplates.Value Symbol NativeGuard →
++      InternedConstructorTemplates.State Symbol NativeGuard →
++      MergedSourceComparison.Result Symbol NativeGuard
++        (InternedConstructorTemplates.Value Symbol NativeGuard))
+@@ -26 +29 @@
+-  match SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue heap with
++  match narrow metadata nativeFuel uv oldValue heap with
+@@ -42,0 +46,24 @@
++/-- Narrow once and retain the complete value beside the actual enumeration action. -/
++def prepare [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol NativeGuard)]
++    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
++    (admits : Key → InternedConstructorTemplates.Value Symbol NativeGuard → Bool)
++    (metadata : Metadata Typing) (nativeFuel representativeFuel uv oldHandle : Nat)
++    (scs : List EnumerationState.Suspended) (oldValue : InternedConstructorTemplates.Value Symbol NativeGuard)
++    (heap : InternedConstructorTemplates.State Symbol NativeGuard) :
++    MergedSourceComparison.Result Symbol NativeGuard
++      (InternedConstructorTemplates.Value Symbol NativeGuard × Option (EnumerateM Symbol EnumGuard Unit))
++ :=
++  prepareWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
++    metadata nativeFuel representativeFuel uv oldHandle scs oldValue heap
++
++/-- The configured wrapper retains the same action and native result. -/
++theorem prepare_configured_eq [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol NativeGuard)]
++    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
++    (admits : Key → InternedConstructorTemplates.Value Symbol NativeGuard → Bool)
++    (metadata : Metadata Typing) (nativeFuel representativeFuel uv oldHandle : Nat)
++    (scs : List EnumerationState.Suspended) (oldValue : InternedConstructorTemplates.Value Symbol NativeGuard)
++    (heap : InternedConstructorTemplates.State Symbol NativeGuard) :
++    prepare (EnumGuard := EnumGuard) holeKey fits admits metadata nativeFuel representativeFuel uv oldHandle scs oldValue heap =
++      prepareWithNarrow (EnumGuard := EnumGuard) (SourcePruningOuterNarrow.narrow holeKey fits admits)
++        metadata nativeFuel representativeFuel uv oldHandle scs oldValue heap := rfl
++
+@@ -112 +139 @@
+-    simp only [prepare, narrowed, emptyResult]
++    simp only [prepare, prepareWithNarrow, narrowed, emptyResult]
+@@ -121 +148 @@
+-        simp only [prepare, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_left sameHandle]
++        simp only [prepare, prepareWithNarrow, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_left sameHandle]
+@@ -123 +150 @@
+-        simp only [prepare, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_left sameHandle]
++        simp only [prepare, prepareWithNarrow, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_left sameHandle]
+@@ -125 +152 @@
+-        simp only [prepare, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_left sameHandle]
++        simp only [prepare, prepareWithNarrow, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_left sameHandle]
+@@ -144 +171 @@
+-          simp only [prepare, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_right changedHandle]
++          simp only [prepare, prepareWithNarrow, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_right changedHandle]
+@@ -146 +173 @@
+-          simp only [prepare, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_right changedHandle]
++          simp only [prepare, prepareWithNarrow, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_right changedHandle]
+@@ -148 +175 @@
+-          simp only [prepare, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_right changedHandle]
++          simp only [prepare, prepareWithNarrow, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_right changedHandle]

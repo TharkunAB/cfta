@@ -1,0 +1,136 @@
+--- a/SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.lean
++++ b/SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.lean
+@@ -38,2 +38,2 @@
+-/-- Execute the actual selected prefix and pass the same child operation through every restart. -/
+-noncomputable def resumeWithChild
++/-- Pass the same narrowing and child operations through every actual restart. -/
++noncomputable def resumeWithNarrow
+@@ -41 +41,3 @@
+-    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
++    (narrow : Metadata Typing → Nat → Nat → Node →
++      InternedConstructorTemplates.State Symbol Constraint →
++      MergedSourceComparison.Result Symbol Constraint Node)
+@@ -53 +55 @@
+-      let observed := SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates
++      let observed := SourcePruningEnumerationSelectedStep.runPrefixWithNarrow narrow graph templates
+@@ -58 +60 @@
+-          resumeWithChild child holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel fuel
++          resumeWithNarrow child narrow graph templates checkEmpty edgesOf stop order workFuel fuel
+@@ -65 +67 @@
+-            (continueWith (resumeWithChild child holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel fuel)
++            (continueWith (resumeWithNarrow child narrow graph templates checkEmpty edgesOf stop order workFuel fuel)
+@@ -74,0 +77,42 @@
++/-- Execute the actual selected prefix and pass the same child operation through every restart. -/
++noncomputable def resumeWithChild
++    (child : Visitor)
++    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
++    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
++    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
++    (stop : Option (Metadata Typing → Nat → Bool))
++    (order : Metadata Typing → List Nat → Option Nat) (workFuel : Nat) :
++    Nat → Metadata Typing → Caller width → Queries → Cached → Option Next → Result :=
++  resumeWithNarrow child (SourcePruningOuterNarrow.narrow holeKey fits admits)
++    graph templates checkEmpty edgesOf stop order workFuel
++
++/-- The configured wrapper retains the complete recursive observation. -/
++theorem resumeWithChild_configured_eq
++    (child : Visitor)
++    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
++    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
++    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
++    (stop : Option (Metadata Typing → Nat → Bool))
++    (order : Metadata Typing → List Nat → Option Nat) (workFuel : Nat)
++    (recursiveFuel : Nat) (metadata : Metadata Typing) (caller : Caller width)
++    (queries : Queries) (before : Cached) (decision : Option Next) :
++    resumeWithChild child holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel
++        recursiveFuel metadata caller queries before decision =
++      resumeWithNarrow child (SourcePruningOuterNarrow.narrow holeKey fits admits)
++        graph templates checkEmpty edgesOf stop order workFuel
++        recursiveFuel metadata caller queries before decision := rfl
++
++/-- Start the same worker with the supplied narrowing and child operations. -/
++noncomputable def runWithNarrow
++    (child : Visitor)
++    (narrow : Metadata Typing → Nat → Nat → Node →
++      InternedConstructorTemplates.State Symbol Constraint →
++      MergedSourceComparison.Result Symbol Constraint Node)
++    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
++    (checkEmpty : Bool) (edgesOf : Node → List Edge)
++    (stop : Option (Metadata Typing → Nat → Bool))
++    (order : Metadata Typing → List Nat → Option Nat) (workFuel recursiveFuel : Nat)
++    (metadata : Metadata Typing) (caller : Caller width) (queries : Queries) (before : Cached) : Result :=
++  resumeWithNarrow child narrow graph templates checkEmpty edgesOf stop order workFuel recursiveFuel
++    metadata caller queries before (SourcePruningEnumerationRestart.decision stop order metadata before)
++
+@@ -84,2 +128,30 @@
+-  resumeWithChild child holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel recursiveFuel
+-    metadata caller queries before (SourcePruningEnumerationRestart.decision stop order metadata before)
++  runWithNarrow child (SourcePruningOuterNarrow.narrow holeKey fits admits)
++    graph templates checkEmpty edgesOf stop order workFuel recursiveFuel metadata caller queries before
++
++/-- The configured entry retains the same decision and entire result. -/
++theorem runWithChild_configured_eq
++    (child : Visitor)
++    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
++    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
++    (checkEmpty : Bool) (edgesOf : Node → List Edge)
++    (stop : Option (Metadata Typing → Nat → Bool))
++    (order : Metadata Typing → List Nat → Option Nat) (workFuel recursiveFuel : Nat)
++    (metadata : Metadata Typing) (caller : Caller width) (queries : Queries) (before : Cached) :
++    runWithChild child holeKey fits admits graph templates checkEmpty edgesOf stop order
++        workFuel recursiveFuel metadata caller queries before =
++      runWithNarrow child (SourcePruningOuterNarrow.narrow holeKey fits admits)
++        graph templates checkEmpty edgesOf stop order
++        workFuel recursiveFuel metadata caller queries before := rfl
++
++/-- Install the same eager children with the supplied native narrowing operation. -/
++noncomputable def runEagerWithNarrow
++    (narrow : Metadata Typing → Nat → Nat → Node →
++      InternedConstructorTemplates.State Symbol Constraint →
++      MergedSourceComparison.Result Symbol Constraint Node)
++    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
++    (checkEmpty : Bool) (edgesOf : Node → List Edge)
++    (stop : Option (Metadata Typing → Nat → Bool))
++    (order : Metadata Typing → List Nat → Option Nat) (workFuel recursiveFuel : Nat)
++    (metadata : Metadata Typing) (caller : Caller width) (queries : Queries) (before : Cached) : Result :=
++  runWithNarrow (eagerChild checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
++    narrow graph templates checkEmpty edgesOf stop order workFuel recursiveFuel metadata caller queries before
+@@ -95,2 +167,16 @@
+-  runWithChild (eagerChild checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
+-    holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel recursiveFuel metadata caller queries before
++  runEagerWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
++    graph templates checkEmpty edgesOf stop order workFuel recursiveFuel metadata caller queries before
++
++/-- The configured eager entry retains the same complete bounded result. -/
++theorem runEager_configured_eq
++    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
++    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
++    (checkEmpty : Bool) (edgesOf : Node → List Edge)
++    (stop : Option (Metadata Typing → Nat → Bool))
++    (order : Metadata Typing → List Nat → Option Nat) (workFuel recursiveFuel : Nat)
++    (metadata : Metadata Typing) (caller : Caller width) (queries : Queries) (before : Cached) :
++    runEager holeKey fits admits graph templates checkEmpty edgesOf stop order
++        workFuel recursiveFuel metadata caller queries before =
++      runEagerWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
++        graph templates checkEmpty edgesOf stop order
++        workFuel recursiveFuel metadata caller queries before := rfl
+@@ -119,2 +205,3 @@
+-          resumeWithChild (width := width) (shallowVisit checkEmpty workFuel workFuel workFuel workFuel workFuel)
+-              holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel fuel =
++          resumeWithNarrow (width := width) (shallowVisit checkEmpty workFuel workFuel workFuel workFuel workFuel)
++              (SourcePruningOuterNarrow.narrow holeKey fits admits)
++              graph templates checkEmpty edgesOf stop order workFuel fuel =
+@@ -131 +218 @@
+-              rw [resumeWithChild, SourcePruningEnumerationSharedPreparedRecursive.resume]
++              rw [resumeWithChild, resumeWithNarrow, SourcePruningEnumerationSharedPreparedRecursive.resume]
+@@ -147 +234 @@
+-  unfold runWithChild SourcePruningEnumerationSharedPreparedRecursive.run
++  unfold runWithChild runWithNarrow SourcePruningEnumerationSharedPreparedRecursive.run
+@@ -198 +285,6 @@
+-  simp only [resumeWithChild, observedPrefix]
++  have actualPrefix : SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
++      (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates stop order
++      metadata workFuel workFuel workFuel workFuel workFuel workFuel uv caller before queries =
++      .narrowed checked narrowed reached saved (some [.ok ((), actionCore)]) (some after)
++        (some [.ok ((false, updated), core)]) none := observedPrefix
++  simp only [resumeWithChild, resumeWithNarrow, actualPrefix]

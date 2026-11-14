@@ -1,0 +1,35 @@
+case=SKI
+source_size=4
+library.show_complete=True
+library=Library {libraryGroups = [("sink",TFun (TVar "a") (TCons "Bool" []),["sink"]),("s",TFun (TFun (TVar "a") (TFun (TVar "b") (TVar "c"))) (TFun (TFun (TVar "a") (TVar "b")) (TFun (TVar "a") (TVar "c"))),["s"]),("i",TFun (TVar "a") (TVar "a"),["i"]),("k",TFun (TVar "a") (TFun (TVar "b") (TVar "a")),["k"])], libraryArgumentOnly = [], libraryAvoid = [], libraryEncoding = FirstOrder}
+query.show_complete=True
+query=Query {queryArguments = [], queryGoal = TCons "Bool" []}
+candidate.ast.show_complete=True
+candidate.ast=App (Var "sink") (App (App (Var "s") (Var "i")) (Var "i"))
+candidate.ast.show_complete=True
+candidate.ast=App (Var "sink") (App (App (Var "s") (Var "k")) (Var "k"))
+candidate.source.show_complete=True
+candidate.source="sink (s i i)"
+candidate.source.show_complete=True
+candidate.source="sink (s k k)"
+raw.root_reachesConstrainedMu.show_complete=True
+raw.root_reachesConstrainedMu=False
+phase=public.programsIn.raw.begin
+public.match=["ski_finite_control"]
+public.ast.show_complete=True
+public.ast=App (Var "sink") (App (App (Var "s") (Var "k")) (Var "k"))
+public.scanned=175
+public.exhausted=True
+public.candidate="ski_self_application" status=absent_after_exhaustion finite_hm_expected=False
+public.candidate="ski_finite_control" status=present finite_hm_expected=True
+phase=typed.raw.begin; evaluation=separate_from_public
+typed.match=["ski_finite_control"]
+typed.ast.show_complete=True
+typed.ast=App (Var "sink") (App (App (Var "s") (Var "k")) (Var "k"))
+typed.same_run_term_and_residuals.show_complete=True
+typed.same_run_term_and_residuals=(Node "filter" [Node "Bool" [],Node "app" [Node "Bool" [],Node "(->)" [],Node "sink" [Node "->" [Node "(->)" [],Node "->" [Node "(->)" [],Node "Mu" [],Node "Mu" []],Node "Bool" []]],Node "app" [Node "->" [Node "(->)" [],Node "Mu" [],Node "Mu" []],Node "(->)" [],Node "app" [Node "->" [Node "(->)" [],Node "->" [Node "(->)" [],Node "Mu" [],Node "->" [Node "(->)" [],Node "Mu" [],Node "Mu" []]],Node "->" [Node "(->)" [],Node "Mu" [],Node "Mu" []]],Node "(->)" [],Node "s" [Node "->" [Node "(->)" [],Node "->" [Node "(->)" [],Node "Mu" [],Node "->" [Node "(->)" [],Node "->" [Node "(->)" [],Node "Mu" [],Node "Mu" []],Node "Mu" []]],Node "->" [Node "(->)" [],Node "->" [Node "(->)" [],Node "Mu" [],Node "->" [Node "(->)" [],Node "Mu" [],Node "Mu" []]],Node "->" [Node "(->)" [],Node "Mu" [],Node "Mu" []]]]],Node "k" [Node "->" [Node "(->)" [],Node "Mu" [],Node "->" [Node "(->)" [],Node "->" [Node "(->)" [],Node "Mu" [],Node "Mu" []],Node "Mu" []]]]],Node "k" [Node "->" [Node "(->)" [],Node "Mu" [],Node "->" [Node "(->)" [],Node "Mu" [],Node "Mu" []]]]]]],[])
+typed.scanned=175
+typed.exhausted=True
+typed.candidate="ski_self_application" status=absent_after_exhaustion finite_hm_expected=False
+typed.candidate="ski_finite_control" status=present finite_hm_expected=True
+case_complete=True; observations_only=True; partial_type_scope=retained

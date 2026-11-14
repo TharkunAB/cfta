@@ -1,0 +1,82 @@
+{
+  "started": "2026-11-13T19:19:23.832089+01:00",
+  "source_sha256": "0bb459f076701f86536846e073b2be6ae001d905d951fa269a81ff1400489585",
+  "limits": {
+    "memory.max": "4294967296",
+    "memory.high": "4294967296",
+    "memory.swap.max": "0"
+  },
+  "source_pins": 104,
+  "scope": "raw SKI root before reduction/refolding; two separate enumeration calls",
+  "repeated_default_probe": false,
+  "stages": [
+    {
+      "name": "current-libraries",
+      "command": [
+        "nix-shell",
+        "--expr",
+        "let pkgs = import <nixpkgs> {}; in pkgs.mkShell { inputsFrom = [ (import ./shell.nix { inherit pkgs; }) ]; packages = [ pkgs.gmp ]; }",
+        "--run",
+        "exec cabal build cfta:lib:cfta cfta-generator:lib:cfta-generator --offline -j1"
+      ],
+      "exit": 0,
+      "seconds": 8.144,
+      "log": "current-libraries.txt",
+      "log_sha256": "2a4a889561eec27f8011a02ba423062d9f3bf5ef5e5cf798596f92bd49db4b66"
+    },
+    {
+      "name": "probe-compile",
+      "command": [
+        "nix-shell",
+        "--expr",
+        "let pkgs = import <nixpkgs> {}; in pkgs.mkShell { inputsFrom = [ (import ./shell.nix { inherit pkgs; }) ]; packages = [ pkgs.gmp ]; }",
+        "--run",
+        "exec cabal exec --offline -- ghc -hide-all-packages -package base -package-id cfta-0.1.0.0-inplace -package-id cfta-generator-0.1.0.0-inplace -package-id text-2.1.3-2a27 -O0 -Wall -j1 -threaded -rtsopts -outputdir /tmp/mcfta-source-raw-ski-check-20261113-1918/ghc -o /tmp/mcfta-source-raw-ski-check-20261113-1918/probe /tmp/mcfta-source-raw-ski-check-20261113-1918/Probe.hs"
+      ],
+      "exit": 0,
+      "seconds": 4.064,
+      "log": "probe-compile.txt",
+      "log_sha256": "d6b41565a0824183ce899c45d48fa7200fd59c66e4272866f6c9fc500be007f8"
+    },
+    {
+      "name": "raw-SKI",
+      "command": [
+        "timeout",
+        "--kill-after=2s",
+        "5s",
+        "/tmp/mcfta-source-raw-ski-check-20261113-1918/probe",
+        "SKI",
+        "+RTS",
+        "-N1",
+        "-M3072m",
+        "-RTS"
+      ],
+      "exit": 0,
+      "seconds": 0.089,
+      "log": "raw-SKI.txt",
+      "log_sha256": "02a40404cc09a2f0dde4c6ddd9ec5908c64dc4b27c00270e8f68e1785c9114e9"
+    }
+  ],
+  "repository_haskell_or_cabal_changes": false,
+  "finite_type_model_existence_proved": false,
+  "binary_sha256": "591da40a4d59a2b2b8a1fb00eab734098dc7d573c13f7d04917d667f7c48fbd9",
+  "child_only_LD_LIBRARY_PATH": "/nix/store/6qi8skh85ci2k9gvl27nnh3kiy32qnsz-zlib-1.3.1/lib:/nix/store/k8bqvzzw3xll9sjkai15skrj7ab4f8gg-gmp-with-cxx-6.3.0/lib",
+  "observation_exit": 0,
+  "completed": "2026-11-13T19:19:36.150164+01:00",
+  "source_pins_unchanged": true,
+  "memory_peak_bytes": "1074810880",
+  "temporary_build_files_removed": [
+    {
+      "file": "/tmp/mcfta-source-raw-ski-check-20261113-1918/probe",
+      "bytes": 10776200
+    },
+    {
+      "file": "/tmp/mcfta-source-raw-ski-check-20261113-1918/ghc/Main.o",
+      "bytes": 111864
+    },
+    {
+      "file": "/tmp/mcfta-source-raw-ski-check-20261113-1918/ghc/Main.hi",
+      "bytes": 6309
+    }
+  ]
+}

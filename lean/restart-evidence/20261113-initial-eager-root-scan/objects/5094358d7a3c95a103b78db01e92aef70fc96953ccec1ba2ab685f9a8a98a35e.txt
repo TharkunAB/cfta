@@ -1,0 +1,16 @@
+# Raw SKI source-root check
+
+The existing default check already covers this exact library, query and candidates.
+All six archived source hashes match current source. Do not repeat that check.
+This check uses the same SKI source ASTs at size 4 before reduction and refolding.
+It passes rawSearchSpace directly to Space with constant edge weight zero.
+It evaluates programsIn once and evaluates runsBy once in a separate call.
+Each route scans for sink(s i i) and sink(s k k). The latter is the positive control.
+A missing candidate counts as absent only after stream exhaustion.
+The whole SKI process has a five-second timeout. A timeout gives no absence claim.
+The source flag reachesConstrainedMu is an observation, not a SAT certificate.
+Compile with exact existing Cabal package IDs in a derived Nix shell with gmp.
+Use the already documented child-only zlib/gmp loader path.
+Run one serial job with one compiler thread, 4 GiB cap and no swap.
+Keep source, exact patch, logs and hashes. Remove only newly built temporary binaries.
+No repository Haskell or Cabal file changes. No Haskell defect is established.

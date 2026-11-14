@@ -1,0 +1,22 @@
+--- source.lean
++++ source.lean
+@@ -1,0 +2,2 @@
++
++set_option autoImplicit false
+@@ -241 +243 @@
+-                                whole = SourceSynthesisFirstOrderConstruction.ofType (.union chunks.flatten)
++                                expression = SourceSynthesisFirstOrderConstruction.ofType (.union chunks.flatten)
+@@ -290 +292,12 @@
+-      exact observed.2
++      let startup : Cached :=
++        ⟨EnumerationState.initial handle,
++          fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary value else false,
++          fun _ => none⟩
++      cases decisionEq : SourcePruningEnumerationRestart.decision none order metadata startup with
++      | none => trivial
++      | some next =>
++          cases next with
++          | done => trivial
++          | stuck => trivial
++          | expand uv =>
++              simpa only [decisionEq] using observed.2
