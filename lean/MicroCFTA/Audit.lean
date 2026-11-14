@@ -1,3 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationEntryRecordedBucketOrigin
 import MicroCFTA.SourceSynthesisCurrentComponentFieldNativeAtoms
 import MicroCFTA.SourceSynthesisCurrentUniverseGeneratedTypeClosure
 import MicroCFTA.SourceSynthesisCurrentUniverseEmptyDomainInduction
@@ -5484,3 +5485,9 @@ run_cmd do
 
 #check @MicroCFTA.SourceSynthesisCurrentComponentFieldNativeAtoms.current_component_fields_cold_native_result_atoms
 #print axioms MicroCFTA.SourceSynthesisCurrentComponentFieldNativeAtoms.current_component_fields_cold_native_result_atoms
+
+#check @MicroCFTA.SourcePruningEnumerationEntry.enter_recorded_bucket_origin
+#print axioms MicroCFTA.SourcePruningEnumerationEntry.enter_recorded_bucket_origin
+
+#check @MicroCFTA.SourcePruningEnumerationEntry.enter_active_key_origin
+#print axioms MicroCFTA.SourcePruningEnumerationEntry.enter_active_key_origin
