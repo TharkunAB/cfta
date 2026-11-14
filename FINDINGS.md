@@ -1,3 +1,36 @@
+# Actual identity-prefix resources checked (2026-11-14 11:21 CET)
+
+SourcePruningEnumerationSharedRecursive.prefix_identity_complete_resources in
+SourcePruningEnumerationIdentityPrefixResources is public and checked.
+From the actual input Packet, Fits and Heap contracts, one common finite budget
+suffices for every larger budget and every actually selected expansion.
+The literal identity runPrefixWithNarrow retains the complete output Packet,
+PendingReferences, dependency Stratified order, resource bounds and actual Post.
+It covers parked, Empty and nonempty outcomes. It derives waiting-count equality
+from the actual count functions and retains the original unchanged caller heap.
+There is no fake Key/fits/admits choice, future callback or output provider input.
+The original approved header remains exact. The first strict check failed in
+an impossible branch; check2 unfolded ExceptT.mk and then failed only unused
+section-instance lint. Check3 scopes that instance to the public theorem and
+passes strict checking. Both failed inputs and repairs remain preserved.
+
+All five public checks pass at 11:19:22 CET. Full strict Audit checks 95,945
+aggregate theorems and separately 81 explicit reports: 79 standard-axiom and
+two axiom-free. Only propext, Classical.choice and Quot.sound occur.
+There are 5,938 source modules and 4,936 direct Audit imports.
+Validation: /tmp/mcfta-identity-prefix-resources-check-20261114-1112 and
+/tmp/mcfta-identity-prefix-resources-publication-20261114-1118.
+
+NEXT: derive actual identity-prefix phase stability, retained mass and bucket
+admission from the selected identity producer. CurrentPrefixResources does not
+include all three facts needed by existing whole configured-worker composition.
+Generalize the narrowing-dependent callback/resume helpers once and instantiate
+actual identity; do not clone configured closure or assume future callbacks.
+Whole identity-worker history, all-fuel safety and ONE finite original-root term
+under ONE consistent assignment remain OPEN. The growth identity below is checked
+and pushed at 3dd17cb529cb8037e3d3ebae773e90ecdf61331a.
+No Haskell source, contract, defect or fix was added or established. Goal ACTIVE.
+
 # Original source-universe identity survives heap growth (2026-11-14 11:11 CET)
 
 SourceSynthesisCurrentUniverseReferenceIdentity.current_stored_universe_reference_identity_after_growth
