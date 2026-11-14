@@ -1,0 +1,13 @@
+--- SourcePruningNarrowPrefixObservation.lean
++++ SourcePruningNarrowPrefixObservation.lean
+@@ -44 +44 @@
+-      simp only [SourcePruningEnumerationAction.prepare, narrowed] at prepared
++      simp only [SourcePruningEnumerationAction.prepare, SourcePruningEnumerationAction.prepareWithNarrow, narrowed] at prepared
+@@ -47 +47 @@
+-      simp only [SourcePruningEnumerationAction.prepare, narrowed] at prepared
++      simp only [SourcePruningEnumerationAction.prepare, SourcePruningEnumerationAction.prepareWithNarrow, narrowed] at prepared
+@@ -91,2 +91,2 @@
+-  unfold runPrefix at prefixObserved
+-  dsimp only at prefixObserved
++  unfold runPrefix runPrefixWithNarrow at prefixObserved
++  simp only [← SourcePruningEnumerationAction.prepare_configured_eq] at prefixObserved

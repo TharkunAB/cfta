@@ -1,0 +1,12 @@
+--- a/lean/MicroCFTA/SourcePruningEnumerationPrefixCoverage.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationPrefixCoverage.lean
+@@ -243,7 +243,8 @@
+       uv caller before queries = .narrowed checked preparedField reached queries
+         (some [.ok ((), after.core)]) (some after) right ordinary) :
+     Success selectedAction checked () after.core := by
+-  simp only [runPrefix, reading, checking, decoded, prepared] at actual
++  simp only [runPrefix, runPrefixWithNarrow,
++    ← SourcePruningEnumerationAction.prepare_configured_eq, reading, checking, decoded, prepared] at actual
+   cases rawEq : ExceptT.run (selectedAction checked) with
+   | nil => simp only [rawEq] at actual; cases actual
+   | cons first rest =>

@@ -1,0 +1,27 @@
+--- a/lean/MicroCFTA/SourcePruningEnumerationSharedPrefixWork.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationSharedPrefixWork.lean
+@@ -289,5 +289,6 @@
+     | .narrowed _ _ _ _ action _ _ _ => action
+     | _ => none) = some (ExceptT.run (selectedAction checked)) := by
+-    simp only [runPrefix, reading, checking, decoded, prepared]
++    simp only [runPrefix, SourcePruningEnumerationSelectedStep.runPrefixWithNarrow,
++      ← SourcePruningEnumerationAction.prepare_configured_eq, reading, checking, decoded, prepared]
+     cases execution : ExceptT.run (selectedAction checked) with
+     | nil => rfl
+@@ -421,5 +422,6 @@
+               | .parked _ candidate _ => candidate
+               | _ => none) actual
+-            simpa only [runPrefix, reading, checking] using fields
++            simpa only [runPrefix, SourcePruningEnumerationSelectedStep.runPrefixWithNarrow,
++              reading, checking] using fields
+           have flags := parked_flags caller.checked.native.machine.heap fuel uv oldHandle scs value
+             before after checked decoded boundary adapted
+@@ -468,5 +470,7 @@
+               | _ => none) = SourcePruningEnumerationNarrowAdapter.adapt heap fuel uv oldHandle newHandle
+                 scs before after.core := by
+-              simp only [runPrefix, reading, checking, decoded, preparedRun, execution, encoded]
++              simp only [runPrefix, SourcePruningEnumerationSelectedStep.runPrefixWithNarrow,
++                ← SourcePruningEnumerationAction.prepare_configured_eq, reading, checking, decoded,
++                preparedRun, execution, encoded]
+               cases attached : SourcePruningEnumerationNarrowAdapter.adapt heap fuel uv oldHandle newHandle
+                   scs before after.core with

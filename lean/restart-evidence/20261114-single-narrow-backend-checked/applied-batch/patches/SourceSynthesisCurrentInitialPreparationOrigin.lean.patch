@@ -1,0 +1,17 @@
+--- a/SourceSynthesisCurrentInitialPreparationOrigin.lean
++++ b/SourceSynthesisCurrentInitialPreparationOrigin.lean
+@@ -200 +200 @@
+-      unfold SourcePruningEnumerationSelectedStep.runPrefix
++      unfold SourcePruningEnumerationSelectedStep.runPrefix SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
+@@ -204 +204 @@
+-      simp only [reading, checking, decoded, prepared]
++      simp only [reading, checking, decoded, ← SourcePruningEnumerationAction.prepare_configured_eq, prepared]
+@@ -247 +247 @@
+-      simp only [SourcePruningEnumerationAction.prepare, native] at emptyPrepared
++      simp only [SourcePruningEnumerationAction.prepare, SourcePruningEnumerationAction.prepareWithNarrow, native] at emptyPrepared
+@@ -324 +324 @@
+-    unfold SourcePruningEnumerationSelectedStep.runPrefix at actualPrefix
++    unfold SourcePruningEnumerationSelectedStep.runPrefix SourcePruningEnumerationSelectedStep.runPrefixWithNarrow at actualPrefix
+@@ -328 +328 @@
+-    simp only [reading, checking, decoded, prepared, executedRaw, encoded] at actualPrefix
++    simp only [reading, checking, decoded, ← SourcePruningEnumerationAction.prepare_configured_eq, prepared, executedRaw, encoded] at actualPrefix

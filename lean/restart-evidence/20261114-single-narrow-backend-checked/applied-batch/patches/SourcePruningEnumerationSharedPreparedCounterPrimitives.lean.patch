@@ -1,0 +1,16 @@
+--- a/lean/MicroCFTA/SourcePruningEnumerationSharedPreparedCounterPrimitives.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationSharedPreparedCounterPrimitives.lean
+@@ -240,4 +240,5 @@
+         ∀ previous next, Success selected previous () next → next.counter = previous.counter := by
+     unfold SourcePruningEnumerationAction.prepare
++      SourcePruningEnumerationAction.prepareWithNarrow
+     cases narrowed : SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue heap with
+     | failed fault reached => trivial
+@@ -280,5 +281,6 @@
+       uv caller before queries) := by
+   unfold SourcePruningEnumerationSelectedStep.runPrefix
+-  dsimp only
++    SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
++  simp only [← SourcePruningEnumerationAction.prepare_configured_eq]
+   split
+   · rename_i oldHandle scs readAfter readEq

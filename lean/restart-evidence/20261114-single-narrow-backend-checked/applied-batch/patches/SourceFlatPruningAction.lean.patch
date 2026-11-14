@@ -1,0 +1,8 @@
+--- a/lean/MicroCFTA/SourceFlatPruningAction.lean
++++ b/lean/MicroCFTA/SourceFlatPruningAction.lean
+@@ -89,4 +89,5 @@
+       (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel fuel uv oldHandle scs oldValue heap) := by
+   unfold prepare SourcePruningEnumerationAction.prepare
++    SourcePruningEnumerationAction.prepareWithNarrow
+   cases observed : SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue heap with
+   | failed fault after => exact ⟨rfl, rfl⟩

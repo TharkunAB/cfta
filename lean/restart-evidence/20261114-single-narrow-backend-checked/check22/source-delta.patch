@@ -1,0 +1,828 @@
+diff --git a/lean/MicroCFTA/Audit.lean b/lean/MicroCFTA/Audit.lean
+index 712b765a6..f63a7977e 100644
+--- a/lean/MicroCFTA/Audit.lean
++++ b/lean/MicroCFTA/Audit.lean
+@@ -5016,0 +5017,11 @@ run_cmd do
++
++#check @MicroCFTA.SourcePruningEnumerationAction.prepare_configured_eq
++#print axioms MicroCFTA.SourcePruningEnumerationAction.prepare_configured_eq
++#check @MicroCFTA.SourcePruningEnumerationSelectedStep.runPrefix_configured_eq
++#print axioms MicroCFTA.SourcePruningEnumerationSelectedStep.runPrefix_configured_eq
++#check @MicroCFTA.SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild_configured_eq
++#print axioms MicroCFTA.SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild_configured_eq
++#check @MicroCFTA.SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.runWithChild_configured_eq
++#print axioms MicroCFTA.SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.runWithChild_configured_eq
++#check @MicroCFTA.SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.runEager_configured_eq
++#print axioms MicroCFTA.SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.runEager_configured_eq
+diff --git a/lean/MicroCFTA/SourceCurrentMuPrepareResources.lean b/lean/MicroCFTA/SourceCurrentMuPrepareResources.lean
+index 5b35f6897..5c9ffe89f 100644
+--- a/lean/MicroCFTA/SourceCurrentMuPrepareResources.lean
++++ b/lean/MicroCFTA/SourceCurrentMuPrepareResources.lean
+@@ -45 +45,2 @@ theorem mu_prepare
+-      simp only [SourcePruningEnumerationAction.prepare, SourcePruningOuterNarrow.narrow, encoded]
++      simp only [SourcePruningEnumerationAction.prepare, SourcePruningEnumerationAction.prepareWithNarrow,
++        SourcePruningOuterNarrow.narrow, encoded]
+diff --git a/lean/MicroCFTA/SourceCurrentSelectedNoHistoryCheck.lean b/lean/MicroCFTA/SourceCurrentSelectedNoHistoryCheck.lean
+index b78e34e8b..0104356fe 100644
+--- a/lean/MicroCFTA/SourceCurrentSelectedNoHistoryCheck.lean
++++ b/lean/MicroCFTA/SourceCurrentSelectedNoHistoryCheck.lean
+@@ -129 +129,3 @@ theorem selected_without_target_history
+-      simp only [SourcePruningEnumerationSelectedStep.runPrefix, readExact er, checkFalse ec, decoded, prepared]
++      simp only [SourcePruningEnumerationSelectedStep.runPrefix,
++        SourcePruningEnumerationSelectedStep.runPrefixWithNarrow, readExact er, checkFalse ec, decoded,
++        ← SourcePruningEnumerationAction.prepare_configured_eq, prepared]
+diff --git a/lean/MicroCFTA/SourceCurrentSelectedRepeatedProgress.lean b/lean/MicroCFTA/SourceCurrentSelectedRepeatedProgress.lean
+index 3beaea850..df5ac905a 100644
+--- a/lean/MicroCFTA/SourceCurrentSelectedRepeatedProgress.lean
++++ b/lean/MicroCFTA/SourceCurrentSelectedRepeatedProgress.lean
+@@ -129 +129,2 @@ theorem selected_repeated_progress
+-    simp only [SourcePruningEnumerationSelectedStep.runPrefix, readExact er, checkExact ec,
++    simp only [SourcePruningEnumerationSelectedStep.runPrefix,
++      SourcePruningEnumerationSelectedStep.runPrefixWithNarrow, readExact er, checkExact ec,
+diff --git a/lean/MicroCFTA/SourceCurrentSelectedStepAllObservedTotal.lean b/lean/MicroCFTA/SourceCurrentSelectedStepAllObservedTotal.lean
+index 85365df3b..5cf477e8b 100644
+--- a/lean/MicroCFTA/SourceCurrentSelectedStepAllObservedTotal.lean
++++ b/lean/MicroCFTA/SourceCurrentSelectedStepAllObservedTotal.lean
+@@ -85 +85 @@ theorem complete
+-    dsimp only [SourcePruningEnumerationAction.prepare] at prepared
++    dsimp only [SourcePruningEnumerationAction.prepare, SourcePruningEnumerationAction.prepareWithNarrow] at prepared
+@@ -153 +153 @@ theorem complete
+-          dsimp only [SourcePruningEnumerationSelectedStep.runPrefix] at observedAction
++          dsimp only [SourcePruningEnumerationSelectedStep.runPrefix, SourcePruningEnumerationSelectedStep.runPrefixWithNarrow] at observedAction
+diff --git a/lean/MicroCFTA/SourceCurrentSelectedStepCheckedFrame.lean b/lean/MicroCFTA/SourceCurrentSelectedStepCheckedFrame.lean
+index a082d0c15..cd7d7e275 100644
+--- a/lean/MicroCFTA/SourceCurrentSelectedStepCheckedFrame.lean
++++ b/lean/MicroCFTA/SourceCurrentSelectedStepCheckedFrame.lean
+@@ -92 +92,2 @@ theorem complete
+-          simp only [SourcePruningEnumerationSelectedStep.runPrefix, read, check, lookup] at hp
++          simp only [SourcePruningEnumerationSelectedStep.runPrefix,
++            SourcePruningEnumerationSelectedStep.runPrefixWithNarrow, read, check, lookup] at hp
+@@ -99 +100,2 @@ theorem complete
+-          simp only [SourcePruningEnumerationSelectedStep.runPrefix, read, check] at hp
++          simp only [SourcePruningEnumerationSelectedStep.runPrefix,
++            SourcePruningEnumerationSelectedStep.runPrefixWithNarrow, read, check] at hp
+diff --git a/lean/MicroCFTA/SourceCurrentSelectedStepObservedTotal.lean b/lean/MicroCFTA/SourceCurrentSelectedStepObservedTotal.lean
+index 708c166b3..d6e9e487b 100644
+--- a/lean/MicroCFTA/SourceCurrentSelectedStepObservedTotal.lean
++++ b/lean/MicroCFTA/SourceCurrentSelectedStepObservedTotal.lean
+@@ -92 +92 @@ theorem complete
+-    dsimp only [SourcePruningEnumerationAction.prepare] at prepared
++    dsimp only [SourcePruningEnumerationAction.prepare, SourcePruningEnumerationAction.prepareWithNarrow] at prepared
+@@ -171 +171 @@ theorem complete
+-                          dsimp only [SourcePruningEnumerationSelectedStep.runPrefix] at observedAction
++                          dsimp only [SourcePruningEnumerationSelectedStep.runPrefix, SourcePruningEnumerationSelectedStep.runPrefixWithNarrow] at observedAction
+diff --git a/lean/MicroCFTA/SourceFlatPruningAction.lean b/lean/MicroCFTA/SourceFlatPruningAction.lean
+index 33478d974..6b75dbd7b 100644
+--- a/lean/MicroCFTA/SourceFlatPruningAction.lean
++++ b/lean/MicroCFTA/SourceFlatPruningAction.lean
+@@ -90,0 +91 @@ theorem prepare_related [DecidableEq (EdgeKey Symbol NativeGuard)]
++    SourcePruningEnumerationAction.prepareWithNarrow
+diff --git a/lean/MicroCFTA/SourceFlatPruningActionReplay.lean b/lean/MicroCFTA/SourceFlatPruningActionReplay.lean
+index 1776d6c66..1238c1868 100644
+--- a/lean/MicroCFTA/SourceFlatPruningActionReplay.lean
++++ b/lean/MicroCFTA/SourceFlatPruningActionReplay.lean
+@@ -73 +73 @@ theorem prepare_replays [DecidableEq (EdgeKey Symbol NativeGuard)]
+-  unfold SourcePruningEnumerationAction.prepare at prepared
++  unfold SourcePruningEnumerationAction.prepare SourcePruningEnumerationAction.prepareWithNarrow at prepared
+diff --git a/lean/MicroCFTA/SourceFlatPruningSelectedPrefixReplay.lean b/lean/MicroCFTA/SourceFlatPruningSelectedPrefixReplay.lean
+index 1d2d56421..792c1299f 100644
+--- a/lean/MicroCFTA/SourceFlatPruningSelectedPrefixReplay.lean
++++ b/lean/MicroCFTA/SourceFlatPruningSelectedPrefixReplay.lean
+@@ -85 +85,3 @@ private theorem narrowed_observation
+-  simp only [SourcePruningEnumerationSelectedStep.runPrefix, reading, checking, decoded, prepared] at actual
++  simp only [SourcePruningEnumerationSelectedStep.runPrefix,
++    SourcePruningEnumerationSelectedStep.runPrefixWithNarrow,
++    ← SourcePruningEnumerationAction.prepare_configured_eq, reading, checking, decoded, prepared] at actual
+@@ -188 +190,2 @@ theorem run_related_of_valid
+-        simpa only [SourcePruningEnumerationSelectedStep.runPrefix, reading, checking] using projected
++        simpa only [SourcePruningEnumerationSelectedStep.runPrefix,
++          SourcePruningEnumerationSelectedStep.runPrefixWithNarrow, reading, checking] using projected
+@@ -229 +232,2 @@ theorem run_related_of_valid
+-            simp only [SourcePruningEnumerationAction.prepare, narrowed]
++            simp only [SourcePruningEnumerationAction.prepare,
++              SourcePruningEnumerationAction.prepareWithNarrow, narrowed]
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationAction.lean b/lean/MicroCFTA/SourcePruningEnumerationAction.lean
+index a34733d6d..c7b91b1f7 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationAction.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationAction.lean
+@@ -16,4 +16,7 @@ local instance actionMonadList : Monad List where
+-/-- Narrow once and retain the complete value beside the actual enumeration action. -/
+-def prepare [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol NativeGuard)]
+-    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
+-    (admits : Key → InternedConstructorTemplates.Value Symbol NativeGuard → Bool)
++/-- Compute the same action with the supplied native narrowing operation. -/
++def prepareWithNarrow
++    (narrow : Metadata Typing → Nat → Nat →
++      InternedConstructorTemplates.Value Symbol NativeGuard →
++      InternedConstructorTemplates.State Symbol NativeGuard →
++      MergedSourceComparison.Result Symbol NativeGuard
++        (InternedConstructorTemplates.Value Symbol NativeGuard))
+@@ -26 +29 @@ def prepare [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol NativeGuar
+-  match SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue heap with
++  match narrow metadata nativeFuel uv oldValue heap with
+@@ -42,0 +46,24 @@ def prepare [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol NativeGuar
++/-- Narrow once and retain the complete value beside the actual enumeration action. -/
++def prepare [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol NativeGuard)]
++    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
++    (admits : Key → InternedConstructorTemplates.Value Symbol NativeGuard → Bool)
++    (metadata : Metadata Typing) (nativeFuel representativeFuel uv oldHandle : Nat)
++    (scs : List EnumerationState.Suspended) (oldValue : InternedConstructorTemplates.Value Symbol NativeGuard)
++    (heap : InternedConstructorTemplates.State Symbol NativeGuard) :
++    MergedSourceComparison.Result Symbol NativeGuard
++      (InternedConstructorTemplates.Value Symbol NativeGuard × Option (EnumerateM Symbol EnumGuard Unit))
++ :=
++  prepareWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
++    metadata nativeFuel representativeFuel uv oldHandle scs oldValue heap
++
++/-- The configured wrapper retains the same action and native result. -/
++theorem prepare_configured_eq [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol NativeGuard)]
++    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
++    (admits : Key → InternedConstructorTemplates.Value Symbol NativeGuard → Bool)
++    (metadata : Metadata Typing) (nativeFuel representativeFuel uv oldHandle : Nat)
++    (scs : List EnumerationState.Suspended) (oldValue : InternedConstructorTemplates.Value Symbol NativeGuard)
++    (heap : InternedConstructorTemplates.State Symbol NativeGuard) :
++    prepare (EnumGuard := EnumGuard) holeKey fits admits metadata nativeFuel representativeFuel uv oldHandle scs oldValue heap =
++      prepareWithNarrow (EnumGuard := EnumGuard) (SourcePruningOuterNarrow.narrow holeKey fits admits)
++        metadata nativeFuel representativeFuel uv oldHandle scs oldValue heap := rfl
++
+@@ -112 +139 @@ theorem prepare_pending_complete
+-    simp only [prepare, narrowed, emptyResult]
++    simp only [prepare, prepareWithNarrow, narrowed, emptyResult]
+@@ -121 +148 @@ theorem prepare_pending_complete
+-        simp only [prepare, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_left sameHandle]
++        simp only [prepare, prepareWithNarrow, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_left sameHandle]
+@@ -123 +150 @@ theorem prepare_pending_complete
+-        simp only [prepare, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_left sameHandle]
++        simp only [prepare, prepareWithNarrow, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_left sameHandle]
+@@ -125 +152 @@ theorem prepare_pending_complete
+-        simp only [prepare, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_left sameHandle]
++        simp only [prepare, prepareWithNarrow, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_left sameHandle]
+@@ -144 +171 @@ theorem prepare_pending_complete
+-          simp only [prepare, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_right changedHandle]
++          simp only [prepare, prepareWithNarrow, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_right changedHandle]
+@@ -146 +173 @@ theorem prepare_pending_complete
+-          simp only [prepare, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_right changedHandle]
++          simp only [prepare, prepareWithNarrow, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_right changedHandle]
+@@ -148 +175 @@ theorem prepare_pending_complete
+-          simp only [prepare, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_right changedHandle]
++          simp only [prepare, prepareWithNarrow, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_right changedHandle]
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationActionTotal.lean b/lean/MicroCFTA/SourcePruningEnumerationActionTotal.lean
+index d390784b2..5e3029df2 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationActionTotal.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationActionTotal.lean
+@@ -42 +42 @@ theorem prepare_total (nativeFuel representativeFuel uv oldHandle : Nat)
+-  dsimp only [SourcePruningEnumerationAction.prepare] at prepared
++  dsimp only [SourcePruningEnumerationAction.prepare, SourcePruningEnumerationAction.prepareWithNarrow] at prepared
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationBoundaryAction.lean b/lean/MicroCFTA/SourcePruningEnumerationBoundaryAction.lean
+index 3b9595e38..7caf8cfb4 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationBoundaryAction.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationBoundaryAction.lean
+@@ -36 +36 @@ theorem prepare_boundary_retained [DecidableEq (EdgeKey Symbol NativeGuard)]
+-    unfold prepare at observed
++    unfold prepare prepareWithNarrow at observed
+@@ -56 +56 @@ theorem prepare_boundary_retained [DecidableEq (EdgeKey Symbol NativeGuard)]
+-    unfold prepare
++    unfold prepare prepareWithNarrow
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationBoundaryPrefixIdentity.lean b/lean/MicroCFTA/SourcePruningEnumerationBoundaryPrefixIdentity.lean
+index 2ba4fe13a..574d64dc1 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationBoundaryPrefixIdentity.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationBoundaryPrefixIdentity.lean
+@@ -137 +137,2 @@ theorem narrowed_boundary_identity
+-      simp only [runPrefix, reading, checking, decoded, preparing, raw, publicEncoded, adapted, recorded,
++      simp only [runPrefix, runPrefixWithNarrow,
++        ← SourcePruningEnumerationAction.prepare_configured_eq, reading, checking, decoded, preparing, raw, publicEncoded, adapted, recorded,
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationNativeNarrowArity.lean b/lean/MicroCFTA/SourcePruningEnumerationNativeNarrowArity.lean
+index b16d2b5b4..8a85938f1 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationNativeNarrowArity.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationNativeNarrowArity.lean
+@@ -69 +69,2 @@ theorem prepare_heap
+-      simpa only [SourcePruningEnumerationAction.prepare, actual,
++      simpa only [SourcePruningEnumerationAction.prepare,
++        SourcePruningEnumerationAction.prepareWithNarrow, actual,
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationOuterTables.lean b/lean/MicroCFTA/SourcePruningEnumerationOuterTables.lean
+index 3d2f21d5f..849ebcf78 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationOuterTables.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationOuterTables.lean
+@@ -191 +191 @@ theorem runPrefix_tables
+-      unfold runPrefix at observed
++      unfold runPrefix runPrefixWithNarrow at observed
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationPathSelectedPrefix.lean b/lean/MicroCFTA/SourcePruningEnumerationPathSelectedPrefix.lean
+index e7410054b..be168bb80 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationPathSelectedPrefix.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationPathSelectedPrefix.lean
+@@ -34,0 +35 @@ theorem runPrefix_paths {Typing Key : Type} {width : Nat}
++    SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
+@@ -111,0 +113 @@ theorem runPrefix_paths {Typing Key : Type} {width : Nat}
++                                          simp only [← SourcePruningEnumerationAction.prepare_configured_eq]
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationPathSelectedRaw.lean b/lean/MicroCFTA/SourcePruningEnumerationPathSelectedRaw.lean
+index b67c70e1e..5051fd1bc 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationPathSelectedRaw.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationPathSelectedRaw.lean
+@@ -106 +106,2 @@ theorem prepare_actions_paths {EnumGuard NativeGuard Typing Key : Type}
+-      simp only [SourcePruningEnumerationAction.prepare, narrowed]
++      simp only [SourcePruningEnumerationAction.prepare,
++        SourcePruningEnumerationAction.prepareWithNarrow, narrowed]
+@@ -110 +111,2 @@ theorem prepare_actions_paths {EnumGuard NativeGuard Typing Key : Type}
+-          simp only [SourcePruningEnumerationAction.prepare, narrowed]
++          simp only [SourcePruningEnumerationAction.prepare,
++            SourcePruningEnumerationAction.prepareWithNarrow, narrowed]
+@@ -116 +118,2 @@ theorem prepare_actions_paths {EnumGuard NativeGuard Typing Key : Type}
+-          simp only [SourcePruningEnumerationAction.prepare, narrowed, SourcePruningEnumerationNodes.encodeNode]
++          simp only [SourcePruningEnumerationAction.prepare,
++            SourcePruningEnumerationAction.prepareWithNarrow, narrowed, SourcePruningEnumerationNodes.encodeNode]
+@@ -120 +123,2 @@ theorem prepare_actions_paths {EnumGuard NativeGuard Typing Key : Type}
+-          simpa only [SourcePruningEnumerationAction.prepare, narrowed, SourcePruningEnumerationNodes.encodeNode]
++          simpa only [SourcePruningEnumerationAction.prepare,
++            SourcePruningEnumerationAction.prepareWithNarrow, narrowed, SourcePruningEnumerationNodes.encodeNode]
+@@ -123 +127,2 @@ theorem prepare_actions_paths {EnumGuard NativeGuard Typing Key : Type}
+-          simpa only [SourcePruningEnumerationAction.prepare, narrowed, SourcePruningEnumerationNodes.encodeNode]
++          simpa only [SourcePruningEnumerationAction.prepare,
++            SourcePruningEnumerationAction.prepareWithNarrow, narrowed, SourcePruningEnumerationNodes.encodeNode]
+@@ -126 +131,2 @@ theorem prepare_actions_paths {EnumGuard NativeGuard Typing Key : Type}
+-          simpa only [SourcePruningEnumerationAction.prepare, narrowed, SourcePruningEnumerationNodes.encodeNode]
++          simpa only [SourcePruningEnumerationAction.prepare,
++            SourcePruningEnumerationAction.prepareWithNarrow, narrowed, SourcePruningEnumerationNodes.encodeNode]
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationPrefixAncestryExtension.lean b/lean/MicroCFTA/SourcePruningEnumerationPrefixAncestryExtension.lean
+index 9c490c5e0..e6f9b8493 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationPrefixAncestryExtension.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationPrefixAncestryExtension.lean
+@@ -127 +127,2 @@ private theorem retained_action_success
+-  simp only [runPrefix, reading, checking, decoded, prepared] at actual
++  simp only [runPrefix, runPrefixWithNarrow,
++    ← SourcePruningEnumerationAction.prepare_configured_eq, reading, checking, decoded, prepared] at actual
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationPrefixCanonicalHistory.lean b/lean/MicroCFTA/SourcePruningEnumerationPrefixCanonicalHistory.lean
+index ccc4af6e3..573fc4fe0 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationPrefixCanonicalHistory.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationPrefixCanonicalHistory.lean
+@@ -53 +53,2 @@ private theorem retained_action_success
+-  simp only [runPrefix, reading, checking, decoded, prepared] at actual
++  simp only [runPrefix, runPrefixWithNarrow,
++    ← SourcePruningEnumerationAction.prepare_configured_eq, reading, checking, decoded, prepared] at actual
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationPrefixCarriers.lean b/lean/MicroCFTA/SourcePruningEnumerationPrefixCarriers.lean
+index a65d43cd3..bab8e461d 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationPrefixCarriers.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationPrefixCarriers.lean
+@@ -54 +54,2 @@ private theorem retained_action_success
+-  simp only [runPrefix, reading, checking, decoded, prepared] at actual
++  simp only [runPrefix, runPrefixWithNarrow,
++    ← SourcePruningEnumerationAction.prepare_configured_eq, reading, checking, decoded, prepared] at actual
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationPrefixCheckpoint.lean b/lean/MicroCFTA/SourcePruningEnumerationPrefixCheckpoint.lean
+index 685aa8a18..8cf133663 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationPrefixCheckpoint.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationPrefixCheckpoint.lean
+@@ -114 +114 @@ theorem prefix_checkpoint_complete
+-        simp only [runPrefix, reading, checking, adapted, Option.map_some]
++        simp only [runPrefix, runPrefixWithNarrow, reading, checking, adapted, Option.map_some]
+@@ -159 +159,2 @@ theorem prefix_checkpoint_complete
+-          simp only [runPrefix, reading, checking, oldDecoded, preparedAt]
++          simp only [runPrefix, runPrefixWithNarrow, reading, checking, oldDecoded,
++            ← SourcePruningEnumerationAction.prepare_configured_eq, preparedAt]
+@@ -227 +228,2 @@ theorem prefix_checkpoint_complete
+-          simp only [runPrefix, reading, checking, oldDecoded, preparedAt, raw, encoded, adaptedAt, right]
++          simp only [runPrefix, runPrefixWithNarrow, reading, checking, oldDecoded,
++            ← SourcePruningEnumerationAction.prepare_configured_eq, preparedAt, raw, encoded, adaptedAt, right]
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationPrefixCompletion.lean b/lean/MicroCFTA/SourcePruningEnumerationPrefixCompletion.lean
+index 224256f75..2488a9df5 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationPrefixCompletion.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationPrefixCompletion.lean
+@@ -99 +99 @@ theorem prefix_complete
+-        simp only [runPrefix, reading, checking, adapted, Option.map_some]
++        simp only [runPrefix, runPrefixWithNarrow, reading, checking, adapted, Option.map_some]
+@@ -143 +143,2 @@ theorem prefix_complete
+-          simp only [runPrefix, reading, checking, oldDecoded, preparedAt]
++          simp only [runPrefix, runPrefixWithNarrow,
++            ← SourcePruningEnumerationAction.prepare_configured_eq, reading, checking, oldDecoded, preparedAt]
+@@ -210 +211,3 @@ theorem prefix_complete
+-          simp only [runPrefix, reading, checking, oldDecoded, preparedAt, raw, encoded, adaptedAt, right]
++          simp only [runPrefix, runPrefixWithNarrow,
++            ← SourcePruningEnumerationAction.prepare_configured_eq,
++            reading, checking, oldDecoded, preparedAt, raw, encoded, adaptedAt, right]
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationPrefixCoverage.lean b/lean/MicroCFTA/SourcePruningEnumerationPrefixCoverage.lean
+index ef247ae0e..08a578515 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationPrefixCoverage.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationPrefixCoverage.lean
+@@ -246 +246,2 @@ private theorem retained_action
+-  simp only [runPrefix, reading, checking, decoded, prepared] at actual
++  simp only [runPrefix, runPrefixWithNarrow,
++    ← SourcePruningEnumerationAction.prepare_configured_eq, reading, checking, decoded, prepared] at actual
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationPrefixIsolatedHistory.lean b/lean/MicroCFTA/SourcePruningEnumerationPrefixIsolatedHistory.lean
+index 328c66c42..fcfb0191e 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationPrefixIsolatedHistory.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationPrefixIsolatedHistory.lean
+@@ -53 +53,2 @@ private theorem retained_action_success
+-  simp only [runPrefix, reading, checking, decoded, prepared] at actual
++  simp only [runPrefix, runPrefixWithNarrow, reading, checking, decoded,
++    ← SourcePruningEnumerationAction.prepare_configured_eq, prepared] at actual
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationPrefixLanguage.lean b/lean/MicroCFTA/SourcePruningEnumerationPrefixLanguage.lean
+index 7f1db8cb2..b881c59cd 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationPrefixLanguage.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationPrefixLanguage.lean
+@@ -139 +139,2 @@ private theorem retained_action
+-  simp only [runPrefix, reading, checking, decoded, prepared] at actual
++  simp only [runPrefix, runPrefixWithNarrow, reading, checking, decoded,
++    ← SourcePruningEnumerationAction.prepare_configured_eq, prepared] at actual
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationPrefixMass.lean b/lean/MicroCFTA/SourcePruningEnumerationPrefixMass.lean
+index 5b04bb2d3..fcf6994d0 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationPrefixMass.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationPrefixMass.lean
+@@ -188 +188,2 @@ private theorem narrowed_raw
+-    simp only [runPrefix, reading, checking, decoded, prepared]
++    simp only [runPrefix, runPrefixWithNarrow, reading, checking, decoded,
++      ← SourcePruningEnumerationAction.prepare_configured_eq, prepared]
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationPrefixPaths.lean b/lean/MicroCFTA/SourcePruningEnumerationPrefixPaths.lean
+index b34c817ab..3c8640194 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationPrefixPaths.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationPrefixPaths.lean
+@@ -128 +128 @@ private theorem prefix_paths_complete
+-        simp only [runPrefix, reading, checking, adapted, Option.map_some]
++        simp only [runPrefix, runPrefixWithNarrow, reading, checking, adapted, Option.map_some]
+@@ -160 +160,2 @@ private theorem prefix_paths_complete
+-          simp only [runPrefix, reading, checking, oldDecoded, preparedAt]
++          simp only [runPrefix, runPrefixWithNarrow,
++            ← SourcePruningEnumerationAction.prepare_configured_eq, reading, checking, oldDecoded, preparedAt]
+@@ -215 +216,2 @@ private theorem prefix_paths_complete
+-          simp only [runPrefix, reading, checking, oldDecoded, preparedAt, raw, encoded, adaptedAt, right]
++          simp only [runPrefix, runPrefixWithNarrow,
++            ← SourcePruningEnumerationAction.prepare_configured_eq, reading, checking, oldDecoded, preparedAt, raw, encoded, adaptedAt, right]
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationPrefixProperHistory.lean b/lean/MicroCFTA/SourcePruningEnumerationPrefixProperHistory.lean
+index b668a7127..1a121d663 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationPrefixProperHistory.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationPrefixProperHistory.lean
+@@ -53 +53,2 @@ private theorem retained_action_success
+-  simp only [runPrefix, reading, checking, decoded, prepared] at actual
++  simp only [runPrefix, runPrefixWithNarrow,
++    ← SourcePruningEnumerationAction.prepare_configured_eq, reading, checking, decoded, prepared] at actual
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationPreparedFuel.lean b/lean/MicroCFTA/SourcePruningEnumerationPreparedFuel.lean
+index 3509c130f..71ca32452 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationPreparedFuel.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationPreparedFuel.lean
+@@ -33 +33 @@ theorem native_moreFuel
+-  unfold SourcePruningEnumerationAction.prepare at prepared ⊢
++  unfold SourcePruningEnumerationAction.prepare SourcePruningEnumerationAction.prepareWithNarrow at prepared ⊢
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationRawGuardNarrowing.lean b/lean/MicroCFTA/SourcePruningEnumerationRawGuardNarrowing.lean
+index 4f15c90df..223e514c3 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationRawGuardNarrowing.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationRawGuardNarrowing.lean
+@@ -95 +95 @@ theorem prepare_heap (P : NativeGuard → Prop) [DecidableEq (EdgeKey Symbol Nat
+-      simpa only [prepare, narrowed, MergedSourceComparison.Result.state] using retained
++      simpa only [prepare, prepareWithNarrow, narrowed, MergedSourceComparison.Result.state] using retained
+@@ -97 +97 @@ theorem prepare_heap (P : NativeGuard → Prop) [DecidableEq (EdgeKey Symbol Nat
+-      simpa only [prepare, narrowed, MergedSourceComparison.Result.state] using retained
++      simpa only [prepare, prepareWithNarrow, narrowed, MergedSourceComparison.Result.state] using retained
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationSelectedPrefixGuardHeap.lean b/lean/MicroCFTA/SourcePruningEnumerationSelectedPrefixGuardHeap.lean
+index 9b9cd44e2..4f8f955e6 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationSelectedPrefixGuardHeap.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationSelectedPrefixGuardHeap.lean
+@@ -40 +40 @@ theorem runPrefix_heap (P : Constraint → Prop) [DecidableEq (EdgeKey Symbol Co
+-  unfold runPrefix
++  unfold runPrefix runPrefixWithNarrow
+@@ -104,0 +105 @@ theorem runPrefix_heap (P : Constraint → Prop) [DecidableEq (EdgeKey Symbol Co
++                                          simp only [← SourcePruningEnumerationAction.prepare_configured_eq]
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationSelectedStep.lean b/lean/MicroCFTA/SourcePruningEnumerationSelectedStep.lean
+index 836a53c2b..9afca2ab3 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationSelectedStep.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationSelectedStep.lean
+@@ -42,3 +42,5 @@ variable [DecidableEq (EdgeKey Symbol Constraint)]
+-/-- Observe the selected prefix through Right recording without scanning ordinary siblings. -/
+-noncomputable def runPrefix
+-    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
++/-- Use the supplied narrowing operation in the same selected prefix. -/
++noncomputable def runPrefixWithNarrow
++    (narrow : Metadata Typing → Nat → Nat → Node →
++      InternedConstructorTemplates.State Symbol Constraint →
++      MergedSourceComparison.Result Symbol Constraint Node)
+@@ -65 +67 @@ noncomputable def runPrefix
+-              let prepared := SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
++              let prepared := SourcePruningEnumerationAction.prepareWithNarrow narrow metadata nativeFuel
+@@ -95,0 +98,26 @@ noncomputable def runPrefix
++/-- Observe the selected prefix through Right recording without scanning ordinary siblings. -/
++noncomputable def runPrefix
++    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
++    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
++    (stop : Option (Metadata Typing → Nat → Bool))
++    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
++    (readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv : Nat)
++    (caller : Caller width) (before : Cached) (queries : Queries) : Result width Typing :=
++  runPrefixWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
++    graph templates stop order metadata readFuel checkFuel nativeFuel representativeFuel
++    indexFuel callbackFuel uv caller before queries
++
++/-- The configured wrapper retains every actual prefix observation. -/
++theorem runPrefix_configured_eq
++    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
++    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
++    (stop : Option (Metadata Typing → Nat → Bool))
++    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
++    (readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv : Nat)
++    (caller : Caller width) (before : Cached) (queries : Queries) :
++    runPrefix holeKey fits admits graph templates stop order metadata readFuel checkFuel nativeFuel
++        representativeFuel indexFuel callbackFuel uv caller before queries =
++      runPrefixWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
++        graph templates stop order metadata readFuel checkFuel nativeFuel
++        representativeFuel indexFuel callbackFuel uv caller before queries := rfl
++
+@@ -108 +136 @@ theorem prefix_no_ordinary
+-  unfold runPrefix
++  unfold runPrefix runPrefixWithNarrow
+@@ -159 +187,2 @@ theorem prefix_no_ordinary
+-                                          generalize SourcePruningEnumerationAction.prepare holeKey fits admits metadata
++                                          generalize SourcePruningEnumerationAction.prepareWithNarrow
++                                            (SourcePruningOuterNarrow.narrow holeKey fits admits) metadata
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationSelectedStepCompletion.lean b/lean/MicroCFTA/SourcePruningEnumerationSelectedStepCompletion.lean
+index 61083a6f6..f5f11881b 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationSelectedStepCompletion.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationSelectedStepCompletion.lean
+@@ -46,3 +46,6 @@ theorem prepared_action
+-  | node entry edges depth free => simp only [SourcePruningEnumerationAction.prepare, narrowed, encoded]
+-  | union entry members depth free => simp only [SourcePruningEnumerationAction.prepare, narrowed, encoded]
+-  | mu entry body depth ordinary => simp only [SourcePruningEnumerationAction.prepare, narrowed, encoded]
++  | node entry edges depth free => simp only [SourcePruningEnumerationAction.prepare,
++      SourcePruningEnumerationAction.prepareWithNarrow, narrowed, encoded]
++  | union entry members depth free => simp only [SourcePruningEnumerationAction.prepare,
++      SourcePruningEnumerationAction.prepareWithNarrow, narrowed, encoded]
++  | mu entry body depth ordinary => simp only [SourcePruningEnumerationAction.prepare,
++      SourcePruningEnumerationAction.prepareWithNarrow, narrowed, encoded]
+@@ -141,2 +144,2 @@ theorem run_eq_legacy
+-  unfold run runPrefix
+-  dsimp only
++  unfold run runPrefix runPrefixWithNarrow
++  simp only [← SourcePruningEnumerationAction.prepare_configured_eq]
+@@ -248 +251 @@ theorem run_parked
+-  simp only [run, runPrefix, read, check, adapted, Option.map_some, finish]
++  simp only [run_eq_legacy, read, check, adapted, Option.map_some]
+@@ -269 +272 @@ theorem run_empty
+-  simp only [run, runPrefix, read, check, decoded, prepared, finish]
++  simp only [run_eq_legacy, read, check, decoded, prepared]
+@@ -304 +307 @@ theorem run_narrowed
+-  simp only [run, runPrefix, read, check, decoded, prepared, raw, encoded, adapted, right, finish]
++  simp only [run_eq_legacy, read, check, decoded, prepared, raw, encoded, adapted, right]
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean b/lean/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean
+index c690f6303..eab08f375 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean
+@@ -3555 +3555,3 @@ private theorem eager_expansion_resources
+-      rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild, observed]
++      rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
++        SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow,
++        ← SourcePruningEnumerationSelectedStep.runPrefix_configured_eq, observed]
+@@ -3580 +3582,3 @@ private theorem eager_expansion_resources
+-      rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild, observed]
++      rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
++        SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow,
++        ← SourcePruningEnumerationSelectedStep.runPrefix_configured_eq, observed]
+@@ -3603 +3607,3 @@ private theorem eager_expansion_resources
+-      rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild, (phase extra).1]
++      rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
++        SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow,
++        ← SourcePruningEnumerationSelectedStep.runPrefix_configured_eq, (phase extra).1]
+@@ -3643 +3649,3 @@ private theorem eager_expansion_resources
+-    rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild, currentPrefix]
++    rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
++      SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow,
++      ← SourcePruningEnumerationSelectedStep.runPrefix_configured_eq, currentPrefix]
+@@ -3644,0 +3653 @@ private theorem eager_expansion_resources
++    dsimp only [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild] at actual
+@@ -3677 +3686,2 @@ private theorem eager_resume_complete
+-          simpa only [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild] using running extra
++          simpa only [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
++            SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow] using running extra
+@@ -3686 +3696,2 @@ private theorem eager_resume_complete
+-              simpa only [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild] using running extra
++              simpa only [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
++                SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow] using running extra
+@@ -3693 +3704,2 @@ private theorem eager_resume_complete
+-              simpa only [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild] using running extra
++              simpa only [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
++                SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow] using running extra
+@@ -7715 +7727,3 @@ private theorem eager_program_expansion_resources
+-      rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild, observed]
++      rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
++        SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow,
++        ← SourcePruningEnumerationSelectedStep.runPrefix_configured_eq, observed]
+@@ -7740 +7754,3 @@ private theorem eager_program_expansion_resources
+-      rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild, observed]
++      rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
++        SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow,
++        ← SourcePruningEnumerationSelectedStep.runPrefix_configured_eq, observed]
+@@ -7766 +7782,3 @@ private theorem eager_program_expansion_resources
+-      rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild, (phase extra).1]
++      rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
++        SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow,
++        ← SourcePruningEnumerationSelectedStep.runPrefix_configured_eq, (phase extra).1]
+@@ -7812 +7830,3 @@ private theorem eager_program_expansion_resources
+-    rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild, currentPrefix]
++    rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
++      SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow,
++      ← SourcePruningEnumerationSelectedStep.runPrefix_configured_eq, currentPrefix]
+@@ -7813,0 +7834 @@ private theorem eager_program_expansion_resources
++    dsimp only [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild] at actual
+@@ -7919 +7940,3 @@ private theorem eager_program_expansion_resources_with_isolated
+-      rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild, observed]
++      rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
++        SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow,
++        ← SourcePruningEnumerationSelectedStep.runPrefix_configured_eq, observed]
+@@ -7961 +7984,3 @@ private theorem eager_program_expansion_resources_with_isolated
+-      rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild, observed]
++      rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
++        SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow,
++        ← SourcePruningEnumerationSelectedStep.runPrefix_configured_eq, observed]
+@@ -7987 +8012,3 @@ private theorem eager_program_expansion_resources_with_isolated
+-      rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild, (phase extra).1]
++      rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
++        SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow,
++        ← SourcePruningEnumerationSelectedStep.runPrefix_configured_eq, (phase extra).1]
+@@ -8056 +8083,3 @@ private theorem eager_program_expansion_resources_with_isolated
+-    rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild, currentPrefix]
++    rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
++      SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow,
++      ← SourcePruningEnumerationSelectedStep.runPrefix_configured_eq, currentPrefix]
+@@ -8057,0 +8087 @@ private theorem eager_program_expansion_resources_with_isolated
++    dsimp only [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild] at actual
+@@ -8092 +8122,2 @@ private theorem eager_program_resume_complete
+-          simpa only [decision, SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild] using running extra
++          simpa only [decision, SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
++            SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow] using running extra
+@@ -8102 +8133,2 @@ private theorem eager_program_resume_complete
+-              simpa only [decision, SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild] using running extra
++              simpa only [decision, SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
++                SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow] using running extra
+@@ -8110 +8142,2 @@ private theorem eager_program_resume_complete
+-              simpa only [decision, SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild] using running extra
++              simpa only [decision, SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
++                SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow] using running extra
+@@ -8142 +8175,2 @@ private theorem eager_program_resume_with_isolated_complete
+-          simpa only [decision, SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild] using running extra
++          simpa only [decision, SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
++            SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow] using running extra
+@@ -8152 +8186,2 @@ private theorem eager_program_resume_with_isolated_complete
+-              simpa only [decision, SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild] using running extra
++              simpa only [decision, SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
++                SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow] using running extra
+@@ -8160 +8195,2 @@ private theorem eager_program_resume_with_isolated_complete
+-              simpa only [decision, SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild] using running extra
++              simpa only [decision, SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild,
++                SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow] using running extra
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationSharedPrefixTargetWork.lean b/lean/MicroCFTA/SourcePruningEnumerationSharedPrefixTargetWork.lean
+index b3d51d2a3..57a89fdc4 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationSharedPrefixTargetWork.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationSharedPrefixTargetWork.lean
+@@ -153 +153,2 @@ private theorem narrowed_raw
+-    simp only [runPrefix, reading, checking, decoded, prepared]
++    simp only [runPrefix, SourcePruningEnumerationSelectedStep.runPrefixWithNarrow,
++      ← SourcePruningEnumerationAction.prepare_configured_eq, reading, checking, decoded, prepared]
+@@ -287 +288,3 @@ theorem retained_work_target_debit
+-              simp only [runPrefix, reading, checking, decoded, preparedRun, execution, encoded]
++              simp only [runPrefix, SourcePruningEnumerationSelectedStep.runPrefixWithNarrow,
++                ← SourcePruningEnumerationAction.prepare_configured_eq, reading, checking, decoded,
++                preparedRun, execution, encoded]
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationSharedPrefixWork.lean b/lean/MicroCFTA/SourcePruningEnumerationSharedPrefixWork.lean
+index b43d394cb..daefc6c21 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationSharedPrefixWork.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationSharedPrefixWork.lean
+@@ -291 +291,2 @@ private theorem narrowed_raw
+-    simp only [runPrefix, reading, checking, decoded, prepared]
++    simp only [runPrefix, SourcePruningEnumerationSelectedStep.runPrefixWithNarrow,
++      ← SourcePruningEnumerationAction.prepare_configured_eq, reading, checking, decoded, prepared]
+@@ -423 +424,2 @@ theorem retained_work
+-            simpa only [runPrefix, reading, checking] using fields
++            simpa only [runPrefix, SourcePruningEnumerationSelectedStep.runPrefixWithNarrow,
++              reading, checking] using fields
+@@ -470 +472,3 @@ theorem retained_work
+-              simp only [runPrefix, reading, checking, decoded, preparedRun, execution, encoded]
++              simp only [runPrefix, SourcePruningEnumerationSelectedStep.runPrefixWithNarrow,
++                ← SourcePruningEnumerationAction.prepare_configured_eq, reading, checking, decoded,
++                preparedRun, execution, encoded]
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationSharedPreparedCounterPrimitives.lean b/lean/MicroCFTA/SourcePruningEnumerationSharedPreparedCounterPrimitives.lean
+index 9474fcfbc..587a51bc2 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationSharedPreparedCounterPrimitives.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationSharedPreparedCounterPrimitives.lean
+@@ -241,0 +242 @@ private theorem action_counter {Typing Key : Type}
++      SourcePruningEnumerationAction.prepareWithNarrow
+@@ -282 +283,2 @@ theorem prefix_counter {Typing Key : Type} {width : Nat}
+-  dsimp only
++    SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
++  simp only [← SourcePruningEnumerationAction.prepare_configured_eq]
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.lean b/lean/MicroCFTA/SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.lean
+index a7fd8e302..7efeb877f 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.lean
+@@ -38,2 +38,2 @@ variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [Decidab
+-/-- Execute the actual selected prefix and pass the same child operation through every restart. -/
+-noncomputable def resumeWithChild
++/-- Pass the same narrowing and child operations through every actual restart. -/
++noncomputable def resumeWithNarrow
+@@ -41 +41,3 @@ noncomputable def resumeWithChild
+-    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
++    (narrow : Metadata Typing → Nat → Nat → Node →
++      InternedConstructorTemplates.State Symbol Constraint →
++      MergedSourceComparison.Result Symbol Constraint Node)
+@@ -53 +55 @@ noncomputable def resumeWithChild
+-      let observed := SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates
++      let observed := SourcePruningEnumerationSelectedStep.runPrefixWithNarrow narrow graph templates
+@@ -58 +60 @@ noncomputable def resumeWithChild
+-          resumeWithChild child holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel fuel
++          resumeWithNarrow child narrow graph templates checkEmpty edgesOf stop order workFuel fuel
+@@ -65 +67 @@ noncomputable def resumeWithChild
+-            (continueWith (resumeWithChild child holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel fuel)
++            (continueWith (resumeWithNarrow child narrow graph templates checkEmpty edgesOf stop order workFuel fuel)
+@@ -74,0 +77,42 @@ noncomputable def resumeWithChild
++/-- Execute the actual selected prefix and pass the same child operation through every restart. -/
++noncomputable def resumeWithChild
++    (child : Visitor)
++    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
++    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
++    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
++    (stop : Option (Metadata Typing → Nat → Bool))
++    (order : Metadata Typing → List Nat → Option Nat) (workFuel : Nat) :
++    Nat → Metadata Typing → Caller width → Queries → Cached → Option Next → Result :=
++  resumeWithNarrow child (SourcePruningOuterNarrow.narrow holeKey fits admits)
++    graph templates checkEmpty edgesOf stop order workFuel
++
++/-- The configured wrapper retains the complete recursive observation. -/
++theorem resumeWithChild_configured_eq
++    (child : Visitor)
++    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
++    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
++    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
++    (stop : Option (Metadata Typing → Nat → Bool))
++    (order : Metadata Typing → List Nat → Option Nat) (workFuel : Nat)
++    (recursiveFuel : Nat) (metadata : Metadata Typing) (caller : Caller width)
++    (queries : Queries) (before : Cached) (decision : Option Next) :
++    resumeWithChild child holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel
++        recursiveFuel metadata caller queries before decision =
++      resumeWithNarrow child (SourcePruningOuterNarrow.narrow holeKey fits admits)
++        graph templates checkEmpty edgesOf stop order workFuel
++        recursiveFuel metadata caller queries before decision := rfl
++
++/-- Start the same worker with the supplied narrowing and child operations. -/
++noncomputable def runWithNarrow
++    (child : Visitor)
++    (narrow : Metadata Typing → Nat → Nat → Node →
++      InternedConstructorTemplates.State Symbol Constraint →
++      MergedSourceComparison.Result Symbol Constraint Node)
++    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
++    (checkEmpty : Bool) (edgesOf : Node → List Edge)
++    (stop : Option (Metadata Typing → Nat → Bool))
++    (order : Metadata Typing → List Nat → Option Nat) (workFuel recursiveFuel : Nat)
++    (metadata : Metadata Typing) (caller : Caller width) (queries : Queries) (before : Cached) : Result :=
++  resumeWithNarrow child narrow graph templates checkEmpty edgesOf stop order workFuel recursiveFuel
++    metadata caller queries before (SourcePruningEnumerationRestart.decision stop order metadata before)
++
+@@ -84,2 +128,30 @@ noncomputable def runWithChild
+-  resumeWithChild child holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel recursiveFuel
+-    metadata caller queries before (SourcePruningEnumerationRestart.decision stop order metadata before)
++  runWithNarrow child (SourcePruningOuterNarrow.narrow holeKey fits admits)
++    graph templates checkEmpty edgesOf stop order workFuel recursiveFuel metadata caller queries before
++
++/-- The configured entry retains the same decision and entire result. -/
++theorem runWithChild_configured_eq
++    (child : Visitor)
++    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
++    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
++    (checkEmpty : Bool) (edgesOf : Node → List Edge)
++    (stop : Option (Metadata Typing → Nat → Bool))
++    (order : Metadata Typing → List Nat → Option Nat) (workFuel recursiveFuel : Nat)
++    (metadata : Metadata Typing) (caller : Caller width) (queries : Queries) (before : Cached) :
++    runWithChild child holeKey fits admits graph templates checkEmpty edgesOf stop order
++        workFuel recursiveFuel metadata caller queries before =
++      runWithNarrow child (SourcePruningOuterNarrow.narrow holeKey fits admits)
++        graph templates checkEmpty edgesOf stop order
++        workFuel recursiveFuel metadata caller queries before := rfl
++
++/-- Install the same eager children with the supplied native narrowing operation. -/
++noncomputable def runEagerWithNarrow
++    (narrow : Metadata Typing → Nat → Nat → Node →
++      InternedConstructorTemplates.State Symbol Constraint →
++      MergedSourceComparison.Result Symbol Constraint Node)
++    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
++    (checkEmpty : Bool) (edgesOf : Node → List Edge)
++    (stop : Option (Metadata Typing → Nat → Bool))
++    (order : Metadata Typing → List Nat → Option Nat) (workFuel recursiveFuel : Nat)
++    (metadata : Metadata Typing) (caller : Caller width) (queries : Queries) (before : Cached) : Result :=
++  runWithNarrow (eagerChild checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
++    narrow graph templates checkEmpty edgesOf stop order workFuel recursiveFuel metadata caller queries before
+@@ -95,2 +167,16 @@ noncomputable def runEager
+-  runWithChild (eagerChild checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
+-    holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel recursiveFuel metadata caller queries before
++  runEagerWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
++    graph templates checkEmpty edgesOf stop order workFuel recursiveFuel metadata caller queries before
++
++/-- The configured eager entry retains the same complete bounded result. -/
++theorem runEager_configured_eq
++    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
++    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
++    (checkEmpty : Bool) (edgesOf : Node → List Edge)
++    (stop : Option (Metadata Typing → Nat → Bool))
++    (order : Metadata Typing → List Nat → Option Nat) (workFuel recursiveFuel : Nat)
++    (metadata : Metadata Typing) (caller : Caller width) (queries : Queries) (before : Cached) :
++    runEager holeKey fits admits graph templates checkEmpty edgesOf stop order
++        workFuel recursiveFuel metadata caller queries before =
++      runEagerWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
++        graph templates checkEmpty edgesOf stop order
++        workFuel recursiveFuel metadata caller queries before := rfl
+@@ -119,2 +205,3 @@ theorem resumeWithChild_shallow
+-          resumeWithChild (width := width) (shallowVisit checkEmpty workFuel workFuel workFuel workFuel workFuel)
+-              holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel fuel =
++          resumeWithNarrow (width := width) (shallowVisit checkEmpty workFuel workFuel workFuel workFuel workFuel)
++              (SourcePruningOuterNarrow.narrow holeKey fits admits)
++              graph templates checkEmpty edgesOf stop order workFuel fuel =
+@@ -131 +218 @@ theorem resumeWithChild_shallow
+-              rw [resumeWithChild, SourcePruningEnumerationSharedPreparedRecursive.resume]
++              rw [resumeWithChild, resumeWithNarrow, SourcePruningEnumerationSharedPreparedRecursive.resume]
+@@ -147 +234 @@ theorem runWithChild_shallow
+-  unfold runWithChild SourcePruningEnumerationSharedPreparedRecursive.run
++  unfold runWithChild runWithNarrow SourcePruningEnumerationSharedPreparedRecursive.run
+@@ -198 +285,6 @@ theorem resume_prepared
+-  simp only [resumeWithChild, observedPrefix]
++  have actualPrefix : SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
++      (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates stop order
++      metadata workFuel workFuel workFuel workFuel workFuel workFuel uv caller before queries =
++      .narrowed checked narrowed reached saved (some [.ok ((), actionCore)]) (some after)
++        (some [.ok ((false, updated), core)]) none := observedPrefix
++  simp only [resumeWithChild, resumeWithNarrow, actualPrefix]
+diff --git a/lean/MicroCFTA/SourcePruningNarrowControl.lean b/lean/MicroCFTA/SourcePruningNarrowControl.lean
+index 928b06afe..ea6de43d9 100644
+--- a/lean/MicroCFTA/SourcePruningNarrowControl.lean
++++ b/lean/MicroCFTA/SourcePruningNarrowControl.lean
+@@ -154 +154 @@ theorem prepare_of_normal [DecidableEq (EdgeKey Symbol Guard)]
+-      simp only [prepare, narrowed]
++      simp only [prepare, prepareWithNarrow, narrowed]
+@@ -163 +163 @@ theorem prepare_of_normal [DecidableEq (EdgeKey Symbol Guard)]
+-      simp only [prepare, narrowed, encoded, ite_true]
++      simp only [prepare, prepareWithNarrow, narrowed, encoded, ite_true]
+diff --git a/lean/MicroCFTA/SourcePruningNarrowReturnedControl.lean b/lean/MicroCFTA/SourcePruningNarrowReturnedControl.lean
+index fdd4b5530..c538fd52f 100644
+--- a/lean/MicroCFTA/SourcePruningNarrowReturnedControl.lean
++++ b/lean/MicroCFTA/SourcePruningNarrowReturnedControl.lean
+@@ -90 +90 @@ theorem prepare_changed_returned_control [DecidableEq (EdgeKey Symbol Guard)]
+-        simp only [prepare, query] at returned
++        simp only [prepare, prepareWithNarrow, query] at returned
+@@ -93 +93 @@ theorem prepare_changed_returned_control [DecidableEq (EdgeKey Symbol Guard)]
+-        simp only [prepare, query] at returned
++        simp only [prepare, prepareWithNarrow, query] at returned
+diff --git a/lean/MicroCFTA/SourcePruningNarrowSlotTransport.lean b/lean/MicroCFTA/SourcePruningNarrowSlotTransport.lean
+index 12ba7add6..cb29c73fe 100644
+--- a/lean/MicroCFTA/SourcePruningNarrowSlotTransport.lean
++++ b/lean/MicroCFTA/SourcePruningNarrowSlotTransport.lean
+@@ -110 +110 @@ theorem prepare_changed_success_stores_normal [DecidableEq (EdgeKey Symbol Nativ
+-        simp only [prepare, narrowed] at prepared
++        simp only [prepare, prepareWithNarrow, narrowed] at prepared
+@@ -113 +113 @@ theorem prepare_changed_success_stores_normal [DecidableEq (EdgeKey Symbol Nativ
+-        simp only [prepare, narrowed] at prepared
++        simp only [prepare, prepareWithNarrow, narrowed] at prepared
+diff --git a/lean/MicroCFTA/SourceSynthesisCurrentInitialPrefixOrigin.lean b/lean/MicroCFTA/SourceSynthesisCurrentInitialPrefixOrigin.lean
+index c825af714..e91bc0c5e 100644
+--- a/lean/MicroCFTA/SourceSynthesisCurrentInitialPrefixOrigin.lean
++++ b/lean/MicroCFTA/SourceSynthesisCurrentInitialPrefixOrigin.lean
+@@ -95 +95 @@ theorem initial_prefix_narrowed_rows
+-    unfold SourcePruningEnumerationAction.prepare at prepared
++    unfold SourcePruningEnumerationAction.prepare SourcePruningEnumerationAction.prepareWithNarrow at prepared
+@@ -109,2 +109,2 @@ theorem initial_prefix_narrowed_rows
+-  unfold SourcePruningEnumerationSelectedStep.runPrefix
+-  dsimp only
++  unfold SourcePruningEnumerationSelectedStep.runPrefix SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
++  simp only [← SourcePruningEnumerationAction.prepare_configured_eq]
+diff --git a/lean/MicroCFTA/SourceSynthesisCurrentInitialPreparationOrigin.lean b/lean/MicroCFTA/SourceSynthesisCurrentInitialPreparationOrigin.lean
+index bf8ddc437..44406718c 100644
+--- a/lean/MicroCFTA/SourceSynthesisCurrentInitialPreparationOrigin.lean
++++ b/lean/MicroCFTA/SourceSynthesisCurrentInitialPreparationOrigin.lean
+@@ -200 +200 @@ theorem initial_prefix_preparation_rows
+-      unfold SourcePruningEnumerationSelectedStep.runPrefix
++      unfold SourcePruningEnumerationSelectedStep.runPrefix SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
+@@ -204 +204 @@ theorem initial_prefix_preparation_rows
+-      simp only [reading, checking, decoded, prepared]
++      simp only [reading, checking, decoded, ← SourcePruningEnumerationAction.prepare_configured_eq, prepared]
+@@ -247 +247 @@ theorem initial_prefix_preparation_rows
+-      simp only [SourcePruningEnumerationAction.prepare, native] at emptyPrepared
++      simp only [SourcePruningEnumerationAction.prepare, SourcePruningEnumerationAction.prepareWithNarrow, native] at emptyPrepared
+@@ -324 +324 @@ theorem initial_prefix_preparation_rows
+-    unfold SourcePruningEnumerationSelectedStep.runPrefix at actualPrefix
++    unfold SourcePruningEnumerationSelectedStep.runPrefix SourcePruningEnumerationSelectedStep.runPrefixWithNarrow at actualPrefix
+@@ -328 +328 @@ theorem initial_prefix_preparation_rows
+-    simp only [reading, checking, decoded, prepared, executedRaw, encoded] at actualPrefix
++    simp only [reading, checking, decoded, ← SourcePruningEnumerationAction.prepare_configured_eq, prepared, executedRaw, encoded] at actualPrefix
+diff --git a/lean/MicroCFTA/SourceSynthesisProgramRolesSharedDriver.lean b/lean/MicroCFTA/SourceSynthesisProgramRolesSharedDriver.lean
+index 58a7c65e1..ff7b38b73 100644
+--- a/lean/MicroCFTA/SourceSynthesisProgramRolesSharedDriver.lean
++++ b/lean/MicroCFTA/SourceSynthesisProgramRolesSharedDriver.lean
+@@ -330 +330,3 @@ private theorem observed_prefix_action
+-    simp only [SourcePruningEnumerationSelectedStep.runPrefix, reading, checking, decoded, prepared]
++    simp only [SourcePruningEnumerationSelectedStep.runPrefix,
++      SourcePruningEnumerationSelectedStep.runPrefixWithNarrow,
++      ← SourcePruningEnumerationAction.prepare_configured_eq, reading, checking, decoded, prepared]
+diff --git a/lean/MicroCFTA/SourceSynthesisSharedEagerOutputControl.lean b/lean/MicroCFTA/SourceSynthesisSharedEagerOutputControl.lean
+index 818010450..7ce1c789d 100644
+--- a/lean/MicroCFTA/SourceSynthesisSharedEagerOutputControl.lean
++++ b/lean/MicroCFTA/SourceSynthesisSharedEagerOutputControl.lean
+@@ -245,0 +246 @@ private theorem control_prefix
++    SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
+@@ -429 +430,2 @@ private theorem control_resume
+-        dsimp only [resumeWithChild] at member
++        dsimp only [resumeWithChild, resumeWithNarrow] at member
++        simp only [← SourcePruningEnumerationSelectedStep.runPrefix_configured_eq] at member
+diff --git a/lean/MicroCFTA/SourceSynthesisSharedPreparedOutputControl.lean b/lean/MicroCFTA/SourceSynthesisSharedPreparedOutputControl.lean
+index 5f12bd293..b35ef4c18 100644
+--- a/lean/MicroCFTA/SourceSynthesisSharedPreparedOutputControl.lean
++++ b/lean/MicroCFTA/SourceSynthesisSharedPreparedOutputControl.lean
+@@ -147,0 +148 @@ private theorem control_prefix
++    SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
