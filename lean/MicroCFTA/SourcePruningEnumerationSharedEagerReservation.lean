@@ -10484,3 +10484,138 @@ private theorem identity_actual_context_prefix_resources
 
 end ActualContextPrefixResources
 end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+section ActualContextCallbackPlanning
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationSharedSelectedContinuations
+open SourcePruningEnumerationSharedIncomingReservation (Seed advance)
+open SourceCurrentAllocatedNativeResourceForecast (Le)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+variable {bits : Nat}
+local notation "Fold" => NativeContinuations.Result
+  (SourcePruningEnumerationSharedPreparedRecursive.Output (bits + 2) Unit)
+  (SourcePruningEnumerationSharedPreparedRecursive.Failure (bits + 2) Unit) (bits + 2)
+local notation "Done" => List Fragment → Caller (bits + 2) → Queries → Cached → Fold
+local notation "Stopped" => List Fragment → ChildDispatch.Observation (bits + 2) → Option Cached → Fold
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+/-- Retain the captured own receipt and the exact actual done closure. -/
+private theorem identity_actual_tuple_done_source
+    (graph : Graph Symbol Constraint) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint)) (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Unit) (uv : Nat) (capturedCaller : Caller (bits + 2))
+    (capturedQueries : Queries) (capturedBefore : Cached) (scs : List Suspended)
+    (edge : EdgeValue Symbol Constraint) (residual : Option Constraint) (capturedOwn : Cached)
+    (staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)))
+    (initialSeed : Seed) (initialMass : Nat)
+    (completedPrefix : List Fragment) (inputs : List (Node × List Suspended))
+    (caller : Caller (bits + 2)) (before : Cached) (queries : Queries)
+    (seed : Seed) (mass : Nat) (done : Done) (stopped : Stopped)
+    (context : IdentityActualTupleContext graph checkEmpty edgesOf recursiveDepth workFuel metadata uv
+      capturedCaller capturedQueries capturedBefore scs edge residual capturedOwn staged initialSeed initialMass
+      completedPrefix inputs caller before queries seed mass done stopped) :
+    SourcePruningEnumerationCachedOwn.prepare capturedCaller.checked.native.machine.heap scs edge capturedBefore =
+      some [((edge.entry.key.symbol, staged, residual), capturedOwn)] ∧
+    ∀ (tail : List Fragment) (reached : Caller (bits + 2)) (saved : Queries) (after : Cached),
+      done tail reached saved after =
+        let fragment : Fragment := .node edge.entry.key.symbol (completedPrefix ++ tail)
+        let middle := SelectedEdge.finish residual fragment after
+        SourcePruningEnumerationSharedReceiptContinuation.run
+          (SourcePruningEnumerationSharedPreparedRecursive.continueWith
+            (SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow
+              (Typing := Unit) (width := bits + 2)
+              (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty
+                workFuel workFuel workFuel workFuel workFuel edgesOf)
+              (fun _ _ _ node state => .done node state) graph [] checkEmpty edgesOf
+              none (fun _ _ => none) workFuel recursiveDepth)
+            graph [] none (fun _ _ => none) workFuel metadata uv)
+          capturedCaller capturedQueries
+          (some (match SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap
+              workFuel uv fragment middle with
+            | some finished => .complete fragment reached saved finished
+            | none => .finalizeStopped fragment reached saved middle)) := by
+  induction context with
+  | captured hook source prepared =>
+      refine ⟨prepared, ?_⟩
+      intro tail reached saved after
+      rw [source]
+      cases observed : SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap workFuel uv
+        (.node edge.entry.key.symbol tail) (SelectedEdge.finish residual (.node edge.entry.key.symbol tail) after) <;>
+          simp only [List.nil_append, observed]
+  | @fallbackTail completedPrefix _caller _before _queries _seed _mass _done _stopped
+      _bucket _incoming _rest fragment _returned _reached _saved _after _outer _waiting
+      _origin _fallback _observed ih =>
+      refine ⟨ih.1, ?_⟩
+      intro tail reached saved after
+      simpa only [List.append_assoc, List.singleton_append] using ih.2 (fragment :: tail) reached saved after
+  | @ordinaryEmptyTail completedPrefix _caller _before _queries _seed _mass _done _stopped
+      _bucket _rest _parentEntry _rows _depth _free selectedRow _alternatives _rowResidual _rowOwn
+      _origin _ordinary _first _prepared ih =>
+      refine ⟨ih.1, ?_⟩
+      intro tail reached saved after
+      simpa only [List.append_assoc, List.singleton_append] using
+        ih.2 (.node selectedRow.entry.key.symbol [] :: tail) reached saved after
+
+/-- An actual empty tail derives its callback padding, admission and enclosing forecast. -/
+private theorem identity_actual_empty_tail_callback_plan
+    (graph : Graph Symbol Constraint) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint)) (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Unit) (uv : Nat) (capturedCaller : Caller (bits + 2))
+    (capturedQueries : Queries) (capturedBefore : Cached) (scs : List Suspended)
+    (edge : EdgeValue Symbol Constraint) (residual : Option Constraint) (capturedOwn : Cached)
+    (staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)))
+    (initialSeed : Seed) (initialMass limit own height count bound : Nat)
+    (bounded : ∀ child bucket, (child, bucket) ∈ staged.map (fun input => (input.1, input.2.1)) →
+      bucket.length ≤ bound)
+    (counted : staged.length ≤ count)
+    (reserved : tupleReserved (nodePlan limit own height) (nodeReserved bits limit own height)
+      count bound initialMass (fun retained current => eagerFinal recursiveDepth current retained)
+      (fun retained current => eagerReserved bits recursiveDepth current retained) initialSeed)
+    (completedPrefix : List Fragment) (caller : Caller (bits + 2))
+    (before : Cached) (queries : Queries) (seed : Seed) (mass : Nat) (done : Done) (stopped : Stopped)
+    (context : IdentityActualTupleContext graph checkEmpty edgesOf recursiveDepth workFuel metadata uv
+      capturedCaller capturedQueries capturedBefore scs edge residual capturedOwn staged initialSeed initialMass
+      completedPrefix [] caller before queries seed mass done stopped) :
+    ∃ consumed,
+      seed = advance initialSeed consumed ∧
+      consumed ≤ count * (bound + 1) ∧
+      mass ≤ initialMass + count * bound ∧
+      eagerReserved bits recursiveDepth (advance initialSeed (count * (bound + 1)))
+        (initialMass + count * bound) ∧
+      Le (eagerFinal recursiveDepth (advance initialSeed (count * (bound + 1)))
+          (initialMass + count * bound)).2
+        (tuplePlan (nodePlan limit own height) count bound initialMass
+          (fun retained current => eagerFinal recursiveDepth current retained) initialSeed).2 ∧
+      (eagerFinal recursiveDepth (advance initialSeed (count * (bound + 1)))
+          (initialMass + count * bound)).1 ⊆
+        (tuplePlan (nodePlan limit own height) count bound initialMass
+          (fun retained current => eagerFinal recursiveDepth current retained) initialSeed).1 := by
+  obtain ⟨consumed, seedAt, paid, retainedMass, lengths, _members⟩ :=
+    identity_actual_tuple_prefix_costs graph checkEmpty edgesOf recursiveDepth workFuel metadata uv
+      capturedCaller capturedQueries capturedBefore scs edge residual capturedOwn staged initialSeed
+      initialMass bound bounded completedPrefix [] caller before queries seed mass done stopped context
+  have prefixCount : completedPrefix.length ≤ count := by
+    simp only [List.length_nil, Nat.add_zero] at lengths
+    omega
+  have queryCount := Nat.mul_le_mul_right (bound + 1) prefixCount
+  have paddedMass := Nat.mul_le_mul_right bound prefixCount
+  have callbackReserved := tupleReserved_first_callback bits limit own height count bound initialMass
+    (fun retained current => eagerFinal recursiveDepth current retained)
+    (fun retained current => eagerReserved bits recursiveDepth current retained) initialSeed reserved
+  have included := first_callback_le_tuple_of_growth limit own height count bound initialMass
+    (fun retained current => eagerFinal recursiveDepth current retained)
+    (fun retained current => eagerFinal_ge recursiveDepth current retained) initialSeed
+  exact ⟨consumed, seedAt, Nat.le_trans paid queryCount,
+    Nat.le_trans retainedMass (Nat.add_le_add_left paddedMass initialMass), callbackReserved, included.1, included.2⟩
+
+end ActualContextCallbackPlanning
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
