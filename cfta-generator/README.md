@@ -573,6 +573,45 @@ scorer <- cachedScorer (modelScorer model)
     guide Greedy limits MaskOnly scorer emptyMaskCache (completionsMask completions)
 ```
 
+### The mask of a text
+
+A language model writes text, not the tokens of a term.
+`Data.CFTA.Mask.Text` gives the mask of a prefix of a text. A
+`Linearization` gives the texts around the children of each symbol, for
+example `["", "+", ""]` for the infix operator `+`, and `linearize` gives the
+text of a term. `textMask` takes the mask of the terms at the empty prefix and
+gives the mask of the texts: the characters that can come next, and the end
+token `EndOfText`. It reads the mask of the terms, so the constraints and the
+solver of the language stay. A text can be a whole term and can also
+continue, so the scorer decides the end. The probability of a character is
+exact under the weights of the completions: the weight of the terms whose
+text starts with the prefix and the character, divided by the weight of the
+terms whose text starts with the prefix. `readText` gives the terms of a text, or the
+place, the `Refusal`, and the offered tokens of the first refused token. The
+same `guide` searches the texts.
+
+In the expressions of the tests, the two children of a sum are equal
+(`Data.CFTA.Gen.ExpressionLanguage`):
+
+```haskell
+let texts = textMask expressionTexts (completionsMask equalCompletions)
+readText texts "a+a*b"
+-- Right [the term *(+(a, a), b)]
+readText texts "a+b"
+-- Left (TextError {textErrorPlace = 2, textErrorRefusal = TokenRejected, textErrorExpected = [Character 'a']})
+```
+
+After `a+`, the right child of the sum must be `a`, so the refusal of `b` is
+at the place 2. A context-free grammar of the texts offers `b` there, because
+it does not keep the equality.
+
+The mask of a text prefix holds its readings: prefixes of term tokens, each
+with a place in its text. A symbol whose first text is empty, such as an infix
+operator, gives one reading for each depth of the left spine and each choice
+of the operators. So
+the cost of the mask grows fast with the size bound. A call notation, a
+prefix notation, or brackets around each child do not have this cost.
+
 ### Check a definitional extension
 
 A definitional extension adds constructors to a language, and a template

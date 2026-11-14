@@ -25,11 +25,18 @@ language to a context-free grammar drops it. With a constraint, the
 completions of a prefix are a list of terms. The exclusion keeps the
 automaton ordinary: it has no constraint, so the completions read the size
 index.
+
+'expressionTexts' gives the infix notation of the expressions, for
+"Data.CFTA.Mask.Text": the text of @+(a, (b))@ is @a+(b)@. A grammar of
+these texts offers @a@ and @b@ after @a+@. The language of 'equalAutomaton'
+offers only @a@ there, because of the equality. The mask of the texts keeps
+the constraint.
 -}
 module Data.CFTA.Gen.ExpressionLanguage (
     structuralAutomaton,
     equalAutomaton,
     singleParenthesesAutomaton,
+    expressionTexts,
 ) where
 
 import qualified Data.CFTA as FTA
@@ -61,3 +68,14 @@ expressions equal =
     constraint operator
         | equal && operator == '+' = equalityConstraint $ mkEqConstraints [[path [0], path [1]]]
         | otherwise = noConstraint
+
+{- | The infix notation of each symbol of 'structuralAutomaton', as a
+'Data.CFTA.Mask.Text.Linearization'. An atom has its character as its one
+text. The parentheses have the texts @(@ and @)@. An operator has the empty
+text, its character between its two children, and the empty text.
+-}
+expressionTexts :: Char -> [String]
+expressionTexts symbol
+    | symbol == '(' = ["(", ")"]
+    | symbol `elem` "+*" = ["", [symbol], ""]
+    | otherwise = [[symbol]]

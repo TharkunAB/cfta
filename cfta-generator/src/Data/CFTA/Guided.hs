@@ -151,7 +151,11 @@ data SearchLimits = SearchLimits
     { searchVisits :: !Int
     -- ^ The most prefixes to visit.
     , searchTerms :: !Int
-    -- ^ The number of found terms to stop after.
+    {- ^ The number of found terms to stop after. The search stops when the
+    number of found terms reaches this limit, and a complete prefix with more
+    than one term, such as a text that two terms have, gives all its terms, so
+    the result can have more terms than the limit.
+    -}
     , searchMicros :: !(Maybe Int)
     -- ^ The wall-clock time of the search, in microseconds.
     }

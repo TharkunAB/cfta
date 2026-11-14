@@ -224,6 +224,12 @@ Wilf, and Feat (ranking).
   `nextTokens`. The record `Mask` (`Data.CFTA.Mask`) holds the mask of a
   prefix and the step after each token. `completionsMask` gives this record
   for each prefix of a `Completions` value.
+- **Linearization**: the texts around the children of each symbol: the text
+  before the first child, the text between each two children, and the text
+  after the last child (`Data.CFTA.Mask.Text`). It gives the text of a term.
+- **Reading**: a prefix of term tokens with a place in its text. The mask of
+  a text prefix holds the readings of the prefix, and each reading has the
+  items that are still to come: rests of texts and children.
 - **Scorer**: a function from a prefix to the log-scores of the next tokens
   (`Data.CFTA.Guided`). Not a trained model of weights
   (`Data.CFTA.Sized.Prefix.Model`).

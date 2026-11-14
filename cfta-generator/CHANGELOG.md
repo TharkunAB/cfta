@@ -30,6 +30,18 @@
 - `Data.CFTA.Guided.Model`: `modelScorer` is the `Scorer` of a trained
   `Model`: the score of a token is the log of its probability after the
   prefix. A guided search with it needs no outside model.
+- `Data.CFTA.Mask.Text`: `textMask` gives the mask of the texts of a language.
+  A `Linearization` gives the texts around the children of each symbol, and
+  `linearize` gives the text of a term. From the mask of the terms at the
+  empty prefix, `textMask` gives the mask of each prefix of the texts: the
+  characters that can come next, and the end token `EndOfText`. It reads the
+  mask of the terms, so the constraints and the solver of the language stay.
+  The probabilities are exact: the probability of a character is the mass of
+  the readings after it, divided by the mass of the readings of the prefix. A
+  text that two terms have gives both terms after `EndOfText`. `readText`
+  gives the terms of a text, or the place, the `Refusal`, and the offered
+  tokens of the first refused token. `guide` runs on the mask of the texts as
+  on the mask of the terms.
 - Add `Data.CFTA.Extension`: `checkExtension` checks that a later automaton
   is a definitional extension of an earlier automaton by a template lowering.
   It reports another initial state, a lost or changed old production, an old

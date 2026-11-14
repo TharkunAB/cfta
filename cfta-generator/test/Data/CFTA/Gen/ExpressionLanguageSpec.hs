@@ -1,9 +1,19 @@
-module Data.CFTA.Gen.ExpressionLanguageSpec (spec) where
+module Data.CFTA.Gen.ExpressionLanguageSpec (
+    spec,
+    equalCompletions,
+    singleParenthesesCompletions,
+    allExpressions,
+    equalExpressions,
+    singleExpressions,
+    node,
+    leaf,
+) where
 
-import Control.Monad (forM_)
+import Control.Monad (foldM, forM_)
 import Data.Functor (void)
 import Data.List (inits)
 import qualified Data.Map.Strict as Map
+import Data.Maybe (fromMaybe)
 import qualified Data.Set as Set
 import Test.Hspec (Spec, describe, it, shouldBe, shouldSatisfy)
 import qualified Test.QuickCheck as QC
@@ -12,9 +22,16 @@ import qualified Test.QuickCheck.Random as QCRandom
 
 import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint)
-import Data.CFTA.Gen.ExpressionLanguage (equalAutomaton, singleParenthesesAutomaton, structuralAutomaton)
+import Data.CFTA.Gen.ExpressionLanguage (
+    equalAutomaton,
+    expressionTexts,
+    singleParenthesesAutomaton,
+    structuralAutomaton,
+ )
 import Data.CFTA.Gen.Internal.Table (unambiguousRows)
 import Data.CFTA.Index (Size (..))
+import Data.CFTA.Mask (Mask (..), completionsMask)
+import Data.CFTA.Mask.Text (TextError (..), TextToken (..), linearize, readText, textMask)
 import Data.CFTA.Sized.Prefix
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
@@ -63,16 +80,34 @@ hasDoubleParentheses (Term.Node symbol children) =
   where
     isParentheses (Term.Node child _) = child == '('
 
+-- | The mask of the texts of the expressions of 'structuralAutomaton' up to the bound.
+structuralTexts :: Mask TextToken (Term Char)
+structuralTexts =
+    textMask expressionTexts . completionsMask . either (error . show) id $
+        prefixCompletions (Size sizeBound) structuralAutomaton
+
+-- | The mask of the texts of the expressions of 'equalAutomaton' up to the bound.
+equalTexts :: Mask TextToken (Term Char)
+equalTexts = textMask expressionTexts $ completionsMask equalCompletions
+
+-- | The mask of the texts of the expressions of 'singleParenthesesAutomaton' up to the bound.
+singleTexts :: Mask TextToken (Term Char)
+singleTexts = textMask expressionTexts $ completionsMask singleParenthesesCompletions
+
+-- | The text of an expression.
+text :: Term Char -> String
+text = fromMaybe (error "an expression without a text") . linearize expressionTexts
+
 -- | The tokens of a term in preorder.
 preorder :: Term Char -> [(Char, Int)]
 preorder (Term.Node symbol children) = (symbol, length children) : concatMap preorder children
 
 -- | A term from its symbols and its children.
-node :: Char -> [Term Char] -> Term Char
+node :: symbol -> [Term symbol] -> Term symbol
 node = Term.Node
 
 -- | A term with no children.
-leaf :: Char -> Term Char
+leaf :: symbol -> Term symbol
 leaf symbol = node symbol []
 
 -- | Every non-empty prefix of the preorder of each expression of 'equalExpressions'.
@@ -120,6 +155,18 @@ spec = describe "Data.CFTA.Gen.ExpressionLanguage" $ do
             sumOfA = [('+', 2), ('a', 0)]
         fmap (map fst . nextTokens) (stepPrefix structural sumOfA) `shouldBe` Right [('(', 1), ('a', 0), ('b', 0)]
         fmap (map fst . nextTokens) (stepPrefix equalCompletions sumOfA) `shouldBe` Right [('a', 0)]
+    it "offers a and b after the text a+ without the equality, and refuses b with it" $ do
+        fmap (map fst . maskNext) (foldM maskStep structuralTexts $ map Character "a+")
+            `shouldBe` Right [Character '(', Character 'a', Character 'b']
+        readText structuralTexts "a+b" `shouldBe` Right [node '+' [leaf 'a', leaf 'b']]
+        readText equalTexts "a+b" `shouldBe` Left (TextError 2 TokenRejected [Character 'a'])
+    it "reads the text of each expression back to the expression alone" $
+        forM_ allExpressions $ \expression ->
+            (text expression, readText structuralTexts $ text expression) `shouldBe` (text expression, Right [expression])
+    -- The text (( is the start of the text ((a)+a), so the mask of the texts offers the second (.
+    it "refuses the text ((a)) at its second ), because the text (( also starts ((a)+a)" $ do
+        readText singleTexts "((a))" `shouldBe` Left (TextError 4 TokenRejected [Character '*', Character '+'])
+        readText singleTexts "((a)+a)" `shouldBe` Right [node '(' [node '+' [node '(' [leaf 'a'], leaf 'a']]]
     it "accepts an expression token by token, and the result is the expression alone" $ do
         let expression = node '*' [node '+' [node '(' [leaf 'a'], node '(' [leaf 'a']], leaf 'b']
             tokens = preorder expression
