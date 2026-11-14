@@ -84,7 +84,7 @@ theorem make_union_atoms_checked [DecidableEq (EdgeKey Symbol Guard)]
   exact onlyU original member atom present
 
 /-- Auxiliary union payload step under the explicit lower-fuel induction hypothesis. -/
-private theorem ordered_union_atoms_of_fuel_induction
+theorem ordered_union_atoms_of_fuel_induction
     [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
     (emptyGuard : Guard) (conjoin : Guard → Guard → Guard) (fuel : Nat)
     (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey)
