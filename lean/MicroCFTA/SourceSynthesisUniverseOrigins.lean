@@ -303,6 +303,14 @@ private theorem relevantRows_closed (closed : Closed P) (ctx : Context) (clean :
 
 end Closure
 
+/-- The existing row evaluator preserves each closed context property. -/
+theorem relevantRows_induction (P : Expression → Prop) (closed : Closed P)
+    (ctx : Context) (contextP : ContextClosed P ctx) (size : Nat)
+    (asArgument : Bool) (names : List String) (rows : List Expression)
+    (returned : relevantRows ctx asArgument size names = .ok rows) :
+    ∀ row ∈ rows, P row :=
+  relevantRows_closed closed ctx contextP size asArgument names rows returned
+
 /-- Induct over the actual constructor and error control for any closed source property. -/
 theorem firstOrderRaw_induction (P : Expression → Prop) (closed : Closed P)
     (lib : Library) (query : Query) (size : Int) (expression : Expression)

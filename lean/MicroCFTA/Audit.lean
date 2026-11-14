@@ -1,3 +1,4 @@
+import MicroCFTA.SourceSynthesisCurrentUniverseOrigins
 import MicroCFTA.SourceSynthesisCurrentInitialIdentityPrefixStable
 import MicroCFTA.SourcePruningEnumerationInitialPrefixFuel
 import MicroCFTA.SourceSynthesisCurrentInitialIdentityPrefix
@@ -5051,3 +5052,8 @@ run_cmd do
 
 #check @MicroCFTA.SourceSynthesisCurrentInitialIdentityPrefixStable.accepted_initial_identity_prefix_stable
 #print axioms MicroCFTA.SourceSynthesisCurrentInitialIdentityPrefixStable.accepted_initial_identity_prefix_stable
+
+#check @MicroCFTA.SourceSynthesisUniverseOrigins.relevantRows_induction
+#print axioms MicroCFTA.SourceSynthesisUniverseOrigins.relevantRows_induction
+#check @MicroCFTA.SourceSynthesisCurrentUniverseOrigins.firstOrderRaw_overUniverse
+#print axioms MicroCFTA.SourceSynthesisCurrentUniverseOrigins.firstOrderRaw_overUniverse
