@@ -1,7 +1,5 @@
 module Data.CFTA.Gen.ExpressionLanguageSpec (
     spec,
-    equalCompletions,
-    singleParenthesesCompletions,
     allExpressions,
     equalExpressions,
     singleExpressions,
@@ -14,7 +12,6 @@ import Control.Monad (foldM, forM_)
 import Data.Functor (void)
 import Data.List (inits)
 import qualified Data.Map.Strict as Map
-import Data.Maybe (fromMaybe)
 import qualified Data.Set as Set
 import Test.Hspec (Spec, describe, it, shouldBe, shouldSatisfy)
 import qualified Test.QuickCheck as QC
@@ -25,34 +22,28 @@ import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint)
 import Data.CFTA.Gen.ExpressionLanguage (
     equalAutomaton,
+    equalCompletions,
+    equalTextMask,
+    expressionSizeBound,
+    expressionText,
     expressionTexts,
     singleParenthesesAutomaton,
+    singleParenthesesCompletions,
+    singleParenthesesTextMask,
     structuralAutomaton,
  )
 import Data.CFTA.Gen.Internal.Table (unambiguousRows)
 import Data.CFTA.Index (Size (..))
 import Data.CFTA.Mask (Mask (..), completionsMask)
-import Data.CFTA.Mask.Text (TextError (..), TextToken (..), linearize, readText, textMask)
+import Data.CFTA.Mask.Text (TextError (..), TextToken (..), readText, textMask)
 import Data.CFTA.Sized.Prefix
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
 
--- | The largest number of nodes of an expression in these tests.
-sizeBound :: Integer
-sizeBound = 7
-
--- | The completions of the empty prefix of 'equalAutomaton'.
-equalCompletions :: Completions Char
-equalCompletions = either (error . show) id $ prefixCompletions (Size sizeBound) equalAutomaton
-
--- | The completions of the empty prefix of 'singleParenthesesAutomaton'.
-singleParenthesesCompletions :: Completions Char
-singleParenthesesCompletions = either (error . show) id $ prefixCompletions (Size sizeBound) singleParenthesesAutomaton
-
 -- | The expressions of 'structuralAutomaton' up to the bound, the sums with two different children included.
 allExpressions :: [Term Char]
 allExpressions =
-    completionTerms . either (error . show) id $ prefixCompletions (Size sizeBound) structuralAutomaton
+    completionTerms . either (error . show) id $ prefixCompletions (Size expressionSizeBound) structuralAutomaton
 
 -- | The expressions up to the bound that have no sum with two different children.
 equalExpressions :: [Term Char]
@@ -85,19 +76,7 @@ hasDoubleParentheses (Term.Node symbol children) =
 structuralTexts :: Mask TextToken (Term Char)
 structuralTexts =
     textMask expressionTexts . completionsMask . either (error . show) id $
-        prefixCompletions (Size sizeBound) structuralAutomaton
-
--- | The mask of the texts of the expressions of 'equalAutomaton' up to the bound.
-equalTexts :: Mask TextToken (Term Char)
-equalTexts = textMask expressionTexts $ completionsMask equalCompletions
-
--- | The mask of the texts of the expressions of 'singleParenthesesAutomaton' up to the bound.
-singleTexts :: Mask TextToken (Term Char)
-singleTexts = textMask expressionTexts $ completionsMask singleParenthesesCompletions
-
--- | The text of an expression.
-text :: Term Char -> String
-text = fromMaybe (error "an expression without a text") . linearize expressionTexts
+        prefixCompletions (Size expressionSizeBound) structuralAutomaton
 
 -- | The tokens of a term in preorder.
 preorder :: Term Char -> [(Char, Int)]
@@ -152,7 +131,7 @@ spec = describe "Data.CFTA.Gen.ExpressionLanguage" $ do
     it "lists the expressions up to the bound" $
         (length allExpressions, length equalExpressions) `shouldBe` (1286, 472)
     it "offers a and b after + a without the equality, and only a with it" $ do
-        let structural = either (error . show) id $ prefixCompletions (Size sizeBound) structuralAutomaton
+        let structural = either (error . show) id $ prefixCompletions (Size expressionSizeBound) structuralAutomaton
             sumOfA = [('+', 2), ('a', 0)]
         fmap (map fst . nextTokens) (stepPrefix structural sumOfA) `shouldBe` Right [('(', 1), ('a', 0), ('b', 0)]
         fmap (map fst . nextTokens) (stepPrefix equalCompletions sumOfA) `shouldBe` Right [('a', 0)]
@@ -160,14 +139,15 @@ spec = describe "Data.CFTA.Gen.ExpressionLanguage" $ do
         fmap (map fst . maskNext) (foldM maskStep structuralTexts $ map Character "a+")
             `shouldBe` Right [Character '(', Character 'a', Character 'b']
         readText structuralTexts "a+b" `shouldBe` Right [node '+' [leaf 'a', leaf 'b']]
-        readText equalTexts "a+b" `shouldBe` Left (TextError 2 TokenRejected [Character 'a'])
+        readText equalTextMask "a+b" `shouldBe` Left (TextError 2 TokenRejected [Character 'a'])
     it "reads the text of each expression back to the expression alone" $
         forM_ allExpressions $ \expression ->
-            (text expression, readText structuralTexts $ text expression) `shouldBe` (text expression, Right [expression])
+            (expressionText expression, readText structuralTexts $ expressionText expression)
+                `shouldBe` (expressionText expression, Right [expression])
     -- The text (( is the start of the text ((a)+a), so the mask of the texts offers the second (.
     it "refuses the text ((a)) at its second ), because the text (( also starts ((a)+a)" $ do
-        readText singleTexts "((a))" `shouldBe` Left (TextError 4 TokenRejected [Character '*', Character '+'])
-        readText singleTexts "((a)+a)" `shouldBe` Right [node '(' [node '+' [node '(' [leaf 'a'], leaf 'a']]]
+        readText singleParenthesesTextMask "((a))" `shouldBe` Left (TextError 4 TokenRejected [Character '*', Character '+'])
+        readText singleParenthesesTextMask "((a)+a)" `shouldBe` Right [node '(' [node '+' [node '(' [leaf 'a'], leaf 'a']]]
     it "accepts an expression token by token, and the result is the expression alone" $ do
         let expression = node '*' [node '+' [node '(' [leaf 'a'], node '(' [leaf 'a']], leaf 'b']
             tokens = preorder expression
@@ -213,4 +193,4 @@ spec = describe "Data.CFTA.Gen.ExpressionLanguage" $ do
             isComplete done `shouldBe` True
             seen `shouldSatisfy` all (`Set.member` equalPrefixes)
             fmap hasUnequalSum (completionTerms done) `shouldBe` [False]
-            fmap (length . preorder) (completionTerms done) `shouldSatisfy` all (<= fromIntegral sizeBound)
+            fmap (length . preorder) (completionTerms done) `shouldSatisfy` all (<= fromIntegral expressionSizeBound)

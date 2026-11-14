@@ -11,22 +11,17 @@ import qualified Test.QuickCheck.Gen as QCGen
 import qualified Test.QuickCheck.Random as QCRandom
 
 import qualified Data.CFTA as FTA
-import Data.CFTA.Gen.ExpressionLanguage (singleParenthesesAutomaton)
+import Data.CFTA.Gen.ExpressionLanguage (
+    equalTextMask,
+    expressionText,
+    singleParenthesesAutomaton,
+    singleParenthesesTextMask,
+ )
 import Data.CFTA.Gen.ExpressionLanguageSpec (leaf, node, structuralTexts)
 import Data.CFTA.Guided
 import Data.CFTA.Mask
 import Data.CFTA.Mask.Text
-import Data.CFTA.Mask.TextSpec (
-    alphabet,
-    equalTextMask,
-    expressionText,
-    lazyMask,
-    limits,
-    pairTexts,
-    prefixCounts,
-    singleParenthesesTextMask,
-    singleTexts,
- )
+import Data.CFTA.Mask.TextSpec (alphabet, lazyMask, limits, pairTexts, prefixCounts, singleTexts)
 import Data.CFTA.Mask.Vocabulary
 import Data.CFTA.Sized.Prefix (prefixCompletionsWith)
 import Data.CFTA.Sized.PrefixGuardSpec (guardedPairs, partialEntailment)

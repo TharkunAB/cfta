@@ -30,20 +30,36 @@ index.
 "Data.CFTA.Mask.Text": the text of @+(a, (b))@ is @a+(b)@. A grammar of
 these texts offers @a@ and @b@ after @a+@. The language of 'equalAutomaton'
 offers only @a@ there, because of the equality. The mask of the texts keeps
-the constraint.
+the constraint. 'equalCompletions' and 'equalTextMask' are the completions
+and the mask of the texts of 'equalAutomaton' up to 'expressionSizeBound'.
+'singleParenthesesCompletions' and 'singleParenthesesTextMask' are those of
+'singleParenthesesAutomaton'.
 -}
 module Data.CFTA.Gen.ExpressionLanguage (
     structuralAutomaton,
     equalAutomaton,
     singleParenthesesAutomaton,
     expressionTexts,
+    expressionText,
+    expressionSizeBound,
+    equalCompletions,
+    equalTextMask,
+    singleParenthesesCompletions,
+    singleParenthesesTextMask,
 ) where
+
+import Data.Maybe (fromMaybe)
 
 import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (equalityConstraint, noConstraint)
 import Data.CFTA.Equality.Constraint (mkEqConstraints)
+import Data.CFTA.Index (Size (..))
+import Data.CFTA.Mask (Mask, completionsMask)
+import Data.CFTA.Mask.Text (TextToken, linearize, textMask)
 import Data.CFTA.Path (path)
+import Data.CFTA.Sized.Prefix (Completions, prefixCompletions)
 import Data.CFTA.Template (Obligation, Template (..), excludeAnywhereFTA)
+import Data.CFTA.Term (Term)
 
 -- | The expressions without a constraint.
 structuralAutomaton :: FTA.PlainFTA Char Char
@@ -79,3 +95,28 @@ expressionTexts symbol
     | symbol == '(' = ["(", ")"]
     | symbol `elem` "+*" = ["", [symbol], ""]
     | otherwise = [[symbol]]
+
+-- | The text of an expression in the infix notation of 'expressionTexts'.
+expressionText :: Term Char -> String
+expressionText = fromMaybe (error "an expression without a text") . linearize expressionTexts
+
+-- | The largest number of nodes of an expression in 'equalCompletions'.
+expressionSizeBound :: Integer
+expressionSizeBound = 7
+
+-- | The completions of the empty prefix of 'equalAutomaton', for the expressions up to 'expressionSizeBound'.
+equalCompletions :: Completions Char
+equalCompletions = either (error . show) id $ prefixCompletions (Size expressionSizeBound) equalAutomaton
+
+-- | The mask of the texts of the expressions of 'equalAutomaton' up to 'expressionSizeBound'.
+equalTextMask :: Mask TextToken (Term Char)
+equalTextMask = textMask expressionTexts $ completionsMask equalCompletions
+
+-- | The completions of the empty prefix of 'singleParenthesesAutomaton', for the expressions up to 'expressionSizeBound'.
+singleParenthesesCompletions :: Completions Char
+singleParenthesesCompletions =
+    either (error . show) id $ prefixCompletions (Size expressionSizeBound) singleParenthesesAutomaton
+
+-- | The mask of the texts of the expressions of 'singleParenthesesAutomaton' up to 'expressionSizeBound'.
+singleParenthesesTextMask :: Mask TextToken (Term Char)
+singleParenthesesTextMask = textMask expressionTexts $ completionsMask singleParenthesesCompletions

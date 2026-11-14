@@ -1,8 +1,5 @@
 module Data.CFTA.Mask.TextSpec (
     spec,
-    equalTextMask,
-    singleParenthesesTextMask,
-    expressionText,
     singleTexts,
     prefixCounts,
     alphabet,
@@ -24,15 +21,8 @@ import qualified Test.QuickCheck.Random as QCRandom
 
 import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (noConstraint)
-import Data.CFTA.Gen.ExpressionLanguage (equalAutomaton, expressionTexts)
-import Data.CFTA.Gen.ExpressionLanguageSpec (
-    allExpressions,
-    equalCompletions,
-    leaf,
-    node,
-    singleExpressions,
-    singleParenthesesCompletions,
- )
+import Data.CFTA.Gen.ExpressionLanguage (equalAutomaton, equalTextMask, expressionText, singleParenthesesTextMask)
+import Data.CFTA.Gen.ExpressionLanguageSpec (allExpressions, leaf, node, singleExpressions)
 import Data.CFTA.Guided
 import Data.CFTA.Index (Size (..))
 import Data.CFTA.Mask
@@ -40,7 +30,6 @@ import Data.CFTA.Mask.Text
 import Data.CFTA.Sized.Prefix (completionTerms, prefixCompletions, prefixCompletionsWith)
 import Data.CFTA.Sized.PrefixGuardSpec (guardedPairs, number, partialEntailment, sym)
 import Data.CFTA.Symbol (Symbol)
-import Data.CFTA.Term (Term)
 
 spec :: Spec
 spec = describe "Data.CFTA.Mask.Text" $ do
@@ -124,18 +113,6 @@ spec = describe "Data.CFTA.Mask.Text" $ do
         refusal (readText pairs "g(3, 2)") `shouldBe` Just (2, TokenUndecided)
         refusal (readText pairs "g(1, 2)") `shouldBe` Just (2, TokenRejected)
         fmap length (readText pairs "g(2, 3)") `shouldBe` Right 1
-
--- | The mask of the texts of the expressions with the equality at the bound of their spec.
-equalTextMask :: Mask TextToken (Term Char)
-equalTextMask = textMask expressionTexts $ completionsMask equalCompletions
-
--- | The mask of the texts of the expressions without double parentheses at the bound of their spec.
-singleParenthesesTextMask :: Mask TextToken (Term Char)
-singleParenthesesTextMask = textMask expressionTexts $ completionsMask singleParenthesesCompletions
-
--- | The text of an expression.
-expressionText :: Term Char -> String
-expressionText = fromMaybe (error "an expression without a text") . linearize expressionTexts
 
 -- | The texts of the expressions without double parentheses.
 singleTexts :: Set.Set String
