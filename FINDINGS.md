@@ -1,3 +1,63 @@
+# Pointwise prefix phases and actual shared-gate replay checked (2026-11-14 16:20 CET)
+
+GOAL ACTIVE. Preserve the complete original objective below.
+
+NEW PUBLIC prefix_identity_phase_resources_at_any_budget strengthens the actual
+supported identity-prefix producer at EACH supplied common bound. Its initial
+header is the existing prefix_identity_resources_at_any_budget header. It derives
+exact parked, empty-fresh and nonempty-fresh observations. All supported phases
+retain Ready and IncomingAvoid. Parked mass is bounded by the original mass.
+Fresh mass is exact. The nonempty phase retains the original stored handle/
+bucket and its length bound. Actual larger checkpoint and read/check observations
+are identified through exact supported replay. No future provider is an input.
+The companion unsupported_or_failed_prefix_stops gives exact local stopped[]
+behavior, reasons and reached endpoints for actual unsupported/failed shapes.
+Every old source byte survives removal of one new import and two declarations.
+
+NEW PUBLIC SharedEnabledEmpty.check_skipped_at_any_bounds and
+check_performed_done_stable replay the ACTUAL optimized shared backend. A skipped
+check retains its endpoint/query memo at any bounds. A completed shared call
+retains answer,checked endpoint,fourth memo,full private snapshot and saved query
+memo at larger p/h. currentTupleBudget is fixed. Legacy ChildDispatchStability
+is a DIFFERENT worker and does not supply actual shared child replay. Actual
+SharedDispatch, terminal folds, cache adapters and full shared-child replay stay
+OPEN. Their exact mismatch/targets are frozen separately, without a fake proof.
+
+NEW PUBLIC SourceSynthesisCurrentUniverseReferenceDescendantSteps keeps the SAME
+accepted/build/stored U, original literal U/P domain and actual later Extension.
+For a closed ordinary Q, Q/refU at n+2 resolves and resets to the actual lower
+execute n emptyDomain Q U at the SAME machine. Reversed refU/Q uses n+3.
+For a union Q, native execution distributes BEFORE reference lookup: n+1 and
+reversed n+2 retain the actual ordered member walk and makeUnion continuation.
+It does not replace a union walk with a direct whole-union reset or assert
+completion. These exact equations include lower fuel0 and exhaustion.
+
+All7public gates PASS. Strict Audit checks96,078 imported theorem axiom
+dependencies and113 reports:111standard-axiom,2axiom-free. Only propext,
+Classical.choice,Quot.sound. Source modules5953; direct imports4951. Effective
+4GiB max/high,zero swap. All compiler handles are terminal. Exact pins/logs:
+/tmp/mcfta-prefix-shared-and-native-publication-20261114-1618.
+Prefix check1 had case-scope goals; repaired check2 passed unchanged targets.
+Native check1 had unused section instances; moving their scope preserved every
+proof body and both public headers. Earlier failures remain uncredited.
+No operational definition changed. No Haskell/Cabal/test/Liquid Haskell edit.
+No new Haskell fix or reachable source counterexample was established.
+
+Latest immutable compact checkpointd7f090074e57047760efbc4f2e715b26fe1f9c20 is pushed
+and independently verified. Its source80d7b86d4 precedes this new prefix/shared/
+native publication. Its311files total6,870,478bytes and preserve295 exact inputs.
+Packet:lean/restart-evidence/20261114-mixed-open-alias-and-native-replay.
+Current source still has one finite accepted SAME-original-root term and one
+consistent assignment per actual emitted causal branch as its central OPEN
+semantic target. Include every removed suspended constraint under that SAME
+assignment. Every-budget stopped scan/callback output inclusion, full generated
+Type closure and terminal finite productivity remain OPEN. Preserve all original
+typing,depth,LPO/refolding,both language directions,stream order/multiplicity/
+lazy demand,exact accepted node-count sizes,counts/weights/training,both rank/
+unrank inverses,host bounds and compiled Haskell correspondence. Record every
+future Haskell fix in FINDINGS. Root owns live/compiler/Git. Preserve .hypha/
+and all failed/marked inputs. Main remains e53852064d3ef5a2eafec47d754c27504b11de5f.
+
 # Mixed aliases and native preparation checkpoint (2026-11-14 15:57 CET)
 
 GOAL ACTIVE. Checked source: 80d7b86d403772dd136b7a606c42e88cdc67c42f. Prior compact checkpoint:1750d9d8fc067cd9472dd4bd0800e812ea7c5e55.
