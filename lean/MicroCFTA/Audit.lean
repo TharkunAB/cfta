@@ -1,3 +1,4 @@
+import MicroCFTA.SourceSynthesisCurrentInitialIdentityPrefixStable
 import MicroCFTA.SourcePruningEnumerationInitialPrefixFuel
 import MicroCFTA.SourceSynthesisCurrentInitialIdentityPrefix
 import MicroCFTA.SourcePruningEnumerationIdentityPrefixMetadataErasure
@@ -5047,3 +5048,6 @@ run_cmd do
 
 #check @MicroCFTA.SourcePruningEnumerationSelectedStep.runPrefix_initial_read_check_fuel
 #print axioms MicroCFTA.SourcePruningEnumerationSelectedStep.runPrefix_initial_read_check_fuel
+
+#check @MicroCFTA.SourceSynthesisCurrentInitialIdentityPrefixStable.accepted_initial_identity_prefix_stable
+#print axioms MicroCFTA.SourceSynthesisCurrentInitialIdentityPrefixStable.accepted_initial_identity_prefix_stable
