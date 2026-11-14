@@ -1,3 +1,88 @@
+# Current checked state — 2026-11-14 17:14 CET
+
+Checked source: `4db4f36a43fb509b66ccb117d5c8bf73e23c80c5`. Source tree digest: `9a374804a711fe13ea6ccdff83d6a879a6d4d2dbacc19eecb36aa454df995ff4`.
+
+The strongest new resource result is pointwise. Under all original initial
+premises, an actual clean empty or singleton shared child result with a returned
+cache retains the full original resource conjunction at its observed budget.
+Exact larger-bound replay retains every reached caller, query memo, outer core,
+waiting index and returned cache. This uses the actual optimized shared gate,
+dispatch, incoming node, raw/cached fold, terminal and child operations. The
+legacy child backend is not substituted. No future-result or resource provider
+is added. The earlier literal-identity sufficient-budget whole-worker resource
+law and same-source initializer bridge remain checked.
+
+The actual shared output-origin laws retain completed scan prefixes, earlier
+head outputs across a stopped suffix, complete selected receipts, and the exact
+false recordTypes receipt and callback restart input. These are structural
+membership laws. They do not prove arbitrary-budget worker resource history.
+That worker induction must derive resources at each actual completed prefix and
+recursive callback. Its internal induction can retain emitted resources and
+complete endpoint resources without requiring a later stopped endpoint.
+
+The generated-Type work now has checked physical child inheritance, actual
+union/node constructor atom preservation and lower-fuel ordered union/edge/node
+steps. The actual selected ordinary branch is checked under its lower-fuel
+hypothesis. The original source/body readback gives refU or the same closed
+atomless marker at each physical child position after actual heap growth.
+Ordinary operand children retain strict prefix-height bounds, original-domain
+freshness, Domain and the full original U lookup. The union and node step lemmas
+are exported by changing visibility only. Their propositions and proof bodies
+are unchanged. The original full closure and simultaneous A/M target remain
+OPEN. Marker calls in a nonempty original domain need an actual native argument;
+closedness alone does not permit an empty-domain reset.
+
+The central semantic gap is still one finite compatible completion of the same
+original emitted root. The new causal review follows the actual shared ancestry
+writes. A true-clear gives a parked direct restart; it does not call Left for the
+cleared slot. The earlier completed expansion has the Left callback. Existing key
+and carrier laws do not yet recover that earlier target, bucket and alias
+incidence from actual emitted membership. The required conclusion is existential:
+one joint final assignment must satisfy all retained and historical removed
+obligations. A universal postModel-implies-removed-Holds premise is not added.
+No accepted-source failing true-clear trace or implementation defect was found.
+The three optional causal-fact drafts remain UNCOMPILED and receive no credit.
+
+Full objective remains: each actual emitted partial root has ONE finite accepted
+term of the SAME original root and ONE assignment for all supported domains,
+paths, aliases, residuals and readback, including parked backward recompletion.
+Original typing, depth adequacy/completeness, defaultLPO and preprocessing in both
+language directions, stream order/multiplicity/lazy demand, exact accepted terms
+at each node-count size, counts/weights/training, both rank/unrank inverses, host
+bounds and compiled Haskell correspondence all stay in scope. This is not a full
+system correctness claim. The persistent goal remains ACTIVE.
+
+Haskell/FINDINGS boundary: this checkpoint changes only Lean proof visibility,
+proof modules, Audit and these handoff documents. No Haskell, Cabal, test or
+Liquid Haskell annotation changed. No new Haskell fix is claimed. Proof-only
+repairs rename the reserved Lean binder prefix, split the actual stopped advance
+result, and remove one no-progress dsimp. Original drafts, failed checks and
+repaired inputs are retained. Proposed duplicate step-wrapper patches are
+preserved as unused drafts; the existing lemmas are exported directly.
+
+Latest public verification: all six gates passed. Audit checked 96,180 aggregate
+theorem dependencies and 142 explicit reports: 140 standard-axiom reports and two
+axiom-free reports. The tree has 5,964 source modules and 4,962 direct Audit
+imports. These are dependency coverage counts, not an end-to-end proof measure.
+
+Pending private work: the exact closed-domain reset candidate failed because its
+entered-key owner was not imported and four old conditional lemma names caused
+strict warnings. Its proof-only repair is preserved and UNCOMPILED. The zero and
+parked-prefix candidate failed strict checks on two unused instance contexts and
+local heartbeat limits. Its complete prior worker source remains byte-identical
+inside the draft. Neither failed module receives proof credit. The arbitrary-
+budget prepared-fold target stays marked OPEN. These failures do not change the
+public checked source or establish a Haskell defect.
+
+The compact archive is `lean/restart-evidence/20261114-shared-child-resources-and-atom-steps`.
+Source reproduces the checked Lean results. Logs are derived records; the archive
+also preserves marked targets, failed inputs, proof repairs and restart scripts.
+It contains no compiled objects or copied import overlays. Earlier immutable
+archives stay unchanged. Root owns compilation, live writes and Git. Other work
+continues only in bounded private drafts. Usage and /tmp remain monitored.
+
+---
+
 # Pointwise prefix and actual shared replay checkpoint (2026-11-14 16:35 CET)
 
 GOAL ACTIVE. Checked source: 0a34ff7eb50e5aa289879865079368008acfcdca. Prior checkpoint:d7f090074e57047760efbc4f2e715b26fe1f9c20.
