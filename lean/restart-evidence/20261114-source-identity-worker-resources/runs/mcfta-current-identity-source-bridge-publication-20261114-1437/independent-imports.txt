@@ -1,0 +1,89 @@
+@MicroCFTA.SourceSynthesisCurrentProgramEagerResources.accepted_initial_identity_emitted_history : ∀
+  [inst : DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (lib : MicroCFTA.SourceSynthesisTypeSyntax.Library) (query : MicroCFTA.SourceSynthesisTypeSyntax.Query) (signed : Int)
+  (expression : MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression),
+  MicroCFTA.SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok expression →
+    ∀ (depth : Nat) (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+      (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+      (graph :
+        MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (checkEmpty : Bool),
+      have metadata := { pending := [], types := [], openHoles := [], typing := () };
+      have bits := MicroCFTA.SourceSynthesisCurrentProgramEagerEnumerationWidth.enumBits lib query signed depth;
+      ∃ fields cache value heap built,
+        MicroCFTA.SourceEqualityOriginalAllocationPreparation.Receipt
+            (MicroCFTA.SourceEqualityConstraintOrigins.guards
+              (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols expression))
+            MicroCFTA.Cache.emptyState fields cache ∧
+          MicroCFTA.SourceCurrentConjunctionEquality.Fields
+              (MicroCFTA.SourceEqualityConstraintMemoAllocation.initial cache) heap ∧
+            MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver
+                (MicroCFTA.SourceCurrentAllocatedPartialInitialization.inventory
+                  (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols expression) value heap built)
+                (MicroCFTA.SourceCurrentAllocatedPartialInitialization.caller (bits + 2) cache heap)
+                MicroCFTA.SourceCurrentAllocatedPartialInitialization.globals ∧
+              MicroCFTA.InternedNestedFacts.Facts heap ∧
+                MicroCFTA.InternedProbeProvenance.Available heap value ∧
+                  MicroCFTA.SourceSynthesisProgramBuildRolesGeneric.ProgramValue
+                      MicroCFTA.SourceSynthesisLabelProgramBuildRoles.literal value ∧
+                    MicroCFTA.InternedConstructorTemplates.Grows MicroCFTA.InternedConstructorTemplates.empty heap ∧
+                      MicroCFTA.Cache.Extends MicroCFTA.InternedConstructorTemplates.empty.nodes.issued
+                          heap.nodes.issued ∧
+                        MicroCFTA.SourceEqualityAnnotationHeap.Heap
+                            (MicroCFTA.SourceEqualityConstraintOrigins.Derived
+                              (MicroCFTA.SourceSynthesisOriginalGuardAlphabet.alphabet
+                                (MicroCFTA.SourceSynthesisCurrentSourceGuards.encodedLibrary lib))
+                              MicroCFTA.SourceSynthesisGeneralizeSyntax.top
+                              MicroCFTA.SourceEqualityPCSNativeEdge.conjoin)
+                            heap ∧
+                          ∃ identity,
+                            MicroCFTA.SourceCurrentAllocatedPartialInitialization.emptyValue cache =
+                                MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity [] ∧
+                              MicroCFTA.SourceEqualityConstraintAllocation.Ready
+                                  (MicroCFTA.SourceCurrentAllocatedPartialInitialization.caller (bits + 2) cache
+                                          heap).checked.operations.constraints
+                                  (MicroCFTA.SourceEqualityConstraintAllocation.Value.live identity []) ∧
+                                value.free = [] ∧
+                                  MicroCFTA.SourceRecursiveIntersectionInputView.Original value ∧
+                                    MicroCFTA.SourceSynthesisHereditaryProgramFields.ValueFields
+                                        (MicroCFTA.SourceSynthesisNativeTypeTrace.Origin
+                                          (MicroCFTA.SourceSynthesisCurrentSourceGuards.encodedLibrary lib))
+                                        MicroCFTA.SourceSynthesisLabelProgramBuildRoles.literal value ∧
+                                      ∃ handle,
+                                        MicroCFTA.SourcePruningEnumerationNodes.encodeNode value = some handle ∧
+                                          MicroCFTA.SourcePruningEnumerationNodes.lookupNode heap handle = some value ∧
+                                            (MicroCFTA.SourceSynthesisProgramEnumerationRoles.ProgramSlots
+                                                (MicroCFTA.SourceSynthesisNativeTypeTrace.Origin
+                                                  (MicroCFTA.SourceSynthesisCurrentSourceGuards.encodedLibrary lib))
+                                                MicroCFTA.SourceSynthesisLabelProgramBuildRoles.literal heap
+                                                (MicroCFTA.EnumerationState.initial handle) fun uv => uv = 0) ∧
+                                              have startup :=
+                                                { core := MicroCFTA.EnumerationState.initial handle,
+                                                  expandable := fun slot =>
+                                                    if slot = 0 then
+                                                      !MicroCFTA.MergedOrdinaryHeight.recursiveBoundary value
+                                                    else false,
+                                                  waiting := fun x => none };
+                                              have initialCaller :=
+                                                MicroCFTA.SourceCurrentAllocatedPartialInitialization.caller (bits + 2)
+                                                  cache heap;
+                                              have initialSeed :=
+                                                MicroCFTA.SourceSynthesisOriginalSharedRankCompletion.seed heap;
+                                              (⋯ ∧
+                                                  MicroCFTA.EnumerationCarriers.CarriesGraph startup.core 0 ∧
+                                                    MicroCFTA.EnumerationGraphReferences.ReferencesCarry startup.core) ∧
+                                                MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits
+                                                    initialSeed.snd initialCaller.checked ∧
+                                                  ⋯
+'MicroCFTA.SourceSynthesisCurrentProgramEagerResources.accepted_initial_identity_emitted_history' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

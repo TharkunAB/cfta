@@ -1,0 +1,26 @@
+-- UNCOMPILED producer headers. These are goals, not premises of a final theorem.
+-- Use SelectedPreparation aliases and the actual caller width.
+theorem successful_run_moreFuel
+    (fuel extra uv target handle : Nat) (scs : List Suspended) (decoded value : Node)
+    (caller : Caller width) (before : Cached) (entered : Core)
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (observed : SourcePruningEnumerationSelectedPreparation.run fuel fuel uv caller before =
+      ([.ok ((target, handle, scs, decoded), entered)], some (.done value heap))) :
+    SourcePruningEnumerationSelectedPreparation.run (fuel + extra) (fuel + extra) uv caller before =
+      ([.ok ((target, handle, scs, decoded), entered)], some (.done value heap))
+
+-- A child replay producer must include both raw [] and singleton success.
+-- A completed rejection advances caller/query state before the next row.
+theorem continuable_child_run_moreFuel
+    (checkEmpty : Bool) (fuel extra : Nat) (scs : List Suspended) (incoming : Node)
+    (caller reached : Caller width) (before after : Cached) (queries saved : Queries)
+    (outer : Core) (waiting : EnumerationWaitingIndex.Waiting)
+    (raw : List (Except EnumerationState.Error (Fragments.Fragment Symbol × Core)))
+    (observed : SourcePruningEnumerationSharedSelectedContinuations.ChildDispatch.run
+      checkEmpty fuel fuel fuel fuel fuel scs incoming caller before queries =
+      ((.ok (some raw), reached, saved, outer, waiting), some after))
+    (continuable : raw = [] ∨ ∃ fragment, raw = [.ok (fragment, after.core)]) :
+    SourcePruningEnumerationSharedSelectedContinuations.ChildDispatch.run checkEmpty
+      (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra)
+      scs incoming caller before queries =
+      ((.ok (some raw), reached, saved, outer, waiting), some after)

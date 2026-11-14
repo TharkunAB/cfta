@@ -1,0 +1,154 @@
+section MixedBodyProbe
+variable {S G : Type}
+
+private theorem mixed_rows_probe_at [DecidableEq (EdgeKey S G)]
+    (top : G) (owner : Nat) (cutoff probe : Reference) (marker : Value S G)
+    (originals products targets : List (EdgeValue S G)) (current : State S G)
+    (closed : marker.free = [])
+    (kinds : ∀ original ∈ originals, ∀ child ∈ original.children,
+      child = marker ∨ child = .reference (.interned owner))
+    (readback : All₂ (fun (source : EdgeValue S G) product =>
+      product.children = source.children.map (input (replacement (.interned owner) (.reference cutoff))) ∧
+      product.entry.key = ⟨source.entry.key.symbol,
+        (source.children.map (input (replacement (.interned owner) (.reference cutoff)))).map Value.referenceOf,
+        top⟩) originals products)
+    (replayed : All₂ (fun original target =>
+      run (makeEdge original.entry.key.symbol top
+        (original.children.map (input (replacement (.interned owner) (.reference probe))))) current =
+          (target, current)) originals targets) :
+    All₂ (fun product target =>
+      run (makeEdge product.entry.key.symbol top
+        (product.children.map (input (replacement cutoff (.reference probe))))) current =
+          (target, current)) products targets := by
+  revert kinds replayed
+  induction readback generalizing targets with
+  | nil => intro _ replayed; cases replayed; exact .nil
+  | @cons original product originals products own rest ih =>
+      intro kinds replayed
+      cases replayed with
+      | @cons _ target _ targets first tail =>
+          refine .cons ?_ (ih targets
+            (fun original member => kinds original (List.mem_cons_of_mem _ member)) tail)
+          have symbol : product.entry.key.symbol = original.entry.key.symbol :=
+            congrArg EdgeKey.symbol own.2
+          have composed : product.children.map (input (replacement cutoff (.reference probe))) =
+              original.children.map (input (replacement (.interned owner) (.reference probe))) := by
+            rw [own.1, List.map_map]
+            apply List.map_congr_left
+            intro child member
+            apply SourceSynthesisUniverseProbeCutoffComposition.input_compose_at owner cutoff probe child
+            rcases kinds original List.mem_cons_self child member with same | same
+            · left
+              rw [same]
+              exact closed
+            · exact Or.inr same
+          rw [symbol, composed]
+          exact first
+
+private theorem mixed_product_probe_at [DecidableEq (EdgeKey S G)]
+    (literal : String → S) (top : G) (catalog : List (String × Nat))
+    (owner : Nat) (cutoff probe : Reference) (marker : Value S G)
+    (sourceArrow : EdgeValue S G) (sources : List (EdgeValue S G))
+    (targetEntry : Interned NodeKey) (targetArrow : EdgeValue S G)
+    (targets : List (EdgeValue S G)) (target : Value S G)
+    (productEntry : Interned NodeKey) (products : List (EdgeValue S G))
+    (current : State S G) (facts : Facts current)
+    (closed : marker.free = []) (nonemptyMarker : marker.referenceOf ≠ .empty)
+    (sourceChildren : sourceArrow.children = [marker, .reference (.interned owner), .reference (.interned owner)])
+    (sourceKey : sourceArrow.entry.key =
+      ⟨literal "->", [marker.referenceOf, .ref (.interned owner), .ref (.interned owner)], top⟩)
+    (sourceAligned : All₂ (fun (descriptor : String × Nat) (row : EdgeValue S G) =>
+      row.children = List.replicate descriptor.2 (.reference (.interned owner)) ∧
+      row.entry.key = ⟨literal descriptor.1, List.replicate descriptor.2 (.ref (.interned owner)), top⟩) catalog sources)
+    (targetChildren : targetArrow.children = [marker, .reference probe, .reference probe])
+    (targetKey : targetArrow.entry.key = ⟨literal "->", [marker.referenceOf, .ref probe, .ref probe], top⟩)
+    (targetAligned : All₂ (fun (descriptor : String × Nat) (row : EdgeValue S G) =>
+      row.children = List.replicate descriptor.2 (.reference probe) ∧
+      row.entry.key = ⟨literal descriptor.1, List.replicate descriptor.2 (.ref probe), top⟩) catalog targets)
+    (sourceResident : ∀ row ∈ sourceArrow :: sources, EdgeResident current row)
+    (targetResident : ∀ row ∈ targetArrow :: targets, EdgeResident current row)
+    (targetEq : target = .node targetEntry (canonicalEdges (targetArrow :: targets)) 0 [probe])
+    (productAvailable : Available current (.node productEntry (canonicalEdges products) 0 [cutoff]))
+    (targetAvailable : Available current target)
+    (sourceKinds : ∀ row ∈ canonicalEdges (sourceArrow :: sources), ∀ child ∈ row.children,
+      child = marker ∨ child = .reference (.interned owner))
+    (readback : All₂ (fun (source : EdgeValue S G) product =>
+      product.children = source.children.map (input (replacement (.interned owner) (.reference cutoff))) ∧
+      product.entry.key = ⟨source.entry.key.symbol,
+        (source.children.map (input (replacement (.interned owner) (.reference cutoff)))).map Value.referenceOf,
+        top⟩) (canonicalEdges (sourceArrow :: sources)) products)
+    (productResident : ∀ row ∈ products, EdgeResident current row) :
+    InternedFreshOrdinaryStoredSubstitution.execute
+      (.node productEntry (canonicalEdges products) 0 [cutoff])
+      (replacement cutoff (.reference probe)) current = .done target current ∧
+    SourceRecursiveIntersectionMaybeMu.callback cutoff
+      (.node productEntry (canonicalEdges products) 0 [cutoff]) probe current = .done target current := by
+  have replayed := SourceSynthesisUniverseMappedProbeRows.raw_rows_replay literal top (.interned owner) probe marker
+    sourceArrow targetArrow catalog sources targets current facts closed sourceChildren sourceKey targetChildren targetKey
+    sourceAligned targetAligned targetResident
+  obtain ⟨canonicalTargets, canonicalReplay, _members, canonicalResident, sameNode⟩ :=
+    SourceSynthesisUniverseCanonicalRowReplay.canonical_replay top
+      (replacement (.interned owner) (.reference probe)) (sourceArrow :: sources) (targetArrow :: targets)
+      current facts sourceResident targetResident replayed
+  have targetLive : ∀ row ∈ targetArrow :: targets,
+      row.children.any (fun child => child.referenceOf == .empty) = false := by
+    have catalogLive : ∀ row ∈ targets,
+        row.children.any (fun child => child.referenceOf == .empty) = false := by
+      intro row member
+      obtain ⟨descriptor, _included, related⟩ := aligned_output targetAligned row member
+      simp [related.1, Value.referenceOf]
+    intro row member
+    rcases List.mem_cons.mp member with rfl | later
+    · simp [targetChildren, Value.referenceOf]
+      exact nonemptyMarker
+    · exact catalogLive row later
+  have survivingTargets : surviving (targetArrow :: targets) = targetArrow :: targets := by
+    unfold surviving
+    apply List.filter_eq_self.mpr
+    intro row member
+    simp only [targetLive row member, Bool.not_false]
+  have retained : targetArrow ∈ canonicalEdges (targetArrow :: targets) :=
+    canonicalEdges_retains current facts.coherent _ targetArrow targetResident List.mem_cons_self
+  have targetNonempty : canonicalEdges (surviving (targetArrow :: targets)) ≠ [] := by
+    rw [survivingTargets]
+    intro absent
+    simp only [absent, List.not_mem_nil] at retained
+  have targetNodeAvailable : Available current
+      (.node targetEntry (canonicalEdges (surviving (targetArrow :: targets))) 0 [probe]) := by
+    rw [survivingTargets, ← targetEq]
+    exact targetAvailable
+  have targetNode := SourceSynthesisUniverseNodeReplay.resident_node_replay
+    (targetArrow :: targets) targetEntry 0 [probe] current facts targetNodeAvailable targetNonempty
+  have nodeReplay : run (makeNode canonicalTargets) current = (target, current) := by
+    rw [sameNode]
+    simpa only [survivingTargets, ← targetEq] using targetNode
+  have rowsReplay := mixed_rows_probe_at top owner cutoff probe marker
+    (canonicalEdges (sourceArrow :: sources)) products canonicalTargets current closed sourceKinds readback canonicalReplay
+  have fields : ∀ product ∈ products, product.entry.key.constraint = top ∧
+      ∀ child ∈ product.children, child = marker ∨ child = .reference cutoff := by
+    intro product member
+    obtain ⟨source, sourceIn, own⟩ := aligned_output readback product member
+    refine ⟨congrArg EdgeKey.constraint own.2, ?_⟩
+    intro child present
+    rw [own.1] at present
+    obtain ⟨original, included, mapped⟩ := List.mem_map.mp present
+    rcases sourceKinds source sourceIn original included with same | same
+    · left
+      rw [same, InternedStoredSubstitutionScope.input_closed marker _ closed] at mapped
+      exact mapped.symm
+    · right
+      simpa [same, input, replacement] using mapped.symm
+  have workDone := SourceSynthesisUniverseCanonicalRowReplay.execute_eq_work_of_raw top
+    cutoff productEntry products canonicalTargets marker (replacement cutoff (.reference probe)) current facts
+    productAvailable closed productResident canonicalResident (fun row member => (fields row member).1)
+    (fun row member => (fields row member).2) rowsReplay
+  have done : InternedFreshOrdinaryStoredSubstitution.execute
+      (.node productEntry (canonicalEdges products) 0 [cutoff]) (replacement cutoff (.reference probe)) current =
+        .done target current := by
+    rw [workDone]
+    simp only [InternedNestedConstruction.work, nodeReplay]
+  refine ⟨done, ?_⟩
+  simp only [SourceRecursiveIntersectionMaybeMu.callback, done, Outcome.bind, targetEq,
+    withoutSelfReference, InternedNestedConstruction.work, run]
+
+end MixedBodyProbe

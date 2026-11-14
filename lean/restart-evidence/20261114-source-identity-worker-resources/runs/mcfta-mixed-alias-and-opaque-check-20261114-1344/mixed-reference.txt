@@ -1,0 +1,108 @@
+/tmp/mcfta-mixed-alias-and-opaque-check-20261114-1344/mixed-reference/source/MicroCFTA/SourceSynthesisCurrentUniverseReferenceIdentity.lean:578:113: error: unsolved goals
+S G : Type
+inst✝¹ : DecidableEq S
+inst✝ : DecidableEq (EdgeKey S G)
+emptyGuard : G
+conjoin : G → G → G
+u b : Interned NodeKey
+rows : List (EdgeValue S G)
+depth ordinary : Value S G
+domain : Interned IntersectionFlatMemoKeyDomain.DomainKey
+state : Machine S G
+facts : Facts state.heap
+valid : Cache.Valid state.domains
+available : Available state.heap (Value.mu u (Value.node b rows 0 [Reference.interned u.identity]) depth ordinary)
+diagonalFresh : ¬pair u.identity u.identity ∈ domain.key.seen
+bodyFresh : ¬pair b.identity u.identity ∈ domain.key.seen
+bodyDiagonalFresh : ¬pair b.identity b.identity ∈ domain.key.seen
+universeValue : Value S G := Value.mu u (Value.node b rows 0 [Reference.interned u.identity]) depth ordinary
+sourceBody : Value S G := Value.node b rows 0 [Reference.interned u.identity]
+referenceValue : Value S G := Value.reference (Reference.interned u.identity)
+first : Interned IntersectionFlatMemoKeyDomain.DomainKey × Cache.State IntersectionFlatMemoKeyDomain.DomainKey :=
+  SourceRecursiveIntersectionEnvironment.enter state.domains domain.key universeValue referenceValue u.identity
+    u.identity
+second : Interned IntersectionFlatMemoKeyDomain.DomainKey × Cache.State IntersectionFlatMemoKeyDomain.DomainKey :=
+  SourceRecursiveIntersectionEnvironment.enter first.snd first.fst.key sourceBody universeValue b.identity u.identity
+different : b.identity ≠ u.identity
+firstValid : Cache.Valid first.snd
+firstSeen :
+  ∀ (key : Nat × Nat),
+    key ∈
+        (SourceRecursiveIntersectionEnvironment.enter state.domains domain.key universeValue referenceValue u.identity
+                u.identity).fst.key.seen ↔
+      key = pair u.identity u.identity ∨ key ∈ domain.key.seen
+secondSeen :
+  ∀ (key : Nat × Nat),
+    key ∈
+        (SourceRecursiveIntersectionEnvironment.enter first.snd first.fst.key sourceBody universeValue b.identity
+                u.identity).fst.key.seen ↔
+      key = pair b.identity u.identity ∨ key ∈ first.fst.key.seen
+firstFresh : ¬pair b.identity u.identity ∈ first.fst.key.seen
+secondFresh : ¬pair b.identity b.identity ∈ second.fst.key.seen
+tag12 : compare 1 2 = Ordering.lt
+tag14 : compare 1 4 = Ordering.lt
+tag24 : compare 2 4 = Ordering.lt
+tag42 : compare 4 2 = Ordering.gt
+swap : decision domain.key referenceValue universeValue = Branch.swap
+muBranch : decision domain.key universeValue referenceValue = Branch.leftMu
+refBranch : decision first.fst.key sourceBody referenceValue = Branch.rightReference
+bodyMuBranch : decision first.fst.key sourceBody universeValue = Branch.rightMu
+ordinaryBranch : decision second.fst.key sourceBody sourceBody = Branch.ordinary
+firstKey :
+  (SourceRecursiveIntersectionEnvironment.enter state.domains domain.key universeValue referenceValue u.identity
+          u.identity).fst.key =
+    SourceRecursiveIntersectionDomain.extend domain.key
+      (List.map Prod.fst (SourceRecursiveIntersectionEnvironment.bindings universeValue referenceValue))
+      (pair u.identity u.identity)
+bound : u.identity ∈ SourceRecursiveIntersectionDomain.names first.fst.key
+read : SourcePreparedSharedRows.read state.heap u.identity = some universeValue
+⊢ (((match sourceBody, sourceBody with
+            | Value.node entry first depth free, Value.node entry_1 second_1 depth_1 free_1 =>
+              node emptyGuard conjoin (execute emptyGuard conjoin 8 second.fst) first second_1
+                { heap := state.heap, domains := second.snd }
+            | x, x_1 => unsupported sourceBody sourceBody { heap := state.heap, domains := second.snd }).bind
+          fun value after =>
+          construction (SourceRecursiveIntersectionMaybeMu.maybeMu (pair b.identity u.identity) value after.heap)
+            after).bind
+      fun value after =>
+      construction (SourceRecursiveIntersectionMaybeMu.maybeMu (pair u.identity u.identity) value after.heap) after) =
+    ((node emptyGuard conjoin
+              (execute emptyGuard conjoin 8
+                (SourceRecursiveIntersectionEnvironment.enter
+                    (SourceRecursiveIntersectionEnvironment.enter state.domains domain.key
+                        (Value.mu u (Value.node b rows 0 [Reference.interned u.identity]) depth ordinary)
+                        (Value.reference (Reference.interned u.identity)) u.identity u.identity).snd
+                    (SourceRecursiveIntersectionEnvironment.enter state.domains domain.key
+                          (Value.mu u (Value.node b rows 0 [Reference.interned u.identity]) depth ordinary)
+                          (Value.reference (Reference.interned u.identity)) u.identity u.identity).fst.key
+                    (Value.node b rows 0 [Reference.interned u.identity])
+                    (Value.mu u (Value.node b rows 0 [Reference.interned u.identity]) depth ordinary) b.identity
+                    u.identity).fst)
+              rows rows
+              { heap := state.heap,
+                domains :=
+                  (SourceRecursiveIntersectionEnvironment.enter
+                      (SourceRecursiveIntersectionEnvironment.enter state.domains domain.key
+                          (Value.mu u (Value.node b rows 0 [Reference.interned u.identity]) depth ordinary)
+                          (Value.reference (Reference.interned u.identity)) u.identity u.identity).snd
+                      (SourceRecursiveIntersectionEnvironment.enter state.domains domain.key
+                            (Value.mu u (Value.node b rows 0 [Reference.interned u.identity]) depth ordinary)
+                            (Value.reference (Reference.interned u.identity)) u.identity u.identity).fst.key
+                      (Value.node b rows 0 [Reference.interned u.identity])
+                      (Value.mu u (Value.node b rows 0 [Reference.interned u.identity]) depth ordinary) b.identity
+                      u.identity).snd }).bind
+          fun value after =>
+          construction (SourceRecursiveIntersectionMaybeMu.maybeMu (pair b.identity u.identity) value after.heap)
+            after).bind
+      fun value after =>
+      construction (SourceRecursiveIntersectionMaybeMu.maybeMu (pair u.identity u.identity) value after.heap) after
+/tmp/mcfta-mixed-alias-and-opaque-check-20261114-1344/mixed-reference/source/MicroCFTA/SourceSynthesisCurrentUniverseReferenceIdentity.lean:915:12: error: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+'MicroCFTA.SourceSynthesisCurrentUniverseReferenceIdentity.current_stored_universe_reference_alias_after_mixed_entry' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceSynthesisCurrentUniverseReferenceIdentity.current_stored_universe_reference_identity_after_growth' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

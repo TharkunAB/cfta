@@ -1,0 +1,28 @@
+-- UNCOMPILED internal induction target. No proof is supplied.
+theorem runEager_identity_completed_replay_and_emitted_inclusion
+    (graph : Graph Symbol Constraint)
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (recursiveFuel : Nat) (inventory : Inventory)
+    (caller : Caller (bits + 2)) (memos : Memos) (before : Cached) (metadata : Metadata Unit)
+    (seed : Seed) (ceiling : Nat)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (bounded : Fits seed.2 caller.checked)
+    (known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap)
+    (selectionMembers : ∀ entry rows depth free, ∀ edge ∈ edgesOf (.node entry rows depth free), edge ∈ rows)
+    (selectionLength : ∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length)
+    (initialMass : SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling)
+    (reserved : SourcePruningEnumerationSharedEagerReservation.eagerReserved bits recursiveFuel seed ceiling) :
+    ∀ workFuel,
+      let small := SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.runEagerWithNarrow
+        (fun _ _ _ node state => .done node state) graph [] checkEmpty edgesOf
+        none (fun _ _ => none) workFuel recursiveFuel metadata caller memos.query before
+      ∃ lift, ∀ extra,
+        let larger := SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.runEagerWithNarrow
+          (fun _ _ _ node state => .done node state) graph [] checkEmpty edgesOf
+          none (fun _ _ => none) (workFuel + lift + extra) recursiveFuel metadata caller memos.query before
+        (match small with
+          | .complete _ _ _ => larger = small
+          | .stopped _ _ _ => True) ∧
+        ∀ output ∈ SourcePruningEnumerationSharedPreparedRecursive.emitted small,
+          output ∈ SourcePruningEnumerationSharedPreparedRecursive.emitted larger

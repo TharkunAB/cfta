@@ -1,0 +1,72 @@
+-- UNCOMPILED additive target. No proof is supplied.
+theorem accepted_initial_identity_emitted_history_at_any_budget
+    (lib : Library) (query : Query) (signed : Int) (expression : Expression)
+    (returned : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok expression)
+    (depth : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (graph : Graph Symbol Constraint) (checkEmpty : Bool) :
+    let metadata : Metadata Unit := ⟨[], [], [], ()⟩
+    let bits := SourceSynthesisCurrentProgramEagerEnumerationWidth.enumBits lib query signed depth
+    ∃ fields cache value heap,
+      ∃ built : InternedFreshOrdinaryConstruction.build (ordinarySymbols expression) [] empty = .done value heap,
+      SourceEqualityOriginalAllocationPreparation.Receipt (guards (ordinarySymbols expression)) Cache.emptyState fields cache ∧
+      SourceCurrentConjunctionEquality.Fields (SourceEqualityConstraintMemoAllocation.initial cache) heap ∧
+      Context formulas solver (SourceCurrentAllocatedPartialInitialization.inventory (ordinarySymbols expression) value heap built)
+        (SourceCurrentAllocatedPartialInitialization.caller (bits + 2) cache heap) SourceCurrentAllocatedPartialInitialization.globals ∧
+      Facts heap ∧ Available heap value ∧
+      SourceSynthesisProgramBuildRolesGeneric.ProgramValue literal value ∧
+      Grows empty heap ∧ Cache.Extends (empty : State Symbol Guard).nodes.issued heap.nodes.issued ∧
+      SourceEqualityAnnotationHeap.Heap
+        (Derived (alphabet (encodedLibrary lib)) top SourceEqualityPCSNativeEdge.conjoin) heap ∧
+      ∃ identity, SourceCurrentAllocatedPartialInitialization.emptyValue cache = .live identity [] ∧
+        SourceEqualityConstraintAllocation.Ready
+          (SourceCurrentAllocatedPartialInitialization.caller (bits + 2) cache heap).checked.operations.constraints
+          (.live identity []) ∧ value.free = [] ∧ SourceRecursiveIntersectionInputView.Original value ∧
+        ValueFields (Origin (encodedLibrary lib)) literal value ∧
+        ∃ handle, encodeNode value = some handle ∧ lookupNode heap handle = some value ∧
+          ProgramSlots (Origin (encodedLibrary lib)) literal heap
+            (EnumerationState.initial handle) (fun uv => uv = 0) ∧
+          let startup : Cached :=
+            ⟨EnumerationState.initial handle,
+              fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary value else false,
+              fun _ => none⟩
+          let initialCaller := SourceCurrentAllocatedPartialInitialization.caller (bits + 2) cache heap
+          let initialSeed := seed heap
+          ((Packet formulas solver
+              (SourceCurrentAllocatedPartialInitialization.inventory (ordinarySymbols expression) value heap built)
+              initialCaller SourceCurrentAllocatedPartialInitialization.globals metadata startup ∧
+            EnumerationValidity.Canonical startup.core ∧
+            startup.core.values[0]? = some (.unenumerated (some handle) []) ∧
+            SourcePruningEnumerationPrefixAdmission.suspendedBound startup.core = 0 ∧
+            EnumerationCanonicalWaiting.Correct (fun uv => uv) startup.core.values startup.waiting ∧
+            ∀ slot, SourcePruningEnumerationNativeIndex.candidate heap
+              ((startup.core.values[slot]?).getD .eliminated) = some (startup.expandable slot)) ∧
+            EnumerationCarriers.CarriesGraph startup.core 0 ∧
+            EnumerationGraphReferences.ReferencesCarry startup.core) ∧
+          Fits initialSeed.2 initialCaller.checked ∧
+          Heap (fun guard => guard ∈ initialSeed.1) heap ∧
+          SourcePruningEnumerationSharedEagerReservation.eagerReserved bits depth initialSeed 0 ∧
+    (∃ bound outcome,
+      (∀ extra, SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.runEagerWithNarrow
+        (fun _ _ _ node state => .done node state)
+        graph [] checkEmpty InternedEdgeResidency.nodeEdges none (fun _ _ => none)
+        (bound + extra) depth metadata initialCaller
+        SourceCurrentAllocatedPartialInitialization.globals.query startup = outcome) ∧
+      OutcomeResources formulas solver initialCaller
+        (SourcePruningEnumerationSharedEagerReservation.eagerFinal depth initialSeed 0) outcome ∧
+      ∀ output ∈ emitted outcome,
+        EnumerationReferences.PendingReferences output.cache.core ∧
+        ∃ (level : Nat → Nat) (frontier : Nat),
+          EnumerationOrder.Stratified output.cache.core level frontier) ∧
+    ∀ workFuel,
+      let actual := SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.runEagerWithNarrow
+        (fun _ _ _ node state => .done node state)
+        graph [] checkEmpty InternedEdgeResidency.nodeEdges none (fun _ _ => none)
+        workFuel depth metadata initialCaller SourceCurrentAllocatedPartialInitialization.globals.query startup
+      ∀ output ∈ emitted actual,
+        SourcePruningEnumerationSharedPreparedRecursive.OutputResources formulas solver initialCaller
+          (SourcePruningEnumerationSharedEagerReservation.eagerFinal depth initialSeed 0) output ∧
+        EnumerationReferences.PendingReferences output.cache.core ∧
+        ∃ (level : Nat → Nat) (frontier : Nat),
+          EnumerationOrder.Stratified output.cache.core level frontier

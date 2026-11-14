@@ -1,0 +1,109 @@
+@MicroCFTA.SourceSynthesisUniverseOffDiagonalBody.node_target_readback : ∀ {Symbol Guard : Type}
+  [inst : DecidableEq Symbol] [inst_1 : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol Guard)]
+  (top : Guard) (conjoin : Guard → Guard → Guard),
+  conjoin top top = top →
+    ∀ (u b m : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+      (bodyRows markerRows : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+      (depth ordinary : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+      (domain : MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+      (state : MicroCFTA.SourceRecursiveIntersectionKernel.Machine Symbol Guard),
+      MicroCFTA.SourceRecursiveIntersectionKernel.Valid state →
+        MicroCFTA.SourceRecursiveIntersectionKernel.Domain state domain →
+          MicroCFTA.InternedProbeProvenance.Available state.heap
+              (MicroCFTA.InternedConstructorTemplates.Value.mu u
+                (MicroCFTA.InternedConstructorTemplates.Value.node b bodyRows 0
+                  [MicroCFTA.InternedBinderProtocol.Reference.interned u.identity])
+                depth ordinary) →
+            MicroCFTA.InternedProbeProvenance.Available state.heap
+                (MicroCFTA.InternedConstructorTemplates.Value.reference
+                  (MicroCFTA.InternedBinderProtocol.Reference.interned u.identity)) →
+              MicroCFTA.InternedProbeProvenance.Available state.heap
+                  (MicroCFTA.InternedConstructorTemplates.Value.node m markerRows 0 []) →
+                u.identity ∈ MicroCFTA.SourceRecursiveIntersectionDomain.names domain.key →
+                  MicroCFTA.SourceRecursiveIntersectionControl.pair b.identity u.identity ∈ domain.key.seen →
+                    ¬MicroCFTA.SourceRecursiveIntersectionControl.pair u.identity u.identity ∈ domain.key.seen →
+                      (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                          row ∈ bodyRows → row.entry.key.constraint = top) →
+                        (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                            row ∈ bodyRows →
+                              ∀ (child : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard),
+                                child ∈ row.children →
+                                  child = MicroCFTA.InternedConstructorTemplates.Value.node m markerRows 0 [] ∨
+                                    child =
+                                      MicroCFTA.InternedConstructorTemplates.Value.reference
+                                        (MicroCFTA.InternedBinderProtocol.Reference.interned u.identity)) →
+                          (∀ (left : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                              left ∈ bodyRows →
+                                ∀ (right : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                                  right ∈ bodyRows →
+                                    left.entry.key.symbol = right.entry.key.symbol →
+                                      left.children.length = right.children.length → left.children = right.children) →
+                            ∀ (arrow : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                              arrow ∈ bodyRows →
+                                arrow.children =
+                                    [MicroCFTA.InternedConstructorTemplates.Value.node m markerRows 0 [],
+                                      MicroCFTA.InternedConstructorTemplates.Value.reference
+                                        (MicroCFTA.InternedBinderProtocol.Reference.interned u.identity),
+                                      MicroCFTA.InternedConstructorTemplates.Value.reference
+                                        (MicroCFTA.InternedBinderProtocol.Reference.interned u.identity)] →
+                                  ∃ product final entry targets,
+                                    MicroCFTA.SourceRecursiveIntersectionKernel.node top conjoin
+                                          (MicroCFTA.SourceRecursiveIntersectionKernel.execute top conjoin 8 domain)
+                                          bodyRows bodyRows state =
+                                        MicroCFTA.SourceRecursiveIntersectionKernel.Result.done product final ∧
+                                      MicroCFTA.SourceRecursiveIntersectionKernel.Valid final ∧
+                                        MicroCFTA.SourceRecursiveIntersectionKernel.Extension state final ∧
+                                          MicroCFTA.InternedProbeProvenance.Available final.heap product ∧
+                                            product =
+                                                MicroCFTA.InternedConstructorTemplates.Value.node entry
+                                                  (MicroCFTA.InternedConstructorTemplates.canonicalEdges targets) 0
+                                                  [MicroCFTA.InternedBinderProtocol.Reference.intersection
+                                                      (MicroCFTA.SourceRecursiveIntersectionControl.pair b.identity
+                                                          u.identity).fst
+                                                      (MicroCFTA.SourceRecursiveIntersectionControl.pair b.identity
+                                                          u.identity).snd] ∧
+                                              MicroCFTA.Language.All₂
+                                                  (fun source target =>
+                                                    target.children =
+                                                        List.map
+                                                          (MicroCFTA.InternedStoredSubstitution.input
+                                                            (MicroCFTA.InternedStoredSubstitutionRebind.replacement
+                                                              (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                                                u.identity)
+                                                              (MicroCFTA.SourceRecursiveIntersectionControl.repeatedValue
+                                                                (MicroCFTA.SourceRecursiveIntersectionControl.pair
+                                                                  b.identity u.identity))))
+                                                          source.children ∧
+                                                      target.entry.key =
+                                                        { symbol := source.entry.key.symbol,
+                                                          children :=
+                                                            List.map
+                                                              MicroCFTA.InternedConstructorTemplates.Value.referenceOf
+                                                              (List.map
+                                                                (MicroCFTA.InternedStoredSubstitution.input
+                                                                  (MicroCFTA.InternedStoredSubstitutionRebind.replacement
+                                                                    (MicroCFTA.InternedBinderProtocol.Reference.interned
+                                                                      u.identity)
+                                                                    (MicroCFTA.SourceRecursiveIntersectionControl.repeatedValue
+                                                                      (MicroCFTA.SourceRecursiveIntersectionControl.pair
+                                                                        b.identity u.identity))))
+                                                                source.children),
+                                                          constraint := top })
+                                                  bodyRows targets ∧
+                                                (∀
+                                                    (target :
+                                                      MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                                                    target ∈ targets →
+                                                      MicroCFTA.InternedEdgeResidency.EdgeResident final.heap target) ∧
+                                                  (∀
+                                                      (target :
+                                                        MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+                                                      target ∈ targets →
+                                                        MicroCFTA.EqualityLeafProjectionPhysical.dead target = false) ∧
+                                                    MicroCFTA.InternedConstructorTemplates.run
+                                                        (MicroCFTA.InternedConstructorTemplates.makeNode targets)
+                                                        final.heap =
+                                                      (product, final.heap)
+'MicroCFTA.SourceSynthesisUniverseOffDiagonalBody.node_target_readback' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

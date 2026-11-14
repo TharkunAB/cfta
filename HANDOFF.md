@@ -1,3 +1,116 @@
+# Same-source identity-worker resource checkpoint (2026-11-14 14:55 CET)
+
+GOAL ACTIVE. Keep the full optimized interned shared eager objective. For EACH
+actual emitted partial root, prove ONE finite accepted term of the SAME ORIGINAL
+root with ONE consistent assignment for supported domains, paths, aliases,
+residuals and partial readback, including parked backward recompletion.
+Keep original typing, depth adequacy/completeness, default LPO/reduction/refolding
+and BOTH language directions, stream order/multiplicity/lazy demand, exact accepted
+terms per node-count size, counts/weights/training, BOTH rank/unrank inverses,
+host bounds and compiled Haskell correspondence. Older constructor/equality work
+remains a secondary target. Do not replace any clause with a smaller objective.
+
+Checked source: 981f461db13af128f127c5ce4e62e39e86e6d474. It is pushed on formalize
+and independently verified. Main remains e53852064d3ef5a2eafec47d754c27504b11de5f.
+Prior compact checkpoint: 31c38ed79d8c23be8a979750b77c986ca79f5338. The host reboot
+at 13:20 cleared old /tmp. That checkpoint retained the earlier exact inputs.
+Preserve unrelated .hypha/ and all earlier proofs/counterexamples/repairs/drafts.
+
+NEW WHOLE-WORKER RESOURCE RESULT. The PUBLIC
+SourcePruningEnumerationSharedEagerReservation.runEager_identity_finite_complete_resources
+matches the exact pinned internal header. For every finite recursive depth, the
+initial Packet/Fits/Heap, actual selection membership/length bounds, mass bound
+and existing eagerReserved bound derive ONE exact stable worker outcome at every
+sufficiently large common budget, with FULL OutcomeResources. It uses actual
+runEagerWithNarrow with literal identity, Unit metadata, empty templates, none
+stop and default order. No fake Key/fits/admits, configured surrogate or future
+prefix/output/callback provider is an input. Actual identity checkpoints supply
+expansion phases, mass and admission. Generic callback/captured-child/row/opaque/
+prepared proofs retain the SAME actual narrowing operation. Old configured
+headers and operational code remain intact.
+
+NEW SAME-SOURCE RESOURCE BRIDGE. The PUBLIC
+SourceSynthesisCurrentProgramEagerResources.accepted_initial_identity_emitted_history
+in SourceSynthesisCurrentProgramIdentityEagerResources.lean matches the exact
+CURRENT target. ONE SAME accepted current firstOrderRaw source/build initializer
+derives all allocation receipts, field/role facts, startup invariants, width and
+reservation. The actual worker theorem then derives the stable resource result.
+Every emitted Packet supplies PendingReferences and Stratified dependency order.
+No alternate initializer or future provider is supplied. These are RESOURCE
+results. Finite-depth stopped outcomes remain actual permitted results.
+
+NEW CONTEXTUAL SOURCE ALIAS. The PUBLIC current_stored_universe_reference_alias_after_mixed_entry
+retains the SAME accepted source/build/stored original U. After literal mixed
+U/available closed ordinary-or-union pattern entry, actual ref(U)/U returns FULL
+ORIGINAL U at one existential finite bound and every larger value. It derives
+final Valid and Extension. The new entered-domain theorem does not export a
+fixed fuel 13. Earlier empty-domain fuel-13 results remain intact. It assumes no
+body/product/callback/result receipt or future provider.
+
+NEW ACTUAL BODY PREREQUISITES. OffDiagonalReferenceControl retains the actual
+three-step body/Mu cutoff and reached cache, also at bound 8. OffDiagonalBody.
+node_target_readback derives the actual ordered native product, exact final
+machine, Valid/Extension, source-ordered target fields, resident live rows and
+complete makeNode readback. Its structural catalog premises remain for the
+source wrapper to derive. This is NOT the body(U)/U source alias theorem.
+
+LATEST PUBLIC VALIDATION. All five final gates PASS: module build, strict source,
+independent import, full Audit build and strict Audit. Strict Audit checks 96,017
+aggregate imported-theorem axiom dependencies. Separately 91 explicit reports
+include 89 standard-axiom and two axiom-free reports. Only propext, Classical.choice
+and Quot.sound occur. There are 5,945 source modules and 4,943 direct Audit imports
+(4,942 project modules plus Lean). Counts do not establish the full objective.
+Serial jobs use effective 4 GiB memory max/high and zero swap. No known compiler
+or push handle is live. Root owns all live writes, compiler jobs and Git.
+
+BIGGEST SEMANTIC GAP. ONE accepted finite common completion of EACH emitted root
+is still UNPROVED. Preserve path/alias/residual coherence and backward parked
+recompletion. Packet/Stratified, provenance, local nonemptiness and a Mu marker
+do not prove this. The removed suspended bucket still needs its actual Holds
+facts. Post-clear satisfaction alone cannot establish those removed facts.
+The full original typing/language/preprocessing/stream/size/count/weight/rank and
+compiled-Haskell clauses remain OPEN. Do not mark the overall goal complete.
+
+NEXT WORKER GAP. Every-budget worker output-history safety remains UNPROVED.
+The actual stopped outcome may contain partial outputs. Eventual stability does
+not prove that target. The frozen all-common-budget route fixes recursive depth
+and includes all emitted outcomes. Successful selected-preparation replay is the
+next actual execution producer. Recover missing mass/admission facts from actual
+receipts. Reuse checked empty-catalog callback/finalizer replay. Its proposed
+SelectedValueReplay primitive and both history headers remain UNCOMPILED.
+
+NEXT SOURCE GAP. BODY(U)/U and full two-alias/generated-type closure remain OPEN.
+The full source body wrapper reached check4 and FAILS. Its frozen repair is
+75ea3347497d0a790e3c0a748aa0b735ca03b7c06f8e71002c1e2e7b8c1da4de.
+Check that exact candidate next. It repairs private binder parsing/projections,
+native-universe probe availability and cutoff normalization. All 16 old checked
+declarations and the public body target remain exact. Do not add future result,
+body/product/callback providers or use diagonal transport for an off-diagonal
+child cache. The lower body dependency is now public. No overlay is required.
+
+RESTART EVIDENCE. lean/restart-evidence/20261114-source-identity-worker-resources
+preserves exact checked inputs, failed inputs, repairs, marked drafts, scripts,
+small logs, source pins and the canonical board request/readback. It excludes
+compiled objects and copied dependency overlays. Source tree digest: feed08ad0cfdc04e4f1aab6b3265906eaa6bebd01dbe98b10808264526996ced.
+The prior compact packet stays immutable. The root manifest covers every payload
+including nested manifests. Verify decompressed byte identities and reconstruct
+each older document from its exact saved prefix and pinned prior Git version.
+The source plus pinned Nix environment reproduces the proof results. Logs record
+derived history. Source pins and the old document bytes are verified.
+
+HASKELL. No Haskell/Cabal/test/Liquid Haskell annotation changed. No new runtime
+implementation defect or fix was established. Record EVERY future Haskell fix in
+FINDINGS so an external reader can apply it. The proof/setup repairs in this
+packet concern Lean normalization, exact state projection, strict lint and private
+module-path setup. They do not establish Haskell defects.
+
+Keep /tmp small. Latest free space was about 138 GiB. Latest primary usage was 6%.
+Use fresh primary percentages. Pause and notify only above 80%; lifetime goal
+token totals are not that signal. Use trusted per-command GitHub SSH443 with
+Hostname=ssh.github.com, HostKeyAlias=github.com, port 443, BatchMode=yes,
+ConnectTimeout=15, ServerAliveInterval=10 and ServerAliveCountMax=2. Port 22
+timed out after reboot. The remote configuration did not change.
+
 # Actual off-diagonal body readback checked (2026-11-14 14:48 CET)
 
 GOAL ACTIVE. Preserve the complete original finite common-term/assignment,
