@@ -3302,16 +3302,18 @@ private theorem eager_captured_rows_resources
 end ActualCapturedRowsResources
 
 section ActualOpaqueResources
-variable {Key : Type}
 variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
 
-private theorem eager_opaque_resources
-    (holeKey : Typing → Nat → Key) (keyMatches : Key → Symbol → Bool) (admits : Key → Node → Bool)
+/-- Opaque completion retains the same narrowing operation in its recursive callback. -/
+private theorem eager_opaque_resources_with_narrow
+    (narrow : Metadata Typing → Nat → Nat → Node →
+      InternedConstructorTemplates.State Symbol Constraint →
+      MergedSourceComparison.Result Symbol Constraint Node)
     (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
     (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
     (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
     (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
-    (recursiveDepth : Nat) (recursive : EagerResumeComplete (bits := bits) holeKey keyMatches admits graph templates
+    (recursiveDepth : Nat) (recursive : EagerResumeWithNarrowComplete (bits := bits) narrow graph templates
       checkEmpty edgesOf stop order formulas solver recursiveDepth)
     (inventory : Inventory) (caller : Caller (bits + 2)) (memos : Memos) (metadata : Metadata Typing)
     (before : Cached) (seed : Seed) (bound ceiling uv handle : Nat) (scs : List Suspended) (value : Node)
@@ -3333,10 +3335,10 @@ private theorem eager_opaque_resources
         uv scs value caller before memos.query = some receipt) ∧
       (∀ extra, SourcePruningEnumerationSharedReceiptContinuation.run
         (SourcePruningEnumerationSharedPreparedRecursive.continueWith
-          (SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild (width := bits + 2)
+          (SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow (width := bits + 2)
             (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty
               (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra) edgesOf)
-            holeKey keyMatches admits graph templates checkEmpty edgesOf stop order (fuel + extra) recursiveDepth)
+            narrow graph templates checkEmpty edgesOf stop order (fuel + extra) recursiveDepth)
           graph templates stop order (fuel + extra) metadata uv) caller memos.query (some receipt) = outcome) ∧
       OutcomeResources formulas solver caller
         (fallbackPlan bound ceiling (fun retained current => eagerFinal recursiveDepth current retained) seed) (finish uv outcome)
@@ -3359,7 +3361,7 @@ private theorem eager_opaque_resources
   · obtain ⟨fragment, after, rfl, afterPacket, _counter, afterMass⟩ := completed
     have actualMass : SourcePruningEnumerationPrefixAdmission.suspendedBound after.core ≤ ceiling + bound := by omega
     obtain ⟨callbackFuel, continued, callbackRun, resources⟩ :=
-      callback_eager_induction_resources holeKey keyMatches admits formulas solver next graph templates metadata uv
+      callback_eager_induction_resources_with_narrow narrow formulas solver next graph templates metadata uv
         fragment reached final after checkEmpty edgesOf stop order recursiveDepth recursive
         (advance seed (bound + 1)) (ceiling + bound) afterPacket admitted.2.2.1 paddedFits paddedKnown
         selectionMembers selectionLength actualMass reserved.2
@@ -3417,6 +3419,51 @@ private theorem eager_opaque_resources
         SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.advance]
     · have fullResources := resources.mono growth.1 growth.2
       simpa only [finish, fallbackPlan, callerSame, querySame] using fullResources
+
+variable {Key : Type}
+
+private theorem eager_opaque_resources
+    (holeKey : Typing → Nat → Key) (keyMatches : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (recursiveDepth : Nat) (recursive : EagerResumeComplete (bits := bits) holeKey keyMatches admits graph templates
+      checkEmpty edgesOf stop order formulas solver recursiveDepth)
+    (inventory : Inventory) (caller : Caller (bits + 2)) (memos : Memos) (metadata : Metadata Typing)
+    (before : Cached) (seed : Seed) (bound ceiling uv handle : Nat) (scs : List Suspended) (value : Node)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (ready : EnumerationDriver.Ready uv before.core)
+    (stored : before.core.values[uv]? = some (.unenumerated (some handle) scs))
+    (incoming : EnumerationReferences.IncomingAvoid uv before.core)
+    (available : Available caller.checked.native.machine.heap value) (closed : value.free = [])
+    (dispatch : (match (generalizing := false) value with
+      | .node .. => !(scs.any (fun sc => EqualityTrie.isTerminal sc.trie)) | _ => false) = false)
+    (fits : Fits seed.2 caller.checked) (known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap)
+    (mass : SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling) (bucketBound : scs.length ≤ bound)
+    (selectionMembers : ∀ entry rows depth free, ∀ edge ∈ edgesOf (.node entry rows depth free), edge ∈ rows)
+    (selectionLength : ∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length)
+    (reserved : fallbackReserved bits bound ceiling (fun retained current => eagerReserved bits recursiveDepth current retained) seed) :
+    ∃ (fuel : Nat) (receipt : SelectedEdge.Result (bits + 2)) (outcome : Fold),
+      (∀ extra, SourcePruningEnumerationSharedSelectedOpaqueDispatch.run checkEmpty
+        (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra)
+        uv scs value caller before memos.query = some receipt) ∧
+      (∀ extra, SourcePruningEnumerationSharedReceiptContinuation.run
+        (SourcePruningEnumerationSharedPreparedRecursive.continueWith
+          (SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild (width := bits + 2)
+            (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty
+              (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra) edgesOf)
+            holeKey keyMatches admits graph templates checkEmpty edgesOf stop order (fuel + extra) recursiveDepth)
+          graph templates stop order (fuel + extra) metadata uv) caller memos.query (some receipt) = outcome) ∧
+      OutcomeResources formulas solver caller
+        (fallbackPlan bound ceiling (fun retained current => eagerFinal recursiveDepth current retained) seed) (finish uv outcome)
+    := by
+  exact eager_opaque_resources_with_narrow (bits := bits)
+    (SourcePruningOuterNarrow.narrow holeKey keyMatches admits)
+    graph templates checkEmpty edgesOf stop order formulas solver recursiveDepth recursive
+    inventory caller memos metadata before seed bound ceiling uv handle scs value
+    packet ready stored incoming available closed dispatch fits known mass bucketBound
+    selectionMembers selectionLength reserved
 
 end ActualOpaqueResources
 

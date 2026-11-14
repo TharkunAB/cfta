@@ -1,3 +1,29 @@
+# Opaque resources retain the actual narrowing operation (2026-11-14 13:55 CET)
+
+GOAL ACTIVE. Preserve the full original joint finite-witness and implementation
+correspondence scope below. Callback, captured-child, captured-row and opaque
+resources now retain one actual narrow/resumeWithNarrow operation.
+The opaque proof adds47 lines. Its configured header and every byte outside
+ActualOpaqueResources remain exact. No operational kernel or Haskell source changes.
+All five public checks PASS. Strict Audit:95,970 aggregate theorem dependencies;
+separately85 explicit reports,83 standard-axiom and2 axiom-free. Only the standard
+propext/Classical.choice/Quot.sound axioms occur. Source modules5942; direct imports4940.
+Public logs/pins: /tmp/mcfta-eager-narrow-opaque-publication-20261114-1351.
+SharedEagerReservation SHA2567ed746108fd83a2884ea0612f9feb7448195577cc91b00b364b101254115ec60.
+All opaque/public compiler handles are terminal. Captured rows commit11d8632d15f93aa3391550595c1945812947f8c9
+is pushed and independently verified. Main remainse53852064d3ef5a2eafec47d754c27504b11de5f.
+
+Next: actual prepared-node composition, prefix capability and depth induction.
+Whole identity-worker resource completion, every-budget worker history, mixed-domain
+source aliases and ONE finite common accepted original-root witness remain OPEN.
+The new ref-only repair and off-diagonal repair are UNVERIFIED; their prepared
+serial driver is /tmp/mcfta-mixed-reference-check8-and-offdiag-check3-20261114-1353.
+Root owns all compilation and live writes. Keep /tmp small and preserve .hypha/.
+Primary usage was6% at13:46; use fresh primary percentages and pause/notify above80%.
+Use the working per-command GitHub SSH443 configuration recorded below.
+No Haskell/Cabal/test/Liquid Haskell annotation changed. No new Haskell fix was
+established. Record every future Haskell fix in FINDINGS.
+
 # Actual captured rows retain the narrowing operation (2026-11-14 13:45 CET)
 
 GOAL ACTIVE. The full finite common-witness, language, typing, depth, default
