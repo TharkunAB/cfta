@@ -1,31 +1,19 @@
 # Not yet on main
 
-This branch is `main` with every open pull request merged, and four commits
-that have no pull request. This file lists that work. Remove an entry when it
-is on `main`.
+This branch is `main` with every open pull request merged, except the three
+of "Not in this branch", and four commits that have no pull request. This
+file lists that work. Remove an entry when it is on `main`.
 
 Each list is one stack of pull requests, from the bottom (based on `main`) to
 the top.
-
-## In progress: completions of a prefix
-
-The serialization stack is on `main`: #188, the graph text format; #116,
-checkpoints; #110, editable source documents and their text forms; and #126,
-diff and three-way merge under `Data.CFTA.Language`. #102 is ready for
-review: it folds the completions stack (#102, #108, #122, #138, #157, #159,
-and #164, which are closed) into one pull request, with the completions in
-the order of `sized` from a size index of the prefix. It also gives `sized`
-count tables for ambiguous rows without constraints (the bottom-up
-deterministic rows) and for equal direct children (the intersections of the
-states), with the checkpoint routes `sized` and `sized-sample` at version 2.
-
-- #102 `feature/grammar-mask`: Completions of a prefix, and count tables for ambiguous rows and equal children
 
 ## Not in progress
 
 Each pull request in this section is a draft.
 
 ### Inclusion
+
+#101 conflicts with `main`.
 
 - #101 `feature/language-inclusion`: Language inclusion up to a size, with a counterexample
 - #103 `feature/exact-inclusion`: Exact language inclusion
@@ -34,9 +22,13 @@ Each pull request in this section is a draft.
 
 ### Sized documentation
 
+#106 conflicts with `main`.
+
 - #106 `docs/sized-row-order`: Sized: qualify the row-order claim
 
 ### Refinements over data
+
+#109 conflicts with `main`.
 
 - #109 `feature/named-predicates`: Refinements over data: named sorts, predicates, definitions, and ground evaluation
 - #128 `feature/theories`: Add theories: datatypes and structurally recursive definitions for every solver
@@ -76,12 +68,15 @@ checks for #134, #135, #142, and #191. A manual CI run passes on each.
 
 ### Learned exclusions and named holes
 
+#139 conflicts with `main`.
+
 - #139 `feature/learned-exclusions`: Learn exclusion templates from rejected and accepted terms
 - #153 `feature/named-holes`: Add named holes to templates, with exact named exclusion
 
 ### Edits
 
-"Format and lint" fails on #141 and on each pull request above it.
+#141 conflicts with `main`. "Format and lint" fails on #141 and on each pull
+request above it.
 
 - #141 `feature/edit-automaton`: The edit automaton of a term
 - #146 `feature/edit-sets`: Edit sets: edits at up to k incomparable sites of a term
@@ -100,17 +95,25 @@ checks for #134, #135, #142, and #191. A manual CI run passes on each.
 - #143 `feature/invertible-generators`: Invertible generator blocks: term to rank for combinator generators
 - #144 `feature/invertible-compile`: Rank a term in a compiled refinement generator by its surface
 
+## Not in this branch
+
+These open pull requests are not merged here.
+
+- #194 `feature/hole-fit-model`: Hole fits ordered by a model of Hackage, from a .cfta file
+- #201 `feature/hole-fit-preferences`: Train conditional preferences between valid hole fits. Its base is `integration/hole-fit-training`.
+- #209 `feature/liquid-phase2`: cfta: LiquidHaskell contracts behind a manual flag
+
 ## Commits without a pull request
 
 - `b2a4b10e1`: `tableIndexes` takes the leaf sources of `tableIndex`. The
-  completions (#102) add `tableIndexes`, `prefixedTable`, and the top-level
-  `seed` and `termPositions` of the table module, and the run-time signatures
-  stack adds the leaf sources. The merge of #102 here gives `seed` and
-  `termPositions` the leaf sources, and `prefixedTable` and `Data.CFTA.Sized`
-  use none. The table rows of #102 carry the classes of equal children
-  (`EqualChildren`) in place of `()`, and `seed` reads a leaf source before
-  the classes. Add this change to the run-time signatures stack when it is
-  rebased after #102.
+  completions (#102, on `main`) add `tableIndexes`, `prefixedTable`, and the
+  top-level `seed` and `termPositions` of the table module, and the run-time
+  signatures stack adds the leaf sources. The merge of #102 here gives `seed`
+  and `termPositions` the leaf sources, and `prefixedTable` and
+  `Data.CFTA.Sized` use none. The table rows of #102 carry the classes of
+  equal children (`EqualChildren`) in place of `()`, and `seed` reads a leaf
+  source before the classes. Add this change to the run-time signatures stack
+  when it is rebased after #102.
 - `40f13e60d`: the text forms of named predicates and named sorts. This needs
   serialization and #109 on `main`.
 - `39c500494`: named holes `_name` in the text form of templates. This needs
