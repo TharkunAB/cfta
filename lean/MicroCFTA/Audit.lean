@@ -5151,6 +5151,7 @@ import MicroCFTA.SourceCurrentAllocatedNativeAuthenticBodyFirstInnerHistories
 import MicroCFTA.SourceCurrentAllocatedNativeAuthenticCoherentInnerHistory
 import MicroCFTA.SourceCurrentAllocatedNativeGeneralMNodeFinish
 import MicroCFTA.SourceCurrentAllocatedNativeGeneralCMHistory
+import MicroCFTA.SourcePruningEnumerationObservedRealPrefixResources
 /-!
 # Proof dependency audit
 
@@ -6162,3 +6163,6 @@ run_cmd do
 #print axioms MicroCFTA.SourceCurrentAllocatedNativeSourceQueryInduction.through_mono
 #check @MicroCFTA.SourceCurrentAllocatedNativeSourceQueryInduction.fields_mono
 #print axioms MicroCFTA.SourceCurrentAllocatedNativeSourceQueryInduction.fields_mono
+
+#check @MicroCFTA.SourcePruningEnumerationSharedRecursive.prefix_real_narrowed_resources_at_original_budget
+#print axioms MicroCFTA.SourcePruningEnumerationSharedRecursive.prefix_real_narrowed_resources_at_original_budget
