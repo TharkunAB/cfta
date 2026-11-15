@@ -1,0 +1,11 @@
+--- lean/restart-evidence/20261115-current-ordinary-node-profile-raw-producer-draft/SourceCurrentAllocatedNativeOrdinaryNodeProfile.lean
++++ lean/restart-evidence/20261115-current-ordinary-node-profile-index-generalization-repair/SourceCurrentAllocatedNativeOrdinaryNodeProfile.lean
+@@ -173,6 +173,8 @@
+     middleExtension, resident, throughWork, resultEq, afterEq, canonical, _resultFree,
+     _rowsAfterPhysical, _rowsAfterExtension, available, _rowsAfterResident⟩ := observed
+   have rowProfiles : ∀ row ∈ rows, ∀ child ∈ row.children, Profile sourceName child := by
++    generalize _jobsEq : pairs (InternedEdgeResidency.nodeEdges request.left)
++      (InternedEdgeResidency.nodeEdges request.right) = jobs at aligned
+     induction aligned with
+     | nil =>
+         intro row member

@@ -1,0 +1,32 @@
+theorem returned_edge_cell_checked_body_prefix
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (rootRequest : NodeRequest Symbol Guard)
+    (machine : SourceRecursiveIntersectionKernel.Machine Symbol Guard)
+    (machineValid : SourceRecursiveIntersectionKernel.Valid machine)
+    (operations : SourceEqualityConstraintMemoAllocation.State)
+    (rest : Control (Value Symbol Guard)) (after : Checked width) (fuel count : Nat)
+    (bounded : count ≤ fuel)
+    (actual : Trace count (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width) rest after)
+    (handle : Nat) (captured : EdgeRequest Symbol Guard) (row : EdgeValue Symbol Guard)
+    (stored : after.native.edges.cells handle = some ⟨captured, .returned row⟩) :
+    ∃ (dispatchUsed bodyCount suffixCount : Nat) (beforeBody beforeFinish : Checked width)
+      (resume : EdgeValue Symbol Guard → Code Symbol Guard (Value Symbol Guard)),
+      dispatchUsed + bodyCount + 1 + suffixCount = count ∧
+      0 < dispatchUsed ∧ dispatchUsed < fuel ∧ bodyCount < fuel ∧
+      Steps dispatchUsed (.code (.node rootRequest .pure))
+        (⟨initial width machine, operations⟩ : Checked width)
+        (.edgeBody captured (fun result => .finishEdge handle result (resume result))) beforeBody ∧
+      beforeBody.native.edges.cells handle = some ⟨captured, .evaluating⟩ ∧
+      Steps bodyCount (.edgeBody captured .pure) beforeBody (.code (.pure row)) beforeFinish ∧
+      beforeFinish.native.edges.cells handle = some ⟨captured, .evaluating⟩ ∧
+      Trace (dispatchUsed + bodyCount) (.code (.node rootRequest .pure))
+        (⟨initial width machine, operations⟩ : Checked width)
+        (.code (.finishEdge handle row (resume row))) beforeFinish ∧
+      Trace 1 (.code (.finishEdge handle row (resume row))) beforeFinish (.code (resume row))
+        {beforeFinish with native := SourceRecursiveIntersectionThunks.finishEdge handle row beforeFinish.native} ∧
+      ({beforeFinish with native := SourceRecursiveIntersectionThunks.finishEdge handle row beforeFinish.native} : Checked width).native.edges.cells
+        handle = some ⟨captured, .returned row⟩ ∧
+      Trace suffixCount (.code (resume row))
+        {beforeFinish with native := SourceRecursiveIntersectionThunks.finishEdge handle row beforeFinish.native}
+        rest after := by

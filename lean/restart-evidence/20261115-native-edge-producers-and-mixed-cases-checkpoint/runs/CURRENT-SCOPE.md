@@ -1,0 +1,1 @@
+Three new modules/four statements pass all five gates. Actual checked-edge producer provenance and joined receipt, general ordinary-node Profile aggregation, and both orders of original-M reference/closed-node query are proved in their exact local scopes. Full native C/M history, actual worker/admission/resource production and one joint finite accepted completion remain OPEN.

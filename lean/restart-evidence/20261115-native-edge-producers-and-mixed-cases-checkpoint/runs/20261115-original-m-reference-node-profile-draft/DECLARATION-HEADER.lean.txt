@@ -1,0 +1,71 @@
+/-- Both original mixed reference orders inherit Profile from genuine smaller same-domain closed or mixed queries. -/
+theorem current_stored_universe_reference_node_profile_of_fuel_induction
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat} {Output : Type}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Node) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Node)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (pattern : Node) (patternClosed : pattern.free = []) (patternId : Nat)
+    (patternIdentity : identity pattern = some patternId)
+    (patternKind : tag pattern = 1 ∨ tag pattern = 3)
+    (operand : Node) (operandEntry : Interned NodeKey)
+    (operandRows : List (EdgeValue Symbol Guard)) (operandLevel : Nat)
+    (operandShape : operand = .node operandEntry operandRows operandLevel [])
+    (operandProfile : Profile entry.identity operand)
+    (smaller : height operand < height pattern) (referenceFirst : Bool)
+    (initial : Control Output) (start entryBefore before reader : Checked width)
+    (startPhysical : Physical start.native)
+    (sourceGrowth : Grows sourceHeap start.native.machine.heap)
+    (wholeCount entryCount queryCount : Nat) (final : Control Output)
+    (wholeActual : Trace wholeCount initial start final reader)
+    (entryStrict : entryCount < wholeCount)
+    (entryNext : Interned DomainKey → Code Symbol Guard Output)
+    (entryPrefix : Steps entryCount initial start
+      (.code (.enter IntersectionEmptyDomain.emptyDomain (.mu entry body depth ordinary)
+        pattern entry.identity patternId entryNext)) entryBefore) :
+    let universeValue : Node := .mu entry body depth ordinary
+    let entered := SourceRecursiveIntersectionEnvironment.enter entryBefore.native.machine.domains
+      IntersectionEmptyDomain.emptyKey universeValue pattern entry.identity patternId
+    let request : NodeRequest Symbol Guard := ⟨entered.1,
+      if referenceFirst then .reference (.interned entry.identity) else operand,
+      if referenceFirst then operand else .reference (.interned entry.identity)⟩
+    ∀ (outerNext : Node → Code Symbol Guard Output),
+    Steps queryCount initial start
+      (.code ((requestNode request.domain request.left request.right).bind outerNext)) before →
+    ∀ (remainder : NodeRequest Symbol Guard → Node → Prop)
+      (edgeLaw : EdgeRequest Symbol Guard → EdgeValue Symbol Guard → Prop)
+      (parentFuel count : Nat) (value : Node) (after : Checked width),
+    Physical before.native → Grows sourceHeap before.native.machine.heap →
+    SourceEqualityConstraintMemoAllocation.Valid before.operations →
+    InputsThrough parentFuel (.code (.node request .pure)) before →
+    FieldsThrough parentFuel (.code (.node request .pure)) before →
+    Returned (fun old result => (old = request → Profile entry.identity result) ∧ remainder old result)
+      before.native.nodes → Returned edgeLaw before.native.edges →
+    count ≤ parentFuel → queryCount + count ≤ wholeCount →
+    Steps count (.code (.node request .pure)) before (.code (.pure value)) after →
+    (∀ (child : NodeRequest Symbol Guard) (used childFuel childCount : Nat),
+      0 < used → childFuel < parentFuel → used + childFuel ≤ parentFuel →
+      childCount ≤ childFuel → used + childCount ≤ count →
+      ((child = ⟨entered.1, operand, universeValue⟩ ∧
+          Profile entry.identity child.left ∧ Profile entry.identity child.right ∧
+          child.domain.key.free.isEmpty = false) ∨
+        child = ⟨entered.1, operand, .reference (.interned entry.identity)⟩) →
+      ∀ (next : Node → Code Symbol Guard Node) (first middle : Checked width) (result : Node),
+      Steps used (.code (.node request .pure)) before
+        (.code ((requestNode child.domain child.left child.right).bind next)) first →
+      Physical first.native → Grows sourceHeap first.native.machine.heap →
+      SourceEqualityConstraintMemoAllocation.Valid first.operations →
+      InputsThrough childFuel (.code (requestNode child.domain child.left child.right)) first →
+      FieldsThrough childFuel (.code (requestNode child.domain child.left child.right)) first →
+      Returned (fun old result => (old = request → Profile entry.identity result) ∧ remainder old result)
+        first.native.nodes → Returned edgeLaw first.native.edges →
+      Available first.native.machine.heap child.left → Available first.native.machine.heap child.right →
+      Steps childCount (.code (requestNode child.domain child.left child.right)) first
+        (.code (.pure result)) middle → Profile entry.identity result) →
+    Profile entry.identity value ∧ Available after.native.machine.heap value ∧ Physical after.native ∧
+    Extension before.native.machine after.native.machine ∧ Grows sourceHeap after.native.machine.heap ∧
+    SourceEqualityConstraintMemoAllocation.Valid after.operations ∧
+    SourceEqualityConstraintMemoAllocation.Grows before.operations after.operations

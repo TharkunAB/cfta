@@ -1,0 +1,10 @@
+--- lean/restart-evidence/20261115-original-m-reference-node-profile-draft/SourceCurrentAllocatedNativeMixedReferenceNodeProfile.lean
++++ lean/restart-evidence/20261115-original-m-reference-node-profile-bound-repair/SourceCurrentAllocatedNativeMixedReferenceNodeProfile.lean
+@@ -217,6 +217,7 @@
+           intro atom member
+           simpa only [universeValue, InternedBoundaryAtoms.atoms, List.mem_singleton] using member
+         have nonempty : entered.1.key.free.isEmpty = false := by
++          change entry.identity ∈ names entered.1.key at bound
+           cases freeMap : entered.1.key.free with
+           | nil => simp only [names, freeMap, List.map_nil, List.not_mem_nil] at bound
+           | cons head tail => rfl

@@ -1,0 +1,5 @@
+theorem edge_result [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (request : EdgeRequest Symbol Guard) (before after : Checked width) (value : EdgeValue Symbol Guard)
+    (valid : SourceCurrentAllocatedNativePhysicalCache.Valid before.native)
+    (trace : Trace fuel (.code (requestEdge request.domain request.left request.right)) before (.code (.pure value)) after) :
+    EdgeResident after.native.machine.heap value
