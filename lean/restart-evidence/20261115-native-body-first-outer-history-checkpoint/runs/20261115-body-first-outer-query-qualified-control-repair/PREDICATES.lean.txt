@@ -1,0 +1,8 @@
+def NodeResult [DecidableEq Symbol] (sourceName bodyId : Nat)
+    (selectedKey originalKey : IntersectionFlatMemoKeyDomain.DomainKey)
+    (body universeValue : Value Symbol Guard)
+    (request : NodeRequest Symbol Guard) (value : Value Symbol Guard) : Prop :=
+  SourceCurrentAllocatedNativeBodyFirstKeyQueryGlobalLaws.NodeResult
+    sourceName bodyId selectedKey body universeValue request value ∧
+  (request.domain.key = originalKey → request.left = body →
+    request.right = universeValue → value = universeValue)

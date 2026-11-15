@@ -1,0 +1,45 @@
+theorem query_returned_and_raw_results
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (inputHeap : InternedConstructorTemplates.State Symbol Guard) (inputFacts : Facts inputHeap)
+    (sourceGrowth : Grows sourceHeap inputHeap)
+    (domains : Cache.State IntersectionFlatMemoKeyDomain.DomainKey) (cacheValid : Cache.Valid domains)
+    (pattern : Value Symbol Guard) (patternAvailable : Available inputHeap pattern)
+    (patternClosed : pattern.free = []) (patternId : Nat)
+    (patternIdentity : identity pattern = some patternId) (patternKind : tag pattern = 1 ∨ tag pattern = 3) :
+    ∃ (bodyEntry : Interned NodeKey) (bodyRows : List (EdgeValue Symbol Guard)),
+      body = .node bodyEntry bodyRows 0 [.interned entry.identity] ∧
+      let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+      let sourceDomain := SourceRecursiveIntersectionEnvironment.enter domains IntersectionEmptyDomain.emptyKey
+        universeValue pattern entry.identity patternId
+      let bodyFirst := SourceRecursiveIntersectionEnvironment.enter sourceDomain.2 sourceDomain.1.key
+        body universeValue bodyEntry.identity entry.identity
+      ∀ (fuel : Nat),
+      (∀ (request : NodeRequest Symbol Guard) (before : Checked width),
+        Physical before.native → Grows inputHeap before.native.machine.heap →
+        SourceEqualityConstraintMemoAllocation.Valid before.operations →
+        InputsThrough fuel (.code (.node request .pure)) before →
+        FieldsThrough fuel (.code (.node request .pure)) before →
+        Returned (NodeResult entry.identity bodyEntry.identity bodyFirst.1.key sourceDomain.1.key body universeValue) before.native.nodes → Returned (EdgeResult entry.identity bodyEntry.identity bodyFirst.1.key universeValue) before.native.edges →
+        (Returned (NodeResult entry.identity bodyEntry.identity bodyFirst.1.key sourceDomain.1.key body universeValue) (execute fuel (.code (.node request .pure)) before).state.native.nodes ∧
+          Returned (EdgeResult entry.identity bodyEntry.identity bodyFirst.1.key universeValue) (execute fuel (.code (.node request .pure)) before).state.native.edges) ∧
+        ∀ (count : Nat) (value : Value Symbol Guard) (after : Checked width), count ≤ fuel →
+          Steps count (.code (.node request .pure)) before (.code (.pure value)) after →
+          (NodeResult entry.identity bodyEntry.identity bodyFirst.1.key sourceDomain.1.key body universeValue) request value) ∧
+      (∀ (request : EdgeRequest Symbol Guard) (before : Checked width),
+        Physical before.native → Grows inputHeap before.native.machine.heap →
+        SourceEqualityConstraintMemoAllocation.Valid before.operations →
+        InputsThrough fuel (.code (.edge request .pure)) before →
+        FieldsThrough fuel (.code (.edge request .pure)) before →
+        Returned (NodeResult entry.identity bodyEntry.identity bodyFirst.1.key sourceDomain.1.key body universeValue) before.native.nodes → Returned (EdgeResult entry.identity bodyEntry.identity bodyFirst.1.key universeValue) before.native.edges →
+        (Returned (NodeResult entry.identity bodyEntry.identity bodyFirst.1.key sourceDomain.1.key body universeValue) (execute fuel (.code (.edge request .pure)) before).state.native.nodes ∧
+          Returned (EdgeResult entry.identity bodyEntry.identity bodyFirst.1.key universeValue) (execute fuel (.code (.edge request .pure)) before).state.native.edges) ∧
+        ∀ (count : Nat) (value : EdgeValue Symbol Guard) (after : Checked width), count ≤ fuel →
+          Steps count (.code (.edge request .pure)) before (.code (.pure value)) after →
+          (EdgeResult entry.identity bodyEntry.identity bodyFirst.1.key universeValue) request value) := by
