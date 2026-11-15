@@ -1,3 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationSharedScanOutputOrigins
 import MicroCFTA.SourceSynthesisCurrentNoStopSourceEntry
 import MicroCFTA.SourcePruningEnumerationPreparedSharedWrittenPathOrigins
 import MicroCFTA.SourceSynthesisCurrentSharedRootGoalFirstChild
@@ -5565,3 +5566,9 @@ run_cmd do
 
 #check @MicroCFTA.SourceSynthesisCurrentNoStopSourceEntry.accepted_no_stop_eager_entry
 #print axioms MicroCFTA.SourceSynthesisCurrentNoStopSourceEntry.accepted_no_stop_eager_entry
+
+#check @MicroCFTA.SourcePruningEnumerationSharedScanOutputOrigins.scan_output_origin
+#print axioms MicroCFTA.SourcePruningEnumerationSharedScanOutputOrigins.scan_output_origin
+
+#check @MicroCFTA.SourcePruningEnumerationSharedScanOutputOrigins.identity_eager_scan_output_origin
+#print axioms MicroCFTA.SourcePruningEnumerationSharedScanOutputOrigins.identity_eager_scan_output_origin
