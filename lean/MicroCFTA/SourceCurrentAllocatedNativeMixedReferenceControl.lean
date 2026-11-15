@@ -24,7 +24,7 @@ local notation "Checked" => SourceEqualityNativeDemand.State
 local notation "ordinarySymbols" => SourceSynthesisUniverseCallerBoundary.ordinarySymbols
 
 /-- Fresh actual operand identities exclude the repeated branch in both orders. -/
-private theorem fresh_reference_decisions
+theorem fresh_reference_decisions
     (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey) (name : Nat)
     (operand : Value Symbol Guard)
     (fresh : ∀ operandId, identity operand = some operandId →
@@ -50,7 +50,7 @@ private theorem fresh_reference_decisions
     exact (fresh first leftIdentity).2 member
 
 /-- A fresh ordinary operand reaches source reference lookup after the actual guards. -/
-private theorem node_reference_branch
+theorem node_reference_branch
     (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey)
     (entry : Interned NodeKey) (rows : List (EdgeValue Symbol Guard)) (level name : Nat)
     (fresh : pair entry.identity name ∉ domain.key.seen) :
@@ -60,7 +60,7 @@ private theorem node_reference_branch
     Value.referenceOf, Value.free, fresh, tagOrder]
 
 /-- The reversed ordinary request retains the actual source swap. -/
-private theorem reference_node_branch
+theorem reference_node_branch
     (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey)
     (entry : Interned NodeKey) (rows : List (EdgeValue Symbol Guard)) (level name : Nat) :
     decision domain.key (.reference (.interned name)) (.node entry rows level []) = .swap := by

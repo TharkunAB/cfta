@@ -25,7 +25,7 @@ set_option autoImplicit false
 variable {A : Type} {width : Nat}
 variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
 
-private theorem checked_trace_extension
+theorem checked_trace_extension
     {fuel : Nat} {control rest : Control A} {before after : Checked width}
     (actual : Trace fuel control before rest after) (valid : Physical before.native) :
     Physical after.native ∧ Extension before.native.machine after.native.machine := by
