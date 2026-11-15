@@ -1,0 +1,17 @@
+omit [DecidableEq Symbol] [DecidableEq Node] in
+private theorem identity_actual_empty_prefix_emitted_complete_resources
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller (bits + 2)) (memos : Memos) (metadata : Metadata Unit) (before : Cached)
+    (seed : Seed) (ceiling recursiveDepth uv : Nat)
+    (checked : EnumerationState.State Symbol Constraint)
+    (current : SourcePruningEnumerationSharedRecursive.CurrentPrefixResources none (fun _ _ => none)
+      metadata formulas solver inventory uv caller before memos seed.2 (fun guard => guard ∈ seed.1)
+      (.narrowed checked
+        (.done (.empty, some (reject : EnumerateM Symbol Constraint Unit)) caller.checked.native.machine.heap)
+        (SourcePruningEnumerationSelectedValueCaller.advance caller caller.checked.native.machine.heap)
+        memos.query (some []) none none none)) :
+    IdentityEmittedCompleteResources formulas solver caller (eagerFinal (recursiveDepth + 1) seed ceiling)
+      (.complete []
+        (SourcePruningEnumerationSelectedValueCaller.advance caller caller.checked.native.machine.heap)
+        memos.query) := by

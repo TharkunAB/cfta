@@ -1,0 +1,89 @@
+ := by
+  classical
+  obtain ⟨_roots, _paths, _storage, realized, _counts, _flags⟩ := packet.valid
+  have initial : SourceCurrentConstrainedCapGeneratedQueryResources.Fits
+        (SourceCurrentConstrainedCapEditForecast.headProfile profile) caller.checked ∧
+      SourceEqualityAnnotationHeap.Heap property caller.checked.native.machine.heap :=
+    ⟨bounded.mono (SourceCurrentConstrainedCapEditForecast.headProfile_ge profile), known⟩
+  by_cases readable : ∃ (oldHandle : Nat) (scs : List Suspended) (readAfter : Core),
+      ExceptT.run (getValue workFuel selected before.core) =
+        [.ok (.unenumerated (some oldHandle) scs, readAfter)]
+  · obtain ⟨oldHandle, scs, readAfter, reading⟩ := readable
+    by_cases fresh : ∃ checked : Core,
+        ExceptT.run (SourcePruningEnumerationRecursion.checkRepeated caller.checked.native.machine.heap
+          workFuel selected oldHandle scs readAfter) = [.ok (false, checked)]
+    · obtain ⟨checked, checking⟩ := fresh
+      cases decoded : lookupNode caller.checked.native.machine.heap oldHandle with
+      | none =>
+          simpa only [SourcePruningEnumerationSelectedStep.runPrefix,
+            SourcePruningEnumerationSelectedStep.runPrefixWithNarrow, reading, checking, decoded,
+            SourcePruningEnumerationSelectedStep.Resources] using initial
+      | some oldValue =>
+          have readObserved : Success (getValue workFuel selected) before.core
+              (.unenumerated (some oldHandle) scs) readAfter := by
+            rw [Success, reading]
+            exact List.mem_singleton_self _
+          obtain ⟨found, _lookup, stored, _readState⟩ :=
+            (getValue_success workFuel selected before.core readAfter
+              (.unenumerated (some oldHandle) scs)).mp readObserved
+          obtain ⟨old, lookup, available, closed⟩ := realized found.representative oldHandle scs stored
+          have same : old = oldValue := Option.some.inj (lookup.symm.trans decoded)
+          subst old
+          have native := actual_narrow_state_resources profile property holeKey fits admits metadata
+            workFuel selected oldValue caller.checked.native.machine.heap
+            packet.context.ready.semantic packet.context.ready.costs available closed
+            (SourceCurrentConstrainedCapRequiredResources.of_checked bounded) known
+          let prepared := SourcePruningEnumerationAction.prepare (EnumGuard := Constraint) holeKey fits admits metadata workFuel workFuel
+            selected oldHandle scs oldValue caller.checked.native.machine.heap
+          have preparedResources : SourceCurrentConstrainedCapRequiredResources.HeapFits
+              (SourceCurrentConstrainedCapEditForecast.headProfile profile) prepared.state ∧
+              SourceEqualityAnnotationHeap.Heap property prepared.state := by
+            rw [prepared, prepared_state]
+            exact native
+          have reachedResources : SourceCurrentConstrainedCapGeneratedQueryResources.Fits
+              (SourceCurrentConstrainedCapEditForecast.headProfile profile)
+              (SourceCurrentAllocatedPartialState.advance caller
+                (advancePhysical caller.checked ⟨prepared.state, caller.checked.operations⟩)
+                caller.fourth caller.merge).checked ∧
+              SourceEqualityAnnotationHeap.Heap property prepared.state :=
+            ⟨⟨preparedResources.1.nodes, preparedResources.1.edges,
+              Nat.le_trans bounded.domains (SourceCurrentConstrainedCapEditForecast.headProfile_ge profile).2.2.1,
+              preparedResources.1.stored⟩, preparedResources.2⟩
+          unfold SourcePruningEnumerationSelectedStep.runPrefix SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
+          rw [reading, checking, decoded]
+          simp only [← SourcePruningEnumerationAction.prepare_configured_eq]
+          dsimp only [prepared] at reachedResources
+          generalize preparedEq : SourcePruningEnumerationAction.prepare (EnumGuard := Constraint) holeKey fits admits metadata
+            workFuel workFuel selected oldHandle scs oldValue caller.checked.native.machine.heap = preparedResult
+            at reachedResources ⊢
+          cases preparedResult with
+          | failed fault heap => exact reachedResources
+          | done pair heap =>
+              obtain ⟨value, action⟩ := pair
+              cases action with
+              | none => exact reachedResources
+              | some action =>
+                  split
+                  · split
+                    · exact reachedResources
+                    · split
+                      · exact reachedResources
+                      · split <;> exact reachedResources
+                  · exact reachedResources
+    · unfold SourcePruningEnumerationSelectedStep.runPrefix SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
+      rw [reading]
+      dsimp only
+      split
+      · exact initial
+      · exact (fresh ⟨_, by assumption⟩).elim
+      · exact initial
+  · have stopped : SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata
+        workFuel workFuel workFuel workFuel workFuel workFuel selected caller before memos.query =
+        .stopped (ExceptT.run (getValue workFuel selected before.core)) none := by
+      unfold SourcePruningEnumerationSelectedStep.runPrefix SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
+      dsimp only
+      split
+      · exact (readable ⟨_, _, _, by assumption⟩).elim
+      · rfl
+    rw [stopped]
+    exact initial

@@ -1,0 +1,28 @@
+/-- Every actual real prefix endpoint fits the original native resource forecast. -/
+theorem prefix_real_continuing_current_at_original_budget
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (metadata : Metadata Typing)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller width) (memos : Memos) (before : Cached)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (profile : Profile) (property : Constraint → Prop)
+    (bounded : SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile caller.checked)
+    (known : SourceEqualityAnnotationHeap.Heap property caller.checked.native.machine.heap)
+    (workFuel selected : Nat)
+    (chosen : SourcePruningEnumerationRestart.decision stop order metadata before = some (.expand selected)) :
+    let observed := SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata
+      workFuel workFuel workFuel workFuel workFuel workFuel selected caller before memos.query
+    match observed with
+    | .parked _ (some _) (some []) =>
+        CurrentPrefixResources stop order metadata formulas solver inventory selected caller before memos profile property observed
+    | .parked _ (some _) (some [.ok ((_updated, _next), _core)]) =>
+        CurrentPrefixResources stop order metadata formulas solver inventory selected caller before memos profile property observed
+    | .narrowed _ _ _ _ (some []) _ _ _ =>
+        CurrentPrefixResources stop order metadata formulas solver inventory selected caller before memos profile property observed
+    | .narrowed _ _ _ _ _ _ (some [.ok ((true, _updated), _core)]) _ => False
+    | .narrowed _ _ _ _ _ (some _) (some [.ok ((false, _updated), _core)]) none =>
+        CurrentPrefixResources stop order metadata formulas solver inventory selected caller before memos profile property observed
+    | _ => True

@@ -1,0 +1,25 @@
+  let reached : Caller (bits + 2) :=
+    SourcePruningEnumerationSelectedValueCaller.advance caller caller.checked.native.machine.heap
+  let start := SourcePruningEnumerationSharedPreparedReservation.preparedSeed seed
+  let limit := SourceCurrentConstrainedCapTargetForecast.scalar start.2
+  let own := SourcePruningEnumerationGuardWidth.width start.1
+  let continuation := fun retained current => eagerFinal recursiveDepth current retained
+  obtain ⟨_ordinary, _queries, _value, _heap, _action, final, _prepared, _reached,
+    post, query, _shape⟩ := current.1
+  have normalizationGrowth := SourcePruningEnumerationPreparedReservation.normalizationProfile_ge
+    (SourcePruningEnumerationSharedRecursiveReservation.narrowSeed seed).2
+  have currentFits : Fits start.2 reached.checked := current.2.1.mono normalizationGrowth
+  have currentKnown : Heap (fun guard => guard ∈ start.1) reached.checked.native.machine.heap := by
+    intro key edge present
+    exact current.2.2 key edge present
+  have certificate : OutcomeResources (Typing := Unit) formulas solver caller start
+      (.complete [] reached memos.query) := by
+    refine ⟨reached, inventory, final, post, currentFits, currentKnown, rfl, query.symm, ?_⟩
+    intro output member
+    cases member
+  have growth : ∀ retained current,
+      Le current.2 (continuation retained current).2 ∧ current.1 ⊆ (continuation retained current).1 :=
+    fun retained current => eagerFinal_ge recursiveDepth current retained
+  have included := nodePlan_ge limit own limit ceiling ceiling continuation growth start
+  rw [eagerFinal]
+  exact identity_emitted_complete_of_outcome (certificate.mono included.1 included.2)

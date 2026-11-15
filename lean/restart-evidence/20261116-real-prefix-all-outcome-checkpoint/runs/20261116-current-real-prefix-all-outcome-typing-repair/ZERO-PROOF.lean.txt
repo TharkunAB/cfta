@@ -1,0 +1,11 @@
+ := by
+  have reading : ExceptT.run (getValue 0 selected before.core) = [.error .representativeFuel] := rfl
+  have stopped : SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata
+      0 0 0 0 0 0 selected caller before memos.query = .stopped [.error .representativeFuel] none := by
+    simp only [SourcePruningEnumerationSelectedStep.runPrefix,
+      SourcePruningEnumerationSelectedStep.runPrefixWithNarrow, reading]
+  dsimp only
+  refine ⟨stopped, ?_⟩
+  rw [stopped]
+  intro current
+  exact current.1

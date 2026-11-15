@@ -1,0 +1,95 @@
+ := by
+  have supported := continuing_parked_empty_resources holeKey fits admits graph templates stop order metadata
+    formulas solver inventory caller memos before packet profile property bounded known workFuel selected chosen
+  dsimp only at supported ⊢
+  generalize observedEq : SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates
+    stop order metadata workFuel workFuel workFuel workFuel workFuel workFuel selected caller before memos.query = observed
+    at supported ⊢
+  cases observed with
+  | stopped reading checking => trivial
+  | parked checked candidate raw =>
+      cases candidate with
+      | none => trivial
+      | some after =>
+          cases raw with
+          | none => trivial
+          | some rows =>
+              cases rows with
+              | nil => exact supported
+              | cons first rest =>
+                  cases rest with
+                  | cons second tail => cases first <;> trivial
+                  | nil =>
+                      cases first with
+                      | error error => trivial
+                      | ok pair =>
+                          obtain ⟨⟨updated, next⟩, core⟩ := pair
+                          exact supported
+  | narrowed checked prepared reached received action candidate right ordinary =>
+      have noOrdinary := SourcePruningEnumerationSelectedStep.prefix_no_ordinary holeKey fits admits
+        graph templates stop order metadata workFuel workFuel workFuel workFuel workFuel workFuel
+        selected caller before memos.query
+      rw [observedEq] at noOrdinary
+      subst ordinary
+      cases action with
+      | none =>
+          cases right with
+          | none => trivial
+          | some rows =>
+              cases rows with
+              | nil => trivial
+              | cons first rest =>
+                  cases rest with
+                  | cons second tail =>
+                      cases first with
+                      | error error => trivial
+                      | ok pair =>
+                          obtain ⟨⟨rejected, _updated⟩, _core⟩ := pair
+                          cases rejected <;> trivial
+                  | nil =>
+                      cases first with
+                      | error error => trivial
+                      | ok pair =>
+                          obtain ⟨⟨rejected, updated⟩, callbackCore⟩ := pair
+                          have current := continuing_right_resources holeKey fits admits graph templates stop order metadata
+                            formulas solver inventory caller memos before packet profile property bounded known workFuel selected chosen
+                            checked callbackCore prepared reached received _ candidate rejected updated observedEq
+                          cases rejected with
+                          | true => cases current.1
+                          | false =>
+                              obtain ⟨_same, after, candidateSame, resources⟩ := current
+                              cases candidate with
+                              | none => cases candidateSame
+                              | some attached => exact resources
+      | some rows =>
+          cases rows with
+          | nil => exact supported
+          | cons first rest =>
+              cases right with
+              | none => trivial
+              | some rows =>
+                  cases rows with
+                  | nil => trivial
+                  | cons first rest =>
+                      cases rest with
+                      | cons second tail =>
+                          cases first with
+                          | error error => trivial
+                          | ok pair =>
+                              obtain ⟨⟨rejected, _updated⟩, _core⟩ := pair
+                              cases rejected <;> trivial
+                      | nil =>
+                          cases first with
+                          | error error => trivial
+                          | ok pair =>
+                              obtain ⟨⟨rejected, updated⟩, callbackCore⟩ := pair
+                              have current := continuing_right_resources holeKey fits admits graph templates stop order metadata
+                                formulas solver inventory caller memos before packet profile property bounded known workFuel selected chosen
+                                checked callbackCore prepared reached received _ candidate rejected updated observedEq
+                              cases rejected with
+                              | true => cases current.1
+                              | false =>
+                                  obtain ⟨_same, after, candidateSame, resources⟩ := current
+                                  cases candidate with
+                                  | none => cases candidateSame
+                                  | some attached => exact resources

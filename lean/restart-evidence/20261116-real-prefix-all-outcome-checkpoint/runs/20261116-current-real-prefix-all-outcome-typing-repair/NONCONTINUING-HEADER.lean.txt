@@ -1,0 +1,23 @@
+/-- A real selected step outside both continuation forms emits no local output at its original budget. -/
+theorem real_prefix_noncontinuing_emits_no_output
+    [DecidableEq Symbol] [DecidableEq Node]
+    (child : Visitor)
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (metadata : Metadata Typing) (workFuel recursiveFuel selected : Nat)
+    (caller : Caller width) (queries : Queries) (before : Cached)
+    (observed : SourcePruningEnumerationSelectedStep.Result width Typing)
+    (actual : SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata
+      workFuel workFuel workFuel workFuel workFuel workFuel selected caller before queries = observed)
+    (noncontinuing : match observed with
+      | .parked _ (some _) (some [.ok ((_updated, _next), _core)]) => False
+      | .narrowed _ _ _ _ (some []) _ _ _ => True
+      | .narrowed _ _ _ _ _ _ (some [.ok ((true, _updated), _core)]) _ => True
+      | .narrowed _ _ _ _ _ (some _) (some [.ok ((false, _updated), _core)]) none => False
+      | _ => True) :
+    SourcePruningEnumerationSharedPreparedRecursive.emitted
+      (SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow child
+        (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order
+        workFuel (recursiveFuel + 1) metadata caller queries before (some (.expand selected))) = []

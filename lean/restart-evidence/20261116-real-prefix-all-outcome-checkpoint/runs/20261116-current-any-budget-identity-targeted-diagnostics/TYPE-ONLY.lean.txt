@@ -1,0 +1,102 @@
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+section ActualIdentityTargetedDiagnostics
+set_option autoImplicit false
+set_option maxHeartbeats 2000000
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedPartialInvariant (Post)
+open SourceCurrentAllocatedNativeResourceForecast (Le)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
+open SourcePruningEnumerationSharedIncomingReservation (Seed advance)
+open SourcePruningEnumerationFiniteReservation (iterate)
+open SourcePruningEnumerationRecursive (Packet)
+open SourcePruningEnumerationSharedPreparedRecursive (Output Failure OutputResources OutcomeResources emitted finish)
+open SourcePruningEnumerationSharedPreparedRecursiveChildPolicy (runEagerWithNarrow runWithNarrow resumeWithNarrow)
+open SourcePruningEnumerationSharedSelectedContinuations
+open SourcePruningEnumerationSharedRecursive (CurrentPrefixFacts)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Heap" => SourceEqualityAnnotationHeap.Heap
+variable {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+attribute [local irreducible] nodeReserved nodePlan tuplePlan fallbackPlan eagerReserved eagerFinal
+
+attribute [local irreducible] SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
+  SourcePruningEnumerationSelectedPreparation.run
+  SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow
+  SourcePruningEnumerationSharedPreparedRecursive.continueWith
+
+set_option diagnostics true
+
+set_option maxHeartbeats 500000 in
+private def identity_diagnostic_success_statement
+    (graph : Graph Symbol Constraint) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (recursiveDepth workFuel : Nat)
+    (_workerIH : IdentityEagerEmittedCompleteAtDepth (bits := bits)
+      graph checkEmpty edgesOf formulas solver recursiveDepth)
+    (inventory : Inventory) (caller : Caller (bits + 2)) (memos : Memos)
+    (metadata : Metadata Unit) (before : Cached) (seed : Seed) (ceiling uv handle : Nat)
+    (scs : List Suspended)
+    (_packet : Packet formulas solver inventory caller memos metadata before)
+    (_ready : EnumerationDriver.Ready uv before.core)
+    (_stored : before.core.values[uv]? = some (.unenumerated (some handle) scs))
+    (_incoming : EnumerationReferences.IncomingAvoid uv before.core)
+    (_fits : Fits (SourcePruningEnumerationSharedRecursiveReservation.narrowSeed seed).2 caller.checked)
+    (_known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap)
+    (_mass : SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling)
+    (_bucketBound : scs.length ≤ ceiling)
+    (_selectionMembers : ∀ entry rows depth free, ∀ selected ∈ edgesOf (.node entry rows depth free), selected ∈ rows)
+    (_selectionLength : ∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length)
+    (_reserved : eagerReserved bits (recursiveDepth + 1) seed ceiling)
+    (target preparedHandle : Nat) (preparedScs : List Suspended) (decoded value : Node)
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (entered : EnumerationState.State Symbol Constraint)
+    (_actual : SourcePruningEnumerationSelectedPreparation.run workFuel workFuel uv caller before =
+      ([.ok ((target, preparedHandle, preparedScs, decoded), entered)], some (.done value heap))) : Prop :=
+    let child := SourcePruningEnumerationSharedEagerChildren.eagerChild
+      (width := bits + 2) (Output := Output (bits + 2) Unit) (Reason := Failure (bits + 2) Unit)
+      checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf
+    let hook := SourcePruningEnumerationSharedPreparedRecursive.continueWith
+      (resumeWithNarrow (Typing := Unit) (width := bits + 2) child
+        (fun _ _ _ node state => .done node state) graph [] checkEmpty edgesOf
+        none (fun _ _ => none) workFuel recursiveDepth)
+      graph [] none (fun _ _ => none) workFuel metadata uv
+    let prepared := SourcePruningEnumerationSharedPreparedChildPolicy.runWithChild child hook
+      checkEmpty workFuel workFuel workFuel workFuel workFuel workFuel workFuel uv edgesOf caller before memos.query
+    IdentityEmittedCompleteResources formulas solver caller (eagerFinal (recursiveDepth + 1) seed ceiling)
+      (match prepared.2 with
+      | none => .stopped [] (.preparation uv prepared.1)
+          (some (SourcePruningEnumerationSharedPreparedContinuations.preparation_endpoint caller memos.query prepared.1))
+      | some folded => finish uv folded)
+
+set_option maxHeartbeats 500000 in
+omit [DecidableEq Symbol] [DecidableEq Node] in
+private def identity_diagnostic_empty_statement
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller (bits + 2)) (memos : Memos) (metadata : Metadata Unit) (before : Cached)
+    (seed : Seed) (ceiling recursiveDepth uv : Nat)
+    (checked : EnumerationState.State Symbol Constraint)
+    (_current : SourcePruningEnumerationSharedRecursive.CurrentPrefixResources none (fun _ _ => none)
+      metadata formulas solver inventory uv caller before memos seed.2 (fun guard => guard ∈ seed.1)
+      (.narrowed checked
+        (.done (.empty, some (reject : EnumerateM Symbol Constraint Unit)) caller.checked.native.machine.heap)
+        (SourcePruningEnumerationSelectedValueCaller.advance caller caller.checked.native.machine.heap)
+        memos.query (some []) none none none)) : Prop :=
+    IdentityEmittedCompleteResources formulas solver caller (eagerFinal (recursiveDepth + 1) seed ceiling)
+      (.complete []
+        (SourcePruningEnumerationSelectedValueCaller.advance caller caller.checked.native.machine.heap)
+        memos.query)
+
+end ActualIdentityTargetedDiagnostics
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation

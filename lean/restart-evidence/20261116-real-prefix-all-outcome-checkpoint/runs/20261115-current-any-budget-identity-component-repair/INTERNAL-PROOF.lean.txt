@@ -1,0 +1,101 @@
+  induction recursiveDepth with
+  | zero => exact identity_emitted_resources_zero graph checkEmpty edgesOf formulas solver
+  | succ recursiveDepth ih =>
+    intro inventory caller memos before metadata seed ceiling packet bounded known
+      selectionMembers selectionLength initialMass reserved workFuel
+    have finalGrowth := eagerFinal_ge (recursiveDepth + 1) seed ceiling
+    cases chosen : SourcePruningEnumerationRestart.decision none (fun _ _ => none) metadata before with
+    | none =>
+      obtain ⟨outcome, running, resources⟩ := identity_resume_eager_zero_resources graph checkEmpty edgesOf
+        formulas solver inventory caller memos before metadata none seed packet bounded known
+      have actual : runEagerWithNarrow (fun _ _ _ node state => .done node state) graph [] checkEmpty edgesOf
+          none (fun _ _ => none) workFuel (recursiveDepth + 1) metadata caller memos.query before = outcome := by
+        unfold runEagerWithNarrow runWithNarrow
+        rw [chosen, resumeWithNarrow]
+        simpa only [resumeWithNarrow] using running workFuel
+      rw [actual]
+      exact identity_emitted_complete_of_outcome (resources.mono finalGrowth.1 finalGrowth.2)
+    | some next =>
+      cases next with
+      | done =>
+        obtain ⟨outcome, running, resources⟩ := identity_resume_eager_zero_resources graph checkEmpty edgesOf
+          formulas solver inventory caller memos before metadata (some .done) seed packet bounded known
+        have actual : runEagerWithNarrow (fun _ _ _ node state => .done node state) graph [] checkEmpty edgesOf
+            none (fun _ _ => none) workFuel (recursiveDepth + 1) metadata caller memos.query before = outcome := by
+          unfold runEagerWithNarrow runWithNarrow
+          rw [chosen, resumeWithNarrow]
+          simpa only [resumeWithNarrow] using running workFuel
+        rw [actual]
+        exact identity_emitted_complete_of_outcome (resources.mono finalGrowth.1 finalGrowth.2)
+      | stuck =>
+        obtain ⟨outcome, running, resources⟩ := identity_resume_eager_zero_resources graph checkEmpty edgesOf
+          formulas solver inventory caller memos before metadata (some .stuck) seed packet bounded known
+        have actual : runEagerWithNarrow (fun _ _ _ node state => .done node state) graph [] checkEmpty edgesOf
+            none (fun _ _ => none) workFuel (recursiveDepth + 1) metadata caller memos.query before = outcome := by
+          unfold runEagerWithNarrow runWithNarrow
+          rw [chosen, resumeWithNarrow]
+          simpa only [resumeWithNarrow] using running workFuel
+        rw [actual]
+        exact identity_emitted_complete_of_outcome (resources.mono finalGrowth.1 finalGrowth.2)
+      | expand uv =>
+        have phases := SourcePruningEnumerationSharedRecursive.prefix_identity_phase_resources_at_any_budget
+          graph metadata formulas solver inventory caller memos before packet seed.2
+          (fun guard => guard ∈ seed.1) bounded known workFuel uv chosen
+        dsimp only at phases
+        have noFailed := identity_actual_prefix_has_no_failed_preparation
+          graph metadata workFuel uv caller before memos.query
+        cases observed : SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
+            (fun _ _ _ node state => .done node state) graph [] none (fun _ _ => none) metadata
+            workFuel workFuel workFuel workFuel workFuel workFuel uv caller before memos.query with
+        | stopped reading checking =>
+          unfold runEagerWithNarrow runWithNarrow
+          rw [chosen, resumeWithNarrow, observed]
+          constructor
+          · intro output member
+            cases member
+          · trivial
+        | parked checked candidate raw =>
+          exact identity_parked_prefix_emitted_resources graph checkEmpty edgesOf formulas solver recursiveDepth ih
+            inventory caller memos before metadata seed ceiling packet bounded known selectionMembers selectionLength
+            initialMass reserved workFuel uv chosen ⟨checked, candidate, raw, observed⟩
+        | narrowed checked prepared reached saved action candidate right ordinary =>
+          cases prepared with
+          | failed fault heap =>
+            rw [observed] at noFailed
+            exact noFailed.elim
+          | done payload heap =>
+            rw [observed] at phases
+            dsimp only at phases
+            rcases phases with parked | empty | nonempty
+            · obtain ⟨_after, _ready, _incoming, _mass, impossible, _current⟩ := parked
+              cases impossible
+            · obtain ⟨emptyCore, _ready, _incoming, _mass, phase, current⟩ := empty
+              have actualPrefix := observed.trans phase
+              rw [phase] at current
+              have resources := identity_actual_empty_prefix_emitted_complete_resources
+                formulas solver inventory caller memos metadata before seed ceiling recursiveDepth uv emptyCore current
+              unfold runEagerWithNarrow runWithNarrow
+              rw [chosen, resumeWithNarrow, actualPrefix]
+              exact resources
+            · obtain ⟨handle, scs, value, after, _nonempty, _encoded, ready, stored, incoming,
+                  lengths, sameMass, phase, current⟩ := nonempty
+              have actualPrefix := observed.trans phase
+              rw [phase] at current
+              let middleCaller : Caller (bits + 2) := SourceCurrentAllocatedPartialState.advance caller
+                (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+                  ⟨caller.checked.native.machine.heap, caller.checked.operations⟩) caller.fourth caller.merge
+              obtain ⟨_metadataSame, middleMemos, middlePost, middleQuery, middlePacket⟩ :=
+                CurrentPrefixFacts.right_packet current.1
+              have currentMass : SourcePruningEnumerationPrefixAdmission.suspendedBound after.core ≤ ceiling := by
+                rw [sameMass]
+                exact initialMass
+              have inheritedLength : scs.length ≤ ceiling := Nat.le_trans lengths initialMass
+              have inherited := identity_actual_prepared_emitted_complete_at_any_budget graph checkEmpty edgesOf
+                formulas solver recursiveDepth workFuel ih inventory middleCaller middleMemos metadata after seed
+                ceiling uv handle scs middlePacket ready stored incoming current.2.1 current.2.2 currentMass
+                inheritedLength selectionMembers selectionLength reserved
+              rw [middleQuery] at inherited
+              have composed := identity_emitted_complete_post middlePost inherited
+              unfold runEagerWithNarrow runWithNarrow
+              rw [chosen, resumeWithNarrow, actualPrefix]
+              exact composed
