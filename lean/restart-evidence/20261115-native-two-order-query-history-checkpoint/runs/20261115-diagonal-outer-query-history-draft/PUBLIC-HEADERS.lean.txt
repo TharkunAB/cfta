@@ -1,0 +1,133 @@
+theorem to_coherent_node_result [DecidableEq Symbol]
+    (sourceName : Nat) (selectedKey firstKey originalKey : IntersectionFlatMemoKeyDomain.DomainKey)
+    (body universeValue : Value Symbol Guard) (request : NodeRequest Symbol Guard) (value : Value Symbol Guard)
+    (actual : NodeResult sourceName selectedKey firstKey originalKey body universeValue request value) :
+    SourceCurrentAllocatedNativeCoherentOpenBodyQueryGlobalLaws.NodeResult
+      sourceName sourceName sourceName selectedKey firstKey body universeValue request value := by
+
+theorem query_returned_and_raw_results
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (inputHeap : InternedConstructorTemplates.State Symbol Guard) (inputFacts : Facts inputHeap)
+    (sourceGrowth : Grows sourceHeap inputHeap)
+    (domains : Cache.State IntersectionFlatMemoKeyDomain.DomainKey) (cacheValid : Cache.Valid domains)
+    (pattern : Value Symbol Guard) (patternAvailable : Available inputHeap pattern)
+    (patternClosed : pattern.free = []) (patternId : Nat)
+    (patternIdentity : identity pattern = some patternId) (patternKind : tag pattern = 1 ∨ tag pattern = 3) :
+    ∃ (bodyEntry : Interned NodeKey) (bodyRows : List (EdgeValue Symbol Guard)),
+      body = .node bodyEntry bodyRows 0 [.interned entry.identity] ∧
+      let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+      let referenceValue : Value Symbol Guard := .reference (.interned entry.identity)
+      let sourceDomain := SourceRecursiveIntersectionEnvironment.enter domains IntersectionEmptyDomain.emptyKey
+        universeValue pattern entry.identity patternId
+      let diagonalFirst := SourceRecursiveIntersectionEnvironment.enter sourceDomain.2 sourceDomain.1.key
+        universeValue referenceValue entry.identity entry.identity
+      let diagonalTerminal := SourceRecursiveIntersectionEnvironment.enter diagonalFirst.2 diagonalFirst.1.key
+        body universeValue bodyEntry.identity entry.identity
+      ∀ (fuel : Nat),
+      (∀ (request : NodeRequest Symbol Guard) (before : Checked width),
+        Physical before.native → Grows inputHeap before.native.machine.heap →
+        SourceEqualityConstraintMemoAllocation.Valid before.operations →
+        InputsThrough fuel (.code (.node request .pure)) before →
+        FieldsThrough fuel (.code (.node request .pure)) before →
+        Returned (NodeResult entry.identity diagonalTerminal.1.key diagonalFirst.1.key sourceDomain.1.key body universeValue) before.native.nodes → Returned EdgeResult before.native.edges →
+        (Returned (NodeResult entry.identity diagonalTerminal.1.key diagonalFirst.1.key sourceDomain.1.key body universeValue) (execute fuel (.code (.node request .pure)) before).state.native.nodes ∧
+          Returned EdgeResult (execute fuel (.code (.node request .pure)) before).state.native.edges) ∧
+        ∀ (count : Nat) (value : Value Symbol Guard) (after : Checked width), count ≤ fuel →
+          Steps count (.code (.node request .pure)) before (.code (.pure value)) after →
+          (NodeResult entry.identity diagonalTerminal.1.key diagonalFirst.1.key sourceDomain.1.key body universeValue) request value) ∧
+      (∀ (request : EdgeRequest Symbol Guard) (before : Checked width),
+        Physical before.native → Grows inputHeap before.native.machine.heap →
+        SourceEqualityConstraintMemoAllocation.Valid before.operations →
+        InputsThrough fuel (.code (.edge request .pure)) before →
+        FieldsThrough fuel (.code (.edge request .pure)) before →
+        Returned (NodeResult entry.identity diagonalTerminal.1.key diagonalFirst.1.key sourceDomain.1.key body universeValue) before.native.nodes → Returned EdgeResult before.native.edges →
+        (Returned (NodeResult entry.identity diagonalTerminal.1.key diagonalFirst.1.key sourceDomain.1.key body universeValue) (execute fuel (.code (.edge request .pure)) before).state.native.nodes ∧
+          Returned EdgeResult (execute fuel (.code (.edge request .pure)) before).state.native.edges) ∧
+        ∀ (count : Nat) (value : EdgeValue Symbol Guard) (after : Checked width), count ≤ fuel →
+          Steps count (.code (.edge request .pure)) before (.code (.pure value)) after →
+          EdgeResult request value) := by
+
+theorem initial_node_query_returned_and_raw_results
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (inputHeap : InternedConstructorTemplates.State Symbol Guard) (inputFacts : Facts inputHeap)
+    (sourceGrowth : Grows sourceHeap inputHeap)
+    (domains : Cache.State IntersectionFlatMemoKeyDomain.DomainKey) (cacheValid : Cache.Valid domains)
+    (pattern : Value Symbol Guard) (patternAvailable : Available inputHeap pattern)
+    (patternClosed : pattern.free = []) (patternId : Nat)
+    (patternIdentity : identity pattern = some patternId) (patternKind : tag pattern = 1 ∨ tag pattern = 3) :
+    ∃ (bodyEntry : Interned NodeKey) (bodyRows : List (EdgeValue Symbol Guard)),
+      body = .node bodyEntry bodyRows 0 [.interned entry.identity] ∧
+      let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+      let referenceValue : Value Symbol Guard := .reference (.interned entry.identity)
+      let sourceDomain := SourceRecursiveIntersectionEnvironment.enter domains IntersectionEmptyDomain.emptyKey
+        universeValue pattern entry.identity patternId
+      let diagonalFirst := SourceRecursiveIntersectionEnvironment.enter sourceDomain.2 sourceDomain.1.key
+        universeValue referenceValue entry.identity entry.identity
+      let diagonalTerminal := SourceRecursiveIntersectionEnvironment.enter diagonalFirst.2 diagonalFirst.1.key
+        body universeValue bodyEntry.identity entry.identity
+      ∀ (machine : SourceRecursiveIntersectionKernel.Machine Symbol Guard),
+      SourceRecursiveIntersectionKernel.Valid machine → Grows inputHeap machine.heap →
+      ∀ (operations : SourceEqualityConstraintMemoAllocation.State),
+      SourceEqualityConstraintMemoAllocation.Valid operations →
+      ∀ (fuel : Nat) (request : NodeRequest Symbol Guard),
+      let start : Checked width := ⟨initial width machine, operations⟩
+      InputsThrough fuel (.code (.node request .pure)) start →
+      FieldsThrough fuel (.code (.node request .pure)) start →
+      (Returned (NodeResult entry.identity diagonalTerminal.1.key diagonalFirst.1.key sourceDomain.1.key body universeValue) (execute fuel (.code (.node request .pure)) start).state.native.nodes ∧
+        Returned EdgeResult (execute fuel (.code (.node request .pure)) start).state.native.edges) ∧
+      ∀ (count : Nat) (value : Value Symbol Guard) (after : Checked width), count ≤ fuel →
+        Steps count (.code (.node request .pure)) start (.code (.pure value)) after →
+        (NodeResult entry.identity diagonalTerminal.1.key diagonalFirst.1.key sourceDomain.1.key body universeValue) request value := by
+
+theorem initial_edge_query_returned_and_raw_results
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (inputHeap : InternedConstructorTemplates.State Symbol Guard) (inputFacts : Facts inputHeap)
+    (sourceGrowth : Grows sourceHeap inputHeap)
+    (domains : Cache.State IntersectionFlatMemoKeyDomain.DomainKey) (cacheValid : Cache.Valid domains)
+    (pattern : Value Symbol Guard) (patternAvailable : Available inputHeap pattern)
+    (patternClosed : pattern.free = []) (patternId : Nat)
+    (patternIdentity : identity pattern = some patternId) (patternKind : tag pattern = 1 ∨ tag pattern = 3) :
+    ∃ (bodyEntry : Interned NodeKey) (bodyRows : List (EdgeValue Symbol Guard)),
+      body = .node bodyEntry bodyRows 0 [.interned entry.identity] ∧
+      let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+      let referenceValue : Value Symbol Guard := .reference (.interned entry.identity)
+      let sourceDomain := SourceRecursiveIntersectionEnvironment.enter domains IntersectionEmptyDomain.emptyKey
+        universeValue pattern entry.identity patternId
+      let diagonalFirst := SourceRecursiveIntersectionEnvironment.enter sourceDomain.2 sourceDomain.1.key
+        universeValue referenceValue entry.identity entry.identity
+      let diagonalTerminal := SourceRecursiveIntersectionEnvironment.enter diagonalFirst.2 diagonalFirst.1.key
+        body universeValue bodyEntry.identity entry.identity
+      ∀ (machine : SourceRecursiveIntersectionKernel.Machine Symbol Guard),
+      SourceRecursiveIntersectionKernel.Valid machine → Grows inputHeap machine.heap →
+      ∀ (operations : SourceEqualityConstraintMemoAllocation.State),
+      SourceEqualityConstraintMemoAllocation.Valid operations →
+      ∀ (fuel : Nat) (request : EdgeRequest Symbol Guard),
+      let start : Checked width := ⟨initial width machine, operations⟩
+      InputsThrough fuel (.code (.edge request .pure)) start →
+      FieldsThrough fuel (.code (.edge request .pure)) start →
+      (Returned (NodeResult entry.identity diagonalTerminal.1.key diagonalFirst.1.key sourceDomain.1.key body universeValue) (execute fuel (.code (.edge request .pure)) start).state.native.nodes ∧
+        Returned EdgeResult (execute fuel (.code (.edge request .pure)) start).state.native.edges) ∧
+      ∀ (count : Nat) (value : EdgeValue Symbol Guard) (after : Checked width), count ≤ fuel →
+        Steps count (.code (.edge request .pure)) start (.code (.pure value)) after →
+        EdgeResult request value := by

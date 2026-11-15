@@ -1,0 +1,66 @@
+theorem current_stored_universe_body_first_outer_body_reclosure
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (original before after : Checked width) (physical : Physical original.native)
+    (growth : Grows sourceHeap original.native.machine.heap)
+    (domains : Cache.State IntersectionFlatMemoKeyDomain.DomainKey) (cacheValid : Cache.Valid domains)
+    (pattern : Value Symbol Guard) (patternAvailable : Available original.native.machine.heap pattern)
+    (patternClosed : pattern.free = []) (patternId : Nat)
+    (patternIdentity : identity pattern = some patternId) (patternKind : tag pattern = 1 ∨ tag pattern = 3) :
+    ∃ (bodyEntry : Interned NodeKey) (bodyRows : List (EdgeValue Symbol Guard)),
+    body = .node bodyEntry bodyRows 0 [.interned entry.identity] ∧ bodyEntry.identity ≠ entry.identity ∧
+    let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+    let sourceDomain := SourceRecursiveIntersectionEnvironment.enter domains IntersectionEmptyDomain.emptyKey
+      universeValue pattern entry.identity patternId
+    let bodyFirst := SourceRecursiveIntersectionEnvironment.enter sourceDomain.2 sourceDomain.1.key
+      body universeValue bodyEntry.identity entry.identity
+    ∀ (actualDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey),
+    actualDomain.key = sourceDomain.1.key →
+    let request : NodeRequest Symbol Guard := ⟨actualDomain, body, universeValue⟩
+    ∀ (parentFuel bodySteps : Nat) (result : Value Symbol Guard)
+      (finishNext : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard)),
+    InputsThrough parentFuel (.code (.node request .pure)) original →
+    Steps 1 (.code (.node request .pure)) original
+      (.code ((compileNode request).bind finishNext)) before →
+    bodySteps < parentFuel →
+    Steps bodySteps (.code (compileNode request)) before (.code (.pure result)) after →
+    let allocated := SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains request.domain.key
+      request.left request.right bodyEntry.identity entry.identity
+    let started : Checked width :=
+      {before with native := advance before.native {before.native.machine with domains := allocated.2}}
+    (∀ used count, 0 < used → used + count ≤ parentFuel → count < parentFuel →
+      ∀ (next : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard))
+        (product : Value Symbol Guard) (middle : Checked width),
+      Steps used (.code (.node request .pure)) original
+        (.code ((requestNode allocated.1 body body).bind next)) started →
+      allocated.1.key = bodyFirst.1.key →
+      Steps count (.code (requestNode allocated.1 body body)) started (.code (.pure product)) middle →
+      ProductShape entry.identity bodyEntry.identity entry.identity body product) →
+    decision request.domain.key request.left request.right = .rightMu ∧
+    allocated.1.key = bodyFirst.1.key ∧ result = universeValue ∧
+    ∃ (childSteps : Nat) (product : Value Symbol Guard) (middle : Checked width),
+      bodySteps = 1 + childSteps + 1 ∧ 2 + childSteps ≤ parentFuel ∧ childSteps < parentFuel ∧
+      Steps 1 (.code (compileNode request)) before
+        (.code ((requestNode allocated.1 body body).bind
+          (fun value => .optionalBinder (pair bodyEntry.identity entry.identity) value .pure))) started ∧
+      Steps 2 (.code (.node request .pure)) original
+        (.code ((requestNode allocated.1 body body).bind
+          (fun value => .optionalBinder (pair bodyEntry.identity entry.identity) value finishNext))) started ∧
+      Steps childSteps (.code (requestNode allocated.1 body body)) started
+        (.code (.pure product)) middle ∧
+      ProductShape entry.identity bodyEntry.identity entry.identity body product ∧
+      Physical middle.native ∧ Grows sourceHeap middle.native.machine.heap ∧
+      Available middle.native.machine.heap product ∧
+      SourceRecursiveIntersectionMaybeMu.maybeMu (pair bodyEntry.identity entry.identity) product
+        middle.native.machine.heap = .done universeValue middle.native.machine.heap ∧
+      SourceEqualityNativeDemand.step
+        (.code (.optionalBinder (pair bodyEntry.identity entry.identity) product .pure)) middle =
+        .yielded (.code (.pure universeValue)) middle ∧
+      Steps 1 (.code (.optionalBinder (pair bodyEntry.identity entry.identity) product .pure)) middle
+        (.code (.pure universeValue)) after ∧ after = middle := by

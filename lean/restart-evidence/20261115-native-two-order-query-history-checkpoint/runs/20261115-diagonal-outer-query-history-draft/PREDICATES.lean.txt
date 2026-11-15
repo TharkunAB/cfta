@@ -1,0 +1,8 @@
+def NodeResult [DecidableEq Symbol] (sourceName : Nat)
+    (selectedKey firstKey originalKey : IntersectionFlatMemoKeyDomain.DomainKey)
+    (body universeValue : Value Symbol Guard)
+    (request : NodeRequest Symbol Guard) (value : Value Symbol Guard) : Prop :=
+  SourceCurrentAllocatedNativeCoherentOpenBodyQueryGlobalLaws.NodeResult
+    sourceName sourceName sourceName selectedKey firstKey body universeValue request value ∧
+  (request.domain.key = originalKey → request.left = universeValue →
+    request.right = .reference (.interned sourceName) → value = universeValue)

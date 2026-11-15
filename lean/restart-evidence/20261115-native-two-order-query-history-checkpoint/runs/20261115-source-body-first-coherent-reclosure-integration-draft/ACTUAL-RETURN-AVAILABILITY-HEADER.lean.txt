@@ -1,0 +1,5 @@
+theorem node_result [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (request : NodeRequest Symbol Guard) (before after : Checked width) (value : Value Symbol Guard)
+    (valid : SourceCurrentAllocatedNativePhysicalCache.Valid before.native)
+    (trace : Trace fuel (.code (requestNode request.domain request.left request.right)) before (.code (.pure value)) after) :
+    Available after.native.machine.heap value

@@ -1,0 +1,40 @@
+theorem current_stored_universe_diagonal_first_actual_mu_body
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (heap : InternedConstructorTemplates.State Symbol Guard) (facts : Facts heap) (growth : Grows sourceHeap heap)
+    (domains : Cache.State IntersectionFlatMemoKeyDomain.DomainKey) (cacheValid : Cache.Valid domains)
+    (pattern : Value Symbol Guard) (_patternAvailable : Available heap pattern)
+    (_patternClosed : pattern.free = []) (patternId : Nat)
+    (_patternIdentity : identity pattern = some patternId)
+    (_patternKind : tag pattern = 1 ∨ tag pattern = 3) :
+    ∃ (bodyEntry : Interned NodeKey) (bodyRows : List (EdgeValue Symbol Guard)),
+      body = .node bodyEntry bodyRows 0 [.interned entry.identity] ∧ bodyEntry.identity ≠ entry.identity ∧
+      let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+      let referenceValue : Value Symbol Guard := .reference (.interned entry.identity)
+      let original := SourceRecursiveIntersectionEnvironment.enter domains IntersectionEmptyDomain.emptyKey
+        universeValue pattern entry.identity patternId
+      let diagonalFirst := SourceRecursiveIntersectionEnvironment.enter original.2 original.1.key
+        universeValue referenceValue entry.identity entry.identity
+      let diagonalTerminal := SourceRecursiveIntersectionEnvironment.enter diagonalFirst.2 diagonalFirst.1.key
+        body universeValue bodyEntry.identity entry.identity
+      identity body = some bodyEntry.identity ∧ identity universeValue = some entry.identity ∧
+      body.free ≠ [] ∧ pair entry.identity entry.identity ≠ pair bodyEntry.identity entry.identity ∧
+      (∀ (actualIncoming : Interned IntersectionFlatMemoKeyDomain.DomainKey),
+        actualIncoming.key = diagonalFirst.1.key →
+        decision actualIncoming.key body universeValue = .rightMu ∧
+        compileNode ⟨actualIncoming, body, universeValue⟩ = compileMu actualIncoming body universeValue ∧
+        ∀ (current : Cache.State IntersectionFlatMemoKeyDomain.DomainKey), Cache.Valid current →
+          (SourceRecursiveIntersectionEnvironment.enter current actualIncoming.key
+            body universeValue bodyEntry.identity entry.identity).1.key = diagonalTerminal.1.key) ∧
+      (∀ (actualDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey),
+        actualDomain.key = diagonalTerminal.1.key →
+        pair bodyEntry.identity bodyEntry.identity ∉ actualDomain.key.seen ∧
+        decision actualDomain.key body body = .ordinary ∧
+        compileNode ⟨actualDomain, body, body⟩ =
+          compileRows actualDomain (nodeEdges body) (nodeEdges body))

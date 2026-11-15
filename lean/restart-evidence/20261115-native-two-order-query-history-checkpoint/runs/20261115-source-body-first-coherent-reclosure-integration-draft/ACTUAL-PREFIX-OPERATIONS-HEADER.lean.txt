@@ -1,0 +1,21 @@
+theorem prefix_operations_before_bind
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (budget used : Nat) (original : Control B) (control : Control A)
+    (next : A → Code Symbol Guard B) (before after : Checked width)
+    (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (physical : Physical before.native)
+    (plan : InputsThrough budget original before)
+    (fields : FieldsThrough budget original before)
+    (valid : SourceEqualityConstraintMemoAllocation.Valid before.operations)
+    (sourceGrowth : InternedConstructorTemplates.Grows sourceHeap before.native.machine.heap)
+    (actual : Steps used original before (control.bind next) after)
+    (bounded : used ≤ budget) :
+    Trace used original before (control.bind next) after ∧
+    Physical after.native ∧ Extension before.native.machine after.native.machine ∧
+    InternedConstructorTemplates.Grows sourceHeap after.native.machine.heap ∧
+    SourceEqualityConstraintMemoAllocation.Valid after.operations ∧
+    SourceEqualityConstraintMemoAllocation.Grows before.operations after.operations ∧
+    InputsThrough (budget - used) (control.bind next) after ∧
+    InputsThrough (budget - used) control after ∧
+    FieldsThrough (budget - used) (control.bind next) after ∧
+    FieldsThrough (budget - used) control after

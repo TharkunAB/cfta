@@ -1,0 +1,19 @@
+theorem stored_open_product_optional_reclosure
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty = .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (state : Checked width) (facts : Facts state.native.machine.heap)
+    (growth : Grows sourceHeap state.native.machine.heap)
+    (cutoffLeft cutoffRight : Nat) (product : Value Symbol Guard)
+    (available : Available state.native.machine.heap product)
+    (shape : ProductShape entry.identity cutoffLeft cutoffRight body product) :
+    SourceRecursiveIntersectionMaybeMu.maybeMu (pair cutoffLeft cutoffRight) product state.native.machine.heap =
+      .done (.mu entry body depth ordinary) state.native.machine.heap ∧
+    SourceEqualityNativeDemand.step (.code (.optionalBinder (pair cutoffLeft cutoffRight) product .pure)) state =
+      .yielded (.code (.pure (.mu entry body depth ordinary))) state ∧
+    SourceEqualityNativeDemand.execute 2 (.code (.optionalBinder (pair cutoffLeft cutoffRight) product .pure)) state =
+      .done (.mu entry body depth ordinary) state
