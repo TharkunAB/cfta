@@ -1,0 +1,55 @@
+/-- The actual closed union control case combines all ordered smaller child Profiles at its original endpoint. -/
+theorem closed_union_body_profile_of_fuel_induction
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (sourceHeap : InternedConstructorTemplates.State Symbol Guard) (sourceName : Nat)
+    (unionEntry : Interned NodeKey) (members : List Node) (level : Nat) (free : List Reference)
+    (other : Node) (side : Bool)
+    (unionProfile : Profile sourceName (.union unionEntry members level free))
+    (otherProfile : Profile sourceName other) :
+    let request : NodeRequest Symbol Guard := ⟨IntersectionEmptyDomain.emptyDomain,
+      if side then .union unionEntry members level free else other,
+      if side then other else .union unionEntry members level free⟩
+    ∀ (original before after : Checked width) (parentFuel bodySteps : Nat) (result : Node)
+      (finishNext : Node → Code Symbol Guard Node),
+    Physical original.native → Grows sourceHeap original.native.machine.heap →
+    SourceEqualityConstraintMemoAllocation.Valid original.operations →
+    InputsThrough parentFuel (.code (.node request .pure)) original →
+    FieldsThrough parentFuel (.code (.node request .pure)) original →
+    decision request.domain.key request.left request.right = (if side then .leftUnion else .rightUnion) →
+    Steps 1 (.code (.node request .pure)) original
+      (.code ((compileNode request).bind finishNext)) before →
+    bodySteps < parentFuel →
+    Steps bodySteps (.code (compileNode request)) before (.code (.pure result)) after →
+    (∀ (child : NodeRequest Symbol Guard) (used childFuel childCount : Nat),
+      0 < used → childFuel < parentFuel → used + childFuel ≤ parentFuel →
+      childCount ≤ childFuel → used + childCount ≤ bodySteps + 1 →
+      child.domain = IntersectionEmptyDomain.emptyDomain →
+      Profile sourceName child.left → Profile sourceName child.right →
+      height child.left + height child.right < height request.left + height request.right →
+      ∀ (next : Node → Code Symbol Guard Node) (first last : Checked width) (value : Node),
+      Steps used (.code (.node request .pure)) original
+        (.code ((requestNode child.domain child.left child.right).bind next)) first →
+      Physical first.native → Grows sourceHeap first.native.machine.heap →
+      SourceEqualityConstraintMemoAllocation.Valid first.operations →
+      InputsThrough childFuel (.code (requestNode child.domain child.left child.right)) first →
+      FieldsThrough childFuel (.code (requestNode child.domain child.left child.right)) first →
+      Available first.native.machine.heap child.left → Available first.native.machine.heap child.right →
+      Steps childCount (.code (requestNode child.domain child.left child.right)) first
+        (.code (.pure value)) last → Profile sourceName value) →
+    Profile sourceName result ∧ Available after.native.machine.heap result ∧ Physical after.native ∧
+    Extension original.native.machine after.native.machine ∧ Grows sourceHeap after.native.machine.heap ∧
+    SourceEqualityConstraintMemoAllocation.Valid after.operations ∧
+    SourceEqualityConstraintMemoAllocation.Grows original.operations after.operations ∧
+    ∃ (values : List Node) (middle : Checked width) (walkCount workCount : Nat),
+      bodySteps = walkCount + workCount ∧
+      SourceEqualityNativeDemandWalkExecution.Walk (fun member : Node =>
+        requestNode request.domain (if side then member else other) (if side then other else member))
+        members before values middle walkCount ∧
+      All₂ (fun _ value => Profile sourceName value) members values ∧
+      (∀ value ∈ values, Available middle.native.machine.heap value) ∧
+      Steps walkCount (.code (compileNode request)) before
+        (.code (.work (makeUnion values) .pure)) middle ∧
+      Steps workCount (.code (.work (makeUnion values) .pure)) middle (.code (.pure result)) after ∧
+      result = (run (makeUnion values) middle.native.machine.heap).1 ∧
+      after = {middle with native := advance middle.native {middle.native.machine with heap :=
+        (run (makeUnion values) middle.native.machine.heap).2}}

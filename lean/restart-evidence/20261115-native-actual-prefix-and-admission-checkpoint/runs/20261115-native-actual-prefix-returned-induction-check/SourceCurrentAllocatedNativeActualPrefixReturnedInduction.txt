@@ -1,0 +1,174 @@
+MicroCFTA.SourceCurrentAllocatedNativeActualPrefixReturnedInduction.returned_at_every_actual_prefix
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat}
+  (nodeLaw :
+    MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        Prop)
+  (edgeLaw :
+    MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        Prop)
+  (rootRequest :
+    MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (machine :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (machineValid : MicroCFTA.SourceRecursiveIntersectionKernel.Valid machine)
+  (operations : MicroCFTA.SourceEqualityConstraintMemoAllocation.State) (fuel count : Nat)
+  (rest :
+    MicroCFTA.SourceEqualityNativeDemand.Control
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (after : MicroCFTA.SourceEqualityNativeDemand.State width) (bounded : count ≤ fuel)
+  (actual :
+    MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace count
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+        (MicroCFTA.SourceRecursiveIntersectionCode.Code.node rootRequest
+          MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+      { native := MicroCFTA.SourceRecursiveIntersectionThunks.initial width machine, operations := operations } rest
+      after)
+  (nodeBodies :
+    ∀ (finishUsed dispatchUsed bodyCount handle : Nat)
+      (request :
+        MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (value :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (beforeBody beforeFinish : MicroCFTA.SourceEqualityNativeDemand.State width)
+      (resume :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+          MicroCFTA.SourceRecursiveIntersectionCode.Code
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))),
+      finishUsed < count →
+        dispatchUsed + bodyCount = finishUsed →
+          0 < dispatchUsed →
+            MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace finishUsed
+                (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                  (MicroCFTA.SourceRecursiveIntersectionCode.Code.node rootRequest
+                    MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+                { native := MicroCFTA.SourceRecursiveIntersectionThunks.initial width machine,
+                  operations := operations }
+                (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                  (MicroCFTA.SourceRecursiveIntersectionCode.Code.finishNode handle value (resume value)))
+                beforeFinish →
+              MicroCFTA.SourceEqualityNativeDemand.Steps dispatchUsed
+                  (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                    (MicroCFTA.SourceRecursiveIntersectionCode.Code.node rootRequest
+                      MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+                  { native := MicroCFTA.SourceRecursiveIntersectionThunks.initial width machine,
+                    operations := operations }
+                  (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                    ((MicroCFTA.SourceRecursiveIntersectionCode.compileNode request).bind fun result =>
+                      MicroCFTA.SourceRecursiveIntersectionCode.Code.finishNode handle result (resume result)))
+                  beforeBody →
+                beforeBody.native.nodes.cells handle =
+                    some { request := request, status := MicroCFTA.FlatMemoThunk.Status.evaluating } →
+                  MicroCFTA.SourceEqualityNativeDemand.Steps bodyCount
+                      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                        (MicroCFTA.SourceRecursiveIntersectionCode.compileNode request))
+                      beforeBody
+                      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                        (MicroCFTA.SourceRecursiveIntersectionCode.Code.pure value))
+                      beforeFinish →
+                    beforeFinish.native.nodes.cells handle =
+                        some { request := request, status := MicroCFTA.FlatMemoThunk.Status.evaluating } →
+                      MicroCFTA.SourceCurrentAllocatedNativeContextCache.Returned nodeLaw beforeFinish.native.nodes →
+                        MicroCFTA.SourceCurrentAllocatedNativeContextCache.Returned edgeLaw beforeFinish.native.edges →
+                          nodeLaw request value)
+  (edgeBodies :
+    ∀ (finishUsed dispatchUsed bodyCount handle : Nat)
+      (request :
+        MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (value :
+        MicroCFTA.InternedConstructorTemplates.EdgeValue
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (beforeBody beforeFinish : MicroCFTA.SourceEqualityNativeDemand.State width)
+      (resume :
+        MicroCFTA.InternedConstructorTemplates.EdgeValue
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+          MicroCFTA.SourceRecursiveIntersectionCode.Code
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))),
+      finishUsed < count →
+        dispatchUsed + bodyCount = finishUsed →
+          0 < dispatchUsed →
+            MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace finishUsed
+                (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                  (MicroCFTA.SourceRecursiveIntersectionCode.Code.node rootRequest
+                    MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+                { native := MicroCFTA.SourceRecursiveIntersectionThunks.initial width machine,
+                  operations := operations }
+                (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                  (MicroCFTA.SourceRecursiveIntersectionCode.Code.finishEdge handle value (resume value)))
+                beforeFinish →
+              MicroCFTA.SourceEqualityNativeDemand.Steps dispatchUsed
+                  (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                    (MicroCFTA.SourceRecursiveIntersectionCode.Code.node rootRequest
+                      MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+                  { native := MicroCFTA.SourceRecursiveIntersectionThunks.initial width machine,
+                    operations := operations }
+                  (MicroCFTA.SourceEqualityNativeDemand.Control.edgeBody request fun result =>
+                    MicroCFTA.SourceRecursiveIntersectionCode.Code.finishEdge handle result (resume result))
+                  beforeBody →
+                beforeBody.native.edges.cells handle =
+                    some { request := request, status := MicroCFTA.FlatMemoThunk.Status.evaluating } →
+                  MicroCFTA.SourceEqualityNativeDemand.Steps bodyCount
+                      (MicroCFTA.SourceEqualityNativeDemand.Control.edgeBody request
+                        MicroCFTA.SourceRecursiveIntersectionCode.Code.pure)
+                      beforeBody
+                      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                        (MicroCFTA.SourceRecursiveIntersectionCode.Code.pure value))
+                      beforeFinish →
+                    beforeFinish.native.edges.cells handle =
+                        some { request := request, status := MicroCFTA.FlatMemoThunk.Status.evaluating } →
+                      MicroCFTA.SourceCurrentAllocatedNativeContextCache.Returned nodeLaw beforeFinish.native.nodes →
+                        MicroCFTA.SourceCurrentAllocatedNativeContextCache.Returned edgeLaw beforeFinish.native.edges →
+                          edgeLaw request value) :
+  (MicroCFTA.SourceCurrentAllocatedNativeContextCache.Returned nodeLaw after.native.nodes ∧
+      MicroCFTA.SourceCurrentAllocatedNativeContextCache.Returned edgeLaw after.native.edges) ∧
+    ∀ (used : Nat)
+      (currentControl :
+        MicroCFTA.SourceEqualityNativeDemand.Control
+          (MicroCFTA.InternedConstructorTemplates.Value
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+      (current : MicroCFTA.SourceEqualityNativeDemand.State width),
+      used ≤ count →
+        MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace used
+            (MicroCFTA.SourceEqualityNativeDemand.Control.code
+              (MicroCFTA.SourceRecursiveIntersectionCode.Code.node rootRequest
+                MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+            { native := MicroCFTA.SourceRecursiveIntersectionThunks.initial width machine, operations := operations }
+            currentControl current →
+          MicroCFTA.SourceCurrentAllocatedNativeContextCache.Returned nodeLaw current.native.nodes ∧
+            MicroCFTA.SourceCurrentAllocatedNativeContextCache.Returned edgeLaw current.native.edges
+'MicroCFTA.SourceCurrentAllocatedNativeActualPrefixReturnedInduction.returned_at_every_actual_prefix' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,31 @@
+--- lean/restart-evidence/20261115-general-closed-native-union-profile-draft/SourceCurrentAllocatedNativeClosedUnionProfile.lean
++++ lean/restart-evidence/20261115-general-closed-native-union-typed-prefix-repair/SourceCurrentAllocatedNativeClosedUnionProfile.lean
+@@ -231,6 +231,10 @@
+   dsimp only
+   intro original before after parentFuel bodySteps result finishNext
+     physical sourceGrowth operationsValid plan fields selected entered smaller actual children
++  change Steps 1 (Control.code (.node request .pure)) original
++    (Control.code ((compileNode request).bind finishNext)) before at entered
++  change Steps bodySteps (Control.code (compileNode request)) before
++    (Control.code (.pure result)) after at actual
+   let child : Node → NodeRequest Symbol Guard := fun member => ⟨request.domain,
+     if side then member else other, if side then other else member⟩
+   let build : List Node → Code Symbol Guard Node := fun values => .work (makeUnion values) .pure
+@@ -258,7 +262,7 @@
+     | false => exact ⟨rfl, otherProfile, memberProfile, Nat.add_lt_add_left descent (height other)⟩
+     | true => exact ⟨rfl, memberProfile, otherProfile, Nat.add_lt_add_right descent (height other)⟩
+   have raw : Steps bodySteps
+-      ((.code (SourceRecursiveIntersectionCode.walk (fun member : Node =>
++      ((Control.code (SourceRecursiveIntersectionCode.walk (fun member : Node =>
+         requestNode (child member).domain (child member).left (child member).right) members)).bind build)
+       before (.code (.pure result)) after := by
+     simpa only [compiled, Control.bind] using actual
+@@ -314,7 +318,7 @@
+   have bodyBound := actual.bind _ _ _ _ _ finishNext
+   have finalPrefix := entered.trans _ _ _ _ _ _ _ _ bodyBound
+   have atFinal : Steps (1 + bodySteps) (.code (.node request .pure)) original
+-      ((.code (.pure result)).bind finishNext) after := by
++      ((Control.code (.pure result)).bind finishNext) after := by
+     simpa only [Control.bind] using finalPrefix
+   have reached := SourceCurrentAllocatedNativePrefixOperations.prefix_operations_before_bind
+     parentFuel (1 + bodySteps) (.code (.node request .pure)) (.code (.pure result)) finishNext
