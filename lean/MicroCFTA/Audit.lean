@@ -5030,6 +5030,7 @@ import MicroCFTA.SourceCurrentConjunctionDemandVerified
 import MicroCFTA.SourcePruningEnumerationSharedParkedRawBucketReceipt
 import MicroCFTA.SourceSynthesisCurrentFirstRealPrefix
 import MicroCFTA.SourcePruningEnumerationSharedBucketWriteToClear
+import MicroCFTA.SourceSynthesisCurrentSharedInitialPreparation
 /-!
 # Proof dependency audit
 
@@ -5584,3 +5585,6 @@ run_cmd do
 
 #check @MicroCFTA.SourcePruningEnumerationSharedBucketWriteToClear.written_bucket_removed_after_finalize_callback
 #print axioms MicroCFTA.SourcePruningEnumerationSharedBucketWriteToClear.written_bucket_removed_after_finalize_callback
+
+#check @MicroCFTA.SourceSynthesisCurrentSharedInitialPreparation.accepted_shared_initial_preparation
+#print axioms MicroCFTA.SourceSynthesisCurrentSharedInitialPreparation.accepted_shared_initial_preparation
