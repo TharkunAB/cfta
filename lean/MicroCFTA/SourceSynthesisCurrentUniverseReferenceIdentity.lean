@@ -177,7 +177,7 @@ private theorem mapped_product_probe [DecidableEq (EdgeKey Symbol Guard)]
   simp only [SourceRecursiveIntersectionMaybeMu.callback, done, Outcome.bind, targetEq,
     withoutSelfReference, InternedNestedConstruction.work, run]
 
-private theorem available_mu_key (state : State Symbol Guard) (facts : Facts state)
+theorem available_mu_key (state : State Symbol Guard) (facts : Facts state)
     (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
     (available : Available state (.mu entry body depth ordinary)) :
     entry.key = muKey depth ordinary ∧ state.nodes.table (muKey depth ordinary) = some entry ∧
@@ -188,7 +188,7 @@ private theorem available_mu_key (state : State Symbol Guard) (facts : Facts sta
   rw [← fields.1] at present
   exact ⟨fields.2, fields.2 ▸ present, fields.2 ▸ resident⟩
 
-private theorem reference_available_mu (state : State Symbol Guard) (facts : Facts state)
+theorem reference_available_mu (state : State Symbol Guard) (facts : Facts state)
     (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
     (available : Available state (.mu entry body depth ordinary)) :
     Available state (.reference (.interned entry.identity)) := by
@@ -978,7 +978,7 @@ private theorem mixed_rows_probe_at [DecidableEq (EdgeKey S G)]
           rw [symbol, composed]
           exact first
 
-private theorem mixed_product_probe_at [DecidableEq (EdgeKey S G)]
+theorem mixed_product_probe_at [DecidableEq (EdgeKey S G)]
     (makeLiteral : String → S) (top : G) (catalog : List (String × Nat))
     (owner : Nat) (cutoff probe : Reference) (marker : Value S G)
     (sourceArrow : EdgeValue S G) (sources : List (EdgeValue S G))
