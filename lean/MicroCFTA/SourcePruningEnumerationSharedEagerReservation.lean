@@ -14230,3 +14230,128 @@ private theorem identity_actual_source_selected_nil_resources
 
 end ActualSelectedNilResourceInduction
 end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+section ActualConsAndOrdinaryResourceInduction
+open EnumerationState InternedConstructorTemplates
+open SourcePruningEnumerationSharedPreparedRecursive (finish)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+variable {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+attribute [local irreducible] nodePlan tuplePlan fallbackPlan identity_actual_frame_plan
+  identity_actual_frame_reserved IdentityActualSourceRoot.limit IdentityActualSourceRoot.own
+
+/-- Tuple cons uses the actual head task and the strict work decrease. -/
+private theorem identity_actual_source_tuple_cons_resources
+    (graph : Graph Symbol Constraint) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint)) (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Unit) (uv : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits) (point : IdentityActualSourcePoint bits) (count : Nat)
+    (incoming : Node) (bucket : List Suspended) (rest : List (Node × List Suspended))
+    (taskIH : ∀ smaller : IdentityActualSourceTask bits,
+      smaller.work root.limit < IdentityActualSourceTask.work root.limit
+        (.tuple {point with count := count + 1} ((incoming, bucket) :: rest)) →
+      IdentityActualSourceCorrectAt graph checkEmpty edgesOf recursiveDepth workFuel metadata uv formulas solver root smaller) :
+    IdentityActualSourceCorrectAt graph checkEmpty edgesOf recursiveDepth workFuel metadata uv formulas solver root
+      (.tuple {point with count := count + 1} ((incoming, bucket) :: rest)) := by
+  intro scopeOriginal scopeBefore allInputs ancestors origin current
+  obtain ⟨headOrigin, headCurrent, decrease⟩ :=
+    identity_actual_source_cons_current graph checkEmpty edgesOf recursiveDepth workFuel metadata uv
+      formulas solver root scopeOriginal scopeBefore allInputs point count incoming bucket rest origin current
+  have resources := taskIH (.child {point with count := count} incoming bucket rest) decrease
+    scopeOriginal scopeBefore allInputs ancestors headOrigin headCurrent
+  have runtime := identity_actual_source_tuple_cons_run graph checkEmpty edgesOf recursiveDepth workFuel
+    metadata uv point count incoming bucket rest
+  have forecast := (identity_actual_source_forward_forecasts recursiveDepth root.limit root.own
+    point count point.height incoming bucket rest).1
+  change IdentityEmittedCompleteResources formulas solver point.caller
+    (IdentityActualSourceTask.goal recursiveDepth root.limit root.own
+      (.tuple {point with count := count + 1} ((incoming, bucket) :: rest))).forecast
+    (finish uv (IdentityActualSourceTask.run graph checkEmpty edgesOf recursiveDepth workFuel metadata uv
+      (.tuple {point with count := count + 1} ((incoming, bucket) :: rest))))
+  rw [runtime, forecast]
+  exact resources
+
+/-- The ordinary child uses the actual rows task at the same native endpoint. -/
+private theorem identity_actual_source_ordinary_resources
+    (graph : Graph Symbol Constraint) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint)) (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Unit) (uv : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits) (point : IdentityActualSourcePoint bits) (height : Nat)
+    (incoming : Node) (bucket : List Suspended) (rest : List (Node × List Suspended))
+    (ordinary : SourcePruningEnumerationSharedEagerChildren.ordinaryNonterminal bucket incoming = true)
+    (taskIH : ∀ smaller : IdentityActualSourceTask bits,
+      smaller.work root.limit < IdentityActualSourceTask.work root.limit
+        (.child {point with height := height + 1} incoming bucket rest) →
+      IdentityActualSourceCorrectAt graph checkEmpty edgesOf recursiveDepth workFuel metadata uv formulas solver root smaller) :
+    IdentityActualSourceCorrectAt graph checkEmpty edgesOf recursiveDepth workFuel metadata uv formulas solver root
+      (.child {point with height := height + 1} incoming bucket rest) := by
+  intro scopeOriginal scopeBefore allInputs ancestors origin current
+  obtain ⟨rowsOrigin, rowsCurrent, decrease⟩ :=
+    identity_actual_source_ordinary_current graph checkEmpty edgesOf recursiveDepth workFuel metadata uv
+      formulas solver root scopeOriginal scopeBefore allInputs point height incoming bucket rest origin ordinary current
+  have resources := taskIH (.rows height {point with height := height + 1} incoming bucket rest) decrease
+    scopeOriginal scopeBefore allInputs ancestors rowsOrigin rowsCurrent
+  have runtime := identity_actual_source_ordinary_run graph checkEmpty edgesOf recursiveDepth workFuel
+    metadata uv point height incoming bucket rest ordinary
+  have forecast := (identity_actual_source_forward_forecasts recursiveDepth root.limit root.own
+    point point.count height incoming bucket rest).2
+  change IdentityEmittedCompleteResources formulas solver point.caller
+    (IdentityActualSourceTask.goal recursiveDepth root.limit root.own
+      (.child {point with height := height + 1} incoming bucket rest)).forecast
+    (finish uv (IdentityActualSourceTask.run graph checkEmpty edgesOf recursiveDepth workFuel metadata uv
+      (.child {point with height := height + 1} incoming bucket rest)))
+  rw [runtime, forecast]
+  exact resources
+
+end ActualConsAndOrdinaryResourceInduction
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+section ActualInputsCapturedNativePost
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+variable {bits : Nat}
+variable [DecidableEq (EdgeKey Symbol Constraint)]
+
+/-- An actual native Post transports the full current Inputs in the same captured cache. -/
+private theorem identity_actual_source_inputs_captured_native_post
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits) (scopeOriginal : Caller (bits + 2))
+    (metadata : Metadata Unit) (scopeBefore : Cached) (allInputs : List (Node × List Suspended))
+    (point : IdentityActualSourcePoint bits) (remaining : List (Node × List Suspended)) (capacity : Nat)
+    (next : Inventory) (reached : Caller (bits + 2)) (final : Memos) (saved : Queries)
+    (inputs : point.Inputs formulas solver root scopeOriginal metadata scopeBefore allInputs remaining capacity)
+    (post : SourceCurrentAllocatedPartialInvariant.Post formulas solver next point.caller reached final)
+    (querySame : final.query = saved) :
+    IdentityActualSourcePoint.Inputs formulas solver root scopeOriginal metadata scopeBefore allInputs
+      {point with caller := reached, queries := saved} remaining capacity := by
+  obtain ⟨shapes, kept, _inventory, _memos, packet, _beforeQuery, previous,
+    mass, counted, subset, genuine⟩ := inputs
+  have transported := tuple_inputs_captured_native_post formulas solver scopeOriginal metadata scopeBefore
+    allInputs point.completed point.caller reached point.queries saved point.before next final previous post querySame
+  exact ⟨shapes, kept.trans post.effects.keeps, next, final,
+    SourcePruningEnumerationRecursive.captured_post packet post, querySame, transported,
+    mass, counted, subset, genuine⟩
+
+end ActualInputsCapturedNativePost
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
