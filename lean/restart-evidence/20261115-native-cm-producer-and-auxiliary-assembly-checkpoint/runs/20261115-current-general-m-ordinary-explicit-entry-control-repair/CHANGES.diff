@@ -1,0 +1,16 @@
+--- lean/restart-evidence/20261115-current-general-m-ordinary-finish-draft/SourceCurrentAllocatedNativeGeneralMOrdinaryFinish.lean
++++ lean/restart-evidence/20261115-current-general-m-ordinary-explicit-entry-control-repair/SourceCurrentAllocatedNativeGeneralMOrdinaryFinish.lean
+@@ -163,7 +163,12 @@
+     simpa only [entryTotal] using wholeActual
+   have entrySplit := SourceCurrentHereditaryNativePhysicalSplit.split entryPrefix.steps wholeForEntry
+   have eventTotal : 1 + (wholeCount - entryUsed - 1) = wholeCount - entryUsed := by omega
+-  have eventRemainder : Trace (1 + (wholeCount - entryUsed - 1)) _ entryBefore rest reader := by
++  have eventRemainder : Trace (1 + (wholeCount - entryUsed - 1))
++      (.code (.enter IntersectionEmptyDomain.emptyDomain
++        (if universeFirst then universeValue else pattern)
++        (if universeFirst then pattern else universeValue)
++        (if universeFirst then entry.identity else patternId)
++        (if universeFirst then patternId else entry.identity) entryNext)) entryBefore rest reader := by
+     simpa only [eventTotal] using entrySplit.2
+   have eventSplit := SourceCurrentHereditaryNativePhysicalSplit.split entryOne.steps eventRemainder
+   have sourceChildren :=

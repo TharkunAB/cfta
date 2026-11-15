@@ -1,0 +1,94 @@
+  cases left <;> cases right
+  all_goals try solve | cases leftClosed
+  all_goals try solve | cases rightClosed
+  all_goals try solve | cases leftIdentity
+  all_goals try solve | cases rightIdentity
+  case node.node first firstRows firstLevel firstFree second secondRows secondLevel secondFree =>
+    have selected : decision IntersectionEmptyDomain.emptyDomain.key
+        (.node first firstRows firstLevel firstFree) (.node second secondRows secondLevel secondFree) = .ordinary := by
+      simpa only [payload] using selectedPayload
+    exact SourceCurrentAllocatedNativeGeneralCOrdinaryFinish.closed_ordinary_profile_at_actual_node_finish
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      rootRequest machine machineValid sourceGrowth operations operationsValid fuel wholeCount finishUsed handle
+      parent value rest reader beforeFinish parentNext wholeBound _wholeActual finishBound actual owner
+      inputs fields selected qualified past
+  case node.union own rows level free other members otherLevel otherFree =>
+    have selected : decision IntersectionEmptyDomain.emptyDomain.key
+        (.node own rows level free) (.union other members otherLevel otherFree) = .rightUnion := by
+      simpa only [payload] using selectedPayload
+    exact unionRun other members otherLevel otherFree (.node own rows level free) false
+      rightProfile leftProfile rfl selected
+  case union.node own members level free other rows otherLevel otherFree =>
+    have selected : decision IntersectionEmptyDomain.emptyDomain.key
+        (.union own members level free) (.node other rows otherLevel otherFree) = .leftUnion := by
+      simpa only [payload] using selectedPayload
+    exact unionRun own members level free (.node other rows otherLevel otherFree) true
+      leftProfile rightProfile rfl selected
+  case union.union own members level free other otherMembers otherLevel otherFree =>
+    have selected : decision IntersectionEmptyDomain.emptyDomain.key
+        (.union own members level free) (.union other otherMembers otherLevel otherFree) = .leftUnion := by
+      simpa only [payload] using selectedPayload
+    exact unionRun own members level free (.union other otherMembers otherLevel otherFree) true
+      leftProfile rightProfile rfl selected
+  case mu.node own ownBody ownDepth ownOrdinary other rows level free =>
+    have same := SourceSynthesisCurrentUniverseClosedMuClassification.current_stored_universe_closed_mu_eq_after_growth
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      queryBefore.native.machine.heap queryPhysical.machine.1 queryGrowth own ownBody ownDepth ownOrdinary
+      leftAvailable leftClosed leftProfile.2
+    have selected : decision IntersectionEmptyDomain.emptyDomain.key
+        (.mu own ownBody ownDepth ownOrdinary) (.node other rows level free) = .leftMu := by
+      simpa only [payload] using selectedPayload
+    rw [same] at selected
+    exact muRun (.node other rows level free) other.identity rightProfile rfl (Or.inl rfl) true
+      (by rw [← same]; exact leftClosed) (by simp only [parent, same]) selected
+  case mu.union own ownBody ownDepth ownOrdinary other members level free =>
+    have same := SourceSynthesisCurrentUniverseClosedMuClassification.current_stored_universe_closed_mu_eq_after_growth
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      queryBefore.native.machine.heap queryPhysical.machine.1 queryGrowth own ownBody ownDepth ownOrdinary
+      leftAvailable leftClosed leftProfile.2
+    have selected : decision IntersectionEmptyDomain.emptyDomain.key
+        (.mu own ownBody ownDepth ownOrdinary) (.union other members level free) = .leftMu := by
+      simpa only [payload] using selectedPayload
+    rw [same] at selected
+    exact muRun (.union other members level free) other.identity rightProfile rfl (Or.inr rfl) true
+      (by rw [← same]; exact leftClosed) (by simp only [parent, same]) selected
+  case node.mu own rows level free other otherBody otherDepth otherOrdinary =>
+    have same := SourceSynthesisCurrentUniverseClosedMuClassification.current_stored_universe_closed_mu_eq_after_growth
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      queryBefore.native.machine.heap queryPhysical.machine.1 queryGrowth other otherBody otherDepth otherOrdinary
+      rightAvailable rightClosed rightProfile.2
+    have selected : decision IntersectionEmptyDomain.emptyDomain.key
+        (.node own rows level free) (.mu other otherBody otherDepth otherOrdinary) = .rightMu := by
+      simpa only [payload] using selectedPayload
+    rw [same] at selected
+    exact muRun (.node own rows level free) own.identity leftProfile rfl (Or.inl rfl) false
+      (by rw [← same]; exact rightClosed) (by simp only [parent, same]) selected
+  case union.mu own members level free other otherBody otherDepth otherOrdinary =>
+    have same := SourceSynthesisCurrentUniverseClosedMuClassification.current_stored_universe_closed_mu_eq_after_growth
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      queryBefore.native.machine.heap queryPhysical.machine.1 queryGrowth other otherBody otherDepth otherOrdinary
+      rightAvailable rightClosed rightProfile.2
+    have selected : decision IntersectionEmptyDomain.emptyDomain.key
+        (.union own members level free) (.mu other otherBody otherDepth otherOrdinary) = .rightMu := by
+      simpa only [payload] using selectedPayload
+    rw [same] at selected
+    exact muRun (.union own members level free) own.identity leftProfile rfl (Or.inr rfl) false
+      (by rw [← same]; exact rightClosed) (by simp only [parent, same]) selected
+  case mu.mu own ownBody ownDepth ownOrdinary other otherBody otherDepth otherOrdinary =>
+    have firstSame := SourceSynthesisCurrentUniverseClosedMuClassification.current_stored_universe_closed_mu_eq_after_growth
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      queryBefore.native.machine.heap queryPhysical.machine.1 queryGrowth own ownBody ownDepth ownOrdinary
+      leftAvailable leftClosed leftProfile.2
+    have secondSame := SourceSynthesisCurrentUniverseClosedMuClassification.current_stored_universe_closed_mu_eq_after_growth
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      queryBefore.native.machine.heap queryPhysical.machine.1 queryGrowth other otherBody otherDepth otherOrdinary
+      rightAvailable rightClosed rightProfile.2
+    have universeClosed : (Value.mu entry body depth ordinary).free = [] := by
+      rw [← firstSame]
+      exact leftClosed
+    have reuse : SourceRecursiveIntersectionControl.closedSelf
+        (.mu entry body depth ordinary) (.mu entry body depth ordinary) = true := by
+      simp only [SourceRecursiveIntersectionControl.closedSelf, beq_self_eq_true,
+        universeClosed, List.isEmpty_nil, Bool.and_self]
+    rw [firstSame, secondSame, reuse] at noSelf
+    cases noSelf

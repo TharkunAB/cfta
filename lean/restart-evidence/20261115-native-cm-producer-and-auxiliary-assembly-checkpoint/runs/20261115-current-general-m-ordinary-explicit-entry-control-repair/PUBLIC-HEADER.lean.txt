@@ -1,0 +1,38 @@
+theorem mixed_ordinary_profile_at_actual_node_finish
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (rootRequest : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
+    (machineValid : SourceRecursiveIntersectionKernel.Valid machine)
+    (sourceGrowth : Grows sourceHeap machine.heap)
+    (operations : SourceEqualityConstraintMemoAllocation.State)
+    (operationsValid : SourceEqualityConstraintMemoAllocation.Valid operations)
+    (fuel wholeCount finishUsed handle : Nat)
+    (request : NodeRequest Symbol Guard) (value : Value Symbol Guard)
+    (rest : Control (Value Symbol Guard)) (reader beforeFinish : Checked width)
+    (parentNext : Code Symbol Guard (Value Symbol Guard))
+    (wholeBound : wholeCount ≤ fuel)
+    (wholeActual : Trace wholeCount (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width) rest reader)
+    (finishBound : finishUsed < wholeCount)
+    (actual : Trace finishUsed (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width)
+      (.code (.finishNode handle value parentNext)) beforeFinish)
+    (owner : beforeFinish.native.nodes.cells handle = some ⟨request, .evaluating⟩)
+    (inputs : InputsThrough fuel (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width))
+    (fields : FieldsThrough fuel (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width))
+    (selected : SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right = .ordinary)
+    (qualified : MixedQualified (width := width) rootRequest machine operations wholeCount entry body depth ordinary request)
+    (past :
+      Returned (NodeResult (width := width) rootRequest machine operations wholeCount entry body depth ordinary)
+        beforeFinish.native.nodes ∧
+      Returned (EdgeResult (width := width) rootRequest machine operations wholeCount entry body depth ordinary)
+        beforeFinish.native.edges) :
+    Profile entry.identity value := by

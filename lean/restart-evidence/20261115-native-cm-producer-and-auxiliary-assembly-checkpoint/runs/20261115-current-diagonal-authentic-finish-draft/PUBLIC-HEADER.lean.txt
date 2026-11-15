@@ -1,0 +1,48 @@
+/-- The actual diagonal parent uses its returned B/R child at the same finish. -/
+theorem diagonal_outer_finish_of_past_coherent_laws
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (bodyId : Nat) (bodyIdentity : identity body = some bodyId)
+    (rootRequest : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
+    (machineValid : Valid machine)
+    (operations : SourceEqualityConstraintMemoAllocation.State)
+    (operationsValid : SourceEqualityConstraintMemoAllocation.Valid operations)
+    (sourceGrowth : Grows sourceHeap machine.heap)
+    (fuel wholeCount finishCount : Nat)
+    (pattern : Value Symbol Guard) (patternId : Nat)
+    (domain actualDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey)
+    (authentic : AuthenticEntry (width := width) rootRequest machine operations wholeCount
+      entry body depth ordinary pattern patternId domain)
+    (sameKey : actualDomain.key = domain.key)
+    (parentHandle : Nat) (value : Value Symbol Guard)
+    (rest : Code Symbol Guard (Value Symbol Guard)) (beforeFinish : Checked width)
+    (readerControl : Control (Value Symbol Guard)) (reader : Checked width)
+    (wholeBound : wholeCount ≤ fuel)
+    (wholeActual : Trace wholeCount (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width) readerControl reader)
+    (finishWithin : finishCount + 1 ≤ wholeCount)
+    (actual : Trace finishCount (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width)
+      (.code (.finishNode parentHandle value rest)) beforeFinish)
+    (owner : beforeFinish.native.nodes.cells parentHandle =
+      some ⟨⟨actualDomain, .mu entry body depth ordinary,
+        .reference (.interned entry.identity)⟩, .evaluating⟩)
+    (plan : InputsThrough fuel (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width))
+    (fields : FieldsThrough fuel (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width))
+    (past :
+      Returned (SourceCurrentAllocatedNativeCoherentOpenBodyQueryGlobalLaws.NodeResult
+        entry.identity entry.identity entry.identity
+        (extend (extend domain.key [entry.identity] (pair entry.identity entry.identity))
+          [entry.identity] (pair bodyId entry.identity))
+        (extend domain.key [entry.identity] (pair entry.identity entry.identity))
+        body (.mu entry body depth ordinary)) beforeFinish.native.nodes ∧
+      Returned SourceCurrentAllocatedNativeTopRowQueryGlobalLaws.EdgeResult beforeFinish.native.edges) :
+    value = .mu entry body depth ordinary

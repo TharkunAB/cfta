@@ -1,0 +1,149 @@
+  have unionRun (unionEntry : Interned NodeKey) (members : List Node) (level : Nat) (free : List Reference)
+      (other : Node) (side : Bool)
+      (unionProfile : Profile entry.identity (.union unionEntry members level free))
+      (otherProfile : Profile entry.identity other)
+      (sameParent : parent = ⟨IntersectionEmptyDomain.emptyDomain,
+        if side then .union unionEntry members level free else other,
+        if side then other else .union unionEntry members level free⟩)
+      (selected : decision IntersectionEmptyDomain.emptyDomain.key
+        (if side then .union unionEntry members level free else other)
+        (if side then other else .union unionEntry members level free) =
+        (if side then .leftUnion else .rightUnion)) : Profile entry.identity value := by
+    let literal : NodeRequest Symbol Guard := ⟨IntersectionEmptyDomain.emptyDomain,
+      if side then .union unionEntry members level free else other,
+      if side then other else .union unionEntry members level free⟩
+    have pref := queryPrefix
+    have dispatched := isolatedDispatch
+    have completed := rawBody
+    have plan := queryInputs
+    have fieldPlan := queryFields
+    rw [sameParent] at pref dispatched completed plan fieldPlan
+    have observed := SourceCurrentAllocatedNativeClosedUnionProfile.closed_union_body_profile_of_fuel_induction
+      sourceHeap entry.identity unionEntry members level free other side unionProfile otherProfile
+      queryBefore beforeBody beforeFinish (fuel - queryUsed) bodyCount value
+      (fun result => .finishNode handle result (.pure result)) queryPhysical queryGrowth queryOperations
+      plan fieldPlan selected dispatched (by omega) completed (by
+        intro child used childFuel childCount _positive _childSmaller _room _countBound span
+          emptyDomain firstProfile secondProfile _height next first last childValue origin
+          _physical _growth _operations _inputs _fields _firstAvailable _secondAvailable childActual
+        let lifted : Node → Code Symbol Guard Node := fun result => (next result).bind queryResume
+        have appended := origin.bind _ _ _ _ _ queryResume
+        change Steps used (.code (.node literal queryResume)) queryBefore
+          (.code (((requestNode child.domain child.left child.right).bind next).bind queryResume)) first at appended
+        have tail : Steps used (.code (.node literal queryResume)) queryBefore
+            (.code ((requestNode child.domain child.left child.right).bind lifted)) first := by
+          simpa only [Code.bind_assoc, lifted] using appended
+        have outer : Steps (queryUsed + used) (.code (.node rootRequest .pure))
+            (⟨initial width machine, operations⟩ : Checked width)
+            (.code ((requestNode child.domain child.left child.right).bind lifted)) first :=
+          pref.steps.trans _ _ _ _ _ _ _ _ tail
+        exact childResult child (queryUsed + used) childCount lifted first last childValue (by omega)
+          outer childActual (Or.inl ⟨firstProfile, secondProfile, Or.inl emptyDomain⟩))
+    exact observed.1
+  have muRun (pattern : Node) (patternId : Nat) (patternProfile : Profile entry.identity pattern)
+      (patternIdentity : identity pattern = some patternId) (patternKind : tag pattern = 1 ∨ tag pattern = 3)
+      (side : Bool) (universeClosed : (Value.mu entry body depth ordinary).free = [])
+      (sameParent : parent = ⟨IntersectionEmptyDomain.emptyDomain,
+        if side then .mu entry body depth ordinary else pattern,
+        if side then pattern else .mu entry body depth ordinary⟩)
+      (selected : decision IntersectionEmptyDomain.emptyDomain.key
+        (if side then .mu entry body depth ordinary else pattern)
+        (if side then pattern else .mu entry body depth ordinary) =
+        (if side then .leftMu else .rightMu)) : Profile entry.identity value := by
+    let universe : Node := .mu entry body depth ordinary
+    let literal : NodeRequest Symbol Guard := ⟨IntersectionEmptyDomain.emptyDomain,
+      if side then universe else pattern, if side then pattern else universe⟩
+    let childLeft : Node := if side then body else pattern
+    let childRight : Node := if side then pattern else body
+    let firstId := if side then entry.identity else patternId
+    let secondId := if side then patternId else entry.identity
+    let entered := SourceRecursiveIntersectionEnvironment.enter beforeBody.native.machine.domains
+      IntersectionEmptyDomain.emptyKey universe pattern entry.identity patternId
+    let started : Checked width :=
+      {beforeBody with native := advance beforeBody.native {beforeBody.native.machine with domains := entered.2}}
+    let binder := pair entry.identity patternId
+    let enterNext := fun domain => (requestNode domain childLeft childRight).bind
+      (fun result => .optionalBinder binder result .pure)
+    have pref := queryOrigin
+    have dispatched := isolatedDispatch
+    have completed := rawBody
+    have plan := queryInputs
+    have fieldPlan := queryFields
+    have held := bodyOwner
+    have compiledPrefix := bodyStart
+    rw [sameParent] at pref dispatched completed plan fieldPlan held compiledPrefix
+    have bodyPattern := pattern_body pattern patternKind
+    have leftIdentity : identity literal.left = some firstId := by
+      cases side with
+      | false => exact patternIdentity
+      | true => rfl
+    have rightIdentity : identity literal.right = some secondId := by
+      cases side with
+      | false => rfl
+      | true => exact patternIdentity
+    have leftBody : SourceRecursiveIntersectionKernel.body literal.left = childLeft := by
+      cases side with
+      | false => exact bodyPattern
+      | true => rfl
+    have rightBody : SourceRecursiveIntersectionKernel.body literal.right = childRight := by
+      cases side with
+      | false => rfl
+      | true => exact bodyPattern
+    have paired : pair firstId secondId = binder := by
+      cases side with
+      | false => simp only [firstId, secondId, binder, pair, Nat.min_comm, Nat.max_comm]
+      | true => rfl
+    have selectedCompile : compileNode literal = compileMu literal.domain literal.left literal.right := by
+      cases side <;> simp only [compileNode, selected]
+    have compiled : compileNode literal = .enter IntersectionEmptyDomain.emptyDomain
+        literal.left literal.right firstId secondId enterNext := by
+      rw [selectedCompile]
+      simp only [compileMu, leftIdentity, rightIdentity, leftBody, rightBody, paired,
+        enterNext, requestNode, Code.bind]
+    have eventPrefix : Trace (queryUsed + 1) (.code (.node rootRequest .pure))
+        (⟨initial width machine, operations⟩ : Checked width)
+        (.code (.enter IntersectionEmptyDomain.emptyDomain literal.left literal.right firstId secondId
+          (fun domain => (enterNext domain).bind finishNext))) beforeBody := by
+      simpa only [compiled, Code.bind] using compiledPrefix
+    have observed := SourceCurrentAllocatedNativeClosedUniverseMuProfile.closed_universe_mu_profile_trace_result
+      sourceHeap key entry body depth ordinary stored universeClosed pattern patternProfile
+      patternId patternIdentity patternKind side queryBefore beforeBody beforeFinish (fuel - queryUsed)
+      bodyCount value (fun result => .finishNode handle result (.pure result))
+      queryPhysical queryGrowth queryOperations selected plan fieldPlan dispatched (by omega) completed (by
+        intro childFuel childCount _childSmaller _countBound _room _parentRoom next childValue middle
+          origin event _physical _growth _operations _inputs _fields _domain _leftAvailable _rightAvailable
+          _universeClosed _patternProfile _height childActual
+        let child : NodeRequest Symbol Guard := ⟨entered.1, childLeft, childRight⟩
+        have span := SourceCurrentAllocatedNativeNodeChildBeforeFinish.completed_node_child_span_before_parent_finish
+          (.code (.node rootRequest .pure)) queryResume literal child handle
+          (⟨initial width machine, operations⟩ : Checked width) queryBefore beforeBody beforeFinish started middle
+          (fuel - queryUsed) bodyCount queryUsed 2 childCount value childValue next
+          bodyPhysical.shape held (by omega) atParent pref dispatched completed (by omega) origin childActual
+        have rootSpan := span.2.1
+        have allocation := SourceCurrentNativeOrderedOriginalEntry.ordered_original_entry_common_operands
+          entry body depth ordinary pattern patternProfile.1 patternId patternIdentity patternKind side enterNext
+          0 beforeBody started (.code (enterNext entered.1)) bodyPhysical event
+        have eventBound : Trace 1
+            (.code (.enter IntersectionEmptyDomain.emptyDomain literal.left literal.right firstId secondId
+              (fun domain => (enterNext domain).bind finishNext))) beforeBody
+            (.code ((enterNext entered.1).bind finishNext)) started := by
+          simpa only [Control.bind, Code.bind] using event.bind finishNext
+        have authenticated : AuthenticEntry (width := width) rootRequest machine operations wholeCount
+            entry body depth ordinary pattern patternId entered.1 := by
+          refine ⟨patternProfile.1, patternIdentity, patternKind, side, queryUsed + 1, beforeBody,
+            (fun domain => (enterNext domain).bind finishNext), ?_⟩
+          dsimp only
+          exact ⟨by omega, eventPrefix, allocation.1, eventBound, rfl⟩
+        have qualifiedChild : Qualified (width := width) rootRequest machine operations wholeCount
+            entry body depth ordinary child := by
+          refine Or.inr ⟨pattern, patternId, body, pattern, authenticated, Or.inl rfl,
+            patternProfile, Nat.le_refl _, ?_, ?_⟩
+          · intro same
+            exact (bodyNotReference same).elim
+          · cases side with
+            | false => exact Or.inr ⟨rfl, rfl⟩
+            | true => exact Or.inl ⟨rfl, rfl⟩
+        exact childResult child (queryUsed + 2) childCount
+          (fun result => (next result).bind queryResume) started middle childValue (by omega)
+          span.2.2.2.2.2.1.steps childActual qualifiedChild)
+    exact observed.1
