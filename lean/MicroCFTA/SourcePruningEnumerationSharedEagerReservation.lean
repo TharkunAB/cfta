@@ -10936,6 +10936,150 @@ local notation "Visitor" => List Suspended → Node → Caller (bits + 2) → Ca
 variable [DecidableEq (EdgeKey Symbol Constraint)]
 
 /-- An actual row entry derives its nested tuple reservation and current child inputs. -/
+private theorem identity_ordinary_row_prefix_reservation_of_row
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (caller : Caller (bits + 2)) (memos : Memos)
+    (metadata : Metadata Unit) (before : Cached)
+    (captured : InternedConstructorTemplates.State Symbol Constraint)
+    (limit own height bound ceiling : Nat) (initialSeed rowSeed : Seed)
+    (continuation : Nat → Seed → Seed) (admitted : Nat → Seed → Prop)
+    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (attempted remaining : List (EdgeValue Symbol Constraint))
+    (edge : EdgeValue Symbol Constraint) (scs : List Suspended)
+    (tries : List EqualityTrie.Trie) (residual : Option Constraint)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (fits : Fits rowSeed.2 caller.checked)
+    (known : Heap (fun guard => guard ∈ rowSeed.1) caller.checked.native.machine.heap)
+    (kept : SourceEqualityRequiredCache.Keeps captured caller.checked.native.machine.heap)
+    (mass : SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling)
+    (bucketBound : scs.length ≤ bound)
+    (available : Available captured (.node parentEntry rows depth free))
+    (closed : free = [])
+    (ranked : MergedOrdinaryHeight.height (.node parentEntry rows depth free) ≤ height + 1)
+    (bounded : ∀ sc ∈ scs, sc.var < before.core.counter)
+    (pending : InputsPending before.core scs)
+    (sourceRows : edgesOf (.node parentEntry rows depth free) = attempted ++ edge :: remaining)
+    (selectionMembers : ∀ selected ∈ edgesOf (.node parentEntry rows depth free), selected ∈ rows)
+    (selectionLength : (edgesOf (.node parentEntry rows depth free)).length ≤ rows.length)
+    (shapes : rows.length ≤ limit ∧ ∀ selected ∈ rows, selected.children.length ≤ limit ∧
+      ∀ projected residual, SourcePruningEnumerationConstraint.project selected.entry.key.constraint =
+        some (projected, residual) → projected.length ≤ own)
+    (allowed : arityAllows edge.children.length scs = true)
+    (projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual))
+    (scheduled : rowSeed = iterate
+      (fun current => tuplePlan (nodePlan limit own height) limit (bound + own) ceiling continuation current)
+      (fallbackPlan bound ceiling continuation initialSeed) attempted.length)
+    (rowReserved : tupleReserved (nodePlan limit own height) (nodeReserved bits limit own height)
+      limit (bound + own) ceiling continuation admitted rowSeed)
+    (growth : ∀ retained current, Le current.2 (continuation retained current).2 ∧
+      current.1 ⊆ (continuation retained current).1) :
+    let inputs := SourcePruningEnumerationEdgeInputs.children edge scs before.core.counter tries
+    let staged := inputs.map (fun input =>
+      (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild input.2 input.1))
+    ∃ rowOwn : Cached,
+      SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs edge before =
+        some [((edge.entry.key.symbol, staged, residual), rowOwn)] ∧
+      Packet formulas solver inventory caller memos metadata rowOwn ∧
+      TupleInputs formulas solver caller metadata rowOwn
+        (staged.map (fun input => (input.1, input.2.1))) [] caller memos.query rowOwn ∧
+      Fits rowSeed.2 caller.checked ∧
+      Heap (fun guard => guard ∈ rowSeed.1) caller.checked.native.machine.heap ∧
+      SourcePruningEnumerationPrefixAdmission.suspendedBound rowOwn.core ≤ ceiling ∧
+      inputs.length ≤ limit ∧
+      (∀ child bucket, (child, bucket) ∈ inputs →
+        Available captured child ∧ child.free = [] ∧
+        MergedOrdinaryHeight.height child < MergedOrdinaryHeight.height (.node parentEntry rows depth free) ∧
+        MergedOrdinaryHeight.height child ≤ height ∧ bucket.length ≤ bound + own ∧
+        (∀ sc ∈ bucket, sc.var < rowOwn.core.counter) ∧ InputsPending rowOwn.core bucket) ∧
+      tupleReserved (nodePlan limit own height) (nodeReserved bits limit own height)
+        limit (bound + own) ceiling continuation admitted rowSeed ∧
+      (Le (tuplePlan (nodePlan limit own height) limit (bound + own) ceiling continuation rowSeed).2
+          (nodePlan limit own (height + 1) bound ceiling continuation initialSeed).2 ∧
+        (tuplePlan (nodePlan limit own height) limit (bound + own) ceiling continuation rowSeed).1 ⊆
+          (nodePlan limit own (height + 1) bound ceiling continuation initialSeed).1) ∧
+      ∀ (visit : Visitor) (consume : SelectedEdge.Result (bits + 2) → Fold),
+        SourcePruningEnumerationSharedChildVisitors.visitSelected visit consume scs edge caller before memos.query =
+          SourcePruningEnumerationSharedChildVisitors.visitChildren visit
+            (fun fragments reached saved after =>
+              let fragment := Fragments.Fragment.node edge.entry.key.symbol fragments
+              consume (.complete fragment reached saved (SelectedEdge.finish residual fragment after)))
+            (fun completed observation candidate => consume (.stopped completed observation candidate))
+            inputs caller rowOwn memos.query := by
+  let inputs := SourcePruningEnumerationEdgeInputs.children edge scs before.core.counter tries
+  let staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)) := inputs.map (fun input =>
+    (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild input.2 input.1))
+  have selected : edge ∈ rows := by
+    apply selectionMembers edge
+    rw [sourceRows]
+    exact List.mem_append_right attempted List.mem_cons_self
+  have indexLt : attempted.length < limit := by
+    have selectedLength := selectionLength
+    rw [sourceRows, List.length_append, List.length_cons] at selectedLength
+    have rowBound := shapes.1
+    omega
+  have rowForecast :
+      Le (tuplePlan (nodePlan limit own height) limit (bound + own) ceiling continuation rowSeed).2
+          (nodePlan limit own (height + 1) bound ceiling continuation initialSeed).2 ∧
+      (tuplePlan (nodePlan limit own height) limit (bound + own) ceiling continuation rowSeed).1 ⊆
+          (nodePlan limit own (height + 1) bound ceiling continuation initialSeed).1 := by
+    let first := fallbackPlan bound ceiling continuation initialSeed
+    let row := fun current => tuplePlan (nodePlan limit own height)
+      limit (bound + own) ceiling continuation current
+    have rowGrowth : ∀ current, Le current.2 (row current).2 ∧ current.1 ⊆ (row current).1 := by
+      intro current
+      exact tuplePlan_ge (nodePlan limit own height) (nodePlan_ge limit own height)
+        limit (bound + own) ceiling continuation growth current
+    have nextSlot : iterate row first (attempted.length + 1) = row rowSeed := by
+      rw [SourcePruningEnumerationFiniteReservation.iterate_add]
+      rw [scheduled]
+      rfl
+    have later := iterate_index_le row rowGrowth first (attempted.length + 1) limit (by omega)
+    rw [nextSlot] at later
+    exact later
+  obtain ⟨_roots, _action, rowOwn, _paths, ownReceipt, rowPacket, rowMass, lower, reducing⟩ :=
+    ordinary_prefix_packet formulas solver inventory caller memos metadata before parentEntry rows depth free
+      edge scs packet (kept.available _ available) closed selected bounded pending allowed tries residual projected
+  have actual : SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs edge before =
+      some [((edge.entry.key.symbol, staged, residual), rowOwn)] := ownReceipt.2.1
+  have emptyPrefix := (identity_captured_actual_prefix_entry formulas solver inventory caller memos metadata
+    before scs edge residual rowOwn staged packet actual).2
+  obtain ⟨_prepared, _middleRun, _raw, _middleCore, _middleCounter, _middleForest, _middleSafe,
+    _middlePaths, _middleRealized, _middleCounts, _middleFlags, _combinedPending, genuine, _middleProtects⟩ := ownReceipt
+  have edgeBounds := shapes.2 edge selected
+  have triesBound := edgeBounds.2 tries residual projected
+  have inputLength : inputs.length ≤ limit := by
+    simpa only [inputs, SourcePruningEnumerationEdgeInputs.children, List.length_map, List.length_zipIdx]
+      using edgeBounds.1
+  have inputFacts : ∀ child bucket, (child, bucket) ∈ inputs →
+      Available captured child ∧ child.free = [] ∧
+      MergedOrdinaryHeight.height child < MergedOrdinaryHeight.height (.node parentEntry rows depth free) ∧
+        MergedOrdinaryHeight.height child ≤ height ∧ bucket.length ≤ bound + own ∧
+      (∀ sc ∈ bucket, sc.var < rowOwn.core.counter) ∧ InputsPending rowOwn.core bucket := by
+    intro child bucket member
+    obtain ⟨_currentAvailable, childClosed, childBounded, childPending⟩ := genuine child bucket member
+    have childRank := lower child bucket member
+    obtain ⟨indexed, indexedMember, same⟩ := List.mem_map.mp member
+    cases same
+    have inherited := SourcePruningEnumerationCostBounds.descend_length_le indexed.2 scs
+    have added := SourcePruningEnumerationCostBounds.descend_length_le indexed.2
+      (suspendedVars before.core.counter tries)
+    rw [SourcePruningEnumerationCostBounds.suspended_length] at added
+    refine ⟨available.children indexed.1 (List.mem_flatMap.mpr
+      ⟨edge, selected, List.fst_mem_of_mem_zipIdx indexedMember⟩), childClosed, childRank, by omega, ?_,
+      childBounded, childPending⟩
+    simp only [List.length_append]
+    omega
+  have ownMass : SourcePruningEnumerationPrefixAdmission.suspendedBound rowOwn.core ≤ ceiling := by
+    rw [rowMass]
+    exact mass
+  exact ⟨rowOwn, actual, rowPacket, emptyPrefix, fits, known, ownMass, inputLength,
+    inputFacts, rowReserved, rowForecast, reducing⟩
+
+/-- The original node-admission interface supplies the same row producer. -/
 private theorem identity_ordinary_row_prefix_reservation
     (formulas : SourceGuards.Formulas FullSyntax.Formula)
     (solver : SourceGuards.Entailment FullSyntax.Formula)
@@ -11008,79 +11152,20 @@ private theorem identity_ordinary_row_prefix_reservation
               consume (.complete fragment reached saved (SelectedEdge.finish residual fragment after)))
             (fun completed observation candidate => consume (.stopped completed observation candidate))
             inputs caller rowOwn memos.query := by
-  let inputs := SourcePruningEnumerationEdgeInputs.children edge scs before.core.counter tries
-  let staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)) := inputs.map (fun input =>
-    (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild input.2 input.1))
-  have selected : edge ∈ rows := by
-    apply selectionMembers edge
-    rw [sourceRows]
-    exact List.mem_append_right attempted List.mem_cons_self
   have indexLt : attempted.length < limit := by
     have selectedLength := selectionLength
     rw [sourceRows, List.length_append, List.length_cons] at selectedLength
     have rowBound := shapes.1
     omega
-  have rowReserved : tupleReserved (nodePlan limit own height) (nodeReserved bits limit own height)
+  have rowAdmission : tupleReserved (nodePlan limit own height) (nodeReserved bits limit own height)
       limit (bound + own) ceiling continuation admitted rowSeed := by
     rw [scheduled]
     exact reserved.2 attempted.length indexLt
-  have rowForecast :
-      Le (tuplePlan (nodePlan limit own height) limit (bound + own) ceiling continuation rowSeed).2
-          (nodePlan limit own (height + 1) bound ceiling continuation initialSeed).2 ∧
-      (tuplePlan (nodePlan limit own height) limit (bound + own) ceiling continuation rowSeed).1 ⊆
-          (nodePlan limit own (height + 1) bound ceiling continuation initialSeed).1 := by
-    let first := fallbackPlan bound ceiling continuation initialSeed
-    let row := fun current => tuplePlan (nodePlan limit own height)
-      limit (bound + own) ceiling continuation current
-    have rowGrowth : ∀ current, Le current.2 (row current).2 ∧ current.1 ⊆ (row current).1 := by
-      intro current
-      exact tuplePlan_ge (nodePlan limit own height) (nodePlan_ge limit own height)
-        limit (bound + own) ceiling continuation growth current
-    have nextSlot : iterate row first (attempted.length + 1) = row rowSeed := by
-      rw [SourcePruningEnumerationFiniteReservation.iterate_add]
-      rw [scheduled]
-      rfl
-    have later := iterate_index_le row rowGrowth first (attempted.length + 1) limit (by omega)
-    rw [nextSlot] at later
-    exact later
-  obtain ⟨_roots, _action, rowOwn, _paths, ownReceipt, rowPacket, rowMass, lower, reducing⟩ :=
-    ordinary_prefix_packet formulas solver inventory caller memos metadata before parentEntry rows depth free
-      edge scs packet (kept.available _ available) closed selected bounded pending allowed tries residual projected
-  have actual : SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs edge before =
-      some [((edge.entry.key.symbol, staged, residual), rowOwn)] := ownReceipt.2.1
-  have emptyPrefix := (identity_captured_actual_prefix_entry formulas solver inventory caller memos metadata
-    before scs edge residual rowOwn staged packet actual).2
-  obtain ⟨_prepared, _middleRun, _raw, _middleCore, _middleCounter, _middleForest, _middleSafe,
-    _middlePaths, _middleRealized, _middleCounts, _middleFlags, _combinedPending, genuine, _middleProtects⟩ := ownReceipt
-  have edgeBounds := shapes.2 edge selected
-  have triesBound := edgeBounds.2 tries residual projected
-  have inputLength : inputs.length ≤ limit := by
-    simpa only [inputs, SourcePruningEnumerationEdgeInputs.children, List.length_map, List.length_zipIdx]
-      using edgeBounds.1
-  have inputFacts : ∀ child bucket, (child, bucket) ∈ inputs →
-      Available captured child ∧ child.free = [] ∧
-      MergedOrdinaryHeight.height child < MergedOrdinaryHeight.height (.node parentEntry rows depth free) ∧
-        MergedOrdinaryHeight.height child ≤ height ∧ bucket.length ≤ bound + own ∧
-      (∀ sc ∈ bucket, sc.var < rowOwn.core.counter) ∧ InputsPending rowOwn.core bucket := by
-    intro child bucket member
-    obtain ⟨_currentAvailable, childClosed, childBounded, childPending⟩ := genuine child bucket member
-    have childRank := lower child bucket member
-    obtain ⟨indexed, indexedMember, same⟩ := List.mem_map.mp member
-    cases same
-    have inherited := SourcePruningEnumerationCostBounds.descend_length_le indexed.2 scs
-    have added := SourcePruningEnumerationCostBounds.descend_length_le indexed.2
-      (suspendedVars before.core.counter tries)
-    rw [SourcePruningEnumerationCostBounds.suspended_length] at added
-    refine ⟨available.children indexed.1 (List.mem_flatMap.mpr
-      ⟨edge, selected, List.fst_mem_of_mem_zipIdx indexedMember⟩), childClosed, childRank, by omega, ?_,
-      childBounded, childPending⟩
-    simp only [List.length_append]
-    omega
-  have ownMass : SourcePruningEnumerationPrefixAdmission.suspendedBound rowOwn.core ≤ ceiling := by
-    rw [rowMass]
-    exact mass
-  exact ⟨rowOwn, actual, rowPacket, emptyPrefix, fits, known, ownMass, inputLength,
-    inputFacts, rowReserved, rowForecast, reducing⟩
+  exact identity_ordinary_row_prefix_reservation_of_row formulas solver inventory caller memos metadata before
+    captured limit own height bound ceiling initialSeed rowSeed continuation admitted
+    parentEntry rows depth free edgesOf attempted remaining edge scs tries residual
+    packet fits known kept mass bucketBound available closed ranked bounded pending sourceRows
+    selectionMembers selectionLength shapes allowed projected scheduled rowAdmission growth
 
 end ActualGeneralOrdinaryRowPrefix
 end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
@@ -13185,6 +13270,173 @@ attribute [local irreducible] nodePlan tuplePlan fallbackPlan identity_actual_fr
   identity_actual_frame_reserved IdentityActualSourceRoot.limit IdentityActualSourceRoot.own
 
 /-- A real earlier row prefix and own preparation produce a new scope and retain all outer ledgers. -/
+private theorem identity_actual_source_selected_own_current_of_rows
+    (graph : Graph Symbol Constraint) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint)) (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Unit) (uv : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits) (outerOriginal : Caller (bits + 2))
+    (outerBefore : Cached) (outerInputs : List (Node × List Suspended))
+    (point : IdentityActualSourcePoint bits) (height : Nat)
+    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (rows : List (EdgeValue Symbol Constraint)) (depth : Nat) (free : List InternedBinderProtocol.Reference)
+    (bucket : List Suspended) (rest : List (Node × List Suspended))
+    (attempted remaining : List (EdgeValue Symbol Constraint)) (edge : EdgeValue Symbol Constraint)
+    (tries : List EqualityTrie.Trie) (residual : Option Constraint)
+    (processed : List (SelectedEdge.Result (bits + 2))) (outputs : List (Output (bits + 2) Unit))
+    (rowCaller : Caller (bits + 2)) (rowQueries : Queries)
+    (origin : IdentityActualSourceOrigin graph checkEmpty edgesOf recursiveDepth workFuel metadata uv root
+      (.rows height {point with height := height + 1} (.node parentEntry rows depth free) bucket rest))
+    (ancestors : IdentityActualFrameLedger formulas solver root metadata uv point.frame outerOriginal outerBefore outerInputs)
+    (sourceRows : edgesOf (.node parentEntry rows depth free) = attempted ++ edge :: remaining)
+    (past : identity_actual_source_row_prefix_run graph checkEmpty edgesOf recursiveDepth workFuel metadata uv
+      {point with height := height + 1} (.node parentEntry rows depth free) bucket rest attempted =
+        .complete processed outputs rowCaller rowQueries)
+    (prefixInputs : IdentityActualSourcePoint.Inputs formulas solver root outerOriginal metadata outerBefore outerInputs
+      {point with
+        height := height + 1
+        caller := rowCaller
+        queries := rowQueries
+        seed := identity_actual_source_row_boundary recursiveDepth root.limit root.own height
+          {point with height := height + 1} attempted.length}
+      ((.node parentEntry rows depth free, bucket) :: rest) (point.count + 1))
+    (prefixFits : Fits (identity_actual_source_row_boundary recursiveDepth root.limit root.own height
+      {point with height := height + 1} attempted.length).2 rowCaller.checked)
+    (prefixKnown : Heap (fun guard => guard ∈ (identity_actual_source_row_boundary recursiveDepth root.limit root.own height
+      {point with height := height + 1} attempted.length).1) rowCaller.checked.native.machine.heap)
+    (admission : (IdentityActualSourceTask.goal recursiveDepth root.limit root.own
+      (.rows height {point with height := height + 1} (.node parentEntry rows depth free) bucket rest)).reserved bits)
+    (selectionMembers : ∀ selected ∈ edgesOf (.node parentEntry rows depth free), selected ∈ rows)
+    (selectionLength : (edgesOf (.node parentEntry rows depth free)).length ≤ rows.length)
+    (allowed : arityAllows edge.children.length bucket = true)
+    (projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual)) :
+    let parent := {point with height := height + 1}
+    let rowSeed := identity_actual_source_row_boundary recursiveDepth root.limit root.own height parent attempted.length
+    let inputs := SourcePruningEnumerationEdgeInputs.children edge bucket point.before.core.counter tries
+    let staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)) :=
+      inputs.map (fun input => (input.1, input.2,
+        SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))
+    ∃ rowOwn : Cached,
+      let inner := identity_actual_source_inner_point height root.limit root.own parent rest edge residual
+        rowCaller rowQueries rowOwn rowSeed
+      SourcePruningEnumerationCachedOwn.prepare rowCaller.checked.native.machine.heap bucket edge point.before =
+        some [((edge.entry.key.symbol, staged, residual), rowOwn)] ∧
+      IdentityActualSourceOrigin graph checkEmpty edgesOf recursiveDepth workFuel metadata uv root
+        (.tuple inner (staged.map (fun input => (input.1, input.2.1)))) ∧
+      IdentityActualFrameLedger formulas solver root metadata uv inner.frame rowCaller rowOwn
+        (staged.map (fun input => (input.1, input.2.1))) ∧
+      IdentityActualSourceCurrent formulas solver root rowCaller metadata rowOwn
+        (staged.map (fun input => (input.1, input.2.1))) recursiveDepth
+        (.tuple inner (staged.map (fun input => (input.1, input.2.1)))) ∧
+      TupleInputs formulas solver outerOriginal metadata outerBefore outerInputs point.completed rowCaller rowQueries point.before ∧
+      TupleInputs formulas solver outerOriginal metadata outerBefore outerInputs point.completed rowCaller rowQueries rowOwn ∧
+      SourcePruningEnumerationSharedChildVisitors.visitSelected
+        (identity_actual_guarded_child checkEmpty edgesOf workFuel (.node parentEntry rows depth free))
+        (SourcePruningEnumerationSharedEagerChildren.consumeSelected
+          (identity_actual_parent_tail checkEmpty edgesOf workFuel
+            (identity_actual_frame_callbacks graph checkEmpty edgesOf recursiveDepth workFuel metadata uv point.frame)
+            point.completed rest) rowCaller rowQueries)
+        bucket edge rowCaller point.before rowQueries =
+          IdentityActualSourceTask.run graph checkEmpty edgesOf recursiveDepth workFuel metadata uv
+            (.tuple inner (staged.map (fun input => (input.1, input.2.1)))) ∧
+      IdentityActualSourceTask.work root.limit (.tuple inner (staged.map (fun input => (input.1, input.2.1)))) <
+        IdentityActualSourceTask.work root.limit (.rows height parent (.node parentEntry rows depth free) bucket rest) := by
+  let parent := {point with height := height + 1}
+  let rowSeed := identity_actual_source_row_boundary recursiveDepth root.limit root.own height parent attempted.length
+  let inputs := SourcePruningEnumerationEdgeInputs.children edge bucket point.before.core.counter tries
+  let staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)) :=
+    inputs.map (fun input => (input.1, input.2,
+      SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))
+  have entrySnapshot := prefixInputs
+  obtain ⟨shapes, kept, inventory, memos, packet, querySame, previous, mass, _counted, memberInputs, genuine⟩ := prefixInputs
+  obtain ⟨available, closed, ranked, bucketBound, bounded, pending⟩ :=
+    genuine (.node parentEntry rows depth free) bucket List.mem_cons_self
+  have rowShapes := shapes.2 parentEntry rows depth free available
+  have indexLt : attempted.length < root.limit := by
+    have selectedLength := selectionLength
+    rw [sourceRows, List.length_append, List.length_cons] at selectedLength
+    have rowBound := rowShapes.1
+    omega
+  have rowAdmission : tupleReserved (nodePlan root.limit root.own height)
+      (nodeReserved bits root.limit root.own height) root.limit (point.bound + root.own) point.mass
+      (parent.tailPlan recursiveDepth root.limit root.own)
+      (parent.tailReserved recursiveDepth root.limit root.own) rowSeed := by
+    exact admission attempted.length indexLt
+  have growth : ∀ retained current, Le current.2 (parent.tailPlan recursiveDepth root.limit root.own retained current).2 ∧
+      current.1 ⊆ (parent.tailPlan recursiveDepth root.limit root.own retained current).1 := by
+    intro retained current
+    exact tuplePlan_ge (nodePlan root.limit root.own parent.height) (nodePlan_ge root.limit root.own parent.height)
+      parent.count parent.bound retained (identity_actual_frame_plan recursiveDepth root.limit root.own parent.frame)
+      (identity_actual_frame_plan_ge recursiveDepth root.limit root.own parent.frame) current
+  obtain ⟨rowOwn, prepared, ownPacket, innerPrefix, ownFits, ownKnown, ownMass, counted, children,
+      rowReserved, _rowIncluded, _rowRuntime⟩ :=
+    identity_ordinary_row_prefix_reservation_of_row formulas solver inventory rowCaller memos metadata point.before
+      root.caller.checked.native.machine.heap root.limit root.own height point.bound point.mass point.seed rowSeed
+      (parent.tailPlan recursiveDepth root.limit root.own) (parent.tailReserved recursiveDepth root.limit root.own)
+      parentEntry rows depth free edgesOf attempted remaining edge bucket tries residual
+      packet prefixFits prefixKnown kept mass bucketBound available closed ranked bounded pending sourceRows
+      selectionMembers selectionLength rowShapes allowed projected rfl rowAdmission growth
+  have readback : staged.map (fun input => (input.1, input.2.1)) = inputs := by
+    simp only [staged, List.map_map]
+    exact List.map_id _
+  have lower : ∀ child scs, (child, scs) ∈ staged.map (fun input => (input.1, input.2.1)) →
+      MergedOrdinaryHeight.height child < MergedOrdinaryHeight.height (.node parentEntry rows depth free) := by
+    intro child scs included
+    rw [readback] at included
+    exact (children child scs included).2.2.1
+  have selected : edge ∈ rows := by
+    apply selectionMembers edge
+    rw [sourceRows]
+    exact List.mem_append_right attempted List.mem_cons_self
+  have outerAtOwn := (tuple_inputs_after_observed_own formulas solver outerOriginal metadata outerBefore
+    outerInputs point.completed rowCaller rowQueries point.before bucket edge residual rowOwn staged previous prepared).1
+  rw [querySame] at innerPrefix
+  let inner := identity_actual_source_inner_point height root.limit root.own parent rest edge residual
+    rowCaller rowQueries rowOwn rowSeed
+  have newOrigin : IdentityActualSourceOrigin graph checkEmpty edgesOf recursiveDepth workFuel metadata uv root
+      (.tuple inner (staged.map (fun input => (input.1, input.2.1)))) :=
+    .selectedOwn point height parentEntry rows depth free bucket rest attempted remaining edge residual
+      processed outputs rowCaller rowQueries rowOwn staged origin sourceRows selected past prepared lower
+  have newLedger : IdentityActualFrameLedger formulas solver root metadata uv inner.frame rowCaller rowOwn
+      (staged.map (fun input => (input.1, input.2.1))) :=
+    .selected point.frame outerOriginal outerBefore outerInputs ancestors point.completed rest
+      (.node parentEntry rows depth free) bucket rowCaller rowQueries point.before rowOwn edge residual
+      parent.height parent.count parent.bound parent.mass rowSeed inventory memos staged packet querySame previous
+      (memberInputs List.mem_cons_self) prepared entrySnapshot
+  have innerInputs : IdentityActualSourcePoint.Inputs formulas solver root rowCaller metadata rowOwn
+      (staged.map (fun input => (input.1, input.2.1))) inner (staged.map (fun input => (input.1, input.2.1))) root.limit := by
+    refine ⟨shapes, kept, inventory, memos, ownPacket, querySame, innerPrefix, ownMass, ?_, ?_, ?_⟩
+    · rw [readback]
+      exact counted
+    · intro pair included
+      exact included
+    · intro child scs included
+      rw [readback] at included
+      obtain ⟨childAvailable, childClosed, _strict, childRank, childBucket, childBounded, childPending⟩ := children child scs included
+      exact ⟨childAvailable, childClosed, childRank, childBucket, childBounded, childPending⟩
+  have innerReserved : (IdentityActualSourceTask.goal recursiveDepth root.limit root.own
+      (.tuple inner (staged.map (fun input => (input.1, input.2.1))))).reserved bits := by
+    change tupleReserved (nodePlan root.limit root.own height) (nodeReserved bits root.limit root.own height)
+      root.limit (point.bound + root.own) point.mass
+      (identity_actual_frame_plan recursiveDepth root.limit root.own
+        (.selected point.frame point.completed rest edge residual rowCaller rowQueries
+          parent.height parent.count parent.bound))
+      (identity_actual_frame_reserved bits recursiveDepth root.limit root.own
+        (.selected point.frame point.completed rest edge residual rowCaller rowQueries
+          parent.height parent.count parent.bound)) rowSeed
+    rw [identity_actual_frame_plan, identity_actual_frame_reserved]
+    exact rowReserved
+  have rowEquation := identity_selected_frame_generation graph checkEmpty edgesOf recursiveDepth workFuel metadata uv
+    point.frame point.completed rest edge residual (.node parentEntry rows depth free) bucket rowCaller rowQueries
+    point.before rowOwn parent.height parent.count parent.bound staged prepared lower
+  refine ⟨rowOwn, prepared, newOrigin, newLedger, ⟨innerInputs, ownFits, ownKnown, innerReserved⟩,
+    previous, outerAtOwn, ?_, ?_⟩
+  · exact rowEquation
+  · exact identity_actual_source_selected_inner_work root.limit root.own point height
+      (.node parentEntry rows depth free) bucket rest edge residual rowCaller rowQueries rowOwn rowSeed
+      (staged.map (fun input => (input.1, input.2.1)))
+
+/-- The original child-admission interface drops its unused fallback reservation. -/
 private theorem identity_actual_source_selected_own_current
     (graph : Graph Symbol Constraint) (checkEmpty : Bool)
     (edgesOf : Node → List (EdgeValue Symbol Constraint)) (recursiveDepth workFuel : Nat)
@@ -13256,90 +13508,13 @@ private theorem identity_actual_source_selected_own_current
             (.tuple inner (staged.map (fun input => (input.1, input.2.1)))) ∧
       IdentityActualSourceTask.work root.limit (.tuple inner (staged.map (fun input => (input.1, input.2.1)))) <
         IdentityActualSourceTask.work root.limit (.rows height parent (.node parentEntry rows depth free) bucket rest) := by
-  let parent := {point with height := height + 1}
-  let rowSeed := identity_actual_source_row_boundary recursiveDepth root.limit root.own height parent attempted.length
-  let inputs := SourcePruningEnumerationEdgeInputs.children edge bucket point.before.core.counter tries
-  let staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)) :=
-    inputs.map (fun input => (input.1, input.2,
-      SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))
-  have entrySnapshot := prefixInputs
-  obtain ⟨shapes, kept, inventory, memos, packet, querySame, previous, mass, _counted, memberInputs, genuine⟩ := prefixInputs
-  obtain ⟨available, closed, ranked, bucketBound, bounded, pending⟩ :=
-    genuine (.node parentEntry rows depth free) bucket List.mem_cons_self
-  have rowShapes := shapes.2 parentEntry rows depth free available
-  have growth : ∀ retained current, Le current.2 (parent.tailPlan recursiveDepth root.limit root.own retained current).2 ∧
-      current.1 ⊆ (parent.tailPlan recursiveDepth root.limit root.own retained current).1 := by
-    intro retained current
-    exact tuplePlan_ge (nodePlan root.limit root.own parent.height) (nodePlan_ge root.limit root.own parent.height)
-      parent.count parent.bound retained (identity_actual_frame_plan recursiveDepth root.limit root.own parent.frame)
-      (identity_actual_frame_plan_ge recursiveDepth root.limit root.own parent.frame) current
-  obtain ⟨rowOwn, prepared, ownPacket, innerPrefix, ownFits, ownKnown, ownMass, counted, children,
-      rowReserved, _rowIncluded, _rowRuntime⟩ :=
-    identity_ordinary_row_prefix_reservation formulas solver inventory rowCaller memos metadata point.before
-      root.caller.checked.native.machine.heap root.limit root.own height point.bound point.mass point.seed rowSeed
-      (parent.tailPlan recursiveDepth root.limit root.own) (parent.tailReserved recursiveDepth root.limit root.own)
-      parentEntry rows depth free edgesOf attempted remaining edge bucket tries residual
-      packet prefixFits prefixKnown kept mass bucketBound available closed ranked bounded pending sourceRows
-      selectionMembers selectionLength rowShapes allowed projected rfl admission growth
-  have readback : staged.map (fun input => (input.1, input.2.1)) = inputs := by
-    simp only [staged, List.map_map]
-    exact List.map_id _
-  have lower : ∀ child scs, (child, scs) ∈ staged.map (fun input => (input.1, input.2.1)) →
-      MergedOrdinaryHeight.height child < MergedOrdinaryHeight.height (.node parentEntry rows depth free) := by
-    intro child scs included
-    rw [readback] at included
-    exact (children child scs included).2.2.1
-  have selected : edge ∈ rows := by
-    apply selectionMembers edge
-    rw [sourceRows]
-    exact List.mem_append_right attempted List.mem_cons_self
-  have outerAtOwn := (tuple_inputs_after_observed_own formulas solver outerOriginal metadata outerBefore
-    outerInputs point.completed rowCaller rowQueries point.before bucket edge residual rowOwn staged previous prepared).1
-  rw [querySame] at innerPrefix
-  let inner := identity_actual_source_inner_point height root.limit root.own parent rest edge residual
-    rowCaller rowQueries rowOwn rowSeed
-  have newOrigin : IdentityActualSourceOrigin graph checkEmpty edgesOf recursiveDepth workFuel metadata uv root
-      (.tuple inner (staged.map (fun input => (input.1, input.2.1)))) :=
-    .selectedOwn point height parentEntry rows depth free bucket rest attempted remaining edge residual
-      processed outputs rowCaller rowQueries rowOwn staged origin sourceRows selected past prepared lower
-  have newLedger : IdentityActualFrameLedger formulas solver root metadata uv inner.frame rowCaller rowOwn
-      (staged.map (fun input => (input.1, input.2.1))) :=
-    .selected point.frame outerOriginal outerBefore outerInputs ancestors point.completed rest
-      (.node parentEntry rows depth free) bucket rowCaller rowQueries point.before rowOwn edge residual
-      parent.height parent.count parent.bound parent.mass rowSeed inventory memos staged packet querySame previous
-      (memberInputs List.mem_cons_self) prepared entrySnapshot
-  have innerInputs : IdentityActualSourcePoint.Inputs formulas solver root rowCaller metadata rowOwn
-      (staged.map (fun input => (input.1, input.2.1))) inner (staged.map (fun input => (input.1, input.2.1))) root.limit := by
-    refine ⟨shapes, kept, inventory, memos, ownPacket, querySame, innerPrefix, ownMass, ?_, ?_, ?_⟩
-    · rw [readback]
-      exact counted
-    · intro pair included
-      exact included
-    · intro child scs included
-      rw [readback] at included
-      obtain ⟨childAvailable, childClosed, _strict, childRank, childBucket, childBounded, childPending⟩ := children child scs included
-      exact ⟨childAvailable, childClosed, childRank, childBucket, childBounded, childPending⟩
-  have innerReserved : (IdentityActualSourceTask.goal recursiveDepth root.limit root.own
-      (.tuple inner (staged.map (fun input => (input.1, input.2.1))))).reserved bits := by
-    change tupleReserved (nodePlan root.limit root.own height) (nodeReserved bits root.limit root.own height)
-      root.limit (point.bound + root.own) point.mass
-      (identity_actual_frame_plan recursiveDepth root.limit root.own
-        (.selected point.frame point.completed rest edge residual rowCaller rowQueries
-          parent.height parent.count parent.bound))
-      (identity_actual_frame_reserved bits recursiveDepth root.limit root.own
-        (.selected point.frame point.completed rest edge residual rowCaller rowQueries
-          parent.height parent.count parent.bound)) rowSeed
-    rw [identity_actual_frame_plan, identity_actual_frame_reserved]
-    exact rowReserved
-  have rowEquation := identity_selected_frame_generation graph checkEmpty edgesOf recursiveDepth workFuel metadata uv
-    point.frame point.completed rest edge residual (.node parentEntry rows depth free) bucket rowCaller rowQueries
-    point.before rowOwn parent.height parent.count parent.bound staged prepared lower
-  refine ⟨rowOwn, prepared, newOrigin, newLedger, ⟨innerInputs, ownFits, ownKnown, innerReserved⟩,
-    previous, outerAtOwn, ?_, ?_⟩
-  · exact rowEquation
-  · exact identity_actual_source_selected_inner_work root.limit root.own point height
-      (.node parentEntry rows depth free) bucket rest edge residual rowCaller rowQueries rowOwn rowSeed
-      (staged.map (fun input => (input.1, input.2.1)))
+  have rowsAdmission : (IdentityActualSourceTask.goal recursiveDepth root.limit root.own
+      (.rows height {point with height := height + 1} (.node parentEntry rows depth free) bucket rest)).reserved bits := by
+    exact admission.2
+  exact identity_actual_source_selected_own_current_of_rows graph checkEmpty edgesOf recursiveDepth workFuel metadata uv
+    formulas solver root outerOriginal outerBefore outerInputs point height parentEntry rows depth free bucket rest
+    attempted remaining edge tries residual processed outputs rowCaller rowQueries origin ancestors sourceRows past
+    prefixInputs prefixFits prefixKnown rowsAdmission selectionMembers selectionLength allowed projected
 
 end SelectedOwnCurrentReduction
 end ActualSelectedOwnScopePush
@@ -13944,4 +14119,114 @@ private theorem identity_actual_source_fallback_child_rejected
       (actualKnown key row found)
 
 end ActualSourceFallbackChildCurrent
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+section ActualSelectedNilResourceInduction
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourcePruningEnumerationRecursive (Packet)
+open SourcePruningEnumerationSharedPreparedRecursive (Output Failure finish emitted)
+open SourcePruningEnumerationSharedSelectedContinuations
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+variable {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+/-- State correctness for actual tasks and current source scopes. -/
+private def IdentityActualSourceCorrectAt
+    (graph : Graph Symbol Constraint) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint)) (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Unit) (uv : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits) (task : IdentityActualSourceTask bits) : Prop :=
+  ∀ (scopeOriginal : Caller (bits + 2)) (scopeBefore : Cached) (allInputs : List (Node × List Suspended)),
+    IdentityActualFrameLedger formulas solver root metadata uv task.point.frame scopeOriginal scopeBefore allInputs →
+    IdentityActualSourceOrigin graph checkEmpty edgesOf recursiveDepth workFuel metadata uv root task →
+    IdentityActualSourceCurrent formulas solver root scopeOriginal metadata scopeBefore allInputs recursiveDepth task →
+    IdentityEmittedCompleteResources formulas solver task.point.caller
+      (task.goal recursiveDepth root.limit root.own).forecast
+      (finish uv (task.run graph checkEmpty edgesOf recursiveDepth workFuel metadata uv))
+
+attribute [local irreducible] nodePlan tuplePlan fallbackPlan identity_actual_frame_plan
+  identity_actual_frame_reserved IdentityActualSourceRoot.limit IdentityActualSourceRoot.own
+
+/-- The selected tuple-nil case uses only the genuine strictly smaller parent-task induction hypothesis. -/
+private theorem identity_actual_source_selected_nil_resources
+    (graph : Graph Symbol Constraint) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint)) (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Unit) (uv : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits) (outerOriginal : Caller (bits + 2))
+    (outerBefore : Cached) (outerInputs : List (Node × List Suspended))
+    (entry current : IdentityActualSourcePoint bits) (incoming : Node) (bucket : List Suspended)
+    (rest : List (Node × List Suspended)) (edge : EdgeValue Symbol Constraint) (residual : Option Constraint)
+    (rowOwn : Cached)
+    (staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)))
+    (ancestors : IdentityActualFrameLedger formulas solver root metadata uv entry.frame outerOriginal outerBefore outerInputs)
+    (snapshot : entry.Inputs formulas solver root outerOriginal metadata outerBefore outerInputs
+      ((incoming, bucket) :: rest) (entry.count + 1))
+    (prepared : SourcePruningEnumerationCachedOwn.prepare entry.caller.checked.native.machine.heap bucket edge entry.before =
+      some [((edge.entry.key.symbol, staged, residual), rowOwn)])
+    (origin : IdentityActualSourceOrigin graph checkEmpty edgesOf recursiveDepth workFuel metadata uv root
+      (.tuple {current with frame := .selected entry.frame entry.completed rest edge residual entry.caller entry.queries entry.height entry.count entry.bound} []))
+    (innerCurrent : IdentityActualSourceCurrent formulas solver root entry.caller metadata rowOwn
+      (staged.map (fun input => (input.1, input.2.1))) recursiveDepth
+      (.tuple {current with frame := .selected entry.frame entry.completed rest edge residual entry.caller entry.queries entry.height entry.count entry.bound} []))
+    (taskIH : ∀ smaller : IdentityActualSourceTask bits,
+      smaller.work root.limit < IdentityActualSourceTask.work root.limit
+        (.tuple {current with frame := .selected entry.frame entry.completed rest edge residual entry.caller entry.queries entry.height entry.count entry.bound} []) →
+      IdentityActualSourceCorrectAt graph checkEmpty edgesOf recursiveDepth workFuel metadata uv formulas solver root smaller) :
+    let task := IdentityActualSourceTask.tuple
+      {current with frame := .selected entry.frame entry.completed rest edge residual entry.caller entry.queries entry.height entry.count entry.bound} []
+    IdentityEmittedCompleteResources formulas solver current.caller
+      (task.goal recursiveDepth root.limit root.own).forecast
+      (finish uv (task.run graph checkEmpty edgesOf recursiveDepth workFuel metadata uv)) := by
+  let inner : IdentityActualSourceTask bits := .tuple
+    {current with frame := .selected entry.frame entry.completed rest edge residual entry.caller entry.queries entry.height entry.count entry.bound} []
+  let returned : IdentityActualSourceTask bits := .tuple (identity_actual_source_return_point entry current edge residual) rest
+  obtain ⟨returnedOrigin, returnedLedger, returnedCurrent, numeric, alphabet⟩ :=
+    identity_actual_source_selected_return_current graph checkEmpty edgesOf recursiveDepth workFuel metadata uv
+      formulas solver root outerOriginal outerBefore outerInputs entry current incoming bucket rest edge residual rowOwn
+      staged ancestors snapshot prepared origin innerCurrent
+  have decrease : returned.work root.limit < inner.work root.limit :=
+    identity_actual_source_selected_return_work root.limit entry current rest edge residual
+  have parentResources : IdentityEmittedCompleteResources formulas solver current.caller
+      (returned.goal recursiveDepth root.limit root.own).forecast
+      (finish uv (returned.run graph checkEmpty edgesOf recursiveDepth workFuel metadata uv)) :=
+    taskIH returned decrease outerOriginal outerBefore outerInputs returnedLedger returnedOrigin returnedCurrent
+  have enlarged : IdentityEmittedCompleteResources formulas solver current.caller
+      (inner.goal recursiveDepth root.limit root.own).forecast
+      (finish uv (returned.run graph checkEmpty edgesOf recursiveDepth workFuel metadata uv)) :=
+    identity_emitted_complete_mono numeric alphabet parentResources
+  have runtime : inner.run graph checkEmpty edgesOf recursiveDepth workFuel metadata uv =
+      match returned.run graph checkEmpty edgesOf recursiveDepth workFuel metadata uv with
+      | .complete processed outputs finalCaller finalQueries =>
+          .complete (SelectedEdge.Result.complete (.node edge.entry.key.symbol current.completed)
+            current.caller current.queries (identity_actual_source_return_point entry current edge residual).before :: processed)
+            outputs finalCaller finalQueries
+      | .stopped processed outputs stopped =>
+          .stopped (SelectedEdge.Result.complete (.node edge.entry.key.symbol current.completed)
+            current.caller current.queries (identity_actual_source_return_point entry current edge residual).before :: processed)
+            outputs stopped :=
+    identity_actual_source_selected_return_run graph checkEmpty edgesOf recursiveDepth workFuel metadata uv
+      entry current rest edge residual
+  change IdentityEmittedCompleteResources formulas solver current.caller
+    (inner.goal recursiveDepth root.limit root.own).forecast
+    (finish uv (inner.run graph checkEmpty edgesOf recursiveDepth workFuel metadata uv))
+  rw [runtime]
+  cases observed : returned.run graph checkEmpty edgesOf recursiveDepth workFuel metadata uv with
+  | complete processed outputs reached saved =>
+      simpa only [observed, finish] using enlarged
+  | stopped processed outputs stopped =>
+      simpa only [observed, finish, IdentityEmittedCompleteResources, emitted] using enlarged
+
+end ActualSelectedNilResourceInduction
 end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
