@@ -1,0 +1,71 @@
+private theorem identity_actual_source_selected_own_current
+    (graph : Graph Symbol Constraint) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint)) (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Unit) (uv : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits) (outerOriginal : Caller (bits + 2))
+    (outerBefore : Cached) (outerInputs : List (Node × List Suspended))
+    (point : IdentityActualSourcePoint bits) (height : Nat)
+    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (rows : List (EdgeValue Symbol Constraint)) (depth : Nat) (free : List InternedBinderProtocol.Reference)
+    (bucket : List Suspended) (rest : List (Node × List Suspended))
+    (attempted remaining : List (EdgeValue Symbol Constraint)) (edge : EdgeValue Symbol Constraint)
+    (tries : List EqualityTrie.Trie) (residual : Option Constraint)
+    (processed : List (SelectedEdge.Result (bits + 2))) (outputs : List (Output (bits + 2) Unit))
+    (rowCaller : Caller (bits + 2)) (rowQueries : Queries)
+    (origin : IdentityActualSourceOrigin graph checkEmpty edgesOf recursiveDepth workFuel metadata uv root
+      (.rows height {point with height := height + 1} (.node parentEntry rows depth free) bucket rest))
+    (ancestors : IdentityActualFrameLedger formulas solver root metadata uv point.frame outerOriginal outerBefore outerInputs)
+    (sourceRows : edgesOf (.node parentEntry rows depth free) = attempted ++ edge :: remaining)
+    (past : identity_actual_source_row_prefix_run graph checkEmpty edgesOf recursiveDepth workFuel metadata uv
+      {point with height := height + 1} (.node parentEntry rows depth free) bucket rest attempted =
+        .complete processed outputs rowCaller rowQueries)
+    (prefixInputs : IdentityActualSourcePoint.Inputs formulas solver root outerOriginal metadata outerBefore outerInputs
+      {point with
+        height := height + 1
+        caller := rowCaller
+        queries := rowQueries
+        seed := identity_actual_source_row_boundary recursiveDepth root.limit root.own height
+          {point with height := height + 1} attempted.length}
+      ((.node parentEntry rows depth free, bucket) :: rest) (point.count + 1))
+    (prefixFits : Fits (identity_actual_source_row_boundary recursiveDepth root.limit root.own height
+      {point with height := height + 1} attempted.length).2 rowCaller.checked)
+    (prefixKnown : Heap (fun guard => guard ∈ (identity_actual_source_row_boundary recursiveDepth root.limit root.own height
+      {point with height := height + 1} attempted.length).1) rowCaller.checked.native.machine.heap)
+    (admission : (IdentityActualSourceTask.goal recursiveDepth root.limit root.own
+      (.child {point with height := height + 1} (.node parentEntry rows depth free) bucket rest)).reserved bits)
+    (selectionMembers : ∀ selected ∈ edgesOf (.node parentEntry rows depth free), selected ∈ rows)
+    (selectionLength : (edgesOf (.node parentEntry rows depth free)).length ≤ rows.length)
+    (allowed : arityAllows edge.children.length bucket = true)
+    (projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual)) :
+    let parent := {point with height := height + 1}
+    let rowSeed := identity_actual_source_row_boundary recursiveDepth root.limit root.own height parent attempted.length
+    let inputs := SourcePruningEnumerationEdgeInputs.children edge bucket point.before.core.counter tries
+    let staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)) :=
+      inputs.map (fun input => (input.1, input.2,
+        SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))
+    ∃ rowOwn : Cached,
+      let inner := identity_actual_source_inner_point height root.limit root.own parent rest edge residual
+        rowCaller rowQueries rowOwn rowSeed
+      SourcePruningEnumerationCachedOwn.prepare rowCaller.checked.native.machine.heap bucket edge point.before =
+        some [((edge.entry.key.symbol, staged, residual), rowOwn)] ∧
+      IdentityActualSourceOrigin graph checkEmpty edgesOf recursiveDepth workFuel metadata uv root
+        (.tuple inner (staged.map (fun input => (input.1, input.2.1)))) ∧
+      IdentityActualFrameLedger formulas solver root metadata uv inner.frame rowCaller rowOwn
+        (staged.map (fun input => (input.1, input.2.1))) ∧
+      IdentityActualSourceCurrent formulas solver root rowCaller metadata rowOwn
+        (staged.map (fun input => (input.1, input.2.1))) recursiveDepth
+        (.tuple inner (staged.map (fun input => (input.1, input.2.1)))) ∧
+      TupleInputs formulas solver outerOriginal metadata outerBefore outerInputs point.completed rowCaller rowQueries point.before ∧
+      TupleInputs formulas solver outerOriginal metadata outerBefore outerInputs point.completed rowCaller rowQueries rowOwn ∧
+      SourcePruningEnumerationSharedChildVisitors.visitSelected
+        (identity_actual_guarded_child checkEmpty edgesOf workFuel (.node parentEntry rows depth free))
+        (SourcePruningEnumerationSharedEagerChildren.consumeSelected
+          (identity_actual_parent_tail checkEmpty edgesOf workFuel
+            (identity_actual_frame_callbacks graph checkEmpty edgesOf recursiveDepth workFuel metadata uv point.frame)
+            point.completed rest) rowCaller rowQueries)
+        bucket edge rowCaller point.before rowQueries =
+          IdentityActualSourceTask.run graph checkEmpty edgesOf recursiveDepth workFuel metadata uv
+            (.tuple inner (staged.map (fun input => (input.1, input.2.1)))) ∧
+      IdentityActualSourceTask.work root.limit (.tuple inner (staged.map (fun input => (input.1, input.2.1)))) <
+        IdentityActualSourceTask.work root.limit (.rows height parent (.node parentEntry rows depth free) bucket rest)

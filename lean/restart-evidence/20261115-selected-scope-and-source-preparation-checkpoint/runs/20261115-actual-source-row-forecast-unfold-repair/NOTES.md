@@ -1,0 +1,1 @@
+Status: UNCOMPILED minimal proof reduction repair. Explicitly unfold the actual selected frame plan once before matching the exact next-row seed. No theorem header, runtime, source bound, original49 proof or target changes. The original failing raw and diagnostic remain. Full source-task induction remains open.

@@ -1,0 +1,56 @@
+
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+section ActualSourceCapturedTaskLeaf
+open EnumerationState InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationSharedSelectedContinuations
+open SourcePruningEnumerationSharedPreparedRecursive (finish)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+variable {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+/-- The actual captured task derives its resources from the immutable entry ledger. -/
+private theorem identity_actual_source_captured_nil_resources
+    (graph : Graph Symbol Constraint) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint)) (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Unit) (uv : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (workerIH : IdentityEagerEmittedCompleteAtDepth (bits := bits)
+      graph checkEmpty edgesOf formulas solver recursiveDepth)
+    (root : IdentityActualSourceRoot bits) (point : IdentityActualSourcePoint bits)
+    (edge : EdgeValue Symbol Constraint) (residual : Option Constraint)
+    (capturedCaller : Caller (bits + 2)) (capturedQueries : Queries)
+    (scopeOriginal : Caller (bits + 2)) (scopeBefore : Cached) (allInputs : List (Node × List Suspended))
+    (ledger : IdentityActualFrameLedger formulas solver root metadata uv
+      (.captured edge residual capturedCaller capturedQueries) scopeOriginal scopeBefore allInputs)
+    (current : IdentityActualSourceCurrent formulas solver root scopeOriginal metadata scopeBefore allInputs recursiveDepth
+      (.tuple {point with frame := .captured edge residual capturedCaller capturedQueries} []))
+    (selectionMembers : ∀ entry rows depth free, ∀ selected ∈ edgesOf (.node entry rows depth free), selected ∈ rows)
+    (selectionLength : ∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length) :
+    let task := IdentityActualSourceTask.tuple
+      {point with frame := .captured edge residual capturedCaller capturedQueries} []
+    IdentityEmittedCompleteResources formulas solver point.caller
+      (task.goal recursiveDepth root.limit root.own).forecast
+      (finish uv (task.run graph checkEmpty edgesOf recursiveDepth workFuel metadata uv)) := by
+  cases ledger with
+  | captured inventory entryCaller memos entryQueries before rowOwn scs row rowResidual handle
+      staged packet _querySame ready stored incoming prepared =>
+    obtain ⟨inputs, fits, known, reserved⟩ := current
+    obtain ⟨_shapes, _kept, _inventory, _memos, _packet, _query, history,
+      mass, _counted, _included, _genuine⟩ := inputs
+    have callback := identity_captured_frame_current_local_resources graph checkEmpty edgesOf recursiveDepth workFuel
+      metadata uv handle formulas solver workerIH inventory capturedCaller memos capturedQueries before scs
+      edge residual scopeBefore staged packet ready stored incoming prepared
+      point.completed point.caller point.queries point.before history
+      root.limit root.own point.height point.count point.bound point.mass point.seed
+      fits known mass selectionMembers selectionLength reserved
+    simpa only [IdentityActualSourceTask.run, SourcePruningEnumerationSharedChildVisitors.visitChildren,
+      List.append_nil] using callback
+
+end ActualSourceCapturedTaskLeaf
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation

@@ -1,0 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationSharedProperPathWitness
+
+#check @MicroCFTA.SourcePruningEnumerationSharedProperPathWitness.selected_parked_one_arrow_path_assignment
+#print axioms MicroCFTA.SourcePruningEnumerationSharedProperPathWitness.selected_parked_one_arrow_path_assignment

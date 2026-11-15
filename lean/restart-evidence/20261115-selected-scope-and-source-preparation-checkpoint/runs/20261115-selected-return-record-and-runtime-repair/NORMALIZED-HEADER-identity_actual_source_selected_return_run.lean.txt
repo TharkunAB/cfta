@@ -1,0 +1,15 @@
+private theorem identity_actual_source_selected_return_run
+    (graph : Graph Symbol Constraint) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint)) (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Unit) (uv : Nat) (entry current : IdentityActualSourcePoint bits)
+    (rest : List (Node × List Suspended)) (edge : EdgeValue Symbol Constraint) (residual : Option Constraint) :
+    let frame := IdentityActualCallbackFrame.selected entry.frame entry.completed rest edge residual entry.caller entry.queries
+      entry.height entry.count entry.bound
+    let returned := identity_actual_source_return_point entry current edge residual
+    let receipt := SelectedEdge.Result.complete (.node edge.entry.key.symbol current.completed)
+      current.caller current.queries returned.before
+    IdentityActualSourceTask.run graph checkEmpty edgesOf recursiveDepth workFuel metadata uv
+      (.tuple {current with frame := frame} []) =
+      match IdentityActualSourceTask.run graph checkEmpty edgesOf recursiveDepth workFuel metadata uv (.tuple returned rest) with
+      | .complete processed outputs finalCaller finalQueries => .complete (receipt :: processed) outputs finalCaller finalQueries
+      | .stopped processed outputs stopped => .stopped (receipt :: processed) outputs stopped

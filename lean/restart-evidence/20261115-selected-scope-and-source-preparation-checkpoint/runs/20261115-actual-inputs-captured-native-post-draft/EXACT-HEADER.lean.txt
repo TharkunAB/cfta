@@ -1,0 +1,12 @@
+private theorem identity_actual_source_inputs_captured_native_post
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits) (scopeOriginal : Caller (bits + 2))
+    (metadata : Metadata Unit) (scopeBefore : Cached) (allInputs : List (Node × List Suspended))
+    (point : IdentityActualSourcePoint bits) (remaining : List (Node × List Suspended)) (capacity : Nat)
+    (next : Inventory) (reached : Caller (bits + 2)) (final : Memos) (saved : Queries)
+    (inputs : point.Inputs formulas solver root scopeOriginal metadata scopeBefore allInputs remaining capacity)
+    (post : SourceCurrentAllocatedPartialInvariant.Post formulas solver next point.caller reached final)
+    (querySame : final.query = saved) :
+    IdentityActualSourcePoint.Inputs formulas solver root scopeOriginal metadata scopeBefore allInputs
+      {point with caller := reached, queries := saved} remaining capacity

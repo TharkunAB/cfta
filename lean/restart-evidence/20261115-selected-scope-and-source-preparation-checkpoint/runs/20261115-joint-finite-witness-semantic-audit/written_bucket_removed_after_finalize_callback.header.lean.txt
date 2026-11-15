@@ -1,0 +1,75 @@
+theorem written_bucket_removed_after_finalize_callback
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (child : Visitor)
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (workFuel depth target parentTarget : Nat)
+    (incoming : Node) (incomingScs : List Suspended) (fragment : Fragment)
+    (caller reached : Caller width) (queries savedQueries : Queries)
+    (before read : Core) (written finalized parked : Cached)
+    (callbackCore checked core : Core) (metadata recorded updated : Metadata Typing) (next : Option Next)
+    (total : UnionFind.Total before.representatives)
+    (incomingActual : SourcePruningEnumerationSharedIncomingNode.run
+      checkEmpty workFuel workFuel workFuel workFuel caller before target incoming incomingScs queries =
+        (.ok (some [.ok ((), written.core)]), reached, savedQueries, read))
+    (finalizedActual : SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap
+      workFuel parentTarget fragment written = some finalized)
+    (callbackActual : ExceptT.run (SourcePruningRecordTypes.recordTypes
+      graph templates workFuel metadata parentTarget (.inl fragment) finalized.core) =
+        [.ok ((false, recorded), callbackCore)])
+    (selected : SourcePruningEnumerationRestart.decision stop order recorded
+      (EnumerationExpandableIndex.frame callbackCore finalized) = some (.expand target))
+    (parkedActual : SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates
+      stop order recorded workFuel workFuel workFuel workFuel workFuel workFuel target reached
+      (EnumerationExpandableIndex.frame callbackCore finalized) savedQueries =
+        .parked checked (some parked) (some [.ok ((updated, next), core)])) :
+    ∃ (found : UnionFind.Result) (oldNode : Option Nat) (oldScs : List Suspended) (handle : Nat)
+        (readAfter : Core) (value : Node) (resolved : Core),
+      UnionFind.findRoot workFuel before.representatives target = some found ∧
+      before.values[found.representative]? = some (.unenumerated oldNode oldScs) ∧
+      parentTarget ≠ found.representative ∧
+      written.core.values[found.representative]? =
+        some (.unenumerated (some handle) (incomingScs ++ oldScs)) ∧
+      ExceptT.run (getValue workFuel target callbackCore) =
+        [.ok (.unenumerated (some handle) (incomingScs ++ oldScs), readAfter)] ∧
+      callbackCore.values[found.representative]? =
+        some (.unenumerated (some handle) (incomingScs ++ oldScs)) ∧
+      UnionFind.Reaches callbackCore.representatives target found.representative found.size ∧
+      lookupNode reached.checked.native.machine.heap handle = some value ∧
+      MergedOrdinaryHeight.recursiveBoundary value = true ∧
+      ExceptT.run (SourcePruningEnumerationRecursion.checkRepeated
+        reached.checked.native.machine.heap workFuel target handle (incomingScs ++ oldScs) readAfter) =
+          [.ok (true, checked)] ∧
+      (recursionKey handle (incomingScs ++ oldScs) ∈ before.expansionAncestry ∨
+        recursionKey handle (incomingScs ++ oldScs) ∈ before.recursionAncestry found.representative) ∧
+      resolved.values[found.representative]? =
+        some (.unenumerated (some handle) (incomingScs ++ oldScs)) ∧
+      Success (setValue found.representative (.unenumerated (some handle) [])) resolved () checked ∧
+      checked = {resolved with
+        values := resolved.values.set found.representative (.unenumerated (some handle) [])} ∧
+      parked.core = checked ∧
+      SourcePruningEnumerationParkedRestart.adapt reached.checked.native.machine.heap workFuel target
+        handle (incomingScs ++ oldScs) (EnumerationExpandableIndex.frame callbackCore finalized) checked =
+          some parked ∧
+      ExceptT.run (SourcePruningEnumerationRestart.run stop order recorded parked checked) =
+        [.ok ((updated, next), core)] ∧
+      updated = recorded ∧ core = checked ∧
+      (∀ (occurrence : Nat) (sc : Suspended), incomingScs[occurrence]? = some sc →
+        (incomingScs ++ oldScs)[occurrence]? = some sc) ∧
+      (∀ (occurrence : Nat) (sc : Suspended), oldScs[occurrence]? = some sc →
+        (incomingScs ++ oldScs)[incomingScs.length + occurrence]? = some sc) ∧
+      (∀ (occurrence : Nat) (sc : Suspended), (incomingScs ++ oldScs)[occurrence]? = some sc →
+        (occurrence < incomingScs.length ∧ incomingScs[occurrence]? = some sc) ∨
+        (incomingScs.length ≤ occurrence ∧ oldScs[occurrence - incomingScs.length]? = some sc)) ∧
+      (∀ (occurrence : Nat) (sc : Suspended), (incomingScs ++ oldScs)[occurrence]? = some sc →
+        ∀ other, UnionFind.SameClass checked.representatives sc.var other ↔
+          UnionFind.SameClass before.representatives sc.var other) ∧
+      SourcePruningEnumerationSharedPreparedRecursive.continueWith
+        (SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild
+          child holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel (depth + 1))
+        graph templates stop order workFuel metadata parentTarget fragment reached savedQueries finalized =
+      SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithChild
+        child holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel depth
+        updated reached savedQueries (EnumerationExpandableIndex.frame core parked) next

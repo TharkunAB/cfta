@@ -1,0 +1,12 @@
+theorem written_semantics
+    (before after : EnumerationState.State Symbol EnumGuard)
+    (target : Nat) (fragment : Fragment Symbol)
+    (inside : target < before.values.length)
+    (written : after = {before with
+      values := before.values.set target (.enumerated fragment)
+      expansionAncestry := []})
+    (language : NodeLanguage Symbol) (meaning : EnumGuard → Term Symbol → Prop)
+    (assignment : Nat → Term Symbol) :
+    Satisfies language meaning assignment after ↔
+      Satisfies language meaning assignment (neutralize target before) ∧
+        fill assignment fragment = assignment target

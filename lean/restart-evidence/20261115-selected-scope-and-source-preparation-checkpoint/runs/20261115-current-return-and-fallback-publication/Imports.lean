@@ -1,0 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+
+#check @MicroCFTA.SourcePruningEnumerationSharedEagerReservation.runEager_identity_finite_complete_resources
+#print axioms MicroCFTA.SourcePruningEnumerationSharedEagerReservation.runEager_identity_finite_complete_resources

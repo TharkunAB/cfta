@@ -1,0 +1,1 @@
+Captured task leaf: unfold only the existing task goal, forecast and captured frame plan in the final equality. The statement, original budgets and actual execution stay unchanged. All earlier raw candidates and failures remain. This repair is uncompiled. No Haskell file changed.

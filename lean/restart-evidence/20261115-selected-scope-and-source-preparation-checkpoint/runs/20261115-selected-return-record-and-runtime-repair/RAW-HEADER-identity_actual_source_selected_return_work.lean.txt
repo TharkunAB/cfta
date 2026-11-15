@@ -1,0 +1,6 @@
+private theorem identity_actual_source_selected_return_work
+    (limit : Nat) (entry current : IdentityActualSourcePoint bits)
+    (rest : List (Node × List Suspended)) (edge : EdgeValue Symbol Constraint) (residual : Option Constraint) :
+    IdentityActualSourceTask.work limit (.tuple (identity_actual_source_return_point entry current edge residual) rest) <
+      IdentityActualSourceTask.work limit (.tuple {current with frame :=
+        .selected entry.frame entry.completed rest edge residual entry.caller entry.queries entry.height entry.count entry.bound} [])

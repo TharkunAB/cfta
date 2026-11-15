@@ -1,0 +1,1 @@
+Status: UNCOMPILED. The case eliminator substitutes indexed caller/query/edge/residual/own fields with the existing header names. This repair uses those surviving names. Header and all other proof code remain unchanged. No original goal, runtime, budget or heartbeat changes.

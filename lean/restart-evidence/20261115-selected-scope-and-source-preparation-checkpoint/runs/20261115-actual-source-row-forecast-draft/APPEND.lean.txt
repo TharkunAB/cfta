@@ -1,0 +1,83 @@
+
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+section ActualSourceOrderedRowForecast
+open EnumerationState InternedConstructorTemplates InternedProbeProvenance
+open SourceCurrentAllocatedNativeResourceForecast (Le)
+open SourcePruningEnumerationSharedIncomingReservation (Seed)
+open SourcePruningEnumerationFiniteReservation (iterate iterate_ge iterate_add)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+variable {bits : Nat}
+
+/-- Each row seed follows the original fallback and ordered row schedule. -/
+private noncomputable def IdentityActualSourcePoint.rowSeed
+    (recursiveDepth limit own height : Nat) (point : IdentityActualSourcePoint bits) (index : Nat) : Seed :=
+  let tail := point.tailPlan recursiveDepth limit own
+  iterate (fun current => tuplePlan (nodePlan limit own height)
+    limit (point.bound + own) point.mass tail current)
+    (fallbackPlan point.bound point.mass tail point.seed) index
+
+attribute [local irreducible] fallbackPlan nodePlan tuplePlan identity_actual_frame_plan
+
+/-- A selected inner tuple ends at the exact next original row forecast. -/
+private theorem identity_actual_source_row_inner_forecast
+    (recursiveDepth limit own height index : Nat) (point : IdentityActualSourcePoint bits)
+    (rest : List (Node × List Suspended)) (edge : EdgeValue Symbol Constraint)
+    (residual : Option Constraint) (caller : Caller (bits + 2))
+    (queries : Queries) (ownCache : Cached) (children : List (Node × List Suspended)) :
+    let inner : IdentityActualSourcePoint bits := {
+      frame := .selected point.frame point.completed rest edge residual caller queries
+        point.height point.count point.bound
+      completed := []
+      caller := caller
+      before := ownCache
+      queries := queries
+      height := height
+      count := limit
+      bound := point.bound + own
+      mass := point.mass
+      seed := point.rowSeed recursiveDepth limit own height index }
+    (IdentityActualSourceTask.goal recursiveDepth limit own (.tuple inner children)).forecast =
+      point.rowSeed recursiveDepth limit own height (index + 1) := by
+  let tail := point.tailPlan recursiveDepth limit own
+  let step := fun current => tuplePlan (nodePlan limit own height)
+    limit (point.bound + own) point.mass tail current
+  let first := fallbackPlan point.bound point.mass tail point.seed
+  change step (iterate step first index) = iterate step first (index + 1)
+  exact (iterate_add step first index 1).symm
+
+/-- Every actual earlier-row boundary fits the original complete row schedule. -/
+private theorem identity_actual_source_row_prefix_forecast
+    (recursiveDepth limit own height index : Nat) (point : IdentityActualSourcePoint bits)
+    (incoming : Node) (bucket : List Suspended) (rest : List (Node × List Suspended))
+    (counted : index ≤ limit) :
+    Le (point.rowSeed recursiveDepth limit own height index).2
+      (IdentityActualSourceTask.goal recursiveDepth limit own (.rows height point incoming bucket rest)).forecast.2 ∧
+    (point.rowSeed recursiveDepth limit own height index).1 ⊆
+      (IdentityActualSourceTask.goal recursiveDepth limit own (.rows height point incoming bucket rest)).forecast.1 := by
+  let tail := point.tailPlan recursiveDepth limit own
+  let step := fun current => tuplePlan (nodePlan limit own height)
+    limit (point.bound + own) point.mass tail current
+  let first := fallbackPlan point.bound point.mass tail point.seed
+  have tailGrowth : ∀ retained current, Le current.2 (tail retained current).2 ∧
+      current.1 ⊆ (tail retained current).1 := by
+    intro retained current
+    exact tuplePlan_ge (nodePlan limit own point.height) (nodePlan_ge limit own point.height)
+      point.count point.bound retained
+      (identity_actual_frame_plan recursiveDepth limit own point.frame)
+      (identity_actual_frame_plan_ge recursiveDepth limit own point.frame) current
+  have stepGrowth : ∀ current, Le current.2 (step current).2 ∧ current.1 ⊆ (step current).1 := by
+    intro current
+    exact tuplePlan_ge (nodePlan limit own height) (nodePlan_ge limit own height)
+      limit (point.bound + own) point.mass tail tailGrowth current
+  have later := iterate_ge step stepGrowth (iterate step first index) (limit - index)
+  rw [← iterate_add, Nat.add_sub_of_le counted] at later
+  exact later
+
+end ActualSourceOrderedRowForecast
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation

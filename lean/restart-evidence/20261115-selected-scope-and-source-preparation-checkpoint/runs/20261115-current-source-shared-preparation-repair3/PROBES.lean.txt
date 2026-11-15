@@ -1,0 +1,4 @@
+import MicroCFTA.SourceSynthesisCurrentSharedInitialPreparation
+
+#check @MicroCFTA.SourceSynthesisCurrentSharedInitialPreparation.accepted_shared_initial_preparation
+#print axioms MicroCFTA.SourceSynthesisCurrentSharedInitialPreparation.accepted_shared_initial_preparation

@@ -1,0 +1,1 @@
+Ready.root already supplies the actual Reaches path. Reuse that path in uniqueness and the two reflexive-class witnesses. Do not apply the Reaches.root constructor, which requires a raw read. The theorem header, constructed assignment and semantic scope are unchanged. The original failed input and log remain. No Haskell file changed.

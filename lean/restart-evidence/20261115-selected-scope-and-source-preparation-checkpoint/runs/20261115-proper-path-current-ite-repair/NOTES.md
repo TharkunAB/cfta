@@ -1,0 +1,1 @@
+Use current ite_eq_left/ite_eq_right names in place of the six deprecated aliases. The preceding input has a standard-axiom proof but fails strict deprecation checks. Header, assignment, statement, budget and all other proof terms remain unchanged. No Haskell file changed.
