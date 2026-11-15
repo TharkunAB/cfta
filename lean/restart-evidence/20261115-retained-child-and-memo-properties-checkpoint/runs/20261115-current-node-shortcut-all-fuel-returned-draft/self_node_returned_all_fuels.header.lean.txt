@@ -1,0 +1,16 @@
+theorem self_node_returned_all_fuels
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (law : NodeRequest Symbol Guard → Value Symbol Guard → Prop)
+    (request actual : NodeRequest Symbol Guard) (state : Checked width)
+    (physical : SourceCurrentAllocatedNativePhysicalCache.Valid state.native)
+    (ready : NodeReady state.native.machine request)
+    (safe : SourceRecursiveIntersectionMemo.KeySafe width request.domain request.left request.right)
+    (handle : Nat) (chosen current : Native width Symbol Guard)
+    (selected : lookupNode width request state.native = (.memoized handle, chosen))
+    (demanded : demandNode handle chosen = (.evaluate actual, current))
+    (nonempty : hasEmpty request.left request.right = false)
+    (noReset : reset request.domain.key request.left request.right = false)
+    (sameOperands : closedSelf request.left request.right = true)
+    (prior : Returned law state.native.nodes) (localLaw : law request request.left) :
+    ∀ fuel, Returned law
+      (SourceEqualityNativeDemand.execute fuel (.code (.node request .pure)) state).state.native.nodes := by

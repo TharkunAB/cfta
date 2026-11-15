@@ -1,0 +1,132 @@
+
+namespace MicroCFTA.SourceCurrentAllocatedNativeNodeShortcutFootprints
+open Cache InternedConstructorTemplates InternedProbeProvenance
+open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionThunks SourceRecursiveIntersectionCode
+open SourceRecursiveIntersectionControl
+open SourceCurrentAllocatedNativeContextCache (Returned)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "Native" => SourceRecursiveIntersectionThunks.State
+variable {width : Nat}
+
+set_option autoImplicit false
+
+/-- Every fuel endpoint retains the chosen law through the same evaluated pure node body. -/
+theorem evaluating_pure_node_returned_all_fuels
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (law : NodeRequest Symbol Guard → Value Symbol Guard → Prop)
+    (request actual : NodeRequest Symbol Guard) (state : Checked width)
+    (physical : SourceCurrentAllocatedNativePhysicalCache.Valid state.native)
+    (ready : NodeReady state.native.machine request)
+    (safe : SourceRecursiveIntersectionMemo.KeySafe width request.domain request.left request.right)
+    (handle : Nat) (chosen current : Native width Symbol Guard)
+    (selected : lookupNode width request state.native = (.memoized handle, chosen))
+    (demanded : demandNode handle chosen = (.evaluate actual, current))
+    (expected : Value Symbol Guard) (pureBody : compileNode request = .pure expected)
+    (prior : Returned law state.native.nodes) (localLaw : law request expected) :
+    ∀ fuel, Returned law
+      (SourceEqualityNativeDemand.execute fuel (.code (.node request .pure)) state).state.native.nodes := by
+  have same := SourceCurrentAllocatedNativePhysicalCache.node_started request actual
+    state.native chosen current handle physical ready safe selected demanded
+  have started : demandNode handle chosen = (.evaluate request, current) := by
+    simpa only [same] using demanded
+  have lookupLaw : Returned law (lookupNode width request state.native).2.nodes := by
+    cases key : SourceRecursiveIntersectionMemo.requestKey width request.domain request.left request.right with
+    | none => simpa only [lookupNode, key] using prior
+    | some keyValue =>
+        simp only [lookupNode, key]
+        exact SourceCurrentAllocatedNativeContextCache.returned_lookup
+          law keyValue request state.native.nodes prior
+  have chosenLaw : Returned law chosen.nodes := by simpa only [selected] using lookupLaw
+  have demandLaw : Returned law (demandNode handle chosen).2.nodes :=
+    SourceCurrentAllocatedNativeContextCache.returned_demand law handle chosen.nodes chosenLaw
+  have currentLaw : Returned law current.nodes := by simpa only [started] using demandLaw
+  have running := (SourceRecursiveIntersectionNative.demandNode_evaluate
+    handle chosen current request started).2
+  have finishedLaw : Returned law (finishNode handle expected current).nodes :=
+    SourceCurrentAllocatedNativeContextCache.returned_finish
+      law handle request expected current.nodes currentLaw running localLaw
+  let runningState : Checked width := ⟨current, state.operations⟩
+  let finalState : Checked width := ⟨finishNode handle expected current, state.operations⟩
+  have one : SourceEqualityNativeDemand.step (.code (.node request .pure)) state =
+      .yielded (.code (.finishNode handle expected (.pure expected))) runningState := by
+    simp only [SourceEqualityNativeDemand.step, SourceRecursiveIntersectionNative.step,
+      selected, started, pureBody, Code.bind, SourceEqualityNativeDemand.lift, runningState]
+  have two : SourceEqualityNativeDemand.step
+      (.code (.finishNode handle expected (.pure expected))) runningState =
+        .yielded (.code (.pure expected)) finalState := by rfl
+  have three : SourceEqualityNativeDemand.step (.code (.pure expected)) finalState =
+      .done expected finalState := by rfl
+  have completed : SourceEqualityNativeDemand.execute 3 (.code (.node request .pure)) state =
+      .done expected finalState := by
+    simp only [SourceEqualityNativeDemand.execute, one, two, three]
+  intro fuel
+  cases fuel with
+  | zero =>
+      simpa only [SourceEqualityNativeDemand.execute, SourceEqualityNativeDemand.Outcome.state] using prior
+  | succ fuel =>
+      cases fuel with
+      | zero =>
+          simpa only [SourceEqualityNativeDemand.execute, one,
+            SourceEqualityNativeDemand.Outcome.state, runningState] using currentLaw
+      | succ fuel =>
+          cases fuel with
+          | zero =>
+              simpa only [SourceEqualityNativeDemand.execute, one, two,
+                SourceEqualityNativeDemand.Outcome.state, finalState] using finishedLaw
+          | succ fuel =>
+              have extended := SourceEqualityNativeDemand.done_stable 3 fuel
+                (.code (.node request .pure)) state finalState expected completed
+              have atFuel : SourceEqualityNativeDemand.execute (Nat.succ (Nat.succ (Nat.succ fuel)))
+                  (.code (.node request .pure)) state = .done expected finalState := by
+                simpa only [Nat.add_comm] using extended
+              simpa only [atFuel, SourceEqualityNativeDemand.Outcome.state, finalState] using finishedLaw
+
+/-- Empty evaluation retains the same conditional returned law at all supplied fuels. -/
+theorem empty_node_returned_all_fuels
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (law : NodeRequest Symbol Guard → Value Symbol Guard → Prop)
+    (request actual : NodeRequest Symbol Guard) (state : Checked width)
+    (physical : SourceCurrentAllocatedNativePhysicalCache.Valid state.native)
+    (ready : NodeReady state.native.machine request)
+    (safe : SourceRecursiveIntersectionMemo.KeySafe width request.domain request.left request.right)
+    (handle : Nat) (chosen current : Native width Symbol Guard)
+    (selected : lookupNode width request state.native = (.memoized handle, chosen))
+    (demanded : demandNode handle chosen = (.evaluate actual, current))
+    (empty : request.left = .empty ∨ request.right = .empty)
+    (prior : Returned law state.native.nodes) (localLaw : law request .empty) :
+    ∀ fuel, Returned law
+      (SourceEqualityNativeDemand.execute fuel (.code (.node request .pure)) state).state.native.nodes := by
+  have guard : hasEmpty request.left request.right = true := by
+    rcases empty with left | right
+    · simp only [hasEmpty, left, Value.referenceOf, beq_self_eq_true, Bool.true_or]
+    · simp only [hasEmpty, right, Value.referenceOf, beq_self_eq_true, Bool.or_true]
+  have branch := empty_first request.domain.key request.left request.right guard
+  have pureBody : compileNode request = .pure .empty := by simp only [compileNode, branch]
+  exact evaluating_pure_node_returned_all_fuels law request actual state physical ready safe
+    handle chosen current selected demanded .empty pureBody prior localLaw
+
+/-- Self evaluation retains the same conditional returned law at all supplied fuels. -/
+theorem self_node_returned_all_fuels
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (law : NodeRequest Symbol Guard → Value Symbol Guard → Prop)
+    (request actual : NodeRequest Symbol Guard) (state : Checked width)
+    (physical : SourceCurrentAllocatedNativePhysicalCache.Valid state.native)
+    (ready : NodeReady state.native.machine request)
+    (safe : SourceRecursiveIntersectionMemo.KeySafe width request.domain request.left request.right)
+    (handle : Nat) (chosen current : Native width Symbol Guard)
+    (selected : lookupNode width request state.native = (.memoized handle, chosen))
+    (demanded : demandNode handle chosen = (.evaluate actual, current))
+    (nonempty : hasEmpty request.left request.right = false)
+    (noReset : reset request.domain.key request.left request.right = false)
+    (sameOperands : closedSelf request.left request.right = true)
+    (prior : Returned law state.native.nodes) (localLaw : law request request.left) :
+    ∀ fuel, Returned law
+      (SourceEqualityNativeDemand.execute fuel (.code (.node request .pure)) state).state.native.nodes := by
+  have branch := self_first request.domain.key request.left request.right nonempty noReset sameOperands
+  have pureBody : compileNode request = .pure request.left := by simp only [compileNode, branch]
+  exact evaluating_pure_node_returned_all_fuels law request actual state physical ready safe
+    handle chosen current selected demanded request.left pureBody prior localLaw
+
+end MicroCFTA.SourceCurrentAllocatedNativeNodeShortcutFootprints

@@ -1,0 +1,6 @@
+import MicroCFTA.SourceCurrentAllocatedNativeContextCache
+
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeContextCache.returned_empty
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeContextCache.returned_lookup
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeContextCache.returned_demand
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeContextCache.returned_finish

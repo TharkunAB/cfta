@@ -1,0 +1,25 @@
+theorem self_node_evaluation_footprint
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (request actual : NodeRequest Symbol Guard) (state : Checked width)
+    (physical : SourceCurrentAllocatedNativePhysicalCache.Valid state.native)
+    (ready : NodeReady state.native.machine request)
+    (safe : SourceRecursiveIntersectionMemo.KeySafe width request.domain request.left request.right)
+    (handle : Nat) (chosen current : Native width Symbol Guard)
+    (selected : lookupNode width request state.native = (.memoized handle, chosen))
+    (demanded : demandNode handle chosen = (.evaluate actual, current))
+    (nonempty : hasEmpty request.left request.right = false)
+    (noReset : reset request.domain.key request.left request.right = false)
+    (sameOperands : closedSelf request.left request.right = true)
+    (universeIdentity : Nat)
+    (onlyU : ∀ atom ∈ atoms request.left, atom = .mu universeIdentity) :
+    actual = request ∧ request.left = request.right ∧
+      SourceCurrentAllocatedNativePhysicalCache.Valid current ∧
+      current.nodes.cells handle = some ⟨request, .evaluating⟩ ∧
+      (∀ extra, SourceEqualityNativeDemand.execute (4 + extra) (.code (.node request .pure)) state =
+        .done request.left ⟨finishNode handle request.left current, state.operations⟩) ∧
+      SourceCurrentAllocatedNativePhysicalCache.Valid (finishNode handle request.left current) ∧
+      (finishNode handle request.left current).nodes.cells handle = some ⟨request, .returned request.left⟩ ∧
+      ∀ fuel value after,
+        SourceEqualityNativeDemand.execute fuel (.code (.node request .pure)) state = .done value after →
+        value = request.left ∧ after = ⟨finishNode handle request.left current, state.operations⟩ ∧
+          ∀ atom ∈ atoms value, atom = .mu universeIdentity := by

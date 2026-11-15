@@ -1,0 +1,12 @@
+theorem node_ready_property
+    (law : NodeRequest Symbol Guard → Value Symbol Guard → Prop)
+    (state : Native width Symbol Guard)
+    (physical : SourceCurrentAllocatedNativePhysicalCache.Valid state)
+    (returned : Returned law state.nodes)
+    (request original : NodeRequest Symbol Guard) (ready : NodeReady state.machine request)
+    (key : IntersectionFlatMemoKeyDomain.Triple width) (checked : NodeKey width request key)
+    (handle : Nat) (published : state.nodes.table key = some handle) (value : Value Symbol Guard)
+    (stored : state.nodes.cells handle = some ⟨original, .returned value⟩) :
+    original = request ∧ lookupNode width request state = (.memoized handle, state) ∧
+      demandNode handle state = (.ready value, state) ∧ Available state.machine.heap value ∧
+      law request value := by

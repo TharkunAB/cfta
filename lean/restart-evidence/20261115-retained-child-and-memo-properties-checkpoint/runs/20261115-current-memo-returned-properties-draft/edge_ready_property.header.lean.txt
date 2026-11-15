@@ -1,0 +1,12 @@
+theorem edge_ready_property
+    (law : EdgeRequest Symbol Guard → EdgeValue Symbol Guard → Prop)
+    (state : Native width Symbol Guard)
+    (physical : SourceCurrentAllocatedNativePhysicalCache.Valid state)
+    (returned : Returned law state.edges)
+    (request original : EdgeRequest Symbol Guard) (ready : EdgeReady state.machine request)
+    (key : IntersectionFlatMemoKeyDomain.Triple width) (checked : EdgeKeyOf width request key)
+    (handle : Nat) (published : state.edges.table key = some handle) (value : EdgeValue Symbol Guard)
+    (stored : state.edges.cells handle = some ⟨original, .returned value⟩) :
+    original = request ∧ lookupEdge width request state = (handle, state) ∧
+      demandEdge handle state = (.ready value, state) ∧ EdgeResident state.machine.heap value ∧
+      law request value := by

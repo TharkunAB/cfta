@@ -1,0 +1,19 @@
+theorem empty_node_evaluation_footprint
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (request actual : NodeRequest Symbol Guard) (state : Checked width)
+    (physical : SourceCurrentAllocatedNativePhysicalCache.Valid state.native)
+    (ready : NodeReady state.native.machine request)
+    (safe : SourceRecursiveIntersectionMemo.KeySafe width request.domain request.left request.right)
+    (handle : Nat) (chosen current : Native width Symbol Guard)
+    (selected : lookupNode width request state.native = (.memoized handle, chosen))
+    (demanded : demandNode handle chosen = (.evaluate actual, current))
+    (empty : request.left = .empty ∨ request.right = .empty) :
+    actual = request ∧ SourceCurrentAllocatedNativePhysicalCache.Valid current ∧
+      current.nodes.cells handle = some ⟨request, .evaluating⟩ ∧
+      (∀ extra, SourceEqualityNativeDemand.execute (4 + extra) (.code (.node request .pure)) state =
+        .done .empty ⟨finishNode handle .empty current, state.operations⟩) ∧
+      SourceCurrentAllocatedNativePhysicalCache.Valid (finishNode handle .empty current) ∧
+      (finishNode handle .empty current).nodes.cells handle = some ⟨request, .returned .empty⟩ ∧
+      ∀ fuel value after,
+        SourceEqualityNativeDemand.execute fuel (.code (.node request .pure)) state = .done value after →
+        value = .empty ∧ after = ⟨finishNode handle .empty current, state.operations⟩ ∧ atoms value = [] := by

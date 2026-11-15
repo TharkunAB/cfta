@@ -1,0 +1,13 @@
+theorem finishNode_property
+    (law : NodeRequest Symbol Guard → Value Symbol Guard → Prop)
+    (state : Native width Symbol Guard)
+    (physical : SourceCurrentAllocatedNativePhysicalCache.Valid state)
+    (returned : Returned law state.nodes)
+    (handle : Nat) (request : NodeRequest Symbol Guard) (value : Value Symbol Guard)
+    (running : state.nodes.cells handle = some ⟨request, .evaluating⟩)
+    (available : Available state.machine.heap value) (localLaw : law request value) :
+    SourceCurrentAllocatedNativePhysicalCache.Valid (finishNode handle value state) ∧
+      Returned law (finishNode handle value state).nodes ∧
+      (finishNode handle value state).nodes.cells handle = some ⟨request, .returned value⟩ ∧
+      (finishNode handle value state).machine = state.machine ∧
+      (finishNode handle value state).edges = state.edges := by
