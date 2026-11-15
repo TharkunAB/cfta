@@ -36,7 +36,7 @@ private theorem through_current {Output : Type}
   | zero => exact plan
   | succ => exact plan.1
 
-private theorem through_mono {Output : Type}
+theorem through_mono {Output : Type}
     [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
     (large small : Nat) (control : Control Output) (state : Checked width)
     (bounded : small ≤ large) (plan : InputsThrough large control state) :
@@ -58,7 +58,7 @@ private theorem through_mono {Output : Type}
               exact ih small next after (by omega) remaining
           | done | failed | constraintError | blocked => trivial
 
-private theorem fields_mono {Output : Type}
+theorem fields_mono {Output : Type}
     [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
     (large small : Nat) (control : Control Output) (state : Checked width)
     (bounded : small ≤ large) (plan : FieldsThrough large control state) :
