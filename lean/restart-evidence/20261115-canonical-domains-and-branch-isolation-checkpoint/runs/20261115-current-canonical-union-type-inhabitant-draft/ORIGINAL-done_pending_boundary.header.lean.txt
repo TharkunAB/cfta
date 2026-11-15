@@ -1,0 +1,11 @@
+theorem done_pending_boundary
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+    (caller : Caller width) (before : Cached)
+    (valid : SourcePruningEnumerationNativeBranchCompletion.CacheValid caller before)
+    (done : decision none order metadata before = some .done)
+    (uv handle : Nat) (scs : List Suspended)
+    (stored : before.core.values[uv]? = some (.unenumerated (some handle) scs)) :
+    ∃ value,
+      lookupNode caller.checked.native.machine.heap handle = some value ∧
+      InternedProbeProvenance.Available caller.checked.native.machine.heap value ∧ value.free = [] ∧
+      MergedOrdinaryHeight.recursiveBoundary value = true ∧ scs = []

@@ -1,0 +1,10 @@
+def Scope (pairs : List (Nat × Nat)) (value : Value Symbol Guard) : Prop :=
+  ∀ name ∈ value.free, ∃ pair ∈ pairs, name = .intersection pair.1 pair.2
+
+/-- Every actual ordered edge child has the same possible recursive pair names. -/
+def EdgeScope (pairs : List (Nat × Nat)) (edge : EdgeValue Symbol Guard) : Prop :=
+  ∀ child ∈ edge.children, Scope pairs child
+
+/-- A closed result has no free-name obligation for any incoming pair set. -/
+theorem closed (pairs : List (Nat × Nat)) (value : Value Symbol Guard) (free : value.free = []) : Scope pairs value := by
+  intro name member

@@ -1,0 +1,81 @@
+@MicroCFTA.SourceCurrentAllocatedTargetQuery.Step.unionNormal : ∀ {width : Nat}
+  [inst : DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {left right value :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before after : MicroCFTA.SourceEqualityNativeDemand.State width},
+  MicroCFTA.SourceCurrentAllocatedTargetQuery.Step left right before value after →
+    MicroCFTA.SourceCurrentRequiredUnionNormal.UnionNormal before.native.machine.heap →
+      MicroCFTA.SourceCurrentRequiredUnionNormal.UnionNormal after.native.machine.heap
+'MicroCFTA.SourceCurrentAllocatedTargetQuery.Step.unionNormal' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourceCurrentAllocatedTargetQuery.Receipt.unionNormal : ∀ {width : Nat}
+  [inst : DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {left right value :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before after : MicroCFTA.SourceEqualityNativeDemand.State width} {memos : MicroCFTA.EndpointMemoGateTrace.Memos},
+  MicroCFTA.SourceCurrentAllocatedTargetQuery.Receipt formulas solver inventory left right before value after memos →
+    MicroCFTA.SourceCurrentRequiredUnionNormal.UnionNormal before.native.machine.heap →
+      MicroCFTA.SourceCurrentRequiredUnionNormal.UnionNormal after.native.machine.heap
+'MicroCFTA.SourceCurrentAllocatedTargetQuery.Receipt.unionNormal' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourcePruningEnumerationEnabledEmpty.check_unionNormal : ∀ {width : Nat}
+  [inst : DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (p h : Nat)
+  (query :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width) (memo : MicroCFTA.SourceCurrentEmptinessMemo.Memo)
+  (queries : MicroCFTA.SourceEndpointMemo.Memos),
+  MicroCFTA.SourceCurrentRequiredUnionNormal.UnionNormal before.native.machine.heap →
+    MicroCFTA.SourceCurrentRequiredUnionNormal.UnionNormal
+      (MicroCFTA.SourcePruningEnumerationEnabledEmpty.check p h query before memo queries).fst.state.native.machine.heap
+'MicroCFTA.SourcePruningEnumerationEnabledEmpty.check_unionNormal' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourcePruningEnumerationIncomingNode.run_unionNormal : ∀ {EnumGuard : Type} {width : Nat}
+  [inst : DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (checkEmpty : Bool) (representativeFuel nativeFuel p h : Nat)
+  (beforeCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard) (uv : Nat)
+  (incoming :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (incomingScs : List MicroCFTA.EnumerationState.Suspended) (queries : MicroCFTA.SourceEndpointMemo.Memos),
+  MicroCFTA.SourceCurrentRequiredUnionNormal.UnionNormal beforeCaller.checked.native.machine.heap →
+    MicroCFTA.SourceCurrentRequiredUnionNormal.UnionNormal
+      (MicroCFTA.SourcePruningEnumerationIncomingNode.run checkEmpty representativeFuel nativeFuel p h beforeCaller
+                    before uv incoming incomingScs queries).snd.fst.checked.native.machine.heap
+'MicroCFTA.SourcePruningEnumerationIncomingNode.run_unionNormal' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

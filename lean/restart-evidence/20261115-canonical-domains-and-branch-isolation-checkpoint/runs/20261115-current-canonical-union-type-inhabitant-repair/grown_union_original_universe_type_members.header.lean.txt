@@ -1,0 +1,25 @@
+theorem grown_union_original_universe_type_members
+    [DecidableEq FullSyntax.Formula] [DecidableEq (EdgeKey Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (ambient : InternedGuardedLanguage.Env Symbol)
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : State Symbol Guard)
+    (built : build (ordinarySymbols whole) [] empty = .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (heap : State Symbol Guard) (normal : Normal heap)
+    (irreducible : SourceCurrentRequiredUnionNormal.UnionNormal heap)
+    (growth : Grows sourceHeap heap)
+    (unionEntry : Interned NodeKey) (members : List (Value Symbol Guard))
+    (unionDepth : Nat) (unionFree : List InternedBinderProtocol.Reference)
+    (available : Available heap (.union unionEntry members unionDepth unionFree))
+    (onlyU : ∀ atom ∈ atoms (.union unionEntry members unionDepth unionFree),
+      atom = .mu entry.identity) :
+    Value.mu entry body depth ordinary ∈ members ∧
+      ∃ handle,
+        encodeNode (.union unionEntry members unionDepth unionFree) = some handle ∧
+        lookupNode heap handle = some (.union unionEntry members unionDepth unionFree) ∧
+        ∀ term, TypeIn (SourceSynthesisCurrentContext.constructorCatalog lib query) term →
+          handles (SourceEqualityPCSGuard.holds formulas solver) ambient heap handle term := by

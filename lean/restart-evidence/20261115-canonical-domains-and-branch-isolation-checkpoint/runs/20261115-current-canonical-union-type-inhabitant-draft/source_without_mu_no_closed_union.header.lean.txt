@@ -1,0 +1,10 @@
+theorem source_without_mu_no_closed_union
+    [DecidableEq (EdgeKey Symbol Guard)]
+    (whole : Expression) (rootValue : Value Symbol Guard) (sourceHeap : State Symbol Guard)
+    (built : build (ordinarySymbols whole) [] empty = .done rootValue sourceHeap)
+    (noMu : ∀ key entry body depth ordinary,
+      sourceHeap.nodeRecords key ≠ some (.mu entry body depth ordinary))
+    (unionEntry : Interned NodeKey) (members : List (Value Symbol Guard))
+    (unionDepth : Nat) (unionFree : List InternedBinderProtocol.Reference)
+    (available : Available sourceHeap (.union unionEntry members unionDepth unionFree))
+    (closed : (Value.union unionEntry members unionDepth unionFree).free = []) : False := by

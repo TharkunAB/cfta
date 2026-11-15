@@ -1,0 +1,46 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-current-canonical-union-type-inhabitant-check/source/MicroCFTA/SourceSynthesisCurrentCanonicalUnionTypeMember.lean:64:3: error: unknown tactic
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-current-canonical-union-type-inhabitant-check/source/MicroCFTA/SourceSynthesisCurrentCanonicalUnionTypeMember.lean:56:61: error: unsolved goals
+heap : InternedConstructorTemplates.State Symbol Guard
+normal : Normal heap
+irreducible : SourceCurrentRequiredUnionNormal.UnionNormal heap
+entry : Interned NodeKey
+members : List (Value Symbol Guard)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+available : Available heap (Value.union entry members depth free)
+closed : (Value.union entry members depth free).free = []
+flat : InternedUnionNormalForm.FlatValue (Value.union entry members depth free)
+nonempty : InternedUnionNonemptyMembers.ValueMembers (Value.union entry members depth free)
+noOrdinary : ordinaryEdges members = none
+⊢ ∃ other body otherDepth ordinary,
+    Value.mu other body otherDepth ordinary ∈ members ∧ Available heap (Value.mu other body otherDepth ordinary)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-current-canonical-union-type-inhabitant-check/source/MicroCFTA/SourceSynthesisCurrentCanonicalUnionTypeMember.lean:122:21: error: Application type mismatch: The argument
+  (many_member members atom).mpr
+    (Exists.intro (Value.mu other otherBody otherDepth otherOrdinary) ⟨present, occurrence⟩)
+has type
+  atom ∈ InternedBoundaryAtoms.manyAtoms members
+but is expected to have type
+  atom ∈ atoms (Value.union unionEntry members unionDepth unionFree)
+in the application
+  onlyU atom
+    ((many_member members atom).mpr
+      (Exists.intro (Value.mu other otherBody otherDepth otherOrdinary) ⟨present, occurrence⟩))
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-current-canonical-union-type-inhabitant-check/source/MicroCFTA/SourceSynthesisCurrentCanonicalUnionTypeMember.lean:143:2: error: 'change' tactic failed, pattern
+  ∃ member, InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient member.val term
+is not definitionally equal to target
+  InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient
+    (Value.union unionEntry members unionDepth unionFree) term
+'MicroCFTA.SourceSynthesisCurrentCanonicalUnionTypeMember.closed_canonical_union_mu_member' depends on axioms: [propext,
+ sorryAx,
+ Quot.sound]
+'MicroCFTA.SourceSynthesisCurrentCanonicalUnionTypeMember.grown_union_original_universe_type_members' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceSynthesisCurrentCanonicalUnionTypeMember.source_closed_union_finite_type_member' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceSynthesisCurrentCanonicalUnionTypeMember.source_without_mu_no_closed_union' depends on axioms: [propext,
+ sorryAx,
+ Quot.sound]

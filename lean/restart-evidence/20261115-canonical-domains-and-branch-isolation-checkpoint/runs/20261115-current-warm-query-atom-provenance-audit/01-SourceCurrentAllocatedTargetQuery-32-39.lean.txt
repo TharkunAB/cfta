@@ -1,0 +1,8 @@
+inductive Step [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (left right : Value Symbol Guard) (before : Checked width) :
+    Value Symbol Guard → Checked width → Prop where
+  | run {fuel : Nat}
+      (trace : Trace fuel (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before
+        (.code (.pure value)) after) : Step left right before value after
+
+/-- A raw completed step has a literal finite checked execution. -/

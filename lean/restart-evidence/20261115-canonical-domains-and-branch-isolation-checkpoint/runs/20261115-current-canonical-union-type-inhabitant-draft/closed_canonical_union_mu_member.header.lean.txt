@@ -1,0 +1,10 @@
+theorem closed_canonical_union_mu_member
+    (heap : State Symbol Guard) (normal : Normal heap)
+    (irreducible : SourceCurrentRequiredUnionNormal.UnionNormal heap)
+    (entry : Interned NodeKey) (members : List (Value Symbol Guard)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference)
+    (available : Available heap (.union entry members depth free))
+    (closed : (Value.union entry members depth free).free = []) :
+    ∃ other body otherDepth ordinary,
+      Value.mu other body otherDepth ordinary ∈ members ∧
+      Available heap (.mu other body otherDepth ordinary) := by

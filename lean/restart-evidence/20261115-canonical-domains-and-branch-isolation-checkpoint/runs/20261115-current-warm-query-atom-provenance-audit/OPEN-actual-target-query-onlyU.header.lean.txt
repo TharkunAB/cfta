@@ -1,0 +1,37 @@
+-- OPEN local provenance obligation. This file is not a checked declaration.
+open MicroCFTA
+open Cache InternedConstructorTemplates InternedProbeProvenance
+open InternedBinderProtocol (NodeKey)
+open SourceSynthesisTypeSyntax (Library Query)
+open SourceSynthesisGeneralizeSyntax (Guard)
+open SourceSynthesisFirstOrderConstruction (Expression)
+open InternedBoundaryAtoms (atoms)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "ordinarySymbols" => SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+
+theorem actual_target_query_onlyU_result
+    {width : Nat}
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (inventory : SourceCurrentAllocatedNativeInventoryState.Inventory)
+    (caller : SourceCurrentAllocatedPartialState.State width)
+    (memos : EndpointMemoGateTrace.Memos)
+    (context : SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory caller memos)
+    (sourceGrowth : Grows sourceHeap caller.checked.native.machine.heap)
+    (left right value : Value Symbol Guard)
+    (leftAvailable : Available caller.checked.native.machine.heap left)
+    (rightAvailable : Available caller.checked.native.machine.heap right)
+    (leftClosed : left.free = []) (rightClosed : right.free = [])
+    (leftOnlyU : ∀ atom ∈ atoms left, atom = .mu entry.identity)
+    (rightOnlyU : ∀ atom ∈ atoms right, atom = .mu entry.identity)
+    (after : SourceEqualityNativeDemand.State width)
+    (actual : SourceCurrentAllocatedTargetQuery.Step left right caller.checked value after) :
+    ∀ atom ∈ atoms value, atom = .mu entry.identity

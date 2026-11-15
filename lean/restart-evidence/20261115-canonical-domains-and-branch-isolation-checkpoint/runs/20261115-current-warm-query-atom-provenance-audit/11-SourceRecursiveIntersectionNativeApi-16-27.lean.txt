@@ -1,0 +1,12 @@
+theorem native_node_correct [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] (emptyGuard : Guard) (conjoin : Guard → Guard → Guard)
+    (fuel : Nat) (request : NodeRequest Symbol Guard) (state after : SourceRecursiveIntersectionThunks.State width Symbol Guard)
+    (value : Value Symbol Guard) (valid : SourceRecursiveIntersectionThunks.Valid width emptyGuard conjoin state)
+    (ready : NodeReady state.machine request)
+    (done : execute emptyGuard conjoin fuel (.node request .pure) state = .done value after)
+    (bounds : Bounds (evaluation_of_done emptyGuard conjoin fuel (.node request .pure) state after value done)) :
+    SourceRecursiveIntersectionThunks.Valid width emptyGuard conjoin after ∧ Extension state.machine after.machine ∧
+      Available after.machine.heap value ∧ ∃ bound, ∀ extra,
+        SourceRecursiveIntersectionKernel.execute emptyGuard conjoin (bound + extra) request.domain request.left request.right state.machine = .done value after.machine := by
+  have correct := bounds.correct (fun after value => Available after.heap value) (by intro value; trivial)
+    (safe_requestNode request.domain request.left request.right state.machine ready) valid
+  obtain ⟨bound, repeated⟩ := correct.meaning

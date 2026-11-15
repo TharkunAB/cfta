@@ -1,0 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationSharedChildClassProtection
+
+#print axioms MicroCFTA.SourcePruningEnumerationSharedChildIsolation.observed_protected_isolated_pending
+#print axioms MicroCFTA.SourcePruningEnumerationSharedChildIsolation.prepared_stored_child_protected

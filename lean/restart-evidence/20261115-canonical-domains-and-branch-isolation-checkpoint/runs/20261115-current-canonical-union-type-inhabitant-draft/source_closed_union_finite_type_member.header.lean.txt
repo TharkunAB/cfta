@@ -1,0 +1,23 @@
+theorem source_closed_union_finite_type_member
+    [DecidableEq FullSyntax.Formula] [DecidableEq (EdgeKey Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (ambient : InternedGuardedLanguage.Env Symbol)
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : State Symbol Guard)
+    (built : build (ordinarySymbols whole) [] empty = .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (unionEntry : Interned NodeKey) (members : List (Value Symbol Guard))
+    (unionDepth : Nat) (unionFree : List InternedBinderProtocol.Reference)
+    (available : Available sourceHeap (.union unionEntry members unionDepth unionFree))
+    (closed : (Value.union unionEntry members unionDepth unionFree).free = []) :
+    Value.mu entry body depth ordinary ∈ members ∧
+      ∃ handle,
+        encodeNode (.union unionEntry members unionDepth unionFree) = some handle ∧
+        lookupNode sourceHeap handle = some (.union unionEntry members unionDepth unionFree) ∧
+        TypeIn (SourceSynthesisCurrentContext.constructorCatalog lib query)
+          (.node (literal "var1") []) ∧
+        handles (SourceEqualityPCSGuard.holds formulas solver) ambient sourceHeap handle
+          (.node (literal "var1") []) := by
