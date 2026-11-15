@@ -1,0 +1,24 @@
+ := by
+  unfold SourcePruningEnumerationSharedSelectedOpaqueDispatch.run
+  rw [ite_eq_right empty]
+  generalize observed : ChildDispatch.run checkEmpty workFuel workFuel workFuel workFuel workFuel
+    scs value caller before queries = receipt
+  cases value <;> simp only [dispatch, Bool.false_eq_true, ↓reduceIte]
+  all_goals
+    rcases receipt with ⟨⟨raw, reached, saved, outer, waiting⟩, candidate⟩
+    cases raw with
+    | error fault => rfl
+    | ok raw =>
+        cases raw with
+        | none => rfl
+        | some results =>
+            cases results with
+            | nil => rfl
+            | cons first rest =>
+                cases first with
+                | error fault => rfl
+                | ok payload =>
+                    rcases payload with ⟨fragment, returned⟩
+                    cases rest with
+                    | cons second tail => rfl
+                    | nil => cases candidate <;> rfl

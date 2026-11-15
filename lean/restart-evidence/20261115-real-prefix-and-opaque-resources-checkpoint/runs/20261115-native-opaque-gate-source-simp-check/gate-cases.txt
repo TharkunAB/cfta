@@ -1,0 +1,65 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-opaque-gate-source-simp-check/Gate.lean:45:82: error: unsolved goals
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+checkEmpty : Bool
+workFuel uv : Nat
+scs : List Suspended
+value : Node
+caller : Caller (bits + 2)
+before : Cached
+queries : Queries
+empty : value ≠ Value.empty
+dispatch :
+  (match value with
+    | Value.node entry edges depth free => !scs.any fun sc => EqualityTrie.isTerminal sc.trie
+    | x => false) =
+    false
+⊢ (if
+        (match value with
+          | Value.node entry edges depth free => !scs.any fun sc => EqualityTrie.isTerminal sc.trie
+          | x => false) =
+          true then
+      none
+    else
+      match
+        ChildDispatch.run checkEmpty workFuel workFuel workFuel workFuel workFuel scs value caller before queries with
+      | ((Except.ok (some [Except.ok (fragment, _returned)]), reached, saved, _outer, _waiting), some after) =>
+        match SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap workFuel uv fragment after with
+        | some finished => some (SelectedEdge.Result.complete fragment reached saved finished)
+        | none => some (SelectedEdge.Result.finalizeStopped fragment reached saved after)
+      | (observation, candidate) => some (SelectedEdge.Result.stopped [] observation candidate)) =
+    match ChildDispatch.run checkEmpty workFuel workFuel workFuel workFuel workFuel scs value caller before queries with
+    | ((Except.ok (some [Except.ok (fragment, _returned)]), reached, saved, _outer, _waiting), some after) =>
+      match SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap workFuel uv fragment after with
+      | some finished => some (SelectedEdge.Result.complete fragment reached saved finished)
+      | none => some (SelectedEdge.Result.finalizeStopped fragment reached saved after)
+    | (observation, candidate) => some (SelectedEdge.Result.stopped [] observation candidate)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-opaque-gate-source-simp-check/Gate.lean:47:24: error: This simp argument is unused:
+  dispatch
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourcePruningEnumerationSharedSelectedOpaqueDispatch.run, ite_eq_right empty, Bool.false_eq_true,
+    ↓reduceIte]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-opaque-gate-source-simp-check/Gate.lean:47:34: error: This simp argument is unused:
+  Bool.false_eq_true
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourcePruningEnumerationSharedSelectedOpaqueDispatch.run, ite_eq_right empty, dispatch, ↓reduceIte]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-opaque-gate-source-simp-check/Gate.lean:47:54: error: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourcePruningEnumerationSharedSelectedOpaqueDispatch.run, ite_eq_right empty, dispatch,
+    Bool.false_eq_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'_private.«restart-evidence».«20261115-native-opaque-gate-source-simp-check».Gate.0.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.opaque_receipt_shape_gate' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

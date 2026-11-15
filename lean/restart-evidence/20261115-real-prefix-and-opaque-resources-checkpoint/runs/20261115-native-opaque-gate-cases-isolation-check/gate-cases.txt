@@ -1,0 +1,185 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-opaque-gate-cases-isolation-check/Gate.lean:45:82: error: unsolved goals
+case empty
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+checkEmpty : Bool
+workFuel uv : Nat
+scs : List Suspended
+caller : Caller (bits + 2)
+before : Cached
+queries : Queries
+empty : Value.empty ≠ Value.empty
+dispatch :
+  (match Value.empty with
+    | Value.node entry edges depth free => !scs.any fun sc => EqualityTrie.isTerminal sc.trie
+    | x => false) =
+    false
+⊢ (match
+      ChildDispatch.run checkEmpty workFuel workFuel workFuel workFuel workFuel scs Value.empty caller before
+        queries with
+    | ((Except.ok (some [Except.ok (fragment, _returned)]), reached, saved, _outer, _waiting), some after) =>
+      match SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap workFuel uv fragment after with
+      | some finished => some (SelectedEdge.Result.complete fragment reached saved finished)
+      | none => some (SelectedEdge.Result.finalizeStopped fragment reached saved after)
+    | (observation, candidate) => some (SelectedEdge.Result.stopped [] observation candidate)) =
+    match
+      ChildDispatch.run checkEmpty workFuel workFuel workFuel workFuel workFuel scs Value.empty caller before
+        queries with
+    | ((Except.ok (some [Except.ok (fragment, _returned)]), reached, saved, _outer, _waiting), some after) =>
+      match SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap workFuel uv fragment after with
+      | some finished => some (SelectedEdge.Result.complete fragment reached saved finished)
+      | none => some (SelectedEdge.Result.finalizeStopped fragment reached saved after)
+    | (observation, candidate) => some (SelectedEdge.Result.stopped [] observation candidate)
+
+case reference
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+checkEmpty : Bool
+workFuel uv : Nat
+scs : List Suspended
+caller : Caller (bits + 2)
+before : Cached
+queries : Queries
+name✝ : InternedBinderProtocol.Reference
+empty : Value.reference name✝ ≠ Value.empty
+dispatch :
+  (match Value.reference name✝ with
+    | Value.node entry edges depth free => !scs.any fun sc => EqualityTrie.isTerminal sc.trie
+    | x => false) =
+    false
+⊢ (match
+      ChildDispatch.run checkEmpty workFuel workFuel workFuel workFuel workFuel scs (Value.reference name✝) caller
+        before queries with
+    | ((Except.ok (some [Except.ok (fragment, _returned)]), reached, saved, _outer, _waiting), some after) =>
+      match SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap workFuel uv fragment after with
+      | some finished => some (SelectedEdge.Result.complete fragment reached saved finished)
+      | none => some (SelectedEdge.Result.finalizeStopped fragment reached saved after)
+    | (observation, candidate) => some (SelectedEdge.Result.stopped [] observation candidate)) =
+    match
+      ChildDispatch.run checkEmpty workFuel workFuel workFuel workFuel workFuel scs (Value.reference name✝) caller
+        before queries with
+    | ((Except.ok (some [Except.ok (fragment, _returned)]), reached, saved, _outer, _waiting), some after) =>
+      match SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap workFuel uv fragment after with
+      | some finished => some (SelectedEdge.Result.complete fragment reached saved finished)
+      | none => some (SelectedEdge.Result.finalizeStopped fragment reached saved after)
+    | (observation, candidate) => some (SelectedEdge.Result.stopped [] observation candidate)
+
+case node
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+checkEmpty : Bool
+workFuel uv : Nat
+scs : List Suspended
+caller : Caller (bits + 2)
+before : Cached
+queries : Queries
+entry✝ : Cache.Interned InternedBinderProtocol.NodeKey
+edges✝ : List (EdgeValue Symbol Constraint)
+depth✝ : Nat
+free✝ : List InternedBinderProtocol.Reference
+empty : Value.node entry✝ edges✝ depth✝ free✝ ≠ Value.empty
+dispatch :
+  (match Value.node entry✝ edges✝ depth✝ free✝ with
+    | Value.node entry edges depth free => !scs.any fun sc => EqualityTrie.isTerminal sc.trie
+    | x => false) =
+    false
+⊢ (match
+      ChildDispatch.run checkEmpty workFuel workFuel workFuel workFuel workFuel scs
+        (Value.node entry✝ edges✝ depth✝ free✝) caller before queries with
+    | ((Except.ok (some [Except.ok (fragment, _returned)]), reached, saved, _outer, _waiting), some after) =>
+      match SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap workFuel uv fragment after with
+      | some finished => some (SelectedEdge.Result.complete fragment reached saved finished)
+      | none => some (SelectedEdge.Result.finalizeStopped fragment reached saved after)
+    | (observation, candidate) => some (SelectedEdge.Result.stopped [] observation candidate)) =
+    match
+      ChildDispatch.run checkEmpty workFuel workFuel workFuel workFuel workFuel scs
+        (Value.node entry✝ edges✝ depth✝ free✝) caller before queries with
+    | ((Except.ok (some [Except.ok (fragment, _returned)]), reached, saved, _outer, _waiting), some after) =>
+      match SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap workFuel uv fragment after with
+      | some finished => some (SelectedEdge.Result.complete fragment reached saved finished)
+      | none => some (SelectedEdge.Result.finalizeStopped fragment reached saved after)
+    | (observation, candidate) => some (SelectedEdge.Result.stopped [] observation candidate)
+
+case union
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+checkEmpty : Bool
+workFuel uv : Nat
+scs : List Suspended
+caller : Caller (bits + 2)
+before : Cached
+queries : Queries
+entry✝ : Cache.Interned InternedBinderProtocol.NodeKey
+members✝ : List Node
+depth✝ : Nat
+free✝ : List InternedBinderProtocol.Reference
+empty : Value.union entry✝ members✝ depth✝ free✝ ≠ Value.empty
+dispatch :
+  (match Value.union entry✝ members✝ depth✝ free✝ with
+    | Value.node entry edges depth free => !scs.any fun sc => EqualityTrie.isTerminal sc.trie
+    | x => false) =
+    false
+⊢ (match
+      ChildDispatch.run checkEmpty workFuel workFuel workFuel workFuel workFuel scs
+        (Value.union entry✝ members✝ depth✝ free✝) caller before queries with
+    | ((Except.ok (some [Except.ok (fragment, _returned)]), reached, saved, _outer, _waiting), some after) =>
+      match SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap workFuel uv fragment after with
+      | some finished => some (SelectedEdge.Result.complete fragment reached saved finished)
+      | none => some (SelectedEdge.Result.finalizeStopped fragment reached saved after)
+    | (observation, candidate) => some (SelectedEdge.Result.stopped [] observation candidate)) =
+    match
+      ChildDispatch.run checkEmpty workFuel workFuel workFuel workFuel workFuel scs
+        (Value.union entry✝ members✝ depth✝ free✝) caller before queries with
+    | ((Except.ok (some [Except.ok (fragment, _returned)]), reached, saved, _outer, _waiting), some after) =>
+      match SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap workFuel uv fragment after with
+      | some finished => some (SelectedEdge.Result.complete fragment reached saved finished)
+      | none => some (SelectedEdge.Result.finalizeStopped fragment reached saved after)
+    | (observation, candidate) => some (SelectedEdge.Result.stopped [] observation candidate)
+
+case mu
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+checkEmpty : Bool
+workFuel uv : Nat
+scs : List Suspended
+caller : Caller (bits + 2)
+before : Cached
+queries : Queries
+entry✝ : Cache.Interned InternedBinderProtocol.NodeKey
+body✝ depthShape✝ ordinaryShape✝ : Node
+empty : Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝ ≠ Value.empty
+dispatch :
+  (match Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝ with
+    | Value.node entry edges depth free => !scs.any fun sc => EqualityTrie.isTerminal sc.trie
+    | x => false) =
+    false
+⊢ (match
+      ChildDispatch.run checkEmpty workFuel workFuel workFuel workFuel workFuel scs
+        (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) caller before queries with
+    | ((Except.ok (some [Except.ok (fragment, _returned)]), reached, saved, _outer, _waiting), some after) =>
+      match SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap workFuel uv fragment after with
+      | some finished => some (SelectedEdge.Result.complete fragment reached saved finished)
+      | none => some (SelectedEdge.Result.finalizeStopped fragment reached saved after)
+    | (observation, candidate) => some (SelectedEdge.Result.stopped [] observation candidate)) =
+    match
+      ChildDispatch.run checkEmpty workFuel workFuel workFuel workFuel workFuel scs
+        (Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝) caller before queries with
+    | ((Except.ok (some [Except.ok (fragment, _returned)]), reached, saved, _outer, _waiting), some after) =>
+      match SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap workFuel uv fragment after with
+      | some finished => some (SelectedEdge.Result.complete fragment reached saved finished)
+      | none => some (SelectedEdge.Result.finalizeStopped fragment reached saved after)
+    | (observation, candidate) => some (SelectedEdge.Result.stopped [] observation candidate)
+'_private.«restart-evidence».«20261115-native-opaque-gate-cases-isolation-check».Gate.0.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.opaque_receipt_shape_gate' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

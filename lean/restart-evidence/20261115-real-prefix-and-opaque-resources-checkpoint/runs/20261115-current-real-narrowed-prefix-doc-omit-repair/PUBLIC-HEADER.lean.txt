@@ -1,0 +1,26 @@
+/-- An actual successful real prefix retains its original caller and native resource bounds. -/
+theorem prefix_real_narrowed_resources_at_original_budget
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (metadata updated : Metadata Typing)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller reached : Caller width) (memos : Memos) (before after : Cached)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (profile : Profile) (property : Constraint → Prop)
+    (bounded : SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile caller.checked)
+    (known : SourceEqualityAnnotationHeap.Heap property caller.checked.native.machine.heap)
+    (workFuel selected : Nat)
+    (chosen : SourcePruningEnumerationRestart.decision stop order metadata before = some (.expand selected))
+    (checked actionCore callbackCore : Core) (value : Node)
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (action : EnumerateM Symbol Constraint Unit) (received : Queries)
+    (actual : SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata
+      workFuel workFuel workFuel workFuel workFuel workFuel selected caller before memos.query =
+      .narrowed checked (.done (value, some action) heap) reached received
+        (some [.ok ((), actionCore)]) (some after) (some [.ok ((false, updated), callbackCore)]) none) :
+    CurrentPrefixResources stop order metadata formulas solver inventory selected caller before memos profile property
+      (.narrowed checked (.done (value, some action) heap) reached received
+        (some [.ok ((), actionCore)]) (some after) (some [.ok ((false, updated), callbackCore)]) none)

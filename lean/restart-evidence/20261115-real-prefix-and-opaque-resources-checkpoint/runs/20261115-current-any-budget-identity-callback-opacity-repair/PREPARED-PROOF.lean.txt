@@ -1,0 +1,180 @@
+  dsimp only
+  let child := SourcePruningEnumerationSharedEagerChildren.eagerChild
+    (width := bits + 2) (Output := Output (bits + 2) Unit) (Reason := Failure (bits + 2) Unit)
+    checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf
+  let hook := SourcePruningEnumerationSharedPreparedRecursive.continueWith
+    (resumeWithNarrow (Typing := Unit) (width := bits + 2) child
+      (fun _ _ _ node state => .done node state) graph [] checkEmpty edgesOf
+      none (fun _ _ => none) workFuel recursiveDepth)
+    graph [] none (fun _ _ => none) workFuel metadata uv
+  let prepared := SourcePruningEnumerationSharedPreparedChildPolicy.runWithChild child hook
+    checkEmpty workFuel workFuel workFuel workFuel workFuel workFuel workFuel uv edgesOf caller before memos.query
+  let start := SourcePruningEnumerationSharedPreparedReservation.preparedSeed seed
+  let limit := SourceCurrentConstrainedCapTargetForecast.scalar start.2
+  let own := SourcePruningEnumerationGuardWidth.width start.1
+  let continuation := fun retained current => eagerFinal recursiveDepth current retained
+  let admitted := fun retained current => eagerReserved bits recursiveDepth current retained
+  have continuationGrowth : ∀ retained current,
+      Le current.2 (continuation retained current).2 ∧ current.1 ⊆ (continuation retained current).1 :=
+    fun retained current => eagerFinal_ge recursiveDepth current retained
+  have planned : nodeReserved bits limit own limit ceiling ceiling continuation admitted start := by
+    have atPrepared := reserved
+    rw [eagerReserved] at atPrepared
+    exact atPrepared
+  change IdentityEmittedCompleteResources formulas solver caller (eagerFinal (recursiveDepth + 1) seed ceiling)
+    (match prepared.2 with
+    | none => .stopped [] (.preparation uv prepared.1)
+        (some (SourcePruningEnumerationSharedPreparedContinuations.preparation_endpoint caller memos.query prepared.1))
+    | some folded => finish uv folded)
+  cases observed : SourcePruningEnumerationSelectedPreparation.run workFuel workFuel uv caller before with
+  | mk raw native =>
+    cases native with
+    | none =>
+      simp only [prepared, SourcePruningEnumerationSharedPreparedChildPolicy.runWithChild, observed]
+      constructor
+      · intro output member
+        cases member
+      · trivial
+    | some native =>
+      cases native with
+      | failed fault heap =>
+        simp only [prepared, SourcePruningEnumerationSharedPreparedChildPolicy.runWithChild, observed]
+        constructor
+        · intro output member
+          cases member
+        · trivial
+      | done value heap =>
+        cases raw with
+        | nil =>
+          simp only [prepared, SourcePruningEnumerationSharedPreparedChildPolicy.runWithChild, observed]
+          constructor
+          · intro output member
+            cases member
+          · trivial
+        | cons first more =>
+          cases first with
+          | error fault =>
+            simp only [prepared, SourcePruningEnumerationSharedPreparedChildPolicy.runWithChild, observed]
+            constructor
+            · intro output member
+              cases member
+            · trivial
+          | ok pair =>
+            rcases pair with ⟨⟨target, preparedHandle, preparedScs, decoded⟩, entered⟩
+            cases more with
+            | cons second further =>
+              simp only [prepared, SourcePruningEnumerationSharedPreparedChildPolicy.runWithChild, observed]
+              constructor
+              · intro output member
+                cases member
+              · trivial
+            | nil =>
+              obtain ⟨targetSame, handleSame, bucketSame, retained, preparedFits, _valueMass,
+                  preparedKnown, _frame, enteredIncoming, sameMass⟩ :=
+                SourcePruningEnumerationSelectedPreparation.successful_resources_current
+                  formulas solver inventory caller memos metadata before uv handle scs packet ready stored
+                  (SourcePruningEnumerationSharedRecursiveReservation.narrowSeed seed).2 fits incoming
+                  (fun guard => guard ∈ seed.1) known workFuel target preparedHandle preparedScs decoded value heap entered observed
+              subst target preparedHandle preparedScs
+              obtain ⟨_running, _decodedLookup, preparationPost, preparedPacket, _stable,
+                  preparedReady, preparedStored, _counter, _values, _flags, _waiting,
+                  available, closed, _meaning, _satisfaction⟩ := retained
+              let preparedCaller : Caller (bits + 2) := SourcePruningEnumerationSelectedValueCaller.advance caller heap
+              let cached : Cached := EnumerationExpandableIndex.frame entered before
+              have currentMass : SourcePruningEnumerationPrefixAdmission.suspendedBound cached.core ≤ ceiling := by
+                rw [sameMass]
+                exact mass
+              by_cases ordinary : ∃ entry rows depth free,
+                  value = .node entry rows depth free ∧ scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = false
+              · obtain ⟨entry, rows, depth, free, rfl, nonterminal⟩ := ordinary
+                have preparedFitsAt : Fits start.2 preparedCaller.checked := preparedFits
+                have preparedKnownAt : Heap (fun guard => guard ∈ start.1)
+                    preparedCaller.checked.native.machine.heap := preparedKnown
+                have availableAt : Available preparedCaller.checked.native.machine.heap
+                    (.node entry rows depth free) := available
+                have closedAt : free = [] := closed
+                have reservedAt : eagerReserved bits (recursiveDepth + 1) seed ceiling := reserved
+                have scan := identity_actual_prepared_scan_prefixes_at_any_budget graph checkEmpty edgesOf
+                  formulas solver recursiveDepth workFuel workerIH inventory preparedCaller memos metadata cached
+                  seed ceiling uv handle scs entry rows depth free preparedPacket preparedReady preparedStored
+                  enteredIncoming preparedFitsAt preparedKnownAt currentMass bucketBound availableAt closedAt nonterminal
+                  selectionMembers selectionLength reservedAt
+                dsimp only at scan
+                obtain ⟨heights, shapes, prefixes⟩ := scan
+                let height := limit - 1
+                let first := fallbackPlan ceiling ceiling continuation start
+                let row := fun current => tuplePlan (nodePlan limit own height)
+                  limit (ceiling + own) ceiling continuation current
+                let visit := SourcePruningEnumerationSharedChildVisitors.visitCapturedWith child hook workFuel uv scs
+                have runtime : prepared.2 = some (SourcePruningEnumerationSharedBranching.scan visit cached
+                    (edgesOf (.node entry rows depth free)) preparedCaller memos.query) := by
+                  simp only [prepared, SourcePruningEnumerationSharedPreparedChildPolicy.runWithChild,
+                    observed, nonterminal, Bool.false_eq_true, ↓reduceIte] <;> rfl
+                have atAll := (prefixes (edgesOf (.node entry rows depth free)) [] (by simp only [List.append_nil])).2.1
+                have positive : 0 < limit := by
+                  have ranked := heights (.node entry rows depth free) available
+                  change MergedOrdinaryHeight.edgesHeight rows + 1 ≤ limit at ranked
+                  omega
+                have heightSame : height + 1 = limit := by dsimp only [height]; omega
+                have rowGrowth : ∀ current, Le current.2 (row current).2 ∧ current.1 ⊆ (row current).1 := by
+                  intro current
+                  exact tuplePlan_ge (nodePlan limit own height) (nodePlan_ge limit own height)
+                    limit (ceiling + own) ceiling continuation continuationGrowth current
+                have sourceCount : (edgesOf (.node entry rows depth free)).length ≤ limit :=
+                  Nat.le_trans (selectionLength entry rows depth free) (shapes entry rows depth free available).1
+                have included := SourcePruningEnumerationFiniteReservation.iterate_index_le row rowGrowth first
+                  (edgesOf (.node entry rows depth free)).length limit sourceCount
+                have finalSame : eagerFinal (recursiveDepth + 1) seed ceiling = iterate row first limit := by
+                  rw [eagerFinal]
+                  change nodePlan limit own limit ceiling ceiling continuation start = _
+                  calc
+                    nodePlan limit own limit ceiling ceiling continuation start =
+                        nodePlan limit own (height + 1) ceiling ceiling continuation start :=
+                      congrArg (fun height => nodePlan limit own height ceiling ceiling continuation start) heightSame.symm
+                    _ = iterate row first limit := by
+                      unfold nodePlan
+                      rfl
+                have enlarged : IdentityEmittedCompleteResources formulas solver preparedCaller
+                    (eagerFinal (recursiveDepth + 1) seed ceiling)
+                    (finish uv (SourcePruningEnumerationSharedBranching.scan visit cached
+                      (edgesOf (.node entry rows depth free)) preparedCaller memos.query)) := by
+                  rw [finalSame]
+                  exact identity_emitted_complete_mono included.1 included.2 atAll
+                have composed := identity_emitted_complete_post preparationPost enlarged
+                rw [runtime]
+                exact composed
+              · have dispatch : (match (generalizing := false) value with
+                    | .node .. => !(scs.any (fun sc => EqualityTrie.isTerminal sc.trie)) | _ => false) = false := by
+                  cases value with
+                  | node entry rows depth free =>
+                    cases nonterminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) with
+                    | false => exact (ordinary ⟨entry, rows, depth, free, rfl, nonterminal⟩).elim
+                    | true => rfl
+                  | empty | reference _ | mu _ _ _ _ | union _ _ _ _ => rfl
+                have runtime : prepared.2 = some (SourcePruningEnumerationSharedReceiptContinuation.run hook
+                    preparedCaller memos.query (SourcePruningEnumerationSharedSelectedOpaqueDispatch.run checkEmpty
+                      workFuel workFuel workFuel workFuel workFuel uv scs value preparedCaller cached memos.query)) := by
+                  dsimp only [prepared, SourcePruningEnumerationSharedPreparedChildPolicy.runWithChild]
+                  rw [observed]
+                  cases terminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) with
+                  | true => rfl
+                  | false =>
+                    cases value with
+                    | node entry rows depth free => exact (ordinary ⟨entry, rows, depth, free, rfl, terminal⟩).elim
+                    | empty | reference _ | mu _ _ _ _ | union _ _ _ _ => rfl
+                have opaqueResources := identity_actual_opaque_terminal_resources_at_any_budget graph checkEmpty edgesOf
+                  formulas solver recursiveDepth workerIH inventory preparedCaller memos metadata cached start
+                  ceiling ceiling uv handle scs value preparedPacket preparedReady preparedStored enteredIncoming
+                  available closed dispatch preparedFits preparedKnown currentMass bucketBound selectionMembers selectionLength
+                  (nodeReserved_fallback bits limit own limit ceiling ceiling continuation admitted start planned) workFuel
+                have included := fallbackPlan_le_nodePlan limit own limit ceiling ceiling continuation continuationGrowth start
+                have enlarged : IdentityEmittedCompleteResources formulas solver preparedCaller
+                    (eagerFinal (recursiveDepth + 1) seed ceiling)
+                    (finish uv (SourcePruningEnumerationSharedReceiptContinuation.run hook preparedCaller memos.query
+                      (SourcePruningEnumerationSharedSelectedOpaqueDispatch.run checkEmpty
+                        workFuel workFuel workFuel workFuel workFuel uv scs value preparedCaller cached memos.query))) := by
+                  rw [eagerFinal]
+                  exact identity_emitted_complete_mono included.1 included.2 opaqueResources
+                have composed := identity_emitted_complete_post preparationPost enlarged
+                rw [runtime]
+                exact composed

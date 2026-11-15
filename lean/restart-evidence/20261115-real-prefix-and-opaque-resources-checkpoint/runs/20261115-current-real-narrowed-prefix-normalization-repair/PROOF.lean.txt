@@ -1,0 +1,23 @@
+ := by
+  classical
+  obtain ⟨bound, sufficient⟩ := prefix_complete_resources holeKey fits admits graph templates checkEmpty edgesOf
+    stop order metadata formulas solver inventory caller memos before packet profile property bounded known
+  obtain ⟨nextAction, replay⟩ := real_success_moreFuel holeKey fits admits graph templates stop order
+    metadata updated workFuel bound selected caller reached before after memos.query received
+    checked actionCore callbackCore value heap action actual
+  have large := sufficient workFuel selected chosen
+  have largeAt : CurrentPrefixResources stop order metadata formulas solver inventory selected caller before memos
+      profile property (SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order
+        metadata (workFuel + bound) (workFuel + bound) (workFuel + bound) (workFuel + bound)
+          (workFuel + bound) (workFuel + bound) selected caller before memos.query) := by
+    simpa only [Nat.add_comm bound workFuel] using large
+  rw [replay] at largeAt
+  obtain ⟨facts, resources⟩ := largeAt
+  obtain ⟨ordinaryNone, query, witnessValue, witnessHeap, witnessAction, final,
+      prepared, advanced, post, saved, shape⟩ := facts
+  have parts := MergedSourceComparison.Result.done.inj prepared
+  have valueSame : value = witnessValue := congrArg Prod.fst parts.1
+  have heapSame : heap = witnessHeap := parts.2
+  subst witnessValue
+  subst witnessHeap
+  exact ⟨⟨ordinaryNone, query, value, heap, action, final, rfl, advanced, post, saved, shape⟩, resources⟩
