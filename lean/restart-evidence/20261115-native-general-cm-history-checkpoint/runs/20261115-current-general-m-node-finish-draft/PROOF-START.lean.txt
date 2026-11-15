@@ -1,0 +1,159 @@
+  have qualified : MixedQualified (width := width) rootRequest machine operations wholeCount
+      entry body depth ordinary request :=
+    ⟨pattern, patternId, openAlias, operand, authentic, aliasKind,
+      operandProfile, operandHeight, strictAlias, ordered⟩
+  have initialPhysical : Physical (initial width machine) :=
+    SourceCurrentAllocatedNativePhysicalCache.initial_valid machine machineValid
+  obtain ⟨queryUsed, bodyCount, queryBefore, beforeBody, queryResume, total,
+      _querySmaller, _queryBound, queryPrefix, actualDispatch, _isolatedDispatch,
+      queryPhysical, queryReady, _querySafe, _bodyOwner, rawBody, _queryRest⟩ :=
+    SourceCurrentAllocatedNativeNodeQueryDispatchOrigin.actual_node_query_dispatch_from_initial_query_finish
+      rootRequest machine machineValid operations fuel finishUsed handle request value parentNext
+      beforeFinish (by omega) actual owner
+  have queryOrigin : Steps queryUsed (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width)
+      ((Control.code (.node request .pure)).bind queryResume) queryBefore := by
+    simpa only [Control.bind, Code.bind] using queryPrefix.steps
+  obtain ⟨_checkedQuery, _queryPhysicalAgain, _queryExtension, queryGrowth, _queryOperations,
+      _queryOperationsGrowth, _queryBoundInputs, _queryInputs, _queryBoundFields, _queryFields⟩ :=
+    SourceCurrentAllocatedNativePrefixOperations.prefix_operations_before_bind
+      fuel queryUsed (.code (.node rootRequest .pure)) (.code (.node request .pure)) queryResume
+      (⟨initial width machine, operations⟩ : Checked width) queryBefore sourceHeap
+      initialPhysical inputs fields operationsValid sourceGrowth queryOrigin (by omega)
+  obtain ⟨bodyEntry, _marker, _arrow, _sourceRows, bodyEq, bodyAvailable, _bodySourceFacts⟩ :=
+    SourceSynthesisCurrentUniverseBodyChildClassification.current_stored_universe_body_physical_children_after_growth
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      queryBefore.native.machine.heap queryPhysical.machine.1 queryGrowth
+  have bodyCodec : ∃ input, IntersectionFlatMemoKey.input body.referenceOf = some input := by
+    rw [bodyEq]
+    exact ⟨.node bodyEntry.identity, rfl⟩
+  have aliasFree : openAlias.free = [.interned entry.identity] := by
+    rcases aliasKind with same | same
+    · rw [same, bodyEq]
+      rfl
+    · rw [same]
+      rfl
+  have operandAvailable : Available queryBefore.native.machine.heap operand := by
+    rcases ordered with ⟨_left, right⟩ | ⟨left, _right⟩
+    · simpa only [right] using queryReady.2.2
+    · simpa only [left] using queryReady.2.1
+  have bodyStart : Trace (queryUsed + 1) (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width)
+      (.code ((compileNode request).bind
+        (fun result => .finishNode handle result (queryResume result)))) beforeBody :=
+    queryPrefix.trans actualDispatch
+  by_cases rejected : SourceRecursiveIntersectionControl.hasEmpty request.left request.right = true
+  · have selected := SourceRecursiveIntersectionControl.empty_first request.domain.key request.left request.right rejected
+    have compiled : compileNode request = .pure .empty := by simp only [compileNode, selected]
+    rw [compiled] at rawBody
+    have pure := pure_trace bodyCount (.empty : Node) value beforeBody beforeFinish rawBody
+    rw [← pure.2.1]
+    exact profile_empty _
+  have noEmpty : SourceRecursiveIntersectionControl.hasEmpty request.left request.right = false := by
+    cases observed : SourceRecursiveIntersectionControl.hasEmpty request.left request.right with
+    | false => rfl
+    | true => exact (rejected observed).elim
+  have noReset : SourceRecursiveIntersectionControl.reset request.domain.key request.left request.right = false := by
+    rcases ordered with ⟨left, right⟩ | ⟨left, right⟩
+    · rw [left, right]
+      change (openAlias.free.isEmpty && operand.free.isEmpty && !request.domain.key.free.isEmpty) = false
+      rw [aliasFree]
+      rfl
+    · rw [left, right]
+      change (operand.free.isEmpty && openAlias.free.isEmpty && !request.domain.key.free.isEmpty) = false
+      rw [aliasFree]
+      cases operand.free.isEmpty <;> rfl
+  by_cases self : SourceRecursiveIntersectionControl.closedSelf request.left request.right = true
+  · have selected := SourceRecursiveIntersectionControl.self_first request.domain.key request.left request.right
+      noEmpty noReset self
+    have compiled : compileNode request = .pure request.left := by simp only [compileNode, selected]
+    have same := SourceRecursiveIntersectionControl.self_record queryBefore.native.machine.heap
+      queryPhysical.machine.1 request.left request.right queryReady.2.1 queryReady.2.2 self
+    have leftProfile : Profile entry.identity request.left := by
+      rcases ordered with ⟨_left, right⟩ | ⟨left, _right⟩
+      · rw [same, right]
+        exact operandProfile
+      · rw [left]
+        exact operandProfile
+    rw [compiled] at rawBody
+    have pure := pure_trace bodyCount request.left value beforeBody beforeFinish rawBody
+    rw [← pure.2.1]
+    exact leftProfile
+  have noSelf : SourceRecursiveIntersectionControl.closedSelf request.left request.right = false := by
+    cases observed : SourceRecursiveIntersectionControl.closedSelf request.left request.right with
+    | false => rfl
+    | true => exact (self observed).elim
+  by_cases swap : SourceRecursiveIntersectionControl.greater request.left request.right = true
+  · have selected := SourceRecursiveIntersectionControl.swap_first request.domain.key request.left request.right
+      noEmpty noReset noSelf swap
+    let child : NodeRequest Symbol Guard := ⟨request.domain, request.right, request.left⟩
+    have childQualified : MixedQualified (width := width) rootRequest machine operations wholeCount
+        entry body depth ordinary child := by
+      refine ⟨pattern, patternId, openAlias, operand, authentic, aliasKind,
+        operandProfile, operandHeight, strictAlias, ?_⟩
+      rcases ordered with ⟨left, right⟩ | ⟨left, right⟩
+      · exact Or.inr ⟨right, left⟩
+      · exact Or.inl ⟨right, left⟩
+    have compiled : compileNode request = requestNode child.domain child.left child.right := by
+      change compileNode request = requestNode request.domain request.right request.left
+      simp only [compileNode, selected]
+    have origin : Steps (queryUsed + 1) (.code (.node rootRequest .pure))
+        (⟨initial width machine, operations⟩ : Checked width)
+        (.code ((requestNode child.domain child.left child.right).bind
+          (fun result => .finishNode handle result (queryResume result)))) beforeBody := by
+      simpa only [compiled] using bodyStart.steps
+    have childActual : Steps bodyCount (.code (requestNode child.domain child.left child.right)) beforeBody
+        (.code (.pure value)) beforeFinish := by
+      simpa only [compiled] using rawBody
+    obtain ⟨childKey, keyed⟩ := SourceCurrentAllocatedNativeGeneralCMHistory.qualified_key
+      rootRequest machine operations wholeCount entry body depth ordinary bodyCodec child (Or.inr childQualified)
+    have law := SourceCurrentAllocatedNativeSamePrefixKeyedChildResult.keyed_child_law_at_node_finish
+      (NodeResult (width := width) rootRequest machine operations wholeCount entry body depth ordinary)
+      (EdgeResult (width := width) rootRequest machine operations wholeCount entry body depth ordinary)
+      rootRequest machine machineValid operations fuel finishUsed (queryUsed + 1) bodyCount handle value parentNext
+      beforeFinish (by omega) actual past child childKey keyed
+      (fun result => .finishNode handle result (queryResume result)) beforeBody beforeFinish value
+      (by omega) origin childActual
+    exact law.1.2 childQualified
+  have noSwap : SourceRecursiveIntersectionControl.greater request.left request.right = false := by
+    cases observed : SourceRecursiveIntersectionControl.greater request.left request.right with
+    | false => rfl
+    | true => exact (swap observed).elim
+  have originalEntry := authentic
+  obtain ⟨_patternClosed, _patternIdentity, _patternKind, _universeFirst, entryUsed,
+      entryBefore, entryNext, entryData⟩ := authentic
+  dsimp only at entryData
+  obtain ⟨entryBound, entryPrefix, _orderedAllocation, _entryOne, domainEq⟩ := entryData
+  let entered := SourceRecursiveIntersectionEnvironment.enter entryBefore.native.machine.domains
+    IntersectionEmptyDomain.emptyKey (.mu entry body depth ordinary) pattern entry.identity patternId
+  change request.domain = entered.1 at domainEq
+  have entryTotal : entryUsed + (wholeCount - entryUsed) = wholeCount := by omega
+  have entryWhole : Trace (entryUsed + (wholeCount - entryUsed)) (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width) rest reader := by
+    simpa only [entryTotal] using wholeActual
+  have entryChecked := SourceCurrentHereditaryNativePhysicalSplit.split entryPrefix.steps entryWhole
+  have entryPhysical := SourceCurrentNativeEnterCommonOperand.checked_trace_extension entryChecked.1 initialPhysical
+  have enteredKey := SourceRecursiveIntersectionSchedule.entered_key entryBefore.native.machine.domains
+    entryPhysical.1.machine.2 IntersectionEmptyDomain.emptyKey
+    (.mu entry body depth ordinary) pattern entry.identity patternId
+  change entered.1.key = SourceRecursiveIntersectionDomain.extend IntersectionEmptyDomain.emptyKey
+    ((SourceRecursiveIntersectionEnvironment.bindings (.mu entry body depth ordinary) pattern).map Prod.fst)
+    (pair entry.identity patternId) at enteredKey
+  have seenOnly : ∀ candidate, candidate ∈ request.domain.key.seen → candidate = pair entry.identity patternId := by
+    intro candidate seen
+    rw [domainEq, enteredKey] at seen
+    rcases (SourceRecursiveIntersectionDomain.extend_seen IntersectionEmptyDomain.emptyKey
+      ((SourceRecursiveIntersectionEnvironment.bindings (.mu entry body depth ordinary) pattern).map Prod.fst)
+      (pair entry.identity patternId) candidate).mp seen with same | old
+    · exact same
+    · simp only [IntersectionEmptyDomain.emptyKey, List.not_mem_nil] at old
+  cases operand with
+  | empty =>
+      have rejected : SourceRecursiveIntersectionControl.hasEmpty request.left request.right = true := by
+        rcases ordered with ⟨left, right⟩ | ⟨left, right⟩ <;>
+          simp [SourceRecursiveIntersectionControl.hasEmpty, left, right, Value.referenceOf]
+      rw [rejected] at noEmpty
+      cases noEmpty
+  | reference name =>
+      have closed := operandProfile.1
+      cases closed

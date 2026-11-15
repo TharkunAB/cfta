@@ -1,0 +1,57 @@
+  | union own members level free =>
+      exact SourceCurrentAllocatedNativeGeneralMUnionFinish.mixed_union_profile_at_actual_node_finish
+        lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+        rootRequest machine machineValid sourceGrowth operations operationsValid fuel wholeCount finishUsed handle
+        request value rest reader beforeFinish parentNext wholeBound wholeActual finishBound actual owner
+        inputs fields ⟨own, members, level, free, by
+          rcases ordered with ⟨_left, right⟩ | ⟨left, _right⟩
+          · exact Or.inr right
+          · exact Or.inl left⟩ qualified past
+  | node own rows level free =>
+      have freeEq : free = [] := operandProfile.1
+      subst free
+      rcases aliasKind with bodyAlias | referenceAlias
+      · subst openAlias
+        have ownerAvailable : Available queryBefore.native.machine.heap (.mu entry body depth ordinary) :=
+          queryPhysical.machine.1.cached.nodes key _ (queryGrowth.nodeRecords key _ stored)
+        have actualBody : Available queryBefore.native.machine.heap
+            (.node bodyEntry (canonicalEdges (_arrow :: _sourceRows)) 0 [.interned entry.identity]) :=
+          bodyEq ▸ bodyAvailable
+        have bodyApart := physical_identity_apart_owner queryBefore.native.machine.heap queryPhysical.machine.1
+          entry body depth ordinary ownerAvailable
+          (.node bodyEntry (canonicalEdges (_arrow :: _sourceRows)) 0 [.interned entry.identity]) actualBody
+          bodyEntry.identity rfl (by intro impossible; cases impossible)
+        have operandApart := physical_identity_apart_owner queryBefore.native.machine.heap queryPhysical.machine.1
+          entry body depth ordinary ownerAvailable (.node own rows level []) operandAvailable own.identity rfl
+          (by intro impossible; cases impossible)
+        have directFresh : pair bodyEntry.identity own.identity ∉ request.domain.key.seen := by
+          intro seen
+          exact pair_apart_owner bodyEntry.identity own.identity entry.identity patternId bodyApart operandApart
+            (seenOnly _ seen)
+        have reverseFresh : pair own.identity bodyEntry.identity ∉ request.domain.key.seen := by
+          intro seen
+          exact pair_apart_owner own.identity bodyEntry.identity entry.identity patternId operandApart bodyApart
+            (seenOnly _ seen)
+        have selected : decision request.domain.key request.left request.right = .ordinary := by
+          unfold decision
+          simp only [noEmpty, noReset, noSelf, noSwap, Bool.false_eq_true, ite_false]
+          rcases ordered with ⟨left, right⟩ | ⟨left, right⟩
+          · simp only [left, right, bodyEq, identity, directFresh, payload, ite_false]
+          · simp only [left, right, bodyEq, identity, reverseFresh, payload, ite_false]
+        exact SourceCurrentAllocatedNativeGeneralMOrdinaryFinish.mixed_ordinary_profile_at_actual_node_finish
+          lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+          rootRequest machine machineValid sourceGrowth operations operationsValid fuel wholeCount finishUsed handle
+          request value rest reader beforeFinish parentNext wholeBound wholeActual finishBound actual owner
+          inputs fields selected qualified past
+      · subst openAlias
+        rcases ordered with ⟨left, right⟩ | ⟨left, right⟩
+        · exact SourceCurrentAllocatedNativeGeneralMReferenceNodeFinish.mixed_reference_node_profile_at_actual_node_finish
+            lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+            rootRequest machine machineValid sourceGrowth operations operationsValid fuel wholeCount finishUsed handle
+            request value rest reader beforeFinish parentNext wholeBound wholeActual finishBound actual owner
+            inputs fields true own rows level ⟨left, right⟩ qualified past
+        · exact SourceCurrentAllocatedNativeGeneralMReferenceNodeFinish.mixed_reference_node_profile_at_actual_node_finish
+            lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+            rootRequest machine machineValid sourceGrowth operations operationsValid fuel wholeCount finishUsed handle
+            request value rest reader beforeFinish parentNext wholeBound wholeActual finishBound actual owner
+            inputs fields false own rows level ⟨left, right⟩ qualified past

@@ -1,0 +1,71 @@
+theorem current_stored_universe_ref_control_in_same_execution
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat} {Output : Type}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Node) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Node)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (pattern : Node) (patternClosed : pattern.free = []) (patternId : Nat)
+    (patternIdentity : identity pattern = some patternId)
+    (patternKind : tag pattern = 1 ∨ tag pattern = 3)
+    (initial : Control Output) (start entryBefore before reader : Checked width)
+    (startPhysical : Physical start.native)
+    (growth : Grows sourceHeap start.native.machine.heap)
+    (wholeCount entryCount producerCount : Nat) (result : Output)
+    (wholeActual : Trace wholeCount initial start (.code (.pure result)) reader)
+    (entryNext : Interned DomainKey → Code Symbol Guard Output)
+    (entryPrefix : Steps entryCount initial start
+      (.code (.enter IntersectionEmptyDomain.emptyDomain (.mu entry body depth ordinary)
+        pattern entry.identity patternId entryNext)) entryBefore)
+    (operand : Node) (operandAvailable : Available before.native.machine.heap operand)
+    (operandClosed : operand.free = []) (smaller : height operand < height pattern)
+    (referenceFirst : Bool) (next : Node → Code Symbol Guard Output)
+    (producerPrefix :
+      let entered := SourceRecursiveIntersectionEnvironment.enter entryBefore.native.machine.domains
+        IntersectionEmptyDomain.emptyKey (.mu entry body depth ordinary) pattern entry.identity patternId
+      Steps producerCount initial start (.code ((compileNode ⟨entered.1,
+        if referenceFirst then .reference (.interned entry.identity) else operand,
+        if referenceFirst then operand else .reference (.interned entry.identity)⟩).bind next)) before) :
+    let universeValue : Node := .mu entry body depth ordinary
+    let entered := SourceRecursiveIntersectionEnvironment.enter entryBefore.native.machine.domains
+      IntersectionEmptyDomain.emptyKey universeValue pattern entry.identity patternId
+    entryCount ≤ wholeCount ∧ producerCount ≤ wholeCount ∧
+    Trace entryCount initial start
+      (.code (.enter IntersectionEmptyDomain.emptyDomain universeValue
+        pattern entry.identity patternId entryNext)) entryBefore ∧
+    Trace (wholeCount - entryCount)
+      (.code (.enter IntersectionEmptyDomain.emptyDomain universeValue
+        pattern entry.identity patternId entryNext)) entryBefore (.code (.pure result)) reader ∧
+    Trace producerCount initial start
+      (.code ((compileNode ⟨entered.1,
+        if referenceFirst then .reference (.interned entry.identity) else operand,
+        if referenceFirst then operand else .reference (.interned entry.identity)⟩).bind next)) before ∧
+    Trace (wholeCount - producerCount)
+      (.code ((compileNode ⟨entered.1,
+        if referenceFirst then .reference (.interned entry.identity) else operand,
+        if referenceFirst then operand else .reference (.interned entry.identity)⟩).bind next))
+      before (.code (.pure result)) reader ∧
+    universeValue.free = [] ∧ Available before.native.machine.heap universeValue ∧
+    Extension before.native.machine reader.native.machine ∧
+    entry.identity ∈ names entered.1.key ∧
+    lookup before.native.machine.heap entered.1.key entry.identity = some universeValue ∧
+    SourcePreparedSharedRows.read before.native.machine.heap entry.identity = some universeValue ∧
+    (∀ cutoff, decision entered.1.key (.reference (.interned entry.identity)) operand ≠ .repeated cutoff) ∧
+    (∀ cutoff, decision entered.1.key operand (.reference (.interned entry.identity)) ≠ .repeated cutoff) ∧
+    (∀ (operandEntry : Interned NodeKey) (rows : List (EdgeValue Symbol Guard)) (level : Nat),
+      operand = .node operandEntry rows level [] →
+      decision entered.1.key operand (.reference (.interned entry.identity)) = .rightReference ∧
+      decision entered.1.key (.reference (.interned entry.identity)) operand = .swap ∧
+      compileNode ⟨entered.1, operand, .reference (.interned entry.identity)⟩ =
+        compileReference entered.1 entry.identity operand false ∧
+      compileNode ⟨entered.1, .reference (.interned entry.identity), operand⟩ =
+        requestNode entered.1 operand (.reference (.interned entry.identity)) ∧
+      SourceEqualityNativeDemand.step
+        (.code (compileNode ⟨entered.1, operand, .reference (.interned entry.identity)⟩)) before =
+        .yielded (.code (requestNode entered.1 operand universeValue)) before ∧
+      SourceEqualityNativeDemand.step
+        (.code (compileNode ⟨entered.1, .reference (.interned entry.identity), operand⟩)) before =
+        SourceEqualityNativeDemand.step
+          (.code (requestNode entered.1 operand (.reference (.interned entry.identity)))) before)

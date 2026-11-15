@@ -1,0 +1,74 @@
+import MicroCFTA.SourceCurrentAllocatedNativeGeneralCMHistoryDefinitions
+import MicroCFTA.SourceCurrentAllocatedNativeBodyFirstKeyQueryGlobalLaws
+import MicroCFTA.SourceCurrentAllocatedNativeSourceBodyFirstReferenceRead
+import MicroCFTA.SourceCurrentNativeEnterCommonOperand
+import MicroCFTA.SourceCurrentHereditaryNativePhysicalSplit
+import MicroCFTA.InternedEdgeResidency
+
+/-!
+# Body-first inner histories at an authentic root prefix
+
+Source facts are checked at the complete trace's common reader.
+Pure compiler facts and cold-source reads instantiate the existing history proof.
+The actual root prefix retains both returned memo laws.
+-/
+namespace MicroCFTA.SourceCurrentAllocatedNativeAuthenticBodyFirstInnerHistories
+open Cache Language InternedConstructorTemplates InternedNestedFacts InternedProbeProvenance
+open InternedBinderProtocol (NodeKey Reference)
+open InternedEdgeResidency (nodeEdges)
+open SourceRecursiveIntersectionControl SourceRecursiveIntersectionDomain
+open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionThunks SourceRecursiveIntersectionCode
+open SourceSynthesisTypeSyntax (Library Query)
+open SourceSynthesisFirstOrderConstruction (Expression)
+open SourceEqualityNativeDemand
+open SourceCurrentAllocatedNativePhysicalTraceCompletion (Trace)
+open SourceCurrentAllocatedNativePhysicalExecution (InputsThrough)
+open SourceEqualityNativeDemandOperations (FieldsThrough)
+open SourceCurrentAllocatedNativeContextCache (Returned)
+open SourceCurrentAllocatedNativeGeneralCMHistory (AuthenticEntry)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "ordinarySymbols" => SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "Physical" => SourceCurrentAllocatedNativePhysicalCache.Valid
+
+set_option autoImplicit false
+
+/-- An authentic context determines both inner laws at every actual root prefix. -/
+theorem body_first_inner_histories_at_authentic_prefix
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (bodyId : Nat) (bodyIdentity : identity body = some bodyId)
+    (rootRequest : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
+    (machineValid : SourceRecursiveIntersectionKernel.Valid machine)
+    (sourceGrowth : Grows sourceHeap machine.heap)
+    (operations : SourceEqualityConstraintMemoAllocation.State)
+    (operationsValid : SourceEqualityConstraintMemoAllocation.Valid operations)
+    (fuel wholeCount : Nat) (readerControl : Control (Value Symbol Guard)) (reader : Checked width)
+    (wholeBound : wholeCount ≤ fuel)
+    (wholeActual : Trace wholeCount (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width) readerControl reader)
+    (pattern : Value Symbol Guard) (patternId : Nat)
+    (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey)
+    (authentic : AuthenticEntry (width := width) rootRequest machine operations wholeCount
+      entry body depth ordinary pattern patternId domain)
+    (plan : InputsThrough fuel (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width))
+    (fields : FieldsThrough fuel (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width))
+    (prefixCount : Nat) (prefixControl : Control (Value Symbol Guard)) (current : Checked width)
+    (prefixBound : prefixCount ≤ wholeCount)
+    (prefixActual : Trace prefixCount (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width) prefixControl current) :
+    Returned (SourceCurrentAllocatedNativeBodyFirstKeyQueryGlobalLaws.NodeResult
+      entry.identity bodyId (extend domain.key [entry.identity] (pair bodyId entry.identity))
+      body (.mu entry body depth ordinary)) current.native.nodes ∧
+    Returned (SourceCurrentAllocatedNativeBodyFirstKeyQueryGlobalLaws.EdgeResult
+      entry.identity bodyId (extend domain.key [entry.identity] (pair bodyId entry.identity))
+      (.mu entry body depth ordinary)) current.native.edges

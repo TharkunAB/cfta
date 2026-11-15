@@ -1,0 +1,53 @@
+  | mu own ownBody ownDepth ownOrdinary =>
+      have same := SourceSynthesisCurrentUniverseClosedMuClassification.current_stored_universe_closed_mu_eq_after_growth
+        lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+        queryBefore.native.machine.heap queryPhysical.machine.1 queryGrowth own ownBody ownDepth ownOrdinary
+        operandAvailable operandProfile.1 operandProfile.2
+      have universeProfile : Profile entry.identity (.mu entry body depth ordinary) := by
+        rw [← same]
+        exact operandProfile
+      rcases aliasKind with bodyAlias | referenceAlias
+      · subst openAlias
+        rcases ordered with ⟨left, right⟩ | ⟨left, right⟩
+        · have requestEq : request = ⟨request.domain, body, .mu entry body depth ordinary⟩ := by
+            change (⟨request.domain, request.left, request.right⟩ : NodeRequest Symbol Guard) = _
+            rw [left, right, same]
+          have held : beforeFinish.native.nodes.cells handle =
+              some ⟨⟨request.domain, body, .mu entry body depth ordinary⟩, .evaluating⟩ :=
+            requestEq ▸ owner
+          have valueEq := SourceCurrentAllocatedNativeAuthenticBodyFirstOuterFinish.body_first_outer_finish_of_past_body_first_key_law
+            lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+            bodyId bodyIdentity rootRequest machine machineValid operations operationsValid sourceGrowth
+            fuel wholeCount finishUsed pattern patternId request.domain request.domain originalEntry rfl
+            handle value parentNext beforeFinish rest reader wholeBound wholeActual (by omega) actual held
+            inputs fields innerPast.1
+          rw [valueEq]
+          exact universeProfile
+        · have wrong : SourceRecursiveIntersectionControl.greater request.left request.right = true := by
+            rw [left, right, same, bodyEq]
+            rfl
+          rw [wrong] at noSwap
+          cases noSwap
+      · subst openAlias
+        rcases ordered with ⟨left, right⟩ | ⟨left, right⟩
+        · have wrong : SourceRecursiveIntersectionControl.greater request.left request.right = true := by
+            rw [left, right, same]
+            rfl
+          rw [wrong] at noSwap
+          cases noSwap
+        · have requestEq : request =
+              ⟨request.domain, .mu entry body depth ordinary, .reference (.interned entry.identity)⟩ := by
+            change (⟨request.domain, request.left, request.right⟩ : NodeRequest Symbol Guard) = _
+            rw [left, right, same]
+          have held : beforeFinish.native.nodes.cells handle =
+              some ⟨⟨request.domain, .mu entry body depth ordinary,
+                .reference (.interned entry.identity)⟩, .evaluating⟩ :=
+            requestEq ▸ owner
+          have valueEq := SourceCurrentAllocatedNativeAuthenticDiagonalOuterFinish.diagonal_outer_finish_of_past_coherent_laws
+            lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+            bodyId bodyIdentity rootRequest machine machineValid operations operationsValid sourceGrowth
+            fuel wholeCount finishUsed pattern patternId request.domain request.domain originalEntry rfl
+            handle value parentNext beforeFinish rest reader wholeBound wholeActual (by omega) actual held
+            inputs fields innerPast.2.2
+          rw [valueEq]
+          exact universeProfile

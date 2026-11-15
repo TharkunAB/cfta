@@ -1,0 +1,51 @@
+theorem current_stored_universe_body_node_of_coupled_fuel_induction
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (heap : State Symbol Guard) (facts : Facts heap) (growth : Grows sourceHeap heap)
+    (domains : Cache.State IntersectionFlatMemoKeyDomain.DomainKey) (cacheValid : Cache.Valid domains)
+    (pattern : Value Symbol Guard) (patternAvailable : Available heap pattern)
+    (patternClosed : pattern.free = []) (patternId : Nat)
+    (patternIdentity : identity pattern = some patternId) (fuel : Nat) :
+    let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+    let entered := SourceRecursiveIntersectionEnvironment.enter domains IntersectionEmptyDomain.emptyKey
+      universeValue pattern entry.identity patternId
+    let initial : Machine Symbol Guard := ⟨heap, entered.2⟩
+    ∀ later : Machine Symbol Guard, SourceRecursiveIntersectionKernel.Valid later → Extension initial later →
+    ∀ (operandEntry : Interned NodeKey) (operandRows : List (EdgeValue Symbol Guard))
+      (operandDepth : Nat) (operandFree : List Reference),
+      let operand : Value Symbol Guard := .node operandEntry operandRows operandDepth operandFree
+      Available later.heap operand → operand.free = [] →
+      (∀ atom ∈ atoms operand, atom = .mu entry.identity) → height operand ≤ height pattern →
+      (∀ smaller : Nat, smaller < fuel → ∀ current : Machine Symbol Guard,
+        SourceRecursiveIntersectionKernel.Valid current → Extension later current →
+        ∀ left right : Value Symbol Guard, Available current.heap left → Available current.heap right →
+        left.free = [] → right.free = [] →
+        (∀ atom ∈ atoms left, atom = .mu entry.identity) →
+        (∀ atom ∈ atoms right, atom = .mu entry.identity) →
+        Checked current
+          (execute top SourceEqualityPCSNativeEdge.conjoin smaller IntersectionEmptyDomain.emptyDomain left right current)
+          (fun after value => Available after.heap value ∧ value.free = [] ∧
+            ∀ atom ∈ atoms value, atom = .mu entry.identity)) →
+      (∀ smaller : Nat, smaller < fuel → ∀ current : Machine Symbol Guard,
+        SourceRecursiveIntersectionKernel.Valid current → Extension later current →
+        ∀ openAlias : Value Symbol Guard, (openAlias = body ∨ openAlias = .reference (.interned entry.identity)) →
+        ∀ closedOperand : Value Symbol Guard, Available current.heap closedOperand → closedOperand.free = [] →
+        (∀ atom ∈ atoms closedOperand, atom = .mu entry.identity) → height closedOperand ≤ height pattern →
+        (openAlias = .reference (.interned entry.identity) → height closedOperand < height pattern) →
+        ∀ bodyFirst : Bool,
+        Checked current
+          (if bodyFirst then execute top SourceEqualityPCSNativeEdge.conjoin smaller entered.1 openAlias closedOperand current
+            else execute top SourceEqualityPCSNativeEdge.conjoin smaller entered.1 closedOperand openAlias current)
+          (fun after value => Available after.heap value ∧ value.free = [] ∧
+            ∀ atom ∈ atoms value, atom = .mu entry.identity)) →
+      ∀ bodyFirst : Bool,
+      Checked later (execute top SourceEqualityPCSNativeEdge.conjoin fuel entered.1
+        (if bodyFirst then body else operand) (if bodyFirst then operand else body) later)
+        (fun after value => Available after.heap value ∧ value.free = [] ∧
+          ∀ atom ∈ atoms value, atom = .mu entry.identity)
