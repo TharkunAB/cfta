@@ -1,0 +1,175 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-coherent-open-body-result-check/source/MicroCFTA/SourceCurrentAllocatedNativeCoherentOpenBodyResult.lean:117:98: error: Application type mismatch: The argument
+  aligned
+has type
+  All₂
+    (fun source target =>
+      target.children =
+          List.map
+            (input (replacement (Reference.interned entry.identity) (repeatedValue (pair cutoffLeft cutoffRight))))
+            source.children ∧
+        target.entry.key =
+          { symbol := source.entry.key.symbol,
+            children :=
+              List.map Value.referenceOf
+                (List.map
+                  (input
+                    (replacement (Reference.interned entry.identity) (repeatedValue (pair cutoffLeft cutoffRight))))
+                  source.children),
+            constraint := top })
+    (nodeEdges body) products
+but is expected to have type
+  All₂
+    (fun source target =>
+      target.children =
+          List.map
+            (input
+              (replacement (Reference.interned entry.identity)
+                (Value.reference
+                  (Reference.intersection (pair cutoffLeft cutoffRight).fst (pair cutoffLeft cutoffRight).snd))))
+            source.children ∧
+        target.entry.key =
+          { symbol := source.entry.key.symbol,
+            children :=
+              List.map Value.referenceOf
+                (List.map
+                  (input
+                    (replacement (Reference.interned entry.identity)
+                      (Value.reference
+                        (Reference.intersection (pair cutoffLeft cutoffRight).fst (pair cutoffLeft cutoffRight).snd))))
+                  source.children),
+            constraint := top })
+    (match body, stored with
+    | Value.node entry_1 rows depth_1 free, stored => rows
+    | x, stored => [])
+    products
+in the application
+  SourceCurrentAllocatedNativeOpenProductReclosure.stored_open_product_optional_reclosure lib query signed whole
+    accepted rootValue sourceHeap built key entry body depth ordinary stored state facts growth
+    (pair cutoffLeft cutoffRight) product productEntry products read available aligned
+MicroCFTA.SourceCurrentAllocatedNativeCoherentOpenBodyResult.to_product_shape
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  (sourceName cutoffLeft cutoffRight : Nat)
+  (body value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)
+  (shape : ProductShape sourceName cutoffLeft cutoffRight body value) :
+  MicroCFTA.SourceCurrentAllocatedNativeOpenBodyQueryGlobalLaws.ProductShape sourceName cutoffLeft cutoffRight body
+    value
+'MicroCFTA.SourceCurrentAllocatedNativeCoherentOpenBodyResult.to_product_shape' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeCoherentOpenBodyResult.identity_functional_of_resident
+  (heap :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)
+  (facts : MicroCFTA.InternedNestedFacts.Facts heap)
+  (products :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard))
+  (resident :
+    ∀
+      (row :
+        MicroCFTA.InternedConstructorTemplates.EdgeValue
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard),
+      row ∈ products → MicroCFTA.InternedEdgeResidency.EdgeResident heap row) :
+  IdentityFunctional products
+'MicroCFTA.SourceCurrentAllocatedNativeCoherentOpenBodyResult.identity_functional_of_resident' depends on axioms: [propext,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeCoherentOpenBodyResult.canonical_edges_retains
+  (products :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard))
+  (functional : IdentityFunctional products)
+  (row :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)
+  (member : row ∈ products) : row ∈ MicroCFTA.InternedConstructorTemplates.canonicalEdges products
+'MicroCFTA.SourceCurrentAllocatedNativeCoherentOpenBodyResult.canonical_edges_retains' depends on axioms: [propext,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeCoherentOpenBodyResult.product_rows_resident
+  (heap :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)
+  (facts : MicroCFTA.InternedNestedFacts.Facts heap)
+  (productEntry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (products :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard))
+  (depth : Nat) (free : List MicroCFTA.InternedBinderProtocol.Reference) (functional : IdentityFunctional products)
+  (available :
+    MicroCFTA.InternedProbeProvenance.Available heap
+      (MicroCFTA.InternedConstructorTemplates.Value.node productEntry
+        (MicroCFTA.InternedConstructorTemplates.canonicalEdges products) depth free))
+  (row :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard) :
+  row ∈ products → MicroCFTA.InternedEdgeResidency.EdgeResident heap row
+'MicroCFTA.SourceCurrentAllocatedNativeCoherentOpenBodyResult.product_rows_resident' depends on axioms: [propext,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeCoherentOpenBodyResult.stored_open_product_optional_reclosure
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)]
+  {width : Nat} (lib : MicroCFTA.SourceSynthesisTypeSyntax.Library) (query : MicroCFTA.SourceSynthesisTypeSyntax.Query)
+  (signed : Int) (whole : MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression)
+  (accepted : MicroCFTA.SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole)
+  (rootValue :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)
+  (sourceHeap :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)
+  (built :
+    MicroCFTA.InternedFreshOrdinaryConstruction.build
+        (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+        MicroCFTA.InternedConstructorTemplates.empty =
+      MicroCFTA.InternedNestedConstruction.Outcome.done rootValue sourceHeap)
+  (key : MicroCFTA.InternedBinderProtocol.NodeKey)
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (body depth ordinary :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)
+  (stored :
+    sourceHeap.nodeRecords key = some (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary))
+  (state : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (facts : MicroCFTA.InternedNestedFacts.Facts state.native.machine.heap)
+  (growth : MicroCFTA.InternedConstructorTemplates.Grows sourceHeap state.native.machine.heap)
+  (cutoffLeft cutoffRight : Nat)
+  (product :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)
+  (available : MicroCFTA.InternedProbeProvenance.Available state.native.machine.heap product)
+  (shape : ProductShape entry.identity cutoffLeft cutoffRight body product) :
+  MicroCFTA.SourceRecursiveIntersectionMaybeMu.maybeMu
+        (MicroCFTA.SourceRecursiveIntersectionControl.pair cutoffLeft cutoffRight) product state.native.machine.heap =
+      MicroCFTA.InternedNestedConstruction.Outcome.done
+        (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary) state.native.machine.heap ∧
+    MicroCFTA.SourceEqualityNativeDemand.step
+          (MicroCFTA.SourceEqualityNativeDemand.Control.code
+            (MicroCFTA.SourceRecursiveIntersectionCode.Code.optionalBinder
+              (MicroCFTA.SourceRecursiveIntersectionControl.pair cutoffLeft cutoffRight) product
+              MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+          state =
+        MicroCFTA.SourceEqualityNativeDemand.Outcome.yielded
+          (MicroCFTA.SourceEqualityNativeDemand.Control.code
+            (MicroCFTA.SourceRecursiveIntersectionCode.Code.pure
+              (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary)))
+          state ∧
+      MicroCFTA.SourceEqualityNativeDemand.execute 2
+          (MicroCFTA.SourceEqualityNativeDemand.Control.code
+            (MicroCFTA.SourceRecursiveIntersectionCode.Code.optionalBinder
+              (MicroCFTA.SourceRecursiveIntersectionControl.pair cutoffLeft cutoffRight) product
+              MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+          state =
+        MicroCFTA.SourceEqualityNativeDemand.Outcome.done
+          (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary) state
+'MicroCFTA.SourceCurrentAllocatedNativeCoherentOpenBodyResult.stored_open_product_optional_reclosure' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

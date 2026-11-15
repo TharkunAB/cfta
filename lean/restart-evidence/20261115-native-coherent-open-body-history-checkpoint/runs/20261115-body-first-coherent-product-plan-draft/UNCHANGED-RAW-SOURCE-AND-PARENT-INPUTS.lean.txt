@@ -1,0 +1,21 @@
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (cutoffLeft cutoffRight : Nat) (domain : Interned DomainKey)
+    (original before after : Checked width) (parentFuel bodySteps : Nat) (result : Value Symbol Guard)
+    (finishNext : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard))
+    (compiled : compileNode ⟨domain, body, body⟩ =
+      compileRows domain (nodeEdges body) (nodeEdges body))
+    (physical : Physical original.native) (sourceGrowth : Grows sourceHeap original.native.machine.heap)
+    (operationsValid : SourceEqualityConstraintMemoAllocation.Valid original.operations)
+    (plan : InputsThrough parentFuel (.code (.node ⟨domain, body, body⟩ .pure)) original)
+    (fields : FieldsThrough parentFuel (.code (.node ⟨domain, body, body⟩ .pure)) original)
+    (entered : Steps 1 (.code (.node ⟨domain, body, body⟩ .pure)) original
+      (.code ((compileNode ⟨domain, body, body⟩).bind finishNext)) before)
+    (smaller : bodySteps < parentFuel)
+    (actual : Steps bodySteps (.code (compileNode ⟨domain, body, body⟩)) before (.code (.pure result)) after)

@@ -1,0 +1,11 @@
+def ProductShape (sourceName cutoffLeft cutoffRight : Nat) (body value : Value Symbol Guard) : Prop :=
+  ∃ (productEntry : Interned NodeKey) (products : List (EdgeValue Symbol Guard)),
+    All₂ (fun (source : EdgeValue Symbol Guard) target =>
+      target.children = source.children.map (input (replacement (.interned sourceName)
+        (repeatedValue (pair cutoffLeft cutoffRight)))) ∧
+      target.entry.key = ⟨source.entry.key.symbol,
+        (source.children.map (input (replacement (.interned sourceName)
+          (repeatedValue (pair cutoffLeft cutoffRight))))).map Value.referenceOf, top⟩)
+      (nodeEdges body) products ∧
+    value = .node productEntry (canonicalEdges products) 0
+      [.intersection (pair cutoffLeft cutoffRight).1 (pair cutoffLeft cutoffRight).2]
