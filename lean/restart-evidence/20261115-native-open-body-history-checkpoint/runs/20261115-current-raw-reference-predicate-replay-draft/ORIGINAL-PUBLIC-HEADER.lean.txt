@@ -1,0 +1,26 @@
+theorem reference_trace_result_of_actual_read
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (request child : NodeRequest Symbol Guard) (original before after : Checked width)
+    (parentFuel bodySteps : Nat) (result expected : Value Symbol Guard)
+    (finishNext : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard))
+    (read : SourceEqualityNativeDemand.step (.code (compileNode request)) before =
+      .yielded (.code (requestNode child.domain child.left child.right)) before)
+    (entered : Steps 1 (.code (.node request .pure)) original
+      (.code ((compileNode request).bind finishNext)) before)
+    (smaller : bodySteps < parentFuel)
+    (actual : Steps bodySteps (.code (compileNode request)) before (.code (.pure result)) after)
+    (children : ∀ used count, 0 < used → used + count ≤ parentFuel → count < parentFuel →
+      ∀ (next : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard))
+        (value : Value Symbol Guard) (last : Checked width),
+      Steps used (.code (.node request .pure)) original
+        (.code ((requestNode child.domain child.left child.right).bind next)) before →
+      Steps count (.code (requestNode child.domain child.left child.right)) before (.code (.pure value)) last →
+      value = expected) :
+    result = expected ∧ ∃ childCount : Nat,
+      bodySteps = 1 + childCount ∧ 2 + childCount ≤ parentFuel ∧ childCount < parentFuel ∧
+      Steps 1 (.code (compileNode request)) before
+        (.code (requestNode child.domain child.left child.right)) before ∧
+      Steps 2 (.code (.node request .pure)) original
+        (.code ((requestNode child.domain child.left child.right).bind finishNext)) before ∧
+      Steps childCount (.code (requestNode child.domain child.left child.right)) before
+        (.code (.pure expected)) after

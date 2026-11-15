@@ -1,0 +1,84 @@
+MicroCFTA.SourceCurrentAllocatedNativeSourceDiagonalKeyReferenceRead.current_stored_universe_diagonal_first_body_reference_read_at_same_key
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (lib : MicroCFTA.SourceSynthesisTypeSyntax.Library) (query : MicroCFTA.SourceSynthesisTypeSyntax.Query)
+  (signed : Int) (whole : MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression)
+  (accepted : MicroCFTA.SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole)
+  (rootValue :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (sourceHeap :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (built :
+    MicroCFTA.InternedFreshOrdinaryConstruction.build
+        (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+        MicroCFTA.InternedConstructorTemplates.empty =
+      MicroCFTA.InternedNestedConstruction.Outcome.done rootValue sourceHeap)
+  (key : MicroCFTA.InternedBinderProtocol.NodeKey)
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (body depth ordinary :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (stored :
+    sourceHeap.nodeRecords key = some (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary))
+  (heap :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (facts : MicroCFTA.InternedNestedFacts.Facts heap)
+  (growth : MicroCFTA.InternedConstructorTemplates.Grows sourceHeap heap)
+  (domains : MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+  (cacheValid : MicroCFTA.Cache.Valid domains)
+  (pattern :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (_patternAvailable : MicroCFTA.InternedProbeProvenance.Available heap pattern) (_patternClosed : pattern.free = [])
+  (patternId : Nat) (_patternIdentity : MicroCFTA.SourceRecursiveIntersectionControl.identity pattern = some patternId)
+  (_patternKind :
+    MicroCFTA.SourceRecursiveIntersectionControl.tag pattern = 1 ∨
+      MicroCFTA.SourceRecursiveIntersectionControl.tag pattern = 3) :
+  ∃ bodyEntry bodyRows,
+    body =
+        MicroCFTA.InternedConstructorTemplates.Value.node bodyEntry bodyRows 0
+          [MicroCFTA.InternedBinderProtocol.Reference.interned entry.identity] ∧
+      have universeValue := MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary;
+      have referenceValue :=
+        MicroCFTA.InternedConstructorTemplates.Value.reference
+          (MicroCFTA.InternedBinderProtocol.Reference.interned entry.identity);
+      have original :=
+        MicroCFTA.SourceRecursiveIntersectionEnvironment.enter domains MicroCFTA.IntersectionEmptyDomain.emptyKey
+          universeValue pattern entry.identity patternId;
+      have diagonalFirst :=
+        MicroCFTA.SourceRecursiveIntersectionEnvironment.enter original.snd original.fst.key universeValue
+          referenceValue entry.identity entry.identity;
+      ∀ (actualIncoming : MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey),
+        actualIncoming.key = diagonalFirst.fst.key →
+          entry.identity ∈ MicroCFTA.SourceRecursiveIntersectionDomain.names actualIncoming.key ∧
+            ¬MicroCFTA.SourceRecursiveIntersectionControl.pair bodyEntry.identity entry.identity ∈
+                  actualIncoming.key.seen ∧
+              MicroCFTA.SourceRecursiveIntersectionControl.decision actualIncoming.key body referenceValue =
+                  MicroCFTA.SourceRecursiveIntersectionControl.Branch.rightReference ∧
+                MicroCFTA.SourceRecursiveIntersectionCode.compileNode
+                      { domain := actualIncoming, left := body, right := referenceValue } =
+                    MicroCFTA.SourceRecursiveIntersectionCode.compileReference actualIncoming entry.identity body
+                      false ∧
+                  ∀ (current : MicroCFTA.SourceEqualityNativeDemand.State width),
+                    MicroCFTA.InternedNestedFacts.Facts current.native.machine.heap →
+                      MicroCFTA.InternedConstructorTemplates.Grows sourceHeap current.native.machine.heap →
+                        MicroCFTA.SourcePreparedSharedRows.read current.native.machine.heap entry.identity =
+                            some universeValue ∧
+                          MicroCFTA.SourceEqualityNativeDemand.step
+                              (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                                (MicroCFTA.SourceRecursiveIntersectionCode.compileNode
+                                  { domain := actualIncoming, left := body, right := referenceValue }))
+                              current =
+                            MicroCFTA.SourceEqualityNativeDemand.Outcome.yielded
+                              (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                                (MicroCFTA.SourceRecursiveIntersectionCode.requestNode actualIncoming body
+                                  universeValue))
+                              current
+'MicroCFTA.SourceCurrentAllocatedNativeSourceDiagonalKeyReferenceRead.current_stored_universe_diagonal_first_body_reference_read_at_same_key' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

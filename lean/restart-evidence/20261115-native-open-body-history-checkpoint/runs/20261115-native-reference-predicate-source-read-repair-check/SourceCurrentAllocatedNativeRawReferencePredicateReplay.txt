@@ -1,0 +1,123 @@
+@MicroCFTA.SourceCurrentAllocatedNativeRawReferencePredicateReplay.reference_trace_predicate_of_actual_read : ∀
+  {width : Nat} [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (request child :
+    MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (original before after : MicroCFTA.SourceEqualityNativeDemand.State width) (parentFuel bodySteps : Nat)
+  (result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (P :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      Prop)
+  (finishNext :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      MicroCFTA.SourceRecursiveIntersectionCode.Code (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))),
+  MicroCFTA.SourceEqualityNativeDemand.step
+        (MicroCFTA.SourceEqualityNativeDemand.Control.code
+          (MicroCFTA.SourceRecursiveIntersectionCode.compileNode request))
+        before =
+      MicroCFTA.SourceEqualityNativeDemand.Outcome.yielded
+        (MicroCFTA.SourceEqualityNativeDemand.Control.code
+          (MicroCFTA.SourceRecursiveIntersectionCode.requestNode child.domain child.left child.right))
+        before →
+    MicroCFTA.SourceEqualityNativeDemand.Steps 1
+        (MicroCFTA.SourceEqualityNativeDemand.Control.code
+          (MicroCFTA.SourceRecursiveIntersectionCode.Code.node request
+            MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+        original
+        (MicroCFTA.SourceEqualityNativeDemand.Control.code
+          ((MicroCFTA.SourceRecursiveIntersectionCode.compileNode request).bind finishNext))
+        before →
+      bodySteps < parentFuel →
+        MicroCFTA.SourceEqualityNativeDemand.Steps bodySteps
+            (MicroCFTA.SourceEqualityNativeDemand.Control.code
+              (MicroCFTA.SourceRecursiveIntersectionCode.compileNode request))
+            before
+            (MicroCFTA.SourceEqualityNativeDemand.Control.code
+              (MicroCFTA.SourceRecursiveIntersectionCode.Code.pure result))
+            after →
+          (∀ (used count : Nat),
+              0 < used →
+                used + count ≤ parentFuel →
+                  count < parentFuel →
+                    ∀
+                      (next :
+                        MicroCFTA.InternedConstructorTemplates.Value
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+                          MicroCFTA.SourceRecursiveIntersectionCode.Code
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.InternedConstructorTemplates.Value
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                      (value :
+                        MicroCFTA.InternedConstructorTemplates.Value
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                      (last : MicroCFTA.SourceEqualityNativeDemand.State width),
+                      MicroCFTA.SourceEqualityNativeDemand.Steps used
+                          (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                            (MicroCFTA.SourceRecursiveIntersectionCode.Code.node request
+                              MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+                          original
+                          (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                            ((MicroCFTA.SourceRecursiveIntersectionCode.requestNode child.domain child.left
+                                  child.right).bind
+                              next))
+                          before →
+                        MicroCFTA.SourceEqualityNativeDemand.Steps count
+                            (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                              (MicroCFTA.SourceRecursiveIntersectionCode.requestNode child.domain child.left
+                                child.right))
+                            before
+                            (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                              (MicroCFTA.SourceRecursiveIntersectionCode.Code.pure value))
+                            last →
+                          P value) →
+            P result ∧
+              ∃ childCount,
+                bodySteps = 1 + childCount ∧
+                  2 + childCount ≤ parentFuel ∧
+                    childCount < parentFuel ∧
+                      MicroCFTA.SourceEqualityNativeDemand.Steps 1
+                          (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                            (MicroCFTA.SourceRecursiveIntersectionCode.compileNode request))
+                          before
+                          (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                            (MicroCFTA.SourceRecursiveIntersectionCode.requestNode child.domain child.left child.right))
+                          before ∧
+                        MicroCFTA.SourceEqualityNativeDemand.Steps 2
+                            (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                              (MicroCFTA.SourceRecursiveIntersectionCode.Code.node request
+                                MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+                            original
+                            (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                              ((MicroCFTA.SourceRecursiveIntersectionCode.requestNode child.domain child.left
+                                    child.right).bind
+                                finishNext))
+                            before ∧
+                          MicroCFTA.SourceEqualityNativeDemand.Steps childCount
+                            (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                              (MicroCFTA.SourceRecursiveIntersectionCode.requestNode child.domain child.left
+                                child.right))
+                            before
+                            (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                              (MicroCFTA.SourceRecursiveIntersectionCode.Code.pure result))
+                            after
+'MicroCFTA.SourceCurrentAllocatedNativeRawReferencePredicateReplay.reference_trace_predicate_of_actual_read' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-reference-predicate-source-read-repair-check/source/MicroCFTA/SourceCurrentAllocatedNativeRawReferencePredicateReplay.lean:72:8: error(lean.unknownIdentifier): Unknown identifier `MicroCFTA.SourceCurrentAllocatedNativeRawReferenceReplay.reference_trace_result_of_actual_read`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-reference-predicate-source-read-repair-check/source/MicroCFTA/SourceCurrentAllocatedNativeRawReferencePredicateReplay.lean:73:14: error(lean.unknownIdentifier): Unknown constant `MicroCFTA.SourceCurrentAllocatedNativeRawReferenceReplay.reference_trace_result_of_actual_read`

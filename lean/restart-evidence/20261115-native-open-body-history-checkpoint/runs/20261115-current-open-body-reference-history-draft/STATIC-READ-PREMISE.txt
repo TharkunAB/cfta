@@ -1,0 +1,6 @@
+    (read : ∀ actualDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey,
+      actualDomain.key = firstKey → ∀ current : Checked width, Physical current.native →
+      Grows sourceHeap current.native.machine.heap →
+      SourceEqualityNativeDemand.step
+        (.code (compileNode ⟨actualDomain, body, .reference (.interned entry.identity)⟩)) current =
+        .yielded (.code (requestNode actualDomain body (.mu entry body depth ordinary))) current)

@@ -1,0 +1,11 @@
+    (firstKey : IntersectionFlatMemoKeyDomain.DomainKey) (bodyId : Nat)
+    (rightMu : ∀ actualDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey,
+      actualDomain.key = firstKey →
+      SourceRecursiveIntersectionControl.decision actualDomain.key body (.mu entry body depth ordinary) = .rightMu)
+    (bodyIdentity : SourceRecursiveIntersectionControl.identity body = some bodyId)
+    (childKey : ∀ actualDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey,
+      actualDomain.key = firstKey →
+      ∀ current : Cache.State IntersectionFlatMemoKeyDomain.DomainKey, Cache.Valid current →
+      (SourceRecursiveIntersectionEnvironment.enter current actualDomain.key body
+        (.mu entry body depth ordinary) bodyId entry.identity).1.key = selectedKey)
+    (cutoffApart : pair bodyId entry.identity ≠ pair cutoffLeft cutoffRight)

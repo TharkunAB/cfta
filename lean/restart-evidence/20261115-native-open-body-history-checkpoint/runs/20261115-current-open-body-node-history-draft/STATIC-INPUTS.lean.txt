@@ -1,0 +1,12 @@
+    (selectedKey : IntersectionFlatMemoKeyDomain.DomainKey) (cutoffLeft cutoffRight : Nat)
+    (compiled : ∀ actualDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey,
+      actualDomain.key = selectedKey →
+      compileNode ⟨actualDomain, body, body⟩ =
+        compileRows actualDomain (nodeEdges body) (nodeEdges body))
+    (inputs : ∀ actualDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey,
+      actualDomain.key = selectedKey → ∀ row ∈ nodeEdges body,
+      All₂ (fun (children : Value Symbol Guard × Value Symbol Guard) (value : Value Symbol Guard) =>
+        KnownResult ⟨actualDomain, children.1, children.2⟩ value)
+        (row.children.zip row.children)
+        (row.children.map (input (replacement (.interned entry.identity)
+          (repeatedValue (pair cutoffLeft cutoffRight))))))

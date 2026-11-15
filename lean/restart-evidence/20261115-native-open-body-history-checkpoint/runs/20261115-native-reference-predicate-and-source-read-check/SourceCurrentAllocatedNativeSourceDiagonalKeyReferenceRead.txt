@@ -1,0 +1,184 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-reference-predicate-and-source-read-check/source/MicroCFTA/SourceCurrentAllocatedNativeSourceDiagonalKeyReferenceRead.lean:94:53: error(lean.invalidField): Invalid field `key`: The environment does not contain `MicroCFTA.InternedConstructorTemplates.Value.key`, so it is not possible to project the field `key` from an expression
+  actualIncoming
+of type `Value Symbol Guard`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-reference-predicate-and-source-read-check/source/MicroCFTA/SourceCurrentAllocatedNativeSourceDiagonalKeyReferenceRead.lean:97:71: error(lean.invalidField): Invalid field `key`: The environment does not contain `MicroCFTA.InternedConstructorTemplates.Value.key`, so it is not possible to project the field `key` from an expression
+  actualIncoming
+of type `Value Symbol Guard`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-reference-predicate-and-source-read-check/source/MicroCFTA/SourceCurrentAllocatedNativeSourceDiagonalKeyReferenceRead.lean:80:89: error: unsolved goals
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+lib : Library
+query : Query
+signed : Int
+whole : Expression
+accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole
+rootValue : Value Symbol Guard
+sourceHeap : InternedConstructorTemplates.State Symbol Guard
+built :
+  InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+    InternedNestedConstruction.Outcome.done rootValue sourceHeap
+key : InternedBinderProtocol.NodeKey
+entry : Interned InternedBinderProtocol.NodeKey
+body depth ordinary : Value Symbol Guard
+stored : sourceHeap.nodeRecords key = some (Value.mu entry body depth ordinary)
+heap : InternedConstructorTemplates.State Symbol Guard
+facts : Facts heap
+growth : Grows sourceHeap heap
+domains : Cache.State IntersectionFlatMemoKeyDomain.DomainKey
+cacheValid : Cache.Valid domains
+pattern : Value Symbol Guard
+_patternAvailable : Available heap pattern
+_patternClosed : pattern.free = []
+patternId : Nat
+_patternIdentity : identity pattern = some patternId
+_patternKind : tag pattern = 1 ∨ tag pattern = 3
+bodyEntry : Interned InternedBinderProtocol.NodeKey
+bodyRows : List (EdgeValue Symbol Guard)
+bodyShape : body = Value.node bodyEntry bodyRows 0 [Reference.interned entry.identity]
+historical :
+  have universeValue := Value.mu entry body depth ordinary;
+  have referenceValue := Value.reference (Reference.interned entry.identity);
+  have original :=
+    SourceRecursiveIntersectionEnvironment.enter domains IntersectionEmptyDomain.emptyKey universeValue pattern
+      entry.identity patternId;
+  have diagonalFirst :=
+    SourceRecursiveIntersectionEnvironment.enter original.snd original.fst.key universeValue referenceValue
+      entry.identity entry.identity;
+  entry.identity ∈ names diagonalFirst.fst.key ∧
+    ¬pair bodyEntry.identity entry.identity ∈ diagonalFirst.fst.key.seen ∧
+      decision diagonalFirst.fst.key body referenceValue = Branch.rightReference ∧
+        compileNode { domain := diagonalFirst.fst, left := body, right := referenceValue } =
+            compileReference diagonalFirst.fst entry.identity body false ∧
+          ∀ (current : Checked width),
+            Facts current.native.machine.heap →
+              Grows sourceHeap current.native.machine.heap →
+                SourcePreparedSharedRows.read current.native.machine.heap entry.identity = some universeValue ∧
+                  SourceEqualityNativeDemand.step
+                      (SourceEqualityNativeDemand.Control.code
+                        (compileNode { domain := diagonalFirst.fst, left := body, right := referenceValue }))
+                      current =
+                    SourceEqualityNativeDemand.Outcome.yielded
+                      (SourceEqualityNativeDemand.Control.code (requestNode diagonalFirst.fst body universeValue))
+                      current
+universeValue : Value Symbol Guard := Value.mu entry body depth ordinary
+referenceValue : Value Symbol Guard := Value.reference (Reference.interned entry.identity)
+original : Interned IntersectionFlatMemoKeyDomain.DomainKey × Cache.State IntersectionFlatMemoKeyDomain.DomainKey :=
+  SourceRecursiveIntersectionEnvironment.enter domains IntersectionEmptyDomain.emptyKey universeValue pattern
+    entry.identity patternId
+diagonalFirst : Interned IntersectionFlatMemoKeyDomain.DomainKey ×
+  Cache.State IntersectionFlatMemoKeyDomain.DomainKey :=
+  SourceRecursiveIntersectionEnvironment.enter original.snd original.fst.key universeValue referenceValue entry.identity
+    entry.identity
+actualIncoming : Value Symbol Guard := Value.mu entry body depth ordinary
+sameKey : Value Symbol Guard := Value.reference (Reference.interned entry.identity)
+bound : entry.identity ∈ names sorry
+⊢ let original :=
+    SourceRecursiveIntersectionEnvironment.enter domains IntersectionEmptyDomain.emptyKey actualIncoming pattern
+      entry.identity patternId;
+  let diagonalFirst :=
+    SourceRecursiveIntersectionEnvironment.enter original.snd original.fst.key actualIncoming sameKey entry.identity
+      entry.identity;
+  ∀ (actualIncoming_1 : Interned IntersectionFlatMemoKeyDomain.DomainKey),
+    actualIncoming_1.key = diagonalFirst.fst.key →
+      entry.identity ∈ names actualIncoming_1.key ∧
+        ¬pair bodyEntry.identity entry.identity ∈ actualIncoming_1.key.seen ∧
+          decision actualIncoming_1.key body sameKey = Branch.rightReference ∧
+            compileNode { domain := actualIncoming_1, left := body, right := sameKey } =
+                compileReference actualIncoming_1 entry.identity body false ∧
+              ∀ (current : Checked width),
+                Facts current.native.machine.heap →
+                  Grows sourceHeap current.native.machine.heap →
+                    SourcePreparedSharedRows.read current.native.machine.heap entry.identity = some actualIncoming ∧
+                      SourceEqualityNativeDemand.step
+                          (SourceEqualityNativeDemand.Control.code
+                            (compileNode { domain := actualIncoming_1, left := body, right := sameKey }))
+                          current =
+                        SourceEqualityNativeDemand.Outcome.yielded
+                          (SourceEqualityNativeDemand.Control.code (requestNode actualIncoming_1 body actualIncoming))
+                          current
+MicroCFTA.SourceCurrentAllocatedNativeSourceDiagonalKeyReferenceRead.current_stored_universe_diagonal_first_body_reference_read_at_same_key
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (lib : MicroCFTA.SourceSynthesisTypeSyntax.Library) (query : MicroCFTA.SourceSynthesisTypeSyntax.Query)
+  (signed : Int) (whole : MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression)
+  (accepted : MicroCFTA.SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole)
+  (rootValue :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (sourceHeap :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (built :
+    MicroCFTA.InternedFreshOrdinaryConstruction.build
+        (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+        MicroCFTA.InternedConstructorTemplates.empty =
+      MicroCFTA.InternedNestedConstruction.Outcome.done rootValue sourceHeap)
+  (key : MicroCFTA.InternedBinderProtocol.NodeKey)
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (body depth ordinary :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (stored :
+    sourceHeap.nodeRecords key = some (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary))
+  (heap :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (facts : MicroCFTA.InternedNestedFacts.Facts heap)
+  (growth : MicroCFTA.InternedConstructorTemplates.Grows sourceHeap heap)
+  (domains : MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+  (cacheValid : MicroCFTA.Cache.Valid domains)
+  (pattern :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (_patternAvailable : MicroCFTA.InternedProbeProvenance.Available heap pattern) (_patternClosed : pattern.free = [])
+  (patternId : Nat) (_patternIdentity : MicroCFTA.SourceRecursiveIntersectionControl.identity pattern = some patternId)
+  (_patternKind :
+    MicroCFTA.SourceRecursiveIntersectionControl.tag pattern = 1 ∨
+      MicroCFTA.SourceRecursiveIntersectionControl.tag pattern = 3) :
+  ∃ bodyEntry bodyRows,
+    body =
+        MicroCFTA.InternedConstructorTemplates.Value.node bodyEntry bodyRows 0
+          [MicroCFTA.InternedBinderProtocol.Reference.interned entry.identity] ∧
+      have universeValue := MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary;
+      have referenceValue :=
+        MicroCFTA.InternedConstructorTemplates.Value.reference
+          (MicroCFTA.InternedBinderProtocol.Reference.interned entry.identity);
+      have original :=
+        MicroCFTA.SourceRecursiveIntersectionEnvironment.enter domains MicroCFTA.IntersectionEmptyDomain.emptyKey
+          universeValue pattern entry.identity patternId;
+      have diagonalFirst :=
+        MicroCFTA.SourceRecursiveIntersectionEnvironment.enter original.snd original.fst.key universeValue
+          referenceValue entry.identity entry.identity;
+      ∀ (actualIncoming : MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey),
+        actualIncoming.key = diagonalFirst.fst.key →
+          entry.identity ∈ MicroCFTA.SourceRecursiveIntersectionDomain.names actualIncoming.key ∧
+            ¬MicroCFTA.SourceRecursiveIntersectionControl.pair bodyEntry.identity entry.identity ∈
+                  actualIncoming.key.seen ∧
+              MicroCFTA.SourceRecursiveIntersectionControl.decision actualIncoming.key body referenceValue =
+                  MicroCFTA.SourceRecursiveIntersectionControl.Branch.rightReference ∧
+                MicroCFTA.SourceRecursiveIntersectionCode.compileNode
+                      { domain := actualIncoming, left := body, right := referenceValue } =
+                    MicroCFTA.SourceRecursiveIntersectionCode.compileReference actualIncoming entry.identity body
+                      false ∧
+                  ∀ (current : MicroCFTA.SourceEqualityNativeDemand.State width),
+                    MicroCFTA.InternedNestedFacts.Facts current.native.machine.heap →
+                      MicroCFTA.InternedConstructorTemplates.Grows sourceHeap current.native.machine.heap →
+                        MicroCFTA.SourcePreparedSharedRows.read current.native.machine.heap entry.identity =
+                            some universeValue ∧
+                          MicroCFTA.SourceEqualityNativeDemand.step
+                              (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                                (MicroCFTA.SourceRecursiveIntersectionCode.compileNode
+                                  { domain := actualIncoming, left := body, right := referenceValue }))
+                              current =
+                            MicroCFTA.SourceEqualityNativeDemand.Outcome.yielded
+                              (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                                (MicroCFTA.SourceRecursiveIntersectionCode.requestNode actualIncoming body
+                                  universeValue))
+                              current
+'MicroCFTA.SourceCurrentAllocatedNativeSourceDiagonalKeyReferenceRead.current_stored_universe_diagonal_first_body_reference_read_at_same_key' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

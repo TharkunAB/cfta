@@ -1,0 +1,55 @@
+theorem query_returned_and_raw_results
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (selectedKey : IntersectionFlatMemoKeyDomain.DomainKey) (cutoffLeft cutoffRight : Nat)
+    (compiled : ∀ actualDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey,
+      actualDomain.key = selectedKey →
+      compileNode ⟨actualDomain, body, body⟩ =
+        compileRows actualDomain (nodeEdges body) (nodeEdges body))
+    (inputs : ∀ actualDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey,
+      actualDomain.key = selectedKey → ∀ row ∈ nodeEdges body,
+      All₂ (fun (children : Value Symbol Guard × Value Symbol Guard) (value : Value Symbol Guard) =>
+        KnownResult ⟨actualDomain, children.1, children.2⟩ value)
+        (row.children.zip row.children)
+        (row.children.map (input (replacement (.interned entry.identity)
+          (repeatedValue (pair cutoffLeft cutoffRight))))))
+    (firstKey : IntersectionFlatMemoKeyDomain.DomainKey) (bodyId : Nat)
+    (rightMu : ∀ actualDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey,
+      actualDomain.key = firstKey →
+      SourceRecursiveIntersectionControl.decision actualDomain.key body (.mu entry body depth ordinary) = .rightMu)
+    (bodyIdentity : SourceRecursiveIntersectionControl.identity body = some bodyId)
+    (childKey : ∀ actualDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey,
+      actualDomain.key = firstKey →
+      ∀ current : Cache.State IntersectionFlatMemoKeyDomain.DomainKey, Cache.Valid current →
+      (SourceRecursiveIntersectionEnvironment.enter current actualDomain.key body
+        (.mu entry body depth ordinary) bodyId entry.identity).1.key = selectedKey)
+    (cutoffApart : pair bodyId entry.identity ≠ pair cutoffLeft cutoffRight)
+    (fuel : Nat) :
+    (∀ (request : NodeRequest Symbol Guard) (before : Checked width),
+      Physical before.native → Grows sourceHeap before.native.machine.heap →
+      SourceEqualityConstraintMemoAllocation.Valid before.operations →
+      InputsThrough fuel (.code (.node request .pure)) before →
+      SourceEqualityNativeDemandOperations.FieldsThrough fuel (.code (.node request .pure)) before →
+      Returned (NodeResult entry.identity cutoffLeft cutoffRight selectedKey firstKey body (.mu entry body depth ordinary)) before.native.nodes → Returned EdgeResult before.native.edges →
+      (Returned (NodeResult entry.identity cutoffLeft cutoffRight selectedKey firstKey body (.mu entry body depth ordinary)) (execute fuel (.code (.node request .pure)) before).state.native.nodes ∧
+        Returned EdgeResult (execute fuel (.code (.node request .pure)) before).state.native.edges) ∧
+      (∀ (count : Nat) (value : Value Symbol Guard) (after : Checked width), count ≤ fuel →
+        Steps count (.code (.node request .pure)) before (.code (.pure value)) after →
+        (NodeResult entry.identity cutoffLeft cutoffRight selectedKey firstKey body (.mu entry body depth ordinary)) request value)) ∧
+    (∀ (request : EdgeRequest Symbol Guard) (before : Checked width),
+      Physical before.native → Grows sourceHeap before.native.machine.heap →
+      SourceEqualityConstraintMemoAllocation.Valid before.operations →
+      InputsThrough fuel (.code (.edge request .pure)) before →
+      SourceEqualityNativeDemandOperations.FieldsThrough fuel (.code (.edge request .pure)) before →
+      Returned (NodeResult entry.identity cutoffLeft cutoffRight selectedKey firstKey body (.mu entry body depth ordinary)) before.native.nodes → Returned EdgeResult before.native.edges →
+      (Returned (NodeResult entry.identity cutoffLeft cutoffRight selectedKey firstKey body (.mu entry body depth ordinary)) (execute fuel (.code (.edge request .pure)) before).state.native.nodes ∧
+        Returned EdgeResult (execute fuel (.code (.edge request .pure)) before).state.native.edges) ∧
+      (∀ (count : Nat) (value : EdgeValue Symbol Guard) (after : Checked width), count ≤ fuel →
+        Steps count (.code (.edge request .pure)) before (.code (.pure value)) after →
+        EdgeResult request value)) := by

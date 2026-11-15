@@ -1,0 +1,43 @@
+theorem current_stored_universe_diagonal_open_body_results
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (machine : SourceRecursiveIntersectionKernel.Machine Symbol Guard)
+    (machineValid : SourceRecursiveIntersectionKernel.Valid machine)
+    (facts : Facts machine.heap) (growth : Grows sourceHeap machine.heap)
+    (domains : Cache.State IntersectionFlatMemoKeyDomain.DomainKey) (cacheValid : Cache.Valid domains)
+    (pattern : Value Symbol Guard) (_patternAvailable : Available machine.heap pattern)
+    (_patternClosed : pattern.free = []) (patternId : Nat)
+    (_patternIdentity : identity pattern = some patternId)
+    (_patternKind : tag pattern = 1 ∨ tag pattern = 3) :
+    ∃ (bodyEntry : Interned NodeKey) (bodyRows : List (EdgeValue Symbol Guard)),
+      body = .node bodyEntry bodyRows 0 [.interned entry.identity] ∧
+      let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+      let referenceValue : Value Symbol Guard := .reference (.interned entry.identity)
+      let original := SourceRecursiveIntersectionEnvironment.enter domains IntersectionEmptyDomain.emptyKey
+        universeValue pattern entry.identity patternId
+      let diagonalFirst := SourceRecursiveIntersectionEnvironment.enter original.2 original.1.key
+        universeValue referenceValue entry.identity entry.identity
+      let diagonalTerminal := SourceRecursiveIntersectionEnvironment.enter diagonalFirst.2 diagonalFirst.1.key
+        body universeValue bodyEntry.identity entry.identity
+      ∀ (actualDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey),
+      actualDomain.key = diagonalTerminal.1.key →
+      ∀ (operations : SourceEqualityConstraintMemoAllocation.State)
+        (_operationsValid : SourceEqualityConstraintMemoAllocation.Valid operations) (fuel : Nat),
+      let start : SourceEqualityNativeDemand.State width :=
+        ⟨SourceRecursiveIntersectionThunks.initial width machine, operations⟩
+      InputsThrough fuel (.code (.node ⟨actualDomain, body, body⟩ .pure)) start →
+      FieldsThrough fuel (.code (.node ⟨actualDomain, body, body⟩ .pure)) start →
+      Returned (NodeResult entry.identity entry.identity entry.identity diagonalTerminal.1.key body)
+        (execute fuel (.code (.node ⟨actualDomain, body, body⟩ .pure)) start).state.native.nodes ∧
+      Returned EdgeResult
+        (execute fuel (.code (.node ⟨actualDomain, body, body⟩ .pure)) start).state.native.edges ∧
+      ∀ (count : Nat) (result : Value Symbol Guard) (after : SourceEqualityNativeDemand.State width),
+        count ≤ fuel →
+        Steps count (.code (.node ⟨actualDomain, body, body⟩ .pure)) start (.code (.pure result)) after →
+        ProductShape entry.identity entry.identity entry.identity body result

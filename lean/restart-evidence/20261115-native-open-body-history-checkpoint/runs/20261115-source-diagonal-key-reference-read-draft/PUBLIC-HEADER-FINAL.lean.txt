@@ -1,0 +1,80 @@
+import MicroCFTA.SourceCurrentAllocatedNativeSourceDiagonalFirstBodyReferenceRead
+
+/-!
+# Original source reads at the actual same-key diagonal handle
+
+The original domain key supplies the bound U name and fresh B/U pair.
+Each actual handle selects its own right-reference compiler branch.
+The source-grown current heap supplies the full original stored U.
+The read yields B/U at the same actual handle and complete current state.
+-/
+namespace MicroCFTA.SourceCurrentAllocatedNativeSourceDiagonalKeyReferenceRead
+open Cache InternedConstructorTemplates InternedNestedFacts InternedProbeProvenance
+open InternedBinderProtocol (NodeKey Reference)
+open SourceRecursiveIntersectionControl SourceRecursiveIntersectionDomain
+open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionThunks SourceRecursiveIntersectionCode
+open SourceSynthesisTypeSyntax (Library Query)
+open SourceSynthesisFirstOrderConstruction (Expression)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "ordinarySymbols" => SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+
+set_option autoImplicit false
+
+private theorem right_reference_code [DecidableEq Symbol]
+    (request : NodeRequest Symbol Guard) (name : Nat)
+    (rightReference : request.right = .reference (.interned name))
+    (selected : decision request.domain.key request.left request.right = .rightReference) :
+    compileNode request = compileReference request.domain name request.left false := by
+  simp only [compileNode, selected]
+  rw [rightReference]
+
+private theorem reference_read_step
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey) (name : Nat)
+    (other value : Value Symbol Guard) (current : Checked width)
+    (bound : name ∈ names domain.key)
+    (read : SourcePreparedSharedRows.read current.native.machine.heap name = some value) :
+    SourceEqualityNativeDemand.step (.code (compileReference domain name other false)) current =
+      .yielded (.code (requestNode domain other value)) current := by
+  simp [compileReference, bound, SourceEqualityNativeDemand.step,
+    SourceRecursiveIntersectionNative.step, read, SourceEqualityNativeDemand.lift]
+
+/-- The original source read yields full U at each actual same-key incoming domain and current state. -/
+theorem current_stored_universe_diagonal_first_body_reference_read_at_same_key
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (heap : InternedConstructorTemplates.State Symbol Guard) (facts : Facts heap) (growth : Grows sourceHeap heap)
+    (domains : Cache.State IntersectionFlatMemoKeyDomain.DomainKey) (cacheValid : Cache.Valid domains)
+    (pattern : Value Symbol Guard) (_patternAvailable : Available heap pattern)
+    (_patternClosed : pattern.free = []) (patternId : Nat)
+    (_patternIdentity : identity pattern = some patternId)
+    (_patternKind : tag pattern = 1 ∨ tag pattern = 3) :
+    ∃ (bodyEntry : Interned NodeKey) (bodyRows : List (EdgeValue Symbol Guard)),
+      body = .node bodyEntry bodyRows 0 [.interned entry.identity] ∧
+      let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+      let referenceValue : Value Symbol Guard := .reference (.interned entry.identity)
+      let original := SourceRecursiveIntersectionEnvironment.enter domains IntersectionEmptyDomain.emptyKey
+        universeValue pattern entry.identity patternId
+      let diagonalFirst := SourceRecursiveIntersectionEnvironment.enter original.2 original.1.key
+        universeValue referenceValue entry.identity entry.identity
+      ∀ (actualIncoming : Interned IntersectionFlatMemoKeyDomain.DomainKey),
+        actualIncoming.key = diagonalFirst.1.key →
+        entry.identity ∈ names actualIncoming.key ∧
+        pair bodyEntry.identity entry.identity ∉ actualIncoming.key.seen ∧
+        decision actualIncoming.key body referenceValue = .rightReference ∧
+        compileNode ⟨actualIncoming, body, referenceValue⟩ =
+          compileReference actualIncoming entry.identity body false ∧
+        (∀ (current : Checked width), Facts current.native.machine.heap →
+          Grows sourceHeap current.native.machine.heap →
+          SourcePreparedSharedRows.read current.native.machine.heap entry.identity = some universeValue ∧
+          SourceEqualityNativeDemand.step
+            (.code (compileNode ⟨actualIncoming, body, referenceValue⟩)) current =
+            .yielded (.code (requestNode actualIncoming body universeValue)) current)
