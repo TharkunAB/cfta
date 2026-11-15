@@ -1,0 +1,34 @@
+'MicroCFTA.SourcePruningEnumerationPartialOutput.expandPartial_complete' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourcePruningEnumerationPartialOutput.rootPartial_stored_equations' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourcePruningEnumerationPartialOutput.rootPartial_complete' depends on axioms: [propext, Quot.sound]
+'_private.MicroCFTA.SourcePruningEnumerationPartialOutput.0.MicroCFTA.SourcePruningEnumerationPartialOutput.root_completes' depends on axioms: [propext,
+ Quot.sound]
+@MicroCFTA.SourcePruningEnumerationPartialOutput.rootPartial_complete_pending_choices : ∀ {NativeGuard EnumGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (level : Nat → Nat) (frontier : Nat)
+  (before : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard),
+  MicroCFTA.EnumerationSchedule.Safe before →
+    MicroCFTA.EnumerationOrder.Stratified before level frontier →
+      0 < before.counter →
+        ∃ bound observedTerm after,
+          (∀ (extra : Nat),
+              MicroCFTA.EnumerationCorrectness.Success
+                  (MicroCFTA.SourcePruningEnumerationPartialOutput.rootPartial heap (bound + extra)) before observedTerm
+                  after ∧
+                (MicroCFTA.SourcePruningEnumerationPartialOutput.rootPartial heap (bound + extra) before).run =
+                  [Except.ok (observedTerm, after)]) ∧
+            MicroCFTA.EnumerationDriver.RenderStable before after ∧
+              MicroCFTA.EnumerationCompressionFrame.Frame before after ∧
+                MicroCFTA.EnumerationOrder.Stratified after level frontier ∧
+                  ∀ (base : Nat → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol),
+                    MicroCFTA.UnionFind.Satisfies before.representatives base →
+                      ∃ assignment,
+                        MicroCFTA.SourcePruningPartialRenderingSemantics.StoredEquations assignment before ∧
+                          MicroCFTA.SourcePruningPartialRenderingSemantics.StoredEquations assignment after ∧
+                            (∀ (uv : Nat) (node : Option Nat) (scs : List MicroCFTA.EnumerationState.Suspended),
+                                before.values[uv]? = some (MicroCFTA.EnumerationState.UVarValue.unenumerated node scs) →
+                                  assignment uv = base uv) ∧
+                              MicroCFTA.SourcePruningPartialMatch.Completes assignment observedTerm (assignment 0)
+'MicroCFTA.SourcePruningEnumerationPartialOutput.rootPartial_complete_pending_choices' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,9 @@
+theorem stratified_extend_pending
+    (state : State Symbol Guard) (safe : Safe state)
+    (level : Nat → Nat) (frontier : Nat) (stratified : Stratified state level frontier)
+    (base : Nat → Term Symbol) (compatible : UnionFind.Satisfies state.representatives base) :
+    ∃ assignment : Nat → Term Symbol,
+      UnionFind.Satisfies state.representatives assignment ∧
+      (∀ uv fragment, state.values[uv]? = some (.enumerated fragment) →
+        assignment uv = fill assignment fragment) ∧
+      ∀ uv node scs, state.values[uv]? = some (.unenumerated node scs) → assignment uv = base uv

@@ -1,0 +1,9 @@
+theorem stored_suspended_target_agreement
+    (state : State Symbol Guard) (safe : Safe state) (pending : PendingReferences state)
+    (left right : Nat → Term Symbol)
+    (leftAliases : UnionFind.Satisfies state.representatives left)
+    (rightAliases : UnionFind.Satisfies state.representatives right)
+    (agree : ∀ uv node scs, state.values[uv]? = some (.unenumerated node scs) → left uv = right uv)
+    (owner : Nat) (node : Option Nat) (bucket : List Suspended)
+    (stored : state.values[owner]? = some (.unenumerated node bucket))
+    (sc : Suspended) (member : sc ∈ bucket) : left sc.var = right sc.var

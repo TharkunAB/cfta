@@ -1,0 +1,13 @@
+theorem rootPartial_stored_equations
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (level : Nat → Nat) (frontier : Nat) (before : State Symbol EnumGuard)
+    (safe : Safe before) (stratified : Stratified before level frontier) (inside : 0 < before.counter) :
+    ∃ bound observedTerm after,
+      (∀ extra,
+        Success (rootPartial heap (bound + extra)) before observedTerm after ∧
+        ExceptT.run (rootPartial heap (bound + extra) before) = [.ok (observedTerm, after)]) ∧
+      RenderStable before after ∧ Frame before after ∧ Stratified after level frontier ∧
+      ∀ (assignment : Nat → Term Symbol),
+        SourcePruningPartialRenderingSemantics.StoredEquations assignment before →
+          SourcePruningPartialRenderingSemantics.StoredEquations assignment after ∧
+          SourcePruningPartialMatch.Completes assignment observedTerm (assignment 0) := by

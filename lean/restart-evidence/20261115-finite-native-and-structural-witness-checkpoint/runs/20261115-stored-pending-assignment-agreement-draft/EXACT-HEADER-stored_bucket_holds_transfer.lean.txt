@@ -1,0 +1,10 @@
+theorem stored_bucket_holds_transfer
+    (state : State Symbol Guard) (safe : Safe state) (pending : PendingReferences state)
+    (left right : Nat → Term Symbol)
+    (leftAliases : UnionFind.Satisfies state.representatives left)
+    (rightAliases : UnionFind.Satisfies state.representatives right)
+    (agree : ∀ uv node scs, state.values[uv]? = some (.unenumerated node scs) → left uv = right uv)
+    (owner : Nat) (node : Option Nat) (bucket : List Suspended)
+    (stored : state.values[owner]? = some (.unenumerated node bucket))
+    (holds : ∀ sc ∈ bucket, Suspended.Holds left (left owner) sc) :
+    ∀ sc ∈ bucket, Suspended.Holds right (right owner) sc

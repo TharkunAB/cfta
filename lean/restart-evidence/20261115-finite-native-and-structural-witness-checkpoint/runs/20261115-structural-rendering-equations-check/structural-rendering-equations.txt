@@ -1,0 +1,46 @@
+@MicroCFTA.SourcePruningPartialRenderingSemantics.storedEquations_frame : ∀ {Guard : Type}
+  (assignment : Nat → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol)
+  (before after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol Guard),
+  MicroCFTA.EnumerationCompressionFrame.Frame before after →
+    (MicroCFTA.SourcePruningPartialRenderingSemantics.StoredEquations assignment after ↔
+      MicroCFTA.SourcePruningPartialRenderingSemantics.StoredEquations assignment before)
+'MicroCFTA.SourcePruningPartialRenderingSemantics.storedEquations_frame' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourcePruningPartialRenderingSemantics.satisfies_storedEquations : ∀ {Guard : Type}
+  (language : MicroCFTA.EnumerationCorrectness.NodeLanguage MicroCFTA.SourcePruningTemplates.Symbol)
+  (meaning : Guard → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol → Prop)
+  (assignment : Nat → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol)
+  (state : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol Guard),
+  MicroCFTA.EnumerationCorrectness.Satisfies language meaning assignment state →
+    MicroCFTA.SourcePruningPartialRenderingSemantics.StoredEquations assignment state
+'MicroCFTA.SourcePruningPartialRenderingSemantics.satisfies_storedEquations' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourcePruningPartialRenderingSemantics.expandPartial_completes_of_stored_equations : ∀ {Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (assignment : Nat → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol) (fuel : Nat)
+  (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+  (before after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (observedTerm :
+    MicroCFTA.Language.Term (MicroCFTA.EnumerationState.PartialSymbol MicroCFTA.SourcePruningTemplates.Symbol)),
+  MicroCFTA.UnionFind.Total before.representatives →
+    MicroCFTA.SourcePruningPartialRenderingSemantics.StoredEquations assignment before →
+      MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationState.expandPartial graph fuel fragment) before
+          observedTerm after →
+        MicroCFTA.SourcePruningPartialMatch.Completes assignment observedTerm
+          (MicroCFTA.Fragments.fill assignment fragment)
+'MicroCFTA.SourcePruningPartialRenderingSemantics.expandPartial_completes_of_stored_equations' depends on axioms: [propext,
+ Quot.sound]
+@MicroCFTA.SourcePruningPartialRenderingSemantics.expandPartial_completes : ∀ {Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (language : MicroCFTA.EnumerationCorrectness.NodeLanguage MicroCFTA.SourcePruningTemplates.Symbol)
+  (meaning : Guard → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol → Prop)
+  (assignment : Nat → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol) (fuel : Nat)
+  (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+  (before after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (observedTerm :
+    MicroCFTA.Language.Term (MicroCFTA.EnumerationState.PartialSymbol MicroCFTA.SourcePruningTemplates.Symbol)),
+  MicroCFTA.UnionFind.Total before.representatives →
+    MicroCFTA.EnumerationCorrectness.Satisfies language meaning assignment before →
+      MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationState.expandPartial graph fuel fragment) before
+          observedTerm after →
+        MicroCFTA.SourcePruningPartialMatch.Completes assignment observedTerm
+          (MicroCFTA.Fragments.fill assignment fragment)
+'MicroCFTA.SourcePruningPartialRenderingSemantics.expandPartial_completes' depends on axioms: [propext, Quot.sound]

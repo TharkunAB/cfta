@@ -1,0 +1,14 @@
+theorem original_stored_universe_language
+    [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : State Symbol Guard)
+    (built : build (ordinarySymbols whole) [] empty = .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary)) :
+    Available sourceHeap (.mu entry body depth ordinary) ∧
+      (Value.mu entry body depth ordinary).free = [] ∧
+      ∀ (holds : Guard → Term Symbol → Bool) (ambient : InternedGuardedLanguage.Env Symbol),
+        InternedGuardedLanguage.meaning holds ambient (.mu entry body depth ordinary) =
+          InternedGuardedSyntax.evaluate holds [] (mapSyntax literal
+            (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query))) := by

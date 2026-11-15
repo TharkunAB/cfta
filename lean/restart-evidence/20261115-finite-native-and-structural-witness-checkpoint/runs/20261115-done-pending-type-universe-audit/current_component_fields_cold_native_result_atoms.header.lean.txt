@@ -1,0 +1,42 @@
+theorem current_component_fields_cold_native_result_atoms
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    {leftExpressions rightExpressions : List (EdgeSyntax Symbol Guard)}
+    {leftBefore leftAfter rightBefore rightAfter : State Symbol Guard}
+    {leftOutputs rightOutputs : List (EdgeValue Symbol Guard)}
+    {leftIndex rightIndex : Nat} {leftSymbol rightSymbol : Symbol}
+    (leftScheme rightScheme : Ty) (leftOriginal : OriginalType lib leftScheme)
+    (rightOriginal : OriginalType lib rightScheme)
+    (leftCall : RowCall leftExpressions [] leftBefore leftOutputs leftAfter sourceHeap leftIndex leftSymbol top
+      [ordinarySymbols (generalize
+        (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query)) (encodeTy leftScheme))])
+    (rightCall : RowCall rightExpressions [] rightBefore rightOutputs rightAfter sourceHeap rightIndex rightSymbol top
+      [ordinarySymbols (generalize
+        (allTypes top (SourceSynthesisCurrentContext.constructorCatalog lib query)) (encodeTy rightScheme))])
+    (left right : Value Symbol Guard)
+    (leftSlot : leftCall.output.children[0]? = some left)
+    (rightSlot : rightCall.output.children[0]? = some right) (width : Nat) :
+    let machine : Machine Symbol Guard := ⟨sourceHeap, Cache.emptyState⟩
+    let before := SourceRecursiveIntersectionThunks.initial width machine
+    let request : SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard :=
+      ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩
+    ∀ (nativeFuel : Nat) (value : Value Symbol Guard)
+      (after : SourceRecursiveIntersectionThunks.State width Symbol Guard)
+      (actual : SourceRecursiveIntersectionNative.execute top SourceEqualityPCSNativeEdge.conjoin nativeFuel
+        (.node request .pure) before = .done value after),
+      SourceRecursiveIntersectionNative.Bounds
+        (SourceRecursiveIntersectionNative.evaluation_of_done top SourceEqualityPCSNativeEdge.conjoin nativeFuel
+          (.node request .pure) before after value actual) →
+      (Available sourceHeap left ∧ left.free = [] ∧ Annotated (Origin (encodedLibrary lib)) left ∧
+        ∀ atom ∈ atoms left, atom = .mu entry.identity) ∧
+      (Available sourceHeap right ∧ right.free = [] ∧ Annotated (Origin (encodedLibrary lib)) right ∧
+        ∀ atom ∈ atoms right, atom = .mu entry.identity) ∧
+      SourceRecursiveIntersectionThunks.Valid width top SourceEqualityPCSNativeEdge.conjoin after ∧
+      Extension machine after.machine ∧ Available after.machine.heap value ∧ value.free = [] ∧
+        ∀ atom ∈ atoms value, atom = .mu entry.identity

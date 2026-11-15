@@ -1,0 +1,19 @@
+theorem typeIn_original_universe_handle
+    [DecidableEq FullSyntax.Formula] [DecidableEq (EdgeKey Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (ambient : InternedGuardedLanguage.Env Symbol)
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : State Symbol Guard)
+    (built : build (ordinarySymbols whole) [] empty = .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (heap : State Symbol Guard) (growth : Grows sourceHeap heap)
+    (history : Extends sourceHeap.nodes.issued heap.nodes.issued) :
+    ∃ handle,
+      encodeNode (.mu entry body depth ordinary) = some handle ∧
+      lookupNode sourceHeap handle = some (.mu entry body depth ordinary) ∧
+      lookupNode heap handle = some (.mu entry body depth ordinary) ∧
+      ∀ term, TypeIn (SourceSynthesisCurrentContext.constructorCatalog lib query) term →
+        handles (SourceEqualityPCSGuard.holds formulas solver) ambient heap handle term := by

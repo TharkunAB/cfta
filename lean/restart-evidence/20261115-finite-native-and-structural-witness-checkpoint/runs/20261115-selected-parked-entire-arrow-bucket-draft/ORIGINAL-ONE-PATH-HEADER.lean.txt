@@ -1,0 +1,39 @@
+theorem selected_parked_one_arrow_path_assignment
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (workFuel depth uv handle : Nat)
+    (metadata updated : Metadata Typing) (caller : Caller width) (queries : Queries)
+    (before parked : Cached) (checked core : Core) (next : Option Next)
+    (safe : Safe before.core)
+    (valid : SourcePruningEnumerationNativeBranchCompletion.CacheValid caller before)
+    (selected : SourcePruningEnumerationRestart.decision stop order metadata before =
+      some (.expand uv))
+    (bucket : List Suspended)
+    (stored : before.core.values[uv]? = some (.unenumerated (some handle) bucket))
+    (occurrence : Nat) (sc : Suspended) (indexed : bucket[occurrence]? = some sc)
+    (path : EqualityTrie.Path)
+    (_represented : path ∈ EqualityTrie.fromPathTrie sc.trie)
+    (arrowChild : path = [1] ∨ path = [2])
+    (actual : SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates
+      stop order metadata workFuel workFuel workFuel workFuel workFuel workFuel uv caller before queries =
+        .parked checked (some parked) (some [.ok ((updated, next), core)]))
+    (catalog : List (String × Nat)) :
+    ∃ (resolved : Core) (rho : Nat → Term Symbol),
+      resolved.values[uv]? = some (.unenumerated (some handle) bucket) ∧
+      Success (setValue uv (.unenumerated (some handle) [])) resolved () checked ∧
+      parked.core = checked ∧ core = checked ∧
+      UnionFind.Satisfies before.core.representatives rho ∧
+      UnionFind.Satisfies checked.representatives rho ∧
+      UnionFind.Satisfies parked.core.representatives rho ∧
+      UnionFind.Satisfies core.representatives rho ∧
+      (rho uv).atPath path = some (rho sc.var) ∧
+      (∀ slot, TypeIn catalog (rho slot)) ∧
+      ∀ (holds : SourceSynthesisGeneralizeSyntax.Guard → Term Symbol → Bool),
+        (∀ term, holds SourceSynthesisGeneralizeSyntax.top term = true) →
+        ∀ slot, InternedGuardedSyntax.evaluate holds []
+          (SourceSynthesisProgramBuildRolesGeneric.mapSyntax literal
+            (SourceSynthesisTypeSyntax.allTypes SourceSynthesisGeneralizeSyntax.top catalog))
+          (rho slot)

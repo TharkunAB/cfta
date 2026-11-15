@@ -1,0 +1,89 @@
+Source: lean/MicroCFTA/EnumerationAssignment.lean
+
+theorem evaluateSlots_stable (state : State Symbol Guard) (roots : Nat → Nat) (paths : Roots state.representatives roots)
+    (level : Nat → Nat) (frontier : Nat) (stratified : Stratified state level frontier) (fallback : Term Symbol)
+    (uv leftFuel rightFuel : Nat) (leftBound : frontier - level uv < leftFuel) (rightBound : frontier - level uv < rightFuel) :
+    evaluateSlots state.values roots fallback leftFuel uv = evaluateSlots state.values roots fallback rightFuel uv := by
+  have stable : ∀ deficit uv, frontier - level uv = deficit → ∀ leftFuel rightFuel,
+      deficit < leftFuel → deficit < rightFuel →
+      evaluateSlots state.values roots fallback leftFuel uv = evaluateSlots state.values roots fallback rightFuel uv := by
+    intro deficit
+    induction deficit using Nat.strongRecOn with
+    | ind deficit ih =>
+        intro uv difference leftFuel rightFuel leftBound rightBound
+        cases leftFuel with
+        | zero => omega
+        | succ leftFuel =>
+            cases rightFuel with
+            | zero => omega
+            | succ rightFuel =>
+                cases stored : state.values[roots uv]? with
+                | none => simp [evaluateSlots, stored]
+                | some value =>
+                    cases value with
+                    | eliminated | unenumerated _ _ => simp [evaluateSlots, stored]
+                    | enumerated fragment =>
+                        simp only [evaluateSlots, stored]
+                        apply fill_holes_congr
+                        intro hole present
+                        obtain ⟨size, path⟩ := paths uv
+                        have sameLevel := stratified.classes uv (roots uv) (UnionFind.sameClass_root path)
+                        obtain ⟨bound, dependencies⟩ := stratified.expanded (roots uv) fragment stored
+                        have increases := dependencies hole present
+                        have smaller : frontier - level hole < deficit := by omega
+                        exact ih (frontier - level hole) smaller hole rfl leftFuel rightFuel (by omega) (by omega)
+  exact stable (frontier - level uv) uv rfl leftFuel rightFuel leftBound rightBound
+
+
+Source: lean/MicroCFTA/EnumerationAssignment.lean
+
+theorem evaluateSlots_stable (state : State Symbol Guard) (roots : Nat → Nat) (paths : Roots state.representatives roots)
+    (level : Nat → Nat) (frontier : Nat) (stratified : Stratified state level frontier) (fallback : Term Symbol)
+    (uv leftFuel rightFuel : Nat) (leftBound : frontier - level uv < leftFuel) (rightBound : frontier - level uv < rightFuel) :
+    evaluateSlots state.values roots fallback leftFuel uv = evaluateSlots state.values roots fallback rightFuel uv
+
+Source: lean/MicroCFTA/EnumerationAssignment.lean
+
+theorem stratified_assignment (state : State Symbol Guard) (safe : Safe state) (level : Nat → Nat) (frontier : Nat)
+    (stratified : Stratified state level frontier) (fallback : Term Symbol) (language : NodeLanguage Symbol)
+    (free : ∀ (uv : Nat) (node : Option Nat) (scs : List Suspended), state.values[uv]? = some (.unenumerated node scs) → node = none ∧ scs = []) :
+    ∃ assignment : Nat → Term Symbol, Fragments.stateSatisfies state.representatives (heap language state.values) assignment
+
+Source: lean/MicroCFTA/EnumerationOrder.lean
+
+structure Stratified (state : State Symbol Guard) (level : Nat → Nat) (frontier : Nat) : Prop where
+  classes : UnionFind.Satisfies state.representatives level
+  expanded : ∀ uv fragment, state.values[uv]? = some (.enumerated fragment) →
+    level uv < frontier ∧ ∀ hole, HasHole fragment hole → level uv < level hole
+  pending : ∀ uv node scs, state.values[uv]? = some (.unenumerated node scs) → level uv = frontier
+
+
+Source: lean/MicroCFTA/SourceSynthesisProgramRolesPartialCompletion.lean
+
+theorem complete_program_root
+    (packet : SourcePruningEnumerationRecursive.Packet formulas solver
+      inventory caller memos metadata before)
+    (finished : EnumerationPureSelection.next (fun _ => none) before = .done)
+    (marked : Nat → Prop)
+    (roles : ProgramSlots valid literal caller.checked.native.machine.heap before.core marked)
+    (root : marked 0) :
+    ∃ (level : Nat → Nat) (frontier : Nat),
+      EnumerationOrder.Stratified before.core level frontier ∧
+      ∃ (bound : Nat) (actualPartial : PartialTerm) (after : Core),
+        (∀ extra,
+          Success (SourcePruningEnumerationPartialOutput.rootPartial
+            caller.checked.native.machine.heap (bound + extra)) before.core actualPartial after ∧
+          ExceptT.run (SourcePruningEnumerationPartialOutput.rootPartial
+            caller.checked.native.machine.heap (bound + extra) before.core) = [.ok (actualPartial, after)]) ∧
+        EnumerationDriver.RenderStable before.core after ∧
+        EnumerationCompressionFrame.Frame before.core after ∧
+        EnumerationOrder.Stratified after level frontier ∧
+        (∀ (language : NodeLanguage Symbol) (meaning : Constraint → Language.Term Symbol → Prop)
+          (assignment : Nat → Language.Term Symbol),
+          Satisfies language meaning assignment before.core →
+            Satisfies language meaning assignment after ∧
+            SourcePruningPartialMatch.Completes assignment actualPartial (assignment 0)) ∧
+        ∃ program, Projection literal Prod.fst (SourcePruningPositions.openProgram true actualPartial) program ∧
+          ∀ (assignment : Nat → Language.Term Symbol) (full : Language.Term Symbol),
+            SourcePruningPartialMatch.Completes assignment actualPartial full →
+              Projection literal Prod.fst full program
