@@ -31,7 +31,7 @@ variable {width : Nat} {A : Type}
 set_option autoImplicit false
 
 /-- A literal prefix selects its checks from the same completed physical trace. -/
-private theorem physical_prefix
+theorem physical_prefix
     [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
     {prefixFuel total : Nat} {control reached : Control A}
     {before middle after : Checked width} {value : A}
