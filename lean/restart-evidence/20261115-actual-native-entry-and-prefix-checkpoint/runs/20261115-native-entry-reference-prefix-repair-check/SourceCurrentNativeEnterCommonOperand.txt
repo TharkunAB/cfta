@@ -1,0 +1,82 @@
+'MicroCFTA.SourceCurrentNativeEnterCommonOperand.enter_prefix_common_operands' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentNativeEnterCommonOperand.enter_prefix_common_operands {A : Type} {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (domain : MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+  (left right :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (first second : Nat)
+  (next :
+    MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey →
+      MicroCFTA.SourceRecursiveIntersectionCode.Code (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) A)
+  (fuel : Nat) (before after : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (rest : MicroCFTA.SourceEqualityNativeDemand.Control A)
+  (valid : MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid before.native)
+  (actual :
+    MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace (fuel + 1)
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+        (MicroCFTA.SourceRecursiveIntersectionCode.Code.enter domain left right first second next))
+      before rest after) :
+  have allocated :=
+    MicroCFTA.SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains domain.key left right first
+      second;
+  have enteredState :=
+    {
+      native :=
+        MicroCFTA.SourceRecursiveIntersectionThunks.advance before.native
+          (have __src := before.native.machine;
+          { heap := __src.heap, domains := allocated.snd }),
+      operations := before.operations };
+  MicroCFTA.SourceEqualityNativeDemand.step
+        (MicroCFTA.SourceEqualityNativeDemand.Control.code
+          (MicroCFTA.SourceRecursiveIntersectionCode.Code.enter domain left right first second next))
+        before =
+      MicroCFTA.SourceEqualityNativeDemand.Outcome.yielded
+        (MicroCFTA.SourceEqualityNativeDemand.Control.code (next allocated.fst)) enteredState ∧
+    MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace fuel
+        (MicroCFTA.SourceEqualityNativeDemand.Control.code (next allocated.fst)) enteredState rest after ∧
+      enteredState.native.machine.heap = before.native.machine.heap ∧
+        enteredState.native.machine.domains = allocated.snd ∧
+          enteredState.operations = before.operations ∧
+            MicroCFTA.SourceRecursiveIntersectionKernel.Domain before.native.machine domain ∧
+              MicroCFTA.InternedProbeProvenance.Available before.native.machine.heap left ∧
+                MicroCFTA.InternedProbeProvenance.Available before.native.machine.heap right ∧
+                  MicroCFTA.InternedProbeProvenance.Available after.native.machine.heap left ∧
+                    MicroCFTA.InternedProbeProvenance.Available after.native.machine.heap right ∧
+                      MicroCFTA.SourceRecursiveIntersectionKernel.Domain enteredState.native.machine allocated.fst ∧
+                        MicroCFTA.SourceRecursiveIntersectionKernel.Domain after.native.machine allocated.fst ∧
+                          allocated.fst.key =
+                              MicroCFTA.SourceRecursiveIntersectionDomain.extend domain.key
+                                (List.map Prod.fst
+                                  (MicroCFTA.SourceRecursiveIntersectionEnvironment.bindings left right))
+                                (MicroCFTA.SourceRecursiveIntersectionControl.pair first second) ∧
+                            MicroCFTA.SourceRecursiveIntersectionKernel.Extension before.native.machine
+                                after.native.machine ∧
+                              ∀
+                                (pattern :
+                                  MicroCFTA.InternedConstructorTemplates.Value
+                                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+                                pattern = left ∨ pattern = right →
+                                  pattern.free = [] →
+                                    ∀ (patternId : Nat),
+                                      MicroCFTA.SourceRecursiveIntersectionControl.identity pattern = some patternId →
+                                        ∀
+                                          (candidate :
+                                            MicroCFTA.InternedConstructorTemplates.Value
+                                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+                                          MicroCFTA.InternedProbeProvenance.Available after.native.machine.heap
+                                              candidate →
+                                            candidate.free = [] →
+                                              MicroCFTA.SourceRecursiveIntersectionControl.identity candidate =
+                                                  some patternId →
+                                                candidate = pattern ∧
+                                                  MicroCFTA.SourceSynthesisUniversePrefixHeight.height candidate =
+                                                    MicroCFTA.SourceSynthesisUniversePrefixHeight.height pattern

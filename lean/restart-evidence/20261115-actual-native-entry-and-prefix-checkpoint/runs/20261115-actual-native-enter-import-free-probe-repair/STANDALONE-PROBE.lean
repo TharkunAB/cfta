@@ -1,0 +1,3 @@
+import MicroCFTA.SourceCurrentNativeEnterCommonOperand
+#print axioms MicroCFTA.SourceCurrentNativeEnterCommonOperand.enter_prefix_common_operands
+#check MicroCFTA.SourceCurrentNativeEnterCommonOperand.enter_prefix_common_operands

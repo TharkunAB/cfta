@@ -1,0 +1,36 @@
+theorem current_stored_universe_ref_descendant_control
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (heap : InternedConstructorTemplates.State Symbol Guard) (facts : Facts heap) (growth : Grows sourceHeap heap)
+    (domains : Cache.State IntersectionFlatMemoKeyDomain.DomainKey) (cacheValid : Cache.Valid domains)
+    (pattern : Value Symbol Guard) (patternAvailable : Available heap pattern)
+    (patternClosed : pattern.free = []) (patternId : Nat)
+    (patternIdentity : identity pattern = some patternId)
+    (_patternKind : tag pattern = 1 ∨ tag pattern = 3) :
+    let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+    let entered := SourceRecursiveIntersectionEnvironment.enter domains IntersectionEmptyDomain.emptyKey
+      universeValue pattern entry.identity patternId
+    let initial : Machine Symbol Guard := ⟨heap, entered.2⟩
+    ∀ before : Checked width, SourceRecursiveIntersectionKernel.Valid before.native.machine →
+      Extension initial before.native.machine →
+      ∀ operand : Value Symbol Guard, Available before.native.machine.heap operand →
+      operand.free = [] → height operand < height pattern →
+      (∀ cutoff, decision entered.1.key (.reference (.interned entry.identity)) operand ≠ .repeated cutoff) ∧
+      (∀ cutoff, decision entered.1.key operand (.reference (.interned entry.identity)) ≠ .repeated cutoff) ∧
+      (∀ (operandEntry : Interned NodeKey) (rows : List (EdgeValue Symbol Guard)) (level : Nat),
+        operand = .node operandEntry rows level [] →
+        decision entered.1.key operand (.reference (.interned entry.identity)) = .rightReference ∧
+        decision entered.1.key (.reference (.interned entry.identity)) operand = .swap ∧
+        compileNode ⟨entered.1, operand, .reference (.interned entry.identity)⟩ =
+          compileReference entered.1 entry.identity operand false ∧
+        compileNode ⟨entered.1, .reference (.interned entry.identity), operand⟩ =
+          requestNode entered.1 operand (.reference (.interned entry.identity)) ∧
+        SourceEqualityNativeDemand.step
+          (.code (compileNode ⟨entered.1, operand, .reference (.interned entry.identity)⟩)) before =
+          .yielded (.code (requestNode entered.1 operand universeValue)) before)

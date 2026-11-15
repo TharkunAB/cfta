@@ -1,0 +1,26 @@
+theorem node_query_returned_of_body_induction
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (nodeLaw : NodeRequest Symbol Guard → Value Symbol Guard → Prop)
+    (edgeLaw : EdgeRequest Symbol Guard → EdgeValue Symbol Guard → Prop)
+    (request : NodeRequest Symbol Guard) (state : Checked width) (fuel : Nat)
+    (physical : SourceCurrentAllocatedNativePhysicalCache.Valid state.native)
+    (ready : NodeReady state.native.machine request)
+    (safe : ∀ key, SourceRecursiveIntersectionMemo.requestKey width request.domain request.left request.right = some key →
+      SourceRecursiveIntersectionMemo.KeySafe width request.domain request.left request.right)
+    (nodes : Returned nodeLaw state.native.nodes) (edges : Returned edgeLaw state.native.edges)
+    (bodyIH : ∀ bodyFuel, bodyFuel < fuel →
+      ∀ (next : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard)) (first : Checked width),
+      Steps 1 (.code (.node request .pure)) state
+        (.code ((compileNode request).bind next)) first →
+      Returned nodeLaw first.native.nodes → Returned edgeLaw first.native.edges →
+      Returned nodeLaw (SourceEqualityNativeDemand.execute bodyFuel
+        (.code (compileNode request)) first).state.native.nodes ∧
+      Returned edgeLaw (SourceEqualityNativeDemand.execute bodyFuel
+        (.code (compileNode request)) first).state.native.edges ∧
+      (∀ (value : Value Symbol Guard) (middle : Checked width),
+        Steps bodyFuel (.code (compileNode request)) first (.code (.pure value)) middle →
+        nodeLaw request value)) :
+    Returned nodeLaw (SourceEqualityNativeDemand.execute fuel
+      (.code (.node request .pure)) state).state.native.nodes ∧
+    Returned edgeLaw (SourceEqualityNativeDemand.execute fuel
+      (.code (.node request .pure)) state).state.native.edges

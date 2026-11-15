@@ -1,0 +1,29 @@
+theorem enter_prefix_common_operands
+    (domain : Interned DomainKey) (left right : Node) (first second : Nat)
+    (next : Interned DomainKey → Code Symbol Guard A)
+    (fuel : Nat) (before after : Checked width) (rest : Control A)
+    (valid : Physical before.native)
+    (actual : Trace (fuel + 1) (.code (.enter domain left right first second next)) before rest after) :
+    let allocated := SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains
+      domain.key left right first second
+    let enteredState : Checked width :=
+      {before with native := advance before.native {before.native.machine with domains := allocated.2}}
+    step (.code (.enter domain left right first second next)) before =
+      .yielded (.code (next allocated.1)) enteredState ∧
+    Trace fuel (.code (next allocated.1)) enteredState rest after ∧
+    enteredState.native.machine.heap = before.native.machine.heap ∧
+    enteredState.native.machine.domains = allocated.2 ∧
+    enteredState.operations = before.operations ∧
+    Domain before.native.machine domain ∧
+    Available before.native.machine.heap left ∧ Available before.native.machine.heap right ∧
+    Available after.native.machine.heap left ∧ Available after.native.machine.heap right ∧
+    Domain enteredState.native.machine allocated.1 ∧ Domain after.native.machine allocated.1 ∧
+    allocated.1.key = SourceRecursiveIntersectionDomain.extend domain.key
+      ((SourceRecursiveIntersectionEnvironment.bindings left right).map Prod.fst)
+      (SourceRecursiveIntersectionControl.pair first second) ∧
+    Extension before.native.machine after.native.machine ∧
+    (∀ (pattern : Node), (pattern = left ∨ pattern = right) → pattern.free = [] →
+      ∀ (patternId : Nat), SourceRecursiveIntersectionControl.identity pattern = some patternId →
+      ∀ (candidate : Node), Available after.native.machine.heap candidate → candidate.free = [] →
+      SourceRecursiveIntersectionControl.identity candidate = some patternId →
+      candidate = pattern ∧ height candidate = height pattern)

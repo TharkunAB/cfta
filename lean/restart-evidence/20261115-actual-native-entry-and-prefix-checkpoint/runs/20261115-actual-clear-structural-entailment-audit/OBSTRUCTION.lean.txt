@@ -1,0 +1,42 @@
+import MicroCFTA.EnumerationPendingAssignment
+import MicroCFTA.SourcePruningPartialRenderingSemantics
+
+/-!
+This candidate is UNCOMPILED. It states a structural non-entailment.
+It does not assert an accepted-source runtime counterexample.
+-/
+namespace MicroCFTA.ActualClearStructuralEntailmentAudit
+open Language Fragments EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationOrder
+local notation "Symbol" => SourcePruningTemplates.Symbol
+variable {Guard : Type}
+
+/-- A pending owner's proper path is not forced by UF and stored fragment equations. -/
+theorem proper_pending_path_not_entailed
+    (state : State Symbol Guard) (safe : Safe state)
+    (level : Nat → Nat) (frontier : Nat) (stratified : Stratified state level frontier)
+    (owner : Nat) (node : Option Nat) (bucket : List Suspended)
+    (stored : state.values[owner]? = some (.unenumerated node bucket))
+    (sc : Suspended) (path : List Nat)
+    (represented : path ∈ EqualityTrie.fromPathTrie sc.trie) (proper : path ≠ [])
+    (leaf : Symbol) :
+    ∃ assignment : Nat → Term Symbol,
+      SourcePruningPartialRenderingSemantics.StoredEquations assignment state ∧
+      ¬ Suspended.Holds assignment (assignment owner) sc := by
+  let base : Nat → Term Symbol := fun _ => .node leaf []
+  have compatible : UnionFind.Satisfies state.representatives base := by
+    intro left right same
+    rfl
+  obtain ⟨assignment, aliases, equations, choices⟩ :=
+    EnumerationPendingAssignment.stratified_extend_pending state safe level frontier stratified base compatible
+  refine ⟨assignment, ⟨aliases, ?_⟩, ?_⟩
+  · intro uv fragment present
+    exact (equations uv fragment present).symm
+  · intro holds
+    have located := holds path represented
+    rw [choices owner node bucket stored] at located
+    cases path with
+    | nil => exact proper rfl
+    | cons index rest =>
+        simpa [base, Term.atPath] using located
+
+end MicroCFTA.ActualClearStructuralEntailmentAudit

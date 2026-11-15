@@ -1,0 +1,246 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-actual-native-entry-reference-and-prefix-check/source/MicroCFTA/SourceCurrentAllocatedNativeEdgeBodyReturned.lean:138:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (execute remaining ((Control.code (requestNode request.domain pair.fst pair.snd)).bind next) before).state
+in the target expression
+  Returned nodeLaw
+      (execute remaining (Control.code ((requestNode request.domain pair.fst pair.snd).bind next))
+              before).state.native.nodes ∧
+    Returned edgeLaw
+      (execute remaining (Control.code ((requestNode request.domain pair.fst pair.snd).bind next))
+              before).state.native.edges
+
+case cons.inl
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+nodeLaw : NodeRequest Symbol Guard → Value Symbol Guard → Prop
+edgeLaw : EdgeRequest Symbol Guard → EdgeValue Symbol Guard → Prop
+request : EdgeRequest Symbol Guard
+state : Checked width
+fuel : Nat
+children :
+  ∀ (stepsBefore childFuel : Nat),
+    0 < stepsBefore →
+      stepsBefore + childFuel ≤ fuel →
+        childFuel < fuel →
+          ∀ (pair : Value Symbol Guard × Value Symbol Guard),
+            pair ∈ request.left.children.zip request.right.children →
+              ∀ (next : Value Symbol Guard → Code Symbol Guard (EdgeValue Symbol Guard)) (first : Checked width),
+                Steps stepsBefore (Control.edgeBody request Code.pure) state
+                    (Control.code ((requestNode request.domain pair.fst pair.snd).bind next)) first →
+                  Returned nodeLaw first.native.nodes →
+                    Returned edgeLaw first.native.edges →
+                      Returned nodeLaw
+                          (execute childFuel (Control.code (requestNode request.domain pair.fst pair.snd))
+                                  first).state.native.nodes ∧
+                        Returned edgeLaw
+                          (execute childFuel (Control.code (requestNode request.domain pair.fst pair.snd))
+                                  first).state.native.edges
+pair : Value Symbol Guard × Value Symbol Guard
+rest : List (Value Symbol Guard × Value Symbol Guard)
+ih :
+  ∀ (before : Checked width) (remaining stepsBefore : Nat)
+    (build : List (Value Symbol Guard) → Work Symbol Guard (EdgeValue Symbol Guard)),
+    Steps stepsBefore (Control.edgeBody request Code.pure) state
+        (Control.code
+          ((walk (fun pair => requestNode request.domain pair.fst pair.snd) rest).bind fun values =>
+            Code.work (build values) Code.pure))
+        before →
+      0 < stepsBefore →
+        stepsBefore + remaining ≤ fuel →
+          (∀ (pair : Value Symbol Guard × Value Symbol Guard),
+              pair ∈ rest → pair ∈ request.left.children.zip request.right.children) →
+            Returned nodeLaw before.native.nodes →
+              Returned edgeLaw before.native.edges →
+                Returned nodeLaw
+                    (execute remaining
+                            (Control.code
+                              ((walk (fun pair => requestNode request.domain pair.fst pair.snd) rest).bind fun values =>
+                                Code.work (build values) Code.pure))
+                            before).state.native.nodes ∧
+                  Returned edgeLaw
+                    (execute remaining
+                            (Control.code
+                              ((walk (fun pair => requestNode request.domain pair.fst pair.snd) rest).bind fun values =>
+                                Code.work (build values) Code.pure))
+                            before).state.native.edges
+before : Checked width
+remaining stepsBefore : Nat
+build : List (Value Symbol Guard) → Work Symbol Guard (EdgeValue Symbol Guard)
+origin :
+  Steps stepsBefore (Control.edgeBody request Code.pure) state
+    (Control.code
+      ((walk (fun pair => requestNode request.domain pair.fst pair.snd) (pair :: rest)).bind fun values =>
+        Code.work (build values) Code.pure))
+    before
+positive : 0 < stepsBefore
+bounded : stepsBefore + remaining ≤ fuel
+included :
+  ∀ (pair_1 : Value Symbol Guard × Value Symbol Guard),
+    pair_1 ∈ pair :: rest → pair_1 ∈ request.left.children.zip request.right.children
+nodes : Returned nodeLaw before.native.nodes
+edges : Returned edgeLaw before.native.edges
+next : Value Symbol Guard → Code Symbol Guard (EdgeValue Symbol Guard) :=
+  fun value =>
+    (walk (fun pair => requestNode request.domain pair.fst pair.snd) rest).bind fun values =>
+      Code.work (build (value :: values)) Code.pure
+sameCode :
+  ((walk (fun pair => requestNode request.domain pair.fst pair.snd) (pair :: rest)).bind fun values =>
+      Code.work (build values) Code.pure) =
+    (requestNode request.domain pair.fst pair.snd).bind next
+atChild :
+  Steps stepsBefore (Control.edgeBody request Code.pure) state
+    (Control.code ((requestNode request.domain pair.fst pair.snd).bind next)) before
+same :
+  (execute remaining ((Control.code (requestNode request.domain pair.fst pair.snd)).bind next) before).state =
+    (execute remaining (Control.code (requestNode request.domain pair.fst pair.snd)) before).state
+⊢ Returned nodeLaw
+      (execute remaining (Control.code ((requestNode request.domain pair.fst pair.snd).bind next))
+              before).state.native.nodes ∧
+    Returned edgeLaw
+      (execute remaining (Control.code ((requestNode request.domain pair.fst pair.snd).bind next))
+              before).state.native.edges
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-actual-native-entry-reference-and-prefix-check/source/MicroCFTA/SourceCurrentAllocatedNativeEdgeBodyReturned.lean:158:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (execute remaining ((Control.code (requestNode request.domain pair.fst pair.snd)).bind next) before).state
+in the target expression
+  Returned nodeLaw
+      (execute remaining (Control.code ((requestNode request.domain pair.fst pair.snd).bind next))
+              before).state.native.nodes ∧
+    Returned edgeLaw
+      (execute remaining (Control.code ((requestNode request.domain pair.fst pair.snd).bind next))
+              before).state.native.edges
+
+case cons.inr
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+nodeLaw : NodeRequest Symbol Guard → Value Symbol Guard → Prop
+edgeLaw : EdgeRequest Symbol Guard → EdgeValue Symbol Guard → Prop
+request : EdgeRequest Symbol Guard
+state : Checked width
+fuel : Nat
+children :
+  ∀ (stepsBefore childFuel : Nat),
+    0 < stepsBefore →
+      stepsBefore + childFuel ≤ fuel →
+        childFuel < fuel →
+          ∀ (pair : Value Symbol Guard × Value Symbol Guard),
+            pair ∈ request.left.children.zip request.right.children →
+              ∀ (next : Value Symbol Guard → Code Symbol Guard (EdgeValue Symbol Guard)) (first : Checked width),
+                Steps stepsBefore (Control.edgeBody request Code.pure) state
+                    (Control.code ((requestNode request.domain pair.fst pair.snd).bind next)) first →
+                  Returned nodeLaw first.native.nodes →
+                    Returned edgeLaw first.native.edges →
+                      Returned nodeLaw
+                          (execute childFuel (Control.code (requestNode request.domain pair.fst pair.snd))
+                                  first).state.native.nodes ∧
+                        Returned edgeLaw
+                          (execute childFuel (Control.code (requestNode request.domain pair.fst pair.snd))
+                                  first).state.native.edges
+pair : Value Symbol Guard × Value Symbol Guard
+rest : List (Value Symbol Guard × Value Symbol Guard)
+ih :
+  ∀ (before : Checked width) (remaining stepsBefore : Nat)
+    (build : List (Value Symbol Guard) → Work Symbol Guard (EdgeValue Symbol Guard)),
+    Steps stepsBefore (Control.edgeBody request Code.pure) state
+        (Control.code
+          ((walk (fun pair => requestNode request.domain pair.fst pair.snd) rest).bind fun values =>
+            Code.work (build values) Code.pure))
+        before →
+      0 < stepsBefore →
+        stepsBefore + remaining ≤ fuel →
+          (∀ (pair : Value Symbol Guard × Value Symbol Guard),
+              pair ∈ rest → pair ∈ request.left.children.zip request.right.children) →
+            Returned nodeLaw before.native.nodes →
+              Returned edgeLaw before.native.edges →
+                Returned nodeLaw
+                    (execute remaining
+                            (Control.code
+                              ((walk (fun pair => requestNode request.domain pair.fst pair.snd) rest).bind fun values =>
+                                Code.work (build values) Code.pure))
+                            before).state.native.nodes ∧
+                  Returned edgeLaw
+                    (execute remaining
+                            (Control.code
+                              ((walk (fun pair => requestNode request.domain pair.fst pair.snd) rest).bind fun values =>
+                                Code.work (build values) Code.pure))
+                            before).state.native.edges
+before : Checked width
+remaining stepsBefore : Nat
+build : List (Value Symbol Guard) → Work Symbol Guard (EdgeValue Symbol Guard)
+origin :
+  Steps stepsBefore (Control.edgeBody request Code.pure) state
+    (Control.code
+      ((walk (fun pair => requestNode request.domain pair.fst pair.snd) (pair :: rest)).bind fun values =>
+        Code.work (build values) Code.pure))
+    before
+positive : 0 < stepsBefore
+bounded : stepsBefore + remaining ≤ fuel
+included :
+  ∀ (pair_1 : Value Symbol Guard × Value Symbol Guard),
+    pair_1 ∈ pair :: rest → pair_1 ∈ request.left.children.zip request.right.children
+nodes : Returned nodeLaw before.native.nodes
+edges : Returned edgeLaw before.native.edges
+next : Value Symbol Guard → Code Symbol Guard (EdgeValue Symbol Guard) :=
+  fun value =>
+    (walk (fun pair => requestNode request.domain pair.fst pair.snd) rest).bind fun values =>
+      Code.work (build (value :: values)) Code.pure
+sameCode :
+  ((walk (fun pair => requestNode request.domain pair.fst pair.snd) (pair :: rest)).bind fun values =>
+      Code.work (build values) Code.pure) =
+    (requestNode request.domain pair.fst pair.snd).bind next
+atChild :
+  Steps stepsBefore (Control.edgeBody request Code.pure) state
+    (Control.code ((requestNode request.domain pair.fst pair.snd).bind next)) before
+steps : Nat
+value : Value Symbol Guard
+middle : Checked width
+shorter : steps < remaining
+called :
+  Steps steps (Control.code (requestNode request.domain pair.fst pair.snd)) before (Control.code (Code.pure value))
+    middle
+same :
+  (execute remaining ((Control.code (requestNode request.domain pair.fst pair.snd)).bind next) before).state =
+    (execute (remaining - steps) (Control.code (next value)) middle).state
+completed :
+  execute (steps + 1) (Control.code (requestNode request.domain pair.fst pair.snd)) before = Outcome.done value middle
+atMiddle :
+  Returned nodeLaw (Outcome.done value middle).state.native.nodes ∧
+    Returned edgeLaw (Outcome.done value middle).state.native.edges
+advanced :
+  Steps steps ((Control.code (requestNode request.domain pair.fst pair.snd)).bind next) before
+    ((Control.code (Code.pure value)).bind next) middle
+tailOrigin :
+  Steps (stepsBefore + steps) (Control.edgeBody request Code.pure) state
+    (Control.code
+      ((walk (fun pair => requestNode request.domain pair.fst pair.snd) rest).bind fun values =>
+        Code.work (build (value :: values)) Code.pure))
+    middle
+restIncluded :
+  ∀ (candidate : Value Symbol Guard × Value Symbol Guard),
+    candidate ∈ rest → candidate ∈ request.left.children.zip request.right.children
+later :
+  Returned nodeLaw
+      (execute (remaining - steps)
+              (Control.code
+                ((walk (fun pair => requestNode request.domain pair.fst pair.snd) rest).bind fun values =>
+                  Code.work (build (value :: values)) Code.pure))
+              middle).state.native.nodes ∧
+    Returned edgeLaw
+      (execute (remaining - steps)
+              (Control.code
+                ((walk (fun pair => requestNode request.domain pair.fst pair.snd) rest).bind fun values =>
+                  Code.work (build (value :: values)) Code.pure))
+              middle).state.native.edges
+⊢ Returned nodeLaw
+      (execute remaining (Control.code ((requestNode request.domain pair.fst pair.snd).bind next))
+              before).state.native.nodes ∧
+    Returned edgeLaw
+      (execute remaining (Control.code ((requestNode request.domain pair.fst pair.snd).bind next))
+              before).state.native.edges
+'MicroCFTA.SourceCurrentAllocatedNativeEdgeBodyReturned.bind_endpoint_state_cases' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceCurrentAllocatedNativeEdgeBodyReturned.edge_body_returned_all_fuels' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,12 @@
+[
+  {
+    "name": "bind_endpoint_state_cases",
+    "header": "theorem bind_endpoint_state_cases\n    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]\n    (fuel : Nat) (control : Control A) (next : A \u2192 Code Symbol Guard B) (state : Checked width) :\n    (SourceEqualityNativeDemand.execute fuel (control.bind next) state).state =\n      (SourceEqualityNativeDemand.execute fuel control state).state \u2228\n    \u2203 steps value middle, steps < fuel \u2227\n      Steps steps control state (.code (.pure value)) middle \u2227\n      (SourceEqualityNativeDemand.execute fuel (control.bind next) state).state =\n        (SourceEqualityNativeDemand.execute (fuel - steps) (.code (next value)) middle).state",
+    "sha256": "6d22d5fa50653b315bb5979ca1688c067bc7d0d2f2c3254ad05badbef2581442"
+  },
+  {
+    "name": "edge_body_returned_all_fuels",
+    "header": "theorem edge_body_returned_all_fuels\n    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]\n    (nodeLaw : NodeRequest Symbol Guard \u2192 Value Symbol Guard \u2192 Prop)\n    (edgeLaw : EdgeRequest Symbol Guard \u2192 EdgeValue Symbol Guard \u2192 Prop)\n    (request : EdgeRequest Symbol Guard) (state : Checked width) (fuel : Nat)\n    (nodes : Returned nodeLaw state.native.nodes) (edges : Returned edgeLaw state.native.edges)\n    (children : \u2200 stepsBefore childFuel, 0 < stepsBefore \u2192 stepsBefore + childFuel \u2264 fuel \u2192 childFuel < fuel \u2192\n      \u2200 pair \u2208 request.left.children.zip request.right.children,\n      \u2200 (next : Value Symbol Guard \u2192 Code Symbol Guard (EdgeValue Symbol Guard)) (first : Checked width),\n        Steps stepsBefore (.edgeBody request .pure) state\n          (.code ((requestNode request.domain pair.1 pair.2).bind next)) first \u2192\n        Returned nodeLaw first.native.nodes \u2192 Returned edgeLaw first.native.edges \u2192\n        Returned nodeLaw (SourceEqualityNativeDemand.execute childFuel\n          (.code (requestNode request.domain pair.1 pair.2)) first).state.native.nodes \u2227\n        Returned edgeLaw (SourceEqualityNativeDemand.execute childFuel\n          (.code (requestNode request.domain pair.1 pair.2)) first).state.native.edges) :\n    Returned nodeLaw (SourceEqualityNativeDemand.execute fuel (.edgeBody request .pure) state).state.native.nodes \u2227\n      Returned edgeLaw (SourceEqualityNativeDemand.execute fuel (.edgeBody request .pure) state).state.native.edges",
+    "sha256": "f11caa16f31d5a01766cbc935d1b063c822451a0ca39dabce1c0c89cc2655f17"
+  }
+]
