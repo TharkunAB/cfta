@@ -5027,6 +5027,7 @@ import MicroCFTA.SourceCurrentConjunctionDemandNumeric
 import MicroCFTA.SourceCurrentConjunctionDemandWeakEffects
 import MicroCFTA.SourceCurrentConjunctionDemandMemos
 import MicroCFTA.SourceCurrentConjunctionDemandVerified
+import MicroCFTA.SourcePruningEnumerationSharedParkedRawBucketReceipt
 /-!
 # Proof dependency audit
 
@@ -5572,3 +5573,6 @@ run_cmd do
 
 #check @MicroCFTA.SourcePruningEnumerationSharedScanOutputOrigins.identity_eager_scan_output_origin
 #print axioms MicroCFTA.SourcePruningEnumerationSharedScanOutputOrigins.identity_eager_scan_output_origin
+
+#check @MicroCFTA.SourcePruningEnumerationSharedPreparedRecursive.parked_singleton_removed_bucket_receipt
+#print axioms MicroCFTA.SourcePruningEnumerationSharedPreparedRecursive.parked_singleton_removed_bucket_receipt
