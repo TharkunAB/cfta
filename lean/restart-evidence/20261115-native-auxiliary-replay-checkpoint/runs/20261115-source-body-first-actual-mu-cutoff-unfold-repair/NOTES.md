@@ -1,0 +1,1 @@
+Use explicit unfolding and equality rewriting at the literal child compiler. The simplifier did not match the local entered-domain selector after reducing nested lets. Complete public header and all source/full-pattern/domain/current-cache assumptions remain byte-exact. Keep the failed draft and diagnostics.

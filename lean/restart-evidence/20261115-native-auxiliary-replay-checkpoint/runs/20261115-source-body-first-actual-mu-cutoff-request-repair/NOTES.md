@@ -1,0 +1,1 @@
+Restore the definitionally equal literal child request with change before compiler reduction. This retains local entered-domain and reference names so the selector equality matches. The complete public header stays byte-exact. All failed source and unfold attempts remain.

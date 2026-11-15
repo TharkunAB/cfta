@@ -1,0 +1,91 @@
+MicroCFTA.SourceCurrentAllocatedNativeSourceBodyFirstActualMuCutoff.current_stored_universe_body_first_actual_mu_cutoff
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (lib : MicroCFTA.SourceSynthesisTypeSyntax.Library) (query : MicroCFTA.SourceSynthesisTypeSyntax.Query)
+  (signed : Int) (whole : MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression)
+  (accepted : MicroCFTA.SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole)
+  (rootValue :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (sourceHeap :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (built :
+    MicroCFTA.InternedFreshOrdinaryConstruction.build
+        (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+        MicroCFTA.InternedConstructorTemplates.empty =
+      MicroCFTA.InternedNestedConstruction.Outcome.done rootValue sourceHeap)
+  (key : MicroCFTA.InternedBinderProtocol.NodeKey)
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (body depth ordinary :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (stored :
+    sourceHeap.nodeRecords key = some (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary))
+  (heap :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (facts : MicroCFTA.InternedNestedFacts.Facts heap)
+  (growth : MicroCFTA.InternedConstructorTemplates.Grows sourceHeap heap)
+  (domains : MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+  (cacheValid : MicroCFTA.Cache.Valid domains)
+  (pattern :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (_patternAvailable : MicroCFTA.InternedProbeProvenance.Available heap pattern) (_patternClosed : pattern.free = [])
+  (patternId : Nat) (_patternIdentity : MicroCFTA.SourceRecursiveIntersectionControl.identity pattern = some patternId)
+  (_patternKind :
+    MicroCFTA.SourceRecursiveIntersectionControl.tag pattern = 1 ∨
+      MicroCFTA.SourceRecursiveIntersectionControl.tag pattern = 3) :
+  ∃ bodyEntry bodyRows,
+    body =
+        MicroCFTA.InternedConstructorTemplates.Value.node bodyEntry bodyRows 0
+          [MicroCFTA.InternedBinderProtocol.Reference.interned entry.identity] ∧
+      bodyEntry.identity ≠ entry.identity ∧
+        have universeValue := MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary;
+        have referenceValue :=
+          MicroCFTA.InternedConstructorTemplates.Value.reference
+            (MicroCFTA.InternedBinderProtocol.Reference.interned entry.identity);
+        have original :=
+          MicroCFTA.SourceRecursiveIntersectionEnvironment.enter domains MicroCFTA.IntersectionEmptyDomain.emptyKey
+            universeValue pattern entry.identity patternId;
+        have bodyFirst :=
+          MicroCFTA.SourceRecursiveIntersectionEnvironment.enter original.snd original.fst.key body universeValue
+            bodyEntry.identity entry.identity;
+        have bodyTerminal :=
+          MicroCFTA.SourceRecursiveIntersectionEnvironment.enter bodyFirst.snd bodyFirst.fst.key universeValue
+            referenceValue entry.identity entry.identity;
+        have binder := MicroCFTA.SourceRecursiveIntersectionControl.pair entry.identity entry.identity;
+        have cutoff :=
+          MicroCFTA.SourceRecursiveIntersectionControl.repeatedValue
+            (MicroCFTA.SourceRecursiveIntersectionControl.pair bodyEntry.identity entry.identity);
+        MicroCFTA.SourceRecursiveIntersectionControl.decision bodyFirst.fst.key universeValue referenceValue =
+            MicroCFTA.SourceRecursiveIntersectionControl.Branch.leftMu ∧
+          MicroCFTA.SourceRecursiveIntersectionCode.compileNode
+                { domain := bodyFirst.fst, left := universeValue, right := referenceValue } =
+              MicroCFTA.SourceRecursiveIntersectionCode.compileMu bodyFirst.fst universeValue referenceValue ∧
+            ¬MicroCFTA.InternedBinderProtocol.Reference.intersection binder.fst binder.snd ∈ cutoff.free ∧
+              (∀ (current : MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey),
+                  MicroCFTA.Cache.Valid current →
+                    have actualEntered :=
+                      MicroCFTA.SourceRecursiveIntersectionEnvironment.enter current bodyFirst.fst.key universeValue
+                        referenceValue entry.identity entry.identity;
+                    actualEntered.fst.key = bodyTerminal.fst.key ∧
+                      MicroCFTA.SourceRecursiveIntersectionControl.decision actualEntered.fst.key body referenceValue =
+                          MicroCFTA.SourceRecursiveIntersectionControl.Branch.repeated
+                            (MicroCFTA.SourceRecursiveIntersectionControl.pair bodyEntry.identity entry.identity) ∧
+                        MicroCFTA.SourceRecursiveIntersectionCode.compileNode
+                            { domain := actualEntered.fst, left := body, right := referenceValue } =
+                          MicroCFTA.SourceRecursiveIntersectionCode.Code.pure cutoff) ∧
+                ∀
+                  (currentHeap :
+                    MicroCFTA.InternedConstructorTemplates.State
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+                  MicroCFTA.SourceRecursiveIntersectionMaybeMu.maybeMu binder cutoff currentHeap =
+                    MicroCFTA.InternedNestedConstruction.Outcome.done cutoff currentHeap
+'MicroCFTA.SourceCurrentAllocatedNativeSourceBodyFirstActualMuCutoff.current_stored_universe_body_first_actual_mu_cutoff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

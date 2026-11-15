@@ -1,0 +1,1 @@
+Apply the literal repeated-branch compiler fact at an abstract request before instantiating the deeply nested source entry. This private fact avoids selector matching through local lets. Every public-header byte and all source/full-pattern/current-cache premises remain exact. Keep all failed original/unfold/request attempts and diagnostics.

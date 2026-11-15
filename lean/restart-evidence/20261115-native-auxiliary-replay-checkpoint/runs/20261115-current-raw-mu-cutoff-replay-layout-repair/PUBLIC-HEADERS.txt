@@ -1,0 +1,55 @@
+theorem left_mu_cutoff_trace_result
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (request : NodeRequest Symbol Guard) (original before after : Checked width)
+    (parentFuel bodySteps : Nat) (result expected : Value Symbol Guard) (first second : Nat)
+    (finishNext : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard))
+    (selected : SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right = .leftMu)
+    (leftIdentity : SourceRecursiveIntersectionControl.identity request.left = some first)
+    (rightIdentity : SourceRecursiveIntersectionControl.identity request.right = some second)
+    (childPure : compileNode
+      ⟨(SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains request.domain.key
+        request.left request.right first second).1,
+        SourceRecursiveIntersectionKernel.body request.left,
+        SourceRecursiveIntersectionKernel.body request.right⟩ = .pure expected)
+    (absent : let binder := SourceRecursiveIntersectionControl.pair first second
+      InternedBinderProtocol.Reference.intersection binder.1 binder.2 ∉ expected.free)
+    (entered : Steps 1 (.code (.node request .pure)) original
+      (.code ((compileNode request).bind finishNext)) before)
+    (smaller : bodySteps < parentFuel)
+    (actual : Steps bodySteps (.code (compileNode request)) before (.code (.pure result)) after)
+    (children :
+      let allocated := SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains request.domain.key
+        request.left request.right first second
+      let started : Checked width :=
+        {before with native := advance before.native {before.native.machine with domains := allocated.2}}
+      ∀ used count, 0 < used → used + count ≤ parentFuel → count < parentFuel →
+      ∀ (next : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard))
+        (value : Value Symbol Guard) (middle : Checked width),
+      Steps used (.code (.node request .pure)) original
+        (.code ((requestNode allocated.1 (SourceRecursiveIntersectionKernel.body request.left)
+          (SourceRecursiveIntersectionKernel.body request.right)).bind next)) started →
+      Steps count (.code (requestNode allocated.1 (SourceRecursiveIntersectionKernel.body request.left)
+        (SourceRecursiveIntersectionKernel.body request.right))) started (.code (.pure value)) middle →
+      compileNode ⟨allocated.1, SourceRecursiveIntersectionKernel.body request.left,
+        SourceRecursiveIntersectionKernel.body request.right⟩ = .pure expected → value = expected) :
+    let allocated := SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains request.domain.key
+      request.left request.right first second
+    let started : Checked width :=
+      {before with native := advance before.native {before.native.machine with domains := allocated.2}}
+    let binder := SourceRecursiveIntersectionControl.pair first second
+    result = expected ∧ ∃ (childSteps : Nat) (middle : Checked width),
+      bodySteps = 1 + childSteps + 1 ∧ 2 + childSteps ≤ parentFuel ∧ childSteps < parentFuel ∧
+      Steps 1 (.code (compileNode request)) before
+        (.code ((requestNode allocated.1 (SourceRecursiveIntersectionKernel.body request.left)
+          (SourceRecursiveIntersectionKernel.body request.right)).bind
+            (fun value => .optionalBinder binder value .pure))) started ∧
+      Steps 2 (.code (.node request .pure)) original
+        (.code ((requestNode allocated.1 (SourceRecursiveIntersectionKernel.body request.left)
+          (SourceRecursiveIntersectionKernel.body request.right)).bind
+            (fun value => .optionalBinder binder value finishNext))) started ∧
+      Steps childSteps (.code (requestNode allocated.1 (SourceRecursiveIntersectionKernel.body request.left)
+        (SourceRecursiveIntersectionKernel.body request.right))) started (.code (.pure expected)) middle ∧
+      SourceRecursiveIntersectionMaybeMu.maybeMu binder expected middle.native.machine.heap =
+        .done expected middle.native.machine.heap ∧
+      Steps 1 (.code (.optionalBinder binder expected .pure)) middle (.code (.pure expected)) after ∧
+      after = {middle with native := advance middle.native {middle.native.machine with heap := middle.native.machine.heap}} := by

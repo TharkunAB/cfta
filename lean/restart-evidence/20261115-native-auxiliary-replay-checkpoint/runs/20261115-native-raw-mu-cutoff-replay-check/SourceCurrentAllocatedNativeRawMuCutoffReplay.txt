@@ -1,0 +1,178 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-raw-mu-cutoff-replay-check/source/MicroCFTA/SourceCurrentAllocatedNativeRawMuCutoffReplay.lean:29:58: error: unexpected token '{'; expected '}'
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-raw-mu-cutoff-replay-check/source/MicroCFTA/SourceCurrentAllocatedNativeRawMuCutoffReplay.lean:106:58: error: unexpected token '{'; expected '}'
+MicroCFTA.SourceCurrentAllocatedNativeRawMuCutoffReplay.left_mu_cutoff_trace_result {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (original before after : MicroCFTA.SourceEqualityNativeDemand.State width) (parentFuel bodySteps : Nat)
+  (result expected :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (first second : Nat)
+  (finishNext :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      MicroCFTA.SourceRecursiveIntersectionCode.Code (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (selected :
+    MicroCFTA.SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right =
+      MicroCFTA.SourceRecursiveIntersectionControl.Branch.leftMu)
+  (leftIdentity : MicroCFTA.SourceRecursiveIntersectionControl.identity request.left = some first)
+  (rightIdentity : MicroCFTA.SourceRecursiveIntersectionControl.identity request.right = some second)
+  (childPure :
+    MicroCFTA.SourceRecursiveIntersectionCode.compileNode
+        {
+          domain :=
+            (MicroCFTA.SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains request.domain.key
+                request.left request.right first second).fst,
+          left := MicroCFTA.SourceRecursiveIntersectionKernel.body request.left,
+          right := MicroCFTA.SourceRecursiveIntersectionKernel.body request.right } =
+      MicroCFTA.SourceRecursiveIntersectionCode.Code.pure expected)
+  (absent :
+    have binder := MicroCFTA.SourceRecursiveIntersectionControl.pair first second;
+    ¬MicroCFTA.InternedBinderProtocol.Reference.intersection binder.fst binder.snd ∈ expected.free)
+  (entered :
+    MicroCFTA.SourceEqualityNativeDemand.Steps 1
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+        (MicroCFTA.SourceRecursiveIntersectionCode.Code.node request
+          MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+      original
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+        ((MicroCFTA.SourceRecursiveIntersectionCode.compileNode request).bind finishNext))
+      before)
+  (smaller : bodySteps < parentFuel)
+  (actual :
+    MicroCFTA.SourceEqualityNativeDemand.Steps bodySteps
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+        (MicroCFTA.SourceRecursiveIntersectionCode.compileNode request))
+      before
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code (MicroCFTA.SourceRecursiveIntersectionCode.Code.pure result))
+      after)
+  (children :
+    have allocated :=
+      MicroCFTA.SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains request.domain.key
+        request.left request.right first second;
+    have started :=
+      {
+        native :=
+          MicroCFTA.SourceRecursiveIntersectionThunks.advance before.native
+            (have __src := before.native.machine;
+            { heap := __src.heap, domains := allocated.snd }),
+        operations := before.operations };
+    ∀ (used count : Nat),
+      0 < used →
+        used + count ≤ parentFuel →
+          count < parentFuel →
+            ∀
+              (next :
+                MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+                  MicroCFTA.SourceRecursiveIntersectionCode.Code
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.InternedConstructorTemplates.Value
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+              (value :
+                MicroCFTA.InternedConstructorTemplates.Value
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (middle : MicroCFTA.SourceEqualityNativeDemand.State width),
+              MicroCFTA.SourceEqualityNativeDemand.Steps used
+                  (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                    (MicroCFTA.SourceRecursiveIntersectionCode.Code.node request
+                      MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+                  original
+                  (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                    ((MicroCFTA.SourceRecursiveIntersectionCode.requestNode allocated.fst
+                          (MicroCFTA.SourceRecursiveIntersectionKernel.body request.left)
+                          (MicroCFTA.SourceRecursiveIntersectionKernel.body request.right)).bind
+                      next))
+                  started →
+                MicroCFTA.SourceEqualityNativeDemand.Steps count
+                    (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                      (MicroCFTA.SourceRecursiveIntersectionCode.requestNode allocated.fst
+                        (MicroCFTA.SourceRecursiveIntersectionKernel.body request.left)
+                        (MicroCFTA.SourceRecursiveIntersectionKernel.body request.right)))
+                    started
+                    (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                      (MicroCFTA.SourceRecursiveIntersectionCode.Code.pure value))
+                    middle →
+                  MicroCFTA.SourceRecursiveIntersectionCode.compileNode
+                        { domain := allocated.fst,
+                          left := MicroCFTA.SourceRecursiveIntersectionKernel.body request.left,
+                          right := MicroCFTA.SourceRecursiveIntersectionKernel.body request.right } =
+                      MicroCFTA.SourceRecursiveIntersectionCode.Code.pure expected →
+                    value = expected) :
+  have allocated :=
+    MicroCFTA.SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains request.domain.key request.left
+      request.right first second;
+  have started :=
+    {
+      native :=
+        MicroCFTA.SourceRecursiveIntersectionThunks.advance before.native
+          (have __src := before.native.machine;
+          { heap := __src.heap, domains := allocated.snd }),
+      operations := before.operations };
+  have binder := MicroCFTA.SourceRecursiveIntersectionControl.pair first second;
+  result = expected ∧
+    ∃ childSteps middle,
+      bodySteps = 1 + childSteps + 1 ∧
+        2 + childSteps ≤ parentFuel ∧
+          childSteps < parentFuel ∧
+            MicroCFTA.SourceEqualityNativeDemand.Steps 1
+                (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                  (MicroCFTA.SourceRecursiveIntersectionCode.compileNode request))
+                before
+                (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                  ((MicroCFTA.SourceRecursiveIntersectionCode.requestNode allocated.fst
+                        (MicroCFTA.SourceRecursiveIntersectionKernel.body request.left)
+                        (MicroCFTA.SourceRecursiveIntersectionKernel.body request.right)).bind
+                    fun value =>
+                    MicroCFTA.SourceRecursiveIntersectionCode.Code.optionalBinder binder value
+                      MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+                started ∧
+              MicroCFTA.SourceEqualityNativeDemand.Steps 2
+                  (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                    (MicroCFTA.SourceRecursiveIntersectionCode.Code.node request
+                      MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+                  original
+                  (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                    ((MicroCFTA.SourceRecursiveIntersectionCode.requestNode allocated.fst
+                          (MicroCFTA.SourceRecursiveIntersectionKernel.body request.left)
+                          (MicroCFTA.SourceRecursiveIntersectionKernel.body request.right)).bind
+                      fun value =>
+                      MicroCFTA.SourceRecursiveIntersectionCode.Code.optionalBinder binder value finishNext))
+                  started ∧
+                MicroCFTA.SourceEqualityNativeDemand.Steps childSteps
+                    (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                      (MicroCFTA.SourceRecursiveIntersectionCode.requestNode allocated.fst
+                        (MicroCFTA.SourceRecursiveIntersectionKernel.body request.left)
+                        (MicroCFTA.SourceRecursiveIntersectionKernel.body request.right)))
+                    started
+                    (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                      (MicroCFTA.SourceRecursiveIntersectionCode.Code.pure expected))
+                    middle ∧
+                  MicroCFTA.SourceRecursiveIntersectionMaybeMu.maybeMu binder expected middle.native.machine.heap =
+                      MicroCFTA.InternedNestedConstruction.Outcome.done expected middle.native.machine.heap ∧
+                    MicroCFTA.SourceEqualityNativeDemand.Steps 1
+                        (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                          (MicroCFTA.SourceRecursiveIntersectionCode.Code.optionalBinder binder expected
+                            MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+                        middle
+                        (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                          (MicroCFTA.SourceRecursiveIntersectionCode.Code.pure expected))
+                        after ∧
+                      after = { native := sorry, operations := middle.operations }
+'MicroCFTA.SourceCurrentAllocatedNativeRawMuCutoffReplay.left_mu_cutoff_trace_result' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

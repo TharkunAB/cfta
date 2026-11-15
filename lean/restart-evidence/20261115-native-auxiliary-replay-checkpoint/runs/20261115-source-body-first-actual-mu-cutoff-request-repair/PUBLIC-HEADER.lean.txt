@@ -1,0 +1,39 @@
+theorem current_stored_universe_body_first_actual_mu_cutoff
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (heap : InternedConstructorTemplates.State Symbol Guard) (facts : Facts heap) (growth : Grows sourceHeap heap)
+    (domains : Cache.State IntersectionFlatMemoKeyDomain.DomainKey) (cacheValid : Cache.Valid domains)
+    (pattern : Value Symbol Guard) (_patternAvailable : Available heap pattern)
+    (_patternClosed : pattern.free = []) (patternId : Nat)
+    (_patternIdentity : identity pattern = some patternId)
+    (_patternKind : tag pattern = 1 ∨ tag pattern = 3) :
+    ∃ (bodyEntry : Interned NodeKey) (bodyRows : List (EdgeValue Symbol Guard)),
+      body = .node bodyEntry bodyRows 0 [.interned entry.identity] ∧ bodyEntry.identity ≠ entry.identity ∧
+      let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+      let referenceValue : Value Symbol Guard := .reference (.interned entry.identity)
+      let original := SourceRecursiveIntersectionEnvironment.enter domains IntersectionEmptyDomain.emptyKey
+        universeValue pattern entry.identity patternId
+      let bodyFirst := SourceRecursiveIntersectionEnvironment.enter original.2 original.1.key
+        body universeValue bodyEntry.identity entry.identity
+      let bodyTerminal := SourceRecursiveIntersectionEnvironment.enter bodyFirst.2 bodyFirst.1.key
+        universeValue referenceValue entry.identity entry.identity
+      let binder := pair entry.identity entry.identity
+      let cutoff := repeatedValue (pair bodyEntry.identity entry.identity)
+      decision bodyFirst.1.key universeValue referenceValue = .leftMu ∧
+      compileNode ⟨bodyFirst.1, universeValue, referenceValue⟩ =
+        compileMu bodyFirst.1 universeValue referenceValue ∧
+      Reference.intersection binder.1 binder.2 ∉ cutoff.free ∧
+      (∀ (current : Cache.State IntersectionFlatMemoKeyDomain.DomainKey), Cache.Valid current →
+        let actualEntered := SourceRecursiveIntersectionEnvironment.enter current bodyFirst.1.key
+          universeValue referenceValue entry.identity entry.identity
+        actualEntered.1.key = bodyTerminal.1.key ∧
+        decision actualEntered.1.key body referenceValue = .repeated (pair bodyEntry.identity entry.identity) ∧
+        compileNode ⟨actualEntered.1, body, referenceValue⟩ = .pure cutoff) ∧
+      (∀ currentHeap : InternedConstructorTemplates.State Symbol Guard,
+        SourceRecursiveIntersectionMaybeMu.maybeMu binder cutoff currentHeap = .done cutoff currentHeap)

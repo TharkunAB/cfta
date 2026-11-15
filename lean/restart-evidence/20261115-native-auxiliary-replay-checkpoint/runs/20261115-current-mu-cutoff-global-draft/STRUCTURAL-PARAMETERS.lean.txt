@@ -1,0 +1,11 @@
+    (target : NodeRequest Symbol Guard) (expected : Value Symbol Guard) (firstId secondId : Nat)
+    (selected : SourceRecursiveIntersectionControl.decision target.domain.key target.left target.right = .leftMu)
+    (leftIdentity : SourceRecursiveIntersectionControl.identity target.left = some firstId)
+    (rightIdentity : SourceRecursiveIntersectionControl.identity target.right = some secondId)
+    (childPure : ∀ current : Cache.State IntersectionFlatMemoKeyDomain.DomainKey, Cache.Valid current →
+      compileNode ⟨(SourceRecursiveIntersectionEnvironment.enter current target.domain.key
+        target.left target.right firstId secondId).1,
+        SourceRecursiveIntersectionKernel.body target.left,
+        SourceRecursiveIntersectionKernel.body target.right⟩ = .pure expected)
+    (absent : let binder := SourceRecursiveIntersectionControl.pair firstId secondId
+      InternedBinderProtocol.Reference.intersection binder.1 binder.2 ∉ expected.free)
