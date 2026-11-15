@@ -198,7 +198,7 @@ private theorem key_of_codecs {width : Nat} (request : NodeRequest Symbol Guard)
   exact ⟨_, IntersectionFlatMemoKeyDomain.sourceKey_complete width request.domain _ _
     first second firstInput secondInput⟩
 
-private theorem qualified_key
+theorem qualified_key
     [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
     (rootRequest : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
     (operations : SourceEqualityConstraintMemoAllocation.State) (wholeCount : Nat)
