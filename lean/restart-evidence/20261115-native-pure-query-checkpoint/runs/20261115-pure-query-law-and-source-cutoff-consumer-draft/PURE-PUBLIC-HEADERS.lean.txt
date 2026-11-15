@@ -1,0 +1,16 @@
+def PureResult [DecidableEq Symbol]
+    (request : NodeRequest Symbol Guard) (value : Value Symbol Guard) : Prop
+
+theorem raw_result
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (request : NodeRequest Symbol Guard) (before after : Checked width)
+    (count : Nat) (value : Value Symbol Guard)
+    (actual : Steps count (.code (compileNode request)) before (.code (.pure value)) after) :
+    PureResult request value
+
+theorem returned_expected
+    [DecidableEq Symbol]
+    (request : NodeRequest Symbol Guard) (before : Checked width) (expected : Value Symbol Guard)
+    (selected : compileNode request = .pure expected)
+    (returned : Returned PureResult before.native.nodes) :
+    Returned (fun old result => old = request → result = expected) before.native.nodes

@@ -1,0 +1,71 @@
+theorem query_returned_and_raw_results
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (nodeLaw : NodeRequest Symbol Guard → Value Symbol Guard → Prop)
+    (edgeLaw : EdgeRequest Symbol Guard → EdgeValue Symbol Guard → Prop)
+    (nodeResults : ∀ (request : NodeRequest Symbol Guard)
+      (before first middle : Checked width) (parentFuel bodySteps : Nat)
+      (value : Value Symbol Guard) (next : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard)),
+      Physical before.native → InputsThrough parentFuel (.code (.node request .pure)) before →
+      Steps 1 (.code (.node request .pure)) before (.code ((compileNode request).bind next)) first →
+      bodySteps < parentFuel →
+      Steps bodySteps (.code (compileNode request)) first (.code (.pure value)) middle →
+      (∀ (child : NodeRequest Symbol Guard)
+        (childNext : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard))
+        (childBefore childAfter : Checked width) (used count : Nat) (childValue : Value Symbol Guard),
+        0 < used → used + count ≤ parentFuel →
+        Steps used (.code (.node request .pure)) before
+          (.code ((requestNode child.domain child.left child.right).bind childNext)) childBefore →
+        Steps count (.code (requestNode child.domain child.left child.right)) childBefore
+          (.code (.pure childValue)) childAfter → nodeLaw child childValue) →
+      (∀ (child : EdgeRequest Symbol Guard)
+        (childNext : EdgeValue Symbol Guard → Code Symbol Guard (Value Symbol Guard))
+        (childBefore childAfter : Checked width) (used count : Nat) (childValue : EdgeValue Symbol Guard),
+        0 < used → used + count ≤ parentFuel →
+        Steps used (.code (.node request .pure)) before
+          (.code ((requestEdge child.domain child.left child.right).bind childNext)) childBefore →
+        Steps count (.code (requestEdge child.domain child.left child.right)) childBefore
+          (.code (.pure childValue)) childAfter → edgeLaw child childValue) →
+      nodeLaw request value)
+    (edgeResults : ∀ (request : EdgeRequest Symbol Guard)
+      (before first middle : Checked width) (parentFuel bodySteps : Nat)
+      (value : EdgeValue Symbol Guard) (next : EdgeValue Symbol Guard → Code Symbol Guard (EdgeValue Symbol Guard)),
+      Physical before.native → InputsThrough parentFuel (.code (.edge request .pure)) before →
+      Steps 1 (.code (.edge request .pure)) before (.edgeBody request next) first →
+      bodySteps < parentFuel →
+      Steps bodySteps (.edgeBody request .pure) first (.code (.pure value)) middle →
+      (∀ (child : NodeRequest Symbol Guard)
+        (childNext : Value Symbol Guard → Code Symbol Guard (EdgeValue Symbol Guard))
+        (childBefore childAfter : Checked width) (used count : Nat) (childValue : Value Symbol Guard),
+        0 < used → used + count ≤ parentFuel →
+        Steps used (.code (.edge request .pure)) before
+          (.code ((requestNode child.domain child.left child.right).bind childNext)) childBefore →
+        Steps count (.code (requestNode child.domain child.left child.right)) childBefore
+          (.code (.pure childValue)) childAfter → nodeLaw child childValue) →
+      (∀ (child : EdgeRequest Symbol Guard)
+        (childNext : EdgeValue Symbol Guard → Code Symbol Guard (EdgeValue Symbol Guard))
+        (childBefore childAfter : Checked width) (used count : Nat) (childValue : EdgeValue Symbol Guard),
+        0 < used → used + count ≤ parentFuel →
+        Steps used (.code (.edge request .pure)) before
+          (.code ((requestEdge child.domain child.left child.right).bind childNext)) childBefore →
+        Steps count (.code (requestEdge child.domain child.left child.right)) childBefore
+          (.code (.pure childValue)) childAfter → edgeLaw child childValue) →
+      edgeLaw request value)
+    (fuel : Nat) :
+    (∀ (request : NodeRequest Symbol Guard) (before : Checked width),
+      Physical before.native →
+      InputsThrough fuel (.code (.node request .pure)) before →
+      Returned nodeLaw before.native.nodes → Returned edgeLaw before.native.edges →
+      (Returned nodeLaw (execute fuel (.code (.node request .pure)) before).state.native.nodes ∧
+        Returned edgeLaw (execute fuel (.code (.node request .pure)) before).state.native.edges) ∧
+      (∀ (count : Nat) (value : Value Symbol Guard) (after : Checked width), count ≤ fuel →
+        Steps count (.code (.node request .pure)) before (.code (.pure value)) after →
+        nodeLaw request value)) ∧
+    (∀ (request : EdgeRequest Symbol Guard) (before : Checked width),
+      Physical before.native →
+      InputsThrough fuel (.code (.edge request .pure)) before →
+      Returned nodeLaw before.native.nodes → Returned edgeLaw before.native.edges →
+      (Returned nodeLaw (execute fuel (.code (.edge request .pure)) before).state.native.nodes ∧
+        Returned edgeLaw (execute fuel (.code (.edge request .pure)) before).state.native.edges) ∧
+      (∀ (count : Nat) (value : EdgeValue Symbol Guard) (after : Checked width), count ≤ fuel →
+        Steps count (.code (.edge request .pure)) before (.code (.pure value)) after →
+        edgeLaw request value))

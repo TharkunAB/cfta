@@ -1,0 +1,48 @@
+theorem current_stored_universe_auxiliary_pure_cutoff_queries
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (heap : InternedConstructorTemplates.State Symbol Guard) (facts : Facts heap) (growth : Grows sourceHeap heap)
+    (domains : Cache.State IntersectionFlatMemoKeyDomain.DomainKey) (cacheValid : Cache.Valid domains)
+    (pattern : Value Symbol Guard) (_patternAvailable : Available heap pattern)
+    (_patternClosed : pattern.free = []) (patternId : Nat)
+    (_patternIdentity : identity pattern = some patternId)
+    (_patternKind : tag pattern = 1 ∨ tag pattern = 3) :
+    ∃ (bodyEntry : Interned NodeKey) (bodyRows : List (EdgeValue Symbol Guard)),
+      body = .node bodyEntry bodyRows 0 [.interned entry.identity] ∧
+      let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+      let referenceValue : Value Symbol Guard := .reference (.interned entry.identity)
+      let original := SourceRecursiveIntersectionEnvironment.enter domains IntersectionEmptyDomain.emptyKey
+        universeValue pattern entry.identity patternId
+      let bodyFirst := SourceRecursiveIntersectionEnvironment.enter original.2 original.1.key
+        body universeValue bodyEntry.identity entry.identity
+      let bodyTerminal := SourceRecursiveIntersectionEnvironment.enter bodyFirst.2 bodyFirst.1.key
+        universeValue referenceValue entry.identity entry.identity
+      let diagonalFirst := SourceRecursiveIntersectionEnvironment.enter original.2 original.1.key
+        universeValue referenceValue entry.identity entry.identity
+      let diagonalTerminal := SourceRecursiveIntersectionEnvironment.enter diagonalFirst.2 diagonalFirst.1.key
+        body universeValue bodyEntry.identity entry.identity
+      ∀ (request : NodeRequest Symbol Guard) (cutoff : Nat × Nat),
+        ((request = ⟨bodyTerminal.1, body, referenceValue⟩ ∧ cutoff = pair bodyEntry.identity entry.identity) ∨
+          (request = ⟨diagonalTerminal.1, referenceValue, referenceValue⟩ ∧
+            cutoff = pair entry.identity entry.identity)) →
+        decision request.domain.key request.left request.right = .repeated cutoff ∧
+        compileNode request = .pure (repeatedValue cutoff) ∧
+        ∀ (Output : Type) (next : Value Symbol Guard → Code Symbol Guard Output)
+          (before after : Checked width) (fuel : Nat) (value : Output),
+          SourceCurrentAllocatedNativePhysicalCache.Valid before.native →
+          NodeReady before.native.machine request →
+          (∀ key, SourceRecursiveIntersectionMemo.requestKey width request.domain request.left request.right = some key →
+            SourceRecursiveIntersectionMemo.KeySafe width request.domain request.left request.right) →
+          Returned PureResult before.native.nodes →
+          execute fuel (.code (.node request next)) before = .done value after →
+          ∃ (total inner outer : Nat) (middle : Checked width),
+            total < fuel ∧ inner + outer = total ∧
+            Steps inner (.code (requestNode request.domain request.left request.right)) before
+              (.code (.pure (repeatedValue cutoff))) middle ∧
+            Steps outer (.code (next (repeatedValue cutoff))) middle (.code (.pure value)) after

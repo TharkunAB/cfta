@@ -1,0 +1,1 @@
+The NodeResult function conjoins the existing SelfResult with the literal PureResult. Instantiate the same actual query induction. Both complete memo families start at Native.initial. Full C/M/open auxiliary history remains open. No proof credit before strict checks.

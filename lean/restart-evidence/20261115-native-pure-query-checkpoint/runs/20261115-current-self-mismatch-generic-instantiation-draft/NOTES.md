@@ -1,0 +1,1 @@
+Instantiate the generic actual query induction for the same two original law functions. Keep all three existing public statements exact. The original complete module remains in this packet. No statement has proof credit until the generic dependency and this exact consumer pass.
