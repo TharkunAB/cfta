@@ -1,0 +1,149 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-actual-open-product-reclosure-check/source/MicroCFTA/SourceCurrentAllocatedNativeOpenProductReclosure.lean:63:4: error(lean.unknownIdentifier): Unknown identifier `InternedProbeProvenance.reference_available_mu`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-actual-open-product-reclosure-check/source/MicroCFTA/SourceCurrentAllocatedNativeOpenProductReclosure.lean:94:4: error: Type mismatch: After simplification, term
+  readback
+ has type
+  All₂
+    (fun source target =>
+      target.children =
+          List.map
+            (input
+              (replacement (Reference.interned entry.identity)
+                (Value.reference (Reference.intersection cutoffKey.fst cutoffKey.snd))))
+            source.children ∧
+        target.entry.key =
+          { symbol := source.entry.key.symbol,
+            children :=
+              List.map Value.referenceOf
+                (List.map
+                  (input
+                    (replacement (Reference.interned entry.identity)
+                      (Value.reference (Reference.intersection cutoffKey.fst cutoffKey.snd))))
+                  source.children),
+            constraint := top })
+    (match body, stored with
+    | Value.node entry_1 rows depth_1 free, stored => rows
+    | x, stored => [])
+    products
+but is expected to have type
+  All₂
+    (fun source target =>
+      target.children =
+          List.map (input (replacement (Reference.interned entry.identity) (Value.reference cutoff))) source.children ∧
+        target.entry.key =
+          { symbol := source.entry.key.symbol,
+            children :=
+              List.map Value.referenceOf
+                (List.map (input (replacement (Reference.interned entry.identity) (Value.reference cutoff)))
+                  source.children),
+            constraint := top })
+    (canonicalEdges (arrow :: rows)) products
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-actual-open-product-reclosure-check/source/MicroCFTA/SourceCurrentAllocatedNativeOpenProductReclosure.lean:147:38: error(lean.unknownIdentifier): Unknown identifier `available_mu_key`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-actual-open-product-reclosure-check/source/MicroCFTA/SourceCurrentAllocatedNativeOpenProductReclosure.lean:147:9: error: Tactic `rcases` failed: `x✝ : ?m.1121` is not an inductive datatype
+@MicroCFTA.SourceCurrentAllocatedNativeOpenProductReclosure.stored_open_product_optional_reclosure : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)]
+  {width : Nat} (lib : MicroCFTA.SourceSynthesisTypeSyntax.Library) (query : MicroCFTA.SourceSynthesisTypeSyntax.Query)
+  (signed : Int) (whole : MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression),
+  MicroCFTA.SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole →
+    ∀
+      (rootValue :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)
+      (sourceHeap :
+        MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard),
+      MicroCFTA.InternedFreshOrdinaryConstruction.build
+            (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+            MicroCFTA.InternedConstructorTemplates.empty =
+          MicroCFTA.InternedNestedConstruction.Outcome.done rootValue sourceHeap →
+        ∀ (key : MicroCFTA.InternedBinderProtocol.NodeKey)
+          (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+          (body depth ordinary :
+            MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)
+          (stored :
+            sourceHeap.nodeRecords key =
+              some (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary))
+          (state : MicroCFTA.SourceEqualityNativeDemand.State width),
+          MicroCFTA.InternedNestedFacts.Facts state.native.machine.heap →
+            MicroCFTA.InternedConstructorTemplates.Grows sourceHeap state.native.machine.heap →
+              ∀ (cutoffKey : Nat × Nat)
+                (product :
+                  MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)
+                (productEntry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+                (products :
+                  List
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)),
+                product =
+                    MicroCFTA.InternedConstructorTemplates.Value.node productEntry
+                      (MicroCFTA.InternedConstructorTemplates.canonicalEdges products) 0
+                      [MicroCFTA.InternedBinderProtocol.Reference.intersection cutoffKey.fst cutoffKey.snd] →
+                  MicroCFTA.InternedProbeProvenance.Available state.native.machine.heap product →
+                    MicroCFTA.Language.All₂
+                        (fun source target =>
+                          target.children =
+                              List.map
+                                (MicroCFTA.InternedStoredSubstitution.input
+                                  (MicroCFTA.InternedStoredSubstitutionRebind.replacement
+                                    (MicroCFTA.InternedBinderProtocol.Reference.interned entry.identity)
+                                    (MicroCFTA.InternedConstructorTemplates.Value.reference
+                                      (MicroCFTA.InternedBinderProtocol.Reference.intersection cutoffKey.fst
+                                        cutoffKey.snd))))
+                                source.children ∧
+                            target.entry.key =
+                              { symbol := source.entry.key.symbol,
+                                children :=
+                                  List.map MicroCFTA.InternedConstructorTemplates.Value.referenceOf
+                                    (List.map
+                                      (MicroCFTA.InternedStoredSubstitution.input
+                                        (MicroCFTA.InternedStoredSubstitutionRebind.replacement
+                                          (MicroCFTA.InternedBinderProtocol.Reference.interned entry.identity)
+                                          (MicroCFTA.InternedConstructorTemplates.Value.reference
+                                            (MicroCFTA.InternedBinderProtocol.Reference.intersection cutoffKey.fst
+                                              cutoffKey.snd))))
+                                      source.children),
+                                constraint := MicroCFTA.SourceSynthesisGeneralizeSyntax.top })
+                        (match body, stored with
+                        | MicroCFTA.InternedConstructorTemplates.Value.node entry_1 rows depth_1 free, stored => rows
+                        | x, stored => [])
+                        products →
+                      (∀
+                          (row :
+                            MicroCFTA.InternedConstructorTemplates.EdgeValue
+                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                              MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard),
+                          row ∈ products → MicroCFTA.InternedEdgeResidency.EdgeResident state.native.machine.heap row) →
+                        MicroCFTA.SourceRecursiveIntersectionMaybeMu.maybeMu cutoffKey product
+                              state.native.machine.heap =
+                            MicroCFTA.InternedNestedConstruction.Outcome.done
+                              (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary)
+                              state.native.machine.heap ∧
+                          MicroCFTA.SourceEqualityNativeDemand.step
+                                (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                                  (MicroCFTA.SourceRecursiveIntersectionCode.Code.optionalBinder cutoffKey product
+                                    MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+                                state =
+                              MicroCFTA.SourceEqualityNativeDemand.Outcome.yielded
+                                (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                                  (MicroCFTA.SourceRecursiveIntersectionCode.Code.pure
+                                    (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary)))
+                                state ∧
+                            MicroCFTA.SourceEqualityNativeDemand.execute 2
+                                (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                                  (MicroCFTA.SourceRecursiveIntersectionCode.Code.optionalBinder cutoffKey product
+                                    MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+                                state =
+                              MicroCFTA.SourceEqualityNativeDemand.Outcome.done
+                                (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary) state
+'MicroCFTA.SourceCurrentAllocatedNativeOpenProductReclosure.stored_open_product_optional_reclosure' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

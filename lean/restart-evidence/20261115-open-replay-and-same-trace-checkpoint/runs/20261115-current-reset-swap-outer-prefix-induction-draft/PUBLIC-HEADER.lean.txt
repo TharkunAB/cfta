@@ -1,0 +1,46 @@
+theorem reset_swap_body_of_outer_query_induction
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (nodeLaw : NodeRequest Symbol Guard → Value Symbol Guard → Prop)
+    (edgeLaw : EdgeRequest Symbol Guard → EdgeValue Symbol Guard → Prop)
+    (valueLaw : Value Symbol Guard → Prop)
+    (request : NodeRequest Symbol Guard) (parent first : Checked width) (parentFuel : Nat)
+    (next : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard))
+    (selected : SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right = .reset ∨
+      SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right = .swap)
+    (origin : Steps 1 (.code (.node request .pure)) parent
+      (.code ((compileNode request).bind next)) first)
+    (nodes : Returned nodeLaw first.native.nodes) (edges : Returned edgeLaw first.native.edges)
+    (children : ∀ child : NodeRequest Symbol Guard,
+      ((SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right = .reset ∧
+          child = ⟨IntersectionEmptyDomain.emptyDomain, request.left, request.right⟩) ∨
+        (SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right = .swap ∧
+          child = ⟨request.domain, request.right, request.left⟩)) →
+      ∀ childFuel, childFuel < parentFuel →
+      Steps 1 (.code (.node request .pure)) parent
+        (.code ((requestNode child.domain child.left child.right).bind next)) first →
+      Returned nodeLaw first.native.nodes → Returned edgeLaw first.native.edges →
+      Returned nodeLaw (SourceEqualityNativeDemand.execute childFuel
+        (.code (requestNode child.domain child.left child.right)) first).state.native.nodes ∧
+      Returned edgeLaw (SourceEqualityNativeDemand.execute childFuel
+        (.code (requestNode child.domain child.left child.right)) first).state.native.edges ∧
+      (∀ (value : Value Symbol Guard) (after : Checked width),
+        Steps childFuel (.code (requestNode child.domain child.left child.right)) first
+          (.code (.pure value)) after → valueLaw value)) :
+    ∃ child : NodeRequest Symbol Guard,
+      ((SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right = .reset ∧
+          child = ⟨IntersectionEmptyDomain.emptyDomain, request.left, request.right⟩) ∨
+        (SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right = .swap ∧
+          child = ⟨request.domain, request.right, request.left⟩)) ∧
+      compileNode request = requestNode child.domain child.left child.right ∧
+      Steps 1 (.code (.node request .pure)) parent
+        (.code ((requestNode child.domain child.left child.right).bind next)) first ∧
+      (∀ remaining, remaining < parentFuel →
+        Returned nodeLaw (SourceEqualityNativeDemand.execute remaining
+          (.code (compileNode request)) first).state.native.nodes ∧
+        Returned edgeLaw (SourceEqualityNativeDemand.execute remaining
+          (.code (compileNode request)) first).state.native.edges ∧
+        (∀ count, count ≤ remaining → ∀ (value : Value Symbol Guard) (after : Checked width),
+          Steps count (.code (compileNode request)) first (.code (.pure value)) after → valueLaw value) ∧
+        (∀ (value : Value Symbol Guard) (after : Checked width),
+          SourceEqualityNativeDemand.execute remaining (.code (compileNode request)) first =
+            .done value after → valueLaw value))

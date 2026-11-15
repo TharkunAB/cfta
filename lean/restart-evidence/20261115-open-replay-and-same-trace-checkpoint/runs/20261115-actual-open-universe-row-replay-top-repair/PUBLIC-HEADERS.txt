@@ -1,0 +1,77 @@
+theorem original_top_self_body_prefix
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (request : EdgeRequest Symbol Guard) (state : Checked width)
+    (self : request.right = request.left)
+    (sourceTop : request.left.entry.key.constraint = top)
+    (valid : SourceEqualityConstraintMemoAllocation.Valid state.operations)
+    (origin : SourceEqualityOriginalFieldOrigins.Origin state.operations.constraints
+      request.left.entry.key.constraint) :
+    ∃ loaded combined : Allocated,
+      SourceEqualityConstraintFieldLookup.load request.left.entry.key.constraint state.operations.constraints =
+        .ok (some loaded) ∧
+      SourceEqualityConjoinAllocation.readback loaded = top ∧
+      (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le loaded loaded
+        request.left.children.length request.right.children.length state.operations).1 = .ok (.ready combined) ∧
+      SourceEqualityConjoinAllocation.readback combined = top ∧
+      SourceEqualityConstraintMemoAllocation.Valid
+        (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le loaded loaded
+          request.left.children.length request.right.children.length state.operations).2 ∧
+      SourceEqualityConstraintMemoAllocation.Grows state.operations
+        (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le loaded loaded
+          request.left.children.length request.right.children.length state.operations).2 ∧
+      SourceEqualityNativeDemand.body request .pure state =
+        .yielded (.code (SourceEqualityNativeCheckedCode.children request.domain request.left request.right combined))
+          {state with operations := (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le loaded loaded
+            request.left.children.length request.right.children.length state.operations).2}
+
+theorem open_row_replay_and_returned_of_children
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (nodeLaw : NodeRequest Symbol Guard → Value Symbol Guard → Prop)
+    (edgeLaw : EdgeRequest Symbol Guard → EdgeValue Symbol Guard → Prop)
+    (sourceName cutoffLeft cutoffRight : Nat)
+    (request : EdgeRequest Symbol Guard) (state : Checked width) (fuel : Nat)
+    (self : request.right = request.left) (sourceTop : request.left.entry.key.constraint = top)
+    (valid : SourceEqualityConstraintMemoAllocation.Valid state.operations)
+    (fieldOrigin : SourceEqualityOriginalFieldOrigins.Origin state.operations.constraints
+      request.left.entry.key.constraint)
+    (nodes : Returned nodeLaw state.native.nodes) (edges : Returned edgeLaw state.native.edges)
+    (childrenReturned : ∀ stepsBefore childFuel, 0 < stepsBefore → stepsBefore + childFuel ≤ fuel → childFuel < fuel →
+      ∀ pair ∈ request.left.children.zip request.right.children,
+      ∀ (next : Value Symbol Guard → Code Symbol Guard (EdgeValue Symbol Guard)) (first : Checked width),
+      Steps stepsBefore (.edgeBody request .pure) state
+        (.code ((requestNode request.domain pair.1 pair.2).bind next)) first →
+      Returned nodeLaw first.native.nodes → Returned edgeLaw first.native.edges →
+      Returned nodeLaw (SourceEqualityNativeDemand.execute childFuel
+        (.code (requestNode request.domain pair.1 pair.2)) first).state.native.nodes ∧
+      Returned edgeLaw (SourceEqualityNativeDemand.execute childFuel
+        (.code (requestNode request.domain pair.1 pair.2)) first).state.native.edges)
+    (childrenReplay : ∀ stepsBefore childFuel, 0 < stepsBefore → stepsBefore + childFuel ≤ fuel → childFuel < fuel →
+      ∀ pair ∈ request.left.children.zip request.right.children,
+      ∀ (next : Value Symbol Guard → Code Symbol Guard (EdgeValue Symbol Guard))
+        (first last : Checked width) (value : Value Symbol Guard),
+      Steps stepsBefore (.edgeBody request .pure) state
+        (.code ((requestNode request.domain pair.1 pair.2).bind next)) first →
+      SourceEqualityNativeDemand.execute childFuel (.code (requestNode request.domain pair.1 pair.2)) first =
+        .done value last →
+      value = input (replacement (.interned sourceName)
+        (repeatedValue (SourceRecursiveIntersectionControl.pair cutoffLeft cutoffRight))) pair.1) :
+    Returned nodeLaw (SourceEqualityNativeDemand.execute fuel (.edgeBody request .pure) state).state.native.nodes ∧
+    Returned edgeLaw (SourceEqualityNativeDemand.execute fuel (.edgeBody request .pure) state).state.native.edges ∧
+    ∀ (result : EdgeValue Symbol Guard) (after : Checked width),
+      SourceEqualityNativeDemand.execute fuel (.edgeBody request .pure) state = .done result after →
+      ∃ (loaded combined : Allocated) (values : List (Value Symbol Guard)) (middle : Checked width) (count : Nat),
+        SourceEqualityConstraintFieldLookup.load request.left.entry.key.constraint state.operations.constraints =
+          .ok (some loaded) ∧
+        (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le loaded loaded
+          request.left.children.length request.right.children.length state.operations).1 = .ok (.ready combined) ∧
+        SourceEqualityConjoinAllocation.readback combined = top ∧
+        count + 1 < fuel ∧
+        SourceEqualityNativeDemandWalkExecution.Walk (fun pair => requestNode request.domain pair.1 pair.2)
+          (request.left.children.zip request.right.children)
+          {state with operations := (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le loaded loaded
+            request.left.children.length request.right.children.length state.operations).2} values middle count ∧
+        values = request.left.children.map
+          (input (replacement (.interned sourceName) (repeatedValue (pair cutoffLeft cutoffRight)))) ∧
+        result = (run (makeEdge request.left.entry.key.symbol top values) middle.native.machine.heap).1 ∧
+        after = {middle with native := advance middle.native {middle.native.machine with heap :=
+          (run (makeEdge request.left.entry.key.symbol top values) middle.native.machine.heap).2}}

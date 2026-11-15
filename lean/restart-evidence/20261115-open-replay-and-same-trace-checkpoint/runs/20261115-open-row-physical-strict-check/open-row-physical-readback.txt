@@ -1,0 +1,148 @@
+MicroCFTA.SourceCurrentAllocatedNativeOpenUniverseRowPhysicalReadback.open_row_physical_readback_of_children
+  {width : Nat} [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (sourceName cutoffLeft cutoffRight : Nat)
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before after : MicroCFTA.SourceEqualityNativeDemand.State width) (fuel traceFuel : Nat)
+  (result :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (physical : MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid before.native)
+  (self : request.right = request.left)
+  (sourceTop : request.left.entry.key.constraint = MicroCFTA.SourceEqualityConstraintConstructors.top)
+  (valid : MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid before.operations)
+  (fieldOrigin :
+    MicroCFTA.SourceEqualityOriginalFieldOrigins.Origin before.operations.constraints request.left.entry.key.constraint)
+  (done :
+    MicroCFTA.SourceEqualityNativeDemand.execute fuel
+        (MicroCFTA.SourceEqualityNativeDemand.Control.edgeBody request
+          MicroCFTA.SourceRecursiveIntersectionCode.Code.pure)
+        before =
+      MicroCFTA.SourceEqualityNativeDemand.Outcome.done result after)
+  (actual :
+    MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace traceFuel
+      (MicroCFTA.SourceEqualityNativeDemand.Control.edgeBody request
+        MicroCFTA.SourceRecursiveIntersectionCode.Code.pure)
+      before
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code (MicroCFTA.SourceRecursiveIntersectionCode.Code.pure result))
+      after)
+  (childrenReplay :
+    ∀ (stepsBefore childFuel : Nat),
+      0 < stepsBefore →
+        stepsBefore + childFuel ≤ fuel →
+          childFuel < fuel →
+            ∀
+              (pair :
+                MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) ×
+                  MicroCFTA.InternedConstructorTemplates.Value
+                    (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+              pair ∈ request.left.children.zip request.right.children →
+                ∀
+                  (next :
+                    MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+                      MicroCFTA.SourceRecursiveIntersectionCode.Code
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                  (first last : MicroCFTA.SourceEqualityNativeDemand.State width)
+                  (value :
+                    MicroCFTA.InternedConstructorTemplates.Value
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+                  MicroCFTA.SourceEqualityNativeDemand.Steps stepsBefore
+                      (MicroCFTA.SourceEqualityNativeDemand.Control.edgeBody request
+                        MicroCFTA.SourceRecursiveIntersectionCode.Code.pure)
+                      before
+                      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                        ((MicroCFTA.SourceRecursiveIntersectionCode.requestNode request.domain pair.fst pair.snd).bind
+                          next))
+                      first →
+                    MicroCFTA.SourceEqualityNativeDemand.execute childFuel
+                          (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                            (MicroCFTA.SourceRecursiveIntersectionCode.requestNode request.domain pair.fst pair.snd))
+                          first =
+                        MicroCFTA.SourceEqualityNativeDemand.Outcome.done value last →
+                      value =
+                        MicroCFTA.InternedStoredSubstitution.input
+                          (MicroCFTA.InternedStoredSubstitutionRebind.replacement
+                            (MicroCFTA.InternedBinderProtocol.Reference.interned sourceName)
+                            (MicroCFTA.SourceRecursiveIntersectionControl.repeatedValue
+                              (MicroCFTA.SourceRecursiveIntersectionControl.pair cutoffLeft cutoffRight)))
+                          pair.fst) :
+  ∃ loaded combined values middle count,
+    MicroCFTA.SourceEqualityConstraintFieldLookup.load request.left.entry.key.constraint before.operations.constraints =
+        Except.ok (some loaded) ∧
+      (MicroCFTA.SourceEqualityIntersectionEdgeAllocation.run MicroCFTA.GuardStructuralOrder.le loaded loaded
+              request.left.children.length request.right.children.length before.operations).fst =
+          Except.ok (MicroCFTA.SourceEqualityIntersectionEdgeAllocation.Branch.ready combined) ∧
+        MicroCFTA.SourceEqualityConjoinAllocation.readback combined =
+            MicroCFTA.SourceEqualityConstraintConstructors.top ∧
+          count + 1 < fuel ∧
+            MicroCFTA.SourceEqualityNativeDemandWalkExecution.Walk
+                (fun pair => MicroCFTA.SourceRecursiveIntersectionCode.requestNode request.domain pair.fst pair.snd)
+                (request.left.children.zip request.right.children)
+                { native := before.native,
+                  operations :=
+                    (MicroCFTA.SourceEqualityIntersectionEdgeAllocation.run MicroCFTA.GuardStructuralOrder.le loaded
+                        loaded request.left.children.length request.right.children.length before.operations).snd }
+                values middle count ∧
+              values =
+                  List.map
+                    (MicroCFTA.InternedStoredSubstitution.input
+                      (MicroCFTA.InternedStoredSubstitutionRebind.replacement
+                        (MicroCFTA.InternedBinderProtocol.Reference.interned sourceName)
+                        (MicroCFTA.SourceRecursiveIntersectionControl.repeatedValue
+                          (MicroCFTA.SourceRecursiveIntersectionControl.pair cutoffLeft cutoffRight))))
+                    request.left.children ∧
+                MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid middle.native ∧
+                  MicroCFTA.SourceRecursiveIntersectionKernel.Extension before.native.machine middle.native.machine ∧
+                    MicroCFTA.InternedNestedProvenance.Values middle.native.machine.heap values ∧
+                      MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace (1 + count)
+                          (MicroCFTA.SourceEqualityNativeDemand.Control.edgeBody request
+                            MicroCFTA.SourceRecursiveIntersectionCode.Code.pure)
+                          before
+                          (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                            (MicroCFTA.SourceRecursiveIntersectionCode.Code.work
+                              (MicroCFTA.InternedConstructorTemplates.makeEdge request.left.entry.key.symbol
+                                (MicroCFTA.SourceEqualityConjoinAllocation.readback combined) values)
+                              MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+                          middle ∧
+                        result.children = values ∧
+                          result.entry.key =
+                              { symbol := request.left.entry.key.symbol,
+                                children := List.map MicroCFTA.InternedConstructorTemplates.Value.referenceOf values,
+                                constraint := MicroCFTA.SourceEqualityConstraintConstructors.top } ∧
+                            result =
+                                (MicroCFTA.InternedConstructorTemplates.run
+                                    (MicroCFTA.InternedConstructorTemplates.makeEdge request.left.entry.key.symbol
+                                      MicroCFTA.SourceEqualityConstraintConstructors.top values)
+                                    middle.native.machine.heap).fst ∧
+                              after =
+                                {
+                                  native :=
+                                    MicroCFTA.SourceRecursiveIntersectionThunks.advance middle.native
+                                      (have __src := middle.native.machine;
+                                      {
+                                        heap :=
+                                          (MicroCFTA.InternedConstructorTemplates.run
+                                              (MicroCFTA.InternedConstructorTemplates.makeEdge
+                                                request.left.entry.key.symbol
+                                                MicroCFTA.SourceEqualityConstraintConstructors.top values)
+                                              middle.native.machine.heap).snd,
+                                        domains := __src.domains }),
+                                  operations := middle.operations }
+'MicroCFTA.SourceCurrentAllocatedNativeOpenUniverseRowPhysicalReadback.open_row_physical_readback_of_children' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,73 @@
+theorem node_mu_open_child_footprint
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty = .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (request : NodeRequest Symbol Guard) (before after : Checked width)
+    (growth : Grows sourceHeap before.native.machine.heap)
+    (first second fuel : Nat) (value : Value Symbol Guard)
+    (leftIdentity : SourceRecursiveIntersectionControl.identity request.left = some first)
+    (rightIdentity : SourceRecursiveIntersectionControl.identity request.right = some second)
+    (selected : SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right = .bothMu ∨
+      SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right = .leftMu ∨
+      SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right = .rightMu)
+    (done : SourceEqualityNativeDemand.execute fuel (.code (compileNode request)) before = .done value after)
+    (children :
+      let entered := SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains request.domain.key
+        request.left request.right first second
+      let started : Checked width :=
+        {before with native := advance before.native {before.native.machine with domains := entered.2}}
+      ∀ childFuel, childFuel < fuel → ∀ child middle,
+        Steps 1 (.code (compileNode request)) before
+          (.code ((requestNode entered.1 (SourceRecursiveIntersectionKernel.body request.left)
+            (SourceRecursiveIntersectionKernel.body request.right)).bind fun result =>
+              .optionalBinder (SourceRecursiveIntersectionControl.pair first second) result .pure)) started →
+        SourceEqualityNativeDemand.execute childFuel
+          (.code (requestNode entered.1 (SourceRecursiveIntersectionKernel.body request.left)
+            (SourceRecursiveIntersectionKernel.body request.right))) started = .done child middle →
+        Facts middle.native.machine.heap ∧ Extension started.native.machine middle.native.machine ∧
+        Available middle.native.machine.heap child ∧
+        ∃ (productEntry : Interned NodeKey) (products : List (EdgeValue Symbol Guard)),
+          child = .node productEntry (canonicalEdges products) 0
+            [.intersection (SourceRecursiveIntersectionControl.pair first second).1
+              (SourceRecursiveIntersectionControl.pair first second).2] ∧
+          All₂ (fun (source : EdgeValue Symbol Guard) target =>
+            target.children = source.children.map (input (replacement (.interned entry.identity)
+              (.reference (.intersection (SourceRecursiveIntersectionControl.pair first second).1
+                (SourceRecursiveIntersectionControl.pair first second).2)))) ∧
+            target.entry.key = ⟨source.entry.key.symbol,
+              (source.children.map (input (replacement (.interned entry.identity)
+                (.reference (.intersection (SourceRecursiveIntersectionControl.pair first second).1
+                  (SourceRecursiveIntersectionControl.pair first second).2))))).map Value.referenceOf, top⟩)
+            (match body with | .node _ rows _ _ => rows | _ => []) products ∧
+          (∀ row ∈ products, EdgeResident middle.native.machine.heap row)) :
+    value = .mu entry body depth ordinary ∧ Available after.native.machine.heap value ∧ value.free = [] ∧
+    (∀ atom ∈ InternedBoundaryAtoms.atoms value, atom = .mu entry.identity) ∧
+    ∃ child middle childSteps restSteps,
+      after = middle ∧ childSteps + 1 < fuel ∧
+      Steps 1 (.code (compileNode request)) before
+        (.code ((requestNode
+          (SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains request.domain.key
+            request.left request.right first second).1
+          (SourceRecursiveIntersectionKernel.body request.left) (SourceRecursiveIntersectionKernel.body request.right)).bind
+          fun result => .optionalBinder (SourceRecursiveIntersectionControl.pair first second) result .pure))
+        {before with native := advance before.native {before.native.machine with domains :=
+          (SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains request.domain.key
+            request.left request.right first second).2}} ∧
+      Steps childSteps
+        (.code (requestNode
+          (SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains request.domain.key
+            request.left request.right first second).1
+          (SourceRecursiveIntersectionKernel.body request.left) (SourceRecursiveIntersectionKernel.body request.right)))
+        {before with native := advance before.native {before.native.machine with domains :=
+          (SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains request.domain.key
+            request.left request.right first second).2}}
+        (.code (.pure child)) middle ∧
+      child.free = [.intersection (SourceRecursiveIntersectionControl.pair first second).1
+        (SourceRecursiveIntersectionControl.pair first second).2] ∧
+      SourceEqualityNativeDemand.execute (restSteps + 1)
+        (.code (.optionalBinder (SourceRecursiveIntersectionControl.pair first second) child .pure)) middle =
+        .done value after
