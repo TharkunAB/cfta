@@ -84,12 +84,12 @@ structure EdgeLaw (view : IntersectSchedule.View Symbol) (model : IntersectSched
 def Returned (law : Request → Answer → Prop) (state : FlatMemoThunk.State Key Request Answer) : Prop :=
   ∀ handle request result, state.cells handle = some ⟨request, .returned result⟩ → law request result
 
-private theorem returned_empty (law : Request → Answer → Prop) :
+theorem returned_empty (law : Request → Answer → Prop) :
     Returned law (FlatMemoThunk.empty : FlatMemoThunk.State Key Request Answer) := by
   intro handle request result found
   cases found
 
-private theorem returned_lookup [DecidableEq Key] (law : Request → Answer → Prop)
+theorem returned_lookup [DecidableEq Key] (law : Request → Answer → Prop)
     (key : Key) (request : Request) (state : FlatMemoThunk.State Key Request Answer) (valid : Returned law state) :
     Returned law (FlatMemoThunk.lookupOrInsert key request state).2 := by
   cases found : state.table key with
@@ -115,7 +115,7 @@ private theorem returned_evaluating (law : Request → Answer → Prop) (handle 
       · exact valid other request result (by
           simpa only [FlatMemoThunk.setStatus, found, Cache.put, ite_eq_right same] using stored)
 
-private theorem returned_demand (law : Request → Answer → Prop) (handle : Nat)
+theorem returned_demand (law : Request → Answer → Prop) (handle : Nat)
     (state : FlatMemoThunk.State Key Request Answer) (valid : Returned law state) :
     Returned law (FlatMemoThunk.demand handle state).2 := by
   cases found : state.cells handle with
@@ -127,7 +127,7 @@ private theorem returned_demand (law : Request → Answer → Prop) (handle : Na
           | suspended => simpa only [FlatMemoThunk.demand, found] using returned_evaluating law handle state valid
           | evaluating | returned result => simpa only [FlatMemoThunk.demand, found] using valid
 
-private theorem returned_finish (law : Request → Answer → Prop) (handle : Nat) (request : Request) (result : Answer)
+theorem returned_finish (law : Request → Answer → Prop) (handle : Nat) (request : Request) (result : Answer)
     (state : FlatMemoThunk.State Key Request Answer) (valid : Returned law state)
     (running : state.cells handle = some ⟨request, .evaluating⟩) (localLaw : law request result) :
     Returned law (FlatMemoThunk.finish handle result state) := by
