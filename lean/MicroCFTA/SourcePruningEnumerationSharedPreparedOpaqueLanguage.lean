@@ -35,7 +35,8 @@ local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
 local notation "Fragment" => Fragments.Fragment Symbol
 local notation "Heap" => SourceEqualityAnnotationHeap.Heap
 variable {Typing : Type} {bits : Nat}
-private theorem finalized_core_of_run
+/-- A successful finalizer retains the exact value update and clears expansion ancestry. -/
+theorem finalized_core_of_run
     (heap : InternedConstructorTemplates.State Symbol Constraint) (fuel target : Nat)
     (fragment : Fragment) (before after : Cached)
     (observed : SourcePruningEnumerationFinalize.run heap fuel target fragment before = some after) :
