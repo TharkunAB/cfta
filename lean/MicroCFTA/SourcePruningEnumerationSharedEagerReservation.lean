@@ -14454,3 +14454,314 @@ private theorem identity_actual_source_tuple_nil_resources
 
 end ActualSourceTupleNilResourceInduction
 end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+section ActualSourceRowsResourceInduction
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
+open SourceCurrentAllocatedNativeResourceForecast (Le)
+open SourcePruningEnumerationRecursive (Packet)
+open SourcePruningEnumerationSharedPreparedRecursive (Output Failure finish emitted)
+open SourcePruningEnumerationSharedSelectedContinuations
+open SourcePruningEnumerationSharedIncomingReservation (Seed)
+open SourcePruningEnumerationFiniteReservation (iterate iterate_ge iterate_add)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Heap" => SourceEqualityAnnotationHeap.Heap
+variable {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+local notation "RowsFold" => NativeContinuations.Result
+  (Output (bits + 2) Unit) (Failure (bits + 2) Unit) (bits + 2)
+
+/-- Append the actual receipts and outputs without changing the tail endpoint. -/
+private def identity_actual_rows_append
+    (processed : List (SelectedEdge.Result (bits + 2))) (outputs : List (Output (bits + 2) Unit)) :
+    RowsFold → RowsFold
+  | .complete later remaining reached saved =>
+      .complete (processed ++ later) (outputs ++ remaining) reached saved
+  | .stopped later remaining current =>
+      .stopped (processed ++ later) (outputs ++ remaining) current
+
+omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node] in
+/-- A literal singleton suffix runs only after its completed actual prefix. -/
+private theorem identity_actual_rows_scan_snoc
+    (visit : EdgeValue Symbol Constraint → Caller (bits + 2) → Queries → Cached → RowsFold)
+    (before : Cached) (attempted : List (EdgeValue Symbol Constraint))
+    (edge : EdgeValue Symbol Constraint) (caller : Caller (bits + 2)) (queries : Queries) :
+    SourcePruningEnumerationSharedBranching.scan visit before (attempted ++ [edge]) caller queries =
+      match SourcePruningEnumerationSharedBranching.scan visit before attempted caller queries with
+      | .complete processed outputs reached saved =>
+          identity_actual_rows_append processed outputs (visit edge reached saved before)
+      | .stopped processed outputs current => .stopped processed outputs current := by
+  induction attempted generalizing caller queries with
+  | nil =>
+      simp only [List.nil_append, SourcePruningEnumerationSharedBranching.scan]
+      cases visit edge caller queries before <;>
+        simp only [identity_actual_rows_append, List.append_nil, List.nil_append]
+  | cons first rest ih =>
+      cases firstRun : visit first caller queries before with
+      | stopped processed outputs current =>
+          simp only [List.cons_append, SourcePruningEnumerationSharedBranching.scan, firstRun]
+      | complete processed outputs reached saved =>
+          simp only [List.cons_append, SourcePruningEnumerationSharedBranching.scan, firstRun, ih]
+          cases tailRun : SourcePruningEnumerationSharedBranching.scan visit before rest reached saved with
+          | stopped later remaining current => rfl
+          | complete later remaining lastCaller lastQueries =>
+              cases lastRun : visit edge lastCaller lastQueries before <;>
+                simp only [identity_actual_rows_append, lastRun, List.append_assoc]
+
+omit [DecidableEq Symbol] [DecidableEq Node] in
+/-- Earlier emissions remain valid when a later row stops without an endpoint certificate. -/
+private theorem identity_actual_rows_append_resources
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (uv : Nat) (original middle : Caller (bits + 2)) (saved : Queries)
+    (seed larger : Seed) (processed : List (SelectedEdge.Result (bits + 2)))
+    (outputs : List (Output (bits + 2) Unit)) (later : RowsFold)
+    (head : IdentityEmittedCompleteResources formulas solver original seed (.complete outputs middle saved))
+    (numeric : Le seed.2 larger.2) (alphabet : seed.1 ⊆ larger.1)
+    (tail : IdentityEmittedCompleteResources formulas solver middle larger (finish uv later)) :
+    IdentityEmittedCompleteResources formulas solver original larger
+      (finish uv (identity_actual_rows_append processed outputs later)) := by
+  obtain ⟨reached, next, final, post, _fits, _known, callerSame, _querySame, _valid⟩ := head.2
+  rw [← callerSame] at post
+  have inherited := identity_emitted_complete_post post tail
+  have widened := identity_emitted_complete_mono numeric alphabet head
+  cases later with
+  | stopped receipts remaining current =>
+      constructor
+      · intro output member
+        rcases List.mem_append.mp member with earlier | later
+        · exact widened.1 output earlier
+        · exact inherited.1 output later
+      · trivial
+  | complete receipts remaining after queries =>
+      have allOutputs : ∀ output ∈ outputs ++ remaining,
+          SourcePruningEnumerationSharedPreparedRecursive.OutputResources formulas solver original larger output := by
+        intro output member
+        rcases List.mem_append.mp member with earlier | later
+        · exact widened.1 output earlier
+        · exact inherited.1 output later
+      refine ⟨allOutputs, ?_⟩
+      obtain ⟨actual, inventory, memos, endpointPost, fitted, known, callerEq, queryEq, _outputs⟩ := inherited.2
+      exact ⟨actual, inventory, memos, endpointPost, fitted, known, callerEq, queryEq, allOutputs⟩
+
+omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node] in
+/-- Ordinary list induction also permits the actual singleton-prefix step. -/
+private theorem identity_actual_rows_reverse_induction
+    {motive : List (EdgeValue Symbol Constraint) → Prop}
+    (nil : motive [])
+    (append_singleton : ∀ attempted edge, motive attempted → motive (attempted ++ [edge]))
+    (values : List (EdgeValue Symbol Constraint)) : motive values := by
+  have backwards : ∀ inputs : List (EdgeValue Symbol Constraint), motive inputs.reverse := by
+    intro inputs
+    induction inputs with
+    | nil => exact nil
+    | cons edge rest ih =>
+        rw [List.reverse_cons]
+        exact append_singleton rest.reverse edge ih
+  simpa only [List.reverse_reverse] using backwards values.reverse
+
+attribute [local irreducible] nodePlan tuplePlan fallbackPlan identity_actual_frame_plan
+  identity_actual_frame_reserved IdentityActualSourceRoot.limit IdentityActualSourceRoot.own
+
+set_option maxHeartbeats 800000 in
+private theorem identity_actual_source_rows_resources
+    (graph : Graph Symbol Constraint) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint)) (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Unit) (uv : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits) (point : IdentityActualSourcePoint bits) (height : Nat)
+    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference) (bucket : List Suspended)
+    (rest : List (Node × List Suspended))
+    (selectionMembers : ∀ entry alternatives level names,
+      ∀ selected ∈ edgesOf (.node entry alternatives level names), selected ∈ alternatives)
+    (selectionLength : ∀ entry alternatives level names,
+      (edgesOf (.node entry alternatives level names)).length ≤ alternatives.length)
+    (taskIH : ∀ smaller : IdentityActualSourceTask bits,
+      smaller.work root.limit < IdentityActualSourceTask.work root.limit
+        (.rows height {point with height := height + 1}
+          (.node parentEntry rows depth free) bucket rest) →
+      IdentityActualSourceCorrectAt graph checkEmpty edgesOf recursiveDepth workFuel metadata uv formulas solver root smaller) :
+    IdentityActualSourceCorrectAt graph checkEmpty edgesOf recursiveDepth workFuel metadata uv formulas solver root
+      (.rows height {point with height := height + 1} (.node parentEntry rows depth free) bucket rest)
+ := by
+  intro scopeOriginal scopeBefore allInputs ancestors origin current
+  let parent := {point with height := height + 1}
+  let incoming : Node := .node parentEntry rows depth free
+  let continuation := parent.tailPlan recursiveDepth root.limit root.own
+  let first := fallbackPlan parent.bound parent.mass continuation parent.seed
+  let row := fun seed => tuplePlan (nodePlan root.limit root.own height)
+    root.limit (parent.bound + root.own) parent.mass continuation seed
+  let seedAt := fun index => iterate row first index
+  let visit := fun edge reached saved captured => SourcePruningEnumerationSharedChildVisitors.visitSelected
+    (identity_actual_guarded_child checkEmpty edgesOf workFuel incoming)
+    (SourcePruningEnumerationSharedEagerChildren.consumeSelected
+      (identity_actual_parent_tail checkEmpty edgesOf workFuel
+        (identity_actual_frame_callbacks graph checkEmpty edgesOf recursiveDepth workFuel metadata uv parent.frame)
+        parent.completed rest) reached saved)
+    bucket edge reached captured saved
+  let prefixRun := fun attempted =>
+    SourcePruningEnumerationSharedBranching.scan visit parent.before attempted parent.caller parent.queries
+  obtain ⟨initialInputs, initialFits, initialKnown, admission⟩ := current
+  have entryInputs := initialInputs
+  obtain ⟨shapes, _kept, inventory, memos, packet, querySame, _previous,
+    _mass, _counted, _subset, genuine⟩ := initialInputs
+  obtain ⟨available, _closed, _ranked, _bucketBound, _bounded, _pending⟩ :=
+    genuine incoming bucket List.mem_cons_self
+  have sourceCount : (edgesOf incoming).length ≤ root.limit :=
+    Nat.le_trans (selectionLength parentEntry rows depth free) (shapes.2 parentEntry rows depth free available).1
+  have continuationGrowth : ∀ retained seed,
+      Le seed.2 (continuation retained seed).2 ∧ seed.1 ⊆ (continuation retained seed).1 := by
+    intro retained seed
+    exact tuplePlan_ge (nodePlan root.limit root.own parent.height)
+      (nodePlan_ge root.limit root.own parent.height) parent.count parent.bound retained
+      (identity_actual_frame_plan recursiveDepth root.limit root.own parent.frame)
+      (identity_actual_frame_plan_ge recursiveDepth root.limit root.own parent.frame) seed
+  have rowGrowth : ∀ seed, Le seed.2 (row seed).2 ∧ seed.1 ⊆ (row seed).1 := by
+    intro seed
+    exact tuplePlan_ge (nodePlan root.limit root.own height) (nodePlan_ge root.limit root.own height)
+      root.limit (parent.bound + root.own) parent.mass continuation continuationGrowth seed
+  have nextSeed : ∀ index, seedAt (index + 1) = row (seedAt index) := by
+    intro index
+    exact iterate_add row first index 1
+  have prefixes : ∀ (attempted remaining : List (EdgeValue Symbol Constraint)),
+      edgesOf incoming = attempted ++ remaining →
+      IdentityEmittedCompleteResources formulas solver parent.caller (seedAt attempted.length)
+        (finish uv (prefixRun attempted)) := by
+    intro attempted
+    induction attempted using identity_actual_rows_reverse_induction with
+    | nil =>
+        intro remaining _sourceRows
+        apply identity_emitted_complete_of_outcome
+        refine ⟨parent.caller, inventory, memos, SourceCurrentAllocatedPartialInvariant.Post.refl packet.context,
+          initialFits, initialKnown, rfl, querySame.symm, ?_⟩
+        intro output impossible
+        cases impossible
+    | append_singleton attempted edge ih =>
+        intro remaining sourceRows
+        have sourceSplit : edgesOf incoming = attempted ++ edge :: remaining := by
+          simpa only [List.append_assoc, List.singleton_append] using sourceRows
+        have previous := ih (edge :: remaining) sourceSplit
+        have growth := rowGrowth (seedAt attempted.length)
+        rw [← nextSeed attempted.length] at growth
+        have observed := identity_actual_rows_scan_snoc visit parent.before attempted edge parent.caller parent.queries
+        change prefixRun (attempted ++ [edge]) =
+          (match prefixRun attempted with
+          | .complete processed outputs reached saved =>
+              identity_actual_rows_append processed outputs (visit edge reached saved parent.before)
+          | .stopped processed outputs stoppedAt => .stopped processed outputs stoppedAt) at observed
+        cases past : prefixRun attempted with
+        | stopped processed outputs stoppedAt =>
+            rw [past] at previous observed
+            rw [List.length_append, List.length_singleton, observed]
+            exact identity_emitted_complete_mono growth.1 growth.2 previous
+        | complete processed outputs rowCaller rowQueries =>
+            rw [past] at previous observed
+            obtain ⟨next, final, post, query, reachedPacket, prefixFits, prefixKnown, _outputResources⟩ :=
+              SourcePruningEnumerationSharedPreparedRecursive.completed_captured_packet
+                formulas solver inventory parent.caller memos metadata parent.before
+                (seedAt attempted.length) outputs rowCaller rowQueries packet previous.2
+            have prefixInputs : IdentityActualSourcePoint.Inputs formulas solver root scopeOriginal metadata
+                scopeBefore allInputs {parent with
+                  caller := rowCaller
+                  queries := rowQueries
+                  seed := seedAt attempted.length}
+                ((incoming, bucket) :: rest) (parent.count + 1) := by
+              exact identity_actual_source_inputs_captured_native_post formulas solver root scopeOriginal
+                metadata scopeBefore allInputs parent ((incoming, bucket) :: rest) (parent.count + 1)
+                next rowCaller final rowQueries entryInputs post query
+            have oneRow : IdentityEmittedCompleteResources formulas solver rowCaller
+                (seedAt (attempted.length + 1)) (finish uv (visit edge rowCaller rowQueries parent.before)) := by
+              cases allowed : arityAllows edge.children.length bucket with
+              | false =>
+                  have prepared : SourcePruningEnumerationCachedOwn.prepare rowCaller.checked.native.machine.heap
+                      bucket edge parent.before = some [] := by
+                    simp only [SourcePruningEnumerationCachedOwn.prepare, allowed, Bool.false_eq_true, ↓reduceIte]
+                  have rejected : visit edge rowCaller rowQueries parent.before =
+                      .complete [.rejected rowCaller rowQueries parent.before] [] rowCaller rowQueries := by
+                    simp only [visit, SourcePruningEnumerationSharedChildVisitors.visitSelected, prepared] <;> rfl
+                  rw [rejected]
+                  apply identity_emitted_complete_of_outcome
+                  refine ⟨rowCaller, next, final, SourceCurrentAllocatedPartialInvariant.Post.refl reachedPacket.context,
+                    prefixFits.mono growth.1, ?_, rfl, query.symm, ?_⟩
+                  · intro key edge found
+                    exact growth.2 (prefixKnown key edge found)
+                  · intro output impossible
+                    cases impossible
+              | true =>
+                  cases projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+                  | none =>
+                      have prepared : SourcePruningEnumerationCachedOwn.prepare rowCaller.checked.native.machine.heap
+                          bucket edge parent.before = none := by
+                        simp only [SourcePruningEnumerationCachedOwn.prepare, allowed, ↓reduceIte, projected]
+                      have stopped : visit edge rowCaller rowQueries parent.before =
+                          .stopped [] [] (.edge (some .unhandled) (rowCaller, rowQueries)) := by
+                        simp only [visit, SourcePruningEnumerationSharedChildVisitors.visitSelected, prepared] <;> rfl
+                      rw [stopped]
+                      constructor
+                      · intro output impossible
+                        cases impossible
+                      · trivial
+                  | some projection =>
+                      rcases projection with ⟨tries, residual⟩
+                      obtain ⟨rowOwn, _prepared, innerOrigin, innerLedger, innerCurrent,
+                          _outerBefore, _outerOwn, actualRow, decrease⟩ :=
+                        identity_actual_source_selected_own_current_of_rows graph checkEmpty edgesOf
+                          recursiveDepth workFuel metadata uv formulas solver root scopeOriginal scopeBefore
+                          allInputs point height parentEntry rows depth free bucket rest attempted remaining edge
+                          tries residual processed outputs rowCaller rowQueries origin ancestors sourceSplit past
+                          prefixInputs prefixFits prefixKnown admission
+                          (selectionMembers parentEntry rows depth free)
+                          (selectionLength parentEntry rows depth free) allowed projected
+                      let inputs : List (Node × List Suspended) :=
+                        SourcePruningEnumerationEdgeInputs.children edge bucket parent.before.core.counter tries
+                      let staged : List (Node × List Suspended ×
+                          Option (EnumerateM Symbol Constraint (Fragments.Fragment Symbol))) := inputs.map
+                        (fun input => (input.1, input.2,
+                          SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))
+                      let children : List (Node × List Suspended) := staged.map (fun input => (input.1, input.2.1))
+                      let inner : IdentityActualSourcePoint bits :=
+                        identity_actual_source_inner_point height root.limit root.own parent rest
+                          edge residual rowCaller rowQueries rowOwn (seedAt attempted.length)
+                      change IdentityActualFrameLedger formulas solver root metadata uv inner.frame
+                        rowCaller rowOwn children at innerLedger
+                      change IdentityActualSourceOrigin graph checkEmpty edgesOf recursiveDepth workFuel
+                        metadata uv root (.tuple inner children) at innerOrigin
+                      change IdentityActualSourceCurrent formulas solver root rowCaller metadata rowOwn children
+                        recursiveDepth (.tuple inner children) at innerCurrent
+                      have actualResources := taskIH (.tuple inner children) decrease rowCaller rowOwn children
+                        innerLedger innerOrigin innerCurrent
+                      have forecast : (IdentityActualSourceTask.goal recursiveDepth root.limit root.own
+                          (.tuple inner (staged.map (fun input => (input.1, input.2.1))))).forecast =
+                            seedAt (attempted.length + 1) :=
+                        identity_actual_source_row_inner_forecast recursiveDepth root.limit root.own height
+                          attempted.length parent rest edge residual rowCaller rowQueries rowOwn
+                          (staged.map (fun input => (input.1, input.2.1)))
+                      rw [forecast] at actualResources
+                      change visit edge rowCaller rowQueries parent.before = _ at actualRow
+                      rw [actualRow]
+                      exact actualResources
+            rw [List.length_append, List.length_singleton, observed]
+            exact identity_actual_rows_append_resources formulas solver uv parent.caller rowCaller rowQueries
+              (seedAt attempted.length) (seedAt (attempted.length + 1)) processed outputs
+              (visit edge rowCaller rowQueries parent.before) previous growth.1 growth.2 oneRow
+  have allRows := prefixes (edgesOf incoming) [] (by rw [List.append_nil])
+  have padded := identity_actual_source_row_prefix_forecast recursiveDepth root.limit root.own height
+    (edgesOf incoming).length parent incoming bucket rest sourceCount
+  exact identity_emitted_complete_mono padded.1 padded.2 allRows
+
+end ActualSourceRowsResourceInduction
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
