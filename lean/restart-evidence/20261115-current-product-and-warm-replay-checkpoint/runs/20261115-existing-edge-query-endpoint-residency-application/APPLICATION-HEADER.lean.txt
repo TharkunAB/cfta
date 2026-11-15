@@ -1,0 +1,10 @@
+example {width : Nat}
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (request : EdgeRequest Symbol Guard) (before after : Checked width)
+    (fuel traceFuel : Nat) (value : EdgeValue Symbol Guard)
+    (physical : SourceCurrentAllocatedNativePhysicalCache.Valid before.native)
+    (_done : execute fuel (.code (requestEdge request.domain request.left request.right)) before =
+      .done value after)
+    (actual : Trace traceFuel (.code (requestEdge request.domain request.left request.right)) before
+      (.code (.pure value)) after) :
+    EdgeResident after.native.machine.heap value

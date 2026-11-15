@@ -1,0 +1,21 @@
+theorem closed_ordinary_self_query_result
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey) (entry : Interned NodeKey)
+    (rows : List (EdgeValue Symbol Guard)) (level : Nat)
+    (before after : Checked width) (fuel traceSteps : Nat) (value : Value Symbol Guard)
+    (physical : Physical before.native)
+    (returned :
+      let operand : Value Symbol Guard := .node entry rows level []
+      Returned (fun request result =>
+        (request = ⟨domain, operand, operand⟩ ∨
+          request = ⟨IntersectionEmptyDomain.emptyDomain, operand, operand⟩) → result = operand)
+        before.native.nodes)
+    (actual :
+      let operand : Value Symbol Guard := .node entry rows level []
+      Trace traceSteps (.code (requestNode domain operand operand)) before (.code (.pure value)) after)
+    (done :
+      let operand : Value Symbol Guard := .node entry rows level []
+      SourceEqualityNativeDemand.execute fuel (.code (requestNode domain operand operand)) before =
+        .done value after) :
+    value = .node entry rows level [] ∧ Physical after.native ∧
+      Extension before.native.machine after.native.machine ∧ Available after.native.machine.heap value

@@ -1,0 +1,20 @@
+Frozen 2026-11-15 10:16:31 CET. UNCOMPILED. Root owns compiler checks and publication.
+
+The candidate proves one conditional observation for actual checked compileRows completion. It retains the original domain, both row lists, supplied fuel, exact result, and full returned checked state. It extracts the ordered Walk over the literal pairs left right. It derives All₂ rowLaw for those same pairs and returned rows. It derives physical validity, heap and domain extension, and residency of every returned row at the actual makeNode instruction. The same physical trace supplies each smaller query's extension. The final result retains the actual surviving and canonical edge list, exact free-name metadata, and constructor endpoint. Every returned row remains resident in the final heap.
+
+The local child IH concerns only actual requestEdge queries from this parent execution. It includes each literal request, actual started and returned states, real continuation, and a Steps prefix from this parent. The completed child budget is strictly below the original parent fuel. The prefix plus child budget is also strictly below that fuel. The proof derives these bounds from the actual completed scan and its final constructor step. The first child can have prefix length zero because compileRows starts with the walk. A positive-prefix premise would omit this real case.
+
+rowLaw is a relation on literal input and output rows. The caller can instantiate it with source-row readback and sentinel facts. The candidate adds no model, future state, future heap fact, or future product supplier. The local IH is intermediate proof infrastructure. It is not a new original caller premise and does not prove whole-history provenance. Its endpoint-residency clause still needs the corresponding smaller actual query proof when the mutual worker induction is closed.
+
+Actual order and current source restrictions:
+- SourceRecursiveIntersectionKernel.pairs uses SymbolicHashJoin.hashJoin by symbol alone.
+- SymbolicHashJoin.hashJoin_exact gives left.flatMap over reversed matching right buckets. The candidate retains pairs itself and does not replace it with a self-pair list or a differently ordered Cartesian loop.
+- SourceSynthesisCurrentContext.constructorCatalog applies eraseDups.
+- constructorsOf_separate and constructorCatalog_separate exclude variable symbols and both arrow symbols from discovered constructor symbols.
+- The older generic SourceSynthesisUniverseBodyRowKinds interface permits arbitrary repeated catalog descriptors and arrow names. That generic interface does not describe a current-source collision. The current source excludes those arrow/catalog collisions.
+- Current catalogs can still contain the same escaped name at different arities. Those pairs remain actual hash-join requests. Root is deriving the current stored-body classifier: an actual equal-symbol pair is identical or has unequal child lengths. This packet does not assume that classifier or a global NoDup condition.
+
+Remaining source-U connection:
+The candidate does not assert that the raw returned row list already has one row per source row. The scan includes real mismatch queries. The source-specific proof must classify those real pairs, obtain actual self-row readback from OpenUniverseRowPhysicalReadback through EdgeQueryResult, and retain dead sentinel results until makeNode removes them. It must then derive self-row coverage and live-row origins in one final heap, compare actual makeNode products with aligned transformed source rows, and derive depth zero plus the singleton cutoff free set. The exact free-name equality returned here exposes that final metadata calculation. It does not assert a Profile for open payloads.
+
+The completed statement handles empty scans and actual dead returned rows. It assumes an actual Done outcome. It does not infer completion from pending, blocked, or error outcomes. Existing all-fuel cache-law modules remain separate. This packet contains no compiler result, live source edit, Git action, board action, /tmp artifact, Haskell change, or Haskell fix to add to FINDINGS.

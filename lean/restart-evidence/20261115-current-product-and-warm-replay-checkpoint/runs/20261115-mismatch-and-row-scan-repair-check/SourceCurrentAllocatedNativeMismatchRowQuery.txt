@@ -1,0 +1,37 @@
+MicroCFTA.SourceCurrentAllocatedNativeMismatchRowQuery.mismatched_row_query_sentinel {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before after : MicroCFTA.SourceEqualityNativeDemand.State width) (fuel traceFuel : Nat)
+  (result :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (physical : MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid before.native)
+  (mismatch : request.left.children.length ≠ request.right.children.length)
+  (returned :
+    MicroCFTA.SourceCurrentAllocatedNativeContextCache.Returned
+      (fun old row => old = request → row.children = [MicroCFTA.InternedConstructorTemplates.Value.empty])
+      before.native.edges)
+  (done :
+    MicroCFTA.SourceEqualityNativeDemand.execute fuel
+        (MicroCFTA.SourceEqualityNativeDemand.Control.code
+          (MicroCFTA.SourceRecursiveIntersectionCode.requestEdge request.domain request.left request.right))
+        before =
+      MicroCFTA.SourceEqualityNativeDemand.Outcome.done result after)
+  (actual :
+    MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace traceFuel
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+        (MicroCFTA.SourceRecursiveIntersectionCode.requestEdge request.domain request.left request.right))
+      before
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code (MicroCFTA.SourceRecursiveIntersectionCode.Code.pure result))
+      after) :
+  result.children = [MicroCFTA.InternedConstructorTemplates.Value.empty] ∧
+    MicroCFTA.InternedConstructorTemplates.surviving [result] = []
+'MicroCFTA.SourceCurrentAllocatedNativeMismatchRowQuery.mismatched_row_query_sentinel' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

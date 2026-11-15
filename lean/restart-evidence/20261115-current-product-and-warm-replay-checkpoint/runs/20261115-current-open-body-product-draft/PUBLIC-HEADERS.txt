@@ -1,0 +1,64 @@
+theorem current_open_body_product_of_smaller_queries
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty = .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (cutoffLeft cutoffRight : Nat) (domain : Interned DomainKey)
+    (before after : Checked width) (fuel traceFuel : Nat) (result : Value Symbol Guard)
+    (physical : Physical before.native) (growth : Grows sourceHeap before.native.machine.heap)
+    (done : SourceEqualityNativeDemand.execute fuel
+      (.code (compileRows domain (nodeEdges body) (nodeEdges body))) before = .done result after)
+    (actual : Trace traceFuel (.code (compileRows domain (nodeEdges body) (nodeEdges body))) before
+      (.code (.pure result)) after)
+    (children : ∀ stepsBefore childFuel, stepsBefore + childFuel < fuel → childFuel < fuel →
+      ∀ pair ∈ pairs (nodeEdges body) (nodeEdges body),
+      ∀ (next : EdgeValue Symbol Guard → Code Symbol Guard (Value Symbol Guard))
+        (first last : Checked width) (row : EdgeValue Symbol Guard),
+      Steps stepsBefore (.code (compileRows domain (nodeEdges body) (nodeEdges body))) before
+        (.code ((requestEdge domain pair.1 pair.2).bind next)) first →
+      Physical first.native →
+      SourceEqualityNativeDemand.execute childFuel (.code (requestEdge domain pair.1 pair.2)) first = .done row last →
+      (pair.1 = pair.2 →
+        row.children = pair.1.children.map (input (replacement (.interned entry.identity)
+          (repeatedValue (SourceRecursiveIntersectionControl.pair cutoffLeft cutoffRight)))) ∧
+        row.entry.key = ⟨pair.1.entry.key.symbol,
+          (pair.1.children.map (input (replacement (.interned entry.identity)
+            (repeatedValue (SourceRecursiveIntersectionControl.pair cutoffLeft cutoffRight))))).map Value.referenceOf,
+          top⟩) ∧
+      (pair.1.children.length ≠ pair.2.children.length → row.children = [.empty])) :
+    ∃ (productEntry : Interned NodeKey) (products rawRows : List (EdgeValue Symbol Guard))
+      (middle : Checked width) (count : Nat),
+      count + 1 < fuel ∧
+      All₂ (fun (source : EdgeValue Symbol Guard) target =>
+        target.children = source.children.map (input (replacement (.interned entry.identity)
+          (repeatedValue (SourceRecursiveIntersectionControl.pair cutoffLeft cutoffRight)))) ∧
+        target.entry.key = ⟨source.entry.key.symbol,
+          (source.children.map (input (replacement (.interned entry.identity)
+            (repeatedValue (SourceRecursiveIntersectionControl.pair cutoffLeft cutoffRight))))).map Value.referenceOf,
+          top⟩) (nodeEdges body) products ∧
+      (∀ row ∈ products, row ∈ rawRows) ∧
+      Physical middle.native ∧ Extension before.native.machine middle.native.machine ∧
+      (∀ row ∈ products, EdgeResident middle.native.machine.heap row) ∧
+      Trace count (.code (compileRows domain (nodeEdges body) (nodeEdges body))) before
+        (.code (.work (makeNode rawRows) .pure)) middle ∧
+      result = (run (makeNode rawRows) middle.native.machine.heap).1 ∧
+      after = {middle with native := advance middle.native {middle.native.machine with heap :=
+        (run (makeNode rawRows) middle.native.machine.heap).2}} ∧
+      canonicalEdges (surviving rawRows) = canonicalEdges products ∧
+      result = .node productEntry (canonicalEdges products) 0
+        [.intersection (SourceRecursiveIntersectionControl.pair cutoffLeft cutoffRight).1
+          (SourceRecursiveIntersectionControl.pair cutoffLeft cutoffRight).2] ∧
+      Physical after.native ∧ Extension before.native.machine after.native.machine ∧
+      Available after.native.machine.heap result ∧
+      (∀ row ∈ products, EdgeResident after.native.machine.heap row) ∧
+      SourceRecursiveIntersectionMaybeMu.maybeMu (SourceRecursiveIntersectionControl.pair cutoffLeft cutoffRight)
+        result after.native.machine.heap = .done (.mu entry body depth ordinary) after.native.machine.heap ∧
+      SourceEqualityNativeDemand.step
+        (.code (.optionalBinder (SourceRecursiveIntersectionControl.pair cutoffLeft cutoffRight) result .pure)) after =
+        .yielded (.code (.pure (.mu entry body depth ordinary))) after ∧
+      SourceEqualityNativeDemand.execute 2
+        (.code (.optionalBinder (SourceRecursiveIntersectionControl.pair cutoffLeft cutoffRight) result .pure)) after =
+        .done (.mu entry body depth ordinary) after := by

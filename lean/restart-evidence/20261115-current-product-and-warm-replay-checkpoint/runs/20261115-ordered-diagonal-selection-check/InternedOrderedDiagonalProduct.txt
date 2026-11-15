@@ -1,0 +1,187 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-ordered-diagonal-selection-check/source/MicroCFTA/InternedOrderedDiagonalProduct.lean:78:9: error: unknown tactic
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-ordered-diagonal-selection-check/source/MicroCFTA/InternedOrderedDiagonalProduct.lean:77:37: error: unsolved goals
+Symbol Guard : Type
+inst✝ : DecidableEq Symbol
+heap : State Symbol Guard
+facts : Facts heap
+sources rawResults : List (EdgeValue Symbol Guard)
+relation : EdgeValue Symbol Guard → EdgeValue Symbol Guard → Prop
+resident : ∀ (row : EdgeValue Symbol Guard), row ∈ rawResults → EdgeResident heap row
+actual :
+  All₂
+    (fun pair row =>
+      (pair.fst = pair.snd → relation pair.fst row) ∧ (pair.fst ≠ pair.snd → row.children = [Value.empty]))
+    (pairs sources sources) rawResults
+functional :
+  ∀ (source : EdgeValue Symbol Guard),
+    source ∈ sources →
+      ∀ (first : EdgeValue Symbol Guard),
+        first ∈ rawResults →
+          ∀ (second : EdgeValue Symbol Guard),
+            second ∈ rawResults → relation source first → relation source second → first = second
+live :
+  ∀ (source : EdgeValue Symbol Guard),
+    source ∈ sources →
+      ∀ (target : EdgeValue Symbol Guard), target ∈ rawResults → relation source target → target ∈ surviving rawResults
+diagonals :
+  ∀ (source : EdgeValue Symbol Guard), source ∈ sources → ∃ target, target ∈ rawResults ∧ relation source target
+selected : List (EdgeValue Symbol Guard)
+aligned : All₂ relation sources selected
+selectedRaw : ∀ (target : EdgeValue Symbol Guard), target ∈ selected → target ∈ rawResults
+selectedResident : ∀ (target : EdgeValue Symbol Guard), target ∈ selected → EdgeResident heap target
+row : EdgeValue Symbol Guard
+present : row ∈ surviving rawResults
+raw : row ∈ rawResults
+pair : EdgeValue Symbol Guard × EdgeValue Symbol Guard
+pairIn : pair ∈ pairs sources sources
+rowLaw : (pair.fst = pair.snd → relation pair.fst row) ∧ (pair.fst ≠ pair.snd → row.children = [Value.empty])
+⊢ pair.fst = pair.snd
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-ordered-diagonal-selection-check/source/MicroCFTA/InternedOrderedDiagonalProduct.lean:74:4: error: unsolved goals
+case mp
+Symbol Guard : Type
+inst✝ : DecidableEq Symbol
+heap : State Symbol Guard
+facts : Facts heap
+sources rawResults : List (EdgeValue Symbol Guard)
+relation : EdgeValue Symbol Guard → EdgeValue Symbol Guard → Prop
+resident : ∀ (row : EdgeValue Symbol Guard), row ∈ rawResults → EdgeResident heap row
+actual :
+  All₂
+    (fun pair row =>
+      (pair.fst = pair.snd → relation pair.fst row) ∧ (pair.fst ≠ pair.snd → row.children = [Value.empty]))
+    (pairs sources sources) rawResults
+functional :
+  ∀ (source : EdgeValue Symbol Guard),
+    source ∈ sources →
+      ∀ (first : EdgeValue Symbol Guard),
+        first ∈ rawResults →
+          ∀ (second : EdgeValue Symbol Guard),
+            second ∈ rawResults → relation source first → relation source second → first = second
+live :
+  ∀ (source : EdgeValue Symbol Guard),
+    source ∈ sources →
+      ∀ (target : EdgeValue Symbol Guard), target ∈ rawResults → relation source target → target ∈ surviving rawResults
+diagonals :
+  ∀ (source : EdgeValue Symbol Guard), source ∈ sources → ∃ target, target ∈ rawResults ∧ relation source target
+selected : List (EdgeValue Symbol Guard)
+aligned : All₂ relation sources selected
+selectedRaw : ∀ (target : EdgeValue Symbol Guard), target ∈ selected → target ∈ rawResults
+selectedResident : ∀ (target : EdgeValue Symbol Guard), target ∈ selected → EdgeResident heap target
+row : EdgeValue Symbol Guard
+present : row ∈ surviving rawResults
+raw : row ∈ rawResults
+pair : EdgeValue Symbol Guard × EdgeValue Symbol Guard
+pairIn : pair ∈ pairs sources sources
+rowLaw : (pair.fst = pair.snd → relation pair.fst row) ∧ (pair.fst ≠ pair.snd → row.children = [Value.empty])
+self : pair.fst = pair.snd
+⊢ row ∈ selected
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-ordered-diagonal-selection-check/source/MicroCFTA/InternedOrderedDiagonalProduct.lean:71:68: error: unsolved goals
+case mpr
+Symbol Guard : Type
+inst✝ : DecidableEq Symbol
+heap : State Symbol Guard
+facts : Facts heap
+sources rawResults : List (EdgeValue Symbol Guard)
+relation : EdgeValue Symbol Guard → EdgeValue Symbol Guard → Prop
+resident : ∀ (row : EdgeValue Symbol Guard), row ∈ rawResults → EdgeResident heap row
+actual :
+  All₂
+    (fun pair row =>
+      (pair.fst = pair.snd → relation pair.fst row) ∧ (pair.fst ≠ pair.snd → row.children = [Value.empty]))
+    (pairs sources sources) rawResults
+functional :
+  ∀ (source : EdgeValue Symbol Guard),
+    source ∈ sources →
+      ∀ (first : EdgeValue Symbol Guard),
+        first ∈ rawResults →
+          ∀ (second : EdgeValue Symbol Guard),
+            second ∈ rawResults → relation source first → relation source second → first = second
+live :
+  ∀ (source : EdgeValue Symbol Guard),
+    source ∈ sources →
+      ∀ (target : EdgeValue Symbol Guard), target ∈ rawResults → relation source target → target ∈ surviving rawResults
+diagonals :
+  ∀ (source : EdgeValue Symbol Guard), source ∈ sources → ∃ target, target ∈ rawResults ∧ relation source target
+selected : List (EdgeValue Symbol Guard)
+aligned : All₂ relation sources selected
+selectedRaw : ∀ (target : EdgeValue Symbol Guard), target ∈ selected → target ∈ rawResults
+selectedResident : ∀ (target : EdgeValue Symbol Guard), target ∈ selected → EdgeResident heap target
+row : EdgeValue Symbol Guard
+⊢ row ∈ selected → row ∈ surviving rawResults
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-ordered-diagonal-selection-check/source/MicroCFTA/InternedOrderedDiagonalProduct.lean:60:73: error: unsolved goals
+Symbol Guard : Type
+inst✝ : DecidableEq Symbol
+heap : State Symbol Guard
+facts : Facts heap
+sources rawResults : List (EdgeValue Symbol Guard)
+relation : EdgeValue Symbol Guard → EdgeValue Symbol Guard → Prop
+resident : ∀ (row : EdgeValue Symbol Guard), row ∈ rawResults → EdgeResident heap row
+actual :
+  All₂
+    (fun pair row =>
+      (pair.fst = pair.snd → relation pair.fst row) ∧ (pair.fst ≠ pair.snd → row.children = [Value.empty]))
+    (pairs sources sources) rawResults
+functional :
+  ∀ (source : EdgeValue Symbol Guard),
+    source ∈ sources →
+      ∀ (first : EdgeValue Symbol Guard),
+        first ∈ rawResults →
+          ∀ (second : EdgeValue Symbol Guard),
+            second ∈ rawResults → relation source first → relation source second → first = second
+live :
+  ∀ (source : EdgeValue Symbol Guard),
+    source ∈ sources →
+      ∀ (target : EdgeValue Symbol Guard), target ∈ rawResults → relation source target → target ∈ surviving rawResults
+diagonals :
+  ∀ (source : EdgeValue Symbol Guard), source ∈ sources → ∃ target, target ∈ rawResults ∧ relation source target
+selected : List (EdgeValue Symbol Guard)
+aligned : All₂ relation sources selected
+selectedRaw : ∀ (target : EdgeValue Symbol Guard), target ∈ selected → target ∈ rawResults
+selectedResident : ∀ (target : EdgeValue Symbol Guard), target ∈ selected → EdgeResident heap target
+same : ∀ (row : EdgeValue Symbol Guard), row ∈ surviving rawResults ↔ row ∈ selected
+⊢ ∃ selected,
+    All₂ relation sources selected ∧
+      (∀ (target : EdgeValue Symbol Guard), target ∈ selected → target ∈ rawResults) ∧
+        (∀ (target : EdgeValue Symbol Guard), target ∈ selected → EdgeResident heap target) ∧
+          (∀ (row : EdgeValue Symbol Guard), row ∈ surviving rawResults ↔ row ∈ selected) ∧
+            canonicalEdges (surviving rawResults) = canonicalEdges selected
+MicroCFTA.InternedOrderedDiagonalProduct.ordered_diagonal_selection {Symbol Guard : Type} [DecidableEq Symbol]
+  (heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard) (facts : MicroCFTA.InternedNestedFacts.Facts heap)
+  (sources rawResults : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+  (relation :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard →
+      MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard → Prop)
+  (resident :
+    ∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+      row ∈ rawResults → MicroCFTA.InternedEdgeResidency.EdgeResident heap row)
+  (actual :
+    MicroCFTA.Language.All₂
+      (fun pair row =>
+        (pair.fst = pair.snd → relation pair.fst row) ∧
+          (pair.fst ≠ pair.snd → row.children = [MicroCFTA.InternedConstructorTemplates.Value.empty]))
+      (MicroCFTA.SourceRecursiveIntersectionKernel.pairs sources sources) rawResults)
+  (functional :
+    ∀ (source : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+      source ∈ sources →
+        ∀ (first : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+          first ∈ rawResults →
+            ∀ (second : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+              second ∈ rawResults → relation source first → relation source second → first = second)
+  (live :
+    ∀ (source : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+      source ∈ sources →
+        ∀ (target : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+          target ∈ rawResults →
+            relation source target → target ∈ MicroCFTA.InternedConstructorTemplates.surviving rawResults) :
+  ∃ selected,
+    MicroCFTA.Language.All₂ relation sources selected ∧
+      (∀ (target : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+          target ∈ selected → target ∈ rawResults) ∧
+        (∀ (target : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+            target ∈ selected → MicroCFTA.InternedEdgeResidency.EdgeResident heap target) ∧
+          (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+              row ∈ MicroCFTA.InternedConstructorTemplates.surviving rawResults ↔ row ∈ selected) ∧
+            MicroCFTA.InternedConstructorTemplates.canonicalEdges
+                (MicroCFTA.InternedConstructorTemplates.surviving rawResults) =
+              MicroCFTA.InternedConstructorTemplates.canonicalEdges selected
+'MicroCFTA.InternedOrderedDiagonalProduct.ordered_diagonal_selection' depends on axioms: [propext, sorryAx, Quot.sound]

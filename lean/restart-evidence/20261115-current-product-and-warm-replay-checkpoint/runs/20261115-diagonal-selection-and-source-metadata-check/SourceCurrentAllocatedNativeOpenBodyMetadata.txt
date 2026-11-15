@@ -1,0 +1,240 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-diagonal-selection-and-source-metadata-check/source/MicroCFTA/SourceCurrentAllocatedNativeOpenBodyMetadata.lean:79:4: error: Type mismatch: After simplification, term
+  readback
+ has type
+  All₂
+    (fun source target =>
+      target.children =
+          List.map (input (replacement (Reference.interned entry.identity) (repeatedValue cutoff))) source.children ∧
+        target.entry.key =
+          { symbol := source.entry.key.symbol,
+            children :=
+              List.map Value.referenceOf
+                (List.map (input (replacement (Reference.interned entry.identity) (repeatedValue cutoff)))
+                  source.children),
+            constraint := top })
+    (match body, stored with
+    | Value.node entry_1 rows depth_1 free, stored => rows
+    | x, stored => [])
+    targets
+but is expected to have type
+  All₂
+    (fun source target =>
+      target.children =
+          List.map (input (replacement (Reference.interned entry.identity) (repeatedValue cutoff))) source.children ∧
+        target.entry.key =
+          { symbol := source.entry.key.symbol,
+            children :=
+              List.map Value.referenceOf
+                (List.map (input (replacement (Reference.interned entry.identity) (repeatedValue cutoff)))
+                  source.children),
+            constraint := top })
+    (canonicalEdges (arrow :: rows)) targets
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-diagonal-selection-and-source-metadata-check/source/MicroCFTA/SourceCurrentAllocatedNativeOpenBodyMetadata.lean:66:109: error: unsolved goals
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+lib : Library
+query : Query
+signed : Int
+whole : Expression
+accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole
+rootValue : Value Symbol Guard
+sourceHeap : InternedConstructorTemplates.State Symbol Guard
+built :
+  InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+    InternedNestedConstruction.Outcome.done rootValue sourceHeap
+key : NodeKey
+entry : Interned NodeKey
+body depth ordinary : Value Symbol Guard
+stored : sourceHeap.nodeRecords key = some (Value.mu entry body depth ordinary)
+heap : InternedConstructorTemplates.State Symbol Guard
+facts : Facts heap
+growth : Grows sourceHeap heap
+cutoff : Nat × Nat
+targets : List (EdgeValue Symbol Guard)
+readback :
+  All₂
+    (fun source target =>
+      target.children =
+          List.map (input (replacement (Reference.interned entry.identity) (repeatedValue cutoff))) source.children ∧
+        target.entry.key =
+          { symbol := source.entry.key.symbol,
+            children :=
+              List.map Value.referenceOf
+                (List.map (input (replacement (Reference.interned entry.identity) (repeatedValue cutoff)))
+                  source.children),
+            constraint := top })
+    (match body, stored with
+    | Value.node entry_1 rows depth_1 free, stored => rows
+    | x, stored => [])
+    targets
+resident : ∀ (target : EdgeValue Symbol Guard), target ∈ targets → EdgeResident heap target
+_bodyEntry : Interned NodeKey
+marker : Value Symbol Guard
+arrow : EdgeValue Symbol Guard
+rows : List (EdgeValue Symbol Guard)
+bodyEq : body = Value.node _bodyEntry (canonicalEdges (arrow :: rows)) 0 [Reference.interned entry.identity]
+_bodyAvailable : Available heap body
+arrowChildren :
+  arrow.children =
+    [marker, Value.reference (Reference.interned entry.identity), Value.reference (Reference.interned entry.identity)]
+_arrowKey :
+  arrow.entry.key =
+    { symbol := SourceSynthesisLabelProgramBuildRoles.literal "->",
+      children :=
+        [marker.referenceOf, InternedBinderProtocol.NodeRef.ref (Reference.interned entry.identity),
+          InternedBinderProtocol.NodeRef.ref (Reference.interned entry.identity)],
+      constraint := top }
+_catalog :
+  All₂
+    (fun descriptor row =>
+      row.children = List.replicate descriptor.snd (Value.reference (Reference.interned entry.identity)) ∧
+        row.entry.key =
+          { symbol := SourceSynthesisLabelProgramBuildRoles.literal descriptor.fst,
+            children :=
+              List.replicate descriptor.snd (InternedBinderProtocol.NodeRef.ref (Reference.interned entry.identity)),
+            constraint := top })
+    (SourceSynthesisUniverseBody.descriptors (SourceSynthesisCurrentContext.constructorCatalog lib query)) rows
+markerClosed : marker.free = []
+_markerAvailable : Available heap marker
+_markerAtoms : InternedBoundaryAtoms.atoms marker = []
+kinds :
+  ∀ (row : EdgeValue Symbol Guard),
+    row ∈ canonicalEdges (arrow :: rows) →
+      EdgeResident heap row ∧
+        row.entry.key.constraint = top ∧
+          ∀ (child : Value Symbol Guard),
+            child ∈ row.children →
+              child = Value.reference (Reference.interned entry.identity) ∨
+                child = marker ∧ Available heap child ∧ child.free = [] ∧ InternedBoundaryAtoms.atoms child = []
+arrowRetained : arrow ∈ canonicalEdges (arrow :: rows)
+markerEntry : Interned NodeKey
+markerRow : EdgeValue Symbol Guard
+markerEq : marker = Value.node markerEntry [markerRow] 0 []
+_markerLeaf : markerRow.children = []
+_markerKey :
+  markerRow.entry.key =
+    { symbol := SourceSynthesisLabelProgramBuildRoles.literal "(->)", children := [], constraint := top }
+aligned :
+  All₂
+    (fun source target =>
+      target.children =
+          List.map (input (replacement (Reference.interned entry.identity) (repeatedValue cutoff))) source.children ∧
+        target.entry.key =
+          { symbol := source.entry.key.symbol,
+            children :=
+              List.map Value.referenceOf
+                (List.map (input (replacement (Reference.interned entry.identity) (repeatedValue cutoff)))
+                  source.children),
+            constraint := top })
+    (canonicalEdges (arrow :: rows)) targets
+members :
+  (∀ (source : EdgeValue Symbol Guard),
+      source ∈ canonicalEdges (arrow :: rows) →
+        ∃ target,
+          target ∈ targets ∧
+            target.children =
+                List.map (input (replacement (Reference.interned entry.identity) (repeatedValue cutoff)))
+                  source.children ∧
+              target.entry.key =
+                { symbol := source.entry.key.symbol,
+                  children :=
+                    List.map Value.referenceOf
+                      (List.map (input (replacement (Reference.interned entry.identity) (repeatedValue cutoff)))
+                        source.children),
+                  constraint := top }) ∧
+    ∀ (target : EdgeValue Symbol Guard),
+      target ∈ targets →
+        ∃ source,
+          source ∈ canonicalEdges (arrow :: rows) ∧
+            target.children =
+                List.map (input (replacement (Reference.interned entry.identity) (repeatedValue cutoff)))
+                  source.children ∧
+              target.entry.key =
+                { symbol := source.entry.key.symbol,
+                  children :=
+                    List.map Value.referenceOf
+                      (List.map (input (replacement (Reference.interned entry.identity) (repeatedValue cutoff)))
+                        source.children),
+                  constraint := top }
+markerInput : input (replacement (Reference.interned entry.identity) (repeatedValue cutoff)) marker = marker
+⊢ maximumDepth (List.flatMap EdgeValue.children (canonicalEdges targets)) = 0 ∧
+    childFree (List.flatMap EdgeValue.children (canonicalEdges targets)) =
+      [Reference.intersection cutoff.fst cutoff.snd]
+MicroCFTA.SourceCurrentAllocatedNativeOpenBodyMetadata.current_transformed_body_metadata_after_growth
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)]
+  (lib : MicroCFTA.SourceSynthesisTypeSyntax.Library) (query : MicroCFTA.SourceSynthesisTypeSyntax.Query) (signed : Int)
+  (whole : MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression)
+  (accepted : MicroCFTA.SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole)
+  (rootValue :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)
+  (sourceHeap :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)
+  (built :
+    MicroCFTA.InternedFreshOrdinaryConstruction.build
+        (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+        MicroCFTA.InternedConstructorTemplates.empty =
+      MicroCFTA.InternedNestedConstruction.Outcome.done rootValue sourceHeap)
+  (key : MicroCFTA.InternedBinderProtocol.NodeKey)
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (body depth ordinary :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)
+  (stored :
+    sourceHeap.nodeRecords key = some (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary))
+  (heap :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard)
+  (facts : MicroCFTA.InternedNestedFacts.Facts heap)
+  (growth : MicroCFTA.InternedConstructorTemplates.Grows sourceHeap heap) (cutoff : Nat × Nat)
+  (targets :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard))
+  (readback :
+    MicroCFTA.Language.All₂
+      (fun source target =>
+        target.children =
+            List.map
+              (MicroCFTA.InternedStoredSubstitution.input
+                (MicroCFTA.InternedStoredSubstitutionRebind.replacement
+                  (MicroCFTA.InternedBinderProtocol.Reference.interned entry.identity)
+                  (MicroCFTA.SourceRecursiveIntersectionControl.repeatedValue cutoff)))
+              source.children ∧
+          target.entry.key =
+            { symbol := source.entry.key.symbol,
+              children :=
+                List.map MicroCFTA.InternedConstructorTemplates.Value.referenceOf
+                  (List.map
+                    (MicroCFTA.InternedStoredSubstitution.input
+                      (MicroCFTA.InternedStoredSubstitutionRebind.replacement
+                        (MicroCFTA.InternedBinderProtocol.Reference.interned entry.identity)
+                        (MicroCFTA.SourceRecursiveIntersectionControl.repeatedValue cutoff)))
+                    source.children),
+              constraint := MicroCFTA.SourceSynthesisGeneralizeSyntax.top })
+      (match body, stored with
+      | MicroCFTA.InternedConstructorTemplates.Value.node entry_1 rows depth_1 free, stored => rows
+      | x, stored => [])
+      targets)
+  (resident :
+    ∀
+      (target :
+        MicroCFTA.InternedConstructorTemplates.EdgeValue
+          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          MicroCFTA.SourceSynthesisGeneralizeSyntax.Guard),
+      target ∈ targets → MicroCFTA.InternedEdgeResidency.EdgeResident heap target) :
+  MicroCFTA.InternedConstructorTemplates.maximumDepth
+        (List.flatMap MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+          (MicroCFTA.InternedConstructorTemplates.canonicalEdges targets)) =
+      0 ∧
+    MicroCFTA.InternedConstructorTemplates.childFree
+        (List.flatMap MicroCFTA.InternedConstructorTemplates.EdgeValue.children
+          (MicroCFTA.InternedConstructorTemplates.canonicalEdges targets)) =
+      [MicroCFTA.InternedBinderProtocol.Reference.intersection cutoff.fst cutoff.snd]
+'MicroCFTA.SourceCurrentAllocatedNativeOpenBodyMetadata.current_transformed_body_metadata_after_growth' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,36 @@
+theorem open_row_query_readback_of_children
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (sourceName cutoffLeft cutoffRight : Nat)
+    (request : EdgeRequest Symbol Guard) (before after : Checked width)
+    (fuel traceFuel : Nat) (result : EdgeValue Symbol Guard)
+    (physical : Physical before.native)
+    (self : request.right = request.left) (sourceTop : request.left.entry.key.constraint = top)
+    (valid : SourceEqualityConstraintMemoAllocation.Valid before.operations)
+    (fieldOrigin : SourceEqualityOriginalFieldOrigins.Origin before.operations.constraints
+      request.left.entry.key.constraint)
+    (returned : Returned (fun old row => old = request →
+      row.children = request.left.children.map
+        (input (replacement (.interned sourceName)
+          (repeatedValue (SourceRecursiveIntersectionControl.pair cutoffLeft cutoffRight)))) ∧
+      row.entry.key = ⟨request.left.entry.key.symbol,
+        (request.left.children.map (input (replacement (.interned sourceName)
+          (repeatedValue (SourceRecursiveIntersectionControl.pair cutoffLeft cutoffRight))))).map Value.referenceOf, top⟩)
+      before.native.edges)
+    (done : execute fuel (.code (requestEdge request.domain request.left request.right)) before = .done result after)
+    (actual : Trace traceFuel (.code (requestEdge request.domain request.left request.right)) before
+      (.code (.pure result)) after)
+    (childrenReplay : ∀ stepsBefore childFuel, 0 < stepsBefore → stepsBefore + childFuel ≤ fuel → childFuel < fuel →
+      ∀ pair ∈ request.left.children.zip request.right.children,
+      ∀ (next : Value Symbol Guard → Code Symbol Guard (EdgeValue Symbol Guard))
+        (first last : Checked width) (value : Value Symbol Guard),
+      Steps stepsBefore (.code (requestEdge request.domain request.left request.right)) before
+        (.code ((requestNode request.domain pair.1 pair.2).bind next)) first →
+      execute childFuel (.code (requestNode request.domain pair.1 pair.2)) first = .done value last →
+      value = input (replacement (.interned sourceName)
+        (repeatedValue (SourceRecursiveIntersectionControl.pair cutoffLeft cutoffRight))) pair.1) :
+    result.children = request.left.children.map
+      (input (replacement (.interned sourceName)
+        (repeatedValue (SourceRecursiveIntersectionControl.pair cutoffLeft cutoffRight)))) ∧
+    result.entry.key = ⟨request.left.entry.key.symbol,
+      (request.left.children.map (input (replacement (.interned sourceName)
+        (repeatedValue (SourceRecursiveIntersectionControl.pair cutoffLeft cutoffRight))))).map Value.referenceOf, top⟩

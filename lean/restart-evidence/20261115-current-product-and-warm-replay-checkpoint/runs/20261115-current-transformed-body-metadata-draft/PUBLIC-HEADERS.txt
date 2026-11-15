@@ -1,0 +1,20 @@
+theorem current_transformed_body_metadata_after_growth
+    [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty = .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (heap : InternedConstructorTemplates.State Symbol Guard) (facts : Facts heap) (growth : Grows sourceHeap heap)
+    (cutoff : Nat × Nat) (targets : List (EdgeValue Symbol Guard))
+    (readback : All₂ (fun (source : EdgeValue Symbol Guard) target =>
+      target.children = source.children.map
+        (input (replacement (.interned entry.identity) (repeatedValue cutoff))) ∧
+      target.entry.key = ⟨source.entry.key.symbol,
+        (source.children.map (input (replacement (.interned entry.identity)
+          (repeatedValue cutoff)))).map Value.referenceOf, top⟩)
+      (match body with | .node _ rows _ _ => rows | _ => []) targets)
+    (resident : ∀ target ∈ targets, EdgeResident heap target) :
+    maximumDepth ((canonicalEdges targets).flatMap EdgeValue.children) = 0 ∧
+      childFree ((canonicalEdges targets).flatMap EdgeValue.children) = [.intersection cutoff.1 cutoff.2] := by

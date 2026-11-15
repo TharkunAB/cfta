@@ -1,0 +1,58 @@
+{
+  "status": "UNCOMPILED",
+  "target": "MicroCFTA.SourceCurrentAllocatedNativeRowsPhysicalReadback.compile_rows_physical_readback_of_smaller_edges",
+  "cases": [
+    {
+      "case": "literal_join",
+      "pin": "pairs left right is retained in the Walk and All\u2082 outputs; its right matching bucket is reversed by actual hashJoin"
+    },
+    {
+      "case": "zero_rows",
+      "pin": "Walk.nil uses no child IH; makeNode of an empty canonical survivor list returns empty"
+    },
+    {
+      "case": "first_query_zero_prefix",
+      "pin": "Steps.refl at compileRows is valid; strict child fuel follows from the final constructor step"
+    },
+    {
+      "case": "actual_child",
+      "pin": "Walk.cons yields the exact requestEdge/domain/pair, actual states, childSteps, actual continuation and parent prefix"
+    },
+    {
+      "case": "same_physical_trace",
+      "pin": "physical_prefix extracts the real parent prefix, then the real appended child trace; unbind retains its physical input checks"
+    },
+    {
+      "case": "extension",
+      "pin": "checked_trace_extension on that child physical trace derives physical validity and Extension; no future heap fact is supplied"
+    },
+    {
+      "case": "ordered_readback",
+      "pin": "All\u2082.cons retains every returned row and its actual pair in scan order"
+    },
+    {
+      "case": "residency",
+      "pin": "the child IH gives residency only at its own actual endpoint; edge_grows transports it through the actual later suffix extension"
+    },
+    {
+      "case": "mismatch_or_rejected",
+      "pin": "all actual returned sentinel rows remain in the ordered list until makeNode filters dead children"
+    },
+    {
+      "case": "canonical_node_cache_hit",
+      "pin": "identifyNode_readback uses derived current Facts and full row residency; key/reference equality is not assumed injective"
+    },
+    {
+      "case": "exact_endpoint",
+      "pin": "work_observation retains the exact run makeNode result and full checked-state update, including reached operations"
+    },
+    {
+      "case": "source_specific_boundary",
+      "pin": "source classification, self coverage, live-row origins and singleton cutoff remain outside this generic actual scan statement"
+    },
+    {
+      "case": "other_outcomes",
+      "pin": "the statement consumes an actual Done outcome and asserts no completion for a stopped prefix"
+    }
+  ]
+}

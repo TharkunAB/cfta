@@ -1,0 +1,17 @@
+Frozen 2026-11-15 10:36:38 CET. UNCOMPILED. Root owns compiler checks and publication.
+
+The candidate derives the exact metadata of the supplied concrete target rows. Its premises are the accepted current source, original cold build, original stored U, one current heap with Facts and past Grows, the finite All₂ readback, and residency of those same target rows in that heap. The readback retains the exact source-child substitution and full literal top key. The conclusion is maximumDepth ((canonicalEdges targets).flatMap children) = 0 and childFree of that same list = [intersection cutoff.1 cutoff.2].
+
+The cutoff is any supplied Nat pair. SourceRecursiveIntersectionControl.repeatedValue is exactly reference (intersection cutoff.1 cutoff.2), and Value.free of this reference is its literal singleton. The statement therefore covers the actual body-first cutoff and the diagonal cutoff without equating them. It does not assert that an arbitrary execution produces these rows or this cutoff. Root's actual scan and diagonal-selection proof must supply the finite readback and residency.
+
+The current stored-body physical-children theorem derives the original body shape, actual marker, retained arrow, and source-child cases from the accepted source and original stored U. The marker is an actual node with depth zero and no free names. The substitution input retains this marker and replaces every original U reference with the supplied repeatedValue. All₂ supplies both target origins and the transformed target of the actual retained source arrow.
+
+canonicalEdges_retains uses current coherence and full target residency to retain that exact transformed arrow through sorting and identity deduplication. The arrow contains two cutoff children. It supplies an occurrence of the cutoff in the canonical child list. maximumDepth_exact proves depth zero from the two possible child forms. canonicalFree_singleton proves the exact singleton from that occurrence and the absence of any other free name.
+
+Existing API audit:
+- SourceSynthesisUniverseMappedBodyExactFree.node_target_readback derives similar metadata, but constructs separate targets through older Kernel execution and fixes the diagonal cutoff. It cannot directly identify the supplied target list or a body-first cutoff.
+- SourceSynthesisUniverseRowTransform.Readback fixes the diagonal substitution. The candidate retains the literal arbitrary-cutoff map used by the actual open-row readback.
+- InternedOrdinaryUnionReadback.makeNode_zero_singleton consumes child depth, free-name bounds, and a retained live witness. Its internal numeric metadata equalities are local. The candidate reuses public maximumDepth_exact and canonicalFree_singleton for the exact requested equalities.
+- SourceSynthesisCurrentUniverseBodyChildClassification.current_stored_universe_body_physical_children_after_growth supplies the current source shape. No source catalog uniqueness or arrow-separation premise is added.
+
+This proof consumes one concrete finite All₂ relation and resident target list. It supplies no future product, future state, semantic model, original caller induction premise, or Profile for an open payload. It does not execute the older kernel, splice an independent product witness, prove actual query completion, or close whole native history. No compiler, live-source, Git, board, /tmp, or Haskell action was performed. No Haskell fix was found for FINDINGS.

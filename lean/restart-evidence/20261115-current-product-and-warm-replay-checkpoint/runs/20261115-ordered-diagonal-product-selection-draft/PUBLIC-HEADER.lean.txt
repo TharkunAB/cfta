@@ -1,0 +1,19 @@
+theorem ordered_diagonal_selection
+    [DecidableEq Symbol]
+    (heap : State Symbol Guard) (facts : Facts heap)
+    (sources rawResults : List (EdgeValue Symbol Guard))
+    (relation : EdgeValue Symbol Guard → EdgeValue Symbol Guard → Prop)
+    (resident : ∀ row ∈ rawResults, EdgeResident heap row)
+    (actual : All₂ (fun (pair : EdgeValue Symbol Guard × EdgeValue Symbol Guard) (row : EdgeValue Symbol Guard) =>
+      (pair.1 = pair.2 → relation pair.1 row) ∧
+      (pair.1 ≠ pair.2 → row.children = [.empty])) (pairs sources sources) rawResults)
+    (functional : ∀ source ∈ sources, ∀ first ∈ rawResults, ∀ second ∈ rawResults,
+      relation source first → relation source second → first = second)
+    (live : ∀ source ∈ sources, ∀ target ∈ rawResults,
+      relation source target → target ∈ surviving rawResults) :
+    ∃ selected,
+      All₂ relation sources selected ∧
+      (∀ target ∈ selected, target ∈ rawResults) ∧
+      (∀ target ∈ selected, EdgeResident heap target) ∧
+      (∀ row, row ∈ surviving rawResults ↔ row ∈ selected) ∧
+      canonicalEdges (surviving rawResults) = canonicalEdges selected

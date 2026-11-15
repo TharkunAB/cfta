@@ -1,0 +1,42 @@
+MicroCFTA.InternedOrderedDiagonalProduct.ordered_diagonal_selection {Symbol Guard : Type} [DecidableEq Symbol]
+  (heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard) (facts : MicroCFTA.InternedNestedFacts.Facts heap)
+  (sources rawResults : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+  (relation :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard →
+      MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard → Prop)
+  (resident :
+    ∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+      row ∈ rawResults → MicroCFTA.InternedEdgeResidency.EdgeResident heap row)
+  (actual :
+    MicroCFTA.Language.All₂
+      (fun pair row =>
+        (pair.fst = pair.snd → relation pair.fst row) ∧
+          (pair.fst ≠ pair.snd → row.children = [MicroCFTA.InternedConstructorTemplates.Value.empty]))
+      (MicroCFTA.SourceRecursiveIntersectionKernel.pairs sources sources) rawResults)
+  (functional :
+    ∀ (source : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+      source ∈ sources →
+        ∀ (first : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+          first ∈ rawResults →
+            ∀ (second : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+              second ∈ rawResults → relation source first → relation source second → first = second)
+  (live :
+    ∀ (source : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+      source ∈ sources →
+        ∀ (target : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+          target ∈ rawResults →
+            relation source target → target ∈ MicroCFTA.InternedConstructorTemplates.surviving rawResults) :
+  ∃ selected,
+    MicroCFTA.Language.All₂ relation sources selected ∧
+      (∀ (target : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+          target ∈ selected → target ∈ rawResults) ∧
+        (∀ (target : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+            target ∈ selected → MicroCFTA.InternedEdgeResidency.EdgeResident heap target) ∧
+          (∀ (row : MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard),
+              row ∈ MicroCFTA.InternedConstructorTemplates.surviving rawResults ↔ row ∈ selected) ∧
+            MicroCFTA.InternedConstructorTemplates.canonicalEdges
+                (MicroCFTA.InternedConstructorTemplates.surviving rawResults) =
+              MicroCFTA.InternedConstructorTemplates.canonicalEdges selected
+'MicroCFTA.InternedOrderedDiagonalProduct.ordered_diagonal_selection' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

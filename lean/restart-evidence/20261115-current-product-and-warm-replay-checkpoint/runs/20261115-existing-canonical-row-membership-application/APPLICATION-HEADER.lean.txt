@@ -1,0 +1,7 @@
+example {Symbol Guard : Type}
+    (heap : State Symbol Guard) (facts : Facts heap)
+    (left right : List (EdgeValue Symbol Guard))
+    (leftResident : ∀ row ∈ left, EdgeResident heap row)
+    (rightResident : ∀ row ∈ right, EdgeResident heap row)
+    (same : ∀ row, row ∈ left ↔ row ∈ right) :
+    canonicalEdges left = canonicalEdges right
