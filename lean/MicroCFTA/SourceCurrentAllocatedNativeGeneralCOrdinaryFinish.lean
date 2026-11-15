@@ -35,7 +35,7 @@ local notation "ordinarySymbols" => SourceSynthesisUniverseCallerBoundary.ordina
 
 set_option autoImplicit false
 
-private theorem ordinary_payload (request : NodeRequest Symbol Guard)
+theorem ordinary_payload (request : NodeRequest Symbol Guard)
     (selected : decision request.domain.key request.left request.right = .ordinary) :
     SourceRecursiveIntersectionControl.payload request.left request.right = .ordinary := by
   unfold decision at selected
@@ -55,7 +55,7 @@ private theorem ordinary_payload (request : NodeRequest Symbol Guard)
           · cases selected
           · exact selected
 
-private theorem ordinary_code [DecidableEq Symbol] (request : NodeRequest Symbol Guard)
+theorem ordinary_code [DecidableEq Symbol] (request : NodeRequest Symbol Guard)
     (selected : decision request.domain.key request.left request.right = .ordinary) :
     compileNode request = compileRows request.domain (InternedEdgeResidency.nodeEdges request.left) (InternedEdgeResidency.nodeEdges request.right) := by
   have payload := ordinary_payload request selected
@@ -66,7 +66,7 @@ private theorem ordinary_code [DecidableEq Symbol] (request : NodeRequest Symbol
   rw [left,right]
   rfl
 
-private theorem make_node_profile [DecidableEq (EdgeKey Symbol Guard)]
+theorem make_node_profile [DecidableEq (EdgeKey Symbol Guard)]
     (sourceName : Nat) (rows : List (EdgeValue Symbol Guard))
     (heap : InternedConstructorTemplates.State Symbol Guard) (facts : Facts heap)
     (resident : ∀ row ∈ rows, EdgeResident heap row)
@@ -88,7 +88,7 @@ private theorem make_node_profile [DecidableEq (EdgeKey Symbol Guard)]
     obtain ⟨row, included, child, inRow, selected⟩ := (InternedBoundaryAtoms.edge_member rows atom).mp raw
     exact (profiles row included child inRow).2 atom selected
 
-private theorem all₂_row_profiles
+theorem all₂_row_profiles
     (sourceName : Nat) {jobs : List (EdgeValue Symbol Guard × EdgeValue Symbol Guard)}
     {rows : List (EdgeValue Symbol Guard)}
     (aligned : All₂ (fun (_pair : EdgeValue Symbol Guard × EdgeValue Symbol Guard)
