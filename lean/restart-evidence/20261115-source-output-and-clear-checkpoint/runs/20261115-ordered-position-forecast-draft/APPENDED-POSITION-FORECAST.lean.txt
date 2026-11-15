@@ -1,0 +1,79 @@
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+open SourceCurrentAllocatedNativeResourceForecast (Le)
+open SourcePruningEnumerationSharedIncomingReservation (Seed advance)
+open SourcePruningEnumerationFiniteReservation (iterate iterate_add)
+
+/-- Each continuation retains its input profile and guard alphabet. -/
+private noncomputable def IdentityReservationGoal.growth : IdentityReservationGoal → Prop
+  | .worker _ _ _ => True
+  | .node _ _ _ _ _ continuation _ _
+  | .rows _ _ _ _ _ _ continuation _ _
+  | .tuple _ _ _ _ _ _ continuation _ _
+  | .fallback _ _ continuation _ _
+  | .callback continuation _ _ _ =>
+      ∀ retained current, Le current.2 (continuation retained current).2 ∧
+        current.1 ⊆ (continuation retained current).1
+
+/-- Each original position remains within its original forecast. -/
+private theorem identity_reservation_position_forecast
+    (bits : Nat) (root goal : IdentityReservationGoal)
+    (position : IdentityReservationPosition bits root goal)
+    (growth : IdentityReservationGoal.growth root) :
+    IdentityReservationGoal.growth goal ∧
+      Le goal.forecast.2 root.forecast.2 ∧ goal.forecast.1 ⊆ root.forecast.1 := by
+  induction position with
+  | root => exact ⟨growth, Le.refl _, fun _ member => member⟩
+  | @prepared depth seed ceiling origin ih =>
+      exact ⟨(fun retained current => eagerFinal_ge depth current retained), ih.2⟩
+  | @nodeFallback limit own height bound ceiling continuation admitted seed origin ih =>
+      have inside := fallbackPlan_le_nodePlan limit own height bound ceiling continuation ih.1 seed
+      exact ⟨ih.1, inside.1.trans ih.2.1, fun _ member => ih.2.2 (inside.2 member)⟩
+  | nodeRows origin ih => exact ⟨ih.1, ih.2⟩
+  | @rowsBoundary limit own height count bound ceiling index continuation admitted seed origin within ih =>
+      let row := fun current => tuplePlan (nodePlan limit own height)
+        limit (bound + own) ceiling continuation current
+      have same : iterate row (iterate row seed index) (count - index) = iterate row seed count := by
+        rw [← iterate_add]
+        congr 1
+        omega
+      refine ⟨ih.1, ?_⟩
+      change Le (iterate row (iterate row seed index) (count - index)).2 root.forecast.2 ∧
+        (iterate row (iterate row seed index) (count - index)).1 ⊆ root.forecast.1
+      rw [same]
+      exact ih.2
+  | @rowHead limit own height count bound ceiling continuation admitted seed origin ih =>
+      let row := fun current => tuplePlan (nodePlan limit own height)
+        limit (bound + own) ceiling continuation current
+      have rowGrowth : ∀ current, Le current.2 (row current).2 ∧ current.1 ⊆ (row current).1 := by
+        intro current
+        exact tuplePlan_ge (nodePlan limit own height) (nodePlan_ge limit own height)
+          limit (bound + own) ceiling continuation ih.1 current
+      have inside := iterate_index_le row rowGrowth seed 1 (count + 1) (by omega)
+      have once : iterate row seed 1 = row seed := rfl
+      rw [once] at inside
+      exact ⟨ih.1, inside.1.trans ih.2.1, fun _ member => ih.2.2 (inside.2 member)⟩
+  | @tupleHead limit own height count bound ceiling continuation admitted seed origin ih =>
+      have tailGrowth : ∀ retained current,
+          Le current.2 (tuplePlan (nodePlan limit own height) count bound retained continuation current).2 ∧
+          current.1 ⊆ (tuplePlan (nodePlan limit own height) count bound retained continuation current).1 := by
+        intro retained current
+        exact tuplePlan_ge (nodePlan limit own height) (nodePlan_ge limit own height)
+          count bound retained continuation ih.1 current
+      exact ⟨tailGrowth, ih.2⟩
+  | @tupleFinishPad limit own height count bound ceiling continuation admitted seed origin ih =>
+      have inside := first_callback_le_tuple_of_growth limit own height count bound ceiling continuation ih.1 seed
+      exact ⟨ih.1, inside.1.trans ih.2.1, fun _ member => ih.2.2 (inside.2 member)⟩
+  | fallbackFinish origin ih => exact ⟨ih.1, ih.2⟩
+  | tupleTail origin ih => exact ⟨ih.1, ih.2⟩
+  | identityWorker origin ih => exact ⟨True.intro, ih.2⟩
+
+/-- Original worker positions need no external continuation-growth premise. -/
+private theorem identity_worker_position_forecast
+    (bits depth : Nat) (seed : Seed) (ceiling : Nat) (goal : IdentityReservationGoal)
+    (position : IdentityReservationPosition bits (.worker depth seed ceiling) goal) :
+    Le goal.forecast.2 (eagerFinal depth seed ceiling).2 ∧
+      goal.forecast.1 ⊆ (eagerFinal depth seed ceiling).1 := by
+  exact (identity_reservation_position_forecast bits (.worker depth seed ceiling) goal
+    position True.intro).2
+
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation

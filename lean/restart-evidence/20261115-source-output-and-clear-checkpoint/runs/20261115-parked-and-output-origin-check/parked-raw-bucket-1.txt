@@ -1,0 +1,93 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-parked-and-output-origin-check/source/MicroCFTA/SourcePruningEnumerationSharedParkedRawBucketReceipt.lean:178:22: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.ok` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `Except.ok`
+  [apply] `EST.Out.ok`
+  [apply] `EStateM.Result.ok`
+  [apply] `Std.Http.Response.ok`
+  [apply] `Std.Http.Status.ok`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-parked-and-output-origin-check/source/MicroCFTA/SourcePruningEnumerationSharedParkedRawBucketReceipt.lean:179:9: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.ok` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `Except.ok`
+  [apply] `EST.Out.ok`
+  [apply] `EStateM.Result.ok`
+  [apply] `Std.Http.Response.ok`
+  [apply] `Std.Http.Status.ok`
+@MicroCFTA.SourcePruningEnumerationSharedPreparedRecursive.parked_singleton_removed_bucket_receipt : ∀
+  {Typing Key : Type} {width : Nat} [inst : DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (holeKey : Typing → Nat → Key) (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits :
+    Key →
+      MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        Bool)
+  (graph :
+    MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol)) (checkEmpty : Bool)
+  (edgesOf :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      List
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (stop : Option (MicroCFTA.SourcePruningRecordTypes.Metadata Typing → Nat → Bool))
+  (order : MicroCFTA.SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat) (workFuel depth uv : Nat)
+  (metadata updated : MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width) (queries : MicroCFTA.SourceEndpointMemo.Memos)
+  (before parked :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (checked core :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (next : Option MicroCFTA.EnumerationState.Next),
+  MicroCFTA.UnionFind.Total before.core.representatives →
+    MicroCFTA.SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata
+          workFuel workFuel workFuel workFuel workFuel workFuel uv caller before queries =
+        MicroCFTA.SourcePruningEnumerationSelectedStep.Result.parked checked (some parked)
+          (some [Except.ok ((updated, next), core)]) →
+      ∃ handle bucket readAfter value root size resolved,
+        (MicroCFTA.EnumerationState.getValue workFuel uv before.core).run =
+            [Except.ok (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle) bucket, readAfter)] ∧
+          before.core.values[root]? = some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle) bucket) ∧
+            MicroCFTA.UnionFind.Reaches before.core.representatives uv root size ∧
+              MicroCFTA.EnumerationCompressionFrame.Frame before.core readAfter ∧
+                MicroCFTA.SourcePruningEnumerationNodes.lookupNode caller.checked.native.machine.heap handle =
+                    some value ∧
+                  MicroCFTA.MergedOrdinaryHeight.recursiveBoundary value = true ∧
+                    (MicroCFTA.SourcePruningEnumerationRecursion.checkRepeated caller.checked.native.machine.heap
+                            workFuel uv handle bucket readAfter).run =
+                        [Except.ok (true, checked)] ∧
+                      MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationState.representative workFuel uv)
+                          readAfter root resolved ∧
+                        MicroCFTA.EnumerationCompressionFrame.Frame readAfter resolved ∧
+                          MicroCFTA.EnumerationState.recursionKey handle bucket ∈ before.core.recursionAncestry root ∧
+                            resolved.values[root]? =
+                                some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle) bucket) ∧
+                              MicroCFTA.EnumerationCorrectness.Success
+                                  (MicroCFTA.EnumerationState.setValue root
+                                    (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle) []))
+                                  resolved () checked ∧
+                                checked =
+                                    { counter := resolved.counter, representatives := resolved.representatives,
+                                      values :=
+                                        resolved.values.set root
+                                          (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle) []),
+                                      obligations := resolved.obligations,
+                                      recursionAncestry := resolved.recursionAncestry,
+                                      expansionAncestry := resolved.expansionAncestry } ∧
+                                  parked.core = checked ∧ ⋯
+'MicroCFTA.SourcePruningEnumerationSharedPreparedRecursive.parked_singleton_removed_bucket_receipt' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

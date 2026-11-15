@@ -1,0 +1,7 @@
+import MicroCFTA.SourcePruningEnumerationSharedScanOutputOrigins
+
+#check @MicroCFTA.SourcePruningEnumerationSharedScanOutputOrigins.scan_output_origin
+#print axioms MicroCFTA.SourcePruningEnumerationSharedScanOutputOrigins.scan_output_origin
+
+#check @MicroCFTA.SourcePruningEnumerationSharedScanOutputOrigins.identity_eager_scan_output_origin
+#print axioms MicroCFTA.SourcePruningEnumerationSharedScanOutputOrigins.identity_eager_scan_output_origin

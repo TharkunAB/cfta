@@ -1,0 +1,3 @@
+import MicroCFTA.SourceSynthesisCurrentFirstRealPrefix
+#check @MicroCFTA.SourceSynthesisCurrentFirstRealPrefix.accepted_first_real_prefix
+#print axioms MicroCFTA.SourceSynthesisCurrentFirstRealPrefix.accepted_first_real_prefix

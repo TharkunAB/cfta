@@ -1,0 +1,92 @@
+@MicroCFTA.SourcePruningEnumerationSharedScanOutputOrigins.scan_output_origin : ∀ {width : Nat} {Output : Type u_1}
+  {Reason : Type u_2}
+  (visit :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      MicroCFTA.SourceCurrentAllocatedPartialState.State width →
+        MicroCFTA.SourceEndpointMemo.Memos →
+          MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+            MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result Output Reason
+              width)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (edges :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width) (queries : MicroCFTA.SourceEndpointMemo.Memos)
+  (index : Nat) (output : Output),
+  (MicroCFTA.SourcePruningEnumerationSharedScanOutputOrigins.outputs
+          (MicroCFTA.SourcePruningEnumerationSharedBranching.scan visit before edges caller queries))[index]? =
+      some output →
+    ∃ attempted edge remaining rowCaller rowQueries processed earlier rowResult localIndex,
+      edges = attempted ++ edge :: remaining ∧
+        MicroCFTA.SourcePruningEnumerationSharedBranching.scan visit before attempted caller queries =
+            MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.complete processed
+              earlier rowCaller rowQueries ∧
+          visit edge rowCaller rowQueries before = rowResult ∧
+            (MicroCFTA.SourcePruningEnumerationSharedScanOutputOrigins.outputs rowResult)[localIndex]? = some output ∧
+              index = earlier.length + localIndex
+'MicroCFTA.SourcePruningEnumerationSharedScanOutputOrigins.scan_output_origin' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourcePruningEnumerationSharedScanOutputOrigins.identity_eager_scan_output_origin : ∀ {width : Nat}
+  [inst : DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (graph :
+    MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (checkEmpty : Bool)
+  (edgesOf :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      List
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (workFuel recursiveDepth uv : Nat) (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Unit)
+  (scs : List MicroCFTA.EnumerationState.Suspended)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (edges :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width) (queries : MicroCFTA.SourceEndpointMemo.Memos)
+  (index : Nat) (output : MicroCFTA.SourcePruningEnumerationSharedPreparedRecursive.Output width Unit),
+  have child :=
+    MicroCFTA.SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel workFuel
+      workFuel edgesOf;
+  have recur :=
+    MicroCFTA.SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow child
+      (fun x x_1 x_2 node state => MicroCFTA.MergedSourceComparison.Result.done node state) graph [] checkEmpty edgesOf
+      none (fun x x_1 => none) workFuel recursiveDepth;
+  have hook :=
+    MicroCFTA.SourcePruningEnumerationSharedPreparedRecursive.continueWith recur graph [] none (fun x x_1 => none)
+      workFuel metadata uv;
+  have visit := fun edge current saved captured =>
+    MicroCFTA.SourcePruningEnumerationSharedChildVisitors.visitCapturedWith child hook workFuel uv scs edge current
+      saved captured;
+  (MicroCFTA.SourcePruningEnumerationSharedScanOutputOrigins.outputs
+          (MicroCFTA.SourcePruningEnumerationSharedBranching.scan visit before edges caller queries))[index]? =
+      some output →
+    ∃ attempted edge remaining rowCaller rowQueries processed earlier rowResult localIndex,
+      edges = attempted ++ edge :: remaining ∧
+        MicroCFTA.SourcePruningEnumerationSharedBranching.scan visit before attempted caller queries =
+            MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.complete processed
+              earlier rowCaller rowQueries ∧
+          MicroCFTA.SourcePruningEnumerationSharedChildVisitors.visitCapturedWith child hook workFuel uv scs edge
+                rowCaller rowQueries before =
+              rowResult ∧
+            (MicroCFTA.SourcePruningEnumerationSharedScanOutputOrigins.outputs rowResult)[localIndex]? = some output ∧
+              index = earlier.length + localIndex
+'MicroCFTA.SourcePruningEnumerationSharedScanOutputOrigins.identity_eager_scan_output_origin' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

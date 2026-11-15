@@ -1,0 +1,1 @@
+The exact Owner49 module compiled in the public build. The Audit failed because six private helpers are visible only inside their defining module. The same49 in-module probes already pass. The repaired public check restores the existing Audit and uses an existing public boundary theorem for independent import. No theorem or runtime definition changes.
