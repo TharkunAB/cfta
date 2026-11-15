@@ -1,0 +1,39 @@
+theorem ordered_original_entry_common_operands
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat} {Output : Type}
+    (entry : Interned NodeKey) (body depth ordinary : Node)
+    (pattern : Node) (patternClosed : pattern.free = []) (patternId : Nat)
+    (patternIdentity : identity pattern = some patternId)
+    (patternKind : tag pattern = 1 ∨ tag pattern = 3) (universeFirst : Bool)
+    (next : Interned DomainKey → Code Symbol Guard Output)
+    (fuel : Nat) (before reader : Checked width) (rest : Control Output)
+    (physical : Physical before.native) :
+    let universeValue : Node := .mu entry body depth ordinary
+    let left := if universeFirst then universeValue else pattern
+    let right := if universeFirst then pattern else universeValue
+    let first := if universeFirst then entry.identity else patternId
+    let second := if universeFirst then patternId else entry.identity
+    let entered := SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains
+      IntersectionEmptyDomain.emptyKey universeValue pattern entry.identity patternId
+    let started : Checked width :=
+      {before with native := advance before.native {before.native.machine with domains := entered.2}}
+    Trace (fuel + 1) (.code (.enter IntersectionEmptyDomain.emptyDomain left right first second next))
+      before rest reader →
+    SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains
+      IntersectionEmptyDomain.emptyKey left right first second = entered ∧
+    SourceEqualityNativeDemand.step
+      (.code (.enter IntersectionEmptyDomain.emptyDomain left right first second next)) before =
+      .yielded (.code (next entered.1)) started ∧
+    Trace 1 (.code (.enter IntersectionEmptyDomain.emptyDomain left right first second next))
+      before (.code (next entered.1)) started ∧
+    Trace fuel (.code (next entered.1)) started rest reader ∧
+    started.native.machine.heap = before.native.machine.heap ∧
+    started.native.machine.domains = entered.2 ∧ started.operations = before.operations ∧
+    Available before.native.machine.heap universeValue ∧ Available before.native.machine.heap pattern ∧
+    Available reader.native.machine.heap universeValue ∧ Available reader.native.machine.heap pattern ∧
+    Domain started.native.machine entered.1 ∧ Domain reader.native.machine entered.1 ∧
+    entered.1.key = SourceRecursiveIntersectionDomain.extend IntersectionEmptyDomain.emptyKey
+      [entry.identity] (SourceRecursiveIntersectionControl.pair entry.identity patternId) ∧
+    entered.1.key.free.isEmpty = false ∧ Physical reader.native ∧
+    Extension before.native.machine reader.native.machine ∧
+    (∀ candidate : Node, Available reader.native.machine.heap candidate → candidate.free = [] →
+      identity candidate = some patternId → candidate = pattern ∧ height candidate = height pattern) := by

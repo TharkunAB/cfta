@@ -1,0 +1,65 @@
+theorem edge_body_children_profile_of_fuel_induction
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (sourceHeap : InternedConstructorTemplates.State Symbol Guard) (sourceName : Nat)
+    (request : EdgeRequest Symbol Guard) (original before after : Checked width)
+    (parentFuel bodySteps : Nat) (result : Row)
+    (finishNext : Row → Code Symbol Guard Row)
+    (physical : Physical original.native) (sourceGrowth : Grows sourceHeap original.native.machine.heap)
+    (operationsValid : SourceEqualityConstraintMemoAllocation.Valid original.operations)
+    (plan : InputsThrough parentFuel (.code (.edge request .pure)) original)
+    (fields : FieldsThrough parentFuel (.code (.edge request .pure)) original)
+    (entered : Steps 1 (.code (.edge request .pure)) original (.edgeBody request finishNext) before)
+    (smaller : bodySteps < parentFuel)
+    (actual : Steps bodySteps (.edgeBody request .pure) before (.code (.pure result)) after)
+    (children : ∀ (pair : Pair), pair ∈ request.left.children.zip request.right.children →
+      ∀ (used childFuel childCount : Nat),
+      0 < used → childFuel < parentFuel → used + childFuel ≤ parentFuel →
+      childCount ≤ childFuel → used + childCount ≤ bodySteps + 1 →
+      ∀ (next : Node → Code Symbol Guard Row) (first last : Checked width) (value : Node),
+      Steps used (.code (.edge request .pure)) original
+        (.code ((requestNode request.domain pair.1 pair.2).bind next)) first →
+      Physical first.native → Grows sourceHeap first.native.machine.heap →
+      SourceEqualityConstraintMemoAllocation.Valid first.operations →
+      InputsThrough childFuel (.code (requestNode request.domain pair.1 pair.2)) first →
+      FieldsThrough childFuel (.code (requestNode request.domain pair.1 pair.2)) first →
+      Available first.native.machine.heap pair.1 → Available first.native.machine.heap pair.2 →
+      Steps childCount (.code (requestNode request.domain pair.1 pair.2)) first
+        (.code (.pure value)) last → Profile sourceName value) :
+    (∀ child ∈ result.children, Profile sourceName child) ∧ EdgeResident after.native.machine.heap result ∧
+    Physical after.native ∧ Extension original.native.machine after.native.machine ∧
+    Grows sourceHeap after.native.machine.heap ∧
+    SourceEqualityConstraintMemoAllocation.Valid after.operations ∧
+    SourceEqualityConstraintMemoAllocation.Grows original.operations after.operations ∧
+    ((∃ started : Checked width,
+        SourceEqualityNativeDemand.body request .pure before =
+          .yielded (.code (SourceEqualityNativeCheckedCode.sentinel request.left)) started ∧
+        bodySteps = 2 ∧ result.children = [.empty] ∧
+        result = (run (makeEdge request.left.entry.key.symbol top [.empty]) started.native.machine.heap).1 ∧
+        after = {started with native := advance started.native {started.native.machine with heap :=
+          (run (makeEdge request.left.entry.key.symbol top [.empty]) started.native.machine.heap).2}}) ∨
+      ∃ (started : Checked width) (first second combined : Allocated) (values : List Node)
+        (middle : Checked width) (walkCount : Nat),
+        SourceEqualityNativeDemand.body request .pure before =
+          .yielded (.code (SourceEqualityNativeCheckedCode.children request.domain request.left request.right combined)) started ∧
+        SourceEqualityConstraintFieldLookup.load request.left.entry.key.constraint before.operations.constraints =
+          .ok (some first) ∧
+        SourceEqualityConstraintFieldLookup.load request.right.entry.key.constraint before.operations.constraints =
+          .ok (some second) ∧
+        (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le first second
+          request.left.children.length request.right.children.length before.operations).1 = .ok (.ready combined) ∧
+        bodySteps = walkCount + 2 ∧
+        SourceEqualityNativeDemandWalkExecution.Walk (fun pair : Pair => requestNode request.domain pair.1 pair.2)
+          (request.left.children.zip request.right.children) started values middle walkCount ∧
+        All₂ (fun _ value => Profile sourceName value)
+          (request.left.children.zip request.right.children) values ∧
+        (∀ value ∈ values, Available middle.native.machine.heap value) ∧ result.children = values ∧
+        Steps walkCount (.code (SourceEqualityNativeCheckedCode.children request.domain request.left request.right combined))
+          started (.code (.work (makeEdge request.left.entry.key.symbol
+            (SourceEqualityConjoinAllocation.readback combined) values) .pure)) middle ∧
+        Steps 1 (.code (.work (makeEdge request.left.entry.key.symbol
+          (SourceEqualityConjoinAllocation.readback combined) values) .pure)) middle (.code (.pure result)) after ∧
+        result = (run (makeEdge request.left.entry.key.symbol
+          (SourceEqualityConjoinAllocation.readback combined) values) middle.native.machine.heap).1 ∧
+        after = {middle with native := advance middle.native {middle.native.machine with heap :=
+          (run (makeEdge request.left.entry.key.symbol (SourceEqualityConjoinAllocation.readback combined) values)
+            middle.native.machine.heap).2}})

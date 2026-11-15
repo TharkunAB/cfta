@@ -1,0 +1,33 @@
+theorem actual_node_query_dispatch_from_initial_query_finish
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (rootRequest : NodeRequest Symbol Guard)
+    (machine : SourceRecursiveIntersectionKernel.Machine Symbol Guard)
+    (machineValid : SourceRecursiveIntersectionKernel.Valid machine)
+    (operations : SourceEqualityConstraintMemoAllocation.State)
+    (originalFuel count handle : Nat) (captured : NodeRequest Symbol Guard)
+    (value : Value Symbol Guard) (rest : Code Symbol Guard (Value Symbol Guard))
+    (beforeFinish : Checked width)
+    (bounded : count < originalFuel)
+    (actual : Trace count (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width)
+      (.code (.finishNode handle value rest)) beforeFinish)
+    (owner : beforeFinish.native.nodes.cells handle = some ⟨captured, .evaluating⟩) :
+    ∃ (queryUsed bodyCount : Nat) (queryBefore beforeBody : Checked width)
+      (resume : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard)),
+      queryUsed + 1 + bodyCount = count ∧ queryUsed < count ∧ queryUsed < originalFuel ∧
+      Trace queryUsed (.code (.node rootRequest .pure))
+        (⟨initial width machine, operations⟩ : Checked width)
+        (.code (.node captured resume)) queryBefore ∧
+      Trace 1 (.code (.node captured resume)) queryBefore
+        (.code ((compileNode captured).bind
+          (fun result => .finishNode handle result (resume result)))) beforeBody ∧
+      Steps 1 (.code (.node captured .pure)) queryBefore
+        (.code ((compileNode captured).bind
+          (fun result => .finishNode handle result (.pure result)))) beforeBody ∧
+      SourceCurrentAllocatedNativePhysicalCache.Valid queryBefore.native ∧
+      NodeReady queryBefore.native.machine captured ∧
+      (∀ key, SourceRecursiveIntersectionMemo.requestKey width captured.domain captured.left captured.right = some key →
+        SourceRecursiveIntersectionMemo.KeySafe width captured.domain captured.left captured.right) ∧
+      beforeBody.native.nodes.cells handle = some ⟨captured, .evaluating⟩ ∧
+      Steps bodyCount (.code (compileNode captured)) beforeBody (.code (.pure value)) beforeFinish ∧
+      resume value = rest := by

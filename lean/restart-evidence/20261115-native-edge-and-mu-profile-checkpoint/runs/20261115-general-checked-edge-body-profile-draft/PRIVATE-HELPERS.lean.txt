@@ -1,0 +1,121 @@
+private theorem through_head
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (fuel : Nat) (control : Control Node) (state : Checked width)
+    (plan : InputsThrough fuel control state) : Inputs control state := by
+  cases fuel with
+  | zero => exact plan
+  | succ fuel => exact plan.1
+
+private theorem empty_profile (sourceName : Nat) : Profile sourceName (.empty : Node) := by
+  constructor
+  · rfl
+  · intro atom member
+    cases member
+
+private theorem profiles_of_all_two {members : List Pair} {values : List Node} (sourceName : Nat)
+    (aligned : All₂ (fun _ value => Profile sourceName value) members values) :
+    ∀ value ∈ values, Profile sourceName value := by
+  induction aligned with
+  | nil => intro value member; cases member
+  | cons head tail ih =>
+      intro value member
+      cases member with
+      | head => exact head
+      | tail _ member => exact ih value member
+
+private theorem protected_body_first
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (request : EdgeRequest Symbol Guard) (bodySteps : Nat) (before after : Checked width) (result : Row)
+    (actual : Trace bodySteps (.edgeBody request .pure) before (.code (.pure result)) after) :
+    ∃ (code : Code Symbol Guard Row) (started : Checked width) (rest : Nat),
+      bodySteps = rest + 1 ∧
+      SourceEqualityNativeDemand.body request .pure before = .yielded (.code code) started ∧
+      Trace rest (.code code) started (.code (.pure result)) after := by
+  cases actual with
+  | cons start state next current final reached count _inputs one tail =>
+      obtain ⟨code, same⟩ := SourceEqualityNativeDemandBodyYield.pure_yielded_code
+        request before current next one
+      subst next
+      exact ⟨code, current, count, rfl, one, tail⟩
+
+private theorem walk_profiles
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (sourceHeap : InternedConstructorTemplates.State Symbol Guard) (sourceName : Nat)
+    (request : EdgeRequest Symbol Guard) (original : Checked width) (parentFuel bodySteps : Nat)
+    (physicalOriginal : Physical original.native) (sourceGrowth : Grows sourceHeap original.native.machine.heap)
+    (operationsValid : SourceEqualityConstraintMemoAllocation.Valid original.operations)
+    (plan : InputsThrough parentFuel (.code (.edge request .pure)) original)
+    (fields : FieldsThrough parentFuel (.code (.edge request .pure)) original)
+    (children : ∀ (pair : Pair), pair ∈ request.left.children.zip request.right.children →
+      ∀ (used childFuel childCount : Nat),
+      0 < used → childFuel < parentFuel → used + childFuel ≤ parentFuel →
+      childCount ≤ childFuel → used + childCount ≤ bodySteps + 1 →
+      ∀ (next : Node → Code Symbol Guard Row) (first last : Checked width) (value : Node),
+      Steps used (.code (.edge request .pure)) original
+        (.code ((requestNode request.domain pair.1 pair.2).bind next)) first →
+      Physical first.native → Grows sourceHeap first.native.machine.heap →
+      SourceEqualityConstraintMemoAllocation.Valid first.operations →
+      InputsThrough childFuel (.code (requestNode request.domain pair.1 pair.2)) first →
+      FieldsThrough childFuel (.code (requestNode request.domain pair.1 pair.2)) first →
+      Available first.native.machine.heap pair.1 → Available first.native.machine.heap pair.2 →
+      Steps childCount (.code (requestNode request.domain pair.1 pair.2)) first
+        (.code (.pure value)) last → Profile sourceName value)
+    (jobs : List Pair) (before : Checked width) (values : List Node) (after : Checked width) (count : Nat)
+    (walked : SourceEqualityNativeDemandWalkExecution.Walk
+      (fun pair : Pair => requestNode request.domain pair.1 pair.2) jobs before values after count)
+    (used : Nat) (next : List Node → Code Symbol Guard Row)
+    (origin : Steps used (.code (.edge request .pure)) original
+      (.code ((SourceRecursiveIntersectionCode.walk
+        (fun pair : Pair => requestNode request.domain pair.1 pair.2) jobs).bind next)) before)
+    (positive : 0 < used) (bounded : used + count ≤ parentFuel)
+    (rawBound : used + count ≤ bodySteps + 1) (physical : Physical before.native)
+    (included : ∀ pair ∈ jobs, pair ∈ request.left.children.zip request.right.children) :
+    Physical after.native ∧ Extension before.native.machine after.native.machine ∧
+      (∀ value ∈ values, Available after.native.machine.heap value) ∧
+      All₂ (fun _ value => Profile sourceName value) jobs values := by
+  induction walked generalizing used next with
+  | nil current =>
+      exact ⟨physical, Extension.refl _, (by intro value member; cases member), .nil⟩
+  | cons pair rest before middle after value values firstCount restCount called tail ih =>
+      let childNext : Node → Code Symbol Guard Row := fun value =>
+        (SourceRecursiveIntersectionCode.walk
+          (fun pair : Pair => requestNode request.domain pair.1 pair.2) rest).bind
+            (fun values => next (value :: values))
+      have atChild : Steps used (.code (.edge request .pure)) original
+          (.code ((requestNode request.domain pair.1 pair.2).bind childNext)) before := by
+        simpa only [SourceRecursiveIntersectionCode.walk, Code.bind_assoc, Code.bind, childNext] using origin
+      have reached := SourceCurrentAllocatedNativePrefixOperations.prefix_operations_before_bind
+        parentFuel used (.code (.edge request .pure))
+        (.code (requestNode request.domain pair.1 pair.2)) childNext
+        original before sourceHeap physicalOriginal plan fields operationsValid sourceGrowth atChild (by omega)
+      obtain ⟨_checkedPrefix, childPhysical, _prefixExtension, childGrowth, childOperations,
+        _operationGrowth, _boundPlan, childPlan, _boundFields, childFields⟩ := reached
+      have ready := through_head (parentFuel - used)
+        (.code (requestNode request.domain pair.1 pair.2)) before childPlan
+      have own := children pair (included pair List.mem_cons_self) used (parentFuel - used) firstCount
+        positive (by omega) (by omega) (by omega) (by omega) childNext before middle value atChild
+        childPhysical childGrowth childOperations childPlan childFields ready.1.2.1 ready.1.2.2 called
+      have completed := SourceCurrentAllocatedNativePrefixOperations.prefix_operations_before_bind
+        (parentFuel - used) firstCount (.code (requestNode request.domain pair.1 pair.2))
+        (.code (.pure value)) .pure before middle sourceHeap childPhysical childPlan childFields
+        childOperations childGrowth called (by omega)
+      obtain ⟨checkedQuery, middlePhysical, queryExtension, _middleGrowth, _middleOperations,
+        _queryOperationGrowth, _queryBoundPlan, _queryPlan, _queryBoundFields, _queryFields⟩ := completed
+      have available := SourceCurrentNativeOpenRequestResults.node_result firstCount
+        ⟨request.domain, pair.1, pair.2⟩ before middle value childPhysical checkedQuery
+      have advanced := called.bind _ _ _ _ _ childNext
+      have tailOrigin : Steps (used + firstCount) (.code (.edge request .pure)) original
+          (.code ((SourceRecursiveIntersectionCode.walk
+            (fun pair : Pair => requestNode request.domain pair.1 pair.2) rest).bind
+              (fun values => next (value :: values)))) middle :=
+        atChild.trans _ _ _ _ _ _ _ _ advanced
+      have restIncluded : ∀ candidate ∈ rest, candidate ∈ request.left.children.zip request.right.children := by
+        intro candidate present
+        exact included candidate (List.mem_cons_of_mem _ present)
+      have later := ih (used + firstCount) (fun values => next (value :: values)) tailOrigin
+        (by omega) (by omega) (by omega) middlePhysical restIncluded
+      refine ⟨later.1, queryExtension.trans later.2.1, ?_, .cons own later.2.2.2⟩
+      intro selected present
+      cases present with
+      | head => exact later.2.1.available value available
+      | tail _ present => exact later.2.2.1 selected present

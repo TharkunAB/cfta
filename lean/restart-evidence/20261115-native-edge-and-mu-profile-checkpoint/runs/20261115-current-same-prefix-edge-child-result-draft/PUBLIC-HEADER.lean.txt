@@ -1,0 +1,31 @@
+theorem edge_child_law_at_node_finish
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (nodeLaw : NodeRequest Symbol Guard → Value Symbol Guard → Prop)
+    (edgeLaw : EdgeRequest Symbol Guard → EdgeValue Symbol Guard → Prop)
+    (rootRequest : NodeRequest Symbol Guard)
+    (machine : SourceRecursiveIntersectionKernel.Machine Symbol Guard)
+    (machineValid : SourceRecursiveIntersectionKernel.Valid machine)
+    (operations : SourceEqualityConstraintMemoAllocation.State)
+    (fuel wholeCount used childCount : Nat)
+    (parentHandle : Nat) (parentValue : Value Symbol Guard)
+    (parentNext : Code Symbol Guard (Value Symbol Guard)) (beforeFinish : Checked width)
+    (bounded : wholeCount ≤ fuel)
+    (whole : Trace wholeCount (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width)
+      (.code (.finishNode parentHandle parentValue parentNext)) beforeFinish)
+    (past : Returned nodeLaw beforeFinish.native.nodes ∧ Returned edgeLaw beforeFinish.native.edges)
+    (child : EdgeRequest Symbol Guard)
+    (childNext : EdgeValue Symbol Guard → Code Symbol Guard (Value Symbol Guard))
+    (childBefore childAfter : Checked width) (value : EdgeValue Symbol Guard)
+    (childBound : used + childCount ≤ wholeCount)
+    (origin : Steps used (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width)
+      (.code ((requestEdge child.domain child.left child.right).bind childNext)) childBefore)
+    (childActual : Steps childCount (.code (requestEdge child.domain child.left child.right))
+      childBefore (.code (.pure value)) childAfter) :
+    edgeLaw child value ∧ ∃ handle,
+      childAfter.native.edges.cells handle = some ⟨child, .returned value⟩ ∧
+      beforeFinish.native.edges.cells handle = some ⟨child, .returned value⟩ ∧
+      Trace (wholeCount - used - childCount) (.code (childNext value)) childAfter
+        (.code (.finishNode parentHandle parentValue parentNext)) beforeFinish ∧
+      SourceEqualityNativeDemandMemo.Retained childAfter.native beforeFinish.native := by

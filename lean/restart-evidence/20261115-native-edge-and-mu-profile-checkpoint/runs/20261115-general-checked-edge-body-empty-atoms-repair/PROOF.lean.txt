@@ -1,0 +1,128 @@
+ := by
+  have bodyBound := actual.bind _ _ _ _ _ finishNext
+  have finalPrefix := entered.trans _ _ _ _ _ _ _ _ bodyBound
+  have atFinal : Steps (1 + bodySteps) (.code (.edge request .pure)) original
+      ((Control.code (.pure result)).bind finishNext) after := by
+    simpa only [Control.bind] using finalPrefix
+  have reached := SourceCurrentAllocatedNativePrefixOperations.prefix_operations_before_bind
+    parentFuel (1 + bodySteps) (.code (.edge request .pure)) (.code (.pure result)) finishNext
+    original after sourceHeap physical plan fields operationsValid sourceGrowth atFinal (by omega)
+  obtain ⟨checkedWhole, afterPhysical, extension, afterGrowth, afterOperations, operationGrowth,
+    _boundPlan, _rawPlan, _boundFields, _rawFields⟩ := reached
+  have separated := SourceCurrentHereditaryNativePhysicalSplit.split entered checkedWhole
+  have bodyTrace := SourceCurrentHereditaryNativePhysicalSplit.unbind actual finishNext separated.2
+  obtain ⟨code, started, rest, bodyCount, one, tail⟩ :=
+    protected_body_first request bodySteps before after result bodyTrace
+  have firstStep : Steps 1 (.edgeBody request .pure) before (.code code) started :=
+    .cons _ _ _ _ _ _ 0 one (.refl _ _)
+  have startedPrefix := entered.trans _ _ _ _ _ _ _ _ (firstStep.bind _ _ _ _ _ finishNext)
+  have atStarted : Steps 2 (.code (.edge request .pure)) original
+      ((Control.code code).bind finishNext) started := by
+    simpa only [Control.bind] using startedPrefix
+  have startedResources := SourceCurrentAllocatedNativePrefixOperations.prefix_operations_before_bind
+    parentFuel 2 (.code (.edge request .pure)) (.code code) finishNext
+    original started sourceHeap physical plan fields operationsValid sourceGrowth atStarted (by omega)
+  obtain ⟨_checkedStart, startedPhysical, _startedExtension, _startedGrowth, _startedOperations,
+    _startedOperationGrowth, _startedBoundPlan, _startedPlan, _startedBoundFields, _startedFields⟩ := startedResources
+  obtain ⟨_nativeSame, branch⟩ :=
+    SourcePruningEnumerationNativeCheckedOriginArity.body_choice_checked request before started code one
+  rcases branch with sentinelSame | ⟨first, second, combined, firstLoad, secondLoad, accepted, codeSame⟩
+  · have workTrace : Trace rest
+        (.code (.work (makeEdge request.left.entry.key.symbol top [.empty]) .pure)) started
+        (.code (.pure result)) after := by
+      simpa only [sentinelSame, SourceEqualityNativeCheckedCode.sentinel] using tail
+    obtain ⟨workCount, sameResult, sameAfter, _workInputs⟩ :=
+      SourceCurrentAllocatedNativeSemanticTraceReadback.work_readback
+        (makeEdge request.left.entry.key.symbol top [.empty]) rest started after result workTrace
+    have valuesAvailable : ∀ value ∈ ([.empty] : List Node), Available started.native.machine.heap value := by
+      intro value member
+      have same := List.mem_singleton.mp member
+      subst value
+      exact empty_available _
+    have fieldsRead := MergedPhysicalGroupEdges.makeEdge_fields started.native.machine.heap
+      startedPhysical.machine.1 request.left.entry.key.symbol top [.empty] valuesAvailable
+    have shape : result.children = [.empty] := by
+      rw [sameResult]
+      exact fieldsRead.2.2
+    have profiles : ∀ child ∈ result.children, Profile sourceName child := by
+      intro child member
+      rw [shape] at member
+      have same := List.mem_singleton.mp member
+      subst child
+      exact empty_profile sourceName
+    have verified := InternedNestedFacts.edge_verified request.left.entry.key.symbol top [.empty]
+      started.native.machine.heap startedPhysical.machine.1 valuesAvailable
+    have resident : EdgeResident after.native.machine.heap result := by
+      rw [sameResult, sameAfter]
+      exact verified.result _ _ rfl
+    have branchOne : SourceEqualityNativeDemand.body request .pure before =
+        .yielded (.code (SourceEqualityNativeCheckedCode.sentinel request.left)) started := by
+      simpa only [sentinelSame] using one
+    exact ⟨profiles, resident, afterPhysical, extension, afterGrowth, afterOperations, operationGrowth,
+      .inl ⟨started, branchOne, by omega, shape, sameResult, sameAfter⟩⟩
+  · let call : Pair → Code Symbol Guard Node := fun pair => requestNode request.domain pair.1 pair.2
+    let build : List Node → Code Symbol Guard Row := fun values =>
+      .work (makeEdge request.left.entry.key.symbol (SourceEqualityConjoinAllocation.readback combined) values) .pure
+    have acceptedTrace : Trace rest
+        ((Control.code (SourceRecursiveIntersectionCode.walk call
+          (request.left.children.zip request.right.children))).bind build) started
+        (.code (.pure result)) after := by
+      rw [codeSame] at tail
+      exact tail
+    obtain ⟨walkCount, workCount, values, middle, total, walkTrace, workTrace⟩ :=
+      SourceCurrentHereditaryNativePhysicalSplit.bind_split
+        (.code (SourceRecursiveIntersectionCode.walk call (request.left.children.zip request.right.children)))
+        build started after result acceptedTrace
+    have walked := SourceEqualityNativeDemandWalkExecution.trace_walk call
+      (request.left.children.zip request.right.children) walkCount started middle values walkTrace.steps
+    obtain ⟨workIsOne, sameResult, sameAfter, _workInputs⟩ :=
+      SourceCurrentAllocatedNativeSemanticTraceReadback.work_readback
+        (makeEdge request.left.entry.key.symbol (SourceEqualityConjoinAllocation.readback combined) values)
+        workCount middle after result workTrace
+    let finish : List Node → Code Symbol Guard Row := fun values => (build values).bind finishNext
+    have walkOrigin : Steps 2 (.code (.edge request .pure)) original
+        (.code ((SourceRecursiveIntersectionCode.walk call
+          (request.left.children.zip request.right.children)).bind finish)) started := by
+      rw [codeSame] at atStarted
+      change Steps 2 (.code (.edge request .pure)) original
+        (.code (((SourceRecursiveIntersectionCode.walk call
+          (request.left.children.zip request.right.children)).bind build).bind finishNext)) started at atStarted
+      simpa only [Code.bind_assoc] using atStarted
+    have observed := walk_profiles sourceHeap sourceName request original parentFuel bodySteps
+      physical sourceGrowth operationsValid plan fields children
+      (request.left.children.zip request.right.children) started values middle walkCount walked
+      2 finish walkOrigin (by omega) (by omega) (by omega) startedPhysical (by intros; assumption)
+    have fieldsRead := MergedPhysicalGroupEdges.makeEdge_fields middle.native.machine.heap
+      observed.1.machine.1 request.left.entry.key.symbol
+      (SourceEqualityConjoinAllocation.readback combined) values observed.2.2.1
+    have shape : result.children = values := by
+      rw [sameResult]
+      exact fieldsRead.2.2
+    have profiles : ∀ child ∈ result.children, Profile sourceName child := by
+      rw [shape]
+      exact profiles_of_all_two sourceName observed.2.2.2
+    have verified := InternedNestedFacts.edge_verified request.left.entry.key.symbol
+      (SourceEqualityConjoinAllocation.readback combined) values middle.native.machine.heap
+      observed.1.machine.1 observed.2.2.1
+    have resident : EdgeResident after.native.machine.heap result := by
+      rw [sameResult, sameAfter]
+      exact verified.result _ _ rfl
+    have throughWork : Steps walkCount
+        (.code (SourceEqualityNativeCheckedCode.children request.domain request.left request.right combined)) started
+        (.code (.work (makeEdge request.left.entry.key.symbol
+          (SourceEqualityConjoinAllocation.readback combined) values) .pure)) middle :=
+      walked.trace.bind _ _ _ _ _ build
+    have workStep : Steps 1
+        (.code (.work (makeEdge request.left.entry.key.symbol
+          (SourceEqualityConjoinAllocation.readback combined) values) .pure)) middle (.code (.pure result)) after := by
+      simpa only [workIsOne] using workTrace.steps
+    have branchOne : SourceEqualityNativeDemand.body request .pure before =
+        .yielded (.code (SourceEqualityNativeCheckedCode.children request.domain request.left request.right combined))
+          started := by
+      simpa only [codeSame] using one
+    exact ⟨profiles, resident, afterPhysical, extension, afterGrowth, afterOperations, operationGrowth,
+      .inr ⟨started, first, second, combined, values, middle, walkCount,
+        branchOne, firstLoad, secondLoad, accepted, by omega, walked, observed.2.2.2, observed.2.2.1,
+        shape, throughWork, workStep, sameResult, sameAfter⟩⟩
+
+end MicroCFTA.SourceCurrentAllocatedNativeCheckedEdgeBodyProfile

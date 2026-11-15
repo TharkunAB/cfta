@@ -1,0 +1,28 @@
+--- lean/restart-evidence/20261115-current-closed-universe-mu-profile-draft/SourceCurrentAllocatedNativeClosedUniverseMuProfile.lean
++++ lean/restart-evidence/20261115-current-closed-universe-mu-profile-local-fold-repair/SourceCurrentAllocatedNativeClosedUniverseMuProfile.lean
+@@ -184,7 +184,7 @@
+             SourceRecursiveIntersectionEnvironment.binder pattern).map Prod.fst)
+           (SourceRecursiveIntersectionControl.pair entry.identity patternId))
+     rw [patternBinder]
+-    simp only [List.nil_append, List.append_nil, pairReverse]
++    simp only [List.nil_append, List.append_nil, pairReverse, binder]
+   have allocatedEq :
+       SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains request.domain.key
+         request.left request.right first second = entered := by
+@@ -223,6 +223,7 @@
+       .enter IntersectionEmptyDomain.emptyDomain request.left request.right first second enterNext := by
+     rw [compiledMu]
+     simp only [compileMu, leftIdentity, rightIdentity, bodyLeft, bodyRight, binderEq]
++    rfl
+   have one : SourceEqualityNativeDemand.step (.code (compileNode request)) before =
+       .yielded (.code (query.bind next)) started := by
+     rw [compiledMu]
+@@ -247,7 +248,7 @@
+   have universeAvailable : Available original.native.machine.heap universeValue :=
+     physical.machine.1.cached.nodes key _ (sourceGrowth.nodeRecords key _ stored)
+   have bodyAvailable : Available original.native.machine.heap body :=
+-    universeAvailable.children body (by simp [InternedProbeProvenance.children])
++    universeAvailable.children body (by simp [universeValue, InternedProbeProvenance.children])
+   have originalInputs := through_head parentFuel (.code (.node request .pure)) original plan
+   have patternAvailable : Available original.native.machine.heap pattern := by
+     cases leftIsU with

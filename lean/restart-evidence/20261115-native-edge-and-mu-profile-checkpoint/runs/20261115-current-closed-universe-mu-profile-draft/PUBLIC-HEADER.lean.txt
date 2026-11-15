@@ -1,0 +1,72 @@
+theorem closed_universe_mu_profile_trace_result
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Node)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (universeClosed : (Value.mu entry body depth ordinary).free = [])
+    (pattern : Node) (patternProfile : Profile entry.identity pattern)
+    (patternId : Nat) (patternIdentity : identity pattern = some patternId)
+    (patternKind : tag pattern = 1 ∨ tag pattern = 3) (leftIsU : Bool)
+    (original before after : Checked width) (parentFuel bodySteps : Nat) (result : Node)
+    (finishNext : Node → Code Symbol Guard Node)
+    (physical : Physical original.native)
+    (sourceGrowth : Grows sourceHeap original.native.machine.heap)
+    (operationsValid : SourceEqualityConstraintMemoAllocation.Valid original.operations) :
+    let universeValue : Node := .mu entry body depth ordinary
+    let request : NodeRequest Symbol Guard := ⟨IntersectionEmptyDomain.emptyDomain,
+      if leftIsU then universeValue else pattern, if leftIsU then pattern else universeValue⟩
+    let childLeft := if leftIsU then body else pattern
+    let childRight := if leftIsU then pattern else body
+    let first := if leftIsU then entry.identity else patternId
+    let second := if leftIsU then patternId else entry.identity
+    let entered := SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains
+      IntersectionEmptyDomain.emptyKey universeValue pattern entry.identity patternId
+    let started : Checked width :=
+      {before with native := advance before.native {before.native.machine with domains := entered.2}}
+    let binder := SourceRecursiveIntersectionControl.pair entry.identity patternId
+    let enterNext := fun domain => (requestNode domain childLeft childRight).bind
+      (fun value => .optionalBinder binder value .pure)
+    SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right =
+      (if leftIsU then .leftMu else .rightMu) →
+    InputsThrough parentFuel (.code (.node request .pure)) original →
+    FieldsThrough parentFuel (.code (.node request .pure)) original →
+    Steps 1 (.code (.node request .pure)) original
+      (.code ((compileNode request).bind finishNext)) before →
+    bodySteps < parentFuel →
+    Steps bodySteps (.code (compileNode request)) before (.code (.pure result)) after →
+    (∀ (childFuel childCount : Nat), childFuel < parentFuel → childCount ≤ childFuel →
+      2 + childFuel ≤ parentFuel → 2 + childCount ≤ parentFuel →
+      ∀ (next : Node → Code Symbol Guard Node) (value : Node) (middle : Checked width),
+      Steps 2 (.code (.node request .pure)) original
+        (.code ((requestNode entered.1 childLeft childRight).bind next)) started →
+      Trace 1 (.code (.enter IntersectionEmptyDomain.emptyDomain request.left request.right
+        first second enterNext)) before (.code (enterNext entered.1)) started →
+      Physical started.native → Grows sourceHeap started.native.machine.heap →
+      SourceEqualityConstraintMemoAllocation.Valid started.operations →
+      InputsThrough childFuel (.code (requestNode entered.1 childLeft childRight)) started →
+      FieldsThrough childFuel (.code (requestNode entered.1 childLeft childRight)) started →
+      Domain started.native.machine entered.1 →
+      Available started.native.machine.heap childLeft → Available started.native.machine.heap childRight →
+      universeValue.free = [] → Profile entry.identity pattern → height pattern ≤ height pattern →
+      Steps childCount (.code (requestNode entered.1 childLeft childRight)) started
+        (.code (.pure value)) middle → Profile entry.identity value) →
+    Profile entry.identity result ∧ Available after.native.machine.heap result ∧ Physical after.native ∧
+    Extension original.native.machine after.native.machine ∧ Grows sourceHeap after.native.machine.heap ∧
+    SourceEqualityConstraintMemoAllocation.Valid after.operations ∧
+    SourceEqualityConstraintMemoAllocation.Grows original.operations after.operations ∧
+    SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains request.domain.key
+      request.left request.right first second = entered ∧
+    entered.1.key.free.isEmpty = false ∧
+    ∃ (childCount : Nat) (middle : Checked width),
+      bodySteps = 1 + childCount + 1 ∧ 2 + childCount ≤ parentFuel ∧ childCount < parentFuel ∧
+      Trace 1 (.code (.enter IntersectionEmptyDomain.emptyDomain request.left request.right
+        first second enterNext)) before (.code (enterNext entered.1)) started ∧
+      Steps 2 (.code (.node request .pure)) original
+        (.code ((requestNode entered.1 childLeft childRight).bind
+          (fun value => .optionalBinder binder value finishNext))) started ∧
+      Steps childCount (.code (requestNode entered.1 childLeft childRight)) started
+        (.code (.pure result)) middle ∧
+      SourceRecursiveIntersectionMaybeMu.maybeMu binder result middle.native.machine.heap =
+        .done result middle.native.machine.heap ∧
+      Steps 1 (.code (.optionalBinder binder result .pure)) middle (.code (.pure result)) after ∧
+      after = middle := by
