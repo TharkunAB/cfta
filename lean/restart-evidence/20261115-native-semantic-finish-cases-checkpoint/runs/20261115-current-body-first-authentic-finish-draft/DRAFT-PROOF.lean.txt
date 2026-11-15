@@ -1,0 +1,185 @@
+  let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+  let initialState : Checked width := ⟨initial width machine, operations⟩
+  let rootControl : Control (Value Symbol Guard) := .code (.node rootRequest .pure)
+  let finalControl : Control (Value Symbol Guard) := .code (.finishNode parentHandle value rest)
+  let request : NodeRequest Symbol Guard := ⟨actualDomain, body, universeValue⟩
+  have initialPhysical := SourceCurrentAllocatedNativePhysicalCache.initial_valid (width := width) machine machineValid
+  have atReader := SourceCurrentNativeEnterCommonOperand.checked_trace_extension actual initialPhysical
+  have readerGrowth : Grows sourceHeap beforeFinish.native.machine.heap :=
+    InternedConstructorTemplates.grows_trans sourceGrowth atReader.2.heap
+  obtain ⟨patternClosed, patternIdentity, patternKind, universeFirst, entryUsed, entryBefore,
+    entryNext, entryData⟩ := authentic
+  dsimp only at entryData
+  obtain ⟨entryBound, entryPrefix, _orderedTuple, _entryOne, domainEq⟩ := entryData
+  let entryLeft := if universeFirst then universeValue else pattern
+  let entryRight := if universeFirst then pattern else universeValue
+  let firstId := if universeFirst then entry.identity else patternId
+  let secondId := if universeFirst then patternId else entry.identity
+  let sourceDomain := SourceRecursiveIntersectionEnvironment.enter entryBefore.native.machine.domains
+    IntersectionEmptyDomain.emptyKey universeValue pattern entry.identity patternId
+  change domain = sourceDomain.1 at domainEq
+  have entryTotal : entryUsed + (wholeCount - entryUsed) = wholeCount := by omega
+  have entryWhole : Trace (entryUsed + (wholeCount - entryUsed)) rootControl initialState finalControl beforeFinish :=
+    entryTotal.symm ▸ actual
+  have entrySplit := SourceCurrentHereditaryNativePhysicalSplit.split entryPrefix.steps entryWhole
+  have entryPhysical := SourceCurrentNativeEnterCommonOperand.checked_trace_extension entrySplit.1 initialPhysical
+  have entryLength : wholeCount - entryUsed = (wholeCount - entryUsed - 1) + 1 := by omega
+  have entryActual : Trace ((wholeCount - entryUsed - 1) + 1)
+      (.code (.enter IntersectionEmptyDomain.emptyDomain entryLeft entryRight firstId secondId entryNext))
+      entryBefore finalControl beforeFinish := entryLength ▸ entrySplit.2
+  obtain ⟨_entryStep, _entryTail, _entryHeap, _entryDomains, _entryOperations, _oldDomain,
+    _leftAtEntry, _rightAtEntry, leftReader, rightReader, _domainAfterEntry, _domainAtReader,
+    _enteredKey, _entryExtension, _sameRecord⟩ :=
+    SourceCurrentNativeEnterCommonOperand.enter_prefix_common_operands
+      IntersectionEmptyDomain.emptyDomain entryLeft entryRight firstId secondId entryNext
+      (wholeCount - entryUsed - 1) entryBefore beforeFinish finalControl entryPhysical.1 entryActual
+  have patternReader : Available beforeFinish.native.machine.heap pattern := by
+    cases universeFirst with
+    | false => exact leftReader
+    | true => exact rightReader
+  obtain ⟨bodyEntry, bodyRows, bodyShape, _bodyApart, sourceFacts⟩ :=
+    SourceCurrentAllocatedNativeSourceDiagonalFirstActualMuBody.current_stored_universe_diagonal_first_actual_mu_body
+      (width := width) lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      beforeFinish.native.machine.heap atReader.1.machine.1 readerGrowth
+      entryBefore.native.machine.domains entryPhysical.1.machine.2
+      pattern patternReader patternClosed patternId patternIdentity patternKind
+  have bodyIdEq : bodyEntry.identity = bodyId := by
+    have observed : identity body = some bodyEntry.identity := by
+      simp only [bodyShape, identity]
+    exact Option.some.inj (observed.symm.trans bodyIdentity)
+  subst bodyId
+  let referenceValue : Value Symbol Guard := .reference (.interned entry.identity)
+  let diagonalFirst := SourceRecursiveIntersectionEnvironment.enter sourceDomain.2 sourceDomain.1.key
+    universeValue referenceValue entry.identity entry.identity
+  dsimp only at sourceFacts
+  obtain ⟨_bodyRead, _universeRead, _bodyOpen, _cutoffApart, incomingFacts, _terminalFacts⟩ := sourceFacts
+  have bodySelected : decision diagonalFirst.1.key body universeValue = .rightMu :=
+    (incomingFacts diagonalFirst.1 rfl).1
+  have sourceValid : Cache.Valid sourceDomain.2 :=
+    (IntersectionEmptyDomain.make_correct entryBefore.native.machine.domains entryPhysical.1.machine.2 _).1
+  have diagonalKey := SourceRecursiveIntersectionSchedule.entered_key sourceDomain.2 sourceValid sourceDomain.1.key
+    universeValue referenceValue entry.identity entry.identity
+  have tagOrder : compare (1 : Nat) 2 = .lt := by decide
+  have bodyDiagonalFresh : pair bodyEntry.identity entry.identity ∉ diagonalFirst.1.key.seen := by
+    intro member
+    have repeated : decision diagonalFirst.1.key body universeValue =
+        .repeated (pair bodyEntry.identity entry.identity) := by
+      simp [decision, hasEmpty, reset, closedSelf, greater, compareValue, tag, identity,
+        bodyShape, universeValue, Value.referenceOf, Value.free, member, tagOrder]
+    rw [repeated] at bodySelected
+    cases bodySelected
+  have sourceFresh : pair bodyEntry.identity entry.identity ∉ sourceDomain.1.key.seen := by
+    intro member
+    apply bodyDiagonalFresh
+    rw [diagonalKey]
+    exact (extend_seen _ _ _ _).mpr (Or.inr member)
+  have sourceSameKey : actualDomain.key = sourceDomain.1.key :=
+    sameKey.trans (congrArg (fun current => current.key) domainEq)
+  have actualFresh : pair bodyEntry.identity entry.identity ∉ actualDomain.key.seen := by
+    rw [sourceSameKey]
+    exact sourceFresh
+  have selected : decision request.domain.key request.left request.right = .rightMu := by
+    simp [request, decision, hasEmpty, reset, closedSelf, greater, compareValue, tag, identity, payload,
+      bodyShape, universeValue, Value.referenceOf, Value.free, actualFresh, tagOrder]
+  have compiled := mu_code request selected
+  obtain ⟨queryUsed, bodyCount, queryBefore, beforeBody, resume, total, _queryBeforeFinish, _queryBound,
+    queryPrefix, dispatched, _isolated, queryPhysical, _queryReady, _querySafe, _bodyOwner, bodyActual, _resumeEq⟩ :=
+    SourceCurrentAllocatedNativeNodeQueryDispatchOrigin.actual_node_query_dispatch_from_initial_query_finish
+      rootRequest machine machineValid operations fuel wholeCount parentHandle request value rest
+      beforeFinish bounded actual owner
+  have beforePhysical :=
+    (SourceCurrentNativeEnterCommonOperand.checked_trace_extension dispatched queryPhysical).1
+  let allocated := SourceRecursiveIntersectionEnvironment.enter beforeBody.native.machine.domains request.domain.key
+    request.left request.right bodyEntry.identity entry.identity
+  let started : Checked width :=
+    {beforeBody with native := advance beforeBody.native {beforeBody.native.machine with domains := allocated.2}}
+  let binder := pair bodyEntry.identity entry.identity
+  let childCode := requestNode allocated.1 body body
+  let next : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard) :=
+    fun product => .optionalBinder binder product .pure
+  let finishNext : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard) :=
+    fun result => .finishNode parentHandle result (resume result)
+  let lifted : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard) :=
+    fun product => (next product).bind finishNext
+  have bodyRead : identity request.left = some bodyEntry.identity := by
+    simp only [request, bodyShape, identity]
+  have one : step (.code (compileNode request)) beforeBody =
+      .yielded (.code (childCode.bind next)) started := by
+    rw [compiled]
+    have receipt := SourceCurrentAllocatedNativeMuSource.enter_prefix request beforeBody
+      bodyEntry.identity entry.identity bodyRead rfl
+    simpa only [childCode, requestNode, Code.bind, next, binder, started, allocated,
+      request, universeValue, bodyShape, SourceRecursiveIntersectionKernel.body] using receipt
+  have bodyEnter : Steps 1 (.code (compileNode request)) beforeBody
+      (.code (childCode.bind next)) started := .cons _ _ _ _ _ _ 0 one (.refl _ _)
+  have names : (SourceRecursiveIntersectionEnvironment.bindings request.left request.right).map Prod.fst =
+      [entry.identity] := by
+    simp only [request, bodyShape, universeValue, SourceRecursiveIntersectionEnvironment.bindings,
+      SourceRecursiveIntersectionEnvironment.binder, List.nil_append, List.map_cons, List.map_nil]
+  have keyCalculation := SourceRecursiveIntersectionSchedule.entered_key beforeBody.native.machine.domains
+    beforePhysical.machine.2 request.domain.key request.left request.right bodyEntry.identity entry.identity
+  change allocated.1.key = extend request.domain.key
+    ((SourceRecursiveIntersectionEnvironment.bindings request.left request.right).map Prod.fst)
+    (pair bodyEntry.identity entry.identity) at keyCalculation
+  have allocatedKey : allocated.1.key =
+      extend domain.key [entry.identity] (pair bodyEntry.identity entry.identity) := by
+    have normalized : allocated.1.key = extend actualDomain.key [entry.identity]
+        (pair bodyEntry.identity entry.identity) :=
+      keyCalculation.trans (congrArg
+        (fun bindings => extend request.domain.key bindings (pair bodyEntry.identity entry.identity)) names)
+    exact normalized.trans (congrArg
+      (fun current => extend current [entry.identity] (pair bodyEntry.identity entry.identity)) sameKey)
+  have liftedBody := bodyEnter.bind _ _ _ _ _ finishNext
+  have rootBody := queryPrefix.steps.trans _ _ _ _ _ _ _ _ dispatched.steps
+  have intoChild := rootBody.trans _ _ _ _ _ _ _ _ liftedBody
+  have childOrigin : Steps (queryUsed + 2) rootControl initialState
+      (.code (childCode.bind lifted)) started := by
+    simpa only [Control.bind, Code.bind_assoc, Code.bind, finishNext, lifted, Nat.add_assoc] using intoChild
+  cases bodyCount with
+  | zero =>
+      have impossible := steps_zero _ _ _ _ bodyActual
+      rw [impossible.1] at one
+      cases one
+  | succ remaining =>
+      obtain ⟨control, current, chosen, tail⟩ := steps_succ remaining _ _ _ _ bodyActual
+      obtain ⟨rfl, rfl⟩ := Outcome.yielded.inj (chosen.symm.trans one)
+      obtain ⟨childCount, optionalCount, product, middle, splitCount, childActual, optionalActual⟩ :=
+        steps_bind_inverse remaining (.code childCode) next started beforeFinish value tail
+      have keyed : ∃ key, SourceRecursiveIntersectionMemo.requestKey width allocated.1 body body = some key := by
+        rw [bodyShape]
+        exact ⟨_, rfl⟩
+      obtain ⟨childKey, childKeyEq⟩ := keyed
+      have edgeTrue : Returned (fun (_ : EdgeRequest Symbol Guard) (_ : EdgeValue Symbol Guard) => True)
+          beforeFinish.native.edges := by
+        intro cell request result stored
+        trivial
+      have childPast := SourceCurrentAllocatedNativeSamePrefixKeyedChildResult.keyed_child_law_at_node_finish
+        (SourceCurrentAllocatedNativeBodyFirstKeyQueryGlobalLaws.NodeResult entry.identity bodyEntry.identity
+          (extend domain.key [entry.identity] (pair bodyEntry.identity entry.identity)) body universeValue)
+        (fun (_ : EdgeRequest Symbol Guard) (_ : EdgeValue Symbol Guard) => True)
+        rootRequest machine machineValid operations fuel wholeCount (queryUsed + 2) childCount
+        parentHandle value rest beforeFinish (by omega) actual ⟨past, edgeTrue⟩
+        ⟨allocated.1, body, body⟩ childKey childKeyEq lifted started middle product
+        (by omega) childOrigin childActual
+      have shape : SourceCurrentAllocatedNativeCoherentOpenBodyResult.ProductShape
+          entry.identity bodyEntry.identity entry.identity body product :=
+        childPast.1.2.2.2 allocatedKey rfl rfl
+      have childResources := SourceCurrentAllocatedNativePrefixOperations.prefix_operations_before_bind
+        fuel (queryUsed + 2) rootControl (.code childCode) lifted initialState started
+        sourceHeap initialPhysical plan fields operationsValid sourceGrowth childOrigin (by omega)
+      obtain ⟨_checkedOrigin, childPhysical, _childExtension, childGrowth, _childOperations,
+        _childOperationsGrowth, _boundChildPlan, childPlan, _boundChildFields, _childFields⟩ := childResources
+      have atEnd := SourceCurrentAllocatedNativePrefixInputs.prefix_inputs_before_bind
+        (fuel - (queryUsed + 2)) childCount (.code childCode) (.code (.pure product)) .pure
+        started middle childPhysical childPlan childActual (by omega)
+      have middleGrowth : Grows sourceHeap middle.native.machine.heap :=
+        InternedConstructorTemplates.grows_trans childGrowth atEnd.2.2.1.heap
+      have available : Available middle.native.machine.heap product :=
+        SourceCurrentNativeOpenRequestResults.node_result childCount
+          ⟨allocated.1, body, body⟩ started middle product childPhysical atEnd.1
+      obtain ⟨_reclosed, optionalOne, _optionalDone⟩ :=
+        SourceCurrentAllocatedNativeCoherentOpenBodyResult.stored_open_product_optional_reclosure
+          lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+          middle atEnd.2.1.machine.1 middleGrowth bodyEntry.identity entry.identity product available shape
+      exact (optional_reclosed_trace binder product universeValue middle beforeFinish optionalCount value
+        optionalOne optionalActual).2.1

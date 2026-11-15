@@ -1,0 +1,95 @@
+  have initialPhysical : Physical (initial width machine) :=
+    SourceCurrentAllocatedNativePhysicalCache.initial_valid machine machineValid
+  obtain ⟨queryUsed, bodyCount, queryBefore, beforeBody, queryResume, total,
+      _querySmaller, queryBound, queryPrefix, actualDispatch, isolatedDispatch,
+      queryPhysical, queryReady, _querySafe, _bodyOwner, rawBody, _queryRest⟩ :=
+    SourceCurrentAllocatedNativeNodeQueryDispatchOrigin.actual_node_query_dispatch_from_initial_query_finish
+      rootRequest machine machineValid operations fuel finishUsed handle request value parentNext
+      beforeFinish (by omega) actual owner
+  have queryOrigin : Steps queryUsed (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width)
+      ((Control.code (.node request .pure)).bind queryResume) queryBefore := by
+    simpa only [Control.bind, Code.bind] using queryPrefix.steps
+  obtain ⟨_checkedQuery, _queryPhysicalAgain, _queryExtension, queryGrowth, queryOperations,
+      _queryOperationsGrowth, _queryBoundInputs, queryInputs, _queryBoundFields, queryFields⟩ :=
+    SourceCurrentAllocatedNativePrefixOperations.prefix_operations_before_bind
+      fuel queryUsed (.code (.node rootRequest .pure)) (.code (.node request .pure)) queryResume
+      (⟨initial width machine, operations⟩ : Checked width) queryBefore sourceHeap
+      initialPhysical inputs fields operationsValid sourceGrowth queryOrigin (by omega)
+  obtain ⟨_checkedDispatch, bodyPhysical, _bodyExtension, bodyGrowth, bodyOperations,
+      _bodyOperationsGrowth, _bodyBoundInputs, bodyInputs, _bodyBoundFields, bodyFields⟩ :=
+    SourceCurrentAllocatedNativePrefixOperations.prefix_operations_before_bind
+      (fuel - queryUsed) 1 (.code (.node request .pure)) (.code (compileNode request))
+      (fun result => .finishNode handle result (.pure result)) queryBefore beforeBody sourceHeap
+      queryPhysical queryInputs queryFields queryOperations queryGrowth isolatedDispatch (by omega)
+  obtain ⟨bodyTrace, _finishPhysical, _finishExtension, _finishGrowth, _finishOperations,
+      _finishOperationsGrowth, _finishBoundInputs, _finishInputs, _finishBoundFields, _finishFields⟩ :=
+    SourceCurrentAllocatedNativePrefixOperations.prefix_operations_before_bind
+      ((fuel - queryUsed) - 1) bodyCount (.code (compileNode request)) (.code (.pure value)) .pure
+      beforeBody beforeFinish sourceHeap bodyPhysical bodyInputs bodyFields bodyOperations bodyGrowth rawBody (by omega)
+  have domainEmpty := closed_ordinary_domain entry.identity request qualified selected
+  have originalPairsQualified : ∀ pair ∈ pairs (nodeEdges request.left) (nodeEdges request.right),
+      ∀ children ∈ pair.1.children.zip pair.2.children,
+        Qualified (width := width) rootRequest machine operations wholeCount entry body depth ordinary
+          ⟨request.domain, children.1, children.2⟩ := by
+    intro pair matched children included
+    have rows := (pairs_member (nodeEdges request.left) (nodeEdges request.right) pair).mp matched
+    have inside := List.of_mem_zip included
+    have first := original_child_profile queryBefore.native.machine.heap queryPhysical.machine.1 entry.identity
+      request.left queryReady.2.1 qualified.1 pair.1 rows.1 children.1 inside.1
+    have second := original_child_profile queryBefore.native.machine.heap queryPhysical.machine.1 entry.identity
+      request.right queryReady.2.2 qualified.2.1 pair.2 rows.2.1 children.2 inside.2
+    exact Or.inl ⟨first, second, Or.inl domainEmpty⟩
+  have compiled := ordinary_code request selected
+  have rowsTrace : Trace bodyCount
+      (.code (compileRows request.domain (nodeEdges request.left) (nodeEdges request.right))) beforeBody
+      (.code (.pure value)) beforeFinish := by
+    rw [← compiled]
+    exact bodyTrace
+  let finishNext : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard) :=
+    fun result => .finishNode handle result (queryResume result)
+  have bodyStart : Steps (queryUsed + 1) (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width)
+      (.code ((compileNode request).bind finishNext)) beforeBody := by
+    simpa only [finishNext] using queryPrefix.steps.trans _ _ _ _ _ _ _ _ actualDispatch.steps
+  have observed := SourceCurrentAllocatedNativeRowsPhysicalReadback.compile_rows_physical_readback_of_smaller_edges
+    request.domain (nodeEdges request.left) (nodeEdges request.right) beforeBody beforeFinish
+    (bodyCount + 1) bodyCount value
+    (fun (_pair : EdgeValue Symbol Guard × EdgeValue Symbol Guard) (row : EdgeValue Symbol Guard) =>
+      ∀ child ∈ row.children, Profile entry.identity child)
+    bodyPhysical (trace_done bodyCount _ beforeBody beforeFinish value rowsTrace.steps) rowsTrace (by
+      intro stepsBefore childFuel room _childSmaller pair member next first last row origin childPhysical childDone
+      obtain ⟨rawCount, rawSmaller, rawSteps⟩ := done_trace childFuel _ first last row childDone
+      have localSpan : stepsBefore + rawCount ≤ bodyCount := by omega
+      let lifted : EdgeValue Symbol Guard → Code Symbol Guard (Value Symbol Guard) :=
+        fun result => (next result).bind finishNext
+      have bodyPrefix : Steps stepsBefore (.code (compileNode request)) beforeBody
+          (.code ((requestEdge request.domain pair.1 pair.2).bind next)) first := by
+        rw [compiled]
+        exact origin
+      have appended := bodyPrefix.bind _ _ _ _ _ finishNext
+      have outer : Steps ((queryUsed + 1) + stepsBefore) (.code (.node rootRequest .pure))
+          (⟨initial width machine, operations⟩ : Checked width)
+          (.code ((requestEdge request.domain pair.1 pair.2).bind lifted)) first := by
+        simpa only [Control.bind, Code.bind_assoc, lifted] using bodyStart.trans _ _ _ _ _ _ _ _ appended
+      have currentLaw := SourceCurrentAllocatedNativeSamePrefixEdgeChildResult.edge_child_law_at_node_finish
+        (NodeResult (width := width) rootRequest machine operations wholeCount entry body depth ordinary)
+        (EdgeResult (width := width) rootRequest machine operations wholeCount entry body depth ordinary)
+        rootRequest machine machineValid operations fuel finishUsed ((queryUsed + 1) + stepsBefore) rawCount
+        handle value parentNext beforeFinish (by omega) actual past
+        ⟨request.domain, pair.1, pair.2⟩ lifted first last row (by omega) outer rawSteps
+      obtain ⟨_remaining, _total, _checkedPrefix, atQuery⟩ :=
+        SourceCurrentAllocatedNativeOpenUniverseRowPhysicalReadback.physical_prefix origin rowsTrace
+      obtain ⟨_rest, _length, boundQuery, _remainingTrace⟩ :=
+        SourceCurrentAllocatedNativeOpenUniverseRowPhysicalReadback.physical_prefix
+          (rawSteps.bind _ _ _ _ _ next) atQuery
+      have rawChecked := SourceCurrentHereditaryNativePhysicalSplit.unbind rawSteps next boundQuery
+      exact ⟨currentLaw.1 (originalPairsQualified pair member),
+        SourceCurrentAllocatedNativeRequestResults.edge_result rawCount
+          ⟨request.domain, pair.1, pair.2⟩ first last row childPhysical rawChecked⟩)
+  obtain ⟨rows, middle, _count, _countBound, _walked, aligned, middlePhysical,
+      _middleExtension, resident, _throughWork, resultEq, _afterEq, _canonical,
+      _free, _afterPhysical, _afterExtension, _available, _afterResident⟩ := observed
+  rw [resultEq]
+  exact make_node_profile entry.identity rows middle.native.machine.heap middlePhysical.machine.1
+    resident (all₂_row_profiles entry.identity aligned)

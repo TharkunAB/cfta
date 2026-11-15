@@ -1,0 +1,62 @@
+  intro originalQualified
+  have initialPhysical : Physical (initial width machine) :=
+    SourceCurrentAllocatedNativePhysicalCache.initial_valid machine machineValid
+  obtain ⟨bodyEntry, _marker, _arrow, _sourceRows, bodyEq, _bodyAvailable, _markerShape,
+      _arrowChildren, _arrowKey, _catalog, _markerClosed, _markerAvailable, _markerAtoms,
+      _rowKinds, _arrowRetained⟩ :=
+    SourceSynthesisCurrentUniverseBodyChildClassification.current_stored_universe_body_physical_children_after_growth
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      machine.heap machineValid.1 sourceGrowth
+  have bodyCodec : ∃ input, IntersectionFlatMemoKey.input body.referenceOf = some input := by
+    rw [bodyEq]
+    exact ⟨.node bodyEntry.identity, rfl⟩
+  obtain ⟨queryUsed, bodyCount, queryBefore, beforeBody, queryResume, total,
+      _querySmaller, _queryBound, queryPrefix, _actualDispatch, isolatedDispatch,
+      queryPhysical, _queryReady, _querySafe, _bodyOwner, rawBody, _queryRest⟩ :=
+    SourceCurrentAllocatedNativeEdgeQueryDispatchOrigin.actual_edge_query_dispatch_from_initial_query_finish
+      rootRequest machine machineValid operations fuel finishUsed handle request row parentNext
+      beforeFinish (by omega) actual owner
+  have queryOrigin : Steps queryUsed (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width)
+      ((Control.code (.edge request .pure)).bind queryResume) queryBefore := by
+    simpa only [Control.bind, Code.bind] using queryPrefix.steps
+  obtain ⟨_checkedQuery, _queryPhysicalAgain, _queryExtension, queryGrowth, queryOperations,
+      _queryOperationsGrowth, _queryBoundInputs, queryInputs, _queryBoundFields, queryFields⟩ :=
+    SourceCurrentAllocatedNativePrefixOperations.prefix_operations_before_bind
+      fuel queryUsed (.code (.node rootRequest .pure)) (.code (.edge request .pure)) queryResume
+      (⟨initial width machine, operations⟩ : Checked width) queryBefore sourceHeap
+      initialPhysical inputs fields operationsValid sourceGrowth queryOrigin (by omega)
+  have observed := SourceCurrentAllocatedNativeCheckedEdgeBodyProfile.edge_body_children_profile_of_fuel_induction
+    sourceHeap entry.identity request queryBefore beforeBody beforeFinish (fuel - queryUsed) bodyCount row
+    (fun result => .finishEdge handle result (.pure result))
+    queryPhysical queryGrowth queryOperations queryInputs queryFields isolatedDispatch (by omega) rawBody (by
+      intro pair member used childFuel childCount _positive _childSmaller _childFuelBound
+        _childCountBound childSpan next first last value origin _childPhysical _childGrowth
+        _childOperations _childInputs _childFields _leftAvailable _rightAvailable childActual
+      let child : NodeRequest Symbol Guard := ⟨request.domain, pair.1, pair.2⟩
+      have qualified : Qualified (width := width) rootRequest machine operations wholeCount
+          entry body depth ordinary child := originalQualified pair member
+      obtain ⟨childKey, keyed⟩ := qualified_key rootRequest machine operations wholeCount
+        entry body depth ordinary bodyCodec child qualified
+      let lifted : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard) :=
+        fun result => (next result).bind queryResume
+      have appended := origin.bind _ _ _ _ _ queryResume
+      change Steps used (.code (.edge request queryResume)) queryBefore
+        (.code (((requestNode request.domain pair.1 pair.2).bind next).bind queryResume)) first at appended
+      have tail : Steps used (.code (.edge request queryResume)) queryBefore
+          (.code ((requestNode request.domain pair.1 pair.2).bind lifted)) first := by
+        simpa only [Code.bind_assoc, lifted] using appended
+      have outer : Steps (queryUsed + used) (.code (.node rootRequest .pure))
+          (⟨initial width machine, operations⟩ : Checked width)
+          (.code ((requestNode request.domain pair.1 pair.2).bind lifted)) first :=
+        queryPrefix.steps.trans _ _ _ _ _ _ _ _ tail
+      have currentLaw := SourceCurrentAllocatedNativeSamePrefixKeyedChildResult.keyed_child_law_at_edge_finish
+        (NodeResult (width := width) rootRequest machine operations wholeCount entry body depth ordinary)
+        (EdgeResult (width := width) rootRequest machine operations wholeCount entry body depth ordinary)
+        rootRequest machine machineValid operations fuel finishUsed (queryUsed + used) childCount
+        handle row parentNext beforeFinish (by omega) actual past child childKey keyed
+        lifted first last value (by omega) outer childActual
+      rcases qualified with closed | mixed
+      · exact currentLaw.1.1 closed
+      · exact currentLaw.1.2 mixed)
+  exact observed.1

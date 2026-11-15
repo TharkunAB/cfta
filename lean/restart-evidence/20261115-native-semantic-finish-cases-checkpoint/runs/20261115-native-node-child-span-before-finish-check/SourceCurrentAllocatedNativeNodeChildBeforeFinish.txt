@@ -1,0 +1,238 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-node-child-span-before-finish-check/source/MicroCFTA/SourceCurrentAllocatedNativeNodeChildBeforeFinish.lean:118:9: error: unknown tactic
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-node-child-span-before-finish-check/source/MicroCFTA/SourceCurrentAllocatedNativeNodeChildBeforeFinish.lean:115:21: error: unsolved goals
+case succ
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+Output : Type
+initial : Control Output
+outside : Node → Code Symbol Guard Output
+parent child : NodeRequest Symbol Guard
+owner : Nat
+start queryBefore beforeFinish childBefore childAfter : Checked width
+parentFuel bodyCount queryUsed childCount : Nat
+parentValue childValue : Node
+childNext : Node → Code Symbol Guard Node
+bodyBound : bodyCount < parentFuel
+whole :
+  Trace (queryUsed + 1 + bodyCount) initial start
+    (Control.code (Code.finishNode owner parentValue (outside parentValue))) beforeFinish
+queryPrefix : Steps queryUsed initial start ((Control.code (Code.node parent Code.pure)).bind outside) queryBefore
+childActual :
+  Steps childCount (Control.code (requestNode child.domain child.left child.right)) childBefore
+    (Control.code (Code.pure childValue)) childAfter
+finishParent : Node → Code Symbol Guard Node := fun value => Code.finishNode owner value (Code.pure value)
+next : Control Node
+reached : Checked width
+one : step (Control.code (Code.node parent Code.pure)) queryBefore = Outcome.yielded next reached
+sameNext : next = (Control.code (compileNode parent)).bind fun value => Code.finishNode owner value (Code.pure value)
+remaining : Nat
+positive : 0 < remaining + 1
+childPrefix :
+  Steps (remaining + 1) (Control.code (Code.node parent Code.pure)) queryBefore
+    ((Control.code (requestNode child.domain child.left child.right)).bind childNext) childBefore
+advanced : Checked width
+first :
+  step (Control.code (Code.node parent Code.pure)) queryBefore =
+    Outcome.yielded ((Control.code (compileNode parent)).bind finishParent) advanced
+tail :
+  Steps remaining ((Control.code (compileNode parent)).bind finishParent) advanced
+    ((Control.code (requestNode child.domain child.left child.right)).bind childNext) childBefore
+bodyShape : SourceRecursiveIntersectionNative.Shape advanced.native
+running : advanced.native.nodes.cells owner = some { request := parent, status := FlatMemoThunk.Status.evaluating }
+dispatched :
+  Steps 1 (Control.code (Code.node parent Code.pure)) queryBefore
+    ((Control.code (compileNode parent)).bind fun value => Code.finishNode owner value (Code.pure value)) advanced
+bodyActual :
+  Steps bodyCount (Control.code (compileNode parent)) advanced (Control.code (Code.pure parentValue)) beforeFinish
+zero :
+  Steps 0 next reached
+    ((Control.code (compileNode parent)).bind fun value => Code.finishNode owner value (Code.pure value)) advanced
+sameState : reached = advanced
+dispatchedOne :
+  step (Control.code (Code.node parent Code.pure)) queryBefore =
+    Outcome.yielded ((Control.code (compileNode parent)).bind finishParent) advanced
+⊢ Steps (remaining + 1 - 1) ((Control.code (compileNode parent)).bind finishParent) advanced
+    (Control.code (Code.node child childNext)) childBefore
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-node-child-span-before-finish-check/source/MicroCFTA/SourceCurrentAllocatedNativeNodeChildBeforeFinish.lean:102:84: error: unsolved goals
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+Output : Type
+initial : Control Output
+outside : Node → Code Symbol Guard Output
+parent child : NodeRequest Symbol Guard
+owner : Nat
+start queryBefore beforeBody beforeFinish childBefore childAfter : Checked width
+parentFuel bodyCount queryUsed childUsed childCount : Nat
+parentValue childValue : Node
+childNext : Node → Code Symbol Guard Node
+bodyShape : SourceRecursiveIntersectionNative.Shape beforeBody.native
+running : beforeBody.native.nodes.cells owner = some { request := parent, status := FlatMemoThunk.Status.evaluating }
+bodyBound : bodyCount < parentFuel
+whole :
+  Trace (queryUsed + 1 + bodyCount) initial start
+    (Control.code (Code.finishNode owner parentValue (outside parentValue))) beforeFinish
+queryPrefix : Steps queryUsed initial start ((Control.code (Code.node parent Code.pure)).bind outside) queryBefore
+dispatched :
+  Steps 1 (Control.code (Code.node parent Code.pure)) queryBefore
+    ((Control.code (compileNode parent)).bind fun value => Code.finishNode owner value (Code.pure value)) beforeBody
+bodyActual :
+  Steps bodyCount (Control.code (compileNode parent)) beforeBody (Control.code (Code.pure parentValue)) beforeFinish
+positive : 0 < childUsed
+childPrefix :
+  Steps childUsed (Control.code (Code.node parent Code.pure)) queryBefore
+    ((Control.code (requestNode child.domain child.left child.right)).bind childNext) childBefore
+childActual :
+  Steps childCount (Control.code (requestNode child.domain child.left child.right)) childBefore
+    (Control.code (Code.pure childValue)) childAfter
+finishParent : Node → Code Symbol Guard Node := fun value => Code.finishNode owner value (Code.pure value)
+next : Control Node
+reached : Checked width
+one : step (Control.code (Code.node parent Code.pure)) queryBefore = Outcome.yielded next reached
+zero :
+  Steps 0 next reached
+    ((Control.code (compileNode parent)).bind fun value => Code.finishNode owner value (Code.pure value)) beforeBody
+sameNext : next = (Control.code (compileNode parent)).bind fun value => Code.finishNode owner value (Code.pure value)
+sameState : reached = beforeBody
+dispatchedOne :
+  step (Control.code (Code.node parent Code.pure)) queryBefore =
+    Outcome.yielded ((Control.code (compileNode parent)).bind finishParent) beforeBody
+inside :
+  Steps (childUsed - 1) ((Control.code (compileNode parent)).bind finishParent) beforeBody
+    (Control.code (Code.node child childNext)) childBefore
+⊢ childUsed + childCount ≤ 1 + bodyCount ∧
+    queryUsed + childUsed + childCount ≤ queryUsed + 1 + bodyCount ∧
+      childUsed + childCount ≤ parentFuel ∧
+        beforeFinish.native.nodes.cells owner = some { request := parent, status := FlatMemoThunk.Status.evaluating } ∧
+          (finishNode owner parentValue beforeFinish.native).nodes.cells owner =
+              some { request := parent, status := FlatMemoThunk.Status.returned parentValue } ∧
+            Trace (queryUsed + childUsed) initial start
+                (Control.code
+                  ((requestNode child.domain child.left child.right).bind fun value => (childNext value).bind outside))
+                childBefore ∧
+              Trace childCount (Control.code (requestNode child.domain child.left child.right)) childBefore
+                  (Control.code (Code.pure childValue)) childAfter ∧
+                Trace (queryUsed + childUsed + childCount) initial start
+                    (Control.code ((childNext childValue).bind outside)) childAfter ∧
+                  Trace (queryUsed + 1 + bodyCount - (queryUsed + childUsed + childCount))
+                    (Control.code ((childNext childValue).bind outside)) childAfter
+                    (Control.code (Code.finishNode owner parentValue (outside parentValue))) beforeFinish
+MicroCFTA.SourceCurrentAllocatedNativeNodeChildBeforeFinish.completed_node_child_span_before_parent_finish
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} {Output : Type} (initial : MicroCFTA.SourceEqualityNativeDemand.Control Output)
+  (outside :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      MicroCFTA.SourceRecursiveIntersectionCode.Code (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Output)
+  (parent child :
+    MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (owner : Nat)
+  (start queryBefore beforeBody beforeFinish childBefore childAfter : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (parentFuel bodyCount queryUsed childUsed childCount : Nat)
+  (parentValue childValue :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (childNext :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      MicroCFTA.SourceRecursiveIntersectionCode.Code (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (bodyShape : MicroCFTA.SourceRecursiveIntersectionNative.Shape beforeBody.native)
+  (running :
+    beforeBody.native.nodes.cells owner =
+      some { request := parent, status := MicroCFTA.FlatMemoThunk.Status.evaluating })
+  (bodyBound : bodyCount < parentFuel)
+  (whole :
+    MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace (queryUsed + 1 + bodyCount) initial start
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+        (MicroCFTA.SourceRecursiveIntersectionCode.Code.finishNode owner parentValue (outside parentValue)))
+      beforeFinish)
+  (queryPrefix :
+    MicroCFTA.SourceEqualityNativeDemand.Steps queryUsed initial start
+      ((MicroCFTA.SourceEqualityNativeDemand.Control.code
+            (MicroCFTA.SourceRecursiveIntersectionCode.Code.node parent
+              MicroCFTA.SourceRecursiveIntersectionCode.Code.pure)).bind
+        outside)
+      queryBefore)
+  (dispatched :
+    MicroCFTA.SourceEqualityNativeDemand.Steps 1
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+        (MicroCFTA.SourceRecursiveIntersectionCode.Code.node parent
+          MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+      queryBefore
+      ((MicroCFTA.SourceEqualityNativeDemand.Control.code
+            (MicroCFTA.SourceRecursiveIntersectionCode.compileNode parent)).bind
+        fun value =>
+        MicroCFTA.SourceRecursiveIntersectionCode.Code.finishNode owner value
+          (MicroCFTA.SourceRecursiveIntersectionCode.Code.pure value))
+      beforeBody)
+  (bodyActual :
+    MicroCFTA.SourceEqualityNativeDemand.Steps bodyCount
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code (MicroCFTA.SourceRecursiveIntersectionCode.compileNode parent))
+      beforeBody
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+        (MicroCFTA.SourceRecursiveIntersectionCode.Code.pure parentValue))
+      beforeFinish)
+  (positive : 0 < childUsed)
+  (childPrefix :
+    MicroCFTA.SourceEqualityNativeDemand.Steps childUsed
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+        (MicroCFTA.SourceRecursiveIntersectionCode.Code.node parent
+          MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+      queryBefore
+      ((MicroCFTA.SourceEqualityNativeDemand.Control.code
+            (MicroCFTA.SourceRecursiveIntersectionCode.requestNode child.domain child.left child.right)).bind
+        childNext)
+      childBefore)
+  (childActual :
+    MicroCFTA.SourceEqualityNativeDemand.Steps childCount
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+        (MicroCFTA.SourceRecursiveIntersectionCode.requestNode child.domain child.left child.right))
+      childBefore
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+        (MicroCFTA.SourceRecursiveIntersectionCode.Code.pure childValue))
+      childAfter) :
+  childUsed + childCount ≤ 1 + bodyCount ∧
+    queryUsed + childUsed + childCount ≤ queryUsed + 1 + bodyCount ∧
+      childUsed + childCount ≤ parentFuel ∧
+        beforeFinish.native.nodes.cells owner =
+            some { request := parent, status := MicroCFTA.FlatMemoThunk.Status.evaluating } ∧
+          (MicroCFTA.SourceRecursiveIntersectionThunks.finishNode owner parentValue beforeFinish.native).nodes.cells
+                owner =
+              some { request := parent, status := MicroCFTA.FlatMemoThunk.Status.returned parentValue } ∧
+            MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace (queryUsed + childUsed) initial start
+                (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                  ((MicroCFTA.SourceRecursiveIntersectionCode.requestNode child.domain child.left child.right).bind
+                    fun value => (childNext value).bind outside))
+                childBefore ∧
+              MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace childCount
+                  (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                    (MicroCFTA.SourceRecursiveIntersectionCode.requestNode child.domain child.left child.right))
+                  childBefore
+                  (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                    (MicroCFTA.SourceRecursiveIntersectionCode.Code.pure childValue))
+                  childAfter ∧
+                MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace (queryUsed + childUsed + childCount)
+                    initial start
+                    (MicroCFTA.SourceEqualityNativeDemand.Control.code ((childNext childValue).bind outside))
+                    childAfter ∧
+                  MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace
+                    (queryUsed + 1 + bodyCount - (queryUsed + childUsed + childCount))
+                    (MicroCFTA.SourceEqualityNativeDemand.Control.code ((childNext childValue).bind outside)) childAfter
+                    (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                      (MicroCFTA.SourceRecursiveIntersectionCode.Code.finishNode owner parentValue
+                        (outside parentValue)))
+                    beforeFinish
+'MicroCFTA.SourceCurrentAllocatedNativeNodeChildBeforeFinish.completed_node_child_span_before_parent_finish' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,13 @@
+--- lean/restart-evidence/20261115-current-node-child-span-before-finish-draft/SourceCurrentAllocatedNativeNodeChildBeforeFinish.lean
++++ lean/restart-evidence/20261115-current-node-child-span-count-rewrite-repair/SourceCurrentAllocatedNativeNodeChildBeforeFinish.lean
+@@ -115,7 +115,9 @@
+     | succ remaining =>
+         obtain ⟨other, advanced, first, tail⟩ := steps_succ remaining _ _ _ _ childPrefix
+         obtain ⟨rfl, rfl⟩ := Outcome.yielded.inj (first.symm.trans dispatchedOne)
+-        convert tail using 1 <;> omega
++        have remainingCount : remaining + 1 - 1 = remaining := by omega
++        rw [remainingCount]
++        exact tail
+   have nonpure := node_child_continuation_nonpure (childUsed - 1) owner
+     (compileNode parent) child childNext beforeBody childBefore inside
+   let finished : Checked width :=
