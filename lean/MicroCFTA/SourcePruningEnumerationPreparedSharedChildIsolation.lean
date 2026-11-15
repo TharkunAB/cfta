@@ -27,29 +27,24 @@ local notation "Child" => Node × List Suspended × Option (EnumerateM Symbol Co
 set_option autoImplicit false
 variable {bits : Nat}
 
-/-- Actual stored and fresh child inputs preserve the same isolated class without an input-avoidance premise. -/
-theorem prepared_stored_child_isolated
+/-- Actual preparation derives complete child resources before any child result. -/
+theorem prepared_stored_child_inputs
     [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
-    (caller reached : Caller (bits + 2)) (captured own after : Cached)
+    (caller : Caller (bits + 2)) (captured own : Cached)
     (parentOwner : Nat) (parentNode : Option Nat) (parentBucket : List Suspended)
     (edge : EdgeValue Symbol Constraint) (symbol : Symbol) (staged : List Child)
     (residual : Option Constraint) (position : Nat) (incoming : Node) (bucket : List Suspended)
     (action : Option (EnumerateM Symbol Constraint Fragment))
-    (checkEmpty : Bool) (r n p h k : Nat) (queries saved : Queries)
-    (fragment : Fragment) (returned outer : Core) (waiting : EnumerationWaitingIndex.Waiting)
     (held heldHandle : Nat) (safe : Safe captured.core)
     (isolated : IsolatedPending held heldHandle captured.core)
     (parentStored : captured.core.values[parentOwner]? = some (.unenumerated parentNode parentBucket))
     (prepared : SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap
       parentBucket edge captured = some [((symbol, staged, residual), own)])
-    (selected : staged[position]? = some (incoming, bucket, action))
-    (actual : SourcePruningEnumerationSharedSelectedContinuations.ChildDispatch.run
-      checkEmpty r n p h k bucket incoming caller own queries =
-        ((.ok (some [.ok (fragment, returned)]), reached, saved, outer, waiting), some after)) :
+    (selected : staged[position]? = some (incoming, bucket, action)) :
     EnumerationDriver.Protected held captured.core own.core ∧
       IsolatedPending held heldHandle own.core ∧
-      Avoids own.core.representatives held bucket ∧
-      IsolatedPending held heldHandle after.core := by
+      Avoids own.core.representatives held bucket ∧ Safe own.core ∧
+      ∀ sc ∈ bucket, sc.var < own.core.counter := by
   have allowed : arityAllows edge.children.length parentBucket = true := by
     by_cases accepted : arityAllows edge.children.length parentBucket = true
     · exact accepted
@@ -129,9 +124,38 @@ theorem prepared_stored_child_isolated
         · exact descend_bounded own.core.counter position parentBucket parentBounded sc old
         · exact descend_bounded own.core.counter position
             (suspendedVars captured.core.counter tries) freshBounded sc added
-      exact ⟨protection, ownIsolated, bucketAvoids,
-        SourcePruningEnumerationSharedChildIsolation.observed_isolated_pending
-          checkEmpty r n p h k bucket incoming caller reached own after queries saved
-          fragment returned outer waiting held heldHandle ownSafe ownIsolated bucketBounded bucketAvoids actual⟩
+      exact ⟨protection, ownIsolated, bucketAvoids, ownSafe, bucketBounded⟩
+
+/-- Actual stored and fresh child inputs preserve the same isolated class without an input-avoidance premise. -/
+theorem prepared_stored_child_isolated
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (caller reached : Caller (bits + 2)) (captured own after : Cached)
+    (parentOwner : Nat) (parentNode : Option Nat) (parentBucket : List Suspended)
+    (edge : EdgeValue Symbol Constraint) (symbol : Symbol) (staged : List Child)
+    (residual : Option Constraint) (position : Nat) (incoming : Node) (bucket : List Suspended)
+    (action : Option (EnumerateM Symbol Constraint Fragment))
+    (checkEmpty : Bool) (r n p h k : Nat) (queries saved : Queries)
+    (fragment : Fragment) (returned outer : Core) (waiting : EnumerationWaitingIndex.Waiting)
+    (held heldHandle : Nat) (safe : Safe captured.core)
+    (isolated : IsolatedPending held heldHandle captured.core)
+    (parentStored : captured.core.values[parentOwner]? = some (.unenumerated parentNode parentBucket))
+    (prepared : SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap
+      parentBucket edge captured = some [((symbol, staged, residual), own)])
+    (selected : staged[position]? = some (incoming, bucket, action))
+    (actual : SourcePruningEnumerationSharedSelectedContinuations.ChildDispatch.run
+      checkEmpty r n p h k bucket incoming caller own queries =
+        ((.ok (some [.ok (fragment, returned)]), reached, saved, outer, waiting), some after)) :
+    EnumerationDriver.Protected held captured.core own.core ∧
+      IsolatedPending held heldHandle own.core ∧
+      Avoids own.core.representatives held bucket ∧
+      IsolatedPending held heldHandle after.core := by
+  obtain ⟨protection, ownIsolated, bucketAvoids, ownSafe, bucketBounded⟩ :=
+    prepared_stored_child_inputs caller captured own parentOwner parentNode parentBucket
+      edge symbol staged residual position incoming bucket action held heldHandle safe isolated
+      parentStored prepared selected
+  exact ⟨protection, ownIsolated, bucketAvoids,
+    SourcePruningEnumerationSharedChildIsolation.observed_isolated_pending
+      checkEmpty r n p h k bucket incoming caller reached own after queries saved
+      fragment returned outer waiting held heldHandle ownSafe ownIsolated bucketBounded bucketAvoids actual⟩
 
 end MicroCFTA.SourcePruningEnumerationPreparedSharedChildIsolation

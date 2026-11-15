@@ -151,65 +151,13 @@ theorem prepared_stored_child_protected
         ((.ok (some [.ok (fragment, returned)]), reached, saved, outer, waiting), some after)) :
     EnumerationDriver.Protected held captured.core after.core ∧
       IsolatedPending held heldHandle after.core := by
-  obtain ⟨preparedProtection, ownIsolated, bucketAvoids, _afterIsolated⟩ :=
-    SourcePruningEnumerationPreparedSharedChildIsolation.prepared_stored_child_isolated
-      caller reached captured own after parentOwner parentNode parentBucket edge symbol staged
-      residual position incoming bucket action checkEmpty r n p h k queries saved
-      fragment returned outer waiting held heldHandle safe isolated parentStored prepared selected actual
-  have ownResources : Safe own.core ∧ ∀ sc ∈ bucket, sc.var < own.core.counter := by
-    have allowed : arityAllows edge.children.length parentBucket = true := by
-      by_cases accepted : arityAllows edge.children.length parentBucket = true
-      · exact accepted
-      · simp [SourcePruningEnumerationCachedOwn.prepare, accepted] at prepared
-    cases projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
-    | none =>
-      simp [SourcePruningEnumerationCachedOwn.prepare, allowed, projected] at prepared
-    | some pair =>
-      obtain ⟨tries, projectedResidual⟩ := pair
-      have scalars := SourcePruningEnumerationCachedOwn.prepare_scalars
-        caller.checked.native.machine.heap parentBucket edge captured own tries projectedResidual
-        (symbol, staged, residual) projected prepared
-      have ownCore : own.core = suspendedState tries.length captured.core := scalars.2.1
-      have ownCounter : own.core.counter = captured.core.counter + tries.length := scalars.2.2.1
-      have ownSafe : Safe own.core := by
-        rw [ownCore]
-        exact suspension_safe tries.length captured.core safe
-      have inputShape := SourcePruningEnumerationCachedOwn.prepare_inputs
-        caller.checked.native.machine.heap parentBucket edge captured own tries projectedResidual
-        (symbol, staged, residual) projected prepared
-      have stagedSame : staged =
-          (SourcePruningEnumerationEdgeInputs.children edge parentBucket captured.core.counter tries).map
-            (fun input => (input.1, input.2,
-              SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1)) :=
-        congrArg (fun result => result.2.1) inputShape
-      have indexedSelection := selected
-      rw [stagedSame, SourcePruningEnumerationEdgeInputs.children,
-        List.map_map, List.getElem?_map] at indexedSelection
-      obtain ⟨indexed, indexedStored, selectedSame⟩ := Option.map_eq_some_iff.mp indexedSelection
-      rw [List.getElem?_zipIdx] at indexedStored
-      obtain ⟨child, _childStored, rfl⟩ := Option.map_eq_some_iff.mp indexedStored
-      have bucketSame : bucket = descendScs position parentBucket ++
-          descendScs position (suspendedVars captured.core.counter tries) := by
-        simpa only [Nat.zero_add, Function.comp_def] using
-          (congrArg (fun input : Child => input.2.1) selectedSame).symm
-      have parentBounded : ∀ sc ∈ parentBucket, sc.var < own.core.counter := by
-        intro sc member
-        have oldBound := safe.1.values _ (List.mem_of_getElem? parentStored) sc member
-        rw [ownCounter]
-        omega
-      have freshBounded : ∀ sc ∈ suspendedVars captured.core.counter tries, sc.var < own.core.counter := by
-        rw [ownCounter]
-        exact suspended_bounded captured.core.counter tries
-      refine ⟨ownSafe, ?_⟩
-      rw [bucketSame]
-      intro sc member
-      rcases List.mem_append.mp member with inherited | fresh
-      · exact descend_bounded own.core.counter position parentBucket parentBounded sc inherited
-      · exact descend_bounded own.core.counter position
-          (suspendedVars captured.core.counter tries) freshBounded sc fresh
+  obtain ⟨preparedProtection, ownIsolated, bucketAvoids, ownSafe, bucketBounded⟩ :=
+    SourcePruningEnumerationPreparedSharedChildIsolation.prepared_stored_child_inputs
+      caller captured own parentOwner parentNode parentBucket edge symbol staged residual
+      position incoming bucket action held heldHandle safe isolated parentStored prepared selected
   obtain ⟨childProtection, childIsolated⟩ := observed_protected_isolated_pending
     checkEmpty r n p h k bucket incoming caller reached own after queries saved fragment returned
-    outer waiting held heldHandle ownResources.1 ownIsolated ownResources.2 bucketAvoids actual
+    outer waiting held heldHandle ownSafe ownIsolated bucketBounded bucketAvoids actual
   exact ⟨preparedProtection.trans childProtection, childIsolated⟩
 
 end MicroCFTA.SourcePruningEnumerationSharedChildIsolation
