@@ -1,0 +1,30 @@
+theorem reference_body_returned_of_child_induction
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (nodeLaw : NodeRequest Symbol Guard → Value Symbol Guard → Prop)
+    (edgeLaw : EdgeRequest Symbol Guard → EdgeValue Symbol Guard → Prop)
+    (resultLaw : Value Symbol Guard → Prop)
+    (domain : Cache.Interned IntersectionFlatMemoKeyDomain.DomainKey) (name : Nat)
+    (other : Value Symbol Guard) (left : Bool) (state : Checked width) (fuel : Nat)
+    (nodes : Returned nodeLaw state.native.nodes) (edges : Returned edgeLaw state.native.edges)
+    (children : ∀ bound : Value Symbol Guard,
+      SourcePreparedSharedRows.read state.native.machine.heap name = some bound →
+      ∀ childFuel, childFuel < fuel →
+      Steps 1 (.code (compileReference domain name other left)) state
+        (.code (if left then requestNode domain bound other else requestNode domain other bound)) state →
+      Returned nodeLaw (SourceEqualityNativeDemand.execute childFuel
+        (.code (if left then requestNode domain bound other else requestNode domain other bound)) state).state.native.nodes ∧
+      Returned edgeLaw (SourceEqualityNativeDemand.execute childFuel
+        (.code (if left then requestNode domain bound other else requestNode domain other bound)) state).state.native.edges ∧
+      (∀ (value : Value Symbol Guard) (after : Checked width),
+        Steps childFuel (.code (if left then requestNode domain bound other else requestNode domain other bound))
+          state (.code (.pure value)) after → resultLaw value)) :
+    Returned nodeLaw (SourceEqualityNativeDemand.execute fuel
+      (.code (compileReference domain name other left)) state).state.native.nodes ∧
+    Returned edgeLaw (SourceEqualityNativeDemand.execute fuel
+      (.code (compileReference domain name other left)) state).state.native.edges ∧
+    (∀ count, count ≤ fuel → ∀ (value : Value Symbol Guard) (after : Checked width),
+      Steps count (.code (compileReference domain name other left)) state (.code (.pure value)) after →
+      resultLaw value) ∧
+    (∀ (value : Value Symbol Guard) (after : Checked width),
+      SourceEqualityNativeDemand.execute fuel (.code (compileReference domain name other left)) state =
+        .done value after → resultLaw value)

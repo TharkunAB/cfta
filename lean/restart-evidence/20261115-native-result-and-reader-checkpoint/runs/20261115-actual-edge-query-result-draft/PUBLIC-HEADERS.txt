@@ -1,0 +1,18 @@
+theorem edge_query_result_of_body_induction
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (law : EdgeRequest Symbol Guard → EdgeValue Symbol Guard → Prop)
+    (request : EdgeRequest Symbol Guard) (before after : Checked width)
+    (fuel : Nat) (value : EdgeValue Symbol Guard)
+    (physical : SourceCurrentAllocatedNativePhysicalCache.Valid before.native)
+    (ready : EdgeReady before.native.machine request)
+    (safe : SourceRecursiveIntersectionEdgeMemo.KeySafe width request.domain request.left request.right)
+    (returned : Returned law before.native.edges)
+    (done : SourceEqualityNativeDemand.execute fuel
+      (.code (requestEdge request.domain request.left request.right)) before = .done value after)
+    (bodies : ∀ bodySteps, bodySteps + 1 < fuel →
+      ∀ (next : EdgeValue Symbol Guard → Code Symbol Guard (EdgeValue Symbol Guard)) (first middle : Checked width)
+        (result : EdgeValue Symbol Guard),
+      Steps 1 (.code (requestEdge request.domain request.left request.right)) before
+        (.edgeBody request next) first →
+      Steps bodySteps (.edgeBody request .pure) first (.code (.pure result)) middle →
+      law request result) : law request value

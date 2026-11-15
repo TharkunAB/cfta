@@ -1,0 +1,26 @@
+{
+  "scope": "Bounded local source inspection; no exhaustive semantic theorem search claimed.",
+  "exact_queries": [
+    {
+      "command": "rg -n 'edge_query_returned_of_body_induction|edge_query_returned_all_fuels|edge_query_returned' lean/MicroCFTA",
+      "result": "No matches before candidate creation; candidate is outside live source."
+    },
+    {
+      "command": "rg --files lean/MicroCFTA -g '*NodeQueryReturned*' -g '*EdgeQueryReturned*' -g '*EdgeBodyReturned*' -g '*Returned*'",
+      "result": "Found public node-query and actual edge-body preservation; no edge-query Returned module."
+    },
+    {
+      "query": "trace_retains; edge_started; lookupEdge_valid; demandEdge_valid; demandEdge_evaluate; returned_lookup; returned_demand; returned_finish",
+      "result": "Existing exact helpers inspected and reused. Public node-query proof supplies the operational pattern."
+    }
+  ],
+  "new_public_targets": [
+    "MicroCFTA.SourceCurrentAllocatedNativeEdgeQueryReturned.edge_query_returned_of_body_induction"
+  ],
+  "private_helpers": [
+    "pure_endpoint_state",
+    "lookup_returned",
+    "finish_endpoint_returned"
+  ],
+  "no_new_cache_predicate": true
+}

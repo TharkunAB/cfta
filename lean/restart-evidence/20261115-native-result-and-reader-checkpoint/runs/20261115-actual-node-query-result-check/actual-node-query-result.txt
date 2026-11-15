@@ -1,0 +1,76 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-actual-node-query-result-check/source/MicroCFTA/SourceCurrentAllocatedNativeNodeQueryResult.lean:54:50: error(lean.unknownIdentifier): Unknown identifier `middle`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-actual-node-query-result-check/source/MicroCFTA/SourceCurrentAllocatedNativeNodeQueryResult.lean:54:57: error(lean.unknownIdentifier): Unknown identifier `result`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-actual-node-query-result-check/source/MicroCFTA/SourceCurrentAllocatedNativeNodeQueryResult.lean:58:78: error(lean.unknownIdentifier): Unknown identifier `result`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-actual-node-query-result-check/source/MicroCFTA/SourceCurrentAllocatedNativeNodeQueryResult.lean:77:58: error(lean.unknownIdentifier): Unknown identifier `result`
+@MicroCFTA.SourceCurrentAllocatedNativeNodeQueryResult.node_query_result_of_body_induction : ∀ {width : Nat}
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (law :
+    MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        Prop)
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before after : MicroCFTA.SourceEqualityNativeDemand.State width) (fuel : Nat)
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid before.native →
+    MicroCFTA.SourceRecursiveIntersectionThunks.NodeReady before.native.machine request →
+      (∀ (key : MicroCFTA.IntersectionFlatMemoKeyDomain.Triple width),
+          MicroCFTA.SourceRecursiveIntersectionMemo.requestKey width request.domain request.left request.right =
+              some key →
+            MicroCFTA.SourceRecursiveIntersectionMemo.KeySafe width request.domain request.left request.right) →
+        MicroCFTA.SourceCurrentAllocatedNativeContextCache.Returned law before.native.nodes →
+          MicroCFTA.SourceEqualityNativeDemand.execute fuel
+                (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                  (MicroCFTA.SourceRecursiveIntersectionCode.requestNode request.domain request.left request.right))
+                before =
+              MicroCFTA.SourceEqualityNativeDemand.Outcome.done value after →
+            (∀ (bodySteps : Nat),
+                bodySteps + 1 < fuel →
+                  ∀
+                    (next :
+                      MicroCFTA.InternedConstructorTemplates.Value
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+                        MicroCFTA.SourceRecursiveIntersectionCode.Code
+                          (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.InternedConstructorTemplates.Value
+                            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                    (first middle : MicroCFTA.SourceEqualityNativeDemand.State width)
+                    (result :
+                      MicroCFTA.InternedConstructorTemplates.Value
+                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+                    MicroCFTA.SourceEqualityNativeDemand.Steps 1
+                        (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                          (MicroCFTA.SourceRecursiveIntersectionCode.requestNode request.domain request.left
+                            request.right))
+                        before
+                        (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                          ((MicroCFTA.SourceRecursiveIntersectionCode.compileNode request).bind next))
+                        first →
+                      MicroCFTA.SourceEqualityNativeDemand.Steps bodySteps
+                          (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                            (MicroCFTA.SourceRecursiveIntersectionCode.compileNode request))
+                          first
+                          (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                            (MicroCFTA.SourceRecursiveIntersectionCode.Code.pure result))
+                          middle →
+                        law request result) →
+              law request value
+'MicroCFTA.SourceCurrentAllocatedNativeNodeQueryResult.node_query_result_of_body_induction' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

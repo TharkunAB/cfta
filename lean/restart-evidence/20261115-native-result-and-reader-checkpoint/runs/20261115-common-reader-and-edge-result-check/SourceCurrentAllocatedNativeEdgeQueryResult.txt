@@ -1,0 +1,65 @@
+MicroCFTA.SourceCurrentAllocatedNativeEdgeQueryResult.edge_query_result_of_body_induction {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (law :
+    MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        Prop)
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before after : MicroCFTA.SourceEqualityNativeDemand.State width) (fuel : Nat)
+  (value :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (physical : MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid before.native)
+  (ready : MicroCFTA.SourceRecursiveIntersectionThunks.EdgeReady before.native.machine request)
+  (safe : MicroCFTA.SourceRecursiveIntersectionEdgeMemo.KeySafe width request.domain request.left request.right)
+  (returned : MicroCFTA.SourceCurrentAllocatedNativeContextCache.Returned law before.native.edges)
+  (done :
+    MicroCFTA.SourceEqualityNativeDemand.execute fuel
+        (MicroCFTA.SourceEqualityNativeDemand.Control.code
+          (MicroCFTA.SourceRecursiveIntersectionCode.requestEdge request.domain request.left request.right))
+        before =
+      MicroCFTA.SourceEqualityNativeDemand.Outcome.done value after)
+  (bodies :
+    ∀ (bodySteps : Nat),
+      bodySteps + 1 < fuel →
+        ∀
+          (next :
+            MicroCFTA.InternedConstructorTemplates.EdgeValue
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+              MicroCFTA.SourceRecursiveIntersectionCode.Code
+                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                  (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+          (first middle : MicroCFTA.SourceEqualityNativeDemand.State width)
+          (result :
+            MicroCFTA.InternedConstructorTemplates.EdgeValue
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+          MicroCFTA.SourceEqualityNativeDemand.Steps 1
+              (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                (MicroCFTA.SourceRecursiveIntersectionCode.requestEdge request.domain request.left request.right))
+              before (MicroCFTA.SourceEqualityNativeDemand.Control.edgeBody request next) first →
+            MicroCFTA.SourceEqualityNativeDemand.Steps bodySteps
+                (MicroCFTA.SourceEqualityNativeDemand.Control.edgeBody request
+                  MicroCFTA.SourceRecursiveIntersectionCode.Code.pure)
+                first
+                (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                  (MicroCFTA.SourceRecursiveIntersectionCode.Code.pure result))
+                middle →
+              law request result) :
+  law request value
+'MicroCFTA.SourceCurrentAllocatedNativeEdgeQueryResult.edge_query_result_of_body_induction' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
