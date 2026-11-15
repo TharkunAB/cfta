@@ -1,0 +1,225 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-diagonal-shortcut-inputs-check/source/MicroCFTA/SourceCurrentAllocatedNativeDiagonalShortcutInputs.lean:58:8: error(lean.unknownIdentifier): Unknown identifier `All₂`
+
+Note: It is not possible to treat `All₂` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-diagonal-shortcut-inputs-check/source/MicroCFTA/SourceCurrentAllocatedNativeDiagonalShortcutInputs.lean:62:71: error: unsolved goals
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+lib : Library
+query : Query
+signed : Int
+whole : Expression
+accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole
+rootValue : Value Symbol Guard
+sourceHeap : InternedConstructorTemplates.State Symbol Guard
+built :
+  InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+    InternedNestedConstruction.Outcome.done rootValue sourceHeap
+key : InternedBinderProtocol.NodeKey
+entry : Interned InternedBinderProtocol.NodeKey
+body depth ordinary : Value Symbol Guard
+stored : sourceHeap.nodeRecords key = some (Value.mu entry body depth ordinary)
+heap : InternedConstructorTemplates.State Symbol Guard
+facts : Facts heap
+growth : Grows sourceHeap heap
+domains : Cache.State IntersectionFlatMemoKeyDomain.DomainKey
+cacheValid : Cache.Valid domains
+pattern : Value Symbol Guard
+_patternAvailable : Available heap pattern
+_patternClosed : pattern.free = []
+patternId : Nat
+_patternIdentity : identity pattern = some patternId
+_patternKind : tag pattern = 1 ∨ tag pattern = 3
+bodyEntry : Interned InternedBinderProtocol.NodeKey
+bodyRows : List (EdgeValue Symbol Guard)
+bodyShape : body = Value.node bodyEntry bodyRows 0 [Reference.interned entry.identity]
+sourceQueries :
+  have universeValue := Value.mu entry body depth ordinary;
+  have referenceValue := Value.reference (Reference.interned entry.identity);
+  have original :=
+    SourceRecursiveIntersectionEnvironment.enter domains IntersectionEmptyDomain.emptyKey universeValue pattern
+      entry.identity patternId;
+  have bodyFirst :=
+    SourceRecursiveIntersectionEnvironment.enter original.snd original.fst.key body universeValue bodyEntry.identity
+      entry.identity;
+  have bodyTerminal :=
+    SourceRecursiveIntersectionEnvironment.enter bodyFirst.snd bodyFirst.fst.key universeValue referenceValue
+      entry.identity entry.identity;
+  have diagonalFirst :=
+    SourceRecursiveIntersectionEnvironment.enter original.snd original.fst.key universeValue referenceValue
+      entry.identity entry.identity;
+  have diagonalTerminal :=
+    SourceRecursiveIntersectionEnvironment.enter diagonalFirst.snd diagonalFirst.fst.key body universeValue
+      bodyEntry.identity entry.identity;
+  ∀ (request : NodeRequest Symbol Guard) (cutoff : Nat × Nat),
+    request = { domain := bodyTerminal.fst, left := body, right := referenceValue } ∧
+          cutoff = pair bodyEntry.identity entry.identity ∨
+        request = { domain := diagonalTerminal.fst, left := referenceValue, right := referenceValue } ∧
+          cutoff = pair entry.identity entry.identity →
+      decision request.domain.key request.left request.right = Branch.repeated cutoff ∧
+        compileNode request = Code.pure (repeatedValue cutoff) ∧
+          ∀ (Output : Type) (next : Value Symbol Guard → Code Symbol Guard Output)
+            (before after : SourceEqualityNativeDemand.State width) (fuel : Nat) (value : Output),
+            SourceCurrentAllocatedNativePhysicalCache.Valid before.native →
+              NodeReady before.native.machine request →
+                (∀ (key : IntersectionFlatMemoKeyDomain.Triple width),
+                    SourceRecursiveIntersectionMemo.requestKey width request.domain request.left request.right =
+                        some key →
+                      SourceRecursiveIntersectionMemo.KeySafe width request.domain request.left request.right) →
+                  SourceCurrentAllocatedNativeContextCache.Returned
+                      (fun old result => old = request → result = repeatedValue cutoff) before.native.nodes →
+                    SourceEqualityNativeDemand.execute fuel
+                          (SourceEqualityNativeDemand.Control.code (Code.node request next)) before =
+                        SourceEqualityNativeDemand.Outcome.done value after →
+                      ∃ total inner outer middle,
+                        total < fuel ∧
+                          inner + outer = total ∧
+                            SourceEqualityNativeDemand.Steps inner
+                                (SourceEqualityNativeDemand.Control.code
+                                  (requestNode request.domain request.left request.right))
+                                before (SourceEqualityNativeDemand.Control.code (Code.pure (repeatedValue cutoff)))
+                                middle ∧
+                              SourceEqualityNativeDemand.Steps outer
+                                (SourceEqualityNativeDemand.Control.code (next (repeatedValue cutoff))) middle
+                                (SourceEqualityNativeDemand.Control.code (Code.pure value)) after
+classifiedEntry : Interned InternedBinderProtocol.NodeKey
+marker : Value Symbol SourceSynthesisGeneralizeSyntax.Guard
+arrow : EdgeValue Symbol SourceSynthesisGeneralizeSyntax.Guard
+rows : List (EdgeValue Symbol SourceSynthesisGeneralizeSyntax.Guard)
+classifiedShape :
+  body = Value.node classifiedEntry (canonicalEdges (arrow :: rows)) 0 [Reference.interned entry.identity]
+_bodyAvailable : Available heap body
+_markerShape :
+  ∃ markerEntry markerRow,
+    marker = Value.node markerEntry [markerRow] 0 [] ∧
+      markerRow.children = [] ∧
+        markerRow.entry.key =
+          { symbol := SourceSynthesisLabelProgramBuildRoles.literal "(->)", children := [],
+            constraint := SourceSynthesisGeneralizeSyntax.top }
+_arrowChildren :
+  arrow.children =
+    [marker, Value.reference (Reference.interned entry.identity), Value.reference (Reference.interned entry.identity)]
+_arrowKey :
+  arrow.entry.key =
+    { symbol := SourceSynthesisLabelProgramBuildRoles.literal "->",
+      children :=
+        [marker.referenceOf, InternedBinderProtocol.NodeRef.ref (Reference.interned entry.identity),
+          InternedBinderProtocol.NodeRef.ref (Reference.interned entry.identity)],
+      constraint := SourceSynthesisGeneralizeSyntax.top }
+_catalog :
+  Language.All₂
+    (fun descriptor row =>
+      row.children = List.replicate descriptor.snd (Value.reference (Reference.interned entry.identity)) ∧
+        row.entry.key =
+          { symbol := SourceSynthesisLabelProgramBuildRoles.literal descriptor.fst,
+            children :=
+              List.replicate descriptor.snd (InternedBinderProtocol.NodeRef.ref (Reference.interned entry.identity)),
+            constraint := SourceSynthesisGeneralizeSyntax.top })
+    (SourceSynthesisUniverseBody.descriptors (SourceSynthesisCurrentContext.constructorCatalog lib query)) rows
+_markerClosed : marker.free = []
+_markerAvailable : Available heap marker
+_markerAtoms : InternedBoundaryAtoms.atoms marker = []
+childKinds :
+  ∀ (row : EdgeValue Symbol SourceSynthesisGeneralizeSyntax.Guard),
+    row ∈ canonicalEdges (arrow :: rows) →
+      InternedEdgeResidency.EdgeResident heap row ∧
+        row.entry.key.constraint = SourceSynthesisGeneralizeSyntax.top ∧
+          ∀ (child : Value Symbol SourceSynthesisGeneralizeSyntax.Guard),
+            child ∈ row.children →
+              child = Value.reference (Reference.interned entry.identity) ∨
+                child = marker ∧ Available heap child ∧ child.free = [] ∧ InternedBoundaryAtoms.atoms child = []
+_arrowPresent : arrow ∈ canonicalEdges (arrow :: rows)
+rowsSame : bodyRows = canonicalEdges (arrow :: rows)
+universeValue : Value Symbol Guard := Value.mu entry body depth ordinary
+referenceValue : Value Symbol Guard := Value.reference (Reference.interned entry.identity)
+original : Interned IntersectionFlatMemoKeyDomain.DomainKey × Cache.State IntersectionFlatMemoKeyDomain.DomainKey :=
+  SourceRecursiveIntersectionEnvironment.enter domains IntersectionEmptyDomain.emptyKey universeValue pattern
+    entry.identity patternId
+diagonalFirst : Interned IntersectionFlatMemoKeyDomain.DomainKey ×
+  Cache.State IntersectionFlatMemoKeyDomain.DomainKey :=
+  SourceRecursiveIntersectionEnvironment.enter original.snd original.fst.key universeValue referenceValue entry.identity
+    entry.identity
+diagonalTerminal : Interned IntersectionFlatMemoKeyDomain.DomainKey ×
+  Cache.State IntersectionFlatMemoKeyDomain.DomainKey :=
+  SourceRecursiveIntersectionEnvironment.enter diagonalFirst.snd diagonalFirst.fst.key body universeValue
+    bodyEntry.identity entry.identity
+⊢ let universeValue := Value.mu entry body depth ordinary;
+  let referenceValue := Value.reference (Reference.interned entry.identity);
+  let original :=
+    SourceRecursiveIntersectionEnvironment.enter domains IntersectionEmptyDomain.emptyKey universeValue pattern
+      entry.identity patternId;
+  let diagonalFirst :=
+    SourceRecursiveIntersectionEnvironment.enter original.snd original.fst.key universeValue referenceValue
+      entry.identity entry.identity;
+  let diagonalTerminal :=
+    SourceRecursiveIntersectionEnvironment.enter diagonalFirst.snd diagonalFirst.fst.key body universeValue
+      bodyEntry.identity entry.identity;
+  ∀ (row : EdgeValue Symbol Guard), row ∈ bodyRows → sorry
+MicroCFTA.SourceCurrentAllocatedNativeDiagonalShortcutInputs.current_stored_universe_diagonal_shortcut_inputs
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (lib : MicroCFTA.SourceSynthesisTypeSyntax.Library) (query : MicroCFTA.SourceSynthesisTypeSyntax.Query)
+  (signed : Int) (whole : MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression)
+  (accepted : MicroCFTA.SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole)
+  (rootValue :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (sourceHeap :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (built :
+    MicroCFTA.InternedFreshOrdinaryConstruction.build
+        (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+        MicroCFTA.InternedConstructorTemplates.empty =
+      MicroCFTA.InternedNestedConstruction.Outcome.done rootValue sourceHeap)
+  (key : MicroCFTA.InternedBinderProtocol.NodeKey)
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (body depth ordinary :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (stored :
+    sourceHeap.nodeRecords key = some (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary))
+  (heap :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (facts : MicroCFTA.InternedNestedFacts.Facts heap)
+  (growth : MicroCFTA.InternedConstructorTemplates.Grows sourceHeap heap)
+  (domains : MicroCFTA.Cache.State MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+  (cacheValid : MicroCFTA.Cache.Valid domains)
+  (pattern :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (_patternAvailable : MicroCFTA.InternedProbeProvenance.Available heap pattern) (_patternClosed : pattern.free = [])
+  (patternId : Nat) (_patternIdentity : MicroCFTA.SourceRecursiveIntersectionControl.identity pattern = some patternId)
+  (_patternKind :
+    MicroCFTA.SourceRecursiveIntersectionControl.tag pattern = 1 ∨
+      MicroCFTA.SourceRecursiveIntersectionControl.tag pattern = 3) :
+  ∃ bodyEntry bodyRows,
+    body =
+        MicroCFTA.InternedConstructorTemplates.Value.node bodyEntry bodyRows 0
+          [MicroCFTA.InternedBinderProtocol.Reference.interned entry.identity] ∧
+      have universeValue := MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary;
+      have referenceValue :=
+        MicroCFTA.InternedConstructorTemplates.Value.reference
+          (MicroCFTA.InternedBinderProtocol.Reference.interned entry.identity);
+      have original :=
+        MicroCFTA.SourceRecursiveIntersectionEnvironment.enter domains MicroCFTA.IntersectionEmptyDomain.emptyKey
+          universeValue pattern entry.identity patternId;
+      have diagonalFirst :=
+        MicroCFTA.SourceRecursiveIntersectionEnvironment.enter original.snd original.fst.key universeValue
+          referenceValue entry.identity entry.identity;
+      have diagonalTerminal :=
+        MicroCFTA.SourceRecursiveIntersectionEnvironment.enter diagonalFirst.snd diagonalFirst.fst.key body
+          universeValue bodyEntry.identity entry.identity;
+      ∀
+        (row :
+          MicroCFTA.InternedConstructorTemplates.EdgeValue
+            (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+        row ∈ bodyRows → sorry
+'MicroCFTA.SourceCurrentAllocatedNativeDiagonalShortcutInputs.current_stored_universe_diagonal_shortcut_inputs' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,1 @@
+Open the existing Language namespace so the frozen All₂ statement resolves. Preserve the complete original public header, all premises, selected domains and ordered children. No semantic statement or execution budget changes. Original failed packet and diagnostics remain.

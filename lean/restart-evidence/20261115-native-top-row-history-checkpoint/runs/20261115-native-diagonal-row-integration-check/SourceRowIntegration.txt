@@ -1,0 +1,164 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-source-diagonal-row-integration-draft/SourceRowIntegration.lean:83:32: error: Application type mismatch: The argument
+  row
+has type
+  Value Symbol Guard
+but is expected to have type
+  EdgeValue Symbol SourceSynthesisGeneralizeSyntax.Guard
+in the application
+  childKinds row
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-source-diagonal-row-integration-draft/SourceRowIntegration.lean:85:25: error: Application type mismatch: The argument
+  operations
+has type
+  Interned IntersectionFlatMemoKeyDomain.DomainKey × Cache.State IntersectionFlatMemoKeyDomain.DomainKey
+but is expected to have type
+  SourceEqualityConstraintMemoAllocation.State
+in the application
+  SourceCurrentAllocatedNativeTopRowQueryGlobalLaws.initial_edge_query_returned_and_raw_results machine machineValid
+    operations
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-source-diagonal-row-integration-draft/SourceRowIntegration.lean:67:57: error: unsolved goals
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+lib : Library
+query : Query
+signed : Int
+whole : Expression
+accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole
+rootValue : Value Symbol Guard
+sourceHeap : InternedConstructorTemplates.State Symbol Guard
+built :
+  InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+    InternedNestedConstruction.Outcome.done rootValue sourceHeap
+key : InternedBinderProtocol.NodeKey
+entry : Interned InternedBinderProtocol.NodeKey
+body depth ordinary : Value Symbol Guard
+stored : sourceHeap.nodeRecords key = some (Value.mu entry body depth ordinary)
+machine : Machine Symbol Guard
+machineValid : SourceRecursiveIntersectionKernel.Valid machine
+facts : Facts machine.heap
+growth : Grows sourceHeap machine.heap
+domains : Cache.State IntersectionFlatMemoKeyDomain.DomainKey
+cacheValid : Cache.Valid domains
+pattern : Value Symbol Guard
+_patternAvailable : Available machine.heap pattern
+_patternClosed : pattern.free = []
+patternId : Nat
+_patternIdentity : identity pattern = some patternId
+_patternKind : tag pattern = 1 ∨ tag pattern = 3
+bodyEntry : Interned InternedBinderProtocol.NodeKey
+bodyRows : List (EdgeValue Symbol Guard)
+bodyShape : body = Value.node bodyEntry bodyRows 0 [Reference.interned entry.identity]
+known :
+  have universeValue := Value.mu entry body depth ordinary;
+  have referenceValue := Value.reference (Reference.interned entry.identity);
+  have original :=
+    SourceRecursiveIntersectionEnvironment.enter domains IntersectionEmptyDomain.emptyKey universeValue pattern
+      entry.identity patternId;
+  have diagonalFirst :=
+    SourceRecursiveIntersectionEnvironment.enter original.snd original.fst.key universeValue referenceValue
+      entry.identity entry.identity;
+  have diagonalTerminal :=
+    SourceRecursiveIntersectionEnvironment.enter diagonalFirst.snd diagonalFirst.fst.key body universeValue
+      bodyEntry.identity entry.identity;
+  ∀ (row : EdgeValue Symbol Guard),
+    row ∈ bodyRows →
+      Language.All₂
+        (fun children value =>
+          KnownResult { domain := diagonalTerminal.fst, left := children.fst, right := children.snd } value)
+        (row.children.zip row.children)
+        (List.map
+          (input (replacement (Reference.interned entry.identity) (repeatedValue (pair entry.identity entry.identity))))
+          row.children)
+classifiedEntry : Interned InternedBinderProtocol.NodeKey
+marker : Value Symbol SourceSynthesisGeneralizeSyntax.Guard
+arrow : EdgeValue Symbol SourceSynthesisGeneralizeSyntax.Guard
+rows : List (EdgeValue Symbol SourceSynthesisGeneralizeSyntax.Guard)
+classifiedShape :
+  body = Value.node classifiedEntry (canonicalEdges (arrow :: rows)) 0 [Reference.interned entry.identity]
+_bodyAvailable : Available machine.heap body
+_markerShape :
+  ∃ markerEntry markerRow,
+    marker = Value.node markerEntry [markerRow] 0 [] ∧
+      markerRow.children = [] ∧
+        markerRow.entry.key =
+          { symbol := SourceSynthesisLabelProgramBuildRoles.literal "(->)", children := [],
+            constraint := SourceSynthesisGeneralizeSyntax.top }
+_arrowChildren :
+  arrow.children =
+    [marker, Value.reference (Reference.interned entry.identity), Value.reference (Reference.interned entry.identity)]
+_arrowKey :
+  arrow.entry.key =
+    { symbol := SourceSynthesisLabelProgramBuildRoles.literal "->",
+      children :=
+        [marker.referenceOf, InternedBinderProtocol.NodeRef.ref (Reference.interned entry.identity),
+          InternedBinderProtocol.NodeRef.ref (Reference.interned entry.identity)],
+      constraint := SourceSynthesisGeneralizeSyntax.top }
+_catalog :
+  Language.All₂
+    (fun descriptor row =>
+      row.children = List.replicate descriptor.snd (Value.reference (Reference.interned entry.identity)) ∧
+        row.entry.key =
+          { symbol := SourceSynthesisLabelProgramBuildRoles.literal descriptor.fst,
+            children :=
+              List.replicate descriptor.snd (InternedBinderProtocol.NodeRef.ref (Reference.interned entry.identity)),
+            constraint := SourceSynthesisGeneralizeSyntax.top })
+    (SourceSynthesisUniverseBody.descriptors (SourceSynthesisCurrentContext.constructorCatalog lib query)) rows
+_markerClosed : marker.free = []
+_markerAvailable : Available machine.heap marker
+_markerAtoms : InternedBoundaryAtoms.atoms marker = []
+childKinds :
+  ∀ (row : EdgeValue Symbol SourceSynthesisGeneralizeSyntax.Guard),
+    row ∈ canonicalEdges (arrow :: rows) →
+      InternedEdgeResidency.EdgeResident machine.heap row ∧
+        row.entry.key.constraint = SourceSynthesisGeneralizeSyntax.top ∧
+          ∀ (child : Value Symbol SourceSynthesisGeneralizeSyntax.Guard),
+            child ∈ row.children →
+              child = Value.reference (Reference.interned entry.identity) ∨
+                child = marker ∧ Available machine.heap child ∧ child.free = [] ∧ InternedBoundaryAtoms.atoms child = []
+_arrowPresent : arrow ∈ canonicalEdges (arrow :: rows)
+rowsSame : bodyRows = canonicalEdges (arrow :: rows)
+row : Value Symbol Guard := Value.mu entry body depth ordinary
+member : Value Symbol Guard := Value.reference (Reference.interned entry.identity)
+operations : Interned IntersectionFlatMemoKeyDomain.DomainKey × Cache.State IntersectionFlatMemoKeyDomain.DomainKey :=
+  SourceRecursiveIntersectionEnvironment.enter domains IntersectionEmptyDomain.emptyKey row pattern entry.identity
+    patternId
+operationsValid : Interned IntersectionFlatMemoKeyDomain.DomainKey ×
+  Cache.State IntersectionFlatMemoKeyDomain.DomainKey :=
+  SourceRecursiveIntersectionEnvironment.enter operations.snd operations.fst.key row member entry.identity
+    entry.identity
+fuel : Interned IntersectionFlatMemoKeyDomain.DomainKey × Cache.State IntersectionFlatMemoKeyDomain.DomainKey :=
+  SourceRecursiveIntersectionEnvironment.enter operationsValid.snd operationsValid.fst.key body row bodyEntry.identity
+    entry.identity
+plan : EdgeValue Symbol Guard
+fields : plan ∈ bodyRows
+sourceTop : sorry.entry.key.constraint = SourceSynthesisGeneralizeSyntax.top
+⊢ ∀ (operations : SourceEqualityConstraintMemoAllocation.State),
+    SourceEqualityConstraintMemoAllocation.Valid operations →
+      ∀ (fuel_1 : Nat),
+        let request := { domain := fuel.fst, left := plan, right := plan };
+        let start := { native := initial width machine, operations := operations };
+        InputsThrough fuel_1 (Control.code (Code.edge request Code.pure)) start →
+          FieldsThrough fuel_1 (Control.code (Code.edge request Code.pure)) start →
+            Returned EdgeResult
+                (SourceEqualityNativeDemand.execute fuel_1 (Control.code (Code.edge request Code.pure))
+                        start).state.native.edges ∧
+              ∀ (count : Nat) (result : EdgeValue Symbol Guard) (after : SourceEqualityNativeDemand.State width),
+                count ≤ fuel_1 →
+                  SourceEqualityNativeDemand.Steps count (Control.code (Code.edge request Code.pure)) start
+                      (Control.code (Code.pure result)) after →
+                    result.children =
+                        List.map
+                          (input
+                            (replacement (Reference.interned entry.identity)
+                              (repeatedValue (pair entry.identity entry.identity))))
+                          plan.children ∧
+                      result.entry.key =
+                        { symbol := plan.entry.key.symbol,
+                          children :=
+                            List.map Value.referenceOf
+                              (List.map
+                                (input
+                                  (replacement (Reference.interned entry.identity)
+                                    (repeatedValue (pair entry.identity entry.identity))))
+                                plan.children),
+                          constraint := SourceEqualityConstraintConstructors.top }

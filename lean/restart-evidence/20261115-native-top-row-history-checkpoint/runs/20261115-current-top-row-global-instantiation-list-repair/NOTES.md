@@ -1,0 +1,1 @@
+Replace an unavailable congrArg₂ name with direct equality rewriting in the private ordered-list proof. All public headers and definitions stay byte-exact. Preserve the original failed packet and diagnostics. No execution budget or theorem premise changes.

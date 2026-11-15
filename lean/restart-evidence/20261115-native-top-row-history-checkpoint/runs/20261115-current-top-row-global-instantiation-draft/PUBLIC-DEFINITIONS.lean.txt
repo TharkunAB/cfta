@@ -1,0 +1,23 @@
+namespace MicroCFTA.SourceCurrentAllocatedNativeTopRowQueryGlobalLaws
+open InternedConstructorTemplates SourceRecursiveIntersectionCode SourceRecursiveIntersectionThunks
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+
+/-- A closed self shortcut or literal pure branch fixes the expected complete value. -/
+def KnownResult [DecidableEq Symbol] (request : NodeRequest Symbol Guard)
+    (expected : Value Symbol Guard) : Prop :=
+  (request.right = request.left ∧ request.left.free = [] ∧ expected = request.left) ∨
+    compileNode request = .pure expected
+
+/-- A matching source top row retains the prescribed ordered shortcut child results and full key. -/
+def TopRowResult [DecidableEq Symbol] (request : EdgeRequest Symbol Guard)
+    (row : EdgeValue Symbol Guard) : Prop :=
+  request.right = request.left →
+  request.left.entry.key.constraint = SourceEqualityConstraintConstructors.top →
+  ∀ expected : List (Value Symbol Guard),
+    Language.All₂ (fun (pair : Value Symbol Guard × Value Symbol Guard) (value : Value Symbol Guard) => KnownResult ⟨request.domain, pair.1, pair.2⟩ value)
+      (request.left.children.zip request.right.children) expected →
+    row.children = expected ∧
+      row.entry.key = ⟨request.left.entry.key.symbol, expected.map Value.referenceOf,
+        SourceEqualityConstraintConstructors.top⟩
+end MicroCFTA.SourceCurrentAllocatedNativeTopRowQueryGlobalLaws

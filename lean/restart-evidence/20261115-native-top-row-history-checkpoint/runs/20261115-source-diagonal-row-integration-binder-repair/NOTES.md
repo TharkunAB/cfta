@@ -1,0 +1,1 @@
+Retain the local-let repair. Prefix the unused name of the inner universal proof binder with an underscore. The binder type, argument order, assumptions and conclusion stay exact modulo this bound-variable name. The proof still uses the actual operation-validity input. No linter is disabled. Preserve both earlier attempts.

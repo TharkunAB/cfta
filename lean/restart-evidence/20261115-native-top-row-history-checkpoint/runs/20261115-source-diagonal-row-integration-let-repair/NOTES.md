@@ -1,0 +1,1 @@
+Reduce local let bindings before introducing the actual row and execution inputs. The complete example statement remains exact. No source, initial-state, plan, row, raw-count or endpoint assumptions change.

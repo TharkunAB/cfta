@@ -1,0 +1,1 @@
+Retain the Language namespace repair. Give the local substitution environment its existing Environment Symbol Guard type. This resolves unconstrained implicit Symbol/Guard arguments. The complete public header and all source/domain/order premises remain byte-exact. Preserve both earlier failed attempts.

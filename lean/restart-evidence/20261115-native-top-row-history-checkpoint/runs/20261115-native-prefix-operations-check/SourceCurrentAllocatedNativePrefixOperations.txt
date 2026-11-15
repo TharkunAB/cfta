@@ -1,0 +1,37 @@
+'MicroCFTA.SourceCurrentAllocatedNativePrefixOperations.prefix_operations_before_bind' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativePrefixOperations.prefix_operations_before_bind {width : Nat} {A B : Type}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (budget used : Nat) (original : MicroCFTA.SourceEqualityNativeDemand.Control B)
+  (control : MicroCFTA.SourceEqualityNativeDemand.Control A)
+  (next :
+    A →
+      MicroCFTA.SourceRecursiveIntersectionCode.Code (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) B)
+  (before after : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (sourceHeap :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (physical : MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid before.native)
+  (plan : MicroCFTA.SourceCurrentAllocatedNativePhysicalExecution.InputsThrough budget original before)
+  (fields : MicroCFTA.SourceEqualityNativeDemandOperations.FieldsThrough budget original before)
+  (valid : MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid before.operations)
+  (sourceGrowth : MicroCFTA.InternedConstructorTemplates.Grows sourceHeap before.native.machine.heap)
+  (actual : MicroCFTA.SourceEqualityNativeDemand.Steps used original before (control.bind next) after)
+  (bounded : used ≤ budget) :
+  MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace used original before (control.bind next) after ∧
+    MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid after.native ∧
+      MicroCFTA.SourceRecursiveIntersectionKernel.Extension before.native.machine after.native.machine ∧
+        MicroCFTA.InternedConstructorTemplates.Grows sourceHeap after.native.machine.heap ∧
+          MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid after.operations ∧
+            MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows before.operations after.operations ∧
+              MicroCFTA.SourceCurrentAllocatedNativePhysicalExecution.InputsThrough (budget - used) (control.bind next)
+                  after ∧
+                MicroCFTA.SourceCurrentAllocatedNativePhysicalExecution.InputsThrough (budget - used) control after ∧
+                  MicroCFTA.SourceEqualityNativeDemandOperations.FieldsThrough (budget - used) (control.bind next)
+                      after ∧
+                    MicroCFTA.SourceEqualityNativeDemandOperations.FieldsThrough (budget - used) control after
