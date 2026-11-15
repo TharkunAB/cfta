@@ -5028,6 +5028,7 @@ import MicroCFTA.SourceCurrentConjunctionDemandWeakEffects
 import MicroCFTA.SourceCurrentConjunctionDemandMemos
 import MicroCFTA.SourceCurrentConjunctionDemandVerified
 import MicroCFTA.SourcePruningEnumerationSharedParkedRawBucketReceipt
+import MicroCFTA.SourceSynthesisCurrentFirstRealPrefix
 /-!
 # Proof dependency audit
 
@@ -5576,3 +5577,6 @@ run_cmd do
 
 #check @MicroCFTA.SourcePruningEnumerationSharedPreparedRecursive.parked_singleton_removed_bucket_receipt
 #print axioms MicroCFTA.SourcePruningEnumerationSharedPreparedRecursive.parked_singleton_removed_bucket_receipt
+
+#check @MicroCFTA.SourceSynthesisCurrentFirstRealPrefix.accepted_first_real_prefix
+#print axioms MicroCFTA.SourceSynthesisCurrentFirstRealPrefix.accepted_first_real_prefix
