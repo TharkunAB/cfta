@@ -1,0 +1,4 @@
+def KnownResult [DecidableEq Symbol] (request : NodeRequest Symbol Guard)
+    (expected : Value Symbol Guard) : Prop :=
+  (request.right = request.left ∧ request.left.free = [] ∧ expected = request.left) ∨
+    compileNode request = .pure expected

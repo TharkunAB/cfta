@@ -1,0 +1,23 @@
+def KnownResult [DecidableEq Symbol] (muTarget referenceTarget : NodeRequest Symbol Guard)
+    (cutoff : Value Symbol Guard) (request : NodeRequest Symbol Guard)
+    (wanted : Value Symbol Guard) : Prop :=
+  SourceCurrentAllocatedNativeTopRowQueryGlobalLaws.KnownResult request wanted ∨
+    ((request = muTarget ∨ request = referenceTarget) ∧ wanted = cutoff)
+
+def TopRowResult [DecidableEq Symbol] (muTarget referenceTarget : NodeRequest Symbol Guard)
+    (cutoff : Value Symbol Guard) (request : EdgeRequest Symbol Guard)
+    (row : EdgeValue Symbol Guard) : Prop :=
+  request.right = request.left →
+  request.left.entry.key.constraint = SourceEqualityConstraintConstructors.top →
+  ∀ expected : List (Value Symbol Guard),
+    Language.All₂ (fun (pair : Value Symbol Guard × Value Symbol Guard) (value : Value Symbol Guard) =>
+      KnownResult muTarget referenceTarget cutoff ⟨request.domain, pair.1, pair.2⟩ value)
+      (request.left.children.zip request.right.children) expected →
+    row.children = expected ∧
+      row.entry.key = ⟨request.left.entry.key.symbol, expected.map Value.referenceOf,
+        SourceEqualityConstraintConstructors.top⟩
+
+def EdgeResult [DecidableEq Symbol] (muTarget referenceTarget : NodeRequest Symbol Guard)
+    (cutoff : Value Symbol Guard) (request : EdgeRequest Symbol Guard)
+    (row : EdgeValue Symbol Guard) : Prop :=
+  MismatchResult request row ∧ TopRowResult muTarget referenceTarget cutoff request row

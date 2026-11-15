@@ -1,0 +1,116 @@
+import MicroCFTA.SourceCurrentAllocatedNativeOpenBodyProduct
+import MicroCFTA.SourceCurrentAllocatedNativePrefixOperations
+
+/-!
+# Raw open source-body products under the original node query
+
+The original node dispatch retains its actual finish continuation.
+Each edge hypothesis uses its original raw count and outer prefix.
+Local completion observations do not change an induction budget.
+The result retains the constructor endpoint and original-U reclosure.
+-/
+namespace MicroCFTA.SourceCurrentAllocatedNativeRawOpenBodyProductReplay
+open Cache Language InternedConstructorTemplates InternedNestedFacts InternedProbeProvenance
+open InternedEdgeResidency
+open InternedBinderProtocol (NodeKey Reference)
+open IntersectionFlatMemoKeyDomain (DomainKey)
+open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionThunks SourceRecursiveIntersectionCode
+open SourceEqualityNativeDemand
+open SourceCurrentAllocatedNativePhysicalTraceCompletion (Trace)
+open SourceCurrentAllocatedNativePhysicalExecution (InputsThrough)
+open SourceEqualityNativeDemandOperations (FieldsThrough)
+open InternedStoredSubstitution (input)
+open InternedStoredSubstitutionRebind (replacement)
+open SourceRecursiveIntersectionControl (repeatedValue)
+open SourceSynthesisTypeSyntax (Library Query)
+open SourceSynthesisGeneralizeSyntax (Guard top)
+open SourceSynthesisFirstOrderConstruction (Expression)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "Physical" => SourceCurrentAllocatedNativePhysicalCache.Valid
+local notation "ordinarySymbols" => SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+variable {width : Nat}
+
+set_option autoImplicit false
+
+/-- Smaller actual edge traces derive the open body product under the original node dispatch. -/
+theorem open_body_product_trace_result
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (heap : InternedConstructorTemplates.State Symbol Guard) (_facts : Facts heap) (_growth : Grows sourceHeap heap)
+    (domains : Cache.State DomainKey) (_cacheValid : Cache.Valid domains)
+    (pattern : Value Symbol Guard) (_patternAvailable : Available heap pattern)
+    (_patternClosed : pattern.free = []) (patternId : Nat)
+    (_patternIdentity : SourceRecursiveIntersectionControl.identity pattern = some patternId)
+    (_patternKind : SourceRecursiveIntersectionControl.tag pattern = 1 ∨
+      SourceRecursiveIntersectionControl.tag pattern = 3)
+    (cutoffLeft cutoffRight : Nat) (domain : Interned DomainKey)
+    (original before after : Checked width) (parentFuel bodySteps : Nat) (result : Value Symbol Guard)
+    (finishNext : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard))
+    (compiled : compileNode ⟨domain, body, body⟩ =
+      compileRows domain (nodeEdges body) (nodeEdges body))
+    (physical : Physical original.native) (sourceGrowth : Grows sourceHeap original.native.machine.heap)
+    (operationsValid : SourceEqualityConstraintMemoAllocation.Valid original.operations)
+    (plan : InputsThrough parentFuel (.code (.node ⟨domain, body, body⟩ .pure)) original)
+    (fields : FieldsThrough parentFuel (.code (.node ⟨domain, body, body⟩ .pure)) original)
+    (entered : Steps 1 (.code (.node ⟨domain, body, body⟩ .pure)) original
+      (.code ((compileNode ⟨domain, body, body⟩).bind finishNext)) before)
+    (smaller : bodySteps < parentFuel)
+    (actual : Steps bodySteps (.code (compileNode ⟨domain, body, body⟩)) before (.code (.pure result)) after)
+    (edges : ∀ pair ∈ pairs (nodeEdges body) (nodeEdges body),
+      ∀ (childNext : EdgeValue Symbol Guard → Code Symbol Guard (Value Symbol Guard))
+        (childBefore childAfter : Checked width) (used count : Nat) (childValue : EdgeValue Symbol Guard),
+      0 < used → used + count ≤ parentFuel →
+      Steps used (.code (.node ⟨domain, body, body⟩ .pure)) original
+        (.code ((requestEdge domain pair.1 pair.2).bind childNext)) childBefore →
+      Steps count (.code (requestEdge domain pair.1 pair.2)) childBefore
+        (.code (.pure childValue)) childAfter →
+      (pair.1 = pair.2 →
+        childValue.children = pair.1.children.map (input (replacement (.interned entry.identity)
+          (repeatedValue (SourceRecursiveIntersectionControl.pair cutoffLeft cutoffRight)))) ∧
+        childValue.entry.key = ⟨pair.1.entry.key.symbol,
+          (pair.1.children.map (input (replacement (.interned entry.identity)
+            (repeatedValue (SourceRecursiveIntersectionControl.pair cutoffLeft cutoffRight))))).map Value.referenceOf,
+          top⟩) ∧
+      (pair.1.children.length ≠ pair.2.children.length → childValue.children = [.empty])) :
+    ∃ (productEntry : Interned NodeKey) (products rawRows : List (EdgeValue Symbol Guard))
+      (middle : Checked width) (count : Nat),
+      count + 1 ≤ bodySteps ∧
+      All₂ (fun (source : EdgeValue Symbol Guard) target =>
+        target.children = source.children.map (input (replacement (.interned entry.identity)
+          (repeatedValue (SourceRecursiveIntersectionControl.pair cutoffLeft cutoffRight)))) ∧
+        target.entry.key = ⟨source.entry.key.symbol,
+          (source.children.map (input (replacement (.interned entry.identity)
+            (repeatedValue (SourceRecursiveIntersectionControl.pair cutoffLeft cutoffRight))))).map Value.referenceOf,
+          top⟩) (nodeEdges body) products ∧
+      (∀ row ∈ products, row ∈ rawRows) ∧
+      Physical middle.native ∧ Extension before.native.machine middle.native.machine ∧
+      (∀ row ∈ products, EdgeResident middle.native.machine.heap row) ∧
+      Trace count (.code (compileRows domain (nodeEdges body) (nodeEdges body))) before
+        (.code (.work (makeNode rawRows) .pure)) middle ∧
+      result = (run (makeNode rawRows) middle.native.machine.heap).1 ∧
+      after = {middle with native := advance middle.native {middle.native.machine with heap :=
+        (run (makeNode rawRows) middle.native.machine.heap).2}} ∧
+      canonicalEdges (surviving rawRows) = canonicalEdges products ∧
+      result = .node productEntry (canonicalEdges products) 0
+        [.intersection (SourceRecursiveIntersectionControl.pair cutoffLeft cutoffRight).1
+          (SourceRecursiveIntersectionControl.pair cutoffLeft cutoffRight).2] ∧
+      Physical after.native ∧ Extension before.native.machine after.native.machine ∧
+      Extension original.native.machine after.native.machine ∧
+      Grows sourceHeap after.native.machine.heap ∧
+      Available after.native.machine.heap result ∧
+      (∀ row ∈ products, EdgeResident after.native.machine.heap row) ∧
+      SourceRecursiveIntersectionMaybeMu.maybeMu (SourceRecursiveIntersectionControl.pair cutoffLeft cutoffRight)
+        result after.native.machine.heap = .done (.mu entry body depth ordinary) after.native.machine.heap ∧
+      SourceEqualityNativeDemand.step
+        (.code (.optionalBinder (SourceRecursiveIntersectionControl.pair cutoffLeft cutoffRight) result .pure)) after =
+        .yielded (.code (.pure (.mu entry body depth ordinary))) after ∧
+      SourceEqualityNativeDemand.execute 2
+        (.code (.optionalBinder (SourceRecursiveIntersectionControl.pair cutoffLeft cutoffRight) result .pure)) after =
+        .done (.mu entry body depth ordinary) after

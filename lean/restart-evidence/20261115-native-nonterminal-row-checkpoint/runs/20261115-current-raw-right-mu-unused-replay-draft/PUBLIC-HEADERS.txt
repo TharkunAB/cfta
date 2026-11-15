@@ -1,0 +1,49 @@
+theorem right_mu_unused_trace_result
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (P : Value Symbol Guard → Prop)
+    (request : NodeRequest Symbol Guard) (original before after : Checked width)
+    (parentFuel bodySteps : Nat) (result : Value Symbol Guard) (first second : Nat)
+    (finishNext : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard))
+    (selected : SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right = .rightMu)
+    (leftIdentity : SourceRecursiveIntersectionControl.identity request.left = some first)
+    (rightIdentity : SourceRecursiveIntersectionControl.identity request.right = some second)
+    (unused : let binder := SourceRecursiveIntersectionControl.pair first second
+      ∀ value, P value → InternedBinderProtocol.Reference.intersection binder.1 binder.2 ∉ value.free)
+    (entered : Steps 1 (.code (.node request .pure)) original
+      (.code ((compileNode request).bind finishNext)) before)
+    (smaller : bodySteps < parentFuel)
+    (actual : Steps bodySteps (.code (compileNode request)) before (.code (.pure result)) after)
+    (children :
+      let allocated := SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains request.domain.key
+        request.left request.right first second
+      let started : Checked width :=
+        {before with native := advance before.native {before.native.machine with domains := allocated.2}}
+      ∀ used count, 0 < used → used + count ≤ parentFuel → count < parentFuel →
+      ∀ (next : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard))
+        (value : Value Symbol Guard) (middle : Checked width),
+      Steps used (.code (.node request .pure)) original
+        (.code ((requestNode allocated.1 (SourceRecursiveIntersectionKernel.body request.left)
+          (SourceRecursiveIntersectionKernel.body request.right)).bind next)) started →
+      Steps count (.code (requestNode allocated.1 (SourceRecursiveIntersectionKernel.body request.left)
+        (SourceRecursiveIntersectionKernel.body request.right))) started (.code (.pure value)) middle → P value) :
+    let allocated := SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains request.domain.key
+      request.left request.right first second
+    let started : Checked width :=
+      {before with native := advance before.native {before.native.machine with domains := allocated.2}}
+    let binder := SourceRecursiveIntersectionControl.pair first second
+    P result ∧ ∃ (childSteps : Nat) (middle : Checked width),
+      bodySteps = 1 + childSteps + 1 ∧ 2 + childSteps ≤ parentFuel ∧ childSteps < parentFuel ∧
+      Steps 1 (.code (compileNode request)) before
+        (.code ((requestNode allocated.1 (SourceRecursiveIntersectionKernel.body request.left)
+          (SourceRecursiveIntersectionKernel.body request.right)).bind
+            (fun value => .optionalBinder binder value .pure))) started ∧
+      Steps 2 (.code (.node request .pure)) original
+        (.code ((requestNode allocated.1 (SourceRecursiveIntersectionKernel.body request.left)
+          (SourceRecursiveIntersectionKernel.body request.right)).bind
+            (fun value => .optionalBinder binder value finishNext))) started ∧
+      Steps childSteps (.code (requestNode allocated.1 (SourceRecursiveIntersectionKernel.body request.left)
+        (SourceRecursiveIntersectionKernel.body request.right))) started (.code (.pure result)) middle ∧
+      SourceRecursiveIntersectionMaybeMu.maybeMu binder result middle.native.machine.heap =
+        .done result middle.native.machine.heap ∧
+      Steps 1 (.code (.optionalBinder binder result .pure)) middle (.code (.pure result)) after ∧
+      after = middle := by

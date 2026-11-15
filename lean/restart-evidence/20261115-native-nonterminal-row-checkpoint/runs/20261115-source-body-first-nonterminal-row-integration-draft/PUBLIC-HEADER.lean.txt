@@ -1,0 +1,45 @@
+theorem current_stored_universe_body_first_nonterminal_row_results
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (machine : SourceRecursiveIntersectionKernel.Machine Symbol Guard)
+    (machineValid : SourceRecursiveIntersectionKernel.Valid machine)
+    (facts : Facts machine.heap) (growth : Grows sourceHeap machine.heap)
+    (domains : Cache.State IntersectionFlatMemoKeyDomain.DomainKey) (cacheValid : Cache.Valid domains)
+    (pattern : Value Symbol Guard) (_patternAvailable : Available machine.heap pattern)
+    (_patternClosed : pattern.free = []) (patternId : Nat)
+    (_patternIdentity : identity pattern = some patternId)
+    (_patternKind : tag pattern = 1 ∨ tag pattern = 3) :
+    ∃ (bodyEntry : Interned NodeKey) (bodyRows : List (EdgeValue Symbol Guard)),
+      body = .node bodyEntry bodyRows 0 [.interned entry.identity] ∧
+      let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+      let referenceValue : Value Symbol Guard := .reference (.interned entry.identity)
+      let original := SourceRecursiveIntersectionEnvironment.enter domains IntersectionEmptyDomain.emptyKey
+        universeValue pattern entry.identity patternId
+      let bodyFirst := SourceRecursiveIntersectionEnvironment.enter original.2 original.1.key
+        body universeValue bodyEntry.identity entry.identity
+      let muTarget : NodeRequest Symbol Guard := ⟨bodyFirst.1, universeValue, referenceValue⟩
+      let referenceTarget : NodeRequest Symbol Guard := ⟨bodyFirst.1, referenceValue, referenceValue⟩
+      let cutoff : Value Symbol Guard := repeatedValue (pair bodyEntry.identity entry.identity)
+      ∀ row ∈ bodyRows,
+      ∀ (operations : SourceEqualityConstraintMemoAllocation.State)
+        (_operationsValid : SourceEqualityConstraintMemoAllocation.Valid operations) (fuel : Nat),
+      let start : SourceEqualityNativeDemand.State width :=
+        ⟨SourceRecursiveIntersectionThunks.initial width machine, operations⟩
+      InputsThrough fuel (.code (.edge ⟨bodyFirst.1, row, row⟩ .pure)) start →
+      FieldsThrough fuel (.code (.edge ⟨bodyFirst.1, row, row⟩ .pure)) start →
+      Returned (NodeResult muTarget referenceTarget cutoff)
+        (execute fuel (.code (.edge ⟨bodyFirst.1, row, row⟩ .pure)) start).state.native.nodes ∧
+      Returned (EdgeResult muTarget referenceTarget cutoff)
+        (execute fuel (.code (.edge ⟨bodyFirst.1, row, row⟩ .pure)) start).state.native.edges ∧
+      ∀ (count : Nat) (result : EdgeValue Symbol Guard) (after : SourceEqualityNativeDemand.State width),
+        count ≤ fuel → Steps count (.code (.edge ⟨bodyFirst.1, row, row⟩ .pure)) start (.code (.pure result)) after →
+        result.children = row.children.map (input (replacement (.interned entry.identity) cutoff)) ∧
+        result.entry.key = ⟨row.entry.key.symbol,
+          (row.children.map (input (replacement (.interned entry.identity) cutoff))).map Value.referenceOf,
+          SourceEqualityConstraintConstructors.top⟩

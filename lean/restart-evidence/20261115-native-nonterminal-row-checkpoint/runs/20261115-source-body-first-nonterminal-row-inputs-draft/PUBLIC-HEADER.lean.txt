@@ -1,0 +1,31 @@
+theorem current_stored_universe_body_first_nonterminal_row_inputs
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (heap : InternedConstructorTemplates.State Symbol Guard) (facts : Facts heap) (growth : Grows sourceHeap heap)
+    (domains : Cache.State IntersectionFlatMemoKeyDomain.DomainKey) (cacheValid : Cache.Valid domains)
+    (pattern : Value Symbol Guard) (_patternAvailable : Available heap pattern)
+    (_patternClosed : pattern.free = []) (patternId : Nat)
+    (_patternIdentity : identity pattern = some patternId)
+    (_patternKind : tag pattern = 1 ∨ tag pattern = 3) :
+    ∃ (bodyEntry : Interned NodeKey) (bodyRows : List (EdgeValue Symbol Guard)),
+      body = .node bodyEntry bodyRows 0 [.interned entry.identity] ∧
+      let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+      let referenceValue : Value Symbol Guard := .reference (.interned entry.identity)
+      let original := SourceRecursiveIntersectionEnvironment.enter domains IntersectionEmptyDomain.emptyKey
+        universeValue pattern entry.identity patternId
+      let bodyFirst := SourceRecursiveIntersectionEnvironment.enter original.2 original.1.key
+        body universeValue bodyEntry.identity entry.identity
+      let muTarget : NodeRequest Symbol Guard := ⟨bodyFirst.1, universeValue, referenceValue⟩
+      let referenceTarget : NodeRequest Symbol Guard := ⟨bodyFirst.1, referenceValue, referenceValue⟩
+      let cutoff : Value Symbol Guard := repeatedValue (pair bodyEntry.identity entry.identity)
+      ∀ row ∈ bodyRows,
+        All₂ (fun (children : Value Symbol Guard × Value Symbol Guard) (value : Value Symbol Guard) =>
+          KnownResult muTarget referenceTarget cutoff ⟨bodyFirst.1, children.1, children.2⟩ value)
+          (row.children.zip row.children)
+          (row.children.map (input (replacement (.interned entry.identity) cutoff)))
