@@ -1,0 +1,1 @@
+Unfold requestNode or requestEdge in the actual one-step execution equality. Rewrite the existing one-step cache preservation result with that exact equality. Keep all public statements exact. Keep the failed syntax-repair log with no proof credit.

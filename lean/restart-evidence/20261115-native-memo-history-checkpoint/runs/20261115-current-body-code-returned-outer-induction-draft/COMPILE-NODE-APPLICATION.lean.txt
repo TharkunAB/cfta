@@ -1,0 +1,11 @@
+-- Application in the actual outer-node body callback.
+-- actualNodeIH and actualEdgeIH are the genuine smaller-query hypotheses.
+-- This is an expression in the caller context, not a new public theorem.
+SourceCurrentAllocatedNativeBodyCodeReturned.body_code_returned_of_outer_query_induction
+  (fun _ _ => True)
+  (fun request row => request.left.children.length ≠ request.right.children.length →
+    row.children = [.empty])
+  original initial parentFuel actualNodeIH actualEdgeIH
+  (compileNode request) (compileNode_bodyCode request)
+  finalNext before stepsBefore remaining positive bounded origin
+  (by intro handle storedRequest value stored; trivial) returnedMismatch

@@ -1,0 +1,25 @@
+MicroCFTA.SourceCurrentAllocatedNativePrefixInputs.prefix_inputs_before_bind {width : Nat} {A B : Type}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (budget used : Nat) (initial : MicroCFTA.SourceEqualityNativeDemand.Control B)
+  (control : MicroCFTA.SourceEqualityNativeDemand.Control A)
+  (next :
+    A →
+      MicroCFTA.SourceRecursiveIntersectionCode.Code (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) B)
+  (before after : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (physical : MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid before.native)
+  (plan : MicroCFTA.SourceCurrentAllocatedNativePhysicalExecution.InputsThrough budget initial before)
+  (actual : MicroCFTA.SourceEqualityNativeDemand.Steps used initial before (control.bind next) after)
+  (bounded : used ≤ budget) :
+  MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace used initial before (control.bind next) after ∧
+    MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid after.native ∧
+      MicroCFTA.SourceRecursiveIntersectionKernel.Extension before.native.machine after.native.machine ∧
+        MicroCFTA.SourceCurrentAllocatedNativePhysicalExecution.InputsThrough (budget - used) (control.bind next)
+            after ∧
+          MicroCFTA.SourceCurrentAllocatedNativePhysicalExecution.InputsThrough (budget - used) control after
+'MicroCFTA.SourceCurrentAllocatedNativePrefixInputs.prefix_inputs_before_bind' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

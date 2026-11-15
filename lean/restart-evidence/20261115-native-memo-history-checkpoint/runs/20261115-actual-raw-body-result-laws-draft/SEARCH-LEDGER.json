@@ -1,0 +1,54 @@
+{
+  "status": "read-only source audit; no compiler",
+  "searches": [
+    {
+      "question": "closed-self guard order for all shapes",
+      "sources": [
+        "SourceRecursiveIntersectionControl.hasEmpty",
+        "SourceRecursiveIntersectionControl.reset",
+        "SourceRecursiveIntersectionControl.closedSelf",
+        "SourceRecursiveIntersectionControl.decision",
+        "SourceRecursiveIntersectionControl.empty_first",
+        "SourceRecursiveIntersectionControl.reset_first",
+        "SourceRecursiveIntersectionControl.self_first"
+      ],
+      "result": "empty/reset/self exhaust closed full self calls before all payload cases"
+    },
+    {
+      "question": "existing ordinary-only helper",
+      "source": "SourceCurrentAllocatedNativeClosedOrdinarySelfQuery",
+      "result": "query wrapper fixes ordinary payloads; raw helper needed for all Value shapes and same-count reset pure traces"
+    },
+    {
+      "question": "actual empty identity",
+      "source": "InternedEmptyNormalization.reference_empty",
+      "result": "referenceOf empty iff full Value is EmptyNode"
+    },
+    {
+      "question": "raw pure body result",
+      "source": "SourceEqualityNativeDemand.pure_trace",
+      "result": "retains exact original result and reached state without execute.done observation"
+    },
+    {
+      "question": "actual mismatch completion",
+      "source": "SourceEqualityNativeDemandMismatchReceipt.mismatch_body_complete",
+      "result": "three-observation standard sentinel execution retains exact heap and emptyField endpoint"
+    },
+    {
+      "question": "completed-trace result uniqueness",
+      "sources": [
+        "SourceEqualityNativeDemand.trace_done",
+        "SourceEqualityNativeDemand.done_stable"
+      ],
+      "result": "compare actual raw mismatch trace with standard completion without any recursive budget claim"
+    },
+    {
+      "question": "literal sentinel payload",
+      "sources": [
+        "InternedGuardedExecutionLists.makeEdge_fields",
+        "InternedProbeProvenance.empty_available"
+      ],
+      "result": "weak before heap Facts derive the exact EmptyNode child"
+    }
+  ]
+}

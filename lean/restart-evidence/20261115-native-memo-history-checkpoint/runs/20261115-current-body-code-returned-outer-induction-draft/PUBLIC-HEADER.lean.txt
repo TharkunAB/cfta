@@ -1,0 +1,37 @@
+theorem body_code_returned_of_outer_query_induction
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (nodeLaw : NodeRequest Symbol Guard → Value Symbol Guard → Prop)
+    (edgeLaw : EdgeRequest Symbol Guard → EdgeValue Symbol Guard → Prop)
+    (original : Control ParentOutput) (initial : Checked width) (parentFuel : Nat)
+    (nodeQueries : ∀ (request : NodeRequest Symbol Guard)
+      (next : Value Symbol Guard → Code Symbol Guard ParentOutput) (before : Checked width)
+      (stepsBefore childFuel : Nat),
+      0 < stepsBefore → stepsBefore + childFuel ≤ parentFuel → childFuel < parentFuel →
+      Steps stepsBefore original initial
+        (.code ((requestNode request.domain request.left request.right).bind next)) before →
+      Returned nodeLaw before.native.nodes → Returned edgeLaw before.native.edges →
+      Returned nodeLaw (SourceEqualityNativeDemand.execute childFuel
+        (.code (requestNode request.domain request.left request.right)) before).state.native.nodes ∧
+      Returned edgeLaw (SourceEqualityNativeDemand.execute childFuel
+        (.code (requestNode request.domain request.left request.right)) before).state.native.edges)
+    (edgeQueries : ∀ (request : EdgeRequest Symbol Guard)
+      (next : EdgeValue Symbol Guard → Code Symbol Guard ParentOutput) (before : Checked width)
+      (stepsBefore childFuel : Nat),
+      0 < stepsBefore → stepsBefore + childFuel ≤ parentFuel → childFuel < parentFuel →
+      Steps stepsBefore original initial
+        (.code ((requestEdge request.domain request.left request.right).bind next)) before →
+      Returned nodeLaw before.native.nodes → Returned edgeLaw before.native.edges →
+      Returned nodeLaw (SourceEqualityNativeDemand.execute childFuel
+        (.code (requestEdge request.domain request.left request.right)) before).state.native.nodes ∧
+      Returned edgeLaw (SourceEqualityNativeDemand.execute childFuel
+        (.code (requestEdge request.domain request.left request.right)) before).state.native.edges)
+    (code : Code Symbol Guard A) (body : BodyCode code) :
+    ∀ (finalNext : A → Code Symbol Guard ParentOutput) (before : Checked width)
+      (stepsBefore remaining : Nat),
+      0 < stepsBefore → stepsBefore + remaining ≤ parentFuel →
+      Steps stepsBefore original initial (.code (code.bind finalNext)) before →
+      Returned nodeLaw before.native.nodes → Returned edgeLaw before.native.edges →
+      Returned nodeLaw (SourceEqualityNativeDemand.execute remaining
+        (.code code) before).state.native.nodes ∧
+      Returned edgeLaw (SourceEqualityNativeDemand.execute remaining
+        (.code code) before).state.native.edges

@@ -1,0 +1,61 @@
+theorem compile_rows_returned_all_fuels
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (nodeLaw : NodeRequest Symbol Guard → Value Symbol Guard → Prop)
+    (edgeLaw : EdgeRequest Symbol Guard → EdgeValue Symbol Guard → Prop)
+    (parent : NodeRequest Symbol Guard) (original : Checked width) (outerFuel : Nat)
+    (domain : Interned DomainKey) (left right : List (EdgeValue Symbol Guard))
+    (bodyState : Checked width) (bodyFuel : Nat)
+    (finishNext : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard))
+    (entered : Steps 1 (.code (.node parent .pure)) original
+      (.code ((compileRows domain left right).bind finishNext)) bodyState)
+    (smaller : bodyFuel < outerFuel)
+    (nodes : Returned nodeLaw bodyState.native.nodes) (edges : Returned edgeLaw bodyState.native.edges)
+    (children : ∀ stepsBefore childFuel, 0 < stepsBefore →
+      stepsBefore + childFuel ≤ outerFuel → childFuel < outerFuel →
+      ∀ pair ∈ pairs left right,
+      ∀ (next : EdgeValue Symbol Guard → Code Symbol Guard (Value Symbol Guard)) (first : Checked width),
+      Steps stepsBefore (.code (.node parent .pure)) original
+        (.code ((requestEdge domain pair.1 pair.2).bind next)) first →
+      Returned nodeLaw first.native.nodes → Returned edgeLaw first.native.edges →
+      Returned nodeLaw (SourceEqualityNativeDemand.execute childFuel
+        (.code (requestEdge domain pair.1 pair.2)) first).state.native.nodes ∧
+      Returned edgeLaw (SourceEqualityNativeDemand.execute childFuel
+        (.code (requestEdge domain pair.1 pair.2)) first).state.native.edges) :
+    Returned nodeLaw (SourceEqualityNativeDemand.execute bodyFuel
+      (.code (compileRows domain left right)) bodyState).state.native.nodes ∧
+    Returned edgeLaw (SourceEqualityNativeDemand.execute bodyFuel
+      (.code (compileRows domain left right)) bodyState).state.native.edges := by
+
+theorem union_walk_returned_all_fuels
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (nodeLaw : NodeRequest Symbol Guard → Value Symbol Guard → Prop)
+    (edgeLaw : EdgeRequest Symbol Guard → EdgeValue Symbol Guard → Prop)
+    (parent : NodeRequest Symbol Guard) (original : Checked width) (outerFuel : Nat)
+    (domain : Interned DomainKey) (members : List (Value Symbol Guard)) (other : Value Symbol Guard) (onLeft : Bool)
+    (bodyState : Checked width) (bodyFuel : Nat)
+    (finishNext : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard))
+    (entered : Steps 1 (.code (.node parent .pure)) original
+      (.code (((SourceRecursiveIntersectionCode.walk
+        (fun member => if onLeft then requestNode domain member other else requestNode domain other member) members).bind
+        (fun values => .work (makeUnion values) .pure)).bind finishNext)) bodyState)
+    (smaller : bodyFuel < outerFuel)
+    (nodes : Returned nodeLaw bodyState.native.nodes) (edges : Returned edgeLaw bodyState.native.edges)
+    (children : ∀ stepsBefore childFuel, 0 < stepsBefore →
+      stepsBefore + childFuel ≤ outerFuel → childFuel < outerFuel →
+      ∀ member ∈ members,
+      ∀ (next : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard)) (first : Checked width),
+      Steps stepsBefore (.code (.node parent .pure)) original
+        (.code ((if onLeft then requestNode domain member other else requestNode domain other member).bind next)) first →
+      Returned nodeLaw first.native.nodes → Returned edgeLaw first.native.edges →
+      Returned nodeLaw (SourceEqualityNativeDemand.execute childFuel
+        (.code (if onLeft then requestNode domain member other else requestNode domain other member)) first).state.native.nodes ∧
+      Returned edgeLaw (SourceEqualityNativeDemand.execute childFuel
+        (.code (if onLeft then requestNode domain member other else requestNode domain other member)) first).state.native.edges) :
+    Returned nodeLaw (SourceEqualityNativeDemand.execute bodyFuel
+      (.code ((SourceRecursiveIntersectionCode.walk
+        (fun member => if onLeft then requestNode domain member other else requestNode domain other member) members).bind
+        (fun values => .work (makeUnion values) .pure))) bodyState).state.native.nodes ∧
+    Returned edgeLaw (SourceEqualityNativeDemand.execute bodyFuel
+      (.code ((SourceRecursiveIntersectionCode.walk
+        (fun member => if onLeft then requestNode domain member other else requestNode domain other member) members).bind
+        (fun values => .work (makeUnion values) .pure))) bodyState).state.native.edges := by

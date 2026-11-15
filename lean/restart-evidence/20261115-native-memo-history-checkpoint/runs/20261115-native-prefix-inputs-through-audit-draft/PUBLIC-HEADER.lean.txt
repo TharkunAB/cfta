@@ -1,0 +1,12 @@
+theorem prefix_inputs_before_bind
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (budget used : Nat) (initial : Control B) (control : Control A)
+    (next : A → Code Symbol Guard B) (before after : Checked width)
+    (physical : Physical before.native)
+    (plan : InputsThrough budget initial before)
+    (actual : Steps used initial before (control.bind next) after)
+    (bounded : used ≤ budget) :
+    Trace used initial before (control.bind next) after ∧
+    Physical after.native ∧ Extension before.native.machine after.native.machine ∧
+    InputsThrough (budget - used) (control.bind next) after ∧
+    InputsThrough (budget - used) control after

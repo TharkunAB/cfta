@@ -1,0 +1,29 @@
+theorem compile_node_closed_self_trace_result
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (request : NodeRequest Symbol Guard) (original bodyState after : Checked width)
+    (parentFuel bodySteps : Nat) (result : Value Symbol Guard)
+    (finishNext : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard))
+    (entered : Steps 1 (.code (.node request .pure)) original
+      (.code ((compileNode request).bind finishNext)) bodyState)
+    (smaller : bodySteps < parentFuel)
+    (actual : Steps bodySteps (.code (compileNode request)) bodyState (.code (.pure result)) after)
+    (resetChild : ∀ childSteps, childSteps < parentFuel →
+      ∀ (next : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard))
+        (value : Value Symbol Guard) (middle : Checked width),
+      Steps 1 (.code (.node request .pure)) original
+        (.code ((requestNode IntersectionEmptyDomain.emptyDomain request.left request.left).bind next)) bodyState →
+      Steps childSteps (.code (requestNode IntersectionEmptyDomain.emptyDomain request.left request.left))
+        bodyState (.code (.pure value)) middle →
+      request.left.free = [] → value = request.left) :
+    request.right = request.left → request.left.free = [] → result = request.left
+
+theorem mismatch_edge_body_trace_result
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (request : EdgeRequest Symbol Guard) (before after : Checked width) (bodySteps : Nat)
+    (row : EdgeValue Symbol Guard) (physical : Physical before.native)
+    (mismatch : request.left.children.length ≠ request.right.children.length)
+    (actual : Steps bodySteps (.edgeBody request .pure) before (.code (.pure row)) after) :
+    let built := run (makeEdge request.left.entry.key.symbol top [.empty]) before.native.machine.heap
+    row.children = [.empty] ∧ row = built.1 ∧
+      after = ⟨advance before.native {before.native.machine with heap := built.2},
+        SourceEqualityMkEdgeAllocation.emptyField before.operations⟩

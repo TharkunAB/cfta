@@ -1,0 +1,65 @@
+{
+  "status": "UNCOMPILED ALTERNATIVE",
+  "targets": [
+    "MicroCFTA.SourceCurrentAllocatedNativeNodeWalkReturned.compile_rows_returned_all_fuels",
+    "MicroCFTA.SourceCurrentAllocatedNativeNodeWalkReturned.union_walk_returned_all_fuels"
+  ],
+  "cases": [
+    {
+      "case": "first_child_whole_body_budget",
+      "pin": "childFuel may equal bodyFuel; strict descent is only from outerFuel"
+    },
+    {
+      "case": "outer_entry",
+      "pin": "actual Steps 1 includes the original node query, real emitted body and literal finishNext"
+    },
+    {
+      "case": "initial_bound",
+      "pin": "bodyFuel < outerFuel derives 1 + bodyFuel \u2264 outerFuel"
+    },
+    {
+      "case": "lifted_continuation",
+      "pin": "atChild binds the local walk continuation again with the actual outer finishNext"
+    },
+    {
+      "case": "zero_fuel",
+      "pin": "same-budget child IH at fuel zero retains both Returned laws, with strict outer descent supplied by positive prefix"
+    },
+    {
+      "case": "stopped_child",
+      "pin": "bind_endpoint_state_cases keeps the exact endpoint state of the standalone child at remaining fuel"
+    },
+    {
+      "case": "completed_child",
+      "pin": "trace_done at steps + 1 supplies reached Returned laws; this budget may equal remaining"
+    },
+    {
+      "case": "tail_prefix",
+      "pin": "called.bind lifted advances the same outer execution, preserving the real finishNext"
+    },
+    {
+      "case": "tail_budget",
+      "pin": "the suffix uses remaining - steps while the outer prefix grows by steps"
+    },
+    {
+      "case": "work",
+      "pin": "actual makeNode/makeUnion Work preserves both native memo tables at every fuel"
+    },
+    {
+      "case": "row_order",
+      "pin": "compileRows uses literal pairs left right and requestEdge domain pair.1 pair.2"
+    },
+    {
+      "case": "union_order",
+      "pin": "literal members remain in source order; onLeft true/false matches the actual left/right union branch expressions"
+    },
+    {
+      "case": "all_outcomes",
+      "pin": "Outcome.state retains yielded, done, failed, constraintError and blocked endpoints; no completion is fabricated"
+    },
+    {
+      "case": "alternative",
+      "pin": "Root may use the simpler structural BodyCode route; this draft is uncompiled and unselected"
+    }
+  ]
+}
