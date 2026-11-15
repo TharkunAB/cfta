@@ -1,0 +1,69 @@
+theorem current_stored_universe_mixed_ordinary_child_qualification_ordered_entry
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat} {Output : Type}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Node) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Node)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (pattern : Node) (_patternClosed : pattern.free = []) (patternId : Nat)
+    (_patternIdentity : identity pattern = some patternId)
+    (_patternKind : tag pattern = 1 ∨ tag pattern = 3) (universeFirst : Bool)
+    (initial : Control Output) (start entryBefore enteredAfter : Checked width)
+    (startPhysical : Physical start.native)
+    (sourceGrowth : Grows sourceHeap start.native.machine.heap)
+    (entryCount : Nat) (entryNext : Interned DomainKey → Code Symbol Guard Output)
+    (entryPrefix : Trace entryCount initial start
+      (.code (.enter IntersectionEmptyDomain.emptyDomain
+        (if universeFirst then .mu entry body depth ordinary else pattern)
+        (if universeFirst then pattern else .mu entry body depth ordinary)
+        (if universeFirst then entry.identity else patternId)
+        (if universeFirst then patternId else entry.identity) entryNext)) entryBefore) :
+    let universeValue : Node := .mu entry body depth ordinary
+    let entered := SourceRecursiveIntersectionEnvironment.enter entryBefore.native.machine.domains
+      IntersectionEmptyDomain.emptyKey universeValue pattern entry.identity patternId
+    Trace 1 (.code (.enter IntersectionEmptyDomain.emptyDomain
+      (if universeFirst then universeValue else pattern)
+      (if universeFirst then pattern else universeValue)
+      (if universeFirst then entry.identity else patternId)
+      (if universeFirst then patternId else entry.identity) entryNext)) entryBefore
+      (.code (entryNext entered.1)) enteredAfter →
+    Available entryBefore.native.machine.heap pattern ∧ Domain enteredAfter.native.machine entered.1 ∧
+    entered.1.key.free.isEmpty = false ∧
+    ∃ (bodyEntry : Interned NodeKey) (bodyRows : List (EdgeValue Symbol Guard)) (marker : Node),
+      body = .node bodyEntry bodyRows 0 [.interned entry.identity] ∧
+      marker.free = [] ∧ InternedBoundaryAtoms.atoms marker = [] ∧
+      ∀ (reader : Checked width), Physical reader.native →
+      ∀ (operandEntry : Interned NodeKey) (operandRows : List (EdgeValue Symbol Guard))
+        (operandDepth : Nat) (operandFree : List Reference),
+        let operand : Node := .node operandEntry operandRows operandDepth operandFree
+        Available reader.native.machine.heap operand → Profile entry.identity operand →
+        height operand ≤ height pattern →
+        ∀ bodyFirst : Bool,
+        let leftRows := if bodyFirst then bodyRows else operandRows
+        let rightRows := if bodyFirst then operandRows else bodyRows
+        ∀ rowPair : EdgeValue Symbol Guard × EdgeValue Symbol Guard,
+        rowPair ∈ SourceRecursiveIntersectionKernel.pairs leftRows rightRows →
+        let inputs := rowPair.1.children.zip rowPair.2.children
+        let qualified := fun children : Node × Node =>
+          let sourceChild := if bodyFirst then children.1 else children.2
+          let operandChild := if bodyFirst then children.2 else children.1
+          (sourceChild = .reference (.interned entry.identity) ∨ sourceChild = marker) ∧
+          Profile entry.identity operandChild ∧ height operandChild < height pattern ∧
+          ((Profile entry.identity children.1 ∧ Profile entry.identity children.2) ∨
+            (children.1 = .reference (.interned entry.identity) ∧
+              Profile entry.identity children.2 ∧ height children.2 < height pattern) ∨
+            (children.2 = .reference (.interned entry.identity) ∧
+              Profile entry.identity children.1 ∧ height children.1 < height pattern))
+        (∀ children ∈ inputs, qualified children) ∧
+        ∀ (count : Nat) (after : Checked width) (values : List Node),
+          Trace count (.code (walk (fun children : Node × Node =>
+            requestNode entered.1 children.1 children.2) inputs)) reader (.code (.pure values)) after →
+          Language.All₂ (fun children value => qualified children ∧
+            ∃ (childCount : Nat) (beforeChild afterChild : Checked width),
+              Trace childCount (.code (requestNode entered.1 children.1 children.2)) beforeChild
+                (.code (.pure value)) afterChild ∧
+              Domain beforeChild.native.machine entered.1 ∧
+              Available beforeChild.native.machine.heap children.1 ∧
+              Available beforeChild.native.machine.heap children.2) inputs values := by

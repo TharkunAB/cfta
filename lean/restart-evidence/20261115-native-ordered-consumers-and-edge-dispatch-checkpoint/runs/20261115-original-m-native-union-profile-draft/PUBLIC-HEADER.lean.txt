@@ -1,0 +1,124 @@
+import MicroCFTA.SourceCurrentAllocatedNativeClosedResetProfile
+import MicroCFTA.SourceCurrentHereditaryNativePhysicalSplit
+import MicroCFTA.SourceSynthesisCurrentUniverseBodyChildClassification
+import MicroCFTA.SourceSynthesisUniverseMixedDescendantFreshness
+import MicroCFTA.SourceEqualityNativeDemandWalkExecution
+import MicroCFTA.MergedColdReaderClosedInputs
+
+namespace MicroCFTA.SourceCurrentAllocatedNativeMixedUnionProfile
+open Cache Language InternedConstructorTemplates InternedNestedFacts InternedProbeProvenance
+open InternedBinderProtocol (NodeKey Reference)
+open SourceRecursiveIntersectionControl SourceRecursiveIntersectionDomain
+open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionThunks SourceRecursiveIntersectionCode
+open SourceSynthesisUniversePrefixHeight (height)
+open SourceSynthesisTypeSyntax (Library Query)
+open SourceSynthesisGeneralizeSyntax (Guard)
+open SourceSynthesisFirstOrderConstruction (Expression)
+open SourceEqualityNativeDemand
+open SourceCurrentAllocatedNativePhysicalTraceCompletion (Trace)
+open SourceCurrentAllocatedNativePhysicalExecution (Inputs InputsThrough)
+open SourceEqualityNativeDemandOperations (FieldsThrough)
+open SourceCurrentAllocatedNativeClosedResetProfile (Profile)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Node" => Value Symbol Guard
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "Physical" => SourceCurrentAllocatedNativePhysicalCache.Valid
+local notation "DomainKey" => IntersectionFlatMemoKeyDomain.DomainKey
+local notation "ordinarySymbols" => SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+
+set_option autoImplicit false
+
+/-- Original mixed union bodies retain both authentic entry orders and all ordered member calls. -/
+theorem current_stored_universe_mixed_union_body_profile_of_fuel_induction
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat} {Output : Type}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Node) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Node)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (pattern : Node) (patternClosed : pattern.free = []) (patternId : Nat)
+    (patternIdentity : identity pattern = some patternId)
+    (_patternKind : tag pattern = 1 ∨ tag pattern = 3)
+    (unionEntry : Interned NodeKey) (members : List Node) (level : Nat) (free : List Reference)
+    (unionProfile : Profile entry.identity (.union unionEntry members level free))
+    (unionBound : height (.union unionEntry members level free) ≤ height pattern)
+    (useReference aliasFirst entryUniverseFirst : Bool)
+    (referenceBound : useReference = true → height (.union unionEntry members level free) < height pattern)
+    (initial : Control Output) (start entryBefore original before reader : Checked width)
+    (startPhysical : Physical start.native) (sourceGrowth : Grows sourceHeap start.native.machine.heap)
+    (wholeCount entryCount queryCount : Nat) (final : Control Output)
+    (wholeActual : Trace wholeCount initial start final reader)
+    (entryStrict : entryCount < wholeCount)
+    (entryNext : Interned DomainKey → Code Symbol Guard Output)
+    (entryPrefix : Steps entryCount initial start
+      (.code (.enter IntersectionEmptyDomain.emptyDomain
+        (if entryUniverseFirst then .mu entry body depth ordinary else pattern)
+        (if entryUniverseFirst then pattern else .mu entry body depth ordinary)
+        (if entryUniverseFirst then entry.identity else patternId)
+        (if entryUniverseFirst then patternId else entry.identity) entryNext)) entryBefore) :
+    let universeValue : Node := .mu entry body depth ordinary
+    let entryLeft : Node := if entryUniverseFirst then universeValue else pattern
+    let entryRight : Node := if entryUniverseFirst then pattern else universeValue
+    let firstId := if entryUniverseFirst then entry.identity else patternId
+    let secondId := if entryUniverseFirst then patternId else entry.identity
+    let entered := SourceRecursiveIntersectionEnvironment.enter entryBefore.native.machine.domains
+      IntersectionEmptyDomain.emptyKey entryLeft entryRight firstId secondId
+    let alias : Node := if useReference then .reference (.interned entry.identity) else body
+    let operand : Node := .union unionEntry members level free
+    let request : NodeRequest Symbol Guard := ⟨entered.1,
+      if aliasFirst then alias else operand, if aliasFirst then operand else alias⟩
+    ∀ (outerNext : Node → Code Symbol Guard Output),
+    Steps queryCount initial start
+      (.code ((requestNode request.domain request.left request.right).bind outerNext)) original →
+    ∀ (parentFuel bodySteps : Nat) (result : Node) (after : Checked width)
+      (finishNext : Node → Code Symbol Guard Node),
+    SourceEqualityConstraintMemoAllocation.Valid original.operations →
+    InputsThrough parentFuel (.code (.node request .pure)) original →
+    FieldsThrough parentFuel (.code (.node request .pure)) original →
+    Steps 1 (.code (.node request .pure)) original
+      (.code ((compileNode request).bind finishNext)) before →
+    bodySteps < parentFuel → queryCount + 1 + bodySteps ≤ wholeCount →
+    Steps bodySteps (.code (compileNode request)) before (.code (.pure result)) after →
+    (∀ (closedOperand : Node) (child : NodeRequest Symbol Guard) (used childFuel childCount : Nat),
+      0 < used → childFuel < parentFuel → used + childFuel ≤ parentFuel →
+      childCount ≤ childFuel → used + childCount ≤ bodySteps + 1 →
+      child.domain = entered.1 → Profile entry.identity closedOperand →
+      height closedOperand ≤ height pattern →
+      (alias = .reference (.interned entry.identity) → height closedOperand < height pattern) →
+      ((child.left = alias ∧ child.right = closedOperand) ∨
+        (child.left = closedOperand ∧ child.right = alias)) →
+      ∀ (next : Node → Code Symbol Guard Node) (first last : Checked width) (value : Node),
+      Steps used (.code (.node request .pure)) original
+        (.code ((requestNode child.domain child.left child.right).bind next)) first →
+      Physical first.native → Grows sourceHeap first.native.machine.heap →
+      SourceEqualityConstraintMemoAllocation.Valid first.operations →
+      InputsThrough childFuel (.code (requestNode child.domain child.left child.right)) first →
+      FieldsThrough childFuel (.code (requestNode child.domain child.left child.right)) first →
+      Available first.native.machine.heap child.left → Available first.native.machine.heap child.right →
+      Steps childCount (.code (requestNode child.domain child.left child.right)) first
+        (.code (.pure value)) last → Profile entry.identity value) →
+    Profile entry.identity result ∧ Available after.native.machine.heap result ∧ Physical after.native ∧
+    Extension original.native.machine after.native.machine ∧ Grows sourceHeap after.native.machine.heap ∧
+    SourceEqualityConstraintMemoAllocation.Valid after.operations ∧
+    SourceEqualityConstraintMemoAllocation.Grows original.operations after.operations ∧
+    (∀ member ∈ members, Profile entry.identity member ∧ height member < height pattern) ∧
+    decision entered.1.key alias operand = (if useReference then .swap else .rightUnion) ∧
+    decision entered.1.key operand alias = (if useReference then .leftUnion else .swap) ∧
+    ((compileNode request = requestNode entered.1 request.right request.left ∧
+        Steps bodySteps (.code (requestNode entered.1 request.right request.left)) before
+          (.code (.pure result)) after) ∨
+      ∃ (values : List Node) (middle : Checked width) (walkCount : Nat),
+        bodySteps = walkCount + 1 ∧
+        SourceEqualityNativeDemandWalkExecution.Walk (fun member : Node =>
+          requestNode entered.1 (if aliasFirst then alias else member) (if aliasFirst then member else alias))
+          members before values middle walkCount ∧
+        All₂ (fun _ value => Profile entry.identity value) members values ∧
+        (∀ value ∈ values, Available middle.native.machine.heap value) ∧
+        Steps walkCount (.code (compileNode request)) before
+          (.code (.work (makeUnion values) .pure)) middle ∧
+        Steps 1 (.code (.work (makeUnion values) .pure)) middle (.code (.pure result)) after ∧
+        result = (run (makeUnion values) middle.native.machine.heap).1 ∧
+        after = {middle with native := advance middle.native {middle.native.machine with heap :=
+          (run (makeUnion values) middle.native.machine.heap).2}})

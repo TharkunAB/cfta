@@ -1,0 +1,160 @@
+  dsimp only
+  have initialPhysical : SourceCurrentAllocatedNativePhysicalCache.Valid (initial width machine) :=
+    SourceCurrentAllocatedNativePhysicalCache.initial_valid machine machineValid
+  obtain ⟨bodyEntry, marker, arrow, sourceRows, bodyEq, _bodyAvailable, _markerShape,
+      _arrowChildren, _arrowKey, _catalog, _markerClosed, _markerAvailable, _markerAtoms,
+      _rowKinds, _arrowRetained⟩ :=
+    SourceSynthesisCurrentUniverseBodyChildClassification.current_stored_universe_body_physical_children_after_growth
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      machine.heap machineValid.1 sourceGrowth
+  have bodyCodec : ∃ input, IntersectionFlatMemoKey.input body.referenceOf = some input := by
+    rw [bodyEq]
+    exact ⟨.node bodyEntry.identity, rfl⟩
+  have bodyOpen : body.free ≠ [] := by
+    rw [bodyEq]
+    simp only [Value.free, List.cons_ne_self]
+  let nodeLaw := HistoryNodeResult (width := width) rootRequest machine operations count
+    entry body depth ordinary bodyEntry.identity
+  let edgeLaw := HistoryEdgeResult (width := width) rootRequest machine operations count
+    entry body depth ordinary bodyEntry.identity
+  have history :
+      (Returned nodeLaw after.native.nodes ∧ Returned edgeLaw after.native.edges) ∧
+        ∀ (used : Nat) (currentControl : Control (Value Symbol Guard)) (current : Checked width),
+          used ≤ count →
+          Trace used (.code (.node rootRequest .pure))
+            (⟨initial width machine, operations⟩ : Checked width) currentControl current →
+          Returned nodeLaw current.native.nodes ∧ Returned edgeLaw current.native.edges := by
+    apply SourceCurrentAllocatedNativeActualPrefixReturnedInduction.returned_at_every_actual_prefix
+      nodeLaw edgeLaw rootRequest machine machineValid operations fuel count rest after bounded actual
+    · intro finishUsed dispatchUsed bodyCount handle request value beforeBody beforeFinish resume
+        smaller total positive original entered _beforeOwner bodyTrace finishOwner nodes edges
+      have past :
+          Returned (NodeResult (width := width) rootRequest machine operations count entry body depth ordinary)
+            beforeFinish.native.nodes ∧
+          Returned (EdgeResult (width := width) rootRequest machine operations count entry body depth ordinary)
+            beforeFinish.native.edges :=
+        ⟨fun handle request value stored => (nodes handle request value stored).1,
+          fun handle request value stored => (edges handle request value stored).1⟩
+      obtain ⟨queryUsed, queryBodyCount, queryBefore, queryBodyBefore, queryResume,
+          queryTotal, _querySmaller, queryFuelBound, queryPrefix, _actualDispatch,
+          isolatedDispatch, _queryPhysical, queryReady, querySafe, queryOwner,
+          queryBodyTrace, queryRest⟩ :=
+        SourceCurrentAllocatedNativeNodeQueryDispatchOrigin.actual_node_query_dispatch_from_initial_query_finish
+          rootRequest machine machineValid operations fuel finishUsed handle request value (resume value)
+          beforeFinish (by omega) original finishOwner
+      have queryOrigin : Steps queryUsed (.code (.node rootRequest .pure))
+          (⟨initial width machine, operations⟩ : Checked width)
+          ((.code (.node request .pure)).bind queryResume) queryBefore := by
+        simpa only [Control.bind, Code.bind] using queryPrefix.steps
+      obtain ⟨_checkedQuery, _queryPhysicalAgain, _queryExtension, queryGrowth, queryOperations,
+          _queryOperationsGrowth, _boundInputs, queryInputs, _boundFields, queryFields⟩ :=
+        SourceCurrentAllocatedNativePrefixOperations.prefix_operations_before_bind
+          fuel queryUsed (.code (.node rootRequest .pure)) (.code (.node request .pure)) queryResume
+          (⟨initial width machine, operations⟩ : Checked width) queryBefore sourceHeap
+          initialPhysical inputs fields operationsValid sourceGrowth queryOrigin (by omega)
+      have queryBodyBound : queryBodyCount < fuel - queryUsed := by omega
+      constructor
+      · constructor
+        · intro qualified
+          cases selected : SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right with
+          | empty =>
+            have compiled : compileNode request = .pure .empty := by simp only [compileNode, selected]
+            rw [compiled] at bodyTrace
+            have pure := pure_trace bodyCount (.empty : Value Symbol Guard) value beforeBody beforeFinish bodyTrace
+            rw [← pure.2.1]
+            exact profile_empty _
+          | reset =>
+            apply closed_forward_at_node_finish rootRequest machine machineValid operations count fuel
+              finishUsed dispatchUsed bodyCount entry body depth ordinary handle request value beforeBody beforeFinish
+              resume (by omega) total original entered bodyTrace past
+              ⟨IntersectionEmptyDomain.emptyDomain, request.left, request.right⟩
+            · exact ⟨qualified.1, qualified.2.1, Or.inl rfl⟩
+            · simp only [compileNode, selected]
+          | self =>
+            have compiled : compileNode request = .pure request.left := by simp only [compileNode, selected]
+            rw [compiled] at bodyTrace
+            have pure := pure_trace bodyCount request.left value beforeBody beforeFinish bodyTrace
+            rw [← pure.2.1]
+            exact qualified.1
+          | swap =>
+            apply closed_forward_at_node_finish rootRequest machine machineValid operations count fuel
+              finishUsed dispatchUsed bodyCount entry body depth ordinary handle request value beforeBody beforeFinish
+              resume (by omega) total original entered bodyTrace past
+              ⟨request.domain, request.right, request.left⟩
+            · exact ⟨qualified.2.1, qualified.1, qualified.2.2⟩
+            · simp only [compileNode, selected]
+          | repeated key => exact (closed_no_repeated entry.identity request qualified key selected).elim
+          | unsupported =>
+            apply (failed_body_impossible bodyCount
+              (.unsupported request.left.referenceOf request.right.referenceOf) beforeBody beforeFinish value ?_).elim
+            simpa only [compileNode, selected, SourceRecursiveIntersectionCode.unsupported] using bodyTrace
+          | bothMu =>
+            /- UNPROVED. Use the authentic dispatch receipt and the ordered C-Mu producer.
+            Its actual enter event must construct this fixed history's AuthenticEntry.
+            The child's M law comes from the past cache at this same parent finish. -/
+            skip
+          | leftMu =>
+            /- UNPROVED. Same ordered C-Mu argument. -/
+            skip
+          | rightMu =>
+            /- UNPROVED. Preserve the real reverse entry and full allocation equality. -/
+            skip
+          | leftUnion =>
+            /- UNPROVED. Lift the literal member calls to this original root prefix.
+            Use the same parent finish's cache law for every original member call. -/
+            skip
+          | rightUnion =>
+            /- UNPROVED. Same member argument in the actual operand order. -/
+            skip
+          | leftReference =>
+            /- UNPROVED IMPOSSIBILITY. A reference has a nonempty free-name list. -/
+            skip
+          | rightReference =>
+            /- UNPROVED IMPOSSIBILITY. A reference has a nonempty free-name list. -/
+            skip
+          | ordinary =>
+            /- UNPROVED. Actual ordered edge callbacks use the same-prefix edge bridge.
+            The closed child qualification follows from the actual available operands. -/
+            skip
+        · intro qualified
+          /- UNPROVED. Apply the actual M control case using the original full
+          pattern and common reader. B/U and R/U select the past auxiliary
+          clauses. No open child is asserted to have Profile. -/
+          skip
+      · constructor
+        · /- UNPROVED. The unconditional pure and closed-self result clauses
+          use this actual dispatch and the same parent finish's past cache. -/
+          skip
+        · intro pattern patternId domain authentic
+          /- UNPROVED. Derive source selectors and pair freshness from the real
+          entry suffix and producer suffix into the common reader. Reuse the
+          existing raw auxiliary producers with the stronger past laws. Do not
+          import an initial P-availability premise from a selected history. -/
+          skip
+    · intro finishUsed dispatchUsed bodyCount handle request row beforeBody beforeFinish resume
+        smaller total positive original entered _beforeOwner bodyTrace _finishOwner nodes edges
+      constructor
+      · intro qualified
+        /- UNPROVED. Sentinel branches need no child law. An accepted body uses
+        actual zipped calls and keyed_child_law_at_edge_finish. Each callback
+        selects the original pair's C or M clause. The raw edge profile helper
+        needs its authentic preceding edge query dispatch. -/
+        skip
+      · constructor
+        · /- UNPROVED. Retain mismatch and exact Top row results. The node
+          history supplies unconditional pure/self clauses at this finish. -/
+          skip
+        · intro pattern patternId domain authentic
+          /- UNPROVED. Retain actual body-first reference row results at the
+          literal selected key. Children use the same fixed-history node law. -/
+          skip
+  constructor
+  · constructor
+    · intro handle request value stored
+      exact (history.1.1 handle request value stored).1
+    · intro handle request value stored
+      exact (history.1.2 handle request value stored).1
+  · intro used currentControl current within currentTrace
+    have currentLaws := history.2 used currentControl current within currentTrace
+    exact ⟨fun handle request value stored => (currentLaws.1 handle request value stored).1,
+      fun handle request value stored => (currentLaws.2 handle request value stored).1⟩

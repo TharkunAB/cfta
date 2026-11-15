@@ -1,0 +1,84 @@
+  dsimp only
+  apply SourceCurrentAllocatedNativeActualPrefixReturnedInduction.returned_at_every_actual_prefix
+    (NodeResult (width := width) rootRequest machine operations count entry body depth ordinary)
+    (EdgeResult (width := width) rootRequest machine operations count entry body depth ordinary)
+    rootRequest machine machineValid operations fuel count rest after bounded actual
+  · intro finishUsed dispatchUsed bodyCount handle request value beforeBody beforeFinish resume
+      smaller total positive original entered _beforeOwner bodyTrace _finishOwner nodes edges
+    have past := And.intro nodes edges
+    constructor
+    · intro qualified
+      cases selected : SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right with
+      | empty =>
+        have compiled : compileNode request = .pure .empty := by simp only [compileNode, selected]
+        rw [compiled] at bodyTrace
+        have pure := pure_trace bodyCount (.empty : Value Symbol Guard) value beforeBody beforeFinish bodyTrace
+        rw [← pure.2.1]
+        exact profile_empty _
+      | reset =>
+        apply closed_forward_at_node_finish rootRequest machine machineValid operations count fuel
+          finishUsed dispatchUsed bodyCount entry body depth ordinary handle request value beforeBody beforeFinish
+          resume (by omega) total original entered bodyTrace past
+          ⟨IntersectionEmptyDomain.emptyDomain, request.left, request.right⟩
+        · exact ⟨qualified.1, qualified.2.1, Or.inl rfl⟩
+        · simp only [compileNode, selected]
+      | self =>
+        have compiled : compileNode request = .pure request.left := by simp only [compileNode, selected]
+        rw [compiled] at bodyTrace
+        have pure := pure_trace bodyCount request.left value beforeBody beforeFinish bodyTrace
+        rw [← pure.2.1]
+        exact qualified.1
+      | swap =>
+        apply closed_forward_at_node_finish rootRequest machine machineValid operations count fuel
+          finishUsed dispatchUsed bodyCount entry body depth ordinary handle request value beforeBody beforeFinish
+          resume (by omega) total original entered bodyTrace past
+          ⟨request.domain, request.right, request.left⟩
+        · exact ⟨qualified.2.1, qualified.1, qualified.2.2⟩
+        · simp only [compileNode, selected]
+      | repeated key => exact (closed_no_repeated entry.identity request qualified key selected).elim
+      | unsupported =>
+        apply (failed_body_impossible bodyCount
+          (.unsupported request.left.referenceOf request.right.referenceOf) beforeBody beforeFinish value ?_).elim
+        simpa only [compileNode, selected, SourceRecursiveIntersectionCode.unsupported] using bodyTrace
+      | bothMu =>
+        /- UNPROVED. Use the authentic dispatch receipt and the ordered C-Mu producer.
+        Its actual enter event must construct this fixed history's AuthenticEntry.
+        The child's M law comes from the past cache at this same parent finish. -/
+        skip
+      | leftMu =>
+        /- UNPROVED. Same ordered C-Mu argument. -/
+        skip
+      | rightMu =>
+        /- UNPROVED. Preserve the real reverse entry and full allocation equality. -/
+        skip
+      | leftUnion =>
+        /- UNPROVED. Lift the literal member calls to this original root prefix.
+        Use the same parent finish's cache law for every original member call. -/
+        skip
+      | rightUnion =>
+        /- UNPROVED. Same member argument in the actual operand order. -/
+        skip
+      | leftReference =>
+        /- UNPROVED IMPOSSIBILITY. A reference has a nonempty free-name list. -/
+        skip
+      | rightReference =>
+        /- UNPROVED IMPOSSIBILITY. A reference has a nonempty free-name list. -/
+        skip
+      | ordinary =>
+        /- UNPROVED. Actual ordered edge callbacks use the same-prefix edge bridge.
+        The closed child qualification follows from the actual available operands. -/
+        skip
+    · intro qualified
+      /- UNPROVED. C/M alone does not close this goal. For example, B/U can call
+      an open B/B query. The internal history invariant must also retain the
+      coherent open-body product and cutoff laws, indexed by actual entries.
+      The public target remains the C/M projection. Do not assume these laws. -/
+      skip
+  · intro finishUsed dispatchUsed bodyCount handle request row beforeBody beforeFinish resume
+      smaller total positive original entered _beforeOwner bodyTrace _finishOwner nodes edges
+    intro qualified
+    /- UNPROVED. Sentinel branches need no child law. An accepted body uses
+    the actual zipped child calls and keyed_child_law_at_edge_finish. Each
+    callback selects the original zipped pair's C or M clause. The current
+    raw edge profile helper needs its authentic preceding edge query dispatch. -/
+    skip

@@ -1,0 +1,1 @@
+UNCOMPILED. Initial frozen definitions and header. The native word width is an implicit parameter of the qualification definitions. It does not occur in their result type. The next packet adds explicit named width arguments at every application. This packet is preserved without proof credit.

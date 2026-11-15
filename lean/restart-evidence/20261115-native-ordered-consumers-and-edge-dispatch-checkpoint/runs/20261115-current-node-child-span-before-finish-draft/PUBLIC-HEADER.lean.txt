@@ -1,0 +1,40 @@
+theorem completed_node_child_span_before_parent_finish
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat} {Output : Type}
+    (initial : Control Output) (outside : Node → Code Symbol Guard Output)
+    (parent child : NodeRequest Symbol Guard) (owner : Nat)
+    (start queryBefore beforeBody beforeFinish childBefore childAfter : Checked width)
+    (parentFuel bodyCount queryUsed childUsed childCount : Nat) (parentValue childValue : Node)
+    (childNext : Node → Code Symbol Guard Node)
+    (bodyShape : SourceRecursiveIntersectionNative.Shape beforeBody.native)
+    (running : beforeBody.native.nodes.cells owner = some ⟨parent, .evaluating⟩)
+    (bodyBound : bodyCount < parentFuel)
+    (whole : Trace (queryUsed + 1 + bodyCount) initial start
+      (.code (.finishNode owner parentValue (outside parentValue))) beforeFinish)
+    (queryPrefix : Steps queryUsed initial start
+      ((.code (.node parent .pure) : Control Node).bind outside) queryBefore)
+    (dispatched : Steps 1 (.code (.node parent .pure)) queryBefore
+      ((.code (compileNode parent) : Control Node).bind
+        (fun value => .finishNode owner value (.pure value))) beforeBody)
+    (bodyActual : Steps bodyCount (.code (compileNode parent)) beforeBody
+      (.code (.pure parentValue)) beforeFinish)
+    (positive : 0 < childUsed)
+    (childPrefix : Steps childUsed (.code (.node parent .pure)) queryBefore
+      ((.code (requestNode child.domain child.left child.right) : Control Node).bind childNext) childBefore)
+    (childActual : Steps childCount (.code (requestNode child.domain child.left child.right)) childBefore
+      (.code (.pure childValue)) childAfter) :
+    childUsed + childCount ≤ 1 + bodyCount ∧
+    queryUsed + childUsed + childCount ≤ queryUsed + 1 + bodyCount ∧
+    childUsed + childCount ≤ parentFuel ∧
+    beforeFinish.native.nodes.cells owner = some ⟨parent, .evaluating⟩ ∧
+    (SourceRecursiveIntersectionThunks.finishNode owner parentValue beforeFinish.native).nodes.cells owner =
+      some ⟨parent, .returned parentValue⟩ ∧
+    Trace (queryUsed + childUsed) initial start
+      (.code ((requestNode child.domain child.left child.right).bind
+        (fun value => (childNext value).bind outside))) childBefore ∧
+    Trace childCount (.code (requestNode child.domain child.left child.right)) childBefore
+      (.code (.pure childValue)) childAfter ∧
+    Trace (queryUsed + childUsed + childCount) initial start
+      (.code ((childNext childValue).bind outside)) childAfter ∧
+    Trace (queryUsed + 1 + bodyCount - (queryUsed + childUsed + childCount))
+      (.code ((childNext childValue).bind outside)) childAfter
+      (.code (.finishNode owner parentValue (outside parentValue))) beforeFinish := by

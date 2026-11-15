@@ -1,0 +1,199 @@
+private theorem through_head
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (fuel : Nat) (control : Control Node) (state : Checked width)
+    (plan : InputsThrough fuel control state) : Inputs control state := by
+  cases fuel with
+  | zero => exact plan
+  | succ fuel => exact plan.1
+
+private theorem profiles_of_all_two {members values : List Node} (sourceName : Nat)
+    (aligned : All₂ (fun _ value => Profile sourceName value) members values) :
+    ∀ value ∈ values, Profile sourceName value := by
+  induction aligned with
+  | nil => intro value member; cases member
+  | cons head tail ih =>
+      intro value member
+      cases member with
+      | head => exact head
+      | tail _ member => exact ih value member
+
+private theorem physical_identity_apart_owner
+    (heap : InternedConstructorTemplates.State Symbol Guard) (facts : Facts heap)
+    (entry : Interned NodeKey) (body depth ordinary : Node)
+    (ownerAvailable : Available heap (.mu entry body depth ordinary))
+    (value : Node) (available : Available heap value)
+    (valueId : Nat) (valueIdentity : SourcePreparedSharedRows.reference value = some valueId)
+    (different : value ≠ .mu entry body depth ordinary) : valueId ≠ entry.identity := by
+  intro same
+  have actualIdentity : SourcePreparedSharedRows.reference value = some entry.identity :=
+    valueIdentity.trans (congrArg some same)
+  have actualRead := SourcePreparedSharedRows.read_identity heap facts value available entry.identity actualIdentity
+  have ownerRead := SourcePreparedSharedRows.read_identity heap facts
+    (.mu entry body depth ordinary) ownerAvailable entry.identity rfl
+  exact different (Option.some.inj (actualRead.symm.trans ownerRead))
+
+private theorem pair_apart_owner (left right owner pattern : Nat)
+    (leftApart : left ≠ owner) (rightApart : right ≠ owner) :
+    pair left right ≠ pair owner pattern := by
+  intro same
+  have lower := congrArg Prod.fst same
+  have upper := congrArg Prod.snd same
+  simp only [pair] at lower upper
+  omega
+
+private theorem body_union_branches
+    (domain : Interned DomainKey) (ownerId : Nat)
+    (bodyEntry : Interned NodeKey) (bodyRows : List (EdgeValue Symbol Guard))
+    (unionEntry : Interned NodeKey) (members : List Node) (level : Nat) (free : List Reference)
+    (fresh : pair bodyEntry.identity unionEntry.identity ∉ domain.key.seen) :
+    decision domain.key (.node bodyEntry bodyRows 0 [.interned ownerId])
+        (.union unionEntry members level free) = .rightUnion ∧
+      decision domain.key (.union unionEntry members level free)
+        (.node bodyEntry bodyRows 0 [.interned ownerId]) = .swap := by
+  have forwardOrder : compare (1 : Nat) 3 = .lt := by decide
+  have reverseOrder : compare (3 : Nat) 1 = .gt := by decide
+  constructor
+  · simp [decision, hasEmpty, reset, closedSelf, greater, compareValue, tag, identity, payload,
+      Value.referenceOf, Value.free, fresh, forwardOrder]
+  · simp [decision, hasEmpty, reset, closedSelf, greater, compareValue, tag,
+      Value.referenceOf, Value.free, reverseOrder]
+
+private theorem reference_union_branches
+    (domain : Interned DomainKey) (ownerId : Nat)
+    (unionEntry : Interned NodeKey) (members : List Node) (level : Nat) (free : List Reference)
+    (fresh : pair unionEntry.identity ownerId ∉ domain.key.seen) :
+    decision domain.key (.reference (.interned ownerId)) (.union unionEntry members level free) = .swap ∧
+      decision domain.key (.union unionEntry members level free) (.reference (.interned ownerId)) = .leftUnion := by
+  have forwardOrder : compare (4 : Nat) 3 = .gt := by decide
+  have reverseOrder : compare (3 : Nat) 4 = .lt := by decide
+  constructor
+  · simp [decision, hasEmpty, reset, closedSelf, greater, compareValue, tag,
+      Value.referenceOf, Value.free, forwardOrder]
+  · simp [decision, hasEmpty, reset, closedSelf, greater, compareValue, tag, identity, payload,
+      Value.referenceOf, Value.free, fresh, reverseOrder]
+
+private theorem union_code
+    [DecidableEq Symbol]
+    (domain : Interned DomainKey) (entry : Interned NodeKey) (members : List Node)
+    (level : Nat) (free : List Reference) (alias : Node) (aliasFirst : Bool)
+    (selected : decision domain.key (if aliasFirst then alias else .union entry members level free)
+      (if aliasFirst then .union entry members level free else alias) =
+        (if aliasFirst then .rightUnion else .leftUnion)) :
+    compileNode ⟨domain, if aliasFirst then alias else .union entry members level free,
+      if aliasFirst then .union entry members level free else alias⟩ =
+      (SourceRecursiveIntersectionCode.walk (fun member : Node =>
+        requestNode domain (if aliasFirst then alias else member) (if aliasFirst then member else alias)) members).bind
+        (fun values => .work (makeUnion values) .pure) := by
+  cases aliasFirst with
+  | false =>
+      change decision domain.key (.union entry members level free) alias = .leftUnion at selected
+      change compileNode ⟨domain, .union entry members level free, alias⟩ =
+        (SourceRecursiveIntersectionCode.walk (fun member : Node => requestNode domain member alias) members).bind
+          (fun values => .work (makeUnion values) .pure)
+      simp only [compileNode, selected]
+  | true =>
+      change decision domain.key alias (.union entry members level free) = .rightUnion at selected
+      change compileNode ⟨domain, alias, .union entry members level free⟩ =
+        (SourceRecursiveIntersectionCode.walk (fun member : Node => requestNode domain alias member) members).bind
+          (fun values => .work (makeUnion values) .pure)
+      simp only [compileNode, selected]
+
+private theorem swap_code [DecidableEq Symbol] (request : NodeRequest Symbol Guard)
+    (selected : decision request.domain.key request.left request.right = .swap) :
+    compileNode request = requestNode request.domain request.right request.left := by
+  simp only [compileNode, selected]
+
+private theorem walk_profiles
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (sourceHeap : InternedConstructorTemplates.State Symbol Guard) (sourceName : Nat)
+    (pattern alias : Node) (request : NodeRequest Symbol Guard) (original : Checked width)
+    (parentFuel bodySteps : Nat) (physicalOriginal : Physical original.native)
+    (sourceGrowth : Grows sourceHeap original.native.machine.heap)
+    (operationsValid : SourceEqualityConstraintMemoAllocation.Valid original.operations)
+    (plan : InputsThrough parentFuel (.code (.node request .pure)) original)
+    (fields : FieldsThrough parentFuel (.code (.node request .pure)) original)
+    (children : ∀ (closedOperand : Node) (child : NodeRequest Symbol Guard) (used childFuel childCount : Nat),
+      0 < used → childFuel < parentFuel → used + childFuel ≤ parentFuel →
+      childCount ≤ childFuel → used + childCount ≤ bodySteps + 1 →
+      child.domain = request.domain → Profile sourceName closedOperand →
+      height closedOperand ≤ height pattern →
+      (alias = .reference (.interned sourceName) → height closedOperand < height pattern) →
+      ((child.left = alias ∧ child.right = closedOperand) ∨
+        (child.left = closedOperand ∧ child.right = alias)) →
+      ∀ (next : Node → Code Symbol Guard Node) (first last : Checked width) (value : Node),
+      Steps used (.code (.node request .pure)) original
+        (.code ((requestNode child.domain child.left child.right).bind next)) first →
+      Physical first.native → Grows sourceHeap first.native.machine.heap →
+      SourceEqualityConstraintMemoAllocation.Valid first.operations →
+      InputsThrough childFuel (.code (requestNode child.domain child.left child.right)) first →
+      FieldsThrough childFuel (.code (requestNode child.domain child.left child.right)) first →
+      Available first.native.machine.heap child.left → Available first.native.machine.heap child.right →
+      Steps childCount (.code (requestNode child.domain child.left child.right)) first
+        (.code (.pure value)) last → Profile sourceName value)
+    (child : Node → NodeRequest Symbol Guard) (members : List Node)
+    (qualified : ∀ member ∈ members,
+      (child member).domain = request.domain ∧ Profile sourceName member ∧ height member < height pattern ∧
+      (((child member).left = alias ∧ (child member).right = member) ∨
+        ((child member).left = member ∧ (child member).right = alias)))
+    (jobs : List Node) (before : Checked width) (values : List Node) (after : Checked width) (count : Nat)
+    (walked : SourceEqualityNativeDemandWalkExecution.Walk (fun member : Node =>
+      requestNode (child member).domain (child member).left (child member).right) jobs before values after count)
+    (used : Nat) (next : List Node → Code Symbol Guard Node)
+    (origin : Steps used (.code (.node request .pure)) original
+      (.code ((SourceRecursiveIntersectionCode.walk (fun member : Node =>
+        requestNode (child member).domain (child member).left (child member).right) jobs).bind next)) before)
+    (positive : 0 < used) (bounded : used + count ≤ parentFuel)
+    (rawBound : used + count ≤ bodySteps + 1) (physical : Physical before.native)
+    (included : ∀ member ∈ jobs, member ∈ members) :
+    Physical after.native ∧ Extension before.native.machine after.native.machine ∧
+      (∀ value ∈ values, Available after.native.machine.heap value) ∧
+      All₂ (fun _ value => Profile sourceName value) jobs values := by
+  induction walked generalizing used next with
+  | nil current =>
+      exact ⟨physical, Extension.refl _, (by intro value member; cases member), .nil⟩
+  | cons member rest before middle after value values firstCount restCount called tail ih =>
+      let childNext : Node → Code Symbol Guard Node := fun value =>
+        (SourceRecursiveIntersectionCode.walk (fun member : Node =>
+          requestNode (child member).domain (child member).left (child member).right) rest).bind
+          (fun values => next (value :: values))
+      have atChild : Steps used (.code (.node request .pure)) original
+          (.code ((requestNode (child member).domain (child member).left (child member).right).bind childNext)) before := by
+        simpa only [SourceRecursiveIntersectionCode.walk, Code.bind_assoc, Code.bind, childNext] using origin
+      have reached := SourceCurrentAllocatedNativePrefixOperations.prefix_operations_before_bind
+        parentFuel used (.code (.node request .pure))
+        (.code (requestNode (child member).domain (child member).left (child member).right)) childNext
+        original before sourceHeap physicalOriginal plan fields operationsValid sourceGrowth atChild (by omega)
+      obtain ⟨_checkedPrefix, childPhysical, _prefixExtension, childGrowth, childOperations,
+        _operationGrowth, _boundPlan, childPlan, _boundFields, childFields⟩ := reached
+      have ready := through_head (parentFuel - used)
+        (.code (requestNode (child member).domain (child member).left (child member).right)) before childPlan
+      obtain ⟨domain, ownProfile, strict, orientation⟩ := qualified member (included member List.mem_cons_self)
+      have own := children member (child member) used (parentFuel - used) firstCount positive
+        (by omega) (by omega) (by omega) (by omega) domain ownProfile (Nat.le_of_lt strict)
+        (fun _ => strict) orientation childNext before middle value atChild
+        childPhysical childGrowth childOperations childPlan childFields ready.1.2.1 ready.1.2.2 called
+      have completed := SourceCurrentAllocatedNativePrefixOperations.prefix_operations_before_bind
+        (parentFuel - used) firstCount
+        (.code (requestNode (child member).domain (child member).left (child member).right))
+        (.code (.pure value)) .pure before middle sourceHeap childPhysical childPlan childFields
+        childOperations childGrowth called (by omega)
+      obtain ⟨checkedQuery, middlePhysical, queryExtension, _middleGrowth, _middleOperations,
+        _queryOperationGrowth, _queryBoundPlan, _queryPlan, _queryBoundFields, _queryFields⟩ := completed
+      have available := SourceCurrentNativeOpenRequestResults.node_result
+        firstCount (child member) before middle value childPhysical checkedQuery
+      have advanced := called.bind _ _ _ _ _ childNext
+      have tailOrigin : Steps (used + firstCount) (.code (.node request .pure)) original
+          (.code ((SourceRecursiveIntersectionCode.walk (fun member : Node =>
+            requestNode (child member).domain (child member).left (child member).right) rest).bind
+            (fun values => next (value :: values)))) middle :=
+        atChild.trans _ _ _ _ _ _ _ _ advanced
+      have restIncluded : ∀ candidate ∈ rest, candidate ∈ members := by
+        intro candidate present
+        exact included candidate (List.mem_cons_of_mem _ present)
+      have later := ih (used + firstCount) (fun values => next (value :: values)) tailOrigin
+        (by omega) (by omega) (by omega) middlePhysical restIncluded
+      refine ⟨later.1, queryExtension.trans later.2.1, ?_, .cons own later.2.2.2⟩
+      intro selected present
+      cases present with
+      | head => exact later.2.1.available value available
+      | tail _ present => exact later.2.2.1 selected present
