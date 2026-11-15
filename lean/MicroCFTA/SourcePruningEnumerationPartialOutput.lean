@@ -1,3 +1,4 @@
+import MicroCFTA.EnumerationPendingAssignment
 import MicroCFTA.SourcePruningPartialRenderingSemantics
 import MicroCFTA.EnumerationPartialCompletion
 import MicroCFTA.EnumerationPartialExact
@@ -128,18 +129,18 @@ private theorem root_exact
 
 private theorem root_completes
     (heap : InternedConstructorTemplates.State Symbol NativeGuard)
-    (language : NodeLanguage Symbol) (meaning : EnumGuard → Term Symbol → Prop)
     (assignment : Nat → Term Symbol) (fuel : Nat) (before after : State Symbol EnumGuard)
     (observedTerm : Term (PartialSymbol Symbol)) (total : UnionFind.Total before.representatives)
-    (satisfied : Satisfies language meaning assignment before)
+    (satisfied : SourcePruningPartialRenderingSemantics.StoredEquations assignment before)
     (actual : Success (rootPartial heap fuel) before observedTerm after) :
     SourcePruningPartialMatch.Completes assignment observedTerm (assignment 0) := by
   obtain ⟨fragment, middle, rootRead, rendered⟩ := (success_bind _ _ _ _ _).mp actual
   have frame := rootFragment_frame fuel before middle fragment total rootRead
-  have middleModel := (SourcePruningEnumerationNativeLanguage.satisfies_frame
-    language meaning assignment before middle frame).mpr satisfied
-  have completed := SourcePruningPartialRenderingSemantics.expandPartial_completes (boundaryView heap)
-    language meaning assignment fuel fragment middle after observedTerm (frame.total total) middleModel rendered
+  have middleEquations := (SourcePruningPartialRenderingSemantics.storedEquations_frame
+    assignment before middle frame).mpr satisfied
+  have completed := SourcePruningPartialRenderingSemantics.expandPartial_completes_of_stored_equations
+    (boundaryView heap) assignment fuel fragment middle after observedTerm
+      (frame.total total) middleEquations rendered
   have rootFilled : fill assignment fragment = assignment 0 := by
     obtain ⟨value, reading, projected⟩ := (rootFragment_success fuel before middle fragment).mp rootRead
     obtain ⟨_readFrame, root, _size, path, _afterPath, stored⟩ :=
@@ -148,15 +149,14 @@ private theorem root_completes
     | eliminated | unenumerated _ _ => simp only [projected, fill]
     | enumerated storedFragment =>
         rw [projected]
-        have rootEquation : fill assignment storedFragment = assignment root := by
-          simpa only [EnumerationCorrectness.heap, stored, Option.getD_some, slot, slotSatisfies]
-            using satisfied.1.2 root
-        exact rootEquation.trans (satisfied.1.1 0 root (UnionFind.sameClass_root path)).symm
+        have rootEquation : fill assignment storedFragment = assignment root :=
+          satisfied.2 root storedFragment stored
+        exact rootEquation.trans (satisfied.1 0 root (UnionFind.sameClass_root path)).symm
   rw [rootFilled] at completed
   exact completed
 
-/-- One native partial root result and its full endpoint precede all original model observers. -/
-theorem rootPartial_complete
+/-- One actual partial root result completes every assignment with the stored equations. -/
+theorem rootPartial_stored_equations
     (heap : InternedConstructorTemplates.State Symbol NativeGuard)
     (level : Nat → Nat) (frontier : Nat) (before : State Symbol EnumGuard)
     (safe : Safe before) (stratified : Stratified before level frontier) (inside : 0 < before.counter) :
@@ -165,10 +165,9 @@ theorem rootPartial_complete
         Success (rootPartial heap (bound + extra)) before observedTerm after ∧
         ExceptT.run (rootPartial heap (bound + extra) before) = [.ok (observedTerm, after)]) ∧
       RenderStable before after ∧ Frame before after ∧ Stratified after level frontier ∧
-      ∀ (language : NodeLanguage Symbol) (meaning : EnumGuard → Term Symbol → Prop)
-        (assignment : Nat → Term Symbol),
-        Satisfies language meaning assignment before →
-          Satisfies language meaning assignment after ∧
+      ∀ (assignment : Nat → Term Symbol),
+        SourcePruningPartialRenderingSemantics.StoredEquations assignment before →
+          SourcePruningPartialRenderingSemantics.StoredEquations assignment after ∧
           SourcePruningPartialMatch.Completes assignment observedTerm (assignment 0) := by
   obtain ⟨readFuel, root, value, middle, reading, readStable, stored, _size, _path⟩ :=
     EnumerationPartialCompletion.getValue_complete before safe 0 inside
@@ -206,9 +205,63 @@ theorem rootPartial_complete
     have raised := EnumerationObservations.rootPartial_moreFuel (boundaryView heap) bound extra
       before observedTerm after actual
     exact ⟨raised, root_exact heap (bound + extra) before after observedTerm raised⟩
-  · intro language meaning assignment satisfied
-    exact ⟨(SourcePruningEnumerationNativeLanguage.satisfies_frame language meaning
-      assignment before after frame).mpr satisfied,
-      root_completes heap language meaning assignment bound before after observedTerm safe.1.total satisfied actual⟩
+  · intro assignment satisfied
+    exact ⟨(SourcePruningPartialRenderingSemantics.storedEquations_frame assignment
+      before after frame).mpr satisfied,
+      root_completes heap assignment bound before after observedTerm safe.1.total satisfied actual⟩
+
+/-- One native partial root result and its full endpoint precede all original model observers. -/
+theorem rootPartial_complete
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (level : Nat → Nat) (frontier : Nat) (before : State Symbol EnumGuard)
+    (safe : Safe before) (stratified : Stratified before level frontier) (inside : 0 < before.counter) :
+    ∃ bound observedTerm after,
+      (∀ extra,
+        Success (rootPartial heap (bound + extra)) before observedTerm after ∧
+        ExceptT.run (rootPartial heap (bound + extra) before) = [.ok (observedTerm, after)]) ∧
+      RenderStable before after ∧ Frame before after ∧ Stratified after level frontier ∧
+      ∀ (language : NodeLanguage Symbol) (meaning : EnumGuard → Term Symbol → Prop)
+        (assignment : Nat → Term Symbol),
+        Satisfies language meaning assignment before →
+          Satisfies language meaning assignment after ∧
+          SourcePruningPartialMatch.Completes assignment observedTerm (assignment 0) := by
+  obtain ⟨bound, observedTerm, after, actual, stable, frame, ordered, completes⟩ :=
+    rootPartial_stored_equations heap level frontier before safe stratified inside
+  refine ⟨bound, observedTerm, after, actual, stable, frame, ordered, ?_⟩
+  intro language meaning assignment satisfied
+  have structural := completes assignment
+    (SourcePruningPartialRenderingSemantics.satisfies_storedEquations
+      language meaning assignment before satisfied)
+  exact ⟨(SourcePruningEnumerationNativeLanguage.satisfies_frame language meaning
+    assignment before after frame).mpr satisfied, structural.2⟩
+
+/-- One actual readback has a finite structural completion for each compatible pending choice. -/
+theorem rootPartial_complete_pending_choices
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (level : Nat → Nat) (frontier : Nat) (before : State Symbol EnumGuard)
+    (safe : Safe before) (stratified : Stratified before level frontier) (inside : 0 < before.counter) :
+    ∃ bound observedTerm after,
+      (∀ extra,
+        Success (rootPartial heap (bound + extra)) before observedTerm after ∧
+        ExceptT.run (rootPartial heap (bound + extra) before) = [.ok (observedTerm, after)]) ∧
+      RenderStable before after ∧ Frame before after ∧ Stratified after level frontier ∧
+      ∀ (base : Nat → Term Symbol), UnionFind.Satisfies before.representatives base →
+        ∃ assignment : Nat → Term Symbol,
+          SourcePruningPartialRenderingSemantics.StoredEquations assignment before ∧
+          SourcePruningPartialRenderingSemantics.StoredEquations assignment after ∧
+          (∀ uv node scs, before.values[uv]? = some (.unenumerated node scs) →
+            assignment uv = base uv) ∧
+          SourcePruningPartialMatch.Completes assignment observedTerm (assignment 0) := by
+  obtain ⟨bound, observedTerm, after, actual, stable, frame, ordered, completes⟩ :=
+    rootPartial_stored_equations heap level frontier before safe stratified inside
+  refine ⟨bound, observedTerm, after, actual, stable, frame, ordered, ?_⟩
+  intro base compatible
+  obtain ⟨assignment, aliases, equations, pending⟩ :=
+    EnumerationPendingAssignment.stratified_extend_pending before safe level frontier stratified
+      base compatible
+  have stored : SourcePruningPartialRenderingSemantics.StoredEquations assignment before :=
+    ⟨aliases, fun uv fragment present => (equations uv fragment present).symm⟩
+  obtain ⟨afterEquations, completed⟩ := completes assignment stored
+  exact ⟨assignment, stored, afterEquations, pending, completed⟩
 
 end MicroCFTA.SourcePruningEnumerationPartialOutput

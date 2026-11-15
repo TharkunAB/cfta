@@ -35,13 +35,43 @@ local instance : LawfulMonad List where
   pure_bind := by intros; simp [pure, bind]
   bind_assoc := by intros; exact List.flatMap_assoc
 
-/-- Actual partial rendering represents the same original completed fragment. -/
-theorem expandPartial_completes (graph : Graph Symbol Guard)
-    (language : NodeLanguage Symbol) (meaning : Guard → Term Symbol → Prop)
+/-- UF aliases and stored fragments determine the structural equations. -/
+def StoredEquations (assignment : Nat → Term Symbol) (state : State Symbol Guard) : Prop :=
+  UnionFind.Satisfies state.representatives assignment ∧
+    ∀ uv fragment, state.values[uv]? = some (.enumerated fragment) →
+      fill assignment fragment = assignment uv
+
+/-- A read frame preserves UF aliases and every stored fragment equation. -/
+theorem storedEquations_frame (assignment : Nat → Term Symbol)
+    (before after : State Symbol Guard) (frame : Frame before after) :
+    StoredEquations assignment after ↔ StoredEquations assignment before := by
+  have forestSame : UnionFind.Satisfies after.representatives assignment ↔
+      UnionFind.Satisfies before.representatives assignment := by
+    constructor
+    · intro satisfied left right related
+      exact satisfied left right
+        ((SourcePruningEnumerationNativeLanguage.frame_sameClass before after frame left right).mpr related)
+    · intro satisfied left right related
+      exact satisfied left right
+        ((SourcePruningEnumerationNativeLanguage.frame_sameClass before after frame left right).mp related)
+  simp only [StoredEquations, frame.values, forestSame]
+
+/-- A full semantic model includes the structural equations. -/
+theorem satisfies_storedEquations (language : NodeLanguage Symbol)
+    (meaning : Guard → Term Symbol → Prop) (assignment : Nat → Term Symbol)
+    (state : State Symbol Guard) (satisfied : Satisfies language meaning assignment state) :
+    StoredEquations assignment state := by
+  refine ⟨satisfied.1.1, ?_⟩
+  intro uv fragment stored
+  simpa only [EnumerationCorrectness.heap, stored, Option.getD_some, slot, slotSatisfies]
+    using satisfied.1.2 uv
+
+/-- Stored equations suffice to complete the actual partial rendering. -/
+theorem expandPartial_completes_of_stored_equations (graph : Graph Symbol Guard)
     (assignment : Nat → Term Symbol) (fuel : Nat) (fragment : Fragment Symbol)
     (before after : State Symbol Guard) (observedTerm : Term (PartialSymbol Symbol))
     (total : UnionFind.Total before.representatives)
-    (satisfied : Satisfies language meaning assignment before)
+    (satisfied : StoredEquations assignment before)
     (success : Success (expandPartial graph fuel fragment) before observedTerm after) :
     Completes assignment observedTerm (fill assignment fragment) := by
   induction fuel generalizing fragment before after observedTerm with
@@ -55,7 +85,7 @@ theorem expandPartial_completes (graph : Graph Symbol Guard)
           obtain ⟨rfl, rfl⟩ := (success_pure _ observedTerm middle after).mp final
           have completed : ∀ (children : List (Fragment Symbol))
               (before after : State Symbol Guard) (partials : List (Term (PartialSymbol Symbol))),
-              UnionFind.Total before.representatives → Satisfies language meaning assignment before →
+              UnionFind.Total before.representatives → StoredEquations assignment before →
               Success (children.mapM (expandPartial graph fuel)) before partials after →
               All₂ (Completes assignment) partials (children.map (fill assignment)) := by
             intro children
@@ -71,8 +101,7 @@ theorem expandPartial_completes (graph : Graph Symbol Guard)
                 obtain ⟨remaining, last, restRead, final⟩ := (success_bind _ _ _ _ _).mp continued
                 obtain ⟨rfl, _same⟩ := (success_pure (first :: remaining) partials last after).mp final
                 have frame := EnumerationObservations.expandPartial_frame graph fuel child before middle first total firstRead
-                have middleSatisfied := (SourcePruningEnumerationNativeLanguage.satisfies_frame language meaning
-                  assignment before middle frame).mpr satisfied
+                have middleSatisfied := (storedEquations_frame assignment before middle frame).mpr satisfied
                 exact .cons (ih child before middle first total satisfied firstRead)
                   (restIH middle last remaining (frame.total total) middleSatisfied restRead)
           simpa only [fill] using (Completes.concrete symbol partials (children.map (fill assignment))
@@ -86,11 +115,9 @@ theorem expandPartial_completes (graph : Graph Symbol Guard)
           | enumerated fragment =>
               have equation : fill assignment fragment = assignment uv := by
                 have rootEquation : fill assignment fragment = assignment root := by
-                  simpa only [EnumerationCorrectness.heap, stored, Option.getD_some, slot, slotSatisfies]
-                    using satisfied.1.2 root
-                exact rootEquation.trans (satisfied.1.1 uv root (UnionFind.sameClass_root path)).symm
-              have middleSatisfied := (SourcePruningEnumerationNativeLanguage.satisfies_frame language meaning
-                assignment before middle frame).mpr satisfied
+                  exact satisfied.2 root fragment stored
+                exact rootEquation.trans (satisfied.1 uv root (UnionFind.sameClass_root path)).symm
+              have middleSatisfied := (storedEquations_frame assignment before middle frame).mpr satisfied
               have completed := ih fragment middle after observedTerm (frame.total total) middleSatisfied final
               simpa only [fill, equation] using completed
           | eliminated =>
@@ -113,5 +140,17 @@ theorem expandPartial_completes (graph : Graph Symbol Guard)
                         first
                         | simpa only [fill] using (Completes.hole (assignment := assignment) uv)
                         | simpa only [fill] using (Completes.truncated (assignment := assignment) [] (assignment uv))
+
+/-- Actual partial rendering represents the same original completed fragment. -/
+theorem expandPartial_completes (graph : Graph Symbol Guard)
+    (language : NodeLanguage Symbol) (meaning : Guard → Term Symbol → Prop)
+    (assignment : Nat → Term Symbol) (fuel : Nat) (fragment : Fragment Symbol)
+    (before after : State Symbol Guard) (observedTerm : Term (PartialSymbol Symbol))
+    (total : UnionFind.Total before.representatives)
+    (satisfied : Satisfies language meaning assignment before)
+    (success : Success (expandPartial graph fuel fragment) before observedTerm after) :
+    Completes assignment observedTerm (fill assignment fragment) := by
+  exact expandPartial_completes_of_stored_equations graph assignment fuel fragment before after
+    observedTerm total (satisfies_storedEquations language meaning assignment before satisfied) success
 
 end MicroCFTA.SourcePruningPartialRenderingSemantics
