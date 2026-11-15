@@ -5029,6 +5029,7 @@ import MicroCFTA.SourceCurrentConjunctionDemandMemos
 import MicroCFTA.SourceCurrentConjunctionDemandVerified
 import MicroCFTA.SourcePruningEnumerationSharedParkedRawBucketReceipt
 import MicroCFTA.SourceSynthesisCurrentFirstRealPrefix
+import MicroCFTA.SourcePruningEnumerationSharedBucketWriteToClear
 /-!
 # Proof dependency audit
 
@@ -5580,3 +5581,6 @@ run_cmd do
 
 #check @MicroCFTA.SourceSynthesisCurrentFirstRealPrefix.accepted_first_real_prefix
 #print axioms MicroCFTA.SourceSynthesisCurrentFirstRealPrefix.accepted_first_real_prefix
+
+#check @MicroCFTA.SourcePruningEnumerationSharedBucketWriteToClear.written_bucket_removed_after_finalize_callback
+#print axioms MicroCFTA.SourcePruningEnumerationSharedBucketWriteToClear.written_bucket_removed_after_finalize_callback
