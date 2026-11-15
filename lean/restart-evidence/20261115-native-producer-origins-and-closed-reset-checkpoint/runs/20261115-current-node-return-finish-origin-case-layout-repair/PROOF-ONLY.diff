@@ -1,0 +1,21 @@
+--- lean/restart-evidence/20261115-current-node-return-finish-origin-draft/SourceCurrentAllocatedNativeNodeReturnOrigin.lean
++++ lean/restart-evidence/20261115-current-node-return-finish-origin-case-layout-repair/SourceCurrentAllocatedNativeNodeReturnOrigin.lean
+@@ -87,7 +87,7 @@
+                     ⟨request, .returned value⟩ := by
+                   apply Option.some.inj
+                   simpa only [FlatMemoThunk.finish, found, FlatMemoThunk.setStatus,
+-                    Cache.put, if_pos rfl] using stored
++                    Cache.put, ite_eq_left rfl] using stored
+                 have requestSame := congrArg FlatMemoThunk.Cell.request cellSame
+                 have valueSame := FlatMemoThunk.Status.returned.inj
+                   (congrArg FlatMemoThunk.Cell.status cellSame)
+@@ -137,8 +137,7 @@
+       | pure | fail =>
+           simp only [SourceEqualityNativeDemand.step, SourceRecursiveIntersectionNative.step, lift] at one
+           cases one
+-      | work job continuation | enter domain left right first second continuation |
+-          read name continuation | finishEdge finished result continuation =>
++      | work job continuation | enter domain left right first second continuation | read name continuation | finishEdge finished result continuation =>
+           have same := Outcome.yielded.inj (by
+             simpa only [SourceEqualityNativeDemand.step, SourceRecursiveIntersectionNative.step, lift] using one)
+           rcases same with ⟨rfl, rfl⟩

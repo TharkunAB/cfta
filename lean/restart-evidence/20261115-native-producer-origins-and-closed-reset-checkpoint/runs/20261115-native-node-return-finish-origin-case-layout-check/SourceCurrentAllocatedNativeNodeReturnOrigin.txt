@@ -1,0 +1,84 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-node-return-finish-origin-case-layout-check/source/MicroCFTA/SourceCurrentAllocatedNativeNodeReturnOrigin.lean:89:18: error: Type mismatch: After simplification, term
+  stored
+ has type
+  @Eq (Option (FlatMemoThunk.Cell Request Answer))
+    (if True then some { request := original, status := FlatMemoThunk.Status.returned result }
+    else some { request := original, status := FlatMemoThunk.Status.evaluating })
+    (some { request := request, status := FlatMemoThunk.Status.returned value })
+but is expected to have type
+  @Eq (Option (FlatMemoThunk.Cell Request Answer))
+    (some { request := original, status := FlatMemoThunk.Status.returned result })
+    (some { request := request, status := FlatMemoThunk.Status.returned value })
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-node-return-finish-origin-case-layout-check/source/MicroCFTA/SourceCurrentAllocatedNativeNodeReturnOrigin.lean:206:66: error: This simp argument is unused:
+  SourceRecursiveIntersectionNative.step
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceEqualityNativeDemand.step, selected, demandedEq, lift] at one
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-node-return-finish-origin-case-layout-check/source/MicroCFTA/SourceCurrentAllocatedNativeNodeReturnOrigin.lean:207:46: error: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourceEqualityNativeDemand.step, SourceRecursiveIntersectionNative.step, selected,
+    demandedEq] at one
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+MicroCFTA.SourceCurrentAllocatedNativeNodeReturnOrigin.returned_node_cell_finish_prefix
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} {Output : Type}
+  (machine :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (operations : MicroCFTA.SourceEqualityConstraintMemoAllocation.State)
+  (control rest : MicroCFTA.SourceEqualityNativeDemand.Control Output)
+  (after : MicroCFTA.SourceEqualityNativeDemand.State width) (fuel count : Nat) (bounded : count ≤ fuel)
+  (actual :
+    MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace count control
+      { native := MicroCFTA.SourceRecursiveIntersectionThunks.initial width machine, operations := operations } rest
+      after)
+  (handle : Nat)
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (stored :
+    after.native.nodes.cells handle =
+      some { request := request, status := MicroCFTA.FlatMemoThunk.Status.returned value }) :
+  ∃ prefixCount suffixCount beforeFinish next,
+    count = prefixCount + 1 + suffixCount ∧
+      prefixCount < count ∧
+        prefixCount < fuel ∧
+          MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace prefixCount control
+              { native := MicroCFTA.SourceRecursiveIntersectionThunks.initial width machine, operations := operations }
+              (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                (MicroCFTA.SourceRecursiveIntersectionCode.Code.finishNode handle value next))
+              beforeFinish ∧
+            beforeFinish.native.nodes.cells handle =
+                some { request := request, status := MicroCFTA.FlatMemoThunk.Status.evaluating } ∧
+              MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace 1
+                  (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                    (MicroCFTA.SourceRecursiveIntersectionCode.Code.finishNode handle value next))
+                  beforeFinish (MicroCFTA.SourceEqualityNativeDemand.Control.code next)
+                  { native := MicroCFTA.SourceRecursiveIntersectionThunks.finishNode handle value beforeFinish.native,
+                    operations := beforeFinish.operations } ∧
+                { native := MicroCFTA.SourceRecursiveIntersectionThunks.finishNode handle value beforeFinish.native,
+                              operations := beforeFinish.operations }.native.nodes.cells
+                      handle =
+                    some { request := request, status := MicroCFTA.FlatMemoThunk.Status.returned value } ∧
+                  MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace suffixCount
+                    (MicroCFTA.SourceEqualityNativeDemand.Control.code next)
+                    { native := MicroCFTA.SourceRecursiveIntersectionThunks.finishNode handle value beforeFinish.native,
+                      operations := beforeFinish.operations }
+                    rest after
+'MicroCFTA.SourceCurrentAllocatedNativeNodeReturnOrigin.returned_node_cell_finish_prefix' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

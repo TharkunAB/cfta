@@ -1,0 +1,108 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-node-compile-dispatch-origin-check/source/MicroCFTA/SourceCurrentAllocatedNativeCompileDispatchOrigin.lean:86:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  resume value
+in the target expression
+  (fun result => (resume result).bind outside) value = rest.bind outside
+
+case refine_2
+width : Nat
+A B : Type
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+count handle : Nat
+control : Control A
+before after : Checked width
+request : NodeRequest Symbol Guard
+value : Value Symbol Guard
+rest : Code Symbol Guard A
+outside : A → Code Symbol Guard B
+used bodyCount : Nat
+beforeBody : Checked width
+resume : Value Symbol Guard → Code Symbol Guard A
+total : used + bodyCount = count
+positive : 0 < used
+entered :
+  Steps used control before
+    (Control.code ((compileNode request).bind fun result => Code.finishNode handle result (resume result))) beforeBody
+owner : beforeBody.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+bodyTrace : Steps bodyCount (Control.code (compileNode request)) beforeBody (Control.code (Code.pure value)) after
+last : resume value = rest
+⊢ (fun result => (resume result).bind outside) value = rest.bind outside
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-node-compile-dispatch-origin-check/source/MicroCFTA/SourceCurrentAllocatedNativeCompileDispatchOrigin.lean:266:0: error: automatically included section variable(s) unused in theorem `MicroCFTA.SourceCurrentAllocatedNativeCompileDispatchOrigin.compiled_node_origin_from_initial_query_finish`:
+  [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+MicroCFTA.SourceCurrentAllocatedNativeCompileDispatchOrigin.compiled_node_origin_from_initial_query_finish
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat}
+  (rootRequest :
+    MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (machine :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (machineValid : MicroCFTA.SourceRecursiveIntersectionKernel.Valid machine)
+  (operations : MicroCFTA.SourceEqualityConstraintMemoAllocation.State) (originalFuel count handle : Nat)
+  (captured :
+    MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (rest :
+    MicroCFTA.SourceRecursiveIntersectionCode.Code (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (beforeFinish : MicroCFTA.SourceEqualityNativeDemand.State width) (bounded : count < originalFuel)
+  (actual :
+    MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace count
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+        (MicroCFTA.SourceRecursiveIntersectionCode.Code.node rootRequest
+          MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+      { native := MicroCFTA.SourceRecursiveIntersectionThunks.initial width machine, operations := operations }
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+        (MicroCFTA.SourceRecursiveIntersectionCode.Code.finishNode handle value rest))
+      beforeFinish)
+  (owner :
+    beforeFinish.native.nodes.cells handle =
+      some { request := captured, status := MicroCFTA.FlatMemoThunk.Status.evaluating }) :
+  ∃ dispatchUsed bodyCount beforeBody resume,
+    dispatchUsed + bodyCount = count ∧
+      0 < dispatchUsed ∧
+        dispatchUsed < originalFuel ∧
+          MicroCFTA.SourceEqualityNativeDemand.Steps dispatchUsed
+              (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                (MicroCFTA.SourceRecursiveIntersectionCode.Code.node rootRequest
+                  MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+              { native := MicroCFTA.SourceRecursiveIntersectionThunks.initial width machine, operations := operations }
+              (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                ((MicroCFTA.SourceRecursiveIntersectionCode.compileNode captured).bind fun result =>
+                  MicroCFTA.SourceRecursiveIntersectionCode.Code.finishNode handle result (resume result)))
+              beforeBody ∧
+            beforeBody.native.nodes.cells handle =
+                some { request := captured, status := MicroCFTA.FlatMemoThunk.Status.evaluating } ∧
+              MicroCFTA.SourceEqualityNativeDemand.Steps bodyCount
+                  (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                    (MicroCFTA.SourceRecursiveIntersectionCode.compileNode captured))
+                  beforeBody
+                  (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                    (MicroCFTA.SourceRecursiveIntersectionCode.Code.pure value))
+                  beforeFinish ∧
+                resume value = rest
+'MicroCFTA.SourceCurrentAllocatedNativeCompileDispatchOrigin.compiled_node_origin_from_initial_query_finish' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

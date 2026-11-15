@@ -1,0 +1,137 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-node-return-finish-origin-check/source/MicroCFTA/SourceCurrentAllocatedNativeNodeReturnOrigin.lean:90:31: error: `if_pos` has been deprecated: Use `ite_eq_left` instead
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-node-return-finish-origin-check/source/MicroCFTA/SourceCurrentAllocatedNativeNodeReturnOrigin.lean:89:18: error: Type mismatch: After simplification, term
+  stored
+ has type
+  @Eq (Option (FlatMemoThunk.Cell Request Answer))
+    (if True then some { request := original, status := FlatMemoThunk.Status.returned result }
+    else some { request := original, status := FlatMemoThunk.Status.evaluating })
+    (some { request := request, status := FlatMemoThunk.Status.returned value })
+but is expected to have type
+  @Eq (Option (FlatMemoThunk.Cell Request Answer))
+    (some { request := original, status := FlatMemoThunk.Status.returned result })
+    (some { request := request, status := FlatMemoThunk.Status.returned value })
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-node-return-finish-origin-check/source/MicroCFTA/SourceCurrentAllocatedNativeNodeReturnOrigin.lean:136:6: error: Alternative `optionalBinder` has not been provided
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-node-return-finish-origin-check/source/MicroCFTA/SourceCurrentAllocatedNativeNodeReturnOrigin.lean:136:6: error: Alternative `node` has not been provided
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-node-return-finish-origin-check/source/MicroCFTA/SourceCurrentAllocatedNativeNodeReturnOrigin.lean:136:6: error: Alternative `edge` has not been provided
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-node-return-finish-origin-check/source/MicroCFTA/SourceCurrentAllocatedNativeNodeReturnOrigin.lean:136:6: error: Alternative `finishNode` has not been provided
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-node-return-finish-origin-check/source/MicroCFTA/SourceCurrentAllocatedNativeNodeReturnOrigin.lean:136:6: error: Alternative `finishEdge` has not been provided
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-node-return-finish-origin-check/source/MicroCFTA/SourceCurrentAllocatedNativeNodeReturnOrigin.lean:135:14: error: unsolved goals
+case code.work
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+Output : Type
+next : Control Output
+before after : Checked width
+handle : Nat
+request : NodeRequest Symbol Guard
+value : Value Symbol Guard
+stored : after.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.returned value }
+X✝ : Type
+job : Work Symbol Guard X✝
+continuation : X✝ → Code Symbol Guard Output
+one : step (Control.code (Code.work job continuation)) before = Outcome.yielded next after
+⊢ before.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.returned value } ∨
+    ∃ continuation_1,
+      Control.code (Code.work job continuation) = Control.code (Code.finishNode handle value continuation_1) ∧
+        before.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+
+case code.enter
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+Output : Type
+next : Control Output
+before after : Checked width
+handle : Nat
+request : NodeRequest Symbol Guard
+value : Value Symbol Guard
+stored : after.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.returned value }
+domain : Interned IntersectionFlatMemoKeyDomain.DomainKey
+left right : Value Symbol Guard
+first second : Nat
+continuation : Interned IntersectionFlatMemoKeyDomain.DomainKey → Code Symbol Guard Output
+one : step (Control.code (Code.enter domain left right first second continuation)) before = Outcome.yielded next after
+⊢ before.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.returned value } ∨
+    ∃ continuation_1,
+      Control.code (Code.enter domain left right first second continuation) =
+          Control.code (Code.finishNode handle value continuation_1) ∧
+        before.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+
+case code.read
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+Output : Type
+next : Control Output
+before after : Checked width
+handle : Nat
+request : NodeRequest Symbol Guard
+value : Value Symbol Guard
+stored : after.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.returned value }
+name✝ : Nat
+next✝ : Option (Value Symbol Guard) → Code Symbol Guard Output
+one : step (Control.code (Code.read name✝ next✝)) before = Outcome.yielded next after
+⊢ before.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.returned value } ∨
+    ∃ continuation,
+      Control.code (Code.read name✝ next✝) = Control.code (Code.finishNode handle value continuation) ∧
+        before.native.nodes.cells handle = some { request := request, status := FlatMemoThunk.Status.evaluating }
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-node-return-finish-origin-check/source/MicroCFTA/SourceCurrentAllocatedNativeNodeReturnOrigin.lean:141:15: error: unexpected identifier; expected command
+MicroCFTA.SourceCurrentAllocatedNativeNodeReturnOrigin.returned_node_cell_finish_prefix
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} {Output : Type}
+  (machine :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (operations : MicroCFTA.SourceEqualityConstraintMemoAllocation.State)
+  (control rest : MicroCFTA.SourceEqualityNativeDemand.Control Output)
+  (after : MicroCFTA.SourceEqualityNativeDemand.State width) (fuel count : Nat) (bounded : count ≤ fuel)
+  (actual :
+    MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace count control
+      { native := MicroCFTA.SourceRecursiveIntersectionThunks.initial width machine, operations := operations } rest
+      after)
+  (handle : Nat)
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (stored :
+    after.native.nodes.cells handle =
+      some { request := request, status := MicroCFTA.FlatMemoThunk.Status.returned value }) :
+  ∃ prefixCount suffixCount beforeFinish next,
+    count = prefixCount + 1 + suffixCount ∧
+      prefixCount < count ∧
+        prefixCount < fuel ∧
+          MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace prefixCount control
+              { native := MicroCFTA.SourceRecursiveIntersectionThunks.initial width machine, operations := operations }
+              (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                (MicroCFTA.SourceRecursiveIntersectionCode.Code.finishNode handle value next))
+              beforeFinish ∧
+            beforeFinish.native.nodes.cells handle =
+                some { request := request, status := MicroCFTA.FlatMemoThunk.Status.evaluating } ∧
+              MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace 1
+                  (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                    (MicroCFTA.SourceRecursiveIntersectionCode.Code.finishNode handle value next))
+                  beforeFinish (MicroCFTA.SourceEqualityNativeDemand.Control.code next)
+                  { native := MicroCFTA.SourceRecursiveIntersectionThunks.finishNode handle value beforeFinish.native,
+                    operations := beforeFinish.operations } ∧
+                { native := MicroCFTA.SourceRecursiveIntersectionThunks.finishNode handle value beforeFinish.native,
+                              operations := beforeFinish.operations }.native.nodes.cells
+                      handle =
+                    some { request := request, status := MicroCFTA.FlatMemoThunk.Status.returned value } ∧
+                  MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace suffixCount
+                    (MicroCFTA.SourceEqualityNativeDemand.Control.code next)
+                    { native := MicroCFTA.SourceRecursiveIntersectionThunks.finishNode handle value beforeFinish.native,
+                      operations := beforeFinish.operations }
+                    rest after
+'MicroCFTA.SourceCurrentAllocatedNativeNodeReturnOrigin.returned_node_cell_finish_prefix' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

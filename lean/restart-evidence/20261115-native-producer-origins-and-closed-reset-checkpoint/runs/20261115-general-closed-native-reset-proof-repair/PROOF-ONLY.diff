@@ -1,0 +1,31 @@
+--- lean/restart-evidence/20261115-general-closed-native-reset-draft/SourceCurrentAllocatedNativeClosedResetProfile.lean
++++ lean/restart-evidence/20261115-general-closed-native-reset-proof-repair/SourceCurrentAllocatedNativeClosedResetProfile.lean
+@@ -61,13 +61,13 @@
+       Returned edgeLaw (step (.code (.node request .pure)) before).state.native.edges := by
+   have published : Returned nodeLaw (lookupNode width request before.native).2.nodes ∧
+       Returned edgeLaw (lookupNode width request before.native).2.edges := by
+-    cases key : SourceRecursiveIntersectionMemo.requestKey width request.domain request.left request.right with
+-    | none => simpa only [lookupNode, key] using And.intro nodes edges
+-    | some key =>
++    cases keyed : SourceRecursiveIntersectionMemo.requestKey width request.domain request.left request.right with
++    | none => simpa only [lookupNode, keyed] using And.intro nodes edges
++    | some physicalKey =>
+         constructor
+-        · simpa only [lookupNode, key] using
+-            SourceCurrentAllocatedNativeContextCache.returned_lookup nodeLaw key request before.native.nodes nodes
+-        · simpa only [lookupNode, key] using edges
++        · simpa only [lookupNode, keyed] using
++            SourceCurrentAllocatedNativeContextCache.returned_lookup nodeLaw physicalKey request before.native.nodes nodes
++        · simpa only [lookupNode, keyed] using edges
+   cases selected : lookupNode width request before.native with
+   | mk selection chosen =>
+       have chosenNodes : Returned nodeLaw chosen.nodes := by
+@@ -164,6 +164,8 @@
+               simp only [compileNode, selected]
+             have childOrigin : Steps 1 (.code (.node request .pure)) before
+                 (.code ((requestNode IntersectionEmptyDomain.emptyDomain request.left request.right).bind next)) first := by
++              change Steps 1 (.code (requestNode request.domain request.left request.right)) before
++                (.code ((requestNode IntersectionEmptyDomain.emptyDomain request.left request.right).bind next)) first
+               simpa only [compiled] using origin
+             have childTrace : Steps bodySteps
+                 (.code (requestNode IntersectionEmptyDomain.emptyDomain request.left request.right)) first

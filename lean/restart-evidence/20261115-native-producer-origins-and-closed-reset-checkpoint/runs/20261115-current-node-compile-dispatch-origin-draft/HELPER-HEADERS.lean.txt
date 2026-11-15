@@ -1,0 +1,19 @@
+theorem finish_node_bind_inverse
+    (control : Control A) (outside : A → Code Symbol Guard B)
+    (handle : Nat) (value : Value Symbol Guard) (rest : Code Symbol Guard B)
+    (nonpure : ∀ result, control ≠ .code (.pure result))
+    (same : control.bind outside = .code (.finishNode handle value rest)) :
+    ∃ (resume : Code Symbol Guard A),
+      control = .code (.finishNode handle value resume) ∧ rest = resume.bind outside := by
+
+theorem compiled_node_prefix_bind
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (used : Nat) (control : Control A) (before producer : Checked width)
+    (handle : Nat) (request : NodeRequest Symbol Guard)
+    (resume : Value Symbol Guard → Code Symbol Guard A)
+    (outside : A → Code Symbol Guard B)
+    (actual : Steps used control before
+      (.code ((compileNode request).bind (fun value => .finishNode handle value (resume value)))) producer) :
+    Steps used (control.bind outside) before
+      (.code ((compileNode request).bind
+        (fun value => .finishNode handle value ((resume value).bind outside)))) producer := by

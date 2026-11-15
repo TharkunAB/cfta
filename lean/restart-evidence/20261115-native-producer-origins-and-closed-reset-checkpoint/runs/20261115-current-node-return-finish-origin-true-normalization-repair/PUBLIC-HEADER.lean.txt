@@ -1,0 +1,21 @@
+theorem returned_node_cell_finish_prefix
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat} {Output : Type}
+    (machine : SourceRecursiveIntersectionKernel.Machine Symbol Guard)
+    (operations : SourceEqualityConstraintMemoAllocation.State)
+    (control rest : Control Output) (after : Checked width) (fuel count : Nat)
+    (bounded : count ≤ fuel)
+    (actual : Trace count control ⟨initial width machine, operations⟩ rest after)
+    (handle : Nat) (request : NodeRequest Symbol Guard) (value : Value Symbol Guard)
+    (stored : after.native.nodes.cells handle = some ⟨request, .returned value⟩) :
+    ∃ (prefixCount suffixCount : Nat) (beforeFinish : Checked width)
+      (next : Code Symbol Guard Output),
+      count = prefixCount + 1 + suffixCount ∧ prefixCount < count ∧ prefixCount < fuel ∧
+      Trace prefixCount control ⟨initial width machine, operations⟩
+        (.code (.finishNode handle value next)) beforeFinish ∧
+      beforeFinish.native.nodes.cells handle = some ⟨request, .evaluating⟩ ∧
+      Trace 1 (.code (.finishNode handle value next)) beforeFinish (.code next)
+        { beforeFinish with native := finishNode handle value beforeFinish.native } ∧
+      ({ beforeFinish with native := finishNode handle value beforeFinish.native } : Checked width).native.nodes.cells
+        handle = some ⟨request, .returned value⟩ ∧
+      Trace suffixCount (.code next)
+        { beforeFinish with native := finishNode handle value beforeFinish.native } rest after

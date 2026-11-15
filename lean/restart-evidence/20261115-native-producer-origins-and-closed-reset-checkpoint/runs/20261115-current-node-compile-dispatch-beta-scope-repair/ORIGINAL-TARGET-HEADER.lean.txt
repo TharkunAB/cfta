@@ -1,0 +1,25 @@
+-- UNPROVED CONTRACT. Not compiler input. No proof or axiom is declared.
+theorem compiled_node_origin_from_initial_query_finish
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (rootRequest : NodeRequest Symbol Guard)
+    (machine : SourceRecursiveIntersectionKernel.Machine Symbol Guard)
+    (machineValid : SourceRecursiveIntersectionKernel.Valid machine)
+    (operations : SourceEqualityConstraintMemoAllocation.State)
+    (originalFuel count handle : Nat) (captured : NodeRequest Symbol Guard)
+    (value : Value Symbol Guard) (rest : Code Symbol Guard (Value Symbol Guard))
+    (beforeFinish : Checked width)
+    (bounded : count < originalFuel)
+    (actual : Trace count (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width)
+      (.code (.finishNode handle value rest)) beforeFinish)
+    (owner : beforeFinish.native.nodes.cells handle = some ⟨captured, .evaluating⟩) :
+    ∃ (dispatchUsed bodyCount : Nat) (beforeBody : Checked width)
+      (resume : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard)),
+      dispatchUsed + bodyCount = count ∧ 0 < dispatchUsed ∧ dispatchUsed < originalFuel ∧
+      Steps dispatchUsed (.code (.node rootRequest .pure))
+        (⟨initial width machine, operations⟩ : Checked width)
+        (.code ((compileNode captured).bind
+          (fun result => .finishNode handle result (resume result)))) beforeBody ∧
+      beforeBody.native.nodes.cells handle = some ⟨captured, .evaluating⟩ ∧
+      Steps bodyCount (.code (compileNode captured)) beforeBody (.code (.pure value)) beforeFinish ∧
+      resume value = rest
