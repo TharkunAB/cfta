@@ -1,0 +1,253 @@
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+section ActualOpaqueTerminalResources
+set_option autoImplicit false
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedPartialInvariant (Post)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
+open SourceCurrentAllocatedNativeResourceForecast (Le)
+open SourcePruningEnumerationSharedIncomingReservation (Seed advance)
+open SourcePruningEnumerationRecursive (Packet)
+open SourcePruningEnumerationSharedSelectedContinuations
+open SourcePruningEnumerationSharedPreparedRecursive (Output Failure finish emitted)
+open SourcePruningEnumerationSharedPreparedRecursiveChildPolicy (resumeWithNarrow)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Core" => EnumerationState.State Symbol Constraint
+local notation "Heap" => SourceEqualityAnnotationHeap.Heap
+variable {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+attribute [local irreducible] fallbackPlan
+
+/-- Actual opaque and terminal receipts retain resources at the supplied work budget. -/
+private theorem identity_actual_opaque_terminal_resources_at_any_budget
+    (graph : Graph Symbol Constraint) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (recursiveDepth : Nat)
+    (workerIH : IdentityEagerEmittedCompleteAtDepth (bits := bits)
+      graph checkEmpty edgesOf formulas solver recursiveDepth)
+    (inventory : Inventory) (caller : Caller (bits + 2)) (memos : Memos) (metadata : Metadata Unit)
+    (before : Cached) (seed : Seed) (bound ceiling uv handle : Nat) (scs : List Suspended) (value : Node)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (ready : EnumerationDriver.Ready uv before.core)
+    (stored : before.core.values[uv]? = some (.unenumerated (some handle) scs))
+    (incoming : EnumerationReferences.IncomingAvoid uv before.core)
+    (available : Available caller.checked.native.machine.heap value) (closed : value.free = [])
+    (dispatch : (match (generalizing := false) value with
+      | .node .. => !(scs.any (fun sc => EqualityTrie.isTerminal sc.trie)) | _ => false) = false)
+    (fits : Fits seed.2 caller.checked)
+    (known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap)
+    (mass : SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling)
+    (bucketBound : scs.length ≤ bound)
+    (selectionMembers : ∀ entry rows depth free, ∀ edge ∈ edgesOf (.node entry rows depth free), edge ∈ rows)
+    (selectionLength : ∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length)
+    (reserved : fallbackReserved bits bound ceiling
+      (fun retained current => eagerReserved bits recursiveDepth current retained) seed)
+    (workFuel : Nat) :
+    IdentityEmittedCompleteResources formulas solver caller
+      (fallbackPlan bound ceiling (fun retained current => eagerFinal recursiveDepth current retained) seed)
+      (finish uv (SourcePruningEnumerationSharedReceiptContinuation.run
+        (SourcePruningEnumerationSharedPreparedRecursive.continueWith
+          (resumeWithNarrow (Typing := Unit) (width := bits + 2)
+            (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty
+              workFuel workFuel workFuel workFuel workFuel edgesOf)
+            (fun _ _ _ node state => .done node state) graph [] checkEmpty edgesOf
+            none (fun _ _ => none) workFuel recursiveDepth)
+          graph [] none (fun _ _ => none) workFuel metadata uv)
+        caller memos.query
+        (SourcePruningEnumerationSharedSelectedOpaqueDispatch.run checkEmpty
+          workFuel workFuel workFuel workFuel workFuel uv scs value caller before memos.query))) := by
+  let continuation : Nat → Seed → Seed := fun retained current => eagerFinal recursiveDepth current retained
+  let plan := fallbackPlan bound ceiling continuation seed
+  let hook := SourcePruningEnumerationSharedPreparedRecursive.continueWith
+    (resumeWithNarrow (Typing := Unit) (width := bits + 2)
+      (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty
+        workFuel workFuel workFuel workFuel workFuel edgesOf)
+      (fun _ _ _ node state => .done node state) graph [] checkEmpty edgesOf
+      none (fun _ _ => none) workFuel recursiveDepth)
+    graph [] none (fun _ _ => none) workFuel metadata uv
+  let opaqueRun := SourcePruningEnumerationSharedSelectedOpaqueDispatch.run checkEmpty
+    workFuel workFuel workFuel workFuel workFuel uv scs value caller before memos.query
+  change IdentityEmittedCompleteResources formulas solver caller plan
+    (finish uv (SourcePruningEnumerationSharedReceiptContinuation.run hook caller memos.query opaqueRun))
+  have cost : scs.length + 1 ≤ bound + 1 := by omega
+  have padding : Le (advance seed (scs.length + 1)).2 (advance seed (bound + 1)).2 ∧
+      (advance seed (scs.length + 1)).1 ⊆ (advance seed (bound + 1)).1 :=
+    ⟨SourcePruningEnumerationSharedIncomingReservation.advance_count_profile_mono seed cost,
+      SourcePruningEnumerationSharedIncomingReservation.advance_count_alphabet_mono seed cost⟩
+  have finalGrowth := eagerFinal_ge recursiveDepth (advance seed (bound + 1)) (ceiling + bound)
+  have completedResources : ∀ (fragment : Fragment) (reached : Caller (bits + 2))
+      (saved : Queries) (after : Cached),
+      opaqueRun = some (.complete fragment reached saved after) →
+      IdentityEmittedCompleteResources formulas solver caller plan
+        (finish uv (SourcePruningEnumerationSharedReceiptContinuation.run hook caller memos.query
+          (some (.complete fragment reached saved after)))) := by
+    intro fragment reached saved after observed
+    obtain ⟨_largerBound, final, next, _replay, post, query, _advance, _admitted, _pending, _history,
+        afterFits, afterKnown, shape, _finalization⟩ :=
+      SourcePruningEnumerationSharedSelectedOpaqueDispatch.observed_complete_resources
+        seed formulas solver inventory caller memos metadata before checkEmpty uv handle scs value
+        packet ready stored incoming available closed dispatch fits (reserved.1.prefix cost) known
+        workFuel workFuel workFuel workFuel workFuel fragment reached saved after observed
+    rcases shape with completed | stopped | rejected
+    · obtain ⟨produced, finished, same, afterPacket, _counter, afterMass⟩ := completed
+      have sameAfter : after = finished := (SelectedEdge.Result.complete.inj same).2.2.2
+      rw [← sameAfter] at afterPacket afterMass
+      have paddedFits := afterFits.mono padding.1
+      have paddedKnown : Heap (fun guard => guard ∈ (advance seed (bound + 1)).1)
+          reached.checked.native.machine.heap :=
+        fun key edge found => padding.2 (afterKnown key edge found)
+      have actualMass : SourcePruningEnumerationPrefixAdmission.suspendedBound after.core ≤ ceiling + bound := by
+        omega
+      have callback := identity_callback_emitted_complete_at_any_budget graph checkEmpty edgesOf
+        formulas solver recursiveDepth workerIH next reached final after metadata uv fragment
+        (advance seed (bound + 1)) (ceiling + bound) afterPacket paddedFits paddedKnown
+        selectionMembers selectionLength actualMass reserved.2 workFuel
+      rw [query] at callback
+      have composed := identity_emitted_complete_post post callback
+      have actualHook : IdentityEmittedCompleteResources formulas solver caller plan
+          (hook fragment reached saved after) := by
+        simpa only [hook, plan, continuation, fallbackPlan] using composed
+      cases observedHook : hook fragment reached saved after with
+      | complete outputs actual returned =>
+          simpa only [SourcePruningEnumerationSharedReceiptContinuation.run, observedHook, finish] using actualHook
+      | stopped outputs reason endpoint =>
+          simpa only [SourcePruningEnumerationSharedReceiptContinuation.run, observedHook, finish,
+            IdentityEmittedCompleteResources, emitted] using actualHook
+    · obtain ⟨finished, outer, waiting, impossible, _counter, _mass⟩ := stopped
+      cases impossible
+    · cases rejected
+  have rejectedResources : ∀ (reached : Caller (bits + 2)) (saved : Queries) (after : Cached)
+      (outer : Core) (waiting : EnumerationWaitingIndex.Waiting),
+      ChildDispatch.run checkEmpty workFuel workFuel workFuel workFuel workFuel scs value caller before memos.query =
+        ((.ok (some []), reached, saved, outer, waiting), some after) →
+      IdentityEmittedCompleteResources formulas solver caller plan (.complete [] reached saved) := by
+    intro reached saved after outer waiting observed
+    obtain ⟨roots, paths, _storage, realized, counts, flags⟩ := packet.valid
+    have bounded : ∀ sc ∈ scs, sc.var < before.core.counter :=
+      ready.safe.1.values _ (List.mem_of_getElem? stored)
+    have pending := EnumerationReferences.pending_inputs before.core packet.pending uv (some handle) scs stored
+    obtain ⟨final, next, _afterRoots, _replay, post, query, _grows, _paths, _storage, _realized,
+        _counts, _flags, _origin, _protects, _references, _pending, _shape, afterFits, afterKnown⟩ :=
+      ChildDispatch.observed_complete_with_fragments_resources seed formulas solver inventory caller before
+        checkEmpty scs value roots memos packet.context packet.safe paths counts flags realized bounded pending
+        available closed fits (reserved.1.prefix cost) known
+        workFuel workFuel workFuel workFuel workFuel [] reached after saved outer waiting observed (.inl rfl)
+    have certificate : SourcePruningEnumerationSharedPreparedRecursive.OutcomeResources (Typing := Unit)
+        formulas solver caller (advance seed (bound + 1)) (.complete [] reached saved) := by
+      refine ⟨reached, next, final, post, afterFits.mono padding.1, ?_, rfl, query.symm, ?_⟩
+      · intro key edge found
+        exact padding.2 (afterKnown key edge found)
+      · intro output impossible
+        cases impossible
+    simpa only [plan, continuation, fallbackPlan] using
+      identity_emitted_complete_mono finalGrowth.1 finalGrowth.2 (identity_emitted_complete_of_outcome certificate)
+  by_cases empty : value = .empty
+  · have observed : opaqueRun = some (.rejected caller memos.query before) := by
+      simpa only [opaqueRun, empty] using
+        SourcePruningEnumerationSharedSelectedOpaqueDispatch.empty checkEmpty
+          workFuel workFuel workFuel workFuel workFuel uv scs caller before memos.query
+    rw [observed]
+    have growth := fallbackPlan_ge bound ceiling continuation
+      (fun retained current => eagerFinal_ge recursiveDepth current retained) seed
+    apply identity_emitted_complete_of_outcome
+    refine ⟨caller, inventory, memos, Post.refl packet.context, fits.mono growth.1, ?_, rfl, rfl, ?_⟩
+    · intro key edge found
+      exact growth.2 (known key edge found)
+    · intro output impossible
+      cases impossible
+  · have receiptShape : opaqueRun =
+        match ChildDispatch.run checkEmpty workFuel workFuel workFuel workFuel workFuel scs value caller before memos.query with
+        | ((.ok (some [.ok (fragment, _returned)]), reached, saved, _outer, _waiting), some after) =>
+            match SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap workFuel uv fragment after with
+            | some finished => some (.complete fragment reached saved finished)
+            | none => some (.finalizeStopped fragment reached saved after)
+        | (observation, candidate) => some (.stopped [] observation candidate) := by
+      dsimp only [opaqueRun]
+      unfold SourcePruningEnumerationSharedSelectedOpaqueDispatch.run
+      rw [if_neg empty]
+      split
+      · rename_i selected
+        have impossible : false = true := dispatch.symm.trans selected
+        cases impossible
+      · rfl
+    rw [receiptShape]
+    cases childAt : ChildDispatch.run checkEmpty workFuel workFuel workFuel workFuel workFuel scs value
+        caller before memos.query with
+    | mk observation candidate =>
+      rcases observation with ⟨raw, reached, saved, outer, waiting⟩
+      cases raw with
+      | error failure =>
+        constructor
+        · intro output impossible
+          cases impossible
+        · trivial
+      | ok raw =>
+        cases raw with
+        | none =>
+          constructor
+          · intro output impossible
+            cases impossible
+          · trivial
+        | some raw =>
+          cases raw with
+          | nil =>
+            cases candidate with
+            | none =>
+              constructor
+              · intro output impossible
+                cases impossible
+              · trivial
+            | some after => exact rejectedResources reached saved after outer waiting childAt
+          | cons first rest =>
+            cases first with
+            | error failure =>
+              constructor
+              · intro output impossible
+                cases impossible
+              · trivial
+            | ok pair =>
+              rcases pair with ⟨fragment, returned⟩
+              cases rest with
+              | cons second remaining =>
+                constructor
+                · intro output impossible
+                  cases impossible
+                · trivial
+              | nil =>
+                cases candidate with
+                | none =>
+                  constructor
+                  · intro output impossible
+                    cases impossible
+                  · trivial
+                | some after =>
+                  change IdentityEmittedCompleteResources formulas solver caller plan
+                    (finish uv (SourcePruningEnumerationSharedReceiptContinuation.run hook caller memos.query
+                      (match SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap
+                        workFuel uv fragment after with
+                      | some finished => some (.complete fragment reached saved finished)
+                      | none => some (.finalizeStopped fragment reached saved after))))
+                  cases finalized : SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap
+                      workFuel uv fragment after with
+                  | none =>
+                    constructor
+                    · intro output impossible
+                      cases impossible
+                    · trivial
+                  | some finished =>
+                    apply completedResources fragment reached saved finished
+                    rw [receiptShape, childAt, finalized]
+
+end ActualOpaqueTerminalResources
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation

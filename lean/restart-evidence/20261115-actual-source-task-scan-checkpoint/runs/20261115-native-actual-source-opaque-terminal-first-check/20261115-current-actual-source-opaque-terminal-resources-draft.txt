@@ -1,0 +1,159 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-actual-source-opaque-terminal-first-check/candidate-0/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:14437:6: error: unexpected token 'opaque'; expected '(', ':=', '|' or term
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-actual-source-opaque-terminal-first-check/candidate-0/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:14419:28: error: Invalid argument name `Typing` for function
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-actual-source-opaque-terminal-first-check/candidate-0/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:14431:22: error: Invalid argument name `Typing` for function
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-actual-source-opaque-terminal-first-check/candidate-0/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:14427:100: error: unsolved goals
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+x✝ : Sort u_1
+resumeWithNarrow : x✝
+graph : Graph Symbol Constraint
+checkEmpty : Bool
+edgesOf : Node → List (EdgeValue Symbol Constraint)
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+recursiveDepth : Nat
+workerIH : IdentityEagerEmittedCompleteAtDepth graph checkEmpty edgesOf formulas solver recursiveDepth
+inventory : Inventory
+caller : Caller (bits + 2)
+memos : Memos
+metadata : Metadata Unit
+before : Cached
+seed : Seed
+bound ceiling uv handle : Nat
+scs : List Suspended
+value : Node
+packet : Packet formulas solver inventory caller memos metadata before
+ready : EnumerationDriver.Ready uv before.core
+stored : before.core.values[uv]? = some (UVarValue.unenumerated (some handle) scs)
+incoming : EnumerationReferences.IncomingAvoid uv before.core
+available : Available caller.checked.native.machine.heap value
+closed : value.free = []
+dispatch :
+  (match value with
+    | Value.node entry edges depth free => !scs.any fun sc => EqualityTrie.isTerminal sc.trie
+    | x => false) =
+    false
+fits : Fits seed.snd caller.checked
+known : Heap (fun guard => guard ∈ seed.fst) caller.checked.native.machine.heap
+mass : SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling
+bucketBound : scs.length ≤ bound
+selectionMembers :
+  ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference) (edge : EdgeValue Symbol Constraint),
+    edge ∈ edgesOf (Value.node entry rows depth free) → edge ∈ rows
+selectionLength :
+  ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference), (edgesOf (Value.node entry rows depth free)).length ≤ rows.length
+reserved :
+  fallbackReserved bits bound ceiling (fun retained current => eagerReserved bits recursiveDepth current retained) seed
+workFuel : Nat
+continuation : Nat → Seed → Seed := fun retained current => eagerFinal recursiveDepth current retained
+plan : Seed := fallbackPlan bound ceiling continuation seed
+⊢ IdentityEmittedCompleteResources formulas solver caller
+    (fallbackPlan bound ceiling (fun retained current => eagerFinal recursiveDepth current retained) seed)
+    (finish uv
+      (SourcePruningEnumerationSharedReceiptContinuation.run
+        (SourcePruningEnumerationSharedPreparedRecursive.continueWith sorry graph [] none (fun x x_1 => none) workFuel
+          metadata uv)
+        caller memos.query
+        (SourcePruningEnumerationSharedSelectedOpaqueDispatch.run checkEmpty workFuel workFuel workFuel workFuel
+          workFuel uv scs value caller before memos.query)))
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-actual-source-opaque-terminal-first-check/candidate-0/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:14437:12: error: unexpected token ':='; expected identifier
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-actual-source-opaque-terminal-first-check/candidate-0/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:14437:12: error: unexpected token ':='; expected ':'
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-actual-source-opaque-terminal-first-check/candidate-0/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:14440:100: error: unexpected token ')'; expected identifier
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-actual-source-opaque-terminal-first-check/candidate-0/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:14440:100: error: unexpected token ')'; expected ':'
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-actual-source-opaque-terminal-first-check/candidate-0/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:14449:12: error: unexpected token '='; expected identifier
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-actual-source-opaque-terminal-first-check/candidate-0/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:14449:21: error: unexpected token '.'; expected '_' or identifier
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-actual-source-opaque-terminal-first-check/candidate-0/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:14458:86: error: unexpected identifier; expected ':'
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-actual-source-opaque-terminal-first-check/candidate-0/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:14502:48: error: unexpected identifier; expected ':'
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-actual-source-opaque-terminal-first-check/candidate-0/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:14514:26: error: unexpected token '='; expected identifier
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-actual-source-opaque-terminal-first-check/candidate-0/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:14514:35: error: unexpected token '.'; expected '_' or identifier
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-actual-source-opaque-terminal-first-check/candidate-0/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:14515:24: error: unexpected token ','; expected identifier
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-actual-source-opaque-terminal-first-check/candidate-0/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:14515:31: error: unexpected token ']'; expected ':'
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-actual-source-opaque-terminal-first-check/candidate-0/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:14527:30: error: unexpected token '='; expected identifier
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-actual-source-opaque-terminal-first-check/candidate-0/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:14528:8: error: unexpected token 'match'; expected ':'
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-actual-source-opaque-terminal-first-check/candidate-0/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:14534:23: error: unexpected token ','; expected identifier
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-actual-source-opaque-terminal-first-check/candidate-0/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:14534:81: error: unexpected token ','; expected ':'
+MicroCFTA.SourcePruningEnumerationSharedEagerReservation.identity_actual_opaque_terminal_resources_at_any_budget.{u_1}
+  {bits : Nat} [DecidableEq SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (InternedConstructorTemplates.EdgeKey SourcePruningTemplates.Symbol
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [DecidableEq
+      (InternedConstructorTemplates.Value SourcePruningTemplates.Symbol
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  {x✝ : Sort u_1} {resumeWithNarrow : x✝}
+  (graph : EnumerationState.Graph SourcePruningTemplates.Symbol (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (checkEmpty : Bool)
+  (edgesOf :
+    InternedConstructorTemplates.Value SourcePruningTemplates.Symbol
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula) →
+      List
+        (InternedConstructorTemplates.EdgeValue SourcePruningTemplates.Symbol
+          (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (recursiveDepth : Nat)
+  (workerIH : IdentityEagerEmittedCompleteAtDepth graph checkEmpty edgesOf formulas solver recursiveDepth)
+  (inventory : SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (caller : SourceCurrentAllocatedPartialState.State (bits + 2)) (memos : EndpointMemoGateTrace.Memos)
+  (metadata : SourcePruningRecordTypes.Metadata Unit)
+  (before :
+    EnumerationExpandableIndex.Cached SourcePruningTemplates.Symbol (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (seed : SourcePruningEnumerationSharedIncomingReservation.Seed) (bound ceiling uv handle : Nat)
+  (scs : List EnumerationState.Suspended)
+  (value :
+    InternedConstructorTemplates.Value SourcePruningTemplates.Symbol
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (packet : SourcePruningEnumerationRecursive.Packet formulas solver inventory caller memos metadata before)
+  (ready : EnumerationDriver.Ready uv before.core)
+  (stored : before.core.values[uv]? = some (EnumerationState.UVarValue.unenumerated (some handle) scs))
+  (incoming : EnumerationReferences.IncomingAvoid uv before.core)
+  (available : InternedProbeProvenance.Available caller.checked.native.machine.heap value) (closed : value.free = [])
+  (dispatch :
+    (match value with
+      | InternedConstructorTemplates.Value.node entry edges depth free =>
+        !scs.any fun sc => EqualityTrie.isTerminal sc.trie
+      | x => false) =
+      false)
+  (fits : SourceCurrentConstrainedCapGeneratedQueryResources.Fits seed.snd caller.checked)
+  (known : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.fst) caller.checked.native.machine.heap)
+  (mass : SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling)
+  (bucketBound : scs.length ≤ bound)
+  (selectionMembers :
+    ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+      (rows :
+        List
+          (InternedConstructorTemplates.EdgeValue SourcePruningTemplates.Symbol
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+      (depth : Nat) (free : List InternedBinderProtocol.Reference)
+      (edge :
+        InternedConstructorTemplates.EdgeValue SourcePruningTemplates.Symbol
+          (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+      edge ∈ edgesOf (InternedConstructorTemplates.Value.node entry rows depth free) → edge ∈ rows)
+  (selectionLength :
+    ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+      (rows :
+        List
+          (InternedConstructorTemplates.EdgeValue SourcePruningTemplates.Symbol
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+      (depth : Nat) (free : List InternedBinderProtocol.Reference),
+      (edgesOf (InternedConstructorTemplates.Value.node entry rows depth free)).length ≤ rows.length)
+  (reserved :
+    fallbackReserved bits bound ceiling (fun retained current => eagerReserved bits recursiveDepth current retained)
+      seed)
+  (workFuel : Nat) :
+  IdentityEmittedCompleteResources formulas solver caller
+    (fallbackPlan bound ceiling (fun retained current => eagerFinal recursiveDepth current retained) seed)
+    (SourcePruningEnumerationSharedPreparedRecursive.finish uv
+      (SourcePruningEnumerationSharedReceiptContinuation.run
+        (SourcePruningEnumerationSharedPreparedRecursive.continueWith sorry graph [] none (fun x x_1 => none) workFuel
+          metadata uv)
+        caller memos.query
+        (SourcePruningEnumerationSharedSelectedOpaqueDispatch.run checkEmpty workFuel workFuel workFuel workFuel
+          workFuel uv scs value caller before memos.query)))
+'_private.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.0.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.identity_actual_opaque_terminal_resources_at_any_budget' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

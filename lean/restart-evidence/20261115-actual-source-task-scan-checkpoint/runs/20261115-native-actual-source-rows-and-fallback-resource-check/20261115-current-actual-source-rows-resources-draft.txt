@@ -1,0 +1,119 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-actual-source-rows-and-fallback-resource-check/candidate-0/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:14419:60: error: unsolved goals
+case cons.complete.complete.complete
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+visit : EdgeValue Symbol Constraint → Caller (bits + 2) → Queries → Cached → RowsFold
+before : Cached
+edge first : EdgeValue Symbol Constraint
+rest : List (EdgeValue Symbol Constraint)
+ih :
+  ∀ (caller : Caller (bits + 2)) (queries : Queries),
+    SourcePruningEnumerationSharedBranching.scan visit before (rest ++ [edge]) caller queries =
+      match SourcePruningEnumerationSharedBranching.scan visit before rest caller queries with
+      | NativeContinuations.Result.complete processed outputs reached saved =>
+        identity_actual_rows_append processed outputs (visit edge reached saved before)
+      | NativeContinuations.Result.stopped processed outputs current =>
+        NativeContinuations.Result.stopped processed outputs current
+caller : Caller (bits + 2)
+queries : Queries
+processed : List (SelectedEdge.Result (bits + 2))
+outputs : List (Output (bits + 2) Unit)
+reached : Caller (bits + 2)
+saved : Queries
+firstRun : visit first caller queries before = NativeContinuations.Result.complete processed outputs reached saved
+later : List (SelectedEdge.Result (bits + 2))
+remaining : List (Output (bits + 2) Unit)
+lastCaller : Caller (bits + 2)
+lastQueries : Queries
+tailRun :
+  SourcePruningEnumerationSharedBranching.scan visit before rest reached saved =
+    NativeContinuations.Result.complete later remaining lastCaller lastQueries
+processed✝ : List (SelectedEdge.Result (bits + 2))
+outputs✝ : List (Output (bits + 2) Unit)
+caller✝ : Caller (bits + 2)
+queries✝ : Queries
+⊢ (match
+      match visit edge lastCaller lastQueries before with
+      | NativeContinuations.Result.complete later_1 remaining_1 reached saved =>
+        NativeContinuations.Result.complete (later ++ later_1) (remaining ++ remaining_1) reached saved
+      | NativeContinuations.Result.stopped later_1 remaining_1 current =>
+        NativeContinuations.Result.stopped (later ++ later_1) (remaining ++ remaining_1) current with
+    | NativeContinuations.Result.complete later remaining finalCaller finalQueries =>
+      NativeContinuations.Result.complete (processed ++ later) (outputs ++ remaining) finalCaller finalQueries
+    | NativeContinuations.Result.stopped later remaining current =>
+      NativeContinuations.Result.stopped (processed ++ later) (outputs ++ remaining) current) =
+    match visit edge lastCaller lastQueries before with
+    | NativeContinuations.Result.complete later_1 remaining_1 reached saved =>
+      NativeContinuations.Result.complete (processed ++ (later ++ later_1)) (outputs ++ (remaining ++ remaining_1))
+        reached saved
+    | NativeContinuations.Result.stopped later_1 remaining_1 current =>
+      NativeContinuations.Result.stopped (processed ++ (later ++ later_1)) (outputs ++ (remaining ++ remaining_1))
+        current
+
+case cons.complete.complete.stopped
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+visit : EdgeValue Symbol Constraint → Caller (bits + 2) → Queries → Cached → RowsFold
+before : Cached
+edge first : EdgeValue Symbol Constraint
+rest : List (EdgeValue Symbol Constraint)
+ih :
+  ∀ (caller : Caller (bits + 2)) (queries : Queries),
+    SourcePruningEnumerationSharedBranching.scan visit before (rest ++ [edge]) caller queries =
+      match SourcePruningEnumerationSharedBranching.scan visit before rest caller queries with
+      | NativeContinuations.Result.complete processed outputs reached saved =>
+        identity_actual_rows_append processed outputs (visit edge reached saved before)
+      | NativeContinuations.Result.stopped processed outputs current =>
+        NativeContinuations.Result.stopped processed outputs current
+caller : Caller (bits + 2)
+queries : Queries
+processed : List (SelectedEdge.Result (bits + 2))
+outputs : List (Output (bits + 2) Unit)
+reached : Caller (bits + 2)
+saved : Queries
+firstRun : visit first caller queries before = NativeContinuations.Result.complete processed outputs reached saved
+later : List (SelectedEdge.Result (bits + 2))
+remaining : List (Output (bits + 2) Unit)
+lastCaller : Caller (bits + 2)
+lastQueries : Queries
+tailRun :
+  SourcePruningEnumerationSharedBranching.scan visit before rest reached saved =
+    NativeContinuations.Result.complete later remaining lastCaller lastQueries
+processed✝ : List (SelectedEdge.Result (bits + 2))
+outputs✝ : List (Output (bits + 2) Unit)
+current✝ : NativeContinuations.Stop (Failure (bits + 2) Unit) (bits + 2)
+⊢ (match
+      match visit edge lastCaller lastQueries before with
+      | NativeContinuations.Result.complete later_1 remaining_1 reached saved =>
+        NativeContinuations.Result.complete (later ++ later_1) (remaining ++ remaining_1) reached saved
+      | NativeContinuations.Result.stopped later_1 remaining_1 current =>
+        NativeContinuations.Result.stopped (later ++ later_1) (remaining ++ remaining_1) current with
+    | NativeContinuations.Result.complete later remaining finalCaller finalQueries =>
+      NativeContinuations.Result.complete (processed ++ later) (outputs ++ remaining) finalCaller finalQueries
+    | NativeContinuations.Result.stopped later remaining current =>
+      NativeContinuations.Result.stopped (processed ++ later) (outputs ++ remaining) current) =
+    match visit edge lastCaller lastQueries before with
+    | NativeContinuations.Result.complete later_1 remaining_1 reached saved =>
+      NativeContinuations.Result.complete (processed ++ (later ++ later_1)) (outputs ++ (remaining ++ remaining_1))
+        reached saved
+    | NativeContinuations.Result.stopped later_1 remaining_1 current =>
+      NativeContinuations.Result.stopped (processed ++ (later ++ later_1)) (outputs ++ (remaining ++ remaining_1))
+        current
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-actual-source-rows-and-fallback-resource-check/candidate-0/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:14424:8: error: automatically included section variable(s) unused in theorem `_private.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.0.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.identity_actual_rows_append_resources`:
+  [DecidableEq Symbol]
+  [DecidableEq Node]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Symbol] [DecidableEq Node] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-actual-source-rows-and-fallback-resource-check/candidate-0/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:14553:94: error: unexpected identifier; expected '}'
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-actual-source-rows-and-fallback-resource-check/candidate-0/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:14518:10: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+'_private.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.0.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.identity_actual_source_rows_resources' does not depend on any axioms

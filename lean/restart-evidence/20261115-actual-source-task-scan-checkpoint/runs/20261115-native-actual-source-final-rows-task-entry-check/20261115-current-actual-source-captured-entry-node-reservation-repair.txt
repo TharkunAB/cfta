@@ -1,0 +1,108 @@
+@identity_actual_source_captured_own_current : ∀ {bits : Nat} [inst : DecidableEq SourcePruningTemplates.Symbol]
+  [inst_1 :
+    DecidableEq
+      (InternedConstructorTemplates.EdgeKey SourcePruningTemplates.Symbol
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (InternedConstructorTemplates.Value SourcePruningTemplates.Symbol
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (graph : EnumerationState.Graph SourcePruningTemplates.Symbol (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (checkEmpty : Bool)
+  (edgesOf :
+    InternedConstructorTemplates.Value SourcePruningTemplates.Symbol
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula) →
+      List
+        (InternedConstructorTemplates.EdgeValue SourcePruningTemplates.Symbol
+          (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+  (recursiveDepth workFuel : Nat) (metadata : SourcePruningRecordTypes.Metadata Unit) (uv handle : Nat)
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (root : IdentityActualSourceRoot bits) (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+  (rows :
+    List
+      (InternedConstructorTemplates.EdgeValue SourcePruningTemplates.Symbol
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+  (depth : Nat) (free : List InternedBinderProtocol.Reference),
+  root.incoming = InternedConstructorTemplates.Value.node parentEntry rows depth free →
+    root.Shapes →
+      InternedProbeProvenance.Available root.caller.checked.native.machine.heap
+          (InternedConstructorTemplates.Value.node parentEntry rows depth free) →
+        free = [] →
+          SourcePruningEnumerationPrefixAdmission.suspendedBound root.before.core ≤ root.ceiling →
+            root.scs.length ≤ root.ceiling →
+              (∀ (sc : EnumerationState.Suspended), sc ∈ root.scs → sc.var < root.before.core.counter) →
+                EnumerationDependencies.InputsPending root.before.core root.scs →
+                  EnumerationDriver.Ready uv root.before.core →
+                    root.before.core.values[uv]? =
+                        some (EnumerationState.UVarValue.unenumerated (some handle) root.scs) →
+                      EnumerationReferences.IncomingAvoid uv root.before.core →
+                        ∀ (inventory : SourceCurrentAllocatedNativeInventoryState.Inventory)
+                          (rowCaller : SourceCurrentAllocatedPartialState.State (bits + 2))
+                          (memos : EndpointMemoGateTrace.Memos) (rowQueries : SourceEndpointMemo.Memos),
+                          SourcePruningEnumerationRecursive.Packet formulas solver inventory rowCaller memos metadata
+                              root.before →
+                            memos.query = rowQueries →
+                              SourceEqualityRequiredCache.Keeps root.caller.checked.native.machine.heap
+                                  rowCaller.checked.native.machine.heap →
+                                ∀
+                                  (attempted remaining :
+                                    List
+                                      (InternedConstructorTemplates.EdgeValue SourcePruningTemplates.Symbol
+                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+                                  (edge :
+                                    InternedConstructorTemplates.EdgeValue SourcePruningTemplates.Symbol
+                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                  (tries : List EqualityTrie.Trie)
+                                  (residual : Option (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+                                  (processed :
+                                    List
+                                      (SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result
+                                        (bits + 2)))
+                                  (outputs :
+                                    List (SourcePruningEnumerationSharedPreparedRecursive.Output (bits + 2) Unit)),
+                                  edgesOf root.incoming = attempted ++ edge :: remaining →
+                                    SourcePruningEnumerationSharedBranching.scan
+                                          (identity_actual_source_root_visit graph checkEmpty edgesOf recursiveDepth
+                                            workFuel metadata uv root.scs)
+                                          root.before attempted root.caller root.queries =
+                                        SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.complete
+                                          processed outputs rowCaller rowQueries →
+                                      SourceCurrentConstrainedCapGeneratedQueryResources.Fits
+                                          (root.rowSeed recursiveDepth attempted.length).snd rowCaller.checked →
+                                        SourceEqualityAnnotationHeap.Heap
+                                            (fun guard => guard ∈ (root.rowSeed recursiveDepth attempted.length).fst)
+                                            rowCaller.checked.native.machine.heap →
+                                          eagerReserved bits (recursiveDepth + 1) root.rawSeed root.ceiling →
+                                            (∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+                                                (rows :
+                                                  List
+                                                    (InternedConstructorTemplates.EdgeValue
+                                                      SourcePruningTemplates.Symbol
+                                                      (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+                                                (depth : Nat) (free : List InternedBinderProtocol.Reference)
+                                                (selected :
+                                                  InternedConstructorTemplates.EdgeValue SourcePruningTemplates.Symbol
+                                                    (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+                                                selected ∈
+                                                    edgesOf
+                                                      (InternedConstructorTemplates.Value.node entry rows depth free) →
+                                                  selected ∈ rows) →
+                                              (∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+                                                  (rows :
+                                                    List
+                                                      (InternedConstructorTemplates.EdgeValue
+                                                        SourcePruningTemplates.Symbol
+                                                        (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+                                                  (depth : Nat) (free : List InternedBinderProtocol.Reference),
+                                                  (edgesOf
+                                                        (InternedConstructorTemplates.Value.node entry rows depth
+                                                          free)).length ≤
+                                                    rows.length) →
+                                                EnumerationState.arityAllows edge.children.length root.scs = true →
+                                                  SourcePruningEnumerationConstraint.project edge.entry.key.constraint =
+                                                      some (tries, residual) →
+                                                    have rowSeed := root.rowSeed recursiveDepth attempted.length;
+                                                    ⋯
+'_private.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.0.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.identity_actual_source_captured_own_current' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

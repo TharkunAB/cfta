@@ -1,0 +1,9 @@
+omit [DecidableEq Symbol] [DecidableEq Node] in
+private theorem identity_actual_prefix_has_no_failed_preparation
+    (graph : Graph Symbol Constraint) (metadata : Metadata Unit) (workFuel uv : Nat)
+    (caller : Caller (bits + 2)) (before : Cached) (queries : Queries) :
+    match SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
+      (fun _ _ _ node state => .done node state) graph [] none (fun _ _ => none) metadata
+      workFuel workFuel workFuel workFuel workFuel workFuel uv caller before queries with
+    | .narrowed _ (.failed _ _) _ _ _ _ _ _ => False
+    | _ => True := by

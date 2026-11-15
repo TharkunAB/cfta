@@ -1,0 +1,176 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-actual-source-final-rows-task-entry-check/candidate-1/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:14712:28: error: Insufficient number of fields for `⟨...⟩` constructor: Constructor `And.intro` has 2 explicit field, but only 1 was provided
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-actual-source-final-rows-task-entry-check/candidate-1/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:14712:52: error: Missing eliminator: An eliminator must be provided when multiple induction targets are specified and no default eliminator has been registered
+
+Hint: Write `using <eliminator-name>` to specify an eliminator, or register a default eliminator with the attribute `[cases_eliminator]`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261115-native-actual-source-final-rows-task-entry-check/candidate-1/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:14731:24: error: Application type mismatch: The argument
+  innerLedger
+has type
+  IdentityActualFrameLedger formulas solver root metadata uv
+    (identity_actual_source_inner_point height root.limit root.own
+        { frame := point.frame, completed := point.completed, caller := point.caller, before := point.before,
+          queries := point.queries, height := height + 1, count := point.count, bound := point.bound,
+          mass := point.mass, seed := point.seed }
+        rest edge residual rowCaller rowQueries rowOwn
+        (identity_actual_source_row_boundary recursiveDepth root.limit root.own height
+          { frame := point.frame, completed := point.completed, caller := point.caller, before := point.before,
+            queries := point.queries, height := height + 1, count := point.count, bound := point.bound,
+            mass := point.mass, seed := point.seed }
+          attempted.length)).frame
+    rowCaller rowOwn
+    (List.map (fun input => (input.fst, input.snd.fst))
+      (List.map
+        (fun input => (input.fst, input.snd, SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst))
+        (SourcePruningEnumerationEdgeInputs.children edge bucket point.before.core.counter tries)))
+but is expected to have type
+  IdentityActualFrameLedger formulas solver root metadata uv
+    (IdentityActualSourceTask.tuple inner (List.map (fun input => (?m.1135, ?m.1136)) staged)).point.frame rowCaller
+    rowOwn (List.map (fun input => (?m.1144, ?m.1145)) staged)
+in the application
+  taskIH (IdentityActualSourceTask.tuple inner (List.map (fun input => (?m.1135, ?m.1136)) staged)) decrease rowCaller
+    rowOwn (List.map (fun input => (?m.1144, ?m.1145)) staged) innerLedger
+MicroCFTA.SourcePruningEnumerationSharedEagerReservation.identity_actual_source_tuple_nil_resources {bits : Nat}
+  [DecidableEq SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (InternedConstructorTemplates.EdgeKey SourcePruningTemplates.Symbol
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [DecidableEq
+      (InternedConstructorTemplates.Value SourcePruningTemplates.Symbol
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (graph : EnumerationState.Graph SourcePruningTemplates.Symbol (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (checkEmpty : Bool)
+  (edgesOf :
+    InternedConstructorTemplates.Value SourcePruningTemplates.Symbol
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula) →
+      List
+        (InternedConstructorTemplates.EdgeValue SourcePruningTemplates.Symbol
+          (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+  (recursiveDepth workFuel : Nat) (metadata : SourcePruningRecordTypes.Metadata Unit) (uv : Nat)
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (workerIH : IdentityEagerEmittedCompleteAtDepth graph checkEmpty edgesOf formulas solver recursiveDepth)
+  (root : IdentityActualSourceRoot bits) (point : IdentityActualSourcePoint bits)
+  (selectionMembers :
+    ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+      (rows :
+        List
+          (InternedConstructorTemplates.EdgeValue SourcePruningTemplates.Symbol
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+      (depth : Nat) (free : List InternedBinderProtocol.Reference)
+      (selected :
+        InternedConstructorTemplates.EdgeValue SourcePruningTemplates.Symbol
+          (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+      selected ∈ edgesOf (InternedConstructorTemplates.Value.node entry rows depth free) → selected ∈ rows)
+  (selectionLength :
+    ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+      (rows :
+        List
+          (InternedConstructorTemplates.EdgeValue SourcePruningTemplates.Symbol
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+      (depth : Nat) (free : List InternedBinderProtocol.Reference),
+      (edgesOf (InternedConstructorTemplates.Value.node entry rows depth free)).length ≤ rows.length)
+  (taskIH :
+    ∀ (smaller : IdentityActualSourceTask bits),
+      IdentityActualSourceTask.work root.limit smaller <
+          IdentityActualSourceTask.work root.limit (IdentityActualSourceTask.tuple point []) →
+        IdentityActualSourceCorrectAt graph checkEmpty edgesOf recursiveDepth workFuel metadata uv formulas solver root
+          smaller) :
+  IdentityActualSourceCorrectAt graph checkEmpty edgesOf recursiveDepth workFuel metadata uv formulas solver root
+    (IdentityActualSourceTask.tuple point [])
+'_private.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.0.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.identity_actual_source_tuple_nil_resources' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'_private.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.0.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.identity_actual_source_rows_resources' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationSharedEagerReservation.identity_actual_source_fallback_resources {bits : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (graph :
+    MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (checkEmpty : Bool)
+  (edgesOf :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      List
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (recursiveDepth workFuel : Nat) (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Unit) (uv : Nat)
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (root : MicroCFTA.SourcePruningEnumerationSharedEagerReservation.IdentityActualSourceRoot bits)
+  (point : MicroCFTA.SourcePruningEnumerationSharedEagerReservation.IdentityActualSourcePoint bits)
+  (incoming :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (bucket : List MicroCFTA.EnumerationState.Suspended)
+  (rest :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) ×
+        List MicroCFTA.EnumerationState.Suspended))
+  (fallback : MicroCFTA.SourcePruningEnumerationSharedEagerChildren.ordinaryNonterminal bucket incoming = false)
+  (taskIH :
+    ∀ (smaller : MicroCFTA.SourcePruningEnumerationSharedEagerReservation.IdentityActualSourceTask bits),
+      MicroCFTA.SourcePruningEnumerationSharedEagerReservation.IdentityActualSourceTask.work root.limit smaller <
+          MicroCFTA.SourcePruningEnumerationSharedEagerReservation.IdentityActualSourceTask.work root.limit
+            (MicroCFTA.SourcePruningEnumerationSharedEagerReservation.IdentityActualSourceTask.child point incoming
+              bucket rest) →
+        MicroCFTA.SourcePruningEnumerationSharedEagerReservation.IdentityActualSourceCorrectAt graph checkEmpty edgesOf
+          recursiveDepth workFuel metadata uv formulas solver root smaller) :
+  MicroCFTA.SourcePruningEnumerationSharedEagerReservation.IdentityActualSourceCorrectAt graph checkEmpty edgesOf
+    recursiveDepth workFuel metadata uv formulas solver root
+    (MicroCFTA.SourcePruningEnumerationSharedEagerReservation.IdentityActualSourceTask.child point incoming bucket rest)
+'_private.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.0.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.identity_actual_source_fallback_resources' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationSharedEagerReservation.identity_actual_source_task_resources {bits : Nat}
+  [DecidableEq SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (InternedConstructorTemplates.EdgeKey SourcePruningTemplates.Symbol
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [DecidableEq
+      (InternedConstructorTemplates.Value SourcePruningTemplates.Symbol
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (graph : EnumerationState.Graph SourcePruningTemplates.Symbol (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (checkEmpty : Bool)
+  (edgesOf :
+    InternedConstructorTemplates.Value SourcePruningTemplates.Symbol
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula) →
+      List
+        (InternedConstructorTemplates.EdgeValue SourcePruningTemplates.Symbol
+          (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+  (recursiveDepth workFuel : Nat) (metadata : SourcePruningRecordTypes.Metadata Unit) (uv : Nat)
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (workerIH : IdentityEagerEmittedCompleteAtDepth graph checkEmpty edgesOf formulas solver recursiveDepth)
+  (root : IdentityActualSourceRoot bits)
+  (selectionMembers :
+    ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+      (rows :
+        List
+          (InternedConstructorTemplates.EdgeValue SourcePruningTemplates.Symbol
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+      (depth : Nat) (free : List InternedBinderProtocol.Reference)
+      (selected :
+        InternedConstructorTemplates.EdgeValue SourcePruningTemplates.Symbol
+          (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+      selected ∈ edgesOf (InternedConstructorTemplates.Value.node entry rows depth free) → selected ∈ rows)
+  (selectionLength :
+    ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+      (rows :
+        List
+          (InternedConstructorTemplates.EdgeValue SourcePruningTemplates.Symbol
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+      (depth : Nat) (free : List InternedBinderProtocol.Reference),
+      (edgesOf (InternedConstructorTemplates.Value.node entry rows depth free)).length ≤ rows.length)
+  (task : IdentityActualSourceTask bits) :
+  IdentityActualSourceCorrectAt graph checkEmpty edgesOf recursiveDepth workFuel metadata uv formulas solver root task
+'_private.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.0.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.identity_actual_source_task_resources' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

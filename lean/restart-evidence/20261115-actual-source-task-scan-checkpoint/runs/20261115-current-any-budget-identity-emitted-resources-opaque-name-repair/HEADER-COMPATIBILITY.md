@@ -1,0 +1,1 @@
+All original declaration, public, internal, prepared, and probe bytes match the frozen predecessor. Each proof header occurs exactly once in the repaired raw file. The raw comparison permits only the local opaqueResources rename, autoImplicit guard, and relocation of the existing heartbeat option. Static checks pass. Lean elaboration is pending.

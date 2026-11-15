@@ -1,0 +1,50 @@
+MicroCFTA.SourcePruningEnumerationSharedEagerReservation.identity_actual_source_tuple_nil_resources {bits : Nat}
+  [DecidableEq SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (InternedConstructorTemplates.EdgeKey SourcePruningTemplates.Symbol
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [DecidableEq
+      (InternedConstructorTemplates.Value SourcePruningTemplates.Symbol
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (graph : EnumerationState.Graph SourcePruningTemplates.Symbol (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (checkEmpty : Bool)
+  (edgesOf :
+    InternedConstructorTemplates.Value SourcePruningTemplates.Symbol
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula) →
+      List
+        (InternedConstructorTemplates.EdgeValue SourcePruningTemplates.Symbol
+          (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+  (recursiveDepth workFuel : Nat) (metadata : SourcePruningRecordTypes.Metadata Unit) (uv : Nat)
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (workerIH : IdentityEagerEmittedCompleteAtDepth graph checkEmpty edgesOf formulas solver recursiveDepth)
+  (root : IdentityActualSourceRoot bits) (point : IdentityActualSourcePoint bits)
+  (selectionMembers :
+    ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+      (rows :
+        List
+          (InternedConstructorTemplates.EdgeValue SourcePruningTemplates.Symbol
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+      (depth : Nat) (free : List InternedBinderProtocol.Reference)
+      (selected :
+        InternedConstructorTemplates.EdgeValue SourcePruningTemplates.Symbol
+          (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+      selected ∈ edgesOf (InternedConstructorTemplates.Value.node entry rows depth free) → selected ∈ rows)
+  (selectionLength :
+    ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+      (rows :
+        List
+          (InternedConstructorTemplates.EdgeValue SourcePruningTemplates.Symbol
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+      (depth : Nat) (free : List InternedBinderProtocol.Reference),
+      (edgesOf (InternedConstructorTemplates.Value.node entry rows depth free)).length ≤ rows.length)
+  (taskIH :
+    ∀ (smaller : IdentityActualSourceTask bits),
+      IdentityActualSourceTask.work root.limit smaller <
+          IdentityActualSourceTask.work root.limit (IdentityActualSourceTask.tuple point []) →
+        IdentityActualSourceCorrectAt graph checkEmpty edgesOf recursiveDepth workFuel metadata uv formulas solver root
+          smaller) :
+  IdentityActualSourceCorrectAt graph checkEmpty edgesOf recursiveDepth workFuel metadata uv formulas solver root
+    (IdentityActualSourceTask.tuple point [])
+'_private.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.0.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.identity_actual_source_tuple_nil_resources' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
