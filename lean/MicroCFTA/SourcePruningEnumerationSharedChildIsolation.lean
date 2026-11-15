@@ -52,7 +52,7 @@ private theorem shared_dispatch_observed_isolated_pending
     exact allowed value member sc listed (by simpa only [frame.representatives] using same)
 
 -- The fold observer follows the actual shared source sequence.
-private theorem shared_fold_observed_isolated_pending
+theorem shared_fold_observed_isolated_pending
     (checkEmpty : Bool) (nativeFuel p h : Nat) (sources : List Nat)
     (beforeCaller : Caller width) (before : Core)
     (target : Nat) (queries : Queries)
