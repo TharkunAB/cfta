@@ -5031,6 +5031,7 @@ import MicroCFTA.SourcePruningEnumerationSharedParkedRawBucketReceipt
 import MicroCFTA.SourceSynthesisCurrentFirstRealPrefix
 import MicroCFTA.SourcePruningEnumerationSharedBucketWriteToClear
 import MicroCFTA.SourceSynthesisCurrentSharedInitialPreparation
+import MicroCFTA.SourcePruningEnumerationSharedProperPathWitness
 /-!
 # Proof dependency audit
 
@@ -5588,3 +5589,6 @@ run_cmd do
 
 #check @MicroCFTA.SourceSynthesisCurrentSharedInitialPreparation.accepted_shared_initial_preparation
 #print axioms MicroCFTA.SourceSynthesisCurrentSharedInitialPreparation.accepted_shared_initial_preparation
+
+#check @MicroCFTA.SourcePruningEnumerationSharedProperPathWitness.selected_parked_one_arrow_path_assignment
+#print axioms MicroCFTA.SourcePruningEnumerationSharedProperPathWitness.selected_parked_one_arrow_path_assignment
