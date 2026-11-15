@@ -14765,3 +14765,205 @@ private theorem identity_actual_source_rows_resources
 
 end ActualSourceRowsResourceInduction
 end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+section ActualSourceFallbackResourceInduction
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedNativeResourceForecast (Le)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
+open SourcePruningEnumerationSharedIncomingReservation (advance)
+open SourcePruningEnumerationSharedPreparedRecursive (finish emitted)
+open SourcePruningEnumerationSharedSelectedContinuations
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+variable {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+attribute [local irreducible] nodePlan tuplePlan fallbackPlan identity_actual_frame_plan
+  identity_actual_frame_reserved IdentityActualSourceRoot.limit IdentityActualSourceRoot.own
+
+/-- A fallback child uses its actual dispatch and the smaller remaining tuple. -/
+private theorem identity_actual_source_fallback_resources
+    (graph : Graph Symbol Constraint) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint)) (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Unit) (uv : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits) (point : IdentityActualSourcePoint bits)
+    (incoming : Node) (bucket : List Suspended) (rest : List (Node × List Suspended))
+    (fallback : SourcePruningEnumerationSharedEagerChildren.ordinaryNonterminal bucket incoming = false)
+    (taskIH : ∀ smaller : IdentityActualSourceTask bits,
+      smaller.work root.limit < IdentityActualSourceTask.work root.limit (.child point incoming bucket rest) →
+      IdentityActualSourceCorrectAt graph checkEmpty edgesOf recursiveDepth workFuel metadata uv formulas solver root smaller) :
+    IdentityActualSourceCorrectAt graph checkEmpty edgesOf recursiveDepth workFuel metadata uv formulas solver root
+      (.child point incoming bucket rest) := by
+  intro scopeOriginal scopeBefore allInputs ancestors origin current
+  have stoppedResources (observation : ChildDispatch.Observation (bits + 2))
+      (candidate : Option (EnumerationExpandableIndex.Cached Symbol Constraint))
+      (noAdvance : NativeContinuations.advance
+        (SelectedEdge.Result.stopped point.completed observation candidate) = none) :
+      IdentityEmittedCompleteResources formulas solver point.caller
+        (IdentityActualSourceTask.goal recursiveDepth root.limit root.own
+          (.child point incoming bucket rest)).forecast
+        (finish uv ((identity_actual_frame_callbacks graph checkEmpty edgesOf recursiveDepth workFuel
+          metadata uv point.frame).2 point.completed observation candidate)) := by
+    rcases observation with ⟨raw, reached, saved, outer, waiting⟩
+    have stopped : (identity_actual_frame_callbacks graph checkEmpty edgesOf recursiveDepth workFuel
+        metadata uv point.frame).2 point.completed (raw, reached, saved, outer, waiting) candidate =
+        .stopped [] [] (.edge (some (SelectedEdge.Result.stopped point.completed
+          (raw, reached, saved, outer, waiting) candidate)) (reached, saved)) := by
+      cases point.frame
+      · simp only [identity_actual_frame_callbacks,
+          SourcePruningEnumerationSharedReceiptContinuation.run,
+          noAdvance, NativeContinuations.endpoint]
+      · simp only [identity_actual_frame_callbacks,
+          SourcePruningEnumerationSharedEagerChildren.consumeSelected,
+          noAdvance, NativeContinuations.endpoint]
+    rw [stopped]
+    constructor
+    · intro output member
+      cases member
+    · trivial
+  cases observed : ChildDispatch.run checkEmpty workFuel workFuel workFuel workFuel workFuel
+      bucket incoming point.caller point.before point.queries with
+  | mk observation candidate =>
+    rcases observation with ⟨raw, reached, saved, outer, waiting⟩
+    cases raw with
+    | error failure =>
+      dsimp only [IdentityActualSourceTask.run]
+      rw [SourcePruningEnumerationSharedEagerChildren.eagerChild_fallback checkEmpty
+        workFuel workFuel workFuel workFuel workFuel edgesOf bucket incoming point.caller point.before point.queries
+        _ _ fallback]
+      simp only [SourcePruningEnumerationSharedChildVisitors.shallowVisit, observed]
+      exact stoppedResources (.error failure, reached, saved, outer, waiting) candidate
+        (by cases candidate <;> rfl)
+    | ok possible =>
+      cases possible with
+      | none =>
+        dsimp only [IdentityActualSourceTask.run]
+        rw [SourcePruningEnumerationSharedEagerChildren.eagerChild_fallback checkEmpty
+          workFuel workFuel workFuel workFuel workFuel edgesOf bucket incoming point.caller point.before point.queries
+          _ _ fallback]
+        simp only [SourcePruningEnumerationSharedChildVisitors.shallowVisit, observed]
+        exact stoppedResources (.ok none, reached, saved, outer, waiting) candidate
+          (by cases candidate <;> rfl)
+      | some rows =>
+        cases rows with
+        | nil =>
+          cases candidate with
+          | none =>
+            dsimp only [IdentityActualSourceTask.run]
+            rw [SourcePruningEnumerationSharedEagerChildren.eagerChild_fallback checkEmpty
+              workFuel workFuel workFuel workFuel workFuel edgesOf bucket incoming point.caller point.before point.queries
+              _ _ fallback]
+            simp only [SourcePruningEnumerationSharedChildVisitors.shallowVisit, observed]
+            exact stoppedResources (.ok (some []), reached, saved, outer, waiting) none
+              rfl
+          | some after =>
+            obtain ⟨runtime, next, final, post, querySame, paddedFits, paddedKnown, _kept⟩ :=
+              identity_actual_source_fallback_child_rejected graph checkEmpty edgesOf recursiveDepth workFuel
+                metadata uv formulas solver root scopeOriginal scopeBefore allInputs point incoming bucket rest
+                current fallback outer reached saved after waiting observed
+            have tailGrowth : ∀ retained seed,
+                Le seed.2 (point.tailPlan recursiveDepth root.limit root.own retained seed).2 ∧
+                seed.1 ⊆ (point.tailPlan recursiveDepth root.limit root.own retained seed).1 := by
+              intro retained seed
+              exact tuplePlan_ge (nodePlan root.limit root.own point.height)
+                (nodePlan_ge root.limit root.own point.height) point.count point.bound retained
+                (identity_actual_frame_plan recursiveDepth root.limit root.own point.frame)
+                (identity_actual_frame_plan_ge recursiveDepth root.limit root.own point.frame) seed
+            have paddedWithin := tailGrowth (point.mass + point.bound)
+              (advance point.seed (point.bound + 1))
+            have fallbackWithin := fallbackPlan_le_nodePlan root.limit root.own point.height
+              point.bound point.mass (point.tailPlan recursiveDepth root.limit root.own) tailGrowth point.seed
+            unfold fallbackPlan at fallbackWithin
+            have numeric : Le (advance point.seed (point.bound + 1)).2
+                (nodePlan root.limit root.own point.height point.bound point.mass
+                  (point.tailPlan recursiveDepth root.limit root.own) point.seed).2 :=
+              paddedWithin.1.trans fallbackWithin.1
+            have alphabet : (advance point.seed (point.bound + 1)).1 ⊆
+                (nodePlan root.limit root.own point.height point.bound point.mass
+                  (point.tailPlan recursiveDepth root.limit root.own) point.seed).1 :=
+              fun _ member => fallbackWithin.2 (paddedWithin.2 member)
+            change IdentityEmittedCompleteResources formulas solver point.caller
+              (nodePlan root.limit root.own point.height point.bound point.mass
+                (point.tailPlan recursiveDepth root.limit root.own) point.seed)
+              (finish uv (IdentityActualSourceTask.run graph checkEmpty edgesOf recursiveDepth workFuel
+                metadata uv (.child point incoming bucket rest)))
+            rw [runtime]
+            constructor
+            · intro output member
+              cases member
+            · refine ⟨reached, next, final, post, paddedFits.mono numeric, ?_, rfl, querySame.symm, ?_⟩
+              · intro key row found
+                exact alphabet (paddedKnown key row found)
+              · intro output member
+                cases member
+        | cons first more =>
+          cases first with
+          | error failure =>
+            dsimp only [IdentityActualSourceTask.run]
+            rw [SourcePruningEnumerationSharedEagerChildren.eagerChild_fallback checkEmpty
+              workFuel workFuel workFuel workFuel workFuel edgesOf bucket incoming point.caller point.before point.queries
+              _ _ fallback]
+            simp only [SourcePruningEnumerationSharedChildVisitors.shallowVisit, observed]
+            exact stoppedResources (.ok (some (.error failure :: more)), reached, saved, outer, waiting) candidate
+              (by cases candidate <;> rfl)
+          | ok pair =>
+            rcases pair with ⟨fragment, returned⟩
+            cases more with
+            | cons second further =>
+              dsimp only [IdentityActualSourceTask.run]
+              rw [SourcePruningEnumerationSharedEagerChildren.eagerChild_fallback checkEmpty
+                workFuel workFuel workFuel workFuel workFuel edgesOf bucket incoming point.caller point.before point.queries
+                _ _ fallback]
+              simp only [SourcePruningEnumerationSharedChildVisitors.shallowVisit, observed]
+              exact stoppedResources (.ok (some (.ok (fragment, returned) :: second :: further)), reached, saved, outer, waiting) candidate
+                (by cases candidate <;> rfl)
+            | nil =>
+              cases candidate with
+              | none =>
+                dsimp only [IdentityActualSourceTask.run]
+                rw [SourcePruningEnumerationSharedEagerChildren.eagerChild_fallback checkEmpty
+                  workFuel workFuel workFuel workFuel workFuel edgesOf bucket incoming point.caller point.before point.queries
+                  _ _ fallback]
+                simp only [SourcePruningEnumerationSharedChildVisitors.shallowVisit, observed]
+                exact stoppedResources (.ok (some [.ok (fragment, returned)]), reached, saved, outer, waiting) none
+                  rfl
+              | some after =>
+                let nextPoint : IdentityActualSourcePoint bits := {point with
+                  completed := point.completed ++ [fragment]
+                  caller := reached
+                  before := after
+                  queries := saved
+                  mass := point.mass + point.bound
+                  seed := advance point.seed (point.bound + 1)}
+                obtain ⟨head, _returnedSame, nextOrigin, nextLedger, nextCurrent,
+                    runtime, decrease, _forecast, included, _position⟩ :=
+                  identity_actual_source_fallback_child_current graph checkEmpty edgesOf recursiveDepth workFuel
+                    metadata uv formulas solver root scopeOriginal scopeBefore allInputs point incoming bucket rest
+                    origin ancestors current fallback fragment returned outer reached saved after waiting observed
+                have tailResources : IdentityEmittedCompleteResources formulas solver reached
+                    (IdentityActualSourceTask.goal recursiveDepth root.limit root.own (.tuple nextPoint rest)).forecast
+                    (finish uv (IdentityActualSourceTask.run graph checkEmpty edgesOf recursiveDepth workFuel
+                      metadata uv (.tuple nextPoint rest))) :=
+                  taskIH (.tuple nextPoint rest) decrease scopeOriginal scopeBefore allInputs
+                    nextLedger nextOrigin nextCurrent
+                obtain ⟨_next, _final, post, _query, _packet, _counter, _origin, _protected,
+                    _references, _bounded, _pending, _avoids⟩ := head
+                have composed := identity_emitted_complete_post post tailResources
+                have enlarged := identity_emitted_complete_mono included.1 included.2 composed
+                change IdentityEmittedCompleteResources formulas solver point.caller
+                  (IdentityActualSourceTask.goal recursiveDepth root.limit root.own
+                    (.child point incoming bucket rest)).forecast
+                  (finish uv (IdentityActualSourceTask.run graph checkEmpty edgesOf recursiveDepth workFuel
+                    metadata uv (.child point incoming bucket rest)))
+                rw [runtime]
+                exact enlarged
+
+end ActualSourceFallbackResourceInduction
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
