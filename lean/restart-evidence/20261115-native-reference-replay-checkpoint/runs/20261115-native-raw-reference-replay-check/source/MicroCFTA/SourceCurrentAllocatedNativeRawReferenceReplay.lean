@@ -1,0 +1,74 @@
+import MicroCFTA.SourceEqualityNativeDemandTraceSplit
+
+/-!
+# Raw reference replay through the actual source read
+
+The source read retains the complete checked state.
+Its child keeps the original parent continuation and raw count.
+The completed child and body have the same complete endpoint.
+-/
+namespace MicroCFTA.SourceCurrentAllocatedNativeRawReferenceReplay
+open InternedConstructorTemplates SourceRecursiveIntersectionCode SourceRecursiveIntersectionThunks
+open SourceEqualityNativeDemand
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Checked" => SourceEqualityNativeDemand.State
+variable {width : Nat}
+
+set_option autoImplicit false
+
+/-- An actual source read and its smaller raw child query return the expected value at the same endpoint. -/
+theorem reference_trace_result_of_actual_read
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (request child : NodeRequest Symbol Guard) (original before after : Checked width)
+    (parentFuel bodySteps : Nat) (result expected : Value Symbol Guard)
+    (finishNext : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard))
+    (read : SourceEqualityNativeDemand.step (.code (compileNode request)) before =
+      .yielded (.code (requestNode child.domain child.left child.right)) before)
+    (entered : Steps 1 (.code (.node request .pure)) original
+      (.code ((compileNode request).bind finishNext)) before)
+    (smaller : bodySteps < parentFuel)
+    (actual : Steps bodySteps (.code (compileNode request)) before (.code (.pure result)) after)
+    (children : ∀ used count, 0 < used → used + count ≤ parentFuel → count < parentFuel →
+      ∀ (next : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard))
+        (value : Value Symbol Guard) (last : Checked width),
+      Steps used (.code (.node request .pure)) original
+        (.code ((requestNode child.domain child.left child.right).bind next)) before →
+      Steps count (.code (requestNode child.domain child.left child.right)) before (.code (.pure value)) last →
+      value = expected) :
+    result = expected ∧ ∃ childCount : Nat,
+      bodySteps = 1 + childCount ∧ 2 + childCount ≤ parentFuel ∧ childCount < parentFuel ∧
+      Steps 1 (.code (compileNode request)) before
+        (.code (requestNode child.domain child.left child.right)) before ∧
+      Steps 2 (.code (.node request .pure)) original
+        (.code ((requestNode child.domain child.left child.right).bind finishNext)) before ∧
+      Steps childCount (.code (requestNode child.domain child.left child.right)) before
+        (.code (.pure expected)) after := by
+
+  have origin : Steps 1 (.code (compileNode request)) before
+      (.code (requestNode child.domain child.left child.right)) before :=
+    .cons _ _ _ _ _ _ _ read (.refl _ _)
+  have appended := origin.bind _ _ _ _ _ finishNext
+  have composed := entered.trans _ _ _ _ _ _ _ _ appended
+  have outer : Steps 2 (.code (.node request .pure)) original
+      (.code ((requestNode child.domain child.left child.right).bind finishNext)) before := by
+    simpa only [Control.bind] using composed
+  cases bodySteps with
+  | zero =>
+      have same := steps_zero _ _ _ _ actual
+      rw [same.1] at read
+      cases read
+  | succ remaining =>
+      obtain ⟨control, current, chosen, tail⟩ := steps_succ remaining _ _ _ _ actual
+      obtain ⟨rfl, rfl⟩ := Outcome.yielded.inj (chosen.symm.trans read)
+      have resultEq : result = expected := children 2 remaining (by omega) (by omega) (by omega)
+        finishNext result after outer tail
+      refine ⟨resultEq, remaining, by omega, by omega, by omega, origin, outer, ?_⟩
+      simpa only [resultEq] using tail
+
+end MicroCFTA.SourceCurrentAllocatedNativeRawReferenceReplay
+
+
+set_option warningAsError true
+#check MicroCFTA.SourceCurrentAllocatedNativeRawReferenceReplay.reference_trace_result_of_actual_read
+#print axioms MicroCFTA.SourceCurrentAllocatedNativeRawReferenceReplay.reference_trace_result_of_actual_read
