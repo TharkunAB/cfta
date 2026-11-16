@@ -1,0 +1,21 @@
+MicroCFTA.EnumerationDischargeHistory.HeldFragmentHistory {Guard : Type} (held handle : Nat)
+  (before after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol Guard) : Prop
+MicroCFTA.EnumerationDischargeHistory.HeldFragmentHistory.refl {Guard : Type} (held handle : Nat)
+  (state : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (safe : MicroCFTA.EnumerationSchedule.Safe state)
+  (isolated : MicroCFTA.EnumerationDischargeHistory.IsolatedPending held handle state) :
+  MicroCFTA.EnumerationDischargeHistory.HeldFragmentHistory held handle state state
+MicroCFTA.EnumerationDischargeHistory.HeldFragmentHistory.trans {Guard : Type} (held handle : Nat)
+  (before middle after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (first : MicroCFTA.EnumerationDischargeHistory.HeldFragmentHistory held handle before middle)
+  (second : MicroCFTA.EnumerationDischargeHistory.HeldFragmentHistory held handle middle after) :
+  MicroCFTA.EnumerationDischargeHistory.HeldFragmentHistory held handle before after
+MicroCFTA.EnumerationDischargeHistory.HeldFragmentHistory.of_frame {Guard : Type} (held handle : Nat)
+  (before after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (safe : MicroCFTA.EnumerationSchedule.Safe before)
+  (isolated : MicroCFTA.EnumerationDischargeHistory.IsolatedPending held handle before)
+  (frame : MicroCFTA.EnumerationCompressionFrame.Frame before after) :
+  MicroCFTA.EnumerationDischargeHistory.HeldFragmentHistory held handle before after
+'MicroCFTA.EnumerationDischargeHistory.HeldFragmentHistory.refl' depends on axioms: [propext]
+'MicroCFTA.EnumerationDischargeHistory.HeldFragmentHistory.trans' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.EnumerationDischargeHistory.HeldFragmentHistory.of_frame' depends on axioms: [propext, Classical.choice]

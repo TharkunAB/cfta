@@ -1,0 +1,72 @@
+import MicroCFTA.SourceSynthesisCurrentSharedIncomingNativeObservation
+import MicroCFTA.SourcePruningEnumerationRecursiveResources
+import MicroCFTA.SourcePruningEnumerationOwnInputShape
+
+namespace MicroCFTA.SourcePruningEnumerationSharedIncomingQueryHistory
+open Cache EnumerationState InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourcePruningEnumerationRecursive (Packet QueryHistory)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Core" => EnumerationState.State Symbol Constraint
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Child" => Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)
+variable {Typing : Type} {bits : Nat}
+set_option autoImplicit false
+
+theorem prepared_incoming_success_query_history
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (metadata : SourcePruningRecordTypes.Metadata Typing)
+    (caller : Caller (bits + 2)) (before : Cached) (memos : Memos)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (parentEntry : Interned InternedBinderProtocol.NodeKey)
+    (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference)
+    (parentAvailable : Available caller.checked.native.machine.heap (.node parentEntry rows depth free))
+    (parentClosed : free = []) (edge : EdgeValue Symbol Constraint) (rowSelected : edge ∈ rows)
+    (preparationHeap : InternedConstructorTemplates.State Symbol Constraint)
+    (parentBucket : List Suspended) (captured own : Cached)
+    (symbol : Symbol) (staged : List Child) (residual : Option Constraint)
+    (prepared : SourcePruningEnumerationCachedOwn.prepare preparationHeap parentBucket edge captured =
+      some [((symbol, staged, residual), own)])
+    (position : Nat) (incoming : Node) (bucket : List Suspended)
+    (action : Option (EnumerateM Symbol Constraint Fragment))
+    (selected : staged[position]? = some (incoming, bucket, action))
+    (checkEmpty : Bool) (representativeFuel nativeFuel p h target : Nat)
+    (incomingScs : List Suspended)
+    (raw : List (Except EnumerationState.Error (Unit × Core)))
+    (afterCaller : Caller (bits + 2)) (savedQueries : Queries) (read : Core)
+    (actual : SourcePruningEnumerationSharedIncomingNode.run checkEmpty representativeFuel nativeFuel p h
+      caller before.core target incoming incomingScs memos.query =
+        (.ok (some raw), afterCaller, savedQueries, read)) :
+    Available caller.checked.native.machine.heap incoming ∧ incoming.free = [] ∧
+      ((afterCaller = caller ∧ QueryHistory 0 caller afterCaller) ∨
+        ∃ (found : UnionFind.Result) (oldHandle : Nat) (oldScs : List Suspended)
+          (old query : Node) (queried : Checked (bits + 2))
+          (phase : SourcePruningEnumerationSharedEnabledEmpty.Outcome (bits + 2))
+          (phaseQueries : Queries) (answer : Bool),
+          UnionFind.findRoot representativeFuel before.core.representatives target = some found ∧
+          before.core.values[found.representative]? = some (.unenumerated (some oldHandle) oldScs) ∧
+          lookupNode caller.checked.native.machine.heap oldHandle = some old ∧
+          Available caller.checked.native.machine.heap old ∧ old.free = [] ∧
+          SourceEqualityNativeDemand.execute nativeFuel
+            (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain incoming old))
+            caller.checked = .done query queried ∧
+          QueryHistory 1 caller
+            (SourceCurrentAllocatedPartialState.advance caller queried caller.fourth caller.merge) ∧
+          (if checkEmpty then SourcePruningEnumerationSharedEnabledEmpty.check p h query queried caller.fourth memos.query
+            else (.skipped queried caller.fourth, memos.query)) = (phase, phaseQueries) ∧
+          phase.completed = some answer ∧
+          afterCaller = SourceCurrentAllocatedPartialState.advance caller phase.state phase.memo caller.merge ∧
+          savedQueries = phaseQueries ∧ read = {before.core with representatives := found.forest} ∧
+          (phase = .skipped queried caller.fourth → QueryHistory 1 caller afterCaller) ∧
+          (checkEmpty = false → QueryHistory 1 caller afterCaller ∧ savedQueries = memos.query))

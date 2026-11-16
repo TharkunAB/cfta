@@ -1,0 +1,19 @@
+omit [DecidableEq Symbol] [DecidableEq Node] in
+private theorem actual_tuple_finalize_held_fragment_history
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (original : Caller (bits + 2)) (metadata : Metadata Typing)
+    (before : Cached) (inputs : List (Node × List Suspended)) (fragments : List Fragment)
+    (reached : Caller (bits + 2)) (queries : Queries) (middle : Cached)
+    (tuple : TupleInputs formulas solver original metadata before inputs fragments reached queries middle)
+    (safe : Safe before.core) (held heldHandle : Nat)
+    (isolated : EnumerationDischargeHistory.IsolatedPending held heldHandle before.core)
+    (inputAvoids : ∀ child bucket, (child, bucket) ∈ inputs →
+      Avoids before.core.representatives held bucket)
+    (symbol : Symbol) (fuel captured : Nat) (finished : Cached)
+    (capturedNode : Option Nat) (capturedBucket : List Suspended)
+    (capturedStored : before.core.values[captured]? = some (.unenumerated capturedNode capturedBucket))
+    (capturedDifferent : captured ≠ held)
+    (actual : SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap
+      fuel captured (.node symbol fragments) middle = some finished) :
+    EnumerationDischargeHistory.HeldFragmentHistory held heldHandle before.core finished.core

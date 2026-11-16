@@ -1,0 +1,54 @@
+@MicroCFTA.SourcePruningEnumerationSharedEagerReservation.actual_tuple_finalize_pending_target_avoids_held : ∀
+  {Typing : Type} {bits : Nat}
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (original : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2))
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (inputs :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) ×
+        List MicroCFTA.EnumerationState.Suspended))
+  (fragments : List (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol))
+  (reached : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2))
+  (queries : MicroCFTA.SourceEndpointMemo.Memos)
+  (middle :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourcePruningEnumerationSharedEagerReservation.TupleInputs formulas solver original metadata before inputs
+      fragments reached queries middle →
+    MicroCFTA.EnumerationSchedule.Safe before.core →
+      ∀ (held heldHandle : Nat),
+        MicroCFTA.EnumerationDischargeHistory.IsolatedPending held heldHandle before.core →
+          (∀
+              (child :
+                MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+              (bucket : List MicroCFTA.EnumerationState.Suspended),
+              (child, bucket) ∈ inputs →
+                MicroCFTA.EnumerationCorrectness.Avoids before.core.representatives held bucket) →
+            ∀ (symbol : MicroCFTA.SourcePruningTemplates.Symbol) (fuel captured : Nat)
+              (finished :
+                MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+              MicroCFTA.SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap fuel captured
+                    (MicroCFTA.Fragments.Fragment.node symbol fragments) middle =
+                  some finished →
+                ∀ (target : Nat) (node : Option Nat) (bucket : List MicroCFTA.EnumerationState.Suspended),
+                  before.core.values[target]? = some (MicroCFTA.EnumerationState.UVarValue.unenumerated node bucket) →
+                    ∀ (representative : Nat)
+                      (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol),
+                      MicroCFTA.UnionFind.SameClass finished.core.representatives target representative →
+                        finished.core.values[representative]? =
+                            some (MicroCFTA.EnumerationState.UVarValue.enumerated fragment) →
+                          MicroCFTA.EnumerationDependencies.FragmentAvoid finished.core.representatives held fragment
+'_private.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.0.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.actual_tuple_finalize_pending_target_avoids_held' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

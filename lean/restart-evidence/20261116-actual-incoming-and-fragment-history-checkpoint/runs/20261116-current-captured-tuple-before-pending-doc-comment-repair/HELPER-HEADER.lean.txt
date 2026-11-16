@@ -1,0 +1,14 @@
+omit [DecidableEq Symbol] [DecidableEq Node] in
+private theorem actual_captured_own_pending_stored
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller (bits + 2)) (memos : Memos) (metadata : Metadata Typing)
+    (before : Cached) (scs : List Suspended) (edge : EdgeValue Symbol Constraint)
+    (residual : Option Constraint) (own : Cached)
+    (staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)))
+    (captured handle : Nat)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (stored : before.core.values[captured]? = some (.unenumerated (some handle) scs))
+    (prepared : SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs edge before =
+      some [((edge.entry.key.symbol, staged, residual), own)]) :
+    own.core.values[captured]? = some (.unenumerated (some handle) scs)

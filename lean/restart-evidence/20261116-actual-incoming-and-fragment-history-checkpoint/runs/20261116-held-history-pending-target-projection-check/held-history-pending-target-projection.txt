@@ -1,0 +1,12 @@
+MicroCFTA.EnumerationDischargeHistory.HeldFragmentHistory.pending_target_avoids {Guard : Type} (held handle : Nat)
+  (before after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (safe : MicroCFTA.EnumerationSchedule.Safe before)
+  (history : MicroCFTA.EnumerationDischargeHistory.HeldFragmentHistory held handle before after) (target : Nat)
+  (node : Option Nat) (bucket : List MicroCFTA.EnumerationState.Suspended) :
+  before.values[target]? = some (MicroCFTA.EnumerationState.UVarValue.unenumerated node bucket) →
+    ∀ (representative : Nat) (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol),
+      MicroCFTA.UnionFind.SameClass after.representatives target representative →
+        after.values[representative]? = some (MicroCFTA.EnumerationState.UVarValue.enumerated fragment) →
+          MicroCFTA.EnumerationDependencies.FragmentAvoid after.representatives held fragment
+'MicroCFTA.EnumerationDischargeHistory.HeldFragmentHistory.pending_target_avoids' depends on axioms: [propext,
+ Classical.choice]

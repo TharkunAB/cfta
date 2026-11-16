@@ -1,0 +1,12 @@
+omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node] in
+private theorem actual_entry_ordinary_readback
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (fuel uv captured capturedHandle : Nat) (capturedBucket : List Suspended)
+    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference)
+    (before entered : EnumerationState.State Symbol Constraint)
+    (actual : ExceptT.run (SourcePruningEnumerationEntry.enter heap fuel uv before) =
+      [.ok ((captured, capturedHandle, capturedBucket, .node parentEntry rows depth free), entered)]) :
+    SourcePruningEnumerationNodes.lookupNode heap capturedHandle =
+      some (.node parentEntry rows depth free)

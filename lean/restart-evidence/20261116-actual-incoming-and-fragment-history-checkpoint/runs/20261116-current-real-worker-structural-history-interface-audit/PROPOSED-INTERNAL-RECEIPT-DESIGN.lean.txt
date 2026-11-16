@@ -1,0 +1,39 @@
+/-
+DESIGN ONLY. No theorem or implementation is supplied in this audit.
+This definition sketch uses the existing owner-local Core, Cached and Fragment
+notations. It is not a checked declaration. It adds no premise to original906.
+-/
+
+-- A concrete result relation for the genuine smaller-worker induction.
+-- Every old expanded slot remains protected. Every other expanded fragment
+-- avoids the held class. This permits actual new finalization writes.
+def HeldFragmentHistoryDesign (held heldHandle : Nat) (before after : Core) : Prop :=
+  EnumerationDischargeHistory.IsolatedPending held heldHandle after ∧
+  EnumerationDriver.Protected held before after ∧
+  (∀ slot fragment, before.values[slot]? = some (.enumerated fragment) →
+    EnumerationDriver.Protected slot before after) ∧
+  ∀ slot fragment, after.values[slot]? = some (.enumerated fragment) →
+    before.values[slot]? = some (.enumerated fragment) ∨
+      EnumerationDependencies.FragmentAvoid after.representatives held fragment
+
+-- The structural half of the internal result follows the actual emitted list.
+-- Native complete and stopped endpoints retain their original resource clauses.
+-- There is no fabricated final enum cache at a native endpoint.
+def ActualEmittedHeldHistoryDesign (held heldHandle : Nat) (before : Cached)
+    (outcome : NativeContinuations.HookResult (Output (bits + 2) Typing)
+      (Failure (bits + 2) Typing) (bits + 2)) : Prop :=
+  ∀ output ∈ emitted outcome,
+    HeldFragmentHistoryDesign held heldHandle before.core output.cache.core
+
+/-
+The private depth induction must prove this result for ALL the existing
+RealEagerEmittedCompleteAtDepth inputs, at the SAME workFuel and recursiveDepth,
+from the original isolated/readback/boundary hypotheses of906. It may be paired
+with the existing resource result. That pair is a genuine induction result.
+It is not a caller-supplied postcondition or a new public provider premise.
+
+The existing task.work measure, ActualSourceOrigin and ActualFrameLedger remain
+unchanged. A task-level companion must retain the actual scoped TupleInputs and
+an already derived relation to its entry checkpoint. Such a relation describes
+an actual prefix. It must not be supplied for an unknown later state.
+-/

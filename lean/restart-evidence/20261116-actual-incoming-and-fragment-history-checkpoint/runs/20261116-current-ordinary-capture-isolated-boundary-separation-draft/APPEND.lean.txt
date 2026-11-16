@@ -1,0 +1,105 @@
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+open Language Fragments EnumerationState EnumerationCorrectness EnumerationSchedule
+open EnumerationDependencies EnumerationReferences InternedConstructorTemplates
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+variable {Typing : Type} {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+
+omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node] in
+private theorem actual_entry_ordinary_readback
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (fuel uv captured capturedHandle : Nat) (capturedBucket : List Suspended)
+    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference)
+    (before entered : EnumerationState.State Symbol Constraint)
+    (actual : ExceptT.run (SourcePruningEnumerationEntry.enter heap fuel uv before) =
+      [.ok ((captured, capturedHandle, capturedBucket, .node parentEntry rows depth free), entered)]) :
+    SourcePruningEnumerationNodes.lookupNode heap capturedHandle =
+      some (.node parentEntry rows depth free)
+ := by
+  have success : Success (SourcePruningEnumerationEntry.enter heap fuel uv) before
+      (captured, capturedHandle, capturedBucket, .node parentEntry rows depth free) entered := by
+    unfold Success
+    rw [actual]
+    exact List.mem_singleton_self _
+  unfold SourcePruningEnumerationEntry.enter at success
+  obtain ⟨value, readAfter, _reading, continued⟩ := (success_bind _ _ _ _ _).mp success
+  cases value with
+  | eliminated | enumerated _ =>
+    simp only [Success, reject, ExceptT.run, List.not_mem_nil] at continued
+  | unenumerated node scs =>
+    cases node with
+    | none => simp only [Success, reject, ExceptT.run, List.not_mem_nil] at continued
+    | some handle =>
+      obtain ⟨root, rootAfter, _reading, continued⟩ := (success_bind _ _ _ _ _).mp continued
+      cases reading : SourcePruningEnumerationNodes.lookupNode heap handle with
+      | none =>
+        simp only [reading] at continued
+        exact (success_failure .unresolvedReference rootAfter entered
+          (captured, capturedHandle, capturedBucket, .node parentEntry rows depth free) continued).elim
+      | some decoded =>
+        simp only [reading] at continued
+        obtain ⟨token, updated, _written, finished⟩ := (success_bind _ _ _ _ _).mp continued
+        cases token
+        have exactResult := (success_pure (root, handle, scs, decoded)
+          (captured, capturedHandle, capturedBucket, .node parentEntry rows depth free) updated entered).mp finished
+        have handleSame : capturedHandle = handle :=
+          congrArg (fun result => result.2.1) exactResult.1
+        have decodedSame : (.node parentEntry rows depth free : Node) = decoded :=
+          congrArg (fun result => result.2.2.2) exactResult.1
+        rw [handleSame, decodedSame]
+        exact reading
+
+omit [DecidableEq Symbol] [DecidableEq Node] in
+private theorem actual_tuple_ordinary_captured_ne_isolated_boundary
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (original : Caller (bits + 2)) (metadata : Metadata Typing)
+    (before : Cached) (inputs : List (Node × List Suspended)) (fragments : List Fragment)
+    (reached : Caller (bits + 2)) (queries : Queries) (middle : Cached)
+    (tuple : TupleInputs formulas solver original metadata before inputs fragments reached queries middle)
+    (entryFuel uv captured capturedHandle : Nat) (capturedBucket : List Suspended)
+    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference)
+    (entryBefore entered : EnumerationState.State Symbol Constraint)
+    (actualEntry : ExceptT.run (SourcePruningEnumerationEntry.enter
+      original.checked.native.machine.heap entryFuel uv entryBefore) =
+      [.ok ((captured, capturedHandle, capturedBucket, .node parentEntry rows depth free), entered)])
+    (capturedStored : before.core.values[captured]? = some (.unenumerated (some capturedHandle) capturedBucket))
+    (held heldHandle : Nat) (heldValue : Node)
+    (isolated : EnumerationDischargeHistory.IsolatedPending held heldHandle before.core)
+    (heldRead : SourcePruningEnumerationNodes.lookupNode reached.checked.native.machine.heap heldHandle =
+      some heldValue)
+    (boundary : MergedOrdinaryHeight.recursiveBoundary heldValue = true) :
+    captured ≠ held
+ := by
+  have capturedRead := actual_entry_ordinary_readback original.checked.native.machine.heap
+    entryFuel uv captured capturedHandle capturedBucket parentEntry rows depth free entryBefore entered actualEntry
+  obtain ⟨_inventory, _memos, post, _query, _current, _growth, _origin,
+      _protectsExpanded, _protectsRoots, _referenceEffects, _bounds, _returnedFragments⟩ := tuple
+  have reachedRead := SourcePruningEnumerationNodes.lookupNode_keeps
+    original.checked.native.machine.heap reached.checked.native.machine.heap post.effects.keeps
+    capturedHandle (.node parentEntry rows depth free) capturedRead
+  intro sameSlot
+  rw [sameSlot] at capturedStored
+  have samePayload := UVarValue.unenumerated.inj
+    (Option.some.inj (capturedStored.symm.trans isolated.stored))
+  have sameHandle : capturedHandle = heldHandle := Option.some.inj samePayload.1
+  rw [sameHandle] at reachedRead
+  have sameValue : (.node parentEntry rows depth free : Node) = heldValue :=
+    Option.some.inj (reachedRead.symm.trans heldRead)
+  have impossible : (false : Bool) = true := by
+    simpa only [← sameValue, MergedOrdinaryHeight.recursiveBoundary] using boundary
+  cases impossible
+
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation

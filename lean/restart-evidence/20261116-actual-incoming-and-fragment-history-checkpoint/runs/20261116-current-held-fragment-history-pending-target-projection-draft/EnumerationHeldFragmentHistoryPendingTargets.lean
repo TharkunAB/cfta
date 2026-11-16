@@ -1,0 +1,34 @@
+import MicroCFTA.SourcePruningEnumerationOpaqueSuffixIsolation
+
+namespace MicroCFTA.EnumerationDischargeHistory
+open EnumerationState EnumerationSchedule EnumerationDependencies EnumerationDriver
+local notation "Symbol" => SourcePruningTemplates.Symbol
+variable {Guard : Type}
+set_option autoImplicit false
+
+/-- Every final expansion of an original pending target avoids the retained isolated class. -/
+theorem HeldFragmentHistory.pending_target_avoids
+    (held handle : Nat) (before after : State Symbol Guard) (safe : Safe before)
+    (history : HeldFragmentHistory held handle before after) :
+    ∀ (target : Nat) (node : Option Nat) (bucket : List Suspended),
+      before.values[target]? = some (.unenumerated node bucket) →
+      ∀ (representative : Nat) (fragment : Fragments.Fragment Symbol),
+        UnionFind.SameClass after.representatives target representative →
+        after.values[representative]? = some (.enumerated fragment) →
+        FragmentAvoid after.representatives held fragment := by
+  intro target node bucket stored representative fragment aliases expanded
+  rcases history.origin representative fragment expanded with original | avoiding
+  · have representativeRoot : IsRoot before.representatives representative :=
+      (enumerated_root before safe representative fragment original).2
+    have targetRoot : IsRoot before.representatives target :=
+      (safe.2 target (.unenumerated node bucket) stored).mp (by intro impossible; cases impossible)
+    have retained := history.expanded representative fragment original
+    have originalAliases : UnionFind.SameClass before.representatives representative target :=
+      (retained.classes target).mp (UnionFind.sameClass_symm aliases)
+    have same : representative = target :=
+      (UnionFind.sameClass_iff_roots representativeRoot.choose_spec targetRoot.choose_spec).mp originalAliases
+    rw [same] at original
+    cases Option.some.inj (original.symm.trans stored)
+  · exact avoiding
+
+end MicroCFTA.EnumerationDischargeHistory

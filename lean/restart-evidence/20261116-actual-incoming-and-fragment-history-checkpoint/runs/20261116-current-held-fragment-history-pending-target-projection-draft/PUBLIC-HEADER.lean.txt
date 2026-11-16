@@ -1,0 +1,9 @@
+theorem HeldFragmentHistory.pending_target_avoids
+    (held handle : Nat) (before after : State Symbol Guard) (safe : Safe before)
+    (history : HeldFragmentHistory held handle before after) :
+    ∀ (target : Nat) (node : Option Nat) (bucket : List Suspended),
+      before.values[target]? = some (.unenumerated node bucket) →
+      ∀ (representative : Nat) (fragment : Fragments.Fragment Symbol),
+        UnionFind.SameClass after.representatives target representative →
+        after.values[representative]? = some (.enumerated fragment) →
+        FragmentAvoid after.representatives held fragment

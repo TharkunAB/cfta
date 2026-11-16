@@ -1,0 +1,13 @@
+omit [DecidableEq Symbol] [DecidableEq Node] in
+private theorem actual_captured_frame_tuple_before_pending
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits) (metadata : Metadata Typing) (uv : Nat)
+    (edge : EdgeValue Symbol Constraint) (residual : Option Constraint)
+    (capturedCaller : Caller (bits + 2)) (capturedQueries : Queries)
+    (scopeOriginal : Caller (bits + 2)) (scopeBefore : Cached)
+    (allInputs : List (Node × List Suspended))
+    (ledger : ActualFrameLedger formulas solver root metadata uv
+      (.captured edge residual capturedCaller capturedQueries) scopeOriginal scopeBefore allInputs) :
+    ∃ (handle : Nat) (scs : List Suspended),
+      scopeBefore.core.values[uv]? = some (.unenumerated (some handle) scs)

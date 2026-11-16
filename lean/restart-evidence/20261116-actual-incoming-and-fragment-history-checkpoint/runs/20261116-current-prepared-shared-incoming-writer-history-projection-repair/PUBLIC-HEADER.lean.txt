@@ -1,0 +1,59 @@
+theorem prepared_incoming_success_writer_history
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (metadata : SourcePruningRecordTypes.Metadata Typing)
+    (caller : Caller (bits + 2)) (before : Cached) (memos : Memos)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (profile : Profile) (fits : Fits profile caller.checked) (admitted : Admits bits profile)
+    (past : History caller.checked)
+    (parentEntry : Interned InternedBinderProtocol.NodeKey)
+    (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference)
+    (parentAvailable : Available caller.checked.native.machine.heap (.node parentEntry rows depth free))
+    (parentClosed : free = []) (edge : EdgeValue Symbol Constraint) (rowSelected : edge ∈ rows)
+    (preparationHeap : InternedConstructorTemplates.State Symbol Constraint)
+    (parentBucket : List Suspended) (captured own : Cached)
+    (symbol : Symbol) (staged : List Child) (residual : Option Constraint)
+    (prepared : SourcePruningEnumerationCachedOwn.prepare preparationHeap parentBucket edge captured =
+      some [((symbol, staged, residual), own)])
+    (position : Nat) (incoming : Node) (bucket : List Suspended)
+    (action : Option (EnumerateM Symbol Constraint Fragment))
+    (selected : staged[position]? = some (incoming, bucket, action))
+    (checkEmpty : Bool) (representativeFuel nativeFuel p h target : Nat)
+    (incomingScs : List Suspended)
+    (raw : List (Except EnumerationState.Error (Unit × Core)))
+    (afterCaller : Caller (bits + 2)) (savedQueries : Queries) (read : Core)
+    (actual : SourcePruningEnumerationSharedIncomingNode.run checkEmpty representativeFuel nativeFuel p h
+      caller before.core target incoming incomingScs memos.query =
+        (.ok (some raw), afterCaller, savedQueries, read)) :
+    Available caller.checked.native.machine.heap incoming ∧ incoming.free = [] ∧
+      History afterCaller.checked ∧
+      ((afterCaller = caller ∧ QueryHistory 0 caller afterCaller) ∨
+        ∃ (found : UnionFind.Result) (oldHandle : Nat) (oldScs : List Suspended)
+          (old query : Node) (queried : Checked (bits + 2))
+          (phase : SourcePruningEnumerationSharedEnabledEmpty.Outcome (bits + 2))
+          (phaseQueries : Queries) (answer : Bool) (next : Inventory) (final : Memos),
+          UnionFind.findRoot representativeFuel before.core.representatives target = some found ∧
+          before.core.values[found.representative]? = some (.unenumerated (some oldHandle) oldScs) ∧
+          lookupNode caller.checked.native.machine.heap oldHandle = some old ∧
+          Available caller.checked.native.machine.heap old ∧ old.free = [] ∧
+          SourceEqualityNativeDemand.execute nativeFuel
+            (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain incoming old))
+            caller.checked = .done query queried ∧
+          History queried ∧
+          QueryHistory 1 caller
+            (SourceCurrentAllocatedPartialState.advance caller queried caller.fourth caller.merge) ∧
+          (if checkEmpty then SourcePruningEnumerationSharedEnabledEmpty.check p h query queried caller.fourth memos.query
+            else (.skipped queried caller.fourth, memos.query)) = (phase, phaseQueries) ∧
+          phase.completed = some answer ∧
+          afterCaller = SourceCurrentAllocatedPartialState.advance caller phase.state phase.memo caller.merge ∧
+          savedQueries = phaseQueries ∧ read = {before.core with representatives := found.forest} ∧
+          next.source = caller.checked.native.machine.heap ∧
+          next.roots = inventory.roots ++ [incoming, old] ∧
+          Post formulas solver next caller afterCaller final ∧ final.query = savedQueries ∧
+          afterCaller.checked.native.nodes = queried.native.nodes ∧
+          afterCaller.checked.native.edges = queried.native.edges ∧
+          afterCaller.checked.native.machine.domains = queried.native.machine.domains ∧
+          (phase = .skipped queried caller.fourth → QueryHistory 1 caller afterCaller) ∧
+          (checkEmpty = false → QueryHistory 1 caller afterCaller ∧ savedQueries = memos.query))

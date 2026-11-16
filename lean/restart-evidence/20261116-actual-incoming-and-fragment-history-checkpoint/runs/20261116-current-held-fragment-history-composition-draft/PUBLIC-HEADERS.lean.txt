@@ -1,0 +1,15 @@
+theorem HeldFragmentHistory.refl
+    (held handle : Nat) (state : State Symbol Guard) (safe : Safe state)
+    (isolated : IsolatedPending held handle state) :
+    HeldFragmentHistory held handle state state
+
+theorem HeldFragmentHistory.trans
+    (held handle : Nat) (before middle after : State Symbol Guard)
+    (first : HeldFragmentHistory held handle before middle)
+    (second : HeldFragmentHistory held handle middle after) :
+    HeldFragmentHistory held handle before after
+
+theorem HeldFragmentHistory.of_frame
+    (held handle : Nat) (before after : State Symbol Guard) (safe : Safe before)
+    (isolated : IsolatedPending held handle before) (frame : Frame before after) :
+    HeldFragmentHistory held handle before after

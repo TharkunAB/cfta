@@ -1,0 +1,33 @@
+ := by
+  have success : Success (SourcePruningEnumerationEntry.enter heap fuel uv) before
+      (captured, capturedHandle, capturedBucket, .node parentEntry rows depth free) entered := by
+    unfold Success
+    rw [actual]
+    exact List.mem_singleton_self _
+  unfold SourcePruningEnumerationEntry.enter at success
+  obtain ⟨value, readAfter, _reading, continued⟩ := (success_bind _ _ _ _ _).mp success
+  cases value with
+  | eliminated | enumerated _ =>
+    simp only [Success, reject, ExceptT.run, List.not_mem_nil] at continued
+  | unenumerated node scs =>
+    cases node with
+    | none => simp only [Success, reject, ExceptT.run, List.not_mem_nil] at continued
+    | some handle =>
+      obtain ⟨root, rootAfter, _reading, continued⟩ := (success_bind _ _ _ _ _).mp continued
+      cases reading : SourcePruningEnumerationNodes.lookupNode heap handle with
+      | none =>
+        simp only [reading] at continued
+        exact (success_failure .unresolvedReference rootAfter entered
+          (captured, capturedHandle, capturedBucket, (.node parentEntry rows depth free : Node)) continued).elim
+      | some decoded =>
+        simp only [reading] at continued
+        obtain ⟨token, updated, _written, finished⟩ := (success_bind _ _ _ _ _).mp continued
+        cases token
+        have exactResult := (success_pure (root, handle, scs, decoded)
+          (captured, capturedHandle, capturedBucket, .node parentEntry rows depth free) updated entered).mp finished
+        have handleSame : capturedHandle = handle :=
+          congrArg (fun result => result.2.1) exactResult.1
+        have decodedSame : (.node parentEntry rows depth free : Node) = decoded :=
+          congrArg (fun result => result.2.2.2) exactResult.1
+        rw [handleSame, decodedSame]
+        exact reading

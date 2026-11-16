@@ -1,0 +1,65 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-captured-pending-qualification-check/source/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:21793:83: error: unexpected token 'omit'; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_cbv_simproc', 'builtin_cbv_simproc_decl', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_grind_propagator', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'cbv_simproc', 'cbv_simproc_decl', 'class', 'coinductive', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'grind_propagator', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_error_explanation', 'register_tactic_tag', 'register_try?_tactic', 'simproc', 'simproc_decl', 'structure', 'syntax', 'tactic_extension', 'theorem' or 'unif_hint'
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-captured-pending-qualification-check/source/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:21840:86: error: unexpected token 'omit'; expected '#guard_msgs', 'abbrev', 'add_decl_doc', 'axiom', 'binder_predicate', 'builtin_cbv_simproc', 'builtin_cbv_simproc_decl', 'builtin_dsimproc', 'builtin_dsimproc_decl', 'builtin_grind_propagator', 'builtin_initialize', 'builtin_simproc', 'builtin_simproc_decl', 'cbv_simproc', 'cbv_simproc_decl', 'class', 'coinductive', 'declare_simp_like_tactic', 'declare_syntax_cat', 'def', 'dsimproc', 'dsimproc_decl', 'elab', 'elab_rules', 'example', 'grind_propagator', 'inductive', 'infix', 'infixl', 'infixr', 'initialize', 'instance', 'macro', 'macro_rules', 'notation', 'opaque', 'postfix', 'prefix', 'recommended_spelling', 'register_error_explanation', 'register_tactic_tag', 'register_try?_tactic', 'simproc', 'simproc_decl', 'structure', 'syntax', 'tactic_extension', 'theorem' or 'unif_hint'
+MicroCFTA.SourcePruningEnumerationSharedEagerReservation.actual_captured_own_pending_stored {Typing : Type} {bits : Nat}
+  [DecidableEq
+      (InternedConstructorTemplates.EdgeKey SourcePruningTemplates.Symbol
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (inventory : SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (caller : SourceCurrentAllocatedPartialState.State (bits + 2)) (memos : EndpointMemoGateTrace.Memos)
+  (metadata : SourcePruningRecordTypes.Metadata Typing)
+  (before :
+    EnumerationExpandableIndex.Cached SourcePruningTemplates.Symbol (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (scs : List EnumerationState.Suspended)
+  (edge :
+    InternedConstructorTemplates.EdgeValue SourcePruningTemplates.Symbol
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (residual : Option (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (own :
+    EnumerationExpandableIndex.Cached SourcePruningTemplates.Symbol (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (staged :
+    List
+      (InternedConstructorTemplates.Value SourcePruningTemplates.Symbol
+          (SourceSymbolicIndex.Constraint FullSyntax.Formula) ×
+        List EnumerationState.Suspended ×
+          Option
+            (EnumerationState.EnumerateM SourcePruningTemplates.Symbol
+              (SourceSymbolicIndex.Constraint FullSyntax.Formula) (Fragments.Fragment SourcePruningTemplates.Symbol))))
+  (captured handle : Nat)
+  (packet : SourcePruningEnumerationRecursive.Packet formulas solver inventory caller memos metadata before)
+  (stored : before.core.values[captured]? = some (EnumerationState.UVarValue.unenumerated (some handle) scs))
+  (prepared :
+    SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs edge before =
+      some [((edge.entry.key.symbol, staged, residual), own)]) :
+  own.core.values[captured]? = some (EnumerationState.UVarValue.unenumerated (some handle) scs)
+'_private.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.0.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.actual_captured_own_pending_stored' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationSharedEagerReservation.actual_captured_frame_tuple_before_pending {Typing : Type}
+  {bits : Nat}
+  [DecidableEq
+      (InternedConstructorTemplates.EdgeKey SourcePruningTemplates.Symbol
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (root : IdentityActualSourceRoot bits) (metadata : SourcePruningRecordTypes.Metadata Typing) (uv : Nat)
+  (edge :
+    InternedConstructorTemplates.EdgeValue SourcePruningTemplates.Symbol
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (residual : Option (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (capturedCaller : SourceCurrentAllocatedPartialState.State (bits + 2)) (capturedQueries : SourceEndpointMemo.Memos)
+  (scopeOriginal : SourceCurrentAllocatedPartialState.State (bits + 2))
+  (scopeBefore :
+    EnumerationExpandableIndex.Cached SourcePruningTemplates.Symbol (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (allInputs :
+    List
+      (InternedConstructorTemplates.Value SourcePruningTemplates.Symbol
+          (SourceSymbolicIndex.Constraint FullSyntax.Formula) ×
+        List EnumerationState.Suspended))
+  (ledger :
+    ActualFrameLedger formulas solver root metadata uv
+      (IdentityActualCallbackFrame.captured edge residual capturedCaller capturedQueries) scopeOriginal scopeBefore
+      allInputs) :
+  ∃ handle scs, scopeBefore.core.values[uv]? = some (EnumerationState.UVarValue.unenumerated (some handle) scs)
+'_private.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.0.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.actual_captured_frame_tuple_before_pending' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,9 @@
+# Original906 remains open: exact interface boundary
+
+runEager_real_emitted_complete_resources_at_any_budget is checked at the original supplied budget. Its OutputResources (SharedHookCertificates:110) contains native Post, final memos, a reached Packet, metadata agreement, Fits and annotation Heap. It does not contain a relation between original and returned enum stores or their expanded fragments.
+
+RealEagerEmittedCompleteAtDepth (owner17355) and RealActualSourceCorrectAt (owner17382) have the same resource-only codomain. At real_actual_source_tuple_nil_resources, an actual captured tuple completes, finalizes the parent, invokes recordTypes and then the configured strictly smaller worker. The concrete TupleInputs certificate has origin/protection/pending/avoidance before that callback, but the worker IH result exposes only OutputResources/OutcomeResources. It cannot be projected into either Protected held before output.core or the new expanded-slot avoidance conclusion. Native Post is not that enum-frame relation.
+
+The local producer freezes the missing useful finalize fact without replacing this codomain or adding a future avoidance supplier. To prove whole906, genuine recursive/task induction must retain (a) earlier isolated/native readback, (b) protection of earlier expanded classes, (c) actual finalize origins for new expanded classes and their FragmentAvoid, and (d) class transport into the exact output snapshot. Existing TupleInputs and actual row/frame receipts are the producer data. They cannot be replaced by an assumed future callback invariant at the top goal.
+
+This is an interface/proof gap, not a demonstrated missing source precondition or counterexample to906. The bounded attempt does not copy the old worker engine, change its header or runtime budgets, or assert original full completion. Whole same-branch history and transitive reconstruction dependencies remain open.

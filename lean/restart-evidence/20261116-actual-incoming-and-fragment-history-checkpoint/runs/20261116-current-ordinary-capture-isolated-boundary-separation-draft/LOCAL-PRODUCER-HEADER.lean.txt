@@ -1,0 +1,23 @@
+omit [DecidableEq Symbol] [DecidableEq Node] in
+private theorem actual_tuple_ordinary_captured_ne_isolated_boundary
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (original : Caller (bits + 2)) (metadata : Metadata Typing)
+    (before : Cached) (inputs : List (Node × List Suspended)) (fragments : List Fragment)
+    (reached : Caller (bits + 2)) (queries : Queries) (middle : Cached)
+    (tuple : TupleInputs formulas solver original metadata before inputs fragments reached queries middle)
+    (entryFuel uv captured capturedHandle : Nat) (capturedBucket : List Suspended)
+    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference)
+    (entryBefore entered : EnumerationState.State Symbol Constraint)
+    (actualEntry : ExceptT.run (SourcePruningEnumerationEntry.enter
+      original.checked.native.machine.heap entryFuel uv entryBefore) =
+      [.ok ((captured, capturedHandle, capturedBucket, .node parentEntry rows depth free), entered)])
+    (capturedStored : before.core.values[captured]? = some (.unenumerated (some capturedHandle) capturedBucket))
+    (held heldHandle : Nat) (heldValue : Node)
+    (isolated : EnumerationDischargeHistory.IsolatedPending held heldHandle before.core)
+    (heldRead : SourcePruningEnumerationNodes.lookupNode reached.checked.native.machine.heap heldHandle =
+      some heldValue)
+    (boundary : MergedOrdinaryHeight.recursiveBoundary heldValue = true) :
+    captured ≠ held

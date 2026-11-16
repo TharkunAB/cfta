@@ -1,0 +1,19 @@
+ := by
+  have capturedRead := actual_entry_ordinary_readback original.checked.native.machine.heap
+    entryFuel uv captured capturedHandle capturedBucket parentEntry rows depth free entryBefore entered actualEntry
+  obtain ⟨_inventory, _memos, post, _query, _current, _growth, _origin,
+      _protectsExpanded, _protectsRoots, _referenceEffects, _bounds, _returnedFragments⟩ := tuple
+  have reachedRead := SourcePruningEnumerationNodes.lookupNode_keeps
+    original.checked.native.machine.heap reached.checked.native.machine.heap post.effects.keeps
+    capturedHandle (.node parentEntry rows depth free) capturedRead
+  intro sameSlot
+  rw [sameSlot] at capturedStored
+  have samePayload := UVarValue.unenumerated.inj
+    (Option.some.inj (capturedStored.symm.trans isolated.stored))
+  have sameHandle : capturedHandle = heldHandle := Option.some.inj samePayload.1
+  rw [sameHandle] at reachedRead
+  have sameValue : (.node parentEntry rows depth free : Node) = heldValue :=
+    Option.some.inj (reachedRead.symm.trans heldRead)
+  have impossible : (false : Bool) = true := by
+    simpa only [← sameValue, MergedOrdinaryHeight.recursiveBoundary] using boundary
+  cases impossible

@@ -1,0 +1,146 @@
+MicroCFTA.SourcePruningEnumerationSharedIncomingWriterHistory.prepared_incoming_success_writer_history {Typing : Type}
+  {bits : Nat} [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2))
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (memos : MicroCFTA.EndpointMemoGateTrace.Memos)
+  (packet : MicroCFTA.SourcePruningEnumerationRecursive.Packet formulas solver inventory caller memos metadata before)
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+  (fits : MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile caller.checked)
+  (admitted : MicroCFTA.SourceCurrentAllocatedNativeCreditProfile.Admits bits profile)
+  (past : MicroCFTA.SourceCurrentNativeEdgeWriterGrowth.History caller.checked)
+  (parentEntry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (rows :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (depth : Nat) (free : List MicroCFTA.InternedBinderProtocol.Reference)
+  (parentAvailable :
+    MicroCFTA.InternedProbeProvenance.Available caller.checked.native.machine.heap
+      (MicroCFTA.InternedConstructorTemplates.Value.node parentEntry rows depth free))
+  (parentClosed : free = [])
+  (edge :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (rowSelected : edge ∈ rows)
+  (preparationHeap :
+    MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (parentBucket : List MicroCFTA.EnumerationState.Suspended)
+  (captured own :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (symbol : MicroCFTA.SourcePruningTemplates.Symbol)
+  (staged :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) ×
+        List MicroCFTA.EnumerationState.Suspended ×
+          Option
+            (MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol))))
+  (residual : Option (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (prepared :
+    MicroCFTA.SourcePruningEnumerationCachedOwn.prepare preparationHeap parentBucket edge captured =
+      some [((symbol, staged, residual), own)])
+  (position : Nat)
+  (incoming :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (bucket : List MicroCFTA.EnumerationState.Suspended)
+  (action :
+    Option
+      (MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)))
+  (selected : staged[position]? = some (incoming, bucket, action)) (checkEmpty : Bool)
+  (representativeFuel nativeFuel p h target : Nat) (incomingScs : List MicroCFTA.EnumerationState.Suspended)
+  (raw :
+    List
+      (Except MicroCFTA.EnumerationState.Error
+        (Unit ×
+          MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))
+  (afterCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2))
+  (savedQueries : MicroCFTA.SourceEndpointMemo.Memos)
+  (read :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (actual :
+    MicroCFTA.SourcePruningEnumerationSharedIncomingNode.run checkEmpty representativeFuel nativeFuel p h caller
+        before.core target incoming incomingScs memos.query =
+      (Except.ok (some raw), afterCaller, savedQueries, read)) :
+  MicroCFTA.InternedProbeProvenance.Available caller.checked.native.machine.heap incoming ∧
+    incoming.free = [] ∧
+      MicroCFTA.SourceCurrentNativeEdgeWriterGrowth.History afterCaller.checked ∧
+        (afterCaller = caller ∧ MicroCFTA.SourcePruningEnumerationRecursive.QueryHistory 0 caller afterCaller ∨
+          ∃ found oldHandle oldScs old query queried phase phaseQueries answer next final,
+            MicroCFTA.UnionFind.findRoot representativeFuel before.core.representatives target = some found ∧
+              before.core.values[found.representative]? =
+                  some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some oldHandle) oldScs) ∧
+                MicroCFTA.SourcePruningEnumerationNodes.lookupNode caller.checked.native.machine.heap oldHandle =
+                    some old ∧
+                  MicroCFTA.InternedProbeProvenance.Available caller.checked.native.machine.heap old ∧
+                    old.free = [] ∧
+                      MicroCFTA.SourceEqualityNativeDemand.execute nativeFuel
+                            (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                              (MicroCFTA.SourceRecursiveIntersectionCode.requestNode
+                                MicroCFTA.IntersectionEmptyDomain.emptyDomain incoming old))
+                            caller.checked =
+                          MicroCFTA.SourceEqualityNativeDemand.Outcome.done query queried ∧
+                        MicroCFTA.SourceCurrentNativeEdgeWriterGrowth.History queried ∧
+                          MicroCFTA.SourcePruningEnumerationRecursive.QueryHistory 1 caller
+                              (MicroCFTA.SourceCurrentAllocatedPartialState.advance caller queried caller.fourth
+                                caller.merge) ∧
+                            (if checkEmpty = true then
+                                  MicroCFTA.SourcePruningEnumerationSharedEnabledEmpty.check p h query queried
+                                    caller.fourth memos.query
+                                else
+                                  (MicroCFTA.SourcePruningEnumerationSharedEnabledEmpty.Outcome.skipped queried
+                                      caller.fourth,
+                                    memos.query)) =
+                                (phase, phaseQueries) ∧
+                              phase.completed = some answer ∧
+                                afterCaller =
+                                    MicroCFTA.SourceCurrentAllocatedPartialState.advance caller phase.state phase.memo
+                                      caller.merge ∧
+                                  savedQueries = phaseQueries ∧
+                                    (read =
+                                        have __src := before.core;
+                                        { counter := __src.counter, representatives := found.forest,
+                                          values := __src.values, obligations := __src.obligations,
+                                          recursionAncestry := __src.recursionAncestry,
+                                          expansionAncestry := __src.expansionAncestry }) ∧
+                                      next.source = caller.checked.native.machine.heap ∧
+                                        next.roots = inventory.roots ++ [incoming, old] ∧
+                                          MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver next
+                                              caller afterCaller final ∧
+                                            final.query = savedQueries ∧
+                                              afterCaller.checked.native.nodes = queried.native.nodes ∧
+                                                afterCaller.checked.native.edges = queried.native.edges ∧
+                                                  afterCaller.checked.native.machine.domains =
+                                                      queried.native.machine.domains ∧
+                                                    (phase =
+                                                          MicroCFTA.SourcePruningEnumerationSharedEnabledEmpty.Outcome.skipped
+                                                            queried caller.fourth →
+                                                        MicroCFTA.SourcePruningEnumerationRecursive.QueryHistory 1
+                                                          caller afterCaller) ∧
+                                                      (checkEmpty = false →
+                                                        MicroCFTA.SourcePruningEnumerationRecursive.QueryHistory 1
+                                                            caller afterCaller ∧
+                                                          savedQueries = memos.query))
+'MicroCFTA.SourcePruningEnumerationSharedIncomingWriterHistory.prepared_incoming_success_writer_history' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

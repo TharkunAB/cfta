@@ -1,0 +1,11 @@
+@MicroCFTA.EnumerationDischargeHistory.finalize_core_of_run : ∀ {EnumGuard NativeGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (fuel target : Nat) (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+  (before after : MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol EnumGuard),
+  MicroCFTA.SourcePruningEnumerationFinalize.run heap fuel target fragment before = some after →
+    after.core =
+      have __src := before.core;
+      { counter := __src.counter, representatives := __src.representatives,
+        values := before.core.values.set target (MicroCFTA.EnumerationState.UVarValue.enumerated fragment),
+        obligations := __src.obligations, recursionAncestry := __src.recursionAncestry, expansionAncestry := [] }
+'MicroCFTA.EnumerationDischargeHistory.finalize_core_of_run' depends on axioms: [propext, Quot.sound]
