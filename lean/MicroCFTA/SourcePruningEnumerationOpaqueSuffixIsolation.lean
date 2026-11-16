@@ -249,3 +249,104 @@ theorem finalize_core_of_run
   finalized_core heap fuel target fragment before after observed
 
 end MicroCFTA.EnumerationDischargeHistory
+
+namespace MicroCFTA.EnumerationDischargeHistory
+open EnumerationState EnumerationSchedule EnumerationDependencies EnumerationDriver EnumerationCompressionFrame
+local notation "Symbol" => SourcePruningTemplates.Symbol
+variable {Guard : Type}
+set_option autoImplicit false
+
+/-- Old expanded slots remain protected. New expanded fragments avoid the held class. -/
+structure HeldFragmentHistory (held handle : Nat) (before after : State Symbol Guard) : Prop where
+  isolated : IsolatedPending held handle after
+  protectedHeld : Protected held before after
+  expanded : ∀ (slot : Nat) (fragment : Fragments.Fragment Symbol),
+    before.values[slot]? = some (.enumerated fragment) → Protected slot before after
+  origin : ∀ (slot : Nat) (fragment : Fragments.Fragment Symbol),
+    after.values[slot]? = some (.enumerated fragment) →
+      before.values[slot]? = some (.enumerated fragment) ∨
+        FragmentAvoid after.representatives held fragment
+
+/-- An unchanged safe core retains its isolated slot and every old expanded value. -/
+theorem HeldFragmentHistory.refl
+    (held handle : Nat) (state : State Symbol Guard) (safe : Safe state)
+    (isolated : IsolatedPending held handle state) :
+    HeldFragmentHistory held handle state state := by
+  refine ⟨isolated, Protected.refl held state isolated.root, ?_, ?_⟩
+  · intro slot fragment stored
+    exact Protected.refl slot state (enumerated_root state safe slot fragment stored).2
+  · intro slot fragment stored
+    exact Or.inl stored
+
+/-- Consecutive receipts retain old expanded values and transport new-fragment avoidance. -/
+theorem HeldFragmentHistory.trans
+    (held handle : Nat) (before middle after : State Symbol Guard)
+    (first : HeldFragmentHistory held handle before middle)
+    (second : HeldFragmentHistory held handle middle after) :
+    HeldFragmentHistory held handle before after := by
+  refine ⟨second.isolated, first.protectedHeld.trans second.protectedHeld, ?_, ?_⟩
+  · intro slot fragment stored
+    have middleStored : middle.values[slot]? = some (.enumerated fragment) :=
+      (first.expanded slot fragment stored).value.trans stored
+    exact (first.expanded slot fragment stored).trans (second.expanded slot fragment middleStored)
+  · intro slot fragment stored
+    rcases second.origin slot fragment stored with middleStored | separate
+    · rcases first.origin slot fragment middleStored with originalStored | middleSeparate
+      · exact Or.inl originalStored
+      · exact Or.inr ((fragmentAvoid_classes middle.representatives after.representatives
+          held fragment second.protectedHeld.classes).mpr middleSeparate)
+    · exact Or.inr separate
+
+/-- A complete compression frame retains the concrete fragment-history receipt. -/
+theorem HeldFragmentHistory.of_frame
+    (held handle : Nat) (before after : State Symbol Guard) (safe : Safe before)
+    (isolated : IsolatedPending held handle before) (frame : Frame before after) :
+    HeldFragmentHistory held handle before after := by
+  have protects : ∀ slot, IsRoot before.representatives slot → Protected slot before after := by
+    intro slot root
+    refine ⟨congrArg (fun values => values[slot]?) frame.values, ?_, ?_⟩
+    · obtain ⟨size, path⟩ := root
+      exact ⟨size, (frame.reaches slot slot size).mpr path⟩
+    · intro other
+      exact SourcePruningEnumerationNativeLanguage.frame_sameClass before after frame slot other
+  refine ⟨isolated.through_frame frame, protects held isolated.root, ?_, ?_⟩
+  · intro slot fragment stored
+    exact protects slot (enumerated_root before safe slot fragment stored).2
+  · intro slot fragment stored
+    rw [frame.values] at stored
+    exact Or.inl stored
+
+end MicroCFTA.EnumerationDischargeHistory
+
+namespace MicroCFTA.EnumerationDischargeHistory
+open EnumerationState EnumerationSchedule EnumerationDependencies EnumerationDriver
+local notation "Symbol" => SourcePruningTemplates.Symbol
+variable {Guard : Type}
+set_option autoImplicit false
+
+/-- Every final expansion of an original pending target avoids the retained isolated class. -/
+theorem HeldFragmentHistory.pending_target_avoids
+    (held handle : Nat) (before after : State Symbol Guard) (safe : Safe before)
+    (history : HeldFragmentHistory held handle before after) :
+    ∀ (target : Nat) (node : Option Nat) (bucket : List Suspended),
+      before.values[target]? = some (.unenumerated node bucket) →
+      ∀ (representative : Nat) (fragment : Fragments.Fragment Symbol),
+        UnionFind.SameClass after.representatives target representative →
+        after.values[representative]? = some (.enumerated fragment) →
+        FragmentAvoid after.representatives held fragment := by
+  intro target node bucket stored representative fragment aliases expanded
+  rcases history.origin representative fragment expanded with original | avoiding
+  · have representativeRoot : IsRoot before.representatives representative :=
+      (enumerated_root before safe representative fragment original).2
+    have targetRoot : IsRoot before.representatives target :=
+      (safe.2 target (.unenumerated node bucket) stored).mp (by intro impossible; cases impossible)
+    have retained := history.expanded representative fragment original
+    have originalAliases : UnionFind.SameClass before.representatives representative target :=
+      (retained.classes target).mp (UnionFind.sameClass_symm aliases)
+    have same : representative = target :=
+      (UnionFind.sameClass_iff_roots representativeRoot.choose_spec targetRoot.choose_spec).mp originalAliases
+    rw [same] at original
+    cases Option.some.inj (original.symm.trans stored)
+  · exact avoiding
+
+end MicroCFTA.EnumerationDischargeHistory
