@@ -1,0 +1,8 @@
+ := by
+  obtain ⟨outputsValid, completed⟩ := resources
+  constructor
+  · intro output member
+    exact (outputsValid output member).post post
+  · cases outcome with
+    | complete outputs caller queries => exact completed.post post
+    | stopped outputs reason endpoint => trivial

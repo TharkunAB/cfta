@@ -1,0 +1,10 @@
+omit [DecidableEq Symbol] [DecidableEq Node] in
+private theorem actual_emitted_complete_post
+    {formulas : SourceGuards.Formulas FullSyntax.Formula}
+    {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {original middle : Caller (bits + 2)} {next : Inventory} {final : Memos}
+    {seed : Seed} {outcome : NativeContinuations.HookResult
+      (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2)}
+    (post : Post formulas solver next original middle final)
+    (resources : ActualEmittedCompleteResources formulas solver middle seed outcome) :
+    ActualEmittedCompleteResources formulas solver original seed outcome

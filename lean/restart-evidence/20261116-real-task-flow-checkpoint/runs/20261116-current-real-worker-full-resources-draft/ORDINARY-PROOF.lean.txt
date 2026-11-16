@@ -1,0 +1,18 @@
+ := by
+  intro scopeOriginal scopeBefore allInputs ancestors origin current
+  obtain ⟨rowsOrigin, rowsCurrent, decrease⟩ :=
+    actual_source_ordinary_current holeKey fits admits graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+      formulas solver root scopeOriginal scopeBefore allInputs point height incoming bucket rest origin ordinary current
+  have resources := taskIH (.rows height {point with height := height + 1} incoming bucket rest) decrease
+    scopeOriginal scopeBefore allInputs ancestors rowsOrigin rowsCurrent
+  have runtime := actual_source_ordinary_run (SourcePruningOuterNarrow.narrow holeKey fits admits) holeKey fits admits graph templates checkEmpty edgesOf stop order recursiveDepth workFuel
+    metadata uv point height incoming bucket rest ordinary
+  have forecast := (identity_actual_source_forward_forecasts recursiveDepth root.limit root.own
+    point point.count height incoming bucket rest).2
+  change ActualEmittedCompleteResources formulas solver point.caller
+    (IdentityActualSourceTask.goal recursiveDepth root.limit root.own
+      (.child {point with height := height + 1} incoming bucket rest)).forecast
+    (finish uv (IdentityActualSourceTask.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) holeKey fits admits graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+      (.child {point with height := height + 1} incoming bucket rest)))
+  rw [runtime, forecast]
+  exact resources

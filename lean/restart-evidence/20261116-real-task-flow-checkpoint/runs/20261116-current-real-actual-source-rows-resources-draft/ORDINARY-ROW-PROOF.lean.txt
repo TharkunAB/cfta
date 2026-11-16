@@ -1,0 +1,72 @@
+ := by
+  let inputs := SourcePruningEnumerationEdgeInputs.children edge scs before.core.counter tries
+  let staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)) := inputs.map (fun input =>
+    (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild input.2 input.1))
+  have selected : edge ∈ rows := by
+    apply selectionMembers edge
+    rw [sourceRows]
+    exact List.mem_append_right attempted List.mem_cons_self
+  have indexLt : attempted.length < limit := by
+    have selectedLength := selectionLength
+    rw [sourceRows, List.length_append, List.length_cons] at selectedLength
+    have rowBound := shapes.1
+    omega
+  have rowForecast :
+      Le (tuplePlan (nodePlan limit own height) limit (bound + own) ceiling continuation rowSeed).2
+          (nodePlan limit own (height + 1) bound ceiling continuation initialSeed).2 ∧
+      (tuplePlan (nodePlan limit own height) limit (bound + own) ceiling continuation rowSeed).1 ⊆
+          (nodePlan limit own (height + 1) bound ceiling continuation initialSeed).1 := by
+    let first := fallbackPlan bound ceiling continuation initialSeed
+    let row := fun current => tuplePlan (nodePlan limit own height)
+      limit (bound + own) ceiling continuation current
+    have rowGrowth : ∀ current, Le current.2 (row current).2 ∧ current.1 ⊆ (row current).1 := by
+      intro current
+      exact tuplePlan_ge (nodePlan limit own height) (nodePlan_ge limit own height)
+        limit (bound + own) ceiling continuation growth current
+    have nextSlot : iterate row first (attempted.length + 1) = row rowSeed := by
+      rw [SourcePruningEnumerationFiniteReservation.iterate_add]
+      rw [scheduled]
+      rfl
+    have later := iterate_ge row rowGrowth (iterate row first (attempted.length + 1))
+      (limit - (attempted.length + 1))
+    rw [← iterate_add, Nat.add_sub_of_le (by omega : attempted.length + 1 ≤ limit)] at later
+    rw [nextSlot] at later
+    exact later
+  obtain ⟨_roots, _action, rowOwn, _paths, ownReceipt, rowPacket, rowMass, lower, reducing⟩ :=
+    ordinary_prefix_packet formulas solver inventory caller memos metadata before parentEntry rows depth free
+      edge scs packet (kept.available _ available) closed selected bounded pending allowed tries residual projected
+  have actual : SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs edge before =
+      some [((edge.entry.key.symbol, staged, residual), rowOwn)] := ownReceipt.2.1
+  have emptyPrefix := real_rows_empty_inputs formulas solver inventory caller memos metadata rowOwn
+    (staged.map (fun input => (input.1, input.2.1))) rowPacket
+  obtain ⟨_prepared, _middleRun, _raw, _middleCore, _middleCounter, _middleForest, _middleSafe,
+    _middlePaths, _middleRealized, _middleCounts, _middleFlags, _combinedPending, genuine, _middleProtects⟩ := ownReceipt
+  have edgeBounds := shapes.2 edge selected
+  have triesBound := edgeBounds.2 tries residual projected
+  have inputLength : inputs.length ≤ limit := by
+    simpa only [inputs, SourcePruningEnumerationEdgeInputs.children, List.length_map, List.length_zipIdx]
+      using edgeBounds.1
+  have inputFacts : ∀ child bucket, (child, bucket) ∈ inputs →
+      Available captured child ∧ child.free = [] ∧
+      MergedOrdinaryHeight.height child < MergedOrdinaryHeight.height (.node parentEntry rows depth free) ∧
+        MergedOrdinaryHeight.height child ≤ height ∧ bucket.length ≤ bound + own ∧
+      (∀ sc ∈ bucket, sc.var < rowOwn.core.counter) ∧ InputsPending rowOwn.core bucket := by
+    intro child bucket member
+    obtain ⟨_currentAvailable, childClosed, childBounded, childPending⟩ := genuine child bucket member
+    have childRank := lower child bucket member
+    obtain ⟨indexed, indexedMember, same⟩ := List.mem_map.mp member
+    cases same
+    have inherited := SourcePruningEnumerationCostBounds.descend_length_le indexed.2 scs
+    have added := SourcePruningEnumerationCostBounds.descend_length_le indexed.2
+      (suspendedVars before.core.counter tries)
+    rw [SourcePruningEnumerationCostBounds.suspended_length] at added
+    refine ⟨available.children indexed.1 (List.mem_flatMap.mpr
+      ⟨edge, selected, List.fst_mem_of_mem_zipIdx indexedMember⟩), childClosed, childRank, by omega, ?_,
+      childBounded, childPending⟩
+    simp only [List.length_append]
+    omega
+  have ownMass : SourcePruningEnumerationPrefixAdmission.suspendedBound rowOwn.core ≤ ceiling := by
+    rw [rowMass]
+    exact mass
+  exact ⟨rowOwn, actual, rowPacket, emptyPrefix, fits, known, ownMass, inputLength,
+    inputFacts, rowReserved, rowForecast, reducing⟩

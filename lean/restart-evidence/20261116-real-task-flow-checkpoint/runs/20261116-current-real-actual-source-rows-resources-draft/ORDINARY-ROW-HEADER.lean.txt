@@ -1,0 +1,73 @@
+private theorem real_ordinary_row_prefix_reservation_of_row
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (caller : Caller (bits + 2)) (memos : Memos)
+    (metadata : Metadata Typing) (before : Cached)
+    (captured : InternedConstructorTemplates.State Symbol Constraint)
+    (limit own height bound ceiling : Nat) (initialSeed rowSeed : Seed)
+    (continuation : Nat → Seed → Seed) (admitted : Nat → Seed → Prop)
+    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (attempted remaining : List (EdgeValue Symbol Constraint))
+    (edge : EdgeValue Symbol Constraint) (scs : List Suspended)
+    (tries : List EqualityTrie.Trie) (residual : Option Constraint)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (fits : Fits rowSeed.2 caller.checked)
+    (known : Heap (fun guard => guard ∈ rowSeed.1) caller.checked.native.machine.heap)
+    (kept : SourceEqualityRequiredCache.Keeps captured caller.checked.native.machine.heap)
+    (mass : SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling)
+    (bucketBound : scs.length ≤ bound)
+    (available : Available captured (.node parentEntry rows depth free))
+    (closed : free = [])
+    (ranked : MergedOrdinaryHeight.height (.node parentEntry rows depth free) ≤ height + 1)
+    (bounded : ∀ sc ∈ scs, sc.var < before.core.counter)
+    (pending : InputsPending before.core scs)
+    (sourceRows : edgesOf (.node parentEntry rows depth free) = attempted ++ edge :: remaining)
+    (selectionMembers : ∀ selected ∈ edgesOf (.node parentEntry rows depth free), selected ∈ rows)
+    (selectionLength : (edgesOf (.node parentEntry rows depth free)).length ≤ rows.length)
+    (shapes : rows.length ≤ limit ∧ ∀ selected ∈ rows, selected.children.length ≤ limit ∧
+      ∀ projected residual, SourcePruningEnumerationConstraint.project selected.entry.key.constraint =
+        some (projected, residual) → projected.length ≤ own)
+    (allowed : arityAllows edge.children.length scs = true)
+    (projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual))
+    (scheduled : rowSeed = iterate
+      (fun current => tuplePlan (nodePlan limit own height) limit (bound + own) ceiling continuation current)
+      (fallbackPlan bound ceiling continuation initialSeed) attempted.length)
+    (rowReserved : tupleReserved (nodePlan limit own height) (nodeReserved bits limit own height)
+      limit (bound + own) ceiling continuation admitted rowSeed)
+    (growth : ∀ retained current, Le current.2 (continuation retained current).2 ∧
+      current.1 ⊆ (continuation retained current).1) :
+    let inputs := SourcePruningEnumerationEdgeInputs.children edge scs before.core.counter tries
+    let staged := inputs.map (fun input =>
+      (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild input.2 input.1))
+    ∃ rowOwn : Cached,
+      SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs edge before =
+        some [((edge.entry.key.symbol, staged, residual), rowOwn)] ∧
+      Packet formulas solver inventory caller memos metadata rowOwn ∧
+      TupleInputs formulas solver caller metadata rowOwn
+        (staged.map (fun input => (input.1, input.2.1))) [] caller memos.query rowOwn ∧
+      Fits rowSeed.2 caller.checked ∧
+      Heap (fun guard => guard ∈ rowSeed.1) caller.checked.native.machine.heap ∧
+      SourcePruningEnumerationPrefixAdmission.suspendedBound rowOwn.core ≤ ceiling ∧
+      inputs.length ≤ limit ∧
+      (∀ child bucket, (child, bucket) ∈ inputs →
+        Available captured child ∧ child.free = [] ∧
+        MergedOrdinaryHeight.height child < MergedOrdinaryHeight.height (.node parentEntry rows depth free) ∧
+        MergedOrdinaryHeight.height child ≤ height ∧ bucket.length ≤ bound + own ∧
+        (∀ sc ∈ bucket, sc.var < rowOwn.core.counter) ∧ InputsPending rowOwn.core bucket) ∧
+      tupleReserved (nodePlan limit own height) (nodeReserved bits limit own height)
+        limit (bound + own) ceiling continuation admitted rowSeed ∧
+      (Le (tuplePlan (nodePlan limit own height) limit (bound + own) ceiling continuation rowSeed).2
+          (nodePlan limit own (height + 1) bound ceiling continuation initialSeed).2 ∧
+        (tuplePlan (nodePlan limit own height) limit (bound + own) ceiling continuation rowSeed).1 ⊆
+          (nodePlan limit own (height + 1) bound ceiling continuation initialSeed).1) ∧
+      ∀ (visit : Visitor) (consume : SelectedEdge.Result (bits + 2) → Fold),
+        SourcePruningEnumerationSharedChildVisitors.visitSelected visit consume scs edge caller before memos.query =
+          SourcePruningEnumerationSharedChildVisitors.visitChildren visit
+            (fun fragments reached saved after =>
+              let fragment := Fragments.Fragment.node edge.entry.key.symbol fragments
+              consume (.complete fragment reached saved (SelectedEdge.finish residual fragment after)))
+            (fun completed observation candidate => consume (.stopped completed observation candidate))
+            inputs caller rowOwn memos.query

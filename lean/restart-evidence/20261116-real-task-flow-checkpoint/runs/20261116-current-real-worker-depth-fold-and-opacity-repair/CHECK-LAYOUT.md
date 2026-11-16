@@ -1,0 +1,1 @@
+Use the same original three imports, Root's latest verified base/dependencies, this APPEND.lean.txt, and the unchanged PROBES.lean.txt. All private names stay in the same copied owner module. No encoded private names or Source visibility changes are needed. The independently repaired prepared scan must pass before the whole worker can receive credit. Root alone compiles.

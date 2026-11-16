@@ -1,0 +1,78 @@
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+section GenericActualSourceTupleConsResources
+set_option autoImplicit false
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedPartialInvariant (Post)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
+open SourcePruningEnumerationSharedIncomingReservation (Seed advance)
+open SourceCurrentAllocatedNativeResourceForecast (Le)
+open SourcePruningEnumerationRecursive (Packet)
+open SourcePruningEnumerationSharedSelectedContinuations
+open SourcePruningEnumerationSharedPreparedRecursive (Output Failure OutputResources OutcomeResources finish emitted)
+open SourcePruningEnumerationSharedPreparedRecursiveChildPolicy (resumeWithNarrow runEagerWithNarrow)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Heap" => SourceEqualityAnnotationHeap.Heap
+variable {Typing Key : Type} {bits : Nat}
+local notation "Fold" => NativeContinuations.Result
+  (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2)
+local notation "Done" => List Fragment → Caller (bits + 2) → Queries → Cached → Fold
+local notation "Stopped" => List Fragment → ChildDispatch.Observation (bits + 2) → Option Cached → Fold
+local notation "ChildDone" => Fragment → Caller (bits + 2) → Queries → Cached → Fold
+local notation "Visitor" => List Suspended → Node → Caller (bits + 2) → Cached → Queries → ChildDone →
+  (ChildDispatch.Observation (bits + 2) → Option Cached → Fold) → Fold
+local notation "Narrow" => Metadata Typing → Nat → Nat → Node →
+  InternedConstructorTemplates.State Symbol Constraint → MergedSourceComparison.Result Symbol Constraint Node
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+/-- Tuple cons uses the actual head task at the original work fuel. -/
+private theorem real_actual_source_tuple_cons_resources
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol)) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Typing) (uv : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits) (point : IdentityActualSourcePoint bits) (count : Nat)
+    (incoming : Node) (bucket : List Suspended) (rest : List (Node × List Suspended))
+    (taskIH : ∀ smaller : IdentityActualSourceTask bits,
+      smaller.work root.limit < IdentityActualSourceTask.work root.limit
+        (.tuple {point with count := count + 1} ((incoming, bucket) :: rest)) →
+      RealActualSourceCorrectAt holeKey fits admits graph templates checkEmpty edgesOf stop order
+        recursiveDepth workFuel metadata uv formulas solver root smaller) :
+    RealActualSourceCorrectAt holeKey fits admits graph templates checkEmpty edgesOf stop order
+      recursiveDepth workFuel metadata uv formulas solver root
+      (.tuple {point with count := count + 1} ((incoming, bucket) :: rest)) := by
+  intro scopeOriginal scopeBefore allInputs ledger origin current
+  obtain ⟨headOrigin, headCurrent, decrease⟩ :=
+    actual_source_cons_current (SourcePruningOuterNarrow.narrow holeKey fits admits)
+      graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+      formulas solver root scopeOriginal scopeBefore allInputs point count incoming bucket rest origin current
+  have resources := taskIH (.child {point with count := count} incoming bucket rest) decrease
+    scopeOriginal scopeBefore allInputs ledger headOrigin headCurrent
+  have runtime := actual_source_tuple_cons_run (SourcePruningOuterNarrow.narrow holeKey fits admits)
+    graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv point count incoming bucket rest
+  have forecast := (identity_actual_source_forward_forecasts recursiveDepth root.limit root.own
+    point count point.height incoming bucket rest).1
+  change ActualEmittedCompleteResources formulas solver point.caller
+    (IdentityActualSourceTask.goal recursiveDepth root.limit root.own
+      (.tuple {point with count := count + 1} ((incoming, bucket) :: rest))).forecast
+    (finish uv (IdentityActualSourceTask.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
+      graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+      (.tuple {point with count := count + 1} ((incoming, bucket) :: rest))))
+  rw [runtime, forecast]
+  exact resources
+
+end GenericActualSourceTupleConsResources
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation

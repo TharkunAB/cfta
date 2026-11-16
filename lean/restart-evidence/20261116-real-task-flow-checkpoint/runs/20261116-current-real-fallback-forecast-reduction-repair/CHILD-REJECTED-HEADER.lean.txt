@@ -1,0 +1,29 @@
+private theorem actual_source_fallback_child_rejected
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol)) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Typing) (uv : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits) (original : Caller (bits + 2))
+    (scopeBefore : Cached) (allInputs : List (Node × List Suspended))
+    (point : IdentityActualSourcePoint bits) (incoming : Node) (bucket : List Suspended)
+    (rest : List (Node × List Suspended))
+    (current : ActualSourceCurrent formulas solver root original metadata scopeBefore allInputs recursiveDepth
+      (.child point incoming bucket rest))
+    (fallback : SourcePruningEnumerationSharedEagerChildren.ordinaryNonterminal bucket incoming = false)
+    (outer : Core) (reached : Caller (bits + 2)) (saved : Queries) (after : Cached)
+    (waiting : EnumerationWaitingIndex.Waiting)
+    (observed : ChildDispatch.run checkEmpty workFuel workFuel workFuel workFuel workFuel
+      bucket incoming point.caller point.before point.queries =
+        ((.ok (some []), reached, saved, outer, waiting), some after)) :
+    IdentityActualSourceTask.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+      (.child point incoming bucket rest) =
+      .complete [SelectedEdge.Result.stopped point.completed
+        (.ok (some []), reached, saved, outer, waiting) (some after)] [] reached saved ∧
+    ∃ (next : Inventory) (final : Memos),
+      Post formulas solver next point.caller reached final ∧ final.query = saved ∧
+      Fits (advance point.seed (point.bound + 1)).2 reached.checked ∧
+      Heap (fun guard => guard ∈ (advance point.seed (point.bound + 1)).1) reached.checked.native.machine.heap ∧
+      SourceEqualityRequiredCache.Keeps root.caller.checked.native.machine.heap reached.checked.native.machine.heap

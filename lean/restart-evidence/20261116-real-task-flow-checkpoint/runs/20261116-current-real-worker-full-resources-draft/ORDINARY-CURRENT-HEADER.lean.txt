@@ -1,0 +1,22 @@
+private theorem actual_source_ordinary_current
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol)) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat) (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Typing) (uv : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits) (original : Caller (bits + 2))
+    (scopeBefore : Cached) (allInputs : List (Node × List Suspended))
+    (point : IdentityActualSourcePoint bits) (height : Nat)
+    (incoming : Node) (bucket : List Suspended) (rest : List (Node × List Suspended))
+    (origin : ActualSourceOrigin (SourcePruningOuterNarrow.narrow holeKey fits admits) holeKey fits admits graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv root
+      (.child {point with height := height + 1} incoming bucket rest))
+    (ordinary : SourcePruningEnumerationSharedEagerChildren.ordinaryNonterminal bucket incoming = true)
+    (current : ActualSourceCurrent formulas solver root original metadata scopeBefore allInputs recursiveDepth
+      (.child {point with height := height + 1} incoming bucket rest)) :
+    ActualSourceOrigin (SourcePruningOuterNarrow.narrow holeKey fits admits) holeKey fits admits graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv root
+      (.rows height {point with height := height + 1} incoming bucket rest) ∧
+    ActualSourceCurrent formulas solver root original metadata scopeBefore allInputs recursiveDepth
+      (.rows height {point with height := height + 1} incoming bucket rest) ∧
+    IdentityActualSourceTask.work root.limit (.rows height {point with height := height + 1} incoming bucket rest) <
+      IdentityActualSourceTask.work root.limit (.child {point with height := height + 1} incoming bucket rest)

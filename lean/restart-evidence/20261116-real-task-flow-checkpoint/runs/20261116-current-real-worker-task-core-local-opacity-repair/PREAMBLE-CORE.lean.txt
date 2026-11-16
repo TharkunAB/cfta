@@ -1,0 +1,43 @@
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+section RealWorkerTaskAndRootAssembly
+set_option autoImplicit false
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedPartialInvariant (Post)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
+open SourcePruningEnumerationSharedIncomingReservation (Seed advance)
+open SourceCurrentAllocatedNativeResourceForecast (Le)
+open SourcePruningEnumerationRecursive (Packet)
+open SourcePruningEnumerationSharedSelectedContinuations
+open SourcePruningEnumerationSharedPreparedRecursive (Output Failure OutputResources OutcomeResources finish emitted)
+open SourcePruningEnumerationSharedPreparedRecursiveChildPolicy (resumeWithNarrow runEagerWithNarrow runWithNarrow)
+open SourcePruningEnumerationFiniteReservation (iterate iterate_add)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Core" => EnumerationState.State Symbol Constraint
+local notation "Heap" => SourceEqualityAnnotationHeap.Heap
+variable {Typing Key : Type} {bits : Nat}
+local notation "Fold" => NativeContinuations.Result
+  (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2)
+local notation "Done" => List Fragment → Caller (bits + 2) → Queries → Cached → Fold
+local notation "Stopped" => List Fragment → ChildDispatch.Observation (bits + 2) → Option Cached → Fold
+local notation "ChildDone" => Fragment → Caller (bits + 2) → Queries → Cached → Fold
+local notation "Visitor" => List Suspended → Node → Caller (bits + 2) → Cached → Queries → ChildDone →
+  (ChildDispatch.Observation (bits + 2) → Option Cached → Fold) → Fold
+local notation "Narrow" => Metadata Typing → Nat → Nat → Node →
+  InternedConstructorTemplates.State Symbol Constraint → MergedSourceComparison.Result Symbol Constraint Node
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+
+attribute [local irreducible] nodePlan tuplePlan fallbackPlan identity_actual_frame_plan
+  identity_actual_frame_reserved IdentityActualSourceRoot.limit IdentityActualSourceRoot.own
+set_option maxHeartbeats 2000000

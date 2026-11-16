@@ -1,0 +1,53 @@
+private theorem actual_source_fallback_child_current
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol)) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Typing) (uv : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits) (original : Caller (bits + 2))
+    (scopeBefore : Cached) (allInputs : List (Node × List Suspended))
+    (point : IdentityActualSourcePoint bits) (incoming : Node) (bucket : List Suspended)
+    (rest : List (Node × List Suspended))
+    (origin : ActualSourceOrigin (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv root
+      (.child point incoming bucket rest))
+    (ancestors : ActualFrameLedger formulas solver root metadata uv point.frame original scopeBefore allInputs)
+    (current : ActualSourceCurrent formulas solver root original metadata scopeBefore allInputs recursiveDepth
+      (.child point incoming bucket rest))
+    (fallback : SourcePruningEnumerationSharedEagerChildren.ordinaryNonterminal bucket incoming = false)
+    (fragment : Fragment) (returned outer : Core) (reached : Caller (bits + 2)) (saved : Queries)
+    (after : Cached) (waiting : EnumerationWaitingIndex.Waiting)
+    (observed : ChildDispatch.run checkEmpty workFuel workFuel workFuel workFuel workFuel
+      bucket incoming point.caller point.before point.queries =
+        ((.ok (some [.ok (fragment, returned)]), reached, saved, outer, waiting), some after)) :
+    let nextPoint : IdentityActualSourcePoint bits := {point with
+      completed := point.completed ++ [fragment]
+      caller := reached
+      before := after
+      queries := saved
+      mass := point.mass + point.bound
+      seed := advance point.seed (point.bound + 1)}
+    ChildInputs formulas solver point.caller metadata point.before bucket fragment reached saved after ∧
+    returned = after.core ∧
+    ActualSourceOrigin (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv root
+      (.tuple nextPoint rest) ∧
+    ActualFrameLedger formulas solver root metadata uv nextPoint.frame original scopeBefore allInputs ∧
+    ActualSourceCurrent formulas solver root original metadata scopeBefore allInputs recursiveDepth
+      (.tuple nextPoint rest) ∧
+    IdentityActualSourceTask.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+      (.child point incoming bucket rest) =
+    IdentityActualSourceTask.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+      (.tuple nextPoint rest) ∧
+    IdentityActualSourceTask.work root.limit (.tuple nextPoint rest) <
+      IdentityActualSourceTask.work root.limit (.child point incoming bucket rest) ∧
+    (IdentityActualSourceTask.goal recursiveDepth root.limit root.own (.tuple nextPoint rest)).forecast =
+      fallbackPlan point.bound point.mass (point.tailPlan recursiveDepth root.limit root.own) point.seed ∧
+    (Le (IdentityActualSourceTask.goal recursiveDepth root.limit root.own (.tuple nextPoint rest)).forecast.2
+        (IdentityActualSourceTask.goal recursiveDepth root.limit root.own (.child point incoming bucket rest)).forecast.2 ∧
+      (IdentityActualSourceTask.goal recursiveDepth root.limit root.own (.tuple nextPoint rest)).forecast.1 ⊆
+        (IdentityActualSourceTask.goal recursiveDepth root.limit root.own (.child point incoming bucket rest)).forecast.1) ∧
+    ∀ reservationRoot, IdentityReservationPosition bits reservationRoot
+      (IdentityActualSourceTask.goal recursiveDepth root.limit root.own (.child point incoming bucket rest)) →
+      IdentityReservationPosition bits reservationRoot
+        (IdentityActualSourceTask.goal recursiveDepth root.limit root.own (.tuple nextPoint rest))

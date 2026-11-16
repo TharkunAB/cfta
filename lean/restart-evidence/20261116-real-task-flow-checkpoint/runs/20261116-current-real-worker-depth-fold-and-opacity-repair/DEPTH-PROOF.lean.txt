@@ -1,0 +1,47 @@
+ := by
+  induction recursiveDepth with
+  | zero => exact real_emitted_resources_zero holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver
+  | succ recursiveDepth ih =>
+    intro inventory caller memos before metadata seed ceiling packet bounded known
+      selectionMembers selectionLength initialMass reserved workFuel
+    have finalGrowth := eagerFinal_ge (recursiveDepth + 1) seed ceiling
+    cases chosen : SourcePruningEnumerationRestart.decision stop order metadata before with
+    | none =>
+      obtain ⟨outcome, running, resources⟩ := real_resume_eager_zero_resources
+        holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver inventory caller memos
+        before metadata none seed packet bounded known
+      have actual : runEagerWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates
+          checkEmpty edgesOf stop order workFuel (recursiveDepth + 1) metadata caller memos.query before = outcome := by
+        unfold runEagerWithNarrow runWithNarrow
+        rw [chosen, resumeWithNarrow]
+        simpa only [resumeWithNarrow] using running workFuel
+      rw [actual]
+      exact real_rows_resources_of_outcome (resources.mono finalGrowth.1 finalGrowth.2)
+    | some next =>
+      cases next with
+      | done =>
+        obtain ⟨outcome, running, resources⟩ := real_resume_eager_zero_resources
+          holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver inventory caller memos
+          before metadata (some .done) seed packet bounded known
+        have actual : runEagerWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates
+            checkEmpty edgesOf stop order workFuel (recursiveDepth + 1) metadata caller memos.query before = outcome := by
+          unfold runEagerWithNarrow runWithNarrow
+          rw [chosen, resumeWithNarrow]
+          simpa only [resumeWithNarrow] using running workFuel
+        rw [actual]
+        exact real_rows_resources_of_outcome (resources.mono finalGrowth.1 finalGrowth.2)
+      | stuck =>
+        obtain ⟨outcome, running, resources⟩ := real_resume_eager_zero_resources
+          holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver inventory caller memos
+          before metadata (some .stuck) seed packet bounded known
+        have actual : runEagerWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates
+            checkEmpty edgesOf stop order workFuel (recursiveDepth + 1) metadata caller memos.query before = outcome := by
+          unfold runEagerWithNarrow runWithNarrow
+          rw [chosen, resumeWithNarrow]
+          simpa only [resumeWithNarrow] using running workFuel
+        rw [actual]
+        exact real_rows_resources_of_outcome (resources.mono finalGrowth.1 finalGrowth.2)
+      | expand uv =>
+        exact real_expand_complete_resources holeKey fits admits graph templates checkEmpty edgesOf stop order
+          formulas solver recursiveDepth ih inventory caller memos before metadata seed ceiling packet bounded known
+          selectionMembers selectionLength initialMass reserved workFuel uv chosen

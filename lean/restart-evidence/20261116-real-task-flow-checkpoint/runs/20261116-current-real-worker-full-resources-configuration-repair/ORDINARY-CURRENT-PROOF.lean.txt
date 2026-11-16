@@ -1,0 +1,23 @@
+ := by
+  let selected := {point with height := height + 1}
+  let tail := selected.tailPlan recursiveDepth root.limit root.own
+  have growth : ∀ retained seed, Le seed.2 (tail retained seed).2 ∧ seed.1 ⊆ (tail retained seed).1 := by
+    intro retained seed
+    exact tuplePlan_ge (nodePlan root.limit root.own selected.height)
+      (nodePlan_ge root.limit root.own selected.height) selected.count selected.bound retained
+      (identity_actual_frame_plan recursiveDepth root.limit root.own selected.frame)
+      (identity_actual_frame_plan_ge recursiveDepth root.limit root.own selected.frame) seed
+  obtain ⟨inputs, currentFits, known, reserved⟩ := current
+  have pad := fallbackPlan_ge selected.bound selected.mass tail growth selected.seed
+  refine ⟨.ordinaryRows point height incoming bucket rest origin ordinary, ?_, ?_⟩
+  · refine ⟨inputs, currentFits.mono pad.1, ?_, ?_⟩
+    · intro key row found
+      exact pad.2 (known key row found)
+    · exact reserved.2
+  · change (root.limit + 1) *
+        (identity_actual_tuple_steps (identity_actual_node_steps root.limit height)
+          root.limit (selected.tailSteps root.limit + 1) + 1) <
+      selected.tailSteps root.limit + 2 + (root.limit + 1) *
+        (identity_actual_tuple_steps (identity_actual_node_steps root.limit height)
+          root.limit (selected.tailSteps root.limit + 1) + 1)
+    omega

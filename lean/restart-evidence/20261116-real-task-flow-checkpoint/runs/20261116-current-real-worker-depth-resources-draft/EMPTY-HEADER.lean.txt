@@ -1,0 +1,13 @@
+omit [DecidableEq Symbol] [DecidableEq Node] in
+private theorem real_empty_prefix_complete_resources
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (metadata : Metadata Typing)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (caller : Caller (bits + 2)) (memos : Memos) (before : Cached)
+    (seed : Seed) (ceiling recursiveDepth uv : Nat)
+    {checked prepared reached saved candidate right ordinary}
+    (current : SourcePruningEnumerationSharedRecursive.CurrentPrefixResources stop order metadata
+      formulas solver inventory uv caller before memos seed.2 (fun guard => guard ∈ seed.1)
+      (.narrowed checked prepared reached saved (some []) candidate right ordinary)) :
+    ActualEmittedCompleteResources formulas solver caller (eagerFinal (recursiveDepth + 1) seed ceiling)
+      (.complete [] reached saved)

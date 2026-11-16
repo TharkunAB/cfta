@@ -1,0 +1,20 @@
+--- lean/restart-evidence/20261116-current-real-actual-source-rows-resources-draft/APPEND.lean.txt
++++ lean/restart-evidence/20261116-current-real-actual-source-rows-plan-and-helper-repair/APPEND.lean.txt
+@@ -180,7 +180,7 @@
+       (staged.map (fun input => (input.1, input.2.1))) caller middle queries := by
+   dsimp only
+   rw [SourcePruningEnumerationSharedChildVisitors.visitSelected, prepared]
+-  exact actual_source_guarded_children_eq checkEmpty edgesOf workFuel parentValue
++  exact real_rows_guarded_children_eq checkEmpty edgesOf workFuel parentValue
+     (staged.map (fun input => (input.1, input.2.1))) caller middle queries
+     (actual_source_frame_callbacks narrow graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+       (.selected parent completedPrefix rest row residual caller queries parentHeight remainingCount parentBound)).1
+@@ -398,7 +398,7 @@
+       (limit - (attempted.length + 1))
+     rw [← iterate_add, Nat.add_sub_of_le (by omega : attempted.length + 1 ≤ limit)] at later
+     rw [nextSlot] at later
+-    exact later
++    simpa only [nodePlan] using later
+   obtain ⟨_roots, _action, rowOwn, _paths, ownReceipt, rowPacket, rowMass, lower, reducing⟩ :=
+     ordinary_prefix_packet formulas solver inventory caller memos metadata before parentEntry rows depth free
+       edge scs packet (kept.available _ available) closed selected bounded pending allowed tries residual projected

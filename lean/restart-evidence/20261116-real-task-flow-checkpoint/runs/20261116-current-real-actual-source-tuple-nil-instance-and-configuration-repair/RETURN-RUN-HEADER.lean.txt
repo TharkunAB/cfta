@@ -1,0 +1,18 @@
+private theorem actual_source_selected_return_run
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol)) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Typing) (uv : Nat) (entry current : IdentityActualSourcePoint bits)
+    (rest : List (Node × List Suspended)) (edge : EdgeValue Symbol Constraint) (residual : Option Constraint) :
+    let frame := IdentityActualCallbackFrame.selected entry.frame entry.completed rest edge residual entry.caller entry.queries
+      entry.height entry.count entry.bound
+    let returned := identity_actual_source_return_point entry current edge residual
+    let receipt := SelectedEdge.Result.complete (.node edge.entry.key.symbol current.completed)
+      current.caller current.queries returned.before
+    IdentityActualSourceTask.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+      (.tuple {current with frame := frame} []) =
+      match IdentityActualSourceTask.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv (.tuple returned rest) with
+      | .complete processed outputs finalCaller finalQueries => .complete (receipt :: processed) outputs finalCaller finalQueries
+      | .stopped processed outputs stopped => .stopped (receipt :: processed) outputs stopped
