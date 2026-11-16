@@ -1,0 +1,59 @@
+theorem children_invocation_origin
+    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List Edge) (policy : Policy)
+    (childIH : ∀ (incoming : Node) (scs : List Suspended) (caller : Caller width)
+        (before : Cached) (queries : Queries) (done : Done) (stopped : Stopped)
+        (index : Nat) (output : Output),
+      (outputs (runPolicy checkEmpty r n p h k edgesOf policy
+        scs incoming caller before queries done stopped))[index]? = some output →
+      ∃ (exit : ChildExit width) (localIndex : Nat),
+        ChildInvocationAt checkEmpty r n p h k edgesOf policy
+          scs incoming caller before queries done stopped index output exit localIndex ∧
+        ∃ (earlier later : List Output),
+          outputs (runPolicy checkEmpty r n p h k edgesOf policy
+            scs incoming caller before queries done stopped) =
+              earlier ++ childExitOutputs done stopped exit ++ later ∧
+          (childExitOutputs done stopped exit)[localIndex]? = some output ∧
+          index = earlier.length + localIndex)
+    (done : TupleDone) (stopped : TupleStopped) (inputs : List (Node × List Suspended))
+    (caller : Caller width) (before : Cached) (queries : Queries) (index : Nat) (output : Output)
+    (observed : (outputs (visitChildren (runPolicy checkEmpty r n p h k edgesOf policy)
+      done stopped inputs caller before queries))[index]? = some output) :
+    ∃ (exit : TupleExit width) (localIndex : Nat),
+      ChildrenInvocationAt checkEmpty r n p h k edgesOf policy
+        done stopped inputs caller before queries index output exit localIndex ∧
+      ∃ (earlier later : List Output),
+        outputs (visitChildren (runPolicy checkEmpty r n p h k edgesOf policy)
+          done stopped inputs caller before queries) =
+            earlier ++ tupleExitOutputs done stopped exit ++ later ∧
+        (tupleExitOutputs done stopped exit)[localIndex]? = some output ∧
+        index = earlier.length + localIndex
+
+theorem selected_invocation_origin
+    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List Edge) (policy : Policy)
+    (childIH : ∀ (incoming : Node) (scs : List Suspended) (caller : Caller width)
+        (before : Cached) (queries : Queries) (done : Done) (stopped : Stopped)
+        (index : Nat) (output : Output),
+      (outputs (runPolicy checkEmpty r n p h k edgesOf policy
+        scs incoming caller before queries done stopped))[index]? = some output →
+      ∃ (exit : ChildExit width) (localIndex : Nat),
+        ChildInvocationAt checkEmpty r n p h k edgesOf policy
+          scs incoming caller before queries done stopped index output exit localIndex ∧
+        ∃ (earlier later : List Output),
+          outputs (runPolicy checkEmpty r n p h k edgesOf policy
+            scs incoming caller before queries done stopped) =
+              earlier ++ childExitOutputs done stopped exit ++ later ∧
+          (childExitOutputs done stopped exit)[localIndex]? = some output ∧
+          index = earlier.length + localIndex)
+    (consume : Receipt width → Result Output Reason width)
+    (scs : List Suspended) (edge : Edge) (caller : Caller width) (before : Cached) (queries : Queries)
+    (index : Nat) (output : Output)
+    (observed : (outputs (visitSelected (runPolicy checkEmpty r n p h k edgesOf policy)
+      consume scs edge caller before queries))[index]? = some output) :
+    ∃ (receipt : Receipt width) (consumerIndex : Nat),
+      SelectedInvocationAt checkEmpty r n p h k edgesOf policy consume scs edge caller before queries
+        index output receipt consumerIndex ∧
+      ∃ (earlier later : List Output),
+        outputs (visitSelected (runPolicy checkEmpty r n p h k edgesOf policy)
+          consume scs edge caller before queries) = earlier ++ outputs (consume receipt) ++ later ∧
+        (outputs (consume receipt))[consumerIndex]? = some output ∧
+        index = earlier.length + consumerIndex

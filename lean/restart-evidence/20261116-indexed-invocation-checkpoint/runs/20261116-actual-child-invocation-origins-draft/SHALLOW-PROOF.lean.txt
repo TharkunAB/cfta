@@ -1,0 +1,61 @@
+ := by
+  have stoppedCase (observation : Observation width) (candidate : Option Cached)
+      (actual : ChildDispatch.run checkEmpty r n p h k scs incoming caller before queries =
+        (observation, candidate)) (shape : ShallowStopped observation candidate)
+      (route : runPolicy checkEmpty r n p h k edgesOf .shallow
+        scs incoming caller before queries done stopped = stopped observation candidate) :
+      ∃ (exit : ChildExit width) (localIndex : Nat),
+        ChildInvocationAt checkEmpty r n p h k edgesOf .shallow
+          scs incoming caller before queries done stopped index output exit localIndex ∧
+        ∃ (earlier later : List Output),
+          outputs (runPolicy checkEmpty r n p h k edgesOf .shallow
+            scs incoming caller before queries done stopped) =
+              earlier ++ childExitOutputs done stopped exit ++ later ∧
+          (childExitOutputs done stopped exit)[localIndex]? = some output ∧
+          index = earlier.length + localIndex := by
+    have found : (outputs (stopped observation candidate))[index]? = some output := by
+      rw [route] at observed
+      exact observed
+    refine ⟨.stopped observation candidate, index,
+      .shallow_stopped actual shape found, [], [], ?_, found, by simp⟩
+    simpa only [List.nil_append, List.append_nil, childExitOutputs] using congrArg outputs route
+  cases actual : ChildDispatch.run checkEmpty r n p h k scs incoming caller before queries with
+  | mk observation candidate =>
+      rcases observation with ⟨raw, reached, saved, outer, waiting⟩
+      cases raw with
+      | error fault =>
+          apply stoppedCase _ _ actual (by trivial)
+          simp only [runPolicy, shallowVisit, actual]
+      | ok possible =>
+          cases possible with
+          | none =>
+              apply stoppedCase _ _ actual (by trivial)
+              simp only [runPolicy, shallowVisit, actual]
+          | some results =>
+              cases results with
+              | nil =>
+                  apply stoppedCase _ _ actual (by trivial)
+                  simp only [runPolicy, shallowVisit, actual]
+              | cons first rest =>
+                  cases first with
+                  | error fault =>
+                      apply stoppedCase _ _ actual (by trivial)
+                      simp only [runPolicy, shallowVisit, actual]
+                  | ok payload =>
+                      rcases payload with ⟨fragment, returned⟩
+                      cases rest with
+                      | cons second tail =>
+                          apply stoppedCase _ _ actual (by trivial)
+                          simp only [runPolicy, shallowVisit, actual]
+                      | nil =>
+                          cases candidate with
+                          | none =>
+                              apply stoppedCase _ _ actual (by trivial)
+                              simp only [runPolicy, shallowVisit, actual]
+                          | some after =>
+                              have found : (outputs (done fragment reached saved after))[index]? = some output := by
+                                simpa only [runPolicy, shallowVisit, actual] using observed
+                              refine ⟨.done fragment reached saved after, index,
+                                .shallow_done actual found, [], [], ?_, found, by simp⟩
+                              simp only [runPolicy, shallowVisit, actual, childExitOutputs,
+                                List.nil_append, List.append_nil]

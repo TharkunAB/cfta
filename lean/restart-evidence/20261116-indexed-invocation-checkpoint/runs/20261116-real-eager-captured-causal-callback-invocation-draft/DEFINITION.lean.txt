@@ -1,0 +1,40 @@
+def CapturedCallbackInvocationAt
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List Edge)
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (workFuel recursiveDepth uv target : Nat) (metadata : Metadata Typing)
+    (scs : List Suspended) (edge : Edge) (caller : Caller (bits + 2))
+    (queries : Queries) (before : Cached) (index : Nat) (output : Output (bits + 2) Typing)
+    (fragment : Fragments.Fragment Symbol) (reached : Caller (bits + 2)) (saved : Queries)
+    (beforeFinalize finished : Cached) (updated : Metadata Typing) (callbackCore : Core)
+    (earlier later : List (Output (bits + 2) Typing)) (localIndex : Nat) : Prop
+ :=
+  let child := SourcePruningEnumerationSharedEagerChildren.eagerChild
+    (width := bits + 2) (Output := Output (bits + 2) Typing) (Reason := Failure (bits + 2) Typing)
+    checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf
+  let recur := resumeWithNarrow child (SourcePruningOuterNarrow.narrow holeKey fits admits)
+    graph templates checkEmpty edgesOf stop order workFuel recursiveDepth
+  let hook := SourcePruningEnumerationSharedPreparedRecursive.continueWith recur
+    graph templates stop order workFuel metadata uv
+  let consume : SelectedEdge.Result (bits + 2) →
+      NativeContinuations.Result (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2) :=
+    fun receipt => match receipt with
+    | .complete fragment reached saved after =>
+        match SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap workFuel target fragment after with
+        | some finished => SourcePruningEnumerationSharedReceiptContinuation.run hook caller queries
+            (some (.complete fragment reached saved finished))
+        | none => SourcePruningEnumerationSharedReceiptContinuation.run hook caller queries
+            (some (.finalizeStopped fragment reached saved after))
+    | other => SourcePruningEnumerationSharedReceiptContinuation.run hook caller queries (some other)
+  SourcePruningEnumerationSharedInvocationTrace.SelectedInvocationAt
+    checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf .eager consume
+    scs edge caller before queries index output (.complete fragment reached saved beforeFinalize) localIndex ∧
+  outputs (visitSelected child consume scs edge caller before queries) =
+    earlier ++ outputs (consume (.complete fragment reached saved beforeFinalize)) ++ later ∧
+  (outputs (consume (.complete fragment reached saved beforeFinalize)))[localIndex]? = some output ∧
+  index = earlier.length + localIndex ∧
+  SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap workFuel target fragment beforeFinalize =
+    some finished ∧
+  ExceptT.run (SourcePruningRecordTypes.recordTypes graph templates workFuel metadata uv
+    (.inl fragment) finished.core) = [.ok ((false, updated), callbackCore)]

@@ -1,0 +1,20 @@
+ := by
+  cases policy with
+  | shallow =>
+      exact terminal_done_dispatch_shallow checkEmpty r n p h k edgesOf
+        scs incoming caller before queries done stopped index output
+        fragment reached saved after localIndex trace
+  | eager =>
+      exact terminal_done_dispatch_eager checkEmpty r n p h k edgesOf
+        scs incoming caller before queries done stopped index output
+        fragment reached saved after localIndex terminal trace
+  | guarded parent =>
+      cases trace with
+      | guarded_lower _lower child =>
+          exact terminal_done_dispatch_eager checkEmpty r n p h k edgesOf
+            scs incoming caller before queries done stopped index output
+            fragment reached saved after localIndex terminal child
+      | guarded_else _lower child =>
+          exact terminal_done_dispatch_shallow checkEmpty r n p h k edgesOf
+            scs incoming caller before queries done stopped index output
+            fragment reached saved after localIndex child

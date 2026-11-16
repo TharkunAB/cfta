@@ -1,0 +1,16 @@
+theorem eager_invocation_at
+    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List Edge)
+    (incoming : Node) (scs : List Suspended) (caller : Caller width)
+    (before : Cached) (queries : Queries) (done : Done) (stopped : Stopped)
+    (index : Nat) (output : Output)
+    (observed : (outputs (runPolicy checkEmpty r n p h k edgesOf .eager
+      scs incoming caller before queries done stopped))[index]? = some output) :
+    ∃ (exit : ChildExit width) (localIndex : Nat),
+      ChildInvocationAt checkEmpty r n p h k edgesOf .eager
+        scs incoming caller before queries done stopped index output exit localIndex ∧
+      ∃ (earlier later : List Output),
+        outputs (runPolicy checkEmpty r n p h k edgesOf .eager
+          scs incoming caller before queries done stopped) =
+            earlier ++ childExitOutputs done stopped exit ++ later ∧
+        (childExitOutputs done stopped exit)[localIndex]? = some output ∧
+        index = earlier.length + localIndex

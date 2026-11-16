@@ -1,0 +1,35 @@
+theorem selected_complete_invocation
+    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List Edge) (policy : Policy)
+    (consume : Receipt width → Result Output Reason width) (scs : List Suspended) (edge : Edge)
+    (caller : Caller width) (before : Cached) (queries : Queries)
+    (index : Nat) (output : Output) (fragment : Fragment) (reached : Caller width)
+    (saved : Queries) (beforeFinalize : Cached) (consumerIndex : Nat)
+    (trace : SelectedInvocationAt checkEmpty r n p h k edgesOf policy
+      consume scs edge caller before queries index output
+      (.complete fragment reached saved beforeFinalize) consumerIndex) :
+    ∃ (symbol : Symbol) (staged : List Input) (residual : Option Constraint)
+        (middle : Cached) (fragments : List Fragment) (afterChildren : Cached),
+      SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs edge before =
+        some [((symbol, staged, residual), middle)] ∧
+      ChildrenInvocationAt checkEmpty r n p h k edgesOf policy
+        (fun produced current capturedQueries captured => consume (.complete (.node symbol produced)
+          current capturedQueries (SelectedEdge.finish residual (.node symbol produced) captured)))
+        (fun completed observation candidate => consume (.stopped completed observation candidate))
+        (staged.map (fun input => (input.1, input.2.1))) caller middle queries index output
+        (.done fragments reached saved afterChildren) consumerIndex ∧
+      fragment = .node symbol fragments ∧
+      beforeFinalize = SelectedEdge.finish residual fragment afterChildren
+
+theorem terminal_done_dispatch
+    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List Edge) (policy : Policy)
+    (scs : List Suspended) (incoming : Node) (caller : Caller width) (before : Cached) (queries : Queries)
+    (done : Done) (stopped : Stopped) (index : Nat) (output : Output)
+    (fragment : Fragment) (reached : Caller width) (saved : Queries) (after : Cached) (localIndex : Nat)
+    (terminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true)
+    (trace : ChildInvocationAt checkEmpty r n p h k edgesOf policy
+      scs incoming caller before queries done stopped index output
+      (.done fragment reached saved after) localIndex) :
+    ∃ (returned read : Core) (waiting : EnumerationWaitingIndex.Waiting),
+      ChildDispatch.run checkEmpty r n p h k scs incoming caller before queries =
+        ((.ok (some [.ok (fragment, returned)]), reached, saved, read, waiting), some after) ∧
+      index = localIndex

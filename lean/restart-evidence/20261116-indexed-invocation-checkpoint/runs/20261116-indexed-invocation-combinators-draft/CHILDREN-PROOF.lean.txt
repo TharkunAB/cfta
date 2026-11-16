@@ -1,0 +1,45 @@
+ := by
+  induction inputs generalizing caller before queries done stopped index with
+  | nil =>
+      refine ⟨.done [] caller queries before, index, .nil observed, [], [], ?_, observed, ?_⟩
+      · simp only [visitChildren, tupleExitOutputs, List.nil_append, List.append_nil]
+      · simp
+  | cons input rest ih =>
+      rcases input with ⟨incoming, bucket⟩
+      let visit := runPolicy checkEmpty r n p h k edgesOf policy
+      let yes := fun fragment reached saved after =>
+        visitChildren visit (fun fragments => done (fragment :: fragments))
+          (fun completed => stopped (fragment :: completed)) rest reached after saved
+      let no := fun observation candidate => stopped [] observation candidate
+      obtain ⟨exit, childIndex, childTrace, earlier, later, decomposition, found, offset⟩ :=
+        childIH incoming bucket caller before queries yes no index output
+          (by simpa only [visitChildren, visit, yes, no] using observed)
+      cases exit with
+      | done fragment reached saved after =>
+          change (outputs (visitChildren visit (fun fragments => done (fragment :: fragments))
+            (fun completed => stopped (fragment :: completed)) rest reached after saved))[childIndex]? =
+              some output at found
+          obtain ⟨tailExit, localIndex, tailTrace, prior, suffix,
+              tailDecomposition, terminalFound, tailOffset⟩ :=
+            ih (done := fun fragments => done (fragment :: fragments))
+              (stopped := fun completed => stopped (fragment :: completed))
+              (caller := reached) (before := after) (queries := saved) (index := childIndex) found
+          have callbackSame : tupleExitOutputs (fun fragments => done (fragment :: fragments))
+              (fun completed => stopped (fragment :: completed)) tailExit =
+              tupleExitOutputs done stopped (TupleExit.prepend fragment tailExit) := by
+            cases tailExit <;> rfl
+          refine ⟨TupleExit.prepend fragment tailExit, localIndex,
+            .cons_done childTrace tailTrace, earlier ++ prior, suffix ++ later, ?_, ?_, ?_⟩
+          · change outputs (visit bucket incoming caller before queries yes no) = _
+            rw [decomposition]
+            change earlier ++ outputs (visitChildren visit (fun fragments => done (fragment :: fragments))
+              (fun completed => stopped (fragment :: completed)) rest reached after saved) ++ later = _
+            rw [tailDecomposition, callbackSame]
+            simp only [List.append_assoc]
+          · rw [← callbackSame]
+            exact terminalFound
+          · simp only [List.length_append]
+            omega
+      | stopped observation candidate =>
+          exact ⟨.stopped [] observation candidate, childIndex, .cons_stopped childTrace,
+            earlier, later, decomposition, found, offset⟩

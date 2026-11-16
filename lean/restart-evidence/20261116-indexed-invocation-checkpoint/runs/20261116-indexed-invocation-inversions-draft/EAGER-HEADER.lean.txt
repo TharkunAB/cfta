@@ -1,0 +1,13 @@
+private theorem terminal_done_dispatch_eager
+    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List Edge)
+    (scs : List Suspended) (incoming : Node) (caller : Caller width) (before : Cached) (queries : Queries)
+    (done : Done) (stopped : Stopped) (index : Nat) (output : Output)
+    (fragment : Fragment) (reached : Caller width) (saved : Queries) (after : Cached) (localIndex : Nat)
+    (terminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true)
+    (trace : ChildInvocationAt checkEmpty r n p h k edgesOf .eager
+      scs incoming caller before queries done stopped index output
+      (.done fragment reached saved after) localIndex) :
+    ∃ (returned read : Core) (waiting : EnumerationWaitingIndex.Waiting),
+      ChildDispatch.run checkEmpty r n p h k scs incoming caller before queries =
+        ((.ok (some [.ok (fragment, returned)]), reached, saved, read, waiting), some after) ∧
+      index = localIndex

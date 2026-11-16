@@ -1,0 +1,35 @@
+ := by
+  cases prepared : SourcePruningEnumerationCachedOwn.prepare
+      caller.checked.native.machine.heap scs edge before with
+  | none =>
+      simp only [visitSelected, prepared] at observed ⊢
+      exact ⟨.unhandled, index, .unhandled_none prepared observed, [], [], by simp, observed, by simp⟩
+  | some rows =>
+      cases rows with
+      | nil =>
+          simp only [visitSelected, prepared] at observed ⊢
+          exact ⟨.rejected caller queries before, index, .rejected prepared observed,
+            [], [], by simp, observed, by simp⟩
+      | cons row rest =>
+          cases rest with
+          | cons second tail =>
+              simp only [visitSelected, prepared] at observed ⊢
+              exact ⟨.unhandled, index, .unhandled_many prepared observed,
+                [], [], by simp, observed, by simp⟩
+          | nil =>
+              rcases row with ⟨⟨symbol, staged, residual⟩, middle⟩
+              simp only [visitSelected, prepared] at observed ⊢
+              obtain ⟨exit, localIndex, children, earlier, later, decomposition, found, offset⟩ :=
+                children_invocation_origin checkEmpty r n p h k edgesOf policy childIH
+                  (fun fragments reached saved after => consume (.complete (.node symbol fragments)
+                    reached saved (SelectedEdge.finish residual (.node symbol fragments) after)))
+                  (fun completed observation candidate => consume (.stopped completed observation candidate))
+                  (staged.map (fun input => (input.1, input.2.1))) caller middle queries index output observed
+              cases exit with
+              | done fragments reached saved after =>
+                  exact ⟨.complete (.node symbol fragments) reached saved
+                    (SelectedEdge.finish residual (.node symbol fragments) after), localIndex,
+                    .singleton_done prepared children, earlier, later, decomposition, found, offset⟩
+              | stopped completed observation candidate =>
+                  exact ⟨.stopped completed observation candidate, localIndex,
+                    .singleton_stopped prepared children, earlier, later, decomposition, found, offset⟩
