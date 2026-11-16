@@ -6478,3 +6478,8 @@ end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
 
 #check MicroCFTA.EnumerationDischargeHistory.HeldFragmentHistory.pending_target_avoids
 #print axioms MicroCFTA.EnumerationDischargeHistory.HeldFragmentHistory.pending_target_avoids
+
+#check @MicroCFTA.SourcePruningEnumerationFinalize.run_after_residual
+#check @MicroCFTA.EnumerationDischargeHistory.HeldFragmentHistory.after_residual
+#print axioms MicroCFTA.SourcePruningEnumerationFinalize.run_after_residual
+#print axioms MicroCFTA.EnumerationDischargeHistory.HeldFragmentHistory.after_residual
