@@ -21665,3 +21665,109 @@ private theorem actual_tuple_finalize_pending_target_avoids_held
     cases Option.some.inj (middleExpanded.symm.trans pendingStored)
 
 end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+open Language Fragments EnumerationState EnumerationCorrectness EnumerationSchedule
+open EnumerationDependencies EnumerationReferences InternedConstructorTemplates
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+variable {Typing : Type} {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+
+omit [DecidableEq Symbol] [DecidableEq Node] in
+private theorem actual_tuple_finalize_held_fragment_history
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (original : Caller (bits + 2)) (metadata : Metadata Typing)
+    (before : Cached) (inputs : List (Node × List Suspended)) (fragments : List Fragment)
+    (reached : Caller (bits + 2)) (queries : Queries) (middle : Cached)
+    (tuple : TupleInputs formulas solver original metadata before inputs fragments reached queries middle)
+    (safe : Safe before.core) (held heldHandle : Nat)
+    (isolated : EnumerationDischargeHistory.IsolatedPending held heldHandle before.core)
+    (inputAvoids : ∀ child bucket, (child, bucket) ∈ inputs →
+      Avoids before.core.representatives held bucket)
+    (symbol : Symbol) (fuel captured : Nat) (finished : Cached)
+    (capturedNode : Option Nat) (capturedBucket : List Suspended)
+    (capturedStored : before.core.values[captured]? = some (.unenumerated capturedNode capturedBucket))
+    (capturedDifferent : captured ≠ held)
+    (actual : SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap
+      fuel captured (.node symbol fragments) middle = some finished) :
+    EnumerationDischargeHistory.HeldFragmentHistory held heldHandle before.core finished.core
+ := by
+  obtain ⟨_inventory, _memos, _post, _query, current, _growth, origin,
+      protectsExpanded, protectsRoots, referenceEffects, _bounds, returnedFragments⟩ := tuple
+  have heldInside : held < before.core.counter := by
+    rw [safe.1.aligned]
+    exact (List.getElem?_eq_some_iff.mp isolated.stored).1
+  have middleHeld : EnumerationDriver.Protected held before.core middle.core :=
+    protectsRoots held heldInside isolated.root inputAvoids
+  have middleIncoming : IncomingAvoid held middle.core := by
+    have allowed := referenceEffects
+      (fun slot => ¬UnionFind.SameClass before.core.representatives held slot)
+      isolated.incoming inputAvoids (fresh_separate before.core safe held heldInside)
+    intro value member sc listed same
+    exact allowed value member sc listed ((middleHeld.classes sc.var).mp same)
+  have middleIsolated : EnumerationDischargeHistory.IsolatedPending held heldHandle middle.core :=
+    ⟨middleHeld.root, middleHeld.value.trans isolated.stored, middleIncoming⟩
+  have middleHistory : EnumerationDischargeHistory.HeldFragmentHistory held heldHandle before.core middle.core := by
+    refine ⟨middleIsolated, middleHeld, protectsExpanded, ?_⟩
+    intro slot fragment stored
+    exact Or.inl (origin slot fragment stored)
+  have producedAvoid : FragmentAvoid middle.core.representatives held (.node symbol fragments) := by
+    intro hole occurs
+    cases occurs with
+    | child _ _ child _ member below =>
+      exact (returnedFragments child member).2 held heldInside isolated.root inputAvoids hole below
+  have core := EnumerationDischargeHistory.finalize_core_of_run
+    reached.checked.native.machine.heap fuel captured (.node symbol fragments) middle finished actual
+  have sameForest : finished.core.representatives = middle.core.representatives := by
+    rw [core]
+  have unwritten : ∀ slot, captured ≠ slot → IsRoot middle.core.representatives slot →
+      EnumerationDriver.Protected slot middle.core finished.core := by
+    intro slot different root
+    refine ⟨?_, ?_, ?_⟩
+    · simp only [core, List.getElem?_set_ne different]
+    · rw [sameForest]
+      exact root
+    · intro other
+      rw [sameForest]
+  have finalIsolated : EnumerationDischargeHistory.IsolatedPending held heldHandle finished.core :=
+    EnumerationDischargeHistory.IsolatedPending.through_finalize
+      reached.checked.native.machine.heap fuel captured held heldHandle (.node symbol fragments)
+      middle finished middleIsolated capturedDifferent actual
+  have finalHistory : EnumerationDischargeHistory.HeldFragmentHistory held heldHandle middle.core finished.core := by
+    refine ⟨finalIsolated, unwritten held capturedDifferent middleHeld.root, ?_, ?_⟩
+    · intro slot fragment stored
+      have different : captured ≠ slot := by
+        intro same
+        subst slot
+        have initiallyExpanded := origin captured fragment stored
+        cases Option.some.inj (capturedStored.symm.trans initiallyExpanded)
+      exact unwritten slot different (enumerated_root middle.core current.safe slot fragment stored).2
+    · intro slot fragment stored
+      by_cases written : slot = captured
+      · subst slot
+        have inside : captured < middle.core.values.length := by
+          have bound := (List.getElem?_eq_some_iff.mp stored).1
+          simpa only [core, List.length_set] using bound
+        have valueSame : Fragments.Fragment.node symbol fragments = fragment := by
+          rw [core, List.getElem?_set_self inside] at stored
+          exact UVarValue.enumerated.inj (Option.some.inj stored)
+        apply Or.inr
+        rw [← valueSame]
+        simpa only [core] using producedAvoid
+      · have middleStored : middle.core.values[slot]? = some (.enumerated fragment) := by
+          rw [core] at stored
+          simpa only [List.getElem?_set_ne (Ne.symm written)] using stored
+        exact Or.inl middleStored
+  exact EnumerationDischargeHistory.HeldFragmentHistory.trans held heldHandle
+    before.core middle.core finished.core middleHistory finalHistory
+
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
