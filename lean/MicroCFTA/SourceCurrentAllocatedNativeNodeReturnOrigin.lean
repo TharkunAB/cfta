@@ -285,3 +285,35 @@ theorem returned_node_cell_finish_prefix
       prefixActual, running, finishActual, finished, suffixActual⟩
 
 end MicroCFTA.SourceCurrentAllocatedNativeNodeReturnOrigin
+
+namespace MicroCFTA.SourceCurrentAllocatedNativeNodeReturnOrigin
+open Cache InternedConstructorTemplates
+open SourceRecursiveIntersectionCode SourceRecursiveIntersectionThunks
+open SourceEqualityNativeDemand
+open SourceCurrentAllocatedNativePhysicalTraceCompletion (Trace)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Checked" => SourceEqualityNativeDemand.State
+set_option autoImplicit false
+
+theorem returned_node_cell_or_finish_prefix [DecidableEq Symbol]
+    [DecidableEq (EdgeKey Symbol Guard)] {width : Nat} {Output : Type}
+    {count : Nat} {control rest : Control Output} {before after : Checked width}
+    (actual : Trace count control before rest after) :
+    ∀ (handle : Nat) (request : NodeRequest Symbol Guard) (value : Value Symbol Guard),
+      after.native.nodes.cells handle = some ⟨request, .returned value⟩ →
+      before.native.nodes.cells handle = some ⟨request, .returned value⟩ ∨
+      ∃ (prefixCount suffixCount : Nat) (beforeFinish : Checked width)
+        (next : Code Symbol Guard Output),
+        count = prefixCount + 1 + suffixCount ∧
+        Trace prefixCount control before (.code (.finishNode handle value next)) beforeFinish ∧
+        beforeFinish.native.nodes.cells handle = some ⟨request, .evaluating⟩ ∧
+        Trace 1 (.code (.finishNode handle value next)) beforeFinish (.code next)
+          { beforeFinish with native := finishNode handle value beforeFinish.native } ∧
+        ({ beforeFinish with native := finishNode handle value beforeFinish.native } : Checked width).native.nodes.cells
+          handle = some ⟨request, .returned value⟩ ∧
+        Trace suffixCount (.code next)
+          { beforeFinish with native := finishNode handle value beforeFinish.native } rest after
+ := trace_returned_or_finish actual
+
+end MicroCFTA.SourceCurrentAllocatedNativeNodeReturnOrigin
