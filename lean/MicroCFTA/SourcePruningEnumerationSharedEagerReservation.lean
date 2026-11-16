@@ -17298,3 +17298,872 @@ private theorem actual_source_root_visit_real_eq
 
 end GenericActualSourceRuntime
 end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+section GenericActualSourceTupleNilResources
+set_option autoImplicit false
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedPartialInvariant (Post)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
+open SourcePruningEnumerationSharedIncomingReservation (Seed advance)
+open SourceCurrentAllocatedNativeResourceForecast (Le)
+open SourcePruningEnumerationRecursive (Packet)
+open SourcePruningEnumerationSharedSelectedContinuations
+open SourcePruningEnumerationSharedPreparedRecursive (Output Failure OutputResources OutcomeResources finish emitted)
+open SourcePruningEnumerationSharedPreparedRecursiveChildPolicy (resumeWithNarrow runEagerWithNarrow)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Heap" => SourceEqualityAnnotationHeap.Heap
+variable {Typing Key : Type} {bits : Nat}
+local notation "Fold" => NativeContinuations.Result
+  (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2)
+local notation "Done" => List Fragment → Caller (bits + 2) → Queries → Cached → Fold
+local notation "Stopped" => List Fragment → ChildDispatch.Observation (bits + 2) → Option Cached → Fold
+local notation "ChildDone" => Fragment → Caller (bits + 2) → Queries → Cached → Fold
+local notation "Visitor" => List Suspended → Node → Caller (bits + 2) → Cached → Queries → ChildDone →
+  (ChildDispatch.Observation (bits + 2) → Option Cached → Fold) → Fold
+local notation "Narrow" => Metadata Typing → Nat → Nat → Node →
+  InternedConstructorTemplates.State Symbol Constraint → MergedSourceComparison.Result Symbol Constraint Node
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+private def ActualEmittedCompleteResources
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (original : Caller (bits + 2)) (seed : Seed)
+    (outcome : NativeContinuations.HookResult (Output (bits + 2) Typing)
+      (Failure (bits + 2) Typing) (bits + 2)) : Prop :=
+  (∀ output ∈ emitted outcome, OutputResources formulas solver original seed output) ∧
+    match outcome with
+    | .complete _ _ _ => OutcomeResources formulas solver original seed outcome
+    | .stopped _ _ _ => True
+
+private def RealEagerEmittedCompleteAtDepth
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (recursiveDepth : Nat) : Prop :=
+  ∀ (nextInventory : Inventory) (nextCaller : Caller (bits + 2)) (nextMemos : Memos)
+        (nextBefore : Cached) (nextMetadata : Metadata Typing) (nextSeed : Seed) (nextCeiling : Nat),
+      Packet formulas solver nextInventory nextCaller nextMemos nextMetadata nextBefore →
+      Fits nextSeed.2 nextCaller.checked →
+      Heap (fun guard => guard ∈ nextSeed.1) nextCaller.checked.native.machine.heap →
+      (∀ entry rows depth free, ∀ edge ∈ edgesOf (.node entry rows depth free), edge ∈ rows) →
+      (∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length) →
+      SourcePruningEnumerationPrefixAdmission.suspendedBound nextBefore.core ≤ nextCeiling →
+      eagerReserved bits recursiveDepth nextSeed nextCeiling →
+      ∀ sameWorkFuel,
+        let outcome := runEagerWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
+          graph templates checkEmpty edgesOf stop order sameWorkFuel recursiveDepth
+          nextMetadata nextCaller nextMemos.query nextBefore
+        (∀ output ∈ emitted outcome,
+          OutputResources formulas solver nextCaller (eagerFinal recursiveDepth nextSeed nextCeiling) output) ∧
+        match outcome with
+        | .complete _ _ _ => OutcomeResources formulas solver nextCaller
+            (eagerFinal recursiveDepth nextSeed nextCeiling) outcome
+        | .stopped _ _ _ => True
+
+private def RealActualSourceCorrectAt
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat) (metadata : Metadata Typing) (uv : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits) (task : IdentityActualSourceTask bits) : Prop :=
+  ∀ (scopeOriginal : Caller (bits + 2)) (scopeBefore : Cached) (allInputs : List (Node × List Suspended)),
+    ActualFrameLedger formulas solver root metadata uv task.point.frame scopeOriginal scopeBefore allInputs →
+    ActualSourceOrigin (SourcePruningOuterNarrow.narrow holeKey fits admits)
+      graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv root task →
+    ActualSourceCurrent formulas solver root scopeOriginal metadata scopeBefore allInputs recursiveDepth task →
+    ActualEmittedCompleteResources formulas solver task.point.caller
+      (task.goal recursiveDepth root.limit root.own).forecast
+      (finish uv (task.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv))
+
+
+omit [DecidableEq Symbol] [DecidableEq Node] in
+private theorem actual_emitted_complete_mono
+    {formulas : SourceGuards.Formulas FullSyntax.Formula}
+    {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {original : Caller (bits + 2)} {seed larger : Seed}
+    {outcome : NativeContinuations.HookResult (Output (bits + 2) Typing)
+      (Failure (bits + 2) Typing) (bits + 2)}
+    (numeric : Le seed.2 larger.2) (alphabet : seed.1 ⊆ larger.1)
+    (resources : ActualEmittedCompleteResources formulas solver original seed outcome) :
+    ActualEmittedCompleteResources formulas solver original larger outcome := by
+  obtain ⟨outputsValid, completed⟩ := resources
+  constructor
+  · intro output member
+    exact (outputsValid output member).mono numeric alphabet
+  · cases outcome with
+    | complete outputs caller queries => exact completed.mono numeric alphabet
+    | stopped outputs reason endpoint => trivial
+
+
+omit [DecidableEq Symbol] [DecidableEq Node] in
+private theorem actual_observed_own_tuple_child_inputs
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (original : Caller (bits + 2)) (memos : Memos)
+    (metadata : Metadata Typing) (before : Cached) (scs : List Suspended)
+    (edge : EdgeValue Symbol Constraint) (residual : Option Constraint) (own : Cached)
+    (staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)))
+    (packet : Packet formulas solver inventory original memos metadata before)
+    (prepared : SourcePruningEnumerationCachedOwn.prepare original.checked.native.machine.heap scs edge before =
+      some [((edge.entry.key.symbol, staged, residual), own)])
+    (fragments : List Fragment) (reached : Caller (bits + 2)) (saved : Queries) (after : Cached)
+    (history : TupleInputs formulas solver original metadata own
+      (staged.map (fun input => (input.1, input.2.1))) fragments reached saved after) :
+    ChildInputs formulas solver original metadata before scs (.node edge.entry.key.symbol fragments) reached saved
+      (SelectedEdge.finish residual (.node edge.entry.key.symbol fragments) after)
+ := by
+  obtain ⟨roots, paths, storage, realized, counts, flags⟩ := packet.valid
+  have complete := SourcePruningEnumerationCachedOwn.complete original.checked.native.machine.heap
+    before scs edge roots storage realized paths counts flags
+  by_cases allowed : arityAllows edge.children.length scs = true
+  · simp only [allowed, ↓reduceIte] at complete
+    cases projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+    | none =>
+        simp only [projected] at complete
+        have impossible := complete.1.symm.trans prepared
+        cases impossible
+    | some pair =>
+        obtain ⟨tries, _projectedResidual⟩ := pair
+        simp only [projected] at complete
+        obtain ⟨_action, candidate, _prefix, actual, _raw, ownCore, ownCounter, _rest⟩ := complete
+        have same := (List.cons.inj (Option.some.inj (actual.symm.trans prepared))).1
+        have endpointSame : candidate = own := congrArg Prod.snd same
+        have contentsSame := congrArg Prod.fst same
+        have tailSame := congrArg Prod.snd contentsSame
+        have stagedSame := congrArg Prod.fst tailSame
+        subst candidate
+        change edge.children.zipIdx.map (fun indexed =>
+          (indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.core.counter tries),
+            SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint)
+              (descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.core.counter tries)) indexed.1)) = staged at stagedSame
+        have readback : staged.map (fun input => (input.1, input.2.1)) =
+            SourcePruningEnumerationEdgeInputs.children edge scs before.core.counter tries := by
+          simp only [← stagedSame, List.map_map, SourcePruningEnumerationEdgeInputs.children]
+          rfl
+        have ownProtects (held : Nat) (inside : held < before.core.counter)
+            (root : IsRoot before.core.representatives held) (avoids : Avoids before.core.representatives held scs) :
+            EnumerationDriver.Protected held before.core own.core ∧
+              ∀ incoming bucket, (incoming, bucket) ∈ SourcePruningEnumerationEdgeInputs.children edge scs before.core.counter tries →
+                Avoids own.core.representatives held bucket := by
+          have frame : EnumerationDriver.Protected held before.core own.core := by
+            rw [ownCore]
+            exact EnumerationDriver.suspension_protected held tries.length before.core packet.safe inside root
+          refine ⟨frame, ?_⟩
+          intro incoming bucket member
+          obtain ⟨indexed, _indexedMember, pairSame⟩ := List.mem_map.mp member
+          cases pairSame
+          have inherited := descend_avoids own.core.representatives held indexed.2 scs (frame.avoids scs avoids)
+          have fresh := descend_avoids own.core.representatives held indexed.2 (suspendedVars before.core.counter tries)
+            (frame.avoids _ (fresh_avoids before.core packet.safe.1 held inside tries))
+          intro sc listed
+          rcases List.mem_append.mp listed with inheritedMember | freshMember
+          · exact inherited sc inheritedMember
+          · exact fresh sc freshMember
+        rw [readback] at history
+        exact own_tuple_child_inputs formulas solver original metadata before own edge scs tries residual
+          ownCore ownCounter ownProtects fragments reached saved after history
+  · simp only [allowed] at complete
+    have impossible := Option.some.inj (complete.1.symm.trans prepared)
+    cases impossible
+
+
+omit [DecidableEq Symbol] [DecidableEq Node] in
+private theorem actual_tuple_inputs_extend_current_head
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (original : Caller (bits + 2)) (metadata : Metadata Typing) (before : Cached)
+    (inputs : List (Node × List Suspended)) (completed : List Fragment)
+    (caller : Caller (bits + 2)) (queries : Queries) (current : Cached)
+    (incoming : Node) (bucket : List Suspended) (fragment : Fragment)
+    (reached : Caller (bits + 2)) (saved : Queries) (after : Cached)
+    (previous : TupleInputs formulas solver original metadata before inputs completed caller queries current)
+    (member : (incoming, bucket) ∈ inputs)
+    (pending : InputsPending current.core bucket)
+    (head : ChildInputs formulas solver caller metadata current bucket fragment reached saved after) :
+    TupleInputs formulas solver original metadata before inputs
+      (completed ++ [fragment]) reached saved after
+ := by
+  obtain ⟨_currentInventory, _currentMemos, previousPost, _previousQuery, currentPacket,
+    previousGrowth, previousOrigin, previousProtected, previousRootsProtected,
+    previousReferences, previousBounds, previousHistory⟩ := previous
+  obtain ⟨next, final, headPost, query, afterPacket, growth, origin, protects,
+    references, fragmentBound, fragmentPending, fragmentSeparate⟩ := head
+  have protectsEnumerated (held : Nat) (old : Fragment)
+      (stored : current.core.values[held]? = some (.enumerated old)) :
+      EnumerationDriver.Protected held current.core after.core := by
+    obtain ⟨inside, root⟩ := enumerated_root current.core currentPacket.safe held old stored
+    exact protects held inside root (pending held old stored)
+  have protectsOriginalRoot (held : Nat) (inside : held < before.core.counter)
+      (root : IsRoot before.core.representatives held)
+      (avoids : ∀ child retained, (child, retained) ∈ inputs →
+        Avoids before.core.representatives held retained) :
+      EnumerationDriver.Protected held current.core after.core := by
+    have first := previousRootsProtected held inside root avoids
+    exact protects held (Nat.lt_of_lt_of_le inside previousGrowth) first.root
+      (first.avoids bucket (avoids incoming bucket member))
+  refine ⟨next, final, previousPost.trans headPost, query, afterPacket,
+    Nat.le_trans previousGrowth growth, previousOrigin.trans origin, ?_, ?_, ?_, ?_, ?_⟩
+  · intro held old stored
+    have first := previousProtected held old stored
+    exact first.trans (protectsEnumerated held old (first.value.trans stored))
+  · intro held inside root avoids
+    exact (previousRootsProtected held inside root avoids).trans
+      (protectsOriginalRoot held inside root avoids)
+  · intro allowed valid supplied future
+    apply references allowed (previousReferences allowed valid supplied future)
+      (supplied incoming bucket member)
+    intro held inside
+    exact future held (Nat.le_trans previousGrowth inside)
+  · intro child included
+    rcases List.mem_append.mp included with earlier | latest
+    · exact fragmentBound_mono _ _ growth child (previousBounds child earlier)
+    · rcases List.mem_singleton.mp latest with rfl
+      exact fragmentBound
+  · intro child included
+    rcases List.mem_append.mp included with earlier | latest
+    · obtain ⟨childPending, childSeparate⟩ := previousHistory child earlier
+      refine ⟨pendingFragment_preserved current.core after.core currentPacket.safe afterPacket.safe
+        growth child (previousBounds child earlier) childPending origin protectsEnumerated, ?_⟩
+      intro held inside root avoids
+      have lastProtection := protectsOriginalRoot held inside root avoids
+      exact (fragmentAvoid_classes current.core.representatives after.core.representatives
+        held child lastProtection.classes).mpr (childSeparate held inside root avoids)
+    · rcases List.mem_singleton.mp latest with rfl
+      refine ⟨fragmentPending, ?_⟩
+      intro held inside root avoids
+      have first := previousRootsProtected held inside root avoids
+      exact fragmentSeparate held (Nat.lt_of_lt_of_le inside previousGrowth) first.root
+        (first.avoids bucket (avoids incoming bucket member))
+
+private theorem actual_selected_frame_callback
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol)) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Typing) (uv : Nat) (parent : IdentityActualCallbackFrame bits)
+    (completedPrefix : List Fragment) (rest : List (Node × List Suspended))
+    (edge : EdgeValue Symbol Constraint) (residual : Option Constraint)
+    (caller : Caller (bits + 2)) (queries : Queries) (parentHeight remainingCount parentBound : Nat)
+    (fragments : List Fragment) (reached : Caller (bits + 2)) (saved : Queries) (after : Cached) :
+    let inherited := actual_source_frame_callbacks (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv parent
+    let tail := actual_source_parent_tail checkEmpty edgesOf workFuel inherited completedPrefix rest
+    let fragment := Fragments.Fragment.node edge.entry.key.symbol fragments
+    let returned := SelectedEdge.finish residual fragment after
+    (actual_source_frame_callbacks (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+      (.selected parent completedPrefix rest edge residual caller queries parentHeight remainingCount parentBound)).1
+      fragments reached saved after =
+      match tail fragment reached saved returned with
+      | .complete processed outputs finalCaller finalQueries =>
+          .complete (.complete fragment reached saved returned :: processed) outputs finalCaller finalQueries
+      | .stopped processed outputs current =>
+          .stopped (.complete fragment reached saved returned :: processed) outputs current
+ := by
+  dsimp only
+  simp only [actual_source_frame_callbacks, SourcePruningEnumerationSharedEagerChildren.consumeSelected]
+  cases actual_source_parent_tail checkEmpty edgesOf workFuel
+      (actual_source_frame_callbacks (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv parent)
+      completedPrefix rest (.node edge.entry.key.symbol fragments) reached saved
+      (SelectedEdge.finish residual (.node edge.entry.key.symbol fragments) after) <;> rfl
+
+
+private theorem actual_selected_frame_actual_handoff
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol)) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Typing) (uv : Nat) (limit own innerHeight innerCount innerBound innerMass : Nat)
+    (innerSeed : Seed) (parent : IdentityActualCallbackFrame bits)
+    (parentHeight remainingCount parentBound : Nat)
+    (original : Caller (bits + 2)) (scopeBefore : Cached)
+    (inputs : List (Node × List Suspended)) (completedPrefix : List Fragment)
+    (rest : List (Node × List Suspended))
+    (caller : Caller (bits + 2)) (queries : Queries) (before : Cached)
+    (incoming : Node) (scs : List Suspended) (edge : EdgeValue Symbol Constraint)
+    (residual : Option Constraint) (middle : Cached)
+    (staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)))
+    (fragments : List Fragment) (reached : Caller (bits + 2)) (saved : Queries) (after : Cached)
+    (previous : TupleInputs formulas solver original metadata scopeBefore inputs completedPrefix caller queries before)
+    (member : (incoming, scs) ∈ inputs)
+    (pending : InputsPending before.core scs)
+    (prepared : SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs edge before =
+      some [((edge.entry.key.symbol, staged, residual), middle)])
+    (history : TupleInputs formulas solver caller metadata middle
+      (staged.map (fun input => (input.1, input.2.1))) fragments reached saved after)
+    (currentFits : Fits innerSeed.2 reached.checked)
+    (currentKnown : Heap (fun guard => guard ∈ innerSeed.1) reached.checked.native.machine.heap)
+    (currentMass : SourcePruningEnumerationPrefixAdmission.suspendedBound after.core ≤ innerMass)
+    (counted : rest.length ≤ remainingCount)
+    (reserved : tupleReserved (nodePlan limit own innerHeight) (nodeReserved bits limit own innerHeight)
+      innerCount innerBound innerMass
+      (identity_actual_frame_plan recursiveDepth limit own
+        (.selected parent completedPrefix rest edge residual caller queries parentHeight remainingCount parentBound))
+      (identity_actual_frame_reserved bits recursiveDepth limit own
+        (.selected parent completedPrefix rest edge residual caller queries parentHeight remainingCount parentBound)) innerSeed) :
+    let frame := IdentityActualCallbackFrame.selected parent completedPrefix rest edge residual caller queries
+      parentHeight remainingCount parentBound
+    let callbackSeed := advance innerSeed (innerCount * (innerBound + 1))
+    let callbackMass := innerMass + innerCount * innerBound
+    let fragment := Fragments.Fragment.node edge.entry.key.symbol fragments
+    let returned := SelectedEdge.finish residual fragment after
+    ChildInputs formulas solver caller metadata before scs fragment reached saved returned ∧
+    TupleInputs formulas solver original metadata scopeBefore inputs
+      (completedPrefix ++ [fragment]) reached saved returned ∧
+    Fits callbackSeed.2 reached.checked ∧
+    Heap (fun guard => guard ∈ callbackSeed.1) reached.checked.native.machine.heap ∧
+    SourcePruningEnumerationPrefixAdmission.suspendedBound returned.core ≤ callbackMass ∧
+    rest.length ≤ remainingCount ∧
+    tupleReserved (nodePlan limit own parentHeight) (nodeReserved bits limit own parentHeight)
+      remainingCount parentBound callbackMass
+      (identity_actual_frame_plan recursiveDepth limit own parent)
+      (identity_actual_frame_reserved bits recursiveDepth limit own parent) callbackSeed ∧
+    (Le (tuplePlan (nodePlan limit own parentHeight) remainingCount parentBound callbackMass
+        (identity_actual_frame_plan recursiveDepth limit own parent) callbackSeed).2
+        (tuplePlan (nodePlan limit own innerHeight) innerCount innerBound innerMass
+          (identity_actual_frame_plan recursiveDepth limit own frame) innerSeed).2 ∧
+      (tuplePlan (nodePlan limit own parentHeight) remainingCount parentBound callbackMass
+        (identity_actual_frame_plan recursiveDepth limit own parent) callbackSeed).1 ⊆
+        (tuplePlan (nodePlan limit own innerHeight) innerCount innerBound innerMass
+          (identity_actual_frame_plan recursiveDepth limit own frame) innerSeed).1) ∧
+    ((actual_source_frame_callbacks (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv frame).1
+      fragments reached saved after =
+      SourcePruningEnumerationSharedEagerChildren.consumeSelected
+        (actual_source_parent_tail checkEmpty edgesOf workFuel
+          (actual_source_frame_callbacks (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv parent)
+          completedPrefix rest)
+        caller queries (.complete fragment reached saved returned)) ∧
+    ∃ (next : Inventory) (final : Memos),
+      SourceCurrentAllocatedPartialInvariant.Post formulas solver next original reached final ∧
+      final.query = saved ∧ Packet formulas solver next reached final metadata returned ∧
+      SourceEqualityRequiredCache.Keeps original.checked.native.machine.heap reached.checked.native.machine.heap
+ := by
+  let frame : IdentityActualCallbackFrame bits := .selected parent completedPrefix rest edge residual caller queries
+    parentHeight remainingCount parentBound
+  let callbackSeed := advance innerSeed (innerCount * (innerBound + 1))
+  let callbackMass := innerMass + innerCount * innerBound
+  let fragment := Fragments.Fragment.node edge.entry.key.symbol fragments
+  let returned := SelectedEdge.finish residual fragment after
+  have sourcePacket : ∃ (inventory : Inventory) (memos : Memos),
+      Packet formulas solver inventory caller memos metadata before := by
+    obtain ⟨inventory, memos, _post, _query, packet, _rest⟩ := previous
+    exact ⟨inventory, memos, packet⟩
+  obtain ⟨inventory, memos, packet⟩ := sourcePacket
+  have head : ChildInputs formulas solver caller metadata before scs fragment reached saved returned :=
+    actual_observed_own_tuple_child_inputs formulas solver inventory caller memos metadata before scs edge residual
+      middle staged packet prepared fragments reached saved after history
+  have outerPrefix := actual_tuple_inputs_extend_current_head formulas solver original metadata scopeBefore
+    inputs completedPrefix caller queries before incoming scs fragment reached saved returned previous member pending head
+  have callbackFits : Fits callbackSeed.2 reached.checked := currentFits.mono
+    (SourcePruningEnumerationSharedIncomingReservation.advance_profile_ge innerSeed (innerCount * (innerBound + 1)))
+  have callbackKnown : Heap (fun guard => guard ∈ callbackSeed.1) reached.checked.native.machine.heap := by
+    intro key row found
+    exact (SourcePruningEnumerationSharedIncomingReservation.advance_alphabet_ge innerSeed
+      (innerCount * (innerBound + 1))) (currentKnown key row found)
+  have callbackMassBound : SourcePruningEnumerationPrefixAdmission.suspendedBound returned.core ≤ callbackMass := by
+    change SourcePruningEnumerationPrefixAdmission.suspendedBound after.core ≤ innerMass + innerCount * innerBound
+    exact Nat.le_trans currentMass (Nat.le_add_right _ _)
+  have tailReserved : tupleReserved (nodePlan limit own parentHeight) (nodeReserved bits limit own parentHeight)
+      remainingCount parentBound callbackMass
+      (identity_actual_frame_plan recursiveDepth limit own parent)
+      (identity_actual_frame_reserved bits recursiveDepth limit own parent) callbackSeed :=
+    tupleReserved_first_callback bits limit own innerHeight innerCount innerBound innerMass
+      (identity_actual_frame_plan recursiveDepth limit own frame)
+      (identity_actual_frame_reserved bits recursiveDepth limit own frame) innerSeed reserved
+  have forecast := first_callback_le_tuple_of_growth limit own innerHeight innerCount innerBound innerMass
+    (identity_actual_frame_plan recursiveDepth limit own frame)
+    (identity_actual_frame_plan_ge recursiveDepth limit own frame) innerSeed
+  have endpoint : ∃ (next : Inventory) (final : Memos),
+      SourceCurrentAllocatedPartialInvariant.Post formulas solver next original reached final ∧
+      final.query = saved ∧ Packet formulas solver next reached final metadata returned ∧
+      SourceEqualityRequiredCache.Keeps original.checked.native.machine.heap reached.checked.native.machine.heap := by
+    obtain ⟨next, final, post, query, afterPacket, _remaining⟩ := outerPrefix
+    exact ⟨next, final, post, query, afterPacket, post.effects.keeps⟩
+  exact ⟨head, outerPrefix, callbackFits, callbackKnown, callbackMassBound, counted, tailReserved,
+    forecast, rfl, endpoint⟩
+
+
+private theorem actual_source_return_tail_run
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol)) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Typing) (uv : Nat) (entry current : IdentityActualSourcePoint bits)
+    (rest : List (Node × List Suspended)) (edge : EdgeValue Symbol Constraint) (residual : Option Constraint) :
+    IdentityActualSourceTask.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+      (.tuple (identity_actual_source_return_point entry current edge residual) rest) =
+    actual_source_parent_tail checkEmpty edgesOf workFuel
+      (actual_source_frame_callbacks (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv entry.frame)
+      entry.completed rest (.node edge.entry.key.symbol current.completed) current.caller current.queries
+      (SelectedEdge.finish residual (.node edge.entry.key.symbol current.completed) current.before)
+ := by
+  let callbacks := actual_source_frame_callbacks (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv entry.frame
+  let child := SourcePruningEnumerationSharedEagerChildren.eagerChild
+    (width := bits + 2) (Output := Output (bits + 2) Typing) (Reason := Failure (bits + 2) Typing)
+    checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf
+  let fragment : Fragment := .node edge.entry.key.symbol current.completed
+  let after := SelectedEdge.finish residual fragment current.before
+  change SourcePruningEnumerationSharedChildVisitors.visitChildren child
+      (fun fragments => callbacks.1 ((entry.completed ++ [fragment]) ++ fragments))
+      (fun completed => callbacks.2 ((entry.completed ++ [fragment]) ++ completed))
+      rest current.caller after current.queries =
+    SourcePruningEnumerationSharedChildVisitors.visitChildren child
+      (fun fragments => callbacks.1 (entry.completed ++ fragment :: fragments))
+      (fun completed => callbacks.2 (entry.completed ++ fragment :: completed))
+      rest current.caller after current.queries
+  simp only [List.append_assoc, List.singleton_append]
+
+
+private theorem actual_source_selected_return_run
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol)) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Typing) (uv : Nat) (entry current : IdentityActualSourcePoint bits)
+    (rest : List (Node × List Suspended)) (edge : EdgeValue Symbol Constraint) (residual : Option Constraint) :
+    let frame := IdentityActualCallbackFrame.selected entry.frame entry.completed rest edge residual entry.caller entry.queries
+      entry.height entry.count entry.bound
+    let returned := identity_actual_source_return_point entry current edge residual
+    let receipt := SelectedEdge.Result.complete (.node edge.entry.key.symbol current.completed)
+      current.caller current.queries returned.before
+    IdentityActualSourceTask.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+      (.tuple {current with frame := frame} []) =
+      match IdentityActualSourceTask.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv (.tuple returned rest) with
+      | .complete processed outputs finalCaller finalQueries => .complete (receipt :: processed) outputs finalCaller finalQueries
+      | .stopped processed outputs stopped => .stopped (receipt :: processed) outputs stopped
+ := by
+  dsimp only
+  let frame := IdentityActualCallbackFrame.selected entry.frame entry.completed rest edge residual entry.caller entry.queries
+    entry.height entry.count entry.bound
+  have actual := actual_selected_frame_callback holeKey fits admits graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+    entry.frame entry.completed rest edge residual entry.caller entry.queries entry.height entry.count entry.bound
+    current.completed current.caller current.queries current.before
+  dsimp only at actual
+  have tailSame := actual_source_return_tail_run holeKey fits admits graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+    entry current rest edge residual
+  rw [← tailSame] at actual
+  have nilRun : IdentityActualSourceTask.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+      (.tuple {current with frame := frame} []) =
+      (actual_source_frame_callbacks (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv frame).1
+        current.completed current.caller current.queries current.before := by
+    simp only [IdentityActualSourceTask.runWithNarrow, SourcePruningEnumerationSharedChildVisitors.visitChildren, List.append_nil]
+  rw [nilRun]
+  cases seen : IdentityActualSourceTask.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+      (.tuple (identity_actual_source_return_point entry current edge residual) rest) <;>
+    (simp only [seen] at actual
+     simpa only [frame, identity_actual_source_return_point] using actual)
+
+
+private theorem actual_source_selected_return_current
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol)) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Typing) (uv : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits) (outerOriginal : Caller (bits + 2))
+    (outerBefore : Cached) (outerInputs : List (Node × List Suspended))
+    (entry current : IdentityActualSourcePoint bits) (incoming : Node) (bucket : List Suspended)
+    (rest : List (Node × List Suspended)) (edge : EdgeValue Symbol Constraint) (residual : Option Constraint)
+    (rowOwn : Cached)
+    (staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)))
+    (ancestors : ActualFrameLedger formulas solver root metadata uv entry.frame outerOriginal outerBefore outerInputs)
+    (snapshot : entry.genericInputs formulas solver root outerOriginal metadata outerBefore outerInputs
+      ((incoming, bucket) :: rest) (entry.count + 1))
+    (prepared : SourcePruningEnumerationCachedOwn.prepare entry.caller.checked.native.machine.heap bucket edge entry.before =
+      some [((edge.entry.key.symbol, staged, residual), rowOwn)])
+    (origin : ActualSourceOrigin (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv root
+      (.tuple {current with frame := .selected entry.frame entry.completed rest edge residual entry.caller entry.queries entry.height entry.count entry.bound} []))
+    (innerCurrent : ActualSourceCurrent formulas solver root entry.caller metadata rowOwn
+      (staged.map (fun input => (input.1, input.2.1))) recursiveDepth
+      (.tuple {current with frame := .selected entry.frame entry.completed rest edge residual entry.caller entry.queries entry.height entry.count entry.bound} [])) :
+    let returned := identity_actual_source_return_point entry current edge residual
+    ActualSourceOrigin (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv root (.tuple returned rest) ∧
+    ActualFrameLedger formulas solver root metadata uv returned.frame outerOriginal outerBefore outerInputs ∧
+    ActualSourceCurrent formulas solver root outerOriginal metadata outerBefore outerInputs recursiveDepth
+      (.tuple returned rest) ∧
+    Le (IdentityActualSourceTask.goal recursiveDepth root.limit root.own (.tuple returned rest)).forecast.2
+      (IdentityActualSourceTask.goal recursiveDepth root.limit root.own
+        (.tuple {current with frame := .selected entry.frame entry.completed rest edge residual entry.caller entry.queries entry.height entry.count entry.bound} [])).forecast.2 ∧
+    (IdentityActualSourceTask.goal recursiveDepth root.limit root.own (.tuple returned rest)).forecast.1 ⊆
+      (IdentityActualSourceTask.goal recursiveDepth root.limit root.own
+        (.tuple {current with frame := .selected entry.frame entry.completed rest edge residual entry.caller entry.queries entry.height entry.count entry.bound} [])).forecast.1
+ := by
+  let returned := identity_actual_source_return_point entry current edge residual
+  obtain ⟨_entryShapes, entryKept, inventory, memos, packet, _entryQuery, previous,
+    _entryMass, counted, members, genuine⟩ := snapshot
+  obtain ⟨innerInputs, currentFits, currentKnown, reserved⟩ := innerCurrent
+  obtain ⟨shapes, kept, _currentInventory, _currentMemos, _currentPacket, _currentQuery,
+    history, mass, _innerCounted, _innerMembers, _innerGenuine⟩ := innerInputs
+  have restCount : rest.length ≤ entry.count := by
+    simp only [List.length_cons] at counted
+    omega
+  have parentPending : InputsPending entry.before.core bucket := (genuine incoming bucket List.mem_cons_self).2.2.2.2.2
+  have member : (incoming, bucket) ∈ outerInputs := members List.mem_cons_self
+  obtain ⟨head, outerPrefix, paddedFits, paddedKnown, paddedMass, _countedAgain,
+      parentReserved, included, _callbackEquation, _endpoint⟩ :=
+    actual_selected_frame_actual_handoff formulas solver holeKey fits admits graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+      root.limit root.own current.height current.count current.bound current.mass current.seed entry.frame
+      entry.height entry.count entry.bound outerOriginal outerBefore outerInputs entry.completed rest
+      entry.caller entry.queries entry.before incoming bucket edge residual rowOwn staged current.completed
+      current.caller current.queries current.before previous member parentPending prepared history
+      currentFits currentKnown mass restCount reserved
+  have currentInputs : ∀ child scs, (child, scs) ∈ (incoming, bucket) :: rest →
+      Available entry.caller.checked.native.machine.heap child ∧ child.free = [] ∧
+      (∀ sc ∈ scs, sc.var < entry.before.core.counter) ∧ InputsPending entry.before.core scs := by
+    intro child scs included
+    obtain ⟨available, closed, _ranked, _bucketBound, bounded, pending⟩ := genuine child scs included
+    exact ⟨entryKept.available child available, closed, bounded, pending⟩
+  have remaining := (child_then_tuple_inputs formulas solver inventory entry.caller memos metadata entry.before
+    incoming bucket rest packet currentInputs (.node edge.entry.key.symbol current.completed)
+    current.caller current.queries returned.before head).1
+  have prefixEndpoint := outerPrefix
+  obtain ⟨next, final, _post, querySame, returnedPacket, _historyFacts⟩ := prefixEndpoint
+  have parentInputs : returned.genericInputs formulas solver root outerOriginal metadata outerBefore outerInputs rest entry.count := by
+    refine ⟨shapes, kept, next, final, returnedPacket, querySame, outerPrefix, paddedMass, restCount, ?_, ?_⟩
+    · intro pair included
+      exact members (List.mem_cons_of_mem (incoming, bucket) included)
+    · intro child scs included
+      obtain ⟨available, closed, ranked, bucketBound, _beforeBounded, _beforePending⟩ :=
+        genuine child scs (List.mem_cons_of_mem (incoming, bucket) included)
+      obtain ⟨_currentAvailable, _currentClosed, bounded, pending⟩ := remaining child scs included
+      exact ⟨available, closed, ranked, bucketBound, bounded, pending⟩
+  exact ⟨.selectedReturn entry current rest edge residual origin, ancestors,
+    ⟨parentInputs, paddedFits, paddedKnown, parentReserved⟩, included.1, included.2⟩
+
+
+private theorem real_captured_frame_current_local_resources
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol)) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Typing) (uv handle : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (workerIH : RealEagerEmittedCompleteAtDepth (bits := bits) holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver recursiveDepth)
+    (inventory : Inventory) (capturedCaller : Caller (bits + 2)) (memos : Memos)
+    (capturedQueries : Queries) (capturedBefore : Cached) (scs : List Suspended)
+    (edge : EdgeValue Symbol Constraint) (residual : Option Constraint) (ownCache : Cached)
+    (staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)))
+    (packet : Packet formulas solver inventory capturedCaller memos metadata capturedBefore)
+    (ready : EnumerationDriver.Ready uv capturedBefore.core)
+    (stored : capturedBefore.core.values[uv]? = some (.unenumerated (some handle) scs))
+    (incoming : EnumerationReferences.IncomingAvoid uv capturedBefore.core)
+    (prepared : SourcePruningEnumerationCachedOwn.prepare capturedCaller.checked.native.machine.heap scs edge capturedBefore =
+      some [((edge.entry.key.symbol, staged, residual), ownCache)])
+    (fragments : List Fragment) (caller : Caller (bits + 2)) (queries : Queries) (current : Cached)
+    (history : TupleInputs formulas solver capturedCaller metadata ownCache
+      (staged.map (fun input => (input.1, input.2.1))) fragments caller queries current)
+    (limit own height unusedCount bound retainedMass : Nat) (currentSeed : Seed)
+    (currentFits : Fits currentSeed.2 caller.checked)
+    (currentKnown : Heap (fun guard => guard ∈ currentSeed.1) caller.checked.native.machine.heap)
+    (currentMass : SourcePruningEnumerationPrefixAdmission.suspendedBound current.core ≤ retainedMass)
+    (selectionMembers : ∀ entry rows depth free, ∀ selected ∈ edgesOf (.node entry rows depth free), selected ∈ rows)
+    (selectionLength : ∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length)
+    (reserved : tupleReserved (nodePlan limit own height) (nodeReserved bits limit own height)
+      unusedCount bound retainedMass (fun retained seed => eagerFinal recursiveDepth seed retained)
+      (fun retained seed => eagerReserved bits recursiveDepth seed retained) currentSeed) :
+    ActualEmittedCompleteResources formulas solver caller
+      (tuplePlan (nodePlan limit own height) unusedCount bound retainedMass
+        (fun retained seed => eagerFinal recursiveDepth seed retained) currentSeed)
+      (finish uv ((actual_source_frame_callbacks (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+        (.captured edge residual capturedCaller capturedQueries)).1 fragments caller queries current))
+ := by
+  let callbackSeed := advance currentSeed (unusedCount * (bound + 1))
+  let callbackMass := retainedMass + unusedCount * bound
+  let plan := tuplePlan (nodePlan limit own height) unusedCount bound retainedMass
+    (fun retained seed => eagerFinal recursiveDepth seed retained) currentSeed
+  let fragment : Fragment := .node edge.entry.key.symbol fragments
+  let childAfter := SelectedEdge.finish residual fragment current
+  let child := SourcePruningEnumerationSharedEagerChildren.eagerChild
+    (width := bits + 2) (Output := Output (bits + 2) Typing) (Reason := Failure (bits + 2) Typing)
+    checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf
+  let hook := SourcePruningEnumerationSharedPreparedRecursive.continueWith
+    (SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow (Typing := Typing) (width := bits + 2) child
+      (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf
+      stop order workFuel recursiveDepth)
+    graph templates stop order workFuel metadata uv
+  have callbackReserved : eagerReserved bits recursiveDepth callbackSeed callbackMass :=
+    tupleReserved_first_callback bits limit own height unusedCount bound retainedMass
+      (fun retained seed => eagerFinal recursiveDepth seed retained)
+      (fun retained seed => eagerReserved bits recursiveDepth seed retained) currentSeed reserved
+  have included := first_callback_le_tuple_of_growth limit own height unusedCount bound retainedMass
+    (fun retained seed => eagerFinal recursiveDepth seed retained)
+    (fun retained seed => eagerFinal_ge recursiveDepth seed retained) currentSeed
+  have callbackFits : Fits callbackSeed.2 caller.checked := currentFits.mono
+    (SourcePruningEnumerationSharedIncomingReservation.advance_profile_ge currentSeed (unusedCount * (bound + 1)))
+  have callbackKnown : Heap (fun guard => guard ∈ callbackSeed.1) caller.checked.native.machine.heap := by
+    intro key row found
+    exact (SourcePruningEnumerationSharedIncomingReservation.advance_alphabet_ge currentSeed
+      (unusedCount * (bound + 1))) (currentKnown key row found)
+  have data := actual_observed_own_tuple_child_inputs formulas solver inventory capturedCaller memos metadata
+    capturedBefore scs edge residual ownCache staged packet prepared fragments caller queries current history
+  have childMass : SourcePruningEnumerationPrefixAdmission.suspendedBound childAfter.core ≤ callbackMass := by
+    change SourcePruningEnumerationPrefixAdmission.suspendedBound current.core ≤ retainedMass + unusedCount * bound
+    exact Nat.le_trans currentMass (Nat.le_add_right _ _)
+  change ActualEmittedCompleteResources formulas solver caller plan
+    (finish uv ((actual_source_frame_callbacks (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+      (.captured edge residual capturedCaller capturedQueries)).1 fragments caller queries current))
+  rw [actual_source_frame_callbacks]
+  change ActualEmittedCompleteResources formulas solver caller plan
+    (finish uv (match SourcePruningEnumerationFinalize.run caller.checked.native.machine.heap workFuel uv fragment childAfter with
+      | some finished => SourcePruningEnumerationSharedReceiptContinuation.run hook capturedCaller capturedQueries
+          (some (.complete fragment caller queries finished))
+      | none => SourcePruningEnumerationSharedReceiptContinuation.run hook capturedCaller capturedQueries
+          (some (.finalizeStopped fragment caller queries childAfter))))
+  cases observedFinish : SourcePruningEnumerationFinalize.run caller.checked.native.machine.heap workFuel uv fragment childAfter with
+  | none =>
+      constructor
+      · intro output member
+        cases member
+      · trivial
+  | some finished =>
+      obtain ⟨next, final, finalFuel, canonicalAfter, _post, querySame, finalAt,
+          finishedPacket, finalFragmentBound, _core, finalMass, _stored, _root⟩ :=
+        finalize_child_inputs_packet formulas solver capturedCaller caller metadata capturedBefore childAfter uv handle scs
+          fragment queries ready stored incoming data
+      have observedLater := SourcePruningEnumerationFinalize.run_some_moreFuel
+        caller.checked.native.machine.heap workFuel finalFuel uv fragment childAfter finished observedFinish
+      have canonicalLater := finalAt workFuel
+      rw [Nat.add_comm workFuel finalFuel] at observedLater
+      have sameCache : canonicalAfter = finished := Option.some.inj (canonicalLater.symm.trans observedLater)
+      subst canonicalAfter
+      have actualMass : SourcePruningEnumerationPrefixAdmission.suspendedBound finished.core ≤ callbackMass :=
+        Nat.le_trans finalMass childMass
+      have callback :=
+        SourcePruningEnumerationRealWorkerCallbackResources.real_callback_resources_of_depth_induction
+          holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver recursiveDepth
+          workerIH next caller final finished metadata uv fragment callbackSeed callbackMass
+          finishedPacket finalFragmentBound callbackFits callbackKnown
+          selectionMembers selectionLength actualMass callbackReserved workFuel
+      rw [querySame] at callback
+      have enlarged := actual_emitted_complete_mono included.1 included.2 callback
+      have actualHook : ActualEmittedCompleteResources formulas solver caller plan
+          (hook fragment caller queries finished) := by
+        simpa only [hook, child] using enlarged
+      cases observedHook : hook fragment caller queries finished with
+      | complete outputs reached saved =>
+          simpa only [SourcePruningEnumerationSharedReceiptContinuation.run, observedHook, finish] using actualHook
+      | stopped outputs reason endpoint =>
+          simpa only [SourcePruningEnumerationSharedReceiptContinuation.run, observedHook, finish,
+            ActualEmittedCompleteResources, emitted] using actualHook
+
+
+private theorem real_actual_source_captured_nil_resources
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol)) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Typing) (uv : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (workerIH : RealEagerEmittedCompleteAtDepth (bits := bits)
+      holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver recursiveDepth)
+    (root : IdentityActualSourceRoot bits) (point : IdentityActualSourcePoint bits)
+    (edge : EdgeValue Symbol Constraint) (residual : Option Constraint)
+    (capturedCaller : Caller (bits + 2)) (capturedQueries : Queries)
+    (scopeOriginal : Caller (bits + 2)) (scopeBefore : Cached) (allInputs : List (Node × List Suspended))
+    (ledger : ActualFrameLedger formulas solver root metadata uv
+      (.captured edge residual capturedCaller capturedQueries) scopeOriginal scopeBefore allInputs)
+    (current : ActualSourceCurrent formulas solver root scopeOriginal metadata scopeBefore allInputs recursiveDepth
+      (.tuple {point with frame := .captured edge residual capturedCaller capturedQueries} []))
+    (selectionMembers : ∀ entry rows depth free, ∀ selected ∈ edgesOf (.node entry rows depth free), selected ∈ rows)
+    (selectionLength : ∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length) :
+    let task := IdentityActualSourceTask.tuple
+      {point with frame := .captured edge residual capturedCaller capturedQueries} []
+    ActualEmittedCompleteResources formulas solver point.caller
+      (task.goal recursiveDepth root.limit root.own).forecast
+      (finish uv (task.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv))
+ := by
+  cases ledger with
+  | captured inventory entryCaller memos entryQueries before rowOwn scs row rowResidual handle
+      staged packet _querySame ready stored incoming prepared =>
+    obtain ⟨inputs, currentFits, known, reserved⟩ := current
+    obtain ⟨_shapes, _kept, _inventory, _memos, _packet, _query, history,
+      mass, _counted, _included, _genuine⟩ := inputs
+    have callback := real_captured_frame_current_local_resources holeKey fits admits graph templates checkEmpty edgesOf stop order recursiveDepth workFuel
+      metadata uv handle formulas solver workerIH inventory capturedCaller memos capturedQueries before scs
+      edge residual scopeBefore staged packet ready stored incoming prepared
+      point.completed point.caller point.queries point.before history
+      root.limit root.own point.height point.count point.bound point.mass point.seed
+      currentFits known mass selectionMembers selectionLength reserved
+    simpa only [IdentityActualSourceTask.runWithNarrow, SourcePruningEnumerationSharedChildVisitors.visitChildren,
+      List.append_nil, IdentityActualSourceTask.goal, IdentityReservationGoal.forecast,
+      identity_actual_frame_plan] using callback
+
+
+private theorem real_actual_source_selected_nil_resources
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol)) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Typing) (uv : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits) (outerOriginal : Caller (bits + 2))
+    (outerBefore : Cached) (outerInputs : List (Node × List Suspended))
+    (entry current : IdentityActualSourcePoint bits) (incoming : Node) (bucket : List Suspended)
+    (rest : List (Node × List Suspended)) (edge : EdgeValue Symbol Constraint) (residual : Option Constraint)
+    (rowOwn : Cached)
+    (staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)))
+    (ancestors : ActualFrameLedger formulas solver root metadata uv entry.frame outerOriginal outerBefore outerInputs)
+    (snapshot : entry.genericInputs formulas solver root outerOriginal metadata outerBefore outerInputs
+      ((incoming, bucket) :: rest) (entry.count + 1))
+    (prepared : SourcePruningEnumerationCachedOwn.prepare entry.caller.checked.native.machine.heap bucket edge entry.before =
+      some [((edge.entry.key.symbol, staged, residual), rowOwn)])
+    (origin : ActualSourceOrigin (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv root
+      (.tuple {current with frame := .selected entry.frame entry.completed rest edge residual entry.caller entry.queries entry.height entry.count entry.bound} []))
+    (innerCurrent : ActualSourceCurrent formulas solver root entry.caller metadata rowOwn
+      (staged.map (fun input => (input.1, input.2.1))) recursiveDepth
+      (.tuple {current with frame := .selected entry.frame entry.completed rest edge residual entry.caller entry.queries entry.height entry.count entry.bound} []))
+    (taskIH : ∀ smaller : IdentityActualSourceTask bits,
+      smaller.work root.limit < IdentityActualSourceTask.work root.limit
+        (.tuple {current with frame := .selected entry.frame entry.completed rest edge residual entry.caller entry.queries entry.height entry.count entry.bound} []) →
+      RealActualSourceCorrectAt holeKey fits admits graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv formulas solver root smaller) :
+    let task := IdentityActualSourceTask.tuple
+      {current with frame := .selected entry.frame entry.completed rest edge residual entry.caller entry.queries entry.height entry.count entry.bound} []
+    ActualEmittedCompleteResources formulas solver current.caller
+      (task.goal recursiveDepth root.limit root.own).forecast
+      (finish uv (task.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv))
+ := by
+  let inner : IdentityActualSourceTask bits := .tuple
+    {current with frame := .selected entry.frame entry.completed rest edge residual entry.caller entry.queries entry.height entry.count entry.bound} []
+  let returned : IdentityActualSourceTask bits := .tuple (identity_actual_source_return_point entry current edge residual) rest
+  obtain ⟨returnedOrigin, returnedLedger, returnedCurrent, numeric, alphabet⟩ :=
+    actual_source_selected_return_current holeKey fits admits graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+      formulas solver root outerOriginal outerBefore outerInputs entry current incoming bucket rest edge residual rowOwn
+      staged ancestors snapshot prepared origin innerCurrent
+  have decrease : returned.work root.limit < inner.work root.limit :=
+    identity_actual_source_selected_return_work root.limit entry current rest edge residual
+  have parentResources : ActualEmittedCompleteResources formulas solver current.caller
+      (returned.goal recursiveDepth root.limit root.own).forecast
+      (finish uv (returned.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv)) :=
+    taskIH returned decrease outerOriginal outerBefore outerInputs returnedLedger returnedOrigin returnedCurrent
+  have enlarged : ActualEmittedCompleteResources formulas solver current.caller
+      (inner.goal recursiveDepth root.limit root.own).forecast
+      (finish uv (returned.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv)) :=
+    actual_emitted_complete_mono numeric alphabet parentResources
+  have runtime : inner.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv =
+      match returned.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv with
+      | .complete processed outputs finalCaller finalQueries =>
+          .complete (SelectedEdge.Result.complete (.node edge.entry.key.symbol current.completed)
+            current.caller current.queries (identity_actual_source_return_point entry current edge residual).before :: processed)
+            outputs finalCaller finalQueries
+      | .stopped processed outputs stopped =>
+          .stopped (SelectedEdge.Result.complete (.node edge.entry.key.symbol current.completed)
+            current.caller current.queries (identity_actual_source_return_point entry current edge residual).before :: processed)
+            outputs stopped :=
+    actual_source_selected_return_run holeKey fits admits graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+      entry current rest edge residual
+  change ActualEmittedCompleteResources formulas solver current.caller
+    (inner.goal recursiveDepth root.limit root.own).forecast
+    (finish uv (inner.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv))
+  rw [runtime]
+  cases observed : returned.runWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv with
+  | complete processed outputs reached saved =>
+      simpa only [observed, finish] using enlarged
+  | stopped processed outputs stopped =>
+      simpa only [observed, finish, ActualEmittedCompleteResources, emitted] using enlarged
+
+
+private theorem real_actual_source_tuple_nil_resources
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol)) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Typing) (uv : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (workerIH : RealEagerEmittedCompleteAtDepth (bits := bits)
+      holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver recursiveDepth)
+    (root : IdentityActualSourceRoot bits) (point : IdentityActualSourcePoint bits)
+    (selectionMembers : ∀ entry rows depth free, ∀ selected ∈ edgesOf (.node entry rows depth free), selected ∈ rows)
+    (selectionLength : ∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length)
+    (taskIH : ∀ smaller : IdentityActualSourceTask bits,
+      smaller.work root.limit < IdentityActualSourceTask.work root.limit (.tuple point []) →
+      RealActualSourceCorrectAt holeKey fits admits graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv formulas solver root smaller) :
+    RealActualSourceCorrectAt holeKey fits admits graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv formulas solver root
+      (.tuple point [])
+ := by
+  intro scopeOriginal scopeBefore allInputs ledger origin current
+  cases point with
+  | mk frame completed currentCaller currentBefore currentQueries height count bound mass seed =>
+    cases ledger with
+    | captured inventory capturedCaller memos capturedQueries capturedBefore rowOwn scs edge residual handle
+        staged packet querySame ready stored incoming prepared =>
+      let currentPoint : IdentityActualSourcePoint bits := {
+        frame := .captured edge residual scopeOriginal capturedQueries
+        completed := completed
+        caller := currentCaller
+        before := currentBefore
+        queries := currentQueries
+        height := height
+        count := count
+        bound := bound
+        mass := mass
+        seed := seed }
+      have capturedLedger : ActualFrameLedger formulas solver root metadata uv
+          (.captured edge residual scopeOriginal capturedQueries) scopeOriginal scopeBefore
+          (staged.map (fun input => (input.1, input.2.1))) :=
+        .captured inventory scopeOriginal memos capturedQueries capturedBefore scopeBefore scs edge residual handle
+          staged packet querySame ready stored incoming prepared
+      exact real_actual_source_captured_nil_resources
+        holeKey fits admits graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv formulas solver workerIH root currentPoint
+        edge residual scopeOriginal capturedQueries scopeOriginal scopeBefore
+        (staged.map (fun input => (input.1, input.2.1))) capturedLedger current selectionMembers selectionLength
+    | selected parent outerOriginal outerBefore outerInputs ancestors completedPrefix rest incoming bucket
+        capturedCaller capturedQueries capturedBefore rowOwn edge residual parentHeight parentCount parentBound
+        parentMass parentSeed inventory memos staged packet querySame previous member prepared snapshot =>
+      let entry : IdentityActualSourcePoint bits := {
+        frame := parent
+        completed := completedPrefix
+        caller := scopeOriginal
+        before := capturedBefore
+        queries := capturedQueries
+        height := parentHeight
+        count := parentCount
+        bound := parentBound
+        mass := parentMass
+        seed := parentSeed }
+      let currentPoint : IdentityActualSourcePoint bits := {
+        frame := .selected parent completedPrefix rest edge residual scopeOriginal capturedQueries
+          parentHeight parentCount parentBound
+        completed := completed
+        caller := currentCaller
+        before := currentBefore
+        queries := currentQueries
+        height := height
+        count := count
+        bound := bound
+        mass := mass
+        seed := seed }
+      exact real_actual_source_selected_nil_resources
+        holeKey fits admits graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv formulas solver root
+        outerOriginal outerBefore outerInputs entry currentPoint incoming bucket rest edge residual scopeBefore staged
+        ancestors snapshot prepared origin current taskIH
+
+
+end GenericActualSourceTupleNilResources
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
