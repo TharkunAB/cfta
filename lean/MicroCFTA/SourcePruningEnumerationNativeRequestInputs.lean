@@ -66,3 +66,22 @@ theorem inputs_of_resources (profile : Profile)
   | run trace => exact trace_inputs trace nativeFuel
 
 end MicroCFTA.SourcePruningEnumerationNativeRequestInputs
+
+namespace MicroCFTA.SourcePruningEnumerationNativeRequestInputs
+open InternedConstructorTemplates SourceRecursiveIntersectionCode SourceEqualityNativeDemand
+open SourceCurrentAllocatedNativePhysicalTraceCompletion (Trace)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Guard
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "InputsThrough" => SourceCurrentAllocatedNativePhysicalExecution.InputsThrough
+variable {width : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+
+/-- A completed physical trace supplies every original-budget input plan. -/
+theorem completed_trace_inputs {steps : Nat} {control : Control Node}
+    {before after : Checked width} {value : Node}
+    (trace : Trace steps control before (.code (.pure value)) after) :
+    ∀ nativeFuel, InputsThrough nativeFuel control before := trace_inputs trace
+
+end MicroCFTA.SourcePruningEnumerationNativeRequestInputs
