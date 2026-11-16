@@ -1,0 +1,12 @@
+--- original78/SourcePruningEnumerationPreparationUnionNormal.lean
++++ union-readback79/SourcePruningEnumerationPreparationUnionNormal.lean
+@@ -41,7 +41,8 @@
+       | done rows after =>
+           have afterNormal : UnionNormal after := by
+             simpa only [actual, MergedSourceExposure.Result.state] using retained
+-          exact SourceCurrentRequiredUnionNormal.node rows after afterNormal
++          simpa only [actual, MergedSourceComparison.Result.state] using
++            (SourceCurrentRequiredUnionNormal.node rows after afterNormal)
+       | unresolved name after =>
+           simpa only [actual, MergedSourceExposure.Result.state,
+             MergedSourceComparison.Result.state] using retained

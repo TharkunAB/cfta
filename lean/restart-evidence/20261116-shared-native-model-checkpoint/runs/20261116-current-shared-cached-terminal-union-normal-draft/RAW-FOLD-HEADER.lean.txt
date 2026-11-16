@@ -1,0 +1,9 @@
+/-- Every actual ordered shared fold retains normality at its returned caller. -/
+theorem rawFold_unionNormal
+    (checkEmpty : Bool) (nativeFuel p h : Nat) (sources : List Nat)
+    (beforeCaller : Caller width) (before : EnumerationState.State Symbol Constraint)
+    (target : Nat) (queries : Queries)
+    (normal : UnionNormal beforeCaller.checked.native.machine.heap) :
+    UnionNormal
+      (SourcePruningEnumerationSharedCachedTerminal.rawFold checkEmpty nativeFuel p h sources
+        beforeCaller before target queries).2.1.checked.native.machine.heap

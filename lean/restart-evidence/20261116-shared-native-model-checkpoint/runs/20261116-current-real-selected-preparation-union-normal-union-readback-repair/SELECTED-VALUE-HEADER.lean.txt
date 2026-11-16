@@ -1,0 +1,5 @@
+/-- Selected Mu and Union preparation retains its exact successful or failed native heap. -/
+theorem selected_value_unionNormal
+    (fuel : Nat) (value : Node) (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (normal : UnionNormal heap) :
+    UnionNormal (SourcePruningEnumerationSelectedValue.run fuel value heap).state

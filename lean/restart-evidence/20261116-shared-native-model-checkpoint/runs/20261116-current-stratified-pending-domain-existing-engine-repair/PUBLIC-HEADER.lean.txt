@@ -1,0 +1,10 @@
+theorem stratified_pending_assignment
+    (state : State Symbol Guard) (safe : Safe state) (level : Nat → Nat) (frontier : Nat)
+    (stratified : Stratified state level frontier) (fallback : Term Symbol) (language : NodeLanguage Symbol)
+    (pending : ∀ (uv : Nat) (node : Option Nat) (scs : List Suspended),
+      state.values[uv]? = some (.unenumerated node scs) →
+      scs = [] ∧ ∀ handle, node = some handle → language handle fallback) :
+    ∃ assignment : Nat → Term Symbol,
+      Fragments.stateSatisfies state.representatives (heap language state.values) assignment ∧
+      ∀ (uv : Nat) (node : Option Nat) (scs : List Suspended),
+        state.values[uv]? = some (.unenumerated node scs) → assignment uv = fallback

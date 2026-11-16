@@ -1,0 +1,22 @@
+ := by
+  obtain ⟨assignment, aliases, equations, pendingValue⟩ :=
+    stratified_extend_pending state safe level frontier stratified
+      (fun _ => fallback) (fun _ _ _ => rfl)
+  refine ⟨assignment, ⟨aliases, ?_⟩, pendingValue⟩
+  intro uv
+  cases stored : state.values[uv]? with
+  | none => simp [heap, stored, slot, slotSatisfies]
+  | some value =>
+      cases value with
+      | eliminated => simp [heap, stored, slot, slotSatisfies]
+      | unenumerated node scs =>
+          obtain ⟨rfl, domains⟩ := pending uv node scs stored
+          have assigned := pendingValue uv node [] stored
+          cases node with
+          | none => simp [heap, stored, slot, slotSatisfies, permits]
+          | some handle =>
+              have member := domains handle rfl
+              simpa [heap, stored, slot, slotSatisfies, permits, assigned] using member
+      | enumerated fragment =>
+          simp only [heap, stored, Option.getD_some, slot, slotSatisfies]
+          exact (equations uv fragment stored).symm

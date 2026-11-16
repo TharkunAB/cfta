@@ -1,0 +1,15 @@
+ := by
+  have packet : SourcePruningEnumerationRecursive.Packet formulas solver inventory caller memos metadata cache := by
+    refine ⟨context, safe_core, pending_core, valid_cache caller, ⟨(fun _ => 0), 0, ordered_core⟩, ?_⟩
+    intro group member
+    rw [emptyPending] at member
+    cases member
+  have done : SourcePruningEnumerationRestart.decision none order metadata cache = some .done := by
+    apply (SourcePruningEnumerationRestart.done_iff_candidates_nil order metadata cache).mpr
+    simp [cache, EnumerationIndexSelection.candidates]
+  have nonempty : bucket ≠ [] := by
+    simp [bucket]
+  refine ⟨packet, done, rfl, nonempty, ?_⟩
+  intro proper
+  have empty : bucket = [] := proper (.unenumerated none bucket) (by simp [cache, core])
+  exact nonempty empty

@@ -1,0 +1,8 @@
+theorem requestKey_injective (width : Nat) (state : Machine Symbol Guard) (valid : Valid state)
+    (firstDomain secondDomain : Interned DomainKey) (firstLeft firstRight secondLeft secondRight : Value Symbol Guard)
+    (firstKnown : Domain state firstDomain) (secondKnown : Domain state secondDomain)
+    (firstSafe : KeySafe width firstDomain firstLeft firstRight) (secondSafe : KeySafe width secondDomain secondLeft secondRight)
+    (firstLeftAvailable : Available state.heap firstLeft) (firstRightAvailable : Available state.heap firstRight)
+    (secondLeftAvailable : Available state.heap secondLeft) (secondRightAvailable : Available state.heap secondRight)
+    (same : requestKey width firstDomain firstLeft firstRight = requestKey width secondDomain secondLeft secondRight) :
+    (firstDomain, firstLeft, firstRight) = (secondDomain, secondLeft, secondRight)

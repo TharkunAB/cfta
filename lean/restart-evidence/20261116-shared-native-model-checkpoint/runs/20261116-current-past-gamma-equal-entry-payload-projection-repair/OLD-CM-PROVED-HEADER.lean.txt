@@ -1,0 +1,30 @@
+theorem current_stored_universe_general_cm_returned_at_every_actual_prefix
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (rootRequest : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
+    (machineValid : SourceRecursiveIntersectionKernel.Valid machine)
+    (sourceGrowth : Grows sourceHeap machine.heap)
+    (operations : SourceEqualityConstraintMemoAllocation.State)
+    (operationsValid : SourceEqualityConstraintMemoAllocation.Valid operations)
+    (fuel count : Nat) (rest : Control (Value Symbol Guard)) (after : Checked width)
+    (bounded : count ≤ fuel)
+    (inputs : InputsThrough fuel (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width))
+    (fields : FieldsThrough fuel (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width))
+    (actual : Trace count (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width) rest after) :
+    let nodeLaw := NodeResult (width := width) rootRequest machine operations count entry body depth ordinary
+    let edgeLaw := EdgeResult (width := width) rootRequest machine operations count entry body depth ordinary
+    (Returned nodeLaw after.native.nodes ∧ Returned edgeLaw after.native.edges) ∧
+      ∀ (used : Nat) (currentControl : Control (Value Symbol Guard)) (current : Checked width),
+        used ≤ count →
+        Trace used (.code (.node rootRequest .pure))
+          (⟨initial width machine, operations⟩ : Checked width) currentControl current →
+        Returned nodeLaw current.native.nodes ∧ Returned edgeLaw current.native.edges

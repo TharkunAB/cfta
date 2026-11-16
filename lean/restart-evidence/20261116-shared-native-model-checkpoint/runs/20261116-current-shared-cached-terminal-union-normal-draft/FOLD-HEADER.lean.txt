@@ -1,0 +1,9 @@
+/-- The actual cached fold has the same returned caller as the shared raw fold. -/
+theorem fold_unionNormal
+    (checkEmpty : Bool) (nativeFuel p h : Nat) (sources : List Nat)
+    (beforeCaller : Caller width) (before : EnumerationExpandableIndex.Cached Symbol Constraint)
+    (target : Nat) (queries : Queries)
+    (normal : UnionNormal beforeCaller.checked.native.machine.heap) :
+    UnionNormal
+      (SourcePruningEnumerationSharedCachedTerminal.fold checkEmpty nativeFuel p h sources
+        beforeCaller before target queries).1.2.1.checked.native.machine.heap

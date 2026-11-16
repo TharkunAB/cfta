@@ -1,0 +1,9 @@
+/-- Every actual shared source-target dispatch retains its returned native heap normality. -/
+theorem dispatch_unionNormal
+    (checkEmpty : Bool) (nativeFuel p h : Nat)
+    (beforeCaller : Caller width) (before : EnumerationState.State Symbol EnumGuard)
+    (source target : Nat) (queries : Queries)
+    (normal : UnionNormal beforeCaller.checked.native.machine.heap) :
+    UnionNormal
+      (SourcePruningEnumerationSharedDispatch.dispatch checkEmpty nativeFuel p h
+        beforeCaller before source target queries).2.1.checked.native.machine.heap
