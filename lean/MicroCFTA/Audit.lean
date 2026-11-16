@@ -1,3 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationSharedChildNoneBuckets
 import MicroCFTA.SourceSynthesisCurrentRealDoneAssignment
 import MicroCFTA.SourceCurrentAllocatedNativeSourceCanonicalOldEntry
 import MicroCFTA.SourceCurrentAllocatedNativeSourceEnterFullOperands
@@ -6376,3 +6377,6 @@ end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
 
 #check MicroCFTA.SourceSynthesisCurrentRealDoneAssignment.accepted_real_done_assignment
 #print axioms MicroCFTA.SourceSynthesisCurrentRealDoneAssignment.accepted_real_done_assignment
+
+#check MicroCFTA.SourcePruningEnumerationSharedEagerNoneBuckets.child_none_buckets
+#print axioms MicroCFTA.SourcePruningEnumerationSharedEagerNoneBuckets.child_none_buckets
