@@ -1,0 +1,10 @@
+/-- A single valid proper descendant path names its own pending class. -/
+def bucket : List Suspended := [⟨0, .branch [(0, .terminal)]⟩]
+
+/-- One fabricated pending root has a missing domain and a nonempty bucket. -/
+def core : EnumerationState.State Symbol Constraint :=
+  ⟨1, UnionFind.withInitialValues [0], [.unenumerated none bucket], [], fun _ => [], []⟩
+
+/-- All native candidate flags are false; the waiting map counts the stored self-reference. -/
+def cache : EnumerationExpandableIndex.Cached Symbol Constraint :=
+  ⟨core, fun _ => false, fun uv => if uv = 0 then some 1 else none⟩

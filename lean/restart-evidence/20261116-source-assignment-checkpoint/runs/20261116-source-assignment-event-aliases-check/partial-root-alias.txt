@@ -1,0 +1,13 @@
+@MicroCFTA.SourcePruningEnumerationPartialOutput.rootPartial_completes_of_stored_equations : ∀
+  {NativeGuard EnumGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (assignment : Nat → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol) (fuel : Nat)
+  (before after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (observedTerm : MicroCFTA.SourcePruningTemplates.PartialTerm),
+  MicroCFTA.UnionFind.Total before.representatives →
+    MicroCFTA.SourcePruningPartialRenderingSemantics.StoredEquations assignment before →
+      MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.SourcePruningEnumerationPartialOutput.rootPartial heap fuel)
+          before observedTerm after →
+        MicroCFTA.SourcePruningPartialMatch.Completes assignment observedTerm (assignment 0)
+'MicroCFTA.SourcePruningEnumerationPartialOutput.rootPartial_completes_of_stored_equations' depends on axioms: [propext,
+ Quot.sound]

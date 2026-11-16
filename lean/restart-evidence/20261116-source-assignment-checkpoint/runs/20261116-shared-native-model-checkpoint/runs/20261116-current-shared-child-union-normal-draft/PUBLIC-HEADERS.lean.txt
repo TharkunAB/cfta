@@ -1,0 +1,48 @@
+import MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations
+import MicroCFTA.SourcePruningEnumerationSharedCachedTerminalUnionNormal
+
+set_option autoImplicit false
+
+namespace MicroCFTA.SourcePruningEnumerationSharedChildUnionNormal
+open EnumerationState InternedConstructorTemplates
+open SourceCurrentRequiredUnionNormal (UnionNormal)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+variable {width : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+/-- Every actual child observation retains normality at its returned caller. -/
+theorem observe_unionNormal
+    (checkEmpty : Bool) (representativeFuel nativeFuel p h : Nat)
+    (scs : List Suspended) (incoming : Node)
+    (beforeCaller : Caller width) (before : EnumerationState.State Symbol Constraint)
+    (waiting : EnumerationWaitingIndex.Waiting) (queries : Queries)
+    (normal : UnionNormal beforeCaller.checked.native.machine.heap) :
+    UnionNormal
+      (SourcePruningEnumerationSharedSelectedContinuations.ChildDispatch.observe
+        checkEmpty representativeFuel nativeFuel p h scs incoming beforeCaller before waiting queries).2.1.checked.native.machine.heap
+
+/-- The cached child dispatcher retains the exact raw returned caller normality. -/
+theorem run_unionNormal
+    (checkEmpty : Bool) (representativeFuel nativeFuel p h indexFuel : Nat)
+    (scs : List Suspended) (incoming : Node)
+    (beforeCaller : Caller width) (before : Cached) (queries : Queries)
+    (normal : UnionNormal beforeCaller.checked.native.machine.heap) :
+    UnionNormal
+      (SourcePruningEnumerationSharedSelectedContinuations.ChildDispatch.run
+        checkEmpty representativeFuel nativeFuel p h indexFuel scs incoming beforeCaller before queries).1.2.1.checked.native.machine.heap
+
+/-- Every actual ordered child traversal retains its complete or stopping caller normality. -/
+theorem traversal_unionNormal
+    (checkEmpty : Bool) (representativeFuel nativeFuel p h indexFuel : Nat)
+    (inputs : List (Node × List Suspended))
+    (beforeCaller : Caller width) (before : Cached) (queries : Queries)
+    (normal : UnionNormal beforeCaller.checked.native.machine.heap) :
+    match SourcePruningEnumerationSharedSelectedContinuations.ChildTraversal.run
+        checkEmpty representativeFuel nativeFuel p h indexFuel inputs beforeCaller before queries with
+    | .complete _ afterCaller _ _ => UnionNormal afterCaller.checked.native.machine.heap
+    | .stopped _ observation _ => UnionNormal observation.2.1.checked.native.machine.heap

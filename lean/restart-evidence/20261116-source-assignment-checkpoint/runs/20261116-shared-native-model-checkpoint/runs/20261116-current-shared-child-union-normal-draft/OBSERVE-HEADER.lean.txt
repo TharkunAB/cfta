@@ -1,0 +1,10 @@
+/-- Every actual child observation retains normality at its returned caller. -/
+theorem observe_unionNormal
+    (checkEmpty : Bool) (representativeFuel nativeFuel p h : Nat)
+    (scs : List Suspended) (incoming : Node)
+    (beforeCaller : Caller width) (before : EnumerationState.State Symbol Constraint)
+    (waiting : EnumerationWaitingIndex.Waiting) (queries : Queries)
+    (normal : UnionNormal beforeCaller.checked.native.machine.heap) :
+    UnionNormal
+      (SourcePruningEnumerationSharedSelectedContinuations.ChildDispatch.observe
+        checkEmpty representativeFuel nativeFuel p h scs incoming beforeCaller before waiting queries).2.1.checked.native.machine.heap

@@ -1,0 +1,9 @@
+/-- The cached child dispatcher retains the exact raw returned caller normality. -/
+theorem run_unionNormal
+    (checkEmpty : Bool) (representativeFuel nativeFuel p h indexFuel : Nat)
+    (scs : List Suspended) (incoming : Node)
+    (beforeCaller : Caller width) (before : Cached) (queries : Queries)
+    (normal : UnionNormal beforeCaller.checked.native.machine.heap) :
+    UnionNormal
+      (SourcePruningEnumerationSharedSelectedContinuations.ChildDispatch.run
+        checkEmpty representativeFuel nativeFuel p h indexFuel scs incoming beforeCaller before queries).1.2.1.checked.native.machine.heap

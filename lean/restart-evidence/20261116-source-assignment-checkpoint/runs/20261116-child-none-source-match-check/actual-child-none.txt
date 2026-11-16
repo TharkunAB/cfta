@@ -1,0 +1,38 @@
+MicroCFTA.SourcePruningEnumerationSharedEagerNoneBuckets.child_none_buckets {width : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (checkEmpty : Bool) (r n p h k : Nat) (scs : List MicroCFTA.EnumerationState.Suspended)
+  (incoming :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (queries : MicroCFTA.SourceEndpointMemo.Memos)
+  (initial : MicroCFTA.SourcePruningEnumerationSharedEagerNoneBuckets.NoneBucketsEmpty before.core) :
+  (∀
+      (state :
+        MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      state ∈
+          MicroCFTA.SourcePruningEnumerationSharedEagerNoneBuckets.childCores
+            (MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.ChildDispatch.run checkEmpty r n p h k scs
+                incoming caller before queries).fst →
+        MicroCFTA.SourcePruningEnumerationSharedEagerNoneBuckets.NoneBucketsEmpty state) ∧
+    ∀
+      (after :
+        MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      (MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.ChildDispatch.run checkEmpty r n p h k scs incoming
+              caller before queries).snd =
+          some after →
+        MicroCFTA.SourcePruningEnumerationSharedEagerNoneBuckets.NoneBucketsEmpty after.core
+'MicroCFTA.SourcePruningEnumerationSharedEagerNoneBuckets.child_none_buckets' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

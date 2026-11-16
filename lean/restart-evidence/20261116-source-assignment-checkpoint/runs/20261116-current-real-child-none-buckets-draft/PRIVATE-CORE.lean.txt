@@ -1,0 +1,210 @@
+import MicroCFTA.SourcePruningEnumerationSharedEagerNoneBuckets
+import MicroCFTA.SourcePruningEnumerationSharedEagerNoneDispatch
+import MicroCFTA.SourcePruningEnumerationSharedEagerNoneCachedWriters
+import MicroCFTA.SourcePruningEnumerationSharedTerminalProper
+import MicroCFTA.SourcePruningEnumerationSharedChildProper
+
+set_option autoImplicit false
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerNoneBuckets
+open EnumerationState EnumerationCorrectness EnumerationSchedule InternedConstructorTemplates
+open SourcePruningEnumerationSharedSelectedContinuations
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Native" => InternedConstructorTemplates.State Symbol Constraint
+local notation "Core" => EnumerationState.State Symbol Constraint
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Raw" α => List (Except EnumerationState.Error (α × Core))
+variable {width : Nat}
+local notation "Fault" => SourceEqualityNativeDemand.Outcome width Node ⊕
+  SourcePruningEnumerationSharedEnabledEmpty.Outcome width
+local notation "CoreResult" => Except Fault (Option (Raw Unit)) × Caller width × Queries × Core
+attribute [local instance] SourcePruningEnumerationTerminalPrefix.terminalPrefixMonadList
+  SourcePruningEnumerationTerminalPrefix.terminalPrefixLawfulMonadList
+
+private def RawNone {α : Type} (raw : Raw α) : Prop :=
+  ∀ state ∈ rawCores raw, NoneBucketsEmpty state
+
+private def ResultNone (observed : CoreResult) : Prop :=
+  NoneBucketsEmpty observed.2.2.2 ∧ match observed.1 with
+    | .ok (some raw) => RawNone raw
+    | _ => True
+
+private theorem raw_single {α : Type} (value : α) (state : Core)
+    (initial : NoneBucketsEmpty state) : RawNone [.ok (value, state)] := by
+  intro current member
+  simp only [rawCores, List.flatMap_cons, List.flatMap_nil, List.append_nil, List.mem_singleton] at member
+  subst current
+  exact initial
+
+private theorem raw_from_success {α : Type} (action : EnumerateM Symbol Constraint α) (before : Core)
+    (each : ∀ value after, Success action before value after → NoneBucketsEmpty after) :
+    RawNone (ExceptT.run (action before)) := by
+  intro current member
+  obtain ⟨row, member, selected⟩ := List.mem_flatMap.mp member
+  cases row with
+  | error fault => cases selected
+  | ok payload =>
+      obtain ⟨value, after⟩ := payload
+      have same : current = after := List.mem_singleton.mp selected
+      subst current
+      exact each value after member
+
+private theorem some_set_none (before : Core) (target handle : Nat) (bucket : List Suspended)
+    (initial : NoneBucketsEmpty before) :
+    NoneBucketsEmpty {before with values := before.values.set target (.unenumerated (some handle) bucket)} := by
+  intro uv scs stored
+  rcases List.mem_or_eq_of_mem_set (List.mem_of_getElem? stored) with retained | replaced
+  · obtain ⟨index, found⟩ := List.mem_iff_getElem?.mp retained
+    exact initial index scs found
+  · cases replaced
+
+private theorem shape_single {α : Type} (raw : Raw α) (value : α) (after : Core)
+    (member : Except.ok (value, after) ∈ raw)
+    (shape : raw = [] ∨ ∃ row, raw = [row]) : raw = [.ok (value, after)] := by
+  rcases shape with empty | ⟨row, singleton⟩
+  · rw [empty] at member
+    cases member
+  · rw [singleton] at member ⊢
+    rw [← List.mem_singleton.mp member]
+
+private theorem optional_shape (source target : Nat) (node : Option Nat)
+    (left right : List Suspended) (before : Core) :
+    ExceptT.run (SourcePruningEnumerationDispatch.finishOptional source target node left right before) = [] ∨
+      ∃ row, ExceptT.run (SourcePruningEnumerationDispatch.finishOptional source target node left right before) = [row] := by
+  unfold SourcePruningEnumerationDispatch.finishOptional
+  split
+  · exact Or.inl rfl
+  · exact Or.inr ⟨_, rfl⟩
+
+private theorem assimilate_shape (source target handle : Nat) (left right : List Suspended)
+    (value : Node) (before : Core) :
+    ExceptT.run (SourcePruningEnumerationAssimilation.finish source target handle left right value before) = [] ∨
+      ∃ row, ExceptT.run (SourcePruningEnumerationAssimilation.finish source target handle left right value before) = [row] := by
+  cases value <;> first | exact Or.inl rfl | exact Or.inr ⟨_, rfl⟩
+
+private theorem dispatch_shape
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (n p h : Nat) (caller : Caller width) (before : Core)
+    (source target : Nat) (queries : Queries) (action : EnumerateM Symbol Constraint Unit)
+    (reached : Caller width) (saved : Queries)
+    (selected : SourcePruningEnumerationSharedDispatch.dispatch checkEmpty n p h
+      caller before source target queries = (.ok (some action), reached, saved)) :
+    ExceptT.run (action before) = [] ∨ ∃ row, ExceptT.run (action before) = [row] := by
+  unfold SourcePruningEnumerationSharedDispatch.dispatch at selected
+  simp only [SourcePruningEnumerationSharedDispatch.afterQuery, Except.mapError, Id.run, pure] at selected
+  repeat' first
+    | solve
+      | have actionEq := congrArg Prod.fst selected
+        dsimp only at actionEq
+        first
+        | solve
+          | cases actionEq
+            first
+            | exact Or.inr ⟨_, rfl⟩
+            | exact optional_shape _ _ _ _ _ _
+            | exact assimilate_shape _ _ _ _ _ _ _
+        | have programEq := Option.some.inj (Except.ok.inj actionEq)
+          rw [← programEq]
+          first
+          | exact Or.inr ⟨_, rfl⟩
+          | exact optional_shape _ _ _ _ _ _
+          | exact assimilate_shape _ _ _ _ _ _ _
+    | split at selected
+    | (dsimp only at selected; split at selected)
+
+private theorem dispatch_all
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (n p h : Nat) (caller : Caller width) (before : Core)
+    (source target : Nat) (queries : Queries) (action : EnumerateM Symbol Constraint Unit)
+    (reached : Caller width) (saved : Queries) (initial : NoneBucketsEmpty before)
+    (selected : SourcePruningEnumerationSharedDispatch.dispatch checkEmpty n p h
+      caller before source target queries = (.ok (some action), reached, saved)) :
+    RawNone (ExceptT.run (action before)) := by
+  apply raw_from_success
+  intro token after completed
+  cases token
+  exact SourcePruningEnumerationSharedEagerNoneDispatch.dispatch_none_buckets
+    checkEmpty n p h caller before source target queries action reached saved after initial selected
+    (shape_single _ () after completed (dispatch_shape checkEmpty n p h caller before source target queries action reached saved selected))
+
+private theorem prefix_none (fuel : Nat) (first : Suspended) (rest : List Suspended)
+    (waiting : EnumerationWaitingIndex.Waiting) (before after : Core)
+    (recorded : List Nat) (winner : Nat) (moved : EnumerationWaitingIndex.Waiting)
+    (initial : NoneBucketsEmpty before)
+    (actual : Success (SourcePruningEnumerationTerminalPrefix.run fuel first rest waiting)
+      before (recorded, winner, moved) after) : NoneBucketsEmpty after := by
+  unfold SourcePruningEnumerationTerminalPrefix.run at actual
+  obtain ⟨actualRecorded, scanned, scanning, continued⟩ := (success_bind _ _ _ _ _).mp actual
+  have scannedGood := mapM_invariant (fun sc => representative fuel sc.var) NoneBucketsEmpty (first :: rest)
+    (fun sc _ previous result next valid step => by
+      obtain ⟨found, _, _, rfl⟩ := (representative_success fuel sc.var previous next result).mp step
+      exact valid) before scanned actualRecorded initial scanning
+  obtain ⟨ignored, united, unions, continued⟩ := (success_bind _ _ _ _ _).mp continued
+  cases ignored
+  have unitedGood := forM_invariant (fun sc => unionVariables fuel first.var sc.var) NoneBucketsEmpty rest
+    (fun sc _ previous next valid step => by
+      obtain ⟨forest, _, rfl⟩ := (unionVariables_success fuel first.var sc.var previous next).mp step
+      exact valid) scanned united scannedGood unions
+  obtain ⟨actualWinner, resolved, resolution, final⟩ := (success_bind _ _ _ _ _).mp continued
+  obtain ⟨found, _, _, rfl⟩ := (representative_success fuel first.var united resolved actualWinner).mp resolution
+  obtain ⟨_same, rfl⟩ := (success_pure _ _ _ _).mp final
+  exact unitedGood
+
+private theorem incoming_finish_none (target handle : Nat) (incomingScs oldScs : List Suspended)
+    (replacement : Node) (before : Core) (initial : NoneBucketsEmpty before) :
+    RawNone (ExceptT.run (SourcePruningEnumerationIncomingNode.finish target handle incomingScs oldScs replacement before)) := by
+  let written : Core := {before with
+    values := before.values.set target (.unenumerated (some handle) (incomingScs ++ oldScs))
+    recursionAncestry := fun other => if other = target then
+      (before.expansionAncestry ++ before.recursionAncestry target).eraseDups
+      else before.recursionAncestry other}
+  have good : NoneBucketsEmpty written := some_set_none before target handle (incomingScs ++ oldScs) initial
+  have rawRun : ExceptT.run (SourcePruningEnumerationIncomingNode.finish target handle incomingScs oldScs replacement before) =
+      match replacement with | .empty => [] | _ => [.ok ((), written)] := by
+    cases replacement <;> rfl
+  rw [rawRun]
+  split
+  · intro state impossible
+    cases impossible
+  · exact raw_single () written good
+
+private theorem incoming_none
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (r n p h : Nat) (caller : Caller width) (before : Core)
+    (target : Nat) (incoming : Node) (incomingScs : List Suspended) (queries : Queries)
+    (initial : NoneBucketsEmpty before) :
+    ResultNone (SourcePruningEnumerationSharedIncomingNode.run checkEmpty r n p h caller before target incoming incomingScs queries) := by
+  generalize observedEq : SourcePruningEnumerationSharedIncomingNode.run checkEmpty r n p h caller before target incoming incomingScs queries = observed
+  obtain ⟨result, reached, saved, read⟩ := observed
+  unfold ResultNone
+  dsimp only
+  unfold SourcePruningEnumerationSharedIncomingNode.run at observedEq
+  split at observedEq
+  next =>
+    simp only [Prod.mk.injEq] at observedEq
+    obtain ⟨rfl, rfl, rfl, rfl⟩ := observedEq
+    refine ⟨initial, ?_⟩
+    intro state impossible
+    simp only [rawCores, List.flatMap_cons, List.flatMap_nil, List.nil_append, List.not_mem_nil] at impossible
+  next =>
+    repeat' first
+      | solve
+        | have readSame := congrArg (fun observed : CoreResult => observed.2.2.2) observedEq
+          have resultSame := congrArg Prod.fst observedEq
+          dsimp only at readSame resultSame
+          constructor
+          · rw [← readSame]
+            change NoneBucketsEmpty before
+            exact initial
+          · rw [← resultSame]
+            first
+            | trivial
+            | exact incoming_finish_none _ _ _ _ _ _ (by change NoneBucketsEmpty before; exact initial)
+            | intro state impossible
+              simp only [rawCores, List.flatMap_cons, List.flatMap_nil, List.nil_append, List.not_mem_nil] at impossible
+      | split at observedEq
+      | (dsimp only at observedEq; split at observedEq)

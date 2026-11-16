@@ -1,0 +1,153 @@
+private theorem shallow_none
+    (scs : List Suspended) (value : Value Symbol Constraint)
+    (before after : EnumerationState.State Symbol Constraint)
+    (action : EnumerateM Symbol Constraint (Fragment)) (fragment : Fragment)
+    (proper : NoneBucketsEmpty before)
+    (prepared : SourcePruningEnumerationShallowChild.prepareChild scs value = some action)
+    (success : Success action before fragment after) : NoneBucketsEmpty after := by
+  cases value with
+  | empty =>
+      simp only [SourcePruningEnumerationShallowChild.prepareChild, Option.some.injEq] at prepared
+      rw [← prepared] at success
+      exact (reject_unsuccessful before after fragment success).elim
+  | reference name =>
+      simp only [SourcePruningEnumerationShallowChild.prepareChild, reduceCtorEq] at prepared
+  | node entry edges depth free =>
+      by_cases terminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true
+      · simp only [SourcePruningEnumerationShallowChild.prepareChild, terminal, ↓reduceIte, reduceCtorEq] at prepared
+      · simp only [SourcePruningEnumerationShallowChild.prepareChild, terminal, Bool.false_eq_true, ↓reduceIte, SourcePruningEnumerationNodes.encodeNode,
+          Option.some.injEq] at prepared
+        rw [← prepared] at success
+        obtain ⟨uv, allocatedAfter, allocation, continued⟩ := (success_bind _ _ _ _ _).mp success
+        have shape : uv = before.counter ∧ allocatedAfter = allocated (some (entry.identity + 1)) before := by
+          simpa [Success, allocate_exact, ExceptT.run] using allocation
+        obtain ⟨rfl, rfl⟩ := shape
+        obtain ⟨ignored, written, writing, final⟩ := (success_bind _ _ _ _ _).mp continued
+        cases ignored
+        have writtenGood := some_write_none_buckets before.counter (entry.identity + 1) scs
+          (allocated (some (entry.identity + 1)) before) written
+          (allocated_none_buckets (some (entry.identity + 1)) before proper) writing
+        obtain ⟨_fragmentSame, afterSame⟩ :=
+          (success_pure (.hole before.counter) fragment written after).mp final
+        subst after
+        exact writtenGood
+  | union entry _ _ _ | mu entry _ _ _ =>
+      by_cases terminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true
+      · simp only [SourcePruningEnumerationShallowChild.prepareChild, terminal, ↓reduceIte, reduceCtorEq] at prepared
+      · simp only [SourcePruningEnumerationShallowChild.prepareChild, terminal, Bool.false_eq_true, ↓reduceIte, SourcePruningEnumerationNodes.encodeNode,
+          Option.some.injEq] at prepared
+        rw [← prepared] at success
+        obtain ⟨uv, allocatedAfter, allocation, final⟩ := (success_bind _ _ _ _ _).mp success
+        have shape : uv = before.counter ∧ allocatedAfter = allocated (some (entry.identity + 1)) before := by
+          simpa [Success, allocate_exact, ExceptT.run] using allocation
+        obtain ⟨rfl, rfl⟩ := shape
+        obtain ⟨_fragmentSame, afterSame⟩ :=
+          (success_pure (.hole before.counter) fragment (allocated (some (entry.identity + 1)) before) after).mp final
+        subst after
+        exact allocated_none_buckets (some (entry.identity + 1)) before proper
+
+private theorem shallow_rows_none
+    (heap : InternedConstructorTemplates.State Symbol Constraint) (fuel : Nat)
+    (scs : List Suspended) (value : Value Symbol Constraint)
+    (before : EnumerationExpandableIndex.Cached Symbol Constraint)
+    (rows : List (Fragment × EnumerationExpandableIndex.Cached Symbol Constraint))
+    (proper : NoneBucketsEmpty before.core)
+    (cached : SourcePruningEnumerationCachedPrepare.prepareChild heap fuel scs value before = some rows) :
+    ∀ fragment after, (fragment, after) ∈ rows → NoneBucketsEmpty after.core := by
+  have raw := SourcePruningEnumerationCachedPrepare.erase_some heap fuel scs value before rows cached
+  cases prepared : SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) scs value with
+  | none =>
+      simp only [prepared, Option.map_none, reduceCtorEq] at raw
+  | some action =>
+      simp only [prepared, Option.map_some, Option.some.injEq] at raw
+      intro fragment after member
+      apply shallow_none scs value before.core after.core
+        action fragment proper prepared
+      rw [Success, raw]
+      exact List.mem_map.mpr ⟨(fragment, after), member, rfl⟩
+
+
+private theorem shallow_cache_none
+    (heap : InternedConstructorTemplates.State Symbol Constraint) (fuel : Nat)
+    (scs : List Suspended) (value : Value Symbol Constraint)
+    (before after : EnumerationExpandableIndex.Cached Symbol Constraint)
+    (proper : NoneBucketsEmpty before.core)
+    (observed : (match SourcePruningEnumerationCachedPrepare.prepareChild heap fuel scs value before with
+      | some [] => some before
+      | some [(_, result)] => some result
+      | _ => none) = some after) : NoneBucketsEmpty after.core := by
+  cases prepared : SourcePruningEnumerationCachedPrepare.prepareChild heap fuel scs value before with
+  | none =>
+      simp only [prepared, reduceCtorEq] at observed
+  | some rows =>
+      cases rows with
+      | nil =>
+          have same : before = after := by simpa only [prepared, Option.some.injEq] using observed
+          subst after
+          exact proper
+      | cons row rest =>
+          rcases row with ⟨fragment, reached⟩
+          cases rest with
+          | nil =>
+              have same : reached = after := by simpa only [prepared, Option.some.injEq] using observed
+              rw [← same]
+              exact shallow_rows_none heap fuel scs value before [(fragment, reached)]
+                proper prepared fragment reached (by simp)
+          | cons row rest =>
+              simp only [prepared, reduceCtorEq] at observed
+
+
+private theorem child_observe_none
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (r n p h : Nat) (scs : List Suspended) (incoming : Node)
+    (caller : Caller width) (before : Core) (waiting : EnumerationWaitingIndex.Waiting) (queries : Queries)
+    (initial : NoneBucketsEmpty before) :
+    ∀ state ∈ childCores (ChildDispatch.observe checkEmpty r n p h scs incoming caller before waiting queries),
+      NoneBucketsEmpty state := by
+  by_cases empty : incoming = .empty
+  · simp only [ChildDispatch.observe, ite_eq_left empty]
+    exact states_single before initial
+  · cases partitioned : scs.partition (fun sc => EqualityTrie.isTerminal sc.trie) with
+    | mk here descendants =>
+        cases here with
+        | nil =>
+            simp only [ChildDispatch.observe, ite_eq_right empty, partitioned]
+            cases prepared : SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) scs incoming with
+            | none => exact states_single before initial
+            | some action =>
+                apply states_cons before _ initial
+                apply raw_from_success
+                intro fragment after actual
+                exact shallow_none scs incoming before after action fragment initial prepared actual
+        | cons first rest =>
+            simp only [ChildDispatch.observe, ite_eq_right empty, partitioned]
+            exact terminal_raw_none checkEmpty r n p h first rest waiting caller before incoming descendants queries initial
+theorem child_none_buckets
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (r n p h k : Nat) (scs : List Suspended) (incoming : Node)
+    (caller : Caller width) (before : Cached) (queries : Queries)
+    (initial : NoneBucketsEmpty before.core) :
+    (∀ state ∈ childCores (ChildDispatch.run checkEmpty r n p h k scs incoming caller before queries).1,
+      NoneBucketsEmpty state) ∧
+    ∀ after, (ChildDispatch.run checkEmpty r n p h k scs incoming caller before queries).2 = some after →
+      NoneBucketsEmpty after.core
+ := by
+  constructor
+  · rw [ChildDispatch.erase]
+    exact child_observe_none checkEmpty r n p h scs incoming caller before.core before.waiting queries initial
+  · intro after candidate
+    by_cases empty : incoming = .empty
+    · simp only [ChildDispatch.run, ite_eq_left empty, Option.some.injEq] at candidate
+      subst after
+      exact initial
+    · cases partitioned : scs.partition (fun sc => EqualityTrie.isTerminal sc.trie) with
+      | mk here descendants =>
+          cases here with
+          | nil =>
+              apply shallow_cache_none caller.checked.native.machine.heap k scs incoming before after initial
+              simpa only [ChildDispatch.run, ite_eq_right empty, partitioned] using candidate
+          | cons first rest =>
+              apply terminal_candidate_none checkEmpty r n p h k first rest caller before incoming descendants queries initial after
+              simpa only [ChildDispatch.run, ite_eq_right empty, partitioned] using candidate
+
+end MicroCFTA.SourcePruningEnumerationSharedEagerNoneBuckets

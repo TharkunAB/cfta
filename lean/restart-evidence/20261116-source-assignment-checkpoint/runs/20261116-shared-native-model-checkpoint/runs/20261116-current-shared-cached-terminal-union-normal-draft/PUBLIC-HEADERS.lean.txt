@@ -1,0 +1,59 @@
+import MicroCFTA.SourcePruningEnumerationSharedCachedTerminal
+import MicroCFTA.SourcePruningEnumerationSharedDispatchUnionNormal
+import MicroCFTA.SourcePruningEnumerationSharedIncomingUnionNormal
+
+set_option autoImplicit false
+
+namespace MicroCFTA.SourcePruningEnumerationSharedCachedTerminalUnionNormal
+open EnumerationState InternedConstructorTemplates
+open SourceCurrentRequiredUnionNormal (UnionNormal)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+variable {width : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+/-- Every actual ordered shared fold retains normality at its returned caller. -/
+theorem rawFold_unionNormal
+    (checkEmpty : Bool) (nativeFuel p h : Nat) (sources : List Nat)
+    (beforeCaller : Caller width) (before : EnumerationState.State Symbol Constraint)
+    (target : Nat) (queries : Queries)
+    (normal : UnionNormal beforeCaller.checked.native.machine.heap) :
+    UnionNormal
+      (SourcePruningEnumerationSharedCachedTerminal.rawFold checkEmpty nativeFuel p h sources
+        beforeCaller before target queries).2.1.checked.native.machine.heap
+
+/-- The actual cached fold has the same returned caller as the shared raw fold. -/
+theorem fold_unionNormal
+    (checkEmpty : Bool) (nativeFuel p h : Nat) (sources : List Nat)
+    (beforeCaller : Caller width) (before : EnumerationExpandableIndex.Cached Symbol Constraint)
+    (target : Nat) (queries : Queries)
+    (normal : UnionNormal beforeCaller.checked.native.machine.heap) :
+    UnionNormal
+      (SourcePruningEnumerationSharedCachedTerminal.fold checkEmpty nativeFuel p h sources
+        beforeCaller before target queries).1.2.1.checked.native.machine.heap
+
+/-- Every raw shared terminal outcome retains its actual returned caller normality. -/
+theorem raw_unionNormal
+    (checkEmpty : Bool) (representativeFuel nativeFuel p h : Nat)
+    (first : EnumerationState.Suspended) (rest : List EnumerationState.Suspended)
+    (waiting : EnumerationWaitingIndex.Waiting)
+    (beforeCaller : Caller width) (before : EnumerationState.State Symbol Constraint)
+    (incoming : Node) (incomingScs : List EnumerationState.Suspended) (queries : Queries)
+    (normal : UnionNormal beforeCaller.checked.native.machine.heap) :
+    UnionNormal
+      (SourcePruningEnumerationSharedCachedTerminal.raw checkEmpty representativeFuel nativeFuel p h
+        first rest waiting beforeCaller before incoming incomingScs queries).2.1.checked.native.machine.heap
+
+/-- The actual cached shared terminal retains normality for every original fuel. -/
+theorem run_unionNormal
+    (checkEmpty : Bool) (representativeFuel nativeFuel p h indexFuel : Nat)
+    (first : EnumerationState.Suspended) (rest : List EnumerationState.Suspended)
+    (beforeCaller : Caller width) (before : EnumerationExpandableIndex.Cached Symbol Constraint)
+    (incoming : Node) (incomingScs : List EnumerationState.Suspended) (queries : Queries)
+    (normal : UnionNormal beforeCaller.checked.native.machine.heap) :
+    UnionNormal
+      (SourcePruningEnumerationSharedCachedTerminal.run checkEmpty representativeFuel nativeFuel p h indexFuel
+        first rest beforeCaller before incoming incomingScs queries).1.2.1.checked.native.machine.heap

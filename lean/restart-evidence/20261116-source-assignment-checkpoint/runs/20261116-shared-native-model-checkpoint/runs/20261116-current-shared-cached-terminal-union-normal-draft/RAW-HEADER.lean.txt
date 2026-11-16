@@ -1,0 +1,11 @@
+/-- Every raw shared terminal outcome retains its actual returned caller normality. -/
+theorem raw_unionNormal
+    (checkEmpty : Bool) (representativeFuel nativeFuel p h : Nat)
+    (first : EnumerationState.Suspended) (rest : List EnumerationState.Suspended)
+    (waiting : EnumerationWaitingIndex.Waiting)
+    (beforeCaller : Caller width) (before : EnumerationState.State Symbol Constraint)
+    (incoming : Node) (incomingScs : List EnumerationState.Suspended) (queries : Queries)
+    (normal : UnionNormal beforeCaller.checked.native.machine.heap) :
+    UnionNormal
+      (SourcePruningEnumerationSharedCachedTerminal.raw checkEmpty representativeFuel nativeFuel p h
+        first rest waiting beforeCaller before incoming incomingScs queries).2.1.checked.native.machine.heap

@@ -1,0 +1,14 @@
+theorem packet_done_can_retain_none_bucket
+    [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : SourceCurrentAllocatedNativeInventoryState.Inventory)
+    (caller : SourceCurrentAllocatedPartialState.State width) (memos : EndpointMemoGateTrace.Memos)
+    (metadata : SourcePruningRecordTypes.Metadata Typing)
+    (order : SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat)
+    (context : SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory caller memos)
+    (emptyPending : metadata.pending = []) :
+    SourcePruningEnumerationRecursive.Packet formulas solver inventory caller memos metadata cache ∧
+    SourcePruningEnumerationRestart.decision none order metadata cache = some .done ∧
+    cache.core.values[0]? = some (.unenumerated none bucket) ∧
+    bucket ≠ [] ∧ ¬EnumerationProgress.ProperState cache.core

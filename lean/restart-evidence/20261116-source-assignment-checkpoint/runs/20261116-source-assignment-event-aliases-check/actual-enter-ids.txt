@@ -1,0 +1,50 @@
+@MicroCFTA.SourceCurrentAllocatedNativeSourceEmptyEnterOperands.stored_dispatch_enter_identities : ∀ {width : Nat}
+  [inst : DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (cached :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourcePruningEnumerationNativeBranchCompletion.CacheValid caller cached →
+    ∀ (source target sourceHandle targetHandle : Nat) (sourceScs targetScs : List MicroCFTA.EnumerationState.Suspended),
+      cached.core.values[source]? =
+          some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some sourceHandle) sourceScs) →
+        cached.core.values[target]? =
+            some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some targetHandle) targetScs) →
+          ∀
+            (rootRequest :
+              MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest MicroCFTA.SourcePruningTemplates.Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+            MicroCFTA.SourcePruningEnumerationNodes.lookupNode caller.checked.native.machine.heap sourceHandle =
+                some rootRequest.left →
+              MicroCFTA.SourcePruningEnumerationNodes.lookupNode caller.checked.native.machine.heap targetHandle =
+                  some rootRequest.right →
+                MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid caller.checked.native →
+                  ∀ (used : Nat) (after : MicroCFTA.SourceEqualityNativeDemand.State width)
+                    (parent : MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+                    (left right :
+                      MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                    (first second : Nat)
+                    (next :
+                      MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey →
+                        MicroCFTA.SourceRecursiveIntersectionCode.Code MicroCFTA.SourcePruningTemplates.Symbol
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                          (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))),
+                    MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace used
+                        (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                          (MicroCFTA.SourceRecursiveIntersectionCode.Code.node rootRequest
+                            MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+                        caller.checked
+                        (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                          (MicroCFTA.SourceRecursiveIntersectionCode.Code.enter parent left right first second next))
+                        after →
+                      MicroCFTA.SourceRecursiveIntersectionControl.identity left = some first ∧
+                        MicroCFTA.SourceRecursiveIntersectionControl.identity right = some second
+'MicroCFTA.SourceCurrentAllocatedNativeSourceEmptyEnterOperands.stored_dispatch_enter_identities' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

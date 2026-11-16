@@ -1,0 +1,10 @@
+/-- The actual cached shared terminal retains normality for every original fuel. -/
+theorem run_unionNormal
+    (checkEmpty : Bool) (representativeFuel nativeFuel p h indexFuel : Nat)
+    (first : EnumerationState.Suspended) (rest : List EnumerationState.Suspended)
+    (beforeCaller : Caller width) (before : EnumerationExpandableIndex.Cached Symbol Constraint)
+    (incoming : Node) (incomingScs : List EnumerationState.Suspended) (queries : Queries)
+    (normal : UnionNormal beforeCaller.checked.native.machine.heap) :
+    UnionNormal
+      (SourcePruningEnumerationSharedCachedTerminal.run checkEmpty representativeFuel nativeFuel p h indexFuel
+        first rest beforeCaller before incoming incomingScs queries).1.2.1.checked.native.machine.heap

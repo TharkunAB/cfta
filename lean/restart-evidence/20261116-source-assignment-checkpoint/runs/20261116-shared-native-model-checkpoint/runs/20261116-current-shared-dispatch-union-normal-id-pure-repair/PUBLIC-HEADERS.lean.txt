@@ -1,0 +1,19 @@
+/-- The actual shared check retains union normality at its returned caller on every outcome. -/
+theorem afterQuery_unionNormal
+    (checkEmpty : Bool) (p h : Nat) (source target : Nat)
+    (sourceScs targetScs : List Suspended) (query : Node) (queried : Checked width)
+    (beforeCaller : Caller width) (queries : Queries)
+    (normal : UnionNormal queried.native.machine.heap) :
+    UnionNormal
+      (SourcePruningEnumerationSharedDispatch.afterQuery (EnumGuard := EnumGuard)
+        checkEmpty p h source target sourceScs targetScs query queried beforeCaller queries).2.1.checked.native.machine.heap
+
+/-- Every actual shared source-target dispatch retains its returned native heap normality. -/
+theorem dispatch_unionNormal
+    (checkEmpty : Bool) (nativeFuel p h : Nat)
+    (beforeCaller : Caller width) (before : EnumerationState.State Symbol EnumGuard)
+    (source target : Nat) (queries : Queries)
+    (normal : UnionNormal beforeCaller.checked.native.machine.heap) :
+    UnionNormal
+      (SourcePruningEnumerationSharedDispatch.dispatch checkEmpty nativeFuel p h
+        beforeCaller before source target queries).2.1.checked.native.machine.heap
