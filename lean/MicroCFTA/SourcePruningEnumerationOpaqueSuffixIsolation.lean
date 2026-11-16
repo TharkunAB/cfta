@@ -234,3 +234,18 @@ theorem opaque_suffix_complete_isolated_resources
 
 end Resources
 end MicroCFTA.EnumerationDischargeHistory
+
+namespace MicroCFTA.EnumerationDischargeHistory
+
+theorem finalize_core_of_run
+    {EnumGuard NativeGuard : Type}
+    (heap : InternedConstructorTemplates.State SourcePruningTemplates.Symbol NativeGuard)
+    (fuel target : Nat) (fragment : Fragments.Fragment SourcePruningTemplates.Symbol)
+    (before after : EnumerationExpandableIndex.Cached SourcePruningTemplates.Symbol EnumGuard)
+    (observed : SourcePruningEnumerationFinalize.run heap fuel target fragment before = some after) :
+    after.core = {before.core with
+      values := before.core.values.set target (.enumerated fragment)
+      expansionAncestry := []} :=
+  finalized_core heap fuel target fragment before after observed
+
+end MicroCFTA.EnumerationDischargeHistory

@@ -6456,3 +6456,6 @@ end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
 #print axioms MicroCFTA.SourcePruningEnumerationNativeRequestFields.fields_of_resources
 #check MicroCFTA.SourcePruningEnumerationNativeRequestFields.admitted_request_plans
 #print axioms MicroCFTA.SourcePruningEnumerationNativeRequestFields.admitted_request_plans
+
+#check @MicroCFTA.EnumerationDischargeHistory.finalize_core_of_run
+#print axioms MicroCFTA.EnumerationDischargeHistory.finalize_core_of_run
