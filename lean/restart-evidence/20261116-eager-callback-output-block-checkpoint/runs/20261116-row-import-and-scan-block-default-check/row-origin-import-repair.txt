@@ -1,0 +1,131 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-row-import-and-scan-block-default-check/source/MicroCFTA/SourcePruningEnumerationRealEagerCapturedOutputOrigin.lean:88:108: error: unsolved goals
+Typing Key : Type
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+checkEmpty : Bool
+edgesOf : Node → List Edge
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+workFuel recursiveDepth uv : Nat
+metadata : Metadata Typing
+caller : Caller (bits + 2)
+before : Cached
+queries : Queries
+target handle : Nat
+scs : List Suspended
+decoded : Node
+entry : Cache.Interned InternedBinderProtocol.NodeKey
+rows : List Edge
+ordinaryDepth : Nat
+free : List InternedBinderProtocol.Reference
+heap : InternedConstructorTemplates.State Symbol Constraint
+entered : Core
+preparation :
+  SourcePruningEnumerationSelectedPreparation.run workFuel workFuel uv caller before =
+    ([Except.ok ((target, handle, scs, decoded), entered)],
+      some (MergedSourceComparison.Result.done (Value.node entry rows ordinaryDepth free) heap))
+nonterminal : (scs.any fun sc => EqualityTrie.isTerminal sc.trie) = false
+index : Nat
+output : Output (bits + 2) Typing
+observedOutput :
+  (emitted
+        (match
+          (SourcePruningEnumerationSharedPreparedChildPolicy.runWithChild
+              (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel workFuel
+                workFuel edgesOf)
+              (SourcePruningEnumerationSharedPreparedRecursive.continueWith
+                (resumeWithNarrow
+                  (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel workFuel
+                    workFuel edgesOf)
+                  (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order
+                  workFuel recursiveDepth)
+                graph templates stop order workFuel metadata uv)
+              checkEmpty workFuel workFuel workFuel workFuel workFuel workFuel workFuel uv edgesOf caller before
+              queries).snd with
+        | none =>
+          NativeContinuations.HookResult.stopped []
+            (Failure.preparation uv
+              (SourcePruningEnumerationSharedPreparedChildPolicy.runWithChild
+                  (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel workFuel
+                    workFuel edgesOf)
+                  (SourcePruningEnumerationSharedPreparedRecursive.continueWith
+                    (resumeWithNarrow
+                      (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel
+                        workFuel workFuel edgesOf)
+                      (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop
+                      order workFuel recursiveDepth)
+                    graph templates stop order workFuel metadata uv)
+                  checkEmpty workFuel workFuel workFuel workFuel workFuel workFuel workFuel uv edgesOf caller before
+                  queries).fst)
+            (some
+              (SourcePruningEnumerationSharedPreparedContinuations.preparation_endpoint caller queries
+                (SourcePruningEnumerationSharedPreparedChildPolicy.runWithChild
+                    (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel
+                      workFuel workFuel edgesOf)
+                    (SourcePruningEnumerationSharedPreparedRecursive.continueWith
+                      (resumeWithNarrow
+                        (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel
+                          workFuel workFuel edgesOf)
+                        (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop
+                        order workFuel recursiveDepth)
+                      graph templates stop order workFuel metadata uv)
+                    checkEmpty workFuel workFuel workFuel workFuel workFuel workFuel workFuel uv edgesOf caller before
+                    queries).fst))
+        | some folded => finish uv folded))[index]? =
+    some output
+child : List Suspended →
+  Node →
+    Caller (bits + 2) →
+      Cached →
+        Queries →
+          (Fragments.Fragment Symbol →
+              Caller (bits + 2) →
+                Queries →
+                  Cached →
+                    NativeContinuations.Result (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2)) →
+            (ChildDispatch.Observation (bits + 2) →
+                Option Cached →
+                  NativeContinuations.Result (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2)) →
+              NativeContinuations.Result (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2) :=
+  SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf
+recur : Metadata Typing →
+  Caller (bits + 2) →
+    Queries →
+      Cached →
+        Option Next →
+          NativeContinuations.HookResult (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2) :=
+  resumeWithNarrow child (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop
+    order workFuel recursiveDepth
+hook : Fragments.Fragment Symbol →
+  Caller (bits + 2) →
+    Queries →
+      Cached → NativeContinuations.HookResult (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2) :=
+  SourcePruningEnumerationSharedPreparedRecursive.continueWith recur graph templates stop order workFuel metadata uv
+rootBefore : Cached := EnumerationExpandableIndex.frame entered before
+rootCaller : Caller (bits + 2) := SourcePruningEnumerationSelectedValueCaller.advance caller heap
+visit : Edge →
+  Caller (bits + 2) →
+    Queries → Cached → NativeContinuations.Result (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2) :=
+  fun edge reached saved captured =>
+    SourcePruningEnumerationSharedChildVisitors.visitCapturedWith child hook workFuel target scs edge reached saved
+      captured
+⊢ (([Except.ok ((target, handle, scs, decoded), entered)],
+        some (MergedSourceComparison.Result.done (Value.node entry rows ordinaryDepth free) heap)),
+      some
+        (scan (SourcePruningEnumerationSharedChildVisitors.visitCapturedWith child hook workFuel target scs)
+          (EnumerationExpandableIndex.frame entered before) (edgesOf (Value.node entry rows ordinaryDepth free))
+          (SourcePruningEnumerationSelectedValueCaller.advance caller heap) queries)) =
+    (([Except.ok ((target, handle, scs, decoded), entered)],
+        some (MergedSourceComparison.Result.done (Value.node entry rows ordinaryDepth free) heap)),
+      some (scan visit rootBefore (edgesOf (Value.node entry rows ordinaryDepth free)) rootCaller queries))
+'MicroCFTA.SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.real_prepared_eager_captured_output_origin' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,8 @@
+theorem visit_selected_output_block_origin
+    (visit : Visitor) (blocks : ∀ incoming, CallbackBlocksAt visit incoming)
+    (consume : Receipt width → Result Output Reason width)
+    (scs : List Suspended) (edge : Edge) (caller : Caller width) (before : Cached) (queries : Queries)
+    (index : Nat) (output : Output)
+    (observed : (outputs (visitSelected visit consume scs edge caller before queries))[index]? = some output) :
+    ∃ receipt, OutputBlock (outputs (visitSelected visit consume scs edge caller before queries))
+      (outputs (consume receipt)) index output

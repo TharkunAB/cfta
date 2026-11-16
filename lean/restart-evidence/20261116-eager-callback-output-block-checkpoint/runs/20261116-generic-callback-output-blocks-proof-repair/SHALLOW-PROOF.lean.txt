@@ -1,0 +1,39 @@
+ := by
+  intro scs caller before queries done stopped index output observed
+  cases actual : ChildDispatch.run checkEmpty r n p h k scs incoming caller before queries with
+  | mk observation candidate =>
+      rcases observation with ⟨raw, reached, saved, outer, waiting⟩
+      cases raw with
+      | error fault =>
+          simp only [shallowVisit, actual] at observed ⊢
+          exact Or.inr ⟨_, _, OutputBlock.refl _ index output observed⟩
+      | ok possible =>
+          cases possible with
+          | none =>
+              simp only [shallowVisit, actual] at observed ⊢
+              exact Or.inr ⟨_, _, OutputBlock.refl _ index output observed⟩
+          | some results =>
+              cases results with
+              | nil =>
+                  simp only [shallowVisit, actual] at observed ⊢
+                  exact Or.inr ⟨_, _, OutputBlock.refl _ index output observed⟩
+              | cons first rest =>
+                  cases first with
+                  | error fault =>
+                      simp only [shallowVisit, actual] at observed ⊢
+                      exact Or.inr ⟨_, _, OutputBlock.refl _ index output observed⟩
+                  | ok payload =>
+                      rcases payload with ⟨fragment, returned⟩
+                      cases rest with
+                      | cons second tail =>
+                          simp only [shallowVisit, actual] at observed ⊢
+                          exact Or.inr ⟨_, _, OutputBlock.refl _ index output observed⟩
+                      | nil =>
+                          cases candidate with
+                          | none =>
+                              simp only [shallowVisit, actual] at observed ⊢
+                              exact Or.inr ⟨_, _, OutputBlock.refl _ index output observed⟩
+                          | some after =>
+                              simp only [shallowVisit, actual] at observed ⊢
+                              exact Or.inl ⟨fragment, reached, saved, after,
+                                OutputBlock.refl _ index output observed⟩

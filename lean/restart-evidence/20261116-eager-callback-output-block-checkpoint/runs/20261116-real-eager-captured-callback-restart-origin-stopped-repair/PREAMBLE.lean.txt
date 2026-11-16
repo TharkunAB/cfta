@@ -1,0 +1,26 @@
+import MicroCFTA.SourcePruningEnumerationSharedEagerOutputBlocks
+import MicroCFTA.SourcePruningEnumerationSharedPreparedLiveRoot
+import MicroCFTA.SourcePruningEnumerationSharedOutputOrigin
+import MicroCFTA.SourcePruningEnumerationSharedPreparedRecursiveChildPolicy
+import MicroCFTA.SourcePruningOuterNarrow
+
+namespace MicroCFTA.SourcePruningEnumerationSharedPreparedRecursiveChildPolicy
+open EnumerationState InternedConstructorTemplates
+open SourcePruningEnumerationSharedSelectedContinuations
+open SourcePruningEnumerationSharedPreparedRecursive (Output Failure emitted)
+open SourcePruningEnumerationSharedChildVisitors (visitSelected)
+open SourcePruningEnumerationSharedScanOutputOrigins (outputs)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Edge" => EdgeValue Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Core" => EnumerationState.State Symbol Constraint
+variable {Typing Key : Type} {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+set_option autoImplicit false
+
+omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node] in

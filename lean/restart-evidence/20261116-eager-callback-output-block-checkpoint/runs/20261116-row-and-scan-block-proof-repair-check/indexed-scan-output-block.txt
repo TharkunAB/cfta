@@ -1,0 +1,37 @@
+MicroCFTA.SourcePruningEnumerationSharedScanOutputOrigins.scan_output_block_origin.{u, v} {width : Nat}
+  {Output : Type u} {Reason : Type v}
+  (visit :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      MicroCFTA.SourceCurrentAllocatedPartialState.State width →
+        MicroCFTA.SourceEndpointMemo.Memos →
+          MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+            MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result Output Reason
+              width)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (edges :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width) (queries : MicroCFTA.SourceEndpointMemo.Memos)
+  (index : Nat) (output : Output)
+  (observed :
+    (MicroCFTA.SourcePruningEnumerationSharedScanOutputOrigins.outputs
+          (MicroCFTA.SourcePruningEnumerationSharedBranching.scan visit before edges caller queries))[index]? =
+      some output) :
+  ∃ attempted edge remaining rowCaller rowQueries processed earlier rowResult localIndex later,
+    edges = attempted ++ edge :: remaining ∧
+      MicroCFTA.SourcePruningEnumerationSharedBranching.scan visit before attempted caller queries =
+          MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.complete processed
+            earlier rowCaller rowQueries ∧
+        visit edge rowCaller rowQueries before = rowResult ∧
+          (MicroCFTA.SourcePruningEnumerationSharedScanOutputOrigins.outputs rowResult)[localIndex]? = some output ∧
+            index = earlier.length + localIndex ∧
+              MicroCFTA.SourcePruningEnumerationSharedScanOutputOrigins.outputs
+                  (MicroCFTA.SourcePruningEnumerationSharedBranching.scan visit before edges caller queries) =
+                earlier ++ MicroCFTA.SourcePruningEnumerationSharedScanOutputOrigins.outputs rowResult ++ later
+'MicroCFTA.SourcePruningEnumerationSharedScanOutputOrigins.scan_output_block_origin' depends on axioms: [propext,
+ Quot.sound]

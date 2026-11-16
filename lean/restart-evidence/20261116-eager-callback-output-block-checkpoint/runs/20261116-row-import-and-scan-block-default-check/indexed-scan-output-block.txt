@@ -1,0 +1,139 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-row-import-and-scan-block-default-check/source/MicroCFTA/SourcePruningEnumerationSharedScanOutputBlocks.lean:42:73: error: Tactic `rfl` failed: The left-hand side
+  outputs
+    (match Result.complete processed earlier rowCaller rowQueries with
+    | Result.stopped processed outputs current => Result.stopped processed outputs current
+    | Result.complete processed outputs reached saved =>
+      match scan visit before (edge :: remaining) reached saved with
+      | Result.complete later more finalCaller finalQueries =>
+        Result.complete (processed ++ later) (outputs ++ more) finalCaller finalQueries
+      | Result.stopped later more current => Result.stopped (processed ++ later) (outputs ++ more) current)
+is not definitionally equal to the right-hand side
+  earlier ++ outputs (Result.complete processed✝ outputs✝ caller✝ queries✝)
+
+case complete
+width : Nat
+Output : Type u
+Reason : Type v
+visit : Edge → Caller width → Queries → Cached → Result Output Reason width
+before : Cached
+edges : List Edge
+caller : Caller width
+queries : Queries
+index : Nat
+output : Output
+observed : (outputs (scan visit before edges caller queries))[index]? = some output
+attempted : List Edge
+edge : Edge
+remaining : List Edge
+rowCaller : Caller width
+rowQueries : Queries
+processed : List (SelectedEdge.Result width)
+earlier : List Output
+rowResult : Result Output Reason width
+localIndex : Nat
+order : edges = attempted ++ edge :: remaining
+prefixRun : scan visit before attempted caller queries = Result.complete processed earlier rowCaller rowQueries
+row : visit edge rowCaller rowQueries before = rowResult
+selected : (outputs rowResult)[localIndex]? = some output
+offset : index = earlier.length + localIndex
+processed✝ : List (SelectedEdge.Result width)
+outputs✝ : List Output
+caller✝ : Caller width
+queries✝ : Queries
+⊢ outputs
+      (match Result.complete processed earlier rowCaller rowQueries with
+      | Result.stopped processed outputs current => Result.stopped processed outputs current
+      | Result.complete processed outputs reached saved =>
+        match scan visit before (edge :: remaining) reached saved with
+        | Result.complete later more finalCaller finalQueries =>
+          Result.complete (processed ++ later) (outputs ++ more) finalCaller finalQueries
+        | Result.stopped later more current => Result.stopped (processed ++ later) (outputs ++ more) current) =
+    earlier ++ outputs (Result.complete processed✝ outputs✝ caller✝ queries✝)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-row-import-and-scan-block-default-check/source/MicroCFTA/SourcePruningEnumerationSharedScanOutputBlocks.lean:42:73: error: Tactic `rfl` failed: The left-hand side
+  outputs
+    (match Result.complete processed earlier rowCaller rowQueries with
+    | Result.stopped processed outputs current => Result.stopped processed outputs current
+    | Result.complete processed outputs reached saved =>
+      match scan visit before (edge :: remaining) reached saved with
+      | Result.complete later more finalCaller finalQueries =>
+        Result.complete (processed ++ later) (outputs ++ more) finalCaller finalQueries
+      | Result.stopped later more current => Result.stopped (processed ++ later) (outputs ++ more) current)
+is not definitionally equal to the right-hand side
+  earlier ++ outputs (Result.stopped processed✝ outputs✝ current✝)
+
+case stopped
+width : Nat
+Output : Type u
+Reason : Type v
+visit : Edge → Caller width → Queries → Cached → Result Output Reason width
+before : Cached
+edges : List Edge
+caller : Caller width
+queries : Queries
+index : Nat
+output : Output
+observed : (outputs (scan visit before edges caller queries))[index]? = some output
+attempted : List Edge
+edge : Edge
+remaining : List Edge
+rowCaller : Caller width
+rowQueries : Queries
+processed : List (SelectedEdge.Result width)
+earlier : List Output
+rowResult : Result Output Reason width
+localIndex : Nat
+order : edges = attempted ++ edge :: remaining
+prefixRun : scan visit before attempted caller queries = Result.complete processed earlier rowCaller rowQueries
+row : visit edge rowCaller rowQueries before = rowResult
+selected : (outputs rowResult)[localIndex]? = some output
+offset : index = earlier.length + localIndex
+processed✝ : List (SelectedEdge.Result width)
+outputs✝ : List Output
+current✝ : NativeContinuations.Stop Reason width
+⊢ outputs
+      (match Result.complete processed earlier rowCaller rowQueries with
+      | Result.stopped processed outputs current => Result.stopped processed outputs current
+      | Result.complete processed outputs reached saved =>
+        match scan visit before (edge :: remaining) reached saved with
+        | Result.complete later more finalCaller finalQueries =>
+          Result.complete (processed ++ later) (outputs ++ more) finalCaller finalQueries
+        | Result.stopped later more current => Result.stopped (processed ++ later) (outputs ++ more) current) =
+    earlier ++ outputs (Result.stopped processed✝ outputs✝ current✝)
+MicroCFTA.SourcePruningEnumerationSharedScanOutputOrigins.scan_output_block_origin.{u, v} {width : Nat}
+  {Output : Type u} {Reason : Type v}
+  (visit :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      MicroCFTA.SourceCurrentAllocatedPartialState.State width →
+        MicroCFTA.SourceEndpointMemo.Memos →
+          MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+            MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result Output Reason
+              width)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (edges :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width) (queries : MicroCFTA.SourceEndpointMemo.Memos)
+  (index : Nat) (output : Output)
+  (observed :
+    (MicroCFTA.SourcePruningEnumerationSharedScanOutputOrigins.outputs
+          (MicroCFTA.SourcePruningEnumerationSharedBranching.scan visit before edges caller queries))[index]? =
+      some output) :
+  ∃ attempted edge remaining rowCaller rowQueries processed earlier rowResult localIndex later,
+    edges = attempted ++ edge :: remaining ∧
+      MicroCFTA.SourcePruningEnumerationSharedBranching.scan visit before attempted caller queries =
+          MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result.complete processed
+            earlier rowCaller rowQueries ∧
+        visit edge rowCaller rowQueries before = rowResult ∧
+          (MicroCFTA.SourcePruningEnumerationSharedScanOutputOrigins.outputs rowResult)[localIndex]? = some output ∧
+            index = earlier.length + localIndex ∧
+              MicroCFTA.SourcePruningEnumerationSharedScanOutputOrigins.outputs
+                  (MicroCFTA.SourcePruningEnumerationSharedBranching.scan visit before edges caller queries) =
+                earlier ++ MicroCFTA.SourcePruningEnumerationSharedScanOutputOrigins.outputs rowResult ++ later
+'MicroCFTA.SourcePruningEnumerationSharedScanOutputOrigins.scan_output_block_origin' depends on axioms: [propext,
+ sorryAx,
+ Quot.sound]

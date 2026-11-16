@@ -1,0 +1,100 @@
+import MicroCFTA.SourcePruningEnumerationSharedCallbackOutputBlocks
+import MicroCFTA.SourcePruningEnumerationSharedScanOutputBlocks
+
+namespace MicroCFTA.SourcePruningEnumerationSharedCallbackOutputBlocks
+open EnumerationState InternedConstructorTemplates
+open SourcePruningEnumerationSharedSelectedContinuations
+open SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations (Result)
+open SourcePruningEnumerationSharedChildVisitors (visitSelected shallowVisit)
+open SourcePruningEnumerationSharedEagerChildren (eagerChild consumeSelected ordinaryNonterminal)
+open SourcePruningEnumerationSharedBranching (scan)
+open SourcePruningEnumerationSharedScanOutputOrigins (outputs scan_output_block_origin)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Edge" => EdgeValue Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Observation" => ChildDispatch.Observation
+universe u v
+variable {width : Nat} {Output : Type u} {Reason : Type v}
+local notation "Visitor" => List Suspended → Node → Caller width → Cached → Queries →
+  (Fragment → Caller width → Queries → Cached → Result Output Reason width) →
+  (Observation width → Option Cached → Result Output Reason width) → Result Output Reason width
+set_option autoImplicit false
+
+theorem eager_child_callback_blocks
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List Edge) (incoming : Node) :
+    CallbackBlocksAt (width := width) (Output := Output) (Reason := Reason) (eagerChild checkEmpty r n p h k edgesOf) incoming := by
+  have allHeights : ∀ bound, ∀ (value : Node), MergedOrdinaryHeight.height value = bound →
+      CallbackBlocksAt (width := width) (Output := Output) (Reason := Reason)
+        (eagerChild checkEmpty r n p h k edgesOf) value := by
+    intro bound
+    induction bound using Nat.strongRecOn with
+    | ind bound ih =>
+      intro value heightSame scs caller before queries done stopped index output observed
+      cases ordinary : ordinaryNonterminal scs value with
+      | false =>
+          have route := SourcePruningEnumerationSharedEagerChildren.eagerChild_fallback
+            checkEmpty r n p h k edgesOf scs value caller before queries done stopped ordinary
+          rw [route] at observed ⊢
+          exact shallow_visit_callback_blocks checkEmpty r n p h k value
+            scs caller before queries done stopped index output observed
+      | true =>
+          have route := SourcePruningEnumerationSharedEagerChildren.eagerChild_ordinary
+            checkEmpty r n p h k edgesOf scs value caller before queries done stopped ordinary
+          rw [route] at observed ⊢
+          let child : Visitor := fun bucket candidate current cache saved yes no =>
+            if _lower : MergedOrdinaryHeight.height candidate < MergedOrdinaryHeight.height value then
+              eagerChild checkEmpty r n p h k edgesOf bucket candidate current cache saved yes no
+            else shallowVisit checkEmpty r n p h k bucket candidate current cache saved yes no
+          have childBlocks : ∀ candidate, CallbackBlocksAt child candidate := by
+            intro candidate
+            by_cases lower : MergedOrdinaryHeight.height candidate < MergedOrdinaryHeight.height value
+            · have smaller : MergedOrdinaryHeight.height candidate < bound := by
+                rw [← heightSame]
+                exact lower
+              simpa only [CallbackBlocksAt, child, dite_eq_left lower] using
+                ih (MergedOrdinaryHeight.height candidate) smaller candidate rfl
+            · simpa only [CallbackBlocksAt, child, dite_eq_right lower] using
+                (shallow_visit_callback_blocks (width := width) (Output := Output) (Reason := Reason)
+                  checkEmpty r n p h k candidate)
+          let visit := fun edge reached saved captured =>
+            visitSelected child (consumeSelected done reached saved) scs edge reached captured saved
+          change (outputs (scan visit before (edgesOf value) caller queries))[index]? = some output at observed
+          obtain ⟨attempted, edge, remaining, rowCaller, rowQueries, processed, earlier,
+              rowResult, localIndex, later, _order, _prefix, rowRun, found, offset, decomposition⟩ :=
+            scan_output_block_origin visit before (edgesOf value) caller queries index output observed
+          have inRow : (outputs (visitSelected child (consumeSelected done rowCaller rowQueries)
+              scs edge rowCaller before rowQueries))[localIndex]? = some output := by
+            change (outputs (visit edge rowCaller rowQueries before))[localIndex]? = some output
+            rw [rowRun]
+            exact found
+          obtain ⟨receipt, rowBlock⟩ := visit_selected_output_block_origin child childBlocks
+            (consumeSelected done rowCaller rowQueries) scs edge rowCaller before rowQueries
+            localIndex output inRow
+          have contained : OutputBlock (outputs rowResult)
+              (outputs (consumeSelected done rowCaller rowQueries receipt)) localIndex output := by
+            rw [← rowRun]
+            exact rowBlock
+          obtain ⟨beforeReceipt, afterReceipt, receiptIndex, rowDecomposition,
+              receiptFound, receiptOffset⟩ := contained
+          obtain ⟨fragment, reached, saved, after, _receiptSame, completed⟩ :=
+            consume_selected_output_block_origin done rowCaller rowQueries receipt receiptIndex output receiptFound
+          have inWholeRow : OutputBlock (outputs rowResult)
+              (outputs (done fragment reached saved after)) localIndex output :=
+            OutputBlock.wrap _ _ _ beforeReceipt afterReceipt localIndex receiptIndex output
+              rowDecomposition receiptOffset completed
+          apply Or.inl
+          refine ⟨fragment, reached, saved, after, ?_⟩
+          exact OutputBlock.wrap _ _ _ earlier later index localIndex output
+            decomposition offset inWholeRow
+  exact allHeights (MergedOrdinaryHeight.height incoming) incoming rfl
+
+end MicroCFTA.SourcePruningEnumerationSharedCallbackOutputBlocks
+
+#check @MicroCFTA.SourcePruningEnumerationSharedCallbackOutputBlocks.eager_child_callback_blocks
+#print axioms MicroCFTA.SourcePruningEnumerationSharedCallbackOutputBlocks.eager_child_callback_blocks

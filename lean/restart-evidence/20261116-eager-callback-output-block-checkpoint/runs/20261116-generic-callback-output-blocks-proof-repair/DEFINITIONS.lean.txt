@@ -1,0 +1,19 @@
+/-- A callback contributes its whole output block at the original indexed occurrence. -/
+def OutputBlock (whole block : List Output) (index : Nat) (output : Output) : Prop :=
+  ∃ (earlier later : List Output) (localIndex : Nat),
+    whole = earlier ++ block ++ later ∧ block[localIndex]? = some output ∧
+      index = earlier.length + localIndex
+
+/-- A fixed child visitor emits only whole blocks from its actual continuations. -/
+def CallbackBlocksAt (visit : Visitor) (incoming : Node) : Prop :=
+  ∀ (scs : List Suspended) (caller : Caller width) (before : Cached) (queries : Queries)
+      (done : Fragment → Caller width → Queries → Cached → Result Output Reason width)
+      (stopped : Observation width → Option Cached → Result Output Reason width)
+      (index : Nat) (output : Output),
+    (outputs (visit scs incoming caller before queries done stopped))[index]? = some output →
+    (∃ (fragment : Fragment) (reached : Caller width) (saved : Queries) (after : Cached),
+      OutputBlock (outputs (visit scs incoming caller before queries done stopped))
+        (outputs (done fragment reached saved after)) index output) ∨
+    (∃ (observation : Observation width) (candidate : Option Cached),
+      OutputBlock (outputs (visit scs incoming caller before queries done stopped))
+        (outputs (stopped observation candidate)) index output)

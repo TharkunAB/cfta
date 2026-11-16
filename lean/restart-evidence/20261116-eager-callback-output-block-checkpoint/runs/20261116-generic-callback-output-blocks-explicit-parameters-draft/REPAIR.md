@@ -1,0 +1,1 @@
+Header-only explicit-parameter repair. The original draft remains immutable. Shallow CallbackBlocksAt now pins the existing implicit width, Output and Reason section parameters. No proposition or premise changes. All other headers and both predicates are byte-exact. No compiler was run.

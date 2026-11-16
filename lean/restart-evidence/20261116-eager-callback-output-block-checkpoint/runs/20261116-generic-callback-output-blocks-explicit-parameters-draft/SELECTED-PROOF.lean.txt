@@ -1,0 +1,30 @@
+ := by
+  cases prepared : SourcePruningEnumerationCachedOwn.prepare
+      caller.checked.native.machine.heap scs edge before with
+  | none =>
+      simp only [visitSelected, prepared] at observed ⊢
+      exact ⟨.unhandled, OutputBlock.refl _ index output observed⟩
+  | some rows =>
+      cases rows with
+      | nil =>
+          simp only [visitSelected, prepared] at observed ⊢
+          exact ⟨.rejected caller queries before, OutputBlock.refl _ index output observed⟩
+      | cons row rest =>
+          cases rest with
+          | cons second tail =>
+              simp only [visitSelected, prepared] at observed ⊢
+              exact ⟨.unhandled, OutputBlock.refl _ index output observed⟩
+          | nil =>
+              rcases row with ⟨⟨symbol, staged, residual⟩, middle⟩
+              simp only [visitSelected, prepared] at observed ⊢
+              have selected := visit_children_output_block_origin visit blocks
+                (fun fragments reached saved after => consume (.complete (.node symbol fragments)
+                  reached saved (SelectedEdge.finish residual (.node symbol fragments) after)))
+                (fun completed observation candidate => consume (.stopped completed observation candidate))
+                (staged.map (fun input => (input.1, input.2.1))) caller middle queries index output observed
+              rcases selected with completed | interrupted
+              · obtain ⟨fragments, reached, saved, after, block⟩ := completed
+                exact ⟨.complete (.node symbol fragments) reached saved
+                  (SelectedEdge.finish residual (.node symbol fragments) after), block⟩
+              · obtain ⟨fragments, observation, candidate, block⟩ := interrupted
+                exact ⟨.stopped fragments observation candidate, block⟩

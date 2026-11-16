@@ -1,0 +1,16 @@
+/-- Each indexed output belongs to one full row-output block in the actual scan. -/
+theorem scan_output_block_origin
+    (visit : Edge → Caller width → Queries → Cached → Result Output Reason width)
+    (before : Cached) (edges : List Edge) (caller : Caller width) (queries : Queries)
+    (index : Nat) (output : Output)
+    (observed : (outputs (scan visit before edges caller queries))[index]? = some output) :
+    ∃ (attempted : List Edge) (edge : Edge) (remaining : List Edge)
+        (rowCaller : Caller width) (rowQueries : Queries)
+        (processed : List (SelectedEdge.Result width)) (earlier : List Output)
+        (rowResult : Result Output Reason width) (localIndex : Nat) (later : List Output),
+      edges = attempted ++ edge :: remaining ∧
+      scan visit before attempted caller queries = .complete processed earlier rowCaller rowQueries ∧
+      visit edge rowCaller rowQueries before = rowResult ∧
+      (outputs rowResult)[localIndex]? = some output ∧
+      index = earlier.length + localIndex ∧
+      outputs (scan visit before edges caller queries) = earlier ++ outputs rowResult ++ later

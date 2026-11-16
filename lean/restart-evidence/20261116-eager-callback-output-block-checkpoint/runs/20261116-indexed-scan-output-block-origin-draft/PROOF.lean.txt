@@ -1,0 +1,24 @@
+ := by
+  obtain ⟨attempted, edge, remaining, rowCaller, rowQueries, processed, earlier,
+    rowResult, localIndex, order, prefixRun, row, selected, offset⟩ :=
+    scan_output_origin visit before edges caller queries index output observed
+  have whole : outputs (scan visit before edges caller queries) =
+      earlier ++ outputs (scan visit before (edge :: remaining) rowCaller rowQueries) := by
+    rw [order, scan_append, prefixRun]
+    cases scan visit before (edge :: remaining) rowCaller rowQueries <;> rfl
+  cases rowResult with
+  | stopped rowProcessed rowOutputs currentStop =>
+      refine ⟨attempted, edge, remaining, rowCaller, rowQueries, processed, earlier,
+        .stopped rowProcessed rowOutputs currentStop, localIndex, [],
+        order, prefixRun, row, selected, offset, ?_⟩
+      rw [whole]
+      simp only [scan, row, outputs, List.append_nil]
+  | complete rowProcessed rowOutputs reached saved =>
+      refine ⟨attempted, edge, remaining, rowCaller, rowQueries, processed, earlier,
+        .complete rowProcessed rowOutputs reached saved, localIndex,
+        outputs (scan visit before remaining reached saved),
+        order, prefixRun, row, selected, offset, ?_⟩
+      rw [whole]
+      simp only [scan, row]
+      cases scan visit before remaining reached saved <;>
+        simp only [outputs, List.append_assoc]

@@ -1,0 +1,9 @@
+theorem consume_selected_output_block_origin
+    (done : Fragment → Caller width → Queries → Cached → Result Output Reason width)
+    (caller : Caller width) (queries : Queries) (receipt : Receipt width)
+    (index : Nat) (output : Output)
+    (observed : (outputs (consumeSelected done caller queries receipt))[index]? = some output) :
+    ∃ (fragment : Fragment) (reached : Caller width) (saved : Queries) (after : Cached),
+      receipt = .complete fragment reached saved after ∧
+      OutputBlock (outputs (consumeSelected done caller queries receipt))
+        (outputs (done fragment reached saved after)) index output

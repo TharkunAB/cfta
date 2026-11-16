@@ -1,0 +1,88 @@
+ := by
+  dsimp only
+  intro observedOutput
+  let child := SourcePruningEnumerationSharedEagerChildren.eagerChild
+    (width := bits + 2) (Output := Output (bits + 2) Typing) (Reason := Failure (bits + 2) Typing)
+    checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf
+  let recur := resumeWithNarrow child (SourcePruningOuterNarrow.narrow holeKey fits admits)
+    graph templates checkEmpty edgesOf stop order workFuel recursiveDepth
+  let hook := SourcePruningEnumerationSharedPreparedRecursive.continueWith recur
+    graph templates stop order workFuel metadata uv
+  let actual := SourcePruningEnumerationSharedChildVisitors.visitCapturedWith child hook
+    workFuel target scs edge caller queries before
+  let consume : SelectedEdge.Result (bits + 2) →
+      NativeContinuations.Result (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2) :=
+    fun receipt => match receipt with
+    | .complete fragment reached saved after =>
+        match SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap workFuel target fragment after with
+        | some finished => SourcePruningEnumerationSharedReceiptContinuation.run hook caller queries
+            (some (.complete fragment reached saved finished))
+        | none => SourcePruningEnumerationSharedReceiptContinuation.run hook caller queries
+            (some (.finalizeStopped fragment reached saved after))
+    | other => SourcePruningEnumerationSharedReceiptContinuation.run hook caller queries (some other)
+  have actualEq : actual = visitSelected child consume scs edge caller before queries :=
+    SourcePruningEnumerationSharedChildVisitors.visitCapturedWith_eq_receipts
+      child hook workFuel target scs edge caller queries before
+  change (outputs actual)[index]? = some output at observedOutput
+  rw [actualEq] at observedOutput
+  obtain ⟨receipt, block⟩ :=
+    SourcePruningEnumerationSharedCallbackOutputBlocks.visit_selected_output_block_origin child
+      (SourcePruningEnumerationSharedCallbackOutputBlocks.eager_child_callback_blocks
+        checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
+      consume scs edge caller before queries index output observedOutput
+  obtain ⟨earlier, later, localIndex, whole, hit, offset⟩ := block
+  cases receipt with
+  | complete fragment reached saved beforeFinalize =>
+    cases finalized : SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap
+        workFuel target fragment beforeFinalize with
+    | none =>
+      have consumed : consume (.complete fragment reached saved beforeFinalize) =
+          .stopped [] [] (.edge (some (.finalizeStopped fragment reached saved beforeFinalize)) (reached, saved)) := by
+        simpa only [consume, finalized] using
+          SourcePruningEnumerationSharedReceiptContinuation.finalize_stopped
+            hook caller reached queries saved fragment beforeFinalize
+      have empty : outputs (consume (.complete fragment reached saved beforeFinalize)) = [] :=
+        congrArg outputs consumed
+      rw [empty] at hit
+      cases hit
+    | some finished =>
+      have consumed : consume (.complete fragment reached saved beforeFinalize) =
+          SourcePruningEnumerationSharedReceiptContinuation.run hook caller queries
+            (some (.complete fragment reached saved finished)) := by
+        simp only [consume, finalized]
+      have receiptHit := hit
+      rw [consumed] at receiptHit
+      obtain ⟨updated, callbackCore, recorded, receiptOutputs, resumedHit⟩ :=
+        completed_callback_restart_origin recur graph templates stop order workFuel uv metadata
+          caller reached queries saved fragment finished localIndex output receiptHit
+      refine ⟨fragment, reached, saved, beforeFinalize, finished, updated, callbackCore,
+        earlier, later, localIndex, finalized, recorded, ?_, resumedHit, offset⟩
+      calc
+        outputs actual = outputs (visitSelected child consume scs edge caller before queries) := congrArg outputs actualEq
+        _ = earlier ++ outputs (consume (.complete fragment reached saved beforeFinalize)) ++ later := whole
+        _ = earlier ++ emitted (recur updated reached saved (EnumerationExpandableIndex.frame callbackCore finished)
+            (SourcePruningEnumerationRestart.decision stop order updated
+              (EnumerationExpandableIndex.frame callbackCore finished))) ++ later := by
+          rw [consumed, receiptOutputs]
+  | unhandled =>
+    change ([] : List (Output (bits + 2) Typing))[localIndex]? = some output at hit
+    cases hit
+  | rejected reached saved after =>
+    change ([] : List (Output (bits + 2) Typing))[localIndex]? = some output at hit
+    cases hit
+  | finalizeStopped fragment reached saved after =>
+    change ([] : List (Output (bits + 2) Typing))[localIndex]? = some output at hit
+    cases hit
+  | stopped completed observation candidate =>
+    have empty : outputs (SourcePruningEnumerationSharedReceiptContinuation.run hook caller queries
+        (some (.stopped completed observation candidate))) = [] := by
+      unfold SourcePruningEnumerationSharedReceiptContinuation.run
+      cases advanced : NativeContinuations.advance (.stopped completed observation candidate) with
+      | none => rfl
+      | some endpoint =>
+        rcases endpoint with ⟨reached, saved⟩
+        rfl
+    change (outputs (SourcePruningEnumerationSharedReceiptContinuation.run hook caller queries
+      (some (.stopped completed observation candidate))))[localIndex]? = some output at hit
+    rw [empty] at hit
+    cases hit

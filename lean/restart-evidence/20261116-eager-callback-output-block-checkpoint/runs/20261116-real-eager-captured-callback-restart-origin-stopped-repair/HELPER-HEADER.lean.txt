@@ -1,0 +1,24 @@
+private theorem completed_callback_restart_origin
+    (recur : Metadata Typing → Caller (bits + 2) → Queries → Cached → Option Next →
+      NativeContinuations.HookResult (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2))
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (workFuel uv : Nat) (metadata : Metadata Typing)
+    (caller reached : Caller (bits + 2)) (queries saved : Queries)
+    (fragment : Fragments.Fragment Symbol) (finished : Cached) (index : Nat)
+    (output : Output (bits + 2) Typing)
+    (observed : (outputs (SourcePruningEnumerationSharedReceiptContinuation.run
+      (SourcePruningEnumerationSharedPreparedRecursive.continueWith recur
+        graph templates stop order workFuel metadata uv)
+      caller queries (some (.complete fragment reached saved finished))))[index]? = some output) :
+    ∃ (updated : Metadata Typing) (callbackCore : Core),
+      ExceptT.run (SourcePruningRecordTypes.recordTypes graph templates workFuel metadata uv
+        (.inl fragment) finished.core) = [.ok ((false, updated), callbackCore)] ∧
+      let resumed := recur updated reached saved (EnumerationExpandableIndex.frame callbackCore finished)
+        (SourcePruningEnumerationRestart.decision stop order updated
+          (EnumerationExpandableIndex.frame callbackCore finished))
+      outputs (SourcePruningEnumerationSharedReceiptContinuation.run
+        (SourcePruningEnumerationSharedPreparedRecursive.continueWith recur
+          graph templates stop order workFuel metadata uv)
+        caller queries (some (.complete fragment reached saved finished))) = emitted resumed ∧
+      (emitted resumed)[index]? = some output

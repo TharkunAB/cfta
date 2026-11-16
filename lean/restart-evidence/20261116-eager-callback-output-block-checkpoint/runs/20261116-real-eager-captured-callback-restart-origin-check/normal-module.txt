@@ -1,0 +1,255 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-real-eager-captured-callback-restart-origin-check/source/MicroCFTA/SourcePruningEnumerationRealEagerCapturedCallbackOrigin.lean:26:8: error: automatically included section variable(s) unused in theorem `_private.MicroCFTA.SourcePruningEnumerationRealEagerCapturedCallbackOrigin.0.MicroCFTA.SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.completed_callback_restart_origin`:
+  [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Constraint)]
+  [DecidableEq Node]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-real-eager-captured-callback-restart-origin-check/source/MicroCFTA/SourcePruningEnumerationRealEagerCapturedCallbackOrigin.lean:190:16: error: Tactic `rfl` failed: The left-hand side
+  outputs
+    (match some (SelectedEdge.Result.stopped completed observation candidate) with
+    | none => NativeContinuations.Result.stopped [] [] (NativeContinuations.Stop.edge none (caller, queries))
+    | some receipt =>
+      match receipt with
+      | SelectedEdge.Result.complete fragment reached saved after =>
+        match hook fragment reached saved after with
+        | NativeContinuations.HookResult.complete outputs actual returned =>
+          NativeContinuations.Result.complete [receipt] outputs actual returned
+        | NativeContinuations.HookResult.stopped outputs reason actual =>
+          NativeContinuations.Result.stopped [] outputs (NativeContinuations.Stop.continuation receipt reason actual)
+      | other =>
+        match NativeContinuations.advance other with
+        | none =>
+          NativeContinuations.Result.stopped [] []
+            (NativeContinuations.Stop.edge (some other) (NativeContinuations.endpoint other caller queries))
+        | some (reached, saved) => NativeContinuations.Result.complete [other] [] reached saved)
+is not definitionally equal to the right-hand side
+  []
+
+case none
+Typing Key : Type
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+checkEmpty : Bool
+edgesOf : Node → List Edge
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+workFuel recursiveDepth uv target : Nat
+metadata : Metadata Typing
+scs : List Suspended
+edge : Edge
+caller : Caller (bits + 2)
+queries : Queries
+before : Cached
+index : Nat
+output : Output (bits + 2) Typing
+child : List Suspended →
+  Node →
+    Caller (bits + 2) →
+      Cached →
+        Queries →
+          (Fragments.Fragment Symbol →
+              Caller (bits + 2) →
+                Queries →
+                  Cached →
+                    NativeContinuations.Result (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2)) →
+            (ChildDispatch.Observation (bits + 2) →
+                Option Cached →
+                  NativeContinuations.Result (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2)) →
+              NativeContinuations.Result (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2) :=
+  SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf
+recur : Metadata Typing →
+  Caller (bits + 2) →
+    Queries →
+      Cached →
+        Option Next →
+          NativeContinuations.HookResult (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2) :=
+  resumeWithNarrow child (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop
+    order workFuel recursiveDepth
+hook : Fragments.Fragment Symbol →
+  Caller (bits + 2) →
+    Queries →
+      Cached → NativeContinuations.HookResult (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2) :=
+  SourcePruningEnumerationSharedPreparedRecursive.continueWith recur graph templates stop order workFuel metadata uv
+actual : NativeContinuations.Result (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2) :=
+  SourcePruningEnumerationSharedChildVisitors.visitCapturedWith child hook workFuel target scs edge caller queries
+    before
+consume : SelectedEdge.Result (bits + 2) →
+  NativeContinuations.Result (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2) :=
+  fun receipt =>
+    match receipt with
+    | SelectedEdge.Result.complete fragment reached saved after =>
+      match SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap workFuel target fragment after with
+      | some finished =>
+        SourcePruningEnumerationSharedReceiptContinuation.run hook caller queries
+          (some (SelectedEdge.Result.complete fragment reached saved finished))
+      | none =>
+        SourcePruningEnumerationSharedReceiptContinuation.run hook caller queries
+          (some (SelectedEdge.Result.finalizeStopped fragment reached saved after))
+    | other => SourcePruningEnumerationSharedReceiptContinuation.run hook caller queries (some other)
+actualEq : actual = visitSelected child consume scs edge caller before queries
+observedOutput : (outputs (visitSelected child consume scs edge caller before queries))[index]? = some output
+earlier later : List (Output (bits + 2) Typing)
+localIndex : Nat
+offset : index = earlier.length + localIndex
+completed : List (Fragments.Fragment Symbol)
+observation : ChildDispatch.Observation (bits + 2)
+candidate : Option Cached
+whole :
+  outputs (visitSelected child consume scs edge caller before queries) =
+    earlier ++ outputs (consume (SelectedEdge.Result.stopped completed observation candidate)) ++ later
+hit : (outputs (consume (SelectedEdge.Result.stopped completed observation candidate)))[localIndex]? = some output
+advanced : NativeContinuations.advance (SelectedEdge.Result.stopped completed observation candidate) = none
+⊢ outputs
+      (match some (SelectedEdge.Result.stopped completed observation candidate) with
+      | none => NativeContinuations.Result.stopped [] [] (NativeContinuations.Stop.edge none (caller, queries))
+      | some receipt =>
+        match receipt with
+        | SelectedEdge.Result.complete fragment reached saved after =>
+          match hook fragment reached saved after with
+          | NativeContinuations.HookResult.complete outputs actual returned =>
+            NativeContinuations.Result.complete [receipt] outputs actual returned
+          | NativeContinuations.HookResult.stopped outputs reason actual =>
+            NativeContinuations.Result.stopped [] outputs (NativeContinuations.Stop.continuation receipt reason actual)
+        | other =>
+          match NativeContinuations.advance other with
+          | none =>
+            NativeContinuations.Result.stopped [] []
+              (NativeContinuations.Stop.edge (some other) (NativeContinuations.endpoint other caller queries))
+          | some (reached, saved) => NativeContinuations.Result.complete [other] [] reached saved) =
+    []
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-real-eager-captured-callback-restart-origin-check/source/MicroCFTA/SourcePruningEnumerationRealEagerCapturedCallbackOrigin.lean:193:8: error: Tactic `rfl` failed: The left-hand side
+  outputs
+    (match some (SelectedEdge.Result.stopped completed observation candidate) with
+    | none => NativeContinuations.Result.stopped [] [] (NativeContinuations.Stop.edge none (caller, queries))
+    | some receipt =>
+      match receipt with
+      | SelectedEdge.Result.complete fragment reached saved after =>
+        match hook fragment reached saved after with
+        | NativeContinuations.HookResult.complete outputs actual returned =>
+          NativeContinuations.Result.complete [receipt] outputs actual returned
+        | NativeContinuations.HookResult.stopped outputs reason actual =>
+          NativeContinuations.Result.stopped [] outputs (NativeContinuations.Stop.continuation receipt reason actual)
+      | other =>
+        match NativeContinuations.advance other with
+        | none =>
+          NativeContinuations.Result.stopped [] []
+            (NativeContinuations.Stop.edge (some other) (NativeContinuations.endpoint other caller queries))
+        | some (reached, saved) => NativeContinuations.Result.complete [other] [] reached saved)
+is not definitionally equal to the right-hand side
+  []
+
+case some
+Typing Key : Type
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+checkEmpty : Bool
+edgesOf : Node → List Edge
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+workFuel recursiveDepth uv target : Nat
+metadata : Metadata Typing
+scs : List Suspended
+edge : Edge
+caller : Caller (bits + 2)
+queries : Queries
+before : Cached
+index : Nat
+output : Output (bits + 2) Typing
+child : List Suspended →
+  Node →
+    Caller (bits + 2) →
+      Cached →
+        Queries →
+          (Fragments.Fragment Symbol →
+              Caller (bits + 2) →
+                Queries →
+                  Cached →
+                    NativeContinuations.Result (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2)) →
+            (ChildDispatch.Observation (bits + 2) →
+                Option Cached →
+                  NativeContinuations.Result (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2)) →
+              NativeContinuations.Result (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2) :=
+  SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf
+recur : Metadata Typing →
+  Caller (bits + 2) →
+    Queries →
+      Cached →
+        Option Next →
+          NativeContinuations.HookResult (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2) :=
+  resumeWithNarrow child (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop
+    order workFuel recursiveDepth
+hook : Fragments.Fragment Symbol →
+  Caller (bits + 2) →
+    Queries →
+      Cached → NativeContinuations.HookResult (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2) :=
+  SourcePruningEnumerationSharedPreparedRecursive.continueWith recur graph templates stop order workFuel metadata uv
+actual : NativeContinuations.Result (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2) :=
+  SourcePruningEnumerationSharedChildVisitors.visitCapturedWith child hook workFuel target scs edge caller queries
+    before
+consume : SelectedEdge.Result (bits + 2) →
+  NativeContinuations.Result (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2) :=
+  fun receipt =>
+    match receipt with
+    | SelectedEdge.Result.complete fragment reached saved after =>
+      match SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap workFuel target fragment after with
+      | some finished =>
+        SourcePruningEnumerationSharedReceiptContinuation.run hook caller queries
+          (some (SelectedEdge.Result.complete fragment reached saved finished))
+      | none =>
+        SourcePruningEnumerationSharedReceiptContinuation.run hook caller queries
+          (some (SelectedEdge.Result.finalizeStopped fragment reached saved after))
+    | other => SourcePruningEnumerationSharedReceiptContinuation.run hook caller queries (some other)
+actualEq : actual = visitSelected child consume scs edge caller before queries
+observedOutput : (outputs (visitSelected child consume scs edge caller before queries))[index]? = some output
+earlier later : List (Output (bits + 2) Typing)
+localIndex : Nat
+offset : index = earlier.length + localIndex
+completed : List (Fragments.Fragment Symbol)
+observation : ChildDispatch.Observation (bits + 2)
+candidate : Option Cached
+whole :
+  outputs (visitSelected child consume scs edge caller before queries) =
+    earlier ++ outputs (consume (SelectedEdge.Result.stopped completed observation candidate)) ++ later
+hit : (outputs (consume (SelectedEdge.Result.stopped completed observation candidate)))[localIndex]? = some output
+reached : Caller (bits + 2)
+saved : Queries
+advanced :
+  NativeContinuations.advance (SelectedEdge.Result.stopped completed observation candidate) = some (reached, saved)
+⊢ outputs
+      (match some (SelectedEdge.Result.stopped completed observation candidate) with
+      | none => NativeContinuations.Result.stopped [] [] (NativeContinuations.Stop.edge none (caller, queries))
+      | some receipt =>
+        match receipt with
+        | SelectedEdge.Result.complete fragment reached saved after =>
+          match hook fragment reached saved after with
+          | NativeContinuations.HookResult.complete outputs actual returned =>
+            NativeContinuations.Result.complete [receipt] outputs actual returned
+          | NativeContinuations.HookResult.stopped outputs reason actual =>
+            NativeContinuations.Result.stopped [] outputs (NativeContinuations.Stop.continuation receipt reason actual)
+        | other =>
+          match NativeContinuations.advance other with
+          | none =>
+            NativeContinuations.Result.stopped [] []
+              (NativeContinuations.Stop.edge (some other) (NativeContinuations.endpoint other caller queries))
+          | some (reached, saved) => NativeContinuations.Result.complete [other] [] reached saved) =
+    []
+'MicroCFTA.SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.real_eager_captured_output_callback_restart_origin' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

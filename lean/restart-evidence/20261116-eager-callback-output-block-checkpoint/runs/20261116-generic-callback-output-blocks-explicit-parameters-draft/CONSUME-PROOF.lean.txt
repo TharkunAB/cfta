@@ -1,0 +1,20 @@
+ := by
+  cases receipt with
+  | complete fragment reached saved after =>
+      have same : outputs (consumeSelected done caller queries (.complete fragment reached saved after)) =
+          outputs (done fragment reached saved after) := by
+        cases done fragment reached saved after <;> rfl
+      rw [same] at observed
+      refine ⟨fragment, reached, saved, after, rfl, ?_⟩
+      rw [same]
+      exact OutputBlock.refl _ index output observed
+  | unhandled =>
+      simp only [consumeSelected, NativeContinuations.advance, outputs, List.getElem?_nil] at observed
+  | rejected reached saved after =>
+      simp only [consumeSelected, NativeContinuations.advance, outputs, List.getElem?_nil] at observed
+  | finalizeStopped fragment reached saved after =>
+      simp only [consumeSelected, NativeContinuations.advance, outputs, List.getElem?_nil] at observed
+  | stopped fragments observation candidate =>
+      cases advanced : NativeContinuations.advance
+          (SelectedEdge.Result.stopped fragments observation candidate) <;>
+        simp only [consumeSelected, advanced, outputs, List.getElem?_nil] at observed

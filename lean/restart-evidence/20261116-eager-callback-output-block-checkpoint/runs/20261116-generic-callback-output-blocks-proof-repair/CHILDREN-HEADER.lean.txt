@@ -1,0 +1,13 @@
+theorem visit_children_output_block_origin
+    (visit : Visitor) (blocks : ∀ incoming, CallbackBlocksAt visit incoming)
+    (done : List Fragment → Caller width → Queries → Cached → Result Output Reason width)
+    (stopped : List Fragment → Observation width → Option Cached → Result Output Reason width)
+    (inputs : List (Node × List Suspended)) (caller : Caller width) (before : Cached) (queries : Queries)
+    (index : Nat) (output : Output)
+    (observed : (outputs (visitChildren visit done stopped inputs caller before queries))[index]? = some output) :
+    (∃ (fragments : List Fragment) (reached : Caller width) (saved : Queries) (after : Cached),
+      OutputBlock (outputs (visitChildren visit done stopped inputs caller before queries))
+        (outputs (done fragments reached saved after)) index output) ∨
+    (∃ (completed : List Fragment) (observation : Observation width) (candidate : Option Cached),
+      OutputBlock (outputs (visitChildren visit done stopped inputs caller before queries))
+        (outputs (stopped completed observation candidate)) index output)

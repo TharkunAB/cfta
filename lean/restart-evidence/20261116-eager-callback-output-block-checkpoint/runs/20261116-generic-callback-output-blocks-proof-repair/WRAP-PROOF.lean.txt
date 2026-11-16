@@ -1,0 +1,7 @@
+ := by
+  obtain ⟨prior, suffix, selected, middleSame, found, innerOffset⟩ := inner
+  refine ⟨earlier ++ prior, suffix ++ later, selected, ?_, found, ?_⟩
+  · rw [decomposition, middleSame]
+    simp only [List.append_assoc]
+  · simp only [List.length_append]
+    omega

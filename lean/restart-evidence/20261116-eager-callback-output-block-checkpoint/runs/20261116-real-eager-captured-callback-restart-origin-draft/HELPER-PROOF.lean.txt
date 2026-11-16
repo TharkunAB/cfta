@@ -1,0 +1,28 @@
+ := by
+  have receiptOutputs :
+      outputs (SourcePruningEnumerationSharedReceiptContinuation.run
+        (SourcePruningEnumerationSharedPreparedRecursive.continueWith recur
+          graph templates stop order workFuel metadata uv)
+        caller queries (some (.complete fragment reached saved finished))) =
+      emitted (SourcePruningEnumerationSharedPreparedRecursive.continueWith recur
+        graph templates stop order workFuel metadata uv fragment reached saved finished) := by
+    cases actual : SourcePruningEnumerationSharedPreparedRecursive.continueWith recur
+      graph templates stop order workFuel metadata uv fragment reached saved finished <;>
+      simp only [SourcePruningEnumerationSharedReceiptContinuation.run, actual, outputs, emitted]
+  have callbackObserved := observed
+  rw [receiptOutputs] at callbackObserved
+  obtain ⟨updated, callbackCore, recorded, _restartMember⟩ :=
+    SourcePruningEnumerationSharedPreparedRecursive.continueWith_output_restart recur
+      graph templates stop order workFuel metadata uv fragment reached saved finished output
+      (List.mem_of_getElem? callbackObserved)
+  have callbackSame :
+      SourcePruningEnumerationSharedPreparedRecursive.continueWith recur graph templates stop order
+        workFuel metadata uv fragment reached saved finished =
+      recur updated reached saved (EnumerationExpandableIndex.frame callbackCore finished)
+        (SourcePruningEnumerationRestart.decision stop order updated
+          (EnumerationExpandableIndex.frame callbackCore finished)) := by
+    simp only [SourcePruningEnumerationSharedPreparedRecursive.continueWith, recorded]
+  refine ⟨updated, callbackCore, recorded, ?_, ?_⟩
+  · exact receiptOutputs.trans (congrArg emitted callbackSame)
+  · rw [callbackSame] at callbackObserved
+    exact callbackObserved

@@ -1,0 +1,46 @@
+theorem OutputBlock.refl (whole : List Output) (index : Nat) (output : Output)
+    (observed : whole[index]? = some output) : OutputBlock whole whole index output
+
+theorem OutputBlock.wrap
+    (whole middle block earlier later : List Output) (index localIndex : Nat) (output : Output)
+    (decomposition : whole = earlier ++ middle ++ later)
+    (offset : index = earlier.length + localIndex)
+    (inner : OutputBlock middle block localIndex output) : OutputBlock whole block index output
+
+theorem visit_children_output_block_origin
+    (visit : Visitor) (blocks : ∀ incoming, CallbackBlocksAt visit incoming)
+    (done : List Fragment → Caller width → Queries → Cached → Result Output Reason width)
+    (stopped : List Fragment → Observation width → Option Cached → Result Output Reason width)
+    (inputs : List (Node × List Suspended)) (caller : Caller width) (before : Cached) (queries : Queries)
+    (index : Nat) (output : Output)
+    (observed : (outputs (visitChildren visit done stopped inputs caller before queries))[index]? = some output) :
+    (∃ (fragments : List Fragment) (reached : Caller width) (saved : Queries) (after : Cached),
+      OutputBlock (outputs (visitChildren visit done stopped inputs caller before queries))
+        (outputs (done fragments reached saved after)) index output) ∨
+    (∃ (completed : List Fragment) (observation : Observation width) (candidate : Option Cached),
+      OutputBlock (outputs (visitChildren visit done stopped inputs caller before queries))
+        (outputs (stopped completed observation candidate)) index output)
+
+theorem visit_selected_output_block_origin
+    (visit : Visitor) (blocks : ∀ incoming, CallbackBlocksAt visit incoming)
+    (consume : Receipt width → Result Output Reason width)
+    (scs : List Suspended) (edge : Edge) (caller : Caller width) (before : Cached) (queries : Queries)
+    (index : Nat) (output : Output)
+    (observed : (outputs (visitSelected visit consume scs edge caller before queries))[index]? = some output) :
+    ∃ receipt, OutputBlock (outputs (visitSelected visit consume scs edge caller before queries))
+      (outputs (consume receipt)) index output
+
+theorem consume_selected_output_block_origin
+    (done : Fragment → Caller width → Queries → Cached → Result Output Reason width)
+    (caller : Caller width) (queries : Queries) (receipt : Receipt width)
+    (index : Nat) (output : Output)
+    (observed : (outputs (consumeSelected done caller queries receipt))[index]? = some output) :
+    ∃ (fragment : Fragment) (reached : Caller width) (saved : Queries) (after : Cached),
+      receipt = .complete fragment reached saved after ∧
+      OutputBlock (outputs (consumeSelected done caller queries receipt))
+        (outputs (done fragment reached saved after)) index output
+
+theorem shallow_visit_callback_blocks
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (r n p h k : Nat) (incoming : Node) :
+    CallbackBlocksAt (width := width) (Output := Output) (Reason := Reason) (shallowVisit checkEmpty r n p h k) incoming
