@@ -265,3 +265,19 @@ theorem rootPartial_complete_pending_choices
   exact ⟨assignment, stored, afterEquations, pending, completed⟩
 
 end MicroCFTA.SourcePruningEnumerationPartialOutput
+
+namespace MicroCFTA.SourcePruningEnumerationPartialOutput
+
+/-- Actual partial root rendering retains completion of the same stored equations. -/
+theorem rootPartial_completes_of_stored_equations {NativeGuard EnumGuard : Type}
+    (heap : InternedConstructorTemplates.State SourcePruningTemplates.Symbol NativeGuard)
+    (assignment : Nat → Language.Term SourcePruningTemplates.Symbol) (fuel : Nat)
+    (before after : EnumerationState.State SourcePruningTemplates.Symbol EnumGuard)
+    (observedTerm : SourcePruningTemplates.PartialTerm)
+    (total : UnionFind.Total before.representatives)
+    (satisfied : SourcePruningPartialRenderingSemantics.StoredEquations assignment before)
+    (actual : EnumerationCorrectness.Success (rootPartial heap fuel) before observedTerm after) :
+    SourcePruningPartialMatch.Completes assignment observedTerm (assignment 0) :=
+  root_completes heap assignment fuel before after observedTerm total satisfied actual
+
+end MicroCFTA.SourcePruningEnumerationPartialOutput
