@@ -1,0 +1,9 @@
+private theorem actual_cached_own_expanded_birth_history
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (before own : Cached) (parentBucket : List Suspended)
+    (edge : EdgeValue Symbol Constraint) (symbol : Symbol)
+    (staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)))
+    (residual : Option Constraint) (safe : Safe before.core)
+    (actual : SourcePruningEnumerationCachedOwn.prepare heap
+      parentBucket edge before = some [((symbol, staged, residual), own)]) :
+    ExpandedBirthHistory before.core own.core

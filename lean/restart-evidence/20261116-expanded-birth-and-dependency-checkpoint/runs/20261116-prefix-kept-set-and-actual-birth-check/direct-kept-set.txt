@@ -1,0 +1,27 @@
+@MicroCFTA.EnumerationDependencies.ExpandedBirthKept : {Symbol Guard : Type} →
+  MicroCFTA.EnumerationState.State Symbol Guard → MicroCFTA.EnumerationState.State Symbol Guard → Nat → Nat → Prop
+@MicroCFTA.EnumerationDependencies.expanded_birth_kept_dependencies : ∀ {Symbol Guard : Type}
+  (before after : MicroCFTA.EnumerationState.State Symbol Guard) (held : Nat) (roots : Nat → Nat),
+  MicroCFTA.EnumerationSchedule.Roots after.representatives roots →
+    MicroCFTA.EnumerationDependencies.ExpandedBirthHistory before after →
+      (∀ (slot : Nat) (fragment : MicroCFTA.Fragments.Fragment Symbol),
+          after.values[slot]? = some (MicroCFTA.EnumerationState.UVarValue.enumerated fragment) →
+            before.values[slot]? = some (MicroCFTA.EnumerationState.UVarValue.enumerated fragment) ∨
+              MicroCFTA.EnumerationDependencies.FragmentAvoid after.representatives held fragment) →
+        ∀ (uv : Nat),
+          MicroCFTA.EnumerationDependencies.ExpandedBirthKept before after held uv →
+            ∀ (fragment : MicroCFTA.Fragments.Fragment Symbol),
+              after.values[roots uv]? = some (MicroCFTA.EnumerationState.UVarValue.enumerated fragment) →
+                ∀ (hole : Nat),
+                  MicroCFTA.EnumerationDependencies.HasHole fragment hole →
+                    MicroCFTA.EnumerationDependencies.ExpandedBirthKept before after held hole
+'MicroCFTA.EnumerationDependencies.expanded_birth_kept_dependencies' depends on axioms: [propext]
+@MicroCFTA.EnumerationDependencies.expanded_birth_kept_inputs : ∀ {Symbol Guard : Type}
+  (before after : MicroCFTA.EnumerationState.State Symbol Guard) (held : Nat)
+  (bucket : List MicroCFTA.EnumerationState.Suspended),
+  MicroCFTA.EnumerationDependencies.ExpandedBirthHistory before after →
+    MicroCFTA.EnumerationDependencies.InputsPending before bucket →
+      MicroCFTA.EnumerationCorrectness.Avoids after.representatives held bucket →
+        ∀ (sc : MicroCFTA.EnumerationState.Suspended),
+          sc ∈ bucket → MicroCFTA.EnumerationDependencies.ExpandedBirthKept before after held sc.var
+'MicroCFTA.EnumerationDependencies.expanded_birth_kept_inputs' depends on axioms: [propext]

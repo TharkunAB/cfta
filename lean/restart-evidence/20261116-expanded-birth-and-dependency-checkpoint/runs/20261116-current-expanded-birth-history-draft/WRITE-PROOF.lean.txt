@@ -1,0 +1,31 @@
+ := by
+  let after : State Symbol Guard := {before with values := before.values.set target (.enumerated fragment)}
+  change ExpandedBirthHistory before after
+  have oldProtection : ∀ slot old, before.values[slot]? = some (.enumerated old) →
+      EnumerationDriver.Protected slot before after := by
+    intro slot old stored
+    have different : target ≠ slot := by
+      intro same
+      subst slot
+      cases Option.some.inj (storedTarget.symm.trans stored)
+    refine ⟨?_, (enumerated_root before safe slot old stored).2, fun _ => Iff.rfl⟩
+    simp only [after, List.getElem?_set_ne different]
+  refine ⟨oldProtection, ?_⟩
+  intro slot produced stored
+  by_cases written : slot = target
+  · subst slot
+    have inside : target < before.values.length :=
+      (List.getElem?_eq_some_iff.mp storedTarget).1
+    have fragmentSame : fragment = produced := by
+      have payloadSame := stored
+      simp only [after, List.getElem?_set_self inside] at payloadSame
+      exact UVarValue.enumerated.inj (Option.some.inj payloadSame)
+    subst produced
+    apply Or.inr
+    intro old oldFragment oldStored
+    exact pendingFragment_avoids_protected_expanded before before fragment oldFragment old
+      pending oldStored
+      (EnumerationDriver.Protected.refl old before
+        (enumerated_root before safe old oldFragment oldStored).2)
+  · apply Or.inl
+    simpa only [after, List.getElem?_set_ne (Ne.symm written)] using stored

@@ -1,0 +1,18 @@
+  have mapped : (SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap
+      fuel captured (.node symbol fragments) middle).map
+        (SourcePruningEnumerationSelectedEdge.finish residual (.node symbol fragments)) = some finished :=
+    (SourcePruningEnumerationFinalize.run_after_residual reached.checked.native.machine.heap
+      fuel captured (.node symbol fragments) residual middle).symm.trans actual
+  obtain ⟨plain, finalized, recorded⟩ := Option.map_eq_some_iff.mp mapped
+  have history := actual_tuple_finalize_expanded_birth_history formulas solver original metadata
+    before inputs fragments reached queries middle tuple symbol fuel captured plain
+    capturedNode capturedBucket capturedStored finalized
+  have retained : ExpandedBirthHistory before.core
+      (SourcePruningEnumerationSelectedEdge.finish residual (.node symbol fragments) plain).core := by
+    constructor
+    · intro slot old stored
+      have protection := history.1 slot old stored
+      exact ⟨protection.value, protection.root, protection.classes⟩
+    · intro slot produced stored
+      exact history.2 slot produced stored
+  simpa only [recorded] using retained

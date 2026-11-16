@@ -1,0 +1,77 @@
+ := by
+  let parent : IdentityActualSourcePoint bits := {point with height := height + 1}
+  let rowSeed := identity_actual_source_row_boundary recursiveDepth root.limit root.own height
+    parent attempted.length
+  obtain ⟨initialInputs, _initialFits, _initialKnown, admission⟩ := current
+  have entryInputs := initialInputs
+  obtain ⟨_shapes, _kept, inventory, memos, packet, _querySame, _previous,
+    _mass, _counted, _subset, _genuine⟩ := initialInputs
+  obtain ⟨next, final, post, query, _reachedPacket, prefixFits, prefixKnown, _outputResources⟩ :=
+    SourcePruningEnumerationSharedPreparedRecursive.completed_captured_packet
+      formulas solver inventory parent.caller memos metadata parent.before rowSeed
+      outputs rowCaller rowQueries packet pastResources.2
+  have prefixInputs : IdentityActualSourcePoint.genericInputs formulas solver root scopeOriginal metadata
+      scopeBefore allInputs {parent with caller := rowCaller, queries := rowQueries, seed := rowSeed}
+      ((.node parentEntry rows depth free, bucket) :: rest) (parent.count + 1) := by
+    exact real_rows_inputs_native_post formulas solver root scopeOriginal metadata scopeBefore allInputs
+      parent ((.node parentEntry rows depth free, bucket) :: rest) (parent.count + 1)
+      next rowCaller final rowQueries entryInputs post query
+  obtain ⟨rowOwn, prepared, innerOrigin, innerLedger, innerCurrent, actualRow, decrease⟩ :=
+    real_rows_selected_own_current holeKey fits admits graph templates checkEmpty edgesOf stop order
+      recursiveDepth workFuel metadata uv formulas solver root scopeOriginal scopeBefore allInputs
+      point height parentEntry rows depth free bucket rest attempted remaining edge tries residual
+      processed outputs rowCaller rowQueries origin ancestors sourceRows past prefixInputs prefixFits
+      prefixKnown admission (selectionMembers parentEntry rows depth free)
+      (selectionLength parentEntry rows depth free) allowed projected
+  let inputs : List (Node × List Suspended) :=
+    SourcePruningEnumerationEdgeInputs.children edge bucket point.before.core.counter tries
+  let staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)) :=
+    inputs.map (fun input => (input.1, input.2,
+      SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))
+  let children : List (Node × List Suspended) := staged.map (fun input => (input.1, input.2.1))
+  let inner : IdentityActualSourcePoint bits :=
+    identity_actual_source_inner_point height root.limit root.own parent rest
+      edge residual rowCaller rowQueries rowOwn rowSeed
+  change ActualFrameLedger formulas solver root metadata uv inner.frame rowCaller rowOwn children at innerLedger
+  change ActualSourceOrigin (SourcePruningOuterNarrow.narrow holeKey fits admits)
+    graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv root
+    (.tuple inner children) at innerOrigin
+  change ActualSourceCurrent formulas solver root rowCaller metadata rowOwn children recursiveDepth
+    (.tuple inner children) at innerCurrent
+  change SourcePruningEnumerationCachedOwn.prepare rowCaller.checked.native.machine.heap
+    bucket edge point.before = some [((edge.entry.key.symbol, staged, residual), rowOwn)] at prepared
+  have scopeData := actual_expanded_frame_history_own
+    formulas solver root metadata uv ancestors scopeHistory
+  have entrySnapshot := prefixInputs
+  obtain ⟨_prefixShapes, _prefixKept, prefixInventory, prefixMemos, prefixPacket, prefixQuery,
+    previous, _prefixMass, _prefixCounted, memberInputs, _genuine⟩ := prefixInputs
+  have previousInputs := previous
+  obtain ⟨_tupleInventory, _tupleMemos, _tuplePost, _tupleQuery, _tuplePacket,
+      _tupleGrowth, tupleOrigin, tupleProtects, _tupleRoots, _tupleReferences,
+      _tupleBounds, _tupleFragments⟩ := previousInputs
+  have tupleHistory : ExpandedBirthHistory scopeBefore.core point.before.core :=
+    ExpandedBirthHistory.of_origin scopeBefore.core point.before.core tupleOrigin tupleProtects
+  have parentHistory := ExpandedBirthHistory.trans
+    root.before.core scopeBefore.core point.before.core scopeData tupleHistory
+  have parentMember : (.node parentEntry rows depth free, bucket) ∈ allInputs :=
+    memberInputs List.mem_cons_self
+  have ownHistory := actual_cached_own_expanded_birth_history
+    rowCaller.checked.native.machine.heap point.before rowOwn bucket edge
+    edge.entry.key.symbol staged residual prefixPacket.safe prepared
+  have innerHistory : ActualExpandedFrameHistory formulas solver root metadata uv innerLedger := by
+    change ActualExpandedFrameHistoryCore formulas solver root metadata uv
+      inner.frame rowCaller rowOwn children
+    refine ⟨ExpandedBirthHistory.trans
+      root.before.core point.before.core rowOwn.core parentHistory ownHistory, ?_⟩
+    refine ⟨scopeOriginal, scopeBefore, allInputs, ancestors,
+      .node parentEntry rows depth free, bucket, point.before, parent.mass, rowSeed,
+      prefixInventory, prefixMemos, staged, ?_, prefixPacket, prefixQuery, previous,
+      parentMember, prepared, ?_, rfl, rfl⟩
+    · exact scopeHistory
+    · exact entrySnapshot
+  have inherited := taskIH (.tuple inner children) decrease resourceIH structuralIH
+    selectionMembers selectionLength rowCaller rowOwn children innerLedger innerOrigin innerCurrent
+    rootInventory rootMemos rootHandle rootPacket rootQuery rootReady rootStored rootIncoming
+    innerHistory
+  rw [actualRow]
+  exact inherited

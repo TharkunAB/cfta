@@ -1,0 +1,12 @@
+/-- Actual birth origins close the retained set under every stored raw hole. -/
+theorem expanded_birth_kept_dependencies
+    (before after : State Symbol Guard) (held : Nat)
+    (roots : Nat → Nat) (paths : Roots after.representatives roots)
+    (births : ExpandedBirthHistory before after)
+    (heldOrigin : ∀ (slot : Nat) (fragment : Fragment Symbol),
+      after.values[slot]? = some (.enumerated fragment) →
+      before.values[slot]? = some (.enumerated fragment) ∨
+        FragmentAvoid after.representatives held fragment) :
+    ∀ uv, ExpandedBirthKept before after held uv → ∀ fragment,
+      after.values[roots uv]? = some (.enumerated fragment) →
+      ∀ hole, HasHole fragment hole → ExpandedBirthKept before after held hole

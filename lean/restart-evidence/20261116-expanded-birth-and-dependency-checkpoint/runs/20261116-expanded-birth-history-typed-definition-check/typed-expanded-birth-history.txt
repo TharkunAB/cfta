@@ -1,0 +1,31 @@
+@MicroCFTA.EnumerationDependencies.ExpandedBirthHistory.refl : ∀ {Symbol Guard : Type}
+  (state : MicroCFTA.EnumerationState.State Symbol Guard),
+  MicroCFTA.EnumerationSchedule.Safe state → MicroCFTA.EnumerationDependencies.ExpandedBirthHistory state state
+'MicroCFTA.EnumerationDependencies.ExpandedBirthHistory.refl' depends on axioms: [propext]
+@MicroCFTA.EnumerationDependencies.ExpandedBirthHistory.trans : ∀ {Symbol Guard : Type}
+  (before middle after : MicroCFTA.EnumerationState.State Symbol Guard),
+  MicroCFTA.EnumerationDependencies.ExpandedBirthHistory before middle →
+    MicroCFTA.EnumerationDependencies.ExpandedBirthHistory middle after →
+      MicroCFTA.EnumerationDependencies.ExpandedBirthHistory before after
+'MicroCFTA.EnumerationDependencies.ExpandedBirthHistory.trans' depends on axioms: [propext]
+@MicroCFTA.EnumerationDependencies.ExpandedBirthHistory.of_origin : ∀ {Symbol Guard : Type}
+  (before after : MicroCFTA.EnumerationState.State Symbol Guard),
+  MicroCFTA.EnumerationDependencies.EnumeratedOrigin before after →
+    (∀ (slot : Nat) (fragment : MicroCFTA.Fragments.Fragment Symbol),
+        before.values[slot]? = some (MicroCFTA.EnumerationState.UVarValue.enumerated fragment) →
+          MicroCFTA.EnumerationDriver.Protected slot before after) →
+      MicroCFTA.EnumerationDependencies.ExpandedBirthHistory before after
+'MicroCFTA.EnumerationDependencies.ExpandedBirthHistory.of_origin' depends on axioms: [propext]
+@MicroCFTA.EnumerationDependencies.ExpandedBirthHistory.write : ∀ {Symbol Guard : Type}
+  (before : MicroCFTA.EnumerationState.State Symbol Guard) (target : Nat)
+  (fragment : MicroCFTA.Fragments.Fragment Symbol) (node : Option Nat)
+  (bucket : List MicroCFTA.EnumerationState.Suspended),
+  MicroCFTA.EnumerationSchedule.Safe before →
+    before.values[target]? = some (MicroCFTA.EnumerationState.UVarValue.unenumerated node bucket) →
+      MicroCFTA.EnumerationDependencies.PendingFragment before fragment →
+        MicroCFTA.EnumerationDependencies.ExpandedBirthHistory before
+          { counter := before.counter, representatives := before.representatives,
+            values := before.values.set target (MicroCFTA.EnumerationState.UVarValue.enumerated fragment),
+            obligations := before.obligations, recursionAncestry := before.recursionAncestry,
+            expansionAncestry := before.expansionAncestry }
+'MicroCFTA.EnumerationDependencies.ExpandedBirthHistory.write' depends on axioms: [propext]

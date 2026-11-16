@@ -1,0 +1,60 @@
+theorem actual_parked_removed_bucket_inputs
+    [DecidableEq Symbol] [DecidableEq Node]
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (workFuel depth uv : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (metadata updated : Metadata Typing) (caller : Caller width) (memos : Memos)
+    (before parked : Cached) (checked core : Core) (next : Option Next)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (chosen : SourcePruningEnumerationRestart.decision stop order metadata before = some (.expand uv))
+    (actual : SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order
+      metadata workFuel workFuel workFuel workFuel workFuel workFuel uv caller before memos.query =
+        .parked checked (some parked) (some [.ok ((updated, next), core)])) :
+    ∃ (handle : Nat) (bucket : List Suspended) (readAfter : Core)
+        (value : Node) (size : Nat) (resolved : Core),
+      ExceptT.run (getValue workFuel uv before.core) =
+        [.ok (.unenumerated (some handle) bucket, readAfter)] ∧
+      before.core.values[uv]? = some (.unenumerated (some handle) bucket) ∧
+      InputsPending parked.core bucket ∧
+      Avoids parked.core.representatives uv bucket ∧
+      EnumerationDischargeHistory.IsolatedPending uv handle parked.core ∧
+      UnionFind.Reaches before.core.representatives uv uv size ∧
+      Frame before.core readAfter ∧
+      lookupNode caller.checked.native.machine.heap handle = some value ∧
+      MergedOrdinaryHeight.recursiveBoundary value = true ∧
+      ExceptT.run (SourcePruningEnumerationRecursion.checkRepeated
+        caller.checked.native.machine.heap workFuel uv handle bucket readAfter) =
+          [.ok (true, checked)] ∧
+      Success (representative workFuel uv) readAfter uv resolved ∧
+      Frame readAfter resolved ∧
+      recursionKey handle bucket ∈ before.core.recursionAncestry uv ∧
+      resolved.values[uv]? = some (.unenumerated (some handle) bucket) ∧
+      Success (setValue uv (.unenumerated (some handle) [])) resolved () checked ∧
+      checked = {resolved with values := resolved.values.set uv (.unenumerated (some handle) [])} ∧
+      parked.core = checked ∧
+      SourcePruningEnumerationParkedRestart.adapt caller.checked.native.machine.heap
+        workFuel uv handle bucket before checked = some parked ∧
+      ExceptT.run (SourcePruningEnumerationRestart.run stop order metadata parked checked) =
+        [.ok ((updated, next), core)] ∧
+      updated = metadata ∧ core = checked ∧
+      next = SourcePruningEnumerationRestart.decision stop order metadata parked ∧
+      SourcePruningEnumerationRestart.decision stop order metadata parked ≠ some .stuck ∧
+      (∀ (occurrence : Nat) (sc : Suspended), bucket[occurrence]? = some sc →
+        ∀ other, UnionFind.SameClass checked.representatives sc.var other ↔
+          UnionFind.SameClass before.core.representatives sc.var other) ∧
+      SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow
+        (SourcePruningEnumerationSharedEagerChildren.eagerChild
+          checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
+        (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        graph templates checkEmpty edgesOf stop order workFuel (depth + 1)
+        metadata caller memos.query before (some (.expand uv)) =
+      SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow
+        (SourcePruningEnumerationSharedEagerChildren.eagerChild
+          checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
+        (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        graph templates checkEmpty edgesOf stop order workFuel depth
+        updated caller memos.query (EnumerationExpandableIndex.frame core parked) next

@@ -1,0 +1,80 @@
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+open Language Fragments EnumerationState EnumerationCorrectness EnumerationSchedule
+open EnumerationDependencies EnumerationReferences InternedConstructorTemplates
+open SourcePruningEnumerationRecursive (Packet)
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+variable {Typing : Type} {bits : Nat}
+variable [DecidableEq (EdgeKey Symbol Constraint)]
+set_option autoImplicit false
+set_option maxHeartbeats 2000000
+
+/- Retain the actual tuple birth receipt through its same-fuel finalizer. -/
+private theorem actual_tuple_finalize_expanded_birth_history
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (original : Caller (bits + 2)) (metadata : Metadata Typing)
+    (before : Cached) (inputs : List (Node × List Suspended)) (fragments : List Fragment)
+    (reached : Caller (bits + 2)) (queries : Queries) (middle : Cached)
+    (tuple : TupleInputs formulas solver original metadata before inputs fragments reached queries middle)
+    (symbol : Symbol) (fuel captured : Nat) (finished : Cached)
+    (capturedNode : Option Nat) (capturedBucket : List Suspended)
+    (capturedStored : before.core.values[captured]? = some (.unenumerated capturedNode capturedBucket))
+    (actual : SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap
+      fuel captured (.node symbol fragments) middle = some finished) :
+    EnumerationDependencies.ExpandedBirthHistory before.core finished.core := by
+  obtain ⟨_inventory, _memos, _post, _query, _current, _growth, origin,
+    protectsExpanded, _protectsRoots, _referenceEffects, _bounds, returnedFragments⟩ := tuple
+  have pendingNode : PendingFragment middle.core (.node symbol fragments) :=
+    pendingFragment_node middle.core symbol fragments
+      (fun child member => (returnedFragments child member).1)
+  have core := EnumerationDischargeHistory.finalize_core_of_run
+    reached.checked.native.machine.heap fuel captured (.node symbol fragments) middle finished actual
+  have sameForest : finished.core.representatives = middle.core.representatives := by rw [core]
+  have unwritten (slot : Nat) (different : captured ≠ slot)
+      (root : IsRoot middle.core.representatives slot) :
+      EnumerationDriver.Protected slot middle.core finished.core := by
+    refine ⟨?_, ?_, ?_⟩
+    · simp only [core, List.getElem?_set_ne different]
+    · rw [sameForest]
+      exact root
+    · intro uv
+      rw [sameForest]
+  constructor
+  · intro slot old stored
+    have retained := protectsExpanded slot old stored
+    have different : captured ≠ slot := by
+      intro same
+      subst slot
+      cases Option.some.inj (capturedStored.symm.trans stored)
+    exact retained.trans (unwritten slot different retained.root)
+  · intro slot produced stored
+    by_cases selected : slot = captured
+    · subst slot
+      have inside : captured < middle.core.values.length := by
+        have bound := (List.getElem?_eq_some_iff.mp stored).1
+        simpa only [core, List.length_set] using bound
+      have sameValue : (.node symbol fragments : Fragment) = produced := by
+        rw [core, List.getElem?_set_self inside] at stored
+        exact UVarValue.enumerated.inj (Option.some.inj stored)
+      apply Or.inr
+      intro old oldFragment oldStored
+      rw [← sameValue]
+      have avoids := pendingFragment_avoids_protected_expanded
+        before.core middle.core (.node symbol fragments) oldFragment old pendingNode
+        oldStored (protectsExpanded old oldFragment oldStored)
+      simpa only [core] using avoids
+    · apply Or.inl
+      apply origin slot produced
+      rw [core] at stored
+      simpa only [List.getElem?_set_ne (Ne.symm selected)] using stored
+
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation

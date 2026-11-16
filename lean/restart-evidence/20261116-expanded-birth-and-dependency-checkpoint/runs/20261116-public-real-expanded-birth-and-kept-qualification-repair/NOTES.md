@@ -1,0 +1,5 @@
+Status: UNCOMPILED. Originald6f830d2 and full failed diagnostics remain unchanged. Root's full-chain check reported only one consumer error here: the kept header qualified HasHole with the wrong namespace. No unsolved proof goal was reported, but the original failed module receives no proof credit.
+
+This NEW repair changes ONLY `Fragments.HasHole` to its actual owner `EnumerationDependencies.HasHole` in the kept header, combined header and assembled append. The kept header has a NEW hash; it is not byte-identical to the ill-typed frozen reference. Its binder scope, all premises, budgets and intended dependency predicate remain unchanged. This is a namespace correction, not a new model premise.
+
+ALL proof bytes, public birth headera2934e16, appendable probes, preamble and ordinary required import remain BYTE-EXACT. No Source edit, fuel/cap/linter change, future supplier or model assumption is added. Root must recheck the full genuine outer Nat proof and these consumers before any module credit. The actual historical-clear applicability audit is separate.

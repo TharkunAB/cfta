@@ -1,0 +1,13 @@
+private theorem actual_finalized_pending_child_expanded_birth_history
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (original reached : Caller (bits + 2)) (memos : Memos)
+    (metadata : Metadata Typing) (before middle after : Cached)
+    (target handle fuel : Nat) (bucket : List Suspended) (fragment : Fragment) (queries : Queries)
+    (packet : Packet formulas solver inventory original memos metadata before)
+    (ready : EnumerationDriver.Ready target before.core)
+    (storedTarget : before.core.values[target]? = some (.unenumerated (some handle) bucket))
+    (actual : ChildInputs formulas solver original metadata before bucket fragment reached queries middle)
+    (finalized : SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap
+      fuel target fragment middle = some after) :
+    EnumerationDependencies.ExpandedBirthHistory before.core after.core

@@ -1,0 +1,33 @@
+ := by
+  intro inventory caller memos before metadata seed ceiling packet bounded known
+    selectionMembers selectionLength mass reserved workFuel
+  have retained := ExpandedBirthHistory.refl before.core packet.safe
+  unfold SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.runEagerWithNarrow
+    SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.runWithNarrow
+  cases chosen : SourcePruningEnumerationRestart.decision stop order metadata before with
+  | none =>
+    change ∀ output ∈ ([⟨some metadata, before, caller, memos.query⟩] : List (Output (bits + 2) Typing)),
+      ExpandedBirthHistory before.core output.cache.core
+    intro output member
+    have same := List.mem_singleton.mp member
+    subst output
+    exact retained
+  | some next =>
+    cases next with
+    | done =>
+      change ∀ output ∈ ([⟨none, before, caller, memos.query⟩] : List (Output (bits + 2) Typing)),
+        ExpandedBirthHistory before.core output.cache.core
+      intro output member
+      have same := List.mem_singleton.mp member
+      subst output
+      exact retained
+    | stuck =>
+      change ∀ output ∈ ([] : List (Output (bits + 2) Typing)),
+        ExpandedBirthHistory before.core output.cache.core
+      intro output member
+      cases member
+    | expand target =>
+      change ∀ output ∈ ([] : List (Output (bits + 2) Typing)),
+        ExpandedBirthHistory before.core output.cache.core
+      intro output member
+      cases member

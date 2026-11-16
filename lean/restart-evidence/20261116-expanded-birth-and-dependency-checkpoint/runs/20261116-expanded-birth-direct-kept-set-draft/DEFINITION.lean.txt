@@ -1,0 +1,6 @@
+/-- Retain classes outside every original expanded class and the held class. -/
+def ExpandedBirthKept (before after : State Symbol Guard) (held uv : Nat) : Prop :=
+  (¬∃ (old : Nat) (oldFragment : Fragment Symbol),
+    before.values[old]? = some (.enumerated oldFragment) ∧
+      UnionFind.SameClass after.representatives old uv) ∧
+  ¬UnionFind.SameClass after.representatives held uv

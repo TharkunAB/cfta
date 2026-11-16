@@ -1,0 +1,21 @@
+  have birthHistories := runEager_real_expanded_birth_history_at_any_budget (bits := bits)
+    holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver recursiveFuel
+    inventory caller memos before metadata seed ceiling packet bounded known selectionMembers selectionLength
+    initialMass reserved workFuel
+  have heldHistories := real_eager_held_fragment_history_at_every_depth (bits := bits)
+    holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver recursiveFuel
+    inventory caller memos before metadata seed ceiling packet bounded known selectionMembers selectionLength
+    initialMass reserved workFuel held heldHandle value isolated decoded boundary
+  dsimp only
+  intro output member
+  have births := birthHistories output member
+  have retained := heldHistories output member
+  constructor
+  · intro target node bucket stored
+    have pending := EnumerationReferences.pending_inputs before.core packet.pending target node bucket stored
+    have originalAvoid : Avoids before.core.representatives held bucket :=
+      isolated.incoming _ (List.mem_of_getElem? stored)
+    have finalAvoid := retained.protectedHeld.avoids bucket originalAvoid
+    exact expanded_birth_kept_inputs before.core output.cache.core held bucket births pending finalAvoid
+  · intro roots paths
+    exact expanded_birth_kept_dependencies before.core output.cache.core held roots paths births retained.origin

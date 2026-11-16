@@ -1,0 +1,149 @@
+ := by
+  have allTasks : ∀ (amount : Nat) (candidate : IdentityActualSourceTask bits),
+      candidate.work root.limit = amount →
+      RealActualSourceExpandedBirthScopedAt holeKey fits admits graph templates checkEmpty edgesOf stop order
+        recursiveDepth workFuel metadata uv formulas solver root candidate := by
+    intro amount
+    induction amount using Nat.strongRecOn with
+    | ind amount smallerIH =>
+      intro candidate measured
+      have taskIH : ∀ smaller : IdentityActualSourceTask bits,
+          smaller.work root.limit < candidate.work root.limit →
+          RealActualSourceExpandedBirthScopedAt holeKey fits admits graph templates checkEmpty edgesOf stop order
+            recursiveDepth workFuel metadata uv formulas solver root smaller := by
+        intro smaller decreased
+        exact smallerIH (smaller.work root.limit) (by omega) smaller rfl
+      cases candidate with
+      | tuple point remaining =>
+        cases remaining with
+        | nil =>
+          cases point with
+          | mk frame completed caller before queries height count bound mass seed =>
+            cases frame with
+            | captured edge residual capturedCaller capturedQueries =>
+              let currentPoint : IdentityActualSourcePoint bits := {
+                frame := .captured edge residual capturedCaller capturedQueries
+                completed := completed
+                caller := caller
+                before := before
+                queries := queries
+                height := height
+                count := count
+                bound := bound
+                mass := mass
+                seed := seed }
+              exact real_actual_source_captured_nil_expanded_birth_scoped
+                holeKey fits admits graph templates checkEmpty edgesOf stop order
+                recursiveDepth workFuel metadata uv formulas solver root currentPoint
+                edge residual capturedCaller capturedQueries
+            | selected parent parentCompleted parentRest edge residual capturedCaller capturedQueries
+                parentHeight parentCount parentBound =>
+              let currentPoint : IdentityActualSourcePoint bits := {
+                frame := .selected parent parentCompleted parentRest edge residual
+                  capturedCaller capturedQueries parentHeight parentCount parentBound
+                completed := completed
+                caller := caller
+                before := before
+                queries := queries
+                height := height
+                count := count
+                bound := bound
+                mass := mass
+                seed := seed }
+              exact real_actual_source_selected_nil_expanded_birth_scoped
+                holeKey fits admits graph templates checkEmpty edgesOf stop order
+                recursiveDepth workFuel metadata uv formulas solver root currentPoint
+                parent parentCompleted parentRest edge residual capturedCaller capturedQueries
+                parentHeight parentCount parentBound taskIH
+        | cons head rest =>
+          obtain ⟨incoming, bucket⟩ := head
+          cases point with
+          | mk frame completed caller before queries height count bound mass seed =>
+            cases count with
+            | zero =>
+              intro _resourceIH _structuralIH _selectionMembers _selectionLength
+                scopeOriginal scopeBefore allInputs _ancestors _origin current
+              obtain ⟨inputs, _fits, _known, _reserved⟩ := current
+              obtain ⟨_shapes, _kept, _inventory, _memos, _packet, _query, _previous,
+                _mass, capacity, _included, _genuine⟩ := inputs
+              change ((incoming, bucket) :: rest).length ≤ 0 at capacity
+              simp only [List.length_cons] at capacity
+              omega
+            | succ count =>
+              let prior : IdentityActualSourcePoint bits := {
+                frame := frame
+                completed := completed
+                caller := caller
+                before := before
+                queries := queries
+                height := height
+                count := count
+                bound := bound
+                mass := mass
+                seed := seed }
+              exact real_actual_source_tuple_cons_expanded_birth_scoped
+                holeKey fits admits graph templates checkEmpty edgesOf stop order
+                recursiveDepth workFuel metadata uv formulas solver root
+                prior count incoming bucket rest taskIH
+      | child point incoming bucket rest =>
+        by_cases ordinary : SourcePruningEnumerationSharedEagerChildren.ordinaryNonterminal bucket incoming = true
+        · cases point with
+          | mk frame completed caller before queries height count bound mass seed =>
+            cases height with
+            | zero =>
+              intro _resourceIH _structuralIH _selectionMembers _selectionLength
+                scopeOriginal scopeBefore allInputs _ancestors _origin current
+              obtain ⟨inputs, _fits, _known, _reserved⟩ := current
+              obtain ⟨_shapes, _kept, _inventory, _memos, _packet, _query, _previous,
+                _mass, _capacity, _included, genuine⟩ := inputs
+              have ranked := (genuine incoming bucket List.mem_cons_self).2.2.1
+              change MergedOrdinaryHeight.height incoming ≤ 0 at ranked
+              cases incoming with
+              | empty => cases ordinary
+              | reference name => cases ordinary
+              | node entry rows depth free =>
+                  simp only [MergedOrdinaryHeight.height] at ranked
+                  omega
+              | union entry members depth free => cases ordinary
+              | mu entry body depth payload => cases ordinary
+            | succ height =>
+              let prior : IdentityActualSourcePoint bits := {
+                frame := frame
+                completed := completed
+                caller := caller
+                before := before
+                queries := queries
+                height := height
+                count := count
+                bound := bound
+                mass := mass
+                seed := seed }
+              exact real_actual_source_ordinary_expanded_birth_scoped
+                holeKey fits admits graph templates checkEmpty edgesOf stop order
+                recursiveDepth workFuel metadata uv formulas solver root
+                prior height incoming bucket rest ordinary taskIH
+        · have fallback : SourcePruningEnumerationSharedEagerChildren.ordinaryNonterminal bucket incoming = false := by
+            cases classified : SourcePruningEnumerationSharedEagerChildren.ordinaryNonterminal bucket incoming with
+            | false => rfl
+            | true => exact (ordinary classified).elim
+          exact real_actual_source_fallback_expanded_birth_scoped
+            holeKey fits admits graph templates checkEmpty edgesOf stop order
+            recursiveDepth workFuel metadata uv formulas solver root point incoming bucket rest fallback taskIH
+      | rows height point incoming bucket rest =>
+        intro resourceIH structuralIH selectionMembers selectionLength
+          scopeOriginal scopeBefore allInputs ancestors origin current
+        cases origin with
+        | ordinaryRows basePoint sourceHeight sourceIncoming sourceBucket sourceRest previous ordinary =>
+          cases incoming with
+          | empty => cases ordinary
+          | reference name => cases ordinary
+          | union entry members depth free => cases ordinary
+          | mu entry body depth payload => cases ordinary
+          | node entry alternatives depth free =>
+            exact real_actual_source_rows_expanded_birth_scoped
+              holeKey fits admits graph templates checkEmpty edgesOf stop order
+              recursiveDepth workFuel metadata uv formulas solver root basePoint height
+              entry alternatives depth free bucket rest taskIH resourceIH structuralIH
+              selectionMembers selectionLength scopeOriginal scopeBefore allInputs ancestors
+              (.ordinaryRows basePoint height (.node entry alternatives depth free) bucket rest previous ordinary) current
+  exact allTasks (task.work root.limit) task rfl

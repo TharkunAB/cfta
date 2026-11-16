@@ -1,0 +1,22 @@
+ := by
+  intro resourceIH structuralIH selectionMembers selectionLength scopeOriginal scopeBefore allInputs
+    ledger origin current rootInventory rootMemos rootHandle rootPacket rootQuery rootReady rootStored
+    rootIncoming expandedScope
+  obtain ⟨rowsOrigin, rowsCurrent, decrease⟩ :=
+    actual_source_ordinary_current holeKey fits admits graph templates checkEmpty edgesOf stop order
+      recursiveDepth workFuel metadata uv formulas solver root scopeOriginal scopeBefore allInputs
+      point height incoming bucket rest origin ordinary current
+  have inherited := taskIH (.rows height {point with height := height + 1} incoming bucket rest) decrease
+    resourceIH structuralIH selectionMembers selectionLength scopeOriginal scopeBefore allInputs
+    ledger rowsOrigin rowsCurrent rootInventory rootMemos rootHandle rootPacket rootQuery rootReady
+    rootStored rootIncoming expandedScope
+  have runtime := actual_source_ordinary_run (SourcePruningOuterNarrow.narrow holeKey fits admits)
+    graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+    point height incoming bucket rest ordinary
+  change ∀ output ∈ emitted (finish uv (IdentityActualSourceTask.runWithNarrow
+      (SourcePruningOuterNarrow.narrow holeKey fits admits)
+      graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+      (.child {point with height := height + 1} incoming bucket rest))),
+    ExpandedBirthHistory root.before.core output.cache.core
+  rw [runtime]
+  exact inherited

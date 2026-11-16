@@ -1,0 +1,11 @@
+Status: UNCOMPILED. Header06da96dd was frozen and sent before this proof. Root owns the generic ExpandedBirthHistory strict check and ordinary public import staging. The generic definition's explicit-binder typing repair does not change this predicate ABI. No Source file was changed.
+
+This theorem requires only the SAME actual TupleInputs, the ORIGINAL captured pending lookup and the SAME supplied-fuel successful finalizer of the actual node fragment. It drops beforeSafe, held/isolation/inputAvoids and capturedDifferent. It does NOT assume the captured slot is literally pending at middle.
+
+TupleInputs gives no new middle expansions, protects every original expanded slot, and supplies PendingFragment for every returned child. pendingFragment_node assembles the actual node fragment. For each old expanded slot, the original pending captured lookup proves captured is different. Actual finalize_core_of_run leaves the forest unchanged and writes only captured, so old protection composes through that write.
+
+For a final expanded lookup at captured, the actual one-slot write identifies the stored fragment with the assembled node. pendingFragment_avoids_protected_expanded plus the actual tuple old protection proves avoidance of every original expanded class. A final expanded lookup elsewhere comes from actual TupleInputs.EnumeratedOrigin. This proves exactly both ExpandedBirthHistory clauses. The generic write law is deliberately not used, since its literal middle pending lookup is not supplied by TupleInputs and is not assumed here.
+
+Assembly: after the generic module has strict-passed and normal-built, add only the ordinary TOP import in REQUIRED-IMPORT.lean.txt to Root's owner copy; append this packet at EOF. Existing private TupleInputs and checked finalizer helpers remain in their original owner. No private-name access outside that owner, import overlay, runtime padding, linter change or checking-limit increase is used. The checking limit is2000000.
+
+This is a local actual tuple-finalizer producer. Whole-worker strong birth, a joint model and the full accepted original-root finite completion remain OPEN. Original public resource5493 and all old headers remain unchanged.

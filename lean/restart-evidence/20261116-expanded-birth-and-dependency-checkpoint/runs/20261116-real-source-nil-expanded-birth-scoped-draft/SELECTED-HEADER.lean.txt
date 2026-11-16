@@ -1,0 +1,21 @@
+private theorem real_actual_source_selected_nil_expanded_birth_scoped
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol)) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat) (metadata : Metadata Typing) (uv : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits) (current : IdentityActualSourcePoint bits)
+    (parent : IdentityActualCallbackFrame bits) (completed : List Fragment)
+    (rest : List (Node × List Suspended)) (edge : EdgeValue Symbol Constraint)
+    (residual : Option Constraint) (capturedCaller : Caller (bits + 2)) (capturedQueries : Queries)
+    (height count bound : Nat)
+    (taskIH : ∀ smaller : IdentityActualSourceTask bits,
+      smaller.work root.limit < IdentityActualSourceTask.work root.limit
+        (.tuple {current with frame := .selected parent completed rest edge residual capturedCaller capturedQueries height count bound} []) →
+      RealActualSourceExpandedBirthScopedAt holeKey fits admits graph templates checkEmpty edgesOf stop order
+        recursiveDepth workFuel metadata uv formulas solver root smaller) :
+    RealActualSourceExpandedBirthScopedAt holeKey fits admits graph templates checkEmpty edgesOf stop order
+      recursiveDepth workFuel metadata uv formulas solver root
+      (.tuple {current with frame := .selected parent completed rest edge residual capturedCaller capturedQueries height count bound} [])

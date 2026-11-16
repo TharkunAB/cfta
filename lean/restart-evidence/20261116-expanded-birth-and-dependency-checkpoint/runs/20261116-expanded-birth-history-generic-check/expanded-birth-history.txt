@@ -1,0 +1,43 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-expanded-birth-history-generic-check/source/MicroCFTA/EnumerationExpandedBirthHistory.lean:12:47: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.enumerated` could not be determined
+
+Hint: Using `UVarValue.enumerated would be unambiguous:
+  [apply] `UVarValue.enumerated`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-expanded-birth-history-generic-check/source/MicroCFTA/EnumerationExpandedBirthHistory.lean:13:33: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.enumerated` could not be determined
+
+Hint: Using `UVarValue.enumerated would be unambiguous:
+  [apply] `UVarValue.enumerated`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-expanded-birth-history-generic-check/source/MicroCFTA/EnumerationExpandedBirthHistory.lean:22:2: error: No goals to be solved
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-expanded-birth-history-generic-check/source/MicroCFTA/EnumerationExpandedBirthHistory.lean:34:2: error: No goals to be solved
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-expanded-birth-history-generic-check/source/MicroCFTA/EnumerationExpandedBirthHistory.lean:52:8: error: declaration uses `sorry`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-expanded-birth-history-generic-check/source/MicroCFTA/EnumerationExpandedBirthHistory.lean:78:8: error: No goals to be solved
+@MicroCFTA.EnumerationDependencies.ExpandedBirthHistory.refl : ∀ {Symbol Guard : Type}
+  (state : MicroCFTA.EnumerationState.State Symbol Guard),
+  MicroCFTA.EnumerationSchedule.Safe state → MicroCFTA.EnumerationDependencies.ExpandedBirthHistory state state
+'MicroCFTA.EnumerationDependencies.ExpandedBirthHistory.refl' depends on axioms: [propext, sorryAx]
+@MicroCFTA.EnumerationDependencies.ExpandedBirthHistory.trans : ∀ {Symbol Guard : Type}
+  (before middle after : MicroCFTA.EnumerationState.State Symbol Guard),
+  MicroCFTA.EnumerationDependencies.ExpandedBirthHistory before middle →
+    MicroCFTA.EnumerationDependencies.ExpandedBirthHistory middle after →
+      MicroCFTA.EnumerationDependencies.ExpandedBirthHistory before after
+'MicroCFTA.EnumerationDependencies.ExpandedBirthHistory.trans' depends on axioms: [sorryAx]
+@MicroCFTA.EnumerationDependencies.ExpandedBirthHistory.of_origin : ∀ {Symbol Guard : Type}
+  (before after : MicroCFTA.EnumerationState.State Symbol Guard),
+  MicroCFTA.EnumerationDependencies.EnumeratedOrigin before after →
+    (∀ (slot : Nat) (fragment : MicroCFTA.Fragments.Fragment Symbol),
+        before.values[slot]? = some (MicroCFTA.EnumerationState.UVarValue.enumerated fragment) →
+          MicroCFTA.EnumerationDriver.Protected slot before after) →
+      MicroCFTA.EnumerationDependencies.ExpandedBirthHistory before after
+'MicroCFTA.EnumerationDependencies.ExpandedBirthHistory.of_origin' depends on axioms: [propext, sorryAx]
+@MicroCFTA.EnumerationDependencies.ExpandedBirthHistory.write : ∀ {Symbol Guard : Type}
+  (before : MicroCFTA.EnumerationState.State Symbol Guard) (target : Nat)
+  (fragment : MicroCFTA.Fragments.Fragment Symbol) (node : Option Nat)
+  (bucket : List MicroCFTA.EnumerationState.Suspended),
+  MicroCFTA.EnumerationSchedule.Safe before →
+    before.values[target]? = some (MicroCFTA.EnumerationState.UVarValue.unenumerated node bucket) →
+      MicroCFTA.EnumerationDependencies.PendingFragment before fragment →
+        MicroCFTA.EnumerationDependencies.ExpandedBirthHistory before
+          { counter := before.counter, representatives := before.representatives,
+            values := before.values.set target (MicroCFTA.EnumerationState.UVarValue.enumerated fragment),
+            obligations := before.obligations, recursionAncestry := before.recursionAncestry,
+            expansionAncestry := before.expansionAncestry }
+'MicroCFTA.EnumerationDependencies.ExpandedBirthHistory.write' depends on axioms: [propext, sorryAx]

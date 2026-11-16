@@ -1,0 +1,22 @@
+theorem ExpandedBirthHistory.refl
+    (state : State Symbol Guard) (safe : Safe state) :
+    ExpandedBirthHistory state state
+
+theorem ExpandedBirthHistory.trans
+    (before middle after : State Symbol Guard)
+    (first : ExpandedBirthHistory before middle)
+    (second : ExpandedBirthHistory middle after) :
+    ExpandedBirthHistory before after
+
+theorem ExpandedBirthHistory.of_origin
+    (before after : State Symbol Guard) (origin : EnumeratedOrigin before after)
+    (protects : ∀ slot fragment, before.values[slot]? = some (.enumerated fragment) →
+      EnumerationDriver.Protected slot before after) :
+    ExpandedBirthHistory before after
+
+theorem ExpandedBirthHistory.write
+    (before : State Symbol Guard) (target : Nat) (fragment : Fragment Symbol)
+    (node : Option Nat) (bucket : List Suspended) (safe : Safe before)
+    (storedTarget : before.values[target]? = some (.unenumerated node bucket))
+    (pending : PendingFragment before fragment) :
+    ExpandedBirthHistory before {before with values := before.values.set target (.enumerated fragment)}

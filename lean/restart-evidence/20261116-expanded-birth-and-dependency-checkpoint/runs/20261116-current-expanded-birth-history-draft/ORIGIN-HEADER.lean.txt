@@ -1,0 +1,5 @@
+theorem ExpandedBirthHistory.of_origin
+    (before after : State Symbol Guard) (origin : EnumeratedOrigin before after)
+    (protects : ∀ slot fragment, before.values[slot]? = some (.enumerated fragment) →
+      EnumerationDriver.Protected slot before after) :
+    ExpandedBirthHistory before after

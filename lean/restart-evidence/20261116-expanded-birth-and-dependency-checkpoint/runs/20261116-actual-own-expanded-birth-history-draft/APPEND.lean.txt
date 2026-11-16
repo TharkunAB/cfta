@@ -1,0 +1,47 @@
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+open Language Fragments EnumerationState EnumerationCorrectness EnumerationSchedule
+open EnumerationDependencies EnumerationReferences InternedConstructorTemplates
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+set_option autoImplicit false
+set_option maxHeartbeats 2000000
+
+private theorem actual_cached_own_expanded_birth_history
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (before own : Cached) (parentBucket : List Suspended)
+    (edge : EdgeValue Symbol Constraint) (symbol : Symbol)
+    (staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)))
+    (residual : Option Constraint) (safe : Safe before.core)
+    (actual : SourcePruningEnumerationCachedOwn.prepare heap
+      parentBucket edge before = some [((symbol, staged, residual), own)]) :
+    ExpandedBirthHistory before.core own.core
+ := by
+  have allowed : arityAllows edge.children.length parentBucket = true := by
+    by_cases accepted : arityAllows edge.children.length parentBucket = true
+    · exact accepted
+    · simp [SourcePruningEnumerationCachedOwn.prepare, accepted] at actual
+  cases projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+  | none =>
+      simp [SourcePruningEnumerationCachedOwn.prepare, allowed, projected] at actual
+  | some pair =>
+      obtain ⟨tries, projectedResidual⟩ := pair
+      have scalars := SourcePruningEnumerationCachedOwn.prepare_scalars
+        heap parentBucket edge before own tries projectedResidual
+        (symbol, staged, residual) projected actual
+      have ownCore : own.core = suspendedState tries.length before.core := scalars.2.1
+      constructor
+      · intro slot fragment stored
+        obtain ⟨inside, root⟩ := enumerated_root before.core safe slot fragment stored
+        rw [ownCore]
+        exact EnumerationDriver.suspension_protected slot tries.length before.core safe inside root
+      · intro slot fragment stored
+        apply Or.inl
+        have origin : EnumeratedOrigin before.core own.core := by
+          rw [ownCore]
+          exact suspension_origin tries.length before.core
+        exact origin slot fragment stored
+
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation

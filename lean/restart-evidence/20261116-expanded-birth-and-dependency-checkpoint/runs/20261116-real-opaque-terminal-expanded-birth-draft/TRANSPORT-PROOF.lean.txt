@@ -1,0 +1,10 @@
+ := by
+  constructor
+  · intro slot fragment stored
+    have afterStored : after.values[slot]? = some (.enumerated fragment) := by
+      rw [stable.values]
+      exact stored
+    exact ⟨congrArg (fun values => values[slot]?) stable.values,
+      (enumerated_root after stable.safe slot fragment afterStored).2, stable.classes slot⟩
+  · intro slot fragment stored
+    exact Or.inl (by simpa only [stable.values] using stored)

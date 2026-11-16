@@ -1,0 +1,7 @@
+def ExpandedBirthHistory (before after : State Symbol Guard) : Prop :=
+  (∀ (slot : Nat) (fragment : Fragment Symbol), before.values[slot]? = some (.enumerated fragment) →
+    EnumerationDriver.Protected slot before after) ∧
+  ∀ (slot : Nat) (fragment : Fragment Symbol), after.values[slot]? = some (.enumerated fragment) →
+    before.values[slot]? = some (.enumerated fragment) ∨
+      ∀ (old : Nat) (oldFragment : Fragment Symbol), before.values[old]? = some (.enumerated oldFragment) →
+        FragmentAvoid after.representatives old fragment

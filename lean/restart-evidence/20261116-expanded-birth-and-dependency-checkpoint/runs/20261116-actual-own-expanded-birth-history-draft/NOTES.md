@@ -1,0 +1,1 @@
+Status: UNCOMPILED. The proof uses the actual CachedOwn.prepare result and its suspendedState core equality. It protects all old expanded classes and derives exact old-only fragment origins. No held-slot, future-history or model premise is added. The whole-worker receipt remains open.

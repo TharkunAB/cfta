@@ -1,0 +1,1 @@
+Status: UNCOMPILED. This normal module follows the actual runPrefix, representative, repeated check, pending write and configured preparation paths. Every original supplied workFuel is unchanged. No held-class, boundary or future-history premise is added. Its immutable original header was frozen before proof adaptation. The whole-worker birth proof remains open.

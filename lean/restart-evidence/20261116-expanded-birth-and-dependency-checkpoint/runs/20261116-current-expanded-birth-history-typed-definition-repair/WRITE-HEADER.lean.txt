@@ -1,0 +1,6 @@
+theorem ExpandedBirthHistory.write
+    (before : State Symbol Guard) (target : Nat) (fragment : Fragment Symbol)
+    (node : Option Nat) (bucket : List Suspended) (safe : Safe before)
+    (storedTarget : before.values[target]? = some (.unenumerated node bucket))
+    (pending : PendingFragment before fragment) :
+    ExpandedBirthHistory before {before with values := before.values.set target (.enumerated fragment)}

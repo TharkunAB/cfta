@@ -1,0 +1,1 @@
+Status: UNCOMPILED. Proof-only scope history retains the exact actual parent ledger package. It does not inspect a proof to compute a scope. Captured entry derives strong birth history from actual CachedOwn.prepare. Whole worker propagation remains open. The context matches the original scoped predicate and its three DecidableEq instances.

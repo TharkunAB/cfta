@@ -1,0 +1,72 @@
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+open Language Fragments EnumerationState EnumerationCorrectness EnumerationSchedule
+open EnumerationDependencies EnumerationReferences InternedConstructorTemplates
+open SourcePruningEnumerationRecursive (Packet)
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+variable {Typing : Type} {bits : Nat}
+variable [DecidableEq (EdgeKey Symbol Constraint)]
+set_option autoImplicit false
+set_option maxHeartbeats 2000000
+
+/- Retain the actual expansion birth receipt through its same-fuel finalizer. -/
+private theorem actual_finalized_pending_child_expanded_birth_history
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (original reached : Caller (bits + 2)) (memos : Memos)
+    (metadata : Metadata Typing) (before middle after : Cached)
+    (target handle fuel : Nat) (bucket : List Suspended) (fragment : Fragment) (queries : Queries)
+    (packet : Packet formulas solver inventory original memos metadata before)
+    (ready : EnumerationDriver.Ready target before.core)
+    (storedTarget : before.core.values[target]? = some (.unenumerated (some handle) bucket))
+    (actual : ChildInputs formulas solver original metadata before bucket fragment reached queries middle)
+    (finalized : SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap
+      fuel target fragment middle = some after) :
+    EnumerationDependencies.ExpandedBirthHistory before.core after.core := by
+  have oldData := actual_child_inputs_old_expanded_protection_and_avoidance
+    formulas solver inventory original reached memos metadata before middle bucket fragment queries
+    target (some handle) packet storedTarget actual
+  obtain ⟨_next, _final, _post, _query, middlePacket, _growth, origin,
+    protects, _references, _bound, fragmentPending, _fragmentAvoid⟩ := actual
+  have protectsOld : ∀ slot old, before.core.values[slot]? = some (.enumerated old) →
+      EnumerationDriver.Protected slot before.core middle.core := by
+    intro slot old stored
+    exact (oldData slot old stored).1
+  have first := ExpandedBirthHistory.of_origin before.core middle.core origin protectsOld
+  have avoids := ready.avoids handle bucket storedTarget
+  have targetProtected := protects target ready.inside ready.root avoids
+  have middleStored : middle.core.values[target]? = some (.unenumerated (some handle) bucket) :=
+    targetProtected.value.trans storedTarget
+  have written := ExpandedBirthHistory.write middle.core target fragment (some handle) bucket
+    middlePacket.safe middleStored fragmentPending
+  have core := EnumerationDischargeHistory.finalize_core_of_run
+    reached.checked.native.machine.heap fuel target fragment middle after finalized
+  have second : ExpandedBirthHistory middle.core after.core := by
+    constructor
+    · intro slot old stored
+      have retained := written.1 slot old stored
+      refine ⟨?_, ?_, ?_⟩
+      · simpa only [core] using retained.value
+      · simpa only [core] using retained.root
+      · intro uv
+        simp only [core]
+    · intro slot produced stored
+      have writtenStored :
+          (middle.core.values.set target (.enumerated fragment))[slot]? = some (.enumerated produced) := by
+        simpa only [core] using stored
+      rcases written.2 slot produced writtenStored with original | separate
+      · exact Or.inl original
+      · apply Or.inr
+        intro old oldFragment oldStored
+        simpa only [core] using separate old oldFragment oldStored
+  exact ExpandedBirthHistory.trans before.core middle.core after.core first second
+
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation

@@ -1,0 +1,38 @@
+private theorem actual_expanded_frame_history_parent
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits) (metadata : Metadata Typing) (uv : Nat)
+    (parent : IdentityActualCallbackFrame bits) (completed : List Fragment)
+    (rest : List (Node × List Suspended)) (edge : EdgeValue Symbol Constraint)
+    (residual : Option Constraint) (caller : Caller (bits + 2)) (queries : Queries)
+    (height count bound : Nat)
+    {scopeOriginal : Caller (bits + 2)} {scopeBefore : Cached} {allInputs : List (Node × List Suspended)}
+    (ledger : ActualFrameLedger formulas solver root metadata uv
+      (.selected parent completed rest edge residual caller queries height count bound)
+      scopeOriginal scopeBefore allInputs)
+    (history : ActualExpandedFrameHistory formulas solver root metadata uv ledger) :
+    ∃ (outerOriginal : Caller (bits + 2)) (outerBefore : Cached)
+        (outerInputs : List (Node × List Suspended))
+        (ancestors : ActualFrameLedger formulas solver root metadata uv parent outerOriginal outerBefore outerInputs)
+        (incoming : Node) (bucket : List Suspended) (before : Cached)
+        (mass : Nat) (seed : Seed) (inventory : Inventory) (memos : Memos)
+        (staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment))),
+      ActualExpandedFrameHistory formulas solver root metadata uv ancestors ∧
+      Packet formulas solver inventory caller memos metadata before ∧
+      memos.query = queries ∧
+      TupleInputs formulas solver outerOriginal metadata outerBefore outerInputs completed caller queries before ∧
+      (incoming, bucket) ∈ outerInputs ∧
+      SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap bucket edge before =
+        some [((edge.entry.key.symbol, staged, residual), scopeBefore)] ∧
+      IdentityActualSourcePoint.genericInputs formulas solver root outerOriginal metadata outerBefore outerInputs {
+        frame := parent
+        completed := completed
+        caller := caller
+        before := before
+        queries := queries
+        height := height
+        count := count
+        bound := bound
+        mass := mass
+        seed := seed } ((incoming, bucket) :: rest) (count + 1) ∧
+      scopeOriginal = caller ∧ allInputs = staged.map (fun input => (input.1, input.2.1))

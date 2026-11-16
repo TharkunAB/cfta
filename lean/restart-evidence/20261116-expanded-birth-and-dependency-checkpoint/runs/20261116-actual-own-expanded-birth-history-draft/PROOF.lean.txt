@@ -1,0 +1,25 @@
+ := by
+  have allowed : arityAllows edge.children.length parentBucket = true := by
+    by_cases accepted : arityAllows edge.children.length parentBucket = true
+    · exact accepted
+    · simp [SourcePruningEnumerationCachedOwn.prepare, accepted] at actual
+  cases projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+  | none =>
+      simp [SourcePruningEnumerationCachedOwn.prepare, allowed, projected] at actual
+  | some pair =>
+      obtain ⟨tries, projectedResidual⟩ := pair
+      have scalars := SourcePruningEnumerationCachedOwn.prepare_scalars
+        heap parentBucket edge before own tries projectedResidual
+        (symbol, staged, residual) projected actual
+      have ownCore : own.core = suspendedState tries.length before.core := scalars.2.1
+      constructor
+      · intro slot fragment stored
+        obtain ⟨inside, root⟩ := enumerated_root before.core safe slot fragment stored
+        rw [ownCore]
+        exact EnumerationDriver.suspension_protected slot tries.length before.core safe inside root
+      · intro slot fragment stored
+        apply Or.inl
+        have origin : EnumeratedOrigin before.core own.core := by
+          rw [ownCore]
+          exact suspension_origin tries.length before.core
+        exact origin slot fragment stored

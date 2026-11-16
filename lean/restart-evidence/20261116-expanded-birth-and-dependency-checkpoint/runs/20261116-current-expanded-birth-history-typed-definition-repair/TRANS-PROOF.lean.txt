@@ -1,0 +1,18 @@
+ := by
+  refine ⟨?_, ?_⟩
+  · intro slot fragment stored
+    have retained := first.1 slot fragment stored
+    exact retained.trans (second.1 slot fragment (retained.value.trans stored))
+  · intro slot fragment stored
+    rcases second.2 slot fragment stored with middleStored | secondSeparate
+    · rcases first.2 slot fragment middleStored with original | firstSeparate
+      · exact Or.inl original
+      · apply Or.inr
+        intro old oldFragment oldStored
+        have middleOld := (first.1 old oldFragment oldStored).value.trans oldStored
+        have retained := second.1 old oldFragment middleOld
+        intro uv hole related
+        exact firstSeparate old oldFragment oldStored uv hole ((retained.classes uv).mp related)
+    · apply Or.inr
+      intro old oldFragment oldStored
+      exact secondSeparate old oldFragment ((first.1 old oldFragment oldStored).value.trans oldStored)
