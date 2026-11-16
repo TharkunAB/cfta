@@ -1,0 +1,43 @@
+theorem stored_dispatch_issued_edge_domain_enter_origin
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (caller : Caller width) (cached : EnumerationExpandableIndex.Cached Symbol Guard)
+    (valid : SourcePruningEnumerationNativeBranchCompletion.CacheValid caller cached)
+    (source target sourceHandle targetHandle : Nat)
+    (sourceScs targetScs : List EnumerationState.Suspended)
+    (sourceStored : cached.core.values[source]? =
+      some (.unenumerated (some sourceHandle) sourceScs))
+    (targetStored : cached.core.values[target]? =
+      some (.unenumerated (some targetHandle) targetScs))
+    (rootRequest : NodeRequest Symbol Guard)
+    (rootEmpty : rootRequest.domain = IntersectionEmptyDomain.emptyDomain)
+    (sourceDecoded : SourcePruningEnumerationNodes.lookupNode
+      caller.checked.native.machine.heap sourceHandle = some rootRequest.left)
+    (targetDecoded : SourcePruningEnumerationNodes.lookupNode
+      caller.checked.native.machine.heap targetHandle = some rootRequest.right)
+    (physical : SourceCurrentAllocatedNativePhysicalCache.Valid caller.checked.native)
+    (queryUsed : Nat) (request : EdgeRequest Symbol Guard)
+    (resume : EdgeValue Symbol Guard → Code Symbol Guard (Value Symbol Guard)) (queryBefore : Checked width)
+    (issued : Trace queryUsed (.code (.node rootRequest .pure)) caller.checked
+      (.code (.edge request resume)) queryBefore)
+    (uid patternId : Nat)
+    (keyShape : request.domain.key = SourceRecursiveIntersectionDomain.extend
+      IntersectionEmptyDomain.emptyKey [uid] (SourceRecursiveIntersectionControl.pair uid patternId)) :
+    ∃ (entryUsed : Nat) (beforeEntry : Checked width) (left right : Value Symbol Guard)
+      (first second : Nat) (next : Interned DomainKey → Code Symbol Guard (Value Symbol Guard)),
+      let entered := SourceRecursiveIntersectionEnvironment.enter beforeEntry.native.machine.domains
+        IntersectionEmptyDomain.emptyKey left right first second
+      let started : Checked width :=
+        {beforeEntry with native := advance beforeEntry.native {beforeEntry.native.machine with domains := entered.2}}
+      entryUsed + 1 ≤ queryUsed ∧
+      Trace entryUsed (.code (.node rootRequest .pure)) caller.checked
+        (.code (.enter IntersectionEmptyDomain.emptyDomain left right first second next)) beforeEntry ∧
+      request.domain = entered.1 ∧
+      Trace 1 (.code (.enter IntersectionEmptyDomain.emptyDomain left right first second next))
+        beforeEntry (.code (next entered.1)) started ∧
+      Trace (queryUsed - (entryUsed + 1)) (.code (next entered.1)) started
+        (.code (.edge request resume)) queryBefore ∧
+      left.free = [] ∧ right.free = [] ∧
+      SourceRecursiveIntersectionControl.identity left = some first ∧
+      SourceRecursiveIntersectionControl.identity right = some second ∧
+      SourceRecursiveIntersectionControl.pair first second =
+        SourceRecursiveIntersectionControl.pair uid patternId

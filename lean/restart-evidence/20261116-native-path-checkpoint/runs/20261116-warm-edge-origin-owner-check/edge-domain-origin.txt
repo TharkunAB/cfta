@@ -1,0 +1,94 @@
+MicroCFTA.SourceCurrentAllocatedNativeSourceIssuedDomainEnterOrigin.stored_dispatch_issued_edge_domain_enter_origin
+  {width : Nat} [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (cached :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (valid : MicroCFTA.SourcePruningEnumerationNativeBranchCompletion.CacheValid caller cached)
+  (source target sourceHandle targetHandle : Nat) (sourceScs targetScs : List MicroCFTA.EnumerationState.Suspended)
+  (sourceStored :
+    cached.core.values[source]? =
+      some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some sourceHandle) sourceScs))
+  (targetStored :
+    cached.core.values[target]? =
+      some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some targetHandle) targetScs))
+  (rootRequest :
+    MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (rootEmpty : rootRequest.domain = MicroCFTA.IntersectionEmptyDomain.emptyDomain)
+  (sourceDecoded :
+    MicroCFTA.SourcePruningEnumerationNodes.lookupNode caller.checked.native.machine.heap sourceHandle =
+      some rootRequest.left)
+  (targetDecoded :
+    MicroCFTA.SourcePruningEnumerationNodes.lookupNode caller.checked.native.machine.heap targetHandle =
+      some rootRequest.right)
+  (physical : MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid caller.checked.native) (queryUsed : Nat)
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (resume :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      MicroCFTA.SourceRecursiveIntersectionCode.Code MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (queryBefore : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (issued :
+    MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace queryUsed
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+        (MicroCFTA.SourceRecursiveIntersectionCode.Code.node rootRequest
+          MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+      caller.checked
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+        (MicroCFTA.SourceRecursiveIntersectionCode.Code.edge request resume))
+      queryBefore)
+  (uid patternId : Nat)
+  (keyShape :
+    request.domain.key =
+      MicroCFTA.SourceRecursiveIntersectionDomain.extend MicroCFTA.IntersectionEmptyDomain.emptyKey [uid]
+        (MicroCFTA.SourceRecursiveIntersectionControl.pair uid patternId)) :
+  ∃ entryUsed beforeEntry left right first second next,
+    have entered :=
+      MicroCFTA.SourceRecursiveIntersectionEnvironment.enter beforeEntry.native.machine.domains
+        MicroCFTA.IntersectionEmptyDomain.emptyKey left right first second;
+    have started :=
+      {
+        native :=
+          MicroCFTA.SourceRecursiveIntersectionThunks.advance beforeEntry.native
+            (have __src := beforeEntry.native.machine;
+            { heap := __src.heap, domains := entered.snd }),
+        operations := beforeEntry.operations };
+    entryUsed + 1 ≤ queryUsed ∧
+      MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace entryUsed
+          (MicroCFTA.SourceEqualityNativeDemand.Control.code
+            (MicroCFTA.SourceRecursiveIntersectionCode.Code.node rootRequest
+              MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+          caller.checked
+          (MicroCFTA.SourceEqualityNativeDemand.Control.code
+            (MicroCFTA.SourceRecursiveIntersectionCode.Code.enter MicroCFTA.IntersectionEmptyDomain.emptyDomain left
+              right first second next))
+          beforeEntry ∧
+        request.domain = entered.fst ∧
+          MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace 1
+              (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                (MicroCFTA.SourceRecursiveIntersectionCode.Code.enter MicroCFTA.IntersectionEmptyDomain.emptyDomain left
+                  right first second next))
+              beforeEntry (MicroCFTA.SourceEqualityNativeDemand.Control.code (next entered.fst)) started ∧
+            MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace (queryUsed - (entryUsed + 1))
+                (MicroCFTA.SourceEqualityNativeDemand.Control.code (next entered.fst)) started
+                (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                  (MicroCFTA.SourceRecursiveIntersectionCode.Code.edge request resume))
+                queryBefore ∧
+              left.free = [] ∧
+                right.free = [] ∧
+                  MicroCFTA.SourceRecursiveIntersectionControl.identity left = some first ∧
+                    MicroCFTA.SourceRecursiveIntersectionControl.identity right = some second ∧
+                      MicroCFTA.SourceRecursiveIntersectionControl.pair first second =
+                        MicroCFTA.SourceRecursiveIntersectionControl.pair uid patternId
+'MicroCFTA.SourceCurrentAllocatedNativeSourceIssuedDomainEnterOrigin.stored_dispatch_issued_edge_domain_enter_origin' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

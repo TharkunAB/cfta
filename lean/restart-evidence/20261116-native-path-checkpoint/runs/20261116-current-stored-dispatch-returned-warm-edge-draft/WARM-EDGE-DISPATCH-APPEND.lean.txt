@@ -1,0 +1,80 @@
+namespace MicroCFTA.SourceCurrentAllocatedNativeEdgeQueryDispatchOrigin
+open InternedConstructorTemplates SourceRecursiveIntersectionCode SourceRecursiveIntersectionThunks
+open SourceEqualityNativeDemand
+open SourceEqualityNativeDemandBodyCode (Clean)
+open SourceRecursiveIntersectionNative (Shape)
+open SourceCurrentAllocatedNativePhysicalTraceCompletion (Trace)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Checked" => SourceEqualityNativeDemand.State
+variable {width : Nat} {A B : Type}
+
+set_option autoImplicit false
+
+theorem actual_edge_query_dispatch_from_warm_query_finish
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (rootRequest : NodeRequest Symbol Guard)
+    (before : Checked width)
+    (initialPhysical : SourceCurrentAllocatedNativePhysicalCache.Valid before.native)
+    (originalFuel count handle : Nat) (captured : EdgeRequest Symbol Guard)
+    (row : EdgeValue Symbol Guard) (rest : Code Symbol Guard (Value Symbol Guard))
+    (beforeFinish : Checked width)
+    (bounded : count < originalFuel)
+    (actual : Trace count (.code (.node rootRequest .pure))
+      before
+      (.code (.finishEdge handle row rest)) beforeFinish)
+    (owner : beforeFinish.native.edges.cells handle = some ⟨captured, .evaluating⟩) :
+    ∃ (queryUsed bodyCount : Nat) (queryBefore beforeBody : Checked width)
+      (resume : EdgeValue Symbol Guard → Code Symbol Guard (Value Symbol Guard)),
+      queryUsed + 1 + bodyCount = count ∧ queryUsed < count ∧ queryUsed < originalFuel ∧
+      Trace queryUsed (.code (.node rootRequest .pure))
+        before
+        (.code (.edge captured resume)) queryBefore ∧
+      Trace 1 (.code (.edge captured resume)) queryBefore
+        (.edgeBody captured (fun result => .finishEdge handle result (resume result))) beforeBody ∧
+      Steps 1 (.code (.edge captured .pure)) queryBefore
+        (.edgeBody captured (fun result => .finishEdge handle result (.pure result))) beforeBody ∧
+      SourceCurrentAllocatedNativePhysicalCache.Valid queryBefore.native ∧
+      EdgeReady queryBefore.native.machine captured ∧
+      SourceRecursiveIntersectionEdgeMemo.KeySafe width captured.domain captured.left captured.right ∧
+      beforeBody.native.edges.cells handle = some ⟨captured, .evaluating⟩ ∧
+      Steps bodyCount (.edgeBody captured .pure) beforeBody (.code (.pure row)) beforeFinish ∧
+      resume row = rest
+ := by
+  have clean : Clean (.code (.node rootRequest .pure)) := by
+    intro result
+    trivial
+  obtain ⟨dispatchUsed, bodyCount, beforeBody, resume, total, positive, _entered, runningOwner, bodyTrace, last,
+    queryUsed, queryBefore, original, chosen, running, counted, queryPrefix, selected, demanded, stateEq⟩ :=
+    descent count (.code (.node rootRequest .pure))
+      before beforeFinish handle captured row rest
+      clean initialPhysical.shape actual.steps owner
+  have splitCount : queryUsed + (count - queryUsed) = count := by omega
+  have parts := SourceCurrentHereditaryNativePhysicalSplit.split queryPrefix (splitCount.symm ▸ actual)
+  have queryPhysical := (SourceCurrentNativeEnterCommonOperand.checked_trace_extension parts.1 initialPhysical).1
+  have queryInputs := first_inputs parts.2 (by omega)
+  change EdgeReady queryBefore.native.machine original ∧
+    SourceRecursiveIntersectionEdgeMemo.KeySafe width original.domain original.left original.right at queryInputs
+  have same := SourceCurrentAllocatedNativePhysicalCache.edge_started original captured queryBefore.native chosen running
+    handle queryPhysical queryInputs.1 queryInputs.2 selected demanded
+  subst original
+  have one : SourceEqualityNativeDemand.step (.code (.edge captured resume)) queryBefore =
+      .yielded (.edgeBody captured
+        (fun result => .finishEdge handle result (resume result))) beforeBody := by
+    rw [stateEq]
+    simp only [SourceEqualityNativeDemand.step, selected, demanded]
+  have isolated : SourceEqualityNativeDemand.step (.code (.edge captured .pure)) queryBefore =
+      .yielded (.edgeBody captured
+        (fun result => .finishEdge handle result (.pure result))) beforeBody := by
+    rw [stateEq]
+    simp only [SourceEqualityNativeDemand.step, selected, demanded]
+  have actualOne : Trace 1 (.code (.edge captured resume)) queryBefore
+      (.edgeBody captured (fun result => .finishEdge handle result (resume result))) beforeBody :=
+    .cons _ _ _ _ _ _ 0 queryInputs one (.refl _ _)
+  have isolatedOne : Steps 1 (.code (.edge captured .pure)) queryBefore
+      (.edgeBody captured (fun result => .finishEdge handle result (.pure result))) beforeBody :=
+    .cons _ _ _ _ _ _ 0 isolated (.refl _ _)
+  exact ⟨queryUsed, bodyCount, queryBefore, beforeBody, resume, by omega, by omega, by omega,
+    parts.1, actualOne, isolatedOne, queryPhysical, queryInputs.1, queryInputs.2, runningOwner, bodyTrace, last⟩
+
+end MicroCFTA.SourceCurrentAllocatedNativeEdgeQueryDispatchOrigin

@@ -1,0 +1,30 @@
+import MicroCFTA.SourcePruningEnumerationNativeRequestInputs
+import MicroCFTA.SourcePruningEnumerationNativeRequestGuardHeap
+
+namespace MicroCFTA.SourcePruningEnumerationNativeRequestFields
+open InternedConstructorTemplates SourceRecursiveIntersectionCode SourceEqualityNativeDemand
+open InternedProbeProvenance (Available)
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedNativeResourceForecast (Profile Room)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
+open SourceCurrentAllocatedPartialInvariant (Context)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Guard
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+variable {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+
+theorem fields_of_resources (profile : Profile)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (before : Caller (bits + 2)) (left right : Node) (memos : Memos)
+    (initial : Context formulas solver inventory before memos)
+    (fits : Fits profile before.checked) (room : Room bits profile)
+    (leftAvailable : Available before.checked.native.machine.heap left)
+    (rightAvailable : Available before.checked.native.machine.heap right)
+    (leftClosed : left.free = []) (rightClosed : right.free = [])
+    (nativeFuel : Nat) :
+    SourceEqualityNativeDemandOperations.FieldsThrough nativeFuel
+      (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before.checked

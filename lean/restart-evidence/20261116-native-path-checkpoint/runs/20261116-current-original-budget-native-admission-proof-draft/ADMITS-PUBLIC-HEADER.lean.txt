@@ -1,0 +1,12 @@
+theorem admitted_request_plans (profile : Profile) (before : Checked (bits + 2))
+    (ready : SourceCurrentConjunctionClassScan.Ready before)
+    (fits : Fits profile before) (room : SourceCurrentAllocatedNativeCreditProfile.Admits bits profile)
+    (left right : Node)
+    (leftAvailable : Available before.native.machine.heap left)
+    (rightAvailable : Available before.native.machine.heap right)
+    (leftClosed : left.free = []) (rightClosed : right.free = [])
+    (nativeFuel : Nat) :
+    SourceCurrentAllocatedNativePhysicalExecution.InputsThrough nativeFuel
+      (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before ∧
+      SourceEqualityNativeDemandOperations.FieldsThrough nativeFuel
+        (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before

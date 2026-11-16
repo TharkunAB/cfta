@@ -1,0 +1,29 @@
+theorem actual_edge_query_dispatch_from_warm_query_finish
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (rootRequest : NodeRequest Symbol Guard)
+    (before : Checked width)
+    (initialPhysical : SourceCurrentAllocatedNativePhysicalCache.Valid before.native)
+    (originalFuel count handle : Nat) (captured : EdgeRequest Symbol Guard)
+    (row : EdgeValue Symbol Guard) (rest : Code Symbol Guard (Value Symbol Guard))
+    (beforeFinish : Checked width)
+    (bounded : count < originalFuel)
+    (actual : Trace count (.code (.node rootRequest .pure))
+      before
+      (.code (.finishEdge handle row rest)) beforeFinish)
+    (owner : beforeFinish.native.edges.cells handle = some ⟨captured, .evaluating⟩) :
+    ∃ (queryUsed bodyCount : Nat) (queryBefore beforeBody : Checked width)
+      (resume : EdgeValue Symbol Guard → Code Symbol Guard (Value Symbol Guard)),
+      queryUsed + 1 + bodyCount = count ∧ queryUsed < count ∧ queryUsed < originalFuel ∧
+      Trace queryUsed (.code (.node rootRequest .pure))
+        before
+        (.code (.edge captured resume)) queryBefore ∧
+      Trace 1 (.code (.edge captured resume)) queryBefore
+        (.edgeBody captured (fun result => .finishEdge handle result (resume result))) beforeBody ∧
+      Steps 1 (.code (.edge captured .pure)) queryBefore
+        (.edgeBody captured (fun result => .finishEdge handle result (.pure result))) beforeBody ∧
+      SourceCurrentAllocatedNativePhysicalCache.Valid queryBefore.native ∧
+      EdgeReady queryBefore.native.machine captured ∧
+      SourceRecursiveIntersectionEdgeMemo.KeySafe width captured.domain captured.left captured.right ∧
+      beforeBody.native.edges.cells handle = some ⟨captured, .evaluating⟩ ∧
+      Steps bodyCount (.edgeBody captured .pure) beforeBody (.code (.pure row)) beforeFinish ∧
+      resume row = rest

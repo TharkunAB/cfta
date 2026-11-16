@@ -1,0 +1,70 @@
+MicroCFTA.SourcePruningEnumerationNativeRequestFields.fields_through_of_physical_inputs
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {Output : Type} {width : Nat} (fuel : Nat) (control : MicroCFTA.SourceEqualityNativeDemand.Control Output)
+  (state : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (valid : MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good state)
+  (inputs : MicroCFTA.SourceCurrentAllocatedNativePhysicalExecution.InputsThrough fuel control state)
+  (fields : MicroCFTA.SourceCurrentAllocatedNativeFieldClosure.Fields control state) :
+  MicroCFTA.SourceEqualityNativeDemandOperations.FieldsThrough fuel control state
+'MicroCFTA.SourcePruningEnumerationNativeRequestFields.fields_through_of_physical_inputs' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationNativeRequestFields.fields_of_resources {bits : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2))
+  (left right :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (memos : MicroCFTA.EndpointMemoGateTrace.Memos)
+  (initial : MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory before memos)
+  (fits : MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile before.checked)
+  (room : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits profile)
+  (leftAvailable : MicroCFTA.InternedProbeProvenance.Available before.checked.native.machine.heap left)
+  (rightAvailable : MicroCFTA.InternedProbeProvenance.Available before.checked.native.machine.heap right)
+  (leftClosed : left.free = []) (rightClosed : right.free = []) (nativeFuel : Nat) :
+  MicroCFTA.SourceEqualityNativeDemandOperations.FieldsThrough nativeFuel
+    (MicroCFTA.SourceEqualityNativeDemand.Control.code
+      (MicroCFTA.SourceRecursiveIntersectionCode.requestNode MicroCFTA.IntersectionEmptyDomain.emptyDomain left right))
+    before.checked
+'MicroCFTA.SourcePruningEnumerationNativeRequestFields.fields_of_resources' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationNativeRequestFields.admitted_request_plans {bits : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+  (before : MicroCFTA.SourceEqualityNativeDemand.State (bits + 2))
+  (ready : MicroCFTA.SourceCurrentConjunctionClassScan.Ready before)
+  (fits : MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile before)
+  (room : MicroCFTA.SourceCurrentAllocatedNativeCreditProfile.Admits bits profile)
+  (left right :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (leftAvailable : MicroCFTA.InternedProbeProvenance.Available before.native.machine.heap left)
+  (rightAvailable : MicroCFTA.InternedProbeProvenance.Available before.native.machine.heap right)
+  (leftClosed : left.free = []) (rightClosed : right.free = []) (nativeFuel : Nat) :
+  MicroCFTA.SourceCurrentAllocatedNativePhysicalExecution.InputsThrough nativeFuel
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+        (MicroCFTA.SourceRecursiveIntersectionCode.requestNode MicroCFTA.IntersectionEmptyDomain.emptyDomain left
+          right))
+      before ∧
+    MicroCFTA.SourceEqualityNativeDemandOperations.FieldsThrough nativeFuel
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+        (MicroCFTA.SourceRecursiveIntersectionCode.requestNode MicroCFTA.IntersectionEmptyDomain.emptyDomain left
+          right))
+      before
+'MicroCFTA.SourcePruningEnumerationNativeRequestFields.admitted_request_plans' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

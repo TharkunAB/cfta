@@ -1,0 +1,75 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-prepared-child-raw-path-congruence-check/source/MicroCFTA/SourcePruningEnumerationSharedPreparedRawPathCongruence.lean:59:10: error: `dsimp` made no progress
+@MicroCFTA.SourcePruningEnumerationSharedPreparedRawPathCongruence.actual_prepared_child_raw_path_congruence : ∀
+  {width : Nat} [inst : DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (ownCaller childCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (parentBucket : List MicroCFTA.EnumerationState.Suspended)
+  (edge :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (ownBefore rowOwn :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (staged :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) ×
+        List MicroCFTA.EnumerationState.Suspended ×
+          Option
+            (MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol))))
+  (residual : Option (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourcePruningEnumerationCachedOwn.prepare ownCaller.checked.native.machine.heap parentBucket edge
+        ownBefore =
+      some [((edge.entry.key.symbol, staged, residual), rowOwn)] →
+    ∀ (position : Nat)
+      (incoming :
+        MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (childBucket : List MicroCFTA.EnumerationState.Suspended)
+      (action :
+        Option
+          (MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol))),
+      staged[position]? = some (incoming, childBucket, action) →
+        (∀ (sc : MicroCFTA.EnumerationState.Suspended), sc ∈ parentBucket → MicroCFTA.EqualityTrie.Valid sc.trie) →
+          ∀
+            (childBefore :
+              MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            (queries : MicroCFTA.SourceEndpointMemo.Memos) (checkEmpty : Bool) (r n p h k : Nat)
+            (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+            (reached : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+            (saved : MicroCFTA.SourceEndpointMemo.Memos)
+            (read returned :
+              MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            (moved : MicroCFTA.EnumerationWaitingIndex.Waiting)
+            (after :
+              Option
+                (MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+            (roots : Nat → Nat),
+            MicroCFTA.EnumerationSchedule.Roots childBefore.core.representatives roots →
+              MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.ChildDispatch.run checkEmpty r n p h k
+                    childBucket incoming childCaller childBefore queries =
+                  ((Except.ok (some [Except.ok (fragment, returned)]), reached, saved, read, moved), after) →
+                ∀ (firstIndex secondIndex : Nat) (first second : MicroCFTA.EnumerationState.Suspended),
+                  parentBucket[firstIndex]? = some first →
+                    parentBucket[secondIndex]? = some second →
+                      [position] ∈ MicroCFTA.EqualityTrie.fromPathTrie first.trie →
+                        [position] ∈ MicroCFTA.EqualityTrie.fromPathTrie second.trie →
+                          MicroCFTA.UnionFind.SameClass returned.representatives first.var second.var
+'MicroCFTA.SourcePruningEnumerationSharedPreparedRawPathCongruence.actual_prepared_child_raw_path_congruence' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

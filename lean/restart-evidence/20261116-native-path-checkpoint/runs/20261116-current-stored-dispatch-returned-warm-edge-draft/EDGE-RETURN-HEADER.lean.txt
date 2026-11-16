@@ -1,0 +1,18 @@
+theorem returned_edge_cell_or_finish_prefix [DecidableEq Symbol]
+    [DecidableEq (EdgeKey Symbol Guard)] {width : Nat} {Output : Type}
+    {count : Nat} {control rest : Control Output} {before after : Checked width}
+    (actual : Trace count control before rest after) :
+    ∀ (handle : Nat) (request : EdgeRequest Symbol Guard) (value : EdgeValue Symbol Guard),
+      after.native.edges.cells handle = some ⟨request, .returned value⟩ →
+      before.native.edges.cells handle = some ⟨request, .returned value⟩ ∨
+      ∃ (prefixCount suffixCount : Nat) (beforeFinish : Checked width)
+        (next : Code Symbol Guard Output),
+        count = prefixCount + 1 + suffixCount ∧
+        Trace prefixCount control before (.code (.finishEdge handle value next)) beforeFinish ∧
+        beforeFinish.native.edges.cells handle = some ⟨request, .evaluating⟩ ∧
+        Trace 1 (.code (.finishEdge handle value next)) beforeFinish (.code next)
+          { beforeFinish with native := finishEdge handle value beforeFinish.native } ∧
+        ({ beforeFinish with native := finishEdge handle value beforeFinish.native } : Checked width).native.edges.cells
+          handle = some ⟨request, .returned value⟩ ∧
+        Trace suffixCount (.code next)
+          { beforeFinish with native := finishEdge handle value beforeFinish.native } rest after

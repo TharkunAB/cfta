@@ -1,0 +1,41 @@
+import MicroCFTA.SourcePruningEnumerationCachedOwn
+import MicroCFTA.SourcePruningEnumerationSharedChildFinalRawTargets
+
+namespace MicroCFTA.SourcePruningEnumerationSharedPreparedRawPathCongruence
+open EnumerationState EnumerationSchedule EnumerationCorrectness InternedConstructorTemplates
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Core" => EnumerationState.State Symbol Constraint
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Input" => Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)
+set_option autoImplicit false
+variable {width : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+theorem actual_prepared_child_raw_path_congruence
+    (ownCaller childCaller : Caller width) (parentBucket : List Suspended)
+    (edge : EdgeValue Symbol Constraint) (ownBefore rowOwn : Cached)
+    (staged : List Input) (residual : Option Constraint)
+    (prepared : SourcePruningEnumerationCachedOwn.prepare
+      ownCaller.checked.native.machine.heap parentBucket edge ownBefore =
+      some [((edge.entry.key.symbol, staged, residual), rowOwn)])
+    (position : Nat) (incoming : Node) (childBucket : List Suspended)
+    (action : Option (EnumerateM Symbol Constraint Fragment))
+    (indexed : staged[position]? = some (incoming, childBucket, action))
+    (valid : ∀ sc ∈ parentBucket, EqualityTrie.Valid sc.trie)
+    (childBefore : Cached) (queries : Queries) (checkEmpty : Bool) (r n p h k : Nat)
+    (fragment : Fragment) (reached : Caller width) (saved : Queries)
+    (read returned : Core) (moved : EnumerationWaitingIndex.Waiting) (after : Option Cached)
+    (roots : Nat → Nat) (paths : Roots childBefore.core.representatives roots)
+    (actual : SourcePruningEnumerationSharedSelectedContinuations.ChildDispatch.run
+      checkEmpty r n p h k childBucket incoming childCaller childBefore queries =
+      ((.ok (some [.ok (fragment, returned)]), reached, saved, read, moved), after)) :
+    ∀ (firstIndex secondIndex : Nat) (first second : Suspended),
+      parentBucket[firstIndex]? = some first → parentBucket[secondIndex]? = some second →
+      [position] ∈ EqualityTrie.fromPathTrie first.trie →
+      [position] ∈ EqualityTrie.fromPathTrie second.trie →
+      UnionFind.SameClass returned.representatives first.var second.var
