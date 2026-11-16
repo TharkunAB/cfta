@@ -1,3 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationPrefixNativeReadback
 import MicroCFTA.SourcePruningEnumerationPrefixIsolatedAtOriginalBudget
 import MicroCFTA.SourcePruningEnumerationRealCapturedCallbackResources
 import MicroCFTA.SourcePruningEnumerationRealWorkerCallbackResources
@@ -6195,3 +6196,6 @@ run_cmd do
 
 #check @MicroCFTA.SourcePruningEnumerationSelectedStep.prefix_isolated_at_original_budget
 #print axioms MicroCFTA.SourcePruningEnumerationSelectedStep.prefix_isolated_at_original_budget
+
+#check @MicroCFTA.SourcePruningEnumerationSelectedStep.prefix_native_readback_at_original_budget
+#print axioms MicroCFTA.SourcePruningEnumerationSelectedStep.prefix_native_readback_at_original_budget
