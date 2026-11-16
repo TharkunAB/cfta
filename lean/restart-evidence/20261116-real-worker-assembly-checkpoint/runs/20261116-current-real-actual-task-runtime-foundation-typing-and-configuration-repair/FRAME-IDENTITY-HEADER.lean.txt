@@ -1,0 +1,7 @@
+private theorem actual_source_frame_callbacks_identity
+    (graph : Graph Symbol Constraint) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint)) (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Unit) (uv : Nat) (frame : IdentityActualCallbackFrame bits) :
+    actual_source_frame_callbacks (fun _ _ _ node state => .done node state)
+      graph [] checkEmpty edgesOf none (fun _ _ => none) recursiveDepth workFuel metadata uv frame =
+      identity_actual_frame_callbacks graph checkEmpty edgesOf recursiveDepth workFuel metadata uv frame

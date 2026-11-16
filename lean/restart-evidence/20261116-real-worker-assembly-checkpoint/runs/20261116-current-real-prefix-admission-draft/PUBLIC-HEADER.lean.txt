@@ -1,0 +1,31 @@
+/-- Actual continuing real prefixes retain incoming avoidance and the original bucket bounds. -/
+theorem prefix_real_phase_admission_at_original_budget
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller width) (memos : Memos) (before : Cached)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (workFuel selected ceiling : Nat)
+    (chosen : SourcePruningEnumerationRestart.decision stop order metadata before = some (.expand selected))
+    (originalMass : suspendedBound before.core ≤ ceiling) :
+    let observed := SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order
+      metadata workFuel workFuel workFuel workFuel workFuel workFuel selected caller before memos.query
+    match observed with
+    | .parked _ (some after) (some [.ok ((_updated, _next), _restartCore)]) =>
+        EnumerationReferences.IncomingAvoid selected after.core ∧
+        suspendedBound after.core ≤ suspendedBound before.core ∧
+        suspendedBound after.core ≤ ceiling
+    | .narrowed _ (.done (_value, some _action) _heap) _ _
+        (some [.ok ((), _actionCore)]) (some after)
+        (some [.ok ((false, _updated), _callbackCore)]) none =>
+        EnumerationReferences.IncomingAvoid selected after.core ∧
+        suspendedBound after.core = suspendedBound before.core ∧
+        suspendedBound after.core ≤ ceiling ∧
+        ∃ (oldHandle newHandle : Nat) (scs : List Suspended),
+          before.core.values[selected]? = some (.unenumerated (some oldHandle) scs) ∧
+          after.core.values[selected]? = some (.unenumerated (some newHandle) scs) ∧
+          scs.length ≤ suspendedBound before.core ∧ scs.length ≤ ceiling
+    | _ => True

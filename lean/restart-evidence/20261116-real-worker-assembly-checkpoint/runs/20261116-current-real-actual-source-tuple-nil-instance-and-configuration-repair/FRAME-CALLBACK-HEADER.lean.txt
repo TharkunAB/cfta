@@ -1,0 +1,23 @@
+private theorem actual_selected_frame_callback
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol)) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Typing) (uv : Nat) (parent : IdentityActualCallbackFrame bits)
+    (completedPrefix : List Fragment) (rest : List (Node × List Suspended))
+    (edge : EdgeValue Symbol Constraint) (residual : Option Constraint)
+    (caller : Caller (bits + 2)) (queries : Queries) (parentHeight remainingCount parentBound : Nat)
+    (fragments : List Fragment) (reached : Caller (bits + 2)) (saved : Queries) (after : Cached) :
+    let inherited := actual_source_frame_callbacks (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv parent
+    let tail := actual_source_parent_tail checkEmpty edgesOf workFuel inherited completedPrefix rest
+    let fragment := Fragments.Fragment.node edge.entry.key.symbol fragments
+    let returned := SelectedEdge.finish residual fragment after
+    (actual_source_frame_callbacks (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+      (.selected parent completedPrefix rest edge residual caller queries parentHeight remainingCount parentBound)).1
+      fragments reached saved after =
+      match tail fragment reached saved returned with
+      | .complete processed outputs finalCaller finalQueries =>
+          .complete (.complete fragment reached saved returned :: processed) outputs finalCaller finalQueries
+      | .stopped processed outputs current =>
+          .stopped (.complete fragment reached saved returned :: processed) outputs current

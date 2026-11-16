@@ -1,0 +1,72 @@
+private theorem actual_selected_frame_actual_handoff
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol)) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Typing) (uv : Nat) (limit own innerHeight innerCount innerBound innerMass : Nat)
+    (innerSeed : Seed) (parent : IdentityActualCallbackFrame bits)
+    (parentHeight remainingCount parentBound : Nat)
+    (original : Caller (bits + 2)) (scopeBefore : Cached)
+    (inputs : List (Node × List Suspended)) (completedPrefix : List Fragment)
+    (rest : List (Node × List Suspended))
+    (caller : Caller (bits + 2)) (queries : Queries) (before : Cached)
+    (incoming : Node) (scs : List Suspended) (edge : EdgeValue Symbol Constraint)
+    (residual : Option Constraint) (middle : Cached)
+    (staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)))
+    (fragments : List Fragment) (reached : Caller (bits + 2)) (saved : Queries) (after : Cached)
+    (previous : TupleInputs formulas solver original metadata scopeBefore inputs completedPrefix caller queries before)
+    (member : (incoming, scs) ∈ inputs)
+    (pending : InputsPending before.core scs)
+    (prepared : SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs edge before =
+      some [((edge.entry.key.symbol, staged, residual), middle)])
+    (history : TupleInputs formulas solver caller metadata middle
+      (staged.map (fun input => (input.1, input.2.1))) fragments reached saved after)
+    (currentFits : Fits innerSeed.2 reached.checked)
+    (currentKnown : Heap (fun guard => guard ∈ innerSeed.1) reached.checked.native.machine.heap)
+    (currentMass : SourcePruningEnumerationPrefixAdmission.suspendedBound after.core ≤ innerMass)
+    (counted : rest.length ≤ remainingCount)
+    (reserved : tupleReserved (nodePlan limit own innerHeight) (nodeReserved bits limit own innerHeight)
+      innerCount innerBound innerMass
+      (identity_actual_frame_plan recursiveDepth limit own
+        (.selected parent completedPrefix rest edge residual caller queries parentHeight remainingCount parentBound))
+      (identity_actual_frame_reserved bits recursiveDepth limit own
+        (.selected parent completedPrefix rest edge residual caller queries parentHeight remainingCount parentBound)) innerSeed) :
+    let frame := IdentityActualCallbackFrame.selected parent completedPrefix rest edge residual caller queries
+      parentHeight remainingCount parentBound
+    let callbackSeed := advance innerSeed (innerCount * (innerBound + 1))
+    let callbackMass := innerMass + innerCount * innerBound
+    let fragment := Fragments.Fragment.node edge.entry.key.symbol fragments
+    let returned := SelectedEdge.finish residual fragment after
+    ChildInputs formulas solver caller metadata before scs fragment reached saved returned ∧
+    TupleInputs formulas solver original metadata scopeBefore inputs
+      (completedPrefix ++ [fragment]) reached saved returned ∧
+    Fits callbackSeed.2 reached.checked ∧
+    Heap (fun guard => guard ∈ callbackSeed.1) reached.checked.native.machine.heap ∧
+    SourcePruningEnumerationPrefixAdmission.suspendedBound returned.core ≤ callbackMass ∧
+    rest.length ≤ remainingCount ∧
+    tupleReserved (nodePlan limit own parentHeight) (nodeReserved bits limit own parentHeight)
+      remainingCount parentBound callbackMass
+      (identity_actual_frame_plan recursiveDepth limit own parent)
+      (identity_actual_frame_reserved bits recursiveDepth limit own parent) callbackSeed ∧
+    (Le (tuplePlan (nodePlan limit own parentHeight) remainingCount parentBound callbackMass
+        (identity_actual_frame_plan recursiveDepth limit own parent) callbackSeed).2
+        (tuplePlan (nodePlan limit own innerHeight) innerCount innerBound innerMass
+          (identity_actual_frame_plan recursiveDepth limit own frame) innerSeed).2 ∧
+      (tuplePlan (nodePlan limit own parentHeight) remainingCount parentBound callbackMass
+        (identity_actual_frame_plan recursiveDepth limit own parent) callbackSeed).1 ⊆
+        (tuplePlan (nodePlan limit own innerHeight) innerCount innerBound innerMass
+          (identity_actual_frame_plan recursiveDepth limit own frame) innerSeed).1) ∧
+    ((actual_source_frame_callbacks (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv frame).1
+      fragments reached saved after =
+      SourcePruningEnumerationSharedEagerChildren.consumeSelected
+        (actual_source_parent_tail checkEmpty edgesOf workFuel
+          (actual_source_frame_callbacks (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv parent)
+          completedPrefix rest)
+        caller queries (.complete fragment reached saved returned)) ∧
+    ∃ (next : Inventory) (final : Memos),
+      SourceCurrentAllocatedPartialInvariant.Post formulas solver next original reached final ∧
+      final.query = saved ∧ Packet formulas solver next reached final metadata returned ∧
+      SourceEqualityRequiredCache.Keeps original.checked.native.machine.heap reached.checked.native.machine.heap

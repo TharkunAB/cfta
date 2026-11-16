@@ -1,0 +1,193 @@
+private theorem observed_success_stages
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (metadata updated : Metadata Typing)
+    (readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv : Nat)
+    (caller reached : Caller width) (before after : Cached) (queries receivedQueries : Queries)
+    (checked observed callbackCore : Core) (result : Node)
+    (nextHeap : InternedConstructorTemplates.State Symbol Constraint) (action : EnumerateM Symbol Constraint Unit)
+    (prefixObserved : SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata readFuel checkFuel nativeFuel
+      representativeFuel indexFuel callbackFuel uv caller before queries =
+      .narrowed checked (.done (result, some action) nextHeap) reached receivedQueries
+        (some [.ok ((), observed)]) (some after) (some [.ok ((false, updated), callbackCore)]) none)
+    :
+    ∃ (oldHandle newHandle : Nat) (scs : List Suspended) (oldValue : Node) (readAfter : Core),
+      ExceptT.run (getValue readFuel uv before.core) = [.ok (.unenumerated (some oldHandle) scs, readAfter)] ∧
+      ExceptT.run (SourcePruningEnumerationRecursion.checkRepeated caller.checked.native.machine.heap
+        checkFuel uv oldHandle scs readAfter) = [.ok (false, checked)] ∧
+      lookupNode caller.checked.native.machine.heap oldHandle = some oldValue ∧
+      SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel
+        uv oldHandle scs oldValue caller.checked.native.machine.heap = .done (result, some action) nextHeap ∧
+      encodeNode result = some newHandle ∧
+      ExceptT.run (action checked) = [.ok ((), observed)] ∧
+      SourcePruningEnumerationNarrowAdapter.adapt nextHeap indexFuel uv oldHandle newHandle scs before observed = some after ∧
+      after.core = observed ∧ callbackCore = observed ∧ updated = metadata ∧
+      reached = SourceCurrentAllocatedPartialState.advance caller
+        (advancePhysical caller.checked ⟨nextHeap, caller.checked.operations⟩) caller.fourth caller.merge ∧
+      receivedQueries = queries := by
+  unfold SourcePruningEnumerationSelectedStep.runPrefix SourcePruningEnumerationSelectedStep.runPrefixWithNarrow at prefixObserved
+  simp only [← SourcePruningEnumerationAction.prepare_configured_eq] at prefixObserved
+  generalize readEq : ExceptT.run (getValue readFuel uv before.core) = read at prefixObserved
+  cases read with
+  | nil => cases prefixObserved
+  | cons first rest =>
+      cases rest with
+      | cons _ _ =>
+          cases first with
+          | error _ => cases prefixObserved
+          | ok pair =>
+              obtain ⟨value, _readAfter⟩ := pair
+              cases value with
+              | eliminated | enumerated _ => cases prefixObserved
+              | unenumerated handle _ => cases handle <;> cases prefixObserved
+      | nil =>
+          cases first with
+          | error _ => cases prefixObserved
+          | ok pair =>
+              obtain ⟨value, readAfter⟩ := pair
+              cases value with
+              | eliminated | enumerated _ => cases prefixObserved
+              | unenumerated handle scs =>
+                  cases handle with
+                  | none => cases prefixObserved
+                  | some oldHandle =>
+                      dsimp only at prefixObserved
+                      generalize checkEq : ExceptT.run (SourcePruningEnumerationRecursion.checkRepeated
+                        caller.checked.native.machine.heap checkFuel uv oldHandle scs readAfter) = check at prefixObserved
+                      cases check with
+                      | nil => cases prefixObserved
+                      | cons first rest =>
+                          cases rest with
+                          | cons _ _ =>
+                              cases first with
+                              | error _ => cases prefixObserved
+                              | ok pair =>
+                                  obtain ⟨repeated, _checked⟩ := pair
+                                  cases repeated <;> cases prefixObserved
+                          | nil =>
+                              cases first with
+                              | error _ => cases prefixObserved
+                              | ok pair =>
+                                  obtain ⟨repeated, actualChecked⟩ := pair
+                                  cases repeated with
+                                  | true => cases prefixObserved
+                                  | false =>
+                                      generalize decodedEq : lookupNode caller.checked.native.machine.heap oldHandle = decoded at prefixObserved
+                                      cases decoded with
+                                      | none => cases prefixObserved
+                                      | some oldValue =>
+                                          dsimp only at prefixObserved
+                                          generalize preparedEq : SourcePruningEnumerationAction.prepare holeKey fits admits metadata
+                                            nativeFuel representativeFuel uv oldHandle scs oldValue
+                                            caller.checked.native.machine.heap = prepared at prefixObserved
+                                          cases prepared with
+                                          | failed _ _ => cases prefixObserved
+                                          | done pair nativeAfter =>
+                                              obtain ⟨nativeResult, possibleAction⟩ := pair
+                                              cases possibleAction with
+                                              | none => cases prefixObserved
+                                              | some actualAction =>
+                                                  dsimp only at prefixObserved
+                                                  generalize actionEq : ExceptT.run (actualAction actualChecked) = raw at prefixObserved
+                                                  cases raw with
+                                                  | nil => cases prefixObserved
+                                                  | cons first rest =>
+                                                      cases rest with
+                                                      | cons _ _ =>
+                                                          cases first with
+                                                          | error _ => cases prefixObserved
+                                                          | ok pair =>
+                                                              obtain ⟨token, _observed⟩ := pair
+                                                              cases token
+                                                              cases prefixObserved
+                                                      | nil =>
+                                                          cases first with
+                                                          | error _ => cases prefixObserved
+                                                          | ok pair =>
+                                                              obtain ⟨token, actualObserved⟩ := pair
+                                                              cases token
+                                                              dsimp only at prefixObserved
+                                                              generalize encodedEq : encodeNode nativeResult = encoded at prefixObserved
+                                                              cases encoded with
+                                                              | none => cases prefixObserved
+                                                              | some newHandle =>
+                                                                  dsimp only at prefixObserved
+                                                                  generalize adaptedEq : SourcePruningEnumerationNarrowAdapter.adapt nativeAfter
+                                                                    indexFuel uv oldHandle newHandle scs before actualObserved = adapted at prefixObserved
+                                                                  cases adapted with
+                                                                  | none => cases prefixObserved
+                                                                  | some attached =>
+                                                                      rw [SourcePruningRecordTypes.recordTypes_inr] at prefixObserved
+                                                                      have same := SourcePruningEnumerationSelectedStep.Result.narrowed.inj prefixObserved
+                                                                      have checkedSame := same.1
+                                                                      have preparedSame := MergedSourceComparison.Result.done.inj same.2.1
+                                                                      have resultSame : nativeResult = result := congrArg Prod.fst preparedSame.1
+                                                                      have actionSame := Option.some.inj (congrArg Prod.snd preparedSame.1)
+                                                                      have heapSame := preparedSame.2
+                                                                      have observedSame : actualObserved = observed := congrArg Prod.snd
+                                                                        (Except.ok.inj (List.cons.inj (Option.some.inj same.2.2.2.2.1)).1)
+                                                                      have attachedSame := Option.some.inj same.2.2.2.2.2.1
+                                                                      have rightSame := Except.ok.inj
+                                                                        (List.cons.inj (Option.some.inj same.2.2.2.2.2.2.1)).1
+                                                                      have callbackSame : attached.core = callbackCore := congrArg Prod.snd rightSame
+                                                                      have updatedSame : metadata = updated := congrArg Prod.snd (congrArg Prod.fst rightSame)
+                                                                      subst actualChecked
+                                                                      subst nativeResult
+                                                                      subst actualAction
+                                                                      subst nativeAfter
+                                                                      subst actualObserved
+                                                                      have attachedEq : attached = after := attachedSame
+                                                                      subst attached
+                                                                      have core := SourcePruningEnumerationNarrowAdapter.adapt_core nextHeap indexFuel
+                                                                        uv oldHandle newHandle scs before after observed adaptedEq
+                                                                      exact ⟨oldHandle, newHandle, scs, oldValue, readAfter, rfl, checkEq,
+                                                                        decodedEq, preparedEq, encodedEq, actionEq, adaptedEq, core,
+                                                                        callbackSame.symm.trans core, updatedSame.symm, same.2.2.1.symm, same.2.2.2.1.symm⟩
+
+private theorem prepared_done_narrowed
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (metadata : Metadata Typing) (fuel representativeFuel uv oldHandle : Nat)
+    (scs : List Suspended) (oldValue value : Node)
+    (before after : InternedConstructorTemplates.State Symbol Constraint)
+    (action : EnumerateM Symbol Constraint Unit)
+    (prepared : SourcePruningEnumerationAction.prepare holeKey fits admits metadata fuel representativeFuel
+      uv oldHandle scs oldValue before = .done (value, some action) after) :
+    SourcePruningOuterNarrow.narrow holeKey fits admits metadata fuel uv oldValue before =
+      .done value after := by
+  unfold SourcePruningEnumerationAction.prepare SourcePruningEnumerationAction.prepareWithNarrow at prepared
+  cases narrowed : SourcePruningOuterNarrow.narrow holeKey fits admits metadata fuel uv oldValue before with
+  | failed =>
+      simp only [narrowed] at prepared
+      cases prepared
+  | done actualValue actualHeap =>
+      rw [narrowed] at prepared
+      have parts := MergedSourceComparison.Result.done.inj prepared
+      have sameValue : actualValue = value := congrArg Prod.fst parts.1
+      cases sameValue
+      cases parts.2
+      rfl
+
+private theorem prepared_success_nonempty
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (metadata : Metadata Typing) (fuel representativeFuel uv oldHandle : Nat)
+    (scs : List Suspended) (oldValue value : Node)
+    (before after : InternedConstructorTemplates.State Symbol Constraint)
+    (action : EnumerateM Symbol Constraint Unit) (checked observed : Core)
+    (prepared : SourcePruningEnumerationAction.prepare holeKey fits admits metadata fuel representativeFuel
+      uv oldHandle scs oldValue before = .done (value, some action) after)
+    (raw : ExceptT.run (action checked) = [.ok ((), observed)]) : value ≠ .empty := by
+  intro sameValue
+  have narrowed := prepared_done_narrowed holeKey fits admits metadata fuel representativeFuel
+    uv oldHandle scs oldValue value before after action prepared
+  have rejected : SourcePruningEnumerationAction.prepare holeKey fits admits metadata fuel representativeFuel
+      uv oldHandle scs oldValue before =
+      .done (value, some (reject : EnumerateM Symbol Constraint Unit)) after := by
+    simp only [SourcePruningEnumerationAction.prepare, SourcePruningEnumerationAction.prepareWithNarrow,
+      narrowed, sameValue]
+  have sameAction : action = (reject : EnumerateM Symbol Constraint Unit) :=
+    Option.some.inj (congrArg Prod.snd (MergedSourceComparison.Result.done.inj
+      (prepared.symm.trans rejected)).1)
+  rw [sameAction] at raw
+  simp only [reject, ExceptT.run] at raw
+  cases raw

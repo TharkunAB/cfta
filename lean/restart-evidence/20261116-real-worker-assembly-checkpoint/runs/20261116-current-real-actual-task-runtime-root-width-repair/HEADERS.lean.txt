@@ -1,0 +1,108 @@
+private theorem actual_source_tuple_cons_run
+    (narrow : Narrow)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol)) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Typing) (uv : Nat) (point : IdentityActualSourcePoint bits) (count : Nat)
+    (incoming : Node) (bucket : List Suspended) (rest : List (Node × List Suspended)) :
+    IdentityActualSourceTask.runWithNarrow narrow graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+      (.tuple {point with count := count + 1} ((incoming, bucket) :: rest)) =
+    IdentityActualSourceTask.runWithNarrow narrow graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+      (.child {point with count := count} incoming bucket rest)
+
+private theorem actual_source_ordinary_run
+    (narrow : Narrow)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol)) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Typing) (uv : Nat) (point : IdentityActualSourcePoint bits) (height : Nat)
+    (incoming : Node) (bucket : List Suspended) (rest : List (Node × List Suspended))
+    (ordinary : SourcePruningEnumerationSharedEagerChildren.ordinaryNonterminal bucket incoming = true) :
+    IdentityActualSourceTask.runWithNarrow narrow graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+      (.child {point with height := height + 1} incoming bucket rest) =
+    IdentityActualSourceTask.runWithNarrow narrow graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+      (.rows height {point with height := height + 1} incoming bucket rest)
+
+private theorem actual_source_row_prefix_run_with_narrow_eq
+    (narrow : Narrow)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol)) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Typing) (uv : Nat) (height : Nat) (point : IdentityActualSourcePoint bits)
+    (incoming : Node) (bucket : List Suspended) (rest : List (Node × List Suspended)) :
+    actual_source_row_prefix_run_with_narrow narrow graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+      point incoming bucket rest (edgesOf incoming) =
+    IdentityActualSourceTask.runWithNarrow narrow graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+      (.rows height point incoming bucket rest)
+
+private theorem actual_source_cons_current
+    (narrow : Narrow)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol)) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Typing) (uv : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits) (original : Caller (bits + 2))
+    (scopeBefore : Cached) (allInputs : List (Node × List Suspended))
+    (point : IdentityActualSourcePoint bits) (count : Nat)
+    (incoming : Node) (bucket : List Suspended) (rest : List (Node × List Suspended))
+    (origin : ActualSourceOrigin narrow graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv root
+      (.tuple {point with count := count + 1} ((incoming, bucket) :: rest)))
+    (current : ActualSourceCurrent formulas solver root original metadata scopeBefore allInputs recursiveDepth
+      (.tuple {point with count := count + 1} ((incoming, bucket) :: rest))) :
+    ActualSourceOrigin narrow graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv root
+      (.child {point with count := count} incoming bucket rest) ∧
+    ActualSourceCurrent formulas solver root original metadata scopeBefore allInputs recursiveDepth
+      (.child {point with count := count} incoming bucket rest) ∧
+    IdentityActualSourceTask.work root.limit (.child {point with count := count} incoming bucket rest) <
+      IdentityActualSourceTask.work root.limit
+        (.tuple {point with count := count + 1} ((incoming, bucket) :: rest))
+
+private theorem actual_source_frame_callbacks_identity
+    (graph : Graph Symbol Constraint) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint)) (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Unit) (uv : Nat) (frame : IdentityActualCallbackFrame bits) :
+    actual_source_frame_callbacks (fun _ _ _ node state => .done node state)
+      graph [] checkEmpty edgesOf none (fun _ _ => none) recursiveDepth workFuel metadata uv frame =
+      identity_actual_frame_callbacks graph checkEmpty edgesOf recursiveDepth workFuel metadata uv frame
+
+private theorem actual_source_task_run_identity
+    (graph : Graph Symbol Constraint) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint)) (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Unit) (uv : Nat) (task : IdentityActualSourceTask bits) :
+    task.runWithNarrow (fun _ _ _ node state => .done node state)
+      graph [] checkEmpty edgesOf none (fun _ _ => none) recursiveDepth workFuel metadata uv =
+      task.run graph checkEmpty edgesOf recursiveDepth workFuel metadata uv
+
+private theorem actual_source_root_visit_identity
+    (graph : Graph Symbol Constraint) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint)) (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Unit) (uv : Nat) (scs : List Suspended) :
+    actual_source_root_visit_with_narrow (bits := bits) (fun _ _ _ node state => .done node state)
+      graph [] checkEmpty edgesOf none (fun _ _ => none) recursiveDepth workFuel metadata uv scs =
+      identity_actual_source_root_visit (bits := bits) graph checkEmpty edgesOf recursiveDepth workFuel metadata uv scs
+
+private theorem actual_source_root_visit_real_eq
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol)) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat) (metadata : Metadata Typing) (uv : Nat) (scs : List Suspended) :
+    actual_source_root_visit_with_narrow (bits := bits) (SourcePruningOuterNarrow.narrow holeKey fits admits)
+      graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv scs =
+      SourcePruningEnumerationSharedChildVisitors.visitCapturedWith
+        (width := bits + 2) (Output := Output (bits + 2) Typing) (Reason := Failure (bits + 2) Typing)
+        (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty
+          workFuel workFuel workFuel workFuel workFuel edgesOf)
+        (SourcePruningEnumerationSharedPreparedRecursive.continueWith
+          (resumeWithNarrow
+            (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty
+              workFuel workFuel workFuel workFuel workFuel edgesOf)
+            (SourcePruningOuterNarrow.narrow holeKey fits admits)
+            graph templates checkEmpty edgesOf stop order workFuel recursiveDepth)
+          graph templates stop order workFuel metadata uv)
+        workFuel uv scs

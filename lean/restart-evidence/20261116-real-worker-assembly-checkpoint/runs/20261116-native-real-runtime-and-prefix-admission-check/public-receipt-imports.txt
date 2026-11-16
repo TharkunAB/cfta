@@ -1,0 +1,131 @@
+MicroCFTA.SourcePruningEnumerationSharedRecursive.observed_success_stages {Typing Key : Type} {width : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (holeKey : Typing → Nat → Key) (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits :
+    Key →
+      MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        Bool)
+  (graph :
+    MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol))
+  (stop : Option (MicroCFTA.SourcePruningRecordTypes.Metadata Typing → Nat → Bool))
+  (order : MicroCFTA.SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat)
+  (metadata updated : MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv : Nat)
+  (caller reached : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before after :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (queries receivedQueries : MicroCFTA.SourceEndpointMemo.Memos)
+  (checked observed callbackCore :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (result :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (nextHeap :
+    MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (action :
+    MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Unit)
+  (prefixObserved :
+    MicroCFTA.SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata
+        readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv caller before queries =
+      MicroCFTA.SourcePruningEnumerationSelectedStep.Result.narrowed checked
+        (MicroCFTA.MergedSourceComparison.Result.done (result, some action) nextHeap) reached receivedQueries
+        (some [Except.ok ((), observed)]) (some after) (some [Except.ok ((false, updated), callbackCore)]) none) :
+  ∃ oldHandle newHandle scs oldValue readAfter,
+    (MicroCFTA.EnumerationState.getValue readFuel uv before.core).run =
+        [Except.ok (MicroCFTA.EnumerationState.UVarValue.unenumerated (some oldHandle) scs, readAfter)] ∧
+      (MicroCFTA.SourcePruningEnumerationRecursion.checkRepeated caller.checked.native.machine.heap checkFuel uv
+              oldHandle scs readAfter).run =
+          [Except.ok (false, checked)] ∧
+        MicroCFTA.SourcePruningEnumerationNodes.lookupNode caller.checked.native.machine.heap oldHandle =
+            some oldValue ∧
+          MicroCFTA.SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel uv
+                oldHandle scs oldValue caller.checked.native.machine.heap =
+              MicroCFTA.MergedSourceComparison.Result.done (result, some action) nextHeap ∧
+            MicroCFTA.SourcePruningEnumerationNodes.encodeNode result = some newHandle ∧
+              (action checked).run = [Except.ok ((), observed)] ∧
+                MicroCFTA.SourcePruningEnumerationNarrowAdapter.adapt nextHeap indexFuel uv oldHandle newHandle scs
+                      before observed =
+                    some after ∧
+                  after.core = observed ∧
+                    callbackCore = observed ∧
+                      updated = metadata ∧
+                        reached =
+                            MicroCFTA.SourceCurrentAllocatedPartialState.advance caller
+                              (MicroCFTA.SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+                                { heap := nextHeap, equality := caller.checked.operations })
+                              caller.fourth caller.merge ∧
+                          receivedQueries = queries
+'MicroCFTA.SourcePruningEnumerationSharedRecursive.observed_success_stages' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationSharedRecursive.prepared_done_narrowed {Typing Key : Type}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (holeKey : Typing → Nat → Key) (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits :
+    Key →
+      MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        Bool)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing) (fuel representativeFuel uv oldHandle : Nat)
+  (scs : List MicroCFTA.EnumerationState.Suspended)
+  (oldValue value :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before after :
+    MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (action :
+    MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Unit)
+  (prepared :
+    MicroCFTA.SourcePruningEnumerationAction.prepare holeKey fits admits metadata fuel representativeFuel uv oldHandle
+        scs oldValue before =
+      MicroCFTA.MergedSourceComparison.Result.done (value, some action) after) :
+  MicroCFTA.SourcePruningOuterNarrow.narrow holeKey fits admits metadata fuel uv oldValue before =
+    MicroCFTA.MergedSourceComparison.Result.done value after
+'MicroCFTA.SourcePruningEnumerationSharedRecursive.prepared_done_narrowed' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationSharedRecursive.prepared_success_nonempty {Typing Key : Type}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (holeKey : Typing → Nat → Key) (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits :
+    Key →
+      MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        Bool)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing) (fuel representativeFuel uv oldHandle : Nat)
+  (scs : List MicroCFTA.EnumerationState.Suspended)
+  (oldValue value :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before after :
+    MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (action :
+    MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Unit)
+  (checked observed :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (prepared :
+    MicroCFTA.SourcePruningEnumerationAction.prepare holeKey fits admits metadata fuel representativeFuel uv oldHandle
+        scs oldValue before =
+      MicroCFTA.MergedSourceComparison.Result.done (value, some action) after)
+  (raw : (action checked).run = [Except.ok ((), observed)]) : value ≠ MicroCFTA.InternedConstructorTemplates.Value.empty
+'MicroCFTA.SourcePruningEnumerationSharedRecursive.prepared_success_nonempty' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,14 @@
+private theorem actual_tuple_inputs_extend_current_head
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (original : Caller (bits + 2)) (metadata : Metadata Typing) (before : Cached)
+    (inputs : List (Node × List Suspended)) (completed : List Fragment)
+    (caller : Caller (bits + 2)) (queries : Queries) (current : Cached)
+    (incoming : Node) (bucket : List Suspended) (fragment : Fragment)
+    (reached : Caller (bits + 2)) (saved : Queries) (after : Cached)
+    (previous : TupleInputs formulas solver original metadata before inputs completed caller queries current)
+    (member : (incoming, bucket) ∈ inputs)
+    (pending : InputsPending current.core bucket)
+    (head : ChildInputs formulas solver caller metadata current bucket fragment reached saved after) :
+    TupleInputs formulas solver original metadata before inputs
+      (completed ++ [fragment]) reached saved after
