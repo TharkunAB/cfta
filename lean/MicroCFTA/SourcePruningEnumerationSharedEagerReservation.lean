@@ -1,3 +1,5 @@
+import MicroCFTA.EnumerationStratifiedLevelReceipts
+import MicroCFTA.EnumerationStratifiedAllocatedMonotonicity
 import MicroCFTA.EnumerationPendingFragmentExpandedAvoidance
 import MicroCFTA.SourcePruningEnumerationPrefixHeldHistoryAtOriginalBudget
 import MicroCFTA.SourcePruningEnumerationSharedScanOutputOrigins
@@ -25857,5 +25859,195 @@ private theorem actual_child_inputs_old_expanded_protection_and_avoidance
   refine ⟨retained, ?_⟩
   exact pendingFragment_avoids_protected_expanded before.core middle.core fragment old slot
     fragmentPending stored retained
+
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+open Language Fragments EnumerationState EnumerationCorrectness EnumerationSchedule
+open EnumerationDependencies EnumerationReferences InternedConstructorTemplates
+open SourcePruningEnumerationRecursive (Packet)
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+variable {Typing : Type} {bits : Nat}
+variable [DecidableEq (EdgeKey Symbol Constraint)]
+set_option autoImplicit false
+set_option maxHeartbeats 2000000
+
+/- Derive a one-write cut from the actual child and finalizer receipts. -/
+private theorem actual_finalized_pending_child_stratified_cut
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (original reached : Caller (bits + 2)) (memos : Memos)
+    (metadata : Metadata Typing) (before middle after : Cached)
+    (target handle fuel : Nat) (bucket : List Suspended) (fragment : Fragment) (queries : Queries)
+    (packet : Packet formulas solver inventory original memos metadata before)
+    (ready : EnumerationDriver.Ready target before.core)
+    (storedTarget : before.core.values[target]? = some (.unenumerated (some handle) bucket))
+    (actual : ChildInputs formulas solver original metadata before bucket fragment reached queries middle)
+    (level : Nat → Nat) (frontier : Nat)
+    (ordered : EnumerationOrder.Stratified before.core level frontier)
+    (finalized : SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap
+      fuel target fragment middle = some after) :
+    ∃ nextLevel, EnumerationOrder.Stratified after.core nextLevel (frontier + 1) ∧
+      (∀ slot old, before.core.values[slot]? = some (.enumerated old) →
+        nextLevel slot = level slot) ∧
+      (∀ slot node scs, before.core.values[slot]? = some (.unenumerated node scs) →
+        frontier ≤ nextLevel slot) ∧
+      (∀ slot produced, after.core.values[slot]? = some (.enumerated produced) →
+        before.core.values[slot]? = some (.enumerated produced) ∨ slot = target) ∧
+      (∀ slot old, before.core.values[slot]? = some (.enumerated old) →
+        FragmentAvoid after.core.representatives slot fragment) := by
+  have oldData := actual_child_inputs_old_expanded_protection_and_avoidance
+    formulas solver inventory original reached memos metadata before middle bucket fragment queries
+    target (some handle) packet storedTarget actual
+  obtain ⟨_next, _final, _post, _query, middlePacket, _growth, origin,
+    protects, _references, _bound, fragmentPending, fragmentAvoid⟩ := actual
+  have protectsOld : ∀ slot old, before.core.values[slot]? = some (.enumerated old) →
+      EnumerationDriver.Protected slot before.core middle.core := by
+    intro slot old stored
+    exact (oldData slot old stored).1
+  obtain ⟨middleLevel, middleOrder, oldFixed, oldPending⟩ :=
+    EnumerationOrder.stratified_preserved_with_old_levels before.core middle.core
+      packet.safe middlePacket.safe level frontier ordered origin protectsOld
+  have avoids := ready.avoids handle bucket storedTarget
+  have targetProtected := protects target ready.inside ready.root avoids
+  have middleStored : middle.core.values[target]? = some (.unenumerated (some handle) bucket) :=
+    targetProtected.value.trans storedTarget
+  have separate := fragmentAvoid target ready.inside ready.root avoids
+  obtain ⟨nextLevel, writtenOrder, increases, writtenFixed⟩ :=
+    EnumerationOrder.write_stratified_with_old_levels middle.core middlePacket.safe
+      middleLevel frontier target middleOrder (some handle) bucket middleStored fragment
+      fragmentPending separate
+  have core := EnumerationDischargeHistory.finalize_core_of_run
+    reached.checked.native.machine.heap fuel target fragment middle after finalized
+  have finalOrder : EnumerationOrder.Stratified after.core nextLevel (frontier + 1) := by
+    rw [core]
+    exact EnumerationOrder.stratified_ancestry _ [] nextLevel (frontier + 1) writtenOrder
+  have sameForest : after.core.representatives = middle.core.representatives := by rw [core]
+  refine ⟨nextLevel, finalOrder, ?_, ?_, ?_, ?_⟩
+  · intro slot old stored
+    have middleOld : middle.core.values[slot]? = some (.enumerated old) :=
+      (oldData slot old stored).1.value.trans stored
+    exact (writtenFixed slot old middleOld).trans (oldFixed slot old stored)
+  · intro slot node scs stored
+    calc
+      frontier = middleLevel slot := (oldPending slot node scs stored).symm
+      _ ≤ nextLevel slot := increases slot
+  · intro slot produced stored
+    by_cases selected : slot = target
+    · exact Or.inr selected
+    · apply Or.inl
+      apply origin slot produced
+      rw [core] at stored
+      simpa only [List.getElem?_set_ne (Ne.symm selected)] using stored
+  · intro slot old stored
+    rw [sameForest]
+    exact (oldData slot old stored).2
+
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+open Language Fragments EnumerationState EnumerationCorrectness EnumerationSchedule
+open EnumerationDependencies EnumerationReferences InternedConstructorTemplates
+open SourcePruningEnumerationRecursive (Packet)
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+variable {Typing : Type} {bits : Nat}
+variable [DecidableEq (EdgeKey Symbol Constraint)]
+set_option autoImplicit false
+set_option maxHeartbeats 2000000
+
+/- Retain the local cut and every old allocated raw level at the same finalizer. -/
+private theorem actual_finalized_pending_child_stratified_monotone_cut
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (original reached : Caller (bits + 2)) (memos : Memos)
+    (metadata : Metadata Typing) (before middle after : Cached)
+    (target handle fuel : Nat) (bucket : List Suspended) (fragment : Fragment) (queries : Queries)
+    (packet : Packet formulas solver inventory original memos metadata before)
+    (ready : EnumerationDriver.Ready target before.core)
+    (storedTarget : before.core.values[target]? = some (.unenumerated (some handle) bucket))
+    (actual : ChildInputs formulas solver original metadata before bucket fragment reached queries middle)
+    (level : Nat → Nat) (frontier : Nat)
+    (ordered : EnumerationOrder.Stratified before.core level frontier)
+    (finalized : SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap
+      fuel target fragment middle = some after) :
+    ∃ nextLevel, EnumerationOrder.Stratified after.core nextLevel (frontier + 1) ∧
+      (∀ slot old, before.core.values[slot]? = some (.enumerated old) →
+        nextLevel slot = level slot) ∧
+      (∀ slot node scs, before.core.values[slot]? = some (.unenumerated node scs) →
+        frontier ≤ nextLevel slot) ∧
+      (∀ slot produced, after.core.values[slot]? = some (.enumerated produced) →
+        before.core.values[slot]? = some (.enumerated produced) ∨ slot = target) ∧
+      (∀ slot old, before.core.values[slot]? = some (.enumerated old) →
+        FragmentAvoid after.core.representatives slot fragment) ∧
+      (∀ uv, uv < before.core.counter → level uv ≤ nextLevel uv) := by
+  have oldData := actual_child_inputs_old_expanded_protection_and_avoidance
+    formulas solver inventory original reached memos metadata before middle bucket fragment queries
+    target (some handle) packet storedTarget actual
+  obtain ⟨_next, _final, _post, _query, middlePacket, growth, origin,
+    protects, _references, _bound, fragmentPending, fragmentAvoid⟩ := actual
+  have protectsOld : ∀ slot old, before.core.values[slot]? = some (.enumerated old) →
+      EnumerationDriver.Protected slot before.core middle.core := by
+    intro slot old stored
+    exact (oldData slot old stored).1
+  obtain ⟨middleLevel, middleOrder, oldFixed, oldPending⟩ :=
+    EnumerationOrder.stratified_preserved_with_old_levels before.core middle.core
+      packet.safe middlePacket.safe level frontier ordered origin protectsOld
+  have middleNondecrease := EnumerationOrder.stratified_transport_allocated_nondecreasing
+    before.core middle.core packet.safe middlePacket.safe growth level middleLevel frontier
+    ordered middleOrder origin protectsOld oldFixed
+  have avoids := ready.avoids handle bucket storedTarget
+  have targetProtected := protects target ready.inside ready.root avoids
+  have middleStored : middle.core.values[target]? = some (.unenumerated (some handle) bucket) :=
+    targetProtected.value.trans storedTarget
+  have separate := fragmentAvoid target ready.inside ready.root avoids
+  obtain ⟨nextLevel, writtenOrder, increases, writtenFixed⟩ :=
+    EnumerationOrder.write_stratified_with_old_levels middle.core middlePacket.safe
+      middleLevel frontier target middleOrder (some handle) bucket middleStored fragment
+      fragmentPending separate
+  have core := EnumerationDischargeHistory.finalize_core_of_run
+    reached.checked.native.machine.heap fuel target fragment middle after finalized
+  have finalOrder : EnumerationOrder.Stratified after.core nextLevel (frontier + 1) := by
+    rw [core]
+    exact EnumerationOrder.stratified_ancestry _ [] nextLevel (frontier + 1) writtenOrder
+  have sameForest : after.core.representatives = middle.core.representatives := by rw [core]
+  refine ⟨nextLevel, finalOrder, ?_, ?_, ?_, ?_, ?_⟩
+  · intro slot old stored
+    have middleOld : middle.core.values[slot]? = some (.enumerated old) :=
+      (oldData slot old stored).1.value.trans stored
+    exact (writtenFixed slot old middleOld).trans (oldFixed slot old stored)
+  · intro slot node scs stored
+    calc
+      frontier = middleLevel slot := (oldPending slot node scs stored).symm
+      _ ≤ nextLevel slot := increases slot
+  · intro slot produced stored
+    by_cases selected : slot = target
+    · exact Or.inr selected
+    · apply Or.inl
+      apply origin slot produced
+      rw [core] at stored
+      simpa only [List.getElem?_set_ne (Ne.symm selected)] using stored
+  · intro slot old stored
+    rw [sameForest]
+    exact (oldData slot old stored).2
+  · intro uv inside
+    exact Nat.le_trans (middleNondecrease uv inside) (increases uv)
 
 end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
