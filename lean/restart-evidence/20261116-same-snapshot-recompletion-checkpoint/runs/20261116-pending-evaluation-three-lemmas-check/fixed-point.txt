@@ -1,0 +1,12 @@
+@MicroCFTA.EnumerationPendingAssignment.evaluateSlotsWith_fixed_of_stored_equations : ∀ {Symbol Guard : Type}
+  (state : MicroCFTA.EnumerationState.State Symbol Guard) (roots : Nat → Nat),
+  MicroCFTA.EnumerationSchedule.Roots state.representatives roots →
+    ∀ (rho : Nat → MicroCFTA.Language.Term Symbol),
+      MicroCFTA.UnionFind.Satisfies state.representatives rho →
+        (∀ (slot : Nat) (fragment : MicroCFTA.Fragments.Fragment Symbol),
+            state.values[slot]? = some (MicroCFTA.EnumerationState.UVarValue.enumerated fragment) →
+              MicroCFTA.Fragments.fill rho fragment = rho slot) →
+          ∀ (fuel uv : Nat),
+            MicroCFTA.EnumerationPendingAssignment.evaluateSlotsWith state.values roots rho fuel uv = rho uv
+'MicroCFTA.EnumerationPendingAssignment.evaluateSlotsWith_fixed_of_stored_equations' depends on axioms: [propext,
+ Quot.sound]

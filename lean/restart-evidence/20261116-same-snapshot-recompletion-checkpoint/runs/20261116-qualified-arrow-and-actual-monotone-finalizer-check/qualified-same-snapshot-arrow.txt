@@ -1,0 +1,87 @@
+@MicroCFTA.SourcePruningEnumerationArrowBucketRecompletion.recomplete_arrow_bucket_at_snapshot : ∀ {Guard : Type}
+  (catalog : List (String × Nat))
+  (state : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol Guard),
+  MicroCFTA.EnumerationSchedule.Safe state →
+    ∀ (roots : Nat → Nat),
+      MicroCFTA.EnumerationSchedule.Roots state.representatives roots →
+        ∀ (level : Nat → Nat) (frontier : Nat),
+          MicroCFTA.EnumerationOrder.Stratified state level frontier →
+            ∀ (current : Nat → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol),
+              MicroCFTA.UnionFind.Satisfies state.representatives current →
+                (∀ (slot : Nat) (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol),
+                    state.values[slot]? = some (MicroCFTA.EnumerationState.UVarValue.enumerated fragment) →
+                      MicroCFTA.Fragments.fill current fragment = current slot) →
+                  ∀ (owner : Nat) (node : Option Nat)
+                    (pendingBucket removedBucket : List MicroCFTA.EnumerationState.Suspended),
+                    state.values[owner]? = some (MicroCFTA.EnumerationState.UVarValue.unenumerated node pendingBucket) →
+                      (∀ (sc : MicroCFTA.EnumerationState.Suspended),
+                          sc ∈ removedBucket →
+                            ∀ (path : MicroCFTA.EqualityTrie.Path),
+                              path ∈ MicroCFTA.EqualityTrie.fromPathTrie sc.trie → path = [1] ∨ path = [2]) →
+                        (∀ (sc : MicroCFTA.EnumerationState.Suspended),
+                            sc ∈ removedBucket →
+                              ∀ (position : Nat),
+                                [position] ∈ MicroCFTA.EqualityTrie.fromPathTrie sc.trie →
+                                  MicroCFTA.SourceSynthesisFiniteTypeWitnesses.TypeIn catalog (current sc.var)) →
+                          (∀ (firstIndex secondIndex : Nat) (first second : MicroCFTA.EnumerationState.Suspended)
+                              (position : Nat),
+                              removedBucket[firstIndex]? = some first →
+                                removedBucket[secondIndex]? = some second →
+                                  [position] ∈ MicroCFTA.EqualityTrie.fromPathTrie first.trie →
+                                    [position] ∈ MicroCFTA.EqualityTrie.fromPathTrie second.trie →
+                                      current first.var = current second.var) →
+                            ∀ (kept : Nat → Prop),
+                              (∀ (uv : Nat),
+                                  kept uv →
+                                    ∀ (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol),
+                                      state.values[roots uv]? =
+                                          some (MicroCFTA.EnumerationState.UVarValue.enumerated fragment) →
+                                        ∀ (hole : Nat),
+                                          MicroCFTA.EnumerationDependencies.HasHole fragment hole → kept hole) →
+                                (∀ (sc : MicroCFTA.EnumerationState.Suspended), sc ∈ removedBucket → kept sc.var) →
+                                  (∀ (slot : Nat),
+                                      kept slot → ¬MicroCFTA.UnionFind.SameClass state.representatives owner slot) →
+                                    ∃ argument result assignment,
+                                      MicroCFTA.SourceSynthesisFiniteTypeWitnesses.TypeIn catalog argument ∧
+                                        MicroCFTA.SourceSynthesisFiniteTypeWitnesses.TypeIn catalog result ∧
+                                          assignment owner =
+                                              MicroCFTA.Language.Term.node
+                                                (MicroCFTA.SourceSynthesisLabelProgramBuildRoles.literal "->")
+                                                [MicroCFTA.Language.Term.node
+                                                    (MicroCFTA.SourceSynthesisLabelProgramBuildRoles.literal "(->)") [],
+                                                  argument, result] ∧
+                                            MicroCFTA.SourceSynthesisFiniteTypeWitnesses.TypeIn catalog
+                                                (assignment owner) ∧
+                                              MicroCFTA.UnionFind.Satisfies state.representatives assignment ∧
+                                                (∀ (slot : Nat)
+                                                    (fragment :
+                                                      MicroCFTA.Fragments.Fragment
+                                                        MicroCFTA.SourcePruningTemplates.Symbol),
+                                                    state.values[slot]? =
+                                                        some
+                                                          (MicroCFTA.EnumerationState.UVarValue.enumerated fragment) →
+                                                      assignment slot = MicroCFTA.Fragments.fill assignment fragment) ∧
+                                                  (∀ (slot : Nat), kept slot → assignment slot = current slot) ∧
+                                                    (∀ (sc : MicroCFTA.EnumerationState.Suspended),
+                                                        sc ∈ removedBucket → assignment sc.var = current sc.var) ∧
+                                                      (∀ (sc : MicroCFTA.EnumerationState.Suspended),
+                                                          sc ∈ removedBucket →
+                                                            MicroCFTA.EnumerationState.Suspended.Holds assignment
+                                                              (assignment owner) sc) ∧
+                                                        (∀ (occurrence : Nat)
+                                                            (sc : MicroCFTA.EnumerationState.Suspended),
+                                                            removedBucket[occurrence]? = some sc →
+                                                              MicroCFTA.EnumerationState.Suspended.Holds assignment
+                                                                (assignment owner) sc) ∧
+                                                          ∀ (slot : Nat) (otherNode : Option Nat)
+                                                            (otherBucket : List MicroCFTA.EnumerationState.Suspended),
+                                                            state.values[slot]? =
+                                                                some
+                                                                  (MicroCFTA.EnumerationState.UVarValue.unenumerated
+                                                                    otherNode otherBucket) →
+                                                              ¬MicroCFTA.UnionFind.SameClass state.representatives owner
+                                                                    slot →
+                                                                assignment slot = current slot
+'MicroCFTA.SourcePruningEnumerationArrowBucketRecompletion.recomplete_arrow_bucket_at_snapshot' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

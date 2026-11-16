@@ -1,0 +1,24 @@
+ := by
+  intro fuel
+  induction fuel with
+  | zero =>
+      intro uv
+      rfl
+  | succ fuel ih =>
+      intro uv
+      cases stored : state.values[roots uv]? with
+      | none =>
+          simp only [evaluateSlotsWith, stored]
+      | some value =>
+          cases value with
+          | eliminated | unenumerated _ _ =>
+              simp only [evaluateSlotsWith, stored]
+          | enumerated fragment =>
+              simp only [evaluateSlotsWith, stored]
+              obtain ⟨size, path⟩ := paths uv
+              have filled : fill (evaluateSlotsWith state.values roots rho fuel) fragment =
+                  fill rho fragment :=
+                EnumerationAssignment.fill_holes_congr _ _ fragment (fun hole _ => ih hole)
+              have atRoot := equations (roots uv) fragment stored
+              have sameValue := aliases uv (roots uv) (UnionFind.sameClass_root path)
+              exact filled.trans (atRoot.trans sameValue.symm)

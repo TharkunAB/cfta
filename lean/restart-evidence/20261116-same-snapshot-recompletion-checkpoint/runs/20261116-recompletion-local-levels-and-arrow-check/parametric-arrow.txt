@@ -1,0 +1,41 @@
+MicroCFTA.SourcePruningEnumerationParametricArrowBucketWitness.parametric_arrow_bucket_recompletion : ∀
+  (catalog : List (String × Nat)) (forest : MicroCFTA.UnionFind.Forest) (owner : Nat)
+  (bucket : List MicroCFTA.EnumerationState.Suspended)
+  (rho : Nat → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol),
+  MicroCFTA.EnumerationSchedule.IsRoot forest owner →
+    MicroCFTA.UnionFind.Satisfies forest rho →
+      MicroCFTA.EnumerationCorrectness.Avoids forest owner bucket →
+        (∀ (sc : MicroCFTA.EnumerationState.Suspended),
+            sc ∈ bucket →
+              ∀ (path : MicroCFTA.EqualityTrie.Path),
+                path ∈ MicroCFTA.EqualityTrie.fromPathTrie sc.trie → path = [1] ∨ path = [2]) →
+          (∀ (sc : MicroCFTA.EnumerationState.Suspended),
+              sc ∈ bucket →
+                ∀ (position : Nat),
+                  [position] ∈ MicroCFTA.EqualityTrie.fromPathTrie sc.trie →
+                    MicroCFTA.SourceSynthesisFiniteTypeWitnesses.TypeIn catalog (rho sc.var)) →
+            (∀ (firstIndex secondIndex : Nat) (first second : MicroCFTA.EnumerationState.Suspended) (position : Nat),
+                bucket[firstIndex]? = some first →
+                  bucket[secondIndex]? = some second →
+                    [position] ∈ MicroCFTA.EqualityTrie.fromPathTrie first.trie →
+                      [position] ∈ MicroCFTA.EqualityTrie.fromPathTrie second.trie → rho first.var = rho second.var) →
+              ∃ argument result updated,
+                MicroCFTA.SourceSynthesisFiniteTypeWitnesses.TypeIn catalog argument ∧
+                  MicroCFTA.SourceSynthesisFiniteTypeWitnesses.TypeIn catalog result ∧
+                    updated owner =
+                        MicroCFTA.Language.Term.node (MicroCFTA.SourceSynthesisLabelProgramBuildRoles.literal "->")
+                          [MicroCFTA.Language.Term.node (MicroCFTA.SourceSynthesisLabelProgramBuildRoles.literal "(->)")
+                              [],
+                            argument, result] ∧
+                      MicroCFTA.SourceSynthesisFiniteTypeWitnesses.TypeIn catalog (updated owner) ∧
+                        MicroCFTA.UnionFind.Satisfies forest updated ∧
+                          (∀ (slot : Nat), ¬MicroCFTA.UnionFind.SameClass forest owner slot → updated slot = rho slot) ∧
+                            (∀ (sc : MicroCFTA.EnumerationState.Suspended), sc ∈ bucket → updated sc.var = rho sc.var) ∧
+                              (∀ (sc : MicroCFTA.EnumerationState.Suspended),
+                                  sc ∈ bucket → MicroCFTA.EnumerationState.Suspended.Holds updated (updated owner) sc) ∧
+                                ∀ (occurrence : Nat) (sc : MicroCFTA.EnumerationState.Suspended),
+                                  bucket[occurrence]? = some sc →
+                                    MicroCFTA.EnumerationState.Suspended.Holds updated (updated owner) sc
+'MicroCFTA.SourcePruningEnumerationParametricArrowBucketWitness.parametric_arrow_bucket_recompletion' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

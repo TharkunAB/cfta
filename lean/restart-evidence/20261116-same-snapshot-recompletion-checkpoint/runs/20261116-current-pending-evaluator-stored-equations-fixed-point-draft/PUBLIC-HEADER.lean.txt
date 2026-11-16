@@ -1,0 +1,7 @@
+theorem evaluateSlotsWith_fixed_of_stored_equations
+    (state : State Symbol Guard) (roots : Nat → Nat)
+    (paths : Roots state.representatives roots) (rho : Nat → Term Symbol)
+    (aliases : UnionFind.Satisfies state.representatives rho)
+    (equations : ∀ slot fragment, state.values[slot]? = some (.enumerated fragment) →
+      fill rho fragment = rho slot) :
+    ∀ fuel uv, evaluateSlotsWith state.values roots rho fuel uv = rho uv

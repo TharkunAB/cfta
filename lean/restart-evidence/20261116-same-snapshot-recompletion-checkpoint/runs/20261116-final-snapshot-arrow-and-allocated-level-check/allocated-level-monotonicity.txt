@@ -1,0 +1,17 @@
+MicroCFTA.EnumerationOrder.stratified_transport_allocated_nondecreasing {Symbol Guard : Type}
+  (before after : MicroCFTA.EnumerationState.State Symbol Guard)
+  (beforeSafe : MicroCFTA.EnumerationSchedule.Safe before) (afterSafe : MicroCFTA.EnumerationSchedule.Safe after)
+  (growth : before.counter ≤ after.counter) (level nextLevel : Nat → Nat) (frontier : Nat)
+  (beforeOrder : MicroCFTA.EnumerationOrder.Stratified before level frontier)
+  (afterOrder : MicroCFTA.EnumerationOrder.Stratified after nextLevel frontier)
+  (origin : MicroCFTA.EnumerationDependencies.EnumeratedOrigin before after)
+  (protects :
+    ∀ (slot : Nat) (fragment : MicroCFTA.Fragments.Fragment Symbol),
+      before.values[slot]? = some (MicroCFTA.EnumerationState.UVarValue.enumerated fragment) →
+        MicroCFTA.EnumerationDriver.Protected slot before after)
+  (fixedOld :
+    ∀ (slot : Nat) (fragment : MicroCFTA.Fragments.Fragment Symbol),
+      before.values[slot]? = some (MicroCFTA.EnumerationState.UVarValue.enumerated fragment) →
+        nextLevel slot = level slot)
+  (uv : Nat) : uv < before.counter → level uv ≤ nextLevel uv
+'MicroCFTA.EnumerationOrder.stratified_transport_allocated_nondecreasing' depends on axioms: [propext]

@@ -1,0 +1,9 @@
+Status: UNCOMPILED. Full private header207a323e was frozen and sent before this proof. This is an owner-local EOF append. Root must add the ordinary import of the new generic level-receipt module at the TOP of its private owner copy, then append this packet. No Source file was changed.
+
+The only extra level premise is the INITIAL Stratified witness. The caller obtains it from the original Packet.ordered. There is no assumed middle or final cut, pending store, protection, new-output law, assignment or model.
+
+The proof uses the already checked actual_child_inputs_old_expanded_protection_and_avoidance for every old expanded slot. It opens the SAME actual ChildInputs to obtain origin, the middle Packet and the actual target-avoidance producer. Ready.avoids derives the target guard from the original literal pending lookup. Target protection then DERIVES the middle pending lookup. The actual pending fragment and target separation feed write_stratified_with_old_levels. The successful finalizer at its ORIGINAL supplied fuel identifies the full after.core, including ancestry reset; it does not allocate observation fuel.
+
+The conclusion supplies ONE final level witness at the original frontier+1. Every old expanded level is fixed; initial Stratified.expanded therefore also proves it is below the original frontier. Every original pending raw lookup remains at or above that frontier. Actual EnumeratedOrigin plus the one-slot write identifies the only possible new expansion as the actual captured target. The actual produced fragment avoids EVERY original expanded class. No other current slot can be a new expansion in this local ChildInputs-plus-finalizer step.
+
+This proves only a local producer if Root accepts it. Whole-worker cut propagation remains OPEN. The original full compatible finite completion, all old headers, runtime fuels, outcome sets and resource theorem5493 remain unchanged. The checking limit stays2000000.

@@ -1,0 +1,59 @@
+  obtain ⟨roots, paths⟩ := roots_exist after.representatives afterSafe.1.total
+  let nextLevel := fun uv => match after.values[roots uv]? with
+    | some (.enumerated _) => level (roots uv)
+    | _ => frontier
+  have fixedExpanded : ∀ uv storedFragment,
+      after.values[uv]? = some (.enumerated storedFragment) → nextLevel uv = level uv := by
+    intro uv storedFragment stored
+    have fixed := stored_root_fixed after afterSafe roots paths uv _ stored (by simp)
+    simp [nextLevel, fixed, stored]
+  have nextOrder : Stratified after nextLevel frontier := by
+    refine ⟨?_, ?_, ?_⟩
+    · intro left right same
+      have sameRoot := (class_iff after.representatives roots paths left right).mp same
+      simp [nextLevel, sameRoot]
+    · intro uv storedFragment stored
+      rw [fixedExpanded uv storedFragment stored]
+      have beforeStored := origin uv storedFragment stored
+      obtain ⟨bound, dependencies⟩ := stratified.expanded uv storedFragment beforeStored
+      refine ⟨bound, ?_⟩
+      intro hole present
+      have oldDependency := dependencies hole present
+      cases target : after.values[roots hole]? with
+      | none => simpa [nextLevel, target] using bound
+      | some value =>
+          cases value with
+          | eliminated | unenumerated _ _ => simpa [nextLevel, target] using bound
+          | enumerated targetFragment =>
+              have beforeTarget := origin (roots hole) targetFragment target
+              have frame := protects (roots hole) targetFragment beforeTarget
+              obtain ⟨size, path⟩ := paths hole
+              have related := (frame.classes hole).mp
+                (UnionFind.sameClass_symm (UnionFind.sameClass_root path))
+              have sameLevel := stratified.classes (roots hole) hole related
+              simpa [nextLevel, target, sameLevel] using oldDependency
+    · intro uv node scs stored
+      have fixed := stored_root_fixed after afterSafe roots paths uv _ stored (by simp)
+      simp [nextLevel, fixed, stored]
+  refine ⟨nextLevel, nextOrder, ?_, ?_⟩
+  · intro slot fragment stored
+    exact fixedExpanded slot fragment ((protects slot fragment stored).value.trans stored)
+  · intro slot node scs stored
+    have slotRoot : IsRoot before.representatives slot :=
+      (beforeSafe.2 slot (.unenumerated node scs) stored).mp (by simp)
+    cases target : after.values[roots slot]? with
+    | none => simp [nextLevel, target]
+    | some value =>
+        cases value with
+        | eliminated | unenumerated _ _ => simp [nextLevel, target]
+        | enumerated old =>
+            have original := origin (roots slot) old target
+            have retained := protects (roots slot) old original
+            obtain ⟨size, path⟩ := paths slot
+            have related := (retained.classes slot).mp
+              (UnionFind.sameClass_symm (UnionFind.sameClass_root path))
+            have expandedRoot := (enumerated_root before beforeSafe (roots slot) old original).2
+            have equal : roots slot = slot :=
+              (UnionFind.sameClass_iff_roots expandedRoot.choose_spec slotRoot.choose_spec).mp related
+            rw [equal] at original
+            cases Option.some.inj (original.symm.trans stored)

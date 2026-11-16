@@ -1,0 +1,45 @@
+MicroCFTA.EnumerationOrder.stratified_preserved_with_old_levels {Symbol Guard : Type}
+  (before after : MicroCFTA.EnumerationState.State Symbol Guard)
+  (beforeSafe : MicroCFTA.EnumerationSchedule.Safe before) (afterSafe : MicroCFTA.EnumerationSchedule.Safe after)
+  (level : Nat → Nat) (frontier : Nat) (stratified : MicroCFTA.EnumerationOrder.Stratified before level frontier)
+  (origin : MicroCFTA.EnumerationDependencies.EnumeratedOrigin before after)
+  (protects :
+    ∀ (slot : Nat) (fragment : MicroCFTA.Fragments.Fragment Symbol),
+      before.values[slot]? = some (MicroCFTA.EnumerationState.UVarValue.enumerated fragment) →
+        MicroCFTA.EnumerationDriver.Protected slot before after) :
+  ∃ nextLevel,
+    MicroCFTA.EnumerationOrder.Stratified after nextLevel frontier ∧
+      (∀ (slot : Nat) (fragment : MicroCFTA.Fragments.Fragment Symbol),
+          before.values[slot]? = some (MicroCFTA.EnumerationState.UVarValue.enumerated fragment) →
+            nextLevel slot = level slot) ∧
+        ∀ (slot : Nat) (node : Option Nat) (scs : List MicroCFTA.EnumerationState.Suspended),
+          before.values[slot]? = some (MicroCFTA.EnumerationState.UVarValue.unenumerated node scs) →
+            nextLevel slot = frontier
+'MicroCFTA.EnumerationOrder.stratified_preserved_with_old_levels' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.EnumerationOrder.write_stratified_with_old_levels {Symbol Guard : Type}
+  (before : MicroCFTA.EnumerationState.State Symbol Guard) (safe : MicroCFTA.EnumerationSchedule.Safe before)
+  (level : Nat → Nat) (frontier uv : Nat) (stratified : MicroCFTA.EnumerationOrder.Stratified before level frontier)
+  (node : Option Nat) (scs : List MicroCFTA.EnumerationState.Suspended)
+  (stored : before.values[uv]? = some (MicroCFTA.EnumerationState.UVarValue.unenumerated node scs))
+  (fragment : MicroCFTA.Fragments.Fragment Symbol)
+  (pendingHoles :
+    ∀ (hole : Nat),
+      MicroCFTA.EnumerationDependencies.HasHole fragment hole →
+        ∃ root size node scs,
+          MicroCFTA.UnionFind.Reaches before.representatives hole root size ∧
+            before.values[root]? = some (MicroCFTA.EnumerationState.UVarValue.unenumerated node scs))
+  (separate : MicroCFTA.EnumerationDependencies.FragmentAvoid before.representatives uv fragment) :
+  ∃ nextLevel,
+    MicroCFTA.EnumerationOrder.Stratified
+        { counter := before.counter, representatives := before.representatives,
+          values := before.values.set uv (MicroCFTA.EnumerationState.UVarValue.enumerated fragment),
+          obligations := before.obligations, recursionAncestry := before.recursionAncestry,
+          expansionAncestry := before.expansionAncestry }
+        nextLevel (frontier + 1) ∧
+      (∀ (index : Nat), level index ≤ nextLevel index) ∧
+        ∀ (index : Nat) (old : MicroCFTA.Fragments.Fragment Symbol),
+          before.values[index]? = some (MicroCFTA.EnumerationState.UVarValue.enumerated old) →
+            nextLevel index = level index
+'MicroCFTA.EnumerationOrder.write_stratified_with_old_levels' depends on axioms: [propext, Classical.choice, Quot.sound]

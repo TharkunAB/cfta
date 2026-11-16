@@ -1,0 +1,45 @@
+MicroCFTA.SourcePruningEnumerationSharedEagerReservation.actual_finalized_pending_child_stratified_cut {Typing : Type}
+  {bits : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (original reached : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2))
+  (memos : MicroCFTA.EndpointMemoGateTrace.Memos) (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (before middle after :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (target handle fuel : Nat) (bucket : List MicroCFTA.EnumerationState.Suspended)
+  (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+  (queries : MicroCFTA.SourceEndpointMemo.Memos)
+  (packet : MicroCFTA.SourcePruningEnumerationRecursive.Packet formulas solver inventory original memos metadata before)
+  (ready : MicroCFTA.EnumerationDriver.Ready target before.core)
+  (storedTarget :
+    before.core.values[target]? = some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle) bucket))
+  (actual :
+    MicroCFTA.SourcePruningEnumerationSharedEagerReservation.ChildInputs formulas solver original metadata before bucket
+      fragment reached queries middle)
+  (level : Nat → Nat) (frontier : Nat) (ordered : MicroCFTA.EnumerationOrder.Stratified before.core level frontier)
+  (finalized :
+    MicroCFTA.SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap fuel target fragment middle =
+      some after) :
+  ∃ nextLevel,
+    MicroCFTA.EnumerationOrder.Stratified after.core nextLevel (frontier + 1) ∧
+      (∀ (slot : Nat) (old : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol),
+          before.core.values[slot]? = some (MicroCFTA.EnumerationState.UVarValue.enumerated old) →
+            nextLevel slot = level slot) ∧
+        (∀ (slot : Nat) (node : Option Nat) (scs : List MicroCFTA.EnumerationState.Suspended),
+            before.core.values[slot]? = some (MicroCFTA.EnumerationState.UVarValue.unenumerated node scs) →
+              frontier ≤ nextLevel slot) ∧
+          (∀ (slot : Nat) (produced : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol),
+              after.core.values[slot]? = some (MicroCFTA.EnumerationState.UVarValue.enumerated produced) →
+                before.core.values[slot]? = some (MicroCFTA.EnumerationState.UVarValue.enumerated produced) ∨
+                  slot = target) ∧
+            ∀ (slot : Nat) (old : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol),
+              before.core.values[slot]? = some (MicroCFTA.EnumerationState.UVarValue.enumerated old) →
+                MicroCFTA.EnumerationDependencies.FragmentAvoid after.core.representatives slot fragment
+'_private.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.0.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.actual_finalized_pending_child_stratified_cut' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

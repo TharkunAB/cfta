@@ -1,0 +1,14 @@
+/-- A retained level cut and actual fragment origins give a dependency-closed set. -/
+theorem dependency_closed_above_cut
+    (before after : State Symbol Guard) (roots : Nat → Nat)
+    (paths : Roots after.representatives roots)
+    (level : Nat → Nat) (frontier held cut : Nat)
+    (stratified : Stratified after level frontier)
+    (origin : ∀ slot fragment, after.values[slot]? = some (.enumerated fragment) →
+      before.values[slot]? = some (.enumerated fragment) ∨
+        FragmentAvoid after.representatives held fragment)
+    (oldBelow : ∀ slot fragment, before.values[slot]? = some (.enumerated fragment) → level slot < cut) :
+    ∀ uv, (cut ≤ level uv ∧ ¬UnionFind.SameClass after.representatives held uv) →
+      ∀ fragment, after.values[roots uv]? = some (.enumerated fragment) →
+        ∀ hole, HasHole fragment hole →
+          cut ≤ level hole ∧ ¬UnionFind.SameClass after.representatives held hole

@@ -1,0 +1,23 @@
+private theorem actual_finalized_pending_child_stratified_cut
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (original reached : Caller (bits + 2)) (memos : Memos)
+    (metadata : Metadata Typing) (before middle after : Cached)
+    (target handle fuel : Nat) (bucket : List Suspended) (fragment : Fragment) (queries : Queries)
+    (packet : Packet formulas solver inventory original memos metadata before)
+    (ready : EnumerationDriver.Ready target before.core)
+    (storedTarget : before.core.values[target]? = some (.unenumerated (some handle) bucket))
+    (actual : ChildInputs formulas solver original metadata before bucket fragment reached queries middle)
+    (level : Nat → Nat) (frontier : Nat)
+    (ordered : EnumerationOrder.Stratified before.core level frontier)
+    (finalized : SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap
+      fuel target fragment middle = some after) :
+    ∃ nextLevel, EnumerationOrder.Stratified after.core nextLevel (frontier + 1) ∧
+      (∀ slot old, before.core.values[slot]? = some (.enumerated old) →
+        nextLevel slot = level slot) ∧
+      (∀ slot node scs, before.core.values[slot]? = some (.unenumerated node scs) →
+        frontier ≤ nextLevel slot) ∧
+      (∀ slot produced, after.core.values[slot]? = some (.enumerated produced) →
+        before.core.values[slot]? = some (.enumerated produced) ∨ slot = target) ∧
+      (∀ slot old, before.core.values[slot]? = some (.enumerated old) →
+        FragmentAvoid after.core.representatives slot fragment)

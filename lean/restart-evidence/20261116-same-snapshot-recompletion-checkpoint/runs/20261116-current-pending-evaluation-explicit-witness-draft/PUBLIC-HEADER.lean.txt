@@ -1,0 +1,11 @@
+/-- The existing finite evaluator supplies the stored equations and the chosen pending terms. -/
+theorem evaluateSlotsWith_witness
+    (state : State Symbol Guard) (safe : Safe state)
+    (roots : Nat → Nat) (paths : Roots state.representatives roots)
+    (level : Nat → Nat) (frontier : Nat) (stratified : Stratified state level frontier)
+    (base : Nat → Term Symbol) (compatible : UnionFind.Satisfies state.representatives base) :
+    let assignment := evaluateSlotsWith state.values roots base (frontier + 1)
+    UnionFind.Satisfies state.representatives assignment ∧
+      (∀ uv fragment, state.values[uv]? = some (.enumerated fragment) →
+        assignment uv = fill assignment fragment) ∧
+      ∀ uv node scs, state.values[uv]? = some (.unenumerated node scs) → assignment uv = base uv

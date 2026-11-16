@@ -1,0 +1,39 @@
+ := by
+  have root : IsRoot state.representatives owner :=
+    (safe.2 owner (.unenumerated node pendingBucket) ownerPending).mp
+      (by intro impossible; cases impossible)
+  have separate : Avoids state.representatives owner removedBucket := by
+    intro sc member
+    exact keptSeparate sc.var (targetsKept sc member)
+  obtain ⟨argument, result, base, argumentTyped, resultTyped, baseOwner, baseTyped,
+      baseAliases, baseOutside, baseTargets, baseHeld, _baseIndexed⟩ :=
+    SourcePruningEnumerationParametricArrowBucketWitness.parametric_arrow_bucket_recompletion
+      catalog state.representatives owner removedBucket current root currentAliases separate
+      arrowPaths targetTypes compatible
+  have baseAgree : ∀ slot, kept slot → base slot = current slot := by
+    intro slot supported
+    exact baseOutside slot (keptSeparate slot supported)
+  let assignment := EnumerationPendingAssignment.evaluateSlotsWith state.values roots base (frontier + 1)
+  have completed := EnumerationPendingAssignment.recomplete_with_base_on
+    state safe roots paths level frontier stratified current base currentAliases currentEquations
+    baseAliases kept dependencies baseAgree
+  dsimp only at completed
+  have ownerSame : assignment owner = base owner :=
+    completed.2.2.1 owner node pendingBucket ownerPending
+  have ownerTyped : TypeIn catalog (assignment owner) := by
+    rw [ownerSame]
+    exact baseTyped
+  have targets : ∀ sc ∈ removedBucket, assignment sc.var = current sc.var := by
+    intro sc member
+    exact completed.2.2.2 sc.var (targetsKept sc member)
+  have held : ∀ sc ∈ removedBucket, Suspended.Holds assignment (assignment owner) sc := by
+    intro sc member path represented
+    have sameTarget : assignment sc.var = base sc.var :=
+      (targets sc member).trans (baseTargets sc member).symm
+    simpa only [ownerSame, sameTarget] using baseHeld sc member path represented
+  refine ⟨argument, result, assignment, argumentTyped, resultTyped, ownerSame.trans baseOwner,
+    ownerTyped, completed.1, completed.2.1, completed.2.2.2, targets, held, ?_, ?_⟩
+  · intro occurrence sc indexed
+    exact held sc (List.mem_iff_getElem?.mpr ⟨occurrence, indexed⟩)
+  · intro slot otherNode otherBucket stored different
+    exact (completed.2.2.1 slot otherNode otherBucket stored).trans (baseOutside slot different)

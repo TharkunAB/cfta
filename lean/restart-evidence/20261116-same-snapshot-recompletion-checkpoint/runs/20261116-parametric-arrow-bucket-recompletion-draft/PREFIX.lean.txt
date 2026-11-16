@@ -1,0 +1,55 @@
+import MicroCFTA.SourcePruningEnumerationSharedProperPathWitness
+
+namespace MicroCFTA.SourcePruningEnumerationParametricArrowBucketWitness
+open Language EnumerationState EnumerationCorrectness EnumerationSchedule
+open InternedConstructorTemplates
+open SourceSynthesisFiniteTypeWitnesses (TypeIn)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "literal" => SourceSynthesisLabelProgramBuildRoles.literal
+set_option autoImplicit false
+
+/-- Use the first actual target at this position, or a free variable if none occurs. -/
+private def arrowChoice (position : Nat) (rho : Nat → Term Symbol) : List Suspended → Term Symbol
+  | [] => .node (literal "var1") []
+  | sc :: rest =>
+      if [position] ∈ EqualityTrie.fromPathTrie sc.trie then rho sc.var
+      else arrowChoice position rho rest
+
+private theorem arrowChoice_spec
+    (catalog : List (String × Nat)) (position : Nat) (rho : Nat → Term Symbol) :
+    ∀ bucket : List Suspended,
+      (∀ sc ∈ bucket, [position] ∈ EqualityTrie.fromPathTrie sc.trie → TypeIn catalog (rho sc.var)) →
+      (∀ first ∈ bucket, ∀ second ∈ bucket,
+        [position] ∈ EqualityTrie.fromPathTrie first.trie →
+        [position] ∈ EqualityTrie.fromPathTrie second.trie → rho first.var = rho second.var) →
+      TypeIn catalog (arrowChoice position rho bucket) ∧
+        ∀ sc ∈ bucket, [position] ∈ EqualityTrie.fromPathTrie sc.trie →
+          arrowChoice position rho bucket = rho sc.var := by
+  intro bucket
+  induction bucket with
+  | nil =>
+    intro _typed _agrees
+    refine ⟨TypeIn.leaf "var1" (by simp), ?_⟩
+    intro sc member _represented
+    cases member
+  | cons first rest ih =>
+    intro typed agrees
+    by_cases represented : [position] ∈ EqualityTrie.fromPathTrie first.trie
+    · simp only [arrowChoice, ite_eq_left represented]
+      refine ⟨typed first List.mem_cons_self represented, ?_⟩
+      intro sc member atPosition
+      exact agrees first List.mem_cons_self sc member represented atPosition
+    · simp only [arrowChoice, ite_eq_right represented]
+      have tail := ih
+        (fun sc member atPosition => typed sc (List.mem_cons_of_mem _ member) atPosition)
+        (fun left leftMember right rightMember leftPath rightPath =>
+          agrees left (List.mem_cons_of_mem _ leftMember) right (List.mem_cons_of_mem _ rightMember)
+            leftPath rightPath)
+      refine ⟨tail.1, ?_⟩
+      intro sc member atPosition
+      rcases List.mem_cons.mp member with same | later
+      · subst sc
+        exact (represented atPosition).elim
+      · exact tail.2 sc later atPosition
+
+/-- One owner-class change satisfies compatible arrow paths at their actual target terms. -/

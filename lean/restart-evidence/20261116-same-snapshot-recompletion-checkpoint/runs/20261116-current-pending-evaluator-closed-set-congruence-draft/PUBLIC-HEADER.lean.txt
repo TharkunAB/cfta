@@ -1,0 +1,9 @@
+theorem evaluateSlotsWith_congr_on
+    (values : List (UVarValue Symbol)) (roots : Nat → Nat)
+    (left right : Nat → Term Symbol) (kept : Nat → Prop)
+    (dependencies : ∀ uv, kept uv → ∀ fragment,
+      values[roots uv]? = some (.enumerated fragment) →
+      ∀ hole, HasHole fragment hole → kept hole)
+    (agree : ∀ uv, kept uv → left uv = right uv) :
+    ∀ fuel uv, kept uv →
+      evaluateSlotsWith values roots left fuel uv = evaluateSlotsWith values roots right fuel uv

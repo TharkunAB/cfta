@@ -1,0 +1,20 @@
+ := by
+  intro fuel
+  induction fuel with
+  | zero =>
+      intro uv inside
+      exact agree uv inside
+  | succ fuel ih =>
+      intro uv inside
+      cases stored : values[roots uv]? with
+      | none =>
+          simpa only [evaluateSlotsWith, stored] using agree uv inside
+      | some value =>
+          cases value with
+          | eliminated | unenumerated _ _ =>
+              simpa only [evaluateSlotsWith, stored] using agree uv inside
+          | enumerated fragment =>
+              simp only [evaluateSlotsWith, stored]
+              apply EnumerationAssignment.fill_holes_congr
+              intro hole present
+              exact ih hole (dependencies uv inside fragment stored hole present)

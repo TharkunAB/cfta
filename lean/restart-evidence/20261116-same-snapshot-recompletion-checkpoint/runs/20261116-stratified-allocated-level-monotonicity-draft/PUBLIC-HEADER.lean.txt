@@ -1,0 +1,10 @@
+theorem stratified_transport_allocated_nondecreasing
+    (before after : State Symbol Guard) (beforeSafe : Safe before) (afterSafe : Safe after)
+    (growth : before.counter ≤ after.counter) (level nextLevel : Nat → Nat) (frontier : Nat)
+    (beforeOrder : Stratified before level frontier) (afterOrder : Stratified after nextLevel frontier)
+    (origin : EnumeratedOrigin before after)
+    (protects : ∀ slot fragment, before.values[slot]? = some (.enumerated fragment) →
+      Protected slot before after)
+    (fixedOld : ∀ slot fragment, before.values[slot]? = some (.enumerated fragment) →
+      nextLevel slot = level slot) :
+    ∀ uv, uv < before.counter → level uv ≤ nextLevel uv

@@ -1,0 +1,22 @@
+theorem parametric_arrow_bucket_recompletion
+    (catalog : List (String × Nat)) (forest : UnionFind.Forest) (owner : Nat)
+    (bucket : List Suspended) (rho : Nat → Term Symbol)
+    (root : IsRoot forest owner) (aliases : UnionFind.Satisfies forest rho)
+    (separate : Avoids forest owner bucket)
+    (arrowPaths : ∀ sc ∈ bucket, ∀ path ∈ EqualityTrie.fromPathTrie sc.trie,
+      path = [1] ∨ path = [2])
+    (targetTypes : ∀ sc ∈ bucket, ∀ (position : Nat),
+      [position] ∈ EqualityTrie.fromPathTrie sc.trie → TypeIn catalog (rho sc.var))
+    (compatible : ∀ (firstIndex secondIndex : Nat) (first second : Suspended) (position : Nat),
+      bucket[firstIndex]? = some first → bucket[secondIndex]? = some second →
+      [position] ∈ EqualityTrie.fromPathTrie first.trie →
+      [position] ∈ EqualityTrie.fromPathTrie second.trie → rho first.var = rho second.var) :
+    ∃ (argument result : Term Symbol) (updated : Nat → Term Symbol),
+      TypeIn catalog argument ∧ TypeIn catalog result ∧
+      updated owner = .node (literal "->") [.node (literal "(->)") [], argument, result] ∧
+      TypeIn catalog (updated owner) ∧ UnionFind.Satisfies forest updated ∧
+      (∀ slot, ¬UnionFind.SameClass forest owner slot → updated slot = rho slot) ∧
+      (∀ sc ∈ bucket, updated sc.var = rho sc.var) ∧
+      (∀ sc ∈ bucket, Suspended.Holds updated (updated owner) sc) ∧
+      ∀ (occurrence : Nat) (sc : Suspended), bucket[occurrence]? = some sc →
+        Suspended.Holds updated (updated owner) sc

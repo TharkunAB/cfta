@@ -1,0 +1,38 @@
+theorem recomplete_arrow_bucket_at_snapshot
+    (catalog : List (String × Nat)) (state : EnumerationState.State Symbol Guard) (safe : Safe state)
+    (roots : Nat → Nat) (paths : Roots state.representatives roots)
+    (level : Nat → Nat) (frontier : Nat) (stratified : EnumerationOrder.Stratified state level frontier)
+    (current : Nat → Term Symbol)
+    (currentAliases : UnionFind.Satisfies state.representatives current)
+    (currentEquations : ∀ slot fragment, state.values[slot]? = some (.enumerated fragment) →
+      fill current fragment = current slot)
+    (owner : Nat) (node : Option Nat) (pendingBucket removedBucket : List Suspended)
+    (ownerPending : state.values[owner]? = some (.unenumerated node pendingBucket))
+    (arrowPaths : ∀ sc ∈ removedBucket, ∀ path ∈ EqualityTrie.fromPathTrie sc.trie,
+      path = [1] ∨ path = [2])
+    (targetTypes : ∀ sc ∈ removedBucket, ∀ (position : Nat),
+      [position] ∈ EqualityTrie.fromPathTrie sc.trie → TypeIn catalog (current sc.var))
+    (compatible : ∀ (firstIndex secondIndex : Nat) (first second : Suspended) (position : Nat),
+      removedBucket[firstIndex]? = some first → removedBucket[secondIndex]? = some second →
+      [position] ∈ EqualityTrie.fromPathTrie first.trie →
+      [position] ∈ EqualityTrie.fromPathTrie second.trie → current first.var = current second.var)
+    (kept : Nat → Prop)
+    (dependencies : ∀ uv, kept uv → ∀ fragment,
+      state.values[roots uv]? = some (.enumerated fragment) →
+      ∀ hole, EnumerationDependencies.HasHole fragment hole → kept hole)
+    (targetsKept : ∀ sc ∈ removedBucket, kept sc.var)
+    (keptSeparate : ∀ slot, kept slot → ¬UnionFind.SameClass state.representatives owner slot) :
+    ∃ (argument result : Term Symbol) (assignment : Nat → Term Symbol),
+      TypeIn catalog argument ∧ TypeIn catalog result ∧
+      assignment owner = .node (literal "->") [.node (literal "(->)") [], argument, result] ∧
+      TypeIn catalog (assignment owner) ∧ UnionFind.Satisfies state.representatives assignment ∧
+      (∀ slot fragment, state.values[slot]? = some (.enumerated fragment) →
+        assignment slot = fill assignment fragment) ∧
+      (∀ slot, kept slot → assignment slot = current slot) ∧
+      (∀ sc ∈ removedBucket, assignment sc.var = current sc.var) ∧
+      (∀ sc ∈ removedBucket, Suspended.Holds assignment (assignment owner) sc) ∧
+      (∀ (occurrence : Nat) (sc : Suspended), removedBucket[occurrence]? = some sc →
+        Suspended.Holds assignment (assignment owner) sc) ∧
+      ∀ slot otherNode otherBucket,
+        state.values[slot]? = some (.unenumerated otherNode otherBucket) →
+        ¬UnionFind.SameClass state.representatives owner slot → assignment slot = current slot

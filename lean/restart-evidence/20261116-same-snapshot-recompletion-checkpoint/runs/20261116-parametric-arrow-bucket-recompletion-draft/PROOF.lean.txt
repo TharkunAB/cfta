@@ -1,0 +1,61 @@
+ := by
+  classical
+  have agree : ∀ first ∈ bucket, ∀ second ∈ bucket, ∀ (position : Nat),
+      [position] ∈ EqualityTrie.fromPathTrie first.trie →
+      [position] ∈ EqualityTrie.fromPathTrie second.trie → rho first.var = rho second.var := by
+    intro first firstMember second secondMember position firstPath secondPath
+    obtain ⟨firstIndex, firstAt⟩ := List.mem_iff_getElem?.mp firstMember
+    obtain ⟨secondIndex, secondAt⟩ := List.mem_iff_getElem?.mp secondMember
+    exact compatible firstIndex secondIndex first second position firstAt secondAt firstPath secondPath
+  have argumentFacts := arrowChoice_spec catalog 1 rho bucket
+    (fun sc member atPosition => targetTypes sc member 1 atPosition)
+    (fun first firstMember second secondMember firstPath secondPath =>
+      agree first firstMember second secondMember 1 firstPath secondPath)
+  have resultFacts := arrowChoice_spec catalog 2 rho bucket
+    (fun sc member atPosition => targetTypes sc member 2 atPosition)
+    (fun first firstMember second secondMember firstPath secondPath =>
+      agree first firstMember second secondMember 2 firstPath secondPath)
+  let argument := arrowChoice 1 rho bucket
+  let result := arrowChoice 2 rho bucket
+  let chosen : Term Symbol := .node (literal "->") [.node (literal "(->)") [], argument, result]
+  let updated : Nat → Term Symbol := fun slot =>
+    if UnionFind.SameClass forest owner slot then chosen else rho slot
+  have selfClass : UnionFind.SameClass forest owner owner :=
+    ⟨owner, root.choose, root.choose_spec, root.choose_spec⟩
+  have ownerValue : updated owner = chosen := by
+    simp only [updated, ite_eq_left selfClass]
+  have updatedAliases : UnionFind.Satisfies forest updated := by
+    intro left right same
+    by_cases first : UnionFind.SameClass forest owner left
+    · have second := UnionFind.sameClass_trans first same
+      simp only [updated, ite_eq_left first, ite_eq_left second]
+    · have second : ¬UnionFind.SameClass forest owner right := by
+        intro joined
+        exact first (UnionFind.sameClass_trans joined (UnionFind.sameClass_symm same))
+      simpa only [updated, ite_eq_right first, ite_eq_right second] using aliases left right same
+  have outside : ∀ slot, ¬UnionFind.SameClass forest owner slot → updated slot = rho slot := by
+    intro slot different
+    simp only [updated, ite_eq_right different]
+  have targets : ∀ sc ∈ bucket, updated sc.var = rho sc.var := by
+    intro sc member
+    exact outside sc.var (separate sc member)
+  have held : ∀ sc ∈ bucket, Suspended.Holds updated (updated owner) sc := by
+    intro sc member path atPath
+    rcases arrowPaths sc member path atPath with first | second
+    · have firstPath : [1] ∈ EqualityTrie.fromPathTrie sc.trie := by
+        simpa only [first] using atPath
+      rw [first, ownerValue, targets sc member]
+      change some argument = some (rho sc.var)
+      exact congrArg some (argumentFacts.2 sc member firstPath)
+    · have secondPath : [2] ∈ EqualityTrie.fromPathTrie sc.trie := by
+        simpa only [second] using atPath
+      rw [second, ownerValue, targets sc member]
+      change some result = some (rho sc.var)
+      exact congrArg some (resultFacts.2 sc member secondPath)
+  have ownerTyped : TypeIn catalog (updated owner) := by
+    rw [ownerValue]
+    exact TypeIn.arrow argument result argumentFacts.1 resultFacts.1
+  refine ⟨argument, result, updated, argumentFacts.1, resultFacts.1, ownerValue,
+    ownerTyped, updatedAliases, outside, targets, held, ?_⟩
+  intro occurrence sc indexed
+  exact held sc (List.mem_iff_getElem?.mpr ⟨occurrence, indexed⟩)

@@ -1,0 +1,9 @@
+Status: UNCOMPILED. Header e224b6eb was frozen and sent before the proof. Root owns compilation and Source promotion. The standalone module imports only existing EnumerationStratifiedTransport; it does not require the new two receipt lemmas to type-check its inputs.
+
+The local oldBound proof follows the actual original UF representative of any allocated raw variable. Safe supplies a bounded live representative. Stratified.classes identifies its raw level with the representative level. An expanded representative is below the frontier; a pending representative is at the frontier. This applies even when the raw lookup is eliminated.
+
+The main proof follows the actual AFTER representative. Counter growth and Safe justify its allocated live lookup. If it is expanded, EnumeratedOrigin supplies the same original expanded lookup. Protected.classes transports the raw alias to the original forest. The fixed-old-level premise and both Stratified.classes fields then give exact equality of the old and new raw levels. If the after representative is pending, its new level is the SAME frontier. oldBound proves the required inequality. An eliminated representative contradicts Safe.
+
+This proves monotonicity only on OLD allocated raw variables. It makes no assertion about arbitrary unallocated indices or a whole-worker cut. No assignment, closure, native semantic model or new global premise is used. Existing public headers and original algorithm fuels remain unchanged. The checking limit stays2000000.
+
+Composition with the existing write receipt is direct: at uv<original.counter, combine the transport result with write_stratified_with_old_levels.increases using Nat.le_trans. The write inequality holds at every index, so no literal pending-lookup assumption is required. This yields honest all-old-allocated monotonicity for the same local ChildInputs-plus-finalizer producer. It does not itself propagate the witness through the whole worker.

@@ -1,0 +1,21 @@
+/-- One explicit finite assignment restores stored equations and keeps every supported value. -/
+theorem recomplete_with_base_on
+    (state : State Symbol Guard) (safe : Safe state)
+    (roots : Nat → Nat) (paths : Roots state.representatives roots)
+    (level : Nat → Nat) (frontier : Nat) (stratified : Stratified state level frontier)
+    (current base : Nat → Term Symbol)
+    (currentAliases : UnionFind.Satisfies state.representatives current)
+    (currentEquations : ∀ slot fragment, state.values[slot]? = some (.enumerated fragment) →
+      fill current fragment = current slot)
+    (baseAliases : UnionFind.Satisfies state.representatives base)
+    (kept : Nat → Prop)
+    (dependencies : ∀ uv, kept uv → ∀ fragment,
+      state.values[roots uv]? = some (.enumerated fragment) →
+      ∀ hole, HasHole fragment hole → kept hole)
+    (agree : ∀ uv, kept uv → base uv = current uv) :
+    let updated := evaluateSlotsWith state.values roots base (frontier + 1)
+    UnionFind.Satisfies state.representatives updated ∧
+      (∀ uv fragment, state.values[uv]? = some (.enumerated fragment) →
+        updated uv = fill updated fragment) ∧
+      (∀ uv node bucket, state.values[uv]? = some (.unenumerated node bucket) → updated uv = base uv) ∧
+      ∀ uv, kept uv → updated uv = current uv

@@ -1,0 +1,58 @@
+@MicroCFTA.EnumerationPendingAssignment.dependency_closed_above_cut : ∀ {Symbol Guard : Type}
+  (before after : MicroCFTA.EnumerationState.State Symbol Guard) (roots : Nat → Nat),
+  MicroCFTA.EnumerationSchedule.Roots after.representatives roots →
+    ∀ (level : Nat → Nat) (frontier held cut : Nat),
+      MicroCFTA.EnumerationOrder.Stratified after level frontier →
+        (∀ (slot : Nat) (fragment : MicroCFTA.Fragments.Fragment Symbol),
+            after.values[slot]? = some (MicroCFTA.EnumerationState.UVarValue.enumerated fragment) →
+              before.values[slot]? = some (MicroCFTA.EnumerationState.UVarValue.enumerated fragment) ∨
+                MicroCFTA.EnumerationDependencies.FragmentAvoid after.representatives held fragment) →
+          (∀ (slot : Nat) (fragment : MicroCFTA.Fragments.Fragment Symbol),
+              before.values[slot]? = some (MicroCFTA.EnumerationState.UVarValue.enumerated fragment) →
+                level slot < cut) →
+            ∀ (uv : Nat),
+              cut ≤ level uv ∧ ¬MicroCFTA.UnionFind.SameClass after.representatives held uv →
+                ∀ (fragment : MicroCFTA.Fragments.Fragment Symbol),
+                  after.values[roots uv]? = some (MicroCFTA.EnumerationState.UVarValue.enumerated fragment) →
+                    ∀ (hole : Nat),
+                      MicroCFTA.EnumerationDependencies.HasHole fragment hole →
+                        cut ≤ level hole ∧ ¬MicroCFTA.UnionFind.SameClass after.representatives held hole
+'MicroCFTA.EnumerationPendingAssignment.dependency_closed_above_cut' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.EnumerationPendingAssignment.recomplete_with_base_on : ∀ {Symbol Guard : Type}
+  (state : MicroCFTA.EnumerationState.State Symbol Guard),
+  MicroCFTA.EnumerationSchedule.Safe state →
+    ∀ (roots : Nat → Nat),
+      MicroCFTA.EnumerationSchedule.Roots state.representatives roots →
+        ∀ (level : Nat → Nat) (frontier : Nat),
+          MicroCFTA.EnumerationOrder.Stratified state level frontier →
+            ∀ (current base : Nat → MicroCFTA.Language.Term Symbol),
+              MicroCFTA.UnionFind.Satisfies state.representatives current →
+                (∀ (slot : Nat) (fragment : MicroCFTA.Fragments.Fragment Symbol),
+                    state.values[slot]? = some (MicroCFTA.EnumerationState.UVarValue.enumerated fragment) →
+                      MicroCFTA.Fragments.fill current fragment = current slot) →
+                  MicroCFTA.UnionFind.Satisfies state.representatives base →
+                    ∀ (kept : Nat → Prop),
+                      (∀ (uv : Nat),
+                          kept uv →
+                            ∀ (fragment : MicroCFTA.Fragments.Fragment Symbol),
+                              state.values[roots uv]? =
+                                  some (MicroCFTA.EnumerationState.UVarValue.enumerated fragment) →
+                                ∀ (hole : Nat), MicroCFTA.EnumerationDependencies.HasHole fragment hole → kept hole) →
+                        (∀ (uv : Nat), kept uv → base uv = current uv) →
+                          have updated :=
+                            MicroCFTA.EnumerationPendingAssignment.evaluateSlotsWith state.values roots base
+                              (frontier + 1);
+                          MicroCFTA.UnionFind.Satisfies state.representatives updated ∧
+                            (∀ (uv : Nat) (fragment : MicroCFTA.Fragments.Fragment Symbol),
+                                state.values[uv]? = some (MicroCFTA.EnumerationState.UVarValue.enumerated fragment) →
+                                  updated uv = MicroCFTA.Fragments.fill updated fragment) ∧
+                              (∀ (uv : Nat) (node : Option Nat) (bucket : List MicroCFTA.EnumerationState.Suspended),
+                                  state.values[uv]? =
+                                      some (MicroCFTA.EnumerationState.UVarValue.unenumerated node bucket) →
+                                    updated uv = base uv) ∧
+                                ∀ (uv : Nat), kept uv → updated uv = current uv
+'MicroCFTA.EnumerationPendingAssignment.recomplete_with_base_on' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

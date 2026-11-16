@@ -1,0 +1,21 @@
+@MicroCFTA.EnumerationPendingAssignment.evaluateSlotsWith_witness : ∀ {Symbol Guard : Type}
+  (state : MicroCFTA.EnumerationState.State Symbol Guard),
+  MicroCFTA.EnumerationSchedule.Safe state →
+    ∀ (roots : Nat → Nat),
+      MicroCFTA.EnumerationSchedule.Roots state.representatives roots →
+        ∀ (level : Nat → Nat) (frontier : Nat),
+          MicroCFTA.EnumerationOrder.Stratified state level frontier →
+            ∀ (base : Nat → MicroCFTA.Language.Term Symbol),
+              MicroCFTA.UnionFind.Satisfies state.representatives base →
+                have assignment :=
+                  MicroCFTA.EnumerationPendingAssignment.evaluateSlotsWith state.values roots base (frontier + 1);
+                MicroCFTA.UnionFind.Satisfies state.representatives assignment ∧
+                  (∀ (uv : Nat) (fragment : MicroCFTA.Fragments.Fragment Symbol),
+                      state.values[uv]? = some (MicroCFTA.EnumerationState.UVarValue.enumerated fragment) →
+                        assignment uv = MicroCFTA.Fragments.fill assignment fragment) ∧
+                    ∀ (uv : Nat) (node : Option Nat) (scs : List MicroCFTA.EnumerationState.Suspended),
+                      state.values[uv]? = some (MicroCFTA.EnumerationState.UVarValue.unenumerated node scs) →
+                        assignment uv = base uv
+'MicroCFTA.EnumerationPendingAssignment.evaluateSlotsWith_witness' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

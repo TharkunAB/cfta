@@ -1,0 +1,10 @@
+ := by
+  intro uv kept fragment stored hole present
+  obtain ⟨size, path⟩ := paths uv
+  have sameLevel := stratified.classes uv (roots uv) (UnionFind.sameClass_root path)
+  have rootAbove : cut ≤ level (roots uv) := sameLevel ▸ kept.1
+  rcases origin (roots uv) fragment stored with old | separate
+  · have below := oldBelow (roots uv) fragment old
+    omega
+  · have higher := (stratified.expanded (roots uv) fragment stored).2 hole present
+    exact ⟨Nat.le_of_lt (Nat.lt_of_le_of_lt rootAbove higher), separate hole present⟩

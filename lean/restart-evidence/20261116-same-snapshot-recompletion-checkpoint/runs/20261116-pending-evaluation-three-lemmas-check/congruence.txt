@@ -1,0 +1,14 @@
+@MicroCFTA.EnumerationPendingAssignment.evaluateSlotsWith_congr_on : ∀ {Symbol : Type}
+  (values : List (MicroCFTA.EnumerationState.UVarValue Symbol)) (roots : Nat → Nat)
+  (left right : Nat → MicroCFTA.Language.Term Symbol) (kept : Nat → Prop),
+  (∀ (uv : Nat),
+      kept uv →
+        ∀ (fragment : MicroCFTA.Fragments.Fragment Symbol),
+          values[roots uv]? = some (MicroCFTA.EnumerationState.UVarValue.enumerated fragment) →
+            ∀ (hole : Nat), MicroCFTA.EnumerationDependencies.HasHole fragment hole → kept hole) →
+    (∀ (uv : Nat), kept uv → left uv = right uv) →
+      ∀ (fuel uv : Nat),
+        kept uv →
+          MicroCFTA.EnumerationPendingAssignment.evaluateSlotsWith values roots left fuel uv =
+            MicroCFTA.EnumerationPendingAssignment.evaluateSlotsWith values roots right fuel uv
+'MicroCFTA.EnumerationPendingAssignment.evaluateSlotsWith_congr_on' depends on axioms: [propext, Quot.sound]

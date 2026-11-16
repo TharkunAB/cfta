@@ -1,0 +1,1 @@
+UNCOMPILED. Add explicit Nat and Fragment Symbol binder types in origin and oldBelow. These are the intended original types; the untyped header failed elaboration at dotted enumerated. Both proofs, all other premises/conclusions, recompletion header and probes are byte-exact. No weakening, budget or source change. Prior failed packet/log preserved.

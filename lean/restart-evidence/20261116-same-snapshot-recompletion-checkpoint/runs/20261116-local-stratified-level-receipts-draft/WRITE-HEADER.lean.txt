@@ -1,0 +1,15 @@
+theorem write_stratified_with_old_levels
+    (before : State Symbol Guard) (safe : Safe before)
+    (level : Nat → Nat) (frontier uv : Nat)
+    (stratified : Stratified before level frontier) (node : Option Nat) (scs : List Suspended)
+    (stored : before.values[uv]? = some (.unenumerated node scs)) (fragment : Fragment Symbol)
+    (pendingHoles : ∀ hole, HasHole fragment hole → ∃ root size node scs,
+      UnionFind.Reaches before.representatives hole root size ∧
+        before.values[root]? = some (.unenumerated node scs))
+    (separate : FragmentAvoid before.representatives uv fragment) :
+    ∃ nextLevel,
+      Stratified {before with values := before.values.set uv (.enumerated fragment)}
+        nextLevel (frontier + 1) ∧
+      (∀ index, level index ≤ nextLevel index) ∧
+      (∀ index old, before.values[index]? = some (.enumerated old) →
+        nextLevel index = level index)

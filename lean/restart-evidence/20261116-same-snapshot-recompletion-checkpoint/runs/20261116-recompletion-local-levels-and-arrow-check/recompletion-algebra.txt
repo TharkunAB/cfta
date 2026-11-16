@@ -1,0 +1,55 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-recompletion-local-levels-and-arrow-check/source/MicroCFTA/EnumerationPendingRecompletion.lean:17:59: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.enumerated` could not be determined
+
+Hint: Using `UVarValue.enumerated would be unambiguous:
+  [apply] `UVarValue.enumerated`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-recompletion-local-levels-and-arrow-check/source/MicroCFTA/EnumerationPendingRecompletion.lean:18:35: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.enumerated` could not be determined
+
+Hint: Using `UVarValue.enumerated would be unambiguous:
+  [apply] `UVarValue.enumerated`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-recompletion-local-levels-and-arrow-check/source/MicroCFTA/EnumerationPendingRecompletion.lean:30:36: error: Application type mismatch: The argument
+  stored
+has type
+  Eq.{1} after.values[roots uv]? (some (UVarValue.enumerated fragment))
+but is expected to have type
+  Eq.{u_1 + 1} after.values[?m.137]?
+    (some (?m.94 before after roots paths level frontier held cut stratified ?m.137 fragment))
+in the application
+  origin ?m.137 fragment stored
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-recompletion-local-levels-and-arrow-check/source/MicroCFTA/EnumerationPendingRecompletion.lean:71:8: error(lean.unknownIdentifier): Unknown identifier `MicroCFTA.EnumerationPendingAssignment.dependency_closed_above_cut`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-recompletion-local-levels-and-arrow-check/source/MicroCFTA/EnumerationPendingRecompletion.lean:72:14: error(lean.unknownIdentifier): Unknown constant `MicroCFTA.EnumerationPendingAssignment.dependency_closed_above_cut`
+@MicroCFTA.EnumerationPendingAssignment.recomplete_with_base_on : ∀ {Symbol Guard : Type}
+  (state : MicroCFTA.EnumerationState.State Symbol Guard),
+  MicroCFTA.EnumerationSchedule.Safe state →
+    ∀ (roots : Nat → Nat),
+      MicroCFTA.EnumerationSchedule.Roots state.representatives roots →
+        ∀ (level : Nat → Nat) (frontier : Nat),
+          MicroCFTA.EnumerationOrder.Stratified state level frontier →
+            ∀ (current base : Nat → MicroCFTA.Language.Term Symbol),
+              MicroCFTA.UnionFind.Satisfies state.representatives current →
+                (∀ (slot : Nat) (fragment : MicroCFTA.Fragments.Fragment Symbol),
+                    state.values[slot]? = some (MicroCFTA.EnumerationState.UVarValue.enumerated fragment) →
+                      MicroCFTA.Fragments.fill current fragment = current slot) →
+                  MicroCFTA.UnionFind.Satisfies state.representatives base →
+                    ∀ (kept : Nat → Prop),
+                      (∀ (uv : Nat),
+                          kept uv →
+                            ∀ (fragment : MicroCFTA.Fragments.Fragment Symbol),
+                              state.values[roots uv]? =
+                                  some (MicroCFTA.EnumerationState.UVarValue.enumerated fragment) →
+                                ∀ (hole : Nat), MicroCFTA.EnumerationDependencies.HasHole fragment hole → kept hole) →
+                        (∀ (uv : Nat), kept uv → base uv = current uv) →
+                          have updated :=
+                            MicroCFTA.EnumerationPendingAssignment.evaluateSlotsWith state.values roots base
+                              (frontier + 1);
+                          MicroCFTA.UnionFind.Satisfies state.representatives updated ∧
+                            (∀ (uv : Nat) (fragment : MicroCFTA.Fragments.Fragment Symbol),
+                                state.values[uv]? = some (MicroCFTA.EnumerationState.UVarValue.enumerated fragment) →
+                                  updated uv = MicroCFTA.Fragments.fill updated fragment) ∧
+                              (∀ (uv : Nat) (node : Option Nat) (bucket : List MicroCFTA.EnumerationState.Suspended),
+                                  state.values[uv]? =
+                                      some (MicroCFTA.EnumerationState.UVarValue.unenumerated node bucket) →
+                                    updated uv = base uv) ∧
+                                ∀ (uv : Nat), kept uv → updated uv = current uv
+'MicroCFTA.EnumerationPendingAssignment.recomplete_with_base_on' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

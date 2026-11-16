@@ -1,0 +1,11 @@
+theorem stratified_preserved_with_old_levels
+    (before after : State Symbol Guard) (beforeSafe : Safe before) (afterSafe : Safe after)
+    (level : Nat → Nat) (frontier : Nat)
+    (stratified : Stratified before level frontier) (origin : EnumeratedOrigin before after)
+    (protects : ∀ slot fragment, before.values[slot]? = some (.enumerated fragment) →
+      Protected slot before after) :
+    ∃ nextLevel, Stratified after nextLevel frontier ∧
+      (∀ slot fragment, before.values[slot]? = some (.enumerated fragment) →
+        nextLevel slot = level slot) ∧
+      (∀ slot node scs, before.values[slot]? = some (.unenumerated node scs) →
+        nextLevel slot = frontier)

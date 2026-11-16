@@ -1,0 +1,11 @@
+ := by
+  dsimp only
+  obtain ⟨aliases, equations, pending⟩ :=
+    evaluateSlotsWith_witness state safe roots paths level frontier stratified base baseAliases
+  refine ⟨aliases, equations, pending, ?_⟩
+  intro uv supported
+  have sameEvaluation := evaluateSlotsWith_congr_on state.values roots base current kept
+    dependencies agree (frontier + 1) uv supported
+  exact sameEvaluation.trans
+    (evaluateSlotsWith_fixed_of_stored_equations state roots paths current
+      currentAliases currentEquations (frontier + 1) uv)
