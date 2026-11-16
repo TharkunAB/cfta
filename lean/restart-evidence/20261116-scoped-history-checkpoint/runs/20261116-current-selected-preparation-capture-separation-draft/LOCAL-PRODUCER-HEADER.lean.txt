@@ -1,0 +1,27 @@
+omit [DecidableEq Symbol] [DecidableEq Node] in
+private theorem actual_selected_preparation_capture_separation
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller (bits + 2)) (memos : Memos) (metadata : Metadata Typing) (before : Cached)
+    (held heldHandle : Nat) (heldValue : Node)
+    (packet : SourcePruningEnumerationRecursive.Packet formulas solver inventory caller memos metadata before)
+    (isolated : EnumerationDischargeHistory.IsolatedPending held heldHandle before.core)
+    (heldRead : SourcePruningEnumerationNodes.lookupNode caller.checked.native.machine.heap heldHandle =
+      some heldValue)
+    (boundary : MergedOrdinaryHeight.recursiveBoundary heldValue = true)
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (uv : Nat)
+    (chosen : SourcePruningEnumerationRestart.decision stop order metadata before = some (.expand uv))
+    (preparedCaller : Caller (bits + 2)) (preparedBefore : Cached)
+    (preparedReady : EnumerationDriver.Ready uv preparedBefore.core)
+    (entryFuel nativeFuel captured handle : Nat) (bucket : List Suspended)
+    (decoded preparedValue : Node) (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (entered : EnumerationState.State Symbol Constraint)
+    (actual : SourcePruningEnumerationSelectedPreparation.run entryFuel nativeFuel uv preparedCaller preparedBefore =
+      ([.ok ((captured, handle, bucket, decoded), entered)], some (.done preparedValue heap))) :
+    captured = uv ∧ captured ≠ held ∧
+      ExceptT.run (SourcePruningEnumerationEntry.enter preparedCaller.checked.native.machine.heap
+        entryFuel uv preparedBefore.core) = [.ok ((captured, handle, bucket, decoded), entered)] ∧
+      SourcePruningEnumerationNodes.lookupNode preparedCaller.checked.native.machine.heap handle = some decoded ∧
+      SourcePruningEnumerationSelectedValue.run nativeFuel decoded preparedCaller.checked.native.machine.heap =
+        .done preparedValue heap

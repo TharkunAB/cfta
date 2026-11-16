@@ -1,0 +1,9 @@
+Status: UNCOMPILED. This packet has no proof credit.
+
+The header keeps all old21290 resource/source/configuration inputs and the complete literal narrowed receipt. It adds only the genuine lower-depth structural IH after the resource workerIH and the original held isolation/read/boundary facts after that receipt. The result is structural history from the ORIGINAL input cache to every output of the EXACT same prepared continuation. It adds no future output, native state, model, preparation success or callback supplier.
+
+The actual original prefix history theorem derives uv != held and the original-to-candidate cache history from the original decision. The original continuing-prefix producer derives the literal after Packet, native Post and exact query equality. The phase-admission producer derives incoming avoidance and actual bucket/capacity bounds. The native Post transports the original held native read to the actual reached caller. No caller or native state is fabricated.
+
+The proof then inverts the ACTUAL SelectedPreparation.run at the supplied workFuel on that reached caller/cache. Missing native result, native failure, empty receipt list, error head, and multiple receipts all have no prepared fold and emit nothing. A singleton successful receipt invokes20734 with the concrete receipt, actual Packet/resources and the genuine lower-depth resource and structural IHs. The exact query equality identifies its literal saved query. The original-to-candidate history composes with its candidate-to-every-output history.
+
+Every R.trans invocation supplies held/handle and all three states explicitly. The packet copies no forecast or runtime engine and introduces no forecast definitions. It preserves original2M and every algorithm fuel. Complete and stopped callback outputs remain included. Original906 and5493 are unchanged. No Haskell defect or fix is asserted.

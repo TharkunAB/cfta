@@ -1,0 +1,210 @@
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
+open EnumerationReferences
+open InternedConstructorTemplates
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
+open SourcePruningEnumerationSharedIncomingReservation (Seed)
+open SourcePruningEnumerationRecursive (Packet)
+open SourcePruningEnumerationSharedPreparedRecursive (Output Failure finish emitted)
+open SourcePruningEnumerationSharedPreparedRecursiveChildPolicy (runEagerWithNarrow)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Heap" => SourceEqualityAnnotationHeap.Heap
+variable {Typing Key : Type} {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+set_option autoImplicit false
+
+
+/- Project the actual scope history and its complete input avoidance. -/
+omit [DecidableEq Symbol] [DecidableEq Node] in
+private theorem actual_held_frame_history_own
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits) (metadata : Metadata Typing) (uv held heldHandle : Nat)
+    {frame : IdentityActualCallbackFrame bits} {scopeOriginal : Caller (bits + 2)}
+    {scopeBefore : Cached} {allInputs : List (Node × List Suspended)}
+    (ledger : ActualFrameLedger formulas solver root metadata uv frame scopeOriginal scopeBefore allInputs)
+    (history : ActualHeldFrameHistory formulas solver root metadata uv held heldHandle ledger) :
+    EnumerationDischargeHistory.HeldFragmentHistory held heldHandle root.before.core scopeBefore.core ∧
+      ∀ child bucket, (child, bucket) ∈ allInputs → Avoids scopeBefore.core.representatives held bucket
+ := by
+  cases frame <;> exact ⟨history.1, history.2.1⟩
+
+/- Retain the chosen parent package with its exact original snapshots. -/
+omit [DecidableEq Symbol] [DecidableEq Node] in
+private theorem actual_held_frame_history_parent
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits) (metadata : Metadata Typing) (uv held heldHandle : Nat)
+    (parent : IdentityActualCallbackFrame bits) (completed : List Fragment)
+    (rest : List (Node × List Suspended)) (edge : EdgeValue Symbol Constraint)
+    (residual : Option Constraint) (caller : Caller (bits + 2)) (queries : Queries)
+    (height count bound : Nat)
+    {scopeOriginal : Caller (bits + 2)} {scopeBefore : Cached} {allInputs : List (Node × List Suspended)}
+    (ledger : ActualFrameLedger formulas solver root metadata uv
+      (.selected parent completed rest edge residual caller queries height count bound)
+      scopeOriginal scopeBefore allInputs)
+    (history : ActualHeldFrameHistory formulas solver root metadata uv held heldHandle ledger) :
+    ∃ (outerOriginal : Caller (bits + 2)) (outerBefore : Cached)
+        (outerInputs : List (Node × List Suspended))
+        (ancestors : ActualFrameLedger formulas solver root metadata uv parent outerOriginal outerBefore outerInputs)
+        (incoming : Node) (bucket : List Suspended) (before : Cached)
+        (mass : Nat) (seed : Seed) (inventory : Inventory) (memos : Memos)
+        (staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment))),
+      ActualHeldFrameHistory formulas solver root metadata uv held heldHandle ancestors ∧
+      Packet formulas solver inventory caller memos metadata before ∧
+      memos.query = queries ∧
+      TupleInputs formulas solver outerOriginal metadata outerBefore outerInputs completed caller queries before ∧
+      (incoming, bucket) ∈ outerInputs ∧
+      SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap bucket edge before =
+        some [((edge.entry.key.symbol, staged, residual), scopeBefore)] ∧
+      IdentityActualSourcePoint.genericInputs formulas solver root outerOriginal metadata outerBefore outerInputs {
+        frame := parent
+        completed := completed
+        caller := caller
+        before := before
+        queries := queries
+        height := height
+        count := count
+        bound := bound
+        mass := mass
+        seed := seed } ((incoming, bucket) :: rest) (count + 1) ∧
+      scopeOriginal = caller ∧ allInputs = staged.map (fun input => (input.1, input.2.1))
+ := by
+  exact history.2.2
+
+/- Every actual prepared ledger scope has a safe core. -/
+omit [DecidableEq Symbol] [DecidableEq Node] in
+private theorem actual_frame_ledger_scope_safe
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits) (metadata : Metadata Typing) (uv : Nat)
+    {frame : IdentityActualCallbackFrame bits} {scopeOriginal : Caller (bits + 2)}
+    {scopeBefore : Cached} {allInputs : List (Node × List Suspended)}
+    (ledger : ActualFrameLedger formulas solver root metadata uv frame scopeOriginal scopeBefore allInputs) :
+    Safe scopeBefore.core
+ := by
+  have prepareSafe : ∀ (heap : InternedConstructorTemplates.State Symbol Constraint)
+      (bucket : List Suspended) (edge : EdgeValue Symbol Constraint) (before own : Cached)
+      (symbol : Symbol)
+      (staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)))
+      (residual : Option Constraint),
+      Safe before.core →
+      SourcePruningEnumerationCachedOwn.prepare heap bucket edge before =
+        some [((symbol, staged, residual), own)] → Safe own.core := by
+    intro heap bucket edge before own symbol staged residual beforeSafe actual
+    have allowed : arityAllows edge.children.length bucket = true := by
+      by_cases accepted : arityAllows edge.children.length bucket = true
+      · exact accepted
+      · simp [SourcePruningEnumerationCachedOwn.prepare, accepted] at actual
+    cases projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+    | none => simp [SourcePruningEnumerationCachedOwn.prepare, allowed, projected] at actual
+    | some pair =>
+        obtain ⟨tries, projectedResidual⟩ := pair
+        have scalars := SourcePruningEnumerationCachedOwn.prepare_scalars heap bucket edge before own
+          tries projectedResidual (symbol, staged, residual) projected actual
+        rw [scalars.2.1]
+        exact suspension_safe tries.length before.core beforeSafe
+  cases ledger with
+  | captured _inventory caller _memos _queries before own bucket edge residual _handle staged
+      packet _querySame _ready _stored _incoming prepared =>
+      exact prepareSafe scopeOriginal.checked.native.machine.heap bucket edge before scopeBefore
+        edge.entry.key.symbol staged residual packet.safe prepared
+  | selected _parent _outerOriginal _outerBefore _outerInputs _ancestors _completed _rest
+      _incoming bucket caller _queries before own edge residual _height _count _bound _mass _seed
+      _inventory _memos staged packet _querySame _previous _member prepared _snapshot =>
+      exact prepareSafe scopeOriginal.checked.native.machine.heap bucket edge before scopeBefore
+        edge.entry.key.symbol staged residual packet.safe prepared
+
+/- Forward the unchanged actual scope to the genuinely smaller task. -/
+private theorem real_actual_source_tuple_cons_held_history_scoped
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol)) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat) (metadata : Metadata Typing) (uv : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits) (point : IdentityActualSourcePoint bits) (count : Nat)
+    (incoming : Node) (bucket : List Suspended) (rest : List (Node × List Suspended))
+    (taskIH : ∀ smaller : IdentityActualSourceTask bits,
+      smaller.work root.limit < IdentityActualSourceTask.work root.limit
+        (.tuple {point with count := count + 1} ((incoming, bucket) :: rest)) →
+      RealActualSourceHeldHistoryScopedAt holeKey fits admits graph templates checkEmpty edgesOf stop order
+        recursiveDepth workFuel metadata uv formulas solver root smaller) :
+    RealActualSourceHeldHistoryScopedAt holeKey fits admits graph templates checkEmpty edgesOf stop order
+      recursiveDepth workFuel metadata uv formulas solver root
+      (.tuple {point with count := count + 1} ((incoming, bucket) :: rest)) := by
+  intro resourceIH structuralIH selectionMembers selectionLength scopeOriginal scopeBefore allInputs
+    ledger origin current rootInventory rootMemos rootHandle rootPacket rootQuery rootReady rootStored
+    rootIncoming held heldHandle value different isolated decoded boundary heldScope
+  obtain ⟨headOrigin, headCurrent, decrease⟩ :=
+    actual_source_cons_current (SourcePruningOuterNarrow.narrow holeKey fits admits)
+      graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+      formulas solver root scopeOriginal scopeBefore allInputs point count incoming bucket rest origin current
+  have inherited := taskIH (.child {point with count := count} incoming bucket rest) decrease
+    resourceIH structuralIH selectionMembers selectionLength scopeOriginal scopeBefore allInputs
+    ledger headOrigin headCurrent rootInventory rootMemos rootHandle rootPacket rootQuery rootReady
+    rootStored rootIncoming held heldHandle value different isolated decoded boundary heldScope
+  have runtime := actual_source_tuple_cons_run (SourcePruningOuterNarrow.narrow holeKey fits admits)
+    graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv point count incoming bucket rest
+  change ∀ output ∈ emitted (finish uv (IdentityActualSourceTask.runWithNarrow
+      (SourcePruningOuterNarrow.narrow holeKey fits admits)
+      graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+      (.tuple {point with count := count + 1} ((incoming, bucket) :: rest)))),
+    EnumerationDischargeHistory.HeldFragmentHistory held heldHandle root.before.core output.cache.core
+  rw [runtime]
+  exact inherited
+
+/- Forward the unchanged actual scope to the genuinely smaller task. -/
+private theorem real_actual_source_ordinary_held_history_scoped
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol)) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat) (metadata : Metadata Typing) (uv : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits) (point : IdentityActualSourcePoint bits) (height : Nat)
+    (incoming : Node) (bucket : List Suspended) (rest : List (Node × List Suspended))
+    (ordinary : SourcePruningEnumerationSharedEagerChildren.ordinaryNonterminal bucket incoming = true)
+    (taskIH : ∀ smaller : IdentityActualSourceTask bits,
+      smaller.work root.limit < IdentityActualSourceTask.work root.limit
+        (.child {point with height := height + 1} incoming bucket rest) →
+      RealActualSourceHeldHistoryScopedAt holeKey fits admits graph templates checkEmpty edgesOf stop order
+        recursiveDepth workFuel metadata uv formulas solver root smaller) :
+    RealActualSourceHeldHistoryScopedAt holeKey fits admits graph templates checkEmpty edgesOf stop order
+      recursiveDepth workFuel metadata uv formulas solver root
+      (.child {point with height := height + 1} incoming bucket rest) := by
+  intro resourceIH structuralIH selectionMembers selectionLength scopeOriginal scopeBefore allInputs
+    ledger origin current rootInventory rootMemos rootHandle rootPacket rootQuery rootReady rootStored
+    rootIncoming held heldHandle value different isolated decoded boundary heldScope
+  obtain ⟨rowsOrigin, rowsCurrent, decrease⟩ :=
+    actual_source_ordinary_current holeKey fits admits graph templates checkEmpty edgesOf stop order
+      recursiveDepth workFuel metadata uv formulas solver root scopeOriginal scopeBefore allInputs
+      point height incoming bucket rest origin ordinary current
+  have inherited := taskIH (.rows height {point with height := height + 1} incoming bucket rest) decrease
+    resourceIH structuralIH selectionMembers selectionLength scopeOriginal scopeBefore allInputs
+    ledger rowsOrigin rowsCurrent rootInventory rootMemos rootHandle rootPacket rootQuery rootReady
+    rootStored rootIncoming held heldHandle value different isolated decoded boundary heldScope
+  have runtime := actual_source_ordinary_run (SourcePruningOuterNarrow.narrow holeKey fits admits)
+    graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+    point height incoming bucket rest ordinary
+  change ∀ output ∈ emitted (finish uv (IdentityActualSourceTask.runWithNarrow
+      (SourcePruningOuterNarrow.narrow holeKey fits admits)
+      graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+      (.child {point with height := height + 1} incoming bucket rest))),
+    EnumerationDischargeHistory.HeldFragmentHistory held heldHandle root.before.core output.cache.core
+  rw [runtime]
+  exact inherited
+
+
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation

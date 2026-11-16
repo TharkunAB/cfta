@@ -1,0 +1,8 @@
+private theorem actual_frame_ledger_scope_safe
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits) (metadata : Metadata Typing) (uv : Nat)
+    {frame : IdentityActualCallbackFrame bits} {scopeOriginal : Caller (bits + 2)}
+    {scopeBefore : Cached} {allInputs : List (Node × List Suspended)}
+    (ledger : ActualFrameLedger formulas solver root metadata uv frame scopeOriginal scopeBefore allInputs) :
+    Safe scopeBefore.core

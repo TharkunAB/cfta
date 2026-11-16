@@ -1,0 +1,14 @@
+ := by
+  have entry : ExceptT.run (SourcePruningEnumerationEntry.enter preparedCaller.checked.native.machine.heap
+      entryFuel uv preparedBefore.core) = [.ok ((captured, handle, bucket, decoded), entered)] := by
+    exact congrArg Prod.fst actual
+  obtain ⟨capturedSame, readback⟩ := actual_ready_entry_captured_readback
+    preparedCaller.checked.native.machine.heap entryFuel uv captured handle bucket decoded
+    preparedBefore.core entered preparedReady entry
+  have different := EnumerationDischargeHistory.packet_restart_ne formulas solver inventory caller memos
+    metadata before held heldHandle uv heldValue stop order packet isolated heldRead boundary chosen
+  have prepared : SourcePruningEnumerationSelectedValue.run nativeFuel decoded
+      preparedCaller.checked.native.machine.heap = .done preparedValue heap := by
+    have second := congrArg Prod.snd actual
+    simpa only [SourcePruningEnumerationSelectedPreparation.run, entry, Option.some.injEq] using second
+  exact ⟨capturedSame, fun same => different (capturedSame.symm.trans same), entry, readback, prepared⟩

@@ -1,0 +1,1 @@
+2026-11-16. UNCOMPILED alpha repair after failed40338. Rename only the unused existential proof binder ancestors to _ancestors inside Core. No type, predicate meaning, argument order, premise or runtime change. Scoped target and global depth reference remain byte-exact. The old5e1a definitions/failure remain immutable.

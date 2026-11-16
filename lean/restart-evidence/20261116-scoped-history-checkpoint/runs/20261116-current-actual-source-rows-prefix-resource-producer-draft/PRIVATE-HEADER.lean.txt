@@ -1,0 +1,37 @@
+private theorem real_actual_source_rows_prefix_resources
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol)) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat) (metadata : Metadata Typing) (uv : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits) (point : IdentityActualSourcePoint bits) (height : Nat)
+    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference) (bucket : List Suspended)
+    (rest : List (Node × List Suspended))
+    (selectionMembers : ∀ entry alternatives level names,
+      ∀ selected ∈ edgesOf (.node entry alternatives level names), selected ∈ alternatives)
+    (selectionLength : ∀ entry alternatives level names,
+      (edgesOf (.node entry alternatives level names)).length ≤ alternatives.length)
+    (resourceTaskIH : ∀ smaller : IdentityActualSourceTask bits,
+      smaller.work root.limit < IdentityActualSourceTask.work root.limit
+        (.rows height {point with height := height + 1} (.node parentEntry rows depth free) bucket rest) →
+      RealActualSourceCorrectAt holeKey fits admits graph templates checkEmpty edgesOf stop order
+        recursiveDepth workFuel metadata uv formulas solver root smaller)
+    (scopeOriginal : Caller (bits + 2)) (scopeBefore : Cached) (allInputs : List (Node × List Suspended))
+    (ancestors : ActualFrameLedger formulas solver root metadata uv point.frame scopeOriginal scopeBefore allInputs)
+    (origin : ActualSourceOrigin (SourcePruningOuterNarrow.narrow holeKey fits admits)
+      graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv root
+      (.rows height {point with height := height + 1} (.node parentEntry rows depth free) bucket rest))
+    (current : ActualSourceCurrent formulas solver root scopeOriginal metadata scopeBefore allInputs recursiveDepth
+      (.rows height {point with height := height + 1} (.node parentEntry rows depth free) bucket rest)) :
+    ∀ (attempted remaining : List (EdgeValue Symbol Constraint)),
+      edgesOf (.node parentEntry rows depth free) = attempted ++ remaining →
+      ActualEmittedCompleteResources formulas solver point.caller
+        (identity_actual_source_row_boundary recursiveDepth root.limit root.own height
+          {point with height := height + 1} attempted.length)
+        (finish uv (actual_source_row_prefix_run_with_narrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
+          graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+          {point with height := height + 1} (.node parentEntry rows depth free) bucket rest attempted))

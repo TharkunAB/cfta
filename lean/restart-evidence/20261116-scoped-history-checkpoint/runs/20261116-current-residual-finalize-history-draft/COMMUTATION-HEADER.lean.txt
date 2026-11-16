@@ -1,0 +1,9 @@
+theorem run_after_residual
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (fuel target : Nat) (fragment : Fragments.Fragment Symbol)
+    (residual : Option Constraint)
+    (before : EnumerationExpandableIndex.Cached Symbol Constraint) :
+    run heap fuel target fragment
+        (SourcePruningEnumerationSelectedEdge.finish residual fragment before) =
+      (run heap fuel target fragment before).map
+        (SourcePruningEnumerationSelectedEdge.finish residual fragment)

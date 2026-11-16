@@ -1,0 +1,14 @@
+ := by
+  have parentAvoids : Avoids root.before.core.representatives held root.scs :=
+    rootIsolated.incoming _ (List.mem_of_getElem? rootStored)
+  have parentBounded : ∀ sc ∈ root.scs, sc.var < root.before.core.counter :=
+    rootPacket.safe.1.values _ (List.mem_of_getElem? rootStored)
+  obtain ⟨history, _ownSafe, stagedAvoid⟩ :=
+    actual_safe_own_held_fragment_history_of_avoiding_bucket
+      capturedCaller.checked.native.machine.heap root.before own root.scs edge
+      edge.entry.key.symbol staged residual rootPacket.safe held heldHandle
+      rootIsolated parentAvoids parentBounded prepared
+  change EnumerationDischargeHistory.HeldFragmentHistory held heldHandle root.before.core own.core ∧
+    (∀ child bucket, (child, bucket) ∈ staged.map (fun input => (input.1, input.2.1)) →
+      Avoids own.core.representatives held bucket) ∧ True
+  exact ⟨history, stagedAvoid, True.intro⟩

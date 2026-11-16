@@ -1,0 +1,26 @@
+private def RealEagerHeldFragmentHistoryAtDepth
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (recursiveDepth : Nat) : Prop :=
+  ∀ (nextInventory : Inventory) (nextCaller : Caller (bits + 2)) (nextMemos : Memos)
+      (nextBefore : Cached) (nextMetadata : Metadata Typing) (nextSeed : Seed) (nextCeiling : Nat),
+    Packet formulas solver nextInventory nextCaller nextMemos nextMetadata nextBefore →
+    Fits nextSeed.2 nextCaller.checked →
+    Heap (fun guard => guard ∈ nextSeed.1) nextCaller.checked.native.machine.heap →
+    (∀ entry rows depth free, ∀ edge ∈ edgesOf (.node entry rows depth free), edge ∈ rows) →
+    (∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length) →
+    SourcePruningEnumerationPrefixAdmission.suspendedBound nextBefore.core ≤ nextCeiling →
+    eagerReserved bits recursiveDepth nextSeed nextCeiling →
+    ∀ (sameWorkFuel held heldHandle : Nat) (value : Node),
+      EnumerationDischargeHistory.IsolatedPending held heldHandle nextBefore.core →
+      SourcePruningEnumerationNodes.lookupNode
+        nextCaller.checked.native.machine.heap heldHandle = some value →
+      MergedOrdinaryHeight.recursiveBoundary value = true →
+      let outcome := runEagerWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        graph templates checkEmpty edgesOf stop order sameWorkFuel recursiveDepth
+        nextMetadata nextCaller nextMemos.query nextBefore
+      ∀ output ∈ emitted outcome,
+        EnumerationDischargeHistory.HeldFragmentHistory held heldHandle nextBefore.core output.cache.core

@@ -1,0 +1,18 @@
+ := by
+  obtain ⟨_inventory, _memos, _post, _query, _current, _growth, origin,
+      protectsExpanded, protectsRoots, referenceEffects, _bounds, _returnedFragments⟩ := tuple
+  have heldInside : held < before.core.counter := by
+    rw [safe.1.aligned]
+    exact (List.getElem?_eq_some_iff.mp isolated.stored).1
+  have heldProtected : EnumerationDriver.Protected held before.core after.core :=
+    protectsRoots held heldInside isolated.root inputAvoids
+  have afterIncoming : IncomingAvoid held after.core := by
+    have allowed := referenceEffects
+      (fun slot => ¬UnionFind.SameClass before.core.representatives held slot)
+      isolated.incoming inputAvoids (fresh_separate before.core safe held heldInside)
+    intro value member sc listed same
+    exact allowed value member sc listed ((heldProtected.classes sc.var).mp same)
+  refine ⟨⟨heldProtected.root, heldProtected.value.trans isolated.stored, afterIncoming⟩,
+    heldProtected, protectsExpanded, ?_⟩
+  intro slot fragment stored
+  exact Or.inl (origin slot fragment stored)

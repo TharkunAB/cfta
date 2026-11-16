@@ -1,0 +1,1 @@
+2026-11-16. UNCOMPILED repair after failed40338. In both dependent ledger cases, use the surviving indexed scopeOriginal/scopeBefore aliases. The dependent cases eliminate the requested caller/own variable names. Only these two proof terms change. All five theorem headers and probes remain byte-exact. Old84254d raw/failure remain immutable.

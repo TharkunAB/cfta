@@ -1,0 +1,109 @@
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+open Language Fragments EnumerationState EnumerationCorrectness EnumerationSchedule
+open EnumerationDependencies EnumerationReferences InternedConstructorTemplates
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+variable {Typing : Type} {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+local notation "Memos" => EndpointMemoGateTrace.Memos
+
+omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node] in
+private theorem actual_ready_entry_captured_readback
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (fuel uv captured handle : Nat) (bucket : List Suspended) (decoded : Node)
+    (before entered : EnumerationState.State Symbol Constraint)
+    (ready : EnumerationDriver.Ready uv before)
+    (actual : ExceptT.run (SourcePruningEnumerationEntry.enter heap fuel uv before) =
+      [.ok ((captured, handle, bucket, decoded), entered)]) :
+    captured = uv ∧ SourcePruningEnumerationNodes.lookupNode heap handle = some decoded
+ := by
+  have success : Success (SourcePruningEnumerationEntry.enter heap fuel uv) before
+      (captured, handle, bucket, decoded) entered := by
+    unfold Success
+    rw [actual]
+    exact List.mem_singleton_self _
+  unfold SourcePruningEnumerationEntry.enter at success
+  obtain ⟨value, readAfter, reading, continued⟩ := (success_bind _ _ _ _ _).mp success
+  obtain ⟨readSafe, readCounter, readProtected, _readStored⟩ :=
+    EnumerationDriver.getValue_root fuel uv before readAfter value
+      ready.safe ready.inside ready.root reading
+  cases value with
+  | eliminated | enumerated _ =>
+    simp only [Success, reject, ExceptT.run, List.not_mem_nil] at continued
+  | unenumerated node scs =>
+    cases node with
+    | none => simp only [Success, reject, ExceptT.run, List.not_mem_nil] at continued
+    | some readHandle =>
+      obtain ⟨target, rootAfter, resolving, continued⟩ := (success_bind _ _ _ _ _).mp continued
+      have targetSame : target = uv :=
+        (EnumerationDriver.representative_root fuel uv target readAfter rootAfter readSafe
+          (by simpa only [readCounter] using ready.inside) readProtected.root resolving).1
+      cases lookupEq : SourcePruningEnumerationNodes.lookupNode heap readHandle with
+      | none =>
+        simp only [lookupEq] at continued
+        exact (success_failure .unresolvedReference rootAfter entered
+          (captured, handle, bucket, decoded) continued).elim
+      | some readValue =>
+        simp only [lookupEq] at continued
+        obtain ⟨token, updated, _written, finished⟩ := (success_bind _ _ _ _ _).mp continued
+        cases token
+        have exactResult := (success_pure (target, readHandle, scs, readValue)
+          (captured, handle, bucket, decoded) updated entered).mp finished
+        have capturedSame : captured = target := congrArg Prod.fst exactResult.1
+        have handleSame : handle = readHandle := congrArg (fun result => result.2.1) exactResult.1
+        have decodedSame : decoded = readValue := congrArg (fun result => result.2.2.2) exactResult.1
+        refine ⟨capturedSame.trans targetSame, ?_⟩
+        rw [handleSame, decodedSame]
+        exact lookupEq
+
+omit [DecidableEq Symbol] [DecidableEq Node] in
+private theorem actual_selected_preparation_capture_separation
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller (bits + 2)) (memos : Memos) (metadata : Metadata Typing) (before : Cached)
+    (held heldHandle : Nat) (heldValue : Node)
+    (packet : SourcePruningEnumerationRecursive.Packet formulas solver inventory caller memos metadata before)
+    (isolated : EnumerationDischargeHistory.IsolatedPending held heldHandle before.core)
+    (heldRead : SourcePruningEnumerationNodes.lookupNode caller.checked.native.machine.heap heldHandle =
+      some heldValue)
+    (boundary : MergedOrdinaryHeight.recursiveBoundary heldValue = true)
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (uv : Nat)
+    (chosen : SourcePruningEnumerationRestart.decision stop order metadata before = some (.expand uv))
+    (preparedCaller : Caller (bits + 2)) (preparedBefore : Cached)
+    (preparedReady : EnumerationDriver.Ready uv preparedBefore.core)
+    (entryFuel nativeFuel captured handle : Nat) (bucket : List Suspended)
+    (decoded preparedValue : Node) (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (entered : EnumerationState.State Symbol Constraint)
+    (actual : SourcePruningEnumerationSelectedPreparation.run entryFuel nativeFuel uv preparedCaller preparedBefore =
+      ([.ok ((captured, handle, bucket, decoded), entered)], some (.done preparedValue heap))) :
+    captured = uv ∧ captured ≠ held ∧
+      ExceptT.run (SourcePruningEnumerationEntry.enter preparedCaller.checked.native.machine.heap
+        entryFuel uv preparedBefore.core) = [.ok ((captured, handle, bucket, decoded), entered)] ∧
+      SourcePruningEnumerationNodes.lookupNode preparedCaller.checked.native.machine.heap handle = some decoded ∧
+      SourcePruningEnumerationSelectedValue.run nativeFuel decoded preparedCaller.checked.native.machine.heap =
+        .done preparedValue heap
+ := by
+  have entry : ExceptT.run (SourcePruningEnumerationEntry.enter preparedCaller.checked.native.machine.heap
+      entryFuel uv preparedBefore.core) = [.ok ((captured, handle, bucket, decoded), entered)] := by
+    exact congrArg Prod.fst actual
+  obtain ⟨capturedSame, readback⟩ := actual_ready_entry_captured_readback
+    preparedCaller.checked.native.machine.heap entryFuel uv captured handle bucket decoded
+    preparedBefore.core entered preparedReady entry
+  have different := EnumerationDischargeHistory.packet_restart_ne formulas solver inventory caller memos
+    metadata before held heldHandle uv heldValue stop order packet isolated heldRead boundary chosen
+  have prepared : SourcePruningEnumerationSelectedValue.run nativeFuel decoded
+      preparedCaller.checked.native.machine.heap = .done preparedValue heap := by
+    have second := congrArg Prod.snd actual
+    simpa only [SourcePruningEnumerationSelectedPreparation.run, entry, Option.some.injEq] using second
+  exact ⟨capturedSame, fun same => different (capturedSame.symm.trans same), entry, readback, prepared⟩
+
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation

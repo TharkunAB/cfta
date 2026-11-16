@@ -1,0 +1,20 @@
+omit [DecidableEq Symbol] [DecidableEq Node] in
+private theorem actual_captured_scope_entry_held_frame_history
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits) (metadata : Metadata Typing)
+    (rootInventory : Inventory) (rootMemos : Memos) (uv rootHandle : Nat)
+    (rootPacket : SourcePruningEnumerationRecursive.Packet formulas solver
+      rootInventory root.caller rootMemos metadata root.before)
+    (rootStored : root.before.core.values[uv]? = some (.unenumerated (some rootHandle) root.scs))
+    (held heldHandle : Nat)
+    (rootIsolated : EnumerationDischargeHistory.IsolatedPending held heldHandle root.before.core)
+    (capturedCaller : Caller (bits + 2)) (capturedQueries : Queries)
+    (edge : EdgeValue Symbol Constraint) (residual : Option Constraint) (own : Cached)
+    (staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)))
+    (prepared : SourcePruningEnumerationCachedOwn.prepare capturedCaller.checked.native.machine.heap
+      root.scs edge root.before = some [((edge.entry.key.symbol, staged, residual), own)])
+    (ledger : ActualFrameLedger formulas solver root metadata uv
+      (.captured edge residual capturedCaller capturedQueries) capturedCaller own
+      (staged.map (fun input => (input.1, input.2.1)))) :
+    ActualHeldFrameHistory formulas solver root metadata uv held heldHandle ledger

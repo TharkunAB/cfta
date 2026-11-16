@@ -1,0 +1,57 @@
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+open EnumerationState EnumerationCorrectness EnumerationSchedule InternedConstructorTemplates
+open SourcePruningEnumerationSharedPreparedRecursive (Output emitted)
+open SourcePruningEnumerationSharedPreparedRecursiveChildPolicy (runEagerWithNarrow runWithNarrow resumeWithNarrow)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+variable {Typing Key : Type} {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+/- Establish the genuine outer-depth base at every original work budget. -/
+private theorem real_held_fragment_history_depth_zero
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) :
+    RealEagerHeldFragmentHistoryAtDepth (bits := bits)
+      holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver 0
+ := by
+  intro inventory caller memos before metadata seed ceiling packet bounded known
+    selectionMembers selectionLength mass reserved workFuel held heldHandle value isolated decoded boundary
+  have retained := EnumerationDischargeHistory.HeldFragmentHistory.refl
+    held heldHandle before.core packet.safe isolated
+  unfold runEagerWithNarrow runWithNarrow
+  cases chosen : SourcePruningEnumerationRestart.decision stop order metadata before with
+  | none =>
+    change ∀ output ∈ [⟨some metadata, before, caller, memos.query⟩],
+      EnumerationDischargeHistory.HeldFragmentHistory held heldHandle before.core output.cache.core
+    intro output member
+    have same := List.mem_singleton.mp member
+    subst output
+    exact retained
+  | some next =>
+    cases next with
+    | done =>
+      change ∀ output ∈ [⟨none, before, caller, memos.query⟩],
+        EnumerationDischargeHistory.HeldFragmentHistory held heldHandle before.core output.cache.core
+      intro output member
+      have same := List.mem_singleton.mp member
+      subst output
+      exact retained
+    | stuck =>
+      change ∀ output ∈ ([] : List (Output (bits + 2) Typing)),
+        EnumerationDischargeHistory.HeldFragmentHistory held heldHandle before.core output.cache.core
+      intro output member
+      cases member
+    | expand target =>
+      change ∀ output ∈ ([] : List (Output (bits + 2) Typing)),
+        EnumerationDischargeHistory.HeldFragmentHistory held heldHandle before.core output.cache.core
+      intro output member
+      cases member
+
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation

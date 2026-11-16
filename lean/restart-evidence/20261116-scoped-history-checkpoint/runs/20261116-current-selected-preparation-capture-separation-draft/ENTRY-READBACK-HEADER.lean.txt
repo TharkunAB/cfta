@@ -1,0 +1,9 @@
+omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node] in
+private theorem actual_ready_entry_captured_readback
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (fuel uv captured handle : Nat) (bucket : List Suspended) (decoded : Node)
+    (before entered : EnumerationState.State Symbol Constraint)
+    (ready : EnumerationDriver.Ready uv before)
+    (actual : ExceptT.run (SourcePruningEnumerationEntry.enter heap fuel uv before) =
+      [.ok ((captured, handle, bucket, decoded), entered)]) :
+    captured = uv ∧ SourcePruningEnumerationNodes.lookupNode heap handle = some decoded

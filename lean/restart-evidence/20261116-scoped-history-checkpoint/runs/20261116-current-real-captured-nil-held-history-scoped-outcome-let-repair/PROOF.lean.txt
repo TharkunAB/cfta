@@ -1,0 +1,39 @@
+ := by
+  unfold RealActualSourceHeldHistoryScopedAt
+  intro _resourceIH structuralIH selectionMembers selectionLength
+    scopeOriginal scopeBefore allInputs ledger _origin current
+    _rootInventory _rootMemos _rootHandle _rootPacket _rootQuerySame _rootReady
+    _rootStored _rootIncoming held heldHandle value different _rootIsolated decoded boundary scopeHistory
+  obtain ⟨rootScope, inputsAvoid⟩ := actual_held_frame_history_own
+    formulas solver root metadata uv held heldHandle ledger scopeHistory
+  have scopeSafe := actual_frame_ledger_scope_safe formulas solver root metadata uv ledger
+  obtain ⟨inputs, currentFits, currentKnown, reserved⟩ := current
+  have currentRead : SourcePruningEnumerationNodes.lookupNode
+      point.caller.checked.native.machine.heap heldHandle = some value :=
+    SourcePruningEnumerationNodes.lookupNode_keeps
+      root.caller.checked.native.machine.heap point.caller.checked.native.machine.heap
+      inputs.2.1 heldHandle value decoded
+  cases ledger with
+  | captured inventory entryCaller memos entryQueries before rowOwn scs row rowResidual handle
+      staged packet _querySame ready stored incoming prepared =>
+    obtain ⟨_shapes, _kept, _inventory, _memos, _packet, _query, history,
+      mass, _counted, _included, _genuine⟩ := inputs
+    have callback := real_captured_frame_current_local_held_history
+      holeKey fits admits graph templates checkEmpty edgesOf stop order recursiveDepth workFuel
+      metadata uv handle formulas solver structuralIH inventory capturedCaller memos capturedQueries
+      before scs edge residual scopeBefore staged packet ready stored incoming prepared
+      point.completed point.caller point.queries point.before history
+      root.limit root.own point.height point.count point.bound point.mass point.seed
+      currentFits currentKnown mass selectionMembers selectionLength reserved
+      scopeSafe held heldHandle rootScope.isolated inputsAvoid different value currentRead boundary
+    dsimp only
+    intro output member
+    have callbackMember : output ∈ emitted
+        (finish uv ((actual_source_frame_callbacks (SourcePruningOuterNarrow.narrow holeKey fits admits)
+          graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+          (.captured edge residual capturedCaller capturedQueries)).1
+          point.completed point.caller point.queries point.before)) := by
+      simpa only [IdentityActualSourceTask.runWithNarrow,
+        SourcePruningEnumerationSharedChildVisitors.visitChildren, List.append_nil] using member
+    exact EnumerationDischargeHistory.HeldFragmentHistory.trans held heldHandle
+      root.before.core scopeBefore.core output.cache.core rootScope (callback output callbackMember)

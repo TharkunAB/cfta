@@ -1,0 +1,39 @@
+ := by
+  have success : Success (SourcePruningEnumerationEntry.enter heap fuel uv) before
+      (captured, handle, bucket, decoded) entered := by
+    unfold Success
+    rw [actual]
+    exact List.mem_singleton_self _
+  unfold SourcePruningEnumerationEntry.enter at success
+  obtain ⟨value, readAfter, reading, continued⟩ := (success_bind _ _ _ _ _).mp success
+  obtain ⟨readSafe, readCounter, readProtected, _readStored⟩ :=
+    EnumerationDriver.getValue_root fuel uv before readAfter value
+      ready.safe ready.inside ready.root reading
+  cases value with
+  | eliminated | enumerated _ =>
+    simp only [Success, reject, ExceptT.run, List.not_mem_nil] at continued
+  | unenumerated node scs =>
+    cases node with
+    | none => simp only [Success, reject, ExceptT.run, List.not_mem_nil] at continued
+    | some readHandle =>
+      obtain ⟨target, rootAfter, resolving, continued⟩ := (success_bind _ _ _ _ _).mp continued
+      have targetSame : target = uv :=
+        (EnumerationDriver.representative_root fuel uv target readAfter rootAfter readSafe
+          (by simpa only [readCounter] using ready.inside) readProtected.root resolving).1
+      cases lookupEq : SourcePruningEnumerationNodes.lookupNode heap readHandle with
+      | none =>
+        simp only [lookupEq] at continued
+        exact (success_failure .unresolvedReference rootAfter entered
+          (captured, handle, bucket, decoded) continued).elim
+      | some readValue =>
+        simp only [lookupEq] at continued
+        obtain ⟨token, updated, _written, finished⟩ := (success_bind _ _ _ _ _).mp continued
+        cases token
+        have exactResult := (success_pure (target, readHandle, scs, readValue)
+          (captured, handle, bucket, decoded) updated entered).mp finished
+        have capturedSame : captured = target := congrArg Prod.fst exactResult.1
+        have handleSame : handle = readHandle := congrArg (fun result => result.2.1) exactResult.1
+        have decodedSame : decoded = readValue := congrArg (fun result => result.2.2.2) exactResult.1
+        refine ⟨capturedSame.trans targetSame, ?_⟩
+        rw [handleSame, decodedSame]
+        exact lookupEq

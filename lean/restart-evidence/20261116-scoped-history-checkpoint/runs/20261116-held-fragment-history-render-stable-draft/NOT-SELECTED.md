@@ -1,0 +1,1 @@
+Not selected. Root chose the sharper header eee855c0 without the redundant Safe-before premise. Preserve this b76f37d7 header and its draft source as reference material. Do not append its declaration. The sole selected implementation is in 20261116-held-fragment-history-render-stable-selected. Both remain uncompiled until Root checks the selected implementation.

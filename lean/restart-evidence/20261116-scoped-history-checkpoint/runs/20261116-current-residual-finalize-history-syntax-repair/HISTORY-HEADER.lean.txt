@@ -1,0 +1,7 @@
+theorem HeldFragmentHistory.after_residual
+    (held handle : Nat) (before : EnumerationState.State Symbol Constraint)
+    (middle : EnumerationExpandableIndex.Cached Symbol Constraint)
+    (residual : Option Constraint) (fragment : Fragments.Fragment Symbol)
+    (history : HeldFragmentHistory held handle before middle.core) :
+    HeldFragmentHistory held handle before
+      (SourcePruningEnumerationSelectedEdge.finish residual fragment middle).core

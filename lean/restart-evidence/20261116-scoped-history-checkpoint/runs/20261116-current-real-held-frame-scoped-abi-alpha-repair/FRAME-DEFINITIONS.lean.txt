@@ -1,0 +1,50 @@
+private def ActualHeldFrameHistoryCore
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits) (metadata : Metadata Typing)
+    (uv held heldHandle : Nat) :
+    IdentityActualCallbackFrame bits → Caller (bits + 2) → Cached → List (Node × List Suspended) → Prop
+  | .captured _ _ _ _, _scopeOriginal, scopeBefore, allInputs =>
+      EnumerationDischargeHistory.HeldFragmentHistory held heldHandle root.before.core scopeBefore.core ∧
+      (∀ child bucket, (child, bucket) ∈ allInputs → Avoids scopeBefore.core.representatives held bucket) ∧ True
+  | .selected parent completed rest edge residual caller queries height count bound,
+      scopeOriginal, scopeBefore, allInputs =>
+      EnumerationDischargeHistory.HeldFragmentHistory held heldHandle root.before.core scopeBefore.core ∧
+      (∀ child bucket, (child, bucket) ∈ allInputs → Avoids scopeBefore.core.representatives held bucket) ∧
+      ∃ (outerOriginal : Caller (bits + 2)) (outerBefore : Cached)
+          (outerInputs : List (Node × List Suspended))
+          (_ancestors : ActualFrameLedger formulas solver root metadata uv parent outerOriginal outerBefore outerInputs)
+          (incoming : Node) (bucket : List Suspended) (before : Cached)
+          (mass : Nat) (seed : Seed) (inventory : Inventory) (memos : Memos)
+          (staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment))),
+        ActualHeldFrameHistoryCore formulas solver root metadata uv held heldHandle
+          parent outerOriginal outerBefore outerInputs ∧
+        Packet formulas solver inventory caller memos metadata before ∧
+        memos.query = queries ∧
+        TupleInputs formulas solver outerOriginal metadata outerBefore outerInputs completed caller queries before ∧
+        (incoming, bucket) ∈ outerInputs ∧
+        SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap bucket edge before =
+          some [((edge.entry.key.symbol, staged, residual), scopeBefore)] ∧
+        IdentityActualSourcePoint.genericInputs formulas solver root outerOriginal metadata outerBefore outerInputs {
+          frame := parent
+          completed := completed
+          caller := caller
+          before := before
+          queries := queries
+          height := height
+          count := count
+          bound := bound
+          mass := mass
+          seed := seed } ((incoming, bucket) :: rest) (count + 1) ∧
+        scopeOriginal = caller ∧ allInputs = staged.map (fun input => (input.1, input.2.1))
+
+private def ActualHeldFrameHistory
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits) (metadata : Metadata Typing)
+    (uv held heldHandle : Nat)
+    {frame : IdentityActualCallbackFrame bits} {scopeOriginal : Caller (bits + 2)}
+    {scopeBefore : Cached} {allInputs : List (Node × List Suspended)}
+    (_ledger : ActualFrameLedger formulas solver root metadata uv frame scopeOriginal scopeBefore allInputs) : Prop :=
+  ActualHeldFrameHistoryCore formulas solver root metadata uv held heldHandle
+    frame scopeOriginal scopeBefore allInputs

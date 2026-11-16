@@ -1,0 +1,20 @@
+omit [DecidableEq Symbol] [DecidableEq Node] in
+private theorem actual_own_held_fragment_history_of_avoiding_bucket
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller (bits + 2)) (memos : Memos) (metadata : Metadata Typing)
+    (before own : Cached) (parentBucket : List Suspended)
+    (edge : EdgeValue Symbol Constraint) (symbol : Symbol)
+    (staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)))
+    (residual : Option Constraint)
+    (packet : SourcePruningEnumerationRecursive.Packet formulas solver inventory caller memos metadata before)
+    (held heldHandle : Nat)
+    (isolated : EnumerationDischargeHistory.IsolatedPending held heldHandle before.core)
+    (parentAvoids : Avoids before.core.representatives held parentBucket)
+    (_parentBounded : ∀ sc ∈ parentBucket, sc.var < before.core.counter)
+    (actual : SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap
+      parentBucket edge before = some [((symbol, staged, residual), own)]) :
+    EnumerationDischargeHistory.HeldFragmentHistory held heldHandle before.core own.core ∧
+      Safe own.core ∧
+      ∀ child bucket, (child, bucket) ∈ staged.map (fun input => (input.1, input.2.1)) →
+        Avoids own.core.representatives held bucket

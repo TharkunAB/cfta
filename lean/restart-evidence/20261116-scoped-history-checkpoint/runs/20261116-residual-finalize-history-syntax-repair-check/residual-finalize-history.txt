@@ -1,0 +1,25 @@
+@MicroCFTA.SourcePruningEnumerationFinalize.run_after_residual : ∀ {NativeGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (fuel target : Nat) (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+  (residual : Option (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourcePruningEnumerationFinalize.run heap fuel target fragment
+      (MicroCFTA.SourcePruningEnumerationSelectedEdge.finish residual fragment before) =
+    Option.map (MicroCFTA.SourcePruningEnumerationSelectedEdge.finish residual fragment)
+      (MicroCFTA.SourcePruningEnumerationFinalize.run heap fuel target fragment before)
+MicroCFTA.EnumerationDischargeHistory.HeldFragmentHistory.after_residual : ∀ (held handle : Nat)
+  (before :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (middle :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (residual : Option (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol),
+  MicroCFTA.EnumerationDischargeHistory.HeldFragmentHistory held handle before middle.core →
+    MicroCFTA.EnumerationDischargeHistory.HeldFragmentHistory held handle before
+      (MicroCFTA.SourcePruningEnumerationSelectedEdge.finish residual fragment middle).core
+'MicroCFTA.SourcePruningEnumerationFinalize.run_after_residual' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.EnumerationDischargeHistory.HeldFragmentHistory.after_residual' depends on axioms: [propext]

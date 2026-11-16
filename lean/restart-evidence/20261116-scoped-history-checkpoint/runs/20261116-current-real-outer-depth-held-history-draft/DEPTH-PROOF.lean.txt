@@ -1,0 +1,43 @@
+
+ := by
+  induction recursiveDepth with
+  | zero =>
+    exact real_held_fragment_history_depth_zero holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver
+  | succ recursiveDepth ih =>
+    intro inventory caller memos before metadata seed ceiling packet bounded known
+      selectionMembers selectionLength initialMass reserved workFuel held heldHandle heldValue isolated decoded boundary
+    have retained := EnumerationDischargeHistory.HeldFragmentHistory.refl
+      held heldHandle before.core packet.safe isolated
+    cases chosen : SourcePruningEnumerationRestart.decision stop order metadata before with
+    | none =>
+      unfold runEagerWithNarrow runWithNarrow
+      rw [chosen, resumeWithNarrow]
+      change ∀ output ∈ ([⟨some metadata, before, caller, memos.query⟩] : List (Output (bits + 2) Typing)),
+        EnumerationDischargeHistory.HeldFragmentHistory held heldHandle before.core output.cache.core
+      intro output member
+      have same := List.mem_singleton.mp member
+      subst output
+      exact retained
+    | some next =>
+      cases next with
+      | done =>
+        unfold runEagerWithNarrow runWithNarrow
+        rw [chosen, resumeWithNarrow]
+        change ∀ output ∈ ([⟨none, before, caller, memos.query⟩] : List (Output (bits + 2) Typing)),
+          EnumerationDischargeHistory.HeldFragmentHistory held heldHandle before.core output.cache.core
+        intro output member
+        have same := List.mem_singleton.mp member
+        subst output
+        exact retained
+      | stuck =>
+        unfold runEagerWithNarrow runWithNarrow
+        rw [chosen, resumeWithNarrow]
+        intro output member
+        cases member
+      | expand uv =>
+        have resourceIH := real_eager_emitted_complete_at_every_depth
+          holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver recursiveDepth
+        exact real_expand_held_fragment_history holeKey fits admits graph templates checkEmpty edgesOf stop order
+          formulas solver recursiveDepth resourceIH ih inventory caller memos before metadata seed ceiling
+          packet bounded known selectionMembers selectionLength initialMass reserved workFuel uv chosen
+          held heldHandle heldValue isolated decoded boundary

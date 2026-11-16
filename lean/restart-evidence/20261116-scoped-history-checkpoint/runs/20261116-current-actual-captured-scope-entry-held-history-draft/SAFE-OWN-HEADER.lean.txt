@@ -1,0 +1,17 @@
+omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node] in
+private theorem actual_safe_own_held_fragment_history_of_avoiding_bucket
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (before own : Cached) (parentBucket : List Suspended)
+    (edge : EdgeValue Symbol Constraint) (symbol : Symbol)
+    (staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)))
+    (residual : Option Constraint)
+    (safe : Safe before.core) (held heldHandle : Nat)
+    (isolated : EnumerationDischargeHistory.IsolatedPending held heldHandle before.core)
+    (parentAvoids : Avoids before.core.representatives held parentBucket)
+    (_parentBounded : ∀ sc ∈ parentBucket, sc.var < before.core.counter)
+    (actual : SourcePruningEnumerationCachedOwn.prepare heap
+      parentBucket edge before = some [((symbol, staged, residual), own)]) :
+    EnumerationDischargeHistory.HeldFragmentHistory held heldHandle before.core own.core ∧
+      Safe own.core ∧
+      ∀ child bucket, (child, bucket) ∈ staged.map (fun input => (input.1, input.2.1)) →
+        Avoids own.core.representatives held bucket

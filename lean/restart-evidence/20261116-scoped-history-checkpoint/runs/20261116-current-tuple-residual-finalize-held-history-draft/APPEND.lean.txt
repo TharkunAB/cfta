@@ -1,0 +1,49 @@
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies InternedConstructorTemplates
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+variable {Typing : Type} {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+/- Use the actual residual update before the same supplied-budget finalizer. -/
+omit [DecidableEq Symbol] [DecidableEq Node] in
+private theorem actual_tuple_residual_finalize_held_fragment_history
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (original : Caller (bits + 2)) (metadata : Metadata Typing)
+    (before : Cached) (inputs : List (Node × List Suspended)) (fragments : List Fragment)
+    (reached : Caller (bits + 2)) (queries : Queries) (middle : Cached)
+    (tuple : TupleInputs formulas solver original metadata before inputs fragments reached queries middle)
+    (safe : Safe before.core) (held heldHandle : Nat)
+    (isolated : EnumerationDischargeHistory.IsolatedPending held heldHandle before.core)
+    (inputAvoids : ∀ child bucket, (child, bucket) ∈ inputs →
+      Avoids before.core.representatives held bucket)
+    (symbol : Symbol) (fuel captured : Nat) (finished : Cached)
+    (capturedNode : Option Nat) (capturedBucket : List Suspended)
+    (capturedStored : before.core.values[captured]? = some (.unenumerated capturedNode capturedBucket))
+    (capturedDifferent : captured ≠ held) (residual : Option Constraint)
+    (actual : SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap
+      fuel captured (.node symbol fragments)
+      (SourcePruningEnumerationSelectedEdge.finish residual (.node symbol fragments) middle) = some finished) :
+    EnumerationDischargeHistory.HeldFragmentHistory held heldHandle before.core finished.core
+ := by
+  have mapped : (SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap
+      fuel captured (.node symbol fragments) middle).map
+        (SourcePruningEnumerationSelectedEdge.finish residual (.node symbol fragments)) = some finished :=
+    (SourcePruningEnumerationFinalize.run_after_residual reached.checked.native.machine.heap
+      fuel captured (.node symbol fragments) residual middle).symm.trans actual
+  obtain ⟨plain, finalized, recorded⟩ := Option.map_eq_some_iff.mp mapped
+  have history := actual_tuple_finalize_held_fragment_history formulas solver original metadata
+    before inputs fragments reached queries middle tuple safe held heldHandle isolated inputAvoids
+    symbol fuel captured plain capturedNode capturedBucket capturedStored capturedDifferent finalized
+  have retained := EnumerationDischargeHistory.HeldFragmentHistory.after_residual held heldHandle
+    before.core plain residual (.node symbol fragments) history
+  simpa only [recorded] using retained
+
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation

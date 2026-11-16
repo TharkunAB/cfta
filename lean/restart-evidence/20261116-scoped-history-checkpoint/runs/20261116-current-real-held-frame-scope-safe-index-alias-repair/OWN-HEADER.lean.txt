@@ -1,0 +1,10 @@
+private theorem actual_held_frame_history_own
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits) (metadata : Metadata Typing) (uv held heldHandle : Nat)
+    {frame : IdentityActualCallbackFrame bits} {scopeOriginal : Caller (bits + 2)}
+    {scopeBefore : Cached} {allInputs : List (Node × List Suspended)}
+    (ledger : ActualFrameLedger formulas solver root metadata uv frame scopeOriginal scopeBefore allInputs)
+    (history : ActualHeldFrameHistory formulas solver root metadata uv held heldHandle ledger) :
+    EnumerationDischargeHistory.HeldFragmentHistory held heldHandle root.before.core scopeBefore.core ∧
+      ∀ child bucket, (child, bucket) ∈ allInputs → Avoids scopeBefore.core.representatives held bucket
