@@ -1,0 +1,20 @@
+ := by
+  unfold SourcePruningEnumerationCachedOwn.prepare at actual
+  split at actual
+  next allowed =>
+    generalize projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = plan at actual
+    cases plan with
+    | none => cases actual
+    | some plan =>
+        rcases plan with ⟨tries, kept⟩
+        dsimp only at actual
+        generalize suspended : SourcePruningEnumerationCachedOwn.suspendMany heap tries before = result at actual
+        cases result with
+        | none => cases actual
+        | some result =>
+            rcases result with ⟨own, after⟩
+            have rowSame := (List.cons.inj (Option.some.inj actual)).1
+            have cacheSame : after = middle := congrArg (fun row : Row => row.2) rowSame
+            have forest := suspendMany_forest heap tries before after own suspended
+            exact (congrArg (fun cached : Cached => cached.core.representatives) cacheSame.symm).trans forest
+  next rejected => cases actual

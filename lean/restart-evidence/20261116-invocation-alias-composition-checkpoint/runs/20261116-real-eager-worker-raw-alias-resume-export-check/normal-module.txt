@@ -1,0 +1,177 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-real-eager-worker-raw-alias-resume-export-check/source/MicroCFTA/SourcePruningEnumerationRealEagerRawAliases.lean:136:4: error: Tactic `split` failed: Could not split an `if` or `match` expression in the type
+  some (SelectedEdge.Result.rejected caller queries before) =
+    some (SelectedEdge.Result.complete fragment reached saved finished)
+of `actual`
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case false.empty
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+checkEmpty : Bool
+r n p h k target : Nat
+scs : List Suspended
+caller reached : Caller (bits + 2)
+before finished : Cached
+queries saved : Queries
+fragment : Fragment
+terminal : (scs.any fun sc => EqualityTrie.isTerminal sc.trie) = false
+actual :
+  some (SelectedEdge.Result.rejected caller queries before) =
+    some (SelectedEdge.Result.complete fragment reached saved finished)
+⊢ ∀ (left right : Nat),
+    UnionFind.SameClass before.core.representatives left right →
+      UnionFind.SameClass finished.core.representatives left right
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-real-eager-worker-raw-alias-resume-export-check/source/MicroCFTA/SourcePruningEnumerationRealEagerRawAliases.lean:136:4: error: Tactic `split` failed: Could not split an `if` or `match` expression in the type
+  some (SelectedEdge.Result.rejected caller queries before) =
+    some (SelectedEdge.Result.complete fragment reached saved finished)
+of `actual`
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case true.empty
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+checkEmpty : Bool
+r n p h k target : Nat
+scs : List Suspended
+caller reached : Caller (bits + 2)
+before finished : Cached
+queries saved : Queries
+fragment : Fragment
+terminal : (scs.any fun sc => EqualityTrie.isTerminal sc.trie) = true
+actual :
+  some (SelectedEdge.Result.rejected caller queries before) =
+    some (SelectedEdge.Result.complete fragment reached saved finished)
+⊢ ∀ (left right : Nat),
+    UnionFind.SameClass before.core.representatives left right →
+      UnionFind.SameClass finished.core.representatives left right
+@MicroCFTA.SourcePruningEnumerationSharedEagerReservation.runEager_real_entry_aliases_at_any_budget : ∀
+  {Typing Key : Type} {bits : Nat}
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_1 : DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (holeKey : Typing → Nat → Key) (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits :
+    Key →
+      MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        Bool)
+  (graph :
+    MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol)) (checkEmpty : Bool)
+  (edgesOf :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      List
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (stop : Option (MicroCFTA.SourcePruningRecordTypes.Metadata Typing → Nat → Bool))
+  (order : MicroCFTA.SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat)
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula) (recursiveFuel : Nat)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2))
+  (memos : MicroCFTA.EndpointMemoGateTrace.Memos)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (seed : MicroCFTA.SourcePruningEnumerationSharedIncomingReservation.Seed) (ceiling : Nat),
+  MicroCFTA.SourcePruningEnumerationRecursive.Packet formulas solver inventory caller memos metadata before →
+    MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits seed.snd caller.checked →
+      MicroCFTA.SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.fst) caller.checked.native.machine.heap →
+        (∀ (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+            (rows :
+              List
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+            (depth : Nat) (free : List MicroCFTA.InternedBinderProtocol.Reference)
+            (edge :
+              MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+            edge ∈ edgesOf (MicroCFTA.InternedConstructorTemplates.Value.node entry rows depth free) → edge ∈ rows) →
+          (∀ (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+              (rows :
+                List
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+              (depth : Nat) (free : List MicroCFTA.InternedBinderProtocol.Reference),
+              (edgesOf (MicroCFTA.InternedConstructorTemplates.Value.node entry rows depth free)).length ≤
+                rows.length) →
+            MicroCFTA.SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling →
+              MicroCFTA.SourcePruningEnumerationSharedEagerReservation.eagerReserved bits recursiveFuel seed ceiling →
+                ∀ (workFuel : Nat),
+                  have outcome :=
+                    MicroCFTA.SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.runEagerWithNarrow
+                      (MicroCFTA.SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf
+                      stop order workFuel recursiveFuel metadata caller memos.query before;
+                  ∀ (output : MicroCFTA.SourcePruningEnumerationSharedPreparedRecursive.Output (bits + 2) Typing),
+                    output ∈ MicroCFTA.SourcePruningEnumerationSharedPreparedRecursive.emitted outcome →
+                      ∀ (left right : Nat),
+                        MicroCFTA.UnionFind.SameClass before.core.representatives left right →
+                          MicroCFTA.UnionFind.SameClass output.cache.core.representatives left right
+'MicroCFTA.SourcePruningEnumerationSharedEagerReservation.runEager_real_entry_aliases_at_any_budget' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationSharedEagerReservation.resumeWithNarrow_real_entry_aliases_at_any_budget
+  {Typing Key : Type} {bits : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (holeKey : Typing → Nat → Key) (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits :
+    Key →
+      MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        Bool)
+  (graph :
+    MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol)) (checkEmpty : Bool)
+  (edgesOf :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      List
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (stop : Option (MicroCFTA.SourcePruningRecordTypes.Metadata Typing → Nat → Bool))
+  (order : MicroCFTA.SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat) (workFuel recursiveDepth : Nat)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2))
+  (queries : MicroCFTA.SourceEndpointMemo.Memos)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (decision : Option MicroCFTA.EnumerationState.Next)
+  (output : MicroCFTA.SourcePruningEnumerationSharedPreparedRecursive.Output (bits + 2) Typing) :
+  output ∈
+      MicroCFTA.SourcePruningEnumerationSharedPreparedRecursive.emitted
+        (MicroCFTA.SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow
+          (MicroCFTA.SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel
+            workFuel workFuel edgesOf)
+          (MicroCFTA.SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order
+          workFuel recursiveDepth metadata caller queries before decision) →
+    ∀ (left right : Nat),
+      MicroCFTA.UnionFind.SameClass before.core.representatives left right →
+        MicroCFTA.UnionFind.SameClass output.cache.core.representatives left right
+'MicroCFTA.SourcePruningEnumerationSharedEagerReservation.resumeWithNarrow_real_entry_aliases_at_any_budget' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

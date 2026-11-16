@@ -1,0 +1,64 @@
+ := by
+  obtain ⟨actualSymbol, actualStaged, actualResidual, actualMiddle, fragments, afterChildren,
+    own, children, _fragmentShape, finishEq⟩ :=
+    selected_complete_invocation checkEmpty r n p h k edgesOf policy consume parentBucket edge
+      caller before queries index output fragment reached saved after consumerIndex trace
+  have rowSame : ((actualSymbol, actualStaged, actualResidual), actualMiddle) =
+      ((edge.entry.key.symbol, staged, residual), middle) :=
+    (List.cons.inj (Option.some.inj (own.symm.trans prepared))).1
+  have symbolSame := congrArg (fun row : Row => row.1.1) rowSame
+  have stagedSame := congrArg (fun row : Row => row.1.2.1) rowSame
+  have residualSame := congrArg (fun row : Row => row.1.2.2) rowSame
+  have middleSame := congrArg (fun row : Row => row.2) rowSame
+  subst actualSymbol actualStaged actualResidual actualMiddle
+  obtain ⟨prior, remaining, split, _priorLength⟩ :=
+    split_indexed staged position (incoming, childBucket, action) indexed
+  let priorInputs := prior.map (fun input : Input => (input.1, input.2.1))
+  let remainingInputs := remaining.map (fun input : Input => (input.1, input.2.1))
+  have inputSplit : staged.map (fun input => (input.1, input.2.1)) =
+      priorInputs ++ (incoming, childBucket) :: remainingInputs := by
+    simpa only [List.map_append, List.map_cons] using
+      congrArg (List.map (fun input : Input => (input.1, input.2.1))) split
+  let doneTuple : TupleDone := fun produced current capturedQueries captured =>
+    consume (.complete (.node edge.entry.key.symbol produced) current capturedQueries
+      (SelectedEdge.finish residual (.node edge.entry.key.symbol produced) captured))
+  let stoppedTuple : TupleStopped := fun completed observation candidate =>
+    consume (.stopped completed observation candidate)
+  rw [inputSplit] at children
+  change ChildrenInvocationAt checkEmpty r n p h k edgesOf policy doneTuple stoppedTuple
+    (priorInputs ++ (incoming, childBucket) :: remainingInputs) caller middle queries index output
+      (.done fragments reached saved afterChildren) consumerIndex at children
+  have middleTotal : UnionFind.Total middle.core.representatives := by
+    rw [SourcePruningEnumerationOwnAliasForest.prepare_forest (actual := prepared)]
+    exact total
+  obtain ⟨priorFragments, childCaller, childBefore, childQueries, childRootIndex,
+    childFragment, childReached, childSaved, childAfter, childCallbackIndex, remainingFragments,
+    _prefixLength, _fragmentsShape, childTrace, tailTrace, _childTotal, roots, rootPaths⟩ :=
+    children_done_prefix_invocation_with_roots checkEmpty r n p h k edgesOf policy
+      doneTuple stoppedTuple priorInputs incoming childBucket remainingInputs caller middle queries
+      index output fragments reached saved afterChildren consumerIndex middleTotal children
+  intro firstIndex secondIndex first second firstStored secondStored firstPath secondPath
+  have terminal := prepared_child_terminal caller.checked.native.machine.heap parentBucket edge
+    before middle staged residual prepared position incoming childBucket action indexed valid
+      first (List.mem_of_getElem? firstStored) firstPath
+  obtain ⟨returned, read, moved, dispatched, _sameIndex⟩ :=
+    terminal_done_dispatch checkEmpty r n p h k edgesOf policy childBucket incoming
+      childCaller childBefore childQueries _ _ childRootIndex output childFragment
+      childReached childSaved childAfter childCallbackIndex terminal childTrace
+  have rawAlias := SourcePruningEnumerationSharedPreparedRawPathCongruence.actual_prepared_child_raw_path_congruence
+    caller childCaller parentBucket edge before middle staged residual prepared
+    position incoming childBucket action indexed valid childBefore childQueries checkEmpty r n p h k
+    childFragment childReached childSaved read returned moved (some childAfter) roots rootPaths dispatched
+    firstIndex secondIndex first second firstStored secondStored firstPath secondPath
+  have childCore := ChildDispatch.singleton_core checkEmpty r n p h k childBucket incoming
+    childCaller childReached childBefore childAfter childQueries childSaved childFragment returned read moved dispatched
+  have atChild : UnionFind.SameClass childAfter.core.representatives first.var second.var := by
+    rw [childCore]
+    exact rawAlias
+  have atChildren := SourcePruningEnumerationInvocationRawAliasGrowth.children_done_sameClass_forward
+    (trace := tailTrace) first.var second.var atChild
+  have finalForest : after.core.representatives = afterChildren.core.representatives := by
+    rw [finishEq]
+    rfl
+  rw [finalForest]
+  exact atChildren

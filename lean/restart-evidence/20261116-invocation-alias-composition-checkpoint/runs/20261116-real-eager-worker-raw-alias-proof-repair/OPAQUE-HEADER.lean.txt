@@ -1,0 +1,29 @@
+private theorem alias_opaque_outputs
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List Edge)
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (workFuel recursiveDepth : Nat)
+    (smallerDepth : ∀ (metadata : Metadata Typing) (caller : Caller (bits + 2))
+        (queries : Queries) (before : Cached) (decision : Option Next),
+      ∀ output ∈ emitted (resumeWithNarrow
+        (SourcePruningEnumerationSharedEagerChildren.eagerChild
+          checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
+        (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        graph templates checkEmpty edgesOf stop order workFuel recursiveDepth metadata caller queries before decision),
+        ∀ left right, UnionFind.SameClass before.core.representatives left right →
+          UnionFind.SameClass output.cache.core.representatives left right)
+    (metadata : Metadata Typing) (uv target : Nat) (scs : List Suspended) (value : Node)
+    (caller : Caller (bits + 2)) (queries : Queries) (before : Cached) :
+    let hook := continueWith
+      (resumeWithNarrow
+        (SourcePruningEnumerationSharedEagerChildren.eagerChild
+          checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
+        (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        graph templates checkEmpty edgesOf stop order workFuel recursiveDepth)
+      graph templates stop order workFuel metadata uv
+    ∀ output ∈ outputs (SourcePruningEnumerationSharedReceiptContinuation.run hook caller queries
+        (SourcePruningEnumerationSharedSelectedOpaqueDispatch.run checkEmpty workFuel workFuel workFuel workFuel workFuel
+          target scs value caller before queries)),
+      ∀ left right, UnionFind.SameClass before.core.representatives left right →
+        UnionFind.SameClass output.cache.core.representatives left right

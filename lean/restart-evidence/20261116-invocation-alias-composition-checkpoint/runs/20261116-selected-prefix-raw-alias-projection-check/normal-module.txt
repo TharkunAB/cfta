@@ -1,0 +1,58 @@
+@MicroCFTA.SourcePruningEnumerationSelectedPrefixRawAliases.runPrefix_sameClass_forward : ∀ {Typing Key : Type}
+  {width : Nat}
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (holeKey : Typing → Nat → Key) (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits :
+    Key →
+      MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        Bool)
+  (graph :
+    MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol))
+  (stop : Option (MicroCFTA.SourcePruningRecordTypes.Metadata Typing → Nat → Bool))
+  (order : MicroCFTA.SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv : Nat)
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (queries : MicroCFTA.SourceEndpointMemo.Memos),
+  match
+    MicroCFTA.SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata
+      readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv caller before queries with
+  | MicroCFTA.SourcePruningEnumerationSelectedStep.Result.stopped read checked => True
+  | MicroCFTA.SourcePruningEnumerationSelectedStep.Result.parked checked candidate raw =>
+    (∀ (left right : Nat),
+        MicroCFTA.UnionFind.SameClass before.core.representatives left right →
+          MicroCFTA.UnionFind.SameClass checked.representatives left right) ∧
+      ∀
+        (after :
+          MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+        candidate = some after →
+          ∀ (left right : Nat),
+            MicroCFTA.UnionFind.SameClass before.core.representatives left right →
+              MicroCFTA.UnionFind.SameClass after.core.representatives left right
+  |
+  MicroCFTA.SourcePruningEnumerationSelectedStep.Result.narrowed checked prepared caller queries action candidate right
+      ordinary =>
+    (∀ (left right : Nat),
+        MicroCFTA.UnionFind.SameClass before.core.representatives left right →
+          MicroCFTA.UnionFind.SameClass checked.representatives left right) ∧
+      ∀
+        (after :
+          MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+        candidate = some after →
+          ∀ (left right : Nat),
+            MicroCFTA.UnionFind.SameClass before.core.representatives left right →
+              MicroCFTA.UnionFind.SameClass after.core.representatives left right
+'MicroCFTA.SourcePruningEnumerationSelectedPrefixRawAliases.runPrefix_sameClass_forward' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

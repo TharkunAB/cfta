@@ -1,0 +1,88 @@
+--- lean/restart-evidence/20261116-real-eager-worker-raw-alias-growth-draft/SourcePruningEnumerationRealEagerRawAliases.lean
++++ lean/restart-evidence/20261116-real-eager-worker-raw-alias-proof-repair/SourcePruningEnumerationRealEagerRawAliases.lean
+@@ -130,13 +130,18 @@
+     ∀ left right, UnionFind.SameClass before.core.representatives left right →
+       UnionFind.SameClass finished.core.representatives left right := by
+   unfold SourcePruningEnumerationSharedSelectedOpaqueDispatch.run at actual
+-  split at actual
+-  · cases actual
+-  · split at actual
+-    · cases actual
+-    · generalize called : ChildDispatch.run checkEmpty r n p h k scs value caller before queries = execution at actual
++  by_cases empty : value = .empty
++  · rw [ite_eq_left empty] at actual
++    cases actual
++  · rw [ite_eq_right empty] at actual
++    by_cases deferred : (match (generalizing := false) value with
++        | .node .. => !(scs.any (fun sc => EqualityTrie.isTerminal sc.trie))
++        | _ => false) = true
++    · rw [ite_eq_left deferred] at actual
++      cases actual
++    · rw [ite_eq_right deferred] at actual
++      generalize called : ChildDispatch.run checkEmpty r n p h k scs value caller before queries = execution at actual
+       obtain ⟨⟨result, childCaller, childQueries, read, waiting⟩, candidate⟩ := execution
+-      dsimp only at actual
+       cases result with
+       | error fault => cases actual
+       | ok returned =>
+@@ -158,9 +163,12 @@
+                           | some after =>
+                               dsimp only at actual
+                               cases finalized : SourcePruningEnumerationFinalize.run
+-                                  childCaller.checked.native.machine.heap k target childFragment after at actual with
+-                              | none => cases actual
++                                  childCaller.checked.native.machine.heap k target childFragment after with
++                              | none =>
++                                  rw [finalized] at actual
++                                  cases actual
+                               | some finalCache =>
++                                  rw [finalized] at actual
+                                   cases Option.some.inj actual
+                                   have childAliases := SourcePruningEnumerationSharedChildRawAliasGrowth.successful_sameClass_forward
+                                     checkEmpty r n p h k scs value caller childCaller before after queries childQueries
+@@ -208,7 +216,8 @@
+       | ok pair =>
+           obtain ⟨⟨pruned, updated⟩, callbackCore⟩ := pair
+           cases rest with
+-          | cons second remaining => intro output impossible; cases impossible
++          | cons second remaining =>
++              cases pruned <;> intro output impossible <;> cases impossible
+           | nil =>
+               cases pruned with
+               | true => intro output impossible; cases impossible
+@@ -262,6 +271,7 @@
+       | finalizeStopped fragment reached saved after => intro output impossible; cases impossible
+       | stopped completed observation candidate =>
+           unfold SourcePruningEnumerationSharedReceiptContinuation.run
++          dsimp only
+           cases advanced : NativeContinuations.advance (.stopped completed observation candidate) with
+           | none => intro output impossible; cases impossible
+           | some endpoint =>
+@@ -434,9 +444,10 @@
+         exact Option.some.inj rawSame
+       all_goals repeat first | (solve | cases observed) | split at observed
+     all_goals repeat first | (solve | cases observed) | split at observed
+-  change (if SourcePruningEnumerationRestart.decision stop order metadata parked = some .stuck then []
+-    else [.ok ((metadata, SourcePruningEnumerationRestart.decision stop order metadata parked), checked)]) =
+-      [.ok ((updated, next), core)] at restarted
++  change ((if SourcePruningEnumerationRestart.decision stop order metadata parked = some .stuck then []
++    else [Except.ok ((metadata, SourcePruningEnumerationRestart.decision stop order metadata parked), checked)]) :
++      List (Except EnumerationState.Error ((Metadata Typing × Option Next) × Core))) =
++        [Except.ok ((updated, next), core)] at restarted
+   split at restarted
+   · cases restarted
+   · have rowSame := Except.ok.inj (List.cons.inj restarted).1
+@@ -594,6 +605,13 @@
+     ∀ output ∈ emitted outcome,
+       ∀ (left right : Nat), UnionFind.SameClass before.core.representatives left right →
+         UnionFind.SameClass output.cache.core.representatives left right := by
++  have _ := packet
++  have _ := bounded
++  have _ := known
++  have _ := selectionMembers
++  have _ := selectionLength
++  have _ := initialMass
++  have _ := reserved
+   clear packet bounded known selectionMembers selectionLength initialMass reserved
+   dsimp only
+   unfold runEagerWithNarrow runWithNarrow

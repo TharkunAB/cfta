@@ -1,0 +1,36 @@
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+open EnumerationState InternedConstructorTemplates
+open SourcePruningEnumerationSharedPreparedRecursive (Output Failure emitted)
+open SourcePruningEnumerationSharedPreparedRecursiveChildPolicy (resumeWithNarrow)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Edge" => EdgeValue Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+variable {Typing Key : Type} {bits : Nat}
+variable [DecidableEq (EdgeKey Symbol Constraint)]
+set_option autoImplicit false
+
+theorem resumeWithNarrow_real_entry_aliases_at_any_budget
+    [DecidableEq Symbol] [DecidableEq Node]
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List Edge)
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (workFuel recursiveDepth : Nat) :
+    ∀ (metadata : Metadata Typing) (caller : Caller (bits + 2)) (queries : Queries)
+        (before : Cached) (decision : Option Next),
+      ∀ output ∈ emitted (resumeWithNarrow
+        (SourcePruningEnumerationSharedEagerChildren.eagerChild
+          checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
+        (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        graph templates checkEmpty edgesOf stop order workFuel recursiveDepth metadata caller queries before decision),
+        ∀ left right, UnionFind.SameClass before.core.representatives left right →
+          UnionFind.SameClass output.cache.core.representatives left right := by
+  exact alias_whole_resume (bits := bits) holeKey fits admits graph templates checkEmpty edgesOf stop order
+    workFuel recursiveDepth
+
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation

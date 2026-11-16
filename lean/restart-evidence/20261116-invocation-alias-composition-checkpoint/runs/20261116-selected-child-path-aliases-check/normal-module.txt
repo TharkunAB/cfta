@@ -1,0 +1,148 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-selected-child-path-aliases-check/source/MicroCFTA/SourcePruningEnumerationSelectedChildPathAliases.lean:154:2: error: Tactic `subst` failed: did not find equation for eliminating 'actualSymbol'
+
+width : Nat
+Output : Type u
+Reason : Type v
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+checkEmpty : Bool
+r n p h k : Nat
+edgesOf : Node → List Edge
+policy : Policy
+consume : Receipt width → Result Output Reason width
+parentBucket : List Suspended
+edge : Edge
+caller reached : Caller width
+before middle after : Cached
+queries saved : Queries
+index : Nat
+output : Output
+fragment : Fragment
+consumerIndex : Nat
+staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment))
+residual : Option Constraint
+prepared :
+  SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap parentBucket edge before =
+    some [((edge.entry.key.symbol, staged, residual), middle)]
+total : UnionFind.Total before.core.representatives
+valid : ∀ (sc : Suspended), sc ∈ parentBucket → EqualityTrie.Valid sc.trie
+position : Nat
+incoming : Node
+childBucket : List Suspended
+action : Option (EnumerateM Symbol Constraint Fragment)
+indexed : staged[position]? = some (incoming, childBucket, action)
+trace :
+  SelectedInvocationAt checkEmpty r n p h k edgesOf policy consume parentBucket edge caller before queries index output
+    (SelectedEdge.Result.complete fragment reached saved after) consumerIndex
+actualSymbol : Symbol
+actualStaged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment))
+actualResidual : Option Constraint
+actualMiddle : Cached
+fragments : List Fragment
+afterChildren : Cached
+own :
+  SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap parentBucket edge before =
+    some [((actualSymbol, actualStaged, actualResidual), actualMiddle)]
+children :
+  ChildrenInvocationAt checkEmpty r n p h k edgesOf policy
+    (fun produced current capturedQueries captured =>
+      consume
+        (SelectedEdge.Result.complete (Fragments.Fragment.node actualSymbol produced) current capturedQueries
+          (SelectedEdge.finish actualResidual (Fragments.Fragment.node actualSymbol produced) captured)))
+    (fun completed observation candidate => consume (SelectedEdge.Result.stopped completed observation candidate))
+    (List.map (fun input => (input.fst, input.snd.fst)) actualStaged) caller actualMiddle queries index output
+    (TupleExit.done fragments reached saved afterChildren) consumerIndex
+_fragmentShape : fragment = Fragments.Fragment.node actualSymbol fragments
+finishEq : after = SelectedEdge.finish actualResidual fragment afterChildren
+rowSame :
+  ((actualSymbol, actualStaged, actualResidual), actualMiddle) = ((edge.entry.key.symbol, staged, residual), middle)
+symbolSame :
+  ((actualSymbol, actualStaged, actualResidual), actualMiddle).fst.fst =
+    ((edge.entry.key.symbol, staged, residual), middle).fst.fst
+stagedSame :
+  ((actualSymbol, actualStaged, actualResidual), actualMiddle).fst.snd.fst =
+    ((edge.entry.key.symbol, staged, residual), middle).fst.snd.fst
+residualSame :
+  ((actualSymbol, actualStaged, actualResidual), actualMiddle).fst.snd.snd =
+    ((edge.entry.key.symbol, staged, residual), middle).fst.snd.snd
+middleSame :
+  ((actualSymbol, actualStaged, actualResidual), actualMiddle).snd =
+    ((edge.entry.key.symbol, staged, residual), middle).snd
+⊢ ∀ (firstIndex secondIndex : Nat) (first second : Suspended),
+    parentBucket[firstIndex]? = some first →
+      parentBucket[secondIndex]? = some second →
+        [position] ∈ EqualityTrie.fromPathTrie first.trie →
+          [position] ∈ EqualityTrie.fromPathTrie second.trie →
+            UnionFind.SameClass after.core.representatives first.var second.var
+MicroCFTA.SourcePruningEnumerationSelectedChildPathAliases.selected_child_path_sameClass.{u, v} {width : Nat}
+  {Output : Type u} {Reason : Type v} [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (checkEmpty : Bool) (r n p h k : Nat)
+  (edgesOf :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      List
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (policy : MicroCFTA.SourcePruningEnumerationSharedInvocationTrace.Policy)
+  (consume :
+    MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result width →
+      MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result Output Reason width)
+  (parentBucket : List MicroCFTA.EnumerationState.Suspended)
+  (edge :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (caller reached : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before middle after :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (queries saved : MicroCFTA.SourceEndpointMemo.Memos) (index : Nat) (output : Output)
+  (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol) (consumerIndex : Nat)
+  (staged :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) ×
+        List MicroCFTA.EnumerationState.Suspended ×
+          Option
+            (MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol))))
+  (residual : Option (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (prepared :
+    MicroCFTA.SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap parentBucket edge before =
+      some [((edge.entry.key.symbol, staged, residual), middle)])
+  (total : MicroCFTA.UnionFind.Total before.core.representatives)
+  (valid : ∀ (sc : MicroCFTA.EnumerationState.Suspended), sc ∈ parentBucket → MicroCFTA.EqualityTrie.Valid sc.trie)
+  (position : Nat)
+  (incoming :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (childBucket : List MicroCFTA.EnumerationState.Suspended)
+  (action :
+    Option
+      (MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)))
+  (indexed : staged[position]? = some (incoming, childBucket, action))
+  (trace :
+    MicroCFTA.SourcePruningEnumerationSharedInvocationTrace.SelectedInvocationAt checkEmpty r n p h k edgesOf policy
+      consume parentBucket edge caller before queries index output
+      (MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result.complete fragment reached saved
+        after)
+      consumerIndex)
+  (firstIndex secondIndex : Nat) (first second : MicroCFTA.EnumerationState.Suspended) :
+  parentBucket[firstIndex]? = some first →
+    parentBucket[secondIndex]? = some second →
+      [position] ∈ MicroCFTA.EqualityTrie.fromPathTrie first.trie →
+        [position] ∈ MicroCFTA.EqualityTrie.fromPathTrie second.trie →
+          MicroCFTA.UnionFind.SameClass after.core.representatives first.var second.var
+'MicroCFTA.SourcePruningEnumerationSelectedChildPathAliases.selected_child_path_sameClass' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

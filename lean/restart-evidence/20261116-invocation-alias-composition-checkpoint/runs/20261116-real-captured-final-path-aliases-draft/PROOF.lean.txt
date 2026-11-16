@@ -1,0 +1,40 @@
+ := by
+  dsimp only
+  intro observed
+  obtain ⟨fragment, reached, saved, beforeFinalize, finished, updated, callbackCore,
+      earlier, later, localIndex, finalized, recorded, whole, hit, offset, invoked⟩ :=
+    real_eager_captured_output_causal_callback_restart_origin
+      holeKey fits admits graph templates checkEmpty edgesOf stop order
+      workFuel recursiveDepth uv target metadata scs edge caller queries before index output observed
+  refine ⟨fragment, reached, saved, beforeFinalize, finished, updated, callbackCore,
+    earlier, later, localIndex, finalized, recorded, whole, hit, offset, invoked, ?_⟩
+  intro total valid middle staged residual prepared position incoming childBucket action indexed
+    firstIndex secondIndex first second firstStored secondStored firstPath secondPath
+  have actualInvocation := invoked
+  dsimp only [CapturedCallbackInvocationAt] at actualInvocation
+  obtain ⟨selected, _rowWhole, _rowHit, _rowOffset, _actualFinalize, _actualRecorded⟩ :=
+    actualInvocation
+  have atSelected :=
+    SourcePruningEnumerationSelectedChildPathAliases.selected_child_path_sameClass
+      checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf .eager _
+      scs edge caller reached before middle beforeFinalize queries saved index output
+      fragment localIndex staged residual prepared total valid
+      position incoming childBucket action indexed selected
+      firstIndex secondIndex first second firstStored secondStored firstPath secondPath
+  have atFinished :=
+    SourcePruningEnumerationCapturedFinalizeRawAliases.finalize_sameClass_forward
+      reached.checked.native.machine.heap workFuel target fragment beforeFinalize finished finalized
+      first.var second.var atSelected
+  have atCallback :=
+    SourcePruningEnumerationCapturedFinalizeRawAliases.false_recordTypes_sameClass_forward
+      graph templates workFuel uv metadata updated fragment finished callbackCore recorded
+      first.var second.var atFinished
+  exact SourcePruningEnumerationSharedEagerReservation.resumeWithNarrow_real_entry_aliases_at_any_budget
+    (bits := bits) holeKey fits admits graph templates checkEmpty edgesOf stop order
+    workFuel recursiveDepth updated reached saved
+    (EnumerationExpandableIndex.frame callbackCore finished)
+    (SourcePruningEnumerationRestart.decision stop order updated
+      (EnumerationExpandableIndex.frame callbackCore finished))
+    output (List.mem_of_getElem? hit) first.var second.var atCallback
+
+end MicroCFTA.SourcePruningEnumerationSharedPreparedRecursiveChildPolicy

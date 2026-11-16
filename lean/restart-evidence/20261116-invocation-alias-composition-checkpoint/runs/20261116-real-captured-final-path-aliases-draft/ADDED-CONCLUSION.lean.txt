@@ -1,0 +1,14 @@
+ ∧
+      ∀ (total : UnionFind.Total before.core.representatives)
+        (valid : ∀ sc ∈ scs, EqualityTrie.Valid sc.trie)
+        (middle : Cached) (staged : List Input) (residual : Option Constraint),
+        SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs edge before =
+          some [((edge.entry.key.symbol, staged, residual), middle)] →
+        ∀ (position : Nat) (incoming : Node) (childBucket : List Suspended)
+          (action : Option (EnumerateM Symbol Constraint (Fragments.Fragment Symbol))),
+          staged[position]? = some (incoming, childBucket, action) →
+          ∀ (firstIndex secondIndex : Nat) (first second : Suspended),
+            scs[firstIndex]? = some first → scs[secondIndex]? = some second →
+            [position] ∈ EqualityTrie.fromPathTrie first.trie →
+            [position] ∈ EqualityTrie.fromPathTrie second.trie →
+            UnionFind.SameClass output.cache.core.representatives first.var second.var

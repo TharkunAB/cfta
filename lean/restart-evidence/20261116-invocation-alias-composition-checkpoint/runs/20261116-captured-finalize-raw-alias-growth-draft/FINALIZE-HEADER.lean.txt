@@ -1,0 +1,7 @@
+theorem finalize_sameClass_forward
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (indexFuel target : Nat) (fragment : Fragments.Fragment Symbol)
+    (before finished : Cached)
+    (observed : SourcePruningEnumerationFinalize.run heap indexFuel target fragment before = some finished) :
+    ∀ (left right : Nat), UnionFind.SameClass before.core.representatives left right →
+      UnionFind.SameClass finished.core.representatives left right

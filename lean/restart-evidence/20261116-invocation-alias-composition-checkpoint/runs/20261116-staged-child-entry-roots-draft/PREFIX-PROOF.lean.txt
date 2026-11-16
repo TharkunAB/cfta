@@ -1,0 +1,39 @@
+ := by
+  induction priorInputs generalizing done stopped caller before queries index fragments with
+  | nil =>
+    obtain ⟨fragment, reached, saved, after, childIndex, remaining,
+        fragmentShape, child, tail⟩ :=
+      children_done_head_invocation checkEmpty r n p h k edgesOf policy done stopped
+        incoming bucket rest caller before queries index output fragments
+        finalCaller finalQueries finalCache localIndex trace
+    exact ⟨[], caller, before, queries, index, fragment, reached, saved, after,
+      childIndex, remaining, rfl, fragmentShape, child, tail, total,
+      EnumerationSchedule.roots_exist before.core.representatives total⟩
+  | cons first prior ih =>
+    rcases first with ⟨firstIncoming, firstBucket⟩
+    obtain ⟨firstFragment, firstReached, firstSaved, firstAfter, firstIndex, tailFragments,
+        firstShape, firstChild, firstTail⟩ :=
+      children_done_head_invocation checkEmpty r n p h k edgesOf policy done stopped
+        firstIncoming firstBucket (prior ++ (incoming, bucket) :: rest)
+        caller before queries index output fragments finalCaller finalQueries finalCache localIndex trace
+    have firstTotal : UnionFind.Total firstAfter.core.representatives := by
+      apply total_of_sameClass_forward before.core.representatives firstAfter.core.representatives total
+      exact SourcePruningEnumerationInvocationRawAliasGrowth.child_done_sameClass_forward
+        checkEmpty r n p h k edgesOf policy firstBucket firstIncoming caller firstReached
+        before firstAfter queries firstSaved _ _ index output firstFragment firstIndex firstChild
+    obtain ⟨priorFragments, childCaller, childBefore, childQueries, childRootIndex,
+        fragment, reached, saved, after, childCallbackIndex, remaining,
+        priorLength, tailShape, child, tail, childTotal, childRoots⟩ :=
+      ih (done := fun produced => done (firstFragment :: produced))
+        (stopped := fun completed => stopped (firstFragment :: completed))
+        (caller := firstReached) (before := firstAfter) (queries := firstSaved)
+        (index := firstIndex) (fragments := tailFragments) firstTotal firstTail
+    refine ⟨firstFragment :: priorFragments, childCaller, childBefore, childQueries,
+      childRootIndex, fragment, reached, saved, after, childCallbackIndex, remaining,
+      ?_, ?_, child, tail, childTotal, childRoots⟩
+    · simp only [List.length_cons, priorLength]
+    · calc
+        fragments = firstFragment :: tailFragments := firstShape
+        _ = (firstFragment :: priorFragments) ++ fragment :: remaining := by
+          rw [tailShape]
+          rfl

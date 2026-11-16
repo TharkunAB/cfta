@@ -1,0 +1,103 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-real-eager-worker-raw-alias-guard-split-check/source/MicroCFTA/SourcePruningEnumerationRealEagerRawAliases.lean:139:6: error: Dependent elimination failed: Failed to solve equation
+  some (SelectedEdge.Result.complete fragment reached saved finished) =
+    Decidable.rec
+      (fun h_1 =>
+        (fun x =>
+            match
+              ChildDispatch.run checkEmpty r n p h k scs (Value.node entry✝ edges✝ depth✝ deferred) caller before
+                queries with
+            | ((Except.ok (some [Except.ok (fragment, _returned)]), reached, saved, _outer, _waiting), some after) =>
+              match
+                SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap k target fragment after with
+              | some finished => some (SelectedEdge.Result.complete fragment reached saved finished)
+              | none => some (SelectedEdge.Result.finalizeStopped fragment reached saved after)
+            | (observation, candidate) => some (SelectedEdge.Result.stopped [] observation candidate))
+          h_1)
+      (fun h => (fun x => none) h)
+      (instDecidableEqBool
+        (match Value.node entry✝ edges✝ depth✝ deferred with
+        | Value.node entry edges depth free => !scs.any fun sc => EqualityTrie.isTerminal sc.trie
+        | x => false)
+        true)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-real-eager-worker-raw-alias-guard-split-check/source/MicroCFTA/SourcePruningEnumerationRealEagerRawAliases.lean:172:74: error(lean.unknownIdentifier): Unknown identifier `childCaller`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-real-eager-worker-raw-alias-guard-split-check/source/MicroCFTA/SourcePruningEnumerationRealEagerRawAliases.lean:172:107: error(lean.unknownIdentifier): Unknown identifier `childQueries`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-real-eager-worker-raw-alias-guard-split-check/source/MicroCFTA/SourcePruningEnumerationRealEagerRawAliases.lean:173:36: error(lean.unknownIdentifier): Unknown identifier `childFragment`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-real-eager-worker-raw-alias-guard-split-check/source/MicroCFTA/SourcePruningEnumerationRealEagerRawAliases.lean:174:82: error(lean.unknownIdentifier): Unknown identifier `childCaller.checked.native.machine.heap`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-real-eager-worker-raw-alias-guard-split-check/source/MicroCFTA/SourcePruningEnumerationRealEagerRawAliases.lean:175:45: error(lean.unknownIdentifier): Unknown identifier `childFragment`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-real-eager-worker-raw-alias-guard-split-check/source/MicroCFTA/SourcePruningEnumerationRealEagerRawAliases.lean:175:65: error(lean.unknownIdentifier): Unknown identifier `finalCache`
+@MicroCFTA.SourcePruningEnumerationSharedEagerReservation.runEager_real_entry_aliases_at_any_budget : ∀
+  {Typing Key : Type} {bits : Nat}
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_1 : DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (holeKey : Typing → Nat → Key) (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits :
+    Key →
+      MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        Bool)
+  (graph :
+    MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol)) (checkEmpty : Bool)
+  (edgesOf :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      List
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (stop : Option (MicroCFTA.SourcePruningRecordTypes.Metadata Typing → Nat → Bool))
+  (order : MicroCFTA.SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat)
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula) (recursiveFuel : Nat)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2))
+  (memos : MicroCFTA.EndpointMemoGateTrace.Memos)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (seed : MicroCFTA.SourcePruningEnumerationSharedIncomingReservation.Seed) (ceiling : Nat),
+  MicroCFTA.SourcePruningEnumerationRecursive.Packet formulas solver inventory caller memos metadata before →
+    MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits seed.snd caller.checked →
+      MicroCFTA.SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.fst) caller.checked.native.machine.heap →
+        (∀ (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+            (rows :
+              List
+                (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+            (depth : Nat) (free : List MicroCFTA.InternedBinderProtocol.Reference)
+            (edge :
+              MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+            edge ∈ edgesOf (MicroCFTA.InternedConstructorTemplates.Value.node entry rows depth free) → edge ∈ rows) →
+          (∀ (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+              (rows :
+                List
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+              (depth : Nat) (free : List MicroCFTA.InternedBinderProtocol.Reference),
+              (edgesOf (MicroCFTA.InternedConstructorTemplates.Value.node entry rows depth free)).length ≤
+                rows.length) →
+            MicroCFTA.SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling →
+              MicroCFTA.SourcePruningEnumerationSharedEagerReservation.eagerReserved bits recursiveFuel seed ceiling →
+                ∀ (workFuel : Nat),
+                  have outcome :=
+                    MicroCFTA.SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.runEagerWithNarrow
+                      (MicroCFTA.SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf
+                      stop order workFuel recursiveFuel metadata caller memos.query before;
+                  ∀ (output : MicroCFTA.SourcePruningEnumerationSharedPreparedRecursive.Output (bits + 2) Typing),
+                    output ∈ MicroCFTA.SourcePruningEnumerationSharedPreparedRecursive.emitted outcome →
+                      ∀ (left right : Nat),
+                        MicroCFTA.UnionFind.SameClass before.core.representatives left right →
+                          MicroCFTA.UnionFind.SameClass output.cache.core.representatives left right
+'MicroCFTA.SourcePruningEnumerationSharedEagerReservation.runEager_real_entry_aliases_at_any_budget' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,22 @@
+/-- Original same-position trie occurrences remain aliased at the actual selected return. -/
+theorem selected_child_path_sameClass
+    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List Edge) (policy : Policy)
+    (consume : Receipt width → Result Output Reason width)
+    (parentBucket : List Suspended) (edge : Edge) (caller reached : Caller width)
+    (before middle after : Cached) (queries saved : Queries) (index : Nat) (output : Output)
+    (fragment : Fragment) (consumerIndex : Nat) (staged : List Input) (residual : Option Constraint)
+    (prepared : SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap
+      parentBucket edge before = some [((edge.entry.key.symbol, staged, residual), middle)])
+    (total : UnionFind.Total before.core.representatives)
+    (valid : ∀ sc ∈ parentBucket, EqualityTrie.Valid sc.trie)
+    (position : Nat) (incoming : Node) (childBucket : List Suspended)
+    (action : Option (EnumerateM Symbol Constraint Fragment))
+    (indexed : staged[position]? = some (incoming, childBucket, action))
+    (trace : SelectedInvocationAt checkEmpty r n p h k edgesOf policy
+      consume parentBucket edge caller before queries index output
+        (.complete fragment reached saved after) consumerIndex) :
+    ∀ (firstIndex secondIndex : Nat) (first second : Suspended),
+      parentBucket[firstIndex]? = some first → parentBucket[secondIndex]? = some second →
+      [position] ∈ EqualityTrie.fromPathTrie first.trie →
+      [position] ∈ EqualityTrie.fromPathTrie second.trie →
+      UnionFind.SameClass after.core.representatives first.var second.var

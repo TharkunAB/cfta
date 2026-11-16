@@ -1,0 +1,8 @@
+theorem false_recordTypes_sameClass_forward
+    (graph : Graph Symbol EnumGuard) (templates : List (Template.Pattern Symbol))
+    (callbackFuel uv : Nat) (metadata updated : SourcePruningRecordTypes.Metadata Typing)
+    (fragment : Fragments.Fragment Symbol) (before : Cached) (after : Core)
+    (observed : ExceptT.run (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata uv
+      (.inl fragment) before.core) = [.ok ((false, updated), after)]) :
+    ∀ (left right : Nat), UnionFind.SameClass before.core.representatives left right →
+      UnionFind.SameClass (EnumerationExpandableIndex.frame after before).core.representatives left right

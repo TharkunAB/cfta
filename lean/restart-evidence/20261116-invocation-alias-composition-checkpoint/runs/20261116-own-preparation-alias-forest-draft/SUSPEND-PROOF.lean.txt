@@ -1,0 +1,31 @@
+ := by
+  induction tries generalizing before after own with
+  | nil =>
+      have resultSame : ([], before) = (own, after) := Option.some.inj actual
+      have cacheSame : before = after :=
+        congrArg (fun result : List Suspended × EnumerationExpandableIndex.Cached Symbol EnumGuard =>
+          result.2) resultSame
+      exact congrArg (fun cached : EnumerationExpandableIndex.Cached Symbol EnumGuard =>
+        cached.core.representatives) cacheSame.symm
+  | cons trie rest ih =>
+      let middle : EnumerationExpandableIndex.Cached Symbol EnumGuard :=
+        ⟨EnumerationState.allocated none before.core, before.expandable, before.waiting⟩
+      have allocation : SourcePruningEnumerationCachedChild.allocate heap none before =
+          some (before.core.counter, middle) := rfl
+      simp only [SourcePruningEnumerationCachedOwn.suspendMany, allocation, Option.bind_some] at actual
+      generalize tailRun : SourcePruningEnumerationCachedOwn.suspendMany heap rest middle = tail at actual
+      cases tail with
+      | none => cases actual
+      | some result =>
+          rcases result with ⟨tailOwn, tailAfter⟩
+          have resultSame : (⟨trie, before.core.counter⟩ :: tailOwn, tailAfter) = (own, after) :=
+            Option.some.inj actual
+          have cacheSame : tailAfter = after :=
+            congrArg (fun result : List Suspended × EnumerationExpandableIndex.Cached Symbol EnumGuard =>
+              result.2) resultSame
+          have tailForest := ih middle tailAfter tailOwn tailRun
+          have middleForest : middle.core.representatives = before.core.representatives := rfl
+          have afterForest : after.core.representatives = tailAfter.core.representatives :=
+            congrArg (fun cached : EnumerationExpandableIndex.Cached Symbol EnumGuard =>
+              cached.core.representatives) cacheSame.symm
+          exact afterForest.trans (tailForest.trans middleForest)

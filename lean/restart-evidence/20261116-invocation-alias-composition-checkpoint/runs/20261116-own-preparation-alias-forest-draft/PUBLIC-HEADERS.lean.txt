@@ -1,0 +1,16 @@
+theorem suspendMany_forest {EnumGuard NativeGuard : Type}
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard) (tries : List EqualityTrie.Trie)
+    (before after : EnumerationExpandableIndex.Cached Symbol EnumGuard) (own : List Suspended)
+    (actual : SourcePruningEnumerationCachedOwn.suspendMany heap tries before = some (own, after)) :
+    after.core.representatives = before.core.representatives
+
+theorem prepare_forest
+    (heap : InternedConstructorTemplates.State Symbol Constraint) (scs : List Suspended) (edge : Edge)
+    (before middle : Cached) (symbol : Symbol) (staged : List Input) (residual : Option Constraint)
+    (actual : SourcePruningEnumerationCachedOwn.prepare heap scs edge before =
+      some [((symbol, staged, residual), middle)]) :
+    middle.core.representatives = before.core.representatives
+
+theorem finish_forest (residual : Option Constraint) (fragment : Fragment) (before : Cached) :
+    (SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.finish residual fragment before).core.representatives =
+      before.core.representatives

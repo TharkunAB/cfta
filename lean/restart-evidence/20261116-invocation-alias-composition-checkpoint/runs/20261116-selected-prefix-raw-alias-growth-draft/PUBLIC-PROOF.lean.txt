@@ -1,0 +1,136 @@
+ := by
+  classical
+  by_cases readable : ∃ (oldHandle : Nat) (scs : List Suspended) (readAfter : Core),
+      ExceptT.run (getValue readFuel uv before.core) =
+        [.ok (.unenumerated (some oldHandle) scs, readAfter)]
+  · obtain ⟨oldHandle, scs, readAfter, reading⟩ := readable
+    have readSuccess : Success (getValue readFuel uv) before.core
+        (.unenumerated (some oldHandle) scs) readAfter := by
+      rw [Success, reading]
+      exact List.mem_singleton_self _
+    have readForward := getValue_forward readFuel uv before.core readAfter
+      (.unenumerated (some oldHandle) scs) readSuccess
+    by_cases checkedResult : ∃ (repeated : Bool) (checked : Core),
+        ExceptT.run (SourcePruningEnumerationRecursion.checkRepeated
+          caller.checked.native.machine.heap checkFuel uv oldHandle scs readAfter) = [.ok (repeated, checked)]
+    · obtain ⟨repeated, checked, checking⟩ := checkedResult
+      have checkSuccess : Success (SourcePruningEnumerationRecursion.checkRepeated
+          caller.checked.native.machine.heap checkFuel uv oldHandle scs) readAfter repeated checked := by
+        rw [Success, checking]
+        exact List.mem_singleton_self _
+      have checkForward := checkRepeated_forward caller.checked.native.machine.heap
+        checkFuel uv oldHandle scs readAfter checked repeated checkSuccess
+      have checkedForward : ∀ left right, UnionFind.SameClass before.core.representatives left right →
+          UnionFind.SameClass checked.representatives left right :=
+        fun left right same => checkForward left right (readForward left right same)
+      cases repeated with
+      | true =>
+          unfold runPrefix runPrefixWithNarrow
+          simp only [reading, checking]
+          refine ⟨checkedForward, ?_⟩
+          intro after adapted
+          rw [SourcePruningEnumerationParkedRestart.adapt_core caller.checked.native.machine.heap
+            indexFuel uv oldHandle scs before after checked adapted]
+          exact checkedForward
+      | false =>
+          have noCandidate :
+              (∀ left right, UnionFind.SameClass before.core.representatives left right →
+                UnionFind.SameClass checked.representatives left right) ∧
+              ∀ after, (none : Option Cached) = some after → ∀ left right,
+                UnionFind.SameClass before.core.representatives left right →
+                  UnionFind.SameClass after.core.representatives left right := by
+            refine ⟨checkedForward, ?_⟩
+            intro after impossible
+            cases impossible
+          cases oldDecoded : lookupNode caller.checked.native.machine.heap oldHandle with
+          | none =>
+              simp only [runPrefix, runPrefixWithNarrow, reading, checking, oldDecoded]
+          | some oldValue =>
+              unfold runPrefix runPrefixWithNarrow
+              simp only [reading, checking, oldDecoded,
+                ← SourcePruningEnumerationAction.prepare_configured_eq]
+              cases preparedEq : SourcePruningEnumerationAction.prepare (EnumGuard := Constraint) holeKey fits admits metadata
+                  nativeFuel representativeFuel uv oldHandle scs oldValue caller.checked.native.machine.heap with
+              | failed fault heap =>
+                  exact noCandidate
+              | done pair heap =>
+                  obtain ⟨narrowedValue, possibleAction⟩ := pair
+                  cases possibleAction with
+                  | none =>
+                      exact noCandidate
+                  | some action =>
+                      dsimp only
+                      by_cases ran : ∃ observed : Core,
+                          ExceptT.run (action checked) = [.ok ((), observed)]
+                      · obtain ⟨observed, raw⟩ := ran
+                        have actionSuccess : Success action checked () observed := by
+                          rw [Success, raw]
+                          exact List.mem_singleton_self _
+                        have actionForward := prepared_action_forward holeKey fits admits metadata
+                          nativeFuel representativeFuel uv oldHandle scs oldValue narrowedValue
+                          caller.checked.native.machine.heap heap action checked observed preparedEq actionSuccess
+                        have wholeForward : ∀ left right, UnionFind.SameClass before.core.representatives left right →
+                            UnionFind.SameClass observed.representatives left right :=
+                          fun left right same => actionForward left right (checkedForward left right same)
+                        simp only [raw]
+                        cases encoded : encodeNode narrowedValue with
+                        | none =>
+                            exact noCandidate
+                        | some newHandle =>
+                            dsimp only
+                            cases adapted : SourcePruningEnumerationNarrowAdapter.adapt heap indexFuel
+                                uv oldHandle newHandle scs before observed with
+                            | none =>
+                                exact noCandidate
+                            | some attached =>
+                                dsimp only
+                                have attachedCore := SourcePruningEnumerationNarrowAdapter.adapt_core heap
+                                  indexFuel uv oldHandle newHandle scs before attached observed adapted
+                                have attachedForward : ∀ left right,
+                                    UnionFind.SameClass before.core.representatives left right →
+                                      UnionFind.SameClass attached.core.representatives left right := by
+                                  rw [attachedCore]
+                                  exact wholeForward
+                                have recorded : ExceptT.run (SourcePruningRecordTypes.recordTypes
+                                    graph templates callbackFuel metadata uv (.inr newHandle) attached.core) =
+                                    [.ok ((false, metadata), attached.core)] := by
+                                  rw [SourcePruningRecordTypes.recordTypes_inr]
+                                  rfl
+                                simp only [recorded]
+                                refine ⟨checkedForward, ?_⟩
+                                intro after candidate
+                                cases candidate
+                                exact attachedForward
+                      · generalize rawEq : ExceptT.run (action checked) = rawAction
+                        cases rawAction with
+                        | nil => exact noCandidate
+                        | cons first rest =>
+                            cases first with
+                            | error fault => exact noCandidate
+                            | ok pair =>
+                                obtain ⟨token, observed⟩ := pair
+                                cases token
+                                cases rest with
+                                | nil => exact (ran ⟨observed, rawEq⟩).elim
+                                | cons another remaining => exact noCandidate
+    · have stopped : runPrefix holeKey fits admits graph templates stop order metadata
+          readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv caller before queries =
+          .stopped (ExceptT.run (getValue readFuel uv before.core))
+            (some (ExceptT.run (SourcePruningEnumerationRecursion.checkRepeated
+              caller.checked.native.machine.heap checkFuel uv oldHandle scs readAfter))) := by
+        unfold runPrefix runPrefixWithNarrow
+        simp only [reading]
+        split
+        · exact (checkedResult ⟨true, _, by assumption⟩).elim
+        · exact (checkedResult ⟨false, _, by assumption⟩).elim
+        · rfl
+      simp only [stopped]
+  · have stopped : runPrefix holeKey fits admits graph templates stop order metadata
+        readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv caller before queries =
+        .stopped (ExceptT.run (getValue readFuel uv before.core)) none := by
+      unfold runPrefix runPrefixWithNarrow
+      dsimp only
+      split
+      · exact (readable ⟨_, _, _, by assumption⟩).elim
+      · rfl
+    simp only [stopped]

@@ -1,0 +1,16 @@
+theorem finalize_sameClass_forward
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (indexFuel target : Nat) (fragment : Fragments.Fragment Symbol)
+    (before finished : Cached)
+    (observed : SourcePruningEnumerationFinalize.run heap indexFuel target fragment before = some finished) :
+    ∀ (left right : Nat), UnionFind.SameClass before.core.representatives left right →
+      UnionFind.SameClass finished.core.representatives left right
+
+theorem false_recordTypes_sameClass_forward
+    (graph : Graph Symbol EnumGuard) (templates : List (Template.Pattern Symbol))
+    (callbackFuel uv : Nat) (metadata updated : SourcePruningRecordTypes.Metadata Typing)
+    (fragment : Fragments.Fragment Symbol) (before : Cached) (after : Core)
+    (observed : ExceptT.run (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata uv
+      (.inl fragment) before.core) = [.ok ((false, updated), after)]) :
+    ∀ (left right : Nat), UnionFind.SameClass before.core.representatives left right →
+      UnionFind.SameClass (EnumerationExpandableIndex.frame after before).core.representatives left right

@@ -1,0 +1,5 @@
+theorem suspendMany_forest {EnumGuard NativeGuard : Type}
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard) (tries : List EqualityTrie.Trie)
+    (before after : EnumerationExpandableIndex.Cached Symbol EnumGuard) (own : List Suspended)
+    (actual : SourcePruningEnumerationCachedOwn.suspendMany heap tries before = some (own, after)) :
+    after.core.representatives = before.core.representatives

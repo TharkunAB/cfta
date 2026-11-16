@@ -1,0 +1,36 @@
+/-- A completed actual child invocation retains every raw entry alias. -/
+theorem child_done_sameClass_forward
+    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List Edge) (policy : Policy)
+    (scs : List Suspended) (incoming : Node) (caller reached : Caller width)
+    (before after : Cached) (queries saved : Queries) (done : Done) (stopped : Stopped)
+    (index : Nat) (output : Output) (fragment : Fragment) (localIndex : Nat)
+    (trace : ChildInvocationAt checkEmpty r n p h k edgesOf policy
+      scs incoming caller before queries done stopped index output
+        (.done fragment reached saved after) localIndex) :
+    ∀ (left right : Nat), UnionFind.SameClass before.core.representatives left right →
+      UnionFind.SameClass after.core.representatives left right
+
+/-- A completed actual tuple invocation retains every raw entry alias. -/
+theorem children_done_sameClass_forward
+    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List Edge) (policy : Policy)
+    (done : TupleDone) (stopped : TupleStopped) (inputs : List (Node × List Suspended))
+    (caller reached : Caller width) (before after : Cached) (queries saved : Queries)
+    (index : Nat) (output : Output) (fragments : List Fragment) (localIndex : Nat)
+    (trace : ChildrenInvocationAt checkEmpty r n p h k edgesOf policy
+      done stopped inputs caller before queries index output
+        (.done fragments reached saved after) localIndex) :
+    ∀ (left right : Nat), UnionFind.SameClass before.core.representatives left right →
+      UnionFind.SameClass after.core.representatives left right
+
+/-- A completed actual selected invocation retains every raw entry alias. -/
+theorem selected_complete_sameClass_forward
+    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List Edge) (policy : Policy)
+    (consume : Receipt width → Result Output Reason width)
+    (scs : List Suspended) (edge : Edge) (caller reached : Caller width)
+    (before after : Cached) (queries saved : Queries) (index : Nat) (output : Output)
+    (fragment : Fragment) (consumerIndex : Nat)
+    (trace : SelectedInvocationAt checkEmpty r n p h k edgesOf policy
+      consume scs edge caller before queries index output
+        (.complete fragment reached saved after) consumerIndex) :
+    ∀ (left right : Nat), UnionFind.SameClass before.core.representatives left right →
+      UnionFind.SameClass after.core.representatives left right

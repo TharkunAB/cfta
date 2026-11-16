@@ -1,0 +1,11 @@
+/-- A completed actual tuple invocation retains every raw entry alias. -/
+theorem children_done_sameClass_forward
+    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List Edge) (policy : Policy)
+    (done : TupleDone) (stopped : TupleStopped) (inputs : List (Node × List Suspended))
+    (caller reached : Caller width) (before after : Cached) (queries saved : Queries)
+    (index : Nat) (output : Output) (fragments : List Fragment) (localIndex : Nat)
+    (trace : ChildrenInvocationAt checkEmpty r n p h k edgesOf policy
+      done stopped inputs caller before queries index output
+        (.done fragments reached saved after) localIndex) :
+    ∀ (left right : Nat), UnionFind.SameClass before.core.representatives left right →
+      UnionFind.SameClass after.core.representatives left right

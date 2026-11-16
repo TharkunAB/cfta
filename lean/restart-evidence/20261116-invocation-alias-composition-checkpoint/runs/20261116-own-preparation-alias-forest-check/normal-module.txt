@@ -1,0 +1,46 @@
+@MicroCFTA.SourcePruningEnumerationOwnAliasForest.suspendMany_forest : ∀ {EnumGuard NativeGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (tries : List MicroCFTA.EqualityTrie.Trie)
+  (before after : MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (own : List MicroCFTA.EnumerationState.Suspended),
+  MicroCFTA.SourcePruningEnumerationCachedOwn.suspendMany heap tries before = some (own, after) →
+    after.core.representatives = before.core.representatives
+'MicroCFTA.SourcePruningEnumerationOwnAliasForest.suspendMany_forest' depends on axioms: [propext]
+MicroCFTA.SourcePruningEnumerationOwnAliasForest.prepare_forest : ∀
+  (heap :
+    MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (scs : List MicroCFTA.EnumerationState.Suspended)
+  (edge :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before middle :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (symbol : MicroCFTA.SourcePruningTemplates.Symbol)
+  (staged :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) ×
+        List MicroCFTA.EnumerationState.Suspended ×
+          Option
+            (MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol))))
+  (residual : Option (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourcePruningEnumerationCachedOwn.prepare heap scs edge before =
+      some [((symbol, staged, residual), middle)] →
+    middle.core.representatives = before.core.representatives
+'MicroCFTA.SourcePruningEnumerationOwnAliasForest.prepare_forest' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationOwnAliasForest.finish_forest : ∀
+  (residual : Option (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  (MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.finish residual fragment
+          before).core.representatives =
+    before.core.representatives
+'MicroCFTA.SourcePruningEnumerationOwnAliasForest.finish_forest' does not depend on any axioms

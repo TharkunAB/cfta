@@ -1,0 +1,12 @@
+/-- A completed actual selected invocation retains every raw entry alias. -/
+theorem selected_complete_sameClass_forward
+    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List Edge) (policy : Policy)
+    (consume : Receipt width → Result Output Reason width)
+    (scs : List Suspended) (edge : Edge) (caller reached : Caller width)
+    (before after : Cached) (queries saved : Queries) (index : Nat) (output : Output)
+    (fragment : Fragment) (consumerIndex : Nat)
+    (trace : SelectedInvocationAt checkEmpty r n p h k edgesOf policy
+      consume scs edge caller before queries index output
+        (.complete fragment reached saved after) consumerIndex) :
+    ∀ (left right : Nat), UnionFind.SameClass before.core.representatives left right →
+      UnionFind.SameClass after.core.representatives left right
