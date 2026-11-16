@@ -1,0 +1,6 @@
+    (targetTypes : ∀ sc ∈ removedBucket, ∀ (position : Nat),
+      [position] ∈ EqualityTrie.fromPathTrie sc.trie → TypeIn catalog (current sc.var))
+    (compatible : ∀ (firstIndex secondIndex : Nat) (first second : Suspended) (position : Nat),
+      removedBucket[firstIndex]? = some first → removedBucket[secondIndex]? = some second →
+      [position] ∈ EqualityTrie.fromPathTrie first.trie →
+      [position] ∈ EqualityTrie.fromPathTrie second.trie → current first.var = current second.var)

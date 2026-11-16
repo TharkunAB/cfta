@@ -1,0 +1,43 @@
+ := by
+  dsimp only
+  intro observedOutput
+  let child := SourcePruningEnumerationSharedEagerChildren.eagerChild
+    (width := bits + 2) (Output := Output (bits + 2) Typing) (Reason := Failure (bits + 2) Typing)
+    checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf
+  let recur := resumeWithNarrow child (SourcePruningOuterNarrow.narrow holeKey fits admits)
+    graph templates checkEmpty edgesOf stop order workFuel recursiveDepth
+  let hook := SourcePruningEnumerationSharedPreparedRecursive.continueWith recur
+    graph templates stop order workFuel metadata uv
+  let rootBefore := EnumerationExpandableIndex.frame entered before
+  let rootCaller := SourcePruningEnumerationSelectedValueCaller.advance caller heap
+  let visit := fun edge reached saved captured =>
+    SourcePruningEnumerationSharedChildVisitors.visitCapturedWith child hook
+      workFuel target scs edge reached saved captured
+  have selectedSame :
+      SourcePruningEnumerationSharedPreparedChildPolicy.runWithChild child hook
+        checkEmpty workFuel workFuel workFuel workFuel workFuel workFuel workFuel uv edgesOf caller before queries =
+      (([.ok ((target, handle, scs, decoded), entered)],
+          some (.done (.node entry rows ordinaryDepth free) heap)),
+        some (scan visit rootBefore (edgesOf (.node entry rows ordinaryDepth free)) rootCaller queries)) := by
+    simp only [SourcePruningEnumerationSharedPreparedChildPolicy.runWithChild, preparation,
+      nonterminal, Bool.false_eq_true, ↓reduceIte]
+  change (emitted (match (SourcePruningEnumerationSharedPreparedChildPolicy.runWithChild child hook
+      checkEmpty workFuel workFuel workFuel workFuel workFuel workFuel workFuel uv edgesOf caller before queries).2 with
+    | none => .stopped [] (.preparation uv
+        (SourcePruningEnumerationSharedPreparedChildPolicy.runWithChild child hook
+          checkEmpty workFuel workFuel workFuel workFuel workFuel workFuel workFuel uv edgesOf caller before queries).1)
+        (some (SourcePruningEnumerationSharedPreparedContinuations.preparation_endpoint caller queries
+          (SourcePruningEnumerationSharedPreparedChildPolicy.runWithChild child hook
+            checkEmpty workFuel workFuel workFuel workFuel workFuel workFuel workFuel uv edgesOf caller before queries).1))
+    | some folded => finish uv folded))[index]? = some output at observedOutput
+  rw [selectedSame] at observedOutput
+  change (emitted (finish uv
+    (scan visit rootBefore (edgesOf (.node entry rows ordinaryDepth free)) rootCaller queries)))[index]? = some output
+    at observedOutput
+  have finishedOutputs : emitted (finish uv
+      (scan visit rootBefore (edgesOf (.node entry rows ordinaryDepth free)) rootCaller queries)) =
+      outputs (scan visit rootBefore (edgesOf (.node entry rows ordinaryDepth free)) rootCaller queries) := by
+    cases scan visit rootBefore (edgesOf (.node entry rows ordinaryDepth free)) rootCaller queries <;> rfl
+  rw [finishedOutputs] at observedOutput
+  exact SourcePruningEnumerationSharedScanOutputOrigins.scan_output_origin
+    visit rootBefore (edgesOf (.node entry rows ordinaryDepth free)) rootCaller queries index output observedOutput

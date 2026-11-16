@@ -1,0 +1,77 @@
+  obtain ⟨handle, bucket, _readAfter, value, _size, _resolved,
+    _reading, originalStored, pendingInputs, bucketAvoid, isolated, _path, _readFrame,
+    decoded, boundary, _checking, _resolution, _resolvedFrame, _seen, _resolvedStored,
+    _cleared, _shape, parkedCore, _adapted, _restarted,
+    metadataEq, coreEq, nextEq, _notStuck, _aliases, restart⟩ :=
+    SourcePruningEnumerationParkedRemovedBucketInputs.actual_parked_removed_bucket_inputs
+      holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel recursiveDepth uv
+      formulas solver inventory metadata updated caller memos before parked checked core next
+      packet chosen actual
+  have framed : EnumerationExpandableIndex.frame core parked = parked := by
+    rw [coreEq, ← parkedCore]
+    cases parked
+    rfl
+  have sameRun :
+      runEagerWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        graph templates checkEmpty edgesOf stop order workFuel (recursiveDepth + 1)
+        metadata caller memos.query before =
+      runEagerWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        graph templates checkEmpty edgesOf stop order workFuel recursiveDepth
+        metadata caller memos.query parked := by
+    simpa only [runEagerWithNarrow, runWithNarrow, chosen, metadataEq, framed, nextEq] using restart
+  have current := SourcePruningEnumerationSharedRecursive.prefix_real_continuing_current_at_original_budget
+    holeKey fits admits graph templates stop order metadata formulas solver inventory caller memos before packet
+    seed.2 (fun guard => guard ∈ seed.1) bounded known workFuel uv chosen
+  rw [actual] at current
+  dsimp only at current
+  obtain ⟨cached, sameCache, _coreSame, _rawSame, cachedPacket⟩ := current.1
+  have cachedSame := Option.some.inj sameCache
+  subst cached
+  have admission := SourcePruningEnumerationSharedRecursive.prefix_real_phase_admission_at_original_budget
+    holeKey fits admits graph templates stop order metadata formulas solver inventory caller memos before packet
+    workFuel uv ceiling chosen initialMass
+  rw [actual] at admission
+  dsimp only at admission
+  let start := SourcePruningEnumerationSharedPreparedReservation.preparedSeed seed
+  let limit := SourceCurrentConstrainedCapTargetForecast.scalar start.2
+  let own := SourcePruningEnumerationGuardWidth.width start.1
+  let continuation : Nat → Seed → Seed := fun retained current => eagerFinal recursiveDepth current retained
+  let admitted : Nat → Seed → Prop := fun retained current => eagerReserved bits recursiveDepth current retained
+  have planned : nodeReserved bits limit own limit ceiling ceiling continuation admitted start := reserved
+  have firstReserved := nodeReserved_fallback bits limit own limit ceiling ceiling
+    continuation admitted start planned
+  let parkedSeed := advance start (ceiling + 1)
+  let parkedMass := ceiling + ceiling
+  have narrowGrowth := SourcePruningEnumerationSharedPreparedReservation.preparedSeed_ge seed
+  have headGrowth : Le start.2 parkedSeed.2 ∧ start.1 ⊆ parkedSeed.1 :=
+    ⟨SourcePruningEnumerationSharedIncomingReservation.advance_profile_ge start (ceiling + 1),
+      SourcePruningEnumerationSharedIncomingReservation.advance_alphabet_ge start (ceiling + 1)⟩
+  have parkedFits : Fits parkedSeed.2 caller.checked := bounded.mono (narrowGrowth.1.trans headGrowth.1)
+  have parkedKnown : Heap (fun guard => guard ∈ parkedSeed.1) caller.checked.native.machine.heap :=
+    fun key edge found => headGrowth.2 (narrowGrowth.2 (known key edge found))
+  have massBound : SourcePruningEnumerationPrefixAdmission.suspendedBound parked.core ≤ parkedMass :=
+    Nat.le_trans admission.2.2 (Nat.le_add_right _ _)
+  have birthHistories := runEager_real_expanded_birth_history_at_any_budget (bits := bits)
+    holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver recursiveDepth
+    inventory caller memos parked metadata parkedSeed parkedMass cachedPacket parkedFits parkedKnown
+    selectionMembers selectionLength massBound firstReserved.2 workFuel
+  have heldHistories := real_eager_held_fragment_history_at_every_depth (bits := bits)
+    holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver recursiveDepth
+    inventory caller memos parked metadata parkedSeed parkedMass cachedPacket parkedFits parkedKnown
+    selectionMembers selectionLength massBound firstReserved.2 workFuel
+    uv handle value isolated decoded boundary
+  refine ⟨handle, bucket, originalStored, pendingInputs, bucketAvoid, isolated, ?_⟩
+  intro output member
+  have suffixMember : output ∈ emitted
+      (runEagerWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        graph templates checkEmpty edgesOf stop order workFuel recursiveDepth
+        metadata caller memos.query parked) := by
+    rw [sameRun] at member
+    exact member
+  have births := birthHistories output suffixMember
+  have retained := heldHistories output suffixMember
+  have finalAvoid := retained.protectedHeld.avoids bucket bucketAvoid
+  constructor
+  · exact expanded_birth_kept_inputs parked.core output.cache.core uv bucket births pendingInputs finalAvoid
+  · intro roots paths
+    exact expanded_birth_kept_dependencies parked.core output.cache.core uv roots paths births retained.origin

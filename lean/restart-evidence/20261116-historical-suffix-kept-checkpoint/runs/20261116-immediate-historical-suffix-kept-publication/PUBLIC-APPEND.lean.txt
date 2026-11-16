@@ -1,0 +1,143 @@
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies EnumerationReferences
+open InternedConstructorTemplates
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
+open SourceCurrentAllocatedNativeResourceForecast (Le)
+open SourcePruningEnumerationSharedIncomingReservation (Seed advance)
+open SourcePruningEnumerationRecursive (Packet)
+open SourcePruningEnumerationSharedPreparedRecursive (Output emitted)
+open SourcePruningEnumerationSharedPreparedRecursiveChildPolicy (runEagerWithNarrow runWithNarrow)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Core" => EnumerationState.State Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Heap" => SourceEqualityAnnotationHeap.Heap
+variable {Typing Key : Type} {bits : Nat}
+variable [DecidableEq (EdgeKey Symbol Constraint)]
+set_option autoImplicit false
+set_option maxHeartbeats 2000000
+attribute [local irreducible] nodePlan tuplePlan fallbackPlan
+  SourceCurrentConstrainedCapEditForecast.headProfile
+
+/- Attach one actual removed bucket to its genuine immediate real-worker suffix. -/
+theorem runEager_real_parked_removed_bucket_kept_at_immediate_suffix
+    [DecidableEq Symbol] [DecidableEq Node]
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (recursiveDepth : Nat)
+    (inventory : Inventory) (caller : Caller (bits + 2)) (memos : Memos)
+    (metadata updated : Metadata Typing) (before parked : Cached)
+    (checked core : Core) (next : Option Next) (seed : Seed) (ceiling : Nat)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (bounded : Fits seed.2 caller.checked)
+    (known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap)
+    (selectionMembers : ∀ entry rows depth free, ∀ edge ∈ edgesOf (.node entry rows depth free), edge ∈ rows)
+    (selectionLength : ∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length)
+    (initialMass : SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling)
+    (reserved : eagerReserved bits (recursiveDepth + 1) seed ceiling) (workFuel uv : Nat)
+    (chosen : SourcePruningEnumerationRestart.decision stop order metadata before = some (.expand uv))
+    (actual : SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order
+      metadata workFuel workFuel workFuel workFuel workFuel workFuel uv caller before memos.query =
+        .parked checked (some parked) (some [.ok ((updated, next), core)])) :
+    ∃ (handle : Nat) (bucket : List Suspended),
+      before.core.values[uv]? = some (.unenumerated (some handle) bucket) ∧
+      InputsPending parked.core bucket ∧ Avoids parked.core.representatives uv bucket ∧
+      EnumerationDischargeHistory.IsolatedPending uv handle parked.core ∧
+      ∀ output ∈ emitted
+        (runEagerWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
+          graph templates checkEmpty edgesOf stop order workFuel (recursiveDepth + 1)
+          metadata caller memos.query before),
+        (∀ sc ∈ bucket, ExpandedBirthKept parked.core output.cache.core uv sc.var) ∧
+        (∀ (roots : Nat → Nat), Roots output.cache.core.representatives roots →
+          ∀ (target : Nat), ExpandedBirthKept parked.core output.cache.core uv target →
+          ∀ (fragment : Fragments.Fragment Symbol),
+            output.cache.core.values[roots target]? = some (.enumerated fragment) →
+            ∀ (hole : Nat), EnumerationDependencies.HasHole fragment hole →
+              ExpandedBirthKept parked.core output.cache.core uv hole) := by
+  obtain ⟨handle, bucket, _readAfter, value, _size, _resolved,
+    _reading, originalStored, pendingInputs, bucketAvoid, isolated, _path, _readFrame,
+    decoded, boundary, _checking, _resolution, _resolvedFrame, _seen, _resolvedStored,
+    _cleared, _shape, parkedCore, _adapted, _restarted,
+    metadataEq, coreEq, nextEq, _notStuck, _aliases, restart⟩ :=
+    SourcePruningEnumerationParkedRemovedBucketInputs.actual_parked_removed_bucket_inputs
+      holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel recursiveDepth uv
+      formulas solver inventory metadata updated caller memos before parked checked core next
+      packet chosen actual
+  have framed : EnumerationExpandableIndex.frame core parked = parked := by
+    rw [coreEq, ← parkedCore]
+    cases parked
+    rfl
+  have sameRun :
+      runEagerWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        graph templates checkEmpty edgesOf stop order workFuel (recursiveDepth + 1)
+        metadata caller memos.query before =
+      runEagerWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        graph templates checkEmpty edgesOf stop order workFuel recursiveDepth
+        metadata caller memos.query parked := by
+    simpa only [runEagerWithNarrow, runWithNarrow, chosen, metadataEq, framed, nextEq] using restart
+  have current := SourcePruningEnumerationSharedRecursive.prefix_real_continuing_current_at_original_budget
+    holeKey fits admits graph templates stop order metadata formulas solver inventory caller memos before packet
+    seed.2 (fun guard => guard ∈ seed.1) bounded known workFuel uv chosen
+  rw [actual] at current
+  dsimp only at current
+  obtain ⟨cached, sameCache, _coreSame, _rawSame, cachedPacket⟩ := current.1
+  have cachedSame := Option.some.inj sameCache
+  subst cached
+  have admission := SourcePruningEnumerationSharedRecursive.prefix_real_phase_admission_at_original_budget
+    holeKey fits admits graph templates stop order metadata formulas solver inventory caller memos before packet
+    workFuel uv ceiling chosen initialMass
+  rw [actual] at admission
+  dsimp only at admission
+  let start := SourcePruningEnumerationSharedPreparedReservation.preparedSeed seed
+  let limit := SourceCurrentConstrainedCapTargetForecast.scalar start.2
+  let own := SourcePruningEnumerationGuardWidth.width start.1
+  let continuation : Nat → Seed → Seed := fun retained current => eagerFinal recursiveDepth current retained
+  let admitted : Nat → Seed → Prop := fun retained current => eagerReserved bits recursiveDepth current retained
+  have planned : nodeReserved bits limit own limit ceiling ceiling continuation admitted start := reserved
+  have firstReserved := nodeReserved_fallback bits limit own limit ceiling ceiling
+    continuation admitted start planned
+  let parkedSeed := advance start (ceiling + 1)
+  let parkedMass := ceiling + ceiling
+  have narrowGrowth := SourcePruningEnumerationSharedPreparedReservation.preparedSeed_ge seed
+  have headGrowth : Le start.2 parkedSeed.2 ∧ start.1 ⊆ parkedSeed.1 :=
+    ⟨SourcePruningEnumerationSharedIncomingReservation.advance_profile_ge start (ceiling + 1),
+      SourcePruningEnumerationSharedIncomingReservation.advance_alphabet_ge start (ceiling + 1)⟩
+  have parkedFits : Fits parkedSeed.2 caller.checked := bounded.mono (narrowGrowth.1.trans headGrowth.1)
+  have parkedKnown : Heap (fun guard => guard ∈ parkedSeed.1) caller.checked.native.machine.heap :=
+    fun key edge found => headGrowth.2 (narrowGrowth.2 (known key edge found))
+  have massBound : SourcePruningEnumerationPrefixAdmission.suspendedBound parked.core ≤ parkedMass :=
+    Nat.le_trans admission.2.2 (Nat.le_add_right _ _)
+  have birthHistories := runEager_real_expanded_birth_history_at_any_budget (bits := bits)
+    holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver recursiveDepth
+    inventory caller memos parked metadata parkedSeed parkedMass cachedPacket parkedFits parkedKnown
+    selectionMembers selectionLength massBound firstReserved.2 workFuel
+  have heldHistories := real_eager_held_fragment_history_at_every_depth (bits := bits)
+    holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver recursiveDepth
+    inventory caller memos parked metadata parkedSeed parkedMass cachedPacket parkedFits parkedKnown
+    selectionMembers selectionLength massBound firstReserved.2 workFuel
+    uv handle value isolated decoded boundary
+  refine ⟨handle, bucket, originalStored, pendingInputs, bucketAvoid, isolated, ?_⟩
+  intro output member
+  have suffixMember : output ∈ emitted
+      (runEagerWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        graph templates checkEmpty edgesOf stop order workFuel recursiveDepth
+        metadata caller memos.query parked) := by
+    rw [sameRun] at member
+    exact member
+  have births := birthHistories output suffixMember
+  have retained := heldHistories output suffixMember
+  have finalAvoid := retained.protectedHeld.avoids bucket bucketAvoid
+  constructor
+  · exact expanded_birth_kept_inputs parked.core output.cache.core uv bucket births pendingInputs finalAvoid
+  · intro roots paths
+    exact expanded_birth_kept_dependencies parked.core output.cache.core uv roots paths births retained.origin
+
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
