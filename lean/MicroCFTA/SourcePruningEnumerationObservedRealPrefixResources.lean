@@ -125,7 +125,7 @@ private theorem observed_checkRepeated_raw_moreFuel
       · simp [SourcePruningEnumerationRecursion.checkRepeated, decoded, boundary]
 
 
-private theorem observed_success_stages
+theorem observed_success_stages
     (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
     (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
     (stop : Option (Metadata Typing → Nat → Bool))
@@ -322,7 +322,7 @@ private theorem adapted_some_moreFuel
       (.unenumerated (some newHandle) scs) scs scs
       (EnumerationExpandableIndex.frame observed before) saved written, mapped⟩
 
-private theorem prepared_done_narrowed
+theorem prepared_done_narrowed
     (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
     (metadata : Metadata Typing) (fuel representativeFuel uv oldHandle : Nat)
     (scs : List Suspended) (oldValue value : Node)
@@ -345,7 +345,7 @@ private theorem prepared_done_narrowed
       cases parts.2
       rfl
 
-private theorem prepared_success_nonempty
+theorem prepared_success_nonempty
     (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
     (metadata : Metadata Typing) (fuel representativeFuel uv oldHandle : Nat)
     (scs : List Suspended) (oldValue value : Node)
