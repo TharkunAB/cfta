@@ -1,0 +1,13 @@
+/-- Selected Mu and Union preparation retains its exact successful or failed native heap. -/
+theorem selected_value_unionNormal
+    (fuel : Nat) (value : Node) (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (normal : UnionNormal heap) :
+    UnionNormal (SourcePruningEnumerationSelectedValue.run fuel value heap).state
+
+/-- Every selected preparation retains union normality at its actual endpoint caller. -/
+theorem run_endpoint_unionNormal
+    (entryFuel nativeFuel uv : Nat) (caller : Caller width) (before : Cached) (queries : Queries)
+    (normal : UnionNormal caller.checked.native.machine.heap) :
+    UnionNormal
+      (SourcePruningEnumerationSharedPreparedContinuations.preparation_endpoint caller queries
+        (SourcePruningEnumerationSelectedPreparation.run entryFuel nativeFuel uv caller before)).1.checked.native.machine.heap
