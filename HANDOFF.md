@@ -1,3 +1,21 @@
+## 2026-11-16 12:49 CET — scoped history passes all public gates
+
+All five publication gates pass for the 22 actual scoped task components and the RenderStable history factor. Validation covers 6171 Source files, 5171 direct Audit imports, 517 explicit reports (514 standard and 3 axiom-free), 112 independent imports, 165 resource/component probes (all 136 original probes plus 29 private probes), and 98779 audited declarations. Only standard axioms pass. Every prior owner byte remains after one ordinary import per owner. Audit retains its exact prior prefix. The original resource5493 header, original906 header, all original runtime fuels and the original2000000 resource proof limit remain unchanged.
+
+The inner task induction is checked. The outer original906 recursive-depth history proof is still OPEN. Captured-row, prepared-scan, successful-preparation, prefix, opaque and parked outer companions remain marked drafts pending separate strict checks. ONE joint finite model for every historical obligation, warm cache meanings, pending Profile closure, the remaining full operational contracts and compiled Haskell correspondence remain open. Keep the full specification below. No Haskell fix was made. Record every future Haskell fix in FINDINGS.md. Goal stays ACTIVE.
+
+---
+
+## 2026-11-16 12:39 CET — actual scoped task induction passes its strict check
+
+A serial 8 GiB check passed all 22 actual scope-history components and the separate RenderStable factor. The task dispatcher uses strong induction on the existing task.work. It covers captured nil, selected return, tuple cons, ordinary child, fallback and all row-scan emissions, including emissions before stops. Genuine smaller recursive-depth resource/history IHs remain internal inputs. The original outer recursive-depth history theorem906 remains OPEN.
+
+The concrete scope accompaniment retains root.before-to-scopeBefore HeldFragmentHistory and avoidance for all original scope inputs. Each selected frame retains its ACTUAL parent ledger, packet, previous tuple and snapshot witnesses. Entry producers construct this data. Return restores the chosen parent. It does not compute a proposition from a proof or infer arbitrary scope equality by ledger inversion. No new runtime datatype, engine, future output-law supplier or external906 premise is introduced.
+
+RenderStable now supplies the full receipt without a redundant Safe-before premise. This covers successful preparation even when ancestry changes. Its proof uses actual values/classes and Safe after. It does not assert guard truth or a finite historical model. The two Source owners preserve every prior byte after one ordinary acyclic import each. Audit retains its prior byte prefix. The scoped Source changes await all five public gates. The last fully checked/pushed Source remains c033b76d699ff96ea91c5d0d78f231ec0072f852. The new captured-row/prepared-scan wrappers and initial-prefix/opaque/depth assembly remain drafts. Keep the full objective and all original runtime/proof limits. No Haskell fix or correctness claim is made. Record every future Haskell fix in FINDINGS.md.
+
+---
+
 ## 2026-11-16 12:14 CET — residual laws pass all public gates
 
 The two new laws are SourcePruningEnumerationFinalize.run_after_residual and EnumerationDischargeHistory.HeldFragmentHistory.after_residual. Residual recording commutes with the actual finalizer at the SAME heap and supplied fuel. It also preserves the structural HeldFragmentHistory receipt. These laws do not assert residual guard truth.
