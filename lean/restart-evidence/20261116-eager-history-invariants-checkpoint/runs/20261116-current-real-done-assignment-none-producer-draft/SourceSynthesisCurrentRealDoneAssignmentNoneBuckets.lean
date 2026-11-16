@@ -1,0 +1,128 @@
+import MicroCFTA.SourceSynthesisCurrentRealDoneAssignment
+import MicroCFTA.SourcePruningEnumerationSharedEagerNoneBucketsWhole
+
+namespace MicroCFTA.SourceSynthesisCurrentRealDoneAssignmentNoneBuckets
+open Language Cache InternedConstructorTemplates InternedProbeProvenance InternedNestedFacts
+open SourceSynthesisTypeSyntax (Library Query)
+open SourceSynthesisFirstOrderConstruction (Expression)
+open SourceSynthesisUniverseCallerBoundary (ordinarySymbols)
+open SourceSynthesisOriginalGuardAlphabet (alphabet)
+open SourceSynthesisCurrentSourceGuards (encodedLibrary)
+open SourceEqualityConstraintOrigins (guards)
+open SourcePruningEnumerationNodes (encodeNode lookupNode)
+open SourcePruningEnumerationSharedPreparedRecursive (OutputResources emitted)
+open SourceSynthesisOriginalSharedRankCompletion (seed)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Guard
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Guard
+local notation "literal" => SourceSynthesisLabelProgramBuildRoles.literal
+set_option autoImplicit false
+variable {Typing Key : Type}
+variable [DecidableEq FullSyntax.Formula] [DecidableEq Symbol]
+  [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Node]
+
+theorem accepted_real_done_assignment
+    (lib : Library) (query : Query) (signed : Int) (expression : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok expression)
+    (workFuel depth : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (ambient : InternedGuardedLanguage.Env Symbol)
+    (metadata : Metadata Typing) (emptyPending : metadata.pending = [])
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : EnumerationState.Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (order : Metadata Typing → List Nat → Option Nat) :
+    let bits := SourceSynthesisCurrentProgramEagerEnumerationWidth.enumBits lib query signed depth
+    ∃ fields cache rootValue sourceHeap,
+      ∃ built : InternedFreshOrdinaryConstruction.build (ordinarySymbols expression) [] empty =
+        InternedNestedConstruction.Outcome.done rootValue sourceHeap,
+      SourceEqualityOriginalAllocationPreparation.Receipt
+        (guards (ordinarySymbols expression)) Cache.emptyState fields cache ∧
+      SourceCurrentAllocatedPartialInvariant.Context formulas solver
+        (SourceCurrentAllocatedPartialInitialization.inventory (ordinarySymbols expression) rootValue sourceHeap built)
+        (SourceCurrentAllocatedPartialInitialization.caller (bits + 2) cache sourceHeap)
+        SourceCurrentAllocatedPartialInitialization.globals ∧
+      Facts sourceHeap ∧ Available sourceHeap rootValue ∧ rootValue.free = [] ∧
+      ∃ handle, encodeNode rootValue = some handle ∧ lookupNode sourceHeap handle = some rootValue ∧
+        let startup : Cached :=
+          ⟨EnumerationState.initial handle,
+            fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+            fun _ => none⟩
+        let initialCaller := SourceCurrentAllocatedPartialInitialization.caller (bits + 2) cache sourceHeap
+        let outcome := SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.runEagerWithNarrow
+          (SourcePruningOuterNarrow.narrow holeKey fits admits)
+          graph templates checkEmpty InternedEdgeResidency.nodeEdges none order workFuel depth metadata
+          initialCaller SourceCurrentAllocatedPartialInitialization.globals.query startup
+        ∀ output ∈ emitted outcome,
+          OutputResources formulas solver initialCaller
+            (SourcePruningEnumerationSharedEagerReservation.eagerFinal depth (seed sourceHeap) 0) output ∧
+          output.metadata = none ∧ EnumerationPureSelection.next (fun _ => none) output.cache = .done ∧
+          InternedStoredMuOrigins.Normal output.caller.checked.native.machine.heap ∧
+          SourceCurrentRequiredUnionNormal.UnionNormal output.caller.checked.native.machine.heap ∧
+          Grows sourceHeap output.caller.checked.native.machine.heap ∧
+          SourcePruningEnumerationSharedEagerNoneBuckets.NoneBucketsEmpty output.cache.core ∧
+          ∀ (key : InternedBinderProtocol.NodeKey) (entry : Interned InternedBinderProtocol.NodeKey)
+            (body muDepth ordinary : Node),
+            sourceHeap.nodeRecords key = some (.mu entry body muDepth ordinary) →
+            (∀ (slot handle : Nat) (scs : List EnumerationState.Suspended),
+              output.cache.core.values[slot]? = some (.unenumerated (some handle) scs) →
+              ∀ value, lookupNode output.caller.checked.native.machine.heap handle = some value →
+              ∀ atom ∈ InternedBoundaryAtoms.atoms value, atom = .mu entry.identity) →
+            ∃ assignment : Nat → Term Symbol,
+              Fragments.stateSatisfies output.cache.core.representatives
+                (EnumerationCorrectness.heap
+                  (SourcePruningEnumerationNativeLanguage.handles
+                    (SourceEqualityPCSGuard.holds formulas solver) ambient
+                    output.caller.checked.native.machine.heap)
+                  output.cache.core.values) assignment ∧
+              (∀ (slot : Nat) (node : Option Nat) (scs : List EnumerationState.Suspended),
+                output.cache.core.values[slot]? = some (.unenumerated node scs) →
+                assignment slot = .node (literal "var1") []) ∧
+              ∀ (readFuel : Nat) (actualPartial : SourcePruningTemplates.PartialTerm)
+                (after : EnumerationState.State Symbol Guard),
+                EnumerationCorrectness.Success (SourcePruningEnumerationPartialOutput.rootPartial
+                  output.caller.checked.native.machine.heap readFuel) output.cache.core actualPartial after →
+                SourcePruningPartialMatch.Completes assignment actualPartial (assignment 0)
+ := by
+  dsimp only
+  let bits := SourceSynthesisCurrentProgramEagerEnumerationWidth.enumBits lib query signed depth
+  obtain ⟨fields, cache, rootValue, sourceHeap, built, allocation, context, facts, available, closed,
+      handle, encoded, decoded, previousOutputs⟩ :=
+    SourceSynthesisCurrentRealDoneAssignment.accepted_real_done_assignment
+      lib query signed expression accepted workFuel depth formulas solver ambient metadata emptyPending
+      holeKey fits admits graph templates checkEmpty order
+  let startup : Cached :=
+    ⟨EnumerationState.initial handle,
+      fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+      fun _ => none⟩
+  let initialCaller := SourceCurrentAllocatedPartialInitialization.caller (bits + 2) cache sourceHeap
+  let outcome := SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.runEagerWithNarrow
+    (SourcePruningOuterNarrow.narrow holeKey fits admits)
+    graph templates checkEmpty InternedEdgeResidency.nodeEdges none order workFuel depth metadata
+    initialCaller SourceCurrentAllocatedPartialInitialization.globals.query startup
+  have preserved := SourcePruningEnumerationSharedEagerNoneBuckets.runEager_real_none_buckets_at_any_budget
+    holeKey fits admits graph templates checkEmpty InternedEdgeResidency.nodeEdges none order
+    workFuel depth metadata initialCaller SourceCurrentAllocatedPartialInitialization.globals.query startup
+    (SourcePruningEnumerationSharedEagerNoneCachedWriters.initial_none_buckets handle)
+  have outputsNone : ∀ output ∈ emitted outcome,
+      SourcePruningEnumerationSharedEagerNoneBuckets.NoneBucketsEmpty output.cache.core := by
+    change SourcePruningEnumerationSharedEagerNoneBuckets.Preserved outcome at preserved
+    cases observed : outcome with
+    | complete outputs reached saved =>
+        rw [observed] at preserved
+        exact preserved
+    | stopped outputs reason endpoint =>
+        rw [observed] at preserved
+        exact preserved.1
+  refine ⟨fields, cache, rootValue, sourceHeap, built, allocation, context, facts, available, closed,
+    handle, encoded, decoded, ?_⟩
+  intro output member
+  obtain ⟨resources, noMetadata, done, normal, unionNormal, growth, models⟩ := previousOutputs output member
+  have currentNone := outputsNone output member
+  refine ⟨resources, noMetadata, done, normal, unionNormal, growth, currentNone, ?_⟩
+  intro key entry body muDepth ordinary stored onlyU
+  exact models key entry body muDepth ordinary stored onlyU currentNone
+
+end MicroCFTA.SourceSynthesisCurrentRealDoneAssignmentNoneBuckets

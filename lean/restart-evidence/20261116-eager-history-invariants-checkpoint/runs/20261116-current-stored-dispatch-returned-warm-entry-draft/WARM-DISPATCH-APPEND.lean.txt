@@ -1,0 +1,86 @@
+namespace MicroCFTA.SourceCurrentAllocatedNativeNodeQueryDispatchOrigin
+open InternedConstructorTemplates SourceRecursiveIntersectionCode SourceRecursiveIntersectionThunks
+open SourceEqualityNativeDemand
+open SourceEqualityNativeDemandBodyCode (Clean)
+open SourceRecursiveIntersectionNative (Shape)
+open SourceCurrentAllocatedNativePhysicalTraceCompletion (Trace)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Checked" => SourceEqualityNativeDemand.State
+set_option autoImplicit false
+
+theorem actual_node_query_dispatch_from_warm_query_finish
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (rootRequest : NodeRequest Symbol Guard)
+    (before : Checked width)
+    (initialPhysical : SourceCurrentAllocatedNativePhysicalCache.Valid before.native)
+    (originalFuel count handle : Nat) (captured : NodeRequest Symbol Guard)
+    (value : Value Symbol Guard) (rest : Code Symbol Guard (Value Symbol Guard))
+    (beforeFinish : Checked width)
+    (bounded : count < originalFuel)
+    (actual : Trace count (.code (.node rootRequest .pure))
+      before
+      (.code (.finishNode handle value rest)) beforeFinish)
+    (owner : beforeFinish.native.nodes.cells handle = some ⟨captured, .evaluating⟩) :
+    ∃ (queryUsed bodyCount : Nat) (queryBefore beforeBody : Checked width)
+      (resume : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard)),
+      queryUsed + 1 + bodyCount = count ∧ queryUsed < count ∧ queryUsed < originalFuel ∧
+      Trace queryUsed (.code (.node rootRequest .pure))
+        before
+        (.code (.node captured resume)) queryBefore ∧
+      Trace 1 (.code (.node captured resume)) queryBefore
+        (.code ((compileNode captured).bind
+          (fun result => .finishNode handle result (resume result)))) beforeBody ∧
+      Steps 1 (.code (.node captured .pure)) queryBefore
+        (.code ((compileNode captured).bind
+          (fun result => .finishNode handle result (.pure result)))) beforeBody ∧
+      SourceCurrentAllocatedNativePhysicalCache.Valid queryBefore.native ∧
+      NodeReady queryBefore.native.machine captured ∧
+      (∀ key, SourceRecursiveIntersectionMemo.requestKey width captured.domain captured.left captured.right = some key →
+        SourceRecursiveIntersectionMemo.KeySafe width captured.domain captured.left captured.right) ∧
+      beforeBody.native.nodes.cells handle = some ⟨captured, .evaluating⟩ ∧
+      Steps bodyCount (.code (compileNode captured)) beforeBody (.code (.pure value)) beforeFinish ∧
+      resume value = rest
+ := by
+  have clean : Clean (.code (.node rootRequest .pure)) := by
+    intro result
+    trivial
+  obtain ⟨dispatchUsed, bodyCount, beforeBody, resume, total, positive, _entered, runningOwner, bodyTrace, last,
+    queryUsed, queryBefore, original, chosen, running, counted, queryPrefix, selected, demanded, stateEq⟩ :=
+    descent count (.code (.node rootRequest .pure))
+      before beforeFinish handle captured value rest
+      clean initialPhysical.shape actual.steps owner
+  have splitCount : queryUsed + (count - queryUsed) = count := by omega
+  have parts := SourceCurrentHereditaryNativePhysicalSplit.split queryPrefix (splitCount.symm ▸ actual)
+  have queryPhysical := (SourceCurrentNativeEnterCommonOperand.checked_trace_extension parts.1 initialPhysical).1
+  have queryInputs := first_inputs parts.2 (by omega)
+  change NodeReady queryBefore.native.machine original ∧
+    (∀ key, SourceRecursiveIntersectionMemo.requestKey width original.domain original.left original.right = some key →
+      SourceRecursiveIntersectionMemo.KeySafe width original.domain original.left original.right) at queryInputs
+  obtain ⟨key, keyed, _published, _machine⟩ :=
+    SourceRecursiveIntersectionNative.lookupNode_memoized original queryBefore.native chosen handle selected
+  have same := SourceCurrentAllocatedNativePhysicalCache.node_started original captured queryBefore.native chosen running
+    handle queryPhysical queryInputs.1 (queryInputs.2 key keyed) selected demanded
+  subst original
+  have one : SourceEqualityNativeDemand.step (.code (.node captured resume)) queryBefore =
+      .yielded (.code ((compileNode captured).bind
+        (fun result => .finishNode handle result (resume result)))) beforeBody := by
+    rw [stateEq]
+    simp only [SourceEqualityNativeDemand.step, SourceRecursiveIntersectionNative.step, selected, demanded, lift]
+  have isolated : SourceEqualityNativeDemand.step (.code (.node captured .pure)) queryBefore =
+      .yielded (.code ((compileNode captured).bind
+        (fun result => .finishNode handle result (.pure result)))) beforeBody := by
+    rw [stateEq]
+    simp only [SourceEqualityNativeDemand.step, SourceRecursiveIntersectionNative.step, selected, demanded, lift]
+  have actualOne : Trace 1 (.code (.node captured resume)) queryBefore
+      (.code ((compileNode captured).bind
+        (fun result => .finishNode handle result (resume result)))) beforeBody :=
+    .cons _ _ _ _ _ _ 0 queryInputs one (.refl _ _)
+  have isolatedOne : Steps 1 (.code (.node captured .pure)) queryBefore
+      (.code ((compileNode captured).bind
+        (fun result => .finishNode handle result (.pure result)))) beforeBody :=
+    .cons _ _ _ _ _ _ 0 isolated (.refl _ _)
+  exact ⟨queryUsed, bodyCount, queryBefore, beforeBody, resume, by omega, by omega, by omega,
+    parts.1, actualOne, isolatedOne, queryPhysical, queryInputs.1, queryInputs.2, runningOwner, bodyTrace, last⟩
+
+end MicroCFTA.SourceCurrentAllocatedNativeNodeQueryDispatchOrigin

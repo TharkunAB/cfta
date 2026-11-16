@@ -1,0 +1,57 @@
+/-- Missing graph domains retain no suspended path bucket. -/
+def NoneBucketsEmpty (state : Core) : Prop :=
+  ∀ (uv : Nat) (scs : List Suspended),
+    state.values[uv]? = some (.unenumerated none scs) → scs = []
+
+/-- Read only successful enumeration-state observations in an actual raw result. -/
+def rawCores {α : Type} (raw : List (Except EnumerationState.Error (α × Core))) : List Core :=
+  raw.flatMap fun row => match row with
+    | .error _ => []
+    | .ok (_, state) => [state]
+
+/-- Observe the current prefix's reached cores and its successful raw stages. -/
+def selectedCores : SourcePruningEnumerationSelectedStep.Result width Typing → List Core
+  | .stopped read checked => rawCores read ++ checked.toList.flatMap rawCores
+  | .parked checked candidate raw =>
+      checked :: (candidate.toList.map (fun after => after.core) ++ raw.toList.flatMap rawCores)
+  | .narrowed checked _prepared _caller _queries action candidate right ordinary =>
+      checked :: (action.toList.flatMap rawCores ++ candidate.toList.map (fun after => after.core) ++
+        right.toList.flatMap rawCores ++ ordinary.toList.flatMap (fun observed => rawCores observed.1))
+
+/-- A shared child observation retains an outer core and any successful raw cores. -/
+def childCores (observation : SourcePruningEnumerationSharedSelectedContinuations.ChildDispatch.Observation width) :
+    List Core :=
+  observation.2.2.2.1 :: (match observation.1 with
+    | .ok none => []
+    | .ok (some raw) => rawCores raw
+    | .error (.inl raw) => rawCores raw
+    | .error (.inr (.inl _native)) => []
+    | .error (.inr (.inr raw)) => rawCores raw)
+
+/-- Observe the real cache or stopping child cores in one actual edge receipt. -/
+def receiptCores : Receipt width → List Core
+  | .unhandled => []
+  | .rejected _caller _queries after => [after.core]
+  | .stopped _completed observation candidate =>
+      childCores observation ++ candidate.toList.map (fun after => after.core)
+  | .finalizeStopped _fragment _caller _queries before => [before.core]
+  | .complete _fragment _caller _queries after => [after.core]
+
+/-- Retain concrete enumeration snapshots from every actual worker stop reason. -/
+def failureCores : Failure width Typing → List Core
+  | .exhausted _uv _metadata before => [before.core]
+  | .selected _uv observed => selectedCores observed
+  | .callback _uv raw => rawCores raw
+  | .preparation _uv observed => rawCores observed.1
+  | .alternatives _uv processed (.edge current _endpoint) =>
+      processed.flatMap receiptCores ++ current.toList.flatMap receiptCores
+  | .alternatives _uv processed (.continuation current reason _endpoint) =>
+      processed.flatMap receiptCores ++ receiptCores current ++ failureCores reason
+
+/-- Cover every emitted cache and every actual retained enum stop endpoint. -/
+def Preserved : HookResult (Output width Typing) (Failure width Typing) width → Prop
+  | .complete outputs _caller _queries =>
+      ∀ output ∈ outputs, NoneBucketsEmpty output.cache.core
+  | .stopped outputs reason _endpoint =>
+      (∀ output ∈ outputs, NoneBucketsEmpty output.cache.core) ∧
+        ∀ state ∈ failureCores reason, NoneBucketsEmpty state

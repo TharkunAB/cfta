@@ -1,0 +1,88 @@
+theorem source_parked_arrow_done_assignment
+    (lib : Library) (query : Query) (signed : Int) (expression : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok expression)
+    (rootValue : Node) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols expression) [] empty =
+      InternedNestedConstruction.Outcome.done rootValue sourceHeap)
+    (key : InternedBinderProtocol.NodeKey) (universeEntry : Interned InternedBinderProtocol.NodeKey)
+    (body muDepth ordinary : Node)
+    (storedU : sourceHeap.nodeRecords key = some (.mu universeEntry body muDepth ordinary))
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (ambient : InternedGuardedLanguage.Env Symbol)
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : EnumerationState.Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Guard))
+    (order : Metadata Typing → List Nat → Option Nat) (workFuel depth uv heldHandle : Nat)
+    (metadata updated : Metadata Typing) (caller : Caller width) (memos : Memos)
+    (before parked : Cached) (checked core : Core)
+    (inventory : SourceCurrentAllocatedNativeInventoryState.Inventory)
+    (packet : SourcePruningEnumerationRecursive.Packet formulas solver inventory caller memos metadata before)
+    (profile : SourceCurrentAllocatedNativeResourceForecast.Profile) (property : Guard → Prop)
+    (bounded : SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile caller.checked)
+    (known : SourceEqualityAnnotationHeap.Heap property caller.checked.native.machine.heap)
+    (growth : Grows sourceHeap caller.checked.native.machine.heap)
+    (irreducible : SourceCurrentRequiredUnionNormal.UnionNormal caller.checked.native.machine.heap)
+    (selected : SourcePruningEnumerationRestart.decision none order metadata before = some (.expand uv))
+    (bucket : List Suspended)
+    (atHeld : before.core.values[uv]? = some (.unenumerated (some heldHandle) bucket))
+    (arrowPaths : ∀ sc ∈ bucket, ∀ path ∈ EqualityTrie.fromPathTrie sc.trie,
+      path = [1] ∨ path = [2])
+    (actual : SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates none order metadata
+      workFuel workFuel workFuel workFuel workFuel workFuel uv caller before memos.query =
+      .parked checked (some parked) (some [.ok ((updated, some .done), core)]))
+    (onlyU : ∀ (slot handle : Nat) (scs : List Suspended),
+      before.core.values[slot]? = some (.unenumerated (some handle) scs) →
+      ∀ value, lookupNode caller.checked.native.machine.heap handle = some value →
+      ∀ atom ∈ InternedBoundaryAtoms.atoms value, atom = .mu universeEntry.identity)
+    (noneBuckets : ∀ (slot : Nat) (scs : List Suspended),
+      before.core.values[slot]? = some (.unenumerated none scs) → scs = []) :
+    SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow
+      (SourcePruningEnumerationSharedEagerChildren.eagerChild
+        checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
+      (SourcePruningOuterNarrow.narrow holeKey fits admits)
+      graph templates checkEmpty edgesOf none order workFuel (depth + 1)
+      metadata caller memos.query before (some (.expand uv)) =
+      .complete [⟨none, EnumerationExpandableIndex.frame core parked, caller, memos.query⟩]
+        caller memos.query ∧
+    ∃ (resolved : Core) (rho : Nat → Term Symbol),
+      Frame before.core resolved ∧
+      resolved.values[uv]? = some (.unenumerated (some heldHandle) bucket) ∧
+      Success (setValue uv (.unenumerated (some heldHandle) [])) resolved () checked ∧
+      parked.core = checked ∧ core = checked ∧
+      SourcePruningPartialRenderingSemantics.StoredEquations rho before.core ∧
+      SourcePruningPartialRenderingSemantics.StoredEquations rho resolved ∧
+      SourcePruningPartialRenderingSemantics.StoredEquations rho checked ∧
+      SourcePruningPartialRenderingSemantics.StoredEquations rho core ∧
+      Fragments.stateSatisfies before.core.representatives
+        (EnumerationCorrectness.heap (SourcePruningEnumerationNativeLanguage.handles
+          (SourceEqualityPCSGuard.holds formulas solver) ambient caller.checked.native.machine.heap)
+          before.core.values) rho ∧
+      Fragments.stateSatisfies checked.representatives
+        (EnumerationCorrectness.heap (SourcePruningEnumerationNativeLanguage.handles
+          (SourceEqualityPCSGuard.holds formulas solver) ambient caller.checked.native.machine.heap)
+          checked.values) rho ∧
+      Fragments.stateSatisfies core.representatives
+        (EnumerationCorrectness.heap (SourcePruningEnumerationNativeLanguage.handles
+          (SourceEqualityPCSGuard.holds formulas solver) ambient caller.checked.native.machine.heap)
+          core.values) rho ∧
+      (∀ sc ∈ bucket, Suspended.Holds rho (rho uv) sc) ∧
+      (∀ (occurrence : Nat) sc, bucket[occurrence]? = some sc → Suspended.Holds rho (rho uv) sc) ∧
+      (∀ slot node scs, before.core.values[slot]? = some (.unenumerated node scs) →
+        TypeIn (SourceSynthesisCurrentContext.constructorCatalog lib query) (rho slot)) ∧
+      (EnumerationCorrectness.guardsHold
+        (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true)
+        rho before.core.obligations →
+        EnumerationCorrectness.Satisfies (SourcePruningEnumerationNativeLanguage.handles
+          (SourceEqualityPCSGuard.holds formulas solver) ambient caller.checked.native.machine.heap)
+          (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true) rho before.core ∧
+        EnumerationCorrectness.Satisfies (SourcePruningEnumerationNativeLanguage.handles
+          (SourceEqualityPCSGuard.holds formulas solver) ambient caller.checked.native.machine.heap)
+          (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true) rho checked ∧
+        EnumerationCorrectness.Satisfies (SourcePruningEnumerationNativeLanguage.handles
+          (SourceEqualityPCSGuard.holds formulas solver) ambient caller.checked.native.machine.heap)
+          (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true) rho core) ∧
+      ∀ (readFuel : Nat) (actualPartial : SourcePruningTemplates.PartialTerm) (after : Core),
+        Success (SourcePruningEnumerationPartialOutput.rootPartial
+          caller.checked.native.machine.heap readFuel) core actualPartial after →
+        SourcePruningPartialMatch.Completes rho actualPartial (rho 0)

@@ -1,0 +1,53 @@
+ := by
+  dsimp only
+  obtain ⟨fields, cache, rootValue, sourceHeap, built, allocation, context, facts, available, closed,
+      handle, encoded, decoded, previousOutputs⟩ :=
+    SourceSynthesisCurrentRealDoneAssignmentNoneBuckets.accepted_real_done_assignment
+      lib query signed expression accepted workFuel depth formulas solver ambient metadata emptyPending
+      holeKey fits admits graph templates checkEmpty order
+  refine ⟨fields, cache, rootValue, sourceHeap, built, allocation, context, facts, available, closed,
+    handle, encoded, decoded, ?_⟩
+  intro output member
+  obtain ⟨resources, noMetadata, defaultDone, normal, unionNormal, growth, noneBuckets, _models⟩ :=
+    previousOutputs output member
+  refine ⟨resources, noMetadata, defaultDone, normal, unionNormal, growth, noneBuckets, ?_⟩
+  intro key entry body muDepth ordinary stored onlyU renderFuel uv after term pending observed checked
+  obtain ⟨inventory, final, nextMetadata, _post, _querySame, packet, _metadataShape,
+      _outputFits, _outputHeap⟩ := resources
+  have done : SourcePruningEnumerationRestart.decision none (fun _ _ => none)
+      nextMetadata output.cache = some .done := by
+    change some (EnumerationPureSelection.next (fun _ => none) output.cache) = some .done
+    rw [defaultDone]
+  obtain ⟨assignment, current, rendered, frame, afterCurrent⟩ :=
+    SourceSynthesisCurrentDoneRendering.rendered_current_assignment
+      formulas solver ambient lib query signed expression accepted rootValue sourceHeap built
+      key entry body muDepth ordinary stored (fun _ _ => none) nextMetadata
+      inventory output.caller final output.cache packet done unionNormal growth onlyU noneBuckets
+      renderFuel uv after term pending observed checked
+  have partials (state : EnumerationState.State Symbol Guard)
+      (total : UnionFind.Total state.representatives)
+      (satisfied : EnumerationCorrectness.Satisfies
+        (SourcePruningEnumerationNativeLanguage.handles
+          (SourceEqualityPCSGuard.holds formulas solver) ambient
+          output.caller.checked.native.machine.heap)
+        (fun guard accepted => SourceEqualityPCSGuard.holds formulas solver guard accepted = true)
+        assignment state) :
+      ∀ (readFuel : Nat) (actualPartial : SourcePruningTemplates.PartialTerm)
+        (readAfter : EnumerationState.State Symbol Guard),
+        EnumerationCorrectness.Success (SourcePruningEnumerationPartialOutput.rootPartial
+          output.caller.checked.native.machine.heap readFuel) state actualPartial readAfter →
+        SourcePruningPartialMatch.Completes assignment actualPartial (assignment 0) := by
+    have equations : SourcePruningPartialRenderingSemantics.StoredEquations assignment state := by
+      refine ⟨satisfied.1.1, ?_⟩
+      intro slot fragment present
+      simpa only [EnumerationCorrectness.heap, present, Option.getD_some, EnumerationCorrectness.slot,
+        Fragments.slotSatisfies] using satisfied.1.2 slot
+    intro readFuel actualPartial readAfter actual
+    exact SourcePruningEnumerationPartialOutput.rootPartial_completes_of_stored_equations
+      output.caller.checked.native.machine.heap assignment readFuel state readAfter actualPartial
+      total equations actual
+  exact ⟨assignment, current, rendered, frame, afterCurrent,
+    partials output.cache.core packet.safe.1.total current,
+    partials after (frame.total packet.safe.1.total) afterCurrent⟩
+
+end MicroCFTA.SourceSynthesisCurrentRealDoneRendering

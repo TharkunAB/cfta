@@ -1,0 +1,169 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-full-none-domain-origin-eager-parked-check/source/MicroCFTA/SourceCurrentAllocatedNativeSourceIssuedDomainEnterOrigin.lean:447:6: error: Type mismatch: After simplification, term
+  domainSame
+ has type
+  @Eq (Interned DomainKey) request.domain
+    (SourceRecursiveIntersectionEnvironment.enter beforeEntry.native.machine.domains
+        IntersectionEmptyDomain.emptyDomain.key left right first second).fst
+but is expected to have type
+  @Eq (Interned DomainKey) request.domain
+    (SourceRecursiveIntersectionEnvironment.enter beforeEntry.native.machine.domains IntersectionEmptyDomain.emptyKey
+        left right first second).fst
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-full-none-domain-origin-eager-parked-check/source/MicroCFTA/SourceCurrentAllocatedNativeSourceIssuedDomainEnterOrigin.lean:448:6: error: Type mismatch: After simplification, term
+  entryActual
+ has type
+  @Trace (Value (SourceObservations.Label FullSyntax.Formula) Guard) width inst✝¹ inst✝ 1
+    (Control.code (Code.enter IntersectionEmptyDomain.emptyDomain left right first second next)) beforeEntry
+    (Control.code
+      (next
+        (SourceRecursiveIntersectionEnvironment.enter beforeEntry.native.machine.domains
+            IntersectionEmptyDomain.emptyDomain.key left right first second).fst))
+    {
+      native :=
+        advance beforeEntry.native
+          { heap := beforeEntry.native.machine.heap,
+            domains :=
+              (SourceRecursiveIntersectionEnvironment.enter beforeEntry.native.machine.domains
+                  IntersectionEmptyDomain.emptyDomain.key left right first second).snd },
+      operations := beforeEntry.operations }
+but is expected to have type
+  @Trace (Value Symbol Guard) width inst✝¹ inst✝ 1
+    (Control.code (Code.enter IntersectionEmptyDomain.emptyDomain left right first second next)) beforeEntry
+    (Control.code
+      (next
+        (SourceRecursiveIntersectionEnvironment.enter beforeEntry.native.machine.domains
+            IntersectionEmptyDomain.emptyKey left right first second).fst))
+    {
+      native :=
+        advance beforeEntry.native
+          { heap := beforeEntry.native.machine.heap,
+            domains :=
+              (SourceRecursiveIntersectionEnvironment.enter beforeEntry.native.machine.domains
+                  IntersectionEmptyDomain.emptyKey left right first second).snd },
+      operations := beforeEntry.operations }
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-full-none-domain-origin-eager-parked-check/source/MicroCFTA/SourceCurrentAllocatedNativeSourceIssuedDomainEnterOrigin.lean:449:6: error: Type mismatch: After simplification, term
+  suffixActual
+ has type
+  @Trace (Value (SourceObservations.Label FullSyntax.Formula) Guard) width inst✝¹ inst✝ (queryUsed - (entryUsed + 1))
+    (Control.code
+      (next
+        (SourceRecursiveIntersectionEnvironment.enter beforeEntry.native.machine.domains
+            IntersectionEmptyDomain.emptyDomain.key left right first second).fst))
+    {
+      native :=
+        advance beforeEntry.native
+          { heap := beforeEntry.native.machine.heap,
+            domains :=
+              (SourceRecursiveIntersectionEnvironment.enter beforeEntry.native.machine.domains
+                  IntersectionEmptyDomain.emptyDomain.key left right first second).snd },
+      operations := beforeEntry.operations }
+    (Control.code (Code.node request resume)) queryBefore
+but is expected to have type
+  @Trace (Value Symbol Guard) width inst✝¹ inst✝ (queryUsed - (entryUsed + 1))
+    (Control.code
+      (next
+        (SourceRecursiveIntersectionEnvironment.enter beforeEntry.native.machine.domains
+            IntersectionEmptyDomain.emptyKey left right first second).fst))
+    {
+      native :=
+        advance beforeEntry.native
+          { heap := beforeEntry.native.machine.heap,
+            domains :=
+              (SourceRecursiveIntersectionEnvironment.enter beforeEntry.native.machine.domains
+                  IntersectionEmptyDomain.emptyKey left right first second).snd },
+      operations := beforeEntry.operations }
+    (Control.code (Code.node request resume)) queryBefore
+MicroCFTA.SourceCurrentAllocatedNativeSourceIssuedDomainEnterOrigin.stored_dispatch_issued_domain_enter_origin
+  {width : Nat} [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (cached :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (valid : MicroCFTA.SourcePruningEnumerationNativeBranchCompletion.CacheValid caller cached)
+  (source target sourceHandle targetHandle : Nat) (sourceScs targetScs : List MicroCFTA.EnumerationState.Suspended)
+  (sourceStored :
+    cached.core.values[source]? =
+      some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some sourceHandle) sourceScs))
+  (targetStored :
+    cached.core.values[target]? =
+      some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some targetHandle) targetScs))
+  (rootRequest :
+    MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (rootEmpty : rootRequest.domain = MicroCFTA.IntersectionEmptyDomain.emptyDomain)
+  (sourceDecoded :
+    MicroCFTA.SourcePruningEnumerationNodes.lookupNode caller.checked.native.machine.heap sourceHandle =
+      some rootRequest.left)
+  (targetDecoded :
+    MicroCFTA.SourcePruningEnumerationNodes.lookupNode caller.checked.native.machine.heap targetHandle =
+      some rootRequest.right)
+  (physical : MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid caller.checked.native) (queryUsed : Nat)
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (resume :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      MicroCFTA.SourceRecursiveIntersectionCode.Code MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (queryBefore : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (issued :
+    MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace queryUsed
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+        (MicroCFTA.SourceRecursiveIntersectionCode.Code.node rootRequest
+          MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+      caller.checked
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+        (MicroCFTA.SourceRecursiveIntersectionCode.Code.node request resume))
+      queryBefore)
+  (uid patternId : Nat)
+  (keyShape :
+    request.domain.key =
+      MicroCFTA.SourceRecursiveIntersectionDomain.extend MicroCFTA.IntersectionEmptyDomain.emptyKey [uid]
+        (MicroCFTA.SourceRecursiveIntersectionControl.pair uid patternId)) :
+  ∃ entryUsed beforeEntry left right first second next,
+    have entered :=
+      MicroCFTA.SourceRecursiveIntersectionEnvironment.enter beforeEntry.native.machine.domains
+        MicroCFTA.IntersectionEmptyDomain.emptyKey left right first second;
+    have started :=
+      {
+        native :=
+          MicroCFTA.SourceRecursiveIntersectionThunks.advance beforeEntry.native
+            (have __src := beforeEntry.native.machine;
+            { heap := __src.heap, domains := entered.snd }),
+        operations := beforeEntry.operations };
+    entryUsed + 1 ≤ queryUsed ∧
+      MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace entryUsed
+          (MicroCFTA.SourceEqualityNativeDemand.Control.code
+            (MicroCFTA.SourceRecursiveIntersectionCode.Code.node rootRequest
+              MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+          caller.checked
+          (MicroCFTA.SourceEqualityNativeDemand.Control.code
+            (MicroCFTA.SourceRecursiveIntersectionCode.Code.enter MicroCFTA.IntersectionEmptyDomain.emptyDomain left
+              right first second next))
+          beforeEntry ∧
+        request.domain = entered.fst ∧
+          MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace 1
+              (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                (MicroCFTA.SourceRecursiveIntersectionCode.Code.enter MicroCFTA.IntersectionEmptyDomain.emptyDomain left
+                  right first second next))
+              beforeEntry (MicroCFTA.SourceEqualityNativeDemand.Control.code (next entered.fst)) started ∧
+            MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace (queryUsed - (entryUsed + 1))
+                (MicroCFTA.SourceEqualityNativeDemand.Control.code (next entered.fst)) started
+                (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                  (MicroCFTA.SourceRecursiveIntersectionCode.Code.node request resume))
+                queryBefore ∧
+              left.free = [] ∧
+                right.free = [] ∧
+                  MicroCFTA.SourceRecursiveIntersectionControl.identity left = some first ∧
+                    MicroCFTA.SourceRecursiveIntersectionControl.identity right = some second ∧
+                      MicroCFTA.SourceRecursiveIntersectionControl.pair first second =
+                        MicroCFTA.SourceRecursiveIntersectionControl.pair uid patternId
+'MicroCFTA.SourceCurrentAllocatedNativeSourceIssuedDomainEnterOrigin.stored_dispatch_issued_domain_enter_origin' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

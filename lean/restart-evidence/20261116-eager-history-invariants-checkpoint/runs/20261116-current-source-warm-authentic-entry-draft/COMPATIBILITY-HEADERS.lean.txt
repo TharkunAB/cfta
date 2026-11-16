@@ -1,0 +1,21 @@
+theorem authentic_entry_at_initial
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (rootRequest : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
+    (operations : SourceEqualityConstraintMemoAllocation.State) (wholeCount : Nat)
+    (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (pattern : Value Symbol Guard) (patternId : Nat) (domain : Interned DomainKey) :
+    AuthenticEntryAt rootRequest (⟨initial width machine, operations⟩ : Checked width)
+      wholeCount entry body depth ordinary pattern patternId domain =
+    SourceCurrentAllocatedNativeGeneralCMHistory.AuthenticEntry (width := width)
+      rootRequest machine operations wholeCount entry body depth ordinary pattern patternId domain
+
+theorem mixed_qualified_at_initial
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (rootRequest : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
+    (operations : SourceEqualityConstraintMemoAllocation.State) (wholeCount : Nat)
+    (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (request : NodeRequest Symbol Guard) :
+    MixedQualifiedAt rootRequest (⟨initial width machine, operations⟩ : Checked width)
+      wholeCount entry body depth ordinary request =
+    SourceCurrentAllocatedNativeGeneralCMHistory.MixedQualified (width := width)
+      rootRequest machine operations wholeCount entry body depth ordinary request

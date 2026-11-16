@@ -1,0 +1,9 @@
+theorem child_none_buckets
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (r n p h k : Nat) (scs : List Suspended) (incoming : Node)
+    (caller : Caller width) (before : Cached) (queries : Queries)
+    (initial : NoneBucketsEmpty before.core) :
+    (∀ state ∈ childCores (ChildDispatch.run checkEmpty r n p h k scs incoming caller before queries).1,
+      NoneBucketsEmpty state) ∧
+    ∀ after, (ChildDispatch.run checkEmpty r n p h k scs incoming caller before queries).2 = some after →
+      NoneBucketsEmpty after.core

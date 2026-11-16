@@ -1,0 +1,88 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-full-none-universe-match-check/source/MicroCFTA/SourcePruningEnumerationSharedEagerNoneBucketsWhole.lean:105:10: error: Type mismatch: After simplification, term
+  have this :=
+    ⟨list_empty ReceiptNone,
+      ⟨list_empty fun output => NoneBucketsEmpty output.cache.core,
+        list_single ReceiptNone (SelectedEdge.Result.stopped completed observation candidate) good⟩⟩;
+  this
+ has type
+  And (ReceiptsNone [])
+    (OutputsNone [] ∧
+      ∀ (retained : Receipt),
+        retained ∈ [SelectedEdge.Result.stopped completed observation candidate] → ReceiptNone retained)
+but is expected to have type
+  And (ReceiptsNone [])
+    (OutputsNone [] ∧
+      ∀ (retained : Receipt),
+        retained ∈ (some (SelectedEdge.Result.stopped completed observation candidate)).toList → ReceiptNone retained)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-full-none-universe-match-check/source/MicroCFTA/SourcePruningEnumerationSharedEagerNoneBucketsWhole.lean:263:10: error: Type mismatch: After simplification, term
+  have this :=
+    ⟨list_empty ReceiptNone,
+      ⟨list_empty fun output => NoneBucketsEmpty output.cache.core,
+        list_single ReceiptNone (SelectedEdge.Result.stopped completed observation candidate) good⟩⟩;
+  this
+ has type
+  And (ReceiptsNone [])
+    (OutputsNone [] ∧
+      ∀ (retained : Receipt),
+        retained ∈ [SelectedEdge.Result.stopped completed observation candidate] → ReceiptNone retained)
+but is expected to have type
+  And (ReceiptsNone [])
+    (OutputsNone [] ∧
+      ∀ (retained : Receipt),
+        retained ∈ (some (SelectedEdge.Result.stopped completed observation candidate)).toList → ReceiptNone retained)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-full-none-universe-match-check/source/MicroCFTA/SourcePruningEnumerationSharedEagerNoneBucketsWhole.lean:349:83: error: Application type mismatch: The argument
+  old
+has type
+  state ∈ List.flatMap receiptCores processed ++ receiptCores receipt
+but is expected to have type
+  ?m.238 ∈ List.flatMap ?m.237 ?m.239
+in the application
+  List.mem_flatMap.mp old
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-full-none-universe-match-check/source/MicroCFTA/SourcePruningEnumerationSharedEagerNoneBucketsWhole.lean:351:40: error: Application type mismatch: The argument
+  stopped
+has type
+  state ∈ failureCores reason
+but is expected to have type
+  ?m.247 ∈ ?m.248 ++ ?m.249
+in the application
+  List.mem_append.mp stopped
+MicroCFTA.SourcePruningEnumerationSharedEagerNoneBuckets.runEager_real_none_buckets_at_any_budget {Typing Key : Type}
+  {width : Nat} [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (holeKey : Typing → Nat → Key) (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits :
+    Key →
+      MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        Bool)
+  (graph :
+    MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol)) (checkEmpty : Bool)
+  (edgesOf :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      List
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (stop : Option (MicroCFTA.SourcePruningRecordTypes.Metadata Typing → Nat → Bool))
+  (order : MicroCFTA.SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat) (workFuel recursiveFuel : Nat)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width) (queries : MicroCFTA.SourceEndpointMemo.Memos)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (initial : MicroCFTA.SourcePruningEnumerationSharedEagerNoneBuckets.NoneBucketsEmpty before.core) :
+  MicroCFTA.SourcePruningEnumerationSharedEagerNoneBuckets.Preserved
+    (MicroCFTA.SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.runEagerWithNarrow
+      (MicroCFTA.SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order
+      workFuel recursiveFuel metadata caller queries before)
+'MicroCFTA.SourcePruningEnumerationSharedEagerNoneBuckets.runEager_real_none_buckets_at_any_budget' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

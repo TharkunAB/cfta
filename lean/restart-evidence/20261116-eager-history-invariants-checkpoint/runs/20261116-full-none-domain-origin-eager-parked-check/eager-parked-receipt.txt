@@ -1,0 +1,105 @@
+MicroCFTA.SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.parked_singleton_removed_bucket_receipt
+  {Typing Key : Type} {width : Nat} [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (holeKey : Typing → Nat → Key) (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits :
+    Key →
+      MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        Bool)
+  (graph :
+    MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol)) (checkEmpty : Bool)
+  (edgesOf :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      List
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (stop : Option (MicroCFTA.SourcePruningRecordTypes.Metadata Typing → Nat → Bool))
+  (order : MicroCFTA.SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat) (workFuel depth uv : Nat)
+  (metadata updated : MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width) (queries : MicroCFTA.SourceEndpointMemo.Memos)
+  (before parked :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (checked core :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (next : Option MicroCFTA.EnumerationState.Next) (total : MicroCFTA.UnionFind.Total before.core.representatives)
+  (actual :
+    MicroCFTA.SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata
+        workFuel workFuel workFuel workFuel workFuel workFuel uv caller before queries =
+      MicroCFTA.SourcePruningEnumerationSelectedStep.Result.parked checked (some parked)
+        (some [Except.ok ((updated, next), core)])) :
+  ∃ handle bucket readAfter value root size resolved,
+    (MicroCFTA.EnumerationState.getValue workFuel uv before.core).run =
+        [Except.ok (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle) bucket, readAfter)] ∧
+      before.core.values[root]? = some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle) bucket) ∧
+        MicroCFTA.UnionFind.Reaches before.core.representatives uv root size ∧
+          MicroCFTA.EnumerationCompressionFrame.Frame before.core readAfter ∧
+            MicroCFTA.SourcePruningEnumerationNodes.lookupNode caller.checked.native.machine.heap handle = some value ∧
+              MicroCFTA.MergedOrdinaryHeight.recursiveBoundary value = true ∧
+                (MicroCFTA.SourcePruningEnumerationRecursion.checkRepeated caller.checked.native.machine.heap workFuel
+                        uv handle bucket readAfter).run =
+                    [Except.ok (true, checked)] ∧
+                  MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationState.representative workFuel uv)
+                      readAfter root resolved ∧
+                    MicroCFTA.EnumerationCompressionFrame.Frame readAfter resolved ∧
+                      MicroCFTA.EnumerationState.recursionKey handle bucket ∈ before.core.recursionAncestry root ∧
+                        resolved.values[root]? =
+                            some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle) bucket) ∧
+                          MicroCFTA.EnumerationCorrectness.Success
+                              (MicroCFTA.EnumerationState.setValue root
+                                (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle) []))
+                              resolved () checked ∧
+                            checked =
+                                { counter := resolved.counter, representatives := resolved.representatives,
+                                  values :=
+                                    resolved.values.set root
+                                      (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle) []),
+                                  obligations := resolved.obligations, recursionAncestry := resolved.recursionAncestry,
+                                  expansionAncestry := resolved.expansionAncestry } ∧
+                              parked.core = checked ∧
+                                MicroCFTA.SourcePruningEnumerationParkedRestart.adapt caller.checked.native.machine.heap
+                                      workFuel uv handle bucket before checked =
+                                    some parked ∧
+                                  (MicroCFTA.SourcePruningEnumerationRestart.run stop order metadata parked
+                                          checked).run =
+                                      [Except.ok ((updated, next), core)] ∧
+                                    updated = metadata ∧
+                                      core = checked ∧
+                                        next =
+                                            MicroCFTA.SourcePruningEnumerationRestart.decision stop order metadata
+                                              parked ∧
+                                          MicroCFTA.SourcePruningEnumerationRestart.decision stop order metadata
+                                                parked ≠
+                                              some MicroCFTA.EnumerationState.Next.stuck ∧
+                                            (∀ (occurrence : Nat) (sc : MicroCFTA.EnumerationState.Suspended),
+                                                bucket[occurrence]? = some sc →
+                                                  ∀ (other : Nat),
+                                                    MicroCFTA.UnionFind.SameClass checked.representatives sc.var other ↔
+                                                      MicroCFTA.UnionFind.SameClass before.core.representatives sc.var
+                                                        other) ∧
+                                              MicroCFTA.SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow
+                                                  (MicroCFTA.SourcePruningEnumerationSharedEagerChildren.eagerChild
+                                                    checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
+                                                  (MicroCFTA.SourcePruningOuterNarrow.narrow holeKey fits admits) graph
+                                                  templates checkEmpty edgesOf stop order workFuel (depth + 1) metadata
+                                                  caller queries before
+                                                  (some (MicroCFTA.EnumerationState.Next.expand uv)) =
+                                                MicroCFTA.SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow
+                                                  (MicroCFTA.SourcePruningEnumerationSharedEagerChildren.eagerChild
+                                                    checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
+                                                  (MicroCFTA.SourcePruningOuterNarrow.narrow holeKey fits admits) graph
+                                                  templates checkEmpty edgesOf stop order workFuel depth updated caller
+                                                  queries (MicroCFTA.EnumerationExpandableIndex.frame core parked) next
+'MicroCFTA.SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.parked_singleton_removed_bucket_receipt' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

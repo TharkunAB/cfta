@@ -1,0 +1,41 @@
+ := by
+  dsimp only
+  let bits := SourceSynthesisCurrentProgramEagerEnumerationWidth.enumBits lib query signed depth
+  obtain ⟨fields, cache, rootValue, sourceHeap, built, allocation, context, facts, available, closed,
+      handle, encoded, decoded, previousOutputs⟩ :=
+    SourceSynthesisCurrentRealDoneAssignment.accepted_real_done_assignment
+      lib query signed expression accepted workFuel depth formulas solver ambient metadata emptyPending
+      holeKey fits admits graph templates checkEmpty order
+  let startup : Cached :=
+    ⟨EnumerationState.initial handle,
+      fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary rootValue else false,
+      fun _ => none⟩
+  let initialCaller := SourceCurrentAllocatedPartialInitialization.caller (bits + 2) cache sourceHeap
+  let outcome := SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.runEagerWithNarrow
+    (SourcePruningOuterNarrow.narrow holeKey fits admits)
+    graph templates checkEmpty InternedEdgeResidency.nodeEdges none order workFuel depth metadata
+    initialCaller SourceCurrentAllocatedPartialInitialization.globals.query startup
+  have preserved := SourcePruningEnumerationSharedEagerNoneBuckets.runEager_real_none_buckets_at_any_budget
+    holeKey fits admits graph templates checkEmpty InternedEdgeResidency.nodeEdges none order
+    workFuel depth metadata initialCaller SourceCurrentAllocatedPartialInitialization.globals.query startup
+    (SourcePruningEnumerationSharedEagerNoneCachedWriters.initial_none_buckets handle)
+  have outputsNone : ∀ output ∈ emitted outcome,
+      SourcePruningEnumerationSharedEagerNoneBuckets.NoneBucketsEmpty output.cache.core := by
+    change SourcePruningEnumerationSharedEagerNoneBuckets.Preserved outcome at preserved
+    cases observed : outcome with
+    | complete outputs reached saved =>
+        rw [observed] at preserved
+        exact preserved
+    | stopped outputs reason endpoint =>
+        rw [observed] at preserved
+        exact preserved.1
+  refine ⟨fields, cache, rootValue, sourceHeap, built, allocation, context, facts, available, closed,
+    handle, encoded, decoded, ?_⟩
+  intro output member
+  obtain ⟨resources, noMetadata, done, normal, unionNormal, growth, models⟩ := previousOutputs output member
+  have currentNone := outputsNone output member
+  refine ⟨resources, noMetadata, done, normal, unionNormal, growth, currentNone, ?_⟩
+  intro key entry body muDepth ordinary stored onlyU
+  exact models key entry body muDepth ordinary stored onlyU currentNone
+
+end MicroCFTA.SourceSynthesisCurrentRealDoneAssignmentNoneBuckets

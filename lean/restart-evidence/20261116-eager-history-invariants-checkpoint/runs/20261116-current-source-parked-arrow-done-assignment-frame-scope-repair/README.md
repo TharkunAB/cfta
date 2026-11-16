@@ -1,0 +1,17 @@
+# One source parked arrow bucket and current done native domains
+
+Frozen: 2026-11-16 08:28 CET. Status: UNCOMPILED. Complete header4c5e was frozen before proof. Raw2996a176 contains the actual bounded semantic proof. Root alone checks and publishes it.
+
+The local source step retains original firstOrderRaw acceptance, literal cold build and FULL stored original U. It retains the actual past caller, memos, inventory, metadata, cache, Packet, Fits, annotation heap, source growth and UnionNormal. It retains past only-U and None-bucket invariants. The actual selected prefix uses real OuterNarrow through runPrefix, the original supplied workFuel in all six primitive positions, and a genuine parked singleton whose actual next is done. Arrow path classification is explicit. No future Packet, model, desired Suspended.Holds or history is an input.
+
+The checked eager parked adapter supplies the actual clear, exact source-native readback, unchanged caller, actual frame and literal eager restart. Selected readiness and unique roots align the actual raw slot and handle with the input slot. The same actual child policy then returns the done singleton at the SAME remaining depth and original workFuel. There is no shallow/legacy executor substitution.
+
+The original-budget continuing-prefix theorem derives the returned Packet from past resources and the actual observed singleton. The concrete clear preserves pending native handles. It therefore derives after-only-U and after-None facts from their PAST versions. The native caller is unchanged. Current done membership follows from DonePendingTypes at that same caller/cache. No future native-domain membership is supplied.
+
+SharedArrowBucketFragmentWitness chooses its own rho from the SAME raw arrow bucket. It supplies old UF aliases, all old stored fragment equations, every removed suspended occurrence and source TypeIn choices at every old pending slot. The proof transfers equations across the actual compression frames and clears. DonePendingTypes admits those SAME finite Type choices in each actual done domain. The checked snapshot model follows by cases on its actual slots. clear_satisfies then restores the removed bucket under rho, and the compression frame restores the old model.
+
+The SAME rho retains old, resolved, checked and returned-core equations and aliases. It satisfies the actual native domains and all stored slot restrictions at the old, checked and returned cores. Every original raw occurrence is retained; no deduplication or parent-literal target replacement is used. Every successful actual rootPartial observation at its supplied readFuel completes rho 0. No sufficient rendering bound or output existence is asserted.
+
+Retained residuals are explicit. The conclusion tests guardsHold under this SAME rho and proves full Satisfies before/after IF that condition holds. It does not reuse residual checks performed under default var1 or a different assignment. It does not assert that this rho passes those residuals.
+
+This is ONE parked-arrow bucket followed immediately by done. It does not establish upstream accepted-source reachability, arbitrary path classification, joint compatibility with other removed buckets or an accepted original Program root completion. Those remain part of the full objective. No original top target is replaced. No Source, Haskell, compiler, Git, board, root document, tmp, warning or heartbeat change is made.

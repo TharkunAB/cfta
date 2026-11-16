@@ -1,0 +1,129 @@
+
+private theorem resume_none
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List Edge)
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (workFuel recursiveFuel : Nat) :
+    ∀ (metadata : Metadata Typing) (caller : Caller width) (queries : Queries) (before : Cached) (decision : Option Next),
+      NoneBucketsEmpty before.core →
+      Preserved (SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow
+        (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
+        (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order
+        workFuel recursiveFuel metadata caller queries before decision) := by
+  induction recursiveFuel with
+  | zero =>
+      intro metadata caller queries before decision initial
+      cases decision with
+      | none => exact hook_single (some metadata) before caller queries initial
+      | some decision =>
+          cases decision with
+          | done => exact hook_single none before caller queries initial
+          | stuck => exact hook_empty caller queries
+          | expand uv => exact hook_stopped _ _ (one_state before.core initial)
+  | succ fuel ih =>
+      intro metadata caller queries before decision initial
+      cases decision with
+      | none => exact hook_single (some metadata) before caller queries initial
+      | some decision =>
+          cases decision with
+          | done => exact hook_single none before caller queries initial
+          | stuck => exact hook_empty caller queries
+          | expand uv =>
+              rw [SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow]
+              dsimp only
+              have prefixGood := SourcePruningEnumerationRealPrefixNoneBuckets.real_prefix_none_buckets
+                holeKey fits admits graph templates stop order metadata
+                workFuel workFuel workFuel workFuel workFuel workFuel uv caller before queries initial
+              dsimp only [SourcePruningEnumerationSelectedStep.runPrefix] at prefixGood
+              generalize prefixObserved : SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
+                (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates stop order metadata
+                workFuel workFuel workFuel workFuel workFuel workFuel uv caller before queries = actual at prefixGood ⊢
+              cases actual with
+              | stopped read checked => exact hook_stopped _ _ prefixGood
+              | parked checked candidate raw =>
+                  cases candidate with
+                  | none => exact hook_stopped _ _ prefixGood
+                  | some parked =>
+                      cases raw with
+                      | none => exact hook_stopped _ _ prefixGood
+                      | some rows =>
+                          cases rows with
+                          | nil => exact hook_empty caller queries
+                          | cons row tail =>
+                              cases row with
+                              | error fault => exact hook_stopped _ _ prefixGood
+                              | ok rowValue =>
+                                  obtain ⟨⟨updated, next⟩, core⟩ := rowValue
+                                  cases tail with
+                                  | nil =>
+                                      apply ih updated caller queries (EnumerationExpandableIndex.frame core parked) next
+                                      exact prefixGood core (by simp [selectedCores, rawCores])
+                                  | cons second remaining => exact hook_stopped _ _ prefixGood
+              | narrowed checked prepared reached saved action candidate right ordinary =>
+                  rcases action with _ | (_ | ⟨actionHead, actionTail⟩)
+                  all_goals first | exact hook_empty reached saved | skip
+                  all_goals
+                    cases right with
+                    | none => exact hook_stopped _ _ prefixGood
+                    | some rows =>
+                        cases rows with
+                        | nil => exact hook_stopped _ _ prefixGood
+                        | cons row tail =>
+                            cases row with
+                            | error fault => exact hook_stopped _ _ prefixGood
+                            | ok rowValue =>
+                                obtain ⟨⟨pruned, updated⟩, core⟩ := rowValue
+                                cases pruned with
+                                | true =>
+                                    cases tail with
+                                    | nil => exact hook_empty reached saved
+                                    | cons second remaining => exact hook_stopped _ _ prefixGood
+                                | false =>
+                                    cases tail with
+                                    | cons second remaining => exact hook_stopped _ _ prefixGood
+                                    | nil =>
+                                        cases candidate with
+                                        | none => exact hook_stopped _ _ prefixGood
+                                        | some after =>
+                                            cases ordinary with
+                                            | some other => exact hook_stopped _ _ prefixGood
+                                            | none =>
+                                                have afterGood : NoneBucketsEmpty after.core := prefixGood after.core (by simp [selectedCores])
+                                                have good := prepared_none holeKey fits admits graph templates checkEmpty edgesOf
+                                                  stop order workFuel fuel updated uv reached saved after afterGood ih
+                                                dsimp only at good ⊢
+                                                generalize dispatched : SourcePruningEnumerationSharedPreparedChildPolicy.runWithChild
+                                                  (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
+                                                  (SourcePruningEnumerationSharedPreparedRecursive.continueWith
+                                                    (SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow
+                                                      (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
+                                                      (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order workFuel fuel)
+                                                    graph templates stop order workFuel updated uv)
+                                                  checkEmpty workFuel workFuel workFuel workFuel workFuel workFuel workFuel uv edgesOf reached after saved = executed at good ⊢
+                                                obtain ⟨preparation, folded⟩ := executed
+                                                dsimp only at good ⊢
+                                                cases folded with
+                                                | none => exact hook_stopped _ _ good.1
+                                                | some folded => exact whole_finish uv folded (good.2 folded rfl)
+
+theorem runEager_real_none_buckets_at_any_budget
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List Edge)
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (workFuel recursiveFuel : Nat) (metadata : Metadata Typing)
+    (caller : Caller width) (queries : Queries) (before : Cached)
+    (initial : NoneBucketsEmpty before.core) :
+    Preserved (SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.runEagerWithNarrow
+      (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order
+      workFuel recursiveFuel metadata caller queries before)
+ := by
+  unfold SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.runEagerWithNarrow
+    SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.runWithNarrow
+  exact resume_none holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel recursiveFuel
+    metadata caller queries before (SourcePruningEnumerationRestart.decision stop order metadata before) initial
+
+end MicroCFTA.SourcePruningEnumerationSharedEagerNoneBuckets
