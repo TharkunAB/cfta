@@ -21578,3 +21578,90 @@ theorem runEager_real_emitted_complete_resources_at_any_budget
 
 end RealWorkerDepthAssembly
 end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+open Language Fragments EnumerationState EnumerationCorrectness EnumerationSchedule
+open EnumerationDependencies EnumerationReferences InternedConstructorTemplates
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+variable {Typing : Type} {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+omit [DecidableEq Symbol] [DecidableEq Node] in
+private theorem actual_tuple_finalize_pending_target_avoids_held
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (original : Caller (bits + 2)) (metadata : Metadata Typing)
+    (before : Cached) (inputs : List (Node × List Suspended)) (fragments : List Fragment)
+    (reached : Caller (bits + 2)) (queries : Queries) (middle : Cached)
+    (tuple : TupleInputs formulas solver original metadata before inputs fragments reached queries middle)
+    (safe : Safe before.core) (held heldHandle : Nat)
+    (isolated : EnumerationDischargeHistory.IsolatedPending held heldHandle before.core)
+    (inputAvoids : ∀ child bucket, (child, bucket) ∈ inputs →
+      Avoids before.core.representatives held bucket)
+    (symbol : Symbol) (fuel captured : Nat) (finished : Cached)
+    (actual : SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap
+      fuel captured (.node symbol fragments) middle = some finished) :
+    ∀ (target : Nat) (node : Option Nat) (bucket : List Suspended),
+      before.core.values[target]? = some (.unenumerated node bucket) →
+      ∀ (representative : Nat) (fragment : Fragment),
+        UnionFind.SameClass finished.core.representatives target representative →
+        finished.core.values[representative]? = some (.enumerated fragment) →
+        FragmentAvoid finished.core.representatives held fragment
+ := by
+  obtain ⟨_inventory, _memos, _post, _query, current, growth, origin,
+      protectsExpanded, _protectsRoots, _referenceEffects, _bounds, returnedFragments⟩ := tuple
+  have heldInside : held < before.core.counter := by
+    rw [safe.1.aligned]
+    exact (List.getElem?_eq_some_iff.mp isolated.stored).1
+  have producedAvoid : FragmentAvoid middle.core.representatives held (.node symbol fragments) := by
+    intro hole occurs
+    cases occurs with
+    | child _ _ child _ member below =>
+      exact (returnedFragments child member).2 held heldInside isolated.root inputAvoids hole below
+  have core := EnumerationDischargeHistory.finalize_core_of_run
+    reached.checked.native.machine.heap fuel captured (.node symbol fragments) middle finished actual
+  intro target node bucket stored representative fragment aliases expanded
+  have targetRoot : IsRoot before.core.representatives target :=
+    (safe.2 target (.unenumerated node bucket) stored).mp (by intro impossible; cases impossible)
+  have targetInside : target < before.core.counter := by
+    rw [safe.1.aligned]
+    exact (List.getElem?_eq_some_iff.mp stored).1
+  have initiallyPending : PendingFragment before.core (.hole target) :=
+    pendingFragment_hole before.core target target targetRoot.choose node bucket targetRoot.choose_spec stored
+  have stillPending : PendingFragment middle.core (.hole target) :=
+    pendingFragment_preserved before.core middle.core safe current.safe growth (.hole target)
+      targetInside initiallyPending origin protectsExpanded
+  obtain ⟨pendingRoot, pendingSize, pendingNode, pendingBucket, pendingPath, pendingStored⟩ :=
+    stillPending target (.hole target)
+  have middleAlias : UnionFind.SameClass middle.core.representatives target representative := by
+    simpa only [core] using aliases
+  by_cases atCaptured : representative = captured
+  · subst representative
+    have inside : captured < middle.core.values.length := by
+      have bound := (List.getElem?_eq_some_iff.mp expanded).1
+      simpa only [core, List.length_set] using bound
+    have written := expanded
+    rw [core, List.getElem?_set_self inside] at written
+    have shape : Fragments.Fragment.node symbol fragments = fragment :=
+      UVarValue.enumerated.inj (Option.some.inj written)
+    rw [← shape]
+    simpa only [core] using producedAvoid
+  · have middleExpanded : middle.core.values[representative]? = some (.enumerated fragment) := by
+      rw [core] at expanded
+      simpa only [List.getElem?_set_ne (Ne.symm atCaptured)] using expanded
+    have expandedRoot : IsRoot middle.core.representatives representative :=
+      (current.safe.2 representative (.enumerated fragment) middleExpanded).mp
+        (by intro impossible; cases impossible)
+    have same : pendingRoot = representative :=
+      (UnionFind.sameClass_iff_roots pendingPath expandedRoot.choose_spec).mp middleAlias
+    rw [same] at pendingStored
+    cases Option.some.inj (middleExpanded.symm.trans pendingStored)
+
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
