@@ -1,3 +1,35 @@
+## 2026-11-16 12:14 CET — residual laws pass all public gates
+
+The two new laws are SourcePruningEnumerationFinalize.run_after_residual and EnumerationDischargeHistory.HeldFragmentHistory.after_residual. Residual recording commutes with the actual finalizer at the SAME heap and supplied fuel. It also preserves the structural HeldFragmentHistory receipt. These laws do not assert residual guard truth.
+
+All five public gates pass: 6171 Source files, 5171 direct Audit imports, 516 explicit reports (513 standard and 3 axiom-free), 111 independent imports, all 136 original resource probes plus the same 7 private component probes, and 98751 audited declarations. Only standard axioms pass. The entire earlier Opaque owner and Audit bytes remain exact prefixes. The resource owner is unchanged. No original theorem header, runtime budget, Haskell source or compiler correspondence claim changes.
+
+Original906, the whole scoped task/depth history proof, warm C/M meanings, pending Profile closure and ONE joint finite historical completion remain open. The scoped ABI and its entry/row/return/dispatcher drafts are not included in these Source claims. Preserve every original statement, source/root/noStop condition, all supplied fuels, and every output before later stops. The full objective and remaining operational contracts remain in the preserved text below. Goal status stays ACTIVE. Known terminal-object cleanup is now 2116366840 bytes; the latest 236072-byte batch preserved all sources, logs and active publication output. Record every future Haskell fix in FINDINGS.md.
+
+---
+
+## 2026-11-16 11:55 CET — retain actual scope history inside the induction
+
+The existing ActualFrameLedger indexes a resource scope. It does not tie that scopeBefore to the scope recorded by ActualSourceOrigin. In particular, captured frame identity contains only edge, residual, caller and queries. Do not infer root.before-to-scope history from ledger inversion. No false-target theorem or actual-source counterexample is claimed.
+
+Carry a concrete past receipt for each ACTUALLY generated ledger node: HeldFragmentHistory from root.before to scopeBefore, avoidance for all original scope inputs, and the same receipt for each selected parent. Derive it at actual captured entry and selected entry. Restore the parent receipt on selected return. This is internal induction data. Do not add it to the external original906 header or use a future output-law supplier. The v1 fixed-root task dispatcher remains provisional and open; its conditional forwarding lemmas are not the missing whole-worker producer.
+
+The published baseline remains checkpoint cae9462bd33f3f9b187b6d1b42c3b79866e0ac2c / checked Source6399e5b69e6c9a6dd121eb762728e5a709cc5fd4. Two residual laws passed their strict local check and await public gates. The later component checks remain unpromoted: preserve their diagnostics and raw inputs. No Haskell change or defect is claimed. Record every future Haskell fix in FINDINGS.md.
+
+---
+
+## 2026-11-16 11:29 CET — captured-path applicability correction
+
+The main captured path uses SharedPreparedChildPolicy.runWithChild and SelectedPreparation.run. SourcePruningEnumerationSharedEagerReservation.real_actual_successful_prepared_emitted_complete_at_any_budget (line20734) keeps decoded and prepared value distinct. Entry.enter returns decoded. SelectedValue.run may unfold a Mu or expose a Union and return an ordinary node. Thus an ordinary prepared parent does not establish an ordinary Entry.enter result. The checked ordinary-entry separation lemma remains valid under its exact premise. It is not the missing main captured-case producer. The earlier handoff instruction to recover this ordinary entry from NativeOrdinary.run does not apply to this main route.
+
+Use the original packet_restart_ne or prefix_isolated_at_original_budget to derive captured uv≠held from the original restart decision, current isolated boundary and actual native read. The same captured uv persists through the row scan. Keep decoded and prepared separate. The real selected-preparation receipt also retains their actual native relation. This is an applicability correction in the formal proof plan. No Haskell defect, fix or actual-source counterexample is established.
+
+The active task companion uses one fixed past root.before anchor. A current-point-only isolation statement loses deferred fragments and parent-scope history. Its internal premises must retain genuine past root Packet/query/Ready/stored root.scs/IncomingAvoid, captured uv≠held, and genuine smaller task/depth IHs. These are not new external premises of original906. Whole906 and joint historical compatibility remain open.
+
+New strict checks prove actual same-fuel residual/finalize commutation and structural-history preservation through residual recording. These laws are added to the existing owner with its entire prior byte prefix retained. Public publication checks are pending. The checked/pushed baseline remains Source6399e5b69e6c9a6dd121eb762728e5a709cc5fd4 at checkpointcae9462bd33f3f9b187b6d1b42c3b79866e0ac2c. The full specification in the preserved prefix below is unchanged. Every future Haskell fix must still be recorded here.
+
+---
+
 ## 2026-11-16 11:15 CET — actual incoming and structural fragment history
 
 Goal status: **ACTIVE**. Checked Source: `6399e5b69e6c9a6dd121eb762728e5a709cc5fd4` on `formalize`. Source-tree SHA256: `607427ea5f71491da282de5a013433ef7aa38abafdc673080280f4943f832da5`. The full objective is unchanged: prove ONE finite accepted completion of the SAME original emitted partial root under ONE compatible assignment. This assignment must satisfy actual domains, paths, UF aliases, residuals, readback, parked recompletion, and EVERY removed historical obligation on THAT branch. Keep the original source, root, noStop premise, work fuel, recursive fuel, primitive fuels, and budgets. Cover ALL emitted outputs, including outputs retained before a later stop. Keep typing, depth adequacy, completeness, both preprocessing/LPO directions, order, multiplicity, lazy demand, exact node-count/count/weight/training results, both rank inverses, host bounds, and compiled Haskell correspondence as separate contracts. Keep the optimized interned core as the primary target and the older constructor/equality work as secondary targets.
