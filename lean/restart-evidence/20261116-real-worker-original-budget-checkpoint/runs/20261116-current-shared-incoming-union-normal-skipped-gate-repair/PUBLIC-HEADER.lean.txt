@@ -1,0 +1,11 @@
+/-- Every actual shared incoming outcome retains union normality at its returned caller. -/
+theorem run_unionNormal
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (representativeFuel nativeFuel p h : Nat)
+    (beforeCaller : Caller width) (before : EnumerationState.State Symbol EnumGuard)
+    (uv : Nat) (incoming : Node) (incomingScs : List EnumerationState.Suspended)
+    (queries : Queries)
+    (normal : UnionNormal beforeCaller.checked.native.machine.heap) :
+    UnionNormal
+      (SourcePruningEnumerationSharedIncomingNode.run checkEmpty representativeFuel nativeFuel p h
+        beforeCaller before uv incoming incomingScs queries).2.1.checked.native.machine.heap

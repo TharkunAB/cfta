@@ -1,0 +1,12 @@
+--- actual-dispatch/APPEND.lean.txt
++++ prepared-result-normalization/APPEND.lean.txt
+@@ -437,7 +437,8 @@
+   · have branch := real_right_prefix_prepared_resources holeKey fits admits graph templates checkEmpty edgesOf stop order
+       formulas solver recursiveDepth workerIH inventory caller memos before metadata seed ceiling packet bounded known
+       selectionMembers selectionLength initialMass reserved workFuel uv chosen actual
+-    exact branch
++    dsimp only at branch ⊢
++    split at branch <;> simp_all only
+   · unfold ActualEmittedCompleteResources
+     constructor
+     · intro output impossible

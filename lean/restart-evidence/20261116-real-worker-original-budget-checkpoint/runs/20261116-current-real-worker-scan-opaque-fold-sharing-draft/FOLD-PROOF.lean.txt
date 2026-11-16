@@ -1,0 +1,25 @@
+ := by
+  intro attempted
+  induction attempted using identity_actual_rows_reverse_induction with
+  | nil =>
+      intro remaining _sourceRows
+      exact base
+  | append_singleton attempted edge ih =>
+      intro remaining sourceRows
+      have sourceSplit : rows = attempted ++ edge :: remaining := by
+        simpa only [List.append_assoc, List.singleton_append] using sourceRows
+      have previous := ih (edge :: remaining) sourceSplit
+      have included := growth attempted.length
+      have observed := real_rows_scan_snoc visit before attempted edge caller queries
+      cases past : SourcePruningEnumerationSharedBranching.scan visit before attempted caller queries with
+      | stopped processed outputs stoppedAt =>
+          rw [past] at previous observed
+          rw [List.length_append, List.length_singleton, observed]
+          exact actual_emitted_complete_mono included.1 included.2 previous
+      | complete processed outputs reached saved =>
+          rw [past] at previous observed
+          have one := rowStep attempted edge remaining sourceSplit processed outputs reached saved past previous
+          rw [List.length_append, List.length_singleton, observed]
+          exact real_rows_append_resources formulas solver uv caller reached saved
+            (seedAt attempted.length) (seedAt (attempted.length + 1)) processed outputs
+            (visit edge reached saved before) previous included.1 included.2 one

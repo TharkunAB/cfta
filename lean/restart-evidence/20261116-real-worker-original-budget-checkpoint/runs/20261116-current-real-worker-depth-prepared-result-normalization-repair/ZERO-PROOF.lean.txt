@@ -1,0 +1,29 @@
+ := by
+  cases decision with
+  | none =>
+      refine ⟨.complete [⟨some metadata, before, caller, memos.query⟩] caller memos.query,
+        (fun _ => rfl), caller, inventory, memos, Post.refl packet.context, bounded, known, rfl, rfl, ?_⟩
+      intro output member
+      have same := List.mem_singleton.mp member
+      subst output
+      exact ⟨inventory, memos, metadata, Post.refl packet.context, rfl, packet, Or.inr rfl, bounded, known⟩
+  | some selected =>
+      cases selected with
+      | done =>
+          refine ⟨.complete [⟨none, before, caller, memos.query⟩] caller memos.query,
+            (fun _ => rfl), caller, inventory, memos, Post.refl packet.context, bounded, known, rfl, rfl, ?_⟩
+          intro output member
+          have same := List.mem_singleton.mp member
+          subst output
+          exact ⟨inventory, memos, metadata, Post.refl packet.context, rfl, packet, Or.inl rfl, bounded, known⟩
+      | stuck =>
+          refine ⟨.complete [] caller memos.query, (fun _ => rfl),
+            caller, inventory, memos, Post.refl packet.context, bounded, known, rfl, rfl, ?_⟩
+          intro output member
+          exact (List.not_mem_nil member).elim
+      | expand uv =>
+          refine ⟨.stopped [] (.exhausted uv metadata before) (some (caller, memos.query)),
+            (fun _ => rfl), caller, inventory, memos, Post.refl packet.context,
+            bounded, known, Or.inr rfl, ?_⟩
+          intro output member
+          exact (List.not_mem_nil member).elim

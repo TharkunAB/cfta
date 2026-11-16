@@ -1,0 +1,102 @@
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+section RealWorkerTaskAndRootAssembly
+set_option autoImplicit false
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedPartialInvariant (Post)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
+open SourcePruningEnumerationSharedIncomingReservation (Seed advance)
+open SourceCurrentAllocatedNativeResourceForecast (Le)
+open SourcePruningEnumerationRecursive (Packet)
+open SourcePruningEnumerationSharedSelectedContinuations
+open SourcePruningEnumerationSharedPreparedRecursive (Output Failure OutputResources OutcomeResources finish emitted)
+open SourcePruningEnumerationSharedPreparedRecursiveChildPolicy (resumeWithNarrow runEagerWithNarrow runWithNarrow)
+open SourcePruningEnumerationFiniteReservation (iterate iterate_add)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Core" => EnumerationState.State Symbol Constraint
+local notation "Heap" => SourceEqualityAnnotationHeap.Heap
+variable {Typing Key : Type} {bits : Nat}
+local notation "Fold" => NativeContinuations.Result
+  (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2)
+local notation "Done" => List Fragment → Caller (bits + 2) → Queries → Cached → Fold
+local notation "Stopped" => List Fragment → ChildDispatch.Observation (bits + 2) → Option Cached → Fold
+local notation "ChildDone" => Fragment → Caller (bits + 2) → Queries → Cached → Fold
+local notation "Visitor" => List Suspended → Node → Caller (bits + 2) → Cached → Queries → ChildDone →
+  (ChildDispatch.Observation (bits + 2) → Option Cached → Fold) → Fold
+local notation "Narrow" => Metadata Typing → Nat → Nat → Node →
+  InternedConstructorTemplates.State Symbol Constraint → MergedSourceComparison.Result Symbol Constraint Node
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+
+attribute [local irreducible] nodePlan tuplePlan fallbackPlan identity_actual_frame_plan
+  identity_actual_frame_reserved IdentityActualSourceRoot.limit IdentityActualSourceRoot.own
+set_option maxHeartbeats 2000000
+
+attribute [local irreducible] nodeReserved eagerReserved eagerFinal
+  SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow
+  SourcePruningEnumerationSharedPreparedRecursive.continueWith
+  SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.runEagerWithNarrow
+  SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.runWithNarrow
+  SourcePruningOuterNarrow.narrow
+
+omit [DecidableEq Symbol] [DecidableEq Node] in
+private theorem real_scan_prefix_resources_of_actual_steps
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (uv : Nat) (visit : EdgeValue Symbol Constraint → Caller (bits + 2) → Queries → Cached → Fold)
+    (before : Cached) (rows : List (EdgeValue Symbol Constraint)) (caller : Caller (bits + 2)) (queries : Queries)
+    (seedAt : Nat → Seed)
+    (base : ActualEmittedCompleteResources (Typing := Typing) formulas solver caller (seedAt 0)
+      (.complete [] caller queries))
+    (growth : ∀ index, Le (seedAt index).2 (seedAt (index + 1)).2 ∧
+      (seedAt index).1 ⊆ (seedAt (index + 1)).1)
+    (rowStep : ∀ (attempted : List (EdgeValue Symbol Constraint)) (edge : EdgeValue Symbol Constraint)
+        (remaining : List (EdgeValue Symbol Constraint)),
+      rows = attempted ++ edge :: remaining →
+      ∀ (processed : List (SelectedEdge.Result (bits + 2))) (outputs : List (Output (bits + 2) Typing))
+        (reached : Caller (bits + 2)) (saved : Queries),
+      SourcePruningEnumerationSharedBranching.scan visit before attempted caller queries =
+        .complete processed outputs reached saved →
+      ActualEmittedCompleteResources formulas solver caller (seedAt attempted.length) (.complete outputs reached saved) →
+      ActualEmittedCompleteResources formulas solver reached (seedAt (attempted.length + 1))
+        (finish uv (visit edge reached saved before))) :
+    ∀ (attempted remaining : List (EdgeValue Symbol Constraint)), rows = attempted ++ remaining →
+      ActualEmittedCompleteResources formulas solver caller (seedAt attempted.length)
+        (finish uv (SourcePruningEnumerationSharedBranching.scan visit before attempted caller queries))
+ := by
+  intro attempted
+  induction attempted using identity_actual_rows_reverse_induction with
+  | nil =>
+      intro remaining _sourceRows
+      exact base
+  | append_singleton attempted edge ih =>
+      intro remaining sourceRows
+      have sourceSplit : rows = attempted ++ edge :: remaining := by
+        simpa only [List.append_assoc, List.singleton_append] using sourceRows
+      have previous := ih (edge :: remaining) sourceSplit
+      have included := growth attempted.length
+      have observed := real_rows_scan_snoc visit before attempted edge caller queries
+      cases past : SourcePruningEnumerationSharedBranching.scan visit before attempted caller queries with
+      | stopped processed outputs stoppedAt =>
+          rw [past] at previous observed
+          rw [List.length_append, List.length_singleton, observed]
+          exact actual_emitted_complete_mono included.1 included.2 previous
+      | complete processed outputs reached saved =>
+          rw [past] at previous observed
+          have one := rowStep attempted edge remaining sourceSplit processed outputs reached saved past previous
+          rw [List.length_append, List.length_singleton, observed]
+          exact real_rows_append_resources formulas solver uv caller reached saved
+            (seedAt attempted.length) (seedAt (attempted.length + 1)) processed outputs
+            (visit edge reached saved before) previous included.1 included.2 one
+
+end RealWorkerTaskAndRootAssembly
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation

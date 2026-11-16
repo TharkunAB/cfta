@@ -1,0 +1,23 @@
+omit [DecidableEq Symbol] [DecidableEq Node] in
+private theorem real_scan_prefix_resources_of_actual_steps
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (uv : Nat) (visit : EdgeValue Symbol Constraint → Caller (bits + 2) → Queries → Cached → Fold)
+    (before : Cached) (rows : List (EdgeValue Symbol Constraint)) (caller : Caller (bits + 2)) (queries : Queries)
+    (seedAt : Nat → Seed)
+    (base : ActualEmittedCompleteResources (Typing := Typing) formulas solver caller (seedAt 0)
+      (.complete [] caller queries))
+    (growth : ∀ index, Le (seedAt index).2 (seedAt (index + 1)).2 ∧
+      (seedAt index).1 ⊆ (seedAt (index + 1)).1)
+    (rowStep : ∀ (attempted : List (EdgeValue Symbol Constraint)) (edge : EdgeValue Symbol Constraint)
+        (remaining : List (EdgeValue Symbol Constraint)),
+      rows = attempted ++ edge :: remaining →
+      ∀ (processed : List (SelectedEdge.Result (bits + 2))) (outputs : List (Output (bits + 2) Typing))
+        (reached : Caller (bits + 2)) (saved : Queries),
+      SourcePruningEnumerationSharedBranching.scan visit before attempted caller queries =
+        .complete processed outputs reached saved →
+      ActualEmittedCompleteResources formulas solver caller (seedAt attempted.length) (.complete outputs reached saved) →
+      ActualEmittedCompleteResources formulas solver reached (seedAt (attempted.length + 1))
+        (finish uv (visit edge reached saved before))) :
+    ∀ (attempted remaining : List (EdgeValue Symbol Constraint)), rows = attempted ++ remaining →
+      ActualEmittedCompleteResources formulas solver caller (seedAt attempted.length)
+        (finish uv (SourcePruningEnumerationSharedBranching.scan visit before attempted caller queries))

@@ -1,0 +1,28 @@
+def AuthenticEntry
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (rootRequest : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
+    (operations : SourceEqualityConstraintMemoAllocation.State) (wholeCount : Nat)
+    (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (pattern : Value Symbol Guard) (patternId : Nat)
+    (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey) : Prop :=
+  pattern.free = [] ∧ SourceRecursiveIntersectionControl.identity pattern = some patternId ∧
+    (SourceRecursiveIntersectionControl.tag pattern = 1 ∨ SourceRecursiveIntersectionControl.tag pattern = 3) ∧
+    ∃ (universeFirst : Bool) (used : Nat) (before : Checked width)
+      (next : Interned IntersectionFlatMemoKeyDomain.DomainKey → Code Symbol Guard (Value Symbol Guard)),
+      let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+      let left := if universeFirst then universeValue else pattern
+      let right := if universeFirst then pattern else universeValue
+      let first := if universeFirst then entry.identity else patternId
+      let second := if universeFirst then patternId else entry.identity
+      let entered := SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains
+        IntersectionEmptyDomain.emptyKey universeValue pattern entry.identity patternId
+      let started : Checked width :=
+        {before with native := advance before.native {before.native.machine with domains := entered.2}}
+      used + 1 ≤ wholeCount ∧
+        Trace used (.code (.node rootRequest .pure))
+          (⟨initial width machine, operations⟩ : Checked width)
+          (.code (.enter IntersectionEmptyDomain.emptyDomain left right first second next)) before ∧
+        SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains
+          IntersectionEmptyDomain.emptyKey left right first second = entered ∧
+        Trace 1 (.code (.enter IntersectionEmptyDomain.emptyDomain left right first second next)) before
+          (.code (next entered.1)) started ∧ domain = entered.1
