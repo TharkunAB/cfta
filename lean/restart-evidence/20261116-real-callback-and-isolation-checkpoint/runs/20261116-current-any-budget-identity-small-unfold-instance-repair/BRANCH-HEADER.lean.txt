@@ -1,0 +1,33 @@
+private theorem identity_actual_resume_nonempty_preparation
+    (graph : Graph Symbol Constraint) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint)) (workFuel recursiveDepth uv : Nat)
+    (metadata : Metadata Unit) (caller : Caller (bits + 2)) (queries : Queries)
+    (before after : Cached) (value : Node)
+    (actual : SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
+      (fun _ _ _ node state => .done node state) graph [] none (fun _ _ => none) metadata
+      workFuel workFuel workFuel workFuel workFuel workFuel uv caller before queries =
+      .narrowed after.core
+        (.done (value, some (pure () : EnumerateM Symbol Constraint Unit)) caller.checked.native.machine.heap)
+        (SourcePruningEnumerationSelectedValueCaller.advance caller caller.checked.native.machine.heap)
+        queries (some [.ok ((), after.core)]) (some after)
+        (some [.ok ((false, metadata), after.core)]) none) :
+    let child := SourcePruningEnumerationSharedEagerChildren.eagerChild
+      (width := bits + 2) (Output := Output (bits + 2) Unit) (Reason := Failure (bits + 2) Unit)
+      checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf
+    let hook := SourcePruningEnumerationSharedPreparedRecursive.continueWith
+      (resumeWithNarrow (Typing := Unit) (width := bits + 2) child
+        (fun _ _ _ node state => .done node state) graph [] checkEmpty edgesOf
+        none (fun _ _ => none) workFuel recursiveDepth)
+      graph [] none (fun _ _ => none) workFuel metadata uv
+    let middleCaller := SourcePruningEnumerationSelectedValueCaller.advance caller caller.checked.native.machine.heap
+    let prepared := SourcePruningEnumerationSharedPreparedChildPolicy.runWithChild child hook
+      checkEmpty workFuel workFuel workFuel workFuel workFuel workFuel workFuel uv edgesOf
+      middleCaller after queries
+    resumeWithNarrow (Typing := Unit) (width := bits + 2) child
+      (fun _ _ _ node state => .done node state) graph [] checkEmpty edgesOf
+      none (fun _ _ => none) workFuel (recursiveDepth + 1) metadata caller queries before (some (.expand uv)) =
+      (match prepared.2 with
+      | none => .stopped [] (.preparation uv prepared.1)
+          (some (SourcePruningEnumerationSharedPreparedContinuations.preparation_endpoint
+            middleCaller queries prepared.1))
+      | some folded => finish uv folded) := by

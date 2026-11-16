@@ -1,0 +1,22 @@
+/-- Every actual real-prefix endpoint retains the original native handle and value. -/
+theorem prefix_native_readback_at_original_budget
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (workFuel uv : Nat) (caller : Caller width) (before : Cached) (memos : Memos)
+    (heldHandle : Nat) (heldValue : Node)
+    (packet : SourcePruningEnumerationRecursive.Packet formulas solver inventory caller memos metadata before)
+    (decoded : lookupNode caller.checked.native.machine.heap heldHandle = some heldValue)
+    (chosen : SourcePruningEnumerationRestart.decision stop order metadata before = some (.expand uv)) :
+    match runPrefix holeKey fits admits graph templates stop order metadata
+        workFuel workFuel workFuel workFuel workFuel workFuel uv caller before memos.query with
+    | .stopped _ _ | .parked _ _ _ =>
+        SourceEqualityRequiredCache.Keeps caller.checked.native.machine.heap caller.checked.native.machine.heap ∧
+          lookupNode caller.checked.native.machine.heap heldHandle = some heldValue
+    | .narrowed _ _ reached _ _ _ _ _ =>
+        SourceEqualityRequiredCache.Keeps caller.checked.native.machine.heap reached.checked.native.machine.heap ∧
+          lookupNode reached.checked.native.machine.heap heldHandle = some heldValue
+ := by

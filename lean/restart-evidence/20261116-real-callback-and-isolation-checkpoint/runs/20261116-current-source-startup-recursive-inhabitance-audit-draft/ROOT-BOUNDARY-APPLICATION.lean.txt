@@ -1,0 +1,23 @@
+-- UNCOMPILED application of existing public source field receipts.
+-- This is not a new published theorem or a complete worker proof.
+import MicroCFTA.SourceSynthesisProgramTypeFieldConstruction
+import MicroCFTA.MergedOrdinaryHeight
+namespace MicroCFTA.SourceSynthesisCurrentStartupBoundaryAudit
+open Cache InternedConstructorTemplates
+open SourceSynthesisTypeSyntax (Library Query)
+open SourceSynthesisFirstOrderConstruction (Expression)
+open SourceSynthesisGeneralizeSyntax (Guard)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+
+theorem accepted_root_nonrecursive
+    [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build
+      (SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) [] empty = .done rootValue sourceHeap) :
+    MergedOrdinaryHeight.recursiveBoundary rootValue = false := by
+  have fields := (SourceSynthesisProgramTypeFieldConstruction.current_root_fields
+    lib query signed whole accepted rootValue sourceHeap built).2
+  cases fields <;> rfl
+end MicroCFTA.SourceSynthesisCurrentStartupBoundaryAudit

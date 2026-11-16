@@ -1,0 +1,19 @@
+/-- An actual callback return derives its current packet at the original work budget. -/
+theorem recorded_callback_current_at_original_budget
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (metadata : Metadata Typing) (uv : Nat) (fragment : Fragment)
+    (caller : Caller width) (memos : Memos) (before : Cached) (seed : Seed)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (allocated : FragmentBound before.core.counter fragment)
+    (bounded : Fits seed.2 caller.checked)
+    (known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap)
+    (workFuel : Nat) (result : Bool × Metadata Typing) (observed : Core)
+    (actual : Success (SourcePruningRecordTypes.recordTypes graph templates workFuel metadata uv (.inl fragment))
+      before.core result observed) :
+    Packet formulas solver inventory caller memos result.2 (EnumerationExpandableIndex.frame observed before) ∧
+      RenderStable before.core observed ∧ Frame before.core observed ∧
+      result.2.types = SourcePruningRecordTypes.updatedTypes metadata uv (.inl fragment) ∧
+      result.2.openHoles = metadata.openHoles ∧ result.2.typing = metadata.typing ∧
+      Fits seed.2 caller.checked ∧ Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap

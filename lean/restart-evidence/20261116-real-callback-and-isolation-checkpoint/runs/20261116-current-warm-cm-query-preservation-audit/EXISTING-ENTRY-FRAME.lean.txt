@@ -1,0 +1,12 @@
+structure Frame (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory) (state : Checked width) : Prop where
+  /-- The same state retains all physical query invariants. -/
+  ready : Ready state
+  /-- Populated native cells retain current inventory admission. -/
+  admitted : At formulas solver inventory state
+  /-- The current heap retains its semantic and guard observations. -/
+  context : Context Plain inventory.source state.native.machine
+  /-- Completed native cells retain both joint laws. -/
+  joint : SourceCurrentConstrainedCapCheckedJointCache.Stored Plain inventory.source state.native
+  /-- Every allocated native cell retains its captured source witnesses. -/
+  origins : SourceCurrentConstrainedCapCheckedJointOrigins.Stored inventory.source state.native

@@ -1,0 +1,19 @@
+  dsimp only
+  rw [resumeWithNarrow, actual]
+  dsimp only
+  generalize actualPrepared : SourcePruningEnumerationSharedPreparedChildPolicy.runWithChild
+      (SourcePruningEnumerationSharedEagerChildren.eagerChild
+        (width := bits + 2) (Output := Output (bits + 2) Unit) (Reason := Failure (bits + 2) Unit)
+        checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
+      (SourcePruningEnumerationSharedPreparedRecursive.continueWith
+        (resumeWithNarrow (Typing := Unit) (width := bits + 2) (SourcePruningEnumerationSharedEagerChildren.eagerChild
+        (width := bits + 2) (Output := Output (bits + 2) Unit) (Reason := Failure (bits + 2) Unit)
+        checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
+          (fun _ _ _ node state => .done node state) graph [] checkEmpty edgesOf
+          none (fun _ _ => none) workFuel recursiveDepth)
+        graph [] none (fun _ _ => none) workFuel metadata uv)
+      checkEmpty workFuel workFuel workFuel workFuel workFuel workFuel workFuel uv edgesOf
+      (SourcePruningEnumerationSelectedValueCaller.advance caller caller.checked.native.machine.heap)
+      after queries = observed
+  rcases observed with ⟨entry, folded⟩
+  cases folded <;> rfl

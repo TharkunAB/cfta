@@ -1,0 +1,69 @@
+MicroCFTA.SourcePruningEnumerationSharedEagerReservation.identity_actual_prepared_seed_alphabet_projection
+  (seed : MicroCFTA.SourcePruningEnumerationSharedIncomingReservation.Seed) :
+  (MicroCFTA.SourcePruningEnumerationSharedPreparedReservation.preparedSeed seed).fst = seed.fst
+'_private.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.0.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.identity_actual_prepared_seed_alphabet_projection' does not depend on any axioms
+MicroCFTA.SourcePruningEnumerationSharedEagerReservation.identity_actual_resume_nonempty_preparation {bits : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (graph :
+    MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (checkEmpty : Bool)
+  (edgesOf :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      List
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (workFuel recursiveDepth uv : Nat) (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Unit)
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2))
+  (queries : MicroCFTA.SourceEndpointMemo.Memos)
+  (before after :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (actual :
+    MicroCFTA.SourcePruningEnumerationSelectedStep.runPrefixWithNarrow
+        (fun x x_1 x_2 node state => MicroCFTA.MergedSourceComparison.Result.done node state) graph [] none
+        (fun x x_1 => none) metadata workFuel workFuel workFuel workFuel workFuel workFuel uv caller before queries =
+      MicroCFTA.SourcePruningEnumerationSelectedStep.Result.narrowed after.core
+        (MicroCFTA.MergedSourceComparison.Result.done (value, some (pure ())) caller.checked.native.machine.heap)
+        (MicroCFTA.SourcePruningEnumerationSelectedValueCaller.advance caller caller.checked.native.machine.heap)
+        queries (some [Except.ok ((), after.core)]) (some after) (some [Except.ok ((false, metadata), after.core)])
+        none) :
+  have child :=
+    MicroCFTA.SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel workFuel
+      workFuel edgesOf;
+  have hook :=
+    MicroCFTA.SourcePruningEnumerationSharedPreparedRecursive.continueWith
+      (MicroCFTA.SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow child
+        (fun x x_1 x_2 node state => MicroCFTA.MergedSourceComparison.Result.done node state) graph [] checkEmpty
+        edgesOf none (fun x x_1 => none) workFuel recursiveDepth)
+      graph [] none (fun x x_1 => none) workFuel metadata uv;
+  have middleCaller :=
+    MicroCFTA.SourcePruningEnumerationSelectedValueCaller.advance caller caller.checked.native.machine.heap;
+  have prepared :=
+    MicroCFTA.SourcePruningEnumerationSharedPreparedChildPolicy.runWithChild child hook checkEmpty workFuel workFuel
+      workFuel workFuel workFuel workFuel workFuel uv edgesOf middleCaller after queries;
+  MicroCFTA.SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow child
+      (fun x x_1 x_2 node state => MicroCFTA.MergedSourceComparison.Result.done node state) graph [] checkEmpty edgesOf
+      none (fun x x_1 => none) workFuel (recursiveDepth + 1) metadata caller queries before
+      (some (MicroCFTA.EnumerationState.Next.expand uv)) =
+    match prepared.snd with
+    | none =>
+      MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.HookResult.stopped []
+        (MicroCFTA.SourcePruningEnumerationSharedPreparedRecursive.Failure.preparation uv prepared.fst)
+        (some
+          (MicroCFTA.SourcePruningEnumerationSharedPreparedContinuations.preparation_endpoint middleCaller queries
+            prepared.fst))
+    | some folded => MicroCFTA.SourcePruningEnumerationSharedPreparedRecursive.finish uv folded
+'_private.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.0.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.identity_actual_resume_nonempty_preparation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

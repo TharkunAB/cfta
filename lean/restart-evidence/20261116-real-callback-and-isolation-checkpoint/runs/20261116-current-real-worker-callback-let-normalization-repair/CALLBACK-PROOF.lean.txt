@@ -1,0 +1,66 @@
+ := by
+  classical
+  let recur := resumeWithNarrow (Typing := Typing) (width := bits + 2)
+    (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty
+      workFuel workFuel workFuel workFuel workFuel edgesOf)
+    (SourcePruningOuterNarrow.narrow holeKey fits admits)
+    graph templates checkEmpty edgesOf stop order workFuel recursiveDepth
+  change (let outcome := (SourcePruningEnumerationSharedPreparedRecursive.continueWith
+      recur graph templates stop order workFuel metadata uv fragment caller memos.query before);
+    (∀ output ∈ emitted outcome,
+      OutputResources formulas solver caller (eagerFinal recursiveDepth seed ceiling) output) ∧
+      match outcome with
+      | .complete _ _ _ => OutcomeResources formulas solver caller (eagerFinal recursiveDepth seed ceiling) outcome
+      | .stopped _ _ _ => True)
+  let raw := ExceptT.run (SourcePruningRecordTypes.recordTypes graph templates workFuel metadata uv
+    (.inl fragment) before.core)
+  by_cases successful : ∃ (flag : Bool) (updated : Metadata Typing) (observed : Core),
+      raw = [.ok ((flag, updated), observed)]
+  · obtain ⟨flag, updated, observed, recorded⟩ := successful
+    have actual : Success (SourcePruningRecordTypes.recordTypes graph templates workFuel metadata uv (.inl fragment))
+        before.core (flag, updated) observed := by
+      rw [Success, recorded]
+      exact List.mem_singleton_self _
+    obtain ⟨current, _stable, frame, _types, _holes, _typing, fitted, alphabet⟩ :=
+      recorded_callback_current_at_original_budget formulas solver inventory graph templates metadata uv fragment
+        caller memos before seed packet allocated bounded known workFuel (flag, updated) observed actual
+    cases flag with
+    | true =>
+        have completed : OutcomeResources (Typing := Typing) formulas solver caller seed
+            (.complete [] caller memos.query) := by
+          refine ⟨caller, inventory, memos, Post.refl packet.context, bounded, known, rfl, rfl, ?_⟩
+          intro output member
+          exact (List.not_mem_nil member).elim
+        have growth := eagerFinal_ge recursiveDepth seed ceiling
+        have padded := completed.mono growth.1 growth.2
+        rw [SourcePruningEnumerationSharedPreparedRecursive.continue_rejected recur graph templates stop order
+          workFuel metadata updated uv fragment caller memos.query before observed recorded]
+        constructor
+        · intro output member
+          exact (List.not_mem_nil member).elim
+        · exact padded
+    | false =>
+        have massAfter : SourcePruningEnumerationPrefixAdmission.suspendedBound
+            (EnumerationExpandableIndex.frame observed before).core ≤ ceiling := by
+          change SourcePruningEnumerationPrefixAdmission.suspendedBound observed ≤ ceiling
+          rw [SourcePruningEnumerationPrefixAdmission.suspendedBound_values before.core observed frame.values]
+          exact mass
+        have inherited := workerIH inventory caller memos (EnumerationExpandableIndex.frame observed before)
+          updated seed ceiling current fitted alphabet selectionMembers selectionLength massAfter reserved workFuel
+        rw [SourcePruningEnumerationSharedPreparedRecursive.continue_recorded recur graph templates stop order
+          workFuel metadata updated uv fragment caller memos.query before observed recorded]
+        simpa only [runEagerWithNarrow, runWithNarrow, recur] using inherited
+  · have stopped : SourcePruningEnumerationSharedPreparedRecursive.continueWith recur graph templates stop order
+        workFuel metadata uv fragment caller memos.query before =
+        .stopped [] (.callback uv raw) (some (caller, memos.query)) := by
+      unfold SourcePruningEnumerationSharedPreparedRecursive.continueWith
+      dsimp only
+      split
+      · exact (successful ⟨true, _, _, by assumption⟩).elim
+      · exact (successful ⟨false, _, _, by assumption⟩).elim
+      · rfl
+    rw [stopped]
+    constructor
+    · intro output member
+      exact (List.not_mem_nil member).elim
+    · trivial

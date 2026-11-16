@@ -1,0 +1,63 @@
+  dsimp only
+  let child := SourcePruningEnumerationSharedEagerChildren.eagerChild
+    (width := bits + 2) (Output := Output (bits + 2) Unit) (Reason := Failure (bits + 2) Unit)
+    checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf
+  let hook := SourcePruningEnumerationSharedPreparedRecursive.continueWith
+    (resumeWithNarrow (Typing := Unit) (width := bits + 2) child
+      (fun _ _ _ node state => .done node state) graph [] checkEmpty edgesOf
+      none (fun _ _ => none) workFuel recursiveDepth)
+    graph [] none (fun _ _ => none) workFuel metadata uv
+  let prepared := SourcePruningEnumerationSharedPreparedChildPolicy.runWithChild child hook
+    checkEmpty workFuel workFuel workFuel workFuel workFuel workFuel workFuel uv edgesOf caller before memos.query
+  change IdentityEmittedCompleteResources formulas solver caller (eagerFinal (recursiveDepth + 1) seed ceiling)
+    (match prepared.2 with
+    | none => .stopped [] (.preparation uv prepared.1)
+        (some (SourcePruningEnumerationSharedPreparedContinuations.preparation_endpoint caller memos.query prepared.1))
+    | some folded => finish uv folded)
+  cases observed : SourcePruningEnumerationSelectedPreparation.run workFuel workFuel uv caller before with
+  | mk raw native =>
+    cases native with
+    | none =>
+      simp only [prepared, SourcePruningEnumerationSharedPreparedChildPolicy.runWithChild, observed]
+      constructor
+      · intro output member
+        cases member
+      · trivial
+    | some native =>
+      cases native with
+      | failed fault heap =>
+        simp only [prepared, SourcePruningEnumerationSharedPreparedChildPolicy.runWithChild, observed]
+        constructor
+        · intro output member
+          cases member
+        · trivial
+      | done value heap =>
+        cases raw with
+        | nil =>
+          simp only [prepared, SourcePruningEnumerationSharedPreparedChildPolicy.runWithChild, observed]
+          constructor
+          · intro output member
+            cases member
+          · trivial
+        | cons first more =>
+          cases first with
+          | error fault =>
+            simp only [prepared, SourcePruningEnumerationSharedPreparedChildPolicy.runWithChild, observed]
+            constructor
+            · intro output member
+              cases member
+            · trivial
+          | ok pair =>
+            rcases pair with ⟨⟨target, preparedHandle, preparedScs, decoded⟩, entered⟩
+            cases more with
+            | cons second further =>
+              simp only [prepared, SourcePruningEnumerationSharedPreparedChildPolicy.runWithChild, observed]
+              constructor
+              · intro output member
+                cases member
+              · trivial
+            | nil =>
+              exact identity_actual_successful_prepared_emitted_complete_at_any_budget graph checkEmpty edgesOf
+                formulas solver recursiveDepth workFuel workerIH inventory caller memos metadata before seed
+                ceiling uv handle scs packet ready stored incoming fits known mass bucketBound selectionMembers
+                selectionLength reserved target preparedHandle preparedScs decoded value heap entered observed

@@ -1,0 +1,162 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-native-prefix-native-readback-check/source/MicroCFTA/SourcePruningEnumerationPrefixNativeReadback.lean:202:42: error: Type mismatch
+  initial
+has type
+  SourceEqualityRequiredCache.Keeps caller.checked.native.machine.heap caller.checked.native.machine.heap ∧
+    lookupNode caller.checked.native.machine.heap heldHandle = some heldValue
+but is expected to have type
+  match
+    match Except.ok (repeated, checked) :: another :: remaining with
+    | [Except.ok (true, checked)] =>
+      Result.parked checked
+        (SourcePruningEnumerationParkedRestart.adapt caller.checked.native.machine.heap workFuel uv oldHandle scs before
+          checked)
+        (Option.map (fun parked => (SourcePruningEnumerationRestart.run stop order metadata parked checked).run)
+          (SourcePruningEnumerationParkedRestart.adapt caller.checked.native.machine.heap workFuel uv oldHandle scs
+            before checked))
+    | [Except.ok (false, checked_1)] =>
+      match lookupNode caller.checked.native.machine.heap oldHandle with
+      | none =>
+        Result.stopped [Except.ok (UVarValue.unenumerated (some oldHandle) scs, readAfter)]
+          (some (Except.ok (repeated, checked) :: another :: remaining))
+      | some oldValue =>
+        match
+          SourcePruningEnumerationAction.prepareWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
+            metadata workFuel workFuel uv oldHandle scs oldValue caller.checked.native.machine.heap with
+        | MergedSourceComparison.Result.failed _fault _heap =>
+          Result.narrowed checked_1
+            (SourcePruningEnumerationAction.prepareWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
+              metadata workFuel workFuel uv oldHandle scs oldValue caller.checked.native.machine.heap)
+            (SourceCurrentAllocatedPartialState.advance caller
+              (advancePhysical caller.checked
+                {
+                  heap :=
+                    (SourcePruningEnumerationAction.prepareWithNarrow
+                        (SourcePruningOuterNarrow.narrow holeKey fits admits) metadata workFuel workFuel uv oldHandle
+                        scs oldValue caller.checked.native.machine.heap).state,
+                  equality := caller.checked.operations })
+              caller.fourth caller.merge)
+            memos.query none none none none
+        | MergedSourceComparison.Result.done (_value, none) _heap =>
+          Result.narrowed checked_1
+            (SourcePruningEnumerationAction.prepareWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
+              metadata workFuel workFuel uv oldHandle scs oldValue caller.checked.native.machine.heap)
+            (SourceCurrentAllocatedPartialState.advance caller
+              (advancePhysical caller.checked
+                {
+                  heap :=
+                    (SourcePruningEnumerationAction.prepareWithNarrow
+                        (SourcePruningOuterNarrow.narrow holeKey fits admits) metadata workFuel workFuel uv oldHandle
+                        scs oldValue caller.checked.native.machine.heap).state,
+                  equality := caller.checked.operations })
+              caller.fourth caller.merge)
+            memos.query none none none none
+        | MergedSourceComparison.Result.done (value, some action) heap =>
+          match (action checked_1).run with
+          | [Except.ok (PUnit.unit, observed)] =>
+            match encodeNode value with
+            | none =>
+              Result.narrowed checked_1
+                (SourcePruningEnumerationAction.prepareWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
+                  metadata workFuel workFuel uv oldHandle scs oldValue caller.checked.native.machine.heap)
+                (SourceCurrentAllocatedPartialState.advance caller
+                  (advancePhysical caller.checked
+                    {
+                      heap :=
+                        (SourcePruningEnumerationAction.prepareWithNarrow
+                            (SourcePruningOuterNarrow.narrow holeKey fits admits) metadata workFuel workFuel uv
+                            oldHandle scs oldValue caller.checked.native.machine.heap).state,
+                      equality := caller.checked.operations })
+                  caller.fourth caller.merge)
+                memos.query (some (action checked_1).run) none none none
+            | some newHandle =>
+              match
+                SourcePruningEnumerationNarrowAdapter.adapt heap workFuel uv oldHandle newHandle scs before
+                  observed with
+              | none =>
+                Result.narrowed checked_1
+                  (SourcePruningEnumerationAction.prepareWithNarrow
+                    (SourcePruningOuterNarrow.narrow holeKey fits admits) metadata workFuel workFuel uv oldHandle scs
+                    oldValue caller.checked.native.machine.heap)
+                  (SourceCurrentAllocatedPartialState.advance caller
+                    (advancePhysical caller.checked
+                      {
+                        heap :=
+                          (SourcePruningEnumerationAction.prepareWithNarrow
+                              (SourcePruningOuterNarrow.narrow holeKey fits admits) metadata workFuel workFuel uv
+                              oldHandle scs oldValue caller.checked.native.machine.heap).state,
+                        equality := caller.checked.operations })
+                    caller.fourth caller.merge)
+                  memos.query (some (action checked_1).run) none none none
+              | some attached =>
+                match
+                  (SourcePruningRecordTypes.recordTypes graph templates workFuel metadata uv (Sum.inr newHandle)
+                      attached.core).run with
+                | [Except.ok ((false, _updated), callbackCore)] =>
+                  Result.narrowed checked_1
+                    (SourcePruningEnumerationAction.prepareWithNarrow
+                      (SourcePruningOuterNarrow.narrow holeKey fits admits) metadata workFuel workFuel uv oldHandle scs
+                      oldValue caller.checked.native.machine.heap)
+                    (SourceCurrentAllocatedPartialState.advance caller
+                      (advancePhysical caller.checked
+                        {
+                          heap :=
+                            (SourcePruningEnumerationAction.prepareWithNarrow
+                                (SourcePruningOuterNarrow.narrow holeKey fits admits) metadata workFuel workFuel uv
+                                oldHandle scs oldValue caller.checked.native.machine.heap).state,
+                          equality := caller.checked.operations })
+                      caller.fourth caller.merge)
+                    memos.query (some (action checked_1).run)
+                    (some (EnumerationExpandableIndex.frame callbackCore attached))
+                    (some
+                      (SourcePruningRecordTypes.recordTypes graph templates workFuel metadata uv (Sum.inr newHandle)
+                          attached.core).run)
+                    none
+                | x =>
+                  Result.narrowed checked_1
+                    (SourcePruningEnumerationAction.prepareWithNarrow
+                      (SourcePruningOuterNarrow.narrow holeKey fits admits) metadata workFuel workFuel uv oldHandle scs
+                      oldValue caller.checked.native.machine.heap)
+                    (SourceCurrentAllocatedPartialState.advance caller
+                      (advancePhysical caller.checked
+                        {
+                          heap :=
+                            (SourcePruningEnumerationAction.prepareWithNarrow
+                                (SourcePruningOuterNarrow.narrow holeKey fits admits) metadata workFuel workFuel uv
+                                oldHandle scs oldValue caller.checked.native.machine.heap).state,
+                          equality := caller.checked.operations })
+                      caller.fourth caller.merge)
+                    memos.query (some (action checked_1).run) (some attached)
+                    (some
+                      (SourcePruningRecordTypes.recordTypes graph templates workFuel metadata uv (Sum.inr newHandle)
+                          attached.core).run)
+                    none
+          | x =>
+            Result.narrowed checked_1
+              (SourcePruningEnumerationAction.prepareWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
+                metadata workFuel workFuel uv oldHandle scs oldValue caller.checked.native.machine.heap)
+              (SourceCurrentAllocatedPartialState.advance caller
+                (advancePhysical caller.checked
+                  {
+                    heap :=
+                      (SourcePruningEnumerationAction.prepareWithNarrow
+                          (SourcePruningOuterNarrow.narrow holeKey fits admits) metadata workFuel workFuel uv oldHandle
+                          scs oldValue caller.checked.native.machine.heap).state,
+                    equality := caller.checked.operations })
+                caller.fourth caller.merge)
+              memos.query (some (action checked_1).run) none none none
+    | x =>
+      Result.stopped [Except.ok (UVarValue.unenumerated (some oldHandle) scs, readAfter)]
+        (some (Except.ok (repeated, checked) :: another :: remaining)) with
+  | Result.stopped read checked =>
+    SourceEqualityRequiredCache.Keeps caller.checked.native.machine.heap caller.checked.native.machine.heap ∧
+      lookupNode caller.checked.native.machine.heap heldHandle = some heldValue
+  | Result.parked checked candidate raw =>
+    SourceEqualityRequiredCache.Keeps caller.checked.native.machine.heap caller.checked.native.machine.heap ∧
+      lookupNode caller.checked.native.machine.heap heldHandle = some heldValue
+  | Result.narrowed checked prepared reached queries action candidate right ordinary =>
+    SourceEqualityRequiredCache.Keeps caller.checked.native.machine.heap reached.checked.native.machine.heap ∧
+      lookupNode reached.checked.native.machine.heap heldHandle = some heldValue
+'MicroCFTA.SourcePruningEnumerationSelectedStep.prefix_native_readback_at_original_budget' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
