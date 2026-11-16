@@ -1,0 +1,41 @@
+theorem selected_staged_child_invocation
+    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List Edge) (policy : Policy)
+    (consume : Receipt width → Result Output Reason width)
+    (scs : List Suspended) (edge : Edge) (caller : Caller width) (before : Cached) (queries : Queries)
+    (index : Nat) (output : Output) (fragment : Fragment) (finalCaller : Caller width)
+    (finalQueries : Queries) (finished : Cached) (consumerIndex : Nat)
+    (symbol : Symbol) (staged : List Input) (residual : Option Constraint) (middle : Cached)
+    (prepared : SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs edge before =
+      some [((symbol, staged, residual), middle)])
+    (position : Nat) (incoming : Node) (bucket : List Suspended)
+    (action : Option (EnumerateM Symbol Constraint Fragment))
+    (indexed : staged[position]? = some (incoming, bucket, action))
+    (trace : SelectedInvocationAt checkEmpty r n p h k edgesOf policy consume scs edge caller before queries
+      index output (.complete fragment finalCaller finalQueries finished) consumerIndex) :
+    let tupleDone : TupleDone := fun produced current capturedQueries captured =>
+      consume (.complete (.node symbol produced) current capturedQueries
+        (SelectedEdge.finish residual (.node symbol produced) captured))
+    let tupleStopped : TupleStopped := fun completed observation candidate =>
+      consume (.stopped completed observation candidate)
+    ∃ (priorStaged laterStaged : List Input) (priorFragments : List Fragment)
+        (childCaller : Caller width) (childBefore : Cached) (childQueries : Queries)
+        (childRootIndex : Nat) (childFragment : Fragment) (reached : Caller width)
+        (saved : Queries) (after : Cached) (childCallbackIndex : Nat)
+        (remainingFragments : List Fragment) (afterChildren : Cached),
+      staged = priorStaged ++ (incoming, bucket, action) :: laterStaged ∧
+      priorStaged.length = position ∧ priorFragments.length = position ∧
+      fragment = .node symbol (priorFragments ++ childFragment :: remainingFragments) ∧
+      finished = SelectedEdge.finish residual fragment afterChildren ∧
+      ChildInvocationAt checkEmpty r n p h k edgesOf policy bucket incoming childCaller childBefore childQueries
+        (fun produced current capturedQueries captured =>
+          visitChildren (runPolicy checkEmpty r n p h k edgesOf policy)
+            (fun remaining => tupleDone (priorFragments ++ produced :: remaining))
+            (fun completed => tupleStopped (priorFragments ++ produced :: completed))
+            (laterStaged.map (fun input => (input.1, input.2.1))) current captured capturedQueries)
+        (fun observation candidate => tupleStopped priorFragments observation candidate)
+        childRootIndex output (.done childFragment reached saved after) childCallbackIndex ∧
+      ChildrenInvocationAt checkEmpty r n p h k edgesOf policy
+        (fun remaining => tupleDone (priorFragments ++ childFragment :: remaining))
+        (fun completed => tupleStopped (priorFragments ++ childFragment :: completed))
+        (laterStaged.map (fun input => (input.1, input.2.1))) reached after saved
+        childCallbackIndex output (.done remainingFragments finalCaller finalQueries afterChildren) consumerIndex

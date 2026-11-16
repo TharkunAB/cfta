@@ -1,0 +1,16 @@
+ := by
+  rcases children_cons_invocation_cases checkEmpty r n p h k edgesOf policy done stopped
+      incoming bucket rest caller before queries index output
+      (.done fragments finalCaller finalQueries finalCache) localIndex trace with completed | interrupted
+  · obtain ⟨fragment, reached, saved, after, childIndex, tailExit, child, tail, same⟩ := completed
+    cases tailExit with
+    | done remaining tailCaller tailQueries tailCache =>
+        simp only [TupleExit.prepend] at same
+        obtain ⟨fragmentsSame, callerSame, queriesSame, cacheSame⟩ := TupleExit.done.inj same
+        subst finalCaller finalQueries finalCache
+        exact ⟨fragment, reached, saved, after, childIndex, remaining, fragmentsSame, child, tail⟩
+    | stopped earlier observation candidate =>
+        simp only [TupleExit.prepend] at same
+        cases same
+  · obtain ⟨observation, candidate, _child, impossible⟩ := interrupted
+    cases impossible

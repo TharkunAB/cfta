@@ -1,0 +1,58 @@
+ := by
+  have coreSame := ChildDispatch.singleton_core checkEmpty r n p h k scs incoming
+    caller reached before after queries saved fragment returned read waiting actual
+  have original := (ChildDispatch.erase checkEmpty r n p h k scs incoming caller before queries).symm.trans
+    (congrArg Prod.fst actual)
+  have aliases : ∀ left right, UnionFind.SameClass before.core.representatives left right →
+      UnionFind.SameClass returned.representatives left right := by
+    by_cases empty : incoming = .empty
+    · simp only [ChildDispatch.observe, empty, ↓reduceIte] at original
+      cases original
+    · cases partitioned : scs.partition (fun sc => EqualityTrie.isTerminal sc.trie) with
+      | mk here descendants =>
+          cases here with
+          | nil =>
+              simp only [ChildDispatch.observe, empty, ↓reduceIte, partitioned] at original
+              cases prepared : SourcePruningEnumerationShallowChild.prepareChild
+                  (EnumGuard := Constraint) scs incoming with
+              | none =>
+                  simp only [prepared] at original
+                  cases original
+              | some action =>
+                  rw [prepared] at original
+                  have rawSame := congrArg Prod.fst original
+                  dsimp only at rawSame
+                  have successful : Success action before.core fragment returned := by
+                    rw [Success, Option.some.inj (Except.ok.inj rawSame)]
+                    exact List.mem_singleton_self _
+                  have forest := shallow_prepared_forest scs incoming before.core returned
+                    action fragment prepared successful
+                  intro left right same
+                  rw [forest]
+                  exact same
+          | cons first rest =>
+              have terminalObserved : SourcePruningEnumerationSharedCachedTerminal.raw
+                  checkEmpty r n p h first rest before.waiting caller before.core incoming descendants queries =
+                    (.ok (some [.ok (fragment, returned)]), reached, saved, read, waiting) := by
+                simpa only [ChildDispatch.observe, empty, ↓reduceIte, partitioned] using original
+              obtain ⟨recorded, winner, joined, foldCaller, foldQueries, folded, foldOuter,
+                processed, foldedCall, _foldEndpoint, incomingCall, _hole⟩ :=
+                raw_terminal_singleton_interval checkEmpty r n p h first rest before.waiting caller
+                  before.core incoming descendants queries fragment reached saved read returned waiting terminalObserved
+              have prefixAliases := terminal_prefix_sameClass_forward r first rest before.waiting
+                before.core joined recorded winner waiting processed
+              have foldForest := shared_fold_singleton_forest checkEmpty n p h recorded caller joined
+                winner queries folded foldCaller foldQueries foldOuter foldedCall
+              obtain ⟨writtenForest, incomingAliases⟩ := shared_incoming_singleton_aliases
+                checkEmpty r n p h foldCaller folded winner incoming descendants foldQueries
+                  returned reached saved read incomingCall
+              intro left right same
+              have atFolded : UnionFind.SameClass folded.representatives left right := by
+                rw [foldForest]
+                exact prefixAliases left right same
+              rw [writtenForest]
+              exact incomingAliases left right atFolded
+  refine ⟨coreSame, ?_⟩
+  intro left right same
+  have kept := aliases left right same
+  exact ⟨kept, by rw [coreSame]; exact kept⟩

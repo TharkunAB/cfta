@@ -1,0 +1,39 @@
+private theorem terminal_prefix_sameClass_forward
+    (fuel : Nat) (first : Suspended) (rest : List Suspended)
+    (waiting : EnumerationWaitingIndex.Waiting) (before after : Core)
+    (recorded : List Nat) (winner : Nat) (moved : EnumerationWaitingIndex.Waiting)
+    (actual : ExceptT.run (SourcePruningEnumerationTerminalPrefix.run
+      fuel first rest waiting before) = [.ok ((recorded, winner, moved), after)]) :
+    ∀ left right, UnionFind.SameClass before.representatives left right →
+      UnionFind.SameClass after.representatives left right := by
+  have successful : Success (SourcePruningEnumerationTerminalPrefix.run fuel first rest waiting)
+      before (recorded, winner, moved) after := by
+    rw [Success, actual]
+    exact List.mem_singleton_self _
+  unfold SourcePruningEnumerationTerminalPrefix.run at successful
+  obtain ⟨roots, scanned, scanning, continued⟩ := (success_bind _ _ _ _ _).mp successful
+  obtain ⟨ignored, united, joining, continued⟩ := (success_bind _ _ _ _ _).mp continued
+  cases ignored
+  obtain ⟨root, resolved, resolving, final⟩ := (success_bind _ _ _ _ _).mp continued
+  obtain ⟨_valueSame, afterSame⟩ := (success_pure _ _ _ _).mp final
+  subst after
+  let invariant := fun state : Core => ∀ left right,
+    UnionFind.SameClass before.representatives left right →
+      UnionFind.SameClass state.representatives left right
+  have scannedAliases : invariant scanned := by
+    apply mapM_invariant (fun sc : Suspended => representative fuel sc.var)
+      invariant (first :: rest) ?_ before scanned roots (fun _ _ same => same) scanning
+    intro sc _member current currentRoot next previous observed
+    intro left right same
+    exact representative_sameClass_forward fuel sc.var currentRoot current next observed
+      left right (previous left right same)
+  have unitedAliases : invariant united := by
+    apply forM_invariant (fun sc : Suspended => unionVariables fuel first.var sc.var)
+      invariant rest ?_ scanned united scannedAliases joining
+    intro sc _member current next previous observed
+    intro left right same
+    exact unionVariables_sameClass_forward fuel first.var sc.var current next observed
+      left right (previous left right same)
+  intro left right same
+  exact representative_sameClass_forward fuel first.var root united resolved resolving
+    left right (unitedAliases left right same)

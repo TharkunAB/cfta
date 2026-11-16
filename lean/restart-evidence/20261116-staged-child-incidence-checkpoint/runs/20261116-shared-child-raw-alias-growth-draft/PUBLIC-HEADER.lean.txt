@@ -1,0 +1,11 @@
+/-- A literal successful shared child retains every raw entry alias at both endpoints. -/
+theorem successful_sameClass_forward
+    (checkEmpty : Bool) (r n p h k : Nat) (scs : List Suspended) (incoming : Node)
+    (caller reached : Caller width) (before after : Cached) (queries saved : Queries)
+    (fragment : Fragment) (returned read : Core) (waiting : EnumerationWaitingIndex.Waiting)
+    (actual : ChildDispatch.run checkEmpty r n p h k scs incoming caller before queries =
+      ((.ok (some [.ok (fragment, returned)]), reached, saved, read, waiting), some after)) :
+    after.core = returned ∧
+      ∀ (left right : Nat), UnionFind.SameClass before.core.representatives left right →
+        UnionFind.SameClass returned.representatives left right ∧
+          UnionFind.SameClass after.core.representatives left right

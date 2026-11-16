@@ -1,0 +1,47 @@
+ := by
+  dsimp only
+  obtain ⟨chosenSymbol, chosenStaged, chosenResidual, chosenMiddle,
+      fragments, afterChildren, actual, children, assembled, finishedEq⟩ :=
+    selected_complete_invocation checkEmpty r n p h k edgesOf policy consume scs edge
+      caller before queries index output fragment finalCaller finalQueries finished consumerIndex trace
+  have rowSame : ((chosenSymbol, chosenStaged, chosenResidual), chosenMiddle) =
+      ((symbol, staged, residual), middle) :=
+    (List.cons.inj (Option.some.inj (actual.symm.trans prepared))).1
+  have symbolSame : chosenSymbol = symbol :=
+    congrArg (fun row : Row => row.1.1) rowSame
+  have stagedSame : chosenStaged = staged :=
+    congrArg (fun row : Row => row.1.2.1) rowSame
+  have residualSame : chosenResidual = residual :=
+    congrArg (fun row : Row => row.1.2.2) rowSame
+  have middleSame : chosenMiddle = middle :=
+    congrArg (fun row : Row => row.2) rowSame
+  subst chosenSymbol chosenStaged chosenResidual chosenMiddle
+  obtain ⟨priorStaged, laterStaged, split, priorLength⟩ :=
+    indexed_split staged position (incoming, bucket, action) indexed
+  have inputSplit : staged.map (fun input => (input.1, input.2.1)) =
+      priorStaged.map (fun input => (input.1, input.2.1)) ++
+        (incoming, bucket) :: laterStaged.map (fun input => (input.1, input.2.1)) := by
+    rw [split, List.map_append, List.map_cons]
+    rfl
+  rw [inputSplit] at children
+  let tupleDone : TupleDone := fun produced current capturedQueries captured =>
+    consume (.complete (.node symbol produced) current capturedQueries
+      (SelectedEdge.finish residual (.node symbol produced) captured))
+  let tupleStopped : TupleStopped := fun completed observation candidate =>
+    consume (.stopped completed observation candidate)
+  obtain ⟨priorFragments, childCaller, childBefore, childQueries, childRootIndex,
+      childFragment, reached, saved, after, childCallbackIndex, remainingFragments,
+      completedLength, fragmentShape, child, tail⟩ :=
+    children_done_prefix_invocation checkEmpty r n p h k edgesOf policy tupleDone tupleStopped
+      (priorStaged.map (fun input => (input.1, input.2.1))) incoming bucket
+      (laterStaged.map (fun input => (input.1, input.2.1))) caller middle queries index output
+      fragments finalCaller finalQueries afterChildren consumerIndex children
+  have samePosition : priorFragments.length = position := by
+    have stagedLength : priorFragments.length = priorStaged.length := by
+      simpa only [List.length_map] using completedLength
+    exact stagedLength.trans priorLength
+  rw [fragmentShape] at assembled
+  exact ⟨priorStaged, laterStaged, priorFragments, childCaller, childBefore, childQueries,
+    childRootIndex, childFragment, reached, saved, after, childCallbackIndex,
+    remainingFragments, afterChildren, split, priorLength, samePosition,
+    assembled, finishedEq, child, tail⟩

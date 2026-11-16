@@ -1,0 +1,1 @@
+Frozen and UNCOMPILED. This draft states forward raw-alias preservation for the actual local lookup, union and allocation operations. No totality or allocation bound is assumed. It does not prove whole-worker alias transport or causal output association. Root owns compilation, repairs and publication.

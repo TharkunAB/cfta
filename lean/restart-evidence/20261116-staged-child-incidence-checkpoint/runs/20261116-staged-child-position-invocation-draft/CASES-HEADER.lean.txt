@@ -1,0 +1,30 @@
+private theorem children_cons_invocation_cases
+    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List Edge) (policy : Policy)
+    (done : TupleDone) (stopped : TupleStopped)
+    (incoming : Node) (bucket : List Suspended) (rest : List (Node × List Suspended))
+    (caller : Caller width) (before : Cached) (queries : Queries) (index : Nat) (output : Output)
+    (exit : TupleExit width) (localIndex : Nat)
+    (trace : ChildrenInvocationAt checkEmpty r n p h k edgesOf policy done stopped
+      ((incoming, bucket) :: rest) caller before queries index output exit localIndex) :
+    (∃ (fragment : Fragment) (reached : Caller width) (saved : Queries) (after : Cached)
+        (childIndex : Nat) (tailExit : TupleExit width),
+      ChildInvocationAt checkEmpty r n p h k edgesOf policy bucket incoming caller before queries
+        (fun produced current capturedQueries captured =>
+          visitChildren (runPolicy checkEmpty r n p h k edgesOf policy)
+            (fun remaining => done (produced :: remaining))
+            (fun completed => stopped (produced :: completed)) rest current captured capturedQueries)
+        (fun observation candidate => stopped [] observation candidate)
+        index output (.done fragment reached saved after) childIndex ∧
+      ChildrenInvocationAt checkEmpty r n p h k edgesOf policy
+        (fun remaining => done (fragment :: remaining))
+        (fun completed => stopped (fragment :: completed)) rest reached after saved
+        childIndex output tailExit localIndex ∧ exit = TupleExit.prepend fragment tailExit) ∨
+    (∃ (observation : Observation width) (candidate : Option Cached),
+      ChildInvocationAt checkEmpty r n p h k edgesOf policy bucket incoming caller before queries
+        (fun produced current capturedQueries captured =>
+          visitChildren (runPolicy checkEmpty r n p h k edgesOf policy)
+            (fun remaining => done (produced :: remaining))
+            (fun completed => stopped (produced :: completed)) rest current captured capturedQueries)
+        (fun current captured => stopped [] current captured)
+        index output (.stopped observation candidate) localIndex ∧
+      exit = .stopped [] observation candidate)

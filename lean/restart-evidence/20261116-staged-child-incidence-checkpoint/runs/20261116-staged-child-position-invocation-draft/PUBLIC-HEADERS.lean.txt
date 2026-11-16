@@ -1,0 +1,52 @@
+theorem children_done_head_invocation
+    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List Edge) (policy : Policy)
+    (done : TupleDone) (stopped : TupleStopped)
+    (incoming : Node) (bucket : List Suspended) (rest : List (Node × List Suspended))
+    (caller : Caller width) (before : Cached) (queries : Queries) (index : Nat) (output : Output)
+    (fragments : List Fragment) (finalCaller : Caller width) (finalQueries : Queries) (finalCache : Cached)
+    (localIndex : Nat)
+    (trace : ChildrenInvocationAt checkEmpty r n p h k edgesOf policy done stopped
+      ((incoming, bucket) :: rest) caller before queries index output
+      (.done fragments finalCaller finalQueries finalCache) localIndex) :
+    ∃ (fragment : Fragment) (reached : Caller width) (saved : Queries) (after : Cached)
+        (childIndex : Nat) (remainingFragments : List Fragment),
+      fragments = fragment :: remainingFragments ∧
+      ChildInvocationAt checkEmpty r n p h k edgesOf policy bucket incoming caller before queries
+        (fun produced current capturedQueries captured =>
+          visitChildren (runPolicy checkEmpty r n p h k edgesOf policy)
+            (fun remaining => done (produced :: remaining))
+            (fun completed => stopped (produced :: completed)) rest current captured capturedQueries)
+        (fun observation candidate => stopped [] observation candidate)
+        index output (.done fragment reached saved after) childIndex ∧
+      ChildrenInvocationAt checkEmpty r n p h k edgesOf policy
+        (fun remaining => done (fragment :: remaining))
+        (fun completed => stopped (fragment :: completed)) rest reached after saved
+        childIndex output (.done remainingFragments finalCaller finalQueries finalCache) localIndex
+
+theorem children_done_prefix_invocation
+    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List Edge) (policy : Policy)
+    (done : TupleDone) (stopped : TupleStopped)
+    (priorInputs : List (Node × List Suspended)) (incoming : Node) (bucket : List Suspended)
+    (rest : List (Node × List Suspended)) (caller : Caller width) (before : Cached) (queries : Queries)
+    (index : Nat) (output : Output) (fragments : List Fragment)
+    (finalCaller : Caller width) (finalQueries : Queries) (finalCache : Cached) (localIndex : Nat)
+    (trace : ChildrenInvocationAt checkEmpty r n p h k edgesOf policy done stopped
+      (priorInputs ++ (incoming, bucket) :: rest) caller before queries index output
+      (.done fragments finalCaller finalQueries finalCache) localIndex) :
+    ∃ (priorFragments : List Fragment) (childCaller : Caller width) (childBefore : Cached)
+        (childQueries : Queries) (childRootIndex : Nat) (fragment : Fragment)
+        (reached : Caller width) (saved : Queries) (after : Cached)
+        (childCallbackIndex : Nat) (remainingFragments : List Fragment),
+      priorFragments.length = priorInputs.length ∧
+      fragments = priorFragments ++ fragment :: remainingFragments ∧
+      ChildInvocationAt checkEmpty r n p h k edgesOf policy bucket incoming childCaller childBefore childQueries
+        (fun produced current capturedQueries captured =>
+          visitChildren (runPolicy checkEmpty r n p h k edgesOf policy)
+            (fun remaining => done (priorFragments ++ produced :: remaining))
+            (fun completed => stopped (priorFragments ++ produced :: completed)) rest current captured capturedQueries)
+        (fun observation candidate => stopped priorFragments observation candidate)
+        childRootIndex output (.done fragment reached saved after) childCallbackIndex ∧
+      ChildrenInvocationAt checkEmpty r n p h k edgesOf policy
+        (fun remaining => done (priorFragments ++ fragment :: remaining))
+        (fun completed => stopped (priorFragments ++ fragment :: completed)) rest reached after saved
+        childCallbackIndex output (.done remainingFragments finalCaller finalQueries finalCache) localIndex
