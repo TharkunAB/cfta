@@ -1,0 +1,12 @@
+private theorem actual_source_tuple_cons_run
+    (narrow : Narrow)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol)) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Typing) (uv : Nat) (point : IdentityActualSourcePoint bits) (count : Nat)
+    (incoming : Node) (bucket : List Suspended) (rest : List (Node × List Suspended)) :
+    IdentityActualSourceTask.runWithNarrow narrow graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+      (.tuple {point with count := count + 1} ((incoming, bucket) :: rest)) =
+    IdentityActualSourceTask.runWithNarrow narrow graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+      (.child {point with count := count} incoming bucket rest)

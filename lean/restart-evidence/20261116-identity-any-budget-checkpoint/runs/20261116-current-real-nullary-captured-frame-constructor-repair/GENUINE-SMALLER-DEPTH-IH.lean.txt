@@ -1,0 +1,19 @@
+    (workerIH : ∀ (nextInventory : Inventory) (nextCaller : Caller (bits + 2)) (nextMemos : Memos)
+        (nextBefore : Cached) (nextMetadata : Metadata Typing) (nextSeed : Seed) (nextCeiling : Nat),
+      Packet formulas solver nextInventory nextCaller nextMemos nextMetadata nextBefore →
+      Fits nextSeed.2 nextCaller.checked →
+      Heap (fun guard => guard ∈ nextSeed.1) nextCaller.checked.native.machine.heap →
+      (∀ entry rows depth free, ∀ edge ∈ edgesOf (.node entry rows depth free), edge ∈ rows) →
+      (∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length) →
+      SourcePruningEnumerationPrefixAdmission.suspendedBound nextBefore.core ≤ nextCeiling →
+      eagerReserved bits recursiveDepth nextSeed nextCeiling →
+      ∀ sameWorkFuel,
+        let outcome := runEagerWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
+          graph templates checkEmpty edgesOf stop order sameWorkFuel recursiveDepth
+          nextMetadata nextCaller nextMemos.query nextBefore
+        (∀ output ∈ emitted outcome,
+          OutputResources formulas solver nextCaller (eagerFinal recursiveDepth nextSeed nextCeiling) output) ∧
+        match outcome with
+        | .complete _ _ _ => OutcomeResources formulas solver nextCaller
+            (eagerFinal recursiveDepth nextSeed nextCeiling) outcome
+        | .stopped _ _ _ => True)

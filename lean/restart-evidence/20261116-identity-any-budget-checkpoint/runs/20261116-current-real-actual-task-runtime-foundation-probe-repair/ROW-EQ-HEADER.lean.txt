@@ -1,0 +1,12 @@
+private theorem actual_source_row_prefix_run_with_narrow_eq
+    (narrow : Narrow)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol)) (checkEmpty : Bool)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat)
+    (metadata : Metadata Typing) (uv : Nat) (height : Nat) (point : IdentityActualSourcePoint bits)
+    (incoming : Node) (bucket : List Suspended) (rest : List (Node × List Suspended)) :
+    actual_source_row_prefix_run_with_narrow narrow graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+      point incoming bucket rest (edgesOf incoming) =
+    IdentityActualSourceTask.runWithNarrow narrow graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+      (.rows height point incoming bucket rest)

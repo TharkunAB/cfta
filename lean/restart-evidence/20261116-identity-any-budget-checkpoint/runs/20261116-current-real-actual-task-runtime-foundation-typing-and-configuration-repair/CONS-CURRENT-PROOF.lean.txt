@@ -1,0 +1,10 @@
+ := by
+  refine ⟨.tupleHead point count incoming bucket rest origin, ?_, ?_⟩
+  · exact current
+  · change identity_actual_node_steps root.limit point.height
+        (identity_actual_tuple_steps (identity_actual_node_steps root.limit point.height)
+          count (identity_actual_frame_steps root.limit point.frame)) <
+      identity_actual_node_steps root.limit point.height
+        (identity_actual_tuple_steps (identity_actual_node_steps root.limit point.height)
+          count (identity_actual_frame_steps root.limit point.frame)) + 1
+    omega

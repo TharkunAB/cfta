@@ -1,0 +1,67 @@
+/-- An actual nullary captured row retains resources through its real callback at the original budget. -/
+theorem nullary_captured_frame_resources_at_original_budget
+    [DecidableEq Symbol] [DecidableEq Node]
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (recursiveDepth : Nat)
+    (workerIH : ∀ (nextInventory : Inventory) (nextCaller : Caller (bits + 2)) (nextMemos : Memos)
+        (nextBefore : Cached) (nextMetadata : Metadata Typing) (nextSeed : Seed) (nextCeiling : Nat),
+      Packet formulas solver nextInventory nextCaller nextMemos nextMetadata nextBefore →
+      Fits nextSeed.2 nextCaller.checked →
+      Heap (fun guard => guard ∈ nextSeed.1) nextCaller.checked.native.machine.heap →
+      (∀ entry rows depth free, ∀ edge ∈ edgesOf (.node entry rows depth free), edge ∈ rows) →
+      (∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length) →
+      SourcePruningEnumerationPrefixAdmission.suspendedBound nextBefore.core ≤ nextCeiling →
+      eagerReserved bits recursiveDepth nextSeed nextCeiling →
+      ∀ sameWorkFuel,
+        let outcome := runEagerWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
+          graph templates checkEmpty edgesOf stop order sameWorkFuel recursiveDepth
+          nextMetadata nextCaller nextMemos.query nextBefore
+        (∀ output ∈ emitted outcome,
+          OutputResources formulas solver nextCaller (eagerFinal recursiveDepth nextSeed nextCeiling) output) ∧
+        match outcome with
+        | .complete _ _ _ => OutcomeResources formulas solver nextCaller
+            (eagerFinal recursiveDepth nextSeed nextCeiling) outcome
+        | .stopped _ _ _ => True)
+    (inventory : Inventory) (caller : Caller (bits + 2)) (memos : Memos)
+    (before : Cached) (metadata : Metadata Typing) (uv handle : Nat)
+    (scs : List Suspended) (edge : EdgeValue Symbol Constraint)
+    (residual : Option Constraint) (own : Cached)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (ready : EnumerationDriver.Ready uv before.core)
+    (stored : before.core.values[uv]? = some (.unenumerated (some handle) scs))
+    (incoming : EnumerationReferences.IncomingAvoid uv before.core)
+    (nullary : edge.children = [])
+    (prepared : SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs edge before =
+      some [((edge.entry.key.symbol, [], residual), own)])
+    (seed : Seed) (ceiling : Nat)
+    (bounded : Fits seed.2 caller.checked)
+    (known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap)
+    (selectionMembers : ∀ entry rows depth free, ∀ selected ∈ edgesOf (.node entry rows depth free), selected ∈ rows)
+    (selectionLength : ∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length)
+    (mass : SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling)
+    (reserved : eagerReserved bits recursiveDepth seed ceiling) (workFuel : Nat) :
+    let outcome := SourcePruningEnumerationSharedPreparedRecursive.finish uv
+      (SourcePruningEnumerationSharedChildVisitors.visitCapturedWith
+        (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty
+          workFuel workFuel workFuel workFuel workFuel edgesOf)
+        (SourcePruningEnumerationSharedPreparedRecursive.continueWith
+          (resumeWithNarrow
+            (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty
+              workFuel workFuel workFuel workFuel workFuel edgesOf)
+            (SourcePruningOuterNarrow.narrow holeKey fits admits)
+            graph templates checkEmpty edgesOf stop order workFuel recursiveDepth)
+          graph templates stop order workFuel metadata uv)
+        workFuel uv scs edge caller memos.query before)
+    (∀ output ∈ emitted outcome,
+      OutputResources formulas solver caller (eagerFinal recursiveDepth seed ceiling) output) ∧
+      match outcome with
+      | .complete outputs reached saved =>
+          OutcomeResources formulas solver caller (eagerFinal recursiveDepth seed ceiling) outcome ∧
+          ∃ (next : Inventory) (final : Memos),
+            Post formulas solver next caller reached final ∧ final.query = saved ∧
+            Packet formulas solver next reached final metadata before
+      | .stopped _ _ _ => True

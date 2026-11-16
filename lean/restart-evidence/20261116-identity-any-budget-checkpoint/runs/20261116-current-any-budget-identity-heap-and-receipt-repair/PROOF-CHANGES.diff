@@ -1,0 +1,81 @@
+--- failed609/SUCCESS-PROOF.lean.txt
++++ heap-and-receipt/SUCCESS-PROOF.lean.txt
+@@ -41,6 +41,15 @@
+   let preparedCaller : Caller (bits + 2) := SourcePruningEnumerationSelectedValueCaller.advance caller heap
+   have preparedHeap : preparedCaller.checked.native.machine.heap = heap :=
+     identity_actual_selected_caller_heap caller heap
++  have preparedFitsAt : Fits start.2 preparedCaller.checked := preparedFits
++  have preparedKnownAt : Heap (fun guard => guard ∈ start.1)
++      preparedCaller.checked.native.machine.heap := by
++    rw [preparedHeap, alphabetSame]
++    change InternedFreshOrdinaryConstraintHeap.Heap (fun guard => guard ∈ seed.1) heap
++    exact preparedKnown
++  have availableAt : Available preparedCaller.checked.native.machine.heap value := by
++    rw [preparedHeap]
++    exact available
+   let cached : Cached := EnumerationExpandableIndex.frame entered before
+   have currentMass : SourcePruningEnumerationPrefixAdmission.suspendedBound cached.core ≤ ceiling := by
+     rw [sameMass]
+@@ -48,16 +57,6 @@
+   by_cases ordinary : ∃ entry rows depth free,
+       value = .node entry rows depth free ∧ scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = false
+   · obtain ⟨entry, rows, depth, free, rfl, nonterminal⟩ := ordinary
+-    have preparedFitsAt : Fits start.2 preparedCaller.checked := preparedFits
+-    have preparedKnownAt : Heap (fun guard => guard ∈ start.1)
+-        preparedCaller.checked.native.machine.heap := by
+-      rw [preparedHeap, alphabetSame]
+-      change InternedFreshOrdinaryConstraintHeap.Heap (fun guard => guard ∈ seed.1) heap
+-      exact preparedKnown
+-    have availableAt : Available preparedCaller.checked.native.machine.heap
+-        (.node entry rows depth free) := by
+-      rw [preparedHeap]
+-      exact available
+     have closedAt : free = [] := closed
+     have reservedAt : eagerReserved bits (recursiveDepth + 1) seed ceiling := reserved
+     have scan := identity_actual_prepared_scan_prefixes_at_any_budget graph checkEmpty edgesOf
+@@ -78,7 +77,7 @@
+         actual, nonterminal, Bool.false_eq_true, ↓reduceIte] <;> rfl
+     have atAll := (prefixes (edgesOf (.node entry rows depth free)) [] (by simp only [List.append_nil])).2.1
+     have positive : 0 < limit := by
+-      have ranked := heights (.node entry rows depth free) available
++      have ranked := heights (.node entry rows depth free) availableAt
+       change MergedOrdinaryHeight.edgesHeight rows + 1 ≤ limit at ranked
+       omega
+     have heightSame : height + 1 = limit := by dsimp only [height]; omega
+@@ -87,9 +86,16 @@
+       exact tuplePlan_ge (nodePlan limit own height) (nodePlan_ge limit own height)
+         limit (ceiling + own) ceiling continuation continuationGrowth current
+     have sourceCount : (edgesOf (.node entry rows depth free)).length ≤ limit :=
+-      Nat.le_trans (selectionLength entry rows depth free) (shapes entry rows depth free available).1
+-    have included := SourcePruningEnumerationFiniteReservation.iterate_index_le row rowGrowth first
+-      (edgesOf (.node entry rows depth free)).length limit sourceCount
++      Nat.le_trans (selectionLength entry rows depth free) (shapes entry rows depth free availableAt).1
++    have included :
++        Le (iterate row first (edgesOf (.node entry rows depth free)).length).2
++          (iterate row first limit).2 ∧
++        (iterate row first (edgesOf (.node entry rows depth free)).length).1 ⊆
++          (iterate row first limit).1 := by
++      obtain ⟨extra, limitEq⟩ := Nat.exists_eq_add_of_le sourceCount
++      simpa only [limitEq, SourcePruningEnumerationFiniteReservation.iterate_add] using
++        (SourcePruningEnumerationFiniteReservation.iterate_ge row rowGrowth
++          (iterate row first (edgesOf (.node entry rows depth free)).length) extra)
+     have finalSame : eagerFinal (recursiveDepth + 1) seed ceiling = iterate row first limit := by
+       rw [eagerFinal]
+       change nodePlan limit own limit ceiling ceiling continuation start = _
+@@ -122,6 +128,7 @@
+           workFuel workFuel workFuel workFuel workFuel uv scs value preparedCaller cached memos.query)) := by
+       dsimp only [prepared, SourcePruningEnumerationSharedPreparedChildPolicy.runWithChild]
+       rw [actual]
++      dsimp only
+       cases terminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) with
+       | true => rfl
+       | false =>
+@@ -131,7 +138,7 @@
+     have opaqueResources := identity_actual_opaque_terminal_resources_at_any_budget graph checkEmpty edgesOf
+       formulas solver recursiveDepth workerIH inventory preparedCaller memos metadata cached start
+       ceiling ceiling uv handle scs value preparedPacket preparedReady preparedStored enteredIncoming
+-      available closed dispatch preparedFits preparedKnown currentMass bucketBound selectionMembers selectionLength
++      availableAt closed dispatch preparedFitsAt preparedKnownAt currentMass bucketBound selectionMembers selectionLength
+       (nodeReserved_fallback bits limit own limit ceiling ceiling continuation admitted start planned) workFuel
+     have included := fallbackPlan_le_nodePlan limit own limit ceiling ceiling continuation continuationGrowth start
+     have enlarged : IdentityEmittedCompleteResources formulas solver preparedCaller
