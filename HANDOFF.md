@@ -1,3 +1,87 @@
+## 2026-11-16 18:10 CET — outer recursive preservation passes all public gates
+
+The original runEager_real_pending_target_fragments_avoid_isolated_at_any_budget
+statement is proved. Its header remains byte-exact9061c0ca. The stronger internal
+HeldFragmentHistory theorem uses genuine depth induction and the checked inner task
+induction. The resource IH comes from the existing all-depth theorem. No new public
+IH, future-output supplier, compatibility oracle or numeric engine is assumed.
+
+For every actual emitted output at the original work and recursive budgets, the held
+recursive class remains isolated and protected. Every final expansion of an originally
+pending target avoids that held class. Actual prefix, parked restart, captured row,
+prepared scan, successful preparation and opaque child paths supply the full history.
+The proof retains outputs before later stops. Empty runtime branches remain empty.
+
+The checked generic pending-fragment lemma also derives avoidance of every protected
+old expanded class. Its actual ChildInputs producer derives all old protection from
+Packet.pending, the original target store, Packet.safe and actual ChildInputs fields.
+It introduces no future protection/model supplier. This is a local dependency fact.
+It does not yet prove evaluator noninterference or one joint historical model.
+
+All five public gates pass:6173 Source files,5173 direct Audit imports,520 reports
+(517 standard and3 axiom-free),115 independent reports,176 resource/component probes
+(ALL136 original probes plus40 additional probes), and98828 audited declarations.
+The limits remain8GiB, zero swap and the original2000000 resource proof limit.
+Every previous owner byte remains after two normal acyclic imports. The original
+resource5493 header remains unchanged. The original906 header is unchanged.
+
+The full target remains ONE finite accepted completion of the SAME original partial
+root under ONE compatible assignment that satisfies every current, removed and parked
+obligation on THAT branch. Current rendering still needs explicit OnlyU and successful
+residual checks. The removed-bucket witness is a separate existential assignment.
+Do not combine those witnesses. Next derive same-final-snapshot recompletion with
+actual raw-target agreement, final UF aliases, occurrence provenance and guards under
+one final rho. Warm C/M meanings, two inherited Returned priors, four mixed clauses,
+whole-source pending Profile closure and all broader operational contracts remain open.
+Typing/depth adequacy/completeness, both preprocessing/LPO directions, lazy demand,
+order/multiplicity, exact node counts/counting/weights/training, both rank inverses,
+host bounds and compiled Haskell correspondence remain in scope.
+
+No Haskell source changed. Record EVERY future Haskell fix in FINDINGS.md for external
+pickup. All failed attempts, repairs, original headers, pause/resume records and pins
+remain preserved. The earlier pause is revoked by Matti's explicit goal reactivation.
+The old timer and service are absent; no duplicate resume worker is scheduled.
+Known exact terminal-output cleanup is2500122488 bytes. Public caches, source, logs,
+live outputs and unknown tmp entries are protected. Primary usage was53%; pause only
+above80%. Goal stays ACTIVE. Pushes to origin/formalize remain explicitly authorized.
+
+---
+
+# Resumed by Matti on 2026-11-16 at 17:54 CET
+
+The existing goal is ACTIVE again. This prefix supersedes the timed-pause status below.
+The old one-shot resume timer and service are absent. No earlier proof compiler is live.
+Upstream main and formalize are unchanged. Primary usage is53%; pause only above80%.
+Full scope, original runtime/proof limits and the prior checked boundary remain unchanged.
+The next strict check selects final outerbc7 and the frozen generic pending-fragment lemma.
+No full outer/906 or new publication claim is made until the checks and five gates pass.
+All drafts, failures, repairs and pause records remain in Work21 and the earlier checkpoint.
+
+---
+
+# Paused for benchmarks until 2026-11-16 18:00 CET
+
+Matti requested this timed pause at 13:50 CET. Proof compiler jobs are terminal.
+Background drafting agents are stopped. Resume at 18:00 CET on 2026-11-16.
+The full objective below remains unchanged. This pause prefix supersedes active status below.
+
+The latest verified and pushed checkpoint remains 2411688c with checked Source df642fe.
+The normal Prefix module and Audit edit are uncommitted. They still need publication gates.
+Prefix, row/scan and opaque381 each have independent strict module passes. The repaired
+full-chain check7985 ended exit1 with ONE unsolved expand-case goal. No full-chain credit.
+A new outer-only repair bc7f93a5 is frozen and UNCOMPILED. It closes quantified True
+branches after using the actual branch history. All original headers and caps stay exact.
+Use the unchanged public906 let-repair739ccdcf. The full outer906 and joint historical
+model remain OPEN until the required checks pass. Do not treat the repair as a proof.
+
+Read lean/restart-evidence/20261116-outer-held-history-integration-work/PAUSE-UNTIL-1800.json
+for exact packets, hashes, terminal handles and the next check. The interrupted pending-
+fragment avoidance draft is preserved and uncompiled. Keep every frozen attempt and log.
+Known terminal-output cleanup is2442379704 bytes. Primary usage was41%. No Haskell change.
+The one-shot local resume launcher and its timer record are in the same work folder.
+
+---
+
 # Current checkpoint: actual scoped task history
 
 Checked at 2026-11-16 13:00 CET. Source df642fe056b438f4c475a9a497c769397448bed9. Source-tree SHA256 abd8ad5e4c82680c184889ce67a576b153cb97d50c407b416afb2fdb58f42db3.
