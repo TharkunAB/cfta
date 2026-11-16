@@ -1,0 +1,152 @@
+import MicroCFTA.SourcePruningEnumerationSharedEagerUnionNormal
+import MicroCFTA.SourcePruningEnumerationSharedChildUnionNormal
+import MicroCFTA.SourcePruningEnumerationSharedReceiptContinuation
+
+set_option autoImplicit false
+
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerUnionNormal
+open EnumerationState InternedConstructorTemplates
+open SourceCurrentRequiredUnionNormal (UnionNormal)
+open SourcePruningEnumerationSharedSelectedContinuations
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Edge" => EdgeValue Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+variable {Typing Key : Type} {width : Nat}
+local notation "Output" => SourcePruningEnumerationSharedPreparedRecursive.Output width Typing
+local notation "Failure" => SourcePruningEnumerationSharedPreparedRecursive.Failure width Typing
+local notation "Hook" => NativeContinuations.HookResult Output Failure width
+local notation "Fold" => NativeContinuations.Result Output Failure width
+local notation "Receipt" => SelectedEdge.Result width
+local notation "Observation" => ChildDispatch.Observation width
+local notation "Visitor" => List Suspended → Node → Caller width → Cached → Queries →
+  (Fragment → Caller width → Queries → Cached → Fold) →
+  (Observation → Option Cached → Fold) → Fold
+
+/-- Read the exact output and native endpoint fields of an actual hook result. -/
+def HookNormal (actual : Hook) : Prop :=
+  match actual with
+  | .complete outputs reached _ =>
+      (∀ output, output ∈ outputs → UnionNormal output.caller.checked.native.machine.heap) ∧
+        UnionNormal reached.checked.native.machine.heap
+  | .stopped outputs _ reached =>
+      (∀ output, output ∈ outputs → UnionNormal output.caller.checked.native.machine.heap) ∧
+        ∀ endpoint, reached = some endpoint → UnionNormal endpoint.1.checked.native.machine.heap
+
+/-- Read the exact outputs and complete or stopping native endpoint of an actual row fold. -/
+def FoldNormal (actual : Fold) : Prop :=
+  match actual with
+  | .complete _ outputs reached _ =>
+      (∀ output, output ∈ outputs → UnionNormal output.caller.checked.native.machine.heap) ∧
+        UnionNormal reached.checked.native.machine.heap
+  | .stopped _ outputs current =>
+      (∀ output, output ∈ outputs → UnionNormal output.caller.checked.native.machine.heap) ∧
+        match current with
+        | .edge _ endpoint => UnionNormal endpoint.1.checked.native.machine.heap
+        | .continuation _ _ reached =>
+            ∀ endpoint, reached = some endpoint → UnionNormal endpoint.1.checked.native.machine.heap
+
+/-- Read only the native caller retained by the actual selected receipt. -/
+def ReceiptNormal (receipt : Receipt) : Prop :=
+  match receipt with
+  | .unhandled => True
+  | .rejected reached _ _ | .finalizeStopped _ reached _ _ | .complete _ reached _ _ =>
+      UnionNormal reached.checked.native.machine.heap
+  | .stopped _ observation _ => UnionNormal observation.2.1.checked.native.machine.heap
+
+/-- State the local CPS transfer law used inside the actual height and depth inductions. -/
+def ChildPreserves (visit : Visitor) : Prop :=
+  ∀ (scs : List Suspended) (incoming : Node) (caller : Caller width) (before : Cached) (queries : Queries)
+    (done : Fragment → Caller width → Queries → Cached → Fold)
+    (stopped : Observation → Option Cached → Fold),
+    UnionNormal caller.checked.native.machine.heap →
+    (∀ (fragment : Fragment) (reached : Caller width) (saved : Queries) (after : Cached), UnionNormal reached.checked.native.machine.heap →
+      FoldNormal (done fragment reached saved after)) →
+    (∀ (observation : Observation) (candidate : Option Cached), UnionNormal observation.2.1.checked.native.machine.heap →
+      FoldNormal (stopped observation candidate)) →
+    FoldNormal (visit scs incoming caller before queries done stopped)
+
+/-- The actual ordered scan retains every emitted prefix and its native stopping endpoint. -/
+theorem scan_unionNormal
+    (visit : Edge → Caller width → Queries → Cached → Fold)
+    (before : Cached) (rows : List Edge) (caller : Caller width) (queries : Queries)
+    (normal : UnionNormal caller.checked.native.machine.heap)
+    (visitNormal : ∀ (edge : Edge) (reached : Caller width) (saved : Queries) (captured : Cached), UnionNormal reached.checked.native.machine.heap →
+      FoldNormal (visit edge reached saved captured)) :
+    FoldNormal (SourcePruningEnumerationSharedBranching.scan visit before rows caller queries)
+
+/-- Actual child tails compose their local callbacks at the returned native caller. -/
+theorem visitChildren_unionNormal
+    (visit : Visitor) (preserves : ChildPreserves visit)
+    (done : List Fragment → Caller width → Queries → Cached → Fold)
+    (stopped : List Fragment → Observation → Option Cached → Fold)
+    (inputs : List (Node × List Suspended)) (caller : Caller width) (before : Cached) (queries : Queries)
+    (normal : UnionNormal caller.checked.native.machine.heap)
+    (doneNormal : ∀ (fragments : List Fragment) (reached : Caller width) (saved : Queries) (after : Cached), UnionNormal reached.checked.native.machine.heap →
+      FoldNormal (done fragments reached saved after))
+    (stopNormal : ∀ (fragments : List Fragment) (observation : Observation) (candidate : Option Cached), UnionNormal observation.2.1.checked.native.machine.heap →
+      FoldNormal (stopped fragments observation candidate)) :
+    FoldNormal (SourcePruningEnumerationSharedChildVisitors.visitChildren visit done stopped inputs caller before queries)
+
+/-- The actual own-row prefix and child traversal preserve its receipt consumer. -/
+theorem visitSelected_unionNormal
+    (visit : Visitor) (preserves : ChildPreserves visit)
+    (consume : Receipt → Fold) (scs : List Suspended) (edge : Edge)
+    (caller : Caller width) (before : Cached) (queries : Queries)
+    (normal : UnionNormal caller.checked.native.machine.heap)
+    (consumeNormal : ∀ (receipt : Receipt), ReceiptNormal receipt → FoldNormal (consume receipt)) :
+    FoldNormal (SourcePruningEnumerationSharedChildVisitors.visitSelected visit consume scs edge caller before queries)
+
+/-- Actual captured finalization invokes its hook at the actual completed child endpoint. -/
+theorem visitCapturedWith_unionNormal
+    (visit : Visitor) (preserves : ChildPreserves visit)
+    (hook : Fragment → Caller width → Queries → Cached → Hook)
+    (k target : Nat) (scs : List Suspended) (edge : Edge)
+    (caller : Caller width) (queries : Queries) (before : Cached)
+    (normal : UnionNormal caller.checked.native.machine.heap)
+    (hookNormal : ∀ (fragment : Fragment) (reached : Caller width) (saved : Queries) (after : Cached), UnionNormal reached.checked.native.machine.heap →
+      HookNormal (hook fragment reached saved after)) :
+    FoldNormal (SourcePruningEnumerationSharedChildVisitors.visitCapturedWith visit hook k target scs edge caller queries before)
+
+/-- The literal eager child satisfies its CPS transfer law by strict ordinary height. -/
+theorem eagerChild_preserves
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List Edge) :
+    ChildPreserves (Typing := Typing) (width := width)
+      (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty r n p h k edgesOf)
+
+/-- The actual prepared ordinary row scan uses only the same configured lower-depth IH. -/
+theorem configured_lower_depth_rows_unionNormal
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List Edge)
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (workFuel recursiveFuel : Nat) (metadata : Metadata Typing) (uv target : Nat)
+    (scs : List Suspended) (rows : List Edge) (caller : Caller width) (queries : Queries) (before : Cached)
+    (normal : UnionNormal caller.checked.native.machine.heap)
+    (smallerDepth : ∀ (currentMetadata : Metadata Typing) (currentCaller : Caller width)
+        (currentQueries : Queries) (currentCache : Cached) (currentDecision : Option Next),
+        UnionNormal currentCaller.checked.native.machine.heap →
+        HookNormal (SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow
+          (SourcePruningEnumerationSharedEagerChildren.eagerChild
+            checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
+          (SourcePruningOuterNarrow.narrow holeKey fits admits)
+          graph templates checkEmpty edgesOf stop order workFuel recursiveFuel currentMetadata currentCaller currentQueries currentCache currentDecision)) :
+    let lower := SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow
+          (SourcePruningEnumerationSharedEagerChildren.eagerChild
+            checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
+          (SourcePruningOuterNarrow.narrow holeKey fits admits)
+          graph templates checkEmpty edgesOf stop order workFuel recursiveFuel
+    let hook := SourcePruningEnumerationSharedPreparedRecursive.continueWith lower
+      graph templates stop order workFuel metadata uv
+    FoldNormal (SourcePruningEnumerationSharedBranching.scan
+      (SourcePruningEnumerationSharedChildVisitors.visitCapturedWith
+        (SourcePruningEnumerationSharedEagerChildren.eagerChild
+          checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
+        hook workFuel target scs) before rows caller queries)

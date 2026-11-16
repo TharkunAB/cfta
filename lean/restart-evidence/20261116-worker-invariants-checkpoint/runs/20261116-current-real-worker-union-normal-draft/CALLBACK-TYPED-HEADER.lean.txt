@@ -1,0 +1,38 @@
+/-- The actual recordTypes callback retains normality from the same configured lower-depth worker. -/
+theorem continueWith_smaller_depth_unionNormal
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List Edge)
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (workFuel recursiveFuel : Nat) (metadata : Metadata Typing) (uv : Nat)
+    (fragment : Fragments.Fragment Symbol) (caller : Caller width) (queries : Queries) (before : Cached)
+    (normal : UnionNormal caller.checked.native.machine.heap)
+    (smallerDepth : ∀ (currentMetadata : Metadata Typing) (currentCaller : Caller width)
+        (currentQueries : Queries) (currentCache : Cached) (currentDecision : Option Next),
+        UnionNormal currentCaller.checked.native.machine.heap →
+        let actual := SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow
+          (SourcePruningEnumerationSharedEagerChildren.eagerChild
+            checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
+          (SourcePruningOuterNarrow.narrow holeKey fits admits)
+          graph templates checkEmpty edgesOf stop order workFuel recursiveFuel currentMetadata currentCaller currentQueries currentCache currentDecision
+        match actual with
+        | .complete outputs reached _ =>
+            (∀ output, output ∈ outputs → UnionNormal output.caller.checked.native.machine.heap) ∧
+              UnionNormal reached.checked.native.machine.heap
+        | .stopped outputs _ reached =>
+            (∀ output, output ∈ outputs → UnionNormal output.caller.checked.native.machine.heap) ∧
+              ∀ endpoint, reached = some endpoint → UnionNormal endpoint.1.checked.native.machine.heap) :
+    let lower := SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow
+          (SourcePruningEnumerationSharedEagerChildren.eagerChild
+            checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
+          (SourcePruningOuterNarrow.narrow holeKey fits admits)
+          graph templates checkEmpty edgesOf stop order workFuel recursiveFuel
+    let actual := SourcePruningEnumerationSharedPreparedRecursive.continueWith lower
+      graph templates stop order workFuel metadata uv fragment caller queries before
+    match actual with
+    | .complete outputs reached _ =>
+        (∀ output, output ∈ outputs → UnionNormal output.caller.checked.native.machine.heap) ∧
+          UnionNormal reached.checked.native.machine.heap
+    | .stopped outputs _ reached =>
+        (∀ output, output ∈ outputs → UnionNormal output.caller.checked.native.machine.heap) ∧
+          ∀ endpoint, reached = some endpoint → UnionNormal endpoint.1.checked.native.machine.heap

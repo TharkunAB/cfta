@@ -1,0 +1,19 @@
+/-- Every real eager emission and returned endpoint retains the original heap normality. -/
+theorem runEager_real_unionNormal_at_any_budget
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List Edge)
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (workFuel recursiveFuel : Nat) (metadata : Metadata Typing)
+    (caller : Caller width) (queries : Queries) (before : Cached)
+    (normal : UnionNormal caller.checked.native.machine.heap) :
+    let actual := SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.runEagerWithNarrow
+      (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order
+      workFuel recursiveFuel metadata caller queries before
+    match actual with
+    | .complete outputs reached _ =>
+        (∀ output, output ∈ outputs → UnionNormal output.caller.checked.native.machine.heap) ∧
+          UnionNormal reached.checked.native.machine.heap
+    | .stopped outputs _ reached =>
+        (∀ output, output ∈ outputs → UnionNormal output.caller.checked.native.machine.heap) ∧
+          ∀ endpoint, reached = some endpoint → UnionNormal endpoint.1.checked.native.machine.heap

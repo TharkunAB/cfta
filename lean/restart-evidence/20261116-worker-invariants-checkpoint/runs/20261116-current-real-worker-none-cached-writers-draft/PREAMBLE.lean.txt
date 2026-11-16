@@ -1,0 +1,16 @@
+import MicroCFTA.SourcePruningEnumerationSharedEagerNoneBuckets
+import MicroCFTA.SourcePruningEnumerationCachedOwn
+import MicroCFTA.SourcePruningEnumerationFinalize
+
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerNoneCachedWriters
+open EnumerationState EnumerationCorrectness
+open SourcePruningEnumerationSharedEagerNoneBuckets
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => InternedConstructorTemplates.Value Symbol Constraint
+local notation "Edge" => InternedConstructorTemplates.EdgeValue Symbol Constraint
+local notation "Native" => InternedConstructorTemplates.State Symbol Constraint
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "OwnRows" => List ((Symbol × List (Node × List Suspended ×
+  Option (EnumerateM Symbol Constraint (Fragments.Fragment Symbol))) × Option Constraint) × Cached)
+set_option autoImplicit false

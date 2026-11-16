@@ -1,0 +1,13 @@
+private theorem whole_resume
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List Edge)
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (workFuel recursiveFuel : Nat) :
+    ∀ (metadata : Metadata Typing) (caller : Caller width) (queries : Queries) (before : Cached) (decision : Option Next),
+      UnionNormal caller.checked.native.machine.heap →
+      HookNormal (SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow
+        (SourcePruningEnumerationSharedEagerChildren.eagerChild
+          checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
+        (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        graph templates checkEmpty edgesOf stop order workFuel recursiveFuel metadata caller queries before decision)

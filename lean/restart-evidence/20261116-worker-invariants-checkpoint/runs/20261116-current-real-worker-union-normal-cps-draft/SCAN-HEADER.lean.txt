@@ -1,0 +1,8 @@
+/-- The actual ordered scan retains every emitted prefix and its native stopping endpoint. -/
+theorem scan_unionNormal
+    (visit : Edge → Caller width → Queries → Cached → Fold)
+    (before : Cached) (rows : List Edge) (caller : Caller width) (queries : Queries)
+    (normal : UnionNormal caller.checked.native.machine.heap)
+    (visitNormal : ∀ (edge : Edge) (reached : Caller width) (saved : Queries) (captured : Cached), UnionNormal reached.checked.native.machine.heap →
+      FoldNormal (visit edge reached saved captured)) :
+    FoldNormal (SourcePruningEnumerationSharedBranching.scan visit before rows caller queries)

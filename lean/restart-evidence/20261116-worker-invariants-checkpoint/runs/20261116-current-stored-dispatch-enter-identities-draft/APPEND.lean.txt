@@ -1,0 +1,52 @@
+
+namespace MicroCFTA.SourceCurrentAllocatedNativeSourceEmptyEnterOperands
+open Cache InternedConstructorTemplates InternedBinderProtocol IntersectionFlatMemoKeyDomain
+open InternedProbeProvenance SourceRecursiveIntersectionThunks SourceRecursiveIntersectionCode
+open SourceRecursiveIntersectionControl SourceEqualityNativeDemand
+open SourceCurrentAllocatedNativePhysicalTraceCompletion (Trace)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+variable {width : Nat}
+set_option autoImplicit false
+
+/-- Each actual source enter retains the ordered identities of its full operands. -/
+theorem stored_dispatch_enter_identities
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (caller : Caller width) (cached : EnumerationExpandableIndex.Cached Symbol Guard)
+    (valid : SourcePruningEnumerationNativeBranchCompletion.CacheValid caller cached)
+    (source target sourceHandle targetHandle : Nat)
+    (sourceScs targetScs : List EnumerationState.Suspended)
+    (sourceStored : cached.core.values[source]? =
+      some (.unenumerated (some sourceHandle) sourceScs))
+    (targetStored : cached.core.values[target]? =
+      some (.unenumerated (some targetHandle) targetScs))
+    (rootRequest : NodeRequest Symbol Guard)
+    (sourceDecoded : SourcePruningEnumerationNodes.lookupNode
+      caller.checked.native.machine.heap sourceHandle = some rootRequest.left)
+    (targetDecoded : SourcePruningEnumerationNodes.lookupNode
+      caller.checked.native.machine.heap targetHandle = some rootRequest.right)
+    (physical : SourceCurrentAllocatedNativePhysicalCache.Valid caller.checked.native)
+    (used : Nat) (after : Checked width) (parent : Interned DomainKey)
+    (left right : Value Symbol Guard) (first second : Nat)
+    (next : Interned DomainKey → Code Symbol Guard (Value Symbol Guard))
+    (actual : Trace used (.code (.node rootRequest .pure)) caller.checked
+      (.code (.enter parent left right first second next)) after) :
+    SourceRecursiveIntersectionControl.identity left = some first ∧
+      SourceRecursiveIntersectionControl.identity right = some second := by
+  obtain ⟨_, _, _, realized, _, _⟩ := valid
+  obtain ⟨sourceValue, sourceRead, _sourceAvailable, sourceClosed⟩ :=
+    realized source sourceHandle sourceScs sourceStored
+  obtain ⟨targetValue, targetRead, _targetAvailable, targetClosed⟩ :=
+    realized target targetHandle targetScs targetStored
+  have sourceSame : sourceValue = rootRequest.left := Option.some.inj (sourceRead.symm.trans sourceDecoded)
+  have targetSame : targetValue = rootRequest.right := Option.some.inj (targetRead.symm.trans targetDecoded)
+  have rootClosed : rootRequest.left.free = [] ∧ rootRequest.right.free = [] :=
+    ⟨by simpa only [sourceSame] using sourceClosed, by simpa only [targetSame] using targetClosed⟩
+  have initial : ControlClosed (.code (.node rootRequest .pure)) :=
+    ⟨fun _ => rootClosed, fun _ => trivial⟩
+  have reached := trace_closed actual physical initial
+  exact ⟨reached.2.1, reached.2.2.1⟩
+
+end MicroCFTA.SourceCurrentAllocatedNativeSourceEmptyEnterOperands

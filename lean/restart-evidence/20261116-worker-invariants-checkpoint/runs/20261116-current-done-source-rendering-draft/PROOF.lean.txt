@@ -1,0 +1,27 @@
+ := by
+  have normal := packet.context.ready.semantic.ready.semantic.1.normal
+  have members := SourceSynthesisCurrentDonePendingTypes.done_pending_type_members
+    formulas solver ambient lib query signed whole accepted rootValue sourceHeap built
+    key entry body depth ordinary stored order metadata caller before packet.valid done
+    normal irreducible growth onlyU
+  obtain ⟨level, frontier, ordered⟩ := packet.ordered
+  apply SourcePruningEnumerationPendingRendering.render_assignment
+    caller.checked.native.machine.heap (SourceEqualityPCSGuard.holds formulas solver) ambient
+    (fun guard accepted => SourceEqualityPCSGuard.holds formulas solver guard accepted = true)
+    (literal "var1") fuel uv before.core after term pending packet.safe level frontier ordered
+    ?_ observed checked
+  intro slot node scs atSlot
+  cases node with
+  | none =>
+      refine ⟨noneBuckets slot scs atSlot, ?_⟩
+      intro handle impossible
+      cases impossible
+  | some handle =>
+      obtain ⟨emptyBucket, admitted⟩ := members slot handle scs atSlot
+      refine ⟨emptyBucket, ?_⟩
+      intro other same
+      have identity : handle = other := Option.some.inj same
+      subst other
+      exact admitted _ (.leaf "var1" (by decide))
+
+end MicroCFTA.SourceSynthesisCurrentDoneRendering

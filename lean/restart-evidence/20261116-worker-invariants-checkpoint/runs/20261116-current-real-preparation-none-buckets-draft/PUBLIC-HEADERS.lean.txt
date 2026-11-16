@@ -1,0 +1,12 @@
+/-- Actual selected entry changes ancestry and compression, but no stored value. -/
+theorem entry_values (heap : Native) (fuel uv : Nat) (before after : Core)
+    (result : Nat × Nat × List Suspended × Node)
+    (actual : Success (SourcePruningEnumerationEntry.enter heap fuel uv) before result after) :
+    after.values = before.values
+
+/-- Every actual preparation enum snapshot retains empty missing-domain buckets. -/
+theorem preparation_none_buckets [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)]
+    (entryFuel nativeFuel uv : Nat) (caller : Caller width) (before : Cached)
+    (initial : NoneBucketsEmpty before.core) :
+    ∀ state ∈ rawCores (SourcePruningEnumerationSelectedPreparation.run entryFuel nativeFuel uv caller before).1,
+      NoneBucketsEmpty state

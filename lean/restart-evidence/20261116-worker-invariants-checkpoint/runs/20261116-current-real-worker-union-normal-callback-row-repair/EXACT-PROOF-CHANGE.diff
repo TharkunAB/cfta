@@ -1,0 +1,34 @@
+--- original170
++++ callback-row-repair
+@@ -136,13 +136,24 @@
+                 cases same
+                 exact normal
+           | ok rowValue =>
+-              constructor
+-              · intro output impossible
+-                cases impossible
+-              · intro endpoint observed
+-                have same : (caller, queries) = endpoint := Option.some.inj observed
+-                cases same
+-                exact normal
++              obtain ⟨⟨pruned, updated⟩, callbackCore⟩ := rowValue
++              cases pruned with
++              | false =>
++                  constructor
++                  · intro output impossible
++                    cases impossible
++                  · intro endpoint observed
++                    have same : (caller, queries) = endpoint := Option.some.inj observed
++                    cases same
++                    exact normal
++              | true =>
++                  constructor
++                  · intro output impossible
++                    cases impossible
++                  · intro endpoint observed
++                    have same : (caller, queries) = endpoint := Option.some.inj observed
++                    cases same
++                    exact normal
+       | nil =>
+           cases row with
+           | error rowError =>

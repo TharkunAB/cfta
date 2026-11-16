@@ -1,0 +1,10 @@
+/-- Actual captured finalization invokes its hook at the actual completed child endpoint. -/
+theorem visitCapturedWith_unionNormal
+    (visit : Visitor) (preserves : ChildPreserves visit)
+    (hook : Fragment → Caller width → Queries → Cached → Hook)
+    (k target : Nat) (scs : List Suspended) (edge : Edge)
+    (caller : Caller width) (queries : Queries) (before : Cached)
+    (normal : UnionNormal caller.checked.native.machine.heap)
+    (hookNormal : ∀ (fragment : Fragment) (reached : Caller width) (saved : Queries) (after : Cached), UnionNormal reached.checked.native.machine.heap →
+      HookNormal (hook fragment reached saved after)) :
+    FoldNormal (SourcePruningEnumerationSharedChildVisitors.visitCapturedWith visit hook k target scs edge caller queries before)

@@ -1,0 +1,15 @@
+import MicroCFTA.SourcePruningEnumerationSharedEagerNoneBuckets
+import MicroCFTA.SourcePruningEnumerationSharedDispatchProper
+
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerNoneDispatch
+open EnumerationState EnumerationCorrectness
+open SourcePruningEnumerationSharedEagerNoneBuckets
+open InternedConstructorTemplates
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => InternedConstructorTemplates.Value Symbol Constraint
+local notation "Core" => EnumerationState.State Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+set_option autoImplicit false
+variable {width : Nat}

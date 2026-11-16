@@ -1,0 +1,43 @@
+MicroCFTA.SourceCurrentAllocatedNativeEmptyRootDomainAncestry.empty_root_singleton_enter_parent {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (rootRequest :
+    MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before after : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (physical : MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid before.native)
+  (rootEmpty : rootRequest.domain = MicroCFTA.IntersectionEmptyDomain.emptyDomain) (used : Nat)
+  (parent : MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+  (left right :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (first second uid patternId : Nat)
+  (next :
+    MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey →
+      MicroCFTA.SourceRecursiveIntersectionCode.Code (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (actual :
+    MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace used
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+        (MicroCFTA.SourceRecursiveIntersectionCode.Code.node rootRequest
+          MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+      before
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+        (MicroCFTA.SourceRecursiveIntersectionCode.Code.enter parent left right first second next))
+      after)
+  (sameKey :
+    (MicroCFTA.SourceRecursiveIntersectionEnvironment.enter after.native.machine.domains parent.key left right first
+            second).fst.key =
+      MicroCFTA.SourceRecursiveIntersectionDomain.extend MicroCFTA.IntersectionEmptyDomain.emptyKey [uid]
+        (MicroCFTA.SourceRecursiveIntersectionControl.pair uid patternId)) :
+  parent.key = MicroCFTA.IntersectionEmptyDomain.emptyKey ∧
+    MicroCFTA.SourceRecursiveIntersectionControl.pair first second =
+      MicroCFTA.SourceRecursiveIntersectionControl.pair uid patternId
+'MicroCFTA.SourceCurrentAllocatedNativeEmptyRootDomainAncestry.empty_root_singleton_enter_parent' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

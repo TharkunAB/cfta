@@ -1,0 +1,8 @@
+/-- The actual own-row prefix and child traversal preserve its receipt consumer. -/
+theorem visitSelected_unionNormal
+    (visit : Visitor) (preserves : ChildPreserves visit)
+    (consume : Receipt → Fold) (scs : List Suspended) (edge : Edge)
+    (caller : Caller width) (before : Cached) (queries : Queries)
+    (normal : UnionNormal caller.checked.native.machine.heap)
+    (consumeNormal : ∀ (receipt : Receipt), ReceiptNormal receipt → FoldNormal (consume receipt)) :
+    FoldNormal (SourcePruningEnumerationSharedChildVisitors.visitSelected visit consume scs edge caller before queries)

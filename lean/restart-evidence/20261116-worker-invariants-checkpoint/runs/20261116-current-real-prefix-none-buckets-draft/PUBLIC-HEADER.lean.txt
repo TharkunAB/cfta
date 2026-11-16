@@ -1,0 +1,14 @@
+/-- Every actual real selected-prefix enum snapshot retains empty missing-domain buckets. -/
+theorem real_prefix_none_buckets
+    [DecidableEq Symbol] [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)]
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (metadata : Metadata Typing)
+    (readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv : Nat)
+    (caller : Caller width) (before : Cached) (queries : Queries)
+    (initial : NoneBucketsEmpty before.core) :
+    ∀ state ∈ selectedCores
+      (SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata
+        readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv caller before queries),
+      NoneBucketsEmpty state

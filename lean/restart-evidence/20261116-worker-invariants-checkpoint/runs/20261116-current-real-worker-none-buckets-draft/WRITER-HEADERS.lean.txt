@@ -1,0 +1,19 @@
+/-- Equal value arrays retain the missing-domain bucket property. -/
+theorem none_buckets_of_values_eq (before after : Core)
+    (initial : NoneBucketsEmpty before) (values : after.values = before.values) : NoneBucketsEmpty after
+
+/-- Fresh allocation stores an empty bucket for either optional domain. -/
+theorem allocated_none_buckets (node : Option Nat) (before : Core)
+    (initial : NoneBucketsEmpty before) : NoneBucketsEmpty (allocated node before)
+
+/-- A literal Some-handle write cannot create a missing-domain bucket. -/
+theorem some_write_none_buckets (target handle : Nat) (bucket : List Suspended) (before after : Core)
+    (initial : NoneBucketsEmpty before)
+    (actual : EnumerationCorrectness.Success (setValue target (.unenumerated (some handle) bucket)) before () after) :
+    NoneBucketsEmpty after
+
+/-- A final fragment write cannot create a missing-domain pending slot. -/
+theorem enumerated_write_none_buckets (target : Nat) (fragment : Fragments.Fragment Symbol) (before after : Core)
+    (initial : NoneBucketsEmpty before)
+    (actual : EnumerationCorrectness.Success (setValue target (.enumerated fragment)) before () after) :
+    NoneBucketsEmpty after

@@ -1,0 +1,39 @@
+/-- Successful partial rendering changes no stored slot, even for a nontotal forest. -/
+theorem partial_render_values (graph : Graph Symbol Constraint) (fuel : Nat)
+    (fragment : Fragments.Fragment Symbol) (before after : Core)
+    (term : Language.Term (PartialSymbol Symbol))
+    (actual : Success (expandPartial graph fuel fragment) before term after) :
+    after.values = before.values
+
+/-- Successful pending-group reads change no stored slot. -/
+theorem resume_values (fuel current : Nat) (term : Language.Term (PartialSymbol Symbol))
+    (pending : SourcePruningPartialMatch.Pending Symbol) (before after : Core)
+    (result : Option (SourcePruningPartialMatch.Pending Symbol))
+    (actual : Success (SourcePruningResume.resume fuel current term pending) before result after) :
+    after.values = before.values
+
+/-- Every actual successful template oracle result retains the stored array. -/
+theorem oracle_values (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (fuel : Nat) (pending : List (SourcePruningPartialMatch.Pending Symbol)) (uv : Nat)
+    (input : Sum (Fragments.Fragment Symbol) Nat) (before after : Core)
+    (result : Bool × List (SourcePruningPartialMatch.Pending Symbol))
+    (actual : Success (SourcePruningOracle.oracle graph templates fuel pending uv input) before result after) :
+    after.values = before.values
+
+/-- Actual type recording retains the stored array without a root-totality premise. -/
+theorem record_types_values (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (fuel : Nat) (metadata : SourcePruningRecordTypes.Metadata Typing) (uv : Nat)
+    (input : Sum (Fragments.Fragment Symbol) Nat) (before after : Core)
+    (result : Bool × SourcePruningRecordTypes.Metadata Typing)
+    (actual : Success (SourcePruningRecordTypes.recordTypes graph templates fuel metadata uv input)
+      before result after) :
+    after.values = before.values
+
+/-- Every actual type-recording result retains the missing-domain bucket property. -/
+theorem record_types_none_buckets (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (fuel : Nat) (metadata : SourcePruningRecordTypes.Metadata Typing) (uv : Nat)
+    (input : Sum (Fragments.Fragment Symbol) Nat) (before after : Core)
+    (result : Bool × SourcePruningRecordTypes.Metadata Typing) (initial : NoneBucketsEmpty before)
+    (actual : Success (SourcePruningRecordTypes.recordTypes graph templates fuel metadata uv input)
+      before result after) :
+    NoneBucketsEmpty after

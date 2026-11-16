@@ -1,0 +1,43 @@
+/-- The initial root slot has a supplied handle and no missing-domain bucket. -/
+theorem initial_none_buckets (root : Nat) : NoneBucketsEmpty (EnumerationState.initial root)
+
+/-- The actual cached allocator uses the same literal empty-bucket allocation. -/
+theorem cached_allocate_none_buckets (heap : Native) (node : Option Nat)
+    (before after : Cached) (uv : Nat) (initial : NoneBucketsEmpty before.core)
+    (actual : SourcePruningEnumerationCachedChild.allocate heap node before = some (uv, after)) :
+    NoneBucketsEmpty after.core
+
+/-- Every actual own-class suspension allocation retains the property. -/
+theorem own_suspensions_none_buckets (heap : Native) (tries : List EqualityTrie.Trie)
+    (before after : Cached) (own : List Suspended) (initial : NoneBucketsEmpty before.core)
+    (actual : SourcePruningEnumerationCachedOwn.suspendMany heap tries before = some (own, after)) :
+    NoneBucketsEmpty after.core
+
+/-- Every actual prepared own-class result retains the property. -/
+theorem own_prefix_none_buckets (heap : Native) (scs : List Suspended) (edge : Edge)
+    (before : Cached) (rows : OwnRows) (initial : NoneBucketsEmpty before.core)
+    (actual : SourcePruningEnumerationCachedOwn.prepare heap scs edge before = some rows) :
+    ∀ row ∈ rows, NoneBucketsEmpty row.2.core
+
+/-- A successful native indexed Some-handle write retains the property. -/
+theorem indexed_some_none_buckets (heap : Native) (fuel target handle : Nat)
+    (bucket gained lost : List Suspended) (before after : Cached)
+    (initial : NoneBucketsEmpty before.core)
+    (actual : SourcePruningEnumerationNativeIndex.write heap fuel target
+      (.unenumerated (some handle) bucket) gained lost before = some after) :
+    NoneBucketsEmpty after.core
+
+/-- A successful native indexed fragment write retains the property. -/
+theorem indexed_enumerated_none_buckets (heap : Native) (fuel target : Nat)
+    (fragment : Fragments.Fragment Symbol) (gained lost : List Suspended) (before after : Cached)
+    (initial : NoneBucketsEmpty before.core)
+    (actual : SourcePruningEnumerationNativeIndex.write heap fuel target
+      (.enumerated fragment) gained lost before = some after) :
+    NoneBucketsEmpty after.core
+
+/-- Actual captured finalization retains the property at its same full cache. -/
+theorem finalize_none_buckets (heap : Native) (fuel target : Nat)
+    (fragment : Fragments.Fragment Symbol) (before after : Cached)
+    (initial : NoneBucketsEmpty before.core)
+    (actual : SourcePruningEnumerationFinalize.run heap fuel target fragment before = some after) :
+    NoneBucketsEmpty after.core

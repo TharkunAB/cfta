@@ -1,0 +1,166 @@
+private theorem singleton_all (core : Core) (good : NoneBucketsEmpty core) :
+    ∀ state ∈ [core], NoneBucketsEmpty state := by
+  intro state member
+  have same := List.mem_singleton.mp member
+  subst state
+  exact good
+
+private theorem optional_raw_all {α : Type} (raw : Option (Raw α))
+    (good : ∀ rows, raw = some rows → ∀ core ∈ rawCores rows, NoneBucketsEmpty core) :
+    ∀ core ∈ raw.toList.flatMap rawCores, NoneBucketsEmpty core := by
+  cases raw with
+  | none => intro core impossible; cases impossible
+  | some rows =>
+      intro core member
+      change core ∈ rawCores rows ++ [] at member
+      rw [List.append_nil] at member
+      exact good rows rfl core member
+
+private theorem optional_cache_all (candidate : Option Cached)
+    (good : ∀ after, candidate = some after → NoneBucketsEmpty after.core) :
+    ∀ core ∈ candidate.toList.map (fun after => after.core), NoneBucketsEmpty core := by
+  cases candidate with
+  | none => intro core impossible; cases impossible
+  | some after => exact singleton_all after.core (good after rfl)
+
+private theorem stopped_all (read : Raw (UVarValue Symbol)) (checked : Option (Raw Bool))
+    (readAll : ∀ core ∈ rawCores read, NoneBucketsEmpty core)
+    (checkAll : ∀ rows, checked = some rows → ∀ core ∈ rawCores rows, NoneBucketsEmpty core) :
+    ∀ core ∈ selectedCores (Typing := Typing) (width := width) (.stopped read checked),
+      NoneBucketsEmpty core := by
+  intro core member
+  change core ∈ rawCores read ++ checked.toList.flatMap rawCores at member
+  rcases List.mem_append.mp member with left | right
+  · exact readAll core left
+  · exact optional_raw_all checked checkAll core right
+
+private theorem parked_all (checked : Core) (candidate : Option Cached)
+    (raw : Option (Raw (Metadata Typing × Option Next)))
+    (checkAll : NoneBucketsEmpty checked)
+    (candidateAll : ∀ after, candidate = some after → NoneBucketsEmpty after.core)
+    (rawAll : ∀ rows, raw = some rows → ∀ core ∈ rawCores rows, NoneBucketsEmpty core) :
+    ∀ core ∈ selectedCores (width := width) (.parked checked candidate raw), NoneBucketsEmpty core := by
+  intro core member
+  rcases List.mem_cons.mp member with same | tail
+  · subst core; exact checkAll
+  · rcases List.mem_append.mp tail with left | right
+    · exact optional_cache_all candidate candidateAll core left
+    · exact optional_raw_all raw rawAll core right
+
+private theorem narrowed_all (checked : Core) (prepared : Prepared) (caller : Caller width)
+    (queries : Queries) (action : Option (Raw Unit)) (candidate : Option Cached)
+    (right : Option (Raw (Bool × Metadata Typing))) (checkAll : NoneBucketsEmpty checked)
+    (actionAll : ∀ rows, action = some rows → ∀ core ∈ rawCores rows, NoneBucketsEmpty core)
+    (candidateAll : ∀ after, candidate = some after → NoneBucketsEmpty after.core)
+    (rightAll : ∀ rows, right = some rows → ∀ core ∈ rawCores rows, NoneBucketsEmpty core) :
+    ∀ core ∈ selectedCores (.narrowed checked prepared caller queries action candidate right none),
+      NoneBucketsEmpty core := by
+  intro core member
+  simp only [selectedCores, Option.toList_none, List.flatMap_nil, List.append_nil,
+    List.mem_cons, List.mem_append, or_assoc] at member
+  rcases member with same | left | middle | last
+  · subst core; exact checkAll
+  · exact optional_raw_all action actionAll core left
+  · exact optional_cache_all candidate candidateAll core middle
+  · exact optional_raw_all right rightAll core last
+
+private theorem raw_all {α : Type} (program : EnumerateM Symbol Constraint α) (before : Core)
+    (step : ∀ output after, Success program before output after → NoneBucketsEmpty after) :
+    ∀ core ∈ rawCores (ExceptT.run (program before)), NoneBucketsEmpty core := by
+  intro core member
+  obtain ⟨row, selected, reached⟩ := List.mem_flatMap.mp member
+  cases row with
+  | error message => cases reached
+  | ok pair =>
+      obtain ⟨output, after⟩ := pair
+      have same := List.mem_singleton.mp reached
+      subst core
+      exact step output after selected
+
+private theorem pure_none {α : Type} (value result : α) (before after : Core)
+    (initial : NoneBucketsEmpty before) (actual : Success (pure value) before result after) :
+    NoneBucketsEmpty after :=
+  none_buckets_of_values_eq before after initial (pure_frame value result before after actual).values
+
+private theorem representative_none (fuel uv root : Nat) (before after : Core)
+    (initial : NoneBucketsEmpty before) (actual : Success (representative fuel uv) before root after) :
+    NoneBucketsEmpty after := by
+  obtain ⟨found, _lookup, _same, rfl⟩ := (representative_success fuel uv before after root).mp actual
+  exact none_buckets_of_values_eq before _ initial rfl
+
+private theorem get_value_none (fuel uv : Nat) (before after : Core) (value : UVarValue Symbol)
+    (initial : NoneBucketsEmpty before) (actual : Success (getValue fuel uv) before value after) :
+    NoneBucketsEmpty after := by
+  obtain ⟨found, _lookup, _stored, rfl⟩ := (getValue_success fuel uv before after value).mp actual
+  exact none_buckets_of_values_eq before _ initial rfl
+
+private theorem check_none (heap : Native) (fuel uv handle : Nat) (scs : List Suspended)
+    (before after : Core) (repeated : Bool) (proper : NoneBucketsEmpty before)
+    (observed : Success (SourcePruningEnumerationRecursion.checkRepeated heap fuel uv handle scs)
+      before repeated after) : NoneBucketsEmpty after := by
+  cases decoded : lookupNode heap handle with
+  | none =>
+      have impossible : Success (failure .unresolvedReference) before repeated after := by
+        simpa only [SourcePruningEnumerationRecursion.checkRepeated, decoded] using observed
+      exact (success_failure .unresolvedReference before after repeated impossible).elim
+  | some value =>
+      by_cases boundary : MergedOrdinaryHeight.recursiveBoundary value = true
+      · simp only [SourcePruningEnumerationRecursion.checkRepeated, decoded, boundary, ↓reduceIte] at observed
+        obtain ⟨root, resolved, resolution, continued⟩ := (success_bind _ _ _ _ _).mp observed
+        have resolvedProper := representative_none fuel uv root before resolved proper resolution
+        obtain ⟨current, reading, read, continued⟩ := (success_bind _ _ _ _ _).mp continued
+        obtain ⟨currentSame, readingSame⟩ := (EnumerationDriver.get_success resolved reading current).mp read
+        subst current
+        subst reading
+        by_cases seen : recursionKey handle scs ∈ resolved.recursionAncestry root
+        · rw [ite_eq_left seen] at continued
+          obtain ⟨token, written, writing, finished⟩ := (success_bind _ _ _ _ _).mp continued
+          cases token
+          have writtenProper := some_write_none_buckets root handle [] resolved written resolvedProper writing
+          exact pure_none true repeated written after writtenProper finished
+        · rw [ite_eq_right seen] at continued
+          exact pure_none false repeated resolved after resolvedProper continued
+      · have pureObserved : Success (pure false) before repeated after := by
+          simpa only [SourcePruningEnumerationRecursion.checkRepeated, decoded, ite_eq_right boundary] using observed
+        exact pure_none false repeated before after proper pureObserved
+
+private theorem action_none [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)]
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (metadata : Metadata Typing) (nativeFuel representativeFuel uv oldHandle : Nat)
+    (scs : List Suspended) (oldValue value : Node) (heap afterHeap : Native)
+    (operation : EnumerateM Symbol Constraint Unit) (input output : Core)
+    (prepared : SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+      representativeFuel uv oldHandle scs oldValue heap = .done (value, some operation) afterHeap)
+    (proper : NoneBucketsEmpty input) (successful : Success operation input () output) :
+    NoneBucketsEmpty output := by
+  dsimp only [SourcePruningEnumerationAction.prepare, SourcePruningEnumerationAction.prepareWithNarrow] at prepared
+  all_goals try (split at prepared)
+  all_goals try (split at prepared)
+  all_goals try (split at prepared)
+  all_goals try (split at prepared)
+  all_goals cases prepared
+  all_goals first
+  | solve
+    | dsimp only [Success, reject, ExceptT.run, ExceptT.mk,
+        Membership.mem, List.instMembership] at successful
+      cases successful
+  | exact pure_none _ _ input output proper successful
+  | exact some_write_none_buckets _ _ _ input output proper successful
+  | obtain ⟨selected, intermediate, represented, stored⟩ :=
+      (success_bind (representative representativeFuel uv) _ input () output).mp successful
+    exact some_write_none_buckets _ _ _ intermediate output
+      (representative_none representativeFuel uv selected input intermediate proper represented) stored
+
+private theorem restart_none (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+    (captured : Cached) (before after : Core) (result : Metadata Typing × Option Next)
+    (initial : NoneBucketsEmpty before)
+    (actual : Success (SourcePruningEnumerationRestart.run stop order metadata captured) before result after) :
+    NoneBucketsEmpty after := by
+  unfold Success SourcePruningEnumerationRestart.run at actual
+  split at actual
+  · cases actual
+  · have same := Except.ok.inj (List.mem_singleton.mp actual)
+    have coreSame : after = before := congrArg Prod.snd same
+    subst after
+    exact initial

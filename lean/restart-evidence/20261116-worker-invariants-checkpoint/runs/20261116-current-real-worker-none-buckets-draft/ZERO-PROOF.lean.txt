@@ -1,0 +1,27 @@
+ := by
+  unfold SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.runEagerWithNarrow
+    SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.runWithNarrow
+  cases selected : SourcePruningEnumerationRestart.decision stop order metadata before with
+  | none =>
+      intro output member
+      have same := List.mem_singleton.mp member
+      subst output
+      exact initial
+  | some decision =>
+      cases decision with
+      | done =>
+          intro output member
+          have same := List.mem_singleton.mp member
+          subst output
+          exact initial
+      | stuck =>
+          intro output impossible
+          cases impossible
+      | expand uv =>
+          constructor
+          · intro output impossible
+            cases impossible
+          · intro state member
+            have same := List.mem_singleton.mp member
+            subst state
+            exact initial

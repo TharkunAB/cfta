@@ -1,0 +1,30 @@
+/-- The actual prepared ordinary row scan uses only the same configured lower-depth IH. -/
+theorem configured_lower_depth_rows_unionNormal
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List Edge)
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (workFuel recursiveFuel : Nat) (metadata : Metadata Typing) (uv target : Nat)
+    (scs : List Suspended) (rows : List Edge) (caller : Caller width) (queries : Queries) (before : Cached)
+    (normal : UnionNormal caller.checked.native.machine.heap)
+    (smallerDepth : ∀ (currentMetadata : Metadata Typing) (currentCaller : Caller width)
+        (currentQueries : Queries) (currentCache : Cached) (currentDecision : Option Next),
+        UnionNormal currentCaller.checked.native.machine.heap →
+        HookNormal (SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow
+          (SourcePruningEnumerationSharedEagerChildren.eagerChild
+            checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
+          (SourcePruningOuterNarrow.narrow holeKey fits admits)
+          graph templates checkEmpty edgesOf stop order workFuel recursiveFuel currentMetadata currentCaller currentQueries currentCache currentDecision)) :
+    let lower := SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow
+          (SourcePruningEnumerationSharedEagerChildren.eagerChild
+            checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
+          (SourcePruningOuterNarrow.narrow holeKey fits admits)
+          graph templates checkEmpty edgesOf stop order workFuel recursiveFuel
+    let hook := SourcePruningEnumerationSharedPreparedRecursive.continueWith lower
+      graph templates stop order workFuel metadata uv
+    FoldNormal (SourcePruningEnumerationSharedBranching.scan
+      (SourcePruningEnumerationSharedChildVisitors.visitCapturedWith
+        (SourcePruningEnumerationSharedEagerChildren.eagerChild
+          checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
+        hook workFuel target scs) before rows caller queries)

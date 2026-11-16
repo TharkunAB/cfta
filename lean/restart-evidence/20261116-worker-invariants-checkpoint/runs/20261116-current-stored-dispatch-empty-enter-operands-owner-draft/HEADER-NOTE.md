@@ -1,0 +1,1 @@
+The preliminary header is retained in the sibling empty-enter-operands-draft packet. This header qualifies lookupNode at its actual declaration owner SourcePruningEnumerationNodes. No premise or conclusion changes. This correction precedes proof construction and Root compiler submission.

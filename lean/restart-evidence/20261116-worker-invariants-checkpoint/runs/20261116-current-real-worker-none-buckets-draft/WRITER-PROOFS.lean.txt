@@ -1,0 +1,28 @@
+ := by
+  intro uv scs stored
+  exact initial uv scs (by simpa only [values] using stored)
+ := by
+  intro uv scs stored
+  have member : UVarValue.unenumerated none scs ∈ before.values ++ [.unenumerated node []] :=
+    List.mem_of_getElem? stored
+  rcases List.mem_append.mp member with old | fresh
+  · obtain ⟨index, found⟩ := List.mem_iff_getElem?.mp old
+    exact initial index scs found
+  · have same := List.mem_singleton.mp fresh
+    cases node with
+    | none => exact (UVarValue.unenumerated.inj same).2
+    | some handle => cases same
+ := by
+  obtain rfl := (EnumerationDriver.modify_success _ before after).mp actual
+  intro uv scs stored
+  rcases List.mem_or_eq_of_mem_set (List.mem_of_getElem? stored) with old | same
+  · obtain ⟨index, found⟩ := List.mem_iff_getElem?.mp old
+    exact initial index scs found
+  · cases same
+ := by
+  obtain rfl := (EnumerationDriver.modify_success _ before after).mp actual
+  intro uv scs stored
+  rcases List.mem_or_eq_of_mem_set (List.mem_of_getElem? stored) with old | same
+  · obtain ⟨index, found⟩ := List.mem_iff_getElem?.mp old
+    exact initial index scs found
+  · cases same

@@ -1,0 +1,43 @@
+/-- Equal value arrays retain the missing-domain bucket property. -/
+theorem none_buckets_of_values_eq (before after : Core)
+    (initial : NoneBucketsEmpty before) (values : after.values = before.values) : NoneBucketsEmpty after := by
+  intro uv scs stored
+  exact initial uv scs (by simpa only [values] using stored)
+
+/-- Fresh allocation stores an empty bucket for either optional domain. -/
+theorem allocated_none_buckets (node : Option Nat) (before : Core)
+    (initial : NoneBucketsEmpty before) : NoneBucketsEmpty (allocated node before) := by
+  intro uv scs stored
+  have member : UVarValue.unenumerated none scs ∈ before.values ++ [.unenumerated node []] :=
+    List.mem_of_getElem? stored
+  rcases List.mem_append.mp member with old | fresh
+  · obtain ⟨index, found⟩ := List.mem_iff_getElem?.mp old
+    exact initial index scs found
+  · have same := List.mem_singleton.mp fresh
+    cases node with
+    | none => exact (UVarValue.unenumerated.inj same).2
+    | some handle => cases same
+
+/-- A literal Some-handle write cannot create a missing-domain bucket. -/
+theorem some_write_none_buckets (target handle : Nat) (bucket : List Suspended) (before after : Core)
+    (initial : NoneBucketsEmpty before)
+    (actual : EnumerationCorrectness.Success (setValue target (.unenumerated (some handle) bucket)) before () after) :
+    NoneBucketsEmpty after := by
+  obtain rfl := (EnumerationDriver.modify_success _ before after).mp actual
+  intro uv scs stored
+  rcases List.mem_or_eq_of_mem_set (List.mem_of_getElem? stored) with old | same
+  · obtain ⟨index, found⟩ := List.mem_iff_getElem?.mp old
+    exact initial index scs found
+  · cases same
+
+/-- A final fragment write cannot create a missing-domain pending slot. -/
+theorem enumerated_write_none_buckets (target : Nat) (fragment : Fragments.Fragment Symbol) (before after : Core)
+    (initial : NoneBucketsEmpty before)
+    (actual : EnumerationCorrectness.Success (setValue target (.enumerated fragment)) before () after) :
+    NoneBucketsEmpty after := by
+  obtain rfl := (EnumerationDriver.modify_success _ before after).mp actual
+  intro uv scs stored
+  rcases List.mem_or_eq_of_mem_set (List.mem_of_getElem? stored) with old | same
+  · obtain ⟨index, found⟩ := List.mem_iff_getElem?.mp old
+    exact initial index scs found
+  · cases same

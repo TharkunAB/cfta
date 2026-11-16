@@ -1,0 +1,64 @@
+MicroCFTA.SourceCurrentAllocatedNativeSourceEmptyEnterOperands.stored_dispatch_enter_closed_operands {width : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (cached :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (valid : MicroCFTA.SourcePruningEnumerationNativeBranchCompletion.CacheValid caller cached)
+  (source target sourceHandle targetHandle : Nat) (sourceScs targetScs : List MicroCFTA.EnumerationState.Suspended)
+  (sourceStored :
+    cached.core.values[source]? =
+      some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some sourceHandle) sourceScs))
+  (targetStored :
+    cached.core.values[target]? =
+      some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some targetHandle) targetScs))
+  (rootRequest :
+    MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (rootEmpty : rootRequest.domain = MicroCFTA.IntersectionEmptyDomain.emptyDomain)
+  (sourceDecoded :
+    MicroCFTA.SourcePruningEnumerationNodes.lookupNode caller.checked.native.machine.heap sourceHandle =
+      some rootRequest.left)
+  (targetDecoded :
+    MicroCFTA.SourcePruningEnumerationNodes.lookupNode caller.checked.native.machine.heap targetHandle =
+      some rootRequest.right)
+  (physical : MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid caller.checked.native) (used : Nat)
+  (after : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (parent : MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+  (left right :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (first second uid patternId : Nat)
+  (next :
+    MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey →
+      MicroCFTA.SourceRecursiveIntersectionCode.Code MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (actual :
+    MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace used
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+        (MicroCFTA.SourceRecursiveIntersectionCode.Code.node rootRequest
+          MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+      caller.checked
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+        (MicroCFTA.SourceRecursiveIntersectionCode.Code.enter parent left right first second next))
+      after)
+  (sameKey :
+    (MicroCFTA.SourceRecursiveIntersectionEnvironment.enter after.native.machine.domains parent.key left right first
+            second).fst.key =
+      MicroCFTA.SourceRecursiveIntersectionDomain.extend MicroCFTA.IntersectionEmptyDomain.emptyKey [uid]
+        (MicroCFTA.SourceRecursiveIntersectionControl.pair uid patternId)) :
+  parent.key = MicroCFTA.IntersectionEmptyDomain.emptyKey ∧
+    left.free = [] ∧
+      right.free = [] ∧
+        (MicroCFTA.SourceRecursiveIntersectionControl.identity left = some uid ∧
+            MicroCFTA.SourceRecursiveIntersectionControl.identity right = some patternId ∨
+          MicroCFTA.SourceRecursiveIntersectionControl.identity left = some patternId ∧
+            MicroCFTA.SourceRecursiveIntersectionControl.identity right = some uid)
+'MicroCFTA.SourceCurrentAllocatedNativeSourceEmptyEnterOperands.stored_dispatch_enter_closed_operands' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

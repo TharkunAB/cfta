@@ -1,0 +1,111 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-worker-constructor-and-source-origins-check/source/MicroCFTA/SourceCurrentAllocatedNativeSourceEmptyEnterOperands.lean:181:14: error: Application type mismatch: The argument
+  leftAvailable
+has type
+  Available heap request.left
+but is expected to have type
+  Available heap (Value.union entry members depth free)
+in the application
+  MergedColdReaderClosed.union_members_closed heap facts entry members depth free leftAvailable
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-worker-constructor-and-source-origins-check/source/MicroCFTA/SourceCurrentAllocatedNativeSourceEmptyEnterOperands.lean:196:14: error: Application type mismatch: The argument
+  rightAvailable
+has type
+  Available heap request.right
+but is expected to have type
+  Available heap (Value.union entry members depth free)
+in the application
+  MergedColdReaderClosed.union_members_closed heap facts entry members depth free rightAvailable
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-worker-constructor-and-source-origins-check/source/MicroCFTA/SourceCurrentAllocatedNativeSourceEmptyEnterOperands.lean:214:54: error: Tactic `assumption` failed
+
+case ordinary.node.node
+inst✝ : DecidableEq Symbol
+heap : InternedConstructorTemplates.State Symbol Guard
+facts : Facts heap
+request : NodeRequest Symbol Guard
+leftAvailable : Available heap request.left
+rightAvailable : Available heap request.right
+closed : NodeClosed request
+edgesClosed :
+  request.domain.key = IntersectionEmptyDomain.emptyKey →
+    MergedColdReaderClosedInputs.ClosedEdges (InternedEdgeResidency.nodeEdges request.left) ∧
+      MergedColdReaderClosedInputs.ClosedEdges (InternedEdgeResidency.nodeEdges request.right)
+selected : decision request.domain.key request.left request.right = Branch.ordinary
+entry✝¹ : Interned InternedBinderProtocol.NodeKey
+edges✝¹ : List (EdgeValue Symbol Guard)
+depth✝¹ : Nat
+free✝¹ : List Reference
+entry✝ : Interned InternedBinderProtocol.NodeKey
+edges✝ : List (EdgeValue Symbol Guard)
+depth✝ : Nat
+free✝ : List Reference
+⊢ CodeClosed
+    (match Value.node entry✝¹ edges✝¹ depth✝¹ free✝¹, Value.node entry✝ edges✝ depth✝ free✝ with
+    | Value.node entry first depth free, Value.node entry_1 second depth_1 free_1 =>
+      compileRows request.domain first second
+    | x, x_1 =>
+      SourceRecursiveIntersectionCode.unsupported (Value.node entry✝¹ edges✝¹ depth✝¹ free✝¹)
+        (Value.node entry✝ edges✝ depth✝ free✝))
+MicroCFTA.SourceCurrentAllocatedNativeSourceEmptyEnterOperands.stored_dispatch_enter_closed_operands {width : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (cached :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (valid : MicroCFTA.SourcePruningEnumerationNativeBranchCompletion.CacheValid caller cached)
+  (source target sourceHandle targetHandle : Nat) (sourceScs targetScs : List MicroCFTA.EnumerationState.Suspended)
+  (sourceStored :
+    cached.core.values[source]? =
+      some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some sourceHandle) sourceScs))
+  (targetStored :
+    cached.core.values[target]? =
+      some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some targetHandle) targetScs))
+  (rootRequest :
+    MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (rootEmpty : rootRequest.domain = MicroCFTA.IntersectionEmptyDomain.emptyDomain)
+  (sourceDecoded :
+    MicroCFTA.SourcePruningEnumerationNodes.lookupNode caller.checked.native.machine.heap sourceHandle =
+      some rootRequest.left)
+  (targetDecoded :
+    MicroCFTA.SourcePruningEnumerationNodes.lookupNode caller.checked.native.machine.heap targetHandle =
+      some rootRequest.right)
+  (physical : MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid caller.checked.native) (used : Nat)
+  (after : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (parent : MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey)
+  (left right :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (first second uid patternId : Nat)
+  (next :
+    MicroCFTA.Cache.Interned MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey →
+      MicroCFTA.SourceRecursiveIntersectionCode.Code MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (actual :
+    MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace used
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+        (MicroCFTA.SourceRecursiveIntersectionCode.Code.node rootRequest
+          MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+      caller.checked
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+        (MicroCFTA.SourceRecursiveIntersectionCode.Code.enter parent left right first second next))
+      after)
+  (sameKey :
+    (MicroCFTA.SourceRecursiveIntersectionEnvironment.enter after.native.machine.domains parent.key left right first
+            second).fst.key =
+      MicroCFTA.SourceRecursiveIntersectionDomain.extend MicroCFTA.IntersectionEmptyDomain.emptyKey [uid]
+        (MicroCFTA.SourceRecursiveIntersectionControl.pair uid patternId)) :
+  parent.key = MicroCFTA.IntersectionEmptyDomain.emptyKey ∧
+    left.free = [] ∧
+      right.free = [] ∧
+        (MicroCFTA.SourceRecursiveIntersectionControl.identity left = some uid ∧
+            MicroCFTA.SourceRecursiveIntersectionControl.identity right = some patternId ∨
+          MicroCFTA.SourceRecursiveIntersectionControl.identity left = some patternId ∧
+            MicroCFTA.SourceRecursiveIntersectionControl.identity right = some uid)
+'MicroCFTA.SourceCurrentAllocatedNativeSourceEmptyEnterOperands.stored_dispatch_enter_closed_operands' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

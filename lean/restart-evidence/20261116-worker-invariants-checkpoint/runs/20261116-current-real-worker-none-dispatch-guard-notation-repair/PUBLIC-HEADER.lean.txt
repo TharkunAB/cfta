@@ -1,0 +1,12 @@
+theorem dispatch_none_buckets
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (nativeFuel p h : Nat)
+    (beforeCaller : Caller width) (before : Core)
+    (source target : Nat) (queries : Queries) (action : EnumerateM Symbol EnumGuard Unit)
+    (afterCaller : Caller width) (savedQueries : Queries)
+    (after : Core)
+    (proper : NoneBucketsEmpty before)
+    (selected : SourcePruningEnumerationSharedDispatch.dispatch checkEmpty nativeFuel p h
+      beforeCaller before source target queries = (.ok (some action), afterCaller, savedQueries))
+    (completed : ExceptT.run (action before) = [.ok ((), after)]) :
+    NoneBucketsEmpty after

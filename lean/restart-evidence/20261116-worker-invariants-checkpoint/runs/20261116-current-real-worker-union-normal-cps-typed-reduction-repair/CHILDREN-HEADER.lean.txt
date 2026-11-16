@@ -1,0 +1,12 @@
+/-- Actual child tails compose their local callbacks at the returned native caller. -/
+theorem visitChildren_unionNormal
+    (visit : Visitor) (preserves : ChildPreserves visit)
+    (done : List Fragment → Caller width → Queries → Cached → Fold)
+    (stopped : List Fragment → Observation → Option Cached → Fold)
+    (inputs : List (Node × List Suspended)) (caller : Caller width) (before : Cached) (queries : Queries)
+    (normal : UnionNormal caller.checked.native.machine.heap)
+    (doneNormal : ∀ (fragments : List Fragment) (reached : Caller width) (saved : Queries) (after : Cached), UnionNormal reached.checked.native.machine.heap →
+      FoldNormal (done fragments reached saved after))
+    (stopNormal : ∀ (fragments : List Fragment) (observation : Observation) (candidate : Option Cached), UnionNormal observation.2.1.checked.native.machine.heap →
+      FoldNormal (stopped fragments observation candidate)) :
+    FoldNormal (SourcePruningEnumerationSharedChildVisitors.visitChildren visit done stopped inputs caller before queries)

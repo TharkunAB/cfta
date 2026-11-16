@@ -1,0 +1,1 @@
+Root-only ordinary module check. Copy to a check source root as MicroCFTA/SourcePruningEnumerationNoneBucketBoundary.lean and import it in a driver. Append PROBES.lean.txt. No Source mutation is requested. No source-reachability claim follows from this fabricated-state counterexample.

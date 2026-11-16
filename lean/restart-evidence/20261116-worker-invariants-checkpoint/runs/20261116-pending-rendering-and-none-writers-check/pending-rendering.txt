@@ -1,0 +1,35 @@
+MicroCFTA.SourcePruningEnumerationPendingRendering.render_assignment {NativeGuard EnumGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (holds : NativeGuard → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (ambient : MicroCFTA.InternedGuardedLanguage.Env MicroCFTA.SourcePruningTemplates.Symbol)
+  (meaning : EnumGuard → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol → Prop)
+  (marker : MicroCFTA.SourcePruningTemplates.Symbol) (fuel uv : Nat)
+  (before after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (term : MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol)
+  (pending : List (EnumGuard × MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol))
+  (safe : MicroCFTA.EnumerationSchedule.Safe before) (level : Nat → Nat) (frontier : Nat)
+  (ordered : MicroCFTA.EnumerationOrder.Stratified before level frontier)
+  (choices :
+    ∀ (slot : Nat) (node : Option Nat) (scs : List MicroCFTA.EnumerationState.Suspended),
+      before.values[slot]? = some (MicroCFTA.EnumerationState.UVarValue.unenumerated node scs) →
+        scs = [] ∧
+          ∀ (handle : Nat),
+            node = some handle →
+              MicroCFTA.SourcePruningEnumerationNativeLanguage.handles holds ambient heap handle
+                (MicroCFTA.Language.Term.node marker []))
+  (success :
+    MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.SourcePruningEnumerationRendering.render heap marker fuel uv)
+      before (term, pending) after)
+  (checked :
+    ∀ (obligation : EnumGuard × MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol),
+      obligation ∈ pending → meaning obligation.fst obligation.snd) :
+  ∃ assignment,
+    MicroCFTA.EnumerationCorrectness.Satisfies
+        (MicroCFTA.SourcePruningEnumerationNativeLanguage.handles holds ambient heap) meaning assignment before ∧
+      term = assignment uv ∧
+        MicroCFTA.EnumerationCompressionFrame.Frame before after ∧
+          MicroCFTA.EnumerationCorrectness.Satisfies
+            (MicroCFTA.SourcePruningEnumerationNativeLanguage.handles holds ambient heap) meaning assignment after
+'MicroCFTA.SourcePruningEnumerationPendingRendering.render_assignment' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

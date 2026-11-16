@@ -1,0 +1,19 @@
+theorem empty_root_singleton_enter_parent
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (rootRequest : NodeRequest Symbol Guard)
+    (before after : Checked width)
+    (physical : SourceCurrentAllocatedNativePhysicalCache.Valid before.native)
+    (rootEmpty : rootRequest.domain = IntersectionEmptyDomain.emptyDomain)
+    (used : Nat) (parent : Interned DomainKey)
+    (left right : Value Symbol Guard) (first second uid patternId : Nat)
+    (next : Interned DomainKey → Code Symbol Guard (Value Symbol Guard))
+    (actual : Trace used (.code (.node rootRequest .pure)) before
+      (.code (.enter parent left right first second next)) after)
+    (sameKey :
+      (SourceRecursiveIntersectionEnvironment.enter after.native.machine.domains
+        parent.key left right first second).1.key =
+      SourceRecursiveIntersectionDomain.extend IntersectionEmptyDomain.emptyKey [uid]
+        (SourceRecursiveIntersectionControl.pair uid patternId)) :
+    parent.key = IntersectionEmptyDomain.emptyKey ∧
+      SourceRecursiveIntersectionControl.pair first second =
+        SourceRecursiveIntersectionControl.pair uid patternId

@@ -1,0 +1,247 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-whole-worker-union-and-callback-values-check/source/MicroCFTA/SourcePruningEnumerationSharedEagerUnionNormalWhole.lean:87:4: error: Type mismatch
+  normal
+has type
+  UnionNormal caller.checked.native.machine.heap
+but is expected to have type
+  True
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-whole-worker-union-and-callback-values-check/source/MicroCFTA/SourcePruningEnumerationSharedEagerUnionNormalWhole.lean:88:4: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case h_2
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+checkEmpty : Bool
+r n p h k target : Nat
+scs : List Suspended
+value : Node
+caller : Caller width
+before : Cached
+queries : Queries
+normal : UnionNormal caller.checked.native.machine.heap
+x✝ : Option Receipt
+receipt✝ : Receipt
+heq✝ :
+  (if value = Value.empty then some (SelectedEdge.Result.rejected caller queries before)
+    else
+      if
+          (match value with
+            | Value.node entry edges depth free => !scs.any fun sc => EqualityTrie.isTerminal sc.trie
+            | x => false) =
+            true then
+        none
+      else
+        match ChildDispatch.run checkEmpty r n p h k scs value caller before queries with
+        | ((Except.ok (some [Except.ok (fragment, _returned)]), reached, saved, _outer, _waiting), some after) =>
+          match SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap k target fragment after with
+          | some finished => some (SelectedEdge.Result.complete fragment reached saved finished)
+          | none => some (SelectedEdge.Result.finalizeStopped fragment reached saved after)
+        | (observation, candidate) => some (SelectedEdge.Result.stopped [] observation candidate)) =
+    some receipt✝
+⊢ ReceiptNormal receipt✝
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-whole-worker-union-and-callback-values-check/source/MicroCFTA/SourcePruningEnumerationSharedEagerUnionNormalWhole.lean:269:98: error: unexpected token '('; expected '='
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-whole-worker-union-and-callback-values-check/source/MicroCFTA/SourcePruningEnumerationSharedEagerUnionNormalWhole.lean:262:22: error: unsolved goals
+case succ.some.expand
+Typing Key : Type
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+checkEmpty : Bool
+edgesOf : Node → List Edge
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+workFuel fuel : Nat
+ih :
+  ∀ (metadata : Metadata Typing) (caller : Caller width) (queries : Queries) (before : Cached) (decision : Option Next),
+    UnionNormal caller.checked.native.machine.heap →
+      HookNormal
+        (SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow
+          (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel workFuel
+            workFuel edgesOf)
+          (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order workFuel
+          fuel metadata caller queries before decision)
+metadata : Metadata Typing
+caller : Caller width
+queries : Queries
+before : Cached
+normal : UnionNormal caller.checked.native.machine.heap
+uv : Nat
+prefixNormal :
+  match
+    SourcePruningEnumerationSelectedStep.runPrefixWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits) graph
+      templates stop order metadata workFuel workFuel workFuel workFuel workFuel workFuel uv caller before queries with
+  | SourcePruningEnumerationSelectedStep.Result.stopped read checked => UnionNormal caller.checked.native.machine.heap
+  | SourcePruningEnumerationSelectedStep.Result.parked checked candidate raw =>
+    UnionNormal caller.checked.native.machine.heap
+  |
+  SourcePruningEnumerationSelectedStep.Result.narrowed checked prepared reached queries action candidate right
+      ordinary =>
+    UnionNormal prepared.state ∧ UnionNormal reached.checked.native.machine.heap
+a✝ :
+  (Metadata Typing →
+      Nat →
+        Nat →
+          Node →
+            InternedConstructorTemplates.State Symbol Constraint →
+              MergedSourceComparison.Result Symbol Constraint Node) →
+    Graph Symbol Constraint →
+      List (Template.Pattern Symbol) →
+        Option (Metadata Typing → Nat → Bool) →
+          (Metadata Typing → List Nat → Option Nat) →
+            Metadata Typing →
+              Nat →
+                Nat →
+                  Nat →
+                    Nat →
+                      Nat →
+                        Nat →
+                          Nat →
+                            Caller width → Cached → Queries → SourcePruningEnumerationSelectedStep.Result width Typing
+prefixObserved : SourcePruningEnumerationSelectedStep.runPrefixWithNarrow = a✝
+⊢ HookNormal
+    (match
+      a✝ (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates stop order metadata workFuel workFuel
+        workFuel workFuel workFuel workFuel uv caller before queries with
+    | SourcePruningEnumerationSelectedStep.Result.parked checked (some _parked) (some []) =>
+      NativeContinuations.HookResult.complete [] caller queries
+    |
+    SourcePruningEnumerationSelectedStep.Result.parked checked (some parked)
+        (some [Except.ok ((updated, next), core)]) =>
+      SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow
+        (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel workFuel workFuel
+          edgesOf)
+        (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order workFuel
+        fuel updated caller queries (EnumerationExpandableIndex.frame core parked) next
+    |
+    SourcePruningEnumerationSelectedStep.Result.narrowed checked prepared reached saved (some []) candidate right
+        ordinary =>
+      NativeContinuations.HookResult.complete [] reached saved
+    |
+    SourcePruningEnumerationSelectedStep.Result.narrowed checked prepared reached saved action candidate
+        (some [Except.ok ((true, _updated), _core)]) ordinary =>
+      NativeContinuations.HookResult.complete [] reached saved
+    |
+    SourcePruningEnumerationSelectedStep.Result.narrowed checked prepared reached saved action (some after)
+        (some [Except.ok ((false, updated), _core)]) none =>
+      match
+        (SourcePruningEnumerationSharedPreparedChildPolicy.runWithChild
+            (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel workFuel
+              workFuel edgesOf)
+            (SourcePruningEnumerationSharedPreparedRecursive.continueWith
+              (SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow
+                (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel workFuel
+                  workFuel edgesOf)
+                (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order
+                workFuel fuel)
+              graph templates stop order workFuel updated uv)
+            checkEmpty workFuel workFuel workFuel workFuel workFuel workFuel workFuel uv edgesOf reached after
+            saved).snd with
+      | none =>
+        NativeContinuations.HookResult.stopped []
+          (SourcePruningEnumerationSharedPreparedRecursive.Failure.preparation uv
+            (SourcePruningEnumerationSharedPreparedChildPolicy.runWithChild
+                (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel workFuel
+                  workFuel edgesOf)
+                (SourcePruningEnumerationSharedPreparedRecursive.continueWith
+                  (SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow
+                    (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel
+                      workFuel workFuel edgesOf)
+                    (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order
+                    workFuel fuel)
+                  graph templates stop order workFuel updated uv)
+                checkEmpty workFuel workFuel workFuel workFuel workFuel workFuel workFuel uv edgesOf reached after
+                saved).fst)
+          (some
+            (SourcePruningEnumerationSharedPreparedContinuations.preparation_endpoint reached saved
+              (SourcePruningEnumerationSharedPreparedChildPolicy.runWithChild
+                  (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel workFuel
+                    workFuel edgesOf)
+                  (SourcePruningEnumerationSharedPreparedRecursive.continueWith
+                    (SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow
+                      (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel
+                        workFuel workFuel edgesOf)
+                      (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop
+                      order workFuel fuel)
+                    graph templates stop order workFuel updated uv)
+                  checkEmpty workFuel workFuel workFuel workFuel workFuel workFuel workFuel uv edgesOf reached after
+                  saved).fst))
+      | some folded => SourcePruningEnumerationSharedPreparedRecursive.finish uv folded
+    |
+    SourcePruningEnumerationSelectedStep.Result.narrowed checked prepared reached saved action candidate right
+        ordinary =>
+      NativeContinuations.HookResult.stopped []
+        (SourcePruningEnumerationSharedPreparedRecursive.Failure.selected uv
+          (a✝ (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates stop order metadata workFuel
+            workFuel workFuel workFuel workFuel workFuel uv caller before queries))
+        (some (reached, saved))
+    | x =>
+      NativeContinuations.HookResult.stopped []
+        (SourcePruningEnumerationSharedPreparedRecursive.Failure.selected uv
+          (a✝ (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates stop order metadata workFuel
+            workFuel workFuel workFuel workFuel workFuel uv caller before queries))
+        (some (caller, queries)))
+MicroCFTA.SourcePruningEnumerationSharedEagerUnionNormal.runEager_real_unionNormal_at_any_budget {Typing Key : Type}
+  {width : Nat} [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (holeKey : Typing → Nat → Key) (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits :
+    Key →
+      MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        Bool)
+  (graph :
+    MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol)) (checkEmpty : Bool)
+  (edgesOf :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      List
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (stop : Option (MicroCFTA.SourcePruningRecordTypes.Metadata Typing → Nat → Bool))
+  (order : MicroCFTA.SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat) (workFuel recursiveFuel : Nat)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width) (queries : MicroCFTA.SourceEndpointMemo.Memos)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (normal : MicroCFTA.SourceCurrentRequiredUnionNormal.UnionNormal caller.checked.native.machine.heap) :
+  have actual :=
+    MicroCFTA.SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.runEagerWithNarrow
+      (MicroCFTA.SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order
+      workFuel recursiveFuel metadata caller queries before;
+  match actual with
+  |
+  MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.HookResult.complete outputs reached
+      queries =>
+    (∀ (output : MicroCFTA.SourcePruningEnumerationSharedPreparedRecursive.Output width Typing),
+        output ∈ outputs →
+          MicroCFTA.SourceCurrentRequiredUnionNormal.UnionNormal output.caller.checked.native.machine.heap) ∧
+      MicroCFTA.SourceCurrentRequiredUnionNormal.UnionNormal reached.checked.native.machine.heap
+  |
+  MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.HookResult.stopped outputs reason
+      reached =>
+    (∀ (output : MicroCFTA.SourcePruningEnumerationSharedPreparedRecursive.Output width Typing),
+        output ∈ outputs →
+          MicroCFTA.SourceCurrentRequiredUnionNormal.UnionNormal output.caller.checked.native.machine.heap) ∧
+      ∀ (endpoint : MicroCFTA.SourceCurrentAllocatedPartialState.State width × MicroCFTA.SourceEndpointMemo.Memos),
+        reached = some endpoint →
+          MicroCFTA.SourceCurrentRequiredUnionNormal.UnionNormal endpoint.fst.checked.native.machine.heap
+'MicroCFTA.SourcePruningEnumerationSharedEagerUnionNormal.runEager_real_unionNormal_at_any_budget' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
