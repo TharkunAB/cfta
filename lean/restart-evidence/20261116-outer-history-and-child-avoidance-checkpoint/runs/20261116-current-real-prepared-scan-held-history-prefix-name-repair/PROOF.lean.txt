@@ -1,0 +1,104 @@
+ := by
+  dsimp only
+  let child := SourcePruningEnumerationSharedEagerChildren.eagerChild
+    (width := bits + 2) (Output := Output (bits + 2) Typing) (Reason := Failure (bits + 2) Typing)
+    checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf
+  let hook := SourcePruningEnumerationSharedPreparedRecursive.continueWith
+    (SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow
+      (Typing := Typing) (width := bits + 2) child
+      (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf
+      stop order workFuel recursiveDepth)
+    graph templates stop order workFuel metadata uv
+  let visit := SourcePruningEnumerationSharedChildVisitors.visitCapturedWith child hook workFuel uv scs
+  let root : IdentityActualSourceRoot bits := {
+    caller := caller
+    queries := memos.query
+    before := before
+    incoming := .node parentEntry rows depth free
+    scs := scs
+    rawSeed := rawSeed
+    ceiling := ceiling }
+  have resourceData := real_actual_prepared_scan_prefixes_at_any_budget
+    holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver recursiveDepth workFuel
+    workerIH inventory caller memos metadata before rawSeed ceiling uv handle scs parentEntry rows depth free
+    packet ready stored incoming currentFits known mass bucketBound available closed nonterminal
+    selectionMembers selectionLength reserved
+  have rootShapes : root.Shapes := by
+    simpa only [IdentityActualSourceRoot.Shapes, IdentityActualSourceRoot.limit,
+      IdentityActualSourceRoot.own, IdentityActualSourceRoot.start, root]
+      using (And.intro resourceData.1 resourceData.2.1)
+  have bounded : ∀ sc ∈ scs, sc.var < before.core.counter :=
+    ready.safe.1.values _ (List.mem_of_getElem? stored)
+  have pending := EnumerationReferences.pending_inputs before.core packet.pending uv (some handle) scs stored
+  change ∀ output ∈ emitted (finish uv (SourcePruningEnumerationSharedBranching.scan visit before
+      (edgesOf (.node parentEntry rows depth free)) caller memos.query)),
+    EnumerationDischargeHistory.HeldFragmentHistory held heldHandle before.core output.cache.core
+  intro output member
+  have outputsSame : emitted (finish uv (SourcePruningEnumerationSharedBranching.scan visit before
+      (edgesOf (.node parentEntry rows depth free)) caller memos.query)) =
+      SourcePruningEnumerationSharedScanOutputOrigins.outputs
+        (SourcePruningEnumerationSharedBranching.scan visit before
+          (edgesOf (.node parentEntry rows depth free)) caller memos.query) := by
+    cases SourcePruningEnumerationSharedBranching.scan visit before
+      (edgesOf (.node parentEntry rows depth free)) caller memos.query <;> rfl
+  rw [outputsSame] at member
+  obtain ⟨index, indexed⟩ := List.mem_iff_getElem?.mp member
+  obtain ⟨attempted, edge, remaining, rowCaller, rowQueries, processed, outputs,
+      rowResult, localIndex, sourceRows, past, rowObserved, rowIndexed, _offset⟩ :=
+    SourcePruningEnumerationSharedScanOutputOrigins.scan_output_origin
+      visit before (edgesOf (.node parentEntry rows depth free)) caller memos.query index output indexed
+  have rowMember : output ∈ emitted (finish uv (visit edge rowCaller rowQueries before)) := by
+    rw [rowObserved]
+    cases rowResult <;> exact List.mem_of_getElem? rowIndexed
+  have pastPrefixReceipt := resourceData.2.2 attempted (edge :: remaining) sourceRows
+  obtain ⟨next, final, post, query, reachedPacket, prefixFits, prefixKnown, kept, _prefixMass⟩ :=
+    pastPrefixReceipt.2.2 processed outputs rowCaller rowQueries past
+  cases allowed : arityAllows edge.children.length scs with
+  | false =>
+      have prepared : SourcePruningEnumerationCachedOwn.prepare rowCaller.checked.native.machine.heap
+          scs edge before = some [] := by
+        simp only [SourcePruningEnumerationCachedOwn.prepare, allowed, Bool.false_eq_true, ↓reduceIte]
+      have rejected : visit edge rowCaller rowQueries before =
+          .complete [.rejected rowCaller rowQueries before] [] rowCaller rowQueries := by
+        simp only [visit, SourcePruningEnumerationSharedChildVisitors.visitCapturedWith_eq_receipts,
+          SourcePruningEnumerationSharedChildVisitors.visitSelected, prepared] <;> rfl
+      rw [rejected] at rowMember
+      cases rowMember
+  | true =>
+      cases projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+      | none =>
+          have prepared : SourcePruningEnumerationCachedOwn.prepare rowCaller.checked.native.machine.heap
+              scs edge before = none := by
+            simp only [SourcePruningEnumerationCachedOwn.prepare, allowed, ↓reduceIte, projected]
+          have stopped : visit edge rowCaller rowQueries before =
+              .stopped [] [] (.edge (some .unhandled) (rowCaller, rowQueries)) := by
+            simp only [visit, SourcePruningEnumerationSharedChildVisitors.visitCapturedWith_eq_receipts,
+              SourcePruningEnumerationSharedChildVisitors.visitSelected, prepared] <;> rfl
+          rw [stopped] at rowMember
+          cases rowMember
+      | some projection =>
+          obtain ⟨tries, residual⟩ := projection
+          have nativePast : SourcePruningEnumerationSharedBranching.scan
+              (actual_source_root_visit_with_narrow (bits := bits)
+                (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf
+                stop order recursiveDepth workFuel metadata uv root.scs)
+              root.before attempted root.caller root.queries =
+                .complete processed outputs rowCaller rowQueries := by
+            change SourcePruningEnumerationSharedBranching.scan visit before attempted caller memos.query = _
+            exact past
+          have nativeFits : Fits (root.rowSeed recursiveDepth attempted.length).2 rowCaller.checked := by
+            simpa only [IdentityActualSourceRoot.rowSeed, IdentityActualSourceRoot.limit,
+              IdentityActualSourceRoot.own, IdentityActualSourceRoot.start, root] using prefixFits
+          have nativeKnown : Heap (fun guard => guard ∈ (root.rowSeed recursiveDepth attempted.length).1)
+              rowCaller.checked.native.machine.heap := by
+            simpa only [IdentityActualSourceRoot.rowSeed, IdentityActualSourceRoot.limit,
+              IdentityActualSourceRoot.own, IdentityActualSourceRoot.start, root] using prefixKnown
+          have one := real_actual_captured_row_held_history
+            holeKey fits admits graph templates checkEmpty edgesOf stop order recursiveDepth workFuel
+            metadata uv handle formulas solver workerIH structuralIH root inventory memos packet rfl
+            parentEntry rows depth free rfl rootShapes available closed mass bucketBound bounded pending
+            ready stored incoming next rowCaller final rowQueries reachedPacket query kept
+            attempted remaining edge tries residual processed outputs sourceRows nativePast nativeFits nativeKnown
+            reserved selectionMembers selectionLength allowed projected
+            held heldHandle value different isolated decoded boundary
+          exact one output rowMember

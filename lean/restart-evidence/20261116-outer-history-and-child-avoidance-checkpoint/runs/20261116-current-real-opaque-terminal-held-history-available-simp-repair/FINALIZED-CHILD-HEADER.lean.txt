@@ -1,0 +1,15 @@
+private theorem actual_finalized_pending_child_held_fragment_history
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (original reached : Caller (bits + 2)) (metadata : Metadata Typing)
+    (before middle after : Cached) (bucket : List Suspended) (fragment : Fragment) (queries : Queries)
+    (target targetHandle held heldHandle fuel : Nat)
+    (safe : Safe before.core) (pendingInputs : InputsPending before.core bucket)
+    (isolated : EnumerationDischargeHistory.IsolatedPending held heldHandle before.core)
+    (avoids : Avoids before.core.representatives held bucket)
+    (storedTarget : before.core.values[target]? = some (.unenumerated (some targetHandle) bucket))
+    (actual : ChildInputs formulas solver original metadata before bucket fragment reached queries middle)
+    (different : target ≠ held)
+    (finalized : SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap
+      fuel target fragment middle = some after) :
+    EnumerationDischargeHistory.HeldFragmentHistory held heldHandle before.core after.core

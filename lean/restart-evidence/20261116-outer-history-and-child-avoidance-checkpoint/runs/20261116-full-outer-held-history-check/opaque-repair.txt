@@ -1,0 +1,146 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-full-outer-held-history-check/source/opaque-repair/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:24576:75: error(lean.invalidField): Invalid field `checked`: The environment does not contain `Function.checked`, so it is not possible to project the field `checked` from an expression
+  childCaller
+of type
+  (a b : Node) → Decidable (a = b)
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261116-full-outer-held-history-check/source/opaque-repair/MicroCFTA/SourcePruningEnumerationSharedEagerReservation.lean:24589:14: error: Dependent elimination failed: Failed to solve equation
+  some (SelectedEdge.Result.complete fragment reached saved after) =
+    match
+      ChildDispatch.run checkEmpty workFuel workFuel workFuel workFuel workFuel scs value caller before memos.query with
+    | ((Except.ok (some [Except.ok (fragment, _returned)]), reached, saved, _outer, _waiting), some after) =>
+      match SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap workFuel uv fragment after with
+      | some finished => some (SelectedEdge.Result.complete fragment reached saved finished)
+      | none => some (SelectedEdge.Result.finalizeStopped fragment reached saved after)
+    | (observation, candidate) => some (SelectedEdge.Result.stopped [] observation candidate)
+MicroCFTA.SourcePruningEnumerationSharedEagerReservation.actual_finalized_pending_child_held_fragment_history
+  {Typing : Type} {bits : Nat}
+  [DecidableEq
+      (InternedConstructorTemplates.EdgeKey SourcePruningTemplates.Symbol
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (original reached : SourceCurrentAllocatedPartialState.State (bits + 2))
+  (metadata : SourcePruningRecordTypes.Metadata Typing)
+  (before middle after :
+    EnumerationExpandableIndex.Cached SourcePruningTemplates.Symbol (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (bucket : List EnumerationState.Suspended) (fragment : Fragments.Fragment SourcePruningTemplates.Symbol)
+  (queries : SourceEndpointMemo.Memos) (target targetHandle held heldHandle fuel : Nat)
+  (safe : EnumerationSchedule.Safe before.core)
+  (pendingInputs : EnumerationDependencies.InputsPending before.core bucket)
+  (isolated : EnumerationDischargeHistory.IsolatedPending held heldHandle before.core)
+  (avoids : EnumerationCorrectness.Avoids before.core.representatives held bucket)
+  (storedTarget :
+    before.core.values[target]? = some (EnumerationState.UVarValue.unenumerated (some targetHandle) bucket))
+  (actual : ChildInputs formulas solver original metadata before bucket fragment reached queries middle)
+  (different : target ≠ held)
+  (finalized :
+    SourcePruningEnumerationFinalize.run reached.checked.native.machine.heap fuel target fragment middle = some after) :
+  EnumerationDischargeHistory.HeldFragmentHistory held heldHandle before.core after.core
+'_private.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.0.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.actual_finalized_pending_child_held_fragment_history' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationSharedEagerReservation.real_actual_opaque_terminal_held_history_at_any_budget
+  {Typing Key : Type} {bits : Nat} [DecidableEq SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (InternedConstructorTemplates.EdgeKey SourcePruningTemplates.Symbol
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [DecidableEq
+      (InternedConstructorTemplates.Value SourcePruningTemplates.Symbol
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (holeKey : Typing → Nat → Key) (fits : Key → SourcePruningTemplates.Symbol → Bool)
+  (admits :
+    Key →
+      InternedConstructorTemplates.Value SourcePruningTemplates.Symbol
+          (SourceSymbolicIndex.Constraint FullSyntax.Formula) →
+        Bool)
+  (graph : EnumerationState.Graph SourcePruningTemplates.Symbol (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (templates : List (Template.Pattern SourcePruningTemplates.Symbol)) (checkEmpty : Bool)
+  (edgesOf :
+    InternedConstructorTemplates.Value SourcePruningTemplates.Symbol
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula) →
+      List
+        (InternedConstructorTemplates.EdgeValue SourcePruningTemplates.Symbol
+          (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+  (stop : Option (SourcePruningRecordTypes.Metadata Typing → Nat → Bool))
+  (order : SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat)
+  (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+  (recursiveDepth : Nat)
+  (workerIH :
+    RealEagerEmittedCompleteAtDepth holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver
+      recursiveDepth)
+  (structuralIH :
+    RealEagerHeldFragmentHistoryAtDepth holeKey fits admits graph templates checkEmpty edgesOf stop order formulas
+      solver recursiveDepth)
+  (inventory : SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (caller : SourceCurrentAllocatedPartialState.State (bits + 2)) (memos : EndpointMemoGateTrace.Memos)
+  (metadata : SourcePruningRecordTypes.Metadata Typing)
+  (before :
+    EnumerationExpandableIndex.Cached SourcePruningTemplates.Symbol (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (seed : SourcePruningEnumerationSharedIncomingReservation.Seed) (bound ceiling uv handle : Nat)
+  (scs : List EnumerationState.Suspended)
+  (value :
+    InternedConstructorTemplates.Value SourcePruningTemplates.Symbol
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (packet : SourcePruningEnumerationRecursive.Packet formulas solver inventory caller memos metadata before)
+  (ready : EnumerationDriver.Ready uv before.core)
+  (stored : before.core.values[uv]? = some (EnumerationState.UVarValue.unenumerated (some handle) scs))
+  (incoming : EnumerationReferences.IncomingAvoid uv before.core)
+  (available : InternedProbeProvenance.Available caller.checked.native.machine.heap value) (closed : value.free = [])
+  (dispatch :
+    (match value with
+      | InternedConstructorTemplates.Value.node entry edges depth free =>
+        !scs.any fun sc => EqualityTrie.isTerminal sc.trie
+      | x => false) =
+      false)
+  (bounded : SourceCurrentConstrainedCapGeneratedQueryResources.Fits seed.snd caller.checked)
+  (known : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.fst) caller.checked.native.machine.heap)
+  (mass : SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling)
+  (bucketBound : scs.length ≤ bound)
+  (selectionMembers :
+    ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+      (rows :
+        List
+          (InternedConstructorTemplates.EdgeValue SourcePruningTemplates.Symbol
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+      (depth : Nat) (free : List InternedBinderProtocol.Reference)
+      (edge :
+        InternedConstructorTemplates.EdgeValue SourcePruningTemplates.Symbol
+          (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+      edge ∈ edgesOf (InternedConstructorTemplates.Value.node entry rows depth free) → edge ∈ rows)
+  (selectionLength :
+    ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+      (rows :
+        List
+          (InternedConstructorTemplates.EdgeValue SourcePruningTemplates.Symbol
+            (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+      (depth : Nat) (free : List InternedBinderProtocol.Reference),
+      (edgesOf (InternedConstructorTemplates.Value.node entry rows depth free)).length ≤ rows.length)
+  (reserved :
+    fallbackReserved bits bound ceiling (fun retained current => eagerReserved bits recursiveDepth current retained)
+      seed)
+  (workFuel held heldHandle : Nat)
+  (heldValue :
+    InternedConstructorTemplates.Value SourcePruningTemplates.Symbol
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (different : uv ≠ held) (isolated : EnumerationDischargeHistory.IsolatedPending held heldHandle before.core)
+  (decodedHeld :
+    SourcePruningEnumerationNodes.lookupNode caller.checked.native.machine.heap heldHandle = some heldValue)
+  (boundary : MergedOrdinaryHeight.recursiveBoundary heldValue = true)
+  (output : SourcePruningEnumerationSharedPreparedRecursive.Output (bits + 2) Typing) :
+  output ∈
+      SourcePruningEnumerationSharedPreparedRecursive.emitted
+        (SourcePruningEnumerationSharedPreparedRecursive.finish uv
+          (SourcePruningEnumerationSharedReceiptContinuation.run
+            (SourcePruningEnumerationSharedPreparedRecursive.continueWith
+              (SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow
+                (SourcePruningEnumerationSharedEagerChildren.eagerChild checkEmpty workFuel workFuel workFuel workFuel
+                  workFuel edgesOf)
+                (SourcePruningOuterNarrow.narrow holeKey fits admits) graph templates checkEmpty edgesOf stop order
+                workFuel recursiveDepth)
+              graph templates stop order workFuel metadata uv)
+            caller memos.query
+            (SourcePruningEnumerationSharedSelectedOpaqueDispatch.run checkEmpty workFuel workFuel workFuel workFuel
+              workFuel uv scs value caller before memos.query))) →
+    EnumerationDischargeHistory.HeldFragmentHistory held heldHandle before.core output.cache.core
+'_private.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.0.MicroCFTA.SourcePruningEnumerationSharedEagerReservation.real_actual_opaque_terminal_held_history_at_any_budget' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,67 @@
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+open EnumerationState EnumerationCorrectness EnumerationSchedule
+open InternedConstructorTemplates
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
+open SourcePruningEnumerationSharedIncomingReservation (Seed)
+open SourcePruningEnumerationRecursive (Packet)
+open SourcePruningEnumerationSharedPreparedRecursive (Output emitted)
+open SourcePruningEnumerationSharedPreparedRecursiveChildPolicy (runEagerWithNarrow)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Heap" => SourceEqualityAnnotationHeap.Heap
+variable {Typing Key : Type} {bits : Nat}
+variable [DecidableEq (EdgeKey Symbol Constraint)]
+set_option autoImplicit false
+
+/- Keep every original pending target separate from the held class. -/
+theorem runEager_real_pending_target_fragments_avoid_isolated_at_any_budget
+    [DecidableEq Symbol] [DecidableEq Node]
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (recursiveFuel : Nat) (inventory : Inventory)
+    (caller : Caller (bits + 2)) (memos : Memos) (before : Cached) (metadata : Metadata Typing)
+    (seed : Seed) (ceiling : Nat)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (bounded : Fits seed.2 caller.checked)
+    (known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap)
+    (selectionMembers : ∀ entry rows depth free, ∀ edge ∈ edgesOf (.node entry rows depth free), edge ∈ rows)
+    (selectionLength : ∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length)
+    (initialMass : SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling)
+    (reserved : eagerReserved bits recursiveFuel seed ceiling) (workFuel : Nat)
+    (held heldHandle : Nat) (value : Node)
+    (isolated : EnumerationDischargeHistory.IsolatedPending held heldHandle before.core)
+    (decoded : SourcePruningEnumerationNodes.lookupNode
+      caller.checked.native.machine.heap heldHandle = some value)
+    (boundary : MergedOrdinaryHeight.recursiveBoundary value = true) :
+    let outcome := runEagerWithNarrow (SourcePruningOuterNarrow.narrow holeKey fits admits)
+      graph templates checkEmpty edgesOf stop order workFuel recursiveFuel metadata caller memos.query before
+    ∀ output ∈ emitted outcome,
+      EnumerationDischargeHistory.IsolatedPending held heldHandle output.cache.core ∧
+      EnumerationDriver.Protected held before.core output.cache.core ∧
+      ∀ (target : Nat) (node : Option Nat) (bucket : List Suspended),
+        before.core.values[target]? = some (.unenumerated node bucket) →
+        ∀ (representative : Nat) (fragment : Fragments.Fragment Symbol),
+          UnionFind.SameClass output.cache.core.representatives target representative →
+          output.cache.core.values[representative]? = some (.enumerated fragment) →
+          EnumerationDependencies.FragmentAvoid output.cache.core.representatives held fragment
+ := by
+  have histories := real_eager_held_fragment_history_at_every_depth (bits := bits)
+    holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver recursiveFuel
+    inventory caller memos before metadata seed ceiling packet bounded known selectionMembers selectionLength
+    initialMass reserved workFuel held heldHandle value isolated decoded boundary
+  intro output member
+  have history := histories output member
+  exact ⟨history.isolated, history.protectedHeld,
+    EnumerationDischargeHistory.HeldFragmentHistory.pending_target_avoids
+      held heldHandle before.core output.cache.core packet.safe history⟩
+
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation

@@ -1,0 +1,6 @@
+theorem pendingFragment_avoids_protected_expanded
+    (before middle : State Symbol Guard) (fragment old : Fragment Symbol) (slot : Nat)
+    (pending : PendingFragment middle fragment)
+    (stored : before.values[slot]? = some (.enumerated old))
+    (protected : EnumerationDriver.Protected slot before middle) :
+    FragmentAvoid middle.representatives slot fragment

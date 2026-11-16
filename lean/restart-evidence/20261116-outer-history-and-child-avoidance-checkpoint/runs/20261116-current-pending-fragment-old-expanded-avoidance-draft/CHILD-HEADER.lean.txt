@@ -1,0 +1,14 @@
+omit [DecidableEq Symbol] [DecidableEq Node] in
+private theorem actual_child_inputs_old_expanded_protection_and_avoidance
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (original reached : Caller (bits + 2)) (memos : Memos)
+    (metadata : Metadata Typing) (before middle : Cached)
+    (bucket : List Suspended) (fragment : Fragment) (queries : Queries)
+    (target : Nat) (targetHandle : Option Nat)
+    (packet : SourcePruningEnumerationRecursive.Packet formulas solver inventory original memos metadata before)
+    (storedTarget : before.core.values[target]? = some (.unenumerated targetHandle bucket))
+    (actual : ChildInputs formulas solver original metadata before bucket fragment reached queries middle) :
+    ∀ slot old, before.core.values[slot]? = some (.enumerated old) →
+      EnumerationDriver.Protected slot before.core middle.core ∧
+        FragmentAvoid middle.core.representatives slot fragment

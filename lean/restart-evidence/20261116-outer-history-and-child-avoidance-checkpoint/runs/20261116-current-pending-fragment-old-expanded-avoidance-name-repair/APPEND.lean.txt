@@ -1,0 +1,43 @@
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+open Language Fragments EnumerationState EnumerationCorrectness EnumerationSchedule
+open EnumerationDependencies EnumerationReferences InternedConstructorTemplates
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+variable {Typing : Type} {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+local notation "Memos" => EndpointMemoGateTrace.Memos
+
+omit [DecidableEq Symbol] [DecidableEq Node] in
+private theorem actual_child_inputs_old_expanded_protection_and_avoidance
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (original reached : Caller (bits + 2)) (memos : Memos)
+    (metadata : Metadata Typing) (before middle : Cached)
+    (bucket : List Suspended) (fragment : Fragment) (queries : Queries)
+    (target : Nat) (targetHandle : Option Nat)
+    (packet : SourcePruningEnumerationRecursive.Packet formulas solver inventory original memos metadata before)
+    (storedTarget : before.core.values[target]? = some (.unenumerated targetHandle bucket))
+    (actual : ChildInputs formulas solver original metadata before bucket fragment reached queries middle) :
+    ∀ slot old, before.core.values[slot]? = some (.enumerated old) →
+      EnumerationDriver.Protected slot before.core middle.core ∧
+        FragmentAvoid middle.core.representatives slot fragment := by
+  have inputsPending : InputsPending before.core bucket :=
+    EnumerationReferences.pending_inputs before.core packet.pending target targetHandle bucket storedTarget
+  obtain ⟨_next, _final, _post, _query, _middlePacket, _growth, _origin,
+    protects, _references, _fragmentBound, fragmentPending, _fragmentAvoid⟩ := actual
+  intro slot old stored
+  obtain ⟨inside, root⟩ := enumerated_root before.core packet.safe slot old stored
+  have retained := protects slot inside root (inputsPending slot old stored)
+  refine ⟨retained, ?_⟩
+  exact pendingFragment_avoids_protected_expanded before.core middle.core fragment old slot
+    fragmentPending stored retained
+
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation

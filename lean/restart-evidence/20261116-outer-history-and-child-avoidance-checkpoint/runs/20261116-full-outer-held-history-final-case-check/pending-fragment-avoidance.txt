@@ -1,0 +1,8 @@
+@MicroCFTA.EnumerationDependencies.pendingFragment_avoids_protected_expanded : ∀ {Symbol Guard : Type}
+  (before middle : MicroCFTA.EnumerationState.State Symbol Guard) (fragment old : MicroCFTA.Fragments.Fragment Symbol)
+  (slot : Nat),
+  MicroCFTA.EnumerationDependencies.PendingFragment middle fragment →
+    before.values[slot]? = some (MicroCFTA.EnumerationState.UVarValue.enumerated old) →
+      MicroCFTA.EnumerationDriver.Protected slot before middle →
+        MicroCFTA.EnumerationDependencies.FragmentAvoid middle.representatives slot fragment
+'MicroCFTA.EnumerationDependencies.pendingFragment_avoids_protected_expanded' depends on axioms: [propext]

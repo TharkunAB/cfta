@@ -1,0 +1,11 @@
+ := by
+  have inputsPending : InputsPending before.core bucket :=
+    EnumerationReferences.pending_inputs before.core packet.pending target targetHandle bucket storedTarget
+  obtain ⟨_next, _final, _post, _query, _middlePacket, _growth, _origin,
+    protects, _references, _fragmentBound, fragmentPending, _fragmentAvoid⟩ := actual
+  intro slot old stored
+  obtain ⟨inside, root⟩ := enumerated_root before.core packet.safe slot old stored
+  have retained := protects slot inside root (inputsPending slot old stored)
+  refine ⟨retained, ?_⟩
+  exact pendingFragment_avoids_protected_expanded before.core middle.core fragment old slot
+    fragmentPending stored retained

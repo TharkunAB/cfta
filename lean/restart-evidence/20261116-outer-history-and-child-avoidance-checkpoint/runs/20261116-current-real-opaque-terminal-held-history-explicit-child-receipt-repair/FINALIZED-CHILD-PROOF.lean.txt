@@ -1,0 +1,49 @@
+  have heldInside : held < before.core.counter := by
+    rw [safe.1.aligned]
+    exact (List.getElem?_eq_some_iff.mp isolated.stored).1
+  have middleIsolated := (child_inputs_isolated_pending formulas solver original reached metadata
+    before middle bucket fragment queries held heldHandle safe isolated avoids actual).2
+  obtain ⟨_next, _final, _post, _query, _middlePacket, _growth, origin,
+    protects, _references, _bound, _pending, fragmentAvoid⟩ := actual
+  have heldProtected := protects held heldInside isolated.root avoids
+  have producedAvoid := fragmentAvoid held heldInside isolated.root avoids
+  have core := EnumerationDischargeHistory.finalize_core_of_run
+    reached.checked.native.machine.heap fuel target fragment middle after finalized
+  have sameForest : after.core.representatives = middle.core.representatives := by rw [core]
+  have unwritten (slot : Nat) (separate : target ≠ slot)
+      (root : IsRoot middle.core.representatives slot) :
+      EnumerationDriver.Protected slot middle.core after.core := by
+    refine ⟨?_, ?_, ?_⟩
+    · simp only [core, List.getElem?_set_ne separate]
+    · rw [sameForest]
+      exact root
+    · intro other
+      rw [sameForest]
+  have finalIsolated := EnumerationDischargeHistory.IsolatedPending.through_finalize
+    reached.checked.native.machine.heap fuel target held heldHandle fragment middle after
+    middleIsolated different finalized
+  refine ⟨finalIsolated, heldProtected.trans (unwritten held different heldProtected.root), ?_, ?_⟩
+  · intro slot old oldStored
+    obtain ⟨inside, root⟩ := enumerated_root before.core safe slot old oldStored
+    have oldProtected := protects slot inside root (pendingInputs slot old oldStored)
+    have separate : target ≠ slot := by
+      intro same
+      subst slot
+      cases Option.some.inj (storedTarget.symm.trans oldStored)
+    exact oldProtected.trans (unwritten slot separate oldProtected.root)
+  · intro slot old afterStored
+    by_cases written : slot = target
+    · subst slot
+      have inside : target < middle.core.values.length := by
+        have bound := (List.getElem?_eq_some_iff.mp afterStored).1
+        simpa only [core, List.length_set] using bound
+      have fragmentSame : fragment = old := by
+        rw [core, List.getElem?_set_self inside] at afterStored
+        exact UVarValue.enumerated.inj (Option.some.inj afterStored)
+      apply Or.inr
+      rw [← fragmentSame]
+      simpa only [core] using producedAvoid
+    · have middleStored : middle.core.values[slot]? = some (.enumerated old) := by
+        rw [core] at afterStored
+        simpa only [List.getElem?_set_ne (Ne.symm written)] using afterStored
+      exact Or.inl (origin slot old middleStored)

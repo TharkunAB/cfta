@@ -1,0 +1,7 @@
+Status: UNCOMPILED. The two earlier opaque candidates and their failed logs remain unchanged. Neither failed module has proof credit. The finalized-child helper itself printed standard axioms in both checks.
+
+The second log exposes the exact failed tactic: split named its third generated binder childCaller, but that binder was a DecidableEq Node instance. A later unmatched complete receipt also caused dependent elimination failure. Both failures occur in the same completed-receipt inversion.
+
+This repair replaces only that inversion. It first proves the exact outer receipt equation with the already checked original20021 normalization scheme. It then cases the literal ChildDispatch result, its option/list/error constructors and actual candidate. Only a singleton successful child and an actual successful finalizer can equal the observed completed receipt. Actual childCaller and childSaved now come from explicit tuple projections, never guessed matcher binders. The same actual receipts call the existing finalizedHistory helper.
+
+The full330 main header, finalized-child0ccee header/proof and probes are byte-exact. Every other proof region is unchanged. This finite control inversion copies no numeric forecast or runtime engine. It retains every original workFuel, the original2M checking cap, all input premises and all output observers. No new lemma or supplier is assumed. Root must check the new immutable packet serially.
