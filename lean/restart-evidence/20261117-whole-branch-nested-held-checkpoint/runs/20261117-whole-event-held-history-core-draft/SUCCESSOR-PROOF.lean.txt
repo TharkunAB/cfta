@@ -1,0 +1,45 @@
+ := by
+  unfold RealWholeEventHeldEntriesAtDepth
+  intro inventory caller memos before metadata seed ceiling
+    packet canonical bounded known selectionMembers selectionLength initialMass reserved
+    workFuel held heldHandle heldValue anchor past decodedHeld boundary decision index output truthful history
+  cases history with
+  | stopped _ _ _ _ _ =>
+      refine ⟨[], JointOutputLedgerAt.stopped _ _ _ _ _ ⟨canonical, packet.safe.1.total⟩, ?_⟩
+      intro event member
+      cases member
+  | done _ _ _ _ _ =>
+      refine ⟨[], JointOutputLedgerAt.done _ _ _ _ _ ⟨canonical, packet.safe.1.total⟩, ?_⟩
+      intro event member
+      cases member
+  | parked actual tail =>
+      exact real_whole_event_held_parked_history holeKey fits admits graph templates checkEmpty edgesOf stop order
+        formulas solver recursiveDepth workFuel outerIH inventory caller memos before metadata seed ceiling
+        packet canonical bounded known selectionMembers selectionLength initialMass reserved
+        held heldHandle heldValue anchor past decodedHeld boundary
+        _ _ _ _ _ _ truthful actual index output tail
+  | selected actual actionContinues preparedHistory =>
+      rename_i uv updated reached saved after checked rightCore prepared action
+      obtain ⟨events, ledger, retained⟩ := real_whole_event_held_right_prepared_history
+        holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver recursiveDepth workFuel outerIH
+        inventory caller memos before metadata seed ceiling packet canonical bounded known selectionMembers selectionLength
+        initialMass reserved held heldHandle heldValue anchor past decodedHeld boundary
+        uv checked prepared reached saved action after updated rightCore truthful actual index output preparedHistory
+      have prefixActual : SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order
+          metadata workFuel workFuel workFuel workFuel workFuel workFuel uv caller before memos.query =
+          .narrowed checked prepared reached saved action (some after)
+            (some [.ok ((false, updated), rightCore)]) none := actual
+      have prefixFacts := SourcePruningEnumerationPreparationEntryInvariants.runPrefix_entry_invariants
+        holeKey fits admits graph templates stop order metadata
+        workFuel workFuel workFuel workFuel workFuel workFuel uv caller before memos.query canonical packet.safe.1.total
+      rw [prefixActual] at prefixFacts
+      have checkedFacts : CanonicalTotal checked := ⟨prefixFacts.2.1, prefixFacts.1⟩
+      have candidateFacts : CanonicalTotal after.core :=
+        ⟨(prefixFacts.2.2 after rfl).2, (prefixFacts.2.2 after rfl).1⟩
+      refine ⟨_, JointOutputLedgerAt.selected actual actionContinues ⟨canonical, packet.safe.1.total⟩ checkedFacts
+        candidateFacts ledger, ?_⟩
+      intro event member
+      simp only [List.mem_cons] at member
+      rcases member with rfl | member
+      · exact past
+      · exact retained event member

@@ -1,0 +1,8 @@
+private theorem whole_event_alias_opaque_complete
+    (checkEmpty : Bool) (r n p h k target : Nat) (scs : List Suspended) (value : Node)
+    (caller reached : Caller (bits + 2)) (before finished : Cached) (queries saved : Queries)
+    (fragment : Fragment)
+    (actual : SourcePruningEnumerationSharedSelectedOpaqueDispatch.run checkEmpty r n p h k target
+      scs value caller before queries = some (.complete fragment reached saved finished)) :
+    ∀ left right, UnionFind.SameClass before.core.representatives left right →
+      UnionFind.SameClass finished.core.representatives left right

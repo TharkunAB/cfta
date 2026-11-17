@@ -1,0 +1,73 @@
+ := by
+  have actualPrefix : SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata
+      workFuel workFuel workFuel workFuel workFuel workFuel uv caller before memos.query =
+      .narrowed checked prepared reached saved action (some after)
+        (some [.ok ((false, updated), callbackCore)]) none := actual
+  have prefixHistory := SourcePruningEnumerationSelectedStep.prefix_held_fragment_history_at_original_budget
+    holeKey fits admits graph templates stop order metadata formulas solver inventory workFuel uv caller before memos
+    held heldHandle heldValue packet past.isolated decodedHeld boundary chosen
+  rw [actualPrefix] at prefixHistory
+  have different : uv ≠ held := prefixHistory.1
+  have localHistory : EnumerationDischargeHistory.HeldFragmentHistory
+      held heldHandle before.core after.core := prefixHistory.2.2 after rfl
+  have current := SourcePruningEnumerationSharedRecursive.prefix_real_continuing_current_at_original_budget
+    holeKey fits admits graph templates stop order metadata formulas solver inventory caller memos before packet
+    seed.2 (fun guard => guard ∈ seed.1) bounded known workFuel uv chosen
+  rw [actualPrefix] at current
+  have currentFull : SourcePruningEnumerationSharedRecursive.CurrentPrefixResources stop order metadata
+      formulas solver inventory uv caller before memos seed.2 (fun guard => guard ∈ seed.1)
+      (.narrowed checked prepared reached saved action (some after)
+        (some [.ok ((false, updated), callbackCore)]) none) := by
+    cases action with
+    | none => exact current
+    | some rows => cases rows <;> exact current
+  have current := currentFull
+  obtain ⟨_ordinary, _queries, _value, _heap, _selectedAction, final, preparedSame, _reached,
+    post, query, shape⟩ := current.1
+  rcases shape with ⟨_empty, _action, impossible, _right⟩ |
+    ⟨newHandle, scs, cached, _nonempty, _encoded, actionSame, cacheSame, rightSame,
+      ready, stored, _waiting, afterPacket⟩
+  · cases impossible
+  · have cachedSame := Option.some.inj cacheSame
+    subst cached
+    have rightFields : updated = metadata ∧ callbackCore = after.core := by
+      simpa only [Option.some.injEq, List.cons.injEq, Except.ok.injEq, Prod.mk.injEq,
+        and_true, true_and] using rightSame
+    have metadataSame := rightFields.1
+    subst updated
+    have admission := SourcePruningEnumerationSharedRecursive.prefix_real_phase_admission_at_original_budget
+      holeKey fits admits graph templates stop order metadata formulas solver inventory caller memos before packet
+      workFuel uv ceiling chosen initialMass
+    rw [actualPrefix, preparedSame, actionSame] at admission
+    dsimp only at admission
+    obtain ⟨_oldHandle, _observedHandle, originalScs, _originalStored, observedStored, _oldLength, bound⟩ :=
+      admission.2.2.2
+    have scsSame : originalScs = scs := by
+      have same := Option.some.inj (observedStored.symm.trans stored)
+      cases same
+      rfl
+    have bucketBound : scs.length ≤ ceiling := by
+      rw [← scsSame]
+      exact bound
+    have reachedHeldRead : SourcePruningEnumerationNodes.lookupNode
+        reached.checked.native.machine.heap heldHandle = some heldValue :=
+      SourcePruningEnumerationNodes.lookupNode_keeps
+        caller.checked.native.machine.heap reached.checked.native.machine.heap
+        post.effects.keeps heldHandle heldValue decodedHeld
+    have enteredPast := EnumerationDischargeHistory.HeldFragmentHistory.trans held heldHandle
+      anchor before.core after.core past localHistory
+    have actualHistory : PreparedHistoryAt holeKey fits admits graph templates checkEmpty edgesOf stop order
+        workFuel recursiveDepth metadata uv reached final.query after index output := by
+      simpa only [query] using history
+    have prefixFacts := SourcePruningEnumerationPreparationEntryInvariants.runPrefix_entry_invariants
+      holeKey fits admits graph templates stop order metadata
+      workFuel workFuel workFuel workFuel workFuel workFuel uv caller before memos.query canonical packet.safe.1.total
+    rw [actualPrefix] at prefixFacts
+    have afterCanonical : EnumerationValidity.Canonical after.core := (prefixFacts.2.2 after rfl).2
+    have inherited := real_whole_event_held_prepared_history_at_depth
+      holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver recursiveDepth workFuel outerIH
+      inventory reached final metadata after seed ceiling uv newHandle scs
+      afterPacket afterCanonical ready stored admission.1 current.2.1 current.2.2 admission.2.2.1 bucketBound
+      selectionMembers selectionLength reserved held heldHandle heldValue anchor different enteredPast
+      reachedHeldRead boundary index output actualHistory
+    simpa only [query] using inherited

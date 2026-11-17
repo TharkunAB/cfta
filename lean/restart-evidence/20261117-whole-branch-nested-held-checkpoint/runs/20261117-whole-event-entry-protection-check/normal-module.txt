@@ -1,0 +1,17 @@
+@MicroCFTA.SourcePruningEnumerationWholeEventEntryProtection.EntriesHeld : {Typing : Type} →
+  {width : Nat} →
+    Nat →
+      Nat →
+        MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+          List (MicroCFTA.SourcePruningEnumerationJointCausalEventLedger.Operation Typing width) → Prop
+@MicroCFTA.SourcePruningEnumerationWholeEventEntryProtection.entries_held_append : ∀ {Typing : Type} {width : Nat}
+  (held heldHandle : Nat)
+  (anchor :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (front back : List (MicroCFTA.SourcePruningEnumerationJointCausalEventLedger.Operation Typing width)),
+  MicroCFTA.SourcePruningEnumerationWholeEventEntryProtection.EntriesHeld held heldHandle anchor front →
+    MicroCFTA.SourcePruningEnumerationWholeEventEntryProtection.EntriesHeld held heldHandle anchor back →
+      MicroCFTA.SourcePruningEnumerationWholeEventEntryProtection.EntriesHeld held heldHandle anchor (front ++ back)
+'MicroCFTA.SourcePruningEnumerationWholeEventEntryProtection.entries_held_append' depends on axioms: [propext]

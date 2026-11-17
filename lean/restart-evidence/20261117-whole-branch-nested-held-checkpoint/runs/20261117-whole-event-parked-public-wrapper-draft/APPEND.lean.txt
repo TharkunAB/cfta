@@ -1,0 +1,129 @@
+namespace MicroCFTA.SourcePruningEnumerationParkedOuterHeldHistory
+open SourcePruningEnumerationRealEagerCausalOutputHistory EnumerationDischargeHistory
+open SourcePruningEnumerationRecursive (Packet)
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourcePruningEnumerationSharedIncomingReservation (Seed)
+open SourcePruningEnumerationSharedEagerReservation (eagerReserved)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
+open EnumerationState InternedConstructorTemplates
+open SourcePruningEnumerationSharedSelectedContinuations
+open SourcePruningEnumerationSharedPreparedRecursive (Output Failure emitted continueWith)
+open SourcePruningEnumerationSharedPreparedRecursiveChildPolicy (resumeWithNarrow CapturedCallbackInvocationAt)
+open SourcePruningEnumerationSharedChildVisitors (visitCapturedWith)
+open SourcePruningEnumerationSharedBranching (scan)
+open SourcePruningEnumerationSharedScanOutputOrigins (outputs)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Edge" => EdgeValue Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Core" => EnumerationState.State Symbol Constraint
+variable {Typing Key : Type} {bits : Nat}
+local notation "Fold" => NativeContinuations.Result (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2)
+local notation "Prepared" => MergedSourceComparison.Result Symbol Constraint (Node × Option (EnumerateM Symbol Constraint Unit))
+local notation "ActionRaw" => List (Except EnumerationState.Error (Unit × Core))
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+set_option autoImplicit false
+
+set_option maxHeartbeats 200000
+
+attribute [local irreducible]
+  SourcePruningEnumerationSharedEagerReservation.eagerReserved
+  SourcePruningEnumerationSharedEagerReservation.eagerFinal
+  SourceCurrentConstrainedCapTargetForecast.scalar
+  SourceCurrentConstrainedCapEditForecast.headProfile
+  SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow
+  SourcePruningEnumerationSharedPreparedRecursive.continueWith
+
+-- Prospective owner-local export. No proof is installed in normal Source.
+theorem actual_parked_same_joint_ledger_all_entries_held_history
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller (bits + 2)) (memos : EndpointMemoGateTrace.Memos) (before parked : Cached)
+    (metadata updated : Metadata Typing) (seed : Seed) (ceiling : Nat)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (canonical : EnumerationValidity.Canonical before.core)
+    (bounded : Fits seed.2 caller.checked)
+    (known : SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap)
+    (selectionMembers : ∀ entry rows depth free, ∀ edge ∈ edgesOf (.node entry rows depth free), edge ∈ rows)
+    (selectionLength : ∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length)
+    (initialMass : SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling)
+    (workFuel depth uv : Nat) (reserved : eagerReserved bits (depth + 1) seed ceiling)
+    (checked core : Core) (next : Option Next)
+    (chosen : SourcePruningEnumerationRestart.decision stop order metadata before = some (.expand uv))
+    (actual : SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order
+      metadata workFuel workFuel workFuel workFuel workFuel workFuel uv caller before memos.query =
+        .parked checked (some parked) (some [.ok ((updated, next), core)]))
+    (index : Nat) (output : Output (bits + 2) Typing)
+    (observed : (emitted (resumeWithNarrow
+      (SourcePruningEnumerationSharedEagerChildren.eagerChild
+        checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
+      (SourcePruningOuterNarrow.narrow holeKey fits admits)
+      graph templates checkEmpty edgesOf stop order workFuel (depth + 1)
+      metadata caller memos.query before (some (.expand uv))))[index]? = some output) :
+    ∃ (handle : Nat) (bucket : List EnumerationState.Suspended) (value : Node),
+      before.core.values[uv]? = some (.unenumerated (some handle) bucket) ∧
+      SourcePruningEnumerationNodes.lookupNode caller.checked.native.machine.heap handle = some value ∧
+      MergedOrdinaryHeight.recursiveBoundary value = true ∧
+      ∃ events : List (SourcePruningEnumerationJointCausalEventLedger.Operation Typing (bits + 2)),
+        SourcePruningEnumerationJointCausalEventLedger.JointOutputLedgerAt
+          holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel
+          depth updated caller memos.query (EnumerationExpandableIndex.frame core parked) next index output events ∧
+        SourcePruningEnumerationWholeEventEntryProtection.EntriesHeld uv handle parked.core events := by
+  obtain ⟨handle, bucket, _readAfter, value, _size, _resolved,
+    _reading, originalStored, _pendingInputs, _bucketAvoid, isolated, _path, _readFrame,
+    decoded, boundary, _checking, _resolution, _resolvedFrame, _seen, _resolvedStored,
+    _cleared, _shape, _parkedCore, _adapted, _restarted,
+    _metadataEq, _coreEq, _nextEq, _notStuck, _aliases, restart⟩ :=
+    SourcePruningEnumerationParkedRemovedBucketInputs.actual_parked_removed_bucket_inputs
+      holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel depth uv
+      formulas solver inventory metadata updated caller memos before parked checked core next packet chosen actual
+  obtain ⟨_metadataSame, framed, trueNext, nextSeed, nextCeiling,
+      nextPacket, nextFits, nextKnown, nextMass, nextReserved⟩ :=
+    SourcePruningEnumerationSharedEagerReservation.real_outer_parked_depth_admission
+      holeKey fits admits graph templates stop order formulas solver depth workFuel inventory caller memos
+      before parked metadata updated seed ceiling uv checked core next
+      packet bounded known initialMass reserved chosen actual
+  have tailObserved : (emitted (resumeWithNarrow
+      (SourcePruningEnumerationSharedEagerChildren.eagerChild
+        checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
+      (SourcePruningOuterNarrow.narrow holeKey fits admits)
+      graph templates checkEmpty edgesOf stop order workFuel depth updated caller memos.query
+      (EnumerationExpandableIndex.frame core parked) next))[index]? = some output := by
+    rw [← restart]
+    exact observed
+  have history := SourcePruningEnumerationRealEagerCausalOutputHistory.resumeWithNarrow_real_eager_indexed_output_history
+    holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel depth
+    updated caller memos.query (EnumerationExpandableIndex.frame core parked) next index output tailObserved
+  have parkedSafe : EnumerationSchedule.Safe parked.core := by
+    simpa only [framed] using nextPacket.safe
+  have initialHistory : EnumerationDischargeHistory.HeldFragmentHistory uv handle parked.core
+      (EnumerationExpandableIndex.frame core parked).core := by
+    rw [framed]
+    exact EnumerationDischargeHistory.HeldFragmentHistory.refl uv handle parked.core parkedSafe isolated
+  have prefixFacts := SourcePruningEnumerationPreparationEntryInvariants.runPrefix_entry_invariants
+    holeKey fits admits graph templates stop order metadata
+    workFuel workFuel workFuel workFuel workFuel workFuel uv caller before memos.query canonical packet.safe.1.total
+  rw [actual] at prefixFacts
+  have candidateCanonical : EnumerationValidity.Canonical parked.core := (prefixFacts.2.2 parked rfl).2
+  have callbackCanonical : EnumerationValidity.Canonical (EnumerationExpandableIndex.frame core parked).core := by
+    rw [framed]
+    exact candidateCanonical
+  obtain ⟨events, ledger, retained⟩ :=
+    SourcePruningEnumerationSharedEagerReservation.real_whole_event_held_entries_at_every_depth
+      holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver depth
+      inventory caller memos (EnumerationExpandableIndex.frame core parked) updated nextSeed nextCeiling
+      nextPacket callbackCanonical nextFits nextKnown selectionMembers selectionLength nextMass nextReserved
+      workFuel uv handle value parked.core initialHistory decoded boundary next index output trueNext.symm history
+  exact ⟨handle, bucket, value, originalStored, decoded, boundary, events, ledger, retained⟩
+
+end MicroCFTA.SourcePruningEnumerationParkedOuterHeldHistory

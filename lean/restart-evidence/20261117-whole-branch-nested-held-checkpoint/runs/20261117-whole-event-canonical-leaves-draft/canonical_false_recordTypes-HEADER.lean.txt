@@ -1,0 +1,8 @@
+omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node] in
+private theorem whole_event_canonical_false_recordTypes
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (fuel uv : Nat) (metadata updated : Metadata Typing) (fragment : Fragment)
+    (before : Cached) (after : Core) (canonical : Canonical before.core)
+    (recorded : ExceptT.run (SourcePruningRecordTypes.recordTypes graph templates fuel metadata uv
+      (.inl fragment) before.core) = [.ok ((false, updated), after)]) :
+    Canonical (EnumerationExpandableIndex.frame after before).core

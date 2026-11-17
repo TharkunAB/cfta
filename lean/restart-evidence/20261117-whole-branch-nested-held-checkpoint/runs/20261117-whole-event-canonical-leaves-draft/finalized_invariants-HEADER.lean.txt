@@ -1,0 +1,7 @@
+omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node] in
+private theorem whole_event_finalized_invariants
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (fuel target : Nat) (fragment : Fragment) (before after : Cached)
+    (input : CanonicalTotal before.core)
+    (observed : SourcePruningEnumerationFinalize.run heap fuel target fragment before = some after) :
+    CanonicalTotal after.core

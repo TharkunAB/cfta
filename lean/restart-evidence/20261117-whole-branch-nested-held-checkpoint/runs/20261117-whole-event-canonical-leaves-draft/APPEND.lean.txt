@@ -1,0 +1,157 @@
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+open SourcePruningEnumerationRealEagerCausalOutputHistory
+open EnumerationValidity EnumerationCorrectness EnumerationSchedule EnumerationSemantics
+open EnumerationState InternedConstructorTemplates
+open SourcePruningEnumerationSharedSelectedContinuations
+open SourcePruningEnumerationSharedPreparedRecursive (Output Failure emitted continueWith)
+open SourcePruningEnumerationSharedPreparedRecursiveChildPolicy (resumeWithNarrow CapturedCallbackInvocationAt)
+open SourcePruningEnumerationSharedChildVisitors (visitCapturedWith)
+open SourcePruningEnumerationSharedBranching (scan)
+open SourcePruningEnumerationSharedScanOutputOrigins (outputs)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Edge" => EdgeValue Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Core" => EnumerationState.State Symbol Constraint
+universe u
+variable {Typing Key : Type} {bits : Nat}
+local notation "Fold" => NativeContinuations.Result (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2)
+local notation "Prepared" => MergedSourceComparison.Result Symbol Constraint (Node × Option (EnumerateM Symbol Constraint Unit))
+local notation "ActionRaw" => List (Except EnumerationState.Error (Unit × Core))
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+set_option autoImplicit false
+
+open SourcePruningEnumerationCausalHistoryInputInvariants (CanonicalTotal)
+open SourcePruningEnumerationCapturedFinalizeRawAliases
+
+/- Note [Canonical facts from actual operations]
+These six proofs use existing public operation laws.
+Their proof text is copied from CausalHistoryInputInvariants.
+Only their private names and local references have a new prefix.
+The caller derives each premise at the same actual operation cache.
+No qualified-history proof supplies hidden event witnesses.
+-/
+
+omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node] in
+private theorem whole_event_canonical_false_recordTypes
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (fuel uv : Nat) (metadata updated : Metadata Typing) (fragment : Fragment)
+    (before : Cached) (after : Core) (canonical : Canonical before.core)
+    (recorded : ExceptT.run (SourcePruningRecordTypes.recordTypes graph templates fuel metadata uv
+      (.inl fragment) before.core) = [.ok ((false, updated), after)]) :
+    Canonical (EnumerationExpandableIndex.frame after before).core := by
+  have successful : Success (SourcePruningRecordTypes.recordTypes graph templates fuel metadata uv
+      (.inl fragment)) before.core (false, updated) after := by
+    rw [Success, recorded]
+    exact List.mem_singleton_self _
+  have values := SourcePruningEnumerationPathRecordingValues.recordTypes_values
+    graph templates fuel metadata uv (.inl fragment) before.core after (false, updated) successful
+  intro value member
+  change value ∈ after.values at member
+  rw [values] at member
+  exact canonical value member
+
+
+
+private theorem whole_event_canonical_opaque_complete
+    (checkEmpty : Bool) (r n p h k target : Nat) (scs : List Suspended) (value : Node)
+    (caller reached : Caller (bits + 2)) (before finished : Cached) (queries saved : Queries)
+    (fragment : Fragment)
+    (canonical : Canonical before.core) (valid : ValidSuspended scs)
+    (actual : SourcePruningEnumerationSharedSelectedOpaqueDispatch.run checkEmpty r n p h k target
+      scs value caller before queries = some (.complete fragment reached saved finished)) : Canonical finished.core := by
+  cases terminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) <;> cases value <;>
+    simp only [SourcePruningEnumerationSharedSelectedOpaqueDispatch.run, Option.some.injEq, reduceCtorEq,
+      terminal, Bool.not_true, Bool.not_false, ↓reduceIte] at actual
+  all_goals
+    split at actual
+    · rename_i childFragment childReturned childCaller childQueries read waiting after called
+      split at actual
+      · rename_i finalCache finalized
+        have receiptSame := Option.some.inj actual
+        have cacheSame : finalCache = finished :=
+          (SelectedEdge.Result.complete.inj receiptSame).2.2.2
+        have childCanonical := SourcePruningEnumerationSharedChildCanonical.successful_canonical
+          checkEmpty r n p h k scs _ caller childCaller before after queries childQueries
+          childFragment childReturned read waiting canonical valid called
+        rw [← cacheSame]
+        exact SourcePruningEnumerationFinalize.run_canonical childCaller.checked.native.machine.heap
+          k target childFragment after finalCache childCanonical finalized
+      · cases actual
+    · cases actual
+
+
+
+private theorem whole_event_alias_opaque_complete
+    (checkEmpty : Bool) (r n p h k target : Nat) (scs : List Suspended) (value : Node)
+    (caller reached : Caller (bits + 2)) (before finished : Cached) (queries saved : Queries)
+    (fragment : Fragment)
+    (actual : SourcePruningEnumerationSharedSelectedOpaqueDispatch.run checkEmpty r n p h k target
+      scs value caller before queries = some (.complete fragment reached saved finished)) :
+    ∀ left right, UnionFind.SameClass before.core.representatives left right →
+      UnionFind.SameClass finished.core.representatives left right := by
+  cases terminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) <;> cases value <;>
+    simp only [SourcePruningEnumerationSharedSelectedOpaqueDispatch.run, Option.some.injEq, reduceCtorEq,
+      terminal, Bool.not_true, Bool.not_false, ↓reduceIte] at actual
+  all_goals
+    split at actual
+    · rename_i childFragment childReturned childCaller childQueries read waiting after called
+      split at actual
+      · rename_i finalCache finalized
+        have receiptSame := Option.some.inj actual
+        have cacheSame : finalCache = finished :=
+          (SelectedEdge.Result.complete.inj receiptSame).2.2.2
+        have childAliases := SourcePruningEnumerationSharedChildRawAliasGrowth.successful_sameClass_forward
+          checkEmpty r n p h k scs _ caller childCaller before after queries childQueries
+          childFragment childReturned read waiting called
+        have finalAliases := finalize_sameClass_forward childCaller.checked.native.machine.heap
+          k target childFragment after finalCache finalized
+        intro left right same
+        rw [← cacheSame]
+        exact finalAliases left right (childAliases.2 left right same).2
+      · cases actual
+    · cases actual
+
+
+
+omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node] in
+private theorem whole_event_forward_total (before after : Core)
+    (total : UnionFind.Total before.representatives)
+    (aliases : ∀ left right, UnionFind.SameClass before.representatives left right →
+      UnionFind.SameClass after.representatives left right) :
+    UnionFind.Total after.representatives := by
+  exact SourcePruningEnumerationStagedChildRoots.total_of_sameClass_forward
+    before.representatives after.representatives total aliases
+
+
+omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node] in
+private theorem whole_event_finalized_invariants
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (fuel target : Nat) (fragment : Fragment) (before after : Cached)
+    (input : CanonicalTotal before.core)
+    (observed : SourcePruningEnumerationFinalize.run heap fuel target fragment before = some after) :
+    CanonicalTotal after.core := by
+  exact ⟨SourcePruningEnumerationFinalize.run_canonical heap fuel target fragment before after input.1 observed,
+    whole_event_forward_total before.core after.core input.2
+      (finalize_sameClass_forward heap fuel target fragment before after observed)⟩
+
+
+omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node] in
+private theorem whole_event_callback_invariants
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (fuel uv : Nat) (metadata updated : Metadata Typing) (fragment : Fragment)
+    (before : Cached) (after : Core) (input : CanonicalTotal before.core)
+    (recorded : ExceptT.run (SourcePruningRecordTypes.recordTypes graph templates fuel metadata uv
+      (.inl fragment) before.core) = [.ok ((false, updated), after)]) :
+    CanonicalTotal (EnumerationExpandableIndex.frame after before).core := by
+  exact ⟨whole_event_canonical_false_recordTypes graph templates fuel uv metadata updated fragment before after input.1 recorded,
+    whole_event_forward_total before.core (EnumerationExpandableIndex.frame after before).core input.2
+      (false_recordTypes_sameClass_forward graph templates fuel uv metadata updated fragment before after recorded)⟩
+
+
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation

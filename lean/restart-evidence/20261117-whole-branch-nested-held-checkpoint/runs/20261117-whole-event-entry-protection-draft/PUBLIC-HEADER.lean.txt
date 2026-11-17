@@ -1,0 +1,6 @@
+/-- Concatenate protection proofs for the same anchor and actual event lists. -/
+theorem entries_held_append (held heldHandle : Nat) (anchor : Core)
+    (front back : List (Operation Typing width))
+    (left : EntriesHeld held heldHandle anchor front)
+    (right : EntriesHeld held heldHandle anchor back) :
+    EntriesHeld held heldHandle anchor (front ++ back)

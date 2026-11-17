@@ -1,0 +1,105 @@
+MicroCFTA.SourceSynthesisCurrentUniverseTerminalMarkerNativeRestriction.original_universe_terminal_marker_native_restriction
+  {bits : Nat} [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (lib : MicroCFTA.SourceSynthesisTypeSyntax.Library) (query : MicroCFTA.SourceSynthesisTypeSyntax.Query) (signed : Int)
+  (whole : MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression)
+  (accepted : MicroCFTA.SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole)
+  (rootValue :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (sourceHeap :
+    MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (built :
+    MicroCFTA.InternedFreshOrdinaryConstruction.build
+        (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+        MicroCFTA.InternedConstructorTemplates.empty =
+      MicroCFTA.InternedNestedConstruction.Outcome.done rootValue sourceHeap)
+  (key : MicroCFTA.InternedBinderProtocol.NodeKey)
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (body depth ordinary :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (stored :
+    sourceHeap.nodeRecords key = some (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary)) :
+  ∃ bodyEntry marker markerEntry markerRow arrow rows,
+    body =
+        MicroCFTA.InternedConstructorTemplates.Value.node bodyEntry
+          (MicroCFTA.InternedConstructorTemplates.canonicalEdges (arrow :: rows)) 0
+          [MicroCFTA.InternedBinderProtocol.Reference.interned entry.identity] ∧
+      marker = MicroCFTA.InternedConstructorTemplates.Value.node markerEntry [markerRow] 0 [] ∧
+        markerRow.children = [] ∧
+          markerRow.entry.key =
+              { symbol := MicroCFTA.SourceSynthesisLabelProgramBuildRoles.literal "(->)", children := [],
+                constraint := MicroCFTA.SourceSynthesisGeneralizeSyntax.top } ∧
+            arrow.children =
+                [marker,
+                  MicroCFTA.InternedConstructorTemplates.Value.reference
+                    (MicroCFTA.InternedBinderProtocol.Reference.interned entry.identity),
+                  MicroCFTA.InternedConstructorTemplates.Value.reference
+                    (MicroCFTA.InternedBinderProtocol.Reference.interned entry.identity)] ∧
+              arrow ∈ MicroCFTA.InternedConstructorTemplates.canonicalEdges (arrow :: rows) ∧
+                ∀ (seed : MicroCFTA.SourcePruningEnumerationSharedIncomingReservation.Seed)
+                  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+                  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+                  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+                  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2))
+                  (before :
+                    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (checkEmpty : Bool) (bucket : List MicroCFTA.EnumerationState.Suspended) (roots : Nat → Nat)
+                  (memos : MicroCFTA.EndpointMemoGateTrace.Memos),
+                  MicroCFTA.InternedConstructorTemplates.Grows sourceHeap caller.checked.native.machine.heap →
+                    MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory caller memos →
+                      MicroCFTA.EnumerationSchedule.Safe before.core →
+                        MicroCFTA.EnumerationSchedule.Roots before.core.representatives roots →
+                          MicroCFTA.EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting →
+                            (∀ (slot : Nat),
+                                MicroCFTA.SourcePruningEnumerationNativeIndex.candidate
+                                    caller.checked.native.machine.heap
+                                    (before.core.values[slot]?.getD MicroCFTA.EnumerationState.UVarValue.eliminated) =
+                                  some (before.expandable slot)) →
+                              MicroCFTA.SourcePruningEnumerationObservation.PendingRealized
+                                  caller.checked.native.machine.heap before.core →
+                                (∀ (sc : MicroCFTA.EnumerationState.Suspended),
+                                    sc ∈ bucket → sc.var < before.core.counter) →
+                                  MicroCFTA.EnumerationDependencies.InputsPending before.core bucket →
+                                    MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits seed.snd
+                                        caller.checked →
+                                      MicroCFTA.SourcePruningEnumerationSharedIncomingReservation.Reserved bits seed
+                                          (bucket.length + 1) →
+                                        MicroCFTA.SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.fst)
+                                            caller.checked.native.machine.heap →
+                                          ∀ (held : Nat),
+                                            held < before.core.counter →
+                                              MicroCFTA.EnumerationCorrectness.Avoids before.core.representatives held
+                                                  bucket →
+                                                ∀ (r n p h k : Nat)
+                                                  (fragment :
+                                                    MicroCFTA.Fragments.Fragment
+                                                      MicroCFTA.SourcePruningTemplates.Symbol)
+                                                  (reached :
+                                                    MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2))
+                                                  (saved : MicroCFTA.SourceEndpointMemo.Memos)
+                                                  (read returned :
+                                                    MicroCFTA.EnumerationState.State
+                                                      MicroCFTA.SourcePruningTemplates.Symbol
+                                                      (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                        MicroCFTA.FullSyntax.Formula))
+                                                  (waiting : MicroCFTA.EnumerationWaitingIndex.Waiting)
+                                                  (after :
+                                                    MicroCFTA.EnumerationExpandableIndex.Cached
+                                                      MicroCFTA.SourcePruningTemplates.Symbol
+                                                      (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                        MicroCFTA.FullSyntax.Formula)),
+                                                  (bucket.any fun sc => MicroCFTA.EqualityTrie.isTerminal sc.trie) =
+                                                      true →
+                                                    ⋯
+'MicroCFTA.SourceSynthesisCurrentUniverseTerminalMarkerNativeRestriction.original_universe_terminal_marker_native_restriction' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

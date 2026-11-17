@@ -1,0 +1,79 @@
+private theorem real_whole_event_held_prepared_captured
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (recursiveDepth workFuel : Nat)
+    (outerIH : RealWholeEventHeldEntriesAtDepth (bits := bits)
+      holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver recursiveDepth)
+    (inventory : Inventory) (caller : Caller (bits + 2)) (memos : Memos)
+    (metadata : Metadata Typing) (before : Cached) (seed : Seed) (ceiling uv handle : Nat)
+    (scs : List Suspended)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (canonical : EnumerationValidity.Canonical before.core)
+    (ready : EnumerationDriver.Ready uv before.core)
+    (stored : before.core.values[uv]? = some (.unenumerated (some handle) scs))
+    (incoming : EnumerationReferences.IncomingAvoid uv before.core)
+    (bounded : Fits (SourcePruningEnumerationSharedRecursiveReservation.narrowSeed seed).2 caller.checked)
+    (known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap)
+    (mass : SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling)
+    (bucketBound : scs.length ≤ ceiling)
+    (selectionMembers : ∀ entry rows depth free, ∀ selected ∈ edgesOf (.node entry rows depth free), selected ∈ rows)
+    (selectionLength : ∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length)
+    (reserved : eagerReserved bits (recursiveDepth + 1) seed ceiling)
+    (held heldHandle : Nat) (heldValue : Node) (anchor : Core) (different : uv ≠ held)
+    (past : EnumerationDischargeHistory.HeldFragmentHistory held heldHandle anchor before.core)
+    (decodedHeld : SourcePruningEnumerationNodes.lookupNode
+      caller.checked.native.machine.heap heldHandle = some heldValue)
+    (boundary : MergedOrdinaryHeight.recursiveBoundary heldValue = true)
+    (index : Nat) (output : Output (bits + 2) Typing)
+    (target preparedHandle rowIndex tailIndex : Nat) (preparedScs : List Suspended)
+    (callbackMetadata : Metadata Typing) (rowCaller completedCaller : Caller (bits + 2))
+    (rowQueries saved : Queries) (beforeFinalize finished : Cached) (decoded : Node)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey) (rows : List (EdgeValue Symbol Constraint))
+    (ordinaryDepth : Nat) (free : List InternedBinderProtocol.Reference)
+    (heap : InternedConstructorTemplates.State Symbol Constraint) (entered callbackCore : Core)
+    (attempted remaining : List (EdgeValue Symbol Constraint)) (edge : EdgeValue Symbol Constraint)
+    (processed : List (SelectedEdge.Result (bits + 2)))
+    (earlier later callbackEarlier callbackLater : List (Output (bits + 2) Typing))
+    (rowResult : Fold) (fragment : Fragment)
+    (actual :
+        let child := SourcePruningEnumerationSharedEagerChildren.eagerChild
+          (width := bits + 2) (Output := Output (bits + 2) Typing) (Reason := Failure (bits + 2) Typing)
+          checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf
+        let recur := resumeWithNarrow child (SourcePruningOuterNarrow.narrow holeKey fits admits)
+          graph templates checkEmpty edgesOf stop order workFuel recursiveDepth
+        let hook := continueWith recur graph templates stop order workFuel metadata uv
+        let rootBefore := EnumerationExpandableIndex.frame entered before
+        let rootCaller := SourcePruningEnumerationSelectedValueCaller.advance caller heap
+        let visit := fun edge reached saved captured =>
+          visitCapturedWith child hook workFuel target preparedScs edge reached saved captured
+        SourcePruningEnumerationSelectedPreparation.run workFuel workFuel uv caller before =
+          ([.ok ((target, preparedHandle, preparedScs, decoded), entered)],
+            some (.done (.node entry rows ordinaryDepth free) heap)) ∧
+        preparedScs.any (fun sc => EqualityTrie.isTerminal sc.trie) = false ∧
+        edgesOf (.node entry rows ordinaryDepth free) = attempted ++ edge :: remaining ∧
+        scan visit rootBefore attempted rootCaller memos.query = .complete processed earlier rowCaller rowQueries ∧
+        visit edge rowCaller rowQueries rootBefore = rowResult ∧
+        (outputs rowResult)[rowIndex]? = some output ∧
+        index = earlier.length + rowIndex ∧
+        outputs (scan visit rootBefore (edgesOf (.node entry rows ordinaryDepth free)) rootCaller memos.query) =
+          earlier ++ outputs rowResult ++ later ∧
+        CapturedCallbackInvocationAt holeKey fits admits graph templates checkEmpty edgesOf stop order
+          workFuel recursiveDepth uv target metadata preparedScs edge rowCaller rowQueries rootBefore rowIndex output
+          fragment completedCaller saved beforeFinalize finished callbackMetadata callbackCore
+          callbackEarlier callbackLater tailIndex ∧
+        outputs rowResult = callbackEarlier ++ emitted (recur callbackMetadata completedCaller saved
+          (EnumerationExpandableIndex.frame callbackCore finished)
+          (SourcePruningEnumerationRestart.decision stop order callbackMetadata
+            (EnumerationExpandableIndex.frame callbackCore finished))) ++ callbackLater ∧
+        rowIndex = callbackEarlier.length + tailIndex)
+      (tail : OutputHistoryAt holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel recursiveDepth callbackMetadata completedCaller saved
+        (EnumerationExpandableIndex.frame callbackCore finished)
+        (SourcePruningEnumerationRestart.decision stop order callbackMetadata
+          (EnumerationExpandableIndex.frame callbackCore finished)) tailIndex output) :
+    ∃ events, SourcePruningEnumerationJointCausalEventLedger.JointPreparedLedgerAt
+      holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel recursiveDepth
+      metadata uv caller memos.query before index output events ∧
+      SourcePruningEnumerationWholeEventEntryProtection.EntriesHeld held heldHandle anchor events

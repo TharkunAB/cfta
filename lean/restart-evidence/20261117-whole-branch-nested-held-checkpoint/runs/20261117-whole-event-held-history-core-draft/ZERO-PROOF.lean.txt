@@ -1,0 +1,14 @@
+ := by
+  unfold RealWholeEventHeldEntriesAtDepth
+  intro inventory caller memos before metadata seed ceiling
+    packet canonical _bounded _known _selectionMembers _selectionLength _mass _reserved
+    workFuel held heldHandle value anchor _past _decoded _boundary decision index output _truthful history
+  cases history with
+  | stopped _ _ _ _ _ =>
+      refine ⟨[], JointOutputLedgerAt.stopped _ _ _ _ _ ⟨canonical, packet.safe.1.total⟩, ?_⟩
+      intro event member
+      cases member
+  | done _ _ _ _ _ =>
+      refine ⟨[], JointOutputLedgerAt.done _ _ _ _ _ ⟨canonical, packet.safe.1.total⟩, ?_⟩
+      intro event member
+      cases member

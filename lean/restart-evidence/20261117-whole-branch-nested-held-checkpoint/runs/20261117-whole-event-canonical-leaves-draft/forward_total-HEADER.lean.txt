@@ -1,0 +1,6 @@
+omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node] in
+private theorem whole_event_forward_total (before after : Core)
+    (total : UnionFind.Total before.representatives)
+    (aliases : ∀ left right, UnionFind.SameClass before.representatives left right →
+      UnionFind.SameClass after.representatives left right) :
+    UnionFind.Total after.representatives

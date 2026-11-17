@@ -1,0 +1,31 @@
+private def RealWholeEventHeldEntriesAtDepth
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (depth : Nat) : Prop :=
+  ∀ (inventory : Inventory) (caller : Caller (bits + 2)) (memos : Memos) (before : Cached)
+    (metadata : Metadata Typing) (seed : Seed) (ceiling : Nat),
+    Packet formulas solver inventory caller memos metadata before →
+    EnumerationValidity.Canonical before.core →
+    Fits seed.2 caller.checked →
+    Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap →
+    (∀ entry rows level free, ∀ edge ∈ edgesOf (.node entry rows level free), edge ∈ rows) →
+    (∀ entry rows level free, (edgesOf (.node entry rows level free)).length ≤ rows.length) →
+    SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling →
+    eagerReserved bits depth seed ceiling →
+    ∀ (workFuel held heldHandle : Nat) (value : Node) (anchor : Core),
+      EnumerationDischargeHistory.HeldFragmentHistory held heldHandle anchor before.core →
+      SourcePruningEnumerationNodes.lookupNode caller.checked.native.machine.heap heldHandle = some value →
+      MergedOrdinaryHeight.recursiveBoundary value = true →
+      ∀ (decision : Option Next) (index : Nat) (output : Output (bits + 2) Typing),
+        SourcePruningEnumerationRestart.decision stop order metadata before = decision →
+        ∀ history : SourcePruningEnumerationRealEagerCausalOutputHistory.OutputHistoryAt
+          holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel depth
+          metadata caller memos.query before decision index output,
+          ∃ events, SourcePruningEnumerationJointCausalEventLedger.JointOutputLedgerAt
+            holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel
+            depth metadata caller memos.query before decision index output events ∧
+            SourcePruningEnumerationWholeEventEntryProtection.EntriesHeld held heldHandle anchor events
