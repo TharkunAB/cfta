@@ -1,0 +1,60 @@
+@MicroCFTA.SourcePruningEnumerationHeldJointCausalEventLedger.captured_invocation_event_ledger : ∀ {Typing Key : Type}
+  {bits : Nat} [inst : DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (holeKey : Typing → Nat → Key) (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits :
+    Key →
+      MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        Bool)
+  (graph :
+    MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol)) (checkEmpty : Bool)
+  (edgesOf :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      List
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (stop : Option (MicroCFTA.SourcePruningRecordTypes.Metadata Typing → Nat → Bool))
+  (order : MicroCFTA.SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat)
+  (workFuel recursiveDepth uv target : Nat) (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (scs : List MicroCFTA.EnumerationState.Suspended)
+  (edge :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2))
+  (queries : MicroCFTA.SourceEndpointMemo.Memos)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (index : Nat) (output : MicroCFTA.SourcePruningEnumerationSharedPreparedRecursive.Output (bits + 2) Typing)
+  (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+  (reached : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2)) (saved : MicroCFTA.SourceEndpointMemo.Memos)
+  (beforeFinalize finished :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (updated : MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (callbackCore :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (earlier later : List (MicroCFTA.SourcePruningEnumerationSharedPreparedRecursive.Output (bits + 2) Typing))
+  (localIndex : Nat),
+  MicroCFTA.SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.CapturedCallbackInvocationAt holeKey fits admits
+      graph templates checkEmpty edgesOf stop order workFuel recursiveDepth uv target metadata scs edge caller queries
+      before index output fragment reached saved beforeFinalize finished updated callbackCore earlier later localIndex →
+    ∃ events,
+      MicroCFTA.SourcePruningEnumerationJointCausalEventLedger.CapturedEventLedgerAt holeKey fits admits graph templates
+        checkEmpty edgesOf stop order workFuel recursiveDepth uv target metadata scs edge caller queries before index
+        output fragment reached saved beforeFinalize finished updated callbackCore localIndex events
+'_private.MicroCFTA.SourcePruningEnumerationHeldJointCausalEventLedger.0.MicroCFTA.SourcePruningEnumerationHeldJointCausalEventLedger.captured_invocation_event_ledger' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

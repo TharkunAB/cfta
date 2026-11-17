@@ -1,0 +1,16 @@
+theorem held_output_history_joint_event_ledger
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List Edge)
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (workFuel held heldHandle : Nat) (anchor : Core)
+    (depth : Nat) (metadata : Metadata Typing) (caller : Caller (bits + 2))
+    (queries : Queries) (before : Cached) (decision : Option Next)
+    (index : Nat) (output : Output (bits + 2) Typing)
+    (history : OutputHistoryAt holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel
+      depth metadata caller queries before decision index output)
+    (qualified : HeldOutputHistoryAt holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel
+      held heldHandle anchor history)
+    (canonical : Canonical before.core) (total : UnionFind.Total before.core.representatives) :
+    ∃ events, JointOutputLedgerAt holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel
+      depth metadata caller queries before decision index output events ∧ OuterEntriesHeld held heldHandle anchor events

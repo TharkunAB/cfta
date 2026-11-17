@@ -1,0 +1,15 @@
+ := by
+  have receipt := invoked
+  dsimp only [CapturedCallbackInvocationAt] at receipt
+  obtain ⟨trace, _whole, _hit, _offset, finalized, recorded⟩ := receipt
+  obtain ⟨events, ledger⟩ :=
+    (SourcePruningEnumerationInvocationEventLedger.invocation_event_ledgers
+      checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf).2.2
+      .eager _ scs edge caller before queries index output
+      (.complete fragment reached saved beforeFinalize) localIndex trace []
+  have authentic :=
+    (SourcePruningEnumerationInvocationEventLedger.invocation_ledger_events_authentic
+      checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf).2.2
+      .eager _ scs edge caller before queries index output
+      (.complete fragment reached saved beforeFinalize) localIndex [] events ledger
+  exact ⟨events, ledger, authentic, finalized, recorded⟩

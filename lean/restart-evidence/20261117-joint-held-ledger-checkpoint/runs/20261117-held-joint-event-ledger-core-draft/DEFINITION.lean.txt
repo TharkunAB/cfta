@@ -1,0 +1,12 @@
+/-- Retain held protection at every visible outer operation entry. -/
+def OuterEntriesHeld {Typing : Type} {width : Nat}
+    (held heldHandle : Nat) (anchor : Core) (events : List (Operation Typing width)) : Prop :=
+  ∀ event ∈ events,
+    match event with
+    | .parked _ _ _ entry _ _ _ _ _ _ =>
+        EnumerationDischargeHistory.HeldFragmentHistory held heldHandle anchor entry.core
+    | .selected _ _ _ entry _ _ _ _ _ _ _ _ _ =>
+        EnumerationDischargeHistory.HeldFragmentHistory held heldHandle anchor entry.core
+    | .prepare _ _ entry _ _ _ _ _ _ _ =>
+        EnumerationDischargeHistory.HeldFragmentHistory held heldHandle anchor entry.core
+    | .opaque .. | .finalize .. | .recordTypes .. | .nested .. => True

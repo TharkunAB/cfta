@@ -1,0 +1,183 @@
+@OuterEntriesHeld : {Typing : Type} →
+  {width : Nat} →
+    Nat →
+      Nat →
+        EnumerationState.State SourcePruningTemplates.Symbol (SourceSymbolicIndex.Constraint FullSyntax.Formula) →
+          List (SourcePruningEnumerationJointCausalEventLedger.Operation Typing width) → Prop
+@held_history_ledgers : ∀ {Typing Key : Type} {bits : Nat} [inst : DecidableEq SourcePruningTemplates.Symbol]
+  [inst_1 :
+    DecidableEq
+      (InternedConstructorTemplates.EdgeKey SourcePruningTemplates.Symbol
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (InternedConstructorTemplates.Value SourcePruningTemplates.Symbol
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (holeKey : Typing → Nat → Key) (fits : Key → SourcePruningTemplates.Symbol → Bool)
+  (admits :
+    Key →
+      InternedConstructorTemplates.Value SourcePruningTemplates.Symbol
+          (SourceSymbolicIndex.Constraint FullSyntax.Formula) →
+        Bool)
+  (graph : EnumerationState.Graph SourcePruningTemplates.Symbol (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (templates : List (Template.Pattern SourcePruningTemplates.Symbol)) (checkEmpty : Bool)
+  (edgesOf :
+    InternedConstructorTemplates.Value SourcePruningTemplates.Symbol
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula) →
+      List
+        (InternedConstructorTemplates.EdgeValue SourcePruningTemplates.Symbol
+          (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+  (stop : Option (SourcePruningRecordTypes.Metadata Typing → Nat → Bool))
+  (order : SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat) (workFuel held heldHandle : Nat)
+  (anchor : EnumerationState.State SourcePruningTemplates.Symbol (SourceSymbolicIndex.Constraint FullSyntax.Formula)),
+  (∀ (depth : Nat) (metadata : SourcePruningRecordTypes.Metadata Typing)
+      (caller : SourceCurrentAllocatedPartialState.State (bits + 2)) (queries : SourceEndpointMemo.Memos)
+      (before :
+        EnumerationExpandableIndex.Cached SourcePruningTemplates.Symbol
+          (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+      (decision : Option EnumerationState.Next) (index : Nat)
+      (output : SourcePruningEnumerationSharedPreparedRecursive.Output (bits + 2) Typing)
+      (history :
+        SourcePruningEnumerationRealEagerCausalOutputHistory.OutputHistoryAt holeKey fits admits graph templates
+          checkEmpty edgesOf stop order workFuel depth metadata caller queries before decision index output),
+      SourcePruningEnumerationParkedOuterHeldHistory.HeldOutputHistoryAt holeKey fits admits graph templates checkEmpty
+          edgesOf stop order workFuel held heldHandle anchor history →
+        SourcePruningEnumerationCausalHistoryInputInvariants.CanonicalTotal before.core →
+          ∃ events,
+            SourcePruningEnumerationJointCausalEventLedger.JointOutputLedgerAt holeKey fits admits graph templates
+                checkEmpty edgesOf stop order workFuel depth metadata caller queries before decision index output
+                events ∧
+              OuterEntriesHeld held heldHandle anchor events) ∧
+    ∀ (depth : Nat) (metadata : SourcePruningRecordTypes.Metadata Typing) (uv : Nat)
+      (caller : SourceCurrentAllocatedPartialState.State (bits + 2)) (queries : SourceEndpointMemo.Memos)
+      (before :
+        EnumerationExpandableIndex.Cached SourcePruningTemplates.Symbol
+          (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+      (index : Nat) (output : SourcePruningEnumerationSharedPreparedRecursive.Output (bits + 2) Typing)
+      (history :
+        SourcePruningEnumerationRealEagerCausalOutputHistory.PreparedHistoryAt holeKey fits admits graph templates
+          checkEmpty edgesOf stop order workFuel depth metadata uv caller queries before index output),
+      SourcePruningEnumerationParkedOuterHeldHistory.HeldPreparedHistoryAt holeKey fits admits graph templates
+          checkEmpty edgesOf stop order workFuel held heldHandle anchor history →
+        SourcePruningEnumerationCausalHistoryInputInvariants.CanonicalTotal before.core →
+          ∃ events,
+            SourcePruningEnumerationJointCausalEventLedger.JointPreparedLedgerAt holeKey fits admits graph templates
+                checkEmpty edgesOf stop order workFuel depth metadata uv caller queries before index output events ∧
+              OuterEntriesHeld held heldHandle anchor events
+@held_output_history_joint_event_ledger : ∀ {Typing Key : Type} {bits : Nat}
+  [inst : DecidableEq SourcePruningTemplates.Symbol]
+  [inst_1 :
+    DecidableEq
+      (InternedConstructorTemplates.EdgeKey SourcePruningTemplates.Symbol
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (InternedConstructorTemplates.Value SourcePruningTemplates.Symbol
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (holeKey : Typing → Nat → Key) (fits : Key → SourcePruningTemplates.Symbol → Bool)
+  (admits :
+    Key →
+      InternedConstructorTemplates.Value SourcePruningTemplates.Symbol
+          (SourceSymbolicIndex.Constraint FullSyntax.Formula) →
+        Bool)
+  (graph : EnumerationState.Graph SourcePruningTemplates.Symbol (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (templates : List (Template.Pattern SourcePruningTemplates.Symbol)) (checkEmpty : Bool)
+  (edgesOf :
+    InternedConstructorTemplates.Value SourcePruningTemplates.Symbol
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula) →
+      List
+        (InternedConstructorTemplates.EdgeValue SourcePruningTemplates.Symbol
+          (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+  (stop : Option (SourcePruningRecordTypes.Metadata Typing → Nat → Bool))
+  (order : SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat) (workFuel held heldHandle : Nat)
+  (anchor : EnumerationState.State SourcePruningTemplates.Symbol (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (depth : Nat) (metadata : SourcePruningRecordTypes.Metadata Typing)
+  (caller : SourceCurrentAllocatedPartialState.State (bits + 2)) (queries : SourceEndpointMemo.Memos)
+  (before :
+    EnumerationExpandableIndex.Cached SourcePruningTemplates.Symbol (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (decision : Option EnumerationState.Next) (index : Nat)
+  (output : SourcePruningEnumerationSharedPreparedRecursive.Output (bits + 2) Typing)
+  (history :
+    SourcePruningEnumerationRealEagerCausalOutputHistory.OutputHistoryAt holeKey fits admits graph templates checkEmpty
+      edgesOf stop order workFuel depth metadata caller queries before decision index output),
+  SourcePruningEnumerationParkedOuterHeldHistory.HeldOutputHistoryAt holeKey fits admits graph templates checkEmpty
+      edgesOf stop order workFuel held heldHandle anchor history →
+    EnumerationValidity.Canonical before.core →
+      UnionFind.Total before.core.representatives →
+        ∃ events,
+          SourcePruningEnumerationJointCausalEventLedger.JointOutputLedgerAt holeKey fits admits graph templates
+              checkEmpty edgesOf stop order workFuel depth metadata caller queries before decision index output events ∧
+            OuterEntriesHeld held heldHandle anchor events
+@held_prepared_history_joint_event_ledger : ∀ {Typing Key : Type} {bits : Nat}
+  [inst : DecidableEq SourcePruningTemplates.Symbol]
+  [inst_1 :
+    DecidableEq
+      (InternedConstructorTemplates.EdgeKey SourcePruningTemplates.Symbol
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (InternedConstructorTemplates.Value SourcePruningTemplates.Symbol
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+  (holeKey : Typing → Nat → Key) (fits : Key → SourcePruningTemplates.Symbol → Bool)
+  (admits :
+    Key →
+      InternedConstructorTemplates.Value SourcePruningTemplates.Symbol
+          (SourceSymbolicIndex.Constraint FullSyntax.Formula) →
+        Bool)
+  (graph : EnumerationState.Graph SourcePruningTemplates.Symbol (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (templates : List (Template.Pattern SourcePruningTemplates.Symbol)) (checkEmpty : Bool)
+  (edgesOf :
+    InternedConstructorTemplates.Value SourcePruningTemplates.Symbol
+        (SourceSymbolicIndex.Constraint FullSyntax.Formula) →
+      List
+        (InternedConstructorTemplates.EdgeValue SourcePruningTemplates.Symbol
+          (SourceSymbolicIndex.Constraint FullSyntax.Formula)))
+  (stop : Option (SourcePruningRecordTypes.Metadata Typing → Nat → Bool))
+  (order : SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat) (workFuel held heldHandle : Nat)
+  (anchor : EnumerationState.State SourcePruningTemplates.Symbol (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (depth : Nat) (metadata : SourcePruningRecordTypes.Metadata Typing) (uv : Nat)
+  (caller : SourceCurrentAllocatedPartialState.State (bits + 2)) (queries : SourceEndpointMemo.Memos)
+  (before :
+    EnumerationExpandableIndex.Cached SourcePruningTemplates.Symbol (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+  (index : Nat) (output : SourcePruningEnumerationSharedPreparedRecursive.Output (bits + 2) Typing)
+  (history :
+    SourcePruningEnumerationRealEagerCausalOutputHistory.PreparedHistoryAt holeKey fits admits graph templates
+      checkEmpty edgesOf stop order workFuel depth metadata uv caller queries before index output),
+  SourcePruningEnumerationParkedOuterHeldHistory.HeldPreparedHistoryAt holeKey fits admits graph templates checkEmpty
+      edgesOf stop order workFuel held heldHandle anchor history →
+    EnumerationValidity.Canonical before.core →
+      UnionFind.Total before.core.representatives →
+        ∃ events,
+          SourcePruningEnumerationJointCausalEventLedger.JointPreparedLedgerAt holeKey fits admits graph templates
+              checkEmpty edgesOf stop order workFuel depth metadata uv caller queries before index output events ∧
+            OuterEntriesHeld held heldHandle anchor events
+'_private.MicroCFTA.SourcePruningEnumerationHeldJointCausalEventLedger.0.MicroCFTA.SourcePruningEnumerationHeldJointCausalEventLedger.canonical_false_recordTypes' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'_private.MicroCFTA.SourcePruningEnumerationHeldJointCausalEventLedger.0.MicroCFTA.SourcePruningEnumerationHeldJointCausalEventLedger.canonical_opaque_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'_private.MicroCFTA.SourcePruningEnumerationHeldJointCausalEventLedger.0.MicroCFTA.SourcePruningEnumerationHeldJointCausalEventLedger.canonical_parked_core' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'_private.MicroCFTA.SourcePruningEnumerationHeldJointCausalEventLedger.0.MicroCFTA.SourcePruningEnumerationHeldJointCausalEventLedger.alias_opaque_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'_private.MicroCFTA.SourcePruningEnumerationHeldJointCausalEventLedger.0.MicroCFTA.SourcePruningEnumerationHeldJointCausalEventLedger.forward_total' does not depend on any axioms
+'_private.MicroCFTA.SourcePruningEnumerationHeldJointCausalEventLedger.0.MicroCFTA.SourcePruningEnumerationHeldJointCausalEventLedger.finalized_invariants' depends on axioms: [propext,
+ Quot.sound]
+'_private.MicroCFTA.SourcePruningEnumerationHeldJointCausalEventLedger.0.MicroCFTA.SourcePruningEnumerationHeldJointCausalEventLedger.callback_invariants' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'_private.MicroCFTA.SourcePruningEnumerationHeldJointCausalEventLedger.0.MicroCFTA.SourcePruningEnumerationHeldJointCausalEventLedger.captured_invocation_event_ledger' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'_private.MicroCFTA.SourcePruningEnumerationHeldJointCausalEventLedger.0.MicroCFTA.SourcePruningEnumerationHeldJointCausalEventLedger.held_history_ledgers' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourcePruningEnumerationHeldJointCausalEventLedger.held_output_history_joint_event_ledger' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourcePruningEnumerationHeldJointCausalEventLedger.held_prepared_history_joint_event_ledger' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
