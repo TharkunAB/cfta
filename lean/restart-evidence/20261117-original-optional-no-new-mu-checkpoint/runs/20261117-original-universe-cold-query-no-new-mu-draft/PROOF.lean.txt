@@ -1,0 +1,69 @@
+ := by
+  let initialState : Checked width := ⟨initial width machine, operations⟩
+  let rootControl : Control (Value Symbol Guard) := .code (.node rootRequest .pure)
+  have sourceStep (used : Nat) (control : Control (Value Symbol Guard)) (current : Checked width)
+      (past : Trace used rootControl initialState control current)
+      (room : used + 1 ≤ fuel)
+      (currentInputs : SourceCurrentAllocatedNativePhysicalExecution.Inputs control current) :
+      InternedShallowHeap.NoNewMu current.native.machine.heap
+        (step control current).state.native.machine.heap := by
+    apply cold_step_no_new_mu control current currentInputs
+    intro binder siteBody resume same
+    subst control
+    exact original_universe_optional_prefix_no_new_mu
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      rootRequest machine machineValid sourceGrowth rootDomain leftProfile rightProfile operations operationsValid
+      fuel used current binder siteBody resume room inputs fields past
+  have traceOld (count : Nat) (control : Control (Value Symbol Guard)) (before : Checked width)
+      (rest : Control (Value Symbol Guard)) (after : Checked width)
+      (suffix : Trace count control before rest after) :
+      ∀ (used : Nat), Trace used rootControl initialState control before → used + count ≤ fuel →
+        InternedShallowHeap.NoNewMu before.native.machine.heap after.native.machine.heap := by
+    induction suffix with
+    | refl control before =>
+        intro _used _past _room
+        exact InternedShallowHeap.noNewMu_refl _
+    | cons control before next middle final after remaining currentInputs one tail ih =>
+        intro used past room
+        have oneTrace : Trace 1 control before next middle :=
+          .cons _ _ _ _ _ _ 0 currentInputs one (.refl _ _)
+        have nextPrefix := past.trans oneTrace
+        have kept := sourceStep used control before past (by omega) currentInputs
+        have keptAt : InternedShallowHeap.NoNewMu before.native.machine.heap middle.native.machine.heap := by
+          simpa only [one, Outcome.state] using kept
+        have later := ih (used + 1) nextPrefix (by omega)
+        exact InternedShallowHeap.noNewMu_trans keptAt later
+  have executeOld : ∀ (remaining : Nat) (control : Control (Value Symbol Guard)) (before : Checked width)
+      (used : Nat), used + remaining ≤ fuel → Trace used rootControl initialState control before →
+      InputsThrough remaining control before →
+      InternedShallowHeap.NoNewMu before.native.machine.heap
+        (SourceEqualityNativeDemand.execute remaining control before).state.native.machine.heap := by
+    intro remaining
+    induction remaining with
+    | zero =>
+        intro control before _used _room _past _remainingInputs
+        exact InternedShallowHeap.noNewMu_refl _
+    | succ remaining ih =>
+        intro control before used room past remainingInputs
+        have kept := sourceStep used control before past (by omega) remainingInputs.1
+        cases one : step control before with
+        | yielded next after =>
+            have oneTrace : Trace 1 control before next after :=
+              .cons _ _ _ _ _ _ 0 remainingInputs.1 one (.refl _ _)
+            have nextPrefix := past.trans oneTrace
+            have nextInputs : InputsThrough remaining next after := by
+              simpa only [one] using remainingInputs.2
+            have keptAt : InternedShallowHeap.NoNewMu before.native.machine.heap after.native.machine.heap := by
+              simpa only [one, Outcome.state] using kept
+            have later := ih next after (used + 1) (by omega) nextPrefix nextInputs
+            simpa only [SourceEqualityNativeDemand.execute, one] using
+              InternedShallowHeap.noNewMu_trans keptAt later
+        | done | failed | constraintError | blocked =>
+            simpa only [SourceEqualityNativeDemand.execute, one, Outcome.state] using kept
+  constructor
+  · simpa only [initialState, rootControl, Nat.zero_add] using
+      executeOld fuel rootControl initialState 0 (by omega) (.refl _ _) inputs
+  · intro used rest current bounded actual
+    simpa only [initialState, Nat.zero_add] using
+      traceOld used rootControl initialState rest current actual 0 (.refl _ _)
+        (by simpa only [Nat.zero_add] using bounded)

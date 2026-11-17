@@ -1,0 +1,33 @@
+cold_lift_heap := by
+  cases outcome <;> rfl
+
+cold_step_no_new_mu := by
+  cases control with
+  | edgeBody request resume =>
+      rw [step, SourceEqualityNativeDemandOperations.body_native]
+      exact InternedShallowHeap.noNewMu_refl _
+  | code code =>
+      cases code with
+      | pure | fail | enter | read | finishNode | finishEdge =>
+          exact InternedShallowHeap.noNewMu_refl _
+      | work job resume =>
+          change InternedShallowHeap.NoNewMu before.native.machine.heap
+            (lift before.operations (SourceRecursiveIntersectionNative.step SourceEqualityConstraintConstructors.top
+              SourceEqualityPCSNativeEdge.conjoin (.work job resume) before.native)).state.native.machine.heap
+          rw [cold_lift_heap]
+          exact SourceCurrentNativePublicationTrace.work_noNewMu job before.native.machine.heap currentInputs
+      | optionalBinder binder body resume =>
+          have kept := optional binder body resume rfl
+          cases called : SourceRecursiveIntersectionMaybeMu.maybeMu binder body before.native.machine.heap with
+          | done value heap | pending key heap =>
+              simpa only [step, SourceRecursiveIntersectionNative.step, called, lift, Outcome.state,
+                advance, InternedNestedConstruction.Outcome.state] using kept
+      | node request resume =>
+          change InternedShallowHeap.NoNewMu before.native.machine.heap
+            (lift before.operations (SourceRecursiveIntersectionNative.step SourceEqualityConstraintConstructors.top
+              SourceEqualityPCSNativeEdge.conjoin (.node request resume) before.native)).state.native.machine.heap
+          rw [cold_lift_heap, SourceRecursiveIntersectionNative.node_step_machine]
+          exact InternedShallowHeap.noNewMu_refl _
+      | edge request resume =>
+          rw [SourceEqualityNativeDemandHeap.step_edge_heap]
+          exact InternedShallowHeap.noNewMu_refl _

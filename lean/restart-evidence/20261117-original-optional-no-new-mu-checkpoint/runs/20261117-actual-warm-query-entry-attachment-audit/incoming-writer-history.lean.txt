@@ -1,0 +1,158 @@
+33: theorem prepared_incoming_success_writer_history
+34:     [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+35:     (formulas : SourceGuards.Formulas FullSyntax.Formula)
+36:     (solver : SourceGuards.Entailment FullSyntax.Formula)
+37:     (inventory : Inventory) (metadata : SourcePruningRecordTypes.Metadata Typing)
+38:     (caller : Caller (bits + 2)) (before : Cached) (memos : Memos)
+39:     (packet : Packet formulas solver inventory caller memos metadata before)
+40:     (profile : Profile) (fits : Fits profile caller.checked) (admitted : Admits bits profile)
+41:     (past : History caller.checked)
+42:     (parentEntry : Interned InternedBinderProtocol.NodeKey)
+43:     (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+44:     (free : List InternedBinderProtocol.Reference)
+45:     (parentAvailable : Available caller.checked.native.machine.heap (.node parentEntry rows depth free))
+46:     (parentClosed : free = []) (edge : EdgeValue Symbol Constraint) (rowSelected : edge ∈ rows)
+47:     (preparationHeap : InternedConstructorTemplates.State Symbol Constraint)
+48:     (parentBucket : List Suspended) (captured own : Cached)
+49:     (symbol : Symbol) (staged : List Child) (residual : Option Constraint)
+50:     (prepared : SourcePruningEnumerationCachedOwn.prepare preparationHeap parentBucket edge captured =
+51:       some [((symbol, staged, residual), own)])
+52:     (position : Nat) (incoming : Node) (bucket : List Suspended)
+53:     (action : Option (EnumerateM Symbol Constraint Fragment))
+54:     (selected : staged[position]? = some (incoming, bucket, action))
+55:     (checkEmpty : Bool) (representativeFuel nativeFuel p h target : Nat)
+56:     (incomingScs : List Suspended)
+57:     (raw : List (Except EnumerationState.Error (Unit × Core)))
+58:     (afterCaller : Caller (bits + 2)) (savedQueries : Queries) (read : Core)
+59:     (actual : SourcePruningEnumerationSharedIncomingNode.run checkEmpty representativeFuel nativeFuel p h
+60:       caller before.core target incoming incomingScs memos.query =
+61:         (.ok (some raw), afterCaller, savedQueries, read)) :
+62:     Available caller.checked.native.machine.heap incoming ∧ incoming.free = [] ∧
+63:       History afterCaller.checked ∧
+64:       ((afterCaller = caller ∧ QueryHistory 0 caller afterCaller) ∨
+65:         ∃ (found : UnionFind.Result) (oldHandle : Nat) (oldScs : List Suspended)
+66:           (old query : Node) (queried : Checked (bits + 2))
+67:           (phase : SourcePruningEnumerationSharedEnabledEmpty.Outcome (bits + 2))
+68:           (phaseQueries : Queries) (answer : Bool) (next : Inventory) (final : Memos),
+69:           UnionFind.findRoot representativeFuel before.core.representatives target = some found ∧
+70:           before.core.values[found.representative]? = some (.unenumerated (some oldHandle) oldScs) ∧
+71:           lookupNode caller.checked.native.machine.heap oldHandle = some old ∧
+72:           Available caller.checked.native.machine.heap old ∧ old.free = [] ∧
+73:           SourceEqualityNativeDemand.execute nativeFuel
+74:             (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain incoming old))
+75:             caller.checked = .done query queried ∧
+76:           History queried ∧
+77:           QueryHistory 1 caller
+78:             (SourceCurrentAllocatedPartialState.advance caller queried caller.fourth caller.merge) ∧
+79:           (if checkEmpty then SourcePruningEnumerationSharedEnabledEmpty.check p h query queried caller.fourth memos.query
+80:             else (.skipped queried caller.fourth, memos.query)) = (phase, phaseQueries) ∧
+81:           phase.completed = some answer ∧
+82:           afterCaller = SourceCurrentAllocatedPartialState.advance caller phase.state phase.memo caller.merge ∧
+83:           savedQueries = phaseQueries ∧ read = {before.core with representatives := found.forest} ∧
+84:           next.source = caller.checked.native.machine.heap ∧
+85:           next.roots = inventory.roots ++ [incoming, old] ∧
+86:           Post formulas solver next caller afterCaller final ∧ final.query = savedQueries ∧
+87:           afterCaller.checked.native.nodes = queried.native.nodes ∧
+88:           afterCaller.checked.native.edges = queried.native.edges ∧
+89:           afterCaller.checked.native.machine.domains = queried.native.machine.domains ∧
+90:           (phase = .skipped queried caller.fourth → QueryHistory 1 caller afterCaller) ∧
+91:           (checkEmpty = false → QueryHistory 1 caller afterCaller ∧ savedQueries = memos.query)) := by
+92:   obtain ⟨incomingAvailable, incomingClosed, observation⟩ :=
+93:     SourcePruningEnumerationSharedIncomingQueryHistory.prepared_incoming_success_query_history
+94:       formulas solver inventory metadata caller before memos packet parentEntry rows depth free
+95:       parentAvailable parentClosed edge rowSelected preparationHeap parentBucket captured own
+96:       symbol staged residual prepared position incoming bucket action selected
+97:       checkEmpty representativeFuel nativeFuel p h target incomingScs raw afterCaller savedQueries read actual
+98:   rcases observation with same | native
+99:   · refine ⟨incomingAvailable, incomingClosed, ?_, .inl same⟩
+100:     rw [same.1]
+101:     exact past
+102:   · obtain ⟨found, oldHandle, oldScs, old, query, queried, phase, phaseQueries, answer,
+103:       foundEq, storedEq, lookup, oldAvailable, oldClosed, nativeDone, queryHistory,
+104:       phaseEq, completed, callerSame, savedEq, readEq, skippedHistory, disabledHistory⟩ := native
+105:     obtain ⟨next, source, roots, receipt, nativePost, _queryFits, _mass⟩ :=
+106:       SourceCurrentAllocatedTargetQuery.raw_done_caller_admitted_resources profile nativeFuel
+107:         formulas solver inventory caller queried incoming old query memos packet.context fits admitted
+108:         incomingAvailable oldAvailable incomingClosed oldClosed nativeDone
+109:     let queriedCaller := SourceCurrentAllocatedPartialState.advance caller queried caller.fourth caller.merge
+110:     have queryContext : Context formulas solver next queriedCaller memos := nativePost.context
+111:     have queriedHistory : History queried := by
+112:       cases receipt.actual with
+113:       | @run traceFuel trace =>
+114:           exact past.query ⟨IntersectionEmptyDomain.emptyDomain, incoming, old⟩ traceFuel query
+115:             packet.context.ready.good trace
+116:     have phaseResources : ∃ final,
+117:         Post formulas solver next queriedCaller
+118:           (SourceCurrentAllocatedPartialState.advance caller phase.state phase.memo caller.merge) final ∧
+119:         History phase.state ∧ final.query = phaseQueries ∧
+120:         phase.state.native.nodes = queried.native.nodes ∧
+121:         phase.state.native.edges = queried.native.edges ∧
+122:         phase.state.native.machine.domains = queried.native.machine.domains := by
+123:       cases checkEmpty with
+124:       | false =>
+125:           have bypass :
+126:               (SourcePruningEnumerationSharedEnabledEmpty.Outcome.skipped queried caller.fourth,
+127:                 memos.query) = (phase, phaseQueries) := by
+128:             simpa only [Bool.false_eq_true, ite_false] using phaseEq
+129:           have phaseSame : phase =
+130:               SourcePruningEnumerationSharedEnabledEmpty.Outcome.skipped queried caller.fourth :=
+131:             (congrArg Prod.fst bypass).symm
+132:           have queriesSame := (congrArg Prod.snd bypass).symm
+133:           rw [phaseSame]
+134:           exact ⟨memos, Post.refl queryContext, queriedHistory, queriesSame.symm, rfl, rfl, rfl⟩
+135:       | true =>
+136:           have checked : SourcePruningEnumerationSharedEnabledEmpty.check p h query queried caller.fourth
+137:               memos.query = (phase, phaseQueries) := by
+138:             simpa only [ite_true] using phaseEq
+139:           cases phase with
+140:           | skipped kept keptMemo =>
+141:               obtain ⟨gate, keptSame, memoSame⟩ :=
+142:                 SourcePruningEnumerationSharedEnabledEmpty.check_skipped_receipt
+143:                   p h query queried kept caller.fourth keptMemo memos.query phaseQueries checked
+144:               have gateChecked := SourceEndpointMemoCorrect.run_checked query
+145:                 queried.native.machine.heap queryContext.ready.good.native.machine.1.coherent
+146:                 receipt.available memos.query queryContext.globals.query
+147:               rw [gate] at gateChecked
+148:               have gateContext : Context formulas solver next queriedCaller
+149:                   {memos with query := phaseQueries} :=
+150:                 ⟨queryContext.ready, queryContext.admitted, queryContext.sound, queryContext.stored,
+151:                   queryContext.covered, queryContext.correct,
+152:                   ⟨queryContext.globals.unfolding, gateChecked.valid⟩, queryContext.probes⟩
+153:               subst kept
+154:               subst keptMemo
+155:               exact ⟨{memos with query := phaseQueries}, Post.refl gateContext,
+156:                 queriedHistory, rfl, rfl, rfl, rfl⟩
+157:           | performed observed =>
+158:               obtain ⟨gate, called⟩ :=
+159:                 SourcePruningEnumerationSharedEnabledEmpty.check_performed_receipt
+160:                   p h query queried caller.fourth memos.query phaseQueries observed checked
+161:               have gateChecked := SourceEndpointMemoCorrect.run_checked query
+162:                 queried.native.machine.heap queryContext.ready.good.native.machine.1.coherent
+163:                 receipt.available memos.query queryContext.globals.query
+164:               rw [gate] at gateChecked
+165:               have gateContext : Context formulas solver next queriedCaller
+166:                   {memos with query := phaseQueries} :=
+167:                 ⟨queryContext.ready, queryContext.admitted, queryContext.sound, queryContext.stored,
+168:                   queryContext.covered, queryContext.correct,
+169:                   ⟨queryContext.globals.unfolding, gateChecked.valid⟩, queryContext.probes⟩
+170:               have phaseOutcome := SourceCurrentAllocatedSharedConjunctionOutcome.verified
+171:                 formulas solver p h SourceCurrentConjunctionTupleBudget.currentTupleBudget
+172:                 queriedCaller query {memos with query := phaseQueries} gateContext receipt.available
+173:               dsimp only at phaseOutcome
+174:               obtain ⟨final, _reads, post, _available, _unfolding, querySame, _sound⟩ := phaseOutcome
+175:               have growth : InternedConstructorTemplates.Grows queried.native.machine.heap
+176:                   (SourceCurrentConjunctionSharedWorker.call p h
+177:                     SourceCurrentConjunctionTupleBudget.currentTupleBudget caller.fourth query
+178:                     (SourceCurrentAllocatedNativeEffects.physical queried)).state.storage.requirements.physical.heap := by
+179:                 exact post.effects.keeps.growth
+180:               have returnedHistory : History
+181:                   (SourceCurrentAllocatedSharedConjunctionWorker.call p h
+182:                     SourceCurrentConjunctionTupleBudget.currentTupleBudget query queried caller.fourth).state := by
+183:                 rw [SourceCurrentAllocatedSharedConjunctionWorker.call_state,
+184:                   SourceCurrentAllocatedSharedConjunctionWorker.call_snapshot]
+185:                 exact .advance queriedHistory _ growth
+186:               have tables := SourceCurrentAllocatedQueryMemo.advance_tables queried
+187:                 (SourceCurrentConjunctionSharedWorker.call p h
+188:                   SourceCurrentConjunctionTupleBudget.currentTupleBudget caller.fourth query
+189:                   (SourceCurrentAllocatedNativeEffects.physical queried)).state.storage.requirements.physical
+190:               rw [← called]

@@ -1,0 +1,16 @@
+private theorem cold_lift_heap {width : Nat} {A : Type}
+    (operations : SourceEqualityConstraintMemoAllocation.State)
+    (outcome : SourceRecursiveIntersectionNative.Outcome width Symbol Guard A) :
+    (lift operations outcome).state.native.machine.heap = outcome.state.machine.heap
+
+private theorem cold_step_no_new_mu
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat} {A : Type}
+    (control : Control A) (before : Checked width)
+    (currentInputs : SourceCurrentAllocatedNativePhysicalExecution.Inputs control before)
+    (optional : ∀ (binder : Nat × Nat) (body : Value Symbol Guard)
+      (resume : Value Symbol Guard → Code Symbol Guard A),
+      control = .code (.optionalBinder binder body resume) →
+      InternedShallowHeap.NoNewMu before.native.machine.heap
+        (SourceRecursiveIntersectionMaybeMu.maybeMu binder body before.native.machine.heap).state) :
+    InternedShallowHeap.NoNewMu before.native.machine.heap
+      (step control before).state.native.machine.heap

@@ -1,0 +1,9 @@
+{
+  "previous_packet": "lean/restart-evidence/20261117-original-universe-cold-query-no-new-mu-draft",
+  "change": "Replace two final simpa-only conclusions by direct exact terms; Nat.zero_add occurs only in the boundedness proof, not either result type.",
+  "public_header_changed": false,
+  "private_headers_changed": false,
+  "runtime_or_budget_change": false,
+  "old": "  \u00b7 simpa only [initialState, rootControl, Nat.zero_add] using\n      executeOld fuel rootControl initialState 0 (by omega) (.refl _ _) inputs\n  \u00b7 intro used rest current bounded actual\n    simpa only [initialState, Nat.zero_add] using\n      traceOld used rootControl initialState rest current actual 0 (.refl _ _)\n        (by simpa only [Nat.zero_add] using bounded)",
+  "new": "  \u00b7 exact executeOld fuel rootControl initialState 0 (by omega) (.refl _ _) inputs\n  \u00b7 intro used rest current bounded actual\n    exact traceOld used rootControl initialState rest current actual 0 (.refl _ _)\n      (by simpa only [Nat.zero_add] using bounded)"
+}

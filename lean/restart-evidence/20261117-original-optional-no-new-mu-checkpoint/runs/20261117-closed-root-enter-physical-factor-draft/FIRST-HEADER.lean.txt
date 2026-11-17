@@ -1,0 +1,21 @@
+theorem query_enter_closed_operands_of_closed_root
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (before : Checked width) (rootRequest : NodeRequest Symbol Guard)
+    (rootEmpty : rootRequest.domain = IntersectionEmptyDomain.emptyDomain)
+    (rootClosed : rootRequest.left.free = [] ∧ rootRequest.right.free = [])
+    (physical : SourceCurrentAllocatedNativePhysicalCache.Valid before.native)
+    (used : Nat) (after : Checked width) (parent : Interned DomainKey)
+    (left right : Value Symbol Guard) (first second uid patternId : Nat)
+    (next : Interned DomainKey → Code Symbol Guard (Value Symbol Guard))
+    (actual : Trace used (.code (.node rootRequest .pure)) before
+      (.code (.enter parent left right first second next)) after)
+    (sameKey :
+      (SourceRecursiveIntersectionEnvironment.enter after.native.machine.domains
+        parent.key left right first second).1.key =
+      SourceRecursiveIntersectionDomain.extend IntersectionEmptyDomain.emptyKey [uid]
+        (SourceRecursiveIntersectionControl.pair uid patternId)) :
+    parent.key = IntersectionEmptyDomain.emptyKey ∧ left.free = [] ∧ right.free = [] ∧
+      ((SourceRecursiveIntersectionControl.identity left = some uid ∧
+        SourceRecursiveIntersectionControl.identity right = some patternId) ∨
+       (SourceRecursiveIntersectionControl.identity left = some patternId ∧
+        SourceRecursiveIntersectionControl.identity right = some uid))

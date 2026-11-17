@@ -1,0 +1,53 @@
+493: theorem next_node_query_preserves_actual_past_inner_payloads
+494:     [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+495:     (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+496:     (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+497:     (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+498:     (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+499:       .done rootValue sourceHeap)
+500:     (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+501:     (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+502:     (bodyId : Nat) (bodyIdentity : identity body = some bodyId)
+503:     (oldRoot : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
+504:     (machineValid : SourceRecursiveIntersectionKernel.Valid machine)
+505:     (sourceGrowth : Grows sourceHeap machine.heap)
+506:     (operations : SourceEqualityConstraintMemoAllocation.State)
+507:     (operationsValid : SourceEqualityConstraintMemoAllocation.Valid operations)
+508:     (fuel wholeCount : Nat) (readerControl : Control (Value Symbol Guard)) (reader : Checked width)
+509:     (wholeBound : wholeCount ≤ fuel)
+510:     (wholeActual : Trace wholeCount (.code (.node oldRoot .pure))
+511:       (⟨initial width machine, operations⟩ : Checked width) readerControl reader)
+512:     (fullPattern : Value Symbol Guard) (patternId : Nat)
+513:     (oldDomain newDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey)
+514:     (authentic : AuthenticEntry (width := width) oldRoot machine operations wholeCount
+515:       entry body depth ordinary fullPattern patternId oldDomain)
+516:     (sameKey : newDomain.key = oldDomain.key)
+517:     (inputs : InputsThrough fuel (.code (.node oldRoot .pure))
+518:       (⟨initial width machine, operations⟩ : Checked width))
+519:     (fields : FieldsThrough fuel (.code (.node oldRoot .pure))
+520:       (⟨initial width machine, operations⟩ : Checked width))
+521:     (newRequest : NodeRequest Symbol Guard) (newFuel : Nat)
+522:     (newInputs : InputsThrough newFuel (.code (.node newRequest .pure)) reader)
+523:     (newFields : FieldsThrough newFuel (.code (.node newRequest .pure)) reader) :
+524:     let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+525:     let bodyFirst := extend newDomain.key [entry.identity] (pair bodyId entry.identity)
+526:     let diagonalFirst := extend newDomain.key [entry.identity] (pair entry.identity entry.identity)
+527:     let diagonalTerminal := extend diagonalFirst [entry.identity] (pair bodyId entry.identity)
+528:     let after := (execute newFuel (.code (.node newRequest .pure)) reader).state
+529:     (Returned (SourceCurrentAllocatedNativeBodyFirstKeyQueryGlobalLaws.NodeResult
+530:         entry.identity bodyId bodyFirst body universeValue) after.native.nodes ∧
+531:       Returned (SourceCurrentAllocatedNativeBodyFirstKeyQueryGlobalLaws.EdgeResult
+532:         entry.identity bodyId bodyFirst universeValue) after.native.edges ∧
+533:       Returned (SourceCurrentAllocatedNativeCoherentOpenBodyQueryGlobalLaws.NodeResult
+534:         entry.identity entry.identity entry.identity diagonalTerminal diagonalFirst body universeValue)
+535:         after.native.nodes ∧
+536:       Returned SourceCurrentAllocatedNativeTopRowQueryGlobalLaws.EdgeResult after.native.edges) ∧
+537:     (∀ (count : Nat) (value : Value Symbol Guard) (final : Checked width), count ≤ newFuel →
+538:       Steps count (.code (.node newRequest .pure)) reader (.code (.pure value)) final →
+539:       SourceCurrentAllocatedNativeBodyFirstKeyQueryGlobalLaws.NodeResult
+540:         entry.identity bodyId bodyFirst body universeValue newRequest value ∧
+541:       SourceCurrentAllocatedNativeCoherentOpenBodyQueryGlobalLaws.NodeResult
+542:         entry.identity entry.identity entry.identity diagonalTerminal diagonalFirst body universeValue newRequest value) := by
+543:   have bodyFirst := body_first_next_query
+544:     lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+545:     bodyId bodyIdentity oldRoot machine machineValid sourceGrowth operations operationsValid

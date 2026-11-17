@@ -1,0 +1,16 @@
+  have initial : ControlClosed (.code (.node rootRequest .pure)) :=
+    ⟨fun _ => rootClosed, fun _ => trivial⟩
+  have reached := trace_closed actual physical initial
+  change (parent.key = IntersectionEmptyDomain.emptyKey → left.free = [] ∧ right.free = []) ∧
+    identity left = some first ∧ identity right = some second ∧
+      (∀ (entered : Interned DomainKey), entered.key ≠ IntersectionEmptyDomain.emptyKey → CodeClosed (next entered)) at reached
+  obtain ⟨parentEmpty, pairSame⟩ :=
+    SourceCurrentAllocatedNativeEmptyRootDomainAncestry.empty_root_singleton_enter_parent
+      rootRequest before after physical rootEmpty used parent left right first second uid patternId next actual sameKey
+  have ordered : (first = uid ∧ second = patternId) ∨ (first = patternId ∧ second = uid) := by
+    simp only [pair, Prod.mk.injEq] at pairSame
+    omega
+  refine ⟨parentEmpty, (reached.1 parentEmpty).1, (reached.1 parentEmpty).2, ?_⟩
+  rcases ordered with ⟨firstSame, secondSame⟩ | ⟨firstSame, secondSame⟩
+  · exact Or.inl ⟨reached.2.1.trans (congrArg some firstSame), reached.2.2.1.trans (congrArg some secondSame)⟩
+  · exact Or.inr ⟨reached.2.1.trans (congrArg some firstSame), reached.2.2.1.trans (congrArg some secondSame)⟩

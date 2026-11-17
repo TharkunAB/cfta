@@ -1,0 +1,74 @@
+61: theorem old_returned_mixed_profile_after_equal_key_entry
+62:     [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+63:     (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+64:     (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+65:     (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+66:     (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+67:       .done rootValue sourceHeap)
+68:     (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+69:     (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+70:     (oldRoot : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
+71:     (machineValid : SourceRecursiveIntersectionKernel.Valid machine)
+72:     (sourceGrowth : Grows sourceHeap machine.heap)
+73:     (operations : SourceEqualityConstraintMemoAllocation.State)
+74:     (operationsValid : SourceEqualityConstraintMemoAllocation.Valid operations)
+75:     (fuel wholeCount : Nat) (oldControl : Control (Value Symbol Guard)) (oldSnapshot : Checked width)
+76:     (wholeBound : wholeCount ≤ fuel)
+77:     (wholeActual : Trace wholeCount (.code (.node oldRoot .pure))
+78:       (⟨initial width machine, operations⟩ : Checked width) oldControl oldSnapshot)
+79:     (oldPattern : Value Symbol Guard) (oldPatternId : Nat)
+80:     (oldDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey)
+81:     (oldAuthentic : AuthenticEntry (width := width) oldRoot machine operations wholeCount
+82:       entry body depth ordinary oldPattern oldPatternId oldDomain)
+83:     (inputs : InputsThrough fuel (.code (.node oldRoot .pure))
+84:       (⟨initial width machine, operations⟩ : Checked width))
+85:     (fields : FieldsThrough fuel (.code (.node oldRoot .pure))
+86:       (⟨initial width machine, operations⟩ : Checked width))
+87:     (handle : Nat) (request : NodeRequest Symbol Guard) (value : Value Symbol Guard)
+88:     (oldCell : oldSnapshot.native.nodes.cells handle = some ⟨request, .returned value⟩)
+89:     (newPattern : Value Symbol Guard) (newClosed : newPattern.free = []) (newPatternId : Nat)
+90:     (newIdentity : identity newPattern = some newPatternId)
+91:     (newKind : SourceRecursiveIntersectionControl.tag newPattern = 1 ∨
+92:       SourceRecursiveIntersectionControl.tag newPattern = 3)
+93:     (universeFirst : Bool)
+94:     (next : Interned IntersectionFlatMemoKeyDomain.DomainKey → Code Symbol Guard (Value Symbol Guard))
+95:     (newRoot : NodeRequest Symbol Guard) (newFuel newUsed : Nat)
+96:     (beforeNew reader : Checked width) (newControl : Control (Value Symbol Guard))
+97:     (newBound : newUsed + 1 ≤ newFuel)
+98:     (newPrefix : Trace newUsed (.code (.node newRoot .pure)) oldSnapshot
+99:       (.code (.enter IntersectionEmptyDomain.emptyDomain
+100:         (if universeFirst then .mu entry body depth ordinary else newPattern)
+101:         (if universeFirst then newPattern else .mu entry body depth ordinary)
+102:         (if universeFirst then entry.identity else newPatternId)
+103:         (if universeFirst then newPatternId else entry.identity) next)) beforeNew)
+104:     (newEntry : Trace 1
+105:       (.code (.enter IntersectionEmptyDomain.emptyDomain
+106:         (if universeFirst then .mu entry body depth ordinary else newPattern)
+107:         (if universeFirst then newPattern else .mu entry body depth ordinary)
+108:         (if universeFirst then entry.identity else newPatternId)
+109:         (if universeFirst then newPatternId else entry.identity) next)) beforeNew newControl reader)
+110:     (sameKey : (SourceRecursiveIntersectionEnvironment.enter beforeNew.native.machine.domains
+111:       IntersectionEmptyDomain.emptyKey (.mu entry body depth ordinary) newPattern
+112:       entry.identity newPatternId).1.key = oldDomain.key)
+113:     (domainMatches : request.domain =
+114:       (SourceRecursiveIntersectionEnvironment.enter beforeNew.native.machine.domains
+115:         IntersectionEmptyDomain.emptyKey (.mu entry body depth ordinary) newPattern
+116:         entry.identity newPatternId).1)
+117:     (openAlias operand : Value Symbol Guard)
+118:     (aliasKind : openAlias = body ∨ openAlias = .reference (.interned entry.identity))
+119:     (operandProfile : SourceCurrentAllocatedNativeClosedResetProfile.Profile entry.identity operand)
+120:     (operandHeight : SourceSynthesisUniversePrefixHeight.height operand ≤
+121:       SourceSynthesisUniversePrefixHeight.height newPattern)
+122:     (strictAlias : openAlias = .reference (.interned entry.identity) →
+123:       SourceSynthesisUniversePrefixHeight.height operand < SourceSynthesisUniversePrefixHeight.height newPattern)
+124:     (ordered : (request.left = openAlias ∧ request.right = operand) ∨
+125:       (request.left = operand ∧ request.right = openAlias)) :
+126:     oldPattern = newPattern ∧
+127:     oldDomain = (SourceRecursiveIntersectionEnvironment.enter beforeNew.native.machine.domains
+128:       IntersectionEmptyDomain.emptyKey (.mu entry body depth ordinary) newPattern
+129:       entry.identity newPatternId).1 ∧
+130:     SourceSynthesisUniversePrefixHeight.height oldPattern = SourceSynthesisUniversePrefixHeight.height newPattern ∧
+131:     SourceCurrentAllocatedNativeClosedResetProfile.Profile entry.identity value ∧
+132:     reader.native.nodes.cells handle = some ⟨request, .returned value⟩ ∧
+133:     Trace (newUsed + 1) (.code (.node newRoot .pure)) oldSnapshot newControl reader ∧
+134:     newUsed + 1 ≤ newFuel := by
