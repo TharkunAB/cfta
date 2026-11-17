@@ -1,0 +1,18 @@
+private theorem closed_codec (value : Value Symbol Guard) (closed : value.free = []) :
+    ∃ input, IntersectionFlatMemoKey.input value.referenceOf = some input
+
+private theorem key_of_codecs {width : Nat} (request : NodeRequest Symbol Guard)
+    (left : ∃ input, IntersectionFlatMemoKey.input request.left.referenceOf = some input)
+    (right : ∃ input, IntersectionFlatMemoKey.input request.right.referenceOf = some input) :
+    ∃ key, SourceRecursiveIntersectionMemo.requestKey width request.domain request.left request.right = some key
+
+private theorem qualified_key
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (newRoot : NodeRequest Symbol Guard) (oldSnapshot : Checked width) (newCount : Nat)
+    (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (bodyCodec : ∃ input, IntersectionFlatMemoKey.input body.referenceOf = some input)
+    (request : NodeRequest Symbol Guard)
+    (qualified : ClosedQualified entry.identity request ∨
+      SourceCurrentAllocatedNativeSourceWarmEntry.MixedQualifiedAt (width := width)
+        newRoot oldSnapshot newCount entry body depth ordinary request) :
+    ∃ key, SourceRecursiveIntersectionMemo.requestKey width request.domain request.left request.right = some key

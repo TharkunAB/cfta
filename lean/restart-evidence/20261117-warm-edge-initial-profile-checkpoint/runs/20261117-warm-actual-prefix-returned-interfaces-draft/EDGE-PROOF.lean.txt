@@ -1,0 +1,8 @@
+  have clean : Clean (.code (.node rootRequest .pure)) := by
+    intro result
+    trivial
+  obtain ⟨dispatchUsed, bodyCount, beforeBody, resume, total, positive, entered, running, bodyTrace, last⟩ :=
+    descent count (.code (.node rootRequest .pure)) start beforeFinish handle captured row rest
+      clean startShape actual.steps owner
+  exact ⟨dispatchUsed, bodyCount, beforeBody, resume, total, positive, by omega,
+    entered, running, bodyTrace, last⟩

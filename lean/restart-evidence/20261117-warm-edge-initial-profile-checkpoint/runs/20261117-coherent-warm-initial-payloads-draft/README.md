@@ -1,0 +1,13 @@
+FROZEN UNCOMPILED. Root owns all compiler checks and Source integration.
+
+The FIRST header 9110d662dc3addfc8b96a0a84f3fdfe25d46e94e079c096f0f452fcca1fb54da was saved before the proof. Its resource argument order matches the body-first pair's FIRST header. The conclusion gives BOTH CoherentOpenBody.NodeResult and the complete TopRow.EdgeResult at the same oldSnapshot. The diagonal-first and diagonal-terminal keys come from each actual AuthenticEntryAt on the fixed full new history. All counts, plans, trace endpoints and source fields stay explicit.
+
+The proof adapts the checked AuthenticCoherentInnerHistory source proof. The old trace establishes the physical oldSnapshot. The new trace establishes the common warm reader and its source-heap growth. The actual new entry supplies the full closed pattern at that reader. Original source diagonal-body, row-input and reference-read theorems then produce uniform compiler, ordered-input, right-Mu, child-key, cutoff-apart and read callbacks. Those callbacks quantify over actual domain handles and arbitrary physical source-grown heaps. They are syntax/read facts. They do not assume a later returned-cache law or a model.
+
+The existing cold initializer runs at oldCount with the original old plans restricted to that count. The exact old trace identifies execute's full endpoint with oldSnapshot. The proof uses no old AuthenticEntry and does not require the full pattern to exist at the cold start. It does not call the body-first candidate or duplicate its callback proof.
+
+The common ABI retains oldRootDomain, oldRootClosed, newBound, newInputs and newFields. This proof explicitly references those genuine physical/resource facts, but its callback derivation needs only the two actual traces and the original cold plans. No future semantic premise is added. The supplied AuthenticEntryAt is the actual source event qualifier used by the existing warm engine, not a desired result law.
+
+This candidate supplies only the second pair of initial auxiliary cache laws for an actual later warm entry. Together with the separately prepared body-first pair, it can supply the four auxiliary initial fields. It does not prove the warm query engine's new semantic body cases, every-call qualification, arbitrary independent warm-history admission, NoNewMu, native inhabitance, Type/Marker class compatibility, one finite accepted original-root completion or Haskell correspondence.
+
+Compile only SourceCurrentNativeWarmCoherentInitialPayloads.lean with normal imports. Append PROBES.lean.txt for the one public axiom report. There are no new runtime definitions, proof-limit overrides or linter suppressions. No compiler was run for this packet.
