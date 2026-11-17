@@ -1,0 +1,42 @@
+theorem cold_prefix_edges_qualified_for_actual_warm_history
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (oldRoot : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
+    (oldRootDomain : oldRoot.domain = IntersectionEmptyDomain.emptyDomain)
+    (oldRootClosed : oldRoot.left.free = [] ∧ oldRoot.right.free = [])
+    (machineValid : SourceRecursiveIntersectionKernel.Valid machine)
+    (sourceGrowth : Grows sourceHeap machine.heap)
+    (pastInventory : InternedShallowHeap.NoNewMu sourceHeap machine.heap)
+    (oldLeftAvailable : Available machine.heap oldRoot.left)
+    (oldRightAvailable : Available machine.heap oldRoot.right)
+    (operations : SourceEqualityConstraintMemoAllocation.State)
+    (operationsValid : SourceEqualityConstraintMemoAllocation.Valid operations)
+    (oldFuel oldCount : Nat) (oldControl : Control (Value Symbol Guard))
+    (oldSnapshot : Checked width) (oldBound : oldCount ≤ oldFuel)
+    (oldInputs : InputsThrough oldFuel (.code (.node oldRoot .pure))
+      (⟨initial width machine, operations⟩ : Checked width))
+    (oldFields : FieldsThrough oldFuel (.code (.node oldRoot .pure))
+      (⟨initial width machine, operations⟩ : Checked width))
+    (oldActual : Trace oldCount (.code (.node oldRoot .pure))
+      (⟨initial width machine, operations⟩ : Checked width) oldControl oldSnapshot)
+    (newRoot : NodeRequest Symbol Guard) (newFuel newCount : Nat)
+    (newControl : Control (Value Symbol Guard)) (warmReader : Checked width)
+    (newBound : newCount ≤ newFuel)
+    (newActual : Trace newCount (.code (.node newRoot .pure))
+      oldSnapshot newControl warmReader) :
+    Returned (fun request row =>
+      (∀ childPair ∈ request.left.children.zip request.right.children,
+        SourceCurrentAllocatedNativeGeneralCMHistory.ClosedQualified entry.identity
+            (⟨request.domain, childPair.1, childPair.2⟩ : NodeRequest Symbol Guard) ∨
+        SourceCurrentAllocatedNativeSourceWarmEntry.MixedQualifiedAt (width := width)
+          newRoot oldSnapshot newCount entry body depth ordinary
+          (⟨request.domain, childPair.1, childPair.2⟩ : NodeRequest Symbol Guard)) →
+      ∀ child ∈ row.children,
+        SourceCurrentAllocatedNativeClosedResetProfile.Profile entry.identity child)
+      oldSnapshot.native.edges
