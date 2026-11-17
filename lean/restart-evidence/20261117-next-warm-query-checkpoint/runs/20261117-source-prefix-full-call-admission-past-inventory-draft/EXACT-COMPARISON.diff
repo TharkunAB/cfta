@@ -1,0 +1,76 @@
+--- lean/restart-evidence/20261117-source-cold-prefix-full-call-admission-scope-repair/APPEND.lean.txt
++++ lean/restart-evidence/20261117-source-prefix-full-call-admission-past-inventory-draft/APPEND.lean.txt
+@@ -25,7 +25,8 @@
+     (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+     (rootRequest : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
+     (machineValid : SourceRecursiveIntersectionKernel.Valid machine)
+-    (sourceStart : machine.heap = sourceHeap)
++    (sourceGrowth : Grows sourceHeap machine.heap)
++    (pastInventory : InternedShallowHeap.NoNewMu sourceHeap machine.heap)
+     (rootDomain : rootRequest.domain = IntersectionEmptyDomain.emptyDomain)
+     (leftAvailable : Available machine.heap rootRequest.left)
+     (rightAvailable : Available machine.heap rootRequest.right)
+@@ -40,19 +41,18 @@
+       ControlAdmission (width := width) rootRequest machine operations wholeCount
+         entry body depth ordinary bodyId control
+  := by
+-  have sourceGrowth : Grows sourceHeap machine.heap := by
+-    rw [sourceStart]
+-    exact InternedConstructorTemplates.grows_refl sourceHeap
+   have leftProfile : Profile entry.identity rootRequest.left :=
+     ⟨leftClosed,
+-      SourceSynthesisCurrentUniverseStartupAtoms.current_stored_universe_closed_startup_value_atoms
++      SourceSynthesisCurrentUniverseStartupAtoms.current_stored_universe_closed_atoms_after_no_new_mu
+         lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+-        rootRequest.left (by simpa only [sourceStart] using leftAvailable) leftClosed⟩
++        machine.heap machineValid.1.coherent pastInventory
++        rootRequest.left leftAvailable leftClosed⟩
+   have rightProfile : Profile entry.identity rootRequest.right :=
+     ⟨rightClosed,
+-      SourceSynthesisCurrentUniverseStartupAtoms.current_stored_universe_closed_startup_value_atoms
++      SourceSynthesisCurrentUniverseStartupAtoms.current_stored_universe_closed_atoms_after_no_new_mu
+         lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+-        rootRequest.right (by simpa only [sourceStart] using rightAvailable) rightClosed⟩
++        machine.heap machineValid.1.coherent pastInventory
++        rootRequest.right rightAvailable rightClosed⟩
+   have universeAvailable : Available machine.heap (.mu entry body depth ordinary) :=
+     machineValid.1.cached.nodes key _ (sourceGrowth.nodeRecords key _ stored)
+   have universeAtoms : ∀ atom ∈ InternedBoundaryAtoms.atoms (.mu entry body depth ordinary),
+@@ -117,7 +117,8 @@
+     (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+     (rootRequest : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
+     (machineValid : SourceRecursiveIntersectionKernel.Valid machine)
+-    (sourceStart : machine.heap = sourceHeap)
++    (sourceGrowth : Grows sourceHeap machine.heap)
++    (pastInventory : InternedShallowHeap.NoNewMu sourceHeap machine.heap)
+     (rootDomain : rootRequest.domain = IntersectionEmptyDomain.emptyDomain)
+     (leftAvailable : Available machine.heap rootRequest.left)
+     (rightAvailable : Available machine.heap rootRequest.right)
+@@ -161,7 +162,7 @@
+   obtain ⟨bodyId, bodyIdentity, admitted⟩ :=
+     cold_source_control_prefix_full_admission (width := width)
+       lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+-      rootRequest machine machineValid sourceStart rootDomain leftAvailable rightAvailable leftClosed rightClosed
++      rootRequest machine machineValid sourceGrowth pastInventory rootDomain leftAvailable rightAvailable leftClosed rightClosed
+       operations wholeCount queryUsed
+       (.code (.node queried queryNext)) queryBefore queryBound queryActual
+   change NodeAdmission (width := width) rootRequest machine operations wholeCount
+@@ -179,7 +180,8 @@
+     (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+     (rootRequest : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
+     (machineValid : SourceRecursiveIntersectionKernel.Valid machine)
+-    (sourceStart : machine.heap = sourceHeap)
++    (sourceGrowth : Grows sourceHeap machine.heap)
++    (pastInventory : InternedShallowHeap.NoNewMu sourceHeap machine.heap)
+     (rootDomain : rootRequest.domain = IntersectionEmptyDomain.emptyDomain)
+     (leftAvailable : Available machine.heap rootRequest.left)
+     (rightAvailable : Available machine.heap rootRequest.right)
+@@ -226,7 +228,7 @@
+   obtain ⟨bodyId, bodyIdentity, admitted⟩ :=
+     cold_source_control_prefix_full_admission (width := width)
+       lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+-      rootRequest machine machineValid sourceStart rootDomain leftAvailable rightAvailable leftClosed rightClosed
++      rootRequest machine machineValid sourceGrowth pastInventory rootDomain leftAvailable rightAvailable leftClosed rightClosed
+       operations wholeCount queryUsed
+       (.code (.edge queried queryNext)) queryBefore queryBound queryActual
+   change EdgeAdmission (width := width) rootRequest machine operations wholeCount

@@ -1,0 +1,51 @@
+theorem original_universe_node_query_prefix_full_admission
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (rootRequest : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
+    (machineValid : SourceRecursiveIntersectionKernel.Valid machine)
+    (sourceStart : machine.heap = sourceHeap)
+    (rootDomain : rootRequest.domain = IntersectionEmptyDomain.emptyDomain)
+    (leftAvailable : Available machine.heap rootRequest.left)
+    (rightAvailable : Available machine.heap rootRequest.right)
+    (leftClosed : rootRequest.left.free = []) (rightClosed : rootRequest.right.free = [])
+    (operations : SourceEqualityConstraintMemoAllocation.State)
+    (wholeCount queryUsed : Nat)
+    (queried : NodeRequest Symbol Guard)
+    (queryNext : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard))
+    (queryBefore : Checked width)
+    (queryBound : queryUsed ≤ wholeCount)
+    (queryActual : Trace queryUsed (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width)
+      (.code (.node queried queryNext)) queryBefore) :
+    ∃ bodyId : Nat, SourceRecursiveIntersectionControl.identity body = some bodyId ∧
+      (Qualified (width := width) rootRequest machine operations wholeCount entry body depth ordinary queried ∨
+        ∃ (fullPattern : Value Symbol Guard) (patternId : Nat)
+          (originalDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey),
+          AuthenticEntry (width := width) rootRequest machine operations wholeCount
+            entry body depth ordinary fullPattern patternId originalDomain ∧
+          let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+          let referenceValue : Value Symbol Guard := .reference (.interned entry.identity)
+          let e := SourceRecursiveIntersectionControl.pair bodyId entry.identity
+          let d := SourceRecursiveIntersectionControl.pair entry.identity entry.identity
+          let bodyFirst := SourceRecursiveIntersectionDomain.extend originalDomain.key [entry.identity] e
+          let diagonalFirst := SourceRecursiveIntersectionDomain.extend originalDomain.key [entry.identity] d
+          let bodyTerminal := SourceRecursiveIntersectionDomain.extend bodyFirst [entry.identity] d
+          let diagonalTerminal := SourceRecursiveIntersectionDomain.extend diagonalFirst [entry.identity] e
+          (queried.domain.key = bodyFirst ∧
+            ((queried.left = body ∧ queried.right = body) ∨
+             (queried.left = referenceValue ∧ queried.right = referenceValue) ∨
+             (queried.left = universeValue ∧ queried.right = referenceValue))) ∨
+          (queried.domain.key = bodyTerminal ∧ queried.left = body ∧ queried.right = referenceValue) ∨
+          (queried.domain.key = diagonalFirst ∧
+            ((queried.left = body ∧ queried.right = referenceValue) ∨
+             (queried.left = body ∧ queried.right = universeValue))) ∨
+          (queried.domain.key = diagonalTerminal ∧
+            ((queried.left = body ∧ queried.right = body) ∨
+             (queried.left = referenceValue ∧ queried.right = referenceValue) ∨
+             (queried.left = universeValue ∧ queried.right = referenceValue))))

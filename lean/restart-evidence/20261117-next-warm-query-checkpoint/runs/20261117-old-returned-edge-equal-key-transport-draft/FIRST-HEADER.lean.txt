@@ -1,0 +1,48 @@
+theorem old_returned_edge_profiles_after_equal_key_entries
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (oldRoot : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
+    (machineValid : SourceRecursiveIntersectionKernel.Valid machine)
+    (sourceGrowth : Grows sourceHeap machine.heap)
+    (operations : SourceEqualityConstraintMemoAllocation.State)
+    (operationsValid : SourceEqualityConstraintMemoAllocation.Valid operations)
+    (fuel wholeCount : Nat) (oldControl : Control (Value Symbol Guard)) (oldSnapshot : Checked width)
+    (wholeBound : wholeCount ≤ fuel)
+    (wholeActual : Trace wholeCount (.code (.node oldRoot .pure))
+      (⟨initial width machine, operations⟩ : Checked width) oldControl oldSnapshot)
+    (oldPattern : Value Symbol Guard) (oldPatternId : Nat)
+    (oldDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey)
+    (oldAuthentic : AuthenticEntry (width := width) oldRoot machine operations wholeCount
+      entry body depth ordinary oldPattern oldPatternId oldDomain)
+    (inputs : InputsThrough fuel (.code (.node oldRoot .pure))
+      (⟨initial width machine, operations⟩ : Checked width))
+    (fields : FieldsThrough fuel (.code (.node oldRoot .pure))
+      (⟨initial width machine, operations⟩ : Checked width))
+    (handle : Nat) (request : EdgeRequest Symbol Guard) (row : EdgeValue Symbol Guard)
+    (oldCell : oldSnapshot.native.edges.cells handle = some ⟨request, .returned row⟩)
+    (domainKeyMatches : request.domain.key = oldDomain.key)
+    (newRoot : NodeRequest Symbol Guard) (newFuel newCount : Nat)
+    (newControl : Control (Value Symbol Guard)) (reader : Checked width)
+    (newBound : newCount ≤ newFuel)
+    (newActual : Trace newCount (.code (.node newRoot .pure)) oldSnapshot newControl reader)
+    (childQualifications : ∀ childPair ∈ request.left.children.zip request.right.children,
+      SourceCurrentAllocatedNativeGeneralCMHistory.ClosedQualified entry.identity
+          (⟨request.domain, childPair.1, childPair.2⟩ : NodeRequest Symbol Guard) ∨
+        SourceCurrentAllocatedNativeSourceWarmEntry.MixedQualifiedAt (width := width)
+          newRoot oldSnapshot newCount entry body depth ordinary
+          (⟨request.domain, childPair.1, childPair.2⟩ : NodeRequest Symbol Guard)) :
+    (∀ childPair ∈ request.left.children.zip request.right.children,
+      SourceCurrentAllocatedNativeGeneralCMHistory.Qualified (width := width)
+        oldRoot machine operations wholeCount entry body depth ordinary
+        (⟨request.domain, childPair.1, childPair.2⟩ : NodeRequest Symbol Guard)) ∧
+    (∀ child ∈ row.children,
+      SourceCurrentAllocatedNativeClosedResetProfile.Profile entry.identity child) ∧
+    reader.native.edges.cells handle = some ⟨request, .returned row⟩ ∧
+    Trace newCount (.code (.node newRoot .pure)) oldSnapshot newControl reader ∧
+    newCount ≤ newFuel

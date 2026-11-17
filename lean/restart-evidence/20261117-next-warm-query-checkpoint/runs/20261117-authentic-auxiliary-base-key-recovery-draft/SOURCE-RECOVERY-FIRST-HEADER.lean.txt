@@ -1,0 +1,29 @@
+theorem source_auxiliary_key_eq_recovers_full_pattern
+    {Symbol Guard : Type} (heap : State Symbol Guard) (facts : Facts heap)
+    (universeEntry bodyEntry : Interned NodeKey) (bodyRows : List (EdgeValue Symbol Guard))
+    (depth ordinary : Value Symbol Guard)
+    (universeAvailable : Available heap
+      (.mu universeEntry (.node bodyEntry bodyRows 0 [.interned universeEntry.identity]) depth ordinary))
+    (oldPattern newPattern : Value Symbol Guard) (oldPatternId newPatternId : Nat)
+    (oldAvailable : Available heap oldPattern) (newAvailable : Available heap newPattern)
+    (oldClosed : oldPattern.free = []) (newClosed : newPattern.free = [])
+    (oldIdentity : identity oldPattern = some oldPatternId)
+    (newIdentity : identity newPattern = some newPatternId)
+    (oldKind : tag oldPattern = 1 ∨ tag oldPattern = 3)
+    (oldKey newKey : IntersectionFlatMemoKeyDomain.DomainKey)
+    (oldShape :
+(oldKey = extend (extend IntersectionEmptyDomain.emptyKey [universeEntry.identity] (pair universeEntry.identity oldPatternId)) [universeEntry.identity] (pair bodyEntry.identity universeEntry.identity) ∨
+      oldKey = extend (extend (extend IntersectionEmptyDomain.emptyKey [universeEntry.identity] (pair universeEntry.identity oldPatternId)) [universeEntry.identity] (pair bodyEntry.identity universeEntry.identity)) [universeEntry.identity] (pair universeEntry.identity universeEntry.identity) ∨
+      oldKey = extend (extend IntersectionEmptyDomain.emptyKey [universeEntry.identity] (pair universeEntry.identity oldPatternId)) [universeEntry.identity] (pair universeEntry.identity universeEntry.identity) ∨
+      oldKey = extend (extend (extend IntersectionEmptyDomain.emptyKey [universeEntry.identity] (pair universeEntry.identity oldPatternId)) [universeEntry.identity] (pair universeEntry.identity universeEntry.identity)) [universeEntry.identity] (pair bodyEntry.identity universeEntry.identity)))
+    (newShape :
+(newKey = extend (extend IntersectionEmptyDomain.emptyKey [universeEntry.identity] (pair universeEntry.identity newPatternId)) [universeEntry.identity] (pair bodyEntry.identity universeEntry.identity) ∨
+      newKey = extend (extend (extend IntersectionEmptyDomain.emptyKey [universeEntry.identity] (pair universeEntry.identity newPatternId)) [universeEntry.identity] (pair bodyEntry.identity universeEntry.identity)) [universeEntry.identity] (pair universeEntry.identity universeEntry.identity) ∨
+      newKey = extend (extend IntersectionEmptyDomain.emptyKey [universeEntry.identity] (pair universeEntry.identity newPatternId)) [universeEntry.identity] (pair universeEntry.identity universeEntry.identity) ∨
+      newKey = extend (extend (extend IntersectionEmptyDomain.emptyKey [universeEntry.identity] (pair universeEntry.identity newPatternId)) [universeEntry.identity] (pair universeEntry.identity universeEntry.identity)) [universeEntry.identity] (pair bodyEntry.identity universeEntry.identity)))
+    (same : oldKey = newKey) :
+    oldPatternId = newPatternId ∧ oldPattern = newPattern ∧
+      extend IntersectionEmptyDomain.emptyKey [universeEntry.identity]
+        (pair universeEntry.identity oldPatternId) =
+      extend IntersectionEmptyDomain.emptyKey [universeEntry.identity]
+        (pair universeEntry.identity newPatternId)

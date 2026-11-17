@@ -1,0 +1,74 @@
+72:     [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+73:     (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+74:     (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+75:     (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+76:     (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+77:       .done rootValue sourceHeap)
+78:     (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+79:     (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+80:     (bodyId : Nat) (bodyIdentity : SourceRecursiveIntersectionControl.identity body = some bodyId)
+81:     (rootRequest : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
+82:     (machineValid : SourceRecursiveIntersectionKernel.Valid machine)
+83:     (sourceGrowth : Grows sourceHeap machine.heap)
+84:     (operations : SourceEqualityConstraintMemoAllocation.State)
+85:     (operationsValid : SourceEqualityConstraintMemoAllocation.Valid operations)
+86:     (fuel wholeCount finishUsed handle : Nat)
+87:     (request : NodeRequest Symbol Guard) (value : Value Symbol Guard)
+88:     (rest : Control (Value Symbol Guard)) (reader beforeFinish : Checked width)
+89:     (parentNext : Code Symbol Guard (Value Symbol Guard))
+90:     (wholeBound : wholeCount ≤ fuel)
+91:     (wholeActual : Trace wholeCount (.code (.node rootRequest .pure))
+92:       (⟨initial width machine, operations⟩ : Checked width) rest reader)
+93:     (finishBound : finishUsed < wholeCount)
+94:     (actual : Trace finishUsed (.code (.node rootRequest .pure))
+95:       (⟨initial width machine, operations⟩ : Checked width)
+96:       (.code (.finishNode handle value parentNext)) beforeFinish)
+97:     (owner : beforeFinish.native.nodes.cells handle = some ⟨request, .evaluating⟩)
+98:     (inputs : InputsThrough fuel (.code (.node rootRequest .pure))
+99:       (⟨initial width machine, operations⟩ : Checked width))
+100:     (fields : FieldsThrough fuel (.code (.node rootRequest .pure))
+101:       (⟨initial width machine, operations⟩ : Checked width))
+102:     (pattern : Node) (patternId : Nat) (openAlias operand : Node)
+103:     (authentic : AuthenticEntry (width := width) rootRequest machine operations wholeCount
+104:       entry body depth ordinary pattern patternId request.domain)
+105:     (aliasKind : openAlias = body ∨ openAlias = .reference (.interned entry.identity))
+106:     (operandProfile : Profile entry.identity operand)
+107:     (operandHeight : height operand ≤ height pattern)
+108:     (strictAlias : openAlias = .reference (.interned entry.identity) → height operand < height pattern)
+109:     (ordered : (request.left = openAlias ∧ request.right = operand) ∨
+110:       (request.left = operand ∧ request.right = openAlias))
+111:     (past :
+112:       Returned (NodeResult (width := width) rootRequest machine operations wholeCount entry body depth ordinary)
+113:         beforeFinish.native.nodes ∧
+114:       Returned (EdgeResult (width := width) rootRequest machine operations wholeCount entry body depth ordinary)
+115:         beforeFinish.native.edges)
+116:     (innerPast :
+117:       Returned (SourceCurrentAllocatedNativeBodyFirstKeyQueryGlobalLaws.NodeResult
+118:         entry.identity bodyId
+119:         (SourceRecursiveIntersectionDomain.extend request.domain.key [entry.identity]
+120:           (SourceRecursiveIntersectionControl.pair bodyId entry.identity))
+121:         body (.mu entry body depth ordinary)) beforeFinish.native.nodes ∧
+122:       Returned (SourceCurrentAllocatedNativeBodyFirstKeyQueryGlobalLaws.EdgeResult
+123:         entry.identity bodyId
+124:         (SourceRecursiveIntersectionDomain.extend request.domain.key [entry.identity]
+125:           (SourceRecursiveIntersectionControl.pair bodyId entry.identity))
+126:         (.mu entry body depth ordinary)) beforeFinish.native.edges ∧
+127:       Returned (SourceCurrentAllocatedNativeCoherentOpenBodyQueryGlobalLaws.NodeResult
+128:         entry.identity entry.identity entry.identity
+129:         (SourceRecursiveIntersectionDomain.extend
+130:           (SourceRecursiveIntersectionDomain.extend request.domain.key [entry.identity]
+131:             (SourceRecursiveIntersectionControl.pair entry.identity entry.identity))
+132:           [entry.identity] (SourceRecursiveIntersectionControl.pair bodyId entry.identity))
+133:         (SourceRecursiveIntersectionDomain.extend request.domain.key [entry.identity]
+134:           (SourceRecursiveIntersectionControl.pair entry.identity entry.identity))
+135:         body (.mu entry body depth ordinary)) beforeFinish.native.nodes ∧
+136:       Returned SourceCurrentAllocatedNativeTopRowQueryGlobalLaws.EdgeResult beforeFinish.native.edges) :
+137:     Profile entry.identity value := by
+138:   have qualified : MixedQualified (width := width) rootRequest machine operations wholeCount
+139:       entry body depth ordinary request :=
+140:     ⟨pattern, patternId, openAlias, operand, authentic, aliasKind,
+141:       operandProfile, operandHeight, strictAlias, ordered⟩
+142:   have initialPhysical : Physical (initial width machine) :=
+143:     SourceCurrentAllocatedNativePhysicalCache.initial_valid machine machineValid
+144:   obtain ⟨queryUsed, bodyCount, queryBefore, beforeBody, queryResume, total,
+145:       _querySmaller, _queryBound, queryPrefix, actualDispatch, _isolatedDispatch,

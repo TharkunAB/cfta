@@ -1,0 +1,12 @@
+--- 20261117-next-warm-query-checkpoint-title-repair/prepare-checkpoint-controls.py
++++ prepare-checkpoint-controls.py
+@@ -177,7 +177,8 @@
+ failed_edge = read(WORK / 'EDGE-FIRST-FAILED.json')
+ assert failed_edge['actual_session'] == 2133 and failed_edge['actual_terminal_exit'] == 1
+ assert failed_edge['first_packet_preserved']
+-failed_result = read(BASE / failed_edge['run'] / 'checked.json')
++failed_run = BASE / failed_edge['run']
++failed_result = read(failed_run / ('checked.json' if (failed_run / 'checked.json').exists() else 'results.json'))
+ assert failed_result['checks'][-1]['exit'] == 1 and failed_result['checks'][-1]['sorryAx']
+ preparation_failure = read(BASE / '20261117-next-warm-node-edge-assembly-check/PREPARATION-FAILED.json')
+ assert not preparation_failure['compiler_started'] and not preparation_failure['source_or_object_output_created']

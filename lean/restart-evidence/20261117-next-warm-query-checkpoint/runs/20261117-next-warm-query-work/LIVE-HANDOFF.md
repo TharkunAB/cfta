@@ -1,0 +1,11 @@
+Checked 2026-11-17T16:17:12.174366+01:00. The formalization goal remains active.
+
+Source is committed as 0f56dcf8b2621cb5c6d67079d8082d17a4c0e455 (parent 5535b223b6f3de67706096a9eab337e160faae47). The tracked working tree is clean. All five publication gates passed in actual terminal session 93217. All 6,299 pinned inputs match. Eight fresh reports are separate from 462 inherited reports. Audit has 676 reports; independent imports have 271. No compiler is running.
+
+The current checkpoint is being prepared as 20261117-next-warm-query-checkpoint. The root checkpoint-note.md and canonical board note 1490 are ready. Await the frozen controller packet from canonical_bucket_semantics, review it, prepare/assemble/finalize and independently verify the archive. Commit only the three root documents and that exact archive. Push only origin/formalize under standing authorization. Save an independent remote/current-tree receipt afterward. The previous immutable checkpoint is 20261117-warm-equal-key-transport-checkpoint at 5535b223.
+
+All eight owned terminal object directories have been removed. This batch removed 33,089,648 bytes; known cumulative cleanup is 6,402,813,509 bytes. The 16:15 census measured 4,024,167,226 readable regular-file bytes in /tmp. Unknown entries are untouched. All logs, source packets, failed checks, repairs and normal .lake remain.
+
+The auxiliary recovery candidate is frozen in 20261117-authentic-auxiliary-base-key-recovery-layout-draft (raw 58012536, manifest f2cb87f7). Its three public laws and two private helpers are UNCOMPILED and have zero theorem credit. Root read the full candidate and README. It derives source pair exclusions from actual coherent readback of open B and closed P; no arbitrary-domain cancellation is permitted. Do not stage it until an actual strict check passes.
+
+Global warm NoNewMu, all warm worker input qualifications, one joint finite accepted completion, Type/Marker compatibility, native inhabitance, guard truth and compiled Haskell correspondence remain open. No Haskell source changed and no new reachable defect was established. Read USAGE.json: at 16:16 usage was exactly 80%; pause and notify Matti only if it exceeds 80%. The November 16 pause deadline had already passed.

@@ -1,0 +1,128 @@
+namespace MicroCFTA.SourceSynthesisCurrentUniverseNativeAllocation
+open Cache InternedConstructorTemplates InternedProbeProvenance
+open InternedBinderProtocol (NodeKey)
+open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionThunks SourceRecursiveIntersectionCode
+open SourceEqualityNativeDemand
+open SourceCurrentAllocatedNativeGeneralCMHistory (AuthenticEntry Qualified)
+open SourceCurrentAllocatedNativePhysicalTraceCompletion (Trace)
+open SourceSynthesisTypeSyntax (Library Query)
+open SourceSynthesisFirstOrderConstruction (Expression)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSynthesisGeneralizeSyntax.Guard
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "Profile" => SourceCurrentAllocatedNativeClosedResetProfile.Profile
+local notation "ordinarySymbols" => SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+set_option autoImplicit false
+
+/- Note [Returned edge source admission]
+The complete empty initializer rules out an inherited returned cell.
+The actual finish receipt fixes one query dispatch and its compiled body.
+Apply source prefix admission to that SAME literal dispatch prefix.
+Retain the finish, query, body, and full admission in one result.
+No caller supplies a future query prefix or semantic result law.
+-/
+
+/-- Every actual returned edge cell retains its source dispatch and complete admission. -/
+theorem original_universe_returned_edge_full_admission
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (rootRequest : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
+    (machineValid : SourceRecursiveIntersectionKernel.Valid machine)
+    (sourceGrowth : Grows sourceHeap machine.heap)
+    (pastInventory : InternedShallowHeap.NoNewMu sourceHeap machine.heap)
+    (rootDomain : rootRequest.domain = IntersectionEmptyDomain.emptyDomain)
+    (leftAvailable : Available machine.heap rootRequest.left)
+    (rightAvailable : Available machine.heap rootRequest.right)
+    (leftClosed : rootRequest.left.free = []) (rightClosed : rootRequest.right.free = [])
+    (operations : SourceEqualityConstraintMemoAllocation.State)
+    (fuel wholeCount : Nat) (rest : Control (Value Symbol Guard)) (after : Checked width)
+    (bounded : wholeCount ≤ fuel)
+    (actual : Trace wholeCount (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width) rest after)
+    (handle : Nat) (queried : EdgeRequest Symbol Guard)
+    (row : EdgeValue Symbol Guard)
+    (storedCell : after.native.edges.cells handle = some ⟨queried, .returned row⟩) :
+    ∃ (finishUsed suffixCount : Nat) (beforeFinish : Checked width)
+      (continuation : Code Symbol Guard (Value Symbol Guard))
+      (queryUsed bodyCount : Nat) (queryBefore beforeBody : Checked width)
+      (queryNext : EdgeValue Symbol Guard → Code Symbol Guard (Value Symbol Guard)),
+      wholeCount = finishUsed + 1 + suffixCount ∧ finishUsed < wholeCount ∧ finishUsed < fuel ∧
+      Trace finishUsed (.code (.node rootRequest .pure))
+        (⟨initial width machine, operations⟩ : Checked width)
+        (.code (.finishEdge handle row continuation)) beforeFinish ∧
+      beforeFinish.native.edges.cells handle = some ⟨queried, .evaluating⟩ ∧
+      Trace 1 (.code (.finishEdge handle row continuation)) beforeFinish (.code continuation)
+        {beforeFinish with native := finishEdge handle row beforeFinish.native} ∧
+      ({beforeFinish with native := finishEdge handle row beforeFinish.native} : Checked width).native.edges.cells
+        handle = some ⟨queried, .returned row⟩ ∧
+      Trace suffixCount (.code continuation)
+        {beforeFinish with native := finishEdge handle row beforeFinish.native} rest after ∧
+      queryUsed + 1 + bodyCount = finishUsed ∧ queryUsed < finishUsed ∧ queryUsed < fuel ∧
+      Trace queryUsed (.code (.node rootRequest .pure))
+        (⟨initial width machine, operations⟩ : Checked width)
+        (.code (.edge queried queryNext)) queryBefore ∧
+      Trace 1 (.code (.edge queried queryNext)) queryBefore
+        (.edgeBody queried (fun result => .finishEdge handle result (queryNext result))) beforeBody ∧
+      Steps 1 (.code (.edge queried .pure)) queryBefore
+        (.edgeBody queried (fun result => .finishEdge handle result (.pure result))) beforeBody ∧
+      SourceCurrentAllocatedNativePhysicalCache.Valid queryBefore.native ∧
+      EdgeReady queryBefore.native.machine queried ∧
+      SourceRecursiveIntersectionEdgeMemo.KeySafe width queried.domain queried.left queried.right ∧
+      beforeBody.native.edges.cells handle = some ⟨queried, .evaluating⟩ ∧
+      Steps bodyCount (.edgeBody queried .pure) beforeBody (.code (.pure row)) beforeFinish ∧
+      queryNext row = continuation ∧
+    ∃ bodyId : Nat, SourceRecursiveIntersectionControl.identity body = some bodyId ∧
+      (queried.left.children.length = queried.right.children.length →
+        ∀ children ∈ queried.left.children.zip queried.right.children,
+          let request : NodeRequest Symbol Guard := ⟨queried.domain, children.1, children.2⟩
+          Qualified (width := width) rootRequest machine operations wholeCount entry body depth ordinary request ∨
+            ∃ (fullPattern : Value Symbol Guard) (patternId : Nat)
+              (originalDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey),
+              AuthenticEntry (width := width) rootRequest machine operations wholeCount
+                entry body depth ordinary fullPattern patternId originalDomain ∧
+              let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+              let referenceValue : Value Symbol Guard := .reference (.interned entry.identity)
+              let e := SourceRecursiveIntersectionControl.pair bodyId entry.identity
+              let d := SourceRecursiveIntersectionControl.pair entry.identity entry.identity
+              let bodyFirst := SourceRecursiveIntersectionDomain.extend originalDomain.key [entry.identity] e
+              let diagonalFirst := SourceRecursiveIntersectionDomain.extend originalDomain.key [entry.identity] d
+              let bodyTerminal := SourceRecursiveIntersectionDomain.extend bodyFirst [entry.identity] d
+              let diagonalTerminal := SourceRecursiveIntersectionDomain.extend diagonalFirst [entry.identity] e
+              (request.domain.key = bodyFirst ∧
+                ((request.left = body ∧ request.right = body) ∨
+                 (request.left = referenceValue ∧ request.right = referenceValue) ∨
+                 (request.left = universeValue ∧ request.right = referenceValue))) ∨
+              (request.domain.key = bodyTerminal ∧ request.left = body ∧ request.right = referenceValue) ∨
+              (request.domain.key = diagonalFirst ∧
+                ((request.left = body ∧ request.right = referenceValue) ∨
+                 (request.left = body ∧ request.right = universeValue))) ∨
+              (request.domain.key = diagonalTerminal ∧
+                ((request.left = body ∧ request.right = body) ∨
+                 (request.left = referenceValue ∧ request.right = referenceValue) ∨
+                 (request.left = universeValue ∧ request.right = referenceValue)))) := by
+  obtain ⟨finishUsed, suffixCount, beforeFinish, continuation, finishTotal, finishSmall,
+      finishFuel, finishActual, owner, finishEvent, finished, suffix⟩ :=
+    SourceCurrentAllocatedNativeEdgeReturnOrigin.returned_edge_cell_finish_prefix
+      machine operations (.code (.node rootRequest .pure)) rest after fuel wholeCount bounded actual
+      handle queried row storedCell
+  obtain ⟨queryUsed, bodyCount, queryBefore, beforeBody, queryNext, queryTotal, querySmall,
+      queryFuel, queryActual, dispatch, isolated, physical, ready, safe, bodyOwner, bodyActual, nextSame⟩ :=
+    SourceCurrentAllocatedNativeEdgeQueryDispatchOrigin.actual_edge_query_dispatch_from_initial_query_finish
+      rootRequest machine machineValid operations fuel finishUsed handle queried row continuation
+      beforeFinish finishFuel finishActual owner
+  have admission := original_universe_edge_query_prefix_full_admission (width := width)
+    lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+    rootRequest machine machineValid sourceGrowth pastInventory rootDomain leftAvailable rightAvailable
+    leftClosed rightClosed operations wholeCount queryUsed queried queryNext queryBefore (by omega) queryActual
+  exact ⟨finishUsed, suffixCount, beforeFinish, continuation, queryUsed, bodyCount,
+    queryBefore, beforeBody, queryNext, finishTotal, finishSmall, finishFuel,
+    finishActual, owner, finishEvent, finished, suffix, queryTotal, querySmall, queryFuel,
+    queryActual, dispatch, isolated, physical, ready, safe, bodyOwner, bodyActual, nextSame, admission⟩
+
+end MicroCFTA.SourceSynthesisCurrentUniverseNativeAllocation

@@ -1,0 +1,58 @@
+94: theorem query_returned_and_raw_results
+95:     [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+96:     (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+97:     (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+98:     (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+99:     (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+100:       .done rootValue sourceHeap)
+101:     (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+102:     (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+103:     (selectedKey : IntersectionFlatMemoKeyDomain.DomainKey) (cutoffLeft cutoffRight : Nat)
+104:     (compiled : ∀ actualDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey,
+105:       actualDomain.key = selectedKey →
+106:       compileNode ⟨actualDomain, body, body⟩ =
+107:         compileRows actualDomain (nodeEdges body) (nodeEdges body))
+108:     (inputs : ∀ actualDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey,
+109:       actualDomain.key = selectedKey → ∀ row ∈ nodeEdges body,
+110:       All₂ (fun (children : Value Symbol Guard × Value Symbol Guard) (value : Value Symbol Guard) =>
+111:         KnownResult ⟨actualDomain, children.1, children.2⟩ value)
+112:         (row.children.zip row.children)
+113:         (row.children.map (input (replacement (.interned entry.identity)
+114:           (repeatedValue (pair cutoffLeft cutoffRight))))))
+115:     (firstKey : IntersectionFlatMemoKeyDomain.DomainKey) (bodyId : Nat)
+116:     (rightMu : ∀ actualDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey,
+117:       actualDomain.key = firstKey →
+118:       SourceRecursiveIntersectionControl.decision actualDomain.key body (.mu entry body depth ordinary) = .rightMu)
+119:     (bodyIdentity : SourceRecursiveIntersectionControl.identity body = some bodyId)
+120:     (childKey : ∀ actualDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey,
+121:       actualDomain.key = firstKey →
+122:       ∀ current : Cache.State IntersectionFlatMemoKeyDomain.DomainKey, Cache.Valid current →
+123:       (SourceRecursiveIntersectionEnvironment.enter current actualDomain.key body
+124:         (.mu entry body depth ordinary) bodyId entry.identity).1.key = selectedKey)
+125:     (cutoffApart : pair bodyId entry.identity ≠ pair cutoffLeft cutoffRight)
+126:     (read : ∀ actualDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey,
+127:       actualDomain.key = firstKey → ∀ current : Checked width, Physical current.native →
+128:       Grows sourceHeap current.native.machine.heap →
+129:       SourceEqualityNativeDemand.step
+130:         (.code (compileNode ⟨actualDomain, body, .reference (.interned entry.identity)⟩)) current =
+131:         .yielded (.code (requestNode actualDomain body (.mu entry body depth ordinary))) current)
+132:     (fuel : Nat) :
+133:     (∀ (request : NodeRequest Symbol Guard) (before : Checked width),
+134:       Physical before.native → Grows sourceHeap before.native.machine.heap →
+135:       SourceEqualityConstraintMemoAllocation.Valid before.operations →
+136:       InputsThrough fuel (.code (.node request .pure)) before →
+137:       SourceEqualityNativeDemandOperations.FieldsThrough fuel (.code (.node request .pure)) before →
+138:       Returned (NodeResult entry.identity cutoffLeft cutoffRight selectedKey firstKey body (.mu entry body depth ordinary)) before.native.nodes → Returned EdgeResult before.native.edges →
+139:       (Returned (NodeResult entry.identity cutoffLeft cutoffRight selectedKey firstKey body (.mu entry body depth ordinary)) (execute fuel (.code (.node request .pure)) before).state.native.nodes ∧
+140:         Returned EdgeResult (execute fuel (.code (.node request .pure)) before).state.native.edges) ∧
+141:       (∀ (count : Nat) (value : Value Symbol Guard) (after : Checked width), count ≤ fuel →
+142:         Steps count (.code (.node request .pure)) before (.code (.pure value)) after →
+143:         (NodeResult entry.identity cutoffLeft cutoffRight selectedKey firstKey body (.mu entry body depth ordinary)) request value)) ∧
+144:     (∀ (request : EdgeRequest Symbol Guard) (before : Checked width),
+145:       Physical before.native → Grows sourceHeap before.native.machine.heap →
+146:       SourceEqualityConstraintMemoAllocation.Valid before.operations →
+147:       InputsThrough fuel (.code (.edge request .pure)) before →
+148:       SourceEqualityNativeDemandOperations.FieldsThrough fuel (.code (.edge request .pure)) before →
+149:       Returned (NodeResult entry.identity cutoffLeft cutoffRight selectedKey firstKey body (.mu entry body depth ordinary)) before.native.nodes → Returned EdgeResult before.native.edges →
+150:       (Returned (NodeResult entry.identity cutoffLeft cutoffRight selectedKey firstKey body (.mu entry body depth ordinary)) (execute fuel (.code (.edge request .pure)) before).state.native.nodes ∧
+151:         Returned EdgeResult (execute fuel (.code (.edge request .pure)) before).state.native.edges) ∧

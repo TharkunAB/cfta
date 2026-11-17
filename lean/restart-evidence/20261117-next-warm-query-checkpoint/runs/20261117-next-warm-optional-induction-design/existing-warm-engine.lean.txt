@@ -1,0 +1,98 @@
+85: theorem query_returned_and_raw_results
+86:     [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+87:     (nodeLaw : NodeRequest Symbol Guard → Value Symbol Guard → Prop)
+88:     (edgeLaw : EdgeRequest Symbol Guard → EdgeValue Symbol Guard → Prop)
+89:     (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+90:     (nodeResults : ∀ (request : NodeRequest Symbol Guard)
+91:       (before first middle : Checked width) (parentFuel bodySteps : Nat)
+92:       (value : Value Symbol Guard) (next : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard)),
+93:       Physical before.native → Grows sourceHeap before.native.machine.heap →
+94:       SourceEqualityConstraintMemoAllocation.Valid before.operations →
+95:       InputsThrough parentFuel (.code (.node request .pure)) before →
+96:       SourceEqualityNativeDemandOperations.FieldsThrough parentFuel (.code (.node request .pure)) before →
+97:       Steps 1 (.code (.node request .pure)) before (.code ((compileNode request).bind next)) first →
+98:       Grows sourceHeap first.native.machine.heap →
+99:       SourceEqualityConstraintMemoAllocation.Valid first.operations →
+100:       bodySteps < parentFuel →
+101:       Steps bodySteps (.code (compileNode request)) first (.code (.pure value)) middle →
+102:       (∀ (child : NodeRequest Symbol Guard)
+103:         (childNext : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard))
+104:         (childBefore childAfter : Checked width) (used count : Nat) (childValue : Value Symbol Guard),
+105:         0 < used → used + count ≤ parentFuel →
+106:         Steps used (.code (.node request .pure)) before
+107:           (.code ((requestNode child.domain child.left child.right).bind childNext)) childBefore →
+108:         Steps count (.code (requestNode child.domain child.left child.right)) childBefore
+109:           (.code (.pure childValue)) childAfter → nodeLaw child childValue) →
+110:       (∀ (child : EdgeRequest Symbol Guard)
+111:         (childNext : EdgeValue Symbol Guard → Code Symbol Guard (Value Symbol Guard))
+112:         (childBefore childAfter : Checked width) (used count : Nat) (childValue : EdgeValue Symbol Guard),
+113:         0 < used → used + count ≤ parentFuel →
+114:         Steps used (.code (.node request .pure)) before
+115:           (.code ((requestEdge child.domain child.left child.right).bind childNext)) childBefore →
+116:         Steps count (.code (requestEdge child.domain child.left child.right)) childBefore
+117:           (.code (.pure childValue)) childAfter → edgeLaw child childValue) →
+118:       nodeLaw request value)
+119:     (edgeResults : ∀ (request : EdgeRequest Symbol Guard)
+120:       (before first middle : Checked width) (parentFuel bodySteps : Nat)
+121:       (value : EdgeValue Symbol Guard) (next : EdgeValue Symbol Guard → Code Symbol Guard (EdgeValue Symbol Guard)),
+122:       Physical before.native → Grows sourceHeap before.native.machine.heap →
+123:       SourceEqualityConstraintMemoAllocation.Valid before.operations →
+124:       InputsThrough parentFuel (.code (.edge request .pure)) before →
+125:       SourceEqualityNativeDemandOperations.FieldsThrough parentFuel (.code (.edge request .pure)) before →
+126:       Steps 1 (.code (.edge request .pure)) before (.edgeBody request next) first →
+127:       Grows sourceHeap first.native.machine.heap →
+128:       SourceEqualityConstraintMemoAllocation.Valid first.operations →
+129:       bodySteps < parentFuel →
+130:       Steps bodySteps (.edgeBody request .pure) first (.code (.pure value)) middle →
+131:       (∀ (child : NodeRequest Symbol Guard)
+132:         (childNext : Value Symbol Guard → Code Symbol Guard (EdgeValue Symbol Guard))
+133:         (childBefore childAfter : Checked width) (used count : Nat) (childValue : Value Symbol Guard),
+134:         0 < used → used + count ≤ parentFuel →
+135:         Steps used (.code (.edge request .pure)) before
+136:           (.code ((requestNode child.domain child.left child.right).bind childNext)) childBefore →
+137:         Steps count (.code (requestNode child.domain child.left child.right)) childBefore
+138:           (.code (.pure childValue)) childAfter → nodeLaw child childValue) →
+139:       (∀ (child : EdgeRequest Symbol Guard)
+140:         (childNext : EdgeValue Symbol Guard → Code Symbol Guard (EdgeValue Symbol Guard))
+141:         (childBefore childAfter : Checked width) (used count : Nat) (childValue : EdgeValue Symbol Guard),
+142:         0 < used → used + count ≤ parentFuel →
+143:         Steps used (.code (.edge request .pure)) before
+144:           (.code ((requestEdge child.domain child.left child.right).bind childNext)) childBefore →
+145:         Steps count (.code (requestEdge child.domain child.left child.right)) childBefore
+146:           (.code (.pure childValue)) childAfter → edgeLaw child childValue) →
+147:       edgeLaw request value)
+148:     (fuel : Nat) :
+149:     (∀ (request : NodeRequest Symbol Guard) (before : Checked width),
+150:       Physical before.native → Grows sourceHeap before.native.machine.heap →
+151:       SourceEqualityConstraintMemoAllocation.Valid before.operations →
+152:       InputsThrough fuel (.code (.node request .pure)) before →
+153:       SourceEqualityNativeDemandOperations.FieldsThrough fuel (.code (.node request .pure)) before →
+154:       Returned nodeLaw before.native.nodes → Returned edgeLaw before.native.edges →
+155:       (Returned nodeLaw (execute fuel (.code (.node request .pure)) before).state.native.nodes ∧
+156:         Returned edgeLaw (execute fuel (.code (.node request .pure)) before).state.native.edges) ∧
+157:       (∀ (count : Nat) (value : Value Symbol Guard) (after : Checked width), count ≤ fuel →
+158:         Steps count (.code (.node request .pure)) before (.code (.pure value)) after →
+159:         nodeLaw request value)) ∧
+160:     (∀ (request : EdgeRequest Symbol Guard) (before : Checked width),
+161:       Physical before.native → Grows sourceHeap before.native.machine.heap →
+162:       SourceEqualityConstraintMemoAllocation.Valid before.operations →
+163:       InputsThrough fuel (.code (.edge request .pure)) before →
+164:       SourceEqualityNativeDemandOperations.FieldsThrough fuel (.code (.edge request .pure)) before →
+165:       Returned nodeLaw before.native.nodes → Returned edgeLaw before.native.edges →
+166:       (Returned nodeLaw (execute fuel (.code (.edge request .pure)) before).state.native.nodes ∧
+167:         Returned edgeLaw (execute fuel (.code (.edge request .pure)) before).state.native.edges) ∧
+168:       (∀ (count : Nat) (value : EdgeValue Symbol Guard) (after : Checked width), count ≤ fuel →
+169:         Steps count (.code (.edge request .pure)) before (.code (.pure value)) after →
+170:         edgeLaw request value)) := by
+171:   induction fuel using Nat.strongRecOn with
+172:   | ind fuel ih =>
+173:       have nodeChild {Output : Type}
+174:           (original : Control Output) (initial : Checked width)
+175:           (physical : Physical initial.native)
+176:           (sourceGrowth : Grows sourceHeap initial.native.machine.heap)
+177:           (valid : SourceEqualityConstraintMemoAllocation.Valid initial.operations)
+178:           (plan : InputsThrough fuel original initial) (fields : FieldsThrough fuel original initial)
+179:           (request : NodeRequest Symbol Guard)
+180:           (next : Value Symbol Guard → Code Symbol Guard Output) (before : Checked width)
+181:           (used childFuel : Nat) (bounded : used + childFuel ≤ fuel) (smaller : childFuel < fuel)
+182:           (origin : Steps used original initial

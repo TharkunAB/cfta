@@ -1,0 +1,76 @@
+  have oldGamma :=
+    SourceCurrentAllocatedNativeGeneralCMHistory.current_stored_universe_general_cm_returned_at_every_actual_prefix
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      oldRoot machine machineValid sourceGrowth operations operationsValid fuel wholeCount oldControl oldSnapshot
+      wholeBound inputs fields wholeActual
+  have initialPhysical : Physical (initial width machine) :=
+    SourceCurrentAllocatedNativePhysicalCache.initial_valid machine machineValid
+  have oldPhysical :=
+    (SourceCurrentNativeEnterCommonOperand.checked_trace_extension wholeActual initialPhysical).1
+  have oldAuthAt : SourceCurrentAllocatedNativeSourceWarmEntry.AuthenticEntryAt (width := width)
+      oldRoot (⟨initial width machine, operations⟩ : Checked width) wholeCount
+      entry body depth ordinary oldPattern oldPatternId oldDomain := by
+    simpa only [SourceCurrentAllocatedNativeSourceWarmEntry.authentic_entry_at_initial] using oldAuthentic
+  have rebased : ∀ childPair ∈ request.left.children.zip request.right.children,
+      SourceCurrentAllocatedNativeGeneralCMHistory.Qualified (width := width)
+        oldRoot machine operations wholeCount entry body depth ordinary
+        (⟨request.domain, childPair.1, childPair.2⟩ : NodeRequest Symbol Guard) := by
+    intro childPair member
+    rcases childQualifications childPair member with closed | mixed
+    · exact Or.inl closed
+    · right
+      obtain ⟨newPattern, newPatternId, openAlias, operand, authentic,
+        aliasKind, operandProfile, operandHeight, strictAlias, ordered⟩ := mixed
+      obtain ⟨newClosed, newIdentity, newKind, universeFirst, newUsed, beforeNew, next, newData⟩ := authentic
+      dsimp only at newData
+      obtain ⟨entryBound, newPrefix, _newAllocation, newEntry, domainEq⟩ := newData
+      let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+      let newEntered := SourceRecursiveIntersectionEnvironment.enter beforeNew.native.machine.domains
+        IntersectionEmptyDomain.emptyKey universeValue newPattern entry.identity newPatternId
+      let entering : Control (Value Symbol Guard) :=
+        .code (.enter IntersectionEmptyDomain.emptyDomain
+          (if universeFirst then universeValue else newPattern)
+          (if universeFirst then newPattern else universeValue)
+          (if universeFirst then entry.identity else newPatternId)
+          (if universeFirst then newPatternId else entry.identity) next)
+      let started : Checked width :=
+        {beforeNew with native := advance beforeNew.native
+          {beforeNew.native.machine with domains := newEntered.2}}
+      have prefixTrace : Trace newUsed (.code (.node newRoot .pure)) oldSnapshot entering beforeNew :=
+        newPrefix
+      have entryTrace : Trace 1 entering beforeNew (.code (next newEntered.1)) started :=
+        newEntry
+      have total : newUsed + (newCount - newUsed) = newCount := by omega
+      have full : Trace (newUsed + (newCount - newUsed))
+          (.code (.node newRoot .pure)) oldSnapshot newControl reader := by
+        simpa only [total] using newActual
+      have separated := SourceCurrentHereditaryNativePhysicalSplit.split prefixTrace.steps full
+      have remaining : 1 + (newCount - newUsed - 1) = newCount - newUsed := by omega
+      have fromEntry : Trace (1 + (newCount - newUsed - 1)) entering beforeNew newControl reader := by
+        simpa only [remaining] using separated.2
+      have atEntry := SourceCurrentHereditaryNativePhysicalSplit.split entryTrace.steps fromEntry
+      have actualDomain : request.domain = newEntered.1 := domainEq
+      have sameKey : newEntered.1.key = oldDomain.key :=
+        (congrArg (fun domain : Interned DKey => domain.key) actualDomain).symm.trans domainKeyMatches
+      have identified := old_warm_entry_full_pattern_after_equal_key_entry
+        oldRoot (⟨initial width machine, operations⟩ : Checked width) initialPhysical
+        wholeCount oldControl oldSnapshot wholeActual entry body depth ordinary
+        oldPattern oldPatternId oldDomain oldAuthAt
+        newPattern newClosed newPatternId newIdentity newKind universeFirst next
+        newRoot newFuel newUsed beforeNew started (.code (next newEntered.1))
+        (by omega) separated.1 atEntry.1 sameKey
+      obtain ⟨_samePatternId, patternEq, domainsEq, _sameHeight, _entrySpan, _entryBound⟩ := identified
+      have actualOldDomain : request.domain = oldDomain := actualDomain.trans domainsEq.symm
+      refine ⟨oldPattern, oldPatternId, openAlias, operand, ?_, aliasKind, operandProfile, ?_, ?_, ordered⟩
+      · simpa only [actualOldDomain] using oldAuthentic
+      · simpa only [patternEq] using operandHeight
+      · intro referenceAlias
+        simpa only [patternEq] using strictAlias referenceAlias
+  have profiles : ∀ child ∈ row.children,
+      SourceCurrentAllocatedNativeClosedResetProfile.Profile entry.identity child :=
+    (oldGamma.1.2 handle request row oldCell) rebased
+  have retention := SourceEqualityNativeDemandMemo.execute_preserves
+    newCount (.code (.node newRoot .pure)) oldSnapshot oldPhysical.shape
+  have retained : SourceEqualityNativeDemandMemo.Retained oldSnapshot.native reader.native := by
+    simpa only [newActual.steps.execute, Outcome.state] using retention.2
+  exact ⟨rebased, profiles, retained.edges handle request row oldCell, newActual, newBound⟩

@@ -1,0 +1,47 @@
+2399:             firstSame, secondSame, optionalNext, Control.bind, requestNode, Code.bind,
+2400:             IntersectionEmptyDomain.emptyDomain] using event)
+2401:         simpa only [entered, domainSame, leftSame, rightSame, firstSame, secondSame,
+2402:           IntersectionEmptyDomain.emptyDomain] using authenticAt
+2403:       have childLeft : childRequest.left = if universeFirst then body else pattern := by
+2404:         change SourceRecursiveIntersectionKernel.body queried.left = _
+2405:         rw [leftSame]
+2406:         cases universeFirst with
+2407:         | false => exact patternBody
+2408:         | true => rfl
+2409:       have childRight : childRequest.right = if universeFirst then pattern else body := by
+2410:         change SourceRecursiveIntersectionKernel.body queried.right = _
+2411:         rw [rightSame]
+2412:         cases universeFirst with
+2413:         | false => rfl
+2414:         | true => exact patternBody
+2415:       have childQualified : MixedQualified (width := width) rootRequest machine operations used
+2416:           entry body depth ordinary childRequest := by
+2417:         refine ⟨pattern, patternId, body, pattern, authentic, Or.inl rfl,
+2418:           patternProfile, Nat.le_refl _, ?_, ?_⟩
+2419:         · intro impossible
+2420:           rw [bodyRead] at impossible
+2421:           cases impossible
+2422:         · cases universeFirst with
+2423:           | false => exact Or.inr ⟨childLeft, childRight⟩
+2424:           | true => exact Or.inl ⟨childLeft, childRight⟩
+2425:       have childKey : ∃ actualKey, SourceRecursiveIntersectionMemo.requestKey width
+2426:           childRequest.domain childRequest.left childRequest.right = some actualKey := by
+2427:         cases universeFirst with
+2428:         | false =>
+2429:             exact optional_key_of_codecs childRequest
+2430:               (by rw [childLeft]; exact optional_closed_codec pattern patternProfile.1)
+2431:               (by rw [childRight]; exact bodyCodec)
+2432:         | true =>
+2433:             exact optional_key_of_codecs childRequest
+2434:               (by rw [childLeft]; exact bodyCodec)
+2435:               (by rw [childRight]; exact optional_closed_codec pattern patternProfile.1)
+2436:       have cmPast := SourceCurrentAllocatedNativeGeneralCMHistory.current_stored_universe_general_cm_returned_at_every_actual_prefix
+2437:         lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+2438:         rootRequest machine machineValid sourceGrowth operations operationsValid fuel used readerControl current
+2439:         (by omega) inputs fields actual
+2440:       have resultProfile := (readChild _ _ cmPast.1 childKey).2 childQualified
+2441:       have unused := SourceRecursiveIntersectionMaybeMu.unused (pair first second) child
+2442:         current.native.machine.heap (by rw [resultProfile.1]; exact List.not_mem_nil)
+2443:       rw [unused]
+2444:       exact InternedShallowHeap.noNewMu_refl _
+2445:     · obtain ⟨pattern, patternId, authentic, alternatives⟩ := optional_mixed_owner

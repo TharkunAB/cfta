@@ -1,0 +1,18 @@
+  obtain ⟨finishUsed, suffixCount, beforeFinish, continuation, finishTotal, finishSmall,
+      finishFuel, finishActual, owner, finishEvent, finished, suffix⟩ :=
+    SourceCurrentAllocatedNativeEdgeReturnOrigin.returned_edge_cell_finish_prefix
+      machine operations (.code (.node rootRequest .pure)) rest after fuel wholeCount bounded actual
+      handle queried row storedCell
+  obtain ⟨queryUsed, bodyCount, queryBefore, beforeBody, queryNext, queryTotal, querySmall,
+      queryFuel, queryActual, dispatch, isolated, physical, ready, safe, bodyOwner, bodyActual, nextSame⟩ :=
+    SourceCurrentAllocatedNativeEdgeQueryDispatchOrigin.actual_edge_query_dispatch_from_initial_query_finish
+      rootRequest machine machineValid operations fuel finishUsed handle queried row continuation
+      beforeFinish finishFuel finishActual owner
+  have admission := original_universe_edge_query_prefix_full_admission (width := width)
+    lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+    rootRequest machine machineValid sourceGrowth pastInventory rootDomain leftAvailable rightAvailable
+    leftClosed rightClosed operations wholeCount queryUsed queried queryNext queryBefore (by omega) queryActual
+  exact ⟨finishUsed, suffixCount, beforeFinish, continuation, queryUsed, bodyCount,
+    queryBefore, beforeBody, queryNext, finishTotal, finishSmall, finishFuel,
+    finishActual, owner, finishEvent, finished, suffix, queryTotal, querySmall, queryFuel,
+    queryActual, dispatch, isolated, physical, ready, safe, bodyOwner, bodyActual, nextSame, admission⟩
