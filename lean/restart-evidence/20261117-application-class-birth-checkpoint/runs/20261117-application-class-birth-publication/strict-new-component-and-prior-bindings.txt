@@ -1,0 +1,79 @@
+{"archived_inputs_verified": 249, "payload_files_verified": 266, "total_files": 267, "total_bytes": 5816957, "manifest_sha256": "b37600f6e5b35afa796393f377be0df636bd81d54df61a7d2f17e4f2e7326a20", "source_tree_sha256": "38769ec9e46e3fe041d5d817f3a2fec5319f7f5da9244eae417cc306e903ba74"}
+{"inherited_component_reports_verified": 365, "fresh_component_reports_expected": 1, "old_sources_and_toolchain_byte_exact": true}
+MicroCFTA.SourceSynthesisApplicationClassBirth.application_class_birth
+  (valid : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Prop)
+  (literal : String → MicroCFTA.SourcePruningTemplates.Symbol)
+  (heap :
+    MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (edge :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (scs : List MicroCFTA.EnumerationState.Suspended)
+  (before after :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (symbol : MicroCFTA.SourcePruningTemplates.Symbol)
+  (staged :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) ×
+        List MicroCFTA.EnumerationState.Suspended ×
+          Option
+            (MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol))))
+  (residual : Option (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (fields : MicroCFTA.SourceSynthesisHereditaryProgramFields.EdgeFields valid literal edge)
+  (four : edge.children.length = 4) (storage : MicroCFTA.EnumerationCorrectness.StorageValid before.core)
+  (observed :
+    MicroCFTA.SourcePruningEnumerationCachedOwn.prepare heap scs edge before =
+      some [((symbol, staged, residual), after)]) :
+  have classes := [[[0], [2, 0, 2]], [[1], [2, 0, 0]], [[2, 0, 1], [3, 0]]];
+  have tries := MicroCFTA.EnumerationEquality.readClasses classes;
+  have start := before.core.counter;
+  have own := MicroCFTA.EnumerationCorrectness.suspendedVars start tries;
+  MicroCFTA.SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, none) ∧
+    symbol = literal "app" ∧
+      residual = none ∧
+        after.core = MicroCFTA.EnumerationCorrectness.suspendedState 3 before.core ∧
+          after.core.counter = start + 3 ∧
+            after.core.representatives = before.core.representatives ∧
+              after.core.values =
+                  before.core.values ++ List.replicate 3 (MicroCFTA.EnumerationState.UVarValue.unenumerated none []) ∧
+                (∀ (offset : Nat),
+                    offset < 3 →
+                      after.core.values[start + offset]? =
+                          some (MicroCFTA.EnumerationState.UVarValue.unenumerated none []) ∧
+                        MicroCFTA.UnionFind.read after.core.representatives (start + offset) =
+                          MicroCFTA.UnionFind.Entry.root 1) ∧
+                  (∀ (left right : Nat),
+                      left < 3 →
+                        right < 3 →
+                          (MicroCFTA.UnionFind.SameClass after.core.representatives (start + left) (start + right) ↔
+                            left = right)) ∧
+                    List.map (fun sc => (sc.var, MicroCFTA.EqualityTrie.fromPathTrie sc.trie)) own =
+                        [(start, [[0], [2, 0, 2]]), (start + 1, [[1], [2, 0, 0]]), (start + 2, [[2, 0, 1], [3, 0]])] ∧
+                      staged =
+                          List.map
+                            (fun input =>
+                              (input.fst, input.snd,
+                                MicroCFTA.SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst))
+                            (MicroCFTA.SourcePruningEnumerationEdgeInputs.children edge scs start tries) ∧
+                        ∀ (index : Nat)
+                          (incoming :
+                            MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                          (bucket : List (MicroCFTA.EqualityTrie.Suspended Nat))
+                          (action :
+                            Option
+                              (MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol))),
+                          staged[index]? = some (incoming, bucket, action) →
+                            bucket =
+                              MicroCFTA.EnumerationState.descendScs index scs ++
+                                MicroCFTA.EnumerationState.descendScs index own
+'MicroCFTA.SourceSynthesisApplicationClassBirth.application_class_birth' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

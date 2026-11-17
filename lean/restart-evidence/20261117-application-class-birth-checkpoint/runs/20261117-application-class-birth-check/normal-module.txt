@@ -1,0 +1,77 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261117-application-class-birth-check/source/MicroCFTA/SourceSynthesisApplicationClassBirth.lean:142:4: error: Tactic `rfl` failed: The left-hand side
+  List.map (fun sc => (sc.var, EqualityTrie.fromPathTrie sc.trie)) own
+is not definitionally equal to the right-hand side
+  [(start, [[0], [2, 0, 2]]), (start + 1, [[1], [2, 0, 0]]), (start + 2, [[2, 0, 1], [3, 0]])]
+
+valid : Constraint → Prop
+literal : String → Symbol
+heap : InternedConstructorTemplates.State Symbol Constraint
+edge : EdgeValue Symbol Constraint
+scs : List Suspended
+before after : Cached
+symbol : Symbol
+staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint (Fragments.Fragment Symbol)))
+residual : Option Constraint
+fields : SourceSynthesisHereditaryProgramFields.EdgeFields valid literal edge
+four : edge.children.length = 4
+storage : StorageValid before.core
+observed : SourcePruningEnumerationCachedOwn.prepare heap scs edge before = some [((symbol, staged, residual), after)]
+classes : EqualityNormalize.Constraints := [[[0], [2, 0, 2]], [[1], [2, 0, 0]], [[2, 0, 1], [3, 0]]]
+tries : List EqualityTrie.Trie := EnumerationEquality.readClasses classes
+start : Nat := before.core.counter
+own : List Suspended := suspendedVars start tries
+sourceFields :
+  edge.entry.key.symbol = literal "app" ∧
+    edge.entry.key.constraint =
+      SourceSynthesisGeneralizeSyntax.eqGuard [[[1], [2, 0, 0]], [[3, 0], [2, 0, 1]], [[0], [2, 0, 2]]]
+projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, none)
+payload :
+  (symbol, staged, residual) =
+    (edge.entry.key.symbol,
+      List.map
+        (fun input => (input.fst, input.snd, SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst))
+        (SourcePruningEnumerationEdgeInputs.children edge scs before.core.counter tries),
+      none)
+scalars :
+  arityAllows edge.children.length scs = true ∧
+    after.core = suspendedState tries.length before.core ∧
+      after.core.counter = before.core.counter + tries.length ∧
+        SourcePruningEnumerationPrefixAdmission.suspendedBound after.core =
+          SourcePruningEnumerationPrefixAdmission.suspendedBound before.core
+symbolSame : symbol = edge.entry.key.symbol
+residualSame : residual = none
+stagedSame :
+  staged =
+    List.map
+      (fun input => (input.fst, input.snd, SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst))
+      (SourcePruningEnumerationEdgeInputs.children edge scs start tries)
+coreSame : after.core = suspendedState 3 before.core
+counterSame : after.core.counter = start + 3
+forestSame : after.core.representatives = before.core.representatives
+valuesSame : after.core.values = before.core.values ++ List.replicate 3 (UVarValue.unenumerated none [])
+fresh :
+  ∀ (offset : Nat),
+    offset < 3 →
+      after.core.values[start + offset]? = some (UVarValue.unenumerated none []) ∧
+        UnionFind.read after.core.representatives (start + offset) = UnionFind.Entry.root 1
+distinct :
+  ∀ (left right : Nat),
+    left < 3 →
+      right < 3 → (UnionFind.SameClass after.core.representatives (start + left) (start + right) ↔ left = right)
+⊢ List.map (fun sc => (sc.var, EqualityTrie.fromPathTrie sc.trie)) own =
+    [(start, [[0], [2, 0, 2]]), (start + 1, [[1], [2, 0, 0]]), (start + 2, [[2, 0, 1], [3, 0]])]
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261117-application-class-birth-check/source/MicroCFTA/SourceSynthesisApplicationClassBirth.lean:151:2: error: Type mismatch: After simplification, term
+  Eq.symm (congrArg (fun result => result.snd.fst) inputSame)
+ has type
+  @Eq (List Suspended) bucket
+    (((fun input => (input.fst, input.snd, SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst)) ∘
+            fun indexed =>
+            (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars start tries)))
+          (child, index)).snd.fst
+but is expected to have type
+  @Eq (List (EqualityTrie.Suspended Nat)) bucket
+    (descendScs index scs ++
+      descendScs index
+        (suspendedVars before.core.counter
+          (EnumerationEquality.readClasses [[[0], [2, 0, 2]], [[1], [2, 0, 0]], [[2, 0, 1], [3, 0]]])))
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261117-application-class-birth-check/source/MicroCFTA/SourceSynthesisApplicationClassBirth.lean:156:0: error: invalid 'import' command, it must be used in the beginning of the file
