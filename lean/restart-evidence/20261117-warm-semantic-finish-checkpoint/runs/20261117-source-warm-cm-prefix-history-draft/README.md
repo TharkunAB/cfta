@@ -1,0 +1,15 @@
+FROZEN UNCOMPILED. Root owns all compiler checks, normal Source integration and publication.
+
+FIRST public header a415c7b6eac1c7a53beab2da8c25713c01d9651ca14b2b69e581647ccd149c27 was saved before the proof. The candidate establishes the source-derived WARM C/M Returned pair at the complete reader and EVERY actual prefix of ONE fixed full new trace after the actual old cold prefix. NodeResult and EdgeResult keep newRoot, oldSnapshot and full newCount in every qualifier. Prefix count does not replace the full history count.
+
+Public inputs retain the accepted firstOrderRaw source, actual stored U, old empty-domain closed root, physical machine/source growth, original old/new plans/traces and independent supplied bounds. The old past NoNewMu inventory is retained because the inherited edge admission needs it. No initial Returned law, finish callback, future Profile/result, auxiliary cache-law supplier or model is a public premise. The proof derives old root operand availability from the current head of oldInputs, including oldFuel=0. It derives the source body identity internally from actual stored-U classification.
+
+The checked node and edge source seeds supply both initial C/M laws at oldSnapshot under the SAME full new history. The old actual trace and original operation/field plans derive the physical warm start, source growth and operation validity. The existing warm actual-prefix induction then uses the original newFuel/newCount/newActual. Its before-finish table laws are genuine induction inputs of each internal callback.
+
+Every semantic callback is discharged concretely: closed node finish uses the source-specific warm C proof; mixed node finish uses the source-specific warm M wrapper; edge finish uses the source-specific warm edge proof. The mixed wrapper derives all four auxiliary initial/prefix laws internally from the same actual source and SAME actual entry at the SAME beforeFinish. The integration does not supply those four laws as new premises. It contains no copied runtime or new chronology engine.
+
+All three finish modules and the shared definition module were UNCOMPILED prospective dependencies when this packet was frozen. They must pass Root's checks before this composition receives proof credit. DEPENDENCY-PINS.json binds their exact candidate bytes and manifests. The node/edge initial seeds and warm actual-prefix interface were checked earlier, but their publication remains Root-owned.
+
+The conclusion retains the full conditional qualifications. It does not state that all worker calls satisfy them. It does not prove NoNewMu on the new trace, semantic correctness across arbitrary independent warm query histories, native inhabitance, Type/Marker class compatibility, one finite accepted original-root completion or Haskell correspondence.
+
+Compile the prospective dependencies in CHECK-LAYOUT order, then this normal module. Append PROBES.lean.txt for its one public axiom report. No compiler, normal Source write, active Work edit, Git/board operation or tmp mutation was performed for this packet. All proof limits and runtime fuels remain unchanged.

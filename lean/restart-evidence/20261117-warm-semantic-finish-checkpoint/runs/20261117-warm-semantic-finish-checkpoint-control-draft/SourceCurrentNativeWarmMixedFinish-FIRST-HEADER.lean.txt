@@ -1,0 +1,53 @@
+theorem mixed_result_at_actual_warm_node_finish
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (bodyId : Nat) (bodyIdentity : identity body = some bodyId)
+    (oldRoot : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
+    (oldRootDomain : oldRoot.domain = IntersectionEmptyDomain.emptyDomain)
+    (oldRootClosed : oldRoot.left.free = [] ∧ oldRoot.right.free = [])
+    (machineValid : SourceRecursiveIntersectionKernel.Valid machine)
+    (sourceGrowth : Grows sourceHeap machine.heap)
+    (operations : SourceEqualityConstraintMemoAllocation.State)
+    (operationsValid : SourceEqualityConstraintMemoAllocation.Valid operations)
+    (oldFuel oldCount : Nat) (oldControl : Control (Value Symbol Guard))
+    (oldSnapshot : Checked width) (oldBound : oldCount ≤ oldFuel)
+    (oldInputs : InputsThrough oldFuel (.code (.node oldRoot .pure))
+      (⟨initial width machine, operations⟩ : Checked width))
+    (oldFields : FieldsThrough oldFuel (.code (.node oldRoot .pure))
+      (⟨initial width machine, operations⟩ : Checked width))
+    (oldActual : Trace oldCount (.code (.node oldRoot .pure))
+      (⟨initial width machine, operations⟩ : Checked width) oldControl oldSnapshot)
+    (newRoot : NodeRequest Symbol Guard) (newFuel newCount : Nat)
+    (newControl : Control (Value Symbol Guard)) (warmReader : Checked width)
+    (newBound : newCount ≤ newFuel)
+    (newInputs : InputsThrough newFuel (.code (.node newRoot .pure)) oldSnapshot)
+    (newFields : FieldsThrough newFuel (.code (.node newRoot .pure)) oldSnapshot)
+    (newActual : Trace newCount (.code (.node newRoot .pure))
+      oldSnapshot newControl warmReader)
+    (finishUsed handle : Nat) (request : NodeRequest Symbol Guard) (value : Node)
+    (parentNext : Code Symbol Guard Node) (beforeFinish : Checked width)
+    (finishBound : finishUsed < newCount)
+    (actual : Trace finishUsed (.code (.node newRoot .pure)) oldSnapshot
+      (.code (.finishNode handle value parentNext)) beforeFinish)
+    (owner : beforeFinish.native.nodes.cells handle = some ⟨request, .evaluating⟩)
+    (pattern : Node) (patternId : Nat) (openAlias operand : Node)
+    (authentic : AuthenticEntryAt (width := width) newRoot oldSnapshot newCount
+      entry body depth ordinary pattern patternId request.domain)
+    (aliasKind : openAlias = body ∨ openAlias = .reference (.interned entry.identity))
+    (operandProfile : Profile entry.identity operand)
+    (operandHeight : height operand ≤ height pattern)
+    (strictAlias : openAlias = .reference (.interned entry.identity) → height operand < height pattern)
+    (ordered : (request.left = openAlias ∧ request.right = operand) ∨
+      (request.left = operand ∧ request.right = openAlias))
+    (past :
+      Returned (NodeResult (width := width) newRoot oldSnapshot newCount entry body depth ordinary)
+        beforeFinish.native.nodes ∧
+      Returned (EdgeResult (width := width) newRoot oldSnapshot newCount entry body depth ordinary)
+        beforeFinish.native.edges) :
+    Profile entry.identity value

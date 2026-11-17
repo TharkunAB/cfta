@@ -1,0 +1,61 @@
+theorem original_universe_next_warm_mu_query_prefix_admission
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (oldRoot : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
+    (oldRootDomain : oldRoot.domain = IntersectionEmptyDomain.emptyDomain)
+    (oldRootClosed : oldRoot.left.free = [] ∧ oldRoot.right.free = [])
+    (machineValid : SourceRecursiveIntersectionKernel.Valid machine)
+    (sourceGrowth : Grows sourceHeap machine.heap)
+    (pastInventory : InternedShallowHeap.NoNewMu sourceHeap machine.heap)
+    (operations : SourceEqualityConstraintMemoAllocation.State)
+    (operationsValid : SourceEqualityConstraintMemoAllocation.Valid operations)
+    (oldFuel oldCount : Nat) (oldControl : Control (Value Symbol Guard))
+    (oldSnapshot : Checked width) (oldBound : oldCount ≤ oldFuel)
+    (oldInputs : InputsThrough oldFuel (.code (.node oldRoot .pure))
+      (⟨initial width machine, operations⟩ : Checked width))
+    (oldFields : FieldsThrough oldFuel (.code (.node oldRoot .pure))
+      (⟨initial width machine, operations⟩ : Checked width))
+    (oldActual : Trace oldCount (.code (.node oldRoot .pure))
+      (⟨initial width machine, operations⟩ : Checked width) oldControl oldSnapshot)
+    (newRoot : NodeRequest Symbol Guard) (newFuel : Nat)
+    (newRootDomain : newRoot.domain = IntersectionEmptyDomain.emptyDomain)
+    (newLeftAvailable : Available oldSnapshot.native.machine.heap newRoot.left)
+    (newRightAvailable : Available oldSnapshot.native.machine.heap newRoot.right)
+    (newLeftClosed : newRoot.left.free = []) (newRightClosed : newRoot.right.free = [])
+    (newInputs : InputsThrough newFuel (.code (.node newRoot .pure)) oldSnapshot)
+    (newFields : FieldsThrough newFuel (.code (.node newRoot .pure)) oldSnapshot)
+    (wholeCount queryUsed : Nat)
+    (readerControl : Control (Value Symbol Guard)) (reader : Checked width)
+    (queried : NodeRequest Symbol Guard)
+    (queryNext : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard))
+    (queryBefore : Checked width)
+    (wholeBound : wholeCount ≤ newFuel)
+    (wholeActual : Trace wholeCount (.code (.node newRoot .pure))
+      oldSnapshot readerControl reader)
+    (queryBound : queryUsed ≤ wholeCount)
+    (queryActual : Trace queryUsed (.code (.node newRoot .pure)) oldSnapshot
+      (.code (.node queried queryNext)) queryBefore)
+    (selectedMu :
+      SourceRecursiveIntersectionControl.decision queried.domain.key queried.left queried.right = .bothMu ∨
+      SourceRecursiveIntersectionControl.decision queried.domain.key queried.left queried.right = .leftMu ∨
+      SourceRecursiveIntersectionControl.decision queried.domain.key queried.left queried.right = .rightMu) :
+    SourceCurrentNativeWarmCMDefinitions.Qualified (width := width)
+      newRoot oldSnapshot wholeCount entry body depth ordinary queried ∨
+      ∃ (fullPattern : Value Symbol Guard) (patternId bodyId : Nat)
+        (originalDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey),
+        SourceRecursiveIntersectionControl.identity body = some bodyId ∧
+        SourceCurrentAllocatedNativeSourceWarmEntry.AuthenticEntryAt (width := width)
+          newRoot oldSnapshot wholeCount entry body depth ordinary fullPattern patternId originalDomain ∧
+        ((queried.domain.key = SourceRecursiveIntersectionDomain.extend originalDomain.key [entry.identity]
+            (SourceRecursiveIntersectionControl.pair bodyId entry.identity) ∧
+          queried.left = .mu entry body depth ordinary ∧
+          queried.right = .reference (.interned entry.identity)) ∨
+         (queried.domain.key = SourceRecursiveIntersectionDomain.extend originalDomain.key [entry.identity]
+            (SourceRecursiveIntersectionControl.pair entry.identity entry.identity) ∧
+          queried.left = body ∧ queried.right = .mu entry body depth ordinary))

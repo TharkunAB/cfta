@@ -1,0 +1,17 @@
+# Warm source Mu-owner admission
+
+Status: COMPLETE CANDIDATE, UNCOMPILED. No theorem credit is claimed.
+
+The normal module is `MicroCFTA.SourceSynthesisCurrentUniverseWarmMuAdmission`. Its public theorem is `MicroCFTA.SourceSynthesisCurrentUniverseNativeAllocation.original_universe_next_warm_mu_query_prefix_admission`. Its declaration is byte-exact FIRST `ee896af31ebf6d94e3baa03fd65ce5a3bea48e5ae6ee66dcb0491b1bdafb99f4`.
+
+The internal namespace is `MicroCFTA.SourceCurrentNativeWarmAdmission`. The four private carriers and 37 private theorem headers were frozen before proof construction. The proof family ports the checked cold carrier and its 36 helpers. It also ports the old final admission proof into one private arbitrary-start theorem. The script records every substitution in `PORT-COLD-TO-WARM.diff`. It changes the start from an empty-cache initialization to the literal supplied warm `Checked` state. It changes cold entry and qualifier predicates to the existing `AuthenticEntryAt` and warm `Qualified`. It derives prefix facts from supplied current physical validity. The original compiler, step and trace proofs remain otherwise unchanged. One copied comment now says actual-root instead of cold-root.
+
+The private arbitrary-start theorem accepts current physical validity, source growth and root Profiles. Those are not new public inputs. The public proof derives the old root operands from the original physical input plan. Past source inventory and old root closedness produce their Profiles. The checked cold `NoNewMu` theorem applies to the literal bounded old prefix, including an unfinished old control. Its inventory composes with the past source inventory. The exact prefix resource theorem supplies physical validity, source growth and operation validity at `oldSnapshot`. The existing closed-atoms theorem then produces both new root Profiles at that snapshot. The private admission theorem starts from that exact snapshot.
+
+Every selected Mu request retains the original fixed new history and its original query prefix. The result retains all closed and mixed cases and one joint authentic base-entry bundle for the two auxiliary selected-Mu forms. Edge admission retains all ordered zipped children. Actual ready hits use universal continuations. Actual evaluate observations recover the exact captured request from physical cache laws. No future returned-value meaning, Profile, auxiliary payload law, admission law, target inventory or model is a public premise.
+
+The full public statement preserves the original accepted source, build, stored full U, past inventory, old and new plans, independent fuel bounds, complete warm start and actual reader/request endpoints. It does not restrict the old control to a completed result. It adds no runtime evaluator or traversal. It uses default proof limits and `autoImplicit false`. It changes no normal Source, Audit, Work, Git, board, temporary file or prior packet.
+
+`PROBES.lean.txt` has the one public axiom query. `INTERNAL-PROBES.lean.txt` is a separate same-file fixture with 37 private axiom queries and four carrier declaration queries. Append both fixtures to the candidate for 38 theorem reports and four declaration checks. Neither fixture imports the candidate into itself.
+
+The source-facing admission result classifies actual query controls. It does not prove returned payload semantics, warm NoNewMu, native inhabitance, class compatibility, guard truth or one finite completion of the original emitted root. Those obligations remain separate.

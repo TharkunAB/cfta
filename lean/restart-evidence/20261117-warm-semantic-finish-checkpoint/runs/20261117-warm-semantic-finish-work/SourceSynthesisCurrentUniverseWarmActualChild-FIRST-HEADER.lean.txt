@@ -1,0 +1,66 @@
+theorem next_warm_actual_body_pattern_child_has_no_current_pair
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Node)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (oldRoot : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
+    (machineValid : SourceRecursiveIntersectionKernel.Valid machine)
+    (sourceGrowth : Grows sourceHeap machine.heap)
+    (pastInventory : InternedShallowHeap.NoNewMu sourceHeap machine.heap)
+    (oldRootDomain : oldRoot.domain = IntersectionEmptyDomain.emptyDomain)
+    (oldLeftAvailable : Available machine.heap oldRoot.left)
+    (oldRightAvailable : Available machine.heap oldRoot.right)
+    (oldLeftClosed : oldRoot.left.free = []) (oldRightClosed : oldRoot.right.free = [])
+    (operations : SourceEqualityConstraintMemoAllocation.State)
+    (operationsValid : SourceEqualityConstraintMemoAllocation.Valid operations)
+    (oldFuel oldCount : Nat) (oldValue : Node) (oldSnapshot : Checked width)
+    (oldBound : oldCount ≤ oldFuel)
+    (oldInputs : InputsThrough oldFuel (.code (.node oldRoot .pure))
+      (⟨initial width machine, operations⟩ : Checked width))
+    (oldFields : FieldsThrough oldFuel (.code (.node oldRoot .pure))
+      (⟨initial width machine, operations⟩ : Checked width))
+    (oldActual : Trace oldCount (.code (.node oldRoot .pure))
+      (⟨initial width machine, operations⟩ : Checked width) (.code (.pure oldValue)) oldSnapshot)
+    (pattern : Node) (patternId : Nat)
+    (patternAvailable : Available oldSnapshot.native.machine.heap pattern)
+    (patternClosed : pattern.free = []) (patternIdentity : identity pattern = some patternId)
+    (patternKind : tag pattern = 1 ∨ tag pattern = 3)
+    (universeFirst : Bool) (newRoot : NodeRequest Symbol Guard)
+    (newFuel newUsed : Nat) (beforeNew reader : Checked width)
+    (next : Node → Code Symbol Guard Node)
+    (newRootDomain : newRoot.domain = IntersectionEmptyDomain.emptyDomain)
+    (newLeftAvailable : Available oldSnapshot.native.machine.heap newRoot.left)
+    (newRightAvailable : Available oldSnapshot.native.machine.heap newRoot.right)
+    (newLeftClosed : newRoot.left.free = []) (newRightClosed : newRoot.right.free = [])
+    (newInputs : InputsThrough newFuel (.code (.node newRoot .pure)) oldSnapshot)
+    (newFields : FieldsThrough newFuel (.code (.node newRoot .pure)) oldSnapshot)
+    (childFuel childCount : Nat) (value : Node) (childAfter : Checked width)
+    (newBound : newUsed + 1 + childFuel ≤ newFuel)
+    (childBound : childCount ≤ childFuel) :
+    let universeValue : Node := .mu entry body depth ordinary
+    let childLeft := if universeFirst then body else pattern
+    let childRight := if universeFirst then pattern else body
+    let first := if universeFirst then entry.identity else patternId
+    let second := if universeFirst then patternId else entry.identity
+    let binder := pair entry.identity patternId
+    let entered := SourceRecursiveIntersectionEnvironment.enter beforeNew.native.machine.domains
+      IntersectionEmptyDomain.emptyKey universeValue pattern entry.identity patternId
+    let _childRequest : NodeRequest Symbol Guard := ⟨entered.1, childLeft, childRight⟩
+    let enterNext := fun domain =>
+      (requestNode domain childLeft childRight).bind (fun value => .optionalBinder binder value next)
+    Trace newUsed (.code (.node newRoot .pure)) oldSnapshot
+      (.code (.enter IntersectionEmptyDomain.emptyDomain
+        (if universeFirst then universeValue else pattern)
+        (if universeFirst then pattern else universeValue) first second enterNext)) beforeNew →
+    Trace 1 (.code (.enter IntersectionEmptyDomain.emptyDomain
+      (if universeFirst then universeValue else pattern)
+      (if universeFirst then pattern else universeValue) first second enterNext)) beforeNew
+      (.code ((requestNode entered.1 childLeft childRight).bind
+        (fun value => .optionalBinder binder value next))) reader →
+    Trace childCount (.code (requestNode entered.1 childLeft childRight)) reader
+      (.code (.pure value)) childAfter →
+    Reference.intersection binder.1 binder.2 ∉ value.free
