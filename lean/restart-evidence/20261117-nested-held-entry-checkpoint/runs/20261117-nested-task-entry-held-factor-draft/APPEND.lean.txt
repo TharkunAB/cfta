@@ -1,0 +1,50 @@
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+open EnumerationState InternedConstructorTemplates
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+variable {Typing : Type} {bits : Nat}
+variable [DecidableEq (EdgeKey Symbol Constraint)]
+set_option autoImplicit false
+
+/- Note [Genuine task entry protection]
+The current point retains TupleInputs for its completed fragment prefix.
+The actual frame ledger supplies a safe scope. Its held history supplies
+protection from the root and avoidance for the original scope inputs.
+Compose those past receipts to protect the exact current task entry.
+This factor does not inspect a callback or infer an interior state from an output.
+-/
+
+private theorem actual_source_task_entry_held_fragment_history
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits) (metadata : Metadata Typing)
+    (uv recursiveDepth : Nat)
+    (scopeOriginal : Caller (bits + 2)) (scopeBefore : Cached)
+    (allInputs : List (Node × List Suspended)) (task : IdentityActualSourceTask bits)
+    (ancestors : ActualFrameLedger formulas solver root metadata uv
+      task.point.frame scopeOriginal scopeBefore allInputs)
+    (current : ActualSourceCurrent formulas solver root scopeOriginal metadata scopeBefore
+      allInputs recursiveDepth task)
+    (held heldHandle : Nat)
+    (heldScope : ActualHeldFrameHistory formulas solver root metadata uv held heldHandle ancestors) :
+    EnumerationDischargeHistory.HeldFragmentHistory held heldHandle root.before.core task.point.before.core
+ := by
+  have scope := actual_held_frame_history_own
+    formulas solver root metadata uv held heldHandle ancestors heldScope
+  have scopeSafe := actual_frame_ledger_scope_safe formulas solver root metadata uv ancestors
+  have retainedCurrent := current
+  obtain ⟨inputFacts, _fits, _known, _reserved⟩ := retainedCurrent
+  obtain ⟨_shapes, _kept, _inventory, _memos, _packet, _query, tuple,
+    _mass, _capacity, _included, _genuine⟩ := inputFacts
+  have fromScope := actual_tuple_held_fragment_history
+    formulas solver scopeOriginal metadata scopeBefore allInputs task.point.completed
+    task.point.caller task.point.queries task.point.before tuple scopeSafe
+    held heldHandle scope.1.isolated scope.2
+  exact EnumerationDischargeHistory.HeldFragmentHistory.trans held heldHandle
+    root.before.core scopeBefore.core task.point.before.core scope.1 fromScope
+
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation

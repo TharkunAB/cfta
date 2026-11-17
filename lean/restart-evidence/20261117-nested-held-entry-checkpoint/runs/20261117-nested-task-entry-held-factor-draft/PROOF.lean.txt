@@ -1,0 +1,14 @@
+ := by
+  have scope := actual_held_frame_history_own
+    formulas solver root metadata uv held heldHandle ancestors heldScope
+  have scopeSafe := actual_frame_ledger_scope_safe formulas solver root metadata uv ancestors
+  have retainedCurrent := current
+  obtain ⟨inputFacts, _fits, _known, _reserved⟩ := retainedCurrent
+  obtain ⟨_shapes, _kept, _inventory, _memos, _packet, _query, tuple,
+    _mass, _capacity, _included, _genuine⟩ := inputFacts
+  have fromScope := actual_tuple_held_fragment_history
+    formulas solver scopeOriginal metadata scopeBefore allInputs task.point.completed
+    task.point.caller task.point.queries task.point.before tuple scopeSafe
+    held heldHandle scope.1.isolated scope.2
+  exact EnumerationDischargeHistory.HeldFragmentHistory.trans held heldHandle
+    root.before.core scopeBefore.core task.point.before.core scope.1 fromScope

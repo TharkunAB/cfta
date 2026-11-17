@@ -1,0 +1,22 @@
+ := by
+  have resourceDepthIH := real_eager_emitted_complete_at_every_depth (bits := bits)
+    holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver recursiveDepth
+  have cut := actual_all_tasks_invocation_held_ledger
+    holeKey fits admits graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+    formulas solver root resourceDepthIH selectionMembers selectionLength (.tuple point inputs)
+  dsimp only [ActualInvocationHeldLedgerAt, ActualTupleInvocationHeldLedgerAt] at cut
+  obtain ⟨events, ledger, protectedEntries, returned, frameSame, completedSame, callerSame,
+      queriesSame, beforeSame, returnedOrigin, returnedAncestors, returnedCurrent, _work⟩ :=
+    cut scopeOriginal scopeBefore allInputs ancestors origin current held heldHandle heldScope
+      index output fragments reached saved after localIndex [] 0 invoked
+  have returnedHeldScope : ActualHeldFrameHistory formulas solver root metadata uv
+      held heldHandle returnedAncestors := by
+    change ActualHeldFrameHistoryCore formulas solver root metadata uv held heldHandle
+      returned.frame scopeOriginal scopeBefore allInputs
+    rw [frameSame]
+    exact heldScope
+  have returnedProtection := actual_source_task_entry_held_fragment_history
+    formulas solver root metadata uv recursiveDepth scopeOriginal scopeBefore allInputs
+    (.tuple returned []) returnedAncestors returnedCurrent held heldHandle returnedHeldScope
+  exact ⟨events, ledger, protectedEntries, returned, frameSame, completedSame, callerSame,
+    queriesSame, beforeSame, returnedOrigin, returnedAncestors, returnedCurrent, returnedProtection⟩

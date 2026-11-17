@@ -1,0 +1,14 @@
+private theorem actual_source_task_entry_held_fragment_history
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (root : IdentityActualSourceRoot bits) (metadata : Metadata Typing)
+    (uv recursiveDepth : Nat)
+    (scopeOriginal : Caller (bits + 2)) (scopeBefore : Cached)
+    (allInputs : List (Node × List Suspended)) (task : IdentityActualSourceTask bits)
+    (ancestors : ActualFrameLedger formulas solver root metadata uv
+      task.point.frame scopeOriginal scopeBefore allInputs)
+    (current : ActualSourceCurrent formulas solver root scopeOriginal metadata scopeBefore
+      allInputs recursiveDepth task)
+    (held heldHandle : Nat)
+    (heldScope : ActualHeldFrameHistory formulas solver root metadata uv held heldHandle ancestors) :
+    EnumerationDischargeHistory.HeldFragmentHistory held heldHandle root.before.core task.point.before.core

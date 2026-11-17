@@ -1,0 +1,12 @@
+theorem children_eager_ledger_to_guarded
+    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (parent : Node) (done : TupleDone) (stopped : TupleStopped) (inputs : List (Node × List Suspended))
+    (caller : Caller width) (before : Cached) (queries : Queries)
+    (index : Nat) (output : Output) (exit : TupleExit width) (consumerIndex : Nat)
+    (path : List Nat) (position : Nat) (events : List (Event width))
+    (lower : ∀ child bucket, (child, bucket) ∈ inputs →
+      MergedOrdinaryHeight.height child < MergedOrdinaryHeight.height parent)
+    (ledger : ChildrenLedgerAt checkEmpty r n p h k edgesOf .eager
+      done stopped inputs caller before queries index output exit consumerIndex path position events) :
+    ChildrenLedgerAt checkEmpty r n p h k edgesOf (.guarded parent)
+      done stopped inputs caller before queries index output exit consumerIndex path position events

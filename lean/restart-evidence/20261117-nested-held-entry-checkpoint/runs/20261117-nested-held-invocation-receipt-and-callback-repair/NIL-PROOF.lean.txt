@@ -1,0 +1,10 @@
+ := by
+  dsimp only [ActualInvocationHeldLedgerAt, ActualTupleInvocationHeldLedgerAt]
+  intro scopeOriginal scopeBefore allInputs ancestors origin current held heldHandle heldScope
+    index output fragments reached saved after localIndex path position invoked
+  cases invoked with
+  | nil observed =>
+    refine ⟨[], .nil observed, ?_, point, rfl, ?_, rfl, rfl, rfl, origin, ancestors, current, Nat.le_refl _⟩
+    · intro event member
+      cases member
+    · exact (List.append_nil point.completed).symm

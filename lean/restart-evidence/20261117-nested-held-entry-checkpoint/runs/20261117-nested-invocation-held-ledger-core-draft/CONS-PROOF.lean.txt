@@ -1,0 +1,85 @@
+ := by
+  dsimp only [ActualInvocationHeldLedgerAt, ActualTupleInvocationHeldLedgerAt]
+  intro scopeOriginal scopeBefore allInputs ancestors origin current held heldHandle heldScope
+    index output fragments reached saved after localIndex path position invoked
+  let selected : IdentityActualSourcePoint bits := {point with count := count + 1}
+  let childPoint : IdentityActualSourcePoint bits := {point with count := count}
+  let callbacks := actual_source_frame_callbacks (SourcePruningOuterNarrow.narrow holeKey fits admits)
+    graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv point.frame
+  obtain ⟨childOrigin, childCurrent, childDecrease⟩ :=
+    actual_source_cons_current (SourcePruningOuterNarrow.narrow holeKey fits admits)
+      graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+      formulas solver root scopeOriginal scopeBefore allInputs point count incoming bucket rest origin current
+  obtain ⟨fragment, middleCaller, middleQueries, middleCache, childIndex, remainingFragments,
+      fragmentsSame, headTrace, tailTrace⟩ :=
+    SourcePruningEnumerationSharedInvocationTrace.children_done_head_invocation
+      checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf .eager
+      (fun produced => callbacks.1 (point.completed ++ produced))
+      (fun completed => callbacks.2 (point.completed ++ completed))
+      incoming bucket rest point.caller point.before point.queries index output
+      fragments reached saved after localIndex invoked
+  have headCut := taskIH (.child childPoint incoming bucket rest) childDecrease
+  dsimp only [ActualInvocationHeldLedgerAt, ActualChildInvocationHeldLedgerAt] at headCut
+  have literalHead : SourcePruningEnumerationSharedInvocationTrace.ChildInvocationAt
+      checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf .eager bucket incoming
+      childPoint.caller childPoint.before childPoint.queries
+      (actual_source_parent_tail checkEmpty edgesOf workFuel callbacks childPoint.completed rest)
+      (callbacks.2 childPoint.completed) index output
+      (.done fragment middleCaller middleQueries middleCache) childIndex := by
+    unfold actual_source_parent_tail
+    simpa only [SourcePruningEnumerationSharedInvocationTrace.runPolicy,
+      childPoint, List.append_nil] using headTrace
+  have headResult := headCut scopeOriginal scopeBefore allInputs ancestors childOrigin childCurrent
+    held heldHandle heldScope index output fragment middleCaller middleQueries middleCache childIndex
+    (path ++ [position]) literalHead
+  obtain ⟨headEvents, headLedger, headHeld, headResult⟩ := headResult
+  obtain ⟨middle, middleFrame, middleCompleted, middleCallerSame, middleQueriesSame, middleCacheSame,
+      middleOrigin, middleAncestors, middleCurrent, middleWork⟩ := headResult
+  have tailDecrease : IdentityActualSourceTask.work root.limit (.tuple middle rest) <
+      IdentityActualSourceTask.work root.limit (.tuple selected ((incoming, bucket) :: rest)) :=
+    Nat.lt_of_le_of_lt middleWork childDecrease
+  have tailCut := taskIH (.tuple middle rest) tailDecrease
+  dsimp only [ActualInvocationHeldLedgerAt, ActualTupleInvocationHeldLedgerAt] at tailCut
+  have literalTail :
+      let nextCallbacks := actual_source_frame_callbacks (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv middle.frame
+      SourcePruningEnumerationSharedInvocationTrace.ChildrenInvocationAt
+        checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf .eager
+        (fun produced => nextCallbacks.1 (middle.completed ++ produced))
+        (fun completed => nextCallbacks.2 (middle.completed ++ completed))
+        rest middle.caller middle.before middle.queries childIndex output
+        (.done remainingFragments reached saved after) localIndex := by
+    simpa only [middleFrame, middleCompleted, middleCallerSame, middleQueriesSame,
+      middleCacheSame, childPoint, callbacks, List.append_assoc, List.singleton_append] using tailTrace
+  have middleScope : ActualHeldFrameHistory formulas solver root metadata uv held heldHandle middleAncestors := by
+    change ActualHeldFrameHistoryCore formulas solver root metadata uv held heldHandle middle.frame
+      scopeOriginal scopeBefore allInputs
+    rw [middleFrame]
+    exact heldScope
+  have tailResult := tailCut scopeOriginal scopeBefore allInputs middleAncestors middleOrigin middleCurrent
+    held heldHandle middleScope childIndex output remainingFragments reached saved after localIndex
+    path (position + 1) literalTail
+  obtain ⟨tailEvents, tailLedger, tailHeld, tailResult⟩ := tailResult
+  obtain ⟨finished, finishedFrame, finishedCompleted, finishedCaller, finishedQueries, finishedCache,
+      finishedOrigin, finishedAncestors, finishedCurrent, finishedWork⟩ := tailResult
+  unfold actual_source_parent_tail at headLedger
+  have headLedgerAt := headLedger
+  simp only [SourcePruningEnumerationSharedInvocationTrace.runPolicy, childPoint, List.append_nil] at headLedgerAt
+  have tailLedgerAt := tailLedger
+  simp only [middleFrame, middleCompleted, middleCallerSame, middleQueriesSame,
+    middleCacheSame, childPoint, callbacks, List.append_assoc, List.singleton_append] at tailLedgerAt
+  refine ⟨headEvents ++ tailEvents, ?_, ?_, ?_⟩
+  · rw [fragmentsSame]
+    exact .cons_done headLedgerAt tailLedgerAt
+  · intro event member
+    rcases List.mem_append.mp member with member | member
+    · exact headHeld event member
+    · exact tailHeld event member
+  refine ⟨finished, finishedFrame.trans middleFrame, ?_, finishedCaller, finishedQueries,
+    finishedCache, finishedOrigin, finishedAncestors, finishedCurrent, ?_⟩
+  · calc
+      finished.completed = middle.completed ++ remainingFragments := finishedCompleted
+      _ = selected.completed ++ fragments := by
+        rw [middleCompleted, fragmentsSame]
+        simp only [selected, childPoint, List.append_assoc, List.singleton_append]
+  · exact Nat.le_trans finishedWork (Nat.le_trans middleWork (Nat.le_of_lt childDecrease))

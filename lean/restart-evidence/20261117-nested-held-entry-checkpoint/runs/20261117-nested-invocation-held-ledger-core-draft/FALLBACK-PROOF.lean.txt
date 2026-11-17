@@ -1,0 +1,33 @@
+ := by
+  dsimp only [ActualInvocationHeldLedgerAt, ActualChildInvocationHeldLedgerAt]
+  intro scopeOriginal scopeBefore allInputs ancestors origin current held heldHandle heldScope
+    index output fragment reached saved after localIndex path invoked
+  cases invoked with
+  | eager_fallback _ shallow =>
+    cases shallow with
+    | shallow_done actual observed =>
+      obtain ⟨_head, _returnedSame, returnedOrigin, returnedAncestors, returnedCurrent,
+          _runtime, decrease, _forecast, _growth, _positions⟩ :=
+        actual_source_fallback_child_current holeKey fits admits graph templates checkEmpty edgesOf
+          stop order recursiveDepth workFuel metadata uv formulas solver root scopeOriginal scopeBefore
+          allInputs point incoming bucket rest origin ancestors current fallback fragment _ _ reached
+          saved after _ actual
+      let returned : IdentityActualSourcePoint bits := {point with
+        completed := point.completed ++ [fragment]
+        caller := reached
+        before := after
+        queries := saved
+        mass := point.mass + point.bound
+        seed := advance point.seed (point.bound + 1)}
+      have entryR := actual_source_task_entry_held_fragment_history formulas solver root metadata uv recursiveDepth
+        scopeOriginal scopeBefore allInputs (.child point incoming bucket rest) ancestors current
+        held heldHandle heldScope
+      refine ⟨_, .eager_fallback fallback (.shallow_done actual observed), ?_,
+        returned, rfl, rfl, rfl, rfl, rfl, returnedOrigin, returnedAncestors, returnedCurrent, Nat.le_of_lt decrease⟩
+      intro event member
+      have same := List.mem_singleton.mp member
+      subst event
+      exact entryR
+  | eager_ordinary ordinary _ _ _ _ _ _ =>
+    rw [fallback] at ordinary
+    cases ordinary

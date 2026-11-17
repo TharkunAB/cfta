@@ -1,0 +1,34 @@
+ := by
+  dsimp only [ActualInvocationHeldLedgerAt, ActualChildInvocationHeldLedgerAt]
+  intro scopeOriginal scopeBefore allInputs ancestors origin current held heldHandle heldScope
+    index output fragment reached saved after localIndex path invoked
+  obtain ⟨rowsOrigin, rowsCurrent, decrease⟩ :=
+    actual_source_ordinary_current holeKey fits admits graph templates checkEmpty edgesOf stop order
+      recursiveDepth workFuel metadata uv formulas solver root scopeOriginal scopeBefore allInputs
+      point height incoming bucket rest origin ordinary current
+  have rowsCut := taskIH (.rows height {point with height := height + 1} incoming bucket rest) decrease
+  dsimp only [ActualInvocationHeldLedgerAt, ActualRowsInvocationHeldLedgerAt] at rowsCut
+  cases invoked with
+  | eager_fallback unsupported _ =>
+    rw [ordinary] at unsupported
+    cases unsupported
+  | eager_ordinary actualOrdinary sourceRows past actualRow row offset observed =>
+    have guardedSame : (SourcePruningEnumerationSharedInvocationTrace.runPolicy
+        (width := bits + 2) (Output := Output (bits + 2) Typing) (Reason := Failure (bits + 2) Typing)
+        checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf (.guarded incoming)) =
+        actual_source_guarded_child checkEmpty edgesOf workFuel incoming := by
+      unfold SourcePruningEnumerationSharedInvocationTrace.runPolicy actual_source_guarded_child
+      rfl
+    have pastAt := past
+    rw [guardedSame] at pastAt
+    have completed := rowsCut scopeOriginal scopeBefore allInputs ancestors rowsOrigin rowsCurrent
+      held heldHandle heldScope _ _ _ _ _ _ _ sourceRows
+      (by simpa only [actual_source_row_prefix_run_with_narrow] using pastAt)
+      _ output fragment reached saved after localIndex path row
+    obtain ⟨events, ledger, entriesHeld, completed⟩ := completed
+    obtain ⟨returned, frameSame, completedSame, callerSame, queriesSame, cacheSame,
+      returnedOrigin, returnedAncestors, returnedCurrent, remainingWork⟩ := completed
+    refine ⟨events, .eager_ordinary actualOrdinary sourceRows past actualRow ledger offset observed,
+      entriesHeld, returned, frameSame, completedSame, callerSame, queriesSame, cacheSame,
+      returnedOrigin, returnedAncestors, returnedCurrent,
+      Nat.le_trans remainingWork (Nat.le_of_lt decrease)⟩
