@@ -1,0 +1,88 @@
+{
+  "phases": [
+    {
+      "phase": "compile",
+      "command": [
+        "nix-shell",
+        "--expr",
+        "let pkgs = import <nixpkgs> {}; in pkgs.mkShell { inputsFrom = [ (import ./shell.nix { inherit pkgs; }) ]; packages = [ pkgs.gmp ]; }",
+        "--run",
+        "cabal exec -- ghc -O0 -package=cfta -package=cfta-generator -odir /tmp/mcfta-fix-self-source-3e0y06tt -hidir /tmp/mcfta-fix-self-source-3e0y06tt -o /tmp/mcfta-fix-self-source-3e0y06tt/probe /home/tritlo/Code/mcfta/lean/restart-evidence/20261117-source-finite-completion-full-stream-check/Probe.hs"
+      ],
+      "external_timeout_seconds": 300,
+      "cgroup": "/user.slice/user-1000.slice/user@1000.service/app.slice/mcfta-finite-full-stream-20261117-1455.scope",
+      "limits": {
+        "memory.max": "8589934592",
+        "memory.high": "8589934592",
+        "memory.swap.max": "0"
+      },
+      "started_at": "2026-11-17T14:55:08.603244+01:00",
+      "exit": 0,
+      "external_timeout": false,
+      "elapsed_seconds": 8.186897316001705
+    },
+    {
+      "phase": "public",
+      "command": [
+        "/tmp/mcfta-fix-self-source-3e0y06tt/probe",
+        "public",
+        "256"
+      ],
+      "external_timeout_seconds": 120,
+      "cgroup": "/user.slice/user-1000.slice/user@1000.service/app.slice/mcfta-finite-full-stream-20261117-1455.scope",
+      "limits": {
+        "memory.max": "8589934592",
+        "memory.high": "8589934592",
+        "memory.swap.max": "0"
+      },
+      "started_at": "2026-11-17T14:55:16.756661+01:00",
+      "child_only_LD_LIBRARY_PATH": "/nix/store/6qi8skh85ci2k9gvl27nnh3kiy32qnsz-zlib-1.3.1/lib:/nix/store/k8bqvzzw3xll9sjkai15skrj7ab4f8gg-gmp-with-cxx-6.3.0/lib",
+      "exit": 0,
+      "external_timeout": false,
+      "elapsed_seconds": 0.015888416004600003
+    },
+    {
+      "phase": "typed-reduced",
+      "command": [
+        "/tmp/mcfta-fix-self-source-3e0y06tt/probe",
+        "typed-reduced",
+        "256"
+      ],
+      "external_timeout_seconds": 120,
+      "cgroup": "/user.slice/user-1000.slice/user@1000.service/app.slice/mcfta-finite-full-stream-20261117-1455.scope",
+      "limits": {
+        "memory.max": "8589934592",
+        "memory.high": "8589934592",
+        "memory.swap.max": "0"
+      },
+      "started_at": "2026-11-17T14:55:16.777182+01:00",
+      "child_only_LD_LIBRARY_PATH": "/nix/store/6qi8skh85ci2k9gvl27nnh3kiy32qnsz-zlib-1.3.1/lib:/nix/store/k8bqvzzw3xll9sjkai15skrj7ab4f8gg-gmp-with-cxx-6.3.0/lib",
+      "exit": 0,
+      "external_timeout": false,
+      "elapsed_seconds": 0.015800335007952526
+    },
+    {
+      "phase": "typed-raw",
+      "command": [
+        "/tmp/mcfta-fix-self-source-3e0y06tt/probe",
+        "typed-raw",
+        "256"
+      ],
+      "external_timeout_seconds": 120,
+      "cgroup": "/user.slice/user-1000.slice/user@1000.service/app.slice/mcfta-finite-full-stream-20261117-1455.scope",
+      "limits": {
+        "memory.max": "8589934592",
+        "memory.high": "8589934592",
+        "memory.swap.max": "0"
+      },
+      "started_at": "2026-11-17T14:55:16.797604+01:00",
+      "child_only_LD_LIBRARY_PATH": "/nix/store/6qi8skh85ci2k9gvl27nnh3kiy32qnsz-zlib-1.3.1/lib:/nix/store/k8bqvzzw3xll9sjkai15skrj7ab4f8gg-gmp-with-cxx-6.3.0/lib",
+      "exit": 0,
+      "external_timeout": false,
+      "elapsed_seconds": 0.007689040998229757
+    }
+  ],
+  "all_input_pins_unchanged": true,
+  "joint_finite_completion_proved": false,
+  "haskell_source_changed": false
+}

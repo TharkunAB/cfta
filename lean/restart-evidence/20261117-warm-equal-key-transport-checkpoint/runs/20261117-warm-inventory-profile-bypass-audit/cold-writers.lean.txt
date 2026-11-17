@@ -1,0 +1,40 @@
+37: private theorem cold_step_no_new_mu
+38:     [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat} {A : Type}
+39:     (control : Control A) (before : Checked width)
+40:     (currentInputs : SourceCurrentAllocatedNativePhysicalExecution.Inputs control before)
+41:     (optional : ∀ (binder : Nat × Nat) (body : Value Symbol Guard)
+42:       (resume : Value Symbol Guard → Code Symbol Guard A),
+43:       control = .code (.optionalBinder binder body resume) →
+44:       InternedShallowHeap.NoNewMu before.native.machine.heap
+45:         (SourceRecursiveIntersectionMaybeMu.maybeMu binder body before.native.machine.heap).state) :
+46:     InternedShallowHeap.NoNewMu before.native.machine.heap
+47:       (step control before).state.native.machine.heap := by
+48:   cases control with
+49:   | edgeBody request resume =>
+50:       rw [step, SourceEqualityNativeDemandOperations.body_native]
+51:       exact InternedShallowHeap.noNewMu_refl _
+52:   | code code =>
+53:       cases code with
+54:       | pure | fail | enter | read | finishNode | finishEdge =>
+55:           exact InternedShallowHeap.noNewMu_refl _
+56:       | work job resume =>
+57:           change InternedShallowHeap.NoNewMu before.native.machine.heap
+58:             (lift before.operations (SourceRecursiveIntersectionNative.step SourceEqualityConstraintConstructors.top
+59:               SourceEqualityPCSNativeEdge.conjoin (.work job resume) before.native)).state.native.machine.heap
+60:           rw [cold_lift_heap]
+61:           exact SourceCurrentNativePublicationTrace.work_noNewMu job before.native.machine.heap currentInputs
+62:       | optionalBinder binder body resume =>
+63:           have kept := optional binder body resume rfl
+64:           cases called : SourceRecursiveIntersectionMaybeMu.maybeMu binder body before.native.machine.heap with
+65:           | done value heap | pending key heap =>
+66:               simpa only [step, SourceRecursiveIntersectionNative.step, called, lift, Outcome.state,
+67:                 advance, InternedNestedConstruction.Outcome.state] using kept
+68:       | node request resume =>
+69:           change InternedShallowHeap.NoNewMu before.native.machine.heap
+70:             (lift before.operations (SourceRecursiveIntersectionNative.step SourceEqualityConstraintConstructors.top
+71:               SourceEqualityPCSNativeEdge.conjoin (.node request resume) before.native)).state.native.machine.heap
+72:           rw [cold_lift_heap, SourceRecursiveIntersectionNative.node_step_machine]
+73:           exact InternedShallowHeap.noNewMu_refl _
+74:       | edge request resume =>
+75:           rw [SourceEqualityNativeDemandHeap.step_edge_heap]
+76:           exact InternedShallowHeap.noNewMu_refl _

@@ -1,0 +1,61 @@
+2445:     · obtain ⟨pattern, patternId, authentic, alternatives⟩ := optional_mixed_owner
+2446:         rootRequest machine operations used queryBefore.native.machine.heap entry body depth ordinary
+2447:         bodyEntry bodyRows bodyRead queried originalMu queryInputs.1.2.1 queryInputs.1.2.2 mixed selectedMu
+2448:       rcases alternatives with ⟨leftSame, rightSame⟩ | ⟨leftSame, rightSame⟩
+2449:       · have firstSame : first = bodyEntry.identity := by
+2450:           rw [leftSame, bodyIdentity] at leftIdentity
+2451:           exact Option.some.inj leftIdentity.symm
+2452:         have secondSame : second = entry.identity := by
+2453:           rw [rightSame] at rightIdentity
+2454:           exact Option.some.inj rightIdentity.symm
+2455:         have childLeft : childRequest.left = body := by
+2456:           simp only [childRequest, leftSame, bodyRead, SourceRecursiveIntersectionKernel.body]
+2457:         have childRight : childRequest.right = body := by
+2458:           simp only [childRequest, rightSame, SourceRecursiveIntersectionKernel.body]
+2459:         have childKeySame : childRequest.domain.key = SourceRecursiveIntersectionDomain.extend queried.domain.key
+2460:             [entry.identity] (pair bodyEntry.identity entry.identity) := by
+2461:           simpa only [childRequest, leftSame, rightSame, firstSame, secondSame, bodyRead,
+2462:             SourceRecursiveIntersectionEnvironment.bindings, SourceRecursiveIntersectionEnvironment.binder,
+2463:             List.nil_append, List.map_cons, List.map_nil] using enteredKey
+2464:         have past := SourceCurrentAllocatedNativeAuthenticBodyFirstInnerHistories.body_first_inner_histories_at_authentic_prefix
+2465:           lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+2466:           bodyEntry.identity bodyIdentity rootRequest machine machineValid sourceGrowth operations operationsValid
+2467:           fuel used readerControl current (by omega) actual pattern patternId queried.domain authentic inputs fields
+2468:           used readerControl current (by omega) actual
+2469:         have childKey := optional_key_of_codecs (width := width) childRequest
+2470:           (by rw [childLeft]; exact bodyCodec) (by rw [childRight]; exact bodyCodec)
+2471:         have product := (readChild _ _ past childKey).2.2.2 childKeySame childLeft childRight
+2472:         have reclosed := SourceCurrentAllocatedNativeCoherentOpenBodyResult.stored_open_product_optional_reclosure
+2473:           lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+2474:           current readerPhysical.1.machine.1 readerGrowth bodyEntry.identity entry.identity child childAvailable product
+2475:         rw [firstSame, secondSame, reclosed.1]
+2476:         exact InternedShallowHeap.noNewMu_refl _
+2477:       · have firstSame : first = entry.identity := by
+2478:           rw [leftSame] at leftIdentity
+2479:           exact Option.some.inj leftIdentity.symm
+2480:         have secondSame : second = entry.identity := by
+2481:           rw [rightSame] at rightIdentity
+2482:           exact Option.some.inj rightIdentity.symm
+2483:         have childLeft : childRequest.left = body := by
+2484:           simp only [childRequest, leftSame, SourceRecursiveIntersectionKernel.body]
+2485:         have childRight : childRequest.right = .reference (.interned entry.identity) := by
+2486:           simp only [childRequest, rightSame, SourceRecursiveIntersectionKernel.body]
+2487:         have childKeySame : childRequest.domain.key = SourceRecursiveIntersectionDomain.extend queried.domain.key
+2488:             [entry.identity] (pair entry.identity entry.identity) := by
+2489:           simpa only [childRequest, leftSame, rightSame, firstSame, secondSame,
+2490:             SourceRecursiveIntersectionEnvironment.bindings, SourceRecursiveIntersectionEnvironment.binder,
+2491:             List.append_nil, List.map_cons, List.map_nil] using enteredKey
+2492:         have past := SourceCurrentAllocatedNativeAuthenticCoherentInnerHistory.authentic_coherent_inner_returned_at_actual_root_prefix
+2493:           lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+2494:           bodyEntry.identity bodyIdentity rootRequest machine machineValid sourceGrowth operations operationsValid
+2495:           fuel used used readerControl readerControl current current (by omega) actual pattern patternId
+2496:           queried.domain authentic (by omega) actual inputs fields
+2497:         have childKey := optional_key_of_codecs (width := width) childRequest
+2498:           (by rw [childLeft]; exact bodyCodec) (by rw [childRight]; exact ⟨.ref entry.identity, rfl⟩)
+2499:         have product := (readChild _ _ past childKey).2 childKeySame childLeft childRight
+2500:         have reclosed := SourceCurrentAllocatedNativeCoherentOpenBodyResult.stored_open_product_optional_reclosure
+2501:           lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+2502:           current readerPhysical.1.machine.1 readerGrowth entry.identity entry.identity child childAvailable product
+2503:         rw [firstSame, secondSame, reclosed.1]
+2504:         exact InternedShallowHeap.noNewMu_refl _
+2505:   · obtain ⟨pattern, patternId, bodyId, originalDomain, bodyIdRead, authentic, alternatives⟩ := auxiliary

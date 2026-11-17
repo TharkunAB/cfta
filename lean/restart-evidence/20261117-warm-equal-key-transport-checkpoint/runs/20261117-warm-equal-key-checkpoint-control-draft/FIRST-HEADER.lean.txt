@@ -1,0 +1,44 @@
+theorem old_warm_entry_full_pattern_after_equal_key_entry
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (oldRoot : NodeRequest Symbol Guard) (oldStart : Checked width)
+    (initialPhysical : Physical oldStart.native)
+    (wholeCount : Nat) (oldControl : Control (Value Symbol Guard)) (oldSnapshot : Checked width)
+    (wholeActual : Trace wholeCount (.code (.node oldRoot .pure)) oldStart oldControl oldSnapshot)
+    (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (oldPattern : Value Symbol Guard) (oldPatternId : Nat)
+    (oldDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey)
+    (oldAuthentic : SourceCurrentAllocatedNativeSourceWarmEntry.AuthenticEntryAt
+      (width := width) oldRoot oldStart wholeCount
+      entry body depth ordinary oldPattern oldPatternId oldDomain)
+    (newPattern : Value Symbol Guard) (newClosed : newPattern.free = []) (newPatternId : Nat)
+    (newIdentity : identity newPattern = some newPatternId)
+    (newKind : SourceRecursiveIntersectionControl.tag newPattern = 1 ∨
+      SourceRecursiveIntersectionControl.tag newPattern = 3)
+    (universeFirst : Bool)
+    (next : Interned IntersectionFlatMemoKeyDomain.DomainKey → Code Symbol Guard (Value Symbol Guard))
+    (newRoot : NodeRequest Symbol Guard) (newFuel newUsed : Nat)
+    (beforeNew reader : Checked width) (newControl : Control (Value Symbol Guard))
+    (newBound : newUsed + 1 ≤ newFuel)
+    (newPrefix : Trace newUsed (.code (.node newRoot .pure)) oldSnapshot
+      (.code (.enter IntersectionEmptyDomain.emptyDomain
+        (if universeFirst then .mu entry body depth ordinary else newPattern)
+        (if universeFirst then newPattern else .mu entry body depth ordinary)
+        (if universeFirst then entry.identity else newPatternId)
+        (if universeFirst then newPatternId else entry.identity) next)) beforeNew)
+    (newEntry : Trace 1
+      (.code (.enter IntersectionEmptyDomain.emptyDomain
+        (if universeFirst then .mu entry body depth ordinary else newPattern)
+        (if universeFirst then newPattern else .mu entry body depth ordinary)
+        (if universeFirst then entry.identity else newPatternId)
+        (if universeFirst then newPatternId else entry.identity) next)) beforeNew newControl reader)
+    (sameKey : (SourceRecursiveIntersectionEnvironment.enter beforeNew.native.machine.domains
+      IntersectionEmptyDomain.emptyKey (.mu entry body depth ordinary) newPattern
+      entry.identity newPatternId).1.key = oldDomain.key) :
+    oldPatternId = newPatternId ∧
+    oldPattern = newPattern ∧
+    oldDomain = (SourceRecursiveIntersectionEnvironment.enter beforeNew.native.machine.domains
+      IntersectionEmptyDomain.emptyKey (.mu entry body depth ordinary) newPattern
+      entry.identity newPatternId).1 ∧
+    height oldPattern = height newPattern ∧
+    Trace (newUsed + 1) (.code (.node newRoot .pure)) oldSnapshot newControl reader ∧
+    newUsed + 1 ≤ newFuel

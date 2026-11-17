@@ -1,0 +1,78 @@
+  have oldPhysical := (SourceCurrentNativeEnterCommonOperand.checked_trace_extension wholeActual initialPhysical).1
+  obtain ⟨oldClosed, oldIdentity, oldKind, oldUniverseFirst, oldUsed, beforeOld, oldNext, oldData⟩ := oldAuthentic
+  dsimp only at oldData
+  obtain ⟨oldBound, oldPrefix, _oldAllocation, _oldOne, oldDomainEq⟩ := oldData
+  let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+  let oldEntered := SourceRecursiveIntersectionEnvironment.enter beforeOld.native.machine.domains
+    IntersectionEmptyDomain.emptyKey universeValue oldPattern entry.identity oldPatternId
+  change oldDomain = oldEntered.1 at oldDomainEq
+  have oldTotal : oldUsed + (wholeCount - oldUsed) = wholeCount := by omega
+  have oldWhole : Trace (oldUsed + (wholeCount - oldUsed)) (.code (.node oldRoot .pure))
+      (⟨initial width machine, operations⟩ : Checked width) oldControl oldSnapshot := by
+    simpa only [oldTotal] using wholeActual
+  have oldSplit := SourceCurrentHereditaryNativePhysicalSplit.split oldPrefix.steps oldWhole
+  have beforeOldPhysical :=
+    (SourceCurrentNativeEnterCommonOperand.checked_trace_extension oldSplit.1 initialPhysical).1
+  have oldLength : (wholeCount - oldUsed - 1) + 1 = wholeCount - oldUsed := by omega
+  have oldSuffix : Trace ((wholeCount - oldUsed - 1) + 1)
+      (.code (.enter IntersectionEmptyDomain.emptyDomain
+        (if oldUniverseFirst then universeValue else oldPattern)
+        (if oldUniverseFirst then oldPattern else universeValue)
+        (if oldUniverseFirst then entry.identity else oldPatternId)
+        (if oldUniverseFirst then oldPatternId else entry.identity) oldNext)) beforeOld oldControl oldSnapshot := by
+    simpa only [oldLength] using oldSplit.2
+  have oldReceipt := SourceCurrentNativeOrderedOriginalEntry.ordered_original_entry_common_operands
+    entry body depth ordinary oldPattern oldClosed oldPatternId oldIdentity oldKind oldUniverseFirst
+    oldNext (wholeCount - oldUsed - 1) beforeOld oldSnapshot oldControl beforeOldPhysical oldSuffix
+  obtain ⟨_oldCanonical, _oldStep, _oldChecked, _oldTail, _oldHeap, _oldCache, _oldOperations,
+      _oldUBefore, _oldPBefore, _oldUAfter, oldAvailable, _oldStartedDomain,
+      oldKnown, oldKey, _oldNonempty, _oldReaderPhysical, _oldExtension, _oldClassify⟩ := oldReceipt
+  have oldDomainKnown : Domain oldSnapshot.native.machine oldDomain := by
+    rw [oldDomainEq]
+    exact oldKnown
+  have oldDomainKey : oldDomain.key = extend IntersectionEmptyDomain.emptyKey
+      [entry.identity] (pair entry.identity oldPatternId) := by
+    rw [oldDomainEq]
+    exact oldKey
+  have beforeNewPhysical :=
+    (SourceCurrentNativeEnterCommonOperand.checked_trace_extension newPrefix oldPhysical).1
+  have newReceipt := SourceCurrentNativeOrderedOriginalEntry.ordered_original_entry_common_operands
+    entry body depth ordinary newPattern newClosed newPatternId newIdentity newKind universeFirst
+    next 0 beforeNew reader newControl beforeNewPhysical newEntry
+  obtain ⟨_newCanonical, _newStep, _newChecked, _newTail, _newHeap, _newCache, _newOperations,
+      _newUBefore, _newPBefore, _newUAfter, newAvailable, _newStartedDomain,
+      newKnown, newKey, _newNonempty, _newReaderPhysical, _newExtension, _newClassify⟩ := newReceipt
+  let newEntered := SourceRecursiveIntersectionEnvironment.enter beforeNew.native.machine.domains
+    IntersectionEmptyDomain.emptyKey universeValue newPattern entry.identity newPatternId
+  change newEntered.1.key = oldDomain.key at sameKey
+  change request.domain = newEntered.1 at domainMatches
+  change newEntered.1.key = extend IntersectionEmptyDomain.emptyKey [entry.identity]
+    (pair entry.identity newPatternId) at newKey
+  have warmSpan : Trace (newUsed + 1) (.code (.node newRoot .pure)) oldSnapshot newControl reader :=
+    newPrefix.trans newEntry
+  have reached := SourceCurrentNativeEnterCommonOperand.checked_trace_extension warmSpan oldPhysical
+  have oldAtReader : Available reader.native.machine.heap oldPattern :=
+    reached.2.available oldPattern oldAvailable
+  have oldDomainAtReader : Domain reader.native.machine oldDomain :=
+    SourceRecursiveIntersectionKernel.Domain.grows oldDomain oldDomainKnown reached.2
+  have oldPairMember : pair entry.identity oldPatternId ∈ oldDomain.key.seen := by
+    rw [oldDomainKey]
+    exact (extend_seen IntersectionEmptyDomain.emptyKey [entry.identity]
+      (pair entry.identity oldPatternId) (pair entry.identity oldPatternId)).2 (Or.inl rfl)
+  have newPairMember : pair entry.identity oldPatternId ∈ newEntered.1.key.seen := by
+    simpa only [sameKey] using oldPairMember
+  rw [newKey] at newPairMember
+  have pairEq : pair entry.identity oldPatternId = pair entry.identity newPatternId := by
+    rcases (extend_seen IntersectionEmptyDomain.emptyKey [entry.identity]
+      (pair entry.identity newPatternId) (pair entry.identity oldPatternId)).1 newPairMember with equal | absent
+    · exact equal
+    · cases absent
+  have samePatternId : oldPatternId = newPatternId :=
+    pair_fixed_left_injective entry.identity oldPatternId newPatternId pairEq
+  have patternEq : oldPattern = newPattern :=
+    SourceSynthesisUniverseMixedDescendantFreshness.closed_identity_injective
+      reader.native.machine.heap reached.1.machine.1 oldPattern newPattern oldAtReader newAvailable
+      oldClosed newClosed oldPatternId oldIdentity (by simpa only [samePatternId] using newIdentity)
+  have domainsEq : oldDomain = newEntered.1 :=
+    represented_same_key reader.native.machine.domains oldDomain newEntered.1
+      oldDomainAtReader.represented newKnown.represented sameKey.symm

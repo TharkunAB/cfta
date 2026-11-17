@@ -1,0 +1,13 @@
+route=typed-reduced; status=observation_only
+library=Library {libraryGroups = [("fix",TFun (TFun (TVar "b") (TVar "b")) (TVar "b"),["fix"]),("k",TFun (TVar "a") (TCons "Int" []),["k"])], libraryArgumentOnly = [], libraryAvoid = [], libraryEncoding = FirstOrder}
+query=Query {queryArguments = [], queryGoal = TCons "Int" []}; source_size=3
+target=infinite_type_candidate; source=k (fix fix); finite_type_expected=False
+target=finite_control; source=k (k fix); finite_type_expected=True
+phase=source_construction_and_enumeration_begin
+match.name=finite_control
+match.output_index=1
+match.actual=(Node "filter" [Node "Int" [],Node "app" [Node "Int" [],Node "(->)" [],Node "k" [Node "->" [Node "(->)" [],Node "Int" [],Node "Int" []]],Node "app" [Node "Int" [],Node "(->)" [],Node "k" [Node "->" [Node "(->)" [],Node "->" [Node "(->)" [],Node "->" [Node "(->)" [],Node "Mu" [],Node "Mu" []],Node "Mu" []],Node "Int" []]],Node "fix" [Node "->" [Node "(->)" [],Node "->" [Node "(->)" [],Node "Mu" [],Node "Mu" []],Node "Mu" []]]]]],[])
+observed.outputs=5
+observed.exhaustion=True
+result.name=infinite_type_candidate status=absent_after_exhaustion finite_type_expected=False
+result.name=finite_control status=present finite_type_expected=True

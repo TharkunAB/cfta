@@ -1,0 +1,18 @@
+57: /-- One literal return retains its computed inventory and the same global table bundle. -/
+58: structure Receipt [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+59:     (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+60:     (inventory : Inventory) (left right : Value Symbol Guard) (before : Checked width)
+61:     (value : Value Symbol Guard) (after : Checked width) (memos : Memos) : Prop where
+62:   actual : Step left right before value after
+63:   ready : Ready after
+64:   admitted : At formulas solver inventory after
+65:   effects : SourceCurrentConjunctionRowsAllocation.Effects (physical before) (physical after)
+66:   extension : Extension before.native.machine after.native.machine
+67:   available : Available after.native.machine.heap value
+68:   closed : value.free = []
+69:   meaning : ∀ ambient term,
+70:     InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient value term ↔
+71:       InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient left term ∧
+72:       InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient right term
+73:   globals : Valid after.native.machine.heap memos
+74:   events : ∃ events, SourceGlobalUnfold.Runs ⟨before.native.machine.heap, memos.unfolding⟩

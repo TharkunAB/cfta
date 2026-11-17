@@ -1,0 +1,13 @@
+48: def MixedQualifiedAt
+49:     [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+50:     (rootRequest : NodeRequest Symbol Guard) (start : Checked width) (wholeCount : Nat)
+51:     (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+52:     (request : NodeRequest Symbol Guard) : Prop :=
+53:   ∃ (pattern : Value Symbol Guard) (patternId : Nat) (openAlias operand : Value Symbol Guard),
+54:     AuthenticEntryAt (width := width) rootRequest start wholeCount entry body depth ordinary
+55:       pattern patternId request.domain ∧
+56:     (openAlias = body ∨ openAlias = .reference (.interned entry.identity)) ∧
+57:     Profile entry.identity operand ∧ height operand ≤ height pattern ∧
+58:     (openAlias = .reference (.interned entry.identity) → height operand < height pattern) ∧
+59:     ((request.left = openAlias ∧ request.right = operand) ∨
+60:       (request.left = operand ∧ request.right = openAlias))
