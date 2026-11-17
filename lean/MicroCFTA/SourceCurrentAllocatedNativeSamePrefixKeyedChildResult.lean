@@ -276,3 +276,79 @@ theorem keyed_child_law_at_actual_reader
     child key keyed childNext childBefore childAfter value childBound origin childActual
 
 end MicroCFTA.SourceCurrentAllocatedNativeSamePrefixKeyedChildResult
+
+namespace MicroCFTA.SourceCurrentAllocatedNativeSamePrefixKeyedChildResult
+open InternedConstructorTemplates SourceRecursiveIntersectionCode SourceRecursiveIntersectionThunks
+open SourceEqualityNativeDemand
+open SourceCurrentAllocatedNativeContextCache (Returned)
+open SourceCurrentAllocatedNativePhysicalTraceCompletion (Trace)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Checked" => SourceEqualityNativeDemand.State
+set_option autoImplicit false
+
+/- Note [Warm child reader]
+The original reader proof uses cold initialization to obtain Physical.
+This export starts at the actual checked state with that past fact.
+The checked whole trace supplies the child inputs and the exact suffix.
+The past Returned law applies to the same retained child cell.
+This theorem supplies no source qualification or payload meaning.
+-/
+
+theorem keyed_child_law_at_actual_warm_reader
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (nodeLaw : NodeRequest Symbol Guard → Value Symbol Guard → Prop)
+    (edgeLaw : EdgeRequest Symbol Guard → EdgeValue Symbol Guard → Prop)
+    (rootRequest : NodeRequest Symbol Guard)
+    (start : Checked width)
+    (initialPhysical : SourceCurrentAllocatedNativePhysicalCache.Valid start.native)
+    (fuel wholeCount used childCount : Nat)
+    (readerControl : Control (Value Symbol Guard)) (beforeFinish : Checked width)
+    (_bounded : wholeCount ≤ fuel)
+    (whole : Trace wholeCount (.code (.node rootRequest .pure))
+      start
+      readerControl beforeFinish)
+    (past : Returned nodeLaw beforeFinish.native.nodes ∧ Returned edgeLaw beforeFinish.native.edges)
+    (child : NodeRequest Symbol Guard) (key : IntersectionFlatMemoKeyDomain.Triple width)
+    (keyed : SourceRecursiveIntersectionMemo.requestKey width child.domain child.left child.right = some key)
+    (childNext : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard))
+    (childBefore childAfter : Checked width) (value : Value Symbol Guard)
+    (childBound : used + childCount ≤ wholeCount)
+    (origin : Steps used (.code (.node rootRequest .pure))
+      start
+      (.code ((requestNode child.domain child.left child.right).bind childNext)) childBefore)
+    (childActual : Steps childCount (.code (requestNode child.domain child.left child.right))
+      childBefore (.code (.pure value)) childAfter) :
+    nodeLaw child value ∧ ∃ handle,
+      childAfter.native.nodes.cells handle = some ⟨child, .returned value⟩ ∧
+      beforeFinish.native.nodes.cells handle = some ⟨child, .returned value⟩ ∧
+      Trace (wholeCount - used - childCount) (.code (childNext value)) childAfter
+        readerControl beforeFinish ∧
+      SourceEqualityNativeDemandMemo.Retained childAfter.native beforeFinish.native
+ := by
+  have childPositive : 0 < childCount := by
+    cases childCount with
+    | zero => cases (steps_zero _ _ _ _ childActual).1
+    | succ => omega
+  obtain ⟨checkedOrigin, outerTrace⟩ := checked_split whole origin (by omega)
+  have childPhysical := (SourceCurrentNativeEnterCommonOperand.checked_trace_extension checkedOrigin initialPhysical).1
+  have boundInputs := first_inputs outerTrace (by omega)
+  have childInputs := SourceCurrentAllocatedNativeSemanticTraceReadback.inputs_before_bind
+    (.code (requestNode child.domain child.left child.right)) childNext childBefore boundInputs
+  change NodeReady childBefore.native.machine child ∧
+    (∀ key, SourceRecursiveIntersectionMemo.requestKey width child.domain child.left child.right = some key →
+      SourceRecursiveIntersectionMemo.KeySafe width child.domain child.left child.right) at childInputs
+  obtain ⟨handle, stored⟩ := keyed_cell childCount child childBefore childAfter value key keyed
+    childPhysical childInputs.1 childInputs.2 childActual
+  have boundChild : Steps childCount
+      (.code ((requestNode child.domain child.left child.right).bind childNext)) childBefore
+      (.code (childNext value)) childAfter := by
+    have bound := childActual.bind _ _ _ _ _ childNext
+    simpa only [Control.bind, Code.bind] using bound
+  obtain ⟨checkedChild, actualSuffix⟩ := checked_split outerTrace boundChild (by omega)
+  have afterPhysical := (SourceCurrentNativeEnterCommonOperand.checked_trace_extension checkedChild childPhysical).1
+  have retained := SourceCurrentNativeWriterReadyRetention.trace_retained actualSuffix afterPhysical.shape
+  have currentCell := retained.nodes handle child value stored
+  exact ⟨past.1 handle child value currentCell, handle, stored, currentCell, actualSuffix, retained⟩
+
+end MicroCFTA.SourceCurrentAllocatedNativeSamePrefixKeyedChildResult
