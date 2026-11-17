@@ -1,0 +1,43 @@
+theorem original_universe_body_first_callbacks_at_numerical_base
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (bodyId : Nat) (bodyIdentity : identity body = some bodyId)
+    (heap : InternedConstructorTemplates.State Symbol Guard) (facts : Facts heap)
+    (sourceGrowth : Grows sourceHeap heap)
+    (patternId : Nat) (patternUniverseApart : patternId ≠ entry.identity)
+    (patternBodyApart : patternId ≠ bodyId) :
+    let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+    let referenceValue : Value Symbol Guard := .reference (.interned entry.identity)
+    let baseKey := extend IntersectionEmptyDomain.emptyKey [entry.identity] (pair entry.identity patternId)
+    let selectedKey := extend baseKey [entry.identity] (pair bodyId entry.identity)
+    (∀ actualDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey,
+      actualDomain.key = selectedKey →
+      compileNode ⟨actualDomain, body, body⟩ =
+        compileRows actualDomain (InternedEdgeResidency.nodeEdges body) (InternedEdgeResidency.nodeEdges body)) ∧
+    (∀ actualDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey,
+      actualDomain.key = selectedKey →
+      decision actualDomain.key universeValue referenceValue = .leftMu) ∧
+    (∀ actualDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey,
+      actualDomain.key = selectedKey →
+      ∀ current : Cache.State IntersectionFlatMemoKeyDomain.DomainKey, Cache.Valid current →
+      compileNode ⟨(SourceRecursiveIntersectionEnvironment.enter current actualDomain.key
+        universeValue referenceValue entry.identity entry.identity).1,
+        SourceRecursiveIntersectionKernel.body universeValue,
+        SourceRecursiveIntersectionKernel.body referenceValue⟩ =
+        .pure (repeatedValue (pair bodyId entry.identity))) ∧
+    (let binder := pair entry.identity entry.identity
+      Reference.intersection binder.1 binder.2 ∉
+        (repeatedValue (pair bodyId entry.identity) : Value Symbol Guard).free) ∧
+    (∀ actualDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey,
+      actualDomain.key = selectedKey →
+      ∀ current : Checked width, Physical current.native →
+      Grows sourceHeap current.native.machine.heap →
+      SourceEqualityNativeDemand.step
+        (.code (compileNode ⟨actualDomain, referenceValue, referenceValue⟩)) current =
+        .yielded (.code (requestNode actualDomain universeValue referenceValue)) current)

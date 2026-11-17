@@ -1,0 +1,51 @@
+theorem original_universe_retained_mu_query_prefix_admission
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (rootRequest : NodeRequest Symbol Guard) (start : Checked width)
+    (initialPhysical : SourceCurrentAllocatedNativePhysicalCache.Valid start.native)
+    (sourceGrowth : Grows sourceHeap start.native.machine.heap)
+    (rootDomain : rootRequest.domain = IntersectionEmptyDomain.emptyDomain)
+    (pastInventory : InternedShallowHeap.NoNewMu sourceHeap start.native.machine.heap)
+    (leftAvailable : Available start.native.machine.heap rootRequest.left)
+    (rightAvailable : Available start.native.machine.heap rootRequest.right)
+    (leftClosed : rootRequest.left.free = []) (rightClosed : rootRequest.right.free = [])
+    (operationsValid : SourceEqualityConstraintMemoAllocation.Valid start.operations)
+    (fuel wholeCount queryUsed : Nat)
+    (readerControl : Control (Value Symbol Guard)) (reader : Checked width)
+    (queried : NodeRequest Symbol Guard)
+    (queryNext : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard))
+    (queryBefore : Checked width)
+    (wholeBound : wholeCount ≤ fuel)
+    (wholeActual : Trace wholeCount (.code (.node rootRequest .pure))
+      start readerControl reader)
+    (queryBound : queryUsed ≤ wholeCount)
+    (queryActual : Trace queryUsed (.code (.node rootRequest .pure))
+      start
+      (.code (.node queried queryNext)) queryBefore)
+    (selectedMu :
+      SourceRecursiveIntersectionControl.decision queried.domain.key queried.left queried.right = .bothMu ∨
+      SourceRecursiveIntersectionControl.decision queried.domain.key queried.left queried.right = .leftMu ∨
+      SourceRecursiveIntersectionControl.decision queried.domain.key queried.left queried.right = .rightMu)
+    (inputs : InputsThrough fuel (.code (.node rootRequest .pure))
+      start)
+    (fields : FieldsThrough fuel (.code (.node rootRequest .pure))
+      start) :
+    Qualified (width := width) rootRequest start wholeCount entry body depth ordinary queried ∨
+      ∃ (fullPattern : Value Symbol Guard) (patternId bodyId : Nat)
+        (originalDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey),
+        SourceRecursiveIntersectionControl.identity body = some bodyId ∧
+        AuthenticEntryAt (width := width) rootRequest start wholeCount
+          entry body depth ordinary fullPattern patternId originalDomain ∧
+        ((queried.domain.key = SourceRecursiveIntersectionDomain.extend originalDomain.key [entry.identity]
+            (SourceRecursiveIntersectionControl.pair bodyId entry.identity) ∧
+          queried.left = .mu entry body depth ordinary ∧
+          queried.right = .reference (.interned entry.identity)) ∨
+         (queried.domain.key = SourceRecursiveIntersectionDomain.extend originalDomain.key [entry.identity]
+            (SourceRecursiveIntersectionControl.pair entry.identity entry.identity) ∧
+          queried.left = body ∧ queried.right = .mu entry body depth ordinary))

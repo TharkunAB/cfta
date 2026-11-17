@@ -1,0 +1,74 @@
+  have initialSeeds : Seeds sourceHeap entry body depth ordinary bodyId
+      (⟨initial width machine, operations⟩ : Checked width) := by
+    refine ⟨pastInventory, ?_, ?_, ?_, ?_, ?_⟩
+    · exact SourceCurrentAllocatedNativeContextCache.returned_empty _
+    · exact SourceCurrentAllocatedNativeContextCache.returned_empty _
+    · exact SourceCurrentAllocatedNativeContextCache.returned_empty _
+    · exact SourceCurrentAllocatedNativeContextCache.returned_empty _
+    · intro patternId _apartUniverse _apartBody
+      exact ⟨SourceCurrentAllocatedNativeContextCache.returned_empty _,
+        SourceCurrentAllocatedNativeContextCache.returned_empty _,
+        SourceCurrentAllocatedNativeContextCache.returned_empty _,
+        SourceCurrentAllocatedNativeContextCache.returned_empty _⟩
+  have rootAvailable (index : Nat) (bounded : index < queryCount) :
+      Available (states index).native.machine.heap (roots index).left ∧
+      Available (states index).native.machine.heap (roots index).right := by
+    have plan := inputs index bounded
+    have head : Inputs (.code (.node (roots index) .pure)) (states index) := by
+      cases observedFuel : queryFuel index with
+      | zero => simpa only [observedFuel, InputsThrough] using plan
+      | succ fuel =>
+          have selected : InputsThrough (fuel + 1)
+              (.code (.node (roots index) .pure)) (states index) := by
+            simpa only [observedFuel] using plan
+          exact selected.1
+    exact head.1.2
+  have endpoint : ∀ index : Nat, index ≤ queryCount →
+      Physical (states index).native ∧
+      Grows sourceHeap (states index).native.machine.heap ∧
+      SourceEqualityConstraintMemoAllocation.Valid (states index).operations ∧
+      Seeds sourceHeap entry body depth ordinary bodyId (states index) := by
+    intro index
+    induction index with
+    | zero =>
+        intro _bounded
+        rw [initialState]
+        exact ⟨SourceCurrentAllocatedNativePhysicalCache.initial_valid machine machineValid,
+          sourceGrowth, operationsValid, initialSeeds⟩
+    | succ index ih =>
+        intro bounded
+        have within : index < queryCount := by omega
+        have previous := ih (by omega)
+        have closed := seeds_preserved_at_every_actual_query_endpoint
+          lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+          bodyId bodyIdentity (roots index) (states index) previous.1 previous.2.1 previous.2.2.1
+          previous.2.2.2 (rootDomains index within) (rootAvailable index within)
+          (rootClosed index within) (queryFuel index) (inputs index within) (fields index within)
+        have physical := query_sequence_execute_physical_extension
+          (queryFuel index) (.code (.node (roots index) .pure)) (states index)
+          previous.1 (inputs index within)
+        have operations := SourceEqualityNativeDemandOperations.execute_operations
+          (queryFuel index) (.code (.node (roots index) .pure)) (states index)
+          previous.2.2.1 (fields index within)
+        have next :
+            Physical (SourceEqualityNativeDemand.execute (queryFuel index)
+              (.code (.node (roots index) .pure)) (states index)).state.native ∧
+            Grows sourceHeap (SourceEqualityNativeDemand.execute (queryFuel index)
+              (.code (.node (roots index) .pure)) (states index)).state.native.machine.heap ∧
+            SourceEqualityConstraintMemoAllocation.Valid
+              (SourceEqualityNativeDemand.execute (queryFuel index)
+                (.code (.node (roots index) .pure)) (states index)).state.operations ∧
+            Seeds sourceHeap entry body depth ordinary bodyId
+              (SourceEqualityNativeDemand.execute (queryFuel index)
+                (.code (.node (roots index) .pure)) (states index)).state :=
+          ⟨physical.1, grows_trans previous.2.1 physical.2.heap, operations.1, closed.1⟩
+        simpa only [Nat.succ_eq_add_one, actual index within] using next
+  refine ⟨endpoint, ?_⟩
+  intro index within used rest after bounded actualPrefix
+  have previous := endpoint index (by omega)
+  exact (seeds_preserved_at_every_actual_query_endpoint
+    lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+    bodyId bodyIdentity (roots index) (states index) previous.1 previous.2.1 previous.2.2.1
+    previous.2.2.2 (rootDomains index within) (rootAvailable index within)
+    (rootClosed index within) (queryFuel index) (inputs index within) (fields index within)).2
+      used rest after bounded actualPrefix

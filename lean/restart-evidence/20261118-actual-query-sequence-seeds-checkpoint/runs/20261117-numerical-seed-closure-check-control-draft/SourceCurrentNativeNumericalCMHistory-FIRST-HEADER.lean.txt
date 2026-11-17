@@ -1,0 +1,35 @@
+theorem numerical_auxiliary_payloads_at_actual_prefix_of_past_seeds
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (bodyId : Nat) (bodyIdentity : identity body = some bodyId)
+    (rootRequest : NodeRequest Symbol Guard) (start : Checked width)
+    (initialPhysical : Physical start.native)
+    (sourceGrowth : Grows sourceHeap start.native.machine.heap)
+    (operationsValid : SourceEqualityConstraintMemoAllocation.Valid start.operations)
+    (fuel prefixCount : Nat) (prefixControl : Control (Value Symbol Guard)) (current : Checked width)
+    (prefixBound : prefixCount ≤ fuel)
+    (inputs : InputsThrough fuel (.code (.node rootRequest .pure)) start)
+    (fields : FieldsThrough fuel (.code (.node rootRequest .pure)) start)
+    (prefixActual : Trace prefixCount (.code (.node rootRequest .pure)) start prefixControl current)
+    (pastSeeds : Seeds sourceHeap entry body depth ordinary bodyId start) :
+    ∀ patternId : Nat, patternId ≠ entry.identity → patternId ≠ bodyId →
+      let domain : IntersectionFlatMemoKeyDomain.DomainKey :=
+        extend IntersectionEmptyDomain.emptyKey [entry.identity] (pair entry.identity patternId)
+      let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+      let bodyFirst := extend domain [entry.identity] (pair bodyId entry.identity)
+      let diagonalFirst := extend domain [entry.identity] (pair entry.identity entry.identity)
+      let diagonalTerminal := extend diagonalFirst [entry.identity] (pair bodyId entry.identity)
+      Returned (SourceCurrentAllocatedNativeBodyFirstKeyQueryGlobalLaws.NodeResult
+        entry.identity bodyId bodyFirst body universeValue) current.native.nodes ∧
+      Returned (SourceCurrentAllocatedNativeBodyFirstKeyQueryGlobalLaws.EdgeResult
+        entry.identity bodyId bodyFirst universeValue) current.native.edges ∧
+      Returned (SourceCurrentAllocatedNativeCoherentOpenBodyQueryGlobalLaws.NodeResult
+        entry.identity entry.identity entry.identity diagonalTerminal diagonalFirst body universeValue)
+        current.native.nodes ∧
+      Returned SourceCurrentAllocatedNativeTopRowQueryGlobalLaws.EdgeResult current.native.edges

@@ -1,0 +1,13 @@
+private theorem authentic_numerical_key_and_identity_apart
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (rootRequest : NodeRequest Symbol Guard) (start : Checked width)
+    (initialPhysical : Physical start.native)
+    (wholeCount : Nat) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (bodyEntry : Interned NodeKey) (bodyRows : List (EdgeValue Symbol Guard))
+    (bodyShape : body = .node bodyEntry bodyRows 0 [.interned entry.identity])
+    (pattern : Value Symbol Guard) (patternId : Nat)
+    (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey)
+    (authentic : AuthenticEntryAt (width := width) rootRequest start wholeCount
+      entry body depth ordinary pattern patternId domain) :
+    domain.key = extend IntersectionEmptyDomain.emptyKey [entry.identity] (pair entry.identity patternId) ∧
+      patternId ≠ entry.identity ∧ patternId ≠ bodyEntry.identity

@@ -1,0 +1,35 @@
+theorem singleton_edges_at_every_actual_prefix_of_past_seeds
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (bodyId : Nat) (bodyIdentity : identity body = some bodyId)
+    (rootRequest : NodeRequest Symbol Guard) (start : Checked width)
+    (initialPhysical : Physical start.native)
+    (sourceGrowth : Grows sourceHeap start.native.machine.heap)
+    (operationsValid : SourceEqualityConstraintMemoAllocation.Valid start.operations)
+    (pastSeeds : Seeds sourceHeap entry body depth ordinary bodyId start)
+    (rootDomain : rootRequest.domain = IntersectionEmptyDomain.emptyDomain)
+    (leftAvailable : Available start.native.machine.heap rootRequest.left)
+    (rightAvailable : Available start.native.machine.heap rootRequest.right)
+    (leftClosed : rootRequest.left.free = []) (rightClosed : rootRequest.right.free = [])
+    (fuel wholeCount : Nat) (rest : Control (Value Symbol Guard)) (reader : Checked width)
+    (wholeBound : wholeCount ≤ fuel)
+    (inputs : InputsThrough fuel (.code (.node rootRequest .pure)) start)
+    (fields : FieldsThrough fuel (.code (.node rootRequest .pure)) start)
+    (wholeActual : Trace wholeCount (.code (.node rootRequest .pure)) start rest reader) :
+    Returned (fun (request : EdgeRequest Symbol Guard) (row : EdgeValue Symbol Guard) =>
+      ∀ patternId : Nat, request.domain.key =
+        extend IntersectionEmptyDomain.emptyKey [entry.identity] (pair entry.identity patternId) →
+      ∀ child ∈ row.children, Profile entry.identity child) reader.native.edges ∧
+    ∀ (used : Nat) (currentControl : Control (Value Symbol Guard)) (current : Checked width),
+      used ≤ wholeCount →
+      Trace used (.code (.node rootRequest .pure)) start currentControl current →
+      Returned (fun (request : EdgeRequest Symbol Guard) (row : EdgeValue Symbol Guard) =>
+        ∀ patternId : Nat, request.domain.key =
+          extend IntersectionEmptyDomain.emptyKey [entry.identity] (pair entry.identity patternId) →
+        ∀ child ∈ row.children, Profile entry.identity child) current.native.edges

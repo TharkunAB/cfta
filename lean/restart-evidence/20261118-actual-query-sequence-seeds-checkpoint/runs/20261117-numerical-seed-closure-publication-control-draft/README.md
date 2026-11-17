@@ -1,0 +1,19 @@
+# Numerical query-sequence Seeds publication controller
+
+This frozen controller has not run. Root owns all execution, normal Source changes, Git operations, and cleanup. Copy prepare-publication.py to the existing numerical-source-callbacks Work directory. Run that copy after review. It creates the fresh numerical-seed-closure-publication runtime. Run the generated check.py in a serial8GiB scope with zero swap.
+
+The preparer requires the actual final thirteen-module private receipt and the actual normal-staging receipt. Both receipts exist at this freeze: private31981 passed seventeen standard reports with6619 independently verified pins. Source55 f216 and its pushed5be checkpoint are bound. No future publication pass or session is supplied by this packet.
+
+The five gates are normal build, strict fresh components with prior bindings, independent imports, Audit build, and Audit strict. The strict gate rebuilds all thirteen normal modules in the verified transitive order. It then queries the freshly rebuilt namespace for fifteen public axiom reports and one Seeds declaration check. The two owning-module private reports stay bound to the private receipt. They do not enter Audit or public report totals. All ten new private helpers compile with their owning modules. Audit covers all private declarations through its normal declaration audit.
+
+Expected public counts are724,15,319,724,724. Incremental build logs can omit cached axiom output. Strict and independent gates require their exact counts. The strict gate requires fifteen standard reports and one declaration check. Independent imports require316 standard and3 axiom-free reports. Audit strict requires718 standard and6 axiom-free reports. The Prop has zero axiom-report credit. No axiom strings are replayed.
+
+The current tree contains6278 Source files and5278 direct Audit imports. Eight modules are new. Five existing owners preserve their entire old blocks. Optional preserves its47211-byte block after one55-byte import. Audit preserves its431699-byte old block after485 bytes of imports. The other6264 Source files remain exact. Current-stage six BEFORE snapshots and the historical Work55 BodyFirst snapshot resolve old pins by exact digest. Actual current Source bytes are pinned for all runtime checks.
+
+The prior503 component reports remain inherited. Fifteen public reports are fresh. The combined count is518. The unchanged264-report resource owner remains inherited. Its old theorems receive no fresh credit. The two private owning reports remain separate. This batch adds25 theorem declarations and one pure Prop definition.
+
+The controller preserves failed95793,78168,63694 and the successful nine-component55279 history through the selected private proof chain. It does not require removed temporary object directories. The BodyFirst first header25e9 remains preserved. Selected5d417 adds one let semicolon. All later selected public and private FIRSTs stay exact. The minimal final repairs add two advance simp entries and one namespace open. The full closure owner preserves the original197-line prefix before its Nat export.
+
+The new public theorem covers actual finite native-query sequences under the stated original source inventory, initial empty memo tables, closed empty-domain roots, and honest InputsThrough/FieldsThrough for each supplied fuel. It derives Seeds at those actual endpoints and all bounded prefixes. Deriving every eager-worker query admission remains open. Native inhabitance, Type/Marker consistency, all historical semantic obligations, and one finite accepted completion remain open.
+
+For review, the preparer preflight ends at the marker `# Root runs the mutation phase only after reviewing every preflight check.` The packet contains scripts and metadata only. No controller, compiler, Git command, runtime mutation, or normal Source mutation was executed while preparing it.

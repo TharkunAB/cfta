@@ -1,0 +1,23 @@
+ := by
+  have _retainedWholeTrace := wholeActual
+  obtain ⟨bodyEntry, _marker, arrow, rows, bodyShape, _bodyAvailable, _markerShape,
+      _arrowChildren, _arrowKey, _catalog, _markerClosed, _markerAvailable, _markerAtoms,
+      _rowKinds, _arrowRetained⟩ :=
+    SourceSynthesisCurrentUniverseBodyChildClassification.current_stored_universe_body_physical_children_after_growth
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      start.native.machine.heap initialPhysical.machine.1 sourceGrowth
+  have actualBodyIdentity : identity body = some bodyEntry.identity := by
+    rw [bodyShape]
+    rfl
+  have bodyIdEq : bodyEntry.identity = bodyId :=
+    Option.some.inj (actualBodyIdentity.symm.trans bodyIdentity)
+  have entryFacts := authentic_numerical_key_and_identity_apart rootRequest start initialPhysical
+    wholeCount entry body depth ordinary bodyEntry (canonicalEdges (arrow :: rows)) bodyShape
+    pattern patternId domain authentic
+  have numeric := numerical_auxiliary_payloads_at_actual_prefix
+    lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+    bodyId bodyIdentity rootRequest start initialPhysical sourceGrowth operationsValid
+    fuel prefixCount prefixControl current (by omega) inputs fields prefixActual pastSeeds
+  have chosen := numeric patternId entryFacts.2.1
+    (fun same => entryFacts.2.2 (same.trans bodyIdEq.symm))
+  simpa only [entryFacts.1] using chosen

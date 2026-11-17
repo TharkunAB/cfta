@@ -1,0 +1,12 @@
+private theorem execute_returned_of_actual_prefixes
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    {width : Nat} {Output : Type}
+    (nodeLaw : NodeRequest Symbol Guard → Value Symbol Guard → Prop)
+    (edgeLaw : EdgeRequest Symbol Guard → EdgeValue Symbol Guard → Prop)
+    (fuel : Nat) (control : Control Output) (before : Checked width)
+    (inputs : InputsThrough fuel control before)
+    (prefixes : ∀ (count : Nat) (rest : Control Output) (after : Checked width),
+      count ≤ fuel → Trace count control before rest after →
+      Returned nodeLaw after.native.nodes ∧ Returned edgeLaw after.native.edges) :
+    Returned nodeLaw (SourceEqualityNativeDemand.execute fuel control before).state.native.nodes ∧
+      Returned edgeLaw (SourceEqualityNativeDemand.execute fuel control before).state.native.edges

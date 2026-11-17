@@ -1,0 +1,42 @@
+theorem original_universe_actual_query_sequence_seeds
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (bodyId : Nat) (bodyIdentity : identity body = some bodyId)
+    (machine : Machine Symbol Guard)
+    (machineValid : SourceRecursiveIntersectionKernel.Valid machine)
+    (sourceGrowth : Grows sourceHeap machine.heap)
+    (pastInventory : InternedShallowHeap.NoNewMu sourceHeap machine.heap)
+    (operations : SourceEqualityConstraintMemoAllocation.State)
+    (operationsValid : SourceEqualityConstraintMemoAllocation.Valid operations)
+    (queryCount : Nat)
+    (roots : Nat → NodeRequest Symbol Guard) (queryFuel : Nat → Nat)
+    (states : Nat → Checked width)
+    (initialState : states 0 = ⟨initial width machine, operations⟩)
+    (actual : ∀ index : Nat, index < queryCount →
+      states (index + 1) =
+        (SourceEqualityNativeDemand.execute (queryFuel index)
+          (.code (.node (roots index) .pure)) (states index)).state)
+    (rootDomains : ∀ index : Nat, index < queryCount →
+      (roots index).domain = IntersectionEmptyDomain.emptyDomain)
+    (rootClosed : ∀ index : Nat, index < queryCount →
+      (roots index).left.free = [] ∧ (roots index).right.free = [])
+    (inputs : ∀ index : Nat, index < queryCount →
+      InputsThrough (queryFuel index) (.code (.node (roots index) .pure)) (states index))
+    (fields : ∀ index : Nat, index < queryCount →
+      FieldsThrough (queryFuel index) (.code (.node (roots index) .pure)) (states index)) :
+    (∀ index : Nat, index ≤ queryCount →
+      Physical (states index).native ∧
+      Grows sourceHeap (states index).native.machine.heap ∧
+      SourceEqualityConstraintMemoAllocation.Valid (states index).operations ∧
+      Seeds sourceHeap entry body depth ordinary bodyId (states index)) ∧
+    ∀ index : Nat, index < queryCount →
+      ∀ (used : Nat) (rest : Control (Value Symbol Guard)) (after : Checked width),
+        used ≤ queryFuel index →
+        Trace used (.code (.node (roots index) .pure)) (states index) rest after →
+        Seeds sourceHeap entry body depth ordinary bodyId after

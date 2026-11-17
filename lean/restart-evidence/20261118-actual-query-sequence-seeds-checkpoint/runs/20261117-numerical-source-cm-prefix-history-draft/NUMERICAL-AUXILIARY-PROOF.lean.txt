@@ -1,0 +1,38 @@
+ := by
+  intro patternId universeApart bodyApart
+  dsimp only [Seeds] at pastSeeds
+  obtain ⟨_inventory, _closedNodes, _closedEdges, _singletonNodes, _singletonEdges, auxiliary⟩ := pastSeeds
+  have initial := auxiliary patternId universeApart bodyApart
+  let baseKey := extend IntersectionEmptyDomain.emptyKey [entry.identity] (pair entry.identity patternId)
+  let bodyFirst := extend baseKey [entry.identity] (pair bodyId entry.identity)
+  let diagonalFirst := extend baseKey [entry.identity] (pair entry.identity entry.identity)
+  let diagonalTerminal := extend diagonalFirst [entry.identity] (pair bodyId entry.identity)
+  obtain ⟨bodyCompiler, selected, childPure, absent, bodyRead⟩ :=
+    SourceCurrentNativeNumericalBodyFirstCallbacks.original_universe_body_first_callbacks_at_numerical_base
+      (width := width) lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      bodyId bodyIdentity start.native.machine.heap initialPhysical.machine.1 sourceGrowth
+      patternId universeApart bodyApart
+  obtain ⟨coherentCompiler, orderedInputs, rightMu, childKey, pairedApart, coherentRead⟩ :=
+    SourceCurrentNativeNumericalCoherentCallbacks.original_universe_coherent_callbacks_at_numerical_base
+      (width := width) lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      bodyId bodyIdentity start.native.machine.heap initialPhysical.machine.1 sourceGrowth
+      patternId universeApart bodyApart
+  have prefixInputs := SourceCurrentAllocatedNativeSourceQueryInduction.through_mono
+    fuel prefixCount (.code (.node rootRequest .pure)) start prefixBound inputs
+  have prefixFields := SourceCurrentAllocatedNativeSourceQueryInduction.fields_mono
+    fuel prefixCount (.code (.node rootRequest .pure)) start prefixBound fields
+  have bodyEngine := SourceCurrentAllocatedNativeBodyFirstKeyQueryGlobalLaws.query_returned_and_raw_results
+    (width := width) lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+    bodyFirst bodyId bodyCompiler selected childPure absent bodyRead prefixCount
+  have bodyReturned := (bodyEngine.1 rootRequest start initialPhysical sourceGrowth operationsValid
+    prefixInputs prefixFields initial.1 initial.2.1).1
+  have coherentEngine := SourceCurrentAllocatedNativeCoherentOpenBodyQueryGlobalLaws.query_returned_and_raw_results
+    (width := width) lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+    diagonalTerminal entry.identity entry.identity coherentCompiler orderedInputs diagonalFirst bodyId
+    rightMu bodyIdentity childKey pairedApart coherentRead prefixCount
+  have coherentReturned := (coherentEngine.1 rootRequest start initialPhysical sourceGrowth operationsValid
+    prefixInputs prefixFields initial.2.2.1 initial.2.2.2).1
+  have exactExecution := SourceEqualityNativeDemand.Steps.execute prefixCount
+    (.code (.node rootRequest .pure)) prefixControl start current prefixActual.steps
+  rw [exactExecution] at bodyReturned coherentReturned
+  exact ⟨bodyReturned.1, bodyReturned.2, coherentReturned.1, coherentReturned.2⟩

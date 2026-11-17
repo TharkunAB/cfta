@@ -1,0 +1,45 @@
+theorem original_universe_coherent_callbacks_at_numerical_base
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (bodyId : Nat) (bodyIdentity : identity body = some bodyId)
+    (heap : InternedConstructorTemplates.State Symbol Guard) (facts : Facts heap)
+    (sourceGrowth : Grows sourceHeap heap)
+    (patternId : Nat) (patternUniverseApart : patternId ≠ entry.identity)
+    (patternBodyApart : patternId ≠ bodyId) :
+    let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+    let referenceValue : Value Symbol Guard := .reference (.interned entry.identity)
+    let baseKey := extend IntersectionEmptyDomain.emptyKey [entry.identity] (pair entry.identity patternId)
+    let firstKey := extend baseKey [entry.identity] (pair entry.identity entry.identity)
+    let selectedKey := extend firstKey [entry.identity] (pair bodyId entry.identity)
+    (∀ actualDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey,
+      actualDomain.key = selectedKey →
+      compileNode ⟨actualDomain, body, body⟩ =
+        compileRows actualDomain (InternedEdgeResidency.nodeEdges body) (InternedEdgeResidency.nodeEdges body)) ∧
+    (∀ actualDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey,
+      actualDomain.key = selectedKey → ∀ row ∈ InternedEdgeResidency.nodeEdges body,
+      All₂ (fun (children : Value Symbol Guard × Value Symbol Guard) (value : Value Symbol Guard) =>
+        KnownResult ⟨actualDomain, children.1, children.2⟩ value)
+        (row.children.zip row.children)
+        (row.children.map (input (replacement (.interned entry.identity)
+          (repeatedValue (pair entry.identity entry.identity)))))) ∧
+    (∀ actualDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey,
+      actualDomain.key = firstKey → decision actualDomain.key body universeValue = .rightMu) ∧
+    (∀ actualDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey,
+      actualDomain.key = firstKey →
+      ∀ current : Cache.State IntersectionFlatMemoKeyDomain.DomainKey, Cache.Valid current →
+      (SourceRecursiveIntersectionEnvironment.enter current actualDomain.key body universeValue
+        bodyId entry.identity).1.key = selectedKey) ∧
+    (pair bodyId entry.identity ≠ pair entry.identity entry.identity) ∧
+    (∀ actualDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey,
+      actualDomain.key = firstKey →
+      ∀ current : Checked width, Physical current.native →
+      Grows sourceHeap current.native.machine.heap →
+      SourceEqualityNativeDemand.step
+        (.code (compileNode ⟨actualDomain, body, referenceValue⟩)) current =
+        .yielded (.code (requestNode actualDomain body universeValue)) current)

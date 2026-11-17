@@ -1,0 +1,15 @@
+  have sourceGate := source_retained_available_reaches_constrained_mu_false
+    lib query signed whole accepted rootValue sourceHeap built
+    queried.native.machine.heap pastInventory value available
+  have observed := SourceEndpointMemoCorrect.run_checked value queried.native.machine.heap
+    coherent available queries validQueries
+  have falseAnswer : (SourceEndpointMemo.run value queries).1 = false :=
+    observed.answer.trans sourceGate
+  have actualMemo : SourceEndpointMemo.run value queries =
+      (false, (SourceEndpointMemo.run value queries).2) :=
+    Prod.ext falseAnswer rfl
+  dsimp only
+  exact ⟨actualMemo,
+    SourcePruningEnumerationSharedEnabledEmpty.check_skipped p h value queried fourth
+      queries (SourceEndpointMemo.run value queries).2 actualMemo,
+    observed.valid, observed.keeps⟩

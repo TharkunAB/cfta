@@ -1,0 +1,40 @@
+theorem initial_payloads_for_actual_history_of_past_seeds
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (bodyId : Nat) (bodyIdentity : identity body = some bodyId)
+    (rootRequest : NodeRequest Symbol Guard) (start : Checked width)
+    (initialPhysical : Physical start.native)
+    (sourceGrowth : Grows sourceHeap start.native.machine.heap)
+    (operationsValid : SourceEqualityConstraintMemoAllocation.Valid start.operations)
+    (fuel wholeCount : Nat) (rest : Control (Value Symbol Guard)) (reader : Checked width)
+    (wholeBound : wholeCount ≤ fuel)
+    (inputs : InputsThrough fuel (.code (.node rootRequest .pure)) start)
+    (fields : FieldsThrough fuel (.code (.node rootRequest .pure)) start)
+    (actual : Trace wholeCount (.code (.node rootRequest .pure)) start rest reader)
+    (pastSeeds : Seeds sourceHeap entry body depth ordinary bodyId start) :
+    (Returned (SourceCurrentNativeWarmCMDefinitions.NodeResult (width := width)
+        rootRequest start wholeCount entry body depth ordinary) start.native.nodes ∧
+      Returned (SourceCurrentNativeWarmCMDefinitions.EdgeResult (width := width)
+        rootRequest start wholeCount entry body depth ordinary) start.native.edges) ∧
+    ∀ (pattern : Value Symbol Guard) (patternId : Nat)
+      (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey),
+      AuthenticEntryAt (width := width) rootRequest start wholeCount
+        entry body depth ordinary pattern patternId domain →
+      let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+      let bodyFirst := extend domain.key [entry.identity] (pair bodyId entry.identity)
+      let diagonalFirst := extend domain.key [entry.identity] (pair entry.identity entry.identity)
+      let diagonalTerminal := extend diagonalFirst [entry.identity] (pair bodyId entry.identity)
+      Returned (SourceCurrentAllocatedNativeBodyFirstKeyQueryGlobalLaws.NodeResult
+        entry.identity bodyId bodyFirst body universeValue) start.native.nodes ∧
+      Returned (SourceCurrentAllocatedNativeBodyFirstKeyQueryGlobalLaws.EdgeResult
+        entry.identity bodyId bodyFirst universeValue) start.native.edges ∧
+      Returned (SourceCurrentAllocatedNativeCoherentOpenBodyQueryGlobalLaws.NodeResult
+        entry.identity entry.identity entry.identity diagonalTerminal diagonalFirst body universeValue)
+        start.native.nodes ∧
+      Returned SourceCurrentAllocatedNativeTopRowQueryGlobalLaws.EdgeResult start.native.edges

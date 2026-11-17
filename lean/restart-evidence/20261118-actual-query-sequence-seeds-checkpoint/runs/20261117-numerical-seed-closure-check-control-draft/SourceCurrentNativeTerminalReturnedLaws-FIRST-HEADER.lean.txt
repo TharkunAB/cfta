@@ -1,0 +1,11 @@
+theorem terminal_step_preserves_returned
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (nodeLaw : NodeRequest Symbol Guard → Value Symbol Guard → Prop)
+    (edgeLaw : EdgeRequest Symbol Guard → EdgeValue Symbol Guard → Prop)
+    (control : Control Output) (before : Checked width)
+    (nodes : Returned nodeLaw before.native.nodes)
+    (edges : Returned edgeLaw before.native.edges)
+    (terminal : ∀ (next : Control Output) (after : Checked width),
+      SourceEqualityNativeDemand.step control before ≠ .yielded next after) :
+    Returned nodeLaw (SourceEqualityNativeDemand.step control before).state.native.nodes ∧
+      Returned edgeLaw (SourceEqualityNativeDemand.step control before).state.native.edges

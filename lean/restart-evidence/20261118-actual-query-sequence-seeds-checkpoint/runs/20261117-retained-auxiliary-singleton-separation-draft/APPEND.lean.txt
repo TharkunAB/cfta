@@ -1,0 +1,70 @@
+
+namespace MicroCFTA.SourceSynthesisCurrentUniverseNativeAllocation
+open Cache InternedConstructorTemplates InternedProbeProvenance
+open InternedBinderProtocol (NodeKey)
+open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionThunks SourceRecursiveIntersectionCode
+open SourceRecursiveIntersectionControl (identity tag pair)
+open SourceRecursiveIntersectionDomain (extend)
+open SourceEqualityNativeDemand
+open SourceCurrentAllocatedNativeSourceWarmEntry (AuthenticEntryAt MixedQualifiedAt)
+open SourceCurrentAllocatedNativeContextCache (Returned)
+open SourceCurrentAllocatedNativePhysicalTraceCompletion (Trace)
+open SourceCurrentAllocatedNativePhysicalExecution (Inputs InputsThrough)
+open SourceEqualityNativeDemandOperations (FieldsThrough)
+open SourceSynthesisTypeSyntax (Library Query)
+open SourceSynthesisFirstOrderConstruction (Expression)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSynthesisGeneralizeSyntax.Guard
+local notation "Node" => Value Symbol Guard
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "Profile" => SourceCurrentAllocatedNativeClosedResetProfile.Profile
+local notation "ordinarySymbols" => SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+set_option autoImplicit false
+
+/- Note [Auxiliary domains cannot be singleton domains]
+An actual source entry supplies the original key and two distinct pairs.
+Each auxiliary key keeps both pairs. A singleton key has only one pair.
+This wrapper exposes the existing separation proof for any singleton key.
+-/
+
+theorem actual_auxiliary_domain_ne_singleton_base
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (rootRequest : NodeRequest Symbol Guard) (start : Checked width)
+    (initialPhysical : SourceCurrentAllocatedNativePhysicalCache.Valid start.native)
+    (wholeCount : Nat) (entry : Interned NodeKey) (body depth ordinary : Node)
+    (bodyEntry : Interned NodeKey) (bodyRows : List (EdgeValue Symbol Guard))
+    (bodyShape : body = .node bodyEntry bodyRows 0 [.interned entry.identity])
+    (pattern : Node) (patternId : Nat) (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey)
+    (authentic : AuthenticEntryAt (width := width) rootRequest start wholeCount
+      entry body depth ordinary pattern patternId domain)
+    (requestDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey)
+    (auxiliary :
+      requestDomain.key = extend domain.key [entry.identity] (pair bodyEntry.identity entry.identity) ∨
+      requestDomain.key = extend (extend domain.key [entry.identity] (pair bodyEntry.identity entry.identity))
+        [entry.identity] (pair entry.identity entry.identity) ∨
+      requestDomain.key = extend domain.key [entry.identity] (pair entry.identity entry.identity) ∨
+      requestDomain.key = extend (extend domain.key [entry.identity] (pair entry.identity entry.identity))
+        [entry.identity] (pair bodyEntry.identity entry.identity))
+    (targetParent : Nat × Nat) :
+    requestDomain.key ≠ extend IntersectionEmptyDomain.emptyKey [entry.identity] targetParent := by
+  have original := authentic_key_and_parent_apart (width := width)
+    rootRequest start initialPhysical wholeCount entry body depth ordinary
+    bodyEntry bodyRows bodyShape pattern patternId domain authentic
+  have shape :
+      requestDomain.key = extend (extend IntersectionEmptyDomain.emptyKey [entry.identity]
+        (pair entry.identity patternId)) [entry.identity] (pair bodyEntry.identity entry.identity) ∨
+      requestDomain.key = extend (extend (extend IntersectionEmptyDomain.emptyKey [entry.identity]
+        (pair entry.identity patternId)) [entry.identity] (pair bodyEntry.identity entry.identity))
+        [entry.identity] (pair entry.identity entry.identity) ∨
+      requestDomain.key = extend (extend IntersectionEmptyDomain.emptyKey [entry.identity]
+        (pair entry.identity patternId)) [entry.identity] (pair entry.identity entry.identity) ∨
+      requestDomain.key = extend (extend (extend IntersectionEmptyDomain.emptyKey [entry.identity]
+        (pair entry.identity patternId)) [entry.identity] (pair entry.identity entry.identity))
+        [entry.identity] (pair bodyEntry.identity entry.identity) := by
+    simpa only [original.1] using auxiliary
+  exact SourceCurrentNativeAuxiliaryBaseKeyRecovery.auxiliary_key_ne_singleton_base
+    entry.identity (pair entry.identity patternId) (pair bodyEntry.identity entry.identity)
+    (pair entry.identity entry.identity) requestDomain.key targetParent
+    original.2.1 original.2.2 shape
+
+end MicroCFTA.SourceSynthesisCurrentUniverseNativeAllocation

@@ -1,0 +1,43 @@
+ := by
+  let nodeLaw := NodeResult (width := width) rootRequest start wholeCount entry body depth ordinary
+  let edgeLaw := EdgeResult (width := width) rootRequest start wholeCount entry body depth ordinary
+  dsimp only
+  have initial := SourceCurrentNativeNumericalSeedInvariant.initial_payloads_for_actual_history_of_past_seeds
+    lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+    bodyId bodyIdentity rootRequest start initialPhysical sourceGrowth operationsValid
+    fuel wholeCount rest reader wholeBound inputs fields wholeActual pastSeeds
+  apply SourceCurrentAllocatedNativeActualPrefixReturnedInduction.returned_at_every_actual_warm_prefix
+    nodeLaw edgeLaw rootRequest start initialPhysical.shape initial.1.1 initial.1.2
+    fuel wholeCount rest reader wholeBound wholeActual
+  · intro finishUsed _dispatchUsed _bodyCount handle request value _beforeBody beforeFinish resume
+      finishBound _total _positive actual _entered _running _bodyActual owner nodes edges
+    constructor
+    · intro closed
+      exact SourceCurrentNativeWarmCNodeFinish.closed_result_at_actual_warm_node_finish
+        lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+        rootRequest start initialPhysical sourceGrowth operationsValid
+        fuel wholeCount finishUsed handle request value rest reader beforeFinish (resume value)
+        wholeBound wholeActual finishBound actual owner inputs fields closed ⟨nodes, edges⟩
+    · intro mixed
+      obtain ⟨pattern, patternId, openAlias, operand, authentic, aliasKind,
+        operandProfile, operandHeight, strictAlias, ordered⟩ := mixed
+      have innerPast := auxiliary_payloads_at_actual_prefix_of_past_seeds
+        lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+        bodyId bodyIdentity rootRequest start initialPhysical sourceGrowth operationsValid
+        fuel wholeCount rest reader wholeBound inputs fields wholeActual pastSeeds
+        finishUsed (.code (.finishNode handle value (resume value))) beforeFinish (by omega) actual
+        pattern patternId request.domain authentic
+      exact SourceCurrentNativeWarmMixedFinish.mixed_result_at_actual_warm_node_finish_of_past_inner_laws
+        lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+        bodyId bodyIdentity rootRequest start initialPhysical sourceGrowth operationsValid
+        fuel wholeCount finishUsed handle request value rest reader beforeFinish (resume value)
+        wholeBound wholeActual finishBound actual owner inputs fields
+        pattern patternId openAlias operand authentic aliasKind operandProfile operandHeight strictAlias ordered
+        ⟨nodes, edges⟩ innerPast
+  · intro finishUsed _dispatchUsed _bodyCount handle request row _beforeBody beforeFinish resume
+      finishBound _total _positive actual _entered _running _bodyActual owner nodes edges
+    exact SourceCurrentNativeWarmEdgeFinish.qualified_edge_result_at_actual_warm_edge_finish
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      rootRequest start initialPhysical sourceGrowth operationsValid
+      fuel wholeCount finishUsed handle request row rest reader beforeFinish (resume row)
+      wholeBound wholeActual finishBound actual owner inputs fields ⟨nodes, edges⟩

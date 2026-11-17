@@ -1,0 +1,7 @@
+private theorem lookup_nodes
+    (nodeLaw : NodeRequest Symbol Guard → Value Symbol Guard → Prop)
+    (edgeLaw : EdgeRequest Symbol Guard → EdgeValue Symbol Guard → Prop)
+    (request : NodeRequest Symbol Guard) (state : Native width Symbol Guard)
+    (nodes : Returned nodeLaw state.nodes) (edges : Returned edgeLaw state.edges) :
+    Returned nodeLaw (lookupNode width request state).2.nodes ∧
+      Returned edgeLaw (lookupNode width request state).2.edges

@@ -1,0 +1,129 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261117-numerical-source-callbacks-repair-check/source/MicroCFTA/SourceCurrentNativeNumericalBodyFirstCallbacks.lean:217:76: error: unsolved goals
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+width : Nat
+lib : Library
+query : Query
+signed : Int
+whole : Expression
+accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole
+rootValue : Value Symbol Guard
+sourceHeap : InternedConstructorTemplates.State Symbol Guard
+built :
+  InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+    InternedNestedConstruction.Outcome.done rootValue sourceHeap
+key : InternedBinderProtocol.NodeKey
+entry : Interned InternedBinderProtocol.NodeKey
+body depth ordinary : Value Symbol Guard
+stored : sourceHeap.nodeRecords key = some (Value.mu entry body depth ordinary)
+heap : InternedConstructorTemplates.State Symbol Guard
+facts : Facts heap
+sourceGrowth : Grows sourceHeap heap
+patternId : Nat
+patternUniverseApart : patternId ≠ entry.identity
+bodyEntry : Interned InternedBinderProtocol.NodeKey
+_marker : Value Symbol SourceSynthesisGeneralizeSyntax.Guard
+arrow : EdgeValue Symbol SourceSynthesisGeneralizeSyntax.Guard
+rows : List (EdgeValue Symbol SourceSynthesisGeneralizeSyntax.Guard)
+bodyShape : body = Value.node bodyEntry (canonicalEdges (arrow :: rows)) 0 [Reference.interned entry.identity]
+_bodyAvailable : Available heap body
+_markerShape :
+  ∃ markerEntry markerRow,
+    _marker = Value.node markerEntry [markerRow] 0 [] ∧
+      markerRow.children = [] ∧
+        markerRow.entry.key =
+          { symbol := SourceSynthesisLabelProgramBuildRoles.literal "(->)", children := [],
+            constraint := SourceSynthesisGeneralizeSyntax.top }
+_arrowChildren :
+  arrow.children =
+    [_marker, Value.reference (Reference.interned entry.identity), Value.reference (Reference.interned entry.identity)]
+_arrowKey :
+  arrow.entry.key =
+    { symbol := SourceSynthesisLabelProgramBuildRoles.literal "->",
+      children :=
+        [_marker.referenceOf, InternedBinderProtocol.NodeRef.ref (Reference.interned entry.identity),
+          InternedBinderProtocol.NodeRef.ref (Reference.interned entry.identity)],
+      constraint := SourceSynthesisGeneralizeSyntax.top }
+_catalog :
+  All₂
+    (fun descriptor row =>
+      row.children = List.replicate descriptor.snd (Value.reference (Reference.interned entry.identity)) ∧
+        row.entry.key =
+          { symbol := SourceSynthesisLabelProgramBuildRoles.literal descriptor.fst,
+            children :=
+              List.replicate descriptor.snd (InternedBinderProtocol.NodeRef.ref (Reference.interned entry.identity)),
+            constraint := SourceSynthesisGeneralizeSyntax.top })
+    (SourceSynthesisUniverseBody.descriptors (SourceSynthesisCurrentContext.constructorCatalog lib query)) rows
+_markerClosed : _marker.free = []
+_markerAvailable : Available heap _marker
+_markerAtoms : InternedBoundaryAtoms.atoms _marker = []
+_rowKinds :
+  ∀ (row : EdgeValue Symbol SourceSynthesisGeneralizeSyntax.Guard),
+    row ∈ canonicalEdges (arrow :: rows) →
+      InternedEdgeResidency.EdgeResident heap row ∧
+        row.entry.key.constraint = SourceSynthesisGeneralizeSyntax.top ∧
+          ∀ (child : Value Symbol SourceSynthesisGeneralizeSyntax.Guard),
+            child ∈ row.children →
+              child = Value.reference (Reference.interned entry.identity) ∨
+                child = _marker ∧ Available heap child ∧ child.free = [] ∧ InternedBoundaryAtoms.atoms child = []
+_arrowRetained : arrow ∈ canonicalEdges (arrow :: rows)
+actualBodyIdentity bodyIdentity : identity body = some bodyEntry.identity
+patternBodyApart _retainedPatternBodyApart : patternId ≠ bodyEntry.identity
+universeValue : Value Symbol Guard := Value.mu entry body depth ordinary
+referenceValue : Value Symbol Guard := Value.reference (Reference.interned entry.identity)
+baseKey : IntersectionFlatMemoKeyDomain.DomainKey :=
+  extend IntersectionEmptyDomain.emptyKey [entry.identity] (pair entry.identity patternId)
+selectedKey : IntersectionFlatMemoKeyDomain.DomainKey :=
+  extend baseKey [entry.identity] (pair bodyEntry.identity entry.identity)
+universeAvailable : Available heap universeValue
+bodyApart : bodyEntry.identity ≠ entry.identity
+diagonalParts : ∀ (first second owner : Nat), pair first second = pair owner owner → first = owner ∧ second = owner
+freshBody : ¬pair bodyEntry.identity bodyEntry.identity ∈ selectedKey.seen
+freshDiagonal : ¬pair entry.identity entry.identity ∈ selectedKey.seen
+sourceRows : InternedEdgeResidency.nodeEdges body = canonicalEdges (arrow :: rows)
+compiler :
+  ∀ (actualDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey),
+    actualDomain.key = selectedKey →
+      compileNode { domain := actualDomain, left := body, right := body } =
+        compileRows actualDomain (InternedEdgeResidency.nodeEdges body) (InternedEdgeResidency.nodeEdges body)
+selected :
+  ∀ (actualDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey),
+    actualDomain.key = selectedKey → decision actualDomain.key universeValue referenceValue = Branch.leftMu
+childPure :
+  ∀ (actualDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey),
+    actualDomain.key = selectedKey →
+      ∀ (current : Cache.State IntersectionFlatMemoKeyDomain.DomainKey),
+        Cache.Valid current →
+          compileNode
+              {
+                domain :=
+                  (SourceRecursiveIntersectionEnvironment.enter current actualDomain.key universeValue referenceValue
+                      entry.identity entry.identity).fst,
+                left := SourceRecursiveIntersectionKernel.body universeValue,
+                right := SourceRecursiveIntersectionKernel.body referenceValue } =
+            Code.pure (repeatedValue (pair bodyEntry.identity entry.identity))
+absent :
+  let binder := pair entry.identity entry.identity;
+  ¬Reference.intersection binder.fst binder.snd ∈ (repeatedValue (pair bodyEntry.identity entry.identity)).free
+actualDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey
+sameKey : actualDomain.key = selectedKey
+current : Checked width
+physical : Physical current.native
+currentGrowth : Grows sourceHeap current.native.machine.heap
+bound : entry.identity ∈ names actualDomain.key
+fresh : ¬pair entry.identity entry.identity ∈ actualDomain.key.seen
+referenceSelected : decision actualDomain.key referenceValue referenceValue = Branch.leftReference
+⊢ (match referenceValue with
+    | Value.reference (Reference.interned name) => compileReference actualDomain name referenceValue true
+    | x => SourceRecursiveIntersectionCode.unsupported referenceValue referenceValue) =
+    compileReference actualDomain entry.identity referenceValue true
+'MicroCFTA.SourceCurrentNativeNumericalBodyFirstCallbacks.original_universe_body_first_callbacks_at_numerical_base' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+Traceback (most recent call last):
+  File "/home/tritlo/Code/mcfta/lean/restart-evidence/20261117-numerical-source-callbacks-repair-check/shadow-compile.py", line 18, in <module>
+    subprocess.run([
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['lean', '-j1', '-DwarningAsError=true', '-R', '/home/tritlo/Code/mcfta/lean/restart-evidence/20261117-numerical-source-callbacks-repair-check/source', '-o', '/tmp/mcfta-numerical-source-callbacks-repair-f49rpgui/MicroCFTA/SourceCurrentNativeNumericalBodyFirstCallbacks.olean', '/home/tritlo/Code/mcfta/lean/restart-evidence/20261117-numerical-source-callbacks-repair-check/source/MicroCFTA/SourceCurrentNativeNumericalBodyFirstCallbacks.lean']' returned non-zero exit status 1.

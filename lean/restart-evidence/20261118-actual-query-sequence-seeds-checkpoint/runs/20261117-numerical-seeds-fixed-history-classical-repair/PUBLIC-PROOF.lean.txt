@@ -1,0 +1,68 @@
+ := by
+  classical
+  have _retainedAdmissions := And.intro operationsValid
+    (And.intro wholeBound (And.intro inputs (And.intro fields actual)))
+  dsimp only [Seeds] at pastSeeds
+  obtain ⟨_inventory, closedNodes, closedEdges, singletonNodes, singletonEdges, auxiliary⟩ := pastSeeds
+  obtain ⟨bodyEntry, _marker, arrow, rows, bodyShape, _bodyAvailable, _markerShape,
+      _arrowChildren, _arrowKey, _catalog, _markerClosed, _markerAvailable, _markerAtoms,
+      _rowKinds, _arrowRetained⟩ :=
+    SourceSynthesisCurrentUniverseBodyChildClassification.current_stored_universe_body_physical_children_after_growth
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      start.native.machine.heap initialPhysical.machine.1 sourceGrowth
+  have actualBodyIdentity : identity body = some bodyEntry.identity := by
+    rw [bodyShape]
+    rfl
+  have bodyIdEq : bodyEntry.identity = bodyId :=
+    Option.some.inj (actualBodyIdentity.symm.trans bodyIdentity)
+  have entryFacts (pattern : Value Symbol Guard) (patternId : Nat)
+      (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey)
+      (authentic : AuthenticEntryAt (width := width) rootRequest start wholeCount
+        entry body depth ordinary pattern patternId domain) :
+      domain.key = extend IntersectionEmptyDomain.emptyKey [entry.identity] (pair entry.identity patternId) ∧
+        patternId ≠ entry.identity ∧ patternId ≠ bodyId := by
+    have observed := authentic_numerical_key_and_identity_apart rootRequest start initialPhysical
+      wholeCount entry body depth ordinary bodyEntry (canonicalEdges (arrow :: rows)) bodyShape
+      pattern patternId domain authentic
+    simpa only [bodyIdEq] using observed
+  have mixedKey (request : NodeRequest Symbol Guard)
+      (mixed : MixedQualifiedAt (width := width) rootRequest start wholeCount
+        entry body depth ordinary request) :
+      ∃ patternId : Nat, request.domain.key =
+        extend IntersectionEmptyDomain.emptyKey [entry.identity] (pair entry.identity patternId) := by
+    obtain ⟨pattern, patternId, _openAlias, _operand, authentic, _aliasKind, _operandProfile,
+      _height, _strict, _ordered⟩ := mixed
+    exact ⟨patternId, (entryFacts pattern patternId request.domain authentic).1⟩
+  have initialNodes : Returned (SourceCurrentNativeWarmCMDefinitions.NodeResult (width := width)
+      rootRequest start wholeCount entry body depth ordinary) start.native.nodes := by
+    intro handle request value storedCell
+    constructor
+    · exact closedNodes handle request value storedCell
+    · intro mixed
+      obtain ⟨patternId, sameKey⟩ := mixedKey request mixed
+      exact singletonNodes handle request value storedCell patternId sameKey
+  have initialEdges : Returned (SourceCurrentNativeWarmCMDefinitions.EdgeResult (width := width)
+      rootRequest start wholeCount entry body depth ordinary) start.native.edges := by
+    intro handle request row storedCell qualifiedChildren
+    by_cases allClosed : ∀ pair ∈ request.left.children.zip request.right.children,
+        ClosedQualified entry.identity ⟨request.domain, pair.1, pair.2⟩
+    · exact closedEdges handle request row storedCell allClosed
+    · have hasMixed : ∃ pair : Value Symbol Guard × Value Symbol Guard,
+          pair ∈ request.left.children.zip request.right.children ∧
+          MixedQualifiedAt (width := width) rootRequest start wholeCount entry body depth ordinary
+            ⟨request.domain, pair.1, pair.2⟩ := by
+        apply Classical.byContradiction
+        intro none
+        apply allClosed
+        intro pair member
+        rcases qualifiedChildren pair member with closed | mixed
+        · exact closed
+        · exact False.elim (none ⟨pair, member, mixed⟩)
+      obtain ⟨pair, _member, mixed⟩ := hasMixed
+      obtain ⟨patternId, sameKey⟩ := mixedKey ⟨request.domain, pair.1, pair.2⟩ mixed
+      exact singletonEdges handle request row storedCell patternId sameKey
+  refine ⟨⟨initialNodes, initialEdges⟩, ?_⟩
+  intro pattern patternId domain authentic
+  have observed := entryFacts pattern patternId domain authentic
+  have selected := auxiliary patternId observed.2.1 observed.2.2
+  simpa only [observed.1] using selected

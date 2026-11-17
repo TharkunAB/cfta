@@ -1,0 +1,27 @@
+theorem returned_at_every_actual_prefix_of_past_seeds
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (bodyId : Nat) (bodyIdentity : identity body = some bodyId)
+    (rootRequest : NodeRequest Symbol Guard) (start : Checked width)
+    (initialPhysical : Physical start.native)
+    (sourceGrowth : Grows sourceHeap start.native.machine.heap)
+    (operationsValid : SourceEqualityConstraintMemoAllocation.Valid start.operations)
+    (fuel wholeCount : Nat) (rest : Control (Value Symbol Guard)) (reader : Checked width)
+    (wholeBound : wholeCount ≤ fuel)
+    (inputs : InputsThrough fuel (.code (.node rootRequest .pure)) start)
+    (fields : FieldsThrough fuel (.code (.node rootRequest .pure)) start)
+    (wholeActual : Trace wholeCount (.code (.node rootRequest .pure)) start rest reader)
+    (pastSeeds : Seeds sourceHeap entry body depth ordinary bodyId start) :
+    let nodeLaw := NodeResult (width := width) rootRequest start wholeCount entry body depth ordinary
+    let edgeLaw := EdgeResult (width := width) rootRequest start wholeCount entry body depth ordinary
+    (Returned nodeLaw reader.native.nodes ∧ Returned edgeLaw reader.native.edges) ∧
+      ∀ (used : Nat) (currentControl : Control (Value Symbol Guard)) (current : Checked width),
+        used ≤ wholeCount →
+        Trace used (.code (.node rootRequest .pure)) start currentControl current →
+        Returned nodeLaw current.native.nodes ∧ Returned edgeLaw current.native.edges

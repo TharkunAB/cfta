@@ -1,0 +1,104 @@
+
+namespace MicroCFTA.SourceSynthesisCurrentUniverseNativeAllocation
+open Cache InternedConstructorTemplates InternedProbeProvenance
+open InternedBinderProtocol (NodeKey)
+open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionThunks SourceRecursiveIntersectionCode
+open SourceEqualityNativeDemand
+open SourceCurrentAllocatedNativeSourceWarmEntry (AuthenticEntryAt)
+open SourceCurrentNativeWarmCMDefinitions (Qualified)
+open SourceCurrentAllocatedNativePhysicalTraceCompletion (Trace)
+open SourceCurrentAllocatedNativePhysicalExecution (InputsThrough)
+open SourceEqualityNativeDemandOperations (FieldsThrough)
+open SourceSynthesisTypeSyntax (Library Query)
+open SourceSynthesisFirstOrderConstruction (Expression)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSynthesisGeneralizeSyntax.Guard
+local notation "Node" => Value Symbol Guard
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "ordinarySymbols" => SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+set_option autoImplicit false
+
+/- Note [Mu owner admission from a retained source start]
+The past inventory and closed Available root operands supply root Profiles.
+The existing source control induction derives the actual node admission.
+The literal Mu decision removes the non-Mu auxiliary alternatives.
+The result keeps one actual root history, its full horizon and its entries.
+No result, Profile, Gamma or future inventory is supplied by the caller.
+-/
+
+theorem original_universe_retained_mu_query_prefix_admission
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (rootRequest : NodeRequest Symbol Guard) (start : Checked width)
+    (initialPhysical : SourceCurrentAllocatedNativePhysicalCache.Valid start.native)
+    (sourceGrowth : Grows sourceHeap start.native.machine.heap)
+    (rootDomain : rootRequest.domain = IntersectionEmptyDomain.emptyDomain)
+    (pastInventory : InternedShallowHeap.NoNewMu sourceHeap start.native.machine.heap)
+    (leftAvailable : Available start.native.machine.heap rootRequest.left)
+    (rightAvailable : Available start.native.machine.heap rootRequest.right)
+    (leftClosed : rootRequest.left.free = []) (rightClosed : rootRequest.right.free = [])
+    (operationsValid : SourceEqualityConstraintMemoAllocation.Valid start.operations)
+    (fuel wholeCount queryUsed : Nat)
+    (readerControl : Control (Value Symbol Guard)) (reader : Checked width)
+    (queried : NodeRequest Symbol Guard)
+    (queryNext : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard))
+    (queryBefore : Checked width)
+    (wholeBound : wholeCount ≤ fuel)
+    (wholeActual : Trace wholeCount (.code (.node rootRequest .pure))
+      start readerControl reader)
+    (queryBound : queryUsed ≤ wholeCount)
+    (queryActual : Trace queryUsed (.code (.node rootRequest .pure))
+      start
+      (.code (.node queried queryNext)) queryBefore)
+    (selectedMu :
+      SourceRecursiveIntersectionControl.decision queried.domain.key queried.left queried.right = .bothMu ∨
+      SourceRecursiveIntersectionControl.decision queried.domain.key queried.left queried.right = .leftMu ∨
+      SourceRecursiveIntersectionControl.decision queried.domain.key queried.left queried.right = .rightMu)
+    (inputs : InputsThrough fuel (.code (.node rootRequest .pure))
+      start)
+    (fields : FieldsThrough fuel (.code (.node rootRequest .pure))
+      start) :
+    Qualified (width := width) rootRequest start wholeCount entry body depth ordinary queried ∨
+      ∃ (fullPattern : Value Symbol Guard) (patternId bodyId : Nat)
+        (originalDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey),
+        SourceRecursiveIntersectionControl.identity body = some bodyId ∧
+        AuthenticEntryAt (width := width) rootRequest start wholeCount
+          entry body depth ordinary fullPattern patternId originalDomain ∧
+        ((queried.domain.key = SourceRecursiveIntersectionDomain.extend originalDomain.key [entry.identity]
+            (SourceRecursiveIntersectionControl.pair bodyId entry.identity) ∧
+          queried.left = .mu entry body depth ordinary ∧
+          queried.right = .reference (.interned entry.identity)) ∨
+         (queried.domain.key = SourceRecursiveIntersectionDomain.extend originalDomain.key [entry.identity]
+            (SourceRecursiveIntersectionControl.pair entry.identity entry.identity) ∧
+          queried.left = body ∧ queried.right = .mu entry body depth ordinary)) := by
+  have _retainedRuntime := And.intro operationsValid wholeActual
+  obtain ⟨bodyId, bodyIdentity, admitted⟩ :=
+    SourceCurrentNativeWarmAdmission.warm_source_control_prefix_full_admission (width := width)
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      rootRequest start initialPhysical sourceGrowth pastInventory rootDomain
+      leftAvailable rightAvailable leftClosed rightClosed
+      fuel wholeCount queryUsed wholeBound inputs fields
+      (.code (.node queried queryNext)) queryBefore queryBound queryActual
+  change SourceCurrentNativeWarmAdmission.NodeAdmission (width := width)
+    rootRequest start wholeCount entry body depth ordinary bodyId queried ∧ _ at admitted
+  obtain ⟨bodyEntry, _marker, arrow, sourceRows, bodyShape, _bodyAvailable,
+      _markerShape, _arrowChildren, _arrowKey, _catalog, _markerClosed,
+      _markerAvailable, _markerAtoms, _rowKinds, _arrowRetained⟩ :=
+    SourceSynthesisCurrentUniverseBodyChildClassification.current_stored_universe_body_physical_children_after_growth
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      start.native.machine.heap initialPhysical.machine.1 sourceGrowth
+  rcases SourceCurrentNativeWarmAdmission.node_admission_mu_projection
+      rootRequest start wholeCount entry body depth ordinary bodyId
+      bodyEntry (canonicalEdges (arrow :: sourceRows)) bodyShape queried admitted.1 selectedMu with
+      qualified | auxiliary
+  · exact Or.inl qualified
+  · obtain ⟨fullPattern, patternId, originalDomain, authentic, alternatives⟩ := auxiliary
+    exact Or.inr ⟨fullPattern, patternId, bodyId, originalDomain, bodyIdentity, authentic, alternatives⟩
+
+end MicroCFTA.SourceSynthesisCurrentUniverseNativeAllocation
