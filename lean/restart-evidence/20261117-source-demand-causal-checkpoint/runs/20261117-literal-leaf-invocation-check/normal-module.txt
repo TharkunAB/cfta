@@ -1,0 +1,43 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261117-literal-leaf-invocation-check/source/MicroCFTA/SourcePruningEnumerationLiteralLeafInvocation.lean:183:54: error: Application type mismatch: The argument
+  control
+has type
+  match policy, first with
+  | Policy.eager, first => True
+  | Policy.guarded parent, first =>
+    MergedOrdinaryHeight.height (Value.node entry [row] depth free) < MergedOrdinaryHeight.height parent
+  | Policy.shallow, first => False
+but is expected to have type
+  match policy with
+  | Policy.eager => True
+  | Policy.guarded parent =>
+    MergedOrdinaryHeight.height (Value.node entry [row] depth free) < MergedOrdinaryHeight.height parent
+  | Policy.shallow => False
+in the application
+  child_nullary_fragment checkEmpty r n p h k edgesOf policy entry row depth free bucket childCaller childReached
+    childBefore childAfter childQueries childSaved
+    (fun produced current capturedQueries captured =>
+      SourcePruningEnumerationSharedChildVisitors.visitChildren (runPolicy checkEmpty r n p h k edgesOf policy)
+        (fun remaining =>
+          (fun produced current capturedQueries captured =>
+              consume
+                (SelectedEdge.Result.complete (Fragments.Fragment.node symbol produced) current capturedQueries
+                  (SelectedEdge.finish residual (Fragments.Fragment.node symbol produced) captured)))
+            (priorFragments ++ produced :: remaining))
+        (fun completed =>
+          (fun completed observation candidate => consume (SelectedEdge.Result.stopped completed observation candidate))
+            (priorFragments ++ produced :: completed))
+        (List.map (fun input => (input.fst, input.snd.fst)) laterStaged) current captured capturedQueries)
+    (fun observation candidate =>
+      (fun completed observation candidate => consume (SelectedEdge.Result.stopped completed observation candidate))
+        priorFragments observation candidate)
+    childRootIndex childCallbackIndex output childFragment nonterminal selector leaf control
+'MicroCFTA.SourcePruningEnumerationLiteralLeafInvocation.selected_nullary_fragment' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourcePruningEnumerationLiteralLeafInvocation.child_nullary_fragment' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourcePruningEnumerationLiteralLeafInvocation.selected_first_nullary_child_fragment' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

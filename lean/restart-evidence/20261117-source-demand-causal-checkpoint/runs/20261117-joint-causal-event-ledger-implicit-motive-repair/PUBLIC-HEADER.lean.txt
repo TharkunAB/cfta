@@ -1,0 +1,17 @@
+theorem resumeWithNarrow_real_eager_joint_event_ledger
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List Edge)
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (workFuel recursiveDepth : Nat) (metadata : Metadata Typing)
+    (caller : Caller (bits + 2)) (queries : Queries) (before : Cached) (decision : Option Next)
+    (index : Nat) (output : Output (bits + 2) Typing)
+    (canonical : Canonical before.core) (total : UnionFind.Total before.core.representatives)
+    (observed : (emitted (resumeWithNarrow
+      (SourcePruningEnumerationSharedEagerChildren.eagerChild
+        checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
+      (SourcePruningOuterNarrow.narrow holeKey fits admits)
+      graph templates checkEmpty edgesOf stop order workFuel recursiveDepth
+      metadata caller queries before decision))[index]? = some output) :
+    ∃ events, JointOutputLedgerAt holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel
+      recursiveDepth metadata caller queries before decision index output events

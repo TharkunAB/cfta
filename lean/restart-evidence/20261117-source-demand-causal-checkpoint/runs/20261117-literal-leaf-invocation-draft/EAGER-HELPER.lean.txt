@@ -1,0 +1,32 @@
+private theorem eager_nullary_fragment
+    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List Edge)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey) (row : Edge)
+    (depth : Nat) (free : List InternedBinderProtocol.Reference) (bucket : List Suspended)
+    (caller reached : Caller width) (before finished : Cached) (queries saved : Queries)
+    (done : Fragment → Caller width → Queries → Cached → Result Output Reason width)
+    (stopped : ChildDispatch.Observation width → Option Cached → Result Output Reason width)
+    (index consumerIndex : Nat) (output : Output) (fragment : Fragment)
+    (nonterminal : bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) = false)
+    (selector : edgesOf (.node entry [row] depth free) = [row])
+    (leaf : row.children = [])
+    (trace : ChildInvocationAt checkEmpty r n p h k edgesOf .eager bucket
+      (.node entry [row] depth free) caller before queries done stopped index output
+      (.done fragment reached saved finished) consumerIndex) :
+    fragment = .node row.entry.key.symbol [] := by
+  cases trace with
+  | eager_fallback fallback _child =>
+      have positive : ordinaryNonterminal bucket (.node entry [row] depth free) = true := by
+        simp only [ordinaryNonterminal, nonterminal, Bool.not_false]
+      rw [positive] at fallback
+      cases fallback
+  | eager_ordinary _ordinary rowOrder _past _rowRun rowTrace _offset _observed =>
+      have onlyRow : ∀ candidate ∈ edgesOf (.node entry [row] depth free), candidate = row := by
+        intro candidate member
+        rw [selector] at member
+        exact List.mem_singleton.mp member
+      have selectedSame := onlyRow _ (by
+        rw [rowOrder]
+        exact List.mem_append_right _ List.mem_cons_self)
+      have shape := selected_nullary_fragment (trace := rowTrace)
+        (leaf := by simpa only [selectedSame] using leaf)
+      simpa only [selectedSame] using shape

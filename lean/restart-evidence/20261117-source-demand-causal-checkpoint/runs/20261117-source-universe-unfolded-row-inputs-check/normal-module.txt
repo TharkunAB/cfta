@@ -1,0 +1,193 @@
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261117-source-universe-unfolded-row-inputs-check/source/MicroCFTA/SourceSynthesisCurrentUniverseUnfoldedRowInputs.lean:35:8: error: automatically included section variable(s) unused in theorem `_private.MicroCFTA.SourceSynthesisCurrentUniverseUnfoldedRowInputs.0.MicroCFTA.SourceSynthesisCurrentUniverseUnfoldedRowInputs.output_origin`:
+  [DecidableEq (EdgeKey Symbol Constraint)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq (EdgeKey Symbol Constraint)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261117-source-universe-unfolded-row-inputs-check/source/MicroCFTA/SourceSynthesisCurrentUniverseUnfoldedRowInputs.lean:46:8: error: automatically included section variable(s) unused in theorem `_private.MicroCFTA.SourceSynthesisCurrentUniverseUnfoldedRowInputs.0.MicroCFTA.SourceSynthesisCurrentUniverseUnfoldedRowInputs.captured_row_leaves`:
+  [DecidableEq (EdgeKey Symbol Constraint)]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq (EdgeKey Symbol Constraint)] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261117-source-universe-unfolded-row-inputs-check/source/MicroCFTA/SourceSynthesisCurrentUniverseUnfoldedRowInputs.lean:96:2: error: 'change' tactic failed, pattern
+  (match
+      InternedFreshOrdinaryStoredSubstitution.execute body
+        (replacement (Reference.interned entry.identity) (Value.mu entry body depth ordinary)) before with
+    | Outcome.done value reached => MergedSourceComparison.Result.done value reached
+    | Outcome.pending key reached =>
+      MergedSourceComparison.Result.failed (MergedSourceComparison.Fault.pending key) reached) =
+    MergedSourceComparison.Result.done prepared after
+is not definitionally equal to target
+  SourcePruningEnumerationSelectedValue.run fuel (Value.mu entry body depth ordinary) before =
+    MergedSourceComparison.Result.done prepared after
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261117-source-universe-unfolded-row-inputs-check/source/MicroCFTA/SourceSynthesisCurrentUniverseUnfoldedRowInputs.lean:150:6: error: unexpected token 'universe'; expected '(', ':=', '|' or term
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261117-source-universe-unfolded-row-inputs-check/source/MicroCFTA/SourceSynthesisCurrentUniverseUnfoldedRowInputs.lean:150:6: error: Missing cases:
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261117-source-universe-unfolded-row-inputs-check/source/MicroCFTA/SourceSynthesisCurrentUniverseUnfoldedRowInputs.lean:144:4: error: unsolved goals
+inst✝ : DecidableEq (EdgeKey Symbol Constraint)
+lib : Library
+query : Query
+signed : Int
+whole : Expression
+accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole
+rootValue : Node
+sourceHeap : InternedConstructorTemplates.State Symbol Constraint
+built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty = Outcome.done rootValue sourceHeap
+key : NodeKey
+entry : Interned NodeKey
+body depth ordinary : Node
+stored : sourceHeap.nodeRecords key = some (Value.mu entry body depth ordinary)
+nativeBefore nativeAfter : InternedConstructorTemplates.State Symbol Constraint
+facts : Facts nativeBefore
+sourceGrowth : Grows sourceHeap nativeBefore
+fuel : Nat
+prepared : Node
+actual :
+  SourcePruningEnumerationSelectedValue.run fuel (Value.mu entry body depth ordinary) nativeBefore =
+    MergedSourceComparison.Result.done prepared nativeAfter
+row : Edge
+present : row ∈ InternedEdgeResidency.nodeEdges prepared
+bodyEntry : Interned NodeKey
+marker : Value (SourceObservations.Label FullSyntax.Formula) SourceSynthesisGeneralizeSyntax.Guard
+arrow : EdgeValue (SourceObservations.Label FullSyntax.Formula) SourceSynthesisGeneralizeSyntax.Guard
+rows : List (EdgeValue (SourceObservations.Label FullSyntax.Formula) SourceSynthesisGeneralizeSyntax.Guard)
+bodyEq : body = Value.node bodyEntry (canonicalEdges (arrow :: rows)) 0 [Reference.interned entry.identity]
+markerRead :
+  ∃ markerEntry markerRow,
+    marker = Value.node markerEntry [markerRow] 0 [] ∧
+      markerRow.children = [] ∧
+        markerRow.entry.key =
+          { symbol := literal "(->)", children := [], constraint := SourceSynthesisGeneralizeSyntax.top }
+arrowChildren :
+  arrow.children =
+    [marker, Value.reference (Reference.interned entry.identity), Value.reference (Reference.interned entry.identity)]
+arrowKey :
+  arrow.entry.key =
+    { symbol := literal "->",
+      children :=
+        [marker.referenceOf, InternedBinderProtocol.NodeRef.ref (Reference.interned entry.identity),
+          InternedBinderProtocol.NodeRef.ref (Reference.interned entry.identity)],
+      constraint := SourceSynthesisGeneralizeSyntax.top }
+aligned :
+  All₂
+    (fun descriptor row =>
+      row.children = List.replicate descriptor.snd (Value.reference (Reference.interned entry.identity)) ∧
+        row.entry.key =
+          { symbol := literal descriptor.fst,
+            children :=
+              List.replicate descriptor.snd (InternedBinderProtocol.NodeRef.ref (Reference.interned entry.identity)),
+            constraint := SourceSynthesisGeneralizeSyntax.top })
+    (SourceSynthesisUniverseBody.descriptors (SourceSynthesisCurrentContext.constructorCatalog lib query)) rows
+markerClosed : marker.free = []
+_markerAvailable : Available sourceHeap marker
+kinds :
+  ∀ (row : EdgeValue (SourceObservations.Label FullSyntax.Formula) SourceSynthesisGeneralizeSyntax.Guard),
+    row ∈ canonicalEdges (arrow :: rows) →
+      row.entry.key.constraint = SourceSynthesisGeneralizeSyntax.top ∧
+        ∀ (child : Value (SourceObservations.Label FullSyntax.Formula) SourceSynthesisGeneralizeSyntax.Guard),
+          child ∈ row.children → child = marker ∨ child = Value.reference (Reference.interned entry.identity)
+_arrowRetained : arrow ∈ canonicalEdges (arrow :: rows)
+sources : List (EdgeValue (SourceObservations.Label FullSyntax.Formula) SourceSynthesisGeneralizeSyntax.Guard) :=
+  canonicalEdges (arrow :: rows)
+⊢ ∃ sourceRow,
+    sourceRow ∈ InternedEdgeResidency.nodeEdges body ∧
+      row.entry.key.symbol = sourceRow.entry.key.symbol ∧
+        row.entry.key.constraint = sourceRow.entry.key.constraint ∧
+          row.children =
+              List.map (input (replacement (Reference.interned entry.identity) (Value.mu entry body depth ordinary)))
+                sourceRow.children ∧
+            ((∃ name arity,
+                (name, arity) ∈
+                    SourceSynthesisUniverseBody.descriptors
+                      (SourceSynthesisCurrentContext.constructorCatalog lib query) ∧
+                  row.entry.key.symbol = literal name ∧
+                    row.children = List.replicate arity (Value.mu entry body depth ordinary)) ∨
+              ∃ marker markerEntry markerRow,
+                marker = Value.node markerEntry [markerRow] 0 [] ∧
+                  markerRow.children = [] ∧
+                    markerRow.entry.key =
+                        { symbol := literal "(->)", children := [],
+                          constraint := SourceSynthesisGeneralizeSyntax.top } ∧
+                      row.entry.key.symbol = literal "->" ∧
+                        row.children = [marker, Value.mu entry body depth ordinary, Value.mu entry body depth ordinary])
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261117-source-universe-unfolded-row-inputs-check/source/MicroCFTA/SourceSynthesisCurrentUniverseUnfoldedRowInputs.lean:150:14: error: unexpected token ':'; expected identifier
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261117-source-universe-unfolded-row-inputs-check/source/MicroCFTA/SourceSynthesisCurrentUniverseUnfoldedRowInputs.lean:152:2: error: expected checkColGt
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261117-source-universe-unfolded-row-inputs-check/source/MicroCFTA/SourceSynthesisCurrentUniverseUnfoldedRowInputs.lean:153:58: error: unexpected token ':='; expected identifier
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261117-source-universe-unfolded-row-inputs-check/source/MicroCFTA/SourceSynthesisCurrentUniverseUnfoldedRowInputs.lean:154:35: error: unexpected token '('; expected identifier
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261117-source-universe-unfolded-row-inputs-check/source/MicroCFTA/SourceSynthesisCurrentUniverseUnfoldedRowInputs.lean:154:81: error: unexpected token ')'; expected command
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261117-source-universe-unfolded-row-inputs-check/source/MicroCFTA/SourceSynthesisCurrentUniverseUnfoldedRowInputs.lean:156:59: error: unexpected token ','; expected identifier
+/home/tritlo/Code/mcfta/lean/restart-evidence/20261117-source-universe-unfolded-row-inputs-check/source/MicroCFTA/SourceSynthesisCurrentUniverseUnfoldedRowInputs.lean:205:92: error: unexpected token ':='; expected identifier
+MicroCFTA.SourceSynthesisCurrentUniverseUnfoldedRowInputs.original_universe_unfolded_row_inputs
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (lib : MicroCFTA.SourceSynthesisTypeSyntax.Library) (query : MicroCFTA.SourceSynthesisTypeSyntax.Query) (signed : Int)
+  (whole : MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression)
+  (accepted : MicroCFTA.SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole)
+  (rootValue :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (sourceHeap :
+    MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (built :
+    MicroCFTA.InternedFreshOrdinaryConstruction.build
+        (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+        MicroCFTA.InternedConstructorTemplates.empty =
+      MicroCFTA.InternedNestedConstruction.Outcome.done rootValue sourceHeap)
+  (key : MicroCFTA.InternedBinderProtocol.NodeKey)
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (body depth ordinary :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (stored :
+    sourceHeap.nodeRecords key = some (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary))
+  (nativeBefore nativeAfter :
+    MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (facts : MicroCFTA.InternedNestedFacts.Facts nativeBefore)
+  (sourceGrowth : MicroCFTA.InternedConstructorTemplates.Grows sourceHeap nativeBefore) (fuel : Nat)
+  (prepared :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (actual :
+    MicroCFTA.SourcePruningEnumerationSelectedValue.run fuel
+        (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary) nativeBefore =
+      MicroCFTA.MergedSourceComparison.Result.done prepared nativeAfter)
+  (row :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (present : row ∈ MicroCFTA.InternedEdgeResidency.nodeEdges prepared) :
+  ∃ sourceRow,
+    sourceRow ∈ MicroCFTA.InternedEdgeResidency.nodeEdges body ∧
+      row.entry.key.symbol = sourceRow.entry.key.symbol ∧
+        row.entry.key.constraint = sourceRow.entry.key.constraint ∧
+          row.children =
+              List.map
+                (MicroCFTA.InternedStoredSubstitution.input
+                  (MicroCFTA.InternedStoredSubstitutionRebind.replacement
+                    (MicroCFTA.InternedBinderProtocol.Reference.interned entry.identity)
+                    (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary)))
+                sourceRow.children ∧
+            ((∃ name arity,
+                (name, arity) ∈
+                    MicroCFTA.SourceSynthesisUniverseBody.descriptors
+                      (MicroCFTA.SourceSynthesisCurrentContext.constructorCatalog lib query) ∧
+                  row.entry.key.symbol = MicroCFTA.SourceSynthesisLabelProgramBuildRoles.literal name ∧
+                    row.children =
+                      List.replicate arity
+                        (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary)) ∨
+              ∃ marker markerEntry markerRow,
+                marker = MicroCFTA.InternedConstructorTemplates.Value.node markerEntry [markerRow] 0 [] ∧
+                  markerRow.children = [] ∧
+                    markerRow.entry.key =
+                        { symbol := MicroCFTA.SourceSynthesisLabelProgramBuildRoles.literal "(->)", children := [],
+                          constraint := MicroCFTA.SourceSynthesisGeneralizeSyntax.top } ∧
+                      row.entry.key.symbol = MicroCFTA.SourceSynthesisLabelProgramBuildRoles.literal "->" ∧
+                        row.children =
+                          [marker, MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary,
+                            MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary])
+'MicroCFTA.SourceSynthesisCurrentUniverseUnfoldedRowInputs.original_universe_unfolded_row_inputs' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

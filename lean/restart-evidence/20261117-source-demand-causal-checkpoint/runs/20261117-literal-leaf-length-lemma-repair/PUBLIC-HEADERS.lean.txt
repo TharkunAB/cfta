@@ -1,0 +1,53 @@
+theorem selected_nullary_fragment
+    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List Edge) (policy : Policy)
+    (consume : Receipt width → Result Output Reason width)
+    (bucket : List Suspended) (edge : Edge) (caller reached : Caller width)
+    (before finished : Cached) (queries saved : Queries) (index : Nat) (output : Output)
+    (fragment : Fragment) (consumerIndex : Nat) (leaf : edge.children = [])
+    (trace : SelectedInvocationAt checkEmpty r n p h k edgesOf policy consume bucket edge caller before queries
+      index output (.complete fragment reached saved finished) consumerIndex) :
+    fragment = .node edge.entry.key.symbol []
+
+theorem child_nullary_fragment
+    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List Edge) (policy : Policy)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey) (row : Edge)
+    (depth : Nat) (free : List InternedBinderProtocol.Reference) (bucket : List Suspended)
+    (caller reached : Caller width) (before finished : Cached) (queries saved : Queries)
+    (done : Fragment → Caller width → Queries → Cached → Result Output Reason width)
+    (stopped : ChildDispatch.Observation width → Option Cached → Result Output Reason width)
+    (index consumerIndex : Nat) (output : Output) (fragment : Fragment)
+    (nonterminal : bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) = false)
+    (selector : edgesOf (.node entry [row] depth free) = [row])
+    (leaf : row.children = [])
+    (control : match policy with
+      | .eager => True
+      | .guarded parent => MergedOrdinaryHeight.height (.node entry [row] depth free) < MergedOrdinaryHeight.height parent
+      | .shallow => False)
+    (trace : ChildInvocationAt checkEmpty r n p h k edgesOf policy bucket
+      (.node entry [row] depth free) caller before queries done stopped index output
+      (.done fragment reached saved finished) consumerIndex) :
+    fragment = .node row.entry.key.symbol []
+
+theorem selected_first_nullary_child_fragment
+    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List Edge) (policy : Policy)
+    (consume : Receipt width → Result Output Reason width)
+    (scs : List Suspended) (edge : Edge) (caller reached : Caller width)
+    (before finished : Cached) (queries saved : Queries) (index : Nat) (output : Output)
+    (fragment : Fragment) (consumerIndex : Nat)
+    (symbol : Symbol) (staged : List Input) (residual : Option Constraint) (middle : Cached)
+    (prepared : SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs edge before =
+      some [((symbol, staged, residual), middle)])
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey) (row : Edge)
+    (depth : Nat) (free : List InternedBinderProtocol.Reference) (bucket : List Suspended)
+    (action : Option (EnumerateM Symbol Constraint Fragment))
+    (first : staged[0]? = some (.node entry [row] depth free, bucket, action))
+    (nonterminal : bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) = false)
+    (selector : edgesOf (.node entry [row] depth free) = [row]) (leaf : row.children = [])
+    (control : match policy with
+      | .eager => True
+      | .guarded parent => MergedOrdinaryHeight.height (.node entry [row] depth free) < MergedOrdinaryHeight.height parent
+      | .shallow => False)
+    (trace : SelectedInvocationAt checkEmpty r n p h k edgesOf policy consume scs edge caller before queries
+      index output (.complete fragment reached saved finished) consumerIndex) :
+    ∃ remaining : List Fragment,
+      fragment = .node symbol (.node row.entry.key.symbol [] :: remaining)

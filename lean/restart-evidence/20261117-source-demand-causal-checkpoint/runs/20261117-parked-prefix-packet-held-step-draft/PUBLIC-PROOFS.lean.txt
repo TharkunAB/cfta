@@ -1,0 +1,195 @@
+theorem actual_parked_callback_packet_at_original_budget
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (metadata updated : Metadata Typing)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller width) (memos : Memos) (before parked : Cached)
+    (profile : Profile) (property : Constraint → Prop)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (bounded : Fits profile caller.checked)
+    (known : SourceEqualityAnnotationHeap.Heap property caller.checked.native.machine.heap)
+    (workFuel uv : Nat) (checked core : Core) (next : Option Next)
+    (chosen : SourcePruningEnumerationRestart.decision stop order metadata before = some (.expand uv))
+    (actual : SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order
+      metadata workFuel workFuel workFuel workFuel workFuel workFuel uv caller before memos.query =
+        .parked checked (some parked) (some [.ok ((updated, next), core)])) :
+    updated = metadata ∧ parked.core = checked ∧ core = parked.core ∧
+      EnumerationExpandableIndex.frame core parked = parked ∧
+      next = SourcePruningEnumerationRestart.decision stop order updated
+        (EnumerationExpandableIndex.frame core parked) ∧ next ≠ some .stuck ∧
+      Packet formulas solver inventory caller memos updated
+        (EnumerationExpandableIndex.frame core parked) ∧
+      Fits profile caller.checked ∧
+      SourceEqualityAnnotationHeap.Heap property caller.checked.native.machine.heap
+ := by
+  have current := SourcePruningEnumerationSharedRecursive.prefix_real_continuing_current_at_original_budget
+    holeKey fits admits graph templates stop order metadata formulas solver inventory caller memos before packet
+    profile property bounded known workFuel uv chosen
+  rw [actual] at current
+  dsimp only at current
+  obtain ⟨cached, sameCache, coreSame, rawSame, cachedPacket⟩ := current.1
+  have cachedSame := Option.some.inj sameCache
+  subst cached
+  rw [← coreSame, SourcePruningEnumerationRestart.run_exact] at rawSame
+  by_cases blocked : SourcePruningEnumerationRestart.decision stop order metadata parked = some .stuck
+  · rw [ite_eq_left blocked] at rawSame
+    cases rawSame
+  · rw [ite_eq_right blocked] at rawSame
+    have shape := Except.ok.inj (List.cons.inj (Option.some.inj rawSame)).1
+    have metadataSame := (Prod.mk.inj (Prod.mk.inj shape).1).1
+    have nextSame := (Prod.mk.inj (Prod.mk.inj shape).1).2
+    have stateSame := (Prod.mk.inj shape).2
+    have framed : EnumerationExpandableIndex.frame core parked = parked := by
+      rw [stateSame]
+      cases parked
+      rfl
+    have trueNext : next = SourcePruningEnumerationRestart.decision stop order updated
+        (EnumerationExpandableIndex.frame core parked) := by
+      rw [metadataSame, framed]
+      exact nextSame
+    have notStuck : next ≠ some .stuck := by
+      rw [nextSame]
+      exact blocked
+    have tailPacket : Packet formulas solver inventory caller memos updated
+        (EnumerationExpandableIndex.frame core parked) := by
+      simpa only [metadataSame, framed] using cachedPacket
+    exact ⟨metadataSame, coreSame, stateSame, framed, trueNext, notStuck, tailPacket, bounded, known⟩
+
+theorem actual_parked_callback_packet_held_history_at_original_budget
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (metadata updated : Metadata Typing)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller width) (memos : Memos) (before parked : Cached)
+    (profile : Profile) (property : Constraint → Prop)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (bounded : Fits profile caller.checked)
+    (known : SourceEqualityAnnotationHeap.Heap property caller.checked.native.machine.heap)
+    (workFuel uv : Nat) (checked core : Core) (next : Option Next)
+    (chosen : SourcePruningEnumerationRestart.decision stop order metadata before = some (.expand uv))
+    (actual : SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order
+      metadata workFuel workFuel workFuel workFuel workFuel workFuel uv caller before memos.query =
+        .parked checked (some parked) (some [.ok ((updated, next), core)]))
+    (held heldHandle : Nat) (value : Node)
+    (isolated : IsolatedPending held heldHandle before.core)
+    (decoded : SourcePruningEnumerationNodes.lookupNode caller.checked.native.machine.heap heldHandle = some value)
+    (boundary : MergedOrdinaryHeight.recursiveBoundary value = true) :
+    uv ≠ held ∧ updated = metadata ∧
+      EnumerationExpandableIndex.frame core parked = parked ∧
+      next = SourcePruningEnumerationRestart.decision stop order updated
+        (EnumerationExpandableIndex.frame core parked) ∧ next ≠ some .stuck ∧
+      Packet formulas solver inventory caller memos updated
+        (EnumerationExpandableIndex.frame core parked) ∧
+      HeldFragmentHistory held heldHandle before.core
+        (EnumerationExpandableIndex.frame core parked).core
+ := by
+  obtain ⟨metadataSame, _checkedSame, _stateSame, framed, trueNext, notStuck, tailPacket,
+      _bounded, _known⟩ := actual_parked_callback_packet_at_original_budget
+    holeKey fits admits graph templates stop order metadata updated formulas solver inventory
+    caller memos before parked profile property packet bounded known workFuel uv checked core next chosen actual
+  have retained := SourcePruningEnumerationSelectedStep.prefix_held_fragment_history_at_original_budget
+    holeKey fits admits graph templates stop order metadata formulas solver inventory
+    workFuel uv caller before memos held heldHandle value packet isolated decoded boundary chosen
+  rw [actual] at retained
+  have tailHistory : HeldFragmentHistory held heldHandle before.core
+      (EnumerationExpandableIndex.frame core parked).core := by
+    rw [framed]
+    exact retained.2.2 parked rfl
+  exact ⟨retained.1, metadataSame, framed, trueNext, notStuck, tailPacket, tailHistory⟩
+
+theorem two_actual_parked_prefixes_packet_held_history
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller width) (memos : Memos) (before firstParked secondParked : Cached)
+    (metadata firstUpdated secondUpdated : Metadata Typing)
+    (profile : Profile) (property : Constraint → Prop)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (bounded : Fits profile caller.checked)
+    (known : SourceEqualityAnnotationHeap.Heap property caller.checked.native.machine.heap)
+    (workFuel depth firstUv secondUv : Nat)
+    (firstChecked firstCore secondChecked secondCore : Core) (next : Option Next)
+    (chosen : SourcePruningEnumerationRestart.decision stop order metadata before = some (.expand firstUv))
+    (firstActual : SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order
+      metadata workFuel workFuel workFuel workFuel workFuel workFuel firstUv caller before memos.query =
+        .parked firstChecked (some firstParked) (some [.ok ((firstUpdated, some (.expand secondUv)), firstCore)]))
+    (secondActual : SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order
+      firstUpdated workFuel workFuel workFuel workFuel workFuel workFuel secondUv caller
+      (EnumerationExpandableIndex.frame firstCore firstParked) memos.query =
+        .parked secondChecked (some secondParked) (some [.ok ((secondUpdated, next), secondCore)]))
+    (index : Nat) (output : Output width Typing)
+    (observed : (emitted (resumeWithNarrow
+      (SourcePruningEnumerationSharedEagerChildren.eagerChild
+        checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
+      (SourcePruningOuterNarrow.narrow holeKey fits admits)
+      graph templates checkEmpty edgesOf stop order workFuel (depth + 2)
+      metadata caller memos.query before (some (.expand firstUv))))[index]? = some output) :
+    ∃ (handle : Nat) (bucket : List EnumerationState.Suspended) (value : Node),
+      before.core.values[firstUv]? = some (.unenumerated (some handle) bucket) ∧
+      SourcePruningEnumerationNodes.lookupNode caller.checked.native.machine.heap handle = some value ∧
+      MergedOrdinaryHeight.recursiveBoundary value = true ∧
+      Packet formulas solver inventory caller memos firstUpdated
+        (EnumerationExpandableIndex.frame firstCore firstParked) ∧
+      Packet formulas solver inventory caller memos secondUpdated
+        (EnumerationExpandableIndex.frame secondCore secondParked) ∧
+      some (.expand secondUv) = SourcePruningEnumerationRestart.decision stop order firstUpdated
+        (EnumerationExpandableIndex.frame firstCore firstParked) ∧
+      next = SourcePruningEnumerationRestart.decision stop order secondUpdated
+        (EnumerationExpandableIndex.frame secondCore secondParked) ∧
+      secondUv ≠ firstUv ∧
+      HeldFragmentHistory firstUv handle firstParked.core
+        (EnumerationExpandableIndex.frame secondCore secondParked).core ∧
+      (emitted (resumeWithNarrow
+        (SourcePruningEnumerationSharedEagerChildren.eagerChild
+          checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
+        (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        graph templates checkEmpty edgesOf stop order workFuel depth
+        secondUpdated caller memos.query (EnumerationExpandableIndex.frame secondCore secondParked) next))[index]? =
+          some output
+ := by
+  obtain ⟨_firstMetadataSame, _firstCheckedSame, _firstCoreSame, firstFrame, firstNext, _firstNotStuck,
+      firstPacket, _firstBounded, _firstKnown⟩ := actual_parked_callback_packet_at_original_budget
+    holeKey fits admits graph templates stop order metadata firstUpdated formulas solver inventory
+    caller memos before firstParked profile property packet bounded known workFuel firstUv
+    firstChecked firstCore (some (.expand secondUv)) chosen firstActual
+  obtain ⟨handle, bucket, _readAfter, value, _size, _resolved,
+      _reading, stored, _pending, _avoid, isolated, _path, _readFrame, decoded, boundary,
+      _checking, _resolution, _resolvedFrame, _seen, _resolvedStored, _written, _shape,
+      _parkedCore, _adapted, _restarted, _updatedEq, _coreEq, _nextEq, _notStuck, _aliases, _restart⟩ :=
+    SourcePruningEnumerationParkedRemovedBucketInputs.actual_parked_removed_bucket_inputs
+      holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel (depth + 1) firstUv
+      formulas solver inventory metadata firstUpdated caller memos before firstParked firstChecked firstCore
+      (some (.expand secondUv)) packet chosen firstActual
+  have isolatedInput : IsolatedPending firstUv handle
+      (EnumerationExpandableIndex.frame firstCore firstParked).core := by
+    rw [firstFrame]
+    exact isolated
+  have secondChosen : SourcePruningEnumerationRestart.decision stop order firstUpdated
+      (EnumerationExpandableIndex.frame firstCore firstParked) = some (.expand secondUv) := firstNext.symm
+  obtain ⟨different, _secondMetadataSame, _secondFrame, secondNext, _secondNotStuck,
+      secondPacket, retained⟩ := actual_parked_callback_packet_held_history_at_original_budget
+    holeKey fits admits graph templates stop order firstUpdated secondUpdated formulas solver inventory
+    caller memos (EnumerationExpandableIndex.frame firstCore firstParked) secondParked profile property
+    firstPacket bounded known workFuel secondUv secondChecked secondCore next secondChosen secondActual
+    firstUv handle value isolatedInput decoded boundary
+  have retainedFromFirst : HeldFragmentHistory firstUv handle firstParked.core
+      (EnumerationExpandableIndex.frame secondCore secondParked).core := by
+    simpa only [firstFrame] using retained
+  have firstRun := parked_resume_eq holeKey fits admits graph templates checkEmpty edgesOf stop order
+    workFuel (depth + 1) firstUv metadata firstUpdated caller memos before firstParked firstChecked firstCore
+    (some (.expand secondUv)) firstActual
+  have secondRun := parked_resume_eq holeKey fits admits graph templates checkEmpty edgesOf stop order
+    workFuel depth secondUv firstUpdated secondUpdated caller memos
+    (EnumerationExpandableIndex.frame firstCore firstParked) secondParked secondChecked secondCore next secondActual
+  have suffixObserved := observed
+  rw [firstRun, secondRun] at suffixObserved
+  exact ⟨handle, bucket, value, stored, decoded, boundary, firstPacket, secondPacket,
+    firstNext, secondNext, different, retainedFromFirst, suffixObserved⟩
