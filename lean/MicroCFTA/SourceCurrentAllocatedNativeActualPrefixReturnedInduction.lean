@@ -256,3 +256,140 @@ theorem returned_at_every_actual_prefix
   exact ⟨allPrefixes count rest after (by omega) actual, allPrefixes⟩
 
 end MicroCFTA.SourceCurrentAllocatedNativeActualPrefixReturnedInduction
+
+namespace MicroCFTA.SourceCurrentAllocatedNativeActualPrefixReturnedInduction
+open InternedConstructorTemplates SourceRecursiveIntersectionCode SourceRecursiveIntersectionThunks
+open SourceEqualityNativeDemand
+open SourceCurrentAllocatedNativeContextCache (Returned)
+open SourceCurrentAllocatedNativePhysicalTraceCompletion (Trace)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "Native" => SourceRecursiveIntersectionThunks.State
+local notation "Inputs" => SourceCurrentAllocatedNativePhysicalExecution.Inputs
+variable {width : Nat}
+
+set_option autoImplicit false
+
+/- See Note [Actual warm query prefix] in
+SourceCurrentAllocatedNativeCompileDispatchOrigin. The same start state,
+full memo tables and original trace counts remain in this interface.
+-/
+
+theorem returned_at_every_actual_warm_prefix
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (nodeLaw : NodeRequest Symbol Guard → Value Symbol Guard → Prop)
+    (edgeLaw : EdgeRequest Symbol Guard → EdgeValue Symbol Guard → Prop)
+    (rootRequest : NodeRequest Symbol Guard)
+    (start : Checked width) (startShape : SourceRecursiveIntersectionNative.Shape start.native)
+    (initialNodes : Returned nodeLaw start.native.nodes)
+    (initialEdges : Returned edgeLaw start.native.edges)
+    (fuel count : Nat) (rest : Control (Value Symbol Guard)) (after : Checked width)
+    (bounded : count ≤ fuel)
+    (actual : Trace count (.code (.node rootRequest .pure))
+      start rest after)
+    (nodeBodies : ∀ (finishUsed dispatchUsed bodyCount handle : Nat)
+      (request : NodeRequest Symbol Guard) (value : Value Symbol Guard)
+      (beforeBody beforeFinish : Checked width)
+      (resume : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard)),
+      finishUsed < count → dispatchUsed + bodyCount = finishUsed → 0 < dispatchUsed →
+      Trace finishUsed (.code (.node rootRequest .pure))
+        start
+        (.code (.finishNode handle value (resume value))) beforeFinish →
+      Steps dispatchUsed (.code (.node rootRequest .pure))
+        start
+        (.code ((compileNode request).bind
+          (fun result => .finishNode handle result (resume result)))) beforeBody →
+      beforeBody.native.nodes.cells handle = some ⟨request, .evaluating⟩ →
+      Steps bodyCount (.code (compileNode request)) beforeBody (.code (.pure value)) beforeFinish →
+      beforeFinish.native.nodes.cells handle = some ⟨request, .evaluating⟩ →
+      Returned nodeLaw beforeFinish.native.nodes → Returned edgeLaw beforeFinish.native.edges →
+      nodeLaw request value)
+    (edgeBodies : ∀ (finishUsed dispatchUsed bodyCount handle : Nat)
+      (request : EdgeRequest Symbol Guard) (value : EdgeValue Symbol Guard)
+      (beforeBody beforeFinish : Checked width)
+      (resume : EdgeValue Symbol Guard → Code Symbol Guard (Value Symbol Guard)),
+      finishUsed < count → dispatchUsed + bodyCount = finishUsed → 0 < dispatchUsed →
+      Trace finishUsed (.code (.node rootRequest .pure))
+        start
+        (.code (.finishEdge handle value (resume value))) beforeFinish →
+      Steps dispatchUsed (.code (.node rootRequest .pure))
+        start
+        (.edgeBody request (fun result => .finishEdge handle result (resume result))) beforeBody →
+      beforeBody.native.edges.cells handle = some ⟨request, .evaluating⟩ →
+      Steps bodyCount (.edgeBody request .pure) beforeBody (.code (.pure value)) beforeFinish →
+      beforeFinish.native.edges.cells handle = some ⟨request, .evaluating⟩ →
+      Returned nodeLaw beforeFinish.native.nodes → Returned edgeLaw beforeFinish.native.edges →
+      edgeLaw request value) :
+    (Returned nodeLaw after.native.nodes ∧ Returned edgeLaw after.native.edges) ∧
+      ∀ (used : Nat) (currentControl : Control (Value Symbol Guard)) (current : Checked width),
+        used ≤ count →
+        Trace used (.code (.node rootRequest .pure))
+          start currentControl current →
+        Returned nodeLaw current.native.nodes ∧ Returned edgeLaw current.native.edges
+ := by
+  have stepAt (used : Nat) (control next : Control (Value Symbol Guard))
+      (before current : Checked width) (smaller : used < count)
+      (origin : Trace used (.code (.node rootRequest .pure))
+        start control before)
+      (nodes : Returned nodeLaw before.native.nodes) (edges : Returned edgeLaw before.native.edges)
+      (inputs : Inputs control before)
+      (one : SourceEqualityNativeDemand.step control before = .yielded next current) :
+      Returned nodeLaw current.native.nodes ∧ Returned edgeLaw current.native.edges := by
+    apply step_returned nodeLaw edgeLaw control next before current nodes edges inputs one
+    · intro handle value next request same owner
+      subst control
+      obtain ⟨dispatchUsed, bodyCount, beforeBody, resume, total, positive, _dispatchBound,
+          entered, running, bodyTrace, last⟩ :=
+        SourceCurrentAllocatedNativeCompileDispatchOrigin.compiled_node_origin_from_warm_query_finish
+          rootRequest start startShape fuel used handle request value next before
+          (by omega) origin owner
+      apply nodeBodies used dispatchUsed bodyCount handle request value beforeBody before resume
+        smaller total positive ?_ entered running bodyTrace owner nodes edges
+      simpa only [last] using origin
+    · intro handle value next request same owner
+      subst control
+      obtain ⟨dispatchUsed, bodyCount, beforeBody, resume, total, positive, _dispatchBound,
+          entered, running, bodyTrace, last⟩ :=
+        SourceCurrentAllocatedNativeEdgeCompileDispatchOrigin.checked_edge_body_origin_from_warm_query_finish
+          rootRequest start startShape fuel used handle request value next before
+          (by omega) origin owner
+      apply edgeBodies used dispatchUsed bodyCount handle request value beforeBody before resume
+        smaller total positive ?_ entered running bodyTrace owner nodes edges
+      simpa only [last] using origin
+  have advance (remaining : Nat) :
+      ∀ (used : Nat) (control final : Control (Value Symbol Guard)) (before last : Checked width),
+        used + remaining ≤ count →
+        Trace used (.code (.node rootRequest .pure))
+          start control before →
+        (Returned nodeLaw before.native.nodes ∧ Returned edgeLaw before.native.edges) →
+        Trace remaining control before final last →
+        Returned nodeLaw last.native.nodes ∧ Returned edgeLaw last.native.edges := by
+    induction remaining with
+    | zero =>
+        intro used control final before last _within _origin known tail
+        cases tail
+        exact known
+    | succ remaining ih =>
+        intro used control final before last within origin known tail
+        cases tail with
+        | cons _ _ next middle _ _ _ inputs one later =>
+            have currentLaws := stepAt used control next before middle (by omega)
+              origin known.1 known.2 inputs one
+            have oneTrace : Trace 1 control before next middle :=
+              .cons _ _ _ _ _ _ 0 inputs one (.refl _ _)
+            have nextOrigin : Trace (used + 1) (.code (.node rootRequest .pure))
+                start next middle :=
+              origin.trans oneTrace
+            exact ih (used + 1) next final middle last (by omega) nextOrigin currentLaws later
+  have allPrefixes (used : Nat) (currentControl : Control (Value Symbol Guard)) (current : Checked width)
+      (within : used ≤ count)
+      (origin : Trace used (.code (.node rootRequest .pure))
+        start currentControl current) :
+      Returned nodeLaw current.native.nodes ∧ Returned edgeLaw current.native.edges := by
+    exact advance used 0 (.code (.node rootRequest .pure)) currentControl
+      start current (by omega) (.refl _ _)
+      ⟨initialNodes, initialEdges⟩ origin
+  exact ⟨allPrefixes count rest after (by omega) actual, allPrefixes⟩
+
+end MicroCFTA.SourceCurrentAllocatedNativeActualPrefixReturnedInduction
