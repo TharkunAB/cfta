@@ -1,0 +1,242 @@
+from pathlib import Path
+import ast
+import hashlib
+import json
+import re
+import subprocess
+import tempfile
+
+root = Path('/home/tritlo/Code/mcfta')
+base = root / 'lean/restart-evidence'
+control = base / '20261117-third-query-six-seed-check-control-draft'
+work = base / '20261117-third-query-node-seed-work'
+assert Path(__file__).resolve().parent == work.resolve(), 'Root must review and copy this controller.'
+assert Path(__file__).read_bytes() == (control / 'prepare-six-seed-check.py').read_bytes()
+selection = json.loads((control / 'SELECTION.json').read_text())
+assert selection['status'] == 'FROZEN PRIVATE CHECK CANDIDATE / NOT EXECUTED'
+runtime = base / selection['runtime']
+assert not runtime.exists(), 'Preserve earlier attempts and use a fresh runtime.'
+sha = lambda data: hashlib.sha256(data).hexdigest()
+bound = set()
+
+
+def verify(path, record):
+    data = path.read_bytes()
+    digest = record['sha256'] if isinstance(record, dict) else record
+    assert sha(data) == digest, str(path)
+    if isinstance(record, dict) and 'bytes' in record:
+        assert len(data) == record['bytes'], str(path)
+    bound.add(path)
+    return data
+
+
+def records(value):
+    return list(value.items()) if isinstance(value, dict) else [(item['path'], item) for item in value]
+
+
+for name, record in json.loads((control / 'MANIFEST.json').read_text())['files'].items():
+    verify(control / name, record)
+bound.add(control / 'MANIFEST.json')
+assert len(selection['components']) == selection['expected_checks'] == 6
+assert selection['compile_order'] == [item['module'] for item in selection['components']]
+assert selection['expected_axiom_reports'] == 7 and selection['expected_declaration_checks'] == 0
+assert not selection['prior_push_required_for_private_check']
+assert selection['prior_push_required_before_normal_Source_staging']
+prior_work = base / selection['prior_work']
+source_path = prior_work / 'SOURCE-COMMIT.json'
+publication_path = prior_work / 'PUBLICATION-VERIFIED.json'
+source = json.loads(source_path.read_text())
+publication = json.loads(publication_path.read_text())
+assert source['actual_terminal'] and source['actual_terminal_exit'] == 0
+assert source['source_commit'] == selection['source_commit']
+assert source['publication_actual_session'] == publication['actual_session'] == 54013
+assert publication['actual_terminal'] and publication['actual_terminal_exit'] == 0
+assert [item['total_axiom_reports'] for item in publication['checks']] == [702, 4, 297, 702, 702]
+assert all(item['exit'] == 0 and not item['diagnostics'] and not item['sorryAx']
+    and not item['nonstandard_axioms'] for item in publication['checks'])
+assert publication['source_files'] == 6267 and publication['pins_independently_reverified'] == 6872
+assert not source['joint_finite_completion_proved'] and not publication['joint_finite_completion_proved']
+bound.update([source_path, publication_path])
+# Checkpoint/document commits can advance HEAD. Source must stay exactly pinned.
+subprocess.run(['git', 'merge-base', '--is-ancestor', source['source_commit'], 'HEAD'], cwd=root, check=True)
+subprocess.run(['git', 'diff', '--quiet', source['source_commit'], 'HEAD', '--', 'lean/MicroCFTA'], cwd=root, check=True)
+baseline_path = root / selection['source_baseline_path']
+baseline = json.loads(verify(baseline_path, selection['source_baseline_sha256']))
+assert baseline['source_commit'] == source['source_commit']
+sources = sorted((root / 'lean/MicroCFTA').glob('*.lean'))
+assert len(sources) == 6267 and {str(path.relative_to(root)) for path in sources} == set(baseline['sources'])
+for name, record in {**baseline['sources'], **baseline['toolchain']}.items():
+    verify(root / name, record)
+seen = set()
+
+
+def verify_packet(packet, digest):
+    manifest_path = packet / 'MANIFEST.json'
+    verify(manifest_path, digest)
+    if manifest_path in seen:
+        return
+    seen.add(manifest_path)
+    manifest = json.loads(manifest_path.read_text())
+    entries = [(item['path'], item) for item in manifest['artifacts']] if 'artifacts' in manifest else records(manifest['files'])
+    for name, record in entries:
+        verify(packet / name, record)
+    failure_path = packet / 'FAILURE-PINS.json'
+    if failure_path.exists():
+        for record in json.loads(failure_path.read_text())['artifacts']:
+            verify(root / record['path'], record)
+    pin_path = packet / 'SOURCE-PINS.json'
+    if pin_path.exists():
+        for name, record in records(json.loads(pin_path.read_text())):
+            verify(root / name, record)
+
+
+# Retain the failed first attempt and reject its generated sorryAx output.
+failed_runtime = base / selection['first_failed_runtime']
+rejected_path = root / selection['first_failure_receipt']
+rejected = json.loads(rejected_path.read_text())
+failed_results_path = failed_runtime / 'results.json'
+failed_results = json.loads(failed_results_path.read_text())
+assert rejected['actual_session'] == selection['first_failed_session'] == 29139
+assert rejected['actual_terminal'] and rejected['actual_terminal_exit'] == 1
+assert rejected['checks'] == failed_results['checks'] and not failed_results['proof_credit']
+assert rejected['generated_sorryAx_public_report_rejected'] and not rejected['proof_credit']
+assert [item['diagnostics'] for item in rejected['checks']] == [0, 3]
+assert rejected['checks'][0]['exit'] == 0 and rejected['checks'][1]['sorryAx']
+assert not (failed_runtime / 'checked.json').exists()
+bound.update([rejected_path, failed_results_path])
+
+# Historical edge pins name the first node candidate. The corrected node is
+# selected by exact public interface and the recorded two-token proof repair.
+compatibility_path = control / 'NODE-INTERFACE-COMPATIBILITY.json'
+compatibility = json.loads(compatibility_path.read_text())
+old_node = base / compatibility['historical_node_packet']
+new_node = base / compatibility['selected_node_packet']
+verify(old_node / 'MANIFEST.json', compatibility['historical_manifest_sha256'])
+verify(new_node / 'MANIFEST.json', compatibility['selected_manifest_sha256'])
+old_raw = verify(old_node / 'SourceSynthesisCurrentUniverseThirdQueryNodeSeed.lean', compatibility['historical_raw_sha256'])
+new_raw = verify(new_node / 'SourceSynthesisCurrentUniverseThirdQueryNodeSeed.lean', compatibility['selected_raw_sha256'])
+assert not compatibility['raws_equal'] and old_raw != new_raw
+expected_repair = old_raw.replace(b'obtain \xe2\x9f\xa8_within, prefix, _ordered, one, domainSame\xe2\x9f\xa9 := data',
+    b'obtain \xe2\x9f\xa8_within, entryPrefix, _ordered, one, domainSame\xe2\x9f\xa9 := data', 1)
+expected_repair = expected_repair.replace(b'checked_trace_extension prefix initialPhysical',
+    b'checked_trace_extension entryPrefix initialPhysical', 1)
+assert expected_repair == new_raw
+for name in ['FIRST-HEADER.lean.txt', 'AUTHENTIC-KEY-FIRST.lean.txt',
+             'AUXILIARY-EXCLUSION-FIRST.lean.txt', 'PUBLIC-PROOF.lean.txt']:
+    assert (old_node / name).read_bytes() == (new_node / name).read_bytes(), name
+node_pass_path = control / selection['node_private_pass_snapshot']
+node_pass = json.loads(node_pass_path.read_text())
+node_pass_run = base / '20261117-third-query-node-seed-prefix-identifier-repair-check'
+node_pass_checked = node_pass_run / 'checked.json'
+node_checked = json.loads(node_pass_checked.read_text())
+assert node_pass['actual_session'] == selection['prior_node_private_session'] == 32348
+assert node_pass['actual_terminal'] and node_pass['actual_terminal_exit'] == 0
+assert node_pass['checks'] == node_checked['checks'] and node_checked['proof_credit']
+assert all(item['exit'] == 0 and not item['diagnostics'] and not item['sorryAx']
+    and not item['nonstandard_axioms'] for item in node_pass['checks'])
+assert node_pass['pins_independently_reverified'] == 6335
+bound.update([compatibility_path, node_pass_path, node_pass_checked])
+
+for preserved in selection['preserved_prior_controllers'] + selection['independent_reviews']:
+    verify_packet(base / preserved['packet'], preserved['manifest_sha256'])
+
+normal_objects = root / 'lean/.lake/build/lib/lean/MicroCFTA'
+assert normal_objects.is_dir()
+candidate_names = set(selection['compile_order'])
+raw_sources = {}
+normal_imports = set()
+for item in selection['components']:
+    packet = base / item['packet']
+    verify_packet(packet, item['manifest_sha256'])
+    raw = verify(packet / item['source'], {'sha256': item['raw_sha256'], 'bytes': item['raw_bytes']})
+    if item['kind'] == 'existing_owner_EOF':
+        before = verify(root / item['owner_source'], {'sha256': item['owner_sha256'], 'bytes': item['owner_bytes']})
+        appended = verify(packet / item['append'], item['append_sha256'])
+        assert raw == before + appended
+        assert re.findall(rb'^import .*$', raw, re.M) == re.findall(rb'^import .*$', before, re.M)
+        declarations = appended
+    else:
+        assert item['kind'] == 'new_module' and not (root / 'lean/MicroCFTA' / item['source']).exists()
+        declarations = raw
+        if item.get('dependency_file'):
+            deps = json.loads(verify(packet / item['dependency_file'], item['dependency_sha256']))
+            if item['dependency_schema'] == 'node_key':
+                key = selection['components'][0]
+                assert deps['freshKeyModule'] == 'MicroCFTA.' + key['module']
+                assert deps['freshKeyRaw'] == key['raw_sha256']
+                verify(root / deps['freshKeyCandidate'], key['raw_sha256'])
+                verify(root / deps['normalOwnerFullAdmission'], deps['normalOwnerFullAdmissionRaw'])
+            elif item['dependency_schema'] == 'historical_edge_node_interface':
+                assert deps['nodeRaw'] == compatibility['historical_raw_sha256']
+                verify(root / deps['nodeCandidate'], deps['nodeRaw'])
+                assert deps['nodePublicFirst'] == compatibility['shared_public_FIRST_sha256']
+                verify(old_node / 'FIRST-HEADER.lean.txt', deps['nodePublicFirst'])
+            else:
+                assert item['dependency_schema'] == 'joint_composition'
+                assert len(deps['components']) == 5
+                for required, selected in zip(deps['components'], selection['components'][:5]):
+                    assert required['packet'] == str((base / selected['packet']).relative_to(root))
+                    assert required['raw'] == selected['source']
+                    assert required['rawSha256'] == selected['raw_sha256']
+                    assert required['manifestSha256'] == selected['manifest_sha256']
+                assert deps['nodePublicFirstByteExact'] and not deps['rawEqualityClaim']
+    assert b'#print axioms ' not in raw and b'#check ' not in raw
+    assert not re.search(rb'set_option\s+(maxHeartbeats|maxRecDepth|warningAsError|linter\.)', declarations)
+    for header in item['headers']:
+        data = verify(packet / header['file'], header['sha256'])
+        assert data.rstrip(b'\n') in declarations
+    probe = verify(packet / item['probe'], item['probe_sha256'])
+    qnames = re.findall(r'^#print axioms (\S+)', probe.decode(), re.M)
+    assert qnames == item['public_qnames'] and len(qnames) == item['expected_axiom_reports']
+    assert probe.count(b'#check ') == item['expected_declaration_checks'] == 0
+    assert len(re.findall(rb'^private theorem ', declarations, re.M)) == item['new_private_theorems']
+    assert not re.findall(rb'^(?:private )?def ', declarations, re.M)
+    for name in re.findall(rb'^import MicroCFTA\.([A-Za-z0-9_]+)\s*$', raw, re.M):
+        module = name.decode()
+        if module not in candidate_names:
+            assert (normal_objects / (module + '.olean')).is_file(), module
+            normal_imports.add(module)
+    raw_sources[item['module']] = raw + b'\n' + probe
+assert sum(item['new_private_theorems'] for item in selection['components']) == selection['new_private_helpers'] == 6
+for name in ['check-driver.py.txt', 'shadow-compile.py.txt']:
+    ast.parse((control / name).read_text())
+
+# Root executes this phase only after reviewing the complete preflight.
+runtime.mkdir()
+objects = Path(tempfile.mkdtemp(prefix='mcfta-third-query-six-seed-check-'))
+(objects / 'MicroCFTA').mkdir()
+linked = []
+for dependency in sorted(normal_objects.glob('*.olean')):
+    if dependency.stem not in candidate_names:
+        (objects / 'MicroCFTA' / dependency.name).symlink_to(dependency)
+        linked.append(dependency.name)
+(runtime / 'objects.json').write_text(json.dumps({'path': str(objects)}, indent=2) + '\n')
+(runtime / 'shadow-imports.json').write_text(json.dumps({
+    'normal_objects': str(normal_objects), 'linked_unchanged_modules': linked,
+    'excluded_candidate_modules': sorted(candidate_names),
+    'verified_direct_normal_imports': sorted(normal_imports),
+    'candidate_output_links_created': False, 'cache_data_copied': False,
+}, indent=2) + '\n')
+source_root = runtime / 'source/MicroCFTA'
+source_root.mkdir(parents=True)
+for module, raw in raw_sources.items():
+    path = source_root / (module + '.lean')
+    path.write_bytes(raw)
+    bound.add(path)
+(runtime / 'shadow-compile.py').write_bytes((control / 'shadow-compile.py.txt').read_bytes())
+(runtime / 'check.py').write_bytes((control / 'check-driver.py.txt').read_bytes())
+selected = dict(selection)
+selected['actual_source_commit'] = source['source_commit']
+selected['actual_prior_publication'] = publication['actual_session']
+selected['prior_checkpoint_push_not_required_for_private_check'] = True
+selected['control_manifest_sha256'] = sha((control / 'MANIFEST.json').read_bytes())
+(runtime / 'selection.json').write_text(json.dumps(selected, indent=2, sort_keys=True) + '\n')
+bound.add(Path(__file__))
+bound.update(path for path in runtime.iterdir() if path.is_file())
+(runtime / 'source-pins.json').write_text(json.dumps({
+    str(path.relative_to(root)): sha(path.read_bytes()) for path in sorted(bound)
+}, indent=2, sort_keys=True) + '\n')
+print(json.dumps({'runtime': str(runtime), 'objects': str(objects), 'checks': 6,
+    'actual_new_public_reports': 7, 'private_helpers_transitive': 6, 'definition_checks': 0,
+    'compile_order': selection['compile_order'], 'normal_Source_changed': False,
+    'normal_Source_staging_still_requires_prior_checkpoint_push': True}))

@@ -1,0 +1,20 @@
+--- 20261117-third-query-node-seed-proof-draft/SourceSynthesisCurrentUniverseThirdQueryNodeSeed.lean
++++ 20261117-third-query-node-seed-prefix-identifier-repair/SourceSynthesisCurrentUniverseThirdQueryNodeSeed.lean
+@@ -48,7 +48,7 @@
+       pair entry.identity patternId ≠ pair entry.identity entry.identity := by
+   obtain ⟨closed, identified, kind, universeFirst, used, before, next, data⟩ := authentic
+   dsimp only at data
+-  obtain ⟨_within, prefix, _ordered, one, domainSame⟩ := data
++  obtain ⟨_within, entryPrefix, _ordered, one, domainSame⟩ := data
+   let universeValue : Node := .mu entry body depth ordinary
+   let entered := SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains
+     IntersectionEmptyDomain.emptyKey universeValue pattern entry.identity patternId
+@@ -56,7 +56,7 @@
+     {before with native := advance before.native {before.native.machine with domains := entered.2}}
+   change domain = entered.1 at domainSame
+   have beforePhysical :=
+-    (SourceCurrentNativeEnterCommonOperand.checked_trace_extension prefix initialPhysical).1
++    (SourceCurrentNativeEnterCommonOperand.checked_trace_extension entryPrefix initialPhysical).1
+   have receipt := SourceCurrentNativeOrderedOriginalEntry.ordered_original_entry_common_operands
+     entry body depth ordinary pattern closed patternId identified kind universeFirst
+     next 0 before after (.code (next entered.1)) beforePhysical one

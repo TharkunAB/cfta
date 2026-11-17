@@ -1,0 +1,85 @@
+ := by
+  let coldInitial : Checked width := ⟨initial width machine, operations⟩
+  have oldCurrent : Inputs (.code (.node oldRoot .pure)) coldInitial := by
+    cases oldFuel with
+    | zero => exact oldInputs
+    | succ remaining => exact oldInputs.1
+  have oldLeftAvailable : Available machine.heap oldRoot.left := oldCurrent.1.2.1
+  have oldRightAvailable : Available machine.heap oldRoot.right := oldCurrent.1.2.2
+  have leftProfile : Profile entry.identity oldRoot.left :=
+    ⟨oldRootClosed.1,
+      SourceSynthesisCurrentUniverseStartupAtoms.current_stored_universe_closed_atoms_after_no_new_mu
+        lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+        machine.heap machineValid.1.coherent pastInventory oldRoot.left oldLeftAvailable oldRootClosed.1⟩
+  have rightProfile : Profile entry.identity oldRoot.right :=
+    ⟨oldRootClosed.2,
+      SourceSynthesisCurrentUniverseStartupAtoms.current_stored_universe_closed_atoms_after_no_new_mu
+        lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+        machine.heap machineValid.1.coherent pastInventory oldRoot.right oldRightAvailable oldRootClosed.2⟩
+  have coldInventory := original_universe_cold_query_no_new_mu (width := width)
+    lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+    oldRoot machine machineValid sourceGrowth oldRootDomain leftProfile rightProfile
+    operations operationsValid oldFuel oldInputs oldFields
+  have inventoryAtOld : InternedShallowHeap.NoNewMu sourceHeap oldSnapshot.native.machine.heap :=
+    InternedShallowHeap.noNewMu_trans pastInventory
+      (coldInventory.2 oldCount oldControl oldSnapshot oldBound oldActual)
+  have warmInventory := original_universe_next_warm_query_no_new_mu (width := width)
+    lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+    oldRoot machine oldRootDomain oldRootClosed machineValid sourceGrowth pastInventory
+    operations operationsValid oldFuel oldCount oldControl oldSnapshot oldBound oldInputs oldFields oldActual
+    middleRoot middleFuel middleRootDomain middleLeftAvailable middleRightAvailable middleLeftClosed middleRightClosed
+    middleInputs middleFields
+  have inventoryAtMiddle : InternedShallowHeap.NoNewMu sourceHeap middleSnapshot.native.machine.heap :=
+    InternedShallowHeap.noNewMu_trans inventoryAtOld
+      (warmInventory.2 middleCount middleControl middleSnapshot middleBound middleActual)
+  obtain ⟨bodyEntry, _marker, _arrow, _sourceRows, bodyEq, _bodyAvailable, _markerShape,
+      _arrowChildren, _arrowKey, _catalog, _markerClosed, _markerAvailable, _markerAtoms,
+      _rowKinds, _arrowRetained⟩ :=
+    SourceSynthesisCurrentUniverseBodyChildClassification.current_stored_universe_body_physical_children_after_growth
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      machine.heap machineValid.1 sourceGrowth
+  have bodyIdentity : SourceRecursiveIntersectionControl.identity body = some bodyEntry.identity := by
+    rw [bodyEq]
+    rfl
+  have nodeSeed := original_universe_two_prefix_node_seed_for_third_actual_history (width := width)
+    lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+    oldRoot machine oldRootDomain oldRootClosed machineValid sourceGrowth pastInventory
+    operations operationsValid oldFuel oldCount oldControl oldSnapshot oldBound oldInputs oldFields oldActual
+    middleRoot middleFuel middleRootDomain middleLeftAvailable middleRightAvailable middleLeftClosed middleRightClosed
+    middleInputs middleFields middleCount middleControl middleSnapshot middleBound middleActual
+    nextRoot nextFuel nextCount nextControl reader nextRootDomain nextRootAvailable nextRootClosed
+    nextBound nextInputs nextFields nextActual
+  have edgeSeed := original_universe_two_prefix_edge_seed_for_third_actual_history (width := width)
+    lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+    oldRoot machine oldRootDomain oldRootClosed machineValid sourceGrowth pastInventory
+    operations operationsValid oldFuel oldCount oldControl oldSnapshot oldBound oldInputs oldFields oldActual
+    middleRoot middleFuel middleRootDomain middleLeftAvailable middleRightAvailable middleLeftClosed middleRightClosed
+    middleInputs middleFields middleCount middleControl middleSnapshot middleBound middleActual
+    nextRoot nextFuel nextCount nextControl reader nextRootDomain nextRootAvailable nextRootClosed
+    nextBound nextInputs nextFields nextActual
+  have bodyFirst :=
+    SourceCurrentNativeWarmBodyFirstInitialPayloads.body_first_initial_payloads_for_third_actual_history
+      (width := width)
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      oldRoot machine oldRootDomain oldRootClosed machineValid sourceGrowth pastInventory
+      operations operationsValid oldFuel oldCount oldControl oldSnapshot oldBound oldInputs oldFields oldActual
+      middleRoot middleFuel middleRootDomain middleLeftAvailable middleRightAvailable middleLeftClosed middleRightClosed
+      middleInputs middleFields middleCount middleControl middleSnapshot middleBound middleActual
+      nextRoot nextFuel nextCount nextControl reader nextRootDomain nextRootAvailable nextRootClosed
+      nextBound nextInputs nextFields nextActual bodyEntry.identity bodyIdentity
+  have coherent :=
+    SourceCurrentNativeWarmCoherentInitialPayloads.coherent_initial_payloads_for_third_actual_history
+      (width := width)
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      oldRoot machine oldRootDomain oldRootClosed machineValid sourceGrowth pastInventory
+      operations operationsValid oldFuel oldCount oldControl oldSnapshot oldBound oldInputs oldFields oldActual
+      middleRoot middleFuel middleRootDomain middleLeftAvailable middleRightAvailable middleLeftClosed middleRightClosed
+      middleInputs middleFields middleCount middleControl middleSnapshot middleBound middleActual
+      nextRoot nextFuel nextCount nextControl reader nextRootDomain nextRootAvailable nextRootClosed
+      nextBound nextInputs nextFields nextActual bodyEntry.identity bodyIdentity
+  dsimp only
+  refine ⟨inventoryAtMiddle, ⟨nodeSeed, edgeSeed⟩, bodyEntry.identity, bodyIdentity, ?_⟩
+  intro pattern patternId domain authentic
+  have bodyFirstPair := bodyFirst pattern patternId domain authentic
+  have coherentPair := coherent pattern patternId domain authentic
+  exact ⟨bodyFirstPair.1, bodyFirstPair.2, coherentPair.1, coherentPair.2⟩

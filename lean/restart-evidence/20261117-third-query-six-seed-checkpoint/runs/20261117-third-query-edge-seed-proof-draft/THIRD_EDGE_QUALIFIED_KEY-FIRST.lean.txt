@@ -1,0 +1,8 @@
+private theorem third_edge_qualified_key
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (rootRequest : NodeRequest Symbol Guard) (start : Checked width) (wholeCount : Nat)
+    (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (bodyCodec : ∃ input, IntersectionFlatMemoKey.input body.referenceOf = some input)
+    (request : NodeRequest Symbol Guard)
+    (qualified : Qualified (width := width) rootRequest start wholeCount entry body depth ordinary request) :
+    ∃ key, SourceRecursiveIntersectionMemo.requestKey width request.domain request.left request.right = some key

@@ -1,0 +1,23 @@
+ := by
+  have old := authentic_key_and_parent_apart (width := width) rootRequest start initialPhysical
+    wholeCount entry body depth ordinary bodyEntry bodyRows bodyShape pattern patternId domain authentic
+  have target := authentic_key_and_parent_apart (width := width) targetRoot targetStart targetPhysical
+    targetCount entry body depth ordinary bodyEntry bodyRows bodyShape targetPattern targetPatternId
+    requestDomain targetAuthentic
+  have oldShape :
+      requestDomain.key = extend (extend IntersectionEmptyDomain.emptyKey [entry.identity]
+        (pair entry.identity patternId)) [entry.identity] (pair bodyEntry.identity entry.identity) ∨
+      requestDomain.key = extend (extend (extend IntersectionEmptyDomain.emptyKey [entry.identity]
+        (pair entry.identity patternId)) [entry.identity] (pair bodyEntry.identity entry.identity))
+        [entry.identity] (pair entry.identity entry.identity) ∨
+      requestDomain.key = extend (extend IntersectionEmptyDomain.emptyKey [entry.identity]
+        (pair entry.identity patternId)) [entry.identity] (pair entry.identity entry.identity) ∨
+      requestDomain.key = extend (extend (extend IntersectionEmptyDomain.emptyKey [entry.identity]
+        (pair entry.identity patternId)) [entry.identity] (pair entry.identity entry.identity))
+        [entry.identity] (pair bodyEntry.identity entry.identity) := by
+    simpa only [old.1] using auxiliary
+  have different := SourceCurrentNativeAuxiliaryBaseKeyRecovery.auxiliary_key_ne_singleton_base
+    entry.identity (pair entry.identity patternId) (pair bodyEntry.identity entry.identity)
+    (pair entry.identity entry.identity) requestDomain.key (pair entry.identity targetPatternId)
+    old.2.1 old.2.2 oldShape
+  exact different target.1

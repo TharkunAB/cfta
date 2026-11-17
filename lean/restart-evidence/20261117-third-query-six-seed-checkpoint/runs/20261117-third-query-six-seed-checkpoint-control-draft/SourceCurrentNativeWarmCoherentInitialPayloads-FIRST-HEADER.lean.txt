@@ -1,0 +1,59 @@
+theorem coherent_initial_payloads_for_third_actual_history
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (oldRoot : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
+    (oldRootDomain : oldRoot.domain = IntersectionEmptyDomain.emptyDomain)
+    (oldRootClosed : oldRoot.left.free = [] ∧ oldRoot.right.free = [])
+    (machineValid : SourceRecursiveIntersectionKernel.Valid machine)
+    (sourceGrowth : Grows sourceHeap machine.heap)
+    (pastInventory : InternedShallowHeap.NoNewMu sourceHeap machine.heap)
+    (operations : SourceEqualityConstraintMemoAllocation.State)
+    (operationsValid : SourceEqualityConstraintMemoAllocation.Valid operations)
+    (oldFuel oldCount : Nat) (oldControl : Control (Value Symbol Guard))
+    (oldSnapshot : Checked width) (oldBound : oldCount ≤ oldFuel)
+    (oldInputs : InputsThrough oldFuel (.code (.node oldRoot .pure))
+      (⟨initial width machine, operations⟩ : Checked width))
+    (oldFields : FieldsThrough oldFuel (.code (.node oldRoot .pure))
+      (⟨initial width machine, operations⟩ : Checked width))
+    (oldActual : Trace oldCount (.code (.node oldRoot .pure))
+      (⟨initial width machine, operations⟩ : Checked width) oldControl oldSnapshot)
+    (middleRoot : NodeRequest Symbol Guard) (middleFuel : Nat)
+    (middleRootDomain : middleRoot.domain = IntersectionEmptyDomain.emptyDomain)
+    (middleLeftAvailable : Available oldSnapshot.native.machine.heap middleRoot.left)
+    (middleRightAvailable : Available oldSnapshot.native.machine.heap middleRoot.right)
+    (middleLeftClosed : middleRoot.left.free = []) (middleRightClosed : middleRoot.right.free = [])
+    (middleInputs : InputsThrough middleFuel (.code (.node middleRoot .pure)) oldSnapshot)
+    (middleFields : FieldsThrough middleFuel (.code (.node middleRoot .pure)) oldSnapshot)
+    (middleCount : Nat) (middleControl : Control (Value Symbol Guard))
+    (middleSnapshot : Checked width) (middleBound : middleCount ≤ middleFuel)
+    (middleActual : Trace middleCount (.code (.node middleRoot .pure))
+      oldSnapshot middleControl middleSnapshot)
+    (nextRoot : NodeRequest Symbol Guard) (nextFuel nextCount : Nat)
+    (nextControl : Control (Value Symbol Guard)) (reader : Checked width)
+    (nextRootDomain : nextRoot.domain = IntersectionEmptyDomain.emptyDomain)
+    (nextRootAvailable : Available middleSnapshot.native.machine.heap nextRoot.left ∧
+      Available middleSnapshot.native.machine.heap nextRoot.right)
+    (nextRootClosed : nextRoot.left.free = [] ∧ nextRoot.right.free = [])
+    (nextBound : nextCount ≤ nextFuel)
+    (nextInputs : InputsThrough nextFuel (.code (.node nextRoot .pure)) middleSnapshot)
+    (nextFields : FieldsThrough nextFuel (.code (.node nextRoot .pure)) middleSnapshot)
+    (nextActual : Trace nextCount (.code (.node nextRoot .pure)) middleSnapshot
+      nextControl reader)
+    (bodyId : Nat) (bodyIdentity : identity body = some bodyId) :
+    ∀ (pattern : Value Symbol Guard) (patternId : Nat)
+      (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey),
+      SourceCurrentAllocatedNativeSourceWarmEntry.AuthenticEntryAt (width := width)
+        nextRoot middleSnapshot nextCount entry body depth ordinary pattern patternId domain →
+      let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+      let firstKey := extend domain.key [entry.identity] (pair entry.identity entry.identity)
+      let selectedKey := extend firstKey [entry.identity] (pair bodyId entry.identity)
+      Returned (SourceCurrentAllocatedNativeCoherentOpenBodyQueryGlobalLaws.NodeResult
+        entry.identity entry.identity entry.identity selectedKey firstKey body universeValue)
+        middleSnapshot.native.nodes ∧
+      Returned SourceCurrentAllocatedNativeTopRowQueryGlobalLaws.EdgeResult middleSnapshot.native.edges

@@ -1,0 +1,33 @@
+def Seeds
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (bodyId : Nat) (snapshot : Checked width) : Prop :=
+  let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+  let baseKey := fun patternId : Nat =>
+    extend IntersectionEmptyDomain.emptyKey [entry.identity] (pair entry.identity patternId)
+  InternedShallowHeap.NoNewMu sourceHeap snapshot.native.machine.heap ∧
+  Returned (fun (request : NodeRequest Symbol Guard) (value : Value Symbol Guard) =>
+    ClosedQualified entry.identity request → Profile entry.identity value) snapshot.native.nodes ∧
+  Returned (fun (request : EdgeRequest Symbol Guard) (row : EdgeValue Symbol Guard) =>
+    (∀ pair ∈ request.left.children.zip request.right.children,
+      ClosedQualified entry.identity ⟨request.domain, pair.1, pair.2⟩) →
+    ∀ child ∈ row.children, Profile entry.identity child) snapshot.native.edges ∧
+  Returned (fun (request : NodeRequest Symbol Guard) (value : Value Symbol Guard) =>
+    ∀ patternId : Nat, request.domain.key = baseKey patternId →
+      Profile entry.identity value) snapshot.native.nodes ∧
+  Returned (fun (request : EdgeRequest Symbol Guard) (row : EdgeValue Symbol Guard) =>
+    ∀ patternId : Nat, request.domain.key = baseKey patternId →
+      ∀ child ∈ row.children, Profile entry.identity child) snapshot.native.edges ∧
+  ∀ patternId : Nat, patternId ≠ entry.identity → patternId ≠ bodyId →
+    let bodyFirst := extend (baseKey patternId) [entry.identity] (pair bodyId entry.identity)
+    let diagonalFirst := extend (baseKey patternId) [entry.identity] (pair entry.identity entry.identity)
+    let diagonalTerminal := extend diagonalFirst [entry.identity] (pair bodyId entry.identity)
+    Returned (SourceCurrentAllocatedNativeBodyFirstKeyQueryGlobalLaws.NodeResult
+      entry.identity bodyId bodyFirst body universeValue) snapshot.native.nodes ∧
+    Returned (SourceCurrentAllocatedNativeBodyFirstKeyQueryGlobalLaws.EdgeResult
+      entry.identity bodyId bodyFirst universeValue) snapshot.native.edges ∧
+    Returned (SourceCurrentAllocatedNativeCoherentOpenBodyQueryGlobalLaws.NodeResult
+      entry.identity entry.identity entry.identity diagonalTerminal diagonalFirst body universeValue)
+      snapshot.native.nodes ∧
+    Returned SourceCurrentAllocatedNativeTopRowQueryGlobalLaws.EdgeResult snapshot.native.edges

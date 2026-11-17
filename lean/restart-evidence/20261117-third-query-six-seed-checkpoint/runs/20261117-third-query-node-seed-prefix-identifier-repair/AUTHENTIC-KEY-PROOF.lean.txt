@@ -1,0 +1,28 @@
+ := by
+  obtain ⟨closed, identified, kind, universeFirst, used, before, next, data⟩ := authentic
+  dsimp only at data
+  obtain ⟨_within, entryPrefix, _ordered, one, domainSame⟩ := data
+  let universeValue : Node := .mu entry body depth ordinary
+  let entered := SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains
+    IntersectionEmptyDomain.emptyKey universeValue pattern entry.identity patternId
+  let after : Checked width :=
+    {before with native := advance before.native {before.native.machine with domains := entered.2}}
+  change domain = entered.1 at domainSame
+  have beforePhysical :=
+    (SourceCurrentNativeEnterCommonOperand.checked_trace_extension entryPrefix initialPhysical).1
+  have receipt := SourceCurrentNativeOrderedOriginalEntry.ordered_original_entry_common_operands
+    entry body depth ordinary pattern closed patternId identified kind universeFirst
+    next 0 before after (.code (next entered.1)) beforePhysical one
+  obtain ⟨_allocation, _step, _event, _tail, _heap, _domains, _operations,
+    universeAvailable, patternAvailable, _universeAfter, _patternAfter, _startedDomain,
+    _readerDomain, keyShape, _nonempty, _afterPhysical, _extension, _classify⟩ := receipt
+  have shapedUniverse : Available before.native.machine.heap
+      (.mu entry (.node bodyEntry bodyRows 0 [.interned entry.identity]) depth ordinary) := by
+    rw [← bodyShape]
+    exact universeAvailable
+  have apart := SourceCurrentNativeAuxiliaryBaseKeyRecovery.source_parent_pair_avoids_auxiliary
+    before.native.machine.heap beforePhysical.machine.1 entry bodyEntry bodyRows depth ordinary
+    shapedUniverse pattern patternId patternAvailable closed identified kind
+  refine ⟨?_, apart⟩
+  rw [domainSame]
+  exact keyShape

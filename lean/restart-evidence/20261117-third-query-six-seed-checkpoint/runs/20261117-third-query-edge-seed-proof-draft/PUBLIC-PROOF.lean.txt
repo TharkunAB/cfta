@@ -1,0 +1,46 @@
+ := by
+  have nodeSeed := original_universe_two_prefix_node_seed_for_third_actual_history (width := width)
+    lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+    oldRoot machine oldRootDomain oldRootClosed machineValid sourceGrowth pastInventory
+    operations operationsValid oldFuel oldCount oldControl oldSnapshot oldBound oldInputs oldFields oldActual
+    middleRoot middleFuel middleRootDomain middleLeftAvailable middleRightAvailable middleLeftClosed middleRightClosed
+    middleInputs middleFields middleCount middleControl middleSnapshot middleBound middleActual
+    nextRoot nextFuel nextCount nextControl reader nextRootDomain nextRootAvailable nextRootClosed
+    nextBound nextInputs nextFields nextActual
+  let coldInitial : Checked width := ⟨initial width machine, operations⟩
+  have coldPhysical : Physical (initial width machine) :=
+    SourceCurrentAllocatedNativePhysicalCache.initial_valid machine machineValid
+  have oldOperations := SourceCurrentAllocatedNativePrefixOperations.prefix_operations_before_bind
+    oldFuel oldCount (.code (.node oldRoot .pure)) oldControl .pure coldInitial oldSnapshot sourceHeap
+    coldPhysical oldInputs oldFields operationsValid sourceGrowth
+    (by simpa only [Control.bind_pure] using oldActual.steps) oldBound
+  have middleRetained := SourceCurrentNativeWriterReadyRetention.trace_retained middleActual
+    oldOperations.2.1.shape
+  obtain ⟨bodyEntry, _marker, _arrow, _sourceRows, bodyEq, _bodyAvailable, _markerShape,
+      _arrowChildren, _arrowKey, _catalog, _markerClosed, _markerAvailable, _markerAtoms,
+      _rowKinds, _arrowRetained⟩ :=
+    SourceSynthesisCurrentUniverseBodyChildClassification.current_stored_universe_body_physical_children_after_growth
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      machine.heap machineValid.1 sourceGrowth
+  have bodyCodec : ∃ input, IntersectionFlatMemoKey.input body.referenceOf = some input := by
+    rw [bodyEq]
+    exact ⟨.node bodyEntry.identity, rfl⟩
+  intro handle request row currentCell
+  rcases SourceCurrentAllocatedNativeEdgeReturnOrigin.returned_edge_cell_or_finish_prefix
+      middleActual handle request row currentCell with inherited | produced
+  · obtain ⟨finishUsed, _suffixCount, beforeFinish, continuation, _total, finishSmall, _finishFuel,
+        finishActual, owner, _finishEvent, _finished, _suffix⟩ :=
+      SourceCurrentAllocatedNativeEdgeReturnOrigin.returned_edge_cell_finish_prefix
+        machine operations (.code (.node oldRoot .pure)) oldControl oldSnapshot oldFuel oldCount
+        oldBound oldActual handle request row inherited
+    exact producer_edge_profiles_at_target_nodes sourceHeap entry body depth ordinary bodyCodec
+      oldRoot coldInitial coldPhysical sourceGrowth operationsValid oldFuel oldCount finishUsed handle
+      request row oldControl oldSnapshot beforeFinish continuation oldBound oldActual finishSmall
+      finishActual owner oldInputs oldFields nextRoot middleSnapshot nextCount nodeSeed middleRetained
+  · obtain ⟨finishUsed, _suffixCount, beforeFinish, continuation, total,
+        finishActual, owner, _finishEvent, _finished, _suffix⟩ := produced
+    exact producer_edge_profiles_at_target_nodes sourceHeap entry body depth ordinary bodyCodec
+      middleRoot oldSnapshot oldOperations.2.1 oldOperations.2.2.2.1 oldOperations.2.2.2.2.1
+      middleFuel middleCount finishUsed handle request row middleControl middleSnapshot beforeFinish continuation
+      middleBound middleActual (by omega) finishActual owner middleInputs middleFields
+      nextRoot middleSnapshot nextCount nodeSeed (SourceEqualityNativeDemandMemo.Retained.refl _)

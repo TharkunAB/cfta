@@ -1,0 +1,26 @@
+private theorem producer_edge_profiles_at_target_nodes
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (entry : Interned NodeKey) (body depth ordinary : Node)
+    (bodyCodec : ∃ input, IntersectionFlatMemoKey.input body.referenceOf = some input)
+    (producerRoot : NodeRequest Symbol Guard) (producerStart : Checked width)
+    (initialPhysical : Physical producerStart.native)
+    (sourceGrowth : Grows sourceHeap producerStart.native.machine.heap)
+    (operationsValid : SourceEqualityConstraintMemoAllocation.Valid producerStart.operations)
+    (fuel wholeCount finishUsed handle : Nat)
+    (request : EdgeRequest Symbol Guard) (row : EdgeValue Symbol Guard)
+    (rest : Control Node) (producerEnd beforeFinish : Checked width)
+    (parentNext : Code Symbol Guard Node)
+    (wholeBound : wholeCount ≤ fuel)
+    (wholeActual : Trace wholeCount (.code (.node producerRoot .pure)) producerStart rest producerEnd)
+    (finishBound : finishUsed < wholeCount)
+    (actual : Trace finishUsed (.code (.node producerRoot .pure)) producerStart
+      (.code (.finishEdge handle row parentNext)) beforeFinish)
+    (owner : beforeFinish.native.edges.cells handle = some ⟨request, .evaluating⟩)
+    (inputs : InputsThrough fuel (.code (.node producerRoot .pure)) producerStart)
+    (fields : FieldsThrough fuel (.code (.node producerRoot .pure)) producerStart)
+    (targetRoot : NodeRequest Symbol Guard) (targetStart : Checked width) (targetCount : Nat)
+    (nodeSeed : Returned (NodeResult (width := width) targetRoot targetStart targetCount
+      entry body depth ordinary) targetStart.native.nodes)
+    (retained : SourceEqualityNativeDemandMemo.Retained producerEnd.native targetStart.native) :
+    EdgeResult (width := width) targetRoot targetStart targetCount entry body depth ordinary request row

@@ -1,0 +1,58 @@
+ := by
+  intro originalQualified
+  obtain ⟨queryUsed, bodyCount, queryBefore, beforeBody, queryResume, total,
+      _querySmaller, _queryBound, queryPrefix, _actualDispatch, isolatedDispatch,
+      queryPhysical, _queryReady, _querySafe, _bodyOwner, rawBody, _queryRest⟩ :=
+    SourceCurrentAllocatedNativeEdgeQueryDispatchOrigin.actual_edge_query_dispatch_from_warm_query_finish
+      producerRoot producerStart initialPhysical fuel finishUsed handle request row parentNext
+      beforeFinish (by omega) actual owner
+  have queryOrigin : Steps queryUsed (.code (.node producerRoot .pure)) producerStart
+      ((Control.code (.edge request .pure)).bind queryResume) queryBefore := by
+    simpa only [Control.bind, Code.bind] using queryPrefix.steps
+  obtain ⟨_checkedQuery, _queryPhysicalAgain, _queryExtension, queryGrowth, queryOperations,
+      _queryOperationsGrowth, _queryBoundInputs, queryInputs, _queryBoundFields, queryFields⟩ :=
+    SourceCurrentAllocatedNativePrefixOperations.prefix_operations_before_bind
+      fuel queryUsed (.code (.node producerRoot .pure)) (.code (.edge request .pure)) queryResume
+      producerStart queryBefore sourceHeap
+      initialPhysical inputs fields operationsValid sourceGrowth queryOrigin (by omega)
+  have trueReturned :
+      Returned (fun (_ : NodeRequest Symbol Guard) (_ : Node) => True) producerEnd.native.nodes ∧
+      Returned (fun (_ : EdgeRequest Symbol Guard) (_ : EdgeValue Symbol Guard) => True)
+        producerEnd.native.edges :=
+    ⟨fun _ _ _ _ => True.intro, fun _ _ _ _ => True.intro⟩
+  have observed := SourceCurrentAllocatedNativeCheckedEdgeBodyProfile.edge_body_children_profile_of_fuel_induction
+    sourceHeap entry.identity request queryBefore beforeBody beforeFinish (fuel - queryUsed) bodyCount row
+    (fun result => .finishEdge handle result (.pure result))
+    queryPhysical queryGrowth queryOperations queryInputs queryFields isolatedDispatch (by omega) rawBody (by
+      intro pair member used childFuel childCount _positive _childSmaller _childFuelBound
+        _childCountBound childSpan next first last value origin _childPhysical _childGrowth
+        _childOperations _childInputs _childFields _leftAvailable _rightAvailable childActual
+      let child : NodeRequest Symbol Guard := ⟨request.domain, pair.1, pair.2⟩
+      have qualified : Qualified (width := width) targetRoot targetStart targetCount
+          entry body depth ordinary child := originalQualified pair member
+      obtain ⟨childKey, keyed⟩ := third_edge_qualified_key targetRoot targetStart targetCount
+        entry body depth ordinary bodyCodec child qualified
+      let lifted : Node → Code Symbol Guard Node := fun result => (next result).bind queryResume
+      have appended := origin.bind _ _ _ _ _ queryResume
+      change Steps used (.code (.edge request queryResume)) queryBefore
+        (.code (((requestNode request.domain pair.1 pair.2).bind next).bind queryResume)) first at appended
+      have tail : Steps used (.code (.edge request queryResume)) queryBefore
+          (.code ((requestNode request.domain pair.1 pair.2).bind lifted)) first := by
+        simpa only [Code.bind_assoc, lifted] using appended
+      have outer : Steps (queryUsed + used) (.code (.node producerRoot .pure)) producerStart
+          (.code ((requestNode request.domain pair.1 pair.2).bind lifted)) first :=
+        queryPrefix.steps.trans _ _ _ _ _ _ _ _ tail
+      have receipt :=
+        SourceCurrentAllocatedNativeSamePrefixKeyedChildResult.keyed_child_law_at_actual_warm_reader
+          (fun (_ : NodeRequest Symbol Guard) (_ : Node) => True)
+          (fun (_ : EdgeRequest Symbol Guard) (_ : EdgeValue Symbol Guard) => True)
+          producerRoot producerStart initialPhysical fuel wholeCount (queryUsed + used) childCount
+          rest producerEnd wholeBound wholeActual trueReturned child childKey keyed
+          lifted first last value (by omega) outer childActual
+      obtain ⟨childHandle, _childAtReturn, childAtProducer, _actualChildSuffix, _childRetention⟩ := receipt.2
+      have childAtTarget := retained.nodes childHandle child value childAtProducer
+      have currentLaw := nodeSeed childHandle child value childAtTarget
+      rcases qualified with closed | mixed
+      · exact currentLaw.1 closed
+      · exact currentLaw.2 mixed)
+  exact observed.1

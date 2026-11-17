@@ -1,0 +1,13 @@
+ := by
+  rcases qualified with closed | mixed
+  · exact third_edge_key_of_codecs (width := width) request (third_edge_closed_codec _ closed.1.1) (third_edge_closed_codec _ closed.2.1.1)
+  · obtain ⟨pattern, patternId, openAlias, operand, _authentic, alias, operandProfile,
+      _height, _strict, ordered⟩ := mixed
+    have aliasCodec : ∃ input, IntersectionFlatMemoKey.input openAlias.referenceOf = some input := by
+      rcases alias with rfl | rfl
+      · exact bodyCodec
+      · exact ⟨.ref entry.identity, rfl⟩
+    have operandCodec := third_edge_closed_codec _ operandProfile.1
+    rcases ordered with ⟨left, right⟩ | ⟨left, right⟩
+    · exact third_edge_key_of_codecs (width := width) request (by rw [left]; exact aliasCodec) (by rw [right]; exact operandCodec)
+    · exact third_edge_key_of_codecs (width := width) request (by rw [left]; exact operandCodec) (by rw [right]; exact aliasCodec)
