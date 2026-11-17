@@ -1,0 +1,69 @@
+--- normalized checked cold proof
++++ warm proof
+@@ -103,13 +103,12 @@
+     have childActual : Steps bodyCount (.code (requestNode child.domain child.left child.right)) beforeBody
+         (.code (.pure value)) beforeFinish := by
+       simpa only [compiled] using rawBody
+-    obtain ⟨childKey, keyed⟩ := SourceCurrentAllocatedNativeGeneralCMHistory.qualified_key
++    obtain ⟨childKey, keyed⟩ := warm_qualified_key
+       rootRequest start wholeCount entry body depth ordinary bodyCodec child (Or.inr childQualified)
+-    have law := SourceCurrentAllocatedNativeSamePrefixKeyedChildResult.keyed_child_law_at_node_finish
++    have law := SourceCurrentAllocatedNativeSamePrefixKeyedChildResult.keyed_child_law_at_actual_warm_reader
+       (NodeResult (width := width) rootRequest start wholeCount entry body depth ordinary)
+       (EdgeResult (width := width) rootRequest start wholeCount entry body depth ordinary)
+-      rootRequest start initialPhysical fuel finishUsed (queryUsed + 1) bodyCount handle value parentNext
+-      beforeFinish (by omega) actual past child childKey keyed
++      rootRequest start initialPhysical fuel finishUsed (queryUsed + 1) bodyCount (.code (.finishNode handle value parentNext)) beforeFinish (by omega) actual past child childKey keyed
+       (fun result => .finishNode handle result (queryResume result)) beforeBody beforeFinish value
+       (by omega) origin childActual
+     exact law.1.2 childQualified
+@@ -156,7 +155,7 @@
+       have closed := operandProfile.1
+       cases closed
+   | union own members level free =>
+-      exact Union.mixed_union_profile_at_actual_node_finish
++      exact SourceCurrentNativeWarmMixedFinish.Union.mixed_union_profile_at_actual_node_finish
+         lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+         rootRequest start initialPhysical sourceGrowth operationsValid fuel wholeCount finishUsed handle
+         request value rest reader beforeFinish parentNext wholeBound wholeActual finishBound actual owner
+@@ -195,19 +194,19 @@
+           rcases ordered with ⟨left, right⟩ | ⟨left, right⟩
+           · simp only [left, right, bodyEq, identity, directFresh, payload, ite_false]
+           · simp only [left, right, bodyEq, identity, reverseFresh, payload, ite_false]
+-        exact Ordinary.mixed_ordinary_profile_at_actual_node_finish
++        exact SourceCurrentNativeWarmMixedFinish.Ordinary.mixed_ordinary_profile_at_actual_node_finish
+           lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+           rootRequest start initialPhysical sourceGrowth operationsValid fuel wholeCount finishUsed handle
+           request value rest reader beforeFinish parentNext wholeBound wholeActual finishBound actual owner
+           inputs fields selected qualified past
+       · subst openAlias
+         rcases ordered with ⟨left, right⟩ | ⟨left, right⟩
+-        · exact ReferenceNode.mixed_reference_node_profile_at_actual_node_finish
++        · exact SourceCurrentNativeWarmMixedFinish.ReferenceNode.mixed_reference_node_profile_at_actual_node_finish
+             lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+             rootRequest start initialPhysical sourceGrowth operationsValid fuel wholeCount finishUsed handle
+             request value rest reader beforeFinish parentNext wholeBound wholeActual finishBound actual owner
+             inputs fields true own rows level ⟨left, right⟩ qualified past
+-        · exact ReferenceNode.mixed_reference_node_profile_at_actual_node_finish
++        · exact SourceCurrentNativeWarmMixedFinish.ReferenceNode.mixed_reference_node_profile_at_actual_node_finish
+             lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+             rootRequest start initialPhysical sourceGrowth operationsValid fuel wholeCount finishUsed handle
+             request value rest reader beforeFinish parentNext wholeBound wholeActual finishBound actual owner
+@@ -229,7 +228,7 @@
+           have held : beforeFinish.native.nodes.cells handle =
+               some ⟨⟨request.domain, body, .mu entry body depth ordinary⟩, .evaluating⟩ :=
+             requestEq ▸ owner
+-          have valueEq := BodyFirstOuter.body_first_outer_finish_of_past_body_first_key_law
++          have valueEq := SourceCurrentNativeWarmMixedFinish.BodyFirstOuter.body_first_outer_finish_of_past_body_first_key_law
+             lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+             bodyId bodyIdentity rootRequest start initialPhysical operationsValid sourceGrowth
+             fuel wholeCount finishUsed pattern patternId request.domain request.domain originalEntry rfl
+@@ -257,7 +256,7 @@
+               some ⟨⟨request.domain, .mu entry body depth ordinary,
+                 .reference (.interned entry.identity)⟩, .evaluating⟩ :=
+             requestEq ▸ owner
+-          have valueEq := DiagonalOuter.diagonal_outer_finish_of_past_coherent_laws
++          have valueEq := SourceCurrentNativeWarmMixedFinish.DiagonalOuter.diagonal_outer_finish_of_past_coherent_laws
+             lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+             bodyId bodyIdentity rootRequest start initialPhysical operationsValid sourceGrowth
+             fuel wholeCount finishUsed pattern patternId request.domain request.domain originalEntry rfl

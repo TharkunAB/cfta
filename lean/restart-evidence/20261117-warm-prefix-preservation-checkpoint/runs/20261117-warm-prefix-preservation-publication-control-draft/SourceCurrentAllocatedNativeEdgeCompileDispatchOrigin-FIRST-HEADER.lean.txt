@@ -1,0 +1,21 @@
+theorem checked_edge_body_origin_from_warm_query_finish
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (rootRequest : NodeRequest Symbol Guard)
+    (start : Checked width) (startShape : Shape start.native)
+    (originalFuel count handle : Nat) (captured : EdgeRequest Symbol Guard)
+    (row : EdgeValue Symbol Guard) (rest : Code Symbol Guard (Value Symbol Guard))
+    (beforeFinish : Checked width)
+    (bounded : count < originalFuel)
+    (actual : Trace count (.code (.node rootRequest .pure))
+      start
+      (.code (.finishEdge handle row rest)) beforeFinish)
+    (owner : beforeFinish.native.edges.cells handle = some ⟨captured, .evaluating⟩) :
+    ∃ (dispatchUsed bodyCount : Nat) (beforeBody : Checked width)
+      (resume : EdgeValue Symbol Guard → Code Symbol Guard (Value Symbol Guard)),
+      dispatchUsed + bodyCount = count ∧ 0 < dispatchUsed ∧ dispatchUsed < originalFuel ∧
+      Steps dispatchUsed (.code (.node rootRequest .pure))
+        start
+        (.edgeBody captured (fun result => .finishEdge handle result (resume result))) beforeBody ∧
+      beforeBody.native.edges.cells handle = some ⟨captured, .evaluating⟩ ∧
+      Steps bodyCount (.edgeBody captured .pure) beforeBody (.code (.pure row)) beforeFinish ∧
+      resume row = rest

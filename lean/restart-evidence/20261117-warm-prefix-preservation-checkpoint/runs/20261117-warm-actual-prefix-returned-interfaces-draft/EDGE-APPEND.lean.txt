@@ -1,0 +1,50 @@
+namespace MicroCFTA.SourceCurrentAllocatedNativeEdgeCompileDispatchOrigin
+open InternedConstructorTemplates SourceRecursiveIntersectionCode SourceRecursiveIntersectionThunks
+open SourceEqualityNativeDemand
+open SourceEqualityNativeDemandBodyCode (Clean)
+open SourceRecursiveIntersectionNative (Shape)
+open SourceCurrentAllocatedNativePhysicalTraceCompletion (Trace)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Checked" => SourceEqualityNativeDemand.State
+variable {width : Nat} {A B : Type}
+
+set_option autoImplicit false
+
+/- See Note [Actual warm query prefix] in
+SourceCurrentAllocatedNativeCompileDispatchOrigin. The same start state,
+full memo tables and original trace counts remain in this interface.
+-/
+
+theorem checked_edge_body_origin_from_warm_query_finish
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (rootRequest : NodeRequest Symbol Guard)
+    (start : Checked width) (startShape : Shape start.native)
+    (originalFuel count handle : Nat) (captured : EdgeRequest Symbol Guard)
+    (row : EdgeValue Symbol Guard) (rest : Code Symbol Guard (Value Symbol Guard))
+    (beforeFinish : Checked width)
+    (bounded : count < originalFuel)
+    (actual : Trace count (.code (.node rootRequest .pure))
+      start
+      (.code (.finishEdge handle row rest)) beforeFinish)
+    (owner : beforeFinish.native.edges.cells handle = some ⟨captured, .evaluating⟩) :
+    ∃ (dispatchUsed bodyCount : Nat) (beforeBody : Checked width)
+      (resume : EdgeValue Symbol Guard → Code Symbol Guard (Value Symbol Guard)),
+      dispatchUsed + bodyCount = count ∧ 0 < dispatchUsed ∧ dispatchUsed < originalFuel ∧
+      Steps dispatchUsed (.code (.node rootRequest .pure))
+        start
+        (.edgeBody captured (fun result => .finishEdge handle result (resume result))) beforeBody ∧
+      beforeBody.native.edges.cells handle = some ⟨captured, .evaluating⟩ ∧
+      Steps bodyCount (.edgeBody captured .pure) beforeBody (.code (.pure row)) beforeFinish ∧
+      resume row = rest
+ := by
+  have clean : Clean (.code (.node rootRequest .pure)) := by
+    intro result
+    trivial
+  obtain ⟨dispatchUsed, bodyCount, beforeBody, resume, total, positive, entered, running, bodyTrace, last⟩ :=
+    descent count (.code (.node rootRequest .pure)) start beforeFinish handle captured row rest
+      clean startShape actual.steps owner
+  exact ⟨dispatchUsed, bodyCount, beforeBody, resume, total, positive, by omega,
+    entered, running, bodyTrace, last⟩
+
+end MicroCFTA.SourceCurrentAllocatedNativeEdgeCompileDispatchOrigin

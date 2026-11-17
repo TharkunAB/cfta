@@ -1,0 +1,10 @@
+--- child_at_parent existing private proof
++++ warm reader proof
+@@ -3,7 +3,6 @@
+     cases childCount with
+     | zero => cases (steps_zero _ _ _ _ childActual).1
+     | succ => omega
+-  have initialPhysical := SourceCurrentAllocatedNativePhysicalCache.initial_valid (width := width) machine machineValid
+   obtain ⟨checkedOrigin, outerTrace⟩ := checked_split whole origin (by omega)
+   have childPhysical := (SourceCurrentNativeEnterCommonOperand.checked_trace_extension checkedOrigin initialPhysical).1
+   have boundInputs := first_inputs outerTrace (by omega)

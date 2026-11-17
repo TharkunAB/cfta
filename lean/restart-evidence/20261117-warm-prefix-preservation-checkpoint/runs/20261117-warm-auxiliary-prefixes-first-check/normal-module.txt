@@ -1,0 +1,145 @@
+@MicroCFTA.SourceCurrentNativeWarmAuxiliaryPrefixes.auxiliary_payloads_at_every_actual_warm_prefix : ∀
+  [inst : DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (lib : MicroCFTA.SourceSynthesisTypeSyntax.Library) (query : MicroCFTA.SourceSynthesisTypeSyntax.Query)
+  (signed : Int) (whole : MicroCFTA.SourceSynthesisFirstOrderConstruction.Expression),
+  MicroCFTA.SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = Except.ok whole →
+    ∀
+      (rootValue :
+        MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (sourceHeap :
+        MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      MicroCFTA.InternedFreshOrdinaryConstruction.build
+            (MicroCFTA.SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) []
+            MicroCFTA.InternedConstructorTemplates.empty =
+          MicroCFTA.InternedNestedConstruction.Outcome.done rootValue sourceHeap →
+        ∀ (key : MicroCFTA.InternedBinderProtocol.NodeKey)
+          (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+          (body depth ordinary :
+            MicroCFTA.InternedConstructorTemplates.Value
+              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+          sourceHeap.nodeRecords key =
+              some (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary) →
+            ∀ (bodyId : Nat),
+              MicroCFTA.SourceRecursiveIntersectionControl.identity body = some bodyId →
+                ∀
+                  (oldRoot :
+                    MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                  (machine :
+                    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+                  oldRoot.domain = MicroCFTA.IntersectionEmptyDomain.emptyDomain →
+                    oldRoot.left.free = [] ∧ oldRoot.right.free = [] →
+                      MicroCFTA.SourceRecursiveIntersectionKernel.Valid machine →
+                        MicroCFTA.InternedConstructorTemplates.Grows sourceHeap machine.heap →
+                          ∀ (operations : MicroCFTA.SourceEqualityConstraintMemoAllocation.State),
+                            MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid operations →
+                              ∀ (oldFuel oldCount : Nat)
+                                (oldControl :
+                                  MicroCFTA.SourceEqualityNativeDemand.Control
+                                    (MicroCFTA.InternedConstructorTemplates.Value
+                                      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                                (oldSnapshot : MicroCFTA.SourceEqualityNativeDemand.State width),
+                                oldCount ≤ oldFuel →
+                                  MicroCFTA.SourceCurrentAllocatedNativePhysicalExecution.InputsThrough oldFuel
+                                      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                                        (MicroCFTA.SourceRecursiveIntersectionCode.Code.node oldRoot
+                                          MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+                                      { native := MicroCFTA.SourceRecursiveIntersectionThunks.initial width machine,
+                                        operations := operations } →
+                                    MicroCFTA.SourceEqualityNativeDemandOperations.FieldsThrough oldFuel
+                                        (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                                          (MicroCFTA.SourceRecursiveIntersectionCode.Code.node oldRoot
+                                            MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+                                        { native := MicroCFTA.SourceRecursiveIntersectionThunks.initial width machine,
+                                          operations := operations } →
+                                      MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace oldCount
+                                          (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                                            (MicroCFTA.SourceRecursiveIntersectionCode.Code.node oldRoot
+                                              MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+                                          { native := MicroCFTA.SourceRecursiveIntersectionThunks.initial width machine,
+                                            operations := operations }
+                                          oldControl oldSnapshot →
+                                        ∀
+                                          (newRoot :
+                                            MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+                                              (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                                          (newFuel newCount : Nat)
+                                          (newControl :
+                                            MicroCFTA.SourceEqualityNativeDemand.Control
+                                              (MicroCFTA.InternedConstructorTemplates.Value
+                                                (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+                                                (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                  MicroCFTA.FullSyntax.Formula)))
+                                          (warmReader : MicroCFTA.SourceEqualityNativeDemand.State width),
+                                          newCount ≤ newFuel →
+                                            MicroCFTA.SourceCurrentAllocatedNativePhysicalExecution.InputsThrough
+                                                newFuel
+                                                (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                                                  (MicroCFTA.SourceRecursiveIntersectionCode.Code.node newRoot
+                                                    MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+                                                oldSnapshot →
+                                              MicroCFTA.SourceEqualityNativeDemandOperations.FieldsThrough newFuel
+                                                  (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                                                    (MicroCFTA.SourceRecursiveIntersectionCode.Code.node newRoot
+                                                      MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+                                                  oldSnapshot →
+                                                MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace
+                                                    newCount
+                                                    (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                                                      (MicroCFTA.SourceRecursiveIntersectionCode.Code.node newRoot
+                                                        MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+                                                    oldSnapshot newControl warmReader →
+                                                  ∀ (prefixCount : Nat)
+                                                    (prefixControl :
+                                                      MicroCFTA.SourceEqualityNativeDemand.Control
+                                                        (MicroCFTA.InternedConstructorTemplates.Value
+                                                          (MicroCFTA.SourceObservations.Label
+                                                            MicroCFTA.FullSyntax.Formula)
+                                                          (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                            MicroCFTA.FullSyntax.Formula)))
+                                                    (current : MicroCFTA.SourceEqualityNativeDemand.State width),
+                                                    prefixCount ≤ newCount →
+                                                      MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace
+                                                          prefixCount
+                                                          (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                                                            (MicroCFTA.SourceRecursiveIntersectionCode.Code.node newRoot
+                                                              MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+                                                          oldSnapshot prefixControl current →
+                                                        ∀
+                                                          (pattern :
+                                                            MicroCFTA.InternedConstructorTemplates.Value
+                                                              (MicroCFTA.SourceObservations.Label
+                                                                MicroCFTA.FullSyntax.Formula)
+                                                              (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                                MicroCFTA.FullSyntax.Formula))
+                                                          (patternId : Nat)
+                                                          (domain :
+                                                            MicroCFTA.Cache.Interned
+                                                              MicroCFTA.IntersectionFlatMemoKeyDomain.DomainKey),
+                                                          MicroCFTA.SourceCurrentAllocatedNativeSourceWarmEntry.AuthenticEntryAt
+                                                              newRoot oldSnapshot newCount entry body depth ordinary
+                                                              pattern patternId domain →
+                                                            have universeValue :=
+                                                              MicroCFTA.InternedConstructorTemplates.Value.mu entry body
+                                                                depth ordinary;
+                                                            have bodyFirst :=
+                                                              MicroCFTA.SourceRecursiveIntersectionDomain.extend
+                                                                domain.key [entry.identity]
+                                                                (MicroCFTA.SourceRecursiveIntersectionControl.pair
+                                                                  bodyId entry.identity);
+                                                            ⋯
+'MicroCFTA.SourceCurrentNativeWarmAuxiliaryPrefixes.auxiliary_payloads_at_every_actual_warm_prefix' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

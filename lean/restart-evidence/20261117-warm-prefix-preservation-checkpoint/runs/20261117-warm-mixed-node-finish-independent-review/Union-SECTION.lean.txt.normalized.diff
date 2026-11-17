@@ -1,0 +1,32 @@
+--- normalized checked cold proof
++++ warm proof
+@@ -1,6 +1,4 @@
+-have initialPhysical : Physical (initial width machine) :=
+-    SourceCurrentAllocatedNativePhysicalCache.initial_valid machine machineValid
+-  obtain ⟨queryUsed, bodyCount, queryBefore, beforeBody, queryResume, total,
++obtain ⟨queryUsed, bodyCount, queryBefore, beforeBody, queryResume, total,
+       _querySmaller, queryBound, queryPrefix, actualDispatch, isolatedDispatch,
+       queryPhysical, queryReady, _querySafe, _bodyOwner, rawBody, _queryRest⟩ :=
+     SourceCurrentAllocatedNativeNodeQueryDispatchOrigin.actual_node_query_dispatch_from_warm_query_finish
+@@ -126,7 +124,7 @@
+       childHeight, strictChild, orderedChild⟩
+     rw [childDomain]
+     exact originalEntry
+-  obtain ⟨childKey, keyed⟩ := SourceCurrentAllocatedNativeGeneralCMHistory.qualified_key
++  obtain ⟨childKey, keyed⟩ := warm_qualified_key
+     rootRequest start wholeCount entry body depth ordinary bodyCodec child (Or.inr childQualified)
+   have lifted := origin.bind _ _ _ _ _ queryResume
+   have globalOrigin : Steps (queryUsed + used) (.code (.node rootRequest .pure))
+@@ -135,10 +133,10 @@
+         (fun result => (next result).bind queryResume))) first := by
+     simpa only [Control.bind, Code.bind_assoc] using
+       queryOrigin.trans _ _ _ _ _ _ _ _ lifted
+-  have observed := SourceCurrentAllocatedNativeSamePrefixKeyedChildResult.keyed_child_law_at_node_finish
++  have observed := SourceCurrentAllocatedNativeSamePrefixKeyedChildResult.keyed_child_law_at_actual_warm_reader
+     (NodeResult (width := width) rootRequest start wholeCount entry body depth ordinary)
+     (EdgeResult (width := width) rootRequest start wholeCount entry body depth ordinary)
+     rootRequest start initialPhysical fuel finishUsed (queryUsed + used) childCount
+-    handle value parentNext beforeFinish (by omega) actual past child childKey keyed
++    (.code (.finishNode handle value parentNext)) beforeFinish (by omega) actual past child childKey keyed
+     (fun result => (next result).bind queryResume) first last emitted (by omega) globalOrigin childActual
+   exact observed.1.2 childQualified

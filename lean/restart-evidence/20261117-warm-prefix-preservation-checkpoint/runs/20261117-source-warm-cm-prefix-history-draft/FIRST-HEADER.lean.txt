@@ -1,0 +1,39 @@
+theorem current_stored_universe_warm_cm_returned_at_every_actual_prefix
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (oldRoot : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
+    (oldRootDomain : oldRoot.domain = IntersectionEmptyDomain.emptyDomain)
+    (oldRootClosed : oldRoot.left.free = [] ∧ oldRoot.right.free = [])
+    (machineValid : SourceRecursiveIntersectionKernel.Valid machine)
+    (sourceGrowth : Grows sourceHeap machine.heap)
+    (pastInventory : InternedShallowHeap.NoNewMu sourceHeap machine.heap)
+    (operations : SourceEqualityConstraintMemoAllocation.State)
+    (operationsValid : SourceEqualityConstraintMemoAllocation.Valid operations)
+    (oldFuel oldCount : Nat) (oldControl : Control (Value Symbol Guard))
+    (oldSnapshot : Checked width) (oldBound : oldCount ≤ oldFuel)
+    (oldInputs : InputsThrough oldFuel (.code (.node oldRoot .pure))
+      (⟨initial width machine, operations⟩ : Checked width))
+    (oldFields : FieldsThrough oldFuel (.code (.node oldRoot .pure))
+      (⟨initial width machine, operations⟩ : Checked width))
+    (oldActual : Trace oldCount (.code (.node oldRoot .pure))
+      (⟨initial width machine, operations⟩ : Checked width) oldControl oldSnapshot)
+    (newRoot : NodeRequest Symbol Guard) (newFuel newCount : Nat)
+    (newControl : Control (Value Symbol Guard)) (warmReader : Checked width)
+    (newBound : newCount ≤ newFuel)
+    (newInputs : InputsThrough newFuel (.code (.node newRoot .pure)) oldSnapshot)
+    (newFields : FieldsThrough newFuel (.code (.node newRoot .pure)) oldSnapshot)
+    (newActual : Trace newCount (.code (.node newRoot .pure))
+      oldSnapshot newControl warmReader) :
+    let nodeLaw := NodeResult (width := width) newRoot oldSnapshot newCount entry body depth ordinary
+    let edgeLaw := EdgeResult (width := width) newRoot oldSnapshot newCount entry body depth ordinary
+    (Returned nodeLaw warmReader.native.nodes ∧ Returned edgeLaw warmReader.native.edges) ∧
+      ∀ (used : Nat) (currentControl : Control (Value Symbol Guard)) (current : Checked width),
+        used ≤ newCount →
+        Trace used (.code (.node newRoot .pure)) oldSnapshot currentControl current →
+        Returned nodeLaw current.native.nodes ∧ Returned edgeLaw current.native.edges

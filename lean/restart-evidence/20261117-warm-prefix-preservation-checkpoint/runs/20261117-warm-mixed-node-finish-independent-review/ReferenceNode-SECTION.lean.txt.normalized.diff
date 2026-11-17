@@ -1,0 +1,23 @@
+--- normalized checked cold proof
++++ warm proof
+@@ -129,7 +129,7 @@
+           exact Or.inr ⟨pattern, patternId, reference, nodeOperand,
+             originalEntry, Or.inr rfl, nodeProfile, Nat.le_of_lt nodeSmaller,
+             (fun _ => nodeSmaller), Or.inr ⟨rfl, rfl⟩⟩
+-      obtain ⟨childKey, keyed⟩ := SourceCurrentAllocatedNativeGeneralCMHistory.qualified_key
++      obtain ⟨childKey, keyed⟩ := warm_qualified_key
+         rootRequest start wholeCount entry body depth ordinary bodyCodec child childQualified
+       have span := SourceCurrentAllocatedNativeNodeChildBeforeFinish.completed_node_child_span_before_parent_finish
+         (.code (.node rootRequest .pure)) queryResume selectedRequest child handle
+@@ -139,9 +139,9 @@
+         positive origin childActual
+       obtain ⟨_localSpan, globalSpan, _suppliedSpan, _owner, _returnedOwner,
+         childPrefix, _checkedChild, _childEnd, _childSuffix⟩ := span
+-      have currentLaw := SourceCurrentAllocatedNativeSamePrefixKeyedChildResult.keyed_child_law_at_node_finish
++      have currentLaw := SourceCurrentAllocatedNativeSamePrefixKeyedChildResult.keyed_child_law_at_actual_warm_reader
+         nodeLaw edgeLaw rootRequest start initialPhysical fuel finishUsed (queryUsed + used) childCount
+-        handle value parentNext beforeFinish (by omega) actual past child childKey keyed
++        (.code (.finishNode handle value parentNext)) beforeFinish (by omega) actual past child childKey keyed
+         (fun result => (next result).bind queryResume) first middle result (by omega) childPrefix.steps childActual
+       rcases childQualified with closed | mixed
+       · exact currentLaw.1.1 closed

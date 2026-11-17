@@ -1,0 +1,25 @@
+--- normalized checked cold proof
++++ warm proof
+@@ -2,7 +2,6 @@
+   let initialState : Checked width := start
+   let rootControl : Control (Value Symbol Guard) := .code (.node rootRequest .pure)
+   let request : NodeRequest Symbol Guard := ⟨actualDomain, body, universeValue⟩
+-  have initialPhysical := SourceCurrentAllocatedNativePhysicalCache.initial_valid (width := width) machine machineValid
+   have atReader := SourceCurrentNativeEnterCommonOperand.checked_trace_extension wholeActual initialPhysical
+   have readerGrowth : Grows sourceHeap reader.native.machine.heap :=
+     InternedConstructorTemplates.grows_trans sourceGrowth atReader.2.heap
+@@ -152,12 +151,12 @@
+           beforeFinish.native.edges := by
+         intro cell request result stored
+         trivial
+-      have childPast := SourceCurrentAllocatedNativeSamePrefixKeyedChildResult.keyed_child_law_at_node_finish
++      have childPast := SourceCurrentAllocatedNativeSamePrefixKeyedChildResult.keyed_child_law_at_actual_warm_reader
+         (SourceCurrentAllocatedNativeBodyFirstKeyQueryGlobalLaws.NodeResult entry.identity bodyEntry.identity
+           (extend domain.key [entry.identity] (pair bodyEntry.identity entry.identity)) body universeValue)
+         (fun (_ : EdgeRequest Symbol Guard) (_ : EdgeValue Symbol Guard) => True)
+         rootRequest start initialPhysical fuel finishCount (queryUsed + 2) childCount
+-        parentHandle value rest beforeFinish (by omega) actual ⟨past, edgeTrue⟩
++        (.code (.finishNode parentHandle value rest)) beforeFinish (by omega) actual ⟨past, edgeTrue⟩
+         ⟨allocated.1, body, body⟩ childKey childKeyEq lifted started middle product
+         (by omega) childOrigin childActual
+       have shape : SourceCurrentAllocatedNativeCoherentOpenBodyResult.ProductShape

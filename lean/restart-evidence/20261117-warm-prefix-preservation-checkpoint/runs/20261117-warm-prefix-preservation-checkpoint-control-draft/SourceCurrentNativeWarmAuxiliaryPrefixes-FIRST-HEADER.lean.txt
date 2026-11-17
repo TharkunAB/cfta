@@ -1,0 +1,51 @@
+theorem auxiliary_payloads_at_every_actual_warm_prefix
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (bodyId : Nat) (bodyIdentity : identity body = some bodyId)
+    (oldRoot : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
+    (oldRootDomain : oldRoot.domain = IntersectionEmptyDomain.emptyDomain)
+    (oldRootClosed : oldRoot.left.free = [] ∧ oldRoot.right.free = [])
+    (machineValid : SourceRecursiveIntersectionKernel.Valid machine)
+    (sourceGrowth : Grows sourceHeap machine.heap)
+    (operations : SourceEqualityConstraintMemoAllocation.State)
+    (operationsValid : SourceEqualityConstraintMemoAllocation.Valid operations)
+    (oldFuel oldCount : Nat) (oldControl : Control (Value Symbol Guard))
+    (oldSnapshot : Checked width) (oldBound : oldCount ≤ oldFuel)
+    (oldInputs : InputsThrough oldFuel (.code (.node oldRoot .pure))
+      (⟨initial width machine, operations⟩ : Checked width))
+    (oldFields : FieldsThrough oldFuel (.code (.node oldRoot .pure))
+      (⟨initial width machine, operations⟩ : Checked width))
+    (oldActual : Trace oldCount (.code (.node oldRoot .pure))
+      (⟨initial width machine, operations⟩ : Checked width) oldControl oldSnapshot)
+    (newRoot : NodeRequest Symbol Guard) (newFuel newCount : Nat)
+    (newControl : Control (Value Symbol Guard)) (warmReader : Checked width)
+    (newBound : newCount ≤ newFuel)
+    (newInputs : InputsThrough newFuel (.code (.node newRoot .pure)) oldSnapshot)
+    (newFields : FieldsThrough newFuel (.code (.node newRoot .pure)) oldSnapshot)
+    (newActual : Trace newCount (.code (.node newRoot .pure))
+      oldSnapshot newControl warmReader) :
+    ∀ (prefixCount : Nat) (prefixControl : Control (Value Symbol Guard)) (current : Checked width),
+      prefixCount ≤ newCount →
+      Trace prefixCount (.code (.node newRoot .pure)) oldSnapshot prefixControl current →
+      ∀ (pattern : Value Symbol Guard) (patternId : Nat)
+        (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey),
+        SourceCurrentAllocatedNativeSourceWarmEntry.AuthenticEntryAt (width := width)
+          newRoot oldSnapshot newCount entry body depth ordinary pattern patternId domain →
+        let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+        let bodyFirst := extend domain.key [entry.identity] (pair bodyId entry.identity)
+        let diagonalFirst := extend domain.key [entry.identity] (pair entry.identity entry.identity)
+        let diagonalTerminal := extend diagonalFirst [entry.identity] (pair bodyId entry.identity)
+        Returned (SourceCurrentAllocatedNativeBodyFirstKeyQueryGlobalLaws.NodeResult
+          entry.identity bodyId bodyFirst body universeValue) current.native.nodes ∧
+        Returned (SourceCurrentAllocatedNativeBodyFirstKeyQueryGlobalLaws.EdgeResult
+          entry.identity bodyId bodyFirst universeValue) current.native.edges ∧
+        Returned (SourceCurrentAllocatedNativeCoherentOpenBodyQueryGlobalLaws.NodeResult
+          entry.identity entry.identity entry.identity diagonalTerminal diagonalFirst body universeValue)
+          current.native.nodes ∧
+        Returned SourceCurrentAllocatedNativeTopRowQueryGlobalLaws.EdgeResult current.native.edges

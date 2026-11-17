@@ -1,0 +1,24 @@
+--- normalized checked cold proof
++++ warm proof
+@@ -1,6 +1,4 @@
+-have initialPhysical : Physical (initial width machine) :=
+-    SourceCurrentAllocatedNativePhysicalCache.initial_valid machine machineValid
+-  obtain ⟨queryUsed, bodyCount, queryBefore, beforeBody, queryResume, total,
++obtain ⟨queryUsed, bodyCount, queryBefore, beforeBody, queryResume, total,
+       _querySmaller, queryBound, queryPrefix, actualDispatch, isolatedDispatch,
+       queryPhysical, queryReady, _querySafe, _bodyOwner, rawBody, _queryRest⟩ :=
+     SourceCurrentAllocatedNativeNodeQueryDispatchOrigin.actual_node_query_dispatch_from_warm_query_finish
+@@ -159,11 +157,11 @@
+           start
+           (.code ((requestEdge request.domain pair.1 pair.2).bind lifted)) first := by
+         simpa only [Control.bind, Code.bind_assoc, lifted] using bodyStart.trans _ _ _ _ _ _ _ _ appended
+-      have currentLaw := SourceCurrentAllocatedNativeSamePrefixEdgeChildResult.edge_child_law_at_node_finish
++      have currentLaw := SourceCurrentAllocatedNativeSamePrefixEdgeChildResult.edge_child_law_at_actual_warm_reader
+         (NodeResult (width := width) rootRequest start wholeCount entry body depth ordinary)
+         (EdgeResult (width := width) rootRequest start wholeCount entry body depth ordinary)
+         rootRequest start initialPhysical fuel finishUsed ((queryUsed + 1) + stepsBefore) rawCount
+-        handle value parentNext beforeFinish (by omega) actual past
++        (.code (.finishNode handle value parentNext)) beforeFinish (by omega) actual past
+         ⟨request.domain, pair.1, pair.2⟩ lifted first last row (by omega) outer rawSteps
+       obtain ⟨_remaining, _total, _checkedPrefix, atQuery⟩ :=
+         SourceCurrentAllocatedNativeOpenUniverseRowPhysicalReadback.physical_prefix origin rowsTrace

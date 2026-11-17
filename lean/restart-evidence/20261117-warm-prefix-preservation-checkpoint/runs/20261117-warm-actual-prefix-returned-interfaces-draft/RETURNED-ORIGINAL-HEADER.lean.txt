@@ -1,0 +1,51 @@
+theorem returned_at_every_actual_prefix
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (nodeLaw : NodeRequest Symbol Guard → Value Symbol Guard → Prop)
+    (edgeLaw : EdgeRequest Symbol Guard → EdgeValue Symbol Guard → Prop)
+    (rootRequest : NodeRequest Symbol Guard)
+    (machine : SourceRecursiveIntersectionKernel.Machine Symbol Guard)
+    (machineValid : SourceRecursiveIntersectionKernel.Valid machine)
+    (operations : SourceEqualityConstraintMemoAllocation.State)
+    (fuel count : Nat) (rest : Control (Value Symbol Guard)) (after : Checked width)
+    (bounded : count ≤ fuel)
+    (actual : Trace count (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width) rest after)
+    (nodeBodies : ∀ (finishUsed dispatchUsed bodyCount handle : Nat)
+      (request : NodeRequest Symbol Guard) (value : Value Symbol Guard)
+      (beforeBody beforeFinish : Checked width)
+      (resume : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard)),
+      finishUsed < count → dispatchUsed + bodyCount = finishUsed → 0 < dispatchUsed →
+      Trace finishUsed (.code (.node rootRequest .pure))
+        (⟨initial width machine, operations⟩ : Checked width)
+        (.code (.finishNode handle value (resume value))) beforeFinish →
+      Steps dispatchUsed (.code (.node rootRequest .pure))
+        (⟨initial width machine, operations⟩ : Checked width)
+        (.code ((compileNode request).bind
+          (fun result => .finishNode handle result (resume result)))) beforeBody →
+      beforeBody.native.nodes.cells handle = some ⟨request, .evaluating⟩ →
+      Steps bodyCount (.code (compileNode request)) beforeBody (.code (.pure value)) beforeFinish →
+      beforeFinish.native.nodes.cells handle = some ⟨request, .evaluating⟩ →
+      Returned nodeLaw beforeFinish.native.nodes → Returned edgeLaw beforeFinish.native.edges →
+      nodeLaw request value)
+    (edgeBodies : ∀ (finishUsed dispatchUsed bodyCount handle : Nat)
+      (request : EdgeRequest Symbol Guard) (value : EdgeValue Symbol Guard)
+      (beforeBody beforeFinish : Checked width)
+      (resume : EdgeValue Symbol Guard → Code Symbol Guard (Value Symbol Guard)),
+      finishUsed < count → dispatchUsed + bodyCount = finishUsed → 0 < dispatchUsed →
+      Trace finishUsed (.code (.node rootRequest .pure))
+        (⟨initial width machine, operations⟩ : Checked width)
+        (.code (.finishEdge handle value (resume value))) beforeFinish →
+      Steps dispatchUsed (.code (.node rootRequest .pure))
+        (⟨initial width machine, operations⟩ : Checked width)
+        (.edgeBody request (fun result => .finishEdge handle result (resume result))) beforeBody →
+      beforeBody.native.edges.cells handle = some ⟨request, .evaluating⟩ →
+      Steps bodyCount (.edgeBody request .pure) beforeBody (.code (.pure value)) beforeFinish →
+      beforeFinish.native.edges.cells handle = some ⟨request, .evaluating⟩ →
+      Returned nodeLaw beforeFinish.native.nodes → Returned edgeLaw beforeFinish.native.edges →
+      edgeLaw request value) :
+    (Returned nodeLaw after.native.nodes ∧ Returned edgeLaw after.native.edges) ∧
+      ∀ (used : Nat) (currentControl : Control (Value Symbol Guard)) (current : Checked width),
+        used ≤ count →
+        Trace used (.code (.node rootRequest .pure))
+          (⟨initial width machine, operations⟩ : Checked width) currentControl current →
+        Returned nodeLaw current.native.nodes ∧ Returned edgeLaw current.native.edges
