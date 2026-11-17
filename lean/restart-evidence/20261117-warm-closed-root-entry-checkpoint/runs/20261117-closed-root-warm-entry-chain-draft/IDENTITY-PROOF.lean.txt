@@ -1,0 +1,4 @@
+  have initial : ControlClosed (.code (.node rootRequest .pure)) :=
+    ⟨fun _ => rootClosed, fun _ => trivial⟩
+  have reached := trace_closed actual physical initial
+  exact ⟨reached.2.1, reached.2.2.1⟩

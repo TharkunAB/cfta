@@ -1,0 +1,110 @@
+namespace MicroCFTA.SourceCurrentAllocatedNativeSourceIssuedDomainEnterOrigin
+open Cache InternedConstructorTemplates InternedBinderProtocol IntersectionFlatMemoKeyDomain
+open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionThunks SourceRecursiveIntersectionCode
+open SourceRecursiveIntersectionControl SourceRecursiveIntersectionDomain
+open SourceEqualityNativeDemand
+open SourceCurrentAllocatedNativePhysicalTraceCompletion (Trace)
+open SourceCurrentAllocatedNativePhysicalExecution (Inputs)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+variable {width : Nat} {A B : Type}
+set_option autoImplicit false
+
+/- Note [Closed-root warm entry]
+The actual staged incoming operand need not have a pending-slot lookup.
+Its actual source receipt supplies closed root operands. Reuse the original
+entry proof at the same Checked start. Keep all counts, controls, domains,
+continuations, and readers. This is physical provenance for an authentic entry.
+It does not classify an inherited payload or prove a semantic result law.
+-/
+
+theorem closed_root_issued_domain_enter_origin
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (before : Checked width) (rootRequest : NodeRequest Symbol Guard)
+    (rootEmpty : rootRequest.domain = IntersectionEmptyDomain.emptyDomain)
+    (rootClosed : rootRequest.left.free = [] ∧ rootRequest.right.free = [])
+    (physical : SourceCurrentAllocatedNativePhysicalCache.Valid before.native)
+    (queryUsed : Nat) (request : NodeRequest Symbol Guard)
+    (resume : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard)) (queryBefore : Checked width)
+    (issued : Trace queryUsed (.code (.node rootRequest .pure)) before
+      (.code (.node request resume)) queryBefore)
+    (uid patternId : Nat)
+    (keyShape : request.domain.key = SourceRecursiveIntersectionDomain.extend
+      IntersectionEmptyDomain.emptyKey [uid] (SourceRecursiveIntersectionControl.pair uid patternId)) :
+    ∃ (entryUsed : Nat) (beforeEntry : Checked width) (left right : Value Symbol Guard)
+      (first second : Nat) (next : Interned DomainKey → Code Symbol Guard (Value Symbol Guard)),
+      let entered := SourceRecursiveIntersectionEnvironment.enter beforeEntry.native.machine.domains
+        IntersectionEmptyDomain.emptyKey left right first second
+      let started : Checked width :=
+        {beforeEntry with native := advance beforeEntry.native {beforeEntry.native.machine with domains := entered.2}}
+      entryUsed + 1 ≤ queryUsed ∧
+      Trace entryUsed (.code (.node rootRequest .pure)) before
+        (.code (.enter IntersectionEmptyDomain.emptyDomain left right first second next)) beforeEntry ∧
+      request.domain = entered.1 ∧
+      Trace 1 (.code (.enter IntersectionEmptyDomain.emptyDomain left right first second next))
+        beforeEntry (.code (next entered.1)) started ∧
+      Trace (queryUsed - (entryUsed + 1)) (.code (next entered.1)) started
+        (.code (.node request resume)) queryBefore ∧
+      left.free = [] ∧ right.free = [] ∧
+      SourceRecursiveIntersectionControl.identity left = some first ∧
+      SourceRecursiveIntersectionControl.identity right = some second ∧
+      SourceRecursiveIntersectionControl.pair first second =
+        SourceRecursiveIntersectionControl.pair uid patternId := by
+  let allowed : Interned DomainKey → Prop := Produced (.code (.node rootRequest .pure))
+    before queryUsed (.code (.node request resume)) queryBefore
+  have original : ControlDomains allowed (.code (.node rootRequest .pure)) := by
+    refine ⟨?_, fun _ => trivial⟩
+    change Produced (.code (.node rootRequest .pure)) before queryUsed
+      (.code (.node request resume)) queryBefore rootRequest.domain
+    exact Or.inl rootEmpty
+  have reached : ControlDomains allowed (.code (.node request resume)) :=
+    trace_domains (.code (.node rootRequest .pure)) before queryUsed
+      (.code (.node request resume)) queryBefore queryUsed
+      (.code (.node rootRequest .pure)) before 0 (.refl _ _) issued (by omega) physical original
+  have origin : Produced (.code (.node rootRequest .pure)) before queryUsed
+      (.code (.node request resume)) queryBefore request.domain := reached.1
+  have nonempty : request.domain ≠ IntersectionEmptyDomain.emptyDomain := by
+    intro empty
+    have member : SourceRecursiveIntersectionControl.pair uid patternId ∈ request.domain.key.seen := by
+      rw [keyShape]
+      exact (SourceRecursiveIntersectionDomain.extend_seen _ _ _ _).mpr (Or.inl rfl)
+    rw [empty] at member
+    cases member
+  rcases origin with empty | origin
+  · exact False.elim (nonempty empty)
+  · obtain ⟨entryUsed, beforeEntry, parent, left, right, first, second, next,
+      bounded, prefixActual, domainSame, entryActual, suffixActual⟩ := origin
+    have sameKey : (SourceRecursiveIntersectionEnvironment.enter beforeEntry.native.machine.domains
+        parent.key left right first second).1.key = SourceRecursiveIntersectionDomain.extend
+          IntersectionEmptyDomain.emptyKey [uid] (SourceRecursiveIntersectionControl.pair uid patternId) :=
+      (congrArg (fun domain : Interned DomainKey => domain.key) domainSame).symm.trans keyShape
+    have ancestry := SourceCurrentAllocatedNativeEmptyRootDomainAncestry.empty_root_singleton_enter_parent
+      rootRequest before beforeEntry physical rootEmpty entryUsed parent left right first second
+      uid patternId next prefixActual sameKey
+    have closed := SourceCurrentAllocatedNativeSourceEmptyEnterOperands.query_enter_closed_operands_of_closed_root
+      before rootRequest rootEmpty rootClosed physical entryUsed beforeEntry parent left right
+      first second uid patternId next prefixActual sameKey
+    have identities := SourceCurrentAllocatedNativeSourceEmptyEnterOperands.closed_root_enter_identities
+      before rootRequest rootClosed physical entryUsed beforeEntry parent left right first second
+      next prefixActual
+    have parentDomain : Domain beforeEntry.native.machine parent := by
+      cases entryActual with
+      | cons control state middle reached final reader count inputs one tail => exact inputs.1
+    have parentIdentity : parent.identity = 0 := by
+      simpa only [ancestry.1, ite_true] using parentDomain.represented.2
+    have parentEmpty : parent = IntersectionEmptyDomain.emptyDomain := by
+      have same : parent = Interned.mk 0 parent.key :=
+        congrArg (fun identifier => Interned.mk identifier parent.key) parentIdentity
+      rw [ancestry.1] at same
+      exact same
+    refine ⟨entryUsed, beforeEntry, left, right, first, second, next, ?_⟩
+    dsimp only
+    refine ⟨bounded, ?_, ?_, ?_, ?_, closed.2.1, closed.2.2.1, identities.1, identities.2, ancestry.2⟩
+    · simpa only [parentEmpty] using prefixActual
+    · simpa only [parentEmpty, IntersectionEmptyDomain.emptyDomain] using domainSame
+    · simpa only [parentEmpty, IntersectionEmptyDomain.emptyDomain] using entryActual
+    · simpa only [parentEmpty, IntersectionEmptyDomain.emptyDomain] using suffixActual
+
+end MicroCFTA.SourceCurrentAllocatedNativeSourceIssuedDomainEnterOrigin

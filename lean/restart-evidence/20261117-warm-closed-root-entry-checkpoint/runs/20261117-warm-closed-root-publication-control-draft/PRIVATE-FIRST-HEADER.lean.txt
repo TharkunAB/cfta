@@ -1,0 +1,6 @@
+private theorem trace_physical
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width used : Nat} {A : Type}
+    {control rest : Control A} {before after : Checked width}
+    (actual : Trace used control before rest after)
+    (valid : SourceCurrentAllocatedNativePhysicalCache.Valid before.native) :
+    SourceCurrentAllocatedNativePhysicalCache.Valid after.native

@@ -1,0 +1,41 @@
+namespace MicroCFTA.SourceCurrentAllocatedNativeSourceEmptyEnterOperands
+open Cache InternedConstructorTemplates InternedBinderProtocol IntersectionFlatMemoKeyDomain
+open InternedProbeProvenance InternedNestedFacts
+open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionThunks SourceRecursiveIntersectionCode
+open SourceRecursiveIntersectionControl SourceRecursiveIntersectionDomain
+open SourceEqualityNativeDemand
+open SourceCurrentAllocatedNativePhysicalTraceCompletion (Trace)
+open SourceCurrentAllocatedNativePhysicalExecution (Inputs)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+variable {width : Nat} {A B : Type}
+set_option autoImplicit false
+
+/- Note [Closed-root warm entry]
+The actual staged incoming operand need not have a pending-slot lookup.
+Its actual source receipt supplies closed root operands. Reuse the original
+entry proof at the same Checked start. Keep all counts, controls, domains,
+continuations, and readers. This is physical provenance for an authentic entry.
+It does not classify an inherited payload or prove a semantic result law.
+-/
+
+theorem closed_root_enter_identities
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (before : Checked width) (rootRequest : NodeRequest Symbol Guard)
+    (rootClosed : rootRequest.left.free = [] ∧ rootRequest.right.free = [])
+    (physical : SourceCurrentAllocatedNativePhysicalCache.Valid before.native)
+    (used : Nat) (after : Checked width) (parent : Interned DomainKey)
+    (left right : Value Symbol Guard) (first second : Nat)
+    (next : Interned DomainKey → Code Symbol Guard (Value Symbol Guard))
+    (actual : Trace used (.code (.node rootRequest .pure)) before
+      (.code (.enter parent left right first second next)) after) :
+    SourceRecursiveIntersectionControl.identity left = some first ∧
+      SourceRecursiveIntersectionControl.identity right = some second := by
+  have initial : ControlClosed (.code (.node rootRequest .pure)) :=
+    ⟨fun _ => rootClosed, fun _ => trivial⟩
+  have reached := trace_closed actual physical initial
+  exact ⟨reached.2.1, reached.2.2.1⟩
+
+end MicroCFTA.SourceCurrentAllocatedNativeSourceEmptyEnterOperands

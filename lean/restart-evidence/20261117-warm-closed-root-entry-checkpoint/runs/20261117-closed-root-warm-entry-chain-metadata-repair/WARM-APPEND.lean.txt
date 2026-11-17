@@ -1,0 +1,126 @@
+namespace MicroCFTA.SourceCurrentAllocatedNativeSourceWarmEntry
+open Cache InternedConstructorTemplates InternedProbeProvenance
+open InternedBinderProtocol (NodeKey Reference)
+open IntersectionFlatMemoKeyDomain
+open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionThunks SourceRecursiveIntersectionCode
+open SourceRecursiveIntersectionControl SourceEqualityNativeDemand
+open SourceSynthesisUniversePrefixHeight (height)
+open SourceCurrentAllocatedNativePhysicalTraceCompletion (Trace)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Profile" => SourceCurrentAllocatedNativeClosedResetProfile.Profile
+variable {width : Nat}
+set_option autoImplicit false
+
+/- Note [Closed-root warm entry]
+The actual staged incoming operand need not have a pending-slot lookup.
+Its actual source receipt supplies closed root operands. Reuse the original
+entry proof at the same Checked start. Keep all counts, controls, domains,
+continuations, and readers. This is physical provenance for an authentic entry.
+It does not classify an inherited payload or prove a semantic result law.
+-/
+
+theorem closed_root_issued_authentic_entry_at
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (before : Checked width) (rootRequest : NodeRequest Symbol Guard)
+    (rootEmpty : rootRequest.domain = IntersectionEmptyDomain.emptyDomain)
+    (rootClosed : rootRequest.left.free = [] ∧ rootRequest.right.free = [])
+    (physical : SourceCurrentAllocatedNativePhysicalCache.Valid before.native)
+    (queryUsed : Nat) (request : NodeRequest Symbol Guard)
+    (resume : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard)) (queryBefore : Checked width)
+    (issued : Trace queryUsed (.code (.node rootRequest .pure)) before
+      (.code (.node request resume)) queryBefore)
+    (oldRemaining : Nat) (oldControl : Control (Value Symbol Guard)) (oldSnapshot : Checked width)
+    (oldContinuation : Trace oldRemaining (.code (.node request resume)) queryBefore oldControl oldSnapshot)
+    (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (universeClosed : (Value.mu entry body depth ordinary).free = [])
+    (pattern : Value Symbol Guard) (patternClosed : pattern.free = []) (patternId : Nat)
+    (patternIdentity : SourceRecursiveIntersectionControl.identity pattern = some patternId)
+    (patternKind : SourceRecursiveIntersectionControl.tag pattern = 1 ∨
+      SourceRecursiveIntersectionControl.tag pattern = 3)
+    (universeFirst : Bool) (newRoot : NodeRequest Symbol Guard) (newUsed : Nat)
+    (beforeNew reader : Checked width)
+    (newNext : Interned DomainKey → Code Symbol Guard (Value Symbol Guard))
+    (newControl : Control (Value Symbol Guard)) :
+    let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+    let newLeft := if universeFirst then universeValue else pattern
+    let newRight := if universeFirst then pattern else universeValue
+    let newFirst := if universeFirst then entry.identity else patternId
+    let newSecond := if universeFirst then patternId else entry.identity
+    let newEntered := SourceRecursiveIntersectionEnvironment.enter beforeNew.native.machine.domains
+      IntersectionEmptyDomain.emptyKey universeValue pattern entry.identity patternId
+    Trace newUsed (.code (.node newRoot .pure)) oldSnapshot
+      (.code (.enter IntersectionEmptyDomain.emptyDomain newLeft newRight newFirst newSecond newNext)) beforeNew →
+    Trace 1 (.code (.enter IntersectionEmptyDomain.emptyDomain newLeft newRight newFirst newSecond newNext))
+      beforeNew newControl reader →
+    request.domain.key = newEntered.1.key →
+    AuthenticEntryAt rootRequest before (queryUsed + oldRemaining)
+      entry body depth ordinary pattern patternId request.domain := by
+  dsimp only
+  intro newPrefix newEntry matchingKey
+  let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+  let newEntered := SourceRecursiveIntersectionEnvironment.enter beforeNew.native.machine.domains
+    IntersectionEmptyDomain.emptyKey universeValue pattern entry.identity patternId
+  have oldWhole : Trace (queryUsed + oldRemaining) (.code (.node rootRequest .pure))
+      before oldControl oldSnapshot := issued.trans oldContinuation
+  have oldSnapshotPhysical := (SourceCurrentNativeEnterCommonOperand.checked_trace_extension oldWhole physical).1
+  have beforeNewPhysical :=
+    (SourceCurrentNativeEnterCommonOperand.checked_trace_extension newPrefix oldSnapshotPhysical).1
+  have newReceipt := SourceCurrentNativeOrderedOriginalEntry.ordered_original_entry_common_operands
+    entry body depth ordinary pattern patternClosed patternId patternIdentity patternKind universeFirst
+    newNext 0 beforeNew reader newControl beforeNewPhysical newEntry
+  obtain ⟨_newAllocation, _newStep, _newEvent, _newTail, _newHeap, _newCache, _newOperations,
+      _universeBefore, _patternBefore, _universeReader, _patternReader, _startedDomain, _readerDomain,
+      newKey, _newNonempty, _readerPhysical, _newGrowth, _classify⟩ := newReceipt
+  have keyShape : request.domain.key = SourceRecursiveIntersectionDomain.extend
+      IntersectionEmptyDomain.emptyKey [entry.identity] (pair entry.identity patternId) :=
+    matchingKey.trans newKey
+  obtain ⟨entryUsed, beforeOld, oldLeft, oldRight, oldFirst, oldSecond, oldNext,
+      entryBound, rawPrefix, domainSame, rawEvent, rawSuffix, _leftClosed, _rightClosed,
+      _leftIdentity, _rightIdentity, _pairSame⟩ :=
+    SourceCurrentAllocatedNativeSourceIssuedDomainEnterOrigin.closed_root_issued_domain_enter_origin
+      before rootRequest rootEmpty rootClosed physical queryUsed request resume queryBefore issued
+      entry.identity patternId keyShape
+  let oldTail := queryUsed - (entryUsed + 1) + oldRemaining
+  have oldSpan : Trace (oldTail + 1)
+      (.code (.enter IntersectionEmptyDomain.emptyDomain oldLeft oldRight oldFirst oldSecond oldNext))
+      beforeOld oldControl oldSnapshot := by
+    have counts : 1 + (queryUsed - (entryUsed + 1) + oldRemaining) = oldTail + 1 := by
+      dsimp only [oldTail]
+      omega
+    simpa only [counts] using rawEvent.trans (rawSuffix.trans oldContinuation)
+  have equalKey : (SourceRecursiveIntersectionEnvironment.enter beforeOld.native.machine.domains
+      IntersectionEmptyDomain.emptyDomain.key oldLeft oldRight oldFirst oldSecond).1.key = newEntered.1.key := by
+    have rawKey : (SourceRecursiveIntersectionEnvironment.enter beforeOld.native.machine.domains
+        IntersectionEmptyDomain.emptyKey oldLeft oldRight oldFirst oldSecond).1.key = newEntered.1.key :=
+      (congrArg (fun domain : Interned DomainKey => domain.key) domainSame).symm.trans matchingKey
+    simpa only [IntersectionEmptyDomain.emptyDomain] using rawKey
+  have canonicalReceipt := SourceCurrentAllocatedNativeSourceCanonicalOldEntry.closed_root_canonical_old_entry
+    before rootRequest rootEmpty rootClosed physical entryUsed beforeOld
+    IntersectionEmptyDomain.emptyDomain oldLeft oldRight oldFirst oldSecond oldNext rawPrefix
+    oldTail oldControl oldSnapshot oldSpan entry body depth ordinary universeClosed pattern patternClosed
+    patternId patternIdentity patternKind universeFirst newRoot newUsed beforeNew reader newNext newControl
+    newPrefix newEntry equalKey
+  obtain ⟨oldUniverseFirst, _parentEmpty, canonicalPrefix, canonicalAllocation, _canonicalStep,
+      canonicalEvent, _canonicalTail, _oldHeap, _oldCache, _oldOperations,
+      _oldUniverseAvailable, _oldPatternAvailable, _oldStartedDomain, _oldSnapshotDomain, _oldKey⟩ := canonicalReceipt
+  have controlSame := (Outcome.yielded.inj
+    (rawPrefix.steps.execute.symm.trans canonicalPrefix.steps.execute)).1
+  have argumentsSame := Code.enter.inj (Control.code.inj controlSame)
+  have allocationSame : SourceRecursiveIntersectionEnvironment.enter beforeOld.native.machine.domains
+      IntersectionEmptyDomain.emptyKey oldLeft oldRight oldFirst oldSecond =
+      SourceRecursiveIntersectionEnvironment.enter beforeOld.native.machine.domains
+        IntersectionEmptyDomain.emptyKey universeValue pattern entry.identity patternId := by
+    rw [argumentsSame.2.1, argumentsSame.2.2.1, argumentsSame.2.2.2.1, argumentsSame.2.2.2.2.1]
+    exact canonicalAllocation
+  have domainCanonical : request.domain =
+      (SourceRecursiveIntersectionEnvironment.enter beforeOld.native.machine.domains
+        IntersectionEmptyDomain.emptyKey universeValue pattern entry.identity patternId).1 :=
+    domainSame.trans (congrArg Prod.fst allocationSame)
+  refine ⟨patternClosed, patternIdentity, patternKind, oldUniverseFirst, entryUsed, beforeOld, oldNext, ?_⟩
+  dsimp only
+  exact ⟨by omega, canonicalPrefix, canonicalAllocation, canonicalEvent, domainCanonical⟩
+
+end MicroCFTA.SourceCurrentAllocatedNativeSourceWarmEntry

@@ -1,0 +1,18 @@
+  rcases SourceSynthesisCurrentUniverseOwnership.current_build_single_universe
+      lib query signed whole accepted rootValue sourceHeap built with noMu | someMu
+  · exact False.elim (noMu key entry body depth ordinary stored)
+  · obtain ⟨owner, ownerBody, ownerDepth, ownerOrdinary, _ownerStored, _ownerAvailable,
+        _ownerClosed, _ownerReplay, unique⟩ := someMu
+    have selected := unique key entry body depth ordinary stored
+    intro atom member
+    rcases atom_shape value atom member with ⟨name, same⟩ | ⟨identity, same⟩
+    · rw [same] at member
+      have free := ref_free name value heap coherent available member
+      simp only [closed, List.not_mem_nil] at free
+    · rw [same] at member
+      obtain ⟨other, otherBody, otherDepth, otherOrdinary, identitySame, present⟩ :=
+        mu_stored value heap available identity member
+      have old := unchanged other.key other otherBody otherDepth otherOrdinary present
+      have equal := (unique other.key other otherBody otherDepth otherOrdinary old).trans selected.symm
+      have entries : other = entry := (Value.mu.inj equal).1
+      rw [same, ← identitySame, entries]

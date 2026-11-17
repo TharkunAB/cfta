@@ -1,0 +1,30 @@
+  have initialValid : SourceCurrentAllocatedNativePhysicalCache.Valid
+      (⟨initial width machine, operations⟩ : Checked width).native :=
+    SourceCurrentAllocatedNativePhysicalCache.initial_valid machine machineValid
+  have ready : SourceEqualityRequiredCache.Ready machine.heap := by
+    rw [sourceStart]
+    exact SourceEqualityRequiredCache.constructed (ordinarySymbols whole) rootValue sourceHeap built
+  have unchanged :=
+    SourceSynthesisCurrentUniverseNativeAllocation.original_universe_cold_query_no_new_mu
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      rootRequest machine machineValid sourceGrowth rootDomain leftProfile rightProfile
+      operations operationsValid fuel inputs fields
+  have sourceToStart : InternedShallowHeap.NoNewMu sourceHeap machine.heap := by
+    rw [sourceStart]
+    exact InternedShallowHeap.noNewMu_refl _
+  constructor
+  · intro value available closed
+    have checked := SourceCurrentAllocatedNativePhysicalExecution.execute_invariants fuel
+      (.code (.node rootRequest .pure)) (⟨initial width machine, operations⟩ : Checked width)
+      initialValid ready inputs
+    exact SourceSynthesisCurrentUniverseStartupAtoms.current_stored_universe_closed_atoms_after_no_new_mu
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      _ checked.1.machine.1.coherent (InternedShallowHeap.noNewMu_trans sourceToStart unchanged.1)
+      value available closed
+  · intro used rest current bounded actual value available closed
+    have checked := trace_physical actual initialValid
+    exact SourceSynthesisCurrentUniverseStartupAtoms.current_stored_universe_closed_atoms_after_no_new_mu
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      current.native.machine.heap checked.machine.1.coherent
+      (InternedShallowHeap.noNewMu_trans sourceToStart (unchanged.2 used rest current bounded actual))
+      value available closed

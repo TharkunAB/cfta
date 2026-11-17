@@ -1,0 +1,32 @@
+theorem closed_root_issued_domain_enter_origin
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (before : Checked width) (rootRequest : NodeRequest Symbol Guard)
+    (rootEmpty : rootRequest.domain = IntersectionEmptyDomain.emptyDomain)
+    (rootClosed : rootRequest.left.free = [] ∧ rootRequest.right.free = [])
+    (physical : SourceCurrentAllocatedNativePhysicalCache.Valid before.native)
+    (queryUsed : Nat) (request : NodeRequest Symbol Guard)
+    (resume : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard)) (queryBefore : Checked width)
+    (issued : Trace queryUsed (.code (.node rootRequest .pure)) before
+      (.code (.node request resume)) queryBefore)
+    (uid patternId : Nat)
+    (keyShape : request.domain.key = SourceRecursiveIntersectionDomain.extend
+      IntersectionEmptyDomain.emptyKey [uid] (SourceRecursiveIntersectionControl.pair uid patternId)) :
+    ∃ (entryUsed : Nat) (beforeEntry : Checked width) (left right : Value Symbol Guard)
+      (first second : Nat) (next : Interned DomainKey → Code Symbol Guard (Value Symbol Guard)),
+      let entered := SourceRecursiveIntersectionEnvironment.enter beforeEntry.native.machine.domains
+        IntersectionEmptyDomain.emptyKey left right first second
+      let started : Checked width :=
+        {beforeEntry with native := advance beforeEntry.native {beforeEntry.native.machine with domains := entered.2}}
+      entryUsed + 1 ≤ queryUsed ∧
+      Trace entryUsed (.code (.node rootRequest .pure)) before
+        (.code (.enter IntersectionEmptyDomain.emptyDomain left right first second next)) beforeEntry ∧
+      request.domain = entered.1 ∧
+      Trace 1 (.code (.enter IntersectionEmptyDomain.emptyDomain left right first second next))
+        beforeEntry (.code (next entered.1)) started ∧
+      Trace (queryUsed - (entryUsed + 1)) (.code (next entered.1)) started
+        (.code (.node request resume)) queryBefore ∧
+      left.free = [] ∧ right.free = [] ∧
+      SourceRecursiveIntersectionControl.identity left = some first ∧
+      SourceRecursiveIntersectionControl.identity right = some second ∧
+      SourceRecursiveIntersectionControl.pair first second =
+        SourceRecursiveIntersectionControl.pair uid patternId

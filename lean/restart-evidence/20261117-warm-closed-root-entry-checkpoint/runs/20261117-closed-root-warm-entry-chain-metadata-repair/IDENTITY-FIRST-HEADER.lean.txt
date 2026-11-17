@@ -1,0 +1,12 @@
+theorem closed_root_enter_identities
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (before : Checked width) (rootRequest : NodeRequest Symbol Guard)
+    (rootClosed : rootRequest.left.free = [] ∧ rootRequest.right.free = [])
+    (physical : SourceCurrentAllocatedNativePhysicalCache.Valid before.native)
+    (used : Nat) (after : Checked width) (parent : Interned DomainKey)
+    (left right : Value Symbol Guard) (first second : Nat)
+    (next : Interned DomainKey → Code Symbol Guard (Value Symbol Guard))
+    (actual : Trace used (.code (.node rootRequest .pure)) before
+      (.code (.enter parent left right first second next)) after) :
+    SourceRecursiveIntersectionControl.identity left = some first ∧
+      SourceRecursiveIntersectionControl.identity right = some second

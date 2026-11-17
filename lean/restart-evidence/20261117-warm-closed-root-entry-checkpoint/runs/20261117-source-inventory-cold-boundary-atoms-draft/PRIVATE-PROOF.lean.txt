@@ -1,0 +1,7 @@
+  induction actual with
+  | refl => exact valid
+  | cons control before next middle final after count inputs one tail ih =>
+      have checked := SourceCurrentAllocatedNativePhysicalExecution.step_valid control before valid inputs
+      have reached : SourceCurrentAllocatedNativePhysicalCache.Valid middle.native := by
+        simpa only [one, Outcome.state] using checked
+      exact ih reached

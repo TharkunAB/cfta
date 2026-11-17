@@ -1,0 +1,55 @@
+  dsimp only
+  intro newPrefix newEntry sameKey
+  let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+  have beforeOldPhysical :=
+    (SourceCurrentNativeEnterCommonOperand.checked_trace_extension oldPrefix physical).1
+  have oldReceipt := SourceCurrentNativeEnterCommonOperand.enter_prefix_common_operands
+    parent oldLeft oldRight oldFirst oldSecond oldNext oldTail beforeOld oldSnapshot oldControl
+    beforeOldPhysical oldSpan
+  obtain ⟨_oldStep, _oldSuffix, _oldHeap, _oldCache, _oldOperations, _oldDomain,
+      _oldLeftBefore, _oldRightBefore, oldLeftAvailable, oldRightAvailable,
+      _oldStartedDomain, _oldReachedDomain, _oldKey, _oldExtension, _oldClassify⟩ := oldReceipt
+  have oldSnapshotPhysical :=
+    (SourceCurrentNativeEnterCommonOperand.checked_trace_extension oldSpan beforeOldPhysical).1
+  have beforeNewPhysical :=
+    (SourceCurrentNativeEnterCommonOperand.checked_trace_extension newPrefix oldSnapshotPhysical).1
+  have newReceipt := SourceCurrentNativeOrderedOriginalEntry.ordered_original_entry_common_operands
+    entry body depth ordinary pattern patternClosed patternId patternIdentity patternKind universeFirst
+    newNext 0 beforeNew reader newControl beforeNewPhysical newEntry
+  obtain ⟨_newCanonical, _newStep, _newChecked, _newSuffix, _newHeap, _newCache, _newOperations,
+      _newUBefore, _newPBefore, universeAvailable, patternAvailable, _newStartedDomain,
+      _newReachedDomain, newKey, _newNonempty, readerPhysical, _newExtension, _newClassify⟩ := newReceipt
+  have oldKey :
+      (SourceRecursiveIntersectionEnvironment.enter beforeOld.native.machine.domains
+        parent.key oldLeft oldRight oldFirst oldSecond).1.key =
+      SourceRecursiveIntersectionDomain.extend IntersectionEmptyDomain.emptyKey [entry.identity]
+        (pair entry.identity patternId) := sameKey.trans newKey
+  obtain ⟨parentEmpty, oldLeftClosed, oldRightClosed, orderedIds⟩ :=
+    SourceCurrentAllocatedNativeSourceEmptyEnterOperands.query_enter_closed_operands_of_closed_root
+      before rootRequest rootEmpty rootClosed physical oldUsed beforeOld parent oldLeft oldRight
+      oldFirst oldSecond entry.identity patternId oldNext oldPrefix oldKey
+  have warmSpan : Trace (newUsed + 1) (.code (.node newRoot .pure)) oldSnapshot newControl reader :=
+    newPrefix.trans newEntry
+  have reached := SourceCurrentNativeEnterCommonOperand.checked_trace_extension warmSpan oldSnapshotPhysical
+  have oldLeftAtReader : Available reader.native.machine.heap oldLeft :=
+    reached.2.available oldLeft oldLeftAvailable
+  have oldRightAtReader : Available reader.native.machine.heap oldRight :=
+    reached.2.available oldRight oldRightAvailable
+  have fullOperands : (oldLeft = universeValue ∧ oldRight = pattern) ∨
+      (oldLeft = pattern ∧ oldRight = universeValue) := by
+    rcases orderedIds with ⟨leftId, rightId⟩ | ⟨leftId, rightId⟩
+    · exact Or.inl ⟨
+        SourceSynthesisUniverseMixedDescendantFreshness.closed_identity_injective reader.native.machine.heap
+          readerPhysical.machine.1 oldLeft universeValue oldLeftAtReader universeAvailable
+          oldLeftClosed universeClosed entry.identity leftId rfl,
+        SourceSynthesisUniverseMixedDescendantFreshness.closed_identity_injective reader.native.machine.heap
+          readerPhysical.machine.1 oldRight pattern oldRightAtReader patternAvailable
+          oldRightClosed patternClosed patternId rightId patternIdentity⟩
+    · exact Or.inr ⟨
+        SourceSynthesisUniverseMixedDescendantFreshness.closed_identity_injective reader.native.machine.heap
+          readerPhysical.machine.1 oldLeft pattern oldLeftAtReader patternAvailable
+          oldLeftClosed patternClosed patternId leftId patternIdentity,
+        SourceSynthesisUniverseMixedDescendantFreshness.closed_identity_injective reader.native.machine.heap
+          readerPhysical.machine.1 oldRight universeValue oldRightAtReader universeAvailable
+          oldRightClosed universeClosed entry.identity rightId rfl⟩
+  exact ⟨parentEmpty, fullOperands, oldLeftAtReader, oldRightAtReader, universeAvailable, patternAvailable⟩

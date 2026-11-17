@@ -1,0 +1,23 @@
+theorem stored_dispatch_enter_identities
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (caller : Caller width) (cached : EnumerationExpandableIndex.Cached Symbol Guard)
+    (valid : SourcePruningEnumerationNativeBranchCompletion.CacheValid caller cached)
+    (source target sourceHandle targetHandle : Nat)
+    (sourceScs targetScs : List EnumerationState.Suspended)
+    (sourceStored : cached.core.values[source]? =
+      some (.unenumerated (some sourceHandle) sourceScs))
+    (targetStored : cached.core.values[target]? =
+      some (.unenumerated (some targetHandle) targetScs))
+    (rootRequest : NodeRequest Symbol Guard)
+    (sourceDecoded : SourcePruningEnumerationNodes.lookupNode
+      caller.checked.native.machine.heap sourceHandle = some rootRequest.left)
+    (targetDecoded : SourcePruningEnumerationNodes.lookupNode
+      caller.checked.native.machine.heap targetHandle = some rootRequest.right)
+    (physical : SourceCurrentAllocatedNativePhysicalCache.Valid caller.checked.native)
+    (used : Nat) (after : Checked width) (parent : Interned DomainKey)
+    (left right : Value Symbol Guard) (first second : Nat)
+    (next : Interned DomainKey → Code Symbol Guard (Value Symbol Guard))
+    (actual : Trace used (.code (.node rootRequest .pure)) caller.checked
+      (.code (.enter parent left right first second next)) after) :
+    SourceRecursiveIntersectionControl.identity left = some first ∧
+      SourceRecursiveIntersectionControl.identity right = some second

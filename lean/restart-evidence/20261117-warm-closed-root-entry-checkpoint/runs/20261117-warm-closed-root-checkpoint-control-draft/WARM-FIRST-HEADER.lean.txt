@@ -1,0 +1,36 @@
+theorem closed_root_issued_authentic_entry_at
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (before : Checked width) (rootRequest : NodeRequest Symbol Guard)
+    (rootEmpty : rootRequest.domain = IntersectionEmptyDomain.emptyDomain)
+    (rootClosed : rootRequest.left.free = [] ∧ rootRequest.right.free = [])
+    (physical : SourceCurrentAllocatedNativePhysicalCache.Valid before.native)
+    (queryUsed : Nat) (request : NodeRequest Symbol Guard)
+    (resume : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard)) (queryBefore : Checked width)
+    (issued : Trace queryUsed (.code (.node rootRequest .pure)) before
+      (.code (.node request resume)) queryBefore)
+    (oldRemaining : Nat) (oldControl : Control (Value Symbol Guard)) (oldSnapshot : Checked width)
+    (oldContinuation : Trace oldRemaining (.code (.node request resume)) queryBefore oldControl oldSnapshot)
+    (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (universeClosed : (Value.mu entry body depth ordinary).free = [])
+    (pattern : Value Symbol Guard) (patternClosed : pattern.free = []) (patternId : Nat)
+    (patternIdentity : SourceRecursiveIntersectionControl.identity pattern = some patternId)
+    (patternKind : SourceRecursiveIntersectionControl.tag pattern = 1 ∨
+      SourceRecursiveIntersectionControl.tag pattern = 3)
+    (universeFirst : Bool) (newRoot : NodeRequest Symbol Guard) (newUsed : Nat)
+    (beforeNew reader : Checked width)
+    (newNext : Interned DomainKey → Code Symbol Guard (Value Symbol Guard))
+    (newControl : Control (Value Symbol Guard)) :
+    let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+    let newLeft := if universeFirst then universeValue else pattern
+    let newRight := if universeFirst then pattern else universeValue
+    let newFirst := if universeFirst then entry.identity else patternId
+    let newSecond := if universeFirst then patternId else entry.identity
+    let newEntered := SourceRecursiveIntersectionEnvironment.enter beforeNew.native.machine.domains
+      IntersectionEmptyDomain.emptyKey universeValue pattern entry.identity patternId
+    Trace newUsed (.code (.node newRoot .pure)) oldSnapshot
+      (.code (.enter IntersectionEmptyDomain.emptyDomain newLeft newRight newFirst newSecond newNext)) beforeNew →
+    Trace 1 (.code (.enter IntersectionEmptyDomain.emptyDomain newLeft newRight newFirst newSecond newNext))
+      beforeNew newControl reader →
+    request.domain.key = newEntered.1.key →
+    AuthenticEntryAt rootRequest before (queryUsed + oldRemaining)
+      entry body depth ordinary pattern patternId request.domain

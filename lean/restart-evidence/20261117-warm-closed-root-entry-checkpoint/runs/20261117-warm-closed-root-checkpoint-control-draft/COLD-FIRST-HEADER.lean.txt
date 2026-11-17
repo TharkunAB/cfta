@@ -1,0 +1,36 @@
+theorem original_source_cold_query_closed_boundary_atoms
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (rootRequest : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
+    (machineValid : SourceRecursiveIntersectionKernel.Valid machine)
+    (sourceGrowth : Grows sourceHeap machine.heap)
+    (sourceStart : machine.heap = sourceHeap)
+    (rootDomain : rootRequest.domain = IntersectionEmptyDomain.emptyDomain)
+    (leftProfile : Profile entry.identity rootRequest.left)
+    (rightProfile : Profile entry.identity rootRequest.right)
+    (operations : SourceEqualityConstraintMemoAllocation.State)
+    (operationsValid : SourceEqualityConstraintMemoAllocation.Valid operations)
+    (fuel : Nat)
+    (inputs : InputsThrough fuel (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width))
+    (fields : FieldsThrough fuel (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width)) :
+    (∀ value : Value Symbol Guard,
+      Available
+        (SourceEqualityNativeDemand.execute fuel (.code (.node rootRequest .pure))
+          (⟨initial width machine, operations⟩ : Checked width)).state.native.machine.heap value →
+      value.free = [] →
+      ∀ atom ∈ InternedBoundaryAtoms.atoms value, atom = .mu entry.identity) ∧
+    ∀ (used : Nat) (rest : Control (Value Symbol Guard)) (current : Checked width),
+      used ≤ fuel →
+      Trace used (.code (.node rootRequest .pure))
+        (⟨initial width machine, operations⟩ : Checked width) rest current →
+      ∀ value : Value Symbol Guard, Available current.native.machine.heap value →
+        value.free = [] →
+        ∀ atom ∈ InternedBoundaryAtoms.atoms value, atom = .mu entry.identity
