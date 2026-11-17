@@ -1,0 +1,47 @@
+{
+  "previous_packet": "lean/restart-evidence/20261117-original-universe-optional-no-new-mu-owner-helper-and-constructor-repair",
+  "failed_check": "20261117-original-universe-optional-no-new-mu-owner-helper-check/normal-module.txt",
+  "changes": [
+    {
+      "old": "    simpa only [Nat.add_assoc, Control.bind, Code.bind, optionalNext] using\n      compilerOrigin.trans (enteredOnce.bind finishNext)",
+      "new": "    have combined := compilerOrigin.trans (enteredOnce.bind finishNext)\n    have countSame : queryUsed + 1 + 1 = queryUsed + 2 := by omega\n    rw [countSame] at combined\n    simpa only [Control.bind, requestNode, Code.bind, optionalNext] using combined"
+    },
+    {
+      "old": "        simp only [compileMu, leftIdentity, rightIdentity]",
+      "new": "        simp only [compileMu, leftIdentity, rightIdentity, requestNode, Code.bind]"
+    },
+    {
+      "old": "        simpa only [enteredNext, Code.bind, domainSame, leftSame, rightSame, firstSame, secondSame]\n          using compilerOrigin",
+      "new": "        have literalOrigin := compilerOrigin\n        rw [enteredNext] at literalOrigin\n        simpa only [requestNode, Code.bind, domainSame, leftSame, rightSame, firstSame, secondSame]\n          using literalOrigin"
+    },
+    {
+      "old": "        simpa only [enteredNext, Control.bind, Code.bind, domainSame, leftSame, rightSame,\n          firstSame, secondSame, optionalNext] using enteredOnce.bind finishNext",
+      "new": "        have literalEvent := enteredOnce.bind finishNext\n        rw [enteredNext] at literalEvent\n        simpa only [Control.bind, requestNode, Code.bind, domainSame, leftSame, rightSame,\n          firstSame, secondSame, optionalNext] using literalEvent"
+    },
+    {
+      "old": "            firstSame, secondSame, optionalNext, Control.bind, Code.bind] using event)\n        simpa only [entered, domainSame, leftSame, rightSame, firstSame, secondSame] using authenticAt",
+      "new": "            firstSame, secondSame, optionalNext, Control.bind, requestNode, Code.bind,\n            IntersectionEmptyDomain.emptyDomain] using event)\n        simpa only [entered, domainSame, leftSame, rightSame, firstSame, secondSame,\n          IntersectionEmptyDomain.emptyDomain] using authenticAt"
+    },
+    {
+      "old": "      have childQualified : MixedQualified (width := width) rootRequest machine operations used",
+      "new": "      have childLeft : childRequest.left = if universeFirst then body else pattern := by\n        change SourceRecursiveIntersectionKernel.body queried.left = _\n        rw [leftSame]\n        cases universeFirst with\n        | false => exact patternBody\n        | true => rfl\n      have childRight : childRequest.right = if universeFirst then pattern else body := by\n        change SourceRecursiveIntersectionKernel.body queried.right = _\n        rw [rightSame]\n        cases universeFirst with\n        | false => rfl\n        | true => exact patternBody\n      have childQualified : MixedQualified (width := width) rootRequest machine operations used"
+    },
+    {
+      "old": "          | false =>\n              exact Or.inr \u27e8by simp only [childRequest, leftSame, patternBody],\n                by simp only [childRequest, rightSame, SourceRecursiveIntersectionKernel.body]\u27e9\n          | true =>\n              exact Or.inl \u27e8by simp only [childRequest, leftSame, SourceRecursiveIntersectionKernel.body],\n                by simp only [childRequest, rightSame, patternBody]\u27e9",
+      "new": "          | false => exact Or.inr \u27e8childLeft, childRight\u27e9\n          | true => exact Or.inl \u27e8childLeft, childRight\u27e9"
+    },
+    {
+      "old": "              (by simpa only [childRequest, leftSame, patternBody] using optional_closed_codec pattern patternProfile.1)\n              (by simpa only [childRequest, rightSame, SourceRecursiveIntersectionKernel.body] using bodyCodec)",
+      "new": "              (by rw [childLeft]; exact optional_closed_codec pattern patternProfile.1)\n              (by rw [childRight]; exact bodyCodec)"
+    },
+    {
+      "old": "              (by simpa only [childRequest, leftSame, SourceRecursiveIntersectionKernel.body] using bodyCodec)\n              (by simpa only [childRequest, rightSame, patternBody] using optional_closed_codec pattern patternProfile.1)",
+      "new": "              (by rw [childLeft]; exact bodyCodec)\n              (by rw [childRight]; exact optional_closed_codec pattern patternProfile.1)"
+    }
+  ],
+  "public_header_changed": false,
+  "private_headers_changed": false,
+  "checked_helper_bodies_changed": false,
+  "proof_limit_changed": false,
+  "runtime_changed": false
+}

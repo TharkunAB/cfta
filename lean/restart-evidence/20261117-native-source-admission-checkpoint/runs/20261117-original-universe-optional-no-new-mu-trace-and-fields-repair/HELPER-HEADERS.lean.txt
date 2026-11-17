@@ -1,0 +1,62 @@
+private theorem optional_closed_codec (value : Node) (closed : value.free = []) :
+    ∃ input, IntersectionFlatMemoKey.input value.referenceOf = some input
+
+private theorem optional_key_of_codecs {width : Nat} (request : NodeRequest Symbol Guard)
+    (left : ∃ input, IntersectionFlatMemoKey.input request.left.referenceOf = some input)
+    (right : ∃ input, IntersectionFlatMemoKey.input request.right.referenceOf = some input) :
+    ∃ actualKey, SourceRecursiveIntersectionMemo.requestKey width
+      request.domain request.left request.right = some actualKey
+
+private theorem optional_mu_controls
+    (domain : IntersectionFlatMemoKeyDomain.DomainKey) (left right : Node)
+    (selected : decision domain left right = .bothMu ∨
+      decision domain left right = .leftMu ∨ decision domain left right = .rightMu) :
+    hasEmpty left right = false ∧ reset domain left right = false ∧
+      closedSelf left right = false ∧ greater left right = false ∧
+      (payload left right = .bothMu ∨ payload left right = .leftMu ∨ payload left right = .rightMu)
+
+private theorem optional_closed_owner
+    (heap : InternedConstructorTemplates.State Symbol Guard)
+    (entry : Interned NodeKey) (body depth ordinary : Node)
+    (request : NodeRequest Symbol Guard)
+    (original : ∀ own ownBody ownDepth ownOrdinary,
+      Available heap (.mu own ownBody ownDepth ownOrdinary) →
+      Profile entry.identity (.mu own ownBody ownDepth ownOrdinary) →
+      (Value.mu own ownBody ownDepth ownOrdinary : Node) = .mu entry body depth ordinary)
+    (leftAvailable : Available heap request.left) (rightAvailable : Available heap request.right)
+    (qualified : ClosedQualified entry.identity request)
+    (selected : decision request.domain.key request.left request.right = .bothMu ∨
+      decision request.domain.key request.left request.right = .leftMu ∨
+      decision request.domain.key request.left request.right = .rightMu) :
+    request.domain = IntersectionEmptyDomain.emptyDomain ∧
+      ∃ (pattern : Node) (patternId : Nat) (universeFirst : Bool),
+        Profile entry.identity pattern ∧ identity pattern = some patternId ∧
+        (tag pattern = 1 ∨ tag pattern = 3) ∧
+        request.left = (if universeFirst then .mu entry body depth ordinary else pattern) ∧
+        request.right = (if universeFirst then pattern else .mu entry body depth ordinary)
+
+private theorem optional_mixed_owner
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (rootRequest : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
+    (operations : SourceEqualityConstraintMemoAllocation.State) (wholeCount : Nat)
+    (heap : InternedConstructorTemplates.State Symbol Guard)
+    (entry : Interned NodeKey) (body depth ordinary : Node)
+    (bodyEntry : Interned NodeKey) (bodyRows : List (EdgeValue Symbol Guard))
+    (bodyShape : body = .node bodyEntry bodyRows 0 [.interned entry.identity])
+    (request : NodeRequest Symbol Guard)
+    (original : ∀ own ownBody ownDepth ownOrdinary,
+      Available heap (.mu own ownBody ownDepth ownOrdinary) →
+      Profile entry.identity (.mu own ownBody ownDepth ownOrdinary) →
+      (Value.mu own ownBody ownDepth ownOrdinary : Node) = .mu entry body depth ordinary)
+    (leftAvailable : Available heap request.left) (rightAvailable : Available heap request.right)
+    (qualified : MixedQualified (width := width) rootRequest machine operations wholeCount
+      entry body depth ordinary request)
+    (selected : decision request.domain.key request.left request.right = .bothMu ∨
+      decision request.domain.key request.left request.right = .leftMu ∨
+      decision request.domain.key request.left request.right = .rightMu) :
+    ∃ (pattern : Node) (patternId : Nat),
+      AuthenticEntry (width := width) rootRequest machine operations wholeCount
+        entry body depth ordinary pattern patternId request.domain ∧
+      ((request.left = body ∧ request.right = .mu entry body depth ordinary) ∨
+       (request.left = .mu entry body depth ordinary ∧
+         request.right = .reference (.interned entry.identity)))

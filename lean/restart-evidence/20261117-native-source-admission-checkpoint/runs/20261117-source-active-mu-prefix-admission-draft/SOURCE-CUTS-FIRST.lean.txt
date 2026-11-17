@@ -1,0 +1,178 @@
+
+namespace MicroCFTA.SourceSynthesisCurrentUniverseNativeAllocation
+open InternedNestedFacts InternedEdgeResidency
+open SourceRecursiveIntersectionControl (identity tag pair decision payload)
+open SourceCurrentAllocatedNativeGeneralCMHistory (ClosedQualified MixedQualified)
+open SourceSynthesisUniversePrefixHeight (height)
+local notation "Node" => Value Symbol Guard
+
+section SourceCuts
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+variable (rootRequest : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
+  (machineValid : SourceRecursiveIntersectionKernel.Valid machine)
+  (operations : SourceEqualityConstraintMemoAllocation.State) (wholeCount : Nat)
+  (entry : Interned NodeKey) (body depth ordinary : Node) (bodyId : Nat)
+
+private theorem physical_at_root_prefix
+    (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (sourceGrowth : Grows sourceHeap machine.heap)
+    (used : Nat) (control : Control Node) (before : Checked width)
+    (actual : Trace used (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width) control before) :
+    SourceCurrentAllocatedNativePhysicalCache.Valid before.native ∧
+      Grows sourceHeap before.native.machine.heap := by
+  have initialPhysical := SourceCurrentAllocatedNativePhysicalCache.initial_valid (width := width) machine machineValid
+  have reached := SourceCurrentNativeEnterCommonOperand.checked_trace_extension actual initialPhysical
+  exact ⟨reached.1, grows_trans sourceGrowth reached.2.heap⟩
+
+private theorem original_universe_read_at_prefix
+    (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (sourceGrowth : Grows sourceHeap machine.heap) (key : NodeKey)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (used : Nat) (control : Control Node) (before : Checked width)
+    (actual : Trace used (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width) control before) :
+    SourcePreparedSharedRows.read before.native.machine.heap entry.identity =
+      some (.mu entry body depth ordinary) := by
+  have reached := physical_at_root_prefix rootRequest machine machineValid operations sourceHeap sourceGrowth
+    used control before actual
+  have available : Available before.native.machine.heap (.mu entry body depth ordinary) :=
+    reached.1.machine.1.cached.nodes key _ (reached.2.nodeRecords key _ stored)
+  exact SourcePreparedSharedRows.read_identity before.native.machine.heap reached.1.machine.1
+    (.mu entry body depth ordinary) available entry.identity rfl
+
+private theorem authentic_domain_key
+    (pattern : Node) (patternId : Nat)
+    (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey)
+    (authentic : AuthenticEntry (width := width) rootRequest machine operations wholeCount
+      entry body depth ordinary pattern patternId domain) :
+    domain.key = SourceRecursiveIntersectionDomain.extend IntersectionEmptyDomain.emptyKey
+      [entry.identity] (pair entry.identity patternId) := by
+  obtain ⟨_closed, _identity, kind, _side, used, before, _next, data⟩ := authentic
+  dsimp only at data
+  obtain ⟨_within, actual, _ordered, _one, sameDomain⟩ := data
+  have physical := SourceCurrentNativeEnterCommonOperand.checked_trace_extension actual
+    (SourceCurrentAllocatedNativePhysicalCache.initial_valid (width := width) machine machineValid)
+  have binderPattern : SourceRecursiveIntersectionEnvironment.binder pattern = [] := by
+    cases pattern <;> simp_all [tag, SourceRecursiveIntersectionEnvironment.binder]
+  have enteredKey := SourceRecursiveIntersectionSchedule.entered_key before.native.machine.domains
+    physical.1.machine.2 IntersectionEmptyDomain.emptyKey (.mu entry body depth ordinary) pattern
+    entry.identity patternId
+  rw [sameDomain]
+  simpa only [SourceRecursiveIntersectionEnvironment.bindings,
+    SourceRecursiveIntersectionEnvironment.binder, binderPattern, List.append_nil,
+    List.map_cons, List.map_nil] using enteredKey
+
+private theorem authentic_domain_nonempty
+    (pattern : Node) (patternId : Nat)
+    (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey)
+    (authentic : AuthenticEntry (width := width) rootRequest machine operations wholeCount
+      entry body depth ordinary pattern patternId domain) :
+    domain.key.free.isEmpty = false := by
+  have keyed := authentic_domain_key rootRequest machine machineValid operations wholeCount
+    entry body depth ordinary pattern patternId domain authentic
+  have named : entry.identity ∈ SourceRecursiveIntersectionDomain.names domain.key := by
+    rw [keyed]
+    exact (SourceRecursiveIntersectionDomain.extend_names _ _ _ _).mpr (Or.inl List.mem_cons_self)
+  cases freeMap : domain.key.free with
+  | nil =>
+      simp only [SourceRecursiveIntersectionDomain.names, freeMap, List.map_nil, List.not_mem_nil] at named
+  | cons first rest => rfl
+
+private theorem original_entry_from_literal_enter
+    (pattern : Node) (patternClosed : pattern.free = []) (patternId : Nat)
+    (patternIdentity : identity pattern = some patternId)
+    (patternKind : tag pattern = 1 ∨ tag pattern = 3) (universeFirst : Bool)
+    (used : Nat) (before : Checked width)
+    (next : Interned IntersectionFlatMemoKeyDomain.DomainKey → Code Symbol Guard Node)
+    (within : used + 1 ≤ wholeCount)
+    (actual : Trace used (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width)
+      (.code (.enter IntersectionEmptyDomain.emptyDomain
+        (if universeFirst then .mu entry body depth ordinary else pattern)
+        (if universeFirst then pattern else .mu entry body depth ordinary)
+        (if universeFirst then entry.identity else patternId)
+        (if universeFirst then patternId else entry.identity) next)) before) :
+    let entered := SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains
+      IntersectionEmptyDomain.emptyKey
+      (if universeFirst then .mu entry body depth ordinary else pattern)
+      (if universeFirst then pattern else .mu entry body depth ordinary)
+      (if universeFirst then entry.identity else patternId)
+      (if universeFirst then patternId else entry.identity)
+    let after : Checked width :=
+      {before with native := advance before.native {before.native.machine with domains := entered.2}}
+    Trace 1 (.code (.enter IntersectionEmptyDomain.emptyDomain
+        (if universeFirst then .mu entry body depth ordinary else pattern)
+        (if universeFirst then pattern else .mu entry body depth ordinary)
+        (if universeFirst then entry.identity else patternId)
+        (if universeFirst then patternId else entry.identity) next)) before
+      (.code (next entered.1)) after →
+    AuthenticEntry (width := width) rootRequest machine operations wholeCount
+      entry body depth ordinary pattern patternId entered.1 := by
+  dsimp only
+  intro one
+  let universeValue : Node := .mu entry body depth ordinary
+  let canonical := SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains
+    IntersectionEmptyDomain.emptyKey universeValue pattern entry.identity patternId
+  have binderPattern : SourceRecursiveIntersectionEnvironment.binder pattern = [] := by
+    cases pattern <;> simp_all [tag, SourceRecursiveIntersectionEnvironment.binder]
+  have ordered : SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains
+      IntersectionEmptyDomain.emptyKey
+      (if universeFirst then universeValue else pattern)
+      (if universeFirst then pattern else universeValue)
+      (if universeFirst then entry.identity else patternId)
+      (if universeFirst then patternId else entry.identity) = canonical := by
+    cases universeFirst with
+    | true => rfl
+    | false =>
+      change IntersectionEmptyDomain.make before.native.machine.domains
+        (SourceRecursiveIntersectionDomain.extend IntersectionEmptyDomain.emptyKey
+          ((SourceRecursiveIntersectionEnvironment.binder pattern ++
+            SourceRecursiveIntersectionEnvironment.binder universeValue).map Prod.fst)
+          (pair patternId entry.identity)) = canonical
+      simp only [canonical, SourceRecursiveIntersectionEnvironment.enter,
+        SourceRecursiveIntersectionEnvironment.bindings, binderPattern, List.nil_append,
+        List.append_nil, pair, Nat.min_comm, Nat.max_comm]
+  refine ⟨patternClosed, patternIdentity, patternKind, universeFirst, used, before, next, ?_⟩
+  dsimp only
+  refine ⟨within, actual, ordered, ?_, congrArg Prod.fst ordered⟩
+  simpa only [universeValue, ordered] using one
+
+private theorem pattern_body_same (pattern : Node) (kind : tag pattern = 1 ∨ tag pattern = 3) :
+    SourceRecursiveIntersectionKernel.body pattern = pattern := by
+  cases pattern <;> simp_all [tag, SourceRecursiveIntersectionKernel.body]
+
+private theorem closed_mu_enter_admission
+    (bodyEntry : Interned NodeKey) (bodyRows : List (EdgeValue Symbol Guard))
+    (bodyShape : body = .node bodyEntry bodyRows 0 [.interned entry.identity])
+    (pattern : Node) (profile : Profile entry.identity pattern) (patternId : Nat)
+    (patternIdentity : identity pattern = some patternId)
+    (patternKind : tag pattern = 1 ∨ tag pattern = 3) (universeFirst : Bool) :
+    CodeAdmission (width := width) rootRequest machine operations wholeCount entry body depth ordinary bodyId
+      (compileMu IntersectionEmptyDomain.emptyDomain
+        (if universeFirst then .mu entry body depth ordinary else pattern)
+        (if universeFirst then pattern else .mu entry body depth ordinary)) := by
+  have leftIdentity : identity (if universeFirst then .mu entry body depth ordinary else pattern) =
+      some (if universeFirst then entry.identity else patternId) := by
+    cases universeFirst <;> first | exact patternIdentity | rfl
+  have rightIdentity : identity (if universeFirst then pattern else .mu entry body depth ordinary) =
+      some (if universeFirst then patternId else entry.identity) := by
+    cases universeFirst <;> first | exact patternIdentity | rfl
+  simp only [compileMu, leftIdentity, rightIdentity, CodeAdmission]
+  intro used before actualNext within actual one
+  have authentic := original_entry_from_literal_enter rootRequest machine operations wholeCount
+    entry body depth ordinary pattern profile.1 patternId patternIdentity patternKind universeFirst
+    used before actualNext within actual one
+  refine ⟨Or.inl (Or.inr ?_), ?_⟩
+  · refine ⟨pattern, patternId, body, pattern, authentic, Or.inl rfl, profile, Nat.le_refl _, ?_, ?_⟩
+    · intro impossible
+      rw [bodyShape] at impossible
+      cases impossible
+    · have bodyPattern := pattern_body_same pattern patternKind
+      cases universeFirst with
+      | true => exact Or.inl ⟨rfl, bodyPattern⟩
+      | false => exact Or.inr ⟨bodyPattern, rfl⟩
+  · intro value result
+    trivial
+end SourceCuts
+end MicroCFTA.SourceSynthesisCurrentUniverseNativeAllocation

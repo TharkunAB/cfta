@@ -1,0 +1,202 @@
+
+namespace MicroCFTA.SourceSynthesisCurrentUniverseNativeAllocation
+open Cache InternedConstructorTemplates InternedProbeProvenance
+open InternedBinderProtocol (NodeKey)
+open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionThunks SourceRecursiveIntersectionCode
+open SourceEqualityNativeDemand
+open SourceCurrentAllocatedNativePhysicalTraceCompletion (Trace)
+open SourceCurrentAllocatedNativePhysicalExecution (InputsThrough)
+open SourceEqualityNativeDemandOperations (FieldsThrough)
+open SourceCurrentAllocatedNativeGeneralCMHistory (AuthenticEntry Qualified)
+open SourceSynthesisTypeSyntax (Library Query)
+open SourceSynthesisFirstOrderConstruction (Expression)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSynthesisGeneralizeSyntax.Guard
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "Profile" => SourceCurrentAllocatedNativeClosedResetProfile.Profile
+local notation "ordinarySymbols" => SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+open InternedNestedFacts InternedEdgeResidency
+open SourceRecursiveIntersectionControl (identity tag pair decision payload)
+open SourceCurrentAllocatedNativeGeneralCMHistory (ClosedQualified MixedQualified)
+open SourceSynthesisUniversePrefixHeight (height)
+local notation "Node" => Value Symbol Guard
+
+section PrefixInduction
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+variable (rootRequest : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
+  (machineValid : SourceRecursiveIntersectionKernel.Valid machine)
+  (operations : SourceEqualityConstraintMemoAllocation.State) (wholeCount : Nat)
+  (entry : Interned NodeKey) (body depth ordinary : Node) (bodyId : Nat)
+variable (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+  (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+  (rootValue : Node) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+  (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty = .done rootValue sourceHeap)
+  (key : NodeKey) (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+  (sourceGrowth : Grows sourceHeap machine.heap)
+  (bodyEntry : Interned NodeKey) (bodyRows : List (EdgeValue Symbol Guard))
+  (bodyShape : body = .node bodyEntry bodyRows 0 [.interned entry.identity])
+  (bodyIdentity : identity body = some bodyId)
+  (sourceChildren : ∀ row ∈ bodyRows, ∀ child ∈ row.children,
+    child = .reference (.interned entry.identity) ∨ Profile entry.identity child)
+  (matched : ∀ pair ∈ SourceRecursiveIntersectionKernel.pairs bodyRows bodyRows,
+    pair.1 = pair.2 ∨ pair.1.children.length ≠ pair.2.children.length)
+  (universeProfile : Profile entry.identity (.mu entry body depth ordinary))
+
+include machineValid accepted built stored sourceGrowth bodyShape bodyIdentity sourceChildren matched universeProfile
+
+private theorem source_compile_admission
+    (heap : InternedConstructorTemplates.State Symbol Guard) (facts : Facts heap) (growth : Grows sourceHeap heap)
+    (request : NodeRequest Symbol Guard)
+    (leftAvailable : Available heap request.left) (rightAvailable : Available heap request.right)
+    (admitted : NodeAdmission (width := width) rootRequest machine operations wholeCount entry body depth ordinary bodyId request) :
+    CodeAdmission (width := width) rootRequest machine operations wholeCount entry body depth ordinary bodyId
+      (compileNode request) := by
+  rcases admitted with closed | auxiliary
+  · rcases closed with closed | mixed
+    · exact closed_compile_admission rootRequest machine operations wholeCount entry body depth ordinary bodyId
+        lib query signed whole accepted rootValue sourceHeap built key stored bodyEntry bodyRows bodyShape
+        universeProfile heap facts growth request leftAvailable rightAvailable closed
+    · exact mixed_compile_admission rootRequest machine machineValid operations wholeCount entry body depth ordinary bodyId
+        lib query signed whole accepted rootValue sourceHeap built key stored sourceGrowth bodyEntry bodyRows bodyShape
+        bodyIdentity sourceChildren universeProfile heap facts growth request leftAvailable rightAvailable mixed
+  · exact auxiliary_compile_admission rootRequest machine machineValid operations wholeCount entry body depth ordinary bodyId
+      sourceHeap sourceGrowth key stored bodyEntry bodyRows bodyShape bodyIdentity sourceChildren matched request auxiliary
+
+private theorem step_admission
+    (used : Nat) (control nextControl : Control Node) (before after : Checked width)
+    (within : used + 1 ≤ wholeCount)
+    (prefixActual : Trace used (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width) control before)
+    (inputs : SourceCurrentAllocatedNativePhysicalExecution.Inputs control before)
+    (one : SourceEqualityNativeDemand.step control before = .yielded nextControl after)
+    (admitted : ControlAdmission (width := width) rootRequest machine operations wholeCount
+      entry body depth ordinary bodyId control) :
+    ControlAdmission (width := width) rootRequest machine operations wholeCount
+      entry body depth ordinary bodyId nextControl := by
+  have reached := physical_at_root_prefix rootRequest machine machineValid operations sourceHeap sourceGrowth
+    used control before prefixActual
+  cases control with
+  | edgeBody request next =>
+    obtain ⟨code, same, certificate⟩ := checked_body_yield_admission rootRequest machine operations wholeCount
+      entry body depth ordinary bodyId request next before after nextControl admitted.1 admitted.2 one
+    rw [same]
+    exact certificate
+  | code code =>
+    cases code with
+    | pure value | fail failure =>
+      simp only [SourceEqualityNativeDemand.step, SourceRecursiveIntersectionNative.step, SourceEqualityNativeDemand.lift] at one
+      cases one
+    | work job next =>
+      simp only [SourceEqualityNativeDemand.step, SourceRecursiveIntersectionNative.step, SourceEqualityNativeDemand.lift] at one
+      cases one
+      exact admitted _
+    | read name next =>
+      simp only [SourceEqualityNativeDemand.step, SourceRecursiveIntersectionNative.step, SourceEqualityNativeDemand.lift] at one
+      cases one
+      exact admitted used before next within prefixActual
+    | enter domain left right first second next =>
+      simp only [SourceEqualityNativeDemand.step, SourceRecursiveIntersectionNative.step, SourceEqualityNativeDemand.lift] at one
+      cases one
+      apply admitted used before next within prefixActual
+      exact Trace.cons _ _ _ _ _ _ 0 inputs rfl (.refl _ _)
+    | optionalBinder binder value next =>
+      cases constructed : SourceRecursiveIntersectionMaybeMu.maybeMu binder value before.native.machine.heap with
+      | pending key heap =>
+        simp only [SourceEqualityNativeDemand.step, SourceRecursiveIntersectionNative.step,
+          constructed, SourceEqualityNativeDemand.lift] at one
+        cases one
+      | done value heap =>
+        simp only [SourceEqualityNativeDemand.step, SourceRecursiveIntersectionNative.step,
+          constructed, SourceEqualityNativeDemand.lift] at one
+        cases one
+        exact admitted value
+    | finishNode handle value next | finishEdge handle value next =>
+      simp only [SourceEqualityNativeDemand.step, SourceRecursiveIntersectionNative.step, SourceEqualityNativeDemand.lift] at one
+      cases one
+      exact admitted
+    | node request next =>
+      have compiled := source_compile_admission rootRequest machine machineValid operations wholeCount
+        entry body depth ordinary bodyId lib query signed whole accepted rootValue sourceHeap built key stored
+        sourceGrowth bodyEntry bodyRows bodyShape bodyIdentity sourceChildren matched universeProfile
+        before.native.machine.heap reached.1.machine.1 reached.2 request inputs.1.2.1 inputs.1.2.2 admitted.1
+      cases selected : lookupNode width request before.native with
+      | mk selection chosen =>
+        cases selection with
+        | direct actual =>
+          have same := (SourceRecursiveIntersectionNative.lookupNode_direct request actual before.native chosen selected).1
+          subst actual
+          simp only [SourceEqualityNativeDemand.step, SourceRecursiveIntersectionNative.step,
+            selected, SourceEqualityNativeDemand.lift] at one
+          cases one
+          exact code_admission_bind rootRequest machine operations wholeCount entry body depth ordinary bodyId
+            _ next compiled admitted.2
+        | memoized handle =>
+          obtain ⟨key, keyed, _published, _sameMachine⟩ :=
+            SourceRecursiveIntersectionNative.lookupNode_memoized request before.native chosen handle selected
+          cases demanded : demandNode handle chosen with
+          | mk observation running =>
+            cases observation with
+            | absent | busy =>
+              simp only [SourceEqualityNativeDemand.step, SourceRecursiveIntersectionNative.step,
+                selected, demanded, SourceEqualityNativeDemand.lift] at one
+              cases one
+            | ready value =>
+              simp only [SourceEqualityNativeDemand.step, SourceRecursiveIntersectionNative.step,
+                selected, demanded, SourceEqualityNativeDemand.lift] at one
+              cases one
+              exact admitted.2 value
+            | evaluate actual =>
+              have same := SourceCurrentAllocatedNativePhysicalCache.node_started request actual before.native chosen running
+                handle reached.1 inputs.1 (inputs.2 key keyed) selected demanded
+              subst actual
+              simp only [SourceEqualityNativeDemand.step, SourceRecursiveIntersectionNative.step,
+                selected, demanded, SourceEqualityNativeDemand.lift] at one
+              cases one
+              apply code_admission_bind rootRequest machine operations wholeCount entry body depth ordinary bodyId
+                _ _ compiled
+              intro value
+              exact admitted.2 value
+    | edge request next =>
+      cases selected : lookupEdge width request before.native with
+      | mk handle chosen =>
+        cases demanded : demandEdge handle chosen with
+        | mk observation running =>
+          cases observation with
+          | absent | busy =>
+            simp only [SourceEqualityNativeDemand.step, selected, demanded] at one
+            cases one
+          | ready value =>
+            simp only [SourceEqualityNativeDemand.step, selected, demanded] at one
+            cases one
+            exact admitted.2 value
+          | evaluate actual =>
+            have same := SourceCurrentAllocatedNativePhysicalCache.edge_started request actual before.native chosen running
+              handle reached.1 inputs.1 inputs.2 selected demanded
+            subst actual
+            simp only [SourceEqualityNativeDemand.step, selected, demanded] at one
+            cases one
+            exact ⟨admitted.1, fun value => admitted.2 value⟩
+
+private theorem trace_admission
+    (count prefixUsed : Nat) (control final : Control Node) (before after : Checked width)
+    (prefixActual : Trace prefixUsed (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width) control before)
+    (actual : Trace count control before final after)
+    (within : prefixUsed + count ≤ wholeCount)
+    (admitted : ControlAdmission (width := width) rootRequest machine operations wholeCount
+      entry body depth ordinary bodyId control) :
+    ControlAdmission (width := width) rootRequest machine operations wholeCount
+      entry body depth ordinary bodyId final := by
+  induction actual generalizing prefixUsed with
+  | refl => exact admitted
+  | cons control before next reached final after count inputs one tail ih =>
+    have nextAdmission := step_admission rootRequest machine machineValid operations wholeCount entry body depth ordinary bodyId
+      lib query signed whole accepted rootValue sourceHeap built key stored sourceGrowth bodyEntry bodyRows bodyShape
+      bodyIdentity sourceChildren matched universeProfile prefixUsed control next before reached (by omega)
+      prefixActual inputs one admitted
+    have nextPrefix : Trace (prefixUsed + 1) (.code (.node rootRequest .pure))
+        (⟨initial width machine, operations⟩ : Checked width) next reached :=
+      prefixActual.trans (Trace.cons _ _ _ _ _ _ 0 inputs one (.refl _ _))
+    exact ih (prefixUsed + 1) nextPrefix (by omega) nextAdmission
+end PrefixInduction
+end MicroCFTA.SourceSynthesisCurrentUniverseNativeAllocation

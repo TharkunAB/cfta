@@ -1,0 +1,30 @@
+theorem original_universe_optional_prefix_no_new_mu
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (rootRequest : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
+    (machineValid : SourceRecursiveIntersectionKernel.Valid machine)
+    (sourceGrowth : Grows sourceHeap machine.heap)
+    (rootDomain : rootRequest.domain = IntersectionEmptyDomain.emptyDomain)
+    (leftProfile : Profile entry.identity rootRequest.left)
+    (rightProfile : Profile entry.identity rootRequest.right)
+    (operations : SourceEqualityConstraintMemoAllocation.State)
+    (operationsValid : SourceEqualityConstraintMemoAllocation.Valid operations)
+    (fuel used : Nat) (current : Checked width)
+    (binder : Nat × Nat) (child : Value Symbol Guard)
+    (next : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard))
+    (bounded : used + 1 ≤ fuel)
+    (inputs : InputsThrough fuel (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width))
+    (fields : FieldsThrough fuel (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width))
+    (actual : Trace used (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width)
+      (.code (.optionalBinder binder child next)) current) :
+    InternedShallowHeap.NoNewMu current.native.machine.heap
+      (SourceRecursiveIntersectionMaybeMu.maybeMu binder child current.native.machine.heap).state

@@ -1,0 +1,157 @@
+
+namespace MicroCFTA.SourceSynthesisCurrentUniverseNativeAllocation
+open Cache InternedConstructorTemplates InternedProbeProvenance
+open InternedBinderProtocol (NodeKey)
+open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionThunks SourceRecursiveIntersectionCode
+open SourceEqualityNativeDemand
+open SourceCurrentAllocatedNativePhysicalTraceCompletion (Trace)
+open SourceCurrentAllocatedNativePhysicalExecution (InputsThrough)
+open SourceEqualityNativeDemandOperations (FieldsThrough)
+open SourceCurrentAllocatedNativeGeneralCMHistory (AuthenticEntry Qualified)
+open SourceSynthesisTypeSyntax (Library Query)
+open SourceSynthesisFirstOrderConstruction (Expression)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSynthesisGeneralizeSyntax.Guard
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "Profile" => SourceCurrentAllocatedNativeClosedResetProfile.Profile
+local notation "ordinarySymbols" => SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+open InternedNestedFacts InternedEdgeResidency
+open SourceRecursiveIntersectionControl (identity tag pair decision payload)
+open SourceCurrentAllocatedNativeGeneralCMHistory (ClosedQualified MixedQualified)
+open SourceSynthesisUniversePrefixHeight (height)
+local notation "Node" => Value Symbol Guard
+
+section ClosedCompiler
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+variable (rootRequest : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
+  (operations : SourceEqualityConstraintMemoAllocation.State) (wholeCount : Nat)
+  (entry : Interned NodeKey) (body depth ordinary : Node) (bodyId : Nat)
+
+private theorem closed_compile_admission
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Node) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty = .done rootValue sourceHeap)
+    (key : NodeKey) (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (bodyEntry : Interned NodeKey) (bodyRows : List (EdgeValue Symbol Guard))
+    (bodyShape : body = .node bodyEntry bodyRows 0 [.interned entry.identity])
+    (universeProfile : Profile entry.identity (.mu entry body depth ordinary))
+    (heap : InternedConstructorTemplates.State Symbol Guard) (facts : Facts heap)
+    (growth : Grows sourceHeap heap)
+    (request : NodeRequest Symbol Guard)
+    (leftAvailable : Available heap request.left) (rightAvailable : Available heap request.right)
+    (qualified : ClosedQualified entry.identity request) :
+    CodeAdmission (width := width) rootRequest machine operations wholeCount entry body depth ordinary bodyId
+      (compileNode request) := by
+  rcases request with ⟨domain, left, right⟩
+  rcases qualified with ⟨leftProfile, rightProfile, domainKind⟩
+  have muOriginal (own : Interned NodeKey) (storedBody storedDepth storedOrdinary : Node)
+      (available : Available heap (.mu own storedBody storedDepth storedOrdinary))
+      (profile : Profile entry.identity (.mu own storedBody storedDepth storedOrdinary)) :
+      (Value.mu own storedBody storedDepth storedOrdinary : Node) = .mu entry body depth ordinary :=
+    SourceSynthesisCurrentUniverseClosedMuClassification.current_stored_universe_closed_mu_eq_after_growth
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      heap facts growth own storedBody storedDepth storedOrdinary available profile.1 profile.2
+  cases emptyTest : SourceRecursiveIntersectionControl.hasEmpty left right with
+  | true =>
+    simp only [compileNode, decision, emptyTest, ite_true, CodeAdmission]
+  | false =>
+    cases resetTest : SourceRecursiveIntersectionControl.reset domain.key left right with
+    | true =>
+      simp only [compileNode, decision, emptyTest, resetTest, Bool.false_eq_true, ite_false, ite_true,
+        requestNode, CodeAdmission]
+      exact ⟨Or.inl (Or.inl ⟨leftProfile, rightProfile, Or.inl rfl⟩), fun _ => trivial⟩
+    | false =>
+      have emptyDomain : domain = IntersectionEmptyDomain.emptyDomain := by
+        rcases domainKind with same | active
+        · exact same
+        · have resetTrue : SourceRecursiveIntersectionControl.reset domain.key left right = true := by
+            simp only [SourceRecursiveIntersectionControl.reset, leftProfile.1, rightProfile.1,
+              List.isEmpty_nil, active, Bool.not_false, Bool.and_self]
+          rw [resetTrue] at resetTest
+          cases resetTest
+      subst domain
+      cases selfTest : SourceRecursiveIntersectionControl.closedSelf left right with
+      | true =>
+        simp only [compileNode, decision, emptyTest, resetTest, selfTest,
+          Bool.false_eq_true, ite_false, ite_true, CodeAdmission]
+      | false =>
+        cases swapTest : SourceRecursiveIntersectionControl.greater left right with
+        | true =>
+          simp only [compileNode, decision, emptyTest, resetTest, selfTest, swapTest,
+            Bool.false_eq_true, ite_false, ite_true, requestNode, CodeAdmission]
+          exact ⟨Or.inl (Or.inl ⟨rightProfile, leftProfile, Or.inl rfl⟩), fun _ => trivial⟩
+        | false =>
+          have emptySeen : IntersectionEmptyDomain.emptyDomain.key.seen = [] := rfl
+          simp only [compileNode, decision, emptyTest, resetTest, selfTest, swapTest,
+            Bool.false_eq_true, ite_false]
+          cases left with
+          | empty => simp only [identity, SourceRecursiveIntersectionCode.unsupported, CodeAdmission]
+          | reference name => cases leftProfile.1
+          | node leftEntry leftRows leftDepth leftFree =>
+            cases right with
+            | empty => simp only [identity, SourceRecursiveIntersectionCode.unsupported, CodeAdmission]
+            | reference name => cases rightProfile.1
+            | node rightEntry rightRows rightDepth rightFree =>
+              simp only [identity, emptySeen, List.not_mem_nil, ite_false, payload]
+              exact closed_rows_admission rootRequest machine operations wholeCount entry body depth ordinary bodyId
+                heap facts IntersectionEmptyDomain.emptyDomain (Or.inl rfl)
+                leftEntry rightEntry leftRows rightRows leftDepth rightDepth leftFree rightFree
+                leftAvailable rightAvailable leftProfile rightProfile
+            | union rightEntry members level free =>
+              simp only [identity, emptySeen, List.not_mem_nil, ite_false, payload]
+              exact closed_union_admission rootRequest machine operations wholeCount entry body depth ordinary bodyId
+                heap facts IntersectionEmptyDomain.emptyDomain (Or.inl rfl) rightEntry members level free
+                (.node leftEntry leftRows leftDepth leftFree) false rightAvailable rightProfile leftProfile
+            | mu own storedBody storedDepth storedOrdinary =>
+              simp only [identity, emptySeen, List.not_mem_nil, ite_false, payload]
+              have same := muOriginal own storedBody storedDepth storedOrdinary rightAvailable rightProfile
+              rw [same]
+              exact closed_mu_enter_admission rootRequest machine operations wholeCount entry body depth ordinary bodyId
+                bodyEntry bodyRows bodyShape (.node leftEntry leftRows leftDepth leftFree) leftProfile
+                leftEntry.identity rfl (Or.inl rfl) false
+          | union leftEntry members level free =>
+            cases right with
+            | empty => simp only [identity, SourceRecursiveIntersectionCode.unsupported, CodeAdmission]
+            | reference name => cases rightProfile.1
+            | node rightEntry rightRows rightDepth rightFree =>
+              simp only [identity, emptySeen, List.not_mem_nil, ite_false, payload]
+              exact closed_union_admission rootRequest machine operations wholeCount entry body depth ordinary bodyId
+                heap facts IntersectionEmptyDomain.emptyDomain (Or.inl rfl) leftEntry members level free
+                (.node rightEntry rightRows rightDepth rightFree) true leftAvailable leftProfile rightProfile
+            | union rightEntry otherMembers otherLevel otherFree =>
+              simp only [identity, emptySeen, List.not_mem_nil, ite_false, payload]
+              exact closed_union_admission rootRequest machine operations wholeCount entry body depth ordinary bodyId
+                heap facts IntersectionEmptyDomain.emptyDomain (Or.inl rfl) leftEntry members level free
+                (.union rightEntry otherMembers otherLevel otherFree) true leftAvailable leftProfile rightProfile
+            | mu own storedBody storedDepth storedOrdinary =>
+              simp only [identity, emptySeen, List.not_mem_nil, ite_false, payload]
+              have same := muOriginal own storedBody storedDepth storedOrdinary rightAvailable rightProfile
+              rw [same]
+              exact closed_mu_enter_admission rootRequest machine operations wholeCount entry body depth ordinary bodyId
+                bodyEntry bodyRows bodyShape (.union leftEntry members level free) leftProfile
+                leftEntry.identity rfl (Or.inr rfl) false
+          | mu own storedBody storedDepth storedOrdinary =>
+            have sameLeft := muOriginal own storedBody storedDepth storedOrdinary leftAvailable leftProfile
+            cases right with
+            | empty => simp only [identity, SourceRecursiveIntersectionCode.unsupported, CodeAdmission]
+            | reference name => cases rightProfile.1
+            | node rightEntry rightRows rightDepth rightFree =>
+              simp only [identity, emptySeen, List.not_mem_nil, ite_false, payload]
+              rw [sameLeft]
+              exact closed_mu_enter_admission rootRequest machine operations wholeCount entry body depth ordinary bodyId
+                bodyEntry bodyRows bodyShape (.node rightEntry rightRows rightDepth rightFree) rightProfile
+                rightEntry.identity rfl (Or.inl rfl) true
+            | union rightEntry members level free =>
+              simp only [identity, emptySeen, List.not_mem_nil, ite_false, payload]
+              rw [sameLeft]
+              exact closed_mu_enter_admission rootRequest machine operations wholeCount entry body depth ordinary bodyId
+                bodyEntry bodyRows bodyShape (.union rightEntry members level free) rightProfile
+                rightEntry.identity rfl (Or.inr rfl) true
+            | mu rightOwn rightBody rightDepth rightOrdinary =>
+              have sameRight := muOriginal rightOwn rightBody rightDepth rightOrdinary rightAvailable rightProfile
+              rw [sameLeft, sameRight] at selfTest
+              simp only [SourceRecursiveIntersectionControl.closedSelf, Value.referenceOf, beq_self_eq_true,
+                universeProfile.1, List.isEmpty_nil, Bool.and_self, Bool.true_eq_false] at selfTest
+end ClosedCompiler
+end MicroCFTA.SourceSynthesisCurrentUniverseNativeAllocation

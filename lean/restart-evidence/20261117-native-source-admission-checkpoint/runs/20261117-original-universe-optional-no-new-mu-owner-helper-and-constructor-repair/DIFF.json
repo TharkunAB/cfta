@@ -1,0 +1,25 @@
+{
+  "previous_packet": "lean/restart-evidence/20261117-original-universe-optional-no-new-mu-controls-and-layout-repair",
+  "changes": [
+    {
+      "old": "(.optionalBinder (pair first second) value (.pure : Node \u2192 Code Symbol Guard Node)).bind finishNext",
+      "new": "(Code.optionalBinder (pair first second) value (.pure : Node \u2192 Code Symbol Guard Node)).bind finishNext"
+    },
+    {
+      "old": "      entry bodyEntry bodyRows depth ordinary machine machineValid.1\n    rw [\u2190 bodyRead]",
+      "new": "      entry bodyEntry bodyRows depth ordinary machine machineValid.1\n    change Available machine.heap (.mu entry (.node bodyEntry bodyRows 0 [.interned entry.identity]) depth ordinary)\n    rw [\u2190 bodyRead]"
+    },
+    {
+      "old": "      have patternBody : SourceRecursiveIntersectionKernel.body pattern = pattern := by\n        cases pattern <;> simp_all [tag, SourceRecursiveIntersectionKernel.body]",
+      "new": "      have patternBody : SourceRecursiveIntersectionKernel.body pattern = pattern :=\n        pattern_body_same pattern patternKind"
+    },
+    {
+      "old": "        | false => exact optional_key_of_codecs childRequest\n            (by simpa only [childRequest, leftSame, patternBody] using optional_closed_codec pattern patternProfile.1)\n            (by simpa only [childRequest, rightSame, SourceRecursiveIntersectionKernel.body] using bodyCodec)\n        | true => exact optional_key_of_codecs childRequest\n            (by simpa only [childRequest, leftSame, SourceRecursiveIntersectionKernel.body] using bodyCodec)\n            (by simpa only [childRequest, rightSame, patternBody] using optional_closed_codec pattern patternProfile.1)",
+      "new": "        | false =>\n            exact optional_key_of_codecs childRequest\n              (by simpa only [childRequest, leftSame, patternBody] using optional_closed_codec pattern patternProfile.1)\n              (by simpa only [childRequest, rightSame, SourceRecursiveIntersectionKernel.body] using bodyCodec)\n        | true =>\n            exact optional_key_of_codecs childRequest\n              (by simpa only [childRequest, leftSame, SourceRecursiveIntersectionKernel.body] using bodyCodec)\n              (by simpa only [childRequest, rightSame, patternBody] using optional_closed_codec pattern patternProfile.1)"
+    }
+  ],
+  "public_header_changed": false,
+  "private_headers_changed": false,
+  "proof_limit_changed": false,
+  "runtime_changed": false
+}

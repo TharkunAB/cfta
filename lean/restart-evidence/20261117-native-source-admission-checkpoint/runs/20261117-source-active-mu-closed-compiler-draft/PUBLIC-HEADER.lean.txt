@@ -1,0 +1,82 @@
+/- OPEN HEADER ONLY. No proof or theorem credit.
+This is a source request-admission target at a literal checked node cut.
+It does not assume a child result law or a future source invariant.
+-/
+import MicroCFTA.SourceCurrentAllocatedNativeGeneralCMHistory
+import MicroCFTA.SourceCurrentNativeConsistentOptionalOwner
+
+namespace MicroCFTA.SourceSynthesisCurrentUniverseNativeAllocation
+open Cache InternedConstructorTemplates InternedProbeProvenance
+open InternedBinderProtocol (NodeKey)
+open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionThunks SourceRecursiveIntersectionCode
+open SourceEqualityNativeDemand
+open SourceCurrentAllocatedNativePhysicalTraceCompletion (Trace)
+open SourceCurrentAllocatedNativePhysicalExecution (InputsThrough)
+open SourceEqualityNativeDemandOperations (FieldsThrough)
+open SourceCurrentAllocatedNativeGeneralCMHistory (AuthenticEntry Qualified)
+open SourceSynthesisTypeSyntax (Library Query)
+open SourceSynthesisFirstOrderConstruction (Expression)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSynthesisGeneralizeSyntax.Guard
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "Profile" => SourceCurrentAllocatedNativeClosedResetProfile.Profile
+local notation "ordinarySymbols" => SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+set_option autoImplicit false
+
+/- Note [Mu owner admission at the original reader]
+The selected Mu query and the original entry use one fixed cold-root trace.
+The entry retains the full original pattern and its actual allocated domain.
+The two auxiliary cases compare domain keys. They do not identify handles.
+The result is an admission fact about the reached request. It is not a
+semantic result hypothesis for a later child or optional instruction.
+-/
+theorem original_universe_mu_query_prefix_admission
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (rootRequest : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
+    (machineValid : SourceRecursiveIntersectionKernel.Valid machine)
+    (sourceGrowth : Grows sourceHeap machine.heap)
+    (rootDomain : rootRequest.domain = IntersectionEmptyDomain.emptyDomain)
+    (leftProfile : Profile entry.identity rootRequest.left)
+    (rightProfile : Profile entry.identity rootRequest.right)
+    (operations : SourceEqualityConstraintMemoAllocation.State)
+    (operationsValid : SourceEqualityConstraintMemoAllocation.Valid operations)
+    (fuel wholeCount queryUsed : Nat)
+    (readerControl : Control (Value Symbol Guard)) (reader : Checked width)
+    (queried : NodeRequest Symbol Guard)
+    (queryNext : Value Symbol Guard → Code Symbol Guard (Value Symbol Guard))
+    (queryBefore : Checked width)
+    (wholeBound : wholeCount ≤ fuel)
+    (wholeActual : Trace wholeCount (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width) readerControl reader)
+    (queryBound : queryUsed ≤ wholeCount)
+    (queryActual : Trace queryUsed (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width)
+      (.code (.node queried queryNext)) queryBefore)
+    (selectedMu :
+      SourceRecursiveIntersectionControl.decision queried.domain.key queried.left queried.right = .bothMu ∨
+      SourceRecursiveIntersectionControl.decision queried.domain.key queried.left queried.right = .leftMu ∨
+      SourceRecursiveIntersectionControl.decision queried.domain.key queried.left queried.right = .rightMu)
+    (inputs : InputsThrough fuel (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width))
+    (fields : FieldsThrough fuel (.code (.node rootRequest .pure))
+      (⟨initial width machine, operations⟩ : Checked width)) :
+    Qualified (width := width) rootRequest machine operations wholeCount entry body depth ordinary queried ∨
+      ∃ (fullPattern : Value Symbol Guard) (patternId bodyId : Nat)
+        (originalDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey),
+        SourceRecursiveIntersectionControl.identity body = some bodyId ∧
+        AuthenticEntry (width := width) rootRequest machine operations wholeCount
+          entry body depth ordinary fullPattern patternId originalDomain ∧
+        ((queried.domain.key = SourceRecursiveIntersectionDomain.extend originalDomain.key [entry.identity]
+            (SourceRecursiveIntersectionControl.pair bodyId entry.identity) ∧
+          queried.left = .mu entry body depth ordinary ∧
+          queried.right = .reference (.interned entry.identity)) ∨
+         (queried.domain.key = SourceRecursiveIntersectionDomain.extend originalDomain.key [entry.identity]
+            (SourceRecursiveIntersectionControl.pair entry.identity entry.identity) ∧
+          queried.left = body ∧ queried.right = .mu entry body depth ordinary))

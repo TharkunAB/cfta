@@ -1,0 +1,101 @@
+/- Note [Actual source call admission]
+Query results do not become operands of later compiled queries.
+The compiler uses original operands, actual source reads and entered domains.
+The carrier checks those calls and their literal continuations only.
+Enter and read obligations use actual rooted prefixes within the fixed trace.
+The carrier does not assume a result law or an optional body invariant.
+-/
+private def NodeAdmission
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (rootRequest : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
+    (operations : SourceEqualityConstraintMemoAllocation.State) (wholeCount : Nat)
+    (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard) (bodyId : Nat)
+    (request : NodeRequest Symbol Guard) : Prop :=
+  Qualified (width := width) rootRequest machine operations wholeCount entry body depth ordinary request ∨
+    ∃ (fullPattern : Value Symbol Guard) (patternId : Nat)
+      (originalDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey),
+      AuthenticEntry (width := width) rootRequest machine operations wholeCount
+        entry body depth ordinary fullPattern patternId originalDomain ∧
+      let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+      let referenceValue : Value Symbol Guard := .reference (.interned entry.identity)
+      let e := SourceRecursiveIntersectionControl.pair bodyId entry.identity
+      let d := SourceRecursiveIntersectionControl.pair entry.identity entry.identity
+      let bodyFirst := SourceRecursiveIntersectionDomain.extend originalDomain.key [entry.identity] e
+      let diagonalFirst := SourceRecursiveIntersectionDomain.extend originalDomain.key [entry.identity] d
+      let bodyTerminal := SourceRecursiveIntersectionDomain.extend bodyFirst [entry.identity] d
+      let diagonalTerminal := SourceRecursiveIntersectionDomain.extend diagonalFirst [entry.identity] e
+      (request.domain.key = bodyFirst ∧
+        ((request.left = body ∧ request.right = body) ∨
+         (request.left = referenceValue ∧ request.right = referenceValue) ∨
+         (request.left = universeValue ∧ request.right = referenceValue))) ∨
+      (request.domain.key = bodyTerminal ∧ request.left = body ∧ request.right = referenceValue) ∨
+      (request.domain.key = diagonalFirst ∧
+        ((request.left = body ∧ request.right = referenceValue) ∨
+         (request.left = body ∧ request.right = universeValue))) ∨
+      (request.domain.key = diagonalTerminal ∧
+        ((request.left = body ∧ request.right = body) ∨
+         (request.left = referenceValue ∧ request.right = referenceValue) ∨
+         (request.left = universeValue ∧ request.right = referenceValue)))
+
+private def EdgeAdmission
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (rootRequest : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
+    (operations : SourceEqualityConstraintMemoAllocation.State) (wholeCount : Nat)
+    (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard) (bodyId : Nat)
+    (request : EdgeRequest Symbol Guard) : Prop :=
+  request.left.children.length = request.right.children.length →
+    ∀ children ∈ request.left.children.zip request.right.children,
+      NodeAdmission (width := width) rootRequest machine operations wholeCount
+        entry body depth ordinary bodyId ⟨request.domain, children.1, children.2⟩
+
+private def CodeAdmission
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat} {A : Type}
+    (rootRequest : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
+    (operations : SourceEqualityConstraintMemoAllocation.State) (wholeCount : Nat)
+    (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard) (bodyId : Nat) :
+    Code Symbol Guard A → Prop
+  | .pure _ | .fail _ => True
+  | .work _ next | .optionalBinder _ _ next =>
+      ∀ value, CodeAdmission (width := width) rootRequest machine operations wholeCount entry body depth ordinary bodyId (next value)
+  | .node request next =>
+      NodeAdmission (width := width) rootRequest machine operations wholeCount entry body depth ordinary bodyId request ∧
+      ∀ value, CodeAdmission (width := width) rootRequest machine operations wholeCount entry body depth ordinary bodyId (next value)
+  | .edge request next =>
+      EdgeAdmission (width := width) rootRequest machine operations wholeCount entry body depth ordinary bodyId request ∧
+      ∀ value, CodeAdmission (width := width) rootRequest machine operations wholeCount entry body depth ordinary bodyId (next value)
+  | .enter domain left right first second next =>
+      ∀ (used : Nat) (before : Checked width)
+        (actualNext : Interned IntersectionFlatMemoKeyDomain.DomainKey → Code Symbol Guard (Value Symbol Guard)),
+        used + 1 ≤ wholeCount →
+        Trace used (.code (.node rootRequest .pure))
+          (⟨initial width machine, operations⟩ : Checked width)
+          (.code (.enter domain left right first second actualNext)) before →
+        let entered := SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains
+          domain.key left right first second
+        let after : Checked width :=
+          {before with native := advance before.native {before.native.machine with domains := entered.2}}
+        Trace 1 (.code (.enter domain left right first second actualNext)) before
+          (.code (actualNext entered.1)) after →
+        CodeAdmission (width := width) rootRequest machine operations wholeCount entry body depth ordinary bodyId (next entered.1)
+  | .read name next =>
+      ∀ (used : Nat) (before : Checked width)
+        (actualNext : Option (Value Symbol Guard) → Code Symbol Guard (Value Symbol Guard)),
+        used + 1 ≤ wholeCount →
+        Trace used (.code (.node rootRequest .pure))
+          (⟨initial width machine, operations⟩ : Checked width)
+          (.code (.read name actualNext)) before →
+        CodeAdmission (width := width) rootRequest machine operations wholeCount entry body depth ordinary bodyId
+          (next (SourcePreparedSharedRows.read before.native.machine.heap name))
+  | .finishNode _ _ next | .finishEdge _ _ next =>
+      CodeAdmission (width := width) rootRequest machine operations wholeCount entry body depth ordinary bodyId next
+
+private def ControlAdmission
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (rootRequest : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
+    (operations : SourceEqualityConstraintMemoAllocation.State) (wholeCount : Nat)
+    (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard) (bodyId : Nat) :
+    Control (Value Symbol Guard) → Prop
+  | .code code => CodeAdmission (width := width) rootRequest machine operations wholeCount entry body depth ordinary bodyId code
+  | .edgeBody request next =>
+      EdgeAdmission (width := width) rootRequest machine operations wholeCount entry body depth ordinary bodyId request ∧
+      ∀ value, CodeAdmission (width := width) rootRequest machine operations wholeCount entry body depth ordinary bodyId (next value)
