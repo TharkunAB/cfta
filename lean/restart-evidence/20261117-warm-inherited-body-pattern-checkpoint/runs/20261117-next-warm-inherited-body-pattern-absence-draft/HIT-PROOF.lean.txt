@@ -1,0 +1,85 @@
+  dsimp only
+  intro newPrefix newEntry oldCell selected demanded
+  let universeValue : Node := .mu entry body depth ordinary
+  let childLeft := if universeFirst then body else pattern
+  let childRight := if universeFirst then pattern else body
+  let binder := pair entry.identity patternId
+  let entered := SourceRecursiveIntersectionEnvironment.enter beforeNew.native.machine.domains
+    IntersectionEmptyDomain.emptyKey universeValue pattern entry.identity patternId
+  let childRequest : NodeRequest Symbol Guard := ⟨entered.1, childLeft, childRight⟩
+  let enterNext := fun domain =>
+    (requestNode domain childLeft childRight).bind (fun value => .optionalBinder binder value next)
+  change oldSnapshot.native.nodes.cells handle = some ⟨childRequest, .returned value⟩ at oldCell
+  change lookupNode width childRequest reader.native = (.memoized handle, chosen) at selected
+  have initialPhysical : SourceCurrentAllocatedNativePhysicalCache.Valid
+      (initial width machine) :=
+    SourceCurrentAllocatedNativePhysicalCache.initial_valid machine machineValid
+  have oldPhysical :=
+    (SourceCurrentNativeEnterCommonOperand.checked_trace_extension oldActual initialPhysical).1
+  have oldLeftProfile : Profile entry.identity oldRoot.left :=
+    ⟨oldLeftClosed,
+      SourceSynthesisCurrentUniverseStartupAtoms.current_stored_universe_closed_atoms_after_no_new_mu
+        lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+        machine.heap machineValid.1.coherent pastInventory oldRoot.left oldLeftAvailable oldLeftClosed⟩
+  have oldRightProfile : Profile entry.identity oldRoot.right :=
+    ⟨oldRightClosed,
+      SourceSynthesisCurrentUniverseStartupAtoms.current_stored_universe_closed_atoms_after_no_new_mu
+        lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+        machine.heap machineValid.1.coherent pastInventory oldRoot.right oldRightAvailable oldRightClosed⟩
+  have oldMuUnchanged :=
+    SourceSynthesisCurrentUniverseNativeAllocation.original_universe_cold_query_no_new_mu
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      oldRoot machine machineValid sourceGrowth oldRootDomain oldLeftProfile oldRightProfile
+      operations operationsValid oldFuel oldInputs oldFields
+  have readerInventory : InternedShallowHeap.NoNewMu sourceHeap oldSnapshot.native.machine.heap :=
+    InternedShallowHeap.noNewMu_trans pastInventory
+      (oldMuUnchanged.2 oldCount (.code (.pure oldValue)) oldSnapshot oldBound oldActual)
+  have patternProfile : Profile entry.identity pattern :=
+    ⟨patternClosed,
+      SourceSynthesisCurrentUniverseStartupAtoms.current_stored_universe_closed_atoms_after_no_new_mu
+        lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+        oldSnapshot.native.machine.heap oldPhysical.machine.1.coherent readerInventory
+        pattern patternAvailable patternClosed⟩
+  obtain ⟨bodyEntry, _marker, _arrow, _sourceRows, bodyShape, _bodyAvailable, _markerShape,
+      _arrowChildren, _arrowKey, _catalog, _markerClosed, _markerAvailable, _markerAtoms,
+      _rowKinds, _arrowRetained⟩ :=
+    SourceSynthesisCurrentUniverseBodyChildClassification.current_stored_universe_body_physical_children_after_growth
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      machine.heap machineValid.1 sourceGrowth
+  have universeClosed : universeValue.free = [] := by
+    change (Value.mu entry body depth ordinary).free = []
+    rw [bodyShape]
+    simp [Value.free]
+  have bodyNotReference : body ≠ .reference (.interned entry.identity) := by
+    intro same
+    rw [bodyShape] at same
+    cases same
+  have inherited :=
+    SourceCurrentAllocatedNativePastGammaEqualEntryPayload.closed_root_cold_returned_mixed_profile_after_later_entry
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      oldRoot machine oldRootDomain ⟨oldLeftClosed, oldRightClosed⟩ universeClosed
+      machineValid sourceGrowth operations operationsValid oldFuel oldCount (.code (.pure oldValue))
+      oldSnapshot oldBound oldActual oldInputs oldFields handle childRequest value oldCell
+      pattern patternClosed patternId patternIdentity patternKind universeFirst enterNext newRoot newFuel newUsed
+      beforeNew reader
+      (.code ((requestNode entered.1 childLeft childRight).bind
+        (fun value => .optionalBinder binder value next)))
+      (by omega) newPrefix newEntry rfl body pattern (Or.inl rfl) patternProfile (Nat.le_refl _)
+      (by intro impossible; exact False.elim (bodyNotReference impossible))
+      (by
+        change ((if universeFirst then body else pattern) = body ∧
+            (if universeFirst then pattern else body) = pattern) ∨
+          ((if universeFirst then body else pattern) = pattern ∧
+            (if universeFirst then pattern else body) = body)
+        cases universeFirst with
+        | false => exact Or.inr ⟨rfl, rfl⟩
+        | true => exact Or.inl ⟨rfl, rfl⟩)
+  obtain ⟨authentic, valueProfile, kept, warmSpan, _entryBound⟩ := inherited
+  have absent : Reference.intersection binder.1 binder.2 ∉ value.free := by
+    rw [valueProfile.1]
+    exact List.not_mem_nil
+  have hit : SourceEqualityNativeDemand.step (.code (.node childRequest .pure)) reader =
+      .yielded (.code (.pure value)) ⟨running, reader.operations⟩ := by
+    simp only [SourceEqualityNativeDemand.step, SourceRecursiveIntersectionNative.step,
+      selected, demanded, SourceEqualityNativeDemand.lift]
+  exact ⟨authentic, absent, kept, warmSpan, hit, newBound⟩
