@@ -1,0 +1,15 @@
+--- first preparedcbe13
++++ corrected internal admission
+@@ -10,10 +10,10 @@
+     (inventory : Inventory) (caller : Caller (bits + 2)) (memos : Memos) (metadata : Metadata Typing)
+     (before : Cached) (seed : Seed) (ceiling uv handle : Nat) (scs : List Suspended)
+     (packet : Packet formulas solver inventory caller memos metadata before)
+-    (ready : EnumerationSchedule.Ready uv before.core)
++    (ready : EnumerationDriver.Ready uv before.core)
+     (stored : before.core.values[uv]? = some (.unenumerated (some handle) scs))
+     (incoming : EnumerationReferences.IncomingAvoid uv before.core)
+-    (bounded : Fits seed.2 caller.checked)
++    (bounded : Fits (SourcePruningEnumerationSharedRecursiveReservation.narrowSeed seed).2 caller.checked)
+     (known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap)
+     (mass : SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling)
+     (bucketBound : scs.length ≤ ceiling)

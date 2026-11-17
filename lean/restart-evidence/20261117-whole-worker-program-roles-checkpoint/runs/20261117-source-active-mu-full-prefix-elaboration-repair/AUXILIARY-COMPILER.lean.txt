@@ -1,0 +1,221 @@
+
+namespace MicroCFTA.SourceSynthesisCurrentUniverseNativeAllocation
+open Cache InternedConstructorTemplates InternedProbeProvenance
+open InternedBinderProtocol (NodeKey)
+open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionThunks SourceRecursiveIntersectionCode
+open SourceEqualityNativeDemand
+open SourceCurrentAllocatedNativePhysicalTraceCompletion (Trace)
+open SourceCurrentAllocatedNativePhysicalExecution (InputsThrough)
+open SourceEqualityNativeDemandOperations (FieldsThrough)
+open SourceCurrentAllocatedNativeGeneralCMHistory (AuthenticEntry Qualified)
+open SourceSynthesisTypeSyntax (Library Query)
+open SourceSynthesisFirstOrderConstruction (Expression)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSynthesisGeneralizeSyntax.Guard
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "Profile" => SourceCurrentAllocatedNativeClosedResetProfile.Profile
+local notation "ordinarySymbols" => SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+open InternedNestedFacts InternedEdgeResidency
+open SourceRecursiveIntersectionControl (identity tag pair decision payload)
+open SourceCurrentAllocatedNativeGeneralCMHistory (ClosedQualified MixedQualified)
+open SourceSynthesisUniversePrefixHeight (height)
+local notation "Node" => Value Symbol Guard
+
+section AuxiliaryCompiler
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+variable (rootRequest : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
+  (machineValid : SourceRecursiveIntersectionKernel.Valid machine)
+  (operations : SourceEqualityConstraintMemoAllocation.State) (wholeCount : Nat)
+  (entry : Interned NodeKey) (body depth ordinary : Node) (bodyId : Nat)
+
+omit [DecidableEq (EdgeKey Symbol Guard)] in
+private theorem body_self_code (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey)
+    (own : Interned NodeKey) (rows : List (EdgeValue Symbol Guard)) :
+    compileNode ⟨domain, .node own rows 0 [.interned entry.identity], .node own rows 0 [.interned entry.identity]⟩ =
+      if pair own.identity own.identity ∈ domain.key.seen then .pure (SourceRecursiveIntersectionControl.repeatedValue
+        (pair own.identity own.identity)) else compileRows domain rows rows := by
+  simp [compileNode, decision, SourceRecursiveIntersectionControl.hasEmpty, SourceRecursiveIntersectionControl.reset,
+    SourceRecursiveIntersectionControl.closedSelf, SourceRecursiveIntersectionControl.greater,
+    SourceRecursiveIntersectionControl.compareValue, tag, identity, payload, Value.referenceOf, Value.free]
+  all_goals split <;> simp_all
+
+omit [DecidableEq (EdgeKey Symbol Guard)] in
+private theorem reference_self_code (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey) :
+    compileNode (⟨domain, .reference (.interned entry.identity), .reference (.interned entry.identity)⟩ :
+      NodeRequest Symbol Guard) =
+      if pair entry.identity entry.identity ∈ domain.key.seen then .pure (SourceRecursiveIntersectionControl.repeatedValue
+        (pair entry.identity entry.identity))
+      else compileReference domain entry.identity (.reference (.interned entry.identity)) true := by
+  simp [compileNode, decision, SourceRecursiveIntersectionControl.hasEmpty, SourceRecursiveIntersectionControl.reset,
+    SourceRecursiveIntersectionControl.closedSelf, SourceRecursiveIntersectionControl.greater,
+    SourceRecursiveIntersectionControl.compareValue, tag, identity, payload, Value.referenceOf, Value.free]
+  all_goals split <;> simp_all
+
+omit [DecidableEq (EdgeKey Symbol Guard)] in
+private theorem universe_reference_code (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey) :
+    compileNode ⟨domain, .mu entry body depth ordinary, .reference (.interned entry.identity)⟩ =
+      if pair entry.identity entry.identity ∈ domain.key.seen then .pure (SourceRecursiveIntersectionControl.repeatedValue
+        (pair entry.identity entry.identity))
+      else compileMu domain (.mu entry body depth ordinary) (.reference (.interned entry.identity)) := by
+  have tagOrder : compare (2 : Nat) 4 = .lt := by decide
+  simp [compileNode, decision, SourceRecursiveIntersectionControl.hasEmpty, SourceRecursiveIntersectionControl.reset,
+    SourceRecursiveIntersectionControl.closedSelf, SourceRecursiveIntersectionControl.greater,
+    SourceRecursiveIntersectionControl.compareValue, tag, identity, payload, Value.referenceOf, Value.free, tagOrder]
+  all_goals split <;> simp_all
+
+omit [DecidableEq (EdgeKey Symbol Guard)] in
+private theorem body_reference_code (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey)
+    (own : Interned NodeKey) (rows : List (EdgeValue Symbol Guard)) :
+    compileNode ⟨domain, .node own rows 0 [.interned entry.identity], .reference (.interned entry.identity)⟩ =
+      if pair own.identity entry.identity ∈ domain.key.seen then .pure (SourceRecursiveIntersectionControl.repeatedValue
+        (pair own.identity entry.identity))
+      else compileReference domain entry.identity (.node own rows 0 [.interned entry.identity]) false := by
+  have tagOrder : compare (1 : Nat) 4 = .lt := by decide
+  simp [compileNode, decision, SourceRecursiveIntersectionControl.hasEmpty, SourceRecursiveIntersectionControl.reset,
+    SourceRecursiveIntersectionControl.closedSelf, SourceRecursiveIntersectionControl.greater,
+    SourceRecursiveIntersectionControl.compareValue, tag, identity, payload, Value.referenceOf, Value.free, tagOrder]
+  all_goals split <;> simp_all
+
+omit [DecidableEq (EdgeKey Symbol Guard)] in
+private theorem body_universe_code (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey)
+    (own : Interned NodeKey) (rows : List (EdgeValue Symbol Guard)) :
+    compileNode ⟨domain, .node own rows 0 [.interned entry.identity], .mu entry body depth ordinary⟩ =
+      if pair own.identity entry.identity ∈ domain.key.seen then .pure (SourceRecursiveIntersectionControl.repeatedValue
+        (pair own.identity entry.identity))
+      else compileMu domain (.node own rows 0 [.interned entry.identity]) (.mu entry body depth ordinary) := by
+  have tagOrder : compare (1 : Nat) 2 = .lt := by decide
+  simp [compileNode, decision, SourceRecursiveIntersectionControl.hasEmpty, SourceRecursiveIntersectionControl.reset,
+    SourceRecursiveIntersectionControl.closedSelf, SourceRecursiveIntersectionControl.greater,
+    SourceRecursiveIntersectionControl.compareValue, tag, identity, payload, Value.referenceOf, Value.free, tagOrder]
+  all_goals split <;> simp_all
+
+include machineValid in
+private theorem auxiliary_compile_admission
+    (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (sourceGrowth : Grows sourceHeap machine.heap) (key : NodeKey)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (bodyEntry : Interned NodeKey) (bodyRows : List (EdgeValue Symbol Guard))
+    (bodyShape : body = .node bodyEntry bodyRows 0 [.interned entry.identity])
+    (bodyIdentity : identity body = some bodyId)
+    (sourceChildren : ∀ row ∈ bodyRows, ∀ child ∈ row.children,
+      child = .reference (.interned entry.identity) ∨ Profile entry.identity child)
+    (matched : ∀ pair ∈ SourceRecursiveIntersectionKernel.pairs bodyRows bodyRows,
+      pair.1 = pair.2 ∨ pair.1.children.length ≠ pair.2.children.length)
+    (request : NodeRequest Symbol Guard)
+    (auxiliary : ∃ (pattern : Node) (patternId : Nat) (originalDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey),
+      AuthenticEntry (width := width) rootRequest machine operations wholeCount entry body depth ordinary
+        pattern patternId originalDomain ∧
+      let universeValue : Node := .mu entry body depth ordinary
+      let referenceValue : Node := .reference (.interned entry.identity)
+      let e := pair bodyId entry.identity
+      let d := pair entry.identity entry.identity
+      let first := SourceRecursiveIntersectionDomain.extend originalDomain.key [entry.identity] e
+      let diagonal := SourceRecursiveIntersectionDomain.extend originalDomain.key [entry.identity] d
+      let bodyTerminal := SourceRecursiveIntersectionDomain.extend first [entry.identity] d
+      let terminal := SourceRecursiveIntersectionDomain.extend diagonal [entry.identity] e
+      (request.domain.key = first ∧ ((request.left = body ∧ request.right = body) ∨
+        (request.left = referenceValue ∧ request.right = referenceValue) ∨
+        (request.left = universeValue ∧ request.right = referenceValue))) ∨
+      (request.domain.key = bodyTerminal ∧ request.left = body ∧ request.right = referenceValue) ∨
+      (request.domain.key = diagonal ∧ ((request.left = body ∧ request.right = referenceValue) ∨
+        (request.left = body ∧ request.right = universeValue))) ∨
+      (request.domain.key = terminal ∧ ((request.left = body ∧ request.right = body) ∨
+        (request.left = referenceValue ∧ request.right = referenceValue) ∨
+        (request.left = universeValue ∧ request.right = referenceValue)))) :
+    CodeAdmission (width := width) rootRequest machine operations wholeCount entry body depth ordinary bodyId
+      (compileNode request) := by
+  have bodyIdEq : bodyEntry.identity = bodyId := by
+    apply Option.some.inj
+    calc
+      some bodyEntry.identity = identity body := by rw [bodyShape]; rfl
+      _ = some bodyId := bodyIdentity
+  subst bodyId
+  have bodySelf (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey) :
+      compileNode ⟨domain, body, body⟩ =
+        if pair bodyEntry.identity bodyEntry.identity ∈ domain.key.seen then
+          .pure (SourceRecursiveIntersectionControl.repeatedValue (pair bodyEntry.identity bodyEntry.identity))
+        else compileRows domain bodyRows bodyRows := by
+    simpa only [bodyShape] using body_self_code entry domain bodyEntry bodyRows
+  have bodyReference (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey) :
+      compileNode ⟨domain, body, .reference (.interned entry.identity)⟩ =
+        if pair bodyEntry.identity entry.identity ∈ domain.key.seen then
+          .pure (SourceRecursiveIntersectionControl.repeatedValue (pair bodyEntry.identity entry.identity))
+        else compileReference domain entry.identity body false := by
+    simpa only [bodyShape] using body_reference_code entry domain bodyEntry bodyRows
+  have bodyUniverse (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey) :
+      compileNode ⟨domain, body, .mu entry body depth ordinary⟩ =
+        if pair bodyEntry.identity entry.identity ∈ domain.key.seen then
+          .pure (SourceRecursiveIntersectionControl.repeatedValue (pair bodyEntry.identity entry.identity))
+        else compileMu domain body (.mu entry body depth ordinary) := by
+    simpa only [bodyShape] using body_universe_code entry body depth ordinary domain bodyEntry bodyRows
+  rcases request with ⟨domain, left, right⟩
+  obtain ⟨pattern, patternId, originalDomain, authentic, contextCases⟩ := auxiliary
+  dsimp only at contextCases
+  rcases contextCases with first | bodyTerminal | diagonal | terminal
+  · rcases first with ⟨atKey, alternatives⟩
+    rcases alternatives with ⟨leftEq, rightEq⟩ | ⟨leftEq, rightEq⟩ | ⟨leftEq, rightEq⟩
+    · rw [leftEq, rightEq]
+      rw [bodySelf domain]
+      split
+      · trivial
+      · exact auxiliary_rows_admission rootRequest machine operations wholeCount entry body depth ordinary bodyEntry.identity
+          bodyRows sourceChildren matched pattern patternId originalDomain domain authentic (Or.inl atKey)
+    · rw [leftEq, rightEq, reference_self_code entry domain]
+      split
+      · trivial
+      · apply source_reference_admission rootRequest machine machineValid operations wholeCount entry body depth ordinary
+          bodyEntry.identity sourceHeap sourceGrowth key stored domain (.reference (.interned entry.identity)) true
+        right
+        refine ⟨pattern, patternId, originalDomain, authentic, ?_⟩
+        dsimp only
+        exact Or.inl ⟨atKey, Or.inr (Or.inr ⟨rfl, rfl⟩)⟩
+    · rw [leftEq, rightEq, universe_reference_code entry body depth ordinary domain]
+      split
+      · trivial
+      · exact universe_reference_enter_admission rootRequest machine machineValid operations wholeCount
+          entry body depth ordinary bodyEntry.identity pattern patternId originalDomain domain authentic (Or.inr atKey)
+  · rcases bodyTerminal with ⟨atKey, leftEq, rightEq⟩
+    have seen : pair bodyEntry.identity entry.identity ∈ domain.key.seen := by
+      rw [atKey]
+      exact (SourceRecursiveIntersectionDomain.extend_seen _ _ _ _).mpr (Or.inr
+        ((SourceRecursiveIntersectionDomain.extend_seen _ _ _ _).mpr (Or.inl rfl)))
+    rw [leftEq, rightEq]
+    rw [bodyReference domain, ite_eq_left seen]
+    trivial
+  · rcases diagonal with ⟨atKey, alternatives⟩
+    rcases alternatives with ⟨leftEq, rightEq⟩ | ⟨leftEq, rightEq⟩
+    · rw [leftEq, rightEq]
+      rw [bodyReference domain]
+      split
+      · trivial
+      · apply source_reference_admission rootRequest machine machineValid operations wholeCount entry body depth ordinary
+          bodyEntry.identity sourceHeap sourceGrowth key stored domain body false
+        right
+        refine ⟨pattern, patternId, originalDomain, authentic, ?_⟩
+        dsimp only
+        exact Or.inr (Or.inr (Or.inl ⟨atKey, Or.inr ⟨rfl, rfl⟩⟩))
+    · rw [leftEq, rightEq]
+      rw [bodyUniverse domain]
+      split
+      · trivial
+      · exact body_mu_enter_admission rootRequest machine machineValid operations wholeCount
+          entry body depth ordinary bodyEntry.identity bodyEntry bodyRows bodyShape bodyIdentity
+          pattern patternId originalDomain domain authentic (Or.inr atKey)
+  · rcases terminal with ⟨atKey, alternatives⟩
+    have seen : pair entry.identity entry.identity ∈ domain.key.seen := by
+      rw [atKey]
+      exact (SourceRecursiveIntersectionDomain.extend_seen _ _ _ _).mpr (Or.inr
+        ((SourceRecursiveIntersectionDomain.extend_seen _ _ _ _).mpr (Or.inl rfl)))
+    rcases alternatives with ⟨leftEq, rightEq⟩ | ⟨leftEq, rightEq⟩ | ⟨leftEq, rightEq⟩
+    · rw [leftEq, rightEq]
+      rw [bodySelf domain]
+      split
+      · trivial
+      · exact auxiliary_rows_admission rootRequest machine operations wholeCount entry body depth ordinary bodyEntry.identity
+          bodyRows sourceChildren matched pattern patternId originalDomain domain authentic (Or.inr atKey)
+    · rw [leftEq, rightEq, reference_self_code entry domain, ite_eq_left seen]
+      trivial
+    · rw [leftEq, rightEq, universe_reference_code entry body depth ordinary domain, ite_eq_left seen]
+      trivial
+end AuxiliaryCompiler
+end MicroCFTA.SourceSynthesisCurrentUniverseNativeAllocation

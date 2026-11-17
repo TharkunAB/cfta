@@ -1,0 +1,177 @@
+
+namespace MicroCFTA.SourceSynthesisCurrentUniverseNativeAllocation
+open Cache InternedConstructorTemplates InternedProbeProvenance
+open InternedBinderProtocol (NodeKey)
+open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionThunks SourceRecursiveIntersectionCode
+open SourceEqualityNativeDemand
+open SourceCurrentAllocatedNativePhysicalTraceCompletion (Trace)
+open SourceCurrentAllocatedNativePhysicalExecution (InputsThrough)
+open SourceEqualityNativeDemandOperations (FieldsThrough)
+open SourceCurrentAllocatedNativeGeneralCMHistory (AuthenticEntry Qualified)
+open SourceSynthesisTypeSyntax (Library Query)
+open SourceSynthesisFirstOrderConstruction (Expression)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSynthesisGeneralizeSyntax.Guard
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "Profile" => SourceCurrentAllocatedNativeClosedResetProfile.Profile
+local notation "ordinarySymbols" => SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+open InternedNestedFacts InternedEdgeResidency
+open SourceRecursiveIntersectionControl (identity tag pair decision payload)
+open SourceCurrentAllocatedNativeGeneralCMHistory (ClosedQualified MixedQualified)
+open SourceSynthesisUniversePrefixHeight (height)
+local notation "Node" => Value Symbol Guard
+
+section Descents
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+variable (rootRequest : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
+  (operations : SourceEqualityConstraintMemoAllocation.State) (wholeCount : Nat)
+  (entry : Interned NodeKey) (body depth ordinary : Node) (bodyId : Nat)
+
+private theorem code_admission_rows
+    (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey)
+    (left right : List (EdgeValue Symbol Guard))
+    (each : ∀ rows ∈ SourceRecursiveIntersectionKernel.pairs left right,
+      EdgeAdmission (width := width) rootRequest machine operations wholeCount
+        entry body depth ordinary bodyId ⟨domain, rows.1, rows.2⟩) :
+    CodeAdmission (width := width) rootRequest machine operations wholeCount
+      entry body depth ordinary bodyId (compileRows domain left right) := by
+  unfold compileRows
+  apply code_admission_bind rootRequest machine operations wholeCount entry body depth ordinary bodyId
+  · apply code_admission_walk rootRequest machine operations wholeCount entry body depth ordinary bodyId
+    intro rows included
+    exact ⟨each rows included, fun _ => trivial⟩
+  · intro values result
+    trivial
+
+private theorem closed_rows_admission
+    (heap : InternedConstructorTemplates.State Symbol Guard) (facts : Facts heap)
+    (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey)
+    (domainKind : domain = IntersectionEmptyDomain.emptyDomain ∨ domain.key.free.isEmpty = false)
+    (leftEntry rightEntry : Interned NodeKey) (leftRows rightRows : List (EdgeValue Symbol Guard))
+    (leftDepth rightDepth : Nat) (leftFree rightFree : List InternedBinderProtocol.Reference)
+    (leftAvailable : Available heap (.node leftEntry leftRows leftDepth leftFree))
+    (rightAvailable : Available heap (.node rightEntry rightRows rightDepth rightFree))
+    (leftProfile : Profile entry.identity (.node leftEntry leftRows leftDepth leftFree))
+    (rightProfile : Profile entry.identity (.node rightEntry rightRows rightDepth rightFree)) :
+    CodeAdmission (width := width) rootRequest machine operations wholeCount entry body depth ordinary bodyId
+      (compileRows domain leftRows rightRows) := by
+  apply code_admission_rows rootRequest machine operations wholeCount entry body depth ordinary bodyId
+  intro rows included _arity children zipped
+  have rowMembers := (SourceRecursiveIntersectionKernel.pairs_member leftRows rightRows rows).mp included
+  have childMembers := List.of_mem_zip zipped
+  have first := SourceSynthesisCurrentUniverseAtomInductionSteps.node_child_closed_atoms
+    heap facts entry.identity leftEntry leftRows leftDepth leftFree leftAvailable
+    leftProfile.1 leftProfile.2 rows.1 rowMembers.1 children.1 childMembers.1
+  have second := SourceSynthesisCurrentUniverseAtomInductionSteps.node_child_closed_atoms
+    heap facts entry.identity rightEntry rightRows rightDepth rightFree rightAvailable
+    rightProfile.1 rightProfile.2 rows.2 rowMembers.2.1 children.2 childMembers.2
+  exact Or.inl (Or.inl ⟨⟨first.2.1, first.2.2⟩, ⟨second.2.1, second.2.2⟩, domainKind⟩)
+
+private theorem closed_union_admission
+    (heap : InternedConstructorTemplates.State Symbol Guard) (facts : Facts heap)
+    (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey)
+    (domainKind : domain = IntersectionEmptyDomain.emptyDomain ∨ domain.key.free.isEmpty = false)
+    (unionEntry : Interned NodeKey) (members : List Node) (level : Nat)
+    (free : List InternedBinderProtocol.Reference) (other : Node) (unionFirst : Bool)
+    (available : Available heap (.union unionEntry members level free))
+    (profile : Profile entry.identity (.union unionEntry members level free))
+    (otherProfile : Profile entry.identity other) :
+    CodeAdmission (width := width) rootRequest machine operations wholeCount entry body depth ordinary bodyId
+      ((walk (fun member => if unionFirst then requestNode domain member other
+        else requestNode domain other member) members).bind fun values => .work (makeUnion values) .pure) := by
+  apply code_admission_bind rootRequest machine operations wholeCount entry body depth ordinary bodyId
+  · apply code_admission_walk rootRequest machine operations wholeCount entry body depth ordinary bodyId
+    intro member included
+    have inherited := SourceSynthesisCurrentUniverseAtomInductionSteps.union_member_closed_atoms
+      heap facts entry.identity unionEntry members level free available profile.1 profile.2 member included
+    have memberProfile : Profile entry.identity member := ⟨inherited.2.1, inherited.2.2⟩
+    cases unionFirst with
+    | false => exact ⟨Or.inl (Or.inl ⟨otherProfile, memberProfile, domainKind⟩), fun _ => trivial⟩
+    | true => exact ⟨Or.inl (Or.inl ⟨memberProfile, otherProfile, domainKind⟩), fun _ => trivial⟩
+  · intro values result
+    trivial
+
+private theorem mixed_union_admission
+    (heap : InternedConstructorTemplates.State Symbol Guard) (facts : Facts heap)
+    (pattern : Node) (patternId : Nat) (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey)
+    (authentic : AuthenticEntry (width := width) rootRequest machine operations wholeCount
+      entry body depth ordinary pattern patternId domain)
+    (alias : Node) (aliasKind : alias = body ∨ alias = .reference (.interned entry.identity))
+    (unionEntry : Interned NodeKey) (members : List Node) (level : Nat)
+    (free : List InternedBinderProtocol.Reference) (aliasFirst : Bool)
+    (available : Available heap (.union unionEntry members level free))
+    (profile : Profile entry.identity (.union unionEntry members level free))
+    (parentHeight : height (.union unionEntry members level free) ≤ height pattern) :
+    CodeAdmission (width := width) rootRequest machine operations wholeCount entry body depth ordinary bodyId
+      ((walk (fun member => if aliasFirst then requestNode domain alias member
+        else requestNode domain member alias) members).bind fun values => .work (makeUnion values) .pure) := by
+  apply code_admission_bind rootRequest machine operations wholeCount entry body depth ordinary bodyId
+  · apply code_admission_walk rootRequest machine operations wholeCount entry body depth ordinary bodyId
+    intro member included
+    have inherited := SourceSynthesisCurrentUniverseAtomInductionSteps.union_member_closed_atoms
+      heap facts entry.identity unionEntry members level free available profile.1 profile.2 member included
+    have memberProfile : Profile entry.identity member := ⟨inherited.2.1, inherited.2.2⟩
+    have smaller := SourceSynthesisUniversePrefixHeight.member_lt unionEntry members level free member included
+    have strict : height member < height pattern := Nat.lt_of_lt_of_le smaller parentHeight
+    have mixed : MixedQualified (width := width) rootRequest machine operations wholeCount
+        entry body depth ordinary (if aliasFirst then ⟨domain, alias, member⟩ else ⟨domain, member, alias⟩) := by
+      refine ⟨pattern, patternId, alias, member, authentic, aliasKind, memberProfile, Nat.le_of_lt strict,
+        fun _ => strict, ?_⟩
+      cases aliasFirst with
+      | false => exact Or.inr ⟨rfl, rfl⟩
+      | true => exact Or.inl ⟨rfl, rfl⟩
+    cases aliasFirst <;> exact ⟨Or.inl (Or.inr mixed), fun _ => trivial⟩
+  · intro values result
+    trivial
+
+private theorem mixed_rows_admission
+    (machineValid : SourceRecursiveIntersectionKernel.Valid machine)
+    (heap : InternedConstructorTemplates.State Symbol Guard) (facts : Facts heap)
+    (bodyRows : List (EdgeValue Symbol Guard))
+    (sourceChildren : ∀ row ∈ bodyRows, ∀ child ∈ row.children,
+      child = .reference (.interned entry.identity) ∨ Profile entry.identity child)
+    (pattern : Node) (patternId : Nat) (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey)
+    (authentic : AuthenticEntry (width := width) rootRequest machine operations wholeCount
+      entry body depth ordinary pattern patternId domain)
+    (operandEntry : Interned NodeKey) (operandRows : List (EdgeValue Symbol Guard)) (level : Nat)
+    (free : List InternedBinderProtocol.Reference) (bodyFirst : Bool)
+    (available : Available heap (.node operandEntry operandRows level free))
+    (profile : Profile entry.identity (.node operandEntry operandRows level free))
+    (parentHeight : height (.node operandEntry operandRows level free) ≤ height pattern) :
+    CodeAdmission (width := width) rootRequest machine operations wholeCount entry body depth ordinary bodyId
+      (compileRows domain (if bodyFirst then bodyRows else operandRows)
+        (if bodyFirst then operandRows else bodyRows)) := by
+  have nonempty := authentic_domain_nonempty rootRequest machine machineValid operations wholeCount
+    entry body depth ordinary pattern patternId domain authentic
+  apply code_admission_rows rootRequest machine operations wholeCount entry body depth ordinary bodyId
+  intro rows included _arity children zipped
+  have rowMembers := (SourceRecursiveIntersectionKernel.pairs_member
+    (if bodyFirst then bodyRows else operandRows) (if bodyFirst then operandRows else bodyRows) rows).mp included
+  have childMembers := List.of_mem_zip zipped
+  cases bodyFirst with
+  | true =>
+    have inherited := SourceSynthesisCurrentUniverseAtomInductionSteps.node_child_closed_atoms
+      heap facts entry.identity operandEntry operandRows level free available profile.1 profile.2
+      rows.2 rowMembers.2.1 children.2 childMembers.2
+    have childProfile : Profile entry.identity children.2 := ⟨inherited.2.1, inherited.2.2⟩
+    rcases sourceChildren rows.1 rowMembers.1 children.1 childMembers.1 with reference | closed
+    · have smaller := SourceSynthesisUniversePrefixHeight.child_lt operandEntry operandRows level free
+        rows.2 rowMembers.2.1 children.2 childMembers.2
+      have strict : height children.2 < height pattern := Nat.lt_of_lt_of_le smaller parentHeight
+      exact Or.inl (Or.inr ⟨pattern, patternId, .reference (.interned entry.identity), children.2,
+        authentic, Or.inr rfl, childProfile, Nat.le_of_lt strict, fun _ => strict, Or.inl ⟨reference, rfl⟩⟩)
+    · exact Or.inl (Or.inl ⟨closed, childProfile, Or.inr nonempty⟩)
+  | false =>
+    have inherited := SourceSynthesisCurrentUniverseAtomInductionSteps.node_child_closed_atoms
+      heap facts entry.identity operandEntry operandRows level free available profile.1 profile.2
+      rows.1 rowMembers.1 children.1 childMembers.1
+    have childProfile : Profile entry.identity children.1 := ⟨inherited.2.1, inherited.2.2⟩
+    rcases sourceChildren rows.2 rowMembers.2.1 children.2 childMembers.2 with reference | closed
+    · have smaller := SourceSynthesisUniversePrefixHeight.child_lt operandEntry operandRows level free
+        rows.1 rowMembers.1 children.1 childMembers.1
+      have strict : height children.1 < height pattern := Nat.lt_of_lt_of_le smaller parentHeight
+      exact Or.inl (Or.inr ⟨pattern, patternId, .reference (.interned entry.identity), children.1,
+        authentic, Or.inr rfl, childProfile, Nat.le_of_lt strict, fun _ => strict, Or.inr ⟨rfl, reference⟩⟩)
+    · exact Or.inl (Or.inl ⟨childProfile, closed, Or.inr nonempty⟩)
+end Descents
+end MicroCFTA.SourceSynthesisCurrentUniverseNativeAllocation

@@ -1,0 +1,15 @@
+/-- One actual eager selected row returns its source Program layout. -/
+theorem selected_eager_program_fragment_roles
+    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List Edge)
+    (selectionMembers : ∀ entry rows depth free, ∀ row ∈ edgesOf (.node entry rows depth free), row ∈ rows)
+    (valid : Constraint → Prop) (literal : String → Symbol) (marked : Nat → Prop)
+    (scs : List Suspended) (edge : Edge)
+    (consume : SelectedEdge.Result width → Result Output Reason width)
+    (caller reached : Caller width) (before after : Cached) (queries saved : Queries)
+    (index consumerIndex : Nat) (output : Output) (fragment : Fragment)
+    (fields : EdgeFields valid literal edge)
+    (pathScope : ∀ sc ∈ scs, EqualityTrie.Valid sc.trie ∧
+      ∀ path ∈ EqualityTrie.fromPathTrie sc.trie, ∃ tail, path = 0 :: tail)
+    (actual : SelectedInvocationAt checkEmpty r n p h k edgesOf .eager consume scs edge
+      caller before queries index output (.complete fragment reached saved after) consumerIndex) :
+    FragmentRoles literal marked fragment

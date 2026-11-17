@@ -1,0 +1,28 @@
+omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node] in
+private theorem real_program_render_stable_slots
+    (heap : InternedConstructorTemplates.State Symbol Constraint) (before after : Core)
+    (valid : Constraint → Prop) (literal : String → Symbol) (marked : Nat → Prop)
+    (stable : EnumerationDriver.RenderStable before after)
+    (slots : ProgramSlots valid literal heap before marked) :
+    ProgramSlots valid literal heap after marked
+
+omit [DecidableEq Symbol] [DecidableEq Node] in
+private theorem real_program_prepared_marked_fields
+    (entryFuel nativeFuel uv handle : Nat) (scs : List Suspended)
+    (caller : Caller (bits + 2)) (before entered : Cached) (decoded value : Node)
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (valid : Constraint → Prop) (literal : String → Symbol) (marked : Nat → Prop)
+    (slots : ProgramSlots valid literal caller.checked.native.machine.heap before.core marked)
+    (stored : before.core.values[uv]? = some (.unenumerated (some handle) scs))
+    (lookup : SourcePruningEnumerationNodes.lookupNode caller.checked.native.machine.heap handle = some decoded)
+    (actual : SourcePruningEnumerationSelectedPreparation.run entryFuel nativeFuel uv caller before =
+      ([.ok ((uv, handle, scs, decoded), entered.core)], some (.done value heap)))
+    (tagged : marked uv) :
+    ValueFields valid literal value ∧ EnumerationSemantics.ValidSuspended scs ∧
+      SourcePruningEnumerationPathTransport.BucketPaths SourceSynthesisGuardRegions.annotationRegion scs
+
+omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node] in
+private theorem real_program_annotation_nonterminal
+    (scs : List Suspended)
+    (scope : SourcePruningEnumerationPathTransport.BucketPaths SourceSynthesisGuardRegions.annotationRegion scs) :
+    scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = false

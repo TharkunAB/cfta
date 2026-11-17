@@ -1,0 +1,42 @@
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies EnumerationReferences
+open InternedConstructorTemplates InternedProbeProvenance
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
+open SourcePruningEnumerationRecursive (Packet)
+open SourcePruningEnumerationSharedIncomingReservation (Seed advance)
+open SourcePruningEnumerationSharedPreparedRecursive (Output Failure emitted continueWith)
+open SourcePruningEnumerationSharedPreparedRecursiveChildPolicy (runEagerWithNarrow resumeWithNarrow CapturedCallbackInvocationAt)
+open SourcePruningEnumerationRealEagerCausalOutputHistory (OutputHistoryAt PreparedHistoryAt)
+open SourcePruningEnumerationSharedSelectedContinuations
+open SourceSynthesisProgramEnumerationRoles (ProgramSlots FragmentRoles SlotRole)
+open SourceSynthesisHereditaryProgramFields (ValueFields EdgeFields)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Core" => EnumerationState.State Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Heap" => SourceEqualityAnnotationHeap.Heap
+variable {Typing Key : Type} {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+set_option autoImplicit false
+
+open SourcePruningEnumerationSharedChildVisitors (visitCapturedWith)
+open SourcePruningEnumerationSharedBranching (scan)
+open SourcePruningEnumerationSharedScanOutputOrigins (outputs)
+local notation "Fold" => NativeContinuations.Result
+  (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2)
+local notation "Prepared" => MergedSourceComparison.Result Symbol Constraint
+  (Node × Option (EnumerateM Symbol Constraint Unit))
+local notation "ActionRaw" => List (Except EnumerationState.Error (Unit × Core))
+attribute [local irreducible] nodePlan tuplePlan fallbackPlan eagerReserved eagerFinal
+  SourceCurrentConstrainedCapTargetForecast.scalar SourceCurrentConstrainedCapEditForecast.headProfile
+  SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow
+  SourcePruningEnumerationSharedPreparedRecursive.continueWith
+attribute [local irreducible] identity_actual_frame_plan identity_actual_frame_reserved
+  IdentityActualSourceRoot.limit IdentityActualSourceRoot.own

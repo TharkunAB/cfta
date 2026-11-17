@@ -1,0 +1,248 @@
+
+namespace MicroCFTA.SourceSynthesisCurrentUniverseNativeAllocation
+open Cache InternedConstructorTemplates InternedProbeProvenance
+open InternedBinderProtocol (NodeKey)
+open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionThunks SourceRecursiveIntersectionCode
+open SourceEqualityNativeDemand
+open SourceCurrentAllocatedNativePhysicalTraceCompletion (Trace)
+open SourceCurrentAllocatedNativePhysicalExecution (InputsThrough)
+open SourceEqualityNativeDemandOperations (FieldsThrough)
+open SourceCurrentAllocatedNativeGeneralCMHistory (AuthenticEntry Qualified)
+open SourceSynthesisTypeSyntax (Library Query)
+open SourceSynthesisFirstOrderConstruction (Expression)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSynthesisGeneralizeSyntax.Guard
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "Profile" => SourceCurrentAllocatedNativeClosedResetProfile.Profile
+local notation "ordinarySymbols" => SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+open InternedNestedFacts InternedEdgeResidency
+open SourceRecursiveIntersectionControl (identity tag pair decision payload)
+open SourceCurrentAllocatedNativeGeneralCMHistory (ClosedQualified MixedQualified)
+open SourceSynthesisUniversePrefixHeight (height)
+local notation "Node" => Value Symbol Guard
+
+section MixedCompiler
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+variable (rootRequest : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
+  (machineValid : SourceRecursiveIntersectionKernel.Valid machine)
+  (operations : SourceEqualityConstraintMemoAllocation.State) (wholeCount : Nat)
+  (entry : Interned NodeKey) (body depth ordinary : Node) (bodyId : Nat)
+
+include machineValid in
+private theorem mixed_compile_admission
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Node) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty = .done rootValue sourceHeap)
+    (key : NodeKey) (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (initialGrowth : Grows sourceHeap machine.heap)
+    (bodyEntry : Interned NodeKey) (bodyRows : List (EdgeValue Symbol Guard))
+    (bodyShape : body = .node bodyEntry bodyRows 0 [.interned entry.identity])
+    (bodyIdentity : identity body = some bodyId)
+    (sourceChildren : ∀ row ∈ bodyRows, ∀ child ∈ row.children,
+      child = .reference (.interned entry.identity) ∨ Profile entry.identity child)
+    (universeProfile : Profile entry.identity (.mu entry body depth ordinary))
+    (heap : InternedConstructorTemplates.State Symbol Guard) (facts : Facts heap) (growth : Grows sourceHeap heap)
+    (request : NodeRequest Symbol Guard)
+    (leftAvailable : Available heap request.left) (rightAvailable : Available heap request.right)
+    (qualified : MixedQualified (width := width) rootRequest machine operations wholeCount
+      entry body depth ordinary request) :
+    CodeAdmission (width := width) rootRequest machine operations wholeCount entry body depth ordinary bodyId
+      (compileNode request) := by
+  rcases request with ⟨domain, left, right⟩
+  dsimp only at leftAvailable rightAvailable
+  dsimp only [MixedQualified] at qualified
+  obtain ⟨pattern, patternId, alias, operand, authentic, aliasKind, operandProfile,
+    operandHeight, strictAlias, ordered⟩ := qualified
+  have nonempty := authentic_domain_nonempty rootRequest machine machineValid operations wholeCount
+    entry body depth ordinary pattern patternId domain authentic
+  have operandAvailable : Available heap operand := by
+    rcases ordered with ⟨leftEq, rightEq⟩ | ⟨leftEq, rightEq⟩
+    · rw [rightEq] at rightAvailable
+      exact rightAvailable
+    · rw [leftEq] at leftAvailable
+      exact leftAvailable
+  have muOriginal (own : Interned NodeKey) (storedBody storedDepth storedOrdinary : Node)
+      (available : Available heap (.mu own storedBody storedDepth storedOrdinary))
+      (profile : Profile entry.identity (.mu own storedBody storedDepth storedOrdinary)) :
+      (Value.mu own storedBody storedDepth storedOrdinary : Node) = .mu entry body depth ordinary :=
+    SourceSynthesisCurrentUniverseClosedMuClassification.current_stored_universe_closed_mu_eq_after_growth
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      heap facts growth own storedBody storedDepth storedOrdinary available profile.1 profile.2
+  cases emptyTest : SourceRecursiveIntersectionControl.hasEmpty left right with
+  | true => simp only [compileNode, decision, emptyTest, ite_true, CodeAdmission]
+  | false =>
+    have resetFalse : SourceRecursiveIntersectionControl.reset domain.key left right = false := by
+      rcases ordered with ⟨leftEq, rightEq⟩ | ⟨leftEq, rightEq⟩
+      all_goals
+        rw [leftEq, rightEq]
+        rcases aliasKind with same | same
+        · simp [same, bodyShape, SourceRecursiveIntersectionControl.reset, Value.free]
+        · simp [same, SourceRecursiveIntersectionControl.reset, Value.free]
+    cases selfTest : SourceRecursiveIntersectionControl.closedSelf left right with
+    | true =>
+      simp only [compileNode, decision, emptyTest, resetFalse, selfTest,
+        Bool.false_eq_true, ite_false, ite_true, CodeAdmission]
+    | false =>
+      cases swapTest : SourceRecursiveIntersectionControl.greater left right with
+      | true =>
+        simp only [compileNode, decision, emptyTest, resetFalse, selfTest, swapTest,
+          Bool.false_eq_true, ite_false, ite_true, requestNode, CodeAdmission]
+        refine ⟨Or.inl (Or.inr ⟨pattern, patternId, alias, operand, authentic, aliasKind,
+          operandProfile, operandHeight, strictAlias, ?_⟩), fun _ => trivial⟩
+        rcases ordered with ⟨first, second⟩ | ⟨first, second⟩
+        · exact Or.inr ⟨second, first⟩
+        · exact Or.inl ⟨second, first⟩
+      | false =>
+        simp only [compileNode, decision, emptyTest, resetFalse, selfTest, swapTest,
+          Bool.false_eq_true, ite_false]
+        rcases aliasKind with bodyAlias | referenceAlias
+        · subst alias
+          rcases ordered with ⟨leftEq, rightEq⟩ | ⟨leftEq, rightEq⟩
+          · rw [leftEq, rightEq]
+            cases operand with
+            | empty =>
+              rw [bodyIdentity]
+              simp only [identity, SourceRecursiveIntersectionCode.unsupported, CodeAdmission]
+            | reference name => cases operandProfile.1
+            | node own rows level free =>
+              rw [bodyIdentity]
+              simp only [identity]
+              by_cases seen : pair bodyId own.identity ∈ domain.key.seen
+              · simp only [seen, ite_true, CodeAdmission]
+              · simp only [seen, ite_false]
+                simp only [bodyShape, payload]
+                simpa only [bodyShape] using mixed_rows_admission rootRequest machine operations wholeCount entry body depth ordinary bodyId
+                    machineValid heap facts bodyRows sourceChildren pattern patternId domain authentic
+                    own rows level free true operandAvailable operandProfile operandHeight
+            | union own members level free =>
+              rw [bodyIdentity]
+              simp only [identity]
+              by_cases seen : pair bodyId own.identity ∈ domain.key.seen
+              · simp only [seen, ite_true, CodeAdmission]
+              · simp only [seen, ite_false]
+                simp only [bodyShape, payload]
+                simpa only [bodyShape] using mixed_union_admission rootRequest machine operations wholeCount entry body depth ordinary bodyId
+                    heap facts pattern patternId domain authentic body (Or.inl rfl) own members level free
+                    true operandAvailable operandProfile operandHeight
+            | mu own storedBody storedDepth storedOrdinary =>
+              rw [bodyIdentity]
+              simp only [identity]
+              by_cases seen : pair bodyId own.identity ∈ domain.key.seen
+              · simp only [seen, ite_true, CodeAdmission]
+              · simp only [seen, ite_false]
+                simp only [bodyShape, payload]
+                have same := muOriginal own storedBody storedDepth storedOrdinary operandAvailable operandProfile
+                rw [same]
+                simpa only [bodyShape] using body_mu_enter_admission rootRequest machine machineValid operations wholeCount
+                  entry body depth ordinary bodyId bodyEntry bodyRows bodyShape bodyIdentity
+                  pattern patternId domain domain authentic (Or.inl rfl)
+          · rw [leftEq, rightEq]
+            cases operand with
+            | empty =>
+              rw [bodyIdentity]
+              simp only [identity, SourceRecursiveIntersectionCode.unsupported, CodeAdmission]
+            | reference name => cases operandProfile.1
+            | node own rows level free =>
+              rw [bodyIdentity]
+              simp only [identity]
+              by_cases seen : pair own.identity bodyId ∈ domain.key.seen
+              · simp only [seen, ite_true, CodeAdmission]
+              · simp only [seen, ite_false]
+                simp only [bodyShape, payload]
+                simpa only [bodyShape] using mixed_rows_admission rootRequest machine operations wholeCount entry body depth ordinary bodyId
+                    machineValid heap facts bodyRows sourceChildren pattern patternId domain authentic
+                    own rows level free false operandAvailable operandProfile operandHeight
+            | union own members level free =>
+              rw [bodyIdentity]
+              simp only [identity]
+              by_cases seen : pair own.identity bodyId ∈ domain.key.seen
+              · simp only [seen, ite_true, CodeAdmission]
+              · simp only [seen, ite_false]
+                simp only [bodyShape, payload]
+                simpa only [bodyShape] using mixed_union_admission rootRequest machine operations wholeCount entry body depth ordinary bodyId
+                    heap facts pattern patternId domain authentic body (Or.inl rfl) own members level free
+                    false operandAvailable operandProfile operandHeight
+            | mu own storedBody storedDepth storedOrdinary =>
+              rw [bodyIdentity]
+              simp only [identity]
+              by_cases seen : pair own.identity bodyId ∈ domain.key.seen
+              · simp only [seen, ite_true, CodeAdmission]
+              · simp only [seen, ite_false]
+                simp only [bodyShape, payload]
+                have same := muOriginal own storedBody storedDepth storedOrdinary operandAvailable operandProfile
+                have wrongOrder := swapTest
+                rw [leftEq, rightEq, same, bodyShape] at wrongOrder
+                have tagOrder : compare (2 : Nat) 1 = .gt := by decide
+                simp [SourceRecursiveIntersectionControl.greater, SourceRecursiveIntersectionControl.compareValue, tag, tagOrder] at wrongOrder
+        · subst alias
+          rcases ordered with ⟨leftEq, rightEq⟩ | ⟨leftEq, rightEq⟩
+          · rw [leftEq, rightEq]
+            cases operand with
+            | empty => simp only [identity, SourceRecursiveIntersectionCode.unsupported, CodeAdmission]
+            | reference name => cases operandProfile.1
+            | node own rows level free =>
+              simp only [identity]
+              by_cases seen : pair entry.identity own.identity ∈ domain.key.seen
+              · simp only [seen, ite_true, CodeAdmission]
+              · simp only [seen, ite_false]
+                simp only [payload]
+                apply source_reference_admission rootRequest machine machineValid operations wholeCount
+                  entry body depth ordinary bodyId sourceHeap initialGrowth key stored domain
+                  (.node own rows level free) true
+                exact Or.inl (Or.inl ⟨universeProfile, operandProfile, Or.inr nonempty⟩)
+            | union own members level free =>
+              simp only [identity]
+              by_cases seen : pair entry.identity own.identity ∈ domain.key.seen
+              · simp only [seen, ite_true, CodeAdmission]
+              · simp only [seen, ite_false]
+                simp only [payload]
+                exact mixed_union_admission rootRequest machine operations wholeCount entry body depth ordinary bodyId
+                  heap facts pattern patternId domain authentic (.reference (.interned entry.identity)) (Or.inr rfl)
+                  own members level free true operandAvailable operandProfile operandHeight
+            | mu own storedBody storedDepth storedOrdinary =>
+              simp only [identity]
+              by_cases seen : pair entry.identity own.identity ∈ domain.key.seen
+              · simp only [seen, ite_true, CodeAdmission]
+              · simp only [seen, ite_false]
+                simp only [payload]
+                have same := muOriginal own storedBody storedDepth storedOrdinary operandAvailable operandProfile
+                have wrongOrder := swapTest
+                rw [leftEq, rightEq, same] at wrongOrder
+                have tagOrder : compare (4 : Nat) 2 = .gt := by decide
+                simp [SourceRecursiveIntersectionControl.greater, SourceRecursiveIntersectionControl.compareValue, tag, tagOrder] at wrongOrder
+          · rw [leftEq, rightEq]
+            cases operand with
+            | empty => simp only [identity, SourceRecursiveIntersectionCode.unsupported, CodeAdmission]
+            | reference name => cases operandProfile.1
+            | node own rows level free =>
+              simp only [identity]
+              by_cases seen : pair own.identity entry.identity ∈ domain.key.seen
+              · simp only [seen, ite_true, CodeAdmission]
+              · simp only [seen, ite_false]
+                simp only [payload]
+                apply source_reference_admission rootRequest machine machineValid operations wholeCount
+                  entry body depth ordinary bodyId sourceHeap initialGrowth key stored domain
+                  (.node own rows level free) false
+                exact Or.inl (Or.inl ⟨operandProfile, universeProfile, Or.inr nonempty⟩)
+            | union own members level free =>
+              simp only [identity]
+              by_cases seen : pair own.identity entry.identity ∈ domain.key.seen
+              · simp only [seen, ite_true, CodeAdmission]
+              · simp only [seen, ite_false]
+                simp only [payload]
+                exact mixed_union_admission rootRequest machine operations wholeCount entry body depth ordinary bodyId
+                  heap facts pattern patternId domain authentic (.reference (.interned entry.identity)) (Or.inr rfl)
+                  own members level free false operandAvailable operandProfile operandHeight
+            | mu own storedBody storedDepth storedOrdinary =>
+              simp only [identity]
+              by_cases seen : pair own.identity entry.identity ∈ domain.key.seen
+              · simp only [seen, ite_true, CodeAdmission]
+              · simp only [seen, ite_false]
+                simp only [payload]
+                have same := muOriginal own storedBody storedDepth storedOrdinary operandAvailable operandProfile
+                rw [same]
+                exact universe_reference_enter_admission rootRequest machine machineValid operations wholeCount
+                  entry body depth ordinary bodyId pattern patternId domain domain authentic (Or.inl rfl)
+end MixedCompiler
+end MicroCFTA.SourceSynthesisCurrentUniverseNativeAllocation

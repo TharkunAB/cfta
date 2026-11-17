@@ -1,0 +1,99 @@
+namespace MicroCFTA.SourceSynthesisActualEagerProgramFragmentRoles
+open EnumerationState EnumerationCorrectness InternedConstructorTemplates
+open SourceSynthesisHereditaryProgramFields (ValueFields EdgeFields)
+open SourceSynthesisProgramEnumerationRoles (FragmentRoles)
+open SourcePruningEnumerationSharedInvocationTrace
+open SourcePruningEnumerationSharedSelectedContinuations
+open SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations (Result)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Edge" => EdgeValue Symbol Constraint
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Input" => Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)
+universe u v
+variable {width : Nat} {Output : Type u} {Reason : Type v}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+set_option autoImplicit false
+
+open SourceSynthesisSelectedProgramChildRetention (ProgramSlot)
+
+/- Note [Program layout at the selected eager row]
+The actual outer captured row uses the eager visitor directly.
+Its same own preparation fixes each original Program operand position.
+The closed eager child theorem supplies that operand's fragment role.
+The selected fragment equation assembles those roles at the same return.
+No resource admission, future callback role, or new mark set is assumed.
+-/
+
+/-- One actual eager selected row returns its source Program layout. -/
+theorem selected_eager_program_fragment_roles
+    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List Edge)
+    (selectionMembers : ∀ entry rows depth free, ∀ row ∈ edgesOf (.node entry rows depth free), row ∈ rows)
+    (valid : Constraint → Prop) (literal : String → Symbol) (marked : Nat → Prop)
+    (scs : List Suspended) (edge : Edge)
+    (consume : SelectedEdge.Result width → Result Output Reason width)
+    (caller reached : Caller width) (before after : Cached) (queries saved : Queries)
+    (index consumerIndex : Nat) (output : Output) (fragment : Fragment)
+    (fields : EdgeFields valid literal edge)
+    (pathScope : ∀ sc ∈ scs, EqualityTrie.Valid sc.trie ∧
+      ∀ path ∈ EqualityTrie.fromPathTrie sc.trie, ∃ tail, path = 0 :: tail)
+    (actual : SelectedInvocationAt checkEmpty r n p h k edgesOf .eager consume scs edge
+      caller before queries index output (.complete fragment reached saved after) consumerIndex) :
+    FragmentRoles literal marked fragment
+:= by
+  obtain ⟨symbol, staged, residual, middle, fragments, afterChildren,
+    prepared, children, assembled, _finished⟩ :=
+    selected_complete_invocation checkEmpty r n p h k edgesOf .eager
+      consume scs edge caller before queries index output fragment reached saved after consumerIndex actual
+  obtain ⟨tries, projected, symbolSame, inputsSame, stagedCount⟩ :=
+    own_inputs caller.checked.native.machine.heap scs edge before middle symbol staged residual prepared
+  have count : fragments.length = edge.children.length := by
+    have tupleCount := tuple_length checkEmpty r n p h k edgesOf .eager
+      (staged.map (fun input => (input.1, input.2.1))) _ _ caller reached middle afterChildren
+      queries saved index consumerIndex output fragments children
+    simpa only [List.length_map, stagedCount] using tupleCount
+  have positions : ∀ position, ProgramSlot edge position → ∀ produced,
+      fragments[position]? = some produced → FragmentRoles literal marked produced := by
+    intro position slot produced producedAt
+    have inside : position < staged.length := by
+      rw [stagedCount]
+      rcases slot with ⟨arity, rfl | rfl⟩ | ⟨arity, rfl⟩ <;> omega
+    let input := staged[position]'inside
+    have inputAt : staged[position]? = some input :=
+      List.getElem?_eq_some_iff.mpr ⟨inside, rfl⟩
+    rcases input with ⟨child, bucket, action⟩
+    have pairAt : (staged.map (fun input => (input.1, input.2.1)))[position]? =
+        some (child, bucket) := by
+      simp only [List.getElem?_map, inputAt, Option.map_some]
+    have originalInput : (SourcePruningEnumerationEdgeInputs.children edge scs before.core.counter tries)[position]? =
+        some (child, bucket) := by
+      rw [← inputsSame]
+      exact pairAt
+    have scope := program_child_scope valid literal edge fields scs before.core.counter pathScope
+      tries residual projected position child bucket originalInput slot
+    obtain ⟨_priorStaged, _laterStaged, priorFragments, childCaller, childBefore, childQueries,
+      childRootIndex, childFragment, childReached, childSaved, childAfter, childCallbackIndex,
+      _remainingFragments, _tupleAfter, _stagedSplit, _priorLength, completedLength,
+      childAssembled, _childFinished, childTrace, _childTail⟩ :=
+      selected_staged_child_invocation checkEmpty r n p h k edgesOf .eager
+        consume scs edge caller before queries index output fragment reached saved after consumerIndex
+        symbol staged residual middle prepared position child bucket action inputAt actual
+    have fragmentShape : fragments = priorFragments ++ childFragment :: _remainingFragments :=
+      (Fragments.Fragment.node.inj (assembled.symm.trans childAssembled)).2
+    have childAt : fragments[position]? = some childFragment := by
+      rw [fragmentShape, List.getElem?_append_right (by omega), ← completedLength, Nat.sub_self]
+      rfl
+    have producedSame : produced = childFragment := Option.some.inj (producedAt.symm.trans childAt)
+    subst produced
+    exact eager_program_fragment_roles checkEmpty r n p h k edgesOf selectionMembers
+      valid literal marked child bucket childCaller childReached childBefore childAfter
+      childQueries childSaved _ _ childRootIndex childCallbackIndex output childFragment
+      scope.1 scope.2.2.2 childTrace
+  rw [assembled]
+  exact roles_from_program_positions valid literal marked edge fields symbol symbolSame fragments count positions
+
+end MicroCFTA.SourceSynthesisActualEagerProgramFragmentRoles

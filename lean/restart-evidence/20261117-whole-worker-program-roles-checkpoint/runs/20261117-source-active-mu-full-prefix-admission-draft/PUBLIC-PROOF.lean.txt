@@ -1,0 +1,59 @@
+ := by
+  have universeAvailable : Available machine.heap (.mu entry body depth ordinary) :=
+    machineValid.1.cached.nodes key _ (sourceGrowth.nodeRecords key _ stored)
+  have universeAtoms : ∀ atom ∈ InternedBoundaryAtoms.atoms (.mu entry body depth ordinary),
+      atom = .mu entry.identity := by
+    intro atom occurrence
+    simpa only [InternedBoundaryAtoms.atoms, List.mem_singleton] using occurrence
+  have universeClosed : (Value.mu entry body depth ordinary).free = [] :=
+    SourceSynthesisCurrentUniverseStartupAtoms.current_stored_universe_boundary_atoms_closed_after_growth
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      machine.heap machineValid.1 sourceGrowth (.mu entry body depth ordinary) universeAvailable universeAtoms
+  have universeProfile : Profile entry.identity (.mu entry body depth ordinary) :=
+    ⟨universeClosed, universeAtoms⟩
+  obtain ⟨bodyEntry, bodyRows, bodyShape, matched⟩ :=
+    SourceSynthesisCurrentUniverseBodyMatchedPairs.current_stored_universe_body_matching_pairs
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      machine.heap machineValid.1 sourceGrowth
+  obtain ⟨classifiedEntry, marker, arrow, descriptors, classifiedShape, _bodyAvailable,
+      _markerShape, _arrowChildren, _arrowKey, _catalog, _markerClosed, _markerAvailable,
+      _markerAtoms, childKinds, _arrowRetained⟩ :=
+    SourceSynthesisCurrentUniverseBodyChildClassification.current_stored_universe_body_physical_children_after_growth
+      lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      machine.heap machineValid.1 sourceGrowth
+  have sameRows : bodyRows = InternedEdgeResidency.canonicalEdges (arrow :: descriptors) :=
+    (Value.node.inj (bodyShape.symm.trans classifiedShape)).2.1
+  have sourceChildren : ∀ row ∈ bodyRows, ∀ child ∈ row.children,
+      child = .reference (.interned entry.identity) ∨ Profile entry.identity child := by
+    intro row included child member
+    rw [sameRows] at included
+    rcases (childKinds row included).2.2 child member with reference | closed
+    · exact Or.inl reference
+    · obtain ⟨_sameMarker, _available, free, atomless⟩ := closed
+      right
+      refine ⟨free, ?_⟩
+      intro atom occurrence
+      rw [atomless] at occurrence
+      cases occurrence
+  let bodyId := bodyEntry.identity
+  have bodyIdentity : SourceRecursiveIntersectionControl.identity body = some bodyId := by
+    rw [bodyShape]
+    rfl
+  have initialAdmission : ControlAdmission (width := width) rootRequest machine operations wholeCount
+      entry body depth ordinary bodyId (.code (.node rootRequest .pure)) := by
+    change NodeAdmission (width := width) rootRequest machine operations wholeCount
+      entry body depth ordinary bodyId rootRequest ∧ _
+    exact ⟨Or.inl (Or.inl ⟨leftProfile, rightProfile, Or.inl rootDomain⟩), fun _ => True.intro⟩
+  have reached := trace_admission rootRequest machine machineValid operations wholeCount
+    entry body depth ordinary bodyId lib query signed whole accepted rootValue sourceHeap built key stored
+    sourceGrowth bodyEntry bodyRows bodyShape bodyIdentity sourceChildren matched universeProfile
+    queryUsed 0 (.code (.node rootRequest .pure)) (.code (.node queried queryNext))
+    (⟨initial width machine, operations⟩ : Checked width) queryBefore (.refl _ _) queryActual
+    (by simpa only [Nat.zero_add] using queryBound) initialAdmission
+  change NodeAdmission (width := width) rootRequest machine operations wholeCount
+    entry body depth ordinary bodyId queried ∧ _ at reached
+  rcases node_admission_mu_projection rootRequest machine operations wholeCount entry body depth ordinary bodyId
+      bodyEntry bodyRows bodyShape queried reached.1 selectedMu with qualified | auxiliary
+  · exact Or.inl qualified
+  · obtain ⟨fullPattern, patternId, originalDomain, authentic, alternatives⟩ := auxiliary
+    exact Or.inr ⟨fullPattern, patternId, bodyId, originalDomain, bodyIdentity, authentic, alternatives⟩

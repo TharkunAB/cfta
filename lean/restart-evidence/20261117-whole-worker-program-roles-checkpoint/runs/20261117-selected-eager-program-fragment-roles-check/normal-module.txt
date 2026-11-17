@@ -1,0 +1,59 @@
+'MicroCFTA.SourceSynthesisActualEagerProgramFragmentRoles.selected_eager_program_fragment_roles' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceSynthesisActualEagerProgramFragmentRoles.selected_eager_program_fragment_roles.{u, v} {width : Nat}
+  {Output : Type u} {Reason : Type v} [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (checkEmpty : Bool) (r n p h k : Nat)
+  (edgesOf :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      List
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (selectionMembers :
+    ∀ (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+      (rows :
+        List
+          (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+      (depth : Nat) (free : List MicroCFTA.InternedBinderProtocol.Reference)
+      (row :
+        MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      row ∈ edgesOf (MicroCFTA.InternedConstructorTemplates.Value.node entry rows depth free) → row ∈ rows)
+  (valid : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Prop)
+  (literal : String → MicroCFTA.SourcePruningTemplates.Symbol) (marked : Nat → Prop)
+  (scs : List MicroCFTA.EnumerationState.Suspended)
+  (edge :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (consume :
+    MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result width →
+      MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.NativeContinuations.Result Output Reason width)
+  (caller reached : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before after :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (queries saved : MicroCFTA.SourceEndpointMemo.Memos) (index consumerIndex : Nat) (output : Output)
+  (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+  (fields : MicroCFTA.SourceSynthesisHereditaryProgramFields.EdgeFields valid literal edge)
+  (pathScope :
+    ∀ (sc : MicroCFTA.EnumerationState.Suspended),
+      sc ∈ scs →
+        MicroCFTA.EqualityTrie.Valid sc.trie ∧
+          ∀ (path : MicroCFTA.EqualityTrie.Path),
+            path ∈ MicroCFTA.EqualityTrie.fromPathTrie sc.trie → ∃ tail, path = 0 :: tail)
+  (actual :
+    MicroCFTA.SourcePruningEnumerationSharedInvocationTrace.SelectedInvocationAt checkEmpty r n p h k edgesOf
+      MicroCFTA.SourcePruningEnumerationSharedInvocationTrace.Policy.eager consume scs edge caller before queries index
+      output
+      (MicroCFTA.SourcePruningEnumerationSharedSelectedContinuations.SelectedEdge.Result.complete fragment reached saved
+        after)
+      consumerIndex) :
+  MicroCFTA.SourceSynthesisProgramEnumerationRoles.FragmentRoles literal marked fragment

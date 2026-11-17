@@ -1,0 +1,24 @@
+--- lean/restart-evidence/20261117-whole-real-eager-program-slots-captured-cache-projection-repair/APPEND.lean.txt
++++ lean/restart-evidence/20261117-whole-real-eager-program-slots-captured-cache-equality-transport-repair/APPEND.lean.txt
+@@ -154,9 +154,7 @@
+     · intro held tagged
+       obtain ⟨payload, present, role⟩ := nativeSlots.stored held tagged
+       have presentAt : cached.core.values[held]? = some payload := by
+-        change entered.values[held]? = some payload
+-        rw [stable.values]
+-        exact present
++        exact (congrArg (fun values => values[held]?) stable.values).trans present
+       apply (stable.safe.2 held payload presentAt).mp
+       intro impossible
+       cases role <;> cases impossible
+@@ -166,9 +164,7 @@
+     · intro held tagged
+       obtain ⟨payload, present, role⟩ := nativeSlots.stored held tagged
+       refine ⟨payload, ?_, role⟩
+-      change entered.values[held]? = some payload
+-      rw [stable.values]
+-      exact present
++      exact (congrArg (fun values => values[held]?) stable.values).trans present
+   have markedFields (tagged : marked uv) :
+       ValueFields valid literal (.node entry rows ordinaryDepth free) ∧
+       EnumerationSemantics.ValidSuspended scs ∧

@@ -1,0 +1,7 @@
+omit [DecidableEq (EdgeKey Symbol Guard)] in
+private theorem reference_self_code (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey) :
+    compileNode (⟨domain, .reference (.interned entry.identity), .reference (.interned entry.identity)⟩ :
+      NodeRequest Symbol Guard) =
+      if pair entry.identity entry.identity ∈ domain.key.seen then .pure (SourceRecursiveIntersectionControl.repeatedValue
+        (pair entry.identity entry.identity))
+      else compileReference domain entry.identity (.reference (.interned entry.identity)) true

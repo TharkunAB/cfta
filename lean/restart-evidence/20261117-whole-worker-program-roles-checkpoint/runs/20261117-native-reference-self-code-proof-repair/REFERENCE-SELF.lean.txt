@@ -1,0 +1,27 @@
+omit [DecidableEq (EdgeKey Symbol Guard)] in
+private theorem reference_self_code (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey) :
+    compileNode (⟨domain, .reference (.interned entry.identity), .reference (.interned entry.identity)⟩ :
+      NodeRequest Symbol Guard) =
+      if pair entry.identity entry.identity ∈ domain.key.seen then .pure (SourceRecursiveIntersectionControl.repeatedValue
+        (pair entry.identity entry.identity))
+      else compileReference domain entry.identity (.reference (.interned entry.identity)) true
+ := by
+  have empty : SourceRecursiveIntersectionControl.hasEmpty
+      (.reference (.interned entry.identity) : Node) (.reference (.interned entry.identity)) = false := rfl
+  have restart : SourceRecursiveIntersectionControl.reset domain.key
+      (.reference (.interned entry.identity) : Node) (.reference (.interned entry.identity)) = false := rfl
+  have self : SourceRecursiveIntersectionControl.closedSelf
+      (.reference (.interned entry.identity) : Node) (.reference (.interned entry.identity)) = false := by
+    simp [SourceRecursiveIntersectionControl.closedSelf, Value.free]
+  have order : SourceRecursiveIntersectionControl.greater
+      (.reference (.interned entry.identity) : Node) (.reference (.interned entry.identity)) = false := by
+    simp [SourceRecursiveIntersectionControl.greater, SourceRecursiveIntersectionControl.compareValue,
+      tag, SourceRecursiveIntersectionSchedule.reference_interned]
+  have selected : decision domain.key
+      (.reference (.interned entry.identity) : Node) (.reference (.interned entry.identity)) =
+      if pair entry.identity entry.identity ∈ domain.key.seen then
+        .repeated (pair entry.identity entry.identity) else .leftReference := by
+    simp [decision, empty, restart, self, order, identity, payload]
+  by_cases seen : pair entry.identity entry.identity ∈ domain.key.seen
+  · simp only [compileNode, selected, seen, ite_true]
+  · simp only [compileNode, selected, seen, ite_false]

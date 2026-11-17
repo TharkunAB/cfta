@@ -1,0 +1,128 @@
+
+namespace MicroCFTA.SourceSynthesisCurrentUniverseNativeAllocation
+open Cache InternedConstructorTemplates InternedProbeProvenance
+open InternedBinderProtocol (NodeKey)
+open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionThunks SourceRecursiveIntersectionCode
+open SourceEqualityNativeDemand
+open SourceCurrentAllocatedNativeGeneralCMHistory (AuthenticEntry Qualified)
+open SourceRecursiveIntersectionControl (identity tag pair decision payload)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSynthesisGeneralizeSyntax.Guard
+local notation "Node" => Value Symbol Guard
+
+private theorem mu_payload_of_decision
+    (domain : IntersectionFlatMemoKeyDomain.DomainKey) (left right : Node)
+    (selected : decision domain left right = .bothMu ∨
+      decision domain left right = .leftMu ∨ decision domain left right = .rightMu) :
+    payload left right = .bothMu ∨ payload left right = .leftMu ∨ payload left right = .rightMu := by
+  cases emptyTest : SourceRecursiveIntersectionControl.hasEmpty left right with
+  | true =>
+    simp only [decision, emptyTest, ite_true] at selected
+    rcases selected with impossible | impossible | impossible <;> cases impossible
+  | false =>
+    simp only [decision, emptyTest, Bool.false_eq_true, ite_false] at selected
+    cases resetTest : SourceRecursiveIntersectionControl.reset domain left right with
+    | true =>
+      simp only [resetTest, ite_true] at selected
+      rcases selected with impossible | impossible | impossible <;> cases impossible
+    | false =>
+      simp only [resetTest, Bool.false_eq_true, ite_false] at selected
+      cases selfTest : SourceRecursiveIntersectionControl.closedSelf left right with
+      | true =>
+        simp only [selfTest, ite_true] at selected
+        rcases selected with impossible | impossible | impossible <;> cases impossible
+      | false =>
+        simp only [selfTest, Bool.false_eq_true, ite_false] at selected
+        cases swapTest : SourceRecursiveIntersectionControl.greater left right with
+        | true =>
+          simp only [swapTest, ite_true] at selected
+          rcases selected with impossible | impossible | impossible <;> cases impossible
+        | false =>
+          simp only [swapTest, Bool.false_eq_true, ite_false] at selected
+          cases leftId : identity left with
+          | none =>
+            simp only [leftId] at selected
+            rcases selected with impossible | impossible | impossible <;> cases impossible
+          | some first =>
+            cases rightId : identity right with
+            | none =>
+              simp only [leftId, rightId] at selected
+              rcases selected with impossible | impossible | impossible <;> cases impossible
+            | some second =>
+              simp only [leftId, rightId] at selected
+              by_cases seen : pair first second ∈ domain.seen
+              · simp only [seen, ite_true] at selected
+                rcases selected with impossible | impossible | impossible <;> cases impossible
+              · simpa only [seen, ite_false] using selected
+
+private theorem node_admission_mu_projection
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (rootRequest : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
+    (operations : SourceEqualityConstraintMemoAllocation.State) (wholeCount : Nat)
+    (entry : Interned NodeKey) (body depth ordinary : Node) (bodyId : Nat)
+    (bodyEntry : Interned NodeKey) (bodyRows : List (EdgeValue Symbol Guard))
+    (bodyShape : body = .node bodyEntry bodyRows 0 [.interned entry.identity])
+    (request : NodeRequest Symbol Guard)
+    (admitted : NodeAdmission (width := width) rootRequest machine operations wholeCount
+      entry body depth ordinary bodyId request)
+    (selected : decision request.domain.key request.left request.right = .bothMu ∨
+      decision request.domain.key request.left request.right = .leftMu ∨
+      decision request.domain.key request.left request.right = .rightMu) :
+    Qualified (width := width) rootRequest machine operations wholeCount entry body depth ordinary request ∨
+      ∃ (pattern : Node) (patternId : Nat)
+        (originalDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey),
+        AuthenticEntry (width := width) rootRequest machine operations wholeCount
+          entry body depth ordinary pattern patternId originalDomain ∧
+        ((request.domain.key = SourceRecursiveIntersectionDomain.extend originalDomain.key [entry.identity]
+            (pair bodyId entry.identity) ∧
+          request.left = .mu entry body depth ordinary ∧
+          request.right = .reference (.interned entry.identity)) ∨
+         (request.domain.key = SourceRecursiveIntersectionDomain.extend originalDomain.key [entry.identity]
+            (pair entry.identity entry.identity) ∧
+          request.left = body ∧ request.right = .mu entry body depth ordinary)) := by
+  rcases admitted with qualified | auxiliary
+  · exact Or.inl qualified
+  · obtain ⟨pattern, patternId, originalDomain, authentic, contextCases⟩ := auxiliary
+    dsimp only at contextCases
+    have actualPayload := mu_payload_of_decision request.domain.key request.left request.right selected
+    rcases contextCases with first | bodyTerminal | diagonal | terminal
+    · rcases first with ⟨atKey, alternatives⟩
+      rcases alternatives with ⟨leftEq, rightEq⟩ | ⟨leftEq, rightEq⟩ | ⟨leftEq, rightEq⟩
+      · rw [leftEq, rightEq, bodyShape] at actualPayload
+        simp only [payload] at actualPayload
+        rcases actualPayload with impossible | impossible | impossible <;> cases impossible
+      · rw [leftEq, rightEq] at actualPayload
+        simp only [payload] at actualPayload
+        rcases actualPayload with impossible | impossible | impossible <;> cases impossible
+      · exact Or.inr ⟨pattern, patternId, originalDomain, authentic, Or.inl ⟨atKey, leftEq, rightEq⟩⟩
+    · rcases bodyTerminal with ⟨_atKey, leftEq, rightEq⟩
+      rw [leftEq, rightEq, bodyShape] at actualPayload
+      simp only [payload] at actualPayload
+      rcases actualPayload with impossible | impossible | impossible <;> cases impossible
+    · rcases diagonal with ⟨atKey, alternatives⟩
+      rcases alternatives with ⟨leftEq, rightEq⟩ | ⟨leftEq, rightEq⟩
+      · rw [leftEq, rightEq, bodyShape] at actualPayload
+        simp only [payload] at actualPayload
+        rcases actualPayload with impossible | impossible | impossible <;> cases impossible
+      · exact Or.inr ⟨pattern, patternId, originalDomain, authentic, Or.inr ⟨atKey, leftEq, rightEq⟩⟩
+    · rcases terminal with ⟨atKey, alternatives⟩
+      rcases alternatives with ⟨leftEq, rightEq⟩ | ⟨leftEq, rightEq⟩ | ⟨leftEq, rightEq⟩
+      · rw [leftEq, rightEq, bodyShape] at actualPayload
+        simp only [payload] at actualPayload
+        rcases actualPayload with impossible | impossible | impossible <;> cases impossible
+      · rw [leftEq, rightEq] at actualPayload
+        simp only [payload] at actualPayload
+        rcases actualPayload with impossible | impossible | impossible <;> cases impossible
+      · have seen : pair entry.identity entry.identity ∈ request.domain.key.seen := by
+          rw [atKey]
+          exact (SourceRecursiveIntersectionDomain.extend_seen _ _ _ _).mpr (Or.inr
+            ((SourceRecursiveIntersectionDomain.extend_seen _ _ _ _).mpr (Or.inl rfl)))
+        have repeated : decision request.domain.key (.mu entry body depth ordinary)
+            (.reference (.interned entry.identity)) = .repeated (pair entry.identity entry.identity) := by
+          simp [decision, SourceRecursiveIntersectionControl.hasEmpty, SourceRecursiveIntersectionControl.reset,
+            SourceRecursiveIntersectionControl.closedSelf, SourceRecursiveIntersectionControl.greater,
+            SourceRecursiveIntersectionControl.compareValue, tag, identity, Value.referenceOf, Value.free, seen]
+        rw [leftEq, rightEq, repeated] at selected
+        rcases selected with impossible | impossible | impossible <;> cases impossible
+
+end MicroCFTA.SourceSynthesisCurrentUniverseNativeAllocation
