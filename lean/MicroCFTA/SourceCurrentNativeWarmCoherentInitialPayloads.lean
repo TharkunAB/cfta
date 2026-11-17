@@ -234,3 +234,275 @@ theorem coherent_initial_payloads_for_actual_warm_history
   exact retained
 
 end MicroCFTA.SourceCurrentNativeWarmCoherentInitialPayloads
+
+namespace MicroCFTA.SourceCurrentNativeWarmCoherentInitialPayloads
+open Cache Language InternedConstructorTemplates InternedProbeProvenance
+open InternedBinderProtocol (NodeKey Reference)
+open SourceRecursiveIntersectionControl SourceRecursiveIntersectionDomain
+open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionThunks SourceRecursiveIntersectionCode
+open SourceSynthesisTypeSyntax (Library Query)
+open SourceSynthesisGeneralizeSyntax (Guard)
+open SourceSynthesisFirstOrderConstruction (Expression)
+open InternedStoredSubstitution (input)
+open InternedStoredSubstitutionRebind (replacement)
+open SourceEqualityNativeDemand
+open SourceCurrentAllocatedNativeContextCache (Returned)
+open SourceCurrentAllocatedNativePhysicalTraceCompletion (Trace)
+open SourceCurrentAllocatedNativePhysicalExecution (InputsThrough)
+open SourceEqualityNativeDemandOperations (FieldsThrough)
+open SourceCurrentAllocatedNativeTopRowQueryGlobalLaws (KnownResult)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Node" => Value Symbol Guard
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "Physical" => SourceCurrentAllocatedNativePhysicalCache.Valid
+local notation "ordinarySymbols" => SourceSynthesisUniverseCallerBoundary.ordinarySymbols
+
+set_option autoImplicit false
+
+/- Note [Third-history auxiliary seeds across two actual queries]
+The later third entry supplies one set of uniform source callbacks.
+The cold initializer derives the selected pair at the old snapshot.
+The same callbacks preserve those laws through the literal middle query.
+Both query executions retain their original plans and endpoints.
+The full third horizon remains fixed in the authentic entry.
+The body identity is a past source fact. It supplies no payload meaning.
+-/
+
+theorem coherent_initial_payloads_for_third_actual_history
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (oldRoot : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
+    (oldRootDomain : oldRoot.domain = IntersectionEmptyDomain.emptyDomain)
+    (oldRootClosed : oldRoot.left.free = [] ∧ oldRoot.right.free = [])
+    (machineValid : SourceRecursiveIntersectionKernel.Valid machine)
+    (sourceGrowth : Grows sourceHeap machine.heap)
+    (pastInventory : InternedShallowHeap.NoNewMu sourceHeap machine.heap)
+    (operations : SourceEqualityConstraintMemoAllocation.State)
+    (operationsValid : SourceEqualityConstraintMemoAllocation.Valid operations)
+    (oldFuel oldCount : Nat) (oldControl : Control (Value Symbol Guard))
+    (oldSnapshot : Checked width) (oldBound : oldCount ≤ oldFuel)
+    (oldInputs : InputsThrough oldFuel (.code (.node oldRoot .pure))
+      (⟨initial width machine, operations⟩ : Checked width))
+    (oldFields : FieldsThrough oldFuel (.code (.node oldRoot .pure))
+      (⟨initial width machine, operations⟩ : Checked width))
+    (oldActual : Trace oldCount (.code (.node oldRoot .pure))
+      (⟨initial width machine, operations⟩ : Checked width) oldControl oldSnapshot)
+    (middleRoot : NodeRequest Symbol Guard) (middleFuel : Nat)
+    (middleRootDomain : middleRoot.domain = IntersectionEmptyDomain.emptyDomain)
+    (middleLeftAvailable : Available oldSnapshot.native.machine.heap middleRoot.left)
+    (middleRightAvailable : Available oldSnapshot.native.machine.heap middleRoot.right)
+    (middleLeftClosed : middleRoot.left.free = []) (middleRightClosed : middleRoot.right.free = [])
+    (middleInputs : InputsThrough middleFuel (.code (.node middleRoot .pure)) oldSnapshot)
+    (middleFields : FieldsThrough middleFuel (.code (.node middleRoot .pure)) oldSnapshot)
+    (middleCount : Nat) (middleControl : Control (Value Symbol Guard))
+    (middleSnapshot : Checked width) (middleBound : middleCount ≤ middleFuel)
+    (middleActual : Trace middleCount (.code (.node middleRoot .pure))
+      oldSnapshot middleControl middleSnapshot)
+    (nextRoot : NodeRequest Symbol Guard) (nextFuel nextCount : Nat)
+    (nextControl : Control (Value Symbol Guard)) (reader : Checked width)
+    (nextRootDomain : nextRoot.domain = IntersectionEmptyDomain.emptyDomain)
+    (nextRootAvailable : Available middleSnapshot.native.machine.heap nextRoot.left ∧
+      Available middleSnapshot.native.machine.heap nextRoot.right)
+    (nextRootClosed : nextRoot.left.free = [] ∧ nextRoot.right.free = [])
+    (nextBound : nextCount ≤ nextFuel)
+    (nextInputs : InputsThrough nextFuel (.code (.node nextRoot .pure)) middleSnapshot)
+    (nextFields : FieldsThrough nextFuel (.code (.node nextRoot .pure)) middleSnapshot)
+    (nextActual : Trace nextCount (.code (.node nextRoot .pure)) middleSnapshot
+      nextControl reader)
+    (bodyId : Nat) (bodyIdentity : identity body = some bodyId) :
+    ∀ (pattern : Value Symbol Guard) (patternId : Nat)
+      (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey),
+      SourceCurrentAllocatedNativeSourceWarmEntry.AuthenticEntryAt (width := width)
+        nextRoot middleSnapshot nextCount entry body depth ordinary pattern patternId domain →
+      let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+      let firstKey := extend domain.key [entry.identity] (pair entry.identity entry.identity)
+      let selectedKey := extend firstKey [entry.identity] (pair bodyId entry.identity)
+      Returned (SourceCurrentAllocatedNativeCoherentOpenBodyQueryGlobalLaws.NodeResult
+        entry.identity entry.identity entry.identity selectedKey firstKey body universeValue)
+        middleSnapshot.native.nodes ∧
+      Returned SourceCurrentAllocatedNativeTopRowQueryGlobalLaws.EdgeResult middleSnapshot.native.edges
+ := by
+  have _retainedAdmissions := And.intro oldRootDomain
+    (And.intro oldRootClosed (And.intro pastInventory
+      (And.intro middleRootDomain (And.intro middleLeftAvailable (And.intro middleRightAvailable
+        (And.intro middleLeftClosed (And.intro middleRightClosed
+          (And.intro nextRootDomain (And.intro nextRootAvailable (And.intro nextRootClosed
+            (And.intro nextBound (And.intro nextInputs nextFields))))))))))))
+  intro pattern patternId domain authentic
+  have initialPhysical : Physical (initial width machine) :=
+    SourceCurrentAllocatedNativePhysicalCache.initial_valid machine machineValid
+  have oldResources := SourceCurrentNativeEnterCommonOperand.checked_trace_extension oldActual initialPhysical
+  have middleResources := SourceCurrentNativeEnterCommonOperand.checked_trace_extension middleActual oldResources.1
+  have readerResources := SourceCurrentNativeEnterCommonOperand.checked_trace_extension nextActual middleResources.1
+  have oldGrowth : Grows sourceHeap oldSnapshot.native.machine.heap :=
+    InternedConstructorTemplates.grows_trans sourceGrowth oldResources.2.heap
+  have readerGrowth : Grows sourceHeap reader.native.machine.heap :=
+    InternedConstructorTemplates.grows_trans oldGrowth
+      (InternedConstructorTemplates.grows_trans middleResources.2.heap readerResources.2.heap)
+  obtain ⟨patternClosed, patternIdentity, patternKind, universeFirst, entryUsed,
+      entryBefore, entryNext, entryData⟩ := authentic
+  dsimp only at entryData
+  obtain ⟨entryBound, entryPrefix, _allocatedEq, _entryOne, domainEq⟩ := entryData
+  let universeValue : Node := .mu entry body depth ordinary
+  let referenceValue : Node := .reference (.interned entry.identity)
+  let original := SourceRecursiveIntersectionEnvironment.enter entryBefore.native.machine.domains
+    IntersectionEmptyDomain.emptyKey universeValue pattern entry.identity patternId
+  change domain = original.1 at domainEq
+  have entryTotal : entryUsed + (nextCount - entryUsed) = nextCount := by omega
+  have wholeForEntry : Trace (entryUsed + (nextCount - entryUsed)) (.code (.node nextRoot .pure))
+      middleSnapshot nextControl reader := by
+    simpa only [entryTotal] using nextActual
+  have entrySplit := SourceCurrentHereditaryNativePhysicalSplit.split entryPrefix.steps wholeForEntry
+  have entryPhysical :=
+    (SourceCurrentNativeEnterCommonOperand.checked_trace_extension entrySplit.1 middleResources.1).1
+  have entryLength : (nextCount - entryUsed - 1) + 1 = nextCount - entryUsed := by omega
+  have entryActual : Trace ((nextCount - entryUsed - 1) + 1)
+      (.code (.enter IntersectionEmptyDomain.emptyDomain
+        (if universeFirst then universeValue else pattern)
+        (if universeFirst then pattern else universeValue)
+        (if universeFirst then entry.identity else patternId)
+        (if universeFirst then patternId else entry.identity) entryNext)) entryBefore nextControl reader := by
+    simpa only [entryLength] using entrySplit.2
+  have entryReceipt := SourceCurrentNativeOrderedOriginalEntry.ordered_original_entry_common_operands
+    entry body depth ordinary pattern patternClosed patternId patternIdentity patternKind universeFirst
+    entryNext (nextCount - entryUsed - 1) entryBefore reader nextControl entryPhysical entryActual
+  obtain ⟨_sameAllocation, _entryStep, _checkedEntry, _entryTail, _sameHeap, _sameDomains,
+      _sameOperations, _universeBefore, _patternBefore, _universeReader, patternReader,
+      _entryDomain, _readerDomain, _originalKey, _nonempty, _readerPhysical,
+      _entryExtension, _identityAtReader⟩ := entryReceipt
+  obtain ⟨bodyEntry, bodyRows, bodyShape, _bodyApart, sourceFacts⟩ :=
+    SourceCurrentAllocatedNativeSourceDiagonalFirstActualMuBody.current_stored_universe_diagonal_first_actual_mu_body
+      (width := width) lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      reader.native.machine.heap readerResources.1.machine.1 readerGrowth
+      entryBefore.native.machine.domains entryPhysical.machine.2
+      pattern patternReader patternClosed patternId patternIdentity patternKind
+  obtain ⟨inputEntry, inputRows, inputShape, rowInputs⟩ :=
+    SourceCurrentAllocatedNativeSourceDiagonalKeyRowInputs.current_stored_universe_diagonal_shortcut_inputs_at_same_key
+      (width := width) lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      reader.native.machine.heap readerResources.1.machine.1 readerGrowth
+      entryBefore.native.machine.domains entryPhysical.machine.2
+      pattern patternReader patternClosed patternId patternIdentity patternKind
+  obtain ⟨readEntry, readRows, readShape, sourceRead⟩ :=
+    SourceCurrentAllocatedNativeSourceDiagonalKeyReferenceRead.current_stored_universe_diagonal_first_body_reference_read_at_same_key
+      (width := width) lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+      reader.native.machine.heap readerResources.1.machine.1 readerGrowth
+      entryBefore.native.machine.domains entryPhysical.machine.2
+      pattern patternReader patternClosed patternId patternIdentity patternKind
+  have sameInputEntry : inputEntry = bodyEntry := (Value.node.inj (inputShape.symm.trans bodyShape)).1
+  have sameInputRows : inputRows = bodyRows := (Value.node.inj (inputShape.symm.trans bodyShape)).2.1
+  subst inputEntry
+  subst inputRows
+  have sameReadEntry : readEntry = bodyEntry := (Value.node.inj (readShape.symm.trans bodyShape)).1
+  have sameReadRows : readRows = bodyRows := (Value.node.inj (readShape.symm.trans bodyShape)).2.1
+  subst readEntry
+  subst readRows
+  have actualBodyIdentity : identity body = some bodyEntry.identity := by
+    simp only [bodyShape, identity]
+  have bodyIdEq : bodyEntry.identity = bodyId :=
+    Option.some.inj (actualBodyIdentity.symm.trans bodyIdentity)
+  subst bodyId
+  let diagonalFirst := SourceRecursiveIntersectionEnvironment.enter original.2 original.1.key
+    universeValue referenceValue entry.identity entry.identity
+  let diagonalTerminal := SourceRecursiveIntersectionEnvironment.enter diagonalFirst.2 diagonalFirst.1.key
+    body universeValue bodyEntry.identity entry.identity
+  let firstKey := extend domain.key [entry.identity] (pair entry.identity entry.identity)
+  let selectedKey := extend firstKey [entry.identity] (pair bodyEntry.identity entry.identity)
+  have originalValid : Cache.Valid original.2 :=
+    (IntersectionEmptyDomain.make_correct entryBefore.native.machine.domains entryPhysical.machine.2 _).1
+  have diagonalValid : Cache.Valid diagonalFirst.2 :=
+    (IntersectionEmptyDomain.make_correct original.2 originalValid _).1
+  have diagonalKey := SourceRecursiveIntersectionSchedule.entered_key original.2 originalValid original.1.key
+    universeValue referenceValue entry.identity entry.identity
+  change diagonalFirst.1.key = extend original.1.key [entry.identity]
+    (pair entry.identity entry.identity) at diagonalKey
+  have firstKeyEq : diagonalFirst.1.key = firstKey := by
+    rw [diagonalKey, ← domainEq]
+  have terminalKey := SourceRecursiveIntersectionSchedule.entered_key diagonalFirst.2 diagonalValid diagonalFirst.1.key
+    body universeValue bodyEntry.identity entry.identity
+  change diagonalTerminal.1.key = extend diagonalFirst.1.key
+    ((SourceRecursiveIntersectionEnvironment.bindings body universeValue).map Prod.fst)
+    (pair bodyEntry.identity entry.identity) at terminalKey
+  have names : (SourceRecursiveIntersectionEnvironment.bindings body universeValue).map Prod.fst = [entry.identity] := by
+    rw [bodyShape]
+    rfl
+  have selectedKeyEq : diagonalTerminal.1.key = selectedKey := by
+    rw [terminalKey, names, firstKeyEq]
+  dsimp only at sourceFacts rowInputs sourceRead
+  obtain ⟨_sourceIdentity, _universeIdentity, _bodyOpen, cutoffApart, incomingFacts, terminalFacts⟩ := sourceFacts
+  have compiler : ∀ actualDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey,
+      actualDomain.key = selectedKey →
+      compileNode ⟨actualDomain, body, body⟩ =
+        compileRows actualDomain (InternedEdgeResidency.nodeEdges body) (InternedEdgeResidency.nodeEdges body) := by
+    intro actualDomain sameKey
+    exact (terminalFacts actualDomain (sameKey.trans selectedKeyEq.symm)).2.2
+  have sourceRows : InternedEdgeResidency.nodeEdges body = bodyRows := by
+    rw [bodyShape]
+    rfl
+  have orderedInputs : ∀ actualDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey,
+      actualDomain.key = selectedKey → ∀ row ∈ InternedEdgeResidency.nodeEdges body,
+      All₂ (fun (children : Node × Node) (value : Node) => KnownResult ⟨actualDomain, children.1, children.2⟩ value)
+        (row.children.zip row.children)
+        (row.children.map (input (replacement (.interned entry.identity)
+          (repeatedValue (pair entry.identity entry.identity))))) := by
+    intro actualDomain sameKey row member
+    exact rowInputs actualDomain (sameKey.trans selectedKeyEq.symm) row (by rw [← sourceRows]; exact member)
+  have rightMu : ∀ actualDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey,
+      actualDomain.key = firstKey → decision actualDomain.key body universeValue = .rightMu := by
+    intro actualDomain sameKey
+    exact (incomingFacts actualDomain (sameKey.trans firstKeyEq.symm)).1
+  have childKey : ∀ actualDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey,
+      actualDomain.key = firstKey →
+      ∀ current : Cache.State IntersectionFlatMemoKeyDomain.DomainKey, Cache.Valid current →
+      (SourceRecursiveIntersectionEnvironment.enter current actualDomain.key body universeValue
+        bodyEntry.identity entry.identity).1.key = selectedKey := by
+    intro actualDomain sameKey current currentValid
+    exact ((incomingFacts actualDomain (sameKey.trans firstKeyEq.symm)).2.2 current currentValid).trans selectedKeyEq
+  have pairedApart : pair bodyEntry.identity entry.identity ≠ pair entry.identity entry.identity :=
+    fun same => cutoffApart same.symm
+  have read : ∀ actualDomain : Interned IntersectionFlatMemoKeyDomain.DomainKey,
+      actualDomain.key = firstKey → ∀ current : Checked width, Physical current.native →
+      Grows sourceHeap current.native.machine.heap →
+      SourceEqualityNativeDemand.step (.code (compileNode ⟨actualDomain, body, referenceValue⟩)) current =
+        .yielded (.code (requestNode actualDomain body universeValue)) current := by
+    intro actualDomain sameKey current physical growth
+    exact ((sourceRead actualDomain (sameKey.trans firstKeyEq.symm)).2.2.2.2 current physical.machine.1 growth).2
+  have prefixInputs := SourceCurrentAllocatedNativeSourceQueryInduction.through_mono
+    oldFuel oldCount (.code (.node oldRoot .pure)) (⟨initial width machine, operations⟩ : Checked width)
+    oldBound oldInputs
+  have prefixFields := SourceCurrentAllocatedNativeSourceQueryInduction.fields_mono
+    oldFuel oldCount (.code (.node oldRoot .pure)) (⟨initial width machine, operations⟩ : Checked width)
+    oldBound oldFields
+  have completed := SourceCurrentAllocatedNativeCoherentOpenBodyQueryGlobalLaws.initial_node_query_returned_and_raw_results
+    (width := width) lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+    selectedKey entry.identity entry.identity compiler orderedInputs firstKey bodyEntry.identity
+    rightMu actualBodyIdentity childKey pairedApart read
+    machine machineValid sourceGrowth operations operationsValid oldCount oldRoot prefixInputs prefixFields
+  have oldReturned := completed.1
+  have prefixExecution := oldActual.steps.execute
+  rw [prefixExecution] at oldReturned
+  have oldAdmission := SourceCurrentAllocatedNativePrefixOperations.prefix_operations_before_bind
+    oldFuel oldCount (.code (.node oldRoot .pure)) oldControl .pure
+    (⟨initial width machine, operations⟩ : Checked width) oldSnapshot sourceHeap
+    initialPhysical oldInputs oldFields operationsValid sourceGrowth
+    (by simpa only [Control.bind_pure] using oldActual.steps) oldBound
+  have middleInputsPlan := SourceCurrentAllocatedNativeSourceQueryInduction.through_mono
+    middleFuel middleCount (.code (.node middleRoot .pure)) oldSnapshot middleBound middleInputs
+  have middleFieldsPlan := SourceCurrentAllocatedNativeSourceQueryInduction.fields_mono
+    middleFuel middleCount (.code (.node middleRoot .pure)) oldSnapshot middleBound middleFields
+  have warmEngine := SourceCurrentAllocatedNativeCoherentOpenBodyQueryGlobalLaws.query_returned_and_raw_results
+    (width := width) lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+    selectedKey entry.identity entry.identity compiler orderedInputs firstKey bodyEntry.identity
+    rightMu actualBodyIdentity childKey pairedApart read middleCount
+  have middleReturned := (warmEngine.1 middleRoot oldSnapshot oldResources.1 oldGrowth
+    oldAdmission.2.2.2.2.1 middleInputsPlan middleFieldsPlan oldReturned.1 oldReturned.2).1
+  have middleExecution := middleActual.steps.execute
+  rw [middleExecution] at middleReturned
+  exact middleReturned
+
+end MicroCFTA.SourceCurrentNativeWarmCoherentInitialPayloads
