@@ -1,0 +1,39 @@
+theorem original_universe_next_warm_query_no_new_mu
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (oldRoot : NodeRequest Symbol Guard) (machine : Machine Symbol Guard)
+    (oldRootDomain : oldRoot.domain = IntersectionEmptyDomain.emptyDomain)
+    (oldRootClosed : oldRoot.left.free = [] ∧ oldRoot.right.free = [])
+    (machineValid : SourceRecursiveIntersectionKernel.Valid machine)
+    (sourceGrowth : Grows sourceHeap machine.heap)
+    (pastInventory : InternedShallowHeap.NoNewMu sourceHeap machine.heap)
+    (operations : SourceEqualityConstraintMemoAllocation.State)
+    (operationsValid : SourceEqualityConstraintMemoAllocation.Valid operations)
+    (oldFuel oldCount : Nat) (oldControl : Control (Value Symbol Guard))
+    (oldSnapshot : Checked width) (oldBound : oldCount ≤ oldFuel)
+    (oldInputs : InputsThrough oldFuel (.code (.node oldRoot .pure))
+      (⟨initial width machine, operations⟩ : Checked width))
+    (oldFields : FieldsThrough oldFuel (.code (.node oldRoot .pure))
+      (⟨initial width machine, operations⟩ : Checked width))
+    (oldActual : Trace oldCount (.code (.node oldRoot .pure))
+      (⟨initial width machine, operations⟩ : Checked width) oldControl oldSnapshot)
+    (newRoot : NodeRequest Symbol Guard) (newFuel : Nat)
+    (newRootDomain : newRoot.domain = IntersectionEmptyDomain.emptyDomain)
+    (newLeftAvailable : Available oldSnapshot.native.machine.heap newRoot.left)
+    (newRightAvailable : Available oldSnapshot.native.machine.heap newRoot.right)
+    (newLeftClosed : newRoot.left.free = []) (newRightClosed : newRoot.right.free = [])
+    (newInputs : InputsThrough newFuel (.code (.node newRoot .pure)) oldSnapshot)
+    (newFields : FieldsThrough newFuel (.code (.node newRoot .pure)) oldSnapshot) :
+    InternedShallowHeap.NoNewMu oldSnapshot.native.machine.heap
+      (SourceEqualityNativeDemand.execute newFuel (.code (.node newRoot .pure))
+        oldSnapshot).state.native.machine.heap ∧
+    ∀ (used : Nat) (rest : Control (Value Symbol Guard)) (current : Checked width),
+      used ≤ newFuel →
+      Trace used (.code (.node newRoot .pure)) oldSnapshot rest current →
+      InternedShallowHeap.NoNewMu oldSnapshot.native.machine.heap current.native.machine.heap

@@ -1,0 +1,51 @@
+ := by
+  let coldInitial : Checked width := ⟨initial width machine, operations⟩
+  have coldPhysical : SourceCurrentAllocatedNativePhysicalCache.Valid (initial width machine) :=
+    SourceCurrentAllocatedNativePhysicalCache.initial_valid machine machineValid
+  have oldCurrent : Inputs (.code (.node oldRoot .pure)) coldInitial := by
+    cases oldFuel with
+    | zero => exact oldInputs
+    | succ remaining => exact oldInputs.1
+  have oldLeftAvailable : Available machine.heap oldRoot.left := oldCurrent.1.2.1
+  have oldRightAvailable : Available machine.heap oldRoot.right := oldCurrent.1.2.2
+  have oldLeftProfile : Profile entry.identity oldRoot.left :=
+    ⟨oldRootClosed.1,
+      SourceSynthesisCurrentUniverseStartupAtoms.current_stored_universe_closed_atoms_after_no_new_mu
+        lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+        machine.heap machineValid.1.coherent pastInventory oldRoot.left oldLeftAvailable oldRootClosed.1⟩
+  have oldRightProfile : Profile entry.identity oldRoot.right :=
+    ⟨oldRootClosed.2,
+      SourceSynthesisCurrentUniverseStartupAtoms.current_stored_universe_closed_atoms_after_no_new_mu
+        lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+        machine.heap machineValid.1.coherent pastInventory oldRoot.right oldRightAvailable oldRootClosed.2⟩
+  have oldOperations := SourceCurrentAllocatedNativePrefixOperations.prefix_operations_before_bind
+    oldFuel oldCount (.code (.node oldRoot .pure)) oldControl .pure coldInitial oldSnapshot sourceHeap
+    coldPhysical oldInputs oldFields operationsValid sourceGrowth
+    (by simpa only [Control.bind_pure] using oldActual.steps) oldBound
+  have coldInventory := original_universe_cold_query_no_new_mu
+    lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+    oldRoot machine machineValid sourceGrowth oldRootDomain oldLeftProfile oldRightProfile
+    operations operationsValid oldFuel oldInputs oldFields
+  have warmInventory : InternedShallowHeap.NoNewMu sourceHeap oldSnapshot.native.machine.heap :=
+    InternedShallowHeap.noNewMu_trans pastInventory
+      (coldInventory.2 oldCount oldControl oldSnapshot oldBound oldActual)
+  have newLeftProfile : Profile entry.identity newRoot.left :=
+    ⟨newLeftClosed,
+      SourceSynthesisCurrentUniverseStartupAtoms.current_stored_universe_closed_atoms_after_no_new_mu
+        lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+        oldSnapshot.native.machine.heap oldOperations.2.1.machine.1.coherent warmInventory
+        newRoot.left newLeftAvailable newLeftClosed⟩
+  have newRightProfile : Profile entry.identity newRoot.right :=
+    ⟨newRightClosed,
+      SourceSynthesisCurrentUniverseStartupAtoms.current_stored_universe_closed_atoms_after_no_new_mu
+        lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+        oldSnapshot.native.machine.heap oldOperations.2.1.machine.1.coherent warmInventory
+        newRoot.right newRightAvailable newRightClosed⟩
+  exact SourceCurrentNativeWarmAdmission.warm_mu_query_prefix_admission
+    lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+    newRoot oldSnapshot oldOperations.2.1 oldOperations.2.2.2.1
+    newRootDomain newLeftProfile newRightProfile oldOperations.2.2.2.2.1
+    newFuel wholeCount queryUsed readerControl reader queried queryNext queryBefore
+    wholeBound wholeActual queryBound queryActual selectedMu newInputs newFields
+
+end MicroCFTA.SourceSynthesisCurrentUniverseNativeAllocation

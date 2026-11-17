@@ -1,0 +1,110 @@
+section CarrierProofs
+
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+variable (rootRequest : NodeRequest Symbol Guard) (start : Checked width)
+  (wholeCount : Nat)
+  (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard) (bodyId : Nat)
+
+section SourceCuts
+
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+variable (rootRequest : NodeRequest Symbol Guard) (start : Checked width)
+  (initialPhysical : SourceCurrentAllocatedNativePhysicalCache.Valid start.native)
+  (wholeCount : Nat)
+  (entry : Interned NodeKey) (body depth ordinary : Node) (bodyId : Nat)
+
+include initialPhysical in
+
+include initialPhysical in
+
+include initialPhysical in
+
+include initialPhysical in
+
+omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] in
+
+section Descents
+
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+variable (rootRequest : NodeRequest Symbol Guard) (start : Checked width)
+  (wholeCount : Nat)
+  (entry : Interned NodeKey) (body depth ordinary : Node) (bodyId : Nat)
+
+section ClosedCompiler
+
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+variable (rootRequest : NodeRequest Symbol Guard) (start : Checked width)
+  (wholeCount : Nat)
+  (entry : Interned NodeKey) (body depth ordinary : Node) (bodyId : Nat)
+
+section AuxiliaryEntries
+
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+variable (rootRequest : NodeRequest Symbol Guard) (start : Checked width)
+  (initialPhysical : SourceCurrentAllocatedNativePhysicalCache.Valid start.native)
+  (wholeCount : Nat)
+  (entry : Interned NodeKey) (body depth ordinary : Node) (bodyId : Nat)
+
+include initialPhysical in
+
+include initialPhysical in
+
+include initialPhysical in
+
+omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] in
+
+omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] in
+
+section MixedCompiler
+
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+variable (rootRequest : NodeRequest Symbol Guard) (start : Checked width)
+  (initialPhysical : SourceCurrentAllocatedNativePhysicalCache.Valid start.native)
+  (wholeCount : Nat)
+  (entry : Interned NodeKey) (body depth ordinary : Node) (bodyId : Nat)
+
+include initialPhysical in
+
+section AuxiliaryCompiler
+
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+variable (rootRequest : NodeRequest Symbol Guard) (start : Checked width)
+  (initialPhysical : SourceCurrentAllocatedNativePhysicalCache.Valid start.native)
+  (wholeCount : Nat)
+  (entry : Interned NodeKey) (body depth ordinary : Node) (bodyId : Nat)
+
+omit [DecidableEq (EdgeKey Symbol Guard)] in
+
+omit [DecidableEq (EdgeKey Symbol Guard)] in
+
+omit [DecidableEq (EdgeKey Symbol Guard)] in
+
+omit [DecidableEq (EdgeKey Symbol Guard)] in
+
+omit [DecidableEq (EdgeKey Symbol Guard)] in
+
+include initialPhysical in
+
+section PrefixInduction
+
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+variable (rootRequest : NodeRequest Symbol Guard) (start : Checked width)
+  (initialPhysical : SourceCurrentAllocatedNativePhysicalCache.Valid start.native)
+  (wholeCount : Nat)
+  (entry : Interned NodeKey) (body depth ordinary : Node) (bodyId : Nat)
+variable (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+  (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+  (rootValue : Node) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+  (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty = .done rootValue sourceHeap)
+  (key : NodeKey) (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+  (sourceGrowth : Grows sourceHeap start.native.machine.heap)
+  (bodyEntry : Interned NodeKey) (bodyRows : List (EdgeValue Symbol Guard))
+  (bodyShape : body = .node bodyEntry bodyRows 0 [.interned entry.identity])
+  (bodyIdentity : identity body = some bodyId)
+  (sourceChildren : ∀ row ∈ bodyRows, ∀ child ∈ row.children,
+    child = .reference (.interned entry.identity) ∨ Profile entry.identity child)
+  (matched : ∀ pair ∈ SourceRecursiveIntersectionKernel.pairs bodyRows bodyRows,
+    pair.1 = pair.2 ∨ pair.1.children.length ≠ pair.2.children.length)
+  (universeProfile : Profile entry.identity (.mu entry body depth ordinary))
+
+include initialPhysical accepted built stored sourceGrowth bodyShape bodyIdentity sourceChildren matched universeProfile

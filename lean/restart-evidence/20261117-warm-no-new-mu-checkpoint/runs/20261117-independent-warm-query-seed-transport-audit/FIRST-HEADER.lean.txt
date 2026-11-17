@@ -1,0 +1,72 @@
+theorem original_universe_serial_prefix_cache_seeds_for_next_actual_history
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (machine : Machine Symbol Guard)
+    (machineValid : SourceRecursiveIntersectionKernel.Valid machine)
+    (sourceGrowth : Grows sourceHeap machine.heap)
+    (initialInventory : InternedShallowHeap.NoNewMu sourceHeap machine.heap)
+    (operations : SourceEqualityConstraintMemoAllocation.State)
+    (operationsValid : SourceEqualityConstraintMemoAllocation.Valid operations)
+    (queryCount : Nat)
+    (roots : Nat → NodeRequest Symbol Guard) (fuels used : Nat → Nat)
+    (controls : Nat → Control (Value Symbol Guard)) (snapshots : Nat → Checked width)
+    (initialSnapshot : snapshots 0 = (⟨initial width machine, operations⟩ : Checked width))
+    (rootDomains : ∀ index, index < queryCount →
+      (roots index).domain = IntersectionEmptyDomain.emptyDomain)
+    (rootAvailable : ∀ index, index < queryCount →
+      Available (snapshots index).native.machine.heap (roots index).left ∧
+      Available (snapshots index).native.machine.heap (roots index).right)
+    (rootClosed : ∀ index, index < queryCount →
+      (roots index).left.free = [] ∧ (roots index).right.free = [])
+    (prefixBounds : ∀ index, index < queryCount → used index ≤ fuels index)
+    (prefixInputs : ∀ index, index < queryCount →
+      InputsThrough (fuels index) (.code (.node (roots index) .pure)) (snapshots index))
+    (prefixFields : ∀ index, index < queryCount →
+      FieldsThrough (fuels index) (.code (.node (roots index) .pure)) (snapshots index))
+    (prefixActual : ∀ index, index < queryCount →
+      Trace (used index) (.code (.node (roots index) .pure)) (snapshots index)
+        (controls index) (snapshots (index + 1)))
+    (nextRoot : NodeRequest Symbol Guard) (nextFuel nextCount : Nat)
+    (nextControl : Control (Value Symbol Guard)) (reader : Checked width)
+    (nextRootDomain : nextRoot.domain = IntersectionEmptyDomain.emptyDomain)
+    (nextRootAvailable : Available (snapshots queryCount).native.machine.heap nextRoot.left ∧
+      Available (snapshots queryCount).native.machine.heap nextRoot.right)
+    (nextRootClosed : nextRoot.left.free = [] ∧ nextRoot.right.free = [])
+    (nextBound : nextCount ≤ nextFuel)
+    (nextInputs : InputsThrough nextFuel (.code (.node nextRoot .pure)) (snapshots queryCount))
+    (nextFields : FieldsThrough nextFuel (.code (.node nextRoot .pure)) (snapshots queryCount))
+    (nextActual : Trace nextCount (.code (.node nextRoot .pure)) (snapshots queryCount)
+      nextControl reader) :
+    let start := snapshots queryCount
+    let nodeLaw := SourceCurrentNativeWarmCMDefinitions.NodeResult (width := width)
+      nextRoot start nextCount entry body depth ordinary
+    let edgeLaw := SourceCurrentNativeWarmCMDefinitions.EdgeResult (width := width)
+      nextRoot start nextCount entry body depth ordinary
+    InternedShallowHeap.NoNewMu sourceHeap start.native.machine.heap ∧
+      (Returned nodeLaw start.native.nodes ∧ Returned edgeLaw start.native.edges) ∧
+      ∃ bodyId : Nat, SourceRecursiveIntersectionControl.identity body = some bodyId ∧
+        ∀ (pattern : Value Symbol Guard) (patternId : Nat)
+          (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey),
+          SourceCurrentAllocatedNativeSourceWarmEntry.AuthenticEntryAt (width := width)
+            nextRoot start nextCount entry body depth ordinary pattern patternId domain →
+          let universeValue : Value Symbol Guard := .mu entry body depth ordinary
+          let bodyFirst := SourceRecursiveIntersectionDomain.extend domain.key [entry.identity]
+            (SourceRecursiveIntersectionControl.pair bodyId entry.identity)
+          let diagonalFirst := SourceRecursiveIntersectionDomain.extend domain.key [entry.identity]
+            (SourceRecursiveIntersectionControl.pair entry.identity entry.identity)
+          let diagonalTerminal := SourceRecursiveIntersectionDomain.extend diagonalFirst [entry.identity]
+            (SourceRecursiveIntersectionControl.pair bodyId entry.identity)
+          Returned (SourceCurrentAllocatedNativeBodyFirstKeyQueryGlobalLaws.NodeResult
+              entry.identity bodyId bodyFirst body universeValue) start.native.nodes ∧
+          Returned (SourceCurrentAllocatedNativeBodyFirstKeyQueryGlobalLaws.EdgeResult
+              entry.identity bodyId bodyFirst universeValue) start.native.edges ∧
+          Returned (SourceCurrentAllocatedNativeCoherentOpenBodyQueryGlobalLaws.NodeResult
+              entry.identity entry.identity entry.identity diagonalTerminal diagonalFirst body universeValue)
+            start.native.nodes ∧
+          Returned SourceCurrentAllocatedNativeTopRowQueryGlobalLaws.EdgeResult start.native.edges

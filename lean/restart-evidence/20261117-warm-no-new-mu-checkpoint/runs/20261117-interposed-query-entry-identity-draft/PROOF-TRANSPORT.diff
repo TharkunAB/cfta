@@ -1,0 +1,36 @@
+--- original-identity-proof
++++ extension-identity-proof
+@@ -1,4 +1,3 @@
+-  have oldPhysical := (SourceCurrentNativeEnterCommonOperand.checked_trace_extension wholeActual initialPhysical).1
+   obtain ⟨oldClosed, oldIdentity, oldKind, oldUniverseFirst, oldUsed, beforeOld, oldNext, oldData⟩ := oldAuthentic
+   dsimp only at oldData
+   obtain ⟨oldBound, oldPrefix, _oldAllocation, _oldOne, oldDomainEq⟩ := oldData
+@@ -35,7 +34,7 @@
+     rw [oldDomainEq]
+     exact oldKey
+   have beforeNewPhysical :=
+-    (SourceCurrentNativeEnterCommonOperand.checked_trace_extension newPrefix oldPhysical).1
++    (SourceCurrentNativeEnterCommonOperand.checked_trace_extension newPrefix newPhysical).1
+   have newReceipt := SourceCurrentNativeOrderedOriginalEntry.ordered_original_entry_common_operands
+     entry body depth ordinary newPattern newClosed newPatternId newIdentity newKind universeFirst
+     next 0 beforeNew reader newControl beforeNewPhysical newEntry
+@@ -47,13 +46,15 @@
+   change newEntered.1.key = oldDomain.key at sameKey
+   change newEntered.1.key = extend IntersectionEmptyDomain.emptyKey [entry.identity]
+     (pair entry.identity newPatternId) at newKey
+-  have warmSpan : Trace (newUsed + 1) (.code (.node newRoot .pure)) oldSnapshot newControl reader :=
++  have warmSpan : Trace (newUsed + 1) (.code (.node newRoot .pure)) newStart newControl reader :=
+     newPrefix.trans newEntry
+-  have reached := SourceCurrentNativeEnterCommonOperand.checked_trace_extension warmSpan oldPhysical
++  have reached := SourceCurrentNativeEnterCommonOperand.checked_trace_extension warmSpan newPhysical
++  have oldToReader : Extension oldSnapshot.native.machine reader.native.machine :=
++    between.trans reached.2
+   have oldAtReader : Available reader.native.machine.heap oldPattern :=
+-    reached.2.available oldPattern oldAvailable
++    oldToReader.available oldPattern oldAvailable
+   have oldDomainAtReader : Domain reader.native.machine oldDomain :=
+-    SourceRecursiveIntersectionKernel.Domain.grows oldDomain oldDomainKnown reached.2
++    SourceRecursiveIntersectionKernel.Domain.grows oldDomain oldDomainKnown oldToReader
+   have oldPairMember : pair entry.identity oldPatternId ∈ oldDomain.key.seen := by
+     rw [oldDomainKey]
+     exact (extend_seen IntersectionEmptyDomain.emptyKey [entry.identity]
