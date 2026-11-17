@@ -1,0 +1,12 @@
+open SourcePruningEnumerationSharedChildVisitors (visitCapturedWith)
+open SourcePruningEnumerationSharedBranching (scan)
+open SourcePruningEnumerationSharedScanOutputOrigins (outputs)
+local notation "Fold" => NativeContinuations.Result
+  (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2)
+local notation "Prepared" => MergedSourceComparison.Result Symbol Constraint
+  (Node × Option (EnumerateM Symbol Constraint Unit))
+local notation "ActionRaw" => List (Except EnumerationState.Error (Unit × Core))
+attribute [local irreducible] nodePlan tuplePlan fallbackPlan eagerReserved eagerFinal
+  SourceCurrentConstrainedCapTargetForecast.scalar SourceCurrentConstrainedCapEditForecast.headProfile
+  SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.resumeWithNarrow
+  SourcePruningEnumerationSharedPreparedRecursive.continueWith

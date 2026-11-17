@@ -1,0 +1,39 @@
+private theorem actual_eager_child_return_program_slots
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat) (metadata : Metadata Typing) (uv : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (selectionMembers : ∀ entry rows depth free,
+      ∀ edge ∈ edgesOf (.node entry rows depth free), edge ∈ rows)
+    (selectionLength : ∀ entry rows depth free,
+      (edgesOf (.node entry rows depth free)).length ≤ rows.length)
+    (root : IdentityActualSourceRoot bits)
+    (scopeOriginal : Caller (bits + 2)) (scopeBefore : Cached)
+    (allInputs : List (Node × List Suspended))
+    (point : IdentityActualSourcePoint bits) (incoming : Node)
+    (bucket : List Suspended) (rest : List (Node × List Suspended))
+    (ancestors : ActualFrameLedger formulas solver root metadata uv
+      point.frame scopeOriginal scopeBefore allInputs)
+    (origin : ActualSourceOrigin (SourcePruningOuterNarrow.narrow holeKey fits admits)
+      graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv root
+      (.child point incoming bucket rest))
+    (current : ActualSourceCurrent formulas solver root scopeOriginal metadata scopeBefore
+      allInputs recursiveDepth (.child point incoming bucket rest))
+    (valid : Constraint → Prop) (literal : String → Symbol) (marked : Nat → Prop)
+    (slots : ProgramSlots valid literal scopeOriginal.checked.native.machine.heap scopeBefore.core marked)
+    (avoids : ∀ held, marked held → ∀ child retained, (child, retained) ∈ allInputs →
+      Avoids scopeBefore.core.representatives held retained)
+    (index : Nat) (output : Output (bits + 2) Typing) (fragment : Fragment)
+    (reached : Caller (bits + 2)) (saved : Queries) (after : Cached) (localIndex : Nat)
+    (invoked :
+      let callbacks := actual_source_frame_callbacks (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv point.frame
+      SourcePruningEnumerationSharedInvocationTrace.ChildInvocationAt
+        checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf .eager bucket incoming
+        point.caller point.before point.queries
+        (actual_source_parent_tail checkEmpty edgesOf workFuel callbacks point.completed rest)
+        (callbacks.2 point.completed) index output (.done fragment reached saved after) localIndex) :
+    ProgramSlots valid literal reached.checked.native.machine.heap after.core marked

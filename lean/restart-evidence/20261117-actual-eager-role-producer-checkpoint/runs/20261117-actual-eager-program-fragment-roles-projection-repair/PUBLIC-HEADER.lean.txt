@@ -1,0 +1,16 @@
+/-- The same actual eager Program return has source fragment roles at every supplied fuel. -/
+theorem eager_program_fragment_roles
+    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List Edge)
+    (selectionMembers : ∀ entry rows depth free, ∀ row ∈ edgesOf (.node entry rows depth free), row ∈ rows)
+    (valid : Constraint → Prop) (literal : String → Symbol) (marked : Nat → Prop)
+    (incoming : Node) (scs : List Suspended)
+    (caller reached : Caller width) (before after : Cached) (queries saved : Queries)
+    (done : Fragment → Caller width → Queries → Cached → Result Output Reason width)
+    (stopped : ChildDispatch.Observation width → Option Cached → Result Output Reason width)
+    (index consumerIndex : Nat) (output : Output) (fragment : Fragment)
+    (fields : ValueFields valid literal incoming)
+    (pathScope : ∀ sc ∈ scs, EqualityTrie.Valid sc.trie ∧
+      ∀ path ∈ EqualityTrie.fromPathTrie sc.trie, ∃ tail, path = 0 :: tail)
+    (actual : ChildInvocationAt checkEmpty r n p h k edgesOf .eager scs incoming
+      caller before queries done stopped index output (.done fragment reached saved after) consumerIndex) :
+    FragmentRoles literal marked fragment

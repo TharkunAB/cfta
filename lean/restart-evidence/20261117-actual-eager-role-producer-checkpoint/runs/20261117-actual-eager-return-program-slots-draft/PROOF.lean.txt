@@ -1,0 +1,42 @@
+ := by
+  have resourceDepthIH := real_eager_emitted_complete_at_every_depth (bits := bits)
+    holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver recursiveDepth
+  have cut := actual_all_tasks_invocation_current holeKey fits admits graph templates checkEmpty edgesOf
+    stop order recursiveDepth workFuel metadata uv formulas solver root resourceDepthIH
+    selectionMembers selectionLength (.child point incoming bucket rest)
+  dsimp only [ActualInvocationCurrentAt, ActualChildInvocationCurrentAt] at cut
+  obtain ⟨returned, _frameSame, _completedSame, callerSame, _queriesSame, beforeSame,
+      _returnedOrigin, _returnedAncestors, returnedCurrent, _work⟩ :=
+    cut scopeOriginal scopeBefore allInputs ancestors origin current index output fragment
+      reached saved after localIndex invoked
+  have scopeSafe := actual_frame_ledger_scope_safe formulas solver root metadata uv ancestors
+  obtain ⟨inputFacts, _fits, _known, _reserved⟩ := returnedCurrent
+  obtain ⟨_shapes, _kept, _inventory, _memos, _packet, _query, tuple,
+      _mass, _capacity, _included, _genuine⟩ := inputFacts
+  obtain ⟨_next, _final, post, _querySame, _afterPacket, growth, _origin,
+      _enumeratedProtection, protection, referenceEffect, _bounds, _fragmentHistory⟩ := tuple
+  have protects (held : Nat) (known : marked held) :
+      EnumerationDriver.Protected held scopeBefore.core returned.before.core :=
+    protection held (slots.bounded held known) (slots.roots held known) (avoids held known)
+  have references (held : Nat) (known : marked held) :
+      EnumerationReferences.ReferencesAllowed
+        (fun target => ¬UnionFind.SameClass scopeBefore.core.representatives held target)
+        returned.before.core :=
+    referenceEffect _ (slots.incoming held known) (avoids held known)
+      (EnumerationReferences.fresh_separate scopeBefore.core scopeSafe held (slots.bounded held known))
+  have carried := SourceSynthesisProgramRolesNativeHeap.keeps_program_slots
+    scopeOriginal.checked.native.machine.heap returned.caller.checked.native.machine.heap
+    scopeBefore.core marked post.effects.keeps slots
+  have returnedSlots : ProgramSlots valid literal returned.caller.checked.native.machine.heap
+      returned.before.core marked := by
+    refine ⟨?_, ?_, ?_, ?_⟩
+    · intro held known
+      exact Nat.lt_of_lt_of_le (slots.bounded held known) growth
+    · intro held known
+      exact (protects held known).root
+    · intro held known payload member sc listed same
+      exact references held known payload member sc listed (((protects held known).classes sc.var).mp same)
+    · intro held known
+      obtain ⟨payload, stored, role⟩ := carried.stored held known
+      exact ⟨payload, (protects held known).value.trans stored, role⟩
+  simpa only [callerSame, beforeSame] using returnedSlots

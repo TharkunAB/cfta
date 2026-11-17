@@ -1,0 +1,20 @@
+ := by
+  dsimp only
+  intro output member
+  obtain ⟨index, indexed⟩ := List.mem_iff_getElem?.mp member
+  have observed : (emitted (resumeWithNarrow
+      (SourcePruningEnumerationSharedEagerChildren.eagerChild
+        checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf)
+      (SourcePruningOuterNarrow.narrow holeKey fits admits)
+      graph templates checkEmpty edgesOf stop order workFuel recursiveFuel
+      metadata caller memos.query before
+      (SourcePruningEnumerationRestart.decision stop order metadata before)))[index]? = some output := by
+    simpa only [runEagerWithNarrow, SourcePruningEnumerationSharedPreparedRecursiveChildPolicy.runWithNarrow]
+      using indexed
+  have history := SourcePruningEnumerationRealEagerCausalOutputHistory.resumeWithNarrow_real_eager_indexed_output_history
+    holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel recursiveFuel metadata caller memos.query
+    before (SourcePruningEnumerationRestart.decision stop order metadata before) index output observed
+  exact real_outer_program_slots_at_every_depth (bits := bits) holeKey fits admits graph templates checkEmpty edgesOf stop order
+    formulas solver recursiveFuel inventory caller memos before metadata seed ceiling packet bounded known
+    selectionMembers selectionLength initialMass reserved valid literal marked slots workFuel
+    (SourcePruningEnumerationRestart.decision stop order metadata before) index output rfl history

@@ -1,0 +1,129 @@
+omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node] in
+private theorem annotation_nonterminal
+    (scs : List Suspended)
+    (scope : ∀ sc ∈ scs, EqualityTrie.Valid sc.trie ∧
+      ∀ path ∈ EqualityTrie.fromPathTrie sc.trie, ∃ tail, path = 0 :: tail) :
+    scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = false := by
+  apply List.any_eq_false.mpr
+  intro sc member tagged
+  have terminal : sc.trie = .terminal := by
+    cases trieRead : sc.trie with
+    | empty => simp only [trieRead, EqualityTrie.isTerminal, Bool.false_eq_true] at tagged
+    | terminal => rfl
+    | branch children => simp only [trieRead, EqualityTrie.isTerminal, Bool.false_eq_true] at tagged
+  obtain ⟨tail, impossible⟩ := (scope sc member).2 [] ((EqualityTrie.nil_mem sc.trie).mpr terminal)
+  cases impossible
+
+private theorem tuple_length
+    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List Edge) (policy : Policy)
+    (inputs : List (Node × List Suspended))
+    (done : List Fragment → Caller width → Queries → Cached → Result Output Reason width)
+    (stopped : List Fragment → ChildDispatch.Observation width → Option Cached → Result Output Reason width)
+    (caller reached : Caller width) (before after : Cached) (queries saved : Queries)
+    (index consumerIndex : Nat) (output : Output) (fragments : List Fragment)
+    (actual : ChildrenInvocationAt checkEmpty r n p h k edgesOf policy done stopped inputs
+      caller before queries index output (.done fragments reached saved after) consumerIndex) :
+    fragments.length = inputs.length := by
+  induction inputs generalizing done stopped caller before queries index fragments with
+  | nil =>
+      cases actual
+      rfl
+  | cons first rest ih =>
+      rcases first with ⟨incoming, bucket⟩
+      obtain ⟨fragment, current, capturedQueries, captured, childIndex, remaining,
+        shape, _child, tail⟩ := children_done_head_invocation checkEmpty r n p h k edgesOf policy
+          done stopped incoming bucket rest caller before queries index output fragments
+          reached saved after consumerIndex actual
+      have remainingLength := ih (done := fun produced => done (fragment :: produced))
+        (stopped := fun completed => stopped (fragment :: completed))
+        (caller := current) (before := captured) (queries := capturedQueries)
+        (index := childIndex) (fragments := remaining) tail
+      simpa only [shape, List.length_cons] using congrArg (fun count => count + 1) remainingLength
+
+omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node] in
+private theorem own_inputs
+    (heap : InternedConstructorTemplates.State Symbol Constraint) (scs : List Suspended)
+    (edge : Edge) (before middle : Cached) (symbol : Symbol) (staged : List Input)
+    (residual : Option Constraint)
+    (actual : SourcePruningEnumerationCachedOwn.prepare heap scs edge before =
+      some [((symbol, staged, residual), middle)]) :
+    ∃ tries, SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual) ∧
+      symbol = edge.entry.key.symbol ∧
+      staged.map (fun input => (input.1, input.2.1)) =
+        SourcePruningEnumerationEdgeInputs.children edge scs before.core.counter tries ∧
+      staged.length = edge.children.length := by
+  by_cases allowed : arityAllows edge.children.length scs = true
+  · cases projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+    | none => simp [SourcePruningEnumerationCachedOwn.prepare, allowed, projected] at actual
+    | some plan =>
+        rcases plan with ⟨tries, kept⟩
+        have shape := SourcePruningEnumerationCachedOwn.prepare_inputs heap scs edge before middle
+          tries kept (symbol, staged, residual) projected actual
+        simp only [Prod.mk.injEq] at shape
+        obtain ⟨symbolSame, stagedSame, residualSame⟩ := shape
+        subst kept
+        refine ⟨tries, projected, symbolSame, ?_, ?_⟩
+        · rw [stagedSame, List.map_map]
+          exact List.map_id _
+        · simp only [stagedSame, SourcePruningEnumerationEdgeInputs.children,
+            List.length_map, List.length_zipIdx]
+  · simp [SourcePruningEnumerationCachedOwn.prepare, allowed] at actual
+
+omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node] in
+private theorem roles_from_program_positions
+    (valid : Constraint → Prop) (literal : String → Symbol) (marked : Nat → Prop)
+    (edge : Edge) (fields : EdgeFields valid literal edge) (symbol : Symbol)
+    (symbolSame : symbol = edge.entry.key.symbol) (fragments : List Fragment)
+    (count : fragments.length = edge.children.length)
+    (positions : ∀ position, ProgramSlot edge position → ∀ fragment,
+      fragments[position]? = some fragment → FragmentRoles literal marked fragment) :
+    FragmentRoles literal marked (.node symbol fragments) := by
+  cases fields with
+  | annotated edge annotation _guard children _typed =>
+      rw [children] at count
+      cases fragments with
+      | nil => simp at count
+      | cons first rest =>
+          have empty : rest = [] := List.length_eq_zero_iff.mp (by
+            simp only [List.length_cons, List.length_nil] at count
+            omega)
+          subst rest
+          exact .component symbol first
+  | application edge types marker function argument symbolField _guard children
+      _typesTyped _markerTyped _functionFields _argumentFields =>
+      rw [children] at count
+      cases fragments with
+      | nil => simp at count
+      | cons annotation rest =>
+        cases rest with
+        | nil => simp at count
+        | cons mark rest =>
+          cases rest with
+          | nil => simp at count
+          | cons first rest =>
+            cases rest with
+            | nil => simp at count
+            | cons second rest =>
+              have empty : rest = [] := List.length_eq_zero_iff.mp (by
+                simp only [List.length_cons, List.length_nil] at count
+                omega)
+              subst rest
+              rw [symbolSame, symbolField]
+              exact .application annotation mark first second
+                (positions 2 (by simp [ProgramSlot, children]) first rfl)
+                (positions 3 (by simp [ProgramSlot, children]) second rfl)
+  | filter edge goal candidates symbolField _guard children _goalTyped _candidateFields =>
+      rw [children] at count
+      cases fragments with
+      | nil => simp at count
+      | cons goalFragment rest =>
+        cases rest with
+        | nil => simp at count
+        | cons candidateFragment rest =>
+          have empty : rest = [] := List.length_eq_zero_iff.mp (by
+            simp only [List.length_cons, List.length_nil] at count
+            omega)
+          subst rest
+          rw [symbolSame, symbolField]
+          exact .filter goalFragment candidateFragment
+            (positions 1 (by simp [ProgramSlot, children]) candidateFragment rfl)

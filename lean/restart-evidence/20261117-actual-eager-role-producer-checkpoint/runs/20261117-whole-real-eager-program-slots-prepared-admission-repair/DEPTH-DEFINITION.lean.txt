@@ -1,0 +1,23 @@
+private def RealOuterProgramSlotsAtDepth
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (depth : Nat) : Prop :=
+  ∀ (inventory : Inventory) (caller : Caller (bits + 2)) (memos : Memos) (before : Cached)
+    (metadata : Metadata Typing) (seed : Seed) (ceiling : Nat),
+    Packet formulas solver inventory caller memos metadata before →
+    Fits seed.2 caller.checked →
+    Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap →
+    (∀ entry rows level free, ∀ edge ∈ edgesOf (.node entry rows level free), edge ∈ rows) →
+    (∀ entry rows level free, (edgesOf (.node entry rows level free)).length ≤ rows.length) →
+    SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling →
+    eagerReserved bits depth seed ceiling →
+    ∀ (valid : Constraint → Prop) (literal : String → Symbol) (marked : Nat → Prop),
+      ProgramSlots valid literal caller.checked.native.machine.heap before.core marked →
+      ∀ (workFuel : Nat) (decision : Option Next) (index : Nat) (output : Output (bits + 2) Typing),
+        SourcePruningEnumerationRestart.decision stop order metadata before = decision →
+        OutputHistoryAt holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel depth
+          metadata caller memos.query before decision index output →
+        ProgramSlots valid literal output.caller.checked.native.machine.heap output.cache.core marked

@@ -1,0 +1,69 @@
+private theorem at_height
+    (checkEmpty : Bool) (r n p h k : Nat) (edgesOf : Node → List Edge)
+    (selectionMembers : ∀ entry rows depth free, ∀ row ∈ edgesOf (.node entry rows depth free), row ∈ rows)
+    (valid : Constraint → Prop) (literal : String → Symbol) (marked : Nat → Prop)
+    (height : Nat) :
+    ∀ (incoming : Node) (scs : List Suspended)
+      (caller reached : Caller width) (before after : Cached) (queries saved : Queries)
+      (done : Fragment → Caller width → Queries → Cached → Result Output Reason width)
+      (stopped : ChildDispatch.Observation width → Option Cached → Result Output Reason width)
+      (index consumerIndex : Nat) (output : Output) (fragment : Fragment),
+      MergedOrdinaryHeight.height incoming ≤ height →
+      ValueFields valid literal incoming →
+      (∀ sc ∈ scs, EqualityTrie.Valid sc.trie ∧
+        ∀ path ∈ EqualityTrie.fromPathTrie sc.trie, ∃ tail, path = 0 :: tail) →
+      ChildInvocationAt checkEmpty r n p h k edgesOf .eager scs incoming
+        caller before queries done stopped index output (.done fragment reached saved after) consumerIndex →
+      FragmentRoles literal marked fragment := by
+  induction height using Nat.strongRecOn with
+  | ind height smaller =>
+    intro incoming scs caller reached before after queries saved done stopped index consumerIndex output fragment
+      ranked fields pathScope actual
+    cases fields with
+    | empty =>
+      cases actual with
+      | eager_fallback _fallback child =>
+        cases child with
+        | shallow_done observed _hit =>
+          simp [ChildDispatch.run] at observed
+      | eager_ordinary ordinary _order _past _rowRun _row _offset _hit =>
+        change (false : Bool) = true at ordinary
+        cases ordinary
+    | node entry rows depth free checked =>
+      have recursive : ∀ (child : Node) (bucket : List Suspended)
+          (childCaller childReached : Caller width) (childBefore childAfter : Cached)
+          (childQueries childSaved : Queries)
+          (childDone : Fragment → Caller width → Queries → Cached → Result Output Reason width)
+          (childStopped : ChildDispatch.Observation width → Option Cached → Result Output Reason width)
+          (childIndex childConsumerIndex : Nat) (childOutput : Output) (childFragment : Fragment),
+          MergedOrdinaryHeight.height child < MergedOrdinaryHeight.height (.node entry rows depth free) →
+          ValueFields valid literal child →
+          (∀ sc ∈ bucket, EqualityTrie.Valid sc.trie ∧
+            ∀ path ∈ EqualityTrie.fromPathTrie sc.trie, ∃ tail, path = 0 :: tail) →
+          ChildInvocationAt checkEmpty r n p h k edgesOf .eager bucket child
+            childCaller childBefore childQueries childDone childStopped childIndex childOutput
+            (.done childFragment childReached childSaved childAfter) childConsumerIndex →
+          FragmentRoles literal marked childFragment := by
+        intro child bucket childCaller childReached childBefore childAfter childQueries childSaved
+          childDone childStopped childIndex childConsumerIndex childOutput childFragment lower
+          childFields childScope childTrace
+        exact smaller (MergedOrdinaryHeight.height child) (Nat.lt_of_lt_of_le lower ranked)
+          child bucket childCaller childReached childBefore childAfter childQueries childSaved
+          childDone childStopped childIndex childConsumerIndex childOutput childFragment
+          (Nat.le_refl _) childFields childScope childTrace
+      cases actual with
+      | eager_fallback fallback _child =>
+        have positive : ordinaryNonterminal scs (.node entry rows depth free) = true := by
+          simp only [ordinaryNonterminal, annotation_nonterminal scs pathScope, Bool.not_false]
+        rw [positive] at fallback
+        cases fallback
+      | eager_ordinary _ordinary rowOrder _past _rowRun rowTrace _offset _hit =>
+        apply selected_roles checkEmpty r n p h k edgesOf valid literal marked entry rows depth free
+          (scs := scs) (pathScope := pathScope) (recur := recursive) (actual := rowTrace)
+        · apply selectionMembers entry rows depth free
+          rw [rowOrder]
+          exact List.mem_append_right _ List.mem_cons_self
+        · apply checked
+          apply selectionMembers entry rows depth free
+          rw [rowOrder]
+          exact List.mem_append_right _ List.mem_cons_self

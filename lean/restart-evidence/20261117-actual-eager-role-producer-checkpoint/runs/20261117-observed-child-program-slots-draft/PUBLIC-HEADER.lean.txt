@@ -1,0 +1,31 @@
+theorem observed_complete_program_slots
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (seed : Seed)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller (bits + 2)) (before : Cached)
+    (checkEmpty : Bool) (bucket : List Suspended) (incoming : Node)
+    (roots : Nat → Nat) (memos : Memos)
+    (initial : Context formulas solver inventory beforeCaller memos)
+    (safe : Safe before.core) (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (flags : ∀ slot, SourcePruningEnumerationNativeIndex.candidate beforeCaller.checked.native.machine.heap
+      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before.core)
+    (bounded : ∀ sc ∈ bucket, sc.var < before.core.counter)
+    (pending : InputsPending before.core bucket)
+    (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])
+    (fits : Fits seed.2 beforeCaller.checked)
+    (reserved : Reserved bits seed (bucket.length + 1))
+    (known : Heap (fun guard => guard ∈ seed.1) beforeCaller.checked.native.machine.heap)
+    (valid : Constraint → Prop) (literal : String → Symbol) (marked : Nat → Prop)
+    (slots : ProgramSlots valid literal beforeCaller.checked.native.machine.heap before.core marked)
+    (avoids : ∀ held, marked held → Avoids before.core.representatives held bucket)
+    (r n p h k : Nat) (fragment : Fragment) (returned : Core)
+    (afterCaller : Caller (bits + 2)) (after : Cached) (savedQueries : Queries)
+    (outer : Core) (waiting : EnumerationWaitingIndex.Waiting)
+    (observed : SourcePruningEnumerationSharedSelectedContinuations.ChildDispatch.run
+      checkEmpty r n p h k bucket incoming beforeCaller before memos.query =
+      ((.ok (some [.ok (fragment, returned)]), afterCaller, savedQueries, outer, waiting), some after)) :
+    returned = after.core ∧
+      ProgramSlots valid literal afterCaller.checked.native.machine.heap after.core marked

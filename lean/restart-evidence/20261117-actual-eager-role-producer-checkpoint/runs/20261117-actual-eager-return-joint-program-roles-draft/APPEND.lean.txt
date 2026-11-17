@@ -1,0 +1,203 @@
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies EnumerationReferences
+open InternedConstructorTemplates
+open SourcePruningEnumerationSharedPreparedRecursive (Output)
+open SourcePruningEnumerationSharedSelectedContinuations
+open SourceSynthesisProgramEnumerationRoles (ProgramSlots)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+variable {Typing Key : Type} {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+set_option autoImplicit false
+
+/-!
+Note [Program slots at an authentic eager child return]
+The source frame ledger supplies the safe past own-preparation scope.
+The current task carries the original Fits, Heap, and task reservation.
+The checked task induction derives one returned Current from the literal
+invocation. Its TupleInputs names the same returned caller and cache.
+Protection, references, and native Keeps retain the scope's old Program marks.
+The resource depth result is already proved. It is applied inside this proof.
+No future Current, ChildInputs, or depth callback is supplied as a premise.
+The mark predicate stays fixed, so this state result can be paired with a
+fragment-role theorem at the same explicit invocation exit.
+-/
+
+private theorem actual_eager_child_return_program_slots
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat) (metadata : Metadata Typing) (uv : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (selectionMembers : ∀ entry rows depth free,
+      ∀ edge ∈ edgesOf (.node entry rows depth free), edge ∈ rows)
+    (selectionLength : ∀ entry rows depth free,
+      (edgesOf (.node entry rows depth free)).length ≤ rows.length)
+    (root : IdentityActualSourceRoot bits)
+    (scopeOriginal : Caller (bits + 2)) (scopeBefore : Cached)
+    (allInputs : List (Node × List Suspended))
+    (point : IdentityActualSourcePoint bits) (incoming : Node)
+    (bucket : List Suspended) (rest : List (Node × List Suspended))
+    (ancestors : ActualFrameLedger formulas solver root metadata uv
+      point.frame scopeOriginal scopeBefore allInputs)
+    (origin : ActualSourceOrigin (SourcePruningOuterNarrow.narrow holeKey fits admits)
+      graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv root
+      (.child point incoming bucket rest))
+    (current : ActualSourceCurrent formulas solver root scopeOriginal metadata scopeBefore
+      allInputs recursiveDepth (.child point incoming bucket rest))
+    (valid : Constraint → Prop) (literal : String → Symbol) (marked : Nat → Prop)
+    (slots : ProgramSlots valid literal scopeOriginal.checked.native.machine.heap scopeBefore.core marked)
+    (avoids : ∀ held, marked held → ∀ child retained, (child, retained) ∈ allInputs →
+      Avoids scopeBefore.core.representatives held retained)
+    (index : Nat) (output : Output (bits + 2) Typing) (fragment : Fragment)
+    (reached : Caller (bits + 2)) (saved : Queries) (after : Cached) (localIndex : Nat)
+    (invoked :
+      let callbacks := actual_source_frame_callbacks (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv point.frame
+      SourcePruningEnumerationSharedInvocationTrace.ChildInvocationAt
+        checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf .eager bucket incoming
+        point.caller point.before point.queries
+        (actual_source_parent_tail checkEmpty edgesOf workFuel callbacks point.completed rest)
+        (callbacks.2 point.completed) index output (.done fragment reached saved after) localIndex) :
+    ProgramSlots valid literal reached.checked.native.machine.heap after.core marked := by
+  have resourceDepthIH := real_eager_emitted_complete_at_every_depth (bits := bits)
+    holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver recursiveDepth
+  have cut := actual_all_tasks_invocation_current holeKey fits admits graph templates checkEmpty edgesOf
+    stop order recursiveDepth workFuel metadata uv formulas solver root resourceDepthIH
+    selectionMembers selectionLength (.child point incoming bucket rest)
+  dsimp only [ActualInvocationCurrentAt, ActualChildInvocationCurrentAt] at cut
+  obtain ⟨returned, _frameSame, _completedSame, callerSame, _queriesSame, beforeSame,
+      _returnedOrigin, _returnedAncestors, returnedCurrent, _work⟩ :=
+    cut scopeOriginal scopeBefore allInputs ancestors origin current index output fragment
+      reached saved after localIndex invoked
+  have scopeSafe := actual_frame_ledger_scope_safe formulas solver root metadata uv ancestors
+  obtain ⟨inputFacts, _fits, _known, _reserved⟩ := returnedCurrent
+  obtain ⟨_shapes, _kept, _inventory, _memos, _packet, _query, tuple,
+      _mass, _capacity, _included, _genuine⟩ := inputFacts
+  obtain ⟨_next, _final, post, _querySame, _afterPacket, growth, _origin,
+      _enumeratedProtection, protection, referenceEffect, _bounds, _fragmentHistory⟩ := tuple
+  have protects (held : Nat) (known : marked held) :
+      EnumerationDriver.Protected held scopeBefore.core returned.before.core :=
+    protection held (slots.bounded held known) (slots.roots held known) (avoids held known)
+  have references (held : Nat) (known : marked held) :
+      EnumerationReferences.ReferencesAllowed
+        (fun target => ¬UnionFind.SameClass scopeBefore.core.representatives held target)
+        returned.before.core :=
+    referenceEffect _ (slots.incoming held known) (avoids held known)
+      (EnumerationReferences.fresh_separate scopeBefore.core scopeSafe held (slots.bounded held known))
+  have carried := SourceSynthesisProgramRolesNativeHeap.keeps_program_slots
+    scopeOriginal.checked.native.machine.heap returned.caller.checked.native.machine.heap
+    scopeBefore.core marked post.effects.keeps slots
+  have returnedSlots : ProgramSlots valid literal returned.caller.checked.native.machine.heap
+      returned.before.core marked := by
+    refine ⟨?_, ?_, ?_, ?_⟩
+    · intro held known
+      exact Nat.lt_of_lt_of_le (slots.bounded held known) growth
+    · intro held known
+      exact (protects held known).root
+    · intro held known payload member sc listed same
+      exact references held known payload member sc listed (((protects held known).classes sc.var).mp same)
+    · intro held known
+      obtain ⟨payload, stored, role⟩ := carried.stored held known
+      exact ⟨payload, (protects held known).value.trans stored, role⟩
+  simpa only [callerSame, beforeSame] using returnedSlots
+
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+
+namespace MicroCFTA.SourcePruningEnumerationSharedEagerReservation
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies EnumerationReferences
+open InternedConstructorTemplates
+open SourcePruningEnumerationSharedPreparedRecursive (Output)
+open SourcePruningEnumerationSharedSelectedContinuations
+open SourceSynthesisProgramEnumerationRoles (ProgramSlots)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+variable {Typing Key : Type} {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+set_option autoImplicit false
+
+/-!
+Note [One source-frame return has both Program role facts]
+The cache and fragment producers receive the same literal invocation.
+All returned fields and both indices are explicit. The marks stay fixed.
+No hidden return witness or mark extension is chosen by this join.
+The source frame retains its original resource admissions and callbacks.
+The incoming fields and path scope are past source facts.
+This result does not specialize arbitrary callbacks or remove admissions
+from the older Packet-only target.
+-/
+
+private theorem actual_eager_child_return_program_roles
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveDepth workFuel : Nat) (metadata : Metadata Typing) (uv : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (selectionMembers : ∀ entry rows depth free,
+      ∀ edge ∈ edgesOf (.node entry rows depth free), edge ∈ rows)
+    (selectionLength : ∀ entry rows depth free,
+      (edgesOf (.node entry rows depth free)).length ≤ rows.length)
+    (root : IdentityActualSourceRoot bits)
+    (scopeOriginal : Caller (bits + 2)) (scopeBefore : Cached)
+    (allInputs : List (Node × List Suspended))
+    (point : IdentityActualSourcePoint bits) (incoming : Node)
+    (bucket : List Suspended) (rest : List (Node × List Suspended))
+    (ancestors : ActualFrameLedger formulas solver root metadata uv
+      point.frame scopeOriginal scopeBefore allInputs)
+    (origin : ActualSourceOrigin (SourcePruningOuterNarrow.narrow holeKey fits admits)
+      graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv root
+      (.child point incoming bucket rest))
+    (current : ActualSourceCurrent formulas solver root scopeOriginal metadata scopeBefore
+      allInputs recursiveDepth (.child point incoming bucket rest))
+    (valid : Constraint → Prop) (literal : String → Symbol) (marked : Nat → Prop)
+    (slots : ProgramSlots valid literal scopeOriginal.checked.native.machine.heap scopeBefore.core marked)
+    (avoids : ∀ held, marked held → ∀ child retained, (child, retained) ∈ allInputs →
+      Avoids scopeBefore.core.representatives held retained)
+    (fields : SourceSynthesisHereditaryProgramFields.ValueFields valid literal incoming)
+    (pathScope : ∀ sc ∈ bucket, EqualityTrie.Valid sc.trie ∧
+      ∀ path ∈ EqualityTrie.fromPathTrie sc.trie, ∃ tail, path = 0 :: tail)
+    (index : Nat) (output : Output (bits + 2) Typing) (fragment : Fragment)
+    (reached : Caller (bits + 2)) (saved : Queries) (after : Cached) (localIndex : Nat)
+    (invoked :
+      let callbacks := actual_source_frame_callbacks (SourcePruningOuterNarrow.narrow holeKey fits admits)
+        graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv point.frame
+      SourcePruningEnumerationSharedInvocationTrace.ChildInvocationAt
+        checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf .eager bucket incoming
+        point.caller point.before point.queries
+        (actual_source_parent_tail checkEmpty edgesOf workFuel callbacks point.completed rest)
+        (callbacks.2 point.completed) index output (.done fragment reached saved after) localIndex) :
+    ProgramSlots valid literal reached.checked.native.machine.heap after.core marked ∧
+      SourceSynthesisProgramEnumerationRoles.FragmentRoles literal marked fragment := by
+  have slotsAtReturn := actual_eager_child_return_program_slots
+    holeKey fits admits graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv
+    formulas solver selectionMembers selectionLength root scopeOriginal scopeBefore allInputs
+    point incoming bucket rest ancestors origin current valid literal marked slots avoids
+    index output fragment reached saved after localIndex invoked
+  have fragmentAtReturn : SourceSynthesisProgramEnumerationRoles.FragmentRoles literal marked fragment := by
+    let callbacks := actual_source_frame_callbacks (SourcePruningOuterNarrow.narrow holeKey fits admits)
+      graph templates checkEmpty edgesOf stop order recursiveDepth workFuel metadata uv point.frame
+    exact SourceSynthesisActualEagerProgramFragmentRoles.eager_program_fragment_roles
+      (width := bits + 2) checkEmpty workFuel workFuel workFuel workFuel workFuel edgesOf
+      selectionMembers valid literal marked incoming bucket point.caller reached point.before after
+      point.queries saved
+      (actual_source_parent_tail checkEmpty edgesOf workFuel callbacks point.completed rest)
+      (callbacks.2 point.completed) index localIndex output fragment fields pathScope invoked
+  exact ⟨slotsAtReturn, fragmentAtReturn⟩
+
+end MicroCFTA.SourcePruningEnumerationSharedEagerReservation
