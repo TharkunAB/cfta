@@ -1,0 +1,29 @@
+theorem observe_query_resources
+    (seed : Seed)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller (bits + 2))
+    (before : EnumerationState.State Symbol EnumGuard) (memos : Memos)
+    (initial : Context formulas solver inventory beforeCaller memos)
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before)
+    (fits : Fits seed.2 beforeCaller.checked)
+    (reserved : Reserved bits seed 1)
+    (checkEmpty : Bool) (representativeFuel nativeFuel p h uv : Nat)
+    (incoming : Node) (incomingScs : List Suspended)
+    (available : Available beforeCaller.checked.native.machine.heap incoming)
+    (closed : incoming.free = []) :
+    let observed := observe checkEmpty representativeFuel nativeFuel p h
+      beforeCaller before uv incoming incomingScs memos.query
+    observed.1 = SourcePruningEnumerationSharedIncomingNode.run
+      checkEmpty representativeFuel nativeFuel p h
+      beforeCaller before uv incoming incomingScs memos.query ∧
+    ∀ start saved left right actual, (start, saved, left, right, actual) ∈ observed.2 →
+      start = beforeCaller ∧ saved = memos.query ∧ left = incoming ∧
+      SourceCurrentConjunctionClassScan.Ready start.checked ∧
+      Fits seed.2 start.checked ∧ SourceCurrentAllocatedNativeCreditProfile.Admits bits seed.2 ∧
+      Available start.checked.native.machine.heap left ∧
+      Available start.checked.native.machine.heap right ∧
+      left.free = [] ∧ right.free = [] ∧
+      actual = SourceEqualityNativeDemand.execute nativeFuel
+        (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+        start.checked

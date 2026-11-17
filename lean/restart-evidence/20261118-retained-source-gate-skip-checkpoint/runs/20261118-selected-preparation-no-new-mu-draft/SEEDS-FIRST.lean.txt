@@ -1,0 +1,17 @@
+theorem original_source_run_endpoint_preserves_seeds
+    [DecidableEq Symbol]
+    (lib : SourceSynthesisTypeSyntax.Library) (query : SourceSynthesisTypeSyntax.Query)
+    (signed : Int) (whole : SourceSynthesisFirstOrderConstruction.Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Node) (sourceHeap : State Symbol Constraint)
+    (built : InternedFreshOrdinaryConstruction.build
+      (SourceSynthesisUniverseCallerBoundary.ordinarySymbols whole) [] empty = .done rootValue sourceHeap)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey) (body depth ordinary : Node) (bodyId : Nat)
+    (entryFuel nativeFuel uv : Nat) (caller : Caller width) (before : Cached) (queries : Queries)
+    (facts : InternedNestedFacts.Facts caller.checked.native.machine.heap)
+    (total : UnionFind.Total before.core.representatives)
+    (pastSeeds : SourceCurrentNativeNumericalSeedInvariant.Seeds
+      sourceHeap entry body depth ordinary bodyId caller.checked) :
+    SourceCurrentNativeNumericalSeedInvariant.Seeds sourceHeap entry body depth ordinary bodyId
+      (SourcePruningEnumerationSharedPreparedContinuations.preparation_endpoint caller queries
+        (run entryFuel nativeFuel uv caller before)).1.checked

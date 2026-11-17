@@ -1,0 +1,27 @@
+theorem original_universe_resource_admitted_request_seeds
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {bits : Nat}
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (key : NodeKey) (entry : Interned NodeKey) (body depth ordinary : Value Symbol Guard)
+    (stored : sourceHeap.nodeRecords key = some (.mu entry body depth ordinary))
+    (bodyId : Nat) (bodyIdentity : identity body = some bodyId)
+    (rootRequest : NodeRequest Symbol Guard) (before : Checked (bits + 2))
+    (sourceGrowth : Grows sourceHeap before.native.machine.heap)
+    (pastSeeds : Seeds sourceHeap entry body depth ordinary bodyId before)
+    (rootDomain : rootRequest.domain = IntersectionEmptyDomain.emptyDomain)
+    (rootAvailable : Available before.native.machine.heap rootRequest.left ∧
+      Available before.native.machine.heap rootRequest.right)
+    (rootClosed : rootRequest.left.free = [] ∧ rootRequest.right.free = [])
+    (profile : SourceCurrentAllocatedNativeResourceForecast.Profile)
+    (ready : SourceCurrentConjunctionClassScan.Ready before)
+    (fits : SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile before)
+    (admitted : SourceCurrentAllocatedNativeCreditProfile.Admits bits profile)
+    (fuel : Nat) :
+    Seeds sourceHeap entry body depth ordinary bodyId
+      (SourceEqualityNativeDemand.execute fuel (.code (.node rootRequest .pure)) before).state ∧
+    ∀ (count : Nat) (rest : Control (Value Symbol Guard)) (after : Checked (bits + 2)),
+      count ≤ fuel → Trace count (.code (.node rootRequest .pure)) before rest after →
+      Seeds sourceHeap entry body depth ordinary bodyId after

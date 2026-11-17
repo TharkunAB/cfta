@@ -1,0 +1,31 @@
+ := by
+  unfold run
+  generalize reading : ExceptT.run (SourcePruningEnumerationEntry.enter
+    caller.checked.native.machine.heap entryFuel uv before.core) = raw
+  cases raw with
+  | nil => exact ⟨InternedShallowHeap.noNewMu_refl _, rfl, rfl, rfl, rfl, rfl⟩
+  | cons first rest =>
+      cases rest with
+      | cons another remaining =>
+          cases first <;> exact ⟨InternedShallowHeap.noNewMu_refl _, rfl, rfl, rfl, rfl, rfl⟩
+      | nil =>
+          cases first with
+          | error fault => exact ⟨InternedShallowHeap.noNewMu_refl _, rfl, rfl, rfl, rfl, rfl⟩
+          | ok pair =>
+              obtain ⟨⟨target, handle, scs, value⟩, entered⟩ := pair
+              have actual : Success (SourcePruningEnumerationEntry.enter
+                  caller.checked.native.machine.heap entryFuel uv) before.core
+                  (target, handle, scs, value) entered := by
+                rw [Success, reading]
+                exact List.mem_singleton_self _
+              obtain ⟨_size, _path, _stored, _values, decoded, _ancestry, _expansion⟩ :=
+                SourcePruningEnumerationEntry.enter_recorded_bucket_origin
+                  caller.checked.native.machine.heap entryFuel uv before.core entered
+                  target handle scs value total actual
+              have available := lookup_available caller.checked.native.machine.heap handle value facts decoded
+              have unchanged := SourcePruningEnumerationSelectedValue.run_noNewMu
+                nativeFuel value caller.checked.native.machine.heap facts prepared available
+              have tables := SourceCurrentAllocatedQueryMemo.advance_tables caller.checked
+                ⟨(SourcePruningEnumerationSelectedValue.run nativeFuel value
+                    caller.checked.native.machine.heap).state, caller.checked.operations⟩
+              exact ⟨unchanged, tables.1, tables.2.1, tables.2.2, rfl, rfl⟩

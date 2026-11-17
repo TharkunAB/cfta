@@ -1,0 +1,10 @@
+ := by
+  have sourcePrepared := SourceSynthesisCurrentUniverseOwnership.current_build_prepared
+    lib query signed whole accepted rootValue sourceHeap built
+  have prepared := sourcePrepared.preserve pastSeeds.1
+  have endpoint := run_endpoint_no_new_mu_and_tables
+    entryFuel nativeFuel uv caller before queries facts prepared total
+  unfold SourceCurrentNativeNumericalSeedInvariant.Seeds at pastSeeds ⊢
+  dsimp only at pastSeeds ⊢
+  refine ⟨InternedShallowHeap.noNewMu_trans pastSeeds.1 endpoint.1, ?_⟩
+  simpa only [endpoint.2.1, endpoint.2.2.1] using pastSeeds.2

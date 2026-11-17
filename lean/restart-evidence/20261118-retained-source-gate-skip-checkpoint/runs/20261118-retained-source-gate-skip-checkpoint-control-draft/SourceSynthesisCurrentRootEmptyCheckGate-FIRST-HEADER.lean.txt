@@ -1,0 +1,11 @@
+theorem source_retained_available_reaches_constrained_mu_false
+    [DecidableEq (EdgeKey Symbol Guard)]
+    (lib : Library) (query : Query) (signed : Int) (whole : Expression)
+    (accepted : SourceSynthesisCurrentConstruction.firstOrderRaw lib query signed = .ok whole)
+    (rootValue : Value Symbol Guard) (sourceHeap : State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build (ordinarySymbols whole) [] empty =
+      .done rootValue sourceHeap)
+    (currentHeap : State Symbol Guard)
+    (pastInventory : InternedShallowHeap.NoNewMu sourceHeap currentHeap)
+    (value : Value Symbol Guard) (available : Available currentHeap value) :
+    SourceEndpointReachability.reaches SourceMemoGate.unconstrained value = false

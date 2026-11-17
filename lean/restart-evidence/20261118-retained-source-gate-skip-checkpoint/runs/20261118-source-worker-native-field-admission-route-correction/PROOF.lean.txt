@@ -1,0 +1,29 @@
+ := by
+  have plans := SourcePruningEnumerationNativeRequestFields.admitted_request_plans
+    profile before ready fits admitted rootRequest.left rootRequest.right
+    rootAvailable.1 rootAvailable.2 rootClosed.1 rootClosed.2 fuel
+  have requestSame :
+      (⟨IntersectionEmptyDomain.emptyDomain, rootRequest.left, rootRequest.right⟩ :
+        NodeRequest Symbol Guard) = rootRequest := by
+    cases rootRequest
+    cases rootDomain
+    rfl
+  have literal :
+      requestNode IntersectionEmptyDomain.emptyDomain rootRequest.left rootRequest.right =
+        .node rootRequest .pure := by
+    unfold requestNode
+    rw [requestSame]
+  have inputs : SourceCurrentAllocatedNativePhysicalExecution.InputsThrough fuel
+      (.code (.node rootRequest .pure)) before := by
+    rw [← literal]
+    exact plans.1
+  have fields : SourceEqualityNativeDemandOperations.FieldsThrough fuel
+      (.code (.node rootRequest .pure)) before := by
+    rw [← literal]
+    exact plans.2
+  exact seeds_preserved_at_every_actual_query_endpoint
+    lib query signed whole accepted rootValue sourceHeap built key entry body depth ordinary stored
+    bodyId bodyIdentity rootRequest before ready.good.native sourceGrowth ready.good.operations
+    pastSeeds rootDomain rootAvailable rootClosed fuel inputs fields
+
+end MicroCFTA.SourceCurrentNativeNumericalSeedInvariant
