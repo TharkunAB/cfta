@@ -175,3 +175,73 @@ theorem source_auxiliary_key_eq_recovers_full_pattern
   exact ⟨identitySame, valueSame, baseSame⟩
 
 end MicroCFTA.SourceCurrentNativeAuxiliaryBaseKeyRecovery
+
+namespace MicroCFTA.SourceCurrentNativeAuxiliaryBaseKeyRecovery
+open Cache InternedConstructorTemplates InternedProbeProvenance InternedNestedFacts
+open InternedBinderProtocol (NodeKey Reference)
+open SourceRecursiveIntersectionControl SourceRecursiveIntersectionDomain
+set_option autoImplicit false
+
+/- Note [Auxiliary domains differ from original base domains]
+Every actual auxiliary key retains its parent pair and an auxiliary pair.
+The source records make these two pairs distinct.
+An original base key has only its one parent pair in seen.
+Thus an auxiliary key cannot equal any original singleton base key.
+This proves key separation. It gives no returned-value meaning.
+-/
+theorem auxiliary_key_ne_singleton_base
+    (owner : Nat) (oldParent extra diagonal : Nat × Nat)
+    (oldKey : IntersectionFlatMemoKeyDomain.DomainKey) (newParent : Nat × Nat)
+    (oldApartExtra : oldParent ≠ extra) (oldApartDiagonal : oldParent ≠ diagonal)
+    (oldShape :
+      (oldKey = extend (extend IntersectionEmptyDomain.emptyKey [owner] oldParent) [owner] extra ∨
+      oldKey = extend (extend (extend IntersectionEmptyDomain.emptyKey [owner] oldParent) [owner] extra) [owner] diagonal ∨
+      oldKey = extend (extend IntersectionEmptyDomain.emptyKey [owner] oldParent) [owner] diagonal ∨
+      oldKey = extend (extend (extend IntersectionEmptyDomain.emptyKey [owner] oldParent) [owner] diagonal) [owner] extra)) :
+    oldKey ≠ extend IntersectionEmptyDomain.emptyKey [owner] newParent := by
+  intro same
+  have parentMember : oldParent ∈ oldKey.seen := by
+    rcases oldShape with rfl | rfl | rfl | rfl
+    all_goals simp [extend_seen, IntersectionEmptyDomain.emptyKey]
+  have auxiliaryMember : extra ∈ oldKey.seen ∨ diagonal ∈ oldKey.seen := by
+    rcases oldShape with rfl | rfl | rfl | rfl
+    · left
+      simp [extend_seen, IntersectionEmptyDomain.emptyKey]
+    · left
+      simp [extend_seen, IntersectionEmptyDomain.emptyKey]
+    · right
+      simp [extend_seen, IntersectionEmptyDomain.emptyKey]
+    · right
+      simp [extend_seen, IntersectionEmptyDomain.emptyKey]
+  have collapse : ∀ chosen, chosen ∈ oldKey.seen → chosen = newParent := by
+    intro chosen member
+    rw [same] at member
+    simpa only [extend_seen, IntersectionEmptyDomain.emptyKey, List.not_mem_nil, or_false] using member
+  rcases auxiliaryMember with extraMember | diagonalMember
+  · exact oldApartExtra ((collapse oldParent parentMember).trans (collapse extra extraMember).symm)
+  · exact oldApartDiagonal ((collapse oldParent parentMember).trans (collapse diagonal diagonalMember).symm)
+
+theorem source_auxiliary_key_ne_original_base
+    {Symbol Guard : Type} (heap : State Symbol Guard) (facts : Facts heap)
+    (universeEntry bodyEntry : Interned NodeKey) (bodyRows : List (EdgeValue Symbol Guard))
+    (depth ordinary : Value Symbol Guard)
+    (universeAvailable : Available heap
+      (.mu universeEntry (.node bodyEntry bodyRows 0 [.interned universeEntry.identity]) depth ordinary))
+    (pattern : Value Symbol Guard) (patternId : Nat)
+    (patternAvailable : Available heap pattern) (patternClosed : pattern.free = [])
+    (patternIdentity : identity pattern = some patternId)
+    (patternKind : tag pattern = 1 ∨ tag pattern = 3)
+    (oldKey : IntersectionFlatMemoKeyDomain.DomainKey) (newParent : Nat × Nat)
+    (oldShape :
+      (oldKey = extend (extend IntersectionEmptyDomain.emptyKey [universeEntry.identity] (pair universeEntry.identity patternId)) [universeEntry.identity] (pair bodyEntry.identity universeEntry.identity) ∨
+      oldKey = extend (extend (extend IntersectionEmptyDomain.emptyKey [universeEntry.identity] (pair universeEntry.identity patternId)) [universeEntry.identity] (pair bodyEntry.identity universeEntry.identity)) [universeEntry.identity] (pair universeEntry.identity universeEntry.identity) ∨
+      oldKey = extend (extend IntersectionEmptyDomain.emptyKey [universeEntry.identity] (pair universeEntry.identity patternId)) [universeEntry.identity] (pair universeEntry.identity universeEntry.identity) ∨
+      oldKey = extend (extend (extend IntersectionEmptyDomain.emptyKey [universeEntry.identity] (pair universeEntry.identity patternId)) [universeEntry.identity] (pair universeEntry.identity universeEntry.identity)) [universeEntry.identity] (pair bodyEntry.identity universeEntry.identity))) :
+    oldKey ≠ extend IntersectionEmptyDomain.emptyKey [universeEntry.identity] newParent := by
+  have apart := source_parent_pair_avoids_auxiliary heap facts universeEntry bodyEntry bodyRows
+    depth ordinary universeAvailable pattern patternId patternAvailable patternClosed patternIdentity patternKind
+  exact auxiliary_key_ne_singleton_base universeEntry.identity
+    (pair universeEntry.identity patternId) (pair bodyEntry.identity universeEntry.identity)
+    (pair universeEntry.identity universeEntry.identity) oldKey newParent apart.1 apart.2 oldShape
+
+end MicroCFTA.SourceCurrentNativeAuxiliaryBaseKeyRecovery
